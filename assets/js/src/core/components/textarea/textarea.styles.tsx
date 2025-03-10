@@ -15,6 +15,14 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
+    textarea: css`
+      &.ant-input-disabled {
+        &.versionFieldItemHighlight {
+          background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+        }
+      }
+    `,
+
     inherited: css`
       background: ${token.colorBgContainerDisabled};
       color: ${token.colorTextDisabled};

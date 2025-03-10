@@ -29,6 +29,7 @@ export class DynamicTypeObjectDataTextarea extends DynamicTypeObjectDataAbstract
     return (
       <TextArea
         autoSize={ { minRows: 3 } }
+        className={ props.className }
         disabled={ props.noteditable === true }
         inherited={ props.inherited }
         maxLength={ props.maxLength ?? undefined }

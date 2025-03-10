@@ -23,16 +23,17 @@ import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/
 export interface DataComponentProps extends ObjectComponentProps {
   datatype: 'data'
   fieldType?: string
+  fieldtype?: string
   [p: string]: any
 }
 
 export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
-  const { fieldType } = props
+  const { fieldType, fieldtype } = props
 
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const fieldWidth = useFieldWidth()
 
-  const currentFieldType = fieldType ?? 'unknown'
+  const currentFieldType = fieldType ?? fieldtype ?? 'unknown'
 
   if (!objectDataRegistry.hasDynamicType(currentFieldType)) {
     return (

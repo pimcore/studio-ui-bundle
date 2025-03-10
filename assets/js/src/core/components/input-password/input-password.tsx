@@ -23,9 +23,10 @@ export interface IInputPasswordProps extends PasswordProps {
 
 export const InputPassword = ({ inherited, className, ...restProps }: IInputPasswordProps): JSX.Element => {
   const { styles } = useStyles()
+
   return (
     <AntInput.Password
-      className={ cn(className, { [styles.inherited]: inherited }) }
+      className={ cn(styles.input, className, { [styles.inherited]: inherited }) }
       { ...restProps }
     />
   )

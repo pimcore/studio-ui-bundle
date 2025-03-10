@@ -47,6 +47,7 @@ export interface ReverseObjectRelationProps extends IRelationAllowedTypesDataCom
   onChange?: (value?: ManyToManyRelationValue | null) => void
   columnDefinition?: Array<ColumnDef<any>>
   enrichRowData?: (row: ManyToManyRelationValueItem) => ManyToManyRelationValueItem & Record<string, any>
+  className?: string
 }
 
 export const ReverseObjectRelation = (props: ReverseObjectRelationProps): React.JSX.Element => {

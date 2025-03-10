@@ -15,6 +15,20 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
+    datePicker: css`
+      input {
+       color: ${token.colorText} !important;
+      }
+
+      .ant-picker-suffix {
+        display: none;
+      }
+      
+      &.versionFieldItemHighlight {
+        background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+      }
+    `,
+
     inherited: css`
       background: ${token.colorBgContainerDisabled};
       color: ${token.colorTextDisabled};

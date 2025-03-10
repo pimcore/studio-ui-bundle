@@ -13,12 +13,14 @@
 
 import React, { useContext, useEffect, useState } from 'react'
 import { Tooltip } from 'antd'
+import cn from 'classnames'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Checkbox as DefaultCheckbox, type ICheckboxProps } from '@Pimcore/components/checkbox/checkbox'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useTranslation } from 'react-i18next'
+import { useStyles } from './checkbox.styles'
 
 export interface CheckboxProps extends Omit<ICheckboxProps, 'value' | 'onChange'> {
   value?: boolean | null
@@ -29,7 +31,9 @@ export const Checkbox = (props: CheckboxProps): React.JSX.Element => {
   const [value, setValue] = useState<boolean | null>(props.value ?? null)
   const { id } = useContext(DataObjectContext)
   const { dataObject } = useDataObjectDraft(id)
+
   const { t } = useTranslation()
+  const { styles } = useStyles()
 
   useEffect(() => {
     if (props.onChange !== undefined) {
@@ -47,7 +51,7 @@ export const Checkbox = (props: CheckboxProps): React.JSX.Element => {
 
   return (
     <Flex
-      className={ props.className }
+      className={ cn(styles.checkbox, props.className) }
       gap="extra-small"
     >
       <DefaultCheckbox

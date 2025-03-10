@@ -12,6 +12,7 @@
 */
 
 import React, { useEffect, useState } from 'react'
+import cn from 'classnames'
 import { Flex } from '@Pimcore/components/flex/flex'
 import _ from 'lodash'
 import { useQuantityValueUnits } from '@Pimcore/modules/data-object/hooks/use-quantity-value-units'
@@ -76,7 +77,7 @@ export const InputQuantityValue = (props: InputQuantityValueProps): React.JSX.El
   return (
     <Flex
       align="center"
-      className={ props.className }
+      className={ cn(styles.container, props.className) }
       gap="small"
     >
       <Input

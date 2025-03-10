@@ -34,6 +34,7 @@ export class DynamicTypeObjectDataManyToOneRelation extends DynamicTypeObjectDat
       <ManyToOneRelation
         { ...props }
         { ... convertAllowedTypes(props) }
+        className={ props.className }
         disabled={ props.noteditable === true }
         inherited={ props.inherited }
       />

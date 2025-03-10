@@ -12,10 +12,9 @@
 */
 
 import React, { useEffect } from 'react'
+import cn from 'classnames'
 import { Card } from '@Pimcore/components/card/card'
-import {
-  ExternalImageFooter
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/external-image/footer'
+import { ExternalImageFooter } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/external-image/footer'
 import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import { useTranslation } from 'react-i18next'
 import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
@@ -23,6 +22,7 @@ import { isEmpty, isNil } from 'lodash'
 import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { theme } from 'antd'
+import { useStyles } from './external-image.styles'
 
 export interface ExternalImageValue {
   url: string
@@ -35,6 +35,7 @@ export interface ExternalImageProps {
   disabled?: boolean
   value?: ExternalImageValue | null
   onChange?: (value: ExternalImageValue | null) => void
+  className?: string
 }
 
 export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
@@ -43,6 +44,7 @@ export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
   const fieldWidth = useFieldWidth()
   const { useToken } = theme
   const { token } = useToken()
+  const { styles } = useStyles()
 
   const onChange = (value?: string): void => {
     const newUrl = value !== '' && value !== undefined ? value : null
@@ -60,7 +62,7 @@ export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
   return (
     <>
       <Card
-        className="max-w-full"
+        className={ cn('max-w-full', styles.image, props.className) }
         fitContent={ Boolean(props.inputWidth) }
         footer={ <ExternalImageFooter
           disabled={ props.disabled }

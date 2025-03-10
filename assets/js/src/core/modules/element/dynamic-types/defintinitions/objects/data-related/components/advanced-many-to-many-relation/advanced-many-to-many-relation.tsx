@@ -56,6 +56,7 @@ export interface AdvancedManyToManyRelationProps extends IRelationAllowedTypesDa
   value?: AdvancedManyToManyRelationValue | null
   onChange?: (value?: AdvancedManyToManyRelationValue | null) => void
   enrichRowData?: (row: ManyToManyRelationValueItem) => ManyToManyRelationValueItem & Record<string, any>
+  className?: string
 }
 
 export const AdvancedManyToManyRelation = (props: AdvancedManyToManyRelationProps): React.JSX.Element => {

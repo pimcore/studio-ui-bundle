@@ -30,6 +30,7 @@ export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
     return (
       <Block
         { ...props }
+        className={ props.className }
         title={ <FieldLabel
           label={ props.title }
           name={ props.name }

@@ -30,6 +30,7 @@ export class DynamicTypeObjectDataTable extends DynamicTypeObjectDataAbstract {
     return (
       <Table
         { ...props }
+        className={ props.className }
         disabled={ props.noteditable === true }
       />
     )

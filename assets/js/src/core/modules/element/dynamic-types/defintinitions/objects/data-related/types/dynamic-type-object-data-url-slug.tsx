@@ -28,6 +28,7 @@ export class DynamicTypeObjectDataUrlSlug extends DynamicTypeObjectDataAbstract 
     return (
       <UrlSlug
         { ...props }
+        className={ props.className }
         disabled={ props.noteditable === true }
       />
     )

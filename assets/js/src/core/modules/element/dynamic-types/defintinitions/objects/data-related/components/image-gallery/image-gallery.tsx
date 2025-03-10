@@ -12,6 +12,7 @@
 */
 
 import React, { useRef, useState } from 'react'
+import cn from 'classnames'
 import {
   type ImageValue
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/image/image'
@@ -42,11 +43,13 @@ import {
   type CropSettings
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/crop-types'
 import { uuid } from '@Pimcore/utils/uuid'
+import { useStyles } from './image-gallery.styles'
 
 export interface ImageGalleryProps {
   value?: ImageGalleryValue | null
   onChange?: (value: ImageGalleryValue | null) => void
   disabled?: boolean
+  className?: string
 }
 
 export type ImageGalleryValue = ImageGalleryValueItem[]
@@ -62,7 +65,7 @@ export interface ImageGalleryValueItem {
 const addKeys = (value: ImageGalleryValue): ImageGalleryValue => {
   return value.map((item, index) => {
     if (item.key === undefined) {
-      item.key = uuid()
+      return { ...item, key: uuid() }
     }
     return item
   })
@@ -78,7 +81,10 @@ const removeKeys = (items: ImageGalleryValue): ImageGalleryValue => {
 export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
   const [value, setValueState] = useState<ImageGalleryValue>(addKeys(props.value ?? []))
   const { t } = useTranslation()
+  const { styles } = useStyles()
+
   const hotspotMarkersModalContainerRef = useRef<HotspotMarkersModalContainerRef>(null)
+
   const setValue = (newValue: ImageGalleryValue): void => {
     const updatedValue = addKeys(newValue)
 
@@ -91,6 +97,7 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
 
   return (
     <Card
+      className={ cn(styles.imageGallery, props.className) }
       footer={ props.disabled === true
         ? undefined
         : (

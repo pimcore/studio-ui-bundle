@@ -13,6 +13,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { Input, List, Tooltip, Typography } from 'antd'
+import cn from 'classnames'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
@@ -22,6 +23,7 @@ import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-but
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { isPlainObject } from 'lodash'
 import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
+import { useStyles } from './url-slug.styles'
 
 export interface UrlSlugEntry {
   slug: string
@@ -35,16 +37,21 @@ export interface UrlSlugProps {
   width?: number | string | null
   value?: UrlSlugEntry[] | null
   onChange?: (value?: UrlSlugEntry[] | null) => void
+  className?: string
 }
 
 export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
   const initialValue = props.value ?? [{ slug: '', siteId: 0 }]
+
   if (isPlainObject(initialValue) && !initialValue.some(entry => entry.siteId === 0)) {
     initialValue.unshift({ slug: '', siteId: 0 })
   }
+
   const [value, setValue] = useState<UrlSlugEntry[]>(initialValue)
   const [errors, setErrors] = useState<boolean[]>([])
+
   const { t } = useTranslation()
+  const { styles } = useStyles()
   const { getSiteById, getRemainingSites } = useSites()
   const fieldWidth = useFieldWidth()
   const { Text } = Typography
@@ -95,6 +102,7 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
   return (
     <List
       bordered
+      className={ cn(styles.container, props.className) }
       dataSource={ sortedValue }
       loadMore={ remainingSites.length > 0 && props.disabled !== true && (
       <List.Item>
@@ -116,7 +124,10 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
             gap="small"
             justify="center"
           >
-            <div style={ { width: toCssDimension(props.domainLabelWidth, 250) } }>
+            <div
+              className="urlSlugLabel"
+              style={ { width: toCssDimension(props.domainLabelWidth, 250) } }
+            >
               { item.siteId === 0 ? t('fallback') : getSiteById(item.siteId)?.domain }
             </div>
             <div className="w-full">

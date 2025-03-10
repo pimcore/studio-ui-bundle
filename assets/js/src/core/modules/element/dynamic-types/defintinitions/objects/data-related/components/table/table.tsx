@@ -12,6 +12,8 @@
 */
 
 import React, { type ReactElement, useEffect, useMemo } from 'react'
+import { isEmpty, isNil } from 'lodash'
+import cn from 'classnames'
 import { TableGrid } from './components/grid/grid'
 import { Box } from '@Pimcore/components/box/box'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -24,7 +26,6 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Content } from '@Pimcore/components/content/content'
 import { toCssDimension } from '@Pimcore/utils/css'
-import { isEmpty, isNil } from 'lodash'
 
 export interface TableProps {
   rows: number | null
@@ -39,6 +40,7 @@ export interface TableProps {
   width?: number | string | null
   height?: number | string | null
   data?: string | null // default data from class definition
+  className?: string
 }
 
 const parseFieldDefinitionData = (data?: string | null): TableValue | null => {
@@ -221,7 +223,7 @@ export const Table = (props: TableProps): React.JSX.Element => {
   }
 
   return (
-    <div>
+    <div className={ cn(props.className) }>
       <Content
         style={ {
           width: toCssDimension(props.width === 320 ? undefined : props.width), // the default table width does not make sense in studio, 100% width is better

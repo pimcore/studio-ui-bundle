@@ -12,9 +12,9 @@
 */
 
 import React from 'react'
-
-import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../../dynamic-type-object-data-abstract'
 import dayjs from 'dayjs'
+import cn from 'classnames'
+import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../../dynamic-type-object-data-abstract'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
 import type { FormInstance } from 'antd'
 import type { NamePath } from 'rc-field-form/es/interface'
@@ -46,7 +46,7 @@ export abstract class DynamicTypeObjectDataAbstractDate extends DynamicTypeObjec
     return (
       <DatePicker
         allowClear
-        className="w-full"
+        className={ cn('w-full', props.className) }
         disabled={ props.noteditable === true }
         inherited={ props.inherited }
         outputFormat={ props.respectTimezone !== false || outputType !== 'dateString' ? undefined : props.outputFormat }

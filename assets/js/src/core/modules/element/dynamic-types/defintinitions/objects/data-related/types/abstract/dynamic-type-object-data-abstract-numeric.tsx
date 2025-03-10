@@ -85,6 +85,7 @@ export abstract class DynamicTypeObjectDataAbstractNumeric extends DynamicTypeOb
   getVersionObjectDataComponent (props: AbstractNumericObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <InputNumber
+        className={ cn(props.className) }
         { ...this.getVersionObjectDataComponentProps(props) }
       />
     )

@@ -35,6 +35,7 @@ export class DynamicTypeObjectDataInputQuantityValue extends DynamicTypeObjectDa
     return (
       <InputQuantityValue
         { ...props }
+        className={ props.className }
         disabled={ props.noteditable === true }
       />
     )

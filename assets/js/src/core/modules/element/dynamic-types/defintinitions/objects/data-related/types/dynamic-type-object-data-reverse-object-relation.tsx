@@ -33,6 +33,7 @@ export class DynamicTypeObjectDataReverseObjectRelation extends DynamicTypeObjec
     return (
       <ReverseObjectRelation
         { ...props }
+        className={ props.className }
         disabled={ props.noteditable === true }
       />
     )
