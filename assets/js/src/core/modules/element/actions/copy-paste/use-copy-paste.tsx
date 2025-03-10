@@ -93,6 +93,8 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       if (success) {
         dispatch(refreshSourceNode({ nodeId: String(currentElement.parentId), elementType }))
         dispatch(refreshTargetNode({ nodeId: String(targetElement.id), elementType }))
+      } else {
+        dispatch(markNodeDeleting({ nodeId: String(currentElement.id), elementType, isDeleting: false }))
       }
     } catch (error) {
       console.error('Error moving element', error)
@@ -157,6 +159,8 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
         dispatch(refreshTargetNode({ nodeId: String(parentId), elementType }))
         setStoredNode(undefined)
         setNodeTask(undefined)
+      } else {
+        dispatch(markNodeDeleting({ nodeId: String(id), elementType, isDeleting: false }))
       }
     } catch (error) {
       console.error('Error cloning element', error)
