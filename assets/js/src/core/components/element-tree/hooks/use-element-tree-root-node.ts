@@ -90,7 +90,7 @@ export const useElementTreeRootNode = (id: number, showRoot: boolean): UseElemen
       }
 
   return {
-    rootNode: newRootNode === undefined
+    rootNode: newRootNode === undefined || !showRoot
       ? undefined
       : {
           ...defaultRootNodeProps,
