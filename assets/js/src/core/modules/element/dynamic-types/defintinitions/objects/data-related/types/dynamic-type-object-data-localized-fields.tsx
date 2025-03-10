@@ -26,13 +26,13 @@ export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataA
     return <LocalizedFields { ...props } />
   }
 
-  processVersionFieldData (props: {
+  async processVersionFieldData (props: {
     item: any
     fieldBreadcrumbTitle: string
     fieldValueByName: object
     versionId: number
     versionCount: number
-  }): IFormattedDataStructureData[] {
+  }): Promise<IFormattedDataStructureData[]> {
     const { item, fieldValueByName, fieldBreadcrumbTitle, versionId, versionCount } = props
 
     const getFieldData = ({ fieldData, fieldValue }: { fieldData: any, fieldValue: any }): IFormattedDataStructureData => {

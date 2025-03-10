@@ -55,13 +55,14 @@ export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Ele
     const versionPromise = dispatch(api.endpoints.versionGetById.initiate({ id: vId.id }))
 
     Promise.resolve(versionPromise)
-      .then((response): void => {
+      .then(async (response): Promise<void> => {
         const formattedDataList: IFormattedDataStructureData[][] = []
 
         const dataRaw = response.data as DataObjectVersion
 
         if (!isUndefined(layoutData?.children)) {
-          formattedDataList.push(getFormattedDataStructure({
+          formattedDataList.push(await getFormattedDataStructure({
+            objectId: id,
             layout: layoutData.children,
             versionData: dataRaw,
             versionId: vId.id,

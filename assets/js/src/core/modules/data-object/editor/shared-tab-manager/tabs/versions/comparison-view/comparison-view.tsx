@@ -65,11 +65,12 @@ export const ComparisonView = ({
       .then((responses): void => {
         const formattedDataList: IFormattedDataStructureData[][] = []
 
-        responses.forEach((response, versionIndex) => {
+        responses.forEach(async (response, versionIndex) => {
           const dataRaw = response.data as DataObjectVersion
 
           if (!isUndefined(layoutData?.children)) {
-            formattedDataList.push(getFormattedDataStructure({
+            formattedDataList.push(await getFormattedDataStructure({
+              objectId: id,
               layout: layoutData.children,
               versionData: dataRaw,
               versionId: versionIds[versionIndex].id,

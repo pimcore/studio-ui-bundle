@@ -19,12 +19,13 @@ import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
-enum DATATYPE_LIST {
+export enum DATATYPE_LIST {
   LAYOUT = 'layout',
   DATA = 'data'
 }
 
 interface IGetFormattedDataStructureProps {
+  objectId: number
   layout: Layout['children']
   versionData: DataObjectVersion
   versionId: number
@@ -48,7 +49,7 @@ const isFieldValueEmpty = (fieldValue: any): boolean => {
   return isEmptyValue(fieldValue)
 }
 
-export const getFormattedDataStructure = ({ layout, versionData, versionId, versionCount, objectDataRegistry }: IGetFormattedDataStructureProps): IFormattedDataStructureData[] => {
+export const getFormattedDataStructure = async ({ objectId, layout, versionData, versionId, versionCount, objectDataRegistry }: IGetFormattedDataStructureProps): Promise<IFormattedDataStructureData[]> => {
   const formattedSystemData = {
     fullPath: versionData.fullPath,
     creationDate: formatDateTime({ timestamp: versionData.creationDate ?? null, dateStyle: 'short', timeStyle: 'medium' }),
@@ -59,12 +60,12 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
     return [value1, value2].filter(Boolean).join('/')
   }
 
-  const processLayoutData = ({ data, fieldBreadcrumbTitle = '' }: { data: Layout['children'], fieldBreadcrumbTitle?: string }): IFormattedDataStructureData[] => {
-    return data.flatMap((item: any) => {
+  const processLayoutData = async ({ data, fieldBreadcrumbTitle = '' }: { data: Layout['children'], fieldBreadcrumbTitle?: string }): Promise<IFormattedDataStructureData[]> => {
+    const promises = data.map(async (item: any) => {
       if (item.datatype === DATATYPE_LIST.LAYOUT) {
         const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, item.title as string)
 
-        return processLayoutData({ data: item.children, fieldBreadcrumbTitle: breadcrumbTitle })
+        return await processLayoutData({ data: item.children, fieldBreadcrumbTitle: breadcrumbTitle })
       }
 
       if (item.datatype === DATATYPE_LIST.DATA) {
@@ -78,11 +79,13 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
 
         const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
 
-        return objectDataType.processVersionFieldData({ item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount })
+        return await objectDataType.processVersionFieldData({ objectId, item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount })
       }
 
       return []
     })
+
+    return (await Promise.all(promises)).flatMap(item => item)
   }
 
   const getGeneralSystemData = (): IFormattedDataStructureData[] => {
@@ -95,7 +98,7 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
     return result
   }
 
-  const layoutData = processLayoutData({ data: layout })
+  const layoutData = await processLayoutData({ data: layout })
   const generalSystemData = getGeneralSystemData()
 
   return [...generalSystemData, ...layoutData]

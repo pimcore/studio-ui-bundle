@@ -65,13 +65,14 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
 
   abstract getObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition>
 
-  processVersionFieldData (props: {
+  async processVersionFieldData (props: {
+    objectId?: number
     item: any
     fieldBreadcrumbTitle: string
     fieldValueByName: string | object
     versionId: number
     versionCount: number
-  }): IFormattedDataStructureData[] {
+  }): Promise<IFormattedDataStructureData[]> {
     const { fieldBreadcrumbTitle, item, fieldValueByName, versionId, versionCount } = props
 
     return [{ fieldBreadcrumbTitle, fieldData: item, fieldValue: fieldValueByName, versionId, versionCount }]

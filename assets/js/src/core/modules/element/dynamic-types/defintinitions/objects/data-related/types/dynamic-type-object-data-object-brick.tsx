@@ -12,10 +12,13 @@
 */
 
 import React from 'react'
-
+import { isEmpty } from 'lodash'
 import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { ObjectBrick, type ObjectBrickProps } from '../components/object-brick/object-brick'
 import { type FormItemProps } from 'antd'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import { DATATYPE_LIST, type IFormattedDataStructureData } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
+import { type ClassObjectBrickObjectLayoutApiResponse, type ObjectBrickLayoutDefinition } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 
 export class DynamicTypeObjectDataObjectBrick extends DynamicTypeObjectDataAbstract {
   id: string = 'objectbricks'
@@ -30,5 +33,64 @@ export class DynamicTypeObjectDataObjectBrick extends DynamicTypeObjectDataAbstr
       ...super.getObjectDataFormItemProps(props),
       label: null
     }
+  }
+
+  async processVersionFieldData (props: {
+    objectId: number
+    item: any
+    fieldBreadcrumbTitle: string
+    fieldValueByName: object
+    versionId: number
+    versionCount: number
+  }): Promise<any> {
+    const { objectId, fieldBreadcrumbTitle, versionId, versionCount } = props
+
+    const processObjectBrickData = ({ data }: { data: ObjectBrickLayoutDefinition[] }): IFormattedDataStructureData[] => {
+      return data.flatMap((dataItem: any) => {
+        if (dataItem.datatype === DATATYPE_LIST.LAYOUT) {
+          return processObjectBrickData({ data: dataItem.children })
+        }
+
+        if (dataItem.datatype === DATATYPE_LIST.DATA) {
+          return {
+            fieldBreadcrumbTitle,
+            fieldData: { ...dataItem },
+            fieldValue: 1,
+            versionId,
+            versionCount
+          }
+        }
+
+        return []
+      })
+    }
+
+    const loadLayoutById = async (): Promise<any | null> => {
+      try {
+        const response = await fetch(`${getPrefix()}/class/object-brick/${objectId}/object/layout`)
+
+        return await response.json()
+      } catch (error) {
+        console.error(error)
+
+        return null
+      }
+    }
+
+    async function handleObjectBrickData (): Promise<any | null> {
+      try {
+        const data: ClassObjectBrickObjectLayoutApiResponse = await loadLayoutById()
+
+        if (!isEmpty(data)) {
+          return processObjectBrickData({ data: data?.items })
+        } else {
+          return null
+        }
+      } catch (e) {
+        return null
+      }
+    }
+
+    return await handleObjectBrickData()
   }
 }
