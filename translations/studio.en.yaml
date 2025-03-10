@@ -659,6 +659,13 @@ link.class: Class
 crop: Crop
 crop.remove: Remove Crop
 hotspots-markers-modal.edit-button: Add & Edit data
+hotspots-markers-data-modal.title: Add & Edit data
+hotspots-markers-data-modal.new-data: New
+hotspots-markers-data-modal.save: Save
+hotspots-markers-data-modal.name: Name
+hotspots-markers-data-modal.data: Data
+hotspots-markers-data-modal.data-type.name: Name
+hotspots-markers-data-modal.data-type.value: Value
 hotspots.edit: Edit marker and hotspots
 hotspots.show: Show marker and hotspots
 hotspots.new-marker: New Marker

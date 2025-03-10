@@ -19,6 +19,9 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { createImageThumbnailUrl } from '@Pimcore/components/image-preview/utils/custom-image-thumbnail'
+import {
+  HotspotMarkersDataModal
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-markers-data-modal'
 
 export interface HotspotMarkersModalProps {
   hotspots?: IHotspot[] | null
@@ -33,6 +36,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
   const { t } = useTranslation()
   const [hotspots, setHotspots] = useState<IHotspot[]>(props.hotspots ?? [])
   const [modalOpened, setModalOpened] = useState(false)
+  const [hotSpotMarkersDataModelOpen, setHotSpotMarkersDataModelOpen] = useState<boolean>(false)
 
   const width = 952
   const height = 800
@@ -57,6 +61,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
   }
 
   const onEdit = (id: number): void => {
+    setHotSpotMarkersDataModelOpen(true)
     console.log('----> insideEdit id', id)
   }
   const onUpdate = (item: IHotspot): void => {
@@ -66,6 +71,8 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
   }
 
   const handleOk = (): void => {
+    console.log('----> props.onChange?.(hotspots)', props.onChange?.(hotspots))
+
     props.onChange?.(hotspots)
     props.onClose?.()
   }
@@ -151,6 +158,12 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
         onRemove={ onRemove }
         onUpdate={ onUpdate }
         src={ thumbnailSrc }
+      />
+      <HotspotMarkersDataModal
+        data={ [] }
+        onClose={ () => { setHotSpotMarkersDataModelOpen(false) } }
+        onSave={ () => { console.log('save') } }
+        open={ hotSpotMarkersDataModelOpen }
       />
     </WindowModal>
   )
