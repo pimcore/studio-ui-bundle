@@ -85,6 +85,8 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
   const imageRef = useRef<HTMLImageElement | null>(null)
   const { t } = useTranslation()
 
+  console.log('----> onEdit', onEdit)
+
   const [items, setItems] = useState<IHotspot[]>(data ?? [])
   useEffect((): void => {
     setItems(data ?? [])
@@ -189,10 +191,10 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
                 {onEdit !== undefined
                   ? (
                     <IconTextButton
-                      icon={ { value: 'plus-square' } }
+                      icon={ { value: 'new' } }
                       onClick={ () => { onEdit(hotspot.id) } }
                       type="default"
-                    >Todo edit</IconTextButton>
+                    >{t('hotspots-markers-modal.edit-button')}</IconTextButton>
                     )
                   : null}
 

@@ -658,6 +658,7 @@ link.tabindex: Tabindex
 link.class: Class
 crop: Crop
 crop.remove: Remove Crop
+hotspots-markers-modal.edit-button: Add & Edit data
 hotspots.edit: Edit marker and hotspots
 hotspots.show: Show marker and hotspots
 hotspots.new-marker: New Marker

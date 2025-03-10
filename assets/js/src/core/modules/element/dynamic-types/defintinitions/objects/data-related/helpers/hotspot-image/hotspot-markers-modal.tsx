@@ -56,7 +56,12 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
     setHotspots(hotspots.filter(h => h.id !== id))
   }
 
+  const onEdit = (id: number): void => {
+    console.log('----> insideEdit id', id)
+  }
   const onUpdate = (item: IHotspot): void => {
+    console.log('----> coordinates', item)
+
     setHotspots(hotspots.map(h => h.id === item.id ? item : h))
   }
 
@@ -142,6 +147,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
         data={ modalOpened ? hotspots : [] }
         disabled={ props.disabled }
         onClone={ onClone }
+        onEdit={ onEdit }
         onRemove={ onRemove }
         onUpdate={ onUpdate }
         src={ thumbnailSrc }
