@@ -49,10 +49,10 @@ const props = compose<AbstractDecoratorProps>(
   ActionColumnDecorator,
   SortingDecorator,
   PagingDecorator,
+  [ClassDefinitionSelectionDecorator, { showConfigLayer: true } as ClassDefinitionSelectionDecoratorConfig],
   ColumnConfigurationDecorator,
   [InlineEditDecorator, { useInlineEditApiUpdate } as IInlineEditDecoratorConfig],
   [RowSelectionDecorator, { rowSelectionMode: 'multiple' } as IRowSelectionDecoratorConfig],
-  [ClassDefinitionSelectionDecorator, { showConfigLayer: true } as ClassDefinitionSelectionDecoratorConfig],
   GeneralFiltersDecorator
 )(defaultProps)
 /* eslint-enable @typescript-eslint/consistent-type-assertions */
