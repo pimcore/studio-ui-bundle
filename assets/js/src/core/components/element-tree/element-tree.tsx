@@ -134,7 +134,8 @@ const ElementTree = (
     <div className={ ['tree', styles.tree].join(' ') }>
       <TreeContext.Provider value={ treeContextValue }>
         {hasRootNode && (
-          <TreeNodeComponent
+
+          <treeContextValue.renderNode
             key={ preparedRootNode!.id }
             level={ -1 }
             { ...preparedRootNode! }
