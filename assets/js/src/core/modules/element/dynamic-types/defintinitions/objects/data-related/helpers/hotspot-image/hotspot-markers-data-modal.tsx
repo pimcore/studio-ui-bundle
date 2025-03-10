@@ -17,11 +17,14 @@ import { Space } from '@Pimcore/components/space/space'
 import { Input } from '@Pimcore/components/input/input'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
 import { useTranslation } from 'react-i18next'
-import { Card } from '@Pimcore/components/card/card'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Button } from '@Pimcore/components/button/button'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
+import { StackList, type StackListProps } from '@Pimcore/components/stack-list/stack-list'
+import { Tag } from 'antd'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { isUndefined } from 'lodash'
 
 type HotspotMarkerDataHotspotMarkerDataType = 'textfield' | 'textarea' | 'checkbox' | 'object' | 'document' | 'asset'
 
@@ -67,58 +70,73 @@ export const HotspotMarkersDataModal = ({
     ])
   }
 
+  const handleRemoveField = (id: number): void => {
+    setFields((prevFields) => prevFields.filter((field) => field.id !== id))
+  }
+
   const renderFormItem = (field: HotspotMarkerData): JSX.Element => {
     return (
-      <Card
-        key={ field.id }
-        theme="card-with-highlight"
-        title={ t(`hotspots-markers-data-modal.data.${field.type}`) }
+      <Space
+        className="w-full"
+        direction="vertical"
+        size="small"
       >
-        <Space
-          className="w-full"
-          direction="vertical"
-          size="small"
+        <Form.Item
+          label={ t('hotspots-markers-data-modal.data-type.name') }
+          name={ `name-${field.id}` }
         >
-          <Form.Item
-            label={ t('hotspots-markers-data-modal.data-type.name') }
-            name={ `name-${field.id}` }
-          >
-            <Input />
-          </Form.Item>
-          {field.type === 'checkbox'
-            ? (
-              <Form.Item
-                label={ t('hotspots-markers-data-modal.data-type.value') }
-                name={ `value-${field.id}` }
-                valuePropName="checked"
-              >
-                <Input type="checkbox" />
-              </Form.Item>
-              )
-            : (
-              <Form.Item
-                label={ t('hotspots-markers-data-modal.data-type.value') }
-                name={ `value-${field.id}` }
-              >
-                {field.type === 'textarea' ? <Input /> : <Input />}
-              </Form.Item>
-              )}
-          {/* <Button type="danger" onClick={() => handleRemoveField(field.id)}> */}
-          {/*    {t('hotspots-markers-data-modal.remove')} */}
-          {/* </Button> */}
-        </Space>
-      </Card>
+          <Input />
+        </Form.Item>
+        {field.type === 'checkbox'
+          ? (
+            <Form.Item
+              label={ t('hotspots-markers-data-modal.data-type.value') }
+              name={ `value-${field.id}` }
+              valuePropName="checked"
+            >
+              <Input type="checkbox" />
+            </Form.Item>
+            )
+          : (
+            <Form.Item
+              label={ t('hotspots-markers-data-modal.data-type.value') }
+              name={ `value-${field.id}` }
+            >
+              {field.type === 'textarea' ? <Input /> : <Input />}
+            </Form.Item>
+            )}
+      </Space>
     )
   }
 
   const dataTypes = [
-    { key: 'text', label: t('hotspots-markers-data-modal.data-type.text-field'), onClick: () => { handleTypeSelect('textfield') } },
+    { key: 'textfield', label: t('hotspots-markers-data-modal.data-type.text-field'), onClick: () => { handleTypeSelect('textfield') } },
     { key: 'textarea', label: t('hotspots-markers-data-modal.data-type.text-area'), onClick: () => { handleTypeSelect('textarea') } },
     { key: 'checkbox', label: t('hotspots-markers-data-modal.data-type.checkbox'), onClick: () => { handleTypeSelect('checkbox') } },
     { key: 'object', label: t('hotspots-markers-data-modal.data-type.object'), onClick: () => { handleTypeSelect('object') } },
     { key: 'document', label: t('hotspots-markers-data-modal.data-type.document'), onClick: () => { handleTypeSelect('document') } },
     { key: 'asset', label: t('hotspots-markers-data-modal.data-type.asset'), onClick: () => { handleTypeSelect('asset') } }
   ]
+
+  const getTypeLabel = (type: string): string => {
+    const typeObj = dataTypes.find(dataType => dataType.key === type)
+    return !isUndefined(typeObj) ? typeObj.label : 'Unknown Type'
+  }
+
+  const items: StackListProps['items'] = fields.map((field) => {
+    return ({
+      id: field.id,
+      children: <Tag>{getTypeLabel(field.type)}</Tag>,
+      renderRightToolbar: <IconButton
+        icon={ { value: 'close' } }
+        key={ 'remove' }
+        onClick={ () => {
+          handleRemoveField(field.id)
+        } }
+                          />,
+      body: renderFormItem(field)
+    })
+  })
 
   return (
     <WindowModal
@@ -174,18 +192,13 @@ export const HotspotMarkersDataModal = ({
           >
             <Input />
           </Form.Item>
-          <Card
-            theme="card-with-highlight"
-            title={ t('hotspots-markers-data-modal.data') }
+          <Space
+            className='w-full'
+            direction='vertical'
+            size='small'
           >
-            <Space
-              className='w-full'
-              direction='vertical'
-              size='small'
-            >
-              {fields.length > 0 ? fields.map((field) => renderFormItem(field)) : <p>{t('hotspots-markers-data-modal.no-data')}</p>}
-            </Space>
-          </Card>
+            {fields.length > 0 ? <StackList items={ items } /> : <p>{t('hotspots-markers-data-modal.no-data')}</p>}
+          </Space>
         </Space>
       </Form>
     </WindowModal>
