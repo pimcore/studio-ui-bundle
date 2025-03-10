@@ -147,6 +147,7 @@ import { DynamicTypeObjectDataObjectBrick } from '@Pimcore/modules/element/dynam
 import { DynamicTypeGridCellDataObjectAdapter } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/data-object-adapter/dynamic-type-grid-cell-data-object-adapter'
 import { MainNavRegistry } from '@Pimcore/modules/app/nav/services/main-nav-registry'
 import { DynamicTypeGridCellDataObjectActions } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/data-object-actions/dynamic-type-grid-cell-data-object-actions'
+import { DynamicTypeGridCellDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/data-object-object-brick/dynamic-type-grid-cell-data-object-adapter'
 
 // Main nav
 container.bind(serviceIds.mainNavRegistry).to(MainNavRegistry).inSingletonScope()
@@ -218,6 +219,7 @@ container.bind(serviceIds['DynamicTypes/GridCell/Document']).to(DynamicTypeGridC
 container.bind(serviceIds['DynamicTypes/GridCell/LanguageSelect']).to(DynamicTypeGridCellLanguageSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Translate']).to(DynamicTypeGridCellTranslate).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/DataObjectAdapter']).to(DynamicTypeGridCellDataObjectAdapter).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/DataObjectObjectBrick']).to(DynamicTypeGridCellDataObjectObjectBrick).inSingletonScope()
 
 // dynamic types listing
 container.bind(serviceIds['DynamicTypes/ListingRegistry']).to(DynamicTypeListingRegistry).inSingletonScope()
