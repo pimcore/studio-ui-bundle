@@ -122,7 +122,8 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
           action: async () => {
             return cloneResponse.jobRunId!
           },
-          parentFolder: String(parentId)
+          parentFolder: String(parentId),
+          elementType
         }))
       } else if (parentId !== undefined) {
         dispatch(refreshTargetNode({ nodeId: String(parentId), elementType }))

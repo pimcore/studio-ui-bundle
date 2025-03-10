@@ -43,10 +43,6 @@ export const NotificationJobContainer = (props: DeleteJobProps): React.JSX.Eleme
 
       openSEEvent()
     }
-
-    if (JobStatus.SUCCESS === status) {
-      dispatch(refreshNodeChildren({ nodeId: props.config.parentFolder, elementType: props.config.elementType }))
-    }
   }, [props.status])
 
   return (
@@ -99,7 +95,11 @@ export const NotificationJobContainer = (props: DeleteJobProps): React.JSX.Eleme
     }
 
     if (data.status !== undefined) {
-      if (data.status === 'finished' || data.status === 'finished_with_errors') {
+      if (data.status === 'finished' || data.status === 'finished_with_errors' || data.status === 'failed') {
+        dispatch(refreshNodeChildren({ nodeId: props.config.parentFolder, elementType: props.config.elementType }))
+      }
+
+      if (data.status === 'finished') {
         updateJob(id, {
           status: JobStatus.SUCCESS
         })
