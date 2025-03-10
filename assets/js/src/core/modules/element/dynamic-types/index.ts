@@ -133,6 +133,7 @@ import { type DynamicTypeObjectDataFieldCollection } from './defintinitions/obje
 import { type DynamicTypeObjectDataObjectBrick } from './defintinitions/objects/data-related/types/dynamic-type-object-data-object-brick'
 import { type DynamicTypeGridCellDataObjectAdapter } from './defintinitions/grid-cell/types/data-object-adapter/dynamic-type-grid-cell-data-object-adapter'
 import { type DynamicTypeGridCellDataObjectActions } from './defintinitions/grid-cell/types/data-object-actions/dynamic-type-grid-cell-data-object-actions'
+import { type DynamicTypeGridCellDataObjectObjectBrick } from './defintinitions/grid-cell/types/data-object-object-brick/dynamic-type-grid-cell-data-object-adapter'
 
 moduleSystem.registerModule({
   onInit () {
@@ -184,6 +185,7 @@ moduleSystem.registerModule({
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellLanguageSelect>(serviceIds['DynamicTypes/GridCell/LanguageSelect']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellTranslate>(serviceIds['DynamicTypes/GridCell/Translate']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectAdapter>(serviceIds['DynamicTypes/GridCell/DataObjectAdapter']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectObjectBrick>(serviceIds['DynamicTypes/GridCell/DataObjectObjectBrick']))
 
     const metadataRegistry = container.get<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
 
