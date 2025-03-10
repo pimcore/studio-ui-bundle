@@ -105,6 +105,7 @@ export type * from './asset-api-slice.gen'
 export const {
   useAssetGetByIdQuery,
   useAssetGetTreeQuery,
+  useLazyAssetGetTreeQuery,
   useAssetUpdateByIdMutation,
   useAssetCloneMutation,
   useAssetReplaceMutation,

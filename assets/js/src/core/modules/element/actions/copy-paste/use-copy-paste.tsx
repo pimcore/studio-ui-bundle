@@ -12,14 +12,12 @@
 */
 
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { type AssetCloneApiResponse, useAssetCloneMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
-import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
+import { type CloneParameters, useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob as createCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
@@ -27,6 +25,10 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
+import { markNodeDeleting, refreshSourceNode, refreshTargetNode, setNodeFetching } from '@Pimcore/components/element-tree/element-tree-slice'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { isUndefined } from 'lodash'
+import { useTreeId } from '../../tree/provider/tree-id-provider/use-tree-id'
 
 export interface UseCopyPasteHookReturn {
   copy: (node: TreeNodeProps) => void
@@ -53,12 +55,12 @@ export interface MoveProps {
 export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn => {
   const [storedNode, setStoredNode] = useState<TreeNodeProps | Element | undefined>()
   const [nodeTask, setNodeTask] = useState<'copy' | 'cut' | undefined>()
-  const { refreshTree } = useRefreshTree(elementType)
-  const [assetClone] = useAssetCloneMutation()
-  const { elementPatch } = useElementApi(elementType)
+  const { elementPatch, elementClone } = useElementApi(elementType)
   const { t } = useTranslation()
   const { isTreeActionAllowed } = useTreePermission()
   const { addJob } = useJobs()
+  const dispatch = useAppDispatch()
+  const { treeId } = useTreeId(true)
 
   const copy = (node: TreeNodeProps | Element): void => {
     setStoredNode(node)
@@ -72,9 +74,14 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
 
   const move = async (props: MoveProps): Promise<void> => {
     const { currentElement, targetElement } = props
+    if (currentElement.id === targetElement.id) {
+      return
+    }
 
     try {
-      await elementPatch({
+      dispatch(markNodeDeleting({ nodeId: String(currentElement.id), elementType, isDeleting: true }))
+
+      const success = await elementPatch({
         body: {
           data: [{
             id: currentElement.id,
@@ -83,16 +90,18 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
         }
       })
 
-      refreshTree(targetElement.parentId)
-      refreshTree(currentElement.parentId)
-      refreshTree(targetElement.id)
-      refreshTree(currentElement.id)
+      if (success) {
+        dispatch(refreshSourceNode({ nodeId: String(currentElement.parentId), elementType }))
+        dispatch(refreshTargetNode({ nodeId: String(targetElement.id), elementType }))
+      } else {
+        dispatch(markNodeDeleting({ nodeId: String(currentElement.id), elementType, isDeleting: false }))
+      }
     } catch (error) {
       console.error('Error moving element', error)
     }
   }
 
-  const paste = async (parentId: number): Promise<void> => {
+  const paste = async (parentId: number, cloneParameters: CloneParameters = { recursive: true, updateReferences: true }): Promise<void> => {
     if (storedNode === undefined) {
       return
     }
@@ -101,38 +110,26 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       ? storedNode.id
       : parseInt(storedNode.id)
 
-    const promise = assetClone({
+    const cloneResponse = await elementClone({
       id,
-      parentId
+      parentId,
+      cloneParameters
     })
 
-    promise.catch(() => {
-      console.error('Error copying element')
-    })
-
-    try {
-      const response = (await promise) as any
-
-      let jobRunId: any = null
-      if ((response.data ?? false) !== false) {
-        const data = response.data as Exclude<AssetCloneApiResponse, void>
-        jobRunId = data.jobRunId ?? null
-      }
-
-      if (jobRunId !== null) {
+    if (cloneResponse.success) {
+      if (!isUndefined(cloneResponse.jobRunId)) {
         addJob(createCloneJob({
           title: 'Cloning Folder',
           topics: [topics['cloning-finished'], ...defaultTopics],
           action: async () => {
-            return jobRunId
+            return cloneResponse.jobRunId!
           },
-          parentFolder: String(parentId)
+          parentFolder: String(parentId),
+          elementType
         }))
       } else if (parentId !== undefined) {
-        refreshTree(parentId)
+        dispatch(refreshTargetNode({ nodeId: String(parentId), elementType }))
       }
-    } catch (error) {
-      console.error('Error cloning element', error)
     }
   }
 
@@ -146,7 +143,9 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       : parseInt(storedNode.id)
 
     try {
-      await elementPatch({
+      dispatch(markNodeDeleting({ nodeId: String(id), elementType, isDeleting: true }))
+
+      const success = await elementPatch({
         body: {
           data: [{
             id,
@@ -155,15 +154,14 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
         }
       })
 
-      if (storedNode.parentId !== undefined) {
-        const parentId = typeof storedNode.parentId === 'number'
-          ? storedNode.parentId
-          : parseInt(storedNode.parentId)
-
-        refreshTree(parentId)
+      if (success) {
+        dispatch(refreshSourceNode({ nodeId: String(storedNode.parentId), elementType }))
+        dispatch(refreshTargetNode({ nodeId: String(parentId), elementType }))
+        setStoredNode(undefined)
+        setNodeTask(undefined)
+      } else {
+        dispatch(markNodeDeleting({ nodeId: String(id), elementType, isDeleting: false }))
       }
-
-      refreshTree(parentId)
     } catch (error) {
       console.error('Error cloning element', error)
     }
@@ -226,6 +224,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       icon: <Icon value={ 'paste' } />,
       hidden: !isTreeActionAllowed(TreePermission.Paste) || (storedNode === undefined || nodeTask !== 'copy') || !checkElementPermission(node.permissions, 'create'),
       onClick: async () => {
+        dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
         await paste(parseInt(node.id))
       }
     }

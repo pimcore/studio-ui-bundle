@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { api } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
 import { api as perspectivesApi } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
@@ -40,6 +40,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const { i18n } = useTranslation()
 
   const [isLoading, setIsLoading] = useState(true)
+  const initializedPerspective = useRef<string | undefined>(undefined)
 
   const [translations] = useTranslationGetCollectionMutation()
   const [fetchMercureCookie] = useMercureCreateCookieMutation()
@@ -87,20 +88,24 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   }
 
   async function initActivePerspective (): Promise<any> {
-    const perspectiveFetcher = dispatch(perspectivesApi.endpoints.perspectiveGetConfigById.initiate({ perspectiveId: 'studio_default_perspective' }))
+    const perspectiveId = 'my_custom'
+    if (perspectiveId !== initializedPerspective.current) {
+      initializedPerspective.current = perspectiveId
+      const perspectiveFetcher = dispatch(perspectivesApi.endpoints.perspectiveGetConfigById.initiate({ perspectiveId }))
 
-    perspectiveFetcher
-      .then(({ data, isSuccess, isError, error }) => {
-        isError && trackError(new ApiError(error))
+      perspectiveFetcher
+        .then(({ data, isSuccess, isError, error }) => {
+          isError && trackError(new ApiError(error))
 
-        if (isSuccess && isPlainObject(data)) {
-          dispatch(setActivePerspective(data))
-          dispatch(updateOuterModel(getInitialModelJson()))
-        }
-      })
-      .catch(() => {})
+          if (isSuccess && isPlainObject(data)) {
+            dispatch(setActivePerspective(data))
+            dispatch(updateOuterModel(getInitialModelJson()))
+          }
+        })
+        .catch(() => {})
 
-    return await perspectiveFetcher
+      return await perspectiveFetcher
+    }
   }
 
   async function loadTranslations (): Promise<any> {

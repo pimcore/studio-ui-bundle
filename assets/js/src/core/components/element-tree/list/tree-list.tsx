@@ -19,6 +19,7 @@ import { useStyles } from './tree-list.styles'
 import { UploadList } from '@Pimcore/components/upload/upload-list/upload-list'
 import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 import { Skeleton } from './../skeleton/skeleton'
+import { useElementTreeNode } from '../hooks/use-element-tree-node'
 
 interface TreeListProps {
   node: TreeNodeProps
@@ -29,10 +30,9 @@ const { useToken } = theme
 export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
   const { token } = useToken()
   const { styles } = useStyles()
-  const { renderFilter: RenderFilter, renderPager: RenderPager, renderNode: RenderNode, nodeApiHook } = useContext(TreeContext)
-  const { apiHookResult, dataTransformer, mergeAdditionalQueryParams } = nodeApiHook(node)
-  const { isLoading, isFetching, isError, data } = apiHookResult
+  const { renderFilter: RenderFilter, renderPager: RenderPager, renderNode: RenderNode } = useContext(TreeContext)
   const { uploadFileList, uploadingNode } = useContext(UploadContext)!
+  const { isLoading, isFetching, getChildren, total } = useElementTreeNode(node.id)
 
   if (isLoading === true) {
     return (
@@ -40,11 +40,7 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
     )
   }
 
-  if (isError === true) {
-    return <>{'Error'}</>
-  }
-
-  const { nodes: children, total } = dataTransformer(data)
+  const children = getChildren()
 
   return (
     <>
@@ -55,9 +51,8 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
         >
           <RenderFilter
             isLoading={ isFetching }
-            mergeAdditionalQueryParams={ mergeAdditionalQueryParams }
             node={ node }
-            total={ total }
+            total={ total ?? 0 }
           />
         </div>
       )}
@@ -78,9 +73,9 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
 
         {uploadFileList.length === 0 && children?.map((item, index) => (
           <RenderNode
-            internalKey={ `${node.internalKey}-${index}` }
             key={ item.id }
             { ...item }
+            level={ node.level + 1 }
           />
         ))}
       </div>
@@ -91,9 +86,8 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
           style={ { paddingLeft: token.paddingSM + (node.level + 1) * 24 } }
         >
           <RenderPager
-            mergeAdditionalQueryParams={ mergeAdditionalQueryParams }
             node={ node }
-            total={ total }
+            total={ total ?? 0 }
           />
         </div>
       )}

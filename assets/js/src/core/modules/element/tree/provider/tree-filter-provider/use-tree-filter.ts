@@ -23,7 +23,7 @@ export const useTreeFilter = (): ITreeFilterContext & {
   let context = useContext(TreeFilterContext)
 
   if (context === undefined) {
-    context = {}
+    context = { pageSize: 30 }
   }
 
   return {

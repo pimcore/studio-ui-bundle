@@ -19,9 +19,8 @@ import { JobView } from '../../notification/job/job-view'
 import { type JobProps } from '../../notification/job/job'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch } from '@Pimcore/app/store'
-import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { type CloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/factory'
+import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
 
 export interface CloneJobProps extends JobProps {
   config: CloneJob['config']
@@ -59,7 +58,6 @@ export const NotificationJobContainer = (props: CloneJobProps): React.JSX.Elemen
         {
           label: t('jobs.job.button-ignore-and-reload'),
           handler: () => {
-            dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_TREE_ID(parseInt(props.config.parentFolder))))
             removeJob(id)
           }
         }
@@ -67,9 +65,8 @@ export const NotificationJobContainer = (props: CloneJobProps): React.JSX.Elemen
 
       successButtonActions={ [
         {
-          label: t('jobs.job.button-hide-and-reload'),
+          label: t('jobs.job.button-hide'),
           handler: () => {
-            dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_TREE_ID(parseInt(props.config.parentFolder))))
             removeJob(id)
           }
         }
@@ -98,7 +95,11 @@ export const NotificationJobContainer = (props: CloneJobProps): React.JSX.Elemen
     }
 
     if (data.status !== undefined) {
-      if (data.status === 'finished' || data.status === 'finished_with_errors') {
+      if (data.status === 'finished' || data.status === 'finished_with_errors' || data.status === 'failed') {
+        dispatch(refreshNodeChildren({ nodeId: props.config.parentFolder, elementType: props.config.elementType }))
+      }
+
+      if (data.status === 'finished') {
         updateJob(id, {
           status: JobStatus.SUCCESS
         })
