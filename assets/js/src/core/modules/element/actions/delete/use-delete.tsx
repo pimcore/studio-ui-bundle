@@ -34,6 +34,10 @@ import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widg
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useRefreshTree } from '../refresh-tree/use-refresh-tree'
+import { isUndefined } from 'lodash'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { markNodeDeleting } from '@Pimcore/components/element-tree/element-tree-slice'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
@@ -54,6 +58,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   const { isMainWidgetOpen, closeWidget } = useWidgetManager()
   const [elementDelete] = useElementDeleteMutation({ fixedCacheKey: cacheKey })
   const { isTreeActionAllowed } = useTreePermission()
+  const dispatch = useAppDispatch()
 
   const deleteElement = (id: number, label: string, parentId?: number, onFinish?: () => void): void => {
     modal.confirm({
@@ -126,6 +131,8 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   }
 
   const deleteMutation = async (id: number, parentId?: number, onFinish?: () => void): Promise<void> => {
+    dispatch(markNodeDeleting({ nodeId: String(id), elementType, isDeleting: true }))
+
     const promise = elementDelete({
       id,
       elementType
@@ -135,7 +142,13 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
       console.error('Error deleting ' + elementType)
     })
 
-    const response = (await promise) as any
+    const response = await promise
+
+    if (!isUndefined(response.error)) {
+      trackError(new ApiError(response.error))
+      dispatch(markNodeDeleting({ nodeId: String(id), elementType, isDeleting: false }))
+      return
+    }
 
     let jobRunId: any = null
     if ((response.data ?? false) !== false) {
@@ -150,7 +163,8 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
         action: async () => {
           return jobRunId
         },
-        parentFolder: String(parentId)
+        parentFolder: String(parentId),
+        elementType
       }))
     } else if (parentId !== undefined) {
       refreshElement(parentId)

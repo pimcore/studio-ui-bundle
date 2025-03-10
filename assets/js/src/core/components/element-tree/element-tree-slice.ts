@@ -344,6 +344,7 @@ const slice = createSlice({
           updateNodeState(state, treeId, payload.nodeId, node => ({
             ...node,
             isLoading: undefined,
+            isExpanded: true,
             isFetchTriggered: false
           }))
 

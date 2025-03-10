@@ -19,9 +19,8 @@ import { JobView } from '../../notification/job/job-view'
 import { type JobProps } from '../../notification/job/job'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch } from '@Pimcore/app/store'
-import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { type DeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/factory'
+import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
 
 export interface DeleteJobProps extends JobProps {
   config: DeleteJob['config']
@@ -44,6 +43,10 @@ export const NotificationJobContainer = (props: DeleteJobProps): React.JSX.Eleme
 
       openSEEvent()
     }
+
+    if (JobStatus.SUCCESS === status) {
+      dispatch(refreshNodeChildren({ nodeId: props.config.parentFolder, elementType: props.config.elementType }))
+    }
   }, [props.status])
 
   return (
@@ -57,9 +60,8 @@ export const NotificationJobContainer = (props: DeleteJobProps): React.JSX.Eleme
 
       finishedWithErrorsButtonActions={ [
         {
-          label: t('jobs.job.button-ignore-and-reload'),
+          label: t('jobs.job.button-hide'),
           handler: () => {
-            dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_TREE_ID(parseInt(props.config.parentFolder))))
             removeJob(id)
           }
         }
@@ -67,9 +69,8 @@ export const NotificationJobContainer = (props: DeleteJobProps): React.JSX.Eleme
 
       successButtonActions={ [
         {
-          label: t('jobs.job.button-hide-and-reload'),
+          label: t('jobs.job.button-hide'),
           handler: () => {
-            dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_TREE_ID(parseInt(props.config.parentFolder))))
             removeJob(id)
           }
         }
