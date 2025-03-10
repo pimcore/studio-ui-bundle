@@ -53,7 +53,7 @@ export const SelectedColumnsProvider = ({ children }: SelectedColumnsProviderPro
   const encodeColumnIdentifier = (column: SelectedColumn): string => {
     return JSON.stringify({
       uuid: uuid(),
-      key: column.key,
+      key: column.key.replaceAll('.', '**'),
       locale: column.locale
     })
   }
@@ -66,8 +66,9 @@ export const SelectedColumnsProvider = ({ children }: SelectedColumnsProviderPro
     }
 
     const { key, locale } = JSON.parse(columnIdentifier)
+    const formattedKey = key.replaceAll('**', '.')
 
-    return selectedColumns.find(column => column.key === key && column.locale === locale)!
+    return selectedColumns.find(column => column.key === formattedKey && column.locale === locale)!
   }
 
   return useMemo(() => (

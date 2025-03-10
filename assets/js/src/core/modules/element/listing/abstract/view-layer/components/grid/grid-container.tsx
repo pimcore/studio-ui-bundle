@@ -19,8 +19,8 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { useSettings } from '../../../settings/use-settings'
 
 export const GridContainer = (): React.JSX.Element => {
-  const { data, dataQueryResult } = useData()
-  const { isLoading } = dataQueryResult!
+  const { dataQueryResult, dataLoadingState } = useData()
+  const { isLoading, isFetching, data } = dataQueryResult!
   const { selectedColumns, encodeColumnIdentifier, decodeColumnIdentifier } = useSelectedColumns()
   const { useGridOptions } = useSettings()
   const { getGridProps, transformGridColumn, transformGridColumnDefinition } = useGridOptions()
@@ -95,10 +95,10 @@ export const GridContainer = (): React.JSX.Element => {
     <Grid
       columns={ gridColumnDefinition }
       data={ gridData }
-      isLoading={ isLoading }
+      isLoading={ isLoading || isFetching || dataLoadingState !== 'data-available' }
       resizable
       setRowId={ (row) => row.id }
       { ...getGridProps() }
     />
-  ), [gridColumnDefinition, gridData, isLoading, getGridProps])
+  ), [gridColumnDefinition, gridData, isLoading, isFetching, dataLoadingState, getGridProps])
 }

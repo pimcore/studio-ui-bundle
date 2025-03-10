@@ -18,12 +18,24 @@ import { Split } from '@Pimcore/components/split/split'
 import { RowSelectionTotal } from '@Pimcore/modules/element/listing/decorators/row-selection/view-layer/components/row-selection-total/row-reselection-total'
 import { Refetch } from '@Pimcore/modules/element/listing/abstract/view-layer/components/refetch/refetch'
 import { Space } from '@Pimcore/components/space/space'
+import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
+import { ClassDefinitionSelect } from '../decorator/class-definition-selection/components/class-definition-select/class-definition-select'
 
 export const Toolbar = (): React.JSX.Element => {
+  const { selectedRows } = useRowSelection()
+
+  const selectedRowsCount = Object.keys(selectedRows ?? {}).length
+
   return useMemo(() => (
     <BaseToolbar theme='secondary'>
       <Space size="extra-small">
-        <RowSelectionTotal />
+        {selectedRowsCount > 0 && (
+          <RowSelectionTotal />
+        )}
+
+        {selectedRowsCount <= 0 && (
+          <ClassDefinitionSelect />
+        )}
       </Space>
 
       <Split size='small'>
@@ -31,5 +43,5 @@ export const Toolbar = (): React.JSX.Element => {
         <Pagination />
       </Split>
     </BaseToolbar>
-  ), [])
+  ), [selectedRowsCount])
 }

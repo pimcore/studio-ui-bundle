@@ -74,22 +74,6 @@ const api = baseApi.enhanceEndpoints({
       }
     },
 
-    assetGetGrid: {
-      providesTags: (result, error, args) => {
-        const providingTagsForGrid: Tag[] = []
-
-        if (result === undefined) {
-          return []
-        }
-
-        for (const item of result.items) {
-          providingTagsForGrid.push(...providingTags.ASSET_DETAIL_ID(item.id!))
-        }
-
-        return providingTagsForGrid
-      }
-    },
-
     assetGetGridConfigurationByFolderId: {
       providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_DETAIL(args.folderId, args.configurationId)
     },
