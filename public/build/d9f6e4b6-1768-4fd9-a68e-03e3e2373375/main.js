@@ -1,0 +1,2 @@
+/*! For license information please see main.js.LICENSE.txt */
+var Pimcore;(()=>{var r={519:(r,e,o)=>{r.exports=o(988)(30191)},988:r=>{"use strict";r.exports=studio_core}},e={};var o=function o(t){var s=e[t];if(void 0!==s)return s.exports;var i=e[t]={exports:{}};return r[t](i,i.exports,o),i.exports}(519);Pimcore=o})();
