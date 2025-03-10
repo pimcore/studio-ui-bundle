@@ -12,7 +12,7 @@
 */
 
 import { store, useAppDispatch } from '@Pimcore/app/store'
-import { type InternalNodeState, selectNodeState, setNodeExpanded, setNodeLoading, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, setNodeFetching } from '../element-tree-slice'
+import { type InternalNodeState, selectNodeState, setNodeExpanded, setNodeLoading, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, setNodeFetching, setNodeHasChildren } from '../element-tree-slice'
 import { isUndefined } from 'lodash'
 import { type DataTransformerReturnType, type DataTransformerSourceNode } from '../types/node-api-hook'
 import { useNodeApiHook } from '../provider/node-api-hook-provider/use-node-api-hook'
@@ -59,9 +59,6 @@ export const useElementTree = (): UseElementTreeReturnType => {
 
   const doRefreshChildren = async (nodeId: string, forceLoading: boolean): Promise<DataTransformerReturnType | undefined> => {
     const nodeState = getNodeState(nodeId)
-    if (nodeState?.isFetching) {
-      return
-    }
 
     if (forceLoading) {
       dispatch(updateNodesByParentId({ treeId, parentId: nodeId, nodes: [], total: 0 }))
@@ -85,6 +82,13 @@ export const useElementTree = (): UseElementTreeReturnType => {
       .then((apiHookResult) => {
         if (!isUndefined(apiHookResult)) {
           dispatch(updateNodesByParentId({ treeId, parentId: nodeId, nodes: apiHookResult.nodes, total: apiHookResult.total }))
+
+          if (getNodeState(nodeId).page > 1 && apiHookResult.nodes.length === 0) {
+            setPage(nodeId, 1)
+          }
+          if (getNodeState(nodeId).page === 1) {
+            updateHasChildren(nodeId, apiHookResult.nodes.length > 0)
+          }
         }
         setLoading(nodeId, false)
         setFetching(nodeId, false)
@@ -117,6 +121,12 @@ export const useElementTree = (): UseElementTreeReturnType => {
 
   const setScrollTo = (nodeId: string, scrollTo: boolean): void => {
     dispatch(setNodeScrollTo({ treeId, nodeId, scrollTo }))
+  }
+
+  const updateHasChildren = (nodeId: string, hasChildren: boolean): void => {
+    if (getNodeState(nodeId).treeNodeProps?.hasChildren !== hasChildren) {
+      dispatch(setNodeHasChildren({ treeId, nodeId, hasChildren }))
+    }
   }
 
   return {

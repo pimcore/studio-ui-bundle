@@ -93,7 +93,7 @@ const ElementTree = (
   const { nodeId } = props
   const hasRootNode = rootNode !== undefined && parseInt(rootNode.id) === nodeId
   const preparedRootNode = rootNode
-  const { page, setPage, getChildren, isLoading } = useElementTreeNode(String(nodeId))
+  const { getChildren, isLoading } = useElementTreeNode(String(nodeId))
 
   const nodesRefs = useRef<Record<string, INodeRef>>({})
   const nodeOrder = useCallback(() => {
@@ -127,10 +127,6 @@ const ElementTree = (
 
   if (hasRootNode) {
     preparedRootNode!.hasChildren = false
-  }
-
-  if (items.length === 0 && page > 1) {
-    setPage(1)
   }
 
   const TreeNode = renderNode

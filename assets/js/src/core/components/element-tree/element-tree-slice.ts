@@ -44,6 +44,7 @@ export interface InternalNodeState {
   isScrollTo: boolean
   isFetchTriggered: boolean
   isFetching: boolean
+  isDeleting: boolean
   page: number
   searchTerm?: string
   treeNodeProps?: TreeNode
@@ -67,7 +68,8 @@ export const initialNodeState: InternalNodeState = {
   page: 1,
   isSelected: false,
   isScrollTo: false,
-  isFetchTriggered: false
+  isFetchTriggered: false,
+  isDeleting: false
 }
 
 const initialTreeState: TreeState = {
@@ -108,21 +110,28 @@ const updateNodeState = (
   }
 }
 
-const getAllDescendants = (nodes: TreeNodesState, parentId: string): string[] => {
+const getDescendants = (nodes: TreeNodesState, parentId: string, recursive: boolean = false): string[] => {
   const descendants = Object.keys(nodes).filter(nodeId => nodes[nodeId].treeNodeProps?.parentId === parentId)
   let allDescendants = [...descendants]
-  descendants.forEach(descendantId => {
-    allDescendants = [...allDescendants, ...getAllDescendants(nodes, descendantId)]
-  })
+  if (recursive) {
+    descendants.forEach(descendantId => {
+      allDescendants = [...allDescendants, ...getDescendants(nodes, descendantId, true)]
+    })
+  }
   return allDescendants
 }
 
-const removeDescendants = (nodes: TreeNodesState, parentId: string): TreeNodesState => {
-  const descendants = getAllDescendants(nodes, parentId)
+const removeDescendants = (nodes: TreeNodesState, parentId: string, keepBasicStates: boolean = false): TreeNodesState => {
+  const descendants = getDescendants(nodes, parentId, !keepBasicStates)
   const result: TreeNodesState = {}
   Object.keys(nodes).forEach(nodeId => {
     if (!descendants.includes(nodeId)) {
       result[nodeId] = nodes[nodeId]
+    } else if (keepBasicStates) {
+      result[nodeId] = {
+        ...nodes[nodeId],
+        treeNodeProps: undefined
+      }
     }
   })
   return result
@@ -186,6 +195,20 @@ const slice = createSlice({
         isExpanded: payload.expanded
       }))
     },
+    setNodeHasChildren: (
+      state,
+      { payload }: PayloadAction<{ treeId: string, nodeId: string, hasChildren: boolean }>
+    ) => {
+      updateNodeState(state, payload.treeId, payload.nodeId, node => ({
+        ...node,
+        treeNodeProps: !isUndefined(node.treeNodeProps)
+          ? {
+              ...node.treeNodeProps,
+              hasChildren: payload.hasChildren
+            }
+          : undefined
+      }))
+    },
     setNodePage: (
       state,
       { payload }: PayloadAction<{ treeId: string, nodeId: string, page: number }>
@@ -238,7 +261,7 @@ const slice = createSlice({
 
       const currentNodes = state[payload.treeId].nodes
 
-      const updatedNodes = removeDescendants(currentNodes, payload.parentId)
+      const updatedNodes = removeDescendants(currentNodes, payload.parentId, true)
 
       // Add or update the new nodes
       let order = 0
@@ -247,6 +270,7 @@ const slice = createSlice({
         updatedNodes[nodeId] = initializeNodeState(state, payload.treeId, nodeId)
         updatedNodes[nodeId] = {
           ...updatedNodes[nodeId],
+          isDeleting: false,
           treeNodeProps: node,
           order: order++
         }
@@ -345,6 +369,55 @@ const slice = createSlice({
         }
       })
     },
+
+    refreshTargetNode: (
+      state,
+      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
+          updateNodeState(state, treeId, payload.nodeId, node => ({
+            ...node,
+            isExpanded: true,
+            isFetchTriggered: false,
+            treeNodeProps: !isUndefined(node.treeNodeProps)
+              ? {
+                  ...node.treeNodeProps,
+                  hasChildren: true
+                }
+              : undefined
+          }))
+
+          // state[treeId].nodes = removeDescendants(state[treeId].nodes, payload.nodeId)
+        }
+      })
+    },
+    refreshSourceNode: (
+      state,
+      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
+          updateNodeState(state, treeId, payload.nodeId, node => ({
+            ...node,
+            isFetchTriggered: false
+          }))
+        }
+      })
+    },
+    markNodeDeleting: (
+      state,
+      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType, isDeleting: boolean }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
+          updateNodeState(state, treeId, payload.nodeId, node => ({
+            ...node,
+            isDeleting: payload.isDeleting
+          }))
+        }
+      })
+    },
     setRootNode: (
       state,
       { payload }: PayloadAction<{ treeId: string, nodeId: string, rootNode: TreeNode }>
@@ -363,7 +436,7 @@ export const treeSliceName = slice.name
 
 injectSliceWithState(slice)
 
-export const { setNodeLoading, setNodeExpanded, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, renameNode, setRootNode } = slice.actions
+export const { setNodeLoading, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, setRootNode } = slice.actions
 
 export const selectNodeState = createSelector(
   (state: RootState) => state.trees,

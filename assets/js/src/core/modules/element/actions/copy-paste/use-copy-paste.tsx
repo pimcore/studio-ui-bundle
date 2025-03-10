@@ -26,6 +26,8 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
+import { markNodeDeleting, refreshSourceNode, refreshTargetNode } from '@Pimcore/components/element-tree/element-tree-slice'
+import { useAppDispatch } from '@Pimcore/app/store'
 
 export interface UseCopyPasteHookReturn {
   copy: (node: TreeNodeProps) => void
@@ -57,6 +59,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
   const { t } = useTranslation()
   const { isTreeActionAllowed } = useTreePermission()
   const { addJob } = useJobs()
+  const dispatch = useAppDispatch()
 
   const copy = (node: TreeNodeProps | Element): void => {
     setStoredNode(node)
@@ -70,9 +73,14 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
 
   const move = async (props: MoveProps): Promise<void> => {
     const { currentElement, targetElement } = props
+    if (currentElement.id === targetElement.id) {
+      return
+    }
 
     try {
-      await elementPatch({
+      dispatch(markNodeDeleting({ nodeId: String(currentElement.id), elementType, isDeleting: true }))
+
+      const success = await elementPatch({
         body: {
           data: [{
             id: currentElement.id,
@@ -81,10 +89,10 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
         }
       })
 
-      // todo refreshTree(targetElement.parentId)
-      // refreshTree(currentElement.parentId)
-      // refreshTree(targetElement.id)
-      // refreshTree(currentElement.id)
+      if (success) {
+        dispatch(refreshSourceNode({ nodeId: String(currentElement.parentId), elementType }))
+        dispatch(refreshTargetNode({ nodeId: String(targetElement.id), elementType }))
+      }
     } catch (error) {
       console.error('Error moving element', error)
     }
@@ -144,7 +152,9 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       : parseInt(storedNode.id)
 
     try {
-      await elementPatch({
+      dispatch(markNodeDeleting({ nodeId: String(id), elementType, isDeleting: true }))
+
+      const success = await elementPatch({
         body: {
           data: [{
             id,
@@ -153,15 +163,12 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
         }
       })
 
-      //  if (storedNode.parentId !== undefined) {
-      //    const parentId = typeof storedNode.parentId === 'number'
-      //      ? storedNode.parentId
-      //      : parseInt(storedNode.parentId)
-
-      // todo refreshTree(parentId)
-      //  }
-
-      // todo  refreshTree(parentId)
+      if (success) {
+        dispatch(refreshSourceNode({ nodeId: String(storedNode.parentId), elementType }))
+        dispatch(refreshTargetNode({ nodeId: String(parentId), elementType }))
+        setStoredNode(undefined)
+        setNodeTask(undefined)
+      }
     } catch (error) {
       console.error('Error cloning element', error)
     }

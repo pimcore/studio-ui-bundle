@@ -22,12 +22,12 @@ export const withActionStates = (Component: typeof TreeNode): typeof TreeNode =>
     const originalLoadingState = props.isLoading ?? false
     const [, { isLoading }] = useAssetPatchByIdMutation({ fixedCacheKey: `ASSET_ACTION_RENAME_ID_${props.id}` })
     const [, { isLoading: isDeleteLoading }] = useElementDeleteMutation({ fixedCacheKey: `ASSET_ACTION_DELETE_ID_${props.id}` })
-    const { isFetching: isMarkedAsFetching, isLoading: isMarkedAsLoading } = useElementTreeNode(props.id)
+    const { isFetching: isMarkedAsFetching, isLoading: isMarkedAsLoading, isDeleting: isMarkedAsDeleting } = useElementTreeNode(props.id)
 
     return (
       <Component
         { ...props }
-        danger={ originalLoadingState || isDeleteLoading }
+        danger={ originalLoadingState || isDeleteLoading || isMarkedAsDeleting }
         isLoading={ originalLoadingState || (isMarkedAsLoading !== true && isMarkedAsFetching) || isLoading || isDeleteLoading }
         ref={ ref }
       />
