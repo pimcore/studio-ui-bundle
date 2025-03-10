@@ -34,6 +34,7 @@ import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { PathTarget } from './path-target'
+import { useStyles } from './many-to-one-relation.styles'
 
 export type ManyToOneRelationValueType = ManyToOneRelationValue | PathTextInputValue | null
 
@@ -68,10 +69,13 @@ export interface ManyToOneRelationProps extends IRelationAllowedTypesDataCompone
 
 export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Element => {
   const [value, setValue] = React.useState<ManyToOneRelationValueType>(props.value ?? null)
+
   const { openElement } = useElementHelper()
-  const { t } = useTranslation()
   const { download } = useDownload()
   const fieldWidth = useFieldWidth()
+
+  const { t } = useTranslation()
+  const { styles } = useStyles()
 
   useEffect(() => {
     props.onChange?.(value)
@@ -90,7 +94,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
 
   return (
     <Flex
-      className={ cn(props.className) }
+      className={ cn(styles.container, props.className) }
       gap="extra-small"
       style={ {
         maxWidth: toCssDimension(props.width, fieldWidth.large)
