@@ -19,8 +19,8 @@ import {
 import { useCacheUpdate } from '@Pimcore/modules/element/hooks/use-cache-update'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useAppDispatch } from '@Pimcore/app/store'
-import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { api as dataObjectApi } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { api as assetApi, useAssetCloneMutation } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { api as dataObjectApi, useDataObjectCloneMutation } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { isUndefined } from 'lodash'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
@@ -39,15 +39,34 @@ interface ElementPatchArgs {
   }
 }
 
+export interface CloneParameters {
+  recursive: boolean
+  updateReferences: boolean
+}
+
+interface ElementCloneArgs {
+  id: number
+  parentId: number
+  cloneParameters: CloneParameters
+}
+
+interface ElementCloneResponse {
+  success: boolean
+  jobRunId?: number
+}
+
 interface UseElementApiReturn {
   elementPatch: (args: ElementPatchArgs) => Promise<boolean>
   getElementById: (id: number) => Promise<AssetGetByIdApiResponse | DataObjectGetByIdApiResponse | undefined>
+  elementClone: (args: ElementCloneArgs) => Promise<ElementCloneResponse>
 }
 
 export const useElementApi = (elementType: ElementType, cacheKey?: string): UseElementApiReturn => {
   const dispatch = useAppDispatch()
   const [assetPatch] = useAssetPatchByIdMutation({ fixedCacheKey: cacheKey })
   const [dataObjectPatch] = useDataObjectPatchByIdMutation({ fixedCacheKey: cacheKey })
+  const [assetClone] = useAssetCloneMutation()
+  const [dataObjectClone] = useDataObjectCloneMutation()
   const { updateFieldValue: updateAssetFieldValue } = useCacheUpdate('asset', ['ASSET_TREE'])
   const { updateFieldValue: updateDataObjectFieldValue } = useCacheUpdate('data-object', ['DATA_OBJECT_TREE'])
 
@@ -103,8 +122,40 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
     }
   }
 
+  const elementClone = async (args: ElementCloneArgs): Promise<ElementCloneResponse> => {
+    try {
+      if (elementType === 'asset') {
+        const response = await assetClone(args)
+        if (!isUndefined(response.error)) {
+          trackError(new ApiError(response.error))
+          return { success: false }
+        }
+        return {
+          success: true,
+          jobRunId: response.data?.jobRunId
+        }
+      } else if (elementType === 'data-object') {
+        const response = await dataObjectClone(args)
+        if (!isUndefined(response.error)) {
+          trackError(new ApiError(response.error))
+          return { success: false }
+        }
+        return {
+          success: true,
+          jobRunId: response.data?.jobRunId ?? undefined
+        }
+      }
+    } catch (error) {
+      console.error('Error cloning element', error)
+    }
+    return {
+      success: false
+    }
+  }
+
   return {
     elementPatch,
-    getElementById
+    getElementById,
+    elementClone
   }
 }
