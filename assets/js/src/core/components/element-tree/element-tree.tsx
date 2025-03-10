@@ -28,6 +28,7 @@ import { Skeleton } from './skeleton/skeleton'
 import { Box } from '../box/box'
 import { useElementTreeNode } from './hooks/use-element-tree-node'
 import { type TreeNode } from './element-tree-slice'
+import { TreeList } from './list/tree-list'
 
 export interface TreeSearchProps {
   node: TreeNodeProps
@@ -58,6 +59,8 @@ export interface TreeProps {
   onLoad?: (node: TreeNode) => Promise<void>
   onSelect?: (node: TreeNode) => void
   onRightClick?: (event: React.MouseEvent, node: TreeNode) => void
+
+  showRoot: boolean
 }
 
 export interface INodeRef {
@@ -73,7 +76,8 @@ export interface ITreeContext extends TreeProps {
 export const defaultProps: TreeProps = {
   nodeId: 1,
   renderNodeContent: TreeNodeContent,
-  renderNode: TreeNodeComponent
+  renderNode: TreeNodeComponent,
+  showRoot: true
 }
 
 export const TreeContext = createContext<ITreeContext>({
@@ -91,7 +95,7 @@ const ElementTree = (
 ): React.JSX.Element => {
   const { styles } = useStyles()
   const { nodeId } = props
-  const hasRootNode = rootNode !== undefined && parseInt(rootNode.id) === nodeId
+  const hasRootNode = rootNode !== undefined && parseInt(rootNode.id) === nodeId && props.showRoot
   const preparedRootNode = rootNode
   const { getChildren, isLoading } = useElementTreeNode(String(nodeId))
 
@@ -128,14 +132,14 @@ const ElementTree = (
   if (hasRootNode) {
     preparedRootNode!.hasChildren = false
   }
-
+  console.log('prepared root node', preparedRootNode)
   const TreeNode = renderNode
   const treeContent = (
     <div className={ ['tree', styles.tree].join(' ') }>
       <TreeContext.Provider value={ treeContextValue }>
         {hasRootNode && (
 
-          <treeContextValue.renderNode
+          <TreeNode
             key={ preparedRootNode!.id }
             level={ -1 }
             { ...preparedRootNode! }
@@ -143,16 +147,10 @@ const ElementTree = (
         )}
 
         {!hasRootNode && (
-          <>
-            {items.map((item, index) => (
-              <TreeNode
-                key={ item.id }
-                { ...item }
-                internalKey={ `${index}` }
-                level={ 0 }
-              />
-            ))}
-          </>
+          <TreeList
+            node={ { ...preparedRootNode!, level: -1 } }
+          />
+
         )}
       </TreeContext.Provider>
     </div>

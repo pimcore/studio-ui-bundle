@@ -215,10 +215,12 @@ const slice = createSlice({
     ) => {
       updateNodeState(state, payload.treeId, payload.nodeId, node => {
         const isFetchTriggered = node.page !== payload.page ? false : node.isFetchTriggered
+        const isLoading = node.page !== payload.page ? undefined : node.isLoading
         return {
           ...node,
           page: payload.page,
-          isFetchTriggered
+          isFetchTriggered,
+          isLoading
         }
       })
     },
@@ -228,10 +230,12 @@ const slice = createSlice({
     ) => {
       updateNodeState(state, payload.treeId, payload.nodeId, node => {
         const isFetchTriggered = node.searchTerm !== payload.searchTerm ? false : node.isFetchTriggered
+        const isLoading = node.searchTerm !== payload.searchTerm ? undefined : node.isLoading
         return {
           ...node,
           searchTerm: payload.searchTerm,
-          isFetchTriggered
+          isFetchTriggered,
+          isLoading
         }
       })
     },

@@ -62,6 +62,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
       renderNodeContent={ defaultProps.renderNodeContent }
       renderPager={ PagerContainer }
       rootNode={ rootNode }
+      showRoot={ showRoot }
     />
   )
 }
