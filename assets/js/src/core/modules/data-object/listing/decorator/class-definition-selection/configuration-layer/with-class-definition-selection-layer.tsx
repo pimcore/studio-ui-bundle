@@ -18,6 +18,8 @@ import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/
 import { type ClassDefinitionSelectionDecoratorConfig } from '../class-definition-selection-decorator'
 import { Content } from '@Pimcore/components/content/content'
 import { ClassDefinitionSelect } from '../components/class-definition-select/class-definition-select'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Text } from '@Pimcore/components/text/text'
 
 export const withClassDefinitionSelectionLayer = (Component: AbstractDecoratorProps['ConfigurationComponent'], config: ClassDefinitionSelectionDecoratorConfig): AbstractDecoratorProps['ConfigurationComponent'] => {
   const ClassDefinitionSelectionConfigurationComponent = (): React.JSX.Element => {
@@ -27,7 +29,13 @@ export const withClassDefinitionSelectionLayer = (Component: AbstractDecoratorPr
     if (config.showConfigLayer === true && selectedClassDefinition === undefined) {
       return (
         <Content padded>
-          <ClassDefinitionSelect />
+          <Flex
+            align='center'
+            gap={ 'extra-small' }
+          >
+            <Text>Select a class to display</Text>
+            <ClassDefinitionSelect />
+          </Flex>
         </Content>
       )
     }
