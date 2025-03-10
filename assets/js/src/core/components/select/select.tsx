@@ -98,9 +98,9 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
         menuItemSelectedIcon={ getItemSelectedIcon() }
         mode={ mode }
         onBlur={ () => { setIsFocus(false) } }
-        onChange={ handleChange }
         onDropdownVisibleChange={ handleClick }
         onFocus={ () => { setIsFocus(true) } }
+        onSelect={ handleChange }
         ref={ selectRef }
         status={ status }
         suffixIcon={ getSuffixIcon() }
