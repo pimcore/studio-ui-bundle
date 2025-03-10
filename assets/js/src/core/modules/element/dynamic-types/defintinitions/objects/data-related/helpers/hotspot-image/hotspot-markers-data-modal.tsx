@@ -21,6 +21,7 @@ import { Card } from '@Pimcore/components/card/card'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Button } from '@Pimcore/components/button/button'
+import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 
 interface HotspotMarkerData {
   type: 'text' | 'checkbox'
@@ -31,56 +32,95 @@ export interface HotspotMarkersDataModalProps {
   data: HotspotMarkerData[]
   onClose: () => void
   onSave: (value: HotspotMarkerData) => void
-  allowedTypes?: string[]
 }
 
 export const HotspotMarkersDataModal = ({
   open,
   data,
   onClose,
-  onSave,
-  allowedTypes = []
+  onSave
 }: HotspotMarkersDataModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
-  // const emptyLinkValue: LinkValue = { linktype: 'direct', text: '', direct: '', fullPath: '', target: '', parameters: '', anchor: '', title: '', accesskey: '', rel: '', tabindex: '', class: '' }
 
   console.log('----> open', open)
 
   // useEffect(() => {
-  //   form.setFieldsValue(convertToInternalLinkValue(value ?? emptyLinkValue))
-  // }, [value])
+  //   transform data into fields here
+  // }, [data])
 
-  const handleOk = (): void => {
-    // const values: InternalLinkValue = form.getFieldsValue()
-    // const newValue = convertFromInternalLinkValue(values)
-    // onSave(newValue)
+  const handleSave = (): void => {
     onClose()
   }
 
   const handleCancel = (): void => {
     onClose()
-    // const newValue = value ?? { ...emptyLinkValue }
-    // form.setFieldsValue(convertToInternalLinkValue(newValue))
   }
+
+  const dataTypes = [{
+    key: 1,
+    label: t('hotspots-markers-data-modal.data-type.text-field'),
+    onClick: () => {
+      console.log('----> clicked text field')
+    }
+  },
+  {
+    key: 2,
+    label: t('hotspots-markers-data-modal.data-type.text-area'),
+    onClick: () => {
+      console.log('----> clicked text area')
+    }
+  },
+  {
+    key: 3,
+    label: t('hotspots-markers-data-modal.data-type.checkbox'),
+    onClick: () => {
+      console.log('----> clicked text area')
+    }
+  },
+  {
+    key: 4,
+    label: t('hotspots-markers-data-modal.data-type.object'),
+    onClick: () => {
+      console.log('----> clicked text area')
+    }
+  },
+  {
+    key: 5,
+    label: t('hotspots-markers-data-modal.data-type.document'),
+    onClick: () => {
+      console.log('----> clicked text area')
+    }
+  },
+  {
+    key: 6,
+    label: t('hotspots-markers-data-modal.data-type.asset'),
+    onClick: () => {
+      console.log('----> clicked text area')
+    }
+  }]
 
   return (
     <WindowModal
-      footer={ (_, { OkBtn }) => (
+      footer={ () => (
         <Flex
           className="w-100"
           justify="space-between"
         >
-          <IconTextButton
-            icon={ { value: 'new' } }
-            key="empty"
-            onClick={ () => {
-              console.log('new data')
-            }
-                        }
+          <Dropdown menu={ {
+            items: dataTypes
+          } }
           >
-            {t('hotspots-markers-data-modal.new-data')}
-          </IconTextButton>,
+            <IconTextButton
+              icon={ { value: 'new' } }
+              key="empty"
+              onClick={ () => {
+                console.log('new data')
+              } }
+            >
+              {t('hotspots-markers-data-modal.new-data')}
+            </IconTextButton>
+          </Dropdown>
           <Button
             key="ok"
             onClick={ () => {
@@ -94,7 +134,7 @@ export const HotspotMarkersDataModal = ({
       ) }
       okText={ t('save') }
       onCancel={ handleCancel }
-      onOk={ handleOk }
+      onOk={ handleSave }
       open={ open }
       size="M"
       title={ t('link.edit-title') }

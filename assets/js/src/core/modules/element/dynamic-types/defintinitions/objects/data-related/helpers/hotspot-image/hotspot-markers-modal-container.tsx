@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState, useImperativeHandle, forwardRef } from 'react'
+import React, { forwardRef, useImperativeHandle, useState } from 'react'
 import {
   HotspotMarkersModal,
   type HotspotMarkersModalProps
@@ -28,7 +28,11 @@ export interface HotspotMarkersModalContainerRef {
 export const HotspotMarkersModalContainer = forwardRef<HotspotMarkersModalContainerRef, HotspotMarkersModalContainerProps>((props: HotspotMarkersModalContainerProps, ref) => {
   const [modals, setModals] = useState<Array<{ id: number, props: HotspotMarkersModalProps }>>([])
 
+  console.log('----> modals', modals)
+
   const setModal = (id: number, modalProps: HotspotMarkersModalProps): void => {
+    console.log('----> modalProps', modalProps)
+
     setModals((prevModals) => {
       const existingModalIndex = prevModals.findIndex(modal => modal.id === id)
       if (existingModalIndex !== -1) {
