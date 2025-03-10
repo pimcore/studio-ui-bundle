@@ -25,6 +25,9 @@ import { type Coordinates, type Rectangle } from '@Pimcore/components/hotspot-im
 import { resizeItem } from '@Pimcore/components/hotspot-image/utils/resize'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
+import {
+  type HotspotMarkerData
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-markers-data-modal'
 
 export interface IStyleOptions {
   hotspot: {
@@ -65,6 +68,8 @@ export interface IHotspot {
   width: number
   height: number
   type: string
+  data?: HotspotMarkerData[]
+  name?: string | null
 }
 
 interface IHotspotImage {

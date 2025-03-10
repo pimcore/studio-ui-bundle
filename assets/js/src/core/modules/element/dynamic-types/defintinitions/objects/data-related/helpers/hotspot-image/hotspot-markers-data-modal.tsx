@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form } from '@Pimcore/components/form/form'
 import { Space } from '@Pimcore/components/space/space'
 import { Input } from '@Pimcore/components/input/input'
@@ -25,37 +25,38 @@ import { StackList, type StackListProps } from '@Pimcore/components/stack-list/s
 import { Tag } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { isUndefined } from 'lodash'
+import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 
 type HotspotMarkerDataHotspotMarkerDataType = 'textfield' | 'textarea' | 'checkbox' | 'object' | 'document' | 'asset'
 
-interface HotspotMarkerData {
+export interface HotspotMarkerData {
   id: number
   type: HotspotMarkerDataHotspotMarkerDataType
 }
 export interface HotspotMarkersDataModalProps {
-  open: boolean
-  data: HotspotMarkerData[]
+  editModeHotspotId: number | undefined
+  hotspot: IHotspot | undefined
   onClose: () => void
-  onSave: (fields: HotspotMarkerData[]) => void
+  onUpdate: (item: IHotspot) => void
 }
 
 export const HotspotMarkersDataModal = ({
-  open,
-  data,
+  editModeHotspotId,
+  hotspot,
   onClose,
-  onSave
+  onUpdate
 }: HotspotMarkersDataModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const [fields, setFields] = useState<HotspotMarkerData[]>([])
   console.log('----> open', open)
 
-  // useEffect(() => {
-  //   transform data into fields here
-  // }, [data])
+  useEffect(() => {
+    //
+  }, [hotspot])
 
   const handleSave = (): void => {
-    onSave(fields)
+    // onUpdate(fields)
     onClose()
   }
 
@@ -63,10 +64,10 @@ export const HotspotMarkersDataModal = ({
     onClose()
   }
 
-  const handleTypeSelect = (type: HotspotMarkerData['type']): void => {
+  const handleTypeSelect = (hotSpotId: number, type: HotspotMarkerData['type']): void => {
     setFields((prevFields) => [
       ...prevFields,
-      { id: Date.now(), type }
+      { id: hotSpotId, type }
     ])
   }
 
@@ -110,12 +111,12 @@ export const HotspotMarkersDataModal = ({
   }
 
   const dataTypes = [
-    { key: 'textfield', label: t('hotspots-markers-data-modal.data-type.text-field'), onClick: () => { handleTypeSelect('textfield') } },
-    { key: 'textarea', label: t('hotspots-markers-data-modal.data-type.text-area'), onClick: () => { handleTypeSelect('textarea') } },
-    { key: 'checkbox', label: t('hotspots-markers-data-modal.data-type.checkbox'), onClick: () => { handleTypeSelect('checkbox') } },
-    { key: 'object', label: t('hotspots-markers-data-modal.data-type.object'), onClick: () => { handleTypeSelect('object') } },
-    { key: 'document', label: t('hotspots-markers-data-modal.data-type.document'), onClick: () => { handleTypeSelect('document') } },
-    { key: 'asset', label: t('hotspots-markers-data-modal.data-type.asset'), onClick: () => { handleTypeSelect('asset') } }
+    { key: 'textfield', label: t('hotspots-markers-data-modal.data-type.text-field'), onClick: () => { !isUndefined(editModeHotspotId) && handleTypeSelect(editModeHotspotId, 'textfield') } },
+    { key: 'textarea', label: t('hotspots-markers-data-modal.data-type.text-area'), onClick: () => { !isUndefined(editModeHotspotId) && handleTypeSelect(editModeHotspotId, 'textarea') } },
+    { key: 'checkbox', label: t('hotspots-markers-data-modal.data-type.checkbox'), onClick: () => { !isUndefined(editModeHotspotId) && handleTypeSelect(editModeHotspotId, 'checkbox') } },
+    { key: 'object', label: t('hotspots-markers-data-modal.data-type.object'), onClick: () => { !isUndefined(editModeHotspotId) && handleTypeSelect(editModeHotspotId, 'object') } },
+    { key: 'document', label: t('hotspots-markers-data-modal.data-type.document'), onClick: () => { !isUndefined(editModeHotspotId) && handleTypeSelect(editModeHotspotId, 'document') } },
+    { key: 'asset', label: t('hotspots-markers-data-modal.data-type.asset'), onClick: () => { !isUndefined(editModeHotspotId) && handleTypeSelect(editModeHotspotId, 'asset') } }
   ]
 
   const getTypeLabel = (type: string): string => {
@@ -137,6 +138,14 @@ export const HotspotMarkersDataModal = ({
       body: renderFormItem(field)
     })
   })
+
+  const addDataToHotspot = (): void => {
+    if (!isUndefined(hotspot)) {
+      const updatedHotspot = { ...hotspot, data: fields }
+      console.log('----> updatedHotspot', updatedHotspot)
+      onUpdate(updatedHotspot)
+    }
+  }
 
   return (
     <WindowModal
@@ -162,7 +171,7 @@ export const HotspotMarkersDataModal = ({
           <Button
             key="ok"
             onClick={ () => {
-              console.log('')
+              addDataToHotspot()
             } }
             type={ 'primary' }
           >
@@ -173,7 +182,7 @@ export const HotspotMarkersDataModal = ({
       okText={ t('save') }
       onCancel={ handleCancel }
       onOk={ handleSave }
-      open={ open }
+      open={ !isUndefined(editModeHotspotId) }
       size="M"
       title={ t('link.edit-title') }
     >
@@ -192,13 +201,7 @@ export const HotspotMarkersDataModal = ({
           >
             <Input />
           </Form.Item>
-          <Space
-            className='w-full'
-            direction='vertical'
-            size='small'
-          >
-            {fields.length > 0 ? <StackList items={ items } /> : <p>{t('hotspots-markers-data-modal.no-data')}</p>}
-          </Space>
+          {fields.length > 0 && <StackList items={ items } />}
         </Space>
       </Form>
     </WindowModal>

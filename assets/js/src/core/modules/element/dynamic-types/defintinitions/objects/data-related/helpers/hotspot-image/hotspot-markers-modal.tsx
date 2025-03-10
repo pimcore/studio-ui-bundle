@@ -36,7 +36,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
   const { t } = useTranslation()
   const [hotspots, setHotspots] = useState<IHotspot[]>(props.hotspots ?? [])
   const [modalOpened, setModalOpened] = useState(false)
-  const [hotSpotMarkersDataModelOpen, setHotSpotMarkersDataModelOpen] = useState<boolean>(false)
+  const [editModeHotspotId, setEditModeHotspotId] = useState<number | undefined>(undefined)
 
   const width = 952
   const height = 800
@@ -61,11 +61,11 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
   }
 
   const onEdit = (id: number): void => {
-    setHotSpotMarkersDataModelOpen(true)
+    setEditModeHotspotId(id)
     console.log('----> insideEdit id', id)
   }
   const onUpdate = (item: IHotspot): void => {
-    console.log('----> coordinates', item)
+    console.log('----> update incoming', item)
 
     setHotspots(hotspots.map(h => h.id === item.id ? item : h))
   }
@@ -105,6 +105,8 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
     mimeType: 'PNG',
     contain: true
   })
+
+  const hotSpotInEditMode = hotspots.find(h => h.id === editModeHotspotId)
 
   return (
     <WindowModal
@@ -160,10 +162,10 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
         src={ thumbnailSrc }
       />
       <HotspotMarkersDataModal
-        data={ [] }
-        onClose={ () => { setHotSpotMarkersDataModelOpen(false) } }
-        onSave={ () => { console.log('save') } }
-        open={ hotSpotMarkersDataModelOpen }
+        editModeHotspotId={ editModeHotspotId }
+        hotspot={ hotSpotInEditMode }
+        onClose={ () => { setEditModeHotspotId(undefined) } }
+        onUpdate={ onUpdate }
       />
     </WindowModal>
   )
