@@ -26,6 +26,7 @@ import { get, isEmpty, isNil } from 'lodash'
 
 interface UseTagConfigReturn {
   tags: Tag[]
+  tagsLoading: boolean
   tagsFetching: boolean
   handleTagUpdate: (id: number, parentId: number, newName?: string) => Promise<void>
   handleTagCreation: (name: string, parentId: number) => Promise<void>
@@ -41,7 +42,7 @@ export const useTagConfig = (): UseTagConfigReturn => {
   const messageApi = useMessage()
   const [filter, setFilter] = useState<string>('')
 
-  const { data: tags, isFetching: tagsFetching } = useTagGetCollectionQuery({
+  const { data: tags, isFetching: tagsFetching, isLoading: tagsLoading } = useTagGetCollectionQuery({
     page: 1,
     pageSize: 9999,
     filter
@@ -164,6 +165,6 @@ export const useTagConfig = (): UseTagConfigReturn => {
   }
 
   return {
-    tags: tags?.items ?? [], setTagFilter: setFilter, tagsFetching, handleTagUpdate, handleTagCreation, tagDeletion, getTag, rootTagFolder
+    tags: tags?.items ?? [], setTagFilter: setFilter, tagsFetching, tagsLoading, handleTagUpdate, handleTagCreation, tagDeletion, getTag, rootTagFolder
   }
 }

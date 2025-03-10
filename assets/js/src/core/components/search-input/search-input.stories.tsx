@@ -25,17 +25,20 @@ export const _default = {
     placeholder: 'Search'
   }
 }
-
-export const SearchWithButton = {
+export const SearchMinimal = {
   args: {
-    withoutAddon: false,
-    withPrefix: false,
-    placeholder: 'Search'
+    withoutAddon: true,
+    withPrefix: true,
+    value: 'Filled value'
   }
 }
-export const Filled = {
+
+export const SearchFullWidth = {
   args: {
-    value: 'Filled value'
+    withoutAddon: true,
+    withPrefix: true,
+    value: 'Filled value',
+    maxWidth: '100%'
   }
 }
 
