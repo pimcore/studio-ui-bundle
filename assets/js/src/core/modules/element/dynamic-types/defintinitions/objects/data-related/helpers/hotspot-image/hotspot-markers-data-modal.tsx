@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Form } from '@Pimcore/components/form/form'
 import { Space } from '@Pimcore/components/space/space'
 import { Input } from '@Pimcore/components/input/input'
@@ -23,15 +23,17 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Button } from '@Pimcore/components/button/button'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 
-interface HotspotMarkerData {
-  type: 'text' | 'checkbox'
-}
+type HotspotMarkerDataHotspotMarkerDataType = 'textfield' | 'textarea' | 'checkbox' | 'object' | 'document' | 'asset'
 
+interface HotspotMarkerData {
+  id: number
+  type: HotspotMarkerDataHotspotMarkerDataType
+}
 export interface HotspotMarkersDataModalProps {
   open: boolean
   data: HotspotMarkerData[]
   onClose: () => void
-  onSave: (value: HotspotMarkerData) => void
+  onSave: (fields: HotspotMarkerData[]) => void
 }
 
 export const HotspotMarkersDataModal = ({
@@ -42,7 +44,7 @@ export const HotspotMarkersDataModal = ({
 }: HotspotMarkersDataModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
-
+  const [fields, setFields] = useState<HotspotMarkerData[]>([])
   console.log('----> open', open)
 
   // useEffect(() => {
@@ -50,6 +52,7 @@ export const HotspotMarkersDataModal = ({
   // }, [data])
 
   const handleSave = (): void => {
+    onSave(fields)
     onClose()
   }
 
@@ -57,48 +60,65 @@ export const HotspotMarkersDataModal = ({
     onClose()
   }
 
-  const dataTypes = [{
-    key: 1,
-    label: t('hotspots-markers-data-modal.data-type.text-field'),
-    onClick: () => {
-      console.log('----> clicked text field')
-    }
-  },
-  {
-    key: 2,
-    label: t('hotspots-markers-data-modal.data-type.text-area'),
-    onClick: () => {
-      console.log('----> clicked text area')
-    }
-  },
-  {
-    key: 3,
-    label: t('hotspots-markers-data-modal.data-type.checkbox'),
-    onClick: () => {
-      console.log('----> clicked text area')
-    }
-  },
-  {
-    key: 4,
-    label: t('hotspots-markers-data-modal.data-type.object'),
-    onClick: () => {
-      console.log('----> clicked text area')
-    }
-  },
-  {
-    key: 5,
-    label: t('hotspots-markers-data-modal.data-type.document'),
-    onClick: () => {
-      console.log('----> clicked text area')
-    }
-  },
-  {
-    key: 6,
-    label: t('hotspots-markers-data-modal.data-type.asset'),
-    onClick: () => {
-      console.log('----> clicked text area')
-    }
-  }]
+  const handleTypeSelect = (type: HotspotMarkerData['type']): void => {
+    setFields((prevFields) => [
+      ...prevFields,
+      { id: Date.now(), type }
+    ])
+  }
+
+  const renderFormItem = (field: HotspotMarkerData): JSX.Element => {
+    return (
+      <Card
+        key={ field.id }
+        theme="card-with-highlight"
+        title={ t(`hotspots-markers-data-modal.data.${field.type}`) }
+      >
+        <Space
+          className="w-full"
+          direction="vertical"
+          size="small"
+        >
+          <Form.Item
+            label={ t('hotspots-markers-data-modal.data-type.name') }
+            name={ `name-${field.id}` }
+          >
+            <Input />
+          </Form.Item>
+          {field.type === 'checkbox'
+            ? (
+              <Form.Item
+                label={ t('hotspots-markers-data-modal.data-type.value') }
+                name={ `value-${field.id}` }
+                valuePropName="checked"
+              >
+                <Input type="checkbox" />
+              </Form.Item>
+              )
+            : (
+              <Form.Item
+                label={ t('hotspots-markers-data-modal.data-type.value') }
+                name={ `value-${field.id}` }
+              >
+                {field.type === 'textarea' ? <Input /> : <Input />}
+              </Form.Item>
+              )}
+          {/* <Button type="danger" onClick={() => handleRemoveField(field.id)}> */}
+          {/*    {t('hotspots-markers-data-modal.remove')} */}
+          {/* </Button> */}
+        </Space>
+      </Card>
+    )
+  }
+
+  const dataTypes = [
+    { key: 'text', label: t('hotspots-markers-data-modal.data-type.text-field'), onClick: () => { handleTypeSelect('textfield') } },
+    { key: 'textarea', label: t('hotspots-markers-data-modal.data-type.text-area'), onClick: () => { handleTypeSelect('textarea') } },
+    { key: 'checkbox', label: t('hotspots-markers-data-modal.data-type.checkbox'), onClick: () => { handleTypeSelect('checkbox') } },
+    { key: 'object', label: t('hotspots-markers-data-modal.data-type.object'), onClick: () => { handleTypeSelect('object') } },
+    { key: 'document', label: t('hotspots-markers-data-modal.data-type.document'), onClick: () => { handleTypeSelect('document') } },
+    { key: 'asset', label: t('hotspots-markers-data-modal.data-type.asset'), onClick: () => { handleTypeSelect('asset') } }
+  ]
 
   return (
     <WindowModal
@@ -163,22 +183,7 @@ export const HotspotMarkersDataModal = ({
               direction='vertical'
               size='small'
             >
-              {
-                <>
-                  <Form.Item
-                    label={ t('hotspots-markers-data-modal.data-type.name') }
-                    name={ t('hotspots-markers-data-modal.data-type.name') }
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    label={ t('hotspots-markers-data-modal.data-type.value') }
-                    name={ t('hotspots-markers-data-modal.data-type.value') }
-                  >
-                    <Input />
-                  </Form.Item>
-                </>
-                            }
+              {fields.length > 0 ? fields.map((field) => renderFormItem(field)) : <p>{t('hotspots-markers-data-modal.no-data')}</p>}
             </Space>
           </Card>
         </Space>
