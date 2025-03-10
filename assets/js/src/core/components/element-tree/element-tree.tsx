@@ -129,16 +129,11 @@ const ElementTree = (
 
   const items: TreeNode[] = getChildren()
 
-  if (hasRootNode) {
-    preparedRootNode!.hasChildren = false
-  }
-  console.log('prepared root node', preparedRootNode)
   const TreeNode = renderNode
   const treeContent = (
     <div className={ ['tree', styles.tree].join(' ') }>
       <TreeContext.Provider value={ treeContextValue }>
         {hasRootNode && (
-
           <TreeNode
             key={ preparedRootNode!.id }
             level={ -1 }
@@ -164,7 +159,7 @@ const ElementTree = (
         </Box>
       )}
 
-      {isLoading !== true && (items.length !== 0 || hasRootNode) && (
+      {(items.length !== 0 || hasRootNode) && (
         ContextMenu !== undefined
           ? (
             <ContextMenu node={ rightClickedNode }>
