@@ -93,7 +93,7 @@ const ElementTree = (
   const { nodeId } = props
   const hasRootNode = rootNode !== undefined && parseInt(rootNode.id) === nodeId
   const preparedRootNode = rootNode
-  const { page, setPage, getChildren, isLoading, isExpanded, setExpanded } = useElementTreeNode(String(nodeId))
+  const { page, setPage, getChildren, isLoading } = useElementTreeNode(String(nodeId))
 
   const nodesRefs = useRef<Record<string, INodeRef>>({})
   const nodeOrder = useCallback(() => {
@@ -123,17 +123,10 @@ const ElementTree = (
 
   const treeContextValue: ITreeContext = useMemo(() => ({ ...props, nodesRefs, nodeOrder, renderNode, renderNodeContent, onRightClick }), [props, nodesRefs, nodeOrder, renderNode, renderNodeContent, onRightClick])
 
-  // todo if (isError !== false) {
-  //   return (<div>{'Error'}</div>)
-  // }
-
   const items: TreeNode[] = getChildren()
 
   if (hasRootNode) {
     preparedRootNode!.hasChildren = false
-    if (!isExpanded) {
-      setExpanded(true)
-    }
   }
 
   if (items.length === 0 && page > 1) {
@@ -176,7 +169,7 @@ const ElementTree = (
         </Box>
       )}
 
-      {isLoading !== true && items.length !== 0 && (
+      {isLoading !== true && (items.length !== 0 || hasRootNode) && (
         ContextMenu !== undefined
           ? (
             <ContextMenu node={ rightClickedNode }>

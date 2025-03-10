@@ -15,6 +15,7 @@ import { getElementIcon } from '@Pimcore/modules/element/element-helper'
 import { type DataObjectGetTreeApiResponse, type DataObjectPermissions } from '../../data-object-api-slice.gen'
 import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type DataTransformerSourceNode, type DataTransformerReturnType } from '@Pimcore/components/element-tree/types/node-api-hook'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 export const transformApiDataToNodes = (node: DataTransformerSourceNode, data: DataObjectGetTreeApiResponse, maxItemsPerNode: number | undefined): DataTransformerReturnType => {
   const nodes: TreeNode[] = []
@@ -23,6 +24,7 @@ export const transformApiDataToNodes = (node: DataTransformerSourceNode, data: D
   dataObjectData.forEach((dataObjectNode) => {
     nodes.push({
       id: dataObjectNode.id.toString(),
+      elementType: elementTypes.dataObject,
       icon: getElementIcon(dataObjectNode, { type: 'name', value: 'data-object' }),
       label: dataObjectNode.key!,
       type: dataObjectNode.type,

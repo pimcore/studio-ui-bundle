@@ -27,5 +27,6 @@ export interface DataTransformerReturnType {
 }
 
 export interface NodeApiHookReturnType {
-  fetchApiHookResult: (node: DataTransformerSourceNode, nodeState: NodeState) => Promise<DataTransformerReturnType | undefined>
+  fetchRoot: (id: number) => Promise<DataTransformerReturnType | undefined>
+  fetchChildren: (node: DataTransformerSourceNode, nodeState: NodeState) => Promise<DataTransformerReturnType | undefined>
 }

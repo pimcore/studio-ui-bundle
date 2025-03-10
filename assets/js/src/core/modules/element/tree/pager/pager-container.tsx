@@ -22,8 +22,10 @@ const PagerContainer = (props: TreePagerProps): React.JSX.Element => {
   const { pageSize } = useTreeFilter()
   const total = props.total
 
-  function onChange (page: number): void {
-    setPage(page)
+  function onChange (newPage: number): void {
+    if (page !== newPage) {
+      setPage(newPage)
+    }
   }
 
   return (

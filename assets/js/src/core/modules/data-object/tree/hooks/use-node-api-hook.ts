@@ -12,7 +12,8 @@
 */
 
 import {
-  api
+  api,
+  type DataObjectGetTreeApiArg
 } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { transformApiDataToNodes } from '../utils/transform-api-data-to-node'
 import { useTreeFilter } from '@Pimcore/modules/element/tree/provider/tree-filter-provider/use-tree-filter'
@@ -25,8 +26,18 @@ export const useNodeApiHook = (): NodeApiHookReturnType => {
   const { pageSize, treeFilterArgs } = useTreeFilter()
   const dispatch = useAppDispatch()
 
-  async function fetchApiHookResult (node: DataTransformerSourceNode, nodeState: NodeState): Promise<DataTransformerReturnType | undefined> {
-    const treeFetcher = dispatch(api.endpoints.dataObjectGetTree.initiate({ parentId: parseInt(node.id), pageSize, page: nodeState.page, idSearchTerm: nodeState.searchTerm, ...treeFilterArgs }, { forceRefetch: true }))
+  async function fetchRoot (id: number): Promise<DataTransformerReturnType | undefined> {
+    const node: DataTransformerSourceNode = { id: '0', internalKey: '0' }
+    const rootNodePqlQuery = id === 1 ? undefined : 'id = ' + id
+    return await fetch(node, { pageSize: 1, page: 1, excludeFolders: false, pathIncludeParent: true, pathIncludeDescendants: false, pqlQuery: rootNodePqlQuery })
+  }
+
+  async function fetchChildren (node: DataTransformerSourceNode, nodeState: NodeState): Promise<DataTransformerReturnType | undefined> {
+    return await fetch(node, { parentId: parseInt(node.id), pageSize, page: nodeState.page, idSearchTerm: nodeState.searchTerm, ...treeFilterArgs })
+  }
+
+  async function fetch (node: DataTransformerSourceNode, args: DataObjectGetTreeApiArg): Promise<DataTransformerReturnType | undefined> {
+    const treeFetcher = dispatch(api.endpoints.dataObjectGetTree.initiate(args, { forceRefetch: true }))
 
     return await treeFetcher
       .then(({ data, isSuccess, isError, error }) => {
@@ -44,5 +55,5 @@ export const useNodeApiHook = (): NodeApiHookReturnType => {
       .catch(() => undefined)
   }
 
-  return { fetchApiHookResult } as const
+  return { fetchRoot, fetchChildren } as const
 }

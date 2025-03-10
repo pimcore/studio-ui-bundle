@@ -33,6 +33,7 @@ import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
+import { useRefreshTree } from '../refresh-tree/use-refresh-tree'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
@@ -49,6 +50,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   const { refreshGrid } = useRefreshGrid(elementType)
   const { getElementById } = useElementApi(elementType)
   const { refreshElement } = useElementRefresh(elementType)
+  const { refreshTree } = useRefreshTree(elementType)
   const { isMainWidgetOpen, closeWidget } = useWidgetManager()
   const [elementDelete] = useElementDeleteMutation({ fixedCacheKey: cacheKey })
   const { isTreeActionAllowed } = useTreePermission()
@@ -152,6 +154,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
       }))
     } else if (parentId !== undefined) {
       refreshElement(parentId)
+      refreshTree(parentId)
     }
 
     const widgetId = getWidgetId(elementType, id)

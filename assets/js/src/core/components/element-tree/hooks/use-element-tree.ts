@@ -34,7 +34,7 @@ export interface UseElementTreeReturnType {
 export const useElementTree = (): UseElementTreeReturnType => {
   const dispatch = useAppDispatch()
   const { nodeApiHook } = useNodeApiHook()
-  const { fetchApiHookResult } = nodeApiHook()
+  const { fetchChildren } = nodeApiHook()
   const { treeId } = useTreeId()
 
   const getNodeState = (nodeId: string): NodeState => {
@@ -77,7 +77,7 @@ export const useElementTree = (): UseElementTreeReturnType => {
       internalKey: nodeId
     }
 
-    return await fetchApiHookResult(node, nodeState)
+    return await fetchChildren(node, nodeState)
   }
 
   const refreshChildren = (nodeId: string, forceLoading: boolean): void => {

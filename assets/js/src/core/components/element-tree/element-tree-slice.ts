@@ -19,9 +19,11 @@ import { createSelector } from 'reselect'
 import { type TreeLevelData } from '@Pimcore/modules/element/element-api-slice.gen'
 import { type ElementIcon } from 'src/sdk/main'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 export interface TreeNode {
   id: string
+  elementType?: ElementType
   parentId?: string
   icon: ElementIcon
   label: string
@@ -47,14 +49,11 @@ export interface InternalNodeState {
   treeNodeProps?: TreeNode
   total?: number
   order?: number
+  isRoot?: boolean
+  isRootFetchTriggered?: boolean
 }
 
 type TreeNodesState = Record<string, InternalNodeState>
-
-export interface LocateInTreeInfo {
-  nodeId: string
-  treeLevelData: TreeLevelData[]
-}
 
 interface TreeState {
   nodes: TreeNodesState
@@ -109,15 +108,24 @@ const updateNodeState = (
   }
 }
 
-const removeDescendants = (nodes: TreeNodesState, parentId: string): TreeNodesState => {
+const getAllDescendants = (nodes: TreeNodesState, parentId: string): string[] => {
   const descendants = Object.keys(nodes).filter(nodeId => nodes[nodeId].treeNodeProps?.parentId === parentId)
-  let updatedNodes = { ...nodes }
+  let allDescendants = [...descendants]
   descendants.forEach(descendantId => {
-    updatedNodes = removeDescendants(updatedNodes, descendantId)
-    const { [descendantId]: _, ...rest } = updatedNodes
-    updatedNodes = rest
+    allDescendants = [...allDescendants, ...getAllDescendants(nodes, descendantId)]
   })
-  return updatedNodes
+  return allDescendants
+}
+
+const removeDescendants = (nodes: TreeNodesState, parentId: string): TreeNodesState => {
+  const descendants = getAllDescendants(nodes, parentId)
+  const result: TreeNodesState = {}
+  Object.keys(nodes).forEach(nodeId => {
+    if (!descendants.includes(nodeId)) {
+      result[nodeId] = nodes[nodeId]
+    }
+  })
+  return result
 }
 
 const updateSelectedNodeIds = (state: TreesState, treeId: string, selectedNodeIds: string[]): void => {
@@ -158,6 +166,15 @@ const slice = createSlice({
       updateNodeState(state, payload.treeId, payload.nodeId, node => ({
         ...node,
         isFetchTriggered: payload.fetchTriggered
+      }))
+    },
+    setRootFetchTriggered: (
+      state,
+      { payload }: PayloadAction<{ treeId: string, nodeId: string, rootFetchTriggered: boolean }>
+    ) => {
+      updateNodeState(state, payload.treeId, payload.nodeId, node => ({
+        ...node,
+        isRootFetchTriggered: payload.rootFetchTriggered
       }))
     },
     setNodeExpanded: (
@@ -293,6 +310,51 @@ const slice = createSlice({
         ...node,
         isFetching: payload.isFetching
       }))
+    },
+    refreshNodeChildren: (
+      state,
+      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
+          updateNodeState(state, treeId, payload.nodeId, node => ({
+            ...node,
+            isLoading: undefined,
+            isFetchTriggered: false
+          }))
+
+          state[treeId].nodes = removeDescendants(state[treeId].nodes, payload.nodeId)
+        }
+      })
+    },
+    renameNode: (
+      state,
+      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType, newLabel: string }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
+          updateNodeState(state, treeId, payload.nodeId, node => ({
+            ...node,
+            treeNodeProps: !isUndefined(node.treeNodeProps)
+              ? {
+                  ...node.treeNodeProps,
+                  label: payload.newLabel
+                }
+              : undefined
+          }))
+        }
+      })
+    },
+    setRootNode: (
+      state,
+      { payload }: PayloadAction<{ treeId: string, nodeId: string, rootNode: TreeNode }>
+    ) => {
+      updateNodeState(state, payload.treeId, payload.nodeId, node => ({
+        ...node,
+        treeNodeProps: payload.rootNode,
+        isExpanded: true,
+        isRoot: true
+      }))
     }
   }
 })
@@ -301,7 +363,7 @@ export const treeSliceName = slice.name
 
 injectSliceWithState(slice)
 
-export const { setNodeLoading, setNodeExpanded, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setNodeFetching } = slice.actions
+export const { setNodeLoading, setNodeExpanded, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, renameNode, setRootNode } = slice.actions
 
 export const selectNodeState = createSelector(
   (state: RootState) => state.trees,
@@ -321,10 +383,4 @@ export const selectNodesByParentId = createSelector(
       .filter((node: InternalNodeState) => String(node.treeNodeProps?.parentId) === parentId)
       .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
   }
-)
-
-export const selectLocateInTree = createSelector(
-  (state: RootState) => state.trees,
-  (state: RootState, treeId: string) => treeId,
-  (trees, treeId) => trees[treeId]?.locateInTree
 )

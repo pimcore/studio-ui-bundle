@@ -21,6 +21,8 @@ import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { api as dataObjectApi } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { isUndefined } from 'lodash'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 /**
  * Abstracts the logic for some basic API calls across element types (assets, data objects, documents)
@@ -38,7 +40,7 @@ interface ElementPatchArgs {
 }
 
 interface UseElementApiReturn {
-  elementPatch: (args: ElementPatchArgs) => Promise<void>
+  elementPatch: (args: ElementPatchArgs) => Promise<boolean>
   getElementById: (id: number) => Promise<AssetGetByIdApiResponse | DataObjectGetByIdApiResponse | undefined>
 }
 
@@ -49,24 +51,32 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
   const { updateFieldValue: updateAssetFieldValue } = useCacheUpdate('asset', ['ASSET_TREE'])
   const { updateFieldValue: updateDataObjectFieldValue } = useCacheUpdate('data-object', ['DATA_OBJECT_TREE'])
 
-  const elementPatch = async (args: ElementPatchArgs): Promise<void> => {
-    if (elementType === 'asset') {
-      await assetPatch(args)
+  const elementPatch = async (args: ElementPatchArgs): Promise<boolean> => {
+    try {
+      if (elementType === 'asset') {
+        const response = await assetPatch(args)
+        if (!isUndefined(response.error)) {
+          trackError(new ApiError(response.error))
+        }
 
-      updateAssetFieldValue(
-        args.body.data[0].id,
-        'filename',
-        args.body.data[0].key
-      )
-    } else if (elementType === 'data-object') {
-      await dataObjectPatch(args)
+        updateAssetFieldValue(args.body.data[0].id, 'filename', args.body.data[0].key)
 
-      updateDataObjectFieldValue(
-        args.body.data[0].id,
-        'key',
-        args.body.data[0].key
-      )
+        return isUndefined(response.error)
+      } else if (elementType === 'data-object') {
+        const response = await dataObjectPatch(args)
+        if (!isUndefined(response.error)) {
+          trackError(new ApiError(response.error))
+        }
+
+        updateDataObjectFieldValue(args.body.data[0].id, 'key', args.body.data[0].key)
+
+        return isUndefined(response.error)
+      }
+    } catch (error) {
+      console.error('Error executing element patch', error)
     }
+
+    return false
   }
 
   const getElementById = async (id: number): Promise<AssetGetByIdApiResponse | DataObjectGetByIdApiResponse | undefined> => {

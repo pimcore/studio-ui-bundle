@@ -15,6 +15,7 @@ import { type AssetGetTreeApiResponse, type AssetPermissions } from '../../asset
 import { getElementIcon } from '@Pimcore/modules/element/element-helper'
 import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type DataTransformerSourceNode, type DataTransformerReturnType } from '@Pimcore/components/element-tree/types/node-api-hook'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 export const transformApiDataToNodes = (node: DataTransformerSourceNode, data: AssetGetTreeApiResponse, maxItemsPerNode: number | undefined): DataTransformerReturnType => {
   const nodes: TreeNode[] = []
@@ -23,6 +24,7 @@ export const transformApiDataToNodes = (node: DataTransformerSourceNode, data: A
   assetData.forEach((assetNode) => {
     nodes.push({
       id: assetNode.id.toString(),
+      elementType: elementTypes.asset,
       icon: getElementIcon(assetNode, { type: 'name', value: 'unknown' }),
       label: assetNode.filename!,
       type: assetNode.type,
