@@ -70,7 +70,15 @@ export const UploadProvider = ({ children }: { children: ReactNode }): React.JSX
 
     setFileList((currentFileList) => {
       setFailedItems(() => currentFileList.filter(file => file.status === 'error'))
-      setSuccessItems(() => currentFileList.filter(file => file.status === 'done'))
+      const currentSuccessItems = currentFileList.filter(file => file.status === 'done')
+      setSuccessItems(() => currentSuccessItems)
+
+      if (
+        currentFileList.length > 0 &&
+        currentFileList.length === currentSuccessItems.length
+      ) {
+        setIsOpen(false)
+      }
 
       return currentFileList
     })

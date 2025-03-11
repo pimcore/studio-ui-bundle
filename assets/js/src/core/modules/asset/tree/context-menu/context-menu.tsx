@@ -51,7 +51,6 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
   const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem, isLockMenuHidden } = useLock('asset')
   const { uploadNewVersionTreeContextMenuItem } = useUploadNewVersion()
   const { isTreeActionAllowed } = useTreePermission()
-  // const { fileList, setFileList } = useUploadContext()
 
   useEffect(() => {
     if (node !== undefined) {
@@ -127,30 +126,6 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     },
     refreshTreeContextMenuItem(node)
   ]
-
-  /* const uploadFile: UploadProps = {
-    action: `/pimcore-studio/api/assets/add/${node.id}`,
-    name: 'file',
-    multiple: true,
-    showUploadList: false,
-    fileList,
-    onChange: ({ fileList: currentFileList }) => {
-      setFileList(currentFileList)
-    }
-  }
-
-  const uploadZip: ZipUploadProps = {
-    action: `/pimcore-studio/api/assets/add-zip/${node.id}`,
-    accept: '.zip, .rar, .7zip',
-    name: 'zipFile',
-    multiple: false,
-    showUploadList: false,
-    fileList,
-    onChange: (props) => {
-      setFileList(props.fileList)
-      void uploadZipProcessor(props)
-    }
-  } */
 
   return (
     <>
