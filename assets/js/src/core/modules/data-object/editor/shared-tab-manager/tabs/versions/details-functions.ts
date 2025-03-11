@@ -49,15 +49,15 @@ const isFieldValueEmpty = (fieldValue: any): boolean => {
   return isEmptyValue(fieldValue)
 }
 
+export const getBreadcrumbTitle = (value1: string, value2: string): string => {
+  return [value1, value2].filter(Boolean).join('/')
+}
+
 export const getFormattedDataStructure = async ({ objectId, layout, versionData, versionId, versionCount, objectDataRegistry }: IGetFormattedDataStructureProps): Promise<IFormattedDataStructureData[]> => {
   const formattedSystemData = {
     fullPath: versionData.fullPath,
     creationDate: formatDateTime({ timestamp: versionData.creationDate ?? null, dateStyle: 'short', timeStyle: 'medium' }),
     modificationDate: formatDateTime({ timestamp: versionData.modificationDate ?? null, dateStyle: 'short', timeStyle: 'medium' })
-  }
-
-  const getBreadcrumbTitle = (value1: string, value2: string): string => {
-    return [value1, value2].filter(Boolean).join('/')
   }
 
   const processLayoutData = async ({ data, fieldBreadcrumbTitle = '' }: { data: Layout['children'], fieldBreadcrumbTitle?: string }): Promise<IFormattedDataStructureData[]> => {

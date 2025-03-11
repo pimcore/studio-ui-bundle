@@ -17,7 +17,11 @@ import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstr
 import { ObjectBrick, type ObjectBrickProps } from '../components/object-brick/object-brick'
 import { type FormItemProps } from 'antd'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
-import { DATATYPE_LIST, type IFormattedDataStructureData } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
+import {
+  DATATYPE_LIST,
+  getBreadcrumbTitle,
+  type IFormattedDataStructureData
+} from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
 import { type ClassObjectBrickObjectLayoutApiResponse, type ObjectBrickLayoutDefinition } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 
 export class DynamicTypeObjectDataObjectBrick extends DynamicTypeObjectDataAbstract {
@@ -47,14 +51,15 @@ export class DynamicTypeObjectDataObjectBrick extends DynamicTypeObjectDataAbstr
 
     let currentBrickSection: null | string = null
 
-    const processObjectBrickData = ({ data }: { data: ObjectBrickLayoutDefinition[] }): IFormattedDataStructureData[] => {
+    const processObjectBrickData = ({ data, updatedFieldBreadcrumbTitle = fieldBreadcrumbTitle }: { data: ObjectBrickLayoutDefinition[], updatedFieldBreadcrumbTitle?: string }): IFormattedDataStructureData[] => {
       return data.flatMap((dataItem: any) => {
         if (!isEmpty(dataItem.key)) currentBrickSection = dataItem.key
 
         const isItemInAllowedList = !isEmpty(currentBrickSection) ? item?.allowedTypes.includes(currentBrickSection) === true : true
-
         if (dataItem.datatype === DATATYPE_LIST.LAYOUT && isItemInAllowedList) {
-          return processObjectBrickData({ data: dataItem.children })
+          const breadcrumbTitle = getBreadcrumbTitle(updatedFieldBreadcrumbTitle, dataItem.title as string)
+
+          return processObjectBrickData({ data: dataItem.children, updatedFieldBreadcrumbTitle: breadcrumbTitle })
         }
 
         if (dataItem.datatype === DATATYPE_LIST.DATA) {
@@ -62,7 +67,7 @@ export class DynamicTypeObjectDataObjectBrick extends DynamicTypeObjectDataAbstr
           const fieldValue = get(fieldValueByName, fieldPath)
 
           return {
-            fieldBreadcrumbTitle,
+            fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle,
             fieldData: { ...dataItem },
             fieldValue,
             versionId,
