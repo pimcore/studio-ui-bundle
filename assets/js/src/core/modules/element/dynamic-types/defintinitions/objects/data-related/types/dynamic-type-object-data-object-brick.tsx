@@ -79,7 +79,7 @@ export class DynamicTypeObjectDataObjectBrick extends DynamicTypeObjectDataAbstr
       })
     }
 
-    const loadLayoutById = async (): Promise<any | null> => {
+    const loadLayoutById = async (): Promise<ClassObjectBrickObjectLayoutApiResponse | null> => {
       try {
         const response = await fetch(`${getPrefix()}/class/object-brick/${objectId}/object/layout`)
 
@@ -91,9 +91,9 @@ export class DynamicTypeObjectDataObjectBrick extends DynamicTypeObjectDataAbstr
       }
     }
 
-    async function handleObjectBrickData (): Promise<any | null> {
+    async function handleObjectBrickData (): Promise<IFormattedDataStructureData[] | null> {
       try {
-        const data: ClassObjectBrickObjectLayoutApiResponse = await loadLayoutById()
+        const data: ClassObjectBrickObjectLayoutApiResponse | null = await loadLayoutById()
 
         if (!isEmpty(data)) {
           return processObjectBrickData({ data: data?.items })
