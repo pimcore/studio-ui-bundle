@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import { isEmpty } from 'lodash'
+import { get, isEmpty } from 'lodash'
 import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { ObjectBrick, type ObjectBrickProps } from '../components/object-brick/object-brick'
 import { type FormItemProps } from 'antd'
@@ -43,19 +43,28 @@ export class DynamicTypeObjectDataObjectBrick extends DynamicTypeObjectDataAbstr
     versionId: number
     versionCount: number
   }): Promise<any> {
-    const { objectId, fieldBreadcrumbTitle, versionId, versionCount } = props
+    const { objectId, item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount } = props
+
+    let currentBrickSection: null | string = null
 
     const processObjectBrickData = ({ data }: { data: ObjectBrickLayoutDefinition[] }): IFormattedDataStructureData[] => {
       return data.flatMap((dataItem: any) => {
-        if (dataItem.datatype === DATATYPE_LIST.LAYOUT) {
+        if (!isEmpty(dataItem.key)) currentBrickSection = dataItem.key
+
+        const isItemInAllowedList = !isEmpty(currentBrickSection) ? item?.allowedTypes.includes(currentBrickSection) === true : true
+
+        if (dataItem.datatype === DATATYPE_LIST.LAYOUT && isItemInAllowedList) {
           return processObjectBrickData({ data: dataItem.children })
         }
 
         if (dataItem.datatype === DATATYPE_LIST.DATA) {
+          const fieldPath = `${currentBrickSection}.${dataItem?.name}`
+          const fieldValue = get(fieldValueByName, fieldPath)
+
           return {
             fieldBreadcrumbTitle,
             fieldData: { ...dataItem },
-            fieldValue: 1,
+            fieldValue,
             versionId,
             versionCount
           }
