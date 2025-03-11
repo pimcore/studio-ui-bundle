@@ -15,7 +15,6 @@ import React, { Children, isValidElement, useEffect, useMemo } from 'react'
 import { useKeyedList } from '../provider/keyed-list/use-keyed-list'
 import { useItem } from '../../item/provider/item/use-item'
 import { type FormItemProps } from 'antd'
-import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
 
 export interface KeyedFormItemControlProps {
   children: React.ReactNode
@@ -26,11 +25,10 @@ export interface KeyedFormItemControlProps {
 }
 
 export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: baseValue, ...props }: KeyedFormItemControlProps): React.JSX.Element => {
-  const { operations } = useKeyedList()
+  const { operations, getAdditionalComponentProps } = useKeyedList()
   const { name } = useItem()
   const Child = Children.only(children)
   const value = operations.getValue(name)
-  const inheritanceState = useInheritanceState()
 
   useEffect(() => {
     operations.update(name, value ?? null, true)
@@ -50,13 +48,12 @@ export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: 
   }
 
   const Component = Child.type
-  const inherited = inheritanceState?.getInheritanceState(name)?.inherited
 
   return useMemo(() => (
     <Component
       { ...Child.props }
       { ...props }
-      inherited={ inherited === true }
+      { ...getAdditionalComponentProps?.(name) }
       onChange={ onChange }
       value={ value }
     />

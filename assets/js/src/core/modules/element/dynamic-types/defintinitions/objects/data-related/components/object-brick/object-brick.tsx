@@ -15,6 +15,8 @@ import React from 'react'
 import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
 import { Form } from '@Pimcore/components/form/form'
 import { ObjectBrickContent } from './object-brick-content'
+import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
+import { type NamePath } from 'antd/es/form/interface'
 
 export interface ObjectBrickProps extends AbstractObjectDataDefinition {
   border?: boolean
@@ -25,11 +27,26 @@ export interface ObjectBrickProps extends AbstractObjectDataDefinition {
 }
 
 export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
+  const inheritanceState = useInheritanceState()
+
+  const onFieldChange = (field: NamePath, value: any): void => {
+    if (inheritanceState?.getInheritanceState(field)?.inherited === true) {
+      inheritanceState?.breakInheritance(field)
+    }
+  }
+
+  const getAdditionalComponentProps = (name: NamePath): Record<string, any> => {
+    return {
+      inherited: inheritanceState?.getInheritanceState(name)?.inherited === true
+    }
+  }
+
   return (
     <Form.KeyedList
-      breakInheritanceOnUpdate
+      getAdditionalComponentProps={ getAdditionalComponentProps }
       name={ props.name }
       onChange={ props.onChange }
+      onFieldChange={ onFieldChange }
       value={ props.value }
     >
       <ObjectBrickContent { ...props } />

@@ -17,20 +17,19 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { type KeyedListData, KeyedListProvider } from './provider/keyed-list/keyed-list-provider'
 import { KeyedListIterator } from './iterator/keyed-list-iterator'
 import { cloneDeep, isArray, isEqual, isObject, set, get } from 'lodash'
-import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
 
 export interface KeyedListProps {
   name: NamePath
   children: React.ReactNode
   value?: KeyedListData['values']
   onChange?: (value: KeyedListData['values']) => void
-  breakInheritanceOnUpdate?: boolean
+  onFieldChange?: (field: NamePath, value: any) => void
+  getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
 }
 
-const KeyedList = ({ name, children, value: baseValue, onChange: baseOnChange, breakInheritanceOnUpdate = false }: KeyedListProps): React.JSX.Element => {
+const KeyedList = ({ name, children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: KeyedListProps): React.JSX.Element => {
   const initialValue = isArray(baseValue) ? {} : baseValue ?? {}
   const [value, setValue] = useState(cloneDeep(initialValue))
-  const inheritanceState = useInheritanceState()
 
   const onChange: KeyedListData['onChange'] = (newValue) => {
     baseOnChange !== undefined && baseOnChange(newValue)
@@ -84,10 +83,8 @@ const KeyedList = ({ name, children, value: baseValue, onChange: baseOnChange, b
       }
     }
 
-    if (breakInheritanceOnUpdate && !isInitialValue) {
-      if (inheritanceState?.getInheritanceState(currentSubFieldname)?.inherited === true) {
-        inheritanceState?.breakInheritance(currentSubFieldname)
-      }
+    if (!isInitialValue) {
+      onFieldChange?.(currentSubFieldname, newSubValue)
     }
 
     setValue((currentValue) => {
@@ -112,6 +109,7 @@ const KeyedList = ({ name, children, value: baseValue, onChange: baseOnChange, b
 
   return useMemo(() => (
     <KeyedListProvider
+      getAdditionalComponentProps={ getAdditionalComponentProps }
       onChange={ onChange }
       operations={ { add, remove, update, getValue } }
       values={ value ?? {} }
