@@ -90,8 +90,6 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
   const imageRef = useRef<HTMLImageElement | null>(null)
   const { t } = useTranslation()
 
-  console.log('----> onEdit', onEdit)
-
   const [items, setItems] = useState<IHotspot[]>(data ?? [])
   useEffect((): void => {
     setItems(data ?? [])

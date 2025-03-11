@@ -38,6 +38,8 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
   const [modalOpened, setModalOpened] = useState(false)
   const [editModeHotspotId, setEditModeHotspotId] = useState<number | undefined>(undefined)
 
+  console.log('----> hotspots', hotspots)
+
   const width = 952
   const height = 800
 

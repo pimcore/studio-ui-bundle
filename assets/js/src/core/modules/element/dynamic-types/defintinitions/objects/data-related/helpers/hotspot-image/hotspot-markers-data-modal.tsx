@@ -31,7 +31,10 @@ type HotspotMarkerDataHotspotMarkerDataType = 'textfield' | 'textarea' | 'checkb
 
 export interface HotspotMarkerData {
   id: number
+  hotSpotId: number
   type: HotspotMarkerDataHotspotMarkerDataType
+  name: string
+  value: string
 }
 export interface HotspotMarkersDataModalProps {
   editModeHotspotId: number | undefined
@@ -49,15 +52,23 @@ export const HotspotMarkersDataModal = ({
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const [fields, setFields] = useState<HotspotMarkerData[]>([])
-  console.log('----> open', open)
+
+  console.log('----> fields', fields)
 
   useEffect(() => {
-    //
+    // fdfd
   }, [hotspot])
 
   const handleSave = (): void => {
-    // onUpdate(fields)
-    onClose()
+    if (isUndefined(hotspot)) return
+
+    form.validateFields().then(() => {
+      const updatedHotspot = { ...hotspot, data: fields }
+      onUpdate(updatedHotspot)
+      onClose()
+    }).catch((error) => {
+      console.error('Validation failed:', error)
+    })
   }
 
   const handleCancel = (): void => {
@@ -67,12 +78,26 @@ export const HotspotMarkersDataModal = ({
   const handleTypeSelect = (hotSpotId: number, type: HotspotMarkerData['type']): void => {
     setFields((prevFields) => [
       ...prevFields,
-      { id: hotSpotId, type }
+      {
+        id: Math.floor(Math.random() * 1000),
+        hotSpotId,
+        type,
+        name: '',
+        value: type === 'checkbox' ? 'false' : ''
+      }
     ])
   }
 
   const handleRemoveField = (id: number): void => {
     setFields((prevFields) => prevFields.filter((field) => field.id !== id))
+  }
+
+  const handleFieldChange = (id: number, key: keyof HotspotMarkerData, value: string): void => {
+    setFields((prevFields) =>
+      prevFields.map((field) =>
+        field.id === id ? { ...field, [key]: value } : field
+      )
+    )
   }
 
   const renderFormItem = (field: HotspotMarkerData): JSX.Element => {
@@ -86,7 +111,10 @@ export const HotspotMarkersDataModal = ({
           label={ t('hotspots-markers-data-modal.data-type.name') }
           name={ `name-${field.id}` }
         >
-          <Input />
+          <Input
+            onChange={ (e) => { handleFieldChange(field.id, 'name', e.target.value) } }
+            value={ field.name }
+          />
         </Form.Item>
         {field.type === 'checkbox'
           ? (
@@ -95,7 +123,11 @@ export const HotspotMarkersDataModal = ({
               name={ `value-${field.id}` }
               valuePropName="checked"
             >
-              <Input type="checkbox" />
+              <Input
+                checked={ field.value === 'true' }
+                onChange={ (e) => { handleFieldChange(field.id, 'value', e.target.checked ? 'true' : 'false') } }
+                type="checkbox"
+              />
             </Form.Item>
             )
           : (
@@ -103,7 +135,19 @@ export const HotspotMarkersDataModal = ({
               label={ t('hotspots-markers-data-modal.data-type.value') }
               name={ `value-${field.id}` }
             >
-              {field.type === 'textarea' ? <Input /> : <Input />}
+              {field.type === 'textarea'
+                ? (
+                  <Input
+                    onChange={ (e) => { handleFieldChange(field.id, 'value', e.target.value) } }
+                    value={ field.value }
+                  />
+                  )
+                : (
+                  <Input
+                    onChange={ (e) => { handleFieldChange(field.id, 'value', e.target.value) } }
+                    value={ field.value }
+                  />
+                  )}
             </Form.Item>
             )}
       </Space>
@@ -139,14 +183,6 @@ export const HotspotMarkersDataModal = ({
     })
   })
 
-  const addDataToHotspot = (): void => {
-    if (!isUndefined(hotspot)) {
-      const updatedHotspot = { ...hotspot, data: fields }
-      console.log('----> updatedHotspot', updatedHotspot)
-      onUpdate(updatedHotspot)
-    }
-  }
-
   return (
     <WindowModal
       footer={ () => (
@@ -171,7 +207,7 @@ export const HotspotMarkersDataModal = ({
           <Button
             key="ok"
             onClick={ () => {
-              addDataToHotspot()
+              handleSave()
             } }
             type={ 'primary' }
           >
@@ -181,7 +217,6 @@ export const HotspotMarkersDataModal = ({
       ) }
       okText={ t('save') }
       onCancel={ handleCancel }
-      onOk={ handleSave }
       open={ !isUndefined(editModeHotspotId) }
       size="M"
       title={ t('link.edit-title') }
