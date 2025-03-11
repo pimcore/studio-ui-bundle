@@ -28,7 +28,7 @@ export const withActionStates = (Component: typeof TreeNode): typeof TreeNode =>
       <Component
         { ...props }
         danger={ originalLoadingState || isDeleteLoading || isMarkedAsDeleting }
-        isLoading={ originalLoadingState || (!isMarkedAsLoading && isMarkedAsFetching) || isLoading || isDeleteLoading || isMarkedAsDeleting }
+        isLoading={ originalLoadingState || (isMarkedAsLoading !== true && isMarkedAsFetching) || isLoading || isDeleteLoading || isMarkedAsDeleting }
         ref={ ref }
       />
     )

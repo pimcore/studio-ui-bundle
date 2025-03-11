@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Flex, theme, Upload, type UploadProps } from 'antd'
+import { Flex, theme } from 'antd'
 import React, { forwardRef, type KeyboardEvent, type MouseEvent, type MutableRefObject, useContext, useEffect } from 'react'
 import { useStyles } from './tree-node.styles'
 import { type INodeRef, TreeContext } from '../element-tree'

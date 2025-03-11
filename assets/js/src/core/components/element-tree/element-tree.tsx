@@ -153,7 +153,7 @@ const ElementTree = (
 
   return (
     <UploadProvider>
-      {isLoading && !hasRootNode && (
+      {isLoading === true && !hasRootNode && (
         <Box padding={ { left: 'extra-small' } }>
           <Skeleton />
         </Box>

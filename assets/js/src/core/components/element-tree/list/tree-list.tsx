@@ -29,7 +29,6 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
   const { token } = useToken()
   const { styles } = useStyles()
   const { renderFilter: RenderFilter, renderPager: RenderPager, renderNode: RenderNode } = useContext(TreeContext)
-  const { uploadFileList, uploadingNode } = useContext(UploadContext)!
   const { isLoading, isFetching, getChildren, total } = useElementTreeNode(node.id)
 
   if (isLoading === true) {
