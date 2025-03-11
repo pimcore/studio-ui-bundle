@@ -30,6 +30,7 @@ export class DynamicTypeObjectDataDatetime extends DynamicTypeObjectDataAbstract
   getObjectDataComponent (props: DatetimeObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return super.getObjectDataComponent({
       ...props,
+      className: props.className,
       outputType: 'dateString',
       outputFormat: 'YYYY-MM-DD HH:mm:ss',
       showTime: true

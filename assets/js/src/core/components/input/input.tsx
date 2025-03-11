@@ -22,9 +22,10 @@ export interface IInputProps extends InputProps {
 
 export const Input = ({ inherited, className, ...restProps }: IInputProps): JSX.Element => {
   const { styles } = useStyles()
+
   return (
     <AntInput
-      className={ cn(className, { [styles.inherited]: inherited }) }
+      className={ cn(styles.input, className, { [styles.inherited]: inherited }) }
       { ...restProps }
     />
   )

@@ -41,6 +41,7 @@ export class DynamicTypeObjectDataRgbaColor extends DynamicTypeObjectDataAbstrac
     return (
       <ColorPicker
         allowClear
+        className={ props.className }
         disabled={ props.noteditable === true }
         format={ 'hex' }
         inherited={ props.inherited }

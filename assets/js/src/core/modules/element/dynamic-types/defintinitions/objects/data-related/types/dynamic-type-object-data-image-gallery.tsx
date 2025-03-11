@@ -30,6 +30,7 @@ export class DynamicTypeObjectDataImageGallery extends DynamicTypeObjectDataAbst
     return (
       <ImageGallery
         { ...props }
+        className={ props.className }
         disabled={ props.noteditable === true }
       />
     )

@@ -39,6 +39,7 @@ export class DynamicTypeObjectDataAdvancedManyToManyRelation extends DynamicType
       <AdvancedManyToManyRelation
         { ...props }
         { ... convertAllowedTypes(props) }
+        className={ props.className }
         disabled={ props.noteditable === true }
       />
     )

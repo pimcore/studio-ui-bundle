@@ -33,7 +33,7 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
   const { asset } = useAssetDraft(id)
-  const { renameContextMenuItem } = useRename('asset', getElementActionCacheKey('asset', 'delete', asset!.id))
+  const { renameContextMenuItem } = useRename('asset', getElementActionCacheKey('asset', 'rename', asset!.id))
   const { deleteContextMenuItem } = useDelete('asset', getElementActionCacheKey('asset', 'delete', asset!.id))
   const { downloadContextMenuItem } = useDownload()
   const { createZipDownloadContextMenuItem } = useZipDownload({ type: 'folder' })

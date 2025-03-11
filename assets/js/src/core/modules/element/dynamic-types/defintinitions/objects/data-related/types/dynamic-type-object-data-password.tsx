@@ -33,6 +33,7 @@ export class DynamicTypeObjectDataPassword extends DynamicTypeObjectDataAbstract
     return (
       <InputPassword
         autoComplete="new-password"
+        className={ props.className }
         disabled={ props.noteditable === true }
         inherited={ props.inherited }
         minLength={ props.minimumLength ?? undefined }

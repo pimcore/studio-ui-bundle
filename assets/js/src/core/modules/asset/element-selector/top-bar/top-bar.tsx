@@ -18,7 +18,7 @@ import React from 'react'
 export const TopBar = (): React.JSX.Element => {
   return (
     <Toolbar
-      borderStyle='primary'
+      borderStyle='default'
       padding={ { left: 'none', right: 'none' } }
       position='top'
       theme='secondary'

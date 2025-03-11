@@ -30,6 +30,7 @@ export class DynamicTypeObjectDataStructuredTable extends DynamicTypeObjectDataA
     return (
       <StructuredTable
         { ...props }
+        className={ props.className }
         disabled={ props.noteditable === true }
       />
     )

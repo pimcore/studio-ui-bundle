@@ -39,6 +39,7 @@ export class DynamicTypeObjectDataQuantityValue extends DynamicTypeObjectDataAbs
     return (
       <QuantityValue
         { ...props }
+        className={ props.className }
         disabled={ props.noteditable === true }
       />
     )

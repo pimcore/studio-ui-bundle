@@ -16,16 +16,14 @@ import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/co
 import { type SettingsProviderProps } from '@Pimcore/modules/element/listing/abstract/settings/settings-provider'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useClassDefinitionSelection } from '../../decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
+import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 
 export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = () => {
   const { useElementId } = useSettings()
   const { getId } = useElementId()
   const { selectedColumns } = useSelectedColumns()
   const { selectedClassDefinition } = useClassDefinitionSelection()
-
-  if (selectedClassDefinition === undefined) {
-    throw new Error('Can\'t load available columns without a selected class definition')
-  }
+  const { dataLoadingState, setDataLoadingState } = useData()
 
   const columnsArg: DataObjectGetGridApiArg['body']['columns'] = selectedColumns.map(column => ({
     key: column.key,
@@ -34,6 +32,10 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
   }))
 
   const getArgs = (): DataObjectGetGridApiArg => {
+    if (selectedClassDefinition === undefined) {
+      throw new Error('No class definition selected')
+    }
+
     return {
       classId: selectedClassDefinition.id,
       body: {
@@ -51,11 +53,13 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
   const hasRequiredArgs = (): boolean => {
     const args = getArgs()
 
-    return args.body.folderId !== undefined
+    return args.body.folderId !== undefined || selectedClassDefinition !== undefined
   }
 
   return {
     getArgs,
-    hasRequiredArgs
+    hasRequiredArgs,
+    dataLoadingState,
+    setDataLoadingState
   }
 }

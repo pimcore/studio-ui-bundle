@@ -35,6 +35,7 @@ export class DynamicTypeObjectDataLink extends DynamicTypeObjectDataAbstract {
         { ...props }
         allowedTargets={ _.compact(props.allowedTargets ?? []) }
         allowedTypes={ _.compact(props.allowedTypes ?? []) }
+        className={ props.className }
         disabled={ props.noteditable === true }
         disabledFields={ _.compact(props.disabledFields ?? []) }
         inherited={ props.inherited }

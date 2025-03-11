@@ -33,6 +33,7 @@ export class DynamicTypeObjectDataBooleanSelect extends DynamicTypeObjectDataAbs
     const options = props.options === null ? undefined : props.options.map(option => ({ label: t(option.key), value: option.value }))
     return (
       <BooleanSelect
+        className={ props.className }
         disabled={ props.noteditable === true }
         inherited={ props.inherited }
         maxWidth={ toCssDimension(props.width, props.defaultFieldWidth.medium) }

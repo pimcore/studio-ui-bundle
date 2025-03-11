@@ -20,7 +20,7 @@ export const withAdvancedColumnConfig = (useBaseHook: AbstractDecoratorProps['us
     const transformGridColumn: typeof baseTransformGridColumn = (column) => {
       const baseColumn = baseTransformGridColumn(column)
 
-      if (column.type !== 'dataobject.adapter') {
+      if (column.type !== 'dataobject.adapter' && column.type !== 'dataobject.objectbrick') {
         return baseColumn
       }
 

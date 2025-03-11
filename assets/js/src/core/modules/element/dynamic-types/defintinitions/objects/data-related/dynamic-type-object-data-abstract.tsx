@@ -25,6 +25,8 @@ import {
 import { type InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 import { type IFieldWidthContext } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/field-width-provider'
 import { DefaultPreview } from './components/grid-cells/image/default-preview'
+import { type AbstractGridCellDefinition } from '../../grid-cell/dynamic-type-grid-cell-abstract'
+import { type IFormattedDataStructureData } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
 
 export type EditMode = 'default' | 'edit-modal'
 
@@ -37,6 +39,11 @@ export interface WithEditModalGridCellDefinition {
   mode: 'edit-modal'
   previewComponent: ReactElement
   editComponent: ReactElement
+}
+
+export interface GetGridCellDefinitionProps {
+  cellProps: AbstractGridCellDefinition
+  objectProps: AbstractObjectDataDefinition
 }
 
 export interface AbstractObjectDataDefinition extends DataComponentProps {
@@ -58,6 +65,18 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
 
   abstract getObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition>
 
+  processVersionFieldData (props: {
+    item: any
+    fieldBreadcrumbTitle: string
+    fieldValueByName: string | object
+    versionId: number
+    versionCount: number
+  }): IFormattedDataStructureData[] {
+    const { fieldBreadcrumbTitle, item, fieldValueByName, versionId, versionCount } = props
+
+    return [{ fieldBreadcrumbTitle, fieldData: item, fieldValue: fieldValueByName, versionId, versionCount }]
+  }
+
   getVersionObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition> {
     return this.getObjectDataComponent({ ...props, noteditable: true })
   }
@@ -72,16 +91,20 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
     }
   }
 
-  getGridCellPreviewComponent (): ReactElement {
+  getGridCellPreviewComponent (props: GetGridCellDefinitionProps): ReactElement {
     return <DefaultPreview />
   }
 
-  getGridCellDefinition (): DefaultGridCellDefinition | WithEditModalGridCellDefinition {
+  getGridCellEditComponent (props: GetGridCellDefinitionProps): ReactElement {
+    return this.getObjectDataComponent(props.objectProps)
+  }
+
+  getGridCellDefinition (props: GetGridCellDefinitionProps): DefaultGridCellDefinition | WithEditModalGridCellDefinition {
     if (this.gridCellEditMode === 'edit-modal') {
       return {
         mode: this.gridCellEditMode,
-        previewComponent: this.getGridCellPreviewComponent(),
-        editComponent: <>edit</>
+        previewComponent: this.getGridCellPreviewComponent(props),
+        editComponent: this.getGridCellEditComponent(props)
       }
     }
 

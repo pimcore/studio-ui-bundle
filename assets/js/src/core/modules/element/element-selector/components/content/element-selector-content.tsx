@@ -11,13 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useElementSelectorHelper } from '../../provider/element-selector/use-element-selector-helper'
 import { AssetSelectorListing } from '@Pimcore/modules/asset/element-selector/asset-selector-listing'
 import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
 import { DataObjectSelectorListing } from '@Pimcore/modules/data-object/element-selector/data-object-selector-listing'
 import { useAreaControl } from '../../provider/area-control/use-area-control'
-import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 export const ElementSelectorContent = (): React.JSX.Element => {
   const helper = useElementSelectorHelper()
@@ -58,6 +58,12 @@ export const ElementSelectorContent = (): React.JSX.Element => {
       </div>
     })
   }
+
+  useEffect(() => {
+    if (tabItems.length > 0 && activeArea === undefined) {
+      setActiveArea(tabItems[0].key as unknown as ElementType)
+    }
+  }, [tabItems])
 
   // @todo translations
   return useMemo(() => (

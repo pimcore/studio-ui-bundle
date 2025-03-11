@@ -34,6 +34,7 @@ export class DynamicTypeObjectDataVideo extends DynamicTypeObjectDataAbstract {
       <Video
         { ...props }
         allowedVideoTypes={ _.compact(props.allowedTypes) ?? undefined }
+        className={ props.className }
         disabled={ props.noteditable === true }
       />
     )

@@ -95,7 +95,7 @@ export const QuantityValue = (props: QuantityValueProps): React.JSX.Element => {
   return (
     <Flex
       align="center"
-      className={ props.className }
+      className={ cn(styles.container, props.className) }
       gap="small"
     >
       <InputNumber

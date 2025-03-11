@@ -90,7 +90,7 @@ export const QuantityValueRange = (props: QuantityValueRangeProps): React.JSX.El
   return (
     <Flex
       align="center"
-      className={ props.className }
+      className={ cn(styles.container, props.className) }
       gap="small"
     >
       <Flex

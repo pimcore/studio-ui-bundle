@@ -20,6 +20,7 @@ import {
 import { toCssDimension } from '@Pimcore/utils/css'
 import React from 'react'
 import { type AbstractObjectDataDefinition } from '../dynamic-type-object-data-abstract'
+import cn from 'classnames'
 
 export type SliderObjectDataDefinition = AbstractNumericObjectDataDefinition & {
   vertical?: boolean | null
@@ -38,7 +39,7 @@ export class DynamicTypeObjectDataSlider extends DynamicTypeObjectDataAbstractNu
       <Slider
         { ...componentProps }
         allowClear
-        className="w-full"
+        className={ cn('w-full', props.className) }
         showValue
         style={ { maxWidth: toCssDimension(props.width, props.defaultFieldWidth.large), height: toCssDimension(props.height, props.vertical === true ? 100 : undefined) } }
         vertical={ props.vertical ?? undefined }
