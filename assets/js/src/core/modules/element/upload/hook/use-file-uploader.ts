@@ -24,7 +24,6 @@ interface UseFileUploaderProps {
 }
 
 interface UseFileUploaderReturn {
-  uploadFile: (props: UploadChangeParam<UploadFile<any>>) => Promise<void>
   uploadZip: (props: UploadChangeParam<UploadFile<any>>) => Promise<void>
 }
 
@@ -32,19 +31,13 @@ let zipUploadFirstRun: string[] = []
 
 export const useFileUploader = ({ nodeId }: UseFileUploaderProps): UseFileUploaderReturn => {
   const { addJob } = useJobs()
-  const { isOpen, setIsOpen, uploadingNode } = useUploadContext()
+  const { uploadingNode } = useUploadContext()
 
-  const uploadFile = async (info: UploadChangeParam<UploadFile<any>>): Promise<void> => {
+  const uploadZip = async (props: UploadChangeParam<UploadFile<any>>): Promise<void> => {
     if (nodeId === undefined) {
       trackError(new GeneralError('Parent ID is required'))
     }
 
-    if (!isOpen) {
-      setIsOpen(true)
-    }
-  }
-
-  const uploadZip = async (props: UploadChangeParam<UploadFile<any>>): Promise<void> => {
     if (!zipUploadFirstRun.includes(props.file.uid)) {
       zipUploadFirstRun = [...zipUploadFirstRun, props.file.uid]
       addJob(createJob({
@@ -58,11 +51,9 @@ export const useFileUploader = ({ nodeId }: UseFileUploaderProps): UseFileUpload
     }
 
     if (props.file.response !== undefined) {
-      console.log('response', props.file.response)
-      console.log('props: ', props)
       props.promiseResolve(props.file.response.jobRunId as number)
     }
   }
 
-  return { uploadFile, uploadZip }
+  return { uploadZip }
 }
