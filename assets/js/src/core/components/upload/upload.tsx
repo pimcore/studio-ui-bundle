@@ -14,14 +14,32 @@
 import React from 'react'
 import { Upload as AntUpload, type UploadProps } from 'antd'
 import { useStyles } from './upload.styles'
+import { useUploadContext } from '@Pimcore/modules/element/upload/upload-provider'
+
+export const defaultProps: UploadProps = {
+
+}
 
 export const Upload = (props: UploadProps): React.JSX.Element => {
   const { styles } = useStyles()
+  const { fileList, setFileList, uploadingNode } = useUploadContext()
+
+  const mergedConfig: UploadProps = {
+    action: `/pimcore-studio/api/assets/add/${uploadingNode}`,
+    name: 'file',
+    multiple: true,
+    showUploadList: false,
+    fileList,
+    onChange: ({ fileList: currentFileList }) => {
+      setFileList(currentFileList)
+    },
+    ...props
+  }
 
   return (
     <AntUpload
       className={ styles.upload }
-      { ...props }
+      { ...mergedConfig }
     >
       {props.children}
     </AntUpload>

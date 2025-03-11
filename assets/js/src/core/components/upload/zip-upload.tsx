@@ -15,6 +15,8 @@ import React, { useState } from 'react'
 import { type UploadProps as AntUploadProps } from 'antd'
 import { type UploadChangeParam as AntUploadChangeParam, type UploadFile } from 'antd/es/upload/interface'
 import { Upload } from '@Pimcore/components/upload/upload'
+import { useUploadContext } from '@Pimcore/modules/element/upload/upload-provider'
+import { useFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
 
 export interface UploadChangeParam<T = UploadFile> extends AntUploadChangeParam<T> {
   promise: Promise<number> | undefined
@@ -30,10 +32,26 @@ type PromiseHolder = Record<string, Pick<UploadChangeParam, 'promise' | 'promise
 
 export const ZipUpload = (props: ZipUploadProps): React.JSX.Element => {
   const [promiseCollection, setPromiseCollection] = useState<PromiseHolder>({})
+  const { fileList, setFileList, uploadingNode } = useUploadContext()
+  const { uploadZip: uploadZipProcessor } = useFileUploader({ nodeId: uploadingNode! })
+
+  const mergedProps: ZipUploadProps = {
+    action: `/pimcore-studio/api/assets/add-zip/${uploadingNode}`,
+    accept: '.zip, .rar, .7zip',
+    name: 'zipFile',
+    multiple: false,
+    showUploadList: false,
+    fileList,
+    onChange: (onChangeProps) => {
+      setFileList(onChangeProps.fileList)
+      void uploadZipProcessor(onChangeProps)
+    },
+    ...props
+  }
 
   return (
     <Upload
-      { ...props }
+      { ...mergedProps }
       onChange={ (changeProps) => {
         let promiseTmpHolder: PromiseType | undefined = promiseCollection[changeProps.file.uid]
         if (promiseTmpHolder === undefined) {
@@ -45,8 +63,8 @@ export const ZipUpload = (props: ZipUploadProps): React.JSX.Element => {
           promiseTmpHolder = { promise: freshPromise, promiseResolve: freshResolve }
         }
 
-        if (props.onChange !== undefined) {
-          props.onChange({ ...changeProps, ...promiseTmpHolder })
+        if (mergedProps.onChange !== undefined) {
+          mergedProps.onChange({ ...changeProps, ...promiseTmpHolder })
         }
 
         setPromiseCollection({ ...promiseCollection, [changeProps.file.uid]: promiseTmpHolder })

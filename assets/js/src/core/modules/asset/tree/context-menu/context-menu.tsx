@@ -29,17 +29,15 @@ import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helpe
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
-import { Button, type UploadProps } from 'antd'
+import { Button } from 'antd'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useUploadContext } from '@Pimcore/modules/element/upload/upload-provider'
-import { ZipUpload, type ZipUploadProps } from '@Pimcore/components/upload/zip-upload'
-import { useFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
+import { ZipUpload } from '@Pimcore/components/upload/zip-upload'
 
 export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
   const node = props.node ?? defaultProps
-  const { uploadZip: uploadZipProcessor } = useFileUploader({ nodeId: node?.id })
   const uploadFileRef = React.useRef<HTMLButtonElement>(null)
   const uploadZipRef = React.useRef<HTMLButtonElement>(null)
   const { setUploadingNode } = useUploadContext()
@@ -53,7 +51,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
   const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem, isLockMenuHidden } = useLock('asset')
   const { uploadNewVersionTreeContextMenuItem } = useUploadNewVersion()
   const { isTreeActionAllowed } = useTreePermission()
-  const { fileList, setFileList } = useUploadContext()
+  // const { fileList, setFileList } = useUploadContext()
 
   useEffect(() => {
     if (node !== undefined) {
@@ -130,7 +128,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     refreshTreeContextMenuItem(node)
   ]
 
-  const uploadFile: UploadProps = {
+  /* const uploadFile: UploadProps = {
     action: `/pimcore-studio/api/assets/add/${node.id}`,
     name: 'file',
     multiple: true,
@@ -152,18 +150,18 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
       setFileList(props.fileList)
       void uploadZipProcessor(props)
     }
-  }
+  } */
 
   return (
     <>
-      <Upload { ...uploadFile }>
+      <Upload>
         <Button
           ref={ uploadFileRef }
           style={ { display: 'none' } }
         ></Button>
       </Upload>
 
-      <ZipUpload { ...uploadZip }>
+      <ZipUpload>
         <Button
           ref={ uploadZipRef }
           style={ { display: 'none' } }
