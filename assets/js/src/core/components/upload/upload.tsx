@@ -12,18 +12,8 @@
 */
 
 import React from 'react'
-import { Upload as AntUpload, type UploadProps as AntUploadProps } from 'antd'
-import { type UploadChangeParam as AntUploadChangeParam, type UploadFile } from 'antd/es/upload/interface'
+import { Upload as AntUpload, type UploadProps } from 'antd'
 import { useStyles } from './upload.styles'
-
-export interface UploadChangeParam<T = UploadFile> extends AntUploadChangeParam<T> {
-  promise: Promise<number> | undefined
-  promiseResolve: (value: number | PromiseLike<number>) => void
-}
-
-export interface UploadProps extends Omit<AntUploadProps, 'beforeUpload'> {
-  onChange?: (info: UploadChangeParam) => void
-}
 
 export const Upload = (props: UploadProps): React.JSX.Element => {
   const { styles } = useStyles()

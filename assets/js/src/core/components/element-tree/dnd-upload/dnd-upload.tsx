@@ -13,9 +13,9 @@
 
 import React from 'react'
 import { Upload, type UploadProps } from 'antd'
-import { useFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useStyles } from '@Pimcore/components/element-tree/dnd-upload/dnd-upload.styles'
+import { useUploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 
 interface DndUploadProps {
   nodeId: string
@@ -25,16 +25,19 @@ interface DndUploadProps {
 
 export const DndUpload = ({ nodeId, nodeType, children }: DndUploadProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const { uploadFile: uploadFileProcessor } = useFileUploader({ nodeId })
   const { Dragger } = Upload
+  const { fileList, setFileList } = useUploadContext()
 
   const uploadProps: UploadProps = {
-    action: `/pimcore-studio/api/assets/add-1/${nodeId}`,
+    action: `/pimcore-studio/api/assets/add/${nodeId}`,
     name: 'file',
     multiple: true,
     openFileDialogOnClick: false,
     showUploadList: false,
-    onChange: uploadFileProcessor
+    fileList,
+    onChange: ({ fileList: currentFileList }) => {
+      setFileList(currentFileList)
+    }
   }
 
   if (nodeType !== 'asset') {

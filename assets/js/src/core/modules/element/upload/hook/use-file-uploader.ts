@@ -16,7 +16,7 @@ import { useUploadContext } from '@Pimcore/modules/element/upload/upload-provide
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob } from '@Pimcore/modules/execution-engine/jobs/zip-upload/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
-import { type UploadChangeParam } from '@Pimcore/components/upload/upload'
+import { type UploadChangeParam } from '@Pimcore/components/upload/zip-upload'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface UseFileUploaderProps {
@@ -32,7 +32,7 @@ let zipUploadFirstRun: string[] = []
 
 export const useFileUploader = ({ nodeId }: UseFileUploaderProps): UseFileUploaderReturn => {
   const { addJob } = useJobs()
-  const { isOpen, setIsOpen, setFileList, uploadingNode, setUploadingNode } = useUploadContext()
+  const { isOpen, setIsOpen, uploadingNode } = useUploadContext()
 
   const uploadFile = async (info: UploadChangeParam<UploadFile<any>>): Promise<void> => {
     if (nodeId === undefined) {
@@ -44,9 +44,8 @@ export const useFileUploader = ({ nodeId }: UseFileUploaderProps): UseFileUpload
     }
 
     // uploadContext.setUploadFileList(info.fileList)
-    console.log('fileList', info.fileList)
-    setFileList(info.fileList)
-    setUploadingNode(nodeId!) // TODO: check if we still need that?
+    // setFileList(info.fileList)
+    // setUploadingNode(nodeId!)
   }
 
   const uploadZip = async (props: UploadChangeParam<UploadFile<any>>): Promise<void> => {
@@ -62,9 +61,11 @@ export const useFileUploader = ({ nodeId }: UseFileUploaderProps): UseFileUpload
       }))
     }
 
-    await uploadFile(props)
+    // await uploadFile(props)
 
     if (props.file.response !== undefined) {
+      console.log('response', props.file.response)
+      console.log('props: ', props)
       props.promiseResolve(props.file.response.jobRunId as number)
     }
   }

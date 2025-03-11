@@ -15,7 +15,7 @@ import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/d
 import { type TreeContextMenuProps } from '@Pimcore/components/element-tree/element-tree'
 import { defaultProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { Upload, type UploadProps } from '@Pimcore/components/upload/upload'
+import { Upload } from '@Pimcore/components/upload/upload'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 import { useUploadNewVersion } from '@Pimcore/modules/asset/actions/upload-new-version/upload-new-version'
 import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
@@ -29,11 +29,12 @@ import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helpe
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
-import { useFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
-import { Button } from 'antd'
+import { Button, type UploadProps } from 'antd'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useUploadContext } from '@Pimcore/modules/element/upload/upload-provider'
+import { ZipUpload, type ZipUploadProps } from '@Pimcore/components/upload/zip-upload'
+import { useFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
 
 export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -140,14 +141,17 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     }
   }
 
-  const uploadZip: UploadProps = {
+  const uploadZip: ZipUploadProps = {
     action: `/pimcore-studio/api/assets/add-zip/${node.id}`,
     accept: '.zip, .rar, .7zip',
     name: 'zipFile',
     multiple: true,
     showUploadList: false,
     fileList,
-    onChange: uploadZipProcessor
+    onChange: (props) => {
+      setFileList(props.fileList)
+      void uploadZipProcessor(props)
+    }
   }
 
   return (
@@ -159,12 +163,12 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
         ></Button>
       </Upload>
 
-      <Upload { ...uploadZip }>
+      <ZipUpload { ...uploadZip }>
         <Button
           ref={ uploadZipRef }
           style={ { display: 'none' } }
         ></Button>
-      </Upload>
+      </ZipUpload>
 
       <Dropdown
         menu={ { items } }
