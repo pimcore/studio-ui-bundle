@@ -27,6 +27,7 @@ asset.upload.label: Select file
 asset.upload.files.uploading: "{{processedItems}}/{{totalItems}} files are uploading ..."
 asset.upload.files.uploaded: "{{successItems}} files are uploaded"
 asset.upload.files.completed: Completed!
+asset.upload.files.successfully-uploaded: Successfully uploaded
 asset.upload.files.completed-actions: Completed actions
 asset.upload.validation: 'Please add a file'
 data-object.data-object-tree.title: Data Object Tree

@@ -26,6 +26,10 @@ export interface UploadContextProps {
   uploadingNode: string | null
   setUploadingNode: (nodeId: string | null) => void
   finishUpload: () => void
+  fileList: UploadFile[]
+  setFileList: (fileList: UploadFile[]) => void
+  successItems: UploadFile[]
+  failedItems: UploadFile[]
 }
 
 export const UploadContext = createContext<UploadContextProps | undefined>(undefined)
@@ -33,8 +37,11 @@ export const UploadContext = createContext<UploadContextProps | undefined>(undef
 export const UploadProvider = ({ children }: { children: ReactNode }): React.JSX.Element => {
   const dispatch = useAppDispatch()
   const [isOpen, setIsOpen] = useState(false)
+  const [fileList, setFileList] = useState<UploadFile[]>([])
   const [uploadFileList, setUploadFileList] = useState<UploadFile[]>([])
   const [uploadingNode, setUploadingNode] = useState<string | null>(null)
+  const [successItems, setSuccessItems] = useState<UploadFile[]>([])
+  const [failedItems, setFailedItems] = useState<UploadFile[]>([])
 
   const finishUpload = (): void => {
     dispatch(
@@ -42,20 +49,32 @@ export const UploadProvider = ({ children }: { children: ReactNode }): React.JSX
         invalidatingTags.ASSET_TREE_ID(parseInt(uploadingNode!))
       )
     )
-    setUploadFileList([])
+    setFileList(() => [])
     setUploadingNode(null)
   }
 
   useEffect(() => {
-    if (
-      uploadFileList.length > 0 &&
-      uploadFileList.length ===
-      uploadFileList.filter(file => file.status === 'done').length
-    ) {
-      finishUpload()
-      setIsOpen(false)
+    if (isOpen) {
+      setSuccessItems(() => [])
+      setFailedItems(() => [])
+      setUploadFileList(() => [])
     }
-  }, [uploadFileList])
+
+    setFileList([])
+  }, [isOpen])
+
+  useEffect(() => {
+    if (!isOpen && fileList.length > 0) {
+      setIsOpen(true)
+    }
+
+    setFileList((currentFileList) => {
+      setFailedItems(() => currentFileList.filter(file => file.status === 'error'))
+      setSuccessItems(() => currentFileList.filter(file => file.status === 'done'))
+
+      return currentFileList
+    })
+  }, [fileList])
 
   const contextValue = useMemo(() => ({
     isOpen,
@@ -64,8 +83,12 @@ export const UploadProvider = ({ children }: { children: ReactNode }): React.JSX
     setUploadFileList,
     uploadingNode,
     setUploadingNode,
-    finishUpload
-  }), [uploadFileList, uploadingNode, isOpen])
+    finishUpload,
+    fileList,
+    setFileList,
+    successItems,
+    failedItems
+  }), [uploadFileList, uploadingNode, isOpen, fileList, successItems, failedItems])
 
   return (
     <UploadContext.Provider value={ contextValue }>

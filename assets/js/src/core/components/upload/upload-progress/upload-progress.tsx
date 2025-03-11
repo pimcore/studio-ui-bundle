@@ -18,13 +18,15 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyles } from '@Pimcore/components/upload/upload-progress/upload-progress.styles'
 import { useTranslation } from 'react-i18next'
 import { UploadList } from '@Pimcore/components/upload/upload-list/upload-list'
+import { useUploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 
 export const UploadProgress = (props: UploadListProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
+  const { fileList } = useUploadContext()
   const items = props.items!
-  const totalItems = items.length
-  const processedItems = items.filter(file => file.status !== 'uploading').length
+  const totalItems = fileList.length
+  const processedItems = fileList.filter(file => file.status !== 'uploading').length
 
   return (
     <div className={ styles.uploadProgress }>

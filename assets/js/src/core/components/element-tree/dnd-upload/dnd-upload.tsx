@@ -29,7 +29,7 @@ export const DndUpload = ({ nodeId, nodeType, children }: DndUploadProps): React
   const { Dragger } = Upload
 
   const uploadProps: UploadProps = {
-    action: `/pimcore-studio/api/assets/add/${nodeId}`,
+    action: `/pimcore-studio/api/assets/add-1/${nodeId}`,
     name: 'file',
     multiple: true,
     openFileDialogOnClick: false,

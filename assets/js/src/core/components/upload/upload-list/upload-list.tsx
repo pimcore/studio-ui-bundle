@@ -18,6 +18,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyles } from './upload-list.styles'
 import { useTranslation } from 'react-i18next'
+import { useUploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 
 interface UploadListProps {
   items: AntUploadListProps['items']
@@ -26,17 +27,20 @@ interface UploadListProps {
 export const UploadList = ({ items = [] }: UploadListProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
-  const successItems = items?.filter(item => item.status === 'done').length ?? 0
-  const failedItems = items?.filter(item => item.status === 'error')
+  const { successItems, failedItems } = useUploadContext()
+
+  // console.log('------------')
+  // console.log('current errors', failedItems)
+  // console.log('current success', successItems)
 
   return (
     <div className={ styles.uploadList }>
       <p>{t('asset.upload.files.completed-actions')}</p>
 
-      {successItems >= 0 && (
+      {successItems.length >= 0 && (
         <Flex className={ 'success_items' }>
           <Icon value={ 'checkmark' } />
-          <span>{t('asset.upload.files.uploaded', { successItems })}</span>
+          <span>{t('asset.upload.files.uploaded', { successItems: successItems.length })}</span>
         </Flex>
       )}
 

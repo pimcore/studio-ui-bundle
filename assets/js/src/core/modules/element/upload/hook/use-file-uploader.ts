@@ -32,27 +32,21 @@ let zipUploadFirstRun: string[] = []
 
 export const useFileUploader = ({ nodeId }: UseFileUploaderProps): UseFileUploaderReturn => {
   const { addJob } = useJobs()
-  const uploadContext = useUploadContext()
+  const { isOpen, setIsOpen, setFileList, uploadingNode, setUploadingNode } = useUploadContext()
 
-  const uploadFile = async ({ fileList }: UploadChangeParam<UploadFile<any>>): Promise<void> => {
+  const uploadFile = async (info: UploadChangeParam<UploadFile<any>>): Promise<void> => {
     if (nodeId === undefined) {
       trackError(new GeneralError('Parent ID is required'))
     }
 
-    uploadContext.setIsOpen(true)
-
-    const fileStates = fileList.map((file) => file.status)
-    const allFullFilled = fileStates.every(item => item !== 'uploading')
-    const filesFailed = fileList.map(file => file.status === 'error')
-
-    uploadContext.setUploadFileList(fileList)
-    uploadContext.setUploadingNode(nodeId!)
-
-    if (allFullFilled) {
-      if (filesFailed.length <= 0) {
-        uploadContext.finishUpload()
-      }
+    if (!isOpen) {
+      setIsOpen(true)
     }
+
+    // uploadContext.setUploadFileList(info.fileList)
+    console.log('fileList', info.fileList)
+    setFileList(info.fileList)
+    setUploadingNode(nodeId!) // TODO: check if we still need that?
   }
 
   const uploadZip = async (props: UploadChangeParam<UploadFile<any>>): Promise<void> => {
@@ -64,7 +58,7 @@ export const useFileUploader = ({ nodeId }: UseFileUploaderProps): UseFileUpload
         action: async () => {
           return await props.promise!
         },
-        parentFolder: uploadContext.uploadingNode!
+        parentFolder: uploadingNode!
       }))
     }
 
