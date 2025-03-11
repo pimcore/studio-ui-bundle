@@ -11,7 +11,6 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type UploadListProps as AntUploadListProps } from 'antd/es/upload'
 import AntUploadList from 'antd/es/upload/UploadList'
 import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -20,18 +19,10 @@ import { useStyles } from './upload-list.styles'
 import { useTranslation } from 'react-i18next'
 import { useUploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 
-interface UploadListProps {
-  items: AntUploadListProps['items']
-}
-
-export const UploadList = ({ items = [] }: UploadListProps): React.JSX.Element => {
+export const UploadList = (): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
   const { successItems, failedItems } = useUploadContext()
-
-  // console.log('------------')
-  // console.log('current errors', failedItems)
-  // console.log('current success', successItems)
 
   return (
     <div className={ styles.uploadList }>

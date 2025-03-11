@@ -24,7 +24,6 @@ export const UploadProgress = (props: UploadListProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
   const { fileList } = useUploadContext()
-  const items = props.items!
   const totalItems = fileList.length
   const processedItems = fileList.filter(file => file.status !== 'uploading').length
 
@@ -53,7 +52,7 @@ export const UploadProgress = (props: UploadListProps): React.JSX.Element => {
         />
       </Flex>
 
-      <UploadList items={ items } />
+      <UploadList />
     </div>
   )
 }

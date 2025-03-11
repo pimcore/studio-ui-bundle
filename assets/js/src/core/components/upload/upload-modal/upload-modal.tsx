@@ -53,7 +53,6 @@ export const UploadModal = (): React.JSX.Element => {
     >
       <Box margin={ { bottom: 'small' } }>
         <UploadProgress
-          items={ fileList }
           locale={ { uploading: 'uploading' } }
         />
       </Box>
