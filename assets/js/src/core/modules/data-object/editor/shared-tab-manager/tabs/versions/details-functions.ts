@@ -79,7 +79,18 @@ export const getFormattedDataStructure = async ({ objectId, layout, versionData,
 
         const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
 
-        return await objectDataType.processVersionFieldData({ objectId, item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount })
+        const processedDataList = await objectDataType.processVersionFieldData({ objectId, item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount })
+        const processedPromises = processedDataList?.map(async (processedDataItem: IFormattedDataStructureData): Promise<IFormattedDataStructureData[]> => {
+          if (!isEmpty((processedDataItem?.fieldData as any)?.children)) {
+            const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, (processedDataItem?.fieldData as any)?.title as string)
+
+            return await processLayoutData({ data: (processedDataItem?.fieldData as any)?.children, fieldBreadcrumbTitle: breadcrumbTitle })
+          }
+
+          return [processedDataItem]
+        })
+
+        return (await Promise.all(processedPromises)).flatMap(item => item)
       }
 
       return []
