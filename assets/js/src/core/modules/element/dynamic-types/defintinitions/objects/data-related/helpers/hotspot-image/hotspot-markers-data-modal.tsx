@@ -29,7 +29,6 @@ import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 
 type HotspotMarkerDataHotspotMarkerDataType = 'textfield' | 'textarea' | 'checkbox' | 'object' | 'document' | 'asset'
 export interface HotspotMarkerData {
-  id: number
   hotSpotId: number
   type: HotspotMarkerDataHotspotMarkerDataType
   name: string
@@ -54,14 +53,12 @@ export const HotspotMarkersDataModal = ({
   const [fields, setFields] = useState<HotspotMarkerData[]>([])
   const [hotspotName, setHotspotName] = useState<string>('')
   useEffect(() => {
-    console.log('----> setting fields', hotspot?.data)
-    console.log('----> hotspot name', hotspot?.name)
     if (!isUndefined(hotspot) && !isUndefined(hotspot.data)) {
       setFields(hotspot.data)
       form.setFieldsValue(
-        hotspot.data.reduce<Record<string, string>>((acc, field) => {
-          acc[`name-${field.id}`] = field.name
-          acc[`value-${field.id}`] = field.value
+        hotspot.data.reduce<Record<string, string>>((acc, field, index) => {
+          acc[`name-${index}`] = field.name
+          acc[`value-${index}`] = field.value
           return acc
         }, {})
       )
@@ -89,7 +86,6 @@ export const HotspotMarkersDataModal = ({
     setFields((prevFields) => [
       ...prevFields,
       {
-        id: Math.floor(Math.random() * 1000),
         hotSpotId,
         type,
         name: '',
@@ -98,18 +94,17 @@ export const HotspotMarkersDataModal = ({
     ])
   }
 
-  const handleRemoveField = (id: number): void => {
-    setFields((prevFields) => prevFields.filter((field) => field.id !== id))
+  const handleRemoveField = (index: number): void => {
+    setFields((prevFields) => prevFields.filter((_, i) => i !== index))
   }
-  const handleFieldChange = (id: number, key: keyof HotspotMarkerData, value: string): void => {
+  const handleFieldChange = (index: number, key: keyof HotspotMarkerData, value: string): void => {
     setFields((prevFields) =>
-      prevFields.map((field) =>
-        field.id === id ? { ...field, [key]: value } : field
+      prevFields.map((field, i) =>
+        i === index ? { ...field, [key]: value } : field
       )
     )
   }
-  const renderFormItem = (field: HotspotMarkerData): JSX.Element => {
-    console.log('----> field When rendering', field)
+  const renderFormItem = (field: HotspotMarkerData, index: number): JSX.Element => {
     return (
       <Space
         className="w-full"
@@ -118,11 +113,11 @@ export const HotspotMarkersDataModal = ({
       >
         <Form.Item
           label={ t('hotspots-markers-data-modal.data-type.name') }
-          name={ `name-${field.id}` }
+          name={ `name-${index}` }
         >
           <Input
             onChange={ (e) => {
-              handleFieldChange(field.id, 'name', e.target.value)
+              handleFieldChange(index, 'name', e.target.value)
             } }
             value={ field.name }
           />
@@ -131,13 +126,13 @@ export const HotspotMarkersDataModal = ({
           ? (
             <Form.Item
               label={ t('hotspots-markers-data-modal.data-type.value') }
-              name={ `value-${field.id}` }
+              name={ `value-${index}` }
               valuePropName="checked"
             >
               <Input
                 checked={ field.value === 'true' }
                 onChange={ (e) => {
-                  handleFieldChange(field.id, 'value', e.target.checked ? 'true' : 'false')
+                  handleFieldChange(index, 'value', e.target.checked ? 'true' : 'false')
                 } }
                 type="checkbox"
               />
@@ -146,13 +141,13 @@ export const HotspotMarkersDataModal = ({
           : (
             <Form.Item
               label={ t('hotspots-markers-data-modal.data-type.value') }
-              name={ `value-${field.id}` }
+              name={ `value-${index}` }
             >
               {field.type === 'textarea'
                 ? (
                   <Input
                     onChange={ (e) => {
-                      handleFieldChange(field.id, 'value', e.target.value)
+                      handleFieldChange(index, 'value', e.target.value)
                     } }
                     value={ field.value }
                   />
@@ -160,7 +155,7 @@ export const HotspotMarkersDataModal = ({
                 : (
                   <Input
                     onChange={ (e) => {
-                      handleFieldChange(field.id, 'value', e.target.value)
+                      handleFieldChange(index, 'value', e.target.value)
                     } }
                     value={ field.value }
                   />
@@ -218,18 +213,18 @@ export const HotspotMarkersDataModal = ({
     const typeObj = dataTypes.find(dataType => dataType.key === type)
     return !isUndefined(typeObj) ? typeObj.label : 'Unknown Type'
   }
-  const items: StackListProps['items'] = fields.map((field) => {
+  const items: StackListProps['items'] = fields.map((field, index) => {
     return ({
-      id: field.id,
+      id: index,
       children: <Tag>{getTypeLabel(field.type)}</Tag>,
       renderRightToolbar: <IconButton
         icon={ { value: 'close' } }
         key={ 'remove' }
         onClick={ () => {
-          handleRemoveField(field.id)
+          handleRemoveField(index)
         } }
                           />,
-      body: renderFormItem(field)
+      body: renderFormItem(field, index)
     })
   })
   return (
