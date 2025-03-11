@@ -145,7 +145,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     action: `/pimcore-studio/api/assets/add-zip/${node.id}`,
     accept: '.zip, .rar, .7zip',
     name: 'zipFile',
-    multiple: true,
+    multiple: false,
     showUploadList: false,
     fileList,
     onChange: (props) => {
