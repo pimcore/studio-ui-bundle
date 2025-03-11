@@ -42,10 +42,6 @@ export const useFileUploader = ({ nodeId }: UseFileUploaderProps): UseFileUpload
     if (!isOpen) {
       setIsOpen(true)
     }
-
-    // uploadContext.setUploadFileList(info.fileList)
-    // setFileList(info.fileList)
-    // setUploadingNode(nodeId!)
   }
 
   const uploadZip = async (props: UploadChangeParam<UploadFile<any>>): Promise<void> => {
@@ -60,8 +56,6 @@ export const useFileUploader = ({ nodeId }: UseFileUploaderProps): UseFileUpload
         parentFolder: uploadingNode!
       }))
     }
-
-    // await uploadFile(props)
 
     if (props.file.response !== undefined) {
       console.log('response', props.file.response)
