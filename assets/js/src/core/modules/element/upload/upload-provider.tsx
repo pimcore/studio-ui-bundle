@@ -21,8 +21,6 @@ import { UploadModal } from '@Pimcore/components/upload/upload-modal/upload-moda
 export interface UploadContextProps {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
-  uploadFileList: UploadFile[]
-  setUploadFileList: (uploadFileList: UploadFile[]) => void
   uploadingNode: string | null
   setUploadingNode: (nodeId: string | null) => void
   finishUpload: () => void
@@ -38,7 +36,6 @@ export const UploadProvider = ({ children }: { children: ReactNode }): React.JSX
   const dispatch = useAppDispatch()
   const [isOpen, setIsOpen] = useState(false)
   const [fileList, setFileList] = useState<UploadFile[]>([])
-  const [uploadFileList, setUploadFileList] = useState<UploadFile[]>([])
   const [uploadingNode, setUploadingNode] = useState<string | null>(null)
   const [successItems, setSuccessItems] = useState<UploadFile[]>([])
   const [failedItems, setFailedItems] = useState<UploadFile[]>([])
@@ -57,7 +54,6 @@ export const UploadProvider = ({ children }: { children: ReactNode }): React.JSX
     if (isOpen) {
       setSuccessItems(() => [])
       setFailedItems(() => [])
-      setUploadFileList(() => [])
     }
 
     setFileList([])
@@ -87,8 +83,6 @@ export const UploadProvider = ({ children }: { children: ReactNode }): React.JSX
   const contextValue = useMemo(() => ({
     isOpen,
     setIsOpen,
-    uploadFileList,
-    setUploadFileList,
     uploadingNode,
     setUploadingNode,
     finishUpload,
@@ -96,7 +90,7 @@ export const UploadProvider = ({ children }: { children: ReactNode }): React.JSX
     setFileList,
     successItems,
     failedItems
-  }), [uploadFileList, uploadingNode, isOpen, fileList, successItems, failedItems])
+  }), [uploadingNode, isOpen, fileList, successItems, failedItems])
 
   return (
     <UploadContext.Provider value={ contextValue }>

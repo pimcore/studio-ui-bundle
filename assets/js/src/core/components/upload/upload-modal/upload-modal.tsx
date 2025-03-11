@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next'
 
 export const UploadModal = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { isOpen, setIsOpen, uploadFileList } = useUploadContext()
+  const { isOpen, setIsOpen, fileList } = useUploadContext()
 
   return (
     <Modal
@@ -32,8 +32,8 @@ export const UploadModal = (): React.JSX.Element => {
         <ModalFooter justify={ 'end' }>
           <Button
             disabled={
-              uploadFileList.length > 0 &&
-              uploadFileList.some(file => file.status === 'uploading')
+              fileList.length > 0 &&
+              fileList.some(file => file.status === 'uploading')
             }
             key='cancel'
             onClick={ () => { setIsOpen(false) } }
@@ -53,7 +53,7 @@ export const UploadModal = (): React.JSX.Element => {
     >
       <Box margin={ { bottom: 'small' } }>
         <UploadProgress
-          items={ uploadFileList }
+          items={ fileList }
           locale={ { uploading: 'uploading' } }
         />
       </Box>
