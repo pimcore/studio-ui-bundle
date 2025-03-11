@@ -109,6 +109,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
   })
 
   const hotSpotInEditMode = hotspots.find(h => h.id === editModeHotspotId)
+  console.log('----> hotSpotInEditMode', hotSpotInEditMode)
 
   return (
     <WindowModal
