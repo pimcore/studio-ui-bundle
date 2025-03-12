@@ -16,26 +16,8 @@ import { formatDateTime } from '@Pimcore/utils/date-time'
 import { type Layout } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import type { DataObjectVersion } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
 import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
-import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
-import { DATATYPE_LIST } from './types'
-
-interface IGetFormattedDataStructureProps {
-  objectId: number
-  layout: Layout['children']
-  versionData: DataObjectVersion
-  versionId: number
-  versionCount: number
-  objectDataRegistry: DynamicTypeObjectDataRegistry
-}
-
-export interface IFormattedDataStructureData {
-  fieldBreadcrumbTitle: string
-  fieldData: Layout['children']
-  fieldValue: any
-  versionCount: number
-  versionId: number
-}
+import { DATATYPE_LIST, type IFormattedDataStructureData, type IGetFormattedDataStructureProps } from './types'
 
 const isFieldValueEmpty = (fieldValue: any): boolean => {
   if (isObject(fieldValue)) {

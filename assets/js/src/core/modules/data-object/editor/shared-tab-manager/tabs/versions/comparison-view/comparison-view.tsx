@@ -25,7 +25,6 @@ import {
 import { useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import {
   getFormattedDataStructure,
-  type IFormattedDataStructureData,
   versionsDataToTableData
 } from '../details-functions'
 import { Content } from '@Pimcore/components/content/content'
@@ -36,6 +35,7 @@ import type {
   DynamicTypeObjectDataRegistry
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type IFormattedDataStructureData } from '../types'
 
 interface IVersionData extends IObjectVersionField {}
 

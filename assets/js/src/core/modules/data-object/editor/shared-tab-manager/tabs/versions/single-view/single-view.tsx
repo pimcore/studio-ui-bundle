@@ -22,7 +22,7 @@ import { type SingleVersionViewProps } from '@Pimcore/modules/element/editor/sha
 import { useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
-import { getFormattedDataStructure, type IFormattedDataStructureData, versionsDataToTableData } from '../details-functions'
+import { getFormattedDataStructure, versionsDataToTableData } from '../details-functions'
 import { Content } from '@Pimcore/components/content/content'
 import { SingleViewUi } from './single-view-ui'
 import { useInjection } from '@Pimcore/app/depency-injection'
@@ -30,6 +30,7 @@ import type {
   DynamicTypeObjectDataRegistry
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type IFormattedDataStructureData } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 
 interface IVersionData extends IObjectVersionField {}
 

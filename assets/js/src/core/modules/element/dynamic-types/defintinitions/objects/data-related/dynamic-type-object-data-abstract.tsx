@@ -26,7 +26,7 @@ import { type InheritanceOverlayType } from '@Pimcore/components/inheritance-ove
 import { type IFieldWidthContext } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/field-width-provider'
 import { DefaultPreview } from './components/grid-cells/image/default-preview'
 import { type AbstractGridCellDefinition } from '../../grid-cell/dynamic-type-grid-cell-abstract'
-import { type IFormattedDataStructureData } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
+import { type IFormattedDataStructureData } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 
 export type EditMode = 'default' | 'edit-modal'
 
