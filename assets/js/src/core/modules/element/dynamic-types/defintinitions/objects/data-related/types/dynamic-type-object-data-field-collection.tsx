@@ -20,10 +20,11 @@ import type {
   FieldCollectionLayoutDefinition
 } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import {
-  DATATYPE_LIST, getBreadcrumbTitle,
+  getBreadcrumbTitle,
   type IFormattedDataStructureData
 } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import { DATATYPE_LIST } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 
 export class DynamicTypeObjectDataFieldCollection extends DynamicTypeObjectDataAbstract {
   id: string = 'fieldcollections'

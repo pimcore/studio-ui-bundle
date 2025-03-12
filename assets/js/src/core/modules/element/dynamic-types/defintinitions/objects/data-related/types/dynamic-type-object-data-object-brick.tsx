@@ -18,11 +18,11 @@ import { ObjectBrick, type ObjectBrickProps } from '../components/object-brick/o
 import { type FormItemProps } from 'antd'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import {
-  DATATYPE_LIST,
   getBreadcrumbTitle,
   type IFormattedDataStructureData
 } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
 import { type ClassObjectBrickObjectLayoutApiResponse, type ObjectBrickLayoutDefinition } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import { DATATYPE_LIST } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 
 export class DynamicTypeObjectDataObjectBrick extends DynamicTypeObjectDataAbstract {
   id: string = 'objectbricks'
