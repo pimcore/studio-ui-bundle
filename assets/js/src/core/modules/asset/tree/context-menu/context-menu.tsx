@@ -15,7 +15,7 @@ import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/d
 import { type TreeContextMenuProps } from '@Pimcore/components/element-tree/element-tree'
 import { defaultProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { Upload, type UploadProps } from '@Pimcore/components/upload/upload'
+import { Upload } from '@Pimcore/components/upload/upload'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 import { useUploadNewVersion } from '@Pimcore/modules/asset/actions/upload-new-version/upload-new-version'
 import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
@@ -29,20 +29,18 @@ import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helpe
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
-import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
-import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 import { Button } from 'antd'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useUploadContext } from '@Pimcore/modules/element/upload/upload-provider'
+import { ZipUpload } from '@Pimcore/components/upload/zip-upload'
 
 export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
   const node = props.node ?? defaultProps
-  const { uploadFile: uploadFileProcessor, uploadZip: uploadZipProcessor } = UseFileUploader({ parentId: node?.id })
   const uploadFileRef = React.useRef<HTMLButtonElement>(null)
   const uploadZipRef = React.useRef<HTMLButtonElement>(null)
-
-  const uploadContext = React.useContext(UploadContext)!
+  const { setUploadingNode } = useUploadContext()
   const { createZipDownloadTreeContextMenuItem } = useZipDownload({ type: 'folder' })
   const { addFolderTreeContextMenuItem } = useAddFolder('asset')
   const { renameTreeContextMenuItem } = useRename('asset', getElementActionCacheKey('asset', 'rename', parseInt(node.id)))
@@ -56,7 +54,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
 
   useEffect(() => {
     if (node !== undefined) {
-      uploadContext.setUploadingNode(node.id)
+      setUploadingNode(node.id)
     }
   }, [node])
 
@@ -129,38 +127,21 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     refreshTreeContextMenuItem(node)
   ]
 
-  const uploadFile: UploadProps = {
-    action: `/pimcore-studio/api/assets/add/${node.id}`,
-    name: 'file',
-    multiple: true,
-    showUploadList: false,
-    onChange: uploadFileProcessor
-  }
-
-  const uploadZip: UploadProps = {
-    action: `/pimcore-studio/api/assets/add-zip/${node.id}`,
-    accept: '.zip, .rar, .7zip',
-    name: 'zipFile',
-    multiple: true,
-    showUploadList: false,
-    onChange: uploadZipProcessor
-  }
-
   return (
     <>
-      <Upload { ...uploadFile }>
+      <Upload>
         <Button
           ref={ uploadFileRef }
           style={ { display: 'none' } }
         ></Button>
       </Upload>
 
-      <Upload { ...uploadZip }>
+      <ZipUpload>
         <Button
           ref={ uploadZipRef }
           style={ { display: 'none' } }
         ></Button>
-      </Upload>
+      </ZipUpload>
 
       <Dropdown
         menu={ { items } }

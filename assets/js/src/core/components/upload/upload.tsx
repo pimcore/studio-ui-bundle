@@ -11,53 +11,34 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
-import { type UploadProps as AntUploadProps } from 'antd'
-import { Upload as AntUpload } from 'antd'
-import { type UploadChangeParam as AntUploadChangeParam, type UploadFile } from 'antd/es/upload/interface'
+import React from 'react'
+import { Upload as AntUpload, type UploadProps } from 'antd'
 import { useStyles } from './upload.styles'
-
-export interface UploadChangeParam<T = UploadFile> extends AntUploadChangeParam<T> {
-  promise: Promise<number> | undefined
-  promiseResolve: (value: number | PromiseLike<number>) => void
-}
-
-export interface UploadProps extends Omit<AntUploadProps, 'beforeUpload'> {
-  onChange?: (info: UploadChangeParam) => void
-}
-
-type PromiseType = Pick<UploadChangeParam, 'promise' | 'promiseResolve'>
-type PromiseHolder = Record<string, Pick<UploadChangeParam, 'promise' | 'promiseResolve'>>
+import { useUploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 
 export const Upload = (props: UploadProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const [fileList, setFileList] = useState<UploadFile[]>([])
-  const [promiseCollection, setPromiseCollection] = useState<PromiseHolder>({})
+  const { fileList, uploadingNode, setUploadContext } = useUploadContext()
+
+  const mergedConfig: UploadProps = {
+    action: `/pimcore-studio/api/assets/add/${uploadingNode}`,
+    name: 'file',
+    multiple: true,
+    showUploadList: false,
+    fileList,
+    onChange: ({ fileList }) => {
+      setUploadContext(
+        'file',
+        fileList
+      )
+    },
+    ...props
+  }
 
   return (
     <AntUpload
       className={ styles.upload }
-      { ...props }
-      fileList={ fileList }
-      onChange={ (changeProps) => {
-        let promiseTmpHolder: PromiseType | undefined = promiseCollection[changeProps.file.uid]
-        if (promiseTmpHolder === undefined) {
-          let freshResolve: UploadChangeParam['promiseResolve'] = () => {}
-          const freshPromise: Promise<number> | undefined = new Promise(resolve => {
-            freshResolve = resolve
-          })
-
-          promiseTmpHolder = { promise: freshPromise, promiseResolve: freshResolve }
-        }
-
-        if (props.onChange !== undefined) {
-          props.onChange({ ...changeProps, ...promiseTmpHolder })
-
-          setFileList(changeProps.fileList.filter((item) => item.status !== 'done'))
-        }
-
-        setPromiseCollection({ ...promiseCollection, [changeProps.file.uid]: promiseTmpHolder })
-      } }
+      { ...mergedConfig }
     >
       {props.children}
     </AntUpload>

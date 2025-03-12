@@ -16,8 +16,6 @@ import { type TreeNodeProps } from '../node/tree-node'
 import { TreeContext } from '../element-tree'
 import { theme } from 'antd'
 import { useStyles } from './tree-list.styles'
-import { UploadList } from '@Pimcore/components/upload/upload-list/upload-list'
-import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 import { Skeleton } from './../skeleton/skeleton'
 import { useElementTreeNode } from '../hooks/use-element-tree-node'
 
@@ -31,7 +29,6 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
   const { token } = useToken()
   const { styles } = useStyles()
   const { renderFilter: RenderFilter, renderPager: RenderPager, renderNode: RenderNode } = useContext(TreeContext)
-  const { uploadFileList, uploadingNode } = useContext(UploadContext)!
   const { isLoading, isFetching, getChildren, total } = useElementTreeNode(node.id)
 
   if (isLoading === true) {
@@ -58,20 +55,7 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
       )}
 
       <div className='tree-list'>
-        {uploadFileList.length > 0 && node.id === uploadingNode && (
-          <div
-            className={ ['tree-list__upload', styles['tree-list__search']].join(' ') }
-            style={ { paddingLeft: token.paddingSM + (node.level + 1) * 24 } }
-          >
-            <UploadList
-              items={ uploadFileList }
-              locale={ { uploading: 'uploading' } }
-              showRemoveIcon={ false }
-            />
-          </div>
-        )}
-
-        {uploadFileList.length === 0 && children?.map((item, index) => (
+        {children?.map((item, index) => (
           <RenderNode
             key={ item.id }
             { ...item }

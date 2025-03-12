@@ -25,6 +25,11 @@ asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
 asset.tree.context-menu.upload-new-version: Upload new version
 asset.upload: Upload
 asset.upload.label: Select file
+asset.upload.files.uploading: "{{processedItems}}/{{totalItems}} files are uploading ..."
+asset.upload.files.uploaded: "{{successItems}} files are uploaded"
+asset.upload.files.completed: Completed!
+asset.upload.files.successfully-uploaded: Successfully uploaded
+asset.upload.files.completed-actions: Completed actions
 asset.upload.validation: 'Please add a file'
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
@@ -341,7 +346,6 @@ jobs.job.finished-with-errors: "{{title}} finished with errors"
 jobs.job.progress: "{{progress}}% completed"
 jobs.job.button-retry: Retry
 jobs.job.button-hide: hide
-jobs.job.button-hide-and-reload: hide and reload folder
 jobs.job.button-download: download
 jobs.job.button-ignore-and-reload: ignore and reload
 jobs.zip-job.title: "ZIP of {{title}}"
@@ -450,6 +454,7 @@ text: Text
 video: Video
 processing: Processing
 upload: Upload
+close: Close
 upload.assets-items-failed-message: Some items could not be uploaded.
 quantity-value.converted-units: Converted Units
 table.empty.confirm: Are you sure you want to clear all data?
