@@ -12,7 +12,7 @@
 */
 
 import React, { createContext, useMemo } from 'react'
-import { useClassObjectBrickObjectLayoutQuery } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import { useClassObjectBrickObjectLayoutQuery } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 export type IObjectBrickContext = ReturnType<typeof useClassObjectBrickObjectLayoutQuery> | null

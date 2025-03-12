@@ -12,7 +12,7 @@
 */
 
 import React, { createContext } from 'react'
-import { useClassFieldCollectionObjectLayoutQuery } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import { useClassFieldCollectionObjectLayoutQuery } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 export type IFieldCollectionContext = ReturnType<typeof useClassFieldCollectionObjectLayoutQuery> | null

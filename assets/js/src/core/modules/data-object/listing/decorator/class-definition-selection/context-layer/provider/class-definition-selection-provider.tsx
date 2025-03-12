@@ -13,7 +13,7 @@
 
 import React, { createContext, useMemo, useState } from 'react'
 import { type ClassDefinitionSelectionDecoratorConfig } from '../../class-definition-selection-decorator'
-import { type ClassDefinitionListItem } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import { type ClassDefinitionListItem } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
 
 export interface ClassDefinitionSelectionData {
