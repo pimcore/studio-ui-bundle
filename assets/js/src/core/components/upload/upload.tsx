@@ -16,10 +16,6 @@ import { Upload as AntUpload, type UploadProps } from 'antd'
 import { useStyles } from './upload.styles'
 import { useUploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 
-export const defaultProps: UploadProps = {
-
-}
-
 export const Upload = (props: UploadProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { fileList, setFileList, uploadingNode } = useUploadContext()

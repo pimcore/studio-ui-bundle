@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next'
 
 export const UploadModal = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { isOpen, setIsOpen, fileList } = useUploadContext()
+  const { isOpen, fileList, setIsOpen } = useUploadContext()
 
   return (
     <Modal

@@ -54,9 +54,9 @@ export const UploadProvider = ({ children }: { children: ReactNode }): React.JSX
     if (isOpen) {
       setSuccessItems(() => [])
       setFailedItems(() => [])
+    } else {
+      finishUpload()
     }
-
-    setFileList([])
   }, [isOpen])
 
   useEffect(() => {
@@ -64,21 +64,17 @@ export const UploadProvider = ({ children }: { children: ReactNode }): React.JSX
       setIsOpen(true)
     }
 
-    setFileList((currentFileList) => {
-      const currentErrorItems = currentFileList.filter(file => file.status === 'error')
-      setFailedItems(() => currentErrorItems)
-      const currentSuccessItems = currentFileList.filter(file => file.status === 'done')
-      setSuccessItems(() => currentSuccessItems)
+    const currentErrorItems = fileList.filter(file => file.status === 'error')
+    setFailedItems(() => currentErrorItems)
+    const currentSuccessItems = fileList.filter(file => file.status === 'done')
+    setSuccessItems(() => currentSuccessItems)
 
-      if (
-        currentFileList.length > 0 &&
-        currentFileList.length === currentSuccessItems.length
-      ) {
-        setIsOpen(false)
-      }
-
-      return currentFileList
-    })
+    if (
+      fileList.length > 0 &&
+      fileList.length === currentSuccessItems.length
+    ) {
+      finishUpload()
+    }
   }, [fileList])
 
   const contextValue = useMemo(() => ({
