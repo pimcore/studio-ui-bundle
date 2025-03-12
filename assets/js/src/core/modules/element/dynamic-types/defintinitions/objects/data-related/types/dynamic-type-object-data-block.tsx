@@ -38,4 +38,23 @@ export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
       />
     )
   }
+
+  async processVersionFieldData (props: {
+    objectId: number
+    item: any
+    fieldBreadcrumbTitle: string
+    fieldValueByName: any[]
+    versionId: number
+    versionCount: number
+  }): Promise<any> {
+    const { item, fieldValueByName, fieldBreadcrumbTitle, versionId, versionCount } = props
+
+    return item.children.flatMap((blockItem: any) => {
+      return fieldValueByName.flatMap(blockValue => {
+        const blockFieldName = blockItem.name
+
+        return [{ fieldBreadcrumbTitle, fieldData: blockItem, fieldValue: blockValue?.[blockFieldName], versionId, versionCount }]
+      })
+    })
+  }
 }
