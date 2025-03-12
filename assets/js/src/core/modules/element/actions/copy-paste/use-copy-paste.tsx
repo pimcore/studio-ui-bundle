@@ -35,12 +35,15 @@ import { useAppDispatch } from '@Pimcore/app/store'
 import { isUndefined } from 'lodash'
 import { useTreeId } from '../../tree/provider/tree-id-provider/use-tree-id'
 
+type ElementPartial = Pick<Element, 'id' | 'parentId'>
+type StoreNode = TreeNodeProps | Element | undefined
+
 export interface UseCopyPasteHookReturn {
-  storedNode: TreeNodeProps | Element | undefined
+  storedNode: StoreNode
   nodeTask: 'copy' | 'cut' | undefined
   copy: (node: TreeNodeProps) => void
   cut: (node: TreeNodeProps) => void
-  paste: (parentId: number, cloneParameters?: CloneParameters, node?: TreeNodeProps | Element | undefined) => Promise<void>
+  paste: (parentId: number, cloneParameters?: CloneParameters, node?: StoreNode) => Promise<void>
   pasteCut: (parentId: number) => Promise<void>
   move: (props: MoveProps) => Promise<void>
   copyTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -51,15 +54,13 @@ export interface UseCopyPasteHookReturn {
   pasteCutContextMenuItem: (parentId: number) => ItemType
 }
 
-type elementPartial = Pick<Element, 'id' | 'parentId'>
-
 export interface MoveProps {
-  currentElement: elementPartial
-  targetElement: elementPartial
+  currentElement: ElementPartial
+  targetElement: ElementPartial
 }
 
 export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn => {
-  const [storedNode, setStoredNode] = useState<TreeNodeProps | Element | undefined>()
+  const [storedNode, setStoredNode] = useState<StoreNode>()
   const [nodeTask, setNodeTask] = useState<'copy' | 'cut' | undefined>()
   const { elementPatch, elementClone } = useElementApi(elementType)
   const { t } = useTranslation()
@@ -110,7 +111,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
   const paste = async (
     parentId: number,
     cloneParameters: CloneParameters = { recursive: true, updateReferences: true },
-    node: TreeNodeProps | Element | undefined = storedNode
+    node: StoreNode = storedNode
   ): Promise<void> => {
     if (node === undefined) {
       return
