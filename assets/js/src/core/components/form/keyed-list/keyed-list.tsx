@@ -49,7 +49,7 @@ const KeyedList = ({ name, children, value: baseValue, onChange: baseOnChange, o
     if (!isEqual(value, initialValue)) {
       setValue(initialValue)
     }
-  }, [initialValue])
+  }, [baseValue])
 
   const add: KeyedListData['operations']['add'] = (key, newValue = {}) => {
     setValue((currentValue) => {
