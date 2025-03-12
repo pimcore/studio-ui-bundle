@@ -48,7 +48,7 @@ export const getFormattedDataStructure = async ({ objectId, layout, versionData,
 
       if (item.datatype === DATATYPE_LIST.DATA) {
         const fieldName = item.name
-        const fieldValueByName: string | object = get(objectValuesData, fieldName)
+        const fieldValueByName = get(objectValuesData, fieldName)
         const currentFieldType: string = item.fieldtype
 
         if (!objectDataRegistry.hasDynamicType(currentFieldType)) {

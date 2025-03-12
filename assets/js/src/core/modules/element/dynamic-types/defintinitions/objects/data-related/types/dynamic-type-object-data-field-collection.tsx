@@ -21,7 +21,11 @@ import type {
 } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { getBreadcrumbTitle } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
-import { DATATYPE_LIST, type IFormattedDataStructureData } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
+import {
+  DATATYPE_LIST,
+  type IFormattedDataStructureData,
+  type IProcessVersionFieldDataProps
+} from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 
 export class DynamicTypeObjectDataFieldCollection extends DynamicTypeObjectDataAbstract {
   id: string = 'fieldcollections'
@@ -31,14 +35,7 @@ export class DynamicTypeObjectDataFieldCollection extends DynamicTypeObjectDataA
     return <FieldCollection { ...props } />
   }
 
-  async processVersionFieldData (props: {
-    objectId: number
-    item: any
-    fieldBreadcrumbTitle: string
-    fieldValueByName: any[]
-    versionId: number
-    versionCount: number
-  }): Promise<any> {
+  async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<any> {
     const { objectId, item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount } = props
 
     let currentFieldCollectionSection: null | string = null

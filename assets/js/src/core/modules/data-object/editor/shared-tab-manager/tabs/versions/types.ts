@@ -36,3 +36,12 @@ export interface IFormattedDataStructureData {
   versionCount: number
   versionId: number
 }
+
+export interface IProcessVersionFieldDataProps {
+  objectId: number
+  item: any
+  fieldBreadcrumbTitle: string
+  fieldValueByName: any[]
+  versionId: number
+  versionCount: number
+}

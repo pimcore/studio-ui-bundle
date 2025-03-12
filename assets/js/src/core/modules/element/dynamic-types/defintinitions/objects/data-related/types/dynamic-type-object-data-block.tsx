@@ -18,9 +18,8 @@ import {
   DynamicTypeObjectDataAbstract
 } from '../dynamic-type-object-data-abstract'
 import { Block } from '../components/block/block'
-import {
-  FieldLabel
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/label/field-label'
+import { FieldLabel } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/label/field-label'
+import { type IProcessVersionFieldDataProps } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 
 export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
   id: string = 'block'
@@ -31,22 +30,17 @@ export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
       <Block
         { ...props }
         className={ props.className }
-        title={ <FieldLabel
-          label={ props.title }
-          name={ props.name }
-                /> }
+        title={
+          <FieldLabel
+            label={ props.title }
+            name={ props.name }
+          />
+        }
       />
     )
   }
 
-  async processVersionFieldData (props: {
-    objectId: number
-    item: any
-    fieldBreadcrumbTitle: string
-    fieldValueByName: any[]
-    versionId: number
-    versionCount: number
-  }): Promise<any> {
+  async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<any> {
     const { item, fieldValueByName, fieldBreadcrumbTitle, versionId, versionCount } = props
 
     return item.children.flatMap((blockItem: any) => {

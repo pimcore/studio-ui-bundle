@@ -16,7 +16,10 @@ import { get, isEmpty } from 'lodash'
 import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { LocalizedFields, type LocalizedFieldsProps } from '../components/localized-fields/localized-fields'
 import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
-import { type IFormattedDataStructureData } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
+import {
+  type IFormattedDataStructureData,
+  type IProcessVersionFieldDataProps
+} from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 
 export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataAbstract {
   id: string = DynamicTypesList.LOCALIZED_FIELDS
@@ -26,13 +29,7 @@ export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataA
     return <LocalizedFields { ...props } />
   }
 
-  async processVersionFieldData (props: {
-    item: any
-    fieldBreadcrumbTitle: string
-    fieldValueByName: object
-    versionId: number
-    versionCount: number
-  }): Promise<IFormattedDataStructureData[]> {
+  async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<IFormattedDataStructureData[]> {
     const { item, fieldValueByName, fieldBreadcrumbTitle, versionId, versionCount } = props
 
     const getFieldData = ({ fieldData, fieldValue }: { fieldData: any, fieldValue: any }): IFormattedDataStructureData => {

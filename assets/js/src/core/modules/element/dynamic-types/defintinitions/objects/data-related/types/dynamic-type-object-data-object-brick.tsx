@@ -19,7 +19,11 @@ import { type FormItemProps } from 'antd'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { getBreadcrumbTitle } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
 import { type ClassObjectBrickObjectLayoutApiResponse, type ObjectBrickLayoutDefinition } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
-import { DATATYPE_LIST, type IFormattedDataStructureData } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
+import {
+  DATATYPE_LIST,
+  type IFormattedDataStructureData,
+  type IProcessVersionFieldDataProps
+} from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 
 export class DynamicTypeObjectDataObjectBrick extends DynamicTypeObjectDataAbstract {
   id: string = 'objectbricks'
@@ -36,14 +40,7 @@ export class DynamicTypeObjectDataObjectBrick extends DynamicTypeObjectDataAbstr
     }
   }
 
-  async processVersionFieldData (props: {
-    objectId: number
-    item: any
-    fieldBreadcrumbTitle: string
-    fieldValueByName: object
-    versionId: number
-    versionCount: number
-  }): Promise<any> {
+  async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<any> {
     const { objectId, item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount } = props
 
     let currentBrickSection: null | string = null

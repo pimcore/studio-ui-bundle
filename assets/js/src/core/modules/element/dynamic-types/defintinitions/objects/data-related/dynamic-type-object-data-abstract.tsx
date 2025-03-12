@@ -26,7 +26,10 @@ import { type InheritanceOverlayType } from '@Pimcore/components/inheritance-ove
 import { type IFieldWidthContext } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/field-width-provider'
 import { DefaultPreview } from './components/grid-cells/image/default-preview'
 import { type AbstractGridCellDefinition } from '../../grid-cell/dynamic-type-grid-cell-abstract'
-import { type IFormattedDataStructureData } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
+import {
+  type IFormattedDataStructureData,
+  type IProcessVersionFieldDataProps
+} from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 
 export type EditMode = 'default' | 'edit-modal'
 
@@ -65,14 +68,7 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
 
   abstract getObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition>
 
-  async processVersionFieldData (props: {
-    objectId?: number
-    item: any
-    fieldBreadcrumbTitle: string
-    fieldValueByName: string | object
-    versionId: number
-    versionCount: number
-  }): Promise<IFormattedDataStructureData[]> {
+  async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<IFormattedDataStructureData[]> {
     const { fieldBreadcrumbTitle, item, fieldValueByName, versionId, versionCount } = props
 
     return [{ fieldBreadcrumbTitle, fieldData: item, fieldValue: fieldValueByName, versionId, versionCount }]
