@@ -346,7 +346,6 @@ jobs.job.finished-with-errors: "{{title}} finished with errors"
 jobs.job.progress: "{{progress}}% completed"
 jobs.job.button-retry: Retry
 jobs.job.button-hide: hide
-jobs.job.button-hide-and-reload: hide and reload folder
 jobs.job.button-download: download
 jobs.job.button-ignore-and-reload: ignore and reload
 jobs.zip-job.title: "ZIP of {{title}}"

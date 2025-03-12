@@ -16,6 +16,8 @@ import { type UploadFile } from 'antd/es/upload/interface'
 import { UploadModal } from '@Pimcore/components/upload/upload-modal/upload-modal'
 import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 
+type UploadType = 'zip' | 'file'
+
 export interface UploadContextProps {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
@@ -23,9 +25,9 @@ export interface UploadContextProps {
   setUploadingNode: (nodeId: string | null) => void
   finishUpload: () => void
   fileList: UploadFile[]
-  setFileList: (fileList: UploadFile[]) => void
   successItems: UploadFile[]
   failedItems: UploadFile[]
+  setUploadContext: (uploadType: UploadType, fileList: UploadFile[]) => void
 }
 
 export const UploadContext = createContext<UploadContextProps | undefined>(undefined)
@@ -36,10 +38,18 @@ export const UploadProvider = ({ children }: { children: ReactNode }): React.JSX
   const [uploadingNode, setUploadingNode] = useState<string | null>(null)
   const [successItems, setSuccessItems] = useState<UploadFile[]>([])
   const [failedItems, setFailedItems] = useState<UploadFile[]>([])
+  const [uploadType, setUploadType] = useState<'zip' | 'file'>('file')
   const { refreshTree } = useRefreshTree('asset')
 
+  const setUploadContext = (uploadType: UploadType, fileList: UploadFile[]): void => {
+    setUploadType(uploadType)
+    setFileList(fileList)
+  }
+
   const finishUpload = (): void => {
-    refreshTree(parseInt(uploadingNode!))
+    if (uploadType !== 'zip') {
+      refreshTree(parseInt(uploadingNode!))
+    }
     setFileList(() => [])
     setUploadingNode(null)
   }
@@ -78,9 +88,9 @@ export const UploadProvider = ({ children }: { children: ReactNode }): React.JSX
     setUploadingNode,
     finishUpload,
     fileList,
-    setFileList,
     successItems,
-    failedItems
+    failedItems,
+    setUploadContext
   }), [uploadingNode, isOpen, fileList, successItems, failedItems])
 
   return (

@@ -32,7 +32,7 @@ type PromiseHolder = Record<string, Pick<UploadChangeParam, 'promise' | 'promise
 
 export const ZipUpload = (props: ZipUploadProps): React.JSX.Element => {
   const [promiseCollection, setPromiseCollection] = useState<PromiseHolder>({})
-  const { fileList, setFileList, uploadingNode } = useUploadContext()
+  const { fileList, uploadingNode, setUploadContext } = useUploadContext()
   const { uploadZip: uploadZipProcessor } = useFileUploader({ nodeId: uploadingNode! })
 
   const mergedProps: ZipUploadProps = {
@@ -43,7 +43,10 @@ export const ZipUpload = (props: ZipUploadProps): React.JSX.Element => {
     showUploadList: false,
     fileList,
     onChange: (onChangeProps) => {
-      setFileList(onChangeProps.fileList)
+      setUploadContext(
+        'zip',
+        onChangeProps.fileList
+      )
       void uploadZipProcessor(onChangeProps)
     },
     ...props

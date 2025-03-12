@@ -18,7 +18,7 @@ import { useUploadContext } from '@Pimcore/modules/element/upload/upload-provide
 
 export const Upload = (props: UploadProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const { fileList, setFileList, uploadingNode } = useUploadContext()
+  const { fileList, uploadingNode, setUploadContext } = useUploadContext()
 
   const mergedConfig: UploadProps = {
     action: `/pimcore-studio/api/assets/add/${uploadingNode}`,
@@ -26,8 +26,11 @@ export const Upload = (props: UploadProps): React.JSX.Element => {
     multiple: true,
     showUploadList: false,
     fileList,
-    onChange: ({ fileList: currentFileList }) => {
-      setFileList(currentFileList)
+    onChange: ({ fileList }) => {
+      setUploadContext(
+        'file',
+        fileList
+      )
     },
     ...props
   }

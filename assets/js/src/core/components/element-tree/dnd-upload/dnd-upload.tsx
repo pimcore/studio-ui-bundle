@@ -26,7 +26,7 @@ interface DndUploadProps {
 export const DndUpload = ({ nodeId, nodeType, children }: DndUploadProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { Dragger } = Upload
-  const { fileList, setFileList } = useUploadContext()
+  const { fileList, setUploadContext } = useUploadContext()
 
   const uploadProps: UploadProps = {
     action: `/pimcore-studio/api/assets/add/${nodeId}`,
@@ -36,7 +36,10 @@ export const DndUpload = ({ nodeId, nodeType, children }: DndUploadProps): React
     showUploadList: false,
     fileList,
     onChange: ({ fileList: currentFileList }) => {
-      setFileList(currentFileList)
+      setUploadContext(
+        'file',
+        currentFileList
+      )
     }
   }
 
