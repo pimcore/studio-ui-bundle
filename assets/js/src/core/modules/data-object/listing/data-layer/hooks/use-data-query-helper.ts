@@ -28,6 +28,7 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
   const columnsArg: DataObjectGetGridApiArg['body']['columns'] = selectedColumns.map(column => ({
     key: column.key,
     type: column.type,
+    locale: column.locale,
     config: column.config
   }))
 
