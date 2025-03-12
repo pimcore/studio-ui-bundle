@@ -20,6 +20,12 @@ const api = baseApi.enhanceEndpoints({
 
     classCustomLayoutEditorCollection: {
       providesTags: (result, error, args) => providingTags.DATA_OBJECT_DETAIL_ID(args.objectId)
+    },
+    classFieldCollectionObjectLayout: {
+      providesTags: (result, error, args) => providingTags.DATA_OBJECT_DETAIL_ID(args.objectId)
+    },
+    classObjectBrickObjectLayout: {
+      providesTags: (result, error, args) => providingTags.DATA_OBJECT_DETAIL_ID(args.objectId)
     }
   }
 })
@@ -27,7 +33,18 @@ const api = baseApi.enhanceEndpoints({
 export type * from './class-definition-slice.gen'
 
 export const {
-  useClassCustomLayoutEditorCollectionQuery
+  useClassDefinitionCollectionQuery,
+  useClassCustomLayoutCollectionQuery,
+  usePimcoreStudioApiClassCustomLayoutCreateMutation,
+  usePimcoreStudioApiClassCustomLayoutGetQuery,
+  usePimcoreStudioApiClassCustomLayoutUpdateMutation,
+  usePimcoreStudioApiClassCustomLayoutDeleteMutation,
+  useClassCustomLayoutEditorCollectionQuery,
+  usePimcoreStudioApiClassCustomLayoutExportQuery,
+  usePimcoreStudioApiClassCustomLayoutImportMutation,
+  useClassFieldCollectionObjectLayoutQuery,
+  useClassDefinitionGetQuery,
+  useClassObjectBrickObjectLayoutQuery
 } = api
 
 export { api }
