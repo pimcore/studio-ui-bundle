@@ -67,7 +67,7 @@ export const UploadProvider = ({ children }: { children: ReactNode }): React.JSX
       fileList.length > 0 &&
       fileList.length === currentSuccessItems.length
     ) {
-      finishUpload()
+      setIsOpen(false)
     }
   }, [fileList])
 
