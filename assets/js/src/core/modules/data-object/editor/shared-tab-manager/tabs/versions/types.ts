@@ -31,7 +31,7 @@ export interface IGetFormattedDataStructureProps {
 
 export interface IFormattedDataStructureData {
   fieldBreadcrumbTitle: string
-  fieldData: Layout['children']
+  fieldData: Layout
   fieldValue: any
   versionCount: number
   versionId: number

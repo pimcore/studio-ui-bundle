@@ -61,10 +61,10 @@ export const getFormattedDataStructure = async ({ objectId, layout, versionData,
         const processedPromises = processedDataList?.map(async (processedDataItem: IFormattedDataStructureData): Promise<IFormattedDataStructureData[]> => {
           objectValuesData = {}
 
-          if (!isEmpty((processedDataItem?.fieldData as any)?.children)) {
-            const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, (processedDataItem?.fieldData as any)?.title as string)
+          if (!isEmpty(processedDataItem?.fieldData?.children)) {
+            const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, processedDataItem?.fieldData?.title as string)
 
-            return await processLayoutData({ data: [processedDataItem?.fieldData], objectValuesData: { ...objectValuesData, [(processedDataItem?.fieldData as any)?.name]: processedDataItem?.fieldValue }, fieldBreadcrumbTitle: breadcrumbTitle })
+            return await processLayoutData({ data: [processedDataItem?.fieldData], objectValuesData: { ...objectValuesData, [processedDataItem?.fieldData?.name]: processedDataItem?.fieldValue }, fieldBreadcrumbTitle: breadcrumbTitle })
           }
 
           return [processedDataItem]
