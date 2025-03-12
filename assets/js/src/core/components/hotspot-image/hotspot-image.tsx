@@ -92,7 +92,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
   const [items, setItems] = useState<IHotspot[]>(data ?? [])
   useEffect((): void => {
     setItems(data ?? [])
-  }, [data?.length])
+  }, [data?.length, JSON.stringify(data?.map((item) => item.data))])
 
   useEffect(() => {
     setImageLoaded(false)
@@ -159,6 +159,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
     setResizeDirection(null)
 
     const updatedItem = items.find(h => h.id === selectedId)
+
     if (updatedItem !== undefined) {
       onUpdate?.(updatedItem)
     }

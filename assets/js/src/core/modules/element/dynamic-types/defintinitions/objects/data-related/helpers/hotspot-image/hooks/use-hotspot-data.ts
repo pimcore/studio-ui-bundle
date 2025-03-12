@@ -49,8 +49,11 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
       )
       !isUndefined(hotspot.name) && !isNull(hotspot.name) && setHotspotName(hotspot.name)
       form.setFieldsValue({ hotspotName: hotspot.name })
+    } else {
+      setFields([])
+      form.resetFields()
     }
-  }, [hotspot])
+  }, [hotspot, editModeHotspotId])
 
   const handleTypeSelect = (hotSpotId: number, type: HotspotMarkerData['type']): void => {
     setFields((prevFields) => [

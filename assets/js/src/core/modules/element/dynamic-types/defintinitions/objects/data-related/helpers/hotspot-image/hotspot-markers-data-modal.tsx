@@ -83,7 +83,7 @@ export const HotspotMarkersDataModal = ({
             } }
             type={ 'primary' }
           >
-            {t('hotspots-markers-data-modal.save')}
+            {t('hotspots-markers-data-modal.apply')}
           </Button>
         </Flex>
       ) }
@@ -91,7 +91,7 @@ export const HotspotMarkersDataModal = ({
       onCancel={ handleCancel }
       open={ !isUndefined(editModeHotspotId) }
       size="M"
-      title={ t('link.edit-title') }
+      title={ t('hotspots-markers-data-modal.title') }
     >
       <Form
         form={ form }
