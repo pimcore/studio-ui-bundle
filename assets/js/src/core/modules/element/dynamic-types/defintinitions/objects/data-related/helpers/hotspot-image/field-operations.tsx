@@ -16,7 +16,8 @@ import { useTranslation } from 'react-i18next'
 import {
   type HotspotMarkerData
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
-import { isUndefined } from 'lodash'
+import { isNull, isUndefined } from 'lodash'
+import { Text as TextField } from '@Pimcore/components/text/text'
 import { Space } from '@Pimcore/components/space/space'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '../../../../../../../../components/input/input'
@@ -25,6 +26,14 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import useHotspotData
   from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hooks/use-hotspot-data'
 import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
+import { TextArea } from '@Pimcore/components/textarea/textarea'
+import {
+  Checkbox
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/checkbox/checkbox'
+import {
+  ManyToOneRelation
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 interface FieldOperationsProps {
   hotspot: IHotspot | undefined
@@ -44,6 +53,75 @@ const FieldOperations = ({
   }
 
   const renderFormItem = (field: HotspotMarkerData, index: number): JSX.Element => {
+    const renderInput = (): JSX.Element => {
+      switch (field.type) {
+        case 'checkbox':
+          return (
+            <Flex gap={ 'small' }>
+              <Checkbox
+                checked={ field.value === 'true' }
+                onChange={ (checked) => {
+                  !isNull(checked) && !isUndefined(checked) && handleFieldChange(index, 'value', checked ? 'true' : 'false')
+                } }
+              />
+              <TextField>{t('hotspots-markers-data-modal.data-type.checkbox')}</TextField>
+            </Flex>
+          )
+
+        case 'textarea':
+          return (
+            <TextArea
+              onChange={ (e) => {
+                handleFieldChange(index, 'value', e.target.value)
+              } }
+              value={ field.value }
+            />
+          )
+
+        case 'textfield':
+          return (
+            <Input
+              onChange={ (e) => {
+                handleFieldChange(index, 'value', e.target.value)
+              } }
+              type="number"
+              value={ field.value }
+            />
+          )
+
+        case 'document':
+          return (
+            <ManyToOneRelation
+              allowPathTextInput
+              assetsAllowed={ false }
+              dataObjectsAllowed
+              disabled
+              documentsAllowed={ false }
+            />
+          )
+        case 'asset':
+          return (
+            <ManyToOneRelation
+              allowPathTextInput
+              assetsAllowed
+              dataObjectsAllowed={ false }
+              disabled
+              documentsAllowed={ false }
+            />
+          )
+        case 'object':
+          return (
+            <ManyToOneRelation
+              allowPathTextInput
+              assetsAllowed={ false }
+              dataObjectsAllowed
+              disabled
+              documentsAllowed={ false }
+            />
+          )
+      }
+    }
+
     return (
       <Space
         className="w-full"
@@ -55,52 +133,16 @@ const FieldOperations = ({
           name={ `name-${index}` }
         >
           <Input
-            onChange={ (e) => {
-              handleFieldChange(index, 'name', e.target.value)
-            } }
+            onChange={ (e) => { handleFieldChange(index, 'name', e.target.value) } }
             value={ field.name }
           />
         </Form.Item>
-        {field.type === 'checkbox'
-          ? (
-            <Form.Item
-              label={ t('hotspots-markers-data-modal.data-type.value') }
-              name={ `value-${index}` }
-              valuePropName="checked"
-            >
-              <Input
-                checked={ field.value === 'true' }
-                onChange={ (e) => {
-                  handleFieldChange(index, 'value', e.target.checked ? 'true' : 'false')
-                } }
-                type="checkbox"
-              />
-            </Form.Item>
-            )
-          : (
-            <Form.Item
-              label={ t('hotspots-markers-data-modal.data-type.value') }
-              name={ `value-${index}` }
-            >
-              {field.type === 'textarea'
-                ? (
-                  <Input
-                    onChange={ (e) => {
-                      handleFieldChange(index, 'value', e.target.value)
-                    } }
-                    value={ field.value }
-                  />
-                  )
-                : (
-                  <Input
-                    onChange={ (e) => {
-                      handleFieldChange(index, 'value', e.target.value)
-                    } }
-                    value={ field.value }
-                  />
-                  )}
-            </Form.Item>
-            )}
+        <Form.Item
+          label={ t('hotspots-markers-data-modal.data-type.value') }
+          name={ `value-${index}` }
+        >
+          {renderInput()}
+        </Form.Item>
       </Space>
     )
   }

@@ -113,6 +113,16 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
   ]
   const handleRemoveField = (index: number): void => {
     setFields((prevFields) => prevFields.filter((_, i) => i !== index))
+    if (!isUndefined(hotspot) && !isUndefined(hotspot.data)) {
+      console.log('----> form', form.getFieldsValue())
+      console.log('----> index', index)
+
+      form.setFieldsValue({
+        [`name-${index}`]: '',
+        [`value-${index}`]: ''
+      })
+      console.log('----> form after', form.getFieldsValue())
+    }
   }
   const handleFieldChange = (index: number, key: keyof HotspotMarkerData, value: string): void => {
     setFields((prevFields) =>

@@ -666,8 +666,8 @@ hotspots-markers-data-modal.name: Name
 hotspots-markers-data-modal.data: Data
 hotspots-markers-data-modal.data-type.name: Name
 hotspots-markers-data-modal.data-type.value: Value
-hotspots-markers-data-modal.data-type.text-field: Textfield
-hotspots-markers-data-modal.data-type.text-area: Textarea
+hotspots-markers-data-modal.data-type.text-field: Text Field
+hotspots-markers-data-modal.data-type.text-area: Text Area
 hotspots-markers-data-modal.data-type.checkbox: Checkbox
 hotspots-markers-data-modal.data-type.object: Object
 hotspots-markers-data-modal.data-type.document: Document
