@@ -22,6 +22,9 @@ import { createImageThumbnailUrl } from '@Pimcore/components/image-preview/utils
 import {
   HotspotMarkersDataModal
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-markers-data-modal'
+import {
+  HotspotDataProvider
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-data-provider'
 
 export interface HotspotMarkersModalProps {
   hotspots?: IHotspot[] | null
@@ -164,12 +167,14 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
         onUpdate={ onUpdate }
         src={ thumbnailSrc }
       />
-      <HotspotMarkersDataModal
-        editModeHotspotId={ editModeHotspotId }
-        hotspot={ hotSpotInEditMode }
-        onClose={ () => { setEditModeHotspotId(undefined) } }
-        onUpdate={ onUpdate }
-      />
+      <HotspotDataProvider editModeHotspotId={ editModeHotspotId }>
+        <HotspotMarkersDataModal
+          hotspot={ hotSpotInEditMode }
+          onClose={ () => { setEditModeHotspotId(undefined) } }
+          onUpdate={ onUpdate }
+        />
+      </HotspotDataProvider>
+      )
     </WindowModal>
   )
 }

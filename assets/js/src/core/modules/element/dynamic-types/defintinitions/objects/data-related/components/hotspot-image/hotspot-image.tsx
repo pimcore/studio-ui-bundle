@@ -60,7 +60,6 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
   const [markerModalOpen, setMarkerModalOpen] = useState(false)
   const [cropModalOpen, setCropModalOpen] = useState(false)
   const { confirm } = useFormModal()
-
   const { t } = useTranslation()
 
   const setValue = (newValue: HotspotImageValue | null): void => {
