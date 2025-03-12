@@ -19,7 +19,10 @@ import {
 } from '../dynamic-type-object-data-abstract'
 import { Block } from '../components/block/block'
 import { FieldLabel } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/label/field-label'
-import { type IProcessVersionFieldDataProps } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
+import {
+  type IFormattedDataStructureData,
+  type IProcessVersionFieldDataProps
+} from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 
 export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
   id: string = 'block'
@@ -40,7 +43,7 @@ export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
     )
   }
 
-  async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<any> {
+  async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<IFormattedDataStructureData[]> {
     const { item, fieldValueByName, fieldBreadcrumbTitle, versionId, versionCount } = props
 
     return item.children.flatMap((blockItem: any) => {

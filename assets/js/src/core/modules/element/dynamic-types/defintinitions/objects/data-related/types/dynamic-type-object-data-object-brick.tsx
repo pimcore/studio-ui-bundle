@@ -40,7 +40,7 @@ export class DynamicTypeObjectDataObjectBrick extends DynamicTypeObjectDataAbstr
     }
   }
 
-  async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<any> {
+  async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<IFormattedDataStructureData[]> {
     const { objectId, item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount } = props
 
     let currentBrickSection: null | string = null
@@ -85,17 +85,17 @@ export class DynamicTypeObjectDataObjectBrick extends DynamicTypeObjectDataAbstr
       }
     }
 
-    async function handleObjectBrickData (): Promise<IFormattedDataStructureData[] | null> {
+    async function handleObjectBrickData (): Promise<IFormattedDataStructureData[] | []> {
       try {
         const data: ClassObjectBrickObjectLayoutApiResponse | null = await loadLayoutById()
 
         if (!isEmpty(data)) {
           return processObjectBrickData({ data: data?.items })
         } else {
-          return null
+          return []
         }
       } catch (e) {
-        return null
+        return []
       }
     }
 

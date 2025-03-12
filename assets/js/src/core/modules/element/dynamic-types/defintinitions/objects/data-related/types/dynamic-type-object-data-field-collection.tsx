@@ -35,7 +35,7 @@ export class DynamicTypeObjectDataFieldCollection extends DynamicTypeObjectDataA
     return <FieldCollection { ...props } />
   }
 
-  async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<any> {
+  async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<IFormattedDataStructureData[]> {
     const { objectId, item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount } = props
 
     let currentFieldCollectionSection: null | string = null
@@ -80,17 +80,17 @@ export class DynamicTypeObjectDataFieldCollection extends DynamicTypeObjectDataA
       }
     }
 
-    async function handleFieldCollectionData (): Promise<IFormattedDataStructureData[] | null> {
+    async function handleFieldCollectionData (): Promise<IFormattedDataStructureData[] | []> {
       try {
         const data: ClassFieldCollectionObjectLayoutApiResponse | null = await loadLayoutById()
 
         if (!isEmpty(data)) {
           return processFieldCollectionData({ data: data?.items })
         } else {
-          return null
+          return []
         }
       } catch (e) {
-        return null
+        return []
       }
     }
 
