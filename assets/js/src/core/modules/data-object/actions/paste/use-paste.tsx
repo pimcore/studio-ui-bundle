@@ -53,7 +53,7 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
       hidden: isPasteOpenHidden(node),
       onClick: async () => {
         dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
-        await paste(parseInt(node.id), { recursive: true, updateReferences: false })
+        await paste(parseInt(node.id), { recursive: true, updateReferences: false }, storedNode)
       }
     }
   }
@@ -103,7 +103,11 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
   }
 
   const isPasteOnlyContentsHidden = (node: Element | TreeNodeProps): boolean => {
-    return isPasteOpenHidden(node) || node.type === 'folder'
+    console.log(node)
+    return isPasteOpenHidden(node) ||
+      node.type === 'folder' ||
+      node.isLocked
+      // storedNode?.type !== node.type //TODO: i guess we need to compare the className aswell
   }
 
   const isPasteMenuHidden = (node: Element | TreeNodeProps): boolean => {

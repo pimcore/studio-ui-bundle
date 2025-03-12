@@ -40,7 +40,7 @@ export interface UseCopyPasteHookReturn {
   nodeTask: 'copy' | 'cut' | undefined
   copy: (node: TreeNodeProps) => void
   cut: (node: TreeNodeProps) => void
-  paste: (parentId: number, cloneParameters?: CloneParameters) => Promise<void>
+  paste: (parentId: number, cloneParameters?: CloneParameters, node?: TreeNodeProps | Element | undefined) => Promise<void>
   pasteCut: (parentId: number) => Promise<void>
   move: (props: MoveProps) => Promise<void>
   copyTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -107,14 +107,18 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
     }
   }
 
-  const paste = async (parentId: number, cloneParameters: CloneParameters = { recursive: true, updateReferences: true }): Promise<void> => {
-    if (storedNode === undefined) {
+  const paste = async (
+    parentId: number,
+    cloneParameters: CloneParameters = { recursive: true, updateReferences: true },
+    node: TreeNodeProps | Element | undefined = storedNode
+  ): Promise<void> => {
+    if (node === undefined) {
       return
     }
 
-    const id = typeof storedNode.id === 'number'
-      ? storedNode.id
-      : parseInt(storedNode.id)
+    const id = typeof node.id === 'number'
+      ? node.id
+      : parseInt(node.id)
 
     const cloneResponse = await elementClone({
       id,
