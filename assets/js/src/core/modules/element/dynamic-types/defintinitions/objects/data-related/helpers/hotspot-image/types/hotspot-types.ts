@@ -30,7 +30,7 @@ export interface Marker {
 type HotspotMarkerDataHotspotMarkerDataType = 'textfield' | 'textarea' | 'checkbox' | 'object' | 'document' | 'asset'
 
 export interface HotspotMarkerData {
-  type: HotspotMarkerDataHotspotMarkerDataType;
-  name: string;
-  value: string;
+  type: HotspotMarkerDataHotspotMarkerDataType
+  name: string
+  value: string
 }
