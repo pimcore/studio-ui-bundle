@@ -23,6 +23,7 @@ import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/us
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import { useLock } from '@Pimcore/modules/element/actions/lock/use-lock'
 import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
+import { usePaste } from '@Pimcore/modules/data-object/actions/paste/use-paste'
 
 export interface DataObjectTreeContextMenuProps {
   node: TreeNodeProps
@@ -36,18 +37,40 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
   const { renameTreeContextMenuItem } = useRename('data-object', getElementActionCacheKey('data-object', 'rename', parseInt(node.id)))
   const { deleteTreeContextMenuItem } = useDelete('data-object', getElementActionCacheKey('data-object', 'delete', parseInt(node.id)))
   const { refreshTreeContextMenuItem } = useRefreshTree('data-object')
-  const { copyTreeContextMenuItem, cutTreeContextMenuItem, pasteTreeContextMenuItem, pasteCutContextMenuItem } = useCopyPaste('data-object')
-  const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem, isLockMenuHidden } = useLock('data-object')
+  const { copyTreeContextMenuItem, cutTreeContextMenuItem, nodeTask, storedNode } = useCopyPaste('data-object')
+  const {
+    lockTreeContextMenuItem,
+    lockAndPropagateTreeContextMenuItem,
+    unlockTreeContextMenuItem,
+    unlockAndPropagateTreeContextMenuItem,
+    isLockMenuHidden
+  } = useLock('data-object')
+  const {
+    pasteAsChildRecursiveTreeContextMenuItem,
+    pasteRecursiveUpdatingReferencesTreeContextMenuItem,
+    pasteAsChildTreeContextMenuItem,
+    pasteOnlyContentsTreeContextMenuItem,
+    isPasteMenuHidden
+  } = usePaste({ storedNode, nodeTask })
 
   const items: DropdownMenuProps['items'] = [
     addFolderTreeContextMenuItem(node),
-    renameTreeContextMenuItem(node),
+    {
+      label: t('element.tree.paste'),
+      key: 'paste',
+      icon: <Icon value={ 'paste' } />,
+      hidden: isPasteMenuHidden(node),
+      children: [
+        pasteAsChildRecursiveTreeContextMenuItem(node),
+        pasteRecursiveUpdatingReferencesTreeContextMenuItem(node),
+        pasteAsChildTreeContextMenuItem(node),
+        pasteOnlyContentsTreeContextMenuItem(node)
+      ]
+    },
     copyTreeContextMenuItem(node),
-    pasteTreeContextMenuItem(node),
     cutTreeContextMenuItem(node),
-    pasteCutContextMenuItem(parseInt(node.id)),
     deleteTreeContextMenuItem(node),
-
+    renameTreeContextMenuItem(node),
     {
       label: t('element.tree.context-menu.advanced'),
       key: 'advanced',
