@@ -13,10 +13,8 @@
 
 import React, { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import { type UploadFile } from 'antd/es/upload/interface'
-import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useAppDispatch } from '@Pimcore/app/store'
 import { UploadModal } from '@Pimcore/components/upload/upload-modal/upload-modal'
+import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 
 export interface UploadContextProps {
   isOpen: boolean
@@ -33,19 +31,15 @@ export interface UploadContextProps {
 export const UploadContext = createContext<UploadContextProps | undefined>(undefined)
 
 export const UploadProvider = ({ children }: { children: ReactNode }): React.JSX.Element => {
-  const dispatch = useAppDispatch()
   const [isOpen, setIsOpen] = useState(false)
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const [uploadingNode, setUploadingNode] = useState<string | null>(null)
   const [successItems, setSuccessItems] = useState<UploadFile[]>([])
   const [failedItems, setFailedItems] = useState<UploadFile[]>([])
+  const { refreshTree } = useRefreshTree('asset')
 
   const finishUpload = (): void => {
-    dispatch(
-      assetApi.util.invalidateTags(
-        invalidatingTags.ASSET_TREE_ID(parseInt(uploadingNode!))
-      )
-    )
+    refreshTree(parseInt(uploadingNode!))
     setFileList(() => [])
     setUploadingNode(null)
   }
