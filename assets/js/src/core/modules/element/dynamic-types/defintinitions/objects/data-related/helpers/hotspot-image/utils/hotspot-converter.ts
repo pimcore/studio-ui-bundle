@@ -52,8 +52,6 @@ export const fromIHotspots = (iHotspots: IHotspot[]): { hotspots: Hotspot[], mar
   const hotspots: Hotspot[] = []
   const marker: Marker[] = []
 
-  console.log('----> iHotspots', iHotspots)
-
   iHotspots.forEach((iHotspot) => {
     if (iHotspot.type === 'hotspot') {
       hotspots.push({
