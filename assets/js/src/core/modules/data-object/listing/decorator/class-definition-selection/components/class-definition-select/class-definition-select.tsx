@@ -25,7 +25,7 @@ export const ClassDefinitionSelect = (): React.JSX.Element => {
   const options: SelectProps['options'] = availableClassDefinitions.map((classDefinition) => ({
     value: classDefinition.id,
     label: classDefinition.name
-  }))
+  })).filter((option) => option.value !== selectedClassDefinition?.id)
 
   const onChange: SelectProps['onChange'] = (value) => {
     const selectedClassDefinition = availableClassDefinitions.find((classDefinition) => classDefinition.id === value)
