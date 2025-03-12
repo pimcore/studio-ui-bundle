@@ -84,7 +84,6 @@ const FieldOperations = ({
               onChange={ (e) => {
                 handleFieldChange(index, 'value', e.target.value)
               } }
-              type="number"
               value={ field.value }
             />
           )
