@@ -35,7 +35,7 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
   const { styles } = useStyles()
   const { t } = useTranslation()
 
-  const renderSectionTitle = ({ key, isCommonSection }: { key: string, isCommonSection: boolean }): React.JSX.Element => {
+  const renderSectionTitle = ({ key, isCommonSection }: { key: string, isCommonSection: boolean }): React.JSX.Element | null => {
     const isShowValueWithTranslation = SECTIONS_WITH_TRANSLATION.includes(key)
     const textValue = isShowValueWithTranslation ? t(`version.category.title.${key}`) : key
 
@@ -45,13 +45,17 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
     const secondTitlePart = remainingTitleParts.length > 0 ? ` | ${remainingTitleParts.join(' | ')}` : ''
 
     return (
-      <Text
-        className={ cn(styles.sectionTitle, { [styles.subSectionTitle]: !isCommonSection }) }
-        strong
-      >
-        {firstTitlePart}
-        {!isEmptyValue(secondTitlePart) && <span className={ styles.subSectionText }>{secondTitlePart}</span>}
-      </Text>
+      (!isEmptyValue(firstTitlePart) || !isEmptyValue(secondTitlePart))
+        ? (
+          <Text
+            className={ cn(styles.sectionTitle, { [styles.subSectionTitle]: !isCommonSection }) }
+            strong
+          >
+            {firstTitlePart}
+            {!isEmptyValue(secondTitlePart) && <span className={ styles.subSectionText }>{secondTitlePart}</span>}
+          </Text>
+          )
+        : null
     )
   }
 
