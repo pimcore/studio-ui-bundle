@@ -13,7 +13,7 @@
 
 import { useContext } from 'react'
 import { ClassDefinitionContext, type ClassDefinitionsData } from './class-definitions-provider'
-import { type ClassDefinitionListItem } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import { type ClassDefinitionListItem } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 
 export type UseClassDefinitionsReturn = ClassDefinitionsData & {
   getById: (id: string) => ClassDefinitionListItem | undefined

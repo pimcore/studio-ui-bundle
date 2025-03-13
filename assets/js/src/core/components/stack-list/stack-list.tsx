@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import cn from 'classnames'
 import { StackListItem, type StackListItemProps } from './stack-list-item'
 import { useStyles } from './stack-list.styles'
@@ -37,7 +37,7 @@ export const StackList = ({ items, onItemsChange }: StackListProps): React.JSX.E
     setItems(items)
   }, [items])
 
-  return (
+  return useMemo(() => (
     <div className={ cn('stack-list', styles.stackList) }>
       <ContextHolder>
         {itemsState.map((item) => (
@@ -50,7 +50,7 @@ export const StackList = ({ items, onItemsChange }: StackListProps): React.JSX.E
         ))}
       </ContextHolder>
     </div>
-  )
+  ), [itemsState])
 
   function onDragEnd (event: DragEndEvent): void {
     const { active, over } = event

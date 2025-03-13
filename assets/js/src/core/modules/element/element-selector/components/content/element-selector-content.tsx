@@ -60,7 +60,7 @@ export const ElementSelectorContent = (): React.JSX.Element => {
   }
 
   useEffect(() => {
-    if (tabItems.length > 0) {
+    if (tabItems.length > 0 && activeArea === undefined) {
       setActiveArea(tabItems[0].key as unknown as ElementType)
     }
   }, [tabItems])

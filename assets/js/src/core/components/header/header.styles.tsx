@@ -16,18 +16,22 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     header: css`
-            display: flex;
-            width: 100%;
-            height: 32px;
-            min-height: 32px;
-            align-items: center;
-            gap: 8px;
+      display: flex;
+      width: 100%;
+      height: 32px;
+      min-height: 32px;
+      align-items: center;
+      gap: 8px;
 
-            .header__title {
-                font-weight: 600;
-                color: ${token.colorPrimary};
-                white-space: nowrap;
-            }
-        `
+      .header__title {
+          font-weight: 600;
+          color: ${token.colorPrimary};
+          white-space: nowrap;
+      }
+
+      .header__text {
+        white-space: nowrap;
+      }
+    `
   }
 }, { hashPriority: 'low' })

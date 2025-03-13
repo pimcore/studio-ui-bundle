@@ -17,7 +17,6 @@ import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/pr
 import { Sidebar } from '@Pimcore/modules/element/listing/abstract/view-layer/components/sidebar/sidebar'
 import { GridContainer } from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/grid-container'
 import { useClassDefinitionSelection } from '../decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
-import { ClassDefinitionSelect } from '../decorator/class-definition-selection/components/class-definition-select/class-definition-select'
 import { Toolbar } from '../toolbar/toolbar'
 
 export const DefaultView = (): React.JSX.Element => {
@@ -28,7 +27,6 @@ export const DefaultView = (): React.JSX.Element => {
     <ContentLayout
       renderSidebar={ dataQueryResult !== undefined ? <Sidebar /> : undefined }
       renderToolbar={ dataQueryResult !== undefined ? <Toolbar /> : undefined }
-      renderTopBar={ <ClassDefinitionSelect /> }
     >
       {selectedClassDefinition !== undefined && dataQueryResult !== undefined && (
         <GridContainer />

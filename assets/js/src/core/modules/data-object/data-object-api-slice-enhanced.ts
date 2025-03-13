@@ -32,7 +32,7 @@ const api = baseApi.enhanceEndpoints({
     },
 
     dataObjectGetGrid: {
-      keepUnusedDataFor: 5
+      keepUnusedDataFor: 10
     },
 
     dataObjectUpdateById: {

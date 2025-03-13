@@ -13,7 +13,7 @@
 
 import { type BaseQuery } from '@Pimcore/app/api/pimcore'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { type ClassDefinitionCollectionApiArg, type ClassDefinitionCollectionApiResponse, useClassDefinitionCollectionQuery } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import { type ClassDefinitionCollectionApiArg, type ClassDefinitionCollectionApiResponse, useClassDefinitionCollectionQuery } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { type TypedUseQueryHookResult } from '@reduxjs/toolkit/dist/query/react'
 import React, { createContext, useMemo } from 'react'
 
