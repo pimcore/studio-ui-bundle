@@ -76,7 +76,7 @@ interface IHotspotImage {
   styleOptions?: IStyleOptions
   data?: IHotspot[]
   onRemove?: (id: number) => void
-  onEdit?: (id: number) => void
+  onEdit?: (hotspot: IHotspot) => void
   onClone?: (id: number) => void
   onUpdate?: (item: IHotspot) => void
   disableContextMenu?: boolean
@@ -195,7 +195,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
                   ? (
                     <IconTextButton
                       icon={ { value: 'new' } }
-                      onClick={ () => { onEdit(hotspot.id) } }
+                      onClick={ () => { onEdit(hotspot) } }
                       type="default"
                     >{t('hotspots-markers-modal.edit-button')}</IconTextButton>
                     )

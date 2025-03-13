@@ -94,7 +94,6 @@ const FieldOperations = ({
               allowPathTextInput
               assetsAllowed={ false }
               dataObjectsAllowed
-              disabled
               documentsAllowed={ false }
             />
           )
@@ -104,7 +103,6 @@ const FieldOperations = ({
               allowPathTextInput
               assetsAllowed
               dataObjectsAllowed={ false }
-              disabled
               documentsAllowed={ false }
             />
           )
@@ -114,7 +112,6 @@ const FieldOperations = ({
               allowPathTextInput
               assetsAllowed={ false }
               dataObjectsAllowed
-              disabled
               documentsAllowed={ false }
             />
           )

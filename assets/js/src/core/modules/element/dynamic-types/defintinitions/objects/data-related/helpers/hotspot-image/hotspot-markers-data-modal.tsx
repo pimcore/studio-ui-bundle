@@ -41,7 +41,7 @@ export const HotspotMarkersDataModal = ({
 }: HotspotMarkersDataModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
-  const { fields, hotspotName, setHotspotName, dataTypes, editModeHotspotId } = useHotspotData(hotspot, form)
+  const { fields, hotspotName, setHotspotName, dataTypes, editModeHotspot } = useHotspotData(hotspot, form)
 
   const handleSave = (): void => {
     if (isUndefined(hotspot)) return
@@ -89,7 +89,7 @@ export const HotspotMarkersDataModal = ({
       ) }
       okText={ t('save') }
       onCancel={ handleCancel }
-      open={ !isUndefined(editModeHotspotId) }
+      open={ !isUndefined(editModeHotspot) }
       size="M"
       title={ t('hotspots-markers-data-modal.title') }
     >

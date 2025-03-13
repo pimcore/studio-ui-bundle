@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
 import { defaultStyleOptions, HotspotImage, type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
@@ -23,7 +23,7 @@ import {
   HotspotMarkersDataModal
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-markers-data-modal'
 import {
-  HotspotDataProvider
+  HotspotContext
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-data-provider'
 
 export interface HotspotMarkersModalProps {
@@ -39,9 +39,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
   const { t } = useTranslation()
   const [hotspots, setHotspots] = useState<IHotspot[]>(props.hotspots ?? [])
   const [modalOpened, setModalOpened] = useState(false)
-  const [editModeHotspotId, setEditModeHotspotId] = useState<number | undefined>(undefined)
-  const [editModeHotspot, setEditModeHotspot] = useState<IHotspot | undefined>(undefined)
-
+  const { editModeHotspot, setEditModeHotspot } = useContext(HotspotContext)
   const width = 952
   const height = 800
 
@@ -49,11 +47,6 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
     setHotspots(props.hotspots ?? [])
   }, [props.hotspots])
 
-  useEffect(() => {
-    const hotSpotInEditMode = hotspots.find(h => h.id === editModeHotspotId)
-    setEditModeHotspot(hotSpotInEditMode)
-    console.log('----> hjotSpotInEditMode neu berechnet', hotSpotInEditMode)
-  }, [])
   const onClone = (id: number): void => {
     const originalHotspot = hotspots.find(h => h.id === id)
     if (originalHotspot !== undefined) {
@@ -69,8 +62,8 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
     setHotspots(hotspots.filter(h => h.id !== id))
   }
 
-  const onEdit = (id: number): void => {
-    setEditModeHotspotId(id)
+  const onEdit = (hotspot: IHotspot): void => {
+    setEditModeHotspot(hotspot)
   }
   const onUpdate = (item: IHotspot): void => {
     setHotspots(hotspots.map(h => h.id === item.id ? item : h))
@@ -154,22 +147,20 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
       size="XL"
       title={ t(props.disabled === true ? 'hotspots.show' : 'hotspots.edit') }
     >
-      <HotspotDataProvider editModeHotspotId={ editModeHotspotId }>
-        <HotspotImage
-          data={ modalOpened ? hotspots : [] }
-          disabled={ props.disabled }
-          onClone={ onClone }
-          onEdit={ onEdit }
-          onRemove={ onRemove }
-          onUpdate={ onUpdate }
-          src={ thumbnailSrc }
-        />
-        <HotspotMarkersDataModal
-          hotspot={ editModeHotspot }
-          onClose={ () => { setEditModeHotspotId(undefined) } }
-          onUpdate={ onUpdate }
-        />
-      </HotspotDataProvider>
+      <HotspotImage
+        data={ modalOpened ? hotspots : [] }
+        disabled={ props.disabled }
+        onClone={ onClone }
+        onEdit={ onEdit }
+        onRemove={ onRemove }
+        onUpdate={ onUpdate }
+        src={ thumbnailSrc }
+      />
+      <HotspotMarkersDataModal
+        hotspot={ editModeHotspot }
+        onClose={ () => { setEditModeHotspot(undefined) } }
+        onUpdate={ onUpdate }
+      />
       )
     </WindowModal>
   )

@@ -30,12 +30,18 @@ interface UseHotspotDataHookReturn {
   handleRemoveField: (index: number) => void
   handleFieldChange: (index: number, key: keyof HotspotMarkerData, value: string) => void
   dataTypes: Array<{ key: string, label: string, onClick: () => void }>
-  editModeHotspotId: number | undefined
+  editModeHotspot: IHotspot | undefined
+  setEditModeHotspot: (hotspot: IHotspot | undefined) => void
 }
 
 const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDataHookReturn => {
   const { t } = useTranslation()
-  const { fields, setFields, hotspotName, setHotspotName, editModeHotspotId } = useContext(HotspotContext)
+  const { fields, setFields, hotspotName, setHotspotName, editModeHotspot, setEditModeHotspot } = useContext(HotspotContext)
+
+  useEffect(() => {
+    setFields([])
+    form.resetFields()
+  }, [editModeHotspot])
 
   useEffect(() => {
     if (!isUndefined(hotspot) && !isUndefined(hotspot.data)) {
@@ -53,13 +59,12 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
       setFields([])
       form.resetFields()
     }
-  }, [hotspot, editModeHotspotId])
+  }, [hotspot])
 
-  const handleTypeSelect = (hotSpotId: number, type: HotspotMarkerData['type']): void => {
+  const handleTypeSelect = (type: HotspotMarkerData['type']): void => {
     setFields((prevFields) => [
       ...prevFields,
       {
-        hotSpotId,
         type,
         name: '',
         value: type === 'checkbox' ? 'false' : ''
@@ -71,44 +76,32 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
     {
       key: 'textfield',
       label: t('hotspots-markers-data-modal.data-type.text-field'),
-      onClick: () => {
-        !isUndefined(editModeHotspotId) && handleTypeSelect(editModeHotspotId, 'textfield')
-      }
+      onClick: () => { handleTypeSelect('textfield') }
     },
     {
       key: 'textarea',
       label: t('hotspots-markers-data-modal.data-type.text-area'),
-      onClick: () => {
-        !isUndefined(editModeHotspotId) && handleTypeSelect(editModeHotspotId, 'textarea')
-      }
+      onClick: () => { handleTypeSelect('textarea') }
     },
     {
       key: 'checkbox',
       label: t('hotspots-markers-data-modal.data-type.checkbox'),
-      onClick: () => {
-        !isUndefined(editModeHotspotId) && handleTypeSelect(editModeHotspotId, 'checkbox')
-      }
+      onClick: () => { handleTypeSelect('checkbox') }
     },
     {
       key: 'object',
       label: t('hotspots-markers-data-modal.data-type.object'),
-      onClick: () => {
-        !isUndefined(editModeHotspotId) && handleTypeSelect(editModeHotspotId, 'object')
-      }
+      onClick: () => { handleTypeSelect('object') }
     },
     {
       key: 'document',
       label: t('hotspots-markers-data-modal.data-type.document'),
-      onClick: () => {
-        !isUndefined(editModeHotspotId) && handleTypeSelect(editModeHotspotId, 'document')
-      }
+      onClick: () => { handleTypeSelect('document') }
     },
     {
       key: 'asset',
       label: t('hotspots-markers-data-modal.data-type.asset'),
-      onClick: () => {
-        !isUndefined(editModeHotspotId) && handleTypeSelect(editModeHotspotId, 'asset')
-      }
+      onClick: () => { handleTypeSelect('asset') }
     }
   ]
   const handleRemoveField = (index: number): void => {
@@ -128,7 +121,7 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
     )
   }
 
-  return { fields, setFields, hotspotName, setHotspotName, handleRemoveField, handleFieldChange, dataTypes, editModeHotspotId }
+  return { fields, setFields, hotspotName, setHotspotName, handleRemoveField, handleFieldChange, dataTypes, editModeHotspot, setEditModeHotspot }
 }
 
 export default useHotspotData

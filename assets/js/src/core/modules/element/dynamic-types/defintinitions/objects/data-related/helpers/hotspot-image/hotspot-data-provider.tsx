@@ -15,13 +15,15 @@ import React, { useState, createContext, useMemo } from 'react'
 import type {
   HotspotMarkerData
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
+import type { IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 
 export interface HotspotDataContext {
   fields: HotspotMarkerData[]
   setFields: React.Dispatch<React.SetStateAction<HotspotMarkerData[]>>
   hotspotName: string
   setHotspotName: (name: string) => void
-  editModeHotspotId: number | undefined
+  editModeHotspot: IHotspot | undefined
+  setEditModeHotspot: (hotspot: IHotspot | undefined) => void
 }
 
 export const HotspotContext = createContext<HotspotDataContext>({
@@ -29,25 +31,27 @@ export const HotspotContext = createContext<HotspotDataContext>({
   setFields: () => {},
   hotspotName: '',
   setHotspotName: () => {},
-  editModeHotspotId: undefined
+  editModeHotspot: undefined,
+  setEditModeHotspot: () => {}
 })
 
 export interface HotspotDataProviderProps {
   children: React.ReactNode
-  editModeHotspotId: number | undefined
 }
 
-export const HotspotDataProvider = ({ children, editModeHotspotId }: HotspotDataProviderProps): React.JSX.Element => {
+export const HotspotDataProvider = ({ children }: HotspotDataProviderProps): React.JSX.Element => {
   const [fields, setFields] = useState<HotspotMarkerData[]>([])
   const [hotspotName, setHotspotName] = useState<string>('')
+  const [editModeHotspot, setEditModeHotspot] = useState<IHotspot | undefined>(undefined)
 
   const value = useMemo(() => ({
     fields,
     setFields,
     hotspotName,
     setHotspotName,
-    editModeHotspotId
-  }), [fields, hotspotName, editModeHotspotId])
+    editModeHotspot,
+    setEditModeHotspot
+  }), [fields, hotspotName, editModeHotspot])
 
   return (
     <HotspotContext.Provider value={ value }>

@@ -24,6 +24,9 @@ import {
 import type {
   CropSettings
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/crop-types'
+import {
+  HotspotDataProvider
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-data-provider'
 
 interface HotspotImagePreviewProps {
   assetId: number
@@ -87,6 +90,7 @@ export const HotspotImagePreview = forwardRef(function HotspotImagePreview (
       ) }
 
       { markerModalOpen && (
+      <HotspotDataProvider>
         <HotspotMarkersModal
           disabled={ disabled }
           hotspots={ toIHotspots(value.hotspots ?? [], value.marker ?? []) }
@@ -95,6 +99,7 @@ export const HotspotImagePreview = forwardRef(function HotspotImagePreview (
           onClose={ hideMarkerModal }
           open={ markerModalOpen }
         />
+      </HotspotDataProvider>
       ) }
     </div>
   )
