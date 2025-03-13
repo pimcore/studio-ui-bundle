@@ -15,6 +15,7 @@ import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type ClassDefinitionListItem } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { useClassDefinitions } from '@Pimcore/modules/class-definition/hooks/use-class-definitions'
+import _ from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -29,10 +30,12 @@ export const useAddObject = (): UseAddObjectHookReturn => {
   const getClassEntries = (): ItemType[] => {
     let classHirachy: ItemType[] = []
 
-    const structuredClassDefinitions = classDefinitions.reduce<Record<string, ClassDefinitionListItem[]>>((acc, classDefinition) => {
-      const groupName = classDefinition.group !== ''
-        ? classDefinition.group
-        : 'undefined'
+    const structuredClassDefinitions = [...classDefinitions]
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .reduce<Record<string, ClassDefinitionListItem[]>>((acc, classDefinition) => {
+      const groupName = _.isEmpty(classDefinition.group)
+        ? 'undefined'
+        : classDefinition.group
 
       if (acc[groupName] === undefined) {
         acc[groupName] = []
@@ -42,6 +45,19 @@ export const useAddObject = (): UseAddObjectHookReturn => {
 
       return acc
     }, {})
+
+    if (structuredClassDefinitions.undefined !== undefined) {
+      classHirachy = structuredClassDefinitions.undefined.map(classDefinition => {
+        return {
+          label: classDefinition.name,
+          key: 'add-object-' + classDefinition.id,
+          icon: <Icon { ...classDefinition.icon } />,
+          onClick: () => {
+            console.log('Add object', classDefinition)
+          }
+        }
+      })
+    }
 
     for (const [group, classDefinitions] of Object.entries(structuredClassDefinitions)) {
       if (group !== 'undefined') {
@@ -60,19 +76,6 @@ export const useAddObject = (): UseAddObjectHookReturn => {
             }
           })
         })
-      }
-
-      if (group === 'undefined') {
-        classHirachy = classHirachy.concat(classDefinitions.map(classDefinition => {
-          return {
-            label: classDefinition.name,
-            key: classDefinition.id,
-            icon: <Icon { ...classDefinition.icon } />,
-            onClick: () => {
-              console.log('Add object', classDefinition)
-            }
-          }
-        }))
       }
     }
 
