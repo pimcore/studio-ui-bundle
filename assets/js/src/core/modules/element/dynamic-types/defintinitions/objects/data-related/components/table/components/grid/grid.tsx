@@ -34,7 +34,7 @@ export const TableGrid = (props: TableGridProps): React.JSX.Element => {
   if (props.columnConfigActivated && props.columnConfig !== undefined) {
     props.columnConfig.forEach((col, index) => {
       columns.push(
-        columnHelper.accessor(col.key, {
+        columnHelper.accessor(String(col.key), {
           header: col.label ?? col.key,
           id: String(col.key),
           size: 150,
