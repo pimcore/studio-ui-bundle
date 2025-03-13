@@ -40,6 +40,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
   const [hotspots, setHotspots] = useState<IHotspot[]>(props.hotspots ?? [])
   const [modalOpened, setModalOpened] = useState(false)
   const [editModeHotspotId, setEditModeHotspotId] = useState<number | undefined>(undefined)
+  const [editModeHotspot, setEditModeHotspot] = useState<IHotspot | undefined>(undefined)
 
   const width = 952
   const height = 800
@@ -48,6 +49,11 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
     setHotspots(props.hotspots ?? [])
   }, [props.hotspots])
 
+  useEffect(() => {
+    const hotSpotInEditMode = hotspots.find(h => h.id === editModeHotspotId)
+    setEditModeHotspot(hotSpotInEditMode)
+    console.log('----> hjotSpotInEditMode neu berechnet', hotSpotInEditMode)
+  }, [])
   const onClone = (id: number): void => {
     const originalHotspot = hotspots.find(h => h.id === id)
     if (originalHotspot !== undefined) {
@@ -104,8 +110,6 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
     contain: true
   })
 
-  const hotSpotInEditMode = hotspots.find(h => h.id === editModeHotspotId)
-
   return (
     <WindowModal
       afterOpenChange={ afterOpenChange }
@@ -150,18 +154,18 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
       size="XL"
       title={ t(props.disabled === true ? 'hotspots.show' : 'hotspots.edit') }
     >
-      <HotspotImage
-        data={ modalOpened ? hotspots : [] }
-        disabled={ props.disabled }
-        onClone={ onClone }
-        onEdit={ onEdit }
-        onRemove={ onRemove }
-        onUpdate={ onUpdate }
-        src={ thumbnailSrc }
-      />
       <HotspotDataProvider editModeHotspotId={ editModeHotspotId }>
+        <HotspotImage
+          data={ modalOpened ? hotspots : [] }
+          disabled={ props.disabled }
+          onClone={ onClone }
+          onEdit={ onEdit }
+          onRemove={ onRemove }
+          onUpdate={ onUpdate }
+          src={ thumbnailSrc }
+        />
         <HotspotMarkersDataModal
-          hotspot={ hotSpotInEditMode }
+          hotspot={ editModeHotspot }
           onClose={ () => { setEditModeHotspotId(undefined) } }
           onUpdate={ onUpdate }
         />
