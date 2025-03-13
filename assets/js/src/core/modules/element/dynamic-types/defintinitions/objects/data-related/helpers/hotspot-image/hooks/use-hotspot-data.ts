@@ -38,6 +38,27 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
   const { t } = useTranslation()
   const { fields, setFields, hotspotName, setHotspotName, editModeHotspot, setEditModeHotspot } = useContext(HotspotContext)
 
+  const getInitialValueForType = (type: HotspotMarkerData['type'], value?: any): string | boolean | Record<string, any> | { type: 'document', id: string, fullPath: string, subtype: 'object' } | { id: string, path: string } => {
+    switch (type) {
+      case 'checkbox':
+        return typeof value === 'boolean' ? value : false
+      case 'document':
+        return typeof value === 'object' && value
+          ? { type: 'document', id: value.id ?? '', fullPath: value.fullPath ?? '', subtype: 'object' }
+          : { type: 'document', id: '', fullPath: '', subtype: 'object' }
+      case 'asset':
+        return typeof value === 'object' && value
+          ? { id: value.id ?? '', path: value.path ?? '' }
+          : { id: '', path: '' }
+      case 'object':
+        return typeof value === 'object' ? value : {}
+      case 'textfield':
+      case 'textarea':
+      default:
+        return typeof value === 'string' ? value : ''
+    }
+  }
+
   useEffect(() => {
     setFields([])
     form.resetFields()
@@ -46,30 +67,51 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
   useEffect(() => {
     if (!isUndefined(hotspot) && !isUndefined(hotspot.data)) {
       setFields(hotspot.data)
+
       form.setFieldsValue(
-        hotspot.data.reduce<Record<string, string>>((acc, field, index) => {
+        hotspot.data.reduce<Record<string, unknown>>((acc, field, index) => {
           acc[`name-${index}`] = field.name
-          acc[`value-${index}`] = field.value
+          acc[`value-${index}`] = getInitialValueForType(field.type, field.value)
           return acc
         }, {})
       )
-      !isUndefined(hotspot.name) && !isNull(hotspot.name) && setHotspotName(hotspot.name)
-      form.setFieldsValue({ hotspotName: hotspot.name })
+
+      if (!isUndefined(hotspot.name) && !isNull(hotspot.name)) {
+        setHotspotName(hotspot.name)
+        form.setFieldsValue({ hotspotName: hotspot.name })
+      }
     } else {
       setFields([])
       form.resetFields()
     }
   }, [hotspot])
 
+  // useEffect(() => {
+  //   if (!isUndefined(hotspot) && !isUndefined(hotspot.data)) {
+  //     setFields(hotspot.data)
+  //     form.setFieldsValue(
+  //       hotspot.data.reduce<Record<string, string>>((acc, field, index) => {
+  //         acc[`name-${index}`] = field.name
+  //         acc[`value-${index}`] = field.value
+  //         return acc
+  //       }, {})
+  //     )
+  //     !isUndefined(hotspot.name) && !isNull(hotspot.name) && setHotspotName(hotspot.name)
+  //     form.setFieldsValue({ hotspotName: hotspot.name })
+  //   } else {
+  //     setFields([])
+  //     form.resetFields()
+  //   }
+  // }, [hotspot])
+
   const handleTypeSelect = (type: HotspotMarkerData['type']): void => {
-    setFields((prevFields) => [
-      ...prevFields,
-      {
-        type,
-        name: '',
-        value: type === 'checkbox' ? 'false' : ''
-      }
-    ])
+    const newField: HotspotMarkerData = {
+      type,
+      name: '',
+      value: getInitialValueForType(type)
+    }
+
+    setFields((prevFields) => [...prevFields, newField])
   }
 
   const dataTypes = [

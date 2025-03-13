@@ -29,8 +29,22 @@ export interface Marker {
 
 type HotspotMarkerDataHotspotMarkerDataType = 'textfield' | 'textarea' | 'checkbox' | 'object' | 'document' | 'asset'
 
-export interface HotspotMarkerData {
-  type: HotspotMarkerDataHotspotMarkerDataType;
+export interface HotspotMarkerDataBase<T extends HotspotMarkerDataHotspotMarkerDataType, V> {
+  type: T;
   name: string;
-  value: string;
+  value: V;
 }
+
+export type HotspotMarkerData =
+    | HotspotMarkerDataBase<'textfield', string>
+    | HotspotMarkerDataBase<'textarea', string>
+    | HotspotMarkerDataBase<'checkbox', boolean>
+    | HotspotMarkerDataBase<'object', { type: 'data-object'; id: string; fullPath: string; subtype: 'object' }>
+    | HotspotMarkerDataBase<'document', { type: 'document'; id: string; fullPath: string; subtype: 'object' }>
+    | HotspotMarkerDataBase<'asset', { type: 'asset'; id: string; fullPath: string; subtype: 'object' }>;
+
+// export interface HotspotMarkerData {
+//   type: HotspotMarkerDataHotspotMarkerDataType;
+//   name: string;
+//   value: string;
+// }

@@ -59,7 +59,7 @@ const FieldOperations = ({
           return (
             <Flex gap={ 'small' }>
               <Checkbox
-                checked={ field.value === 'true' }
+                checked={ field.value }
                 onChange={ (checked) => {
                   !isNull(checked) && !isUndefined(checked) && handleFieldChange(index, 'value', checked ? 'true' : 'false')
                 } }
@@ -95,6 +95,9 @@ const FieldOperations = ({
               assetsAllowed={ false }
               dataObjectsAllowed
               documentsAllowed={ false }
+              value={
+              { type: 'document', id: field.value.id, fullPath: field.value.fullPath, subtype: 'object' }
+            }
             />
           )
         case 'asset':
