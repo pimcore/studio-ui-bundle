@@ -20,9 +20,8 @@ import {
 import { Block } from '../components/block/block'
 import { FieldLabel } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/label/field-label'
 import {
-  type IFormattedDataStructureData,
-  type IProcessVersionFieldDataProps
-} from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
+  DataComponent
+} from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/components/data-component/data-component'
 
 export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
   id: string = 'block'
@@ -43,14 +42,19 @@ export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
     )
   }
 
-  async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<IFormattedDataStructureData[]> {
-    const { item, fieldValueByName, fieldBreadcrumbTitle, versionId, versionCount } = props
-
-    return item.children.flatMap((blockItem: any) => {
-      return fieldValueByName.flatMap(blockValue => {
+  getVersionObjectDataComponent (props: AbstractObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+    return props.children.map((blockItem: any): React.JSX.Element => {
+      return props.value.map((blockValue: any, blockIndex: number) => {
         const blockFieldName = blockItem.name
+        const blockFieldValue = blockValue?.[blockFieldName]
 
-        return [{ fieldBreadcrumbTitle, fieldData: blockItem, fieldValue: blockValue?.[blockFieldName], versionId, versionCount }]
+        return (
+          <DataComponent
+            key={ blockIndex }
+            value={ blockFieldValue }
+            { ...blockItem }
+          />
+        )
       })
     })
   }
