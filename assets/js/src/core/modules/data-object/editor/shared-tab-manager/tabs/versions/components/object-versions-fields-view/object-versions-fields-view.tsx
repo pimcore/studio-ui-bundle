@@ -88,11 +88,16 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                 const isBreadcrumbKeyMatch = breadcrumb.key === fieldItem.Field.fieldBreadcrumbTitle
                 const isFieldInBreadcrumbList = breadcrumb.fieldKeys.includes(fieldItem.Field.name as string)
 
+                const isGroupedType = fieldItem.Field.fieldtype === 'fieldcollections'
+
                 return (
                   isBreadcrumbKeyMatch && isFieldInBreadcrumbList && (
                     <div key={ `${fieldIndex}-${fieldItem.Field.name}` }>
                       {renderFieldTitle({ key: fieldItem.Field.title, locale: fieldItem.Field?.locale, isCommonSection })}
-                      <Flex gap="mini">
+                      <Flex
+                        className={ cn({ [styles.sectionFields]: isGroupedType }) }
+                        gap="mini"
+                      >
                         {versionKeysList.map((key, index) => {
                           const isModifiedField = fieldItem?.isModifiedValue === true
                           const isSecondItem = index === 1
