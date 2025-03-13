@@ -21,7 +21,7 @@ import { useTranslation } from 'react-i18next'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { isPlainObject } from 'lodash'
+import { cloneDeep, isEmpty, isEqual, isNil, isPlainObject } from 'lodash'
 import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
 import { useStyles } from './url-slug.styles'
 
@@ -40,8 +40,12 @@ export interface UrlSlugProps {
   className?: string
 }
 
+const getInitialValue = (value?: UrlSlugEntry[] | null): UrlSlugEntry[] => {
+  return !isNil(value) && !isEmpty(value) ? value : [{ slug: '', siteId: 0 }]
+}
+
 export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
-  const initialValue = props.value ?? [{ slug: '', siteId: 0 }]
+  const initialValue = getInitialValue(props.value)
 
   if (isPlainObject(initialValue) && !initialValue.some(entry => entry.siteId === 0)) {
     initialValue.unshift({ slug: '', siteId: 0 })
@@ -57,10 +61,17 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
   const { Text } = Typography
 
   useEffect(() => {
-    if (props.onChange !== undefined) {
-      props.onChange(value)
+    if (!isEqual(initialValue, value)) {
+      props.onChange?.(value)
     }
   }, [value])
+
+  useEffect(() => {
+    const newValue = getInitialValue(props.value)
+    if (!isEqual(value, newValue)) {
+      setValue(newValue)
+    }
+  }, [props.value])
 
   const validateSlug = (slug: string): boolean => {
     if (slug !== '') {
@@ -79,7 +90,7 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
   }
 
   const handleInputChange = (index: number, newSlug: string): void => {
-    const newValue = [...value]
+    const newValue = cloneDeep(value)
 
     newValue[index].slug = newSlug
 
