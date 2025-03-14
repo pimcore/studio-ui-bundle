@@ -24,7 +24,7 @@ interface OpenElementWidgetProps {
 
 interface UseElementReturn {
   openElement: (props: OpenElementWidgetProps) => Promise<void>
-  mapToElementType: (elementType: string) => ElementType | undefined
+  mapToElementType: (elementType: string, silent?: boolean) => ElementType | undefined
 }
 
 export const useElementHelper = (): UseElementReturn => {
@@ -49,15 +49,15 @@ export const useElementHelper = (): UseElementReturn => {
     }
   }
 
-  function mapToElementType (elementType: string): ElementType | undefined {
+  function mapToElementType (elementType: string, silent?: boolean): ElementType | undefined {
     const targetType = mapType(elementType)
 
-    if (targetType === null) {
+    if (targetType === null && silent !== true) {
       trackError(new GeneralError(`Unknown element type: ${elementType}`))
       return undefined
     }
 
-    return targetType
+    return targetType ?? undefined
   }
 
   return { openElement, mapToElementType }
