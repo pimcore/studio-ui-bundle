@@ -13,7 +13,7 @@
 
 import { type StoryObj, type Meta } from '@storybook/react'
 import { ElementTag } from './element-tag'
-import {  elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 const config: Meta = {
   title: 'Components/Data Display/ElementTag',
