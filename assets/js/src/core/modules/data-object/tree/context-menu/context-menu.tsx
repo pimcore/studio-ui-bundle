@@ -42,7 +42,7 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
   const { addObjectTreeContextMenuItem } = useAddObject()
 
   const items: DropdownMenuProps['items'] = [
-    addObjectTreeContextMenuItem(),
+    addObjectTreeContextMenuItem(node),
     addFolderTreeContextMenuItem(node),
     renameTreeContextMenuItem(node),
     copyTreeContextMenuItem(node),

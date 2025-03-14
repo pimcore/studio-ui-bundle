@@ -12,22 +12,31 @@
 */
 
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
+import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { type ClassDefinitionListItem } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { useClassDefinitions } from '@Pimcore/modules/class-definition/hooks/use-class-definitions'
 import _ from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useDataObjectAddMutation } from '../../data-object-api-slice.gen'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface UseAddObjectHookReturn {
-  addObjectTreeContextMenuItem: () => ItemType
+  addObjectTreeContextMenuItem: (node: TreeNodeProps) => ItemType
 }
 
 export const useAddObject = (): UseAddObjectHookReturn => {
   const { t } = useTranslation()
   const classDefinitions = useClassDefinitions()
+  const modal = useFormModal()
+  const [addDataObjectMutation] = useDataObjectAddMutation()
+  const dispatch = useAppDispatch()
 
-  const getClassEntries = (): ItemType[] => {
+  const getClassEntries = (node: TreeNodeProps): ItemType[] => {
     let classHirachy: ItemType[] = []
 
     const structuredClassDefinitions = [...classDefinitions]
@@ -47,16 +56,7 @@ export const useAddObject = (): UseAddObjectHookReturn => {
     }, {})
 
     if (structuredClassDefinitions.undefined !== undefined) {
-      classHirachy = structuredClassDefinitions.undefined.map(classDefinition => {
-        return {
-          label: classDefinition.name,
-          key: 'add-object-' + classDefinition.id,
-          icon: <Icon { ...classDefinition.icon } />,
-          onClick: () => {
-            console.log('Add object', classDefinition)
-          }
-        }
-      })
+      classHirachy = structuredClassDefinitions.undefined.map(classDefinition => getDataObjectEntry(classDefinition, node))
     }
 
     for (const [group, classDefinitions] of Object.entries(structuredClassDefinitions)) {
@@ -65,16 +65,7 @@ export const useAddObject = (): UseAddObjectHookReturn => {
           label: group,
           key: 'add-object-group-' + group,
           icon: <Icon value={ 'folder' } />,
-          children: classDefinitions.map(classDefinition => {
-            return {
-              label: classDefinition.name,
-              key: classDefinition.id,
-              icon: <Icon { ...classDefinition.icon } />,
-              onClick: () => {
-                console.log('Add object', classDefinition)
-              }
-            }
-          })
+          children: classDefinitions.map(classDefinition => getDataObjectEntry(classDefinition, node))
         })
       }
     }
@@ -82,12 +73,73 @@ export const useAddObject = (): UseAddObjectHookReturn => {
     return classHirachy
   }
 
-  const addObjectTreeContextMenuItem = (): ItemType => {
+  const getDataObjectEntry = (classDefinition: ClassDefinitionListItem, node: TreeNodeProps): ItemType => {
+    return {
+      label: classDefinition.name,
+      key: classDefinition.id,
+      icon: <Icon { ...classDefinition.icon } />,
+      onClick: () => {
+        const id = parseInt(node.id)
+        const parentId = parseInt(node.id)
+        createDataObject(id, classDefinition, parentId)
+      }
+    }
+  }
+
+  const createDataObject = (
+    id: number,
+    classDefinition: ClassDefinitionListItem,
+    parentId: number,
+    onFinish?: (newName: string) => void
+  ): void => {
+    modal.input({
+      title: t('data-object.create-data-object', { className: classDefinition.name }),
+      label: t('form.label.new-item'),
+      rule: {
+        required: true,
+        message: t('form.validation.required')
+      },
+      onOk: async (value: string) => {
+        await createDataObjectMutation(classDefinition.id, value, parentId)
+        onFinish?.(value)
+      }
+    })
+  }
+
+  const createDataObjectMutation = async (
+    classId: string,
+    name: string,
+    parentId: number
+  ): Promise<void> => {
+    const createDataObjectTask = addDataObjectMutation({
+      parentId,
+      dataObjectAddParameters: {
+        key: name,
+        classId,
+        type: 'object'
+      }
+    })
+
+    try {
+      const response = await createDataObjectTask
+
+      if (response.error !== undefined) {
+        trackError(new ApiError(response.error))
+        return
+      }
+
+      dispatch(refreshNodeChildren({ nodeId: String(parentId), elementType: 'data-object' }))
+    } catch (error) {
+      trackError(new GeneralError('Error creating data object'))
+    }
+  }
+
+  const addObjectTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('data-object.tree.context-menu.add-object'),
       key: 'add-object',
       icon: <Icon value={ 'folder' } />,
-      children: getClassEntries()
+      children: getClassEntries(node)
     }
   }
 
