@@ -47,6 +47,8 @@ export class DynamicTypeObjectDataAdvancedManyToManyRelation extends DynamicType
     return {
       ...super.getObjectDataFormItemProps(props),
       label: <ManyToManyRelationLabel
+
+        disabled={ props.noteditable === true }
         label={ props.title }
         name={ props.name }
              />

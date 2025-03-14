@@ -21,12 +21,13 @@ import type { FormItemProps } from 'antd'
 export interface ManyToManyRelationLabelProps {
   label: ReactNode
   name: FormItemProps['name']
+  disabled?: boolean
 }
 
 export const ManyToManyRelationLabel = (props: ManyToManyRelationLabelProps): React.JSX.Element => {
   return (
     <FieldLabel
-      additionalIcons={ <Icon value={ 'drop-target' } /> }
+      additionalIcons={ props.disabled === true ? undefined : <Icon value={ 'drop-target' } /> }
       label={ props.label }
       name={ props.name }
     />
