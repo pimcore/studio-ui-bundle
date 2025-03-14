@@ -11,11 +11,11 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useEffect, useContext } from 'react'
+import { useEffect, useContext, useCallback } from 'react'
 import { isUndefined, isNull } from 'lodash'
 import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import {
-  type HotspotMarkerData
+  type HotspotMarkerData, type HotspotValueMap
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import {
   HotspotContext
@@ -38,25 +38,65 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
   const { t } = useTranslation()
   const { fields, setFields, hotspotName, setHotspotName, editModeHotspot, setEditModeHotspot } = useContext(HotspotContext)
 
-  const getInitialValueForType = (type: HotspotMarkerData['type'], value?: any): string | boolean | Record<string, any> | { type: 'document', id: string, fullPath: string, subtype: 'object' } | { id: string, path: string } => {
-    switch (type) {
-      case 'checkbox':
-        return typeof value === 'boolean' ? value : false
-      case 'document':
-        return typeof value === 'object' && value
-          ? { type: 'document', id: value.id ?? '', fullPath: value.fullPath ?? '', subtype: 'object' }
-          : { type: 'document', id: '', fullPath: '', subtype: 'object' }
-      case 'asset':
-        return typeof value === 'object' && value
-          ? { id: value.id ?? '', path: value.path ?? '' }
-          : { id: '', path: '' }
-      case 'object':
-        return typeof value === 'object' ? value : {}
-      case 'textfield':
-      case 'textarea':
-      default:
-        return typeof value === 'string' ? value : ''
+  const getInitialValueForType = <T extends keyof HotspotValueMap>(
+    type: T,
+    value?: unknown
+  ): HotspotValueMap[T] => {
+    const defaultValues: HotspotValueMap = {
+      textfield: '',
+      textarea: '',
+      checkbox: false,
+      object: { type: 'data-object', id: 0, fullPath: '', subtype: 'object' },
+      document: { type: 'document', id: 0, fullPath: '', subtype: 'object' },
+      asset: { type: 'asset', id: 0, fullPath: '', subtype: 'object' }
     }
+
+    const isValidObject = (val: unknown): val is Record<string, unknown> =>
+      typeof val === 'object' && val !== null
+
+    const parseId = (id: unknown): number =>
+      typeof id === 'number' && !isNaN(id) ? id : 0
+
+    const parseFullPath = (path: unknown): string =>
+      typeof path === 'string' ? path : ''
+
+    if (type === 'checkbox') {
+      return (typeof value === 'boolean' ? value : defaultValues.checkbox) as HotspotValueMap[T]
+    }
+
+    if (type === 'document' && isValidObject(value) && 'id' in value) {
+      const documentValue: HotspotValueMap['document'] = {
+        type: 'document',
+        id: parseId(value.id),
+        fullPath: parseFullPath(value.fullPath),
+        subtype: 'object'
+      }
+      return documentValue as HotspotValueMap[T]
+    }
+
+    if (type === 'asset' && isValidObject(value) && 'id' in value) {
+      console.log('----> value', value)
+
+      const assetValue: HotspotValueMap['asset'] = {
+        type: 'asset',
+        id: parseId(value.id),
+        fullPath: parseFullPath(value.fullPath),
+        subtype: 'object'
+      }
+      return assetValue as HotspotValueMap[T]
+    }
+
+    if (type === 'object' && isValidObject(value)) {
+      console.log('----> value', value)
+
+      return value as HotspotValueMap[T]
+    }
+
+    if ((type === 'textfield' || type === 'textarea') && typeof value === 'string') {
+      return value as HotspotValueMap[T]
+    }
+
+    return defaultValues[type]
   }
 
   useEffect(() => {
@@ -86,33 +126,17 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
     }
   }, [hotspot])
 
-  // useEffect(() => {
-  //   if (!isUndefined(hotspot) && !isUndefined(hotspot.data)) {
-  //     setFields(hotspot.data)
-  //     form.setFieldsValue(
-  //       hotspot.data.reduce<Record<string, string>>((acc, field, index) => {
-  //         acc[`name-${index}`] = field.name
-  //         acc[`value-${index}`] = field.value
-  //         return acc
-  //       }, {})
-  //     )
-  //     !isUndefined(hotspot.name) && !isNull(hotspot.name) && setHotspotName(hotspot.name)
-  //     form.setFieldsValue({ hotspotName: hotspot.name })
-  //   } else {
-  //     setFields([])
-  //     form.resetFields()
-  //   }
-  // }, [hotspot])
-
-  const handleTypeSelect = (type: HotspotMarkerData['type']): void => {
-    const newField: HotspotMarkerData = {
-      type,
-      name: '',
-      value: getInitialValueForType(type)
-    }
-
-    setFields((prevFields) => [...prevFields, newField])
-  }
+  const handleTypeSelect = useCallback(
+      <T extends keyof HotspotValueMap>(type: T) => {
+        const newField = {
+          type,
+          name: '',
+          value: getInitialValueForType(type)
+        } as unknown as Extract<HotspotMarkerData, { type: T }>
+        setFields((prevFields) => [...prevFields, newField])
+      },
+      [setFields]
+  )
 
   const dataTypes = [
     {

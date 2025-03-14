@@ -27,24 +27,22 @@ export interface Marker {
   name?: string | null
 }
 
-type HotspotMarkerDataHotspotMarkerDataType = 'textfield' | 'textarea' | 'checkbox' | 'object' | 'document' | 'asset'
-
-export interface HotspotMarkerDataBase<T extends HotspotMarkerDataHotspotMarkerDataType, V> {
+export interface HotspotMarkerDataBase<T extends keyof HotspotValueMap> {
   type: T;
   name: string;
-  value: V;
+  value: HotspotValueMap[T];
 }
 
-export type HotspotMarkerData =
-    | HotspotMarkerDataBase<'textfield', string>
-    | HotspotMarkerDataBase<'textarea', string>
-    | HotspotMarkerDataBase<'checkbox', boolean>
-    | HotspotMarkerDataBase<'object', { type: 'data-object'; id: string; fullPath: string; subtype: 'object' }>
-    | HotspotMarkerDataBase<'document', { type: 'document'; id: string; fullPath: string; subtype: 'object' }>
-    | HotspotMarkerDataBase<'asset', { type: 'asset'; id: string; fullPath: string; subtype: 'object' }>;
+export interface HotspotValueMap {
+  textfield: string;
+  textarea: string;
+  checkbox: boolean;
+  object: { type: 'data-object'; id: number; fullPath: string; subtype: 'object' };
+  document: { type: 'document'; id: number; fullPath: string; subtype: 'object' };
+  asset: { type: 'asset'; id: number; fullPath: string; subtype: 'object' };
+}
 
-// export interface HotspotMarkerData {
-//   type: HotspotMarkerDataHotspotMarkerDataType;
-//   name: string;
-//   value: string;
-// }
+export type HotspotMarkerData = {
+  [K in keyof HotspotValueMap]: HotspotMarkerDataBase<K>;
+}[keyof HotspotValueMap];
+

@@ -107,6 +107,9 @@ const FieldOperations = ({
               assetsAllowed
               dataObjectsAllowed={ false }
               documentsAllowed={ false }
+              value={
+                { type: 'asset', id: field.value.id, fullPath: field.value.fullPath, subtype: 'object' }
+              }
             />
           )
         case 'object':
@@ -116,6 +119,9 @@ const FieldOperations = ({
               assetsAllowed={ false }
               dataObjectsAllowed
               documentsAllowed={ false }
+              value={
+                { type: 'data-object', id: field.value.id, fullPath: field.value.fullPath, subtype: 'object' }
+              }
             />
           )
       }
