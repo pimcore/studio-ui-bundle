@@ -14,7 +14,7 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from 'antd'
-import { isEmpty } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 import cn from 'classnames'
 import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
@@ -31,17 +31,17 @@ import {
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
-import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { PathTarget } from './path-target'
 
 export type ManyToOneRelationValueType = ManyToOneRelationValue | PathTextInputValue | null
 
 export interface ManyToOneRelationValue {
-  type: ElementType
+  type: string
   id: number
   fullPath?: string
   subtype?: string
+  isPublished?: boolean | null
   textInput?: false
 }
 
@@ -68,7 +68,7 @@ export interface ManyToOneRelationProps extends IRelationAllowedTypesDataCompone
 
 export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Element => {
   const [value, setValue] = React.useState<ManyToOneRelationValueType>(props.value ?? null)
-  const { openElement } = useElementHelper()
+  const { openElement, mapToElementType } = useElementHelper()
   const { t } = useTranslation()
   const { download } = useDownload()
   const fieldWidth = useFieldWidth()
@@ -83,7 +83,11 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
 
   const clickOpenElement = (): void => {
     if (value !== null && value.textInput !== true) {
-      openElement(value).catch(() => {})
+      const elementType = mapToElementType(value.type)
+      if (!isUndefined(elementType)) {
+        openElement({ type: elementType, id: value.id }).catch(() => {})
+      }
+
       props.onOpenElement?.()
     }
   }
@@ -101,12 +105,27 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           isValidContext={ (info: DragAndDropInfo) => props.disabled !== true && isValidElementType(info.type) }
           isValidData={ (info: DragAndDropInfo) => dndIsValidData(info, props) }
           onDrop={ (info: DragAndDropInfo) => {
-            setValue({
-              type: info.type as ElementType,
-              id: info.data.id as number,
-              fullPath: `${info.data.path}${info.data.filename ?? info.data.key}`,
-              subtype: info.data.type
-            })
+            let newValue: ManyToOneRelationValue | undefined
+
+            if (info.type === 'data-object') {
+              newValue = {
+                id: info.data.id,
+                type: 'object',
+                subtype: info.data.className ?? info.data.type,
+                isPublished: info.data.published,
+                fullPath: info.data.fullPath
+              }
+            } else if (info.type === 'asset') {
+              newValue = {
+                id: info.data.id,
+                type: info.type,
+                subtype: info.data.type,
+                isPublished: null,
+                fullPath: info.data.fullPath
+              }
+            }
+
+            setValue(newValue ?? null)
           } }
         >
           <PathTarget

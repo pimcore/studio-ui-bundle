@@ -54,7 +54,7 @@ export const convertFromInternalLinkValue = (value: InternalLinkValue): LinkValu
     linktype: value.path?.textInput === true ? 'direct' : 'internal',
     direct: value.path?.textInput === true ? value.path.fullPath : null,
     internal: value.path?.textInput === true ? null : value.path?.id,
-    internalType: value.path?.textInput === true ? null : reverseConvertType(value.path?.type),
+    internalType: value.path?.textInput === true ? null : reverseConvertType(mapToElementType(String(value.path?.type))),
     fullPath: value.path?.fullPath,
     target: value.target ?? null,
     parameters: value.parameters ?? '',
