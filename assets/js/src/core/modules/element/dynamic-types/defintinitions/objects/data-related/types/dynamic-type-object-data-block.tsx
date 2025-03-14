@@ -50,7 +50,7 @@ export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
 
         return (
           <DataComponent
-            key={ blockIndex }
+            key={ `${blockIndex}-${blockFieldName}` }
             value={ blockFieldValue }
             { ...blockItem }
           />

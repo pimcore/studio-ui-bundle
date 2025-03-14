@@ -23,6 +23,7 @@ import { DATATYPE_LIST } from '@Pimcore/modules/data-object/editor/shared-tab-ma
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { getBreadcrumbTitle } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
 import { Space } from '@Pimcore/components/space/space'
+import { type FieldCollectionLayoutDefinition } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 
 export interface VersionFieldCollectionProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectLayoutDefinition | AbstractObjectDataDefinition
@@ -37,24 +38,15 @@ interface IList {
 
 export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle }: VersionFieldCollectionProps): React.JSX.Element => {
   const fieldCollection = useFieldCollection()
-
   const [fieldCollectionGroups, setFieldCollectionGroups] = useState<IList[]>([])
 
-  if (value === null || fieldCollection === null) {
-    return <></>
-  }
-
-  const { data, isLoading } = fieldCollection
-
-  if (isLoading === true) {
-    return <Content loading />
-  }
-
-  const layoutDefinition = data?.items
+  const layoutDefinition: FieldCollectionLayoutDefinition[] = fieldCollection?.data?.items
   let currentFieldCollectionSection: string = ''
 
-  const handleFieldCollectionData = ({ data, breadcrumbTitle = fieldBreadcrumbTitle }: { data: any, breadcrumbTitle?: string }): IList[] => {
+  const handleFieldCollectionData = ({ data, breadcrumbTitle = fieldBreadcrumbTitle }: { data: FieldCollectionLayoutDefinition[], breadcrumbTitle?: string }): IList[] => {
     const tempFieldCollectionGroups: IList[] = []
+
+    const checkExistingGroupByKey = (key: string): IList | undefined => tempFieldCollectionGroups.find(group => group.key === key)
 
     const processData = (data: any, breadcrumbTitle: string): void => {
       data?.forEach((dataItem: any, dataIndex: number) => {
@@ -69,11 +61,11 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle }: VersionF
         if (dataItem.datatype === DATATYPE_LIST.DATA) {
           const filteredObject = filter(value, { type: currentFieldCollectionSection })
           const fieldValue = filteredObject[0]?.data?.[dataItem?.name]
-          const existingGroup = tempFieldCollectionGroups.find(group => group.key === currentFieldCollectionSection)
+          const existingGroup = checkExistingGroupByKey(currentFieldCollectionSection)
 
           const element = (
             <DataComponent
-              key={ dataIndex }
+              key={ `${dataIndex}-${dataItem.name}-${currentFieldCollectionSection}` }
               value={ fieldValue }
               { ...dataItem }
             />
@@ -98,10 +90,20 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle }: VersionF
   }
 
   useEffect(() => {
-    const groups: IList[] = handleFieldCollectionData({ data: layoutDefinition })
+    if (!isEmpty(fieldCollection) && !isEmpty(value)) {
+      const groups: IList[] = handleFieldCollectionData({ data: layoutDefinition })
 
-    setFieldCollectionGroups(groups)
+      setFieldCollectionGroups(groups)
+    }
   }, [fieldCollection, value])
+
+  if (value === null || fieldCollection === null) {
+    return <></>
+  }
+
+  if (fieldCollection?.isLoading === true) {
+    return <Content loading />
+  }
 
   return (
     <Space
