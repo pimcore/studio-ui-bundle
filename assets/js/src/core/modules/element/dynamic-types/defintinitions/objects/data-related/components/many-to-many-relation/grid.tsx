@@ -33,18 +33,40 @@ import { useDownload } from '@Pimcore/modules/asset/actions/download/use-downloa
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Content } from '@Pimcore/components/content/content'
 import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
+import { type ElementCellConfig, type ElementInfo } from '../../../../grid-cell/components/element-cell/element-cell'
+import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
+import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 
 interface ManyToManyRelationGridProps {
   value?: ManyToManyRelationValue | null
   deleteItem: (rowIndex: number) => void
   assetInlineDownloadAllowed: boolean
   disabled?: boolean
+  inherited?: boolean
   width: number | string | null
   height: number | string | null
   enrichRowData?: (row: ManyToManyRelationValueItem) => ManyToManyRelationValueItem & Record<string, any>
   columnDefinition?: Array<ColumnDef<any>>
   hint?: React.ReactNode | null
   onUpdateCellData?: (event: OnUpdateCellDataEvent) => void
+}
+
+export const getElementCellConfig = (disabled?: boolean): ElementCellConfig => {
+  return {
+    allowedTypes: [],
+    getElementInfo: (itemProps: DefaultCellProps): ElementInfo => {
+      const element: ManyToManyRelationValueItem = itemProps.row.original as ManyToManyRelationValueItem
+
+      const elementType = mapToElementType(element.type)
+      return {
+        elementType: elementType ?? undefined,
+        id: element.id,
+        fullPath: element.fullPath,
+        published: element.isPublished ?? undefined,
+        disabled
+      }
+    }
+  }
 }
 
 export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid (props: ManyToManyRelationGridProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
@@ -55,6 +77,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
   const { download } = useDownload()
 
   const columnHelper = createColumnHelper()
+
   const columns = props.columnDefinition !== undefined
     ? [...props.columnDefinition]
     : [
@@ -65,7 +88,10 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
         columnHelper.accessor('fullPath', {
           header: t('relations.reference'),
           meta: {
-            autoWidth: true
+            type: 'element',
+            autoWidth: true,
+            editable: false,
+            config: getElementCellConfig(props.inherited === true || props.disabled === true)
           },
           size: 200
         }),
@@ -211,7 +237,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
             autoWidth
             columns={ columns }
             data={ getDataArray() }
-            disabled={ props.disabled }
+            disabled={ props.disabled === true || props.inherited === true }
             onUpdateCellData={ props.onUpdateCellData }
             resizable
           />

@@ -13,65 +13,73 @@
 
 import React, { forwardRef, type MutableRefObject } from 'react'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import { Tag } from '@Pimcore/components/tag/tag'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyle } from './element-cell.styles'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
-import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
+import { type ElementInfo } from './element-cell'
 
-export const ElementCellContent = forwardRef(function ElementCellContent (props: DefaultCellProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
+export interface ElementCellContentProps extends DefaultCellProps {
+  dropDisabled?: boolean
+  getElementInfo?: (props: DefaultCellProps) => ElementInfo
+}
+
+export const ElementCellContent = forwardRef(function ElementCellContent (props: ElementCellContentProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { styles } = useStyle()
-  const { openElement } = useElementHelper()
   const propertyData = props.row.original
   const { getStateClasses } = useDroppable()
 
-  // @todo check hardcoded type
-  let defaultType: ElementType = 'data-object'
-  const allowedTypes = props.column.columnDef.meta?.config?.allowedTypes
-  if (allowedTypes !== undefined) {
-    defaultType = allowedTypes[0] as ElementType
-  }
-
-  function openElementWidget (): void {
-    if (props !== undefined) {
-      openElement({
-        id: propertyData.data?.id ?? propertyData.id,
-        type: defaultType
-      }).catch(() => {})
+  const getElementInfo = props.getElementInfo ?? ((): ElementInfo => {
+    // @todo check hardcoded type
+    let defaultType: ElementType = 'data-object'
+    const allowedTypes = props.column.columnDef.meta?.config?.allowedTypes
+    if (allowedTypes !== undefined) {
+      defaultType = allowedTypes[0] as ElementType
     }
-  }
 
-  const includesPathInformation = propertyData.data !== null && (propertyData.data?.fullPath !== undefined || propertyData.data?.path !== undefined)
-  const hasFullPath = includesPathInformation && propertyData.data?.fullPath !== undefined
+    const includesPathInformation = propertyData.data !== null && (propertyData.data?.fullPath !== undefined || propertyData.data?.path !== undefined)
+    const hasFullPath = includesPathInformation && propertyData.data?.fullPath !== undefined
 
-  let tagText = props.getValue()
+    let fullPath = props.getValue()
 
-  if (includesPathInformation && hasFullPath) {
-    tagText = propertyData.data.fullPath
-  } else if (includesPathInformation) {
-    tagText = `${propertyData.data.path}${propertyData.data.filename ?? propertyData.data.key}`
-  }
+    if (includesPathInformation && hasFullPath) {
+      fullPath = propertyData.data.fullPath
+    } else if (includesPathInformation) {
+      fullPath = `${propertyData.data.path}${propertyData.data.filename ?? propertyData.data.key}`
+    }
+
+    return {
+      fullPath: String(fullPath ?? ''),
+      elementType: defaultType,
+      id: propertyData.data?.id ?? propertyData.id
+    }
+  })
+
+  const elementInfo = getElementInfo(props)
 
   return (
     <div
       className={ [styles.link, ...getStateClasses()].join(' ') }
       ref={ ref }
     >
-      {tagText !== false && (
-        <Tag
-          bordered={ false }
-          color="processing"
-          onClick={ openElementWidget }
-        >
-          {tagText}
-        </Tag>
+      {elementInfo.fullPath !== false && (
+        <ElementTag
+          disabled={ elementInfo.disabled }
+          elementType={ elementInfo.elementType }
+          id={ elementInfo.id }
+          path={ elementInfo.fullPath }
+          published={ elementInfo.published }
+        />
       )}
 
+      { props.dropDisabled !== true && (
       <Icon
         className={ styles.dropTargetIcon }
         value={ 'drop-target' }
       />
+      )}
+
     </div>
   )
 })

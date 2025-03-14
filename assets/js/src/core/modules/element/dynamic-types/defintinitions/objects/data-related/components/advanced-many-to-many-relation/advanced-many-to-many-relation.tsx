@@ -30,6 +30,7 @@ import type {
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/allowed-types'
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
+import { getElementCellConfig } from '../many-to-many-relation/grid'
 
 export interface AdvancedManyToManyRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -53,6 +54,7 @@ export interface RelationColumnDefinition {
 
 export interface AdvancedManyToManyRelationProps extends IRelationAllowedTypesDataComponent, AdvancedManyToManyRelationClassDefinitionProps {
   disabled?: boolean
+  inherited?: boolean
   value?: AdvancedManyToManyRelationValue | null
   onChange?: (value?: AdvancedManyToManyRelationValue | null) => void
   enrichRowData?: (row: ManyToManyRelationValueItem) => ManyToManyRelationValueItem & Record<string, any>
@@ -81,7 +83,10 @@ export const AdvancedManyToManyRelation = (props: AdvancedManyToManyRelationProp
       columnHelper.accessor('fullPath', {
         header: t('relations.reference'),
         meta: {
-          autoWidth: true
+          type: 'element',
+          autoWidth: true,
+          editable: false,
+          config: getElementCellConfig(props.inherited === true || props.disabled === true)
         },
         size: 200
       }),

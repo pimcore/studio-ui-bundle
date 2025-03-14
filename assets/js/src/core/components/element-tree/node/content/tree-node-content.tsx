@@ -15,13 +15,16 @@ import React, { forwardRef, type MutableRefObject } from 'react'
 import { type TreeNodeProps } from '../tree-node'
 import { Flex } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { useStyles } from './tree-node-content.styles'
+import cn from 'classnames'
 
 export interface TreeNodeContentProps {
   node: TreeNodeProps
 }
 
 const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeContentProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
-  const { icon, label } = props.node
+  const { icon, label, isPublished } = props.node
+  const { styles } = useStyles()
 
   return (
     <Flex
@@ -31,7 +34,9 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
     >
       <Icon
         { ...icon }
+        className={ cn({ [styles.unpublishedIcon]: isPublished === false && icon.type === 'name', [styles.unpublishedIconPath]: isPublished === false && icon.type === 'path' }) }
         options={ { width: 16, height: 16 } }
+        subIconName={ isPublished === false ? 'eye-off' : undefined }
       />
       <span className="tree-node-content__label">{label}</span>
     </Flex>

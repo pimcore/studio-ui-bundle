@@ -89,6 +89,7 @@ export const serviceIds = {
   'DynamicTypes/GridCell/Asset': 'DynamicTypes/GridCell/Asset',
   'DynamicTypes/GridCell/Object': 'DynamicTypes/GridCell/Object',
   'DynamicTypes/GridCell/Document': 'DynamicTypes/GridCell/Document',
+  'DynamicTypes/GridCell/Element': 'DynamicTypes/GridCell/Element',
   'DynamicTypes/GridCell/LanguageSelect': 'DynamicTypes/GridCell/LanguageSelect',
   'DynamicTypes/GridCell/Translate': 'DynamicTypes/GridCell/Translate',
   'DynamicTypes/GridCell/DataObjectAdapter': 'DynamicTypes/GridCell/DataObjectAdapter',

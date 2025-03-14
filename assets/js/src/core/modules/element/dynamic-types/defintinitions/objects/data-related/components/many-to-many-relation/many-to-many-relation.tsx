@@ -49,6 +49,7 @@ export interface ManyToManyRelationClassDefinitionProps {
 
 export interface ManyToManyRelationProps extends IRelationAllowedTypesDataComponent, ManyToManyRelationClassDefinitionProps {
   disabled?: boolean
+  inherited?: boolean
   value?: ManyToManyRelationValue | null
   onChange?: (value?: ManyToManyRelationValue | null) => void
   isLoading?: boolean
@@ -105,6 +106,7 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
           enrichRowData={ props.enrichRowData }
           height={ props.height }
           hint={ props.hint }
+          inherited={ props.inherited }
           onUpdateCellData={ props.onUpdateCellData }
           value={ displayedValue }
           width={ props.width }

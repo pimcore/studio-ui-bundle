@@ -46,6 +46,7 @@ import { type DynamicTypeGridCellAssetVersionPreviewFieldLabel } from './definti
 import { type DynamicTypeGridCellAsset } from './defintinitions/grid-cell/types/asset/dynamic-type-grid-cell-asset'
 import { type DynamicTypeGridCellObject } from './defintinitions/grid-cell/types/object/dynamic-type-grid-cell-object'
 import { type DynamicTypeGridCellDocument } from './defintinitions/grid-cell/types/document/dynamic-type-grid-cell-document'
+import { type DynamicTypeGridCellElement } from './defintinitions/grid-cell/types/element/dynamic-type-grid-cell-element'
 import { type DynamicTypeMetaDataRegistry } from './defintinitions/meta-data/dynamic-type-metadata-registry'
 import { type DynamicTypeMetaDataAsset } from './defintinitions/meta-data/types/dynamic-type-meta-data-asset'
 import { type DynamicTypeMetaDataCheckbox } from './defintinitions/meta-data/types/dynamic-type-meta-data-checkbox'
@@ -182,6 +183,7 @@ moduleSystem.registerModule({
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellAsset>(serviceIds['DynamicTypes/GridCell/Asset']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellObject>(serviceIds['DynamicTypes/GridCell/Object']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDocument>(serviceIds['DynamicTypes/GridCell/Document']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellElement>(serviceIds['DynamicTypes/GridCell/Element']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellLanguageSelect>(serviceIds['DynamicTypes/GridCell/LanguageSelect']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellTranslate>(serviceIds['DynamicTypes/GridCell/Translate']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectAdapter>(serviceIds['DynamicTypes/GridCell/DataObjectAdapter']))

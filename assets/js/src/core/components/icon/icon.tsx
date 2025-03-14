@@ -16,23 +16,28 @@ import { type IconLibrary } from '@Pimcore/modules/icon-library/services/icon-li
 import React from 'react'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { isNil, isUndefined } from 'lodash'
+import { useStyles } from './icon.styles'
 
 export interface IconProps extends Omit<ElementIcon, 'type'> {
   type?: ElementIcon['type']
   options?: React.SVGProps<SVGSVGElement>
   className?: string
+  subIconName?: string
 }
 
-export const Icon = ({ value, type = 'name', options, className, ...props }: IconProps): React.JSX.Element => {
+export const Icon = ({ value, type = 'name', options, className, subIconName, ...props }: IconProps): React.JSX.Element => {
   const iconLibrary = useInjection<IconLibrary>(serviceIds.iconLibrary)
   const width = options?.width ?? 16
   const height = options?.height ?? 16
+  const { styles } = useStyles()
 
   const renderIcon = (): React.JSX.Element => {
     if (type === 'path') {
       return (
         <img
-          alt={ 'foo' }
+          alt={ '' }
+          className='pimcore-icon__image'
           src={ value }
           style={ { width, height } }
         />
@@ -54,12 +59,15 @@ export const Icon = ({ value, type = 'name', options, className, ...props }: Ico
     )
   }
 
+  const SubIcon = isUndefined(subIconName) ? undefined : iconLibrary.get(subIconName)
+
   return (
     <div
       className={ `pimcore-icon pimcore-icon-${value} anticon ${className}` }
-      style={ { width, height } }
+      style={ { width, height, position: 'relative' } }
       { ...props }
     >
+      {!isNil(SubIcon) && <div className={ styles.subIcon }><SubIcon /></div>}
       {renderIcon()}
     </div>
   )

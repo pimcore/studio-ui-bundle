@@ -31,6 +31,7 @@ export interface TreeNode {
 
   permissions: ElementPermissions
   isLocked: boolean
+  isPublished?: boolean
   hasChildren?: boolean
   metaData?: any
 

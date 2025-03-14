@@ -131,6 +131,7 @@ import { DynamicTypeObjectDataLocalizedFields } from '@Pimcore/modules/element/d
 import { DynamicTypeGridCellAsset } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/asset/dynamic-type-grid-cell-asset'
 import { DynamicTypeGridCellObject } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/object/dynamic-type-grid-cell-object'
 import { DynamicTypeGridCellDocument } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/document/dynamic-type-grid-cell-document'
+import { DynamicTypeGridCellElement } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/element/dynamic-type-grid-cell-element'
 import { DynamicTypeGridCellLanguageSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/language-select/dynamic-type-grid-cell-language-select'
 import { DynamicTypeGridCellTranslate } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/translate/dynamic-type-grid-cell-translate'
 import {
@@ -216,6 +217,7 @@ container.bind(serviceIds['DynamicTypes/GridCell/AssetVersionPreviewFieldLabel']
 container.bind(serviceIds['DynamicTypes/GridCell/Asset']).to(DynamicTypeGridCellAsset).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Object']).to(DynamicTypeGridCellObject).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Document']).to(DynamicTypeGridCellDocument).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/Element']).to(DynamicTypeGridCellElement).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/LanguageSelect']).to(DynamicTypeGridCellLanguageSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Translate']).to(DynamicTypeGridCellTranslate).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/DataObjectAdapter']).to(DynamicTypeGridCellDataObjectAdapter).inSingletonScope()
