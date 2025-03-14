@@ -13,15 +13,16 @@
 
 import React, { useEffect, useState } from 'react'
 import { filter, isEmpty } from 'lodash'
+import { Content } from '@Pimcore/components/content/content'
+import { CollapseItem } from '@Pimcore/components/collapse/item/collapse-item'
+import { DataComponent } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/components/data-component/data-component'
 import { type AbstractObjectDataDefinition } from '../../../dynamic-type-object-data-abstract'
 import { type AbstractObjectLayoutDefinition } from '../../../../layout-related/dynamic-type-object-layout-abstract'
 import { useFieldCollection } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/field-collection/providers/use-field-collection'
-import { Content } from '@Pimcore/components/content/content'
 import { DATATYPE_LIST } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
-import { DataComponent } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/components/data-component/data-component'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { getBreadcrumbTitle } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
-import { CollapseItem } from '@Pimcore/components/collapse/item/collapse-item'
+import { Space } from '@Pimcore/components/space/space'
 
 export interface VersionFieldCollectionProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectLayoutDefinition | AbstractObjectDataDefinition
@@ -103,13 +104,20 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle }: VersionF
   }, [fieldCollection, value])
 
   return (
-    <>{!isEmpty(fieldCollectionGroups) && fieldCollectionGroups?.map((groupItem: IList, groupIndex: number) => (
-      <CollapseItem
-        key={ `${groupItem.key} - ${groupIndex}` }
-        label={ `${groupItem.breadcrumbTitle} / Inner Section ${groupIndex + 1}: ${groupItem.key}` }
-      >
-        {groupItem.renderList?.map(item => item)}
-      </CollapseItem>
-    ))}</>
+    <Space
+      className="w-full"
+      direction="vertical"
+      size="mini"
+    >
+      {fieldCollectionGroups?.map((groupItem: IList, groupIndex: number) => (
+        <CollapseItem
+          defaultActive
+          key={ `${groupItem.key}-${groupIndex}` }
+          label={ `${groupItem.breadcrumbTitle} / Inner Section ${groupIndex + 1}: ${groupItem.key}` }
+        >
+          {groupItem.renderList?.map(item => item)}
+        </CollapseItem>
+      ))}
+    </Space>
   )
 }
