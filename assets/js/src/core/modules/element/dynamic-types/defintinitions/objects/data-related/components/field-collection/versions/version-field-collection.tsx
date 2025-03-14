@@ -24,6 +24,7 @@ import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { getBreadcrumbTitle } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
 import { Space } from '@Pimcore/components/space/space'
 import { type FieldCollectionLayoutDefinition } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import { useStyles } from './version-field-collection.styles'
 
 export interface VersionFieldCollectionProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectLayoutDefinition | AbstractObjectDataDefinition
@@ -39,6 +40,8 @@ interface IList {
 export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle }: VersionFieldCollectionProps): React.JSX.Element => {
   const fieldCollection = useFieldCollection()
   const [fieldCollectionGroups, setFieldCollectionGroups] = useState<IList[]>([])
+
+  const { styles } = useStyles()
 
   const layoutDefinition: FieldCollectionLayoutDefinition[] = fieldCollection?.data?.items
   let currentFieldCollectionSection: string = ''
@@ -115,7 +118,11 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle }: VersionF
         <CollapseItem
           defaultActive
           key={ `${groupItem.key}-${groupIndex}` }
-          label={ `${groupItem.breadcrumbTitle} / Inner Section ${groupIndex + 1}: ${groupItem.key}` }
+          label={
+            <div className={ styles.sectionLabel }>
+              <span className={ styles.subSectionLabel }>{`${groupItem.breadcrumbTitle} / `}</span>{`Inner Section ${groupIndex + 1}: ${groupItem.key}`}
+            </div>
+          }
         >
           {groupItem.renderList?.map(item => item)}
         </CollapseItem>
