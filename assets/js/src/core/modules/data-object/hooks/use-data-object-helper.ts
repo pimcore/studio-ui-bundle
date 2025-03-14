@@ -53,8 +53,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
     const icon = getElementIcon(data, { value: 'widget', type: 'name' })
     const iconConfig: IconProps & ElementIcon = {
       type: icon.type,
-      value: icon.value,
-      subIconName: data?.published === false ? 'eye-off' : undefined
+      value: icon.value
     }
 
     openMainWidget({
