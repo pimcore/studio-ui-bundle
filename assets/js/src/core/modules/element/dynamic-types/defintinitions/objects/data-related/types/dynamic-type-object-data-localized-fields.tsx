@@ -29,6 +29,16 @@ export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataA
     return <LocalizedFields { ...props } />
   }
 
+  getVersionObjectDataComponent (props: LocalizedFieldsProps): React.ReactElement<LocalizedFieldsProps> {
+    return (
+      <LocalizedFields
+        { ...props }
+        className="versionFieldItem"
+        noteditable
+      />
+    )
+  }
+
   async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<IFormattedDataStructureData[]> {
     const { item, fieldValueByName, fieldBreadcrumbTitle, versionId, versionCount } = props
 

@@ -17,6 +17,10 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     input: css`
       &.ant-input-disabled {
+        &.versionFieldItem {
+          border-color: transparent !important;
+        }
+        
         &.versionFieldItemHighlight {
           background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
         }
