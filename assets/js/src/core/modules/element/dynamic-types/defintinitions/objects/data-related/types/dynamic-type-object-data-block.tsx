@@ -19,9 +19,7 @@ import {
 } from '../dynamic-type-object-data-abstract'
 import { Block } from '../components/block/block'
 import { FieldLabel } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/label/field-label'
-import {
-  DataComponent
-} from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/components/data-component/data-component'
+import { VersionBlock } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/block/versions/version-block'
 
 export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
   id: string = 'block'
@@ -43,19 +41,8 @@ export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
   }
 
   getVersionObjectDataComponent (props: AbstractObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
-    return props.children.map((blockItem: any): React.JSX.Element => {
-      return props.value.map((blockValue: any, blockIndex: number) => {
-        const blockFieldName = blockItem.name
-        const blockFieldValue = blockValue?.[blockFieldName]
-
-        return (
-          <DataComponent
-            key={ `${blockIndex}-${blockFieldName}` }
-            value={ blockFieldValue }
-            { ...blockItem }
-          />
-        )
-      })
-    })
+    return (
+      <VersionBlock { ...props } />
+    )
   }
 }
