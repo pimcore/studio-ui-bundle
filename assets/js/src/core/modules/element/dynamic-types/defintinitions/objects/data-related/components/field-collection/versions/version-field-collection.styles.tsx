@@ -56,6 +56,11 @@ export const useStyles = createStyles(({ css, token }) => {
         height: 22px;
         background-color: ${token.Colors.Neutral.Fill.colorFill};
       }
+    `,
+
+    fieldTitle: css`
+      display: block;
+      margin-bottom: 4px;
     `
   }
 })

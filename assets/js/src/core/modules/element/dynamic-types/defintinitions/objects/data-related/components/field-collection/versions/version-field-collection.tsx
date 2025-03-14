@@ -25,6 +25,7 @@ import { getBreadcrumbTitle } from '@Pimcore/modules/data-object/editor/shared-t
 import { Space } from '@Pimcore/components/space/space'
 import { type FieldCollectionLayoutDefinition } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { useStyles } from './version-field-collection.styles'
+import { Text } from '@Pimcore/components/text/text'
 
 export interface VersionFieldCollectionProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectLayoutDefinition | AbstractObjectDataDefinition
@@ -108,6 +109,18 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle }: VersionF
     return <Content loading />
   }
 
+  const renderFieldTitle = (title: string): React.JSX.Element => {
+    if (!isEmptyValue(title)) {
+      return (
+        <Text className={ styles.fieldTitle }>
+          <strong>{title}</strong>
+        </Text>
+      )
+    }
+
+    return <></>
+  }
+
   return (
     <Space
       className="w-full"
@@ -124,7 +137,16 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle }: VersionF
             </div>
           }
         >
-          {groupItem.renderList?.map(item => item)}
+          {groupItem.renderList?.map((item, index) => {
+            const fieldTitle: string = item?.props?.title
+
+            return (
+              <div key={ `${index}-${groupItem.key}` }>
+                {renderFieldTitle(fieldTitle)}
+                {item}
+              </div>
+            )
+          })}
         </CollapseItem>
       ))}
     </Space>
