@@ -15,8 +15,9 @@ import React from 'react'
 import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { FieldCollection, type FieldCollectionProps } from '../components/field-collection/field-collection'
 import {
-  VersionFieldCollection
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/field-collection/version-field-collection'
+  VersionFieldCollection,
+  type VersionFieldCollectionProps
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/field-collection/versions/version-field-collection'
 
 export class DynamicTypeObjectDataFieldCollection extends DynamicTypeObjectDataAbstract {
   id: string = 'fieldcollections'
@@ -26,7 +27,7 @@ export class DynamicTypeObjectDataFieldCollection extends DynamicTypeObjectDataA
     return <FieldCollection { ...props } />
   }
 
-  getVersionObjectDataComponent (props: FieldCollectionProps): React.ReactElement<FieldCollectionProps> {
+  getVersionObjectDataComponent (props: VersionFieldCollectionProps): React.ReactElement<FieldCollectionProps> {
     return <VersionFieldCollection { ...props } />
   }
 }
