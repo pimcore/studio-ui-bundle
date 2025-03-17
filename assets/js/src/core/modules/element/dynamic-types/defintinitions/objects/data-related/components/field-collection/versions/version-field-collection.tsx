@@ -54,16 +54,30 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle, className,
   const layoutDefinition: FieldCollectionLayoutDefinition[] = fieldCollection?.data?.items
   let currentFieldCollectionSection: string = ''
 
+  const checkLocalizedFields = (value: object): boolean => {
+    return Object.values(value).every(value =>
+      !isEmpty(value) && isObject(value) ? checkLocalizedFields(value) : isNull(value)
+    )
+  }
+
+  const shouldSkipProcessing = ({ dataItem, filteredObject, fieldValue }): boolean => {
+    if (dataItem.fieldtype === DynamicTypesList.LOCALIZED_FIELDS) {
+      const isAllFieldsNull = checkLocalizedFields(fieldValue as object)
+
+      if (isAllFieldsNull) return true
+    }
+
+    if (isEmpty(filteredObject) && isEmpty(fieldValue)) {
+      return true
+    }
+
+    return isComparisonMode && !isExpandedUnmodifiedFields && fieldCollectionModifiedList?.includes(currentFieldCollectionSection) === false
+  }
+
   const handleFieldCollectionData = ({ data, breadcrumbTitle = fieldBreadcrumbTitle }: { data: FieldCollectionLayoutDefinition[], breadcrumbTitle?: string }): IList[] => {
     const tempFieldCollectionGroups: IList[] = []
 
     const checkExistingGroupByKey = (key: string): IList | undefined => tempFieldCollectionGroups.find(group => group.key === key)
-
-    const checkLocalizedFields = (value: object): boolean => {
-      return Object.values(value).every(value =>
-        !isEmpty(value) && isObject(value) ? checkLocalizedFields(value) : isNull(value)
-      )
-    }
 
     const processData = (data: any, breadcrumbTitle: string): void => {
       data?.forEach((dataItem: any, dataIndex: number) => {
@@ -80,19 +94,9 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle, className,
           const fieldValue = filteredObject[0]?.data?.[dataItem?.name]
           const existingGroup = checkExistingGroupByKey(currentFieldCollectionSection)
 
-          if (dataItem.fieldtype === DynamicTypesList.LOCALIZED_FIELDS) {
-            const isAllFieldsNull = checkLocalizedFields(fieldValue as object)
+          const isEmptyValue = shouldSkipProcessing({ dataItem, filteredObject, fieldValue })
 
-            if (isAllFieldsNull) return
-          }
-
-          if (isEmpty(filteredObject) && isEmpty(fieldValue)) {
-            return
-          }
-
-          if (isComparisonMode && !isExpandedUnmodifiedFields && fieldCollectionModifiedList?.includes(currentFieldCollectionSection) === false) {
-            return
-          }
+          if (isEmptyValue) return
 
           const element = (
             <DataComponent
