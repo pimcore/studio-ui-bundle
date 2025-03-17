@@ -67,6 +67,10 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle }: VersionF
           const fieldValue = filteredObject[0]?.data?.[dataItem?.name]
           const existingGroup = checkExistingGroupByKey(currentFieldCollectionSection)
 
+          if (isEmpty(filteredObject) && isEmpty(fieldValue)) {
+            return
+          }
+
           const element = (
             <DataComponent
               key={ `${dataIndex}-${dataItem.name}-${currentFieldCollectionSection}` }
