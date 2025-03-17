@@ -14,20 +14,18 @@
 import React, { type ReactElement } from 'react'
 import { injectable } from 'inversify'
 import {
+  type AbstractBatchEditDefinition,
   type DynamicTypeBatchEditAbstract
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/dynamic-type-batch-edit-abstract'
-import {
-  DynamicTypeBatchEditTextComponent,
-  type DynamicTypeBatchEditTextProps
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/components/text/dynamic-type-batch-edit-text-component'
+import { DynamicTypeBatchEditDataObjectObjectBrickComponent } from '../../components/data-object-object-brick/dynamic-type-batch-edit-data-object-object-brick-component'
 
 @injectable()
-export class DynamicTypeBatchEditText implements DynamicTypeBatchEditAbstract {
-  id = 'input'
+export class DynamicTypeBatchEditDataObjectObjectBrick implements DynamicTypeBatchEditAbstract {
+  id = 'dataobject.objectbrick'
 
-  getBatchEditComponent (props: DynamicTypeBatchEditTextProps): ReactElement<DynamicTypeBatchEditTextProps> {
+  getBatchEditComponent (props: AbstractBatchEditDefinition): ReactElement<AbstractBatchEditDefinition> {
     return (
-      <DynamicTypeBatchEditTextComponent { ...props } />
+      <DynamicTypeBatchEditDataObjectObjectBrickComponent { ...props } />
     )
   }
 }

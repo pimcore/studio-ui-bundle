@@ -15,7 +15,8 @@ import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorator
 import React, { useState, createContext, useMemo } from 'react'
 
 export interface BatchEdit extends AvailableColumn {
-  locale?: string | null
+  locale: string | null
+  value?: any
 }
 
 export interface BatchContext {

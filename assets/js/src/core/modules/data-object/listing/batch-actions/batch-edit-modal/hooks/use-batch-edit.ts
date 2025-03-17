@@ -14,9 +14,10 @@
 import { useContext } from 'react'
 import { type BatchContext, type BatchEdit, BatchEditContext } from '../batch-edit-provider'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 interface UseBatchEditHookReturn extends BatchContext {
-  addOrUpdateBatchEdit: (column: AvailableColumn) => void
+  addOrUpdateBatchEdit: (column: AvailableColumn, value: BatchEdit['value']) => void
   updateLocale: (key: string, locale: string | null) => void
   resetBatchEdits: () => void
   removeBatchEdit: (key: string) => void
@@ -24,6 +25,7 @@ interface UseBatchEditHookReturn extends BatchContext {
 
 export const useBatchEdit = (): UseBatchEditHookReturn => {
   const { batchEdits, setBatchEdits } = useContext(BatchEditContext)
+  const settings = useSettings()
 
   const resetBatchEdits = (): void => {
     setBatchEdits([])
@@ -43,8 +45,13 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
     setBatchEdits(updatedEdits)
   }
 
-  const addOrUpdateBatchEdit = (column: AvailableColumn): void => {
-    const newEdit: BatchEdit = column
+  const addOrUpdateBatchEdit = (column: AvailableColumn, value: BatchEdit['value']): void => {
+    const newEdit: BatchEdit = {
+      ...column,
+      // @todo infer selected language from grid config when available
+      locale: column.localizable ? column.locale ?? settings.requiredLanguages[0] : null,
+      value
+    }
 
     const updatedEdits: BatchEdit[] = [...batchEdits]
 
@@ -67,9 +74,9 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
   return {
     batchEdits,
     setBatchEdits,
+    addOrUpdateBatchEdit,
     updateLocale,
     resetBatchEdits,
-    removeBatchEdit,
-    addOrUpdateBatchEdit
+    removeBatchEdit
   }
 }

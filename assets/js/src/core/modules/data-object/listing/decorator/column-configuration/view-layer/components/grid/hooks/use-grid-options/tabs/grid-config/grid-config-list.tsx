@@ -69,10 +69,11 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
     <>
       { stackListItems.length === 0 && <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } /> }
       { stackListItems.length > 0 && (
-      <StackList
-        items={ stackListItems }
-        onItemsChange={ onItemsChange }
-      />
+        <StackList
+          items={ stackListItems }
+          onItemsChange={ onItemsChange }
+          sortable
+        />
       ) }
     </>
   )

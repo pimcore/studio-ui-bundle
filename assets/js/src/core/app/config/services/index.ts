@@ -148,6 +148,8 @@ import { DynamicTypeGridCellDataObjectAdapter } from '@Pimcore/modules/element/d
 import { MainNavRegistry } from '@Pimcore/modules/app/nav/services/main-nav-registry'
 import { DynamicTypeGridCellDataObjectActions } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/data-object-actions/dynamic-type-grid-cell-data-object-actions'
 import { DynamicTypeGridCellDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/data-object-object-brick/dynamic-type-grid-cell-data-object-adapter'
+import { DynamicTypeBatchEditDataObjectAdapter } from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/types/data-object-adapter/dynamic-type-batch-edit-data-object-adpater'
+import { DynamicTypeBatchEditDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/types/data-object-object-brick/dynamic-type-batch-edit-data-object-object-brick'
 
 // Main nav
 container.bind(serviceIds.mainNavRegistry).to(MainNavRegistry).inSingletonScope()
@@ -186,6 +188,8 @@ container.bind(serviceIds['DynamicTypes/FieldFilter/Datetime']).to(DynamicTypeFi
 container.bind(serviceIds['DynamicTypes/BatchEditRegistry']).to(DynamicTypeBatchEditRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/BatchEdit/Text']).to(DynamicTypeBatchEditText).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/BatchEdit/TextArea']).to(DynamicTypeBatchEditTextArea).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/BatchEdit/DataObjectAdapter']).to(DynamicTypeBatchEditDataObjectAdapter).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/BatchEdit/DataObjectObjectBrick']).to(DynamicTypeBatchEditDataObjectObjectBrick).inSingletonScope()
 
 // dynamic types grid cells
 container.bind(serviceIds['DynamicTypes/GridCellRegistry']).to(DynamicTypeGridCellRegistry).inSingletonScope()

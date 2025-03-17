@@ -12,10 +12,10 @@
 */
 
 import React, { createContext, useMemo, useState } from 'react'
-import { elementTypes, type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 export interface AreaControlData {
-  activeArea: ElementType
+  activeArea: ElementType | undefined
   setActiveArea: (area: ElementType) => void
 }
 
@@ -28,7 +28,7 @@ export interface AreaControlProviderProps {
 }
 
 export const AreaControlProvider = ({ children }: AreaControlProviderProps): React.JSX.Element => {
-  const [activeArea, setActiveArea] = useState<ElementType>(elementTypes.asset)
+  const [activeArea, setActiveArea] = useState<ElementType>()
 
   return useMemo(() => (
     <AreaControlContext.Provider value={ { activeArea, setActiveArea } }>

@@ -32,7 +32,8 @@ const api = baseApi.enhanceEndpoints({
     },
 
     dataObjectGetGrid: {
-      keepUnusedDataFor: 10
+      keepUnusedDataFor: 10,
+      providesTags: (result, error, args) => providingTags.DATA_OBJECT_GRID_ID(args.body.folderId)
     },
 
     dataObjectUpdateById: {
@@ -60,6 +61,7 @@ export const {
   useDataObjectGetByIdQuery,
   useDataObjectUpdateByIdMutation,
   useDataObjectPatchByIdMutation,
+  useDataObjectPatchFolderByIdMutation,
   useDataObjectGetTreeQuery,
   useDataObjectGetLayoutByIdQuery
 } = api
