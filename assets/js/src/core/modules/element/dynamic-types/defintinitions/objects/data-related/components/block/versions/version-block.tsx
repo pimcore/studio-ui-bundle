@@ -57,6 +57,7 @@ export const VersionBlock = ({ children, value }: IVersionBlockProps): React.JSX
               >
                 {renderTitle(blockFieldTitle)}
                 <DataComponent
+                  className="versionFieldItem"
                   value={ blockFieldValue }
                   { ...blockItem }
                 />
