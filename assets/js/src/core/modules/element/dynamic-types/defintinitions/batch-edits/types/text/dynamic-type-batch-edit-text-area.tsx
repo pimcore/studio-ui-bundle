@@ -19,7 +19,7 @@ import {
 import {
   DynamicTypeBatchEditTextAreaComponent,
   type DynamicTypeBatchEditTextAreaProps
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/types/components/dynamic-type-batch-edit-text-area-component'
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/components/text/dynamic-type-batch-edit-text-area-component'
 
 @injectable()
 export class DynamicTypeBatchEditTextArea implements DynamicTypeBatchEditAbstract {

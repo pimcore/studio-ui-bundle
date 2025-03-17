@@ -28,13 +28,11 @@ import {
 import {
   ManyToManyObjectRelation
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-many-object-relation/many-to-many-object-relation'
-import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 
 export type ManyToManyObjectRelationObjectDataDefinition = AbstractObjectDataDefinition & IRelationAllowedTypesClassDefinition & ManyToManyRelationClassDefinitionProps
 
 export class DynamicTypeObjectDataManyToManyObjectRelation extends DynamicTypeObjectDataAbstract {
   id: string = 'manyToManyObjectRelation'
-  inheritedMaskOverlay: InheritanceOverlayType = 'form-item-container'
 
   getObjectDataComponent (props: ManyToManyObjectRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
@@ -51,6 +49,8 @@ export class DynamicTypeObjectDataManyToManyObjectRelation extends DynamicTypeOb
     return {
       ...super.getObjectDataFormItemProps(props),
       label: <ManyToManyRelationLabel
+
+        disabled={ props.noteditable === true }
         label={ props.title }
         name={ props.name }
              />

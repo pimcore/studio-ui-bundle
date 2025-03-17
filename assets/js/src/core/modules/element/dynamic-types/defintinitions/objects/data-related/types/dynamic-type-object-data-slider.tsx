@@ -30,7 +30,7 @@ export type SliderObjectDataDefinition = AbstractNumericObjectDataDefinition & {
 
 export class DynamicTypeObjectDataSlider extends DynamicTypeObjectDataAbstractNumeric {
   id: string = 'slider'
-  inheritedMaskOverlay: InheritanceOverlayType = 'form-item-container'
+  inheritedMaskOverlay: InheritanceOverlayType = 'form-element'
 
   getObjectDataComponent (props: SliderObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     const componentProps = this.getObjectDataComponentProps(props) as SliderProps
