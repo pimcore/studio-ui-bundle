@@ -59,6 +59,12 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle, className,
 
     const checkExistingGroupByKey = (key: string): IList | undefined => tempFieldCollectionGroups.find(group => group.key === key)
 
+    const checkLocalizedFields = (value: object): boolean => {
+      return Object.values(value).every(value =>
+        !isEmpty(value) && isObject(value) ? checkLocalizedFields(value) : isNull(value)
+      )
+    }
+
     const processData = (data: any, breadcrumbTitle: string): void => {
       data?.forEach((dataItem: any, dataIndex: number) => {
         if (!isEmptyValue(dataItem.key)) currentFieldCollectionSection = dataItem.key ?? ''
@@ -75,13 +81,9 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle, className,
           const existingGroup = checkExistingGroupByKey(currentFieldCollectionSection)
 
           if (dataItem.fieldtype === DynamicTypesList.LOCALIZED_FIELDS) {
-            const checkIsAllNull = (object: object): boolean => {
-              return Object.values(object).every(value =>
-                !isEmpty(value) && isObject(value) ? checkIsAllNull(value) : isNull(value)
-              )
-            }
+            const isAllFieldsNull = checkLocalizedFields(fieldValue as object)
 
-            if (checkIsAllNull(fieldValue as object)) return
+            if (isAllFieldsNull) return
           }
 
           if (isEmpty(filteredObject) && isEmpty(fieldValue)) {
