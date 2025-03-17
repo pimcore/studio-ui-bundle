@@ -13,7 +13,7 @@
 
 import { type ReactElement } from 'react'
 import { type DynamicTypeAbstract } from '../../registry/dynamic-type-registry-abstract'
-import { BatchEdit } from '@Pimcore/modules/data-object/listing/batch-actions/batch-edit-modal/batch-edit-provider'
+import { type BatchEdit } from '@Pimcore/modules/data-object/listing/batch-actions/batch-edit-modal/batch-edit-provider'
 
 export interface AbstractBatchEditDefinition {
   batchEdit: BatchEdit
