@@ -12,7 +12,7 @@
 */
 
 import React, { useEffect, useState } from 'react'
-import { filter, isEmpty } from 'lodash'
+import { filter, isEmpty, isNull, isObject } from 'lodash'
 import { Content } from '@Pimcore/components/content/content'
 import { CollapseItem } from '@Pimcore/components/collapse/item/collapse-item'
 import { DataComponent } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/components/data-component/data-component'
@@ -72,6 +72,16 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle, className,
           const filteredObject = filter(value, { type: currentFieldCollectionSection })
           const fieldValue = filteredObject[0]?.data?.[dataItem?.name]
           const existingGroup = checkExistingGroupByKey(currentFieldCollectionSection)
+
+          if (dataItem.fieldtype === 'localizedfields') {
+            const checkIsAllNull = (object: object): boolean => {
+              return Object.values(object).every(value =>
+                !isEmpty(value) && isObject(value) ? checkIsAllNull(value) : isNull(value)
+              )
+            }
+
+            if (checkIsAllNull(fieldValue as object)) return
+          }
 
           if (isEmpty(filteredObject) && isEmpty(fieldValue)) {
             return
