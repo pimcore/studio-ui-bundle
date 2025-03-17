@@ -27,11 +27,12 @@ interface IObjectVersionsFieldsViewProps {
   breadcrumbsList?: CategoriesList
   versionViewData: IObjectVersionsFieldsList['data']
   versionKeysList: VersionKeysList
+  isExpandedUnmodifiedFields: boolean
 }
 
 const SECTIONS_WITH_TRANSLATION: string[] = [VersionCategoryName.SYSTEM_DATA]
 
-export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, versionKeysList }: IObjectVersionsFieldsViewProps): React.JSX.Element => {
+export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, versionKeysList, isExpandedUnmodifiedFields }: IObjectVersionsFieldsViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
 
@@ -108,7 +109,9 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                                   versionFieldItemHighlight: isModifiedField && isSecondItem
                                 }) }
                                 datatype={ 'data' }
+                                fieldCollectionModifiedList={ fieldItem?.fieldCollectionModifiedList }
                                 fieldType={ fieldItem.Field.fieldtype }
+                                isExpandedUnmodifiedFields={ isExpandedUnmodifiedFields }
                                 key={ `${index}-${key}` }
                                 name={ fieldItem.Field.name }
                                 value={ fieldItem[key] }

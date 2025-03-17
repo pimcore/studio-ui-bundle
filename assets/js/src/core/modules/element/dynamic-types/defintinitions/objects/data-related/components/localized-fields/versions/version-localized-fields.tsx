@@ -47,7 +47,7 @@ export const VersionLocalizedFields = ({ children, noteditable, className, ...pr
           if (isNull(value)) return <></>
 
           return (
-            <div key={ `${index}-${key}` }>
+            <div key={ `${index}-${key}-${child.title}` }>
               {renderFieldTitle({ key: child.title, locale: key })}
               <DataComponent
                 { ...child }

@@ -27,10 +27,13 @@ import { type FieldCollectionLayoutDefinition } from '@Pimcore/modules/class-def
 import { useStyles } from './version-field-collection.styles'
 import { Text } from '@Pimcore/components/text/text'
 import { Flex } from '@Pimcore/components/flex/flex'
+import cn from 'classnames'
 
 export interface VersionFieldCollectionProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectLayoutDefinition | AbstractObjectDataDefinition
   fieldBreadcrumbTitle: string
+  fieldCollectionModifiedList?: string[]
+  isExpandedUnmodifiedFields: boolean
 }
 
 interface IList {
@@ -39,9 +42,11 @@ interface IList {
   renderList: React.JSX.Element[]
 }
 
-export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle }: VersionFieldCollectionProps): React.JSX.Element => {
+export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle, className, fieldCollectionModifiedList, isExpandedUnmodifiedFields }: VersionFieldCollectionProps): React.JSX.Element => {
   const fieldCollection = useFieldCollection()
   const [fieldCollectionGroups, setFieldCollectionGroups] = useState<IList[]>([])
+
+  const isComparisonMode = !isEmpty(fieldCollectionModifiedList)
 
   const { styles } = useStyles()
 
@@ -69,6 +74,10 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle }: VersionF
           const existingGroup = checkExistingGroupByKey(currentFieldCollectionSection)
 
           if (isEmpty(filteredObject) && isEmpty(fieldValue)) {
+            return
+          }
+
+          if (isComparisonMode && !isExpandedUnmodifiedFields && fieldCollectionModifiedList?.includes(currentFieldCollectionSection) === false) {
             return
           }
 
@@ -134,6 +143,7 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle }: VersionF
     >
       {fieldCollectionGroups?.map((groupItem: IList, groupIndex: number) => (
         <CollapseItem
+          className={ cn(className, { [styles.section]: fieldCollectionModifiedList?.includes(groupItem.key) === true }) }
           defaultActive
           key={ `${groupItem.key}-${groupIndex}` }
           label={

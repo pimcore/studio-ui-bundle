@@ -152,6 +152,7 @@ export const VersionsFieldsList = ({ data, isComparisonViewMode = false }: IVers
         {isDataObjectType && (
           <ObjectVersionsFieldsView
             breadcrumbsList={ sectionsListWithFields }
+            isExpandedUnmodifiedFields={ isExpandedUnmodifiedFields }
             versionKeysList={ versionKeysList }
             versionViewData={ versionViewData as IObjectVersionField[] }
           />

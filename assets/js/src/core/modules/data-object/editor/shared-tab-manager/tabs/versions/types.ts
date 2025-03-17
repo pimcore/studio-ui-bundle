@@ -45,3 +45,8 @@ export interface IProcessVersionFieldDataProps {
   versionId: number
   versionCount: number
 }
+
+export interface IFieldCollectionValue {
+  type: string
+  data: object
+}

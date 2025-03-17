@@ -28,6 +28,12 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
+    section: css`
+      &.versionFieldItemHighlight {
+        background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+      }
+    `,
+
     sectionLabel: css`
       position: relative;
     `,
