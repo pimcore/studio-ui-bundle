@@ -20,6 +20,7 @@ import { Refetch } from '@Pimcore/modules/element/listing/abstract/view-layer/co
 import { Space } from '@Pimcore/components/space/space'
 import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
 import { ClassDefinitionSelect } from '../decorator/class-definition-selection/components/class-definition-select/class-definition-select'
+import { BatchActions } from '../batch-actions/batch-actions'
 
 export const Toolbar = (): React.JSX.Element => {
   const { selectedRows } = useRowSelection()
@@ -28,15 +29,19 @@ export const Toolbar = (): React.JSX.Element => {
 
   return useMemo(() => (
     <BaseToolbar theme='secondary'>
-      <Space size="extra-small">
-        {selectedRowsCount > 0 && (
-          <RowSelectionTotal />
-        )}
+      <Split>
+        <Space size="extra-small">
+          {selectedRowsCount > 0 && (
+            <RowSelectionTotal />
+          )}
 
-        {selectedRowsCount <= 0 && (
-          <ClassDefinitionSelect />
-        )}
-      </Space>
+          {selectedRowsCount <= 0 && (
+            <ClassDefinitionSelect />
+          )}
+        </Space>
+
+        <BatchActions />
+      </Split>
 
       <Split size='small'>
         <Refetch />

@@ -135,6 +135,8 @@ import { type DynamicTypeObjectDataObjectBrick } from './defintinitions/objects/
 import { type DynamicTypeGridCellDataObjectAdapter } from './defintinitions/grid-cell/types/data-object-adapter/dynamic-type-grid-cell-data-object-adapter'
 import { type DynamicTypeGridCellDataObjectActions } from './defintinitions/grid-cell/types/data-object-actions/dynamic-type-grid-cell-data-object-actions'
 import { type DynamicTypeGridCellDataObjectObjectBrick } from './defintinitions/grid-cell/types/data-object-object-brick/dynamic-type-grid-cell-data-object-adapter'
+import { type DynamicTypeBatchEditDataObjectAdapter } from './defintinitions/batch-edits/types/data-object-adapter/dynamic-type-batch-edit-data-object-adpater'
+import { type DynamicTypeBatchEditDataObjectObjectBrick } from './defintinitions/batch-edits/types/data-object-object-brick/dynamic-type-batch-edit-data-object-object-brick'
 
 moduleSystem.registerModule({
   onInit () {
@@ -149,6 +151,8 @@ moduleSystem.registerModule({
 
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditText>(serviceIds['DynamicTypes/BatchEdit/Text']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditTextArea>(serviceIds['DynamicTypes/BatchEdit/TextArea']))
+    batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditDataObjectAdapter>(serviceIds['DynamicTypes/BatchEdit/DataObjectAdapter']))
+    batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditDataObjectObjectBrick>(serviceIds['DynamicTypes/BatchEdit/DataObjectObjectBrick']))
 
     const listingRegistry = container.get<DynamicTypeListingRegistry>(serviceIds['DynamicTypes/ListingRegistry'])
 
