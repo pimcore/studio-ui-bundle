@@ -26,6 +26,7 @@ import { Space } from '@Pimcore/components/space/space'
 import { type FieldCollectionLayoutDefinition } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { useStyles } from './version-field-collection.styles'
 import { Text } from '@Pimcore/components/text/text'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 export interface VersionFieldCollectionProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectLayoutDefinition | AbstractObjectDataDefinition
@@ -141,16 +142,21 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle }: VersionF
             </div>
           }
         >
-          {groupItem.renderList?.map((item, index) => {
-            const fieldTitle: string = item?.props?.title
+          <Flex
+            gap="small"
+            vertical
+          >
+            {groupItem.renderList?.map((item, index) => {
+              const fieldTitle: string = item?.props?.title
 
-            return (
-              <div key={ `${index}-${groupItem.key}` }>
-                {renderFieldTitle(fieldTitle)}
-                {item}
-              </div>
-            )
-          })}
+              return (
+                <div key={ `${index}-${groupItem.key}` }>
+                  {renderFieldTitle(fieldTitle)}
+                  {item}
+                </div>
+              )
+            })}
+          </Flex>
         </CollapseItem>
       ))}
     </Space>

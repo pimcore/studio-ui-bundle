@@ -96,6 +96,14 @@ export const useStyles = createStyles(({ token, css }) => {
           }
       }
 
+      &.versionFieldItemHighlight {
+        .ant-table-content {
+          table {
+            border-color: ${token.Colors.Brand.Warning.colorWarningBorder} !important;
+          }
+        }
+      }
+
       .grid__cell-content {
         display: flex;
         width: 100%;

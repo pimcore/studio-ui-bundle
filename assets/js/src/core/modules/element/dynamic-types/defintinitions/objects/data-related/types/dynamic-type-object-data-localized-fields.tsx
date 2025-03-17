@@ -15,6 +15,7 @@ import React from 'react'
 import { get, isEmpty } from 'lodash'
 import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { LocalizedFields, type LocalizedFieldsProps } from '../components/localized-fields/localized-fields'
+import { VersionLocalizedFields } from '../components/localized-fields/versions/version-localized-fields'
 import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
 import {
   type IFormattedDataStructureData,
@@ -31,7 +32,7 @@ export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataA
 
   getVersionObjectDataComponent (props: LocalizedFieldsProps): React.ReactElement<LocalizedFieldsProps> {
     return (
-      <LocalizedFields
+      <VersionLocalizedFields
         { ...props }
         className="versionFieldItem"
         noteditable

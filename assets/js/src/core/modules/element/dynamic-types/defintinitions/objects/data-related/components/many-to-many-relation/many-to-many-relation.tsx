@@ -99,6 +99,7 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
       >
         <ManyToManyRelationGrid
           assetInlineDownloadAllowed={ props.assetInlineDownloadAllowed ?? false }
+          className={ props.className }
           columnDefinition={ props.columnDefinition }
           deleteItem={ deleteItem }
           disabled={ props.disabled }

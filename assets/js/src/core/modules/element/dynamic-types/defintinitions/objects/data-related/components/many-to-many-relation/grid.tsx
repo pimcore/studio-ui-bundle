@@ -45,6 +45,7 @@ interface ManyToManyRelationGridProps {
   columnDefinition?: Array<ColumnDef<any>>
   hint?: React.ReactNode | null
   onUpdateCellData?: (event: OnUpdateCellDataEvent) => void
+  className?: string
 }
 
 export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid (props: ManyToManyRelationGridProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
@@ -209,6 +210,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
         >
           <Grid
             autoWidth
+            className={ props.className }
             columns={ columns }
             data={ getDataArray() }
             disabled={ props.disabled }
