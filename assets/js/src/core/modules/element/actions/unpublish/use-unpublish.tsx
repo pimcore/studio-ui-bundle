@@ -19,6 +19,8 @@ import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { useElementHelper } from '../../hooks/use-element-helper'
+import { usePublish } from '../publish/use-publish'
 
 interface UseUnpublishHookReturn {
   unpublishTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -27,6 +29,8 @@ interface UseUnpublishHookReturn {
 export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn => {
   const { t } = useTranslation()
   const { isTreeActionAllowed } = useTreePermission()
+  const { executeElementTask } = useElementHelper()
+  const { setTreeNodePublished } = usePublish(elementType)
 
   const isUnpublishHidden = (node: TreeNodeProps): boolean => {
     return !isTreeActionAllowed(TreePermission.Unpublish) || node.isLocked || node.isPublished === false
@@ -39,7 +43,9 @@ export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn =
       icon: <Icon value='eye-off' />,
       hidden: isUnpublishHidden(node),
       onClick: () => {
-        console.log('TBI')
+        const nodeId = parseInt(node.id)
+        executeElementTask(elementType, nodeId, 'unpublish')
+        setTreeNodePublished(nodeId, false)
       }
     }
   }
