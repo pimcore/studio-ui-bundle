@@ -14,7 +14,7 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from 'antd'
-import { isEmpty, isUndefined } from 'lodash'
+import { isEmpty, isEqual, isUndefined } from 'lodash'
 import cn from 'classnames'
 import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
@@ -74,7 +74,9 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
   const fieldWidth = useFieldWidth()
 
   useEffect(() => {
-    props.onChange?.(value)
+    if (!isEqual(value, props.value ?? null)) {
+      props.onChange?.(value)
+    }
   }, [value])
 
   useEffect(() => {
