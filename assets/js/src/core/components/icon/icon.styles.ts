@@ -29,6 +29,5 @@ export const useStyles = createStyles(({ token, css }) => {
         border-radius: ${token.borderRadiusLG}px;
       }
     `
-
   }
 })

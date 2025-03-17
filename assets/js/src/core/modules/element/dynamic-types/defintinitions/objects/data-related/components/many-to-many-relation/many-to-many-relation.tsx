@@ -35,6 +35,7 @@ import { toCssDimension } from '@Pimcore/utils/css'
 import { Content } from '@Pimcore/components/content/content'
 import type { ColumnDef } from '@tanstack/react-table'
 import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
+import { isEqual } from 'lodash'
 
 export interface ManyToManyRelationClassDefinitionProps {
   assetUploadPath?: string | null
@@ -66,7 +67,7 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
   const { onDrop, deleteItem, onSearch, addAssets, addItems, maxRemainingItems } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments)
 
   useEffect(() => {
-    if (value !== props.value) {
+    if (!isEqual(value, props.value ?? null)) {
       props.onChange?.(value)
     }
   }, [value])

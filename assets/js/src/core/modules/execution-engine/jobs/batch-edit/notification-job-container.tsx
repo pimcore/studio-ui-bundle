@@ -77,6 +77,7 @@ export const NotificationJobContainer = (props: BatchEditProps): React.JSX.Eleme
   }
 
   function openHandler (): void {
+    console.log('reopen')
     action().then(actionJobId => {
       jobId.current = actionJobId
     }).catch(console.error)
