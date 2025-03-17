@@ -11,28 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import i18n from 'i18next'
-import { isNil } from 'lodash'
+import { createStyles } from 'antd-style'
 
-interface IFormatNumberProps {
-  value?: number
-  lng?: string
-  options?: Intl.NumberFormatOptions
-}
-
-export function formatNumber ({ value, lng, options }: IFormatNumberProps): string {
-  if (isNil(value)) {
-    return ''
+export const useStyles = createStyles(({ css, token }) => {
+  return {
+    wrapper: css`
+      padding: ${token.paddingXS}px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    `
   }
-
-  if (lng === undefined) {
-    lng = i18n.language
-  }
-
-  return i18n.format(
-    value,
-    'number',
-    lng,
-    options
-  )
-}
+})

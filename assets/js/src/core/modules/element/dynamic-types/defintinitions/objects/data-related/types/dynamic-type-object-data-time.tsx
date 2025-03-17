@@ -14,15 +14,19 @@
 import React from 'react'
 import cn from 'classnames'
 import {
-  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
+  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract,
+  type EditMode,
+  type GetGridCellDefinitionProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { GridCellPreviewWrapper } from '../../grid-cell-preview/grid-cell-cell-preview-wrapper/grid-cell-preview-wrapper'
 
 export type TimeObjectDataDefinition = AbstractObjectDataDefinition
 
 export class DynamicTypeObjectDataTime extends DynamicTypeObjectDataAbstract {
   id: string = 'time'
+  gridCellEditMode: EditMode = 'edit-modal'
 
   getObjectDataComponent (props: TimeObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
@@ -37,5 +41,11 @@ export class DynamicTypeObjectDataTime extends DynamicTypeObjectDataAbstract {
         value={ props.value }
       />
     )
+  }
+
+  getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
+    const value = props.cellProps.getValue()
+
+    return <GridCellPreviewWrapper>{value}</GridCellPreviewWrapper>
   }
 }

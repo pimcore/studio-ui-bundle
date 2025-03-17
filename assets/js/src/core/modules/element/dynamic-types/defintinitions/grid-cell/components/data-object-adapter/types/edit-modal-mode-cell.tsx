@@ -12,11 +12,12 @@
 */
 
 import React from 'react'
-import { type WithEditModalGridCellDefinition } from '../../../../objects/data-related/dynamic-type-object-data-abstract'
+import { type AbstractObjectDataDefinition, type WithEditModalGridCellDefinition } from '../../../../objects/data-related/dynamic-type-object-data-abstract'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
-import { Modal } from '@Pimcore/components/modal/modal'
 import { Form } from '@Pimcore/components/form/form'
+import { FieldWidthProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/field-width-provider'
+import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
 
 export interface EditModalModeCellProps {
   objectCellDefinition: WithEditModalGridCellDefinition
@@ -36,30 +37,35 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
     form.resetFields()
     disableEditMode()
   }
+  props.objectCellDefinition.handleDefaultValue?.(props.objectCellDefinition.editComponent.props as AbstractObjectDataDefinition, form, ['value'])
 
   return (
-    <div>
+    <>
       {props.objectCellDefinition.previewComponent}
 
-      <Modal
-        cancelText='Discard'
-        okText='Apply Changes'
-        onCancel={ onCancel }
-        onOk={ () => { form.submit() } }
-        open={ isInEditMode }
-        size='M'
-        title={ 'Inline edit' }
-      >
-        <Form
-          form={ form }
-          initialValues={ { value: props.cellProps.getValue() } }
-          onFinish={ onFormFinish }
+      { isInEditMode && (
+        <WindowModal
+          cancelText='Discard'
+          okText='Apply Changes'
+          onCancel={ onCancel }
+          onOk={ () => { form.submit() } }
+          open={ isInEditMode }
+          size='M'
+          title={ 'Inline edit' }
         >
-          <Form.Item name={ 'value' }>
-            {props.objectCellDefinition.editComponent}
-          </Form.Item>
-        </Form>
-      </Modal>
-    </div>
+          <FieldWidthProvider>
+            <Form
+              form={ form }
+              initialValues={ { value: props.cellProps.getValue() } }
+              onFinish={ onFormFinish }
+            >
+              <Form.Item name={ 'value' }>
+                {props.objectCellDefinition.editComponent}
+              </Form.Item>
+            </Form>
+          </FieldWidthProvider>
+        </WindowModal>
+      ) }
+    </>
   )
 }

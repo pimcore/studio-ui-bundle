@@ -11,28 +11,18 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import i18n from 'i18next'
-import { isNil } from 'lodash'
+import React from 'react'
+import { formatNumber } from '@Pimcore/utils/number'
+import { GridCellPreviewWrapper } from '../grid-cell-cell-preview-wrapper/grid-cell-preview-wrapper'
 
-interface IFormatNumberProps {
-  value?: number
-  lng?: string
-  options?: Intl.NumberFormatOptions
+interface NumericProps {
+  value: number
 }
 
-export function formatNumber ({ value, lng, options }: IFormatNumberProps): string {
-  if (isNil(value)) {
-    return ''
-  }
-
-  if (lng === undefined) {
-    lng = i18n.language
-  }
-
-  return i18n.format(
-    value,
-    'number',
-    lng,
-    options
+export const Numeric = ({ value }: NumericProps): React.JSX.Element => {
+  return (
+    <GridCellPreviewWrapper>
+      {formatNumber({ value })}
+    </GridCellPreviewWrapper>
   )
 }

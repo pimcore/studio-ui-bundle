@@ -19,8 +19,9 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-numeric'
 import { toCssDimension } from '@Pimcore/utils/css'
 import React from 'react'
-import { type AbstractObjectDataDefinition } from '../dynamic-type-object-data-abstract'
+import { type EditMode, type AbstractObjectDataDefinition, type GetGridCellDefinitionProps } from '../dynamic-type-object-data-abstract'
 import cn from 'classnames'
+import { Numeric } from '../../grid-cell-preview/numeric/numeric'
 
 export type SliderObjectDataDefinition = AbstractNumericObjectDataDefinition & {
   vertical?: boolean | null
@@ -31,6 +32,15 @@ export type SliderObjectDataDefinition = AbstractNumericObjectDataDefinition & {
 export class DynamicTypeObjectDataSlider extends DynamicTypeObjectDataAbstractNumeric {
   id: string = 'slider'
   inheritedMaskOverlay: InheritanceOverlayType = 'form-element'
+  gridCellEditMode: EditMode = 'edit-modal'
+
+  getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
+    const value = props.cellProps.getValue()
+
+    return (
+      <Numeric value={ value } />
+    )
+  }
 
   getObjectDataComponent (props: SliderObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     const componentProps = this.getObjectDataComponentProps(props) as SliderProps

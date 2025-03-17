@@ -11,28 +11,19 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import i18n from 'i18next'
-import { isNil } from 'lodash'
+import React from 'react'
+import { useStyles } from './grid-cell-preview-wrapper.styles'
 
-interface IFormatNumberProps {
-  value?: number
-  lng?: string
-  options?: Intl.NumberFormatOptions
+interface GridPreviewWrapperProps {
+  children: React.ReactNode
 }
 
-export function formatNumber ({ value, lng, options }: IFormatNumberProps): string {
-  if (isNil(value)) {
-    return ''
-  }
+export const GridCellPreviewWrapper = ({ children }: GridPreviewWrapperProps): React.JSX.Element => {
+  const { styles } = useStyles()
 
-  if (lng === undefined) {
-    lng = i18n.language
-  }
-
-  return i18n.format(
-    value,
-    'number',
-    lng,
-    options
+  return (
+    <div className={ styles.wrapper } >
+      {children}
+    </div>
   )
 }
