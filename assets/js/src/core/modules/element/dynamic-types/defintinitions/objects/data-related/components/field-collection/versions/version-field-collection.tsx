@@ -13,6 +13,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { filter, isEmpty, isNull, isObject } from 'lodash'
+import cn from 'classnames'
 import { Content } from '@Pimcore/components/content/content'
 import { CollapseItem } from '@Pimcore/components/collapse/item/collapse-item'
 import { DataComponent } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/components/data-component/data-component'
@@ -27,7 +28,7 @@ import { type FieldCollectionLayoutDefinition } from '@Pimcore/modules/class-def
 import { useStyles } from './version-field-collection.styles'
 import { Text } from '@Pimcore/components/text/text'
 import { Flex } from '@Pimcore/components/flex/flex'
-import cn from 'classnames'
+import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
 
 export interface VersionFieldCollectionProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectLayoutDefinition | AbstractObjectDataDefinition
@@ -73,7 +74,7 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle, className,
           const fieldValue = filteredObject[0]?.data?.[dataItem?.name]
           const existingGroup = checkExistingGroupByKey(currentFieldCollectionSection)
 
-          if (dataItem.fieldtype === 'localizedfields') {
+          if (dataItem.fieldtype === DynamicTypesList.LOCALIZED_FIELDS) {
             const checkIsAllNull = (object: object): boolean => {
               return Object.values(object).every(value =>
                 !isEmpty(value) && isObject(value) ? checkIsAllNull(value) : isNull(value)
