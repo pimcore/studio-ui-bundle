@@ -33,8 +33,6 @@ export const usePublish = (elementType: ElementType): UsePublishHookReturn => {
   }
 
   const publishTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
-    console.log('isHidden : ', isPublishHidden(node))
-
     return {
       label: t('element.publish'),
       key: 'publish',
