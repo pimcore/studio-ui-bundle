@@ -12,13 +12,14 @@
 */
 
 import React from 'react'
+import { isEmpty } from 'lodash'
 import { DataComponent } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/components/data-component/data-component'
 import { type AbstractObjectDataDefinition } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Text } from '@Pimcore/components/text/text'
 import { Box } from '@Pimcore/components/box/box'
-import { useStyles } from './version-block.styles'
 import { Divider } from '@Pimcore/components/divider/divider'
+import { useStyles } from './version-block.styles'
 
 export interface IVersionBlockProps extends AbstractObjectDataDefinition {
   children?: any
@@ -37,6 +38,10 @@ const renderTitle = (title: string): React.JSX.Element => {
 
 export const VersionBlock = ({ children, value }: IVersionBlockProps): React.JSX.Element => {
   const { styles } = useStyles()
+
+  if (isEmpty(children) || isEmpty(value)) {
+    return <></>
+  }
 
   return (
     <div className={ styles.block }>
