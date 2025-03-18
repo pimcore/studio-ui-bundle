@@ -44,9 +44,9 @@ export const useAddObject = (): UseAddObjectHookReturn => {
 
   const getClassEntries = (node: TreeNodeProps): ItemType[] => {
     let classHirachy: ItemType[] = []
-    const classDefintions = getClassDefinitions()
+    const classDefinitions = getClassDefinitions()
 
-    const structuredClassDefinitions = [...classDefintions]
+    const structuredClassDefinitions = [...classDefinitions]
       .sort((a, b) => a.name.localeCompare(b.name))
       .reduce<Record<string, ClassDefinitionListItem[]>>((acc, classDefinition) => {
       const groupName = _.isEmpty(classDefinition.group)
