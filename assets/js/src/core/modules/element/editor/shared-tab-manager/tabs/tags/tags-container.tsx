@@ -38,6 +38,7 @@ export const TagsTabContainer = (): React.JSX.Element => {
   const { element } = useElementDraft(id, elementType)
   const { applyTagsToChildren, removeAndApplyTagsToChildren } = useShortcutActions()
 
+  //
   const { data, isLoading } = useTagGetCollectionForElementByTypeAndIdQuery({
     elementType,
     id
