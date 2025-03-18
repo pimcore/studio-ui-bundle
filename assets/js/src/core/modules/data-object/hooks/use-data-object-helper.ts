@@ -16,6 +16,7 @@ import { store, useAppDispatch } from '@Pimcore/app/store'
 import { type IconProps } from '@Pimcore/components/icon/icon'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { api } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { usePublish } from '@Pimcore/modules/element/actions/publish/use-publish'
 import { getElementIcon } from '@Pimcore/modules/element/element-helper'
 import { type ElementTask } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
@@ -38,6 +39,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
   const { openMainWidget, isMainWidgetOpen } = useWidgetManager()
   const dispatch = useAppDispatch()
   const [update] = useDataObjectUpdateByIdMutation()
+  const { setTreeNodePublished } = usePublish('data-object')
 
   async function openDataObject (props: OpenDataObjectWidgetProps): Promise<void> {
     const { config } = props
@@ -91,6 +93,11 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
 
       if (response.error !== undefined) {
         trackError(new ApiError(response.error))
+        return
+      }
+
+      if (task === 'unpublish' || task === 'publish') {
+        setTreeNodePublished(id, task === 'publish')
       }
     } catch (e: any) {
       trackError(new GeneralError(e.message as string))
