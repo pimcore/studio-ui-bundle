@@ -15,13 +15,10 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
-    wrapper: css`
-      padding: ${token.paddingXS}px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: flex;
-      align-items: center;
-      width: 100%;
+    colorPreview: css`
+      display: inline-block;
+      width: 20px;
+      height: 20px;
     `
   }
 })

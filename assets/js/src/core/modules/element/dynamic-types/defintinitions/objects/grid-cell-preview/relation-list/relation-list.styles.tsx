@@ -15,13 +15,8 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
-    wrapper: css`
-      padding: ${token.paddingXS}px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: flex;
-      align-items: center;
-      width: 100%;
+    container: css`
+      overflow: hidden
     `
   }
 })

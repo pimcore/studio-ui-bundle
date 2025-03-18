@@ -15,13 +15,20 @@ import React from 'react'
 
 import {
   type AbstractObjectDataDefinition,
-  DynamicTypeObjectDataAbstract
+  DynamicTypeObjectDataAbstract,
+  type EditMode,
+  type GetGridCellDefinitionProps
 } from '../dynamic-type-object-data-abstract'
 
 import {
-  ExternalImage
+  ExternalImage,
+  type ExternalImageValue
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/external-image/external-image'
 import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
+import { GridCellPreviewWrapper } from '../../grid-cell-preview/grid-cell-cell-preview-wrapper/grid-cell-preview-wrapper'
+import { Flex } from 'antd'
+import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
+import { isEmpty, isNil } from 'lodash'
 
 export type ExternalImageObjectDataDefinition = AbstractObjectDataDefinition & {
   previewWidth: number | null
@@ -32,6 +39,7 @@ export type ExternalImageObjectDataDefinition = AbstractObjectDataDefinition & {
 export class DynamicTypeObjectDataExternalImage extends DynamicTypeObjectDataAbstract {
   id: string = 'externalImage'
   inheritedMaskOverlay: InheritanceOverlayType = 'form-element'
+  gridCellEditMode: EditMode = 'edit-modal'
 
   getObjectDataComponent (props: ExternalImageObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
@@ -43,6 +51,27 @@ export class DynamicTypeObjectDataExternalImage extends DynamicTypeObjectDataAbs
         previewWidth={ props.previewWidth }
         value={ props.value }
       />
+    )
+  }
+
+  getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
+    const value: ExternalImageValue | null = props.cellProps.getValue()
+
+    return (
+      <GridCellPreviewWrapper>
+        <Flex
+          className='w-full'
+          justify='center'
+        >
+          { !isNil(value) && !isEmpty(value.url) && (
+          <ImagePreview
+            height={ 100 }
+            src={ value.url }
+            width={ 100 }
+          />
+          )}
+        </Flex>
+      </GridCellPreviewWrapper>
     )
   }
 }

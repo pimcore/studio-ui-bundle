@@ -28,8 +28,13 @@ import { DefaultPreview } from './components/grid-cells/image/default-preview'
 import { type AbstractGridCellDefinition } from '../../grid-cell/dynamic-type-grid-cell-abstract'
 import { type IFormattedDataStructureData } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
 import { type ColumnMetaType } from '@Pimcore/components/grid/grid'
+import { type ModalSize } from '@Pimcore/components/modal/modal'
 
 export type EditMode = 'default' | 'edit-modal' | 'column-meta'
+export interface EditModalSettings {
+  modalSize: ModalSize
+  formLayout: 'vertical' | 'horizontal'
+}
 
 export interface DefaultGridCellDefinition {
   mode: 'default'
@@ -40,6 +45,8 @@ export interface WithEditModalGridCellDefinition {
   mode: 'edit-modal'
   previewComponent: ReactElement
   editComponent: ReactElement
+  formItemProps: FormItemProps
+  editModalSettings?: EditModalSettings
   handleDefaultValue?: (props: AbstractObjectDataDefinition, form: FormInstance, fieldName: NamePath) => void
 }
 
@@ -71,6 +78,10 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
   isCollectionType: boolean = false
   inheritedMaskOverlay: InheritanceOverlayType = false
   gridCellEditMode: EditMode = 'default'
+  gridCellEditModalSettings: EditModalSettings = {
+    modalSize: 'M',
+    formLayout: 'horizontal'
+  }
 
   abstract getObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition>
 
@@ -116,6 +127,8 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
         mode: this.gridCellEditMode,
         previewComponent: this.getGridCellPreviewComponent(cellProps),
         editComponent: this.getGridCellEditComponent(cellProps),
+        formItemProps: this.getObjectDataFormItemProps(cellProps.objectProps),
+        editModalSettings: this.gridCellEditModalSettings,
         handleDefaultValue: this.handleDefaultValue
       }
     }

@@ -15,13 +15,22 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
-    wrapper: css`
-      padding: ${token.paddingXS}px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: flex;
-      align-items: center;
-      width: 100%;
+    table: css`
+      width: auto !important;
+      min-width: 100%;
+      border-radius: 0 !important;
+
+      td, th {
+        padding: 2px ${token.paddingXXS}px !important;
+        text-align: left;
+        border: 1px solid ${token.colorBorderSecondary};
+        white-space: nowrap;
+        width: auto;
+      }
+      
+    `,
+    tableNoMinWidth: css`
+      min-width: auto;
     `
   }
 })

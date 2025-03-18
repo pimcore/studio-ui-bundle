@@ -18,6 +18,7 @@ import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { Form } from '@Pimcore/components/form/form'
 import { FieldWidthProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/field-width-provider'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
+import { isUndefined } from 'lodash'
 
 export interface EditModalModeCellProps {
   objectCellDefinition: WithEditModalGridCellDefinition
@@ -43,23 +44,27 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
     <>
       {props.objectCellDefinition.previewComponent}
 
-      { isInEditMode && (
+      { isInEditMode && !isUndefined(props.objectCellDefinition.editModalSettings) && (
         <WindowModal
           cancelText='Discard'
           okText='Apply Changes'
           onCancel={ onCancel }
           onOk={ () => { form.submit() } }
           open={ isInEditMode }
-          size='M'
+          size={ props.objectCellDefinition.editModalSettings.modalSize }
           title={ 'Inline edit' }
         >
           <FieldWidthProvider>
             <Form
               form={ form }
               initialValues={ { value: props.cellProps.getValue() } }
+              layout={ props.objectCellDefinition.editModalSettings.formLayout }
               onFinish={ onFormFinish }
             >
-              <Form.Item name={ 'value' }>
+              <Form.Item
+                { ...props.objectCellDefinition.formItemProps }
+                name={ 'value' }
+              >
                 {props.objectCellDefinition.editComponent}
               </Form.Item>
             </Form>

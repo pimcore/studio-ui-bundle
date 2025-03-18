@@ -16,14 +16,24 @@ import { useStyles } from './grid-cell-preview-wrapper.styles'
 
 interface GridPreviewWrapperProps {
   children: React.ReactNode
+  overflow?: 'auto'
+  ref?: React.Ref<HTMLDivElement>
 }
 
-export const GridCellPreviewWrapper = ({ children }: GridPreviewWrapperProps): React.JSX.Element => {
-  const { styles } = useStyles()
+export const GridCellPreviewWrapper = React.forwardRef<HTMLDivElement, GridPreviewWrapperProps>(
+  ({ children, overflow }, ref): React.JSX.Element => {
+    const { styles } = useStyles()
 
-  return (
-    <div className={ styles.wrapper } >
-      {children}
-    </div>
-  )
-}
+    return (
+      <div
+        className={ styles.wrapper }
+        ref={ ref }
+        style={ { overflow } }
+      >
+        {children}
+      </div>
+    )
+  }
+)
+
+GridCellPreviewWrapper.displayName = 'GridCellPreviewWrapper'
