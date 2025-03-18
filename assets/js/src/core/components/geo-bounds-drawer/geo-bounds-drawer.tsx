@@ -17,14 +17,14 @@ import { GeoMapCard, type GeoMapCardBaseProps } from '@Pimcore/components/geo-ma
 import { type GeoBounds, type GeoPoint } from '@Pimcore/components/geo-map/types/geo-types'
 import { type GeoMapAPI } from '@Pimcore/components/geo-map/geo-map'
 
-export interface GeoPolyDrawerProps extends GeoMapCardBaseProps {
+export interface GeoBoundsDrawerProps extends GeoMapCardBaseProps {
   onChange?: (value: GeoBounds | undefined) => void
   value?: GeoBounds | null
   disabled?: boolean
   className?: string
 }
 
-export const GeoBoundsDrawer = ({ ...props }: GeoPolyDrawerProps): React.JSX.Element => {
+export const GeoBoundsDrawer = ({ ...props }: GeoBoundsDrawerProps): React.JSX.Element => {
   const [mapValue, setMapValue] = React.useState<GeoBounds | undefined>(props.value ?? undefined)
   const [footerValue, setFooterValue] = React.useState<GeoBounds | undefined>(props.value ?? undefined)
   const geoMapRef = useRef<GeoMapAPI>(null)

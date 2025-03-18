@@ -17,9 +17,9 @@ import { injectSliceWithState, type RootState } from '@Pimcore/app/store'
 import { isUndefined } from 'lodash'
 import { createSelector } from 'reselect'
 import { type TreeLevelData } from '@Pimcore/modules/element/element-api-slice.gen'
-import { type ElementIcon } from 'src/sdk/main'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 export interface TreeNode {
   id: string

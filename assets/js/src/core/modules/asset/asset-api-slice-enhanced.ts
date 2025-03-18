@@ -129,7 +129,7 @@ export const {
   useAssetDeleteGridConfigurationByConfigurationIdMutation,
   useAssetGetGridConfigurationByFolderIdQuery,
   useAssetGetAvailableGridColumnsQuery,
-  useAssetPatchFolderByIdMutation
+  useAssetPatchFolderByIdMutation,
 } = api
 
 export { api }
