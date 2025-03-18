@@ -43,8 +43,6 @@ export const HotspotMarkersDataModal = ({
   const [form] = Form.useForm()
   const { fields, hotspotName, setHotspotName, dataTypes, editModeHotspot } = useHotspotData(hotspot, form)
 
-  console.log('----> fields', fields)
-
   const handleSave = (): void => {
     if (isUndefined(hotspot)) return
     form.validateFields().then(() => {
@@ -94,6 +92,7 @@ export const HotspotMarkersDataModal = ({
       open={ !isUndefined(editModeHotspot) }
       size="M"
       title={ t('hotspots-markers-data-modal.title') }
+      zIndex={ 1000 }
     >
       <Form
         form={ form }

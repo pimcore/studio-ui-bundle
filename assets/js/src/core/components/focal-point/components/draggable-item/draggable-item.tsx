@@ -38,7 +38,7 @@ export const DraggableItem = ({ top, left, children, disabled, active = false }:
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const craftedStyle = {
     position: 'absolute',
-    zIndex: 1000,
+    zIndex: 1500,
     top,
     left,
     transform: CSS.Transform.toString(transform)
