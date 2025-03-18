@@ -25,7 +25,7 @@ export interface StackListProps {
   onItemsChange?: (items: StackListItemProps[]) => void
 }
 
-export const StackList = ({ items, onItemsChange }: StackListProps): React.JSX.Element => {
+export const StackList = ({ items, onItemsChange, sortable }: StackListProps): React.JSX.Element => {
   const [itemsState, setItems] = useState<StackListProps['items']>(items)
   const { ContextHolder } = useSortableContext({
     items: itemsState,
@@ -39,16 +39,31 @@ export const StackList = ({ items, onItemsChange }: StackListProps): React.JSX.E
 
   return useMemo(() => (
     <div className={ cn('stack-list', styles.stackList) }>
-      <ContextHolder>
-        {itemsState.map((item) => (
-          <div
-            className="stack-list__item"
-            key={ item.id }
-          >
-            <StackListItem { ...item } />
-          </div>
-        ))}
-      </ContextHolder>
+      {sortable === true && (
+        <ContextHolder>
+          {itemsState.map((item) => (
+            <div
+              className="stack-list__item"
+              key={ item.id }
+            >
+              <StackListItem { ...item } />
+            </div>
+          ))}
+        </ContextHolder>
+      )}
+
+      {sortable !== true && (
+        <>
+          {itemsState.map((item) => (
+            <div
+              className="stack-list__item"
+              key={ item.id }
+            >
+              <StackListItem { ...item } />
+            </div>
+          ))}
+        </>
+      )}
     </div>
   ), [itemsState])
 
