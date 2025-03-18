@@ -46,9 +46,9 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
       textfield: '',
       textarea: '',
       checkbox: false,
-      object: { type: 'data-object', id: 0, fullPath: '', subtype: 'object' },
-      document: { type: 'document', id: 0, fullPath: '', subtype: 'object' },
-      asset: { type: 'asset', id: 0, fullPath: '', subtype: 'object' }
+      object: '',
+      document: '',
+      asset: ''
     }
 
     const isValidObject = (val: unknown): val is Record<string, unknown> =>

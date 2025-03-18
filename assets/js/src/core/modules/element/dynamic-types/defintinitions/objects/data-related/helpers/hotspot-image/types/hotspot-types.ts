@@ -37,9 +37,9 @@ export interface HotspotValueMap {
   textfield: string;
   textarea: string;
   checkbox: boolean;
-  object: { type: 'data-object'; id: number; fullPath: string; subtype: 'object' };
-  document: { type: 'document'; id: number; fullPath: string; subtype: 'object' };
-  asset: { type: 'asset'; id: number; fullPath: string; subtype: 'object' };
+  object: string;
+  document: string;
+  asset: string
 }
 
 export type HotspotMarkerData = {

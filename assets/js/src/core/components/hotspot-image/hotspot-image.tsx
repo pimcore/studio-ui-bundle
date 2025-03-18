@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState, useRef, useEffect, type MouseEvent } from 'react'
+import React, { useState, useRef, useEffect, type MouseEvent, useContext } from 'react'
 import { useStyle } from './hotspot-image.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Popover } from 'antd'
@@ -28,6 +28,9 @@ import { useTranslation } from 'react-i18next'
 import {
   type HotspotMarkerData
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
+import {
+  HotspotContext
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-data-provider'
 export interface IStyleOptions {
   hotspot: {
     width: number
@@ -88,6 +91,9 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
   const [imageLoaded, setImageLoaded] = useState<boolean>(false)
   const imageRef = useRef<HTMLImageElement | null>(null)
   const { t } = useTranslation()
+  const { editModeHotspot } = useContext(HotspotContext)
+  const disableDrag = editModeHotspot !== undefined
+  console.log('----> disableDrag', disableDrag)
 
   const [items, setItems] = useState<IHotspot[]>(data ?? [])
   useEffect((): void => {
@@ -107,32 +113,34 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
   const containerRef = useRef<HTMLDivElement>(null)
 
   const handleMouseDown = (evt: MouseEvent, hotspot: IHotspot): void => {
-    const rect = evt.currentTarget.getBoundingClientRect()
-    const mouseX = evt.clientX - rect.left
-    const mouseY = evt.clientY - rect.top
+    if (!disableDrag) {
+      const rect = evt.currentTarget.getBoundingClientRect()
+      const mouseX = evt.clientX - rect.left
+      const mouseY = evt.clientY - rect.top
 
-    const nearLeftEdge = mouseX < styleOptions[hotspot.type].resizeBorderSize
-    const nearRightEdge = mouseX > rect.width - styleOptions[hotspot.type].resizeBorderSize
-    const nearTopEdge = mouseY < styleOptions[hotspot.type].resizeBorderSize
-    const nearBottomEdge = mouseY > rect.height - styleOptions[hotspot.type].resizeBorderSize
+      const nearLeftEdge = mouseX < styleOptions[hotspot.type].resizeBorderSize
+      const nearRightEdge = mouseX > rect.width - styleOptions[hotspot.type].resizeBorderSize
+      const nearTopEdge = mouseY < styleOptions[hotspot.type].resizeBorderSize
+      const nearBottomEdge = mouseY > rect.height - styleOptions[hotspot.type].resizeBorderSize
 
-    if (hotspot.type === 'hotspot' && (nearLeftEdge || nearRightEdge || nearTopEdge || nearBottomEdge)) {
-      let direction = ''
-      if (nearTopEdge) direction += 'n'
-      if (nearBottomEdge) direction += 's'
-      if (nearLeftEdge) direction += 'w'
-      if (nearRightEdge) direction += 'e'
+      if (hotspot.type === 'hotspot' && (nearLeftEdge || nearRightEdge || nearTopEdge || nearBottomEdge)) {
+        let direction = ''
+        if (nearTopEdge) direction += 'n'
+        if (nearBottomEdge) direction += 's'
+        if (nearLeftEdge) direction += 'w'
+        if (nearRightEdge) direction += 'e'
 
-      setResizeDirection(direction)
-      setResizeStart({ x: evt.clientX, y: evt.clientY, width: hotspot.width, height: hotspot.height })
-    } else {
-      setDragging(true)
-      setDragStart({ x: mouseX, y: mouseY })
+        setResizeDirection(direction)
+        setResizeStart({ x: evt.clientX, y: evt.clientY, width: hotspot.width, height: hotspot.height })
+      } else {
+        setDragging(true)
+        setDragStart({ x: mouseX, y: mouseY })
+      }
+
+      setPopoverOpen(false)
+      setSelectedId(hotspot.id)
+      evt.stopPropagation()
     }
-
-    setPopoverOpen(false)
-    setSelectedId(hotspot.id)
-    evt.stopPropagation()
   }
 
   const toNumber = (value: any): number => {
@@ -141,7 +149,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
   }
 
   const handleMouseMove = (evt: MouseEvent): void => {
-    if (selectedId === null || containerRef.current === null || disabled === true) return
+    if (selectedId === null || containerRef.current === null || disabled === true || disableDrag) return
     const containerBounds = containerRef.current.getBoundingClientRect()
     const hotspotIndex = items.findIndex(h => h.id === selectedId)
     const dx = evt.clientX - resizeStart.x
