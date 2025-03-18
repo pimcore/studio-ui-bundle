@@ -20,14 +20,14 @@ import { api } from '@Pimcore/modules/class-definition/class-definition-slice.ge
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface UseClassDefinitionsHookReturn {
-  loadClassDefinitions: () => Promise<any>
+  loadClassDefinitions: () => Promise<void>
   getClassDefinitions: () => ClassDefinitionListItem[]
 }
 
 export const useClassDefinitions = (): UseClassDefinitionsHookReturn => {
   const dispatch = useAppDispatch()
 
-  const loadClassDefinitions = async (): Promise<any> => {
+  const loadClassDefinitions = async (): Promise<void> => {
     const classDefinitionFetcher = dispatch(api.endpoints.classDefinitionCollection.initiate())
 
     classDefinitionFetcher
