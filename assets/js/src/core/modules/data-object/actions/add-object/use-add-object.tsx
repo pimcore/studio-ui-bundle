@@ -24,6 +24,7 @@ import { useDataObjectAddMutation } from '../../data-object-api-slice.gen'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import { useDataObjectHelper } from '../../hooks/use-data-object-helper'
 
 interface UseAddObjectHookReturn {
   addObjectTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -35,6 +36,7 @@ export const useAddObject = (): UseAddObjectHookReturn => {
   const modal = useFormModal()
   const [addDataObjectMutation] = useDataObjectAddMutation()
   const dispatch = useAppDispatch()
+  const { openDataObject } = useDataObjectHelper()
 
   const getClassEntries = (node: TreeNodeProps): ItemType[] => {
     let classHirachy: ItemType[] = []
@@ -79,7 +81,6 @@ export const useAddObject = (): UseAddObjectHookReturn => {
       key: classDefinition.id,
       icon: <Icon { ...classDefinition.icon } />,
       onClick: () => {
-        const id = parseInt(node.id)
         const parentId = parseInt(node.id)
         createDataObject(classDefinition, parentId)
       }
@@ -127,6 +128,8 @@ export const useAddObject = (): UseAddObjectHookReturn => {
         return
       }
 
+      const { id } = response.data
+      openDataObject({ config: { id } })
       dispatch(refreshNodeChildren({ nodeId: String(parentId), elementType: 'data-object' }))
     } catch (error) {
       trackError(new GeneralError('Error creating data object'))
