@@ -76,8 +76,6 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
   }, [value])
 
   useEffect(() => {
-    console.log('----> props.value', props.value)
-
     setValue(props.value ?? null)
   }, [props.value])
 

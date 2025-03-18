@@ -95,6 +95,11 @@ const FieldOperations = ({
               assetsAllowed={ false }
               dataObjectsAllowed
               documentsAllowed={ false }
+              onChange={
+                (newValue) => {
+                  !isUndefined(newValue?.fullPath) && handleFieldChange(index, 'value', newValue.fullPath)
+                }
+              }
               value={
               { type: 'document', id: field.value.id, fullPath: field.value.fullPath, subtype: 'object' }
             }
@@ -107,6 +112,11 @@ const FieldOperations = ({
               assetsAllowed
               dataObjectsAllowed={ false }
               documentsAllowed={ false }
+              onChange={
+                  (newValue) => {
+                    !isUndefined(newValue?.fullPath) && handleFieldChange(index, 'value', newValue.fullPath)
+                  }
+              }
               value={
                 { type: 'asset', id: field.value.id, fullPath: field.value.fullPath, subtype: 'object' }
               }
@@ -119,6 +129,11 @@ const FieldOperations = ({
               assetsAllowed={ false }
               dataObjectsAllowed
               documentsAllowed={ false }
+              onChange={
+                  (newValue) => {
+                    !isUndefined(newValue?.fullPath) && handleFieldChange(index, 'value', newValue.fullPath)
+                  }
+              }
               value={
                 { type: 'data-object', id: field.value.id, fullPath: field.value.fullPath, subtype: 'object' }
               }

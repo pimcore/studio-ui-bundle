@@ -75,8 +75,6 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
     }
 
     if (type === 'asset' && isValidObject(value) && 'id' in value) {
-      console.log('----> value', value)
-
       const assetValue: HotspotValueMap['asset'] = {
         type: 'asset',
         id: parseId(value.id),
@@ -87,8 +85,6 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
     }
 
     if (type === 'object' && isValidObject(value)) {
-      console.log('----> value', value)
-
       return value as HotspotValueMap[T]
     }
 
