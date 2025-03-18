@@ -62,7 +62,7 @@ export const useAddObject = (): UseAddObjectHookReturn => {
     for (const [group, classDefinitions] of Object.entries(structuredClassDefinitions)) {
       if (group !== 'undefined') {
         classHirachy.push({
-          label: group,
+          label: t(group),
           key: 'add-object-group-' + group,
           icon: <Icon value={ 'folder' } />,
           children: classDefinitions.map(classDefinition => getDataObjectEntry(classDefinition, node))
@@ -75,7 +75,7 @@ export const useAddObject = (): UseAddObjectHookReturn => {
 
   const getDataObjectEntry = (classDefinition: ClassDefinitionListItem, node: TreeNodeProps): ItemType => {
     return {
-      label: classDefinition.name,
+      label: t(classDefinition.name),
       key: classDefinition.id,
       icon: <Icon { ...classDefinition.icon } />,
       onClick: () => {
