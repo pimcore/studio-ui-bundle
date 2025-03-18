@@ -81,13 +81,12 @@ export const useAddObject = (): UseAddObjectHookReturn => {
       onClick: () => {
         const id = parseInt(node.id)
         const parentId = parseInt(node.id)
-        createDataObject(id, classDefinition, parentId)
+        createDataObject(classDefinition, parentId)
       }
     }
   }
 
   const createDataObject = (
-    id: number,
     classDefinition: ClassDefinitionListItem,
     parentId: number,
     onFinish?: (newName: string) => void
