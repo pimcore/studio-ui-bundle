@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { ElementType } from '../../../types/enums/element/element-type'
+import { type ElementType } from '../../../types/enums/element/element-type'
 
 export const getWidgetId = (elementType: ElementType, id: number): string => {
-  return `${elementType}-${id.toString()}` 
+  return `${elementType}-${id.toString()}`
 }

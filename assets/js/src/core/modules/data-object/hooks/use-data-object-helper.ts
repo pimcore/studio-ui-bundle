@@ -20,7 +20,7 @@ import { getElementIcon } from '@Pimcore/modules/element/element-helper'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 import { type IconProps } from '@Pimcore/components/icon/icon'
-import { ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 interface OpenDataObjectWidgetProps {
   config: EditorContainerProps

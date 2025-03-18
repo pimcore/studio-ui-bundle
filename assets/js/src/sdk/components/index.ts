@@ -1,3 +1,16 @@
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+*/
+
 export * from '@Pimcore/components/accordion/accordion'
 export * from '@Pimcore/components/accordion-timeline/accordion-timeline'
 export * from '@Pimcore/components/alert/alert'
@@ -31,13 +44,13 @@ export * from '@Pimcore/components/element-toolbar/element-toolbar'
 export * from '@Pimcore/components/element-toolbar/element-toolbar.skeleton'
 export * from '@Pimcore/components/element-tree/element-tree'
 // @todo check usage and naming of nodeState
-export { NodeState, UseElementTreeReturnType, useElementTree } from '@Pimcore/components/element-tree/hooks/use-element-tree'
-export { NodeState as xy, useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
+export { type NodeState, type UseElementTreeReturnType, useElementTree } from '@Pimcore/components/element-tree/hooks/use-element-tree'
+export { type NodeState as xy, useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
 export * from '@Pimcore/components/element-tree/hooks/use-element-tree-root-node'
 export * from '@Pimcore/components/element-tree/expander/tree-expander'
 export * from '@Pimcore/components/element-tree/dnd-upload/dnd-upload'
 export * from '@Pimcore/components/element-tree/list/tree-list'
-export { TreeNode, TreeNodeProps, defaultProps as treeNodeDefaultProps } from '@Pimcore/components/element-tree/node/tree-node'
+export { TreeNode, type TreeNodeProps, defaultProps as treeNodeDefaultProps } from '@Pimcore/components/element-tree/node/tree-node'
 export * from '@Pimcore/components/element-tree/node/content/tree-node-content'
 export * from '@Pimcore/components/element-tree/provider/node-api-hook-provider/node-api-hook-provider'
 export * from '@Pimcore/components/element-tree/provider/node-api-hook-provider/use-node-api-hook'
