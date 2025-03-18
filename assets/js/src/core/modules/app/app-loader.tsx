@@ -21,7 +21,6 @@ import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice
 import { useTranslationGetCollectionMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { api } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { setUser } from '@Pimcore/modules/auth/user/user-slice'
-import { api as classDefinitionApi } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { api as perspectivesApi } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
 import { GlobalStyles } from '@Pimcore/styles/global.styles'
 import { isPlainObject } from 'lodash'
@@ -31,7 +30,6 @@ import { setActivePerspective } from '../perspectives/active-perspective-slice'
 import { getInitialModelJson } from '../widget-manager/utils/widget-manager-outer-model'
 import { updateOuterModel } from '../widget-manager/widget-manager-slice'
 import { useMercureCreateCookieMutation } from './mercure-api-slice.gen'
-import { setClassDefinitions } from '../class-definition/class-defintion.slice'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -121,29 +119,12 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
       })
   }
 
-  async function loadClassDefinitions (): Promise<any> {
-    const classDefinitionFetcher = dispatch(classDefinitionApi.endpoints.classDefinitionCollection.initiate())
-
-    classDefinitionFetcher
-      .then(({ data, isSuccess, isError, error }) => {
-        isError && trackError(new ApiError(error))
-
-        if (isSuccess && data !== undefined) {
-          dispatch(setClassDefinitions(data))
-        }
-      })
-      .catch(() => { })
-
-    return await classDefinitionFetcher
-  }
-
   useEffect(() => {
     Promise.all([
       initLoadUser(),
       initSettings(),
       initActivePerspective(),
-      loadTranslations(),
-      loadClassDefinitions()
+      loadTranslations()
     ]).then(() => {
       setIsLoading(false)
     }).catch(() => { })

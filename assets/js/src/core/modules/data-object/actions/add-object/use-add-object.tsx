@@ -11,19 +11,21 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { useAppDispatch } from '@Pimcore/app/store'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
+import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
-import { type ClassDefinitionListItem } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import {
+  type ClassDefinitionListItem
+} from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { useClassDefinitions } from '@Pimcore/modules/class-definition/hooks/use-class-definitions'
 import _ from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDataObjectAddMutation } from '../../data-object-api-slice.gen'
-import { useAppDispatch } from '@Pimcore/app/store'
-import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
-import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useDataObjectHelper } from '../../hooks/use-data-object-helper'
 
 interface UseAddObjectHookReturn {
@@ -32,16 +34,19 @@ interface UseAddObjectHookReturn {
 
 export const useAddObject = (): UseAddObjectHookReturn => {
   const { t } = useTranslation()
-  const classDefinitions = useClassDefinitions()
   const modal = useFormModal()
   const [addDataObjectMutation] = useDataObjectAddMutation()
   const dispatch = useAppDispatch()
   const { openDataObject } = useDataObjectHelper()
+  const { loadClassDefinitions, getClassDefinitions } = useClassDefinitions()
+
+  void loadClassDefinitions()
 
   const getClassEntries = (node: TreeNodeProps): ItemType[] => {
     let classHirachy: ItemType[] = []
+    const classDefintions = getClassDefinitions()
 
-    const structuredClassDefinitions = [...classDefinitions]
+    const structuredClassDefinitions = [...classDefintions]
       .sort((a, b) => a.name.localeCompare(b.name))
       .reduce<Record<string, ClassDefinitionListItem[]>>((acc, classDefinition) => {
       const groupName = _.isEmpty(classDefinition.group)

@@ -14,10 +14,41 @@
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { type ClassDefinitionListItem } from '../class-definition-slice.gen'
-import { getClassDefinitions } from '../class-defintion.slice'
+import { getClassDefinitions as sliceGetClassDefinitions, setClassDefinitions } from '../class-defintion.slice'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { api } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
-export const useClassDefinitions = (): ClassDefinitionListItem[] => {
-  const classDefinitions = useSelector(getClassDefinitions)
+interface UseClassDefinitionsHookReturn {
+  loadClassDefinitions: () => Promise<any>
+  getClassDefinitions: () => ClassDefinitionListItem[]
+}
 
-  return useMemo(() => (classDefinitions), [classDefinitions])
+export const useClassDefinitions = (): UseClassDefinitionsHookReturn => {
+  const dispatch = useAppDispatch()
+
+  const loadClassDefinitions = async (): Promise<any> => {
+    const classDefinitionFetcher = dispatch(api.endpoints.classDefinitionCollection.initiate())
+
+    classDefinitionFetcher
+      .then(({ data, isSuccess, isError, error }) => {
+        isError && trackError(new ApiError(error))
+
+        if (isSuccess && data !== undefined) {
+          dispatch(setClassDefinitions(data))
+        }
+      })
+      .catch(() => { })
+  }
+
+  const getClassDefinitions = (): ClassDefinitionListItem[] => {
+    const classDefinitions = useSelector(sliceGetClassDefinitions)
+
+    return useMemo(() => (classDefinitions), [classDefinitions])
+  }
+
+  return {
+    loadClassDefinitions,
+    getClassDefinitions
+  }
 }
