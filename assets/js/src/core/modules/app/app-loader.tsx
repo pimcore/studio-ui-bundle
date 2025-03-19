@@ -122,12 +122,15 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
       })
   }
 
-  const loadUserData = (): void => {
-    Promise.all([
-      initSettings(),
-      initActivePerspective()
-    ]).then(() => {
-    }).catch(() => {})
+  const loadUserData = async (): Promise<void> => {
+    const { isSuccess: isSuccessInitSetting } = await initSettings()
+
+    if (isSuccessInitSetting === true) {
+      Promise.allSettled([
+        initActivePerspective()
+      ]).then(() => {
+      }).catch(() => {})
+    }
   }
 
   useEffect(() => {
@@ -140,8 +143,12 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   }, [])
 
   useEffect(() => {
+    const fetchUserData = async (): Promise<void> => {
+      await loadUserData()
+    }
+
     if (isAuthenticated) {
-      loadUserData()
+      void fetchUserData()
     }
   }, [isAuthenticated])
 
