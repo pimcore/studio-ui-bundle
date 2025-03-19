@@ -24,6 +24,9 @@ export interface ObjectBrickContentProps extends ObjectBrickProps {}
 
 export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.Element => {
   const { values, operations } = useKeyedList()
+
+  const isNoteditable = props.noteditable === true
+
   const tabItems: ITabsProps['items'] = Object.keys(values).map((key) => {
     return {
       key,
@@ -34,7 +37,10 @@ export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.El
         <Form.Group
           name={ key }
         >
-          <ObjectBrickItem type={ key } />
+          <ObjectBrickItem
+            noteditable={ props.noteditable }
+            type={ key }
+          />
         </Form.Group>
       )
     }
@@ -50,14 +56,14 @@ export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.El
       collapsed={ props.collapsed }
       collapsible={ props.collapsible }
       contentPadding={ 'none' }
-      extra={ <ObjectBrickAddButton allowedTypes={ props.allowedTypes } /> }
+      extra={ !isNoteditable && <ObjectBrickAddButton allowedTypes={ props.allowedTypes } /> }
       extraPosition='start'
       theme='default'
       title={ props.title }
     >
       <Tabs
         items={ tabItems }
-        onClose={ onClose }
+        onClose={ !isNoteditable ? onClose : undefined }
       />
     </BaseView>
   ), [values])

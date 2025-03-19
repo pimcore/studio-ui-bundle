@@ -16,9 +16,11 @@ import { Content } from '@Pimcore/components/content/content'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { useObjectBrick } from './providers/use-object-brick'
 import { Box } from '@Pimcore/components/box/box'
+import { type AbstractObjectDataDefinition } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 
 export interface ObjectBrickItemProps {
   type: string
+  noteditable?: AbstractObjectDataDefinition['noteditable']
 }
 
 export const ObjectBrickItem = (props: ObjectBrickItemProps): React.JSX.Element => {
@@ -49,6 +51,7 @@ export const ObjectBrickItem = (props: ObjectBrickItemProps): React.JSX.Element 
           <ObjectComponent
             key={ index }
             { ...child }
+            noteditable={ props.noteditable }
           />
         )
       })}

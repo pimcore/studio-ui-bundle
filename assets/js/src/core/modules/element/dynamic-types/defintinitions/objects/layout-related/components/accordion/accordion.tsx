@@ -24,7 +24,7 @@ export interface AccordionProps extends AbstractObjectLayoutDefinition {
   collapsed?: boolean
 }
 
-export const Accordion = ({ children, title, border, collapsed, collapsible }: AccordionProps): React.JSX.Element => {
+export const Accordion = ({ children, title, border, collapsed, collapsible, noteditable }: AccordionProps): React.JSX.Element => {
   const items: CollapseProps['items'] = children.map((child, index) => ({
     key: index,
     label: child.title,
@@ -32,6 +32,7 @@ export const Accordion = ({ children, title, border, collapsed, collapsible }: A
     children: (
       <ObjectComponent
         { ...{ ...child, title: '' } }
+        noteditable={ noteditable }
       />
     )
   }))
