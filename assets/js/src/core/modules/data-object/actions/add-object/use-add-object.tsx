@@ -45,7 +45,7 @@ export const useAddObject = (): UseAddObjectHookReturn => {
   const { getClassDefinitionsForCurrentUser } = useClassDefinitions()
 
   const getClassEntries = (node: TreeNodeProps): ItemType[] => {
-    let classHirachy: ItemType[] = []
+    let classHierarchy: ItemType[] = []
     const classDefinitions = getClassDefinitionsForCurrentUser()
 
     const structuredClassDefinitions = [...classDefinitions]
@@ -65,12 +65,12 @@ export const useAddObject = (): UseAddObjectHookReturn => {
     }, {})
 
     if (structuredClassDefinitions.undefined !== undefined) {
-      classHirachy = structuredClassDefinitions.undefined.map(classDefinition => getDataObjectEntry(classDefinition, node))
+      classHierarchy = structuredClassDefinitions.undefined.map(classDefinition => getDataObjectEntry(classDefinition, node))
     }
 
     for (const [group, classDefinitions] of Object.entries(structuredClassDefinitions)) {
       if (group !== 'undefined') {
-        classHirachy.push({
+        classHierarchy.push({
           label: t(group),
           key: 'add-object-group-' + group,
           icon: <Icon value={ 'folder' } />,
@@ -79,7 +79,7 @@ export const useAddObject = (): UseAddObjectHookReturn => {
       }
     }
 
-    return classHirachy
+    return classHierarchy
   }
 
   const getDataObjectEntry = (classDefinition: ClassDefinitionListItem, node: TreeNodeProps): ItemType => {
