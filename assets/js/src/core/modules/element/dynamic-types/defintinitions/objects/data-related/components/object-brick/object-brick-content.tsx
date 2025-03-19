@@ -12,7 +12,9 @@
 */
 
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { BaseView } from '../../../layout-related/views/base-view'
 import { type ObjectBrickProps } from './object-brick'
 import { Form } from '@Pimcore/components/form/form'
@@ -25,6 +27,9 @@ export interface ObjectBrickContentProps extends ObjectBrickProps {}
 
 export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.Element => {
   const { values, operations } = useKeyedList()
+
+  const modal = useFormModal()
+  const { t } = useTranslation()
 
   const maxItemsCount = props?.maxItems ?? 0
   const valuesKeys = Object.keys(values)
@@ -50,7 +55,14 @@ export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.El
   })
 
   const onClose: ITabsProps['onClose'] = (key: string) => {
-    operations.remove(key)
+    modal.confirm({
+      content: (
+        <span>{t('element.delete.confirmation.text')}</span>
+      ),
+      okText: t('yes'),
+      cancelText: t('no'),
+      onOk: () => { operations.remove(key) }
+    })
   }
 
   return useMemo(() => (
