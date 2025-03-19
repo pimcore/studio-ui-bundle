@@ -36,6 +36,12 @@ Encore
     * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
     */
   .addEntry('main', path.resolve(__dirname, 'js', 'src', 'sdk', 'main.ts'))
+  .addEntry('components/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'components', 'index.ts'))
+  .addEntry('app/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'app', 'index.ts'))
+  .addEntry('modules/asset/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'asset', 'index.ts'))
+  .addEntry('modules/class-definitions/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'class-definitions', 'index.ts'))
+  .addEntry('modules/element/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'element', 'index.ts'))
+  .addEntry('modules/icon-library/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'icon-library', 'index.ts'))
 
 // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
 // .enableStimulusBridge('./assets/controllers.json')
@@ -139,7 +145,7 @@ Encore
     `
   }))
 
-  .addPlugin(new ForkTsCheckerWebpackPlugin())
+  // .addPlugin(new ForkTsCheckerWebpackPlugin())
 
   .configureSplitChunks
 

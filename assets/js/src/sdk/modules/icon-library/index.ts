@@ -11,9 +11,4 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-export { type AbstractModule } from '@Pimcore/app/module-system/module-system'
-export { type IAbstractPlugin } from '@Pimcore/app/plugin-system/plugin-system'
-
-export const Pimcore = window.Pimcore
-export const container = window.Pimcore.container
-export const pluginSystem = window.Pimcore.pluginSystem
+export * from '@Pimcore/modules/icon-library/services/icon-library'
