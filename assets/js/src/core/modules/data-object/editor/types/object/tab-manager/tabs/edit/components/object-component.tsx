@@ -15,7 +15,9 @@ import React, { useMemo } from 'react'
 import { LayoutComponent, type LayoutComponentProps } from './layout-component'
 import { DataComponent, type DataComponentProps } from './data-component'
 import { type FormItemProps } from 'antd'
-import type { AbstractObjectDataDefinition } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
+import {
+  type AbstractObjectDataDefinition
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
 
 export interface ObjectComponentProps {
   name: FormItemProps['name']

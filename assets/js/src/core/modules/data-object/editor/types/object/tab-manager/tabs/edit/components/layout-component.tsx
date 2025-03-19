@@ -15,10 +15,10 @@ import React from 'react'
 import { type ObjectComponentProps } from './object-component'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type DynamicTypeObjectLayoutRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/dynamic-type-object-layout-registry'
-import type {
-  AbstractObjectDataDefinition
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
+import { type DynamicTypeObjectLayoutRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/dynamic-type-object-layout-registry'
+import {
+  type AbstractObjectDataDefinition
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
 
 export interface LayoutComponentProps extends ObjectComponentProps {
   datatype: 'layout'
