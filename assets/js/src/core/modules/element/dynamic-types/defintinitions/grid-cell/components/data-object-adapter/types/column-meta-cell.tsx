@@ -55,7 +55,7 @@ export const ColumnMetaCell = (props: DefaultModeCellProps): React.JSX.Element =
 
     const dynType = gridCellRegistry.getDynamicType(meta.type)
     const component = dynType.getGridCellComponent(newCellProps)
-    console.log('dyntype', dynType)
+
     return (
       <>
         {component}
