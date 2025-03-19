@@ -15,16 +15,25 @@ import React from 'react'
 
 import {
   type AbstractObjectDataDefinition,
-  DynamicTypeObjectDataAbstract
+  DynamicTypeObjectDataAbstract,
+  type EditModalSettings,
+  type EditMode,
+  type GetGridCellDefinitionProps
 } from '../dynamic-type-object-data-abstract'
 import { Block } from '../components/block/block'
 import {
   FieldLabel
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/label/field-label'
+import { ItemsCount } from '../../grid-cell-preview/items-count/items-count'
 
 export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
   id: string = 'block'
   isCollectionType: boolean = true
+  gridCellEditMode: EditMode = 'edit-modal'
+  gridCellEditModalSettings: EditModalSettings = {
+    modalSize: 'XL',
+    formLayout: 'vertical'
+  }
 
   getObjectDataComponent (props: AbstractObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
@@ -36,6 +45,14 @@ export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
           name={ props.name }
                 /> }
       />
+    )
+  }
+
+  getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
+    const value: [] | null = props.cellProps.getValue()
+
+    return (
+      <ItemsCount count={ value?.length ?? 0 } />
     )
   }
 }

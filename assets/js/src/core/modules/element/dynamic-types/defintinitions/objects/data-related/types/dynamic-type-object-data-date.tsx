@@ -15,10 +15,15 @@ import {
   type AbstractDateObjectDataDefinition,
   DynamicTypeObjectDataAbstractDate
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-date'
-import type React from 'react'
+import React from 'react'
 import {
-  type AbstractObjectDataDefinition
+  type GetGridCellDefinitionProps,
+  type AbstractObjectDataDefinition,
+  type EditMode
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
+import { GridCellPreviewWrapper } from '../../grid-cell-preview/grid-cell-cell-preview-wrapper/grid-cell-preview-wrapper'
+import { formatDate } from '@Pimcore/utils/date-time'
+import { isNumber } from 'lodash'
 
 export type DateObjectDataDefinition = AbstractDateObjectDataDefinition & {
   columnType: 'date' | 'bigint(20)'
@@ -26,6 +31,7 @@ export type DateObjectDataDefinition = AbstractDateObjectDataDefinition & {
 
 export class DynamicTypeObjectDataDate extends DynamicTypeObjectDataAbstractDate {
   id: string = 'date'
+  gridCellEditMode: EditMode = 'edit-modal'
 
   getObjectDataComponent (props: DateObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return super.getObjectDataComponent({
@@ -35,5 +41,11 @@ export class DynamicTypeObjectDataDate extends DynamicTypeObjectDataAbstractDate
       outputType: 'dateString',
       outputFormat: 'YYYY-MM-DD'
     })
+  }
+
+  getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
+    const value = props.cellProps.getValue()
+
+    return <GridCellPreviewWrapper>{isNumber(value) ? formatDate(value) : value}</GridCellPreviewWrapper>
   }
 }

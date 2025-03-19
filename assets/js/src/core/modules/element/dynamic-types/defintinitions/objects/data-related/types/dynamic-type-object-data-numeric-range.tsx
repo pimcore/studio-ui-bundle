@@ -12,10 +12,11 @@
 */
 
 import React from 'react'
-import { type AbstractObjectDataDefinition } from '../dynamic-type-object-data-abstract'
+import { type GetGridCellDefinitionProps, type AbstractObjectDataDefinition, type EditMode } from '../dynamic-type-object-data-abstract'
 import {
   NumericRange,
   type NumericRangeProps,
+  type NumericRangeValue,
   validateSecondValueGreater
 } from '@Pimcore/components/numeric-range/numeric-range'
 import type { FormItemProps } from 'antd/es/form/FormItem'
@@ -25,9 +26,11 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-numeric'
 import { toCssDimension } from '@Pimcore/utils/css'
 import classNames from 'classnames'
+import { NumericRange as NumericRangePreview } from '../../grid-cell-preview/numeric-range/numeric-range'
 
 export class DynamicTypeObjectDataNumericRange extends DynamicTypeObjectDataAbstractNumeric {
   id: string = 'numericRange'
+  gridCellEditMode: EditMode = 'edit-modal'
 
   getObjectDataComponent (props: AbstractNumericObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     const componentProps = this.getObjectDataComponentProps(props) as NumericRangeProps
@@ -64,5 +67,16 @@ export class DynamicTypeObjectDataNumericRange extends DynamicTypeObjectDataAbst
         }
       ]
     }
+  }
+
+  getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
+    const value: NumericRangeValue | null = props.cellProps.getValue()
+
+    return (
+      <NumericRangePreview
+        max={ value?.maximum ?? undefined }
+        min={ value?.minimum ?? undefined }
+      />
+    )
   }
 }

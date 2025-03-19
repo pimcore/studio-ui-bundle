@@ -13,7 +13,7 @@
 
 import type React from 'react'
 
-import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
+import { type GetGridCellDefinitionProps, type GridCellColumnMeta, type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
 import {
   DynamicTypeObjectDataAbstractSelect, type SelectProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-select'
@@ -26,5 +26,15 @@ export abstract class DynamicTypeObjectDataAbstractMultiSelect extends DynamicTy
       multiSelect: true,
       width: toCssDimension(props.width, props.defaultFieldWidth.large)
     })
+  }
+
+  getGridCellColumnMeta (props: GetGridCellDefinitionProps): GridCellColumnMeta {
+    return {
+      type: 'multi-select',
+      editable: props.objectProps.noteditable !== true,
+      config: {
+        options: this.convertOptions(props.objectProps.options as Array<{ key: string, value: string | number }> | null)
+      }
+    }
   }
 }

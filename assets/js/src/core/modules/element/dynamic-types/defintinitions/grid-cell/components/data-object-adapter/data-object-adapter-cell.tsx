@@ -21,6 +21,7 @@ import { type DynamicTypeObjectDataRegistry } from '../../../objects/data-relate
 import { DefaultModeCell } from './types/default-mode-cell'
 import { EditModalCell } from './types/edit-modal-mode-cell'
 import { type AbstractObjectDataDefinition } from '../../../objects/data-related/dynamic-type-object-data-abstract'
+import { ColumnMetaCell } from './types/column-meta-cell'
 
 export interface DataObjectAdapterCellProps extends DefaultCellProps {}
 
@@ -64,6 +65,15 @@ export const DataObjectAdapterCell = (props: DataObjectAdapterCellProps): React.
   if (cellDefinition.mode === 'edit-modal') {
     return (
       <EditModalCell
+        cellProps={ props }
+        objectCellDefinition={ cellDefinition }
+      />
+    )
+  }
+
+  if (cellDefinition.mode === 'column-meta') {
+    return (
+      <ColumnMetaCell
         cellProps={ props }
         objectCellDefinition={ cellDefinition }
       />

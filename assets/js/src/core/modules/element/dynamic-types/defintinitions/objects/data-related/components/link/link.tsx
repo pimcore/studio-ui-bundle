@@ -20,13 +20,13 @@ import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import {
   LinkModal
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/link/modal'
-import { Tag } from '@Pimcore/components/tag/tag'
 import _ from 'lodash'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import {
   convertType
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/link/utils/link-value-converter'
 import { useStyles } from './link.styles'
+import { LinkPreview } from './components/link-preview/link-preview'
 
 export interface LinkValue {
   text: string
@@ -100,37 +100,17 @@ export const Link = (props: LinkProps): React.JSX.Element => {
     }
   }
 
-  const getLinkText = (): string => {
-    if (value === null) {
-      return t('link.not-set')
-    }
-
-    if (!_.isEmpty(value?.text)) {
-      return value?.text ?? ''
-    }
-
-    if (!_.isEmpty(value?.fullPath)) {
-      return value?.fullPath ?? ''
-    }
-
-    return t('link.not-set')
-  }
-
   return (
     <Flex
       align="center"
       className={ cn(styles.link, props.className) }
       gap="extra-small"
     >
-      { props.inherited === true
-        ? (
-          <span className="studio-inherited-overlay">
-            <Tag>{ getLinkText() }</Tag>
-          </span>
-          )
-        : (
-          <Tag>{ getLinkText() }</Tag>
-          ) }
+      <LinkPreview
+        className="studio-inherited-overlay"
+        inherited={ props.inherited }
+        value={ value }
+      />
 
       <Tooltip
         key="open"

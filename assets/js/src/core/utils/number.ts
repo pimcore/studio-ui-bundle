@@ -12,14 +12,19 @@
 */
 
 import i18n from 'i18next'
+import { isNil } from 'lodash'
 
 interface IFormatNumberProps {
-  value: number
+  value?: number
   lng?: string
   options?: Intl.NumberFormatOptions
 }
 
 export function formatNumber ({ value, lng, options }: IFormatNumberProps): string {
+  if (isNil(value)) {
+    return ''
+  }
+
   if (lng === undefined) {
     lng = i18n.language
   }

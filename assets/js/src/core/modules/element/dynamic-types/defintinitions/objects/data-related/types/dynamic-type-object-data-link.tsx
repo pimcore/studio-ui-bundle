@@ -13,11 +13,15 @@
 
 import React from 'react'
 import {
-  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
+  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract,
+  type EditMode,
+  type GetGridCellDefinitionProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
-import { Link } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/link/link'
+import { Link, type LinkValue } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/link/link'
 import _ from 'lodash'
 import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
+import { LinkPreview } from '../components/link/components/link-preview/link-preview'
+import { GridCellPreviewWrapper } from '../../grid-cell-preview/grid-cell-cell-preview-wrapper/grid-cell-preview-wrapper'
 
 export type LinkObjectDataDefinition = AbstractObjectDataDefinition & {
   allowedTypes?: string[] | null
@@ -28,6 +32,7 @@ export type LinkObjectDataDefinition = AbstractObjectDataDefinition & {
 export class DynamicTypeObjectDataLink extends DynamicTypeObjectDataAbstract {
   id: string = 'link'
   inheritedMaskOverlay: InheritanceOverlayType = 'manual'
+  gridCellEditMode: EditMode = 'edit-modal'
 
   getObjectDataComponent (props: LinkObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
@@ -40,6 +45,16 @@ export class DynamicTypeObjectDataLink extends DynamicTypeObjectDataAbstract {
         disabledFields={ _.compact(props.disabledFields ?? []) }
         inherited={ props.inherited }
       />
+    )
+  }
+
+  getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
+    const value: LinkValue | null = props.cellProps.getValue()
+
+    return (
+      <GridCellPreviewWrapper>
+        <LinkPreview value={ value } />
+      </GridCellPreviewWrapper>
     )
   }
 }
