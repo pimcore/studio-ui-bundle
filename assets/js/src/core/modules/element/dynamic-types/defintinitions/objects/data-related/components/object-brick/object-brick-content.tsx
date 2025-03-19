@@ -26,9 +26,12 @@ export interface ObjectBrickContentProps extends ObjectBrickProps {}
 export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.Element => {
   const { values, operations } = useKeyedList()
 
+  const maxItemsCount = props?.maxItems ?? 0
   const valuesKeys = Object.keys(values)
+
   const allowedTypes = props.allowedTypes?.filter((item) => !valuesKeys.includes(item))
-  const isShowAddButton = !isEmpty(allowedTypes)
+  const isItemLimitReached = maxItemsCount > 0 && valuesKeys.length === maxItemsCount
+  const isHideAddButton = isItemLimitReached || isEmpty(allowedTypes)
 
   const tabItems: ITabsProps['items'] = valuesKeys?.map((key) => {
     return {
@@ -56,7 +59,7 @@ export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.El
       collapsed={ props.collapsed }
       collapsible={ props.collapsible }
       contentPadding={ 'none' }
-      extra={ isShowAddButton && <ObjectBrickAddButton allowedTypes={ allowedTypes } /> }
+      extra={ !isHideAddButton && <ObjectBrickAddButton allowedTypes={ allowedTypes } /> }
       extraPosition='start'
       theme='default'
       title={ props.title }
