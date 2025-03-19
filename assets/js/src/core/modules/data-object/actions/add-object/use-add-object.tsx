@@ -19,7 +19,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import {
-  type ClassDefinitionListItem
+    type ClassDefinitionListItem
 } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
@@ -32,146 +32,148 @@ import { useDataObjectHelper } from '../../hooks/use-data-object-helper'
 import { useClassDefinitions } from '../../utils/provider/class-defintions/use-class-definitions'
 
 interface UseAddObjectHookReturn {
-  addObjectTreeContextMenuItem: (node: TreeNodeProps) => ItemType
+    addObjectTreeContextMenuItem: (node: TreeNodeProps) => ItemType
 }
 
 export const useAddObject = (): UseAddObjectHookReturn => {
-  const { t } = useTranslation()
-  const modal = useFormModal()
-  const [addDataObjectMutation] = useDataObjectAddMutation()
-  const dispatch = useAppDispatch()
-  const { openDataObject } = useDataObjectHelper()
-  const { isTreeActionAllowed } = useTreePermission()
-  const { getClassDefinitionsForCurrentUser } = useClassDefinitions()
+    const { t } = useTranslation()
+    const modal = useFormModal()
+    const [addDataObjectMutation] = useDataObjectAddMutation()
+    const dispatch = useAppDispatch()
+    const { openDataObject } = useDataObjectHelper()
+    const { isTreeActionAllowed } = useTreePermission()
+    const { getClassDefinitionsForCurrentUser } = useClassDefinitions()
 
-  const getClassEntries = (node: TreeNodeProps): ItemType[] => {
-    let classHierarchy: ItemType[] = []
-    const classDefinitions = getClassDefinitionsForCurrentUser()
+    const getClassEntries = (node: TreeNodeProps): ItemType[] => {
+        let classHierarchy: ItemType[] = []
+        const classDefinitions = getClassDefinitionsForCurrentUser()
 
-    const structuredClassDefinitions = [...classDefinitions]
-      .sort((a, b) => a.name.localeCompare(b.name))
-      .reduce<Record<string, ClassDefinitionListItem[]>>((acc, classDefinition) => {
-      const groupName = isEmpty(classDefinition.group)
-        ? 'undefined'
-        : classDefinition.group
+        const structuredClassDefinitions = [...classDefinitions]
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .reduce<Record<string, ClassDefinitionListItem[]>>((acc, classDefinition) => {
+                const groupName = isEmpty(classDefinition.group)
+                    ? 'undefined'
+                    : classDefinition.group
 
-      if (acc[groupName] === undefined) {
-        acc[groupName] = []
-      }
+                if (acc[groupName] === undefined) {
+                    acc[groupName] = []
+                }
 
-      acc[groupName].push(classDefinition)
+                acc[groupName].push(classDefinition)
 
-      return acc
-    }, {})
+                return acc
+            }, {})
 
-    if (structuredClassDefinitions.undefined !== undefined) {
-      classHierarchy = structuredClassDefinitions.undefined.map(classDefinition => getDataObjectEntry(classDefinition, node))
+        if (structuredClassDefinitions.undefined !== undefined) {
+            classHierarchy = structuredClassDefinitions.undefined.map(classDefinition => getDataObjectEntry(classDefinition, node))
+        }
+
+        for (const [group, classDefinitions] of Object.entries(structuredClassDefinitions)) {
+            if (group !== 'undefined') {
+                classHierarchy.push({
+                    label: t(group),
+                    key: 'add-object-group-' + group,
+                    icon: <Icon value={'folder'} />,
+                    children: classDefinitions.map(classDefinition => getDataObjectEntry(classDefinition, node))
+                })
+            }
+        }
+
+        return classHierarchy
     }
 
-    for (const [group, classDefinitions] of Object.entries(structuredClassDefinitions)) {
-      if (group !== 'undefined') {
-        classHierarchy.push({
-          label: t(group),
-          key: 'add-object-group-' + group,
-          icon: <Icon value={ 'folder' } />,
-          children: classDefinitions.map(classDefinition => getDataObjectEntry(classDefinition, node))
+    const getDataObjectEntry = (classDefinition: ClassDefinitionListItem, node: TreeNodeProps): ItemType => {
+        return {
+            label: t(classDefinition.name),
+            key: classDefinition.id,
+            icon: classDefinition.icon.value === 'class'
+                ? (
+                    <Icon
+                        subIconName='new'
+                        subIconVariant={'green'}
+                        value='data-object'
+                    />
+                )
+                : (
+                    <Icon
+                        subIconName='new'
+                        subIconVariant={'green'}
+                        {...classDefinition.icon}
+                    />
+                ),
+            onClick: () => {
+                const parentId = parseInt(node.id)
+                createDataObject(classDefinition, parentId)
+            }
+        }
+    }
+
+    const createDataObject = (
+        classDefinition: ClassDefinitionListItem,
+        parentId: number,
+        onFinish?: (newName: string) => void
+    ): void => {
+        modal.input({
+            title: t('data-object.create-data-object', { className: classDefinition.name }),
+            label: t('form.label.new-item'),
+            rule: {
+                required: true,
+                message: t('form.validation.required')
+            },
+            onOk: async (value: string) => {
+                await createDataObjectMutation(classDefinition.id, value, parentId)
+                onFinish?.(value)
+            }
         })
-      }
     }
 
-    return classHierarchy
-  }
+    const createDataObjectMutation = async (
+        classId: string,
+        name: string,
+        parentId: number
+    ): Promise<void> => {
+        const createDataObjectTask = addDataObjectMutation({
+            parentId,
+            dataObjectAddParameters: {
+                key: name,
+                classId,
+                type: 'object'
+            }
+        })
 
-  const getDataObjectEntry = (classDefinition: ClassDefinitionListItem, node: TreeNodeProps): ItemType => {
-    return {
-      label: t(classDefinition.name),
-      key: classDefinition.id,
-      icon: classDefinition.icon.value === 'class'
-        ? (
-          <Icon
-            subIconName='new'
-            value='data-object'
-          />
-          )
-        : (
-          <Icon
-            subIconName='new'
-            { ...classDefinition.icon }
-          />
-          ),
-      onClick: () => {
-        const parentId = parseInt(node.id)
-        createDataObject(classDefinition, parentId)
-      }
+        try {
+            const response = await createDataObjectTask
+
+            if (response.error !== undefined) {
+                trackError(new ApiError(response.error))
+                return
+            }
+
+            const { id } = response.data
+            openDataObject({ config: { id } })
+            dispatch(refreshNodeChildren({ nodeId: String(parentId), elementType: 'data-object' }))
+        } catch (error) {
+            trackError(new GeneralError('Error creating data object'))
+        }
     }
-  }
 
-  const createDataObject = (
-    classDefinition: ClassDefinitionListItem,
-    parentId: number,
-    onFinish?: (newName: string) => void
-  ): void => {
-    modal.input({
-      title: t('data-object.create-data-object', { className: classDefinition.name }),
-      label: t('form.label.new-item'),
-      rule: {
-        required: true,
-        message: t('form.validation.required')
-      },
-      onOk: async (value: string) => {
-        await createDataObjectMutation(classDefinition.id, value, parentId)
-        onFinish?.(value)
-      }
-    })
-  }
-
-  const createDataObjectMutation = async (
-    classId: string,
-    name: string,
-    parentId: number
-  ): Promise<void> => {
-    const createDataObjectTask = addDataObjectMutation({
-      parentId,
-      dataObjectAddParameters: {
-        key: name,
-        classId,
-        type: 'object'
-      }
-    })
-
-    try {
-      const response = await createDataObjectTask
-
-      if (response.error !== undefined) {
-        trackError(new ApiError(response.error))
-        return
-      }
-
-      const { id } = response.data
-      openDataObject({ config: { id } })
-      dispatch(refreshNodeChildren({ nodeId: String(parentId), elementType: 'data-object' }))
-    } catch (error) {
-      trackError(new GeneralError('Error creating data object'))
-    }
-  }
-
-  const isAddObjectHidden = (node: TreeNodeProps): boolean => {
-    return !isTreeActionAllowed(TreePermission.Add) ||
+    const isAddObjectHidden = (node: TreeNodeProps): boolean => {
+        return !isTreeActionAllowed(TreePermission.Add) ||
             !checkElementPermission(node.permissions, 'create') ||
             isEmpty(getClassDefinitionsForCurrentUser())
-  }
-
-  const addObjectTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
-    return {
-      label: t('data-object.tree.context-menu.add-object'),
-      key: 'add-object',
-      icon: <Icon value={ 'folder' } />,
-      hidden: isAddObjectHidden(node),
-      children: getClassEntries(node)
     }
-  }
 
-  return {
-    addObjectTreeContextMenuItem
-  }
+    const addObjectTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+        return {
+            label: t('data-object.tree.context-menu.add-object'),
+            key: 'add-object',
+            icon: <Icon value={'folder'} />,
+            hidden: isAddObjectHidden(node),
+            children: getClassEntries(node)
+        }
+    }
+
+    return {
+        addObjectTreeContextMenuItem
+    }
 }
