@@ -20,6 +20,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useElementHelper } from '../../hooks/use-element-helper'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { checkElementPermission } from '../../permissions/permission-helper'
 
 interface UseUnpublishHookReturn {
   unpublishTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -32,6 +33,7 @@ export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn =
 
   const isUnpublishHidden = (node: TreeNodeProps): boolean => {
     return !isTreeActionAllowed(TreePermission.Unpublish) ||
+            !checkElementPermission(node.permissions, 'unpublish') ||
             node.type === 'folder' ||
             node.isLocked ||
             node.isPublished === false

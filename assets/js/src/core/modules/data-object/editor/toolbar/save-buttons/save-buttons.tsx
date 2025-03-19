@@ -96,26 +96,29 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     const secondaryButtons: ReactElement[] = []
 
     const isDraftLoading = (runningTask === SaveTaskType.Version && (isLoading || isSchedulesLoading)) || isDraftDeleteLoading
+    const isUnpublishHidden = !checkElementPermission(dataObject?.permissions, 'unpublish') ||
+      dataObject?.published === false ||
+      dataObject?.isLocked === true
+
+    if (!isUnpublishHidden) {
+      secondaryButtons.push(
+        <Button
+          disabled={ isLoading || isSchedulesLoading || isDraftLoading }
+          hidden={ dataObject?.published }
+          key="unpublish"
+          onClick={ async () => {
+            void executeDataObjectTask(dataObject!.id, 'unpublish')
+            unpublishDraft()
+          } }
+          type="default"
+        >
+          {t('element.unpublish')}
+        </Button>
+      )
+    }
 
     if (checkElementPermission(dataObject?.permissions, 'save')) {
       if (dataObject?.published === true) {
-        if (checkElementPermission(dataObject?.permissions, 'unpublish')) {
-          secondaryButtons.push(
-            <Button
-              disabled={ isLoading || isSchedulesLoading || isDraftLoading }
-              hidden={ dataObject?.published }
-              key="unpublish"
-              onClick={ async () => {
-                void executeDataObjectTask(dataObject.id, 'unpublish')
-                unpublishDraft()
-              } }
-              type="default"
-            >
-              {t('element.unpublish')}
-            </Button>
-          )
-        }
-
         secondaryButtons.push(
           <Button
             disabled={ isLoading || isSchedulesLoading || isDraftLoading }
