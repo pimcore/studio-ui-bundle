@@ -31,8 +31,8 @@ interface OpenDataObjectWidgetProps {
 }
 
 interface UseDataObjectReturn {
-  openDataObject: (props: OpenDataObjectWidgetProps) => void
-  executeDataObjectTask: (id: number, task: ElementTask) => void
+  openDataObject: (props: OpenDataObjectWidgetProps) => Promise<void>
+  executeDataObjectTask: (id: number, task: ElementTask) => Promise<void>
 }
 
 export const useDataObjectHelper = (): UseDataObjectReturn => {
