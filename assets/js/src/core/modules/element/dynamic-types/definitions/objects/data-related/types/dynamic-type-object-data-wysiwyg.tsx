@@ -20,7 +20,7 @@ import {
 
 import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 
-export type WysiwygObjectDataDefinition = AbstractObjectDataDefinition 
+export type WysiwygObjectDataDefinition = AbstractObjectDataDefinition
 export class DynamicTypeObjectDataWysiwyg extends DynamicTypeObjectDataAbstract {
   id: string = 'wywsiwyg'
   inheritedMaskOverlay: InheritanceOverlayType = 'form-element'
@@ -33,6 +33,6 @@ export class DynamicTypeObjectDataWysiwyg extends DynamicTypeObjectDataAbstract 
   }
 
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
-     return <>dummy data</>
+    return <>dummy data</>
   }
 }
