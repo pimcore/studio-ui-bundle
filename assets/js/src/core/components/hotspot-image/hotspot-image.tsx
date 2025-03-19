@@ -26,7 +26,7 @@ import { resizeItem } from '@Pimcore/components/hotspot-image/utils/resize'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
 import {
-  type HotspotMarkerData
+  type ExpandedHotspotMarkerData
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import {
   HotspotContext
@@ -70,7 +70,7 @@ export interface IHotspot {
   width: number
   height: number
   type: string
-  data?: HotspotMarkerData[]
+  data?: ExpandedHotspotMarkerData[]
   name?: string | null
 }
 

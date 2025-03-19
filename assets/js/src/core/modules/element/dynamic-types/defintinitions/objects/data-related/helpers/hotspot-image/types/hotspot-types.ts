@@ -1,15 +1,15 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * Pimcore
+ *
+ * This source file is available under two different licenses:
+ * - Pimcore Open Core License (POCL)
+ * - Pimcore Commercial License (PCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+ *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+ */
 
 export interface Hotspot {
   top: number
@@ -27,22 +27,31 @@ export interface Marker {
   name?: string | null
 }
 
-export interface HotspotMarkerDataBase<T extends keyof HotspotValueMap> {
+export type HotspotMarkerDataType = 'textfield' | 'textarea' | 'object' | 'asset'
+
+export type ExpandedHotspotMarkerDataBase<T extends keyof HotspotValueMap> = {
   type: T;
   name: string;
-  value: HotspotValueMap[T];
+} & (HotspotValueMap[T] extends object
+    ? HotspotValueMap[T] // Spread object values
+    : { value: HotspotValueMap[T] });
+
+export interface HotspotObjectType {
+  id: number;
+  fullPath: string;
+  subtype: 'object';
 }
 
 export interface HotspotValueMap {
   textfield: string;
   textarea: string;
   checkbox: boolean;
-  object: string;
-  document: string;
-  asset: string
+  object: HotspotObjectType;
+  document: HotspotObjectType;
+  asset: HotspotObjectType;
 }
 
-export type HotspotMarkerData = {
-  [K in keyof HotspotValueMap]: HotspotMarkerDataBase<K>;
+export type ExpandedHotspotMarkerData = {
+  [K in keyof HotspotValueMap]: ExpandedHotspotMarkerDataBase<K>;
 }[keyof HotspotValueMap];
 

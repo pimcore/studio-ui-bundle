@@ -47,6 +47,8 @@ export const HotspotMarkersDataModal = ({
     if (isUndefined(hotspot)) return
     form.validateFields().then(() => {
       const updatedHotspot = { ...hotspot, data: fields, name: hotspotName }
+      console.log('----> updatedHotspot', updatedHotspot)
+
       onUpdate(updatedHotspot)
       onClose()
     }).catch((error) => {

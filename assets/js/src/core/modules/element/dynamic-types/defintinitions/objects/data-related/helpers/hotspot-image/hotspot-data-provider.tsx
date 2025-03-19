@@ -12,14 +12,14 @@
 */
 
 import React, { useState, createContext, useMemo } from 'react'
-import type {
-  HotspotMarkerData
+import {
+  type ExpandedHotspotMarkerData
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import type { IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 
 export interface HotspotDataContext {
-  fields: HotspotMarkerData[]
-  setFields: React.Dispatch<React.SetStateAction<HotspotMarkerData[]>>
+  fields: ExpandedHotspotMarkerData[]
+  setFields: React.Dispatch<React.SetStateAction<ExpandedHotspotMarkerData[]>>
   hotspotName: string
   setHotspotName: (name: string) => void
   editModeHotspot: IHotspot | undefined
@@ -40,7 +40,7 @@ export interface HotspotDataProviderProps {
 }
 
 export const HotspotDataProvider = ({ children }: HotspotDataProviderProps): React.JSX.Element => {
-  const [fields, setFields] = useState<HotspotMarkerData[]>([])
+  const [fields, setFields] = useState<ExpandedHotspotMarkerData[]>([])
   const [hotspotName, setHotspotName] = useState<string>('')
   const [editModeHotspot, setEditModeHotspot] = useState<IHotspot | undefined>(undefined)
 

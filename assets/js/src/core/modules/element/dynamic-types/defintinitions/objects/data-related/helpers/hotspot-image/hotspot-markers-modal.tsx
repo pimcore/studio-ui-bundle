@@ -70,6 +70,8 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
   }
 
   const handleOk = (): void => {
+    console.log('----> handleSave hotspots', hotspots)
+
     props.onChange?.(hotspots)
     props.onClose?.()
   }

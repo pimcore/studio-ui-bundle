@@ -14,7 +14,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  type HotspotMarkerData
+  type ExpandedHotspotMarkerData
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import { isNull, isUndefined } from 'lodash'
 import { Text as TextField } from '@Pimcore/components/text/text'
@@ -31,7 +31,8 @@ import {
   Checkbox
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/checkbox/checkbox'
 import {
-  ManyToOneRelation
+  ManyToOneRelation,
+  type ManyToOneRelationValue
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
 import { Flex } from '@Pimcore/components/flex/flex'
 
@@ -45,14 +46,14 @@ const FieldOperations = ({
   form
 }: FieldOperationsProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { fields, handleFieldChange, handleRemoveField, dataTypes } = useHotspotData(hotspot, form)
+  const { fields, updateTextValue, updateCheckboxValue, updateRelationValue, handleRemoveField, dataTypes, setHotspotName } = useHotspotData(hotspot, form)
 
   const getTypeLabel = (type: string): string => {
     const typeObj = dataTypes.find(dataType => dataType.key === type)
     return !isUndefined(typeObj) ? typeObj.label : 'Unknown Type'
   }
 
-  const renderFormItem = (field: HotspotMarkerData, index: number): JSX.Element => {
+  const renderFormItem = (field: ExpandedHotspotMarkerData, index: number): JSX.Element => {
     const renderInput = (): JSX.Element => {
       switch (field.type) {
         case 'checkbox':
@@ -61,7 +62,7 @@ const FieldOperations = ({
               <Checkbox
                 checked={ field.value }
                 onChange={ (checked) => {
-                  !isNull(checked) && !isUndefined(checked) && handleFieldChange(index, 'value', checked ? 'true' : 'false')
+                  !isNull(checked) && !isUndefined(checked) && updateCheckboxValue(index, checked)
                 } }
               />
               <TextField>{t('hotspots-markers-data-modal.data-type.checkbox')}</TextField>
@@ -72,7 +73,7 @@ const FieldOperations = ({
           return (
             <TextArea
               onChange={ (e) => {
-                handleFieldChange(index, 'value', e.target.value)
+                updateTextValue(index, e.target.value)
               } }
               value={ field.value }
             />
@@ -82,7 +83,7 @@ const FieldOperations = ({
           return (
             <Input
               onChange={ (e) => {
-                handleFieldChange(index, 'value', e.target.value)
+                updateTextValue(index, e.target.value)
               } }
               value={ field.value }
             />
@@ -96,12 +97,13 @@ const FieldOperations = ({
               dataObjectsAllowed
               documentsAllowed={ false }
               onChange={
-                (newValue) => {
-                  !isUndefined(newValue?.fullPath) && handleFieldChange(index, 'value', newValue.fullPath)
-                }
+                  (newValue: ManyToOneRelationValue) => {
+                    if (isNull(newValue) || isUndefined(newValue.fullPath)) return
+                    updateRelationValue(index, 'document', newValue)
+                  }
               }
               value={
-              { type: 'document', id: field.value.id, fullPath: field.value.fullPath, subtype: 'object' }
+              { type: 'document', id: field.id, fullPath: field.fullPath, subtype: 'object' }
             }
             />
           )
@@ -113,12 +115,13 @@ const FieldOperations = ({
               dataObjectsAllowed={ false }
               documentsAllowed={ false }
               onChange={
-                  (newValue) => {
-                    !isUndefined(newValue?.fullPath) && handleFieldChange(index, 'value', newValue.fullPath)
+                  (newValue: ManyToOneRelationValue) => {
+                    if (isNull(newValue) || isUndefined(newValue.fullPath)) return
+                    updateRelationValue(index, 'asset', newValue)
                   }
               }
               value={
-                { type: 'asset', id: field.value.id, fullPath: field.value.fullPath, subtype: 'object' }
+                { type: 'asset', id: field.id, fullPath: field.fullPath, subtype: 'object' }
               }
             />
           )
@@ -130,12 +133,13 @@ const FieldOperations = ({
               dataObjectsAllowed
               documentsAllowed={ false }
               onChange={
-                  (newValue) => {
-                    !isUndefined(newValue?.fullPath) && handleFieldChange(index, 'value', newValue.fullPath)
+                  (newValue: ManyToOneRelationValue) => {
+                    if (isNull(newValue) || isUndefined(newValue.fullPath)) return
+                    updateRelationValue(index, 'object', newValue)
                   }
               }
               value={
-                { type: 'data-object', id: field.value.id, fullPath: field.value.fullPath, subtype: 'object' }
+                { type: 'data-object', id: field.id, fullPath: field.fullPath, subtype: 'object' }
               }
             />
           )
@@ -153,7 +157,7 @@ const FieldOperations = ({
           name={ `name-${index}` }
         >
           <Input
-            onChange={ (e) => { handleFieldChange(index, 'name', e.target.value) } }
+            onChange={ (e) => { setHotspotName(e.target.value) } }
             value={ field.name }
           />
         </Form.Item>
