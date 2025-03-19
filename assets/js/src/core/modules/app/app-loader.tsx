@@ -1,35 +1,35 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * Pimcore
+ *
+ * This source file is available under two different licenses:
+ * - Pimcore Open Core License (POCL)
+ * - Pimcore Commercial License (PCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+ *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+ */
 
-import { useAppDispatch } from '@Pimcore/app/store'
-import { Content } from '@Pimcore/components/content/content'
-import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
-import { setSettings } from '@Pimcore/modules/app/settings/settings-slice'
-import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
-import { useTranslationGetCollectionMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
+import React, { useEffect, useState, useRef } from 'react'
 import { api } from '@Pimcore/modules/auth/user/user-api-slice.gen'
-import { setUser } from '@Pimcore/modules/auth/user/user-slice'
+import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
 import { api as perspectivesApi } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
-import { GlobalStyles } from '@Pimcore/styles/global.styles'
-import { isPlainObject } from 'lodash'
-import React, { useEffect, useRef, useState } from 'react'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { useTranslationGetCollectionMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { useTranslation } from 'react-i18next'
-import { setActivePerspective } from '../perspectives/active-perspective-slice'
-import { getInitialModelJson } from '../widget-manager/utils/widget-manager-outer-model'
-import { updateOuterModel } from '../widget-manager/widget-manager-slice'
+import { setUser } from '@Pimcore/modules/auth/user/user-slice'
+import { setSettings } from '@Pimcore/modules/app/settings/settings-slice'
+import { Content } from '@Pimcore/components/content/content'
+import { GlobalStyles } from '@Pimcore/styles/global.styles'
+import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
+import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useMercureCreateCookieMutation } from './mercure-api-slice.gen'
+import { setActivePerspective } from '../perspectives/active-perspective-slice'
+import { updateOuterModel } from '../widget-manager/widget-manager-slice'
+import { getInitialModelJson } from '../widget-manager/utils/widget-manager-outer-model'
+import { isPlainObject } from 'lodash'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -66,7 +66,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           dispatch(setUser(data))
         }
       })
-      .catch(() => { })
+      .catch(() => {})
 
     return await userFetcher
   }
@@ -82,7 +82,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           dispatch(setSettings(data))
         }
       })
-      .catch(() => { })
+      .catch(() => {})
 
     return await settingsFetcher
   }
@@ -102,7 +102,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
             dispatch(updateOuterModel(getInitialModelJson()))
           }
         })
-        .catch(() => { })
+        .catch(() => {})
 
       return await perspectiveFetcher
     }
@@ -127,7 +127,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
       loadTranslations()
     ]).then(() => {
       setIsLoading(false)
-    }).catch(() => { })
+    }).catch(() => {})
   }, [])
 
   return (
