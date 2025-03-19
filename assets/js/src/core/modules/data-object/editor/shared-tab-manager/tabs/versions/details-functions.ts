@@ -18,7 +18,7 @@ import type { DataObjectVersion } from '@Pimcore/modules/element/editor/shared-t
 import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { DATATYPE_LIST, type IFormattedDataStructureData, type IGetFormattedDataStructureProps, type IFieldCollectionValue } from './types'
-import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
+import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'
 
 const isFieldValueEmpty = (fieldValue: any): boolean => {
   if (isObject(fieldValue)) {

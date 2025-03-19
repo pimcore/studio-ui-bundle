@@ -17,9 +17,6 @@ import cn from 'classnames'
 import { Content } from '@Pimcore/components/content/content'
 import { CollapseItem } from '@Pimcore/components/collapse/item/collapse-item'
 import { DataComponent } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/components/data-component/data-component'
-import { type AbstractObjectDataDefinition } from '../../../dynamic-type-object-data-abstract'
-import { type AbstractObjectLayoutDefinition } from '../../../../layout-related/dynamic-type-object-layout-abstract'
-import { useFieldCollection } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/field-collection/providers/use-field-collection'
 import { DATATYPE_LIST } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { getBreadcrumbTitle } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
@@ -28,7 +25,10 @@ import { type FieldCollectionLayoutDefinition } from '@Pimcore/modules/class-def
 import { useStyles } from './version-field-collection.styles'
 import { Text } from '@Pimcore/components/text/text'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
+import { type AbstractObjectDataDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
+import { type AbstractObjectLayoutDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/dynamic-type-object-layout-abstract'
+import { useFieldCollection } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/field-collection/providers/use-field-collection'
+import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'
 
 export interface VersionFieldCollectionProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectLayoutDefinition | AbstractObjectDataDefinition

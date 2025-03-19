@@ -24,6 +24,8 @@ import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useStyle } from './breadcrumb.styles'
 import { Filename } from '../filename/filename'
 
+export { useBreadcrumbSize }
+
 interface BreadcrumbProps {
   path: string
   elementType: ElementType

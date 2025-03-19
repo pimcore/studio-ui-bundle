@@ -33,6 +33,8 @@ asset.upload.files.completed-actions: Completed actions
 asset.upload.validation: 'Please add a file'
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
+data-object.tree.context-menu.add-object: Add Object
+data-object.create-data-object: Add new Object of type {{className}}
 workflow.label: Workflow
 workflow.headline: Workflow Details
 workflow.no-workflows-found: No workflows found
@@ -369,6 +371,7 @@ form.validation.numeric-range.second-value-missing: Second value is missing
 form.validation.numeric-range.second-value-greater: Second value cannot be smaller than the first value
 form.validation.provide-name: Please provide a name
 form.validation.provide-description: Please provide a description
+form.label.new-item: Enter the name of the new item
 thumbnail: Thumbnail
 select-image-preview: Select Image Preview
 choose-media: Choose Media
@@ -399,7 +402,6 @@ element.unlock: Unlock
 element.unlock-and-propagate-to-children: Unlock and propagate to children
 element.tree.refresh: Refresh
 element.new-folder: New Folder
-element.new-folder.label: 'Enter the name of the new item'
 element.new-folder.validation: 'Please enter a valid name'
 element.rename: Rename
 element.rename.label: 'Please enter the new name'
@@ -687,3 +689,6 @@ auto-save.loading-tooltip: Auto save in progress
 detached-tab.draft-tooltip: The current version is a draft.
 detached-tab.draft-tooltip-addon:  You can publish in the associated element/object main/mother tab.
 details: Details
+element: Element
+entries: entries
+entry: entry
