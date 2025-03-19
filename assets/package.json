@@ -26,35 +26,10 @@
       "require": "./dist/sdk/main.js",
       "types": "./dist/build/types/src/sdk/main.d.ts"
     },
-    "./app": {
-      "import": "./dist/sdk/app/index.js",
-      "require": "./dist/sdk/app/index.js",
-      "types": "./dist/build/types/src/sdk/app/index.d.ts"
-    },
-    "./components": {
-      "import": "./dist/sdk/components/index.js",
-      "require": "./dist/sdk/components/index.js",
-      "types": "./dist/build/types/src/sdk/components/index.d.ts"
-    },
-    "./modules/asset": {
-      "import": "./dist/sdk/modules/asset/index.js",
-      "require": "./dist/sdk/modules/asset/index.js",
-      "types": "./dist/build/types/src/sdk/modules/asset/index.d.ts"
-    },
-    "./modules/class-definitions": {
-      "import": "./dist/sdk/modules/class-definitions/index.js",
-      "require": "./dist/sdk/modules/class-definitions/index.js",
-      "types": "./dist/build/types/src/sdk/modules/class-definitions/index.d.ts"
-    },
-    "./modules/element": {
-      "import": "./dist/sdk/modules/element/index.js",
-      "require": "./dist/sdk/modules/element/index.js",
-      "types": "./dist/build/types/src/sdk/modules/element/index.d.ts"
-    },
-    "./modules/icon-library": {
-      "import": "./dist/sdk/modules/icon-library/index.js",
-      "require": "./dist/sdk/modules/icon-library/index.js",
-      "types": "./dist/build/types/src/sdk/modules/icon-library/index.d.ts"
+    "./*": {
+      "import": "./dist/sdk/*/index.js",
+      "require": "./dist/sdk/*/index.js",
+      "types": "./dist/build/types/src/sdk/*/index.d.ts"
     }
   },
   "files": [
