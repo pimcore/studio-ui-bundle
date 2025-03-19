@@ -64,7 +64,8 @@ export const ListingContainer = (): React.JSX.Element => {
     <DynamicTypeRegistryProvider
       serviceIds={ [
         'DynamicTypes/GridCellRegistry',
-        'DynamicTypes/ListingRegistry'
+        'DynamicTypes/ListingRegistry',
+        'DynamicTypes/BatchEditRegistry'
       ] }
     >
       <BaseListing

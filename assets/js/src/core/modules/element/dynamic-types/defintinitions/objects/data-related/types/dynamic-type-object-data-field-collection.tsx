@@ -13,14 +13,28 @@
 
 import React from 'react'
 
-import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
+import { DynamicTypeObjectDataAbstract, type GetGridCellDefinitionProps, type EditModalSettings, type EditMode } from '../dynamic-type-object-data-abstract'
 import { FieldCollection, type FieldCollectionProps } from '../components/field-collection/field-collection'
+import { ItemsCount } from '../../grid-cell-preview/items-count/items-count'
 
 export class DynamicTypeObjectDataFieldCollection extends DynamicTypeObjectDataAbstract {
   id: string = 'fieldcollections'
   isCollectionType: boolean = true
+  gridCellEditMode: EditMode = 'edit-modal'
+  gridCellEditModalSettings: EditModalSettings = {
+    modalSize: 'XL',
+    formLayout: 'vertical'
+  }
 
   getObjectDataComponent (props: FieldCollectionProps): React.ReactElement<FieldCollectionProps> {
     return <FieldCollection { ...props } />
+  }
+
+  getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
+    const value: [] | null = props.cellProps.getValue()
+
+    return (
+      <ItemsCount count={ value?.length ?? 0 } />
+    )
   }
 }

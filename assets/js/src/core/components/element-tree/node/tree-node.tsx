@@ -43,6 +43,7 @@ export interface TreeNodeProps {
   isLoading?: boolean
   danger?: boolean
   ref?: MutableRefObject<HTMLDivElement>
+  isPublished?: boolean
 }
 
 export const defaultProps: TreeNodeProps = {

@@ -59,9 +59,7 @@ export const createTreeStructure = ({ tags, loadingNodes, actions, rootActions }
       return {
         key: tag.id.toString(),
         title: getTitle(tag.text, isLoading(tag.id.toString())),
-        icon: Icon({
-          value: 'tag'
-        }),
+        icon: <Icon value='tag' />,
         disableCheckbox: isLoading(tag.id.toString()),
         children: tag.hasChildren ? treeWalker(tag.children!) : [],
         actions
@@ -72,9 +70,7 @@ export const createTreeStructure = ({ tags, loadingNodes, actions, rootActions }
   return [{
     key: 0,
     title: getTitle('All Tags', isLoading('0')),
-    icon: Icon({
-      value: 'folder'
-    }),
+    icon: <Icon value='folder' />,
     children: tags.length > 0 ? treeWalker(tags) : [],
     actions: rootActions
   }]

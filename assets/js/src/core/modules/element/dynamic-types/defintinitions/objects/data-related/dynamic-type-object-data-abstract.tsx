@@ -23,12 +23,18 @@ import {
   FieldLabel
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/label/field-label'
 import { type InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
-import { type IFieldWidthContext } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/field-width-provider'
+import { defaultFieldWidthValues, type IFieldWidthContext } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/field-width-provider'
 import { DefaultPreview } from './components/grid-cells/image/default-preview'
 import { type AbstractGridCellDefinition } from '../../grid-cell/dynamic-type-grid-cell-abstract'
 import { type IFormattedDataStructureData } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
+import { type ColumnMetaType } from '@Pimcore/components/grid/grid'
+import { type ModalSize } from '@Pimcore/components/modal/modal'
 
-export type EditMode = 'default' | 'edit-modal'
+export type EditMode = 'default' | 'edit-modal' | 'column-meta'
+export interface EditModalSettings {
+  modalSize: ModalSize
+  formLayout: 'vertical' | 'horizontal'
+}
 
 export interface DefaultGridCellDefinition {
   mode: 'default'
@@ -39,6 +45,14 @@ export interface WithEditModalGridCellDefinition {
   mode: 'edit-modal'
   previewComponent: ReactElement
   editComponent: ReactElement
+  formItemProps: FormItemProps
+  editModalSettings?: EditModalSettings
+  handleDefaultValue?: (props: AbstractObjectDataDefinition, form: FormInstance, fieldName: NamePath) => void
+}
+
+export interface ColumnMetaGridCellDefinition {
+  mode: 'column-meta'
+  meta: GridCellColumnMeta
 }
 
 export interface GetGridCellDefinitionProps {
@@ -56,12 +70,18 @@ export interface AbstractObjectDataDefinition extends DataComponentProps {
   defaultFieldWidth: IFieldWidthContext
 }
 
+export type GridCellColumnMeta = ColumnMetaType & { type: string }
+
 @injectable()
 export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
   isCollectionType: boolean = false
   inheritedMaskOverlay: InheritanceOverlayType = false
   gridCellEditMode: EditMode = 'default'
+  gridCellEditModalSettings: EditModalSettings = {
+    modalSize: 'M',
+    formLayout: 'horizontal'
+  }
 
   abstract getObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition>
 
@@ -99,17 +119,35 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
     return this.getObjectDataComponent(props.objectProps)
   }
 
-  getGridCellDefinition (props: GetGridCellDefinitionProps): DefaultGridCellDefinition | WithEditModalGridCellDefinition {
+  getGridCellDefinition (props: GetGridCellDefinitionProps): DefaultGridCellDefinition | WithEditModalGridCellDefinition | ColumnMetaGridCellDefinition {
     if (this.gridCellEditMode === 'edit-modal') {
+      const cellProps = { ...props, objectProps: { ...props.objectProps, defaultFieldWidth: defaultFieldWidthValues } }
+
       return {
         mode: this.gridCellEditMode,
-        previewComponent: this.getGridCellPreviewComponent(props),
-        editComponent: this.getGridCellEditComponent(props)
+        previewComponent: this.getGridCellPreviewComponent(cellProps),
+        editComponent: this.getGridCellEditComponent(cellProps),
+        formItemProps: this.getObjectDataFormItemProps(cellProps.objectProps),
+        editModalSettings: this.gridCellEditModalSettings,
+        handleDefaultValue: this.handleDefaultValue
+      }
+    }
+
+    if (this.gridCellEditMode === 'column-meta') {
+      return {
+        mode: this.gridCellEditMode,
+        meta: this.getGridCellColumnMeta(props)
       }
     }
 
     return {
       mode: this.gridCellEditMode,
+      type: this.id
+    }
+  }
+
+  getGridCellColumnMeta (props: GetGridCellDefinitionProps): GridCellColumnMeta {
+    return {
       type: this.id
     }
   }

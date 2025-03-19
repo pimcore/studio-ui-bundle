@@ -13,14 +13,16 @@
 
 import React from 'react'
 
-import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
+import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type EditMode, type GetGridCellDefinitionProps } from '../dynamic-type-object-data-abstract'
 
 import {
-  QuantityValueRange
+  QuantityValueRange,
+  type QuantityValueRangeValue
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/quantity-value-range/quantity-value-range'
 import type { FormInstance } from 'antd'
 import type { NamePath } from 'rc-field-form/es/interface'
-import _ from 'lodash'
+import _, { isNull } from 'lodash'
+import { QuantityValueRange as QuantityValueRangePreview } from '../../grid-cell-preview/quantity-value-range/quantity-value-range'
 
 export type QuantityValueRangeObjectDataDefinition = AbstractObjectDataDefinition & {
   defaultUnit: string | null
@@ -32,6 +34,7 @@ export type QuantityValueRangeObjectDataDefinition = AbstractObjectDataDefinitio
 
 export class DynamicTypeObjectDataQuantityValueRange extends DynamicTypeObjectDataAbstract {
   id: string = 'quantityValueRange'
+  gridCellEditMode: EditMode = 'edit-modal'
 
   getObjectDataComponent (props: QuantityValueRangeObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
@@ -54,5 +57,19 @@ export class DynamicTypeObjectDataQuantityValueRange extends DynamicTypeObjectDa
         unitId: props.defaultUnit
       })
     }
+  }
+
+  getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
+    const value: QuantityValueRangeValue | null = props.cellProps.getValue()
+
+    return isNull(value)
+      ? <></>
+      : (
+        <QuantityValueRangePreview
+          max={ value.maximum ?? undefined }
+          min={ value.minimum ?? undefined }
+          unitId={ value.unitId }
+        />
+        )
   }
 }

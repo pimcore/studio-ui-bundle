@@ -13,6 +13,7 @@
 
 import { useState, useEffect } from 'react'
 import { type GridCellReference } from '@Pimcore/components/grid/grid'
+import { isEqual } from 'lodash'
 
 export type TableValue = Array<Record<string, string> | string[]>
 
@@ -49,7 +50,9 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
   const [key, setKey] = useState<number>(0)
 
   useEffect(() => {
-    props.onChange?.(value)
+    if (!isEqual(value, props.initialValue)) {
+      props.onChange?.(value)
+    }
   }, [value])
 
   const initializeValue = (): TableValue => {

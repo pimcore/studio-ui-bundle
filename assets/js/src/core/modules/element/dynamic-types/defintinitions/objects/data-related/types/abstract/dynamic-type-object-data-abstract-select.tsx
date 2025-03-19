@@ -13,7 +13,7 @@
 
 import React from 'react'
 
-import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../../dynamic-type-object-data-abstract'
+import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type EditMode, type GetGridCellDefinitionProps, type GridCellColumnMeta } from '../../dynamic-type-object-data-abstract'
 import { Select } from '@Pimcore/components/select/select'
 import { t } from 'i18next'
 import type { FormInstance } from 'antd'
@@ -34,8 +34,10 @@ export type SelectProps = AbstractObjectDataDefinition & {
 }
 
 export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObjectDataAbstract {
+  gridCellEditMode: EditMode = 'column-meta'
+
   getObjectDataComponent (props: SelectProps): React.ReactElement<AbstractObjectDataDefinition> {
-    const options = props.options === null ? undefined : props.options.map(option => ({ label: t(option.key), value: option.value }))
+    const options = this.convertOptions(props.options)
     return (
       <Select
         allowClear={ props.allowClear !== false }
@@ -59,6 +61,23 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
     }
     if (_.isEmpty(form.getFieldValue(fieldName))) {
       form.setFieldValue(fieldName, props.defaultValue)
+    }
+  }
+
+  convertOptions (options: Array<{ key: string, value: string | number }> | null): Array<{ label: string, value: string | number }> | undefined {
+    if (options === null) {
+      return
+    }
+    return options.map(option => ({ label: t(option.key), value: option.value }))
+  }
+
+  getGridCellColumnMeta (props: GetGridCellDefinitionProps): GridCellColumnMeta {
+    return {
+      type: 'select',
+      editable: props.objectProps.noteditable !== true,
+      config: {
+        options: this.convertOptions(props.objectProps.options as Array<{ key: string, value: string | number }> | null)
+      }
     }
   }
 }

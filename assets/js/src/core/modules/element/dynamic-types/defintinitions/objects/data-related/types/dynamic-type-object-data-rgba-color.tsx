@@ -13,11 +13,12 @@
 
 import React from 'react'
 
-import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
+import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type EditMode, type GetGridCellDefinitionProps } from '../dynamic-type-object-data-abstract'
 import type { FormItemProps } from 'antd/es/form/FormItem'
 import { type Color } from 'antd/es/color-picker'
 import { t } from 'i18next'
 import { ColorPicker } from '@Pimcore/components/color-picker/color-picker'
+import { RgbaColor } from '../../grid-cell-preview/rgba-color/rgba-color'
 
 export type RgbaColorObjectDataDefinition = AbstractObjectDataDefinition & {
   minimumLength: number | null
@@ -36,6 +37,7 @@ const formatColorShowText = (color: Color): React.ReactNode => {
 
 export class DynamicTypeObjectDataRgbaColor extends DynamicTypeObjectDataAbstract {
   id: string = 'rgbaColor'
+  gridCellEditMode: EditMode = 'edit-modal'
 
   getObjectDataComponent (props: RgbaColorObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
@@ -56,5 +58,11 @@ export class DynamicTypeObjectDataRgbaColor extends DynamicTypeObjectDataAbstrac
       ...super.getObjectDataFormItemProps(props),
       getValueFromEvent: formatColor
     }
+  }
+
+  getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
+    const value: string | null = props.cellProps.getValue()
+
+    return <RgbaColor value={ value } />
   }
 }

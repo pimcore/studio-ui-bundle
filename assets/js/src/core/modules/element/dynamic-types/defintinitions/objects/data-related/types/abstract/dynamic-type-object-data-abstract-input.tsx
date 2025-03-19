@@ -13,7 +13,7 @@
 
 import React from 'react'
 
-import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../../dynamic-type-object-data-abstract'
+import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type EditMode, type GetGridCellDefinitionProps, type GridCellColumnMeta } from '../../dynamic-type-object-data-abstract'
 import { Input } from '@Pimcore/components/input/input'
 import { toCssDimension } from '@Pimcore/utils/css'
 
@@ -24,6 +24,8 @@ export type InputProps = AbstractObjectDataDefinition & {
 }
 
 export abstract class DynamicTypeObjectDataAbstractInput extends DynamicTypeObjectDataAbstract {
+  gridCellEditMode: EditMode = 'column-meta'
+
   getObjectDataComponent (props: InputProps): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <Input
@@ -37,5 +39,12 @@ export abstract class DynamicTypeObjectDataAbstractInput extends DynamicTypeObje
         value={ props.value }
       />
     )
+  }
+
+  getGridCellColumnMeta (props: GetGridCellDefinitionProps): GridCellColumnMeta {
+    return {
+      type: 'input',
+      editable: props.objectProps.noteditable !== true
+    }
   }
 }

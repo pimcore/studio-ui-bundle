@@ -30,6 +30,8 @@ export const ApplyButton = (): React.JSX.Element => {
     helper.close()
   }
 
+  console.log(getSelectionCount())
+
   // @todo translation
   return (
     <Button

@@ -19,20 +19,30 @@ import { ElementCellContent } from './element-cell-content'
 import { useStyle } from './element-cell.styles'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { isEmpty } from 'lodash'
+
+export interface ElementInfo {
+  elementType?: ElementType
+  id?: number
+  fullPath: string | false
+  published?: boolean
+  disabled?: boolean
+}
 
 export interface ElementCellConfig {
-  allowedTypes: ElementType[] | ((props: DefaultCellProps) => ElementType[])
+  allowedTypes?: ElementType[] | ((props: DefaultCellProps) => ElementType[])
+  getElementInfo?: (props: DefaultCellProps) => ElementInfo
 }
 
 export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
   const styles = useStyle().styles
   const { column } = props
-  const editable = props.column.columnDef.meta?.editable ?? true
+  const editable = Boolean(props.column.columnDef.meta?.editable ?? true)
   const config = column.columnDef.meta?.config as ElementCellConfig | null ?? {
     allowedTypes: ['asset', 'data-object', 'document']
   }
 
-  const allowedTypes = typeof config.allowedTypes === 'function' ? config.allowedTypes(props) : config.allowedTypes
+  const allowedTypes = typeof config.allowedTypes === 'function' ? config.allowedTypes(props) : (config.allowedTypes ?? [])
 
   function isValidContext (info: DragAndDropInfo): boolean {
     return allowedTypes.includes(info.type as ElementType) && editable
@@ -50,13 +60,20 @@ export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
     }
   }
 
+  const dropDisabled = !editable || isEmpty(allowedTypes)
+
   return (
     <Droppable
       className={ [styles['element-cell'], 'default-cell__content'].join(' ') }
+      disabled={ dropDisabled }
       isValidContext={ isValidContext }
       onDrop={ onDrop }
     >
-      <ElementCellContent { ...props } />
+      <ElementCellContent
+        { ...props }
+        dropDisabled={ dropDisabled }
+        getElementInfo={ config.getElementInfo }
+      />
     </Droppable>
   )
 }

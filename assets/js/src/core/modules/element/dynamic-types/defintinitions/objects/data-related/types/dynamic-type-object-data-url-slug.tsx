@@ -13,16 +13,25 @@
 
 import React from 'react'
 import {
-  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
+  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract,
+  type EditModalSettings,
+  type EditMode,
+  type GetGridCellDefinitionProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import {
-  UrlSlug, type UrlSlugProps
+  UrlSlug, type UrlSlugEntry, type UrlSlugProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/url-slug/url-slug'
+import { UrlSlug as UrlSlugPreview } from '../../grid-cell-preview/url-slug/url-slug'
 
 export type UrlSlugObjectDataDefinition = AbstractObjectDataDefinition & UrlSlugProps
 
 export class DynamicTypeObjectDataUrlSlug extends DynamicTypeObjectDataAbstract {
   id: string = 'urlSlug'
+  gridCellEditMode: EditMode = 'edit-modal'
+  gridCellEditModalSettings: EditModalSettings = {
+    modalSize: 'L',
+    formLayout: 'vertical'
+  }
 
   getObjectDataComponent (props: UrlSlugObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
@@ -31,6 +40,14 @@ export class DynamicTypeObjectDataUrlSlug extends DynamicTypeObjectDataAbstract 
         className={ props.className }
         disabled={ props.noteditable === true }
       />
+    )
+  }
+
+  getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
+    const value: UrlSlugEntry[] | null = props.cellProps.getValue()
+
+    return (
+      <UrlSlugPreview value={ value } />
     )
   }
 }
