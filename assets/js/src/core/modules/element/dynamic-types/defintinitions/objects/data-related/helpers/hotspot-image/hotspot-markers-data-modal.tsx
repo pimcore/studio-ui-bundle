@@ -43,6 +43,23 @@ export const HotspotMarkersDataModal = ({
   const [form] = Form.useForm()
   const { fields, hotspotName, setHotspotName, dataTypes, editModeHotspot } = useHotspotData(hotspot, form)
 
+  // const transformHotspotFields = (fields: ExpandedHotspotMarkerData[]): ExpandedHotspotMarkerData[] => {
+  //   return fields.map((field) => {
+  //     console.log('----> field', field)
+  //
+  //     if (field.type === 'object' || field.type === 'document' || field.type === 'asset') {
+  //       return {
+  //         type: field.type,
+  //         name: field.name,
+  //         id: ,
+  //         fullPath: (field as HotspotObjectType).fullPath,
+  //         subtype: (field as HotspotObjectType).subtype
+  //       }
+  //     }
+  //     return field
+  //   })
+  // }
+
   const handleSave = (): void => {
     if (isUndefined(hotspot)) return
     form.validateFields().then(() => {

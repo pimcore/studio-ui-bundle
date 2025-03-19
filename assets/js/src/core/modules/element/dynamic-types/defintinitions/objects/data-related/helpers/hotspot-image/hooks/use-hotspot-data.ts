@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useCallback, useContext, useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { isNull, isUndefined } from 'lodash'
 import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import {
@@ -20,8 +20,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import {
   type ExpandedHotspotMarkerData,
-  type HotspotObjectType,
-  type HotspotValueMap
+  type HotspotObjectType
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import {
   type ManyToOneRelationValue
@@ -47,66 +46,6 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
   const { fields, setFields, hotspotName, setHotspotName, editModeHotspot, setEditModeHotspot } = useContext(HotspotContext)
 
   console.log('----> fields', fields)
-
-  const getInitialValueForType = <T extends keyof HotspotValueMap>(
-    type: T,
-    value?: unknown
-  ): HotspotValueMap[T] => {
-    const defaultValues: HotspotValueMap = {
-      textfield: '',
-      textarea: '',
-      checkbox: false,
-      object: { id: 0, fullPath: '', subtype: 'object' },
-      document: { id: 0, fullPath: '', subtype: 'object' },
-      asset: { id: 0, fullPath: '', subtype: 'object' }
-    }
-
-    const isValidObject = (val: unknown): val is Record<string, unknown> =>
-      typeof val === 'object' && val !== null
-
-    const parseId = (id: unknown): number =>
-      typeof id === 'number' && !isNaN(id) ? id : 0
-
-    const parseFullPath = (path: unknown): string =>
-      typeof path === 'string' ? path : ''
-
-    if (type === 'checkbox') {
-      return (typeof value === 'boolean' ? value : defaultValues.checkbox) as HotspotValueMap[T]
-    }
-
-    if (type === 'document' && isValidObject(value) && 'id' in value) {
-      const documentValue: HotspotValueMap['document'] = {
-        id: parseId(value.id),
-        fullPath: parseFullPath(value.fullPath),
-        subtype: 'object'
-      }
-      return documentValue as HotspotValueMap[T]
-    }
-
-    if (type === 'asset' && isValidObject(value) && 'id' in value) {
-      const assetValue: HotspotValueMap['asset'] = {
-        id: parseId(value.id),
-        fullPath: parseFullPath(value.fullPath),
-        subtype: 'object'
-      }
-      return assetValue as HotspotValueMap[T]
-    }
-
-    if (type === 'object' && isValidObject(value)) {
-      const objectValue: HotspotValueMap['asset'] = {
-        id: parseId(value.id),
-        fullPath: parseFullPath(value.fullPath),
-        subtype: 'object'
-      }
-      return objectValue as HotspotValueMap[T]
-    }
-
-    if ((type === 'textfield' || type === 'textarea') && typeof value === 'string') {
-      return value as HotspotValueMap[T]
-    }
-
-    return defaultValues[type]
-  }
 
   useEffect(() => {
     setFields([])
@@ -140,48 +79,65 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
     }
   }, [hotspot])
 
-  const handleTypeSelect = useCallback(
-      <T extends keyof HotspotValueMap>(type: T) => {
-        const newField = {
-          type,
-          name: '',
-          value: getInitialValueForType(type)
-        } as unknown as Extract<ExpandedHotspotMarkerData, { type: T }>
-        setFields((prevFields) => [...prevFields, newField])
-      },
-      [setFields]
-  )
+  const handleTextTypeSelect = (textType: 'textarea' | 'textfield'): void => {
+    const newField = {
+      type: textType,
+      name: '',
+      value: ''
+    }
+    setFields((prevFields) => [...prevFields, newField])
+  }
+
+  const handleCheckboxTypeSelect = (): void => {
+    const newField: ExpandedHotspotMarkerData = {
+      type: 'checkbox',
+      name: '',
+      value: false
+    }
+    setFields((prevFields) => [...prevFields, newField])
+  }
+
+  const handleRelationTypeSelect = (type: 'document' | 'asset' | 'object'): void => {
+    const newField: ExpandedHotspotMarkerData = {
+      type,
+      name: '',
+      id: 0,
+      fullPath: '',
+      subtype: 'object'
+    }
+    setFields((prevFields) => [...prevFields, newField])
+  }
 
   const dataTypes = [
     {
       key: 'textfield',
       label: t('hotspots-markers-data-modal.data-type.text-field'),
-      onClick: () => { handleTypeSelect('textfield') }
+      onClick: () => { handleTextTypeSelect('textfield') }
     },
     {
       key: 'textarea',
       label: t('hotspots-markers-data-modal.data-type.text-area'),
-      onClick: () => { handleTypeSelect('textarea') }
+      onClick: () => { handleTextTypeSelect('textarea') }
     },
     {
       key: 'checkbox',
       label: t('hotspots-markers-data-modal.data-type.checkbox'),
-      onClick: () => { handleTypeSelect('checkbox') }
+      onClick: () => { handleCheckboxTypeSelect() }
     },
     {
       key: 'object',
       label: t('hotspots-markers-data-modal.data-type.object'),
-      onClick: () => { handleTypeSelect('object') }
+      onClick: () => { handleRelationTypeSelect('object') }
     },
     {
       key: 'document',
       label: t('hotspots-markers-data-modal.data-type.document'),
-      onClick: () => { handleTypeSelect('document') }
+      onClick: () => { handleRelationTypeSelect('document') }
     },
     {
       key: 'asset',
       label: t('hotspots-markers-data-modal.data-type.asset'),
-      onClick: () => { handleTypeSelect('asset') }
+      onClick: () => { handleRelationTypeSelect('asset') }
     }
   ]
   const handleRemoveField = (index: number): void => {
@@ -232,7 +188,7 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
     setFields((prevFields) =>
       prevFields.map((field, i) =>
         i === index && field.type === type
-          ? { ...field, value: formattedValue }
+          ? { ...field, ...formattedValue }
           : field
       )
     )
