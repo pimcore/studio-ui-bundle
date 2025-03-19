@@ -44,7 +44,7 @@ export const useClassDefinitions = (): UseClassDefinitionsReturn => {
   }
 
   const getClassDefinitionsForCurrentUser = (): ClassDefinitionListItem[] => {
-    if (user.isAdmin) {
+    if (user.isAdmin || user?.classes.length === 0) {
       return context.data?.items ?? []
     }
 
