@@ -86,7 +86,14 @@ export const useAddObject = (): UseAddObjectHookReturn => {
     return {
       label: t(classDefinition.name),
       key: classDefinition.id,
-      icon: <Icon { ...classDefinition.icon } />,
+      icon: classDefinition.icon.value === 'class'
+        ? (
+          <Icon
+            subIconName='new'
+            value='data-object'
+          />
+          )
+        : <Icon { ...classDefinition.icon } />,
       onClick: () => {
         const parentId = parseInt(node.id)
         createDataObject(classDefinition, parentId)
