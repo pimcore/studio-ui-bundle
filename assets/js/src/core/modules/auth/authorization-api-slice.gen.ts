@@ -37,6 +37,10 @@ export type UserInformation = {
     permissions: string[];
     /** If user is an admin user */
     isAdmin: boolean;
+    /** Allowed classes to create */
+    classes: string[];
+    /** Allowed doc types to create */
+    docTypes: string[];
 };
 export type InvalidCredentials = {
     /** Error */
