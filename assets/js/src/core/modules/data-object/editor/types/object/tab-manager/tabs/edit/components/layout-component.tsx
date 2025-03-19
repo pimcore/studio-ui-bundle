@@ -15,7 +15,7 @@ import React from 'react'
 import { type ObjectComponentProps } from './object-component'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type DynamicTypeObjectLayoutRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/dynamic-type-object-layout-registry'
+import { type DynamicTypeObjectLayoutRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/dynamic-type-object-layout-registry'
 
 export interface LayoutComponentProps extends ObjectComponentProps {
   datatype: 'layout'

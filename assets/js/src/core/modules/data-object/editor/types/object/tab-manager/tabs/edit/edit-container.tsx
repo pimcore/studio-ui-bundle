@@ -18,9 +18,9 @@ import { RootComponent } from './components/root-component'
 import { useDataObjectGetByIdQuery, useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { Content } from '@Pimcore/components/content/content'
-import { FieldCollectionProvider } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/field-collection/providers/field-collection-provider'
+import { FieldCollectionProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/field-collection/providers/field-collection-provider'
 import { useStyles } from './edit-container.styles'
-import { ObjectBrickProvider } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/object-brick/providers/object-brick-provider'
+import { ObjectBrickProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/object-brick/providers/object-brick-provider'
 import {
   useLayoutSelection
 } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/use-layout-selection'
