@@ -1,6 +1,6 @@
 
 * -text
-*.tgz binary -diff -merge -text
+public/build/studio-npm-package.tgz binary -diff -merge -text
 
 # Exclude build/test files from archive to reduce ZIP size for composer dist download
 /.github export-ignore
