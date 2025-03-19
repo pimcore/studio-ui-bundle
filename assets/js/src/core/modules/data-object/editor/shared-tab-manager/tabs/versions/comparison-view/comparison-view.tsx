@@ -34,7 +34,7 @@ import type { IObjectVersionField } from '@Pimcore/modules/element/editor/shared
 import { useInjection } from '@Pimcore/app/depency-injection'
 import type {
   DynamicTypeObjectDataRegistry
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 interface IVersionData extends IObjectVersionField {}
