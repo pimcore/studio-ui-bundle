@@ -19,16 +19,23 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
 
 import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
+import Wysiwyg from '@Pimcore/modules/wysiwyg/wysiwyg'
 
-export type WysiwygObjectDataDefinition = AbstractObjectDataDefinition
+export type WysiwygObjectDataDefinition = AbstractObjectDataDefinition & {
+  value?: string | null
+  onChange?: (value: string | null) => void
+}
 export class DynamicTypeObjectDataWysiwyg extends DynamicTypeObjectDataAbstract {
-  id: string = 'wywsiwyg'
+  id: string = 'wysiwyg'
   inheritedMaskOverlay: InheritanceOverlayType = 'form-element'
   gridCellEditMode: EditMode = 'edit-modal'
 
   getObjectDataComponent (props: WysiwygObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
-      <div>WYSIWYG editor</div>
+      <Wysiwyg
+        { ...props }
+        disabled={ props.noteditable === true }
+      />
     )
   }
 

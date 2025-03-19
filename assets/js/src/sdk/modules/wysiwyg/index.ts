@@ -1,0 +1,1 @@
+export * from '@Pimcore/modules/wysiwyg/interface/wysiwyg'
