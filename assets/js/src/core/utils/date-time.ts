@@ -13,9 +13,10 @@
 
 import i18n from 'i18next'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { isNumber } from 'lodash'
 
 interface IFormatDateTimeProps {
-  timestamp: number | null
+  timestamp: number | string | null
   lng?: string
   timeStyle?: 'short' | 'medium' | 'long' | 'full'
   dateStyle?: 'short' | 'medium' | 'long' | 'full'
@@ -32,7 +33,7 @@ export function formatDateTime ({ timestamp, lng, timeStyle, dateStyle, options 
   }
 
   try {
-    const date = new Date(timestamp * 1000)
+    const date = new Date(isNumber(timestamp) ? timestamp * 1000 : timestamp)
 
     return i18n.format(
       date,
@@ -51,10 +52,10 @@ export function formatDateTime ({ timestamp, lng, timeStyle, dateStyle, options 
   }
 }
 
-export function formatDate (timestamp: number): string {
+export function formatDate (timestamp: number | string): string {
   return formatDateTime({ timestamp, dateStyle: 'short' })
 }
 
-export function formatTime (timestamp: number): string {
+export function formatTime (timestamp: number | string): string {
   return formatDateTime({ timestamp, timeStyle: 'short' })
 }

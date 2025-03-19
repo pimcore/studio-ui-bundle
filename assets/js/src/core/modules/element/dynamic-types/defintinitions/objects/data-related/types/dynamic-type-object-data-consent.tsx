@@ -12,10 +12,12 @@
 */
 
 import React from 'react'
-import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
+import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type EditMode, type GetGridCellDefinitionProps } from '../dynamic-type-object-data-abstract'
 import {
-  Consent
+  Consent,
+  type ConsentValue
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/consent/consent'
+import { Consent as ConsentPreview } from '../../grid-cell-preview/consent/consent'
 
 export type ConsentObjectDataDefinition = AbstractObjectDataDefinition & {
   minimumLength: number | null
@@ -23,6 +25,7 @@ export type ConsentObjectDataDefinition = AbstractObjectDataDefinition & {
 
 export class DynamicTypeObjectDataConsent extends DynamicTypeObjectDataAbstract {
   id: string = 'consent'
+  gridCellEditMode: EditMode = 'edit-modal'
 
   getObjectDataComponent (props: ConsentObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
@@ -32,5 +35,11 @@ export class DynamicTypeObjectDataConsent extends DynamicTypeObjectDataAbstract 
         value={ props.value }
       />
     )
+  }
+
+  getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
+    const value: ConsentValue | null = props.cellProps.getValue()
+
+    return <ConsentPreview consent={ value } />
   }
 }

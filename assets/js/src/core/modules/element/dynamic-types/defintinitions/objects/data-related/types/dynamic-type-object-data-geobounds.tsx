@@ -13,13 +13,18 @@
 
 import React from 'react'
 import {
-  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
+  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract,
+  type EditMode,
+  type GetGridCellDefinitionProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import {
   getGeoComponentHeight, getGeoComponentWidth
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/utils/geo-types'
 import { GeoBoundsDrawer } from '@Pimcore/components/geo-bounds-drawer/geo-bounds-drawer'
 import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
+import { type GeoBounds } from '@Pimcore/components/geo-map/types/geo-types'
+import { isNil } from 'lodash'
+import { GeoPointList } from '../../grid-cell-preview/geo-point-list/geo-point-list'
 
 export type GeoBoundsObjectDataDefinition = AbstractObjectDataDefinition & {
   width: string
@@ -32,6 +37,7 @@ export type GeoBoundsObjectDataDefinition = AbstractObjectDataDefinition & {
 export class DynamicTypeObjectDataGeoBounds extends DynamicTypeObjectDataAbstract {
   id: string = 'geobounds'
   inheritedMaskOverlay: InheritanceOverlayType = 'form-element'
+  gridCellEditMode: EditMode = 'edit-modal'
 
   getObjectDataComponent (props: GeoBoundsObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
@@ -46,5 +52,11 @@ export class DynamicTypeObjectDataGeoBounds extends DynamicTypeObjectDataAbstrac
         zoom={ props.zoom }
       />
     )
+  }
+
+  getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
+    const value: GeoBounds | null = props.cellProps.getValue()
+
+    return isNil(value) ? <></> : <GeoPointList geoPoints={ [value.southWest, value.northEast] } />
   }
 }

@@ -13,13 +13,18 @@
 
 import React from 'react'
 import {
-  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
+  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract,
+  type EditMode,
+  type GetGridCellDefinitionProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import {
   getGeoComponentHeight, getGeoComponentWidth
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/utils/geo-types'
 import { GeoPolyDrawer } from '@Pimcore/components/geo-poly-drawer/geo-poly-drawer'
 import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
+import { type GeoPoints } from '@Pimcore/components/geo-map/types/geo-types'
+import { isNil } from 'lodash'
+import { GeoPointList } from '../../grid-cell-preview/geo-point-list/geo-point-list'
 
 export type GeoPolyLineObjectDataDefinition = AbstractObjectDataDefinition & {
   width: string
@@ -32,6 +37,7 @@ export type GeoPolyLineObjectDataDefinition = AbstractObjectDataDefinition & {
 export class DynamicTypeObjectDataGeoPolyLine extends DynamicTypeObjectDataAbstract {
   id: string = 'geopolyline'
   inheritedMaskOverlay: InheritanceOverlayType = 'form-element'
+  gridCellEditMode: EditMode = 'edit-modal'
 
   getObjectDataComponent (props: GeoPolyLineObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
@@ -47,5 +53,11 @@ export class DynamicTypeObjectDataGeoPolyLine extends DynamicTypeObjectDataAbstr
         zoom={ props.zoom }
       />
     )
+  }
+
+  getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
+    const value: GeoPoints | null = props.cellProps.getValue()
+
+    return isNil(value) ? <></> : <GeoPointList geoPoints={ value } />
   }
 }

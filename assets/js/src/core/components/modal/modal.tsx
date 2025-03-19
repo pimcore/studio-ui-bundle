@@ -17,7 +17,7 @@ import { useStyle } from '@Pimcore/components/modal/modal.styles'
 import type useModal from 'antd/es/modal/useModal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 
-type ModalSize = 'M' | 'L' | 'XL'
+export type ModalSize = 'M' | 'L' | 'XL' | 'XXL'
 
 export interface IModalProps extends AntModalProps {
   icon?: React.JSX.Element
@@ -34,7 +34,8 @@ export const Modal = ({ iconName, size = 'M', className, title, children, ...pro
   const classes = [styles.modal, className].filter(Boolean)
 
   const sizeBasedWidth = {
-    XL: 'max(1200px, 85%)',
+    XXL: 'max(1200px, 85%)',
+    XL: 1000,
     L: 700,
     M: 530
   }[size]

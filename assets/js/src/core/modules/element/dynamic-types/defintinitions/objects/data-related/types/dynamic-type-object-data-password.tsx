@@ -11,13 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { type ReactElement } from 'react'
 
-import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
+import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type EditMode, type GetGridCellDefinitionProps } from '../dynamic-type-object-data-abstract'
 import { InputPassword } from '@Pimcore/components/input-password/input-password'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { type FormInstance } from 'antd'
 import { type NamePath } from 'antd/es/form/interface'
+import { GridCellPreviewWrapper } from '../../grid-cell-preview/grid-cell-cell-preview-wrapper/grid-cell-preview-wrapper'
 
 export type PasswordObjectDataDefinition = AbstractObjectDataDefinition & {
   minimumLength: number | null
@@ -28,6 +29,7 @@ const PASSWORD_PLACEHOLDER = '********'
 
 export class DynamicTypeObjectDataPassword extends DynamicTypeObjectDataAbstract {
   id: string = 'password'
+  gridCellEditMode: EditMode = 'edit-modal'
 
   getObjectDataComponent (props: PasswordObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
@@ -46,5 +48,17 @@ export class DynamicTypeObjectDataPassword extends DynamicTypeObjectDataAbstract
 
   handleDefaultValue (props: PasswordObjectDataDefinition, form: FormInstance, fieldName: NamePath): void {
     form.setFieldValue(fieldName, PASSWORD_PLACEHOLDER)
+  }
+
+  getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
+    return <GridCellPreviewWrapper>{PASSWORD_PLACEHOLDER}</GridCellPreviewWrapper>
+  }
+
+  getGridCellEditComponent (props: GetGridCellDefinitionProps): ReactElement {
+    const objectProps: PasswordObjectDataDefinition = {
+      ...props.objectProps as PasswordObjectDataDefinition,
+      value: PASSWORD_PLACEHOLDER
+    }
+    return this.getObjectDataComponent(objectProps)
   }
 }
