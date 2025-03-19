@@ -14,10 +14,13 @@
 import { useContext } from 'react'
 import { TreeIdContext, type ITreeIdContext } from './tree-id-provider'
 
-export const useTreeId = (): ITreeIdContext => {
+export const useTreeId = (allowEmptyContext: boolean = false): ITreeIdContext => {
   const context = useContext(TreeIdContext)
 
   if (context === undefined) {
+    if (allowEmptyContext) {
+      return { treeId: '' }
+    }
     throw new Error('useTreeId must be used within a TreeIdProvider')
   }
 

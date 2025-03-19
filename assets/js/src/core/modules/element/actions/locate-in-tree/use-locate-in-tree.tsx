@@ -16,10 +16,9 @@ import { api } from '@Pimcore/modules/element/element-api-slice.gen'
 import { store, useAppDispatch } from '@Pimcore/app/store'
 import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
 import { isNil, isNull, isUndefined } from 'lodash'
-import { locateInTree as locateInTreeAction, setNodeScrollTo, setSelectedNodeIds } from '@Pimcore/components/element-tree/element-tree-slice'
+import { locateInTree as locateInTreeAction } from '@Pimcore/components/element-tree/element-tree-slice'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
-import { useRefreshTree } from '../refresh-tree/use-refresh-tree'
 
 export interface UseLocateInTreeHookReturn {
   locateInTree: (elementId: number, onFinished?: () => void) => void
@@ -29,7 +28,6 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
   const dispatch = useAppDispatch()
   const activePerspective = selectActivePerspective(store.getState())
   const { switchToWidget } = useWidgetManager()
-  const { refreshTree } = useRefreshTree(elementType)
 
   const locateInTree = (elementId: number, onFinished?: () => void): void => {
     if (isNull(activePerspective)) {
@@ -48,23 +46,13 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
         }
 
         if (!isNil(result.data) && !isNil(result.data.treeLevelData)) {
-          switchToWidget(result.data.widgetId)
-          result.data.treeLevelData.forEach((treeLevelDataItem) => {
-            refreshTree(treeLevelDataItem.parentId ?? 1)
-          })
+          const treeId = result.data.widgetId
+          switchToWidget(treeId)
 
           dispatch(locateInTreeAction({
-            treeId: result.data.widgetId,
-            treeLevelData: result.data.treeLevelData
-          }))
-          dispatch(setSelectedNodeIds({
-            treeId: result.data.widgetId,
-            selectedNodeIds: [String(elementId)]
-          }))
-          dispatch(setNodeScrollTo({
-            treeId: result.data.widgetId,
+            treeId,
             nodeId: String(elementId),
-            scrollTo: true
+            treeLevelData: result.data.treeLevelData
           }))
           onFinished?.()
         }

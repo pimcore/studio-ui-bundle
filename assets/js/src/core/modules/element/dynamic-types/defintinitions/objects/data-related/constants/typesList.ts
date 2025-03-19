@@ -12,5 +12,6 @@
 */
 
 export enum DynamicTypesList {
-  LOCALIZED_FIELDS = 'localizedfields'
+  LOCALIZED_FIELDS = 'localizedfields',
+  FIELD_COLLECTIONS = 'fieldcollections'
 }

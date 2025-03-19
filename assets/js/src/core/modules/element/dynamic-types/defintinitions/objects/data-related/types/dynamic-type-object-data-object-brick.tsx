@@ -51,7 +51,8 @@ export class DynamicTypeObjectDataObjectBrick extends DynamicTypeObjectDataAbstr
 
         const isItemInAllowedList = !isEmpty(currentBrickSection) ? item?.allowedTypes.includes(currentBrickSection) === true : true
         if (dataItem.datatype === DATATYPE_LIST.LAYOUT && isItemInAllowedList) {
-          const breadcrumbTitle = getBreadcrumbTitle(updatedFieldBreadcrumbTitle, dataItem.title as string)
+          const breadcrumbField = dataItem.title ?? dataItem.name
+          const breadcrumbTitle = getBreadcrumbTitle(updatedFieldBreadcrumbTitle, breadcrumbField as string)
 
           return processObjectBrickData({ data: dataItem.children, updatedFieldBreadcrumbTitle: breadcrumbTitle })
         }

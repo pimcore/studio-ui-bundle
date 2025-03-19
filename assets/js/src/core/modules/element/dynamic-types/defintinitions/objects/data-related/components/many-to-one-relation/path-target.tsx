@@ -19,6 +19,10 @@ import {
 } from './many-to-one-relation'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import cn from 'classnames'
+import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
+import { isNil } from 'lodash'
+import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
+import { Flex } from 'antd'
 
 export interface PathTargetProps {
   value: ManyToOneRelationValueType
@@ -35,6 +39,7 @@ export const PathTarget = forwardRef(function PathTarget (
   const { t } = useTranslation()
   const [value, setValue] = React.useState<ManyToOneRelationValueType>(props.value ?? null)
   const { getStateClasses } = useDroppable()
+  const { mapToElementType } = useElementHelper()
 
   useEffect(() => {
     setValue(props.value ?? null)
@@ -54,29 +59,75 @@ export const PathTarget = forwardRef(function PathTarget (
 
   const displayText = getDisplayText()
 
+  const hasElementTag = value?.textInput !== true && !isNil(value?.fullPath)
+  const showElementTagPrefix = props.allowPathTextInput !== true && hasElementTag
+  const showElementTag = props.allowPathTextInput === true && hasElementTag
+
   return (
     <div
       ref={ ref }
 
       style={ { flexGrow: 1 } }
     >
-      <Input
-        className={ cn(...getStateClasses()) }
-        disabled={ props.disabled }
-        inherited={ props.inherited }
-        onChange={ (e) => {
-          const newValue: { textInput: true, fullPath: string } = {
-            textInput: true,
-            fullPath: e.currentTarget.value
-          }
+      { showElementTag
+        ? (
+          <Flex
+            align="center"
+            className={ cn(...getStateClasses()) }
+          >
 
-          setValue(newValue)
-          props.onChange?.(newValue)
-        } }
-        placeholder={ t(props.allowPathTextInput === true ? 'many-to-one-relation.drop-placeholder-text-input' : 'many-to-one-relation.drop-placeholder') }
-        readOnly={ props.allowPathTextInput !== true }
-        value={ displayText }
-      />
+            <Input
+              disabled={ props.disabled }
+              inherited={ props.inherited }
+              prefix={
+
+                <ElementTag
+                  disabled={ props.disabled === true || props.inherited === true }
+                  elementType={ mapToElementType(value.type) }
+                  id={ value.id }
+                  onClose={ () => {
+                    setValue(null)
+                    props.onChange?.(null)
+                  } }
+                  path={ String(value?.fullPath) }
+                  published={ value.isPublished ?? undefined }
+                />
+              }
+              readOnly
+            />
+
+          </Flex>
+          )
+        : (
+          <Input
+            className={ cn(...getStateClasses()) }
+            disabled={ props.disabled }
+            inherited={ props.inherited }
+            onChange={ (e) => {
+              const newValue: { textInput: true, fullPath: string } = {
+                textInput: true,
+                fullPath: e.currentTarget.value
+              }
+
+              setValue(newValue)
+              props.onChange?.(newValue)
+            } }
+            placeholder={ showElementTagPrefix ? undefined : t(props.allowPathTextInput === true ? 'many-to-one-relation.drop-placeholder-text-input' : 'many-to-one-relation.drop-placeholder') }
+            prefix={ showElementTagPrefix
+              ? (
+                <ElementTag
+                  disabled={ props.disabled === true || props.inherited === true }
+                  elementType={ props.allowPathTextInput === true ? undefined : mapToElementType(value.type) }
+                  id={ props.allowPathTextInput === true ? undefined : value.id }
+                  path={ String(value?.fullPath) }
+                  published={ value.isPublished ?? undefined }
+                />
+                )
+              : undefined }
+            readOnly={ props.allowPathTextInput !== true }
+            value={ showElementTagPrefix ? undefined : displayText }
+          />
+          )}
     </div>
   )
 })

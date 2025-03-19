@@ -11,31 +11,36 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type UploadListProps } from 'antd/es/upload'
+import AntUploadList from 'antd/es/upload/UploadList'
 import React from 'react'
-import { Progress } from 'antd'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyles } from './upload-list.styles'
+import { useTranslation } from 'react-i18next'
+import { useUploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 
-export const UploadList = (props: UploadListProps): React.JSX.Element => {
+export const UploadList = (): React.JSX.Element => {
   const { styles } = useStyles()
-  const items = props.items!
-  const totalCount = items.length
-  const doneCount = items.filter(file => file.status === 'done').length
+  const { t } = useTranslation()
+  const { successItems, failedItems } = useUploadContext()
 
   return (
     <div className={ styles.uploadList }>
-      <Progress
-        { ...props.progress }
-        aria-label={ 'upload progress' }
-        percent={ (doneCount / totalCount) * 100 }
-        showInfo={ false }
-        size={ [-1, 2] }
-        type="line"
-      />
+      <p>{t('asset.upload.files.completed-actions')}</p>
 
-      <span>
-        {doneCount}/{totalCount} files uploaded
-      </span>
+      {successItems.length > 0 && (
+        <Flex className={ 'success_items' }>
+          <Icon value={ 'checkmark' } />
+          <span>{t('asset.upload.files.uploaded', { successItems: successItems.length })}</span>
+        </Flex>
+      )}
+
+      <AntUploadList
+        iconRender={ () => <Icon value={ 'alert' } /> }
+        items={ failedItems }
+        locale={ {} }
+        showRemoveIcon={ false }
+      />
     </div>
   )
 }

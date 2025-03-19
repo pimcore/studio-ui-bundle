@@ -19,10 +19,11 @@ export interface KeyedListData {
   operations: {
     add: (key: string, value?: any) => void
     remove: (key: string) => void
-    update: (name: NamePath, value: any) => void
+    update: (name: NamePath, value: any, isInitialValue: boolean) => void
     getValue: (name: NamePath) => any
   }
   onChange?: (value: KeyedListData['values']) => void
+  getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
 }
 
 export type KeyedListContextProps = KeyedListData | undefined
@@ -34,6 +35,7 @@ export interface KeyedListProviderProps {
   values: KeyedListData['values']
   operations: KeyedListData['operations']
   onChange?: (value: KeyedListData['values']) => void
+  getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
 }
 
 export const KeyedListProvider = ({ children, ...props }: KeyedListProviderProps): React.JSX.Element => {

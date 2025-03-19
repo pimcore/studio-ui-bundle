@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useStyles } from './stack-list-item.styles'
 import { type UniqueIdentifier } from '@dnd-kit/core'
 import { useSortable } from '@dnd-kit/sortable'
@@ -28,7 +28,8 @@ export interface StackListItemProps {
   meta?: unknown
 }
 
-export const StackListItem = ({ id, children, body, sortable = false, renderLeftToolbar, renderRightToolbar }: StackListItemProps): React.JSX.Element => {
+export const StackListItem = (props: StackListItemProps): React.JSX.Element => {
+  const { id, children, body, sortable = false, renderLeftToolbar, renderRightToolbar } = props
   const { styles } = useStyles()
   const { listeners, setNodeRef, setActivatorNodeRef, transform, transition } = useSortable({ id })
 
@@ -37,7 +38,7 @@ export const StackListItem = ({ id, children, body, sortable = false, renderLeft
     transition: transition ?? undefined
   }
 
-  return (
+  return useMemo(() => (
     <div
       className={ ['stack-list-item', styles.stackListItem].join(' ') }
       ref={ setNodeRef }
@@ -68,5 +69,5 @@ export const StackListItem = ({ id, children, body, sortable = false, renderLeft
         </div>
       )}
     </div>
-  )
+  ), [props, transform])
 }

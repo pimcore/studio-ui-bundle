@@ -47,6 +47,7 @@ export interface VisibleFieldDefinition {
 
 export interface ManyToManyObjectRelationProps extends IRelationAllowedTypesDataComponent, ManyToManyObjectRelationClassDefinitionProps {
   disabled?: boolean
+  inherited?: boolean
   value?: ManyToManyRelationValue | null
   onChange?: (value?: ManyToManyRelationValue | null) => void
   columnDefinition?: Array<ColumnDef<any>>
@@ -93,7 +94,7 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
     visibleFieldDefinitions[key] = field
   }
 
-  const columnDefinition = visibleFieldsToColumnDefinitions(visibleFieldDefinitions)
+  const columnDefinition = visibleFieldsToColumnDefinitions(visibleFieldDefinitions, props.inherited === true || props.disabled === true)
 
   return (
     <ManyToManyRelation

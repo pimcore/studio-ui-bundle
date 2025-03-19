@@ -18,6 +18,10 @@ import React from 'react'
 import { TreeFilterProvider } from './provider/tree-filter-provider/tree-filter-provider'
 import { TreePermissionProvider } from './provider/tree-permission-provider/tree-permission-provider'
 import { TreeIdProvider } from './provider/tree-id-provider/tree-id-provider'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { useNodeApiHook as useNodeApiHookDataObject } from '@Pimcore/modules/data-object/tree/hooks/use-node-api-hook'
+import { useNodeApiHook as useNodeApiHookAsset } from '@Pimcore/modules/asset/tree/hooks/use-node-api-hook'
+import { NodeApiHookProvider } from '@Pimcore/components/element-tree/provider/node-api-hook-provider/node-api-hook-provider'
 
 export interface TreeWidgetProps {
   id: string
@@ -30,25 +34,34 @@ export interface TreeWidgetProps {
   showRoot?: boolean
 }
 export const TreeWidget = ({ id, elementType, rootFolderId, classes, pql, pageSize, contextPermissions, showRoot = false }: TreeWidgetProps): React.JSX.Element => {
+  const { asset_tree_paging_limit: pageSizeAsset, object_tree_paging_limit: pageSizeObject } = useSettings()
+
+  const usedPageSize = pageSize ?? (elementType === elementTypes.asset ? pageSizeAsset : pageSizeObject)
+
   return (
     <TreeIdProvider treeId={ id }>
       <TreePermissionProvider permissions={ { ...contextPermissions } }>
         <TreeFilterProvider
           classIds={ classes }
-          pageSize={ pageSize ?? undefined }
+          pageSize={ usedPageSize }
           pqlQuery={ pql ?? undefined }
         >
           { elementType === elementTypes.asset && (
-          <AssetTreeContainer
-            id={ rootFolderId ?? 1 }
-            showRoot={ showRoot }
-          />
+          <NodeApiHookProvider nodeApiHook={ useNodeApiHookAsset }>
+            <AssetTreeContainer
+              id={ rootFolderId ?? 1 }
+              showRoot={ showRoot }
+            />
+          </NodeApiHookProvider>
           )}
           { elementType === elementTypes.dataObject && (
-          <DataObjectTreeContainer
-            id={ rootFolderId ?? 1 }
-            showRoot={ showRoot }
-          />
+
+          <NodeApiHookProvider nodeApiHook={ useNodeApiHookDataObject }>
+            <DataObjectTreeContainer
+              id={ rootFolderId ?? 1 }
+              showRoot={ showRoot }
+            />
+          </NodeApiHookProvider>
           )}
         </TreeFilterProvider>
       </TreePermissionProvider>

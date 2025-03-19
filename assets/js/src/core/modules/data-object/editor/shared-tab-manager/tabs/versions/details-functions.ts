@@ -11,13 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { every, get, isEmpty, isEqual, isObject, isUndefined } from 'lodash'
+import { differenceWith, every, get, isEmpty, isEqual, isObject, isUndefined } from 'lodash'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { type Layout } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import type { DataObjectVersion } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
 import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
-import { DATATYPE_LIST, type IFormattedDataStructureData, type IGetFormattedDataStructureProps } from './types'
+import { DATATYPE_LIST, type IFormattedDataStructureData, type IGetFormattedDataStructureProps, type IFieldCollectionValue } from './types'
+import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
 
 const isFieldValueEmpty = (fieldValue: any): boolean => {
   if (isObject(fieldValue)) {
@@ -133,6 +134,16 @@ export const versionsDataToTableData = ({ data }: { data: IFormattedDataStructur
 
     if (isComparisonMode && !isEqual(mainVersionItem?.fieldValue, compareVersionItem?.fieldValue)) {
       field.isModifiedValue = true
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      if (mainVersionItem?.fieldData?.fieldtype === DynamicTypesList.FIELD_COLLECTIONS) {
+        const differences = differenceWith(mainVersionItem?.fieldValue as IFieldCollectionValue[], compareVersionItem?.fieldValue as IFieldCollectionValue[], (item1, item2) =>
+          item1?.type === item2?.type && isEqual(item1?.data, item2?.data)
+        )
+
+        field.fieldCollectionModifiedList = differences.map(item => item.type)
+      }
     }
 
     resultList.push(field)

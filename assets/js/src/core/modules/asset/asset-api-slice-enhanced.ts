@@ -74,24 +74,12 @@ const api = baseApi.enhanceEndpoints({
       }
     },
 
-    assetGetGrid: {
-      providesTags: (result, error, args) => {
-        const providingTagsForGrid: Tag[] = []
-
-        if (result === undefined) {
-          return []
-        }
-
-        for (const item of result.items) {
-          providingTagsForGrid.push(...providingTags.ASSET_DETAIL_ID(item.id!))
-        }
-
-        return providingTagsForGrid
-      }
-    },
-
     assetGetGridConfigurationByFolderId: {
       providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_DETAIL(args.folderId, args.configurationId)
+    },
+
+    assetGetGrid: {
+      providesTags: (result, error, args) => providingTags.ASSET_GRID_ID(args.body.folderId)
     },
 
     assetSaveGridConfiguration: {
@@ -121,6 +109,7 @@ export type * from './asset-api-slice.gen'
 export const {
   useAssetGetByIdQuery,
   useAssetGetTreeQuery,
+  useLazyAssetGetTreeQuery,
   useAssetUpdateByIdMutation,
   useAssetCloneMutation,
   useAssetReplaceMutation,
@@ -139,7 +128,8 @@ export const {
   useAssetUpdateGridConfigurationMutation,
   useAssetDeleteGridConfigurationByConfigurationIdMutation,
   useAssetGetGridConfigurationByFolderIdQuery,
-  useAssetGetAvailableGridColumnsQuery
+  useAssetGetAvailableGridColumnsQuery,
+  useAssetPatchFolderByIdMutation
 } = api
 
 export { api }

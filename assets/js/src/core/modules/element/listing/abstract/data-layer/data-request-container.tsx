@@ -17,8 +17,8 @@ import { useData } from './provider/data/use-data'
 
 export const DataRequestContainer = (): React.JSX.Element => {
   const { ViewComponent, useDataQueryHelper, useDataQuery } = useSettings()
-  const { getArgs } = useDataQueryHelper()
-  const dataQueryResult = useDataQuery(getArgs())
+  const { getArgs, dataLoadingState, setDataLoadingState } = useDataQueryHelper()
+  const dataQueryResult = useDataQuery(getArgs(), { skip: dataLoadingState !== 'config-changed' && dataLoadingState !== 'data-available' })
   const { setDataQueryResult, setData } = useData()
 
   useEffect(() => {
@@ -26,8 +26,11 @@ export const DataRequestContainer = (): React.JSX.Element => {
   }, [dataQueryResult])
 
   useEffect(() => {
-    setData(dataQueryResult.data)
-  }, [dataQueryResult.data])
+    if (dataQueryResult.isSuccess) {
+      setData(dataQueryResult.data)
+      setDataLoadingState('data-available')
+    }
+  }, [dataQueryResult.data, dataQueryResult.isSuccess])
 
   return useMemo(() => (
     <ViewComponent />

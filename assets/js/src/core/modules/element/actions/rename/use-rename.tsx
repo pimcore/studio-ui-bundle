@@ -18,7 +18,6 @@ import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
-import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
@@ -26,6 +25,8 @@ import { type GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { renameNode } from '@Pimcore/components/element-tree/element-tree-slice'
 
 export interface UseRenameHookReturn {
   rename: (parentId: number, currentLabel: string) => void
@@ -38,10 +39,10 @@ export interface UseRenameHookReturn {
 export const useRename = (elementType: ElementType, cacheKey?: string): UseRenameHookReturn => {
   const { t } = useTranslation()
   const modal = useFormModal()
-  const { refreshTree } = useRefreshTree(elementType)
   const { refreshGrid } = useRefreshGrid(elementType)
   const { elementPatch, getElementById } = useElementApi(elementType, cacheKey)
   const { isTreeActionAllowed } = useTreePermission()
+  const dispatch = useAppDispatch()
 
   const rename = (
     id: number,
@@ -134,10 +135,10 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
     })
 
     try {
-      await elementRenameTask
+      const success = await elementRenameTask
 
-      if (parentId !== undefined) {
-        refreshTree(parentId)
+      if (success) {
+        dispatch(renameNode({ elementType, nodeId: String(id), newLabel: value }))
       }
     } catch (error) {
       console.error('Error renaming ' + elementType, error)

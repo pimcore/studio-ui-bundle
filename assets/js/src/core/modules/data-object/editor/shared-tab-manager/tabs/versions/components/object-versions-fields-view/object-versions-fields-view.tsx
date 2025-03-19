@@ -27,15 +27,16 @@ interface IObjectVersionsFieldsViewProps {
   breadcrumbsList?: CategoriesList
   versionViewData: IObjectVersionsFieldsList['data']
   versionKeysList: VersionKeysList
+  isExpandedUnmodifiedFields: boolean
 }
 
 const SECTIONS_WITH_TRANSLATION: string[] = [VersionCategoryName.SYSTEM_DATA]
 
-export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, versionKeysList }: IObjectVersionsFieldsViewProps): React.JSX.Element => {
+export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, versionKeysList, isExpandedUnmodifiedFields }: IObjectVersionsFieldsViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
 
-  const renderSectionTitle = ({ key, isCommonSection }: { key: string, isCommonSection: boolean }): React.JSX.Element => {
+  const renderSectionTitle = ({ key, isCommonSection }: { key: string, isCommonSection: boolean }): React.JSX.Element | null => {
     const isShowValueWithTranslation = SECTIONS_WITH_TRANSLATION.includes(key)
     const textValue = isShowValueWithTranslation ? t(`version.category.title.${key}`) : key
 
@@ -45,13 +46,17 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
     const secondTitlePart = remainingTitleParts.length > 0 ? ` | ${remainingTitleParts.join(' | ')}` : ''
 
     return (
-      <Text
-        className={ cn(styles.sectionTitle, { [styles.subSectionTitle]: !isCommonSection }) }
-        strong
-      >
-        {firstTitlePart}
-        {!isEmptyValue(secondTitlePart) && <span className={ styles.subSectionText }>{secondTitlePart}</span>}
-      </Text>
+      (!isEmptyValue(firstTitlePart) || !isEmptyValue(secondTitlePart))
+        ? (
+          <Text
+            className={ cn(styles.sectionTitle, { [styles.subSectionTitle]: !isCommonSection }) }
+            strong
+          >
+            {firstTitlePart}
+            {!isEmptyValue(secondTitlePart) && <span className={ styles.subSectionText }>{secondTitlePart}</span>}
+          </Text>
+          )
+        : null
     )
   }
 
@@ -104,7 +109,9 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                                   versionFieldItemHighlight: isModifiedField && isSecondItem
                                 }) }
                                 datatype={ 'data' }
+                                fieldCollectionModifiedList={ fieldItem?.fieldCollectionModifiedList }
                                 fieldType={ fieldItem.Field.fieldtype }
+                                isExpandedUnmodifiedFields={ isExpandedUnmodifiedFields }
                                 key={ `${index}-${key}` }
                                 name={ fieldItem.Field.name }
                                 value={ fieldItem[key] }

@@ -35,6 +35,7 @@ import { toCssDimension } from '@Pimcore/utils/css'
 import { Content } from '@Pimcore/components/content/content'
 import type { ColumnDef } from '@tanstack/react-table'
 import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
+import { isEqual } from 'lodash'
 
 export interface ManyToManyRelationClassDefinitionProps {
   assetUploadPath?: string | null
@@ -49,6 +50,7 @@ export interface ManyToManyRelationClassDefinitionProps {
 
 export interface ManyToManyRelationProps extends IRelationAllowedTypesDataComponent, ManyToManyRelationClassDefinitionProps {
   disabled?: boolean
+  inherited?: boolean
   value?: ManyToManyRelationValue | null
   onChange?: (value?: ManyToManyRelationValue | null) => void
   isLoading?: boolean
@@ -65,7 +67,7 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
   const { onDrop, deleteItem, onSearch, addAssets, addItems, maxRemainingItems } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments)
 
   useEffect(() => {
-    if (value !== props.value) {
+    if (!isEqual(value, props.value ?? null)) {
       props.onChange?.(value)
     }
   }, [value])
@@ -99,12 +101,14 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
       >
         <ManyToManyRelationGrid
           assetInlineDownloadAllowed={ props.assetInlineDownloadAllowed ?? false }
+          className={ props.className }
           columnDefinition={ props.columnDefinition }
           deleteItem={ deleteItem }
           disabled={ props.disabled }
           enrichRowData={ props.enrichRowData }
           height={ props.height }
           hint={ props.hint }
+          inherited={ props.inherited }
           onUpdateCellData={ props.onUpdateCellData }
           value={ displayedValue }
           width={ props.width }
@@ -122,7 +126,10 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
           allowClear={ props.allowToClearRelation && props.disabled !== true }
           assetUploadPath={ props.assetUploadPath }
           disabled={ props.disabled }
-          empty={ () => { setValue(null) } }
+          empty={ () => {
+            setDisplayedValue(null)
+            setValue(null)
+          } }
           enableUpload={ props.assetsAllowed === true && props.disabled !== true }
           onSearch={ onSearch }
           uploadMaxItems={ maxRemainingItems !== undefined && maxRemainingItems > 0 ? maxRemainingItems : (props.maxItems ?? undefined) }

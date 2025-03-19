@@ -33,6 +33,7 @@ export const useStyles = createStyles(({ css, token }) => {
         padding: ${token.paddingXXS}px;
         background-color: ${token.colorBgContainerDisabled} !important;
         border: 1px solid transparent;
+        border-radius: ${token.borderRadius}px !important;
       }
       
       &.versionFieldItemHighlight {

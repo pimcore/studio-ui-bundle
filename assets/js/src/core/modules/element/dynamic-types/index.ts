@@ -46,6 +46,7 @@ import { type DynamicTypeGridCellAssetVersionPreviewFieldLabel } from './definti
 import { type DynamicTypeGridCellAsset } from './defintinitions/grid-cell/types/asset/dynamic-type-grid-cell-asset'
 import { type DynamicTypeGridCellObject } from './defintinitions/grid-cell/types/object/dynamic-type-grid-cell-object'
 import { type DynamicTypeGridCellDocument } from './defintinitions/grid-cell/types/document/dynamic-type-grid-cell-document'
+import { type DynamicTypeGridCellElement } from './defintinitions/grid-cell/types/element/dynamic-type-grid-cell-element'
 import { type DynamicTypeMetaDataRegistry } from './defintinitions/meta-data/dynamic-type-metadata-registry'
 import { type DynamicTypeMetaDataAsset } from './defintinitions/meta-data/types/dynamic-type-meta-data-asset'
 import { type DynamicTypeMetaDataCheckbox } from './defintinitions/meta-data/types/dynamic-type-meta-data-checkbox'
@@ -133,6 +134,9 @@ import { type DynamicTypeObjectDataFieldCollection } from './defintinitions/obje
 import { type DynamicTypeObjectDataObjectBrick } from './defintinitions/objects/data-related/types/dynamic-type-object-data-object-brick'
 import { type DynamicTypeGridCellDataObjectAdapter } from './defintinitions/grid-cell/types/data-object-adapter/dynamic-type-grid-cell-data-object-adapter'
 import { type DynamicTypeGridCellDataObjectActions } from './defintinitions/grid-cell/types/data-object-actions/dynamic-type-grid-cell-data-object-actions'
+import { type DynamicTypeGridCellDataObjectObjectBrick } from './defintinitions/grid-cell/types/data-object-object-brick/dynamic-type-grid-cell-data-object-adapter'
+import { type DynamicTypeBatchEditDataObjectAdapter } from './defintinitions/batch-edits/types/data-object-adapter/dynamic-type-batch-edit-data-object-adpater'
+import { type DynamicTypeBatchEditDataObjectObjectBrick } from './defintinitions/batch-edits/types/data-object-object-brick/dynamic-type-batch-edit-data-object-object-brick'
 
 moduleSystem.registerModule({
   onInit () {
@@ -147,6 +151,8 @@ moduleSystem.registerModule({
 
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditText>(serviceIds['DynamicTypes/BatchEdit/Text']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditTextArea>(serviceIds['DynamicTypes/BatchEdit/TextArea']))
+    batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditDataObjectAdapter>(serviceIds['DynamicTypes/BatchEdit/DataObjectAdapter']))
+    batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditDataObjectObjectBrick>(serviceIds['DynamicTypes/BatchEdit/DataObjectObjectBrick']))
 
     const listingRegistry = container.get<DynamicTypeListingRegistry>(serviceIds['DynamicTypes/ListingRegistry'])
 
@@ -181,9 +187,11 @@ moduleSystem.registerModule({
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellAsset>(serviceIds['DynamicTypes/GridCell/Asset']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellObject>(serviceIds['DynamicTypes/GridCell/Object']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDocument>(serviceIds['DynamicTypes/GridCell/Document']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellElement>(serviceIds['DynamicTypes/GridCell/Element']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellLanguageSelect>(serviceIds['DynamicTypes/GridCell/LanguageSelect']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellTranslate>(serviceIds['DynamicTypes/GridCell/Translate']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectAdapter>(serviceIds['DynamicTypes/GridCell/DataObjectAdapter']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectObjectBrick>(serviceIds['DynamicTypes/GridCell/DataObjectObjectBrick']))
 
     const metadataRegistry = container.get<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
 

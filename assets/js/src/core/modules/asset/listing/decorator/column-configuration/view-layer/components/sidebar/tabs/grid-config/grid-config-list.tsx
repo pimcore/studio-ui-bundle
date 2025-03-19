@@ -72,6 +72,7 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
       <StackList
         items={ stackListItems }
         onItemsChange={ onItemsChange }
+        sortable
       />
       ) }
     </>
