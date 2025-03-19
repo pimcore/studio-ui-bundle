@@ -38,8 +38,7 @@ export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn =
   }
 
   const unpublishTreeNode = (node: TreeNodeProps): void => {
-    const nodeId = parseInt(node.id)
-    executeElementTask(elementType, nodeId, 'unpublish')
+    executeElementTask(elementType, parseInt(node.id), 'unpublish')
   }
 
   const unpublishTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
