@@ -22,9 +22,9 @@ import { type ElementTask } from '@Pimcore/modules/element/hooks/use-element-hel
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
-import { type ElementIcon } from 'src/sdk/main'
 import { useDataObjectUpdateByIdMutation } from '../data-object-api-slice.gen'
 import { type EditorContainerProps } from '../editor/editor-container'
+import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 interface OpenDataObjectWidgetProps {
   config: EditorContainerProps
