@@ -31,7 +31,10 @@ export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn =
   const { executeElementTask } = useElementHelper()
 
   const isUnpublishHidden = (node: TreeNodeProps): boolean => {
-    return !isTreeActionAllowed(TreePermission.Unpublish) || node.isLocked || node.isPublished === false
+    return !isTreeActionAllowed(TreePermission.Unpublish) ||
+            node.type === 'folder' ||
+            node.isLocked ||
+            node.isPublished === false
   }
 
   const unpublishTreeNode = (node: TreeNodeProps): void => {

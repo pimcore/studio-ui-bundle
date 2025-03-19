@@ -27,64 +27,63 @@ import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unp
 import { useAddObject } from '../../actions/add-object/use-add-object'
 
 export interface DataObjectTreeContextMenuProps {
-    node: TreeNodeProps
-    children: React.ReactNode
+  node: TreeNodeProps
+  children: React.ReactNode
 }
 
 export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps): React.JSX.Element => {
-    const { t } = useTranslation()
-    const node = props.node ?? defaultProps
-    const { addFolderTreeContextMenuItem } = useAddFolder('data-object')
-    const { renameTreeContextMenuItem } = useRename('data-object', getElementActionCacheKey('data-object', 'rename', parseInt(node.id)))
-    const { deleteTreeContextMenuItem } = useDelete('data-object', getElementActionCacheKey('data-object', 'delete', parseInt(node.id)))
-    const { refreshTreeContextMenuItem } = useRefreshTree('data-object')
-    const { copyTreeContextMenuItem, cutTreeContextMenuItem, pasteTreeContextMenuItem, pasteCutContextMenuItem } = useCopyPaste('data-object')
-    const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem, isLockMenuHidden } = useLock('data-object')
-    const { unpublishTreeContextMenuItem } = useUnpublish('data-object')
-    const { addObjectTreeContextMenuItem } = useAddObject()
+  const { t } = useTranslation()
+  const node = props.node ?? defaultProps
+  const { addFolderTreeContextMenuItem } = useAddFolder('data-object')
+  const { renameTreeContextMenuItem } = useRename('data-object', getElementActionCacheKey('data-object', 'rename', parseInt(node.id)))
+  const { deleteTreeContextMenuItem } = useDelete('data-object', getElementActionCacheKey('data-object', 'delete', parseInt(node.id)))
+  const { refreshTreeContextMenuItem } = useRefreshTree('data-object')
+  const { copyTreeContextMenuItem, cutTreeContextMenuItem, pasteTreeContextMenuItem, pasteCutContextMenuItem } = useCopyPaste('data-object')
+  const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem, isLockMenuHidden } = useLock('data-object')
+  const { unpublishTreeContextMenuItem } = useUnpublish('data-object')
+  const { addObjectTreeContextMenuItem } = useAddObject()
 
-    const items: DropdownMenuProps['items'] = [
-        addObjectTreeContextMenuItem(node),
-        addFolderTreeContextMenuItem(node),
-        renameTreeContextMenuItem(node),
-        copyTreeContextMenuItem(node),
-        pasteTreeContextMenuItem(node),
-        cutTreeContextMenuItem(node),
-        unpublishTreeContextMenuItem(node),
-        pasteCutContextMenuItem(parseInt(node.id)),
-        deleteTreeContextMenuItem(node),
-
+  const items: DropdownMenuProps['items'] = [
+    addObjectTreeContextMenuItem(node),
+    addFolderTreeContextMenuItem(node),
+    renameTreeContextMenuItem(node),
+    copyTreeContextMenuItem(node),
+    pasteTreeContextMenuItem(node),
+    cutTreeContextMenuItem(node),
+    unpublishTreeContextMenuItem(node),
+    pasteCutContextMenuItem(parseInt(node.id)),
+    deleteTreeContextMenuItem(node),
+    {
+      label: t('element.tree.context-menu.advanced'),
+      key: 'advanced',
+      icon: <Icon value={ 'more' } />,
+      hidden: isLockMenuHidden(node),
+      children: [
         {
-            label: t('element.tree.context-menu.advanced'),
-            key: 'advanced',
-            icon: <Icon value={'more'} />,
-            hidden: isLockMenuHidden(node),
-            children: [
-                {
-                    label: t('element.lock'),
-                    key: 'advanced-lock',
-                    icon: <Icon value={'lock'} />,
-                    hidden: isLockMenuHidden(node),
-                    children: [
-                        lockTreeContextMenuItem(node),
-                        lockAndPropagateTreeContextMenuItem(node),
-                        unlockTreeContextMenuItem(node),
-                        unlockAndPropagateTreeContextMenuItem(node)
-                    ]
-                }
-            ]
-        },
-        refreshTreeContextMenuItem(node)
-    ]
+          label: t('element.lock'),
+          key: 'advanced-lock',
+          icon: <Icon value={ 'lock' } />,
+          hidden: isLockMenuHidden(node),
+          children: [
+            lockTreeContextMenuItem(node),
+            lockAndPropagateTreeContextMenuItem(node),
+            unlockTreeContextMenuItem(node),
+            unlockAndPropagateTreeContextMenuItem(node)
+          ]
+        }
+      ]
+    },
+    refreshTreeContextMenuItem(node)
+  ]
 
-    return (
-        <>
-            <Dropdown
-                menu={{ items }}
-                trigger={['contextMenu']}
-            >
-                {props.children}
-            </Dropdown>
-        </>
-    )
+  return (
+    <>
+      <Dropdown
+        menu={ { items } }
+        trigger={ ['contextMenu'] }
+      >
+        {props.children}
+      </Dropdown>
+    </>
+  )
 }
