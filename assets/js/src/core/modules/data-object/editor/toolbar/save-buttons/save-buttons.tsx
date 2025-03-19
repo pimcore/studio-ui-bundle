@@ -42,7 +42,7 @@ import { useTranslation } from 'react-i18next'
 export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DataObjectContext)
-  const { dataObject, removeTrackedChanges, publishDraft } = useDataObjectDraft(id)
+  const { dataObject, removeTrackedChanges, publishDraft, unpublishDraft } = useDataObjectDraft(id)
   const { save: saveDataObject, isLoading, isSuccess, isError, error } = useSave()
   const { isAutoSaveLoading, runningTask } = useSaveContext()
   const {
@@ -56,6 +56,8 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { deleteDraft, isLoading: isDraftDeleteLoading, buttonText: deleteDraftButtonText } = useDeleteDraft()
   const messageApi = useMessage()
   const { executeDataObjectTask } = useDataObjectHelper()
+
+  console.log('published: ', dataObject?.published)
 
   const isAutoSaved = dataObject?.draftData?.isAutoSave === true
 
@@ -106,7 +108,10 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
               disabled={ isLoading || isSchedulesLoading || isDraftLoading }
               hidden={ dataObject?.published }
               key="unpublish"
-              onClick={ async () => { await executeDataObjectTask(dataObject.id, 'unpublish') } }
+              onClick={ async () => {
+                void executeDataObjectTask(dataObject.id, 'unpublish')
+                unpublishDraft()
+              } }
               type="default"
             >
               {t('element.unpublish')}
