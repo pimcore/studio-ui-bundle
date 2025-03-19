@@ -17,7 +17,7 @@ import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 import {
   type AbstractObjectDataDefinition,
   type DynamicTypeObjectDataAbstract
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
 import cn from 'classnames'
 import { useInheritanceOverlayStyle } from '@Pimcore/components/inheritance-overlay/hooks/use-inheritance-overlay-style'
 
