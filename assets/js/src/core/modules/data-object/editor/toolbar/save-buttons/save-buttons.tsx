@@ -56,9 +56,6 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { deleteDraft, isLoading: isDraftDeleteLoading, buttonText: deleteDraftButtonText } = useDeleteDraft()
   const messageApi = useMessage()
   const { executeDataObjectTask } = useDataObjectHelper()
-
-  console.log('published: ', dataObject?.published)
-
   const isAutoSaved = dataObject?.draftData?.isAutoSave === true
 
   useEffect(() => {
