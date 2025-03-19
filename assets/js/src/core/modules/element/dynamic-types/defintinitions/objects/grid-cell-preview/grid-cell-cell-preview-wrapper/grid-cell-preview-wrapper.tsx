@@ -17,7 +17,6 @@ import { useStyles } from './grid-cell-preview-wrapper.styles'
 interface GridPreviewWrapperProps {
   children: React.ReactNode
   overflow?: 'auto'
-  ref?: React.Ref<HTMLDivElement>
 }
 
 export const GridCellPreviewWrapper = React.forwardRef<HTMLDivElement, GridPreviewWrapperProps>(

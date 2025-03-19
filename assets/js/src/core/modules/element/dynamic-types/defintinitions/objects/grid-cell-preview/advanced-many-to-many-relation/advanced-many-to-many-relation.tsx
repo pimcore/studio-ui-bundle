@@ -58,7 +58,7 @@ export const AdvancedManyToManyRelationList = ({ value, columnDefinition }: Adva
         </thead>
         <tbody>
           {value.map((item, index) => (
-            <tr key={ index }>
+            <tr key={ `${item.element.fullPath}-${index}` }>
               <td style={ { lineHeight: 0 } }>
                 <ElementTag
                   path={ item.element.fullPath }
@@ -66,7 +66,7 @@ export const AdvancedManyToManyRelationList = ({ value, columnDefinition }: Adva
                 />
               </td>
               {columnDefinition.map((col) => (
-                <td key={ col.key }>{item.data?.[col.key] ?? ''}</td>
+                <td key={ `${col.key}-${index}` }>{item.data?.[col.key] ?? ''}</td>
               ))}
             </tr>
           ))}

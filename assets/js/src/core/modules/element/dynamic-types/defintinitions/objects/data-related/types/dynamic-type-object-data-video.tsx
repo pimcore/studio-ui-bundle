@@ -25,7 +25,7 @@ import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-ove
 import { Flex } from '@Pimcore/components/flex/flex'
 import { VideoPreview } from '../components/video/preview'
 import { GridCellPreviewWrapper } from '../../grid-cell-preview/grid-cell-cell-preview-wrapper/grid-cell-preview-wrapper'
-import { useTranslation } from 'react-i18next'
+import { Trans } from 'react-i18next'
 
 export type VideoObjectDataDefinition = AbstractObjectDataDefinition & VideoProps & {
   allowedTypes?: VideoType[] | null
@@ -49,7 +49,6 @@ export class DynamicTypeObjectDataVideo extends DynamicTypeObjectDataAbstract {
 
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
     const value: VideoValue | null = props.cellProps.getValue()
-    const { t } = useTranslation()
 
     return (
       <GridCellPreviewWrapper>
@@ -66,7 +65,7 @@ export class DynamicTypeObjectDataVideo extends DynamicTypeObjectDataAbstract {
           )}
 
           { !isNil(value) && value?.type !== 'asset' && (
-            <span style={ { whiteSpace: 'normal' } }>{t('video.type.' + value.type)} ({t('video.id')}: {value.data})</span>
+            <span style={ { whiteSpace: 'normal' } }><Trans>video.type.{value.type}</Trans> (<Trans>video.id</Trans>: {value.data})</span>
           )}
         </Flex>
       </GridCellPreviewWrapper>
