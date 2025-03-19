@@ -12,6 +12,7 @@
 */
 
 import React, { useMemo } from 'react'
+import { isEmpty } from 'lodash'
 import { BaseView } from '../../../layout-related/views/base-view'
 import { type ObjectBrickProps } from './object-brick'
 import { Form } from '@Pimcore/components/form/form'
@@ -24,7 +25,12 @@ export interface ObjectBrickContentProps extends ObjectBrickProps {}
 
 export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.Element => {
   const { values, operations } = useKeyedList()
-  const tabItems: ITabsProps['items'] = Object.keys(values).map((key) => {
+
+  const valuesKeys = Object.keys(values)
+  const allowedTypes = props.allowedTypes?.filter((item) => !valuesKeys.includes(item))
+  const isShowAddButton = !isEmpty(allowedTypes)
+
+  const tabItems: ITabsProps['items'] = valuesKeys?.map((key) => {
     return {
       key,
       label: key,
@@ -50,7 +56,7 @@ export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.El
       collapsed={ props.collapsed }
       collapsible={ props.collapsible }
       contentPadding={ 'none' }
-      extra={ <ObjectBrickAddButton allowedTypes={ props.allowedTypes } /> }
+      extra={ isShowAddButton && <ObjectBrickAddButton allowedTypes={ allowedTypes } /> }
       extraPosition='start'
       theme='default'
       title={ props.title }
