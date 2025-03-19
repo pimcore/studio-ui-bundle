@@ -21,7 +21,9 @@ const initialState: UserInformation = {
   id: 0,
   username: '',
   permissions: [],
-  isAdmin: false
+  isAdmin: false,
+  classes: [],
+  docTypes: []
 }
 
 const slice = createSlice({

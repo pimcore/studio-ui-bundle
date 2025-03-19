@@ -21,12 +21,15 @@ import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-h
 import {
   type ClassDefinitionListItem
 } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
-import { useClassDefinitions } from '@Pimcore/modules/class-definition/hooks/use-class-definitions'
-import _ from 'lodash'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
+import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
+import { isEmpty } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDataObjectAddMutation } from '../../data-object-api-slice.gen'
 import { useDataObjectHelper } from '../../hooks/use-data-object-helper'
+import { useClassDefinitions } from '../../utils/provider/class-defintions/use-class-definitions'
 
 interface UseAddObjectHookReturn {
   addObjectTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -38,18 +41,17 @@ export const useAddObject = (): UseAddObjectHookReturn => {
   const [addDataObjectMutation] = useDataObjectAddMutation()
   const dispatch = useAppDispatch()
   const { openDataObject } = useDataObjectHelper()
-  const { loadClassDefinitions, getClassDefinitions } = useClassDefinitions()
-
-  void loadClassDefinitions()
+  const { isTreeActionAllowed } = useTreePermission()
+  const { getClassDefinitionsForCurrentUser } = useClassDefinitions()
 
   const getClassEntries = (node: TreeNodeProps): ItemType[] => {
     let classHirachy: ItemType[] = []
-    const classDefinitions = getClassDefinitions()
+    const classDefinitions = getClassDefinitionsForCurrentUser()
 
     const structuredClassDefinitions = [...classDefinitions]
       .sort((a, b) => a.name.localeCompare(b.name))
       .reduce<Record<string, ClassDefinitionListItem[]>>((acc, classDefinition) => {
-      const groupName = _.isEmpty(classDefinition.group)
+      const groupName = isEmpty(classDefinition.group)
         ? 'undefined'
         : classDefinition.group
 
@@ -141,11 +143,18 @@ export const useAddObject = (): UseAddObjectHookReturn => {
     }
   }
 
+  const isAddObjectHidden = (node: TreeNodeProps): boolean => {
+    return !isTreeActionAllowed(TreePermission.Add) ||
+            !checkElementPermission(node.permissions, 'create') ||
+            isEmpty(getClassDefinitionsForCurrentUser())
+  }
+
   const addObjectTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('data-object.tree.context-menu.add-object'),
       key: 'add-object',
       icon: <Icon value={ 'folder' } />,
+      hidden: isAddObjectHidden(node),
       children: getClassEntries(node)
     }
   }
