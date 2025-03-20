@@ -19,6 +19,7 @@ import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Text } from '@Pimcore/components/text/text'
 import { Box } from '@Pimcore/components/box/box'
 import { Divider } from '@Pimcore/components/divider/divider'
+import { useStyles as useCommonStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/styles/common-versions-fields-view.styles'
 import { useStyles } from './version-block.styles'
 
 export interface IVersionBlockProps extends AbstractObjectDataDefinition {
@@ -27,9 +28,11 @@ export interface IVersionBlockProps extends AbstractObjectDataDefinition {
 }
 
 const renderTitle = (title: string): React.JSX.Element => {
+  const { styles } = useCommonStyles()
+
   if (!isEmptyValue(title)) {
     return (
-      <Text>{title}</Text>
+      <Text className={ styles.fieldTitle }>{title}</Text>
     )
   }
 
@@ -38,6 +41,7 @@ const renderTitle = (title: string): React.JSX.Element => {
 
 export const VersionBlock = ({ children, value }: IVersionBlockProps): React.JSX.Element => {
   const { styles } = useStyles()
+  const { styles: commonStyles } = useCommonStyles()
 
   const blocksCount = value.length
   const lastItemIndex = blocksCount - 1
@@ -63,7 +67,7 @@ export const VersionBlock = ({ children, value }: IVersionBlockProps): React.JSX
                 >
                   {renderTitle(blockFieldTitle)}
                   <DataComponent
-                    className="versionFieldItem"
+                    className={ commonStyles.objectSectionFieldItem }
                     value={ blockFieldValue }
                     { ...blockItem }
                   />
