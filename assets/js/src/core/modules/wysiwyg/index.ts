@@ -11,22 +11,19 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import { type WysiwygProps } from './interface/wysiwyg'
+import { moduleSystem } from '@Pimcore/app/module-system/module-system'
+import { ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { container } from '@Pimcore/app/depency-injection'
+import DefaultWysiwygEditor from './default-wysiwyg-editor/default-wysiwyg-editor'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { ComponentRegistry } from '../app/component-registry/component-registry'
 
-export const Wysiwyg = (props: WysiwygProps): React.JSX.Element => {
-  const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
+moduleSystem.registerModule({
+  onInit: () => {
+    const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
 
-  const WysiwygEditor = componentRegistry.get<WysiwygProps>('wysiwygEditor')!
-
-  return (
-    <WysiwygEditor
-      { ...props }
-    />
-  )
-}
-
-export default Wysiwyg
+    componentRegistry.register({
+      name: 'wysiwygEditor',
+      component: DefaultWysiwygEditor
+    })
+  }
+})

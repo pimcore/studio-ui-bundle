@@ -1,0 +1,1 @@
+export * from  '@Pimcore/modules/app/component-registry/component-registry'

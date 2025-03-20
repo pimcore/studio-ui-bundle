@@ -18,7 +18,7 @@ import { useStyles } from './default-wysiwyg-editor.styles'
 
 export const DefaultWysiwygEditor = ({ value, onChange, disabled }: WysiwygProps): React.JSX.Element => {
   const editorRef = useRef<HTMLDivElement>(null)
-  const { styles } = useStyles() // Pass disabled as a parameter to useStyles
+  const { styles } = useStyles()
 
   useEffect(() => {
     if (!isNull(editorRef.current) && editorRef.current.innerHTML !== value) {
@@ -34,7 +34,7 @@ export const DefaultWysiwygEditor = ({ value, onChange, disabled }: WysiwygProps
 
   return (
     <div
-      className={ styles.editor } // Use className instead of inline styles
+      className={ styles.editor }
       contentEditable={ disabled !== true }
       onInput={ handleInput }
       ref={ editorRef }

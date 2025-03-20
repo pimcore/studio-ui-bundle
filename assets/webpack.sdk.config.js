@@ -57,6 +57,7 @@ Encore
   .addEntry('api/user/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'user', 'index.ts'))
   .addEntry('api/version/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'version', 'index.ts'))
   .addEntry('api/workflow/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'workflow', 'index.ts'))
+  .addEntry('modules/app/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'app', 'index.ts'))
   .addEntry('modules/asset/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'asset', 'index.ts'))
   .addEntry('modules/class-definitions/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'class-definitions', 'index.ts'))
   .addEntry('modules/element/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'element', 'index.ts'))

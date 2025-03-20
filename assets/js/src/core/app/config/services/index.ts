@@ -180,9 +180,6 @@ container.bind(serviceIds['DataObject/Editor/FolderTabManager']).to(FolderTabMan
 // Icon library
 container.bind(serviceIds.iconLibrary).to(IconLibrary).inSingletonScope()
 
-// WYSIWYG
-container.bind(serviceIds.wysiwyg).toConstantValue(DefaultWysiwygEditor)
-
 // dynamic types field filters
 container.bind(serviceIds['DynamicTypes/FieldFilterRegistry']).to(DynamicTypeFieldFilterRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Text']).to(DynamicTypeFieldFilterText).inSingletonScope()
