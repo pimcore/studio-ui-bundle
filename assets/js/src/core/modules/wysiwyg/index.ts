@@ -12,7 +12,7 @@
 */
 
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
+import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { container } from '@Pimcore/app/depency-injection'
 import DefaultWysiwygEditor from './default-wysiwyg-editor/default-wysiwyg-editor'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'

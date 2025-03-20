@@ -15,12 +15,12 @@ import React from 'react'
 import { type WysiwygProps } from './interface/wysiwyg'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { ComponentRegistry } from '../app/component-registry/component-registry'
+import { type ComponentRegistry } from '../app/component-registry/component-registry'
 
 export const Wysiwyg = (props: WysiwygProps): React.JSX.Element => {
   const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
 
-  const WysiwygEditor = componentRegistry.get<WysiwygProps>('wysiwygEditor')!
+  const WysiwygEditor = componentRegistry.get<WysiwygProps>('wysiwygEditor')
 
   return (
     <WysiwygEditor
