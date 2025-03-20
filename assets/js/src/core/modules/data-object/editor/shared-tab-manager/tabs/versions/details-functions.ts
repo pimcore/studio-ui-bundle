@@ -142,9 +142,15 @@ export const versionsDataToTableData = ({ data }: { data: IFormattedDataStructur
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       if (mainVersionItem?.fieldData?.fieldtype === DynamicTypesList.FIELD_COLLECTIONS) {
-        const differences = differenceWith(mainVersionItem?.fieldValue as IFieldCollectionValue[], compareVersionItem?.fieldValue as IFieldCollectionValue[], (item1, item2) =>
-          item1?.type === item2?.type && isEqual(item1?.data, item2?.data)
-        )
+        const mainVersionLength = mainVersionItem?.fieldValue?.length
+        const compareVersionLength = compareVersionItem?.fieldValue?.length
+
+        const mainList = compareVersionLength > mainVersionLength ? compareVersionItem : mainVersionItem
+        const compareList = mainVersionLength < compareVersionLength ? mainVersionItem : compareVersionItem
+
+        const differences = differenceWith(mainList?.fieldValue as IFieldCollectionValue[], compareList?.fieldValue as IFieldCollectionValue[], (item1, item2) => {
+          return item1?.type === item2?.type && isEqual(item1?.data, item2?.data)
+        })
 
         field.fieldCollectionModifiedList = differences.map(item => item.type)
       }
