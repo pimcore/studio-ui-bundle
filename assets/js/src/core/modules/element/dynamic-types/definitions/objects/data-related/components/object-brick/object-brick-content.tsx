@@ -12,6 +12,9 @@
 */
 
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+import { isEmpty } from 'lodash'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { BaseView } from '../../../layout-related/views/base-view'
 import { type ObjectBrickProps } from './object-brick'
 import { Form } from '@Pimcore/components/form/form'
@@ -25,9 +28,18 @@ export interface ObjectBrickContentProps extends ObjectBrickProps {}
 export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.Element => {
   const { values, operations } = useKeyedList()
 
+  const modal = useFormModal()
+  const { t } = useTranslation()
+
+  const maxItemsCount = props?.maxItems ?? 0
+  const valuesKeys = Object.keys(values)
   const isNoteditable = props.noteditable === true
 
-  const tabItems: ITabsProps['items'] = Object.keys(values).map((key) => {
+  const allowedTypes = props.allowedTypes?.filter((item) => !valuesKeys.includes(item))
+  const isItemLimitReached = maxItemsCount > 0 && valuesKeys.length === maxItemsCount
+  const isHideAddButton = isNoteditable || isItemLimitReached || isEmpty(allowedTypes)
+
+  const tabItems: ITabsProps['items'] = valuesKeys?.map((key) => {
     return {
       key,
       label: key,
@@ -47,7 +59,14 @@ export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.El
   })
 
   const onClose: ITabsProps['onClose'] = (key: string) => {
-    operations.remove(key)
+    modal.confirm({
+      content: (
+        <span>{t('element.delete.confirmation.text')}</span>
+      ),
+      okText: t('yes'),
+      cancelText: t('no'),
+      onOk: () => { operations.remove(key) }
+    })
   }
 
   return useMemo(() => (
@@ -56,7 +75,7 @@ export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.El
       collapsed={ props.collapsed }
       collapsible={ props.collapsible }
       contentPadding={ 'none' }
-      extra={ !isNoteditable && <ObjectBrickAddButton allowedTypes={ props.allowedTypes } /> }
+      extra={ !isHideAddButton && <ObjectBrickAddButton allowedTypes={ allowedTypes } /> }
       extraPosition='start'
       theme='default'
       title={ props.title }
