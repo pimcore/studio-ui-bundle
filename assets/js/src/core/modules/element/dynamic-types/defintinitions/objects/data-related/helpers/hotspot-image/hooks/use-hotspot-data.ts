@@ -19,7 +19,7 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-data-provider'
 import { useTranslation } from 'react-i18next'
 import {
-  type ExpandedHotspotMarkerData,
+  type ExpandedHotspotMarkerData, type HotspotMarkerRelationDataType,
   type HotspotObjectType
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import {
@@ -35,7 +35,7 @@ interface UseHotspotDataHookReturn {
   updateName: (index: number, value: string) => void
   updateTextValue: (index: number, value: string) => void
   updateCheckboxValue: (index: number, checked: boolean) => void
-  updateRelationValue: (index: number, type: 'document' | 'asset' | 'object', newValue: ManyToOneRelationValue | null) => void
+  updateRelationValue: (index: number, type: HotspotMarkerRelationDataType, newValue: ManyToOneRelationValue | null) => void
   dataTypes: Array<{ key: string, label: string, onClick: () => void }>
   editModeHotspot: IHotspot | undefined
   setEditModeHotspot: (hotspot: IHotspot | undefined) => void
@@ -53,16 +53,14 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
   useEffect(() => {
     if (!isUndefined(hotspot) && !isUndefined(hotspot.data)) {
       setFields(hotspot.data)
-
       form.setFieldsValue(
         hotspot.data.reduce<Record<string, unknown>>((acc, field, index) => {
           acc[`name-${index}`] = field.name
           if (field.type === 'textfield' || field.type === 'textarea' || field.type === 'checkbox') {
             acc[`value-${index}`] = field.value
-          } else {
-            acc[`value-${index}`] = { ...field }
+          } else if (field.type === 'asset' || field.type === 'data-object' || field.type === 'document') {
+            acc[`value-${index}`] = { type: field.type, id: field.id, fullPath: field.fullPath, subtype: 'object' }
           }
-
           return acc
         }, {})
       )
@@ -95,7 +93,7 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
     setFields((prevFields) => [...prevFields, newField])
   }
 
-  const handleRelationTypeSelect = (type: 'document' | 'asset' | 'object'): void => {
+  const handleRelationTypeSelect = (type: 'document' | 'asset' | 'data-object'): void => {
     const newField: ExpandedHotspotMarkerData = {
       type,
       name: '',
@@ -123,9 +121,9 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
       onClick: () => { handleCheckboxTypeSelect() }
     },
     {
-      key: 'object',
+      key: 'data-object',
       label: t('hotspots-markers-data-modal.data-type.object'),
-      onClick: () => { handleRelationTypeSelect('object') }
+      onClick: () => { handleRelationTypeSelect('data-object') }
     },
     {
       key: 'document',
@@ -182,7 +180,7 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
 
   const updateRelationValue = (
     index: number,
-    type: 'document' | 'asset' | 'object',
+    type: HotspotMarkerRelationDataType,
     newValue: ManyToOneRelationValue | null
   ): void => {
     if (isUndefined(newValue?.fullPath)) return

@@ -131,7 +131,6 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
       ) }
 
       { props.assetInlineDownloadAllowed === true && value?.textInput !== true && (
-
         <Tooltip
           key="download"
           title={ t('download') }
@@ -148,6 +147,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           />
         </Tooltip>
       ) }
+
       { props.allowToClearRelation === true && (
 
         <Tooltip

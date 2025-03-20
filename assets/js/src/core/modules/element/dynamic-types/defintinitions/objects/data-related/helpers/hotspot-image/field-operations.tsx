@@ -125,7 +125,7 @@ const FieldOperations = ({
               }
             />
           )
-        case 'object':
+        case 'data-object':
           return (
             <ManyToOneRelation
               allowPathTextInput
@@ -135,7 +135,7 @@ const FieldOperations = ({
               onChange={
                   (newValue: ManyToOneRelationValue) => {
                     if (isNull(newValue) || isUndefined(newValue.fullPath)) return
-                    updateRelationValue(index, 'object', newValue)
+                    updateRelationValue(index, 'data-object', newValue)
                   }
               }
               value={
