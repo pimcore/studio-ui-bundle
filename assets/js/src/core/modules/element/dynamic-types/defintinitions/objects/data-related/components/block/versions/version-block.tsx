@@ -39,39 +39,41 @@ const renderTitle = (title: string): React.JSX.Element => {
 export const VersionBlock = ({ children, value }: IVersionBlockProps): React.JSX.Element => {
   const { styles } = useStyles()
 
+  const blocksCount = value.length
+  const lastItemIndex = blocksCount - 1
+
   if (isEmpty(children) || isEmpty(value)) {
     return <></>
   }
 
   return (
     <div className={ styles.block }>
-      {children.map((blockItem: any) => {
-        return value.map((blockValue: any, blockIndex: number) => {
-          const blockFieldName = blockItem.name
-          const blockFieldTitle: string = blockItem.title
-          const blockFieldValue = blockValue?.[blockFieldName]
+      {[...Array(blocksCount)].map((_, index) => (
+        <div key={ index }>
+          {children.map((blockItem: any, blockIndex: number) => {
+            const blockFieldName = blockItem.name
+            const blockFieldTitle: string = blockItem.title
+            const blockFieldValue = value[index]?.[blockFieldName]
 
-          const blockLength = value.length
-          const lastItemIndex = blockLength - 1
-
-          return (
-            <div key={ `${blockIndex}-${blockFieldName}` }>
-              <Box
-                className={ styles.blockItem }
-                padding={ { x: 'small', y: 'mini' } }
-              >
-                {renderTitle(blockFieldTitle)}
-                <DataComponent
-                  className="versionFieldItem"
-                  value={ blockFieldValue }
-                  { ...blockItem }
-                />
-              </Box>
-              {(blockIndex !== lastItemIndex) && <Divider className={ styles.divider } />}
-            </div>
-          )
-        })
-      })}
+            return (
+              <div key={ `${blockIndex}-${blockFieldName}` }>
+                <Box
+                  className={ styles.blockItem }
+                  padding={ { x: 'small', y: 'mini' } }
+                >
+                  {renderTitle(blockFieldTitle)}
+                  <DataComponent
+                    className="versionFieldItem"
+                    value={ blockFieldValue }
+                    { ...blockItem }
+                  />
+                </Box>
+              </div>
+            )
+          })}
+          {(index !== lastItemIndex) && <Divider className={ styles.divider } />}
+        </div>
+      ))}
     </div>
   )
 }
