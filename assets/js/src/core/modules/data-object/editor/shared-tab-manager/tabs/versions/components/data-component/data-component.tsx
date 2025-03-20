@@ -13,7 +13,7 @@
 
 import React from 'react'
 import { useInjection } from '@Pimcore/app/depency-injection'
-import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
+import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { Alert } from 'antd'
 import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
