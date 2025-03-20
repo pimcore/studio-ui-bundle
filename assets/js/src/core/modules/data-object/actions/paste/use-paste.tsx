@@ -49,7 +49,7 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
     return {
       label: t('element.tree.paste-as-child-recursive'),
       key: 'pasteAsChildRecursive',
-      icon: <Icon value={ 'paste' } />,
+      icon: <Icon value={'paste'} />,
       hidden: isPasteOpenHidden(node),
       onClick: async () => {
         dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
@@ -62,7 +62,7 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
     return {
       label: t('element.tree.paste-recursive-updating-references'),
       key: 'pasteRecursiveUpdatingReferences',
-      icon: <Icon value={ 'paste' } />,
+      icon: <Icon value={'paste'} />,
       hidden: isPasteOpenHidden(node),
       onClick: async () => {
         dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
@@ -75,7 +75,7 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
     return {
       label: t('element.tree.paste-as-child'),
       key: 'pasteAsChild',
-      icon: <Icon value={ 'paste' } />,
+      icon: <Icon value={'paste'} />,
       hidden: isPasteOpenHidden(node),
       onClick: async () => {
         dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
@@ -88,7 +88,7 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
     return {
       label: t('element.tree.paste-only-contents'),
       key: 'pasteOnlyContents',
-      icon: <Icon value={ 'paste' } />,
+      icon: <Icon value={'paste'} />,
       hidden: isPasteOnlyContentsHidden(node),
       onClick: async () => {
         console.log('not implemented!')
@@ -103,11 +103,10 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
   }
 
   const isPasteOnlyContentsHidden = (node: Element | TreeNodeProps): boolean => {
-    console.log(node)
     return isPasteOpenHidden(node) ||
       node.type === 'folder' ||
       node.isLocked
-      // storedNode?.type !== node.type //TODO: i guess we need to compare the className aswell
+    // storedNode?.type !== node.type //TODO: i guess we need to compare the className aswell
   }
 
   const isPasteMenuHidden = (node: Element | TreeNodeProps): boolean => {
