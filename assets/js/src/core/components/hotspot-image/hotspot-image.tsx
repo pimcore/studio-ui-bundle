@@ -113,34 +113,32 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
   const containerRef = useRef<HTMLDivElement>(null)
 
   const handleMouseDown = (evt: MouseEvent, hotspot: IHotspot): void => {
-    if (!disableDrag) {
-      const rect = evt.currentTarget.getBoundingClientRect()
-      const mouseX = evt.clientX - rect.left
-      const mouseY = evt.clientY - rect.top
+    const rect = evt.currentTarget.getBoundingClientRect()
+    const mouseX = evt.clientX - rect.left
+    const mouseY = evt.clientY - rect.top
 
-      const nearLeftEdge = mouseX < styleOptions[hotspot.type].resizeBorderSize
-      const nearRightEdge = mouseX > rect.width - styleOptions[hotspot.type].resizeBorderSize
-      const nearTopEdge = mouseY < styleOptions[hotspot.type].resizeBorderSize
-      const nearBottomEdge = mouseY > rect.height - styleOptions[hotspot.type].resizeBorderSize
+    const nearLeftEdge = mouseX < styleOptions[hotspot.type].resizeBorderSize
+    const nearRightEdge = mouseX > rect.width - styleOptions[hotspot.type].resizeBorderSize
+    const nearTopEdge = mouseY < styleOptions[hotspot.type].resizeBorderSize
+    const nearBottomEdge = mouseY > rect.height - styleOptions[hotspot.type].resizeBorderSize
 
-      if (hotspot.type === 'hotspot' && (nearLeftEdge || nearRightEdge || nearTopEdge || nearBottomEdge)) {
-        let direction = ''
-        if (nearTopEdge) direction += 'n'
-        if (nearBottomEdge) direction += 's'
-        if (nearLeftEdge) direction += 'w'
-        if (nearRightEdge) direction += 'e'
+    if (hotspot.type === 'hotspot' && (nearLeftEdge || nearRightEdge || nearTopEdge || nearBottomEdge)) {
+      let direction = ''
+      if (nearTopEdge) direction += 'n'
+      if (nearBottomEdge) direction += 's'
+      if (nearLeftEdge) direction += 'w'
+      if (nearRightEdge) direction += 'e'
 
-        setResizeDirection(direction)
-        setResizeStart({ x: evt.clientX, y: evt.clientY, width: hotspot.width, height: hotspot.height })
-      } else {
-        setDragging(true)
-        setDragStart({ x: mouseX, y: mouseY })
-      }
-
-      setPopoverOpen(false)
-      setSelectedId(hotspot.id)
-      evt.stopPropagation()
+      setResizeDirection(direction)
+      setResizeStart({ x: evt.clientX, y: evt.clientY, width: hotspot.width, height: hotspot.height })
+    } else {
+      setDragging(true)
+      setDragStart({ x: mouseX, y: mouseY })
     }
+
+    setPopoverOpen(false)
+    setSelectedId(hotspot.id)
+    evt.stopPropagation()
   }
 
   const toNumber = (value: any): number => {
@@ -149,13 +147,13 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
   }
 
   const handleMouseMove = (evt: MouseEvent): void => {
-    if (selectedId === null || containerRef.current === null || disabled === true || disableDrag) return
+    if (selectedId === null || containerRef.current === null || disabled === true) return
     const containerBounds = containerRef.current.getBoundingClientRect()
     const hotspotIndex = items.findIndex(h => h.id === selectedId)
     const dx = evt.clientX - resizeStart.x
     const dy = evt.clientY - resizeStart.y
 
-    if (dragging && !disableDrag) {
+    if (dragging) {
       setItems(dragItem(evt, dragStart, containerBounds, items, hotspotIndex, toNumber(styleOptions[items[hotspotIndex].type].marginLeft), toNumber(styleOptions[items[hotspotIndex].type].marginTop)))
     } else if (resizeDirection !== null) {
       setItems(resizeItem(evt, resizeStart, resizeDirection, containerBounds, items, hotspotIndex, toNumber(styleOptions[items[hotspotIndex].type].minSize), dx, dy))
@@ -193,7 +191,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
         ref={ imageRef }
         src={ src }
       />
-      { editModeHotspot === undefined && imageLoaded && containerRef.current !== null && (
+      { disableDrag && imageLoaded && containerRef.current !== null && (
         convertHotspotsToPixel(items, containerRef.current.getBoundingClientRect()).map(hotspot => (
           <Popover
             arrow={ false }
