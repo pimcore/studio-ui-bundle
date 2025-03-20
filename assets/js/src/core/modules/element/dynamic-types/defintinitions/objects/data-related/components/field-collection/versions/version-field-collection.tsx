@@ -54,7 +54,9 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle, className,
   const layoutDefinition: FieldCollectionLayoutDefinition[] = fieldCollection?.data?.items
   let currentFieldCollectionSection: string = ''
 
-  const checkLocalizedFields = (value: object): boolean => {
+  const checkLocalizedFields = (value: any): boolean => {
+    if (!isObject(value)) return true
+
     return Object.values(value).every(value =>
       !isEmpty(value) && isObject(value) ? checkLocalizedFields(value) : isNull(value)
     )
@@ -62,7 +64,7 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle, className,
 
   const shouldSkipProcessing = ({ dataItem, filteredObject, fieldValue }): boolean => {
     if (dataItem.fieldtype === DynamicTypesList.LOCALIZED_FIELDS) {
-      const isAllFieldsNull = checkLocalizedFields(fieldValue as object)
+      const isAllFieldsNull = checkLocalizedFields(fieldValue)
 
       if (isAllFieldsNull) return true
     }
