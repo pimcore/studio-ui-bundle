@@ -69,7 +69,7 @@ export const createTreeStructure = ({ tags, loadingNodes, actions, rootActions }
 
   return [{
     key: 0,
-    title: getTitle('All Tags', isLoading('0')),
+    title: getTitle('All Tags', false),
     icon: <Icon value='folder' />,
     children: tags.length > 0 ? treeWalker(tags) : [],
     actions: rootActions

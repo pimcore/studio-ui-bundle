@@ -147,6 +147,10 @@ jobs:
         working-directory: ./assets
         run: npm run build
 
+      - name: Create package archive
+        working-directory: ./assets
+        run: npm pack && mv ./pimcore-studio-ui*.tgz ../public/build/studio-npm-package.tgz
+
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           file_pattern: './public/'
