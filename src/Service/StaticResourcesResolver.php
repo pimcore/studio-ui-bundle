@@ -25,7 +25,7 @@ use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProviderInterface;
 /**
  * @internal
  */
-final readonly  class StaticResourcesResolver implements StaticResourcesResolverInterface
+final readonly class StaticResourcesResolver implements StaticResourcesResolverInterface
 {
     public function __construct(
         private WebpackEntryPointManager $webpackEntryPointManager,
@@ -67,6 +67,7 @@ final readonly  class StaticResourcesResolver implements StaticResourcesResolver
 
     /**
      * @param WebpackEntryPointProviderInterface[]|null $providers
+     *
      * @throws InvalidEntryPointsJsonException
      */
     private function getFilesFromEntryPointsJson(string $type, ?array $providers = null): array
@@ -163,5 +164,4 @@ final readonly  class StaticResourcesResolver implements StaticResourcesResolver
             )
         );
     }
-
 }
