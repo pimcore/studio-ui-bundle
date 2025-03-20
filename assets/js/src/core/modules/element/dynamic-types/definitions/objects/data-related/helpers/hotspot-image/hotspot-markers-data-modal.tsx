@@ -24,9 +24,9 @@ import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { isUndefined } from 'lodash'
 import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import useHotspotData
-  from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hooks/use-hotspot-data'
+  from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hooks/use-hotspot-data'
 import FieldOperations
-  from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/field-operations'
+  from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/field-operations'
 
 export interface HotspotMarkersDataModalProps {
   hotspot: IHotspot | undefined

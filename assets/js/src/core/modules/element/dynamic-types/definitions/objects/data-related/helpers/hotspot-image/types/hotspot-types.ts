@@ -28,7 +28,6 @@ export interface Marker {
 }
 
 export type HotspotMarkerRelationDataType = 'data-object' | 'asset' | 'document'
-export type HotspotMarkerDataType = 'textfield' | 'textarea' | HotspotMarkerRelationDataType
 
 export type ExpandedHotspotMarkerDataBase<T extends keyof HotspotValueMap> = {
   type: T;

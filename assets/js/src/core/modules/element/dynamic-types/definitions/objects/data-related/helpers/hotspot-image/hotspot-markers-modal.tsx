@@ -20,11 +20,11 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { createImageThumbnailUrl } from '@Pimcore/components/image-preview/utils/custom-image-thumbnail'
 import {
-  HotspotMarkersDataModal
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-markers-data-modal'
-import {
   HotspotContext
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-data-provider'
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-data-provider'
+import {
+  HotspotMarkersDataModal
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-markers-data-modal'
 
 export interface HotspotMarkersModalProps {
   hotspots?: IHotspot[] | null

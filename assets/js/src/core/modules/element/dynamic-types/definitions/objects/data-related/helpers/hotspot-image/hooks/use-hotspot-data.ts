@@ -14,18 +14,16 @@
 import { useContext, useEffect } from 'react'
 import { isNull, isUndefined } from 'lodash'
 import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
-import {
-  HotspotContext
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-data-provider'
 import { useTranslation } from 'react-i18next'
 import {
-  type ExpandedHotspotMarkerData, type HotspotMarkerRelationDataType,
-  type HotspotObjectType
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
+  type ExpandedHotspotMarkerData, type HotspotMarkerRelationDataType, type HotspotObjectType
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import {
   type ManyToOneRelationValue
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
-
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
+import {
+  HotspotContext
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-data-provider'
 interface UseHotspotDataHookReturn {
   fields: ExpandedHotspotMarkerData[]
   setFields: React.Dispatch<React.SetStateAction<ExpandedHotspotMarkerData[]>>
@@ -53,14 +51,16 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
   useEffect(() => {
     if (!isUndefined(hotspot) && !isUndefined(hotspot.data)) {
       setFields(hotspot.data)
+
       form.setFieldsValue(
         hotspot.data.reduce<Record<string, unknown>>((acc, field, index) => {
           acc[`name-${index}`] = field.name
           if (field.type === 'textfield' || field.type === 'textarea' || field.type === 'checkbox') {
             acc[`value-${index}`] = field.value
-          } else if (field.type === 'asset' || field.type === 'data-object' || field.type === 'document') {
-            acc[`value-${index}`] = { type: field.type, id: field.id, fullPath: field.fullPath, subtype: 'object' }
+          } else {
+            acc[`value-${index}`] = { ...field }
           }
+
           return acc
         }, {})
       )
@@ -93,7 +93,7 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
     setFields((prevFields) => [...prevFields, newField])
   }
 
-  const handleRelationTypeSelect = (type: 'document' | 'asset' | 'data-object'): void => {
+  const handleRelationTypeSelect = (type: HotspotMarkerRelationDataType): void => {
     const newField: ExpandedHotspotMarkerData = {
       type,
       name: '',

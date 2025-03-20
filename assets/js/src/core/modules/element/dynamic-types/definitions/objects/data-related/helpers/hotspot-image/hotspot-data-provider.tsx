@@ -12,10 +12,10 @@
 */
 
 import React, { useState, createContext, useMemo } from 'react'
+import type { IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import {
   type ExpandedHotspotMarkerData
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
-import type { IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
 
 export interface HotspotDataContext {
   fields: ExpandedHotspotMarkerData[]
