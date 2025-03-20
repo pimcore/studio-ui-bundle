@@ -24,7 +24,7 @@ export interface LocalizedFieldsProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectDataDefinition | AbstractObjectLayoutDefinition
 }
 
-export const VersionLocalizedFields = ({ children, noteditable, className, ...props }: LocalizedFieldsProps): React.JSX.Element => {
+export const VersionLocalizedFields = ({ children, noteditable, ...props }: LocalizedFieldsProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   const renderFieldTitle = ({ key, locale }: { key: string, locale: string }): React.JSX.Element => {
@@ -51,7 +51,7 @@ export const VersionLocalizedFields = ({ children, noteditable, className, ...pr
               {renderFieldTitle({ key: child.title, locale: key })}
               <DataComponent
                 { ...child }
-                className={ className }
+                className={ styles.objectSectionFieldItem }
                 noteditable={ noteditable }
                 value={ value }
               />

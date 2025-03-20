@@ -34,7 +34,6 @@ export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataA
     return (
       <VersionLocalizedFields
         { ...props }
-        className="versionFieldItem"
         noteditable
       />
     )

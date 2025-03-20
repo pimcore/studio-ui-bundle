@@ -47,6 +47,8 @@ export const useStyles = createStyles(({ css, token }) => {
     `,
 
     divider: css`
+      width: calc(100% - ${token.marginXS * 2}px);
+      min-width: calc(100% - ${token.marginXS * 2}px);
       margin: 10px ${token.marginXS}px;
     `
   }

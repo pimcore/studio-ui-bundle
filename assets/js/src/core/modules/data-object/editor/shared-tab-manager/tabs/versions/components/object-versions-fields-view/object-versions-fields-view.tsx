@@ -22,6 +22,7 @@ import { DataComponent } from '../data-component/data-component'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 import { type CategoriesList, type IObjectVersionsFieldsList, type VersionKeysList } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
 import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/styles/common-versions-fields-view.styles'
+import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'
 
 interface IObjectVersionsFieldsViewProps {
   breadcrumbsList?: CategoriesList
@@ -31,6 +32,7 @@ interface IObjectVersionsFieldsViewProps {
 }
 
 const SECTIONS_WITH_TRANSLATION: string[] = [VersionCategoryName.SYSTEM_DATA]
+const SECTIONS_WITH_COMPLEX_TYPES: string[] = [DynamicTypesList.BLOCK]
 
 export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, versionKeysList, isExpandedUnmodifiedFields }: IObjectVersionsFieldsViewProps): React.JSX.Element => {
   const { styles } = useStyles()
@@ -97,10 +99,13 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                         {versionKeysList.map((key, index) => {
                           const isModifiedField = fieldItem?.isModifiedValue === true
                           const isSecondItem = index === 1
+                          const isComplexType = SECTIONS_WITH_COMPLEX_TYPES.includes(fieldItem?.Field.fieldtype as string)
 
                           return (
                             <div
-                              className={ styles.objectSectionFieldItemWrapper }
+                              className={ cn(styles.objectSectionFieldItemWrapper, {
+                                [styles.objectSectionFieldItemWrapperHighlight]: isModifiedField && isSecondItem && isComplexType
+                              }) }
                               key={ `${index}-${key}` }
                             >
                               <DataComponent
