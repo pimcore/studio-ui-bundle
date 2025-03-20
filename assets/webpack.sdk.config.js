@@ -60,9 +60,16 @@ Encore
   .addEntry('modules/app/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'app', 'index.ts'))
   .addEntry('modules/asset/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'asset', 'index.ts'))
   .addEntry('modules/class-definitions/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'class-definitions', 'index.ts'))
+  .addEntry('modules/data-object/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'data-object', 'index.ts'))
   .addEntry('modules/element/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'element', 'index.ts'))
   .addEntry('modules/icon-library/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'icon-library', 'index.ts'))
+<<<<<<< HEAD
   .addEntry('modules/wysiwyg/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'wysiwyg', 'index.ts'))
+=======
+  .addEntry('modules/user/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'user', 'index.ts'))
+  .addEntry('modules/widget-manager/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'widget-manager', 'index.ts'))
+  .addEntry('modules/utils/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'utils', 'index.ts'))
+>>>>>>> origin/1.x
 
 // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
 // .enableStimulusBridge('./assets/controllers.json')
