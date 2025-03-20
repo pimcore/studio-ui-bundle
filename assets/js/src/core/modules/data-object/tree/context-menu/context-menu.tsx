@@ -55,7 +55,7 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
     {
       label: t('element.tree.paste'),
       key: 'paste',
-      icon: <Icon value={'paste'} />,
+      icon: <Icon value={ 'paste' } />,
       hidden: isPasteMenuHidden(node),
       children: [
         pasteAsChildRecursiveTreeContextMenuItem(node),
@@ -73,13 +73,13 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
     {
       label: t('element.tree.context-menu.advanced'),
       key: 'advanced',
-      icon: <Icon value={'more'} />,
+      icon: <Icon value={ 'more' } />,
       hidden: isLockMenuHidden(node),
       children: [
         {
           label: t('element.lock'),
           key: 'advanced-lock',
-          icon: <Icon value={'lock'} />,
+          icon: <Icon value={ 'lock' } />,
           hidden: isLockMenuHidden(node),
           children: [
             lockTreeContextMenuItem(node),
@@ -96,8 +96,8 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
   return (
     <>
       <Dropdown
-        menu={{ items }}
-        trigger={['contextMenu']}
+        menu={ { items } }
+        trigger={ ['contextMenu'] }
       >
         {props.children}
       </Dropdown>
