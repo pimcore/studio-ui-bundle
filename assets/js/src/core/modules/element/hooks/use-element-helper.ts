@@ -66,13 +66,12 @@ export const useElementHelper = (): UseElementReturn => {
   }
 
   const executeElementTask = (elementType: ElementType, id: number, task: ElementTask): void => {
-    switch (elementType) {
-      case 'data-object':
-        void executeDataObjectTask(id, task)
-        break
-      default:
-        console.log('not implemented!')
+    if (elementType === 'data-object') {
+      void executeDataObjectTask(id, task)
+      return
     }
+
+    console.log('not implemented for elementType: ' + elementType)
   }
 
   return { openElement, mapToElementType, executeElementTask }
