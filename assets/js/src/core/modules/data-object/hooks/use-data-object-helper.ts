@@ -19,6 +19,8 @@ import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { getElementIcon } from '@Pimcore/modules/element/element-helper'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
+import { type IconProps } from '@Pimcore/components/icon/icon'
+import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 interface OpenDataObjectWidgetProps {
   config: EditorContainerProps
@@ -48,13 +50,19 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
       return
     }
 
+    const icon = getElementIcon(data, { value: 'widget', type: 'name' })
+    const iconConfig: IconProps & ElementIcon = {
+      type: icon.type,
+      value: icon.value
+    }
+
     openMainWidget({
       name: data?.key,
       id: widgetId,
       component: 'data-object-editor',
       config: {
         ...config,
-        icon: getElementIcon(data, { value: 'widget', type: 'name' })
+        icon: iconConfig
       }
     })
   }

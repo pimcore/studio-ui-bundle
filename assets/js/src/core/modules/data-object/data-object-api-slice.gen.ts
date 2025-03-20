@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Data Objects", "Data Object Grid"] as const;
+export const addTagTypes = ["Data Objects", "Data Object Grid", "Data Object Search"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -161,6 +161,15 @@ const injectedRtkApi = api
                     method: "POST",
                 }),
                 invalidatesTags: ["Data Objects"],
+            }),
+            dataObjectGetSearchConfiguration: build.query<
+                DataObjectGetSearchConfigurationApiResponse,
+                DataObjectGetSearchConfigurationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/search/configuration/${queryArg.classId}`,
+                }),
+                providesTags: ["Data Object Search"],
             }),
             dataObjectGetSelectOptions: build.mutation<
                 DataObjectGetSelectOptionsApiResponse,
@@ -421,6 +430,12 @@ export type DataObjectReplaceContentApiArg = {
     sourceId: number;
     /** TargetId of the data-object */
     targetId: number;
+};
+export type DataObjectGetSearchConfigurationApiResponse =
+    /** status 200 Data object search configuration */ GridDetailedConfiguration;
+export type DataObjectGetSearchConfigurationApiArg = {
+    /** Class Id of the data object */
+    classId?: string;
 };
 export type DataObjectGetSelectOptionsApiResponse = /** status 200 List of dynamic select options */ {
     totalItems: number;
@@ -726,6 +741,20 @@ export type GridColumnData = {
     /** inheritance */
     inheritance?: any;
 };
+export type RelationFieldConfig = {
+    /** Relation Getter */
+    relation: string;
+    /** Field getter */
+    field: string;
+};
+export type SimpleFieldConfig = {
+    /** Field getter */
+    field: string;
+};
+export type AdvancedColumnConfig = {
+    /** advancedColumns */
+    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig)[];
+};
 export type GridColumnRequest = {
     /** Key */
     key: string;
@@ -736,7 +765,7 @@ export type GridColumnRequest = {
     /** Group */
     group?: any;
     /** Config */
-    config: string[];
+    config: (string | AdvancedColumnConfig)[];
 };
 export type Layout = {
     /** AdditionalAttributes */
@@ -819,6 +848,7 @@ export const {
     useDataObjectFormatPathMutation,
     useDataObjectPreviewByIdQuery,
     useDataObjectReplaceContentMutation,
+    useDataObjectGetSearchConfigurationQuery,
     useDataObjectGetSelectOptionsMutation,
     useDataObjectGetTreeQuery,
 } = injectedRtkApi;

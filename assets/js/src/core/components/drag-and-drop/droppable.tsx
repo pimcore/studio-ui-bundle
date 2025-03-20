@@ -26,6 +26,7 @@ export interface DroppableProps {
   isValidData?: ((info: DragAndDropInfo) => boolean)
   onDrop: (info: DragAndDropInfo) => void
   onSort?: (info: DragAndDropInfo, dragId: UniqueIdentifier, dropId: UniqueIdentifier) => void
+  disabled?: boolean
 }
 
 export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
@@ -42,7 +43,7 @@ export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
 
   const { isOver, setNodeRef } = useDroppable({
     id,
-    disabled: context.getInfo().sortable !== undefined
+    disabled: context.getInfo().sortable !== undefined || props.disabled === true
   })
 
   if (isValidContext && isOver && !isValidData) {

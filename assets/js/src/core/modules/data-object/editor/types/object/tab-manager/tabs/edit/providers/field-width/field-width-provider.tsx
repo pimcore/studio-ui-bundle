@@ -19,18 +19,24 @@ export interface IFieldWidthContext {
   large: number
 }
 
+export const defaultFieldWidthValues: IFieldWidthContext = {
+  small: 200,
+  medium: 300,
+  large: 900
+}
+
 export const FieldWidthContext = React.createContext<IFieldWidthContext | undefined>(undefined)
 
 export interface FieldWidthProviderProps {
+  fieldWidthValues?: Partial<IFieldWidthContext>
   children: React.ReactNode
 }
 
-export const FieldWidthProvider = ({ children }: FieldWidthProviderProps): React.JSX.Element => {
+export const FieldWidthProvider = ({ children, ...props }: FieldWidthProviderProps): React.JSX.Element => {
   const fieldWidthValues = useMemo(() => ({
-    small: 200,
-    medium: 300,
-    large: 900
-  }), [])
+    ...defaultFieldWidthValues,
+    ...props.fieldWidthValues
+  }), [props.fieldWidthValues])
 
   return (
     <FieldWidthContext.Provider value={ fieldWidthValues }>

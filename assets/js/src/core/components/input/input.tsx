@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import { Input as AntInput, type InputProps } from 'antd'
+import { Input as AntInput, type InputProps, type InputRef } from 'antd'
 import cn from 'classnames'
 import { useStyles } from './input.styles'
 
@@ -20,13 +20,17 @@ export interface IInputProps extends InputProps {
   inherited?: boolean
 }
 
-export const Input = ({ inherited, className, ...restProps }: IInputProps): JSX.Element => {
+export const Input = React.forwardRef<InputRef, IInputProps>(function Input (
+  { inherited, className, ...restProps }: IInputProps,
+  ref
+): JSX.Element {
   const { styles } = useStyles()
 
   return (
     <AntInput
       className={ cn(styles.input, className, { [styles.inherited]: inherited }) }
+      ref={ ref }
       { ...restProps }
     />
   )
-}
+})

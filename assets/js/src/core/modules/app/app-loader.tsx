@@ -30,6 +30,7 @@ import { setActivePerspective } from '../perspectives/active-perspective-slice'
 import { updateOuterModel } from '../widget-manager/widget-manager-slice'
 import { getInitialModelJson } from '../widget-manager/utils/widget-manager-outer-model'
 import { isPlainObject } from 'lodash'
+import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -46,6 +47,8 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const [fetchMercureCookie] = useMercureCreateCookieMutation()
 
   const modal = useAlertModal()
+
+  const isAuthenticated = useIsAuthenticated()
 
   // Register the modal instance to allow centralized error message display throughout the project
   ErrorModalService.setModalInstance(modal)
@@ -119,16 +122,35 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
       })
   }
 
+  const loadUserData = async (): Promise<void> => {
+    const { isSuccess: isSuccessInitSetting } = await initSettings()
+
+    if (isSuccessInitSetting === true) {
+      Promise.allSettled([
+        initActivePerspective()
+      ]).then(() => {
+      }).catch(() => {})
+    }
+  }
+
   useEffect(() => {
     Promise.all([
       initLoadUser(),
-      initSettings(),
-      initActivePerspective(),
       loadTranslations()
     ]).then(() => {
       setIsLoading(false)
     }).catch(() => {})
   }, [])
+
+  useEffect(() => {
+    const fetchUserData = async (): Promise<void> => {
+      await loadUserData()
+    }
+
+    if (isAuthenticated) {
+      void fetchUserData()
+    }
+  }, [isAuthenticated])
 
   return (
     <>

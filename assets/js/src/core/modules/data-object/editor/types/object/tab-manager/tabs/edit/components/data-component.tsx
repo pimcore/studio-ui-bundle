@@ -15,7 +15,7 @@ import React, { type ReactNode, useEffect } from 'react'
 import { type ObjectComponentProps } from './object-component'
 import { Form } from '@Pimcore/components/form/form'
 import { useInjection } from '@Pimcore/app/depency-injection'
-import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
+import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { Alert } from 'antd'
 import { useFormList } from '../providers/form-list-provider/use-form-list'
@@ -29,7 +29,7 @@ import {
   useEditFormContext
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
 import { useFormGroupOptional } from '@Pimcore/components/form/group/provider/use-form-group-optional'
-import { useLocalizedFields } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/localized-fields/provider/localized-fields-provider/use-localized-fields'
+import { useLocalizedFields } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/localized-fields/provider/localized-fields-provider/use-localized-fields'
 import { isArray } from 'lodash'
 import { useFieldWidth } from '../providers/field-width/use-field-width'
 

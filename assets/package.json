@@ -1,5 +1,5 @@
 {
-  "name": "pimcore-studio-ui",
+  "name": "@pimcore/studio-ui-bundle",
   "version": "0.0.1",
   "scripts": {
     "dev-server": "NODE_OPTIONS=--max_old_space_size=4096 encore dev-server --port 3030",
@@ -8,7 +8,7 @@
     "dev-vendor": "encore dev --config webpack.vendor.config",
     "dev-core-dll": "encore dev --config webpack.core-dll.config",
     "watch": "encore dev --watch",
-    "build": "NODE_OPTIONS=--max_old_space_size=4096 npm run build-vendor && npm run build-core-dll && encore production && npm run build-sdk",
+    "build": "NODE_OPTIONS=--max_old_space_size=4096 npm run build-vendor && NODE_OPTIONS=--max_old_space_size=4096 npm run build-core-dll && encore production && npm run build-sdk",
     "build-sdk": "encore production --config webpack.sdk.config && tsc-alias",
     "build-vendor": "encore production --config webpack.vendor.config",
     "build-core-dll": "encore production --config webpack.core-dll.config",
@@ -20,8 +20,18 @@
     "storybook": "storybook dev -p 6006 --no-open",
     "generate-icons": "npx ts-node -O '{\"module\": \"CommonJS\", \"esModuleInterop\": true}' -r tsconfig-paths/register build/generate-icon-index.ts"
   },
-  "types": "./dist/build/types/src/sdk/main.d.ts",
-  "main": "./dist/sdk/main.js",
+  "exports": {
+    ".": {
+      "import": "./dist/sdk/main.js",
+      "require": "./dist/sdk/main.js",
+      "types": "./dist/build/types/src/sdk/main.d.ts"
+    },
+    "./*": {
+      "import": "./dist/sdk/*/index.js",
+      "require": "./dist/sdk/*/index.js",
+      "types": "./dist/build/types/src/sdk/*/index.d.ts"
+    }
+  },
   "files": [
     "dist"
   ],
@@ -110,11 +120,11 @@
     "uuid": "^10.0.0"
   },
   "peerDependencies": {
-    "antd": "^5.22.1",
-    "antd-style": "^3.7.1",
-    "inversify": "^6.1.4",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "reflect-metadata": "^0.2.2"
+    "antd": "5.22.x",
+    "antd-style": "3.7.x",
+    "inversify": "6.1.x",
+    "react": "18.3.x",
+    "react-dom": "18.3.x",
+    "reflect-metadata": "0.2.x"
   }
 }
