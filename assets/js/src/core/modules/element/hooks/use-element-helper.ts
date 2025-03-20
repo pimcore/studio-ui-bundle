@@ -44,7 +44,7 @@ export const useElementHelper = (): UseElementReturn => {
         }
       })
     } else if (elementType === 'data-object') {
-      openDataObject({
+      void openDataObject({
         config: {
           id: props.id
         }
@@ -68,7 +68,7 @@ export const useElementHelper = (): UseElementReturn => {
   const executeElementTask = (elementType: ElementType, id: number, task: ElementTask): void => {
     switch (elementType) {
       case 'data-object':
-        executeDataObjectTask(id, task)
+        void executeDataObjectTask(id, task)
         break
       default:
         console.log('not implemented!')
