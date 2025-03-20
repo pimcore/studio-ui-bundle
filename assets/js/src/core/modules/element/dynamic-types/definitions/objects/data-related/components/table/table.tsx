@@ -223,7 +223,7 @@ export const Table = (props: TableProps): React.JSX.Element => {
   }
 
   return (
-    <div className={ cn(props.className) }>
+    <div>
       <Content
         style={ {
           width: toCssDimension(props.width === 320 ? undefined : props.width), // the default table width does not make sense in studio, 100% width is better
@@ -231,6 +231,7 @@ export const Table = (props: TableProps): React.JSX.Element => {
         } }
       >
         <TableGrid
+          className={ cn(props.className) }
           cols={ cols }
           columnConfig={ props.columnConfig }
           columnConfigActivated={ columnConfigActivated }

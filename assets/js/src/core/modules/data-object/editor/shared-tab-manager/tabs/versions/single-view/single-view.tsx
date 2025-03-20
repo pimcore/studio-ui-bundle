@@ -61,7 +61,7 @@ export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Ele
 
         const dataRaw = response.data as DataObjectVersion
 
-        if (!isUndefined(layoutData?.children)) {
+        if (!isUndefined(layoutData?.children) && !isUndefined(dataRaw)) {
           formattedDataList.push(await getFormattedDataStructure({
             objectId: id,
             layout: layoutData.children,

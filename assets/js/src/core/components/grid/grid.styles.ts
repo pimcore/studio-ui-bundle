@@ -95,6 +95,14 @@ export const useStyles = createStyles(({ token, css }) => {
             }
           }
       }
+      
+      &.versionFieldItem {
+        .ant-table-content {
+          table {
+            width: 100% !important;
+          }
+        }
+      }
 
       &.versionFieldItemHighlight {
         .ant-table-content {

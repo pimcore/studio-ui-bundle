@@ -68,7 +68,7 @@ export const ComparisonView = ({
         responses.forEach(async (response, versionIndex) => {
           const dataRaw = response.data as DataObjectVersion
 
-          if (!isUndefined(layoutData?.children)) {
+          if (!isUndefined(layoutData?.children) && !isUndefined(dataRaw)) {
             formattedDataList.push(await getFormattedDataStructure({
               objectId: id,
               layout: layoutData.children,
