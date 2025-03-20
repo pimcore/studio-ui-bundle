@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Assets", "Asset Grid", "Metadata", "Versions"] as const;
+export const addTagTypes = ["Assets", "Asset Grid", "Asset Search", "Metadata", "Versions"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -234,6 +234,21 @@ const injectedRtkApi = api
                     body: queryArg.body,
                 }),
                 invalidatesTags: ["Assets"],
+            }),
+            assetGetSearchConfiguration: build.query<
+                AssetGetSearchConfigurationApiResponse,
+                AssetGetSearchConfigurationApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/assets/search/configuration/` }),
+                providesTags: ["Asset Search"],
+            }),
+            assetGetSearch: build.mutation<AssetGetSearchApiResponse, AssetGetSearchApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/search`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Asset Search"],
             }),
             assetClearThumbnail: build.mutation<AssetClearThumbnailApiResponse, AssetClearThumbnailApiArg>({
                 query: (queryArg) => ({
@@ -718,6 +733,24 @@ export type AssetPatchFolderByIdApiArg = {
         filters?: GridFilter;
     };
 };
+export type AssetGetSearchConfigurationApiResponse =
+    /** status 200 Asset search configuration */ GridDetailedConfiguration;
+export type AssetGetSearchConfigurationApiArg = void;
+export type AssetGetSearchApiResponse = /** status 200 Assets for search grid */ {
+    totalItems: number;
+    items: {
+        id?: number;
+        columns?: GridColumnData[];
+        isLocked?: boolean;
+        permissions?: Permissions;
+    }[];
+};
+export type AssetGetSearchApiArg = {
+    body: {
+        columns: GridColumnRequest[];
+        filters?: GridFilter;
+    };
+};
 export type AssetClearThumbnailApiResponse = /** status 200 Success */ void;
 export type AssetClearThumbnailApiArg = {
     /** Id of the asset */
@@ -861,6 +894,20 @@ export type CustomSettings = {
     /** dynamic custom settings - can be any key-value pair */
     dynamicCustomSettings?: object[];
 };
+export type RelationFieldConfig = {
+    /** Relation Getter */
+    relation: string;
+    /** Field getter */
+    field: string;
+};
+export type SimpleFieldConfig = {
+    /** Field getter */
+    field: string;
+};
+export type AdvancedColumnConfig = {
+    /** advancedColumns */
+    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig)[];
+};
 export type GridColumnRequest = {
     /** Key */
     key: string;
@@ -871,7 +918,7 @@ export type GridColumnRequest = {
     /** Group */
     group?: any;
     /** Config */
-    config: string[];
+    config: (string | AdvancedColumnConfig)[];
 };
 export type GridFilter = {
     /** Page */
@@ -1188,6 +1235,8 @@ export const {
     useAssetImageDownloadByThumbnailQuery,
     useAssetPatchByIdMutation,
     useAssetPatchFolderByIdMutation,
+    useAssetGetSearchConfigurationQuery,
+    useAssetGetSearchMutation,
     useAssetClearThumbnailMutation,
     useAssetGetTreeQuery,
     useAssetAddMutation,

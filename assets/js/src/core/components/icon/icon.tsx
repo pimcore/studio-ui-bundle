@@ -19,14 +19,17 @@ import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { isNil, isUndefined } from 'lodash'
 import { useStyles } from './icon.styles'
 
+type SubIconVariant = 'default' | 'green'
+
 export interface IconProps extends Omit<ElementIcon, 'type'> {
   type?: ElementIcon['type']
   options?: React.SVGProps<SVGSVGElement>
   className?: string
   subIconName?: string
+  subIconVariant?: SubIconVariant
 }
 
-export const Icon = ({ value, type = 'name', options, className, subIconName, ...props }: IconProps): React.JSX.Element => {
+export const Icon = ({ value, type = 'name', options, className, subIconName, subIconVariant = 'default', ...props }: IconProps): React.JSX.Element => {
   const iconLibrary = useInjection<IconLibrary>(serviceIds.iconLibrary)
   const width = options?.width ?? 16
   const height = options?.height ?? 16
@@ -67,8 +70,10 @@ export const Icon = ({ value, type = 'name', options, className, subIconName, ..
       style={ { width, height, position: 'relative' } }
       { ...props }
     >
-      {!isNil(SubIcon) && <div className={ styles.subIcon }><SubIcon /></div>}
+      {!isNil(SubIcon) && (
+        <div className={ `${styles.subIcon} sub-icon-variant--${subIconVariant}` }><SubIcon /></div>
+      )}
       {renderIcon()}
-    </div>
+    </div >
   )
 }

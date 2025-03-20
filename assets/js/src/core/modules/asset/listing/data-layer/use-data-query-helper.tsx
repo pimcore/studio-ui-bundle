@@ -16,7 +16,7 @@ import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/pr
 import { type SettingsProviderProps } from '@Pimcore/modules/element/listing/abstract/settings/settings-provider'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
-import { type AssetGetGridApiArg } from 'src/sdk/main'
+import { type AssetGetGridApiArg } from '../../asset-api-slice-enhanced'
 
 export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = () => {
   const { useElementId } = useSettings()
