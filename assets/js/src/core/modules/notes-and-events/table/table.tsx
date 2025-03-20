@@ -24,9 +24,10 @@ import {
 import { uuid } from '@Pimcore/utils/uuid'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
-import { isUndefined } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 import { NoteModal } from '@Pimcore/modules/notes-and-events/note-modal'
-import { Tag } from '@Pimcore/components/tag/tag'
+import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
+import { type ElementInfo } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/element-cell/element-cell'
 
 type DataNoteWithActions = DataNote & {
   actions: React.ReactNode
@@ -59,15 +60,6 @@ export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): R
     })
     )
 
-  const openCorrectElement = async (eType: string, eId: number): Promise<void> => {
-    const elementType = mapToElementType(eType)
-    !isUndefined(elementType) &&
-        await openElement({
-          type: elementType,
-          id: eId
-        })
-  }
-
   const columnHelper = createColumnHelper<DataNoteWithActions>()
   const createColumns = (): any => [
     columnHelper.accessor('type', {
@@ -77,29 +69,21 @@ export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): R
     columnHelper.accessor(row => ({ path: row.cPath, elementType: row.cType, id: row.cId }), {
       id: 'element',
       header: t('notes-and-events.columns.element'),
-      size: 200,
-      cell: (info) => {
-        const { path, elementType, id } = info.getValue()
-
-        return (!isUndefined(path) && path !== '')
-          ? (
-            <Flex
-              align={ 'center' }
-              className={ styles.link }
-              key={ id }
-            >
-              <Tag
-                bordered={ false }
-                color="blue"
-                onClick={ async () => {
-                  await openCorrectElement(elementType, id)
-                } }
-              >{decodeURIComponent(path)}
-              </Tag>
-            </Flex>
-            )
-          : <div></div>
-      }
+      meta: {
+        editable: false,
+        type: 'element',
+        config: {
+          getElementInfo: (cellProps: DefaultCellProps): ElementInfo => {
+            const row = cellProps.row.original
+            return {
+              elementType: mapToElementType(String(row.cType), true),
+              id: row.cId,
+              fullPath: isEmpty(row.cPath) ? false : decodeURIComponent(String(row.cPath))
+            }
+          }
+        }
+      },
+      size: 300
     }),
     columnHelper.accessor('title', {
       header: t('notes-and-events.columns.title'),
@@ -131,7 +115,7 @@ export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): R
       size: 70,
       cell: (info) => {
         const row: { path: string, elementType: string, id: number } = info.row.getValue('element')
-        const elementType = mapToElementType(row.elementType)
+        const elementType = mapToElementType(row.elementType, true)
         const elementId = row.id
 
         return (!isUndefined(row.path) && row.path !== '')

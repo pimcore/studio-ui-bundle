@@ -14,6 +14,7 @@
 import { useAppDispatch } from '@Pimcore/app/store'
 import { api, type DataObjectGetGridApiArg, useDataObjectPatchByIdMutation } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { type UseInlineEditApiUpdateReturn } from '@Pimcore/modules/element/listing/decorators/inline-edit/inline-edit-decorator'
+import { set } from 'lodash'
 
 export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
   const [patchDataObject] = useDataObjectPatchByIdMutation()
@@ -52,7 +53,7 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
           {
             id: update.id,
             editableData: {
-              [update.column.key]: update.value
+              ...set({}, update.column.key, update.value)
             }
           }
         ]

@@ -30,7 +30,9 @@ import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/co
 import { useFilter } from './provider/filter-provider/use-filter'
 import { usePqlFilter } from '../../../../../context-layer/provider/pql-filter/use-pql-filter'
 import { useFieldFilters } from '../../../../../context-layer/provider/field-filters/use-field-filters'
-import { useDirectChildrenFilter } from '../../../../../context-layer/provider/direct-children-filter/use-direct-children-filter'
+import {
+  useDirectChildrenFilter
+} from '../../../../../context-layer/provider/direct-children-filter/use-direct-children-filter'
 import { useSearchTermFilter } from '../../../../../context-layer/provider/search-term-filter/use-search-term-filter'
 import { useGeneralFiltersConfig } from '../../../../../context-layer/provider/general-filters-config/use-general-filters-config'
 import { SearchTermFilter } from '../../../search/search-term-filter'
@@ -96,7 +98,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
             Apply
           </Button>
         </Toolbar>
-       }
+            }
     >
       <Content padded>
         <Flex
@@ -108,7 +110,9 @@ export const FilterContainerInner = (): React.JSX.Element => {
             <Text>Advanced Mode</Text>
             <Switch
               checked={ isAdvancedMode }
-              onChange={ () => { setIsAdvancedMode(!isAdvancedMode) } }
+              onChange={ () => {
+                setIsAdvancedMode(!isAdvancedMode)
+              } }
             />
           </Flex>
         </Flex>

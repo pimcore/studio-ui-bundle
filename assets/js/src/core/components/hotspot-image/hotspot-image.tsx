@@ -27,10 +27,11 @@ import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
 import {
   type ExpandedHotspotMarkerData
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import {
   HotspotContext
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-data-provider'
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-data-provider'
+
 export interface IStyleOptions {
   hotspot: {
     width: number
@@ -93,7 +94,6 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
   const { t } = useTranslation()
   const { editModeHotspot } = useContext(HotspotContext)
   const disableDrag = editModeHotspot !== undefined
-  console.log('----> disableDrag', disableDrag)
 
   const [items, setItems] = useState<IHotspot[]>(data ?? [])
   useEffect((): void => {

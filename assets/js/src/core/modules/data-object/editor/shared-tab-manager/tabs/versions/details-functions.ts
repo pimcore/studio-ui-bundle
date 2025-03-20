@@ -11,12 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { get, isEmpty } from 'lodash'
+import { every, get, isEmpty, isEqual, isObject, isUndefined } from 'lodash'
 import { formatDateTime } from '@Pimcore/utils/date-time'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type Layout } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import type { DataObjectVersion } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
 import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
+import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 enum DATATYPE_LIST {
   LAYOUT = 'layout',
@@ -28,6 +29,7 @@ interface IGetFormattedDataStructureProps {
   versionData: DataObjectVersion
   versionId: number
   versionCount: number
+  objectDataRegistry: DynamicTypeObjectDataRegistry
 }
 
 export interface IFormattedDataStructureData {
@@ -38,7 +40,15 @@ export interface IFormattedDataStructureData {
   versionId: number
 }
 
-export const getFormattedDataStructure = ({ layout, versionData, versionId, versionCount }: IGetFormattedDataStructureProps): IFormattedDataStructureData[] => {
+const isFieldValueEmpty = (fieldValue: any): boolean => {
+  if (isObject(fieldValue)) {
+    return every(fieldValue, isEmptyValue)
+  }
+
+  return isEmptyValue(fieldValue)
+}
+
+export const getFormattedDataStructure = ({ layout, versionData, versionId, versionCount, objectDataRegistry }: IGetFormattedDataStructureProps): IFormattedDataStructureData[] => {
   const formattedSystemData = {
     fullPath: versionData.fullPath,
     creationDate: formatDateTime({ timestamp: versionData.creationDate ?? null, dateStyle: 'short', timeStyle: 'medium' }),
@@ -59,11 +69,16 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
 
       if (item.datatype === DATATYPE_LIST.DATA) {
         const fieldName = item.name
-        const fieldValue = get(versionData?.objectData, fieldName)
+        const fieldValueByName: string | object = get(versionData?.objectData, fieldName)
+        const currentFieldType: string = item.fieldtype
 
-        if (!isEmptyValue(fieldValue)) {
-          return [{ fieldBreadcrumbTitle, fieldData: item, fieldValue, versionId, versionCount }]
+        if (!objectDataRegistry.hasDynamicType(currentFieldType)) {
+          return []
         }
+
+        const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
+
+        return objectDataType.processVersionFieldData({ item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount })
       }
 
       return []
@@ -86,30 +101,48 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
   return [...generalSystemData, ...layoutData]
 }
 
-export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): IObjectVersionField[] => {
+export const versionsDataToTableData = ({ data }: { data: IFormattedDataStructureData[][] }): IObjectVersionField[] => {
   const resultList: IObjectVersionField[] = []
 
-  const mainVersionData = data[0]
-  const compareVersionData = data[1]
+  const mainVersionData = data[0] ?? []
+  const compareVersionData = data[1] ?? []
+  const isComparisonMode = !isEmpty(compareVersionData)
 
-  mainVersionData.forEach((versionItem, index) => {
-    const field = {
+  for (let index = 0; index < mainVersionData.length; index++) {
+    const mainVersionItem = mainVersionData[index]
+    const compareVersionItem = compareVersionData[index]
+
+    const isEmptyField = isFieldValueEmpty(mainVersionItem?.fieldValue) && isFieldValueEmpty(compareVersionItem?.fieldValue)
+
+    if (isEmptyField) { continue }
+
+    const hasCompareVersion = !isUndefined(compareVersionItem)
+
+    const field: IObjectVersionField = {
       Field: {
-        fieldBreadcrumbTitle: versionItem?.fieldBreadcrumbTitle,
-        ...versionItem.fieldData
-      },
-      [`Version ${versionItem.versionCount}`]: versionItem.fieldValue
+        fieldBreadcrumbTitle: mainVersionItem?.fieldBreadcrumbTitle,
+        ...mainVersionItem?.fieldData
+      }
     }
 
-    const compareVersion = compareVersionData?.[index]
-    const hasCompareVersion = !isEmpty(compareVersion)
+    // Set the field for the main version count
+    if (!isEmpty(mainVersionItem)) {
+      field[`Version ${mainVersionItem.versionCount}`] = mainVersionItem.fieldValue
+    } else if (hasCompareVersion) {
+      field[`Version ${compareVersionItem.versionCount}`] = null
+    }
 
+    // Set the field for the compare version count
     if (hasCompareVersion) {
-      field[`Version ${compareVersion.versionCount}`] = compareVersion.fieldValue
+      field[`Version ${compareVersionItem.versionCount}`] = compareVersionItem.fieldValue ?? null
+    }
+
+    if (isComparisonMode && !isEqual(mainVersionItem?.fieldValue, compareVersionItem?.fieldValue)) {
+      field.isModifiedValue = true
     }
 
     resultList.push(field)
-  })
+  }
 
   return resultList
 }

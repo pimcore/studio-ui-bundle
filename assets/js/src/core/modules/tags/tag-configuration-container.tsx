@@ -47,6 +47,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
   const {
     tags,
     tagsFetching,
+    tagsLoading,
     rootTagFolder,
     getTag,
     tagDeletion,
@@ -201,7 +202,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
         }
     >
       <Content
-        loading={ tagsFetching }
+        loading={ tagsLoading }
         margin={ {
           x: 'extra-small',
           y: 'none'

@@ -164,6 +164,24 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
         .ant-select-arrow {
           color: ${token.colorTextDisabled} !important;
         }
+        
+        &.versionFieldItem {
+          .ant-select-selection-item {
+            color: ${token.colorText} !important;
+          }
+        }
+
+        &.versionFieldItem:not(.versionFieldItemHighlight) {
+          .ant-select-selector {
+            border-color: transparent !important;
+          }
+        }
+
+        &.versionFieldItemHighlight {
+          .ant-select-selector {
+            background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+          }
+        }
       }
       
       &.ant-select--inherited {

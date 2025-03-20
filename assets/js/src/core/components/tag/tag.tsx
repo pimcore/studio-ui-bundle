@@ -17,7 +17,7 @@ import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './tag.styles'
 
-export interface TagProps extends AntTagPropsProps {
+export interface TagProps extends AntTagPropsProps, React.RefAttributes<HTMLSpanElement> {
   children: ReactNode
   iconName?: string
   className?: string
@@ -26,7 +26,7 @@ export interface TagProps extends AntTagPropsProps {
 
 export type TagTheme = 'transparent'
 
-export const Tag = ({ children, icon, iconName, theme, className, ...props }: TagProps): React.JSX.Element => {
+export const Tag = React.forwardRef<HTMLSpanElement, TagProps>(({ children, icon, iconName, theme, className, ...props }, ref): React.JSX.Element => {
   const { styles } = useStyles()
 
   const tagClassNames = cn(
@@ -55,9 +55,12 @@ export const Tag = ({ children, icon, iconName, theme, className, ...props }: Ta
     <AntTag
       className={ tagClassNames }
       icon={ getIcon() }
+      ref={ ref }
       { ...props }
     >
       {children}
     </AntTag>
   )
-}
+})
+
+Tag.displayName = 'Tag'

@@ -126,6 +126,7 @@ export const useStyles = createStyles(({ token, css }) => {
     disabledGrid: css`
       .ant-table-cell {
         background-color: ${token.colorBgContainerDisabled};
+        color: ${token.colorTextDisabled};
       }
     `
   }

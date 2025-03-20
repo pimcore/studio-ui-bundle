@@ -19,7 +19,7 @@ import { Group } from './group/group'
 import { KeyedList } from './keyed-list/keyed-list'
 import { withItemProvider } from './item/with-item-provider'
 import { withKeyedItemContext } from './item/with-keyed-item-context'
-import { withLocalizedFieldsLocale } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/localized-fields/form-item/with-localized-fields-locale'
+import { withLocalizedFieldsLocale } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/localized-fields/form-item/with-localized-fields-locale'
 import { compose } from '@reduxjs/toolkit'
 
 export interface FormProps extends Omit<AntFormProps, 'children'> {

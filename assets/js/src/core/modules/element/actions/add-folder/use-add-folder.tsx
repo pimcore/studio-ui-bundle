@@ -20,36 +20,42 @@ import { useElementFolderCreateMutation } from '@Pimcore/modules/element/element
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
-import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import { type Element } from '@Pimcore/modules/element/element-helper'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
+import { useRefreshTree } from '../refresh-tree/use-refresh-tree'
+import { useTreeId } from '../../tree/provider/tree-id-provider/use-tree-id'
+import { setNodeFetching } from '@Pimcore/components/element-tree/element-tree-slice'
+import { useAppDispatch } from '@Pimcore/app/store'
 
 export interface UseAddFolderHookReturn {
   addFolder: (parentId: number) => void
   addFolderTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  addFolderContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   addFolderMutation: (parentId: number, value: string) => Promise<void>
 }
 
 export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn => {
   const { t } = useTranslation()
   const modal = useFormModal()
-  const { refreshTree } = useRefreshTree(elementType)
   const [elementFolderCreateMutation] = useElementFolderCreateMutation()
   const { isTreeActionAllowed } = useTreePermission()
+  const { refreshTree } = useRefreshTree(elementType)
+  const dispatch = useAppDispatch()
+  const { treeId } = useTreeId(true)
 
-  const addFolder = (parentId: number, onFinish?: () => void): void => {
+  const addFolder = (parentId: number, onBeforeMutation?: () => void, onFailedMutation?: () => void): void => {
     modal.input({
       title: t('element.new-folder'),
-      label: t('element.new-folder.label'),
+      label: t('form.label.new-item'),
       rule: {
         required: true,
         message: t('element.new-folder.validation')
       },
-      onOk: async (value: string) => { await addFolderMutation(parentId, value, onFinish) }
+      onOk: async (value: string) => {
+        onBeforeMutation?.()
+        await addFolderMutation(parentId, value, onFailedMutation)
+      }
     })
   }
 
@@ -61,25 +67,16 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
       hidden: !isTreeActionAllowed(TreePermission.AddFolder) || node.type !== 'folder' || !checkElementPermission(node.permissions, 'create'),
       onClick: () => {
         const parentId = parseInt(node.id)
-        addFolder(parentId)
+        addFolder(
+          parentId,
+          () => dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true })),
+          () => dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: false }))
+        )
       }
     }
   }
 
-  const addFolderContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
-    return {
-      label: t('element.new-folder'),
-      key: 'add-folder',
-      icon: <Icon value={ 'add-folder' } />,
-      hidden: node.type !== 'folder' || !checkElementPermission(node.permissions, 'create'),
-      onClick: () => {
-        addFolder(node.id)
-        onFinish?.()
-      }
-    }
-  }
-
-  const addFolderMutation = async (parentId: number, value: string, onFinish?: () => void): Promise<void> => {
+  const addFolderMutation = async (parentId: number, value: string, onFailedMutation?: () => void): Promise<void> => {
     const elementFolderCreateMutationTask = elementFolderCreateMutation({
       parentId,
       elementType,
@@ -93,11 +90,10 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
 
       if (!isUndefined(response.error)) {
         trackError(new ApiError(response.error))
+        onFailedMutation?.()
+      } else {
+        refreshTree(parentId)
       }
-
-      refreshTree(parentId)
-
-      onFinish?.()
     } catch (error) {
       console.error('Error creating folder', error)
     }
@@ -106,7 +102,6 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
   return {
     addFolder,
     addFolderTreeContextMenuItem,
-    addFolderContextMenuItem,
     addFolderMutation
   }
 }

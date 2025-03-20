@@ -29,6 +29,7 @@ import { type IInlineEditDecoratorConfig, InlineEditDecorator } from '@Pimcore/m
 import { useInlineEditApiUpdate } from './decorator/inline-editing/hooks/use-inline-edit-api-update'
 import { GeneralFiltersDecorator } from '@Pimcore/modules/element/listing/decorators/general-filters/general-filters-decorator'
 import { ActionColumnDecorator } from './decorator/action-column/action-column-decorator'
+import { TagFilterDecorator } from '@Pimcore/modules/asset/listing/decorator/tag-filter/tag-filter-decorator'
 
 export interface IObjectListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useDataObjectGetGridQuery
@@ -49,10 +50,11 @@ const props = compose<AbstractDecoratorProps>(
   ActionColumnDecorator,
   SortingDecorator,
   PagingDecorator,
+  [ClassDefinitionSelectionDecorator, { showConfigLayer: true } as ClassDefinitionSelectionDecoratorConfig],
   ColumnConfigurationDecorator,
   [InlineEditDecorator, { useInlineEditApiUpdate } as IInlineEditDecoratorConfig],
   [RowSelectionDecorator, { rowSelectionMode: 'multiple' } as IRowSelectionDecoratorConfig],
-  [ClassDefinitionSelectionDecorator, { showConfigLayer: true } as ClassDefinitionSelectionDecoratorConfig],
+  TagFilterDecorator,
   GeneralFiltersDecorator
 )(defaultProps)
 /* eslint-enable @typescript-eslint/consistent-type-assertions */
@@ -62,7 +64,8 @@ export const ListingContainer = (): React.JSX.Element => {
     <DynamicTypeRegistryProvider
       serviceIds={ [
         'DynamicTypes/GridCellRegistry',
-        'DynamicTypes/ListingRegistry'
+        'DynamicTypes/ListingRegistry',
+        'DynamicTypes/BatchEditRegistry'
       ] }
     >
       <BaseListing

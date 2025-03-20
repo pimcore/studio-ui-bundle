@@ -11,11 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useEffect, useState } from 'react'
+import React from 'react'
 import { Input } from 'antd'
-import { isUndefined } from 'lodash'
-import { TreeContext, type TreeSearchProps } from '@Pimcore/components/element-tree/element-tree'
-import { useNodeState } from '@Pimcore/components/element-tree/hooks/use-node-state'
+import { isEmpty } from 'lodash'
+import { type TreeSearchProps } from '@Pimcore/components/element-tree/element-tree'
+import { useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
+import { useTreeFilter } from '../provider/tree-filter-provider/use-tree-filter'
 
 const { Search } = Input
 
@@ -24,16 +25,10 @@ export type SearchContainerProps = TreeSearchProps & {
 }
 
 const SearchContainer = (props: SearchContainerProps): React.JSX.Element => {
+  const { searchTerm, setSearchTerm, setPage } = useElementTreeNode(props.node.id)
   const { total } = props
-  const [searchActive, setSearchActive] = useState(false)
-  const { maxItemsPerNode } = useContext(TreeContext)
-  const { setSearchTerm, setPage } = useNodeState(props.node.id)
-
-  useEffect(() => {
-    if (!isUndefined(maxItemsPerNode)) {
-      total > maxItemsPerNode && setSearchActive(true)
-    }
-  }, [total])
+  const { pageSize } = useTreeFilter()
+  const searchActive = !isEmpty(searchTerm) || total > pageSize
 
   function onSearch (searchTerm: string): void {
     setSearchTerm(searchTerm === '' ? undefined : searchTerm)
@@ -47,6 +42,7 @@ const SearchContainer = (props: SearchContainerProps): React.JSX.Element => {
   return (
     <Search
       aria-label={ props.label }
+      defaultValue={ searchTerm }
       loading={ props.isLoading }
       onSearch={ onSearch }
       placeholder={ props.label }

@@ -54,7 +54,7 @@ const DatePickerComponent = (props: DatePickerProps): React.JSX.Element => {
         setValue(date)
         props.onChange?.(fromDayJs(date, props.outputType, props.outputFormat))
       } }
-      rootClassName={ cn({ [styles.inherited]: props.inherited }) }
+      rootClassName={ cn(styles.datePicker, props.className, { [styles.inherited]: props.inherited }) }
       value={ value }
     />
   )

@@ -139,7 +139,6 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
         {isDataObjectType && (
           <ObjectVersionsFieldsView
             breadcrumbsList={ sectionsListWithFields }
-            modifiedFields={ modifiedFields }
             versionKeysList={ versionKeysList }
             versionViewData={ versionViewData as IObjectVersionField[] }
           />

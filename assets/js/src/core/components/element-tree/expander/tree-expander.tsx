@@ -35,7 +35,7 @@ export const TreeExpander = ({ node, state }: TreeExpanderProps): React.JSX.Elem
     if (hasChildren === true) {
       const newExpandedValue = !isExpanded
 
-      if (newExpandedValue && onLoad !== undefined && children.length === 0) {
+      if (newExpandedValue && onLoad !== undefined && children !== undefined && children.length === 0) {
         await onLoad(node)
       }
 

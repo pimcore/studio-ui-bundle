@@ -25,22 +25,22 @@ export interface KeyedFormItemControlProps {
 }
 
 export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: baseValue, ...props }: KeyedFormItemControlProps): React.JSX.Element => {
-  const { operations } = useKeyedList()
+  const { operations, getAdditionalComponentProps } = useKeyedList()
   const { name } = useItem()
   const Child = Children.only(children)
   const value = operations.getValue(name)
 
   useEffect(() => {
-    operations.update(name, value ?? null)
+    operations.update(name, value ?? null, true)
   }, [])
 
   const onChange: KeyedFormItemControlProps['onChange'] = (value: any) => {
     if (value?.target !== undefined && typeof value.target === 'object') {
-      operations.update(name, value.target.value)
+      operations.update(name, value.target.value, false)
       return
     }
 
-    operations.update(name, value)
+    operations.update(name, value, false)
   }
 
   if (!isValidElement(Child)) {
@@ -53,6 +53,7 @@ export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: 
     <Component
       { ...Child.props }
       { ...props }
+      { ...getAdditionalComponentProps?.(name) }
       onChange={ onChange }
       value={ value }
     />

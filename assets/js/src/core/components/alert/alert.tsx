@@ -16,6 +16,8 @@ import cn from 'classnames'
 import { Alert as AntAlert, type AlertProps as AntAlertProps } from 'antd'
 import { useStyles } from './alert.styles'
 
+export interface AlertProps extends AntAlertProps {}
+
 export const Alert = ({ className, rootClassName, ...props }: AntAlertProps): React.JSX.Element => {
   const { styles } = useStyles()
 

@@ -28,6 +28,7 @@ import { useRootElementId } from '@Pimcore/modules/asset/listing/hooks/use-root-
 import { ClassDefinitionSelectionDecorator, type ClassDefinitionSelectionDecoratorConfig } from '../listing/decorator/class-definition-selection/class-definition-selection-decorator'
 import { DefaultView } from './view-layer/views/default-view'
 import { GeneralFiltersDecorator, type GeneralFiltersDecoratorConfig } from '@Pimcore/modules/element/listing/decorators/general-filters/general-filters-decorator'
+import { TagFilterDecorator } from '@Pimcore/modules/asset/listing/decorator/tag-filter/tag-filter-decorator'
 
 const defaultProps = {
   ...listingDefaultProps,
@@ -48,6 +49,7 @@ export const DataObjectSelectorListing = (): React.JSX.Element => {
     SortingDecorator,
     [GlobalRowSelectionDecorator, { rowSelectionMode: config?.selectionType, elementType: 'data-object' } as IGlobalRowSelectionConfig],
     [ClassDefinitionSelectionDecorator, { showConfigLayer: true } as ClassDefinitionSelectionDecoratorConfig],
+    TagFilterDecorator,
     [GeneralFiltersDecorator, { handleSearchTermInSidebar: false } as GeneralFiltersDecoratorConfig]
   )(defaultProps), [config])
   /* eslint-enable @typescript-eslint/consistent-type-assertions */

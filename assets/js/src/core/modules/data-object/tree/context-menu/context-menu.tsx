@@ -22,6 +22,8 @@ import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
 import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import { useLock } from '@Pimcore/modules/element/actions/lock/use-lock'
+import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
+import { useAddObject } from '../../actions/add-object/use-add-object'
 
 export interface DataObjectTreeContextMenuProps {
   node: TreeNodeProps
@@ -32,13 +34,15 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
   const { t } = useTranslation()
   const node = props.node ?? defaultProps
   const { addFolderTreeContextMenuItem } = useAddFolder('data-object')
-  const { renameTreeContextMenuItem } = useRename('data-object')
-  const { deleteTreeContextMenuItem } = useDelete('data-object')
+  const { renameTreeContextMenuItem } = useRename('data-object', getElementActionCacheKey('data-object', 'rename', parseInt(node.id)))
+  const { deleteTreeContextMenuItem } = useDelete('data-object', getElementActionCacheKey('data-object', 'delete', parseInt(node.id)))
   const { refreshTreeContextMenuItem } = useRefreshTree('data-object')
   const { copyTreeContextMenuItem, cutTreeContextMenuItem, pasteTreeContextMenuItem, pasteCutContextMenuItem } = useCopyPaste('data-object')
   const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem, isLockMenuHidden } = useLock('data-object')
+  const { addObjectTreeContextMenuItem } = useAddObject()
 
   const items: DropdownMenuProps['items'] = [
+    addObjectTreeContextMenuItem(node),
     addFolderTreeContextMenuItem(node),
     renameTreeContextMenuItem(node),
     copyTreeContextMenuItem(node),

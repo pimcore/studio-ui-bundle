@@ -36,6 +36,36 @@ Encore
     * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
     */
   .addEntry('main', path.resolve(__dirname, 'js', 'src', 'sdk', 'main.ts'))
+  .addEntry('components/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'components', 'index.ts'))
+  .addEntry('app/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'app', 'index.ts'))
+  .addEntry('api/asset/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'asset', 'index.ts'))
+  .addEntry('api/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'index.ts'))
+  .addEntry('api/custom-metadata/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'custom-metadata', 'index.ts'))
+  .addEntry('api/data-object/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'data-object', 'index.ts'))
+  .addEntry('api/dependencies/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'dependencies', 'index.ts'))
+  .addEntry('api/documents/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'documents', 'index.ts'))
+  .addEntry('api/elements/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'elements', 'index.ts'))
+  .addEntry('api/metadata/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'metadata', 'index.ts'))
+  .addEntry('api/perspectives/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'perspectives', 'index.ts'))
+  .addEntry('api/properties/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'properties', 'index.ts'))
+  .addEntry('api/role/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'asset', 'index.ts'))
+  .addEntry('api/schedule/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'schedule', 'index.ts'))
+  .addEntry('api/settings/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'settings', 'index.ts'))
+  .addEntry('api/tags/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'tags', 'index.ts'))
+  .addEntry('api/thumbnails/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'thumbnails', 'index.ts'))
+  .addEntry('api/translations/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'translations', 'index.ts'))
+  .addEntry('api/user/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'user', 'index.ts'))
+  .addEntry('api/version/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'version', 'index.ts'))
+  .addEntry('api/workflow/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'api', 'workflow', 'index.ts'))
+  .addEntry('modules/app/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'app', 'index.ts'))
+  .addEntry('modules/asset/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'asset', 'index.ts'))
+  .addEntry('modules/class-definitions/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'class-definitions', 'index.ts'))
+  .addEntry('modules/data-object/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'data-object', 'index.ts'))
+  .addEntry('modules/element/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'element', 'index.ts'))
+  .addEntry('modules/icon-library/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'icon-library', 'index.ts'))
+  .addEntry('modules/user/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'user', 'index.ts'))
+  .addEntry('modules/widget-manager/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'widget-manager', 'index.ts'))
+  .addEntry('modules/utils/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'utils', 'index.ts'))
 
 // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
 // .enableStimulusBridge('./assets/controllers.json')
@@ -139,7 +169,7 @@ Encore
     `
   }))
 
-  .addPlugin(new ForkTsCheckerWebpackPlugin())
+  // .addPlugin(new ForkTsCheckerWebpackPlugin())
 
   .configureSplitChunks
 

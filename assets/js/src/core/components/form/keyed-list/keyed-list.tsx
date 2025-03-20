@@ -23,9 +23,11 @@ export interface KeyedListProps {
   children: React.ReactNode
   value?: KeyedListData['values']
   onChange?: (value: KeyedListData['values']) => void
+  onFieldChange?: (field: NamePath, value: any) => void
+  getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
 }
 
-const KeyedList = ({ name, children, value: baseValue, onChange: baseOnChange }: KeyedListProps): React.JSX.Element => {
+const KeyedList = ({ name, children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: KeyedListProps): React.JSX.Element => {
   const initialValue = isArray(baseValue) ? {} : baseValue ?? {}
   const [value, setValue] = useState(cloneDeep(initialValue))
 
@@ -47,7 +49,7 @@ const KeyedList = ({ name, children, value: baseValue, onChange: baseOnChange }:
     if (!isEqual(value, initialValue)) {
       setValue(initialValue)
     }
-  }, [initialValue])
+  }, [baseValue])
 
   const add: KeyedListData['operations']['add'] = (key, newValue = {}) => {
     setValue((currentValue) => {
@@ -69,7 +71,7 @@ const KeyedList = ({ name, children, value: baseValue, onChange: baseOnChange }:
     setValue(() => newValue)
   }
 
-  const update: KeyedListData['operations']['update'] = (subFieldname, newSubValue) => {
+  const update: KeyedListData['operations']['update'] = (subFieldname, newSubValue, isInitialValue) => {
     const currentName: string[] = isArray(name) ? name : [name]
     const currentSubFieldname: string[] = isArray(subFieldname) ? subFieldname : [subFieldname]
 
@@ -79,6 +81,10 @@ const KeyedList = ({ name, children, value: baseValue, onChange: baseOnChange }:
       if (currentName[i] !== currentSubFieldname[i]) {
         nameDifference.push(currentSubFieldname[i])
       }
+    }
+
+    if (!isInitialValue) {
+      onFieldChange?.(currentSubFieldname, newSubValue)
     }
 
     setValue((currentValue) => {
@@ -103,6 +109,7 @@ const KeyedList = ({ name, children, value: baseValue, onChange: baseOnChange }:
 
   return useMemo(() => (
     <KeyedListProvider
+      getAdditionalComponentProps={ getAdditionalComponentProps }
       onChange={ onChange }
       operations={ { add, remove, update, getValue } }
       values={ value ?? {} }

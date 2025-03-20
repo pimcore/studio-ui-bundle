@@ -16,15 +16,15 @@ import React, { createContext, useMemo } from 'react'
 export interface ITreeFilterContext {
   classIds?: string[]
   pqlQuery?: string
-  pageSize?: number
+  pageSize: number
 }
 
-export const TreeFilterContext = createContext<ITreeFilterContext>({})
+export const TreeFilterContext = createContext<ITreeFilterContext>({ pageSize: 30 })
 
 export interface TreeFilterProviderProps {
   classIds?: string[]
   pqlQuery?: string
-  pageSize?: number
+  pageSize: number
   children: React.ReactNode
 }
 

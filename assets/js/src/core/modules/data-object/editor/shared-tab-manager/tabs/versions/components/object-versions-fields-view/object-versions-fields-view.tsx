@@ -14,6 +14,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
+import { isEmpty } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
@@ -26,12 +27,11 @@ interface IObjectVersionsFieldsViewProps {
   breadcrumbsList?: CategoriesList
   versionViewData: IObjectVersionsFieldsList['data']
   versionKeysList: VersionKeysList
-  modifiedFields: string[]
 }
 
 const SECTIONS_WITH_TRANSLATION: string[] = [VersionCategoryName.SYSTEM_DATA]
 
-export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, versionKeysList, modifiedFields }: IObjectVersionsFieldsViewProps): React.JSX.Element => {
+export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, versionKeysList }: IObjectVersionsFieldsViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
 
@@ -55,11 +55,15 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
     )
   }
 
-  const renderFieldTitle = ({ key, isCommonSection }: { key: string, isCommonSection: boolean }): React.JSX.Element => {
+  const renderFieldTitle = ({ key, locale, isCommonSection }: { key: string, locale: string, isCommonSection: boolean }): React.JSX.Element => {
+    if (isEmptyValue(key)) return <></>
+
     const textValue = isCommonSection ? t(`version.${key}`) : key
 
     return (
-      <Text className={ styles.fieldTitle }>{textValue}</Text>
+      <Text className={ styles.fieldTitle }>
+        {textValue} {!isEmpty(locale) && <Text type="secondary">| {locale.toUpperCase()}</Text>}
+      </Text>
     )
   }
 
@@ -76,35 +80,44 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
               gap="extra-small"
               vertical
             >
-              {versionViewData.map((fieldItem, fieldIndex) => (
-                breadcrumb.fieldKeys.includes(fieldItem.Field.name as string) && (
-                  <div key={ `${fieldIndex}-${fieldItem.Field.name}` }>
-                    {renderFieldTitle({ key: fieldItem.Field.title, isCommonSection })}
-                    <Flex gap="mini">
-                      {versionKeysList.map((key, index) => {
-                        const isModifiedField = modifiedFields.includes(fieldItem.Field.title as string)
-                        const isSecondItem = index === 1
+              {versionViewData.map((fieldItem, fieldIndex) => {
+                const isBreadcrumbKeyMatch = breadcrumb.key === fieldItem.Field.fieldBreadcrumbTitle
+                const isFieldInBreadcrumbList = breadcrumb.fieldKeys.includes(fieldItem.Field.name as string)
 
-                        return (
-                          <div
-                            className={ cn(styles.objectSectionFieldItemWrapper, {
-                              [styles.objectSectionFieldItemWrapperHighlight]: isModifiedField && isSecondItem
-                            }) }
-                            key={ `${index}-${key}` }
-                          >
-                            <DataComponent
-                              datatype={ 'data' }
-                              fieldType={ fieldItem.Field.fieldtype }
-                              name={ fieldItem.Field.name }
-                              value={ fieldItem[key] }
-                              { ...fieldItem.Field }
-                            />
-                          </div>
-                        )
-                      })}
-                    </Flex>
-                  </div>
-                )))}
+                return (
+                  isBreadcrumbKeyMatch && isFieldInBreadcrumbList && (
+                    <div key={ `${fieldIndex}-${fieldItem.Field.name}` }>
+                      {renderFieldTitle({ key: fieldItem.Field.title, locale: fieldItem.Field?.locale, isCommonSection })}
+                      <Flex gap="mini">
+                        {versionKeysList.map((key, index) => {
+                          const isModifiedField = fieldItem?.isModifiedValue === true
+                          const isSecondItem = index === 1
+
+                          return (
+                            <div
+                              className={ styles.objectSectionFieldItemWrapper }
+                              key={ `${index}-${key}` }
+                            >
+                              <DataComponent
+                                className={ cn(styles.objectSectionFieldItem, 'versionFieldItem', {
+                                  [styles.objectSectionFieldItemHighlight]: isModifiedField && isSecondItem,
+                                  versionFieldItemHighlight: isModifiedField && isSecondItem
+                                }) }
+                                datatype={ 'data' }
+                                fieldType={ fieldItem.Field.fieldtype }
+                                key={ `${index}-${key}` }
+                                name={ fieldItem.Field.name }
+                                value={ fieldItem[key] }
+                                { ...fieldItem.Field }
+                              />
+                            </div>
+                          )
+                        })}
+                      </Flex>
+                    </div>
+                  )
+                )
+              })}
             </Flex>
           </div>
         )
