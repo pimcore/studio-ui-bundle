@@ -152,7 +152,6 @@ import { DynamicTypeGridCellDataObjectActions } from '@Pimcore/modules/element/d
 import { DynamicTypeGridCellDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/data-object-object-brick/dynamic-type-grid-cell-data-object-adapter'
 import { DynamicTypeBatchEditDataObjectAdapter } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/data-object-adapter/dynamic-type-batch-edit-data-object-adpater'
 import { DynamicTypeBatchEditDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/data-object-object-brick/dynamic-type-batch-edit-data-object-object-brick'
-import DefaultWysiwygEditor from '@Pimcore/modules/wysiwyg/default-wysiwyg-editor/default-wysiwyg-editor'
 
 // Main nav
 container.bind(serviceIds.mainNavRegistry).to(MainNavRegistry).inSingletonScope()
