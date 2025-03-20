@@ -155,7 +155,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
     const dx = evt.clientX - resizeStart.x
     const dy = evt.clientY - resizeStart.y
 
-    if (dragging) {
+    if (dragging && !disableDrag) {
       setItems(dragItem(evt, dragStart, containerBounds, items, hotspotIndex, toNumber(styleOptions[items[hotspotIndex].type].marginLeft), toNumber(styleOptions[items[hotspotIndex].type].marginTop)))
     } else if (resizeDirection !== null) {
       setItems(resizeItem(evt, resizeStart, resizeDirection, containerBounds, items, hotspotIndex, toNumber(styleOptions[items[hotspotIndex].type].minSize), dx, dy))
@@ -176,8 +176,8 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
   return (
     <div
       className={ ['hotspot-image', styles.hotspotImage].join(' ') }
-      onMouseMove={ handleMouseMove }
-      onMouseUp={ handleMouseUp }
+      onMouseMove={ !disableDrag ? handleMouseMove : undefined }
+      onMouseUp={ !disableDrag ? handleMouseUp : undefined }
       ref={ containerRef }
       role="none"
     >
@@ -193,7 +193,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
         ref={ imageRef }
         src={ src }
       />
-      { imageLoaded && containerRef.current !== null && (
+      { editModeHotspot === undefined && imageLoaded && containerRef.current !== null && (
         convertHotspotsToPixel(items, containerRef.current.getBoundingClientRect()).map(hotspot => (
           <Popover
             arrow={ false }

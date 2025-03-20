@@ -46,7 +46,7 @@ const FieldOperations = ({
   form
 }: FieldOperationsProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { fields, updateTextValue, updateCheckboxValue, updateRelationValue, handleRemoveField, dataTypes, setHotspotName } = useHotspotData(hotspot, form)
+  const { fields, updateName, updateTextValue, updateCheckboxValue, updateRelationValue, handleRemoveField, dataTypes } = useHotspotData(hotspot, form)
 
   const getTypeLabel = (type: string): string => {
     const typeObj = dataTypes.find(dataType => dataType.key === type)
@@ -157,7 +157,7 @@ const FieldOperations = ({
           name={ `name-${index}` }
         >
           <Input
-            onChange={ (e) => { setHotspotName(e.target.value) } }
+            onChange={ (e) => { updateName(index, e.target.value) } }
             value={ field.name }
           />
         </Form.Item>

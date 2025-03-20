@@ -32,10 +32,10 @@ interface UseHotspotDataHookReturn {
   hotspotName: string
   setHotspotName: (name: string) => void
   handleRemoveField: (index: number) => void
+  updateName: (index: number, value: string) => void
   updateTextValue: (index: number, value: string) => void
   updateCheckboxValue: (index: number, checked: boolean) => void
-  updateRelationValue: (index: number, type: 'document' | 'asset' | 'object',
-    newValue: ManyToOneRelationValue | null) => void
+  updateRelationValue: (index: number, type: 'document' | 'asset' | 'object', newValue: ManyToOneRelationValue | null) => void
   dataTypes: Array<{ key: string, label: string, onClick: () => void }>
   editModeHotspot: IHotspot | undefined
   setEditModeHotspot: (hotspot: IHotspot | undefined) => void
@@ -44,8 +44,6 @@ interface UseHotspotDataHookReturn {
 const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDataHookReturn => {
   const { t } = useTranslation()
   const { fields, setFields, hotspotName, setHotspotName, editModeHotspot, setEditModeHotspot } = useContext(HotspotContext)
-
-  console.log('----> fields', fields)
 
   useEffect(() => {
     setFields([])
@@ -152,6 +150,16 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
     }
   }
 
+  const updateName = (index: number, value: string): void => {
+    setFields((prevFields) =>
+      prevFields.map((field, i) =>
+        i === index
+          ? { ...field, name: value }
+          : field
+      )
+    )
+  }
+
   const updateTextValue = (index: number, value: string): void => {
     setFields((prevFields) =>
       prevFields.map((field, i) =>
@@ -194,7 +202,7 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
     )
   }
 
-  return { fields, setFields, hotspotName, setHotspotName, handleRemoveField, updateTextValue, updateCheckboxValue, updateRelationValue, dataTypes, editModeHotspot, setEditModeHotspot }
+  return { fields, setFields, hotspotName, setHotspotName, handleRemoveField, updateName, updateTextValue, updateCheckboxValue, updateRelationValue, dataTypes, editModeHotspot, setEditModeHotspot }
 }
 
 export default useHotspotData
