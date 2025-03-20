@@ -27,18 +27,6 @@ export interface IVersionBlockProps extends AbstractObjectDataDefinition {
   value?: any
 }
 
-const renderTitle = (title: string): React.JSX.Element => {
-  const { styles } = useCommonStyles()
-
-  if (!isEmptyValue(title)) {
-    return (
-      <Text className={ styles.fieldTitle }>{title}</Text>
-    )
-  }
-
-  return <></>
-}
-
 export const VersionBlock = ({ children, value }: IVersionBlockProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { styles: commonStyles } = useCommonStyles()
@@ -47,6 +35,16 @@ export const VersionBlock = ({ children, value }: IVersionBlockProps): React.JSX
   const lastItemIndex = blocksCount - 1
 
   if (isEmpty(children) || isEmpty(value)) {
+    return <></>
+  }
+
+  const renderTitle = (title: string): React.JSX.Element => {
+    if (!isEmptyValue(title)) {
+      return (
+        <Text className={ commonStyles.fieldTitle }>{title}</Text>
+      )
+    }
+
     return <></>
   }
 
