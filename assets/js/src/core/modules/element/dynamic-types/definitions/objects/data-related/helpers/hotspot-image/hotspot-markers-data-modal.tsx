@@ -58,35 +58,37 @@ export const HotspotMarkersDataModal = ({
     onClose()
   }
 
+  const dataModalFooter = (
+    <Flex
+      className="w-100"
+      justify="space-between"
+    >
+      <Dropdown menu={ {
+        items: dataTypes
+      } }
+      >
+        <IconTextButton
+          icon={ { value: 'new' } }
+          key="empty"
+        >
+          {t('hotspots-markers-data-modal.new-data')}
+        </IconTextButton>
+      </Dropdown>
+      <Button
+        key="ok"
+        onClick={ () => {
+          handleSave()
+        } }
+        type={ 'primary' }
+      >
+        {t('hotspots-markers-data-modal.apply')}
+      </Button>
+    </Flex>
+  )
+
   return (
     <WindowModal
-      footer={ () => (
-        <Flex
-          className="w-100"
-          justify="space-between"
-        >
-          <Dropdown menu={ {
-            items: dataTypes
-          } }
-          >
-            <IconTextButton
-              icon={ { value: 'new' } }
-              key="empty"
-            >
-              {t('hotspots-markers-data-modal.new-data')}
-            </IconTextButton>
-          </Dropdown>
-          <Button
-            key="ok"
-            onClick={ () => {
-              handleSave()
-            } }
-            type={ 'primary' }
-          >
-            {t('hotspots-markers-data-modal.apply')}
-          </Button>
-        </Flex>
-      ) }
+      footer={ dataModalFooter }
       okText={ t('save') }
       onCancel={ handleCancel }
       open={ !isUndefined(editModeHotspot) }
