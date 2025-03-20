@@ -19,12 +19,10 @@ namespace Pimcore\Bundle\StudioUiBundle;
 
 use function dirname;
 use Pimcore\Bundle\StudioUiBundle\DependencyInjection\PimcoreStudioUiExtension;
-use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiInterface;
-use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiOptionalEntrypointsInterface;
 use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
-class PimcoreStudioUiBundle extends AbstractPimcoreBundle implements PimcoreBundleStudioUiInterface, PimcoreBundleStudioUiOptionalEntrypointsInterface
+class PimcoreStudioUiBundle extends AbstractPimcoreBundle
 {
     public function getContainerExtension(): ExtensionInterface
     {
@@ -34,20 +32,5 @@ class PimcoreStudioUiBundle extends AbstractPimcoreBundle implements PimcoreBund
     public function getPath(): string
     {
         return dirname(__DIR__);
-    }
-
-    public function getWebpackEntryPointsJsonLocations(): array
-    {
-        return glob($this->getPath() . '/public/build/*/entrypoints.json');
-    }
-
-    public function getWebpackEntryPoints(): array
-    {
-        return ['vendor', 'core-dll', 'main'];
-    }
-
-    public function getWebpackOptionalEntrypoints(): array
-    {
-        return ['vendor', 'core-dll'];
     }
 }
