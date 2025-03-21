@@ -28,18 +28,45 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
-    link: css`
-      &.versionFieldItem {
-        padding: ${token.paddingXXS}px;
-        background-color: ${token.colorBgContainerDisabled} !important;
-        border: 1px solid transparent;
-        border-radius: ${token.borderRadius}px !important;
-      }
-      
+    section: css`
       &.versionFieldItemHighlight {
         background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
-        border-color: ${token.colorBorder} !important;
       }
+    `,
+
+    sectionLabel: css`
+      position: relative;
+    `,
+
+    subSectionLabel: css`
+      color: ${token.colorTextSecondary};
+      margin-left: 6px;
+
+      &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        left: -5px;
+        width: 2px;
+        height: 22px;
+        background-color: ${token.Colors.Neutral.Fill.colorFill};
+      }
+
+      &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 2px;
+        height: 22px;
+        background-color: ${token.Colors.Neutral.Fill.colorFill};
+      }
+    `,
+
+    fieldTitle: css`
+      display: block;
+      margin-bottom: 4px;
     `
   }
 })

@@ -61,4 +61,5 @@ export interface GridProps {
   onActiveCellChange?: (activeCell?: GridCellReference) => void
   contextMenu?: ListGridContextMenuComponents
   disabled?: boolean
+  className?: string
 }

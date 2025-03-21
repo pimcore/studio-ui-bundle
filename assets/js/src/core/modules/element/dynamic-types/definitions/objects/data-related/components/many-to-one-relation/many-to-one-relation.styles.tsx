@@ -15,25 +15,19 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    input: css`
-      &.ant-input-disabled {
-        &.versionFieldItem {
+    container: css`
+      &.versionFieldItem {
+        .ant-input-disabled {
           color: ${token.colorText} !important;
-          border-color: transparent !important;
-        }
-        
-        &.versionFieldItemHighlight {
-          border-color: ${token.colorBorder} !important;
-          background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+          border: 1px solid transparent !important;
         }
       }
-    `,
-
-    inherited: css`
-      background: ${token.colorBgContainerDisabled};
-      color: ${token.colorTextDisabled};
-      &:focus-within, &:hover {
-        background: ${token.colorBgContainerDisabled};
+      
+      &.versionFieldItemHighlight {
+        .ant-input-disabled {
+          background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+          border-color: ${token.colorBorder} !important;
+        }
       }
     `
   }
