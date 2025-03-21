@@ -68,7 +68,7 @@ export interface BoxProps extends React.HTMLAttributes<HTMLOrSVGElement> {
 export const Box = ({ children, padding, margin, className, component = 'div', inline, ...props }: BoxProps): React.JSX.Element => {
   const { styles } = useStyles()
   const classes: string[] = [
-    'box',
+    'box test',
     styles.box,
     inline === true ? 'box--inline' : '',
     className ?? ''
