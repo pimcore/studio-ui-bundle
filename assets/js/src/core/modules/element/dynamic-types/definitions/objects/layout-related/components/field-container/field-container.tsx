@@ -21,7 +21,7 @@ export interface FieldContainerProps extends AbstractObjectLayoutDefinition {
   collapsed?: boolean
 }
 
-export const FieldContainer = ({ children, collapsible, collapsed }: FieldContainerProps): React.JSX.Element => {
+export const FieldContainer = ({ children, collapsible, collapsed, noteditable }: FieldContainerProps): React.JSX.Element => {
   return (
     <Flex
       className='w-full'
@@ -35,6 +35,7 @@ export const FieldContainer = ({ children, collapsible, collapsed }: FieldContai
           >
             <ObjectComponent
               { ...child }
+              noteditable={ noteditable }
             />
           </Flex>
         )
