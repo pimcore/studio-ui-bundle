@@ -14,13 +14,11 @@ declare(strict_types=1);
  *  @license    http://www.pimcore.org/license     GPLv3 and PCL
  */
 
-namespace Pimcore\Bundle\StudioUiBundle\Extension\Bundle;
+namespace Pimcore\Bundle\StudioUiBundle\Exception;
 
 /**
- * Can be used to define entrypoints that are allowed to be empty.
- * This is useful for bundles that have optional entrypoints which are created e.g. for the dev environment only.
+ * @internal
  */
-interface PimcoreBundleStudioUiOptionalEntrypointsInterface extends PimcoreBundleStudioUiInterface
+final class InvalidEntryPointsJsonException extends \RuntimeException
 {
-    public function getWebpackOptionalEntrypoints(): array;
 }

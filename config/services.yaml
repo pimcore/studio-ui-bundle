@@ -17,6 +17,12 @@ services:
     Pimcore\Bundle\StudioUiBundle\Service\StaticResourcesResolverInterface:
         class: Pimcore\Bundle\StudioUiBundle\Service\StaticResourcesResolver
 
+    Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointManager:
+        arguments:
+            - !tagged_iterator pimcore_studio_ui.webpack_entry_point_provider
+
+    Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProvider: ~
+
 # add more services, or override services that need manual wiring
 #    Pimcore\Bundle\StudioUiBundle\ExampleClass:
 #        arguments:

@@ -163,35 +163,46 @@ Now that the main entry point is in place, it’s time to bundle our files. Simp
 npm run build
 ```
 
-When the command is finished you should have a few new files in your `./public/build` directory. Most important for us is the `entrypoint.json`, because we still have to tell Pimcore where it will find our generated frontend files. For that we should use the `PimcoreBundleStudioUiInterface` in our Pimcore bundle:
+When the command is finished you should have a few new files in your `./public/build` directory. Most important for us is the `entrypoint.json`, because we still have to tell Pimcore where it will find our generated frontend files. For that we need to register a `WebpackEntryPointProviderInterface` service in our Pimcore service container:
 
 ``` PHP
 <?php
+declare(strict_types=1);
 
-namespace Pimcore\Bundle\StudioUiDemoPluginBundle;
+namespace Pimcore\Bundle\StudioUiDemoPluginBundle\Webpack;
 
-use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiInterface;
-use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
+use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProviderInterface;
 
-class PimcoreStudioUiDemoPluginBundle extends AbstractPimcoreBundle implements PimcoreBundleStudioUiInterface
+final class WebpackEntryPointProvider implements WebpackEntryPointProviderInterface
 {
-
-    public function getPath(): string
+    public function getEntryPointsJsonLocations(): array
     {
-        return \dirname(__DIR__);
+        return [__DIR__ . '/../../public/build/entrypoints.json'];
     }
 
-    public function getWebpackEntryPointsJsonLocations(): array
-    {
-        return [$this->getPath() . '/public/build/entrypoints.json'];
-    }
-
-    public function getWebpackEntryPoints(): array
+    public function getEntryPoints(): array
     {
         return ['main'];
     }
+
+    public function getOptionalEntryPoints(): array
+    {
+        return [];
+    }
+
 }
+
 ```
+
+```YAML
+# services.yaml
+
+services:
+    Pimcore\Bundle\StudioUiDemoPluginBundle\Webpack\WebpackEntryPointProvider:
+        tags:
+            - { name: pimcore_studio_ui.webpack_entry_point_provider }
+```
+
 Now just ensure that our bundle is installed. And finally we should see our `console.log()` in the browser console when we access our Pimcore Studio in the browser.
 
 ### Further guides

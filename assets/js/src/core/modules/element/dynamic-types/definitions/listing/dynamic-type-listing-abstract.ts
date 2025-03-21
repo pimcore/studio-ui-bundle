@@ -21,11 +21,6 @@ import { type DynamicTypeAbstract } from '../../registry/dynamic-type-registry-a
 import { type AbstractGridCellDefinition, type DynamicTypeGridCellAbstract } from '../grid-cell/dynamic-type-grid-cell-abstract'
 import { type DynamicTypeGridCellRegistry } from '../grid-cell/dynamic-type-grid-cell-registry'
 
-// @todo move to corresponding file
-export interface DefaultBatchEditComponentProps {
-  toBeDefined: true
-}
-
 @injectable()
 export abstract class DynamicTypeListingAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
