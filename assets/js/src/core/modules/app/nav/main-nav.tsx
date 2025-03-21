@@ -125,7 +125,7 @@ export const MainNav = (): React.JSX.Element => {
       document.removeEventListener('click', handleClickOutside)
     }
   }, [isOpen])
-  console.log('navItems', navItems)
+
   return (
     <div ref={ elRef }>
       <IconButton
