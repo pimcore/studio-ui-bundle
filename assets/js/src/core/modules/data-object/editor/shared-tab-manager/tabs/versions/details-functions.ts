@@ -18,7 +18,7 @@ import type { DataObjectVersion } from '@Pimcore/modules/element/editor/shared-t
 import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { DATATYPE_LIST, type IFormattedDataStructureData, type IGetFormattedDataStructureProps, type IFieldCollectionValue } from './types'
-import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
+import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'
 
 const isFieldValueEmpty = (fieldValue: any): boolean => {
   if (isObject(fieldValue)) {
@@ -31,6 +31,8 @@ const isFieldValueEmpty = (fieldValue: any): boolean => {
 export const getBreadcrumbTitle = (value1: string, value2: string): string => {
   return [value1, value2].filter(Boolean).join('/')
 }
+
+const fieldTypesRequiringChildren = [DynamicTypesList.BLOCK]
 
 export const getFormattedDataStructure = async ({ objectId, layout, versionData, versionId, versionCount, objectDataRegistry }: IGetFormattedDataStructureProps): Promise<IFormattedDataStructureData[]> => {
   const formattedSystemData = {
@@ -62,7 +64,9 @@ export const getFormattedDataStructure = async ({ objectId, layout, versionData,
         const processedPromises = processedDataList?.map(async (processedDataItem: IFormattedDataStructureData): Promise<IFormattedDataStructureData[]> => {
           objectValuesData = {}
 
-          if (!isEmpty(processedDataItem?.fieldData?.children)) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          if (!isEmpty(processedDataItem?.fieldData?.children) && !fieldTypesRequiringChildren.includes(processedDataItem?.fieldData?.fieldtype as DynamicTypesList)) {
             const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, processedDataItem?.fieldData?.title as string)
 
             return await processLayoutData({ data: [processedDataItem?.fieldData], objectValuesData: { ...objectValuesData, [processedDataItem?.fieldData?.name]: processedDataItem?.fieldValue }, fieldBreadcrumbTitle: breadcrumbTitle })
@@ -138,9 +142,15 @@ export const versionsDataToTableData = ({ data }: { data: IFormattedDataStructur
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       if (mainVersionItem?.fieldData?.fieldtype === DynamicTypesList.FIELD_COLLECTIONS) {
-        const differences = differenceWith(mainVersionItem?.fieldValue as IFieldCollectionValue[], compareVersionItem?.fieldValue as IFieldCollectionValue[], (item1, item2) =>
-          item1?.type === item2?.type && isEqual(item1?.data, item2?.data)
-        )
+        const mainVersionLength = mainVersionItem?.fieldValue?.length
+        const compareVersionLength = compareVersionItem?.fieldValue?.length
+
+        const mainList = compareVersionLength > mainVersionLength ? compareVersionItem : mainVersionItem
+        const compareList = mainVersionLength < compareVersionLength ? mainVersionItem : compareVersionItem
+
+        const differences = differenceWith(mainList?.fieldValue as IFieldCollectionValue[], compareList?.fieldValue as IFieldCollectionValue[], (item1, item2) => {
+          return item1?.type === item2?.type && isEqual(item1?.data, item2?.data)
+        })
 
         field.fieldCollectionModifiedList = differences.map(item => item.type)
       }

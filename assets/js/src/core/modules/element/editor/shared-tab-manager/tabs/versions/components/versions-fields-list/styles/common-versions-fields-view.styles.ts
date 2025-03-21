@@ -77,6 +77,10 @@ export const useStyles = createStyles(({ token, css }) => {
       width: 100%;
     `,
 
+    objectSectionFieldItemWrapperHighlight: css`
+      background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+    `,
+
     objectSectionFieldItem: css`
       justify-content: flex-start;
       width: 100% !important;

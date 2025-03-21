@@ -14,11 +14,12 @@
 import React from 'react'
 import { isEmpty } from 'lodash'
 import { DataComponent } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/components/data-component/data-component'
-import { type AbstractObjectDataDefinition } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
+import { type AbstractObjectDataDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Text } from '@Pimcore/components/text/text'
 import { Box } from '@Pimcore/components/box/box'
 import { Divider } from '@Pimcore/components/divider/divider'
+import { useStyles as useCommonStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/styles/common-versions-fields-view.styles'
 import { useStyles } from './version-block.styles'
 
 export interface IVersionBlockProps extends AbstractObjectDataDefinition {
@@ -26,52 +27,55 @@ export interface IVersionBlockProps extends AbstractObjectDataDefinition {
   value?: any
 }
 
-const renderTitle = (title: string): React.JSX.Element => {
-  if (!isEmptyValue(title)) {
-    return (
-      <Text>{title}</Text>
-    )
-  }
-
-  return <></>
-}
-
 export const VersionBlock = ({ children, value }: IVersionBlockProps): React.JSX.Element => {
   const { styles } = useStyles()
+  const { styles: commonStyles } = useCommonStyles()
+
+  const blocksCount = value.length
+  const lastItemIndex = blocksCount - 1
 
   if (isEmpty(children) || isEmpty(value)) {
     return <></>
   }
 
+  const renderTitle = (title: string): React.JSX.Element => {
+    if (!isEmptyValue(title)) {
+      return (
+        <Text className={ commonStyles.fieldTitle }>{title}</Text>
+      )
+    }
+
+    return <></>
+  }
+
   return (
     <div className={ styles.block }>
-      {children.map((blockItem: any) => {
-        return value.map((blockValue: any, blockIndex: number) => {
-          const blockFieldName = blockItem.name
-          const blockFieldTitle: string = blockItem.title
-          const blockFieldValue = blockValue?.[blockFieldName]
+      {[...Array(blocksCount)].map((_, index) => (
+        <div key={ index }>
+          {children.map((blockItem: any, blockIndex: number) => {
+            const blockFieldName = blockItem.name
+            const blockFieldTitle: string = blockItem.title
+            const blockFieldValue = value[index]?.[blockFieldName]
 
-          const blockLength = value.length
-          const lastItemIndex = blockLength - 1
-
-          return (
-            <div key={ `${blockIndex}-${blockFieldName}` }>
-              <Box
-                className={ styles.blockItem }
-                padding={ { x: 'small', y: 'mini' } }
-              >
-                {renderTitle(blockFieldTitle)}
-                <DataComponent
-                  className="versionFieldItem"
-                  value={ blockFieldValue }
-                  { ...blockItem }
-                />
-              </Box>
-              {(blockIndex !== lastItemIndex) && <Divider className={ styles.divider } />}
-            </div>
-          )
-        })
-      })}
+            return (
+              <div key={ `${blockIndex}-${blockFieldName}` }>
+                <Box
+                  className={ styles.blockItem }
+                  padding={ { x: 'small', y: 'mini' } }
+                >
+                  {renderTitle(blockFieldTitle)}
+                  <DataComponent
+                    className={ commonStyles.objectSectionFieldItem }
+                    value={ blockFieldValue }
+                    { ...blockItem }
+                  />
+                </Box>
+              </div>
+            )
+          })}
+          {(index !== lastItemIndex) && <Divider className={ styles.divider } />}
+        </div>
+      ))}
     </div>
   )
 }

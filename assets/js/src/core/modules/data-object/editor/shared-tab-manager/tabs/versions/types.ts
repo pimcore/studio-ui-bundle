@@ -13,7 +13,7 @@
 
 import type { Layout } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import type { DataObjectVersion } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
-import type { DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
+import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 
 export enum DATATYPE_LIST {
   LAYOUT = 'layout',

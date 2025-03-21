@@ -28,7 +28,7 @@ import { SingleViewUi } from './single-view-ui'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import type {
   DynamicTypeObjectDataRegistry
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type IFormattedDataStructureData } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 
@@ -61,7 +61,7 @@ export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Ele
 
         const dataRaw = response.data as DataObjectVersion
 
-        if (!isUndefined(layoutData?.children)) {
+        if (!isUndefined(layoutData?.children) && !isUndefined(dataRaw)) {
           formattedDataList.push(await getFormattedDataStructure({
             objectId: id,
             layout: layoutData.children,
