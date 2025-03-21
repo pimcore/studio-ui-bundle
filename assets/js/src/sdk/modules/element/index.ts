@@ -73,6 +73,9 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/comp
 export * from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/text/text-cell'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/textarea/textarea-cell'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/time/time-cell'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/dynamic-type-grid-cell-registry'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/dynamic-type-grid-cell-abstract'
+
 // @todo check the naming of the cellProps
 export { type TextCellProps as TranslateCellProps, TranslateCell } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/translate/translate-cell'
 
