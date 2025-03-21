@@ -27,6 +27,7 @@ import {
 import {
   type HotspotMarkersModalContainerRef
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-markers-modal-container'
+import { useStyles } from '../../image-gallery.styles'
 
 export interface ImageGallerySortableItemProps {
   id: string
@@ -55,11 +56,14 @@ export const ImageGallerySortableItem = ({ id, index, item, value, setValue, dis
     transition
   }
 
+  const { styles } = useStyles()
+
   return (
     <div
       ref={ setNodeRef }
       { ...attributes }
       { ...listeners }
+      className={ styles.imageItem }
       style={ active?.data.current?.sortable !== undefined ? style : undefined }
     >
       { item.image !== null

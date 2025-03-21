@@ -63,7 +63,6 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
   const { openAsset } = useAssetHelper()
   const messageApi = useMessage()
   const { confirm } = useFormModal()
-
   const { open: openElementSelector } = useElementSelector({
     selectionType: SelectionType.Single,
     areas: {
