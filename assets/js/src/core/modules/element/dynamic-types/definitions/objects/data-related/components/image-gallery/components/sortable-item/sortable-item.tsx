@@ -82,9 +82,11 @@ export const ImageGallerySortableItem = ({ id, index, item, value, setValue, dis
         : (
           <ImageGalleryImageTarget
             disabled={ disabled }
+            height={ height }
             index={ index }
             setValue={ setValue }
             value={ value }
+            width={ width }
           />
           )
         }

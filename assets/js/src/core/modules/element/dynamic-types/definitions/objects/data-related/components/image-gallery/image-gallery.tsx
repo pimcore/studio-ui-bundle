@@ -146,9 +146,11 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
         { (props.disabled !== true || isEmpty(value)) && (
           <ImageGalleryImageTarget
             disabled={ props.disabled }
+            height={ height! }
             index={ value.length }
             setValue={ setValue }
             value={ value }
+            width={ width! }
           />
         ) }
       </Flex>
