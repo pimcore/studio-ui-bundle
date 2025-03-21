@@ -36,9 +36,11 @@ export interface ImageGallerySortableItemProps {
   setValue: React.Dispatch<React.SetStateAction<ImageGalleryValue>>
   disabled?: boolean
   hotspotMarkersModalContainer: React.RefObject<HotspotMarkersModalContainerRef>
+  width: string
+  height: string
 }
 
-export const ImageGallerySortableItem = ({ id, index, item, value, setValue, disabled, hotspotMarkersModalContainer }: ImageGallerySortableItemProps): React.JSX.Element => {
+export const ImageGallerySortableItem = ({ id, index, item, value, setValue, disabled, hotspotMarkersModalContainer, width, height }: ImageGallerySortableItemProps): React.JSX.Element => {
   const sortable = useSortable({
     id,
     transition: {
@@ -64,11 +66,13 @@ export const ImageGallerySortableItem = ({ id, index, item, value, setValue, dis
         ? (
           <ImageGalleryImagePreview
             disabled={ disabled }
+            height={ height }
             hotspotMarkersModalContainer={ hotspotMarkersModalContainer }
             index={ index }
             item={ item }
             setValue={ setValue }
             value={ value }
+            width={ width }
           />
           )
         : (
