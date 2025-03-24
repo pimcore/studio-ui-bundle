@@ -12,10 +12,13 @@
 */
 
 import React from 'react'
-
 import { DynamicTypeObjectDataAbstract, type GetGridCellDefinitionProps, type EditModalSettings, type EditMode } from '../dynamic-type-object-data-abstract'
 import { FieldCollection, type FieldCollectionProps } from '../components/field-collection/field-collection'
 import { ItemsCount } from '../../grid-cell-preview/items-count/items-count'
+import {
+  VersionFieldCollection,
+  type VersionFieldCollectionProps
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/field-collection/versions/version-field-collection'
 
 export class DynamicTypeObjectDataFieldCollection extends DynamicTypeObjectDataAbstract {
   id: string = 'fieldcollections'
@@ -28,6 +31,10 @@ export class DynamicTypeObjectDataFieldCollection extends DynamicTypeObjectDataA
 
   getObjectDataComponent (props: FieldCollectionProps): React.ReactElement<FieldCollectionProps> {
     return <FieldCollection { ...props } />
+  }
+
+  getVersionObjectDataComponent (props: VersionFieldCollectionProps): React.ReactElement<FieldCollectionProps> {
+    return <VersionFieldCollection { ...props } />
   }
 
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {

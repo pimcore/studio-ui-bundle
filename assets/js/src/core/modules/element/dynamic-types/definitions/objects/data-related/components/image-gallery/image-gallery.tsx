@@ -44,12 +44,15 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
 import { uuid } from '@Pimcore/utils/uuid'
 import { useStyles } from './image-gallery.styles'
+import { toCssDimension } from '@Pimcore/utils/css'
 
 export interface ImageGalleryProps {
   value?: ImageGalleryValue | null
   onChange?: (value: ImageGalleryValue | null) => void
   disabled?: boolean
   className?: string
+  width: string | number | null
+  height: string | number | null
 }
 
 export type ImageGalleryValue = ImageGalleryValueItem[]
@@ -82,6 +85,9 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
   const [value, setValueState] = useState<ImageGalleryValue>(addKeys(props.value ?? []))
   const { t } = useTranslation()
   const { styles } = useStyles()
+
+  const width = toCssDimension(props.width, 200)
+  const height = toCssDimension(props.height, 100)
 
   const hotspotMarkersModalContainerRef = useRef<HotspotMarkersModalContainerRef>(null)
 
@@ -125,6 +131,7 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
           { value.map((item, index) => (
             <ImageGallerySortableItem
               disabled={ props.disabled }
+              height={ height! }
               hotspotMarkersModalContainer={ hotspotMarkersModalContainerRef }
               id={ String(index) }
               index={ index }
@@ -132,15 +139,18 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
               key={ item.key }
               setValue={ setValue }
               value={ value }
+              width={ width! }
             />
           )) }
         </SortableContext>
         { (props.disabled !== true || isEmpty(value)) && (
           <ImageGalleryImageTarget
             disabled={ props.disabled }
+            height={ height! }
             index={ value.length }
             setValue={ setValue }
             value={ value }
+            width={ width! }
           />
         ) }
       </Flex>

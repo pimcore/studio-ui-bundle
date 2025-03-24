@@ -22,20 +22,23 @@ import { DataComponent } from '../data-component/data-component'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 import { type CategoriesList, type IObjectVersionsFieldsList, type VersionKeysList } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
 import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/styles/common-versions-fields-view.styles'
+import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'
 
 interface IObjectVersionsFieldsViewProps {
   breadcrumbsList?: CategoriesList
   versionViewData: IObjectVersionsFieldsList['data']
   versionKeysList: VersionKeysList
+  isExpandedUnmodifiedFields: boolean
 }
 
 const SECTIONS_WITH_TRANSLATION: string[] = [VersionCategoryName.SYSTEM_DATA]
+const SECTIONS_WITH_COMPLEX_TYPES: string[] = [DynamicTypesList.BLOCK]
 
-export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, versionKeysList }: IObjectVersionsFieldsViewProps): React.JSX.Element => {
+export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, versionKeysList, isExpandedUnmodifiedFields }: IObjectVersionsFieldsViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
 
-  const renderSectionTitle = ({ key, isCommonSection }: { key: string, isCommonSection: boolean }): React.JSX.Element => {
+  const renderSectionTitle = ({ key, isCommonSection }: { key: string, isCommonSection: boolean }): React.JSX.Element | null => {
     const isShowValueWithTranslation = SECTIONS_WITH_TRANSLATION.includes(key)
     const textValue = isShowValueWithTranslation ? t(`version.category.title.${key}`) : key
 
@@ -45,13 +48,17 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
     const secondTitlePart = remainingTitleParts.length > 0 ? ` | ${remainingTitleParts.join(' | ')}` : ''
 
     return (
-      <Text
-        className={ cn(styles.sectionTitle, { [styles.subSectionTitle]: !isCommonSection }) }
-        strong
-      >
-        {firstTitlePart}
-        {!isEmptyValue(secondTitlePart) && <span className={ styles.subSectionText }>{secondTitlePart}</span>}
-      </Text>
+      (!isEmptyValue(firstTitlePart) || !isEmptyValue(secondTitlePart))
+        ? (
+          <Text
+            className={ cn(styles.sectionTitle, { [styles.subSectionTitle]: !isCommonSection }) }
+            strong
+          >
+            {firstTitlePart}
+            {!isEmptyValue(secondTitlePart) && <span className={ styles.subSectionText }>{secondTitlePart}</span>}
+          </Text>
+          )
+        : null
     )
   }
 
@@ -92,10 +99,13 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                         {versionKeysList.map((key, index) => {
                           const isModifiedField = fieldItem?.isModifiedValue === true
                           const isSecondItem = index === 1
+                          const isComplexType = SECTIONS_WITH_COMPLEX_TYPES.includes(fieldItem?.Field.fieldtype as string)
 
                           return (
                             <div
-                              className={ styles.objectSectionFieldItemWrapper }
+                              className={ cn(styles.objectSectionFieldItemWrapper, {
+                                [styles.objectSectionFieldItemWrapperHighlight]: isModifiedField && isSecondItem && isComplexType
+                              }) }
                               key={ `${index}-${key}` }
                             >
                               <DataComponent
@@ -104,7 +114,9 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                                   versionFieldItemHighlight: isModifiedField && isSecondItem
                                 }) }
                                 datatype={ 'data' }
+                                fieldCollectionModifiedList={ fieldItem?.fieldCollectionModifiedList }
                                 fieldType={ fieldItem.Field.fieldtype }
+                                isExpandedUnmodifiedFields={ isExpandedUnmodifiedFields }
                                 key={ `${index}-${key}` }
                                 name={ fieldItem.Field.name }
                                 value={ fieldItem[key] }

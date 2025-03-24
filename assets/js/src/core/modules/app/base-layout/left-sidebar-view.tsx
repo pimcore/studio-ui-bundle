@@ -16,6 +16,7 @@ import { MainNav } from '@Pimcore/modules/app/nav/main-nav'
 import { Avatar } from 'antd'
 import React from 'react'
 import { useStyles } from './left-sidebar-view.styles'
+import { Search } from '@Pimcore/modules/search/search'
 
 export const LeftSidebarView = (): React.JSX.Element => {
   const { styles } = useStyles()
@@ -31,6 +32,10 @@ export const LeftSidebarView = (): React.JSX.Element => {
       <ul className='left-sidebar__nav'>
         <li>
           <MainNav />
+        </li>
+
+        <li>
+          <Search />
         </li>
       </ul>
     </div>
