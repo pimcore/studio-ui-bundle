@@ -159,7 +159,7 @@ export const MainNav = (): React.JSX.Element => {
                     <li><Button type={ 'link' }>{t('navigation.clear-cache')}</Button></li>
                     <li><Button type={ 'link' }>{t('navigation.custom-reports')}</Button></li>
                   </ul>
-                  <Button type={ 'default' }>Customise</Button>
+                  <Button type={ 'default' }>{t('navigation.customise')}</Button>
                 </div>
 
                 <Divider className={ 'main-nav__divider' } />
@@ -177,31 +177,31 @@ export const MainNav = (): React.JSX.Element => {
                   <ul className={ 'main-nav__list-inline' }>
                     <li><IconTextButton
                       icon={ { value: 'pimcore' } }
-                        >Default</IconTextButton></li>
+                        >{t('navigation.default')}</IconTextButton></li>
                     <li><IconTextButton
                       icon={ { value: 'cdp' } }
                       type={ 'default' }
-                        >CDP</IconTextButton></li>
+                        >{t('navigation.cdp')}</IconTextButton></li>
                     <li><IconTextButton
                       icon={ { value: 'document' } }
                       type={ 'default' }
-                        >CMS</IconTextButton></li>
+                        >{t('navigation.cms')}</IconTextButton></li>
                     <li><IconTextButton
                       icon={ { value: 'asset' } }
                       type={ 'default' }
-                        >Commerce</IconTextButton></li>
+                        >{t('navigation.commerce')}</IconTextButton></li>
                     <li><IconTextButton
                       icon={ { value: 'asset' } }
                       type={ 'default' }
-                        >DAM</IconTextButton></li>
+                        >{t('navigation.dam')}</IconTextButton></li>
                     <li><IconTextButton
                       icon={ { value: 'data-object' } }
                       type={ 'default' }
-                        >PIM</IconTextButton></li>
+                        >{t('navigation.pim')}</IconTextButton></li>
                     <li><IconTextButton
                       icon={ { value: 'catalog' } }
                       type={ 'default' }
-                        >Catalogue</IconTextButton></li>
+                        >{t('navigation.catalogue')}</IconTextButton></li>
                   </ul>
                 </div>
               </div>

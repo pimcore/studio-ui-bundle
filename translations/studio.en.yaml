@@ -625,6 +625,15 @@ navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
 navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
+navigation.customise: Customise
+navigation.default: Default
+navigation.cdp: CDP
+navigation.cms: CMS
+navigation.document: Document
+navigation.commerce: Commerce
+navigation.dam: DAM
+navigation.pim: PIM
+navigation.catalogue: Catalogue
 external-image.preview-placeholder: Add an external image
 empty-image: Empty Image
 image.dnd-target: Drop an image here
