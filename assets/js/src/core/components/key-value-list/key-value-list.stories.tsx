@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { StoryObj, type Meta } from '@storybook/react'
-import { KeyValueList, KeyValueListProps } from './key-value-list'
+import { type StoryObj, type Meta } from '@storybook/react'
+import { KeyValueList, type KeyValueListProps } from './key-value-list'
 
 const config: Meta = {
   title: 'Components/Data Display/KeyValueList',
