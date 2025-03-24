@@ -44,7 +44,8 @@ export const TAB_SCHEDULE: IEditorTab = {
   icon: <Icon value={ 'schedule' } />,
   isDetachable: true,
   hidden: (element): boolean => {
-    return !checkElementPermission(element.permissions, 'versions')
+    return !checkElementPermission(element.permissions, 'versions') ||
+      !checkElementPermission(element.permissions, 'settings')
   }
 }
 export const TAB_DEPENDENCIES: IEditorTab = {
