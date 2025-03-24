@@ -38,7 +38,6 @@ export const TagsTabContainer = (): React.JSX.Element => {
   const { element } = useElementDraft(id, elementType)
   const { applyTagsToChildren, removeAndApplyTagsToChildren } = useShortcutActions()
 
-  //
   const { data, isLoading } = useTagGetCollectionForElementByTypeAndIdQuery({
     elementType,
     id
@@ -83,7 +82,6 @@ export const TagsTabContainer = (): React.JSX.Element => {
                 {t('tags.apply-tags-to-children')}
               </Dropdown.Button>
             </Header>
-
             <div className={ 'pimcore-tags-content' }>
               <AssignedTagsTable
                 isLoading={ isLoading }
@@ -93,7 +91,6 @@ export const TagsTabContainer = (): React.JSX.Element => {
           </Content>
         )
       } }
-
       withDivider
     />
   )
