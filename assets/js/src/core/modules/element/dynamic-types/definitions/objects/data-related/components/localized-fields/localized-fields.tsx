@@ -24,7 +24,7 @@ export interface LocalizedFieldsProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectDataDefinition | AbstractObjectLayoutDefinition
 }
 
-export const LocalizedFields = ({ children }: LocalizedFieldsProps): React.JSX.Element => {
+export const LocalizedFields = ({ children, noteditable, className }: LocalizedFieldsProps): React.JSX.Element => {
   const { currentLanguage } = useLanguageSelection()
 
   return (
@@ -39,6 +39,8 @@ export const LocalizedFields = ({ children }: LocalizedFieldsProps): React.JSX.E
             <ObjectComponent
               key={ index }
               { ...child }
+              className={ className }
+              noteditable={ noteditable }
             />
           ))}
         </Space>

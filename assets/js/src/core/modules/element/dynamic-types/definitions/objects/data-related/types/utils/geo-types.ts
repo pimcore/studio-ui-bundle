@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import _ from 'lodash'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
-export const getGeoComponentWidth = (width: string): string => _.isEmpty(width) ? '500px' : width
-export const getGeoComponentHeight = (height: string): string => _.isEmpty(height) ? '250px' : height
+export const getGeoComponentWidth = (width: string): string => isEmptyValue(width) ? '500px' : width
+export const getGeoComponentHeight = (height: string): string => isEmptyValue(height) ? '250px' : height
