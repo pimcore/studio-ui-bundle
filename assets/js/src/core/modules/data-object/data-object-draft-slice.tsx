@@ -30,8 +30,10 @@ import {
   type ModifiedObjectDataDraft,
   useModifiedObjectDataReducers
 } from '@Pimcore/modules/data-object/draft/hooks/use-modified-object-data'
+import { useDraftDataReducers } from '@Pimcore/modules/data-object/draft/hooks/use-draft-data'
+import { usePublishedReducers, type PublishedDraft } from '../element/draft/hooks/use-published'
 
-export interface DataObjectDraft extends DataObject, PropertiesDraft, SchedulesDraft, TrackableChangesDraft, TabsDraft, ModifiedObjectDataDraft {
+export interface DataObjectDraft extends DataObject, PropertiesDraft, SchedulesDraft, TrackableChangesDraft, TabsDraft, ModifiedObjectDataDraft, PublishedDraft {
 }
 
 export const dataObjectsAdapter: EntityAdapter<DataObjectDraft, number> = createEntityAdapter<DataObjectDraft>({})
@@ -63,7 +65,10 @@ export const slice = createSlice({
     ...usePropertiesReducers(dataObjectsAdapter),
     ...useSchedulesReducers(dataObjectsAdapter),
     ...useTabsReducers(dataObjectsAdapter),
-    ...useModifiedObjectDataReducers(dataObjectsAdapter)
+    ...useModifiedObjectDataReducers(dataObjectsAdapter),
+    ...useModifiedObjectDataReducers(dataObjectsAdapter),
+    ...useDraftDataReducers(dataObjectsAdapter),
+    ...usePublishedReducers(dataObjectsAdapter)
   }
 })
 
@@ -89,7 +94,11 @@ export const {
   resetSchedulesChanges: resetSchedulesChangesForDataObject,
   setActiveTab: setActiveTabForDataObject,
 
-  markObjectDataAsModified
+  markObjectDataAsModified,
+  setDraftData,
+
+  publishDraft,
+  unpublishDraft
 
 } = slice.actions
 export const { selectById: selectDataObjectById } = dataObjectsAdapter.getSelectors((state: RootState) => state['data-object-draft'])

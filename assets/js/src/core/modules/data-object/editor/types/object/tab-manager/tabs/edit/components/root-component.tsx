@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { ObjectComponent } from './object-component'
 import { Form } from '@Pimcore/components/form/form'
 import { Button, ConfigProvider } from 'antd'
@@ -20,6 +20,10 @@ import { useEditFormContext } from '@Pimcore/modules/data-object/editor/types/ob
 import {
   useInheritanceState
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
+import {
+  DraftAlert
+} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/root-component/draft-alert'
+import { FieldWidthProvider } from '../providers/field-width/field-width-provider'
 
 interface RootComponentProps {
   layout: DataObjectGetLayoutByIdApiResponse
@@ -50,25 +54,28 @@ export const RootComponent = ({ layout, data, className }: RootComponentProps): 
     console.log(values)
   }
 
-  return (
+  return useMemo(() => (
     <ConfigProvider theme={ { components: { Form: { itemMarginBottom: 0 } } } }>
-      <Form
-        className={ className }
-        form={ form }
-        initialValues={ data }
-        layout='vertical'
-        onFinish={ handleSubmit }
-        onValuesChange={ handleValuesChange }
-        preserve
-      >
-        <ObjectComponent { ...layout } />
-        <Form.Item style={ { margin: 12 } }>
-          <Button
-            htmlType="submit"
-            type="primary"
-          >Test submission</Button>
-        </Form.Item>
-      </Form>
+      <FieldWidthProvider>
+        <Form
+          className={ className }
+          form={ form }
+          initialValues={ data }
+          layout='vertical'
+          onFinish={ handleSubmit }
+          onValuesChange={ handleValuesChange }
+          preserve
+        >
+          <DraftAlert />
+          <ObjectComponent { ...layout } />
+          <Form.Item style={ { margin: 12 } }>
+            <Button
+              htmlType="submit"
+              type="primary"
+            >Test submission</Button>
+          </Form.Item>
+        </Form>
+      </FieldWidthProvider>
     </ConfigProvider>
-  )
+  ), [layout, data, className])
 }

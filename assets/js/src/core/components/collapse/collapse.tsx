@@ -16,6 +16,9 @@ import { CollapseItem, type CollapseItemProps, type CollapseStyleProps } from '.
 import { Space, type SpaceProps } from '../space/space'
 import cn from 'classnames'
 
+export { CollapseItem, type CollapseItemProps, type CollapseStyleProps }
+export { CollapseHeader, type CollapseHeaderProps } from './item/header/collapse-header'
+
 export interface ICollapseItem extends Omit<CollapseItemProps, 'active'> {
   key: string
 }

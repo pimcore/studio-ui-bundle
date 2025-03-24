@@ -17,15 +17,19 @@ import { useRowSelection } from '../../../../../context-layer/provider/use-row-s
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 import { useEffect } from 'react'
 import { type RowSelectionData } from '../../../../../context-layer/provider/row-selection-provider'
+import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 
 export const WithRowSelection = (useBaseHook: IRowSelectionDecoratorProps['useGridOptions'], config: IRowSelectionDecoratorConfig): IRowSelectionDecoratorProps['useGridOptions'] => {
   const useRowSelectionExtension: AbstractDecoratorProps['useGridOptions'] = () => {
     const { getGridProps: baseGetGridProps, ...baseMethods } = useBaseHook()
     const { data } = useData()
     const { selectedRows, setSelectedRows, selectedRowsData, setSelectedRowsData } = useRowSelection()
+    const { availableColumns } = useAvailableColumns()
 
     useEffect(() => {
       const newSelectedRowsData: RowSelectionData['selectedRowsData'] = {}
+      const systemColumns = availableColumns.filter(column => column.group === 'system')
+      const systemColumnKeys = systemColumns.map(column => column.key)
 
       for (const key in selectedRows) {
         const currentKey = parseInt(key)
@@ -37,12 +41,12 @@ export const WithRowSelection = (useBaseHook: IRowSelectionDecoratorProps['useGr
             continue
           }
 
-          const fullpathColumn = item.columns.find((column) => column.key === 'fullpath')
-
-          if (idColumn !== undefined && fullpathColumn !== undefined) {
-            newSelectedRowsData[currentKey] = {
-              id: idColumn.value,
-              fullpath: fullpathColumn.value
+          for (const column of item.columns) {
+            if (systemColumnKeys.includes(column.key as string)) {
+              newSelectedRowsData[currentKey] = {
+                ...newSelectedRowsData[currentKey],
+                [column.key]: column.value
+              }
             }
           }
         }

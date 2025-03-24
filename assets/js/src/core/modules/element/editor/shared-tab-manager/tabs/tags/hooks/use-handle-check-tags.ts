@@ -57,6 +57,10 @@ export const useHandleCheck = ({
   const [loadingNodes, setLoadingNodes] = useState<Set<string>>(new Set())
 
   const mutateTag = async (tagId: number, checked: boolean): Promise<void> => {
+    const isRootTag = tagId === 0
+
+    if (isRootTag) return
+
     const mutation = checked ? assignTag : unassignTag
 
     const response = (await mutation({ elementType, id: elementId, tagId })) as {

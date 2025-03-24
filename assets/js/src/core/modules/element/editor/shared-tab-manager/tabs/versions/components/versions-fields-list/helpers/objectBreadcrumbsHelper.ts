@@ -15,11 +15,17 @@ import { map, filter, intersection, isEmpty, isUndefined } from 'lodash'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 import { type CategoriesList, type IObjectVersionsFieldsList } from '../types'
 
+const IGNORED_FIELDS = ['reverseObjectRelation']
+
 export const getObjectBreadcrumbsList = (data: IObjectVersionsFieldsList['data']): CategoriesList => {
   const breadcrumbMap: Partial<Record<VersionCategoryName, Set<string>>> = {}
 
   data.forEach(item => {
     const breadcrumbName = item.Field.fieldBreadcrumbTitle ?? VersionCategoryName.SYSTEM_DATA
+
+    if (IGNORED_FIELDS.includes(item.Field.fieldtype as string)) {
+      return
+    }
 
     if (isUndefined(breadcrumbMap[breadcrumbName])) {
       breadcrumbMap[breadcrumbName] = new Set()
@@ -37,6 +43,7 @@ export const getObjectBreadcrumbsList = (data: IObjectVersionsFieldsList['data']
 export const getObjectBreadcrumbsListWithFields = ({ versionViewData, breadcrumbsList }: { versionViewData: IObjectVersionsFieldsList['data'], breadcrumbsList?: CategoriesList }): CategoriesList => {
   // get all version field keys
   const versionFieldKeys = map(versionViewData, 'Field.name')
+  const versionFieldBreadcrumbs = map(versionViewData, 'Field.fieldBreadcrumbTitle')
 
   if (isEmpty(breadcrumbsList)) return []
 
@@ -46,6 +53,6 @@ export const getObjectBreadcrumbsListWithFields = ({ versionViewData, breadcrumb
       ...breadcrumb, // keep initial category properties
       fieldKeys: intersection(breadcrumb.fieldKeys, versionFieldKeys) // keep only matching keys
     })),
-    breadcrumb => !isEmpty(breadcrumb.fieldKeys) // include only categories with non-empty fieldKeys
+    breadcrumb => !isEmpty(breadcrumb.fieldKeys) && versionFieldBreadcrumbs.includes(breadcrumb.key) // include only categories with non-empty fieldKeys
   )
 }

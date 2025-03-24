@@ -14,6 +14,7 @@
 const Encore = require('@symfony/webpack-encore');
 const path = require('path');
 const { DllPlugin } = require('webpack');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const uuid = require('uuid');
 const buildId = uuid.v4();
 const fs = require('fs');
@@ -62,7 +63,9 @@ Encore
       context: __dirname,
       name: 'studio_vendor',
       path: __dirname + '/dist/vendor/vendor-manifest.json',
-    }));
+    }))
+
+    .addPlugin(new ForkTsCheckerWebpackPlugin())
 
 let webpackConfig = Encore.getWebpackConfig();
 

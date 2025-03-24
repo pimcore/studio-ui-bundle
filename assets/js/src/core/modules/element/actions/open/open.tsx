@@ -18,7 +18,7 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { useTranslation } from 'react-i18next'
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
 
 export interface UseOpenHookReturn {

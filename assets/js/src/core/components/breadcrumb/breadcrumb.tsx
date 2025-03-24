@@ -20,9 +20,11 @@ import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.ge
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { Text } from '@Pimcore/components/text/text'
 import { useBreadcrumbSize } from './hooks/use-breadcrumb-size'
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useStyle } from './breadcrumb.styles'
 import { Filename } from '../filename/filename'
+
+export { useBreadcrumbSize }
 
 interface BreadcrumbProps {
   path: string

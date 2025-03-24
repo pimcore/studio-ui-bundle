@@ -33,6 +33,7 @@ export const Content = ({
   children,
   padded = false,
   padding = { top: 'small', x: 'extra-small', bottom: 'extra-small' },
+  margin = 'none',
   className,
   loading = false,
   none = false,

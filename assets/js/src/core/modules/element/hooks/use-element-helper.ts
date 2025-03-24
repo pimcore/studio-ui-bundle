@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
@@ -24,7 +24,7 @@ interface OpenElementWidgetProps {
 
 interface UseElementReturn {
   openElement: (props: OpenElementWidgetProps) => Promise<void>
-  mapToElementType: (elementType: string) => ElementType | undefined
+  mapToElementType: (elementType: string, silent?: boolean) => ElementType | undefined
 }
 
 export const useElementHelper = (): UseElementReturn => {
@@ -49,15 +49,15 @@ export const useElementHelper = (): UseElementReturn => {
     }
   }
 
-  function mapToElementType (elementType: string): ElementType | undefined {
+  function mapToElementType (elementType: string, silent?: boolean): ElementType | undefined {
     const targetType = mapType(elementType)
 
-    if (targetType === null) {
+    if (targetType === null && silent !== true) {
       trackError(new GeneralError(`Unknown element type: ${elementType}`))
       return undefined
     }
 
-    return targetType
+    return targetType ?? undefined
   }
 
   return { openElement, mapToElementType }

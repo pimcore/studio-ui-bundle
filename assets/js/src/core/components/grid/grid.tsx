@@ -32,6 +32,7 @@ import {
 } from '@tanstack/react-table'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { isEmpty } from 'lodash'
+import cn from 'classnames'
 import { useStyles } from './grid.styles'
 import { Resizer } from './resizer/resizer'
 import { DefaultCell } from './columns/default-cell'
@@ -43,13 +44,16 @@ import { type GridProps } from '@Pimcore/types/components/types'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import type { AssetGetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
+export interface ColumnMetaType {
+  editable?: boolean
+  autoWidth?: boolean
+  type?: string
+  config?: any
+}
+
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  export interface ColumnMeta<TData extends RowData, TValue> {
-    editable?: boolean
-    autoWidth?: boolean
-    type?: string
-    config?: any
+  export interface ColumnMeta<TData extends RowData, TValue> extends ColumnMetaType {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -85,6 +89,7 @@ export const Grid = ({
   onActiveCellChange,
   enableRowSelection = false,
   selectedRows = {},
+  disabled = false,
   ...props
 }: GridProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -239,7 +244,7 @@ export const Grid = ({
   )
 
   return useMemo(() => (
-    <div className={ ['ant-table-wrapper', hashId, styles.grid].join(' ') }>
+    <div className={ cn('ant-table-wrapper', hashId, styles.grid, props.className, { [styles.disabledGrid]: disabled }) }>
       <div className="ant-table ant-table-small">
         <div className='ant-table-container'>
           <div className='ant-table-content'>

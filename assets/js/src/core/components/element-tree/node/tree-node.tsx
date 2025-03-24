@@ -11,25 +11,30 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Flex, theme, Upload, type UploadProps } from 'antd'
+import { Flex, theme } from 'antd'
 import React, { forwardRef, type KeyboardEvent, type MouseEvent, type MutableRefObject, useContext, useEffect } from 'react'
 import { useStyles } from './tree-node.styles'
 import { type INodeRef, TreeContext } from '../element-tree'
 import { TreeList } from '../list/tree-list'
 import { TreeExpander } from '../expander/tree-expander'
-import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useElementTreeNode } from '../hooks/use-element-tree-node'
+import { isNil } from 'lodash'
+import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/utils/widget-content-scroll'
+import { DndUpload } from '@Pimcore/components/element-tree/dnd-upload/dnd-upload'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 export interface TreeNodeProps {
   id: string
   icon: ElementIcon
   label: string
   internalKey: string
-  children: TreeNodeProps[]
+  children?: TreeNodeProps[]
   level: number
   permissions: ElementPermissions
   isLocked: boolean
+  elementType?: ElementType
   hasChildren?: boolean
   metaData?: any
   type?: string
@@ -38,9 +43,10 @@ export interface TreeNodeProps {
   isLoading?: boolean
   danger?: boolean
   ref?: MutableRefObject<HTMLDivElement>
+  isPublished?: boolean
 }
 
-const defaultProps: TreeNodeProps = {
+export const defaultProps: TreeNodeProps = {
   id: Math.random().toString(16).slice(2),
   internalKey: '',
   icon: {
@@ -79,20 +85,17 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   ...props
 }: TreeNodeProps, forwardRef: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { token } = useToken()
-  const { children, metaData } = props
+  const { metaData } = props
   const { styles } = useStyles()
   const {
     renderNodeContent: RenderNodeContent,
     onSelect,
     onRightClick,
-    selectedIdsState,
     nodesRefs,
     nodeOrder
   } = useContext(TreeContext)
-  const [isExpanded, setIsExpanded] = React.useState(children.length !== 0)
-  const [selectedIds, setSelectedIds] = selectedIdsState!
+  const { isExpanded, setExpanded, isSelected, isScrollTo, setScrollTo, setSelectedIds } = useElementTreeNode(id)
   const treeNodeProps = { id, icon, label, internalKey, level, isLoading, isRoot, danger, ...props }
-  const { uploadFile: uploadFileProcessor } = UseFileUploader({ parentId: id })
 
   useEffect(() => {
     return () => {
@@ -103,10 +106,21 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     }
   }, [])
 
+  useEffect(() => {
+    if (isScrollTo) {
+      const nodeElement = nodesRefs?.current[internalKey]?.el
+
+      if (!isNil(nodeElement)) {
+        scrollToNodeElement(nodeElement)
+        setScrollTo(false)
+      }
+    }
+  }, [isScrollTo, nodesRefs, internalKey, setScrollTo])
+
   function getClasses (): string {
     const classes = ['tree-node', styles.treeNode]
 
-    if (selectedIds.includes(id)) {
+    if (isSelected) {
       classes.push('tree-node--selected')
     }
 
@@ -162,11 +176,11 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   }
 
   function expandItem (): void {
-    setIsExpanded(true)
+    setExpanded(true)
   }
 
   function collapseItem (): void {
-    setIsExpanded(false)
+    setExpanded(false)
   }
 
   function gotoNextNode (event: KeyboardEvent): void {
@@ -206,15 +220,6 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     }
   }
 
-  const uploadProps: UploadProps = {
-    action: `/pimcore-studio/api/assets/add/${id}`,
-    name: 'file',
-    multiple: true,
-    openFileDialogOnClick: false,
-    showUploadList: false,
-    onChange: uploadFileProcessor
-  }
-
   return (
     <div
       className={ getClasses() }
@@ -240,15 +245,18 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
         {isRoot !== true && (
           <TreeExpander
             node={ treeNodeProps }
-            state={ [isExpanded, setIsExpanded] }
+            state={ [isExpanded, setExpanded] }
           />
         )}
 
-        <Upload { ...uploadProps }>
+        <DndUpload
+          nodeId={ id }
+          nodeType={ props.elementType! }
+        >
           <div className="tree-node__content-wrapper">
             <RenderNodeContent node={ treeNodeProps } />
           </div>
-        </Upload>
+        </DndUpload>
       </Flex>
 
       {isExpanded && (

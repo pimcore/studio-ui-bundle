@@ -73,26 +73,26 @@ export const useStyles = createStyles(({ token, css }) => {
 
     objectSectionFieldItemWrapper: css`
       flex: 1 1 50%;
-
-      &:only-child {
-        flex: 1 1 100%;
-      }
-
-      .ant-input-number {
-        width: 100%;
-      }
-      
-      & > :first-child {
-        background-color: ${token.colorBgContainerDisabled};
-        border-radius: ${token.borderRadius}px;
-        border: none !important;
-        color: ${token.colorText} !important;
-      }
+      max-width: 900px;
+      width: 100%;
     `,
 
     objectSectionFieldItemWrapperHighlight: css`
-      & > :first-child {
-        background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+      background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+    `,
+
+    objectSectionFieldItem: css`
+      justify-content: flex-start;
+      width: 100% !important;
+      max-width: 100% !important;
+      border-radius: ${token.borderRadius}px !important;
+      border-color: transparent !important;
+      color: ${token.colorText} !important;
+    `,
+
+    objectSectionFieldItemHighlight: css`
+      &.versionFieldItem {
+        border-color: ${token.colorBorder} !important;
       }
     `
   }

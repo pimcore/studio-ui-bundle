@@ -20,8 +20,7 @@ import { type JobProps } from '../../notification/job/job'
 import { type ZipUploadJob } from './factory'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch } from '@Pimcore/app/store'
-import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
 
 export interface ZipUploadJobProps extends JobProps {
   config: ZipUploadJob['config']
@@ -62,6 +61,13 @@ export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.El
   }
 
   const handleMessageStatus = (data: any): void => {
+    if (
+      (data.status === 'finished' || data.status === 'finished_with_errors') &&
+      data.jobRunName === 'studio_ee_job_upload_assets'
+    ) {
+      dispatch(refreshNodeChildren({ nodeId: props.config.parentFolder, elementType: 'asset' }))
+    }
+
     if (data.status !== undefined) {
       if (data.status === 'finished' && data.messages !== undefined) {
         const messages: { jobRunChildId?: number } = data.messages
@@ -129,10 +135,8 @@ export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.El
 
       successButtonActions={ [
         {
-          label: t('jobs.job.button-hide-and-reload'),
+          label: t('jobs.job.button-hide'),
           handler: () => {
-            console.log('parentFolder', parseInt(props.config.parentFolder))
-            dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_TREE_ID(parseInt(props.config.parentFolder))))
             removeJob(id)
           }
         }

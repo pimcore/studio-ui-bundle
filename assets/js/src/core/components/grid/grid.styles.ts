@@ -95,6 +95,22 @@ export const useStyles = createStyles(({ token, css }) => {
             }
           }
       }
+      
+      &.versionFieldItem {
+        .ant-table-content {
+          table {
+            width: 100% !important;
+          }
+        }
+      }
+
+      &.versionFieldItemHighlight {
+        .ant-table-content {
+          table {
+            border-color: ${token.Colors.Brand.Warning.colorWarningBorder} !important;
+          }
+        }
+      }
 
       .grid__cell-content {
         display: flex;
@@ -120,6 +136,13 @@ export const useStyles = createStyles(({ token, css }) => {
 
       .ant-table-row-selected td {
         background-color: ${token.controlItemBgActive};
+      }
+    `,
+
+    disabledGrid: css`
+      .ant-table-cell {
+        background-color: ${token.colorBgContainerDisabled};
+        color: ${token.colorTextDisabled};
       }
     `
   }

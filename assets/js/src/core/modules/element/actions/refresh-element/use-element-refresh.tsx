@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type ElementType } from '../../../../../../types/element-type.d'
+import { type ElementType } from '../../../../types/enums/element/element-type'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { api as dataObjectApi } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'

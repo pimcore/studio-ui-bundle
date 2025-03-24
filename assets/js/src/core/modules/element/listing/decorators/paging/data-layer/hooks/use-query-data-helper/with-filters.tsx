@@ -16,7 +16,7 @@ import { usePaging } from '../../../context-layer/paging/provider/use-paging'
 
 export const withFilters = (useBaseHook: AbstractDecoratorProps['useDataQueryHelper']): AbstractDecoratorProps['useDataQueryHelper'] => {
   const useWithFilters: typeof useBaseHook = () => {
-    const { getArgs: baseGetArgs, hasRequiredArgs } = useBaseHook()
+    const { getArgs: baseGetArgs, hasRequiredArgs, ...baseProps } = useBaseHook()
     const context = usePaging()
 
     const getArgs: typeof baseGetArgs = () => {
@@ -38,6 +38,7 @@ export const withFilters = (useBaseHook: AbstractDecoratorProps['useDataQueryHel
     }
 
     return {
+      ...baseProps,
       hasRequiredArgs,
       getArgs
     }

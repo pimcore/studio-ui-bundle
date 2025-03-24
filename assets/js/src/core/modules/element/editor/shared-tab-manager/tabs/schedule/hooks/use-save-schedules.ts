@@ -16,21 +16,24 @@ import {
   type UpdateSchedule,
   useScheduleUpdateForElementByTypeAndIdMutation
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/schedule-api-slice-enhanced'
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useTranslation } from 'react-i18next'
 import { type Schedule } from '@Pimcore/modules/element/draft/hooks/use-schedules'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { type SerializedError } from '@reduxjs/toolkit'
 
 interface UseCleanupArchivedSchedulesResponseInterface {
   isLoading: boolean
   isSuccess: boolean
   isError: boolean
+  error: FetchBaseQueryError | SerializedError | undefined
   saveSchedules: () => Promise<void>
 }
 
 export const useSaveSchedules = (elementType: ElementType, id: number, showNotifications: boolean = true): UseCleanupArchivedSchedulesResponseInterface => {
-  const [updateSchedulesApi, { isLoading, isSuccess: isApiSuccess, isError }] = useScheduleUpdateForElementByTypeAndIdMutation()
+  const [updateSchedulesApi, { isLoading, isSuccess: isApiSuccess, isError, error }] = useScheduleUpdateForElementByTypeAndIdMutation()
   const [isSuccess, setIsSuccess] = useState(false)
   const { element, schedules, resetSchedulesChanges } = useElementDraft(id, elementType)
   const messageApi = useMessage()
@@ -77,5 +80,5 @@ export const useSaveSchedules = (elementType: ElementType, id: number, showNotif
     })
   }
 
-  return { isLoading, isSuccess, isError, saveSchedules }
+  return { isLoading, isSuccess, isError, error, saveSchedules }
 }

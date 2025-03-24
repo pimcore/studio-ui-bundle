@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Assets", "Asset Grid", "Metadata", "Versions"] as const;
+export const addTagTypes = ["Assets", "Asset Grid", "Asset Search", "Metadata", "Versions"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -235,6 +235,21 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Assets"],
             }),
+            assetGetSearchConfiguration: build.query<
+                AssetGetSearchConfigurationApiResponse,
+                AssetGetSearchConfigurationApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/assets/search/configuration/` }),
+                providesTags: ["Asset Search"],
+            }),
+            assetGetSearch: build.mutation<AssetGetSearchApiResponse, AssetGetSearchApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/search`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Asset Search"],
+            }),
             assetClearThumbnail: build.mutation<AssetClearThumbnailApiResponse, AssetClearThumbnailApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/assets/${queryArg.id}/thumbnail/clear`,
@@ -250,6 +265,7 @@ const injectedRtkApi = api
                         pageSize: queryArg.pageSize,
                         parentId: queryArg.parentId,
                         idSearchTerm: queryArg.idSearchTerm,
+                        pqlQuery: queryArg.pqlQuery,
                         excludeFolders: queryArg.excludeFolders,
                         path: queryArg.path,
                         pathIncludeParent: queryArg.pathIncludeParent,
@@ -546,6 +562,8 @@ export type AssetGetSavedGridConfigurationsApiArg = {
 export type AssetSaveGridConfigurationApiResponse =
     /** status 200 Asset grid configuration saved successfully */ GridConfiguration;
 export type AssetSaveGridConfigurationApiArg = {
+    /** FolderId of the folder */
+    folderId: number;
     body: {
         folderId: number;
         pageSize: number;
@@ -574,6 +592,7 @@ export type AssetUpdateGridConfigurationApiArg = {
     /** ConfigurationId of the configurationId */
     configurationId: number;
     body: {
+        folderId: number;
         pageSize: number;
         name: string;
         description: string;
@@ -714,6 +733,24 @@ export type AssetPatchFolderByIdApiArg = {
         filters?: GridFilter;
     };
 };
+export type AssetGetSearchConfigurationApiResponse =
+    /** status 200 Asset search configuration */ GridDetailedConfiguration;
+export type AssetGetSearchConfigurationApiArg = void;
+export type AssetGetSearchApiResponse = /** status 200 Assets for search grid */ {
+    totalItems: number;
+    items: {
+        id?: number;
+        columns?: GridColumnData[];
+        isLocked?: boolean;
+        permissions?: Permissions;
+    }[];
+};
+export type AssetGetSearchApiArg = {
+    body: {
+        columns: GridColumnRequest[];
+        filters?: GridFilter;
+    };
+};
 export type AssetClearThumbnailApiResponse = /** status 200 Success */ void;
 export type AssetClearThumbnailApiArg = {
     /** Id of the asset */
@@ -732,6 +769,8 @@ export type AssetGetTreeApiArg = {
     parentId?: number;
     /** Filter assets/data-objects by matching ids. As a wildcard * can be used */
     idSearchTerm?: string;
+    /** Pql query filter */
+    pqlQuery?: string;
     /** Filter folders from result. */
     excludeFolders?: boolean;
     /** Filter by path. */
@@ -855,6 +894,20 @@ export type CustomSettings = {
     /** dynamic custom settings - can be any key-value pair */
     dynamicCustomSettings?: object[];
 };
+export type RelationFieldConfig = {
+    /** Relation Getter */
+    relation: string;
+    /** Field getter */
+    field: string;
+};
+export type SimpleFieldConfig = {
+    /** Field getter */
+    field: string;
+};
+export type AdvancedColumnConfig = {
+    /** advancedColumns */
+    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig)[];
+};
 export type GridColumnRequest = {
     /** Key */
     key: string;
@@ -865,7 +918,7 @@ export type GridColumnRequest = {
     /** Group */
     group?: any;
     /** Config */
-    config: string[];
+    config: (string | AdvancedColumnConfig)[];
 };
 export type GridFilter = {
     /** Page */
@@ -1182,6 +1235,8 @@ export const {
     useAssetImageDownloadByThumbnailQuery,
     useAssetPatchByIdMutation,
     useAssetPatchFolderByIdMutation,
+    useAssetGetSearchConfigurationQuery,
+    useAssetGetSearchMutation,
     useAssetClearThumbnailMutation,
     useAssetGetTreeQuery,
     useAssetAddMutation,

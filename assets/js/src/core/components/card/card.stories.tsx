@@ -18,7 +18,7 @@ import React, { Fragment } from 'react'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Flex } from 'antd'
-import Input from 'antd/es/input/Input'
+import { Input } from '@Pimcore/components/input/input'
 import { Button } from '@Pimcore/components/button/button'
 
 const config: Meta = {

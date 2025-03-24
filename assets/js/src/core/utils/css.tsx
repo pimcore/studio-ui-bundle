@@ -12,7 +12,7 @@
 */
 
 export const toCssDimension = (value?: number | string | null, fallback?: number | string): string | undefined => {
-  if (value === null || value === undefined || value === '') {
+  if (value === null || value === undefined || value === '' || value === 0) {
     if (fallback === undefined) {
       return undefined
     }

@@ -20,6 +20,9 @@ import React from 'react'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useCacheUpdate } from '@Pimcore/modules/element/hooks/use-cache-update'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
+import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 
 export interface UseUploadNewVersionReturn {
   uploadNewVersion: (id: number, accept?: string) => void
@@ -33,6 +36,7 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
   const messageApi = useMessage()
   const { updateFieldValue } = useCacheUpdate('asset', ['ASSET_TREE'])
   const [replaceAsset] = useAssetReplaceMutation()
+  const { isTreeActionAllowed } = useTreePermission()
 
   const uploadNewVersion = (id: number, accept?: string, onFinish?: () => void): void => {
     modal.upload({
@@ -87,7 +91,11 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
       label: t('asset.tree.context-menu.upload-new-version'),
       key: 'upload-new-version',
       icon: <Icon value={ 'upload-cloud' } />,
-      hidden: node.type === 'folder',
+      hidden: node.type === 'folder' ||
+        !checkElementPermission(node.permissions, 'list') ||
+        !checkElementPermission(node.permissions, 'view') ||
+        !checkElementPermission(node.permissions, 'publish') ||
+        !checkElementPermission(node.permissions, 'versions'),
       onClick: () => {
         uploadNewVersion(
           node.id,
@@ -103,7 +111,12 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
       label: t('asset.tree.context-menu.upload-new-version'),
       key: 'upload-new-version',
       icon: <Icon value={ 'upload-cloud' } />,
-      hidden: node.type === 'folder',
+      hidden: !isTreeActionAllowed(TreePermission.UploadNewVersion) ||
+        node.type === 'folder' ||
+        !checkElementPermission(node.permissions, 'list') ||
+        !checkElementPermission(node.permissions, 'view') ||
+        !checkElementPermission(node.permissions, 'publish') ||
+        !checkElementPermission(node.permissions, 'versions'),
       onClick: () => {
         uploadNewVersion(
           parseInt(node.id),

@@ -11,15 +11,11 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import React, { useState, createContext, useMemo } from 'react'
 
-export interface BatchEdit {
-  key: string
-  type: string
-  frontendType: string | undefined
-  locale: string | null
-  localizable: boolean
-  value: string
+export interface BatchEdit extends AvailableColumn {
+  locale?: string | null
 }
 
 export interface BatchContext {

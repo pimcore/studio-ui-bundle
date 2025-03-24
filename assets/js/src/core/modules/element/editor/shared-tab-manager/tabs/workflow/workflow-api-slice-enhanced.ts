@@ -13,7 +13,7 @@
 
 import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './workflow-api-slice.gen'
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.ASSET_DETAIL, tagNames.DATA_OBJECT_DETAIL, tagNames.WORKFLOW],

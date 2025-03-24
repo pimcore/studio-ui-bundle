@@ -32,6 +32,7 @@ export interface GeoMapCardProps extends GeoMapCardBaseProps {
   onChangeMap?: (value: GeoType) => void
   footer?: React.ReactNode
   disabled?: boolean
+  className?: string
 }
 
 const GeoMapCard = forwardRef<GeoMapAPI, GeoMapCardProps>((props, geoMapRef): React.JSX.Element => {
@@ -39,7 +40,7 @@ const GeoMapCard = forwardRef<GeoMapAPI, GeoMapCardProps>((props, geoMapRef): Re
 
   return (
     <Card
-      className={ cn(styles.container) }
+      className={ cn(styles.container, props?.className) }
       cover={
         <GeoMap
           disabled={ props.disabled }

@@ -12,11 +12,14 @@
 */
 
 import React, { useEffect, useState } from 'react'
+import cn from 'classnames'
 import { type InputNumberProps } from 'antd/es/input-number'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { type ValueType } from '@rc-component/mini-decimal/es/interface'
 import { t } from 'i18next'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
+import { toCssDimension } from '@Pimcore/utils/css'
+import { useStyles } from './numeric-range.styles'
 
 export interface NumericRangeValue { minimum: ValueType | null, maximum: ValueType | null }
 
@@ -24,6 +27,8 @@ export type NumericRangeProps = InputNumberProps & {
   value?: NumericRangeValue | null
   onChange?: (value: NumericRangeValue | null) => void
   disabled?: boolean
+  width?: string | number | null
+  inputClassName?: string
 }
 
 export const validateOneFieldEmpty = async (rule, value): Promise<any> => {
@@ -54,6 +59,8 @@ export const validateSecondValueGreater = async (rule, value): Promise<any> => {
 export const NumericRange = (props: NumericRangeProps): React.JSX.Element => {
   const [value, setValue] = useState<NumericRangeValue | null>(props.value ?? null)
 
+  const { styles } = useStyles()
+
   useEffect(() => {
     if (props.onChange !== undefined) {
       props.onChange(value)
@@ -75,17 +82,20 @@ export const NumericRange = (props: NumericRangeProps): React.JSX.Element => {
   return (
     <Flex
       align="center"
-      className={ props.className }
-      gap="mini"
+      className={ cn(styles.container, props.className) }
+      gap="small"
+      style={ { maxWidth: toCssDimension(props.width) } }
+
     >
       <InputNumber
         { ...props }
+        className={ props.inputClassName }
         onChange={ (newValue) => { updateValue('minimum', newValue) } }
         value={ value !== null ? value.minimum : null }
       />
-      <div>–</div>
       <InputNumber
         { ...props }
+        className={ props.inputClassName }
         onChange={ (newValue) => { updateValue('maximum', newValue) } }
         value={ value !== null ? value.maximum : null }
       />

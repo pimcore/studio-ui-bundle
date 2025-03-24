@@ -11,16 +11,20 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { LayoutComponent, type LayoutComponentProps } from './layout-component'
 import { DataComponent, type DataComponentProps } from './data-component'
 import { type FormItemProps } from 'antd'
+import {
+  type AbstractObjectDataDefinition
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
 
 export interface ObjectComponentProps {
   name: FormItemProps['name']
   className?: string
   dataType?: string
   datatype?: string
+  noteditable?: AbstractObjectDataDefinition['noteditable']
   [p: string]: any
 }
 
@@ -29,13 +33,33 @@ export const ObjectComponent = (props: ObjectComponentProps): React.JSX.Element 
 
   const currentDataType = dataType ?? datatype
 
-  if (currentDataType === 'data') {
-    return <DataComponent { ...props as DataComponentProps } />
+  const renderNode = useMemo(() => {
+    if (currentDataType === 'data') {
+      return (
+        <DataComponent
+          { ...props as DataComponentProps }
+          noteditable={ props.noteditable }
+        />
+      )
+    }
+
+    if (currentDataType === 'layout') {
+      return (
+        <LayoutComponent
+          { ...props as LayoutComponentProps }
+          noteditable={ props.noteditable }
+        />
+      )
+    }
+  }, [currentDataType])
+
+  if (renderNode === undefined) {
+    throw new Error(`Unknown datatype: ${currentDataType}`)
   }
 
-  if (currentDataType === 'layout') {
-    return <LayoutComponent { ...props as LayoutComponentProps } />
-  }
-
-  throw new Error(`Unknown datatype: ${currentDataType}`)
+  return (
+    <>
+      { renderNode }
+    </>
+  )
 }

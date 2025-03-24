@@ -17,40 +17,40 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\StudioUiBundle\Service;
 
 use Exception;
-use Pimcore\Bundle\StudioUiBundle\Exception\InvalidEntrypointsJsonException;
-use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiInterface;
-use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiOptionalEntrypointsInterface;
-use Pimcore\Bundle\StudioUiBundle\PimcoreStudioUiBundle;
-use Pimcore\Extension\Bundle\PimcoreBundleManager;
+use Pimcore\Bundle\StudioUiBundle\Exception\InvalidEntryPointsJsonException;
+use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointManager;
+use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProvider;
+use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProviderInterface;
 
 /**
  * @internal
  */
-final class StaticResourcesResolver implements StaticResourcesResolverInterface
+final readonly class StaticResourcesResolver implements StaticResourcesResolverInterface
 {
     public function __construct(
-        private readonly PimcoreBundleManager $bundleManager,
+        private WebpackEntryPointManager $webpackEntryPointManager,
+        private WebpackEntryPointProvider $studioEntryPointProvider,
     ) {
     }
 
     /**
-     * @throws InvalidEntrypointsJsonException
+     * @throws InvalidEntryPointsJsonException
      */
     public function getStudioCssFiles(): array
     {
-        return $this->getFilesFromEntryPointsJson('css', [$this->getStudioUiBundle()]);
+        return $this->getFilesFromEntryPointsJson('css', [$this->studioEntryPointProvider]);
     }
 
     /**
-     * @throws InvalidEntrypointsJsonException
+     * @throws InvalidEntryPointsJsonException
      */
     public function getStudioJsFiles(): array
     {
-        return $this->getFilesFromEntryPointsJson('js', [$this->getStudioUiBundle()]);
+        return $this->getFilesFromEntryPointsJson('js', [$this->studioEntryPointProvider]);
     }
 
     /**
-     * @throws InvalidEntrypointsJsonException
+     * @throws InvalidEntryPointsJsonException
      */
     public function getBundleCssFiles(): array
     {
@@ -58,7 +58,7 @@ final class StaticResourcesResolver implements StaticResourcesResolverInterface
     }
 
     /**
-     * @throws InvalidEntrypointsJsonException
+     * @throws InvalidEntryPointsJsonException
      */
     public function getBundleJsFiles(): array
     {
@@ -66,21 +66,23 @@ final class StaticResourcesResolver implements StaticResourcesResolverInterface
     }
 
     /**
-     * @throws InvalidEntrypointsJsonException
+     * @param WebpackEntryPointProviderInterface[]|null $providers
+     *
+     * @throws InvalidEntryPointsJsonException
      */
-    private function getFilesFromEntryPointsJson(string $type, ?array $bundles = null): array
+    private function getFilesFromEntryPointsJson(string $type, ?array $providers = null): array
     {
-        $bundles = is_array($bundles) ? $bundles : $this->getStudioUiBundles();
+        $entryPointProviders = $providers ?? $this->webpackEntryPointManager->getProviders();
 
         $files = [];
-        foreach ($bundles as $bundle) {
+        foreach ($entryPointProviders as $entryPointProvider) {
             $entryPointJsonContents = [];
 
-            foreach ($bundle->getWebpackEntryPointsJsonLocations() as $entryPointsJsonLocation) {
+            foreach ($entryPointProvider->getEntryPointsJsonLocations() as $entryPointsJsonLocation) {
                 $entryPointJsonContents[] = $this->getEntryPointsJsonContent($entryPointsJsonLocation);
             }
 
-            foreach ($this->getEntryPoints($bundle) as $entryPointName) {
+            foreach ($this->getEntryPoints($entryPointProvider) as $entryPointName) {
 
                 $entryPointFound = false;
                 foreach ($entryPointJsonContents as $entryPointJson) {
@@ -96,12 +98,13 @@ final class StaticResourcesResolver implements StaticResourcesResolverInterface
                     }
                 }
 
-                if (!$entryPointFound && !$this->isEntryPointOptional($bundle, $entryPointName)) {
-                    throw new InvalidEntrypointsJsonException(
+                if (!$entryPointFound && !$this->isEntryPointOptional($entryPointProvider, $entryPointName)) {
+                    throw new InvalidEntryPointsJsonException(
                         sprintf(
-                            'Entry point "%s" not found in any of the entry points JSON files: %s',
+                            'Entry point "%s" for entry point provider "%s" not found in any of the entry points JSON files: %s',
                             $entryPointName,
-                            implode(', ', $bundle->getWebpackEntryPointsJsonLocations())
+                            get_class($entryPointProvider),
+                            implode(', ', $entryPointProvider->getEntryPointsJsonLocations())
                         )
                     );
                 }
@@ -111,25 +114,23 @@ final class StaticResourcesResolver implements StaticResourcesResolverInterface
         return $files;
     }
 
-    private function getEntryPoints(PimcoreBundleStudioUiInterface $bundle): array
+    private function getEntryPoints(WebpackEntryPointProviderInterface $entryPointProvider): array
     {
-        $entryPoints = $bundle->getWebpackEntryPoints();
-
-        if ($bundle instanceof PimcoreBundleStudioUiOptionalEntrypointsInterface) {
-            $entryPoints = array_merge($entryPoints, $bundle->getWebpackOptionalEntrypoints());
-        }
-
-        return array_unique($entryPoints);
+        return array_unique(
+            array_merge(
+                $entryPointProvider->getEntryPoints(),
+                $entryPointProvider->getOptionalEntryPoints()
+            )
+        );
     }
 
-    private function isEntryPointOptional(PimcoreBundleStudioUiInterface $bundle, string $entryPointName): bool
+    private function isEntryPointOptional(WebpackEntryPointProviderInterface $entryPointProvider, string $entryPointName): bool
     {
-        return $bundle instanceof PimcoreBundleStudioUiOptionalEntrypointsInterface
-            && in_array($entryPointName, $bundle->getWebpackOptionalEntrypoints(), true);
+        return  in_array($entryPointName, $entryPointProvider->getOptionalEntryPoints(), true);
     }
 
     /**
-     * @throws InvalidEntrypointsJsonException
+     * @throws InvalidEntryPointsJsonException
      */
     private function getEntryPointsJsonContent(string $entryPointsJsonLocation): array
     {
@@ -144,7 +145,7 @@ final class StaticResourcesResolver implements StaticResourcesResolverInterface
                 );
 
             } catch (Exception $e) {
-                throw new InvalidEntrypointsJsonException(
+                throw new InvalidEntryPointsJsonException(
                     sprintf(
                         'Error parsing entry points JSON file %s: %s',
                         $entryPointsJsonLocation,
@@ -157,38 +158,11 @@ final class StaticResourcesResolver implements StaticResourcesResolverInterface
 
         }
 
-        throw new InvalidEntrypointsJsonException(
+        throw new InvalidEntryPointsJsonException(
             sprintf(
                 'Entry points JSON file not found: %s',
                 $entryPointsJsonLocation
             )
         );
-    }
-
-    /**
-     * @return PimcoreBundleStudioUiInterface[]
-     */
-    private function getStudioUiBundles(): array
-    {
-        $bundles = [];
-
-        foreach ($this->bundleManager->getActiveBundles() as $bundle) {
-            if ($bundle instanceof PimcoreStudioUiBundle) {
-                continue;
-            }
-            if ($bundle instanceof PimcoreBundleStudioUiInterface) {
-                $bundles[] = $bundle;
-            }
-        }
-
-        return $bundles;
-    }
-
-    private function getStudioUiBundle(): PimcoreStudioUiBundle
-    {
-        /** @var PimcoreStudioUiBundle $bundle */
-        $bundle = $this->bundleManager->getActiveBundle(PimcoreStudioUiBundle::class);
-
-        return $bundle;
     }
 }

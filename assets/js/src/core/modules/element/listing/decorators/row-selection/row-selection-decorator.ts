@@ -31,7 +31,7 @@ export const RowSelectionDecorator: IRowSelectionDecorator = (props, config) => 
     ...baseProps,
     ContextComponent: withRowSelectionContext(ContextComponent),
     useGridOptions: WithRowSelection(useGridOptions, config),
-    useSidebarOptions: withSelectionOverviewTab(useSidebarOptions)
+    useSidebarOptions: config.rowSelectionMode === 'multiple' ? withSelectionOverviewTab(useSidebarOptions) : useSidebarOptions
   }
 
   return newProps

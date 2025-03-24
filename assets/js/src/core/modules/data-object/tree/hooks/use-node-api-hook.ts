@@ -11,45 +11,49 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
-import { TreeContext } from '@Pimcore/components/element-tree/element-tree'
 import {
-  type DataObjectGetTreeApiResponse,
-  useDataObjectGetTreeQuery
+  api,
+  type DataObjectGetTreeApiArg
 } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
-import { type TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react'
-import { type Dispatch, type SetStateAction, useContext, useState } from 'react'
 import { transformApiDataToNodes } from '../utils/transform-api-data-to-node'
+import { useTreeFilter } from '@Pimcore/modules/element/tree/provider/tree-filter-provider/use-tree-filter'
+import { type DataTransformerSourceNode, type DataTransformerReturnType, type NodeApiHookReturnType } from '@Pimcore/components/element-tree/types/node-api-hook'
+import { useAppDispatch } from '@Pimcore/app/store'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { type NodeState } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
 
-interface DataObjectTreeAdditionalTreeProps {
-  pager?: number
-}
+export const useNodeApiHook = (): NodeApiHookReturnType => {
+  const { pageSize, treeFilterArgs } = useTreeFilter()
+  const dispatch = useAppDispatch()
 
-interface DataTransformerReturnType {
-  nodes: TreeNodeProps[]
-  total: number
-}
-
-interface NodeApiHookReturnType {
-  apiHookResult: TypedUseQueryHookResult<any, unknown, any, any>
-  dataTransformer: (data: DataObjectGetTreeApiResponse) => DataTransformerReturnType
-  mergeAdditionalQueryParams: Dispatch<SetStateAction<DataObjectTreeAdditionalTreeProps | undefined>>
-}
-
-export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
-  const [additionalQueryParams, setAdditionalQueryParams] = useState<DataObjectTreeAdditionalTreeProps>()
-  const { maxItemsPerNode } = useContext(TreeContext)
-  const apiHookResult = useDataObjectGetTreeQuery({ parentId: parseInt(node.id), pageSize: maxItemsPerNode!, page: 1, ...additionalQueryParams })
-
-  function dataTransformer (data: DataObjectGetTreeApiResponse): DataTransformerReturnType {
-    return transformApiDataToNodes(node, data, maxItemsPerNode)
+  async function fetchRoot (id: number): Promise<DataTransformerReturnType | undefined> {
+    const node: DataTransformerSourceNode = { id: '0', internalKey: '0' }
+    const rootNodePqlQuery = id === 1 ? undefined : 'id = ' + id
+    return await fetch(node, { pageSize: 1, page: 1, excludeFolders: false, pathIncludeParent: true, pathIncludeDescendants: false, pqlQuery: rootNodePqlQuery })
   }
 
-  function mergeAdditionalQueryParams (newParams: DataObjectTreeAdditionalTreeProps): void {
-    const params = { ...additionalQueryParams, ...newParams }
-
-    setAdditionalQueryParams(params)
+  async function fetchChildren (node: DataTransformerSourceNode, nodeState: NodeState): Promise<DataTransformerReturnType | undefined> {
+    return await fetch(node, { parentId: parseInt(node.id), pageSize, page: nodeState.page, idSearchTerm: nodeState.searchTerm, ...treeFilterArgs })
   }
 
-  return { apiHookResult, dataTransformer, mergeAdditionalQueryParams } as const
+  async function fetch (node: DataTransformerSourceNode, args: DataObjectGetTreeApiArg): Promise<DataTransformerReturnType | undefined> {
+    const treeFetcher = dispatch(api.endpoints.dataObjectGetTree.initiate(args, { forceRefetch: true }))
+
+    return await treeFetcher
+      .then(({ data, isSuccess, isError, error }) => {
+        if (isError) {
+          trackError(new ApiError(error))
+          return undefined
+        }
+
+        if (isSuccess) {
+          return transformApiDataToNodes(node, data, pageSize)
+        }
+
+        return undefined
+      })
+      .catch(() => undefined)
+  }
+
+  return { fetchRoot, fetchChildren } as const
 }

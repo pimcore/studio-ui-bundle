@@ -64,8 +64,7 @@ export const TagsTree = ({
     >
       <SearchInput
         loading={ isLoading }
-        onChange={ (e) => {
-          const { value } = e.target
+        onSearch={ (value) => {
           setFilter(value)
         } }
         placeholder="Search"

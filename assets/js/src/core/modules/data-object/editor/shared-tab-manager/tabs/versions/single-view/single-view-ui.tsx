@@ -23,6 +23,7 @@ interface ISingleViewUiProps {
 export const SingleViewUi = ({ data }: ISingleViewUiProps): React.JSX.Element => {
   return (
     <Flex
+      flex={ 1 }
       gap="small"
       vertical
     >

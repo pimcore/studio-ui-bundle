@@ -15,6 +15,18 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
+    colorPicker: css`
+      &.versionFieldItem {
+        .ant-color-picker-trigger-text {
+          color: ${token.colorText} !important;
+        }
+      }
+
+      &.versionFieldItemHighlight {
+        background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+      }
+    `,
+
     inherited: css`
       background: ${token.colorBgContainerDisabled};
       color: ${token.colorTextDisabled};

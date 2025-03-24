@@ -15,10 +15,13 @@ import React, { createContext, type ElementType } from 'react'
 import { type BaseQueryFn, type TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react'
 import { type useGridOptions } from '../view-layer/components/grid/hooks/use-grid-options'
 import { type useSidebarOptions } from '../view-layer/components/sidebar/hooks/use-sidebar-options'
+import { type DataContextProps } from '../data-layer/provider/data/data-provider'
 
 export interface UseQueryHelperReturn {
   hasRequiredArgs: () => boolean
   getArgs: () => Record<string, any>
+  dataLoadingState: DataContextProps['dataLoadingState']
+  setDataLoadingState: DataContextProps['setDataLoadingState']
 }
 
 export interface UseElementIdReturn {
@@ -31,7 +34,7 @@ export interface SettingsContextProps {
   DataComponent: ElementType
   ViewComponent: ElementType
   useDataQueryHelper: () => UseQueryHelperReturn
-  useDataQuery: (props: unknown) => TypedUseQueryHookResult<any, unknown, BaseQueryFn>
+  useDataQuery: (...props: unknown[]) => TypedUseQueryHookResult<any, unknown, BaseQueryFn>
   useGridOptions: typeof useGridOptions
   useSidebarOptions: typeof useSidebarOptions
   useElementId: () => UseElementIdReturn

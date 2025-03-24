@@ -11,11 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import React from 'react'
 import { type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
 import { type AccessorColumnDef, type IdentifiedColumnDef } from '@tanstack/react-table'
 import { type GridProps as BaseGridProps } from '@Pimcore/types/components/types'
 import { useTranslation } from 'react-i18next'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
+import { Alert } from '@Pimcore/components/alert/alert'
+import { DefaultCell } from '@Pimcore/components/grid/columns/default-cell'
 
 export type GridProps = Pick<BaseGridProps, 'contextMenu' | 'enableMultipleRowSelection' | 'enableRowSelection' | 'enableSorting' | 'modifiedCells' | 'onSelectedRowsChange' | 'onSortingChange' | 'onUpdateCellData' | 'selectedRows' | 'sorting'>
 
@@ -30,12 +33,41 @@ export const useGridOptions = (): UseGridOptionsReturn => {
   const { hasType } = useDynamicTypeResolver()
 
   const transformGridColumn = (column: SelectedColumn): IdentifiedColumnDef<unknown, never> => {
-    return {
+    const isMainTypeIncluded = hasType({ target: 'GRID_CELL', dynamicTypeIds: [column.type] })
+    const isSecondaryTypeIncluded = hasType({ target: 'GRID_CELL', dynamicTypeIds: [column.frontendType!] })
+    const isTypeIncluded = isMainTypeIncluded || isSecondaryTypeIncluded
+
+    const columnDefinition: IdentifiedColumnDef<unknown, never> = {
       header: t('listing.column.' + column.key) + (column.locale !== undefined && column.locale !== null ? ` (${column.locale})` : ''),
       meta: {
-        type: hasType({ target: 'GRID_CELL', dynamicTypeIds: [column.type] }) ? column.type : column.frontendType
+        type: isMainTypeIncluded ? column.type : column.frontendType
       }
     }
+
+    if (!isTypeIncluded) {
+      columnDefinition.cell = (info) => {
+        const currentValue = info.getValue()
+        if (typeof currentValue === 'string' || typeof currentValue === 'number') {
+          const newInfo = {
+            ...info,
+            meta: {
+              type: 'input'
+            }
+          }
+
+          return <DefaultCell { ...newInfo } />
+        }
+
+        return (
+          <Alert
+            message="Not supported"
+            type="warning"
+          />
+        )
+      }
+    }
+
+    return columnDefinition
   }
 
   const transformGridColumnDefinition = (columns: Array<AccessorColumnDef<unknown, never>>): Array<AccessorColumnDef<unknown, never>> => {

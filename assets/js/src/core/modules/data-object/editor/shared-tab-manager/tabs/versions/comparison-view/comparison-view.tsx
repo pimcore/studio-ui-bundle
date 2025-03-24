@@ -25,12 +25,17 @@ import {
 import { useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import {
   getFormattedDataStructure,
-  type IFormattedDataStructureData,
   versionsDataToTableData
 } from '../details-functions'
 import { Content } from '@Pimcore/components/content/content'
 import { ComparisonViewUI } from './comparison-view-ui'
 import type { IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import type {
+  DynamicTypeObjectDataRegistry
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type IFormattedDataStructureData } from '../types'
 
 interface IVersionData extends IObjectVersionField {}
 
@@ -42,6 +47,7 @@ export const ComparisonView = ({
   const dispatch = useAppDispatch()
 
   const { id } = useElementContext()
+  const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const { data: layoutData } = useDataObjectGetLayoutByIdQuery({ id })
 
   useEffect(() => {
@@ -59,18 +65,20 @@ export const ComparisonView = ({
       .then((responses): void => {
         const formattedDataList: IFormattedDataStructureData[][] = []
 
-        responses.forEach((response, versionIndex) => {
+        responses.forEach(async (response, versionIndex) => {
           const dataRaw = response.data as DataObjectVersion
 
-          if (!isUndefined(layoutData?.children)) {
-            formattedDataList.push(getFormattedDataStructure({
+          if (!isUndefined(layoutData?.children) && !isUndefined(dataRaw)) {
+            formattedDataList.push(await getFormattedDataStructure({
+              objectId: id,
               layout: layoutData.children,
               versionData: dataRaw,
               versionId: versionIds[versionIndex].id,
-              versionCount: versionIds[versionIndex].count
+              versionCount: versionIds[versionIndex].count,
+              objectDataRegistry
             }))
 
-            setVersionsData(versionsDataToTableData(formattedDataList))
+            setVersionsData(versionsDataToTableData({ data: formattedDataList }))
           }
         })
       })
