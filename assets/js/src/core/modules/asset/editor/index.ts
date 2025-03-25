@@ -29,6 +29,7 @@ import {
 import { EditorToolbarContextMenu } from '@Pimcore/modules/asset/editor/toolbar/context-menu/context-menu'
 import { AssetEditorWidget } from '@Pimcore/modules/asset/editor/widget'
 import { type TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
+import { CustomMetadataTabContainer } from './shared-tab-manager/tabs/custom-metadata/custom-metadata-container'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -83,6 +84,11 @@ moduleSystem.registerModule({
     componentRegistry.register({
       name: 'editorToolbarContextMenuAsset',
       component: EditorToolbarContextMenu
+    })
+
+    componentRegistry.register({
+      name: 'assetEditorTabCustomMetadata',
+      component: CustomMetadataTabContainer
     })
   }
 })
