@@ -7,6 +7,13 @@ on:
       - "[0-9]+.x"
       - "feature-*"
       - "nightly"
+  pull_request_target:
+    branches:
+      - "[0-9]+.[0-9]+"
+      - "[0-9]+.x"
+      - "*_actions"
+      - "feature-*"
+      - "nightly"
 
 permissions:
   contents: read
@@ -141,6 +148,8 @@ jobs:
         run: npm run build
 
       - name: Create package archive
+        if: github.ref == 'refs/heads/1.x'
+        continue-on-error: true
         working-directory: ./assets
         run: npm pack && mv ./pimcore-studio-ui*.tgz ../public/build/studio-npm-package.tgz
 
