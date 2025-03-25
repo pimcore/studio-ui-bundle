@@ -34,7 +34,7 @@ export const useElementHelper = (): UseElementReturn => {
   const { openDataObject } = useDataObjectHelper()
   const { executeDataObjectTask } = useDataObjectHelper()
 
-  async function openElement(props: OpenElementWidgetProps): Promise<void> {
+  async function openElement (props: OpenElementWidgetProps): Promise<void> {
     const elementType = mapToElementType(props.type)
     if (elementType === 'asset') {
       openAsset({
@@ -53,7 +53,7 @@ export const useElementHelper = (): UseElementReturn => {
     }
   }
 
-  function mapToElementType(elementType: string, silent?: boolean): ElementType | undefined {
+  function mapToElementType (elementType: string, silent?: boolean): ElementType | undefined {
     const targetType = mapType(elementType)
 
     if (targetType === null && silent !== true) {

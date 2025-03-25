@@ -42,7 +42,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
   const [update] = useDataObjectUpdateByIdMutation()
   const { setTreeNodePublished } = usePublish('data-object')
 
-  async function openDataObject(props: OpenDataObjectWidgetProps): Promise<void> {
+  async function openDataObject (props: OpenDataObjectWidgetProps): Promise<void> {
     const { config } = props
     const widgetId = getWidgetId('data-object', config.id)
 
