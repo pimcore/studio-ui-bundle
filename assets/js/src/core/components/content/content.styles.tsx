@@ -23,6 +23,38 @@ export const useStyles = createStyles(({ token, css }) => {
       overflow: auto;
       gap: 12px;
 
+      &.content--overflow-x-hidden {
+        overflow-x: hidden;
+      }
+
+      &.content--overflow-y-hidden {
+        overflow-y: hidden;
+      }
+
+      &.content--overflow-x-auto {
+        overflow-x: auto;
+      }
+
+      &.content--overflow-y-auto {
+        overflow-y: auto;
+      }
+
+      &.content--overflow-x-visible {
+        overflow-x: visible;
+      }
+
+      &.content--overflow-y-visible {
+        overflow-y: visible;
+      }
+
+      &.content--overflow-x-scroll {
+        overflow-x: scroll;
+      }
+
+      &.content--overflow-y-scroll {
+        overflow-y: scroll;
+      }
+
       &.content--padded {
         padding: ${token.paddingSM}px;
       }

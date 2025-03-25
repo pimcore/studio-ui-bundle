@@ -18,6 +18,8 @@ import { type INoContentProps, NoContent } from '../no-content/no-content'
 import { Spin } from '../spin/spin'
 import { Box, type BoxProps } from '../box/box'
 
+export type OverflowValue = 'visible' | 'hidden' | 'scroll' | 'auto'
+
 export interface ContentProps extends Omit<BoxProps, 'children'> {
   className?: string
   children?: ReactNode
@@ -27,12 +29,14 @@ export interface ContentProps extends Omit<BoxProps, 'children'> {
   centered?: boolean
   fullPage?: boolean
   noneOptions?: INoContentProps
+  overflow?: { x: OverflowValue, y: OverflowValue }
 }
 
 export const Content = ({
   children,
   padded = false,
   padding = { top: 'small', x: 'extra-small', bottom: 'extra-small' },
+  overflow = { x: 'auto', y: 'auto' },
   margin = 'none',
   className,
   loading = false,
@@ -51,6 +55,8 @@ export const Content = ({
     styles.content,
     'content',
     className,
+    `content--overflow-x-${overflow.x}`,
+    `content--overflow-y-${overflow.y}`,
     {
       'content--centered': contentCentered,
       [styles.contentFullPage]: fullPage

@@ -65,7 +65,7 @@ Encore
   .addEntry('modules/icon-library/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'icon-library', 'index.ts'))
   .addEntry('modules/user/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'user', 'index.ts'))
   .addEntry('modules/widget-manager/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'modules', 'widget-manager', 'index.ts'))
-  .addEntry('modules/utils/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'utils', 'index.ts'))
+  .addEntry('utils/index', path.resolve(__dirname, 'js', 'src', 'sdk', 'utils', 'index.ts'))
 
 // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
 // .enableStimulusBridge('./assets/controllers.json')
