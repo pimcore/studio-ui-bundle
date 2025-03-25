@@ -18,6 +18,7 @@ import { KeyValueList, type KeyValueListProps } from '@Pimcore/components/key-va
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type SimpleSearchResult, useSimpleSearchPreviewGetQuery } from '@Pimcore/modules/search/search-api-slice.gen'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 import { Image } from '@Pimcore/components/image/image'
 import { useStyles } from '../../../../../search.styles'
 
@@ -31,7 +32,7 @@ export const SearchResultDetailFound = (props: SearchResultDetailProps): React.J
   const { item } = props
   const { id, elementType } = item
 
-  const { isError, error, isLoading, data } = useSimpleSearchPreviewGetQuery({ id, elementType: elementType as unknown as ElementType })
+  const { isError, error, isLoading, data } = useSimpleSearchPreviewGetQuery({ id, elementType: mapToElementType(elementType) as unknown as ElementType })
 
   const { styles } = useStyles()
 

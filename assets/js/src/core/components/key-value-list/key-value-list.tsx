@@ -13,6 +13,7 @@
 
 import { isEmpty } from 'lodash'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { useStyles } from './key-value-list.styles'
 
 export interface KeyValueListItem {
@@ -28,6 +29,8 @@ export interface KeyValueListProps {
 
 export const KeyValueList = ({ items, skipEmpty = true, skipComplexTypes = true }: KeyValueListProps): React.JSX.Element => {
   const { styles } = useStyles()
+  const { t } = useTranslation()
+
   const preparedItems: KeyValueListItem[] = []
 
   items.forEach((item) => {
@@ -42,14 +45,20 @@ export const KeyValueList = ({ items, skipEmpty = true, skipComplexTypes = true 
     preparedItems.push(item)
   })
 
+  const renderItem = (item: KeyValueListItem): React.JSX.Element => {
+    const fieldValue = item?.value
+
+    return (
+      <tr key={ item.key }>
+        <td>{t(`modal-search.field.${item.key}`)}</td>
+        <td>{fieldValue}</td>
+      </tr>
+    )
+  }
+
   return (
     <table className={ styles.keyValueList }>
-      {preparedItems.map((item) => (
-        <tr key={ item.key }>
-          <td>{item.key}</td>
-          <td>{item.value}</td>
-        </tr>
-      ))}
+      {preparedItems.map((item) => renderItem(item))}
     </table>
   )
 }
