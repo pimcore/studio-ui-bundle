@@ -147,9 +147,8 @@ jobs:
         working-directory: ./assets
         run: npm run build
 
-      - name: Skip if branch is not in on.push.branches
-        if: "!contains(github.ref, 'refs/heads/[0-9]+.[0-9]+') && !contains(github.ref, 'refs/heads/[0-9]+.x') && !contains(github.ref, 'refs/heads/feature-') && github.ref != 'refs/heads/nightly'"
-        run: echo "Skipping package archive creation as the branch is not in the on.push.branches list"
+      - name: Create package archive
+        if: github.ref == 'refs/heads/1.x'
         continue-on-error: true
         working-directory: ./assets
         run: npm pack && mv ./pimcore-studio-ui*.tgz ../public/build/studio-npm-package.tgz
