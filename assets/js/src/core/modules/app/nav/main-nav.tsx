@@ -56,6 +56,8 @@ export const MainNav = (): React.JSX.Element => {
       return <></>
     }
 
+    console.log('----> item', item)
+
     return (
       <li
         className={ `main-nav__list-item ${openKeys.includes(index) ? 'is-active' : ''} ${item.className ?? ''}` }
@@ -83,7 +85,7 @@ export const MainNav = (): React.JSX.Element => {
               } }
             >
               {item.icon !== undefined ? (<Icon value={ item.icon } />) : null}
-              {item.label}
+              {t(`${item.label}`)}
 
               {item.children !== undefined && item.children.length > 0
                 ? (

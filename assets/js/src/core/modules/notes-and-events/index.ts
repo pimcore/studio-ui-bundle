@@ -28,7 +28,7 @@ moduleSystem.registerModule({
       className: 'item-style-modifier',
       perspectivePermission: NavPermission.NotesAndEvents,
       widgetConfig: {
-        name: 'Notes & Events',
+        name: 'widget.notes-and-events',
         id: 'notes-and-events',
         component: 'notes-and-events',
         config: {

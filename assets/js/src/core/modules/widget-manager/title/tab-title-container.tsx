@@ -16,6 +16,7 @@ import React, { useState } from 'react'
 import { BorderTitleView } from './border-title-view'
 import { TabTitleView } from './tab-title-view'
 import { useWidgetManager } from '../hooks/use-widget-manager'
+import { useTranslation } from 'react-i18next'
 
 export interface TabTitleContainerProps {
   node: TabNode
@@ -28,6 +29,7 @@ export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): R
   const icon = config.icon ?? { value: 'widget-default', type: 'name' }
   const { closeWidget } = useWidgetManager()
   const isCloseable = node.isEnableClose()
+  const { t } = useTranslation()
 
   const onClose = (): void => {
     if (modified === false || modified === undefined) {
@@ -43,7 +45,7 @@ export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): R
     return (
       <BorderTitleView
         icon={ icon }
-        title={ node.getName() }
+        title={ t(`${node.getName()}`) }
       />
     )
   }
@@ -58,6 +60,6 @@ export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): R
   )
 
   function getTitle (): string {
-    return node.getName() + (modified === true ? '*' : '')
+    return t(`${node.getName()}`) + (modified === true ? '*' : '')
   }
 }
