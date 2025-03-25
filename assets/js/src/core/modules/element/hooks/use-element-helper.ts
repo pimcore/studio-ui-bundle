@@ -13,6 +13,7 @@
 
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
+import { type SaveTaskType } from '@Pimcore/modules/data-object/actions/save/use-save'
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 import { mapToElementType as mapType } from '@Pimcore/modules/element/utils/element-type'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
@@ -25,17 +26,15 @@ interface OpenElementWidgetProps {
 interface UseElementReturn {
   openElement: (props: OpenElementWidgetProps) => Promise<void>
   mapToElementType: (elementType: string, silent?: boolean) => ElementType | undefined
-  executeElementTask: (elementType: ElementType, id: number, task: ElementTask) => void
+  executeElementTask: (elementType: ElementType, id: number, task: SaveTaskType) => void
 }
-
-export type ElementTask = 'autoSave' | 'publish' | 'save' | 'unpublish' | 'version'
 
 export const useElementHelper = (): UseElementReturn => {
   const { openAsset } = useAssetHelper()
   const { openDataObject } = useDataObjectHelper()
   const { executeDataObjectTask } = useDataObjectHelper()
 
-  async function openElement (props: OpenElementWidgetProps): Promise<void> {
+  async function openElement(props: OpenElementWidgetProps): Promise<void> {
     const elementType = mapToElementType(props.type)
     if (elementType === 'asset') {
       openAsset({
@@ -54,7 +53,7 @@ export const useElementHelper = (): UseElementReturn => {
     }
   }
 
-  function mapToElementType (elementType: string, silent?: boolean): ElementType | undefined {
+  function mapToElementType(elementType: string, silent?: boolean): ElementType | undefined {
     const targetType = mapType(elementType)
 
     if (targetType === null && silent !== true) {
@@ -65,7 +64,7 @@ export const useElementHelper = (): UseElementReturn => {
     return targetType ?? undefined
   }
 
-  const executeElementTask = (elementType: ElementType, id: number, task: ElementTask): void => {
+  const executeElementTask = (elementType: ElementType, id: number, task: SaveTaskType): void => {
     if (elementType === 'data-object') {
       void executeDataObjectTask(id, task)
       return

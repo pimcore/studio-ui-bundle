@@ -33,7 +33,8 @@ export enum SaveTaskType {
   Version = 'version',
   AutoSave = 'autoSave',
   Publish = 'publish',
-  Save = 'save'
+  Save = 'save',
+  Unpublish = 'unpublish'
 }
 
 export interface UseSaveHookReturn {

@@ -18,13 +18,13 @@ import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-h
 import { api } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { usePublish } from '@Pimcore/modules/element/actions/publish/use-publish'
 import { getElementIcon } from '@Pimcore/modules/element/element-helper'
-import { type ElementTask } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 import { useDataObjectUpdateByIdMutation } from '../data-object-api-slice.gen'
 import { type EditorContainerProps } from '../editor/editor-container'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type SaveTaskType } from '../actions/save/use-save'
 
 interface OpenDataObjectWidgetProps {
   config: EditorContainerProps
@@ -32,7 +32,7 @@ interface OpenDataObjectWidgetProps {
 
 interface UseDataObjectReturn {
   openDataObject: (props: OpenDataObjectWidgetProps) => Promise<void>
-  executeDataObjectTask: (id: number, task: ElementTask) => Promise<void>
+  executeDataObjectTask: (id: number, task: SaveTaskType) => Promise<void>
 }
 
 export const useDataObjectHelper = (): UseDataObjectReturn => {
@@ -74,7 +74,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
     })
   }
 
-  const executeDataObjectTask = async (id: number, task: ElementTask): Promise<void> => {
+  const executeDataObjectTask = async (id: number, task: SaveTaskType): Promise<void> => {
     const updateTask = update({
       id,
       body: {

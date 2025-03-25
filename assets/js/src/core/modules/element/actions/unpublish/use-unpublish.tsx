@@ -22,6 +22,7 @@ import { useElementHelper } from '../../hooks/use-element-helper'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { checkElementPermission } from '../../permissions/permission-helper'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { SaveTaskType } from '@Pimcore/modules/data-object/actions/save/use-save'
 
 type Element = DataObject
 
@@ -44,7 +45,7 @@ export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn =
 
   const unpublishTreeNode = (node: TreeNodeProps | Element): void => {
     const nodeId = typeof node.id === 'string' ? parseInt(node.id) : node.id
-    executeElementTask(elementType, nodeId, 'unpublish')
+    executeElementTask(elementType, nodeId, SaveTaskType.Unpublish)
   }
 
   const unpublishContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
