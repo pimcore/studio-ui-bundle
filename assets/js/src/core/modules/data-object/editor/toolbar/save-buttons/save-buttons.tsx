@@ -11,32 +11,32 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type ReactElement, useContext, useEffect } from 'react'
+import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Button } from '@Pimcore/components/button/button'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
-import { useTranslation } from 'react-i18next'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { useMessage } from '@Pimcore/components/message/useMessage'
+import { Spin } from '@Pimcore/components/spin/spin'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { useDeleteDraft } from '@Pimcore/modules/data-object/actions/delete-draft/use-delete-draft'
 import { SaveTaskType, useSave } from '@Pimcore/modules/data-object/actions/save/use-save'
-import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
-import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
-import {
-  useSaveContext
-} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/use-save-context'
-import {
-  useSaveSchedules
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 import {
   useEditFormContext
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
-import { useMessage } from '@Pimcore/components/message/useMessage'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
-import { Spin } from '@Pimcore/components/spin/spin'
-import { Icon } from '@Pimcore/components/icon/icon'
-import { useDeleteDraft } from '@Pimcore/modules/data-object/actions/delete-draft/use-delete-draft'
+import {
+  useSaveContext
+} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/use-save-context'
+import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
+import {
+  useSaveSchedules
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { isNil } from 'lodash'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import React, { type ReactElement, useContext, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -54,7 +54,6 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { getModifiedDataObjectAttributes, resetModifiedDataObjectAttributes } = useEditFormContext()
   const { deleteDraft, isLoading: isDraftDeleteLoading, buttonText: deleteDraftButtonText } = useDeleteDraft()
   const messageApi = useMessage()
-
   const isAutoSaved = dataObject?.draftData?.isAutoSave === true
 
   useEffect(() => {
@@ -93,7 +92,6 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
 
   const getSecondaryButtons = (): ReactElement[] => {
     const secondaryButtons: ReactElement[] = []
-
     const isDraftLoading = (runningTask === SaveTaskType.Version && (isLoading || isSchedulesLoading)) || isDraftDeleteLoading
 
     if (checkElementPermission(dataObject?.permissions, 'save')) {
