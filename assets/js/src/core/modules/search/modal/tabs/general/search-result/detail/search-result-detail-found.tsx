@@ -11,21 +11,31 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import React, { useEffect } from 'react'
 import { Content } from '@Pimcore/components/content/content'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { KeyValueList, type KeyValueListProps } from '@Pimcore/components/key-value-list/key-value-list'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type SimpleSearchResult, useSimpleSearchPreviewGetQuery } from '@Pimcore/modules/search/search-api-slice.gen'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import React, { useEffect } from 'react'
+import { Image } from '@Pimcore/components/image/image'
+import { useStyles } from '../../../../../search.styles'
 
 export interface SearchResultDetailProps {
   item: SimpleSearchResult
 }
 
+const KEYS_TO_REMOVE = ['elementType', 'type']
+
 export const SearchResultDetailFound = (props: SearchResultDetailProps): React.JSX.Element => {
   const { item } = props
   const { id, elementType } = item
+
   const { isError, error, isLoading, data } = useSimpleSearchPreviewGetQuery({ id, elementType: elementType as unknown as ElementType })
+
+  const { styles } = useStyles()
+
+  const isImageType = item?.type === 'image'
 
   useEffect(() => {
     if (isError) {
@@ -47,10 +57,9 @@ export const SearchResultDetailFound = (props: SearchResultDetailProps): React.J
   }
 
   const { additionalAttributes, ...detail } = data!
-  const keysToRemove = ['elementType', 'type']
 
   const preparedItemList: KeyValueListProps['items'] = Object.entries(detail)
-    .filter(([key]) => !keysToRemove.includes(key))
+    .filter(([key]) => !KEYS_TO_REMOVE.includes(key))
     .map(([key, value]) => {
       return {
         key,
@@ -60,6 +69,15 @@ export const SearchResultDetailFound = (props: SearchResultDetailProps): React.J
 
   return (
     <Content>
+      {isImageType && (
+        <Flex justify="center">
+          <Image
+            className={ styles.searchResultImage }
+            preview={ false }
+            src={ item?.path }
+          />
+        </Flex>
+      )}
       <KeyValueList
         items={ preparedItemList }
         skipEmpty={ false }
