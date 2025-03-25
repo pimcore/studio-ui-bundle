@@ -30,7 +30,6 @@ import {
   useSaveContext
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/use-save-context'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
-import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 import {
   useSaveSchedules
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
@@ -42,7 +41,7 @@ import { useTranslation } from 'react-i18next'
 export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DataObjectContext)
-  const { dataObject, removeTrackedChanges, publishDraft, unpublishDraft } = useDataObjectDraft(id)
+  const { dataObject, removeTrackedChanges, publishDraft } = useDataObjectDraft(id)
   const { save: saveDataObject, isLoading, isSuccess, isError, error } = useSave()
   const { isAutoSaveLoading, runningTask } = useSaveContext()
   const {
@@ -55,7 +54,6 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { getModifiedDataObjectAttributes, resetModifiedDataObjectAttributes } = useEditFormContext()
   const { deleteDraft, isLoading: isDraftDeleteLoading, buttonText: deleteDraftButtonText } = useDeleteDraft()
   const messageApi = useMessage()
-  const { executeDataObjectTask } = useDataObjectHelper()
   const isAutoSaved = dataObject?.draftData?.isAutoSave === true
 
   useEffect(() => {
@@ -94,28 +92,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
 
   const getSecondaryButtons = (): ReactElement[] => {
     const secondaryButtons: ReactElement[] = []
-
     const isDraftLoading = (runningTask === SaveTaskType.Version && (isLoading || isSchedulesLoading)) || isDraftDeleteLoading
-    const isUnpublishHidden = !checkElementPermission(dataObject?.permissions, 'unpublish') ||
-      dataObject?.published === false ||
-      dataObject?.isLocked === true
-
-    if (!isUnpublishHidden) {
-      secondaryButtons.push(
-        <Button
-          disabled={ isLoading || isSchedulesLoading || isDraftLoading }
-          hidden={ dataObject?.published }
-          key="unpublish"
-          onClick={ async () => {
-            void executeDataObjectTask(dataObject!.id, 'unpublish')
-            unpublishDraft()
-          } }
-          type="default"
-        >
-          {t('element.unpublish')}
-        </Button>
-      )
-    }
 
     if (checkElementPermission(dataObject?.permissions, 'save')) {
       if (dataObject?.published === true) {
