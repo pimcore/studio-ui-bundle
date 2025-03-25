@@ -14,15 +14,15 @@
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { SaveTaskType } from '@Pimcore/modules/data-object/actions/save/use-save'
+import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useElementHelper } from '../../hooks/use-element-helper'
-import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { checkElementPermission } from '../../permissions/permission-helper'
-import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
-import { SaveTaskType } from '@Pimcore/modules/data-object/actions/save/use-save'
+import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 
 type Element = DataObject
 
@@ -40,7 +40,6 @@ export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn =
     return !checkElementPermission(node.permissions, 'unpublish') ||
       node.type === 'folder' ||
       node.isLocked
-    // node.isPublished === false //-> this is called published not isPublished on dataObject
   }
 
   const unpublishTreeNode = (node: TreeNodeProps | Element): void => {
@@ -53,7 +52,7 @@ export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn =
       label: t('element.unpublish'),
       key: 'unpublish',
       icon: <Icon value='eye-off' />,
-      hidden: isUnpublishHidden(node),
+      hidden: node.published === false || isUnpublishHidden(node),
       onClick: () => { unpublishTreeNode(node) }
     }
   }
@@ -63,7 +62,7 @@ export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn =
       label: t('element.unpublish'),
       key: 'unpublish',
       icon: <Icon value='eye-off' />,
-      hidden: !isTreeActionAllowed(TreePermission.Unpublish) || isUnpublishHidden(node),
+      hidden: node.isPublished === false || !isTreeActionAllowed(TreePermission.Unpublish) || isUnpublishHidden(node),
       onClick: () => { unpublishTreeNode(node) }
     }
   }
