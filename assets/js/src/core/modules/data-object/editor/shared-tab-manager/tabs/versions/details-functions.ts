@@ -34,7 +34,7 @@ export const getBreadcrumbTitle = (value1: string, value2: string): string => {
 
 const fieldTypesRequiringChildren = [DynamicTypesList.BLOCK]
 
-export const getFormattedDataStructure = async ({ objectId, layout, versionData, versionId, versionCount, objectDataRegistry }: IGetFormattedDataStructureProps): Promise<IFormattedDataStructureData[]> => {
+export const getFormattedDataStructure = async ({ objectId, layout, versionData, versionId, versionCount, objectDataRegistry, layoutsList, setLayoutsList }: IGetFormattedDataStructureProps): Promise<IFormattedDataStructureData[]> => {
   const formattedSystemData = {
     fullPath: versionData.fullPath,
     creationDate: formatDateTime({ timestamp: versionData.creationDate ?? null, dateStyle: 'short', timeStyle: 'medium' }),
@@ -60,7 +60,7 @@ export const getFormattedDataStructure = async ({ objectId, layout, versionData,
 
         const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
 
-        const processedDataList = await objectDataType.processVersionFieldData({ objectId, item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount })
+        const processedDataList = await objectDataType.processVersionFieldData({ objectId, item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount, layoutsList, setLayoutsList })
         const processedPromises = processedDataList?.map(async (processedDataItem: IFormattedDataStructureData): Promise<IFormattedDataStructureData[]> => {
           objectValuesData = {}
 
