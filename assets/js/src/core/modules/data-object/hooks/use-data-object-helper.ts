@@ -25,6 +25,7 @@ import { useDataObjectUpdateByIdMutation } from '../data-object-api-slice.gen'
 import { type EditorContainerProps } from '../editor/editor-container'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type SaveTaskType } from '../actions/save/use-save'
+import { setNodeLoadingInAllTree } from '@Pimcore/components/element-tree/element-tree-slice'
 
 interface OpenDataObjectWidgetProps {
   config: EditorContainerProps
@@ -41,7 +42,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
   const [update] = useDataObjectUpdateByIdMutation()
   const { setTreeNodePublished } = usePublish('data-object')
 
-  async function openDataObject (props: OpenDataObjectWidgetProps): Promise<void> {
+  async function openDataObject(props: OpenDataObjectWidgetProps): Promise<void> {
     const { config } = props
     const widgetId = getWidgetId('data-object', config.id)
 
@@ -89,9 +90,11 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
     })
 
     try {
+      dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: true }))
       const response = (await updateTask)
 
       if (response.error !== undefined) {
+        dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: false }))
         trackError(new ApiError(response.error))
         return
       }
@@ -99,6 +102,8 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
       if (task === 'unpublish' || task === 'publish') {
         setTreeNodePublished(id, task === 'publish')
       }
+
+      dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: false }))
     } catch (e: any) {
       trackError(new GeneralError(e.message as string))
     }
