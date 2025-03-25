@@ -169,6 +169,19 @@ const slice = createSlice({
         isLoading: payload.loading
       }))
     },
+    setNodeLoadingInAllTree: (
+      state,
+      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType, loading: boolean }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
+          updateNodeState(state, treeId, payload.nodeId, node => ({
+            ...node,
+            isLoading: payload.loading
+          }))
+        }
+      })
+    },
     setFetchTriggered: (
       state,
       { payload }: PayloadAction<{ treeId: string, nodeId: string, fetchTriggered: boolean }>
@@ -460,7 +473,7 @@ export const treeSliceName = slice.name
 
 injectSliceWithState(slice)
 
-export const { setNodeLoading, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, setNodePublished, setRootNode } = slice.actions
+export const { setNodeLoading, setNodeLoadingInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, setNodePublished, setRootNode } = slice.actions
 
 export const selectNodeState = createSelector(
   (state: RootState) => state.trees,

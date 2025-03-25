@@ -31,6 +31,7 @@ import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draf
 import {
   useTagGetCollectionForElementByTypeAndIdQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
+import { Button } from '@Pimcore/components/button/button'
 
 export const TagsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -42,6 +43,30 @@ export const TagsTabContainer = (): React.JSX.Element => {
     elementType,
     id
   })
+
+  const tagsAction = (): React.JSX.Element => data?.totalItems === 0
+    ? (
+      <Button
+        onClick={ removeAndApplyTagsToChildren }
+      >
+        {t('tags.remove-and-apply-tags-to-children')}
+      </Button>
+      )
+    : (
+      <Dropdown.Button
+        disabled={ element?.hasChildren !== true }
+        menu={ {
+          items: [{
+            label: t('tags.remove-and-apply-tags-to-children'),
+            key: '1',
+            onClick: removeAndApplyTagsToChildren
+          }]
+        } }
+        onClick={ applyTagsToChildren }
+      >
+        {t('tags.apply-tags-to-children')}
+      </Dropdown.Button>
+      )
 
   return (
     <SplitLayout
@@ -68,19 +93,7 @@ export const TagsTabContainer = (): React.JSX.Element => {
         children: (
           <Content padded>
             <Header title={ t('tags.assigned-tags-text') }>
-              <Dropdown.Button
-                disabled={ data?.totalItems === 0 || element?.hasChildren !== true }
-                menu={ {
-                  items: [{
-                    label: t('tags.remove-and-apply-tags-to-children'),
-                    key: '1',
-                    onClick: removeAndApplyTagsToChildren
-                  }]
-                } }
-                onClick={ applyTagsToChildren }
-              >
-                {t('tags.apply-tags-to-children')}
-              </Dropdown.Button>
+              {tagsAction()}
             </Header>
             <div className={ 'pimcore-tags-content' }>
               <AssignedTagsTable
