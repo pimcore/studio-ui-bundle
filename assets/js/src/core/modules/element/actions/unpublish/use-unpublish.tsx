@@ -21,9 +21,13 @@ import { useTranslation } from 'react-i18next'
 import { useElementHelper } from '../../hooks/use-element-helper'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { checkElementPermission } from '../../permissions/permission-helper'
+import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+
+type Element = DataObject
 
 interface UseUnpublishHookReturn {
   unpublishTreeContextMenuItem: (node: TreeNodeProps) => ItemType
+  unpublishContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
 }
 
 export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn => {
@@ -31,19 +35,19 @@ export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn =
   const { isTreeActionAllowed } = useTreePermission()
   const { executeElementTask } = useElementHelper()
 
-  const isUnpublishHidden = (node: TreeNodeProps): boolean => {
-    return !isTreeActionAllowed(TreePermission.Unpublish) ||
-            !checkElementPermission(node.permissions, 'unpublish') ||
-            node.type === 'folder' ||
-            node.isLocked ||
-            node.isPublished === false
+  const isUnpublishHidden = (node: TreeNodeProps | Element): boolean => {
+    return !checkElementPermission(node.permissions, 'unpublish') ||
+      node.type === 'folder' ||
+      node.isLocked
+    // node.isPublished === false //-> this is called published not isPublished on dataObject
   }
 
-  const unpublishTreeNode = (node: TreeNodeProps): void => {
-    executeElementTask(elementType, parseInt(node.id), 'unpublish')
+  const unpublishTreeNode = (node: TreeNodeProps | Element): void => {
+    const nodeId = typeof node.id === 'string' ? parseInt(node.id) : node.id
+    executeElementTask(elementType, nodeId, 'unpublish')
   }
 
-  const unpublishTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+  const unpublishContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
     return {
       label: t('element.unpublish'),
       key: 'unpublish',
@@ -53,7 +57,18 @@ export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn =
     }
   }
 
+  const unpublishTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+    return {
+      label: t('element.unpublish'),
+      key: 'unpublish',
+      icon: <Icon value='eye-off' />,
+      hidden: !isTreeActionAllowed(TreePermission.Unpublish) || isUnpublishHidden(node),
+      onClick: () => { unpublishTreeNode(node) }
+    }
+  }
+
   return {
-    unpublishTreeContextMenuItem
+    unpublishTreeContextMenuItem,
+    unpublishContextMenuItem
   }
 }
