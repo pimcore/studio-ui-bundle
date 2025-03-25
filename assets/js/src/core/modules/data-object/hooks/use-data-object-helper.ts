@@ -24,8 +24,9 @@ import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 import { useDataObjectUpdateByIdMutation } from '../data-object-api-slice.gen'
 import { type EditorContainerProps } from '../editor/editor-container'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { type SaveTaskType } from '../actions/save/use-save'
+import { SaveTaskType } from '../actions/save/use-save'
 import { setNodeLoadingInAllTree } from '@Pimcore/components/element-tree/element-tree-slice'
+import { unpublishDraft } from '../data-object-draft-slice'
 
 interface OpenDataObjectWidgetProps {
   config: EditorContainerProps
@@ -99,7 +100,10 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
         return
       }
 
-      if (task === 'unpublish' || task === 'publish') {
+      if (task === SaveTaskType.Unpublish || task === SaveTaskType.Publish) {
+        if (task === SaveTaskType.Unpublish) {
+          dispatch(unpublishDraft({ id }))
+        }
         setTreeNodePublished(id, task === 'publish')
       }
 
