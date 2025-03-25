@@ -68,4 +68,3 @@ export class ComponentRegistry implements ComponentRegistryInterface {
 export * from './component-ids'
 export * from './component-renderer'
 export * from './use-component-registry'
-
