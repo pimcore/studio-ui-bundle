@@ -100,10 +100,11 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
         return
       }
 
+      if (task === SaveTaskType.Unpublish) {
+        dispatch(unpublishDraft({ id }))
+      }
+
       if (task === SaveTaskType.Unpublish || task === SaveTaskType.Publish) {
-        if (task === SaveTaskType.Unpublish) {
-          dispatch(unpublishDraft({ id }))
-        }
         setTreeNodePublished(id, task === 'publish')
       }
 
