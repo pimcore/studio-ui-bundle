@@ -178,7 +178,6 @@ const slice = createSlice({
           updateNodeState(state, treeId, payload.nodeId, node => ({
             ...node,
             isLoading: payload.loading
-
           }))
         }
       })
