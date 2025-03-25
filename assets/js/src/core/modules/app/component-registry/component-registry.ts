@@ -64,3 +64,7 @@ export class ComponentRegistry implements ComponentRegistryInterface {
     this.registry[component.name] = component
   }
 }
+
+export * from './component-ids'
+export * from './component-renderer'
+export * from './use-component-registry'
