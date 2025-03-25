@@ -17,6 +17,7 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     mapContainer: css`
       max-width: 100%;
+      width: 100% !important;
       
       .leaflet-tooltip{
         width: 100px;

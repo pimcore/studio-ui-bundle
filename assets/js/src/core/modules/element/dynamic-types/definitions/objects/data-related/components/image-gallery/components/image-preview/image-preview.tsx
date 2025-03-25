@@ -51,13 +51,16 @@ interface ImageGalleryImagePreviewProps {
   setValue: React.Dispatch<React.SetStateAction<ImageGalleryValueItem[]>>
   disabled?: boolean
   hotspotMarkersModalContainer: React.RefObject<HotspotMarkersModalContainerRef>
+  width: string
+  height: string
 }
 
-export const ImageGalleryImagePreview = ({ item, index, value, setValue, disabled, hotspotMarkersModalContainer }: ImageGalleryImagePreviewProps): React.JSX.Element => {
+export const ImageGalleryImagePreview = ({ item, index, value, setValue, disabled, hotspotMarkersModalContainer, width, height }: ImageGalleryImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { openAsset } = useAssetHelper()
   const [markerModalOpen, setMarkerModalOpen] = useState(false)
   const [cropModalOpen, setCropModalOpen] = useState(false)
+
+  const { openAsset } = useAssetHelper()
   const messageApi = useMessage()
   const { confirm } = useFormModal()
   const { open: openElementSelector } = useElementSelector({
@@ -274,11 +277,11 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
               }
             }
           ] }
-          height={ 100 }
+          height={ height }
           onHotspotsDataButtonClick={ hasHotspotData(index) ? () => { setMarkerModalOpen(true) } : undefined }
           style={ { backgroundColor: '#fff' } }
           thumbnailSettings={ item.crop }
-          width={ 200 }
+          width={ width }
         />
       </Droppable>
       { cropModalOpen && (

@@ -21,10 +21,9 @@ import {
   type GetGridCellDefinitionProps
 } from '../dynamic-type-object-data-abstract'
 import { Block } from '../components/block/block'
-import {
-  FieldLabel
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label'
+import { FieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label'
 import { ItemsCount } from '../../grid-cell-preview/items-count/items-count'
+import { VersionBlock } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/block/versions/version-block'
 
 export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
   id: string = 'block'
@@ -40,11 +39,19 @@ export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
       <Block
         { ...props }
         className={ props.className }
-        title={ <FieldLabel
-          label={ props.title }
-          name={ props.name }
-                /> }
+        title={
+          <FieldLabel
+            label={ props.title }
+            name={ props.name }
+          />
+        }
       />
+    )
+  }
+
+  getVersionObjectDataComponent (props: AbstractObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+    return (
+      <VersionBlock { ...props } />
     )
   }
 

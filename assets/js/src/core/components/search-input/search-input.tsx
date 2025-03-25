@@ -18,7 +18,7 @@ import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './search-input.styles'
 
-interface ISearchInputProps extends AntSearchProps {
+export interface ISearchInputProps extends AntSearchProps {
   className?: string
   withoutAddon?: boolean
   withPrefix?: boolean
