@@ -29,7 +29,7 @@ export const DataObjectActionsCell = ({ row }: DefaultCellProps): React.JSX.Elem
       >
         <IconButton
           icon={ { value: 'open-folder' } }
-          onClick={ () => { openDataObject({ config: { id: data.id } }) } }
+          onClick={ () => { void openDataObject({ config: { id: data.id } }) } }
           type='link'
         />
       </Flex>

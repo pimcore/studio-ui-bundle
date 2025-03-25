@@ -45,7 +45,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
   }
 
   async function onSelect (node: TreeNode): Promise<void> {
-    openDataObject({
+    void openDataObject({
       config: {
         id: parseInt(node.id)
       }

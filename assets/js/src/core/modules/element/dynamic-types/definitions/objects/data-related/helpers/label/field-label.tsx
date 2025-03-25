@@ -49,7 +49,7 @@ export const FieldLabel: React.FC<FieldLabelProps> = (props: FieldLabelProps): R
           <IconButton
             className={ styles.inheritanceButton }
             icon={ { value: 'inheritance-active' } }
-            onClick={ () => { openDataObject({ config: { id: inheritanceState?.objectId } }) } }
+            onClick={ () => { void openDataObject({ config: { id: inheritanceState?.objectId } }) } }
             type="link"
             variant="minimal"
           />
