@@ -56,8 +56,6 @@ export const MainNav = (): React.JSX.Element => {
       return <></>
     }
 
-    console.log('----> item', item)
-
     return (
       <li
         className={ `main-nav__list-item ${openKeys.includes(index) ? 'is-active' : ''} ${item.className ?? ''}` }
@@ -179,31 +177,31 @@ export const MainNav = (): React.JSX.Element => {
                   <ul className={ 'main-nav__list-inline' }>
                     <li><IconTextButton
                       icon={ { value: 'pimcore' } }
-                        >{t('navigation.default')}</IconTextButton></li>
+                        >Default</IconTextButton></li>
                     <li><IconTextButton
                       icon={ { value: 'cdp' } }
                       type={ 'default' }
-                        >{t('navigation.cdp')}</IconTextButton></li>
+                        >CDP</IconTextButton></li>
                     <li><IconTextButton
                       icon={ { value: 'document' } }
                       type={ 'default' }
-                        >{t('navigation.cms')}</IconTextButton></li>
+                        >CMS</IconTextButton></li>
                     <li><IconTextButton
                       icon={ { value: 'asset' } }
                       type={ 'default' }
-                        >{t('navigation.commerce')}</IconTextButton></li>
+                        >Commerce</IconTextButton></li>
                     <li><IconTextButton
                       icon={ { value: 'asset' } }
                       type={ 'default' }
-                        >{t('navigation.dam')}</IconTextButton></li>
+                        >DAM</IconTextButton></li>
                     <li><IconTextButton
                       icon={ { value: 'data-object' } }
                       type={ 'default' }
-                        >{t('navigation.pim')}</IconTextButton></li>
+                        >PIM</IconTextButton></li>
                     <li><IconTextButton
                       icon={ { value: 'catalog' } }
                       type={ 'default' }
-                        >{t('navigation.catalogue')}</IconTextButton></li>
+                        >Catalogue</IconTextButton></li>
                   </ul>
                 </div>
               </div>

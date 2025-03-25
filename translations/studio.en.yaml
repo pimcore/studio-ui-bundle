@@ -626,14 +626,6 @@ navigation.clear-cache: Clear Full Page Cache
 navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
 navigation.customise: Customise
-navigation.default: Default
-navigation.cdp: CDP
-navigation.cms: CMS
-navigation.document: Document
-navigation.commerce: Commerce
-navigation.dam: DAM
-navigation.pim: PIM
-navigation.catalogue: Catalogue
 navigation.tag-configuration: Tag Configuration
 navigation.use-and-roles: User & Roles
 navigation.open-asset: Open Asset
