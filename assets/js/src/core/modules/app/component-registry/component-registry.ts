@@ -25,7 +25,7 @@ export interface ComponentRegistryInterface {
   getAll: () => Record<string, ComponentRegistryEntry<any>>
   get: (name: string) => ComponentRegistryEntry<any>['component']
   has: (name: string) => boolean
-  override: (name: string, component: ComponentRegistryEntry<any>) => void
+  override: (component: ComponentRegistryEntry<any>) => void
 }
 
 @injectable()
@@ -56,11 +56,11 @@ export class ComponentRegistry implements ComponentRegistryInterface {
     return name in this.registry
   }
 
-  override <T>(name: string, component: ComponentRegistryEntry<T>): void {
-    if (!this.has(name)) {
-      trackError(new GeneralError(`No component named "${name}" found to override`))
+  override <T>(component: ComponentRegistryEntry<T>): void {
+    if (!this.has(component.name)) {
+      trackError(new GeneralError(`No component named "${component.name}" found to override`))
     }
 
-    this.registry[name] = component
+    this.registry[component.name] = component
   }
 }
