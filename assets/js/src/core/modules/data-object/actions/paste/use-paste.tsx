@@ -93,7 +93,7 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
       hidden: isPasteOptionHidden(node),
       onClick: async () => {
         dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
-        await paste(parseInt(node.id))
+        await paste(parseInt(node.id), { recursive: true, updateReferences: true }, storedNode)
       }
     }
   }
