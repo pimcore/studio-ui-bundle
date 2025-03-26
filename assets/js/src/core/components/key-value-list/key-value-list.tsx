@@ -48,13 +48,21 @@ export const KeyValueList = ({ items, skipEmpty = true }: KeyValueListProps): Re
 
     if (SPECIAL_DATA_TYPES.includes(item.key)) {
       if (isObject(item.value)) {
-        Object.entries(item.value).forEach(([key, value]) => {
-          if (shouldSkipValue(value)) {
-            return
-          }
+        const renderObjectValue = (objectValue: object): void => {
+          Object.entries(objectValue).forEach(([key, value]) => {
+            if (shouldSkipValue(value)) {
+              return
+            }
 
-          preparedItems.push({ key, value: value as string, withoutTranslate: item.key === 'objectData' })
-        })
+            if (isObject(value)) {
+              renderObjectValue(value)
+            } else {
+              preparedItems.push({ key, value, withoutTranslate: item.key === 'objectData' })
+            }
+          })
+        }
+
+        renderObjectValue(item.value)
       }
     } else {
       preparedItems.push(item)
