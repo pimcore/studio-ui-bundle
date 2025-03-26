@@ -16,7 +16,6 @@ import type { EntityAdapter, EntityState } from '@reduxjs/toolkit/src/entities/m
 
 import { useAppDispatch } from '@Pimcore/app/store'
 import { useTransition } from 'react'
-import trackError, {GeneralError} from "@Pimcore/modules/app/error-handler";
 
 export interface PublishedDraft {
   published?: boolean
@@ -45,7 +44,6 @@ export const usePublishedReducers = (entityAdapter: EntityAdapter<PublishedDraft
   const modifyDraft = (state: EntityState<PublishedDraft, number>, id: number, modification: (draft: PublishedDraft) => PublishedDraft): void => {
     const draft = entityAdapter.getSelectors().selectById(state, id)
     if (draft === undefined) {
-      trackError(new GeneralError(`Data object draft with id ${id} not found`))
       return
     }
 
