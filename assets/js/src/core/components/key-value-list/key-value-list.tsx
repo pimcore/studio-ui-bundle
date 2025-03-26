@@ -21,6 +21,7 @@ import { useStyles } from './key-value-list.styles'
 export interface KeyValueListItem {
   key: string
   value: string
+  withoutTranslate?: boolean
 }
 
 export interface KeyValueListProps {
@@ -52,7 +53,7 @@ export const KeyValueList = ({ items, skipEmpty = true }: KeyValueListProps): Re
             return
           }
 
-          preparedItems.push({ key, value: value as string })
+          preparedItems.push({ key, value: value as string, withoutTranslate: item.key === 'objectData' })
         })
       }
     } else {
@@ -70,7 +71,7 @@ export const KeyValueList = ({ items, skipEmpty = true }: KeyValueListProps): Re
     return (
       <tr key={ item.key }>
         <td>
-          <Text>{t(`modal-search.field.${item.key}`)}</Text>
+          <Text>{item?.withoutTranslate === true ? item.key : t(`modal-search.field.${item.key}`)}</Text>
         </td>
         <td>
           <Text>{fieldValue}</Text>
