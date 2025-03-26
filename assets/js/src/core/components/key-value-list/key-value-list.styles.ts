@@ -17,10 +17,16 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     keyValueList: css`
       border: 0;
+      border-collapse: collapse;
 
       tr td {
+        padding: ${token.Table.cellPaddingBlockSM}px;
         border: 0;
         border-bottom: 1px solid ${token.colorBorderSecondary};
+        
+        &:first-child {
+          min-width: 100px;
+        }
       }
 
       tr:last-of-type td {

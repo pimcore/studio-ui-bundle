@@ -20,6 +20,7 @@ import { type SimpleSearchResult, useSimpleSearchPreviewGetQuery } from '@Pimcor
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 import { Image } from '@Pimcore/components/image/image'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { useStyles } from '../../../../../search.styles'
 
 export interface SearchResultDetailProps {
@@ -70,12 +71,12 @@ export const SearchResultDetailFound = (props: SearchResultDetailProps): React.J
 
   return (
     <Content>
-      {isImageType && (
+      {isImageType && !isEmptyValue(item?.path) && (
         <Flex justify="center">
           <Image
             className={ styles.searchResultImage }
             preview={ false }
-            src={ item?.path }
+            src={ item.path }
           />
         </Flex>
       )}

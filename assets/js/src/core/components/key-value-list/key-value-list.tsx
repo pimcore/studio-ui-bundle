@@ -14,6 +14,8 @@
 import { isEmpty } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { Text } from '@Pimcore/components/text/text'
+import { formatDateTime } from '@Pimcore/utils/date-time'
 import { useStyles } from './key-value-list.styles'
 
 export interface KeyValueListItem {
@@ -26,6 +28,8 @@ export interface KeyValueListProps {
   skipEmpty?: boolean
   skipComplexTypes?: boolean
 }
+
+const FIELDS_TO_CONVERT_TO_DATE = ['creationDate', 'modificationDate']
 
 export const KeyValueList = ({ items, skipEmpty = true, skipComplexTypes = true }: KeyValueListProps): React.JSX.Element => {
   const { styles } = useStyles()
@@ -46,12 +50,20 @@ export const KeyValueList = ({ items, skipEmpty = true, skipComplexTypes = true 
   })
 
   const renderItem = (item: KeyValueListItem): React.JSX.Element => {
-    const fieldValue = item?.value
+    let fieldValue = item?.value
+
+    if (FIELDS_TO_CONVERT_TO_DATE.includes(item.key)) {
+      fieldValue = formatDateTime({ timestamp: item?.value ?? null, dateStyle: 'short', timeStyle: 'short' })
+    }
 
     return (
       <tr key={ item.key }>
-        <td>{t(`modal-search.field.${item.key}`)}</td>
-        <td>{fieldValue}</td>
+        <td>
+          <Text>{t(`modal-search.field.${item.key}`)}</Text>
+        </td>
+        <td>
+          <Text>{fieldValue}</Text>
+        </td>
       </tr>
     )
   }
