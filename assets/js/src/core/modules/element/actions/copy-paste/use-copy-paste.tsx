@@ -183,7 +183,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       label: t('element.tree.copy'),
       key: 'copy',
       icon: <Icon value={ 'copy' } />,
-      hidden: !isTreeActionAllowed(TreePermission.Copy) || !checkElementPermission(node.permissions, 'view') || node.isLocked,
+      hidden: !isTreeActionAllowed(TreePermission.Copy) || !checkElementPermission(node.permissions, 'view'),
       onClick: () => {
         copy(node)
       }
