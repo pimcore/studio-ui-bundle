@@ -24,6 +24,8 @@ import { useTranslation } from 'react-i18next'
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
+import { useDataObjectReplaceContentMutation } from '../../data-object-api-slice.gen'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface UsePasteHookParams {
   storedNode: UseCopyPasteHookReturn['storedNode']
@@ -44,6 +46,31 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
   const dispatch = useAppDispatch()
   const { paste } = useCopyPaste('data-object')
   const { treeId } = useTreeId(true)
+  const [replaceContentMutation] = useDataObjectReplaceContentMutation()
+
+  const replaceContent = async (storedNode: UsePasteHookParams['storedNode'], node: Element | TreeNodeProps): Promise<void> => {
+    dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
+
+    const targetId = typeof node.id === 'string' ? parseInt(node.id) : node.id
+    const sourceId = typeof storedNode!.id === 'string' ? parseInt(storedNode!.id) : storedNode!.id
+
+    const replaceContentTask = replaceContentMutation({
+      sourceId,
+      targetId
+    })
+
+    try {
+      const response = await replaceContentTask
+
+      if (response.error !== undefined) {
+        trackError(new ApiError(response.error))
+      }
+
+      dispatch(setNodeFetching({ treeId, nodeId: String(targetId), isFetching: false }))
+    } catch (error: any) {
+      trackError(new GeneralError(error.message as string))
+    }
+  }
 
   const pasteAsChildRecursiveTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
@@ -90,9 +117,7 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
       key: 'pasteOnlyContents',
       icon: <Icon value={ 'paste' } />,
       hidden: isPasteOnlyContentsHidden(node),
-      onClick: async () => {
-        console.log('not implemented!')
-      }
+      onClick: async () => { await replaceContent(storedNode, node) }
     }
   }
 
