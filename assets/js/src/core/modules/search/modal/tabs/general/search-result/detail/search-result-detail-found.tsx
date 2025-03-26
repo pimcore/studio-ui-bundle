@@ -80,10 +80,7 @@ export const SearchResultDetailFound = (props: SearchResultDetailProps): React.J
           />
         </Flex>
       )}
-      <KeyValueList
-        items={ preparedItemList }
-        skipEmpty={ false }
-      />
+      <KeyValueList items={ preparedItemList } />
     </Content>
   )
 }

@@ -12,9 +12,11 @@
 */
 
 import React from 'react'
-import { isEmpty, isNil, isObject } from 'lodash'
+import { isEqual, isObject, isString } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Text } from '@Pimcore/components/text/text'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { useStyles } from './key-value-list.styles'
 
@@ -39,7 +41,7 @@ export const KeyValueList = ({ items, skipEmpty = true }: KeyValueListProps): Re
 
   const preparedItems: KeyValueListItem[] = []
 
-  const shouldSkipValue = (value: any): boolean => skipEmpty && (isEmpty(value) || isNil(value))
+  const shouldSkipValue = (value: any): boolean => skipEmpty && (isEmptyValue(value) || isEqual(value, false))
 
   items.forEach((item) => {
     if (shouldSkipValue(item?.value)) {
@@ -57,7 +59,10 @@ export const KeyValueList = ({ items, skipEmpty = true }: KeyValueListProps): Re
             if (isObject(value)) {
               renderObjectValue(value)
             } else {
-              preparedItems.push({ key, value, withoutTranslate: item.key === 'objectData' })
+              // @TODO: delete after the task is completed (https://github.com/pimcore/studio-backend-bundle/issues/953)
+              const isTableValue = isString(value) && value.includes('<table>')
+
+              !isTableValue && preparedItems.push({ key, value, withoutTranslate: item.key === 'objectData' })
             }
           })
         }
@@ -82,7 +87,9 @@ export const KeyValueList = ({ items, skipEmpty = true }: KeyValueListProps): Re
           <Text>{item?.withoutTranslate === true ? item.key : t(`modal-search.field.${item.key}`)}</Text>
         </td>
         <td>
-          <Text>{fieldValue}</Text>
+          <Text>
+            <SanitizeHtml html={ fieldValue ?? '' } />
+          </Text>
         </td>
       </tr>
     )
