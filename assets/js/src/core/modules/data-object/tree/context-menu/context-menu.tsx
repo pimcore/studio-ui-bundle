@@ -39,7 +39,7 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
   const { renameTreeContextMenuItem } = useRename('data-object', getElementActionCacheKey('data-object', 'rename', parseInt(node.id)))
   const { deleteTreeContextMenuItem } = useDelete('data-object', getElementActionCacheKey('data-object', 'delete', parseInt(node.id)))
   const { refreshTreeContextMenuItem } = useRefreshTree('data-object')
-  const { copyTreeContextMenuItem, cutTreeContextMenuItem, pasteTreeContextMenuItem, pasteCutContextMenuItem, nodeTask, storedNode } = useCopyPaste('data-object')
+  const { copyTreeContextMenuItem, cutTreeContextMenuItem, pasteCutContextMenuItem, nodeTask, storedNode } = useCopyPaste('data-object')
   const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem, isLockMenuHidden } = useLock('data-object')
   const { unpublishTreeContextMenuItem } = useUnpublish('data-object')
   const {
@@ -68,7 +68,6 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
     },
     renameTreeContextMenuItem(node),
     copyTreeContextMenuItem(node),
-    pasteTreeContextMenuItem(node),
     cutTreeContextMenuItem(node),
     unpublishTreeContextMenuItem(node),
     pasteCutContextMenuItem(parseInt(node.id)),
