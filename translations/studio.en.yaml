@@ -420,6 +420,7 @@ element.toolbar.copy-full-path-to-clipboard: Copy full path to clipboard
 element.toolbar.copy-deep-link-to-clipboard: Copy deep link to clipboard
 element.toolbar.copy-className: Class {{className}} - Copy
 element.unpublish: Unpublish
+element.publish: Publish
 male: Male
 female: Female
 other: Other

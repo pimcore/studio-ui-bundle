@@ -26,6 +26,7 @@ import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helpe
 import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
 import { useAddObject } from '../../actions/add-object/use-add-object'
 import { usePaste } from '@Pimcore/modules/data-object/actions/paste/use-paste'
+import { usePublish } from '@Pimcore/modules/element/actions/publish/use-publish'
 
 export interface DataObjectTreeContextMenuProps {
   node: TreeNodeProps
@@ -50,6 +51,7 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
     isPasteMenuHidden
   } = usePaste({ storedNode, nodeTask })
   const { addObjectTreeContextMenuItem } = useAddObject()
+  const { publishTreeContextMenuItem } = usePublish('data-object')
 
   const items: DropdownMenuProps['items'] = [
     addObjectTreeContextMenuItem(node),
@@ -69,6 +71,7 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
     renameTreeContextMenuItem(node),
     copyTreeContextMenuItem(node),
     cutTreeContextMenuItem(node),
+    publishTreeContextMenuItem(node),
     unpublishTreeContextMenuItem(node),
     pasteCutContextMenuItem(parseInt(node.id)),
     deleteTreeContextMenuItem(node),
