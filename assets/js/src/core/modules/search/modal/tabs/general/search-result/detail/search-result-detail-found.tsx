@@ -21,6 +21,7 @@ import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 import { Image } from '@Pimcore/components/image/image'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { PimcoreVideo } from '@Pimcore/components/pimcore-video/pimcore-video'
 import { useStyles } from '../../../../../search.styles'
 
 export interface SearchResultDetailProps {
@@ -36,8 +37,6 @@ export const SearchResultDetailFound = (props: SearchResultDetailProps): React.J
   const { isError, error, isLoading, data } = useSimpleSearchPreviewGetQuery({ id, elementType: mapToElementType(elementType) as unknown as ElementType })
 
   const { styles } = useStyles()
-
-  const isImageType = item?.type === 'image'
 
   useEffect(() => {
     if (isError) {
@@ -69,6 +68,10 @@ export const SearchResultDetailFound = (props: SearchResultDetailProps): React.J
       }
     })
 
+  const isImageType = item?.type === 'image'
+  const isVideoType = item?.type === 'video'
+  const videoSource = [{ src: item.path }]
+
   return (
     <Content>
       {isImageType && !isEmptyValue(item?.path) && (
@@ -77,6 +80,14 @@ export const SearchResultDetailFound = (props: SearchResultDetailProps): React.J
             className={ styles.searchResultImage }
             preview={ false }
             src={ item.path }
+          />
+        </Flex>
+      )}
+      {isVideoType && !isEmptyValue(item?.path) && (
+        <Flex justify="center">
+          <PimcoreVideo
+            sources={ videoSource }
+            width={ 250 }
           />
         </Flex>
       )}
