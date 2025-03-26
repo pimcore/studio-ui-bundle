@@ -19,7 +19,7 @@ import { type IErrorGetContent } from '@Pimcore/modules/app/error-handler/types'
 
 type ApiErrorData = FetchBaseQueryError | SerializedError
 
-interface IApiErrorDetails {
+export interface IApiErrorDetails {
   detail?: string
   errorKey?: string
   message?: string

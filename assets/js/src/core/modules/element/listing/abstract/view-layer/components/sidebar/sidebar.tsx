@@ -30,5 +30,5 @@ export const Sidebar = (): React.JSX.Element => {
         />
       )}
     </>
-  ), [hasEntries])
+  ), [getProps()])
 }

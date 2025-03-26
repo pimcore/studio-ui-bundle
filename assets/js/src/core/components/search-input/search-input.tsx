@@ -11,20 +11,22 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import Search, { type SearchProps as AntSearchProps } from 'antd/es/input/Search'
+import React, { type CSSProperties } from 'react'
+import { type SearchProps as AntSearchProps } from 'antd/es/input/Search'
+import { Input } from 'antd'
 import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './search-input.styles'
 
-interface ISearchInputProps extends AntSearchProps {
+export interface ISearchInputProps extends AntSearchProps {
   className?: string
   withoutAddon?: boolean
   withPrefix?: boolean
   withClear?: boolean
+  maxWidth?: CSSProperties['maxWidth']
 }
 
-export const SearchInput = ({ className, withoutAddon = true, withPrefix = true, withClear = true, ...props }: ISearchInputProps): React.JSX.Element => {
+export const SearchInput = ({ className, withoutAddon = false, withPrefix = false, withClear = true, maxWidth = 320, ...props }: ISearchInputProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   const searchClassNames = cn(
@@ -36,7 +38,7 @@ export const SearchInput = ({ className, withoutAddon = true, withPrefix = true,
   )
 
   return (
-    <Search
+    <Input.Search
       allowClear={ (withClear) && {
         clearIcon: (
           <Icon
@@ -53,6 +55,7 @@ export const SearchInput = ({ className, withoutAddon = true, withPrefix = true,
           value='search'
         />
       ) }
+      style={ { maxWidth } }
       { ...props }
     />
   )

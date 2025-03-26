@@ -14,8 +14,6 @@
 import React, { useState, type Key, useEffect } from 'react'
 import { Tree, type TreeDataNode, type TreeProps } from 'antd'
 import cn from 'classnames'
-import { map } from 'lodash'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { TreeElementItem } from './tree-element-item'
 import { useStyles } from './tree-element.styles'
@@ -35,7 +33,6 @@ interface ITreeElementProps extends TreeProps {
   onExpand?: (keys: Key[]) => void
   withCustomSwitcherIcon?: boolean
   isHideRootChecker?: boolean
-  filter?: string
 }
 
 const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
@@ -53,30 +50,13 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
     onLoadData,
     onExpand,
     withCustomSwitcherIcon,
-    isHideRootChecker = true,
-    filter
+    isHideRootChecker = true
   } = props
 
   const { styles } = useStyles({ isHideRootChecker })
 
   const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
   const [expandedKeys, setExpandedKeys] = useState<Key[]>(defaultExpandedKeys ?? [])
-
-  const getFilteredExpandedKeys = (): string[] => (
-    map(treeData[0].children, 'key').map(String)
-  )
-
-  useEffect(() => {
-    if (!isEmptyValue(filter)) {
-      const _expandedKeys = getFilteredExpandedKeys()
-
-      setExpandedKeys(['root', ..._expandedKeys])
-    }
-
-    if (isEmptyValue(filter)) {
-      setExpandedKeys(['root'])
-    }
-  }, [filter])
 
   const handleCustomSwitcherIcon = (): React.JSX.Element | undefined => {
     if (withCustomSwitcherIcon === false) return undefined

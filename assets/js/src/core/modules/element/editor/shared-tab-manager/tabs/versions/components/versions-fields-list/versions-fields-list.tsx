@@ -32,9 +32,11 @@ import {
 } from './types'
 import { useStyles } from './versions-fields-list.styles'
 
-interface IVersionsFieldsListProps extends IVersionsFieldsList {}
+interface IVersionsFieldsListProps extends IVersionsFieldsList {
+  isComparisonViewMode?: boolean
+}
 
-export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JSX.Element => {
+export const VersionsFieldsList = ({ data, isComparisonViewMode = false }: IVersionsFieldsListProps): React.JSX.Element => {
   const { elementType } = useElementContext()
 
   const isAssetType = elementType === ElementTypeName.ASSET
@@ -139,7 +141,7 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
         {isDataObjectType && (
           <ObjectVersionsFieldsView
             breadcrumbsList={ sectionsListWithFields }
-            modifiedFields={ modifiedFields }
+            isExpandedUnmodifiedFields={ isExpandedUnmodifiedFields }
             versionKeysList={ versionKeysList }
             versionViewData={ versionViewData as IObjectVersionField[] }
           />

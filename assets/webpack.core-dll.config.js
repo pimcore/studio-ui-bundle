@@ -17,6 +17,7 @@ const path = require('path')
 const webpack = require('webpack')
 const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const uuid = require('uuid');
 const buildId = uuid.v4();
 const fs = require('fs');
@@ -113,11 +114,6 @@ Encore
     options.allowedHosts = 'all'
   })
 
-  .enableEslintPlugin({
-    extensions: ['js', 'jsx', 'ts', 'tsx'],
-    fix: true
-  })
-
   .addAliases({
     '@Pimcore': path.resolve(__dirname, 'js', 'src', 'core'),
     '@test-utils': path.resolve(__dirname, 'js', 'test-utils')
@@ -138,6 +134,8 @@ Encore
       manifest: path.join(__dirname, 'dist', 'vendor',  'vendor-manifest.json')
     }),
   )
+
+  .addPlugin(new ForkTsCheckerWebpackPlugin())
 
   .addPlugin(new webpack.BannerPlugin({
     banner: `
@@ -172,6 +170,10 @@ if (Encore.isDevServer()) {
     .setOutputPath('../public/core-dll/')
     .setPublicPath('/core-dll')
     .addPlugin(new ReactRefreshPlugin())
+    .enableEslintPlugin({
+      extensions: ['js', 'jsx', 'ts', 'tsx'],
+      fix: true
+    })
 }
 
 let config = Encore.getWebpackConfig()

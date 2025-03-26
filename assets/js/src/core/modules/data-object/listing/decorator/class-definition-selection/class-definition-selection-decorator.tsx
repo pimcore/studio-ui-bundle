@@ -13,7 +13,7 @@
 
 import { type AbstractDecorator } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { withClassDefinitionSelectionContext } from './context-layer/with-class-definition-selection'
-import { type IRelationAllowedTypesClassDefinition } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/allowed-types'
+import { type IRelationAllowedTypesClassDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
 import { withClassDefinitionSelectionLayer } from './configuration-layer/with-class-definition-selection-layer'
 
 export interface ClassDefinitionSelectionDecoratorConfig {
@@ -32,6 +32,6 @@ export const ClassDefinitionSelectionDecorator: AbstractDecorator<ClassDefinitio
   return {
     ...baseProps,
     ContextComponent: withClassDefinitionSelectionContext(ContextComponent, config),
-    ConfigurationComponent: config.showConfigLayer === true ? withClassDefinitionSelectionLayer(ConfigurationComponent) : ConfigurationComponent
+    ConfigurationComponent: withClassDefinitionSelectionLayer(ConfigurationComponent, config)
   }
 }

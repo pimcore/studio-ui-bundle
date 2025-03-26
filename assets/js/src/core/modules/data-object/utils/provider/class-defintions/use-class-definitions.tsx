@@ -13,15 +13,19 @@
 
 import { useContext } from 'react'
 import { ClassDefinitionContext, type ClassDefinitionsData } from './class-definitions-provider'
-import { type ClassDefinitionListItem } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import { type ClassDefinitionListItem } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 
 export type UseClassDefinitionsReturn = ClassDefinitionsData & {
   getById: (id: string) => ClassDefinitionListItem | undefined
   getByName: (name: string) => ClassDefinitionListItem | undefined
+  getAllClassDefinitions: () => ClassDefinitionListItem[]
+  getClassDefinitionsForCurrentUser: () => ClassDefinitionListItem[]
 }
 
 export const useClassDefinitions = (): UseClassDefinitionsReturn => {
   const context = useContext(ClassDefinitionContext)
+  const user = useUser()
 
   if (context === undefined) {
     throw new Error('useClassDefinitions must be used within a ClassDefinitionsProvider')
@@ -35,9 +39,25 @@ export const useClassDefinitions = (): UseClassDefinitionsReturn => {
     return context.data?.items?.find((classDefinition) => classDefinition.name === name)
   }
 
+  const getAllClassDefinitions: UseClassDefinitionsReturn['getAllClassDefinitions'] = () => {
+    return context.data?.items ?? []
+  }
+
+  const getClassDefinitionsForCurrentUser = (): ClassDefinitionListItem[] => {
+    if (user.isAdmin || user?.classes.length === 0) {
+      return context.data?.items ?? []
+    }
+
+    return context.data?.items.filter((classDefintion) => {
+      return user?.classes.includes(classDefintion.id)
+    }) ?? []
+  }
+
   return {
     ...context,
     getById,
-    getByName
+    getByName,
+    getAllClassDefinitions,
+    getClassDefinitionsForCurrentUser
   }
 }

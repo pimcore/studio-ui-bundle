@@ -1,6 +1,4 @@
-
 * -text
-
 
 # Exclude build/test files from archive to reduce ZIP size for composer dist download
 /.github export-ignore

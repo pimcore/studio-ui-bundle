@@ -20,6 +20,7 @@ export type UseGlobalRowSelectionReturn = GlobalRowSelectionData & {
     documents: any[]
     objects: any[]
   }
+  getSelectionCount: () => number
 }
 
 export const useGlobalRowSelection = (): UseGlobalRowSelectionReturn => {
@@ -39,8 +40,15 @@ export const useGlobalRowSelection = (): UseGlobalRowSelectionReturn => {
     }
   }
 
+  const getSelectionCount = (): number => {
+    const { assets, documents, objects } = getSelectedData()
+
+    return assets.length + documents.length + objects.length
+  }
+
   return {
     ...context,
-    getSelectedData
+    getSelectedData,
+    getSelectionCount
   }
 }

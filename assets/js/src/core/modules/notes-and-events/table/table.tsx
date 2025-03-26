@@ -24,9 +24,10 @@ import {
 import { uuid } from '@Pimcore/utils/uuid'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
-import { isUndefined } from 'lodash'
-import { NoteModal } from '@Pimcore/modules/notes-and-events/table/note-modal'
-import { Tag } from '@Pimcore/components/tag/tag'
+import { isEmpty, isUndefined } from 'lodash'
+import { NoteModal } from '@Pimcore/modules/notes-and-events/note-modal'
+import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
+import { type ElementInfo } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/element-cell/element-cell'
 
 type DataNoteWithActions = DataNote & {
   actions: React.ReactNode
@@ -34,10 +35,10 @@ type DataNoteWithActions = DataNote & {
 
 export interface TableProps {
   notesAndEvents: Note[]
-  notesAndEventsLoading: boolean
+  notesAndEventsFetching: boolean
 }
 
-export const Table = ({ notesAndEvents, notesAndEventsLoading }: TableProps): React.JSX.Element => {
+export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { openElement, mapToElementType } = useElementHelper()
@@ -59,15 +60,6 @@ export const Table = ({ notesAndEvents, notesAndEventsLoading }: TableProps): Re
     })
     )
 
-  const openCorrectElement = async (eType: string, eId: number): Promise<void> => {
-    const elementType = mapToElementType(eType)
-    !isUndefined(elementType) &&
-        await openElement({
-          type: elementType,
-          id: eId
-        })
-  }
-
   const columnHelper = createColumnHelper<DataNoteWithActions>()
   const createColumns = (): any => [
     columnHelper.accessor('type', {
@@ -77,27 +69,21 @@ export const Table = ({ notesAndEvents, notesAndEventsLoading }: TableProps): Re
     columnHelper.accessor(row => ({ path: row.cPath, elementType: row.cType, id: row.cId }), {
       id: 'element',
       header: t('notes-and-events.columns.element'),
-      size: 200,
-      cell: (info) => {
-        const { path, elementType, id } = info.getValue()
-
-        return (
-          <Flex
-            align={ 'center' }
-            className={ styles.link }
-            key={ id }
-          >
-            <Tag
-              bordered={ false }
-              color="processing"
-              onClick={ async () => {
-                await openCorrectElement(elementType, id)
-              } }
-            >{decodeURIComponent(path)}
-            </Tag>
-          </Flex>
-        )
-      }
+      meta: {
+        editable: false,
+        type: 'element',
+        config: {
+          getElementInfo: (cellProps: DefaultCellProps): ElementInfo => {
+            const row = cellProps.row.original
+            return {
+              elementType: mapToElementType(String(row.cType), true),
+              id: row.cId,
+              fullPath: isEmpty(row.cPath) ? false : decodeURIComponent(String(row.cPath))
+            }
+          }
+        }
+      },
+      size: 300
     }),
     columnHelper.accessor('title', {
       header: t('notes-and-events.columns.title'),
@@ -129,35 +115,49 @@ export const Table = ({ notesAndEvents, notesAndEventsLoading }: TableProps): Re
       size: 70,
       cell: (info) => {
         const row: { path: string, elementType: string, id: number } = info.row.getValue('element')
-        const elementType = mapToElementType(row.elementType)
+        const elementType = mapToElementType(row.elementType, true)
         const elementId = row.id
 
-        return (
-          <Flex
-            align='center'
-            className='w-full'
-            justify='center'
-          >
-            <IconButton
-              icon={ { value: 'open-folder' } }
-              onClick={ async () => {
-                !isUndefined(elementType) &&
-                                await openElement({
-                                  type: elementType,
-                                  id: elementId
-                                })
-              } }
-              type="link"
-            />
-            <IconButton
-              icon={ { value: 'show-details' } }
-              onClick={ async () => {
-                setNoteDetail(info.row.original)
-              } }
-              type="link"
-            />
-          </Flex>
-        )
+        return (!isUndefined(row.path) && row.path !== '')
+          ? (
+            <Flex
+              align='center'
+              className='w-full'
+            >
+              <IconButton
+                icon={ { value: 'open-folder' } }
+                onClick={ async () => {
+                  !isUndefined(elementType) &&
+                                    await openElement({
+                                      type: elementType,
+                                      id: elementId
+                                    })
+                } }
+                type="link"
+              />
+              <IconButton
+                icon={ { value: 'show-details' } }
+                onClick={ async () => {
+                  setNoteDetail(info.row.original)
+                } }
+                type="link"
+              />
+            </Flex>
+            )
+          : (
+            <Flex
+              align='center'
+              className='w-full'
+            >
+              <IconButton
+                icon={ { value: 'show-details' } }
+                onClick={ async () => {
+                  setNoteDetail(info.row.original)
+                } }
+                type="link"
+              />
+            </Flex>
+            )
       }
     })
   ]
@@ -176,7 +176,7 @@ export const Table = ({ notesAndEvents, notesAndEventsLoading }: TableProps): Re
         autoWidth
         columns={ tableData }
         data={ notes }
-        isLoading={ notesAndEventsLoading }
+        isLoading={ notesAndEventsFetching }
         modifiedCells={ [] }
         resizable
         setRowId={ (row: DataNote) => row.rowId }

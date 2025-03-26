@@ -26,13 +26,14 @@ import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils
 export const withColumnConfiguration = (Component: AbstractDecoratorProps['ConfigurationComponent']): AbstractDecoratorProps['ConfigurationComponent'] => {
   const WithAssetColumnConfiguration = (): React.JSX.Element => {
     const { isLoading, data } = useAssetGetAvailableGridColumnsQuery()
-    const { useElementId } = useSettings()
+    const { useElementId, useDataQueryHelper } = useSettings()
     const { getId } = useElementId()
     const { id: configId } = useSelectedGridConfigId()
     const { isLoading: isInitialConfigLoading, data: initialConfigurationData } = useAssetGetGridConfigurationByFolderIdQuery({ folderId: getId(), configurationId: configId })
     const { setSelectedColumns } = useSelectedColumns()
     const { setAvailableColumns } = useAvailableColumns()
     const { setGridConfig } = useGridConfig()
+    const { setDataLoadingState } = useDataQueryHelper()
     const isConfigLoading = isLoading || isInitialConfigLoading
 
     useEffect(() => {
@@ -66,6 +67,7 @@ export const withColumnConfiguration = (Component: AbstractDecoratorProps['Confi
       setSelectedColumns(selectedColumns)
       setAvailableColumns(availableColumns)
       setGridConfig(initialConfigurationData)
+      setDataLoadingState('config-changed')
     }, [data, initialConfigurationData])
 
     if (isConfigLoading) {

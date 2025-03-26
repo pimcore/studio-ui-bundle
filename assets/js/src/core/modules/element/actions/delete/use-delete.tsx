@@ -18,7 +18,6 @@ import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
-import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import { createJob as createDeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { type AssetDeleteZipApiArg } from '@Pimcore/modules/asset/asset-api-slice.gen'
@@ -32,6 +31,13 @@ import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/us
 import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
+import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { TreePermission } from '../../../perspectives/enums/tree-permission'
+import { useRefreshTree } from '../refresh-tree/use-refresh-tree'
+import { isUndefined } from 'lodash'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { markNodeDeleting } from '@Pimcore/components/element-tree/element-tree-slice'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
@@ -45,12 +51,14 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   const { t } = useTranslation()
   const modal = useFormModal()
   const { addJob } = useJobs()
-  const { refreshTree } = useRefreshTree(elementType)
   const { refreshGrid } = useRefreshGrid(elementType)
   const { getElementById } = useElementApi(elementType)
   const { refreshElement } = useElementRefresh(elementType)
+  const { refreshTree } = useRefreshTree(elementType)
   const { isMainWidgetOpen, closeWidget } = useWidgetManager()
   const [elementDelete] = useElementDeleteMutation({ fixedCacheKey: cacheKey })
+  const { isTreeActionAllowed } = useTreePermission()
+  const dispatch = useAppDispatch()
 
   const deleteElement = (id: number, label: string, parentId?: number, onFinish?: () => void): void => {
     modal.confirm({
@@ -70,7 +78,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
       label: t('element.delete'),
       key: 'delete',
       icon: <Icon value={ 'trash' } />,
-      hidden: !checkElementPermission(node.permissions, 'delete') || node.isLocked,
+      hidden: !isTreeActionAllowed(TreePermission.Delete) || !checkElementPermission(node.permissions, 'delete') || node.isLocked,
       onClick: () => {
         const id = parseInt(node.id)
         const parentId = node.parentId !== undefined ? parseInt(node.parentId) : undefined
@@ -123,6 +131,8 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   }
 
   const deleteMutation = async (id: number, parentId?: number, onFinish?: () => void): Promise<void> => {
+    dispatch(markNodeDeleting({ nodeId: String(id), elementType, isDeleting: true }))
+
     const promise = elementDelete({
       id,
       elementType
@@ -132,7 +142,13 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
       console.error('Error deleting ' + elementType)
     })
 
-    const response = (await promise) as any
+    const response = await promise
+
+    if (!isUndefined(response.error)) {
+      trackError(new ApiError(response.error))
+      dispatch(markNodeDeleting({ nodeId: String(id), elementType, isDeleting: false }))
+      return
+    }
 
     let jobRunId: any = null
     if ((response.data ?? false) !== false) {
@@ -147,11 +163,12 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
         action: async () => {
           return jobRunId
         },
-        parentFolder: String(parentId)
+        parentFolder: String(parentId),
+        elementType
       }))
     } else if (parentId !== undefined) {
-      refreshTree(parentId)
       refreshElement(parentId)
+      refreshTree(parentId)
     }
 
     const widgetId = getWidgetId(elementType, id)

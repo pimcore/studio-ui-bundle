@@ -22,10 +22,8 @@ import { DropdownInner } from './dropdown-inner'
 import { SelectionProvider, SelectionType } from './selection/selection-provider'
 import { useStyle } from './dropdown.styles'
 
-export type OldItemType = Extract<MenuProps['items'], any[]>[0]
-export type OldMenuItemType = Extract<OldItemType, { danger?: boolean }>
-export type OldMenuItemGroupType = Extract<OldItemType, { type: 'group' }>
-export type OldSubMenuType = Extract<OldItemType, { children: OldItemType[] }>
+type OldItemType = Extract<MenuProps['items'], any[]>[0]
+type OldMenuItemGroupType = Extract<OldItemType, { type: 'group' }>
 export type MenuDividerType = Extract<OldItemType, { type: 'divider' }>
 
 export interface MenuItemType extends AntdMenuType {

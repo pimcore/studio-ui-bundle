@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Data Objects", "Data Object Grid"] as const;
+export const addTagTypes = ["Data Objects", "Data Object Grid", "Data Object Search"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -162,6 +162,15 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
+            dataObjectGetSearchConfiguration: build.query<
+                DataObjectGetSearchConfigurationApiResponse,
+                DataObjectGetSearchConfigurationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/search/configuration/${queryArg.classId}`,
+                }),
+                providesTags: ["Data Object Search"],
+            }),
             dataObjectGetSelectOptions: build.mutation<
                 DataObjectGetSelectOptionsApiResponse,
                 DataObjectGetSelectOptionsApiArg
@@ -181,11 +190,13 @@ const injectedRtkApi = api
                         pageSize: queryArg.pageSize,
                         parentId: queryArg.parentId,
                         idSearchTerm: queryArg.idSearchTerm,
+                        pqlQuery: queryArg.pqlQuery,
                         excludeFolders: queryArg.excludeFolders,
                         path: queryArg.path,
                         pathIncludeParent: queryArg.pathIncludeParent,
                         pathIncludeDescendants: queryArg.pathIncludeDescendants,
                         className: queryArg.className,
+                        classIds: queryArg.classIds,
                     },
                 }),
                 providesTags: ["Data Objects"],
@@ -234,7 +245,7 @@ export type DataObjectUpdateByIdApiArg = {
             index?: any;
             key?: any;
             useDraftData?: any;
-            task?: "autoSave" | "publish" | "save" | "version";
+            task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
             locked?: any;
             childrenSortBy?: any;
             childrenSortOrder?: any;
@@ -364,7 +375,7 @@ export type DataObjectPatchByIdApiArg = {
             parentId?: any;
             index?: any;
             key?: any;
-            task?: "autoSave" | "publish" | "save" | "version";
+            task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
             locked?: any;
             childrenSortBy?: any;
             childrenSortOrder?: any;
@@ -420,6 +431,12 @@ export type DataObjectReplaceContentApiArg = {
     /** TargetId of the data-object */
     targetId: number;
 };
+export type DataObjectGetSearchConfigurationApiResponse =
+    /** status 200 Data object search configuration */ GridDetailedConfiguration;
+export type DataObjectGetSearchConfigurationApiArg = {
+    /** Class Id of the data object */
+    classId?: string;
+};
 export type DataObjectGetSelectOptionsApiResponse = /** status 200 List of dynamic select options */ {
     totalItems: number;
     items: SelectOption2[];
@@ -446,6 +463,8 @@ export type DataObjectGetTreeApiArg = {
     parentId?: number;
     /** Filter assets/data-objects by matching ids. As a wildcard * can be used */
     idSearchTerm?: string;
+    /** Pql query filter */
+    pqlQuery?: string;
     /** Filter folders from result. */
     excludeFolders?: boolean;
     /** Filter by path. */
@@ -454,8 +473,10 @@ export type DataObjectGetTreeApiArg = {
     pathIncludeParent?: boolean;
     /** Include all descendants in the result. */
     pathIncludeDescendants?: boolean;
-    /** Filter by class. */
+    /** When provided, the search is executed on the specific data object class index. */
     className?: string;
+    /** Filter results based on the provided class IDs. */
+    classIds?: string;
 };
 export type Error = {
     /** Message */
@@ -720,6 +741,20 @@ export type GridColumnData = {
     /** inheritance */
     inheritance?: any;
 };
+export type RelationFieldConfig = {
+    /** Relation Getter */
+    relation: string;
+    /** Field getter */
+    field: string;
+};
+export type SimpleFieldConfig = {
+    /** Field getter */
+    field: string;
+};
+export type AdvancedColumnConfig = {
+    /** advancedColumns */
+    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig)[];
+};
 export type GridColumnRequest = {
     /** Key */
     key: string;
@@ -730,7 +765,7 @@ export type GridColumnRequest = {
     /** Group */
     group?: any;
     /** Config */
-    config: string[];
+    config: (string | AdvancedColumnConfig)[];
 };
 export type Layout = {
     /** AdditionalAttributes */
@@ -813,6 +848,7 @@ export const {
     useDataObjectFormatPathMutation,
     useDataObjectPreviewByIdQuery,
     useDataObjectReplaceContentMutation,
+    useDataObjectGetSearchConfigurationQuery,
     useDataObjectGetSelectOptionsMutation,
     useDataObjectGetTreeQuery,
 } = injectedRtkApi;

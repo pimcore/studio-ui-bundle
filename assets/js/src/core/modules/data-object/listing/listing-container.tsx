@@ -25,6 +25,11 @@ import { PagingDecorator } from '@Pimcore/modules/element/listing/decorators/pag
 import { SortingDecorator } from '@Pimcore/modules/element/listing/decorators/sorting/sorting-decorator'
 import { DefaultView } from './views/default-view'
 import { ClassDefinitionSelectionDecorator, type ClassDefinitionSelectionDecoratorConfig } from './decorator/class-definition-selection/class-definition-selection-decorator'
+import { type IInlineEditDecoratorConfig, InlineEditDecorator } from '@Pimcore/modules/element/listing/decorators/inline-edit/inline-edit-decorator'
+import { useInlineEditApiUpdate } from './decorator/inline-editing/hooks/use-inline-edit-api-update'
+import { GeneralFiltersDecorator } from '@Pimcore/modules/element/listing/decorators/general-filters/general-filters-decorator'
+import { ActionColumnDecorator } from './decorator/action-column/action-column-decorator'
+import { TagFilterDecorator } from '@Pimcore/modules/asset/listing/decorator/tag-filter/tag-filter-decorator'
 
 export interface IObjectListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useDataObjectGetGridQuery
@@ -42,17 +47,27 @@ const defaultProps = {
 
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 const props = compose<AbstractDecoratorProps>(
+  ActionColumnDecorator,
   SortingDecorator,
   PagingDecorator,
+  [ClassDefinitionSelectionDecorator, { showConfigLayer: true } as ClassDefinitionSelectionDecoratorConfig],
   ColumnConfigurationDecorator,
+  [InlineEditDecorator, { useInlineEditApiUpdate } as IInlineEditDecoratorConfig],
   [RowSelectionDecorator, { rowSelectionMode: 'multiple' } as IRowSelectionDecoratorConfig],
-  [ClassDefinitionSelectionDecorator, { showConfigLayer: true } as ClassDefinitionSelectionDecoratorConfig]
+  TagFilterDecorator,
+  GeneralFiltersDecorator
 )(defaultProps)
 /* eslint-enable @typescript-eslint/consistent-type-assertions */
 
 export const ListingContainer = (): React.JSX.Element => {
   return (
-    <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/ListingRegistry'] }>
+    <DynamicTypeRegistryProvider
+      serviceIds={ [
+        'DynamicTypes/GridCellRegistry',
+        'DynamicTypes/ListingRegistry',
+        'DynamicTypes/BatchEditRegistry'
+      ] }
+    >
       <BaseListing
         { ...props }
       />

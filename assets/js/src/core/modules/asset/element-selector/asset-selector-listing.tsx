@@ -12,7 +12,6 @@
 */
 
 import React, { useMemo } from 'react'
-import { DefaultView } from '../listing/views/default-view'
 import { useAssetGetGridQuery } from '../asset-api-slice-enhanced'
 import { useDataQueryHelper } from '../listing/data-layer/use-data-query-helper'
 import { ListingContainer, defaultProps as listingDefaultProps } from '@Pimcore/modules/element/listing/abstract/listing-container'
@@ -23,11 +22,12 @@ import { PagingDecorator } from '@Pimcore/modules/element/listing/decorators/pag
 import { ColumnConfigurationDecorator } from '../listing/decorator/column-configuration/column-configuration-decorator'
 import { type IRowSelectionDecoratorConfig, RowSelectionDecorator } from '@Pimcore/modules/element/listing/decorators/row-selection/row-selection-decorator'
 import { TagFilterDecorator } from '../listing/decorator/tag-filter/tag-filter-decorator'
-import { GeneralFiltersDecorator } from '../listing/decorator/general-filters/general-filters-decorator'
+import { GeneralFiltersDecorator, type GeneralFiltersDecoratorConfig } from '../../element/listing/decorators/general-filters/general-filters-decorator'
 import { useElementSelectorHelper } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector-helper'
 import { useRootElementId } from '../listing/hooks/use-root-element-id'
 import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 import { GlobalRowSelectionDecorator, type IGlobalRowSelectionConfig } from '@Pimcore/modules/element/element-selector/listing-decorators/global-row-selection/global-row-selection-decorator'
+import { DefaultView } from './view-layer/views/default-view'
 
 const defaultProps = {
   ...listingDefaultProps,
@@ -46,7 +46,7 @@ export const AssetSelectorListing = (): React.JSX.Element => {
     ColumnConfigurationDecorator,
     [RowSelectionDecorator, { rowSelectionMode: config?.selectionType } as IRowSelectionDecoratorConfig],
     TagFilterDecorator,
-    GeneralFiltersDecorator,
+    [GeneralFiltersDecorator, { handleSearchTermInSidebar: false } as GeneralFiltersDecoratorConfig],
     SortingDecorator,
     [GlobalRowSelectionDecorator, { rowSelectionMode: config?.selectionType, elementType: 'asset' } as IGlobalRowSelectionConfig]
   )(defaultProps), [config])
@@ -54,6 +54,7 @@ export const AssetSelectorListing = (): React.JSX.Element => {
 
   return useMemo(() => (
     <DynamicTypeRegistryProvider serviceIds={ [
+      'DynamicTypes/GridCellRegistry',
       'DynamicTypes/MetadataRegistry',
       'DynamicTypes/ListingRegistry',
       'DynamicTypes/BatchEditRegistry'

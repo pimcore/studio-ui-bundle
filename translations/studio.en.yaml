@@ -1,6 +1,7 @@
 common.owner: Owner
 common.modification-date: Modification date
 common.globally: Globally
+error.error_something_generic_went_wrong: Element not found
 error.error_element_exists: Element already exists
 error.error_folder_exists: Folder already exists
 error.error_invalid_argument: Invalid argument
@@ -24,9 +25,16 @@ asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
 asset.tree.context-menu.upload-new-version: Upload new version
 asset.upload: Upload
 asset.upload.label: Select file
+asset.upload.files.uploading: "{{processedItems}}/{{totalItems}} files are uploading ..."
+asset.upload.files.uploaded: "{{successItems}} files are uploaded"
+asset.upload.files.completed: Completed!
+asset.upload.files.successfully-uploaded: Successfully uploaded
+asset.upload.files.completed-actions: Completed actions
 asset.upload.validation: 'Please add a file'
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
+data-object.tree.context-menu.add-object: Add Object
+data-object.create-data-object: Add new Object of type {{className}}
 workflow.label: Workflow
 workflow.headline: Workflow Details
 workflow.no-workflows-found: No workflows found
@@ -214,6 +222,24 @@ data-type.document: Document
 data-type.asset: Asset
 data-type.object: Object
 data-type.checkbox: Checkbox
+open-data-object.button: Open Data Object
+open-data-object-modal.title: Open Data Object
+open-data-object-modal.label: Please enter the ID or Path of the data object
+open-data-object-modal.required-message: Please enter an ID or Path
+open-data-object-modal.ok-button: OK
+open-data-object-modal.cancel-button: Cancel
+open-asset.button: Open Asset
+open-asset-modal.title: Open Asset
+open-asset-modal.label: Please enter the ID or Path of the asset
+open-asset-modal.ok-button: OK
+open-asset-modal.cancel-button: Cancel
+open-asset-modal.required-message: Please enter an ID or Path of the document
+open-document.button: Open Document
+open-document-modal.title: Open Document
+open-document-modal.label: Please enter the ID or Path of the document
+open-document-modal.ok-button: OK
+open-document-modal.cancel-button: Cancel
+open-document-modal.required-message: Please enter an ID, Path or URL
 notes-and-events-modal.detail-information: Detail Information
 notes-and-events.columns.type: Type
 notes-and-events.columns.element: Element
@@ -257,9 +283,9 @@ component.no-content.no-content-available: No content available
 notes-and-events.label: Notes & Events
 notes-and-events.notes-and-events: Notes & Events
 notes-and-events.details: Details
-notes-and-events.name: name
-notes-and-events.type: type
-notes-and-events.value: value
+notes-and-events.name: Name
+notes-and-events.type: Type
+notes-and-events.value: Value
 notes-and-events.new-note: New Note
 notes-and-events.content: content
 notes-and-events.seo: seo
@@ -322,7 +348,6 @@ jobs.job.finished-with-errors: "{{title}} finished with errors"
 jobs.job.progress: "{{progress}}% completed"
 jobs.job.button-retry: Retry
 jobs.job.button-hide: hide
-jobs.job.button-hide-and-reload: hide and reload folder
 jobs.job.button-download: download
 jobs.job.button-ignore-and-reload: ignore and reload
 jobs.zip-job.title: "ZIP of {{title}}"
@@ -346,6 +371,7 @@ form.validation.numeric-range.second-value-missing: Second value is missing
 form.validation.numeric-range.second-value-greater: Second value cannot be smaller than the first value
 form.validation.provide-name: Please provide a name
 form.validation.provide-description: Please provide a description
+form.label.new-item: Enter the name of the new item
 thumbnail: Thumbnail
 select-image-preview: Select Image Preview
 choose-media: Choose Media
@@ -376,7 +402,6 @@ element.unlock: Unlock
 element.unlock-and-propagate-to-children: Unlock and propagate to children
 element.tree.refresh: Refresh
 element.new-folder: New Folder
-element.new-folder.label: 'Enter the name of the new item'
 element.new-folder.validation: 'Please enter a valid name'
 element.rename: Rename
 element.rename.label: 'Please enter the new name'
@@ -390,6 +415,7 @@ element.toolbar.copy-id: ID {{id}} - Copy
 element.toolbar.copy-full-path-to-clipboard: Copy full path to clipboard
 element.toolbar.copy-deep-link-to-clipboard: Copy deep link to clipboard
 element.toolbar.copy-className: Class {{className}} - Copy
+element.unpublish: Unpublish
 male: Male
 female: Female
 other: Other
@@ -431,6 +457,7 @@ text: Text
 video: Video
 processing: Processing
 upload: Upload
+close: Close
 upload.assets-items-failed-message: Some items could not be uploaded.
 quantity-value.converted-units: Converted Units
 table.empty.confirm: Are you sure you want to clear all data?
@@ -663,3 +690,6 @@ auto-save.loading-tooltip: Auto save in progress
 detached-tab.draft-tooltip: The current version is a draft.
 detached-tab.draft-tooltip-addon:  You can publish in the associated element/object main/mother tab.
 details: Details
+element: Element
+entries: entries
+entry: entry

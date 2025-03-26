@@ -22,7 +22,6 @@ import { useTagConfig } from '@Pimcore/modules/tags/hooks/use-tag-config'
 import { t } from 'i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { Box } from '@Pimcore/components/box/box'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
@@ -34,6 +33,7 @@ import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
+import { Content } from '@Pimcore/components/content/content'
 
 export type Mode = 'create' | 'update'
 
@@ -47,6 +47,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
   const {
     tags,
     tagsFetching,
+    tagsLoading,
     rootTagFolder,
     getTag,
     tagDeletion,
@@ -130,6 +131,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
             message: 'Please enter a tag name'
           },
           okText: t('tag-configuration.save'),
+          initialValue: newFocusTag.text,
           onOk: async (value: string) => {
             setLoadingTagKey(newFocusTag.id.toString())
             await handleTagUpdate(newFocusTag.id, newFocusTag.parentId, value)
@@ -168,56 +170,62 @@ const TagConfigurationContainer = (): React.JSX.Element => {
           }
           />
         </Toolbar> }
-    >
-      <Box
-        margin={ 'small' }
-      >
-        <Flex
-          gap={ 'small' }
-          vertical
+      renderTopBar={
+        <Toolbar
+          justify='space-between'
+          margin={ {
+            x: 'mini',
+            y: 'none'
+          } }
+          theme='secondary'
         >
-          <Flex
-            justify={ 'space-between' }
-          >
-            <Flex
-              gap={ 'small' }
-            >
-              <Title>Tag Configuration</Title>
-              <IconTextButton
-                disabled={ loadingTagKey !== undefined }
-                icon={ { value: 'new' } }
-                onClick={ () => {
-                  onActionsClick(rootTagFolder.id.toString(), 'add-tag')
-                } }
-              >{t('tag-configuration.new')}</IconTextButton>
-            </Flex>
-            <SearchInput
-              loading={ tagsFetching }
-              onChange={ (e) => {
-                const { value } = e.target
-                setTagFilter(value)
+          <Flex gap={ 'small' }>
+            <Title>Tag Configuration</Title>
+            <IconTextButton
+              disabled={ loadingTagKey !== undefined }
+              icon={ { value: 'new' } }
+              onClick={ () => {
+                onActionsClick(rootTagFolder.id.toString(), 'add-tag')
               } }
-              placeholder="Search"
-            />
+            >{t('tag-configuration.new')}</IconTextButton>
           </Flex>
-          <TreeElement
-            checkStrictly
-            defaultExpandedKeys={ expandedKeys }
-            draggable
-            onActionsClick={ onActionsClick }
-            onDragAndDrop={ async (params) => {
-              setLoadingTagKey(params.dragNode.key.toString())
-              await handleTagUpdate(Number(params.dragNode.key), Number(params.node.key))
-            }
-                        }
-            onExpand={ (keys) => {
-              setExpandedKeys(keys)
+          <SearchInput
+            loading={ tagsFetching }
+            onSearch={ (value) => {
+              setTagFilter(value)
             } }
-            treeData={ treeData }
-            withCustomSwitcherIcon
+            placeholder="Search"
+            withPrefix={ false }
+            withoutAddon={ false }
           />
-        </Flex>
-      </Box>
+        </Toolbar>
+        }
+    >
+      <Content
+        loading={ tagsLoading }
+        margin={ {
+          x: 'extra-small',
+          y: 'none'
+        } }
+        none={ tags.length === 0 }
+      >
+        <TreeElement
+          checkStrictly
+          defaultExpandedKeys={ expandedKeys }
+          draggable
+          onActionsClick={ onActionsClick }
+          onDragAndDrop={ async (params) => {
+            setLoadingTagKey(params.dragNode.key.toString())
+            await handleTagUpdate(Number(params.dragNode.key), Number(params.node.key))
+          }
+                        }
+          onExpand={ (keys) => {
+            setExpandedKeys(keys)
+          } }
+          treeData={ treeData }
+          withCustomSwitcherIcon
+        />
+      </Content>
     </ContentLayout>
   )
 }

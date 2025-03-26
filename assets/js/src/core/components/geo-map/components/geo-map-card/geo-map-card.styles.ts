@@ -16,14 +16,38 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     container: css`
+      max-width: 100%;
+      min-width: 270px;
+
       .ant-card-cover {
         .leaflet-container {
           border-radius: ${token.borderRadiusLG}px ${token.borderRadiusLG}px 0 0;
           min-height: 120px;
         }
       }
-      max-width: 100%;
-      min-width: 270px;
+
+      &.versionFieldItemHighlight {
+        border: none !important;
+      }
+
+      &.ant-card {
+        &.versionFieldItem {
+          .ant-card-cover {
+            .leaflet-container {
+              width: 100% !important;
+              border: 1px solid transparent !important;
+            }
+          }
+        }
+        
+        &.versionFieldItemHighlight {
+          .ant-card-cover {
+            .leaflet-container {
+              border: 1px solid ${token.Colors.Brand.Warning.colorWarningBorder} !important;
+            }
+          }
+        }
+      }
     `
   }
 }, { hashPriority: 'low' })

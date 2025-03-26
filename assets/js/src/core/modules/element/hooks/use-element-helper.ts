@@ -11,11 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
-import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
+import { type SaveTaskType } from '@Pimcore/modules/data-object/actions/save/use-save'
+import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 import { mapToElementType as mapType } from '@Pimcore/modules/element/utils/element-type'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 interface OpenElementWidgetProps {
   id: number
@@ -24,12 +25,15 @@ interface OpenElementWidgetProps {
 
 interface UseElementReturn {
   openElement: (props: OpenElementWidgetProps) => Promise<void>
-  mapToElementType: (elementType: string) => ElementType | undefined
+  mapToElementType: (elementType: string, silent?: boolean) => ElementType | undefined
+  executeElementTask: (elementType: ElementType, id: number, task: SaveTaskType) => void
 }
 
 export const useElementHelper = (): UseElementReturn => {
   const { openAsset } = useAssetHelper()
   const { openDataObject } = useDataObjectHelper()
+  const { executeDataObjectTask } = useDataObjectHelper()
+
   async function openElement (props: OpenElementWidgetProps): Promise<void> {
     const elementType = mapToElementType(props.type)
     if (elementType === 'asset') {
@@ -39,7 +43,7 @@ export const useElementHelper = (): UseElementReturn => {
         }
       })
     } else if (elementType === 'data-object') {
-      openDataObject({
+      void openDataObject({
         config: {
           id: props.id
         }
@@ -49,16 +53,25 @@ export const useElementHelper = (): UseElementReturn => {
     }
   }
 
-  function mapToElementType (elementType: string): ElementType | undefined {
+  function mapToElementType (elementType: string, silent?: boolean): ElementType | undefined {
     const targetType = mapType(elementType)
 
-    if (targetType === null) {
+    if (targetType === null && silent !== true) {
       trackError(new GeneralError(`Unknown element type: ${elementType}`))
       return undefined
     }
 
-    return targetType
+    return targetType ?? undefined
   }
 
-  return { openElement, mapToElementType }
+  const executeElementTask = (elementType: ElementType, id: number, task: SaveTaskType): void => {
+    if (elementType === 'data-object') {
+      void executeDataObjectTask(id, task)
+      return
+    }
+
+    console.log('not implemented for elementType: ' + elementType)
+  }
+
+  return { openElement, mapToElementType, executeElementTask }
 }

@@ -11,10 +11,26 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { ListingBaseView } from '@Pimcore/modules/element/listing/abstract/view-layer/base-view/listing-base-view'
-import React from 'react'
+import React, { useMemo } from 'react'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
+import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
+import { Sidebar } from '@Pimcore/modules/element/listing/abstract/view-layer/components/sidebar/sidebar'
+import { GridContainer } from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/grid-container'
+import { useClassDefinitionSelection } from '../decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { Toolbar } from '../toolbar/toolbar'
 
 export const DefaultView = (): React.JSX.Element => {
-  return <ListingBaseView renderToolbar={ Toolbar } />
+  const { dataQueryResult } = useData()
+  const { selectedClassDefinition } = useClassDefinitionSelection()
+
+  return useMemo(() => (
+    <ContentLayout
+      renderSidebar={ dataQueryResult !== undefined ? <Sidebar /> : undefined }
+      renderToolbar={ dataQueryResult !== undefined ? <Toolbar /> : undefined }
+    >
+      {selectedClassDefinition !== undefined && dataQueryResult !== undefined && (
+        <GridContainer />
+      )}
+    </ContentLayout>
+  ), [dataQueryResult])
 }

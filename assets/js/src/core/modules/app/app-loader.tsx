@@ -11,9 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { api } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
+import { api as perspectivesApi } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { useTranslationGetCollectionMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { useTranslation } from 'react-i18next'
@@ -25,6 +26,11 @@ import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-a
 import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useMercureCreateCookieMutation } from './mercure-api-slice.gen'
+import { setActivePerspective } from '../perspectives/active-perspective-slice'
+import { updateOuterModel } from '../widget-manager/widget-manager-slice'
+import { getInitialModelJson } from '../widget-manager/utils/widget-manager-outer-model'
+import { isPlainObject } from 'lodash'
+import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -35,11 +41,14 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const { i18n } = useTranslation()
 
   const [isLoading, setIsLoading] = useState(true)
+  const initializedPerspective = useRef<string | undefined>(undefined)
 
   const [translations] = useTranslationGetCollectionMutation()
   const [fetchMercureCookie] = useMercureCreateCookieMutation()
 
   const modal = useAlertModal()
+
+  const isAuthenticated = useIsAuthenticated()
 
   // Register the modal instance to allow centralized error message display throughout the project
   ErrorModalService.setModalInstance(modal)
@@ -81,6 +90,27 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     return await settingsFetcher
   }
 
+  async function initActivePerspective (): Promise<any> {
+    const perspectiveId = 'studio_default_perspective'
+    if (perspectiveId !== initializedPerspective.current) {
+      initializedPerspective.current = perspectiveId
+      const perspectiveFetcher = dispatch(perspectivesApi.endpoints.perspectiveGetConfigById.initiate({ perspectiveId }))
+
+      perspectiveFetcher
+        .then(({ data, isSuccess, isError, error }) => {
+          isError && trackError(new ApiError(error))
+
+          if (isSuccess && isPlainObject(data)) {
+            dispatch(setActivePerspective(data))
+            dispatch(updateOuterModel(getInitialModelJson()))
+          }
+        })
+        .catch(() => {})
+
+      return await perspectiveFetcher
+    }
+  }
+
   async function loadTranslations (): Promise<any> {
     await translations({ translation: { locale: 'en', keys: [] } })
       .unwrap()
@@ -92,15 +122,35 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
       })
   }
 
+  const loadUserData = async (): Promise<void> => {
+    const { isSuccess: isSuccessInitSetting } = await initSettings()
+
+    if (isSuccessInitSetting === true) {
+      Promise.allSettled([
+        initActivePerspective()
+      ]).then(() => {
+      }).catch(() => {})
+    }
+  }
+
   useEffect(() => {
     Promise.all([
       initLoadUser(),
-      initSettings(),
       loadTranslations()
     ]).then(() => {
       setIsLoading(false)
     }).catch(() => {})
   }, [])
+
+  useEffect(() => {
+    const fetchUserData = async (): Promise<void> => {
+      await loadUserData()
+    }
+
+    if (isAuthenticated) {
+      void fetchUserData()
+    }
+  }, [isAuthenticated])
 
   return (
     <>

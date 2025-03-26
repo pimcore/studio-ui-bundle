@@ -11,10 +11,9 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Alert, Modal, Space } from 'antd'
+import { Alert, Modal, Space, Form } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { CreateCSVForm, type CSVFormValues } from './create-csv-form/create-csv-form'
-import { useForm } from 'antd/es/form/Form'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob as createDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/factory'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
@@ -39,7 +38,7 @@ export interface CsvModalProps {
 }
 
 export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
-  const [form] = useForm()
+  const [form] = Form.useForm()
   const { addJob } = useJobs()
   const { id } = useAsset()
   const { data } = useAssetGetByIdQuery({ id })

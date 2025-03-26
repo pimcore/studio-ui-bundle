@@ -27,7 +27,10 @@ export const ComparisonViewUI = ({ data }: IComparisonViewUIProps): React.JSX.El
       gap="small"
       vertical
     >
-      <VersionsFieldsList data={ data } />
+      <VersionsFieldsList
+        data={ data }
+        isComparisonViewMode
+      />
     </Flex>
   )
 }

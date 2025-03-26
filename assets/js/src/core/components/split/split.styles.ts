@@ -22,6 +22,10 @@ export const useStyles = createStyles(({ css, token }) => {
         margin-inline: 0;
       }
 
+      .ant-space-item:empty + .ant-space-item-split {
+        display: none;
+      }
+
       &.split--theme-secondary {
         .ant-divider {
           border-color: ${token.colorTextSecondary};

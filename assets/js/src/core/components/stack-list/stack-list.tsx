@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import cn from 'classnames'
 import { StackListItem, type StackListItemProps } from './stack-list-item'
 import { useStyles } from './stack-list.styles'
@@ -25,7 +25,7 @@ export interface StackListProps {
   onItemsChange?: (items: StackListItemProps[]) => void
 }
 
-export const StackList = ({ items, onItemsChange }: StackListProps): React.JSX.Element => {
+export const StackList = ({ items, onItemsChange, sortable }: StackListProps): React.JSX.Element => {
   const [itemsState, setItems] = useState<StackListProps['items']>(items)
   const { ContextHolder } = useSortableContext({
     items: itemsState,
@@ -37,20 +37,35 @@ export const StackList = ({ items, onItemsChange }: StackListProps): React.JSX.E
     setItems(items)
   }, [items])
 
-  return (
+  return useMemo(() => (
     <div className={ cn('stack-list', styles.stackList) }>
-      <ContextHolder>
-        {itemsState.map((item) => (
-          <div
-            className="stack-list__item"
-            key={ item.id }
-          >
-            <StackListItem { ...item } />
-          </div>
-        ))}
-      </ContextHolder>
+      {sortable === true && (
+        <ContextHolder>
+          {itemsState.map((item) => (
+            <div
+              className="stack-list__item"
+              key={ item.id }
+            >
+              <StackListItem { ...item } />
+            </div>
+          ))}
+        </ContextHolder>
+      )}
+
+      {sortable !== true && (
+        <>
+          {itemsState.map((item) => (
+            <div
+              className="stack-list__item"
+              key={ item.id }
+            >
+              <StackListItem { ...item } />
+            </div>
+          ))}
+        </>
+      )}
     </div>
-  )
+  ), [itemsState])
 
   function onDragEnd (event: DragEndEvent): void {
     const { active, over } = event

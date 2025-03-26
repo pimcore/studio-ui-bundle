@@ -25,10 +25,20 @@ export const _default = {
     placeholder: 'Search'
   }
 }
-
-export const Filled = {
+export const SearchMinimal = {
   args: {
+    withoutAddon: true,
+    withPrefix: true,
     value: 'Filled value'
+  }
+}
+
+export const SearchFullWidth = {
+  args: {
+    withoutAddon: true,
+    withPrefix: true,
+    value: 'Filled value',
+    maxWidth: '100%'
   }
 }
 

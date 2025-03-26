@@ -24,7 +24,7 @@ import {
   type IVersionsFieldsList,
   type VersionKeysList
 } from '../types'
-import { type ElementType } from '../../../../../../../../../types/enums/element/element-type'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { ElementTypeName } from '@Pimcore/constants/global'
 
 interface IUseVersionDataReturn {

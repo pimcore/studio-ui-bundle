@@ -29,9 +29,10 @@ declare global {
 
 window.Pimcore = (await import('./app/public-api')).Pimcore
 
-await pluginSystem.loadPlugins()
-pluginSystem.initPlugins()
-pluginSystem.startupPlugins()
-moduleSystem.initModules()
-
-runApp()
+window.addEventListener('load', async () => {
+  await pluginSystem.loadPlugins()
+  pluginSystem.initPlugins()
+  pluginSystem.startupPlugins()
+  moduleSystem.initModules()
+  runApp()
+})
