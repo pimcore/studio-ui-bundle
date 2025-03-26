@@ -17,6 +17,10 @@ modal-search.field.userModification: User Modification
 modal-search.field.userModificationName: User Modification Name
 modal-search.field.creationDate: Creation Date
 modal-search.field.modificationDate: Modification Date
+modal-search.field.description: Description
+modal-search.field.name: Name
+modal-search.field.previewImage: Preview Image
+modal-search.field.title: Title
 modal-search.field.class: Class
 modal-search.field.language: Language
 asset.sidebar.details: Details

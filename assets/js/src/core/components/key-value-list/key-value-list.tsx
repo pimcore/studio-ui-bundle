@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { isEmpty } from 'lodash'
 import React from 'react'
+import { isEmpty, isNil, isObject } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Text } from '@Pimcore/components/text/text'
 import { formatDateTime } from '@Pimcore/utils/date-time'
@@ -30,23 +30,34 @@ export interface KeyValueListProps {
 }
 
 const FIELDS_TO_CONVERT_TO_DATE = ['creationDate', 'modificationDate']
+const SPECIAL_DATA_TYPES = ['documentData', 'objectData']
 
-export const KeyValueList = ({ items, skipEmpty = true, skipComplexTypes = true }: KeyValueListProps): React.JSX.Element => {
+export const KeyValueList = ({ items, skipEmpty = true }: KeyValueListProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
 
   const preparedItems: KeyValueListItem[] = []
 
+  const shouldSkipValue = (value: any): boolean => skipEmpty && (isEmpty(value) || isNil(value))
+
   items.forEach((item) => {
-    if (skipEmpty && isEmpty(item.value)) {
+    if (shouldSkipValue(item?.value)) {
       return
     }
 
-    if (skipComplexTypes && (typeof item.value === 'object' || Array.isArray(item.value))) {
-      return
-    }
+    if (SPECIAL_DATA_TYPES.includes(item.key)) {
+      if (isObject(item.value)) {
+        Object.entries(item.value).forEach(([key, value]) => {
+          if (shouldSkipValue(value)) {
+            return
+          }
 
-    preparedItems.push(item)
+          preparedItems.push({ key, value: value as string })
+        })
+      }
+    } else {
+      preparedItems.push(item)
+    }
   })
 
   const renderItem = (item: KeyValueListItem): React.JSX.Element => {
