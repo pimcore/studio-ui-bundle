@@ -20,6 +20,7 @@ import { useTreePermission } from '../../tree/provider/tree-permission-provider/
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
+import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 
 export interface PublishHookReturn {
   publishTreeContextMenuItem: (node: TreeNodeProps) => ItemType
