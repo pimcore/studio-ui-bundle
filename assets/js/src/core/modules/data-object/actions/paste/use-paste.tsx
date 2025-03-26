@@ -77,7 +77,7 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
       label: t('element.tree.paste-as-child-recursive'),
       key: 'pasteAsChildRecursive',
       icon: <Icon value={ 'paste' } />,
-      hidden: isPasteOpenHidden(node),
+      hidden: isPasteOptionHidden(node),
       onClick: async () => {
         dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
         await paste(parseInt(node.id), { recursive: true, updateReferences: false }, storedNode)
@@ -90,7 +90,7 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
       label: t('element.tree.paste-recursive-updating-references'),
       key: 'pasteRecursiveUpdatingReferences',
       icon: <Icon value={ 'paste' } />,
-      hidden: isPasteOpenHidden(node),
+      hidden: isPasteOptionHidden(node),
       onClick: async () => {
         dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
         await paste(parseInt(node.id))
@@ -103,7 +103,7 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
       label: t('element.tree.paste-as-child'),
       key: 'pasteAsChild',
       icon: <Icon value={ 'paste' } />,
-      hidden: isPasteOpenHidden(node),
+      hidden: isPasteOptionHidden(node),
       onClick: async () => {
         dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
         await paste(parseInt(node.id), { recursive: false, updateReferences: false })
@@ -121,21 +121,21 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
     }
   }
 
-  const isPasteOpenHidden = (node: Element | TreeNodeProps): boolean => {
+  const isPasteOptionHidden = (node: Element | TreeNodeProps): boolean => {
     return !isTreeActionAllowed(TreePermission.Paste) ||
       (storedNode === undefined || nodeTask !== 'copy') ||
       !checkElementPermission(node.permissions, 'create')
   }
 
   const isPasteOnlyContentsHidden = (node: Element | TreeNodeProps): boolean => {
-    return isPasteOpenHidden(node) ||
+    return isPasteOptionHidden(node) ||
       node.type === 'folder' ||
       node.isLocked ||
       storedNode?.type !== node.type
   }
 
   const isPasteMenuHidden = (node: Element | TreeNodeProps): boolean => {
-    return isPasteOpenHidden(node) &&
+    return isPasteOptionHidden(node) &&
       isPasteOnlyContentsHidden(node)
   }
 
