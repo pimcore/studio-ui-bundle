@@ -36,6 +36,7 @@ import { userOpened, userClosed, userUpdated, changeUser, userImageLoaded } from
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
 import type { UseTrackableChangesDraftReturn } from '@Pimcore/modules/user/hooks/use-user-trackable-changes'
+import trackError, {ApiError} from "@Pimcore/modules/app/error-handler";
 
 interface AddItemArgs {
   parentId: number
@@ -239,7 +240,7 @@ export const useUserHelper = (): UseUserReturn => {
         data = URL.createObjectURL(imageBlob)
         dispatch(userImageLoaded({ id, image: data }))
       }).catch((error) => {
-        console.log('error', error)
+          trackError(new ApiError(error))
       })
 
     return { data }

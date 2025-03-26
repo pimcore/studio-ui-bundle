@@ -24,6 +24,7 @@ import {
   type UserGetByIdApiResponse
 } from '@Pimcore/modules/user/user-api-slice.gen'
 import { useEffect, useState } from 'react'
+import trackError, {ApiError} from "@Pimcore/modules/app/error-handler";
 
 interface UseUserReturnDraft {
   isLoading: boolean
@@ -90,7 +91,7 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
     fetchUserAvailablePermissions().then((data) => {
       dispatch(userAvailablePermissionsFetched(data))
     }).catch((e) => {
-      console.error(e)
+      trackError(new ApiError(e))
     })
   }
 

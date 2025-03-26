@@ -22,6 +22,7 @@ import { type Element } from '@Pimcore/modules/element/element-helper'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
+import trackError, {ApiError} from "@Pimcore/modules/app/error-handler";
 
 export interface UseLockHookReturn {
   lock: (id: number) => Promise<void>
@@ -70,7 +71,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
         }
       })
     } catch (error) {
-      console.error('Error updating element lock', error)
+      trackError(new ApiError(error))
     }
   }
 

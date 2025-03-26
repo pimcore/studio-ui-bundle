@@ -18,6 +18,7 @@ import { Text } from '@Pimcore/components/text/text'
 import { Button } from '@Pimcore/components/button/button'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { saveFileLocal } from '@Pimcore/utils/files'
+import trackError, {ApiError} from "@Pimcore/modules/app/error-handler";
 
 export const EmptyState = ({ id, fileName }: { id?: number, fileName?: string }): React.JSX.Element => {
   const [isLoading, setIsLoading] = useState(false)
@@ -37,8 +38,7 @@ export const EmptyState = ({ id, fileName }: { id?: number, fileName?: string })
         setIsLoading(false)
       })
       .catch((err) => {
-        console.error(err)
-
+        trackError(new ApiError(err))
         setIsLoading(false)
       })
   }

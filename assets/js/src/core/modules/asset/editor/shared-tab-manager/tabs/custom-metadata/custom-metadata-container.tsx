@@ -40,7 +40,7 @@ import { uuid } from '@Pimcore/utils/uuid'
 import {
   useMetadataGetCollectionMutation
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-slice.gen'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import trackError, {ApiError, GeneralError} from '@Pimcore/modules/app/error-handler'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -118,7 +118,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
     })
 
     predefinedMetadataTask.catch(() => {
-      console.error('Failed to load predefined metadata')
+      trackError(new GeneralError('Failed to load predefined metadata'))
     })
 
     const response = await predefinedMetadataTask

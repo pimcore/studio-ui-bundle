@@ -22,6 +22,7 @@ import {
   useWorkflow
 } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import trackError, {ApiError} from "@Pimcore/modules/app/error-handler";
 
 interface UseSubmitWorkflowReturn {
   submitWorkflowAction: (actionType: string, transition: TransitionType, workFlowName: string, workFlowOptions: WorkflowOptions) => void
@@ -75,18 +76,8 @@ export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn
           type: 'success',
           duration: 3
         })
-      } else if ('error' in response) {
-        throw new Error(JSON.stringify(response.error))
       }
-    }).catch((error) => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      messageApi.error({
-        content: t('action-could-not-be-applied') + ': ' + t(`${workflowName}`),
-        type: 'error',
-        duration: 3
-      })
-      console.error(`Failed to submit workflow action ${error}`)
-    })
+    }).catch((error) => trackError(new ApiError(error)))
   }
 
   return {

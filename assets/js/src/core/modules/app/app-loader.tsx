@@ -118,7 +118,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
         i18n.addResourceBundle('en', 'translation', response.keys ?? [], true, true)
       })
       .catch((error) => {
-        console.error('rejected', error)
+        trackError(new ApiError(error))
       })
   }
 

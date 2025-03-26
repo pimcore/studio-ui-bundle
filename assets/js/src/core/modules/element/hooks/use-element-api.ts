@@ -92,7 +92,7 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
         return isUndefined(response.error)
       }
     } catch (error) {
-      console.error('Error executing element patch', error)
+      trackError(new ApiError(error))
     }
 
     return false
@@ -146,7 +146,7 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
         }
       }
     } catch (error) {
-      console.error('Error cloning element', error)
+      trackError(new ApiError(error))
     }
     return {
       success: false

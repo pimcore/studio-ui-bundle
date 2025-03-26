@@ -31,6 +31,7 @@ import { appConfig } from '@Pimcore/app/config/app-config'
 import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
+import trackError, {GeneralError} from "@Pimcore/modules/app/error-handler";
 
 export interface CsvModalProps {
   open: boolean
@@ -129,9 +130,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
         }
       })
 
-      promise.catch(() => {
-        console.error('Failed to create csv')
-      })
+      promise.catch(() => trackError(new GeneralError('Failed to create csv')))
 
       const response = (await promise) as any
       const data = response.data as AssetExportCsvFolderApiResponse
@@ -156,7 +155,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
       })
 
       promise.catch(() => {
-        console.error('Failed to create csv')
+        trackError(new GeneralError('Failed to create csv'))
       })
 
       const response = (await promise) as any

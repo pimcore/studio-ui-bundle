@@ -35,7 +35,7 @@ import { useTreePermission } from '../../tree/provider/tree-permission-provider/
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useRefreshTree } from '../refresh-tree/use-refresh-tree'
 import { isUndefined } from 'lodash'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import trackError, {ApiError, GeneralError} from '@Pimcore/modules/app/error-handler'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { markNodeDeleting } from '@Pimcore/components/element-tree/element-tree-slice'
 
@@ -138,9 +138,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
       elementType
     })
 
-    promise.catch(() => {
-      console.error('Error deleting ' + elementType)
-    })
+    promise.catch(() => trackError(new GeneralError(`Error deleting ' + elementType`)))
 
     const response = await promise
 

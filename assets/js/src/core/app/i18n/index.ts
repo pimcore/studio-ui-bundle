@@ -13,6 +13,7 @@
 
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
+import trackError, {GeneralError} from "@Pimcore/modules/app/error-handler";
 
 i18n
   .use(initReactI18next)
@@ -25,7 +26,7 @@ i18n
   })
 
   .catch((error) => {
-    console.error(error)
+      trackError(new GeneralError(error))
   })
 
 i18n.on('missingKey', (lngs, namespace, key, res) => {

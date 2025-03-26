@@ -36,6 +36,7 @@ import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/co
 import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/use-grid-config'
 import { useSelectedGridConfigId } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/selected-grid-config-id/use-selected-grid-config-id'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
+import trackError, {ApiError, GeneralError} from "@Pimcore/modules/app/error-handler";
 
 enum ViewState {
   Edit = 'edit',
@@ -101,15 +102,15 @@ export const GridConfigInner = (): React.JSX.Element => {
       fetchDeleteGridConfig({ configurationId: gridConfig.id!, folderId: getId() }).then(() => {
         setView(ViewState.Edit)
         setSelectedGridConfigId(undefined)
-      }).catch((error) => {
-        console.error('Failed to switch to edit view', error)
-      })
+      }).catch((error) =>
+        trackError(new ApiError(error))
+      )
     }
   }
 
   function onUpdatedConfigurationClick (): void {
     if (gridConfig === undefined) {
-      console.error('No grid configuration available')
+      trackError(new GeneralError('No grid configuration available'))
       return
     }
 
@@ -128,7 +129,7 @@ export const GridConfigInner = (): React.JSX.Element => {
         pageSize: 0
       }
     }).catch((error) => {
-      console.error('Failed to update grid configuration', error)
+      trackError(new ApiError(error))
     })
   }
 
@@ -171,12 +172,10 @@ export const GridConfigInner = (): React.JSX.Element => {
           pageSize: 0
         }
       }).catch((error) => {
-        console.error('Failed to update grid configuration', error)
+        trackError(new ApiError(error))
       }).then(() => {
         setView(ViewState.Edit)
-      }).catch((error) => {
-        console.error('Failed to switch to edit view', error)
-      })
+      }).catch((error) => trackError(new GeneralError(`Failed to switch to edit view, ${error}`)))
     }
 
     if (view === ViewState.Save) {
@@ -194,16 +193,13 @@ export const GridConfigInner = (): React.JSX.Element => {
           saveFilter: false,
           pageSize: 0
         }
-      }).catch((error) => {
-        console.error('Failed to save grid configuration', error)
-      }).then((response) => {
+      }).catch((error) => trackError(new ApiError(error))).then((response) => {
         if (response?.data !== undefined) {
           setSelectedGridConfigId(response.data.id)
           setView(ViewState.Edit)
         }
-      }).catch((error) => {
-        console.error('Failed to switch to edit view', error)
-      })
+      }).catch((error) =>
+      trackError(new GeneralError(`Failed to switch to edit view, ${error}`)))
     }
   }
 

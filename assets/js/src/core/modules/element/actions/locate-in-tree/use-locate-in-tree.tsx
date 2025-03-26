@@ -57,9 +57,7 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
           onFinished?.()
         }
       })
-      .catch((error) => {
-        console.error(error)
-      })
+      .catch((error) => trackError(new ApiError(error)))
   }
 
   return {
