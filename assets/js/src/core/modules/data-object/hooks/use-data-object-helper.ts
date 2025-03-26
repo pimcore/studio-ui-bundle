@@ -13,20 +13,19 @@
 
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { store, useAppDispatch } from '@Pimcore/app/store'
+import { setNodeLoadingInAllTree, setNodePublished } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type IconProps } from '@Pimcore/components/icon/icon'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { api } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
-import { usePublish } from '@Pimcore/modules/element/actions/publish/use-publish'
 import { getElementIcon } from '@Pimcore/modules/element/element-helper'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
-import { useDataObjectUpdateByIdMutation } from '../data-object-api-slice.gen'
-import { type EditorContainerProps } from '../editor/editor-container'
-import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { SaveTaskType } from '../actions/save/use-save'
-import { setNodeLoadingInAllTree } from '@Pimcore/components/element-tree/element-tree-slice'
-import { unpublishDraft } from '../data-object-draft-slice'
+import { useDataObjectUpdateByIdMutation } from '../data-object-api-slice.gen'
+import { publishDraft, unpublishDraft } from '../data-object-draft-slice'
+import { type EditorContainerProps } from '../editor/editor-container'
 
 interface OpenDataObjectWidgetProps {
   config: EditorContainerProps
@@ -41,7 +40,6 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
   const { openMainWidget, isMainWidgetOpen } = useWidgetManager()
   const dispatch = useAppDispatch()
   const [update] = useDataObjectUpdateByIdMutation()
-  const { setTreeNodePublished } = usePublish('data-object')
 
   async function openDataObject (props: OpenDataObjectWidgetProps): Promise<void> {
     const { config } = props
@@ -104,8 +102,12 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
         dispatch(unpublishDraft({ id }))
       }
 
+      if (task === SaveTaskType.Publish) {
+        dispatch(publishDraft({ id }))
+      }
+
       if (task === SaveTaskType.Unpublish || task === SaveTaskType.Publish) {
-        setTreeNodePublished(id, task === 'publish')
+        dispatch(setNodePublished({ nodeId: String(id), elementType: 'data-object', isPublished: task === 'publish' }))
       }
 
       dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: false }))
