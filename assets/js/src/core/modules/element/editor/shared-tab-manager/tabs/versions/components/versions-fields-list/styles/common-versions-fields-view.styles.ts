@@ -90,6 +90,23 @@ export const useStyles = createStyles(({ token, css }) => {
       &.versionFieldItem {
         border-color: ${token.colorBorder} !important;
       }
+    `,
+
+    objectSectionEmptyState: css`
+      justify-content: center !important;
+      width: 100%;
+      min-width: 100px;
+      height: 100%;
+      border: 1px solid transparent !important;
+    `,
+
+    objectSectionEmptyStateDisabled: css`
+      background-color: ${token.colorBgContainerDisabled} !important;
+    `,
+
+    objectSectionEmptyStateHighlight: css`
+      background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+      border-color: ${token.colorBorder} !important;
     `
   }
 })

@@ -101,8 +101,9 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
                 if (!$entryPointFound && !$this->isEntryPointOptional($entryPointProvider, $entryPointName)) {
                     throw new InvalidEntryPointsJsonException(
                         sprintf(
-                            'Entry point "%s" not found in any of the entry points JSON files: %s',
+                            'Entry point "%s" for entry point provider "%s" not found in any of the entry points JSON files: %s',
                             $entryPointName,
+                            get_class($entryPointProvider),
                             implode(', ', $entryPointProvider->getEntryPointsJsonLocations())
                         )
                     );

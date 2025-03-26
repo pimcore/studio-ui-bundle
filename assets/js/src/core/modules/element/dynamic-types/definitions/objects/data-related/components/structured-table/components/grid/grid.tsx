@@ -32,6 +32,7 @@ interface StructuredTableGridProps {
   labelFirstCell: string | null
   value: StructuredTableValue | null
   onChange?: (value: StructuredTableValue | null) => void
+  className?: string
 }
 
 export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.Element => {
@@ -87,6 +88,7 @@ export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.
 
   return (
     <Grid
+      className={ props.className }
       columns={ columns }
       data={ rows }
       disabled={ props.disabled }

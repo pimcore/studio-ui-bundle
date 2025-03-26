@@ -11,34 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { every, get, isEmpty, isEqual, isObject, isUndefined } from 'lodash'
+import { differenceWith, every, get, isEmpty, isEqual, isObject, isUndefined } from 'lodash'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { type Layout } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import type { DataObjectVersion } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
 import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
-import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
-
-enum DATATYPE_LIST {
-  LAYOUT = 'layout',
-  DATA = 'data'
-}
-
-interface IGetFormattedDataStructureProps {
-  layout: Layout['children']
-  versionData: DataObjectVersion
-  versionId: number
-  versionCount: number
-  objectDataRegistry: DynamicTypeObjectDataRegistry
-}
-
-export interface IFormattedDataStructureData {
-  fieldBreadcrumbTitle: string
-  fieldData: Layout['children']
-  fieldValue: any
-  versionCount: number
-  versionId: number
-}
+import { DATATYPE_LIST, type IFormattedDataStructureData, type IGetFormattedDataStructureProps, type IFieldCollectionValue } from './types'
+import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'
 
 const isFieldValueEmpty = (fieldValue: any): boolean => {
   if (isObject(fieldValue)) {
@@ -48,28 +28,30 @@ const isFieldValueEmpty = (fieldValue: any): boolean => {
   return isEmptyValue(fieldValue)
 }
 
-export const getFormattedDataStructure = ({ layout, versionData, versionId, versionCount, objectDataRegistry }: IGetFormattedDataStructureProps): IFormattedDataStructureData[] => {
+export const getBreadcrumbTitle = (value1: string, value2: string): string => {
+  return [value1, value2].filter(Boolean).join('/')
+}
+
+const fieldTypesRequiringChildren = [DynamicTypesList.BLOCK]
+
+export const getFormattedDataStructure = async ({ objectId, layout, versionData, versionId, versionCount, objectDataRegistry, layoutsList, setLayoutsList }: IGetFormattedDataStructureProps): Promise<IFormattedDataStructureData[]> => {
   const formattedSystemData = {
     fullPath: versionData.fullPath,
     creationDate: formatDateTime({ timestamp: versionData.creationDate ?? null, dateStyle: 'short', timeStyle: 'medium' }),
     modificationDate: formatDateTime({ timestamp: versionData.modificationDate ?? null, dateStyle: 'short', timeStyle: 'medium' })
   }
 
-  const getBreadcrumbTitle = (value1: string, value2: string): string => {
-    return [value1, value2].filter(Boolean).join('/')
-  }
-
-  const processLayoutData = ({ data, fieldBreadcrumbTitle = '' }: { data: Layout['children'], fieldBreadcrumbTitle?: string }): IFormattedDataStructureData[] => {
-    return data.flatMap((item: any) => {
+  const processLayoutData = async ({ data, objectValuesData = versionData?.objectData, fieldBreadcrumbTitle = '' }: { data: Layout['children'], objectValuesData?: DataObjectVersion['objectData'], fieldBreadcrumbTitle?: string }): Promise<IFormattedDataStructureData[]> => {
+    const promises = data.map(async (item: any) => {
       if (item.datatype === DATATYPE_LIST.LAYOUT) {
         const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, item.title as string)
 
-        return processLayoutData({ data: item.children, fieldBreadcrumbTitle: breadcrumbTitle })
+        return await processLayoutData({ data: item.children, fieldBreadcrumbTitle: breadcrumbTitle, objectValuesData })
       }
 
       if (item.datatype === DATATYPE_LIST.DATA) {
         const fieldName = item.name
-        const fieldValueByName: string | object = get(versionData?.objectData, fieldName)
+        const fieldValueByName = get(objectValuesData, fieldName)
         const currentFieldType: string = item.fieldtype
 
         if (!objectDataRegistry.hasDynamicType(currentFieldType)) {
@@ -78,11 +60,28 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
 
         const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
 
-        return objectDataType.processVersionFieldData({ item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount })
+        const processedDataList = await objectDataType.processVersionFieldData({ objectId, item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount, layoutsList, setLayoutsList })
+        const processedPromises = processedDataList?.map(async (processedDataItem: IFormattedDataStructureData): Promise<IFormattedDataStructureData[]> => {
+          objectValuesData = {}
+
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          if (!isEmpty(processedDataItem?.fieldData?.children) && !fieldTypesRequiringChildren.includes(processedDataItem?.fieldData?.fieldtype as DynamicTypesList)) {
+            const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, processedDataItem?.fieldData?.title as string)
+
+            return await processLayoutData({ data: [processedDataItem?.fieldData], objectValuesData: { ...objectValuesData, [processedDataItem?.fieldData?.name]: processedDataItem?.fieldValue }, fieldBreadcrumbTitle: breadcrumbTitle })
+          }
+
+          return [processedDataItem]
+        })
+
+        return (await Promise.all(processedPromises)).flatMap(item => item)
       }
 
       return []
     })
+
+    return (await Promise.all(promises)).flatMap(item => item)
   }
 
   const getGeneralSystemData = (): IFormattedDataStructureData[] => {
@@ -95,7 +94,7 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
     return result
   }
 
-  const layoutData = processLayoutData({ data: layout })
+  const layoutData = await processLayoutData({ data: layout })
   const generalSystemData = getGeneralSystemData()
 
   return [...generalSystemData, ...layoutData]
@@ -139,6 +138,22 @@ export const versionsDataToTableData = ({ data }: { data: IFormattedDataStructur
 
     if (isComparisonMode && !isEqual(mainVersionItem?.fieldValue, compareVersionItem?.fieldValue)) {
       field.isModifiedValue = true
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      if (mainVersionItem?.fieldData?.fieldtype === DynamicTypesList.FIELD_COLLECTIONS) {
+        const mainVersionLength = mainVersionItem?.fieldValue?.length
+        const compareVersionLength = compareVersionItem?.fieldValue?.length
+
+        const mainList = compareVersionLength > mainVersionLength ? compareVersionItem : mainVersionItem
+        const compareList = mainVersionLength < compareVersionLength ? mainVersionItem : compareVersionItem
+
+        const differences = differenceWith(mainList?.fieldValue as IFieldCollectionValue[], compareList?.fieldValue as IFieldCollectionValue[], (item1, item2) => {
+          return item1?.type === item2?.type && isEqual(item1?.data, item2?.data)
+        })
+
+        field.fieldCollectionModifiedList = differences.map(item => item.type)
+      }
     }
 
     resultList.push(field)

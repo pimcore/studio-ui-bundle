@@ -27,7 +27,7 @@ export interface PanelProps extends AbstractObjectLayoutDefinition {
   theme?: 'fieldset' | 'card-with-highlight'
 }
 
-export const Panel = ({ children, name, border, collapsed, collapsible, title, theme = 'card-with-highlight' }: PanelProps): React.JSX.Element => {
+export const Panel = ({ children, name, border, collapsed, collapsible, title, theme = 'card-with-highlight', noteditable }: PanelProps): React.JSX.Element => {
   const isMainPanel = name === 'pimcore_root'
   const hasTabPanel = children.find((child) => child.fieldType === 'tabpanel' || child.fieldtype === 'tabpanel') !== undefined
 
@@ -63,6 +63,7 @@ export const Panel = ({ children, name, border, collapsed, collapsible, title, t
             <ObjectComponent
               { ...getChildProperties(child) }
               key={ index }
+              noteditable={ noteditable }
             />
           ))}
         </Space>

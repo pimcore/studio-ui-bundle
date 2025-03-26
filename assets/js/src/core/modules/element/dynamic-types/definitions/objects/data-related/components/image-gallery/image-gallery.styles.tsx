@@ -24,6 +24,10 @@ export const useStyles = createStyles(({ token, css }) => {
         background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
         border-color: ${token.colorBorder} !important;
       }
+    `,
+
+    imageItem: css`
+      max-width: 100%;
     `
   }
 })

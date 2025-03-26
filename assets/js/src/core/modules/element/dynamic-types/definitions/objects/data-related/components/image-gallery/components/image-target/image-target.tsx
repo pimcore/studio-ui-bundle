@@ -20,15 +20,18 @@ import { useTranslation } from 'react-i18next'
 import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
 import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
 import { isEmpty } from 'lodash'
+import { useStyles } from '../../image-gallery.styles'
 
 interface ImageGalleryImageTargetProps {
   index: number
   value: ImageGalleryValueItem[]
   setValue: React.Dispatch<React.SetStateAction<ImageGalleryValueItem[]>>
   disabled?: boolean
+  width: string
+  height: string
 }
 
-export const ImageGalleryImageTarget = ({ index, value, setValue, disabled }: ImageGalleryImageTargetProps): React.JSX.Element => {
+export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, width, height }: ImageGalleryImageTargetProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { open: openElementSelector } = useElementSelector({
     selectionType: SelectionType.Single,
@@ -51,8 +54,11 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled }: Im
     }
   })
 
+  const { styles } = useStyles()
+
   return (
     <Droppable
+      className={ styles.imageItem }
       isValidContext={ (info: DragAndDropInfo) => true }
       isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
       onDrop={ (info: DragAndDropInfo) => {
@@ -64,7 +70,7 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled }: Im
     >
       <AssetTarget
         dndIcon={ disabled !== true }
-        height={ 100 }
+        height={ height }
         onRemove={ value[index] === undefined
           ? undefined
           : () => {
@@ -74,7 +80,7 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled }: Im
             } }
         onSearch={ openElementSelector }
         title={ t(disabled !== true ? 'image.dnd-target' : 'empty') }
-        width={ 200 }
+        width={ width }
       />
     </Droppable>
   )

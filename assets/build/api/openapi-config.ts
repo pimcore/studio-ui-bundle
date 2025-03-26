@@ -109,6 +109,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/perspectives/perspectives-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/perspectives\//i)
+    },
+    '../../js/src/core/modules/search/search-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/search\/?/i)
     }
   },
   exportName: 'api',

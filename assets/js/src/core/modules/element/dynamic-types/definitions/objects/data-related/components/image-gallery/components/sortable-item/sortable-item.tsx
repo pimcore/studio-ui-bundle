@@ -27,6 +27,7 @@ import {
 import {
   type HotspotMarkersModalContainerRef
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-markers-modal-container'
+import { useStyles } from '../../image-gallery.styles'
 
 export interface ImageGallerySortableItemProps {
   id: string
@@ -36,9 +37,11 @@ export interface ImageGallerySortableItemProps {
   setValue: React.Dispatch<React.SetStateAction<ImageGalleryValue>>
   disabled?: boolean
   hotspotMarkersModalContainer: React.RefObject<HotspotMarkersModalContainerRef>
+  width: string
+  height: string
 }
 
-export const ImageGallerySortableItem = ({ id, index, item, value, setValue, disabled, hotspotMarkersModalContainer }: ImageGallerySortableItemProps): React.JSX.Element => {
+export const ImageGallerySortableItem = ({ id, index, item, value, setValue, disabled, hotspotMarkersModalContainer, width, height }: ImageGallerySortableItemProps): React.JSX.Element => {
   const sortable = useSortable({
     id,
     transition: {
@@ -53,30 +56,37 @@ export const ImageGallerySortableItem = ({ id, index, item, value, setValue, dis
     transition
   }
 
+  const { styles } = useStyles()
+
   return (
     <div
       ref={ setNodeRef }
       { ...attributes }
       { ...listeners }
+      className={ styles.imageItem }
       style={ active?.data.current?.sortable !== undefined ? style : undefined }
     >
       { item.image !== null
         ? (
           <ImageGalleryImagePreview
             disabled={ disabled }
+            height={ height }
             hotspotMarkersModalContainer={ hotspotMarkersModalContainer }
             index={ index }
             item={ item }
             setValue={ setValue }
             value={ value }
+            width={ width }
           />
           )
         : (
           <ImageGalleryImageTarget
             disabled={ disabled }
+            height={ height }
             index={ index }
             setValue={ setValue }
             value={ value }
+            width={ width }
           />
           )
         }
