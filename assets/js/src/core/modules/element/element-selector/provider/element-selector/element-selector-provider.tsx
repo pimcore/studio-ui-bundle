@@ -15,7 +15,7 @@ import React, { createContext, useMemo, useState } from 'react'
 import { ElementSelector } from '../../element-selector'
 import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
 import { uuid } from '@Pimcore/utils/uuid'
-import { type IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/allowed-types'
+import { type IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 export interface SelectedItem {

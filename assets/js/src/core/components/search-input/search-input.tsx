@@ -18,7 +18,7 @@ import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './search-input.styles'
 
-interface ISearchInputProps extends AntSearchProps {
+export interface ISearchInputProps extends AntSearchProps {
   className?: string
   withoutAddon?: boolean
   withPrefix?: boolean
@@ -26,7 +26,7 @@ interface ISearchInputProps extends AntSearchProps {
   maxWidth?: CSSProperties['maxWidth']
 }
 
-export const SearchInput = ({ className, withoutAddon = false, withPrefix = false, withClear = true, maxWidth = 300, ...props }: ISearchInputProps): React.JSX.Element => {
+export const SearchInput = ({ className, withoutAddon = false, withPrefix = false, withClear = true, maxWidth = 320, ...props }: ISearchInputProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   const searchClassNames = cn(

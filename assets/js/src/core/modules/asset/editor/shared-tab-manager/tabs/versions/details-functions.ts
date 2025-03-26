@@ -20,8 +20,8 @@ import {
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import i18n from 'i18next'
-import { type PreviewFieldLabelCellValue } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/components/_versions/preview-field-label-cell/preview-field-label-cell'
-import { type DynamicTypeMetaDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/dynamic-type-metadata-registry'
+import { type PreviewFieldLabelCellValue } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/_versions/preview-field-label-cell/preview-field-label-cell'
+import { type DynamicTypeMetaDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/meta-data/dynamic-type-metadata-registry'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 
 export interface AssetVersionData {

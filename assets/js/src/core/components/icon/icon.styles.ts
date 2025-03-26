@@ -28,7 +28,12 @@ export const useStyles = createStyles(({ token, css }) => {
         background: ${token.gold1};
         border-radius: ${token.borderRadiusLG}px;
       }
-    `
 
+      &.sub-icon-variant--green {
+        & svg {
+          color: ${token.green7};
+        }
+      }
+    `
   }
 })

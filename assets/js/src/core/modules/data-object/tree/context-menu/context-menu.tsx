@@ -23,6 +23,8 @@ import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/us
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import { useLock } from '@Pimcore/modules/element/actions/lock/use-lock'
 import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
+import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
+import { useAddObject } from '../../actions/add-object/use-add-object'
 import { usePublish } from '@Pimcore/modules/element/actions/publish/use-publish'
 
 export interface DataObjectTreeContextMenuProps {
@@ -39,18 +41,21 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
   const { refreshTreeContextMenuItem } = useRefreshTree('data-object')
   const { copyTreeContextMenuItem, cutTreeContextMenuItem, pasteTreeContextMenuItem, pasteCutContextMenuItem } = useCopyPaste('data-object')
   const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem, isLockMenuHidden } = useLock('data-object')
+  const { unpublishTreeContextMenuItem } = useUnpublish('data-object')
+  const { addObjectTreeContextMenuItem } = useAddObject()
   const { publishTreeContextMenuItem } = usePublish('data-object')
 
   const items: DropdownMenuProps['items'] = [
+    addObjectTreeContextMenuItem(node),
     addFolderTreeContextMenuItem(node),
     renameTreeContextMenuItem(node),
     copyTreeContextMenuItem(node),
     pasteTreeContextMenuItem(node),
     cutTreeContextMenuItem(node),
     publishTreeContextMenuItem(node),
+    unpublishTreeContextMenuItem(node),
     pasteCutContextMenuItem(parseInt(node.id)),
     deleteTreeContextMenuItem(node),
-
     {
       label: t('element.tree.context-menu.advanced'),
       key: 'advanced',

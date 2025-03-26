@@ -78,6 +78,10 @@ const api = baseApi.enhanceEndpoints({
       providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_DETAIL(args.folderId, args.configurationId)
     },
 
+    assetGetGrid: {
+      providesTags: (result, error, args) => providingTags.ASSET_GRID_ID(args.body.folderId)
+    },
+
     assetSaveGridConfiguration: {
       invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION_LIST(args.body.folderId)
     },
@@ -124,7 +128,8 @@ export const {
   useAssetUpdateGridConfigurationMutation,
   useAssetDeleteGridConfigurationByConfigurationIdMutation,
   useAssetGetGridConfigurationByFolderIdQuery,
-  useAssetGetAvailableGridColumnsQuery
+  useAssetGetAvailableGridColumnsQuery,
+  useAssetPatchFolderByIdMutation
 } = api
 
 export { api }

@@ -27,7 +27,7 @@ import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-hel
 import { isEmpty, isUndefined } from 'lodash'
 import { NoteModal } from '@Pimcore/modules/notes-and-events/note-modal'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import { type ElementInfo } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/components/element-cell/element-cell'
+import { type ElementInfo } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/element-cell/element-cell'
 
 type DataNoteWithActions = DataNote & {
   actions: React.ReactNode

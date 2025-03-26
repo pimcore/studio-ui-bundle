@@ -47,7 +47,7 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
   const addFolder = (parentId: number, onBeforeMutation?: () => void, onFailedMutation?: () => void): void => {
     modal.input({
       title: t('element.new-folder'),
-      label: t('element.new-folder.label'),
+      label: t('form.label.new-item'),
       rule: {
         required: true,
         message: t('element.new-folder.validation')
