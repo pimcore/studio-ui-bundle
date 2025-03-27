@@ -23,7 +23,10 @@ import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/us
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import { useLock } from '@Pimcore/modules/element/actions/lock/use-lock'
 import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
+import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
 import { useAddObject } from '../../actions/add-object/use-add-object'
+import { usePaste } from '@Pimcore/modules/data-object/actions/paste/use-paste'
+import { usePublish } from '@Pimcore/modules/element/actions/publish/use-publish'
 
 export interface DataObjectTreeContextMenuProps {
   node: TreeNodeProps
@@ -37,20 +40,41 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
   const { renameTreeContextMenuItem } = useRename('data-object', getElementActionCacheKey('data-object', 'rename', parseInt(node.id)))
   const { deleteTreeContextMenuItem } = useDelete('data-object', getElementActionCacheKey('data-object', 'delete', parseInt(node.id)))
   const { refreshTreeContextMenuItem } = useRefreshTree('data-object')
-  const { copyTreeContextMenuItem, cutTreeContextMenuItem, pasteTreeContextMenuItem, pasteCutContextMenuItem } = useCopyPaste('data-object')
+  const { copyTreeContextMenuItem, cutTreeContextMenuItem, pasteCutContextMenuItem, nodeTask, storedNode } = useCopyPaste('data-object')
   const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem, isLockMenuHidden } = useLock('data-object')
+  const { unpublishTreeContextMenuItem } = useUnpublish('data-object')
+  const {
+    pasteAsChildRecursiveTreeContextMenuItem,
+    pasteRecursiveUpdatingReferencesTreeContextMenuItem,
+    pasteAsChildTreeContextMenuItem,
+    pasteOnlyContentsTreeContextMenuItem,
+    isPasteMenuHidden
+  } = usePaste({ storedNode, nodeTask })
   const { addObjectTreeContextMenuItem } = useAddObject()
+  const { publishTreeContextMenuItem } = usePublish('data-object')
 
   const items: DropdownMenuProps['items'] = [
     addObjectTreeContextMenuItem(node),
     addFolderTreeContextMenuItem(node),
+    {
+      label: t('element.tree.paste'),
+      key: 'paste',
+      icon: <Icon value={ 'paste' } />,
+      hidden: isPasteMenuHidden(node),
+      children: [
+        pasteAsChildRecursiveTreeContextMenuItem(node),
+        pasteRecursiveUpdatingReferencesTreeContextMenuItem(node),
+        pasteAsChildTreeContextMenuItem(node),
+        pasteOnlyContentsTreeContextMenuItem(node)
+      ]
+    },
     renameTreeContextMenuItem(node),
     copyTreeContextMenuItem(node),
-    pasteTreeContextMenuItem(node),
     cutTreeContextMenuItem(node),
+    publishTreeContextMenuItem(node),
+    unpublishTreeContextMenuItem(node),
     pasteCutContextMenuItem(parseInt(node.id)),
     deleteTreeContextMenuItem(node),
-
     {
       label: t('element.tree.context-menu.advanced'),
       key: 'advanced',

@@ -32,7 +32,7 @@ interface IObjectVersionsFieldsViewProps {
 }
 
 const SECTIONS_WITH_TRANSLATION: string[] = [VersionCategoryName.SYSTEM_DATA]
-const SECTIONS_WITH_COMPLEX_TYPES: string[] = [DynamicTypesList.BLOCK]
+const SECTIONS_WITH_COMPLEX_TYPES: string[] = [DynamicTypesList.BLOCK, DynamicTypesList.FIELD_COLLECTIONS]
 
 export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, versionKeysList, isExpandedUnmodifiedFields }: IObjectVersionsFieldsViewProps): React.JSX.Element => {
   const { styles } = useStyles()
@@ -98,20 +98,33 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                       <Flex gap="mini">
                         {versionKeysList.map((key, index) => {
                           const isModifiedField = fieldItem?.isModifiedValue === true
-                          const isSecondItem = index === 1
+                          const isMainVersion = index === 0
+                          const isCompareVersion = index === 1
+
                           const isComplexType = SECTIONS_WITH_COMPLEX_TYPES.includes(fieldItem?.Field.fieldtype as string)
+                          const isEmptyModifiedStateForComplexTypes = isModifiedField && isComplexType && isEmptyValue(fieldItem[key])
 
                           return (
                             <div
-                              className={ cn(styles.objectSectionFieldItemWrapper, {
-                                [styles.objectSectionFieldItemWrapperHighlight]: isModifiedField && isSecondItem && isComplexType
-                              }) }
+                              className={ styles.objectSectionFieldItemWrapper }
                               key={ `${index}-${key}` }
                             >
+                              {isEmptyModifiedStateForComplexTypes && (
+                                <Flex
+                                  align="center"
+                                  className={ cn(styles.objectSectionFieldItem, styles.objectSectionEmptyState, {
+                                    [styles.objectSectionEmptyStateDisabled]: isMainVersion,
+                                    [styles.objectSectionEmptyStateHighlight]: isCompareVersion
+                                  }) }
+                                  justify="center"
+                                >
+                                  {t('empty')}
+                                </Flex>
+                              )}
                               <DataComponent
                                 className={ cn(styles.objectSectionFieldItem, 'versionFieldItem', {
-                                  [styles.objectSectionFieldItemHighlight]: isModifiedField && isSecondItem,
-                                  versionFieldItemHighlight: isModifiedField && isSecondItem
+                                  [styles.objectSectionFieldItemHighlight]: isModifiedField && isCompareVersion,
+                                  versionFieldItemHighlight: isModifiedField && isCompareVersion
                                 }) }
                                 datatype={ 'data' }
                                 fieldCollectionModifiedList={ fieldItem?.fieldCollectionModifiedList }

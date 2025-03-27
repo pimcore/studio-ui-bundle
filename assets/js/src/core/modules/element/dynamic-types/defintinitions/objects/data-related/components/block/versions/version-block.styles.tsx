@@ -42,6 +42,10 @@ export const useStyles = createStyles(({ css, token }) => {
       }
     `,
 
+    blockItemWrapperHighlighted: css`
+      background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+    `,
+
     blockItem: css`
       margin-left: 5px;
     `,
