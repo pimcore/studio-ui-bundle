@@ -11,13 +11,9 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-export interface WysiwygProps {
-  value?: string | null
-  onChange?: (value: string | null) => void
-  disabled?: boolean
-  width?: string | number
-  height?: string | number
-  maxCharacters?: number
-  placeholder?: string
-  editorConfig?: Record<string, any>
+export interface WysiwygAppConfigInterface {
+  defaultEditorConfig: {
+    dataObject: Record<string, any>
+    document: Record<string, any>
+  }
 }

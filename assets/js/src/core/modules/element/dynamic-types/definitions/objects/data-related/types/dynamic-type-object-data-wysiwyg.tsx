@@ -20,10 +20,16 @@ import {
 
 import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 import Wysiwyg from '@Pimcore/modules/wysiwyg/wysiwyg'
+import { appConfig } from '@Pimcore/app/config/app-config'
+import { isEmpty, isNil, isObject, merge } from 'lodash'
 
 export type WysiwygObjectDataDefinition = AbstractObjectDataDefinition & {
   value?: string | null
   onChange?: (value: string | null) => void
+  width: string | number | null
+  height: string | number | null
+  maxCharacters?: number | null
+  toolbarConfig?: string | null
 }
 export class DynamicTypeObjectDataWysiwyg extends DynamicTypeObjectDataAbstract {
   id: string = 'wysiwyg'
@@ -31,10 +37,34 @@ export class DynamicTypeObjectDataWysiwyg extends DynamicTypeObjectDataAbstract 
   gridCellEditMode: EditMode = 'edit-modal'
 
   getObjectDataComponent (props: WysiwygObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+    const parseConfig = (config?: string | null): Record<string, any> => {
+      if (isNil(config) || isEmpty(config)) {
+        return {}
+      }
+
+      try {
+        const result = JSON.parse(config)
+        return isObject(result) ? result : {}
+      } catch (e) {
+        console.error('Error while parsing toolbar config', e)
+        return {}
+      }
+    }
+
+    const editorConfig = merge(
+      {},
+      appConfig.wysiwyg.defaultEditorConfig.dataObject,
+      parseConfig(props.toolbarConfig)
+    )
+
     return (
       <Wysiwyg
         { ...props }
         disabled={ props.noteditable === true }
+        editorConfig={ editorConfig }
+        height={ props.height ?? undefined }
+        maxCharacters={ props.maxCharacters ?? undefined }
+        width={ props.width ?? undefined }
       />
     )
   }

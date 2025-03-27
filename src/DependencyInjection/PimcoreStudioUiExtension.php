@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\StudioUiBundle\DependencyInjection;
 
 use Exception;
+use Pimcore\Bundle\StudioUiBundle\Service\StaticResourcesResolverInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
@@ -44,5 +45,11 @@ class PimcoreStudioUiExtension extends Extension
         $loader->load('services.yaml');
 
         $container->setParameter('pimcore_studio_ui.url_path', rtrim($config['url_path'], '/'));
+
+        $container->getDefinition(StaticResourcesResolverInterface::class)
+            ->setArgument('$additionalCssFiles', array_unique($config['static_resources']['css']))
+            ->setArgument('$additionalJsFiles', array_unique($config['static_resources']['js']));
+
+        $container->setParameter('pimcore_studio_ui.wysiwyg_configuration', $config['wysiwyg']);
     }
 }

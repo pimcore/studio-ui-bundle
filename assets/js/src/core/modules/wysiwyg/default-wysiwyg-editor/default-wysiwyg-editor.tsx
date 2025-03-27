@@ -16,7 +16,7 @@ import { type WysiwygProps } from '../interface/wysiwyg'
 import { isNull } from 'lodash'
 import { useStyles } from './default-wysiwyg-editor.styles'
 
-export const DefaultWysiwygEditor = ({ value, onChange, disabled }: WysiwygProps): React.JSX.Element => {
+export const DefaultWysiwygEditor = ({ value, onChange, disabled, editorConfig }: WysiwygProps): React.JSX.Element => {
   const editorRef = useRef<HTMLDivElement>(null)
   const { styles } = useStyles()
 
@@ -33,12 +33,15 @@ export const DefaultWysiwygEditor = ({ value, onChange, disabled }: WysiwygProps
   }
 
   return (
-    <div
-      className={ styles.editor }
-      contentEditable={ disabled !== true }
-      onInput={ handleInput }
-      ref={ editorRef }
-    />
+    <>
+      {JSON.stringify(editorConfig)}
+      <div
+        className={ styles.editor }
+        contentEditable={ disabled !== true }
+        onInput={ handleInput }
+        ref={ editorRef }
+      />
+    </>
   )
 }
 
