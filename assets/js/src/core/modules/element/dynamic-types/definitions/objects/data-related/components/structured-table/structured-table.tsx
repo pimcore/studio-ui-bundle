@@ -105,7 +105,6 @@ export const StructuredTable = (props: StructuredTableProps): React.JSX.Element 
   return (
     <>
       <Content
-        className={ cn(props.className) }
         style={ {
           width: toCssDimension(props.width),
           height: toCssDimension(props.height)
@@ -113,6 +112,7 @@ export const StructuredTable = (props: StructuredTableProps): React.JSX.Element 
       >
         <StructuredTableGrid
           castColumnValue={ castColumnValue }
+          className={ cn(props.className) }
           cols={ props.cols }
           disabled={ props.disabled }
           key={ key }
