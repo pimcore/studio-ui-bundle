@@ -92,7 +92,7 @@ export const SearchResultDetailFound = (props: SearchResultDetailProps): React.J
               width={ 250 }
             />
           )}
-          {type === 'document' && path?.includes('.pdf') && (
+          {type === 'document' && (
             <PimcoreDocument
               className={ styles.searchResultDocument }
               src={ path }
