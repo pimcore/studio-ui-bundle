@@ -19,6 +19,7 @@ import {
   ReloadButton
 } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/components/reload-button/reload-button'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
+import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
 import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
 import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
 import ButtonGroup from 'antd/es/button/button-group'
@@ -31,9 +32,11 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { dataObject } = useDataObjectDraft(id)
   const { unpublishContextMenuItem } = useUnpublish('data-object')
   const { renameContextMenuItem } = useRename('data-object')
+  const { deleteContextMenuItem } = useDelete('data-object')
 
   const items: DropdownMenuProps['items'] = [
     unpublishContextMenuItem(dataObject as DataObject),
+    deleteContextMenuItem(dataObject as DataObject),
     renameContextMenuItem(dataObject as DataObject)
   ]
 
