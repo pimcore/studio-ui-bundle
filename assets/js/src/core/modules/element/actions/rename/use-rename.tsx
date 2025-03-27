@@ -26,7 +26,7 @@ import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/us
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useAppDispatch } from '@Pimcore/app/store'
-import { renameNode } from '@Pimcore/components/element-tree/element-tree-slice'
+import { renameNode, setNodeLoadingInAllTree } from '@Pimcore/components/element-tree/element-tree-slice'
 
 export interface UseRenameHookReturn {
   rename: (parentId: number, currentLabel: string) => void
@@ -135,11 +135,14 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
     })
 
     try {
+      dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType, loading: true }))
       const success = await elementRenameTask
 
       if (success) {
         dispatch(renameNode({ elementType, nodeId: String(id), newLabel: value }))
       }
+
+      dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType, loading: false }))
     } catch (error) {
       console.error('Error renaming ' + elementType, error)
     }
