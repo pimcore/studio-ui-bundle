@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './data-object-api-slice.gen'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 
@@ -49,6 +49,18 @@ const api = baseApi.enhanceEndpoints({
         url: queryArg.layoutId === undefined ? `${getPrefix()}/data-objects/${queryArg.id}/layout` : `${getPrefix()}/data-objects/${queryArg.id}/layout/${queryArg.layoutId}`
       }),
       providesTags: (result, error, args) => providingTags.DATA_OBJECT_DETAIL_ID(args.id)
+    },
+
+    dataObjectPatchById: {
+      invalidatesTags: (result, error, args) => {
+        const invalidatingTagsForPatch: Tag[] = []
+
+        for (const dataObject of args.body.data) {
+          invalidatingTagsForPatch.push(...invalidatingTags.DATA_OBJECT_DETAIL_ID(dataObject.id))
+        }
+
+        return invalidatingTagsForPatch
+      }
     }
   }
 })
