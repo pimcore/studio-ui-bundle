@@ -59,7 +59,17 @@ const config: Meta = {
             key2: {
               KeyedInput: 'Key 2'
             }
-          }
+          },
+          myNumberedList: [
+            {
+              NumberedInput: 'Key 1',
+              NumberedInput2: 'Key 2'
+            },
+            {
+              NumberedInput: 'Key 3',
+              NumberedInput2: 'Key 4'
+            }
+          ]
         } }
         layout='vertical'
         onFieldsChange={ onFieldsChange }
@@ -185,6 +195,28 @@ const config: Meta = {
               </Form.Item>
             </Form.KeyedList.Iterator>
           </Form.KeyedList>
+        </Form.Item>
+
+        <Form.Item name={ 'myNumberedList' } >
+          <Form.NumberedList name='myNumberedList'>
+            <Form.NumberedList.Iterator>
+              <Form.Item
+                label="Numbered Input"
+                name="NumberedInput"
+                rules={ [{ required: true, message: 'Please input!' }] }
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                label="Numbered Input 2"
+                name="NumberedInput2"
+                rules={ [{ required: true, message: 'Please input!' }] }
+              >
+                <Input />
+              </Form.Item>
+            </Form.NumberedList.Iterator>
+          </Form.NumberedList>
         </Form.Item>
 
         <Form.Item>

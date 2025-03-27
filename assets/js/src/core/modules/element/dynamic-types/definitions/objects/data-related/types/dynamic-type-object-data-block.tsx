@@ -24,10 +24,10 @@ import { Block } from '../components/block/block'
 import { FieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label'
 import { ItemsCount } from '../../grid-cell-preview/items-count/items-count'
 import { VersionBlock } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/block/versions/version-block'
+import { type FormItemProps } from 'antd'
 
 export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
   id: string = 'block'
-  isCollectionType: boolean = true
   gridCellEditMode: EditMode = 'edit-modal'
   gridCellEditModalSettings: EditModalSettings = {
     modalSize: 'XL',
@@ -47,6 +47,13 @@ export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
         }
       />
     )
+  }
+
+  getObjectDataFormItemProps (props: AbstractObjectDataDefinition): FormItemProps {
+    return {
+      ...super.getObjectDataFormItemProps(props),
+      label: null
+    }
   }
 
   getVersionObjectDataComponent (props: AbstractObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
