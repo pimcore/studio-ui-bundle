@@ -22,6 +22,7 @@ import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 import { Image } from '@Pimcore/components/image/image'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { PimcoreVideo } from '@Pimcore/components/pimcore-video/pimcore-video'
+import { PimcoreDocument } from '@Pimcore/components/pimcore-document/pimcore-document'
 import { useStyles } from '../../../../../search.styles'
 
 export interface SearchResultDetailProps {
@@ -29,6 +30,7 @@ export interface SearchResultDetailProps {
 }
 
 const KEYS_TO_REMOVE = ['elementType', 'type']
+const MEDIA_TYPE = ['image', 'video', 'document']
 
 export const SearchResultDetailFound = (props: SearchResultDetailProps): React.JSX.Element => {
   const { item } = props
@@ -68,29 +70,41 @@ export const SearchResultDetailFound = (props: SearchResultDetailProps): React.J
       }
     })
 
-  const isImageType = item?.type === 'image'
-  const isVideoType = item?.type === 'video'
-  const videoSource = [{ src: item.path }]
+  const renderMediaElement = (): React.JSX.Element | null => {
+    const type = item?.type
+    const path = item?.path
+
+    const isShowMediaElement = MEDIA_TYPE.includes(type)
+
+    if (isShowMediaElement && !isEmptyValue(path)) {
+      return (
+        <Flex justify="center">
+          {type === 'image' && (
+            <Image
+              className={ styles.searchResultImage }
+              preview={ false }
+              src={ path }
+            />
+          )}
+          {type === 'video' && (
+            <PimcoreVideo
+              sources={ [{ src: path }] }
+              width={ 250 }
+            />
+          )}
+          {type === 'document' && (
+            <PimcoreDocument src={ path } />
+          )}
+        </Flex>
+      )
+    }
+
+    return null
+  }
 
   return (
     <Content>
-      {isImageType && !isEmptyValue(item?.path) && (
-        <Flex justify="center">
-          <Image
-            className={ styles.searchResultImage }
-            preview={ false }
-            src={ item.path }
-          />
-        </Flex>
-      )}
-      {isVideoType && !isEmptyValue(item?.path) && (
-        <Flex justify="center">
-          <PimcoreVideo
-            sources={ videoSource }
-            width={ 250 }
-          />
-        </Flex>
-      )}
+      {renderMediaElement()}
       <KeyValueList items={ preparedItemList } />
     </Content>
   )
