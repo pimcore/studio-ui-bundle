@@ -16,7 +16,7 @@ import { isEmpty } from 'lodash'
 
 interface IErrorModalServiceReturn {
   setModalInstance: (modal: any) => void
-  showError: (content: React.JSX.Element | string) => void
+  showError: (content: React.JSX.Element | string, title?: string | null) => void
 }
 
 export const ErrorModalService = ((): IErrorModalServiceReturn => {
@@ -26,12 +26,12 @@ export const ErrorModalService = ((): IErrorModalServiceReturn => {
     modalInstance = modal
   }
 
-  const showError = (content: React.JSX.Element | string): void => {
+  const showError = (content: React.JSX.Element | string, title?: string | null): void => {
     if (isEmpty(modalInstance)) {
       throw new Error('ErrorModalService: Modal instance is not set. Call setModalInstance first.')
     }
 
-    modalInstance.error({ content })
+    modalInstance.error({ content, title })
   }
 
   return {

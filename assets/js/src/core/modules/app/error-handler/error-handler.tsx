@@ -52,7 +52,7 @@ const trackError = (data: IErrorContentProvider, handler?: ErrorHandler): never 
     handler(getErrorContentValue())
   } else {
     // default handler
-    ErrorModalService.showError(getErrorContentValue())
+    ErrorModalService.showError(getErrorContentValue(), typeof errorContent === 'object' ? errorContent.title as string : null)
   }
 
   if (isGeneralError(data)) {

@@ -20,6 +20,7 @@ type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncP
 
 interface ContentAware {
   content: string | React.ReactNode
+  title?: string
 }
 
 export interface UseAlertModalResponse {
@@ -36,27 +37,29 @@ export const useAlertModal = (): UseAlertModalResponse => {
 
   return useMemo<UseAlertModalResponse>(
     () => ({
-      info: ({ content }) => (
+      info: ({ title, content }) => (
         modal.info({
-          title: t('info'),
+          title: title !== undefined ? t(title) : t('error'),
           content
         })
       ),
-      error: ({ content }) => (
-        modal.error({
-          title: t('error'),
-          content
-        })
-      ),
-      warn: ({ content }) => (
+      error: ({ title, content }) => {
+        return (
+          modal.error({
+            title: title !== undefined ? t(title) : t('error'),
+            content
+          })
+        )
+      },
+      warn: ({ title, content }) => (
         modal.warning({
-          title: t('warning'),
+          title: title !== undefined ? t(title) : t('error'),
           content
         })
       ),
-      success: ({ content }) => (
+      success: ({ title, content }) => (
         modal.success({
-          title: t('success'),
+          title: title !== undefined ? t(title) : t('success'),
           content
         })
       )
