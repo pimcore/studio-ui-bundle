@@ -27,6 +27,7 @@ import { useTreePermission } from '../../tree/provider/tree-permission-provider/
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { renameNode, setNodeLoadingInAllTree } from '@Pimcore/components/element-tree/element-tree-slice'
+import { updateKey } from '@Pimcore/modules/data-object/data-object-draft-slice'
 
 export interface UseRenameHookReturn {
   rename: (parentId: number, currentLabel: string) => void
@@ -143,6 +144,7 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
       }
 
       dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType, loading: false }))
+      dispatch(updateKey({ id, key: value }))
     } catch (error) {
       console.error('Error renaming ' + elementType, error)
     }
