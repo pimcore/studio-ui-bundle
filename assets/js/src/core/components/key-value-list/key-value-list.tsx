@@ -75,7 +75,7 @@ export const KeyValueList = ({ items, skipEmpty = true }: KeyValueListProps): Re
   })
 
   const renderItem = (item: KeyValueListItem): React.JSX.Element => {
-    let fieldValue = item?.value
+    let fieldValue: any = item?.value
 
     if (FIELDS_TO_CONVERT_TO_DATE.includes(item.key)) {
       fieldValue = formatDateTime({ timestamp: item?.value ?? null, dateStyle: 'short', timeStyle: 'short' })
@@ -88,7 +88,7 @@ export const KeyValueList = ({ items, skipEmpty = true }: KeyValueListProps): Re
         </td>
         <td>
           <Text>
-            <SanitizeHtml html={ fieldValue ?? '' } />
+            {fieldValue === 0 ? fieldValue : <SanitizeHtml html={ fieldValue ?? '' } /> }
           </Text>
         </td>
       </tr>
