@@ -92,8 +92,11 @@ export const SearchResultDetailFound = (props: SearchResultDetailProps): React.J
               width={ 250 }
             />
           )}
-          {type === 'document' && (
-            <PimcoreDocument src={ path } />
+          {type === 'document' && path?.includes('.pdf') && (
+            <PimcoreDocument
+              className={ styles.searchResultDocument }
+              src={ path }
+            />
           )}
         </Flex>
       )

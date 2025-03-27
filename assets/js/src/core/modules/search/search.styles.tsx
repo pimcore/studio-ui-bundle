@@ -18,6 +18,13 @@ export const useStyles = createStyles(({ token, css }) => {
     searchResultImage: css`
       min-height: 100px;
       max-height: 200px;
+    `,
+
+    searchResultDocument: css`
+      iframe {
+        width: 100%;
+        height: 100%;
+      }
     `
   }
 })
