@@ -23,15 +23,20 @@ import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unp
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
+import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
+import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
 
 export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DataObjectContext)
   const { dataObject } = useDataObjectDraft(id)
   const { unpublishContextMenuItem } = useUnpublish('data-object')
+  const { renameContextMenuItem } = useRename('data-object')
+  const { refreshElement } = useElementRefresh('data-object')
 
   const items: DropdownMenuProps['items'] = [
-    unpublishContextMenuItem(dataObject as DataObject)
+    unpublishContextMenuItem(dataObject as DataObject),
+    renameContextMenuItem(dataObject as DataObject, () => refreshElement(id))
   ]
 
   const visibleItems = items.filter(item => (item !== null && 'hidden' in item) ? item?.hidden === false : false)
@@ -41,8 +46,8 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
       <ReloadButton />
 
       {visibleItems.length > 0 && (
-        <Dropdown menu={ { items } }>
-          <DropdownButton key={ 'dropdown-button' }>
+        <Dropdown menu={{ items }}>
+          <DropdownButton key={'dropdown-button'}>
             {t('toolbar.more')}
           </DropdownButton>
         </Dropdown>
