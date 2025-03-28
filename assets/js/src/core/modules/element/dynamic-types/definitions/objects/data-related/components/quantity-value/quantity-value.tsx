@@ -23,7 +23,7 @@ import { QuantityValueCalculatorButton } from './components/calculator/calculato
 import { useStyles } from './quantity-value.styles'
 import cn from 'classnames'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
-import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
+import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export interface QuantityValueProps {
   value?: QuantityValueValue | null

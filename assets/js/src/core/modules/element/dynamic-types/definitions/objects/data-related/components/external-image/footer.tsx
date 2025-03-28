@@ -19,7 +19,7 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { useTranslation } from 'react-i18next'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { isEmpty } from 'lodash'
-import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
+import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 interface ExternalImageFooterProps {
   value?: string
