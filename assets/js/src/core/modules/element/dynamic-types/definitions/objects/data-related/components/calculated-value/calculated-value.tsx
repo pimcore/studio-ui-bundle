@@ -20,7 +20,7 @@ import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
 import _ from 'lodash'
-import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
+import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export interface CalculatedValueProps {
   value?: string | null
