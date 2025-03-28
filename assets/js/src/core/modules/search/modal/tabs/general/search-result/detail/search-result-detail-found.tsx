@@ -106,7 +106,7 @@ export const SearchResultDetailFound = (props: SearchResultDetailProps): React.J
   }
 
   return (
-    <Content>
+    <Content className={ styles.detailContent }>
       {renderMediaElement()}
       <KeyValueList items={ preparedItemList } />
     </Content>

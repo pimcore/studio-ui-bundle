@@ -15,6 +15,10 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
+    detailContent: css`
+      max-height: 450px;
+    `,
+
     searchResultImage: css`
       min-height: 100px;
       max-height: 200px;
