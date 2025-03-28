@@ -55,7 +55,7 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     }
   }, [baseValue])
 
-  const add: NumberedListData['operations']['add'] = (newValue = {}, key) => {
+  const add: NumberedListData['operations']['add'] = (newValue, key) => {
     let currentKey = key
 
     if (currentKey === undefined) {

@@ -44,7 +44,6 @@ export const usePublishedReducers = (entityAdapter: EntityAdapter<PublishedDraft
   const modifyDraft = (state: EntityState<PublishedDraft, number>, id: number, modification: (draft: PublishedDraft) => PublishedDraft): void => {
     const draft = entityAdapter.getSelectors().selectById(state, id)
     if (draft === undefined) {
-      console.error(`Data object draft with id ${id} not found`)
       return
     }
 

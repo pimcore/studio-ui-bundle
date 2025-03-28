@@ -394,6 +394,10 @@ element.tree.context-menu.expand-children: Expand Children
 asset.tree.context-menu.clear-thumbnails: Clear Thumbnails
 element.tree.copy: Copy
 element.tree.paste: Paste
+element.tree.paste-as-child: Paste as child
+element.tree.paste-as-child-recursive: Paste as child (recursive)
+element.tree.paste-recursive-updating-references: Paste recursive, updating references
+element.tree.paste-only-contents: Paste only contents here
 element.tree.cut: Cut
 element.tree.paste-cut: Paste cut-out element
 element.lock: Lock
@@ -416,6 +420,7 @@ element.toolbar.copy-full-path-to-clipboard: Copy full path to clipboard
 element.toolbar.copy-deep-link-to-clipboard: Copy deep link to clipboard
 element.toolbar.copy-className: Class {{className}} - Copy
 element.unpublish: Unpublish
+element.publish: Publish
 male: Male
 female: Female
 other: Other
