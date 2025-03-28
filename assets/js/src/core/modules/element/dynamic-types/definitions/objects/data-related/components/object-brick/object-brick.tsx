@@ -90,6 +90,7 @@ export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
       valueRef.current = newValue
     }
   }
+
   const mergedValue = useMemo(
     () => getMergedValue(valueRef.current, originalValue, props.value, isInherited)
     , [valueRef.current, originalValue]

@@ -19,6 +19,7 @@ import { Form } from '@Pimcore/components/form/form'
 import { FieldWidthProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/field-width-provider'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
 import { isUndefined } from 'lodash'
+import { FieldCollectionProvider } from '../../../../objects/data-related/components/field-collection/providers/field-collection-provider'
 
 export interface EditModalModeCellProps {
   objectCellDefinition: WithEditModalGridCellDefinition
@@ -55,19 +56,21 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
           title={ 'Inline edit' }
         >
           <FieldWidthProvider>
-            <Form
-              form={ form }
-              initialValues={ { value: props.cellProps.getValue() } }
-              layout={ props.objectCellDefinition.editModalSettings.formLayout }
-              onFinish={ onFormFinish }
-            >
-              <Form.Item
-                { ...props.objectCellDefinition.formItemProps }
-                name={ 'value' }
+            <FieldCollectionProvider id={ props.cellProps.row.original.id }>
+              <Form
+                form={ form }
+                initialValues={ { value: props.cellProps.getValue() } }
+                layout={ props.objectCellDefinition.editModalSettings.formLayout }
+                onFinish={ onFormFinish }
               >
-                {props.objectCellDefinition.editComponent}
-              </Form.Item>
-            </Form>
+                <Form.Item
+                  { ...props.objectCellDefinition.formItemProps }
+                  name={ 'value' }
+                >
+                  {props.objectCellDefinition.editComponent}
+                </Form.Item>
+              </Form>
+            </FieldCollectionProvider>
           </FieldWidthProvider>
         </WindowModal>
       ) }
