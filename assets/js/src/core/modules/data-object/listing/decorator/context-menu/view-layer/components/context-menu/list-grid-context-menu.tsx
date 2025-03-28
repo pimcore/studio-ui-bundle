@@ -13,6 +13,7 @@
 
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
+import { useLocateInTree } from '@Pimcore/modules/element/actions/locate-in-tree/use-locate-in-tree'
 import { useOpen } from '@Pimcore/modules/element/actions/open/open'
 import { type ListGridContextMenuProps } from '@Pimcore/types/components/types'
 import React from 'react'
@@ -21,9 +22,11 @@ export const ListGridContextMenu = (props: ListGridContextMenuProps): React.JSX.
   const { row } = props
   const { openGridContextMenuItem } = useOpen('data-object')
   const { deleteGridContextMenuItem } = useDelete('data-object')
+  const { locateInTreeGridContextMenuItem } = useLocateInTree('data-object')
 
   const items = [
     openGridContextMenuItem(row),
+    locateInTreeGridContextMenuItem(row),
     deleteGridContextMenuItem(row)
   ].filter(Boolean) as DropdownMenuProps['items']
 
