@@ -11,21 +11,28 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import { type WysiwygProps } from './interface/wysiwyg'
-import { container } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type ComponentRegistry } from '../app/component-registry/component-registry'
+import React, { useRef } from 'react'
+import { type WysiwygEditorRef, type WysiwygProps } from './interface/wysiwyg'
+import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
+import { type DragAndDropInfo } from 'src/sdk/components'
+import { isValidElementType } from '../element/utils/element-type'
+import WysiwygEditor from './wysiwyg-editor'
 
 export const Wysiwyg = (props: WysiwygProps): React.JSX.Element => {
-  const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
-
-  const WysiwygEditor = componentRegistry.get<WysiwygProps>('wysiwygEditor')
+  const wysiwygEditorRef = useRef<WysiwygEditorRef>(null)
 
   return (
-    <WysiwygEditor
-      { ...props }
-    />
+    <Droppable
+      isValidContext={ (info: DragAndDropInfo) => props.disabled !== true && isValidElementType(info.type) }
+      isValidData={ () => true }
+      onDrop={ (info: DragAndDropInfo) => {
+        wysiwygEditorRef.current?.onDrop?.(info)
+      } }
+    >
+      <WysiwygEditor
+        editorProps={ { ...props, ref: wysiwygEditorRef } }
+      />
+    </Droppable>
   )
 }
 

@@ -11,6 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { DragAndDropInfo } from "src/sdk/components"
+
 export interface WysiwygProps {
   value?: string | null
   onChange?: (value: string | null) => void
@@ -20,4 +22,9 @@ export interface WysiwygProps {
   maxCharacters?: number
   placeholder?: string
   editorConfig?: Record<string, any>
+  ref?: React.Ref<WysiwygEditorRef>
+}
+
+export interface WysiwygEditorRef {
+  onDrop: (info: DragAndDropInfo) => void
 }
