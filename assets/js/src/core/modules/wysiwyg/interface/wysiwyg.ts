@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { DragAndDropInfo } from "src/sdk/components"
+import { type DragAndDropInfo } from 'src/sdk/components'
 
 export interface WysiwygProps {
   value?: string | null
