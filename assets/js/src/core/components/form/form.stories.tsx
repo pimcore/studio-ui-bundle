@@ -198,7 +198,7 @@ const config: Meta = {
         </Form.Item>
 
         <Form.Item name={ 'myNumberedList' } >
-          <Form.NumberedList name='myNumberedList'>
+          <Form.NumberedList>
             <Form.NumberedList.Iterator>
               <Form.Item
                 label="Numbered Input"

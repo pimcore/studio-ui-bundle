@@ -14,9 +14,8 @@
 import React from 'react'
 import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
 import { type AbstractObjectLayoutDefinition } from '../../../layout-related/dynamic-type-object-layout-abstract'
-import { Collection } from '../collection/collection'
-import { FieldCollectionItem } from './field-collection-item'
-import { FieldCollectionAddButton } from './field-collection-add-button'
+import { Form } from '@Pimcore/components/form/form'
+import { FieldCollectionContent } from './field-collection-content'
 
 export interface FieldCollectionProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectLayoutDefinition | AbstractObjectDataDefinition
@@ -29,15 +28,14 @@ export interface FieldCollectionProps extends AbstractObjectDataDefinition {
 }
 
 export const FieldCollection = ({ border = false, disallowAddRemove, ...props }: FieldCollectionProps): React.JSX.Element => {
+  console.log({ value: props.value })
+
   return (
-    <Collection
-      addButtonComponent={ [FieldCollectionAddButton, { allowedTypes: props.allowedTypes }] }
-      border={ border }
-      disallowAdd={ disallowAddRemove }
-      disallowDelete={ disallowAddRemove }
-      itemComponent={ [FieldCollectionItem, { allowedTypes: props.allowedTypes }] }
-      name={ props.name }
-      title={ props.title }
-    />
+    <Form.NumberedList
+      onChange={ props.onChange }
+      value={ props.value }
+    >
+      <FieldCollectionContent { ...props } />
+    </Form.NumberedList>
   )
 }

@@ -32,7 +32,6 @@ export interface BlockProps extends AbstractObjectDataDefinition {
 export const Block = (props: BlockProps): React.JSX.Element => {
   return (
     <Form.NumberedList
-      name={ props.name }
       onChange={ props.onChange }
       value={ props.value }
     >

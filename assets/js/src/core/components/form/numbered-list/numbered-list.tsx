@@ -16,10 +16,10 @@ import { Form } from '../form'
 import React, { useEffect, useMemo, useState } from 'react'
 import { type NumberedListData, NumberedListProvider } from './provider/numbered-list/numbered-list-provider'
 import { NumberedListIterator } from './iterator/numbered-list-iterator'
-import { cloneDeep, isArray, isEqual, set, get } from 'lodash'
+import { cloneDeep, isEqual, set, get, isArray } from 'lodash'
+import { useItem } from '../item/provider/item/use-item'
 
 export interface NumberedListProps {
-  name: NamePath
   children: React.ReactNode
   value?: NumberedListData['values']
   onChange?: (value: NumberedListData['values']) => void
@@ -27,9 +27,13 @@ export interface NumberedListProps {
   getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
 }
 
-const NumberedList = ({ name, children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: NumberedListProps): React.JSX.Element => {
+const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: NumberedListProps): React.JSX.Element => {
   const initialValue = baseValue ?? []
   const [value, setValue] = useState(cloneDeep(initialValue))
+  const { name: tempItemName } = useItem()
+
+  const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
+  const name = useMemo(() => itemName[itemName.length - 1], [itemName])
 
   const onChange: NumberedListData['onChange'] = (newValue) => {
     baseOnChange !== undefined && baseOnChange(newValue)
@@ -73,8 +77,8 @@ const NumberedList = ({ name, children, value: baseValue, onChange: baseOnChange
   }
 
   const update: NumberedListData['operations']['update'] = (subFieldname, newSubValue, isInitialValue) => {
-    const currentName: string[] = isArray(name) ? name : [name]
-    const currentSubFieldname: string[] = isArray(subFieldname) ? subFieldname : [subFieldname]
+    const currentName: string[] = itemName
+    const currentSubFieldname: string[] = subFieldname
     const nameDifference: string[] = []
 
     for (let i = 0; i < currentSubFieldname.length; i++) {
@@ -104,7 +108,7 @@ const NumberedList = ({ name, children, value: baseValue, onChange: baseOnChange
   }
 
   const getValue = (subFieldNames: string[]): any => {
-    const currentName: string[] = isArray(name) ? name : [name]
+    const currentName: string[] = itemName
     const nameDifference: string[] = []
 
     for (let i = 0; i < subFieldNames.length; i++) {

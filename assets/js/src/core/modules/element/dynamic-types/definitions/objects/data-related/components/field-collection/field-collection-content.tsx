@@ -13,19 +13,18 @@
 
 import React, { useMemo } from 'react'
 import { BaseView } from '../../../layout-related/views/base-view'
-import { type BlockProps } from './block'
 import { useNumberedList } from '@Pimcore/components/form/numbered-list/provider/numbered-list/use-numbered-list'
-import { BlockAddButton } from './block-add-button'
-import { BlockItem } from './block-item'
-import { Space } from '@Pimcore/components/space/space'
+import { type FieldCollectionProps } from './field-collection'
+import { FieldCollectionItem } from './field-collection-item'
+import { FieldCollectionAddButton } from './field-collection-add-button'
 import { Box } from '@Pimcore/components/box/box'
+import { Space } from '@Pimcore/components/space/space'
 
-export interface BlockContentProps extends BlockProps {}
+export interface FieldCollectionContentProps extends FieldCollectionProps {}
 
 /* eslint-disable react/no-children-prop */
-export const BlockContent = (props: BlockContentProps): React.JSX.Element => {
+export const FieldCollectionContent = (props: FieldCollectionContentProps): React.JSX.Element => {
   const { values } = useNumberedList()
-
   const maxItemsCount = props?.maxItems ?? 0
   const valuesKeys = Object.keys(values)
   const isNoteditable = props.noteditable === true
@@ -38,7 +37,7 @@ export const BlockContent = (props: BlockContentProps): React.JSX.Element => {
       collapsed={ props.collapsed }
       collapsible={ props.collapsible }
       contentPadding={ 'none' }
-      extra={ !isHideAddButton && <BlockAddButton /> }
+      extra={ !isHideAddButton && <FieldCollectionAddButton allowedTypes={ props.allowedTypes } /> }
       extraPosition='start'
       theme='default'
       title={ props.title }
@@ -51,8 +50,9 @@ export const BlockContent = (props: BlockContentProps): React.JSX.Element => {
         >
           {values.map((value, index) => (
             <div key={ index }>
-              <BlockItem
-                children={ props.children }
+              <FieldCollectionItem
+                allowedTypes={ props.allowedTypes }
+                docked={ props.border === true }
                 field={ index }
                 noteditable={ props.noteditable }
               />

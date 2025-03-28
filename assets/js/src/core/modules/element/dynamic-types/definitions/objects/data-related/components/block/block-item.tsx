@@ -30,7 +30,7 @@ export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
 
   return useMemo(() => (
     <ToolStripBox
-      docked
+      docked={ false }
       key={ field }
       renderToolStripStart={
         noteditable === false && (
