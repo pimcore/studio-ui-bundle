@@ -14,18 +14,26 @@
 import React, { createContext } from 'react'
 import { useClassFieldCollectionObjectLayoutQuery } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { Content } from '@Pimcore/components/content/content'
 
 export type IFieldCollectionContext = ReturnType<typeof useClassFieldCollectionObjectLayoutQuery> | null
 
 export const FieldCollectionContext = createContext<IFieldCollectionContext>(null)
 
 export interface IFieldCollectionProviderProps {
+  id?: number
   children: React.ReactNode
 }
 
-export const FieldCollectionProvider = ({ children }: IFieldCollectionProviderProps): React.JSX.Element => {
-  const { id } = useElementContext()
-  const fieldCollectionResult = useClassFieldCollectionObjectLayoutQuery({ objectId: id })
+export const FieldCollectionProvider = ({ children, id }: IFieldCollectionProviderProps): React.JSX.Element => {
+  const { id: elementId } = useElementContext()
+  const fieldCollectionResult = useClassFieldCollectionObjectLayoutQuery({ objectId: id ?? elementId })
+
+  const { isLoading } = fieldCollectionResult
+
+  if (isLoading) {
+    return <Content loading />
+  }
 
   return (
     <FieldCollectionContext.Provider value={ fieldCollectionResult }>
