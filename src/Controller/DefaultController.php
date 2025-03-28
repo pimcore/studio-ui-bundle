@@ -23,7 +23,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class DefaultController extends FrontendController
 {
-
     #[Route('')]
     #[Route('/login')]
     #[Route('/{elementType}/{id}', requirements: ['elementType' => 'asset|data-object|document', 'id' => '\d+'])]
