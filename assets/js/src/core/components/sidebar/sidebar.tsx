@@ -65,7 +65,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
                   aria-selected={ entry.key === activeTab }
                   className={ [
                     'entry',
-                    entry.key === activeTab ? 'active' : '',
+                    entry.key === activeTab ? 'sidebar--active' : '',
                     highlights.includes(entry.key) ? 'entry--highlighted' : ''
                   ].join(' ') }
                   key={ entry.key }
@@ -113,7 +113,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
           return (
             <div
               aria-labelledby={ entry.key }
-              className={ 'tab ' + (entry.key === activeTab ? 'active' : '') }
+              className={ 'tab ' + (entry.key === activeTab ? 'sidebar--active' : '') }
               id={ entry.key }
               key={ entry.key }
               role="tabpanel"
