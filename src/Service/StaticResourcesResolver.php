@@ -28,15 +28,17 @@ use Pimcore\ValueObject\Collection\ArrayOfStrings;
  */
 final readonly class StaticResourcesResolver implements StaticResourcesResolverInterface
 {
+    private ArrayOfStrings $additionalCssFiles;
+    private ArrayOfStrings $additionalJsFiles;
+
     public function __construct(
         private WebpackEntryPointManager $webpackEntryPointManager,
         private WebpackEntryPointProvider $studioEntryPointProvider,
-        private array $additionalCssFiles = [],
-        private array $additionalJsFiles = []
+        array $additionalCssFiles = [],
+        array $additionalJsFiles = []
     ) {
-        // validation
-        new ArrayOfStrings($this->additionalCssFiles);
-        new ArrayOfStrings($this->additionalJsFiles);
+        $this->additionalCssFiles = new ArrayOfStrings($additionalCssFiles);
+        $this->additionalJsFiles = new ArrayOfStrings($additionalJsFiles);
     }
 
     /**
@@ -73,12 +75,12 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
 
     public function getAdditionalCssFiles(): array
     {
-        return $this->additionalCssFiles;
+        return $this->additionalCssFiles->getValue();
     }
 
     public function getAdditionalJsFiles(): array
     {
-        return $this->additionalJsFiles;
+        return $this->additionalJsFiles->getValue();
     }
 
     /**
