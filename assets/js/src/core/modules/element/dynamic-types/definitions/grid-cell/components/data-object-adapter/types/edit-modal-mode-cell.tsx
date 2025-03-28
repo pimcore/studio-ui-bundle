@@ -16,7 +16,7 @@ import { type AbstractObjectDataDefinition, type WithEditModalGridCellDefinition
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { Form } from '@Pimcore/components/form/form'
-import { FieldWidthProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/field-width-provider'
+import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
 import { isUndefined } from 'lodash'
 
