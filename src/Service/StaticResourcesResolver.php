@@ -29,6 +29,7 @@ use Pimcore\ValueObject\Collection\ArrayOfStrings;
 final readonly class StaticResourcesResolver implements StaticResourcesResolverInterface
 {
     private ArrayOfStrings $additionalCssFiles;
+
     private ArrayOfStrings $additionalJsFiles;
 
     public function __construct(
