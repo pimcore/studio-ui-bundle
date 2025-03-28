@@ -52,6 +52,7 @@ export const TimePicker = (props: TimePickerProps): React.JSX.Element => {
       onChange={ (date: Dayjs | null) => {
         setValue(date)
       } }
+      popupClassName={ styles.datePickerDropdown }
       rootClassName={ cn(styles.datePicker, props.className, { [styles.inherited]: props.inherited }) }
       value={ value }
     />
