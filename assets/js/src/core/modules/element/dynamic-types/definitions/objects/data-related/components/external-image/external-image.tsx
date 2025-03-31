@@ -23,6 +23,7 @@ import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definition
 import { toCssDimension } from '@Pimcore/utils/css'
 import { theme } from 'antd'
 import { useStyles } from './external-image.styles'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export interface ExternalImageValue {
   url: string
@@ -64,13 +65,16 @@ export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
       <Card
         className={ cn('max-w-full', styles.image, props.className) }
         fitContent={ Boolean(props.inputWidth) }
-        footer={ <ExternalImageFooter
-          disabled={ props.disabled }
-          inputWidth={ props.inputWidth ?? undefined }
-          key="external-image-footer"
-          onChange={ onChange }
-          value={ value?.url ?? undefined }
-                 /> }
+        footer={ (
+          <ExternalImageFooter
+            disabled={ props.disabled }
+            inputWidth={ props.inputWidth ?? undefined }
+            key="external-image-footer"
+            onChange={ onChange }
+            placeholder={ isEmptyValue(value?.url) ? 'URL' : undefined }
+            value={ value?.url ?? undefined }
+          />
+        ) }
         style={ { maxWidth: toCssDimension(containerWidth) } }
       >
         { value !== null && !isEmpty(value.url)

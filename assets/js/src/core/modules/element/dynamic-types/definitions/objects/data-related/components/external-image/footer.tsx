@@ -26,6 +26,7 @@ interface ExternalImageFooterProps {
   onChange: (value?: string) => void
   inputWidth?: number
   disabled?: boolean
+  placeholder?: string
 }
 
 export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.Element => {
@@ -84,6 +85,7 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
       <Input
         disabled={ props.disabled }
         onChange={ onChange }
+        placeholder={ props.placeholder }
         style={ { maxWidth: toCssDimension(inputWidth, fieldWidth.large), width: toCssDimension(inputWidth, fieldWidth.large) } }
         value={ props.value }
       />
