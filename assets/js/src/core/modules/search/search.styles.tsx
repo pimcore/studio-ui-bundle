@@ -15,22 +15,19 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    keyValueList: css`
-      border: 0;
-      border-collapse: collapse;
+    detailContent: css`
+      max-height: 400px;
+    `,
 
-      tr td {
-        padding: ${token.Table.cellPaddingBlockSM}px;
-        border: 0;
-        border-bottom: 1px solid ${token.colorBorderSecondary};
-        
-        &:first-child {
-          min-width: 100px;
-        }
-      }
+    searchResultImage: css`
+      min-height: 100px;
+      max-height: 200px;
+    `,
 
-      tr:last-of-type td {
-        border-bottom: 0;
+    searchResultDocument: css`
+      iframe {
+        width: 100%;
+        height: 100%;
       }
     `
   }

@@ -82,6 +82,16 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["User Management"],
             }),
+            userUpdateActivePerspective: build.mutation<
+                UserUpdateActivePerspectiveApiResponse,
+                UserUpdateActivePerspectiveApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/user/active-perspective/${queryArg.perspectiveId}`,
+                    method: "PUT",
+                }),
+                invalidatesTags: ["User Management"],
+            }),
             userUpdatePasswordById: build.mutation<UserUpdatePasswordByIdApiResponse, UserUpdatePasswordByIdApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/user/${queryArg.id}/password`,
@@ -185,6 +195,12 @@ export type PimcoreStudioApiUserSearchApiArg = {
     /** Query to search for an user. This can be a part of username, firstname, lastname, email or id. */
     searchQuery?: string;
 };
+export type UserUpdateActivePerspectiveApiResponse =
+    /** status 200 Updated active perspective for the current user. */ void;
+export type UserUpdateActivePerspectiveApiArg = {
+    /** Set active perspective by Id */
+    perspectiveId: string;
+};
 export type UserUpdatePasswordByIdApiResponse = /** status 200 Success */ void;
 export type UserUpdatePasswordByIdApiArg = {
     /** Id of the User */
@@ -240,6 +256,26 @@ export type DevError = {
     /** Details */
     details: string;
 };
+export type ElementIcon = {
+    /** Icon type */
+    type: "name" | "path";
+    /** Icon value */
+    value: string;
+};
+export type PerspectiveConfig = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Perspective ID */
+    id: string;
+    /** Name */
+    name: string;
+    /** Icon */
+    icon: ElementIcon;
+    /** Is Writeable */
+    isWriteable: boolean;
+};
 export type UserInformation = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -257,6 +293,10 @@ export type UserInformation = {
     classes: string[];
     /** Allowed doc types to create */
     docTypes: string[];
+    /** Active studio perspective ID */
+    activePerspective: any;
+    /** Allowed studio perspectives */
+    perspectives: PerspectiveConfig[];
 };
 export type KeyBindingForAUser = {
     /** ASCII Code for a key on the Keyboard */
@@ -358,6 +398,8 @@ export type User = {
     documentWorkspaces: UserWorkspace[];
     /** Object Dependencies */
     objectDependencies: UserObjectDependencies;
+    /** Allowed studio perspectives */
+    perspectives: PerspectiveConfig[];
 };
 export type User2 = {
     /** Email of the User */
@@ -396,6 +438,8 @@ export type User2 = {
     dataObjectWorkspaces: UserWorkspace[];
     /** Document Workspace */
     documentWorkspaces: UserWorkspace[];
+    /** Allowed studio perspectives */
+    perspectives: object;
 };
 export type UserPermission = {
     /** AdditionalAttributes */
@@ -435,6 +479,7 @@ export const {
     useUserGetCollectionQuery,
     useUserResetPasswordMutation,
     usePimcoreStudioApiUserSearchQuery,
+    useUserUpdateActivePerspectiveMutation,
     useUserUpdatePasswordByIdMutation,
     useUserUploadImageMutation,
     useUserGetImageQuery,
