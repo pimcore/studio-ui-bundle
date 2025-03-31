@@ -15,7 +15,8 @@ import React, { forwardRef, useRef, useImperativeHandle, useState } from 'react'
 import type { RefSelectProps } from 'antd/es/select'
 import { Checkbox, Select as AntdSelect, type SelectProps as AntdSelectProps } from 'antd'
 import cn from 'classnames'
-import { isString, isEmpty } from 'lodash'
+import { isString } from 'lodash'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './select.styles'
 
@@ -26,18 +27,18 @@ export interface SelectProps extends AntdSelectProps {
   width?: number
 }
 
-export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, width, allowClear, inherited, ...antdSelectProps }, ref): React.JSX.Element => {
+export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, width, allowClear, inherited, value, ...antdSelectProps }, ref): React.JSX.Element => {
   const selectRef = useRef<RefSelectProps>(null)
 
   const [isActive, setIsActive] = useState(false)
   const [isFocus, setIsFocus] = useState(false)
-  const [isSelected, setIsSelected] = useState(false)
+  const [isSelected, setIsSelected] = useState(!isEmptyValue(value))
 
   useImperativeHandle(ref, () => selectRef.current!)
 
   const { styles } = useStyles({ width })
 
-  const withCustomIcon = !isEmpty(customIcon)
+  const withCustomIcon = !isEmptyValue(customIcon)
   const isStatusWarning = status === 'warning'
   const isStatusError = status === 'error'
 
@@ -59,11 +60,11 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
   const handleClick = (): void => { setIsActive(!isActive) }
 
   const handleChange = (value: string): void => {
-    !isEmpty(value) ? setIsSelected(true) : setIsSelected(false)
+    !isEmptyValue(value) ? setIsSelected(true) : setIsSelected(false)
   }
 
   const getSuffixIcon = (): React.JSX.Element => {
-    const isShowCustomIcon = !isEmpty(customArrowIcon) && isString(customArrowIcon)
+    const isShowCustomIcon = !isEmptyValue(customArrowIcon) && isString(customArrowIcon)
     const defaultIcon = isActive ? 'chevron-up' : 'chevron-down'
 
     const iconToShow = isShowCustomIcon ? customArrowIcon : defaultIcon
@@ -104,6 +105,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
         ref={ selectRef }
         status={ status }
         suffixIcon={ getSuffixIcon() }
+        value={ value }
         { ...antdSelectProps }
       />
     </div>
