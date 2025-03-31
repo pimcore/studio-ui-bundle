@@ -24,17 +24,16 @@ export interface TabTitleContainerProps {
 }
 
 export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const [isBorderNode] = useState(node.getParent() instanceof BorderNode)
   const config = node.getConfig()
   const icon = config.icon ?? { value: 'widget-default', type: 'name' }
-  const translationKey = config.translationKey ?? config.translationKey
+  const title = t(`${config.translationKey}`) ?? node.getName()
+
+  console.log(title)
 
   const { closeWidget } = useWidgetManager()
   const isCloseable = node.isEnableClose()
-  const { t } = useTranslation()
-
-  console.log('test', node)
-  console.log('translationKey', translationKey)
 
   const onClose = (): void => {
     if (modified === false || modified === undefined) {
@@ -65,6 +64,6 @@ export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): R
   )
 
   function getTitle (): string {
-    return t(`${node.getName()}`) + (modified === true ? '*' : '')
+    return title + (modified === true ? '*' : '')
   }
 }

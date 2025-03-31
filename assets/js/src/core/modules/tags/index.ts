@@ -29,10 +29,10 @@ moduleSystem.registerModule({
       perspectivePermission: NavPermission.TagConfiguration,
       widgetConfig: {
         name: 'Tag Configuration',
-        translationKey: 'widget.tag-configuration',
         id: 'tag-configuration',
         component: 'tag-configuration',
         config: {
+          translationKey: 'widget.tag-configuration',
           icon: {
             type: 'name',
             value: 'tag-configuration'

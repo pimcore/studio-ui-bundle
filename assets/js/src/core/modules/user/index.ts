@@ -38,10 +38,10 @@ moduleSystem.registerModule({
       perspectivePermission: NavPermission.Users,
       widgetConfig: {
         name: 'Users',
-        translationKey: 'widget.user-management',
         id: 'user-management',
         component: 'user-management',
         config: {
+          translationKey: '%ser-management',
           icon: {
             type: 'name',
             value: 'user'
@@ -55,10 +55,10 @@ moduleSystem.registerModule({
       perspectivePermission: NavPermission.Roles,
       widgetConfig: {
         name: 'Roles',
-        translationKey: 'widget.role-management',
         id: 'role-management',
         component: 'role-management',
         config: {
+          translationKey: 'widget.role-management',
           icon: {
             type: 'name',
             value: 'user'
