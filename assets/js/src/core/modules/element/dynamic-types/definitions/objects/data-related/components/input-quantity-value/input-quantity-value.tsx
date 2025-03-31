@@ -21,7 +21,7 @@ import { useTranslation } from 'react-i18next'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { useStyles } from './input-quantity-value.styles'
 import { Input } from '@Pimcore/components/input/input'
-import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
+import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export interface InputQuantityValueProps {
   value?: InputQuantityValueValue | null

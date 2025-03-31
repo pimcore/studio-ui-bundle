@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { type ReactElement } from 'react'
 import { DynamicTypeObjectDataAbstract, type GetGridCellDefinitionProps, type EditModalSettings, type EditMode } from '../dynamic-type-object-data-abstract'
 import { FieldCollection, type FieldCollectionProps } from '../components/field-collection/field-collection'
 import { ItemsCount } from '../../grid-cell-preview/items-count/items-count'
@@ -19,10 +19,11 @@ import {
   VersionFieldCollection,
   type VersionFieldCollectionProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/field-collection/versions/version-field-collection'
+import { type FormItemProps } from 'antd'
 
 export class DynamicTypeObjectDataFieldCollection extends DynamicTypeObjectDataAbstract {
   id: string = 'fieldcollections'
-  isCollectionType: boolean = true
+  isCollectionType: boolean = false
   gridCellEditMode: EditMode = 'edit-modal'
   gridCellEditModalSettings: EditModalSettings = {
     modalSize: 'XL',
@@ -35,6 +36,17 @@ export class DynamicTypeObjectDataFieldCollection extends DynamicTypeObjectDataA
 
   getVersionObjectDataComponent (props: VersionFieldCollectionProps): React.ReactElement<FieldCollectionProps> {
     return <VersionFieldCollection { ...props } />
+  }
+
+  getObjectDataFormItemProps (props: FieldCollectionProps): FormItemProps {
+    return {
+      ...super.getObjectDataFormItemProps(props),
+      label: null
+    }
+  }
+
+  getGridCellEditComponent (props: GetGridCellDefinitionProps): ReactElement {
+    return this.getObjectDataComponent(props.objectProps as unknown as FieldCollectionProps)
   }
 
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {

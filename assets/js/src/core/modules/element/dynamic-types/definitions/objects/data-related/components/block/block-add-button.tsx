@@ -14,26 +14,20 @@
 import { type IconButtonProps } from '@Pimcore/components/icon-button/icon-button'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import React from 'react'
-import { type BlockItemProps } from './block-item'
-import { type CollectionAddButtonProps } from '../collection/collection'
 import { useTranslation } from 'react-i18next'
+import { useNumberedList } from '@Pimcore/components/form/numbered-list/provider/numbered-list/use-numbered-list'
 
-export interface BlockAddButtonProps extends CollectionAddButtonProps {
-  operation: BlockItemProps['operation']
-}
-
-export const BlockAddButton = (props: BlockAddButtonProps): React.JSX.Element => {
-  const { operation } = props
+export const BlockAddButton = (): React.JSX.Element => {
+  const { operations } = useNumberedList()
   const { t } = useTranslation()
 
   const onAddClick: IconButtonProps['onClick'] = (e): void => {
     e.stopPropagation()
-    operation.add()
+    operations.add({})
   }
 
   return (
     <IconTextButton
-      disabled={ props.disallowAdd === true }
       icon={ { value: 'new' } }
       onClick={ onAddClick }
     >{t('add')}</IconTextButton>

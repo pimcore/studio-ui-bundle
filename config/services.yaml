@@ -23,6 +23,11 @@ services:
 
     Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProvider: ~
 
+    Pimcore\Bundle\StudioUiBundle\Installer:
+        public: true
+        arguments:
+            $bundle: "@=service('kernel').getBundle('PimcoreStudioUiBundle')"
+
 # add more services, or override services that need manual wiring
 #    Pimcore\Bundle\StudioUiBundle\ExampleClass:
 #        arguments:
