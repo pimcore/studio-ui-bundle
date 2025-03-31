@@ -37,8 +37,8 @@ moduleSystem.registerModule({
       className: 'item-style-modifier',
       perspectivePermission: NavPermission.Users,
       widgetConfig: {
-        name: 'widget.user-management',
-
+        name: 'Users',
+        translationKey: 'widget.user-management',
         id: 'user-management',
         component: 'user-management',
         config: {
@@ -54,7 +54,8 @@ moduleSystem.registerModule({
       path: 'Settings/User & Roles/Roles',
       perspectivePermission: NavPermission.Roles,
       widgetConfig: {
-        name: 'widget.role-management',
+        name: 'Roles',
+        translationKey: 'widget.role-management',
         id: 'role-management',
         component: 'role-management',
         config: {
