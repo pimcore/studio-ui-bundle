@@ -14,11 +14,11 @@ declare(strict_types=1);
  *  @license    http://www.pimcore.org/license     GPLv3 and PCL
  */
 
-namespace Pimcore\Bundle\StudioUiBundle\Extension\Bundle;
+namespace Pimcore\Bundle\StudioUiBundle\Exception;
 
-interface PimcoreBundleStudioUiInterface
+/**
+ * @internal
+ */
+final class InvalidEntryPointsJsonException extends \RuntimeException
 {
-    public function getWebpackEntryPointsJsonLocations(): array;
-
-    public function getWebpackEntryPoints(): array;
 }

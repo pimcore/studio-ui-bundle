@@ -73,6 +73,9 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/comp
 export * from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/text/text-cell'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/textarea/textarea-cell'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/time/time-cell'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/dynamic-type-grid-cell-registry'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/dynamic-type-grid-cell-abstract'
+
 // @todo check the naming of the cellProps
 export { type TextCellProps as TranslateCellProps, TranslateCell } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/translate/translate-cell'
 
@@ -118,6 +121,8 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-r
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/table/table'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/url-slug/url-slug'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/video/video'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'

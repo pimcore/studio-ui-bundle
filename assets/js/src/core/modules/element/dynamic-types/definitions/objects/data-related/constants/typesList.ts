@@ -12,5 +12,8 @@
 */
 
 export enum DynamicTypesList {
-  LOCALIZED_FIELDS = 'localizedfields'
+  LOCALIZED_FIELDS = 'localizedfields',
+  OBJECT_BRICKS = 'objectbricks',
+  FIELD_COLLECTIONS = 'fieldcollections',
+  BLOCK = 'block'
 }

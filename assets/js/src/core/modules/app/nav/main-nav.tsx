@@ -59,7 +59,7 @@ export const MainNav = (): React.JSX.Element => {
     return (
       <li
         className={ `main-nav__list-item ${openKeys.includes(index) ? 'is-active' : ''} ${item.className ?? ''}` }
-        key={ item.id }
+        key={ item.path }
       >
         {!isUndefined(item.button)
           ? (
@@ -98,7 +98,9 @@ export const MainNav = (): React.JSX.Element => {
 
         {item.children !== undefined && item.children.length > 0
           ? (
-            <ul className={ `main-nav__list main-nav__list--level-${level + 1}` }>
+            <ul
+              className={ `main-nav__list main-nav__list--level-${level + 1}` }
+            >
               {item.children?.map((child: IMainNavItem, childIndex) => renderNavItem(child, `${index}-${childIndex}`, level))}
             </ul>
             )

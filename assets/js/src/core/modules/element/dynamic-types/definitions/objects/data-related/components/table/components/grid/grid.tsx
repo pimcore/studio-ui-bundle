@@ -25,6 +25,7 @@ interface TableGridProps {
   disabled?: boolean
   columnConfigActivated: boolean
   columnConfig?: Array<{ key: string, label: string }>
+  className?: string
 }
 
 export const TableGrid = (props: TableGridProps): React.JSX.Element => {
@@ -79,6 +80,7 @@ export const TableGrid = (props: TableGridProps): React.JSX.Element => {
 
   return (
     <Grid
+      className={ props.className }
       columns={ columns }
       data={ dataRows }
       disabled={ props.disabled }

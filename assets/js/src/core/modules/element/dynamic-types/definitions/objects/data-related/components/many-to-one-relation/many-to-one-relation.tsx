@@ -22,7 +22,7 @@ import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-
 import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
-import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
+import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import {
   createElementSelectorAreas,
   dndIsValidData,
@@ -33,6 +33,7 @@ import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-hel
 import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { PathTarget } from './path-target'
+import { useStyles } from './many-to-one-relation.styles'
 
 export type ManyToOneRelationValueType = ManyToOneRelationValue | PathTextInputValue | null
 
@@ -68,10 +69,13 @@ export interface ManyToOneRelationProps extends IRelationAllowedTypesDataCompone
 
 export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Element => {
   const [value, setValue] = React.useState<ManyToOneRelationValueType>(props.value ?? null)
+
   const { openElement, mapToElementType } = useElementHelper()
-  const { t } = useTranslation()
   const { download } = useDownload()
   const fieldWidth = useFieldWidth()
+
+  const { t } = useTranslation()
+  const { styles } = useStyles()
 
   useEffect(() => {
     if (!isEqual(value, props.value ?? null)) {
@@ -96,7 +100,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
 
   return (
     <Flex
-      className={ cn(props.className) }
+      className={ cn(styles.container, props.className) }
       gap="extra-small"
       style={ {
         maxWidth: toCssDimension(props.width, fieldWidth.large)

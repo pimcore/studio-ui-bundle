@@ -33,10 +33,11 @@ export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.El
 
   const maxItemsCount = props?.maxItems ?? 0
   const valuesKeys = Object.keys(values)
+  const isNoteditable = props.noteditable === true
 
   const allowedTypes = props.allowedTypes?.filter((item) => !valuesKeys.includes(item))
   const isItemLimitReached = maxItemsCount > 0 && valuesKeys.length === maxItemsCount
-  const isHideAddButton = isItemLimitReached || isEmpty(allowedTypes)
+  const isHideAddButton = isNoteditable || isItemLimitReached || isEmpty(allowedTypes)
 
   const tabItems: ITabsProps['items'] = valuesKeys?.map((key) => {
     return {
@@ -48,7 +49,10 @@ export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.El
         <Form.Group
           name={ key }
         >
-          <ObjectBrickItem type={ key } />
+          <ObjectBrickItem
+            noteditable={ props.noteditable }
+            type={ key }
+          />
         </Form.Group>
       )
     }
@@ -78,7 +82,7 @@ export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.El
     >
       <Tabs
         items={ tabItems }
-        onClose={ onClose }
+        onClose={ !isNoteditable ? onClose : undefined }
       />
     </BaseView>
   ), [values])

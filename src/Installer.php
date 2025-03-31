@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Pimcore
@@ -14,8 +13,21 @@ declare(strict_types=1);
  *  @license    http://www.pimcore.org/license     GPLv3 and PCL
  */
 
-namespace Pimcore\Bundle\StudioUiBundle\Exception;
+namespace Pimcore\Bundle\StudioUiBundle;
 
-class InvalidEntrypointsJsonException extends \RuntimeException
+use Pimcore\Extension\Bundle\Installer\SettingsStoreAwareInstaller;
+
+class Installer extends SettingsStoreAwareInstaller
 {
+    public function install(): void
+    {
+        //currently nothing to do
+        $this->markInstalled();
+    }
+
+    public function uninstall(): void
+    {
+        //currently nothing to do
+        $this->markUninstalled();
+    }
 }

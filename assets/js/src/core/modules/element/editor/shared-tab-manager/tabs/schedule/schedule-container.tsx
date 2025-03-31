@@ -11,30 +11,32 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Switch } from '@Pimcore/components/switch/switch'
+import { Box } from '@Pimcore/components/box/box'
+import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Button } from '@Pimcore/components/button/button'
+import { Content } from '@Pimcore/components/content/content'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Header } from '@Pimcore/components/header/header'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { Segmented } from '@Pimcore/components/segmented/segmented'
+import { Space } from '@Pimcore/components/space/space'
+import { Switch } from '@Pimcore/components/switch/switch'
+import { Text } from '@Pimcore/components/text/text'
+import trackError from '@Pimcore/modules/app/error-handler'
+import { type Schedule } from '@Pimcore/modules/element/draft/hooks/use-schedules'
+import {
+  Table
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/components/table/table'
+import { useSaveSchedules } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 import {
   type Schedule as ApiSchedule,
   useScheduleGetCollectionForElementByTypeAndIdQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/schedule-api-slice-enhanced'
-import {
-  Table
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/components/table/table'
-import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import { Header } from '@Pimcore/components/header/header'
-import { Content } from '@Pimcore/components/content/content'
-import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
-import { type Schedule } from '@Pimcore/modules/element/draft/hooks/use-schedules'
-import { Segmented } from '@Pimcore/components/segmented/segmented'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
-import { useSaveSchedules } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
-import { Flex } from '@Pimcore/components/flex/flex'
-import { Text } from '@Pimcore/components/text/text'
-import { Space } from '@Pimcore/components/space/space'
-import { Box } from '@Pimcore/components/box/box'
+import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import ApiError from '../../../../../app/error-handler/classes/api-error'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -44,7 +46,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
   const { element, schedules, setSchedules, addSchedule, removeSchedule } = useElementDraft(id, elementType)
   const { saveSchedules, isLoading: isSaveLoading } = useSaveSchedules(elementType, id)
 
-  const { data, isLoading, isError } = useScheduleGetCollectionForElementByTypeAndIdQuery({
+  const { data, isLoading, isError, error } = useScheduleGetCollectionForElementByTypeAndIdQuery({
     elementType,
     id
   })
@@ -74,12 +76,14 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
     }
   }, [schedules])
 
+  useEffect(() => {
+    if (isError) {
+      trackError(new ApiError(error))
+    }
+  }, [isError])
+
   if (isLoading || data === undefined) {
     return <Content loading />
-  }
-
-  if (isError) {
-    return <div>Error</div>
   }
 
   function filterSchedules (schedules: Schedule[]): Schedule[] {

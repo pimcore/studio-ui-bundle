@@ -13,11 +13,14 @@
 
 import { container } from '@Pimcore/app/depency-injection'
 import { useMemo } from 'react'
+import { useSelector } from 'react-redux'
 import { type IMainNavItem, type MainNavRegistry } from '../services/main-nav-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { isAllowedInPerspective } from '@Pimcore/modules/perspectives/permission-checker'
+import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
+import { isNil } from 'lodash'
 
 interface IUseMainNavReturn {
   navItems: IMainNavItem[]
@@ -69,9 +72,14 @@ const addNavItemToItemList = (items: IMainNavItem[], item: IMainNavItem): void =
 export const useMainNav = (): IUseMainNavReturn => {
   const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
   const user = useUser()
+  const activePerspective = useSelector(selectActivePerspective)
 
   const createNavItems = (): IMainNavItem[] => {
     const items: IMainNavItem[] = []
+
+    if (isNil(user) || isNil(activePerspective)) {
+      return items
+    }
 
     mainNavRegistryService.getMainNavItems().forEach(item => {
       if (item.permission !== undefined && !isAllowed(item.permission)) {
@@ -90,7 +98,7 @@ export const useMainNav = (): IUseMainNavReturn => {
 
   const navItems = useMemo(() => {
     return createNavItems()
-  }, [mainNavRegistryService.getMainNavItems(), user])
+  }, [mainNavRegistryService.getMainNavItems(), user, activePerspective])
 
   return {
     navItems

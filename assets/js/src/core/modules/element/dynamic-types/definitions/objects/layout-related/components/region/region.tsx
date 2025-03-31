@@ -31,7 +31,7 @@ export enum AvailableRegions {
   Center = 'center',
 }
 
-export const Region = ({ children, ...props }: RegionProps): React.JSX.Element => {
+export const Region = ({ children, noteditable, ...props }: RegionProps): React.JSX.Element => {
   const items: BaseRegionProps['items'] = []
   const layoutDefinition: BaseRegionProps['layoutDefinition'] = []
   const regionMap: Record<string, number> = {}
@@ -48,10 +48,13 @@ export const Region = ({ children, ...props }: RegionProps): React.JSX.Element =
     items.push({
       region: `${region}${regionIndex}`,
       // maxWidth: @todo field for the max width needs to be defined,
-      component: <ObjectComponent
-        { ...child }
-        key={ child.name }
-                 />
+      component: (
+        <ObjectComponent
+          { ...child }
+          key={ child.name }
+          noteditable={ noteditable }
+        />
+      )
     })
 
     regionMap[region] = regionIndex
