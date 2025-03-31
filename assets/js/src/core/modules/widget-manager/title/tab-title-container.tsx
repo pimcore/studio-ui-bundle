@@ -30,8 +30,6 @@ export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): R
   const icon = config.icon ?? { value: 'widget-default', type: 'name' }
   const title = t(`${config.translationKey}`) ?? node.getName()
 
-  console.log(title)
-
   const { closeWidget } = useWidgetManager()
   const isCloseable = node.isEnableClose()
 
