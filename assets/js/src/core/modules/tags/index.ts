@@ -28,7 +28,8 @@ moduleSystem.registerModule({
       className: 'item-style-modifier',
       perspectivePermission: NavPermission.TagConfiguration,
       widgetConfig: {
-        name: 'widget.tag-configuration',
+        name: 'Tag Configuration',
+        translationKey: 'widget.tag-configuration',
         id: 'tag-configuration',
         component: 'tag-configuration',
         config: {

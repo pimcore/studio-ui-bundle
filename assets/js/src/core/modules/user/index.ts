@@ -38,6 +38,7 @@ moduleSystem.registerModule({
       perspectivePermission: NavPermission.Users,
       widgetConfig: {
         name: 'widget.user-management',
+
         id: 'user-management',
         component: 'user-management',
         config: {
