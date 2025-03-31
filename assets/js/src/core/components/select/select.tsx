@@ -11,11 +11,11 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { forwardRef, useRef, useImperativeHandle, useState } from 'react'
+import React, { forwardRef, useRef, useImperativeHandle, useState, useEffect } from 'react'
 import type { RefSelectProps } from 'antd/es/select'
 import { Checkbox, Select as AntdSelect, type SelectProps as AntdSelectProps } from 'antd'
 import cn from 'classnames'
-import { isString } from 'lodash'
+import { isEmpty, isString } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './select.styles'
@@ -35,6 +35,14 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
   const [isSelected, setIsSelected] = useState(!isEmptyValue(value))
 
   useImperativeHandle(ref, () => selectRef.current!)
+
+  useEffect(() => {
+    if (!isEmpty(value) || !isEmptyValue(value)) {
+      setIsSelected(true)
+    } else {
+      setIsSelected(false)
+    }
+  }, [value])
 
   const { styles } = useStyles({ width })
 
@@ -58,10 +66,6 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
   })
 
   const handleClick = (): void => { setIsActive(!isActive) }
-
-  const handleChange = (value: string): void => {
-    !isEmptyValue(value) ? setIsSelected(true) : setIsSelected(false)
-  }
 
   const getSuffixIcon = (): React.JSX.Element => {
     const isShowCustomIcon = !isEmptyValue(customArrowIcon) && isString(customArrowIcon)
@@ -101,7 +105,6 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
         onBlur={ () => { setIsFocus(false) } }
         onDropdownVisibleChange={ handleClick }
         onFocus={ () => { setIsFocus(true) } }
-        onSelect={ handleChange }
         ref={ selectRef }
         status={ status }
         suffixIcon={ getSuffixIcon() }
