@@ -24,7 +24,7 @@ const initialState: UserInformation = {
   isAdmin: false,
   classes: [],
   docTypes: [],
-  activePerspective: {},
+  activePerspective: 0,
   perspectives: []
 }
 
