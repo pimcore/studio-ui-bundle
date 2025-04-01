@@ -32,6 +32,7 @@ moduleSystem.registerModule({
         id: 'notes-and-events',
         component: 'notes-and-events',
         config: {
+          translationKey: 'widget.notes-and-events',
           icon: {
             type: 'name',
             value: 'notes-events'

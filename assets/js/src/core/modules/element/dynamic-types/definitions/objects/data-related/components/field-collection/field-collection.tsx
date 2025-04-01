@@ -27,9 +27,7 @@ export interface FieldCollectionProps extends AbstractObjectDataDefinition {
   maxItems?: number
 }
 
-export const FieldCollection = ({ border = false, disallowAddRemove, ...props }: FieldCollectionProps): React.JSX.Element => {
-  console.log({ value: props.value })
-
+export const FieldCollection = ({ border = false, ...props }: FieldCollectionProps): React.JSX.Element => {
   return (
     <Form.NumberedList
       onChange={ props.onChange }

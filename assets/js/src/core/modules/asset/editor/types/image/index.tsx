@@ -46,6 +46,7 @@ moduleSystem.registerModule({
 
     imageEditorTabManager.register({
       key: 'edit',
+      workspacePermission: 'publish',
       label: 'asset.asset-editor-tabs.edit',
       children: <EditTabContainer />,
       icon: <Icon value={ 'edit-pen' } />

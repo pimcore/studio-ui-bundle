@@ -12,7 +12,8 @@
 */
 
 import React, { type ReactNode } from 'react'
-import { Form as AntForm, type FormProps as AntFormProps, FormItemProps } from 'antd'
+
+import { Form as AntForm, type FormProps as AntFormProps, type FormItemProps } from 'antd'
 import { Space } from '../space/space'
 import { withGroupName } from './item/with-group-name'
 import { Group } from './group/group'
@@ -69,4 +70,4 @@ Form.useFormInstance = AntForm.useFormInstance
 Form.useWatch = AntForm.useWatch
 Form.ErrorList = AntForm.ErrorList
 
-export { Form, FormItemProps }
+export { Form, type FormItemProps }

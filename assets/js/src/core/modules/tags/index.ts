@@ -32,6 +32,7 @@ moduleSystem.registerModule({
         id: 'tag-configuration',
         component: 'tag-configuration',
         config: {
+          translationKey: 'widget.tag-configuration',
           icon: {
             type: 'name',
             value: 'tag-configuration'
