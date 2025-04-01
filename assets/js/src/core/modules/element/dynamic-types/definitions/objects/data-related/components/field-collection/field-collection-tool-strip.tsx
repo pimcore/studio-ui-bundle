@@ -24,11 +24,11 @@ export interface FieldCollectionToolStripProps {
   field: number
   allowedTypes: FieldCollectionProps['allowedTypes']
   disallowAdd?: boolean
-  disallowAddRemove?: boolean
+  disallowDelete?: boolean
   disallowReorder?: boolean
 }
 
-export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, disallowAddRemove, disallowReorder }: FieldCollectionToolStripProps): React.JSX.Element => {
+export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, disallowDelete, disallowReorder }: FieldCollectionToolStripProps): React.JSX.Element => {
   const { operations } = useNumberedList()
 
   const type = operations.getValue([field, 'type'])
@@ -51,7 +51,7 @@ export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, dis
         <Text type='secondary'>{ type }</Text>
 
         <Dropdown
-          disabled={ disallowAdd === true || disallowAddRemove === true }
+          disabled={ disallowAdd === true }
           menu={ { items: dropDownItems } }
         >
           <IconButton
@@ -78,7 +78,7 @@ export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, dis
       </Space>
 
       <IconButton
-        disabled={ disallowAddRemove === true }
+        disabled={ disallowDelete === true }
         icon={ { value: 'trash' } }
         onClick={ () => { operations.remove(field) } }
         style={ { padding: 4 } }
