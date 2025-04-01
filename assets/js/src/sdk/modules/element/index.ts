@@ -187,6 +187,10 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-r
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-user'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-video'
 
+export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/grid-cell-preview/grid-cell-cell-preview-wrapper/grid-cell-preview-wrapper'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/grid-cell-preview/numeric/numeric'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/grid-cell-preview/relation-list/relation-list'
+
 export * from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
 export * from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 export * from '@Pimcore/modules/element/dynamic-types/resolver/dynamic-type-resolver'

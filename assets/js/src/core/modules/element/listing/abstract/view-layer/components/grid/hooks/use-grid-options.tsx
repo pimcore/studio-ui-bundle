@@ -40,7 +40,8 @@ export const useGridOptions = (): UseGridOptionsReturn => {
     const columnDefinition: IdentifiedColumnDef<unknown, never> = {
       header: t('listing.column.' + column.key) + (column.locale !== undefined && column.locale !== null ? ` (${column.locale})` : ''),
       meta: {
-        type: isMainTypeIncluded ? column.type : column.frontendType
+        type: isMainTypeIncluded ? column.type : column.frontendType,
+        columnKey: column.key
       }
     }
 

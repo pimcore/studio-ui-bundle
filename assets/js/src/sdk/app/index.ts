@@ -10,10 +10,10 @@
 *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
-
 export * from '@Pimcore/app/config/app-config'
 export * from '@Pimcore/app/config/date-time'
 export * from '@Pimcore/app/config/services/service-ids'
 export * from '@Pimcore/app/depency-injection'
 export * from '@Pimcore/app/router/router'
 export * from '@Pimcore/app/store'
+export { useTranslation, Trans } from 'react-i18next'
