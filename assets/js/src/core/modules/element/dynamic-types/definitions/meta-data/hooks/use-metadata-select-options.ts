@@ -35,6 +35,5 @@ export const useMetadataSelectOptions = (fieldName: string): { isLoading: boolea
     }
   }, [data, fieldName])
 
-  console.log('foundselect return', fieldName, { isLoading: isFetching, options })
   return { isLoading: isFetching, options }
 }

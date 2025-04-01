@@ -72,7 +72,7 @@ export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
   if (config === undefined) {
     return getValue()
   }
-  console.log('fieldname?', props)
+
   const optionsResult = resolveOptions(config, config.fieldName ?? String(props.column.columnDef.meta?.columnKey))
   if (optionsResult.isLoading) {
     return (

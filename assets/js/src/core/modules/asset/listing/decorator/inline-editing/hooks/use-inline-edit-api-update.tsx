@@ -55,7 +55,6 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
 
   const updateApiData: UseInlineEditApiUpdateReturn['updateApiData'] = async (event) => {
     const { update } = event
-    console.log('updateApiData', update)
     const promise = patchAsset({
       body: {
         data: [
