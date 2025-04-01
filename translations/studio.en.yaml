@@ -46,6 +46,7 @@ asset.upload.files.completed: Completed!
 asset.upload.files.successfully-uploaded: Successfully uploaded
 asset.upload.files.completed-actions: Completed actions
 asset.upload.validation: 'Please add a file'
+asset.select.type.nullable: 'All types'
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 data-object.tree.context-menu.add-object: Add Object
@@ -651,6 +652,20 @@ navigation.tag-configuration: Tag Configuration
 navigation.user-and-roles: User & Roles
 navigation.users: Users
 navigation.roles: Roles
+navigation.open-asset: Open Asset
+navigation.open-document: Open Document
+navigation.open-data-object: Open Data Object
+navigation.notes-and-events: Notes & Events
+navigation.file: File
+navigation.settings: Settings
+navigation.tools: Tools
+widget.notes-and-events: Notes & Events
+widget.tag-configuration: Tag Configuration
+widget.user-management: Users
+widget.role-management: Roles
+navigation.customise: Customise
+navigation.tag-configuration: Tag Configuration
+navigation.use-and-roles: User & Roles
 navigation.open-asset: Open Asset
 navigation.open-document: Open Document
 navigation.open-data-object: Open Data Object

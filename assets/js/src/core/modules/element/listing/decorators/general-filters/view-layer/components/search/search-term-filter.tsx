@@ -51,8 +51,6 @@ export const SearchTermFilter = (): React.JSX.Element => {
       onSearch={ onSearch }
       placeholder='Search'
       value={ currentSearchTerm }
-      withPrefix
-      withoutAddon
     />
   )
 }
