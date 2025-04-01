@@ -36,6 +36,10 @@ const config: ConfigFile = {
     {
       pattern: 'noteGetCollection',
       type: 'query'
+    },
+    {
+      pattern: 'metadataGetCollection',
+      type: 'query'
     }
   ],
   outputFiles: {
@@ -83,7 +87,7 @@ const config: ConfigFile = {
     '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen.ts': {
       filterEndpoints: pathMatcher(/custom-metadata/i)
     },
-    '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-slice.gen.ts': {
+    '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/metadata/i)
     },
     '../../js/src/core/modules/app/settings/settings-slice.gen.ts': {

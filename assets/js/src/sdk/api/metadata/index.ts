@@ -11,4 +11,4 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-export * from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-slice.gen'
+export * from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'

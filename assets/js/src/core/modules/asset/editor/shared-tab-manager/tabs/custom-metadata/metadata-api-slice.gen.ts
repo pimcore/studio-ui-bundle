@@ -13,9 +13,9 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/custom-metadata` }),
                 providesTags: ["Metadata"],
             }),
-            metadataGetCollection: build.mutation<MetadataGetCollectionApiResponse, MetadataGetCollectionApiArg>({
+            metadataGetCollection: build.query<MetadataGetCollectionApiResponse, MetadataGetCollectionApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/metadata`, method: "POST", body: queryArg.body }),
-                invalidatesTags: ["Metadata"],
+                providesTags: ["Metadata"],
             }),
         }),
         overrideExisting: false,
@@ -90,4 +90,4 @@ export type PredefinedMetadata = {
     /** Writable */
     isWriteable: boolean;
 };
-export const { useAssetCustomMetadataGetByIdQuery, useMetadataGetCollectionMutation } = injectedRtkApi;
+export const { useAssetCustomMetadataGetByIdQuery, useMetadataGetCollectionQuery } = injectedRtkApi;
