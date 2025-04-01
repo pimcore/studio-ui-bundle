@@ -31,7 +31,7 @@ import {
 import { useFormGroupOptional } from '@Pimcore/components/form/group/provider/use-form-group-optional'
 import { useLocalizedFields } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/localized-fields/provider/localized-fields-provider/use-localized-fields'
 import { isArray } from 'lodash'
-import { useFieldWidth } from '../providers/field-width/use-field-width'
+import { useFieldWidth } from '../../../../../../../../element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export interface DataComponentProps extends ObjectComponentProps {
   datatype: 'data'

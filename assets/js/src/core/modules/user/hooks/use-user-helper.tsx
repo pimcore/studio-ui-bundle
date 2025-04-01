@@ -199,7 +199,8 @@ export const useUserHelper = (): UseUserReturn => {
         keyBindings: user.keyBindings,
         assetWorkspaces: user.assetWorkspaces,
         dataObjectWorkspaces: user.dataObjectWorkspaces,
-        documentWorkspaces: user.documentWorkspaces
+        documentWorkspaces: user.documentWorkspaces,
+        perspectives: user.perspectives
       }
     }))
 

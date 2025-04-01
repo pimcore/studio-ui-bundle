@@ -24,7 +24,7 @@ import { SingleView } from '@Pimcore/modules/data-object/editor/shared-tab-manag
 import { PreviewView } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/preview/preview-view'
 import {
   FieldWidthProvider
-} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/field-width-provider'
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 import { FieldCollectionProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/field-collection/providers/field-collection-provider'
 
 export const TAB_VERSIONS: IEditorTab = {
