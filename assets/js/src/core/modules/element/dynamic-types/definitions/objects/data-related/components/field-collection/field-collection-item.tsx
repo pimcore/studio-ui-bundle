@@ -29,10 +29,14 @@ export interface FieldCollectionItemProps {
   docked: boolean
   noteditable: AbstractObjectDataDefinition['noteditable']
   allowedTypes: FieldCollectionProps['allowedTypes']
+  isItemLimitReached: boolean
+  disallowReorder?: boolean
+  disallowAddRemove?: boolean
 }
 
 export const FieldCollectionItem = (props: FieldCollectionItemProps): React.JSX.Element => {
-  const { field, noteditable } = props
+  const { field, noteditable, isItemLimitReached } = props
+
   const fieldCollection = useFieldCollection()
   const { operations } = useNumberedList()
   const type = operations.getValue([field, 'type'])
@@ -61,6 +65,9 @@ export const FieldCollectionItem = (props: FieldCollectionItemProps): React.JSX.
         renderToolStripStart={ (
           <FieldCollectionToolStrip
             allowedTypes={ props.allowedTypes }
+            disallowAdd={ isItemLimitReached }
+            disallowAddRemove={ props?.disallowAddRemove }
+            disallowReorder={ props?.disallowReorder }
             field={ field }
           />
           ) }
