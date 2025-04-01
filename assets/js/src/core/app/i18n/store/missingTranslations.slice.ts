@@ -11,9 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { injectSliceWithState, type RootState } from '@Pimcore/app/store'
-import { createSlice } from '@reduxjs/toolkit'
-import { remove } from 'lodash'
+import { addAppMiddleware, injectSliceWithState, type RootState } from '@Pimcore/app/store'
+import { createListenerMiddleware, createSlice } from '@reduxjs/toolkit'
+import { debounce } from 'lodash'
+import { addNewTranslations } from '../helper/translation-helper'
 
 const initialState: string[] = []
 
@@ -23,17 +24,31 @@ const slice = createSlice({
   reducers: {
     addMissingTranslation: (state, { payload }) => {
       state.push(payload as string)
-    },
-    removeMissingTranslation: (state, { payload }) => {
-      remove(state, payload as string)
     }
   }
 })
+
+export const { addMissingTranslation } = slice.actions
 
 export const missingTranslationsSliceName = slice.name
 
 injectSliceWithState(slice)
 
-export const { addMissingTranslation, removeMissingTranslation } = slice.actions
-
 export const selectMissingTranslations = (state: RootState): string[] => state.missingTranslations
+
+const debouncedSendTranslations = debounce(async (listenerApi) => {
+  const state = listenerApi.getState() as RootState
+  const translations = selectMissingTranslations(state)
+  void addNewTranslations(translations)
+}, 3000) // Wait for 3 seconds of inactivity before sending
+
+const listenerMiddleware = createListenerMiddleware()
+listenerMiddleware.startListening({
+  actionCreator: addMissingTranslation,
+  effect: async (action, listenerApi) => {
+    debouncedSendTranslations.cancel()
+    void debouncedSendTranslations(listenerApi)
+  }
+})
+
+addAppMiddleware(listenerMiddleware.middleware)
