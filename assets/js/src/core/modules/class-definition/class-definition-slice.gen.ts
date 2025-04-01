@@ -99,6 +99,13 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Class Definition"],
             }),
+            classDefinitionFolderCollection: build.query<
+                ClassDefinitionFolderCollectionApiResponse,
+                ClassDefinitionFolderCollectionApiArg
+            >({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/class/folder/${queryArg.folderId}` }),
+                providesTags: ["Class Definition"],
+            }),
             classDefinitionGet: build.query<ClassDefinitionGetApiResponse, ClassDefinitionGetApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/class/definition/${queryArg.dataObjectClass}` }),
                 providesTags: ["Class Definition"],
@@ -183,6 +190,14 @@ export type ClassFieldCollectionObjectLayoutApiResponse = /** status 200 List of
 export type ClassFieldCollectionObjectLayoutApiArg = {
     /** ObjectId of the element */
     objectId: number;
+};
+export type ClassDefinitionFolderCollectionApiResponse = /** status 200 List of all data object classes in a folder */ {
+    totalItems: number;
+    items: ClassInDataObjectFolder[];
+};
+export type ClassDefinitionFolderCollectionApiArg = {
+    /** FolderId of the data-object */
+    folderId: number;
 };
 export type ClassDefinitionGetApiResponse = /** status 200 Class definition */ ClassDefinition;
 export type ClassDefinitionGetApiArg = {
@@ -349,6 +364,18 @@ export type FieldCollectionLayoutDefinition = {
     /** Children */
     children: any[];
 };
+export type ClassInDataObjectFolder = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID of class */
+    id: string;
+    /** Name of class */
+    name: string;
+    /** Inheritance allowed */
+    inheritance: boolean;
+};
 export type ClassDefinition = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -363,9 +390,9 @@ export type ClassDefinition = {
     /** Description */
     description: string;
     /** Creation date timestamp */
-    creationDate: number;
+    creationDate: any;
     /** Modification date timestamp */
-    modificationDate: number;
+    modificationDate: any;
     /** User id of owner */
     userOwner: number;
     /** Namespace of parent class */
@@ -448,6 +475,7 @@ export const {
     usePimcoreStudioApiClassCustomLayoutExportQuery,
     usePimcoreStudioApiClassCustomLayoutImportMutation,
     useClassFieldCollectionObjectLayoutQuery,
+    useClassDefinitionFolderCollectionQuery,
     useClassDefinitionGetQuery,
     useClassObjectBrickObjectLayoutQuery,
 } = injectedRtkApi;
