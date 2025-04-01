@@ -17,6 +17,7 @@ import { BorderTitleView } from './border-title-view'
 import { TabTitleView } from './tab-title-view'
 import { useWidgetManager } from '../hooks/use-widget-manager'
 import { useTranslation } from 'react-i18next'
+import { isUndefined } from 'lodash'
 
 export interface TabTitleContainerProps {
   node: TabNode
@@ -28,8 +29,9 @@ export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): R
   const [isBorderNode] = useState(node.getParent() instanceof BorderNode)
   const config = node.getConfig()
   const icon = config.icon ?? { value: 'widget-default', type: 'name' }
-  const title = config.translationKey ? t(config.translationKey) : node.getName()
-
+  const title = (!isUndefined(config.translationKey) && config.translationKey === 'string')
+    ? t(config.translationKey as string)
+    : node.getName()
   const { closeWidget } = useWidgetManager()
   const isCloseable = node.isEnableClose()
 
