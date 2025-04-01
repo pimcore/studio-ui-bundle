@@ -150,7 +150,7 @@ export const useAddObject = (): UseAddObjectHookReturn => {
       }
 
       const { id } = response.data
-      openDataObject({ config: { id } })
+      void openDataObject({ config: { id } })
       dispatch(refreshNodeChildren({ nodeId: String(parentId), elementType: 'data-object' }))
     } catch (error) {
       trackError(new GeneralError('Error creating data object'))
@@ -159,8 +159,8 @@ export const useAddObject = (): UseAddObjectHookReturn => {
 
   const isAddObjectHidden = (node: TreeNodeProps): boolean => {
     return !isTreeActionAllowed(TreePermission.Add) ||
-            !checkElementPermission(node.permissions, 'create') ||
-            isEmpty(getClassDefinitionsForCurrentUser())
+      !checkElementPermission(node.permissions, 'create') ||
+      isEmpty(getClassDefinitionsForCurrentUser())
   }
 
   const addObjectTreeContextMenuItem = (node: TreeNodeProps): ItemType => {

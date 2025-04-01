@@ -13,6 +13,7 @@
 
 import React from 'react'
 import { isEmpty } from 'lodash'
+import cn from 'classnames'
 import { DataComponent } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/components/data-component/data-component'
 import { type AbstractObjectDataDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
@@ -25,9 +26,10 @@ import { useStyles } from './version-block.styles'
 export interface IVersionBlockProps extends AbstractObjectDataDefinition {
   children?: any
   value?: any
+  className?: string
 }
 
-export const VersionBlock = ({ children, value }: IVersionBlockProps): React.JSX.Element => {
+export const VersionBlock = ({ children, value, className }: IVersionBlockProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { styles: commonStyles } = useCommonStyles()
 
@@ -58,7 +60,10 @@ export const VersionBlock = ({ children, value }: IVersionBlockProps): React.JSX
             const blockFieldValue = value[index]?.[blockFieldName]
 
             return (
-              <div key={ `${blockIndex}-${blockFieldName}` }>
+              <div
+                className={ cn({ [styles.blockItemWrapperHighlighted]: className?.includes('versionFieldItemHighlight') }) }
+                key={ `${blockIndex}-${blockFieldName}` }
+              >
                 <Box
                   className={ styles.blockItem }
                   padding={ { x: 'small', y: 'mini' } }

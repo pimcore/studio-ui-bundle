@@ -427,3 +427,5 @@ export const Grid = ({
     return sortDirection ? SortDirections.DESC : SortDirections.ASC
   }
 }
+
+export * from './edit-mode/use-edit-mode'

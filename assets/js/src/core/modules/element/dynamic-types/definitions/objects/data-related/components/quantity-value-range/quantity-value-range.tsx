@@ -22,7 +22,7 @@ import { type ValueType } from '@rc-component/mini-decimal/es/interface'
 import { useStyles } from './quantity-value-range.styles'
 import cn from 'classnames'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
-import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
+import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import { theme } from 'antd'
 
 export interface QuantityValueRangeProps {

@@ -35,7 +35,10 @@ import type {
   DynamicTypeObjectDataRegistry
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type IFormattedDataStructureData } from '../types'
+import {
+  type IFormattedDataStructureData,
+  type ILayoutItem
+} from '../types'
 
 interface IVersionData extends IObjectVersionField {}
 
@@ -43,6 +46,7 @@ export const ComparisonView = ({
   versionIds
 }: VersionComparisonViewProps): React.JSX.Element => {
   const [versionsData, setVersionsData] = useState<IVersionData[]>([])
+  const [layoutsList, setLayoutsList] = useState<ILayoutItem[]>([])
 
   const dispatch = useAppDispatch()
 
@@ -75,7 +79,9 @@ export const ComparisonView = ({
               versionData: dataRaw,
               versionId: versionIds[versionIndex].id,
               versionCount: versionIds[versionIndex].count,
-              objectDataRegistry
+              objectDataRegistry,
+              layoutsList,
+              setLayoutsList
             }))
 
             setVersionsData(versionsDataToTableData({ data: formattedDataList }))

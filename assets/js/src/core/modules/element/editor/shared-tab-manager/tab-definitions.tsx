@@ -26,6 +26,7 @@ import {
   NotesAndEventsTabContainer
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-container'
 import { TagsTabContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-container'
+import { checkElementPermission } from '../../permissions/permission-helper'
 
 export const TAB_PROPERTIES: IEditorTab = {
   key: 'properties',
@@ -41,7 +42,11 @@ export const TAB_SCHEDULE: IEditorTab = {
   workspacePermission: 'settings',
   children: <ScheduleTabContainer />,
   icon: <Icon value={ 'schedule' } />,
-  isDetachable: true
+  isDetachable: true,
+  hidden: (element): boolean => {
+    return !checkElementPermission(element.permissions, 'versions') ||
+      !checkElementPermission(element.permissions, 'settings')
+  }
 }
 export const TAB_DEPENDENCIES: IEditorTab = {
   key: 'dependencies',

@@ -23,7 +23,7 @@ export const useStyles = createStyles(({
       top: 0;
       left: 0;
       bottom: 0;
-      z-index: 1001;
+      z-index: 1000;
       pointer-events: none;
 
       .left-sidebar__avatar {

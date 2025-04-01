@@ -20,6 +20,11 @@ export enum DATATYPE_LIST {
   DATA = 'data'
 }
 
+export interface ILayoutItem {
+  type: string
+  data: any
+}
+
 export interface IGetFormattedDataStructureProps {
   objectId: number
   layout: Layout['children']
@@ -27,6 +32,8 @@ export interface IGetFormattedDataStructureProps {
   versionId: number
   versionCount: number
   objectDataRegistry: DynamicTypeObjectDataRegistry
+  layoutsList: ILayoutItem[]
+  setLayoutsList: (layout: ILayoutItem[]) => void
 }
 
 export interface IFormattedDataStructureData {
@@ -44,6 +51,8 @@ export interface IProcessVersionFieldDataProps {
   fieldValueByName: any[]
   versionId: number
   versionCount: number
+  layoutsList: ILayoutItem[]
+  setLayoutsList: (layout: ILayoutItem[]) => void
 }
 
 export interface IFieldCollectionValue {

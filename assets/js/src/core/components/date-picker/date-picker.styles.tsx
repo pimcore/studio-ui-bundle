@@ -29,6 +29,10 @@ export const useStyles = createStyles(({ token, css }) => {
       }
     `,
 
+    datePickerDropdown: css`
+      width: inherit !important;
+    `,
+
     inherited: css`
       background: ${token.colorBgContainerDisabled};
       color: ${token.colorTextDisabled};

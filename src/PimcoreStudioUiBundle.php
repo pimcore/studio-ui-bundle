@@ -33,4 +33,9 @@ class PimcoreStudioUiBundle extends AbstractPimcoreBundle
     {
         return dirname(__DIR__);
     }
+
+    public function getInstaller(): Installer
+    {
+        return $this->container->get(Installer::class);
+    }
 }

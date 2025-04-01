@@ -24,7 +24,7 @@ import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators
 import { useBatchEdit } from './hooks/use-batch-edit'
 import { BatchEditListContainer } from './batch-edit-list-container'
 import { Form } from '@Pimcore/components/form/form'
-import { FieldWidthProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/field-width-provider'
+import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
 import { api, useDataObjectPatchByIdMutation, useDataObjectPatchFolderByIdMutation } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'

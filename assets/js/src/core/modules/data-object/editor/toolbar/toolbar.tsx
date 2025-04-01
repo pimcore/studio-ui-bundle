@@ -29,12 +29,13 @@ import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow
 import {
   EditorToolbarSaveButtons
 } from '@Pimcore/modules/data-object/editor/toolbar/save-buttons/save-buttons'
+import { componentId } from '@Pimcore/modules/app/component-registry/component-ids'
 
 export const Toolbar = (): React.JSX.Element => {
   const { id } = useContext(DataObjectContext)
   const { activeTab } = useDataObjectDraft(id)
   const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
-  const ContextMenu = componentRegistry.get('editorToolbarContextMenuDataObject')
+  const ContextMenu = componentRegistry.get(componentId.dataObject.editor.toolbar.contextMenu)
 
   return (
     <ToolbarView>

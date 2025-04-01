@@ -22,7 +22,7 @@ import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { cloneDeep, isEmpty, isEqual, isNil, isPlainObject } from 'lodash'
-import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
+import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import { useStyles } from './url-slug.styles'
 
 export interface UrlSlugEntry {

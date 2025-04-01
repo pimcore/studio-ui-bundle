@@ -40,6 +40,7 @@ import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { isNil } from 'lodash'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { componentId } from '@Pimcore/modules/app/component-registry/component-ids'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -57,7 +58,7 @@ export const Toolbar = (): React.JSX.Element => {
   } = useSaveSchedules('asset', id, false)
   const messageApi = useMessage()
   const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
-  const ContextMenu = componentRegistry.get('editorToolbarContextMenuAsset')
+  const ContextMenu = componentRegistry.get(componentId.asset.editor.toolbar.contextMenu)
 
   useEffect(() => {
     const handleSuccessEvent = async (): Promise<void> => {
