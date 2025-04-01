@@ -148,7 +148,8 @@ export const useRoleHelper = (): IUseRoleReturn => {
         websiteTranslationLanguagesView: item.websiteTranslationLanguagesView,
         assetWorkspaces: item.assetWorkspaces,
         dataObjectWorkspaces: item.dataObjectWorkspaces,
-        documentWorkspaces: item.documentWorkspaces
+        documentWorkspaces: item.documentWorkspaces,
+        perspectives: item.perspectives
       }
     }))
     handleNotification(t('roles.save-item.success'), error)

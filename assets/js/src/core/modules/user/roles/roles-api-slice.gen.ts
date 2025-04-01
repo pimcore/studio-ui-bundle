@@ -161,6 +161,26 @@ export type UserWorkspace = {
     /** Properties Permission */
     properties: boolean;
 };
+export type ElementIcon = {
+    /** Icon type */
+    type: "name" | "path";
+    /** Icon value */
+    value: string;
+};
+export type PerspectiveConfig = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Perspective ID */
+    id: string;
+    /** Name */
+    name: string;
+    /** Icon */
+    icon: ElementIcon;
+    /** Is Writeable */
+    isWriteable: boolean;
+};
 export type DetailedUserRole = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -185,6 +205,8 @@ export type DetailedUserRole = {
     dataObjectWorkspaces: UserWorkspace[];
     /** Document Workspace */
     documentWorkspaces: UserWorkspace[];
+    /** Allowed studio perspectives */
+    perspectives: PerspectiveConfig[];
 };
 export type UpdateUserRole = {
     /** Name of Folder or Role */
@@ -204,6 +226,8 @@ export type UpdateUserRole = {
     dataObjectWorkspaces: UserWorkspace[];
     /** Document Workspace */
     documentWorkspaces: UserWorkspace[];
+    /** Allowed studio perspectives */
+    perspectives: object;
 };
 export type SimpleUserRole = {
     /** AdditionalAttributes */

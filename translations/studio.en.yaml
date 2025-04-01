@@ -8,6 +8,21 @@ error.error_invalid_argument: Invalid argument
 error.error_widget_name_missing: Widget name have to be provided
 error.error_widget_name_invalid: Widget name is invalid (only alphanumeric characters, underscores and spaces are allowed, must be at least 3 characters long and less than 80 long)
 error.error_validation_failed: Validation failed
+modal-search.field.mimeType: MIME-Type
+modal-search.field.thumbnail: Thumbnail
+modal-search.field.id: ID
+modal-search.field.userOwner: User Owner
+modal-search.field.userOwnerName: User Owner Name
+modal-search.field.userModification: User Modification
+modal-search.field.userModificationName: User Modification Name
+modal-search.field.creationDate: Creation Date
+modal-search.field.modificationDate: Modification Date
+modal-search.field.description: Description
+modal-search.field.name: Name
+modal-search.field.previewImage: Preview Image
+modal-search.field.title: Title
+modal-search.field.class: Class
+modal-search.field.language: Language
 asset.sidebar.details: Details
 asset.asset-tree.title: Asset Tree
 asset.asset-tree.search: Search in {{folderName}}

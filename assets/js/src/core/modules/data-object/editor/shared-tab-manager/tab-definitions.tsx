@@ -26,6 +26,7 @@ import {
   FieldWidthProvider
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 import { FieldCollectionProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/field-collection/providers/field-collection-provider'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export const TAB_VERSIONS: IEditorTab = {
   key: 'versions',
@@ -41,7 +42,10 @@ export const TAB_VERSIONS: IEditorTab = {
     </FieldCollectionProvider>
   ),
   icon: <Icon value={ 'history' } />,
-  isDetachable: true
+  isDetachable: true,
+  hidden: (element): boolean => {
+    return !checkElementPermission(element.permissions, 'versions')
+  }
 }
 
 export const TAB_PREVIEW: IEditorTab = {

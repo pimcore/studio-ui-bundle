@@ -30,7 +30,9 @@ const initialState: UserInformation = {
   permissions: [],
   isAdmin: false,
   classes: [],
-  docTypes: []
+  docTypes: [],
+  activePerspective: {},
+  perspectives: []
 }
 
 export const rtkQueryErrorLogger: Middleware =
