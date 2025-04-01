@@ -28,7 +28,7 @@ export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): R
   const [isBorderNode] = useState(node.getParent() instanceof BorderNode)
   const config = node.getConfig()
   const icon = config.icon ?? { value: 'widget-default', type: 'name' }
-  const title = t(`${config.translationKey}`) ?? node.getName()
+  const title = config.translationKey ? t(config.translationKey) : node.getName()
 
   const { closeWidget } = useWidgetManager()
   const isCloseable = node.isEnableClose()
