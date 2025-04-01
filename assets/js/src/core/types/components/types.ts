@@ -62,4 +62,5 @@ export interface GridProps {
   contextMenu?: ListGridContextMenuComponents
   disabled?: boolean
   className?: string
+  onRowDoubleClick?: (row: any) => void
 }

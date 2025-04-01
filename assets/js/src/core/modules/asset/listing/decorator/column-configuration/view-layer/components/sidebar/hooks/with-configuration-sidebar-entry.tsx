@@ -16,7 +16,11 @@ import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { GridConfig } from '../tabs/grid-config/grid-config'
 
-export const withConfigurationSidebarEntry = (useBaseHook: AbstractDecoratorProps['useSidebarOptions']): AbstractDecoratorProps['useSidebarOptions'] => {
+export interface Settings {
+  saveEnabled?: boolean
+}
+
+export const withConfigurationSidebarEntry = (useBaseHook: AbstractDecoratorProps['useSidebarOptions'], settings: Settings = { saveEnabled: true }): AbstractDecoratorProps['useSidebarOptions'] => {
   const useSidebarEntry: typeof useBaseHook = () => {
     const { getProps: baseGetProps } = useBaseHook()
 
@@ -28,7 +32,7 @@ export const withConfigurationSidebarEntry = (useBaseHook: AbstractDecoratorProp
         entries: [
           ...baseProps.entries,
           {
-            component: <GridConfig />,
+            component: <GridConfig settings={ settings } />,
             key: 'configuration',
             icon: <Icon value="settings" />
           }

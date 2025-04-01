@@ -36,6 +36,10 @@ const config: ConfigFile = {
     {
       pattern: 'noteGetCollection',
       type: 'query'
+    },
+    {
+      pattern: 'assetGetSearch',
+      type: 'query',
     }
   ],
   outputFiles: {

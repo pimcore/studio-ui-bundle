@@ -18,7 +18,8 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/ListingRegistry': 'DynamicTypes/ListingRegistry',
   'DynamicTypes/MetadataRegistry': 'DynamicTypes/MetadataRegistry',
   'DynamicTypes/ObjectLayoutRegistry': 'DynamicTypes/ObjectLayoutRegistry',
-  'DynamicTypes/ObjectDataRegistry': 'DynamicTypes/ObjectDataRegistry'
+  'DynamicTypes/ObjectDataRegistry': 'DynamicTypes/ObjectDataRegistry',
+  'DynamicTypes/AssetRegistry': 'DynamicTypes/AssetRegistry'
 }
 
 export const serviceIds = {
@@ -173,6 +174,16 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/LocalizedFields': 'DynamicTypes/ObjectData/LocalizedFields',
   'DynamicTypes/ObjectData/FieldCollection': 'DynamicTypes/ObjectData/FieldCollection',
   'DynamicTypes/ObjectData/ObjectBrick': 'DynamicTypes/ObjectData/ObjectBrick',
+
+  // Asset types
+  'DynamicTypes/Asset/Video': 'DynamicTypes/Asset/Video',
+  'DynamicTypes/Asset/Audio': 'DynamicTypes/Asset/Audio',
+  'DynamicTypes/Asset/Image': 'DynamicTypes/Asset/Image',
+  'DynamicTypes/Asset/Document': 'DynamicTypes/Asset/Document',
+  'DynamicTypes/Asset/Archive': 'DynamicTypes/Asset/Archive',
+  'DynamicTypes/Asset/Unknown': 'DynamicTypes/Asset/Unknown',
+  'DynamicTypes/Asset/Folder': 'DynamicTypes/Asset/Folder',
+  'DynamicTypes/Asset/Text': 'DynamicTypes/Asset/Text',
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',

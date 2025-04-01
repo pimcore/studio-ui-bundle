@@ -17,6 +17,7 @@ import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import React from 'react'
 import { GeneralTab } from './tabs/general/general-tab'
 import { useSearch } from '../provider/use-search'
+import { AssetTab } from './tabs/asset/asset-tab'
 
 export const SearchModal = (): React.JSX.Element => {
   const { isOpen, close } = useSearch()
@@ -27,15 +28,15 @@ export const SearchModal = (): React.JSX.Element => {
       key: 'all',
       children: <GeneralTab />
     },
-    {
+    /* {
       label: 'Documents',
       key: elementTypes.document,
       children: <>@todo</>
-    },
+    }, */
     {
       label: 'Assets',
       key: elementTypes.asset,
-      children: <>@todo</>
+      children: <AssetTab />
     },
     {
       label: 'Data Objects',
@@ -52,7 +53,7 @@ export const SearchModal = (): React.JSX.Element => {
           footer={ null }
           onCancel={ () => { close() } }
           open={ isOpen }
-          size={ 'XXL' }
+          size={ 'XL' }
         >
           <Tabs
             items={ tabItems }

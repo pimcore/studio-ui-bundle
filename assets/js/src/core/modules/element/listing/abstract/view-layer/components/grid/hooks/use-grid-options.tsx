@@ -20,7 +20,7 @@ import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/r
 import { Alert } from '@Pimcore/components/alert/alert'
 import { DefaultCell } from '@Pimcore/components/grid/columns/default-cell'
 
-export type GridProps = Pick<BaseGridProps, 'contextMenu' | 'enableMultipleRowSelection' | 'enableRowSelection' | 'enableSorting' | 'modifiedCells' | 'onSelectedRowsChange' | 'onSortingChange' | 'onUpdateCellData' | 'selectedRows' | 'sorting'>
+export type GridProps = Pick<BaseGridProps, 'contextMenu' | 'enableMultipleRowSelection' | 'enableRowSelection' | 'enableSorting' | 'modifiedCells' | 'onSelectedRowsChange' | 'onSortingChange' | 'onUpdateCellData' | 'selectedRows' | 'sorting' | 'onRowDoubleClick'>
 
 export interface UseGridOptionsReturn {
   transformGridColumn: (column: SelectedColumn) => IdentifiedColumnDef<unknown, never>
