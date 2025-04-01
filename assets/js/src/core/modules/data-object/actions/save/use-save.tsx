@@ -33,7 +33,8 @@ export enum SaveTaskType {
   Version = 'version',
   AutoSave = 'autoSave',
   Publish = 'publish',
-  Save = 'save'
+  Save = 'save',
+  Unpublish = 'unpublish'
 }
 
 export interface UseSaveHookReturn {
@@ -49,7 +50,7 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
   const { dataObject, properties, setDraftData } = useDataObjectDraft(id)
   const [saveDataObject, { isLoading, isSuccess, isError, error }] = useDataObjectUpdateByIdMutation()
   const { setRunningTask, runningTask, runningTaskRef, queuedTask, setQueuedTask } = useSaveContext()
-  const { setTreeNodePublished } = usePublish(elementTypes.dataObject)
+  const { publishNode } = usePublish(elementTypes.dataObject)
 
   const executeQueuedTask = async (): Promise<void> => {
     if (!isNil(queuedTask)) {
@@ -125,7 +126,7 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
       if (response.error === undefined) {
         setDraftData(response.data?.draftData ?? null)
         if (task === SaveTaskType.Publish) {
-          setTreeNodePublished(id, true)
+          publishNode(dataObject)
         }
         onFinish?.()
       }

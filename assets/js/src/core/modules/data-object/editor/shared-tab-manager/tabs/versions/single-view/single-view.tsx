@@ -30,7 +30,10 @@ import type {
   DynamicTypeObjectDataRegistry
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type IFormattedDataStructureData } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
+import {
+  type IFormattedDataStructureData,
+  type ILayoutItem
+} from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 
 interface IVersionData extends IObjectVersionField {}
 
@@ -42,6 +45,7 @@ export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Ele
 
   const [vId, setVId] = useState(versionId)
   const [versionData, setVersionData] = useState<IVersionData[]>([])
+  const [layoutsList, setLayoutsList] = useState<ILayoutItem[]>([])
 
   const { data: layoutData } = useDataObjectGetLayoutByIdQuery({ id })
 
@@ -68,7 +72,9 @@ export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Ele
             versionData: dataRaw,
             versionId: vId.id,
             versionCount: vId.count,
-            objectDataRegistry
+            objectDataRegistry,
+            layoutsList,
+            setLayoutsList
           }))
 
           setVersionData(versionsDataToTableData({ data: formattedDataList }))

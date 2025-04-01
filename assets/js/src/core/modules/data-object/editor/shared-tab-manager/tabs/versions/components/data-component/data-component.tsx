@@ -18,7 +18,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { Alert } from 'antd'
 import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 import { type ObjectComponentProps } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
-import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
+import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export interface DataComponentProps extends ObjectComponentProps {
   datatype: 'data'

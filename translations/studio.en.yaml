@@ -8,6 +8,21 @@ error.error_invalid_argument: Invalid argument
 error.error_widget_name_missing: Widget name have to be provided
 error.error_widget_name_invalid: Widget name is invalid (only alphanumeric characters, underscores and spaces are allowed, must be at least 3 characters long and less than 80 long)
 error.error_validation_failed: Validation failed
+modal-search.field.mimeType: MIME-Type
+modal-search.field.thumbnail: Thumbnail
+modal-search.field.id: ID
+modal-search.field.userOwner: User Owner
+modal-search.field.userOwnerName: User Owner Name
+modal-search.field.userModification: User Modification
+modal-search.field.userModificationName: User Modification Name
+modal-search.field.creationDate: Creation Date
+modal-search.field.modificationDate: Modification Date
+modal-search.field.description: Description
+modal-search.field.name: Name
+modal-search.field.previewImage: Preview Image
+modal-search.field.title: Title
+modal-search.field.class: Class
+modal-search.field.language: Language
 asset.sidebar.details: Details
 asset.asset-tree.title: Asset Tree
 asset.asset-tree.search: Search in {{folderName}}
@@ -394,6 +409,10 @@ element.tree.context-menu.expand-children: Expand Children
 asset.tree.context-menu.clear-thumbnails: Clear Thumbnails
 element.tree.copy: Copy
 element.tree.paste: Paste
+element.tree.paste-as-child: Paste as child
+element.tree.paste-as-child-recursive: Paste as child (recursive)
+element.tree.paste-recursive-updating-references: Paste recursive, updating references
+element.tree.paste-only-contents: Paste only contents here
 element.tree.cut: Cut
 element.tree.paste-cut: Paste cut-out element
 element.lock: Lock
@@ -415,6 +434,8 @@ element.toolbar.copy-id: ID {{id}} - Copy
 element.toolbar.copy-full-path-to-clipboard: Copy full path to clipboard
 element.toolbar.copy-deep-link-to-clipboard: Copy deep link to clipboard
 element.toolbar.copy-className: Class {{className}} - Copy
+element.unpublish: Unpublish
+element.publish: Publish
 male: Male
 female: Female
 other: Other

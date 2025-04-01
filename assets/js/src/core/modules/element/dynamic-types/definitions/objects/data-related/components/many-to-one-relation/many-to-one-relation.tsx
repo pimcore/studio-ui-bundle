@@ -22,7 +22,7 @@ import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-
 import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
-import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
+import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import {
   createElementSelectorAreas,
   dndIsValidData,
