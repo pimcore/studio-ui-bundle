@@ -52,7 +52,7 @@ export const FieldCollectionContent = (props: FieldCollectionContentProps): Reac
               <FieldCollectionItem
                 allowedTypes={ props.allowedTypes }
                 disallowAdd={ props.disallowAddRemove === true || isItemLimitReached }
-                disallowDelete={ props.disallowAddRemove === true }
+                disallowDelete={ props.disallowAddRemove }
                 disallowReorder={ props.disallowReorder }
                 docked={ props.border === true }
                 field={ index }
