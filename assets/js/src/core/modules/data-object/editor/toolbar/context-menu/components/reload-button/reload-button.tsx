@@ -51,7 +51,7 @@ export const ReloadButton = (): React.JSX.Element => {
   }
 
   const onReload = (): void => {
-    refreshElement(id)
+    refreshElement(id, true)
   }
 
   const onReloadLayout = (): void => {
@@ -59,7 +59,7 @@ export const ReloadButton = (): React.JSX.Element => {
       setCurrentLayout(selectedLayout)
     }
 
-    refreshElement(id)
+    refreshElement(id, true)
   }
 
   const onCancelLayoutChange = (): void => {

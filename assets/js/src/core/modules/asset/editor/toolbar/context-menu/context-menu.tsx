@@ -85,6 +85,6 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   }
 
   function onReload (): void {
-    refreshElement(id)
+    refreshElement(id, true)
   }
 }

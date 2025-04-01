@@ -28,7 +28,7 @@ moduleSystem.registerModule({
 
     mainNavRegistryService.registerMainNavItem({
       path: 'Settings/User & Roles',
-      label: 'User & Roles',
+      label: 'navigation.use-and-roles',
       perspectivePermissionHide: NavPermission.UsersHidden
     })
 
@@ -41,6 +41,7 @@ moduleSystem.registerModule({
         id: 'user-management',
         component: 'user-management',
         config: {
+          translationKey: '%ser-management',
           icon: {
             type: 'name',
             value: 'user'
@@ -57,6 +58,7 @@ moduleSystem.registerModule({
         id: 'role-management',
         component: 'role-management',
         config: {
+          translationKey: 'widget.role-management',
           icon: {
             type: 'name',
             value: 'user'

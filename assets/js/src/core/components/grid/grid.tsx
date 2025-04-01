@@ -48,6 +48,7 @@ export interface ColumnMetaType {
   editable?: boolean
   autoWidth?: boolean
   type?: string
+  columnKey?: string
   config?: any
 }
 

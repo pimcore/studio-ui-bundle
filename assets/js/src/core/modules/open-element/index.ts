@@ -25,21 +25,21 @@ moduleSystem.registerModule({
 
     mainNavRegistryService.registerMainNavItem({
       path: 'File/Open Asset',
-      label: 'Open Asset',
+      label: 'navigation.open-asset',
       perspectivePermission: NavPermission.OpenAsset,
       button: () => React.createElement(OpenElement, { elementType: 'asset' })
     })
 
     mainNavRegistryService.registerMainNavItem({
       path: 'File/Open Document',
-      label: 'Open Document',
+      label: 'navigation.open-document',
       perspectivePermission: NavPermission.OpenDocument,
       button: () => React.createElement(OpenElement, { elementType: 'document' })
     })
 
     mainNavRegistryService.registerMainNavItem({
       path: 'File/Open Data Object',
-      label: 'Open Data Object',
+      label: 'navigation.open-data-object',
       perspectivePermission: NavPermission.OpenObject,
       button: () => React.createElement(OpenElement, { elementType: 'data-object' })
     })

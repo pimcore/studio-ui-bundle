@@ -83,7 +83,7 @@ export const MainNav = (): React.JSX.Element => {
               } }
             >
               {item.icon !== undefined ? (<Icon value={ item.icon } />) : null}
-              {item.label}
+              {t(`${item.label}`)}
 
               {item.children !== undefined && item.children.length > 0
                 ? (
@@ -159,7 +159,7 @@ export const MainNav = (): React.JSX.Element => {
                     <li><Button type={ 'link' }>{t('navigation.clear-cache')}</Button></li>
                     <li><Button type={ 'link' }>{t('navigation.custom-reports')}</Button></li>
                   </ul>
-                  <Button type={ 'default' }>Customise</Button>
+                  <Button type={ 'default' }>{t('navigation.customise')}</Button>
                 </div>
 
                 <Divider className={ 'main-nav__divider' } />
