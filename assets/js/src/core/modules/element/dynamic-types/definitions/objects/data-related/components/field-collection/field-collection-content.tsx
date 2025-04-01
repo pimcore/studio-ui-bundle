@@ -22,7 +22,6 @@ import { Space } from '@Pimcore/components/space/space'
 
 export interface FieldCollectionContentProps extends FieldCollectionProps {}
 
-/* eslint-disable react/no-children-prop */
 export const FieldCollectionContent = (props: FieldCollectionContentProps): React.JSX.Element => {
   const { values } = useNumberedList()
   const maxItemsCount = props?.maxItems ?? 0
@@ -48,10 +47,13 @@ export const FieldCollectionContent = (props: FieldCollectionContentProps): Reac
           direction='vertical'
           size='extra-small'
         >
-          {values.map((value, index) => (
+          {values.map((_value, index) => (
             <div key={ index }>
               <FieldCollectionItem
                 allowedTypes={ props.allowedTypes }
+                disallowAdd={ props.disallowAddRemove === true || isItemLimitReached }
+                disallowDelete={ props.disallowAddRemove }
+                disallowReorder={ props.disallowReorder }
                 docked={ props.border === true }
                 field={ index }
                 noteditable={ props.noteditable }

@@ -167,7 +167,7 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle, className,
           key={ `${groupItem.key}-${groupIndex}` }
           label={
             <div className={ styles.sectionLabel }>
-              <span className={ styles.subSectionLabel }>{`${groupItem.breadcrumbTitle} / `}</span>{`Inner Section ${groupIndex + 1}: ${groupItem.key}`}
+              <span className={ styles.subSectionLabel }>{`${groupItem.breadcrumbTitle} / `}</span>{groupItem.key}
             </div>
           }
         >
