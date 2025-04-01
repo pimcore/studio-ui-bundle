@@ -26,12 +26,11 @@ export interface FieldCollectionToolStripProps {
   disallowAdd?: boolean
   disallowDelete?: boolean
   disallowReorder?: boolean
-  maxItems?: FieldCollectionProps['maxItems']
 }
 
-export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, disallowDelete, disallowReorder, maxItems }: FieldCollectionToolStripProps): React.JSX.Element => {
+export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, disallowDelete, disallowReorder }: FieldCollectionToolStripProps): React.JSX.Element => {
   const { operations } = useNumberedList()
-  const hasMaxItems = false
+
   const type = operations.getValue([field, 'type'])
 
   const dropDownItems: DropdownMenuProps['items'] = allowedTypes.map((type, index) => {
@@ -52,7 +51,7 @@ export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, dis
         <Text type='secondary'>{ type }</Text>
 
         <Dropdown
-          disabled={ disallowAdd === true || hasMaxItems }
+          disabled={ disallowAdd === true }
           menu={ { items: dropDownItems } }
         >
           <IconButton
