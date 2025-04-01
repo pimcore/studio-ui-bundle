@@ -92,7 +92,7 @@ export const usePropertiesReducers = (entityAdapter: EntityAdapter<PropertiesDra
     const modifyDraft = (state: EntityState<PropertiesDraft, number>, id: number, modification: (draft: PropertiesDraft) => PropertiesDraft): void => {
         const draft = entityAdapter.getSelectors().selectById(state, id)
         if (draft === undefined) {
-            new GeneralError(`Item with id ${id} not found`)
+            trackError(new GeneralError(`Item with id ${id} not found`))
             return
         }
 
