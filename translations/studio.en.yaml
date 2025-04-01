@@ -648,7 +648,9 @@ navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
 navigation.customise: Customise
 navigation.tag-configuration: Tag Configuration
-navigation.use-and-roles: User & Roles
+navigation.user-and-roles: User & Roles
+navigation.users: Users
+navigation.roles: Roles
 navigation.open-asset: Open Asset
 navigation.open-document: Open Document
 navigation.open-data-object: Open Data Object

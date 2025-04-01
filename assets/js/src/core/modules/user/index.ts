@@ -34,6 +34,7 @@ moduleSystem.registerModule({
 
     mainNavRegistryService.registerMainNavItem({
       path: 'Settings/User & Roles/Users',
+
       className: 'item-style-modifier',
       perspectivePermission: NavPermission.Users,
       widgetConfig: {
@@ -41,7 +42,7 @@ moduleSystem.registerModule({
         id: 'user-management',
         component: 'user-management',
         config: {
-          translationKey: '%ser-management',
+          translationKey: 'widget.user-management',
           icon: {
             type: 'name',
             value: 'user'
