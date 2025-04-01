@@ -23,7 +23,7 @@ import { saveFileLocal } from '@Pimcore/utils/files'
 import { VideoContext } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/preview-container'
 import { Content } from '@Pimcore/components/content/content'
 import { fetchBlobWithPolling } from '@Pimcore/utils/polling-helper'
-import trackError, {ApiError, GeneralError} from "@Pimcore/modules/app/error-handler";
+import trackError, {ApiError} from "@Pimcore/modules/app/error-handler";
 
 const DetailContainer = (): React.JSX.Element => {
   const [isDownloading, setIsDownloading] = useState(false)
