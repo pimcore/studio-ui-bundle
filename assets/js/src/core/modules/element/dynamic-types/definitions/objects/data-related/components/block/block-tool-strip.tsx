@@ -25,8 +25,7 @@ export interface BlockToolStripProps {
   maxItems: number
 }
 
-export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReorder, maxItems }: BlockToolStripProps): React.JSX.Element => {
-  const hasMaxItems = false
+export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReorder }: BlockToolStripProps): React.JSX.Element => {
   const { operations } = useNumberedList()
 
   return (
@@ -37,7 +36,7 @@ export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReo
     >
       <Space size="mini">
         <IconButton
-          disabled={ disallowAdd || hasMaxItems }
+          disabled={ disallowAdd }
           icon={ { value: 'new' } }
           onClick={ () => { operations.add({}, field + 1) } }
           style={ { padding: 4 } }
