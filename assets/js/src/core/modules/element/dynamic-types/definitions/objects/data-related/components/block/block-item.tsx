@@ -29,7 +29,7 @@ export interface BlockItemProps {
 }
 
 export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
-  const { field, noteditable, children } = props
+  const { field, noteditable, children, disallowAdd } = props
 
   return useMemo(() => (
     <ToolStripBox
@@ -65,5 +65,5 @@ export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
           : undefined
       }
     </ToolStripBox>
-  ), [field, noteditable, children])
+  ), [field, disallowAdd, noteditable, children])
 }
