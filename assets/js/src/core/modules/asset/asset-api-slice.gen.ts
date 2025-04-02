@@ -338,13 +338,13 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/search/configuration/assets` }),
                 providesTags: ["Search"],
             }),
-            assetGetSearch: build.mutation<AssetGetSearchApiResponse, AssetGetSearchApiArg>({
+            assetGetSearch: build.query<AssetGetSearchApiResponse, AssetGetSearchApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/search/assets`,
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Search"],
+                providesTags: ["Search"],
             }),
             versionAssetDownloadById: build.query<VersionAssetDownloadByIdApiResponse, VersionAssetDownloadByIdApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}/asset/download` }),
@@ -1248,6 +1248,6 @@ export const {
     useAssetVideoStreamByThumbnailQuery,
     useAssetCustomMetadataGetByIdQuery,
     useAssetGetSearchConfigurationQuery,
-    useAssetGetSearchMutation,
+    useAssetGetSearchQuery,
     useVersionAssetDownloadByIdQuery,
 } = injectedRtkApi;

@@ -13,13 +13,13 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/search/configuration/assets` }),
                 providesTags: ["Search"],
             }),
-            assetGetSearch: build.mutation<AssetGetSearchApiResponse, AssetGetSearchApiArg>({
+            assetGetSearch: build.query<AssetGetSearchApiResponse, AssetGetSearchApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/search/assets`,
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Search"],
+                providesTags: ["Search"],
             }),
             dataObjectGetSearchConfiguration: build.query<
                 DataObjectGetSearchConfigurationApiResponse,
@@ -360,7 +360,7 @@ export type SimpleUser = {
 };
 export const {
     useAssetGetSearchConfigurationQuery,
-    useAssetGetSearchMutation,
+    useAssetGetSearchQuery,
     useDataObjectGetSearchConfigurationQuery,
     useDataObjectGetSearchMutation,
     useSimpleSearchPreviewGetQuery,

@@ -21,7 +21,11 @@ const fs = require('fs');
 const buildPath = path.resolve(__dirname, '..', 'public', 'build', buildId);
 
 if (fs.existsSync( path.resolve(__dirname, '..', 'public', 'build'))) {
-  fs.rmSync(path.resolve(__dirname, '..', 'public', 'build'), { recursive: true });
+  fs.readdirSync(path.resolve(__dirname, '..', 'public', 'build')).forEach((file) => {
+    if (file !== 'studio-npm-package.tgz') {
+      fs.rmSync(path.resolve(__dirname, '..', 'public', 'build', file), { recursive: true });
+    }
+  })
 }
 
 if (!fs.existsSync(buildPath)) {

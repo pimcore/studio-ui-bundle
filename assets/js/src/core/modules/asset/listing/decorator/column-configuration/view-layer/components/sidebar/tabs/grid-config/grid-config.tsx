@@ -14,11 +14,19 @@
 import React from 'react'
 import { GridConfigProvider } from './grid-config-provider'
 import { GridConfigInner } from './grid-config-inner'
+import { type Settings } from '../../hooks/with-configuration-sidebar-entry'
+import { SettingsProvider } from './povider/settings/settings-provider'
 
-export const GridConfig = (): React.JSX.Element => {
+export interface GridConfigProps {
+  settings?: Settings
+}
+
+export const GridConfig = (props: GridConfigProps): React.JSX.Element => {
   return (
-    <GridConfigProvider>
-      <GridConfigInner />
-    </GridConfigProvider>
+    <SettingsProvider settings={ props.settings }>
+      <GridConfigProvider>
+        <GridConfigInner />
+      </GridConfigProvider>
+    </SettingsProvider>
   )
 }

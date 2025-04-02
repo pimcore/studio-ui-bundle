@@ -38,6 +38,10 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'assetGetSearch',
+      type: 'query',
+    },
+    {
       pattern: 'metadataGetCollection',
       type: 'query'
     }

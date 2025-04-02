@@ -14,6 +14,7 @@
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { SearchTermFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/search/search-term-filter'
 import React from 'react'
+import { ProvidedTypeSelect } from '../../components/type-select/provided-type-select'
 
 export const TopBar = (): React.JSX.Element => {
   return (
@@ -23,6 +24,7 @@ export const TopBar = (): React.JSX.Element => {
       position='top'
       theme='secondary'
     >
+      <ProvidedTypeSelect />
       <SearchTermFilter />
     </Toolbar>
   )
