@@ -22,13 +22,13 @@ import { Box } from '@Pimcore/components/box/box'
 
 export interface BlockContentProps extends BlockProps {}
 
-/* eslint-disable react/no-children-prop */
 export const BlockContent = (props: BlockContentProps): React.JSX.Element => {
   const { values } = useNumberedList()
 
   const maxItemsCount = props?.maxItems ?? 0
   const valuesKeys = Object.keys(values)
   const isNoteditable = props.noteditable === true
+
   const isItemLimitReached = maxItemsCount > 0 && valuesKeys.length === maxItemsCount
   const isHideAddButton = isNoteditable || isItemLimitReached || valuesKeys.length > 0
 
@@ -49,13 +49,14 @@ export const BlockContent = (props: BlockContentProps): React.JSX.Element => {
           direction='vertical'
           size='extra-small'
         >
-          {values.map((value, index) => (
+          {values.map((_value, index) => (
             <div key={ index }>
               <BlockItem
-                children={ props.children }
                 field={ index }
                 noteditable={ props.noteditable }
-              />
+              >
+                {props.children}
+              </BlockItem>
             </div>
           ))}
         </Space>

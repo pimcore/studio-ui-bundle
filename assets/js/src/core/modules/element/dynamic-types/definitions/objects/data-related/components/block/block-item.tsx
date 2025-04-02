@@ -54,6 +54,7 @@ export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
                 <ObjectComponent
                   key={ field }
                   { ...child }
+                  noteditable={ noteditable === true }
                 />
               </Form.Group>
             )
