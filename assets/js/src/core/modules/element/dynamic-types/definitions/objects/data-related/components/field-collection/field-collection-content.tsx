@@ -28,9 +28,10 @@ export const FieldCollectionContent = (props: FieldCollectionContentProps): Reac
   const maxItemsCount = props?.maxItems ?? 0
   const valuesKeys = Object.keys(values)
   const isNoteditable = props.noteditable === true
+  const isDisallowAddRemove = props.disallowAddRemove === true
 
   const isItemLimitReached = maxItemsCount > 0 && valuesKeys.length === maxItemsCount
-  const isHideAddButton = isNoteditable || isItemLimitReached || valuesKeys.length > 0
+  const isHideAddButton = isNoteditable || isItemLimitReached || valuesKeys.length > 0 || isDisallowAddRemove
 
   return useMemo(() => (
     <BaseView
