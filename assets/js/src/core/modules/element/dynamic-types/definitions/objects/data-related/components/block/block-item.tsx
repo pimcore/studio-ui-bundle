@@ -42,7 +42,6 @@ export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
           disallowDelete={ props.disallowDelete }
           disallowReorder={ props.disallowReorder }
           field={ field }
-          maxItems={ 20 }
         />
         ) }
     >
