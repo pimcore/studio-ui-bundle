@@ -661,6 +661,8 @@ navigation.settings: Settings
 navigation.tools: Tools
 widget.notes-and-events: Notes & Events
 widget.tag-configuration: Tag Configuration
+widget.role-management: Roles
+widget.user-management: Users
 external-image.preview-placeholder: Add an external image
 empty-image: Empty Image
 image.dnd-target: Drop an image here
