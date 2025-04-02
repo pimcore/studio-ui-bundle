@@ -25,8 +25,8 @@ i18n
     saveMissing: true
   })
 
-  .catch((error) => {
-      trackError(new GeneralError(error))
+  .catch(() => {
+      trackError(new GeneralError("Could not load translations"))
   })
 
 i18n.on('missingKey', (lngs, namespace, key, res) => {
