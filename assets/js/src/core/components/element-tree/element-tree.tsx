@@ -127,7 +127,7 @@ const ElementTree = (
 
   const treeContextValue: ITreeContext = useMemo(() => ({ ...props, nodesRefs, nodeOrder, renderNode, renderNodeContent, onRightClick }), [props, nodesRefs, nodeOrder, renderNode, renderNodeContent, onRightClick])
 
-  const items: TreeNode[] = getChildren()
+  const items: string[] = getChildren()
 
   const TreeNode = renderNode
   const treeContent = (
