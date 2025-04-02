@@ -22,7 +22,6 @@ export interface BlockToolStripProps {
   disallowAdd: boolean
   disallowDelete: boolean
   disallowReorder: boolean
-  maxItems: number
 }
 
 export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReorder }: BlockToolStripProps): React.JSX.Element => {
