@@ -99,8 +99,6 @@ export const {
   setCustomMetadata: setCustomMetadataForAsset,
   setActiveTab: setActiveTabForAsset,
 
-  addTextData: addTextDataToAsset,
-  updateTextData: updateTextDataForAsset,
-  removeTextData: removeTextDataFromAsset
+  updateTextData: updateTextDataForAsset
 } = slice.actions
 export const { selectById: selectAssetById } = assetsAdapter.getSelectors((state: RootState) => state['asset-draft'])

@@ -37,9 +37,7 @@ import {
   updateImageSettingForAsset,
   updatePropertyForAsset,
   updateScheduleForAsset,
-  addTextDataToAsset,
-  updateTextDataForAsset,
-  removeTextDataFromAsset
+  updateTextDataForAsset
 } from '../asset-draft-slice'
 import { useEffect, useState } from 'react'
 import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
@@ -226,9 +224,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   const textDataActions = useTextDataDraft({
     id,
     draft: asset,
-    addTextDataAction: addTextDataToAsset,
-    updateTextDataAction: updateTextDataForAsset,
-    removeTextDataAction: removeTextDataFromAsset
+    updateTextDataAction: updateTextDataForAsset
   })
 
   const tabsActions = useTabsDraft(

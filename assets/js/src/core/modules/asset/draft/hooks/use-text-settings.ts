@@ -29,9 +29,7 @@ export interface TextDataDraft extends TrackableChangesDraft {
 }
 
 interface UseTextDataReturn {
-  addTextData: (state: EntityState<TextDataDraft, number>, action: PayloadAction<TextDataAction>) => void
   updateTextData: (state: EntityState<TextDataDraft, number>, action: PayloadAction<TextDataAction>) => void
-  removeTextData: (state: EntityState<TextDataDraft, number>, action: PayloadAction<TextDataAction>) => void
 }
 
 export const useTextDataReducers = (entityAdapter: EntityAdapter<TextDataDraft, number>): UseTextDataReturn => {
@@ -55,14 +53,6 @@ export const useTextDataReducers = (entityAdapter: EntityAdapter<TextDataDraft, 
     }
   }
 
-  const addTextData = (state: EntityState<TextDataDraft, number>, action: PayloadAction<TextDataAction>): void => {
-    modifyDraft(state, action.payload.id, (draft: TextDataDraft): TextDataDraft => {
-      draft.textData = action.payload.textData ?? ''
-
-      return draft
-    })
-  }
-
   const updateTextData = (state: EntityState<TextDataDraft, number>, action: PayloadAction<TextDataAction>): void => {
     modifyDraft(state, action.payload.id, (draft: TextDataDraft): TextDataDraft => {
       draft.textData = action.payload.textData ?? ''
@@ -73,36 +63,18 @@ export const useTextDataReducers = (entityAdapter: EntityAdapter<TextDataDraft, 
     })
   }
 
-  const removeTextData = (state: EntityState<TextDataDraft, number>, action: PayloadAction<TextDataAction>): void => {
-    modifyDraft(state, action.payload.id, (draft: TextDataDraft): TextDataDraft => {
-      draft.textData = ''
-
-      markedAsModified(draft)
-
-      return draft
-    })
-  }
-
-  return {
-    addTextData,
-    updateTextData,
-    removeTextData
-  }
+  return { updateTextData }
 }
 
 export interface UseTextDataDraftReturn {
   textData?: string
   updateTextData: (textData: TextData) => void
-  addTextData: (textData: TextData) => void
-  removeTextData: (textData: TextData) => void
 }
 
-export const useTextDataDraft = ({ id, draft, addTextDataAction, updateTextDataAction, removeTextDataAction }: {
+export const useTextDataDraft = ({ id, draft, updateTextDataAction }: {
   id: number
   draft: TextDataDraft
-  addTextDataAction: ActionCreatorWithPayload<TextDataAction>
   updateTextDataAction: ActionCreatorWithPayload<TextDataAction>
-  removeTextDataAction: ActionCreatorWithPayload<TextDataAction>
 }): UseTextDataDraftReturn => {
   const dispatch = useAppDispatch()
 
@@ -111,14 +83,6 @@ export const useTextDataDraft = ({ id, draft, addTextDataAction, updateTextDataA
 
     updateTextData: (textData: TextData): void => {
       dispatch(updateTextDataAction({ id, textData }))
-    },
-
-    addTextData: (textData: TextData): void => {
-      dispatch(addTextDataAction({ id, textData }))
-    },
-
-    removeTextData: (textData: TextData): void => {
-      dispatch(removeTextDataAction({ id, textData }))
     }
   }
 }
