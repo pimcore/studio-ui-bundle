@@ -39,8 +39,8 @@ const EditView = (props: PreviewViewProps): React.JSX.Element => {
     <div className={ styles.preview }>
       <TextEditor
         language={ language }
+        setTextValue={ handleUpdateTextValue }
         textValue={ textValue }
-        updateTextValue={ handleUpdateTextValue }
       />
     </div>
   )

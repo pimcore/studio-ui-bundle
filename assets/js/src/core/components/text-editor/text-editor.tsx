@@ -22,7 +22,7 @@ interface TextEditorProps {
   className?: string
   language?: SupportedLanguage
   textValue: string
-  updateTextValue: (value: string) => void
+  setTextValue: (value: string) => void
 }
 
 export const TextEditor = ({
@@ -30,7 +30,7 @@ export const TextEditor = ({
   className,
   language,
   textValue,
-  updateTextValue
+  setTextValue
 }: TextEditorProps): React.JSX.Element => {
   const { styles } = useStyle()
 
@@ -41,7 +41,7 @@ export const TextEditor = ({
       } }
       className={ cn(styles.editor, className) }
       extensions={ getLanguageExtensions(language) }
-      onChange={ (value) => { updateTextValue(value) } }
+      onChange={ (value) => { setTextValue(value) } }
       value={ textValue }
     />
   )

@@ -57,7 +57,7 @@ export const useTextDataReducers = (entityAdapter: EntityAdapter<TextDataDraft, 
 
   const addTextData = (state: EntityState<TextDataDraft, number>, action: PayloadAction<TextDataAction>): void => {
     modifyDraft(state, action.payload.id, (draft: TextDataDraft): TextDataDraft => {
-      draft.textData = draft.textData ?? {}
+      draft.textData = action.payload.textData ?? ''
 
       return draft
     })
@@ -65,9 +65,10 @@ export const useTextDataReducers = (entityAdapter: EntityAdapter<TextDataDraft, 
 
   const updateTextData = (state: EntityState<TextDataDraft, number>, action: PayloadAction<TextDataAction>): void => {
     modifyDraft(state, action.payload.id, (draft: TextDataDraft): TextDataDraft => {
-      draft.textData = draft.textData ?? {}
+      draft.textData = action.payload.textData ?? ''
 
       markedAsModified(draft)
+
       return draft
     })
   }
@@ -77,6 +78,7 @@ export const useTextDataReducers = (entityAdapter: EntityAdapter<TextDataDraft, 
       draft.textData = ''
 
       markedAsModified(draft)
+
       return draft
     })
   }
@@ -98,8 +100,8 @@ export interface UseTextDataDraftReturn {
 export const useTextDataDraft = (
   id: number,
   draft: TextDataDraft,
-  updateTextDataAction: ActionCreatorWithPayload<TextDataAction>,
   addTextDataAction: ActionCreatorWithPayload<TextDataAction>,
+  updateTextDataAction: ActionCreatorWithPayload<TextDataAction>,
   removeTextDataAction: ActionCreatorWithPayload<TextDataAction>
 ): UseTextDataDraftReturn => {
   const dispatch = useAppDispatch()

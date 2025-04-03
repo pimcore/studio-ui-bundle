@@ -46,7 +46,7 @@ export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useElementContext()
 
-  const { asset, properties, removeTrackedChanges, customMetadata, imageSettings } = useAssetDraft(id)
+  const { asset, properties, removeTrackedChanges, customMetadata, imageSettings, textData } = useAssetDraft(id)
 
   const [saveAsset, { isLoading, isSuccess, isError, error }] = useAssetUpdateByIdMutation()
   const {
@@ -151,6 +151,10 @@ export const Toolbar = (): React.JSX.Element => {
 
     if (asset.changes.imageSettings) {
       update.image = imageSettings
+    }
+
+    if (asset.changes.textData) {
+      update.data = textData
     }
 
     const saveAssetPromise = saveAsset({
