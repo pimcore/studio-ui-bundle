@@ -40,7 +40,7 @@ export const useMiddleware = (): void => {
       }
     }
 
-    fetchData().catch((error) => { trackError(new GeneralError('An Error occured while opening the Element')) })
+    fetchData().catch(() => { trackError(new GeneralError('An Error occured while opening the Element')) })
   }
 
   useEffect(() => {

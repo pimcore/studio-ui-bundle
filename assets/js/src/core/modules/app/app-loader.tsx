@@ -24,7 +24,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { GlobalStyles } from '@Pimcore/styles/global.styles'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useMercureCreateCookieMutation } from './mercure-api-slice.gen'
 import { setActivePerspective } from '../perspectives/active-perspective-slice'
 import { updateOuterModel } from '../widget-manager/widget-manager-slice'
@@ -117,8 +117,8 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
       .then(response => {
         i18n.addResourceBundle('en', 'translation', response.keys ?? [], true, true)
       })
-      .catch((error) => {
-        trackError(new ApiError(error))
+      .catch(() => {
+        trackError(new GeneralError('Error loading translations'))
       })
   }
 

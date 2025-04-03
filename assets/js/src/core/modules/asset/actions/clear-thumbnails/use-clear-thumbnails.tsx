@@ -19,7 +19,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export interface UseClearThumbnailsHookReturn {
   clearImageThumbnailContextMenuItem: (node: Asset, onFinish?: () => void) => ItemType
@@ -40,10 +40,9 @@ export const useClearThumbnails = (): UseClearThumbnailsHookReturn => {
   const handleClearThumbnails = async (node: Asset, onFinish?: () => void): Promise<void> => {
     const clearThumbnailTask = clearThumbnail({ id: node.id })
 
-    try {
-      await clearThumbnailTask
-      onFinish?.()
-  }}
+    await clearThumbnailTask
+    onFinish?.()
+  }
 
   const clearImageThumbnailContextMenuItem = (node: Asset, onFinish?: () => void): ItemType => {
     return {

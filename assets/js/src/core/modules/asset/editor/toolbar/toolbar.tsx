@@ -68,7 +68,9 @@ export const Toolbar = (): React.JSX.Element => {
       }
     }
 
-    handleSuccessEvent().catch((error) => { trackError(new ApiError(error)) })
+    handleSuccessEvent().catch((error) => {
+      console.error(error)
+    })
   }, [isSuccess, isSchedulesSuccess])
 
   useEffect(() => {

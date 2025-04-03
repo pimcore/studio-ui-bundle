@@ -52,7 +52,7 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
           onFinished?.()
         }
       })
-      .catch((error) => { trackError(new GeneralError('An error occured while locating in the tree')) })
+      .catch(() => { trackError(new GeneralError('An error occured while locating in the tree')) })
   }
 
   return {

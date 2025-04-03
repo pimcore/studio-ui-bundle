@@ -115,22 +115,22 @@ export const GridConfigInner = (): React.JSX.Element => {
 
   const availableColumnsDropdown = useMemo(() => getAvailableColumnsDropdown(onColumnClick), [getAvailableColumnsDropdown, columns])
 
-  function onDeleteClick (): void {
+  const onDeleteClick = async (): Promise<void> => {
     if (isSavedConfiguration) {
-      fetchDeleteGridConfig({ configurationId: gridConfig.id!, folderId: getId() }).then(() => {
+      await fetchDeleteGridConfig({ configurationId: gridConfig.id!, folderId: getId() }).then(() => {
         setView(ViewState.Edit)
         setSelectedGridConfigId(undefined)
       })
     }
   }
 
-  function onUpdatedConfigurationClick (): void {
+  const onUpdatedConfigurationClick = async (): Promise<void> => {
     if (gridConfig === undefined) {
       trackError(new GeneralError('No grid configuration available'))
       return
     }
 
-    fetchUpdateGridConfig({
+    await fetchUpdateGridConfig({
       configurationId: gridConfig.id!,
       body: {
         folderId: getId(),
@@ -155,7 +155,7 @@ export const GridConfigInner = (): React.JSX.Element => {
     }))
   }
 
-  function onFormFinish (values: any): void {
+  const onFormFinish = async (values: any): Promise<void> => {
     const columnsToSave = prepareColumns(columns)
 
     const isShareGlobally = values.shareGlobally === true
@@ -171,7 +171,7 @@ export const GridConfigInner = (): React.JSX.Element => {
     }
 
     if (view === ViewState.Update && isSavedConfiguration) {
-      fetchUpdateGridConfig({
+      await fetchUpdateGridConfig({
         configurationId: gridConfig.id!,
         body: {
           folderId: getId(),
@@ -185,15 +185,13 @@ export const GridConfigInner = (): React.JSX.Element => {
           saveFilter: false,
           pageSize: 0
         }
-      }).catch((error) => {
-        trackError(new ApiError(error))
       }).then(() => {
         setView(ViewState.Edit)
-      }))
+      })
     }
 
     if (view === ViewState.Save) {
-      fetchSaveGridConfig({
+      await fetchSaveGridConfig({
         folderId: getId(),
         body: {
           folderId: getId(),

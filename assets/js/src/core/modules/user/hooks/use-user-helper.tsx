@@ -96,10 +96,7 @@ export const useUserHelper = (): UseUserReturn => {
 
   async function fetchUserById (props): Promise<UserGetByIdApiResponse> {
     const { id } = props
-    const { data, error }: any = await dispatch(api.endpoints.userGetById.initiate({ id }))
-    if (error) {
-      trackError(new ApiError(error))
-    }
+    const { data }: any = await dispatch(api.endpoints.userGetById.initiate({ id }))
     return data
   }
 
@@ -108,18 +105,12 @@ export const useUserHelper = (): UseUserReturn => {
     return data
   }
   async function searchUserByText (query: string): Promise<PimcoreStudioApiUserSearchApiResponse> {
-    const { data, error }: any = await dispatch(api.endpoints.pimcoreStudioApiUserSearch.initiate({ searchQuery: query }))
-    if (error) {
-      trackError(new ApiError(error))
-    }
+    const { data }: any = await dispatch(api.endpoints.pimcoreStudioApiUserSearch.initiate({ searchQuery: query }))
     return data
   }
 
   async function getDefaultKeyBindings (): Promise<UserDefaultKeyBindingsApiResponse> {
-    const { data, error }: any = await dispatch(api.endpoints.userDefaultKeyBindings.initiate())
-    if (error) {
-      trackError(new ApiError(error))
-    }
+    const { data }: any = await dispatch(api.endpoints.userDefaultKeyBindings.initiate())
     return data
   }
 
@@ -133,10 +124,8 @@ export const useUserHelper = (): UseUserReturn => {
 
   async function getUserTree (props: UserGetTreeApiArg): Promise<UserGetTreeApiResponse> {
     const { parentId } = props
-    const { data, error }: any = await dispatch(api.endpoints.userGetTree.initiate({ parentId }))
-    if (error) {
-      trackError(new ApiError(error))
-    }
+    const { data }: any = await dispatch(api.endpoints.userGetTree.initiate({ parentId }))
+
     return data
   }
 
@@ -230,10 +219,7 @@ export const useUserHelper = (): UseUserReturn => {
   }
 
   async function getAvailablePermissions (props): Promise<{ data: UserGetAvailablePermissionsApiResponse, error: Error }> {
-    const { data, error }: any = await dispatch(api.endpoints.userGetAvailablePermissions.initiate())
-    if (error) {
-      trackError(new ApiError(error))
-    }
+    const { data }: any = await dispatch(api.endpoints.userGetAvailablePermissions.initiate())
     return data
   }
 

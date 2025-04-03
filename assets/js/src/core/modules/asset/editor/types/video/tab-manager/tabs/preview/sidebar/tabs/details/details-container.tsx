@@ -68,7 +68,7 @@ const DetailContainer = (): React.JSX.Element => {
         const url = URL.createObjectURL(blob)
         setImagePreview(url)
       })
-      .catch((err) => {
+      .catch(() => {
         trackError(new GeneralError('An error occurred while loading the Thumbnail'))
       }).finally(then)
   }
@@ -106,7 +106,7 @@ const DetailContainer = (): React.JSX.Element => {
       .then(() => {
         setImagePreviewFromBackend(200, 119, callback)
       })
-      .catch((err) => {
+      .catch(() => {
         trackError(new GeneralError('An error occured while setting the Image Preview'))
         callback()
       })
@@ -123,7 +123,7 @@ const DetailContainer = (): React.JSX.Element => {
         saveFileLocal(objectUrl, videoData.filename)
       }
     })
-      .catch((error) => { trackError(new GeneralError('An error occured while loading the Video')) })
+      .catch(() => { trackError(new GeneralError('An error occured while loading the Video')) })
       .finally(() => {
         setIsDownloading(false)
       })

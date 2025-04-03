@@ -114,8 +114,8 @@ export const loadPreviewImage = async (version: AssetVersion, versionId: number)
     .then((imageBlob) => {
       result = URL.createObjectURL(imageBlob)
     })
-    .catch((err) => {
-      trackError(new GeneralError('Failed to load preview image', err))
+    .catch(() => {
+      trackError(new GeneralError('Failed to load preview image'))
     })
   return result
 }

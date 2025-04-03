@@ -24,7 +24,7 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
-import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export interface ICreateZipDownloadProps {
   jobTitle: string

@@ -85,7 +85,7 @@ const DetailContainer = (): React.JSX.Element => {
         const imageURL = URL.createObjectURL(imageBlob)
         downloadShortcutsHandlerForCustomSettings(imageData.filename!, imageURL, format)
       })
-      .catch((err) => {
+      .catch(() => {
         trackError(new GeneralError('Could not download image'))
       })
   }
@@ -106,7 +106,7 @@ const DetailContainer = (): React.JSX.Element => {
 
         downloadShortcutsHandler(imageData.filename!, imageURL, format)
       })
-      .catch((err) => { trackError(new GeneralError('Could not prepare download')) })
+      .catch(() => { trackError(new GeneralError('Could not prepare download')) })
   }
 
   function downloadShortcutsHandler (name: string, url: string, format: string): void {

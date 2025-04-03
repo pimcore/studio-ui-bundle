@@ -44,9 +44,9 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
   const [isError, setIsError] = useState<boolean>(false)
 
   async function fetchUser (): Promise<UserGetByIdApiResponse> {
-    const { data, error } = await dispatch(api.endpoints.userGetById.initiate({ id }))
+    const { data, isError: isUserGetByIdError, error } = await dispatch(api.endpoints.userGetById.initiate({ id }))
 
-    if (error) {
+    if (isUserGetByIdError) {
       trackError(new ApiError(error))
     }
     if (data !== undefined) {
@@ -57,19 +57,19 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
     return {} as UserGetByIdApiResponse
   }
 
-  function reloadUser (): void {
+  async function reloadUser (): Promise<void> {
     removeUserFromState()
     getUser()
   }
 
   async function fetchUserAvailablePermissions (): Promise<UserGetAvailablePermissionsApiResponse> {
-    const { data, error } = await dispatch(api.endpoints.userGetAvailablePermissions.initiate())
+    const { data, isError: isFetchUserAvailablePermissionsError, error } = await dispatch(api.endpoints.userGetAvailablePermissions.initiate())
 
     if (data !== undefined) {
       return data
     }
 
-    if (error) {
+    if (isFetchUserAvailablePermissionsError) {
       trackError(new ApiError(error))
     }
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -96,6 +96,8 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
 
     fetchUserAvailablePermissions().then((data) => {
       dispatch(userAvailablePermissionsFetched(data))
+    }).catch((e) => {
+      console.error(e)
     })
   }
 

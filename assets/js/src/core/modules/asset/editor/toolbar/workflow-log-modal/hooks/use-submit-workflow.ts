@@ -22,7 +22,7 @@ import {
   useWorkflow
 } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useEffect } from 'react'
 
 interface UseSubmitWorkflowReturn {
@@ -74,10 +74,10 @@ export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn
     })
   }
 
-  const submitWorkflowAction = (transition: TransitionType, actionType: string, workflowName: string, workFlowOptions: WorkflowOptions): void => {
+  const submitWorkflowAction = async (transition: TransitionType, actionType: string, workflowName: string, workFlowOptions: WorkflowOptions): Promise<void> => {
     setContextWorkflowDetails({ transition, action: actionType, workflowName })
 
-    fetchSubmitWorkflowActionMutation(workFlowTransition(transition, actionType, workflowName, workFlowOptions)).unwrap().then((response) => {
+    await fetchSubmitWorkflowActionMutation(workFlowTransition(transition, actionType, workflowName, workFlowOptions)).unwrap().then((response) => {
       if ('data' in response) {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         messageApi.success({

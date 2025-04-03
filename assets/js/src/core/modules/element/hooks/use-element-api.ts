@@ -23,7 +23,6 @@ import { api as assetApi, useAssetCloneMutation } from '@Pimcore/modules/asset/a
 import { api as dataObjectApi, useDataObjectCloneMutation } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { isUndefined } from 'lodash'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
-import { useEffect } from 'react'
 
 /**
  * Abstracts the logic for some basic API calls across element types (assets, data objects, documents)

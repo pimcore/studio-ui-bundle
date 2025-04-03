@@ -58,7 +58,7 @@ import { type ElementEditorType, type TypeRegistryInterface } from '@Pimcore/mod
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { initialTabsStateValue, useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-tabs'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import trackError, { GeneralError, ApiError } from '@Pimcore/modules/app/error-handler'
 
 export interface UseAssetDraftReturn extends
   UseCustomMetadataDraftReturn,
@@ -174,7 +174,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
 
       return mergedAssetData
     }).catch((e) => {
-      trackError(new ApiError(e))
+      trackError(new GeneralError('An error occurred while loading the asset'))
       setIsError(true)
     }).finally(() => {
       setIsLoading(false)

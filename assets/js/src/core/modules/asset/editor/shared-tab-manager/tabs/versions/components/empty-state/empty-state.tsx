@@ -37,7 +37,7 @@ export const EmptyState = ({ id, fileName }: { id?: number, fileName?: string })
 
         setIsLoading(false)
       })
-      .catch((err) => {
+      .catch(() => {
         trackError(new GeneralError('Error downloading version asset'))
         setIsLoading(false)
       })
