@@ -61,7 +61,7 @@ export const EditContainer = (): React.JSX.Element => {
 
 export const TAB_EDIT: IEditorTab = {
   key: 'edit',
-  label: 'Edit',
+  label: 'asset.asset-editor-tabs.edit',
   children: <EditContainer />,
   icon: <Icon value={ 'edit-pen' } />,
   isDetachable: true
