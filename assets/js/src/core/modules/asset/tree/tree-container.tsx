@@ -33,6 +33,8 @@ export interface TreeContainerProps {
   showRoot?: boolean
 }
 
+export const AssetTreeNode = withDroppable(withDroppableStyling(withActionStates(withDraggable(TreeNodeComponent))))
+
 const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
   const { openAsset } = useAssetHelper()
   const { rootNode, isLoading } = useElementTreeRootNode(id, showRoot)
@@ -61,7 +63,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
       nodeId={ id }
       onSelect={ onSelect }
       renderFilter={ SearchContainer }
-      renderNode={ withDroppable(withDroppableStyling(withActionStates(withDraggable(TreeNodeComponent)))) }
+      renderNode={ AssetTreeNode }
       renderNodeContent={ defaultProps.renderNodeContent }
       renderPager={ PagerContainer }
       rootNode={ rootNode }
