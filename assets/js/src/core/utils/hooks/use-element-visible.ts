@@ -13,7 +13,7 @@
 
 import { useState, useEffect, type RefObject } from 'react'
 
-const useElementVisible = (ref: RefObject<HTMLDivElement>): boolean => {
+const useElementVisible = (ref: RefObject<HTMLElement>, continueObserving: boolean = false): boolean => {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -21,7 +21,11 @@ const useElementVisible = (ref: RefObject<HTMLDivElement>): boolean => {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true)
-          observer.disconnect()
+          if (!continueObserving) {
+            observer.disconnect()
+          }
+        } else if (continueObserving) {
+          setIsVisible(false)
         }
       },
       { threshold: 0.1 }
@@ -37,7 +41,7 @@ const useElementVisible = (ref: RefObject<HTMLDivElement>): boolean => {
         observer.disconnect()
       }
     }
-  }, [ref])
+  }, [ref, continueObserving])
 
   return isVisible
 }
