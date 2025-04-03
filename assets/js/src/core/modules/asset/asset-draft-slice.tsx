@@ -22,10 +22,11 @@ import {
   useTrackableChangesReducers
 } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
 import { useImageSettingsReducers } from '@Pimcore/modules/asset/draft/hooks/use-image-settings'
+import { type TextDataDraft, useTextDataReducers } from '@Pimcore/modules/asset/draft/hooks/use-text-settings'
 import { type SchedulesDraft, useSchedulesReducers } from '@Pimcore/modules/element/draft/hooks/use-schedules'
 import { initialTabsStateValue, type TabsDraft, useTabsReducers } from '../element/draft/hooks/use-tabs'
 
-export interface AssetDraft extends Asset, PropertiesDraft, SchedulesDraft, CustomMetadataDraft, TrackableChangesDraft, TabsDraft {
+export interface AssetDraft extends Asset, PropertiesDraft, SchedulesDraft, CustomMetadataDraft, TextDataDraft, TrackableChangesDraft, TabsDraft {
   imageSettings: ImageData
 }
 
@@ -37,6 +38,7 @@ export const slice = createSlice({
     modified: false,
     properties: [],
     customMetadata: [],
+    textData: {},
     imageSettings: [],
     schedule: [],
     changes: {},
@@ -60,6 +62,7 @@ export const slice = createSlice({
     ...useSchedulesReducers(assetsAdapter),
     ...useCustomMetadataReducers(assetsAdapter),
     ...useImageSettingsReducers(assetsAdapter),
+    ...useTextDataReducers(assetsAdapter),
     ...useTabsReducers(assetsAdapter)
   }
 })
@@ -94,6 +97,10 @@ export const {
   removeCustomMetadata: removeCustomMetadataFromAsset,
   updateCustomMetadata: updateCustomMetadataForAsset,
   setCustomMetadata: setCustomMetadataForAsset,
-  setActiveTab: setActiveTabForAsset
+  setActiveTab: setActiveTabForAsset,
+
+  addTextData: addTextDataToAsset,
+  updateTextData: updateTextDataForAsset,
+  removeTextData: removeTextDataFromAsset
 } = slice.actions
 export const { selectById: selectAssetById } = assetsAdapter.getSelectors((state: RootState) => state['asset-draft'])

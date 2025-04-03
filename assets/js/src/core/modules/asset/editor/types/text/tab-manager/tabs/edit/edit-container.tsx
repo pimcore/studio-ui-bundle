@@ -11,7 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
+import { isEmpty } from 'lodash'
 import { EditView } from './edit-view'
 import { useAssetGetTextDataByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
@@ -22,14 +23,23 @@ import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 
 const EditContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
-  const { asset } = useAssetDraft(assetContext.id)
+
+  const { asset, addTextData, updateTextData } = useAssetDraft(assetContext.id)
   const { data } = useAssetGetTextDataByIdQuery({ id: assetContext.id })
+
   const { styles } = useStyle()
 
   let language: SupportedLanguage = null
+
   if (typeof asset?.filename === 'string') {
     language = detectLanguageFromFilename(asset.filename)
   }
+
+  useEffect(() => {
+    if (!isEmpty(data)) {
+      addTextData(data.data)
+    }
+  }, [data])
 
   return (
     <div className={ styles.relativeContainer }>
@@ -37,6 +47,7 @@ const EditContainer = (): React.JSX.Element => {
       <EditView
         language={ language }
         src={ data!.data }
+        updateTextData={ updateTextData }
       />
       ) }
     </div>

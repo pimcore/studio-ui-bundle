@@ -15,19 +15,25 @@ import React, { useState } from 'react'
 import { useStyle } from './edit-view.styles'
 import { TextEditor } from '@Pimcore/components/text-editor/text-editor'
 import { type SupportedLanguage } from '@Pimcore/components/text-editor/detect-language'
+import { type TextData } from '@Pimcore/modules/asset/draft/hooks/use-text-settings'
 
 interface PreviewViewProps {
   src: string | undefined
   language?: SupportedLanguage
+  updateTextData: (text: TextData) => void
 }
 
 const EditView = (props: PreviewViewProps): React.JSX.Element => {
   const { styles } = useStyle()
-  const { src, language } = props
+  const { src, language, updateTextData } = props
 
   const [textValue, setTextValue] = useState(src ?? '')
 
-  const handleUpdateTextValue = (value: string): void => { setTextValue(value) }
+  const handleUpdateTextValue = (value: string): void => {
+    setTextValue(value)
+
+    updateTextData(value)
+  }
 
   return (
     <div className={ styles.preview }>
