@@ -11,42 +11,38 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
-import { useStyle } from './text-editor.styles'
+import React from 'react'
 import ReactCodeMirror from '@uiw/react-codemirror'
+import cn from 'classnames'
 import { getLanguageExtensions, type SupportedLanguage } from '@Pimcore/components/text-editor/detect-language'
+import { useStyle } from './text-editor.styles'
 
 interface TextEditorProps {
-  defaultText?: string
   lineNumbers?: boolean
   className?: string
   language?: SupportedLanguage
+  textValue: string
+  setTextValue: (value: string) => void
 }
 
 export const TextEditor = ({
-  defaultText,
   lineNumbers = true,
   className,
-  language
+  language,
+  textValue,
+  setTextValue
 }: TextEditorProps): React.JSX.Element => {
-  const [text, setText] = useState(defaultText ?? '')
   const { styles } = useStyle()
-
-  useEffect(() => {
-    setText(defaultText ?? '')
-  }, [defaultText])
 
   return (
     <ReactCodeMirror
       basicSetup={ {
         lineNumbers
       } }
-      className={ [styles.editor, className].join(' ') }
+      className={ cn(styles.editor, className) }
       extensions={ getLanguageExtensions(language) }
-      onChange={ (value) => {
-        setText(value)
-      } }
-      value={ text }
+      onChange={ (value) => { setTextValue(value) } }
+      value={ textValue }
     />
   )
 }
