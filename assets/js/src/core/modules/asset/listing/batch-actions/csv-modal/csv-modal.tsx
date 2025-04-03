@@ -31,7 +31,7 @@ import { appConfig } from '@Pimcore/app/config/app-config'
 import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
-import trackError, {GeneralError} from "@Pimcore/modules/app/error-handler";
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export interface CsvModalProps {
   open: boolean
@@ -44,8 +44,8 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   const { id } = useAsset()
   const { data } = useAssetGetByIdQuery({ id })
   const [jobTitle, setJobTitle] = useState<string>('Asset')
-  const [fetchCreateCsv] = useAssetExportCsvAssetMutation()
-  const [fetchCreateFolderCsv] = useAssetExportCsvFolderMutation()
+  const [fetchCreateCsv, { isError: isCreateCsvError, error: createCsvError }] = useAssetExportCsvAssetMutation()
+  const [fetchCreateFolderCsv, { isError: isCreateFolderCsvError, error: createFolderCsvError }] = useAssetExportCsvFolderMutation()
   const { selectedRows } = useRowSelection()
   const numberedSelectedRows = selectedRows !== undefined ? Object.keys(selectedRows).map(Number) : []
   const { selectedColumns } = useSelectedColumns()
@@ -62,6 +62,18 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
       setJobTitle(`${data.filename}`)
     }
   }, [data])
+
+  useEffect(() => {
+    if (isCreateCsvError) {
+      trackError(new ApiError(createCsvError))
+    }
+  }, [isCreateCsvError])
+
+  useEffect(() => {
+    if (isCreateFolderCsvError) {
+      trackError(new ApiError(createFolderCsvError))
+    }
+  }, [isCreateFolderCsvError])
 
   return (
     <Modal
@@ -130,8 +142,6 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
         }
       })
 
-      promise.catch(() => trackError(new GeneralError('Failed to create csv')))
-
       const response = (await promise) as any
       const data = response.data as AssetExportCsvFolderApiResponse
       return data.jobRunId
@@ -152,10 +162,6 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
             header
           }
         }
-      })
-
-      promise.catch(() => {
-        trackError(new GeneralError('Failed to create csv'))
       })
 
       const response = (await promise) as any

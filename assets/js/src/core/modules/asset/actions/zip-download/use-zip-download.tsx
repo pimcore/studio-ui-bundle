@@ -19,12 +19,12 @@ import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
-import trackError, {GeneralError} from "@Pimcore/modules/app/error-handler";
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface ICreateZipDownloadProps {
   jobTitle: string
@@ -54,10 +54,16 @@ export interface UseZipDownloadHookReturn {
 
 export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHookReturn => {
   const [fetchFolder] = useAssetExportZipFolderMutation()
-  const [fetchAssets] = useAssetExportZipAssetMutation()
+  const [fetchAssets, { isError, error }] = useAssetExportZipAssetMutation()
   const { addJob } = useJobs()
   const { t } = useTranslation()
   const { isTreeActionAllowed } = useTreePermission()
+
+  useEffect(() => {
+    if (isError) {
+      trackError(new ApiError(error))
+    }
+  }, [isError])
 
   const createZipDownload = ({ jobTitle, requestData }: ICreateZipFolderDownloadProps | ICreateZipFolderAssetListProps): void => {
     addJob(createJob({
@@ -73,10 +79,6 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
         } else {
           promise = fetchAssets(requestData as AssetExportZipAssetApiArg)
         }
-
-        promise.catch(() => {
-          trackError(new GeneralError('Failed to create zip'))
-        })
 
         const response = (await promise) as any
         const data = response.data as AssetExportZipAssetApiResponse | AssetExportZipFolderApiResponse

@@ -17,7 +17,7 @@ import { type Schedule as ApiSchedule } from '@Pimcore/modules/element/editor/sh
 
 import { useAppDispatch } from '@Pimcore/app/store'
 import { type TrackableChangesDraft } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
-import trackError, {GeneralError} from "@Pimcore/modules/app/error-handler";
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface ScheduleAction {
   id: number

@@ -15,7 +15,7 @@ import type { ActionCreatorWithPayload, PayloadAction } from '@reduxjs/toolkit'
 import type { EntityAdapter, EntityState } from '@reduxjs/toolkit/src/entities/models'
 
 import { useAppDispatch } from '@Pimcore/app/store'
-import trackError, {GeneralError} from "@Pimcore/modules/app/error-handler";
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface ModifiedCell {
   rowIndex: number | string

@@ -58,7 +58,7 @@ import { type ElementEditorType, type TypeRegistryInterface } from '@Pimcore/mod
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { initialTabsStateValue, useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-tabs'
-import trackError, {ApiError} from "@Pimcore/modules/app/error-handler";
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export interface UseAssetDraftReturn extends
   UseCustomMetadataDraftReturn,
@@ -90,7 +90,13 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   const typeRegistry = useInjection<TypeRegistryInterface>(serviceIds['Asset/Editor/TypeRegistry'])
 
   async function getAsset (): Promise<AssetGetByIdApiResponse> {
-    const { data } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
+    const { data, isError, error } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
+
+    useEffect(() => {
+      if (isError) {
+        trackError(new ApiError(error))
+      }
+    }, [isError])
 
     if (data !== undefined) {
       return data
@@ -102,7 +108,13 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
 
   async function getCustomSettings (): Promise<ImageData> {
     let objectToReturn: ImageData = {}
-    const { data, isSuccess } = await dispatch(settingsApi.endpoints.assetCustomSettingsGetById.initiate({ id }))
+    const { data, isSuccess, isError: assetCustomSettingsError } = await dispatch(settingsApi.endpoints.assetCustomSettingsGetById.initiate({ id }))
+
+    useEffect(() => {
+      if (isError) {
+        trackError(new ApiError(error))
+      }
+    }, [isError])
 
     if (isSuccess && data !== undefined) {
       const settings = data.items!

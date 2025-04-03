@@ -21,7 +21,7 @@ import {
 import { replaceFileEnding, saveFileLocal } from '@Pimcore/utils/files'
 import { buildQueryString } from '@Pimcore/utils/query-string'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
-import trackError, {ApiError} from "@Pimcore/modules/app/error-handler";
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 const DetailContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
@@ -86,7 +86,7 @@ const DetailContainer = (): React.JSX.Element => {
         downloadShortcutsHandlerForCustomSettings(imageData.filename!, imageURL, format)
       })
       .catch((err) => {
-        trackError(new ApiError(err))
+        trackError(new GeneralError('Could not download image'))
       })
   }
 
@@ -106,7 +106,7 @@ const DetailContainer = (): React.JSX.Element => {
 
         downloadShortcutsHandler(imageData.filename!, imageURL, format)
       })
-      .catch((err) => trackError(new ApiError(err)))
+      .catch((err) => { trackError(new GeneralError('Could not prepare download')) })
   }
 
   function downloadShortcutsHandler (name: string, url: string, format: string): void {

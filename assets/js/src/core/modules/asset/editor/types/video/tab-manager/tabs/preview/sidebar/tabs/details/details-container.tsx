@@ -23,7 +23,7 @@ import { saveFileLocal } from '@Pimcore/utils/files'
 import { VideoContext } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/preview-container'
 import { Content } from '@Pimcore/components/content/content'
 import { fetchBlobWithPolling } from '@Pimcore/utils/polling-helper'
-import trackError, {ApiError} from "@Pimcore/modules/app/error-handler";
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 const DetailContainer = (): React.JSX.Element => {
   const [isDownloading, setIsDownloading] = useState(false)
@@ -69,7 +69,7 @@ const DetailContainer = (): React.JSX.Element => {
         setImagePreview(url)
       })
       .catch((err) => {
-        trackError(new ApiError(err))
+        trackError(new GeneralError('An error occurred while loading the Thumbnail'))
       }).finally(then)
   }
 
@@ -107,7 +107,7 @@ const DetailContainer = (): React.JSX.Element => {
         setImagePreviewFromBackend(200, 119, callback)
       })
       .catch((err) => {
-        trackError(new ApiError(err))
+        trackError(new GeneralError('An error occured while setting the Image Preview'))
         callback()
       })
   }
@@ -123,7 +123,7 @@ const DetailContainer = (): React.JSX.Element => {
         saveFileLocal(objectUrl, videoData.filename)
       }
     })
-      .catch((error) => trackError(new ApiError(error)))
+      .catch((error) => { trackError(new GeneralError('An error occured while loading the Video')) })
       .finally(() => {
         setIsDownloading(false)
       })

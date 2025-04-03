@@ -32,7 +32,8 @@ export async function fetchBlobWithPolling ({
     } else if (response.status === 202) {
       setTimeout(fetchUrl, interval)
     } else {
-      trackError(new GeneralError(`Unexpected response status: ${response.status}`))
+      response
+        .trackError(new GeneralError(`Unexpected response status: ${response.status}`))
     }
   }
 

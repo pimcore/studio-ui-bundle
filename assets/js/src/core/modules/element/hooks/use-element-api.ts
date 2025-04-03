@@ -22,7 +22,8 @@ import { useAppDispatch } from '@Pimcore/app/store'
 import { api as assetApi, useAssetCloneMutation } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { api as dataObjectApi, useDataObjectCloneMutation } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { isUndefined } from 'lodash'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import { useEffect } from 'react'
 
 /**
  * Abstracts the logic for some basic API calls across element types (assets, data objects, documents)
@@ -92,9 +93,8 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
         return isUndefined(response.error)
       }
     } catch (error) {
-      trackError(new ApiError(error))
+      trackError(new GeneralError('Error while patching element'))
     }
-
     return false
   }
 
@@ -146,7 +146,7 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
         }
       }
     } catch (error) {
-      trackError(new ApiError(error))
+      console.error(error)
     }
     return {
       success: false

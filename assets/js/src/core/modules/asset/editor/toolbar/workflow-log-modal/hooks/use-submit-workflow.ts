@@ -22,7 +22,8 @@ import {
   useWorkflow
 } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import trackError, {ApiError} from "@Pimcore/modules/app/error-handler";
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import { useEffect } from 'react'
 
 interface UseSubmitWorkflowReturn {
   submitWorkflowAction: (actionType: string, transition: TransitionType, workFlowName: string, workFlowOptions: WorkflowOptions) => void
@@ -45,10 +46,18 @@ export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn
   const [fetchSubmitWorkflowActionMutation, {
     isLoading: submissionLoading,
     isSuccess: submissionSuccess,
-    isError: submissionError
+    isError: isSubmissionError,
+    error
   }] = useWorkflowActionSubmitMutation(
     { fixedCacheKey: `shared-submit-workflow-action-${workflowName}` }
   )
+
+  useEffect(() => {
+    if (isSubmissionError) {
+      trackError(new ApiError(error))
+    }
+  }, [isSubmissionError])
+
   const workFlowTransition = (transition: TransitionType, actionType: string, workFlowName: string, workFlowOptions: WorkflowOptions): WorkflowActionSubmitApiArg => {
     const workflowId = _.snakeCase(workFlowName)
     const transitionId = _.snakeCase(transition)
@@ -77,13 +86,13 @@ export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn
           duration: 3
         })
       }
-    }).catch((error) => trackError(new ApiError(error)))
+    })
   }
 
   return {
     submitWorkflowAction,
     submissionLoading,
     submissionSuccess,
-    submissionError
+    submissionError: isSubmissionError
   }
 }

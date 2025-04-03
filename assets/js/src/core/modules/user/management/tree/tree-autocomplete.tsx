@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next'
 import { UserOutlined } from '@ant-design/icons'
 import { useStyles } from '@Pimcore/components/search-input/search-input.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
-import trackError, {ApiError} from "@Pimcore/modules/app/error-handler";
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface ITreeAutocompleteProps {
   loading?: boolean
@@ -57,7 +57,7 @@ const TreeAutocomplete = ({ loading = true, ...props }: ITreeAutocompleteProps):
           </Row>
         )
       })))
-    }).catch(e => trackError(new ApiError(e)))
+    }).catch(e => { trackError(new GeneralError('An error occured while searching for a user')) })
   }
 
   return (

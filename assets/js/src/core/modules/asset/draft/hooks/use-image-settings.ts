@@ -18,7 +18,7 @@ import { useAppDispatch } from '@Pimcore/app/store'
 
 import { type TrackableChangesDraft } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
 import type { ImageData } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import trackError, {GeneralError} from "@Pimcore/modules/app/error-handler";
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface ImageSettingsAction {
   id: number

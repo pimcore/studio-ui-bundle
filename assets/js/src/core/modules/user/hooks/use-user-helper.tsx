@@ -36,7 +36,7 @@ import { userOpened, userClosed, userUpdated, changeUser, userImageLoaded } from
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
 import type { UseTrackableChangesDraftReturn } from '@Pimcore/modules/user/hooks/use-user-trackable-changes'
-import trackError, {ApiError} from "@Pimcore/modules/app/error-handler";
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface AddItemArgs {
   parentId: number
@@ -96,7 +96,10 @@ export const useUserHelper = (): UseUserReturn => {
 
   async function fetchUserById (props): Promise<UserGetByIdApiResponse> {
     const { id } = props
-    const { data }: any = await dispatch(api.endpoints.userGetById.initiate({ id }))
+    const { data, error }: any = await dispatch(api.endpoints.userGetById.initiate({ id }))
+    if (error) {
+      trackError(new ApiError(error))
+    }
     return data
   }
 
@@ -105,13 +108,18 @@ export const useUserHelper = (): UseUserReturn => {
     return data
   }
   async function searchUserByText (query: string): Promise<PimcoreStudioApiUserSearchApiResponse> {
-    const { data }: any = await dispatch(api.endpoints.pimcoreStudioApiUserSearch.initiate({ searchQuery: query }))
+    const { data, error }: any = await dispatch(api.endpoints.pimcoreStudioApiUserSearch.initiate({ searchQuery: query }))
+    if (error) {
+      trackError(new ApiError(error))
+    }
     return data
   }
 
   async function getDefaultKeyBindings (): Promise<UserDefaultKeyBindingsApiResponse> {
-    const { data }: any = await dispatch(api.endpoints.userDefaultKeyBindings.initiate())
-
+    const { data, error }: any = await dispatch(api.endpoints.userDefaultKeyBindings.initiate())
+    if (error) {
+      trackError(new ApiError(error))
+    }
     return data
   }
 
@@ -125,8 +133,10 @@ export const useUserHelper = (): UseUserReturn => {
 
   async function getUserTree (props: UserGetTreeApiArg): Promise<UserGetTreeApiResponse> {
     const { parentId } = props
-    const { data }: any = await dispatch(api.endpoints.userGetTree.initiate({ parentId }))
-
+    const { data, error }: any = await dispatch(api.endpoints.userGetTree.initiate({ parentId }))
+    if (error) {
+      trackError(new ApiError(error))
+    }
     return data
   }
 
@@ -220,7 +230,10 @@ export const useUserHelper = (): UseUserReturn => {
   }
 
   async function getAvailablePermissions (props): Promise<{ data: UserGetAvailablePermissionsApiResponse, error: Error }> {
-    const { data }: any = await dispatch(api.endpoints.userGetAvailablePermissions.initiate())
+    const { data, error }: any = await dispatch(api.endpoints.userGetAvailablePermissions.initiate())
+    if (error) {
+      trackError(new ApiError(error))
+    }
     return data
   }
 
@@ -241,7 +254,10 @@ export const useUserHelper = (): UseUserReturn => {
         data = URL.createObjectURL(imageBlob)
         dispatch(userImageLoaded({ id, image: data }))
       }).catch((error) => {
-          trackError(new ApiError(error))
+        const apiError = error instanceof Error
+          ? new ApiError(error)
+          : new GeneralError('An error occurred while loading the image')
+        trackError(apiError)
       })
 
     return { data }

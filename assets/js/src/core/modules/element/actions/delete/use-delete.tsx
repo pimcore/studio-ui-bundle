@@ -16,7 +16,7 @@ import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
-import React from 'react'
+import React, { useEffect } from 'react'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { createJob as createDeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
@@ -35,7 +35,7 @@ import { useTreePermission } from '../../tree/provider/tree-permission-provider/
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useRefreshTree } from '../refresh-tree/use-refresh-tree'
 import { isUndefined } from 'lodash'
-import trackError, {ApiError, GeneralError} from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { markNodeDeleting } from '@Pimcore/components/element-tree/element-tree-slice'
 
@@ -56,9 +56,15 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   const { refreshElement } = useElementRefresh(elementType)
   const { refreshTree } = useRefreshTree(elementType)
   const { isMainWidgetOpen, closeWidget } = useWidgetManager()
-  const [elementDelete] = useElementDeleteMutation({ fixedCacheKey: cacheKey })
+  const [elementDelete, { isError, error }] = useElementDeleteMutation({ fixedCacheKey: cacheKey })
   const { isTreeActionAllowed } = useTreePermission()
   const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (isError) {
+      trackError(new ApiError(error))
+    }
+  }, [isError])
 
   const deleteElement = (id: number, label: string, parentId?: number, onFinish?: () => void): void => {
     modal.confirm({
@@ -137,13 +143,9 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
       id,
       elementType
     })
-
-    promise.catch(() => trackError(new GeneralError(`Error deleting ' + elementType`)))
-
     const response = await promise
 
     if (!isUndefined(response.error)) {
-      trackError(new ApiError(response.error))
       dispatch(markNodeDeleting({ nodeId: String(id), elementType, isDeleting: false }))
       return
     }

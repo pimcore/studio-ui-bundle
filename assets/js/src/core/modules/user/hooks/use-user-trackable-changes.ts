@@ -11,11 +11,11 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import type {ActionCreatorWithPayload, PayloadAction} from '@reduxjs/toolkit'
-import type {EntityAdapter, EntityState} from '@reduxjs/toolkit/src/entities/models'
+import type { ActionCreatorWithPayload, PayloadAction } from '@reduxjs/toolkit'
+import type { EntityAdapter, EntityState } from '@reduxjs/toolkit/src/entities/models'
 
-import {useAppDispatch} from '@Pimcore/app/store'
-import trackError, {GeneralError} from "@Pimcore/modules/app/error-handler";
+import { useAppDispatch } from '@Pimcore/app/store'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface ModifiedCell {
   rowIndex: number | string

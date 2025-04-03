@@ -36,7 +36,7 @@ import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/co
 import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/use-grid-config'
 import { useSelectedGridConfigId } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/selected-grid-config-id/use-selected-grid-config-id'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
-import trackError, {ApiError, GeneralError} from "@Pimcore/modules/app/error-handler";
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 
 enum ViewState {
   Edit = 'edit',
@@ -62,9 +62,27 @@ export const GridConfigInner = (): React.JSX.Element => {
     configurationId: selectedGridConfigId
   })
 
-  const [fetchSaveGridConfig, { isLoading: isSaveLoading }] = useAssetSaveGridConfigurationMutation()
-  const [fetchUpdateGridConfig, { isLoading: isUpdating }] = useAssetUpdateGridConfigurationMutation()
-  const [fetchDeleteGridConfig, { isLoading: isDeleting }] = useAssetDeleteGridConfigurationByConfigurationIdMutation()
+  const [fetchSaveGridConfig, { isLoading: isSaveLoading, isError: isSaveGridConfigError, error: saveGridConfigError }] = useAssetSaveGridConfigurationMutation()
+  const [fetchUpdateGridConfig, { isLoading: isUpdating, isError: isUpdateGridConfigError, error: updateGridConfigError }] = useAssetUpdateGridConfigurationMutation()
+  const [fetchDeleteGridConfig, { isLoading: isDeleting, isError: isDeleteGridConfigError, error: deleteGridConfigError }] = useAssetDeleteGridConfigurationByConfigurationIdMutation()
+
+  useEffect(() => {
+    if (isSaveGridConfigError) {
+      trackError(new ApiError(saveGridConfigError))
+    }
+  }, [isSaveGridConfigError])
+
+  useEffect(() => {
+    if (isUpdateGridConfigError) {
+      trackError(new ApiError(updateGridConfigError))
+    }
+  }, [isUpdateGridConfigError])
+
+  useEffect(() => {
+    if (isDeleteGridConfigError) {
+      trackError(new ApiError(deleteGridConfigError))
+    }
+  }, [isDeleteGridConfigError])
 
   const [view, setView] = useState<ViewState>(ViewState.Edit)
   const [form] = useForm()
@@ -102,9 +120,7 @@ export const GridConfigInner = (): React.JSX.Element => {
       fetchDeleteGridConfig({ configurationId: gridConfig.id!, folderId: getId() }).then(() => {
         setView(ViewState.Edit)
         setSelectedGridConfigId(undefined)
-      }).catch((error) =>
-        trackError(new ApiError(error))
-      )
+      })
     }
   }
 
@@ -128,8 +144,6 @@ export const GridConfigInner = (): React.JSX.Element => {
         saveFilter: false,
         pageSize: 0
       }
-    }).catch((error) => {
-      trackError(new ApiError(error))
     })
   }
 
@@ -175,7 +189,7 @@ export const GridConfigInner = (): React.JSX.Element => {
         trackError(new ApiError(error))
       }).then(() => {
         setView(ViewState.Edit)
-      }).catch((error) => trackError(new GeneralError(`Failed to switch to edit view, ${error}`)))
+      }))
     }
 
     if (view === ViewState.Save) {
@@ -193,13 +207,12 @@ export const GridConfigInner = (): React.JSX.Element => {
           saveFilter: false,
           pageSize: 0
         }
-      }).catch((error) => trackError(new ApiError(error))).then((response) => {
+      }).then((response) => {
         if (response?.data !== undefined) {
           setSelectedGridConfigId(response.data.id)
           setView(ViewState.Edit)
         }
-      }).catch((error) =>
-      trackError(new GeneralError(`Failed to switch to edit view, ${error}`)))
+      })
     }
   }
 

@@ -24,7 +24,7 @@ import {
   type UserGetByIdApiResponse
 } from '@Pimcore/modules/user/user-api-slice.gen'
 import { useEffect, useState } from 'react'
-import trackError, {ApiError} from "@Pimcore/modules/app/error-handler";
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface UseUserReturnDraft {
   isLoading: boolean
@@ -44,8 +44,11 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
   const [isError, setIsError] = useState<boolean>(false)
 
   async function fetchUser (): Promise<UserGetByIdApiResponse> {
-    const { data } = await dispatch(api.endpoints.userGetById.initiate({ id }))
+    const { data, error } = await dispatch(api.endpoints.userGetById.initiate({ id }))
 
+    if (error) {
+      trackError(new ApiError(error))
+    }
     if (data !== undefined) {
       return data
     }
@@ -60,12 +63,15 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
   }
 
   async function fetchUserAvailablePermissions (): Promise<UserGetAvailablePermissionsApiResponse> {
-    const { data } = await dispatch(api.endpoints.userGetAvailablePermissions.initiate())
+    const { data, error } = await dispatch(api.endpoints.userGetAvailablePermissions.initiate())
 
     if (data !== undefined) {
       return data
     }
 
+    if (error) {
+      trackError(new ApiError(error))
+    }
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return {} as UserGetAvailablePermissionsApiResponse
   }
@@ -90,8 +96,6 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
 
     fetchUserAvailablePermissions().then((data) => {
       dispatch(userAvailablePermissionsFetched(data))
-    }).catch((e) => {
-      trackError(new ApiError(e))
     })
   }
 

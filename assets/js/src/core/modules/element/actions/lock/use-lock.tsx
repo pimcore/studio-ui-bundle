@@ -22,7 +22,6 @@ import { type Element } from '@Pimcore/modules/element/element-helper'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
-import trackError, {ApiError} from "@Pimcore/modules/app/error-handler";
 
 export interface UseLockHookReturn {
   lock: (id: number) => Promise<void>
@@ -61,18 +60,14 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
   }
 
   const patchLock = async (id: number, lockType: 'self' | 'propagate' | '' | 'unlockPropagate'): Promise<void> => {
-    try {
-      await elementPatch({
-        body: {
-          data: [{
-            id,
-            locked: lockType
-          }]
-        }
-      })
-    } catch (error) {
-      trackError(new ApiError(error))
-    }
+    await elementPatch({
+      body: {
+        data: [{
+          id,
+          locked: lockType
+        }]
+      }
+    })
   }
 
   const lockTreeContextMenuItem = (node: TreeNodeProps): ItemType => {

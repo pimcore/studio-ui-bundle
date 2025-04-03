@@ -23,7 +23,7 @@ import i18n from 'i18next'
 import { type PreviewFieldLabelCellValue } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/_versions/preview-field-label-cell/preview-field-label-cell'
 import { type DynamicTypeMetaDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/meta-data/dynamic-type-metadata-registry'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
-import trackError, {ApiError} from "@Pimcore/modules/app/error-handler";
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface AssetVersionData {
   versionCount: number
@@ -115,9 +115,8 @@ export const loadPreviewImage = async (version: AssetVersion, versionId: number)
       result = URL.createObjectURL(imageBlob)
     })
     .catch((err) => {
-      trackError(new ApiError(err))
+      trackError(new GeneralError('Failed to load preview image', err))
     })
-
   return result
 }
 

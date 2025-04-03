@@ -13,7 +13,7 @@
 
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import trackError, {GeneralError} from "@Pimcore/modules/app/error-handler";
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 i18n
   .use(initReactI18next)
@@ -26,7 +26,7 @@ i18n
   })
 
   .catch(() => {
-      trackError(new GeneralError("Could not load translations"))
+    trackError(new GeneralError('Could not load translations'))
   })
 
 i18n.on('missingKey', (lngs, namespace, key, res) => {

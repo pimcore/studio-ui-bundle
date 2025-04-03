@@ -40,7 +40,7 @@ import { uuid } from '@Pimcore/utils/uuid'
 import {
   useMetadataGetCollectionMutation
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-slice.gen'
-import trackError, {ApiError, GeneralError} from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -48,7 +48,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const settings = useSettings()
   const { id } = useContext(AssetContext)
   const { addCustomMetadata, customMetadata } = useAssetDraft(id)
-  const [predefinedMetadata, { isLoading }] = useMetadataGetCollectionMutation()
+  const [predefinedMetadata, { isLoading, isError, error }] = useMetadataGetCollectionMutation()
   const {
     showModal: showDuplicateEntryModal,
     closeModal: closeDuplicateEntryModal,
@@ -59,6 +59,12 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
     type: 'error'
   })
+
+  useEffect(() => {
+    if (isError) {
+      trackError(new ApiError(error))
+    }
+  }, [isError])
 
   const nameInputValue = useRef<string>('')
   const nameInputRef = useRef<InputRef>(null)
@@ -117,15 +123,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
       body: {}
     })
 
-    predefinedMetadataTask.catch(() => {
-      trackError(new GeneralError('Failed to load predefined metadata'))
-    })
-
     const response = await predefinedMetadataTask
-
-    if (response.error !== undefined) {
-      trackError(new ApiError(response.error))
-    }
 
     const data = response.data!
 
