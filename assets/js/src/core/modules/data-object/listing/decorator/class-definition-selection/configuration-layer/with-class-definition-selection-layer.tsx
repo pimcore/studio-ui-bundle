@@ -40,7 +40,7 @@ export const withClassDefinitionSelectionLayer = (Component: AbstractDecoratorPr
       )
     }
 
-    if (selectedClassDefinition === undefined) {
+    if (config.showConfigLayer === true && selectedClassDefinition === undefined) {
       return (
         <ViewComponent />
       )

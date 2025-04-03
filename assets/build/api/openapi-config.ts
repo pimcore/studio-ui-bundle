@@ -42,6 +42,10 @@ const config: ConfigFile = {
       type: 'query',
     },
     {
+      pattern: 'dataObjectGetSearch',
+      type: 'query',
+    },
+    {
       pattern: 'metadataGetCollection',
       type: 'query'
     }

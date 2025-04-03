@@ -197,17 +197,19 @@ const injectedRtkApi = api
                 DataObjectGetSearchConfigurationApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/search/configuration/data-objects/${queryArg.classId}`,
+                    url: `/pimcore-studio/api/search/configuration/data-objects`,
+                    params: { classId: queryArg.classId },
                 }),
                 providesTags: ["Search"],
             }),
-            dataObjectGetSearch: build.mutation<DataObjectGetSearchApiResponse, DataObjectGetSearchApiArg>({
+            dataObjectGetSearch: build.query<DataObjectGetSearchApiResponse, DataObjectGetSearchApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/search/data-objects/${queryArg.classId}`,
+                    url: `/pimcore-studio/api/search/data-objects`,
                     method: "POST",
                     body: queryArg.body,
+                    params: { classId: queryArg.classId },
                 }),
-                invalidatesTags: ["Search"],
+                providesTags: ["Search"],
             }),
         }),
         overrideExisting: false,
@@ -878,5 +880,5 @@ export const {
     useDataObjectGetSelectOptionsMutation,
     useDataObjectGetTreeQuery,
     useDataObjectGetSearchConfigurationQuery,
-    useDataObjectGetSearchMutation,
+    useDataObjectGetSearchQuery,
 } = injectedRtkApi;

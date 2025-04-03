@@ -11,8 +11,9 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { Flex } from '@Pimcore/components/flex/flex'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { ProvidedTypeSelect } from '@Pimcore/modules/asset/components/type-select/provided-type-select'
+import { ProvidedTypeSelect } from '@Pimcore/modules/element/components/type-select/provided-type-select'
 import { SearchTermFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/search/search-term-filter'
 import React from 'react'
 
@@ -24,8 +25,13 @@ export const TopBar = (): React.JSX.Element => {
       position='top'
       theme='secondary'
     >
-      <ProvidedTypeSelect />
-      <SearchTermFilter />
+      <Flex
+        className='w-full'
+        gap={ 'small' }
+      >
+        <ProvidedTypeSelect />
+        <SearchTermFilter />
+      </Flex>
     </Toolbar>
   )
 }

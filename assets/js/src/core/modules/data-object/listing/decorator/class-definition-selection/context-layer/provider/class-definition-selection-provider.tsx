@@ -20,7 +20,7 @@ export interface ClassDefinitionSelectionData {
   config: ClassDefinitionSelectionDecoratorConfig
   availableClassDefinitions: ClassDefinitionListItem[]
   selectedClassDefinition: ClassDefinitionListItem | undefined
-  setSelectedClassDefinition: (classDefinition: ClassDefinitionListItem) => void
+  setSelectedClassDefinition: (classDefinition: ClassDefinitionListItem | undefined) => void
 }
 
 export type ClassDefinitionSelectionContextProps = ClassDefinitionSelectionData | undefined
@@ -36,6 +36,11 @@ export const ClassDefinitionSelectionProvider = ({ children, config }: ClassDefi
   const { data } = useClassDefinitions()
   const [selectedClassDefinition, setSelectedClassDefinition] = useState<ClassDefinitionSelectionData['selectedClassDefinition']>(undefined)
   const availableClassDefinitions = useMemo(() => {
+    if (config.classRestriction !== undefined) {
+      const restrictedClasses: string[] = config.classRestriction.map((classDefinition) => classDefinition.classes)
+      return data?.items.filter((classDefinition) => restrictedClasses.includes(classDefinition.name)) ?? []
+    }
+
     if (data !== undefined) {
       return data.items
     }

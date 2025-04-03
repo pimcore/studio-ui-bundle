@@ -19,7 +19,8 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/MetadataRegistry': 'DynamicTypes/MetadataRegistry',
   'DynamicTypes/ObjectLayoutRegistry': 'DynamicTypes/ObjectLayoutRegistry',
   'DynamicTypes/ObjectDataRegistry': 'DynamicTypes/ObjectDataRegistry',
-  'DynamicTypes/AssetRegistry': 'DynamicTypes/AssetRegistry'
+  'DynamicTypes/AssetRegistry': 'DynamicTypes/AssetRegistry',
+  'DynamicTypes/ObjectRegistry': 'DynamicTypes/ObjectRegistry'
 }
 
 export const serviceIds = {
@@ -184,6 +185,11 @@ export const serviceIds = {
   'DynamicTypes/Asset/Unknown': 'DynamicTypes/Asset/Unknown',
   'DynamicTypes/Asset/Folder': 'DynamicTypes/Asset/Folder',
   'DynamicTypes/Asset/Text': 'DynamicTypes/Asset/Text',
+
+  // Object types
+  'DynamicTypes/Object/Folder': 'DynamicTypes/Object/Folder',
+  'DynamicTypes/Object/Object': 'DynamicTypes/Object/Object',
+  'DynamicTypes/Object/Variant': 'DynamicTypes/Object/Variant',
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',
