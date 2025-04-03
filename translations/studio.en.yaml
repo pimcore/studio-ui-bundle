@@ -649,7 +649,9 @@ navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
 navigation.customise: Customise
 navigation.tag-configuration: Tag Configuration
-navigation.use-and-roles: User & Roles
+navigation.user-and-roles: User & Roles
+navigation.users: Users
+navigation.roles: Roles
 navigation.open-asset: Open Asset
 navigation.open-document: Open Document
 navigation.open-data-object: Open Data Object
@@ -659,8 +661,8 @@ navigation.settings: Settings
 navigation.tools: Tools
 widget.notes-and-events: Notes & Events
 widget.tag-configuration: Tag Configuration
-widget.user-management: Users
 widget.role-management: Roles
+widget.user-management: Users
 external-image.preview-placeholder: Add an external image
 empty-image: Empty Image
 image.dnd-target: Drop an image here

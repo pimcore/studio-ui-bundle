@@ -18,6 +18,7 @@ import { theme } from 'antd'
 import { useStyles } from './tree-list.styles'
 import { Skeleton } from './../skeleton/skeleton'
 import { useElementTreeNode } from '../hooks/use-element-tree-node'
+import { TreeListNode } from './tree-list-node'
 
 interface TreeListProps {
   node: TreeNodeProps
@@ -28,7 +29,7 @@ const { useToken } = theme
 export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
   const { token } = useToken()
   const { styles } = useStyles()
-  const { renderFilter: RenderFilter, renderPager: RenderPager, renderNode: RenderNode } = useContext(TreeContext)
+  const { renderFilter: RenderFilter, renderPager: RenderPager } = useContext(TreeContext)
   const { isLoading, isFetching, getChildren, total } = useElementTreeNode(node.id)
 
   if (isLoading === true) {
@@ -37,7 +38,7 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
     )
   }
 
-  const children = getChildren()
+  const childrenIds = getChildren()
 
   return (
     <>
@@ -55,11 +56,11 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
       )}
 
       <div className='tree-list'>
-        {children?.map((item, index) => (
-          <RenderNode
-            key={ item.id }
-            { ...item }
+        {childrenIds.map((childId) => (
+          <TreeListNode
+            key={ childId }
             level={ node.level + 1 }
+            nodeId={ childId }
           />
         ))}
       </div>

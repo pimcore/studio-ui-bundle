@@ -25,6 +25,7 @@ moduleSystem.registerModule({
 
     mainNavRegistryService.registerMainNavItem({
       path: 'Tools/Notes & Events',
+      label: 'navigation.notes-and-events',
       className: 'item-style-modifier',
       perspectivePermission: NavPermission.NotesAndEvents,
       widgetConfig: {

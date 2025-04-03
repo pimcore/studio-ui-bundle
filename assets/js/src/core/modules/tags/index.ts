@@ -25,6 +25,7 @@ moduleSystem.registerModule({
 
     mainNavRegistryService.registerMainNavItem({
       path: 'Settings/Tag Configuration',
+      label: 'navigation.tag-configuration',
       className: 'item-style-modifier',
       perspectivePermission: NavPermission.TagConfiguration,
       widgetConfig: {
