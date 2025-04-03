@@ -17,19 +17,21 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     pagination: css`
       .ant-pagination .ant-pagination-item {
-        padding: unset;
-        margin-top: unset;
-        margin-bottom: unset;
-        vertical-align: middle;
+        border: 0;
       }
 
       button.page-number-node {
-        color: black;
+        color: ${token.colorText};
         text-align: center;
-        vertical-align: text-bottom;
         box-shadow: none;
-        padding: 0 2px 2px 0;
-        border: none;
+        border: 1px solid transparent;
+        padding: ${token.paddingXXS}px;
+        
+        &:hover {
+            background-color: transparent;
+          border-color: ${token.colorPrimary};
+            color: ${token.colorPrimary};
+        }
       }
 
       button.page-number-node, .ant-pagination .ant-pagination-item {
@@ -40,6 +42,7 @@ export const useStyle = createStyles(({ token, css }) => {
       
       & .ant-pagination-item-active span {
         color: ${token.colorPrimary};
+        background: ${token.colorBgContainer};
       }
     `
   }

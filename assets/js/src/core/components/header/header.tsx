@@ -34,7 +34,9 @@ export const Header = (props: HeaderProps): React.JSX.Element => {
   return (
     <div className={ classNames }>
       <span className={ 'header__text p-l-mini' }>
-        <Title icon={ icon }>
+        <Title
+          icon={ icon }
+        >
           {title}
         </Title>
       </span>

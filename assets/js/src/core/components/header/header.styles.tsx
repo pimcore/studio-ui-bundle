@@ -32,6 +32,10 @@ export const useStyles = createStyles(({ token, css }) => {
       .header__text {
         white-space: nowrap;
         margin: 0;
+        
+        h1 {
+          margin: 0;
+        }
       }
     `
   }
