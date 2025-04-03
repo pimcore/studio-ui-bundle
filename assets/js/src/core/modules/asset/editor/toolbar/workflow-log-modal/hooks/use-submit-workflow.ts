@@ -26,7 +26,7 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useEffect } from 'react'
 
 interface UseSubmitWorkflowReturn {
-  submitWorkflowAction: (actionType: string, transition: TransitionType, workFlowName: string, workFlowOptions: WorkflowOptions) => void
+  submitWorkflowAction: (actionType: string, transition: TransitionType, workFlowName: string, workFlowOptions: WorkflowOptions) => Promise <void>
   submissionLoading: boolean
   submissionSuccess: boolean
   submissionError: boolean

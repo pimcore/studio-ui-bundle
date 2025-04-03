@@ -91,7 +91,7 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
 
         return isUndefined(response.error)
       }
-    } catch (error) {
+    } catch {
       trackError(new GeneralError('Error while patching element'))
     }
     return false

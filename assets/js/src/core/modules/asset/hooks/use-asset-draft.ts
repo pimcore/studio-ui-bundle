@@ -92,11 +92,9 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   async function getAsset (): Promise<AssetGetByIdApiResponse> {
     const { data, isError: isGetAssetError, error: getAssetError } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
 
-    useEffect(() => {
-      if (isGetAssetError) {
-        trackError(new ApiError(getAssetError))
-      }
-    }, [isGetAssetError])
+    if (isGetAssetError) {
+      trackError(new ApiError(getAssetError))
+    }
 
     if (data !== undefined) {
       return data
@@ -110,11 +108,9 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     let objectToReturn: ImageData = {}
     const { data, isSuccess, isError: isAssetCustomSettingsError, error: assetCustomSettingsError } = await dispatch(settingsApi.endpoints.assetCustomSettingsGetById.initiate({ id }))
 
-    useEffect(() => {
-      if (isAssetCustomSettingsError) {
-        trackError(new ApiError(assetCustomSettingsError))
-      }
-    }, [isAssetCustomSettingsError])
+    if (isAssetCustomSettingsError) {
+      trackError(new ApiError(assetCustomSettingsError))
+    }
 
     if (isSuccess && data !== undefined) {
       const settings = data.items!
