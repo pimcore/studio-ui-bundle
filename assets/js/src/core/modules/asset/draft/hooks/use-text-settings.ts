@@ -97,13 +97,13 @@ export interface UseTextDataDraftReturn {
   removeTextData: (textData: TextData) => void
 }
 
-export const useTextDataDraft = (
-  id: number,
-  draft: TextDataDraft,
-  addTextDataAction: ActionCreatorWithPayload<TextDataAction>,
-  updateTextDataAction: ActionCreatorWithPayload<TextDataAction>,
+export const useTextDataDraft = ({ id, draft, addTextDataAction, updateTextDataAction, removeTextDataAction }: {
+  id: number
+  draft: TextDataDraft
+  addTextDataAction: ActionCreatorWithPayload<TextDataAction>
+  updateTextDataAction: ActionCreatorWithPayload<TextDataAction>
   removeTextDataAction: ActionCreatorWithPayload<TextDataAction>
-): UseTextDataDraftReturn => {
+}): UseTextDataDraftReturn => {
   const dispatch = useAppDispatch()
 
   return {

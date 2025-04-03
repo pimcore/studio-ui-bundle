@@ -223,13 +223,13 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     updateImageSettingForAsset
   )
 
-  const textDataActions = useTextDataDraft(
+  const textDataActions = useTextDataDraft({
     id,
-    asset,
-    addTextDataToAsset,
-    updateTextDataForAsset,
-    removeTextDataFromAsset
-  )
+    draft: asset,
+    addTextDataAction: addTextDataToAsset,
+    updateTextDataAction: updateTextDataForAsset,
+    removeTextDataAction: removeTextDataFromAsset
+  })
 
   const tabsActions = useTabsDraft(
     id,

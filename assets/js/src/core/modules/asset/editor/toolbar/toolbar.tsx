@@ -110,6 +110,7 @@ export const Toolbar = (): React.JSX.Element => {
     if (asset?.changes === undefined) return
 
     const update: AssetUpdateByIdApiArg['body']['data'] = {}
+
     if (asset.changes.properties) {
       const propertyUpdate = properties?.map((property: DataProperty): DataPropertyApi => {
         const { rowId, ...propertyApi } = property
