@@ -57,7 +57,7 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
     return {} as UserGetByIdApiResponse
   }
 
-  async function reloadUser (): Promise<void> {
+  function reloadUser (): void {
     removeUserFromState()
     getUser()
   }

@@ -74,7 +74,7 @@ export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn
     })
   }
 
-  const submitWorkflowAction = async (transition: TransitionType, actionType: string, workflowName: string, workFlowOptions: WorkflowOptions): Promise<void> => {
+  const submitWorkflowAction = (transition: TransitionType, actionType: string, workflowName: string, workFlowOptions: WorkflowOptions): void => {
     setContextWorkflowDetails({ transition, action: actionType, workflowName })
 
     fetchSubmitWorkflowActionMutation(workFlowTransition(transition, actionType, workflowName, workFlowOptions)).unwrap().then((response) => {
