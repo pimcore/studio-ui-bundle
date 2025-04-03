@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Asset Search", "Data Object Search", "Search", "User Management"] as const;
+export const addTagTypes = ["Search", "User Management"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -10,28 +10,38 @@ const injectedRtkApi = api
                 AssetGetSearchConfigurationApiResponse,
                 AssetGetSearchConfigurationApiArg
             >({
-                query: () => ({ url: `/pimcore-studio/api/assets/search/configuration/` }),
-                providesTags: ["Asset Search"],
+                query: () => ({ url: `/pimcore-studio/api/search/configuration/assets` }),
+                providesTags: ["Search"],
             }),
-            assetGetSearch: build.mutation<AssetGetSearchApiResponse, AssetGetSearchApiArg>({
+            assetGetSearch: build.query<AssetGetSearchApiResponse, AssetGetSearchApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/search`,
+                    url: `/pimcore-studio/api/search/assets`,
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Asset Search"],
+                providesTags: ["Search"],
             }),
             dataObjectGetSearchConfiguration: build.query<
                 DataObjectGetSearchConfigurationApiResponse,
                 DataObjectGetSearchConfigurationApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-object/search/configuration/${queryArg.classId}`,
+                    url: `/pimcore-studio/api/search/configuration/data-objects/${queryArg.classId}`,
                 }),
-                providesTags: ["Data Object Search"],
+                providesTags: ["Search"],
+            }),
+            dataObjectGetSearch: build.mutation<DataObjectGetSearchApiResponse, DataObjectGetSearchApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/search/data-objects/${queryArg.classId}`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Search"],
             }),
             simpleSearchPreviewGet: build.query<SimpleSearchPreviewGetApiResponse, SimpleSearchPreviewGetApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/search/${queryArg.elementType}/${queryArg.id}` }),
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/search/preview/${queryArg.elementType}/${queryArg.id}`,
+                }),
                 providesTags: ["Search"],
             }),
             simpleSearchGet: build.query<SimpleSearchGetApiResponse, SimpleSearchGetApiArg>({
@@ -78,6 +88,23 @@ export type DataObjectGetSearchConfigurationApiResponse =
 export type DataObjectGetSearchConfigurationApiArg = {
     /** Class Id of the data object */
     classId?: string;
+};
+export type DataObjectGetSearchApiResponse = /** status 200 Data object search results */ {
+    totalItems: number;
+    items: {
+        id?: number;
+        columns?: GridColumnData[];
+        isLocked?: boolean;
+        permissions?: Permissions;
+    }[];
+};
+export type DataObjectGetSearchApiArg = {
+    /** Class Id of the data object */
+    classId?: string;
+    body: {
+        columns: GridColumnRequest[];
+        filters?: GridFilter;
+    };
 };
 export type SimpleSearchPreviewGetApiResponse = /** status 200 Simple search results preview for elements */
     | SimpleSearchAssetDetail
@@ -333,8 +360,9 @@ export type SimpleUser = {
 };
 export const {
     useAssetGetSearchConfigurationQuery,
-    useAssetGetSearchMutation,
+    useAssetGetSearchQuery,
     useDataObjectGetSearchConfigurationQuery,
+    useDataObjectGetSearchMutation,
     useSimpleSearchPreviewGetQuery,
     useSimpleSearchGetQuery,
     usePimcoreStudioApiUserSearchQuery,

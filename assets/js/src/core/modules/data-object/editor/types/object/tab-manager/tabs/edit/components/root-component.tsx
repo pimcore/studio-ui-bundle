@@ -23,7 +23,7 @@ import {
 import {
   DraftAlert
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/root-component/draft-alert'
-import { FieldWidthProvider } from '../providers/field-width/field-width-provider'
+import { FieldWidthProvider } from '../../../../../../../../element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 
 interface RootComponentProps {
   layout: DataObjectGetLayoutByIdApiResponse

@@ -11,20 +11,23 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { useNumberedList } from '@Pimcore/components/form/numbered-list/provider/numbered-list/use-numbered-list'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Space } from '@Pimcore/components/space/space'
 import { Split } from '@Pimcore/components/split/split'
-import { type FormListFieldData, type FormListOperation } from 'antd'
 import React from 'react'
-import { type CollectionItemProps } from '../collection/collection'
 
-export interface BlockToolStripProps extends CollectionItemProps {
-  field: FormListFieldData
-  operations: FormListOperation
+export interface BlockToolStripProps {
+  field: number
+  disallowAdd: boolean
+  disallowDelete: boolean
+  disallowReorder: boolean
+  maxItems: number
 }
 
-export const BlockToolStrip = ({ field, operations, disallowAdd, disallowDelete, disallowReorder, fields, maxItems }: BlockToolStripProps): React.JSX.Element => {
-  const hasMaxItems = maxItems !== undefined && maxItems !== null && fields.length >= maxItems
+export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReorder, maxItems }: BlockToolStripProps): React.JSX.Element => {
+  const hasMaxItems = false
+  const { operations } = useNumberedList()
 
   return (
     <Split
@@ -34,32 +37,34 @@ export const BlockToolStrip = ({ field, operations, disallowAdd, disallowDelete,
     >
       <Space size="mini">
         <IconButton
-          disabled={ disallowAdd === true || hasMaxItems }
+          disabled={ disallowAdd || hasMaxItems }
           icon={ { value: 'new' } }
-          onClick={ () => { operations.add(undefined, field.name + 1) } }
+          onClick={ () => { operations.add({}, field + 1) } }
           style={ { padding: 4 } }
           variant='minimal'
         />
+
         <IconButton
-          disabled={ disallowReorder === true }
+          disabled={ disallowReorder }
           icon={ { value: 'move-down' } }
-          onClick={ () => { operations.move(field.name, field.name + 1) } }
+          onClick={ () => { operations.move(field, field + 1) } }
           style={ { padding: 4 } }
           variant='minimal'
         />
+
         <IconButton
-          disabled={ disallowReorder === true }
+          disabled={ disallowReorder }
           icon={ { value: 'move-up' } }
-          onClick={ () => { operations.move(field.name, field.name - 1) } }
+          onClick={ () => { operations.move(field, field - 1) } }
           style={ { padding: 4 } }
           variant='minimal'
         />
       </Space>
 
       <IconButton
-        disabled={ disallowDelete === true }
+        disabled={ disallowDelete }
         icon={ { value: 'trash' } }
-        onClick={ () => { operations.remove(field.name) } }
+        onClick={ () => { operations.remove(field) } }
         style={ { padding: 4 } }
         variant='minimal'
       />

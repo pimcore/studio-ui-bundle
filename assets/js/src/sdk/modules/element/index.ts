@@ -121,6 +121,8 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-r
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/table/table'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/url-slug/url-slug'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/video/video'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
@@ -184,6 +186,10 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-r
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-url-slug'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-user'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-video'
+
+export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/grid-cell-preview/grid-cell-cell-preview-wrapper/grid-cell-preview-wrapper'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/grid-cell-preview/numeric/numeric'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/grid-cell-preview/relation-list/relation-list'
 
 export * from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
 export * from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'

@@ -8,6 +8,21 @@ error.error_invalid_argument: Invalid argument
 error.error_widget_name_missing: Widget name have to be provided
 error.error_widget_name_invalid: Widget name is invalid (only alphanumeric characters, underscores and spaces are allowed, must be at least 3 characters long and less than 80 long)
 error.error_validation_failed: Validation failed
+modal-search.field.mimeType: MIME-Type
+modal-search.field.thumbnail: Thumbnail
+modal-search.field.id: ID
+modal-search.field.userOwner: User Owner
+modal-search.field.userOwnerName: User Owner Name
+modal-search.field.userModification: User Modification
+modal-search.field.userModificationName: User Modification Name
+modal-search.field.creationDate: Creation Date
+modal-search.field.modificationDate: Modification Date
+modal-search.field.description: Description
+modal-search.field.name: Name
+modal-search.field.previewImage: Preview Image
+modal-search.field.title: Title
+modal-search.field.class: Class
+modal-search.field.language: Language
 asset.sidebar.details: Details
 asset.asset-tree.title: Asset Tree
 asset.asset-tree.search: Search in {{folderName}}
@@ -31,6 +46,7 @@ asset.upload.files.completed: Completed!
 asset.upload.files.successfully-uploaded: Successfully uploaded
 asset.upload.files.completed-actions: Completed actions
 asset.upload.validation: 'Please add a file'
+asset.select.type.nullable: 'All types'
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 data-object.tree.context-menu.add-object: Add Object
@@ -631,6 +647,22 @@ navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
 navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
+navigation.customise: Customise
+navigation.tag-configuration: Tag Configuration
+navigation.user-and-roles: User & Roles
+navigation.users: Users
+navigation.roles: Roles
+navigation.open-asset: Open Asset
+navigation.open-document: Open Document
+navigation.open-data-object: Open Data Object
+navigation.notes-and-events: Notes & Events
+navigation.file: File
+navigation.settings: Settings
+navigation.tools: Tools
+widget.notes-and-events: Notes & Events
+widget.tag-configuration: Tag Configuration
+widget.role-management: Roles
+widget.user-management: Users
 external-image.preview-placeholder: Add an external image
 empty-image: Empty Image
 image.dnd-target: Drop an image here

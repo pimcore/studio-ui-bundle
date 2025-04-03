@@ -25,6 +25,7 @@ moduleSystem.registerModule({
 
     mainNavRegistryService.registerMainNavItem({
       path: 'Settings/Tag Configuration',
+      label: 'navigation.tag-configuration',
       className: 'item-style-modifier',
       perspectivePermission: NavPermission.TagConfiguration,
       widgetConfig: {
@@ -32,6 +33,7 @@ moduleSystem.registerModule({
         id: 'tag-configuration',
         component: 'tag-configuration',
         config: {
+          translationKey: 'widget.tag-configuration',
           icon: {
             type: 'name',
             value: 'tag-configuration'

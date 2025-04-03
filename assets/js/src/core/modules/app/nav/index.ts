@@ -23,18 +23,21 @@ moduleSystem.registerModule({
 
     mainNavRegistryService.registerMainNavItem({
       path: 'File',
+      label: 'navigation.file',
       icon: 'document',
       perspectivePermissionHide: NavPermission.FileHidden
     })
 
     mainNavRegistryService.registerMainNavItem({
       path: 'Settings',
+      label: 'navigation.settings',
       icon: 'menu',
       perspectivePermissionHide: NavPermission.SettingsHidden
     })
 
     mainNavRegistryService.registerMainNavItem({
       path: 'Tools',
+      label: 'navigation.tools',
       icon: 'accessory',
       perspectivePermissionHide: NavPermission.ToolsHidden
     })

@@ -11,75 +11,89 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import { FormListProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/form-list-provider/form-list-provider'
-import { type FormListFieldData, type FormListOperation } from 'antd'
-import { useFieldCollection } from './providers/use-field-collection'
-import { Content } from '@Pimcore/components/content/content'
-import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { ToolStripBox } from '@Pimcore/components/toolstrip/box/tool-strip-box'
-import { FieldCollectionToolStrip } from './field-collection-tool-strip'
-import { Form } from '@Pimcore/components/form/form'
-import { type CollectionItemProps } from '../collection/collection'
+import React, { useMemo } from 'react'
+import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
+import { useFieldCollection } from './providers/use-field-collection'
+import { isEmpty } from 'lodash'
+import { Content } from '@Pimcore/components/content/content'
+import { useNumberedList } from '@Pimcore/components/form/numbered-list/provider/numbered-list/use-numbered-list'
 import { type FieldCollectionProps } from './field-collection'
+import { Form } from '@Pimcore/components/form/form'
+import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
+import { FieldCollectionToolStrip } from './field-collection-tool-strip'
+import { Input } from 'antd'
 
-export interface FieldCollectionItemProps extends CollectionItemProps {
-  field: FormListFieldData
-  operation: FormListOperation
+export interface FieldCollectionItemProps {
+  field: number
+  docked: boolean
+  noteditable: AbstractObjectDataDefinition['noteditable']
   allowedTypes: FieldCollectionProps['allowedTypes']
+  disallowReorder?: boolean
+  disallowAdd?: boolean
+  disallowDelete?: boolean
 }
 
-export const FieldCollectionItem = ({ field, operation, name, border, ...props }: FieldCollectionItemProps): React.JSX.Element => {
-  const form = Form.useFormInstance()
+export const FieldCollectionItem = (props: FieldCollectionItemProps): React.JSX.Element => {
+  const { field, noteditable } = props
+
   const fieldCollection = useFieldCollection()
-  const value = form.getFieldValue([name, field.name])
+  const { operations } = useNumberedList()
+  const type = operations.getValue([field, 'type'])
 
-  // @todo handle this cases as errors
-  if (value === null || fieldCollection === null) {
-    return <></>
+  if (isEmpty(type) || isEmpty(fieldCollection)) {
+    throw new Error('FieldCollection or type is empty')
   }
 
-  const { data, isLoading } = fieldCollection
+  return useMemo(() => {
+    const { data, isLoading } = fieldCollection
 
-  if (isLoading === true) {
-    return <Content loading />
-  }
+    if (isLoading === true) {
+      return <Content loading />
+    }
 
-  const fieldCollectionType: string = value?.type
-  const layoutDefinition = data.items.find(item => item.key === fieldCollectionType)
+    const layoutDefinition = data.items.find(item => item.key === type)
 
-  if (layoutDefinition === undefined) {
-    return <></>
-  }
+    if (layoutDefinition === undefined) {
+      throw new Error(`Field collection layout definition for type ${type} not found`)
+    }
 
-  return (
-    <ToolStripBox
-      docked={ border }
-      renderToolStripStart={ (
-        <FieldCollectionToolStrip
-          { ...props }
-          field={ field }
-          label={ fieldCollectionType }
-          name={ name }
-          operation={ operation }
-        />
-      ) }
-    >
-      <FormListProvider
-        field={ field }
-        fieldSuffix='data'
-        operation={ operation }
+    return (
+      <ToolStripBox
+        docked={ props.docked }
+        key={ field }
+        renderToolStripStart={ (
+          <FieldCollectionToolStrip
+            allowedTypes={ props.allowedTypes }
+            disallowAdd={ props?.disallowAdd }
+            disallowDelete={ props?.disallowDelete }
+            disallowReorder={ props?.disallowReorder }
+            field={ field }
+          />
+          ) }
       >
-        {layoutDefinition.children.map((child, index) => {
-          return (
-            <ObjectComponent
-              key={ index }
-              { ...child }
-            />
-          )
-        })}
-      </FormListProvider>
-    </ToolStripBox>
+        <Form.Item
+          name={ [field, 'type'] }
+          style={ { display: 'none' } }
+        >
+          <Input
+            type='hidden'
+            value={ type }
+          />
+        </Form.Item>
 
-  )
+        <Form.Group name={ [field, 'data'] }>
+          {layoutDefinition.children.map((child, index) => {
+            return (
+              <ObjectComponent
+                key={ index }
+                { ...child }
+                noteditable={ noteditable }
+              />
+            )
+          })}
+        </Form.Group>
+      </ToolStripBox>
+    )
+  }, [field, noteditable, fieldCollection, type, props.docked, props.allowedTypes])
 }
