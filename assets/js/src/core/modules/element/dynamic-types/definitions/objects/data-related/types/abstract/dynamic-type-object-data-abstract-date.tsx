@@ -14,6 +14,7 @@
 import React from 'react'
 import dayjs from 'dayjs'
 import cn from 'classnames'
+import { type PickerProps } from 'antd/lib/date-picker/generatePicker/interface'
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../../dynamic-type-object-data-abstract'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
 import type { FormInstance } from 'antd'
@@ -26,7 +27,7 @@ export type AbstractDateObjectDataDefinition = AbstractObjectDataDefinition & {
   respectTimezone?: boolean | null
   outputType?: 'timestamp' | 'dateString'
   outputFormat?: string
-  showTime?: boolean
+  showTime?: PickerProps['showTime']
 }
 
 const getDefaultValue = (props: AbstractDateObjectDataDefinition): number | string | dayjs.Dayjs | undefined => {

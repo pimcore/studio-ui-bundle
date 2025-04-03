@@ -32,6 +32,7 @@ export type DatePickerProps = PickerProps & {
   onChange?: (date: DatePickerValueType) => void
   outputType?: OutputType
   outputFormat?: string
+  showTime?: PickerProps['showTime']
   disabled?: boolean
   inherited?: boolean
 }
@@ -50,12 +51,14 @@ const DatePickerComponent = (props: DatePickerProps): React.JSX.Element => {
   return (
     <OriginalDatePicker
       { ...props }
+      format={ props.outputFormat }
       onChange={ (date: Dayjs | null) => {
         setValue(date)
         props.onChange?.(fromDayJs(date, props.outputType, props.outputFormat))
       } }
       popupClassName={ styles.datePickerDropdown }
       rootClassName={ cn(styles.datePicker, props.className, { [styles.inherited]: props.inherited }) }
+      showTime={ props.showTime }
       value={ value }
     />
   )
