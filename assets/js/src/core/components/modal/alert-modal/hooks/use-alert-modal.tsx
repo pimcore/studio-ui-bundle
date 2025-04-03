@@ -15,6 +15,7 @@ import { App, type ModalFuncProps } from 'antd'
 import type React from 'react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { isUndefined } from 'lodash'
 
 type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)
 
@@ -39,27 +40,27 @@ export const useAlertModal = (): UseAlertModalResponse => {
     () => ({
       info: ({ title, content }) => (
         modal.info({
-          title: title !== undefined ? t(title) : t('error'),
+          title: !isUndefined(title) ? t(title) : t('info'),
           content
         })
       ),
       error: ({ title, content }) => {
         return (
           modal.error({
-            title: title !== undefined ? t(title) : t('error'),
+            title: !isUndefined(title) ? t(title) : t('error'),
             content
           })
         )
       },
       warn: ({ title, content }) => (
         modal.warning({
-          title: title !== undefined ? t(title) : t('error'),
+          title: !isUndefined(title) ? t(title) : t('warning'),
           content
         })
       ),
       success: ({ title, content }) => (
         modal.success({
-          title: title !== undefined ? t(title) : t('success'),
+          title: !isUndefined(title) ? t(title) : t('success'),
           content
         })
       )
