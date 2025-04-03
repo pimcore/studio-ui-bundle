@@ -53,7 +53,6 @@ export const GridConfigInner = (): React.JSX.Element => {
   const userData = useUser()
   const { id: selectedGridConfigId, setId: setSelectedGridConfigId } = useSelectedGridConfigId()
   const { gridConfig, setGridConfig } = useGridConfig()
-
   const { isLoading, isFetching, data } = useAssetGetSavedGridConfigurationsQuery({ folderId: getId() })
   const { data: roleList } = useRoleGetCollectionQuery()
   const { data: userList } = useUserGetCollectionQuery()

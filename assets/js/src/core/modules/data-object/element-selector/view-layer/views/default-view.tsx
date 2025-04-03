@@ -32,7 +32,7 @@ export const DefaultView = (): React.JSX.Element => {
       <ContentLayout
         renderSidebar={ <Sidebar /> }
       >
-        {selectedClassDefinition !== undefined && dataQueryResult !== undefined && (
+        { dataQueryResult !== undefined && (
           <GridContainer />
         )}
       </ContentLayout>

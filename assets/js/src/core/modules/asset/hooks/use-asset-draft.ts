@@ -36,7 +36,8 @@ import {
   updateCustomMetadataForAsset,
   updateImageSettingForAsset,
   updatePropertyForAsset,
-  updateScheduleForAsset
+  updateScheduleForAsset,
+  updateTextDataForAsset
 } from '../asset-draft-slice'
 import { useEffect, useState } from 'react'
 import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
@@ -59,6 +60,7 @@ import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { initialTabsStateValue, useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-tabs'
 import trackError, { GeneralError, ApiError } from '@Pimcore/modules/app/error-handler'
+import { useTextDataDraft, type UseTextDataDraftReturn } from '@Pimcore/modules/asset/draft/hooks/use-text-settings'
 
 export interface UseAssetDraftReturn extends
   UseCustomMetadataDraftReturn,
@@ -66,6 +68,7 @@ export interface UseAssetDraftReturn extends
   UseSchedulesDraftReturn,
   UseTrackableChangesDraftReturn,
   UseTabsDraftReturn,
+  UseTextDataDraftReturn,
   UseImageSettingsDraftReturn {
   isLoading: boolean
   isError: boolean
@@ -162,6 +165,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
         properties: [],
         customMetadata: [],
         schedules: [],
+        textData: '',
         imageSettings: customSettingsResponse,
         changes: {},
         modifiedCells: {},
@@ -230,6 +234,12 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     updateImageSettingForAsset
   )
 
+  const textDataActions = useTextDataDraft({
+    id,
+    draft: asset,
+    updateTextDataAction: updateTextDataForAsset
+  })
+
   const tabsActions = useTabsDraft(
     id,
     asset,
@@ -252,6 +262,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     ...schedulesActions,
     ...customMetadataActions,
     ...imageSettingsActions,
+    ...textDataActions,
     ...tabsActions
   }
 }

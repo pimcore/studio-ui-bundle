@@ -20,13 +20,13 @@ import { removeAsset } from '@Pimcore/modules/asset/asset-draft-slice'
 import { removeDataObject } from '@Pimcore/modules/data-object/data-object-draft-slice'
 
 interface UseElementRefreshHookReturn {
-  refreshElement: (id: number) => void
+  refreshElement: (id: number, inElementTab?: boolean) => void
 }
 
 export const useElementRefresh = (elementType: ElementType): UseElementRefreshHookReturn => {
   const dispatch = useAppDispatch()
 
-  const refreshElement = (id: number): void => {
+  const refreshElement = (id: number, inElementTab?: boolean): void => {
     if (elementType === 'asset') {
       dispatch(removeAsset(id))
       dispatch(
@@ -34,6 +34,14 @@ export const useElementRefresh = (elementType: ElementType): UseElementRefreshHo
           invalidatingTags.ASSET_DETAIL_ID(id)
         )
       )
+
+      if (inElementTab === true) {
+        dispatch(
+          assetApi.util.invalidateTags(
+            invalidatingTags.PREDEFINED_ASSET_METADATA()
+          )
+        )
+      }
     } else if (elementType === 'data-object') {
       dispatch(removeDataObject(id))
       dispatch(

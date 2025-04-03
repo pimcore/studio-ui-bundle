@@ -84,7 +84,6 @@ export const GridConfigInner = (): React.JSX.Element => {
         }
       }) ?? []
     }
-
     return []
   }, [data])
 

@@ -26,8 +26,8 @@ import {
 import { isNil, isUndefined } from 'lodash'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { type SerializedError } from '@reduxjs/toolkit'
-import { usePublish } from '@Pimcore/modules/element/actions/publish/use-publish'
-import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { setNodePublished } from '@Pimcore/components/element-tree/element-tree-slice'
 
 export enum SaveTaskType {
   Version = 'version',
@@ -50,7 +50,7 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
   const { dataObject, properties, setDraftData } = useDataObjectDraft(id)
   const [saveDataObject, { isLoading, isSuccess, isError, error }] = useDataObjectUpdateByIdMutation()
   const { setRunningTask, runningTask, runningTaskRef, queuedTask, setQueuedTask } = useSaveContext()
-  const { publishNode } = usePublish(elementTypes.dataObject)
+  const dispatch = useAppDispatch()
 
   const executeQueuedTask = async (): Promise<void> => {
     if (!isNil(queuedTask)) {
@@ -126,7 +126,7 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
       if (response.error === undefined) {
         setDraftData(response.data?.draftData ?? null)
         if (task === SaveTaskType.Publish) {
-          publishNode(dataObject)
+          dispatch(setNodePublished({ nodeId: String(id), elementType: 'data-object', isPublished: true }))
         }
         onFinish?.()
       }

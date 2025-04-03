@@ -42,6 +42,13 @@ class ApiError extends Error {
     const errorMessage = errorData?.message
     const errorValue = errorData?.error
 
+    if (!isEmpty(errorKey) && errorKey === ErrorKeyTypes.ELEMENT_VALIDATION_FAILED) {
+      return {
+        title: errorKey,
+        errorKey: errorMessage!
+      }
+    }
+
     if (!isEmpty(errorKey) && errorKey !== ErrorKeyTypes.GENERIC_ERROR) {
       return { errorKey: errorKey! }
     }
