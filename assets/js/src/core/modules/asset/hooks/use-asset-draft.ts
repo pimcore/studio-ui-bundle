@@ -90,13 +90,13 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   const typeRegistry = useInjection<TypeRegistryInterface>(serviceIds['Asset/Editor/TypeRegistry'])
 
   async function getAsset (): Promise<AssetGetByIdApiResponse> {
-    const { data, isError, error } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
+    const { data, isError: isGetAssetError, error: getAssetError } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
 
     useEffect(() => {
-      if (isError) {
-        trackError(new ApiError(error))
+      if (isGetAssetError) {
+        trackError(new ApiError(getAssetError))
       }
-    }, [isError])
+    }, [isGetAssetError])
 
     if (data !== undefined) {
       return data
@@ -108,13 +108,13 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
 
   async function getCustomSettings (): Promise<ImageData> {
     let objectToReturn: ImageData = {}
-    const { data, isSuccess, isError: assetCustomSettingsError } = await dispatch(settingsApi.endpoints.assetCustomSettingsGetById.initiate({ id }))
+    const { data, isSuccess, isError: isAssetCustomSettingsError, error: assetCustomSettingsError } = await dispatch(settingsApi.endpoints.assetCustomSettingsGetById.initiate({ id }))
 
     useEffect(() => {
-      if (isError) {
-        trackError(new ApiError(error))
+      if (isAssetCustomSettingsError) {
+        trackError(new ApiError(assetCustomSettingsError))
       }
-    }, [isError])
+    }, [isAssetCustomSettingsError])
 
     if (isSuccess && data !== undefined) {
       const settings = data.items!
