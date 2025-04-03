@@ -22,6 +22,13 @@ export const DataRequestContainer = (): React.JSX.Element => {
   const { setDataQueryResult, setData } = useData()
 
   useEffect(() => {
+    if (!dataQueryResult.isLoading && dataLoadingState === 'config-changed') {
+      void dataQueryResult.refetch()
+      setDataLoadingState('data-available')
+    }
+  }, [dataLoadingState])
+
+  useEffect(() => {
     setDataQueryResult(dataQueryResult)
   }, [dataQueryResult])
 

@@ -11,13 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useSettings } from './settings/use-settings'
 
 export const ListingInnerContainer = (): React.JSX.Element => {
   const { ContextComponent } = useSettings()
 
-  return (
-    <ContextComponent />
-  )
+  return useMemo(() => (
+    <ContextComponent key={ 'context-component' } />
+  ), [ContextComponent])
 }

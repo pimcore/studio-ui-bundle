@@ -11,6 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+/* eslint-disable max-lines */
 import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type DynamicTypeFieldFilterRegistry } from './definitions/field-filters/dynamic-type-field-filter-registry'
@@ -146,6 +147,10 @@ import { type DynamicTypeAssetImage } from './definitions/asset/types/dynamic-ty
 import { type DynamicTypeAssetText } from './definitions/asset/types/dynamic-type-asset-text'
 import { type DynamicTypeAssetUnknown } from './definitions/asset/types/dynamic-type-asset-unknown'
 import { type DynamicTypeAssetVideo } from './definitions/asset/types/dynamic-type-asset-video'
+import { type DynamicTypeObjectRegistry } from './definitions/objects/dynamic-type-object-registry'
+import { type DynamicTypeObjectFolder } from './definitions/objects/types/dynamic-type-object-folder'
+import { type DynamicTypeObjectObject } from './definitions/objects/types/dynamic-type-object-object'
+import { type DynamicTypeObjectVariant } from './definitions/objects/types/dynamic-type-object-variant'
 
 moduleSystem.registerModule({
   onInit () {
@@ -289,5 +294,11 @@ moduleSystem.registerModule({
     assetRegistry.registerDynamicType(container.get<DynamicTypeAssetText>(serviceIds['DynamicTypes/Asset/Text']))
     assetRegistry.registerDynamicType(container.get<DynamicTypeAssetUnknown>(serviceIds['DynamicTypes/Asset/Unknown']))
     assetRegistry.registerDynamicType(container.get<DynamicTypeAssetVideo>(serviceIds['DynamicTypes/Asset/Video']))
+
+    const objectRegistry = container.get<DynamicTypeObjectRegistry>(serviceIds['DynamicTypes/ObjectRegistry'])
+
+    objectRegistry.registerDynamicType(container.get<DynamicTypeObjectFolder>(serviceIds['DynamicTypes/Object/Folder']))
+    objectRegistry.registerDynamicType(container.get<DynamicTypeObjectObject>(serviceIds['DynamicTypes/Object/Object']))
+    objectRegistry.registerDynamicType(container.get<DynamicTypeObjectVariant>(serviceIds['DynamicTypes/Object/Variant']))
   }
 })

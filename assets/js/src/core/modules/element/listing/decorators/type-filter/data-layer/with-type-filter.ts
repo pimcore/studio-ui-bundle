@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useTypeSelect } from '@Pimcore/modules/asset/components/type-select/provider/use-type-select'
+import { useTypeSelect } from '@Pimcore/modules/element/components/type-select/provider/use-type-select'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 
 export const withTypeFilter = (useBaseHook: AbstractDecoratorProps['useDataQueryHelper']): AbstractDecoratorProps['useDataQueryHelper'] => {

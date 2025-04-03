@@ -1189,9 +1189,11 @@ export type PatchCustomMetadata = {
     /** Name */
     name: string;
     /** Language */
-    language?: any;
+    language: any;
+    /** Type */
+    type: string;
     /** Data */
-    data?: any;
+    data: any;
 };
 export type CustomMetadata = {
     /** AdditionalAttributes */
