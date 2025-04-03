@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useStyle } from './edit-view.styles'
 import { TextEditor } from '@Pimcore/components/text-editor/text-editor'
 import { type SupportedLanguage } from '@Pimcore/components/text-editor/detect-language'
@@ -25,11 +25,16 @@ const EditView = (props: PreviewViewProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { src, language } = props
 
+  const [textValue, setTextValue] = useState(src ?? '')
+
+  const handleUpdateTextValue = (value: string): void => { setTextValue(value) }
+
   return (
     <div className={ styles.preview }>
       <TextEditor
-        defaultText={ src }
         language={ language }
+        textValue={ textValue }
+        updateTextValue={ handleUpdateTextValue }
       />
     </div>
   )
