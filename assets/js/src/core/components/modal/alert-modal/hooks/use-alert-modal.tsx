@@ -15,11 +15,13 @@ import { App, type ModalFuncProps } from 'antd'
 import type React from 'react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { isUndefined } from 'lodash'
 
 type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)
 
 interface ContentAware {
   content: string | React.ReactNode
+  title?: string
 }
 
 export interface UseAlertModalResponse {
@@ -36,27 +38,29 @@ export const useAlertModal = (): UseAlertModalResponse => {
 
   return useMemo<UseAlertModalResponse>(
     () => ({
-      info: ({ content }) => (
+      info: ({ title, content }) => (
         modal.info({
-          title: t('info'),
+          title: !isUndefined(title) ? t(title) : t('info'),
           content
         })
       ),
-      error: ({ content }) => (
-        modal.error({
-          title: t('error'),
-          content
-        })
-      ),
-      warn: ({ content }) => (
+      error: ({ title, content }) => {
+        return (
+          modal.error({
+            title: !isUndefined(title) ? t(title) : t('error'),
+            content
+          })
+        )
+      },
+      warn: ({ title, content }) => (
         modal.warning({
-          title: t('warning'),
+          title: !isUndefined(title) ? t(title) : t('warning'),
           content
         })
       ),
-      success: ({ content }) => (
+      success: ({ title, content }) => (
         modal.success({
-          title: t('success'),
+          title: !isUndefined(title) ? t(title) : t('success'),
           content
         })
       )
