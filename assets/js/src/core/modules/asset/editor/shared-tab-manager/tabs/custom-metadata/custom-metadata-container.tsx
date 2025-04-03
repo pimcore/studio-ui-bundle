@@ -48,7 +48,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const settings = useSettings()
   const { id } = useContext(AssetContext)
   const { addCustomMetadata, customMetadata } = useAssetDraft(id)
-  const [predefinedMetadata, { isFetching, isError, error }] = useMetadataGetCollectionMutation()
+  const [predefinedMetadata, { isFetching, isError, error }] = useLazyMetadataGetCollectionQuery()
 
   const {
     showModal: showDuplicateEntryModal,

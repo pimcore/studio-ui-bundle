@@ -26,7 +26,7 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useEffect } from 'react'
 
 interface UseSubmitWorkflowReturn {
-  submitWorkflowAction: (actionType: string, transition: TransitionType, workFlowName: string, workFlowOptions: WorkflowOptions) => Promise <void>
+  submitWorkflowAction: (actionType: string, transition: TransitionType, workFlowName: string, workFlowOptions: WorkflowOptions) => void
   submissionLoading: boolean
   submissionSuccess: boolean
   submissionError: boolean
@@ -77,7 +77,7 @@ export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn
   const submitWorkflowAction = async (transition: TransitionType, actionType: string, workflowName: string, workFlowOptions: WorkflowOptions): Promise<void> => {
     setContextWorkflowDetails({ transition, action: actionType, workflowName })
 
-    await fetchSubmitWorkflowActionMutation(workFlowTransition(transition, actionType, workflowName, workFlowOptions)).unwrap().then((response) => {
+    fetchSubmitWorkflowActionMutation(workFlowTransition(transition, actionType, workflowName, workFlowOptions)).unwrap().then((response) => {
       if ('data' in response) {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         messageApi.success({
@@ -86,6 +86,8 @@ export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn
           duration: 3
         })
       }
+    }).catch((error) => {
+      console.error(`Failed to submit workflow action ${error}`)
     })
   }
 
