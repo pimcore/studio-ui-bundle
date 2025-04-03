@@ -38,8 +38,8 @@ import { Select } from '@Pimcore/components/select/select'
 import { type DynamicTypeMetaDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/meta-data/dynamic-type-metadata-registry'
 import { uuid } from '@Pimcore/utils/uuid'
 import {
-  useMetadataGetCollectionMutation
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-slice.gen'
+  useLazyMetadataGetCollectionQuery
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
@@ -48,7 +48,8 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const settings = useSettings()
   const { id } = useContext(AssetContext)
   const { addCustomMetadata, customMetadata } = useAssetDraft(id)
-  const [predefinedMetadata, { isLoading, isError, error }] = useMetadataGetCollectionMutation()
+  const [predefinedMetadata, { isFetching, isError, error }] = useMetadataGetCollectionMutation()
+
   const {
     showModal: showDuplicateEntryModal,
     closeModal: closeDuplicateEntryModal,
@@ -237,10 +238,10 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
 
             {!editmode && (
             <ButtonGroup items={ [<IconTextButton
-              disabled={ isLoading }
+              disabled={ isFetching }
               icon={ { value: 'add-something' } }
               key={ t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition') }
-              loading={ isLoading }
+              loading={ isFetching }
               onClick={ addPredefinedMetadata }
                                   >
               {t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition')}

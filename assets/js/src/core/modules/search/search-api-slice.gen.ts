@@ -13,30 +13,32 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/search/configuration/assets` }),
                 providesTags: ["Search"],
             }),
-            assetGetSearch: build.mutation<AssetGetSearchApiResponse, AssetGetSearchApiArg>({
+            assetGetSearch: build.query<AssetGetSearchApiResponse, AssetGetSearchApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/search/assets`,
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Search"],
+                providesTags: ["Search"],
             }),
             dataObjectGetSearchConfiguration: build.query<
                 DataObjectGetSearchConfigurationApiResponse,
                 DataObjectGetSearchConfigurationApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/search/configuration/data-objects/${queryArg.classId}`,
+                    url: `/pimcore-studio/api/search/configuration/data-objects`,
+                    params: { classId: queryArg.classId },
                 }),
                 providesTags: ["Search"],
             }),
-            dataObjectGetSearch: build.mutation<DataObjectGetSearchApiResponse, DataObjectGetSearchApiArg>({
+            dataObjectGetSearch: build.query<DataObjectGetSearchApiResponse, DataObjectGetSearchApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/search/data-objects/${queryArg.classId}`,
+                    url: `/pimcore-studio/api/search/data-objects`,
                     method: "POST",
                     body: queryArg.body,
+                    params: { classId: queryArg.classId },
                 }),
-                invalidatesTags: ["Search"],
+                providesTags: ["Search"],
             }),
             simpleSearchPreviewGet: build.query<SimpleSearchPreviewGetApiResponse, SimpleSearchPreviewGetApiArg>({
                 query: (queryArg) => ({
@@ -360,9 +362,9 @@ export type SimpleUser = {
 };
 export const {
     useAssetGetSearchConfigurationQuery,
-    useAssetGetSearchMutation,
+    useAssetGetSearchQuery,
     useDataObjectGetSearchConfigurationQuery,
-    useDataObjectGetSearchMutation,
+    useDataObjectGetSearchQuery,
     useSimpleSearchPreviewGetQuery,
     useSimpleSearchGetQuery,
     usePimcoreStudioApiUserSearchQuery,

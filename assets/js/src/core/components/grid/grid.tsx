@@ -48,6 +48,7 @@ export interface ColumnMetaType {
   editable?: boolean
   autoWidth?: boolean
   type?: string
+  columnKey?: string
   config?: any
 }
 
@@ -317,6 +318,7 @@ export const Grid = ({
                     key={ row.id }
                     modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
                     onFocusCell={ onFocusCell }
+                    onRowDoubleClick={ props.onRowDoubleClick }
                     row={ row }
                     tableElement={ tableElement }
                   />

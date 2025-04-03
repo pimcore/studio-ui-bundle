@@ -40,7 +40,8 @@ export const tagNames = {
   NOTES_AND_EVENTS: 'NOTES_AND_EVENTS',
   AVAILABLE_TAGS: 'AVAILABLE_TAGS',
   ELEMENT_TAGS: 'TAGS',
-  ROLE: 'ROLE'
+  ROLE: 'ROLE',
+  PREDEFINED_ASSET_METADATA: 'PREDEFINED_ASSET_METADATA'
 }
 
 export const providingTags = {
@@ -82,7 +83,8 @@ export const providingTags = {
   ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.NOTES_AND_EVENTS, elementType, id)],
   AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS],
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.ELEMENT_TAGS, elementType, id)],
-  ROLE: () => [tagNames.ROLE]
+  ROLE: () => [tagNames.ROLE],
+  PREDEFINED_ASSET_METADATA: () => [tagNames.PREDEFINED_ASSET_METADATA]
 }
 
 export const invalidatingTags = {
@@ -114,7 +116,8 @@ export const invalidatingTags = {
   ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.NOTES_AND_EVENTS, elementType, id)],
   AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS],
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.ELEMENT_TAGS, elementType, id)],
-  ROLE: () => [tagNames.ROLE]
+  ROLE: () => [tagNames.ROLE],
+  PREDEFINED_ASSET_METADATA: () => [tagNames.PREDEFINED_ASSET_METADATA]
 }
 
 const elementUnspecificDataTag = tagNames.AVAILABLE_TAGS

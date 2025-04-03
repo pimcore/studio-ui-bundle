@@ -22,14 +22,16 @@ import { Space } from '@Pimcore/components/space/space'
 
 export interface FieldCollectionContentProps extends FieldCollectionProps {}
 
-/* eslint-disable react/no-children-prop */
 export const FieldCollectionContent = (props: FieldCollectionContentProps): React.JSX.Element => {
   const { values } = useNumberedList()
+
   const maxItemsCount = props?.maxItems ?? 0
   const valuesKeys = Object.keys(values)
   const isNoteditable = props.noteditable === true
+  const isDisallowAddRemove = props.disallowAddRemove === true
+
   const isItemLimitReached = maxItemsCount > 0 && valuesKeys.length === maxItemsCount
-  const isHideAddButton = isNoteditable || isItemLimitReached || valuesKeys.length > 0
+  const isHideAddButton = isNoteditable || isItemLimitReached || valuesKeys.length > 0 || isDisallowAddRemove
 
   return useMemo(() => (
     <BaseView
@@ -48,10 +50,13 @@ export const FieldCollectionContent = (props: FieldCollectionContentProps): Reac
           direction='vertical'
           size='extra-small'
         >
-          {values.map((value, index) => (
+          {values.map((_value, index) => (
             <div key={ index }>
               <FieldCollectionItem
                 allowedTypes={ props.allowedTypes }
+                disallowAdd={ props.disallowAddRemove === true || isItemLimitReached || isNoteditable }
+                disallowDelete={ props.disallowAddRemove === true || isNoteditable }
+                disallowReorder={ props.disallowReorder === true || isNoteditable }
                 docked={ props.border === true }
                 field={ index }
                 noteditable={ props.noteditable }

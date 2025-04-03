@@ -14,6 +14,8 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { addMissingTranslation } from './store/missingTranslations.slice'
+import { store } from '../store'
 
 i18n
   .use(initReactI18next)
@@ -30,7 +32,7 @@ i18n
   })
 
 i18n.on('missingKey', (lngs, namespace, key, res) => {
-// @todo implement handling of missing keys after endpoints are available
+  store.dispatch(addMissingTranslation(key))
 })
 
 export default i18n

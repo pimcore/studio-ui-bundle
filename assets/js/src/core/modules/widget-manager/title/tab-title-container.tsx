@@ -16,6 +16,8 @@ import React, { useState } from 'react'
 import { BorderTitleView } from './border-title-view'
 import { TabTitleView } from './tab-title-view'
 import { useWidgetManager } from '../hooks/use-widget-manager'
+import { useTranslation } from 'react-i18next'
+import { isString } from 'lodash'
 
 export interface TabTitleContainerProps {
   node: TabNode
@@ -23,9 +25,13 @@ export interface TabTitleContainerProps {
 }
 
 export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const [isBorderNode] = useState(node.getParent() instanceof BorderNode)
   const config = node.getConfig()
   const icon = config.icon ?? { value: 'widget-default', type: 'name' }
+  const title = isString(config.translationKey)
+    ? t(config.translationKey as string)
+    : node.getName()
   const { closeWidget } = useWidgetManager()
   const isCloseable = node.isEnableClose()
 
@@ -43,7 +49,7 @@ export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): R
     return (
       <BorderTitleView
         icon={ icon }
-        title={ node.getName() }
+        title={ t(`${node.getName()}`) }
       />
     )
   }
@@ -58,6 +64,6 @@ export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): R
   )
 
   function getTitle (): string {
-    return node.getName() + (modified === true ? '*' : '')
+    return title + (modified === true ? '*' : '')
   }
 }

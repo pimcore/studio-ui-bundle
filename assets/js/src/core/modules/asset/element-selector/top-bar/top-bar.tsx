@@ -14,6 +14,8 @@
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { SearchTermFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/search/search-term-filter'
 import React from 'react'
+import { ProvidedTypeSelect } from '../../../element/components/type-select/provided-type-select'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 export const TopBar = (): React.JSX.Element => {
   return (
@@ -23,7 +25,13 @@ export const TopBar = (): React.JSX.Element => {
       position='top'
       theme='secondary'
     >
-      <SearchTermFilter />
+      <Flex
+        className='w-full'
+        gap={ 'small' }
+      >
+        <ProvidedTypeSelect />
+        <SearchTermFilter />
+      </Flex>
     </Toolbar>
   )
 }

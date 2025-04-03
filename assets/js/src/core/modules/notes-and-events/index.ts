@@ -25,6 +25,7 @@ moduleSystem.registerModule({
 
     mainNavRegistryService.registerMainNavItem({
       path: 'Tools/Notes & Events',
+      label: 'navigation.notes-and-events',
       className: 'item-style-modifier',
       perspectivePermission: NavPermission.NotesAndEvents,
       widgetConfig: {
@@ -32,6 +33,7 @@ moduleSystem.registerModule({
         id: 'notes-and-events',
         component: 'notes-and-events',
         config: {
+          translationKey: 'widget.notes-and-events',
           icon: {
             type: 'name',
             value: 'notes-events'
