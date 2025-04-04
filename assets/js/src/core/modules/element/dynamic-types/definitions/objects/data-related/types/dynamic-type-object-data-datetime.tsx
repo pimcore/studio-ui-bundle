@@ -38,8 +38,8 @@ export class DynamicTypeObjectDataDatetime extends DynamicTypeObjectDataAbstract
       ...props,
       className: props.className,
       outputType: 'dateString',
-      outputFormat: 'YYYY-MM-DD HH:mm:ss',
-      showTime: true
+      outputFormat: 'YYYY-MM-DD HH:mm',
+      showTime: { format: 'HH:mm' }
     })
   }
 
