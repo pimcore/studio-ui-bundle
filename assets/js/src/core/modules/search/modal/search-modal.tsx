@@ -18,6 +18,7 @@ import React from 'react'
 import { GeneralTab } from './tabs/general/general-tab'
 import { useSearch } from '../provider/use-search'
 import { AssetTab } from './tabs/asset/asset-tab'
+import { ObjectTab } from './tabs/object/object-tab'
 
 export const SearchModal = (): React.JSX.Element => {
   const { isOpen, close } = useSearch()
@@ -41,7 +42,7 @@ export const SearchModal = (): React.JSX.Element => {
     {
       label: 'Data Objects',
       key: elementTypes.dataObject,
-      children: <>@todo</>
+      children: <ObjectTab />
     }
   ]
 

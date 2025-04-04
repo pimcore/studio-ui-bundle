@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { createContext, type ElementType } from 'react'
+import React, { createContext, useMemo, type ElementType } from 'react'
 import { type BaseQueryFn, type TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react'
 import { type useGridOptions } from '../view-layer/components/grid/hooks/use-grid-options'
 import { type useSidebarOptions } from '../view-layer/components/sidebar/hooks/use-sidebar-options'
@@ -49,5 +49,9 @@ export interface SettingsProviderProps extends SettingsContextProps {
 export const SettingsProvider = (props: SettingsProviderProps): React.JSX.Element => {
   const { children, ...contextProps } = props
 
-  return <SettingsContext.Provider value={ contextProps }>{children}</SettingsContext.Provider>
+  return useMemo(() => (
+    <SettingsContext.Provider value={ contextProps }>
+      {children}
+    </SettingsContext.Provider>
+  ), [props])
 }

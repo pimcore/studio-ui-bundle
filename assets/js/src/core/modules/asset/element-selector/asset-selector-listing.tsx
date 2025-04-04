@@ -26,9 +26,10 @@ import { useRootElementId } from '../listing/hooks/use-root-element-id'
 import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 import { GlobalRowSelectionDecorator, type IGlobalRowSelectionConfig } from '@Pimcore/modules/element/element-selector/listing-decorators/global-row-selection/global-row-selection-decorator'
 import { DefaultView } from './view-layer/views/default-view'
-import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '@Pimcore/modules/search/modal/tabs/asset/listing/decorator/type-filter/type-filter-decorator'
+import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '@Pimcore/modules/element/listing/decorators/type-filter/type-filter-decorator'
 import { StaticColumnConfigurationDecorator } from '@Pimcore/modules/search/modal/tabs/asset/listing/decorator/static-column-configuration/static-column-configuration-decorator'
 import { useAssetGetSearchQuery } from '@Pimcore/modules/search/search-api-slice.gen'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 const defaultProps = {
   ...listingDefaultProps,
@@ -41,7 +42,7 @@ const defaultProps = {
 export const AssetSelectorListing = (): React.JSX.Element => {
   const { config } = useElementSelectorHelper()
 
-  console.log({ config })
+  const allowedTypes: string[] = config.config?.assets?.allowedTypes ?? []
 
   /* eslint-disable @typescript-eslint/consistent-type-assertions */
   const listingProps = useMemo(() => compose<AbstractDecoratorProps>(
@@ -52,7 +53,13 @@ export const AssetSelectorListing = (): React.JSX.Element => {
     [GeneralFiltersDecorator, { handleSearchTermInSidebar: false } as GeneralFiltersDecoratorConfig],
     SortingDecorator,
     [GlobalRowSelectionDecorator, { rowSelectionMode: config?.selectionType, elementType: 'asset' } as IGlobalRowSelectionConfig],
-    [TypeFilterDecorator, { restrictedOptions: config.config?.assets?.allowedTypes } as TypeFilterDecoratorConfig]
+    [
+      TypeFilterDecorator,
+      {
+        restrictedOptions: allowedTypes.length > 0 ? allowedTypes : undefined,
+        elementType: elementTypes.asset
+      } as TypeFilterDecoratorConfig
+    ]
   )(defaultProps), [config])
   /* eslint-enable @typescript-eslint/consistent-type-assertions */
 

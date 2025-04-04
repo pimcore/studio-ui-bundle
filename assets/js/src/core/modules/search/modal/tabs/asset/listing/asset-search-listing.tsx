@@ -25,7 +25,7 @@ import { compose } from '@Pimcore/utils/compose'
 import React from 'react'
 import { StaticColumnConfigurationDecorator } from './decorator/static-column-configuration/static-column-configuration-decorator'
 import { DefaultView } from './view/view-layer/views/default-view'
-import { TypeFilterDecorator } from './decorator/type-filter/type-filter-decorator'
+import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '../../../../../element/listing/decorators/type-filter/type-filter-decorator'
 import { OpenElementDecorator, type OpenElementDecoratorConfig } from './decorator/open-element/open-element-decorator'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
@@ -43,7 +43,7 @@ const listingProps = compose<AbstractDecoratorProps>(
   StaticColumnConfigurationDecorator,
   TagFilterDecorator,
   [GeneralFiltersDecorator, { handleSearchTermInSidebar: false } as GeneralFiltersDecoratorConfig],
-  TypeFilterDecorator,
+  [TypeFilterDecorator, { elementType: elementTypes.asset } as TypeFilterDecoratorConfig],
   SortingDecorator,
   [OpenElementDecorator, { elementType: elementTypes.asset } as OpenElementDecoratorConfig]
 )(defaultProps)
