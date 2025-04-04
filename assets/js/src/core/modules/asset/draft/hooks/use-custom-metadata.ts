@@ -57,19 +57,24 @@ export const useCustomMetadataReducers = (entityAdapter: EntityAdapter<CustomMet
   }
 
   const updateCustomMetadata = (state: EntityState<CustomMetadataDraft, number>, action: PayloadAction<CustomMetadataAction>): void => {
+    let found = false
+
     modifyDraft(state, action.payload.id, (draft: CustomMetadataDraft): CustomMetadataDraft => {
       draft.customMetadata = (draft.customMetadata ?? []).map((customMetadata, index) => {
-        if (customMetadata.name === action.payload.customMetadata.name) {
+        if (customMetadata.name === action.payload.customMetadata.name && customMetadata.language === action.payload.customMetadata.language) {
           markedAsModified(draft)
-
+          found = true
           return action.payload.customMetadata
         }
 
         return customMetadata
       })
-
       return draft
     })
+
+    if (!found) {
+      addCustomMetadata(state, action)
+    }
   }
   const removeCustomMetadata = (state: EntityState<CustomMetadataDraft, number>, action: PayloadAction<CustomMetadataAction>): void => {
     modifyDraft(state, action.payload.id, (draft: CustomMetadataDraft): CustomMetadataDraft => {
