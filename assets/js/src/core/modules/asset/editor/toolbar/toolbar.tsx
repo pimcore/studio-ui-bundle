@@ -46,7 +46,7 @@ export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useElementContext()
 
-  const { asset, properties, removeTrackedChanges, customMetadata, imageSettings, textData } = useAssetDraft(id)
+  const { asset, properties, removeTrackedChanges, customMetadata, customSettings, imageSettings, textData } = useAssetDraft(id)
 
   const [saveAsset, { isLoading, isSuccess, isError, error }] = useAssetUpdateByIdMutation()
   const {
@@ -148,6 +148,10 @@ export const Toolbar = (): React.JSX.Element => {
 
         return metadataApi
       })
+    }
+
+    if (asset.changes.customSettings) {
+      update.customSettings = customSettings
     }
 
     if (asset.changes.imageSettings) {
