@@ -26,7 +26,6 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import {
   type ComponentRegistry as GlobalComponentRegistry
 } from '@Pimcore/modules/app/component-registry/component-registry'
-import { EditorToolbarContextMenu } from '@Pimcore/modules/asset/editor/toolbar/context-menu/context-menu'
 import { AssetEditorWidget } from '@Pimcore/modules/asset/editor/widget'
 import { type TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
 import { CustomMetadataTabContainer } from './shared-tab-manager/tabs/custom-metadata/custom-metadata-container'
@@ -83,11 +82,6 @@ moduleSystem.registerModule({
     widgetRegistryService.registerWidget(AssetEditorWidget)
 
     const componentRegistry = container.get<GlobalComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
-
-    componentRegistry.register({
-      name: componentId.asset.editor.toolbar.contextMenu,
-      component: EditorToolbarContextMenu
-    })
 
     componentRegistry.register({
       name: componentId.asset.editor.tab.embeddedMetadata,

@@ -29,9 +29,6 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
-import { SlotRenderer, type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { container } from '@Pimcore/app/depency-injection'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -40,7 +37,9 @@ import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { isNil } from 'lodash'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { componentId } from '@Pimcore/modules/app/component-registry/component-ids'
+import { componentId, defaultSlotEntries } from '@Pimcore/modules/app/component-registry/component-ids'
+import { EditorToolbarContextMenu } from './context-menu/context-menu'
+import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -57,8 +56,6 @@ export const Toolbar = (): React.JSX.Element => {
     error: schedulesError
   } = useSaveSchedules('asset', id, false)
   const messageApi = useMessage()
-  const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
-  const ContextMenu = componentRegistry.get(componentId.asset.editor.toolbar.contextMenu)
 
   useEffect(() => {
     const handleSuccessEvent = async (): Promise<void> => {
@@ -84,9 +81,15 @@ export const Toolbar = (): React.JSX.Element => {
   return (
     <ToolbarView>
       <WorkFlowProvider>
-        <SlotRenderer slot={ componentId.asset.editor.toolbar.slots.beforeContextMenu } />
-        <ContextMenu />
-        <SlotRenderer slot={ componentId.asset.editor.toolbar.slots.beforeContextMenu } />
+        <SlotRenderer
+          defaultEntries={ [
+            {
+              ...defaultSlotEntries[componentId.asset.editor.toolbar.slots.left].contextMenu,
+              component: EditorToolbarContextMenu
+            }
+          ] }
+          slot={ componentId.asset.editor.toolbar.slots.left }
+        />
         <Flex
           style={ { height: '32px' } }
           vertical={ false }

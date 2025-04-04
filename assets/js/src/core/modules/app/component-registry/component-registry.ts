@@ -14,10 +14,11 @@
 import { injectable } from 'inversify'
 import type React from 'react'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { ComponentType, componentConfig } from './component-ids'
+import { componentConfig } from './component-ids'
 import { isUndefined } from 'lodash'
+import { ComponentType } from './enums/component-type'
 
-interface ComponentRegistryEntry<T> {
+export interface ComponentRegistryEntry<T> {
   name: string
   component: React.ComponentType<T>
   priority?: number // Optional priority for slot components
@@ -86,14 +87,14 @@ export class ComponentRegistry implements ComponentRegistryInterface {
   registerToSlot (slotName: string, component: ComponentRegistryEntry<any>): void {
     const componentConfig = this.getComponentConfig(slotName)
     if (componentConfig.type !== ComponentType.SLOT) {
-      trackError(new GeneralError(`Slot "${slotName}" is not configured as a multiple component slot.`))
+      trackError(new GeneralError(`Slot "${slotName}" is not configured as a slot component.`))
     }
 
     if (isUndefined(this.slots[slotName])) {
       this.slots[slotName] = []
     }
     this.slots[slotName].push(component)
-    this.slots[slotName].sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0)) // Sort by priority
+    this.slots[slotName].sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0))
   }
 
   getSlotComponents (slotName: string): Array<ComponentRegistryEntry<any>> {

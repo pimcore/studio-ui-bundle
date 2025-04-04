@@ -12,13 +12,8 @@
 */
 
 import { type ComponentRegistryConfigEntry } from './component-registry'
+import { ComponentType } from './enums/component-type'
 
-export enum ComponentType {
-  SINGLE = 'single',
-  SLOT = 'slot'
-}
-
-// Restructured componentId to only contain strings
 export const componentId = {
   asset: {
     editor: {
@@ -30,8 +25,8 @@ export const componentId = {
       toolbar: {
         contextMenu: 'asset.editor.toolbar.contextMenu',
         slots: {
-          beforeContextMenu: 'asset.editor.toolbar.slots.beforeContextMenu',
-          afterContextMenu: 'asset.editor.toolbar.slots.afterContextMenu'
+          left: 'asset.editor.toolbar.slots.left',
+          right: 'asset.editor.toolbar.slots.right'
         }
       }
     },
@@ -49,16 +44,27 @@ export const componentId = {
       contextMenu: 'dataObject.tree.contextMenu'
     }
   }
-}
+} as const
 
 export const componentConfig: Record<string, ComponentRegistryConfigEntry> = {
   [componentId.asset.editor.tab.customMetadata]: { type: ComponentType.SINGLE },
   [componentId.asset.editor.tab.embeddedMetadata]: { type: ComponentType.SINGLE },
   [componentId.asset.editor.tab.versions]: { type: ComponentType.SINGLE },
   [componentId.asset.editor.toolbar.contextMenu]: { type: ComponentType.SINGLE },
-  [componentId.asset.editor.toolbar.slots.beforeContextMenu]: { type: ComponentType.SLOT },
-  [componentId.asset.editor.toolbar.slots.afterContextMenu]: { type: ComponentType.SLOT },
+  [componentId.asset.editor.toolbar.slots.left]: { type: ComponentType.SLOT },
+  [componentId.asset.editor.toolbar.slots.right]: { type: ComponentType.SLOT },
   [componentId.asset.tree.contextMenu]: { type: ComponentType.SINGLE },
   [componentId.dataObject.editor.toolbar.contextMenu]: { type: ComponentType.SINGLE },
   [componentId.dataObject.tree.contextMenu]: { type: ComponentType.SINGLE }
-}
+} as const
+
+export const defaultSlotEntries: Record<string, Record<string, { name: string, priority: number }>> = {
+  [componentId.asset.editor.toolbar.slots.left]: {
+    contextMenu: { name: 'contextMenu', priority: 100 }
+  },
+  [componentId.asset.editor.toolbar.slots.right]: {
+    workflows: { name: 'workflows', priority: 100 },
+    primaryButton: { name: 'primaryButton', priority: 200 },
+    secondaryButton: { name: 'secondaryButton', priority: 300 }
+  }
+} as const
