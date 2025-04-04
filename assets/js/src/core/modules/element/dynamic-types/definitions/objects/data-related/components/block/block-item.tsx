@@ -12,46 +12,57 @@
 */
 
 import { ToolStripBox } from '@Pimcore/components/toolstrip/box/tool-strip-box'
-import { type CollectionItemProps } from '../collection/collection'
-import { BlockToolStrip } from './block-tool-strip'
-import { FormListProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/form-list-provider/form-list-provider'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { type BlockProps } from './block'
+import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
+import { Form } from '@Pimcore/components/form/form'
+import { BlockToolStrip } from './block-tool-strip'
 
-export interface BlockItemProps extends CollectionItemProps {
+export interface BlockItemProps {
+  field: number
+  noteditable: AbstractObjectDataDefinition['noteditable']
   children: BlockProps['children']
+  disallowReorder: boolean
+  disallowAdd: boolean
+  disallowDelete: boolean
 }
 
 export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
-  const { field, operation, children } = props
+  const { field, noteditable, children, disallowAdd } = props
 
-  return (
+  return useMemo(() => (
     <ToolStripBox
-      docked
-      key={ field.key }
-      renderToolStripStart={ <BlockToolStrip
-        operations={ operation }
-        { ...props }
-                             /> }
+      docked={ false }
+      key={ field }
+      renderToolStripStart={
+        noteditable === false && (
+        <BlockToolStrip
+          disallowAdd={ props.disallowAdd }
+          disallowDelete={ props.disallowDelete }
+          disallowReorder={ props.disallowReorder }
+          field={ field }
+        />
+        ) }
     >
-      <FormListProvider
-        field={ field }
-        operation={ operation }
-      >
-        {
+      {
         Array.isArray(children)
           ? children.map((child, index) => {
             return (
-              <ObjectComponent
-                key={ field.name + index }
-                { ...child }
-              />
+              <Form.Group
+                key={ index }
+                name={ field }
+              >
+                <ObjectComponent
+                  key={ field }
+                  { ...child }
+                  noteditable={ noteditable === true }
+                />
+              </Form.Group>
             )
           })
           : undefined
       }
-      </FormListProvider>
     </ToolStripBox>
-  )
+  ), [field, disallowAdd, noteditable, children])
 }

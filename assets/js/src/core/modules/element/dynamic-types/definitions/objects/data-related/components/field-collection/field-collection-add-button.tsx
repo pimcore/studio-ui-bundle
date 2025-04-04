@@ -14,16 +14,17 @@
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import React from 'react'
-import { type CollectionAddButtonProps } from '../collection/collection'
 import { type FieldCollectionProps } from './field-collection'
 import { useTranslation } from 'react-i18next'
+import { useNumberedList } from '@Pimcore/components/form/numbered-list/provider/numbered-list/use-numbered-list'
 
-export interface FieldCollectionAddButtonProps extends CollectionAddButtonProps {
+export interface FieldCollectionAddButtonProps {
   allowedTypes: FieldCollectionProps['allowedTypes']
 }
 
 export const FieldCollectionAddButton = (props: FieldCollectionAddButtonProps): React.JSX.Element => {
-  const { operation, allowedTypes, disallowAdd } = props
+  const { allowedTypes } = props
+  const { operations } = useNumberedList()
   const { t } = useTranslation()
 
   const fieldCollectionDropdownItems: DropdownMenuProps['items'] = allowedTypes.map((type) => {
@@ -32,14 +33,13 @@ export const FieldCollectionAddButton = (props: FieldCollectionAddButtonProps): 
       label: type,
       onClick: (e) => {
         e.domEvent.stopPropagation()
-        operation.add({ type })
+        operations.add({ type })
       }
     }
   })
 
   return (
     <Dropdown
-      disabled={ disallowAdd === true }
       menu={ { items: fieldCollectionDropdownItems } }
     >
       <IconTextButton

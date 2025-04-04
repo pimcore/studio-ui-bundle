@@ -11,6 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+/* eslint-disable max-lines */
 import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type DynamicTypeFieldFilterRegistry } from './definitions/field-filters/dynamic-type-field-filter-registry'
@@ -138,6 +139,19 @@ import { type DynamicTypeGridCellDataObjectActions } from './definitions/grid-ce
 import { type DynamicTypeGridCellDataObjectObjectBrick } from './definitions/grid-cell/types/data-object-object-brick/dynamic-type-grid-cell-data-object-adapter'
 import { type DynamicTypeBatchEditDataObjectAdapter } from './definitions/batch-edits/types/data-object-adapter/dynamic-type-batch-edit-data-object-adpater'
 import { type DynamicTypeBatchEditDataObjectObjectBrick } from './definitions/batch-edits/types/data-object-object-brick/dynamic-type-batch-edit-data-object-object-brick'
+import { type DynamicTypeAssetRegistry } from './definitions/asset/dynamic-type-asset-registry'
+import { type DynamicTypeAssetArchive } from './definitions/asset/types/dynamic-type-asset-archive'
+import { type DynamicTypeAssetAudio } from './definitions/asset/types/dynamic-type-asset-audio'
+import { type DynamicTypeAssetDocument } from './definitions/asset/types/dynamic-type-asset-document'
+import { type DynamicTypeAssetFolder } from './definitions/asset/types/dynamic-type-asset-folder'
+import { type DynamicTypeAssetImage } from './definitions/asset/types/dynamic-type-asset-image'
+import { type DynamicTypeAssetText } from './definitions/asset/types/dynamic-type-asset-text'
+import { type DynamicTypeAssetUnknown } from './definitions/asset/types/dynamic-type-asset-unknown'
+import { type DynamicTypeAssetVideo } from './definitions/asset/types/dynamic-type-asset-video'
+import { type DynamicTypeObjectRegistry } from './definitions/objects/dynamic-type-object-registry'
+import { type DynamicTypeObjectFolder } from './definitions/objects/types/dynamic-type-object-folder'
+import { type DynamicTypeObjectObject } from './definitions/objects/types/dynamic-type-object-object'
+import { type DynamicTypeObjectVariant } from './definitions/objects/types/dynamic-type-object-variant'
 
 moduleSystem.registerModule({
   onInit () {
@@ -271,5 +285,22 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataLocalizedFields>(serviceIds['DynamicTypes/ObjectData/LocalizedFields']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataFieldCollection>(serviceIds['DynamicTypes/ObjectData/FieldCollection']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataObjectBrick>(serviceIds['DynamicTypes/ObjectData/ObjectBrick']))
+
+    const assetRegistry = container.get<DynamicTypeAssetRegistry>(serviceIds['DynamicTypes/AssetRegistry'])
+
+    assetRegistry.registerDynamicType(container.get<DynamicTypeAssetArchive>(serviceIds['DynamicTypes/Asset/Archive']))
+    assetRegistry.registerDynamicType(container.get<DynamicTypeAssetAudio>(serviceIds['DynamicTypes/Asset/Audio']))
+    assetRegistry.registerDynamicType(container.get<DynamicTypeAssetDocument>(serviceIds['DynamicTypes/Asset/Document']))
+    assetRegistry.registerDynamicType(container.get<DynamicTypeAssetFolder>(serviceIds['DynamicTypes/Asset/Folder']))
+    assetRegistry.registerDynamicType(container.get<DynamicTypeAssetImage>(serviceIds['DynamicTypes/Asset/Image']))
+    assetRegistry.registerDynamicType(container.get<DynamicTypeAssetText>(serviceIds['DynamicTypes/Asset/Text']))
+    assetRegistry.registerDynamicType(container.get<DynamicTypeAssetUnknown>(serviceIds['DynamicTypes/Asset/Unknown']))
+    assetRegistry.registerDynamicType(container.get<DynamicTypeAssetVideo>(serviceIds['DynamicTypes/Asset/Video']))
+
+    const objectRegistry = container.get<DynamicTypeObjectRegistry>(serviceIds['DynamicTypes/ObjectRegistry'])
+
+    objectRegistry.registerDynamicType(container.get<DynamicTypeObjectFolder>(serviceIds['DynamicTypes/Object/Folder']))
+    objectRegistry.registerDynamicType(container.get<DynamicTypeObjectObject>(serviceIds['DynamicTypes/Object/Object']))
+    objectRegistry.registerDynamicType(container.get<DynamicTypeObjectVariant>(serviceIds['DynamicTypes/Object/Variant']))
   }
 })

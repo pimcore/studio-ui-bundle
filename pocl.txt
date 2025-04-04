@@ -28,8 +28,11 @@ Core Software, and to modify, adapt and customize it for the Customer’s own no
 commercial use. Contribution and distribution of these modifications, adaptations, and
 customizations (“Derivatives”) are permitted under conditions set up by section 3.
 
-2.2 The Customer may not offer the Open Core Software as a hosted or managed service by granting
-third parties access to a significant part of the features or functions of the Open Core Software.
+2.2 The Customer may not offer the Open Core Software (POCL) as a hosted or managed service that 
+grants third parties access to a significant portion of its features or functions. Additionally, 
+the Customer may not fork, modify, or redistribute the software or any derivative in a manner 
+that creates a competing or functionally similar product offered as a free or commercial 
+alternative to Pimcore’s official offerings.
 
 2.3 If the Customer violates any of the above provisions, all rights of usage granted under the
 POCL shall immediately become invalid and shall automatically revert to Pimcore. In this case, the

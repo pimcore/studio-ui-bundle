@@ -28,6 +28,7 @@ import { Compact } from '@Pimcore/components/compact/compact'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type GridConfigData } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/grid-config-provider'
+import { useSettings } from '../povider/settings/use-settings'
 
 export interface EditViewProps {
   onCancelClick: () => void
@@ -61,6 +62,7 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
   } = props
 
   const { t } = useTranslation()
+  const { saveEnabled } = useSettings()
 
   const isSavedConfiguration = gridConfig?.name !== 'Predefined' && gridConfig !== undefined
   const isGridTemplateOwner = currentUserId === gridConfig?.ownerId
@@ -91,31 +93,33 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
     >
       <Content padded>
         <Header title={ t('listing.grid-config.title') }>
-          <Dropdown
-            disabled={ savedGridConfigurations?.length === 0 && !isLoading }
-            menu={ { items: savedGridConfigurations } }
-          >
-            <Tooltip title={ savedGridConfigurations?.length === 0 && !isLoading ? t('grid.configuration.no-saved-templates') : '' }>
-              <IconTextButton
-                disabled={ savedGridConfigurations?.length === 0 && !isLoading }
-                icon={ { value: 'style' } }
-                loading={ isLoading }
-                style={ { minHeight: '32px', minWidth: '100px' } }
-              >
-                { isSavedConfiguration
-                  ? (
-                    <>
-                      { gridConfig.name}
-                    </>
-                    )
-                  : (
-                    <>
-                      {t('grid.configuration.template')}
-                    </>
-                    ) }
-              </IconTextButton>
-            </Tooltip>
-          </Dropdown>
+          {saveEnabled === true && (
+            <Dropdown
+              disabled={ savedGridConfigurations?.length === 0 && !isLoading }
+              menu={ { items: savedGridConfigurations } }
+            >
+              <Tooltip title={ savedGridConfigurations?.length === 0 && !isLoading ? t('grid.configuration.no-saved-templates') : '' }>
+                <IconTextButton
+                  disabled={ savedGridConfigurations?.length === 0 && !isLoading }
+                  icon={ { value: 'style' } }
+                  loading={ isLoading }
+                  style={ { minHeight: '32px', minWidth: '100px' } }
+                >
+                  { isSavedConfiguration
+                    ? (
+                      <>
+                        { gridConfig.name}
+                      </>
+                      )
+                    : (
+                      <>
+                        {t('grid.configuration.template')}
+                      </>
+                      ) }
+                </IconTextButton>
+              </Tooltip>
+            </Dropdown>
+          )}
         </Header>
 
         <Space
@@ -142,7 +146,7 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
   function renderSaveButton (): React.JSX.Element {
     return (
       <>
-        { !isSavedConfiguration && (
+        { saveEnabled === true && !isSavedConfiguration && (
           <Button
             onClick={ onSaveConfigurationClick }
             type='default'
@@ -151,7 +155,7 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
           </Button>
         ) }
 
-        { isSavedConfiguration && (
+        { saveEnabled === true && isSavedConfiguration && (
           <>
             { isGridTemplateOwner && (
               <Compact>
@@ -195,7 +199,7 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
               </Compact>
             )}
 
-            { !isGridTemplateOwner && (
+            { saveEnabled && !isGridTemplateOwner && (
               <Button
                 onClick={ onSaveConfigurationClick }
                 type='default'

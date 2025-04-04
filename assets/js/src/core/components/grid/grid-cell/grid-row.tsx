@@ -27,6 +27,7 @@ export interface GridRowProps {
   activeColumId?: string
   onFocusCell?: (cell: GridCellReference) => void
   contextMenu?: ListGridContextMenuComponents
+  onRowDoubleClick?: GridProps['onRowDoubleClick']
 }
 
 const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): React.JSX.Element => {
@@ -46,10 +47,21 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
     return <>{children}</>
   }
 
+  const onRowDoubleClick = (): void => {
+    if (props.onRowDoubleClick !== undefined) {
+      props.onRowDoubleClick(row)
+    }
+  }
+
   return useMemo(() => renderWithContextMenu(
     <tr
-      className={ ['ant-table-row', row.getIsSelected() ? 'ant-table-row-selected' : ''].join(' ') }
+      className={ [
+        'ant-table-row',
+        row.getIsSelected() ? 'ant-table-row-selected' : '',
+        props.onRowDoubleClick !== undefined ? 'hover' : ''
+      ].join(' ') }
       key={ row.id }
+      onDoubleClick={ onRowDoubleClick }
     >
       {row.getVisibleCells().map(cell => (
         <td

@@ -15,6 +15,8 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { SearchTermFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/search/search-term-filter'
 import React from 'react'
 import { ClassDefinitionSelect } from '../../listing/decorator/class-definition-selection/components/class-definition-select/class-definition-select'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { ProvidedTypeSelect } from '@Pimcore/modules/element/components/type-select/provided-type-select'
 
 export const TopBar = (): React.JSX.Element => {
   return (
@@ -24,8 +26,14 @@ export const TopBar = (): React.JSX.Element => {
       position='top'
       theme='secondary'
     >
-      <ClassDefinitionSelect />
-      <SearchTermFilter />
+      <Flex
+        className='w-full'
+        gap='small'
+      >
+        <ProvidedTypeSelect />
+        <ClassDefinitionSelect nullable />
+        <SearchTermFilter />
+      </Flex>
     </Toolbar>
   )
 }
