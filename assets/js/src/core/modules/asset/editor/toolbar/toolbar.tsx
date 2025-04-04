@@ -29,7 +29,7 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
-import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
+import { SlotRenderer, type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { container } from '@Pimcore/app/depency-injection'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
@@ -84,7 +84,9 @@ export const Toolbar = (): React.JSX.Element => {
   return (
     <ToolbarView>
       <WorkFlowProvider>
+        <SlotRenderer slot={ componentId.asset.editor.toolbar.slots.beforeContextMenu } />
         <ContextMenu />
+        <SlotRenderer slot={ componentId.asset.editor.toolbar.slots.beforeContextMenu } />
         <Flex
           style={ { height: '32px' } }
           vertical={ false }

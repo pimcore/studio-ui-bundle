@@ -24,5 +24,27 @@ interface ComponentRendererProps {
 export const ComponentRenderer = ({ component, props }: ComponentRendererProps): React.JSX.Element => {
   const ComponentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
   const Component = ComponentRegistry.get(component)
+
   return <Component { ...props } />
+}
+
+interface SlotRendererProps {
+  slot: string
+  props?: Record<string, any>
+}
+
+export const SlotRenderer = ({ slot, props }: SlotRendererProps): React.JSX.Element => {
+  const ComponentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
+  const components = ComponentRegistry.getSlotComponents(slot)
+
+  return (
+    <>
+      {components.map(({ component: Component }, index) => (
+        <Component
+          key={ index }
+          { ...props }
+        />
+      ))}
+    </>
+  )
 }
