@@ -38,6 +38,7 @@ export const slice = createSlice({
     modified: false,
     properties: [],
     customMetadata: [],
+    customSettings: [],
     textData: {},
     imageSettings: [],
     schedule: [],
