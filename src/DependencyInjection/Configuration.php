@@ -58,7 +58,7 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('defaultEditorConfig')
                         ->addDefaultsIfNotSet()
                         ->children()
-                            ->variableNode('asset')->defaultValue([])->end()
+                            ->variableNode('document')->defaultValue([])->end()
                             ->variableNode('dataObject')->defaultValue([])->end()
                         ->end()
                     ->end()
