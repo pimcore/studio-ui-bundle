@@ -13,8 +13,9 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, type FormProps, Input } from 'antd'
+import { type FormProps, Input } from 'antd'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
+import { Form } from '@Pimcore/components/form/form'
 import {
   useNoteElementGetTypeCollectionQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
