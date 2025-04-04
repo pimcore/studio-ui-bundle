@@ -16,11 +16,13 @@ import { initReactI18next } from 'react-i18next'
 import { addMissingTranslation } from './store/missingTranslations.slice'
 import { store } from '../store'
 
+const FALLBACK_LANGUAGE = 'en'
+
 i18n
   .use(initReactI18next)
 
   .init({
-    fallbackLng: 'en',
+    fallbackLng: FALLBACK_LANGUAGE,
     ns: ['translation'],
     resources: {},
     saveMissing: true
@@ -32,6 +34,7 @@ i18n
 
 i18n.on('missingKey', (lngs, namespace, key, res) => {
   store.dispatch(addMissingTranslation(key))
+  i18n.addResource(FALLBACK_LANGUAGE, namespace, key, key)
 })
 
 export default i18n
