@@ -34,7 +34,7 @@ export const DataObjectPreview = ({ id }: DataObjectPreviewProps): React.JSX.Ele
     if (isVisible) {
       setTimestamp(Date.now())
     }
-  }, [dataObject?.draftData?.modificationDate])
+  }, [dataObject?.draftData?.modificationDate, isVisible])
 
   return (
     <iframe
