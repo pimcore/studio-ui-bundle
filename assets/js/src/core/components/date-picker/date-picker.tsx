@@ -32,7 +32,6 @@ export type DatePickerProps = PickerProps & {
   onChange?: (date: DatePickerValueType) => void
   outputType?: OutputType
   outputFormat?: string
-  showTime?: PickerProps['showTime']
   disabled?: boolean
   inherited?: boolean
 }
