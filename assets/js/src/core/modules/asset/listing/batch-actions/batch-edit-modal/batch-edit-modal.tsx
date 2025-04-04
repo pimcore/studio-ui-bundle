@@ -91,7 +91,8 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
       return {
         name: batchEdit.key,
         language: batchEdit.locale,
-        data: values[batchEdit.key]
+        data: values[batchEdit.key],
+        type: batchEdit.type
       }
     })
 

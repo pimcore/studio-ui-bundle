@@ -23,9 +23,9 @@ import { useNumberedList } from '@Pimcore/components/form/numbered-list/provider
 export interface FieldCollectionToolStripProps {
   field: number
   allowedTypes: FieldCollectionProps['allowedTypes']
-  disallowAdd?: boolean
-  disallowDelete?: boolean
-  disallowReorder?: boolean
+  disallowAdd: boolean
+  disallowDelete: boolean
+  disallowReorder: boolean
 }
 
 export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, disallowDelete, disallowReorder }: FieldCollectionToolStripProps): React.JSX.Element => {
@@ -51,7 +51,7 @@ export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, dis
         <Text type='secondary'>{ type }</Text>
 
         <Dropdown
-          disabled={ disallowAdd === true }
+          disabled={ disallowAdd }
           menu={ { items: dropDownItems } }
         >
           <IconButton
@@ -62,14 +62,14 @@ export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, dis
         </Dropdown>
 
         <IconButton
-          disabled={ disallowReorder === true }
+          disabled={ disallowReorder }
           icon={ { value: 'move-down' } }
           onClick={ () => { operations.move(field, field + 1) } }
           style={ { padding: 4 } }
           variant='minimal'
         />
         <IconButton
-          disabled={ disallowReorder === true }
+          disabled={ disallowReorder }
           icon={ { value: 'move-up' } }
           onClick={ () => { operations.move(field, field - 1) } }
           style={ { padding: 4 } }
@@ -78,7 +78,7 @@ export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, dis
       </Space>
 
       <IconButton
-        disabled={ disallowDelete === true }
+        disabled={ disallowDelete }
         icon={ { value: 'trash' } }
         onClick={ () => { operations.remove(field) } }
         style={ { padding: 4 } }

@@ -11,12 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { Select, type SelectProps } from '@Pimcore/components/select/select'
 import { type DynamicTypeAssetRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/asset/dynamic-type-asset-registry'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { type DynamicTypeObjectRegistry } from '../../dynamic-types/definitions/objects/dynamic-type-object-registry'
 
 export interface TypeSelectProps {
   initialValue?: string | null
@@ -25,10 +25,11 @@ export interface TypeSelectProps {
   restrictOptions?: string[]
   nullable?: boolean
   nullableLabel?: string
+  registryServiceId: string
 }
 
-export const TypeSelect = ({ nullable = true, ...props }: TypeSelectProps): React.JSX.Element => {
-  const assetRegistry = useInjection<DynamicTypeAssetRegistry>(serviceIds['DynamicTypes/AssetRegistry'])
+export const TypeSelect = ({ nullable = true, registryServiceId, ...props }: TypeSelectProps): React.JSX.Element => {
+  const assetRegistry = useInjection<DynamicTypeAssetRegistry | DynamicTypeObjectRegistry>(registryServiceId)
   const [value, setValue] = useState<string | null>(props.initialValue ?? props.value ?? null)
   const { t } = useTranslation()
   const types = assetRegistry.getDynamicTypes()
