@@ -25,12 +25,24 @@ i18n
     fallbackLng: FALLBACK_LANGUAGE,
     ns: ['translation'],
     resources: {},
-    saveMissing: true
+    saveMissing: true,
+    postProcess: ['returnKeyIfEmpty']
   })
 
   .catch((error) => {
     console.error(error)
   })
+
+i18n.use({
+  type: 'postProcessor',
+  name: 'returnKeyIfEmpty',
+  process (value, key, options, translator) {
+    if (value === '') {
+      return key
+    }
+    return value
+  }
+})
 
 i18n.on('missingKey', (lngs, namespace, key, res) => {
   store.dispatch(addMissingTranslation(key))
