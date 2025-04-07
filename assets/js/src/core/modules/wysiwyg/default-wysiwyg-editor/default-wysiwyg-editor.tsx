@@ -16,9 +16,10 @@ import { type WysiwygEditorRef, type WysiwygProps } from '../interface/wysiwyg'
 import { isNull } from 'lodash'
 import { useStyles } from './default-wysiwyg-editor.styles'
 import { type DragAndDropInfo } from 'src/sdk/components'
+import { toCssDimension } from '@Pimcore/utils/css'
 
 export const DefaultWysiwygEditor = forwardRef<WysiwygEditorRef, WysiwygProps>(
-  ({ value, onChange, disabled }, ref): React.JSX.Element => {
+  ({ value, onChange, disabled, width }, ref): React.JSX.Element => {
     const editorRef = useRef<HTMLDivElement>(null)
     const { styles } = useStyles()
 
@@ -46,6 +47,7 @@ export const DefaultWysiwygEditor = forwardRef<WysiwygEditorRef, WysiwygProps>(
           contentEditable={ disabled !== true }
           onInput={ handleInput }
           ref={ editorRef }
+          style={ { maxWidth: toCssDimension(width) } }
         />
       </div>
     )

@@ -22,6 +22,7 @@ import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-ove
 import Wysiwyg from '@Pimcore/modules/wysiwyg/wysiwyg'
 import { appConfig } from '@Pimcore/app/config/app-config'
 import { isEmpty, isNil, isObject, merge } from 'lodash'
+import { toCssDimension } from '@Pimcore/utils/css'
 
 export type WysiwygObjectDataDefinition = AbstractObjectDataDefinition & {
   value?: string | null
@@ -64,7 +65,7 @@ export class DynamicTypeObjectDataWysiwyg extends DynamicTypeObjectDataAbstract 
         editorConfig={ editorConfig }
         height={ props.height ?? undefined }
         maxCharacters={ props.maxCharacters ?? undefined }
-        width={ props.width ?? undefined }
+        width={ toCssDimension(props.width, props.defaultFieldWidth.large) }
       />
     )
   }
