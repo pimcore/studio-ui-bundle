@@ -11,10 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { type WysiwygAppConfigInterface } from '@Pimcore/modules/wysiwyg/interface/wysiwyg-app-config'
+
 interface AppConfig {
   baseUrl: string
   mercureUrl: string
   maxPageSize: number
+  wysiwyg: WysiwygAppConfigInterface
 }
 
 const appElement = document.querySelector('#app')
@@ -34,5 +37,11 @@ if (appConfigJSON !== null) {
 export const appConfig: AppConfig = {
   baseUrl: appConfigData?.baseUrl ?? '/pimcore-studio/',
   mercureUrl: appConfigData?.mercureUrl ?? `${currentDomain}/.well-known/mercure`,
-  maxPageSize: appConfigData?.maxPageSize ?? 9999999
+  maxPageSize: appConfigData?.maxPageSize ?? 9999999,
+  wysiwyg: appConfigData?.wysiwyg ?? {
+    defaultEditorConfig: {
+      dataObject: {},
+      document: {}
+    }
+  }
 }

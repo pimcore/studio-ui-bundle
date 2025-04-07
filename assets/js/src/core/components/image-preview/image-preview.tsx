@@ -147,3 +147,5 @@ export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, as
     </div>
   )
 })
+
+export * from './utils/custom-image-thumbnail'

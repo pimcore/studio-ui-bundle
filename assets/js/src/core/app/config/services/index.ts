@@ -79,6 +79,7 @@ import { DynamicTypeObjectLayoutFieldset } from '@Pimcore/modules/element/dynami
 import { DynamicTypeObjectLayoutFieldContainer } from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/types/dynamic-type-object-layout-field-container'
 import { DynamicTypeObjectDataInput } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-input'
 import { DynamicTypeObjectDataTextarea } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-textarea'
+import { DynamicTypeObjectDataWysiwyg } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-wysiwyg'
 import { DynamicTypeObjectDataPassword } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-password'
 import { DynamicTypeObjectDataInputQuantityValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-input-quantity-value'
 import { DynamicTypeObjectDataSelect } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-select'
@@ -268,6 +269,7 @@ container.bind(serviceIds['DynamicTypes/ObjectLayout/FieldContainer']).to(Dynami
 container.bind(serviceIds['DynamicTypes/ObjectDataRegistry']).to(DynamicTypeObjectDataRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Input']).to(DynamicTypeObjectDataInput).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Textarea']).to(DynamicTypeObjectDataTextarea).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectData/Wysiwyg']).to(DynamicTypeObjectDataWysiwyg).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/InputQuantityValue']).to(DynamicTypeObjectDataInputQuantityValue).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Password']).to(DynamicTypeObjectDataPassword).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Select']).to(DynamicTypeObjectDataSelect).inSingletonScope()

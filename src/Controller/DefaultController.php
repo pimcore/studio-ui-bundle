@@ -29,15 +29,19 @@ final class DefaultController extends FrontendController
     public function indexAction(
         StaticResourcesResolverInterface $staticResourcesResolver,
         string $studioUrlUrlPath,
-        string $studioMercureClientUrl
+        string $studioMercureClientUrl,
+        array $studioWysiwygConfiguration
     ): Response {
         return $this->render('@PimcoreStudioUi/default/index.html.twig', [
             'studioCssFiles' => $staticResourcesResolver->getStudioCssFiles(),
             'studioJsFiles' => $staticResourcesResolver->getStudioJsFiles(),
             'bundleCssFiles' => $staticResourcesResolver->getBundleCssFiles(),
             'bundleJsFiles' => $staticResourcesResolver->getBundleJsFiles(),
+            'additionalCssFiles' => $staticResourcesResolver->getAdditionalCssFiles(),
+            'additionalJsFiles' => $staticResourcesResolver->getAdditionalJsFiles(),
             'baseUrl' => $studioUrlUrlPath,
             'mercureUrl' => $studioMercureClientUrl,
+            'wysiwygConfiguration' => $studioWysiwygConfiguration,
         ]);
     }
 }
