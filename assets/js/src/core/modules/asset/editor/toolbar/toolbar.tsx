@@ -37,8 +37,7 @@ import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { isNil } from 'lodash'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { componentId, defaultSlotEntries } from '@Pimcore/modules/app/component-registry/component-ids'
-import { EditorToolbarContextMenu } from './context-menu/context-menu'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 
 export const Toolbar = (): React.JSX.Element => {
@@ -82,13 +81,7 @@ export const Toolbar = (): React.JSX.Element => {
     <ToolbarView>
       <WorkFlowProvider>
         <SlotRenderer
-          defaultEntries={ [
-            {
-              ...defaultSlotEntries[componentId.asset.editor.toolbar.slots.left].contextMenu,
-              component: EditorToolbarContextMenu
-            }
-          ] }
-          slot={ componentId.asset.editor.toolbar.slots.left }
+          slot={ componentConfig.asset.editor.toolbar.slots.left }
         />
         <Flex
           style={ { height: '32px' } }

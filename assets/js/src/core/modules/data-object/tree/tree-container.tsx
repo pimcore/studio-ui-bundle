@@ -25,7 +25,7 @@ import { withDroppableStyling } from './node/with-droppable/with-droppable-styli
 import { withActionStates } from './node/with-action-states'
 import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
 import { useElementTreeRootNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-root-node'
-import { componentId } from '@Pimcore/modules/app/component-registry/component-ids'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { useComponentRegistry } from '@Pimcore/modules/app/component-registry/use-component-registry'
 
 export interface TreeContainerProps {
@@ -39,7 +39,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
   const { openDataObject } = useDataObjectHelper()
   const { rootNode, isLoading } = useElementTreeRootNode(id, showRoot)
   const componentRegistry = useComponentRegistry()
-  const contextMenu = componentRegistry.get(componentId.dataObject.tree.contextMenu)
+  const contextMenu = componentRegistry.get(componentConfig.dataObject.tree.contextMenu.name)
 
   if (showRoot && isLoading) {
     return (

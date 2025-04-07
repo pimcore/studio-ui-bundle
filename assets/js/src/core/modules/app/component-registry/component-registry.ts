@@ -14,8 +14,8 @@
 import { injectable } from 'inversify'
 import type React from 'react'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { componentConfig } from './component-ids'
-import { isUndefined } from 'lodash'
+import { componentConfig } from './component-config'
+import { isObject, isUndefined } from 'lodash'
 import { ComponentType } from './enums/component-type'
 
 export interface ComponentRegistryEntry<T> {
@@ -24,8 +24,21 @@ export interface ComponentRegistryEntry<T> {
   priority?: number // Optional priority for slot components
 }
 
-export interface ComponentRegistryConfigEntry {
-  type: ComponentType
+interface ComponentRegistryConfigEntrySingle {
+  name: string
+  type: ComponentType.SINGLE
+}
+
+interface ComponentRegistryConfigEntrySlot {
+  name: string
+  type: ComponentType.SLOT
+  defaultEntries?: Array<ComponentRegistryEntry<any>>
+}
+
+export type ComponentRegistryConfigEntry = ComponentRegistryConfigEntrySingle | ComponentRegistryConfigEntrySlot
+
+export interface ComponentRegistryConfig {
+  [key: string]: ComponentRegistryConfigEntry | ComponentRegistryConfig
 }
 
 export interface ComponentRegistryInterface {
@@ -40,11 +53,33 @@ export interface ComponentRegistryInterface {
   registerConfig: (config: Record<string, ComponentRegistryConfigEntry>) => void
 }
 
+const flattenConfig = (source: ComponentRegistryConfig): Record<string, ComponentRegistryConfigEntry> => {
+  const result: Record<string, ComponentRegistryConfigEntry> = {}
+
+  const flatten = (config: ComponentRegistryConfig): void => {
+    for (const key in config) {
+      const value = config[key]
+
+      // Check if it's a valid config entry by checking for the 'type' property
+      if (isObject(value) && 'type' in value) {
+        const entry = value as ComponentRegistryConfigEntry
+        result[entry.name] = entry
+      } else if (isObject(value)) {
+        // If it's an object but not a config entry, recurse
+        flatten(value)
+      }
+    }
+  }
+
+  flatten(source)
+  return result
+}
+
 @injectable()
 export class ComponentRegistry implements ComponentRegistryInterface {
   private registry: Record<string, ComponentRegistryEntry<any>> = {}
   private slots: Record<string, Array<ComponentRegistryEntry<any>>> = {}
-  private readonly configs: Array<Record<string, ComponentRegistryConfigEntry>> = [componentConfig] // Start with the default componentConfig
+  private readonly configs: Record<string, ComponentRegistryConfigEntry> = flattenConfig(componentConfig) // Start with default config
 
   register (component: ComponentRegistryEntry<any>): void {
     const componentConfig = this.getComponentConfig(component.name)
@@ -101,21 +136,20 @@ export class ComponentRegistry implements ComponentRegistryInterface {
     return this.slots[slotName] ?? []
   }
 
-  registerConfig (config: Record<string, ComponentRegistryConfigEntry>): void {
-    this.configs.push(config)
+  registerConfig (config: ComponentRegistryConfig): void {
+    const flattenedConfig = flattenConfig(config)
+    Object.assign(this.configs, flattenedConfig)
   }
 
   getComponentConfig (name: string): ComponentRegistryConfigEntry {
-    for (const config of this.configs) {
-      if (!isUndefined(config[name])) {
-        return config[name]
-      }
+    if (isUndefined(this.configs[name])) {
+      throw new Error(`Component configuration for "${name}" not found.`)
     }
 
-    throw new Error(`Component configuration for "${name}" not found.`)
+    return this.configs[name]
   }
 }
 
-export { componentId } from './component-ids'
+export * from './component-config'
 export * from './component-renderer'
 export * from './use-component-registry'

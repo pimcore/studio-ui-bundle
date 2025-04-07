@@ -29,7 +29,7 @@ import {
 import { AssetEditorWidget } from '@Pimcore/modules/asset/editor/widget'
 import { type TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
 import { CustomMetadataTabContainer } from './shared-tab-manager/tabs/custom-metadata/custom-metadata-container'
-import { componentId } from '@Pimcore/modules/app/component-registry/component-ids'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { AssetVersionsTabContainer } from './shared-tab-manager/tabs/versions/tab-container'
 import { EmbeddedMetadataTabContainer } from './shared-tab-manager/tabs/embedded-metadata/embedded-metadata-container'
 
@@ -84,17 +84,17 @@ moduleSystem.registerModule({
     const componentRegistry = container.get<GlobalComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
 
     componentRegistry.register({
-      name: componentId.asset.editor.tab.embeddedMetadata,
+      name: componentConfig.asset.editor.tab.embeddedMetadata.name,
       component: EmbeddedMetadataTabContainer
     })
 
     componentRegistry.register({
-      name: componentId.asset.editor.tab.customMetadata,
+      name: componentConfig.asset.editor.tab.customMetadata.name,
       component: CustomMetadataTabContainer
     })
 
     componentRegistry.register({
-      name: componentId.asset.editor.tab.versions,
+      name: componentConfig.asset.editor.tab.versions.name,
       component: AssetVersionsTabContainer
     })
   }

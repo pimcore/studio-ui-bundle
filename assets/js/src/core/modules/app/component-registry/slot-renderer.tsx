@@ -16,26 +16,29 @@ import { type ComponentRegistryEntry, useComponentRegistry } from './component-r
 import { isUndefined } from 'lodash'
 
 interface SlotRendererProps {
-  slot: string
+  slot: {
+    name: string
+    defaultEntries?: Array<ComponentRegistryEntry<any>>
+  }
   props?: Record<string, any>
-  defaultEntries?: Array<ComponentRegistryEntry<any>>
 }
 
-export const SlotRenderer = ({ slot, props, defaultEntries }: SlotRendererProps): React.JSX.Element => {
+export const SlotRenderer = ({ slot, props }: SlotRendererProps): React.JSX.Element => {
+  const { name, defaultEntries } = slot
   const ComponentRegistry = useComponentRegistry()
 
   useEffect(() => {
     if (!isUndefined(defaultEntries)) {
-      const existingEntries = ComponentRegistry.getSlotComponents(slot).map(({ name }) => name)
+      const existingEntries = ComponentRegistry.getSlotComponents(name).map(({ name }) => name)
       Object.entries(defaultEntries).forEach(([key, entry]) => {
         if (!existingEntries.includes(entry.name)) {
-          ComponentRegistry.registerToSlot(slot, entry)
+          ComponentRegistry.registerToSlot(name, entry)
         }
       })
     }
-  }, [slot, defaultEntries, ComponentRegistry])
+  }, [name, defaultEntries, ComponentRegistry])
 
-  const components = ComponentRegistry.getSlotComponents(slot)
+  const components = ComponentRegistry.getSlotComponents(name)
 
   return (
     <>
