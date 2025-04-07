@@ -1,6 +1,6 @@
-# Configuration of the Studio UI Bundle
+# Configuration for the Studio UI Bundle
 
-The Studio UI Bundle provides some configuration possibility. 
+The Studio UI Bundle offers several configuration options, which are listed below.
 
-## Further Readings
+## Further Reading
 - [WYSIWYG](05_Wysiwyg.md)
