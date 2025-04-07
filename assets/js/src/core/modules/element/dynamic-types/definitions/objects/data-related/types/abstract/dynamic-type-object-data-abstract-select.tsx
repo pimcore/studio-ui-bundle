@@ -15,7 +15,6 @@ import React from 'react'
 
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type EditMode, type GetGridCellDefinitionProps, type GridCellColumnMeta } from '../../dynamic-type-object-data-abstract'
 import { Select } from '@Pimcore/components/select/select'
-import { t } from 'i18next'
 import type { FormInstance } from 'antd'
 import type { NamePath } from 'rc-field-form/es/interface'
 import _ from 'lodash'
@@ -23,6 +22,7 @@ import {
   type InputObjectDataDefinition
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-input'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { Trans } from 'react-i18next'
 
 export type SelectProps = AbstractObjectDataDefinition & {
   defaultValue?: string | number | string[] | null
@@ -64,11 +64,11 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
     }
   }
 
-  convertOptions (options: Array<{ key: string, value: string | number }> | null): Array<{ label: string, value: string | number }> | undefined {
+  convertOptions (options: Array<{ key: string, value: string | number }> | null): Array<{ label: React.ReactElement, value: string | number }> | undefined {
     if (options === null) {
       return
     }
-    return options.map(option => ({ label: t(option.key), value: option.value }))
+    return options.map(option => ({ label: <Trans>{ option.key }</Trans>, value: option.value }))
   }
 
   getGridCellColumnMeta (props: GetGridCellDefinitionProps): GridCellColumnMeta {
