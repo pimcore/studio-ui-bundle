@@ -52,7 +52,7 @@ const defaultComponentConfig = {
     }
   },
   wysiwyg: {
-    editor: { type: ComponentType.SINGLE, name: 'wysiwyg.editor' },
+    editor: { type: ComponentType.SINGLE, name: 'wysiwyg.editor' }
   }
 }
 

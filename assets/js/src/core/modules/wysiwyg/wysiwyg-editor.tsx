@@ -32,7 +32,10 @@ export const WysiwygEditor = forwardRef(function WysiwygEditor (
       className={ cn(...getStateClasses()) }
       ref={ ref }
     >
-      <ComponentRenderer component={componentConfig.wysiwyg.editor.name} props={ { ...props.editorProps } } />
+      <ComponentRenderer
+        component={ componentConfig.wysiwyg.editor.name }
+        props={ { ...props.editorProps } }
+      />
     </div>
   )
 })
