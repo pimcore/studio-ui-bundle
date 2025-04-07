@@ -13,9 +13,7 @@
 
 import React, { forwardRef, type MutableRefObject, useEffect } from 'react'
 import { type WysiwygProps } from './interface/wysiwyg'
-import { container } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type ComponentRegistry } from '../app/component-registry/component-registry'
+import { componentConfig, ComponentRenderer } from '../app/component-registry/component-registry'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import cn from 'classnames'
 interface WysiwygEditorProps { editorProps: WysiwygProps }
@@ -24,12 +22,9 @@ export const WysiwygEditor = forwardRef(function WysiwygEditor (
   props: WysiwygEditorProps,
   ref: MutableRefObject<HTMLDivElement>
 ): React.JSX.Element {
-  const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
-  const WysiwygEditorComponent = componentRegistry.get<WysiwygProps>('wysiwygEditor')
   const { getStateClasses } = useDroppable()
 
   useEffect(() => {
-    // Add any necessary effect logic here if required
   }, [props.editorProps])
 
   return (
@@ -37,7 +32,10 @@ export const WysiwygEditor = forwardRef(function WysiwygEditor (
       className={ cn(...getStateClasses()) }
       ref={ ref }
     >
-      <WysiwygEditorComponent { ...props.editorProps } />
+      <ComponentRenderer
+        component={ componentConfig.wysiwyg.editor.name }
+        props={ { ...props.editorProps } }
+      />
     </div>
   )
 })

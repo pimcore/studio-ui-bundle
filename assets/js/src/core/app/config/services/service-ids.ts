@@ -50,9 +50,6 @@ export const serviceIds = {
   // icon library
   iconLibrary: 'IconLibrary',
 
-  // Wysiwyg
-  wysiwyg: 'Wysiwyg',
-
   // Grid
   'Grid/TypeRegistry': 'Grid/TypeRegistry',
 
