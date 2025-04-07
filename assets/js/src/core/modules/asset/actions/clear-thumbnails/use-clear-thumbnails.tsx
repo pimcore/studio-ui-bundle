@@ -16,9 +16,10 @@ import {
   type Asset, useAssetClearThumbnailMutation
 } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { Icon } from '@Pimcore/components/icon/icon'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export interface UseClearThumbnailsHookReturn {
   clearImageThumbnailContextMenuItem: (node: Asset, onFinish?: () => void) => ItemType
@@ -28,17 +29,19 @@ export interface UseClearThumbnailsHookReturn {
 
 export const useClearThumbnails = (): UseClearThumbnailsHookReturn => {
   const { t } = useTranslation()
-  const [clearThumbnail] = useAssetClearThumbnailMutation()
+  const [clearThumbnail, { isError, error }] = useAssetClearThumbnailMutation()
+
+  useEffect(() => {
+    if (isError) {
+      trackError(new ApiError(error))
+    }
+  }, [isError])
 
   const handleClearThumbnails = async (node: Asset, onFinish?: () => void): Promise<void> => {
     const clearThumbnailTask = clearThumbnail({ id: node.id })
 
-    try {
-      await clearThumbnailTask
-      onFinish?.()
-    } catch (error) {
-      console.error('Error clearing thumbnails (id: ' + node.id + ')', error)
-    }
+    await clearThumbnailTask
+    onFinish?.()
   }
 
   const clearImageThumbnailContextMenuItem = (node: Asset, onFinish?: () => void): ItemType => {

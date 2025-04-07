@@ -19,6 +19,7 @@ import type {
   CustomMetadata as CustomMetadataApi
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 import { type TrackableChangesDraft } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface CustomMetadataAction {
   id: number
@@ -104,10 +105,7 @@ export const useCustomMetadataReducers = (entityAdapter: EntityAdapter<CustomMet
 
   const modifyDraft = (state: EntityState<CustomMetadataDraft, number>, id: number, modification: (draft: CustomMetadataDraft) => CustomMetadataDraft): void => {
     const draft = entityAdapter.getSelectors().selectById(state, id)
-    if (draft === undefined) {
-      console.error(`Item with id ${id} not found`)
-      return
-    }
+    if (draft === undefined) trackError(new GeneralError(`Item with id ${id} not found`))
 
     state.entities[id] = modification({ ...draft })
   }

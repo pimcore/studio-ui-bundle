@@ -13,10 +13,13 @@
 
 import type { ActionCreatorWithPayload, PayloadAction } from '@reduxjs/toolkit'
 import type { EntityAdapter, EntityState } from '@reduxjs/toolkit/src/entities/models'
-import type { DataProperty as DataPropertyApi } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
+import type {
+  DataProperty as DataPropertyApi
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
 
 import { useAppDispatch } from '@Pimcore/app/store'
 import { type TrackableChangesDraft } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface PropertyAction {
   id: number
@@ -89,7 +92,7 @@ export const usePropertiesReducers = (entityAdapter: EntityAdapter<PropertiesDra
   const modifyDraft = (state: EntityState<PropertiesDraft, number>, id: number, modification: (draft: PropertiesDraft) => PropertiesDraft): void => {
     const draft = entityAdapter.getSelectors().selectById(state, id)
     if (draft === undefined) {
-      console.error(`Item with id ${id} not found`)
+      trackError(new GeneralError(`Item with id ${id} not found`))
       return
     }
 

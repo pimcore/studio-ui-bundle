@@ -15,9 +15,9 @@ import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { api } from '@Pimcore/modules/element/element-api-slice.gen'
 import { store, useAppDispatch } from '@Pimcore/app/store'
 import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
-import { isNil, isNull, isUndefined } from 'lodash'
+import { isNil, isNull } from 'lodash'
 import { locateInTree as locateInTreeAction } from '@Pimcore/components/element-tree/element-tree-slice'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 
 export interface UseLocateInTreeHookReturn {
@@ -40,11 +40,6 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
       perspectiveId: activePerspective.id
     }, { forceRefetch: true }))
       .then((result) => {
-        if (!isUndefined(result.error)) {
-          trackError(new ApiError(result.error))
-          return
-        }
-
         if (!isNil(result.data) && !isNil(result.data.treeLevelData)) {
           const treeId = result.data.widgetId
           switchToWidget(treeId)
@@ -57,9 +52,7 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
           onFinished?.()
         }
       })
-      .catch((error) => {
-        console.error(error)
-      })
+      .catch(() => { trackError(new GeneralError('An error occured while locating in the tree')) })
   }
 
   return {

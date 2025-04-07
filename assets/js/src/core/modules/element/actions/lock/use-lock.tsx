@@ -60,18 +60,14 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
   }
 
   const patchLock = async (id: number, lockType: 'self' | 'propagate' | '' | 'unlockPropagate'): Promise<void> => {
-    try {
-      await elementPatch({
-        body: {
-          data: [{
-            id,
-            locked: lockType
-          }]
-        }
-      })
-    } catch (error) {
-      console.error('Error updating element lock', error)
-    }
+    await elementPatch({
+      body: {
+        data: [{
+          id,
+          locked: lockType
+        }]
+      }
+    })
   }
 
   const lockTreeContextMenuItem = (node: TreeNodeProps): ItemType => {

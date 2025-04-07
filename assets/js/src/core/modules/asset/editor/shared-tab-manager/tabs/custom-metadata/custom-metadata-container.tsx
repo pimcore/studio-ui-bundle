@@ -48,7 +48,8 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const settings = useSettings()
   const { id } = useContext(AssetContext)
   const { addCustomMetadata, customMetadata } = useAssetDraft(id)
-  const [predefinedMetadata, { isFetching }] = useLazyMetadataGetCollectionQuery()
+  const [predefinedMetadata, { isFetching, isError, error }] = useLazyMetadataGetCollectionQuery()
+
   const {
     showModal: showDuplicateEntryModal,
     closeModal: closeDuplicateEntryModal,
@@ -59,6 +60,12 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
     type: 'error'
   })
+
+  useEffect(() => {
+    if (isError) {
+      trackError(new ApiError(error))
+    }
+  }, [isError])
 
   const nameInputValue = useRef<string>('')
   const nameInputRef = useRef<InputRef>(null)
@@ -117,15 +124,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
       body: {}
     })
 
-    predefinedMetadataTask.catch(() => {
-      console.error('Failed to load predefined metadata')
-    })
-
     const response = await predefinedMetadataTask
-
-    if (response.error !== undefined) {
-      trackError(new ApiError(response.error))
-    }
 
     const data = response.data!
 

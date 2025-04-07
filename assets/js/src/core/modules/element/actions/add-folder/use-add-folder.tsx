@@ -21,7 +21,7 @@ import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useRefreshTree } from '../refresh-tree/use-refresh-tree'
@@ -95,7 +95,7 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
         refreshTree(parentId)
       }
     } catch (error) {
-      console.error('Error creating folder', error)
+      trackError(new GeneralError(`'Error creating folder: ${error}`))
     }
   }
 

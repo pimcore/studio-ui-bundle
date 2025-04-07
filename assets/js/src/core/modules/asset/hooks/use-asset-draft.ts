@@ -61,6 +61,7 @@ import { type ElementEditorType, type TypeRegistryInterface } from '@Pimcore/mod
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { initialTabsStateValue, useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-tabs'
+import trackError, { GeneralError, ApiError } from '@Pimcore/modules/app/error-handler'
 import { useTextDataDraft, type UseTextDataDraftReturn } from '@Pimcore/modules/asset/draft/hooks/use-text-settings'
 import { useCustomSettingsDraft, type UseCustomSettingsDraftReturn } from '@Pimcore/modules/asset/draft/hooks/use-custom-settings'
 
@@ -96,7 +97,11 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   const typeRegistry = useInjection<TypeRegistryInterface>(serviceIds['Asset/Editor/TypeRegistry'])
 
   async function getAsset (): Promise<AssetGetByIdApiResponse> {
-    const { data } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
+    const { data, isError: isGetAssetError, error: getAssetError } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
+
+    if (isGetAssetError) {
+      trackError(new ApiError(getAssetError))
+    }
 
     if (data !== undefined) {
       return data
@@ -108,7 +113,11 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
 
   async function getCustomSettings (): Promise<ImageData> {
     let objectToReturn: ImageData = {}
-    const { data, isSuccess } = await dispatch(settingsApi.endpoints.assetCustomSettingsGetById.initiate({ id }))
+    const { data, isSuccess, isError: isAssetCustomSettingsError, error: assetCustomSettingsError } = await dispatch(settingsApi.endpoints.assetCustomSettingsGetById.initiate({ id }))
+
+    if (isAssetCustomSettingsError) {
+      trackError(new ApiError(assetCustomSettingsError))
+    }
 
     if (isSuccess && data !== undefined) {
       const settings = data.items!
@@ -170,7 +179,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
 
       return mergedAssetData
     }).catch((e) => {
-      console.error(e)
+      trackError(new GeneralError('An error occurred while loading the asset'))
       setIsError(true)
     }).finally(() => {
       setIsLoading(false)
