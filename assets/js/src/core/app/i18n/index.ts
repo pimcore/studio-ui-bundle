@@ -39,6 +39,9 @@ i18n.use({
   name: 'returnKeyIfEmpty',
   process (value, key, options, translator) {
     if (value === '') {
+      if (Array.isArray(key)) {
+        return key[0]
+      }
       return key
     }
     return value
