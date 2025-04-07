@@ -23,6 +23,9 @@ import Wysiwyg from '@Pimcore/modules/wysiwyg/wysiwyg'
 import { appConfig } from '@Pimcore/app/config/app-config'
 import { isEmpty, isNil, isObject, merge } from 'lodash'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { type FormItemProps } from 'antd'
+import { FieldLabel } from '../helpers/label/field-label'
+import { Icon } from '@Pimcore/components/icon/icon'
 
 export type WysiwygObjectDataDefinition = AbstractObjectDataDefinition & {
   value?: string | null
@@ -72,5 +75,16 @@ export class DynamicTypeObjectDataWysiwyg extends DynamicTypeObjectDataAbstract 
 
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
     return <>dummy data</>
+  }
+
+  getObjectDataFormItemProps (props: AbstractObjectDataDefinition): FormItemProps {
+    return {
+      ...super.getObjectDataFormItemProps(props),
+      label: <FieldLabel
+        additionalIcons={ <Icon value="drop-target" /> }
+        label={ props.title }
+        name={ props.name }
+             />
+    }
   }
 }
