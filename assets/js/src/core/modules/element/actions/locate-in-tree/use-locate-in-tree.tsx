@@ -12,19 +12,16 @@
 */
 
 import { store, useAppDispatch } from '@Pimcore/app/store'
-import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
-import { isNil, isNull } from 'lodash'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { locateInTree as locateInTreeAction } from '@Pimcore/components/element-tree/element-tree-slice'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { Icon } from '@Pimcore/components/icon/icon'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { api } from '@Pimcore/modules/element/element-api-slice.gen'
 import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { isNil, isNull, isUndefined } from 'lodash'
+import { isNil, isNull } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
