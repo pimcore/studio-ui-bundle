@@ -83,7 +83,7 @@ export const MainNav = (): React.JSX.Element => {
               } }
             >
               {item.icon !== undefined ? (<Icon value={ item.icon } />) : null}
-              {item.label}
+              {t(`${item.label}`)}
 
               {item.children !== undefined && item.children.length > 0
                 ? (
@@ -98,11 +98,17 @@ export const MainNav = (): React.JSX.Element => {
 
         {item.children !== undefined && item.children.length > 0
           ? (
-            <ul
-              className={ `main-nav__list main-nav__list--level-${level + 1}` }
-            >
-              {item.children?.map((child: IMainNavItem, childIndex) => renderNavItem(child, `${index}-${childIndex}`, level))}
-            </ul>
+            <div className={ 'main-nav__list-detail' }>
+              <div className={ 'main-nav__list-detail-scroll-container' }>
+                <div className={ 'main-nav__list-detail-scroll' }>
+                  <ul
+                    className={ `main-nav__list main-nav__list--level-${level + 1}` }
+                  >
+                    {item.children?.map((child: IMainNavItem, childIndex) => renderNavItem(child, `${index}-${childIndex}`, level))}
+                  </ul>
+                </div>
+              </div>
+            </div>
             )
           : null}
       </li>
@@ -116,9 +122,16 @@ export const MainNav = (): React.JSX.Element => {
     }
   }
 
+  const navRef = useRef<HTMLUListElement | null>(null)
   useEffect(() => {
     if (isOpen) {
       document.addEventListener('click', handleClickOutside)
+
+      if (navRef.current !== null) {
+        const maxHeight = Array.from(document.querySelectorAll('.main-nav__list')).reduce((max, nav) => Math.max(max, nav.scrollHeight), 0)
+
+        navRef.current.style.height = `${maxHeight}px`
+      }
     }
 
     return () => {
@@ -159,12 +172,15 @@ export const MainNav = (): React.JSX.Element => {
                     <li><Button type={ 'link' }>{t('navigation.clear-cache')}</Button></li>
                     <li><Button type={ 'link' }>{t('navigation.custom-reports')}</Button></li>
                   </ul>
-                  <Button type={ 'default' }>Customise</Button>
+                  <Button type={ 'default' }>{t('navigation.customise')}</Button>
                 </div>
 
                 <Divider className={ 'main-nav__divider' } />
 
-                <ul className={ 'main-nav__list main-nav__list--level-0' }>
+                <ul
+                  className={ 'main-nav__list main-nav__list--level-0' }
+                  ref={ navRef }
+                >
                   {navItems.map((item, index) => (
                     renderNavItem(item, `${index}`)
                   ))}

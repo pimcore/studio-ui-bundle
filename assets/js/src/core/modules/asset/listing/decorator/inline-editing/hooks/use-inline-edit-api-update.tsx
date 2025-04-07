@@ -12,8 +12,10 @@
 */
 
 import { useAppDispatch } from '@Pimcore/app/store'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { api, type AssetGetGridApiArg, useAssetPatchByIdMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { type UseInlineEditApiUpdateReturn } from '@Pimcore/modules/element/listing/decorators/inline-edit/inline-edit-decorator'
+import { isNil } from 'lodash'
 
 export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
   const [patchAsset] = useAssetPatchByIdMutation()
@@ -43,9 +45,16 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
     }))
   }
 
+  // todo: remove this as soon as backend added the type to the schema
+  interface ExtendedMetadataItem {
+    name: string
+    language: string
+    data: any
+    type: string
+  }
+
   const updateApiData: UseInlineEditApiUpdateReturn['updateApiData'] = async (event) => {
     const { update } = event
-
     const promise = patchAsset({
       body: {
         data: [
@@ -55,15 +64,22 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
               {
                 name: update.column.key,
                 language: update.column.locale,
-                data: update.value
+                data: update.value,
+                type: update.column.type
               }
-            ]
+            ] as ExtendedMetadataItem[]
           }
         ]
       }
     })
 
-    return await promise
+    const result = await promise
+
+    if (!isNil(result.error)) {
+      trackError(new ApiError(result.error))
+    }
+
+    return result
   }
 
   return {

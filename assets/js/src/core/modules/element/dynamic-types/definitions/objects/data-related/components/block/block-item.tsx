@@ -23,10 +23,13 @@ export interface BlockItemProps {
   field: number
   noteditable: AbstractObjectDataDefinition['noteditable']
   children: BlockProps['children']
+  disallowReorder: boolean
+  disallowAdd: boolean
+  disallowDelete: boolean
 }
 
 export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
-  const { field, noteditable, children } = props
+  const { field, noteditable, children, disallowAdd } = props
 
   return useMemo(() => (
     <ToolStripBox
@@ -35,11 +38,10 @@ export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
       renderToolStripStart={
         noteditable === false && (
         <BlockToolStrip
-          disallowAdd={ false }
-          disallowDelete={ false }
-          disallowReorder={ false }
+          disallowAdd={ props.disallowAdd }
+          disallowDelete={ props.disallowDelete }
+          disallowReorder={ props.disallowReorder }
           field={ field }
-          maxItems={ 20 }
         />
         ) }
     >
@@ -54,6 +56,7 @@ export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
                 <ObjectComponent
                   key={ field }
                   { ...child }
+                  noteditable={ noteditable === true }
                 />
               </Form.Group>
             )
@@ -61,5 +64,5 @@ export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
           : undefined
       }
     </ToolStripBox>
-  ), [field, noteditable, children])
+  ), [field, disallowAdd, noteditable, children])
 }

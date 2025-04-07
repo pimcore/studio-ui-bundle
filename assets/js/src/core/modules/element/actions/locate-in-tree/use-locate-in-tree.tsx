@@ -12,8 +12,11 @@
 */
 
 import { store, useAppDispatch } from '@Pimcore/app/store'
+import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
+import { isNil, isNull } from 'lodash'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { locateInTree as locateInTreeAction } from '@Pimcore/components/element-tree/element-tree-slice'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { Icon } from '@Pimcore/components/icon/icon'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
@@ -47,11 +50,6 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
       perspectiveId: activePerspective.id
     }, { forceRefetch: true }))
       .then((result) => {
-        if (!isUndefined(result.error)) {
-          trackError(new ApiError(result.error))
-          return
-        }
-
         if (!isNil(result.data) && !isNil(result.data.treeLevelData)) {
           const treeId = result.data.widgetId
           switchToWidget(treeId)
@@ -64,9 +62,7 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
           onFinished?.()
         }
       })
-      .catch((error) => {
-        console.error(error)
-      })
+      .catch(() => { trackError(new GeneralError('An error occured while locating in the tree')) })
   }
 
   const locateInTreeGridContextMenuItem = (row: any): ItemType | undefined => {

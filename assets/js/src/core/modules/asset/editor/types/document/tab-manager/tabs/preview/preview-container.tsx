@@ -21,6 +21,7 @@ import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { fetchBlobWithPolling } from '@Pimcore/utils/polling-helper'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 const PreviewContainer = (): React.JSX.Element => {
   const { id } = useAsset()
@@ -37,7 +38,7 @@ const PreviewContainer = (): React.JSX.Element => {
       onSuccess: (blob) => {
         setDocURL(URL.createObjectURL(blob))
       }
-    }).catch(console.error)
+    }).catch(() => { trackError(new GeneralError('An error occured while loading pdf preview')) })
   }, [id, isLoading])
 
   if (docURL === '' || isLoading) {

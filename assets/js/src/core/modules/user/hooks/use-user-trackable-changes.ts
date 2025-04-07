@@ -15,6 +15,7 @@ import type { ActionCreatorWithPayload, PayloadAction } from '@reduxjs/toolkit'
 import type { EntityAdapter, EntityState } from '@reduxjs/toolkit/src/entities/models'
 
 import { useAppDispatch } from '@Pimcore/app/store'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface ModifiedCell {
   rowIndex: number | string
@@ -65,8 +66,7 @@ export const useTrackableChangesReducers = (entityAdapter: EntityAdapter<Trackab
   const modifyDraft = (state: EntityState<TrackableChangesDraft, number>, id: number, modification: (draft: TrackableChangesDraft) => TrackableChangesDraft): void => {
     const draft = entityAdapter.getSelectors().selectById(state, id)
     if (draft === undefined) {
-      console.error(`Item with id ${id} not found`)
-      return
+      trackError(new GeneralError(`Item with id ${id} not found`))
     }
 
     state.entities[id] = modification({ ...draft })

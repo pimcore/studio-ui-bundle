@@ -12,9 +12,7 @@
 */
 
 import React from 'react'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type ComponentRegistry } from './component-registry'
-import { container } from '@Pimcore/app/depency-injection'
+import { useComponentRegistry } from './component-registry'
 
 interface ComponentRendererProps {
   component: string
@@ -22,7 +20,8 @@ interface ComponentRendererProps {
 }
 
 export const ComponentRenderer = ({ component, props }: ComponentRendererProps): React.JSX.Element => {
-  const ComponentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
+  const ComponentRegistry = useComponentRegistry()
   const Component = ComponentRegistry.get(component)
+
   return <Component { ...props } />
 }

@@ -36,6 +36,7 @@ import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/co
 import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/use-grid-config'
 import { useSelectedGridConfigId } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/selected-grid-config-id/use-selected-grid-config-id'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 
 enum ViewState {
   Edit = 'edit',
@@ -52,7 +53,6 @@ export const GridConfigInner = (): React.JSX.Element => {
   const userData = useUser()
   const { id: selectedGridConfigId, setId: setSelectedGridConfigId } = useSelectedGridConfigId()
   const { gridConfig, setGridConfig } = useGridConfig()
-
   const { isLoading, isFetching, data } = useAssetGetSavedGridConfigurationsQuery({ folderId: getId() })
   const { data: roleList } = useRoleGetCollectionQuery()
   const { data: userList } = useUserGetCollectionQuery()
@@ -61,9 +61,27 @@ export const GridConfigInner = (): React.JSX.Element => {
     configurationId: selectedGridConfigId
   })
 
-  const [fetchSaveGridConfig, { isLoading: isSaveLoading }] = useAssetSaveGridConfigurationMutation()
-  const [fetchUpdateGridConfig, { isLoading: isUpdating }] = useAssetUpdateGridConfigurationMutation()
-  const [fetchDeleteGridConfig, { isLoading: isDeleting }] = useAssetDeleteGridConfigurationByConfigurationIdMutation()
+  const [fetchSaveGridConfig, { isLoading: isSaveLoading, isError: isSaveGridConfigError, error: saveGridConfigError }] = useAssetSaveGridConfigurationMutation()
+  const [fetchUpdateGridConfig, { isLoading: isUpdating, isError: isUpdateGridConfigError, error: updateGridConfigError }] = useAssetUpdateGridConfigurationMutation()
+  const [fetchDeleteGridConfig, { isLoading: isDeleting, isError: isDeleteGridConfigError, error: deleteGridConfigError }] = useAssetDeleteGridConfigurationByConfigurationIdMutation()
+
+  useEffect(() => {
+    if (isSaveGridConfigError) {
+      trackError(new ApiError(saveGridConfigError))
+    }
+  }, [isSaveGridConfigError])
+
+  useEffect(() => {
+    if (isUpdateGridConfigError) {
+      trackError(new ApiError(updateGridConfigError))
+    }
+  }, [isUpdateGridConfigError])
+
+  useEffect(() => {
+    if (isDeleteGridConfigError) {
+      trackError(new ApiError(deleteGridConfigError))
+    }
+  }, [isDeleteGridConfigError])
 
   const [view, setView] = useState<ViewState>(ViewState.Edit)
   const [form] = useForm()
@@ -96,24 +114,22 @@ export const GridConfigInner = (): React.JSX.Element => {
 
   const availableColumnsDropdown = useMemo(() => getAvailableColumnsDropdown(onColumnClick), [getAvailableColumnsDropdown, columns])
 
-  function onDeleteClick (): void {
+  const onDeleteClick = async (): Promise<void> => {
     if (isSavedConfiguration) {
-      fetchDeleteGridConfig({ configurationId: gridConfig.id!, folderId: getId() }).then(() => {
+      await fetchDeleteGridConfig({ configurationId: gridConfig.id!, folderId: getId() }).then(() => {
         setView(ViewState.Edit)
         setSelectedGridConfigId(undefined)
-      }).catch((error) => {
-        console.error('Failed to switch to edit view', error)
       })
     }
   }
 
-  function onUpdatedConfigurationClick (): void {
+  const onUpdatedConfigurationClick = async (): Promise<void> => {
     if (gridConfig === undefined) {
-      console.error('No grid configuration available')
+      trackError(new GeneralError('No grid configuration available'))
       return
     }
 
-    fetchUpdateGridConfig({
+    await fetchUpdateGridConfig({
       configurationId: gridConfig.id!,
       body: {
         folderId: getId(),
@@ -127,8 +143,6 @@ export const GridConfigInner = (): React.JSX.Element => {
         saveFilter: false,
         pageSize: 0
       }
-    }).catch((error) => {
-      console.error('Failed to update grid configuration', error)
     })
   }
 
@@ -140,7 +154,7 @@ export const GridConfigInner = (): React.JSX.Element => {
     }))
   }
 
-  function onFormFinish (values: any): void {
+  const onFormFinish = async (values: any): Promise<void> => {
     const columnsToSave = prepareColumns(columns)
 
     const isShareGlobally = values.shareGlobally === true
@@ -156,7 +170,7 @@ export const GridConfigInner = (): React.JSX.Element => {
     }
 
     if (view === ViewState.Update && isSavedConfiguration) {
-      fetchUpdateGridConfig({
+      await fetchUpdateGridConfig({
         configurationId: gridConfig.id!,
         body: {
           folderId: getId(),
@@ -170,17 +184,13 @@ export const GridConfigInner = (): React.JSX.Element => {
           saveFilter: false,
           pageSize: 0
         }
-      }).catch((error) => {
-        console.error('Failed to update grid configuration', error)
       }).then(() => {
         setView(ViewState.Edit)
-      }).catch((error) => {
-        console.error('Failed to switch to edit view', error)
       })
     }
 
     if (view === ViewState.Save) {
-      fetchSaveGridConfig({
+      await fetchSaveGridConfig({
         folderId: getId(),
         body: {
           folderId: getId(),
@@ -194,15 +204,11 @@ export const GridConfigInner = (): React.JSX.Element => {
           saveFilter: false,
           pageSize: 0
         }
-      }).catch((error) => {
-        console.error('Failed to save grid configuration', error)
       }).then((response) => {
         if (response?.data !== undefined) {
           setSelectedGridConfigId(response.data.id)
           setView(ViewState.Edit)
         }
-      }).catch((error) => {
-        console.error('Failed to switch to edit view', error)
       })
     }
   }
