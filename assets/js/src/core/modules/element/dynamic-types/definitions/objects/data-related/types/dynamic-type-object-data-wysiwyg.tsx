@@ -22,7 +22,7 @@ import {
 import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 import Wysiwyg from '@Pimcore/modules/wysiwyg/wysiwyg'
 import { appConfig } from '@Pimcore/app/config/app-config'
-import { isEmpty, isNil, isObject, merge } from 'lodash'
+import { isEmpty, isNil, isObject, merge, toNumber } from 'lodash'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { type FormItemProps } from 'antd'
 import { FieldLabel } from '../helpers/label/field-label'
@@ -35,7 +35,7 @@ export type WysiwygObjectDataDefinition = AbstractObjectDataDefinition & {
   onChange?: (value: string | null) => void
   width: string | number | null
   height: string | number | null
-  maxCharacters?: number | null
+  maxCharacters?: number | null | string
   toolbarConfig?: string | null
 }
 export class DynamicTypeObjectDataWysiwyg extends DynamicTypeObjectDataAbstract {
@@ -68,13 +68,15 @@ export class DynamicTypeObjectDataWysiwyg extends DynamicTypeObjectDataAbstract 
       parseConfig(props.toolbarConfig)
     )
 
+    const maxCharacters = toNumber(props.maxCharacters) ?? 0
+
     return (
       <Wysiwyg
         { ...props }
         disabled={ props.noteditable === true }
         editorConfig={ editorConfig }
         height={ props.height ?? undefined }
-        maxCharacters={ props.maxCharacters ?? undefined }
+        maxCharacters={ maxCharacters === 0 ? undefined : maxCharacters }
         width={ toCssDimension(props.width, props.defaultFieldWidth.large) }
       />
     )

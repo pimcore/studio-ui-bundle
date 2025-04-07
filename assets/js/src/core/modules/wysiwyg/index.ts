@@ -12,7 +12,7 @@
 */
 
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
+import { componentConfig, type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { container } from '@Pimcore/app/depency-injection'
 import DefaultWysiwygEditor from './default-wysiwyg-editor/default-wysiwyg-editor'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
@@ -22,7 +22,7 @@ moduleSystem.registerModule({
     const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
 
     componentRegistry.register({
-      name: 'wysiwygEditor',
+      name: componentConfig.wysiwyg.editor.name,
       component: DefaultWysiwygEditor
     })
   }

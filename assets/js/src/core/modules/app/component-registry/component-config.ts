@@ -50,6 +50,9 @@ const defaultComponentConfig = {
     tree: {
       contextMenu: { type: ComponentType.SINGLE, name: 'dataObject.tree.contextMenu' }
     }
+  },
+  wysiwyg: {
+    editor: { type: ComponentType.SINGLE, name: 'wysiwyg.editor' },
   }
 }
 
