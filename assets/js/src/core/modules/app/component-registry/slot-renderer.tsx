@@ -42,9 +42,9 @@ export const SlotRenderer = ({ slot, props }: SlotRendererProps): React.JSX.Elem
 
   return (
     <>
-      {components.map(({ component: Component }, index) => (
+      {components.map(({ component: Component, name }, index) => (
         <Component
-          key={ index }
+          key={ name }
           { ...props }
         />
       ))}
