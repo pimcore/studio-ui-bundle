@@ -22,7 +22,7 @@ import { type SingleVersionViewProps } from '@Pimcore/modules/element/editor/sha
 import { useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
-import { getFormattedDataStructure, type IFormattedDataStructureData, versionsDataToTableData } from '../details-functions'
+import { getFormattedDataStructure, versionsDataToTableData } from '../details-functions'
 import { Content } from '@Pimcore/components/content/content'
 import { SingleViewUi } from './single-view-ui'
 import { useInjection } from '@Pimcore/app/depency-injection'
@@ -30,6 +30,10 @@ import type {
   DynamicTypeObjectDataRegistry
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import {
+  type IFormattedDataStructureData,
+  type ILayoutItem
+} from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 
 interface IVersionData extends IObjectVersionField {}
 
@@ -41,6 +45,7 @@ export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Ele
 
   const [vId, setVId] = useState(versionId)
   const [versionData, setVersionData] = useState<IVersionData[]>([])
+  const [layoutsList, setLayoutsList] = useState<ILayoutItem[]>([])
 
   const { data: layoutData } = useDataObjectGetLayoutByIdQuery({ id })
 
@@ -55,18 +60,21 @@ export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Ele
     const versionPromise = dispatch(api.endpoints.versionGetById.initiate({ id: vId.id }))
 
     Promise.resolve(versionPromise)
-      .then((response): void => {
+      .then(async (response): Promise<void> => {
         const formattedDataList: IFormattedDataStructureData[][] = []
 
         const dataRaw = response.data as DataObjectVersion
 
-        if (!isUndefined(layoutData?.children)) {
-          formattedDataList.push(getFormattedDataStructure({
+        if (!isUndefined(layoutData?.children) && !isUndefined(dataRaw)) {
+          formattedDataList.push(await getFormattedDataStructure({
+            objectId: id,
             layout: layoutData.children,
             versionData: dataRaw,
             versionId: vId.id,
             versionCount: vId.count,
-            objectDataRegistry
+            objectDataRegistry,
+            layoutsList,
+            setLayoutsList
           }))
 
           setVersionData(versionsDataToTableData({ data: formattedDataList }))

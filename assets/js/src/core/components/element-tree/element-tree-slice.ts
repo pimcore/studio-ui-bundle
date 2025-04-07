@@ -14,7 +14,7 @@
 /* eslint-disable max-lines */
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@Pimcore/app/store'
-import { isUndefined } from 'lodash'
+import { isEqual, isUndefined } from 'lodash'
 import { createSelector } from 'reselect'
 import { type TreeLevelData } from '@Pimcore/modules/element/element-api-slice.gen'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
@@ -53,6 +53,7 @@ export interface InternalNodeState {
   order?: number
   isRoot?: boolean
   isRootFetchTriggered?: boolean
+  childrenIds: string[]
 }
 
 type TreeNodesState = Record<string, InternalNodeState>
@@ -70,7 +71,8 @@ export const initialNodeState: InternalNodeState = {
   isSelected: false,
   isScrollTo: false,
   isFetchTriggered: false,
-  isDeleting: false
+  isDeleting: false,
+  childrenIds: []
 }
 
 const initialTreeState: TreeState = {
@@ -101,13 +103,11 @@ const updateNodeState = (
   nodeId: string,
   updateFn: (node: InternalNodeState) => InternalNodeState
 ): void => {
-  initializeNodeState(state, treeId, nodeId)
-  state[treeId] = {
-    ...state[treeId],
-    nodes: {
-      ...state[treeId].nodes,
-      [nodeId]: updateFn(state[treeId].nodes[nodeId])
-    }
+  const node = initializeNodeState(state, treeId, nodeId)
+  const updatedNode = updateFn(node)
+
+  if (!isEqual(node, updatedNode)) {
+    state[treeId].nodes[nodeId] = updatedNode
   }
 }
 
@@ -168,6 +168,19 @@ const slice = createSlice({
         ...node,
         isLoading: payload.loading
       }))
+    },
+    setNodeLoadingInAllTree: (
+      state,
+      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType, loading: boolean }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
+          updateNodeState(state, treeId, payload.nodeId, node => ({
+            ...node,
+            isLoading: payload.loading
+          }))
+        }
+      })
     },
     setFetchTriggered: (
       state,
@@ -261,7 +274,8 @@ const slice = createSlice({
     ) => {
       updateNodeState(state, payload.treeId, payload.parentId, node => ({
         ...node,
-        total: payload.total
+        total: payload.total,
+        childrenIds: payload.nodes.map(child => String(child.id)) // Save child node IDs
       }))
 
       const currentNodes = state[payload.treeId].nodes
@@ -281,7 +295,6 @@ const slice = createSlice({
         }
       })
 
-      // Assign the new object to the state (triggers an immutable update)
       state[payload.treeId].nodes = updatedNodes
     },
     locateInTree: (
@@ -460,24 +473,11 @@ export const treeSliceName = slice.name
 
 injectSliceWithState(slice)
 
-export const { setNodeLoading, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, setNodePublished, setRootNode } = slice.actions
+export const { setNodeLoading, setNodeLoadingInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, setNodePublished, setRootNode } = slice.actions
 
 export const selectNodeState = createSelector(
   (state: RootState) => state.trees,
   (state: RootState, treeId: string) => treeId,
   (state: RootState, treeId: string, nodeId: string) => nodeId,
   (trees, treeId, nodeId) => trees[treeId]?.nodes[nodeId]
-)
-
-export const selectNodesByParentId = createSelector(
-  (state: RootState) => state.trees,
-  (state: RootState, treeId: string) => treeId,
-  (state: RootState, treeId: string, parentId: string) => parentId,
-  (trees, treeId, parentId) => {
-    const tree: TreeNodesState = trees[treeId]?.nodes ?? {}
-    const treeNodes: InternalNodeState[] = Object.values(tree)
-    return treeNodes
-      .filter((node: InternalNodeState) => String(node.treeNodeProps?.parentId) === parentId)
-      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-  }
 )

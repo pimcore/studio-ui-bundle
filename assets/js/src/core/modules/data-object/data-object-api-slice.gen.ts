@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Data Objects", "Data Object Grid", "Data Object Search"] as const;
+export const addTagTypes = ["Data Objects", "Data Object Grid", "Search"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -162,15 +162,6 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
-            dataObjectGetSearchConfiguration: build.query<
-                DataObjectGetSearchConfigurationApiResponse,
-                DataObjectGetSearchConfigurationApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-object/search/configuration/${queryArg.classId}`,
-                }),
-                providesTags: ["Data Object Search"],
-            }),
             dataObjectGetSelectOptions: build.mutation<
                 DataObjectGetSelectOptionsApiResponse,
                 DataObjectGetSelectOptionsApiArg
@@ -200,6 +191,25 @@ const injectedRtkApi = api
                     },
                 }),
                 providesTags: ["Data Objects"],
+            }),
+            dataObjectGetSearchConfiguration: build.query<
+                DataObjectGetSearchConfigurationApiResponse,
+                DataObjectGetSearchConfigurationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/search/configuration/data-objects`,
+                    params: { classId: queryArg.classId },
+                }),
+                providesTags: ["Search"],
+            }),
+            dataObjectGetSearch: build.query<DataObjectGetSearchApiResponse, DataObjectGetSearchApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/search/data-objects`,
+                    method: "POST",
+                    body: queryArg.body,
+                    params: { classId: queryArg.classId },
+                }),
+                providesTags: ["Search"],
             }),
         }),
         overrideExisting: false,
@@ -431,12 +441,6 @@ export type DataObjectReplaceContentApiArg = {
     /** TargetId of the data-object */
     targetId: number;
 };
-export type DataObjectGetSearchConfigurationApiResponse =
-    /** status 200 Data object search configuration */ GridDetailedConfiguration;
-export type DataObjectGetSearchConfigurationApiArg = {
-    /** Class Id of the data object */
-    classId?: string;
-};
 export type DataObjectGetSelectOptionsApiResponse = /** status 200 List of dynamic select options */ {
     totalItems: number;
     items: SelectOption2[];
@@ -477,6 +481,29 @@ export type DataObjectGetTreeApiArg = {
     className?: string;
     /** Filter results based on the provided class IDs. */
     classIds?: string;
+};
+export type DataObjectGetSearchConfigurationApiResponse =
+    /** status 200 Data object search configuration */ GridDetailedConfiguration;
+export type DataObjectGetSearchConfigurationApiArg = {
+    /** Class Id of the data object */
+    classId?: string;
+};
+export type DataObjectGetSearchApiResponse = /** status 200 Data object search results */ {
+    totalItems: number;
+    items: {
+        id?: number;
+        columns?: GridColumnData[];
+        isLocked?: boolean;
+        permissions?: Permissions;
+    }[];
+};
+export type DataObjectGetSearchApiArg = {
+    /** Class Id of the data object */
+    classId?: string;
+    body: {
+        columns: GridColumnRequest[];
+        filters?: GridFilter;
+    };
 };
 export type Error = {
     /** Message */
@@ -716,6 +743,8 @@ export type GridColumnConfiguration = {
     editable: boolean;
     /** Exportable */
     exportable?: boolean;
+    /** Filterable */
+    filterable?: boolean;
     /** Localizable */
     localizable: boolean;
     /** Locale */
@@ -848,7 +877,8 @@ export const {
     useDataObjectFormatPathMutation,
     useDataObjectPreviewByIdQuery,
     useDataObjectReplaceContentMutation,
-    useDataObjectGetSearchConfigurationQuery,
     useDataObjectGetSelectOptionsMutation,
     useDataObjectGetTreeQuery,
+    useDataObjectGetSearchConfigurationQuery,
+    useDataObjectGetSearchQuery,
 } = injectedRtkApi;

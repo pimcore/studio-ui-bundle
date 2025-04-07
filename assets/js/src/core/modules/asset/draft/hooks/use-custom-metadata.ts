@@ -19,6 +19,7 @@ import type {
   CustomMetadata as CustomMetadataApi
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 import { type TrackableChangesDraft } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface CustomMetadataAction {
   id: number
@@ -57,19 +58,24 @@ export const useCustomMetadataReducers = (entityAdapter: EntityAdapter<CustomMet
   }
 
   const updateCustomMetadata = (state: EntityState<CustomMetadataDraft, number>, action: PayloadAction<CustomMetadataAction>): void => {
+    let found = false
+
     modifyDraft(state, action.payload.id, (draft: CustomMetadataDraft): CustomMetadataDraft => {
       draft.customMetadata = (draft.customMetadata ?? []).map((customMetadata, index) => {
-        if (customMetadata.name === action.payload.customMetadata.name) {
+        if (customMetadata.name === action.payload.customMetadata.name && customMetadata.language === action.payload.customMetadata.language) {
           markedAsModified(draft)
-
+          found = true
           return action.payload.customMetadata
         }
 
         return customMetadata
       })
-
       return draft
     })
+
+    if (!found) {
+      addCustomMetadata(state, action)
+    }
   }
   const removeCustomMetadata = (state: EntityState<CustomMetadataDraft, number>, action: PayloadAction<CustomMetadataAction>): void => {
     modifyDraft(state, action.payload.id, (draft: CustomMetadataDraft): CustomMetadataDraft => {
@@ -99,10 +105,7 @@ export const useCustomMetadataReducers = (entityAdapter: EntityAdapter<CustomMet
 
   const modifyDraft = (state: EntityState<CustomMetadataDraft, number>, id: number, modification: (draft: CustomMetadataDraft) => CustomMetadataDraft): void => {
     const draft = entityAdapter.getSelectors().selectById(state, id)
-    if (draft === undefined) {
-      console.error(`Item with id ${id} not found`)
-      return
-    }
+    if (draft === undefined) trackError(new GeneralError(`Item with id ${id} not found`))
 
     state.entities[id] = modification({ ...draft })
   }

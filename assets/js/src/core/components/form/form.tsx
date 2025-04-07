@@ -12,7 +12,7 @@
 */
 
 import React, { type ReactNode } from 'react'
-import { Form as AntForm, type FormProps as AntFormProps } from 'antd'
+import { Form as AntForm, type FormProps as AntFormProps, type FormItemProps } from 'antd'
 import { Space } from '../space/space'
 import { withGroupName } from './item/with-group-name'
 import { Group } from './group/group'
@@ -21,6 +21,8 @@ import { withItemProvider } from './item/with-item-provider'
 import { withKeyedItemContext } from './item/with-keyed-item-context'
 import { withLocalizedFieldsLocale } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/localized-fields/form-item/with-localized-fields-locale'
 import { compose } from '@reduxjs/toolkit'
+import { NumberedList } from './numbered-list/numbered-list'
+import { withNumberedItemContext } from './item/with-numbered-item-context'
 
 export interface FormProps extends Omit<AntFormProps, 'children'> {
   children?: React.ReactNode
@@ -45,11 +47,13 @@ const Form = (({ ...props }: FormProps) => {
 }) as typeof AntForm & {
   Group: typeof Group
   KeyedList: typeof KeyedList
+  NumberedList: typeof NumberedList
 }
 
 const newFormItem = compose(
   withGroupName,
   withKeyedItemContext,
+  withNumberedItemContext,
   withLocalizedFieldsLocale,
   withItemProvider
 )(AntForm.Item)
@@ -59,9 +63,10 @@ Form.List = AntForm.List
 Form.Provider = AntForm.Provider
 Form.Group = Group
 Form.KeyedList = KeyedList
+Form.NumberedList = NumberedList
 Form.useForm = AntForm.useForm
 Form.useFormInstance = AntForm.useFormInstance
 Form.useWatch = AntForm.useWatch
 Form.ErrorList = AntForm.ErrorList
 
-export { Form }
+export { Form, type FormItemProps }

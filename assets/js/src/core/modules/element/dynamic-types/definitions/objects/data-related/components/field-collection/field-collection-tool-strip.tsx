@@ -14,27 +14,30 @@
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Split } from '@Pimcore/components/split/split'
 import { Text } from '@Pimcore/components/text/text'
-import { type FormListFieldData } from 'antd'
 import React from 'react'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Space } from '@Pimcore/components/space/space'
-import { type CollectionItemProps } from '../collection/collection'
-import { type FieldCollectionItemProps } from './field-collection-item'
+import { type FieldCollectionProps } from './field-collection'
+import { useNumberedList } from '@Pimcore/components/form/numbered-list/provider/numbered-list/use-numbered-list'
 
-export interface FieldCollectionToolStripProps extends CollectionItemProps {
-  label: string
-  field: FormListFieldData
-  allowedTypes: FieldCollectionItemProps['allowedTypes']
+export interface FieldCollectionToolStripProps {
+  field: number
+  allowedTypes: FieldCollectionProps['allowedTypes']
+  disallowAdd: boolean
+  disallowDelete: boolean
+  disallowReorder: boolean
 }
 
-export const FieldCollectionToolStrip = ({ label, field, fields, operation, allowedTypes, disallowAdd, disallowDelete, disallowReorder, maxItems }: FieldCollectionToolStripProps): React.JSX.Element => {
-  const hasMaxItems = maxItems !== undefined && maxItems !== null && fields.length >= maxItems
+export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, disallowDelete, disallowReorder }: FieldCollectionToolStripProps): React.JSX.Element => {
+  const { operations } = useNumberedList()
+
+  const type = operations.getValue([field, 'type'])
 
   const dropDownItems: DropdownMenuProps['items'] = allowedTypes.map((type, index) => {
     return {
       key: index,
       label: type,
-      onClick: (e) => { e.domEvent.stopPropagation(); operation.add({ type }) }
+      onClick: (e) => { e.domEvent.stopPropagation(); operations.add({ type }) }
     }
   })
 
@@ -45,10 +48,10 @@ export const FieldCollectionToolStrip = ({ label, field, fields, operation, allo
       theme='secondary'
     >
       <Space size="mini">
-        <Text type='secondary'>{ label }</Text>
+        <Text type='secondary'>{ type }</Text>
 
         <Dropdown
-          disabled={ disallowAdd === true || hasMaxItems }
+          disabled={ disallowAdd }
           menu={ { items: dropDownItems } }
         >
           <IconButton
@@ -59,25 +62,25 @@ export const FieldCollectionToolStrip = ({ label, field, fields, operation, allo
         </Dropdown>
 
         <IconButton
-          disabled={ disallowReorder === true }
+          disabled={ disallowReorder }
           icon={ { value: 'move-down' } }
-          onClick={ () => { operation.move(field.name, field.name + 1) } }
+          onClick={ () => { operations.move(field, field + 1) } }
           style={ { padding: 4 } }
           variant='minimal'
         />
         <IconButton
-          disabled={ disallowReorder === true }
+          disabled={ disallowReorder }
           icon={ { value: 'move-up' } }
-          onClick={ () => { operation.move(field.name, field.name - 1) } }
+          onClick={ () => { operations.move(field, field - 1) } }
           style={ { padding: 4 } }
           variant='minimal'
         />
       </Space>
 
       <IconButton
-        disabled={ disallowDelete === true }
+        disabled={ disallowDelete }
         icon={ { value: 'trash' } }
-        onClick={ () => { operation.remove(field.name) } }
+        onClick={ () => { operations.remove(field) } }
         style={ { padding: 4 } }
         variant='minimal'
       />

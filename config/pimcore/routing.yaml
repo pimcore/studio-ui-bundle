@@ -1,10 +1,10 @@
 pimcore_studio_ui:
     resource: "@PimcoreStudioUiBundle/src/Controller/DefaultController.php"
-    type:     annotation
+    type:     attribute
     prefix:   '%pimcore_studio_ui.url_path%'
 
 pimcore_studio_ui_backend:
     resource: "@PimcoreStudioUiBundle/src/Controller/ImageEditorController.php"
-    type:     annotation
+    type:     attribute
     prefix:   '%pimcore_studio_backend.url_prefix%'
 

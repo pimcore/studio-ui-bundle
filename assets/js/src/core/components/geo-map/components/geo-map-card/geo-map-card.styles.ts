@@ -34,6 +34,7 @@ export const useStyles = createStyles(({ token, css }) => {
         &.versionFieldItem {
           .ant-card-cover {
             .leaflet-container {
+              width: 100% !important;
               border: 1px solid transparent !important;
             }
           }

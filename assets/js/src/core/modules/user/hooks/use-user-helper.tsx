@@ -36,6 +36,7 @@ import { userOpened, userClosed, userUpdated, changeUser, userImageLoaded } from
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
 import type { UseTrackableChangesDraftReturn } from '@Pimcore/modules/user/hooks/use-user-trackable-changes'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface AddItemArgs {
   parentId: number
@@ -110,7 +111,6 @@ export const useUserHelper = (): UseUserReturn => {
 
   async function getDefaultKeyBindings (): Promise<UserDefaultKeyBindingsApiResponse> {
     const { data }: any = await dispatch(api.endpoints.userDefaultKeyBindings.initiate())
-
     return data
   }
 
@@ -198,7 +198,8 @@ export const useUserHelper = (): UseUserReturn => {
         keyBindings: user.keyBindings,
         assetWorkspaces: user.assetWorkspaces,
         dataObjectWorkspaces: user.dataObjectWorkspaces,
-        documentWorkspaces: user.documentWorkspaces
+        documentWorkspaces: user.documentWorkspaces,
+        perspectives: user.perspectives
       }
     }))
 
@@ -239,7 +240,10 @@ export const useUserHelper = (): UseUserReturn => {
         data = URL.createObjectURL(imageBlob)
         dispatch(userImageLoaded({ id, image: data }))
       }).catch((error) => {
-        console.log('error', error)
+        const apiError = error instanceof Error
+          ? new ApiError(error)
+          : new GeneralError('An error occurred while loading the image')
+        trackError(apiError)
       })
 
     return { data }

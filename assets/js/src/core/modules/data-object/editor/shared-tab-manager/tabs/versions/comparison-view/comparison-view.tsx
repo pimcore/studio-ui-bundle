@@ -25,7 +25,6 @@ import {
 import { useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import {
   getFormattedDataStructure,
-  type IFormattedDataStructureData,
   versionsDataToTableData
 } from '../details-functions'
 import { Content } from '@Pimcore/components/content/content'
@@ -36,6 +35,10 @@ import type {
   DynamicTypeObjectDataRegistry
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import {
+  type IFormattedDataStructureData,
+  type ILayoutItem
+} from '../types'
 
 interface IVersionData extends IObjectVersionField {}
 
@@ -43,6 +46,7 @@ export const ComparisonView = ({
   versionIds
 }: VersionComparisonViewProps): React.JSX.Element => {
   const [versionsData, setVersionsData] = useState<IVersionData[]>([])
+  const [layoutsList, setLayoutsList] = useState<ILayoutItem[]>([])
 
   const dispatch = useAppDispatch()
 
@@ -65,16 +69,19 @@ export const ComparisonView = ({
       .then((responses): void => {
         const formattedDataList: IFormattedDataStructureData[][] = []
 
-        responses.forEach((response, versionIndex) => {
+        responses.forEach(async (response, versionIndex) => {
           const dataRaw = response.data as DataObjectVersion
 
-          if (!isUndefined(layoutData?.children)) {
-            formattedDataList.push(getFormattedDataStructure({
+          if (!isUndefined(layoutData?.children) && !isUndefined(dataRaw)) {
+            formattedDataList.push(await getFormattedDataStructure({
+              objectId: id,
               layout: layoutData.children,
               versionData: dataRaw,
               versionId: versionIds[versionIndex].id,
               versionCount: versionIds[versionIndex].count,
-              objectDataRegistry
+              objectDataRegistry,
+              layoutsList,
+              setLayoutsList
             }))
 
             setVersionsData(versionsDataToTableData({ data: formattedDataList }))

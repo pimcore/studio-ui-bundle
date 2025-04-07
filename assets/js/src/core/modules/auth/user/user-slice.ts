@@ -23,7 +23,9 @@ const initialState: UserInformation = {
   permissions: [],
   isAdmin: false,
   classes: [],
-  docTypes: []
+  docTypes: [],
+  activePerspective: 0,
+  perspectives: []
 }
 
 const slice = createSlice({

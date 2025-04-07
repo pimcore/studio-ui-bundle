@@ -48,6 +48,7 @@ export interface ColumnMetaType {
   editable?: boolean
   autoWidth?: boolean
   type?: string
+  columnKey?: string
   config?: any
 }
 
@@ -244,7 +245,7 @@ export const Grid = ({
   )
 
   return useMemo(() => (
-    <div className={ cn('ant-table-wrapper', hashId, styles.grid, { [styles.disabledGrid]: disabled }) }>
+    <div className={ cn('ant-table-wrapper', hashId, styles.grid, props.className, { [styles.disabledGrid]: disabled }) }>
       <div className="ant-table ant-table-small">
         <div className='ant-table-container'>
           <div className='ant-table-content'>
@@ -317,6 +318,7 @@ export const Grid = ({
                     key={ row.id }
                     modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
                     onFocusCell={ onFocusCell }
+                    onRowDoubleClick={ props.onRowDoubleClick }
                     row={ row }
                     tableElement={ tableElement }
                   />
@@ -427,3 +429,5 @@ export const Grid = ({
     return sortDirection ? SortDirections.DESC : SortDirections.ASC
   }
 }
+
+export * from './edit-mode/use-edit-mode'

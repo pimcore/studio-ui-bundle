@@ -19,13 +19,14 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { useTranslation } from 'react-i18next'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { isEmpty } from 'lodash'
-import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
+import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 interface ExternalImageFooterProps {
   value?: string
   onChange: (value?: string) => void
   inputWidth?: number
   disabled?: boolean
+  placeholder?: string
 }
 
 export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.Element => {
@@ -84,6 +85,7 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
       <Input
         disabled={ props.disabled }
         onChange={ onChange }
+        placeholder={ props.placeholder }
         style={ { maxWidth: toCssDimension(inputWidth, fieldWidth.large), width: toCssDimension(inputWidth, fieldWidth.large) } }
         value={ props.value }
       />

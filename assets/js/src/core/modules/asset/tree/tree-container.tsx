@@ -11,14 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { defaultProps, ElementTree } from '@Pimcore/components/element-tree/element-tree'
+import { defaultProps, ElementTree, type TreeContextMenuProps } from '@Pimcore/components/element-tree/element-tree'
 import React from 'react'
 import { TreeNode as TreeNodeComponent } from '@Pimcore/components/element-tree/node/tree-node'
 import { PagerContainer } from '@Pimcore/modules/element/tree/pager/pager-container'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { SearchContainer } from './search/search-container'
 import { withDraggable } from './node/with-draggable'
-import { AssetTreeContextMenu } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
 import { Skeleton } from '@Pimcore/components/element-tree/skeleton/skeleton'
 import { Box } from '@Pimcore/components/box/box'
 import { withDroppable } from './node/with-droppable/with-droppable'
@@ -26,15 +25,21 @@ import { withActionStates } from './node/with-action-states'
 import { withDroppableStyling } from './node/with-droppable/with-droppable-styling'
 import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
 import { useElementTreeRootNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-root-node'
+import { useComponentRegistry } from '@Pimcore/modules/app/component-registry/use-component-registry'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 
 export interface TreeContainerProps {
   id: number
   showRoot?: boolean
 }
 
+export const AssetTreeNode = withDroppable(withDroppableStyling(withActionStates(withDraggable(TreeNodeComponent))))
+
 const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
   const { openAsset } = useAssetHelper()
   const { rootNode, isLoading } = useElementTreeRootNode(id, showRoot)
+  const componentRegistry = useComponentRegistry()
+  const contextMenu = componentRegistry.get(componentConfig.asset.tree.contextMenu.name)
 
   if (showRoot && isLoading) {
     return (
@@ -54,11 +59,11 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
 
   return (
     <ElementTree
-      contextMenu={ AssetTreeContextMenu }
+      contextMenu={ contextMenu as React.ElementType<TreeContextMenuProps> | undefined }
       nodeId={ id }
       onSelect={ onSelect }
       renderFilter={ SearchContainer }
-      renderNode={ withDroppable(withDroppableStyling(withActionStates(withDraggable(TreeNodeComponent)))) }
+      renderNode={ AssetTreeNode }
       renderNodeContent={ defaultProps.renderNodeContent }
       renderPager={ PagerContainer }
       rootNode={ rootNode }

@@ -38,7 +38,6 @@ export const useModifiedObjectDataReducers = (entityAdapter: EntityAdapter<Modif
   const modifyDraft = (state: EntityState<ModifiedObjectDataDraft, number>, id: number, modification: (draft: ModifiedObjectDataDraft) => ModifiedObjectDataDraft): void => {
     const draft = entityAdapter.getSelectors().selectById(state, id)
     if (draft === undefined) {
-      console.error(`Object draft with id ${id} not found`)
       return
     }
 
