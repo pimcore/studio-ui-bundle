@@ -35,12 +35,14 @@ export const useStyle = createStyles(({ token, css }) => {
         object-fit: contain;
       }
     `,
+
     floatingContainer: css`
       position: absolute;
       bottom: 20px;
       width: 100%;
       z-index: 9999;
     `,
+
     flexContainer: css`
       display: flex;
       flex-direction: row;
@@ -48,8 +50,12 @@ export const useStyle = createStyles(({ token, css }) => {
       padding-left: 15px;
       padding-right: 15px;
     `,
+
     imageContainer: css`
+      width: 100%;
+      height: 100%;
       max-height: 100%;
+      overflow: scroll;
     `
   }
 }, { hashPriority: 'low' })

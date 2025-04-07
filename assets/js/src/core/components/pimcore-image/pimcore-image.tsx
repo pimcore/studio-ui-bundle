@@ -24,13 +24,16 @@ export const PimcoreImage = (props: PimcoreImageProps): React.JSX.Element => {
   const { zoom } = useContext(ZoomContext)
 
   return (
-    <Image
-      className={ styles.image }
-      preview={ false }
-      style={ {
-        transform: `scale(${zoom * 0.01})`
-      } }
-      { ...props }
-    />
+    <>
+      <Image
+        className={ styles.image }
+        preview={ false }
+        style={ {
+          width: `${zoom}%`,
+          height: `${zoom}%`
+        } }
+        { ...props }
+      />
+    </>
   )
 }
