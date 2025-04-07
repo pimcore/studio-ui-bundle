@@ -150,6 +150,7 @@ export class ComponentRegistry implements ComponentRegistryInterface {
   }
 }
 
+export * from './enums/component-type'
 export * from './component-config'
 export * from './component-renderer'
 export * from './use-component-registry'
