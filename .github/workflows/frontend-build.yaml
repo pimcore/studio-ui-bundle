@@ -148,7 +148,7 @@ jobs:
         run: npm run build
 
       - name: Create package archive
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/1.x' || github.ref == 'refs/heads/wysiwyg' }}
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/1.x' }}
         continue-on-error: true
         working-directory: ./assets
         run: npm pack && mv ./pimcore-studio-ui*.tgz ../public/build/studio-npm-package.tgz
