@@ -37,8 +37,9 @@ export type ExpandedHotspotMarkerDataBase<T extends keyof HotspotValueMap> = {
   : { value: HotspotValueMap[T] })
 
 export interface HotspotObjectType {
-  id: number
+  value: number
   fullPath: string
+  published: boolean | null
   subtype: 'object'
 }
 

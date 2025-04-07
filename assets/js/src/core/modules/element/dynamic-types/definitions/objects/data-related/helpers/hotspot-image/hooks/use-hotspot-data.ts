@@ -97,9 +97,10 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
     const newField: ExpandedHotspotMarkerData = {
       type,
       name: '',
-      id: 0,
+      value: 0,
       fullPath: '',
-      subtype: 'object'
+      subtype: 'object',
+      published: null
     }
     setFields((prevFields) => [...prevFields, newField])
   }
@@ -186,9 +187,10 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
     if (isUndefined(newValue?.fullPath)) return
 
     const formattedValue: HotspotObjectType = {
-      id: newValue.id,
+      value: newValue.id,
       fullPath: newValue.fullPath,
-      subtype: 'object'
+      subtype: 'object',
+      published: newValue?.isPublished ?? null
     }
 
     setFields((prevFields) =>

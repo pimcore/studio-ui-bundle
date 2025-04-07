@@ -24,6 +24,7 @@ import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { Flex } from '@Pimcore/components/flex/flex'
 import {
+  type HotspotValueMap,
   type ExpandedHotspotMarkerData
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import {
@@ -102,7 +103,7 @@ const FieldOperations = ({
                   }
               }
               value={
-              { type: 'document', id: field.id, fullPath: field.fullPath, subtype: 'object' }
+              { type: 'document', id: field.value, fullPath: field.fullPath, subtype: 'object' }
             }
             />
           )
@@ -120,7 +121,7 @@ const FieldOperations = ({
                   }
               }
               value={
-                { type: 'asset', id: field.id, fullPath: field.fullPath, subtype: 'object' }
+                { type: 'asset', id: field.value, fullPath: field.fullPath, subtype: 'object' }
               }
             />
           )
@@ -138,7 +139,7 @@ const FieldOperations = ({
                   }
               }
               value={
-                { type: 'data-object', id: field.id, fullPath: field.fullPath, subtype: 'object' }
+                { type: 'data-object', id: field.value, fullPath: field.fullPath, subtype: 'object' }
               }
             />
           )
@@ -184,7 +185,7 @@ const FieldOperations = ({
           </IconButton>
                 }
         key={ index }
-        title={ getTypeLabel(field.type) }
+        title={ getTypeLabel(field.type as keyof HotspotValueMap) }
       >
         {renderFormItem(field, index)}
       </Card>
