@@ -41,8 +41,8 @@ export const HotspotImageContainer = ({ src, items, styleOptions = defaultStyleO
     setHotspots(hotspots.filter(h => h.id !== id))
   }
 
-  const onEdit = (id: number): void => {
-    console.log('Todo show edit view', id)
+  const onEdit = (hotspot: IHotspot): void => {
+    console.log(`hotspot with id ${hotspot.id} in edit mode`)
   }
 
   const onUpdate = (item: IHotspot): void => {

@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState, useRef, useEffect, type MouseEvent } from 'react'
+import React, { useState, useRef, useEffect, type MouseEvent, useContext } from 'react'
 import { useStyle } from './hotspot-image.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Popover } from 'antd'
@@ -25,6 +25,12 @@ import { type Coordinates, type Rectangle } from '@Pimcore/components/hotspot-im
 import { resizeItem } from '@Pimcore/components/hotspot-image/utils/resize'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
+import {
+  type ExpandedHotspotMarkerData
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
+import {
+  HotspotContext
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-data-provider'
 
 export interface IStyleOptions {
   hotspot: {
@@ -65,6 +71,8 @@ export interface IHotspot {
   width: number
   height: number
   type: string
+  data?: ExpandedHotspotMarkerData[]
+  name?: string | null
 }
 
 interface IHotspotImage {
@@ -72,7 +80,7 @@ interface IHotspotImage {
   styleOptions?: IStyleOptions
   data?: IHotspot[]
   onRemove?: (id: number) => void
-  onEdit?: (id: number) => void
+  onEdit?: (hotspot: IHotspot) => void
   onClone?: (id: number) => void
   onUpdate?: (item: IHotspot) => void
   disableContextMenu?: boolean
@@ -84,11 +92,13 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
   const [imageLoaded, setImageLoaded] = useState<boolean>(false)
   const imageRef = useRef<HTMLImageElement | null>(null)
   const { t } = useTranslation()
+  const { editModeHotspot } = useContext(HotspotContext)
+  const disableDrag = editModeHotspot !== undefined
 
   const [items, setItems] = useState<IHotspot[]>(data ?? [])
   useEffect((): void => {
     setItems(data ?? [])
-  }, [data?.length])
+  }, [data?.length, JSON.stringify(data?.map((item) => item.data))])
 
   useEffect(() => {
     setImageLoaded(false)
@@ -155,6 +165,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
     setResizeDirection(null)
 
     const updatedItem = items.find(h => h.id === selectedId)
+
     if (updatedItem !== undefined) {
       onUpdate?.(updatedItem)
     }
@@ -163,8 +174,8 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
   return (
     <div
       className={ ['hotspot-image', styles.hotspotImage].join(' ') }
-      onMouseMove={ handleMouseMove }
-      onMouseUp={ handleMouseUp }
+      onMouseMove={ !disableDrag ? handleMouseMove : undefined }
+      onMouseUp={ !disableDrag ? handleMouseUp : undefined }
       ref={ containerRef }
       role="none"
     >
@@ -180,7 +191,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
         ref={ imageRef }
         src={ src }
       />
-      { imageLoaded && containerRef.current !== null && (
+      { disableDrag && imageLoaded && containerRef.current !== null && (
         convertHotspotsToPixel(items, containerRef.current.getBoundingClientRect()).map(hotspot => (
           <Popover
             arrow={ false }
@@ -189,10 +200,10 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
                 {onEdit !== undefined
                   ? (
                     <IconTextButton
-                      icon={ { value: 'plus-square' } }
-                      onClick={ () => { onEdit(hotspot.id) } }
+                      icon={ { value: 'new' } }
+                      onClick={ () => { onEdit(hotspot) } }
                       type="default"
-                    >Todo edit</IconTextButton>
+                    >{t('hotspots-markers-modal.edit-button')}</IconTextButton>
                     )
                   : null}
 
