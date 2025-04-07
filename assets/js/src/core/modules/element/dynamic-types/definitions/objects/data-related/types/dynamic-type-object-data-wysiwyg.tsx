@@ -14,6 +14,7 @@
 import React from 'react'
 import {
   type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract,
+  type EditModalSettings,
   type EditMode,
   type GetGridCellDefinitionProps
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
@@ -26,6 +27,8 @@ import { toCssDimension } from '@Pimcore/utils/css'
 import { type FormItemProps } from 'antd'
 import { FieldLabel } from '../helpers/label/field-label'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { GridCellPreviewWrapper } from '../../grid-cell-preview/grid-cell-cell-preview-wrapper/grid-cell-preview-wrapper'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 
 export type WysiwygObjectDataDefinition = AbstractObjectDataDefinition & {
   value?: string | null
@@ -39,6 +42,10 @@ export class DynamicTypeObjectDataWysiwyg extends DynamicTypeObjectDataAbstract 
   id: string = 'wysiwyg'
   inheritedMaskOverlay: InheritanceOverlayType = 'form-element'
   gridCellEditMode: EditMode = 'edit-modal'
+  gridCellEditModalSettings: EditModalSettings = {
+    modalSize: 'XL',
+    formLayout: 'vertical'
+  }
 
   getObjectDataComponent (props: WysiwygObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     const parseConfig = (config?: string | null): Record<string, any> => {
@@ -74,7 +81,13 @@ export class DynamicTypeObjectDataWysiwyg extends DynamicTypeObjectDataAbstract 
   }
 
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
-    return <>dummy data</>
+    const value = props.cellProps.getValue()
+
+    if (isNil(value)) {
+      return <></>
+    }
+
+    return <GridCellPreviewWrapper><SanitizeHtml html={ value } /></GridCellPreviewWrapper>
   }
 
   getObjectDataFormItemProps (props: AbstractObjectDataDefinition): FormItemProps {
