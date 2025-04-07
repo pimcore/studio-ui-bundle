@@ -11,20 +11,27 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { api } from '@Pimcore/modules/element/element-api-slice.gen'
 import { store, useAppDispatch } from '@Pimcore/app/store'
-import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
-import { isNil, isNull } from 'lodash'
+import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { locateInTree as locateInTreeAction } from '@Pimcore/components/element-tree/element-tree-slice'
+import { type GridContextMenuProps } from '@Pimcore/components/grid/grid'
+import { Icon } from '@Pimcore/components/icon/icon'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { api } from '@Pimcore/modules/element/element-api-slice.gen'
+import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { isNil, isNull } from 'lodash'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export interface UseLocateInTreeHookReturn {
   locateInTree: (elementId: number, onFinished?: () => void) => void
+  locateInTreeGridContextMenuItem: (row: any) => ItemType | undefined
 }
 
 export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookReturn => {
+  const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const activePerspective = selectActivePerspective(store.getState())
   const { switchToWidget } = useWidgetManager()
@@ -55,7 +62,24 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
       .catch(() => { trackError(new GeneralError('An error occured while locating in the tree')) })
   }
 
+  const locateInTreeGridContextMenuItem = (row: any): ItemType | undefined => {
+    const data: GridContextMenuProps = row.original ?? {}
+    if (data.id === undefined) {
+      return
+    }
+
+    return {
+      label: t('element.locate-in-tree'),
+      key: 'locate-in-tree',
+      icon: <Icon value={ 'target' } />,
+      onClick: async () => {
+        locateInTree(data.id)
+      }
+    }
+  }
+
   return {
-    locateInTree
+    locateInTree,
+    locateInTreeGridContextMenuItem
   }
 }

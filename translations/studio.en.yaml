@@ -437,6 +437,7 @@ element.toolbar.copy-deep-link-to-clipboard: Copy deep link to clipboard
 element.toolbar.copy-className: Class {{className}} - Copy
 element.unpublish: Unpublish
 element.publish: Publish
+element.locate-in-tree: Locate in Tree
 male: Male
 female: Female
 other: Other

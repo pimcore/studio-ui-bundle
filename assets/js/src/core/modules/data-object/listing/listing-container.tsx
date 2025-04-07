@@ -30,6 +30,7 @@ import { useInlineEditApiUpdate } from './decorator/inline-editing/hooks/use-inl
 import { GeneralFiltersDecorator } from '@Pimcore/modules/element/listing/decorators/general-filters/general-filters-decorator'
 import { ActionColumnDecorator } from './decorator/action-column/action-column-decorator'
 import { TagFilterDecorator } from '@Pimcore/modules/asset/listing/decorator/tag-filter/tag-filter-decorator'
+import { ContextMenuDecorator } from './decorator/context-menu/context-menu-decorator'
 
 export interface IObjectListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useDataObjectGetGridQuery
@@ -54,6 +55,7 @@ const props = compose<AbstractDecoratorProps>(
   ColumnConfigurationDecorator,
   [InlineEditDecorator, { useInlineEditApiUpdate } as IInlineEditDecoratorConfig],
   [RowSelectionDecorator, { rowSelectionMode: 'multiple' } as IRowSelectionDecoratorConfig],
+  ContextMenuDecorator,
   TagFilterDecorator,
   GeneralFiltersDecorator
 )(defaultProps)
