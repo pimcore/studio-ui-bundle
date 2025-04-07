@@ -68,6 +68,7 @@ import { type DynamicTypeObjectLayoutFieldset } from './definitions/objects/layo
 import { type DynamicTypeObjectLayoutFieldContainer } from './definitions/objects/layout-related/types/dynamic-type-object-layout-field-container'
 import { type DynamicTypeObjectDataInput } from './definitions/objects/data-related/types/dynamic-type-object-data-input'
 import { type DynamicTypeObjectDataTextarea } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-textarea'
+import { type DynamicTypeObjectDataWysiwyg } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-wysiwyg'
 import { type DynamicTypeObjectDataPassword } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-password'
 import { type DynamicTypeObjectDataInputQuantityValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-input-quantity-value'
 import { type DynamicTypeObjectDataSelect } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-select'
@@ -232,6 +233,7 @@ moduleSystem.registerModule({
 
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataInput>(serviceIds['DynamicTypes/ObjectData/Input']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataTextarea>(serviceIds['DynamicTypes/ObjectData/Textarea']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataWysiwyg>(serviceIds['DynamicTypes/ObjectData/Wysiwyg']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataPassword>(serviceIds['DynamicTypes/ObjectData/Password']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataInputQuantityValue>(serviceIds['DynamicTypes/ObjectData/InputQuantityValue']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataSelect>(serviceIds['DynamicTypes/ObjectData/Select']))
