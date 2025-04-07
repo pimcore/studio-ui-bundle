@@ -21,6 +21,8 @@ import {
   assetReceived,
   removeAsset,
   removeCustomMetadataFromAsset,
+  setCustomSettingsForAsset,
+  removeCustomSettingsFromAsset,
   removeImageSettingFromAsset,
   removePropertyFromAsset,
   removeScheduleFromAsset,
@@ -60,9 +62,11 @@ import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { initialTabsStateValue, useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-tabs'
 import { useTextDataDraft, type UseTextDataDraftReturn } from '@Pimcore/modules/asset/draft/hooks/use-text-settings'
+import { useCustomSettingsDraft, type UseCustomSettingsDraftReturn } from '@Pimcore/modules/asset/draft/hooks/use-custom-settings'
 
 export interface UseAssetDraftReturn extends
   UseCustomMetadataDraftReturn,
+  UseCustomSettingsDraftReturn,
   UsePropertiesDraftReturn,
   UseSchedulesDraftReturn,
   UseTrackableChangesDraftReturn,
@@ -151,6 +155,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
         modified: false,
         properties: [],
         customMetadata: [],
+        customSettings: [],
         schedules: [],
         textData: '',
         imageSettings: customSettingsResponse,
@@ -213,6 +218,13 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     updateAllCustomMetadataForAsset
   )
 
+  const customSettingsActions = useCustomSettingsDraft({
+    id,
+    draft: asset,
+    setCustomSettingsAction: setCustomSettingsForAsset,
+    removeCustomSettingsAction: removeCustomSettingsFromAsset
+  })
+
   const imageSettingsActions = useImageSettingsDraft(
     id,
     asset,
@@ -248,6 +260,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     ...propertyActions,
     ...schedulesActions,
     ...customMetadataActions,
+    ...customSettingsActions,
     ...imageSettingsActions,
     ...textDataActions,
     ...tabsActions
