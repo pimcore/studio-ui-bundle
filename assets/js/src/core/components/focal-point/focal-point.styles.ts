@@ -13,22 +13,20 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyle = createStyles(({ token, css }) => {
+export const useStyles = createStyles(({ token, css }) => {
   return {
-    draggableContainer: css`
-        display: flex;
-        position: relative;
-    `,
-    draggableItem: css`
+    draggableElement: css`
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       color: ${token.colorPrimary};
       width: ${token.Button.controlHeightSM}px !important;
       height: ${token.Button.controlHeightSM}px !important;
       background: ${token.Colors.Neutral.Fill.colorFill};
       box-shadow: none;
       border: 2px dashed;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      transition: transform 0.05s linear !important;
 
         &:hover {
         color: ${token.colorPrimary};

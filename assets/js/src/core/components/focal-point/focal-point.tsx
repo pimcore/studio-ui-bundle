@@ -12,12 +12,14 @@
 */
 
 import React, { Children, isValidElement, type MouseEvent, useContext, useState, useRef } from 'react'
+import { isNull, isUndefined } from 'lodash'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { FocalPointContext } from '@Pimcore/components/focal-point/context/focal-point-context'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { useStyles } from './focal-point.styles'
 
 interface FocalPointProps {
   children: React.ReactNode
@@ -26,16 +28,22 @@ interface FocalPointProps {
 export const FocalPoint = ({ children }: FocalPointProps): React.JSX.Element | null => {
   const Image = Children.only(children)
 
+  if (!isValidElement(Image)) {
+    trackError(new GeneralError('Children must be a valid react component'))
+
+    return null
+  }
+
+  const [dragging, setDragging] = useState<boolean>(false)
   const movingElementRef = useRef<HTMLDivElement>(null)
 
   const { id } = useContext(AssetContext)
   const focalPointContext = useContext(FocalPointContext)
 
   const { imageSettings } = useAssetDraft(id)
+  const { styles } = useStyles()
 
-  const [dragging, setDragging] = useState<boolean>(false)
-
-  if (focalPointContext === undefined) {
+  if (isUndefined(focalPointContext)) {
     trackError(new GeneralError('FocalPoint must be used within the FocalPointProvider'))
   }
 
@@ -48,14 +56,8 @@ export const FocalPoint = ({ children }: FocalPointProps): React.JSX.Element | n
     containerRef
   } = focalPointContext!
 
-  if (!isValidElement(Image)) {
-    trackError(new GeneralError('Children must be a valid react component'))
-
-    return null
-  }
-
   const handleOnLoad = (): void => {
-    if (containerRef.current !== null && imageSettings?.focalPoint !== undefined) {
+    if (!isNull(containerRef.current) && !isUndefined(imageSettings?.focalPoint)) {
       const focalPoint = imageSettings.focalPoint
       const calcX = containerRef.current.clientWidth * Number(focalPoint.x) / 100
       const calcY = containerRef.current.clientHeight * Number(focalPoint.y) / 100
@@ -66,7 +68,7 @@ export const FocalPoint = ({ children }: FocalPointProps): React.JSX.Element | n
   }
 
   const handleMouseMove = (evt: MouseEvent): void => {
-    if (containerRef.current === null || movingElementRef.current === null || disabled) return
+    if (isNull(containerRef.current) || isNull(movingElementRef.current) || disabled) return
 
     if (dragging) {
       const containerBounds = containerRef.current.getBoundingClientRect()
@@ -104,22 +106,21 @@ export const FocalPoint = ({ children }: FocalPointProps): React.JSX.Element | n
           onLoad={ handleOnLoad }
           { ...Image.props }
         />
-        { isActive && containerRef.current !== null && (
-        <div
-          onMouseDown={ handleMouseDown }
-          ref={ movingElementRef }
-          role="none"
-          style={ {
-            position: 'absolute',
-            left: `${coordinates.x}px`,
-            top: `${coordinates.y}px`
-          } }
-        >
-          <Icon
-            options={ { width: '16px', height: '16px' } }
-            value={ 'focal-point' }
+        { isActive && !isNull(containerRef.current) && (
+          <IconButton
+            aria-label="Draggable"
+            className={ styles.draggableElement }
+            data-cypress="draggable-item"
+            hidden={ !isActive }
+            icon={ { value: 'focal-point' } }
+            onMouseDown={ handleMouseDown }
+            ref={ movingElementRef }
+            style={ {
+              left: `${coordinates.x}px`,
+              top: `${coordinates.y}px`
+            } }
+            type="dashed"
           />
-        </div>
         )}
       </div>
     </Flex>
