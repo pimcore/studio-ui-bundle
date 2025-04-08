@@ -33,7 +33,7 @@ interface OpenDataObjectWidgetProps {
 
 interface UseDataObjectReturn {
   openDataObject: (props: OpenDataObjectWidgetProps) => Promise<void>
-  executeDataObjectTask: (id: number, task: SaveTaskType) => Promise<void>
+  executeDataObjectTask: (id: number, task: SaveTaskType, onFinish?: () => void) => Promise<void>
 }
 
 export const useDataObjectHelper = (): UseDataObjectReturn => {
@@ -74,7 +74,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
     })
   }
 
-  const executeDataObjectTask = async (id: number, task: SaveTaskType): Promise<void> => {
+  const executeDataObjectTask = async (id: number, task: SaveTaskType, onFinish?: () => void): Promise<void> => {
     const updateTask = update({
       id,
       body: {
@@ -95,6 +95,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
       if (response.error !== undefined) {
         dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: false }))
         trackError(new ApiError(response.error))
+        onFinish?.()
         return
       }
 
@@ -111,6 +112,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
       }
 
       dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: false }))
+      onFinish?.()
     } catch (e: any) {
       trackError(new GeneralError(e.message as string))
     }

@@ -16,7 +16,7 @@ import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { createJob as createDeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
@@ -59,6 +59,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   const [elementDelete, { isError, error }] = useElementDeleteMutation({ fixedCacheKey: cacheKey })
   const { isTreeActionAllowed } = useTreePermission()
   const dispatch = useAppDispatch()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
     if (isError) {
@@ -75,11 +76,17 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
         <b>{label}</b>
       </>,
       okText: t('element.delete.confirmation.ok'),
-      onOk: async () => { await deleteMutation(id, parentId, onFinish) }
+      onOk: async () => {
+        setIsLoading(true)
+        await deleteMutation(id, parentId, () => {
+          onFinish?.()
+          setIsLoading(false)
+        })
+      }
     })
   }
 
-  const deleteTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+  const deleteTreeContextMenuItem = (node: TreeNodeProps, onFinish?: () => void): ItemType => {
     return {
       label: t('element.delete'),
       key: 'delete',
@@ -88,7 +95,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
       onClick: () => {
         const id = parseInt(node.id)
         const parentId = node.parentId !== undefined ? parseInt(node.parentId) : undefined
-        deleteElement(id, node.label, parentId)
+        deleteElement(id, node.label, parentId, onFinish)
       }
     }
   }
@@ -97,6 +104,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
     return {
       label: t('element.delete'),
       key: 'delete',
+      isLoading,
       icon: <Icon value={ 'trash' } />,
       hidden: !checkElementPermission(node.permissions, 'delete') || node.isLocked,
       onClick: () => {
