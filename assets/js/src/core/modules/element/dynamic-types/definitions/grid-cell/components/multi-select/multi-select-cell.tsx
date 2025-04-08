@@ -34,8 +34,15 @@ export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
   const [open, setOpen] = useState<boolean>(false)
   const config = column.columnDef.meta?.config as MultiSelectCellConfig | undefined
   const element = useRef<RefSelectProps>(null)
-  const fieldName = config?.fieldName ?? String(props.column.columnDef.meta?.columnKey)
 
+  useEffect(() => {
+    if (isInEditMode) {
+      element.current?.focus()
+      setOpen(true)
+    }
+  }, [isInEditMode])
+
+  const fieldName = config?.fieldName ?? String(props.column.columnDef.meta?.columnKey)
   const optionsResult = config ? resolveOptions(config, fieldName) : { isLoading: false, options: [] }
   if (optionsResult.isLoading) {
     return (
@@ -45,13 +52,6 @@ export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
     )
   }
   const options = optionsResult.options
-
-  useEffect(() => {
-    if (isInEditMode) {
-      element.current?.focus()
-      setOpen(true)
-    }
-  }, [isInEditMode])
 
   const value: [] = Array.isArray(getValue()) ? getValue() : []
 
