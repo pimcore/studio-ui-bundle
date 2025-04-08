@@ -38,7 +38,9 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined)
 
   const items: DropdownMenuProps['items'] = [
-    unpublishContextMenuItem(dataObject as DataObject),
+    unpublishContextMenuItem(dataObject as DataObject, () => {
+      setIsOpen(undefined)
+    }),
     deleteContextMenuItem(dataObject as DataObject),
     renameContextMenuItem(dataObject as DataObject)
   ]
