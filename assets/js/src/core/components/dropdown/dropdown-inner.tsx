@@ -25,8 +25,8 @@ export const DropdownInner = ({ selectedKeys, onSelect, menu, menuRef, ...props 
 
   const renderMenuComponent = (): ReactNode => (
     <Menu
-      ref={menuRef}
-      {...rest}
+      ref={ menuRef }
+      { ...rest }
     >
       {items?.map((item: ItemType) => renderDropdownItem({ item }))}
     </Menu>
@@ -34,8 +34,8 @@ export const DropdownInner = ({ selectedKeys, onSelect, menu, menuRef, ...props 
 
   return (
     <AntdDropdown
-      {...props}
-      dropdownRender={renderMenuComponent}
+      { ...props }
+      dropdownRender={ renderMenuComponent }
     >
       {props.children}
     </AntdDropdown>
