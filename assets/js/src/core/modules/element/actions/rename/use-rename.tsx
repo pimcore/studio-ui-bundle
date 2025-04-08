@@ -62,9 +62,10 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
       },
       onOk: async (value: string) => {
         setIsLoading(true)
-        await renameMutation(id, value, parentId)
-        onFinish?.(value)
-        setIsLoading(false)
+        await renameMutation(id, value, parentId, () => {
+          onFinish?.(value)
+          setIsLoading(false)
+        })
       }
     })
   }
@@ -129,7 +130,7 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
     }
   }
 
-  const renameMutation = async (id: number, value: string, parentId?: number): Promise<void> => {
+  const renameMutation = async (id: number, value: string, parentId?: number, onFinish?: () => void): Promise<void> => {
     const elementRenameTask = elementPatch({
       body: {
         data: [{
@@ -149,6 +150,8 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
 
       dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType, loading: false }))
       dispatch(updateKey({ id, key: value }))
+
+      onFinish?.()
     } catch (error) {
       console.error('Error renaming ' + elementType, error)
     }
