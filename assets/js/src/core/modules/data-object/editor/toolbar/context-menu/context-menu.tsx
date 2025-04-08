@@ -47,7 +47,9 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
       <ReloadButton />
 
       {visibleItems.length > 0 && (
-        <Dropdown menu={ { items } }>
+        <Dropdown
+          menu={ { items } }
+        >
           <DropdownButton key={ 'dropdown-button' }>
             {t('toolbar.more')}
           </DropdownButton>
