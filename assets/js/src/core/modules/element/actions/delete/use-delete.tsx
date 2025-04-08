@@ -38,6 +38,7 @@ import { useTranslation } from 'react-i18next'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { useRefreshTree } from '../refresh-tree/use-refresh-tree'
+import { ContextMenuActionName } from '..'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
@@ -89,7 +90,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   const deleteTreeContextMenuItem = (node: TreeNodeProps, onFinish?: () => void): ItemType => {
     return {
       label: t('element.delete'),
-      key: 'delete',
+      key: ContextMenuActionName.delete,
       icon: <Icon value={ 'trash' } />,
       hidden: !isTreeActionAllowed(TreePermission.Delete) || !checkElementPermission(node.permissions, 'delete') || node.isLocked,
       onClick: () => {
@@ -103,7 +104,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   const deleteContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
     return {
       label: t('element.delete'),
-      key: 'delete',
+      key: ContextMenuActionName.delete,
       isLoading,
       icon: <Icon value={ 'trash' } />,
       hidden: !checkElementPermission(node.permissions, 'delete') || node.isLocked,
@@ -123,7 +124,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
 
     return {
       label: t('element.delete'),
-      key: 'delete',
+      key: ContextMenuActionName.delete,
       icon: <Icon value={ 'trash' } />,
       hidden: !checkElementPermission(data.permissions, 'delete') || data.isLocked,
       onClick: async () => {

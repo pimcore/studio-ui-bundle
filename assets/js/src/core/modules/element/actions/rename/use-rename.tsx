@@ -28,6 +28,7 @@ import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { renameNode, setNodeLoadingInAllTree } from '@Pimcore/components/element-tree/element-tree-slice'
 import { updateKey } from '@Pimcore/modules/data-object/data-object-draft-slice'
+import { ContextMenuActionName } from '..'
 
 export interface UseRenameHookReturn {
   rename: (parentId: number, currentLabel: string) => void
@@ -76,7 +77,7 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
   ): ItemType => {
     return {
       label: t('element.rename'),
-      key: 'rename',
+      key: ContextMenuActionName.rename,
       isLoading,
       icon: <Icon value={ 'rename' } />,
       hidden: !checkElementPermission(node.permissions, 'rename') || node.isLocked,
@@ -95,7 +96,7 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
 
     return {
       label: t('element.rename'),
-      key: 'rename',
+      key: ContextMenuActionName.rename,
       icon: <Icon value={ 'rename' } />,
       hidden: !checkElementPermission(data.permissions, 'rename') || data.isLocked,
       onClick: async () => {
@@ -119,7 +120,7 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
   const renameTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.rename'),
-      key: 'rename',
+      key: ContextMenuActionName.rename,
       icon: <Icon value={ 'rename' } />,
       hidden: !isTreeActionAllowed(TreePermission.Rename) || !checkElementPermission(node.permissions, 'rename') || node.isLocked,
       onClick: () => {

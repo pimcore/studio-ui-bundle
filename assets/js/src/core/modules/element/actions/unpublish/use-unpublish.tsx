@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next'
 import { useElementHelper } from '../../hooks/use-element-helper'
 import { checkElementPermission } from '../../permissions/permission-helper'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { ContextMenuActionName } from '..'
 
 type Element = DataObject
 
@@ -51,7 +52,7 @@ export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn =
   const unpublishContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
     return {
       label: t('element.unpublish'),
-      key: 'unpublish',
+      key: ContextMenuActionName.unpublish,
       isLoading,
       icon: <Icon value='eye-off' />,
       hidden: node.published === false || isUnpublishHidden(node),
@@ -68,7 +69,7 @@ export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn =
   const unpublishTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.unpublish'),
-      key: 'unpublish',
+      key: ContextMenuActionName.unpublish,
       isLoading,
       icon: <Icon value='eye-off' />,
       hidden: node.isPublished === false || !isTreeActionAllowed(TreePermission.Unpublish) || isUnpublishHidden(node),
