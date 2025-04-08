@@ -166,7 +166,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
 
     if (jobRunId !== null) {
       addJob(createDeleteJob({
-        title: 'Deleting Folder',
+        title: t('element.delete.deleting-folder'),
         topics: [topics['deletion-finished'], ...defaultTopics],
         action: async () => {
           return jobRunId
