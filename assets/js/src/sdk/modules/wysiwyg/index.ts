@@ -12,3 +12,4 @@
 */
 
 export * from '@Pimcore/modules/wysiwyg/interface/wysiwyg'
+export * from '@Pimcore/modules/wysiwyg/wysiwyg'

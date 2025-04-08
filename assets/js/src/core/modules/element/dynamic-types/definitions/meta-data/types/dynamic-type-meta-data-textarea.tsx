@@ -21,6 +21,7 @@ import { respectLineBreak } from '@Pimcore/utils/helpers'
 @injectable()
 export class DynamicTypeMetaDataTextarea extends DynamicTypeMetadataAbstract {
   readonly id = 'metadata.textarea'
+  readonly iconName = 'content'
 
   visibleInTypeSelection: boolean = true
 

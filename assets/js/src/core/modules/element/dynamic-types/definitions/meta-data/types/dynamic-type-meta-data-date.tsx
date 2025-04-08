@@ -21,6 +21,7 @@ import { DynamicTypeFieldFilterAbstract } from '../../field-filters/dynamic-type
 @injectable()
 export class DynamicTypeMetaDataDate extends DynamicTypeMetadataAbstract {
   readonly id = 'metadata.date'
+  readonly iconName = 'calendar'
 
   visibleInTypeSelection: boolean = true
 

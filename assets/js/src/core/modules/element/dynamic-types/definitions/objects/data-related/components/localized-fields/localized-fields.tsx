@@ -48,3 +48,6 @@ export const LocalizedFields = ({ children, noteditable, className }: LocalizedF
     </LocalizedFieldsProvider>
   )
 }
+
+export * from './provider/localized-fields-provider/localized-fields-provider'
+export * from './provider/localized-fields-provider/use-localized-fields'

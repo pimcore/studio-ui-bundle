@@ -18,13 +18,15 @@ import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { Select } from '@Pimcore/components/select/select'
 import { useStyles } from './multi-select-cell.styles'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import {
-  type SelectOptionType
-} from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/select/select-cell'
+import { Spin } from '@Pimcore/components/spin/spin'
+import { resolveOptions, SelectOptionType } from '../../utils/select-options'
 
 export interface MultiSelectCellConfig {
-  options: string[] | SelectOptionType[]
+  options?: string[] | SelectOptionType[]
+  optionsUseHook?: (fieldName: string) => { isLoading: boolean, options: SelectOptionType[] } | undefined
+  fieldName?: string
 }
+
 export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { column, getValue } = props
@@ -32,6 +34,17 @@ export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
   const [open, setOpen] = useState<boolean>(false)
   const config = column.columnDef.meta?.config as MultiSelectCellConfig | undefined
   const element = useRef<RefSelectProps>(null)
+  const fieldName = config?.fieldName ?? String(props.column.columnDef.meta?.columnKey)
+
+  const optionsResult = config ? resolveOptions(config, fieldName) : { isLoading: false, options: [] }
+  if (optionsResult.isLoading) {
+    return (
+      <div className={ [styles['multi-select-cell'], 'default-cell__content'].join(' ') }>
+        <Spin type="classic" />
+      </div>
+    )
+  }
+  const options = optionsResult.options
 
   useEffect(() => {
     if (isInEditMode) {
@@ -45,10 +58,6 @@ export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
   if (config === undefined) {
     return <>{ value.join(', ') }</>
   }
-
-  const options: SelectOptionType[] = config.options.map((value: string | object) => (
-    typeof value === 'object' ? value : { label: value, value }
-  ))
 
   const displayOptions = value.map((value: string) => {
     const option = options.find((option: SelectOptionType) => option.value === value)

@@ -32,6 +32,7 @@ export abstract class DynamicTypeMetadataAbstract implements DynamicTypeAbstract
   abstract visibleInTypeSelection: boolean
   protected readonly abstract dynamicTypeGridCellType: InstanceType<typeof DynamicTypeGridCellAbstract>
   protected readonly abstract dynamicTypeFieldFilterType: InstanceType<typeof DynamicTypeFieldFilterAbstract>
+  readonly iconName: string | undefined = undefined
 
   abstract getVersionPreviewComponent (data: unknown): ReactElement<unknown>
 

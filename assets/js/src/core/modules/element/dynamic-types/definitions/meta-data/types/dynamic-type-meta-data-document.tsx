@@ -21,6 +21,7 @@ import { DynamicTypeFieldFilterAbstract } from '../../field-filters/dynamic-type
 @injectable()
 export class DynamicTypeMetaDataDocument extends DynamicTypeMetadataAbstract {
   readonly id = 'metadata.document'
+  readonly iconName = 'document'
 
   visibleInTypeSelection: boolean = true
 

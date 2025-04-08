@@ -21,6 +21,7 @@ import { DynamicTypeFieldFilterAbstract } from '../../field-filters/dynamic-type
 @injectable()
 export class DynamicTypeMetaDataAsset extends DynamicTypeMetadataAbstract {
   readonly id = 'metadata.asset'
+  readonly iconName = 'asset'
 
   visibleInTypeSelection: boolean = true
 
