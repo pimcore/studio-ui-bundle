@@ -13,12 +13,14 @@
 
 import React from 'react'
 import { useInheritanceOverlayStyle } from '@Pimcore/components/inheritance-overlay/hooks/use-inheritance-overlay-style'
+import cn from 'classnames'
 
-export type InheritanceOverlayType = 'form-item-container' | 'form-element' | 'manual' | 'wrapper' | false
+export type InheritanceOverlayType = 'form-item-container' | 'form-element' | 'manual' | 'wrapper' | 'grid-cell' | false
 
 export interface InheritanceOverlayProps {
   inherited?: boolean
   type?: InheritanceOverlayType
+  className?: string
   children?: React.ReactNode
 }
 
@@ -29,8 +31,14 @@ export const InheritanceOverlay = (props: InheritanceOverlayProps): JSX.Element 
     return <></>
   }
 
+  const classNames = cn(
+    'inheritance-overlay',
+    style,
+    props.className
+  )
+
   return (
-    <span className={ style }>
+    <span className={ classNames }>
       {props.children}
     </span>
   )
