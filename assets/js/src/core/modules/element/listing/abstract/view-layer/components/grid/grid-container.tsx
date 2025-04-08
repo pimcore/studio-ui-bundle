@@ -75,15 +75,8 @@ export const GridContainer = (): React.JSX.Element => {
         }
 
         newRow[accessor] = rowColumn.value
+        newRow['__api-data'] = row
       })
-
-      for (const column of row.columns) {
-        const isMetaColumn = ['id', 'fullpath'].includes(column.key as string)
-
-        if (isMetaColumn) {
-          newRow[column.key] = column.value
-        }
-      }
 
       memoizedData.push(newRow)
     }

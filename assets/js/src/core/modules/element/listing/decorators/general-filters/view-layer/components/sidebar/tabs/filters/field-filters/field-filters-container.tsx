@@ -72,7 +72,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
 
   const availableFilterColumns = useMemo(() => availableColumns.filter((column) => {
     const hasDynamicType = hasType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.frontendType!] })
-    const isIgnoredField = FILTER_FIELD_KEY_IGNORE_LIST.includes(column.key)
+    const isIgnoredField = FILTER_FIELD_KEY_IGNORE_LIST.includes(column.key) || column.filterable !== true
 
     return hasDynamicType && !isIgnoredField && !filters.some((filter) => filter.id === column.key)
   }), [availableColumns, filters])

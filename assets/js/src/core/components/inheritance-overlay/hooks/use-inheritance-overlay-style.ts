@@ -37,5 +37,9 @@ export const useInheritanceOverlayStyle = (props: UseInheritanceOverlayStyleProp
     return styles.inheritedWrapper
   }
 
+  if (props.type === 'grid-cell' && props.inherited === true) {
+    return styles.inheritedGridCell
+  }
+
   return undefined
 }

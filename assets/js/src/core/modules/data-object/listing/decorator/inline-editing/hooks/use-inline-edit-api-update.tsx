@@ -47,6 +47,16 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
 
   const updateApiData: UseInlineEditApiUpdateReturn['updateApiData'] = async (event) => {
     const { update } = event
+    let columnKey = update.column.key
+
+    if (update.column.localizable && update.column.locale !== undefined) {
+      const splittedColumnKey = columnKey.split('.')
+      const columnId = splittedColumnKey[splittedColumnKey.length - 1]
+      splittedColumnKey.pop()
+      const hasPrepath = splittedColumnKey.length > 0 && splittedColumnKey[0] !== ''
+
+      columnKey = `${splittedColumnKey.join('.')}${hasPrepath ? '.' : ''}localizedfields.${columnId}.${update.column.locale}`
+    }
 
     const promise = patchDataObject({
       body: {
@@ -54,7 +64,7 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
           {
             id: update.id,
             editableData: {
-              ...set({}, update.column.key, update.value)
+              ...set({}, columnKey, update.value)
             }
           }
         ]
