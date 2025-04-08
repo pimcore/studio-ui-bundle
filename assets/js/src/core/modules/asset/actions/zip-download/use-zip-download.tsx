@@ -25,6 +25,7 @@ import { type Element, getElementKey } from '@Pimcore/modules/element/element-he
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 
 export interface ICreateZipDownloadProps {
   jobTitle: string
@@ -90,7 +91,7 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
   const createZipDownloadContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
     return {
       label: t('asset.tree.context-menu.download-as-zip'),
-      key: 'download-as-zip',
+      key: ContextMenuActionName.downloadAsZip,
       icon: <Icon value={ 'download-zip' } />,
       hidden: node.type !== 'folder' || !checkElementPermission(node.permissions, 'view'),
       onClick: () => {
@@ -105,7 +106,7 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
   const createZipDownloadTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('asset.tree.context-menu.download-as-zip'),
-      key: 'download-as-zip',
+      key: ContextMenuActionName.downloadAsZip,
       icon: <Icon value={ 'download-zip' } />,
       hidden: !isTreeActionAllowed(TreePermission.DownloadZip) || node.type !== 'folder' || !checkElementPermission(node.permissions, 'view'),
       onClick: () => {
