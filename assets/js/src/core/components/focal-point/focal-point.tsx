@@ -11,38 +11,29 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { Children, isValidElement, useContext, useEffect } from 'react'
-import {
-  DndContext,
-  KeyboardSensor,
-  MouseSensor,
-  type PointerActivationConstraint,
-  TouchSensor,
-  useSensor,
-  useSensors
-} from '@dnd-kit/core'
-import { DraggableItem } from '@Pimcore/components/focal-point/components/draggable-item/draggable-item'
-import { restrictToParentElement } from '@dnd-kit/modifiers'
+import React, { Children, isValidElement, type MouseEvent, useContext, useState, useRef } from 'react'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { FocalPointContext } from '@Pimcore/components/focal-point/context/focal-point-context'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 interface FocalPointProps {
-  activationConstraint?: PointerActivationConstraint
   children: React.ReactNode
 }
 
-export const FocalPoint = ({ activationConstraint, children }: FocalPointProps): React.JSX.Element | null => {
+export const FocalPoint = ({ children }: FocalPointProps): React.JSX.Element | null => {
   const Image = Children.only(children)
+
+  const movingElementRef = useRef<HTMLDivElement>(null)
+
   const { id } = useContext(AssetContext)
   const focalPointContext = useContext(FocalPointContext)
-  const { imageSettings, isLoading } = useAssetDraft(id)
-  const mouseSensor = useSensor(MouseSensor, { activationConstraint })
-  const touchSensor = useSensor(TouchSensor, { activationConstraint })
-  const keyboardSensor = useSensor(KeyboardSensor, {})
-  const sensors = useSensors(mouseSensor, touchSensor, keyboardSensor)
-  const { addImageSettings, removeImageSetting } = useAssetDraft(id)
+
+  const { imageSettings } = useAssetDraft(id)
+
+  const [dragging, setDragging] = useState<boolean>(false)
 
   if (focalPointContext === undefined) {
     trackError(new GeneralError('FocalPoint must be used within the FocalPointProvider'))
@@ -57,11 +48,14 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
     containerRef
   } = focalPointContext!
 
-  const onLoad = (): void => {
-    if (
-      containerRef.current !== null &&
-      imageSettings?.focalPoint !== undefined
-    ) {
+  if (!isValidElement(Image)) {
+    trackError(new GeneralError('Children must be a valid react component'))
+
+    return null
+  }
+
+  const handleOnLoad = (): void => {
+    if (containerRef.current !== null && imageSettings?.focalPoint !== undefined) {
       const focalPoint = imageSettings.focalPoint
       const calcX = containerRef.current.clientWidth * Number(focalPoint.x) / 100
       const calcY = containerRef.current.clientHeight * Number(focalPoint.y) / 100
@@ -71,56 +65,63 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
     }
   }
 
-  const onToggleOff = (): void => {
-    setCoordinates({ x: 0, y: 0 })
-    removeImageSetting('focalPoint')
-  }
+  const handleMouseMove = (evt: MouseEvent): void => {
+    if (containerRef.current === null || movingElementRef.current === null || disabled) return
 
-  useEffect(() => {
-    if (!isActive && !isLoading && containerRef.current !== null) {
-      onToggleOff()
+    if (dragging) {
+      const containerBounds = containerRef.current.getBoundingClientRect()
+      const movingElementBounds = movingElementRef.current.getBoundingClientRect()
+
+      const movingElementWidth = movingElementBounds.width
+      const movingElementHeight = movingElementBounds.height
+
+      let x = evt.clientX - containerBounds.left
+      let y = evt.clientY - containerBounds.top
+
+      x = Math.max(0, Math.min(x, containerBounds.width - movingElementWidth))
+      y = Math.max(0, Math.min(y, containerBounds.height - movingElementHeight))
+
+      setCoordinates({ x, y })
     }
-  }, [isActive])
-
-  if (!isValidElement(Image)) {
-    trackError(new GeneralError('Children must be a valid react component'))
-
-    return null
   }
+
+  const handleMouseUp = (): void => { setDragging(false) }
+
+  const handleMouseDown = (): void => { setDragging(true) }
 
   const ImageComponent = Image.type
 
   return (
-    <DndContext
-      modifiers={ [restrictToParentElement] }
-      onDragEnd={ ({ delta }) => {
-        const calcX = coordinates.x + delta.x
-        const calcY = coordinates.y + delta.y
-
-        setCoordinates({ x: calcX, y: calcY })
-
-        if (containerRef.current !== null) {
-          addImageSettings({
-            focalPoint: {
-              x: Number(Number(calcX * 100 / containerRef?.current.clientWidth).toPrecision(8)),
-              y: Number(Number(calcY * 100 / containerRef?.current.clientHeight).toPrecision(8))
-            }
-          })
-        }
-      } }
-      sensors={ sensors }
-    >
-      <DraggableItem
-        active={ isActive }
-        disabled={ disabled }
-        left={ coordinates.x }
-        top={ coordinates.y }
+    <Flex align={ 'center' }>
+      <div
+        onMouseMove={ handleMouseMove }
+        onMouseUp={ handleMouseUp }
+        ref={ containerRef }
+        role="none"
+        style={ { height: 'fit-content', position: 'relative' } }
       >
         <ImageComponent
-          onLoad={ onLoad }
+          onLoad={ handleOnLoad }
           { ...Image.props }
         />
-      </DraggableItem>
-    </DndContext>
+        { isActive && containerRef.current !== null && (
+        <div
+          onMouseDown={ handleMouseDown }
+          ref={ movingElementRef }
+          role="none"
+          style={ {
+            position: 'absolute',
+            left: `${coordinates.x}px`,
+            top: `${coordinates.y}px`
+          } }
+        >
+          <Icon
+            options={ { width: '16px', height: '16px' } }
+            value={ 'focal-point' }
+          />
+        </div>
+        )}
+      </div>
+    </Flex>
   )
 }
