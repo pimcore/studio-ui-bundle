@@ -12,7 +12,10 @@
 */
 
 import React, { useContext } from 'react'
+import cn from 'classnames'
+import { isNull, isUndefined } from 'lodash'
 import { FocalPointContext } from '@Pimcore/components/focal-point/context/focal-point-context'
+import { ZoomContext } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/preview-container'
 import { type ISidebarButton } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 
 interface SidebarButtonProps extends Omit<ISidebarButton, 'component'> {
@@ -21,9 +24,12 @@ interface SidebarButtonProps extends Omit<ISidebarButton, 'component'> {
 
 export const FocalPointSidebarButton = (props: Partial<SidebarButtonProps>): React.JSX.Element => {
   const focalPointContext = useContext(FocalPointContext)
+  const { zoom } = useContext(ZoomContext)
 
-  const onClick = (): void => {
-    if (focalPointContext !== undefined) {
+  const zoomFactor = zoom / 100
+
+  const handleClick = (): void => {
+    if (!isUndefined(focalPointContext)) {
       const {
         isActive,
         setIsActive,
@@ -31,9 +37,11 @@ export const FocalPointSidebarButton = (props: Partial<SidebarButtonProps>): Rea
         containerRef
       } = focalPointContext
 
-      if (containerRef.current !== null) {
-        const calcX = containerRef.current.clientWidth * 0.5
-        const calcY = containerRef.current.clientHeight * 0.5
+      if (!isNull(containerRef.current)) {
+        const containerBounds = containerRef.current.getBoundingClientRect()
+
+        const calcX = (containerBounds.width * 0.5) / zoomFactor
+        const calcY = (containerBounds.height * 0.5) / zoomFactor
 
         setCoordinates({ x: calcX, y: calcY })
         setIsActive(!isActive)
@@ -44,13 +52,10 @@ export const FocalPointSidebarButton = (props: Partial<SidebarButtonProps>): Rea
   return (
     <div
       aria-label={ props.key }
-      className={ [
-        'button',
-        focalPointContext?.isActive === true ? 'button--highlighted' : ''
-      ].join(' ') }
+      className={ cn('button', { 'button--highlighted': focalPointContext?.isActive === true }) }
       key={ props.key }
-      onClick={ onClick }
-      onKeyDown={ onClick }
+      onClick={ handleClick }
+      onKeyDown={ handleClick }
       role={ 'button' }
       tabIndex={ props.index }
     >
