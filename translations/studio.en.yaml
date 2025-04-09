@@ -661,6 +661,9 @@ navigation.notes-and-events: Notes & Events
 navigation.file: File
 navigation.settings: Settings
 navigation.tools: Tools
+perspective.default: Default
+perspective.switching.title: Switching perspective
+perspective.switching.description: Currently switching to the following perspective
 widget.notes-and-events: Notes & Events
 widget.tag-configuration: Tag Configuration
 widget.role-management: Roles
