@@ -14,6 +14,7 @@
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import React, { createContext, useMemo, useState } from 'react'
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { useTranslation } from 'react-i18next'
 
 // @todo: Create a union type for all the different element types
 export type AvailableColumn = GridColumnConfiguration
@@ -40,6 +41,7 @@ export interface AvailableColumnsProviderProps {
 
 export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderProps): React.JSX.Element => {
   const [availableColumns, setAvailableColumns] = useState<AvailableColumnsData['availableColumns']>([])
+  const { t } = useTranslation()
 
   const getAvailableColumnsDropdown: AvailableColumnsData['getAvailableColumnsDropdown'] = useMemo(() => {
     return (onMenuItemClick: OnMenuItemClick): DropdownProps => {
@@ -58,10 +60,10 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
         menu: {
           items: Object.entries(columnsMappedByGroup).map(([key, value]) => ({
             key: index++,
-            label: key,
+            label: t(key),
             children: value.map((column) => ({
               key: column.key,
-              label: column.key,
+              label: t(column.key),
               onClick: () => {
                 onMenuItemClick(column)
               }
