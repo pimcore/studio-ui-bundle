@@ -11,33 +11,32 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useTranslation } from 'react-i18next'
-import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { useAppDispatch } from '@Pimcore/app/store'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
-import { Icon } from '@Pimcore/components/icon/icon'
-import React, { useEffect } from 'react'
+import { markNodeDeleting } from '@Pimcore/components/element-tree/element-tree-slice'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
+import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { type AssetDeleteZipApiArg } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
+import { useElementDeleteMutation } from '@Pimcore/modules/element/element-api-slice.gen'
+import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
+import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob as createDeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
-import { type AssetDeleteZipApiArg } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
-import { useElementDeleteMutation } from '@Pimcore/modules/element/element-api-slice.gen'
-import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
-import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
-import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
-import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
-import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
-import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
-import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
-import { TreePermission } from '../../../perspectives/enums/tree-permission'
-import { useRefreshTree } from '../refresh-tree/use-refresh-tree'
+import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { isUndefined } from 'lodash'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { useAppDispatch } from '@Pimcore/app/store'
-import { markNodeDeleting } from '@Pimcore/components/element-tree/element-tree-slice'
+import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { TreePermission } from '../../../perspectives/enums/tree-permission'
+import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { useRefreshTree } from '../refresh-tree/use-refresh-tree'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
@@ -53,7 +52,6 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   const { addJob } = useJobs()
   const { refreshGrid } = useRefreshGrid(elementType)
   const { getElementById } = useElementApi(elementType)
-  const { refreshElement } = useElementRefresh(elementType)
   const { refreshTree } = useRefreshTree(elementType)
   const { isMainWidgetOpen, closeWidget } = useWidgetManager()
   const [elementDelete, { isError, error }] = useElementDeleteMutation({ fixedCacheKey: cacheKey })
@@ -132,7 +130,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
       node!.id,
       getElementKey(node!, elementType),
       parentId,
-      () => { refreshGrid() }
+      () => { refreshGrid() } // TODO: also refresh preview (for assets)
     )
   }
 
@@ -167,7 +165,6 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
         elementType
       }))
     } else if (parentId !== undefined) {
-      refreshElement(parentId)
       refreshTree(parentId)
     }
 
