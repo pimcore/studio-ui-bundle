@@ -26,28 +26,26 @@ export const PerspectiveSwitch = ({ setIsOpen }: PerspectiveSwitchProps): React.
   const { switchPerspective } = usePerspectives()
   const user = useUser()
   return (
-    <>
-      <div className={ 'main-nav__bottom' }>
-        <div className={ 'main-nav__bottom-title' }>{t('navigation.perspectives')}</div>
-        <ul className={ 'main-nav__list-inline' }>
-          {user.perspectives.map((perspective, index) => (
-            <li key={ index }>
-              <IconTextButton
-                color={ perspective.id === user.activePerspective ? 'primary' : 'secondary' }
-                icon={ perspective.icon }
-                onClick={ async () => {
-                  void switchPerspective(perspective)
-                  setIsOpen(false)
+    <div className={ 'main-nav__bottom' }>
+      <div className={ 'main-nav__bottom-title' }>{t('navigation.perspectives')}</div>
+      <ul className={ 'main-nav__list-inline' }>
+        {user.perspectives.map((perspective, index) => (
+          <li key={ perspective.id }>
+            <IconTextButton
+              color={ perspective.id === user.activePerspective ? 'primary' : 'secondary' }
+              icon={ perspective.icon }
+              onClick={ async () => {
+                void switchPerspective(perspective)
+                setIsOpen(false)
+              }
                 }
-                }
-                variant={ perspective.id === user.activePerspective ? 'filled' : 'outlined' }
-              >
-                {t(perspective.name)}
-              </IconTextButton>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </>
+              variant={ perspective.id === user.activePerspective ? 'filled' : 'outlined' }
+            >
+              {t(perspective.name)}
+            </IconTextButton>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
