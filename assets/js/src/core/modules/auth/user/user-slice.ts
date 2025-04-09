@@ -14,7 +14,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@Pimcore/app/store'
-import { type UserInformation } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import { type UserInformation } from '@Pimcore/modules/auth/user/user-api-slice-enhanced'
 
 // The logic dependency is in the rtkQueryErrorLogger middleware
 const initialState: UserInformation = {

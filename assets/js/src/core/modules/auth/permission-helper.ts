@@ -14,7 +14,7 @@
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
 import { store } from '@Pimcore/app/store'
 import { selectCurrentUser, type userSliceName } from '@Pimcore/modules/auth/user/user-slice'
-import type { UserInformation } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import type { UserInformation } from '@Pimcore/modules/auth/user/user-api-slice-enhanced'
 
 export const isAllowed = (permission: IEditorTab['userPermission']): boolean => {
   const state = store.getState()
