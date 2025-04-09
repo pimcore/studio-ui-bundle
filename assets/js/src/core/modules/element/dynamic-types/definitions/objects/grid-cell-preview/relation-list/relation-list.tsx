@@ -30,35 +30,37 @@ export interface RelationItem {
 interface RelationListProps {
   relations: RelationItem[] | null
   isClickable?: boolean
+  noWrapper?: boolean
 }
 
-export const RelationList = ({ relations, isClickable = false }: RelationListProps): React.JSX.Element => {
+export const RelationList = ({ relations, isClickable = false, noWrapper = false }: RelationListProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   if (isNil(relations) || isEmpty(relations)) {
     return <></>
   }
 
-  return (
-    <GridCellPreviewWrapper>
-      <Flex
-        align="flex-start"
-        className={ styles.container }
-        gap="mini"
-        vertical
-      >
-        {relations?.map((relation, index) => (isNil(relation.fullPath)
-          ? null
-          : (
-            <ElementTag
-              elementType={ isString(relation.type) && isClickable ? mapToElementType(relation.type)! : undefined }
-              key={ index }
-              path={ relation.fullPath }
-              published={ relation.isPublished ?? undefined }
-            />
-            )
-        ))}
-      </Flex>
-    </GridCellPreviewWrapper>
+  const content = (
+    <Flex
+      align="flex-start"
+      className={ styles.container }
+      gap="mini"
+      vertical
+    >
+      {relations?.map((relation, index) => (isNil(relation.fullPath)
+        ? null
+        : (
+          <ElementTag
+            elementType={ isString(relation.type) && isClickable ? mapToElementType(relation.type)! : undefined }
+            id={ relation.id }
+            key={ index }
+            path={ relation.fullPath }
+            published={ relation.isPublished ?? undefined }
+          />
+          )
+      ))}
+    </Flex>
   )
+
+  return noWrapper ? content : <GridCellPreviewWrapper>{content}</GridCellPreviewWrapper>
 }
