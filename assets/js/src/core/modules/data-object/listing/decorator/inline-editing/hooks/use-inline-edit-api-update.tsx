@@ -35,6 +35,7 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
         for (const column of item.columns!) {
           if (column.key === columnToUpdate.key && column.locale === columnToUpdate.locale) {
             column.value = value
+            column.inheritance = 'broken'
             // for now we assume that there can be only one value updated at the time
             break item_loop
           }
