@@ -17,7 +17,10 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     container: css`
       position: relative;
-      overflow: scroll;
+      overflow-x: auto;
+      overflow-y: auto;
+      width: 100%;
+      height: 100%;
     `,
 
     draggableElement: css`

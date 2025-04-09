@@ -40,11 +40,14 @@ export const FocalPointSidebarButton = (props: Partial<SidebarButtonProps>): Rea
       if (!isNull(containerRef.current)) {
         const container = containerRef.current
 
-        const scrollLeft = container.scrollLeft
-        const scrollTop = container.scrollTop
+        console.log(container)
 
-        const visibleWidth = container.clientWidth
-        const visibleHeight = container.clientHeight
+        const scrollLeft = container?.scrollLeft ?? 0
+        const scrollTop = container?.scrollTop ?? 0
+
+        const visibleWidth = container?.clientWidth ?? 0
+        const visibleHeight = container?.clientHeight ?? 0
+        console.log('----->>>>> ', scrollLeft, scrollTop, visibleWidth, visibleHeight)
 
         const calcX = (scrollLeft + (visibleWidth / 2)) / zoomFactor
         const calcY = (scrollTop + (visibleHeight / 2)) / zoomFactor

@@ -64,10 +64,7 @@ const PreviewView = (props: PreviewViewProps): React.JSX.Element => {
     <>
       <div className={ styles.imageContainer }>
         <FocalPoint zoom={ zoom }>
-          <PimcoreImage
-            src={ imageSrc }
-            wrapperClassName={ styles.imageContentWrapper }
-          />
+          <PimcoreImage src={ imageSrc } />
         </FocalPoint>
       </div>
       <div className={ styles.floatingContainer }>

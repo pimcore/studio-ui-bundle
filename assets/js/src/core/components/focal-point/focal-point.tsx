@@ -108,7 +108,7 @@ export const FocalPoint = ({ children, zoom }: FocalPointProps): React.JSX.Eleme
   return (
     <Flex
       align="center"
-      style={ { minHeight: '100%' } }
+      style={ { height: '100%' } }
     >
       <div
         className={ styles.container }

@@ -15,8 +15,11 @@ import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
-    preview: css`
-      position: relative;
+    imageContainer: css`
+      height: 100%; 
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: auto;
     `,
 
     floatingContainer: css`
@@ -31,13 +34,6 @@ export const useStyle = createStyles(({ token, css }) => {
       align-items: center;
       height: 100%;
       pointer-events: auto;
-    `,
-
-    imageContainer: css`
-      height: 100%;
-    `,
-
-    imageContentWrapper: css`
     `
   }
 }, { hashPriority: 'low' })
