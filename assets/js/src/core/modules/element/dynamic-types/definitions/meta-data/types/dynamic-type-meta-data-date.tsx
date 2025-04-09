@@ -17,6 +17,8 @@ import { DynamicTypeMetadataAbstract } from '../dynamic-type-metadata-abstract'
 import { DynamicTypeGridCellAbstract } from '../../grid-cell/dynamic-type-grid-cell-abstract'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { DynamicTypeFieldFilterAbstract } from '../../field-filters/dynamic-type-field-filter-abstract'
+import { formatDate } from '@Pimcore/utils/date-time'
+import { isNil } from 'lodash'
 
 @injectable()
 export class DynamicTypeMetaDataDate extends DynamicTypeMetadataAbstract {
@@ -28,7 +30,10 @@ export class DynamicTypeMetaDataDate extends DynamicTypeMetadataAbstract {
   @inject(serviceIds['DynamicTypes/GridCell/Date']) protected dynamicTypeGridCellType: DynamicTypeGridCellAbstract
   @inject(serviceIds['DynamicTypes/FieldFilter/Text']) protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract
 
-  getVersionPreviewComponent (data: { path: string, key: string }): JSX.Element {
-    return <span>{ data.path }{ data.key }</span>
+  getVersionPreviewComponent (data: number | null): JSX.Element {
+    if (isNil(data)) {
+      return <></>
+    }
+    return <span>{ formatDate(data) }</span>
   }
 }

@@ -14,9 +14,10 @@
 import React from 'react'
 import { GridCellPreviewWrapper } from '../grid-cell-cell-preview-wrapper/grid-cell-preview-wrapper'
 import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
-import { isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil, isString } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyles } from './relation-list.styles'
+import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 
 export interface RelationItem {
   type?: string
@@ -28,9 +29,10 @@ export interface RelationItem {
 
 interface RelationListProps {
   relations: RelationItem[] | null
+  isClickable?: boolean
 }
 
-export const RelationList = ({ relations }: RelationListProps): React.JSX.Element => {
+export const RelationList = ({ relations, isClickable = false }: RelationListProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   if (isNil(relations) || isEmpty(relations)) {
@@ -49,6 +51,7 @@ export const RelationList = ({ relations }: RelationListProps): React.JSX.Elemen
           ? null
           : (
             <ElementTag
+              elementType={ isString(relation.type) && isClickable ? mapToElementType(relation.type)! : undefined }
               key={ index }
               path={ relation.fullPath }
               published={ relation.isPublished ?? undefined }
