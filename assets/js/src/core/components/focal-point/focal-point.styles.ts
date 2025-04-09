@@ -15,6 +15,11 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
+    container: css`
+      position: relative;
+      overflow: scroll;
+    `,
+
     draggableElement: css`
       position: absolute;
       display: flex;

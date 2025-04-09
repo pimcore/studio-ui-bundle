@@ -106,13 +106,13 @@ export const FocalPoint = ({ children, zoom }: FocalPointProps): React.JSX.Eleme
   const ImageComponent = Image.type
 
   return (
-    <Flex align={ 'center' }>
+    <Flex align="center">
       <div
+        className={ styles.container }
         onMouseMove={ handleMouseMove }
         onMouseUp={ handleMouseUp }
         ref={ containerRef }
         role="none"
-        style={ { position: 'relative', overflow: 'scroll' } }
       >
         <ImageComponent
           onLoad={ handleOnLoad }
