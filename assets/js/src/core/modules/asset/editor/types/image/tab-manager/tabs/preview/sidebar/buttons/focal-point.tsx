@@ -38,10 +38,16 @@ export const FocalPointSidebarButton = (props: Partial<SidebarButtonProps>): Rea
       } = focalPointContext
 
       if (!isNull(containerRef.current)) {
-        const containerBounds = containerRef.current.getBoundingClientRect()
+        const container = containerRef.current
 
-        const calcX = (containerBounds.width * 0.5) / zoomFactor
-        const calcY = (containerBounds.height * 0.5) / zoomFactor
+        const scrollLeft = container.scrollLeft
+        const scrollTop = container.scrollTop
+
+        const visibleWidth = container.clientWidth
+        const visibleHeight = container.clientHeight
+
+        const calcX = (scrollLeft + (visibleWidth / 2)) / zoomFactor
+        const calcY = (scrollTop + (visibleHeight / 2)) / zoomFactor
 
         setCoordinates({ x: calcX, y: calcY })
         setIsActive(!isActive)

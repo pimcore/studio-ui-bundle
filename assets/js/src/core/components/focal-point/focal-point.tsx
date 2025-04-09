@@ -112,7 +112,7 @@ export const FocalPoint = ({ children, zoom }: FocalPointProps): React.JSX.Eleme
         onMouseUp={ handleMouseUp }
         ref={ containerRef }
         role="none"
-        style={ { height: 'fit-content', position: 'relative' } }
+        style={ { position: 'relative', overflow: 'scroll' } }
       >
         <ImageComponent
           onLoad={ handleOnLoad }

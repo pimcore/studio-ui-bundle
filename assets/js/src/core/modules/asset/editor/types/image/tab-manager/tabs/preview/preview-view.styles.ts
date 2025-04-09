@@ -56,6 +56,13 @@ export const useStyle = createStyles(({ token, css }) => {
       height: 100%;
       max-height: 100%;
       overflow: scroll;
+    `,
+
+    imageContentWrapper: css`
+      display: block !important;
+      max-height: 100vh !important;
+      max-width: 100vh !important;
+      text-align: center;
     `
   }
 }, { hashPriority: 'low' })
