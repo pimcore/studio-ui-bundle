@@ -21,7 +21,7 @@ const config: Meta = {
   title: 'Components/__Refactor__/Focal Point',
   component: () => {
     return (
-      <FocalPoint>
+      <FocalPoint zoom={ 100 }>
         <PimcoreImage src={ 'https://picsum.photos/800/600.jpg' } />
       </FocalPoint>
     )

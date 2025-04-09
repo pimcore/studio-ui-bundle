@@ -23,10 +23,12 @@ import { useStyles } from './focal-point.styles'
 
 interface FocalPointProps {
   children: React.ReactNode
+  zoom: number
 }
 
-export const FocalPoint = ({ children }: FocalPointProps): React.JSX.Element | null => {
+export const FocalPoint = ({ children, zoom }: FocalPointProps): React.JSX.Element | null => {
   const Image = Children.only(children)
+  const zoomFactor = zoom / 100
 
   if (!isValidElement(Image)) {
     trackError(new GeneralError('Children must be a valid react component'))
@@ -71,17 +73,27 @@ export const FocalPoint = ({ children }: FocalPointProps): React.JSX.Element | n
     if (isNull(containerRef.current) || isNull(movingElementRef.current) || disabled) return
 
     if (dragging) {
-      const containerBounds = containerRef.current.getBoundingClientRect()
-      const movingElementBounds = movingElementRef.current.getBoundingClientRect()
+      const container = containerRef.current
+      const movingElement = movingElementRef.current
 
-      const movingElementWidth = movingElementBounds.width
-      const movingElementHeight = movingElementBounds.height
+      const containerBounds = container.getBoundingClientRect()
 
-      let x = evt.clientX - containerBounds.left
-      let y = evt.clientY - containerBounds.top
+      const scrollLeft = container.scrollLeft
+      const scrollTop = container.scrollTop
 
-      x = Math.max(0, Math.min(x, containerBounds.width - movingElementWidth))
-      y = Math.max(0, Math.min(y, containerBounds.height - movingElementHeight))
+      // Get the full size of the container, not just the visible area
+      const fullContainerWidth = container.scrollWidth
+      const fullContainerHeight = container.scrollHeight
+
+      // Calculate mouse position considering scroll and zoom
+      let x = (evt.clientX - containerBounds.left + scrollLeft) / zoomFactor
+      let y = (evt.clientY - containerBounds.top + scrollTop) / zoomFactor
+
+      const movingElementWidth = movingElement.offsetWidth / zoomFactor
+      const movingElementHeight = movingElement.offsetHeight / zoomFactor
+
+      x = Math.max(0, Math.min(x, fullContainerWidth / zoomFactor - movingElementWidth))
+      y = Math.max(0, Math.min(y, fullContainerHeight / zoomFactor - movingElementHeight))
 
       setCoordinates({ x, y })
     }
@@ -116,8 +128,8 @@ export const FocalPoint = ({ children }: FocalPointProps): React.JSX.Element | n
             onMouseDown={ handleMouseDown }
             ref={ movingElementRef }
             style={ {
-              left: `${coordinates.x}px`,
-              top: `${coordinates.y}px`
+              left: `${coordinates.x * zoomFactor}px`,
+              top: `${coordinates.y * zoomFactor}px`
             } }
             type="dashed"
           />
