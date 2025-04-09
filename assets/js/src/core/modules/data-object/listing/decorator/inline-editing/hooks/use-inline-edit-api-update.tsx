@@ -49,7 +49,7 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
     const { update } = event
     let columnKey = update.column.key
 
-    if (update.column.localizable && update.column.locale !== undefined) {
+    if (update.column.localizable && update.column.locale !== undefined && update.column.locale !== null) {
       const splittedColumnKey = columnKey.split('.')
       const columnId = splittedColumnKey[splittedColumnKey.length - 1]
       splittedColumnKey.pop()
