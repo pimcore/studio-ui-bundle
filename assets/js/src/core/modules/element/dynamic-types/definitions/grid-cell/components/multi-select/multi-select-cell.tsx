@@ -20,6 +20,7 @@ import { useStyles } from './multi-select-cell.styles'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { resolveOptions, SelectOptionType } from '../../utils/select-options'
+import { isNil } from 'lodash'
 
 export interface MultiSelectCellConfig {
   options?: string[] | SelectOptionType[]
@@ -43,7 +44,7 @@ export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
   }, [isInEditMode])
 
   const fieldName = config?.fieldName ?? String(props.column.columnDef.meta?.columnKey)
-  const optionsResult = config ? resolveOptions(config, fieldName) : { isLoading: false, options: [] }
+  const optionsResult = !isNil(config) ? resolveOptions(config, fieldName) : { isLoading: false, options: [] }
   if (optionsResult.isLoading) {
     return (
       <div className={ [styles['multi-select-cell'], 'default-cell__content'].join(' ') }>
