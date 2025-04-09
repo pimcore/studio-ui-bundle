@@ -33,11 +33,13 @@ export const Header = (props: HeaderProps): React.JSX.Element => {
 
   return (
     <div className={ classNames }>
-      <span className={ 'header__text' }>
-        <Title icon={ icon }>
-          {title}
-        </Title>
-      </span>
+      { title !== '' && (
+        <span className={ 'header__text' }>
+          <Title icon={ icon }>
+            {title}
+          </Title>
+        </span>
+      )}
 
       <div className={ cn('header__content', { 'w-full': props.fullWidth === true }) }>
         {children}

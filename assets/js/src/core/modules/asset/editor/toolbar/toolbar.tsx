@@ -80,9 +80,11 @@ export const Toolbar = (): React.JSX.Element => {
   return (
     <ToolbarView>
       <WorkFlowProvider>
-        <SlotRenderer
-          slot={ componentConfig.asset.editor.toolbar.slots.left }
-        />
+        <Flex>
+          <SlotRenderer
+            slot={ componentConfig.asset.editor.toolbar.slots.left }
+          />
+        </Flex>
         <Flex
           style={ { height: '32px' } }
           vertical={ false }
