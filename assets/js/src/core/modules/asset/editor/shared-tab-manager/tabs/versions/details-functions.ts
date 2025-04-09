@@ -97,8 +97,8 @@ const formatMetadata = (metadata: CustomMetadataVersion[] | undefined): Map<stri
   return map
 }
 
-export const checkIsImageVersion = (version: AssetVersion): boolean => (
-  version.type === 'image'
+export const checkIsImageVersion = (version?: AssetVersion): boolean => (
+  version?.type === 'image'
 )
 
 export const loadPreviewImage = async (version: AssetVersion, versionId: number): Promise<string | null> => {
