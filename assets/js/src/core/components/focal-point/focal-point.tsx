@@ -106,7 +106,10 @@ export const FocalPoint = ({ children, zoom }: FocalPointProps): React.JSX.Eleme
   const ImageComponent = Image.type
 
   return (
-    <Flex align="center">
+    <Flex
+      align="center"
+      style={ { minHeight: '100%' } }
+    >
       <div
         className={ styles.container }
         onMouseMove={ handleMouseMove }
