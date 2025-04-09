@@ -22,12 +22,12 @@ import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-pe
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { isNil, isNull } from 'lodash'
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export interface UseLocateInTreeHookReturn {
   locateInTree: (elementId: number, onFinished?: () => void) => void
-  locateInTreeGridContextMenuItem: (row: any) => ItemType | undefined
+  locateInTreeGridContextMenuItem: (row: any, onFinish?: () => void) => ItemType | undefined
 }
 
 export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookReturn => {
@@ -35,6 +35,9 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
   const dispatch = useAppDispatch()
   const activePerspective = selectActivePerspective(store.getState())
   const { switchToWidget } = useWidgetManager()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  console.log(isLoading)
 
   const locateInTree = (elementId: number, onFinished?: () => void): void => {
     if (isNull(activePerspective)) {
@@ -62,7 +65,7 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
       .catch(() => { trackError(new GeneralError('An error occured while locating in the tree')) })
   }
 
-  const locateInTreeGridContextMenuItem = (row: any): ItemType | undefined => {
+  const locateInTreeGridContextMenuItem = (row: any, onFinish?: () => void): ItemType | undefined => {
     const data: GridContextMenuProps = row.original ?? {}
     if (data.id === undefined) {
       return
@@ -71,9 +74,14 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
     return {
       label: t('element.locate-in-tree'),
       key: 'locate-in-tree',
+      // isLoading,
       icon: <Icon value={ 'target' } />,
       onClick: async () => {
-        locateInTree(data.id)
+        setIsLoading(true)
+        locateInTree(data.id, () => {
+          onFinish?.()
+          setIsLoading(false)
+        })
       }
     }
   }
