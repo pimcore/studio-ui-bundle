@@ -41,6 +41,7 @@ import {
   useLazyMetadataGetCollectionQuery
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export interface CustomMetadataTabContainerProps {
   disableHeaderTitle?: boolean
@@ -52,7 +53,7 @@ export const CustomMetadataTabContainer = ({ disableHeaderTitle = false, disable
   const [editmode, setEditMode] = useState<boolean>(false)
   const settings = useSettings()
   const { id } = useContext(AssetContext)
-  const { addCustomMetadata, customMetadata } = useAssetDraft(id)
+  const { asset, addCustomMetadata, customMetadata } = useAssetDraft(id)
   const [predefinedMetadata, { isFetching, isError, error }] = useLazyMetadataGetCollectionQuery()
 
   const {
@@ -72,6 +73,7 @@ export const CustomMetadataTabContainer = ({ disableHeaderTitle = false, disable
     }
   }, [isError])
 
+  const isEditable = checkElementPermission(asset?.permissions, 'publish')
   const nameInputValue = useRef<string>('')
   const nameInputRef = useRef<InputRef>(null)
   const typeSelectValue = useRef<string>('input')
@@ -270,7 +272,7 @@ export const CustomMetadataTabContainer = ({ disableHeaderTitle = false, disable
             </>
             )}
 
-            {!editmode && (
+            {!editmode && isEditable && (
             <ButtonGroup items={ buttons } />
             )}
           </Space>
