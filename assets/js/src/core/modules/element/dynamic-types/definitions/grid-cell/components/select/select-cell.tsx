@@ -19,7 +19,7 @@ import { Select } from '@Pimcore/components/select/select'
 import { useStyles } from './select-cell.styles'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { Spin } from '@Pimcore/components/spin/spin'
-import { resolveOptions, SelectOptionType } from '../../utils/select-options'
+import { resolveOptions, type SelectOptionType } from '../../utils/select-options'
 
 export interface SelectCellConfig {
   options?: string[] | SelectOptionType[]
