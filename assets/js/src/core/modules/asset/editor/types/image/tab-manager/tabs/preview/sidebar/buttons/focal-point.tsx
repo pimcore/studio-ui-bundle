@@ -15,7 +15,6 @@ import React, { useContext } from 'react'
 import cn from 'classnames'
 import { isNull, isUndefined } from 'lodash'
 import { FocalPointContext } from '@Pimcore/components/focal-point/context/focal-point-context'
-import { ZoomContext } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/preview-container'
 import { type ISidebarButton } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 
 interface SidebarButtonProps extends Omit<ISidebarButton, 'component'> {
@@ -24,9 +23,6 @@ interface SidebarButtonProps extends Omit<ISidebarButton, 'component'> {
 
 export const FocalPointSidebarButton = (props: Partial<SidebarButtonProps>): React.JSX.Element => {
   const focalPointContext = useContext(FocalPointContext)
-  const { zoom } = useContext(ZoomContext)
-
-  const zoomFactor = zoom / 100
 
   const handleClick = (): void => {
     if (!isUndefined(focalPointContext)) {
@@ -42,26 +38,18 @@ export const FocalPointSidebarButton = (props: Partial<SidebarButtonProps>): Rea
       if (!isNull(containerRef.current) && !isUndefined(image) && !isNull(image)) {
         const container = containerRef.current
 
-        const scrollLeft = container?.scrollLeft ?? 0
-        const scrollTop = container?.scrollTop ?? 0
+        const scrollLeft = container?.parentElement?.scrollLeft ?? 0
+        const scrollTop = container?.parentElement?.scrollTop ?? 0
 
-        console.log('=====>>>>scroll: ', scrollLeft, scrollTop)
+        const visibleWidth = container.clientWidth ?? 0
+        const visibleHeight = container.clientHeight ?? 0
+        const parentWidth = container?.parentElement?.clientWidth ?? 0
+        const parentHeight = container?.parentElement?.clientHeight ?? 0
 
-        const visibleWidth = container?.clientWidth ?? 0
-        const visibleHeight = container?.clientHeight ?? 0
+        const percentX = ((scrollLeft / visibleWidth) + ((parentWidth / visibleWidth) / 2)) * 100
+        const percentY = ((scrollTop / visibleHeight) + ((parentHeight / visibleHeight) / 2)) * 100
 
-        const contentWidth = container?.scrollWidth ?? 1
-        const contentHeight = container?.scrollHeight ?? 1
-
-        const centerX = scrollLeft + visibleWidth / 2
-        const centerY = scrollTop + visibleHeight / 2
-
-        const percentX = (centerX / contentWidth) * 100
-        const percentY = (centerY / contentHeight) * 100
-
-        console.log('=====>>>> coordinates: ', percentX, percentY, zoomFactor)
-
-        setCoordinates({ x: 50, y: 50 })
+        setCoordinates({ x: percentX, y: percentY })
         setIsActive(!isActive)
       }
     }
