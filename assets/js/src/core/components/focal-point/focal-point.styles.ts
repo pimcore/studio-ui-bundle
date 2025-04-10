@@ -40,6 +40,8 @@ export const useStyles = createStyles(({ token, css }) => {
       box-shadow: none;
       border: 2px dashed;
       transition: transform 0.05s linear !important;
+      transform: translate(-50%, -50%);
+      
 
         &:hover {
         color: ${token.colorPrimary};

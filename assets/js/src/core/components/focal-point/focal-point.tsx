@@ -26,9 +26,10 @@ interface FocalPointProps {
   zoom: number
 }
 
-export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Element | null => {
-  const zoomFactor = zoom / 100
+const HALF_DIVISOR = 2
+const PERCENT_MULTIPLIER = 100
 
+export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Element | null => {
   const [dragging, setDragging] = useState<boolean>(false)
   const movingElementRef = useRef<HTMLDivElement>(null)
 
@@ -74,21 +75,25 @@ export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Eleme
       const scrollLeft = container.scrollLeft
       const scrollTop = container.scrollTop
 
-      // Get the full size of the container, not just the visible area
-      const fullContainerWidth = container.scrollWidth
-      const fullContainerHeight = container.scrollHeight
+      const fullWidth = container.scrollWidth
+      const fullHeight = container.scrollHeight
 
-      // Calculate mouse position considering scroll and zoom
-      let x = (evt.clientX - containerBounds.left + scrollLeft) / zoomFactor
-      let y = (evt.clientY - containerBounds.top + scrollTop) / zoomFactor
+      const mouseXPercent = ((evt.clientX - containerBounds.left + scrollLeft) / fullWidth) * PERCENT_MULTIPLIER
+      const mouseYPercent = ((evt.clientY - containerBounds.top + scrollTop) / fullHeight) * PERCENT_MULTIPLIER
 
-      const movingElementWidth = movingElement.offsetWidth / zoomFactor
-      const movingElementHeight = movingElement.offsetHeight / zoomFactor
+      const movingElementWidthPercent = (movingElement.offsetWidth / fullWidth) * PERCENT_MULTIPLIER
+      const movingElementHeightPercent = (movingElement.offsetHeight / fullHeight) * PERCENT_MULTIPLIER
 
-      x = Math.max(0, Math.min(x, fullContainerWidth / zoomFactor - movingElementWidth))
-      y = Math.max(0, Math.min(y, fullContainerHeight / zoomFactor - movingElementHeight))
+      const maxXPercent = PERCENT_MULTIPLIER - movingElementWidthPercent
+      const maxYPercent = PERCENT_MULTIPLIER - movingElementHeightPercent
 
-      setCoordinates({ x, y })
+      const clampedXPercent = Math.max(0, Math.min(mouseXPercent, maxXPercent))
+      const clampedYPercent = Math.max(0, Math.min(mouseYPercent, maxYPercent))
+
+      const percentX = clampedXPercent + movingElementWidthPercent / HALF_DIVISOR
+      const percentY = clampedYPercent + movingElementHeightPercent / HALF_DIVISOR
+
+      setCoordinates({ x: percentX, y: percentY })
     }
   }
 
