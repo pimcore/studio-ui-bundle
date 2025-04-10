@@ -101,7 +101,6 @@ export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Eleme
       className={ styles.container }
       onMouseMove={ handleMouseMove }
       onMouseUp={ handleMouseUp }
-      ref={ containerRef }
       role="none"
       style={ {
         width: `${zoom}%`,
