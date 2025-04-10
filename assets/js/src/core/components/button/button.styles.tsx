@@ -39,6 +39,16 @@ export const useStyles = createStyles(({ token, css }) => {
           background-color: ${token.colorFillActive};
         }
       }
+
+      &.button--color-secondary {
+        border-color: ${token.colorBorderSecondary};
+        box-shadow: none;
+        color: ${token.colorText};
+      }
+      &.button--color-secondary:hover {
+        border-color: ${token.colorBorderSecondary} !important;
+        color: ${token.colorText} !important;
+      }
     `
   }
 })

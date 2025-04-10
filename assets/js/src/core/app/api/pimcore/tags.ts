@@ -41,7 +41,8 @@ export const tagNames = {
   AVAILABLE_TAGS: 'AVAILABLE_TAGS',
   ELEMENT_TAGS: 'TAGS',
   ROLE: 'ROLE',
-  PREDEFINED_ASSET_METADATA: 'PREDEFINED_ASSET_METADATA'
+  PREDEFINED_ASSET_METADATA: 'PREDEFINED_ASSET_METADATA',
+  CURRENT_USER_INFORMATION: 'CURRENT_USER_INFORMATION'
 }
 
 export const providingTags = {
@@ -84,7 +85,8 @@ export const providingTags = {
   AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS],
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.ELEMENT_TAGS, elementType, id)],
   ROLE: () => [tagNames.ROLE],
-  PREDEFINED_ASSET_METADATA: () => [tagNames.PREDEFINED_ASSET_METADATA]
+  PREDEFINED_ASSET_METADATA: () => [tagNames.PREDEFINED_ASSET_METADATA],
+  CURRENT_USER_INFORMATION: () => [tagNames.CURRENT_USER_INFORMATION]
 }
 
 export const invalidatingTags = {

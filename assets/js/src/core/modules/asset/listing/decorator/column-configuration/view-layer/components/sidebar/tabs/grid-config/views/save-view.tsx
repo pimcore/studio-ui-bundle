@@ -26,7 +26,7 @@ import { Text } from '@Pimcore/components/text/text'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type RoleGetCollectionApiResponse } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
-import { type UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import { type UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice-enhanced'
 
 export interface SaveViewProps {
   formProps: SaveFormProps
