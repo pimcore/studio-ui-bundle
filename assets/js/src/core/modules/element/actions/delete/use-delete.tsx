@@ -130,7 +130,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
       node!.id,
       getElementKey(node!, elementType),
       parentId,
-      () => { refreshGrid() } // TODO: also refresh preview (for assets)
+      () => { void refreshGrid() }
     )
   }
 
