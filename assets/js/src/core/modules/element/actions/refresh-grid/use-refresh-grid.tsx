@@ -18,7 +18,7 @@ import type { ElementType } from '../../../../types/enums/element/element-type'
 import { DataContext } from '../../listing/abstract/data-layer/provider/data/data-provider'
 
 export interface UseRefreshGridHookReturn {
-  refreshGrid: (parentId?: number) => void
+  refreshGrid: (parentId?: number) => Promise<void>
 }
 
 export const useRefreshGrid = (elementType: ElementType): UseRefreshGridHookReturn => {
