@@ -750,3 +750,4 @@ element: Element
 entries: entries
 entry: entry
 error_element_validation_failed: 'Validation failed'
+element.delete.deleting-folder: Deleting Folder

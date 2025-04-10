@@ -56,13 +56,13 @@ export function useFormModal (): UseFormModalHookResponse {
       input: (props) => {
         const modalResult = modal.confirm(withInput(props))
         // avoid that errors are logged in the console
-        modalResult.then(() => {}, () => {})
+        modalResult.then(() => { }, () => { })
         return modalResult
       },
       textarea: (props) => {
         const modalResult = modal.confirm(withTextarea(props))
         // avoid that errors are logged in the console
-        modalResult.then(() => {}, () => {})
+        modalResult.then(() => { }, () => { })
         return modalResult
       },
       confirm: (props) => modal.confirm(withConfirm(props)),
@@ -119,9 +119,9 @@ export function withInput (props: InputFormModalProps): ModalFuncProps {
     onOk: async () => {
       return await new Promise((resolve, reject) => {
         form!.validateFields()
-          .then(() => {
+          .then(async () => {
             const value = form!.getFieldValue(fieldName)
-            props.onOk?.(value)
+            await props.onOk?.(value)
             resolve(value)
           })
           .catch(() => {

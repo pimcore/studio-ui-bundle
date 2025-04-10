@@ -22,6 +22,7 @@ import { type Element } from '../../element-helper'
 import { useElementHelper } from '../../hooks/use-element-helper'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { SaveTaskType } from '@Pimcore/modules/data-object/actions/save/use-save'
+import { ContextMenuActionName } from '..'
 
 export interface PublishHookReturn {
   publishTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -45,7 +46,7 @@ export const usePublish = (elementType: ElementType): PublishHookReturn => {
   const publishTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.publish'),
-      key: 'publish',
+      key: ContextMenuActionName.publish,
       icon: <Icon value='eye' />,
       hidden: isPublishHidden(node),
       onClick: () => {
