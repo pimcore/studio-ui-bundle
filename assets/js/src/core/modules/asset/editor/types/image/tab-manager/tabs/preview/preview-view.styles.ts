@@ -16,6 +16,7 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     imageContainer: css`
+      display: grid;
       height: 100%; 
       width: 100%;
       overflow-x: auto;

@@ -26,7 +26,6 @@ interface FocalPointProps {
   zoom: number
 }
 
-const HALF_DIVISOR = 2
 const PERCENT_MULTIPLIER = 100
 
 export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Element | null => {
@@ -67,33 +66,35 @@ export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Eleme
     if (isNull(containerRef.current) || isNull(movingElementRef.current) || disabled) return
 
     if (dragging) {
-      const container = containerRef.current
-      const movingElement = movingElementRef.current
+      const container = containerRef.current.firstElementChild!
 
       const containerBounds = container.getBoundingClientRect()
 
-      const scrollLeft = container.scrollLeft
-      const scrollTop = container.scrollTop
+      const isOutOfTheBox = (
+        // if cursor point less than left container side
+        evt.clientX <= containerBounds.left ||
+        // if cursor point more than right container side
+        evt.clientX >= containerBounds.left + containerBounds.width ||
+        // if cursor point less than top container side
+        evt.clientY <= containerBounds.top ||
+        // if cursor point more than bottom container side
+        evt.clientY >= containerBounds.top + containerBounds.height
+      )
 
-      const fullWidth = container.scrollWidth
-      const fullHeight = container.scrollHeight
+      if (isOutOfTheBox) {
+        return
+      }
 
-      const mouseXPercent = ((evt.clientX - containerBounds.left + scrollLeft) / fullWidth) * PERCENT_MULTIPLIER
-      const mouseYPercent = ((evt.clientY - containerBounds.top + scrollTop) / fullHeight) * PERCENT_MULTIPLIER
+      const fullWidth = container.clientWidth ?? 0
+      const fullHeight = container.clientHeight ?? 0
 
-      const movingElementWidthPercent = (movingElement.offsetWidth / fullWidth) * PERCENT_MULTIPLIER
-      const movingElementHeightPercent = (movingElement.offsetHeight / fullHeight) * PERCENT_MULTIPLIER
+      const percentX = ((evt.clientX - containerBounds.left) / fullWidth) * PERCENT_MULTIPLIER
+      const percentY = ((evt.clientY - containerBounds.top) / fullHeight) * PERCENT_MULTIPLIER
 
-      const maxXPercent = PERCENT_MULTIPLIER - movingElementWidthPercent
-      const maxYPercent = PERCENT_MULTIPLIER - movingElementHeightPercent
-
-      const clampedXPercent = Math.max(0, Math.min(mouseXPercent, maxXPercent))
-      const clampedYPercent = Math.max(0, Math.min(mouseYPercent, maxYPercent))
-
-      const percentX = clampedXPercent + movingElementWidthPercent / HALF_DIVISOR
-      const percentY = clampedYPercent + movingElementHeightPercent / HALF_DIVISOR
-
-      setCoordinates({ x: percentX, y: percentY })
+      setCoordinates({
+        x: percentX,
+        y: percentY
+      })
     }
   }
 
@@ -108,8 +109,7 @@ export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Eleme
       onMouseUp={ handleMouseUp }
       role="none"
       style={ {
-        width: `${zoom}%`,
-        height: zoom > 100 ? 'auto' : '100%'
+        width: `${zoom}%`
       } }
     >
       <PimcoreImage

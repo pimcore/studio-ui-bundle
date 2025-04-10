@@ -48,8 +48,13 @@ export const FocalPointSidebarButton = (props: Partial<SidebarButtonProps>): Rea
         const fullWidth = container?.firstElementChild?.clientWidth ?? 0
         const fullHeight = container?.firstElementChild?.clientHeight ?? 0
 
-        const percentX = ((scrollLeft + visibleWidth / HALF_DIVISOR) / fullWidth) * PERCENT_MULTIPLIER
-        const percentY = ((scrollTop + visibleHeight / HALF_DIVISOR) / fullHeight) * PERCENT_MULTIPLIER
+        const percentX = fullWidth >= visibleWidth
+          ? ((scrollLeft + visibleWidth / HALF_DIVISOR) / fullWidth) * PERCENT_MULTIPLIER
+          : 50
+
+        const percentY = fullHeight >= visibleHeight
+          ? ((scrollTop + visibleHeight / HALF_DIVISOR) / fullHeight) * PERCENT_MULTIPLIER
+          : 50
 
         setCoordinates({ x: percentX, y: percentY })
         setIsActive(!isActive)
