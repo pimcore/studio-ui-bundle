@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type MouseEvent, useContext, useState, useRef } from 'react'
+import React, { type MouseEvent, useContext, useState } from 'react'
 import { isNull, isUndefined } from 'lodash'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
@@ -30,7 +30,6 @@ const PERCENT_MULTIPLIER = 100
 
 export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Element | null => {
   const [dragging, setDragging] = useState<boolean>(false)
-  const movingElementRef = useRef<HTMLDivElement>(null)
 
   const { id } = useContext(AssetContext)
   const focalPointContext = useContext(FocalPointContext)
@@ -54,16 +53,14 @@ export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Eleme
   const handleOnLoad = (): void => {
     if (!isNull(containerRef.current) && !isUndefined(imageSettings?.focalPoint)) {
       const focalPoint = imageSettings.focalPoint
-      const calcX = containerRef.current.clientWidth * Number(focalPoint.x) / 100
-      const calcY = containerRef.current.clientHeight * Number(focalPoint.y) / 100
 
-      setCoordinates({ x: calcX, y: calcY })
+      setCoordinates({ x: focalPoint.x, y: focalPoint.y })
       setIsActive(true)
     }
   }
 
   const handleMouseMove = (evt: MouseEvent): void => {
-    if (isNull(containerRef.current) || isNull(movingElementRef.current) || disabled) return
+    if (isNull(containerRef.current) || disabled) return
 
     if (dragging) {
       const container = containerRef.current.firstElementChild!
@@ -126,7 +123,6 @@ export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Eleme
           hidden={ !isActive }
           icon={ { value: 'focal-point' } }
           onMouseDown={ handleMouseDown }
-          ref={ movingElementRef }
           style={ {
             left: `${coordinates.x}%`,
             top: `${coordinates.y}%`

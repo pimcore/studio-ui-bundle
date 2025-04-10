@@ -40,8 +40,8 @@ export const useStyles = createStyles(({ token, css }) => {
       
 
         &:hover {
-        color: ${token.colorPrimary};
-        background: ${token.Colors.Neutral.Fill.colorFill} !important;
+          color: ${token.colorPrimary};
+          background: ${token.Colors.Neutral.Fill.colorFill} !important;
       }
     `
   }
