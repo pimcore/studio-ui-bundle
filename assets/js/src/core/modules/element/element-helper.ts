@@ -14,6 +14,8 @@
 import { type Asset, type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import type { ElementType } from '../../types/enums/element/element-type'
+import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
+import { isBoolean } from 'lodash'
 
 export type Element = Asset | DataObject
 
@@ -55,4 +57,34 @@ export const getElementActionCacheKey = (elementType: ElementType, action: strin
   }
 
   return cacheKey.toUpperCase()
+}
+
+// This data strcture is used for most API calls where element relations are used
+export interface ElementReference {
+  id: number
+  type: 'asset' | 'object' | 'document'
+  fullPath: string
+  isPublished?: boolean | null
+  subtype?: string
+}
+
+export const convertDragAndDropInfoToElementReference = (info: DragAndDropInfo): ElementReference => {
+  const elementData = info.data as Element
+
+  const getSubType = (info: DragAndDropInfo): string | undefined => {
+    if (info.type === 'data-object') {
+      return info.data.classname ?? 'folder'
+    }
+    return info.data.type ?? undefined
+  }
+
+  const published = 'published' in elementData ? elementData.published : null
+
+  return {
+    id: elementData.id,
+    type: (info.type === 'data-object' ? 'object' : info.type) as ElementReference['type'],
+    fullPath: String(elementData.fullPath),
+    isPublished: isBoolean(published) ? published : null,
+    subtype: getSubType(info)
+  }
 }
