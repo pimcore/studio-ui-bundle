@@ -38,8 +38,6 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
   const { switchToWidget } = useWidgetManager()
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  console.log(isLoading)
-
   const locateInTree = (elementId: number, onFinished?: () => void): void => {
     if (isNull(activePerspective)) {
       return

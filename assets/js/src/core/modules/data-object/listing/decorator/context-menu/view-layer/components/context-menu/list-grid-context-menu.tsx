@@ -12,6 +12,7 @@
 */
 
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
 import { useLocateInTree } from '@Pimcore/modules/element/actions/locate-in-tree/use-locate-in-tree'
 import { useOpen } from '@Pimcore/modules/element/actions/open/open'
@@ -28,12 +29,12 @@ export const ListGridContextMenu = (props: ListGridContextMenuProps): React.JSX.
 
   const items = [
     openGridContextMenuItem(row),
-    locateInTreeGridContextMenuItem(row, () => { setIsOpen(false) }),
-    deleteGridContextMenuItem(row) // () => { setIsOpen(false) }
+    locateInTreeGridContextMenuItem(row, () => { setIsOpen(undefined) }),
+    deleteGridContextMenuItem(row)
   ].filter(Boolean) as DropdownMenuProps['items']
 
   const handleMenuClick: MenuProps['onClick'] = (e) => {
-    if (e.key === 'delete' || e.key === 'locate-in-tree') {
+    if (e.key === ContextMenuActionName.locateInTree) {
       setIsOpen(true)
     }
   }
