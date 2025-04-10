@@ -37,22 +37,31 @@ export const FocalPointSidebarButton = (props: Partial<SidebarButtonProps>): Rea
         containerRef
       } = focalPointContext
 
-      if (!isNull(containerRef.current)) {
-        const container = containerRef.current
+      const image = containerRef.current?.querySelector('img')
 
-        console.log(container)
+      if (!isNull(containerRef.current) && !isUndefined(image) && !isNull(image)) {
+        const container = containerRef.current
 
         const scrollLeft = container?.scrollLeft ?? 0
         const scrollTop = container?.scrollTop ?? 0
 
+        console.log('=====>>>>scroll: ', scrollLeft, scrollTop)
+
         const visibleWidth = container?.clientWidth ?? 0
         const visibleHeight = container?.clientHeight ?? 0
-        console.log('----->>>>> ', scrollLeft, scrollTop, visibleWidth, visibleHeight)
 
-        const calcX = (scrollLeft + (visibleWidth / 2)) / zoomFactor
-        const calcY = (scrollTop + (visibleHeight / 2)) / zoomFactor
+        const contentWidth = container?.scrollWidth ?? 1
+        const contentHeight = container?.scrollHeight ?? 1
 
-        setCoordinates({ x: calcX, y: calcY })
+        const centerX = scrollLeft + visibleWidth / 2
+        const centerY = scrollTop + visibleHeight / 2
+
+        const percentX = (centerX / contentWidth) * 100
+        const percentY = (centerY / contentHeight) * 100
+
+        console.log('=====>>>> coordinates: ', percentX, percentY, zoomFactor)
+
+        setCoordinates({ x: 50, y: 50 })
         setIsActive(!isActive)
       }
     }

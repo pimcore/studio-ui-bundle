@@ -12,26 +12,20 @@
 */
 
 import { Image, type ImageProps } from 'antd'
-import React, { useContext } from 'react'
+import React from 'react'
 import { useStyle } from '@Pimcore/components/pimcore-image/pimcore-image.styles'
-import { ZoomContext } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/preview-container'
 
 interface PimcoreImageProps extends ImageProps {
 }
 
 export const PimcoreImage = (props: PimcoreImageProps): React.JSX.Element => {
   const { styles } = useStyle()
-  const { zoom } = useContext(ZoomContext)
 
   return (
     <>
       <Image
         className={ styles.image }
         preview={ false }
-        style={ {
-          width: `${zoom}%`,
-          height: `${zoom}%`
-        } }
         { ...props }
       />
     </>

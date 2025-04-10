@@ -17,10 +17,15 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     container: css`
       position: relative;
+      display: flex;
+      align-items: center;
       overflow-x: auto;
       overflow-y: auto;
+    `,
+
+    imageContainer: css`
       width: 100%;
-      height: 100%;
+      margin: auto 0;
     `,
 
     draggableElement: css`

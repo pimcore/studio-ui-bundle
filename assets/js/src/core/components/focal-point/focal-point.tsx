@@ -11,30 +11,23 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { Children, isValidElement, type MouseEvent, useContext, useState, useRef } from 'react'
+import React, { type MouseEvent, useContext, useState, useRef } from 'react'
 import { isNull, isUndefined } from 'lodash'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { FocalPointContext } from '@Pimcore/components/focal-point/context/focal-point-context'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useStyles } from './focal-point.styles'
+import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 
 interface FocalPointProps {
-  children: React.ReactNode
+  imageSrc: string
   zoom: number
 }
 
-export const FocalPoint = ({ children, zoom }: FocalPointProps): React.JSX.Element | null => {
-  const Image = Children.only(children)
+export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Element | null => {
   const zoomFactor = zoom / 100
-
-  if (!isValidElement(Image)) {
-    trackError(new GeneralError('Children must be a valid react component'))
-
-    return null
-  }
 
   const [dragging, setDragging] = useState<boolean>(false)
   const movingElementRef = useRef<HTMLDivElement>(null)
@@ -103,41 +96,40 @@ export const FocalPoint = ({ children, zoom }: FocalPointProps): React.JSX.Eleme
 
   const handleMouseDown = (): void => { setDragging(true) }
 
-  const ImageComponent = Image.type
-
   return (
-    <Flex
-      align="center"
-      style={ { height: '100%' } }
+    <div
+      className={ styles.container }
+      onMouseMove={ handleMouseMove }
+      onMouseUp={ handleMouseUp }
+      ref={ containerRef }
+      role="none"
+      style={ {
+        width: `${zoom}%`,
+        height: zoom > 100 ? 'auto' : '100%'
+      } }
     >
-      <div
-        className={ styles.container }
-        onMouseMove={ handleMouseMove }
-        onMouseUp={ handleMouseUp }
-        ref={ containerRef }
-        role="none"
-      >
-        <ImageComponent
-          onLoad={ handleOnLoad }
-          { ...Image.props }
+      <PimcoreImage
+        alt="car"
+        onLoad={ handleOnLoad }
+        src={ imageSrc }
+        wrapperClassName={ styles.imageContainer }
+      />
+      {isActive && !isNull(containerRef.current) && (
+        <IconButton
+          aria-label="Draggable"
+          className={ styles.draggableElement }
+          data-cypress="draggable-item"
+          hidden={ !isActive }
+          icon={ { value: 'focal-point' } }
+          onMouseDown={ handleMouseDown }
+          ref={ movingElementRef }
+          style={ {
+            left: `${coordinates.x}%`,
+            top: `${coordinates.y}%`
+          } }
+          type="dashed"
         />
-        { isActive && !isNull(containerRef.current) && (
-          <IconButton
-            aria-label="Draggable"
-            className={ styles.draggableElement }
-            data-cypress="draggable-item"
-            hidden={ !isActive }
-            icon={ { value: 'focal-point' } }
-            onMouseDown={ handleMouseDown }
-            ref={ movingElementRef }
-            style={ {
-              left: `${coordinates.x * zoomFactor}px`,
-              top: `${coordinates.y * zoomFactor}px`
-            } }
-            type="dashed"
-          />
-        )}
-      </div>
-    </Flex>
+      )}
+    </div>
   )
 }
