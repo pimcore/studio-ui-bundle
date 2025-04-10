@@ -34,6 +34,7 @@ import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { PathTarget } from './path-target'
 import { useStyles } from './many-to-one-relation.styles'
+import { convertDragAndDropInfoToElementReference } from '@Pimcore/modules/element/element-helper'
 
 export type ManyToOneRelationValueType = ManyToOneRelationValue | PathTextInputValue | null
 
@@ -111,25 +112,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           isValidContext={ (info: DragAndDropInfo) => props.disabled !== true && isValidElementType(info.type) }
           isValidData={ (info: DragAndDropInfo) => dndIsValidData(info, props) }
           onDrop={ (info: DragAndDropInfo) => {
-            let newValue: ManyToOneRelationValue | undefined
-
-            if (info.type === 'data-object') {
-              newValue = {
-                id: info.data.id,
-                type: 'object',
-                subtype: info.data.className ?? info.data.type,
-                isPublished: info.data.published,
-                fullPath: info.data.fullPath
-              }
-            } else if (info.type === 'asset') {
-              newValue = {
-                id: info.data.id,
-                type: info.type,
-                subtype: info.data.type,
-                isPublished: null,
-                fullPath: info.data.fullPath
-              }
-            }
+            const newValue: ManyToOneRelationValue | undefined = convertDragAndDropInfoToElementReference(info)
 
             setValue(newValue ?? null)
           } }
