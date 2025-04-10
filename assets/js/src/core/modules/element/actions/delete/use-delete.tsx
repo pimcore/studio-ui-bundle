@@ -20,7 +20,6 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type AssetDeleteZipApiArg } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 import { useElementDeleteMutation } from '@Pimcore/modules/element/element-api-slice.gen'
 import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
@@ -35,10 +34,10 @@ import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { isUndefined } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ContextMenuActionName } from '..'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { useRefreshTree } from '../refresh-tree/use-refresh-tree'
-import { ContextMenuActionName } from '..'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
@@ -54,7 +53,6 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   const { addJob } = useJobs()
   const { refreshGrid } = useRefreshGrid(elementType)
   const { getElementById } = useElementApi(elementType)
-  const { refreshElement } = useElementRefresh(elementType)
   const { refreshTree } = useRefreshTree(elementType)
   const { isMainWidgetOpen, closeWidget } = useWidgetManager()
   const [elementDelete, { isError, error }] = useElementDeleteMutation({ fixedCacheKey: cacheKey })
@@ -141,7 +139,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
       node!.id,
       getElementKey(node!, elementType),
       parentId,
-      () => { refreshGrid() }
+      () => { void refreshGrid() }
     )
   }
 
@@ -176,7 +174,6 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
         elementType
       }))
     } else if (parentId !== undefined) {
-      refreshElement(parentId)
       refreshTree(parentId)
     }
 

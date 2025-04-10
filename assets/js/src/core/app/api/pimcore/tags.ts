@@ -119,7 +119,8 @@ export const invalidatingTags = {
   AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS],
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.ELEMENT_TAGS, elementType, id)],
   ROLE: () => [tagNames.ROLE],
-  PREDEFINED_ASSET_METADATA: () => [tagNames.PREDEFINED_ASSET_METADATA]
+  PREDEFINED_ASSET_METADATA: () => [tagNames.PREDEFINED_ASSET_METADATA],
+  ELEMENT_DETAIL: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)]
 }
 
 const elementUnspecificDataTag = tagNames.AVAILABLE_TAGS

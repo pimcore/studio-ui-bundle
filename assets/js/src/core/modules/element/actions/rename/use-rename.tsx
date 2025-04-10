@@ -113,7 +113,7 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
       id,
       getElementKey(node!, elementType),
       parentId,
-      () => { refreshGrid() }
+      () => { void refreshGrid() }
     )
   }
 
