@@ -36,7 +36,7 @@ export const BatchEditListContainer = (): React.JSX.Element => {
 
     return ({
       id: batchEdit.key,
-      children: <Tag>{t(`listing.column.${batchEdit.key}`)}</Tag>,
+      children: <Tag>{t(`${batchEdit.key}`)}</Tag>,
       renderRightToolbar: <ButtonGroup items={
         [...(batchEdit.localizable
           ? [

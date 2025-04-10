@@ -89,14 +89,14 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
 
       groupedItems[group].push({
         key: column.key,
-        label: column.key,
+        label: t(column.key),
         onClick: () => { handleColumnClick(column) }
       })
     })
 
     return Object.keys(groupedItems).map((group) => ({
       key: group,
-      label: group,
+      label: t(group),
       children: groupedItems[group]
     }))
   }, [availableFilterColumns])

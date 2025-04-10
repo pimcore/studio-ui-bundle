@@ -20,6 +20,7 @@ import { type Element } from '@Pimcore/modules/element/element-helper'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
+import { ContextMenuActionName } from '..'
 
 export interface UseOpenHookReturn {
   openContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
@@ -33,7 +34,7 @@ export const useOpen = (elementType: ElementType): UseOpenHookReturn => {
   const openContextMenuItem = (node: Element): ItemType => {
     return {
       label: t('element.open'),
-      key: 'open',
+      key: ContextMenuActionName.open,
       icon: <Icon value={ 'open-folder' } />,
       hidden: !checkElementPermission(node.permissions, 'view'),
       onClick: async () => {
@@ -53,7 +54,7 @@ export const useOpen = (elementType: ElementType): UseOpenHookReturn => {
 
     return {
       label: t('element.open'),
-      key: 'open',
+      key: ContextMenuActionName.open,
       icon: <Icon value={ 'open-folder' } />,
       hidden: !checkElementPermission(data.permissions, 'view'),
       onClick: async () => {

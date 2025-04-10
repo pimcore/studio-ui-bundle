@@ -21,10 +21,13 @@ export type DropdownInnerProps = DropdownProps & {
 }
 
 export const DropdownInner = ({ selectedKeys, onSelect, menu, menuRef, ...props }: DropdownInnerProps): React.JSX.Element => {
-  const { items } = menu
+  const { items, ...rest } = menu
 
   const renderMenuComponent = (): ReactNode => (
-    <Menu ref={ menuRef }>
+    <Menu
+      ref={ menuRef }
+      { ...rest }
+    >
       {items?.map((item: ItemType) => renderDropdownItem({ item }))}
     </Menu>
   )

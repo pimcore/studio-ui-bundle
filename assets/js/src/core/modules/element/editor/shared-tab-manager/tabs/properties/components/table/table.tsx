@@ -151,7 +151,7 @@ export const Table = ({
                 info.row.original.data !== null &&
               (
                 <IconButton
-                  icon={ { value: 'group' } }
+                  icon={ { value: 'open-folder' } }
                   onClick={ async () => {
                     const typeValue = mapToElementType(info.row.original.type)
 

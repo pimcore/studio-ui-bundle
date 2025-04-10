@@ -11,19 +11,27 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import type { ElementType } from '../../../../types/enums/element/element-type'
 import { eventBus } from '@Pimcore/lib/event-bus'
 import { useOptionalElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { useContext } from 'react'
+import type { ElementType } from '../../../../types/enums/element/element-type'
+import { DataContext } from '../../listing/abstract/data-layer/provider/data/data-provider'
 
 export interface UseRefreshGridHookReturn {
-  refreshGrid: (parentId?: number) => void
+  refreshGrid: (parentId?: number) => Promise<void>
 }
 
 export const useRefreshGrid = (elementType: ElementType): UseRefreshGridHookReturn => {
   const elementContext = useOptionalElementContext()
+  const dataContext = useContext(DataContext)
 
-  const refreshGrid = (parentId?: number): void => {
+  const refreshGrid = async (parentId?: number): Promise<void> => {
     const id = parentId ?? elementContext?.id
+
+    if (dataContext?.dataQueryResult !== undefined) {
+      const { refetch } = dataContext.dataQueryResult
+      await refetch()
+    }
 
     if (elementType === 'asset' && id !== undefined) {
       eventBus.publish({ identifier: { type: 'asset:listing:refresh', id } })

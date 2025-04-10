@@ -30,6 +30,7 @@ import { useTranslation } from 'react-i18next'
 import { useDataObjectAddMutation } from '../../data-object-api-slice.gen'
 import { useDataObjectHelper } from '../../hooks/use-data-object-helper'
 import { useClassDefinitions } from '../../utils/provider/class-defintions/use-class-definitions'
+import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 
 interface UseAddObjectHookReturn {
   addObjectTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -166,7 +167,7 @@ export const useAddObject = (): UseAddObjectHookReturn => {
   const addObjectTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('data-object.tree.context-menu.add-object'),
-      key: 'add-object',
+      key: ContextMenuActionName.addObject,
       icon: <Icon value={ 'folder' } />,
       hidden: isAddObjectHidden(node),
       children: getClassEntries(node)

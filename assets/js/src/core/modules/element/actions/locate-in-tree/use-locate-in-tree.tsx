@@ -24,6 +24,7 @@ import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { isNil, isNull } from 'lodash'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ContextMenuActionName } from '..'
 
 export interface UseLocateInTreeHookReturn {
   locateInTree: (elementId: number, onFinished?: () => void) => void
@@ -73,8 +74,8 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
 
     return {
       label: t('element.locate-in-tree'),
-      key: 'locate-in-tree',
-      // isLoading,
+      key: ContextMenuActionName.locateInTree,
+      isLoading,
       icon: <Icon value={ 'target' } />,
       onClick: async () => {
         setIsLoading(true)

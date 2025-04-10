@@ -26,6 +26,7 @@ import { useAppDispatch } from '@Pimcore/app/store'
 import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
 import { useDataObjectReplaceContentMutation } from '../../data-object-api-slice.gen'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 
 interface UsePasteHookParams {
   storedNode: UseCopyPasteHookReturn['storedNode']
@@ -75,7 +76,7 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
   const pasteAsChildRecursiveTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.tree.paste-as-child-recursive'),
-      key: 'pasteAsChildRecursive',
+      key: ContextMenuActionName.pasteAsChildRecursive,
       icon: <Icon value={ 'paste' } />,
       hidden: isPasteOptionHidden(node),
       onClick: async () => {
@@ -88,7 +89,7 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
   const pasteRecursiveUpdatingReferencesTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.tree.paste-recursive-updating-references'),
-      key: 'pasteRecursiveUpdatingReferences',
+      key: ContextMenuActionName.pasteRecursiveUpdatingReferences,
       icon: <Icon value={ 'paste' } />,
       hidden: isPasteOptionHidden(node),
       onClick: async () => {
@@ -101,7 +102,7 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
   const pasteAsChildTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.tree.paste-as-child'),
-      key: 'pasteAsChild',
+      key: ContextMenuActionName.pasteAsChild,
       icon: <Icon value={ 'paste' } />,
       hidden: isPasteOptionHidden(node),
       onClick: async () => {
@@ -114,7 +115,7 @@ export const usePaste = ({ storedNode, nodeTask }: UsePasteHookParams): UsePaste
   const pasteOnlyContentsTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.tree.paste-only-contents'),
-      key: 'pasteOnlyContents',
+      key: ContextMenuActionName.pasteOnlyContents,
       icon: <Icon value={ 'paste' } />,
       hidden: isPasteOnlyContentsHidden(node),
       onClick: async () => { await replaceContent(storedNode, node) }

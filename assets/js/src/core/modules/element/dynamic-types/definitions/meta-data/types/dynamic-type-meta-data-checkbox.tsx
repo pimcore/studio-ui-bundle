@@ -28,7 +28,7 @@ export class DynamicTypeMetaDataCheckbox extends DynamicTypeMetadataAbstract {
   @inject(serviceIds['DynamicTypes/GridCell/Checkbox']) protected dynamicTypeGridCellType: DynamicTypeGridCellAbstract
   @inject(serviceIds['DynamicTypes/FieldFilter/Text']) protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract
 
-  getVersionPreviewComponent (data: boolean): React.JSX.Element {
-    return <span>{ data ? '✓' : '-' }</span>
+  getVersionPreviewComponent (data: boolean | null): React.JSX.Element {
+    return <span>{ data === true ? '✓' : '-' }</span>
   }
 }

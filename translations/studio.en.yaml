@@ -8,6 +8,7 @@ error.error_invalid_argument: Invalid argument
 error.error_widget_name_missing: Widget name have to be provided
 error.error_widget_name_invalid: Widget name is invalid (only alphanumeric characters, underscores and spaces are allowed, must be at least 3 characters long and less than 80 long)
 error.error_validation_failed: Validation failed
+error.error_element_not_found: Element not found
 modal-search.field.mimeType: MIME-Type
 modal-search.field.thumbnail: Thumbnail
 modal-search.field.id: ID
@@ -660,6 +661,9 @@ navigation.notes-and-events: Notes & Events
 navigation.file: File
 navigation.settings: Settings
 navigation.tools: Tools
+perspective.default: Default
+perspective.switching.title: Switching perspective
+perspective.switching.description: Currently switching to the following perspective
 widget.notes-and-events: Notes & Events
 widget.tag-configuration: Tag Configuration
 widget.role-management: Roles
@@ -746,3 +750,4 @@ element: Element
 entries: entries
 entry: entry
 error_element_validation_failed: 'Validation failed'
+element.delete.deleting-folder: Deleting Folder
