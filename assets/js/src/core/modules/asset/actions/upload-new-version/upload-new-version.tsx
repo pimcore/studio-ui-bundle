@@ -23,6 +23,7 @@ import { useCacheUpdate } from '@Pimcore/modules/element/hooks/use-cache-update'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
+import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 
 export interface UseUploadNewVersionReturn {
   uploadNewVersion: (id: number, accept?: string) => void
@@ -89,7 +90,7 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
   const uploadNewVersionContextMenuItem = (node: Asset, onFinish?: () => void): ItemType => {
     return {
       label: t('asset.tree.context-menu.upload-new-version'),
-      key: 'upload-new-version',
+      key: ContextMenuActionName.uploadNewVersion,
       icon: <Icon value={ 'upload-cloud' } />,
       hidden: node.type === 'folder' ||
         !checkElementPermission(node.permissions, 'list') ||
@@ -109,7 +110,7 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
   const uploadNewVersionTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('asset.tree.context-menu.upload-new-version'),
-      key: 'upload-new-version',
+      key: ContextMenuActionName.uploadNewVersion,
       icon: <Icon value={ 'upload-cloud' } />,
       hidden: !isTreeActionAllowed(TreePermission.UploadNewVersion) ||
         node.type === 'folder' ||

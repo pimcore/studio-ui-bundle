@@ -22,6 +22,7 @@ import { useAppDispatch } from '@Pimcore/app/store'
 import { refreshNodeChildren, setNodeExpanded } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useTreeId } from '../../tree/provider/tree-id-provider/use-tree-id'
+import { ContextMenuActionName } from '..'
 
 export interface UseRefreshTreeHookReturn {
   refreshTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -41,7 +42,7 @@ export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookRetu
   const refreshTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.tree.refresh'),
-      key: 'refresh',
+      key: ContextMenuActionName.refresh,
       icon: <Icon value={ 'refresh' } />,
       hidden: !isTreeActionAllowed(TreePermission.Refresh),
       onClick: () => {

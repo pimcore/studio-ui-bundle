@@ -17,13 +17,14 @@ import { Flex, Menu } from 'antd'
 import { useStyles } from './default-item.styles'
 import { SelectionButton } from '@Pimcore/components/dropdown/selection/selection-button'
 import { useSelection } from '@Pimcore/components/dropdown/selection/hooks/use-selection'
+import { Spin } from '@Pimcore/components/spin/spin'
 
 export interface DefaultItemProps extends MenuItemType {
   id: React.Key
 }
 
 export const WithExtendedApi = (Component: typeof Menu.Item): ComponentType<DefaultItemProps> => {
-  const DecoratedMenuItem = ({ label, key, selectable, id, ...props }: DefaultItemProps): React.JSX.Element => {
+  const DecoratedMenuItem = ({ label, key, selectable, id, icon, ...props }: DefaultItemProps): React.JSX.Element => {
     const { styles } = useStyles()
     const { selectionType } = useSelection()
     const classes = [styles.dropdownItem]
@@ -43,8 +44,16 @@ export const WithExtendedApi = (Component: typeof Menu.Item): ComponentType<Defa
         <Flex
           align='center'
           gap={ 8 }
-          justify='space-between'
         >
+          {props.isLoading === true && (
+            <Spin
+              tip='Loading'
+              type='classic'
+            />
+          )}
+
+          {icon}
+
           <span>{label}</span>
 
           {selectable === true && selectionType !== 'disabled' && (

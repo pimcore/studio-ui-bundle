@@ -20,6 +20,7 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 
 export interface UseClearThumbnailsHookReturn {
   clearImageThumbnailContextMenuItem: (node: Asset, onFinish?: () => void) => ItemType
@@ -47,7 +48,7 @@ export const useClearThumbnails = (): UseClearThumbnailsHookReturn => {
   const clearImageThumbnailContextMenuItem = (node: Asset, onFinish?: () => void): ItemType => {
     return {
       label: t('asset.tree.context-menu.clear-thumbnails'),
-      key: 'clear-image-thumbnails',
+      key: ContextMenuActionName.clearImageThumbnails,
       icon: <Icon value={ 'remove-image-thumbnail' } />,
       hidden: node.type !== 'image' || !checkElementPermission(node.permissions, 'publish'),
       onClick: async () => { await handleClearThumbnails(node, onFinish) }
@@ -57,7 +58,7 @@ export const useClearThumbnails = (): UseClearThumbnailsHookReturn => {
   const clearVideoThumbnailContextMenuItem = (node: Asset, onFinish?: () => void): ItemType => {
     return {
       label: t('asset.tree.context-menu.clear-thumbnails'),
-      key: 'clear-video-thumbnails',
+      key: ContextMenuActionName.clearVideoThumbnails,
       icon: <Icon value={ 'remove-video-thumbnail' } />,
       hidden: node.type !== 'video' || !checkElementPermission(node.permissions, 'publish'),
       onClick: async () => { await handleClearThumbnails(node, onFinish) }
@@ -67,7 +68,7 @@ export const useClearThumbnails = (): UseClearThumbnailsHookReturn => {
   const clearPdfThumbnailContextMenuItem = (node: Asset, onFinish?: () => void): ItemType => {
     return {
       label: t('asset.tree.context-menu.clear-thumbnails'),
-      key: 'clear-pdf-thumbnails',
+      key: ContextMenuActionName.clearPdfThumbnails,
       icon: <Icon value={ 'remove-pdf-thumbnail' } />,
       hidden: node.mimeType !== 'application/pdf' || !checkElementPermission(node.permissions, 'publish'),
       onClick: async () => { await handleClearThumbnails(node, onFinish) }

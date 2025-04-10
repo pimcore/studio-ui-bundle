@@ -28,6 +28,7 @@ export type MenuDividerType = Extract<OldItemType, { type: 'divider' }>
 
 export interface MenuItemType extends AntdMenuType {
   selectable?: boolean
+  isLoading?: boolean
 }
 
 export interface SubMenuItemType extends Omit<AntdSubMenuType, 'children'> {
