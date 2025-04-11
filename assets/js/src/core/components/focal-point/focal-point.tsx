@@ -32,6 +32,7 @@ export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Eleme
   const [dragging, setDragging] = useState<boolean>(false)
 
   const draggingRef = useRef(dragging)
+  const movingElementRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => { draggingRef.current = dragging }, [dragging])
 
@@ -64,20 +65,25 @@ export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Eleme
   }
 
   const handleMouseMove = (evt: MouseEvent): void => {
-    if (isNull(containerRef.current) || disabled) return
+    if (isNull(containerRef.current) || isNull(movingElementRef.current) || disabled) return
 
     if (draggingRef.current) {
       const container = containerRef.current.firstElementChild!
+      const movingElement = movingElementRef.current
 
       const containerBounds = container.getBoundingClientRect()
+      const movingElementBounds = movingElement.getBoundingClientRect()
+
+      const movingElementHalfWidth = movingElementBounds.width / 2
+      const movingElementHalfHeight = movingElementBounds.height / 2
 
       const fullWidth = container.clientWidth ?? 0
       const fullHeight = container.clientHeight ?? 0
 
-      const minX = containerBounds.left
-      const maxX = containerBounds.left + containerBounds.width
-      const minY = containerBounds.top
-      const maxY = containerBounds.top + containerBounds.height
+      const minX = containerBounds.left + movingElementHalfWidth
+      const maxX = containerBounds.left + containerBounds.width - movingElementHalfWidth
+      const minY = containerBounds.top + movingElementHalfHeight
+      const maxY = containerBounds.top + containerBounds.height - movingElementHalfHeight
 
       const positionX = Math.min(Math.max(minX, evt.clientX), maxX)
       const positionY = Math.min(Math.max(minY, evt.clientY), maxY)
@@ -127,6 +133,7 @@ export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Eleme
           hidden={ !isActive }
           icon={ { value: 'focal-point' } }
           onMouseDown={ handleMouseDown }
+          ref={ movingElementRef }
           style={ {
             left: `${coordinates.x}%`,
             top: `${coordinates.y}%`
