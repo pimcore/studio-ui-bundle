@@ -66,7 +66,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           dispatch(setUser(data))
         }
       })
-      .catch(() => {})
+      .catch(() => { })
 
     return await userFetcher
   }
@@ -82,7 +82,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           dispatch(setSettings(data))
         }
       })
-      .catch(() => {})
+      .catch(() => { })
 
     return await settingsFetcher
   }
@@ -94,10 +94,11 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   }
 
   async function loadTranslations (): Promise<any> {
-    await translations({ translation: { locale: 'en', keys: [] } })
+    const user = selectCurrentUser(store.getState())
+    await translations({ translation: { locale: user.language, keys: [] } })
       .unwrap()
       .then(response => {
-        i18n.addResourceBundle('en', 'translation', response.keys ?? [], true, true)
+        i18n.addResourceBundle(user.language, 'translation', response.keys ?? [], true, true)
       })
       .catch(() => {
         trackError(new GeneralError('Error loading translations'))
@@ -111,7 +112,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
       Promise.allSettled([
         initActivePerspective()
       ]).then(() => {
-      }).catch(() => {})
+      }).catch(() => { })
     }
   }
 
@@ -121,7 +122,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
       loadTranslations()
     ]).then(() => {
       setIsLoading(false)
-    }).catch(() => {})
+    }).catch(() => { })
   }, [])
 
   useEffect(() => {
