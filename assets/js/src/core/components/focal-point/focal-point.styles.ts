@@ -40,7 +40,7 @@ export const useStyles = createStyles(({ token, css }) => {
       transform: translate(-50%, -50%);
       
 
-        &:hover {
+        &:hover, &:active {
           color: ${token.colorPrimary};
           background: ${token.Colors.Neutral.Fill.colorFill} !important;
       }
