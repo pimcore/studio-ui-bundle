@@ -18,6 +18,7 @@ export const useStyles = createStyles(({ token, css }) => {
     container: css`
       position: relative;
       margin: auto;
+      user-select: none;
     `,
 
     imageContainer: css`

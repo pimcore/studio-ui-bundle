@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type MouseEvent, useContext, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { isNull, isUndefined } from 'lodash'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
@@ -30,6 +30,10 @@ const PERCENT_MULTIPLIER = 100
 
 export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Element | null => {
   const [dragging, setDragging] = useState<boolean>(false)
+
+  const draggingRef = useRef(dragging)
+
+  useEffect(() => { draggingRef.current = dragging }, [dragging])
 
   const { id } = useContext(AssetContext)
   const focalPointContext = useContext(FocalPointContext)
@@ -62,31 +66,24 @@ export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Eleme
   const handleMouseMove = (evt: MouseEvent): void => {
     if (isNull(containerRef.current) || disabled) return
 
-    if (dragging) {
+    if (draggingRef.current) {
       const container = containerRef.current.firstElementChild!
 
       const containerBounds = container.getBoundingClientRect()
 
-      const isOutOfTheBox = (
-        // if cursor point less than left container side
-        evt.clientX <= containerBounds.left ||
-        // if cursor point more than right container side
-        evt.clientX >= containerBounds.left + containerBounds.width ||
-        // if cursor point less than top container side
-        evt.clientY <= containerBounds.top ||
-        // if cursor point more than bottom container side
-        evt.clientY >= containerBounds.top + containerBounds.height
-      )
-
-      if (isOutOfTheBox) {
-        return
-      }
-
       const fullWidth = container.clientWidth ?? 0
       const fullHeight = container.clientHeight ?? 0
 
-      const percentX = ((evt.clientX - containerBounds.left) / fullWidth) * PERCENT_MULTIPLIER
-      const percentY = ((evt.clientY - containerBounds.top) / fullHeight) * PERCENT_MULTIPLIER
+      const minX = containerBounds.left
+      const maxX = containerBounds.left + containerBounds.width
+      const minY = containerBounds.top
+      const maxY = containerBounds.top + containerBounds.height
+
+      const positionX = Math.min(Math.max(minX, evt.clientX), maxX)
+      const positionY = Math.min(Math.max(minY, evt.clientY), maxY)
+
+      const percentX = ((positionX - containerBounds.left) / fullWidth) * PERCENT_MULTIPLIER
+      const percentY = ((positionY - containerBounds.top) / fullHeight) * PERCENT_MULTIPLIER
 
       setCoordinates({
         x: percentX,
@@ -99,12 +96,19 @@ export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Eleme
 
   const handleMouseDown = (): void => { setDragging(true) }
 
+  useEffect(() => {
+    window.addEventListener('mouseup', handleMouseUp)
+    window.addEventListener('mousemove', handleMouseMove)
+
+    return () => {
+      window.removeEventListener('mouseup', handleMouseUp)
+      window.removeEventListener('mousemove', handleMouseMove)
+    }
+  }, [])
+
   return (
     <div
       className={ styles.container }
-      onMouseMove={ handleMouseMove }
-      onMouseUp={ handleMouseUp }
-      role="none"
       style={ {
         width: `${zoom}%`
       } }
