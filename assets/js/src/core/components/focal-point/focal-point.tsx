@@ -18,8 +18,8 @@ import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { FocalPointContext } from '@Pimcore/components/focal-point/context/focal-point-context'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { useStyles } from './focal-point.styles'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
+import { useStyles } from './focal-point.styles'
 
 interface FocalPointProps {
   imageSrc: string
@@ -55,13 +55,19 @@ export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Eleme
     containerRef
   } = focalPointContext!
 
-  console.log('------>>>>>: ', coordinates)
-
   useEffect(() => {
     if (!isActive && !isLoading && containerRef.current !== null) {
       removeImageSetting('focalPoint')
     }
   }, [isActive])
+
+  useEffect(() => {
+    if (isActive && !dragging) {
+      addImageSettings({
+        focalPoint: { x: coordinates.x, y: coordinates.y }
+      })
+    }
+  }, [dragging])
 
   const handleOnLoad = (): void => {
     if (!isNull(containerRef.current) && !isUndefined(imageSettings?.focalPoint)) {
@@ -99,10 +105,7 @@ export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Eleme
       const percentX = ((positionX - containerBounds.left) / fullWidth) * PERCENT_MULTIPLIER
       const percentY = ((positionY - containerBounds.top) / fullHeight) * PERCENT_MULTIPLIER
 
-      const updatedCoordinates = { x: percentX, y: percentY }
-
-      setCoordinates(updatedCoordinates)
-      addImageSettings({ focalPoint: updatedCoordinates })
+      setCoordinates({ x: percentX, y: percentY })
     }
   }
 
