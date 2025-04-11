@@ -8,6 +8,7 @@ error.error_invalid_argument: Invalid argument
 error.error_widget_name_missing: Widget name have to be provided
 error.error_widget_name_invalid: Widget name is invalid (only alphanumeric characters, underscores and spaces are allowed, must be at least 3 characters long and less than 80 long)
 error.error_validation_failed: Validation failed
+error.error_element_not_found: Element not found
 modal-search.field.mimeType: MIME-Type
 modal-search.field.thumbnail: Thumbnail
 modal-search.field.id: ID
@@ -437,6 +438,7 @@ element.toolbar.copy-deep-link-to-clipboard: Copy deep link to clipboard
 element.toolbar.copy-className: Class {{className}} - Copy
 element.unpublish: Unpublish
 element.publish: Publish
+element.locate-in-tree: Locate in Tree
 male: Male
 female: Female
 other: Other
@@ -659,6 +661,9 @@ navigation.notes-and-events: Notes & Events
 navigation.file: File
 navigation.settings: Settings
 navigation.tools: Tools
+perspective.default: Default
+perspective.switching.title: Switching perspective
+perspective.switching.description: Currently switching to the following perspective
 widget.notes-and-events: Notes & Events
 widget.tag-configuration: Tag Configuration
 widget.role-management: Roles
@@ -703,6 +708,20 @@ link.tabindex: Tabindex
 link.class: Class
 crop: Crop
 crop.remove: Remove Crop
+hotspots-markers-modal.edit-button: Add & Edit data
+hotspots-markers-data-modal.title: Add & Edit data
+hotspots-markers-data-modal.new-data: New
+hotspots-markers-data-modal.apply: Apply
+hotspots-markers-data-modal.name: Name
+hotspots-markers-data-modal.data: Data
+hotspots-markers-data-modal.data-type.name: Name
+hotspots-markers-data-modal.data-type.value: Value
+hotspots-markers-data-modal.data-type.text-field: Text Field
+hotspots-markers-data-modal.data-type.text-area: Text Area
+hotspots-markers-data-modal.data-type.checkbox: Checkbox
+hotspots-markers-data-modal.data-type.object: Object
+hotspots-markers-data-modal.data-type.document: Document
+hotspots-markers-data-modal.data-type.asset: Asset
 hotspots.edit: Edit marker and hotspots
 hotspots.show: Show marker and hotspots
 hotspots.new-marker: New Marker
@@ -731,3 +750,4 @@ element: Element
 entries: entries
 entry: entry
 error_element_validation_failed: 'Validation failed'
+element.delete.deleting-folder: Deleting Folder

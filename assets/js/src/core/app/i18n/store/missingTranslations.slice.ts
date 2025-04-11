@@ -24,11 +24,15 @@ const slice = createSlice({
   reducers: {
     addMissingTranslation: (state, { payload }) => {
       state.push(payload as string)
+    },
+    removeMissingTranslations: (state, { payload }) => {
+      const translationsToRemove = Array.isArray(payload) ? payload : [payload]
+      return state.filter((translation) => !translationsToRemove.includes(translation))
     }
   }
 })
 
-export const { addMissingTranslation } = slice.actions
+export const { addMissingTranslation, removeMissingTranslations } = slice.actions
 
 export const missingTranslationsSliceName = slice.name
 
@@ -39,6 +43,8 @@ export const selectMissingTranslations = (state: RootState): string[] => state.m
 const debouncedSendTranslations = debounce(async (listenerApi) => {
   const state = listenerApi.getState() as RootState
   const translations = selectMissingTranslations(state)
+
+  listenerApi.dispatch(removeMissingTranslations(translations))
   void addNewTranslations(translations)
 }, 3000) // Wait for 3 seconds of inactivity before sending
 

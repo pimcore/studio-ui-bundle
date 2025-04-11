@@ -32,6 +32,7 @@ import { CustomMetadataTabContainer } from './shared-tab-manager/tabs/custom-met
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { AssetVersionsTabContainer } from './shared-tab-manager/tabs/versions/tab-container'
 import { EmbeddedMetadataTabContainer } from './shared-tab-manager/tabs/embedded-metadata/embedded-metadata-container'
+import { EditorContainer } from './editor-container'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -82,6 +83,11 @@ moduleSystem.registerModule({
     widgetRegistryService.registerWidget(AssetEditorWidget)
 
     const componentRegistry = container.get<GlobalComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
+
+    componentRegistry.register({
+      name: componentConfig.asset.editor.container.name,
+      component: EditorContainer
+    })
 
     componentRegistry.register({
       name: componentConfig.asset.editor.tab.embeddedMetadata.name,

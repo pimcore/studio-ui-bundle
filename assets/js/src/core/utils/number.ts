@@ -20,7 +20,7 @@ interface IFormatNumberProps {
   options?: Intl.NumberFormatOptions
 }
 
-export function formatNumber ({ value, lng, options }: IFormatNumberProps): string {
+export function formatNumber ({ value, lng, options = { useGrouping: false } }: IFormatNumberProps): string {
   if (isNil(value)) {
     return ''
   }

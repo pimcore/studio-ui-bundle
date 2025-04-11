@@ -26,7 +26,9 @@ export const toIHotspots = (hotspots: Hotspot[], markers: Marker[]): IHotspot[] 
       y: hotspot.top,
       width: hotspot.width,
       height: hotspot.height,
-      type: 'hotspot'
+      type: 'hotspot',
+      data: hotspot.data,
+      name: hotspot.name
     })
   })
 
@@ -38,7 +40,9 @@ export const toIHotspots = (hotspots: Hotspot[], markers: Marker[]): IHotspot[] 
       y: marker.top,
       width: style.width,
       height: style.height,
-      type: 'marker'
+      type: 'marker',
+      data: marker.data,
+      name: marker.name
     })
   })
   return resultArray
@@ -55,15 +59,15 @@ export const fromIHotspots = (iHotspots: IHotspot[]): { hotspots: Hotspot[], mar
         top: iHotspot.y,
         width: iHotspot.width,
         height: iHotspot.height,
-        data: null,
-        name: null
+        data: iHotspot.data,
+        name: iHotspot.name
       })
     } else if (iHotspot.type === 'marker') {
       marker.push({
         left: iHotspot.x,
         top: iHotspot.y,
-        data: null,
-        name: null
+        data: iHotspot.data,
+        name: iHotspot.name
       })
     }
   })

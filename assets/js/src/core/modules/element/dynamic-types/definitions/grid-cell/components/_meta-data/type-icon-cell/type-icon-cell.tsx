@@ -14,35 +14,28 @@
 import type { DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import React from 'react'
 import { IconView } from '@Pimcore/components/grid/columns/views/icon/icon-view'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import { type DynamicTypeMetadataAbstract, type DynamicTypeMetaDataRegistry } from 'src/sdk/modules/element'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { isUndefined } from 'lodash'
 
 export const TypeIconCell = (props: DefaultCellProps): React.JSX.Element => {
-  const propertyType = props.row.original.type
+  const propertyType: string = props.row.original.type
 
-  function renderCell (): React.JSX.Element {
-    switch (propertyType) {
-      case 'metadata.input':
-        return <IconView value={ 'text-field' } />
-      case 'metadata.textarea':
-        return <IconView value={ 'content' } />
-      case 'metadata.document':
-        return <IconView value={ 'data-object-variant' } />
-      case 'metadata.asset':
-        return <IconView value={ 'asset' } />
-      case 'metadata.object':
-      case 'metadata.dataObject':
-        return <IconView value={ 'data-object-variant' } />
-      case 'metadata.date':
-        return <IconView value={ 'calendar' } />
-      case 'metadata.checkbox':
-        return <IconView value={ 'checkbox' } />
-      default:
-        return <span></span>
-    }
+  const metadataTypeRegistry = useInjection<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
+
+  let metadataType: undefined | DynamicTypeMetadataAbstract
+  try {
+    metadataType = metadataTypeRegistry.getDynamicType(propertyType)
+  } catch (error) {
+  }
+
+  const iconName = metadataType?.iconName
+  if (isUndefined(iconName)) {
+    return <></>
   }
 
   return (
-    <>
-      {renderCell()}
-    </>
+    <IconView value={ iconName } />
   )
 }

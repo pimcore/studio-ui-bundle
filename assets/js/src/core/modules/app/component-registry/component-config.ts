@@ -18,6 +18,7 @@ import { EditorToolbarContextMenu } from '@Pimcore/modules/asset/editor/toolbar/
 const defaultComponentConfig = {
   asset: {
     editor: {
+      container: { type: ComponentType.SINGLE, name: 'asset.editor.container' },
       tab: {
         customMetadata: { type: ComponentType.SINGLE, name: 'asset.editor.tab.customMetadata' },
         embeddedMetadata: { type: ComponentType.SINGLE, name: 'asset.editor.tab.embeddedMetadata' },
@@ -50,6 +51,9 @@ const defaultComponentConfig = {
     tree: {
       contextMenu: { type: ComponentType.SINGLE, name: 'dataObject.tree.contextMenu' }
     }
+  },
+  wysiwyg: {
+    editor: { type: ComponentType.SINGLE, name: 'wysiwyg.editor' }
   }
 }
 

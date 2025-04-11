@@ -11,14 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type ListGridContextMenuProps } from '@Pimcore/types/components/types'
-import React from 'react'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
+import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
+import { useLocateInTree } from '@Pimcore/modules/element/actions/locate-in-tree/use-locate-in-tree'
 import { useOpen } from '@Pimcore/modules/element/actions/open/open'
 import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
-import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
-import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
+import { type ListGridContextMenuProps } from '@Pimcore/types/components/types'
+import React from 'react'
 
 export const ListGridContextMenu = (props: ListGridContextMenuProps): React.JSX.Element => {
   const { row } = props
@@ -26,10 +27,12 @@ export const ListGridContextMenu = (props: ListGridContextMenuProps): React.JSX.
   const { renameGridContextMenuItem } = useRename('asset', getElementActionCacheKey('asset', 'rename', Number(row.id)))
   const { deleteGridContextMenuItem } = useDelete('asset', getElementActionCacheKey('asset', 'delete', Number(row.id)))
   const { downloadGridContextMenuItem } = useDownload()
+  const { locateInTreeGridContextMenuItem } = useLocateInTree('asset')
 
   const items = [
     openGridContextMenuItem(row),
     renameGridContextMenuItem(row),
+    locateInTreeGridContextMenuItem(row),
     deleteGridContextMenuItem(row),
     downloadGridContextMenuItem(row)
   ].filter(Boolean) as DropdownMenuProps['items']

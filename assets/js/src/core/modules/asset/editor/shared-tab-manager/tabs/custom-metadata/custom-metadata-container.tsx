@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useRef, useState, useEffect } from 'react'
+import React, { useContext, useRef, useState, useEffect, type ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type InputRef } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
@@ -41,13 +41,19 @@ import {
   useLazyMetadataGetCollectionQuery
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
-export const CustomMetadataTabContainer = (): React.JSX.Element => {
+export interface CustomMetadataTabContainerProps {
+  disableHeaderTitle?: boolean
+  disableAddPredefinedMetadata?: boolean
+}
+
+export const CustomMetadataTabContainer = ({ disableHeaderTitle = false, disableAddPredefinedMetadata = false }: CustomMetadataTabContainerProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [editmode, setEditMode] = useState<boolean>(false)
   const settings = useSettings()
   const { id } = useContext(AssetContext)
-  const { addCustomMetadata, customMetadata } = useAssetDraft(id)
+  const { asset, addCustomMetadata, customMetadata } = useAssetDraft(id)
   const [predefinedMetadata, { isFetching, isError, error }] = useLazyMetadataGetCollectionQuery()
 
   const {
@@ -67,6 +73,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
     }
   }, [isError])
 
+  const isEditable = checkElementPermission(asset?.permissions, 'publish')
   const nameInputValue = useRef<string>('')
   const nameInputRef = useRef<InputRef>(null)
   const typeSelectValue = useRef<string>('input')
@@ -152,10 +159,39 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
     }
   }, [editmode])
 
+  const buttons: ReactElement[] = []
+  if (!editmode) {
+    if (!disableAddPredefinedMetadata) {
+      buttons.push((
+        <IconTextButton
+          disabled={ isFetching }
+          icon={ { value: 'add-something' } }
+          key={ t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition') }
+          loading={ isFetching }
+          onClick={ addPredefinedMetadata }
+        >
+          {t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition')}
+        </IconTextButton>
+      ))
+    }
+
+    buttons.push((
+      <IconTextButton
+        icon={ { value: 'new-something' } }
+        key={ t('asset.asset-editor-tabs.custom-metadata.new-custom-metadata') }
+        onClick={ () => {
+          setEditMode(true)
+        } }
+      >
+        {t('asset.asset-editor-tabs.custom-metadata.new-custom-metadata')}
+      </IconTextButton>
+    ))
+  }
+
   return (
     <Content padded>
       <Header
-        title={ t('asset.asset-editor-tabs.custom-metadata.text') }
+        title={ !disableHeaderTitle ? t('asset.asset-editor-tabs.custom-metadata.text') : '' }
       >
         <div className='pimcore-custom-metadata-toolbar'>
           <Space
@@ -236,26 +272,8 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
             </>
             )}
 
-            {!editmode && (
-            <ButtonGroup items={ [<IconTextButton
-              disabled={ isFetching }
-              icon={ { value: 'add-something' } }
-              key={ t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition') }
-              loading={ isFetching }
-              onClick={ addPredefinedMetadata }
-                                  >
-              {t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition')}
-            </IconTextButton>,
-              <IconTextButton
-                icon={ { value: 'new-something' } }
-                key={ t('asset.asset-editor-tabs.custom-metadata.new-custom-metadata') }
-                onClick={ () => {
-                  setEditMode(true)
-                } }
-              >
-                {t('asset.asset-editor-tabs.custom-metadata.new-custom-metadata')}
-              </IconTextButton>] }
-            />
+            {!editmode && isEditable && (
+            <ButtonGroup items={ buttons } />
             )}
           </Space>
         </div>

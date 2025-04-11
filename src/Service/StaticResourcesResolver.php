@@ -21,16 +21,25 @@ use Pimcore\Bundle\StudioUiBundle\Exception\InvalidEntryPointsJsonException;
 use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointManager;
 use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProvider;
 use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProviderInterface;
+use Pimcore\ValueObject\Collection\ArrayOfStrings;
 
 /**
  * @internal
  */
 final readonly class StaticResourcesResolver implements StaticResourcesResolverInterface
 {
+    private ArrayOfStrings $additionalCssFiles;
+
+    private ArrayOfStrings $additionalJsFiles;
+
     public function __construct(
         private WebpackEntryPointManager $webpackEntryPointManager,
         private WebpackEntryPointProvider $studioEntryPointProvider,
+        array $additionalCssFiles = [],
+        array $additionalJsFiles = []
     ) {
+        $this->additionalCssFiles = new ArrayOfStrings($additionalCssFiles);
+        $this->additionalJsFiles = new ArrayOfStrings($additionalJsFiles);
     }
 
     /**
@@ -63,6 +72,16 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
     public function getBundleJsFiles(): array
     {
         return $this->getFilesFromEntryPointsJson('js');
+    }
+
+    public function getAdditionalCssFiles(): array
+    {
+        return $this->additionalCssFiles->getValue();
+    }
+
+    public function getAdditionalJsFiles(): array
+    {
+        return $this->additionalJsFiles->getValue();
     }
 
     /**

@@ -96,7 +96,7 @@ export const Grid = ({
   const { t } = useTranslation()
   const hashId = useCssComponentHash('table')
   const { styles } = useStyles()
-  const [columnResizeMode] = useState<ColumnResizeMode>('onEnd')
+  const [columnResizeMode] = useState<ColumnResizeMode>('onChange')
   const [activeCell, setActiveCell] = useState<GridCellReference | undefined>()
   const [tableAutoWidth, setTableAutoWidth] = useState<boolean>(props.autoWidth ?? false)
   const tableElement = useRef<HTMLTableElement>(null)
@@ -329,7 +329,7 @@ export const Grid = ({
         </div>
       </div>
     </div>
-  ), [table, modifiedCells, data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined])
+  ), [table, modifiedCells, table.getTotalSize(), data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined])
 
   function getModifiedRow (rowIndex: string): GridProps['modifiedCells'] {
     return memoModifiedCells.filter(({ rowIndex: rIndex }) => String(rIndex) === String(rowIndex)) ?? []

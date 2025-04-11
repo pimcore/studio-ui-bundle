@@ -12,46 +12,19 @@
 */
 
 import React, { useEffect, useRef, useState } from 'react'
-import { type RefSelectProps, type DefaultOptionType } from 'antd/es/select'
+import { type RefSelectProps } from 'antd/es/select'
 import cn from 'classnames'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { Select } from '@Pimcore/components/select/select'
 import { useStyles } from './select-cell.styles'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import { isUndefined } from 'lodash'
 import { Spin } from '@Pimcore/components/spin/spin'
+import { resolveOptions, type SelectOptionType } from '../../utils/select-options'
 
 export interface SelectCellConfig {
   options?: string[] | SelectOptionType[]
   optionsUseHook?: (fieldName: string) => { isLoading: boolean, options: SelectOptionType[] } | undefined
   fieldName?: string
-}
-
-export type SelectOptionType = DefaultOptionType & {
-  displayValue?: string
-}
-
-const resolveOptions = (config: SelectCellConfig, fieldName: string): { isLoading: boolean, options: SelectOptionType[] } => {
-  const emptyResult = { isLoading: false, options: [] }
-
-  if (!isUndefined(config.optionsUseHook)) {
-    const useHookResult = config.optionsUseHook(fieldName)
-    if (isUndefined(useHookResult)) {
-      return emptyResult
-    }
-    return useHookResult
-  }
-
-  if (isUndefined(config.options)) {
-    return emptyResult
-  }
-
-  return {
-    isLoading: false,
-    options: config.options.map((value: string | object) => (
-      typeof value === 'object' ? value : { label: value, value }
-    ))
-  }
 }
 
 export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
@@ -113,3 +86,5 @@ export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
     disableEditMode()
   }
 }
+
+export type { SelectOptionType }

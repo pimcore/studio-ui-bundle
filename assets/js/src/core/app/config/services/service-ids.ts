@@ -124,6 +124,7 @@ export const serviceIds = {
   // Object data
   'DynamicTypes/ObjectData/Input': 'DynamicTypes/ObjectData/Input',
   'DynamicTypes/ObjectData/Textarea': 'DynamicTypes/ObjectData/Textarea',
+  'DynamicTypes/ObjectData/Wysiwyg': 'DynamicTypes/ObjectData/Wysiwyg',
   'DynamicTypes/ObjectData/Password': 'DynamicTypes/ObjectData/Password',
   'DynamicTypes/ObjectData/InputQuantityValue': 'DynamicTypes/ObjectData/InputQuantityValue',
   'DynamicTypes/ObjectData/Select': 'DynamicTypes/ObjectData/Select',

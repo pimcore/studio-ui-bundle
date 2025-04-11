@@ -58,6 +58,10 @@ export const GlobalStyles = createGlobalStyle`
     background: ${props => props.theme.itemHoverColor};
   }
 
+  .relative {
+    position: relative;
+  }
+
   .p-none {
     padding: 0;
   }

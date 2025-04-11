@@ -129,7 +129,7 @@ export class ComponentRegistry implements ComponentRegistryInterface {
       this.slots[slotName] = []
     }
     this.slots[slotName].push(component)
-    this.slots[slotName].sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0))
+    this.slots[slotName].sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0))
   }
 
   getSlotComponents (slotName: string): Array<ComponentRegistryEntry<any>> {
@@ -150,6 +150,7 @@ export class ComponentRegistry implements ComponentRegistryInterface {
   }
 }
 
+export * from './enums/component-type'
 export * from './component-config'
 export * from './component-renderer'
 export * from './use-component-registry'

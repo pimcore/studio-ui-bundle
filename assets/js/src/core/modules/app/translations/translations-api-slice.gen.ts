@@ -6,6 +6,14 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            translationCreate: build.mutation<TranslationCreateApiResponse, TranslationCreateApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/translations/create`,
+                    method: "POST",
+                    body: queryArg.createTranslation,
+                }),
+                invalidatesTags: ["Translation"],
+            }),
             translationDeleteByKey: build.mutation<TranslationDeleteByKeyApiResponse, TranslationDeleteByKeyApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/translations/${queryArg.key}`, method: "DELETE" }),
                 invalidatesTags: ["Translation"],
@@ -33,6 +41,10 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type TranslationCreateApiResponse = /** status 200 Successfully created translations */ void;
+export type TranslationCreateApiArg = {
+    createTranslation: TranslationCreate;
+};
 export type TranslationDeleteByKeyApiResponse = /** status 200 translation_delete_by_key_success_description */ void;
 export type TranslationDeleteByKeyApiArg = {
     /** Delete translations by matching key */
@@ -57,6 +69,16 @@ export type DevError = {
     /** Details */
     details: string;
 };
+export type TranslationDataForCreate = {
+    /** Key */
+    key: string;
+    /** Type */
+    type: string;
+};
+export type TranslationCreate = {
+    /** Translation Data */
+    translationData: TranslationDataForCreate[];
+};
 export type TranslationData = {
     /** Key */
     key: string;
@@ -77,5 +99,9 @@ export type Translation = {
     /** Keys */
     keys: string[];
 };
-export const { useTranslationDeleteByKeyMutation, useTranslationUpdateMutation, useTranslationGetCollectionMutation } =
-    injectedRtkApi;
+export const {
+    useTranslationCreateMutation,
+    useTranslationDeleteByKeyMutation,
+    useTranslationUpdateMutation,
+    useTranslationGetCollectionMutation,
+} = injectedRtkApi;

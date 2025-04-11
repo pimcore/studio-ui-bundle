@@ -66,6 +66,17 @@ export const useStyles = createStyles(({ token, css }) => {
       &:after {
         ${overlay};
       }
+    `,
+    inheritedGridCell: css`
+      padding-right: 20px;
+      
+      & > * {
+        filter: opacity(0.5);
+      }
+      &:after {
+        ${overlay};
+        backdrop-filter: none;
+      }
     `
   }
 })

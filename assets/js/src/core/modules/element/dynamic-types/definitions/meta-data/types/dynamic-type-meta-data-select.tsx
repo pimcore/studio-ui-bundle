@@ -26,6 +26,7 @@ import { addColumnConfig } from '@Pimcore/components/grid/columns/helpers'
 @injectable()
 export class DynamicTypeMetaDataSelect extends DynamicTypeMetadataAbstract {
   readonly id = 'metadata.select'
+  readonly iconName = 'chevron-down'
 
   visibleInTypeSelection: boolean = false
 

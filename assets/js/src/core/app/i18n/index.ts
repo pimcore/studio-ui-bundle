@@ -17,22 +17,40 @@ import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { addMissingTranslation } from './store/missingTranslations.slice'
 import { store } from '../store'
 
+const FALLBACK_LANGUAGE = 'en'
+
 i18n
   .use(initReactI18next)
 
   .init({
-    fallbackLng: 'en',
+    fallbackLng: FALLBACK_LANGUAGE,
     ns: ['translation'],
     resources: {},
-    saveMissing: true
+    saveMissing: true,
+    postProcess: ['returnKeyIfEmpty']
   })
 
   .catch(() => {
     trackError(new GeneralError('Could not load translations'))
   })
 
+i18n.use({
+  type: 'postProcessor',
+  name: 'returnKeyIfEmpty',
+  process (value, key, options, translator) {
+    if (value === '') {
+      if (Array.isArray(key)) {
+        return key[0]
+      }
+      return key
+    }
+    return value
+  }
+})
+
 i18n.on('missingKey', (lngs, namespace, key, res) => {
   store.dispatch(addMissingTranslation(key))
+  i18n.addResource(FALLBACK_LANGUAGE, namespace, key, key)
 })
 
 export default i18n

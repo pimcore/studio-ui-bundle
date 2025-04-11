@@ -22,6 +22,6 @@ export class DynamicTypeGridCellObject extends DynamicTypeGridCellAbstract {
   readonly id = 'object'
 
   getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
-    return <ElementCell { ...addColumnConfig(props, { allowedTypes: ['object'] }) } />
+    return <ElementCell { ...addColumnConfig(props, { allowedTypes: ['data-object'] }) } />
   }
 }

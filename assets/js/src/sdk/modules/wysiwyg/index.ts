@@ -11,12 +11,5 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { createStyles } from 'antd-style'
-
-export const useStyles = createStyles(({ token, css }) => {
-  return {
-    inheritanceButton: css`
-        border: 0
-      `
-  }
-})
+export * from '@Pimcore/modules/wysiwyg/interface/wysiwyg'
+export * from '@Pimcore/modules/wysiwyg/wysiwyg'

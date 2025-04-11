@@ -20,6 +20,9 @@ import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/defin
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
 import { isUndefined } from 'lodash'
 import { FieldCollectionProvider } from '../../../../objects/data-related/components/field-collection/providers/field-collection-provider'
+import { InheritanceLayer } from '../inheritance-layer'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 
 export interface EditModalModeCellProps {
   objectCellDefinition: WithEditModalGridCellDefinition
@@ -27,6 +30,7 @@ export interface EditModalModeCellProps {
 }
 
 export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element => {
+  const { decodeColumnIdentifier } = useSelectedColumns()
   const { isInEditMode, fireOnUpdateCellDataEvent, disableEditMode } = useEditMode(props.cellProps)
   const [form] = Form.useForm()
 
@@ -41,9 +45,21 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
   }
   props.objectCellDefinition.handleDefaultValue?.(props.objectCellDefinition.editComponent.props as AbstractObjectDataDefinition, form, ['value'])
 
+  const column = decodeColumnIdentifier(props.cellProps.column.id)
+  const apiColumns = props.cellProps.row.original['__api-data']
+
+  const currentApiColumn = apiColumns.columns.find((apiColumn) => {
+    return apiColumn.key === column?.key
+  })
+
   return (
-    <>
-      {props.objectCellDefinition.previewComponent}
+    <Flex className='relative w-full h-full'>
+      <InheritanceLayer
+        inherited={ currentApiColumn?.inheritance?.inherited === true && !isInEditMode }
+        objectId={ currentApiColumn?.inheritance?.objectId }
+      >
+        {props.objectCellDefinition.previewComponent}
+      </InheritanceLayer>
 
       { isInEditMode && !isUndefined(props.objectCellDefinition.editModalSettings) && (
         <WindowModal
@@ -74,6 +90,6 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
           </FieldWidthProvider>
         </WindowModal>
       ) }
-    </>
+    </Flex>
   )
 }
