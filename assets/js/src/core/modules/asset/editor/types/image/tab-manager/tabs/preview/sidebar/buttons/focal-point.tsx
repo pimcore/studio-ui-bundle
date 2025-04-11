@@ -16,6 +16,8 @@ import cn from 'classnames'
 import { isNull, isUndefined } from 'lodash'
 import { FocalPointContext } from '@Pimcore/components/focal-point/context/focal-point-context'
 import { type ISidebarButton } from '@Pimcore/modules/element/sidebar/sidebar-manager'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 
 interface SidebarButtonProps extends Omit<ISidebarButton, 'component'> {
   index: number
@@ -25,7 +27,10 @@ const HALF_DIVISOR = 2
 const PERCENT_MULTIPLIER = 100
 
 export const FocalPointSidebarButton = (props: Partial<SidebarButtonProps>): React.JSX.Element => {
+  const { id } = useContext(AssetContext)
   const focalPointContext = useContext(FocalPointContext)
+
+  const { addImageSettings } = useAssetDraft(id)
 
   const handleClick = (): void => {
     if (!isUndefined(focalPointContext)) {
@@ -56,7 +61,11 @@ export const FocalPointSidebarButton = (props: Partial<SidebarButtonProps>): Rea
           ? ((scrollTop + visibleHeight / HALF_DIVISOR) / fullHeight) * PERCENT_MULTIPLIER
           : 50
 
-        setCoordinates({ x: percentX, y: percentY })
+        const updatedCoordinates = { x: percentX, y: percentY }
+
+        setCoordinates(updatedCoordinates)
+        addImageSettings({ focalPoint: updatedCoordinates })
+
         setIsActive(!isActive)
       }
     }

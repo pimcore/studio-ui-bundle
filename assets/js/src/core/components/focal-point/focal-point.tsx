@@ -39,7 +39,7 @@ export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Eleme
   const { id } = useContext(AssetContext)
   const focalPointContext = useContext(FocalPointContext)
 
-  const { imageSettings } = useAssetDraft(id)
+  const { isLoading, imageSettings, addImageSettings, removeImageSetting } = useAssetDraft(id)
   const { styles } = useStyles()
 
   if (isUndefined(focalPointContext)) {
@@ -54,6 +54,14 @@ export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Eleme
     disabled,
     containerRef
   } = focalPointContext!
+
+  console.log('------>>>>>: ', coordinates)
+
+  useEffect(() => {
+    if (!isActive && !isLoading && containerRef.current !== null) {
+      removeImageSetting('focalPoint')
+    }
+  }, [isActive])
 
   const handleOnLoad = (): void => {
     if (!isNull(containerRef.current) && !isUndefined(imageSettings?.focalPoint)) {
@@ -91,10 +99,10 @@ export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Eleme
       const percentX = ((positionX - containerBounds.left) / fullWidth) * PERCENT_MULTIPLIER
       const percentY = ((positionY - containerBounds.top) / fullHeight) * PERCENT_MULTIPLIER
 
-      setCoordinates({
-        x: percentX,
-        y: percentY
-      })
+      const updatedCoordinates = { x: percentX, y: percentY }
+
+      setCoordinates(updatedCoordinates)
+      addImageSettings({ focalPoint: updatedCoordinates })
     }
   }
 
