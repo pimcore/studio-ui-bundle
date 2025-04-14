@@ -30,6 +30,7 @@ import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-co
 import { Text } from '@Pimcore/components/text/text'
 import { Box } from '@Pimcore/components/box/box'
 import { uuid } from '@Pimcore/utils/uuid'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 interface ITableProps {
   propertiesTableTab: string
@@ -52,6 +53,7 @@ export const Table = ({
   const { id, elementType } = useElementContext()
   const { element, properties, setProperties, updateProperty, removeProperty, setModifiedCells } = useElementDraft(id, elementType)
   const arePropertiesAvailable = properties !== undefined && properties.length > 0
+  const isEditable = checkElementPermission(element?.permissions, 'publish') || checkElementPermission(element?.permissions, 'save')
 
   const { data, isLoading } = usePropertyGetCollectionForElementByTypeAndIdQuery({
     elementType,
@@ -108,7 +110,7 @@ export const Table = ({
     columnHelper.accessor('key', {
       header: t('properties.columns.key'),
       meta: {
-        editable: true
+        editable: isEditable && tableType === 'own'
       },
       size: 200
     }),
@@ -124,7 +126,7 @@ export const Table = ({
       header: t('properties.columns.data'),
       meta: {
         type: 'property-value',
-        editable: tableType === 'own',
+        editable: isEditable && tableType === 'own',
         autoWidth: true
       },
       size: 300
@@ -134,7 +136,7 @@ export const Table = ({
       size: 70,
       meta: {
         type: 'checkbox',
-        editable: tableType === 'own',
+        editable: isEditable && tableType === 'own',
         config: {
           align: 'center'
         }
