@@ -21,7 +21,7 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/quantity-value/quantity-value'
 import type { FormInstance } from 'antd'
 import type { NamePath } from 'rc-field-form/es/interface'
-import _, { isNull } from 'lodash'
+import { isEmpty } from 'lodash'
 import { QuantityValue as QuantityValuePreview } from '../../grid-cell-preview/quantity-value/quantity-value'
 
 export type QuantityValueObjectDataDefinition = AbstractObjectDataDefinition & {
@@ -49,10 +49,10 @@ export class DynamicTypeObjectDataQuantityValue extends DynamicTypeObjectDataAbs
   }
 
   handleDefaultValue (props: QuantityValueObjectDataDefinition, form: FormInstance, fieldName: NamePath): void {
-    if (_.isEmpty(props.defaultValue) && _.isEmpty(props.defaultUnit)) {
+    if (isEmpty(props.defaultValue) && isEmpty(props.defaultUnit)) {
       return
     }
-    if (_.isEmpty(form.getFieldValue(fieldName))) {
+    if (isEmpty(form.getFieldValue(fieldName))) {
       form.setFieldValue(fieldName, {
         value: props.defaultValue,
         unitId: props.defaultUnit
@@ -63,7 +63,7 @@ export class DynamicTypeObjectDataQuantityValue extends DynamicTypeObjectDataAbs
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
     const value: QuantityValueValue | null = props.cellProps.getValue()
 
-    return isNull(value)
+    return isEmpty(value)
       ? <></>
       : (
         <QuantityValuePreview
