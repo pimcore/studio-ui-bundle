@@ -13,7 +13,6 @@
 
 import { type BaseQuery } from '@Pimcore/app/api/pimcore'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
 import { useClassDefinitionCollectionQuery, type ClassDefinitionCollectionApiArg, type ClassDefinitionCollectionApiResponse } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { type TypedUseQueryHookResult } from '@reduxjs/toolkit/dist/query/react'
 import React, { createContext, useMemo } from 'react'
@@ -29,11 +28,7 @@ export interface ClassDefinitionsProviderProps {
 }
 
 export const ClassDefinitionsProvider = ({ children }: ClassDefinitionsProviderProps): React.JSX.Element => {
-  const isAuthenticated = useIsAuthenticated()
-
-  const queryResultReturn = isAuthenticated
-    ? useClassDefinitionCollectionQuery()
-    : undefined
+  const queryResultReturn = useClassDefinitionCollectionQuery()
 
   if (queryResultReturn?.error !== undefined) {
     trackError(new ApiError(queryResultReturn.error))
