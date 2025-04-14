@@ -11,23 +11,18 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Image, type ImageProps } from 'antd'
 import React from 'react'
+import { Image, type ImageProps } from 'antd'
 import { useStyle } from '@Pimcore/components/pimcore-image/pimcore-image.styles'
 
-interface PimcoreImageProps extends ImageProps {
-}
-
-export const PimcoreImage = (props: PimcoreImageProps): React.JSX.Element => {
+export const PimcoreImage = (props: ImageProps): React.JSX.Element => {
   const { styles } = useStyle()
 
   return (
-    <>
-      <Image
-        className={ styles.image }
-        preview={ false }
-        { ...props }
-      />
-    </>
+    <Image
+      className={ styles.image }
+      preview={ false }
+      { ...props }
+    />
   )
 }
