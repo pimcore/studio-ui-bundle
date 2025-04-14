@@ -16,12 +16,11 @@ import type { ImageData as AssetImageData } from '@Pimcore/modules/asset/asset-a
 import { FocalPointContext } from '../context/focal-point-context'
 
 export const FocalPointProvider = ({ children }: { children: React.ReactNode }): React.JSX.Element => {
-  const [coordinates, setCoordinates] = React.useState<NonNullable<AssetImageData['focalPoint']>>({
-    x: 0,
-    y: 0
-  })
-  const [isActive, setIsActive] = React.useState<boolean>(false)
-  const [disabled, setDisabled] = useState<boolean>(false) // to freeze the focal point
+  const [coordinates, setCoordinates] = useState<NonNullable<AssetImageData['focalPoint']>>({ x: 0, y: 0 })
+
+  const [isActive, setIsActive] = useState<boolean>(false)
+  const [disabled, setDisabled] = useState<boolean>(false)
+
   const containerRef = useRef<HTMLDivElement>(null)
 
   return useMemo(() => (
