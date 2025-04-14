@@ -207,6 +207,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
             </Form.Item>
 
             <Form.Item
+              key={ 'data-' + type }
               label={ t(type === 'asset' ? 'video.path' : 'video.id') }
               name="data"
             >
