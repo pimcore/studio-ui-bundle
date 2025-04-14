@@ -41,6 +41,7 @@ interface IList {
   key: string
   breadcrumbTitle: string
   renderList: React.JSX.Element[]
+  index: number
 }
 
 export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle, className, fieldCollectionModifiedList, isExpandedUnmodifiedFields }: VersionFieldCollectionProps): React.JSX.Element => {
@@ -79,7 +80,9 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle, className,
   const handleFieldCollectionData = ({ data, breadcrumbTitle = fieldBreadcrumbTitle }: { data: FieldCollectionLayoutDefinition[], breadcrumbTitle?: string }): IList[] => {
     const tempFieldCollectionGroups: IList[] = []
 
-    const checkExistingGroupByKey = (key: string): IList | undefined => tempFieldCollectionGroups.find(group => group.key === key)
+    const checkExistingGroupByKey = (key: string, index: number): IList | undefined => {
+      return tempFieldCollectionGroups.find(group => group.key === key && group.index === index)
+    }
 
     const processData = (data: any, breadcrumbTitle: string): void => {
       data?.forEach((dataItem: any, dataIndex: number) => {
@@ -93,30 +96,34 @@ export const VersionFieldCollection = ({ value, fieldBreadcrumbTitle, className,
 
         if (dataItem.datatype === DATATYPE_LIST.DATA) {
           const filteredObject = filter(value, { type: currentFieldCollectionSection })
-          const fieldValue = filteredObject[0]?.data?.[dataItem?.name]
-          const existingGroup = checkExistingGroupByKey(currentFieldCollectionSection)
 
-          const isEmptyValue = shouldSkipProcessing({ dataItem, filteredObject, fieldValue })
+          filteredObject.forEach((filteredObjectItem: any, currentFieldCollectionItemIndex: number) => {
+            const fieldValue = filteredObjectItem?.data?.[dataItem?.name]
+            const existingGroup = checkExistingGroupByKey(currentFieldCollectionSection, currentFieldCollectionItemIndex)
 
-          if (isEmptyValue) return
+            const isEmptyValue = shouldSkipProcessing({ dataItem, filteredObject, fieldValue })
 
-          const element = (
-            <DataComponent
-              key={ `${dataIndex}-${dataItem.name}-${currentFieldCollectionSection}` }
-              value={ fieldValue }
-              { ...dataItem }
-            />
-          )
+            if (isEmptyValue) return
 
-          if (isEmpty(existingGroup)) {
-            tempFieldCollectionGroups.push({
-              key: currentFieldCollectionSection,
-              breadcrumbTitle,
-              renderList: [element]
-            })
-          } else {
-            existingGroup.renderList.push(element)
-          }
+            const element = (
+              <DataComponent
+                key={ `${dataIndex}-${dataItem.name}-${currentFieldCollectionSection}` }
+                value={ fieldValue }
+                { ...dataItem }
+              />
+            )
+
+            if (isEmpty(existingGroup)) {
+              tempFieldCollectionGroups.push({
+                key: currentFieldCollectionSection,
+                breadcrumbTitle,
+                renderList: [element],
+                index: currentFieldCollectionItemIndex
+              })
+            } else {
+              existingGroup.renderList.push(element)
+            }
+          })
         }
       })
     }

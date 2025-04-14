@@ -51,7 +51,7 @@ export const ObjectComponent = (props: ObjectComponentProps): React.JSX.Element 
         />
       )
     }
-  }, [currentDataType])
+  }, [props])
 
   if (renderNode === undefined) {
     throw new Error(`Unknown datatype: ${currentDataType}`)
