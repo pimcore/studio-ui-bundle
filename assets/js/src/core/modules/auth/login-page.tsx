@@ -14,18 +14,21 @@
 import { routes } from '@Pimcore/app/router/router'
 import { LoginForm } from '@Pimcore/components/login-form/login-form'
 import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useIsAuthenticated } from './hooks/use-is-authenticated'
 import { useStyle } from './login-page.styles'
 
 export const LoginPage = (): React.JSX.Element => {
   const { styles } = useStyle()
   const navigate = useNavigate()
+  const location = useLocation()
   const isAuthenticated = useIsAuthenticated()
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(routes.root)
+      const redirectPath: string = location?.state?.from?.pathname
+
+      navigate(redirectPath ?? routes.root)
     }
   }, [isAuthenticated])
 

@@ -16,7 +16,7 @@ import { DefaultPage } from '@Pimcore/modules/app/default-page'
 import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
 import { LoginPage } from '@Pimcore/modules/auth/login-page'
 import React from 'react'
-import { createBrowserRouter, Navigate } from 'react-router-dom'
+import { createBrowserRouter, Navigate, useLocation } from 'react-router-dom'
 import { appConfig } from '../config/app-config'
 
 export const baseUrl = appConfig.baseUrl.endsWith('/')
@@ -34,8 +34,16 @@ export const routes = {
 
 const AuthenticatedRoute = ({ children }: { children: React.JSX.Element }): React.ReactElement => {
   const isAuthenticated = useIsAuthenticated()
+  const location = useLocation()
 
-  return isAuthenticated ? children : <Navigate to={ routes.login } />
+  return isAuthenticated
+    ? children
+    : (
+      <Navigate
+        state={ { from: location } }
+        to={ routes.login }
+      />
+      )
 }
 
 export const router = createBrowserRouter([
