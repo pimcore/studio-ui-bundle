@@ -15,6 +15,9 @@ import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
+    wrapper: css`
+      pointer-events: none;
+    `,
     modal: css`
       .ant-modal-content {
           outline: 1px solid ${token.colorBorderContainer};

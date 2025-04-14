@@ -25,6 +25,7 @@ import { useStyles } from './checkbox.styles'
 export interface CheckboxProps extends Omit<ICheckboxProps, 'value' | 'onChange'> {
   value?: boolean | null
   onChange?: (value?: boolean | null) => void
+  disableClearButton?: boolean
 }
 
 export const Checkbox = (props: CheckboxProps): React.JSX.Element => {
@@ -47,7 +48,7 @@ export const Checkbox = (props: CheckboxProps): React.JSX.Element => {
     props.onChange?.(newValue)
   }
 
-  const showClearButton = value !== null && dataObject?.allowInheritance === true && props.disabled !== true
+  const showClearButton = props.disableClearButton !== true && value !== null && dataObject?.allowInheritance === true && props.disabled !== true
 
   return (
     <Flex
