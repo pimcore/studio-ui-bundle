@@ -18,11 +18,11 @@ import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { Text } from '@Pimcore/components/text/text'
 import { isString, isUndefined } from 'lodash'
 import type { DataNote } from '@Pimcore/modules/notes-and-events/hooks/use-global-notes-and-events'
-import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
 import { Box } from '@Pimcore/components/box/box'
 import {
   NoteAndEventDetails
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/note-and-events-details'
+import { formatDateTime } from '@Pimcore/utils/date-time'
 
 export interface NoteModalProps {
   noteDetail: DataNote
@@ -70,15 +70,7 @@ export const NoteModal = ({ noteDetail, setNoteDetail }: NoteModalProps): React.
           </Box>
         )}
         {isString(noteDetail.userName) && displayTextArea(noteDetail.userName, t('notes-and-events.columns.user'))}
-        <Box
-          margin={ 'small' }
-        >
-          <div>{t('notes-and-events.columns.date')}</div>
-          <DatePicker
-            disabled
-            value={ noteDetail.date }
-          />
-        </Box>
+        {displayTextArea(formatDateTime({ timestamp: noteDetail.date, dateStyle: 'short', timeStyle: 'short' }), t('notes-and-events.columns.date'))}
       </>
     </Modal>
   )
