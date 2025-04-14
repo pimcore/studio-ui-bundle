@@ -131,7 +131,10 @@ export const VersionsView = ({
   if (isEmptyVersionsList) {
     return (
       <Content padded>
-        <Header title={ t('version.versions') } />
+        <Header
+          className={ 'p-l-mini' }
+          title={ t('version.versions') }
+        />
         <Content
           none
           noneOptions={ {

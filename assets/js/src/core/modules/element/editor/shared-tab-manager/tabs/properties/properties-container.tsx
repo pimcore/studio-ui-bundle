@@ -68,7 +68,10 @@ export const PropertiesContainer = (): React.JSX.Element => {
 
   return (
     <Content padded>
-      <Header title={ t('properties.label') }>
+      <Header
+        className={ 'p-l-mini' }
+        title={ t('properties.label') }
+      >
         <Space size='small'>
           <Segmented
             onChange={ setPropertiesTableTab }

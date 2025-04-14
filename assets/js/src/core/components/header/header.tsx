@@ -33,7 +33,7 @@ export const Header = (props: HeaderProps): React.JSX.Element => {
 
   return (
     <div className={ classNames }>
-      <span className={ 'header__text p-l-mini' }>
+      <span className={ 'header__text' }>
         <Title
           icon={ icon }
         >

@@ -59,6 +59,7 @@ export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
   return (
     <Content padded>
       <Header
+        className={ 'p-l-mini' }
         title={ t('asset.asset-editor-tabs.embedded-metadata.headline') }
       />
 

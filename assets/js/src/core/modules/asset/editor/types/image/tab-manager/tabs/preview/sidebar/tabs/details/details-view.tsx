@@ -177,6 +177,7 @@ export const AssetEditorSidebarDetailsView = ({
     <Content
       className={ styles.sidebarContentEntry }
       padded
+      padding={ { top: 'none', x: 'small', bottom: 'mini' } }
     >
       <Header title={ t('asset.sidebar.details') } />
 
@@ -186,13 +187,13 @@ export const AssetEditorSidebarDetailsView = ({
             <p>{t('width')}</p>
             <p>{t('height')}</p>
           </div>
-          <div className={ 'entry-content__dimensions-content' }>
+          <div className={ 'm-t-mini entry-content__dimensions-content' }>
             <p>{width} px</p>
             <p>{height} px</p>
           </div>
         </div>
 
-        <div className={ styles.sidebarContentDownload }>
+        <div className={ ['m-t-small', styles.sidebarContentDownload].join(' ') }>
           <p className={ 'sidebar__content-label' }>{t('download')}</p>
 
           <div className={ 'entry-content__download-content' }>
@@ -215,6 +216,7 @@ export const AssetEditorSidebarDetailsView = ({
               <CollapseItem
                 { ...CUSTOM_DOWNLOAD_OPTIONS }
                 defaultActive
+                size={ 'small' }
                 theme='simple'
               />
             </div>

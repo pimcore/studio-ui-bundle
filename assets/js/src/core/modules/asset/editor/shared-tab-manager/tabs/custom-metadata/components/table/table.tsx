@@ -82,7 +82,7 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
       meta: {
         type: 'asset-custom-metadata-icon'
       },
-      size: 40
+      size: 44
     }),
     columnHelper.accessor('name', {
       header: t('asset.asset-editor-tabs.custom-metadata.columns.name'),

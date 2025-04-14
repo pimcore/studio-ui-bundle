@@ -103,7 +103,7 @@ export const Table = ({
       meta: {
         type: 'property-icon'
       },
-      size: 40
+      size: 44
     }),
     columnHelper.accessor('key', {
       header: t('properties.columns.key'),
@@ -131,7 +131,7 @@ export const Table = ({
     }),
     columnHelper.accessor('inheritable', {
       header: t('properties.columns.inheritable'),
-      size: 70,
+      size: 74,
       meta: {
         type: 'checkbox',
         editable: tableType === 'own',
