@@ -17,7 +17,7 @@ import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
 import { t } from 'i18next'
-import { Modal } from '@Pimcore/components/modal/modal'
+import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
@@ -157,7 +157,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   }
 
   return (
-    <Modal
+    <WindowModal
       afterClose={ () => {
         resetModal()
       } }
@@ -220,6 +220,6 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
           <BatchEditListContainer />
         </Form>
       </FieldWidthProvider>
-    </Modal>
+    </WindowModal>
   )
 }

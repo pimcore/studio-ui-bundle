@@ -52,7 +52,7 @@ export const Table = ({
   const { styles } = useStyles()
   const { id, elementType } = useElementContext()
   const { element, properties, setProperties, updateProperty, removeProperty, setModifiedCells } = useElementDraft(id, elementType)
-  const arePropertiesAvailable = properties !== undefined && properties.length > 0
+  const arePropertiesAvailable = properties !== undefined
   const isEditable = checkElementPermission(element?.permissions, 'publish') || checkElementPermission(element?.permissions, 'save')
 
   const { data, isLoading } = usePropertyGetCollectionForElementByTypeAndIdQuery({
