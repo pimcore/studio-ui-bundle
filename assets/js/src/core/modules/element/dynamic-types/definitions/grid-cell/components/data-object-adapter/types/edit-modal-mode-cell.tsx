@@ -23,6 +23,7 @@ import { FieldCollectionProvider } from '../../../../objects/data-related/compon
 import { InheritanceLayer } from '../inheritance-layer'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
+import { META_SUPPORTS_BATCH_APPEND_MODE } from '@Pimcore/modules/data-object/listing/batch-actions/batch-append-mode/batch-append-mode'
 
 export interface EditModalModeCellProps {
   objectCellDefinition: WithEditModalGridCellDefinition
@@ -35,7 +36,10 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
   const [form] = Form.useForm()
 
   const onFormFinish = (values): void => {
-    fireOnUpdateCellDataEvent(values.value)
+    fireOnUpdateCellDataEvent(values.value, {
+      [META_SUPPORTS_BATCH_APPEND_MODE]: props.objectCellDefinition.supportsBatchAppendModes
+    })
+
     disableEditMode()
   }
 

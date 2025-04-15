@@ -57,7 +57,8 @@ export const WithInlineEdit = (useBaseHook: IInlineEditDecoratorProps['useGridOp
           id: rowData.id,
           column,
           value
-        }
+        },
+        meta: event.meta
       }
 
       updateCache(update)

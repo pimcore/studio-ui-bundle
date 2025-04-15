@@ -49,6 +49,7 @@ export interface WithEditModalGridCellDefinition {
   formItemProps: FormItemProps
   editModalSettings?: EditModalSettings
   handleDefaultValue?: (props: AbstractObjectDataDefinition, form: FormInstance, fieldName: NamePath) => void
+  supportsBatchAppendModes: boolean
 }
 
 export interface ColumnMetaGridCellDefinition {
@@ -78,6 +79,8 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
   abstract readonly id: string
   isCollectionType: boolean = false
   inheritedMaskOverlay: InheritanceOverlayType = false
+  supportsBatchAppendModes: boolean = false
+
   gridCellEditMode: EditMode = 'default'
   gridCellEditModalSettings: EditModalSettings = {
     modalSize: 'M',
@@ -124,7 +127,8 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
         editComponent: this.getGridCellEditComponent(cellProps),
         formItemProps: this.getObjectDataFormItemProps(cellProps.objectProps),
         editModalSettings: this.gridCellEditModalSettings,
-        handleDefaultValue: this.handleDefaultValue
+        handleDefaultValue: this.handleDefaultValue,
+        supportsBatchAppendModes: this.supportsBatchAppendModes
       }
     }
 

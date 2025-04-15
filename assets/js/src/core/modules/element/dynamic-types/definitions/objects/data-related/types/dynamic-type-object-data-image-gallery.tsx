@@ -29,6 +29,7 @@ export type ImageObjectDataDefinition = AbstractObjectDataDefinition & ImageGall
 export class DynamicTypeObjectDataImageGallery extends DynamicTypeObjectDataAbstract {
   id: string = 'imageGallery'
   inheritedMaskOverlay: InheritanceOverlayType = 'form-item-container'
+  supportsBatchAppendModes: boolean = true
   gridCellEditMode: EditMode = 'edit-modal'
   gridCellEditModalSettings: EditModalSettings = {
     modalSize: 'XL',
