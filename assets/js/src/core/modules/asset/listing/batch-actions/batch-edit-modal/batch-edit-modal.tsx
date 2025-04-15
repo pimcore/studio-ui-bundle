@@ -166,50 +166,49 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
       afterClose={ () => {
         resetBatchEdits()
       } }
-      footer={ <ModalFooter
-        divider
-        justify={ 'space-between' }
-               >
-        <Dropdown menu={ {
-          items: getAvailableColumnsDropdown(onColumnClick).menu.items
-        } }
+      footer={ (
+        <ModalFooter
+          divider
+          justify={ 'space-between' }
         >
-          <IconTextButton
-            icon={ { value: 'new' } }
-            type='default'
-          >
-            {t('listing.add-column')}
-          </IconTextButton>
-        </Dropdown>
-        {batchEdits.length > 0 &&
-            (
-            <Flex
-              align={ 'center' }
-              gap={ 'extra-small' }
+          <Dropdown menu={ { items: getAvailableColumnsDropdown(onColumnClick).menu.items } }>
+            <IconTextButton
+              icon={ { value: 'new' } }
+              type='default'
             >
-              <IconTextButton
-                icon={ { value: 'close' } }
-                onClick={ () => {
-                  resetBatchEdits()
-                } }
-                type='link'
+              {t('listing.add-column')}
+            </IconTextButton>
+          </Dropdown>
+          {batchEdits.length > 0 &&
+            (
+              <Flex
+                align={ 'center' }
+                gap={ 'extra-small' }
               >
-                {t('batch-edit.modal-footer.discard-all-changes')}</IconTextButton>
-              <Button
-                onClick={ () => {
-                  form.submit()
-                } }
-                type='primary'
-              >{t('batch-edit.modal-footer.apply-changes')}</Button>
-            </Flex>
+                <IconTextButton
+                  icon={ { value: 'close' } }
+                  onClick={ () => {
+                    resetBatchEdits()
+                  } }
+                  type='link'
+                >
+                  {t('batch-edit.modal-footer.discard-all-changes')}</IconTextButton>
+                <Button
+                  onClick={ () => {
+                    form.submit()
+                  } }
+                  type='primary'
+                >{t('batch-edit.modal-footer.apply-changes')}</Button>
+              </Flex>
             )}
-      </ModalFooter> }
+        </ModalFooter>
+      ) }
       onCancel={ () => {
         setBatchEditModalOpen(false)
         resetModal()
       } }
       open={ batchEditModalOpen }
-      size={ 'M' }
+      size="M"
       title={ <ModalTitle>{t('batch-edit.modal-title')}</ModalTitle> }
     >
       <Form
