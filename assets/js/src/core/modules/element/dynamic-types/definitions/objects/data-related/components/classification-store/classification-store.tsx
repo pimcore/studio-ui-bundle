@@ -84,11 +84,7 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
       filteredValue[key] = { action: DELETED }
     }) */
 
-    console.log({ filteredValue, changedValue })
-
     const newValue = isEmpty(filteredValue) ? [] : filteredValue
-
-    console.log({ newValue, valueRef: valueRef.current, equal: isEqual(newValue, valueRef.current) })
 
     if (!isEqual(newValue, valueRef.current)) {
       props.onChange(newValue)
@@ -104,8 +100,6 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
   useEffect(() => {
     valueRef.current = props.value
   }, [props.value])
-
-  console.log({ mergedValue })
 
   return (
     <Form.KeyedList
