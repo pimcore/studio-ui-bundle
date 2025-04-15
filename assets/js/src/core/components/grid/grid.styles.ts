@@ -35,6 +35,10 @@ export const useStyles = createStyles(({ token, css }) => {
         padding: ${token.Table.cellPaddingBlockSM}px ${token.Table.cellPaddingInlineSM}px;
       }
 
+      &.ant-table-wrapper .ant-table.ant-table-small .ant-table-thead>tr>th {
+        padding: ${token.paddingXXS}px ${token.paddingXS}px;
+      }
+
       &.ant-table-wrapper .ant-table.ant-table-small .ant-table-tbody>tr>td {
         padding: 0;
       }

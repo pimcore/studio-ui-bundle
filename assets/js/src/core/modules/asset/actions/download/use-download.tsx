@@ -23,6 +23,7 @@ import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
+import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 
 export interface UseDownloadReturn {
   download: (id: string, label?: string) => void
@@ -50,7 +51,7 @@ export const useDownload = (): UseDownloadReturn => {
   const downloadContextMenuItem = (node: Asset, onFinish?: () => void): ItemType => {
     return {
       label: t('asset.tree.context-menu.download'),
-      key: 'download',
+      key: ContextMenuActionName.download,
       icon: <Icon value={ 'download' } />,
       hidden: node.type === 'folder' || !checkElementPermission(node.permissions, 'view'),
       onClick: () => { handleDownload(node, onFinish) }
@@ -60,7 +61,7 @@ export const useDownload = (): UseDownloadReturn => {
   const downloadTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('asset.tree.context-menu.download'),
-      key: 'download',
+      key: ContextMenuActionName.download,
       icon: <Icon value={ 'download' } />,
       hidden: !isTreeActionAllowed(TreePermission.Download) || node.type === 'folder' || !checkElementPermission(node.permissions, 'view'),
       onClick: () => { handleDownload(node) }
@@ -75,7 +76,7 @@ export const useDownload = (): UseDownloadReturn => {
 
     return {
       label: t('asset.tree.context-menu.download'),
-      key: 'download',
+      key: ContextMenuActionName.download,
       icon: <Icon value={ 'download' } />,
       onClick: () => { handleDownload(data) }
     }

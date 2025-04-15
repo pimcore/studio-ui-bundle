@@ -24,6 +24,7 @@ import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-cust
 import { Box } from '@Pimcore/components/box/box'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { uuid } from '@Pimcore/utils/uuid'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 interface CustomMetadataWithActions extends CustomMetadata {
   actions: React.ReactNode
@@ -41,6 +42,7 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
   const { data, isLoading } = useAssetCustomMetadataGetByIdQuery({ id })
   const modifiedCellsType = 'customMetadata'
   const modifiedCells = asset?.modifiedCells[modifiedCellsType] ?? []
+  const isEditable = checkElementPermission(asset?.permissions, 'publish')
 
   const enrichCustomMetadata = (data: CustomMetadataApi[]): CustomMetadata[] => {
     return data.map((item) => {
@@ -82,12 +84,12 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
       meta: {
         type: 'asset-custom-metadata-icon'
       },
-      size: 40
+      size: 44
     }),
     columnHelper.accessor('name', {
       header: t('asset.asset-editor-tabs.custom-metadata.columns.name'),
       meta: {
-        editable: true
+        editable: isEditable
       },
       size: 200
     }),
@@ -95,7 +97,7 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
       header: t('asset.asset-editor-tabs.custom-metadata.columns.language'),
       meta: {
         type: 'language-select',
-        editable: true
+        editable: isEditable
       },
       size: 100
     }),
@@ -103,35 +105,39 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
       header: t('asset.asset-editor-tabs.custom-metadata.columns.value'),
       meta: {
         type: 'asset-custom-metadata-value',
-        editable: true,
+        editable: isEditable,
         autoWidth: true
       },
       size: 400
-    }),
-    columnHelper.accessor('actions', {
-      header: t('asset.asset-editor-tabs.custom-metadata.columns.actions'),
-      cell: (info) => {
-        return (
-          <Box padding={ 'mini' }>
-            <Flex
-              align='center'
-              className='w-full h-full'
-              justify='center'
-            >
-              <IconButton
-                icon={ { value: 'trash' } }
-                onClick={ () => {
-                  removeCustomMetadata(info.row.original)
-                } }
-                type="link"
-              />
-            </Flex>
-          </Box>
-        )
-      },
-      size: 60
     })
   ]
+
+  if (isEditable) {
+    columns.push(
+      columnHelper.accessor('actions', {
+        header: t('asset.asset-editor-tabs.custom-metadata.columns.actions'),
+        cell: (info) => {
+          return (
+            <Box padding={ 'mini' }>
+              <Flex
+                align='center'
+                className='w-full h-full'
+                justify='center'
+              >
+                <IconButton
+                  icon={ { value: 'trash' } }
+                  onClick={ () => {
+                    removeCustomMetadata(info.row.original)
+                  } }
+                  type="link"
+                />
+              </Flex>
+            </Box>
+          )
+        },
+        size: 60
+      }))
+  }
 
   const onUpdateCellData = ({ rowIndex, columnId, value, rowData }): void => {
     const updatedCustomMetadataEntries = [...(customMetadata ?? [])]

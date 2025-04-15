@@ -13,13 +13,15 @@
 
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
+import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
 import { useLocateInTree } from '@Pimcore/modules/element/actions/locate-in-tree/use-locate-in-tree'
 import { useOpen } from '@Pimcore/modules/element/actions/open/open'
 import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
 import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
 import { type ListGridContextMenuProps } from '@Pimcore/types/components/types'
-import React from 'react'
+import { type MenuProps } from 'antd'
+import React, { useState } from 'react'
 
 export const ListGridContextMenu = (props: ListGridContextMenuProps): React.JSX.Element => {
   const { row } = props
@@ -28,19 +30,30 @@ export const ListGridContextMenu = (props: ListGridContextMenuProps): React.JSX.
   const { deleteGridContextMenuItem } = useDelete('asset', getElementActionCacheKey('asset', 'delete', Number(row.id)))
   const { downloadGridContextMenuItem } = useDownload()
   const { locateInTreeGridContextMenuItem } = useLocateInTree('asset')
+  const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined)
 
   const items = [
     openGridContextMenuItem(row),
     renameGridContextMenuItem(row),
-    locateInTreeGridContextMenuItem(row),
+    locateInTreeGridContextMenuItem(row, () => { setIsOpen(undefined) }),
     deleteGridContextMenuItem(row),
     downloadGridContextMenuItem(row)
   ].filter(Boolean) as DropdownMenuProps['items']
 
+  const handleMenuClick: MenuProps['onClick'] = (e) => {
+    if (e.key === ContextMenuActionName.locateInTree) {
+      setIsOpen(true)
+    }
+  }
+
   return (
     <Dropdown
       key={ row.id }
-      menu={ { items } }
+      menu={ {
+        items,
+        onClick: handleMenuClick
+      } }
+      open={ isOpen }
       trigger={ ['contextMenu'] }
     >
       {props.children}

@@ -17,14 +17,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useStlyes } from './main-nav.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useMainNav } from './hooks/use-main-nav'
-import { Button } from '@Pimcore/components/button/button'
-import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useTranslation } from 'react-i18next'
 import { type IMainNavItem } from './services/main-nav-registry'
 import { isAllowedInPerspective } from '@Pimcore/modules/perspectives/permission-checker'
 import { isUndefined } from 'lodash'
+import { PerspectiveSwitch } from './perspective-switch'
 
 export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -156,26 +155,11 @@ export const MainNav = (): React.JSX.Element => {
           initial={ { opacity: isOpen ? 0 : 1 } }
           key={ isOpen ? 'open' : 'closed' }
         >
-
           {isOpen
             ? (
               <div
                 className={ ['main-nav', styles.mainNav].join(' ') }
               >
-                <div className={ 'main-nav__top' }>
-                  <ul className={ 'main-nav__list-inline' }>
-                    <li>
-                      <IconTextButton
-                        icon={ { value: 'pin' } }
-                        type={ 'link' }
-                      >{t('navigation.document-types')}</IconTextButton></li>
-                    <li><Button type={ 'link' }>{t('navigation.clear-cache')}</Button></li>
-                    <li><Button type={ 'link' }>{t('navigation.custom-reports')}</Button></li>
-                  </ul>
-                  <Button type={ 'default' }>{t('navigation.customise')}</Button>
-                </div>
-
-                <Divider className={ 'main-nav__divider' } />
 
                 <ul
                   className={ 'main-nav__list main-nav__list--level-0' }
@@ -188,38 +172,7 @@ export const MainNav = (): React.JSX.Element => {
 
                 <Divider className={ 'main-nav__divider' } />
 
-                <div className={ 'main-nav__bottom' }>
-                  <div className={ 'main-nav__bottom-title' }>{t('navigation.perspectives')}</div>
-                  <ul className={ 'main-nav__list-inline' }>
-                    <li><IconTextButton
-                      icon={ { value: 'pimcore' } }
-                        >Default</IconTextButton></li>
-                    <li><IconTextButton
-                      icon={ { value: 'cdp' } }
-                      type={ 'default' }
-                        >CDP</IconTextButton></li>
-                    <li><IconTextButton
-                      icon={ { value: 'document' } }
-                      type={ 'default' }
-                        >CMS</IconTextButton></li>
-                    <li><IconTextButton
-                      icon={ { value: 'asset' } }
-                      type={ 'default' }
-                        >Commerce</IconTextButton></li>
-                    <li><IconTextButton
-                      icon={ { value: 'asset' } }
-                      type={ 'default' }
-                        >DAM</IconTextButton></li>
-                    <li><IconTextButton
-                      icon={ { value: 'data-object' } }
-                      type={ 'default' }
-                        >PIM</IconTextButton></li>
-                    <li><IconTextButton
-                      icon={ { value: 'catalog' } }
-                      type={ 'default' }
-                        >Catalogue</IconTextButton></li>
-                  </ul>
-                </div>
+                <PerspectiveSwitch setIsOpen={ setIsOpen } />
               </div>
               )
             : null}

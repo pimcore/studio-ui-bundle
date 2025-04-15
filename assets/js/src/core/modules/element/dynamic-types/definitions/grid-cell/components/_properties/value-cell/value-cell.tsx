@@ -16,6 +16,8 @@ import React from 'react'
 import { Alert } from 'antd'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeGridCellRegistry } from '../../../dynamic-type-grid-cell-registry'
+import { addColumnConfig } from '@Pimcore/components/grid/columns/helpers'
+import { isString } from 'lodash'
 
 const typeMapping = {
   text: 'input',
@@ -39,8 +41,18 @@ export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
     }
 
     const dynamicType = gridCellRegistry.getDynamicType(type)
-
-    return dynamicType.getGridCellComponent(props)
+    let enrichedProps = props
+    if (type === 'select') {
+      enrichedProps = addColumnConfig(props, {
+        options: isString(props.row.original.config)
+          ? props.row.original.config.split(',').map((value: string) => {
+            return { value, label: value }
+          }
+          )
+          : undefined
+      })
+    }
+    return dynamicType.getGridCellComponent(enrichedProps)
   }
 
   return (

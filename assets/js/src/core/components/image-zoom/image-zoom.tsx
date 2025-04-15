@@ -11,13 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Space } from 'antd'
+import type { BaseSelectRef } from 'rc-select/lib/BaseSelect'
+import { isNull } from 'lodash'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useStyle } from '@Pimcore/components/image-zoom/image-zoom.styles'
-import { onKeyEnterExecuteClick } from '@Pimcore/utils/helpers'
 import { Select } from '@Pimcore/components/select/select'
+import { onKeyEnterExecuteClick } from '@Pimcore/utils/helpers'
+import { useStyle } from '@Pimcore/components/image-zoom/image-zoom.styles'
 
 interface IImageZoom {
   zoom: number
@@ -26,8 +28,11 @@ interface IImageZoom {
 }
 
 export const ImageZoom = ({ zoom, setZoom, zoomSteps = 25 }: IImageZoom): React.JSX.Element => {
-  const [zoomInDisabled, setZoomInDisabled] = React.useState<boolean>(false)
-  const [zoomOutDisabled, setZoomOutDisabled] = React.useState<boolean>(false)
+  const [zoomInDisabled, setZoomInDisabled] = useState(false)
+  const [zoomOutDisabled, setZoomOutDisabled] = useState(false)
+
+  const selectRef = useRef<BaseSelectRef>(null)
+
   const { styles } = useStyle({ zoom })
   const { t } = useTranslation()
 
@@ -48,6 +53,14 @@ export const ImageZoom = ({ zoom, setZoom, zoomSteps = 25 }: IImageZoom): React.
       setZoomOutDisabled(false)
     }
   }, [zoom])
+
+  const handleChange = (value: string): void => {
+    setZoom(parseInt(value))
+
+    if (!isNull(selectRef.current)) {
+      selectRef.current.blur()
+    }
+  }
 
   return (
     <div className={ styles.imageZoomContainer }>
@@ -77,7 +90,7 @@ export const ImageZoom = ({ zoom, setZoom, zoomSteps = 25 }: IImageZoom): React.
           aria-label={ t('aria.asset.image.editor.zoom.preconfigured-zoom-levels') }
           defaultActiveFirstOption
           defaultValue={ '100' }
-          onChange={ (value: string) => { setZoom(parseInt(value)) } }
+          onChange={ (value: string) => { handleChange(value) } }
           options={ [
             { value: '100', label: '100%' },
             { value: '125', label: '125%' },
@@ -87,6 +100,7 @@ export const ImageZoom = ({ zoom, setZoom, zoomSteps = 25 }: IImageZoom): React.
             { value: '225', label: '225%' },
             { value: '250', label: '250%' }
           ] }
+          ref={ selectRef }
           value={ `${zoom}%` }
         />
         <Button

@@ -58,11 +58,7 @@ const PreviewContainer = (): React.JSX.Element => {
           />
           }
         >
-          <Content>
-            <PreviewView
-              src={ previewImgUrl }
-            />
-          </Content>
+          <PreviewView src={ previewImgUrl } />
         </ContentLayout>
       </ZoomContext.Provider>
     </FocalPointProvider>

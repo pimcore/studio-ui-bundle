@@ -28,6 +28,7 @@ import { useRefreshTree } from '../refresh-tree/use-refresh-tree'
 import { useTreeId } from '../../tree/provider/tree-id-provider/use-tree-id'
 import { setNodeFetching } from '@Pimcore/components/element-tree/element-tree-slice'
 import { useAppDispatch } from '@Pimcore/app/store'
+import { ContextMenuActionName } from '..'
 
 export interface UseAddFolderHookReturn {
   addFolder: (parentId: number) => void
@@ -62,7 +63,7 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
   const addFolderTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.new-folder'),
-      key: 'add-folder',
+      key: ContextMenuActionName.addFolder,
       icon: <Icon value={ 'add-folder' } />,
       hidden: !isTreeActionAllowed(TreePermission.AddFolder) || node.type !== 'folder' || !checkElementPermission(node.permissions, 'create'),
       onClick: () => {

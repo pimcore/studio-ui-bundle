@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import React from 'react'
 import { type Form, type FormItemProps } from 'antd'
-import React, { useMemo } from 'react'
 import { NumberedFormItemControl } from './numbered-form-item-control'
 
 export interface NumberedFormItemProps {
@@ -22,13 +22,14 @@ export interface NumberedFormItemProps {
 
 export const NumberedFormItem = ({ Component, componentProps }: NumberedFormItemProps): React.JSX.Element => {
   const { children, ...baseProps } = componentProps
+
   const currentChildren = children as unknown as React.ReactNode
 
-  return useMemo(() => (
+  return (
     <Component { ...baseProps } >
       <NumberedFormItemControl>
         { currentChildren }
       </NumberedFormItemControl>
     </Component>
-  ), [])
+  )
 }

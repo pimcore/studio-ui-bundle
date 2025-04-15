@@ -22,6 +22,7 @@ import { type Element } from '@Pimcore/modules/element/element-helper'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
+import { ContextMenuActionName } from '..'
 
 export interface UseLockHookReturn {
   lock: (id: number) => Promise<void>
@@ -73,7 +74,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
   const lockTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.lock'),
-      key: 'lock',
+      key: ContextMenuActionName.lock,
       icon: <Icon value={ 'lock' } />,
       hidden: isLockHidden(node),
       onClick: async () => {
@@ -85,7 +86,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
   const lockContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
     return {
       label: t('element.lock'),
-      key: 'lock',
+      key: ContextMenuActionName.lock,
       icon: <Icon value={ 'lock' } />,
       hidden: isLockHidden(node),
       onClick: async () => {
@@ -98,7 +99,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
   const lockAndPropagateTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.lock-and-propagate-to-children'),
-      key: 'lock-and-propagate-to-children',
+      key: ContextMenuActionName.lockAndPropagate,
       icon: <Icon value={ 'file-locked' } />,
       hidden: isLockPropagateHidden(node),
       onClick: async () => {
@@ -110,7 +111,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
   const lockAndPropagateContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
     return {
       label: t('element.lock-and-propagate-to-children'),
-      key: 'lock-and-propagate-to-children',
+      key: ContextMenuActionName.lockAndPropagate,
       icon: <Icon value={ 'file-locked' } />,
       hidden: isLockPropagateHidden(node),
       onClick: async () => {
@@ -123,7 +124,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
   const unlockTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.unlock'),
-      key: 'unlock',
+      key: ContextMenuActionName.unlock,
       icon: <Icon value={ 'unlocked' } />,
       hidden: isUnlockHidden(node),
       onClick: async () => {
@@ -135,7 +136,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
   const unlockContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
     return {
       label: t('element.unlock'),
-      key: 'unlock',
+      key: ContextMenuActionName.unlock,
       icon: <Icon value={ 'unlocked' } />,
       hidden: isUnlockHidden(node),
       onClick: async () => {
@@ -148,7 +149,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
   const unlockAndPropagateTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.unlock-and-propagate-to-children'),
-      key: 'unlock-and-propagate-to-children',
+      key: ContextMenuActionName.unlockAndPropagate,
       icon: <Icon value={ 'unlocked' } />,
       hidden: isUnlockPropagateHidden(node),
       onClick: async () => {
@@ -160,7 +161,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
   const unlockAndPropagateContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
     return {
       label: t('element.unlock-and-propagate-to-children'),
-      key: 'unlock-and-propagate-to-children',
+      key: ContextMenuActionName.unlockAndPropagate,
       icon: <Icon value={ 'unlocked' } />,
       hidden: isUnlockPropagateHidden(node),
       onClick: async () => {

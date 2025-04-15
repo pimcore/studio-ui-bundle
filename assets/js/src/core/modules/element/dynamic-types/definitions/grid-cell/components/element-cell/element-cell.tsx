@@ -17,9 +17,9 @@ import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
 import { ElementCellContent } from './element-cell-content'
 import { useStyle } from './element-cell.styles'
-import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { isEmpty } from 'lodash'
+import { convertDragAndDropInfoToElementReference } from '@Pimcore/modules/element/element-helper'
 
 export interface ElementInfo {
   elementType?: ElementType
@@ -49,12 +49,11 @@ export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
   }
 
   function onDrop (info: DragAndDropInfo): void {
-    const element = info.data as Asset // @todo add other element types as soon as APIs are available
     if (props.column.columnDef.meta?.editable !== undefined && props.table.options.meta?.onUpdateCellData !== undefined) {
       props.table.options.meta?.onUpdateCellData({
         rowIndex: props.row.index,
         columnId: props.column.id,
-        value: element,
+        value: convertDragAndDropInfoToElementReference(info),
         rowData: props.row.original
       })
     }
