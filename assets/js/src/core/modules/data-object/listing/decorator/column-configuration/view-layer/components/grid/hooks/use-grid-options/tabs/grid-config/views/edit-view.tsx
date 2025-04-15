@@ -68,7 +68,6 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
   } = props
 
   const settings = useSettings()
-  console.log({ settings })
 
   const { t } = useTranslation()
 

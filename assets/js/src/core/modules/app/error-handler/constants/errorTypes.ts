@@ -25,5 +25,6 @@ export enum ErrorKeyTypes {
   INVALID_ARGUMENT = 'error_invalid_argument',
   WIDGET_NAME_MISSING = 'error_widget_name_missing',
   WIDGET_NAME_INVALID = 'error_widget_name_invalid',
-  VALIDATION_FAILED = 'error_validation_failed'
+  VALIDATION_FAILED = 'error_validation_failed',
+  ELEMENT_VALIDATION_FAILED = 'error_element_validation_failed',
 }

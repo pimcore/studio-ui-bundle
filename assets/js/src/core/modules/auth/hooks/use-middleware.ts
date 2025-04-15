@@ -18,6 +18,7 @@ import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authentic
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { routes } from '@Pimcore/app/router/router'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export const useMiddleware = (): void => {
   const navigate = useNavigate()
@@ -39,9 +40,7 @@ export const useMiddleware = (): void => {
       }
     }
 
-    fetchData().catch((error) => {
-      console.error('Error while opening element:', error)
-    })
+    fetchData().catch(() => { trackError(new GeneralError('An Error occured while opening the Element')) })
   }
 
   useEffect(() => {

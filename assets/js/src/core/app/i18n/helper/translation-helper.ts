@@ -15,14 +15,14 @@ import { store } from '@Pimcore/app/store'
 import { api as translationApi } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 
 export const addNewTranslations = async (translations: string[]): Promise<void> => {
-  await store.dispatch(translationApi.endpoints.translationUpdate.initiate({
-    updateTranslation: {
-      locale: 'en',
-      translationData: translations.map((translation) => ({
-        key: translation,
-        translation: '',
-        type: 'simple'
-      }))
+  const translationData = translations.map((translation) => ({
+    key: translation,
+    type: 'simple'
+  }))
+
+  await store.dispatch(translationApi.endpoints.translationCreate.initiate({
+    createTranslation: {
+      translationData
     }
   }))
 }

@@ -11,6 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+/* eslint-disable max-lines */
 import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type DynamicTypeFieldFilterRegistry } from './definitions/field-filters/dynamic-type-field-filter-registry'
@@ -67,6 +68,7 @@ import { type DynamicTypeObjectLayoutFieldset } from './definitions/objects/layo
 import { type DynamicTypeObjectLayoutFieldContainer } from './definitions/objects/layout-related/types/dynamic-type-object-layout-field-container'
 import { type DynamicTypeObjectDataInput } from './definitions/objects/data-related/types/dynamic-type-object-data-input'
 import { type DynamicTypeObjectDataTextarea } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-textarea'
+import { type DynamicTypeObjectDataWysiwyg } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-wysiwyg'
 import { type DynamicTypeObjectDataPassword } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-password'
 import { type DynamicTypeObjectDataInputQuantityValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-input-quantity-value'
 import { type DynamicTypeObjectDataSelect } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-select'
@@ -146,6 +148,10 @@ import { type DynamicTypeAssetImage } from './definitions/asset/types/dynamic-ty
 import { type DynamicTypeAssetText } from './definitions/asset/types/dynamic-type-asset-text'
 import { type DynamicTypeAssetUnknown } from './definitions/asset/types/dynamic-type-asset-unknown'
 import { type DynamicTypeAssetVideo } from './definitions/asset/types/dynamic-type-asset-video'
+import { type DynamicTypeObjectRegistry } from './definitions/objects/dynamic-type-object-registry'
+import { type DynamicTypeObjectFolder } from './definitions/objects/types/dynamic-type-object-folder'
+import { type DynamicTypeObjectObject } from './definitions/objects/types/dynamic-type-object-object'
+import { type DynamicTypeObjectVariant } from './definitions/objects/types/dynamic-type-object-variant'
 
 moduleSystem.registerModule({
   onInit () {
@@ -227,6 +233,7 @@ moduleSystem.registerModule({
 
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataInput>(serviceIds['DynamicTypes/ObjectData/Input']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataTextarea>(serviceIds['DynamicTypes/ObjectData/Textarea']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataWysiwyg>(serviceIds['DynamicTypes/ObjectData/Wysiwyg']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataPassword>(serviceIds['DynamicTypes/ObjectData/Password']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataInputQuantityValue>(serviceIds['DynamicTypes/ObjectData/InputQuantityValue']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataSelect>(serviceIds['DynamicTypes/ObjectData/Select']))
@@ -289,5 +296,11 @@ moduleSystem.registerModule({
     assetRegistry.registerDynamicType(container.get<DynamicTypeAssetText>(serviceIds['DynamicTypes/Asset/Text']))
     assetRegistry.registerDynamicType(container.get<DynamicTypeAssetUnknown>(serviceIds['DynamicTypes/Asset/Unknown']))
     assetRegistry.registerDynamicType(container.get<DynamicTypeAssetVideo>(serviceIds['DynamicTypes/Asset/Video']))
+
+    const objectRegistry = container.get<DynamicTypeObjectRegistry>(serviceIds['DynamicTypes/ObjectRegistry'])
+
+    objectRegistry.registerDynamicType(container.get<DynamicTypeObjectFolder>(serviceIds['DynamicTypes/Object/Folder']))
+    objectRegistry.registerDynamicType(container.get<DynamicTypeObjectObject>(serviceIds['DynamicTypes/Object/Object']))
+    objectRegistry.registerDynamicType(container.get<DynamicTypeObjectVariant>(serviceIds['DynamicTypes/Object/Variant']))
   }
 })

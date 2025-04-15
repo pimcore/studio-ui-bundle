@@ -35,6 +35,9 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
         for (const column of item.columns!) {
           if (column.key === columnToUpdate.key && column.locale === columnToUpdate.locale) {
             column.value = value
+            if (column.inheritance === true) {
+              column.inheritance = 'broken'
+            }
             // for now we assume that there can be only one value updated at the time
             break item_loop
           }
@@ -47,6 +50,16 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
 
   const updateApiData: UseInlineEditApiUpdateReturn['updateApiData'] = async (event) => {
     const { update } = event
+    let columnKey = update.column.key
+
+    if (update.column.localizable && update.column.locale !== undefined && update.column.locale !== null) {
+      const splittedColumnKey = columnKey.split('.')
+      const columnId = splittedColumnKey[splittedColumnKey.length - 1]
+      splittedColumnKey.pop()
+      const hasPrepath = splittedColumnKey.length > 0 && splittedColumnKey[0] !== ''
+
+      columnKey = `${splittedColumnKey.join('.')}${hasPrepath ? '.' : ''}localizedfields.${columnId}.${update.column.locale}`
+    }
 
     const promise = patchDataObject({
       body: {
@@ -54,7 +67,7 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
           {
             id: update.id,
             editableData: {
-              ...set({}, update.column.key, update.value)
+              ...set({}, columnKey, update.value)
             }
           }
         ]

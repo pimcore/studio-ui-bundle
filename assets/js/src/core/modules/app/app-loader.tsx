@@ -11,26 +11,22 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState, useRef } from 'react'
-import { api } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import React, { useEffect, useState } from 'react'
+import { api } from '@Pimcore/modules/auth/user/user-api-slice-enhanced'
 import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
-import { api as perspectivesApi } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch, store } from '@Pimcore/app/store'
 import { useTranslationGetCollectionMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { useTranslation } from 'react-i18next'
-import { setUser } from '@Pimcore/modules/auth/user/user-slice'
+import { setUser, selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
 import { setSettings } from '@Pimcore/modules/app/settings/settings-slice'
 import { Content } from '@Pimcore/components/content/content'
 import { GlobalStyles } from '@Pimcore/styles/global.styles'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useMercureCreateCookieMutation } from './mercure-api-slice.gen'
-import { setActivePerspective } from '../perspectives/active-perspective-slice'
-import { updateOuterModel } from '../widget-manager/widget-manager-slice'
-import { getInitialModelJson } from '../widget-manager/utils/widget-manager-outer-model'
-import { isPlainObject } from 'lodash'
 import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
+import { usePerspectives } from '../perspectives/hooks/use-perspectives'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -41,12 +37,13 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const { i18n } = useTranslation()
 
   const [isLoading, setIsLoading] = useState(true)
-  const initializedPerspective = useRef<string | undefined>(undefined)
 
   const [translations] = useTranslationGetCollectionMutation()
   const [fetchMercureCookie] = useMercureCreateCookieMutation()
 
   const modal = useAlertModal()
+
+  const { loadPerspective } = usePerspectives()
 
   const isAuthenticated = useIsAuthenticated()
 
@@ -91,24 +88,9 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   }
 
   async function initActivePerspective (): Promise<any> {
-    const perspectiveId = 'studio_default_perspective'
-    if (perspectiveId !== initializedPerspective.current) {
-      initializedPerspective.current = perspectiveId
-      const perspectiveFetcher = dispatch(perspectivesApi.endpoints.perspectiveGetConfigById.initiate({ perspectiveId }))
-
-      perspectiveFetcher
-        .then(({ data, isSuccess, isError, error }) => {
-          isError && trackError(new ApiError(error))
-
-          if (isSuccess && isPlainObject(data)) {
-            dispatch(setActivePerspective(data))
-            dispatch(updateOuterModel(getInitialModelJson()))
-          }
-        })
-        .catch(() => {})
-
-      return await perspectiveFetcher
-    }
+    const user = selectCurrentUser(store.getState())
+    const perspectiveId = String(user?.activePerspective ?? 'studio_default_perspective')
+    return await loadPerspective(perspectiveId)
   }
 
   async function loadTranslations (): Promise<any> {
@@ -117,8 +99,8 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
       .then(response => {
         i18n.addResourceBundle('en', 'translation', response.keys ?? [], true, true)
       })
-      .catch((error) => {
-        console.error('rejected', error)
+      .catch(() => {
+        trackError(new GeneralError('Error loading translations'))
       })
   }
 

@@ -32,4 +32,8 @@ export * from '@Pimcore/types/enums/element/element-type'
 export * from '@Pimcore/modules/data-object/editor/types/folder/tab-manager/folder-tab-manager'
 export * from '@Pimcore/modules/data-object/editor/types/object/tab-manager/object-tab-manager'
 
+export * from '@Pimcore/modules/data-object/editor/toolbar/language-selection/language-selection'
+export * from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/language-selection-provider'
+export * from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/use-language-selection'
+
 export * from '@Pimcore/modules/data-object/editor/widget'

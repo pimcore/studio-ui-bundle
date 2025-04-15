@@ -38,7 +38,7 @@ export const AddNoteForm = ({ elementType, ...props }: AddNoteFormProps): React.
     return <Content loading />
   }
 
-  const noteTypeOptions = noteTypesResponse?.items?.map((noteType) => ({ value: noteType.id, label: t('notes-and-events.' + noteType.id) }))
+  const noteTypeOptions = noteTypesResponse?.items?.map((noteType) => ({ value: noteType.id, label: noteType.id }))
 
   return (
     <Form

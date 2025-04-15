@@ -16,7 +16,6 @@ import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-pe
 import { type WidgetConfig, type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
 import { uuid } from '@Pimcore/utils/uuid'
 import { type IJsonTabNode, type IJsonModel } from 'flexlayout-react'
-import { t } from 'i18next'
 import { isNil } from 'lodash'
 
 export const getInitialModelJson = (): IJsonModel => {
@@ -136,7 +135,7 @@ const widgetsToModelJson = (widgets: WidgetConfig[] | undefined, usedIds: Set<st
     result.push({
       id: widgetId,
       type: 'tab',
-      name: t(widget.name),
+      name: widget.name,
       component: widget.widgetType,
       enableClose: false,
       config: { ...widget, id: widgetId }

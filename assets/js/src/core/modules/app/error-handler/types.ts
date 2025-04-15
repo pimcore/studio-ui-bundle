@@ -12,5 +12,5 @@
 */
 
 export interface IErrorGetContent {
-  data: string | { errorKey: string }
+  data: string | { errorKey: string, title?: string }
 }

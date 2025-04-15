@@ -16,7 +16,7 @@ import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
-import { Modal } from '@Pimcore/components/modal/modal'
+import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
@@ -91,7 +91,8 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
       return {
         name: batchEdit.key,
         language: batchEdit.locale,
-        data: values[batchEdit.key]
+        data: values[batchEdit.key],
+        type: batchEdit.type
       }
     })
 
@@ -161,7 +162,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   }
 
   return (
-    <Modal
+    <WindowModal
       afterClose={ () => {
         resetBatchEdits()
       } }
@@ -217,6 +218,6 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
       >
         <BatchEditListContainer />
       </Form>
-    </Modal>
+    </WindowModal>
   )
 }

@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState, useImperativeHandle, forwardRef } from 'react'
+import React, { forwardRef, useImperativeHandle, useState } from 'react'
 import {
   HotspotMarkersModal,
   type HotspotMarkersModalProps

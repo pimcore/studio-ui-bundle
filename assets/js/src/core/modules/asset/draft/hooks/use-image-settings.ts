@@ -18,6 +18,7 @@ import { useAppDispatch } from '@Pimcore/app/store'
 
 import { type TrackableChangesDraft } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
 import type { ImageData } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface ImageSettingsAction {
   id: number
@@ -76,10 +77,7 @@ export const useImageSettingsReducers = (entityAdapter: EntityAdapter<ImageSetti
 
   const modifyDraft = (state: EntityState<ImageSettingsDraft, number>, id: number, modification: (draft: ImageSettingsDraft) => ImageSettingsDraft): void => {
     const draft = entityAdapter.getSelectors().selectById(state, id)
-    if (draft === undefined) {
-      console.error(`Item with id ${id} not found`)
-      return
-    }
+    if (draft === undefined) trackError(new GeneralError(`Item with id ${id} not found`))
 
     state.entities[id] = modification({ ...draft })
   }

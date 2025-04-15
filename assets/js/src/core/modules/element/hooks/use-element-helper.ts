@@ -26,7 +26,7 @@ interface OpenElementWidgetProps {
 interface UseElementReturn {
   openElement: (props: OpenElementWidgetProps) => Promise<void>
   mapToElementType: (elementType: string, silent?: boolean) => ElementType | undefined
-  executeElementTask: (elementType: ElementType, id: number, task: SaveTaskType) => void
+  executeElementTask: (elementType: ElementType, id: number, task: SaveTaskType, onFinish?: () => void) => void
 }
 
 export const useElementHelper = (): UseElementReturn => {
@@ -64,9 +64,9 @@ export const useElementHelper = (): UseElementReturn => {
     return targetType ?? undefined
   }
 
-  const executeElementTask = (elementType: ElementType, id: number, task: SaveTaskType): void => {
+  const executeElementTask = (elementType: ElementType, id: number, task: SaveTaskType, onFinish?: () => void): void => {
     if (elementType === 'data-object') {
-      void executeDataObjectTask(id, task)
+      void executeDataObjectTask(id, task, onFinish)
       return
     }
 

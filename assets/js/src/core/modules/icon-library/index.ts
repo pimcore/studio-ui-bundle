@@ -59,6 +59,7 @@ import contentDuplicate from '@Pimcore/assets/icons/content-duplicate.inline.svg
 import content from '@Pimcore/assets/icons/content.inline.svg'
 import copilot from '@Pimcore/assets/icons/copilot.inline.svg'
 import copy from '@Pimcore/assets/icons/copy.inline.svg'
+import countrySelect from '@Pimcore/assets/icons/country-select.inline.svg'
 import crop from '@Pimcore/assets/icons/crop.inline.svg'
 import customMetadata from '@Pimcore/assets/icons/custom-metadata.inline.svg'
 import customerSegmentGroup from '@Pimcore/assets/icons/customer-segment-group.inline.svg'
@@ -70,6 +71,7 @@ import dashboard from '@Pimcore/assets/icons/dashboard.inline.svg'
 import dataObjectVariant from '@Pimcore/assets/icons/data-object-variant.inline.svg'
 import dataObject from '@Pimcore/assets/icons/data-object.inline.svg'
 import dataQuality from '@Pimcore/assets/icons/data-quality.inline.svg'
+import dateTimeField from '@Pimcore/assets/icons/date-time-field.inline.svg'
 import deleteColumn from '@Pimcore/assets/icons/delete-column.inline.svg'
 import deleteRow from '@Pimcore/assets/icons/delete-row.inline.svg'
 import dependencies from '@Pimcore/assets/icons/dependencies.inline.svg'
@@ -117,6 +119,7 @@ import info from '@Pimcore/assets/icons/info.inline.svg'
 import inheritanceActive from '@Pimcore/assets/icons/inheritance-active.inline.svg'
 import inheritanceBroken from '@Pimcore/assets/icons/inheritance-broken.inline.svg'
 import json from '@Pimcore/assets/icons/json.inline.svg'
+import languageSelect from '@Pimcore/assets/icons/language-select.inline.svg'
 import layout from '@Pimcore/assets/icons/layout.inline.svg'
 import list from '@Pimcore/assets/icons/list.inline.svg'
 import loading from '@Pimcore/assets/icons/loading.inline.svg'
@@ -126,6 +129,7 @@ import locked from '@Pimcore/assets/icons/locked.inline.svg'
 import logOut from '@Pimcore/assets/icons/log-out.inline.svg'
 import longText from '@Pimcore/assets/icons/long-text.inline.svg'
 import mailAnswer from '@Pimcore/assets/icons/mail-answer.inline.svg'
+import manyToMany from '@Pimcore/assets/icons/many-to-many.inline.svg'
 import market from '@Pimcore/assets/icons/market.inline.svg'
 import marketing from '@Pimcore/assets/icons/marketing.inline.svg'
 import menu from '@Pimcore/assets/icons/menu.inline.svg'
@@ -134,6 +138,7 @@ import minus from '@Pimcore/assets/icons/minus.inline.svg'
 import more from '@Pimcore/assets/icons/more.inline.svg'
 import moveDown from '@Pimcore/assets/icons/move-down.inline.svg'
 import moveUp from '@Pimcore/assets/icons/move-up.inline.svg'
+import multiSelect from '@Pimcore/assets/icons/multi-select.inline.svg'
 import newCircle from '@Pimcore/assets/icons/new-circle.inline.svg'
 import newColumn from '@Pimcore/assets/icons/new-column.inline.svg'
 import newHotspot from '@Pimcore/assets/icons/new-hotspot.inline.svg'
@@ -145,6 +150,7 @@ import news from '@Pimcore/assets/icons/news.inline.svg'
 import noContent from '@Pimcore/assets/icons/no-content.inline.svg'
 import notesEvents from '@Pimcore/assets/icons/notes-events.inline.svg'
 import notification from '@Pimcore/assets/icons/notification.inline.svg'
+import numberField from '@Pimcore/assets/icons/number-field.inline.svg'
 import openFolder from '@Pimcore/assets/icons/open-folder.inline.svg'
 import packageIcon from '@Pimcore/assets/icons/package.inline.svg'
 import paste from '@Pimcore/assets/icons/paste.inline.svg'
@@ -197,6 +203,7 @@ import unknown from '@Pimcore/assets/icons/unknown.inline.svg'
 import unlocked from '@Pimcore/assets/icons/unlocked.inline.svg'
 import uploadCloud from '@Pimcore/assets/icons/upload-cloud.inline.svg'
 import uploadZip from '@Pimcore/assets/icons/upload-zip.inline.svg'
+import userSelect from '@Pimcore/assets/icons/user-select.inline.svg'
 import user from '@Pimcore/assets/icons/user.inline.svg'
 import video from '@Pimcore/assets/icons/video.inline.svg'
 import view from '@Pimcore/assets/icons/view.inline.svg'
@@ -204,6 +211,7 @@ import warningCircle from '@Pimcore/assets/icons/warning-circle.inline.svg'
 import webhook from '@Pimcore/assets/icons/webhook.inline.svg'
 import widget from '@Pimcore/assets/icons/widget.inline.svg'
 import workflow from '@Pimcore/assets/icons/workflow.inline.svg'
+import wysiwygField from '@Pimcore/assets/icons/wysiwyg-field.inline.svg'
 import xCircle from '@Pimcore/assets/icons/x-circle.inline.svg'
 import xlsxCsv from '@Pimcore/assets/icons/xlsx-csv.inline.svg'
 
@@ -375,6 +383,10 @@ moduleSystem.registerModule({
       component: copy
     })
     iconLibrary.register({
+      name: 'country-select',
+      component: countrySelect
+    })
+    iconLibrary.register({
       name: 'crop',
       component: crop
     })
@@ -417,6 +429,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'data-quality',
       component: dataQuality
+    })
+    iconLibrary.register({
+      name: 'date-time-field',
+      component: dateTimeField
     })
     iconLibrary.register({
       name: 'delete-column',
@@ -607,6 +623,10 @@ moduleSystem.registerModule({
       component: json
     })
     iconLibrary.register({
+      name: 'language-select',
+      component: languageSelect
+    })
+    iconLibrary.register({
       name: 'layout',
       component: layout
     })
@@ -643,6 +663,10 @@ moduleSystem.registerModule({
       component: mailAnswer
     })
     iconLibrary.register({
+      name: 'many-to-many',
+      component: manyToMany
+    })
+    iconLibrary.register({
       name: 'market',
       component: market
     })
@@ -673,6 +697,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'move-up',
       component: moveUp
+    })
+    iconLibrary.register({
+      name: 'multi-select',
+      component: multiSelect
     })
     iconLibrary.register({
       name: 'new-circle',
@@ -717,6 +745,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'notification',
       component: notification
+    })
+    iconLibrary.register({
+      name: 'number-field',
+      component: numberField
     })
     iconLibrary.register({
       name: 'open-folder',
@@ -927,6 +959,10 @@ moduleSystem.registerModule({
       component: uploadZip
     })
     iconLibrary.register({
+      name: 'user-select',
+      component: userSelect
+    })
+    iconLibrary.register({
       name: 'user',
       component: user
     })
@@ -953,6 +989,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'workflow',
       component: workflow
+    })
+    iconLibrary.register({
+      name: 'wysiwyg-field',
+      component: wysiwygField
     })
     iconLibrary.register({
       name: 'x-circle',

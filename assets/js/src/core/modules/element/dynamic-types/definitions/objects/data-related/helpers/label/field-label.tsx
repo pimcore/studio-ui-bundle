@@ -18,12 +18,10 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import {
   useInheritanceState
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
-import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { useStyles } from './field-label.styles'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
 import { useItemOptional } from '@Pimcore/components/form/item/provider/item/use-item'
+import { InheritanceButton } from '@Pimcore/modules/data-object/components/inheritance-button'
 
 export interface FieldLabelProps {
   name: FormItemProps['name']
@@ -32,11 +30,9 @@ export interface FieldLabelProps {
 }
 
 export const FieldLabel: React.FC<FieldLabelProps> = (props: FieldLabelProps): React.JSX.Element => {
-  const { styles } = useStyles()
   const itemContext = useItemOptional()
   const inheritanceStateContext = useInheritanceState()
   const inheritanceState = inheritanceStateContext?.getInheritanceState(itemContext?.name ?? props.name)
-  const { openDataObject } = useDataObjectHelper()
   const { t } = useTranslation()
 
   return (
@@ -45,15 +41,9 @@ export const FieldLabel: React.FC<FieldLabelProps> = (props: FieldLabelProps): R
       gap="extra-small"
     >
       { inheritanceState?.inherited === true && (
-        <Tooltip title={ t('inheritance-active', { id: inheritanceState?.objectId }) }>
-          <IconButton
-            className={ styles.inheritanceButton }
-            icon={ { value: 'inheritance-active' } }
-            onClick={ () => { void openDataObject({ config: { id: inheritanceState?.objectId } }) } }
-            type="link"
-            variant="minimal"
-          />
-        </Tooltip>
+        <InheritanceButton
+          objectId={ inheritanceState.objectId }
+        />
       )}
       { inheritanceState?.inherited === 'broken' && (
         <Tooltip title={ t('inheritance-broken') }>

@@ -38,7 +38,7 @@ export const useGridOptions = (): UseGridOptionsReturn => {
     const isTypeIncluded = isMainTypeIncluded || isSecondaryTypeIncluded
 
     const columnDefinition: IdentifiedColumnDef<unknown, never> = {
-      header: t('listing.column.' + column.key) + (column.locale !== undefined && column.locale !== null ? ` (${column.locale})` : ''),
+      header: t(column.key) + (column.locale !== undefined && column.locale !== null ? ` (${column.locale})` : ''),
       meta: {
         type: isMainTypeIncluded ? column.type : column.frontendType,
         columnKey: column.key

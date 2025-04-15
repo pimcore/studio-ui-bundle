@@ -121,5 +121,6 @@ Finally, you can access it under `{your-domain/storybook}`
 ## Documentation Overview
 
 - [Installation](./doc/01_Installation.md)
+- [Configuration](./doc/02_Configuration/README.md)
 - [Getting started with your first plugin](./doc/05_Plugins/README.md)
 - [SDK Overview](./doc/07_SDK_Overview/README.md)

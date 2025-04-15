@@ -61,6 +61,27 @@ export const slice = createSlice({
         state.entities[action.payload] = dataObjectsAdapter.getInitialState({ modified: false, properties: [], changes: {} }).entities[action.payload]
       }
     },
+
+    updateKey (state, action: PayloadAction<{ id: number, key: string }>): void {
+      if (state.entities[action.payload.id] !== undefined) {
+        const dataObject = state.entities[action.payload.id]
+
+        dataObject.key = action.payload.key
+
+        if (dataObject.fullPath !== undefined) {
+          const fullPathAsArray = dataObject.fullPath?.split('/')
+          fullPathAsArray[fullPathAsArray.length - 1] = action.payload.key
+          dataObject.fullPath = fullPathAsArray.join('/')
+        }
+
+        if (dataObject.path !== undefined) {
+          const pathAsArray = dataObject.path.split('/')
+          pathAsArray[pathAsArray.length - 1] = action.payload.key
+          dataObject.path = pathAsArray.join('/')
+        }
+      }
+    },
+
     ...useTrackableChangesReducers(dataObjectsAdapter),
     ...usePropertiesReducers(dataObjectsAdapter),
     ...useSchedulesReducers(dataObjectsAdapter),
@@ -78,6 +99,7 @@ export const {
   dataObjectReceived,
   removeDataObject,
   resetDataObject,
+  updateKey,
 
   resetChanges,
   setModifiedCells,

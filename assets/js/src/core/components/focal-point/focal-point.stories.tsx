@@ -14,16 +14,16 @@
 import type { Meta } from '@storybook/react'
 import { FocalPoint } from '@Pimcore/components/focal-point/focal-point'
 import React from 'react'
-import { PimcoreImage } from '../pimcore-image/pimcore-image'
 
 // @todo Component needs refactoring because it contains business logic
 const config: Meta = {
   title: 'Components/__Refactor__/Focal Point',
   component: () => {
     return (
-      <FocalPoint>
-        <PimcoreImage src={ 'https://picsum.photos/800/600.jpg' } />
-      </FocalPoint>
+      <FocalPoint
+        imageSrc="https://picsum.photos/800/600.jpg"
+        zoom={ 100 }
+      />
     )
   },
   parameters: {

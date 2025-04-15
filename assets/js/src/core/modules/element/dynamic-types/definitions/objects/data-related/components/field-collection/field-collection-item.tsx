@@ -29,9 +29,9 @@ export interface FieldCollectionItemProps {
   docked: boolean
   noteditable: AbstractObjectDataDefinition['noteditable']
   allowedTypes: FieldCollectionProps['allowedTypes']
-  disallowReorder?: boolean
-  disallowAdd?: boolean
-  disallowDelete?: boolean
+  disallowReorder: boolean
+  disallowAdd: boolean
+  disallowDelete: boolean
 }
 
 export const FieldCollectionItem = (props: FieldCollectionItemProps): React.JSX.Element => {
@@ -95,5 +95,5 @@ export const FieldCollectionItem = (props: FieldCollectionItemProps): React.JSX.
         </Form.Group>
       </ToolStripBox>
     )
-  }, [field, noteditable, fieldCollection, type, props.docked, props.allowedTypes])
+  }, [field, props?.disallowAdd, noteditable, fieldCollection, type, props.docked, props.allowedTypes])
 }

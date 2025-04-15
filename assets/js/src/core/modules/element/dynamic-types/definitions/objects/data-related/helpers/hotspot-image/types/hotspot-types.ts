@@ -26,3 +26,32 @@ export interface Marker {
   data: any
   name?: string | null
 }
+
+export type HotspotMarkerRelationDataType = 'data-object' | 'asset' | 'document'
+
+export type ExpandedHotspotMarkerDataBase<T extends keyof HotspotValueMap> = {
+  type: T
+  name: string
+} & (HotspotValueMap[T] extends object
+  ? HotspotValueMap[T]
+  : { value: HotspotValueMap[T] })
+
+export interface HotspotObjectType {
+  value: number
+  fullPath: string
+  published: boolean | null
+  subtype: 'object'
+}
+
+export interface HotspotValueMap {
+  textfield: string
+  textarea: string
+  checkbox: boolean
+  'data-object': HotspotObjectType
+  document: HotspotObjectType
+  asset: HotspotObjectType
+}
+
+export type ExpandedHotspotMarkerData = {
+  [K in keyof HotspotValueMap]: ExpandedHotspotMarkerDataBase<K>;
+}[keyof HotspotValueMap]
