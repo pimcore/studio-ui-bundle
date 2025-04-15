@@ -11,9 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
+import { map, groupBy, isUndefined, isNull } from 'lodash'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
-import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
+import { Dropdown, type ItemType, type MenuItemType } from '@Pimcore/components/dropdown/dropdown'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
@@ -161,6 +162,40 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     }
   }
 
+  const getFilteredAvailableMenuItems = useMemo(() => (): Array<ItemType<MenuItemType>> => {
+    const availableDropdownMenuList = getAvailableColumnsDropdown(onColumnClick).menu.items
+
+    if (isUndefined(availableDropdownMenuList)) return []
+
+    const groupedBatchEditsData = map(
+      groupBy(batchEdits, 'group'),
+      (items, group) => ({
+        group,
+        keys: items.map(item => item.key)
+      })
+    )
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return availableDropdownMenuList.map(availableItem => {
+      if (isNull(availableItem)) return null
+
+      const availableItemGroupTitle = 'label' in availableItem && availableItem?.label
+      const availableItemGroupChildren = 'children' in availableItem ? availableItem?.children : []
+
+      const groupRule = groupedBatchEditsData.find(batchEditItem => batchEditItem.group === availableItemGroupTitle && (availableItemGroupChildren ?? []).length > batchEditItem.keys.length)
+
+      const filteredChildren = availableItemGroupChildren?.filter(child =>
+        groupRule?.keys.includes(child?.key as string) !== true
+      )
+
+      return {
+        ...availableItem,
+        children: filteredChildren
+      }
+    }).filter(Boolean)
+  }, [getAvailableColumnsDropdown(onColumnClick).menu.items])
+
   return (
     <WindowModal
       afterClose={ () => {
@@ -171,7 +206,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
           divider
           justify={ 'space-between' }
         >
-          <Dropdown menu={ { items: getAvailableColumnsDropdown(onColumnClick).menu.items } }>
+          <Dropdown menu={ { items: getFilteredAvailableMenuItems() } }>
             <IconTextButton
               icon={ { value: 'new' } }
               type='default'
