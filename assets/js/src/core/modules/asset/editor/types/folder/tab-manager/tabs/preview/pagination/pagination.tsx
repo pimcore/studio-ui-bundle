@@ -15,9 +15,7 @@ import { Pagination as BasePagination, type PaginationProps as BasePaginationPro
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-interface PaginationProps extends BasePaginationProps { }
-
-export const Pagination = (props: PaginationProps): React.JSX.Element => {
+export const Pagination = (props: BasePaginationProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
