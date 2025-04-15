@@ -16,10 +16,10 @@ import { Form } from '../form'
 import React, { useEffect, useMemo, useState } from 'react'
 import { type KeyedListData, KeyedListProvider } from './provider/keyed-list/keyed-list-provider'
 import { KeyedListIterator } from './iterator/keyed-list-iterator'
-import { cloneDeep, isArray, isEqual, isObject, set, get } from 'lodash'
+import { cloneDeep, isArray, isEqual, isObject, get, isUndefined, setWith } from 'lodash'
+import { useItem } from '../item/provider/item/use-item'
 
 export interface KeyedListProps {
-  name: NamePath
   children: React.ReactNode
   value?: KeyedListData['values']
   onChange?: (value: KeyedListData['values']) => void
@@ -27,9 +27,10 @@ export interface KeyedListProps {
   getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
 }
 
-const KeyedList = ({ name, children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: KeyedListProps): React.JSX.Element => {
+const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: KeyedListProps): React.JSX.Element => {
   const initialValue = isArray(baseValue) ? {} : baseValue ?? {}
   const [value, setValue] = useState(cloneDeep(initialValue))
+  const { name } = useItem()
 
   const onChange: KeyedListData['onChange'] = (newValue) => {
     baseOnChange !== undefined && baseOnChange(newValue)
@@ -87,9 +88,17 @@ const KeyedList = ({ name, children, value: baseValue, onChange: baseOnChange, o
       onFieldChange?.(currentSubFieldname, newSubValue)
     }
 
+    const setAsObject = (obj): object => {
+      if (isUndefined(obj)) {
+        return {}
+      }
+
+      return obj
+    }
+
     setValue((currentValue) => {
       const newValue = cloneDeep(currentValue)
-      set(newValue, nameDifference, newSubValue)
+      setWith(newValue, nameDifference, newSubValue, setAsObject)
       return newValue
     })
   }

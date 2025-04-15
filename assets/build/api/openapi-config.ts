@@ -124,6 +124,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/search/search-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/search\/?/i)
+    },
+    '../../js/src/core/modules/data-object/classification-store/classification-store-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/classification-store\/?/i)
     }
   },
   exportName: 'api',

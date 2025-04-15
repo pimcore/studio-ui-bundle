@@ -14,12 +14,16 @@
 import React from 'react'
 import { IconTextButton, type IconTextButtonProps } from '../icon-text-button/icon-text-button'
 import { type IconProps } from '@Pimcore/components/icon/icon'
+import { useStyle } from './dropdown-button.styles'
 
 export type dropdownButtonProps = Omit<IconTextButtonProps, 'icon'> & {
   icon?: IconProps
 }
 
 export const DropdownButton = ({ icon, ...props }: dropdownButtonProps): React.JSX.Element => {
+  const { styles } = useStyle()
+
+  props.className = props.className !== null ? `${props.className} ${styles.dropdownButton}` : `${styles.dropdownButton}`
   return (
     <IconTextButton
       icon={ {

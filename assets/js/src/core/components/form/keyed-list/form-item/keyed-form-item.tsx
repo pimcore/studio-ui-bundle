@@ -30,5 +30,5 @@ export const KeyedFormItem = ({ Component, componentProps }: KeyedFormItemProps)
         { currentChildren }
       </KeyedFormItemControl>
     </Component>
-  ), [])
+  ), [baseProps.name])
 }

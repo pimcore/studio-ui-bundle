@@ -143,6 +143,7 @@ export const NotesAndEventsTabView = ({
         padded
       >
         <Header
+          className={ 'p-l-mini' }
           title={ t('notes-and-events.notes-and-events') }
         >
           <IconTextButton

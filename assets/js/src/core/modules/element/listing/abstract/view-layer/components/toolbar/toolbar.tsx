@@ -23,7 +23,7 @@ export const Toolbar = (): React.JSX.Element => {
     <BaseToolbar theme='secondary'>
       <RowSelectionTotal />
 
-      <Split size='small'>
+      <Split size='extra-small'>
         <Refetch />
         <Pagination />
       </Split>

@@ -62,7 +62,8 @@ export class DynamicTypeObjectDataCalculatedValue extends DynamicTypeObjectDataA
       editComponent: this.getGridCellEditComponent(cellProps),
       formItemProps: this.getObjectDataFormItemProps(objectProps),
       handleDefaultValue: this.handleDefaultValue,
-      editModalSettings: undefined
+      editModalSettings: undefined,
+      supportsBatchAppendModes: false
     }
   }
 

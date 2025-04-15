@@ -35,6 +35,7 @@ export type ManyToManyRelationObjectDataDefinition = AbstractObjectDataDefinitio
 
 export class DynamicTypeObjectDataManyToManyRelation extends DynamicTypeObjectDataAbstract {
   id: string = 'manyToManyRelation'
+  supportsBatchAppendModes: boolean = true
   gridCellEditMode: EditMode = 'edit-modal'
   gridCellEditModalSettings: EditModalSettings = {
     modalSize: 'XL',

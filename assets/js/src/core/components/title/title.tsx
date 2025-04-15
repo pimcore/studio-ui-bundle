@@ -20,9 +20,10 @@ const { Title: AntTitle } = Typography
 
 export interface TitleProps extends AntTitleProps {
   icon?: React.JSX.Element
+  titleClass?: string
 }
 
-export const Title = ({ children, icon, ...props }: TitleProps): React.JSX.Element => {
+export const Title = ({ children, icon, titleClass, ...props }: TitleProps): React.JSX.Element => {
   const { styles } = useStyle()
 
   return (
@@ -32,7 +33,7 @@ export const Title = ({ children, icon, ...props }: TitleProps): React.JSX.Eleme
     >
       {icon}
       <AntTitle
-        className={ [styles.title, 'pimcore-title'].join(' ') }
+        className={ [styles.title, 'pimcore-title', titleClass ?? null].join(' ') }
         { ...props }
       >{children}</AntTitle>
     </Flex>

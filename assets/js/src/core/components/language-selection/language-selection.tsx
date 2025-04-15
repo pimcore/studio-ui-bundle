@@ -15,6 +15,7 @@ import { Button } from '@Pimcore/components/button/button'
 import React, { useEffect, useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './langguage-selection.styles'
+import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
 
 interface LanguageSelectionProps {
   languages: string[]
@@ -45,7 +46,8 @@ export const LanguageSelection = ({ languages, selectedLanguage, onSelectLanguag
       </Button>
 
       <div className='language-select__current-value'>
-        <Icon value='flag' /> <span>{language}</span>
+        <FlagIcon value={ transformLanguage(language) } />
+        <span>{language}</span>
       </div>
 
       <Button
