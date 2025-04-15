@@ -191,6 +191,7 @@ export const CustomMetadataTabContainer = ({ disableHeaderTitle = false, disable
   return (
     <Content padded>
       <Header
+        className={ 'p-l-mini' }
         title={ !disableHeaderTitle ? t('asset.asset-editor-tabs.custom-metadata.text') : '' }
       >
         <div className='pimcore-custom-metadata-toolbar'>

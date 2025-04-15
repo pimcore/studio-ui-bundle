@@ -28,7 +28,7 @@ export const useStyle = createStyles(({ token, css }) => {
         display: flex;
         height: 100%;
       }
-
+      
       &.ant-tabs > .ant-tabs-nav > .ant-tabs-nav-wrap > .ant-tabs-nav-list > .ant-tabs-tab {
         margin: 0 ${token.paddingXS}px !important;
         transition: color .2s;
@@ -52,6 +52,7 @@ export const useStyle = createStyles(({ token, css }) => {
       }
       &.ant-tabs-top >.ant-tabs-nav {
         margin-bottom: 0;
+        padding-right: ${token.paddingXXS}px;
           
         .ant-tabs-nav-wrap {
           display: flex;

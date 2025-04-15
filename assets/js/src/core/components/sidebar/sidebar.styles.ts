@@ -27,7 +27,6 @@ export const useStyle = createStyles(({ token, css }) => {
           align-items: center;
           flex-shrink: 0;
           align-self: stretch;
-          border-right: 1px solid rgba(0, 0, 0, 0.08);
           border-left: 1px solid rgba(0, 0, 0, 0.08);
           justify-content: space-between;
           color: ${token.colorIconSidebar};

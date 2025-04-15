@@ -92,7 +92,10 @@ export const TagsTabContainer = (): React.JSX.Element => {
         size: 75,
         children: (
           <Content padded>
-            <Header title={ t('tags.assigned-tags-text') }>
+            <Header
+              className={ 'p-l-mini' }
+              title={ t('tags.assigned-tags-text') }
+            >
               {tagsAction()}
             </Header>
             <div className={ 'pimcore-tags-content' }>

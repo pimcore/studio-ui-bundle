@@ -12,7 +12,8 @@
 */
 
 import React from 'react'
-import { Form, Input, Col, Row, Alert, Flex } from 'antd'
+import { Input, Col, Row, Alert, Flex } from 'antd'
+import { Form } from '@Pimcore/components/form/form'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
 import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'

@@ -191,6 +191,7 @@ function PreviousButton (prop): React.JSX.Element {
         className={ 'ant-pagination-item-link' }
         disabled={ currentPage === 1 }
         icon={ <Icon
+          options={ { width: 18, height: 18 } }
           value='chevron-left'
                /> }
         onClick={ onClickPrev }
@@ -209,6 +210,7 @@ function NextButton (prop): React.JSX.Element {
         className={ 'ant-pagination-item-link' }
         disabled={ currentPage === pages }
         icon={ <Icon
+          options={ { width: 18, height: 18 } }
           value='chevron-right'
                /> }
         onClick={ onClickNext }
