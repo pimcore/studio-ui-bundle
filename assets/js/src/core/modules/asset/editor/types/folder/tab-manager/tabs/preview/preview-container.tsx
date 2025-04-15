@@ -50,6 +50,7 @@ const PreviewContainer = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar
           justify={ 'flex-end' }
+          theme='secondary'
         >
           <Pagination
             current={ currentPage }
