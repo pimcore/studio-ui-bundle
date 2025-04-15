@@ -183,15 +183,16 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
       const availableItemGroupTitle = 'label' in availableItem && availableItem?.label
       const availableItemGroupChildren = 'children' in availableItem ? availableItem?.children : []
 
-      const groupRule = groupedBatchEditsData.find(batchEditItem => batchEditItem.group === availableItemGroupTitle && (availableItemGroupChildren ?? []).length > batchEditItem.keys.length)
-
-      const filteredChildren = availableItemGroupChildren?.filter(child =>
-        groupRule?.keys.includes(child?.key as string) !== true
+      const currentGroup = groupedBatchEditsData.find(batchEditItem => batchEditItem.group === availableItemGroupTitle)
+      const currentGroupFilteredChildren = availableItemGroupChildren?.filter(child =>
+        currentGroup?.keys.includes(child?.key as string) !== true
       )
+
+      if (currentGroup?.keys.length === availableItemGroupChildren?.length) return null
 
       return {
         ...availableItem,
-        children: filteredChildren
+        children: currentGroupFilteredChildren
       }
     }).filter(Boolean)
   }, [getAvailableColumnsDropdown(onColumnClick).menu.items])
@@ -208,6 +209,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         >
           <Dropdown menu={ { items: getFilteredAvailableMenuItems() } }>
             <IconTextButton
+              disabled={ getFilteredAvailableMenuItems().length === 0 }
               icon={ { value: 'new' } }
               type='default'
             >
