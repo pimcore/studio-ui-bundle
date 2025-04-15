@@ -73,12 +73,20 @@ export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Eleme
   const handleOnLoad = (): void => {
     const image = containerRef.current?.querySelector('img') as HTMLImageElement | null
 
-    if (!isNull(containerRef.current)) {
+    if (!isNull(containerRef.current) && !isNull(image)) {
       const container = containerRef.current
 
-      if (!isNull(image)) {
-        setImageWidth(image.naturalWidth < container?.clientWidth ? image.naturalWidth : container.clientWidth)
-      }
+      const visibleWidth = container.clientWidth
+      const visibleHeight = container.clientHeight
+
+      const imageNaturalWidth = image.naturalWidth
+      const imageNaturalHeight = image.naturalHeight
+      const aspectRatio = imageNaturalWidth / imageNaturalHeight
+
+      const maxWidthBasedOnHeight = visibleHeight * aspectRatio
+
+      const maxImageWidth = Math.min(visibleWidth, maxWidthBasedOnHeight, imageNaturalWidth)
+      setImageWidth(maxImageWidth)
 
       if (!isUndefined(imageSettings?.focalPoint)) {
         const focalPoint = imageSettings.focalPoint
