@@ -12,10 +12,12 @@
 */
 
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
+import { useTranslation } from 'react-i18next'
 
 export const withAdvancedColumnConfig = (useBaseHook: AbstractDecoratorProps['useGridOptions']): AbstractDecoratorProps['useGridOptions'] => {
   const useAdvancedColumnConfigExtension: AbstractDecoratorProps['useGridOptions'] = () => {
     const { transformGridColumn: baseTransformGridColumn, ...baseMethods } = useBaseHook()
+    const { t } = useTranslation()
 
     const transformGridColumn: typeof baseTransformGridColumn = (column) => {
       const baseColumn = baseTransformGridColumn(column)
@@ -26,6 +28,7 @@ export const withAdvancedColumnConfig = (useBaseHook: AbstractDecoratorProps['us
 
       return {
         ...baseColumn,
+        header: t(column.config?.fieldDefinition?.title as string ?? column.key) + (column.locale !== undefined && column.locale !== null ? ` (${column.locale})` : ''),
         meta: {
           ...baseColumn.meta,
           config: {
