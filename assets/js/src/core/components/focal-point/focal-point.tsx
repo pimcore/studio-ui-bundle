@@ -30,6 +30,7 @@ const PERCENT_MULTIPLIER = 100
 
 export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Element | null => {
   const [dragging, setDragging] = useState<boolean>(false)
+  const [imageWidth, setImageWidth] = useState<number>(0)
 
   const draggingRef = useRef(dragging)
   const movingElementRef = useRef<HTMLDivElement>(null)
@@ -70,11 +71,21 @@ export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Eleme
   }, [dragging])
 
   const handleOnLoad = (): void => {
-    if (!isNull(containerRef.current) && !isUndefined(imageSettings?.focalPoint)) {
-      const focalPoint = imageSettings.focalPoint
+    const image = containerRef.current?.querySelector('img') as HTMLImageElement | null
 
-      setCoordinates({ x: focalPoint.x, y: focalPoint.y })
-      setIsActive(true)
+    if (!isNull(containerRef.current)) {
+      const container = containerRef.current
+
+      if (!isNull(image)) {
+        setImageWidth(image.naturalWidth < container?.clientWidth ? image.naturalWidth : container.clientWidth)
+      }
+
+      if (!isUndefined(imageSettings?.focalPoint)) {
+        const focalPoint = imageSettings.focalPoint
+
+        setCoordinates({ x: focalPoint.x, y: focalPoint.y })
+        setIsActive(true)
+      }
     }
   }
 
@@ -127,7 +138,8 @@ export const FocalPoint = ({ zoom, imageSrc }: FocalPointProps): React.JSX.Eleme
     <div
       className={ styles.container }
       style={ {
-        width: `${zoom}%`
+        width: `${zoom}%`,
+        maxWidth: `${imageWidth * (zoom / 100)}px`
       } }
     >
       <PimcoreImage
