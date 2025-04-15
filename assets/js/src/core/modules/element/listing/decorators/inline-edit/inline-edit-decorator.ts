@@ -22,6 +22,7 @@ export interface UpdateEvent {
     column: SelectedColumn
     value: any
   }
+  meta?: Record<string, any>
 }
 
 export interface UseInlineEditApiUpdateReturn {

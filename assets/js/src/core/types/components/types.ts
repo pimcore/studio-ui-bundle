@@ -26,6 +26,7 @@ export interface OnUpdateCellDataEvent {
   columnId: string
   value: any
   rowData: any
+  meta?: Record<string, any>
 }
 
 export interface ListGridContextMenuProps {

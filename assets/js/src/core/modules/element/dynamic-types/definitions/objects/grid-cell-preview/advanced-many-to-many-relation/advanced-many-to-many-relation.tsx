@@ -13,7 +13,7 @@
 
 import React from 'react'
 import { GridCellPreviewWrapper } from '../grid-cell-cell-preview-wrapper/grid-cell-preview-wrapper'
-import { isEmpty, isNil, isNull } from 'lodash'
+import { isBoolean, isEmpty, isNil, isNull } from 'lodash'
 import { type AdvancedManyToManyRelationValue } from '../../data-related/helpers/relations/types/advanced-many-to-many-relation'
 import { type RelationColumnDefinition } from '../../data-related/components/advanced-many-to-many-object-relation/advanced-many-to-many-object-relation'
 import { RelationList, type RelationItem } from '../relation-list/relation-list'
@@ -43,6 +43,18 @@ export const AdvancedManyToManyRelationList = ({ value, columnDefinition }: Adva
     return <RelationList relations={ items } />
   }
 
+  const formatMetaValue = (metaValue: any): string => {
+    if (isNil(metaValue)) {
+      return ''
+    }
+
+    if (isBoolean(metaValue)) {
+      return metaValue ? '1' : ''
+    }
+
+    return String(metaValue)
+  }
+
   return (
     <GridCellPreviewWrapper overflow="auto">
       <table className={ classNames(styles.table) }>
@@ -66,7 +78,7 @@ export const AdvancedManyToManyRelationList = ({ value, columnDefinition }: Adva
                 />
               </td>
               {columnDefinition.map((col) => (
-                <td key={ `${col.key}-${index}` }>{item.data?.[col.key] ?? ''}</td>
+                <td key={ `${col.key}-${index}` }>{formatMetaValue(item.data?.[col.key] ?? '')}</td>
               ))}
             </tr>
           ))}
