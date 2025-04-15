@@ -90,6 +90,12 @@ export const useStyles = createStyles(({ token, css }) => {
         }
       }
 
+      &.card--theme-border-highlight {        
+        &, &.ant-card:not(.ant-card-bordered) {
+          border-left: 3px solid #D5CFDA;
+        }
+      }
+
       &.card--theme-fieldset {
         border-left: 3px solid #D5CFDA;
         background: rgba(242, 240, 244, 0.52);

@@ -176,6 +176,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/LocalizedFields': 'DynamicTypes/ObjectData/LocalizedFields',
   'DynamicTypes/ObjectData/FieldCollection': 'DynamicTypes/ObjectData/FieldCollection',
   'DynamicTypes/ObjectData/ObjectBrick': 'DynamicTypes/ObjectData/ObjectBrick',
+  'DynamicTypes/ObjectData/ClassificationStore': 'DynamicTypes/ObjectData/ClassificationStore',
 
   // Asset types
   'DynamicTypes/Asset/Video': 'DynamicTypes/Asset/Video',
