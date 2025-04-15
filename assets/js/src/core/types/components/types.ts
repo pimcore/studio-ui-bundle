@@ -25,7 +25,7 @@ export interface OnUpdateCellDataEvent {
   rowIndex: number
   columnId: string
   value: any
-  rowData: any,
+  rowData: any
   meta?: Record<string, any>
 }
 
