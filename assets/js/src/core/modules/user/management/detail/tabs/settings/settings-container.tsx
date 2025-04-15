@@ -13,7 +13,8 @@
 
 import { debounce } from 'lodash'
 import React, { useCallback, useEffect } from 'react'
-import { Form, Input, Col, Row, Flex, Typography } from 'antd'
+import { Input, Col, Row, Flex, Typography } from 'antd'
+import { Form } from '@Pimcore/components/form/form'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { useTranslation } from 'react-i18next'

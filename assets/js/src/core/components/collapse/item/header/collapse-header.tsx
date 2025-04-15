@@ -38,7 +38,7 @@ export const CollapseHeader = ({ label, subLabel, extra, extraPosition, expandIc
           gap={ 'mini' }
         >
           {(expandIconPosition === 'start' || expandIconPosition === 'left') && expandIcon}
-          <Text strong>{label}</Text>
+          <Text className={ 'collapse-header__title' }>{label}</Text>
           {(expandIconPosition === 'end' || expandIconPosition === 'right') && expandIcon}
         </Flex>
 

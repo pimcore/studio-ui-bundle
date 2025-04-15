@@ -104,7 +104,10 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
     <Content
       padded
     >
-      <Header title={ t('schedule.headline') }>
+      <Header
+        className={ 'p-l-mini' }
+        title={ t('schedule.headline') }
+      >
         <ButtonGroup items={ [
           <IconTextButton
             className={ 'pimcore-schedule-toolbar__headline__buttons__add' }
