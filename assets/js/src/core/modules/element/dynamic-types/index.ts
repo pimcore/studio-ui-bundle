@@ -152,6 +152,7 @@ import { type DynamicTypeObjectRegistry } from './definitions/objects/dynamic-ty
 import { type DynamicTypeObjectFolder } from './definitions/objects/types/dynamic-type-object-folder'
 import { type DynamicTypeObjectObject } from './definitions/objects/types/dynamic-type-object-object'
 import { type DynamicTypeObjectVariant } from './definitions/objects/types/dynamic-type-object-variant'
+import { type DynamicTypeObjectDataClassificationStore } from './definitions/objects/data-related/types/dynamic-type-object-data-classification-store'
 
 moduleSystem.registerModule({
   onInit () {
@@ -285,6 +286,7 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataLocalizedFields>(serviceIds['DynamicTypes/ObjectData/LocalizedFields']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataFieldCollection>(serviceIds['DynamicTypes/ObjectData/FieldCollection']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataObjectBrick>(serviceIds['DynamicTypes/ObjectData/ObjectBrick']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataClassificationStore>(serviceIds['DynamicTypes/ObjectData/ClassificationStore']))
 
     const assetRegistry = container.get<DynamicTypeAssetRegistry>(serviceIds['DynamicTypes/AssetRegistry'])
 

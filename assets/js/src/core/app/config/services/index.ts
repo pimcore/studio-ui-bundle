@@ -165,6 +165,7 @@ import { DynamicTypeObjectRegistry } from '@Pimcore/modules/element/dynamic-type
 import { DynamicTypeObjectFolder } from '@Pimcore/modules/element/dynamic-types/definitions/objects/types/dynamic-type-object-folder'
 import { DynamicTypeObjectObject } from '@Pimcore/modules/element/dynamic-types/definitions/objects/types/dynamic-type-object-object'
 import { DynamicTypeObjectVariant } from '@Pimcore/modules/element/dynamic-types/definitions/objects/types/dynamic-type-object-variant'
+import { DynamicTypeObjectDataClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-classification-store'
 
 // Main nav
 container.bind(serviceIds.mainNavRegistry).to(MainNavRegistry).inSingletonScope()
@@ -321,6 +322,7 @@ container.bind(serviceIds['DynamicTypes/ObjectData/Block']).to(DynamicTypeObject
 container.bind(serviceIds['DynamicTypes/ObjectData/LocalizedFields']).to(DynamicTypeObjectDataLocalizedFields).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/FieldCollection']).to(DynamicTypeObjectDataFieldCollection).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/ObjectBrick']).to(DynamicTypeObjectDataObjectBrick).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectData/ClassificationStore']).to(DynamicTypeObjectDataClassificationStore).inSingletonScope()
 
 // Asset Types
 container.bind(serviceIds['DynamicTypes/AssetRegistry']).to(DynamicTypeAssetRegistry).inSingletonScope()

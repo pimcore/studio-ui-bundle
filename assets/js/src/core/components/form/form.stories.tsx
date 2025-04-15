@@ -184,7 +184,7 @@ const config: Meta = {
         </Form.List>
 
         <Form.Item name={ 'myKeyedList' } >
-          <Form.KeyedList name='myKeyedList'>
+          <Form.KeyedList>
             <Form.KeyedList.Iterator>
               <Form.Item
                 label="Keyed Input"

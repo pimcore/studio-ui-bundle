@@ -11,39 +11,40 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
 import { Form } from '@Pimcore/components/form/form'
-import { ObjectBrickContent } from './object-brick-content'
-import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
+import { ClassificationStoreContent } from './classification-store-content'
+import { get, isEmpty, isEqual, isPlainObject } from 'lodash'
 import { type NamePath } from 'antd/es/form/interface'
-import { forEach, get, isEmpty, isEqual, isPlainObject, isUndefined, keys, union } from 'lodash'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
-import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
-import { DELETED, filterInheritedFields, getMergedValue } from './utils/brick-value'
+import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
+import { filterInheritedFields, getMergedValue } from './utils/group-value'
 
-export interface ObjectBrickProps extends AbstractObjectDataDefinition {
-  border?: boolean
-  maxItems?: number
-  allowedTypes: string[]
+export interface ClassificationStoreProps extends AbstractObjectDataDefinition {
+  storeId: number
+  allowedGroupIds: string[]
+  localized: boolean
   value: any
   onChange: (value: any) => void
 }
 
 const getOriginalValue = (value: any, name: NamePath): object => {
-  const originalValue = get(value, name, {})
+  const originalValue: Record<string, any> = get(value, name, {})
+
   return isPlainObject(originalValue) ? originalValue : {}
 }
 
-export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
-  const valueRef = useRef(props.value)
-  const deletedBricksRef = useRef(new Set<string>())
-  const inheritanceState = useInheritanceState()
-  const changedFieldsRef = useRef<Set<string>>(new Set())
-  const { id } = useContext(DataObjectContext)
+export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.Element => {
+  const { id } = useElementContext()
   const { dataObject } = useDataObjectDraft(id)
   const objectData = dataObject?.objectData ?? {}
   const originalValue = getOriginalValue(objectData, props.name)
+  const valueRef = useRef(props.value)
+  const inheritanceState = useInheritanceState()
+  const changedFieldsRef = useRef<Set<string>>(new Set())
+
   const fieldNameToString = (field: NamePath): string => {
     return Array.isArray(field) ? field.join('.') : field
   }
@@ -69,23 +70,21 @@ export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
 
   const onChange = (changedValue: any): void => {
     const filteredValue = filterInheritedFields(changedValue, isInherited)
+    /* const allGroupNames = union([...keys(originalValue), ...keys(valueRef.current)])
 
-    const allBrickNames = union([...keys(originalValue), ...keys(valueRef.current)])
-    forEach(allBrickNames, key => {
+    forEach(allGroupNames, key => {
       if (isUndefined(filteredValue[key])) {
-        deletedBricksRef.current.add(key)
+        deletedGroupsRef.current.add(key)
       } else {
-        deletedBricksRef.current.delete(key)
+        deletedGroupsRef.current.delete(key)
       }
     })
 
-    forEach(Array.from(deletedBricksRef.current.keys()), key => {
+    forEach(Array.from(deletedGroupsRef.current.keys()), key => {
       filteredValue[key] = { action: DELETED }
-    })
+    }) */
 
     const newValue = isEmpty(filteredValue) ? [] : filteredValue
-
-    console.log({ newValue, old: valueRef.current })
 
     if (!isEqual(newValue, valueRef.current)) {
       props.onChange(newValue)
@@ -109,7 +108,7 @@ export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
       onFieldChange={ onFieldChange }
       value={ mergedValue }
     >
-      <ObjectBrickContent { ...props } />
+      <ClassificationStoreContent { ...props } />
     </Form.KeyedList>
   )
 }

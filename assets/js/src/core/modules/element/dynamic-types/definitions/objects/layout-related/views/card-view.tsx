@@ -21,7 +21,7 @@ export interface CardViewProps {
   children?: React.ReactNode
   collapsible?: false
   bordered?: boolean
-  theme?: 'fieldset' | 'card-with-highlight' | 'default'
+  theme?: 'fieldset' | 'card-with-highlight' | 'default' | 'border-highlight'
   contentPadding?: BoxProps['padding']
   extra?: ReactNode
   extraPosition?: 'start' | 'end'
