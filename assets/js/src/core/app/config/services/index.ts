@@ -135,15 +135,10 @@ import { DynamicTypeGridCellDocument } from '@Pimcore/modules/element/dynamic-ty
 import { DynamicTypeGridCellElement } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/element/dynamic-type-grid-cell-element'
 import { DynamicTypeGridCellLanguageSelect } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/language-select/dynamic-type-grid-cell-language-select'
 import { DynamicTypeGridCellTranslate } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/translate/dynamic-type-grid-cell-translate'
-import {
-  DynamicTypeBatchEditRegistry
-} from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/dynamic-type-batch-edit-registry'
-import {
-  DynamicTypeBatchEditText
-} from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/text/dynamic-type-batch-edit-text'
-import {
-  DynamicTypeBatchEditTextArea
-} from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/text/dynamic-type-batch-edit-text-area'
+import { DynamicTypeBatchEditRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/dynamic-type-batch-edit-registry'
+import { DynamicTypeBatchEditText } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/text/dynamic-type-batch-edit-text'
+import { DynamicTypeBatchEditTextArea } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/text/dynamic-type-batch-edit-text-area'
+import { DynamicTypeBatchEditDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/datetime/dynamic-type-batch-edit-datetime'
 import { DynamicTypeObjectDataFieldCollection } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-field-collection'
 import { DynamicTypeObjectDataObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-object-brick'
 import { DynamicTypeGridCellDataObjectAdapter } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/data-object-adapter/dynamic-type-grid-cell-data-object-adapter'
@@ -204,6 +199,7 @@ container.bind(serviceIds['DynamicTypes/FieldFilter/Datetime']).to(DynamicTypeFi
 container.bind(serviceIds['DynamicTypes/BatchEditRegistry']).to(DynamicTypeBatchEditRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/BatchEdit/Text']).to(DynamicTypeBatchEditText).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/BatchEdit/TextArea']).to(DynamicTypeBatchEditTextArea).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/BatchEdit/Datetime']).to(DynamicTypeBatchEditDatetime).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/BatchEdit/DataObjectAdapter']).to(DynamicTypeBatchEditDataObjectAdapter).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/BatchEdit/DataObjectObjectBrick']).to(DynamicTypeBatchEditDataObjectObjectBrick).inSingletonScope()
 
