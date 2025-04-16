@@ -29,6 +29,7 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
   return (
     <Flex
       className={ styles.container }
+      gap={ 'mini' }
       justify='space-between'
     >
       <Flex
@@ -48,7 +49,7 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
 
       <Flex
         align='center'
-        gap={ 'extra-small' }
+        gap={ 'mini' }
         ref={ ref }
       >
         {isLocked && (
