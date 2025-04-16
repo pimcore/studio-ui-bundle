@@ -15,12 +15,10 @@ import React from 'react'
 import { TabTitleContainer, type TabTitleContainerProps } from '@Pimcore/modules/widget-manager/title/tab-title-container'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useTranslation } from 'react-i18next'
-import { useDataObjectGetByIdQuery } from '../../data-object-api-slice-enhanced'
 
 export const TitleContainer = (props: TabTitleContainerProps): React.JSX.Element => {
   const { node } = props
   const { dataObject } = useDataObjectDraft(node.getConfig().id as number)
-  const { data } = useDataObjectGetByIdQuery({ id: node.getConfig().id })
   const { t } = useTranslation()
 
   const nodeName = node.getName()
@@ -29,7 +27,7 @@ export const TitleContainer = (props: TabTitleContainerProps): React.JSX.Element
       node.getName = () => t('home')
     }
 
-    return data?.key ?? nodeName
+    return dataObject?.key ?? nodeName
   }
 
   return (
