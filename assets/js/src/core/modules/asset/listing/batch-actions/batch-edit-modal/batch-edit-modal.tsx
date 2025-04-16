@@ -35,6 +35,8 @@ import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { createJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/factory'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
+import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
+import { type BatchEdit } from '@Pimcore/modules/asset/listing/batch-actions/batch-edit-modal/batch-edit-provider'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean
@@ -55,6 +57,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const { id } = useElementContext()
   const { useDataQueryHelper } = useSettings()
   const { getArgs } = useDataQueryHelper()
+  const { hasType } = useDynamicTypeResolver()
 
   const resetModal = (): void => {
     resetBatchEdits()
@@ -162,13 +165,20 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     }
   }
 
-  const getFilteredAvailableMenuItems = useMemo(() => (): Array<ItemType<MenuItemType>> => {
+  const getFilteredAvailableColumns = (availableColumns: BatchEdit[]): BatchEdit[] => {
+    return availableColumns.filter((column) => {
+      return hasType({ target: 'BATCH_EDIT', dynamicTypeIds: [column.frontendType!] })
+    })
+  }
+
+  const getFilteredAvailableMenuItems = useMemo(() => (): Array<ItemType<MenuItemType>> | undefined => {
     const availableDropdownMenuList = getAvailableColumnsDropdown(onColumnClick).menu.items
 
     if (isUndefined(availableDropdownMenuList)) return []
 
-    const groupedBatchEditsData = map(
-      groupBy(batchEdits, 'group'),
+    const filteredAvailableColumns = getFilteredAvailableColumns(batchEdits)
+    const groupedAvailableColumns = map(
+      groupBy(filteredAvailableColumns, 'group'),
       (items, group) => ({
         group,
         keys: items.map(item => item.key)
@@ -183,7 +193,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
       const availableItemGroupTitle = 'label' in availableItem && availableItem?.label
       const availableItemGroupChildren = 'children' in availableItem ? availableItem?.children : []
 
-      const currentGroup = groupedBatchEditsData.find(batchEditItem => batchEditItem.group === availableItemGroupTitle)
+      const currentGroup = groupedAvailableColumns.find(batchEditItem => batchEditItem.group === availableItemGroupTitle)
       const currentGroupFilteredChildren = availableItemGroupChildren?.filter(child =>
         currentGroup?.keys.includes(child?.key as string) !== true
       )
@@ -209,7 +219,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         >
           <Dropdown menu={ { items: getFilteredAvailableMenuItems() } }>
             <IconTextButton
-              disabled={ getFilteredAvailableMenuItems().length === 0 }
+              disabled={ getFilteredAvailableMenuItems()?.length === 0 }
               icon={ { value: 'new' } }
               type='default'
             >
