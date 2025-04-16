@@ -11,9 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
+import { isUndefined } from 'lodash'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
-import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
+import { Dropdown, type ItemType, type MenuItemType } from '@Pimcore/components/dropdown/dropdown'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
 import { t } from 'i18next'
@@ -36,6 +37,7 @@ import { useAppDispatch } from '@Pimcore/app/store'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
+import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean
@@ -56,6 +58,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const { addJob } = useJobs()
   const selectedRowsIds = Object.keys(selectedRows ?? {})
   const selectedRowsCount = selectedRowsIds.length
+  const { hasType } = useDynamicTypeResolver()
 
   const resetModal = (): void => {
     resetBatchEdits()
@@ -156,6 +159,25 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     }
   }
 
+  const availableDropdownList = getAvailableColumnsDropdown(onColumnClick).menu.items
+
+  const getFilteredAvailableDropdownList = useMemo(() => (): Array<ItemType<MenuItemType>> | undefined => {
+    if (isUndefined(availableDropdownList)) return []
+
+    return availableDropdownList.map((column: any) => {
+      return {
+        ...column,
+        children: column?.children?.filter((child: any) => {
+          const isAlreadyInBatchEditList = batchEdits.some(item => child.key === item.key && child.group === item.group)
+          const hasDynamicType = hasType({ target: 'BATCH_EDIT', dynamicTypeIds: [child?.frontendType as string] })
+
+          return hasDynamicType && !isAlreadyInBatchEditList
+        })
+      }
+    })
+  }, [availableDropdownList])
+  const isEmptyDropdownList = getFilteredAvailableDropdownList()?.every((item: any) => item?.children?.length === 0)
+
   return (
     <WindowModal
       afterClose={ () => {
@@ -165,11 +187,9 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         divider
         justify={ 'space-between' }
                >
-        <Dropdown menu={ {
-          items: getAvailableColumnsDropdown(onColumnClick).menu.items
-        } }
-        >
+        <Dropdown menu={ { items: getFilteredAvailableDropdownList() } }>
           <IconTextButton
+            disabled={ isEmptyDropdownList }
             icon={ { value: 'new' } }
             type='default'
           >
