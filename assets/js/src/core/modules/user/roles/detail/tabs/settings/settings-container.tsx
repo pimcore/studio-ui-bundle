@@ -13,7 +13,8 @@
 
 import { debounce } from 'lodash'
 import React, { useCallback, useEffect } from 'react'
-import { Form, Col, Row } from 'antd'
+import { Col, Row } from 'antd'
+import { Form } from '@Pimcore/components/form/form'
 import { useRoleContext } from '@Pimcore/modules/user/roles/hooks/use-role-context'
 import { Content } from '@Pimcore/components/content/content'
 import { GeneralAccordion } from '@Pimcore/modules/user/roles/detail/tabs/settings/components/form/general-accordion'

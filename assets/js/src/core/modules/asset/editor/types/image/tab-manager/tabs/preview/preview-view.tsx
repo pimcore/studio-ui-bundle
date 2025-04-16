@@ -11,13 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
-import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
+import React, { useContext, useEffect, useState } from 'react'
 import { useStyle } from './preview-view.styles'
 import { ImageZoom } from '@Pimcore/components/image-zoom/image-zoom'
 import { ZoomContext } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/preview-container'
-import { Flex } from '@Pimcore/components/flex/flex'
 import { FocalPoint } from '@Pimcore/components/focal-point/focal-point'
+import { FocalPointContext } from '@Pimcore/components/focal-point/context/focal-point-context'
 
 interface PreviewViewProps {
   src: string
@@ -42,7 +41,11 @@ const PreviewView = (props: PreviewViewProps): React.JSX.Element => {
   const [imageSrc, setImageSrc] = useState(src)
 
   const { styles } = useStyle()
+
+  const focalPointContext = useContext(FocalPointContext)
   const { zoom, setZoom } = React.useContext(ZoomContext)
+
+  const { containerRef } = focalPointContext!
 
   useEffect(() => {
     const handleMessage = (event: IPostMessageEvent): void => {
@@ -62,14 +65,16 @@ const PreviewView = (props: PreviewViewProps): React.JSX.Element => {
   }, [])
 
   return (
-    <div className={ styles.preview }>
-
-      <Flex className={ styles.imageContainer }>
-        <FocalPoint>
-          <PimcoreImage src={ imageSrc } />
-        </FocalPoint>
-      </Flex>
-
+    <>
+      <div
+        className={ styles.imageContainer }
+        ref={ containerRef }
+      >
+        <FocalPoint
+          imageSrc={ imageSrc }
+          zoom={ zoom }
+        />
+      </div>
       <div className={ styles.floatingContainer }>
         <div className={ styles.flexContainer }>
           <ImageZoom
@@ -78,7 +83,7 @@ const PreviewView = (props: PreviewViewProps): React.JSX.Element => {
           />
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

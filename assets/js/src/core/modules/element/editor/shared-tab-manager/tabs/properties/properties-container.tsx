@@ -31,6 +31,7 @@ import { Space } from '@Pimcore/components/space/space'
 import { Split } from '@Pimcore/components/split/split'
 import { Select } from '@Pimcore/components/select/select'
 import { uuid } from '@Pimcore/utils/uuid'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -38,7 +39,9 @@ export const PropertiesContainer = (): React.JSX.Element => {
   const [createManualPropertyMode, setCreateManualPropertyMode] = useState<boolean>(false)
   const { id, elementType } = useElementContext()
 
-  const { addProperty, properties } = useElementDraft(id, elementType)
+  const { element, addProperty, properties } = useElementDraft(id, elementType)
+  const isEditable = checkElementPermission(element?.permissions, 'publish') || checkElementPermission(element?.permissions, 'save')
+
   const {
     showModal: showDuplicatePropertyModal,
     closeModal: closeDuplicatePropertyModal,
@@ -68,7 +71,10 @@ export const PropertiesContainer = (): React.JSX.Element => {
 
   return (
     <Content padded>
-      <Header title={ t('properties.label') }>
+      <Header
+        className={ 'p-l-mini' }
+        title={ t('properties.label') }
+      >
         <Space size='small'>
           <Segmented
             onChange={ setPropertiesTableTab }
@@ -78,6 +84,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
             ] }
           />
 
+          {isEditable && (
           <div className={ 'pimcore-properties-toolbar__predefined-properties' }>
             <DuplicatePropertyModal
               footer={ <ModalFooter>
@@ -174,6 +181,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
               </Split>
             )}
           </div>
+          )}
         </Space>
       </Header>
 
@@ -196,13 +204,13 @@ export const PropertiesContainer = (): React.JSX.Element => {
       return
     }
 
-    if (propertyExists(property.name)) {
+    if (propertyExists(property.key)) {
       showDuplicatePropertyModal()
       return
     }
 
     const newDataProperty: DataProperty = {
-      key: property.name,
+      key: property.key,
       type: property.type,
       data: property.data,
       inherited: false,

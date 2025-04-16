@@ -35,6 +35,7 @@ export const WorkflowTabContainer = (): React.JSX.Element => {
       padded
     >
       <Header
+        className={ 'p-l-mini' }
         title={ t('workflow.headline') }
       />
 

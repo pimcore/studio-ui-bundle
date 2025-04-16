@@ -67,6 +67,7 @@ export const RequiredByPanel = (): React.JSX.Element => {
         padded
       >
         <Header
+          className={ 'p-l-mini' }
           icon={ <Icon value={ 'required-by' } /> }
           title={ t('dependencies.required-by') }
         />

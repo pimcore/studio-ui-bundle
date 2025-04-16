@@ -27,7 +27,7 @@ export const Toolbar = (): React.JSX.Element => {
         <BatchActions />
       </Split>
 
-      <Split size='small'>
+      <Split size='extra-small'>
         <Refetch />
         <Pagination />
       </Split>

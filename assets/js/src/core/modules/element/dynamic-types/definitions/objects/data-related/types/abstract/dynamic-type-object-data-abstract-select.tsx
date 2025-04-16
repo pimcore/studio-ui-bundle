@@ -22,7 +22,7 @@ import {
   type InputObjectDataDefinition
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-input'
 import { toCssDimension } from '@Pimcore/utils/css'
-import { Trans } from 'react-i18next'
+import i18n from '@Pimcore/app/i18n'
 
 export type SelectProps = AbstractObjectDataDefinition & {
   defaultValue?: string | number | string[] | null
@@ -64,11 +64,11 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
     }
   }
 
-  convertOptions (options: Array<{ key: string, value: string | number }> | null): Array<{ label: React.ReactElement, value: string | number }> | undefined {
+  convertOptions (options: Array<{ key: string, value: string | number }> | null): Array<{ label: string, value: string | number }> | undefined {
     if (options === null) {
       return
     }
-    return options.map(option => ({ label: <Trans>{ option.key }</Trans>, value: option.value }))
+    return options.map(option => ({ label: i18n.t(option.key), value: option.value }))
   }
 
   getGridCellColumnMeta (props: GetGridCellDefinitionProps): GridCellColumnMeta {

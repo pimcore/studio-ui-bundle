@@ -180,7 +180,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
           theme='secondary'
         >
           <Flex gap={ 'small' }>
-            <Title>Tag Configuration</Title>
+            <Title titleClass={ 'm-none' }>{t('widget.tag-configuration')}</Title>
             <IconTextButton
               disabled={ loadingTagKey !== undefined }
               icon={ { value: 'new' } }

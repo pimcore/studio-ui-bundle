@@ -18,8 +18,10 @@ import {
   DynamicTypeObjectDataAbstractSelect, type SelectProps
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-select'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { META_SUPPORTS_BATCH_APPEND_MODE } from '@Pimcore/modules/data-object/listing/batch-actions/batch-append-mode/batch-append-mode'
 
 export abstract class DynamicTypeObjectDataAbstractMultiSelect extends DynamicTypeObjectDataAbstractSelect {
+  supportsBatchAppendModes: boolean = true
   getObjectDataComponent (props: SelectProps): React.ReactElement<AbstractObjectDataDefinition> {
     return super.getObjectDataComponent({
       ...props,
@@ -33,7 +35,8 @@ export abstract class DynamicTypeObjectDataAbstractMultiSelect extends DynamicTy
       type: 'multi-select',
       editable: props.objectProps.noteditable !== true,
       config: {
-        options: this.convertOptions(props.objectProps.options as Array<{ key: string, value: string | number }> | null)
+        options: this.convertOptions(props.objectProps.options as Array<{ key: string, value: string | number }> | null),
+        [META_SUPPORTS_BATCH_APPEND_MODE]: this.supportsBatchAppendModes
       }
     }
   }

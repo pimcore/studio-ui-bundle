@@ -32,14 +32,15 @@ export const useStyle = createStyles(({ token, css }) => {
           .ant-btn-icon.ant-btn-icon-end {
             margin-left: 0;
           }
+
+          &:hover .pimcore-icon {
+            color: ${token.colorIconHover};
+          }
         }
       }
         
       .pimcore-icon {
-        color: ${token.colorPrimary};
-        &:hover {
-          color: ${token.colorPrimaryHover};
-        }
+        color: ${token.colorIcon};
       }
     `
   }
