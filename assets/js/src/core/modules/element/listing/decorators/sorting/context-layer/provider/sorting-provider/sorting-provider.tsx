@@ -12,7 +12,6 @@
 */
 
 import { type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
-import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { type GridProps } from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/hooks/use-grid-options'
 import React, { createContext, useMemo, useState } from 'react'
 
@@ -25,7 +24,6 @@ export interface SortingFilter {
 export interface SortingData {
   sorting: GridProps['sorting']
   setSorting: (sorting: GridProps['sorting']) => void
-  getDataQueryArg: () => SortingFilter | undefined
 }
 
 export type SortingContextProps = SortingData | undefined
@@ -38,32 +36,9 @@ export interface SortingProviderProps {
 
 export const SortingProvider = (props: SortingProviderProps): React.JSX.Element => {
   const [sorting, setSorting] = useState<SortingData['sorting']>([])
-  const { decodeColumnIdentifier } = useSelectedColumns()
-
-  const getDataQueryArg: SortingData['getDataQueryArg'] = () => {
-    if (sorting === undefined || sorting.length === 0) {
-      return undefined
-    }
-
-    const sortingColumnDef = sorting[0]
-    const selectedColumn = decodeColumnIdentifier(sortingColumnDef.id)
-
-    if (selectedColumn === undefined) {
-      return undefined
-    }
-
-    const sortingFilter: SortingFilter = {
-      key: selectedColumn.key,
-      locale: selectedColumn.locale,
-      direction: sortingColumnDef.desc ? 'desc' : 'asc'
-    }
-
-    return sortingFilter
-  }
-
   return useMemo(() => (
-    <SortingContext.Provider value={ { sorting, setSorting, getDataQueryArg } }>
+    <SortingContext.Provider value={ { sorting, setSorting } }>
       {props.children}
     </SortingContext.Provider>
-  ), [sorting])
+  ), [sorting, props.children])
 }
