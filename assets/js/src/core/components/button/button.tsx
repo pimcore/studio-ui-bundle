@@ -69,20 +69,23 @@ const Component = ({ loading, children, className, type, color, ...props }: Butt
           <AnimatePresence>
             <motion.div
               animate={ { opacity: 1 } }
+              className='button__loading-spinner'
               exit={ { opacity: 0 } }
               initial={ { opacity: 0 } }
               key={ 'loading' }
             >
               <Spin
-                className='button__loading-spinner'
                 size='small'
                 spinning
               />
             </motion.div>
           </AnimatePresence>
           )
-        : children
-        }
+        : null }
+
+      <motion.div
+        animate={ { opacity: loading === true ? 0 : 1 } }
+      >{children}</motion.div>
     </AntdButton>
   )
 }

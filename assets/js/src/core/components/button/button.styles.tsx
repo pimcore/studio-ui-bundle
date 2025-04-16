@@ -21,12 +21,12 @@ export const useStyles = createStyles(({ token, css }) => {
       .button__loading-spinner,
       .ant-spin-dot {
         position: absolute;
-        top: 0;
+        top: 50%;
         left: 0;
         right: 0;
-        bottom: 0;
         margin: auto;
         color: inherit;
+        transform: translateY(-50%);
       }
 
       &.button--type-action {
