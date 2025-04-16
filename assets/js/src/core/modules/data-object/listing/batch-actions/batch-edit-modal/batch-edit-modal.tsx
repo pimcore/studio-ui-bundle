@@ -38,6 +38,7 @@ import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
+import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean
@@ -53,12 +54,13 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const [patchObjectsByIds, { error: idPatchError, isError: isIdPatchError, isSuccess: isIdPatchSuccess }] = useDataObjectPatchByIdMutation()
   const { useDataQueryHelper } = useSettings()
   const { getArgs } = useDataQueryHelper()
-  const { id } = useElementContext()
+  const { id, elementType } = useElementContext()
   const dispatch = useAppDispatch()
   const { addJob } = useJobs()
   const selectedRowsIds = Object.keys(selectedRows ?? {})
   const selectedRowsCount = selectedRowsIds.length
   const { hasType } = useDynamicTypeResolver()
+  const { refreshGrid } = useRefreshGrid(elementType)
 
   const resetModal = (): void => {
     resetBatchEdits()
@@ -118,6 +120,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
           return response.data?.jobRunId
         },
+        refreshGrid,
         // @todo change that to a more generic context
         assetContextId: id
       }))
@@ -153,6 +156,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
           return response.data?.jobRunId
         },
+        refreshGrid,
         // @todo change that to a more generic context
         assetContextId: id
       }))

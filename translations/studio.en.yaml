@@ -360,6 +360,7 @@ jobs.job.finished: "{{title}} finished"
 jobs.job.finished-with-errors: "{{title}} finished with errors"
 jobs.job.progress: "{{progress}}% completed"
 jobs.job.button-retry: Retry
+jobs.job.button-reload: Reload
 jobs.job.button-hide: hide
 jobs.job.button-download: download
 jobs.job.button-ignore-and-reload: ignore and reload
