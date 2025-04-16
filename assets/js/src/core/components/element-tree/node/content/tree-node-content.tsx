@@ -23,22 +23,39 @@ export interface TreeNodeContentProps {
 }
 
 const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeContentProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
-  const { icon, label, isPublished } = props.node
+  const { icon, label, isPublished, isLocked } = props.node
   const { styles } = useStyles()
 
   return (
     <Flex
-      align='center'
-      gap={ 'small' }
-      ref={ ref }
+      justify='space-between'
     >
-      <Icon
-        { ...icon }
-        className={ cn({ [styles.unpublishedIcon]: isPublished === false && icon.type === 'name', [styles.unpublishedIconPath]: isPublished === false && icon.type === 'path' }) }
-        options={ { width: 16, height: 16 } }
-        subIconName={ isPublished === false ? 'eye-off' : undefined }
-      />
-      <span className="tree-node-content__label">{label}</span>
+      <Flex
+        align='center'
+        gap={ 'small' }
+        ref={ ref }
+      >
+        <Icon
+          { ...icon }
+          className={ cn({ [styles.unpublishedIcon]: isPublished === false && icon.type === 'name', [styles.unpublishedIconPath]: isPublished === false && icon.type === 'path' }) }
+          options={ { width: 16, height: 16 } }
+          subIconName={ isPublished === false ? 'eye-off' : undefined }
+        />
+        <span className="tree-node-content__label">{label}</span>
+      </Flex>
+
+      <Flex
+        align='center'
+        gap={ 'small' }
+        ref={ ref }
+      >
+        {isLocked && (
+          <Icon
+            options={ { width: 14, height: 14 } }
+            value='lock'
+          />
+        )}
+      </Flex>
     </Flex>
   )
 })
