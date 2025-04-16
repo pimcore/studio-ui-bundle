@@ -40,6 +40,7 @@ export const useStyles = createStyles(({ token, css }) => {
           
         .ant-upload-wrapper {
           width: 100%;
+          overflow: hidden;
             
           .ant-upload {
             width: 100%;
@@ -63,10 +64,6 @@ export const useStyles = createStyles(({ token, css }) => {
 
       &.tree-node--selected > .tree-node__content {
         background-color: ${token.controlItemBgActive};
-      }
-
-      .tree-node__content-wrapper {
-        max-width: calc(100% - 15px);
       }
 
       .tree-node-content__label {
