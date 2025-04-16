@@ -29,7 +29,7 @@ export interface AvailableColumnsData {
   availableColumns: AvailableColumn[]
   setAvailableColumns: (availableColumns: AvailableColumn[]) => void
   getAvailableColumnsDropdown: (menuClickHandler: OnMenuItemClick) => DropdownProps
-};
+}
 
 export type AvailableColumnsContextProps = AvailableColumnsData | undefined
 
@@ -63,7 +63,9 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
             label: t(key),
             children: value.map((column) => ({
               key: column.key,
+              group: column.group,
               label: t(column.key),
+              frontendType: column.frontendType,
               onClick: () => {
                 onMenuItemClick(column)
               }

@@ -12,7 +12,7 @@
 */
 
 import React, { useEffect, useMemo } from 'react'
-import { map, groupBy, isUndefined, isNull } from 'lodash'
+import { isUndefined } from 'lodash'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Dropdown, type ItemType, type MenuItemType } from '@Pimcore/components/dropdown/dropdown'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
@@ -36,7 +36,6 @@ import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-co
 import { createJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/factory'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
-import { type BatchEdit } from '@Pimcore/modules/asset/listing/batch-actions/batch-edit-modal/batch-edit-provider'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean
@@ -165,47 +164,24 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     }
   }
 
-  const getFilteredAvailableColumns = (availableColumns: BatchEdit[]): BatchEdit[] => {
-    return availableColumns.filter((column) => {
-      return hasType({ target: 'BATCH_EDIT', dynamicTypeIds: [column.frontendType!] })
-    })
-  }
+  const availableDropdownList = getAvailableColumnsDropdown(onColumnClick).menu.items
 
-  const getFilteredAvailableMenuItems = useMemo(() => (): Array<ItemType<MenuItemType>> | undefined => {
-    const availableDropdownMenuList = getAvailableColumnsDropdown(onColumnClick).menu.items
+  const getFilteredAvailableDropdownList = useMemo(() => (): Array<ItemType<MenuItemType>> | undefined => {
+    if (isUndefined(availableDropdownList)) return []
 
-    if (isUndefined(availableDropdownMenuList)) return []
-
-    const filteredAvailableColumns = getFilteredAvailableColumns(batchEdits)
-    const groupedAvailableColumns = map(
-      groupBy(filteredAvailableColumns, 'group'),
-      (items, group) => ({
-        group,
-        keys: items.map(item => item.key)
-      })
-    )
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    return availableDropdownMenuList.map(availableItem => {
-      if (isNull(availableItem)) return null
-
-      const availableItemGroupTitle = 'label' in availableItem && availableItem?.label
-      const availableItemGroupChildren = 'children' in availableItem ? availableItem?.children : []
-
-      const currentGroup = groupedAvailableColumns.find(batchEditItem => batchEditItem.group === availableItemGroupTitle)
-      const currentGroupFilteredChildren = availableItemGroupChildren?.filter(child =>
-        currentGroup?.keys.includes(child?.key as string) !== true
-      )
-
-      if (currentGroup?.keys.length === availableItemGroupChildren?.length) return null
-
+    return availableDropdownList.map((column: any) => {
       return {
-        ...availableItem,
-        children: currentGroupFilteredChildren
+        ...column,
+        children: column?.children?.filter((child: any) => {
+          const isAlreadyInBatchEditList = batchEdits.some(item => child.key === item.key && child.group === item.group)
+          const hasDynamicType = hasType({ target: 'BATCH_EDIT', dynamicTypeIds: [child?.frontendType as string] })
+
+          return hasDynamicType && !isAlreadyInBatchEditList
+        })
       }
-    }).filter(Boolean)
-  }, [getAvailableColumnsDropdown(onColumnClick).menu.items])
+    })
+  }, [availableDropdownList])
+  const isEmptyDropdownList = getFilteredAvailableDropdownList()?.every((item: any) => item?.children?.length === 0)
 
   return (
     <WindowModal
@@ -217,9 +193,9 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
           divider
           justify={ 'space-between' }
         >
-          <Dropdown menu={ { items: getFilteredAvailableMenuItems() } }>
+          <Dropdown menu={ { items: getFilteredAvailableDropdownList() } }>
             <IconTextButton
-              disabled={ getFilteredAvailableMenuItems()?.length === 0 }
+              disabled={ isEmptyDropdownList }
               icon={ { value: 'new' } }
               type='default'
             >
