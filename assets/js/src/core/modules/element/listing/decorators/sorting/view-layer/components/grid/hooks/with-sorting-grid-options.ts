@@ -13,11 +13,16 @@
 
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { useSorting } from '../../../../context-layer/provider/sorting-provider/use-sorting'
+import { type GridProps } from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/hooks/use-grid-options'
 
 export const withSortingGridOptions = (useBaseHook: AbstractDecoratorProps['useGridOptions']): AbstractDecoratorProps['useGridOptions'] => {
   const useGridOptionsSortingExtension: AbstractDecoratorProps['useGridOptions'] = () => {
     const { getGridProps: baseGetGridProps, transformGridColumn: baseTransformGridColumn, ...baseMethods } = useBaseHook()
     const { sorting, setSorting } = useSorting()
+
+    const setNewSorting: GridProps['onSortingChange'] = (newSorting: GridProps['sorting']) => {
+      setSorting(newSorting)
+    }
 
     const getGridProps: typeof baseGetGridProps = () => {
       const baseGripProps = baseGetGridProps()
@@ -25,8 +30,9 @@ export const withSortingGridOptions = (useBaseHook: AbstractDecoratorProps['useG
       const newGridProps: ReturnType<typeof baseGetGridProps> = {
         ...baseGripProps,
         sorting,
-        onSortingChange: setSorting,
-        enableSorting: true
+        onSortingChange: setNewSorting,
+        enableSorting: true,
+        manualSorting: true
       }
 
       return newGridProps
