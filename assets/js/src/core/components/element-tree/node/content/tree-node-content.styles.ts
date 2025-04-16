@@ -15,6 +15,13 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
+    container: css`
+      width: 100%;
+      overflow: hidden;
+    `,
+    containerChild: css`
+      min-width: 150px
+    `,
     unpublishedIcon: css`
       color: ${token.colorIconTreeUnpublished}
     `,

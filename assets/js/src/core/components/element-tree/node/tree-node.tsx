@@ -236,8 +236,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
         role='button'
         style={
           {
-            paddingLeft: token.paddingSM + 20 * level,
-            minWidth: `${20 * level + 200}px`
+            paddingLeft: token.paddingSM + 20 * level
           }
         }
         tabIndex={ -1 }

@@ -13,10 +13,10 @@
 
 import React, { forwardRef, type MutableRefObject } from 'react'
 import { type TreeNodeProps } from '../tree-node'
-import { Flex } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './tree-node-content.styles'
 import cn from 'classnames'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 export interface TreeNodeContentProps {
   node: TreeNodeProps
@@ -28,10 +28,12 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
 
   return (
     <Flex
+      className={ styles.container }
       justify='space-between'
     >
       <Flex
         align='center'
+        className={ styles.containerChild }
         gap={ 'small' }
         ref={ ref }
       >
@@ -46,7 +48,7 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
 
       <Flex
         align='center'
-        gap={ 'small' }
+        gap={ 'extra-small' }
         ref={ ref }
       >
         {isLocked && (

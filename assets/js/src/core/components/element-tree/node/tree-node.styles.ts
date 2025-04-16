@@ -66,8 +66,7 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       .tree-node__content-wrapper {
-        //max-width: max(100%, calc(100px - 16px));
-        width: 100%;
+        max-width: calc(100% - 15px);
       }
 
       .tree-node-content__label {
