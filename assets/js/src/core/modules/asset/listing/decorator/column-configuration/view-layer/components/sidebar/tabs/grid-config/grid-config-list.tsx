@@ -45,12 +45,19 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
   const stackListItems: ColumnStackListProps['items'] = columns.map((column) => {
     const uniqueId = uuid()
 
+    let translationKey = `${column.key}`
+
+    if ('fieldDefinition' in column.config) {
+      const fieldDefinition = column.config.fieldDefinition as Record<string, any>
+      translationKey = fieldDefinition?.title ?? column.key
+    }
+
     return {
       id: uniqueId,
       sortable: true,
       meta: column,
 
-      children: <Tag>{t(`${column.key}`)}</Tag>,
+      children: <Tag>{t(`${translationKey}`)}</Tag>,
 
       renderRightToolbar: (
         <Space size='mini'>

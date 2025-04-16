@@ -61,15 +61,24 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
           items: Object.entries(columnsMappedByGroup).map(([key, value]) => ({
             key: index++,
             label: t(key),
-            children: value.map((column) => ({
-              key: column.key,
-              group: column.group,
-              label: t(column.key),
-              frontendType: column.frontendType,
-              onClick: () => {
-                onMenuItemClick(column)
+            children: value.map((column) => {
+              let translationKey = `${column.key}`
+
+              if ('fieldDefinition' in column.config) {
+                const fieldDefinition = column.config.fieldDefinition as Record<string, any>
+                translationKey = fieldDefinition?.title ?? column.key
               }
-            }))
+
+              return {
+                key: column.key,
+                label: t(translationKey),
+                group: column.group,
+                frontendType: column.frontendType,
+                onClick: () => {
+                  onMenuItemClick(column)
+                }
+              }
+            })
           }))
         }
       }

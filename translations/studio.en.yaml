@@ -203,25 +203,22 @@ dependencies.required-by: Required by
 dependencies.columns.subtype: Subtype
 dependencies.columns.path: Path
 dependencies.columns.open: Open
-listing.groups.system: System
-listing.groups.default_metadata: Default Metadata
-listing.groups.predefined_metadata: Predefined Metadata
-listing.column.preview: Preview
-listing.column.id: ID
-listing.column.type: Type
-listing.column.filename: Filename
-listing.column.fullpath: Full path
-listing.column.modificationDate: Modification date
-listing.column.creationDate: Creation date
-listing.column.size: Size
-listing.column.title: Title
-listing.column.alt: Alt
-listing.column.copyright: Copyright
-listing.column.author: Author
-listing.column.authorLink: Author Link
-listing.column.license: License
-listing.column.licensePath: License Path
-listing.column.source: Source
+system: System
+default_metadata: Default Metadata
+predefined_metadata: Predefined Metadata
+preview: Preview
+id: ID
+type: Type
+filename: Filename
+fullpath: Full path
+modificationDate: Modification date
+creationDate: Creation date
+fileSize: File size
+mimetype: MIME type
+key: Key
+published: Published
+classname: Classname
+index: Index
 listing.grid-config.title: Grid config
 listing.add-column: Add a column
 listing.actions: Apply to selection
@@ -320,7 +317,6 @@ tags.columns.actions: Remove
 add: Add
 new: New
 save: Save
-type: Type
 title: Title
 description: Description
 select: Select

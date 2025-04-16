@@ -11,11 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import { createBrowserRouter } from 'react-router-dom'
-import { DefaultPage } from '@Pimcore/modules/app/default-page'
-import { LoginPage } from '@Pimcore/modules/auth/login-page'
 import { DeepLink } from '@Pimcore/components/deep-link/deep-link'
+import { DefaultPage } from '@Pimcore/modules/app/default-page'
+import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
+import { LoginPage } from '@Pimcore/modules/auth/login-page'
+import React from 'react'
+import { createBrowserRouter, Navigate, useLocation } from 'react-router-dom'
 import { appConfig } from '../config/app-config'
 
 export const baseUrl = appConfig.baseUrl.endsWith('/')
@@ -31,10 +32,26 @@ export const routes = {
   deeplinkAsset: DEEP_LINK_URL
 }
 
+const AuthenticatedRoute = ({ children }: { children: React.JSX.Element }): React.ReactElement => {
+  const isAuthenticated = useIsAuthenticated()
+  const location = useLocation()
+
+  return isAuthenticated
+    ? children
+    : (
+      <Navigate
+        state={ { from: location } }
+        to={ routes.login }
+      />
+      )
+}
+
 export const router = createBrowserRouter([
   {
     path: routes.root,
-    element: <DefaultPage />
+    element: <AuthenticatedRoute>
+      <DefaultPage />
+    </AuthenticatedRoute>
   },
   {
     path: routes.login,
@@ -42,6 +59,8 @@ export const router = createBrowserRouter([
   },
   {
     path: routes.deeplinkAsset,
-    element: <DeepLink />
+    element: <AuthenticatedRoute>
+      <DeepLink />
+    </AuthenticatedRoute>
   }
 ])
