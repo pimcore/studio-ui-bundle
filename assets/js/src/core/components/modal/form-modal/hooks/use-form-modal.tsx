@@ -76,6 +76,7 @@ interface InputFormProps {
   form: FormInstance<any>
   initialValues: object
   fieldName: string
+  onOk?: (value: any) => void
 }
 
 export function withInput (props: InputFormModalProps): ModalFuncProps {
@@ -100,6 +101,7 @@ export function withInput (props: InputFormModalProps): ModalFuncProps {
         form={ props.form }
         initialValues={ props.initialValues }
         layout={ 'vertical' }
+        onSubmitCapture={ () => { props.onOk?.(props.fieldName) } }
       >
         <Form.Item
           label={ label }
@@ -112,22 +114,26 @@ export function withInput (props: InputFormModalProps): ModalFuncProps {
     )
   })
 
+  const submit = async (fieldName): Promise<any> => {
+    return await new Promise((resolve, reject) => {
+      form!.validateFields()
+        .then(async () => {
+          const value = form!.getFieldValue(fieldName)
+          await props.onOk?.(value)
+          resolve(value)
+        })
+        .catch(() => {
+          reject(new Error('Invalid form'))
+        })
+    })
+  }
+
   return {
     ...modalProps,
     type: props.type ?? 'confirm',
     icon: props.icon ?? null,
     onOk: async () => {
-      return await new Promise((resolve, reject) => {
-        form!.validateFields()
-          .then(async () => {
-            const value = form!.getFieldValue(fieldName)
-            await props.onOk?.(value)
-            resolve(value)
-          })
-          .catch(() => {
-            reject(new Error('Invalid form'))
-          })
-      })
+      await submit(fieldName)
     },
     modalRender: (node) => {
       if (inputRef.current !== null) {
@@ -140,6 +146,7 @@ export function withInput (props: InputFormModalProps): ModalFuncProps {
       form={ form! }
       initialValues={ { [fieldName]: initialValue } }
       key={ 'input-form' }
+      onOk={ submit }
       ref={ inputRef }
              />
   }
