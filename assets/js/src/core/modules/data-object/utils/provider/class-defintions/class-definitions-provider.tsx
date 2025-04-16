@@ -13,7 +13,7 @@
 
 import { type BaseQuery } from '@Pimcore/app/api/pimcore'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { type ClassDefinitionCollectionApiArg, type ClassDefinitionCollectionApiResponse, useClassDefinitionCollectionQuery } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
+import { useClassDefinitionCollectionQuery, type ClassDefinitionCollectionApiArg, type ClassDefinitionCollectionApiResponse } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { type TypedUseQueryHookResult } from '@reduxjs/toolkit/dist/query/react'
 import React, { createContext, useMemo } from 'react'
 
@@ -30,7 +30,7 @@ export interface ClassDefinitionsProviderProps {
 export const ClassDefinitionsProvider = ({ children }: ClassDefinitionsProviderProps): React.JSX.Element => {
   const queryResultReturn = useClassDefinitionCollectionQuery()
 
-  if (queryResultReturn.error !== undefined) {
+  if (queryResultReturn?.error !== undefined) {
     trackError(new ApiError(queryResultReturn.error))
   }
 
