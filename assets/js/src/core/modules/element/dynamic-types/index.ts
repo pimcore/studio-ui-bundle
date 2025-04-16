@@ -123,6 +123,8 @@ import { type DynamicTypeBatchEditRegistry } from '@Pimcore/modules/element/dyna
 import { type DynamicTypeBatchEditText } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/text/dynamic-type-batch-edit-text'
 import { type DynamicTypeBatchEditTextArea } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/text/dynamic-type-batch-edit-text-area'
 import { type DynamicTypeBatchEditDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/datetime/dynamic-type-batch-edit-datetime'
+import { type DynamicTypeBatchEditSelect } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/select/dynamic-type-batch-edit-select'
+import { type DynamicTypeBatchEditCheckbox } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/checkbox/dynamic-type-batch-edit-checkbox'
 import { type DynamicTypeGridCellLanguageSelect } from './definitions/grid-cell/types/language-select/dynamic-type-grid-cell-language-select'
 import { type DynamicTypeGridCellTranslate } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/translate/dynamic-type-grid-cell-translate'
 import { type DynamicTypeListingRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/listing/dynamic-type-listing-registry'
@@ -148,9 +150,6 @@ import { type DynamicTypeObjectFolder } from './definitions/objects/types/dynami
 import { type DynamicTypeObjectObject } from './definitions/objects/types/dynamic-type-object-object'
 import { type DynamicTypeObjectVariant } from './definitions/objects/types/dynamic-type-object-variant'
 import { type DynamicTypeObjectDataClassificationStore } from './definitions/objects/data-related/types/dynamic-type-object-data-classification-store'
-import {
-  type DynamicTypeBatchEditSelect
-} from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/select/dynamic-type-batch-edit-select'
 
 moduleSystem.registerModule({
   onInit () {
@@ -167,6 +166,7 @@ moduleSystem.registerModule({
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditTextArea>(serviceIds['DynamicTypes/BatchEdit/TextArea']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditDatetime>(serviceIds['DynamicTypes/BatchEdit/Datetime']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditSelect>(serviceIds['DynamicTypes/BatchEdit/Select']))
+    batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditCheckbox>(serviceIds['DynamicTypes/BatchEdit/Checkbox']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditDataObjectAdapter>(serviceIds['DynamicTypes/BatchEdit/DataObjectAdapter']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditDataObjectObjectBrick>(serviceIds['DynamicTypes/BatchEdit/DataObjectObjectBrick']))
 

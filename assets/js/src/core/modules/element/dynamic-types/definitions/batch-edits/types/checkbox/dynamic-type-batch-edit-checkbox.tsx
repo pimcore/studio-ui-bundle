@@ -14,15 +14,15 @@
 import React, { type ReactElement } from 'react'
 import { injectable } from 'inversify'
 import { type DynamicTypeBatchEditAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/dynamic-type-batch-edit-abstract'
-import { DynamicTypeBatchEditDatetimeComponent, type DynamicTypeBatchEditDatetimeProps } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/components/datetime/dynamic-type-batch-edit-datetime-component'
+import { DynamicTypeBatchEditCheckboxComponent, type DynamicTypeBatchEditCheckboxProps } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/components/checkbox/dynamic-type-batch-edit-checkbox-component'
 
 @injectable()
-export class DynamicTypeBatchEditDatetime implements DynamicTypeBatchEditAbstract {
-  id = 'datetime'
+export class DynamicTypeBatchEditCheckbox implements DynamicTypeBatchEditAbstract {
+  id = 'checkbox'
 
-  getBatchEditComponent (props: DynamicTypeBatchEditDatetimeProps): ReactElement<DynamicTypeBatchEditDatetimeProps> {
+  getBatchEditComponent (props: DynamicTypeBatchEditCheckboxProps): ReactElement<DynamicTypeBatchEditCheckboxProps> {
     return (
-      <DynamicTypeBatchEditDatetimeComponent { ...props } />
+      <DynamicTypeBatchEditCheckboxComponent { ...props } />
     )
   }
 }
