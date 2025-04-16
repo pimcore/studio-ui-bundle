@@ -11,6 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { isPlainObject } from 'lodash'
+
 export enum BatchAppendMode {
   Add = 'add',
   Remove = 'remove',
@@ -24,4 +26,11 @@ export const addBatchAppendMode = (value: any, mode: BatchAppendMode): any => {
     action: mode,
     data: value
   }
+}
+
+export const removeBatchAppendMode = (value: any): any => {
+  if (isPlainObject(value)) {
+    return value.data
+  }
+  return value
 }
