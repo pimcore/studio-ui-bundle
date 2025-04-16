@@ -148,6 +148,9 @@ import { type DynamicTypeObjectFolder } from './definitions/objects/types/dynami
 import { type DynamicTypeObjectObject } from './definitions/objects/types/dynamic-type-object-object'
 import { type DynamicTypeObjectVariant } from './definitions/objects/types/dynamic-type-object-variant'
 import { type DynamicTypeObjectDataClassificationStore } from './definitions/objects/data-related/types/dynamic-type-object-data-classification-store'
+import {
+  type DynamicTypeBatchEditSelect
+} from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/select/dynamic-type-batch-edit-select'
 
 moduleSystem.registerModule({
   onInit () {
@@ -163,6 +166,7 @@ moduleSystem.registerModule({
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditText>(serviceIds['DynamicTypes/BatchEdit/Text']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditTextArea>(serviceIds['DynamicTypes/BatchEdit/TextArea']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditDatetime>(serviceIds['DynamicTypes/BatchEdit/Datetime']))
+    batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditSelect>(serviceIds['DynamicTypes/BatchEdit/Select']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditDataObjectAdapter>(serviceIds['DynamicTypes/BatchEdit/DataObjectAdapter']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditDataObjectObjectBrick>(serviceIds['DynamicTypes/BatchEdit/DataObjectObjectBrick']))
 
