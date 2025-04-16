@@ -11,17 +11,17 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { routes } from '@Pimcore/app/router/router'
-import React, { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+export enum BatchAppendMode {
+  Add = 'add',
+  Remove = 'remove',
+  Replace = 'replace'
+}
 
-export const DeepLink = (): React.JSX.Element => {
-  const { elementType, id } = useParams()
-  const navigate = useNavigate()
+export const META_SUPPORTS_BATCH_APPEND_MODE = 'supportsBatchAppendMode'
 
-  useEffect(() => {
-    navigate(routes.root, { state: { isDeeplink: true, id, elementType } })
-  }, [id, elementType])
-
-  return <></>
+export const addBatchAppendMode = (value: any, mode: BatchAppendMode): any => {
+  return {
+    action: mode,
+    data: value
+  }
 }

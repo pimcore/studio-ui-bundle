@@ -87,9 +87,16 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
         groupedItems[group] = []
       }
 
+      let translationKey = `${column.key}`
+
+      if ('fieldDefinition' in column.config) {
+        const fieldDefinition = column.config.fieldDefinition as Record<string, any>
+        translationKey = fieldDefinition?.title ?? column.key
+      }
+
       groupedItems[group].push({
         key: column.key,
-        label: t(column.key),
+        label: t(translationKey),
         onClick: () => { handleColumnClick(column) }
       })
     })
