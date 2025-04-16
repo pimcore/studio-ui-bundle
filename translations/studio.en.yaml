@@ -371,6 +371,9 @@ batch-edit.no-content: There are no added columns yet
 batch-edit.modal-footer.apply-changes: Apply changes
 batch-edit.modal-footer.discard-all-changes: Discard All Changes
 batch-edit.modal-footer.add-a-column: Add a column
+batch-edit.append-mode.replace: Batch replace
+batch-edit.append-mode.add: Batch add
+batch-edit.append-mode.remove: Batch remove
 export-csv-form.modal-title: Export CSV
 export-csv-form.export-notice: Please note that the export does not support some fields(e.g. preview, size). Press OK to continue with the export.
 export-csv-form.form-field.delimiter: Delimiter
