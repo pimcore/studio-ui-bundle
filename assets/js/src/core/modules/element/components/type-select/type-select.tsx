@@ -73,6 +73,7 @@ export const TypeSelect = ({ nullable = true, registryServiceId, ...props }: Typ
 
   return (
     <Select
+      minWidth={ 'normal' }
       onChange={ onChange }
       options={ preparedOptions }
       value={ value }
