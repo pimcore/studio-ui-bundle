@@ -95,7 +95,7 @@ export const NotificationJobContainer = (props: BatchEditProps): React.JSX.Eleme
       failureButtonActions={ [
         {
           label: t('jobs.job.button-retry'),
-          handler: successButtonHandler
+          handler: failureButtonHandler
         },
         {
           label: t('jobs.job.button-hide'),
@@ -105,7 +105,7 @@ export const NotificationJobContainer = (props: BatchEditProps): React.JSX.Eleme
       successButtonActions={ [
         {
           label: t('jobs.job.button-reload'),
-          handler: failureButtonHandler
+          handler: async () => { await successButtonHandler() }
         },
         {
           label: t('jobs.job.button-hide'),
