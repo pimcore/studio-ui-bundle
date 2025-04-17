@@ -23,6 +23,8 @@ import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { ContextMenuActionName } from '..'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { setNodeLoadingInAllTree, setNodeLocked } from '@Pimcore/components/element-tree/element-tree-slice'
 
 export interface UseLockHookReturn {
   lock: (id: number) => Promise<void>
@@ -40,11 +42,14 @@ export interface UseLockHookReturn {
   isLockMenuHidden: (node: Element | TreeNodeProps) => boolean
 }
 
+type LockTypes = 'self' | 'propagate' | '' | 'unlockPropagate'
+
 export const useLock = (elementType: ElementType): UseLockHookReturn => {
   const { t } = useTranslation()
   const { elementPatch } = useElementApi(elementType)
   const user = useUser()
   const { isTreeActionAllowed } = useTreePermission()
+  const dispatch = useAppDispatch()
 
   const lock = async (id: number): Promise<void> => {
     await patchLock(id, 'self')
@@ -60,8 +65,8 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     await patchLock(id, 'unlockPropagate')
   }
 
-  const patchLock = async (id: number, lockType: 'self' | 'propagate' | '' | 'unlockPropagate'): Promise<void> => {
-    await elementPatch({
+  const patchLock = async (id: number, lockType: LockTypes): Promise<void> => {
+    const elementLockTask = elementPatch({
       body: {
         data: [{
           id,
@@ -69,6 +74,23 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
         }]
       }
     })
+
+    const getLockedFromLockType = (lockType: LockTypes): boolean => {
+      return lockType === 'self' || lockType === 'propagate'
+    }
+
+    try {
+      dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType, loading: true }))
+      const success = await elementLockTask
+
+      if (success) {
+        dispatch(setNodeLocked({ elementType, nodeId: String(id), isLocked: getLockedFromLockType(lockType) }))
+      }
+
+      dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType, loading: false }))
+    } catch (error) {
+      console.error('Error renaming ' + elementType, error)
+    }
   }
 
   const lockTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
