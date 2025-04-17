@@ -38,13 +38,27 @@ i18n.use({
   type: 'postProcessor',
   name: 'returnKeyIfEmpty',
   process (value, key, options, translator) {
+    let returnValue = value
+
     if (value === '') {
+      returnValue = key
+
       if (Array.isArray(key)) {
-        return key[0]
+        returnValue = key[0]
       }
-      return key
     }
-    return value
+
+    if (typeof returnValue !== 'string') {
+      try {
+        returnValue = JSON.stringify(returnValue)
+      } catch (e) {
+        throw new Error(`Translation key '${key}' with value '${value}' is not translatable. Error in i18n postProcessor: ${e}`)
+      }
+
+      console.warn('Malformed translation key detected:', key, value)
+    }
+
+    return returnValue
   }
 })
 

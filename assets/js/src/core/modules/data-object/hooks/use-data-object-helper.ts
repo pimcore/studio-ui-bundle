@@ -26,6 +26,7 @@ import { SaveTaskType } from '../actions/save/use-save'
 import { useDataObjectUpdateByIdMutation } from '../data-object-api-slice.gen'
 import { publishDraft, unpublishDraft } from '../data-object-draft-slice'
 import { type EditorContainerProps } from '../editor/editor-container'
+import { useDataObjectDraftFetcher } from './use-data-object-draft-fetcher'
 
 interface OpenDataObjectWidgetProps {
   config: EditorContainerProps
@@ -40,6 +41,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
   const { openMainWidget, isMainWidgetOpen } = useWidgetManager()
   const dispatch = useAppDispatch()
   const [update] = useDataObjectUpdateByIdMutation()
+  const { updateDataObjectDraft } = useDataObjectDraftFetcher()
 
   async function openDataObject (props: OpenDataObjectWidgetProps): Promise<void> {
     const { config } = props
@@ -47,6 +49,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
 
     if (!isMainWidgetOpen(widgetId)) {
       dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_DETAIL_ID(config.id)))
+      void updateDataObjectDraft(config.id, true)
     }
 
     const { data } = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id: config.id }))

@@ -11,14 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
-import { api as dataObjectApi, type DataObject, type DataObjectGetByIdApiResponse } from '../data-object-api-slice-enhanced'
+import { useAppSelector } from '@Pimcore/app/store'
 import {
   addPropertyToDataObject,
-  addScheduleToDataObject,
-  dataObjectReceived,
-  removeDataObject,
-  removePropertyFromDataObject,
+  addScheduleToDataObject, removePropertyFromDataObject,
   removeScheduleFromDataObject,
   resetChanges,
   resetSchedulesChangesForDataObject,
@@ -44,13 +40,14 @@ import { useSchedulesDraft, type UseSchedulesDraftReturn } from '@Pimcore/module
 import type { ElementEditorType, TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { initialTabsStateValue, useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-tabs'
+import { useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-tabs'
 import {
   useModifiedObjectDataDraft,
   type UseModifiedObjectDataDraftReturn
 } from '@Pimcore/modules/data-object/draft/hooks/use-modified-object-data'
 import { useDraftDataDraft, type UseDraftDataReturn } from '@Pimcore/modules/data-object/draft/hooks/use-draft-data'
 import { usePublishedDraft, type UsePublishedData } from '@Pimcore/modules/element/draft/hooks/use-published'
+import { isFailedDraftId } from '../data-object-draft-error-slice'
 
 export interface UseDataObjectDraftReturn extends
   UsePropertiesDraftReturn,
@@ -64,74 +61,21 @@ export interface UseDataObjectDraftReturn extends
   isError: boolean
   dataObject: undefined | ReturnType<typeof selectDataObjectById>
   editorType: ElementEditorType | undefined
-
-  removeDataObjectFromState: () => void
-
-  fetchDataObject: () => Promise<DataObject>
 }
 
 export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
-  const dispatch = useAppDispatch()
   const dataObject = useAppSelector(state => selectDataObjectById(state, id))
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [isError, setIsError] = useState<boolean>(false)
   const typeRegistry = useInjection<TypeRegistryInterface>(serviceIds['DataObject/Editor/TypeRegistry'])
-
-  async function fetchDataObject (): Promise<DataObjectGetByIdApiResponse> {
-    const { data } = await dispatch(dataObjectApi.endpoints.dataObjectGetById.initiate({ id }))
-
-    if (data !== undefined) {
-      return data
-    }
-
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    return {} as DataObject
-  }
+  const isError = useAppSelector((state) => isFailedDraftId(state, id))
 
   useEffect(() => {
-    if (dataObject === undefined) {
-      getDataObject()
+    if (dataObject === undefined && !isError) {
+      setIsLoading(true)
     } else {
       setIsLoading(false)
     }
   }, [dataObject])
-
-  function getDataObject (): void {
-    setIsLoading(true)
-
-    Promise.all([
-      fetchDataObject()
-    ]).then(([dataObjectData]) => {
-      const mergedDataObjectData = {
-        ...dataObjectData,
-        id,
-        modified: false,
-        properties: [],
-        schedules: [],
-        changes: {},
-        modifiedCells: {},
-        modifiedObjectData: {},
-        ...initialTabsStateValue
-      }
-
-      if (dataObjectData !== undefined) {
-        dispatch(dataObjectReceived(mergedDataObjectData))
-      }
-
-      return mergedDataObjectData
-    }).catch((e) => {
-      console.error(e)
-      setIsError(true)
-    }).finally(() => {
-      setIsLoading(false)
-    })
-  }
-
-  function removeDataObjectFromState (): void {
-    if (dataObject === undefined) return
-
-    dispatch(removeDataObject(dataObject.id))
-  }
 
   const trackableChangesActions = useTrackableChangesDraft(
     id,
@@ -190,8 +134,6 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
     isError,
     dataObject,
     editorType,
-    removeDataObjectFromState,
-    fetchDataObject,
     ...trackableChangesActions,
     ...propertyActions,
     ...schedulesActions,

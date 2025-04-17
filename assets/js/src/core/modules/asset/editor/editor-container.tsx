@@ -20,6 +20,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { TabsContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs-container'
 import { Toolbar } from '@Pimcore/modules/asset/editor/toolbar/toolbar'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
+import { Alert } from '@Pimcore/components/alert/alert'
 
 export interface EditorContainerProps {
   id: number
@@ -27,14 +28,13 @@ export interface EditorContainerProps {
 
 const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   const { id } = props
-  const { isLoading, isError, asset, removeAssetFromState, editorType } = useAssetDraft(id)
+  const { isLoading, isError, asset, editorType } = useAssetDraft(id)
   const isWidgetActive = useIsAcitveMainWidget()
   const { setContext, removeContext } = useGlobalAssetContext()
 
   useEffect(() => {
     return () => {
       removeContext()
-      removeAssetFromState()
     }
   }, [])
 
@@ -50,12 +50,19 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
     }
   }, [isWidgetActive])
 
-  if (isError) {
-    return <div>Error</div>
-  }
-
   if (isLoading) {
     return <Content loading />
+  }
+
+  if (isError) {
+    return (
+      <Content padded>
+        <Alert
+          message="Error: Loading of asset failed"
+          type="error"
+        />
+      </Content>
+    )
   }
 
   if (asset === undefined || editorType === undefined) {

@@ -30,6 +30,7 @@ import {
 import {
   SaveProvider
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/save-provider'
+import { Alert } from '@Pimcore/components/alert/alert'
 
 export interface EditorContainerInnerProps {
   id: number
@@ -37,14 +38,13 @@ export interface EditorContainerInnerProps {
 
 const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Element => {
   const { id } = props
-  const { isLoading, isError, dataObject, removeDataObjectFromState, editorType } = useDataObjectDraft(id)
+  const { isLoading, isError, dataObject, editorType } = useDataObjectDraft(id)
   const isWidgetActive = useIsAcitveMainWidget()
   const { setContext, removeContext } = useGlobalDataObjectContext()
 
   useEffect(() => {
     return () => {
       removeContext()
-      removeDataObjectFromState()
     }
   }, [])
 
@@ -60,12 +60,19 @@ const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Eleme
     }
   }, [isWidgetActive])
 
-  if (isError) {
-    return <div>Error</div>
-  }
-
   if (isLoading) {
     return <Content loading />
+  }
+
+  if (isError) {
+    return (
+      <Content padded>
+        <Alert
+          message="Error: Loading of data object failed"
+          type="error"
+        />
+      </Content>
+    )
   }
 
   if (dataObject === undefined || editorType === undefined) {
