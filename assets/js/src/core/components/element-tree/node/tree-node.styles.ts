@@ -50,6 +50,11 @@ export const useStyles = createStyles(({ token, css }) => {
           }
         }
 
+        .tree-node__content-wrapper {
+          width: 100%;
+          overflow: hidden;
+        }
+
         @media (hover: hover) {
           &:hover {
             background-color: ${token.controlItemBgActiveHover};
