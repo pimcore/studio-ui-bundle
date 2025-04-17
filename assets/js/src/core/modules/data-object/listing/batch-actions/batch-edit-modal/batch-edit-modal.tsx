@@ -227,7 +227,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         setBatchEditModalOpen(false)
       } }
       open={ batchEditModalOpen }
-      size={ 'L' }
+      size={ 'XL' }
       title={ <ModalTitle>{t('batch-edit.modal-title')}</ModalTitle> }
     >
       <FieldWidthProvider

@@ -20,6 +20,8 @@ import {
   ContentLayout
 } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
+import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { Pagination } from './pagination/pagination'
 
 const PreviewContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
@@ -43,35 +45,31 @@ const PreviewContainer = (): React.JSX.Element => {
     setPageSize(pageSize)
   }
 
-  console.log({ total, onPagerChange })
-
   return useMemo(() => (
     <ContentLayout
       renderToolbar={
-        <>
-          {/* @todo toolbar should not be shared with the grid...
-          <GridToolbarContainer
-          pager={ data !== undefined && data.totalItems > 0
-            ? {
-                current: currentPage,
-                total,
-                pageSize,
-                onChange: onPagerChange
-              }
-            : undefined }
-          /> */}
-        </>
+        <Toolbar
+          justify={ 'flex-end' }
+          theme='secondary'
+        >
+          <Pagination
+            current={ currentPage }
+            defaultPageSize={ pageSize }
+            onChange={ onPagerChange }
+            total={ total }
+          />
+        </Toolbar>
       }
     >
       <Content
         loading={ isLoading }
         padded
       >
-        { data?.items !== undefined && data.items.length > 0 && (
+        {data?.items !== undefined && data.items.length > 0 && (
           <FlexContainer assets={ data } />
         )}
       </Content>
-    </ContentLayout>
+    </ContentLayout >
   ), [currentPage, pageSize, data, isLoading])
 }
 

@@ -13,15 +13,25 @@
 
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { useSorting } from '../context-layer/provider/sorting-provider/use-sorting'
+import { useSelectedColumns } from '../../../abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 
 export const withSortingDataQueryArg = (useBaseHook: AbstractDecoratorProps['useDataQueryHelper']): AbstractDecoratorProps['useDataQueryHelper'] => {
   const useDataQueryHelperSortingExtension: AbstractDecoratorProps['useDataQueryHelper'] = () => {
     const { getArgs: baseGetArgs, ...baseMethods } = useBaseHook()
-    const { getDataQueryArg } = useSorting()
+    const { sorting } = useSorting()
+    const { decodeColumnIdentifier } = useSelectedColumns()
 
     const getArgs: typeof baseGetArgs = () => {
       const baseArgs = baseGetArgs()
-      const sortingFilter = getDataQueryArg()
+      const sortingFilter = sorting?.map((sort) => {
+        const selectedColumn = decodeColumnIdentifier(sort.id)
+
+        return {
+          key: selectedColumn!.key,
+          locale: selectedColumn!.locale,
+          direction: sort.desc ? 'desc' : 'asc'
+        }
+      })[0]
 
       return {
         ...baseArgs,
@@ -29,7 +39,7 @@ export const withSortingDataQueryArg = (useBaseHook: AbstractDecoratorProps['use
           ...baseArgs.body,
           filters: {
             ...baseArgs.body.filters,
-            ...(sortingFilter !== undefined ? { sortingFilter } : {})
+            ...(sortingFilter !== undefined ? { sortFilter: sortingFilter } : {})
           }
         }
       }
