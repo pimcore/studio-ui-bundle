@@ -66,6 +66,7 @@ export const serviceIds = {
   'DynamicTypes/BatchEdit/Datetime': 'DynamicTypes/BatchEdit/Datetime',
   'DynamicTypes/BatchEdit/Select': 'DynamicTypes/BatchEdit/Select',
   'DynamicTypes/BatchEdit/Checkbox': 'DynamicTypes/BatchEdit/Checkbox',
+  'DynamicTypes/BatchEdit/ElementDropzone': 'DynamicTypes/BatchEdit/ElementDropzone',
   'DynamicTypes/BatchEdit/DataObjectAdapter': 'DynamicTypes/BatchEdit/DataObjectAdapter',
   'DynamicTypes/BatchEdit/DataObjectObjectBrick': 'DynamicTypes/BatchEdit/DataObjectObjectBrick',
 
