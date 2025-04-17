@@ -23,7 +23,7 @@ import { type BatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-
 
 export interface BatchEditProps extends JobProps {
   config: BatchEditJob['config']
-  refreshGrid: () => void
+  refreshGrid: () => Promise<void>
 }
 export const NotificationJobContainer = (props: BatchEditProps): React.JSX.Element => {
   const { id, topics, status, action, refreshGrid } = props
@@ -88,14 +88,14 @@ export const NotificationJobContainer = (props: BatchEditProps): React.JSX.Eleme
     openSEEvent()
   }
 
-  const successButtonHandler = (): void => { refreshGrid() }
+  const successButtonHandler = async (): Promise<void> => { await refreshGrid() }
 
   return (
     <JobView
       failureButtonActions={ [
         {
           label: t('jobs.job.button-retry'),
-          handler: failureButtonHandler
+          handler: successButtonHandler
         },
         {
           label: t('jobs.job.button-hide'),
@@ -105,7 +105,7 @@ export const NotificationJobContainer = (props: BatchEditProps): React.JSX.Eleme
       successButtonActions={ [
         {
           label: t('jobs.job.button-reload'),
-          handler: successButtonHandler
+          handler: failureButtonHandler
         },
         {
           label: t('jobs.job.button-hide'),
