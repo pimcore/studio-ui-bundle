@@ -14,7 +14,7 @@
 import React, { useMemo } from 'react'
 import { ObjectComponent } from './object-component'
 import { Form } from '@Pimcore/components/form/form'
-import { Button, ConfigProvider } from 'antd'
+import { ConfigProvider } from 'antd'
 import { type DataObjectGetLayoutByIdApiResponse } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useEditFormContext } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
 import {
@@ -24,6 +24,7 @@ import {
   DraftAlert
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/root-component/draft-alert'
 import { FieldWidthProvider } from '../../../../../../../../element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 
 interface RootComponentProps {
   layout: DataObjectGetLayoutByIdApiResponse
@@ -50,10 +51,6 @@ export const RootComponent = ({ layout, data, className }: RootComponentProps): 
     updateDraft().catch((error) => { console.error(error) })
   }
 
-  const handleSubmit = (values: any): void => {
-    console.log(values)
-  }
-
   return useMemo(() => (
     <ConfigProvider theme={ { components: { Form: { itemMarginBottom: 0 } } } }>
       <FieldWidthProvider>
@@ -62,18 +59,14 @@ export const RootComponent = ({ layout, data, className }: RootComponentProps): 
           form={ form }
           initialValues={ data }
           layout='vertical'
-          onFinish={ handleSubmit }
           onValuesChange={ handleValuesChange }
           preserve
         >
-          <DraftAlert />
-          <ObjectComponent { ...layout } />
-          <Form.Item style={ { margin: 12 } }>
-            <Button
-              htmlType="submit"
-              type="primary"
-            >Test submission</Button>
-          </Form.Item>
+          <ContentLayout
+            renderTopBar={ <DraftAlert /> }
+          >
+            <ObjectComponent { ...layout } />
+          </ContentLayout>
         </Form>
       </FieldWidthProvider>
     </ConfigProvider>
