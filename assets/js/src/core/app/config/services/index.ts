@@ -166,6 +166,7 @@ import { DynamicTypeObjectFolder } from '@Pimcore/modules/element/dynamic-types/
 import { DynamicTypeObjectObject } from '@Pimcore/modules/element/dynamic-types/definitions/objects/types/dynamic-type-object-object'
 import { DynamicTypeObjectVariant } from '@Pimcore/modules/element/dynamic-types/definitions/objects/types/dynamic-type-object-variant'
 import { DynamicTypeObjectDataClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-classification-store'
+import { DynamicTypeGridCellBoolean } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/boolean/dynamic-type-grid-cell-boolean'
 
 // Main nav
 container.bind(serviceIds.mainNavRegistry).to(MainNavRegistry).inSingletonScope()
@@ -215,6 +216,7 @@ container.bind(serviceIds['DynamicTypes/GridCell/Number']).to(DynamicTypeGridCel
 container.bind(serviceIds['DynamicTypes/GridCell/Select']).to(DynamicTypeGridCellSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/MultiSelect']).to(DynamicTypeGridCellMultiSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Checkbox']).to(DynamicTypeGridCellCheckbox).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/Boolean']).to(DynamicTypeGridCellBoolean).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Date']).to(DynamicTypeGridCellDate).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Time']).to(DynamicTypeGridCellTime).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/DateTime']).to(DynamicTypeGridCellDateTime).inSingletonScope()

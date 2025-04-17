@@ -72,6 +72,7 @@ export const serviceIds = {
   'DynamicTypes/GridCell/Select': 'DynamicTypes/GridCell/Select',
   'DynamicTypes/GridCell/MultiSelect': 'DynamicTypes/GridCell/MultiSelect',
   'DynamicTypes/GridCell/Checkbox': 'DynamicTypes/GridCell/Checkbox',
+  'DynamicTypes/GridCell/Boolean': 'DynamicTypes/GridCell/Boolean',
   'DynamicTypes/GridCell/Date': 'DynamicTypes/GridCell/Date',
   'DynamicTypes/GridCell/Time': 'DynamicTypes/GridCell/Time',
   'DynamicTypes/GridCell/DateTime': 'DynamicTypes/GridCell/DateTime',
