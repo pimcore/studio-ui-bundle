@@ -82,11 +82,11 @@ export const ClassDefinitionSelect = ({ nullable = false }: ClassDefinitionSelec
     }
   }, [isDisabled])
 
-  // @todo translation
   return (
     <Select
       className='w-full'
       disabled={ isDisabled }
+      minWidth={ 'normal' }
       onChange={ (value) => { onChange(value) } }
       options={ options }
       showSearch

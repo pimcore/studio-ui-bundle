@@ -17,7 +17,7 @@ import type { SerializedError } from '@reduxjs/toolkit'
 import { ErrorKeyTypes } from '@Pimcore/modules/app/error-handler/constants/errorTypes'
 import { type IErrorGetContent } from '@Pimcore/modules/app/error-handler/types'
 
-type ApiErrorData = FetchBaseQueryError | SerializedError
+export type ApiErrorData = FetchBaseQueryError | SerializedError
 
 export interface IApiErrorDetails {
   detail?: string
