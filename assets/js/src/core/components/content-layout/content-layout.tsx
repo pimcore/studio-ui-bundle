@@ -38,7 +38,7 @@ const Component = (props: ContentToolbarViewProps): React.JSX.Element => {
         </div>
       )}
 
-      <Content className='content-toolbar-sidebar-layout__content'>
+      <Content className='content-toolbar-sidebar-layout__content relative'>
         {props.children}
       </Content>
 
