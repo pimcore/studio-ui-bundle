@@ -78,7 +78,6 @@ interface InputFormProps {
   form: FormInstance<any>
   initialValues: object
   fieldName: string
-  onSubmit?: (value: any) => void
 }
 
 export function withInput (props: InputFormModalProps, onKeyBoardSubmit): ModalFuncProps {
@@ -97,25 +96,6 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit): ModalF
     formattedRule = [rule]
   }
 
-  const InputForm = forwardRef(function InputForm (props: InputFormProps, ref: RefObject<InputRef>): React.JSX.Element {
-    return (
-      <Form
-        form={ props.form }
-        initialValues={ props.initialValues }
-        layout={ 'vertical' }
-        onSubmitCapture={ () => { props.onSubmit?.(props.fieldName) } }
-      >
-        <Form.Item
-          label={ label }
-          name={ props.fieldName }
-          rules={ formattedRule }
-        >
-          <Input ref={ ref } />
-        </Form.Item>
-      </Form>
-    )
-  })
-
   const submit = async (fieldName): Promise<any> => {
     return await new Promise((resolve, reject) => {
       form!.validateFields()
@@ -130,6 +110,25 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit): ModalF
         })
     })
   }
+
+  const InputForm = forwardRef(function InputForm (props: InputFormProps, ref: RefObject<InputRef>): React.JSX.Element {
+    return (
+      <Form
+        form={ props.form }
+        initialValues={ props.initialValues }
+        layout={ 'vertical' }
+        onSubmitCapture={ async () => { await submit(props.fieldName) } }
+      >
+        <Form.Item
+          label={ label }
+          name={ props.fieldName }
+          rules={ formattedRule }
+        >
+          <Input ref={ ref } />
+        </Form.Item>
+      </Form>
+    )
+  })
 
   return {
     ...modalProps,
@@ -149,7 +148,6 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit): ModalF
       form={ form! }
       initialValues={ { [fieldName]: initialValue } }
       key={ 'input-form' }
-      onSubmit={ submit }
       ref={ inputRef }
              />
   }
