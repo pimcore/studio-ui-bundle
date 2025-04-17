@@ -83,9 +83,7 @@ const Component = ({ loading, children, className, type, color, ...props }: Butt
           )
         : null }
 
-      <motion.div
-        animate={ { opacity: loading === true ? 0 : 1 } }
-      >{children}</motion.div>
+      <span className={ 'button__text' }>{children}</span>
     </AntdButton>
   )
 }

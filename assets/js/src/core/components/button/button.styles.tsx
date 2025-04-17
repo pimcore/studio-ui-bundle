@@ -28,6 +28,18 @@ export const useStyles = createStyles(({ token, css }) => {
         color: inherit;
         transform: translateY(-50%);
       }
+      
+      .button__text {
+        transition: opacity 200ms ease-in-out;
+        
+        &:empty {
+          display: none;
+        }
+      }
+      
+      .button__loading-spinner + .button__text {
+        opacity: 0;
+      }
 
       &.button--type-action {
         background-color: ${token.colorBgToolbar};
