@@ -46,7 +46,7 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
   const { treeId } = useTreeId(true)
 
   const addFolder = (parentId: number, onBeforeMutation?: () => void, onFailedMutation?: () => void): void => {
-    const modalInstance = modal.input({
+    modal.input({
       title: t('element.new-folder'),
       label: t('form.label.new-item'),
       rule: {
@@ -56,7 +56,6 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
       onOk: async (value: string) => {
         onBeforeMutation?.()
         await addFolderMutation(parentId, value, onFailedMutation)
-        modalInstance.destroy()
       }
     })
   }
