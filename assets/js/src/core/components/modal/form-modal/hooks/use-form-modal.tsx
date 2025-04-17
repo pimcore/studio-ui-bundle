@@ -76,7 +76,7 @@ interface InputFormProps {
   form: FormInstance<any>
   initialValues: object
   fieldName: string
-  onOk?: (value: any) => void
+  onSubmit?: (value: any) => void
 }
 
 export function withInput (props: InputFormModalProps): ModalFuncProps {
@@ -101,7 +101,7 @@ export function withInput (props: InputFormModalProps): ModalFuncProps {
         form={ props.form }
         initialValues={ props.initialValues }
         layout={ 'vertical' }
-        onSubmitCapture={ () => { props.onOk?.(props.fieldName) } }
+        onSubmitCapture={ () => { props.onSubmit?.(props.fieldName) } }
       >
         <Form.Item
           label={ label }
@@ -146,7 +146,7 @@ export function withInput (props: InputFormModalProps): ModalFuncProps {
       form={ form! }
       initialValues={ { [fieldName]: initialValue } }
       key={ 'input-form' }
-      onOk={ submit }
+      onSubmit={ submit }
       ref={ inputRef }
              />
   }
