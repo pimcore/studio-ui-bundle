@@ -165,17 +165,17 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
   const availableDropdownList = getAvailableColumnsDropdown(onColumnClick).menu.items
 
+  const getFilteredTypes = (column: any): object[] => {
+    return column?.children?.filter((child: any) => {
+      const isAlreadyInBatchEditList = batchEdits.some(item => child.key === item.key && child.group === item.group)
+      const hasDynamicType = hasType({ target: 'BATCH_EDIT', dynamicTypeIds: [child?.frontendType as string] })
+
+      return hasDynamicType && !isAlreadyInBatchEditList
+    })
+  }
+
   const getFilteredAvailableDropdownList = useMemo(() => (): Array<ItemType<MenuItemType>> | undefined => {
     if (isUndefined(availableDropdownList)) return []
-
-    const getFilteredTypes = (column: any): object[] => {
-      return column?.children?.filter((child: any) => {
-        const isAlreadyInBatchEditList = batchEdits.some(item => child.key === item.key && child.group === item.group)
-        const hasDynamicType = hasType({ target: 'BATCH_EDIT', dynamicTypeIds: [child?.frontendType as string] })
-
-        return hasDynamicType && !isAlreadyInBatchEditList
-      })
-    }
 
     return availableDropdownList.map((column: any) => {
       return {
