@@ -524,8 +524,12 @@ const slice = createSlice({
             return null
           }
 
+          const refreshChildren = payload.lockType === LockType.Self || payload.lockType === LockType.Unlock
+
           updateNodeState(state, treeId, payload.nodeId, node => ({
             ...node,
+            isLoading: refreshChildren ? undefined : node.isLoading,
+            isFetchTriggered: refreshChildren ? false : node.isFetchTriggered,
             treeNodeProps: !isUndefined(node.treeNodeProps)
               ? {
                   ...node.treeNodeProps,
@@ -535,6 +539,10 @@ const slice = createSlice({
               : undefined
           }))
 
+          if (refreshChildren) {
+            state[treeId].nodes = removeDescendants(state[treeId].nodes, payload.nodeId)
+          }
+
           if (
             payload.lockType === LockType.Self ||
             payload.lockType === LockType.Propagate ||
@@ -543,7 +551,7 @@ const slice = createSlice({
           ) {
             const isUnlock = payload.lockType === LockType.Unlock || payload.lockType === LockType.UnlockPropagate
 
-            const isFetchTriggered = (node: InternalNodeState, lockType: string): boolean => {
+            const isFetchTriggered = (node: InternalNodeState): boolean => {
               return (isUnlock)
                 ? false
                 : node.isFetchTriggered
@@ -561,7 +569,7 @@ const slice = createSlice({
 
                 return {
                   ...node,
-                  isFetchTriggered: isFetchTriggered(node, payload.lockType),
+                  isFetchTriggered: isFetchTriggered(node),
                   treeNodeProps: !isUndefined(node.treeNodeProps)
                     ? {
                         ...node.treeNodeProps,
