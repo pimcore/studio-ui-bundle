@@ -20,7 +20,7 @@ import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
 
-export interface IWindowModalProps extends Omit<IModalProps, 'mask' | 'maskClosable' | 'maskStyle' | 'maskTransitionName' | 'wrapStyle' | 'modalRender'> {
+export interface IWindowModalProps extends Omit<IModalProps, 'mask' | 'maskClosable' | 'maskStyle' | 'maskTransitionName' | 'wrapClassName' | 'modalRender'> {
 
 }
 
@@ -83,7 +83,7 @@ export const WindowModal = (props: IWindowModalProps): React.JSX.Element => {
           </Flex>
         </div>
       }
-      wrapStyle={ { pointerEvents: 'none' } }
+      wrapClassName={ styles.wrapper }
     >
       {props.children}
     </Modal>
