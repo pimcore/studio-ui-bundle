@@ -311,6 +311,10 @@ const slice = createSlice({
           return
         }
 
+        if (parentId === elementId) {
+          return
+        }
+
         const isParentIdCurrent = state[payload.treeId]?.nodes[String(elementId)]?.treeNodeProps?.parentId === String(parentId)
         if (hasParentChanged || !isParentIdCurrent) {
           hasParentChanged = true

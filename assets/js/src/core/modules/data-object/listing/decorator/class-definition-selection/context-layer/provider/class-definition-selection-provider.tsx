@@ -13,8 +13,12 @@
 
 import React, { createContext, useMemo, useState } from 'react'
 import { type ClassDefinitionSelectionDecoratorConfig } from '../../class-definition-selection-decorator'
-import { type ClassDefinitionListItem } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
+
+export interface ClassDefinitionListItem {
+  id: string
+  name: string
+}
 
 export interface ClassDefinitionSelectionData {
   config: ClassDefinitionSelectionDecoratorConfig
@@ -48,9 +52,15 @@ export const ClassDefinitionSelectionProvider = ({ children, config }: ClassDefi
     return []
   }, [data])
 
+  let computedSelectedClassDefinition = selectedClassDefinition
+
+  if (availableClassDefinitions.length === 1 && selectedClassDefinition === undefined) {
+    computedSelectedClassDefinition = availableClassDefinitions[0]
+  }
+
   return useMemo(() => (
-    <ClassDefinitionSelectionContext.Provider value={ { config, availableClassDefinitions, selectedClassDefinition, setSelectedClassDefinition } }>
+    <ClassDefinitionSelectionContext.Provider value={ { config, availableClassDefinitions, selectedClassDefinition: computedSelectedClassDefinition, setSelectedClassDefinition } }>
       {children}
     </ClassDefinitionSelectionContext.Provider>
-  ), [config, availableClassDefinitions, selectedClassDefinition])
+  ), [config, availableClassDefinitions, selectedClassDefinition, data])
 }
