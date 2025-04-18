@@ -18,7 +18,12 @@ export type VersionKeysList = string[]
 export type CategoriesList = Array<{ key: VersionCategoryName, fieldKeys: string[] }>
 
 export interface IAssetVersionField {
-  Field: { field: string, key: string, name: string }
+  Field: {
+    field: string
+    key: string
+    name: string
+    language?: string
+  }
   [key: string]: any
 }
 
