@@ -172,10 +172,11 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
   const getFilteredTypes = (column: any): object[] => {
     return column?.children?.filter((child: any) => {
+      const isEditable: boolean = child.editable === true
       const isAlreadyInBatchEditList = batchEdits.some(item => child.key === item.key && child.group === item.group)
       const hasDynamicType = hasType({ target: 'BATCH_EDIT', dynamicTypeIds: [child?.frontendType as string] })
 
-      return hasDynamicType && !isAlreadyInBatchEditList
+      return isEditable && hasDynamicType && !isAlreadyInBatchEditList
     })
   }
 

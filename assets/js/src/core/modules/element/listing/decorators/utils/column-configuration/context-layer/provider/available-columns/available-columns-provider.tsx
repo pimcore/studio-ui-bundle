@@ -74,6 +74,7 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
                 label: t(translationKey),
                 group: column.group,
                 frontendType: column.frontendType,
+                editable: column.editable,
                 onClick: () => {
                   onMenuItemClick(column)
                 }
