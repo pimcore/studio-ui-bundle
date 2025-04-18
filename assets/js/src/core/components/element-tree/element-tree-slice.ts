@@ -116,10 +116,7 @@ const getAscendants = (nodes: TreeNodesState, parentId: string): string[] => {
   const ascendants: string[] = []
   Object.keys(nodes).forEach(nodeId => {
     if (nodeId === parentId) {
-      if (
-        nodes[nodeId].treeNodeProps?.parentId !== undefined &&
-        nodes[nodeId].treeNodeProps?.parentId !== '1'
-      ) {
+      if (nodes[nodeId].treeNodeProps?.parentId !== undefined) {
         ascendants.push(nodes[nodeId].treeNodeProps?.parentId)
       }
     }
@@ -530,24 +527,39 @@ const slice = createSlice({
           console.log('getAscendants', getAscendants(state[treeId].nodes, node.id))
           console.log('getDescendants', getDescendants(state[treeId].nodes, node.id, true)) */
 
+          // tree loading to fetching!
+
           if (
             payload.lockType === LockType.Self ||
             payload.lockType === LockType.Propagate ||
             payload.lockType === LockType.Unlock ||
             payload.lockType === LockType.UnlockPropagate
           ) {
+            const isUnlock = payload.lockType === LockType.Unlock || payload.lockType === LockType.UnlockPropagate
+
+            const isFetchTriggered = (node: InternalNodeState, lockType: string): boolean => {
+              return (isUnlock)
+                ? false
+                : node.isFetchTriggered
+            }
+
             applyToAllAscendants(
               state,
               state[treeId].nodes,
               payload.nodeId,
               payload.elementType,
               (node: InternalNodeState) => {
+                if (!isUnlock && node.treeNodeProps?.id === '1') {
+                  return node
+                }
+
                 return {
                   ...node,
+                  isFetchTriggered: isFetchTriggered(node, payload.lockType),
                   treeNodeProps: !isUndefined(node.treeNodeProps)
                     ? {
                         ...node.treeNodeProps,
-                        isLocked: payload.isLocked
+                        isLocked: isUnlock ? node.treeNodeProps.isLocked : payload.isLocked
                       }
                     : undefined
                 }
