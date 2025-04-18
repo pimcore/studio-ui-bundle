@@ -42,7 +42,12 @@ export interface UseLockHookReturn {
   isLockMenuHidden: (node: Element | TreeNodeProps) => boolean
 }
 
-type LockTypes = 'self' | 'propagate' | '' | 'unlockPropagate'
+export enum LockType {
+  Self = 'self',
+  Propagate = 'propagate',
+  Unlock = '',
+  UnlockPropagate = 'unlockPropagate'
+}
 
 export const useLock = (elementType: ElementType): UseLockHookReturn => {
   const { t } = useTranslation()
@@ -52,20 +57,20 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
   const dispatch = useAppDispatch()
 
   const lock = async (id: number): Promise<void> => {
-    await patchLock(id, 'self')
+    await patchLock(id, LockType.Self)
   }
 
   const lockAndPropagate = async (id: number): Promise<void> => {
-    await patchLock(id, 'propagate')
+    await patchLock(id, LockType.Propagate)
   }
   const unlock = async (id: number): Promise<void> => {
-    await patchLock(id, '')
+    await patchLock(id, LockType.Unlock)
   }
   const unlockAndPropagate = async (id: number): Promise<void> => {
-    await patchLock(id, 'unlockPropagate')
+    await patchLock(id, LockType.UnlockPropagate)
   }
 
-  const patchLock = async (id: number, lockType: LockTypes): Promise<void> => {
+  const patchLock = async (id: number, lockType: LockType): Promise<void> => {
     const elementLockTask = elementPatch({
       body: {
         data: [{
@@ -75,7 +80,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
       }
     })
 
-    const getLockedFromLockType = (lockType: LockTypes): boolean => {
+    const getLockedFromLockType = (lockType: LockType): boolean => {
       return lockType === 'self' || lockType === 'propagate'
     }
 
@@ -84,7 +89,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
       const success = await elementLockTask
 
       if (success) {
-        dispatch(setNodeLocked({ elementType, nodeId: String(id), isLocked: getLockedFromLockType(lockType) }))
+        dispatch(setNodeLocked({ elementType, nodeId: String(id), isLocked: getLockedFromLockType(lockType), lockType }))
       }
 
       dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType, loading: false }))

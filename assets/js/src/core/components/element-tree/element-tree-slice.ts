@@ -20,6 +20,7 @@ import { type TreeLevelData } from '@Pimcore/modules/element/element-api-slice.g
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { LockType } from '@Pimcore/modules/element/actions/lock/use-lock'
 
 export interface TreeNode {
   id: string
@@ -111,6 +112,37 @@ const updateNodeState = (
   }
 }
 
+const getAscendants = (nodes: TreeNodesState, parentId: string): string[] => {
+  const ascendants: string[] = []
+  Object.keys(nodes).forEach(nodeId => {
+    if (nodeId === parentId) {
+      if (
+        nodes[nodeId].treeNodeProps?.parentId !== undefined &&
+        nodes[nodeId].treeNodeProps?.parentId !== '1'
+      ) {
+        ascendants.push(nodes[nodeId].treeNodeProps?.parentId)
+      }
+    }
+  })
+
+  let allAscendants = [...ascendants]
+  ascendants.forEach(ascendantId => {
+    allAscendants = [...allAscendants, ...getAscendants(nodes, ascendantId)]
+  })
+  return allAscendants
+}
+
+const applyToAllAscendants = (state: TreesState, nodes: TreeNodesState, nodeId: string, elementType: ElementType, updateFn: (node: InternalNodeState) => InternalNodeState): void => {
+  const descendants = getAscendants(nodes, nodeId)
+  descendants.forEach(nodeId => {
+    Object.keys(state).forEach(treeId => {
+      if (state[treeId].nodes[nodeId]?.treeNodeProps?.elementType === elementType) {
+        updateNodeState(state, treeId, nodeId, node => updateFn(node))
+      }
+    })
+  })
+}
+
 const getDescendants = (nodes: TreeNodesState, parentId: string, recursive: boolean = false): string[] => {
   const descendants = Object.keys(nodes).filter(nodeId => nodes[nodeId].treeNodeProps?.parentId === parentId)
   let allDescendants = [...descendants]
@@ -120,6 +152,17 @@ const getDescendants = (nodes: TreeNodesState, parentId: string, recursive: bool
     })
   }
   return allDescendants
+}
+
+const applyToAllDescendants = (state: TreesState, nodes: TreeNodesState, parentId: string, elementType: ElementType, updateFn: (node: InternalNodeState) => InternalNodeState): void => {
+  const descendants = getDescendants(nodes, parentId, true)
+  descendants.forEach(nodeId => {
+    Object.keys(state).forEach(treeId => {
+      if (state[treeId].nodes[nodeId]?.treeNodeProps?.elementType === elementType) {
+        updateNodeState(state, treeId, nodeId, node => updateFn(node))
+      }
+    })
+  })
 }
 
 const removeDescendants = (nodes: TreeNodesState, parentId: string, keepBasicStates: boolean = false): TreeNodesState => {
@@ -468,7 +511,7 @@ const slice = createSlice({
     },
     setNodeLocked: (
       state,
-      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType, isLocked: boolean }>
+      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType, isLocked: boolean, lockType: LockType }>
     ) => {
       Object.keys(state).forEach(treeId => {
         if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
@@ -481,6 +524,59 @@ const slice = createSlice({
                 }
               : undefined
           }))
+
+          // const node = state[treeId].nodes[payload.nodeId].treeNodeProps!
+          /* console.log('node', node)
+          console.log('getAscendants', getAscendants(state[treeId].nodes, node.id))
+          console.log('getDescendants', getDescendants(state[treeId].nodes, node.id, true)) */
+
+          if (
+            payload.lockType === LockType.Self ||
+            payload.lockType === LockType.Propagate ||
+            payload.lockType === LockType.Unlock ||
+            payload.lockType === LockType.UnlockPropagate
+          ) {
+            applyToAllAscendants(
+              state,
+              state[treeId].nodes,
+              payload.nodeId,
+              payload.elementType,
+              (node: InternalNodeState) => {
+                return {
+                  ...node,
+                  treeNodeProps: !isUndefined(node.treeNodeProps)
+                    ? {
+                        ...node.treeNodeProps,
+                        isLocked: payload.isLocked
+                      }
+                    : undefined
+                }
+              }
+            )
+          }
+
+          if (
+            payload.lockType === LockType.Propagate ||
+            payload.lockType === LockType.UnlockPropagate
+          ) {
+            applyToAllDescendants(
+              state,
+              state[treeId].nodes,
+              payload.nodeId,
+              payload.elementType,
+              (node: InternalNodeState) => {
+                return {
+                  ...node,
+                  treeNodeProps: !isUndefined(node.treeNodeProps)
+                    ? {
+                        ...node.treeNodeProps,
+                        isLocked: payload.isLocked
+                      }
+                    : undefined
+                }
+              }
+            )
+          }
         }
       })
     }
