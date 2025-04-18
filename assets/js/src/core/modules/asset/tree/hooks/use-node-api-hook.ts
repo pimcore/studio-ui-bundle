@@ -21,6 +21,7 @@ import { type NodeApiHookReturnType, type DataTransformerReturnType, type DataTr
 import { useAppDispatch } from '@Pimcore/app/store'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type NodeState } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
+import { isUndefined } from 'lodash'
 
 export const useNodeApiHook = (): NodeApiHookReturnType => {
   const { pageSize, treeFilterArgs } = useTreeFilter()
@@ -40,13 +41,13 @@ export const useNodeApiHook = (): NodeApiHookReturnType => {
     const treeFetcher = dispatch(api.endpoints.assetGetTree.initiate(args, { forceRefetch: true }))
 
     return await treeFetcher
-      .then(({ data, isSuccess, isError, error }) => {
+      .then(({ data, isError, error }) => {
         if (isError) {
           trackError(new ApiError(error))
           return undefined
         }
 
-        if (isSuccess) {
+        if (!isError && !isUndefined(data)) {
           return transformApiDataToNodes(node, data, pageSize)
         }
 
