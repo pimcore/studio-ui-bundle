@@ -130,8 +130,8 @@ const getAscendants = (nodes: TreeNodesState, parentId: string): string[] => {
 }
 
 const applyToAllAscendants = (state: TreesState, nodes: TreeNodesState, nodeId: string, elementType: ElementType, updateFn: (node: InternalNodeState) => InternalNodeState): void => {
-  const descendants = getAscendants(nodes, nodeId)
-  descendants.forEach(nodeId => {
+  const ascendants = getAscendants(nodes, nodeId).reverse()
+  ascendants.forEach(nodeId => {
     Object.keys(state).forEach(treeId => {
       if (state[treeId].nodes[nodeId]?.treeNodeProps?.elementType === elementType) {
         updateNodeState(state, treeId, nodeId, node => updateFn(node))
@@ -521,13 +521,6 @@ const slice = createSlice({
                 }
               : undefined
           }))
-
-          // const node = state[treeId].nodes[payload.nodeId].treeNodeProps!
-          /* console.log('node', node)
-          console.log('getAscendants', getAscendants(state[treeId].nodes, node.id))
-          console.log('getDescendants', getDescendants(state[treeId].nodes, node.id, true)) */
-
-          // tree loading to fetching!
 
           if (
             payload.lockType === LockType.Self ||
