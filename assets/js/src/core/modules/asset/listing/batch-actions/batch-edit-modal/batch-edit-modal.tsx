@@ -91,6 +91,13 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     addOrUpdateBatchEdit({ ...column, locale })
   }
 
+  const handleApplyChanges = (): void => {
+    form.submit()
+
+    resetModal()
+    setBatchEditModalOpen(false)
+  }
+
   const onFormFinish = async (values: any): Promise<void> => {
     const patches = batchEdits.map((batchEdit) => {
       return {
@@ -224,13 +231,14 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
                   } }
                   type='link'
                 >
-                  {t('batch-edit.modal-footer.discard-all-changes')}</IconTextButton>
+                  {t('batch-edit.modal-footer.discard-all-changes')}
+                </IconTextButton>
                 <Button
-                  onClick={ () => {
-                    form.submit()
-                  } }
+                  onClick={ handleApplyChanges }
                   type='primary'
-                >{t('batch-edit.modal-footer.apply-changes')}</Button>
+                >
+                  {t('batch-edit.modal-footer.apply-changes')}
+                </Button>
               </Flex>
             )}
         </ModalFooter>
