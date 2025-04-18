@@ -17,13 +17,14 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './tree-node-content.styles'
 import cn from 'classnames'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { isEmpty, isNil } from 'lodash'
 
 export interface TreeNodeContentProps {
   node: TreeNodeProps
 }
 
 const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeContentProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
-  const { icon, label, isPublished, isLocked } = props.node
+  const { icon, label, isPublished, isLocked, locked } = props.node
   const { styles } = useStyles()
 
   return (
@@ -55,6 +56,7 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
         {isLocked && (
           <Icon
             options={ { width: 14, height: 14 } }
+            subIconName={ !isNil(locked) && !isEmpty(locked) ? 'open-folder' : undefined }
             value='lock'
           />
         )}

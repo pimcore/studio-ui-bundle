@@ -31,6 +31,7 @@ export interface TreeNode {
   type?: string
 
   permissions: ElementPermissions
+  locked: string | null
   isLocked: boolean
   isPublished?: boolean
   hasChildren?: boolean
@@ -512,11 +513,23 @@ const slice = createSlice({
     ) => {
       Object.keys(state).forEach(treeId => {
         if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
+          const locked = (): string | null => {
+            if (payload.lockType === LockType.Self) {
+              return 'self'
+            }
+            if (payload.lockType === LockType.Propagate) {
+              return 'propagate'
+            }
+
+            return null
+          }
+
           updateNodeState(state, treeId, payload.nodeId, node => ({
             ...node,
             treeNodeProps: !isUndefined(node.treeNodeProps)
               ? {
                   ...node.treeNodeProps,
+                  locked: locked(),
                   isLocked: payload.isLocked
                 }
               : undefined
