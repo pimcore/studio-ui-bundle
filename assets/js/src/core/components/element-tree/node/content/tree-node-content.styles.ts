@@ -29,6 +29,9 @@ export const useStyles = createStyles(({ token, css }) => {
        .pimcore-icon__image {
           opacity: 0.4
        }
+    `,
+    indirectLockedIcon: css`
+      opacity: 0.5;
     `
   }
 })

@@ -55,8 +55,8 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
       >
         {isLocked && (
           <Icon
+            className={ !isNil(locked) && !isEmpty(locked) ? '' : styles.indirectLockedIcon }
             options={ { width: 14, height: 14 } }
-            subIconName={ !isNil(locked) && !isEmpty(locked) ? 'open-folder' : undefined }
             value='lock'
           />
         )}
