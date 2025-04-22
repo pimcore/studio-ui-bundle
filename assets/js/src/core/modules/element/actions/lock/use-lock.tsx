@@ -25,6 +25,7 @@ import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { ContextMenuActionName } from '..'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { setNodeLoadingInAllTree, setNodeLocked } from '@Pimcore/components/element-tree/element-tree-slice'
+import { isNil } from 'lodash'
 
 export interface UseLockHookReturn {
   lock: (id: number) => Promise<void>
@@ -198,15 +199,31 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     }
   }
 
+  const isNodeDirectlyLocked = (node: Element | TreeNodeProps): boolean => {
+    return node.isLocked && !isNil(node.locked)
+  }
+
   const isLockHidden = (node: Element | TreeNodeProps): boolean => {
+    if (node.isLocked && isNil(node.locked)) {
+      return false
+    }
+
     return !isTreeActionAllowed(TreePermission.Lock) || node.isLocked || !user.isAdmin
   }
 
   const isLockPropagateHidden = (node: Element | TreeNodeProps): boolean => {
+    if (!isNodeDirectlyLocked(node)) {
+      return false
+    }
+
     return !isTreeActionAllowed(TreePermission.LockAndPropagate) || node.isLocked || !user.isAdmin
   }
 
   const isUnlockHidden = (node: Element | TreeNodeProps): boolean => {
+    if (!isNodeDirectlyLocked(node)) {
+      return true
+    }
+
     return !isTreeActionAllowed(TreePermission.Unlock) || !node.isLocked || !user.isAdmin
   }
 
