@@ -122,6 +122,8 @@ export const Accordion = ({
         </Flex>
         {item.subtitle}
       </>,
+      title: '',
+      subtitle: '',
       ...(item.disabled ?? false ? collapseDisabled : {})
     })
   }) ?? []

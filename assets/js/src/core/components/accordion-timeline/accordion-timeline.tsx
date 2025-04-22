@@ -12,6 +12,7 @@
 */
 
 import React from 'react'
+import cn from 'classnames'
 import { useStyle } from './accordion-timeline.styles'
 import { VerticalTimeline } from '@Pimcore/components/vertical-timeline/vertical-timeline'
 import { Accordion, type AccordionItemType } from '@Pimcore/components/accordion/accordion'
@@ -31,7 +32,7 @@ export const AccordionTimeline = ({ items }: AccordionTimelineProps): React.JSX.
   const ItemAccordions = items.map((item) => {
     return (
       <div
-        className={ [styles.card, item.className].join(' ') }
+        className={ cn(styles.card, item.className) }
         key={ item.key }
       >
         {item.selected === true
