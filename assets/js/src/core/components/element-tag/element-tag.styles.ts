@@ -16,6 +16,7 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     tag: css`
+      display: block;
       max-width: 100%;
       text-overflow: ellipsis;
       overflow: hidden;

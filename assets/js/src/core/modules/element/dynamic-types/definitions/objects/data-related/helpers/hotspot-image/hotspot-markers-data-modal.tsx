@@ -41,12 +41,15 @@ export const HotspotMarkersDataModal = ({
 }: HotspotMarkersDataModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
-  const { fields, hotspotName, setHotspotName, dataTypes, editModeHotspot } = useHotspotData(hotspot, form)
+
+  const { getFieldsData, dataTypes } = useHotspotData(hotspot, form)
 
   const handleSave = (): void => {
     if (isUndefined(hotspot)) return
     form.validateFields().then(() => {
-      const updatedHotspot = { ...hotspot, data: fields, name: hotspotName }
+      const values = form.getFieldsValue()
+      const updatedHotspot = { ...hotspot, data: getFieldsData(), name: values.hotspotName }
+
       onUpdate(updatedHotspot)
       onClose()
     }).catch((error) => {
@@ -91,7 +94,7 @@ export const HotspotMarkersDataModal = ({
       footer={ dataModalFooter }
       okText={ t('save') }
       onCancel={ handleCancel }
-      open={ !isUndefined(editModeHotspot) }
+      open={ !isUndefined(hotspot) }
       size="M"
       title={ t('hotspots-markers-data-modal.title') }
       zIndex={ 1000 }
@@ -109,11 +112,7 @@ export const HotspotMarkersDataModal = ({
             label={ t('hotspots-markers-data-modal.name') }
             name="hotspotName"
           >
-            <Input
-              onChange={ (e) => {
-                setHotspotName(e.target.value)
-              } }
-            />
+            <Input />
           </Form.Item>
           <FieldOperations
             form={ form }

@@ -16,6 +16,7 @@ import {
   HotspotMarkersModal,
   type HotspotMarkersModalProps
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-markers-modal'
+import { HotspotDataProvider } from './hotspot-data-provider'
 
 export interface HotspotMarkersModalContainerProps {
   ref: React.Ref<HotspotMarkersModalContainerRef>
@@ -46,14 +47,16 @@ export const HotspotMarkersModalContainer = forwardRef<HotspotMarkersModalContai
   }))
 
   return (
-    <>
-      {modals.map(({ id, props }) => (
-        <HotspotMarkersModal
-          key={ id }
-          { ...props }
-        />
+    <HotspotDataProvider>
+      {modals.map(({ id, props: modalProps }) => (
+        modalProps.open && (
+          <HotspotMarkersModal
+            key={ id }
+            { ...modalProps }
+          />
+        )
       ))}
-    </>
+    </HotspotDataProvider>
   )
 })
 

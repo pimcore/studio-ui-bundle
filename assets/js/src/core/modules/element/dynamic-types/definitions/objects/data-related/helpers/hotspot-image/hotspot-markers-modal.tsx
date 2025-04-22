@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
 import { defaultStyleOptions, HotspotImage, type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
@@ -20,11 +20,10 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { createImageThumbnailUrl } from '@Pimcore/components/image-preview/utils/custom-image-thumbnail'
 import {
-  HotspotContext
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-data-provider'
-import {
   HotspotMarkersDataModal
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-markers-data-modal'
+import { isUndefined } from 'lodash'
+import { type CropSettings } from './types/crop-types'
 
 export interface HotspotMarkersModalProps {
   hotspots?: IHotspot[] | null
@@ -33,19 +32,20 @@ export interface HotspotMarkersModalProps {
   disabled?: boolean
   onClose?: () => void
   onChange?: (hotspots: IHotspot[]) => void
+  crop?: CropSettings
 }
 
 export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [hotspots, setHotspots] = useState<IHotspot[]>(props.hotspots ?? [])
   const [modalOpened, setModalOpened] = useState(false)
-  const { editModeHotspot, setEditModeHotspot } = useContext(HotspotContext)
+  const [editModeHotspot, setEditModeHotspot] = useState<IHotspot | undefined>(undefined)
   const width = 952
   const height = 800
 
   useEffect(() => {
     setHotspots(props.hotspots ?? [])
-  }, [props.hotspots])
+  }, [props.hotspots?.length, JSON.stringify(props.hotspots?.map((item) => ({ name: item.name, data: item.data, id: item.id })))])
 
   const onClone = (id: number): void => {
     const originalHotspot = hotspots.find(h => h.id === id)
@@ -63,7 +63,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
   }
 
   const onEdit = (hotspot: IHotspot): void => {
-    setEditModeHotspot(hotspot)
+    setEditModeHotspot(hotspots.find(h => h.id === hotspot.id))
   }
   const onUpdate = (item: IHotspot): void => {
     setHotspots(hotspots.map(h => h.id === item.id ? item : h))
@@ -100,7 +100,8 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
     width,
     height,
     mimeType: 'PNG',
-    contain: true
+    contain: true,
+    ...props.crop
   })
 
   return (
@@ -149,6 +150,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
     >
       <HotspotImage
         data={ modalOpened ? hotspots : [] }
+        disableDrag={ !isUndefined(editModeHotspot) }
         disabled={ props.disabled }
         onClone={ onClone }
         onEdit={ onEdit }
@@ -161,7 +163,6 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
         onClose={ () => { setEditModeHotspot(undefined) } }
         onUpdate={ onUpdate }
       />
-      )
     </WindowModal>
   )
 }

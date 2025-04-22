@@ -34,6 +34,7 @@ export type * from './class-definition-slice.gen'
 
 export const {
   useClassDefinitionCollectionQuery,
+  useClassDefinitionFolderCollectionQuery,
   useClassCustomLayoutCollectionQuery,
   usePimcoreStudioApiClassCustomLayoutCreateMutation,
   usePimcoreStudioApiClassCustomLayoutGetQuery,

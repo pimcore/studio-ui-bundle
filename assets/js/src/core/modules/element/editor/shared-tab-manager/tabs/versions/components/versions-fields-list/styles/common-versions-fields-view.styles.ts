@@ -58,6 +58,8 @@ export const useStyles = createStyles(({ token, css }) => {
 
     sectionFieldItem: css`
       flex: 1 1 50%;
+      min-width: 50%;
+      width: 100%;
       padding: ${token.paddingXS}px;
       background-color: ${token.colorBgContainerDisabled};
       border-radius: ${token.borderRadius}px;
@@ -73,6 +75,7 @@ export const useStyles = createStyles(({ token, css }) => {
 
     objectSectionFieldItemWrapper: css`
       flex: 1 1 50%;
+      min-width: 50%;
       max-width: 900px;
       width: 100%;
     `,

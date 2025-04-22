@@ -29,6 +29,15 @@ export const useStyles = createStyles(({ token, css }) => {
           border-color: ${token.colorBorder} !important;
         }
       }
+    `,
+
+    droppableWrapper: css`
+      flex: 1;
+      overflow: hidden;
+      
+      .ant-input-prefix {
+        width: 100%;
+      }
     `
   }
 })

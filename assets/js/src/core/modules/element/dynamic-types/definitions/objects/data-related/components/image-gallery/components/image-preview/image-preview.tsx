@@ -86,7 +86,6 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
   })
 
   const hotspots = toIHotspots(item.hotspots ?? [], item.marker ?? [])
-
   const hideMarkerModal = (): void => {
     setMarkerModalOpen(false)
   }
@@ -101,6 +100,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
     const hotspotMarkersModalProps = {
       disabled,
       hotspots,
+      crop: item.crop,
       imageId: item.image!.id,
       open: markerModalOpen,
       onClose: hideMarkerModal,

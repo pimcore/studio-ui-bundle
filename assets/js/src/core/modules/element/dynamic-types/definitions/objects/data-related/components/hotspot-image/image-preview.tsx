@@ -92,6 +92,7 @@ export const HotspotImagePreview = forwardRef(function HotspotImagePreview (
       { markerModalOpen && (
       <HotspotDataProvider>
         <HotspotMarkersModal
+          crop={ value.crop }
           disabled={ disabled }
           hotspots={ toIHotspots(value.hotspots ?? [], value.marker ?? []) }
           imageId={ assetId }

@@ -15,7 +15,7 @@ import React from 'react'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { RootComponent } from './components/root-component'
-import { useDataObjectGetByIdQuery, useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { Content } from '@Pimcore/components/content/content'
 import { FieldCollectionProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/field-collection/providers/field-collection-provider'
@@ -25,24 +25,22 @@ import {
   useLayoutSelection
 } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/use-layout-selection'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 
 export const EditContainer = (): React.JSX.Element => {
   const { id } = useElementContext()
   const { currentLayout } = useLayoutSelection()
 
   const { data: layoutData, isLoading, error: layoutError } = useDataObjectGetLayoutByIdQuery({ id, layoutId: currentLayout ?? undefined })
-  const { data, isLoading: isDataLoading, error: dataObjectError } = useDataObjectGetByIdQuery({ id })
+  const { dataObject, isLoading: isDraftLoading } = useDataObjectDraft(id)
 
   const { styles } = useStyles()
 
-  if (dataObjectError !== undefined) {
-    trackError(new ApiError(dataObjectError))
-  }
   if (layoutError !== undefined) {
     trackError(new ApiError(layoutError))
   }
 
-  if (layoutData === undefined || isLoading || isDataLoading) {
+  if (layoutData === undefined || isLoading || isDraftLoading) {
     return <Content loading />
   }
 
@@ -51,7 +49,7 @@ export const EditContainer = (): React.JSX.Element => {
       <ObjectBrickProvider>
         <RootComponent
           className={ styles.editContainer }
-          data={ data?.objectData }
+          data={ dataObject?.objectData }
           layout={ layoutData }
         />
       </ObjectBrickProvider>
