@@ -32,7 +32,8 @@ const initialState: UserInformation = {
   classes: [],
   docTypes: [],
   activePerspective: 0,
-  perspectives: []
+  perspectives: [],
+  language: 'en'
 }
 
 export const rtkQueryErrorLogger: Middleware =

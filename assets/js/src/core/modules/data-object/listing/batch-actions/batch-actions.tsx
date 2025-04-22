@@ -19,10 +19,14 @@ import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/d
 import { useRowSelectionOptional } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection-optional'
 import { BatchEditProvider } from './batch-edit-modal/batch-edit-provider'
 import { BatchEditModal } from './batch-edit-modal/batch-edit-modal'
+import { CsvModal } from '@Pimcore/modules/element/listing/batch-actions/csv-modal/csv-modal'
+import { XlsxModal } from '@Pimcore/modules/element/listing/batch-actions/xlsx-modal/xlsx-modal'
 
 export const BatchActions = (): React.JSX.Element => {
   const rowSelection = useRowSelectionOptional()
   const [batchEditModalOpen, setBatchEditModalOpen] = useState<boolean>(false)
+  const [csvModalOpen, setCsvModalOpen] = useState<boolean>(false)
+  const [xlsxModalOpen, setXlsxModalOpen] = useState<boolean>(false)
 
   const { t } = useTranslation()
 
@@ -42,6 +46,29 @@ export const BatchActions = (): React.JSX.Element => {
         onClick: () => {
           setBatchEditModalOpen(true)
         }
+      },
+      {
+        key: '2',
+        label: t('listing.actions.export'),
+        icon: <Icon value={ 'export' } />,
+        children: [
+          {
+            key: '2.1',
+            label: t('listing.actions.csv-export'),
+            icon: <Icon value={ 'export' } />,
+            onClick: () => {
+              setCsvModalOpen(true)
+            }
+          },
+          {
+            key: '2.2',
+            label: t('listing.actions.xlsx-export'),
+            icon: <Icon value={ 'export' } />,
+            onClick: () => {
+              setXlsxModalOpen(true)
+            }
+          }
+        ]
       }
     ]
   }
@@ -53,6 +80,16 @@ export const BatchActions = (): React.JSX.Element => {
       >
         <DropdownButton key={ 'dropdown-button' }>{hasSelectedItems ? t('listing.actions') : t('listing.non-selected.actions')}</DropdownButton>
       </Dropdown>
+
+      <CsvModal
+        open={ csvModalOpen }
+        setOpen={ setCsvModalOpen }
+      />
+
+      <XlsxModal
+        open={ xlsxModalOpen }
+        setOpen={ setXlsxModalOpen }
+      />
 
       <BatchEditProvider>
         <BatchEditModal
