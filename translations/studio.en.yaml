@@ -360,12 +360,14 @@ jobs.job.finished: "{{title}} finished"
 jobs.job.finished-with-errors: "{{title}} finished with errors"
 jobs.job.progress: "{{progress}}% completed"
 jobs.job.button-retry: Retry
+jobs.job.button-reload: Reload
 jobs.job.button-hide: hide
 jobs.job.button-download: download
 jobs.job.button-ignore-and-reload: ignore and reload
 jobs.zip-job.title: "ZIP of {{title}}"
 jobs.batch-edit-job.title: "Batch Edit of {{title}}"
 jobs.csv-job.title: "CSV of {{title}}"
+batch-edit.job-title: Batch Edit
 batch-edit.modal-title: Batch Edit
 batch-edit.no-content: There are no added columns yet
 batch-edit.modal-footer.apply-changes: Apply changes

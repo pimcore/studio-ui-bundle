@@ -18,6 +18,7 @@ export const useStyles = createStyles(({ css }) => {
     buttonStyle: css`
       padding-left: 2px;
       padding-right: 2px;
+      text-transform: capitalize;
     `
   }
 })

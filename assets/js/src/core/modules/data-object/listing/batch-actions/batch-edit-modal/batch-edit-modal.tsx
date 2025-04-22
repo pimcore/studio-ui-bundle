@@ -11,9 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
+import { isUndefined } from 'lodash'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
-import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
+import { Dropdown, type ItemType, type MenuItemType } from '@Pimcore/components/dropdown/dropdown'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
 import { t } from 'i18next'
@@ -36,6 +37,8 @@ import { useAppDispatch } from '@Pimcore/app/store'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
+import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
+import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean
@@ -51,11 +54,13 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const [patchObjectsByIds, { error: idPatchError, isError: isIdPatchError, isSuccess: isIdPatchSuccess }] = useDataObjectPatchByIdMutation()
   const { useDataQueryHelper } = useSettings()
   const { getArgs } = useDataQueryHelper()
-  const { id } = useElementContext()
+  const { id, elementType } = useElementContext()
   const dispatch = useAppDispatch()
   const { addJob } = useJobs()
   const selectedRowsIds = Object.keys(selectedRows ?? {})
   const selectedRowsCount = selectedRowsIds.length
+  const { hasType } = useDynamicTypeResolver()
+  const { refreshGrid } = useRefreshGrid(elementType)
 
   const resetModal = (): void => {
     resetBatchEdits()
@@ -86,8 +91,11 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     addOrUpdateBatchEdit(column, undefined)
   }
 
-  const applyChanges = (): void => {
+  const handleApplyChanges = (): void => {
     form.submit()
+
+    resetModal()
+    setBatchEditModalOpen(false)
   }
 
   const onFormFinish = async (values: any): Promise<void> => {
@@ -115,6 +123,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
           return response.data?.jobRunId
         },
+        refreshGrid,
         // @todo change that to a more generic context
         assetContextId: id
       }))
@@ -150,11 +159,36 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
           return response.data?.jobRunId
         },
+        refreshGrid,
         // @todo change that to a more generic context
         assetContextId: id
       }))
     }
   }
+
+  const availableDropdownList = getAvailableColumnsDropdown(onColumnClick).menu.items
+
+  const getFilteredTypes = (column: any): object[] => {
+    return column?.children?.filter((child: any) => {
+      const isEditable: boolean = child.editable === true
+      const isAlreadyInBatchEditList = batchEdits.some(item => child.key === item.key && child.group === item.group)
+      const hasDynamicType = hasType({ target: 'BATCH_EDIT', dynamicTypeIds: [child?.frontendType as string] })
+
+      return isEditable && hasDynamicType && !isAlreadyInBatchEditList
+    })
+  }
+
+  const getFilteredAvailableDropdownList = useMemo(() => (): Array<ItemType<MenuItemType>> | undefined => {
+    if (isUndefined(availableDropdownList)) return []
+
+    return availableDropdownList.map((column: any) => {
+      return {
+        ...column,
+        children: getFilteredTypes(column)
+      }
+    })
+  }, [availableDropdownList])
+  const isEmptyDropdownList = getFilteredAvailableDropdownList()?.every((item: any) => item?.children?.length === 0)
 
   return (
     <WindowModal
@@ -165,11 +199,9 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         divider
         justify={ 'space-between' }
                >
-        <Dropdown menu={ {
-          items: getAvailableColumnsDropdown(onColumnClick).menu.items
-        } }
-        >
+        <Dropdown menu={ { items: getFilteredAvailableDropdownList() } }>
           <IconTextButton
+            disabled={ isEmptyDropdownList }
             icon={ { value: 'new' } }
             type='default'
           >
@@ -189,13 +221,14 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
                 } }
                 type='link'
               >
-                {t('batch-edit.modal-footer.discard-all-changes')}</IconTextButton>
+                {t('batch-edit.modal-footer.discard-all-changes')}
+              </IconTextButton>
               <Button
-                onClick={ () => {
-                  applyChanges()
-                } }
+                onClick={ handleApplyChanges }
                 type='primary'
-              >{t('batch-edit.modal-footer.apply-changes')}</Button>
+              >
+                {t('batch-edit.modal-footer.apply-changes')}
+              </Button>
             </Flex>
             )}
       </ModalFooter> }

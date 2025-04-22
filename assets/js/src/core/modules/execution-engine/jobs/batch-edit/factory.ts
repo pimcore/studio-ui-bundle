@@ -19,6 +19,7 @@ export interface BatchEditJob extends AbstractJob {
   config: {
     assetContextId: number
   }
+  refreshGrid: () => Promise<void>
 }
 
 export interface BatchEditFactoryArgs {
@@ -26,12 +27,14 @@ export interface BatchEditFactoryArgs {
   title: AbstractJob['title']
   topics: AbstractJob['topics']
   assetContextId: number
+  refreshGrid: () => Promise<void>
 }
 
 export const createJob = (job: BatchEditFactoryArgs): BatchEditJob => {
   return {
     id: getUniqueId(),
     action: job.action,
+    refreshGrid: job.refreshGrid,
     type: 'batch-edit',
     title: job.title,
     status: JobStatus.QUEUED,
