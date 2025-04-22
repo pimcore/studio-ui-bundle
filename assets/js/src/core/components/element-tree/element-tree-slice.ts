@@ -20,6 +20,7 @@ import { type TreeLevelData } from '@Pimcore/modules/element/element-api-slice.g
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { LockType } from '@Pimcore/modules/element/actions/lock/use-lock'
 
 export interface TreeNode {
   id: string
@@ -30,6 +31,7 @@ export interface TreeNode {
   type?: string
 
   permissions: ElementPermissions
+  locked: string | null
   isLocked: boolean
   isPublished?: boolean
   hasChildren?: boolean
@@ -111,6 +113,34 @@ const updateNodeState = (
   }
 }
 
+const getAscendants = (nodes: TreeNodesState, parentId: string): string[] => {
+  const ascendants: string[] = []
+  Object.keys(nodes).forEach(nodeId => {
+    if (nodeId === parentId) {
+      if (nodes[nodeId].treeNodeProps?.parentId !== undefined) {
+        ascendants.push(nodes[nodeId].treeNodeProps?.parentId)
+      }
+    }
+  })
+
+  let allAscendants = [...ascendants]
+  ascendants.forEach(ascendantId => {
+    allAscendants = [...allAscendants, ...getAscendants(nodes, ascendantId)]
+  })
+  return allAscendants
+}
+
+const applyToAllAscendants = (state: TreesState, nodes: TreeNodesState, nodeId: string, elementType: ElementType, updateFn: (node: InternalNodeState) => InternalNodeState): void => {
+  const ascendants = getAscendants(nodes, nodeId).reverse()
+  ascendants.forEach(nodeId => {
+    Object.keys(state).forEach(treeId => {
+      if (state[treeId].nodes[nodeId]?.treeNodeProps?.elementType === elementType) {
+        updateNodeState(state, treeId, nodeId, node => updateFn(node))
+      }
+    })
+  })
+}
+
 const getDescendants = (nodes: TreeNodesState, parentId: string, recursive: boolean = false): string[] => {
   const descendants = Object.keys(nodes).filter(nodeId => nodes[nodeId].treeNodeProps?.parentId === parentId)
   let allDescendants = [...descendants]
@@ -120,6 +150,17 @@ const getDescendants = (nodes: TreeNodesState, parentId: string, recursive: bool
     })
   }
   return allDescendants
+}
+
+const applyToAllDescendants = (state: TreesState, nodes: TreeNodesState, parentId: string, elementType: ElementType, updateFn: (node: InternalNodeState) => InternalNodeState): void => {
+  const descendants = getDescendants(nodes, parentId, true)
+  descendants.forEach(nodeId => {
+    Object.keys(state).forEach(treeId => {
+      if (state[treeId].nodes[nodeId]?.treeNodeProps?.elementType === elementType) {
+        updateNodeState(state, treeId, nodeId, node => updateFn(node))
+      }
+    })
+  })
 }
 
 const removeDescendants = (nodes: TreeNodesState, parentId: string, keepBasicStates: boolean = false): TreeNodesState => {
@@ -469,6 +510,105 @@ const slice = createSlice({
         isExpanded: true,
         isRoot: true
       }))
+    },
+    setNodeLocked: (
+      state,
+      { payload }: PayloadAction<{ nodeId: string, elementType: ElementType, isLocked: boolean, lockType: LockType }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
+          const locked = (): string | null => {
+            if (payload.lockType === LockType.Self) {
+              return 'self'
+            }
+            if (payload.lockType === LockType.Propagate) {
+              return 'propagate'
+            }
+
+            return null
+          }
+
+          const refreshChildren = payload.lockType === LockType.Self || payload.lockType === LockType.Unlock
+
+          updateNodeState(state, treeId, payload.nodeId, node => ({
+            ...node,
+            isLoading: refreshChildren ? undefined : node.isLoading,
+            isFetchTriggered: refreshChildren ? false : node.isFetchTriggered,
+            treeNodeProps: !isUndefined(node.treeNodeProps)
+              ? {
+                  ...node.treeNodeProps,
+                  locked: locked(),
+                  isLocked: payload.isLocked
+                }
+              : undefined
+          }))
+
+          if (refreshChildren) {
+            state[treeId].nodes = removeDescendants(state[treeId].nodes, payload.nodeId)
+          }
+
+          if (
+            payload.lockType === LockType.Self ||
+            payload.lockType === LockType.Propagate ||
+            payload.lockType === LockType.Unlock ||
+            payload.lockType === LockType.UnlockPropagate
+          ) {
+            const isUnlock = payload.lockType === LockType.Unlock || payload.lockType === LockType.UnlockPropagate
+
+            const isFetchTriggered = (node: InternalNodeState): boolean => {
+              return (isUnlock)
+                ? false
+                : node.isFetchTriggered
+            }
+
+            applyToAllAscendants(
+              state,
+              state[treeId].nodes,
+              payload.nodeId,
+              payload.elementType,
+              (node: InternalNodeState) => {
+                if (!isUnlock && node.treeNodeProps?.id === '1') {
+                  return node
+                }
+
+                return {
+                  ...node,
+                  isFetchTriggered: isFetchTriggered(node),
+                  treeNodeProps: !isUndefined(node.treeNodeProps)
+                    ? {
+                        ...node.treeNodeProps,
+                        isLocked: isUnlock ? node.treeNodeProps.isLocked : payload.isLocked
+                      }
+                    : undefined
+                }
+              }
+            )
+          }
+
+          if (
+            payload.lockType === LockType.Propagate ||
+            payload.lockType === LockType.UnlockPropagate
+          ) {
+            applyToAllDescendants(
+              state,
+              state[treeId].nodes,
+              payload.nodeId,
+              payload.elementType,
+              (node: InternalNodeState) => {
+                return {
+                  ...node,
+                  treeNodeProps: !isUndefined(node.treeNodeProps)
+                    ? {
+                        ...node.treeNodeProps,
+                        isLocked: payload.isLocked
+                      }
+                    : undefined
+                }
+              }
+            )
+          }
+        }
+      })
     }
   }
 })
@@ -477,7 +617,7 @@ export const treeSliceName = slice.name
 
 injectSliceWithState(slice)
 
-export const { setNodeLoading, setNodeLoadingInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, setNodePublished, setRootNode } = slice.actions
+export const { setNodeLoading, setNodeLoadingInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, setNodePublished, setRootNode, setNodeLocked } = slice.actions
 
 export const selectNodeState = createSelector(
   (state: RootState) => state.trees,

@@ -33,6 +33,7 @@ export interface TreeNodeProps {
   children?: TreeNodeProps[]
   level: number
   permissions: ElementPermissions
+  locked: string | null
   isLocked: boolean
   elementType?: ElementType
   hasChildren?: boolean
@@ -67,6 +68,7 @@ export const defaultProps: TreeNodeProps = {
     properties: false
   },
   level: 0,
+  locked: null,
   isLocked: false,
   isRoot: false
 }
