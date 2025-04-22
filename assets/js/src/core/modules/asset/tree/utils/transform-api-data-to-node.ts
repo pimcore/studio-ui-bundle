@@ -30,6 +30,7 @@ export const transformApiDataToNodes = (node: DataTransformerSourceNode, data: A
       type: assetNode.type,
       parentId: assetNode.parentId.toString(),
       hasChildren: assetNode.hasChildren,
+      locked: assetNode.locked,
       isLocked: assetNode.isLocked,
       metaData: {
         asset: assetNode

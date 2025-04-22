@@ -16,19 +16,23 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     dragger: css`
-        .ant-upload {
-            padding: 0 !important;
-            background: none;
-            border-color: transparent;
-            
-            &:hover {
-                border-color: transparent !important;
-            }
-            
-            &.ant-upload-drag-hover {
-                border-color: ${token.colorLinkHover} !important;
-            }
+      .ant-upload {
+        padding: 0 !important;
+        background: none;
+        border-color: transparent;
+        
+        &:hover {
+            border-color: transparent !important;
         }
+        
+        &.ant-upload-drag-hover {
+            border-color: ${token.colorLinkHover} !important;
+        }
+
+        .ant-upload-drag-container {
+          width: 100%;
+        }
+      }
     `
   }
 })
