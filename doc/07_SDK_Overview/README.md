@@ -8,7 +8,7 @@ For practical examples and step-by-step guides on implementing specific features
 ## Table of Contents
 
 1. [Plugin Architecture, Plugins, and Modules](./01_Plugin_Architecture_Plugins_Modules.md)  
-2. [Services](./04_Services.md)  
-3. [Components](./06_Components.md)  
+2. [Services and Dependency Injection](./04_Services_and_Dependency_Injection.md)  
+3. [UI Components](./06_UI_Components.md)  
 4. [Hooks](./Hooks.md)
 

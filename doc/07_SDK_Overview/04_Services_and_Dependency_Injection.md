@@ -1,4 +1,4 @@
-# Services
+# Services and Dependency Injection
 
 Think of services as straightforward objects that assist with specific tasks. To maximize the benefits of services, we’ve introduced a service container using [Inversify](https://github.com/inversify/InversifyJS).  
 
