@@ -107,7 +107,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
         maxWidth: toCssDimension(props.width, fieldWidth.large)
       } }
     >
-      <div style={ { flex: 1 } }>
+      <div className={ styles.droppableWrapper }>
         <Droppable
           isValidContext={ (info: DragAndDropInfo) => props.disabled !== true && isValidElementType(info.type) }
           isValidData={ (info: DragAndDropInfo) => dndIsValidData(info, props) }
@@ -126,7 +126,8 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           />
         </Droppable>
       </div>
-      { props.allowPathTextInput !== true && (
+      <Flex gap="extra-small">
+        { props.allowPathTextInput !== true && (
         <Tooltip
           key="open"
           title={ t('open') }
@@ -139,9 +140,9 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
             type="default"
           />
         </Tooltip>
-      ) }
+        ) }
 
-      { props.assetInlineDownloadAllowed === true && value?.textInput !== true && (
+        { props.assetInlineDownloadAllowed === true && value?.textInput !== true && (
         <Tooltip
           key="download"
           title={ t('download') }
@@ -157,9 +158,9 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
             type="default"
           />
         </Tooltip>
-      ) }
+        ) }
 
-      { props.allowToClearRelation === true && (
+        { props.allowToClearRelation === true && (
 
         <Tooltip
           key="empty"
@@ -174,9 +175,9 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
             type="default"
           />
         </Tooltip>
-      ) }
+        ) }
 
-      { props.disabled !== true && (
+        { props.disabled !== true && (
         <ElementSelectorButton
           elementSelectorConfig={ {
             selectionType: SelectionType.Single,
@@ -205,7 +206,8 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           } }
           type="default"
         />
-      ) }
+        ) }
+      </Flex>
     </Flex>
   )
 }
