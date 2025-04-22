@@ -46,22 +46,6 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/download` }),
                 providesTags: ["Assets"],
             }),
-            assetExportCsvAsset: build.mutation<AssetExportCsvAssetApiResponse, AssetExportCsvAssetApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/export/csv/asset`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                invalidatesTags: ["Assets"],
-            }),
-            assetExportCsvFolder: build.mutation<AssetExportCsvFolderApiResponse, AssetExportCsvFolderApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/export/csv/folder`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                invalidatesTags: ["Assets"],
-            }),
             assetExportZipAsset: build.mutation<AssetExportZipAssetApiResponse, AssetExportZipAssetApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/assets/export/zip/asset`,
@@ -399,75 +383,6 @@ export type AssetDownloadByIdApiResponse = /** status 200 Original asset binary 
 export type AssetDownloadByIdApiArg = {
     /** Id of the asset */
     id: number;
-};
-export type AssetExportCsvAssetApiResponse =
-    /** status 201 Successfully created <strong>jobRun</strong> for csv export */ {
-        /** ID of created jobRun */
-        jobRunId: number;
-    };
-export type AssetExportCsvAssetApiArg = {
-    body: {
-        assets?: number[];
-        columns?: GridColumnRequest[];
-        config?: {
-            delimiter?: string;
-            header?:
-                | "id"
-                | "custom_report_config"
-                | "custom_report_to_export"
-                | "asset_to_export"
-                | "folder_to_export"
-                | "csv_export_data"
-                | "config"
-                | "columns"
-                | "filters"
-                | "delimiter"
-                | "header"
-                | "no_header"
-                | "title"
-                | "name"
-                | "\r\n"
-                | "array"
-                | "int"
-                | "string"
-                | "bool";
-        };
-    };
-};
-export type AssetExportCsvFolderApiResponse =
-    /** status 201 Successfully created <strong>jobRun</strong> for csv export */ {
-        /** ID of created jobRun */
-        jobRunId: number;
-    };
-export type AssetExportCsvFolderApiArg = {
-    body: {
-        folders?: number[];
-        columns?: GridColumnRequest[];
-        filters?: GridFilter;
-        config?: {
-            delimiter?: string;
-            header?:
-                | "id"
-                | "custom_report_config"
-                | "custom_report_to_export"
-                | "asset_to_export"
-                | "folder_to_export"
-                | "csv_export_data"
-                | "config"
-                | "columns"
-                | "filters"
-                | "delimiter"
-                | "header"
-                | "no_header"
-                | "title"
-                | "name"
-                | "\r\n"
-                | "array"
-                | "int"
-                | "string"
-                | "bool";
-        };
-    };
 };
 export type AssetExportZipAssetApiResponse =
     /** status 201 Successfully created <strong>jobRun</strong> for zip export */ {
@@ -894,32 +809,6 @@ export type CustomSettings = {
     /** dynamic custom settings - can be any key-value pair */
     dynamicCustomSettings?: object[];
 };
-export type RelationFieldConfig = {
-    /** Relation Getter */
-    relation: string;
-    /** Field getter */
-    field: string;
-};
-export type SimpleFieldConfig = {
-    /** Field getter */
-    field: string;
-};
-export type AdvancedColumnConfig = {
-    /** advancedColumns */
-    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig)[];
-};
-export type GridColumnRequest = {
-    /** Key */
-    key: string;
-    /** Locale */
-    locale?: any;
-    /** Type */
-    type: string;
-    /** Group */
-    group?: any;
-    /** Config */
-    config: (string | AdvancedColumnConfig)[];
-};
 export type GridFilter = {
     /** Page */
     page: number;
@@ -1185,6 +1074,32 @@ export type GridColumnData = {
     /** inheritance */
     inheritance?: any;
 };
+export type RelationFieldConfig = {
+    /** Relation Getter */
+    relation: string;
+    /** Field getter */
+    field: string;
+};
+export type SimpleFieldConfig = {
+    /** Field getter */
+    field: string;
+};
+export type AdvancedColumnConfig = {
+    /** advancedColumns */
+    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig)[];
+};
+export type GridColumnRequest = {
+    /** Key */
+    key: string;
+    /** Locale */
+    locale?: any;
+    /** Type */
+    type: string;
+    /** Group */
+    group?: any;
+    /** Config */
+    config: (string | AdvancedColumnConfig)[];
+};
 export type PatchCustomMetadata = {
     /** Name */
     name: string;
@@ -1217,8 +1132,6 @@ export const {
     useAssetDownloadZipQuery,
     useAssetDeleteZipMutation,
     useAssetDownloadByIdQuery,
-    useAssetExportCsvAssetMutation,
-    useAssetExportCsvFolderMutation,
     useAssetExportZipAssetMutation,
     useAssetExportZipFolderMutation,
     useAssetGetByIdQuery,

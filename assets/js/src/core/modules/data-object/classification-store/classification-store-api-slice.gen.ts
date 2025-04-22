@@ -140,7 +140,7 @@ export type ClassificationStoreGetLayoutByCollectionApiResponse =
     /** status 200 Layout definition */ ClassificationStoreGroupLayout;
 export type ClassificationStoreGetLayoutByCollectionApiArg = {
     /** object ID */
-    objectId?: number;
+    objectId: number;
     /** CollectionId of the Collection ID */
     collectionId: number;
     /** Field Name */
@@ -150,7 +150,7 @@ export type ClassificationStoreGetLayoutByGroupApiResponse =
     /** status 200 Layout definition */ ClassificationStoreGroupLayout2;
 export type ClassificationStoreGetLayoutByGroupApiArg = {
     /** object ID */
-    objectId?: number;
+    objectId: number;
     /** GroupId of the Group ID */
     groupId: number;
     /** Field Name */

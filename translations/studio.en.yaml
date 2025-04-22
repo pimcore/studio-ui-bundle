@@ -226,6 +226,7 @@ listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download
 listing.actions.export: Export
 listing.actions.csv-export: CSV Export
+listing.actions.xlsx-export: Excel Export
 listing.actions.batch-edit: Batch edit
 listing.selection.total: "{{total}} selected"
 data-type.input: Input
@@ -366,6 +367,7 @@ jobs.job.button-ignore-and-reload: ignore and reload
 jobs.zip-job.title: "ZIP of {{title}}"
 jobs.batch-edit-job.title: "Batch Edit of {{title}}"
 jobs.csv-job.title: "CSV of {{title}}"
+jobs.xlsx-job.title: "XLSX of {{title}}"
 batch-edit.modal-title: Batch Edit
 batch-edit.no-content: There are no added columns yet
 batch-edit.modal-footer.apply-changes: Apply changes
@@ -381,6 +383,13 @@ export-csv-form.form-field.header: Header
 export-csv-form.form-field.header.option.name: System key
 export-csv-form.form-field.header.option.title: Label
 export-csv-form.form-field.header.option.no-header: No header
+export-xlsx-form.modal-title: Export Excel
+export-xlsx-form.export-notice: Please note that the export does not support some fields(e.g. preview, size). Press OK to continue with the export.
+export-xlsx-form.form-field.delimiter: Delimiter
+export-xlsx-form.form-field.header: Header
+export-xlsx-form.form-field.header.option.name: System key
+export-xlsx-form.form-field.header.option.title: Label
+export-xlsx-form.form-field.header.option.no-header: No header
 form.validation.required: This field is required
 form.validation.numeric-range.first-value-missing: First value is missing
 form.validation.numeric-range.second-value-missing: Second value is missing

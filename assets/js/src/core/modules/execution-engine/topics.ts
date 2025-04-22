@@ -15,6 +15,7 @@ export const topics: Record<string, string> = {
   'patch-finished': 'patch-finished',
   'zip-download-ready': 'zip-download-ready',
   'csv-download-ready': 'csv-download-ready',
+  'xlsx-download-ready': 'xlsx-download-ready',
   'handler-progress': 'handler-progress',
   'job-finished-with-errors': 'job-finished-with-errors',
   'job-failed': 'job-failed',
