@@ -161,7 +161,7 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
       <Form.Item
         label={ t('description') }
         name="description"
-        rules={ [{ required: true, message: t('form.validation.provide-description') }] }
+        rules={ [{ required: false, message: t('form.validation.provide-description') }] }
       >
         <Input.TextArea />
       </Form.Item>
