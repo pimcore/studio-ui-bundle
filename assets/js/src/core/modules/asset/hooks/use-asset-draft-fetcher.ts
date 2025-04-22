@@ -107,6 +107,7 @@ export const useAssetDraftFetcher = (): UseAssetDraftFetcherReturn => {
             modifiedCells: {},
             ...initialTabsStateValue
           }
+
           dispatch(assetReceived(mergedAssetData))
           dispatch(removeFailedDraftId(id))
         }

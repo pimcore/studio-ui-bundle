@@ -45,6 +45,7 @@ export const SingleViewUi = ({
   return (
     <Flex
       gap="small"
+      style={ { minWidth: '100%' } }
       vertical
     >
       <Flex

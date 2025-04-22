@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState, useRef, useEffect, type MouseEvent, useContext } from 'react'
+import React, { useState, useRef, useEffect, type MouseEvent } from 'react'
 import { useStyle } from './hotspot-image.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Popover } from 'antd'
@@ -25,12 +25,8 @@ import { type Coordinates, type Rectangle } from '@Pimcore/components/hotspot-im
 import { resizeItem } from '@Pimcore/components/hotspot-image/utils/resize'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
-import {
-  type ExpandedHotspotMarkerData
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
-import {
-  HotspotContext
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-data-provider'
+import { type ExpandedHotspotMarkerData } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
+import { isEqual } from 'lodash'
 
 export interface IStyleOptions {
   hotspot: {
@@ -85,20 +81,19 @@ interface IHotspotImage {
   onUpdate?: (item: IHotspot) => void
   disableContextMenu?: boolean
   disabled?: boolean
+  disableDrag?: boolean
 }
 
-export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, onRemove, onEdit, onClone, onUpdate, disableContextMenu, disabled }: IHotspotImage): JSX.Element => {
+export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, onRemove, onEdit, onClone, onUpdate, disableContextMenu, disabled, disableDrag = false }: IHotspotImage): JSX.Element => {
   const { styles } = useStyle()
   const [imageLoaded, setImageLoaded] = useState<boolean>(false)
   const imageRef = useRef<HTMLImageElement | null>(null)
   const { t } = useTranslation()
-  const { editModeHotspot } = useContext(HotspotContext)
-  const disableDrag = editModeHotspot !== undefined
 
   const [items, setItems] = useState<IHotspot[]>(data ?? [])
   useEffect((): void => {
     setItems(data ?? [])
-  }, [data?.length, JSON.stringify(data?.map((item) => item.data))])
+  }, [data?.length, JSON.stringify(data?.map((item) => ({ name: item.name, data: item.data, id: item.id })))])
 
   useEffect(() => {
     setImageLoaded(false)
@@ -160,13 +155,14 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
     }
   }
 
-  const handleMouseUp = (): void => {
+  const handleMouseUp = (evt: MouseEvent): void => {
     setDragging(false)
     setResizeDirection(null)
 
     const updatedItem = items.find(h => h.id === selectedId)
+    const origiinalItem = data?.find(h => h.id === selectedId)
 
-    if (updatedItem !== undefined) {
+    if (updatedItem !== undefined && !isEqual(updatedItem, origiinalItem)) {
       onUpdate?.(updatedItem)
     }
   }
@@ -191,7 +187,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
         ref={ imageRef }
         src={ src }
       />
-      { disableDrag && imageLoaded && containerRef.current !== null && (
+      { !disableDrag && imageLoaded && containerRef.current !== null && (
         convertHotspotsToPixel(items, containerRef.current.getBoundingClientRect()).map(hotspot => (
           <Popover
             arrow={ false }
