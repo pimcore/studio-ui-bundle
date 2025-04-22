@@ -94,7 +94,6 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const handleApplyChanges = (): void => {
     form.submit()
 
-    resetModal()
     setBatchEditModalOpen(false)
   }
 
@@ -202,7 +201,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   return (
     <WindowModal
       afterClose={ () => {
-        resetBatchEdits()
+        resetModal()
       } }
       footer={ (
         <ModalFooter
