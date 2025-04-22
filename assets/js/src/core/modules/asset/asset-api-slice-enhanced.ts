@@ -120,8 +120,6 @@ export const {
   useAssetPatchByIdMutation,
   useAssetExportZipAssetMutation,
   useAssetExportZipFolderMutation,
-  useAssetExportCsvAssetMutation,
-  useAssetExportCsvFolderMutation,
   useAssetGetSavedGridConfigurationsQuery,
   useAssetSaveGridConfigurationMutation,
   useAssetSetGridConfigurationAsFavoriteMutation,

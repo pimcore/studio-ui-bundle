@@ -16,14 +16,6 @@ import React, { useEffect, useState } from 'react'
 import { CreateCSVForm, type CSVFormValues } from './create-csv-form/create-csv-form'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob as createDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/factory'
-import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
-import {
-  type AssetExportCsvAssetApiResponse,
-  type AssetExportCsvFolderApiResponse,
-  useAssetExportCsvAssetMutation,
-  useAssetExportCsvFolderMutation,
-  useAssetGetByIdQuery
-} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useTranslation } from 'react-i18next'
@@ -32,6 +24,9 @@ import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { type ExportCsvApiResponse, type ExportCsvFolderApiResponse, useExportCsvFolderMutation, useExportCsvMutation } from '@Pimcore/modules/element/export-api-slice.gen'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 
 export interface CsvModalProps {
   open: boolean
@@ -41,11 +36,11 @@ export interface CsvModalProps {
 export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   const [form] = Form.useForm()
   const { addJob } = useJobs()
-  const { id } = useAsset()
-  const { data } = useAssetGetByIdQuery({ id })
-  const [jobTitle, setJobTitle] = useState<string>('Asset')
-  const [fetchCreateCsv, { isError: isCreateCsvError, error: createCsvError }] = useAssetExportCsvAssetMutation()
-  const [fetchCreateFolderCsv, { isError: isCreateFolderCsvError, error: createFolderCsvError }] = useAssetExportCsvFolderMutation()
+  const { id, elementType } = useElementContext()
+  const { element } = useElementDraft(id, elementType)
+  const [jobTitle, setJobTitle] = useState<string>('Element')
+  const [fetchCreateCsv, { isError: isCreateCsvError, error: createCsvError }] = useExportCsvMutation()
+  const [fetchCreateFolderCsv, { isError: isCreateFolderCsvError, error: createFolderCsvError }] = useExportCsvFolderMutation()
   const { selectedRows } = useRowSelection()
   const numberedSelectedRows = selectedRows !== undefined ? Object.keys(selectedRows).map(Number) : []
   const { selectedColumns } = useSelectedColumns()
@@ -58,10 +53,18 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   useEffect(() => {
-    if (data !== undefined) {
-      setJobTitle(`${data.filename}`)
+    if (element === undefined) {
+      return
     }
-  }, [data])
+
+    if ('filename' in element) {
+      setJobTitle(element.filename as string)
+    }
+
+    if ('key' in element) {
+      setJobTitle(element.key as string)
+    }
+  }, [element])
 
   useEffect(() => {
     if (isCreateCsvError) {
@@ -109,7 +112,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
       // @todo add api domain
       title: t('jobs.csv-job.title', { title: jobTitle }),
       topics: [topics['csv-download-ready'], ...defaultTopics],
-      downloadUrl: '/pimcore-studio/api/assets/download/csv/{jobRunId}',
+      downloadUrl: '/pimcore-studio/api/export/download/csv/{jobRunId}',
       action: async () => await getDownloadAction(values.delimiter, values.header)
     }))
 
@@ -121,6 +124,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
       const promise = fetchCreateFolderCsv({
         body: {
           folders: [id],
+          elementType,
           columns: selectedColumns.map((column) => {
             return {
               key: column.key,
@@ -143,12 +147,13 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
       })
 
       const response = (await promise) as any
-      const data = response.data as AssetExportCsvFolderApiResponse
+      const data = response.data as ExportCsvFolderApiResponse
       return data.jobRunId
     } else {
       const promise = fetchCreateCsv({
         body: {
-          assets: numberedSelectedRows,
+          elements: numberedSelectedRows,
+          elementType,
           columns: selectedColumns.map((column) => {
             return {
               key: column.key,
@@ -165,7 +170,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
       })
 
       const response = (await promise) as any
-      const data = response.data as AssetExportCsvAssetApiResponse
+      const data = response.data as ExportCsvApiResponse
       return data.jobRunId
     }
   }
