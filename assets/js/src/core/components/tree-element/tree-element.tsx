@@ -56,7 +56,7 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
   const { styles } = useStyles({ isHideRootChecker })
 
   const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
-  const [expandedKeys, setExpandedKeys] = useState<Key[]>(defaultExpandedKeys ?? [])
+  const [expandedKeys, setExpandedKeys] = useState<Key[]>(defaultExpandedKeys ?? [0])
 
   const handleCustomSwitcherIcon = (): React.JSX.Element | undefined => {
     if (withCustomSwitcherIcon === false) return undefined
