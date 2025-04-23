@@ -137,7 +137,7 @@ import { type DynamicTypeObjectDataObjectBrick } from './definitions/objects/dat
 import { type DynamicTypeGridCellDataObjectAdapter } from './definitions/grid-cell/types/data-object-adapter/dynamic-type-grid-cell-data-object-adapter'
 import { type DynamicTypeGridCellDataObjectActions } from './definitions/grid-cell/types/data-object-actions/dynamic-type-grid-cell-data-object-actions'
 import { type DynamicTypeGridCellDataObjectObjectBrick } from './definitions/grid-cell/types/data-object-object-brick/dynamic-type-grid-cell-data-object-adapter'
-import { type DynamicTypeBatchEditDataObjectAdapter } from './definitions/batch-edits/types/data-object-adapter/dynamic-type-batch-edit-data-object-adpater'
+import { type DynamicTypeBatchEditDataObjectAdapter } from './definitions/batch-edits/types/data-object-adapter/dynamic-type-batch-edit-data-object-adapter'
 import { type DynamicTypeBatchEditDataObjectObjectBrick } from './definitions/batch-edits/types/data-object-object-brick/dynamic-type-batch-edit-data-object-object-brick'
 import { type DynamicTypeAssetRegistry } from './definitions/asset/dynamic-type-asset-registry'
 import { type DynamicTypeAssetArchive } from './definitions/asset/types/dynamic-type-asset-archive'

@@ -17,7 +17,7 @@ import {
   type AbstractBatchEditDefinition,
   type DynamicTypeBatchEditAbstract
 } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/dynamic-type-batch-edit-abstract'
-import { DynamicTypeBatchEditDataObjectAdapterComponent } from '../../components/data-object-adpater/dynamic-type-batch-edit-data-object-adapter-component'
+import { DynamicTypeBatchEditDataObjectAdapterComponent } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/components/data-object-adapter/dynamic-type-batch-edit-data-object-adapter-component'
 
 @injectable()
 export class DynamicTypeBatchEditDataObjectAdapter implements DynamicTypeBatchEditAbstract {
