@@ -103,12 +103,10 @@ Encore
 
   // Important! Reference this vendor-manifest in your build.
   // It will take care of injecting Ant-Design, React, etc. without the need to bundle it in your plugin.
-  // Note: This is currently not even possible, since the build dir changes with every build (uidv4) and even if you
-  // use the right folder, it fails... is it really needed?
-  /*.addPlugin(new webpack.DllReferencePlugin({
+  .addPlugin(new webpack.DllReferencePlugin({
     context: __dirname,
     manifest: path.join(__dirname, 'node_modules', 'pimcore-studio-ui', 'dist', 'vendor',  'vendor-manifest.json')
-  }))*/
+  }))
 ;
 
 if (!Encore.isDevServer()) {
