@@ -1,4 +1,4 @@
-# Plugin system
+# Getting Started With Your First Plugin
 
 The Pimcore Studio plugin system allows developers to extend the functionality of Pimcore Studio by creating custom plugins.
 
@@ -220,10 +220,8 @@ services:
 
 Now just ensure that our bundle is installed. And finally we should see our `console.log()` in the browser console when we access our Pimcore Studio in the browser.
 
-### Further guides
+### Further reading
 
-- [How to register a new tab for a folder asset](./01_Register_a_tab_for_a_folder_asset.md)
-- [How to add a custom icon](./02_Adding_custom_icons.md)
-- [How to add your first widget](03_Add_your_first_widget.md)
+- [Plugin Development Examples](./05_Examples/01_Register_a_tab_for_a_folder_asset.md)
 
 
