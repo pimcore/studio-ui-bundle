@@ -95,3 +95,7 @@ componentRegistry.registerConfig({
 ```
 
 Refer to the [Component Configuration Source](https://github.com/pimcore/studio-ui-bundle/blob/1.x/assets/js/src/core/modules/app/component-registry/component-config.ts) for the complete default configuration and a list of the available single components and slots. This file provides an overview of the extension points available in Pimcore Studio UI via the component registry.
+
+## Full Example
+
+For a complete working example, refer to the [Add an Additional Asset Editor Toolbar Button Example](../05_Examples/05_Add_a_additional_asset_editor_toolbar_button.md).
