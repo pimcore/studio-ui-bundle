@@ -12,8 +12,7 @@
 */
 
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import ButtonGroup from 'antd/es/button/button-group'
-import React, { useContext } from 'react'
+import React, { type ReactElement, useContext } from 'react'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useTranslation } from 'react-i18next'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
@@ -28,6 +27,7 @@ import { useClearThumbnails } from '@Pimcore/modules/asset/actions/clear-thumbna
 import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
 import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
 import { ReloadPopconfirm } from '@Pimcore/components/reload-popconfirm/reload-popconfirm'
+import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 
 export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -55,29 +55,42 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   ]
   const visibleItems = items.filter(item => (item !== null && 'hidden' in item) ? item?.hidden === false : false)
 
-  return (
-    <ButtonGroup>
-      <ReloadPopconfirm
-        hasDataChanged={ hasDataChanged }
-        onReload={ onReload }
-        title={ t('toolbar.reload.confirmation') }
+  const buttonGroupItems: ReactElement[] = []
+
+  buttonGroupItems.push(
+    <ReloadPopconfirm
+      hasDataChanged={ hasDataChanged }
+      key={ 'reload-button' }
+      onReload={ onReload }
+      title={ t('toolbar.reload.confirmation') }
+    >
+      <IconButton
+        icon={ { value: 'refresh' } }
       >
-        <IconButton
-          icon={ { value: 'refresh' } }
-        >
-          {t('toolbar.reload')}
-        </IconButton>
+        {t('toolbar.reload')}
+      </IconButton>
 
-      </ReloadPopconfirm>
+    </ReloadPopconfirm>
+  )
 
-      {visibleItems.length > 0 && (
-        <Dropdown menu={ { items } }>
-          <DropdownButton key={ 'dropdown-button' }>
-            {t('toolbar.more')}
-          </DropdownButton>
-        </Dropdown>
-      )}
-    </ButtonGroup>
+  if (visibleItems.length > 0) {
+    buttonGroupItems.push(
+      <Dropdown
+        key={ 'more-button' }
+        menu={ { items } }
+      >
+        <DropdownButton key={ 'dropdown-button' }>
+          {t('toolbar.more')}
+        </DropdownButton>
+      </Dropdown>
+    )
+  }
+
+  return (
+    <ButtonGroup
+      items={ buttonGroupItems }
+      noSpacing
+    />
   )
 
   function hasDataChanged (): boolean {
