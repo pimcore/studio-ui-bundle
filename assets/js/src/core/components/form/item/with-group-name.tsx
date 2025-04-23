@@ -36,7 +36,7 @@ export const withGroupName = (Component: typeof Form.Item): typeof Form.Item => 
         { ...baseProps }
         name={ formItemName }
       />
-    ), [formItemName])
+    ), [props])
   }
 
   const NewFormItem = FormItemWithGroupContext as typeof Form.Item

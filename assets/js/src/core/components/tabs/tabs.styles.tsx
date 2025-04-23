@@ -78,6 +78,7 @@ export const useStyles = createStyles(({ token, css }) => {
 
       .ant-tabs-tab-active .ant-tabs-tab-btn {
         font-weight: 600;
+        text-shadow: none !important;
       }
       
       &.ant-tabs-line .ant-tabs-nav .ant-tabs-tab-active .ant-tabs-tab-remove {
