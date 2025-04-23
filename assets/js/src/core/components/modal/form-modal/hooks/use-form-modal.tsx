@@ -54,7 +54,7 @@ export function useFormModal (): UseFormModalHookResponse {
   return React.useMemo<UseFormModalHookResponse>(
     () => ({
       input: (props) => {
-        const modalResult = modal.confirm(withInput(props))
+        const modalResult = modal.confirm(withInput(props, (value) => { modalResult.destroy() }, (loading) => { modalResult.update({ okButtonProps: { loading } }) }))
         // avoid that errors are logged in the console
         modalResult.then(() => { }, () => { })
         return modalResult
@@ -78,7 +78,7 @@ interface InputFormProps {
   fieldName: string
 }
 
-export function withInput (props: InputFormModalProps): ModalFuncProps {
+export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetModalLoading): ModalFuncProps {
   const inputRef = React.createRef<InputRef>()
   const uuid = pimcoreUUid()
   const fieldName = `input-${uuid}`
@@ -94,12 +94,29 @@ export function withInput (props: InputFormModalProps): ModalFuncProps {
     formattedRule = [rule]
   }
 
+  const submit = async (fieldName): Promise<any> => {
+    onSetModalLoading?.(true)
+    return await new Promise((resolve, reject) => {
+      form!.validateFields()
+        .then(async () => {
+          const value = form!.getFieldValue(fieldName)
+          await props.onOk?.(value)
+          onKeyBoardSubmit?.(value)
+          resolve(value)
+        })
+        .catch(() => {
+          reject(new Error('Invalid form'))
+        })
+    })
+  }
+
   const InputForm = forwardRef(function InputForm (props: InputFormProps, ref: RefObject<InputRef>): React.JSX.Element {
     return (
       <Form
         form={ props.form }
         initialValues={ props.initialValues }
         layout={ 'vertical' }
+        onSubmitCapture={ async () => { await submit(props.fieldName) } }
       >
         <Form.Item
           label={ label }
@@ -117,17 +134,7 @@ export function withInput (props: InputFormModalProps): ModalFuncProps {
     type: props.type ?? 'confirm',
     icon: props.icon ?? null,
     onOk: async () => {
-      return await new Promise((resolve, reject) => {
-        form!.validateFields()
-          .then(async () => {
-            const value = form!.getFieldValue(fieldName)
-            await props.onOk?.(value)
-            resolve(value)
-          })
-          .catch(() => {
-            reject(new Error('Invalid form'))
-          })
-      })
+      await submit(fieldName)
     },
     modalRender: (node) => {
       if (inputRef.current !== null) {
