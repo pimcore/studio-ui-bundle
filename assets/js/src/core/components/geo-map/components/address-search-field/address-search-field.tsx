@@ -12,11 +12,12 @@
 */
 
 import React from 'react'
-import Search from 'antd/es/input/Search'
+import { Input } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { ERROR_ADDRESS_NOT_FOUND, geoCode } from '@Pimcore/components/geo-map/utils/geocode'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { type GeoPoint } from '@Pimcore/components/geo-map/types/geo-types'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 interface AddressSearchFieldProps {
   onSearch: (geoPoint?: GeoPoint) => void
@@ -26,13 +27,14 @@ interface AddressSearchFieldProps {
 export const AddressSearchField = (props: AddressSearchFieldProps): React.JSX.Element => {
   const { t } = useTranslation()
   const alertModal = useAlertModal()
+  const settings = useSettings()
 
   const onSearch = async (value: string): Promise<void> => {
     if (value === '') {
       props.onSearch(undefined); return
     }
 
-    await geoCode(value)
+    await geoCode(value, settings.maps.geocoding_url_template as string)
       .then(props.onSearch)
       .catch((error: Error) => {
         if (error.message === ERROR_ADDRESS_NOT_FOUND) {
@@ -51,7 +53,7 @@ export const AddressSearchField = (props: AddressSearchFieldProps): React.JSX.El
   }
 
   return (
-    <Search
+    <Input.Search
       className="address-search-field"
       disabled={ props.disabled }
       onSearch={ onSearch }

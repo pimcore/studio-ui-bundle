@@ -18,29 +18,33 @@ export const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.NOTES_AND_EVENTS, tagNames.ASSET_DETAIL, tagNames.DATA_OBJECT_DETAIL],
   endpoints: {
     noteGetCollection: {
-      providesTags: (result, error, args) => {
+      providesTags: (result, error, args): Tag[] => {
         const tags: Tag[] = []
 
         result?.items.forEach((note) => {
-          tags.push(...providingTags.NOTES_AND_EVENTS_ID(note.id))
+          tags.push(...providingTags.NOTES_AND_EVENTS_DETAIL(note.id))
         })
 
         return tags
       }
     },
     noteDeleteById: {
-      invalidatesTags: (result, error, args) => invalidatingTags.NOTES_AND_EVENTS_ID(args.id)
+      invalidatesTags: (result, error, args) => invalidatingTags.NOTES_AND_EVENTS_DETAIL(args.id)
     },
     noteElementGetCollection: {
       providesTags: (result, error, args) => {
-        const tags = providingTags.ELEMENT_NOTES_AND_EVENTS(args.elementType, args.id)
+        const tags: Tag[] = []
 
-        return tags.filter((tag) => tag !== undefined)
+        result?.items.forEach((note) => {
+          tags.push(...providingTags.NOTES_AND_EVENTS_DETAIL(note.id))
+        })
+
+        return [...tags, ...providingTags.ELEMENT_NOTES_AND_EVENTS(args.elementType, args.id)]
       }
     },
     noteElementCreate: {
       invalidatesTags: (result, error, args) => {
-        const tags = providingTags.ELEMENT_NOTES_AND_EVENTS(args.elementType, args.id)
+        const tags = invalidatingTags.ELEMENT_NOTES_AND_EVENTS(args.elementType, args.id)
 
         return tags.filter((tag) => tag !== undefined)
       }

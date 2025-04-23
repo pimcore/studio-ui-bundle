@@ -29,6 +29,10 @@ export const useStyles = createStyles(({ token, css }) => {
 
       .stack-list-item__body {
         padding: 0 4px 4px 4px;
+        
+        .ant-picker {
+          width: 100%;
+        }
       }
 
       .stack-list-item__content {

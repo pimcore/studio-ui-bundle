@@ -18,10 +18,15 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/ListingRegistry': 'DynamicTypes/ListingRegistry',
   'DynamicTypes/MetadataRegistry': 'DynamicTypes/MetadataRegistry',
   'DynamicTypes/ObjectLayoutRegistry': 'DynamicTypes/ObjectLayoutRegistry',
-  'DynamicTypes/ObjectDataRegistry': 'DynamicTypes/ObjectDataRegistry'
+  'DynamicTypes/ObjectDataRegistry': 'DynamicTypes/ObjectDataRegistry',
+  'DynamicTypes/AssetRegistry': 'DynamicTypes/AssetRegistry',
+  'DynamicTypes/ObjectRegistry': 'DynamicTypes/ObjectRegistry'
 }
 
 export const serviceIds = {
+  // Main nav
+  mainNavRegistry: 'MainNavRegistry',
+
   // Widget manager
   widgetManager: 'WidgetManagerService',
 
@@ -58,12 +63,20 @@ export const serviceIds = {
 
   'DynamicTypes/BatchEdit/Text': 'DynamicTypes/BatchEdit/Text',
   'DynamicTypes/BatchEdit/TextArea': 'DynamicTypes/BatchEdit/TextArea',
+  'DynamicTypes/BatchEdit/Datetime': 'DynamicTypes/BatchEdit/Datetime',
+  'DynamicTypes/BatchEdit/Select': 'DynamicTypes/BatchEdit/Select',
+  'DynamicTypes/BatchEdit/Checkbox': 'DynamicTypes/BatchEdit/Checkbox',
+  'DynamicTypes/BatchEdit/ElementDropzone': 'DynamicTypes/BatchEdit/ElementDropzone',
+  'DynamicTypes/BatchEdit/DataObjectAdapter': 'DynamicTypes/BatchEdit/DataObjectAdapter',
+  'DynamicTypes/BatchEdit/DataObjectObjectBrick': 'DynamicTypes/BatchEdit/DataObjectObjectBrick',
 
   'DynamicTypes/GridCell/Text': 'DynamicTypes/GridCell/Text',
   'DynamicTypes/GridCell/Textarea': 'DynamicTypes/GridCell/Textarea',
   'DynamicTypes/GridCell/Number': 'DynamicTypes/GridCell/Number',
   'DynamicTypes/GridCell/Select': 'DynamicTypes/GridCell/Select',
+  'DynamicTypes/GridCell/MultiSelect': 'DynamicTypes/GridCell/MultiSelect',
   'DynamicTypes/GridCell/Checkbox': 'DynamicTypes/GridCell/Checkbox',
+  'DynamicTypes/GridCell/Boolean': 'DynamicTypes/GridCell/Boolean',
   'DynamicTypes/GridCell/Date': 'DynamicTypes/GridCell/Date',
   'DynamicTypes/GridCell/Time': 'DynamicTypes/GridCell/Time',
   'DynamicTypes/GridCell/DateTime': 'DynamicTypes/GridCell/DateTime',
@@ -73,6 +86,7 @@ export const serviceIds = {
   'DynamicTypes/GridCell/OpenElement': 'DynamicTypes/GridCell/OpenElement',
   'DynamicTypes/GridCell/AssetPreview': 'DynamicTypes/GridCell/AssetPreview',
   'DynamicTypes/GridCell/AssetActions': 'DynamicTypes/GridCell/AssetActions',
+  'DynamicTypes/GridCell/DataObjectActions': 'DynamicTypes/GridCell/DataObjectActions',
   'DynamicTypes/GridCell/DependencyTypeIcon': 'DynamicTypes/GridCell/DependencyTypeIcon',
   'DynamicTypes/GridCell/AssetCustomMetadataIcon': 'DynamicTypes/GridCell/AssetCustomMetadataIcon',
   'DynamicTypes/GridCell/AssetCustomMetadataValue': 'DynamicTypes/GridCell/AssetCustomMetadataValue',
@@ -84,8 +98,11 @@ export const serviceIds = {
   'DynamicTypes/GridCell/Asset': 'DynamicTypes/GridCell/Asset',
   'DynamicTypes/GridCell/Object': 'DynamicTypes/GridCell/Object',
   'DynamicTypes/GridCell/Document': 'DynamicTypes/GridCell/Document',
+  'DynamicTypes/GridCell/Element': 'DynamicTypes/GridCell/Element',
   'DynamicTypes/GridCell/LanguageSelect': 'DynamicTypes/GridCell/LanguageSelect',
   'DynamicTypes/GridCell/Translate': 'DynamicTypes/GridCell/Translate',
+  'DynamicTypes/GridCell/DataObjectAdapter': 'DynamicTypes/GridCell/DataObjectAdapter',
+  'DynamicTypes/GridCell/DataObjectObjectBrick': 'DynamicTypes/GridCell/DataObjectObjectBrick',
 
   'DynamicTypes/Listing/Text': 'DynamicTypes/Listing/Text',
   'DynamicTypes/Listing/AssetLink': 'DynamicTypes/Listing/AssetLink',
@@ -112,6 +129,7 @@ export const serviceIds = {
   // Object data
   'DynamicTypes/ObjectData/Input': 'DynamicTypes/ObjectData/Input',
   'DynamicTypes/ObjectData/Textarea': 'DynamicTypes/ObjectData/Textarea',
+  'DynamicTypes/ObjectData/Wysiwyg': 'DynamicTypes/ObjectData/Wysiwyg',
   'DynamicTypes/ObjectData/Password': 'DynamicTypes/ObjectData/Password',
   'DynamicTypes/ObjectData/InputQuantityValue': 'DynamicTypes/ObjectData/InputQuantityValue',
   'DynamicTypes/ObjectData/Select': 'DynamicTypes/ObjectData/Select',
@@ -134,7 +152,9 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/Gender': 'DynamicTypes/ObjectData/Gender',
   'DynamicTypes/ObjectData/RgbaColor': 'DynamicTypes/ObjectData/RgbaColor',
   'DynamicTypes/ObjectData/EncryptedField': 'DynamicTypes/ObjectData/EncryptedField',
+  'DynamicTypes/ObjectData/CalculatedValue': 'DynamicTypes/ObjectData/CalculatedValue',
   'DynamicTypes/ObjectData/Checkbox': 'DynamicTypes/ObjectData/Checkbox',
+  'DynamicTypes/ObjectData/Link': 'DynamicTypes/ObjectData/Link',
   'DynamicTypes/ObjectData/UrlSlug': 'DynamicTypes/ObjectData/UrlSlug',
   'DynamicTypes/ObjectData/Date': 'DynamicTypes/ObjectData/Date',
   'DynamicTypes/ObjectData/Datetime': 'DynamicTypes/ObjectData/Datetime',
@@ -142,16 +162,41 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/Time': 'DynamicTypes/ObjectData/Time',
   'DynamicTypes/ObjectData/ExternalImage': 'DynamicTypes/ObjectData/ExternalImage',
   'DynamicTypes/ObjectData/Image': 'DynamicTypes/ObjectData/Image',
+  'DynamicTypes/ObjectData/Video': 'DynamicTypes/ObjectData/Video',
+  'DynamicTypes/ObjectData/HotspotImage': 'DynamicTypes/ObjectData/HotspotImage',
   'DynamicTypes/ObjectData/ImageGallery': 'DynamicTypes/ObjectData/ImageGallery',
   'DynamicTypes/ObjectData/GeoPoint': 'DynamicTypes/ObjectData/GeoPoint',
   'DynamicTypes/ObjectData/GeoBounds': 'DynamicTypes/ObjectData/GeoBounds',
   'DynamicTypes/ObjectData/GeoPolygon': 'DynamicTypes/ObjectData/GeoPolygon',
   'DynamicTypes/ObjectData/GeoPolyLine': 'DynamicTypes/ObjectData/GeoPolyLine',
+  'DynamicTypes/ObjectData/ManyToOneRelation': 'DynamicTypes/ObjectData/ManyToOneRelation',
   'DynamicTypes/ObjectData/ManyToManyRelation': 'DynamicTypes/ObjectData/ManyToManyRelation',
+  'DynamicTypes/ObjectData/ManyToManyObjectRelation': 'DynamicTypes/ObjectData/ManyToManyObjectRelation',
+  'DynamicTypes/ObjectData/AdvancedManyToManyRelation': 'DynamicTypes/ObjectData/AdvancedManyToManyRelation',
+  'DynamicTypes/ObjectData/AdvancedManyToManyObjectRelation': 'DynamicTypes/ObjectData/AdvancedManyToManyObjectRelation',
+  'DynamicTypes/ObjectData/ReverseObjectRelation': 'DynamicTypes/ObjectData/ReverseObjectRelation',
+  'DynamicTypes/ObjectData/Table': 'DynamicTypes/ObjectData/Table',
   'DynamicTypes/ObjectData/StructuredTable': 'DynamicTypes/ObjectData/StructuredTable',
   'DynamicTypes/ObjectData/Block': 'DynamicTypes/ObjectData/Block',
   'DynamicTypes/ObjectData/LocalizedFields': 'DynamicTypes/ObjectData/LocalizedFields',
   'DynamicTypes/ObjectData/FieldCollection': 'DynamicTypes/ObjectData/FieldCollection',
+  'DynamicTypes/ObjectData/ObjectBrick': 'DynamicTypes/ObjectData/ObjectBrick',
+  'DynamicTypes/ObjectData/ClassificationStore': 'DynamicTypes/ObjectData/ClassificationStore',
+
+  // Asset types
+  'DynamicTypes/Asset/Video': 'DynamicTypes/Asset/Video',
+  'DynamicTypes/Asset/Audio': 'DynamicTypes/Asset/Audio',
+  'DynamicTypes/Asset/Image': 'DynamicTypes/Asset/Image',
+  'DynamicTypes/Asset/Document': 'DynamicTypes/Asset/Document',
+  'DynamicTypes/Asset/Archive': 'DynamicTypes/Asset/Archive',
+  'DynamicTypes/Asset/Unknown': 'DynamicTypes/Asset/Unknown',
+  'DynamicTypes/Asset/Folder': 'DynamicTypes/Asset/Folder',
+  'DynamicTypes/Asset/Text': 'DynamicTypes/Asset/Text',
+
+  // Object types
+  'DynamicTypes/Object/Folder': 'DynamicTypes/Object/Folder',
+  'DynamicTypes/Object/Object': 'DynamicTypes/Object/Object',
+  'DynamicTypes/Object/Variant': 'DynamicTypes/Object/Variant',
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',

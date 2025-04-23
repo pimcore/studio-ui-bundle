@@ -39,9 +39,9 @@ export const useQuantityValueUnits = (): UseQuantityValueUnitsReturn => {
 
     return units
       .items
-      .filter(unit => validUnits === undefined || (unit.id !== null && validUnits.includes(unit.id)))
+      .filter(unit => validUnits === undefined || (unit.id !== null && validUnits.includes(String(unit.id))))
       .map(unit => ({
-        label: unit.abbreviation === null ? unit.id : t(unit.abbreviation),
+        label: unit.abbreviation === null ? unit.id : t(String(unit.abbreviation)),
         value: unit.id
       }))
   }

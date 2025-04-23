@@ -12,10 +12,13 @@
 */
 
 import React, { type ReactNode } from 'react'
+import cn from 'classnames'
 import { useStyles } from './content.styles'
 import { type INoContentProps, NoContent } from '../no-content/no-content'
 import { Spin } from '../spin/spin'
 import { Box, type BoxProps } from '../box/box'
+
+export type OverflowValue = 'visible' | 'hidden' | 'scroll' | 'auto'
 
 export interface ContentProps extends Omit<BoxProps, 'children'> {
   className?: string
@@ -24,32 +27,45 @@ export interface ContentProps extends Omit<BoxProps, 'children'> {
   loading?: boolean
   none?: boolean
   centered?: boolean
+  fullPage?: boolean
   noneOptions?: INoContentProps
+  overflow?: { x: OverflowValue, y: OverflowValue }
 }
 
 export const Content = ({
   children,
   padded = false,
   padding = { top: 'small', x: 'extra-small', bottom: 'extra-small' },
+  overflow = { x: 'auto', y: 'auto' },
+  margin = 'none',
   className,
   loading = false,
   none = false,
   centered = false,
   noneOptions,
+  fullPage,
   ...props
 }: ContentProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const classes = [styles.content, 'content', className]
+
   const showChildren = !loading && !none
   const contentCentered = centered || none || loading
 
-  if (contentCentered) {
-    classes.push('content--centered')
-  }
+  const classes = cn(
+    styles.content,
+    'content',
+    className,
+    `content--overflow-x-${overflow.x}`,
+    `content--overflow-y-${overflow.y}`,
+    {
+      'content--centered': contentCentered,
+      [styles.contentFullPage]: fullPage
+    }
+  )
 
   return (
     <Box
-      className={ classes.join(' ') }
+      className={ classes }
       padding={ padded ? padding : 'none' }
       { ...props }
     >

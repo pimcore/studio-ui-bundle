@@ -25,7 +25,6 @@ import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
 const ManagementContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
   const { getUserTree } = useUserHelper()
-  const [treeKey, setTreeKey] = React.useState<string>('tree-' + Date.now())
 
   const treeParentItem = {
     title: t('user-management.tree.all'),
@@ -34,10 +33,11 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
     children: [],
     actions: [
       { key: 'add-folder', icon: 'folder-plus' },
-      { key: 'add-user', icon: 'user-plus-01' }
+      { key: 'add-user', icon: 'add-user' }
     ]
   }
   const [treeData, setTreeData] = React.useState<TreeDataItem[]>([treeParentItem])
+  const [treeIsLoading, setTreeIsLoading] = React.useState<boolean>(false)
 
   const createNodeByResponse = useCallback((items: any): TreeDataNode[] => {
     return items.map((item: any) => ({
@@ -45,16 +45,16 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
       key: item.id,
       selectable: item.type === 'user',
       allowDrop: item.type !== 'user',
-      icon: item.type === 'user' ? <Icon value={ 'user-01' } /> : <Icon value={ 'folder' } />,
+      icon: item.type === 'user' ? <Icon value={ 'user' } /> : <Icon value={ 'folder' } />,
       actions: item.type === 'user'
         ? [
-            { key: 'clone-user', icon: 'copy-03' },
-            { key: 'remove-user', icon: 'delete-outlined' }
+            { key: 'clone-user', icon: 'copy' },
+            { key: 'remove-user', icon: 'trash' }
           ]
         : [
             { key: 'add-folder', icon: 'folder-plus' },
-            { key: 'add-user', icon: 'user-plus-01' },
-            { key: 'remove-folder', icon: 'delete-outlined' }
+            { key: 'add-user', icon: 'add-user' },
+            { key: 'remove-folder', icon: 'trash' }
           ],
       children: [],
       isLeaf: item.children === false
@@ -84,14 +84,12 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
     })
   }
 
-  const reloadTree = (): void => {
-    getUserTree({ parentId: 0 }).then((data) => {
-      updateTreeData('0', data.items)
-      const timestamp = Date.now()
-      setTreeKey('tree-' + timestamp)
-    }).catch((error) => {
-      console.error(error)
-    })
+  const reloadTree = async (): Promise<void> => {
+    setTreeIsLoading(true)
+
+    const { items } = await getUserTree({ parentId: 0 })
+    updateTreeData('0', items)
+    setTreeIsLoading(false)
   }
 
   const sidebar = {
@@ -100,7 +98,8 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
     minSize: 170,
     children: [
       <TreeContainer
-        key={ treeKey }
+        isLoading={ treeIsLoading }
+        key="user-tree"
         onLoadTreeData={ handleOnLoadData }
         onMoveItem={ (dragNode, dropKey) => {
           const parent = findParentByKey(treeData, dragNode.key)
@@ -113,7 +112,9 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
             setTreeData([...treeData])
           }
         } }
-        onReloadTree={ reloadTree }
+        onReloadTree={ async () => {
+          await reloadTree()
+        } }
         onRemoveItem={ (key) => {
           const parent = findParentByKey(treeData, key)
           if (parent?.children !== undefined) {
@@ -137,18 +138,11 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
     children: [
       <ManagementDetail
         key="user-detail"
-        onCloneUser={ (data) => {
-          reloadTree()
+        onCloneUser={ async () => {
+          await reloadTree()
         } }
-        onRemoveItem={ (id) => {
-          const parent = findParentByKey(treeData, id)
-          if (parent?.children !== undefined) {
-            const updatedTreeData = parent.children.filter((child: TreeDataNode) => child.key !== id)
-            setTreeData((data: TreeDataNode[]): TreeDataNode[] => {
-              parent.children = updatedTreeData
-              return [...data]
-            })
-          }
+        onRemoveItem={ async () => {
+          await reloadTree()
         } }
       />
     ]

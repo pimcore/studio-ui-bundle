@@ -19,7 +19,6 @@ export interface GeoPolyDrawerFooterProps {
   onChange?: (value?: GeoPoints) => void
   onSearch: (geoPoint: GeoPoint) => void
   value?: GeoPoints
-  disabled?: boolean
 }
 
 export const GeoPolyDrawerFooter = (props: GeoPolyDrawerFooterProps): React.JSX.Element => {
@@ -40,8 +39,7 @@ export const GeoPolyDrawerFooter = (props: GeoPolyDrawerFooterProps): React.JSX.
     <GeoMapCardFooter
       emptyValue={ emptyValue }
       onSearch={ props.onSearch }
-      removeButtonDisabled={ value === undefined || props.disabled }
-      searchDisabled={ props.disabled }
+      removeButtonDisabled={ value === undefined }
     />
   )
 }

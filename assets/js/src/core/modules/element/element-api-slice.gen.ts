@@ -27,6 +27,21 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Elements"],
             }),
+            elementGetContextPermissions: build.query<
+                ElementGetContextPermissionsApiResponse,
+                ElementGetContextPermissionsApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/elements/${queryArg.elementType}/context-permissions/`,
+                }),
+                providesTags: ["Elements"],
+            }),
+            elementGetTreeLocation: build.query<ElementGetTreeLocationApiResponse, ElementGetTreeLocationApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/elements/${queryArg.elementType}/location/${queryArg.id}/${queryArg.perspectiveId}`,
+                }),
+                providesTags: ["Elements"],
+            }),
             elementGetIdByPath: build.query<ElementGetIdByPathApiResponse, ElementGetIdByPathApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/elements/${queryArg.elementType}/path`,
@@ -37,6 +52,16 @@ const injectedRtkApi = api
             elementGetSubtype: build.query<ElementGetSubtypeApiResponse, ElementGetSubtypeApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/elements/${queryArg.elementType}/subtype/${queryArg.id}`,
+                }),
+                providesTags: ["Elements"],
+            }),
+            elementResolveBySearchTerm: build.query<
+                ElementResolveBySearchTermApiResponse,
+                ElementResolveBySearchTermApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/elements/${queryArg.elementType}/resolve`,
+                    params: { searchTerm: queryArg.searchTerm },
                 }),
                 providesTags: ["Elements"],
             }),
@@ -70,6 +95,23 @@ export type ElementFolderCreateApiArg = {
     elementType: "asset" | "document" | "data-object";
     folderData: FolderData;
 };
+export type ElementGetContextPermissionsApiResponse = /** status 200 Context permission list */
+    | AssetContextPermissions
+    | DataObjectContextPermissions
+    | DocumentContextPermissions;
+export type ElementGetContextPermissionsApiArg = {
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+};
+export type ElementGetTreeLocationApiResponse = /** status 200 Location data of the element */ ElementLocationData;
+export type ElementGetTreeLocationApiArg = {
+    /** Id of the element */
+    id: number;
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+    /** Get perspective by matching Id */
+    perspectiveId: string;
+};
 export type ElementGetIdByPathApiResponse = /** status 200 element_get_id_by_path_response_description */ {
     /** ID of the element */
     id: number;
@@ -87,6 +129,16 @@ export type ElementGetSubtypeApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
 };
+export type ElementResolveBySearchTermApiResponse = /** status 200 ID of the element with given search term */ {
+    /** ID of the element */
+    id: number;
+};
+export type ElementResolveBySearchTermApiArg = {
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+    /** Search term to filter elements by. */
+    searchTerm: string;
+};
 export type Error = {
     /** Message */
     message: string;
@@ -100,7 +152,7 @@ export type DevError = {
 export type DeleteInfo = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** hasDependencies */
     hasDependencies: boolean;
@@ -111,10 +163,178 @@ export type FolderData = {
     /** Folder Name */
     folderName: string;
 };
+export type SaveAssetContextPermissions = {
+    /** Hide Add Menu */
+    hideAdd: boolean;
+    /** Add Upload */
+    addUpload: boolean;
+    /** Upload New Version */
+    uploadNewVersion: boolean;
+    /** Add Upload Zip */
+    addUploadZip: boolean;
+    /** Download */
+    download: boolean;
+    /** Download Zip */
+    downloadZip: boolean;
+    /** Add Folder */
+    addFolder: boolean;
+    /** Copy */
+    copy: boolean;
+    /** Cut */
+    cut: boolean;
+    /** Delete */
+    delete: boolean;
+    /** Lock */
+    lock: boolean;
+    /** Lock And Propagate */
+    lockAndPropagate: boolean;
+    /** Paste */
+    paste: boolean;
+    /** Paste Cut */
+    pasteCut: boolean;
+    /** Refresh */
+    refresh: boolean;
+    /** Rename */
+    rename: boolean;
+    /** SearchAndMove */
+    searchAndMove: boolean;
+    /** Unlock */
+    unlock: boolean;
+    /** Unlock And Propagate */
+    unlockAndPropagate: boolean;
+};
+export type AssetContextPermissions = SaveAssetContextPermissions & {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+};
+export type SaveDataObjectContextPermissions = {
+    /** Add */
+    add: boolean;
+    /** Add Folder */
+    addFolder: boolean;
+    /** Change Children SortBy */
+    changeChildrenSortBy: boolean;
+    /** Copy */
+    copy: boolean;
+    /** Cut */
+    cut: boolean;
+    /** Delete */
+    delete: boolean;
+    /** Lock */
+    lock: boolean;
+    /** Lock and Propagate */
+    lockAndPropagate: boolean;
+    /** Paste */
+    paste: boolean;
+    /** Publish */
+    publish: boolean;
+    /** Refresh */
+    refresh: boolean;
+    /** Rename */
+    rename: boolean;
+    /** Search and Move */
+    searchAndMove: boolean;
+    /** Unlock */
+    unlock: boolean;
+    /** Unlock and Propagate */
+    unlockAndPropagate: boolean;
+    /** Unpublish */
+    unpublish: boolean;
+};
+export type DataObjectContextPermissions = SaveDataObjectContextPermissions & {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+};
+export type SaveDocumentContextPermissions = {
+    /** Add */
+    add: boolean;
+    /** Add E-Mail */
+    addEmail: boolean;
+    /** Add Folder */
+    addFolder: boolean;
+    /** Add Hardlink */
+    addHardlink: boolean;
+    /** Add Headless Document */
+    addHeadlessDocument: boolean;
+    /** Add Link */
+    addLink: boolean;
+    /** Add Newsletter */
+    addNewsletter: boolean;
+    /** Add Print Page */
+    addPrintPage: boolean;
+    /** Add Snippet */
+    addSnippet: boolean;
+    /** Convert */
+    convert: boolean;
+    /** Copy */
+    copy: boolean;
+    /** Cut */
+    cut: boolean;
+    /** Delete */
+    delete: boolean;
+    /** Edit Site */
+    editSite: boolean;
+    /** Lock */
+    lock: boolean;
+    /** Lock and Propagate */
+    lockAndPropagate: boolean;
+    /** Open */
+    open: boolean;
+    /** Paste */
+    paste: boolean;
+    /** Paste Cut */
+    pasteCut: boolean;
+    /** Publish */
+    publish: boolean;
+    /** Refresh */
+    refresh: boolean;
+    /** Remove Site */
+    removeSite: boolean;
+    /** Rename */
+    rename: boolean;
+    /** Search and Move */
+    searchAndMove: boolean;
+    /** Unlock */
+    unlock: boolean;
+    /** Unlock and Propagate */
+    unlockAndPropagate: boolean;
+    /** Unpublish */
+    unpublish: boolean;
+    /** Use As Site */
+    useAsSite: boolean;
+};
+export type DocumentContextPermissions = SaveDocumentContextPermissions & {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+};
+export type TreeLevelData = {
+    /** Parent ID */
+    parentId?: number;
+    /** Element ID */
+    elementId: number;
+    /** Page Number */
+    pageNumber: number;
+};
+export type ElementLocationData = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Widget Id */
+    widgetId: string;
+    /** Tree level data */
+    treeLevelData: TreeLevelData[];
+};
 export type Subtype = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** Element Id */
     elementId: number;
@@ -127,6 +347,9 @@ export const {
     useElementDeleteMutation,
     useElementGetDeleteInfoQuery,
     useElementFolderCreateMutation,
+    useElementGetContextPermissionsQuery,
+    useElementGetTreeLocationQuery,
     useElementGetIdByPathQuery,
     useElementGetSubtypeQuery,
+    useElementResolveBySearchTermQuery,
 } = injectedRtkApi;

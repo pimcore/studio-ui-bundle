@@ -20,7 +20,7 @@ export interface ITreeElementItemProps {
   title: string
   actions?: Array<{ key: string, icon: string }>
   onSelected?: () => void
-  onActionsClick?: (action: string) => void
+  onActionsClick?: (action: string, title: string) => void
 }
 const TreeElementItem = ({ title, actions, onSelected, onActionsClick }: ITreeElementItemProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -32,12 +32,15 @@ const TreeElementItem = ({ title, actions, onSelected, onActionsClick }: ITreeEl
       key: action.key,
       label: t(`tree.actions.${action.key}`),
       icon: <Icon value={ action.icon } />,
-      onClick: () => { onActionsClick?.(action.key) }
+      onClick: () => {
+        onActionsClick?.(action.key, title)
+      }
     })
   })
 
   const renderTitle = (): React.JSX.Element => (
-    <span
+    <button
+      className={ 'ant-tree-title__btn' }
       onClick={ onSelected }
       onKeyDown={ (event) => {
         if (event.key === 'Enter' || event.key === 'Escape') {
@@ -46,11 +49,9 @@ const TreeElementItem = ({ title, actions, onSelected, onActionsClick }: ITreeEl
           }
         }
       } }
-      role="button"
-      tabIndex={ 0 }
     >
       {title}
-    </span>
+    </button>
   )
 
   return items?.length > 0

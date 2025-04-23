@@ -19,6 +19,10 @@ export const useStyles = createStyles(({ token, css }) => {
       .ant-card-head {
         min-height: 38px;
         padding: ${token.paddingXXS}px ${token.paddingSM}px;
+
+        .button--type-action {
+          margin-bottom: -4px;
+        }
       }
 
       &.ant-card:not(.ant-card-bordered) {
@@ -38,6 +42,18 @@ export const useStyles = createStyles(({ token, css }) => {
         align-items: center;
         gap: ${token.marginXXS}px;
         color: ${token.colorTextSecondary};
+      }
+
+      .ant-card-head-wrapper {
+        gap: ${token.paddingXS}px;
+
+        .ant-card-head-title {
+          min-width: fit-content;  
+        }
+
+        .ant-card-extra {
+          width: 100%;
+        }
       }
 
       .ant-card-body {
@@ -71,6 +87,12 @@ export const useStyles = createStyles(({ token, css }) => {
       &.card--theme-card-with-highlight {
         .ant-card-head {
           border-bottom: 1px solid ${token.colorPrimaryBorder};
+        }
+      }
+
+      &.card--theme-border-highlight {        
+        &, &.ant-card:not(.ant-card-bordered) {
+          border-left: 3px solid #D5CFDA;
         }
       }
 

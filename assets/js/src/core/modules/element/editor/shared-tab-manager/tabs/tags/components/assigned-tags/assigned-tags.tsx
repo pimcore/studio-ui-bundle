@@ -32,7 +32,7 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
   const checkedTags = useMemo(() => {
     const tagEntries = Object.entries(tags)
     return tagEntries
-      .map(([key, tag]) => ({ ...tag, key }))
+      .map(([key, tag]) => ({ ...tag }))
       .filter((tag) => tag.id !== undefined)
   }, [tags])
 
@@ -44,7 +44,7 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
   })
 
   const handleRemoveTag = async (tagId: string): Promise<void> => {
-    const updatedCheckedTags = checkedTags.filter((tag) => tag.id?.toString() !== tagId).map((tag) => tag.id!.toString())
+    const updatedCheckedTags = checkedTags.filter((tag) => tag.id?.toString() !== tagId).map((tag) => tag.id.toString())
     await handleCheck(
       {
         checked: updatedCheckedTags,
@@ -76,7 +76,7 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
           <IconButton
             aria-label={ t('tags.actions.delete') }
             icon={ { value: 'trash' } }
-            onClick={ async () => { await handleRemoveTag(info.row.original.id!.toString()) } }
+            onClick={ async () => { await handleRemoveTag(info.row.original.id.toString()) } }
             type="link"
           />
         </Flex>

@@ -13,14 +13,15 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, type FormProps, Input } from 'antd'
-import TextArea from 'antd/es/input/TextArea'
+import { type FormProps, Input } from 'antd'
+import { TextArea } from '@Pimcore/components/textarea/textarea'
+import { Form } from '@Pimcore/components/form/form'
 import {
   useNoteElementGetTypeCollectionQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
 import { Content } from '@Pimcore/components/content/content'
 import { Select } from '@Pimcore/components/select/select'
-import { type ElementType } from '../../../../../../../../../types/element-type.d'
+import { type ElementType } from '../../../../../../../types/enums/element/element-type'
 
 export interface AddNoteFormProps extends FormProps {
   elementType: ElementType
@@ -37,7 +38,7 @@ export const AddNoteForm = ({ elementType, ...props }: AddNoteFormProps): React.
     return <Content loading />
   }
 
-  const noteTypeOptions = noteTypesResponse?.items?.map((noteType) => ({ value: noteType.id, label: t('notes-and-events.' + noteType.id) }))
+  const noteTypeOptions = noteTypesResponse?.items?.map((noteType) => ({ value: noteType.id, label: noteType.id }))
 
   return (
     <Form

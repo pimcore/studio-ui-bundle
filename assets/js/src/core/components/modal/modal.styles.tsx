@@ -16,10 +16,30 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     modal: css`
-        &.ant-modal .ant-modal-footer > .ant-btn + .ant-btn {
-            margin-inline-start: 0;
+        &.error {
+            .ant-modal-content .ant-modal-header .ant-modal-title .pimcore-icon {
+                color:  ${token.colorError}; 
+            }
         }
-
+        
+        &.success {
+            .ant-modal-content .ant-modal-header .ant-modal-title .pimcore-icon {
+                color: ${token.colorSuccess}; 
+            }
+        }
+        
+        &.info {
+            .ant-modal-content .ant-modal-header .ant-modal-title .pimcore-icon {
+                color: ${token.colorPrimary}; 
+            }
+        }
+        
+        &.alert {
+            .ant-modal-content .ant-modal-header .ant-modal-title .pimcore-icon {
+                color: ${token.colorWarning}; 
+            }
+        }
+        
         .ant-modal-content {
             width: 100%;
             display: inline-flex;

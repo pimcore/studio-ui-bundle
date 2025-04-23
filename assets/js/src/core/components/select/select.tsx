@@ -11,42 +11,58 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { forwardRef, useRef, useImperativeHandle, useState } from 'react'
+import React, { forwardRef, useRef, useImperativeHandle, useState, useEffect } from 'react'
 import type { RefSelectProps } from 'antd/es/select'
 import { Checkbox, Select as AntdSelect, type SelectProps as AntdSelectProps } from 'antd'
 import cn from 'classnames'
-import { isString, isEmpty } from 'lodash'
+import { isEmpty, isString } from 'lodash'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './select.styles'
+
+export const sizeOptions = {
+  normal: 150
+}
 
 export interface SelectProps extends AntdSelectProps {
   customArrowIcon?: string
   customIcon?: string
+  inherited?: boolean
   width?: number
+  minWidth?: number | keyof typeof sizeOptions
 }
 
-export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, width, allowClear, ...antdSelectProps }, ref): React.JSX.Element => {
+export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, width, allowClear, inherited, value, minWidth, ...antdSelectProps }, ref): React.JSX.Element => {
   const selectRef = useRef<RefSelectProps>(null)
 
   const [isActive, setIsActive] = useState(false)
   const [isFocus, setIsFocus] = useState(false)
-  const [isSelected, setIsSelected] = useState(false)
+  const [isSelected, setIsSelected] = useState(!isEmptyValue(value))
 
   useImperativeHandle(ref, () => selectRef.current!)
 
+  useEffect(() => {
+    if (!isEmpty(value) || !isEmptyValue(value)) {
+      setIsSelected(true)
+    } else {
+      setIsSelected(false)
+    }
+  }, [value])
+
   const { styles } = useStyles({ width })
 
-  const withCustomIcon = !isEmpty(customIcon)
+  const withCustomIcon = !isEmptyValue(customIcon)
   const isStatusWarning = status === 'warning'
   const isStatusError = status === 'error'
 
-  const selectContainerClassNames = cn(styles.selectContainer, {
+  const selectContainerClassNames = cn('studio-select', styles.selectContainer, {
     [styles.selectContainerWarning]: isStatusWarning,
     [styles.selectContainerError]: isStatusError,
     [styles.selectContainerWithClear]: allowClear === true && isSelected
   })
   const selectClassNames = cn(className, styles.select, {
-    [styles.selectWithCustomIcon]: withCustomIcon
+    [styles.selectWithCustomIcon]: withCustomIcon,
+    'ant-select--inherited': inherited
   })
   const customIconClassNames = cn(styles.customIcon, 'custom-select-icon', {
     [styles.customIconActive]: isActive || isFocus,
@@ -56,12 +72,8 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
 
   const handleClick = (): void => { setIsActive(!isActive) }
 
-  const handleChange = (value: string): void => {
-    !isEmpty(value) ? setIsSelected(true) : setIsSelected(false)
-  }
-
   const getSuffixIcon = (): React.JSX.Element => {
-    const isShowCustomIcon = !isEmpty(customArrowIcon) && isString(customArrowIcon)
+    const isShowCustomIcon = !isEmptyValue(customArrowIcon) && isString(customArrowIcon)
     const defaultIcon = isActive ? 'chevron-up' : 'chevron-down'
 
     const iconToShow = isShowCustomIcon ? customArrowIcon : defaultIcon
@@ -82,6 +94,16 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
     return null
   }
 
+  let computedMinWidth: undefined | number
+
+  if (typeof minWidth === 'number') {
+    computedMinWidth = minWidth
+  }
+
+  if (typeof minWidth === 'string') {
+    computedMinWidth = sizeOptions[minWidth as keyof typeof sizeOptions]
+  }
+
   return (
     <div className={ selectContainerClassNames }>
       {withCustomIcon && (
@@ -96,12 +118,13 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
         menuItemSelectedIcon={ getItemSelectedIcon() }
         mode={ mode }
         onBlur={ () => { setIsFocus(false) } }
-        onChange={ handleChange }
         onDropdownVisibleChange={ handleClick }
         onFocus={ () => { setIsFocus(true) } }
         ref={ selectRef }
         status={ status }
+        style={ { minWidth: computedMinWidth } }
         suffixIcon={ getSuffixIcon() }
+        value={ value }
         { ...antdSelectProps }
       />
     </div>

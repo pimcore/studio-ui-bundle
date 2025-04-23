@@ -22,6 +22,7 @@ import {
 
 export interface UserDraft extends User, TrackableChangesDraft {
   password?: string
+  image?: string
 }
 
 export const userAdapter: EntityAdapter<UserDraft, number> = createEntityAdapter<UserDraft>({})
@@ -49,7 +50,7 @@ export const slice = createSlice({
         userAdapter.upsertOne(state, action)
       }
     },
-    removeUser: (state, action: PayloadAction<number>): void => {
+    userRemoved: (state, action: PayloadAction<number>): void => {
       userAdapter.removeOne(state, action.payload)
     },
     changeUser: (state, action: PayloadAction<{ id: any, changes: any }>): void => {
@@ -65,15 +66,11 @@ export const slice = createSlice({
       }
       userAdapter.updateOne(state, update)
     },
-    userReloaded: (state, action: PayloadAction<number>): void => {
-      const id: number = action.payload
-
+    userImageLoaded: (state, action: PayloadAction<{ id: any, image: any }>): void => {
       const update: Update<any, any> = {
-        id,
-        changes: { modified: false }
+        id: action.payload.id,
+        changes: { image: action.payload.image }
       }
-      state.changedIds = state.changedIds.filter((item) => item !== id)
-
       userAdapter.updateOne(state, update)
     },
     userUpdated: (state, action: PayloadAction<any>): void => {
@@ -82,34 +79,6 @@ export const slice = createSlice({
     userAvailablePermissionsFetched: (state, action: PayloadAction<UserGetAvailablePermissionsApiResponse>): void => {
       state.availablePermissions = action.payload.items
     },
-    userUpdateWorkspaces: (state, action: PayloadAction<any>): void => {
-      const type = action.payload.type
-      const id: number = action.payload.id
-
-      if (!state.changedIds.includes(id)) {
-        state.changedIds.push(id)
-      }
-
-      if (type === 'assets') {
-        const update: Update<any, any> = {
-          id,
-          changes: { assetWorkspaces: action.payload.changes, modified: true }
-        }
-        userAdapter.updateOne(state, update)
-      } else if (type === 'documents') {
-        const update: Update<any, any> = {
-          id,
-          changes: { documentWorkspaces: action.payload.changes, modified: true }
-        }
-        userAdapter.updateOne(state, update)
-      } else if (type === 'objects') {
-        const update: Update<any, any> = {
-          id,
-          changes: { dataObjectWorkspaces: action.payload.changes, modified: true }
-        }
-        userAdapter.updateOne(state, update)
-      }
-    },
     ...useTrackableChangesReducers(userAdapter)
   }
 })
@@ -117,15 +86,14 @@ export const slice = createSlice({
 injectSliceWithState(slice)
 
 export const {
-  removeUser,
+  userRemoved,
   userOpened,
   userClosed,
   userFetched,
-  userReloaded,
   userAvailablePermissionsFetched,
   changeUser,
-  userUpdated,
-  userUpdateWorkspaces
+  userImageLoaded,
+  userUpdated
 } = slice.actions
 
 export const { selectById: selectUserById } = userAdapter.getSelectors((state: RootState) => state.user)

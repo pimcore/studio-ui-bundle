@@ -13,13 +13,14 @@
 
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { kebabCase } from 'lodash'
 import {
   type Note
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
-import { AddNoteModal } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/modal/add-note-modal'
-import { type ElementType } from '../../../../../../../../types/element-type.d'
+import {
+  AddNoteModal
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/modal/add-note-modal'
+import { type ElementType } from '../../../../../../types/enums/element/element-type'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
@@ -28,14 +29,15 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Tag } from 'antd'
 import { Space } from '@Pimcore/components/space/space'
 import i18n from 'i18next'
-import { Grid } from '@Pimcore/components/grid/grid'
-import { createColumnHelper } from '@tanstack/react-table'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Text } from '@Pimcore/components/text/text'
 import { Split } from '@Pimcore/components/split/split'
 import { Paragraph } from '@Pimcore/components/paragraph/paragraph'
 import { Collapse } from '@Pimcore/components/collapse/collapse'
+import {
+  NoteAndEventDetails
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/note-and-events-details'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
@@ -43,6 +45,7 @@ interface NotesAndEventsTabViewProps {
   onClickTrash: (id: number) => void
   elementType: ElementType
   elementId: number
+  deleteLoading: boolean
 }
 
 export const NotesAndEventsTabView = ({
@@ -50,7 +53,8 @@ export const NotesAndEventsTabView = ({
   pagination,
   onClickTrash,
   elementId,
-  elementType
+  elementType,
+  deleteLoading
 }: NotesAndEventsTabViewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [addNoteModalOpen, setAddNoteModalOpen] = useState<boolean>(false)
@@ -61,27 +65,8 @@ export const NotesAndEventsTabView = ({
     label: React.JSX.Element
     key: string
   }> = notes.map((note) => {
-    let showDetails = false
-
-    const formatedData: any[] = []
-
-    if (Array.isArray(note.data) && note.data.length > 0) {
-      showDetails = true
-
-      note.data.forEach((noteData) => {
-        const tempData = structuredClone(noteData)
-        if (typeof tempData.data === 'object') {
-          tempData[t('notes-and-events.value')] = tempData.data.path
-        } else {
-          tempData[t('notes-and-events.value')] = respectLineBreak(tempData.data as string)
-        }
-        delete tempData.data
-        formatedData.push(tempData)
-      })
-    }
-
     const extra = (): React.JSX.Element => {
-      const type = note.type !== '' ? t(`notes-and-events.${kebabCase(note.type)}`) : undefined
+      const type = note.type ?? undefined
 
       return (
         <Space
@@ -90,46 +75,27 @@ export const NotesAndEventsTabView = ({
         >
           {type !== undefined && <Tag>{type}</Tag>}
           <span>{formatDateTime({ timestamp: note.date, dateStyle: 'short', timeStyle: 'medium' })}</span>
+          { !note.locked && (
           <IconButton
             aria-label={ i18n.t('aria.notes-and-events.delete') }
             icon={ { value: 'trash' } }
+            loading={ deleteLoading }
             onClick={ (e) => {
               e.stopPropagation()
-
               onClickTrash(note.id)
             } }
             theme='primary'
           />
+          )}
         </Space>
       )
     }
 
-    const columnHelper = createColumnHelper<any>()
-
-    const columns = [
-      columnHelper.accessor(i18n.t('notes-and-events.name'), {}),
-      columnHelper.accessor(i18n.t('notes-and-events.type'), { size: 120 }),
-      columnHelper.accessor(i18n.t('notes-and-events.value'), { size: 310, meta: { autoWidth: true } })
-    ]
-
     const children = (): React.JSX.Element => {
       return (
-        <><span
-          className={ 'panel-body__description ' + (showDetails ? 'panel-body__description-padding' : '') }
-          >
+        <>
           <Paragraph>{respectLineBreak(note.description)}</Paragraph>
-        </span>
-          {showDetails && (
-          <div>
-            <span className={ 'panel-body__details' }>{i18n.t('notes-and-events.details')}</span>
-            <Grid
-              autoWidth
-              columns={ columns }
-              data={ note.data }
-              resizable
-            />
-          </div>
-          )}
+          {note.data.length > 0 && <NoteAndEventDetails note={ note } />}
         </>
       )
     }
@@ -167,7 +133,7 @@ export const NotesAndEventsTabView = ({
             theme='secondary'
           >
             <>
-              { pagination }
+              {pagination}
             </>
           </Toolbar>
           )
@@ -177,15 +143,16 @@ export const NotesAndEventsTabView = ({
         padded
       >
         <Header
+          className={ 'p-l-mini' }
           title={ t('notes-and-events.notes-and-events') }
         >
           <IconTextButton
-            icon={ { value: 'new-circle' } }
+            icon={ { value: 'new' } }
             onClick={ () => {
               setAddNoteModalOpen(true)
             } }
           >
-            {t('add')}
+            {t('new')}
           </IconTextButton>
 
           <AddNoteModal

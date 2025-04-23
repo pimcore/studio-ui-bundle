@@ -13,11 +13,20 @@
 
 import React from 'react'
 import { InputNumber as AntInputNumber, type InputNumberProps } from 'antd'
+import cn from 'classnames'
+import { useStyles } from './input-number.styles'
 
-export interface IInputNumberProps extends InputNumberProps {}
+export interface IInputNumberProps extends InputNumberProps {
+  inherited?: boolean
+}
 
-export const InputNumber = (props: IInputNumberProps): JSX.Element => {
+export const InputNumber = ({ inherited, className, ...restProps }: IInputNumberProps): JSX.Element => {
+  const { styles } = useStyles()
+
   return (
-    <AntInputNumber { ...props } />
+    <AntInputNumber
+      className={ cn(styles.inputNumber, className, { [styles.inherited]: inherited }) }
+      { ...restProps }
+    />
   )
 }

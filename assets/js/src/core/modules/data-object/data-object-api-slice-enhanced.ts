@@ -11,8 +11,9 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './data-object-api-slice.gen'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 
 const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_TREE, tagNames.DATA_OBJECT_DETAIL],
@@ -30,8 +31,13 @@ const api = baseApi.enhanceEndpoints({
       providesTags: (result, error, args) => args.parentId !== undefined ? providingTags.DATA_OBJECT_TREE_ID(args.parentId) : providingTags.DATA_OBJECT_TREE()
     },
 
+    dataObjectGetGrid: {
+      keepUnusedDataFor: 10,
+      providesTags: (result, error, args) => providingTags.DATA_OBJECT_GRID_ID(args.body.folderId)
+    },
+
     dataObjectUpdateById: {
-      invalidatesTags: (result, error, args) => invalidatingTags.DATA_OBJECT_DETAIL_ID(args.id)
+      invalidatesTags: (result, error, args) => args.body.data.task === 'autoSave' ? [] : invalidatingTags.DATA_OBJECT_DETAIL_ID(args.id)
     },
 
     dataObjectAdd: {
@@ -39,7 +45,22 @@ const api = baseApi.enhanceEndpoints({
     },
 
     dataObjectGetLayoutById: {
+      query: (queryArg) => ({
+        url: queryArg.layoutId === undefined ? `${getPrefix()}/data-objects/${queryArg.id}/layout` : `${getPrefix()}/data-objects/${queryArg.id}/layout/${queryArg.layoutId}`
+      }),
       providesTags: (result, error, args) => providingTags.DATA_OBJECT_DETAIL_ID(args.id)
+    },
+
+    dataObjectPatchById: {
+      invalidatesTags: (result, error, args) => {
+        const invalidatingTagsForPatch: Tag[] = []
+
+        for (const dataObject of args.body.data) {
+          invalidatingTagsForPatch.push(...invalidatingTags.DATA_OBJECT_DETAIL_ID(dataObject.id))
+        }
+
+        return invalidatingTagsForPatch
+      }
     }
   }
 })
@@ -52,6 +73,7 @@ export const {
   useDataObjectGetByIdQuery,
   useDataObjectUpdateByIdMutation,
   useDataObjectPatchByIdMutation,
+  useDataObjectPatchFolderByIdMutation,
   useDataObjectGetTreeQuery,
   useDataObjectGetLayoutByIdQuery
 } = api

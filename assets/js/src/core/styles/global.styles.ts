@@ -48,6 +48,20 @@ export const GlobalStyles = createGlobalStyle`
     animation-direction: reverse;
   }
 
+  .active {
+    cursor: pointer;
+    background: ${props => props.theme.itemHoverColor};
+  }
+
+  .hover:hover {
+    cursor: pointer;
+    background: ${props => props.theme.itemHoverColor};
+  }
+
+  .relative {
+    position: relative;
+  }
+
   .p-none {
     padding: 0;
   }

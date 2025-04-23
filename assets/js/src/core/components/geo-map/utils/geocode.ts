@@ -16,8 +16,8 @@ import { type GeoPoint } from '@Pimcore/components/geo-map/types/geo-types'
 
 export const ERROR_ADDRESS_NOT_FOUND = 'address_not_found'
 
-export const geoCode = async (address: string): Promise<GeoPoint> => {
-  const geoCodeUrl = 'https://nominatim.openstreetmap.org/search?q={q}&addressdetails=1&format=json&limit=1'.replace('{q}', encodeURIComponent(address))
+export const geoCode = async (address: string, geoCodeUrlTemplate: string): Promise<GeoPoint> => {
+  const geoCodeUrl = geoCodeUrlTemplate.replace('{q}', encodeURIComponent(address))
 
   const response = await fetch(geoCodeUrl)
 
@@ -36,10 +36,10 @@ export const geoCode = async (address: string): Promise<GeoPoint> => {
   }
 }
 
-export const reverseGeocode = async (layerObj: L.Marker): Promise<void> => {
-  const reverseGeocodeUrl = 'https://nominatim.openstreetmap.org/reverse?format=json&lat={lat}&lon={lng}'
+export const reverseGeocode = async (layerObj: L.Marker, reverseGeoCodeUrlTemplate: string): Promise<void> => {
+  const reverseGeocodeUrl = reverseGeoCodeUrlTemplate
     .replace('{lat}', layerObj.getLatLng().lat.toString())
-    .replace('{lng}', layerObj.getLatLng().lng.toString())
+    .replace('{lon}', layerObj.getLatLng().lng.toString())
 
   await fetch(reverseGeocodeUrl).then(async (response: Response | undefined | null) => {
     if (response === undefined || response === null) {

@@ -18,16 +18,21 @@ import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/d
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
-import { type ElementType } from 'types/element-type.d'
+import { baseUrl } from '@Pimcore/app/router/router'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { useTranslation } from 'react-i18next'
+import { IconButton } from '../icon-button/icon-button'
+import { useLocateInTree } from '@Pimcore/modules/element/actions/locate-in-tree/use-locate-in-tree'
 
 export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: number, elementType: ElementType, editorTabsWidth?: number }): React.JSX.Element => {
+  const { t } = useTranslation()
   const elementRef = useRef<HTMLDivElement>(null)
-
   const { styles } = useStyle()
-
   const { element } = useElementDraft(id, elementType)
-
+  const deeplinkUrl = `${window.location.origin}${baseUrl}${elementType}/${id}`
   const [editorTabsBlockSize, setEditorTabsBlockSize] = useState<'S' | 'L' | null>(null)
+  const [locateInTreeLoading, setLocateInTreeLoading] = useState<boolean>(false)
+  const { locateInTree } = useLocateInTree(elementType)
 
   useLayoutEffect(() => {
     if (editorTabsWidth == null) return
@@ -42,7 +47,7 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
   const menuItems: DropdownMenuProps['items'] = [
     {
       key: '1',
-      label: `ID ${element.id} - Copy`,
+      label: t('element.toolbar.copy-id', { id: element.id }),
       onClick: () => {
         void navigator.clipboard.writeText(
           element.id.toString()
@@ -51,7 +56,7 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
     },
     {
       key: '2',
-      label: 'Copy full path to clipboard',
+      label: t('element.toolbar.copy-full-path-to-clipboard'),
       onClick: () => {
         void navigator.clipboard.writeText(
           element.fullPath!
@@ -60,15 +65,24 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
     },
     {
       key: '3',
-      label: 'Copy deep link to clipboard',
+      label: t('element.toolbar.copy-deep-link-to-clipboard'),
       onClick: () => {
-        // @todo implement other types
-        void navigator.clipboard.writeText(`
-          http://localhost/admin/login/deeplink?asset_${element.id}_${element.type}
-        `)
+        void navigator.clipboard.writeText(deeplinkUrl)
       }
     }
   ]
+
+  if (elementType === 'data-object' && 'className' in element) {
+    menuItems?.splice(0, 0, {
+      key: '0',
+      label: t('element.toolbar.copy-className', { className: element.className as string }),
+      onClick: () => {
+        void navigator.clipboard.writeText(
+          element.className as string
+        )
+      }
+    })
+  }
 
   return (
     <div
@@ -88,7 +102,6 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
           <Button
             icon={
               <Icon
-                options={ { width: 14, height: 7 } }
                 value={ 'chevron-down' }
               />
             }
@@ -107,7 +120,14 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
         </Dropdown>
       </div>
 
-      <Icon value={ 'target' } />
+      <IconButton
+        icon={ { value: 'target' } }
+        loading={ locateInTreeLoading }
+        onClick={ () => {
+          setLocateInTreeLoading(true)
+          locateInTree(element.id, () => { setLocateInTreeLoading(false) })
+        } }
+      />
     </div>
   )
 }

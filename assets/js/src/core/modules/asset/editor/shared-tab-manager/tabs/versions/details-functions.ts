@@ -20,8 +20,10 @@ import {
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import i18n from 'i18next'
-import { type PreviewFieldLabelCellValue } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/components/_versions/preview-field-label-cell/preview-field-label-cell'
-import { type DynamicTypeMetaDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/dynamic-type-metadata-registry'
+import { type PreviewFieldLabelCellValue } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/_versions/preview-field-label-cell/preview-field-label-cell'
+import { type DynamicTypeMetaDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/meta-data/dynamic-type-metadata-registry'
+import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface AssetVersionData {
   versionCount: number
@@ -81,7 +83,7 @@ const formatMetadata = (metadata: CustomMetadataVersion[] | undefined): Map<stri
 
   for (const meta of metadata) {
     const metadataType = metadataTypeRegistry.getTypeSelectionTypes().get(`metadata.${meta.type}`)
-    const metaKey = meta.language !== null ? `meta.${meta.name}.${meta.language}` : meta.name
+    const metaKey = meta.language !== null ? `${VersionCategoryName.META}.${meta.name}.${meta.language}` : meta.name
     map.set(metaKey, {
       key: metaKey,
       field: meta.name,
@@ -95,12 +97,12 @@ const formatMetadata = (metadata: CustomMetadataVersion[] | undefined): Map<stri
   return map
 }
 
-const isImageVersion = (version: AssetVersion): boolean => {
-  return version.type === 'image'
-}
+export const checkIsImageVersion = (version?: AssetVersion): boolean => (
+  version?.type === 'image'
+)
 
 export const loadPreviewImage = async (version: AssetVersion, versionId: number): Promise<string | null> => {
-  if (!isImageVersion(version)) {
+  if (!checkIsImageVersion(version)) {
     return null
   }
   let result: string | null = null
@@ -112,10 +114,9 @@ export const loadPreviewImage = async (version: AssetVersion, versionId: number)
     .then((imageBlob) => {
       result = URL.createObjectURL(imageBlob)
     })
-    .catch((err) => {
-      console.error(err)
+    .catch(() => {
+      trackError(new GeneralError('Failed to load preview image'))
     })
-
   return result
 }
 
@@ -129,7 +130,7 @@ export const versionsDataToTableData = (data: AssetVersionData[]): object[] => {
     const dataColumn = `${t('version.version')} ${versionData.versionCount}`
 
     Object.keys(versionData.baseDataFormatted).forEach((key) => {
-      if (key === 'dimensions' && isImageVersion(versionData.dataRaw)) {
+      if (key === 'dimensions' && !checkIsImageVersion(versionData.dataRaw)) {
         return
       }
       const row = tableBaseData.find((row: any) => row[fieldColumn].key === key)

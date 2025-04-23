@@ -20,7 +20,7 @@ import {
   TAB_SCHEDULE, TAB_TAGS, TAB_WORKFLOW
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
 import { type ObjectTabManager } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/object-tab-manager'
-import { TAB_VERSIONS } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tab-definitions'
+import { TAB_PREVIEW, TAB_VERSIONS } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tab-definitions'
 import { TAB_EDIT } from './tab-manager/tabs/edit/edit-container'
 
 moduleSystem.registerModule({
@@ -28,6 +28,7 @@ moduleSystem.registerModule({
     const objectEditorTabManager = container.get<ObjectTabManager>(serviceIds['DataObject/Editor/ObjectTabManager'])
 
     objectEditorTabManager.register(TAB_EDIT)
+    objectEditorTabManager.register(TAB_PREVIEW)
     objectEditorTabManager.register(TAB_PROPERTIES)
     objectEditorTabManager.register(TAB_VERSIONS)
     objectEditorTabManager.register(TAB_SCHEDULE)

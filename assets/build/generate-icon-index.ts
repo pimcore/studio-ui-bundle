@@ -31,7 +31,7 @@ if (!fs.existsSync(SVG_FOLDER)) {
     process.exit(1);
 }
 
-const files: string[] = fs.readdirSync(SVG_FOLDER as string).filter(file => file.endsWith('.inline.svg'));
+const files: string[] = fs.readdirSync(SVG_FOLDER as string).filter(file => file.endsWith('.svg'));
 
 if (files.length === 0) {
     console.log(`No SVG files found in ${SVG_FOLDER}`);
@@ -39,7 +39,8 @@ if (files.length === 0) {
 }
 
 const generateVariableName = (fileName: string): string => {
-    const baseName = fileName.replace('.inline.svg', '');
+    let baseName = fileName.replace('.svg', '').replace('.inline', '');
+
     let variableName = baseName
         .replace(/[-_\s]+(.)?/g, (_, letter) => letter ? letter.toUpperCase() : '')
         .replace(/^./, str => str.toLowerCase());
@@ -52,14 +53,14 @@ const generateVariableName = (fileName: string): string => {
 };
 
 const generateIconEntry = (fileName: string): string => {
-    const iconName = fileName.replace('.inline.svg', '');
+    const iconName = fileName.replace('.svg', '').replace('.inline', '');
 
     const variableName = generateVariableName(fileName)
     return `
     iconLibrary.register({
       name: '${iconName}',
       component: ${variableName}
-    });`;
+    })`;
 };
 
 const modifySvgAttributes = (filePath: string): void => {
@@ -73,6 +74,16 @@ const modifySvgAttributes = (filePath: string): void => {
     svgContent = svgContent.replace(/stroke="[^"]*"/g, 'stroke="currentColor"');
 
     fs.writeFileSync(filePath, svgContent, 'utf-8');
+};
+
+const renameSvgFile = (filePath: string): void => {
+    const newFilePath = filePath.endsWith('.inline.svg')
+        ? filePath
+        : filePath.replace('.svg', '.inline.svg');
+
+    if (newFilePath !== filePath) {
+        fs.renameSync(filePath, newFilePath);
+    }
 };
 
 const variableNameSet = new Set<string>();
@@ -103,19 +114,23 @@ let content = `
 
 /* eslint-disable max-lines */
 
-import { container } from '@Pimcore/app/depency-injection';
-import { moduleSystem } from '@Pimcore/app/module-system/module-system';
-import { serviceIds } from '@Pimcore/app/config/services/service-ids';
-import { type IconLibrary } from './services/icon-library';
+import { container } from '@Pimcore/app/depency-injection'
+import { moduleSystem } from '@Pimcore/app/module-system/module-system'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type IconLibrary } from './services/icon-library'
 `;
-
 files.forEach((file: string) => {
     const filePath: string = path.join(SVG_FOLDER as string, file);
     modifySvgAttributes(filePath);
+    renameSvgFile(filePath);
+
+    const importFileName = file.endsWith('.inline.svg')
+        ? file
+        : file.replace('.svg', '.inline.svg');
 
     const variableName: string = generateVariableName(file);
     content += `
-import ${variableName} from '@Pimcore/assets/icons/${file}';`;
+import ${variableName} from '@Pimcore/assets/icons/${importFileName}'`;
 });
 
 content += `
@@ -130,7 +145,7 @@ files.forEach(file => {
 
 content += `
   }
-});
+})
 `;
 
 try {

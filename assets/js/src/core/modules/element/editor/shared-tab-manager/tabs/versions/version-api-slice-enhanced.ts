@@ -18,9 +18,9 @@ export const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.ASSET_DETAIL],
   endpoints: {
     versionGetById: {
-      providesTags: (result, error, args) => providingTags.ASSET_VERSIONS(args.id)
+      providesTags: (result, error, args) =>
+        providingTags.VERSIONS_DETAIL(args.id)
     },
-
     versionGetCollectionForElementByTypeAndId: {
       providesTags: (result, error, args) => {
         const tagCollection: Tag[] = []
@@ -29,11 +29,20 @@ export const api = baseApi.enhanceEndpoints({
           tagCollection.push(...providingTags.VERSIONS_DETAIL(version.id))
         })
 
-        return [
-          ...tagCollection,
-          ...providingTags.ASSET_VERSIONS(args.id)
-        ]
+        return [...tagCollection, ...providingTags.ELEMENT_VERSIONS(args.elementType, args.id)]
       }
+    },
+
+    versionCleanupForElementByTypeAndId: {
+      invalidatesTags: (result, error, args) => invalidatingTags.ELEMENT_VERSIONS(args.elementType, args.id)
+    },
+
+    versionUpdateById: {
+      invalidatesTags: (result, error, args) => invalidatingTags.VERSIONS_DETAIL(args.id)
+    },
+
+    versionPublishById: {
+      invalidatesTags: (result, error, args) => invalidatingTags.VERSIONS_DETAIL(args.id)
     },
 
     versionDeleteById: {
@@ -46,7 +55,8 @@ export type * from './version-api-slice.gen'
 export const {
   useVersionAssetDownloadByIdQuery,
   useVersionCleanupForElementByTypeAndIdMutation,
-  useVersionDeleteByIdMutation, useVersionGetByIdQuery,
+  useVersionDeleteByIdMutation,
+  useVersionGetByIdQuery,
   useVersionGetCollectionForElementByTypeAndIdQuery,
   useVersionPublishByIdMutation,
   useVersionUpdateByIdMutation

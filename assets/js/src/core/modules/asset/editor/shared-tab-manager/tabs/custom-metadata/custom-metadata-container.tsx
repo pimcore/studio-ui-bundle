@@ -11,11 +11,11 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useRef, useState, useEffect } from 'react'
+import React, { useContext, useRef, useState, useEffect, type ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type InputRef } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
-import Input from 'antd/es/input/Input'
+import { Input } from 'antd'
 import {
   CustomMetadataTable
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/components/table/table'
@@ -35,15 +35,27 @@ import { Content } from '@Pimcore/components/content/content'
 import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 import { Space } from '@Pimcore/components/space/space'
 import { Select } from '@Pimcore/components/select/select'
-import { type DynamicTypeMetaDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/dynamic-type-metadata-registry'
+import { type DynamicTypeMetaDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/meta-data/dynamic-type-metadata-registry'
 import { uuid } from '@Pimcore/utils/uuid'
+import {
+  useLazyMetadataGetCollectionQuery
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
-export const CustomMetadataTabContainer = (): React.JSX.Element => {
+export interface CustomMetadataTabContainerProps {
+  disableHeaderTitle?: boolean
+  disableAddPredefinedMetadata?: boolean
+}
+
+export const CustomMetadataTabContainer = ({ disableHeaderTitle = false, disableAddPredefinedMetadata = false }: CustomMetadataTabContainerProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [editmode, setEditMode] = useState<boolean>(false)
   const settings = useSettings()
   const { id } = useContext(AssetContext)
-  const { addCustomMetadata, customMetadata } = useAssetDraft(id)
+  const { asset, addCustomMetadata, customMetadata } = useAssetDraft(id)
+  const [predefinedMetadata, { isFetching, isError, error }] = useLazyMetadataGetCollectionQuery()
+
   const {
     showModal: showDuplicateEntryModal,
     closeModal: closeDuplicateEntryModal,
@@ -55,6 +67,13 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
     type: 'error'
   })
 
+  useEffect(() => {
+    if (isError) {
+      trackError(new ApiError(error))
+    }
+  }, [isError])
+
+  const isEditable = checkElementPermission(asset?.permissions, 'publish')
   const nameInputValue = useRef<string>('')
   const nameInputRef = useRef<InputRef>(null)
   const typeSelectValue = useRef<string>('input')
@@ -107,6 +126,29 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
     addCustomMetadata(newCustomMetadata)
   }
 
+  const addPredefinedMetadata = async (): Promise<void> => {
+    const predefinedMetadataTask = predefinedMetadata({
+      body: {}
+    })
+
+    const response = await predefinedMetadataTask
+
+    const data = response.data!
+
+    data.items!.forEach((predefinedDefinition) => {
+      if (customMetadata?.find((cm) => cm.name === predefinedDefinition.name && cm.language === (predefinedDefinition.language ?? '')) !== undefined) {
+        return
+      }
+
+      addCustomMetadata({
+        ...predefinedDefinition,
+        rowId: predefinedDefinition.id,
+        language: predefinedDefinition.language ?? '',
+        data: predefinedDefinition.data ?? null
+      })
+    })
+  }
+
   useEffect(() => {
     if (editmode) {
       nameInputRef.current?.focus()
@@ -117,10 +159,40 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
     }
   }, [editmode])
 
+  const buttons: ReactElement[] = []
+  if (!editmode) {
+    if (!disableAddPredefinedMetadata) {
+      buttons.push((
+        <IconTextButton
+          disabled={ isFetching }
+          icon={ { value: 'add-something' } }
+          key={ t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition') }
+          loading={ isFetching }
+          onClick={ addPredefinedMetadata }
+        >
+          {t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition')}
+        </IconTextButton>
+      ))
+    }
+
+    buttons.push((
+      <IconTextButton
+        icon={ { value: 'new-something' } }
+        key={ t('asset.asset-editor-tabs.custom-metadata.new-custom-metadata') }
+        onClick={ () => {
+          setEditMode(true)
+        } }
+      >
+        {t('asset.asset-editor-tabs.custom-metadata.new-custom-metadata')}
+      </IconTextButton>
+    ))
+  }
+
   return (
     <Content padded>
       <Header
-        title={ t('asset.asset-editor-tabs.custom-metadata.text') }
+        className={ 'p-l-mini' }
+        title={ !disableHeaderTitle ? t('asset.asset-editor-tabs.custom-metadata.text') : '' }
       >
         <div className='pimcore-custom-metadata-toolbar'>
           <Space
@@ -166,12 +238,12 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                 />
 
                 <IconTextButton
-                  icon={ { value: 'new-circle' } }
+                  icon={ { value: 'new-something' } }
                   onClick={ () => {
                     onAddPropertyClick()
                   } }
                 >
-                  {t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.add')}
+                  {t('asset.asset-editor-tabs.custom-metadata.new-custom-metadata.create')}
                 </IconTextButton>
               </Space>
 
@@ -201,25 +273,8 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
             </>
             )}
 
-            {!editmode && (
-            <ButtonGroup items={ [<Button
-              key={ t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition') }
-              onClick={ () => {
-                console.log('clicked')
-              } }
-                                  >
-              {t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition')}
-            </Button>,
-              <IconTextButton
-                icon={ { value: 'new-circle' } }
-                key={ t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add') }
-                onClick={ () => {
-                  setEditMode(true)
-                } }
-              >
-                {t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add')}
-              </IconTextButton>] }
-            />
+            {!editmode && isEditable && (
+            <ButtonGroup items={ buttons } />
             )}
           </Space>
         </div>

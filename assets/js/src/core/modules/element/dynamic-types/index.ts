@@ -11,114 +11,147 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+/* eslint-disable max-lines */
 import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { type DynamicTypeFieldFilterRegistry } from './defintinitions/field-filters/dynamic-type-field-filter-registry'
+import { type DynamicTypeFieldFilterRegistry } from './definitions/field-filters/dynamic-type-field-filter-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type DynamicTypeFieldFilterText } from './defintinitions/field-filters/types/text/dynamic-type-field-filter-text'
-import { type DynamicTypeFieldFilterNumber } from './defintinitions/field-filters/types/number/dynamic-type-field-filter-number'
-import { type DynamicTypeFieldFilterSelect } from './defintinitions/field-filters/types/select/dynamic-type-field-filter-select'
-import { type DynamicTypeFieldFilterDatetime } from './defintinitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
-import { type DynamicTypeGridCellText } from './defintinitions/grid-cell/types/text/dynamic-type-grid-cell-text'
-import { type DynamicTypeGridCellRegistry } from './defintinitions/grid-cell/dynamic-type-grid-cell-registry'
-import { type DynamicTypeGridCellTextarea } from './defintinitions/grid-cell/types/textarea/dynamic-type-grid-cell-text'
-import { type DynamicTypeGridCellNumber } from './defintinitions/grid-cell/types/number/dynamic-type-grid-cell-number'
-import { type DynamicTypeGridCellSelect } from './defintinitions/grid-cell/types/select/dynamic-type-grid-cell-select'
-import { type DynamicTypeGridCellCheckbox } from './defintinitions/grid-cell/types/checkbox/dynamic-type-grid-cell-checkbox'
-import { type DynamicTypeGridCellDate } from './defintinitions/grid-cell/types/date/dynamic-type-grid-cell-date'
-import { type DynamicTypeGridCellTime } from './defintinitions/grid-cell/types/time/dynamic-type-grid-cell-time'
-import { type DynamicTypeGridCellDateTime } from './defintinitions/grid-cell/types/date-time/dynamic-type-grid-cell-date-time'
-import { type DynamicTypeGridCellAssetLink } from './defintinitions/grid-cell/types/asset-link/dynamic-type-grid-cell-asset-link'
-import { type DynamicTypeGridCellObjectLink } from './defintinitions/grid-cell/types/object-link/dynamic-type-grid-cell-object-link'
-import { type DynamicTypeGridCellDocumentLink } from './defintinitions/grid-cell/types/document-link/dynamic-type-grid-cell-document-link'
-import { type DynamicTypeGridCellOpenElement } from './defintinitions/grid-cell/types/open-element/dynamic-type-grid-cell-open-element'
-import { type DynamicTypeGridCellAssetPreview } from './defintinitions/grid-cell/types/asset-preview/dynamic-type-grid-cell-asset-preview'
-import { type DynamicTypeGridCellAssetActions } from './defintinitions/grid-cell/types/asset-actions/dynamic-type-grid-cell-asset-preview'
-import { type DynamicTypeGridCellDependencyTypeIcon } from './defintinitions/grid-cell/types/_dependencies/dynamic-type-grid-cell-dependency-type-icon'
-import { type DynamicTypeGridCellAssetCustomMetadataIcon } from './defintinitions/grid-cell/types/_meta-data/dynamic-type-grid-cell-asset-custom-metadata-icon'
-import { type DynamicTypeGridCellAssetCustomMetadataValue } from './defintinitions/grid-cell/types/_meta-data/dynamic-type-grid-cell-asset-custom-metadata-value'
-import { type DynamicTypeGridCellPropertyIcon } from './defintinitions/grid-cell/types/_properties/dynamic-type-grid-cell-property-icon'
-import { type DynamicTypeGridCellPropertyValue } from './defintinitions/grid-cell/types/_properties/dynamic-type-grid-cell-property-value'
-import { type DynamicTypeGridCellScheduleActionsSelect } from './defintinitions/grid-cell/types/_schedule/dynamic-type-grid-cell-schedule-actions-select'
-import { type DynamicTypeGridCellVersionIdSelect } from './defintinitions/grid-cell/types/_schedule/dynamic-type-grid-cell-version-id-select'
-import { type DynamicTypeGridCellAssetVersionPreviewFieldLabel } from './defintinitions/grid-cell/types/_versions/dynamic-type-grid-cell-asset-version-preview-field-label'
-import { type DynamicTypeGridCellAsset } from './defintinitions/grid-cell/types/asset/dynamic-type-grid-cell-asset'
-import { type DynamicTypeGridCellObject } from './defintinitions/grid-cell/types/object/dynamic-type-grid-cell-object'
-import { type DynamicTypeGridCellDocument } from './defintinitions/grid-cell/types/document/dynamic-type-grid-cell-document'
-import { type DynamicTypeMetaDataRegistry } from './defintinitions/meta-data/dynamic-type-metadata-registry'
-import { type DynamicTypeMetaDataAsset } from './defintinitions/meta-data/types/dynamic-type-meta-data-asset'
-import { type DynamicTypeMetaDataCheckbox } from './defintinitions/meta-data/types/dynamic-type-meta-data-checkbox'
-import { type DynamicTypeMetaDataDate } from './defintinitions/meta-data/types/dynamic-type-meta-data-date'
-import { type DynamicTypeMetaDataDocument } from './defintinitions/meta-data/types/dynamic-type-meta-data-document'
-import { type DynamicTypeMetaDataInput } from './defintinitions/meta-data/types/dynamic-type-meta-data-input'
-import { type DynamicTypeMetaDataObject } from './defintinitions/meta-data/types/dynamic-type-meta-data-object'
-import { type DynamicTypeMetaDataSelect } from './defintinitions/meta-data/types/dynamic-type-meta-data-select'
-import { type DynamicTypeMetaDataTextarea } from './defintinitions/meta-data/types/dynamic-type-meta-data-textarea'
-import { type DynamicTypeObjectLayoutRegistry } from './defintinitions/objects/layout-related/dynamic-type-object-layout-registry'
-import { type DynamicTypeObjectLayoutPanel } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-panel'
-import { type DynamicTypeObjectDataRegistry } from './defintinitions/objects/data-related/dynamic-type-object-data-registry'
-import { type DynamicTypeObjectLayoutTabpanel } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-tabpanel'
-import { type DynamicTypeObjectLayoutAccordion } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-accordion'
-import { type DynamicTypeObjectLayoutRegion } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-region'
-import { type DynamicTypeObjectLayoutText } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-text'
-import { type DynamicTypeObjectLayoutFieldset } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-fieldset'
-import { type DynamicTypeObjectLayoutFieldContainer } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-field-container'
-import { type DynamicTypeObjectDataInput } from './defintinitions/objects/data-related/types/dynamic-type-object-data-input'
-import { type DynamicTypeObjectDataTextarea } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-textarea'
-import { type DynamicTypeObjectDataPassword } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-password'
-import { type DynamicTypeObjectDataInputQuantityValue } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-input-quantity-value'
-import { type DynamicTypeObjectDataSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-select'
-import { type DynamicTypeObjectDataMultiSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-multiselect'
-import { type DynamicTypeObjectDataLanguage } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-language'
-import { type DynamicTypeObjectDataLanguageMultiSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-language-multiselect'
-import { type DynamicTypeObjectDataCountry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-country'
-import { type DynamicTypeObjectDataCountryMultiSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-country-multiselect'
-import { type DynamicTypeObjectDataUser } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-user'
-import { type DynamicTypeObjectDataBooleanSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-boolean-select'
-import { type DynamicTypeObjectDataNumeric } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-numeric'
-import { type DynamicTypeObjectDataNumericRange } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-numeric-range'
-import { type DynamicTypeObjectDataSlider } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-slider'
-import { type DynamicTypeObjectDataQuantityValue } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-quantity-value'
-import { type DynamicTypeObjectDataQuantityValueRange } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-quantity-value-range'
-import { type DynamicTypeObjectDataConsent } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-consent'
-import { type DynamicTypeObjectDataFirstname } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-firstname'
-import { type DynamicTypeObjectDataLastname } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-lastname'
-import { type DynamicTypeObjectDataEmail } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-email'
-import { type DynamicTypeObjectDataGender } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-gender'
-import { type DynamicTypeObjectDataRgbaColor } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-rgba-color'
-import { type DynamicTypeObjectDataEncryptedField } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-encrypted-field'
-import { type DynamicTypeObjectDataCheckbox } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-checkbox'
-import { type DynamicTypeObjectDataUrlSlug } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-url-slug'
-import { type DynamicTypeObjectDataDate } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-date'
-import { type DynamicTypeObjectDataDatetime } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-datetime'
-import { type DynamicTypeObjectDataDateRange } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-date-range'
-import { type DynamicTypeObjectDataTime } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-time'
-import { type DynamicTypeObjectDataExternalImage } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-external-image'
-import { type DynamicTypeObjectDataImage } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-image'
-import { type DynamicTypeObjectDataImageGallery } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-image-gallery'
-import { type DynamicTypeObjectDataGeoPoint } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geopoint'
-import { type DynamicTypeObjectDataGeoBounds } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geobounds'
-import { type DynamicTypeObjectDataGeoPolygon } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geopolygon'
-import { type DynamicTypeObjectDataGeoPolyLine } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geopolyline'
-import { type DynamicTypeObjectDataManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-many-to-many-relation'
-import { type DynamicTypeObjectDataStructuredTable } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-structured-table'
+import { type DynamicTypeFieldFilterText } from './definitions/field-filters/types/text/dynamic-type-field-filter-text'
+import { type DynamicTypeFieldFilterNumber } from './definitions/field-filters/types/number/dynamic-type-field-filter-number'
+import { type DynamicTypeFieldFilterSelect } from './definitions/field-filters/types/select/dynamic-type-field-filter-select'
+import { type DynamicTypeFieldFilterDatetime } from './definitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
+import { type DynamicTypeGridCellText } from './definitions/grid-cell/types/text/dynamic-type-grid-cell-text'
+import { type DynamicTypeGridCellRegistry } from './definitions/grid-cell/dynamic-type-grid-cell-registry'
+import { type DynamicTypeGridCellTextarea } from './definitions/grid-cell/types/textarea/dynamic-type-grid-cell-text'
+import { type DynamicTypeGridCellNumber } from './definitions/grid-cell/types/number/dynamic-type-grid-cell-number'
+import { type DynamicTypeGridCellSelect } from './definitions/grid-cell/types/select/dynamic-type-grid-cell-select'
+import { type DynamicTypeGridCellMultiSelect } from './definitions/grid-cell/types/multi-select/dynamic-type-grid-cell-multi-select'
+import { type DynamicTypeGridCellCheckbox } from './definitions/grid-cell/types/checkbox/dynamic-type-grid-cell-checkbox'
+import { type DynamicTypeGridCellDate } from './definitions/grid-cell/types/date/dynamic-type-grid-cell-date'
+import { type DynamicTypeGridCellTime } from './definitions/grid-cell/types/time/dynamic-type-grid-cell-time'
+import { type DynamicTypeGridCellDateTime } from './definitions/grid-cell/types/date-time/dynamic-type-grid-cell-date-time'
+import { type DynamicTypeGridCellAssetLink } from './definitions/grid-cell/types/asset-link/dynamic-type-grid-cell-asset-link'
+import { type DynamicTypeGridCellObjectLink } from './definitions/grid-cell/types/object-link/dynamic-type-grid-cell-object-link'
+import { type DynamicTypeGridCellDocumentLink } from './definitions/grid-cell/types/document-link/dynamic-type-grid-cell-document-link'
+import { type DynamicTypeGridCellOpenElement } from './definitions/grid-cell/types/open-element/dynamic-type-grid-cell-open-element'
+import { type DynamicTypeGridCellAssetPreview } from './definitions/grid-cell/types/asset-preview/dynamic-type-grid-cell-asset-preview'
+import { type DynamicTypeGridCellAssetActions } from './definitions/grid-cell/types/asset-actions/dynamic-type-grid-cell-asset-preview'
+import { type DynamicTypeGridCellDependencyTypeIcon } from './definitions/grid-cell/types/_dependencies/dynamic-type-grid-cell-dependency-type-icon'
+import { type DynamicTypeGridCellAssetCustomMetadataIcon } from './definitions/grid-cell/types/_meta-data/dynamic-type-grid-cell-asset-custom-metadata-icon'
+import { type DynamicTypeGridCellAssetCustomMetadataValue } from './definitions/grid-cell/types/_meta-data/dynamic-type-grid-cell-asset-custom-metadata-value'
+import { type DynamicTypeGridCellPropertyIcon } from './definitions/grid-cell/types/_properties/dynamic-type-grid-cell-property-icon'
+import { type DynamicTypeGridCellPropertyValue } from './definitions/grid-cell/types/_properties/dynamic-type-grid-cell-property-value'
+import { type DynamicTypeGridCellScheduleActionsSelect } from './definitions/grid-cell/types/_schedule/dynamic-type-grid-cell-schedule-actions-select'
+import { type DynamicTypeGridCellVersionIdSelect } from './definitions/grid-cell/types/_schedule/dynamic-type-grid-cell-version-id-select'
+import { type DynamicTypeGridCellAssetVersionPreviewFieldLabel } from './definitions/grid-cell/types/_versions/dynamic-type-grid-cell-asset-version-preview-field-label'
+import { type DynamicTypeGridCellAsset } from './definitions/grid-cell/types/asset/dynamic-type-grid-cell-asset'
+import { type DynamicTypeGridCellObject } from './definitions/grid-cell/types/object/dynamic-type-grid-cell-object'
+import { type DynamicTypeGridCellDocument } from './definitions/grid-cell/types/document/dynamic-type-grid-cell-document'
+import { type DynamicTypeGridCellElement } from './definitions/grid-cell/types/element/dynamic-type-grid-cell-element'
+import { type DynamicTypeMetaDataRegistry } from './definitions/meta-data/dynamic-type-metadata-registry'
+import { type DynamicTypeMetaDataAsset } from './definitions/meta-data/types/dynamic-type-meta-data-asset'
+import { type DynamicTypeMetaDataCheckbox } from './definitions/meta-data/types/dynamic-type-meta-data-checkbox'
+import { type DynamicTypeMetaDataDate } from './definitions/meta-data/types/dynamic-type-meta-data-date'
+import { type DynamicTypeMetaDataDocument } from './definitions/meta-data/types/dynamic-type-meta-data-document'
+import { type DynamicTypeMetaDataInput } from './definitions/meta-data/types/dynamic-type-meta-data-input'
+import { type DynamicTypeMetaDataObject } from './definitions/meta-data/types/dynamic-type-meta-data-object'
+import { type DynamicTypeMetaDataSelect } from './definitions/meta-data/types/dynamic-type-meta-data-select'
+import { type DynamicTypeMetaDataTextarea } from './definitions/meta-data/types/dynamic-type-meta-data-textarea'
+import { type DynamicTypeObjectLayoutRegistry } from './definitions/objects/layout-related/dynamic-type-object-layout-registry'
+import { type DynamicTypeObjectLayoutPanel } from './definitions/objects/layout-related/types/dynamic-type-object-layout-panel'
+import { type DynamicTypeObjectDataRegistry } from './definitions/objects/data-related/dynamic-type-object-data-registry'
+import { type DynamicTypeObjectLayoutTabpanel } from './definitions/objects/layout-related/types/dynamic-type-object-layout-tabpanel'
+import { type DynamicTypeObjectLayoutAccordion } from './definitions/objects/layout-related/types/dynamic-type-object-layout-accordion'
+import { type DynamicTypeObjectLayoutRegion } from './definitions/objects/layout-related/types/dynamic-type-object-layout-region'
+import { type DynamicTypeObjectLayoutText } from './definitions/objects/layout-related/types/dynamic-type-object-layout-text'
+import { type DynamicTypeObjectLayoutFieldset } from './definitions/objects/layout-related/types/dynamic-type-object-layout-fieldset'
+import { type DynamicTypeObjectLayoutFieldContainer } from './definitions/objects/layout-related/types/dynamic-type-object-layout-field-container'
+import { type DynamicTypeObjectDataInput } from './definitions/objects/data-related/types/dynamic-type-object-data-input'
+import { type DynamicTypeObjectDataTextarea } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-textarea'
+import { type DynamicTypeObjectDataWysiwyg } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-wysiwyg'
+import { type DynamicTypeObjectDataPassword } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-password'
+import { type DynamicTypeObjectDataInputQuantityValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-input-quantity-value'
+import { type DynamicTypeObjectDataSelect } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-select'
+import { type DynamicTypeObjectDataMultiSelect } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-multiselect'
+import { type DynamicTypeObjectDataLanguage } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-language'
+import { type DynamicTypeObjectDataLanguageMultiSelect } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-language-multiselect'
+import { type DynamicTypeObjectDataCountry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-country'
+import { type DynamicTypeObjectDataCountryMultiSelect } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-country-multiselect'
+import { type DynamicTypeObjectDataUser } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-user'
+import { type DynamicTypeObjectDataBooleanSelect } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-boolean-select'
+import { type DynamicTypeObjectDataNumeric } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-numeric'
+import { type DynamicTypeObjectDataNumericRange } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-numeric-range'
+import { type DynamicTypeObjectDataSlider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-slider'
+import { type DynamicTypeObjectDataQuantityValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-quantity-value'
+import { type DynamicTypeObjectDataQuantityValueRange } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-quantity-value-range'
+import { type DynamicTypeObjectDataConsent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-consent'
+import { type DynamicTypeObjectDataFirstname } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-firstname'
+import { type DynamicTypeObjectDataLastname } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-lastname'
+import { type DynamicTypeObjectDataEmail } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-email'
+import { type DynamicTypeObjectDataGender } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-gender'
+import { type DynamicTypeObjectDataRgbaColor } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-rgba-color'
+import { type DynamicTypeObjectDataEncryptedField } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-encrypted-field'
+import { type DynamicTypeObjectDataCalculatedValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-calculated-value'
+import { type DynamicTypeObjectDataCheckbox } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-checkbox'
+import { type DynamicTypeObjectDataLink } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-link'
+import { type DynamicTypeObjectDataUrlSlug } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-url-slug'
+import { type DynamicTypeObjectDataDate } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-date'
+import { type DynamicTypeObjectDataDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-datetime'
+import { type DynamicTypeObjectDataDateRange } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-date-range'
+import { type DynamicTypeObjectDataTime } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-time'
+import { type DynamicTypeObjectDataExternalImage } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-external-image'
+import { type DynamicTypeObjectDataImage } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-image'
+import { type DynamicTypeObjectDataVideo } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-video'
+import { type DynamicTypeObjectDataHotspotImage } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-hotspotimage'
+import { type DynamicTypeObjectDataImageGallery } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-image-gallery'
+import { type DynamicTypeObjectDataGeoPoint } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-geopoint'
+import { type DynamicTypeObjectDataGeoBounds } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-geobounds'
+import { type DynamicTypeObjectDataGeoPolygon } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-geopolygon'
+import { type DynamicTypeObjectDataGeoPolyLine } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-geopolyline'
+import { type DynamicTypeObjectDataManyToOneRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-many-to-one-relation'
+import { type DynamicTypeObjectDataManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-many-to-many-relation'
+import { type DynamicTypeObjectDataManyToManyObjectRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-many-to-many-object-relation'
+import { type DynamicTypeObjectDataAdvancedManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-advanced-many-to-many-relation'
+import { type DynamicTypeObjectDataAdvancedManyToManyObjectRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-advanced-many-to-many-object-relation'
+import { type DynamicTypeObjectDataReverseObjectRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-reverse-object-relation'
+import { type DynamicTypeObjectDataTable } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-table'
+import { type DynamicTypeObjectDataStructuredTable } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-structured-table'
 
-import { type DynamicTypeObjectDataBlock } from './defintinitions/objects/data-related/types/dynamic-type-object-data-block'
-import { type DynamicTypeObjectDataLocalizedFields } from './defintinitions/objects/data-related/types/dynamic-type-object-data-localized-fields'
-import {
-  type DynamicTypeBatchEditRegistry
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/dynamic-type-batch-edit-registry'
-import {
-  type DynamicTypeBatchEditText
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/types/text/dynamic-type-batch-edit-text'
-import {
-  type DynamicTypeBatchEditTextArea
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/types/text/dynamic-type-batch-edit-text-area'
-import { type DynamicTypeGridCellLanguageSelect } from './defintinitions/grid-cell/types/language-select/dynamic-type-grid-cell-language-select'
-import { type DynamicTypeGridCellTranslate } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/translate/dynamic-type-grid-cell-translate'
-import { type DynamicTypeListingRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/listing/dynamic-type-listing-registry'
-import { type DynamicTypeListingAssetLink } from '@Pimcore/modules/element/dynamic-types/defintinitions/listing/types/dynamic-type-listing-asset-link'
-import { type DynamicTypeObjectDataFieldCollection } from './defintinitions/objects/data-related/types/dynamic-type-object-data-field-collection'
+import { type DynamicTypeObjectDataBlock } from './definitions/objects/data-related/types/dynamic-type-object-data-block'
+import { type DynamicTypeObjectDataLocalizedFields } from './definitions/objects/data-related/types/dynamic-type-object-data-localized-fields'
+import { type DynamicTypeBatchEditRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/dynamic-type-batch-edit-registry'
+import { type DynamicTypeBatchEditText } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/text/dynamic-type-batch-edit-text'
+import { type DynamicTypeBatchEditTextArea } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/text/dynamic-type-batch-edit-text-area'
+import { type DynamicTypeBatchEditDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/datetime/dynamic-type-batch-edit-datetime'
+import { type DynamicTypeBatchEditSelect } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/select/dynamic-type-batch-edit-select'
+import { type DynamicTypeBatchEditCheckbox } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/checkbox/dynamic-type-batch-edit-checkbox'
+import { type DynamicTypeBatchEditElementDropzone } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/element-dropzone/dynamic-type-batch-edit-element-dropzone'
+import { type DynamicTypeGridCellLanguageSelect } from './definitions/grid-cell/types/language-select/dynamic-type-grid-cell-language-select'
+import { type DynamicTypeGridCellTranslate } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/translate/dynamic-type-grid-cell-translate'
+import { type DynamicTypeListingRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/listing/dynamic-type-listing-registry'
+import { type DynamicTypeListingAssetLink } from '@Pimcore/modules/element/dynamic-types/definitions/listing/types/dynamic-type-listing-asset-link'
+import { type DynamicTypeObjectDataFieldCollection } from './definitions/objects/data-related/types/dynamic-type-object-data-field-collection'
+import { type DynamicTypeObjectDataObjectBrick } from './definitions/objects/data-related/types/dynamic-type-object-data-object-brick'
+import { type DynamicTypeGridCellDataObjectAdapter } from './definitions/grid-cell/types/data-object-adapter/dynamic-type-grid-cell-data-object-adapter'
+import { type DynamicTypeGridCellDataObjectActions } from './definitions/grid-cell/types/data-object-actions/dynamic-type-grid-cell-data-object-actions'
+import { type DynamicTypeGridCellDataObjectObjectBrick } from './definitions/grid-cell/types/data-object-object-brick/dynamic-type-grid-cell-data-object-adapter'
+import { type DynamicTypeBatchEditDataObjectAdapter } from './definitions/batch-edits/types/data-object-adapter/dynamic-type-batch-edit-data-object-adpater'
+import { type DynamicTypeBatchEditDataObjectObjectBrick } from './definitions/batch-edits/types/data-object-object-brick/dynamic-type-batch-edit-data-object-object-brick'
+import { type DynamicTypeAssetRegistry } from './definitions/asset/dynamic-type-asset-registry'
+import { type DynamicTypeAssetArchive } from './definitions/asset/types/dynamic-type-asset-archive'
+import { type DynamicTypeAssetAudio } from './definitions/asset/types/dynamic-type-asset-audio'
+import { type DynamicTypeAssetDocument } from './definitions/asset/types/dynamic-type-asset-document'
+import { type DynamicTypeAssetFolder } from './definitions/asset/types/dynamic-type-asset-folder'
+import { type DynamicTypeAssetImage } from './definitions/asset/types/dynamic-type-asset-image'
+import { type DynamicTypeAssetText } from './definitions/asset/types/dynamic-type-asset-text'
+import { type DynamicTypeAssetUnknown } from './definitions/asset/types/dynamic-type-asset-unknown'
+import { type DynamicTypeAssetVideo } from './definitions/asset/types/dynamic-type-asset-video'
+import { type DynamicTypeObjectRegistry } from './definitions/objects/dynamic-type-object-registry'
+import { type DynamicTypeObjectFolder } from './definitions/objects/types/dynamic-type-object-folder'
+import { type DynamicTypeObjectObject } from './definitions/objects/types/dynamic-type-object-object'
+import { type DynamicTypeObjectVariant } from './definitions/objects/types/dynamic-type-object-variant'
+import { type DynamicTypeObjectDataClassificationStore } from './definitions/objects/data-related/types/dynamic-type-object-data-classification-store'
+import { type DynamicTypeGridCellBoolean } from './definitions/grid-cell/types/boolean/dynamic-type-grid-cell-boolean'
 
 moduleSystem.registerModule({
   onInit () {
@@ -133,6 +166,12 @@ moduleSystem.registerModule({
 
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditText>(serviceIds['DynamicTypes/BatchEdit/Text']))
     batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditTextArea>(serviceIds['DynamicTypes/BatchEdit/TextArea']))
+    batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditDatetime>(serviceIds['DynamicTypes/BatchEdit/Datetime']))
+    batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditSelect>(serviceIds['DynamicTypes/BatchEdit/Select']))
+    batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditCheckbox>(serviceIds['DynamicTypes/BatchEdit/Checkbox']))
+    batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditElementDropzone>(serviceIds['DynamicTypes/BatchEdit/ElementDropzone']))
+    batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditDataObjectAdapter>(serviceIds['DynamicTypes/BatchEdit/DataObjectAdapter']))
+    batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditDataObjectObjectBrick>(serviceIds['DynamicTypes/BatchEdit/DataObjectObjectBrick']))
 
     const listingRegistry = container.get<DynamicTypeListingRegistry>(serviceIds['DynamicTypes/ListingRegistry'])
 
@@ -144,6 +183,8 @@ moduleSystem.registerModule({
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellTextarea>(serviceIds['DynamicTypes/GridCell/Textarea']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellNumber>(serviceIds['DynamicTypes/GridCell/Number']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellSelect>(serviceIds['DynamicTypes/GridCell/Select']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellMultiSelect>(serviceIds['DynamicTypes/GridCell/MultiSelect']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellBoolean>(serviceIds['DynamicTypes/GridCell/Boolean']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellCheckbox>(serviceIds['DynamicTypes/GridCell/Checkbox']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDate>(serviceIds['DynamicTypes/GridCell/Date']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellTime>(serviceIds['DynamicTypes/GridCell/Time']))
@@ -154,6 +195,7 @@ moduleSystem.registerModule({
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellOpenElement>(serviceIds['DynamicTypes/GridCell/OpenElement']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellAssetPreview>(serviceIds['DynamicTypes/GridCell/AssetPreview']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellAssetActions>(serviceIds['DynamicTypes/GridCell/AssetActions']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectActions>(serviceIds['DynamicTypes/GridCell/DataObjectActions']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDependencyTypeIcon>(serviceIds['DynamicTypes/GridCell/DependencyTypeIcon']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellAssetCustomMetadataIcon>(serviceIds['DynamicTypes/GridCell/AssetCustomMetadataIcon']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellAssetCustomMetadataValue>(serviceIds['DynamicTypes/GridCell/AssetCustomMetadataValue']))
@@ -165,8 +207,11 @@ moduleSystem.registerModule({
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellAsset>(serviceIds['DynamicTypes/GridCell/Asset']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellObject>(serviceIds['DynamicTypes/GridCell/Object']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDocument>(serviceIds['DynamicTypes/GridCell/Document']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellElement>(serviceIds['DynamicTypes/GridCell/Element']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellLanguageSelect>(serviceIds['DynamicTypes/GridCell/LanguageSelect']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellTranslate>(serviceIds['DynamicTypes/GridCell/Translate']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectAdapter>(serviceIds['DynamicTypes/GridCell/DataObjectAdapter']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectObjectBrick>(serviceIds['DynamicTypes/GridCell/DataObjectObjectBrick']))
 
     const metadataRegistry = container.get<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
 
@@ -193,6 +238,7 @@ moduleSystem.registerModule({
 
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataInput>(serviceIds['DynamicTypes/ObjectData/Input']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataTextarea>(serviceIds['DynamicTypes/ObjectData/Textarea']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataWysiwyg>(serviceIds['DynamicTypes/ObjectData/Wysiwyg']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataPassword>(serviceIds['DynamicTypes/ObjectData/Password']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataInputQuantityValue>(serviceIds['DynamicTypes/ObjectData/InputQuantityValue']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataSelect>(serviceIds['DynamicTypes/ObjectData/Select']))
@@ -215,7 +261,9 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGender>(serviceIds['DynamicTypes/ObjectData/Gender']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataRgbaColor>(serviceIds['DynamicTypes/ObjectData/RgbaColor']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataEncryptedField>(serviceIds['DynamicTypes/ObjectData/EncryptedField']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataCalculatedValue>(serviceIds['DynamicTypes/ObjectData/CalculatedValue']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataCheckbox>(serviceIds['DynamicTypes/ObjectData/Checkbox']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataLink>(serviceIds['DynamicTypes/ObjectData/Link']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataUrlSlug>(serviceIds['DynamicTypes/ObjectData/UrlSlug']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataDate>(serviceIds['DynamicTypes/ObjectData/Date']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataDatetime>(serviceIds['DynamicTypes/ObjectData/Datetime']))
@@ -223,15 +271,42 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataTime>(serviceIds['DynamicTypes/ObjectData/Time']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataExternalImage>(serviceIds['DynamicTypes/ObjectData/ExternalImage']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataImage>(serviceIds['DynamicTypes/ObjectData/Image']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataVideo>(serviceIds['DynamicTypes/ObjectData/Video']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataHotspotImage>(serviceIds['DynamicTypes/ObjectData/HotspotImage']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataImageGallery>(serviceIds['DynamicTypes/ObjectData/ImageGallery']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGeoPoint>(serviceIds['DynamicTypes/ObjectData/GeoPoint']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGeoBounds>(serviceIds['DynamicTypes/ObjectData/GeoBounds']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGeoPolygon>(serviceIds['DynamicTypes/ObjectData/GeoPolygon']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGeoPolyLine>(serviceIds['DynamicTypes/ObjectData/GeoPolyLine']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataManyToOneRelation>(serviceIds['DynamicTypes/ObjectData/ManyToOneRelation']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataManyToManyRelation>(serviceIds['DynamicTypes/ObjectData/ManyToManyRelation']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataManyToManyObjectRelation>(serviceIds['DynamicTypes/ObjectData/ManyToManyObjectRelation']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataAdvancedManyToManyObjectRelation>(serviceIds['DynamicTypes/ObjectData/AdvancedManyToManyObjectRelation']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataAdvancedManyToManyRelation>(serviceIds['DynamicTypes/ObjectData/AdvancedManyToManyRelation']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataReverseObjectRelation>(serviceIds['DynamicTypes/ObjectData/ReverseObjectRelation']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataTable>(serviceIds['DynamicTypes/ObjectData/Table']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataStructuredTable>(serviceIds['DynamicTypes/ObjectData/StructuredTable']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataBlock>(serviceIds['DynamicTypes/ObjectData/Block']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataLocalizedFields>(serviceIds['DynamicTypes/ObjectData/LocalizedFields']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataFieldCollection>(serviceIds['DynamicTypes/ObjectData/FieldCollection']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataObjectBrick>(serviceIds['DynamicTypes/ObjectData/ObjectBrick']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataClassificationStore>(serviceIds['DynamicTypes/ObjectData/ClassificationStore']))
+
+    const assetRegistry = container.get<DynamicTypeAssetRegistry>(serviceIds['DynamicTypes/AssetRegistry'])
+
+    assetRegistry.registerDynamicType(container.get<DynamicTypeAssetArchive>(serviceIds['DynamicTypes/Asset/Archive']))
+    assetRegistry.registerDynamicType(container.get<DynamicTypeAssetAudio>(serviceIds['DynamicTypes/Asset/Audio']))
+    assetRegistry.registerDynamicType(container.get<DynamicTypeAssetDocument>(serviceIds['DynamicTypes/Asset/Document']))
+    assetRegistry.registerDynamicType(container.get<DynamicTypeAssetFolder>(serviceIds['DynamicTypes/Asset/Folder']))
+    assetRegistry.registerDynamicType(container.get<DynamicTypeAssetImage>(serviceIds['DynamicTypes/Asset/Image']))
+    assetRegistry.registerDynamicType(container.get<DynamicTypeAssetText>(serviceIds['DynamicTypes/Asset/Text']))
+    assetRegistry.registerDynamicType(container.get<DynamicTypeAssetUnknown>(serviceIds['DynamicTypes/Asset/Unknown']))
+    assetRegistry.registerDynamicType(container.get<DynamicTypeAssetVideo>(serviceIds['DynamicTypes/Asset/Video']))
+
+    const objectRegistry = container.get<DynamicTypeObjectRegistry>(serviceIds['DynamicTypes/ObjectRegistry'])
+
+    objectRegistry.registerDynamicType(container.get<DynamicTypeObjectFolder>(serviceIds['DynamicTypes/Object/Folder']))
+    objectRegistry.registerDynamicType(container.get<DynamicTypeObjectObject>(serviceIds['DynamicTypes/Object/Object']))
+    objectRegistry.registerDynamicType(container.get<DynamicTypeObjectVariant>(serviceIds['DynamicTypes/Object/Variant']))
   }
 })

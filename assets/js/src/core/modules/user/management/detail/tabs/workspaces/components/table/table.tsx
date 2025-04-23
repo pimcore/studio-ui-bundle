@@ -15,8 +15,6 @@ import React, { useEffect } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { useUserContext } from '@Pimcore/modules/user/hooks/use-user-context'
-import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
 import { type UserWorkspace } from '@Pimcore/modules/user/user-api-slice.gen'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from 'antd'
@@ -24,22 +22,17 @@ import { Flex } from 'antd'
 interface ITableProps {
   data: UserWorkspace[]
   isLoading: boolean
-  type: string
   showDuplicatePropertyModal: () => void
+  onUpdateData: (data: UserWorkspace[]) => void
 }
 
 export const Table = ({
   showDuplicatePropertyModal,
-  type,
   data,
-  isLoading
+  isLoading, onUpdateData
 }: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { id } = useUserContext()
-  const { updateUserWorkspaces } = useUserDraft(id)
   const [gridData, setGridData] = React.useState<UserWorkspace[]>(data)
-
-  // const modifiedCells = user?.modifiedCells !== undefined ? user?.modifiedCells[type] : []
 
   useEffect(() => {
     setGridData(data)
@@ -223,7 +216,7 @@ export const Table = ({
       showDuplicatePropertyModal()
     } else {
       setGridData(updatedProperties)
-      updateUserWorkspaces({ type, changes: updatedProperties })
+      onUpdateData(updatedProperties)
     }
   }
 
@@ -232,7 +225,7 @@ export const Table = ({
     const propertyIndex = updatedProperties.findIndex((property) => property.cid === id)
     updatedProperties.splice(propertyIndex, 1)
     setGridData(updatedProperties)
-    updateUserWorkspaces({ type, changes: updatedProperties })
+    onUpdateData(updatedProperties)
   }
 
   return (
@@ -241,7 +234,6 @@ export const Table = ({
       columns={ ownTableColumns }
       data={ gridData }
       isLoading={ isLoading }
-      // modifiedCells={ modifiedCells }
       onUpdateCellData={ onUpdateCellData }
       resizable
       setRowId={ (row) => row.cid }

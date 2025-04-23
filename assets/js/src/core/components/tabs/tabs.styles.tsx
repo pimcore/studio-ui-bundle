@@ -21,8 +21,15 @@ export const useStyles = createStyles(({ token, css }) => {
         padding-right: ${token.paddingXXS}px;
 
         + .ant-tabs-tab {
-          margin-left: ${token.marginXXS}px;
+          margin-left: ${token.marginSM}px;
         }
+      }
+
+      &.tabs--has-sticky-header > .ant-tabs-nav {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: ${token.colorBgContainer};
       }
 
       &.ant-tabs-top > .ant-tabs-nav {
@@ -46,6 +53,15 @@ export const useStyles = createStyles(({ token, css }) => {
         padding-right: ${token.paddingXS}px;
         align-items: center;
       }
+      
+      &.tabs--no-padding .ant-tabs-nav-list {
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      &.tabs--no-tab-bar-margin.ant-tabs-top>.ant-tabs-nav+.ant-tabs-content-holder {
+        padding-top: 0;
+      }
 
       &.ant-tabs-line .ant-tabs-nav .ant-tabs-tab {
         border-radius: 0;
@@ -58,6 +74,10 @@ export const useStyles = createStyles(({ token, css }) => {
           opacity: 0;
           font-size: 8px;
         }
+      }
+
+      .ant-tabs-tab-active .ant-tabs-tab-btn {
+        font-weight: 600;
       }
       
       &.ant-tabs-line .ant-tabs-nav .ant-tabs-tab-active .ant-tabs-tab-remove {

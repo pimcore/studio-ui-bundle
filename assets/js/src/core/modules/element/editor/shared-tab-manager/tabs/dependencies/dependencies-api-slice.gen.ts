@@ -44,7 +44,7 @@ export type DependencyGetCollectionByElementTypeApiArg = {
 export type Dependency = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** id */
     id: number;

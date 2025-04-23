@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { type InputRef } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import { usePropertyGetCollectionQuery } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
-import Input from 'antd/es/input/Input'
+import { Input } from 'antd'
 import { Table } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/components/table/table'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
@@ -31,6 +31,7 @@ import { Space } from '@Pimcore/components/space/space'
 import { Split } from '@Pimcore/components/split/split'
 import { Select } from '@Pimcore/components/select/select'
 import { uuid } from '@Pimcore/utils/uuid'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -38,7 +39,9 @@ export const PropertiesContainer = (): React.JSX.Element => {
   const [createManualPropertyMode, setCreateManualPropertyMode] = useState<boolean>(false)
   const { id, elementType } = useElementContext()
 
-  const { addProperty, properties } = useElementDraft(id, elementType)
+  const { element, addProperty, properties } = useElementDraft(id, elementType)
+  const isEditable = checkElementPermission(element?.permissions, 'publish') || checkElementPermission(element?.permissions, 'save')
+
   const {
     showModal: showDuplicatePropertyModal,
     closeModal: closeDuplicatePropertyModal,
@@ -68,7 +71,10 @@ export const PropertiesContainer = (): React.JSX.Element => {
 
   return (
     <Content padded>
-      <Header title={ t('properties.label') }>
+      <Header
+        className={ 'p-l-mini' }
+        title={ t('properties.label') }
+      >
         <Space size='small'>
           <Segmented
             onChange={ setPropertiesTableTab }
@@ -78,6 +84,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
             ] }
           />
 
+          {isEditable && (
           <div className={ 'pimcore-properties-toolbar__predefined-properties' }>
             <DuplicatePropertyModal
               footer={ <ModalFooter>
@@ -134,12 +141,12 @@ export const PropertiesContainer = (): React.JSX.Element => {
               />
 
               <IconTextButton
-                icon={ { value: 'new-circle' } }
+                icon={ { value: 'new-something' } }
                 onClick={ () => {
                   onAddPropertyClick()
                 } }
               >
-                {t('properties.add-custom-property.add')}
+                {t('properties.add-custom-property.create')}
               </IconTextButton>
             </Space>
             )}
@@ -163,17 +170,18 @@ export const PropertiesContainer = (): React.JSX.Element => {
                 />
 
                 <IconTextButton
-                  icon={ { value: 'new-circle' } }
-                  key={ t('properties.add-custom-property') }
+                  icon={ { value: 'new-something' } }
+                  key={ t('properties.new-custom-property') }
                   onClick={ () => {
                     setCreateManualPropertyMode(true)
                   } }
                 >
-                  {t('properties.add-custom-property')}
+                  {t('properties.new-custom-property')}
                 </IconTextButton>
               </Split>
             )}
           </div>
+          )}
         </Space>
       </Header>
 
@@ -196,13 +204,13 @@ export const PropertiesContainer = (): React.JSX.Element => {
       return
     }
 
-    if (propertyExists(property.name)) {
+    if (propertyExists(property.key)) {
       showDuplicatePropertyModal()
       return
     }
 
     const newDataProperty: DataProperty = {
-      key: property.name,
+      key: property.key,
       type: property.type,
       data: property.data,
       inherited: false,

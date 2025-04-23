@@ -18,12 +18,13 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { flattenArray } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/utils/flattn-tags-array'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
+import { type TreeDataItem, TreeElement } from '@Pimcore/components/tree-element/tree-element'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import {
   createTreeStructure
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/create-tree-structure'
 import { useHandleCheck } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/hooks/use-handle-check-tags'
+import { isNull } from 'lodash'
 
 export interface TagsTreeProps {
   elementId: number
@@ -46,7 +47,7 @@ export const TagsTree = ({
   defaultCheckedTags,
   setDefaultCheckedTags
 }: TagsTreeProps): React.JSX.Element => {
-  const flatTags = flattenArray(tags).filter((tag): tag is { id: number } => tag.id !== undefined)
+  const flatTags = flattenArray(tags).filter((tag) => tag.id !== undefined)
 
   const { handleCheck, loadingNodes } = useHandleCheck({
     elementId,
@@ -57,6 +58,26 @@ export const TagsTree = ({
 
   const treeData = createTreeStructure({ tags, loadingNodes })
 
+  const getAllTreeKeys = (treeData: TreeDataItem[]): string[] => {
+    const result: string[] = []
+
+    const traverse = (nodes: TreeDataItem[]): void => {
+      for (const node of nodes) {
+        if (node.key !== undefined) {
+          result.push(String(node.key))
+        }
+        if (!isNull(node.children)) {
+          traverse(node.children as TreeDataItem[])
+        }
+      }
+    }
+
+    traverse(treeData)
+
+    return result
+  }
+
+  const defaultExpandedKeys = (): Array<string | number> => (filter !== undefined && filter.length > 0) ? [0, ...getAllTreeKeys(treeData)] : [0]
   return (
     <Flex
       gap="small"
@@ -64,8 +85,7 @@ export const TagsTree = ({
     >
       <SearchInput
         loading={ isLoading }
-        onChange={ (e) => {
-          const { value } = e.target
+        onSearch={ (value) => {
           setFilter(value)
         } }
         placeholder="Search"
@@ -74,8 +94,7 @@ export const TagsTree = ({
       <TreeElement
         checkStrictly
         checkedKeys={ { checked: defaultCheckedTags, halfChecked: [] } }
-        defaultExpandedKeys={ ['root'] }
-        filter={ filter }
+        defaultExpandedKeys={ defaultExpandedKeys() }
         onCheck={ handleCheck }
         treeData={ treeData }
         withCustomSwitcherIcon

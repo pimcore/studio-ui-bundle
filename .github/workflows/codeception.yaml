@@ -22,12 +22,13 @@ env:
 jobs:
     codeception-tests:
         name: "Codeception tests"
-        runs-on: "ubuntu-20.04"
+        runs-on: "ubuntu-latest"
         continue-on-error: ${{ matrix.experimental }}
         strategy:
             matrix:
                 include:
-                    - { php-version: 8.2, dependencies: highest, pimcore_version: "", experimental: false }
+                    - { php-version: 8.3, dependencies: highest, pimcore_version: "", experimental: false }
+                    - { php-version: 8.4, dependencies: highest, pimcore_version: "", experimental: false }
 
         steps:
             -   name: "Checkout code"

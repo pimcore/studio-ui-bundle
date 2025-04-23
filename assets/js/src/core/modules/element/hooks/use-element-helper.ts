@@ -11,10 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type ElementType } from 'types/element-type.d'
-import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
-import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
+import { type SaveTaskType } from '@Pimcore/modules/data-object/actions/save/use-save'
+import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
+import { mapToElementType as mapType } from '@Pimcore/modules/element/utils/element-type'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 interface OpenElementWidgetProps {
   id: number
@@ -23,49 +25,53 @@ interface OpenElementWidgetProps {
 
 interface UseElementReturn {
   openElement: (props: OpenElementWidgetProps) => Promise<void>
-  mapToElementType: (elementType: string) => ElementType | undefined
+  mapToElementType: (elementType: string, silent?: boolean) => ElementType | undefined
+  executeElementTask: (elementType: ElementType, id: number, task: SaveTaskType, onFinish?: () => void) => void
 }
 
 export const useElementHelper = (): UseElementReturn => {
   const { openAsset } = useAssetHelper()
   const { openDataObject } = useDataObjectHelper()
+  const { executeDataObjectTask } = useDataObjectHelper()
+
   async function openElement (props: OpenElementWidgetProps): Promise<void> {
-    if (props.type === 'asset') {
+    const elementType = mapToElementType(props.type)
+    if (elementType === 'asset') {
       openAsset({
         config: {
           id: props.id
         }
       })
-    } else if (props.type === 'data-object') {
-      openDataObject({
+    } else if (elementType === 'data-object') {
+      void openDataObject({
         config: {
           id: props.id
         }
       })
     } else {
-      console.log('Opening ' + props.type + ' is not supported yet.')
+      console.log('Opening ' + elementType + ' is not supported yet.')
     }
   }
 
-  function mapToElementType (elementType: string): ElementType | undefined {
-    switch (elementType) {
-      case 'asset':
-        return 'asset'
+  function mapToElementType (elementType: string, silent?: boolean): ElementType | undefined {
+    const targetType = mapType(elementType)
 
-      case 'document':
-        return 'document'
-
-      case 'data-object':
-      case 'object':
-      case 'dataObject':
-        return 'data-object'
-
-      default:
-        trackError(new GeneralError('Unknown element type: ' + elementType))
-
-        return undefined
+    if (targetType === null && silent !== true) {
+      trackError(new GeneralError(`Unknown element type: ${elementType}`))
+      return undefined
     }
+
+    return targetType ?? undefined
   }
 
-  return { openElement, mapToElementType }
+  const executeElementTask = (elementType: ElementType, id: number, task: SaveTaskType, onFinish?: () => void): void => {
+    if (elementType === 'data-object') {
+      void executeDataObjectTask(id, task, onFinish)
+      return
+    }
+
+    console.log('not implemented for elementType: ' + elementType)
+  }
+
+  return { openElement, mapToElementType, executeElementTask }
 }

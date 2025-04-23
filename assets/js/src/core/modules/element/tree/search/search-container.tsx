@@ -11,10 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useEffect, useState } from 'react'
+import React from 'react'
 import { Input } from 'antd'
-import { isUndefined } from 'lodash'
-import { TreeContext, type TreeSearchProps } from '@Pimcore/components/element-tree/element-tree'
+import { isEmpty } from 'lodash'
+import { type TreeSearchProps } from '@Pimcore/components/element-tree/element-tree'
+import { useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
+import { useTreeFilter } from '../provider/tree-filter-provider/use-tree-filter'
 
 const { Search } = Input
 
@@ -23,21 +25,14 @@ export type SearchContainerProps = TreeSearchProps & {
 }
 
 const SearchContainer = (props: SearchContainerProps): React.JSX.Element => {
-  const { mergeAdditionalQueryParams, total } = props
-  const [searchActive, setSearchActive] = useState(false)
-  const { maxItemsPerNode } = useContext(TreeContext)
-
-  useEffect(() => {
-    if (!isUndefined(maxItemsPerNode)) {
-      total > maxItemsPerNode && setSearchActive(true)
-    }
-  }, [total])
+  const { searchTerm, setSearchTerm, setPage } = useElementTreeNode(props.node.id)
+  const { total } = props
+  const { pageSize } = useTreeFilter()
+  const searchActive = !isEmpty(searchTerm) || total > pageSize
 
   function onSearch (searchTerm: string): void {
-    mergeAdditionalQueryParams!({
-      idSearchTerm: searchTerm,
-      page: 1
-    })
+    setSearchTerm(searchTerm === '' ? undefined : searchTerm)
+    setPage(1)
   }
 
   if (!searchActive) {
@@ -47,6 +42,7 @@ const SearchContainer = (props: SearchContainerProps): React.JSX.Element => {
   return (
     <Search
       aria-label={ props.label }
+      defaultValue={ searchTerm }
       loading={ props.isLoading }
       onSearch={ onSearch }
       placeholder={ props.label }

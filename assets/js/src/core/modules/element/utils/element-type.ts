@@ -11,6 +11,28 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import type { ElementType } from '@Pimcore/types/enums/element/element-type'
+
 export const isValidElementType = (type: string): boolean => {
-  return type === 'asset' || type === 'document' || type === 'data-object'
+  return allElementTypes.includes(type)
+}
+
+export const allElementTypes = ['asset', 'document', 'data-object']
+
+export const mapToElementType = (elementType: string): ElementType | null => {
+  switch (elementType) {
+    case 'asset':
+      return 'asset'
+
+    case 'document':
+      return 'document'
+
+    case 'data-object':
+    case 'object':
+    case 'dataObject':
+      return 'data-object'
+
+    default:
+      return null
+  }
 }

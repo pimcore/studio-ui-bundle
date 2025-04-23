@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Dropdown } from 'antd'
 import { useTranslation } from 'react-i18next'
 import {
@@ -31,31 +31,42 @@ import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draf
 import {
   useTagGetCollectionForElementByTypeAndIdQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
-import {
-  api
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { Button } from '@Pimcore/components/button/button'
 
 export const TagsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id, elementType } = useElementContext()
   const { element } = useElementDraft(id, elementType)
   const { applyTagsToChildren, removeAndApplyTagsToChildren } = useShortcutActions()
-  const dispatch = useAppDispatch()
 
   const { data, isLoading } = useTagGetCollectionForElementByTypeAndIdQuery({
     elementType,
     id
   })
 
-  useEffect(() => {
-    dispatch(
-      api.util.invalidateTags(
-        invalidatingTags.AVAILABLE_TAGS()
+  const tagsAction = (): React.JSX.Element => data?.totalItems === 0
+    ? (
+      <Button
+        onClick={ removeAndApplyTagsToChildren }
+      >
+        {t('tags.remove-and-apply-tags-to-children')}
+      </Button>
       )
-    )
-  }, [])
+    : (
+      <Dropdown.Button
+        disabled={ element?.hasChildren !== true }
+        menu={ {
+          items: [{
+            label: t('tags.remove-and-apply-tags-to-children'),
+            key: '1',
+            onClick: removeAndApplyTagsToChildren
+          }]
+        } }
+        onClick={ applyTagsToChildren }
+      >
+        {t('tags.apply-tags-to-children')}
+      </Dropdown.Button>
+      )
 
   return (
     <SplitLayout
@@ -81,22 +92,12 @@ export const TagsTabContainer = (): React.JSX.Element => {
         size: 75,
         children: (
           <Content padded>
-            <Header title={ t('tags.assigned-tags-text') }>
-              <Dropdown.Button
-                disabled={ data?.totalItems === 0 || element?.hasChildren !== true }
-                menu={ {
-                  items: [{
-                    label: t('tags.remove-and-apply-tags-to-children'),
-                    key: '1',
-                    onClick: removeAndApplyTagsToChildren
-                  }]
-                } }
-                onClick={ applyTagsToChildren }
-              >
-                {t('tags.apply-tags-to-children')}
-              </Dropdown.Button>
+            <Header
+              className={ 'p-l-mini' }
+              title={ t('tags.assigned-tags-text') }
+            >
+              {tagsAction()}
             </Header>
-
             <div className={ 'pimcore-tags-content' }>
               <AssignedTagsTable
                 isLoading={ isLoading }
@@ -106,7 +107,6 @@ export const TagsTabContainer = (): React.JSX.Element => {
           </Content>
         )
       } }
-
       withDivider
     />
   )

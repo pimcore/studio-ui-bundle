@@ -11,27 +11,46 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { defaultProps, ElementTree } from '@Pimcore/components/element-tree/element-tree'
+import { defaultProps, ElementTree, type TreeContextMenuProps } from '@Pimcore/components/element-tree/element-tree'
 import React from 'react'
-import { useNodeApiHook } from './hooks/use-node-api-hook'
-import { TreeNode, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
+import { TreeNode as TreeNodeComponent } from '@Pimcore/components/element-tree/node/tree-node'
 import { SearchContainer } from './search/search-container'
 import { withDraggable } from './node/with-draggable'
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
-import { DataObjectTreeContextMenu } from '@Pimcore/modules/data-object/tree/context-menu/context-menu'
 import { PagerContainer } from '@Pimcore/modules/element/tree/pager/pager-container'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { Box } from '@Pimcore/components/box/box'
+import { Skeleton } from '@Pimcore/components/element-tree/skeleton/skeleton'
+import { withDroppable } from './node/with-droppable/with-droppable'
+import { withDroppableStyling } from './node/with-droppable/with-droppable-styling'
+import { withActionStates } from './node/with-action-states'
+import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
+import { useElementTreeRootNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-root-node'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import { useComponentRegistry } from '@Pimcore/modules/app/component-registry/use-component-registry'
 
 export interface TreeContainerProps {
   id: number
+  showRoot?: boolean
 }
 
-const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Element => {
-  const { openDataObject } = useDataObjectHelper()
-  const { object_tree_paging_limit: dataObjectTreePagingLimit } = useSettings()
+export const DataObjectTreeNode = withDroppable(withDroppableStyling(withActionStates(withDraggable(TreeNodeComponent))))
 
-  async function onSelect (node: TreeNodeProps): Promise<void> {
-    openDataObject({
+const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
+  const { openDataObject } = useDataObjectHelper()
+  const { rootNode, isLoading } = useElementTreeRootNode(id, showRoot)
+  const componentRegistry = useComponentRegistry()
+  const contextMenu = componentRegistry.get(componentConfig.dataObject.tree.contextMenu.name)
+
+  if (showRoot && isLoading) {
+    return (
+      <Box padding={ 'small' }>
+        <Skeleton />
+      </Box>
+    )
+  }
+
+  async function onSelect (node: TreeNode): Promise<void> {
+    void openDataObject({
       config: {
         id: parseInt(node.id)
       }
@@ -40,15 +59,15 @@ const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Elem
 
   return (
     <ElementTree
-      contextMenu={ DataObjectTreeContextMenu }
-      maxItemsPerNode={ dataObjectTreePagingLimit }
-      nodeApiHook={ useNodeApiHook }
+      contextMenu={ contextMenu as React.ElementType<TreeContextMenuProps> | undefined }
       nodeId={ id }
       onSelect={ onSelect }
       renderFilter={ SearchContainer }
-      renderNode={ withDraggable(TreeNode) }
+      renderNode={ DataObjectTreeNode }
       renderNodeContent={ defaultProps.renderNodeContent }
       renderPager={ PagerContainer }
+      rootNode={ rootNode }
+      showRoot={ showRoot }
     />
   )
 }

@@ -15,7 +15,7 @@ import type { Meta } from '@storybook/react'
 import React from 'react'
 import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
 import { ElementToolbarSkeleton } from '@Pimcore/components/element-toolbar/element-toolbar.skeleton'
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 const config: Meta = {
   title: 'Components/__Refactor__/Element Toolbar',

@@ -40,4 +40,14 @@ interface StaticResourcesResolverInterface
      * @return string[]
      */
     public function getBundleJsFiles(): array;
+
+    /**
+     * @return string[]
+     */
+    public function getAdditionalCssFiles(): array;
+
+    /**
+     * @return string[]
+     */
+    public function getAdditionalJsFiles(): array;
 }

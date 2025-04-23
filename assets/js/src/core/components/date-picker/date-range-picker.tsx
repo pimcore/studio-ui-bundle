@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { type RangePickerProps as OriginalRangePickerProps } from 'antd/lib/date-picker/generatePicker/interface'
 import { DatePicker as OriginalDatePicker } from 'antd'
 import { type Dayjs } from 'dayjs'
@@ -21,6 +21,8 @@ import {
   fromDayJs,
   type OutputType
 } from './utils/date-picker-utils'
+import { useStyles } from '@Pimcore/components/date-picker/date-picker.styles'
+import cn from 'classnames'
 
 export type DateRange = [start: Dayjs | null, end: Dayjs | null]
 export type DateRangeTargetValue = [start: DatePickerValueType, end: DatePickerValueType]
@@ -30,6 +32,7 @@ export type DateRangePickerProps = OriginalRangePickerProps & {
   onChange?: (dates: DateRangeTargetValue | null) => void
   outputType?: OutputType
   outputFormat?: string
+  inherited?: boolean
 }
 
 const valueToDayJs = (value?: DateRangeTargetValue | unknown): DateRange | null => {
@@ -56,19 +59,17 @@ const valueFromDayJs = (value: DateRange | null, outputType?: OutputType, output
 
 export const DateRangePicker = (props: DateRangePickerProps): React.JSX.Element => {
   const [value, setValue] = React.useState<DateRange | null>(valueToDayJs(props.value))
-
-  useEffect(() => {
-    if (props.onChange !== undefined) {
-      props.onChange(valueFromDayJs(value, props.outputType, props.outputFormat))
-    }
-  }, [value, props.outputType, props.outputFormat])
+  const { styles } = useStyles()
 
   return (
     <OriginalDatePicker.RangePicker
       { ...props }
       onChange={ (dates: DateRange | null) => {
         setValue(dates)
+        props.onChange?.(valueFromDayJs(dates, props.outputType, props.outputFormat))
       } }
+      popupClassName={ styles.datePickerDropdown }
+      rootClassName={ cn(styles.datePicker, props.className, { [styles.inherited]: props.inherited }) }
       value={ value }
     />
   )

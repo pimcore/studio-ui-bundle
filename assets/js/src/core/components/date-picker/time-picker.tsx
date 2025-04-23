@@ -21,18 +21,22 @@ import {
 } from './utils/date-picker-utils'
 import { DatePicker } from 'antd'
 import { type GenericTimePickerProps } from 'antd/es/date-picker/generatePicker/interface'
+import cn from 'classnames'
+import { useStyles } from '@Pimcore/components/date-picker/date-picker.styles'
 
 export type TimePickerProps = GenericTimePickerProps & {
   value?: DatePickerValueType
   onChange?: (date: DatePickerValueType) => void
   outputType?: OutputType
   outputFormat?: string
+  inherited?: boolean
 }
 
 export const TimePicker = (props: TimePickerProps): React.JSX.Element => {
   const outputFormat = props?.outputFormat ?? 'HH:mm:ss'
 
   const [value, setValue] = React.useState<Dayjs | null>(toDayJs(props.value, outputFormat))
+  const { styles } = useStyles()
 
   useEffect(() => {
     if (props.onChange !== undefined) {
@@ -48,6 +52,8 @@ export const TimePicker = (props: TimePickerProps): React.JSX.Element => {
       onChange={ (date: Dayjs | null) => {
         setValue(date)
       } }
+      popupClassName={ styles.datePickerDropdown }
+      rootClassName={ cn(styles.datePicker, props.className, { [styles.inherited]: props.inherited }) }
       value={ value }
     />
   )

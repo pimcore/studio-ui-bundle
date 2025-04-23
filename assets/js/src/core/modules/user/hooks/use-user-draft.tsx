@@ -15,17 +15,16 @@ import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
 import {
   selectUserById,
   userFetched,
-  removeUser,
+  userRemoved,
   changeUser,
-  userUpdateWorkspaces,
-  userAvailablePermissionsFetched,
-  userReloaded
+  userAvailablePermissionsFetched
 } from '@Pimcore/modules/user/user-slice'
 import {
   api, type UserGetAvailablePermissionsApiResponse,
   type UserGetByIdApiResponse
 } from '@Pimcore/modules/user/user-api-slice.gen'
 import { useEffect, useState } from 'react'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface UseUserReturnDraft {
   isLoading: boolean
@@ -35,7 +34,6 @@ interface UseUserReturnDraft {
   removeUserFromState: () => void
   changeUserInState: (changedValues: any) => void
   updateUserKeyBinding: (name: string, code: object) => void
-  updateUserWorkspaces: (changedValues: any) => void
   reloadUser: () => void
 }
 
@@ -46,8 +44,11 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
   const [isError, setIsError] = useState<boolean>(false)
 
   async function fetchUser (): Promise<UserGetByIdApiResponse> {
-    const { data } = await dispatch(api.endpoints.userGetById.initiate({ id }))
+    const { data, isError: isUserGetByIdError, error } = await dispatch(api.endpoints.userGetById.initiate({ id }))
 
+    if (isUserGetByIdError) {
+      trackError(new ApiError(error))
+    }
     if (data !== undefined) {
       return data
     }
@@ -57,17 +58,20 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
   }
 
   function reloadUser (): void {
-    dispatch(userReloaded(user.id))
+    removeUserFromState()
     getUser()
   }
 
   async function fetchUserAvailablePermissions (): Promise<UserGetAvailablePermissionsApiResponse> {
-    const { data } = await dispatch(api.endpoints.userGetAvailablePermissions.initiate())
+    const { data, isError: isFetchUserAvailablePermissionsError, error } = await dispatch(api.endpoints.userGetAvailablePermissions.initiate())
 
     if (data !== undefined) {
       return data
     }
 
+    if (isFetchUserAvailablePermissionsError) {
+      trackError(new ApiError(error))
+    }
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return {} as UserGetAvailablePermissionsApiResponse
   }
@@ -100,17 +104,12 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
   function removeUserFromState (): void {
     if (user === undefined) return
 
-    dispatch(removeUser(user.id))
+    dispatch(userRemoved(user.id))
   }
 
   function changeUserInState (changes: any): void {
     if (user === undefined) return
     dispatch(changeUser({ id: user.id, changes }))
-  }
-
-  function updateUserWorkspaces (changes: any): void {
-    if (user === undefined) return
-    dispatch(userUpdateWorkspaces({ id: user.id, type: changes.type, changes: changes.changes }))
   }
 
   function updateUserKeyBinding (name: string, code: object): void {
@@ -121,7 +120,6 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
       }
       return keyBinding
     })
-
     dispatch(changeUser({ id: user.id, changes: { keyBindings: updatedKeyBindings } }))
   }
 
@@ -132,7 +130,6 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
     removeUserFromState,
     changeUserInState,
     reloadUser,
-    updateUserWorkspaces,
     updateUserKeyBinding
   }
 }

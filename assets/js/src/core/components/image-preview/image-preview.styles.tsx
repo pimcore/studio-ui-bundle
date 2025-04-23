@@ -41,6 +41,15 @@ export const useStyle = createStyles(({ token, css }) => {
         }
       }
         
+    `,
+    hotspotButton: css`
+      position: absolute;
+      top: ${token.paddingXXS}px;
+      left: ${token.paddingXXS}px;
+      // todo: remove this when loading animation in button is fixed
+      & > div {
+        display:none;
+      }
     `
   }
 })

@@ -12,20 +12,14 @@
 */
 
 import React, { useEffect, useState } from 'react'
-import {
-  api, type AssetVersion
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
+import { api, type AssetVersion } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
 import { store } from '@Pimcore/app/store'
-import {
-  hydrateVersionData, versionsDataToTableData
-} from '../details-functions'
-import {
-  SingleViewUi
-} from './single-view-ui'
+import { hydrateVersionData, checkIsImageVersion, versionsDataToTableData } from '../details-functions'
+import { SingleViewUi } from './single-view-ui'
 import { Content } from '@Pimcore/components/content/content'
 import {
   type SingleVersionViewProps
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-details-props'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 
 export const SingleView = ({
   versions,
@@ -35,10 +29,14 @@ export const SingleView = ({
   const [vId, setVId] = useState(versionId)
   const [versionData, setVersionData] = useState([] as object[])
   const [versionPreviewImageUrl, setVersionPreviewImageUrl] = useState<string | null>(null)
+  const [versionFileName, setVersionFileName] = useState<string | undefined>(undefined)
+  const [isImageVersion, setIsImageVersion] = useState(false)
 
   useEffect(() => {
-    setVersionData([])
-    setVId(versionId)
+    if (versionId.id !== vId.id) {
+      setVersionData([])
+      setVId(versionId)
+    }
   }, [versionId])
 
   useEffect(() => {
@@ -47,27 +45,17 @@ export const SingleView = ({
       .then((responses): void => {
         const dataRaw = responses.data as AssetVersion
         const tempVersionData = hydrateVersionData(dataRaw, vId.id, vId.count)
+
+        if (checkIsImageVersion(dataRaw)) {
+          setIsImageVersion(true)
+        }
+
+        setVersionFileName(dataRaw?.fileName)
         setVersionData(versionsDataToTableData([tempVersionData]))
         setVersionPreviewImageUrl(tempVersionData.previewImageUrl)
       })
       .catch(err => { console.log(err) })
   }, [vId])
-
-  if (versionData.length === 0) {
-    return <Content loading />
-  }
-
-  return (
-    <SingleViewUi
-      data={ versionData }
-      firstVersion={ versions[0].id === vId.id }
-      imgSrc={ versionPreviewImageUrl }
-      lastVersion={ versions[versions.length - 1].id === vId.id }
-      onClickNext={ onClickNext }
-      onClickPrevious={ onClickPrevious }
-      versionId={ vId }
-    />
-  )
 
   function onClickNext (): void {
     setVersionData([])
@@ -92,4 +80,27 @@ export const SingleView = ({
       }
     }
   }
+
+  if (versionData.length === 0) {
+    return (
+      <Content
+        fullPage
+        loading
+      />
+    )
+  }
+
+  return (
+    <SingleViewUi
+      data={ versionData }
+      fileName={ versionFileName }
+      firstVersion={ versions[0].id === vId.id }
+      imgSrc={ versionPreviewImageUrl }
+      isImageVersion={ isImageVersion }
+      lastVersion={ versions[versions.length - 1].id === vId.id }
+      onClickNext={ onClickNext }
+      onClickPrevious={ onClickPrevious }
+      versionId={ vId }
+    />
+  )
 }

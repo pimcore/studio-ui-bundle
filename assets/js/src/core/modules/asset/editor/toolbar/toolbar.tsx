@@ -29,64 +29,77 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
-import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { container } from '@Pimcore/app/depency-injection'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
 import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-log-modal'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { isNil } from 'lodash'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useElementContext()
 
-  const { asset, properties, removeTrackedChanges, customMetadata, imageSettings } = useAssetDraft(id)
-  const hasChanges = asset?.modified === true
-  const [saveAsset, { isLoading, isSuccess, isError }] = useAssetUpdateByIdMutation()
+  const { asset, properties, removeTrackedChanges, customMetadata, customSettings, imageSettings, textData } = useAssetDraft(id)
+
+  const [saveAsset, { isLoading, isSuccess, isError, error }] = useAssetUpdateByIdMutation()
   const {
     saveSchedules,
     isLoading: isSchedulesLoading,
     isSuccess: isSchedulesSuccess,
-    isError: isSchedulesError
+    isError: isSchedulesError,
+    error: schedulesError
   } = useSaveSchedules('asset', id, false)
   const messageApi = useMessage()
-  const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
-  const ContextMenu = componentRegistry.get('editorToolbarContextMenuAsset')
 
   useEffect(() => {
-    if (isSuccess && isSchedulesSuccess) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      messageApi.success(t('save-success'))
-      removeTrackedChanges()
+    const handleSuccessEvent = async (): Promise<void> => {
+      if (isSuccess && isSchedulesSuccess) {
+        removeTrackedChanges()
+        await messageApi.success(t('save-success'))
+      }
     }
+
+    handleSuccessEvent().catch((error) => {
+      console.error(error)
+    })
   }, [isSuccess, isSchedulesSuccess])
 
   useEffect(() => {
-    if (isError || isSchedulesError) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      messageApi.error(t('save-failed'))
+    if (isError && !isNil(error)) {
+      trackError(new ApiError(error))
+    } else if (isSchedulesError && !isNil(schedulesError)) {
+      trackError(new ApiError(schedulesError))
     }
-  }, [isError, isSchedulesError])
+  }, [isError, isSchedulesError, error, schedulesError])
 
   return (
     <ToolbarView>
       <WorkFlowProvider>
-        <ContextMenu />
+        <Flex>
+          <SlotRenderer
+            slot={ componentConfig.asset.editor.toolbar.slots.left }
+          />
+        </Flex>
         <Flex
           style={ { height: '32px' } }
           vertical={ false }
         >
           <EditorToolbarWorkflowMenu />
-          <Button
-            disabled={ !hasChanges || isLoading || isSchedulesLoading }
-            loading={ isLoading || isSchedulesLoading }
-            onClick={ onSaveClick }
-            type="primary"
-          >
-            {t('toolbar.save-and-publish')}
-          </Button>
+          { checkElementPermission(asset?.permissions, 'publish') && (
+            <Button
+              disabled={ isLoading || isSchedulesLoading }
+              loading={ isLoading || isSchedulesLoading }
+              onClick={ onSaveClick }
+              type="primary"
+            >
+              {t('toolbar.save-and-publish')}
+            </Button>
+          ) }
         </Flex>
         <WorkflowLogModal />
       </WorkFlowProvider>
@@ -97,6 +110,7 @@ export const Toolbar = (): React.JSX.Element => {
     if (asset?.changes === undefined) return
 
     const update: AssetUpdateByIdApiArg['body']['data'] = {}
+
     if (asset.changes.properties) {
       const propertyUpdate = properties?.map((property: DataProperty): DataPropertyApi => {
         const { rowId, ...propertyApi } = property
@@ -117,12 +131,35 @@ export const Toolbar = (): React.JSX.Element => {
     if (asset.changes.customMetadata) {
       update.metadata = customMetadata?.map((metadata: CustomMetadata): CustomMetadataApi => {
         const { rowId, ...metadataApi } = metadata
+
+        if (metadataApi.type.startsWith('metadata.')) {
+          metadataApi.type = metadataApi.type.replace('metadata.', '')
+        }
+
+        if (metadataApi.data === null) {
+          if (metadataApi.type === 'input' || metadataApi.type === 'textarea') {
+            metadataApi.data = ''
+          }
+
+          if (metadataApi.type === 'checkbox') {
+            metadataApi.data = false
+          }
+        }
+
         return metadataApi
       })
     }
 
+    if (asset.changes.customSettings) {
+      update.customSettings = customSettings
+    }
+
     if (asset.changes.imageSettings) {
       update.image = imageSettings
+    }
+
+    if (asset.changes.textData) {
+      update.data = textData
     }
 
     const saveAssetPromise = saveAsset({

@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { WidgetManagerView } from './widget-manager-view'
 import { widgetManagerFactory } from './utils/widget-manager-factory'
 import { Actions, type ITabRenderValues, Model, type TabNode, type TabSetNode } from 'flexlayout-react'
@@ -25,13 +25,11 @@ export const WidgetManagerContainer = (): React.JSX.Element => {
   const model = Model.fromJson(modelJson)
   const bottomTabset = model.getNodeById('bottom_tabset') as TabSetNode
 
-  useEffect(() => {
-    model.doAction(Actions.updateModelAttributes({
-      tabSetTabStripHeight: 34,
-      tabSetTabHeaderHeight: 34,
-      borderBarSize: 50
-    }))
-  }, [])
+  model.doAction(Actions.updateModelAttributes({
+    tabSetTabStripHeight: 34,
+    tabSetTabHeaderHeight: 34,
+    borderBarSize: 50
+  }))
 
   if (bottomTabset.getChildren().length === 0) {
     model.doAction(Actions.updateNodeAttributes(bottomTabset.getId(), { height: -8 }))

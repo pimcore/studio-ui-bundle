@@ -15,20 +15,20 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Table } from '@Pimcore/modules/user/management/detail/tabs/references/components/table/table'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
+import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
+import { useUserContext } from '@Pimcore/modules/user/hooks/use-user-context'
 
 const ReferenceContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
-  // const { id } = useUserContext()
-  // const { user, isLoading } = useUserDraft(id)
-
-  const [references] = React.useState<[]>([])
+  const { id } = useUserContext()
+  const { user } = useUserDraft(id)
 
   const accordionContent = [
     {
       key: '1',
       title: <>{ t('user-management.references.documents') }</>,
       children: <Table
-        data={ references }
+        data={ user?.objectDependencies?.dependencies ?? [] }
         isLoading={ false }
                 />
     }

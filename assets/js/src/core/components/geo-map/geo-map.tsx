@@ -24,6 +24,8 @@ import { type GeoPoints, type GeoPoint, type GeoType, type GeoBounds } from '@Pi
 import { addGeoPolyLineToolbar } from '@Pimcore/components/geo-map/toolbar/add-geo-poly-line-toolbar'
 import { addGeoPolygonToolbar } from '@Pimcore/components/geo-map/toolbar/add-geo-polygon-toolbar'
 import { addGeoBoundsToolbar } from '@Pimcore/components/geo-map/toolbar/add-geo-bounds-toolbar'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: '/bundles/pimcorestudioui/img/leaflet/marker-icon-2x.png',
@@ -62,8 +64,8 @@ const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Elemen
   const [zoom, setZoom] = useState<number | undefined>(props.zoom)
   const [value, setValue] = useState<GeoType | undefined>(props.value)
   const [key, setKey] = useState<number>(0)
-  const [isVisible, setIsVisible] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  const settings = useSettings()
 
   const geoMapApi: GeoMapAPI = {
     reset: () => {
@@ -94,15 +96,14 @@ const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Elemen
       } else {
         map.setView([props.lat ?? 0, props.lng ?? 0], props.zoom ?? 1)
       }
-
-      L.tileLayer('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      L.tileLayer(settings.maps.tile_layer_url_template as string, {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map)
 
       const featureGroup = L.featureGroup().addTo(map)
 
       if (props.mode === 'geoPoint') {
-        addGeoPointToolbar(map, featureGroup, value as GeoPoint, props.onChange, props.disabled)
+        addGeoPointToolbar(map, featureGroup, settings.maps.reverse_geocoding_url_template as string, value as GeoPoint, props.onChange, props.disabled)
       } else if (props.mode === 'geoPolyLine') {
         addGeoPolyLineToolbar(map, featureGroup, value as GeoPoints, props.onChange, props.disabled)
       } else if (props.mode === 'geoPolygon') {
@@ -132,28 +133,7 @@ const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Elemen
     setZoom(props.zoom)
   }, [props.zoom])
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-          observer.disconnect()
-        }
-      },
-      { threshold: 0.1 }
-    )
-
-    if (containerRef.current !== null) {
-      observer.observe(containerRef.current)
-    }
-
-    return () => {
-      if (containerRef.current !== null) {
-        observer.unobserve(containerRef.current)
-        observer.disconnect()
-      }
-    }
-  }, [])
+  const isVisible = useElementVisible(containerRef)
 
   useEffect(() => {
     if (!isVisible) {

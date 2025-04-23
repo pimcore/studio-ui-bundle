@@ -28,8 +28,28 @@ export const useStyles = createStyles(({ css, token }) => {
         background: transparent;
         border: none;
 
+        &.ant-collapse-small >.ant-collapse-item >.ant-collapse-header {
+          display: flex;
+          min-height: 38px;
+          padding: ${token.paddingXXS}px ${token.paddingSM}px;
+          align-items: center;
+        }
+
+        &.ant-collapse-small .collapse-header__title {
+          font-weight: 400;
+        }
+
+        &>.ant-collapse-item >.ant-collapse-header {
+          .button--type-action {
+            margin-bottom: -4px;
+          }
+        }
+
         .collapse-header__title-container {
           flex-grow: 0;
+        }
+        .collapse-header__title {           
+          font-weight: ${token.fontWeightStrong};
         }
 
         .collapse-header__extra {
@@ -52,6 +72,21 @@ export const useStyles = createStyles(({ css, token }) => {
 
           &.collapse-item--bordered {
             border: 1px solid ${token.colorBorderSecondary};
+          }
+          
+          &.collapse-item--separator .ant-collapse-content {
+            border-top: 1px solid ${themeToken.colorBorderSecondary};
+          }
+        }
+
+        .collapse-item--theme-border-highlight {
+          background-color: ${themeToken.colorBgContainer};
+          border-left: 3px solid #D5CFDA;
+          border-radius: 0;
+
+          &.collapse-item--bordered {
+            border: 1px solid ${token.colorBorderSecondary};
+            border-left: 3px solid #D5CFDA;
           }
           
           &.collapse-item--separator .ant-collapse-content {

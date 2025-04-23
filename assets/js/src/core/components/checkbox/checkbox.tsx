@@ -13,11 +13,20 @@
 
 import React from 'react'
 import { Checkbox as AntCheckbox, type CheckboxProps } from 'antd'
+import cn from 'classnames'
+import { useStyles } from './checkbox.styles'
 
-export interface ICheckboxProps extends CheckboxProps {}
+export interface ICheckboxProps extends CheckboxProps {
+  inherited?: boolean
+}
 
-export const Checkbox = (props: ICheckboxProps): JSX.Element => {
+export const Checkbox = ({ inherited, className, ...restProps }: ICheckboxProps): JSX.Element => {
+  const { styles } = useStyles()
+
   return (
-    <AntCheckbox { ...props } />
+    <AntCheckbox
+      className={ cn(className, { [styles.inherited]: inherited }) }
+      { ...restProps }
+    />
   )
 }

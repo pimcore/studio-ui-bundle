@@ -12,7 +12,8 @@
 */
 
 import React from 'react'
-import { Form, Input, Col, Row, Alert, Flex } from 'antd'
+import { Input, Col, Row, Alert, Flex } from 'antd'
+import { Form } from '@Pimcore/components/form/form'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
 import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
@@ -25,8 +26,8 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
   const [form] = Form.useForm()
   const { t } = useTranslation()
   const { id } = useUserContext()
-  const { user, isLoading, updateUserKeyBinding } = useUserDraft(id)
-  const { resetUserKeyBindings } = useUserHelper()
+  const { user, isLoading, updateUserKeyBinding, changeUserInState } = useUserDraft(id)
+  const { resetUserKeyBindings, getDefaultKeyBindings } = useUserHelper()
 
   const getKeyName = (key: number): string => {
     let name = ''
@@ -37,7 +38,6 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
     } else {
       name = String.fromCharCode(key)
     }
-
     return name
   }
 
@@ -45,18 +45,28 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
     return `${keyBinding.ctrl !== false ? 'Ctrl + ' : ''}${keyBinding.alt !== false ? 'Alt + ' : ''}${keyBinding.shift !== false ? 'Shift + ' : ''}${getKeyName(keyBinding.key as number)}`
   }
 
-  if (!isLoading) {
-    user?.keyBindings.forEach((keyBinding: any) => {
+  const setDataToForm = (data: any): void => {
+    data.forEach((keyBinding: any) => {
       form.setFieldsValue({
         [keyBinding.action]: renderKeyCombination(keyBinding)
       })
     })
   }
 
+  if (!isLoading) {
+    if (user?.keyBindings?.length === 0) {
+      getDefaultKeyBindings().then((data) => {
+        setDataToForm(data.items)
+        changeUserInState({ keyBindings: data.items })
+      }).catch((error) => {
+        console.error('error setting default key bindings', error)
+      })
+    }
+    setDataToForm(user?.keyBindings)
+  }
   if (isLoading) {
     return <Content loading></Content>
   }
-
   const handleInputChange = (evt: any, name: string): object | boolean => {
     const key = evt.keyCode
     evt.preventDefault()
@@ -69,25 +79,18 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
       key
     }
 
-    if (key === 9 || key === 8) {
+    if (key === 9 || key === 8 || key === 27 || key === 46) {
       return false
     }
 
-    if (key === 46 || key === 27) {
-      // code.action = 'action?'
-    } else {
-      // code.action = 'action'
-      code.ctrl = evt.ctrlKey
-      code.alt = evt.altKey
-      code.shift = evt.shiftKey
-    }
+    code.ctrl = evt.ctrlKey
+    code.alt = evt.altKey
+    code.shift = evt.shiftKey
 
     form.setFieldsValue({
       [name]: renderKeyCombination(code)
     })
-
     updateUserKeyBinding(name, code)
-
     return code
   }
 
@@ -207,9 +210,6 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
               name={ field as any }
             >
               <Input
-                onBlur={ (evt) => {
-                  console.log(evt)
-                } }
                 onKeyDown={ (evt) => handleInputChange(evt, field) }
               />
             </Form.Item>
@@ -239,7 +239,6 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
             <Button onClick={ async () => await resetUserKeyBindings(id) }>{ t('user-management.key-bindings.reset') }</Button>
           </Flex>
         </Col>
-
         <Col span={ 14 }>
           <Accordion
             activeKey={ '1' }
@@ -249,7 +248,6 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
           >
           </Accordion>
         </Col>
-
         <Col span={ 14 }>
           <Accordion
             activeKey={ '1' }
@@ -259,7 +257,6 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
           >
           </Accordion>
         </Col>
-
         <Col span={ 14 }>
           <Accordion
             activeKey={ '1' }
@@ -269,7 +266,6 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
           >
           </Accordion>
         </Col>
-
         <Col span={ 14 }>
           <Accordion
             activeKey={ '1' }
@@ -279,7 +275,6 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
           >
           </Accordion>
         </Col>
-
         <Col span={ 14 }>
           <Accordion
             activeKey={ '1' }

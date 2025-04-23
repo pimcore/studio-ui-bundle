@@ -11,66 +11,65 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Popconfirm } from 'antd'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
+import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
+import {
+  ReloadButton
+} from '@Pimcore/modules/data-object/editor/toolbar/context-menu/components/reload-button/reload-button'
+import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
+import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
+import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
+import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
+import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
+import { type MenuProps } from 'antd'
 import ButtonGroup from 'antd/es/button/button-group'
 import React, { useContext, useState } from 'react'
-import { api } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useAppDispatch } from '@Pimcore/app/store'
 import { useTranslation } from 'react-i18next'
-import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
-import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
 
 export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const dispatch = useAppDispatch()
   const { id } = useContext(DataObjectContext)
-  const { dataObject, removeDataObjectFromState } = useDataObjectDraft(id)
-  const [popConfirmOpen, setPopConfirmOpen] = useState<boolean>(false)
+  const { dataObject } = useDataObjectDraft(id)
+  const { unpublishContextMenuItem } = useUnpublish('data-object')
+  const { renameContextMenuItem } = useRename('data-object')
+  const { deleteContextMenuItem } = useDelete('data-object')
+  const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined)
+
+  const items: DropdownMenuProps['items'] = [
+    unpublishContextMenuItem(dataObject as DataObject, () => {
+      setIsOpen(undefined)
+    }),
+    deleteContextMenuItem(dataObject as DataObject),
+    renameContextMenuItem(dataObject as DataObject)
+  ]
+
+  const visibleItems = items.filter(item => (item !== null && 'hidden' in item) ? item?.hidden === false : false)
+
+  const handleMenuClick: MenuProps['onClick'] = (e) => {
+    if (e.key === ContextMenuActionName.unpublish) {
+      setIsOpen(true)
+    }
+  }
 
   return (
     <ButtonGroup>
-      <Popconfirm
-        onCancel={ onCancel }
-        onConfirm={ onConfirm }
-        onOpenChange={ onOpenChange }
-        open={ popConfirmOpen }
-        title={ t('toolbar.reload.confirmation') }
-      >
-        <IconButton
-          icon={ { value: 'refresh' } }
+      <ReloadButton />
+
+      {visibleItems.length > 0 && (
+        <Dropdown
+          menu={ {
+            items,
+            onClick: handleMenuClick
+          } }
+          open={ isOpen }
         >
-          {t('toolbar.reload')}
-        </IconButton>
-      </Popconfirm>
+          <DropdownButton key={ 'dropdown-button' }>
+            {t('toolbar.more')}
+          </DropdownButton>
+        </Dropdown>
+      )}
     </ButtonGroup>
   )
-
-  function onOpenChange (newOpen: boolean): void {
-    if (!newOpen) {
-      setPopConfirmOpen(false)
-      return
-    }
-
-    if (Object.keys(dataObject?.changes ?? {}).length > 0) {
-      setPopConfirmOpen(true)
-    } else {
-      refreshDataObject()
-    }
-  }
-
-  function onConfirm (): void {
-    setPopConfirmOpen(false)
-    refreshDataObject()
-  }
-
-  function onCancel (): void {
-    setPopConfirmOpen(false)
-  }
-
-  function refreshDataObject (): void {
-    removeDataObjectFromState()
-    dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_DETAIL_ID(id)))
-  }
 }

@@ -18,7 +18,7 @@ import React, { Fragment } from 'react'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Flex } from 'antd'
-import Input from 'antd/es/input/Input'
+import { Input } from '@Pimcore/components/input/input'
 import { Button } from '@Pimcore/components/button/button'
 
 const config: Meta = {
@@ -42,9 +42,9 @@ export const HeadWithButtons = {
     title: <Fragment>
       Card Title
       <IconTextButton
-        icon={ { value: 'new-circle' } }
+        icon={ { value: 'new' } }
         type="default"
-      >Add</IconTextButton>
+      >New</IconTextButton>
     </Fragment>,
     extra: [
       {
@@ -56,6 +56,24 @@ export const HeadWithButtons = {
     ]
   }
 }
+
+export const HeadWithActionButton = {
+  args: {
+    ..._default.args,
+    title: 'Action Buttons',
+    extraPosition: 'flex-start',
+    extra: (
+      <IconTextButton
+        icon={ { value: 'edit' } }
+        onClick={ () => { console.log('click action button 1') } }
+        type='action'
+      >
+        Edit
+      </IconTextButton>
+    )
+  }
+}
+
 export const CloseButton = {
   args: {
     ..._default.args,

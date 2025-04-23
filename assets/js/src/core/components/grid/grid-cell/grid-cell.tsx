@@ -13,28 +13,37 @@
 
 import { type Cell, type CellContext, flexRender } from '@tanstack/react-table'
 import React from 'react'
-import { type ExtendedCellContext } from '../grid'
+import { type GridCellReference, type ExtendedCellContext } from '../grid'
 import { type GridContextProviderProps, GridContextProvider } from '../grid-context'
+import {
+  DynamicTypeRegistryProvider
+} from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 
 export interface GridCellProps {
   cell: Cell<any, unknown>
+  isActive?: boolean
   isModified?: boolean
+  onFocusCell?: (cell: GridCellReference) => void
   tableElement: GridContextProviderProps['table']
 }
 
-export const GridCell = ({ cell, isModified, tableElement }: GridCellProps): React.JSX.Element => {
+export const GridCell = ({ cell, isModified, isActive, onFocusCell, tableElement }: GridCellProps): React.JSX.Element => {
   return (
-    <GridContextProvider table={ tableElement }>
-      <div className='grid__cell-content'>
-        {flexRender(cell.column.columnDef.cell, getExtendedCellContext(cell.getContext()))}
-      </div>
-    </GridContextProvider>
+    <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/GridCellRegistry'] }>
+      <GridContextProvider table={ tableElement }>
+        <div className='grid__cell-content'>
+          {flexRender(cell.column.columnDef.cell, getExtendedCellContext(cell.getContext()))}
+        </div>
+      </GridContextProvider>
+    </DynamicTypeRegistryProvider>
   )
 
   function getExtendedCellContext (context: CellContext<any, any>): ExtendedCellContext {
     return {
       ...context,
-      modified: isModified
+      active: isActive,
+      modified: isModified,
+      onFocus: onFocusCell
     }
   }
 }

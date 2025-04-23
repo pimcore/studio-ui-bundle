@@ -143,22 +143,22 @@ export type CustomMetadataVersion = {
     /** Name */
     name: string;
     /** Language */
-    language?: string | null;
+    language?: any;
     /** Type */
     type: string;
     /** Data */
-    data: string | null;
+    data: any;
 };
 export type VersionDimensions = {
     /** width */
-    width?: number | null;
+    width?: any;
     /** height */
-    height?: number | null;
+    height?: any;
 };
 export type AssetVersion = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** asset type */
     type: string;
@@ -167,31 +167,80 @@ export type AssetVersion = {
     /** creation date */
     creationDate: number;
     /** modification date */
-    modificationDate?: number | null;
+    modificationDate?: any;
     /** file size */
     fileSize: number;
     /** mime type */
     mimeType: string;
     /** Metadata */
     metadata: CustomMetadataVersion[];
+    /** dimensions */
     dimensions: VersionDimensions;
 };
-export type DataObjectVersion = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
-    };
-    /** modification date */
-    modificationDate: number;
+export type ElementIcon = {
+    /** Icon type */
+    type: "name" | "path";
+    /** Icon value */
+    value: string;
+};
+export type Element = {
+    /** ID */
+    id: number;
+    /** ID of parent */
+    parentId: number;
     /** path */
     path: string;
-    /** published */
-    published: boolean;
+    /** icon */
+    icon?: ElementIcon;
+    /** ID of owner */
+    userOwner: number;
+    /** User that modified the element */
+    userModification: number;
+    /** Locked */
+    locked: any;
+    /** Is locked */
+    isLocked: boolean;
+    /** Creation date */
+    creationDate: any;
+    /** Modification date */
+    modificationDate: any;
+};
+export type DataObjectVersion = Element & {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Inheritance allowed */
+    allowInheritance?: boolean;
+    /** Variants allowed */
+    allowVariants?: boolean;
+    /** Show variants */
+    showVariants?: boolean;
+    /** Has preview */
+    hasPreview?: boolean;
+    /** Has workflow available */
+    hasWorkflowAvailable?: boolean;
+    /** Key */
+    key?: string;
+    /** Type */
+    type?: string;
+    /** Has children */
+    hasChildren?: boolean;
+    /** Full path */
+    fullPath?: string;
+    /** Custom index */
+    index?: number;
+    /** Class name */
+    className?: any;
+    /** Published */
+    published?: any;
+    /** Detail object data */
+    objectData?: object;
 };
 export type DocumentVersion = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** modification date */
     modificationDate: number;
@@ -202,20 +251,20 @@ export type DocumentVersion = {
 };
 export type UpdateVersion = {
     /** Public */
-    public?: boolean | null;
+    public?: any;
     /** Note */
-    note?: string | null;
+    note?: any;
 };
 export type VersionUser = {
     /** ID */
-    id?: number | null;
+    id?: any;
     /** name */
-    name?: string | null;
+    name?: any;
 };
 export type Version = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** version ID */
     id: number;
@@ -235,9 +284,10 @@ export type Version = {
     versionCount: number;
     /** autosave */
     autosave: boolean;
+    /** user */
     user: VersionUser;
     /** scheduled */
-    scheduled?: number | null;
+    scheduled?: any;
 };
 export const {
     useVersionAssetDownloadByIdQuery,

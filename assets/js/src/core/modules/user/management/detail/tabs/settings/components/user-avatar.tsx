@@ -11,68 +11,81 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Card } from '@Pimcore/components/card/card'
-import { Avatar, Flex, Upload } from 'antd'
+import { Avatar, Flex, Upload, Skeleton } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import { Button } from '@Pimcore/components/button/button'
 import { useStyle } from '@Pimcore/modules/user/management/detail/tabs/settings/components/user-avatar.styles'
 import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
-import { useUserContext } from '@Pimcore/modules/user/hooks/use-user-context'
+import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
 
-const UserAvatar = ({ ...props }): React.JSX.Element => {
+interface IUserAvatar {
+  id: number
+}
+const UserAvatar = ({ id, ...props }: IUserAvatar): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
   const classNames = ['avatar--default', styles.avatar]
 
-  // const [form] = Form.useForm()
-  const { id } = useUserContext()
-  const { uploadUserAvatar } = useUserHelper()
+  const { user } = useUserDraft(id)
+  const { uploadUserAvatar, fetchUserImageById } = useUserHelper()
+
+  const [userImage, setUserImage] = React.useState<any>(user?.image ?? null)
+  const [userImageLoading, setUserImageLoading] = React.useState<boolean>(user?.hasImage === true && userImage === null)
+
+  const getUserImage = (): void => {
+    setUserImageLoading(true)
+
+    fetchUserImageById({ id }).then(response => {
+      setUserImage(response.data)
+      setUserImageLoading(false)
+    }).catch(error => {
+      setUserImageLoading(false)
+      console.log(error)
+    })
+  }
+
+  useEffect(() => {
+    if (user?.hasImage === true && userImage === null) {
+      getUserImage()
+    }
+  }, [id])
 
   return (
-
     <Card title={ t('user-management.settings.avatar') }>
       <Flex
         gap={ 'middle' }
         vertical
       >
-        <Avatar
-          className={ classNames.join(' ') }
-          icon={ <UserOutlined /> }
-          size={ 64 }
-        />
+        {userImageLoading
+          ? (
+            <Skeleton.Avatar
+              active
+              size={ 64 }
+            />
+            )
+          : (
+            <Avatar
+              className={ classNames.join(' ') }
+              icon={ <UserOutlined /> }
+              size={ 64 }
+              src={ userImage }
+            />
+            )}
 
         <div>
           <Upload
-            customRequest={ ({ file, onError, onSuccess }) => {
-              let state = 'uploading'
-              uploadUserAvatar({ id, file: file as File }).then(response => {
-                state = 'done'
-              }).catch(error => {
-                console.log(error)
-                state = 'error'
-              })
-
-              return state
+            customRequest={ async ({ file }) => {
+              await uploadUserAvatar({ id, file: file as File })
+              getUserImage()
             } }
             headers={ {
               'Content-Type': 'multipart/form-data'
             } }
             name={ 'userImage' }
-            onChange={ (info) => {
-              if (info.file.status !== 'uploading') {
-                console.log(info.file, info.fileList)
-              }
-              if (info.file.status === 'done') {
-                console.log(`${info.file.name} file uploaded successfully`)
-                // message.success(`${info.file.name} file uploaded successfully`)
-              } else if (info.file.status === 'error') {
-                console.log(`${info.file.name} file upload failed.`)
-                // message.error(`${info.file.name} file upload failed.`)
-              }
-            }
-          }
+            showUploadList={ false }
           >
             <Button type={ 'default' }>{t('user-management.settings.upload-avatar')}</Button>
           </Upload>

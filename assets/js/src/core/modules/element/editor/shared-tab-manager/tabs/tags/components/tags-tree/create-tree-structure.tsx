@@ -11,15 +11,26 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import {
-  type TagGetCollectionApiResponse
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import type { TreeDataNode } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { LoadingOutlined } from '@ant-design/icons'
 import React from 'react'
+import { type TreeAction } from '@Pimcore/modules/tags/tag-configuration-container'
+import {
+  type TagGetCollectionApiResponse
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 
-export const createTreeStructure = ({ tags, loadingNodes }: { tags: NonNullable<TagGetCollectionApiResponse['items']>, loadingNodes: Set<string> }): TreeDataNode[] => {
+export interface CreateTreeStructureProps {
+  tags: NonNullable<TagGetCollectionApiResponse['items']>
+  loadingNodes: Set<string>
+  actions?: TreeAction[]
+  rootActions?: TreeAction[]
+}
+
+export interface CustomTreeDataNode extends TreeDataNode {
+  actions?: TreeAction[]
+}
+export const createTreeStructure = ({ tags, loadingNodes, actions, rootActions }: CreateTreeStructureProps): CustomTreeDataNode[] => {
   const getTitle = (tagText: string | undefined, isLoading: boolean): React.ReactNode => {
     if (tagText === undefined || tagText === null || tagText.trim() === '') {
       return isLoading
@@ -41,27 +52,26 @@ export const createTreeStructure = ({ tags, loadingNodes }: { tags: NonNullable<
     )
   }
 
+  const isLoading = (id: string): boolean => loadingNodes.has(id)
+
   function treeWalker (tags: NonNullable<TagGetCollectionApiResponse['items']>): TreeDataNode[] {
     return tags.map((tag) => {
-      const isLoading = loadingNodes.has(tag.id!.toString())
       return {
-        key: tag.id!.toString(),
-        title: getTitle(tag.text, isLoading),
-        icon: Icon({
-          value: 'tag'
-        }),
-        disableCheckbox: isLoading,
-        children: tag.hasChildren === true ? treeWalker(tag.children!) : []
+        key: tag.id.toString(),
+        title: getTitle(tag.text, isLoading(tag.id.toString())),
+        icon: <Icon value='tag' />,
+        disableCheckbox: isLoading(tag.id.toString()),
+        children: tag.hasChildren ? treeWalker(tag.children!) : [],
+        actions
       }
     })
   }
 
   return [{
-    key: 'root',
-    title: 'All Tags',
-    icon: Icon({
-      value: 'folder'
-    }),
-    children: tags.length > 0 ? treeWalker(tags) : []
+    key: 0,
+    title: getTitle('All Tags', false),
+    icon: <Icon value='folder' />,
+    children: tags.length > 0 ? treeWalker(tags) : [],
+    actions: rootActions
   }]
 }

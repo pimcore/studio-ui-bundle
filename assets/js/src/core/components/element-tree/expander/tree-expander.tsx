@@ -16,6 +16,7 @@ import { type TreeNodeProps } from '../node/tree-node'
 import { TreeContext } from '../element-tree'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
+import { Spin } from '@Pimcore/components/spin/spin'
 
 export interface TreeExpanderProps {
   node: TreeNodeProps
@@ -23,7 +24,7 @@ export interface TreeExpanderProps {
 }
 
 export const TreeExpander = ({ node, state }: TreeExpanderProps): React.JSX.Element => {
-  const { hasChildren, children } = node
+  const { hasChildren, children, isLoading } = node
   const { onLoad } = useContext(TreeContext)
   const [isExpanded, setIsExpanded] = state
   const { t } = useTranslation()
@@ -34,7 +35,7 @@ export const TreeExpander = ({ node, state }: TreeExpanderProps): React.JSX.Elem
     if (hasChildren === true) {
       const newExpandedValue = !isExpanded
 
-      if (newExpandedValue && onLoad !== undefined && children.length === 0) {
+      if (newExpandedValue && onLoad !== undefined && children !== undefined && children.length === 0) {
         await onLoad(node)
       }
 
@@ -47,6 +48,10 @@ export const TreeExpander = ({ node, state }: TreeExpanderProps): React.JSX.Elem
       className='tree-expander'
       style={ { minWidth: 16, width: 16, height: 16 } }
     >
+      {isLoading === true && (
+        <Spin type='classic' />
+      )}
+
       {node.hasChildren === true && (
         // keyboard navigation is already handled on parent level
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events
@@ -56,19 +61,24 @@ export const TreeExpander = ({ node, state }: TreeExpanderProps): React.JSX.Elem
           role='button'
           tabIndex={ -1 }
         >
-          {isExpanded
-            ? (
-              <Icon
-                options={ { width: 16, height: 16 } }
-                value="chevron-up"
-              />
-              )
-            : (
-              <Icon
-                options={ { width: 16, height: 16 } }
-                value="chevron-down"
-              />
-              )}
+          {isLoading !== true && (
+            <>
+              {isExpanded
+                ? (
+                  <Icon
+                    options={ { width: 16, height: 16 } }
+                    value="chevron-up"
+                  />
+                  )
+                : (
+                  <Icon
+                    options={ { width: 16, height: 16 } }
+                    value="chevron-down"
+                  />
+                  )
+              }
+            </>
+          )}
         </span>
       )}
     </div>

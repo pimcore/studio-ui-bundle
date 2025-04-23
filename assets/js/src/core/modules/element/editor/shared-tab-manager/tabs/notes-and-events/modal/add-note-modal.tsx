@@ -20,7 +20,7 @@ import { useForm } from 'antd/es/form/Form'
 import {
   useNoteElementCreateMutation
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
-import { type ElementType } from '../../../../../../../../../types/element-type.d'
+import { type ElementType } from '../../../../../../../types/enums/element/element-type'
 
 export interface AddNoteFormValues {
   type: string
@@ -72,7 +72,7 @@ export const AddNoteModal = ({ ...props }: AddNoteModalProps): React.JSX.Element
       onOk={ () => { form.submit() } }
       open={ props.open }
       title={ (
-        <ModalTitle iconName='new-circle'>{ t('notes-and-events.new-note') }</ModalTitle>
+        <ModalTitle iconName='new'>{ t('notes-and-events.new-note') }</ModalTitle>
           ) }
     >
 

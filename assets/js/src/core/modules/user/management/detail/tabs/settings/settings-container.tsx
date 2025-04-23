@@ -13,7 +13,8 @@
 
 import { debounce } from 'lodash'
 import React, { useCallback, useEffect } from 'react'
-import { Form, Input, Col, Row, Flex, Typography } from 'antd'
+import { Input, Col, Row, Flex, Typography } from 'antd'
+import { Form } from '@Pimcore/components/form/form'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { useTranslation } from 'react-i18next'
@@ -46,6 +47,8 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
     if (!isLoading) {
       form.setFieldsValue({
         active: user?.active,
+        admin: user?.admin,
+        classes: user?.classes,
         name: user?.name,
         twoFactorAuthenticationEnabled: user?.twoFactorAuthenticationEnabled,
         firstname: user?.firstname,
@@ -147,7 +150,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
           />
         </Col>
         <Col span={ 8 }>
-          <UserAvatar />
+          <UserAvatar id={ id } />
         </Col>
         <Col span={ 16 }>
           <CustomisationAccordion />
@@ -164,18 +167,22 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
         <Col span={ 16 }>
           <EditorSettingsAccordion
             data={ user?.contentLanguages }
+            editData={ user?.websiteTranslationLanguagesEdit }
             onChange={ (languages) => { changeUserInState({ contentLanguages: languages }) } }
+            viewData={ user?.websiteTranslationLanguagesView }
           />
         </Col>
         <Col span={ 16 }>
           <SharedTranslationSettingsAccordion
             data={ validLanguages }
+            editData={ user?.websiteTranslationLanguagesEdit }
             onChange={ (languages) => {
               changeUserInState({
                 websiteTranslationLanguagesEdit: languages.filter((language) => language.edit).map((language) => language.abbreviation),
                 websiteTranslationLanguagesView: languages.filter((language) => language.view).map((language) => language.abbreviation)
               })
             } }
+            viewData={ user?.websiteTranslationLanguagesView }
           />
         </Col>
       </Row>

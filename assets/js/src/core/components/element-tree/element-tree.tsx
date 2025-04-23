@@ -13,7 +13,6 @@
 
 import React, {
   createContext,
-  type Dispatch,
   type ElementType,
   type MutableRefObject,
   useCallback,
@@ -21,45 +20,47 @@ import React, {
   useRef,
   useState
 } from 'react'
-import { TreeNode, type TreeNodeProps } from './node/tree-node'
+import { TreeNode as TreeNodeComponent, type TreeNodeProps } from './node/tree-node'
 import { TreeNodeContent, type TreeNodeContentProps } from './node/content/tree-node-content'
 import { useStyles } from './element-tree.styles'
 import { UploadProvider } from '@Pimcore/modules/element/upload/upload-provider'
 import { Skeleton } from './skeleton/skeleton'
 import { Box } from '../box/box'
+import { useElementTreeNode } from './hooks/use-element-tree-node'
+import { type TreeNode } from './element-tree-slice'
+import { TreeList } from './list/tree-list'
 
 export interface TreeSearchProps {
   node: TreeNodeProps
   isLoading?: boolean
-  mergeAdditionalQueryParams?: Dispatch<unknown>
   total: number
 }
 
 export interface TreePagerProps {
   node: TreeNodeProps
-  mergeAdditionalQueryParams: Dispatch<unknown>
   total: number
 }
 
 export interface TreeContextMenuProps {
   children: React.ReactNode
-  node: TreeNodeProps
+  node?: TreeNodeProps
 }
 
 export interface TreeProps {
   nodeId: number
-  nodeApiHook: any
-  maxItemsPerNode?: number
+  rootNode?: TreeNode
 
-  renderNode: ElementType<TreeNodeProps>
+  renderNode: typeof TreeNodeComponent
   renderNodeContent: ElementType<TreeNodeContentProps>
   contextMenu?: ElementType<TreeContextMenuProps>
   renderFilter?: ElementType<TreeSearchProps>
   renderPager?: ElementType<TreePagerProps>
 
-  onLoad?: (node: TreeNodeProps) => Promise<void>
-  onSelect?: (node: TreeNodeProps) => void
-  onRightClick?: (event: React.MouseEvent, node: TreeNodeProps) => void
+  onLoad?: (node: TreeNode) => Promise<void>
+  onSelect?: (node: TreeNode) => void
+  onRightClick?: (event: React.MouseEvent, node: TreeNode) => void
+
+  showRoot: boolean
 }
 
 export interface INodeRef {
@@ -68,17 +69,15 @@ export interface INodeRef {
 }
 
 export interface ITreeContext extends TreeProps {
-  selectedIdsState?: [string[], (ids: string[]) => void]
   nodesRefs?: MutableRefObject<Record<string, INodeRef>>
   nodeOrder?: () => string[]
 }
 
 export const defaultProps: TreeProps = {
   nodeId: 1,
-  nodeApiHook: () => {},
-  maxItemsPerNode: 30,
   renderNodeContent: TreeNodeContent,
-  renderNode: TreeNode
+  renderNode: TreeNodeComponent,
+  showRoot: true
 }
 
 export const TreeContext = createContext<ITreeContext>({
@@ -87,22 +86,19 @@ export const TreeContext = createContext<ITreeContext>({
 
 const ElementTree = (
   {
-    maxItemsPerNode = defaultProps.maxItemsPerNode,
-    nodeApiHook = defaultProps.nodeApiHook,
     renderNode = defaultProps.renderNode,
     renderNodeContent = defaultProps.renderNodeContent,
     contextMenu: ContextMenu,
+    rootNode,
     ...props
   }: TreeProps
 ): React.JSX.Element => {
-  const selectedIdsState = useState<string[]>([])
   const { styles } = useStyles()
   const { nodeId } = props
-  const { apiHookResult, dataTransformer } = nodeApiHook({
-    id: nodeId,
-    level: -1
-  })
-  const { isLoading, isError, data } = apiHookResult
+  const hasRootNode = rootNode !== undefined && parseInt(rootNode.id) === nodeId && props.showRoot
+  const preparedRootNode = rootNode
+  const { getChildren, isLoading } = useElementTreeNode(String(nodeId))
+
   const nodesRefs = useRef<Record<string, INodeRef>>({})
   const nodeOrder = useCallback(() => {
     return Object.keys(nodesRefs.current).sort((a: string, b: string) => {
@@ -129,45 +125,42 @@ const ElementTree = (
     setRightClickedNode(node)
   }
 
-  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, selectedIdsState, nodesRefs, nodeOrder, maxItemsPerNode, nodeApiHook, renderNode, renderNodeContent, onRightClick }), [props, selectedIdsState, nodesRefs, nodeOrder, maxItemsPerNode, nodeApiHook, renderNode, renderNodeContent, onRightClick])
+  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, nodesRefs, nodeOrder, renderNode, renderNodeContent, onRightClick }), [props, nodesRefs, nodeOrder, renderNode, renderNodeContent, onRightClick])
 
-  if (isError !== false) {
-    return (<div>{'Error'}</div>)
-  }
-
-  let items: any[] = []
-
-  if (isLoading === false && data !== undefined) {
-    const { nodes } = dataTransformer(data)
-    items = nodes
-  }
+  const items: string[] = getChildren()
 
   const TreeNode = renderNode
-
   const treeContent = (
     <div className={ ['tree', styles.tree].join(' ') }>
       <TreeContext.Provider value={ treeContextValue }>
-        {items.map((item, index) => (
+        {hasRootNode && (
           <TreeNode
-            internalKey={ `${index}` }
-            key={ item.id }
-            { ...item }
+            key={ preparedRootNode!.id }
+            level={ -1 }
+            { ...preparedRootNode! }
           />
-        ))}
+        )}
+
+        {!hasRootNode && (
+          <TreeList
+            node={ { ...preparedRootNode!, level: -1 } }
+          />
+
+        )}
       </TreeContext.Provider>
     </div>
   )
 
   return (
     <UploadProvider>
-      {isLoading === true && (
+      {isLoading === true && !hasRootNode && (
         <Box padding={ { left: 'extra-small' } }>
           <Skeleton />
         </Box>
       )}
 
-      {isLoading === false && items.length !== 0 && (
-        ContextMenu !== undefined && rightClickedNode !== undefined
+      {(items.length !== 0 || hasRootNode) && (
+        ContextMenu !== undefined
           ? (
             <ContextMenu node={ rightClickedNode }>
               {treeContent}

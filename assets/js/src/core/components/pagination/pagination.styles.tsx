@@ -16,20 +16,32 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     pagination: css`
+      .ant-pagination {
+        display: flex;
+        align-items: center;
+        margin-left: ${token.marginXXS}px;
+      }
+      
       .ant-pagination .ant-pagination-item {
-        padding: unset;
-        margin-top: unset;
-        margin-bottom: unset;
-        vertical-align: middle;
+        border: 0;
       }
 
       button.page-number-node {
-        color: black;
+        color: ${token.colorText};
         text-align: center;
-        vertical-align: text-bottom;
         box-shadow: none;
-        padding: 0 2px 2px 0;
-        border: none;
+        border: 1px solid transparent;
+        padding: ${token.paddingXXS}px;
+        background-color: ${token.colorBgContainer};
+        
+        &:hover {
+          border-color: ${token.colorPrimary};
+          color: ${token.colorPrimary};
+        }
+      }
+      .ant-pagination-item-active .page-number-node {
+        color: ${token.colorPrimary};
+        border-color: ${token.colorPrimary};
       }
 
       button.page-number-node, .ant-pagination .ant-pagination-item {
@@ -40,6 +52,19 @@ export const useStyle = createStyles(({ token, css }) => {
       
       & .ant-pagination-item-active span {
         color: ${token.colorPrimary};
+        background: ${token.colorBgContainer};
+      }
+      
+      .ant-pagination-item-link {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .ant-pagination .ant-pagination-total-text {
+        height: auto;
+        line-height: 1;
+        margin-right: ${token.marginXXS}px;
       }
     `
   }

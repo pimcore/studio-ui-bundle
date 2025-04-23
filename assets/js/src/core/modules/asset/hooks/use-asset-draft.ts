@@ -11,16 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
-import { api as assetApi, type AssetGetByIdApiResponse, type Image, type ImageData } from '../asset-api-slice-enhanced'
+import { useAppSelector } from '@Pimcore/app/store'
 import {
   addCustomMetadataToAsset,
   addImageSettingsToAsset,
   addPropertyToAsset,
-  addScheduleToAsset,
-  assetReceived,
-  removeAsset,
-  removeCustomMetadataFromAsset,
+  addScheduleToAsset, removeCustomMetadataFromAsset,
+  setCustomSettingsForAsset,
+  removeCustomSettingsFromAsset,
   removeImageSettingFromAsset,
   removePropertyFromAsset,
   removeScheduleFromAsset,
@@ -36,10 +34,10 @@ import {
   updateCustomMetadataForAsset,
   updateImageSettingForAsset,
   updatePropertyForAsset,
-  updateScheduleForAsset
+  updateScheduleForAsset,
+  updateTextDataForAsset
 } from '../asset-draft-slice'
 import { useEffect, useState } from 'react'
-import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
 import { usePropertiesDraft, type UsePropertiesDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import {
   useCustomMetadataDraft,
@@ -57,122 +55,39 @@ import { useSchedulesDraft, type UseSchedulesDraftReturn } from '@Pimcore/module
 import { type ElementEditorType, type TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { initialTabsStateValue, useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-tabs'
+import { useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-tabs'
+import { useTextDataDraft, type UseTextDataDraftReturn } from '@Pimcore/modules/asset/draft/hooks/use-text-settings'
+import { useCustomSettingsDraft, type UseCustomSettingsDraftReturn } from '@Pimcore/modules/asset/draft/hooks/use-custom-settings'
+import { isFailedDraftId } from '../asset-draft-error-slice'
 
-interface UseAssetDraftReturn extends
+export interface UseAssetDraftReturn extends
   UseCustomMetadataDraftReturn,
+  UseCustomSettingsDraftReturn,
   UsePropertiesDraftReturn,
   UseSchedulesDraftReturn,
   UseTrackableChangesDraftReturn,
   UseTabsDraftReturn,
+  UseTextDataDraftReturn,
   UseImageSettingsDraftReturn {
   isLoading: boolean
   isError: boolean
   asset: undefined | ReturnType<typeof selectAssetById>
   editorType: ElementEditorType | undefined
-
-  removeAssetFromState: () => void
-
-  fetchAsset: () => void
-}
-
-interface DynamicCustomSettings {
-  focalPointX: number
-  focalPointY: number
 }
 
 export const useAssetDraft = (id: number): UseAssetDraftReturn => {
-  const dispatch = useAppDispatch()
   const asset = useAppSelector(state => selectAssetById(state, id))
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [isError, setIsError] = useState<boolean>(false)
   const typeRegistry = useInjection<TypeRegistryInterface>(serviceIds['Asset/Editor/TypeRegistry'])
-
-  async function getAsset (): Promise<AssetGetByIdApiResponse> {
-    const { data } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
-
-    if (data !== undefined) {
-      return data
-    }
-
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    return {} as Image
-  }
-
-  async function getCustomSettings (): Promise<ImageData> {
-    let objectToReturn: ImageData = {}
-    const { data, isSuccess } = await dispatch(settingsApi.endpoints.assetCustomSettingsGetById.initiate({ id }))
-
-    if (isSuccess && data !== undefined) {
-      const settings = data.items!
-      const dynamicSettings = settings?.dynamicCustomSettings as any as DynamicCustomSettings
-
-      if (
-        dynamicSettings !== undefined &&
-        Object.prototype.hasOwnProperty.call(dynamicSettings, 'focalPointX') === true &&
-        Object.prototype.hasOwnProperty.call(dynamicSettings, 'focalPointY') === true
-      ) {
-        const focalPoint: ImageData['focalPoint'] = {
-          x: dynamicSettings.focalPointX,
-          y: dynamicSettings.focalPointY
-        }
-
-        objectToReturn = {
-          ...objectToReturn,
-          focalPoint
-        }
-      }
-    }
-
-    return objectToReturn
-  }
+  const isError = useAppSelector((state) => isFailedDraftId(state, id))
 
   useEffect(() => {
     if (asset === undefined) {
-      fetchAsset()
+      setIsLoading(true)
     } else {
       setIsLoading(false)
     }
   }, [asset])
-
-  function fetchAsset (): void {
-    setIsLoading(true)
-
-    Promise.all([
-      getAsset(),
-      getCustomSettings()
-    ]).then(([assetData, customSettingsResponse]) => {
-      const mergedAssetData = {
-        ...assetData,
-        id,
-        modified: false,
-        properties: [],
-        customMetadata: [],
-        schedules: [],
-        imageSettings: customSettingsResponse,
-        changes: {},
-        modifiedCells: {},
-        ...initialTabsStateValue
-      }
-
-      if (assetData !== undefined) {
-        dispatch(assetReceived(mergedAssetData))
-      }
-
-      return mergedAssetData
-    }).catch((e) => {
-      console.error(e)
-      setIsError(true)
-    }).finally(() => {
-      setIsLoading(false)
-    })
-  }
-
-  function removeAssetFromState (): void {
-    if (asset === undefined) return
-
-    dispatch(removeAsset(asset.id))
-  }
 
   const trackableChangesActions = useTrackableChangesDraft(
     id,
@@ -209,6 +124,13 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     updateAllCustomMetadataForAsset
   )
 
+  const customSettingsActions = useCustomSettingsDraft({
+    id,
+    draft: asset,
+    setCustomSettingsAction: setCustomSettingsForAsset,
+    removeCustomSettingsAction: removeCustomSettingsFromAsset
+  })
+
   const imageSettingsActions = useImageSettingsDraft(
     id,
     asset,
@@ -216,6 +138,12 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     removeImageSettingFromAsset,
     updateImageSettingForAsset
   )
+
+  const textDataActions = useTextDataDraft({
+    id,
+    draft: asset,
+    updateTextDataAction: updateTextDataForAsset
+  })
 
   const tabsActions = useTabsDraft(
     id,
@@ -232,13 +160,13 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     isError,
     asset,
     editorType,
-    removeAssetFromState,
-    fetchAsset,
     ...trackableChangesActions,
     ...propertyActions,
     ...schedulesActions,
     ...customMetadataActions,
+    ...customSettingsActions,
     ...imageSettingsActions,
+    ...textDataActions,
     ...tabsActions
   }
 }

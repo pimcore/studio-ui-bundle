@@ -21,6 +21,7 @@ export function onKeyEnterExecuteClick (e: any): void {
   }
 }
 
+// TODO: Use _.isNil from Lodash instead of the custom implementation below
 export function isSet (par: any): boolean {
   return par !== null && par !== undefined
 }

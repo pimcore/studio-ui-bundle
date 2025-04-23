@@ -13,36 +13,45 @@
 
 import React from 'react'
 import { Spin as AntdSpin, type SpinProps as AntdSpinProps } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
 import { Icon } from '../icon/icon'
 import { useStyles } from './spin.styles'
 
-interface SpinProps extends AntdSpinProps {
+interface SpinProps extends Omit<AntdSpinProps, 'indicator'> {
+  type?: 'dotted' | 'classic'
   asContainer?: boolean
 };
 
-export const Spin = ({ asContainer = false, tip, ...props }: SpinProps): React.JSX.Element => {
+export const Spin = ({ asContainer = false, type = 'dotted', tip, ...props }: SpinProps): React.JSX.Element => {
   const { styles } = useStyles()
+
+  let icon = (
+    <Icon
+      className={ styles.spin }
+      value='spinner'
+    />
+  )
+
+  if (type === 'classic') {
+    icon = (
+      <LoadingOutlined spin />
+    )
+  }
 
   return (
     <>
       { !asContainer && (
-        <AntdSpin
-          indicator={ <Icon
-            className={ styles.spin }
-            value='spinner'
-                      /> }
-          { ...props }
-        />
+        <>
+          {icon}
+        </>
       )}
 
       { asContainer && (
         <div className={ styles.spinContainer }>
           <AntdSpin
-            indicator={ <Icon
-              className={ styles.spin }
-              options={ { width: 20, height: 20 } }
-              value='spinner'
-                        /> }
+            indicator={ <>
+              {icon}
+            </> }
             { ...props }
           />
 

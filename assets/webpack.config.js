@@ -17,6 +17,7 @@ const path = require('path')
 const webpack = require('webpack')
 const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const uuid = require('uuid');
 const buildId = uuid.v4();
 const fs = require('fs');
@@ -140,6 +141,8 @@ Encore
     `
   }))
 
+  .addPlugin(new ForkTsCheckerWebpackPlugin())
+
 if (!Encore.isDevServer()) {
   // only needed for CDN's or sub-directory deploy
   Encore
@@ -167,7 +170,11 @@ if (!Encore.isDevServer() && !Encore.isProduction()) {
 
 if (Encore.isDevServer()) {
   if (fs.existsSync( path.resolve(__dirname, '..', 'public', 'build'))) {
-    fs.rmSync(path.resolve(__dirname, '..', 'public', 'build'), { recursive: true });
+    fs.readdirSync(path.resolve(__dirname, '..', 'public', 'build')).forEach((file) => {
+      if (file !== 'studio-npm-package.tgz') {
+        fs.rmSync(path.resolve(__dirname, '..', 'public', 'build', file), { recursive: true });
+      }
+    })
   }
 
   if (!fs.existsSync(buildPath)) {

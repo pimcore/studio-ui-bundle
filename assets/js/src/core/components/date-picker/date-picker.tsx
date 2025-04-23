@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { type PickerProps } from 'antd/lib/date-picker/generatePicker/interface'
 import { DatePicker as OriginalDatePicker } from 'antd'
 import { type Dayjs } from 'dayjs'
@@ -23,31 +23,41 @@ import {
 } from './utils/date-picker-utils'
 import { DateRangePicker, type DateRangePickerProps } from '@Pimcore/components/date-picker/date-range-picker'
 import { TimePicker, type TimePickerProps } from '@Pimcore/components/date-picker/time-picker'
+import _ from 'lodash'
+import { useStyles } from './date-picker.styles'
+import cn from 'classnames'
 
 export type DatePickerProps = PickerProps & {
   value?: DatePickerValueType
   onChange?: (date: DatePickerValueType) => void
   outputType?: OutputType
   outputFormat?: string
+  disabled?: boolean
+  inherited?: boolean
 }
 
 const DatePickerComponent = (props: DatePickerProps): React.JSX.Element => {
-  const outputFormat = props?.outputFormat
-
-  const [value, setValue] = React.useState<Dayjs | null>(toDayJs(props.value))
+  const [value, setValue] = useState<Dayjs | null>(toDayJs(props.value))
+  const { styles } = useStyles()
 
   useEffect(() => {
-    if (props.onChange !== undefined) {
-      props.onChange(fromDayJs(value, props.outputType, props.outputFormat))
+    const localValue = fromDayJs(value, 'timestamp')
+    if (!_.isEqual(fromDayJs(toDayJs(props.value), 'timestamp'), localValue)) {
+      setValue(toDayJs(props.value))
     }
-  }, [value, props.outputType, outputFormat])
+  }, [props.value])
 
   return (
     <OriginalDatePicker
       { ...props }
+      format={ props.outputFormat }
       onChange={ (date: Dayjs | null) => {
         setValue(date)
+        props.onChange?.(fromDayJs(date, props.outputType, props.outputFormat))
       } }
+      popupClassName={ styles.datePickerDropdown }
+      rootClassName={ cn(styles.datePicker, props.className, { [styles.inherited]: props.inherited }) }
+      showTime={ props.showTime }
       value={ value }
     />
   )

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US">
+<head>
+    <title>Image Editor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        .cursor-pointer {
+            cursor: pointer;
+        }
+    </style>
+    <base href="/bundles/pimcorestudioui/js/lib/minipaint/" />
+    <script src="dist/bundle.js"></script>
+</head>
+<body>
+<div class="wrapper">
+    <nav aria-label="Main Menu" class="main_menu" id="main_menu"></nav>
+
+    <div class="submenu">
+        <div class="block attributes" id="action_attributes"></div>
+        <div class="clear"></div>
+        <button class="undo_button" id="undo_button" type="button">
+            <span class="sr_only">Undo</span>
+        </button>
+    </div>
+
+    <div class="sidebar_left" id="tools_container"></div>
+
+    <div class="middle_area" id="middle_area">
+
+        <canvas class="ruler_left" id="ruler_left"></canvas>
+        <canvas class="ruler_top" id="ruler_top"></canvas>
+
+        <div class="main_wrapper" id="main_wrapper">
+            <div class="canvas_wrapper" id="canvas_wrapper">
+                <div id="mouse"></div>
+                <div class="transparent-grid" id="canvas_minipaint_background"></div>
+                <canvas id="canvas_minipaint">
+                    <div class="trn error">
+                        Your browser does not support canvas or JavaScript is not enabled.
+                    </div>
+                </canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar_right">
+        <div class="preview block">
+            <h2 class="trn toggle" data-target="toggle_preview">Preview</h2>
+            <div id="toggle_preview"></div>
+        </div>
+
+        <div class="colors block">
+            <h2 class="trn toggle" data-target="toggle_colors">Colors</h2>
+            <input
+                    title="Click to change color"
+                    type="color"
+                    class="color_area"
+                    id="main_color"
+                    value="#0000ff"	/>
+            <div class="content" id="toggle_colors"></div>
+        </div>
+
+        <div class="block" id="info_base">
+            <h2 class="trn toggle toggle-full" data-target="toggle_info">Information</h2>
+            <div class="content" id="toggle_info"></div>
+        </div>
+
+        <div class="details block" id="details_base">
+            <h2 class="trn toggle toggle-full" data-target="toggle_details">Layer details</h2>
+            <div class="content" id="toggle_details"></div>
+        </div>
+
+        <div class="layers block">
+            <h2 class="trn">Layers</h2>
+            <div class="content" id="layers_base"></div>
+        </div>
+    </div>
+</div>
+<div class="mobile_menu">
+    <button class="left_mobile_menu" id="left_mobile_menu_button" type="button">
+        <span class="sr_only">Toggle Menu</span>
+    </button>
+    <button class="right_mobile_menu" id="mobile_menu_button" type="button">
+        <span class="sr_only">Toggle Menu</span>
+    </button>
+</div>
+<div class="hidden" id="tmp"></div>
+<div id="popups"></div>
+
+{% set imageFileExtension = pimcore_file_extension(asset.getFilename()) %}
+{% set imageUrl = path('pimcore_studio_api_stream_image', {id: asset.getId()}) %}
+
+{% if imageFileExtension not in ['png', 'jpg', 'jpeg'] %}
+    {% set imageUrl = path('pimcore_studio_api_stream_image_custom', {id: asset.getId(), mimeType: 'png', resizeMode: 'none' }) %}
+{% endif %}
+
+<img style="visibility: hidden" id='image' src="{{ imageUrl }}" alt="editor preview" />
+<script {{ pimcore_csp.getNonceHtmlAttribute()|raw }}>
+
+    /**
+     * wait for image editor to be fully available
+     * before loading image to editor
+     */
+    async function loadEditor(e) {
+        return new Promise(resolve => {
+            var checkInterval = setInterval(async () => {
+                if (window.Layers) {
+                    clearInterval(checkInterval);
+
+                    const translationKeys = await getTranslation()
+                    manipulateMenuBar(translationKeys);
+
+                    loadImageToEditor(e);
+
+                    resolve(true);
+                }
+            }, 300);
+        });
+    }
+
+    async function getTranslation() {
+        const url = '{{ path('pimcore_studio_api_translations') }}';
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ locale: 'en', keys: ["save"] })
+        });
+
+        const data = await response.json();
+
+        return data.keys;
+    }
+
+    function loadImageToEditor(e) {
+        const image = document.getElementById('image');
+
+        window.Layers.insert({
+            name: "{{ asset.getFilename() }}",
+            type: 'image',
+            data: image,
+            width: image.naturalWidth || image.width,
+            height: image.naturalHeight || image.height,
+            width_original: image.naturalWidth || image.width,
+            height_original: image.naturalHeight || image.height,
+        });
+
+        document.getElementById('save_button').addEventListener('click', function () {
+            let tempCanvas = document.createElement("canvas");
+
+            const tempCtx = tempCanvas.getContext("2d");
+            const dim = window.Layers.get_dimensions();
+            tempCanvas.width = dim.width;
+            tempCanvas.height = dim.height;
+            Layers.convert_layers_to_canvas(tempCtx);
+
+            const dataUri = tempCanvas.toDataURL('image/{{ imageFileExtension == "png" ? "png" : "jpeg" }}');
+            const url = '{{ path('pimcore_studio_api_update_asset', {id: asset.getId()}) }}';
+
+            const isDev = window.location.origin.includes('localhost')
+            const devTargetOrigin = window.location.origin
+            const prodTargetOrigin = 'https://studionightly.pimcore.app'
+
+            fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ data: { dataUri } })
+            }).then((response) => {
+                if (response.ok) {
+                    // Post a message to the Preview Asset Tab
+                    window.parent.postMessage({
+                        type: 'MiniPaint',
+                        status: 'success',
+                        message: 'Image successfully saved!'
+                    }, isDev ? devTargetOrigin : prodTargetOrigin);
+                }
+            });
+
+            return false;
+        });
+    }
+
+    function manipulateMenuBar(translationKeys) {
+        const menuBar = document.getElementsByClassName('menu_bar')[0];
+        const liElement = document.createElement('li');
+        const aElement = document.createElement('a');
+        const spanElement = document.createElement('span');
+
+        aElement.setAttribute('id', 'save_button');
+        aElement.setAttribute('role', 'menu_item');
+        aElement.setAttribute('tabindex', '-1');
+        aElement.setAttribute('aria-haspopup', 'false');
+        aElement.classList.add('cursor-pointer');
+        aElement.setAttribute('aria-expanded', 'false');
+        spanElement.setAttribute('class', 'name trn');
+        spanElement.innerText = translationKeys['save']
+
+        aElement.appendChild(spanElement);
+        liElement.appendChild(aElement);
+        menuBar.prepend(liElement);
+
+        document.getElementById('main_menu_0_0').addEventListener('click', () => {
+            document.getElementById('main_menu_1_10').remove();
+            document.getElementById('main_menu_1_11').remove();
+        })
+
+        removeHref();
+
+        document.getElementsByTagName('nav')[0].addEventListener('click', (e) => {
+            removeHref();
+        });
+    }
+
+    function removeHref() {
+        const allLinkElements = document.getElementsByTagName('nav')[0].querySelectorAll("a");
+        for (let a of allLinkElements) {
+            if (a.getAttribute('href') === 'javascript:void(0)') {
+                a.classList.add('cursor-pointer');
+                a.removeAttribute('href');
+            }
+        }
+    }
+
+    window.addEventListener("load", function(e) {
+        loadEditor(e);
+    }, false);
+</script>
+</body>
+</html>

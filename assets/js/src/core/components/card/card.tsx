@@ -19,6 +19,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { PimcoreImage as Image } from '@Pimcore/components/pimcore-image/pimcore-image'
 import { useTranslation } from 'react-i18next'
 import { Box, type BoxProps } from '../box/box'
+import { Flex, type FlexProps } from '../flex/flex'
 
 export interface CardProps extends AntdCardProps {
   loading?: boolean
@@ -26,10 +27,10 @@ export interface CardProps extends AntdCardProps {
   onClose?: () => void
   icon?: string
   image?: { src: string, alt?: string } | null
-  extra?: any[]
   footer?: React.ReactNode
-  theme?: 'default' | 'fieldset' | 'card-with-highlight'
+  theme?: 'default' | 'fieldset' | 'card-with-highlight' | 'border-highlight'
   contentPadding?: BoxProps['padding']
+  extraPosition?: FlexProps['justify']
 }
 
 const Component = ({ loading, children, footer, fitContent, className, theme = 'default', contentPadding = 'small', ...props }: CardProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
@@ -45,7 +46,10 @@ const Component = ({ loading, children, footer, fitContent, className, theme = '
 
   const renderExtraContent = (): React.ReactElement | null => {
     return (
-      <Fragment>
+      <Flex
+        className='w-full'
+        justify={ props.extraPosition ?? 'flex-end' }
+      >
         {Array.isArray(props.extra)
           ? (
             <div>
@@ -65,7 +69,7 @@ const Component = ({ loading, children, footer, fitContent, className, theme = '
               ))}
             </div>
             )
-          : null}
+          : props.extra}
 
         {props.onClose !== undefined
           ? (
@@ -79,7 +83,7 @@ const Component = ({ loading, children, footer, fitContent, className, theme = '
             />
             )
           : null}
-      </Fragment>
+      </Flex>
     )
   }
 
@@ -108,9 +112,11 @@ const Component = ({ loading, children, footer, fitContent, className, theme = '
       extra={ props.extra !== undefined && props.extra !== null ? renderExtraContent() : null }
       title={ props.title !== undefined && props.title !== null ? renderTitle() : null }
     >
+      {children !== undefined && (
       <Box padding={ contentPadding }>
         {children}
       </Box>
+      )}
 
       {footer !== undefined && (
       <div className="card-footer">

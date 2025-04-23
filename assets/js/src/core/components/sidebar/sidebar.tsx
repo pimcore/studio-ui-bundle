@@ -16,7 +16,7 @@ import React, { isValidElement, useState } from 'react'
 import { type ISidebarButton, type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
-interface SidebarProps {
+export interface SidebarProps {
   entries: ISidebarEntry[]
   buttons?: ISidebarButton[]
   sizing?: 'large' | 'default'
@@ -65,7 +65,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
                   aria-selected={ entry.key === activeTab }
                   className={ [
                     'entry',
-                    entry.key === activeTab ? 'active' : '',
+                    entry.key === activeTab ? 'sidebar--active' : '',
                     highlights.includes(entry.key) ? 'entry--highlighted' : ''
                   ].join(' ') }
                   key={ entry.key }
@@ -113,7 +113,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
           return (
             <div
               aria-labelledby={ entry.key }
-              className={ 'tab ' + (entry.key === activeTab ? 'active' : '') }
+              className={ 'tab ' + (entry.key === activeTab ? 'sidebar--active' : '') }
               id={ entry.key }
               key={ entry.key }
               role="tabpanel"

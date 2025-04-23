@@ -2,6 +2,9 @@
 {# @var studioJsFiles string[] #}
 {# @var bundleCssFiles string[] #}
 {# @var bundleJsFiles string[] #}
+{# @var additionalCssFiles string[] #}
+{# @var additionalJsFiles string[] #}
+{# @var wysiwygConfiguration [] #}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -15,12 +18,17 @@
         {% for cssFile in bundleCssFiles %}
             <link rel="stylesheet" href="{{ cssFile }}"/>
         {% endfor %}
+
+        {% for cssFile in additionalCssFiles %}
+            <link rel="stylesheet" href="{{ cssFile }}"/>
+        {% endfor %}
     </head>
 
     <body>
         <div id="app" data-app-config="{{ {
             baseUrl: baseUrl ~ '/',
             mercureUrl: mercureUrl,
+            wysiwyg: wysiwygConfiguration,
         }|json_encode }}"></div>
 
         {% for jsFile in studioJsFiles %}
@@ -29,6 +37,10 @@
 
         {% for jsFile in bundleJsFiles %}
             <script data-pimcore-studio-plugin="{{ jsFile }}"></script>
+        {% endfor %}
+
+        {% for jsFile in additionalJsFiles %}
+            <script src="{{ jsFile }}"></script>
         {% endfor %}
     </body>
 </html>

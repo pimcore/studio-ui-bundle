@@ -82,6 +82,16 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["User Management"],
             }),
+            userUpdateActivePerspective: build.mutation<
+                UserUpdateActivePerspectiveApiResponse,
+                UserUpdateActivePerspectiveApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/user/active-perspective/${queryArg.perspectiveId}`,
+                    method: "PUT",
+                }),
+                invalidatesTags: ["User Management"],
+            }),
             userUpdatePasswordById: build.mutation<UserUpdatePasswordByIdApiResponse, UserUpdatePasswordByIdApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/user/${queryArg.id}/password`,
@@ -124,14 +134,14 @@ export type UserCloneByIdApiArg = {
 export type UserCreateApiResponse = /** status 200 Node of the new created User. */ TreeNode;
 export type UserCreateApiArg = {
     body: {
-        parentId: number | null;
+        parentId: any;
         name: string;
     };
 };
 export type UserFolderCreateApiResponse = /** status 200 Node of the new created Folder. */ TreeNode;
 export type UserFolderCreateApiArg = {
     body: {
-        parentId: number | null;
+        parentId: any;
         name: string;
     };
 };
@@ -185,6 +195,12 @@ export type PimcoreStudioApiUserSearchApiArg = {
     /** Query to search for an user. This can be a part of username, firstname, lastname, email or id. */
     searchQuery?: string;
 };
+export type UserUpdateActivePerspectiveApiResponse =
+    /** status 200 Updated active perspective for the current user. */ void;
+export type UserUpdateActivePerspectiveApiArg = {
+    /** Set active perspective by Id */
+    perspectiveId: string;
+};
 export type UserUpdatePasswordByIdApiResponse = /** status 200 Success */ void;
 export type UserUpdatePasswordByIdApiArg = {
     /** Id of the User */
@@ -219,7 +235,7 @@ export type UserGetTreeApiArg = {
 export type TreeNode = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** Unique Identifier */
     id: number;
@@ -240,17 +256,49 @@ export type DevError = {
     /** Details */
     details: string;
 };
+export type ElementIcon = {
+    /** Icon type */
+    type: "name" | "path";
+    /** Icon value */
+    value: string;
+};
+export type PerspectiveConfig = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Perspective ID */
+    id: string;
+    /** Name */
+    name: string;
+    /** Icon */
+    icon: ElementIcon;
+    /** Is Writeable */
+    isWriteable: boolean;
+};
 export type UserInformation = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
+    /** User ID */
+    id: number;
     /** Username */
     username: string;
     /** Permissions */
     permissions: string[];
     /** If user is an admin user */
     isAdmin: boolean;
+    /** Allowed classes to create */
+    classes: string[];
+    /** Allowed doc types to create */
+    docTypes: string[];
+    /** User Language */
+    language: string;
+    /** Active studio perspective ID */
+    activePerspective: any;
+    /** Allowed studio perspectives */
+    perspectives: PerspectiveConfig[];
 };
 export type KeyBindingForAUser = {
     /** ASCII Code for a key on the Keyboard */
@@ -305,18 +353,18 @@ export type UserObjectDependencies = {
 export type User = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** ID of the User */
     id: number;
     /** Name of Folder or User */
-    name?: string | null;
+    name?: any;
     /** Email of the User */
-    email?: string | null;
+    email?: any;
     /** Firstname of the User */
-    firstname?: string | null;
+    firstname?: any;
     /** Lastname of the User */
-    lastname?: string | null;
+    lastname?: any;
     /** If a User is active */
     active: boolean;
     /** If User is admin */
@@ -333,9 +381,9 @@ export type User = {
     /** Language of the User */
     language: string;
     /** Timestamp of the last login */
-    lastLogin?: number | null;
+    lastLogin?: any;
     memorizeTabs: boolean;
-    parentId: number | null;
+    parentId: any;
     /** List of permissions for the user */
     permissions: object;
     /** ID List of roles the user is assigned */
@@ -350,15 +398,18 @@ export type User = {
     dataObjectWorkspaces: UserWorkspace[];
     /** Document Workspace */
     documentWorkspaces: UserWorkspace[];
+    /** Object Dependencies */
     objectDependencies: UserObjectDependencies;
+    /** Allowed studio perspectives */
+    perspectives: PerspectiveConfig[];
 };
 export type User2 = {
     /** Email of the User */
-    email?: string | null;
+    email?: any;
     /** Firstname of the User */
-    firstname?: string | null;
+    firstname?: any;
     /** Lastname of the User */
-    lastname?: string | null;
+    lastname?: any;
     /** If User is admin */
     admin?: boolean;
     /** If User is active */
@@ -389,11 +440,13 @@ export type User2 = {
     dataObjectWorkspaces: UserWorkspace[];
     /** Document Workspace */
     documentWorkspaces: UserWorkspace[];
+    /** Allowed studio perspectives */
+    perspectives: object;
 };
 export type UserPermission = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** Key of the Permission */
     key: string;
@@ -403,7 +456,7 @@ export type UserPermission = {
 export type SimpleUser = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** ID of the User */
     id: number;
@@ -428,6 +481,7 @@ export const {
     useUserGetCollectionQuery,
     useUserResetPasswordMutation,
     usePimcoreStudioApiUserSearchQuery,
+    useUserUpdateActivePerspectiveMutation,
     useUserUpdatePasswordByIdMutation,
     useUserUploadImageMutation,
     useUserGetImageQuery,

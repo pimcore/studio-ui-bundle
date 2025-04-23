@@ -35,6 +35,10 @@ export const useStyles = createStyles(({ token, css }) => {
         padding: ${token.Table.cellPaddingBlockSM}px ${token.Table.cellPaddingInlineSM}px;
       }
 
+      &.ant-table-wrapper .ant-table.ant-table-small .ant-table-thead>tr>th {
+        padding: ${token.paddingXXS}px ${token.paddingXS}px;
+      }
+
       &.ant-table-wrapper .ant-table.ant-table-small .ant-table-tbody>tr>td {
         padding: 0;
       }
@@ -95,6 +99,22 @@ export const useStyles = createStyles(({ token, css }) => {
             }
           }
       }
+      
+      &.versionFieldItem {
+        .ant-table-content {
+          table {
+            width: 100% !important;
+          }
+        }
+      }
+
+      &.versionFieldItemHighlight {
+        .ant-table-content {
+          table {
+            border-color: ${token.Colors.Brand.Warning.colorWarningBorder} !important;
+          }
+        }
+      }
 
       .grid__cell-content {
         display: flex;
@@ -120,6 +140,13 @@ export const useStyles = createStyles(({ token, css }) => {
 
       .ant-table-row-selected td {
         background-color: ${token.controlItemBgActive};
+      }
+    `,
+
+    disabledGrid: css`
+      .ant-table-cell {
+        background-color: ${token.colorBgContainerDisabled};
+        color: ${token.colorTextDisabled};
       }
     `
   }

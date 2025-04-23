@@ -30,6 +30,9 @@ export const useStlyes = createStyles(({
       max-width: 90vw;
       min-width: 530px;
       text-align: left;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
       
       .main-nav__top {
         display: flex;
@@ -64,9 +67,10 @@ export const useStlyes = createStyles(({
         margin: 0;
         list-style: none;
         width: 100%;
-        //width: 25%;
         padding: 0 ${token.paddingXS}px;
         font-size: ${token.fontSize}px;
+        position: relative;
+        max-height: 100%;
       }
 
       .main-nav__list--level-0 {
@@ -81,29 +85,49 @@ export const useStlyes = createStyles(({
         }
       }
 
+      .main-nav__list:not(.main-nav__list--level-0) {
+        position: static;
+      }
+
       .main-nav__list--level-1 {
         padding: ${token.paddingXS}px;
       }
-      
-      .main-nav__list:not(.main-nav__list--level-0) {
+
+      .main-nav__list-detail {
         position: absolute;
         left: 100%;
+        width: 100%;
         top: 0;
+        bottom: 0;
         transform: translateX(-15px);
         opacity: 0;
         visibility: hidden;
         transition: transform 200ms ease-in-out, opacity 200ms ease-in-out;
       }
-      
-      .is-active > .main-nav__list {
+
+      .is-active > .main-nav__list-detail {
         opacity: 1;
         transform: translateX(0);
         visibility: visible;
       }
-      
-      .main-nav__list-item {
-        position: relative;
+
+      .main-nav__list-detail-scroll-container {
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        max-height: 100%;
       }
+
+      .main-nav__list-detail-scroll {
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+        scroll-snap-type: x mandatory;
+      }
+
       .main-nav__list-btn {
         background: none;
         border: 0;

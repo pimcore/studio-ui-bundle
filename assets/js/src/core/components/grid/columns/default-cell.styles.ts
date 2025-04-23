@@ -19,7 +19,11 @@ export const useStyle = createStyles(({ token, css }) => {
       display: flex;
       width: 100%;
       height: 100%;
-    
+
+      &.default-cell--active:not(:focus):not(.default-cell--edit-mode) {
+        background-color: ${token.controlItemBgActive};
+      }
+      
       &:focus {
         outline: 1px solid ${token.colorPrimaryActive};
         outline-offset: -1px;

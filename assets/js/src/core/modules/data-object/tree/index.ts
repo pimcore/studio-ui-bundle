@@ -16,13 +16,14 @@ import { container } from '@Pimcore/app/depency-injection'
 import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { DataObjectTreeContextMenu } from '@Pimcore/modules/data-object/tree/context-menu/context-menu'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 
 moduleSystem.registerModule({
   onInit: () => {
     const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
 
     componentRegistry.register({
-      name: 'dataObjectTreeContextMenu',
+      name: componentConfig.dataObject.tree.contextMenu.name,
       component: DataObjectTreeContextMenu
     })
   }

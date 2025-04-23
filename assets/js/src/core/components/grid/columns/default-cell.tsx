@@ -34,6 +34,7 @@ export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element =
   const cellType = useMemo(() => column.columnDef.meta?.type ?? 'text', [column.columnDef.meta?.type])
   const [isInEditMode, setIsInEditMode] = useState(false)
   const element = useRef<HTMLInputElement>(null)
+  const [columnWrapperWidth, setColumnWrapperWidth] = useState<number | undefined>(undefined)
   // @todo move to new dynamic type system
   // const typeRegistry = useInjection<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
   const { handleArrowNavigation } = useKeyboardNavigation(props)
@@ -61,6 +62,7 @@ export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element =
   }
 
   return useMemo(() => {
+    const isInAutoWidthColumnEditMode = isInEditMode && column.columnDef.meta?.editable === true && column.columnDef.meta?.autoWidth === true
     return (
       <div
         className={ [styles['default-cell'], ...getCssClasses()].join(' ') }
@@ -68,23 +70,34 @@ export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element =
         data-grid-row={ row.index }
         // @todo move to new dynamic type system
         // onCopy={ onCopy }
+        key={ isInAutoWidthColumnEditMode ? 'auto-width-column-editmode' : 'default' }
         onDoubleClick={ onDoubleClick }
+        onFocus={ () => props.onFocus?.({
+          rowIndex: row.index,
+          columnIndex: column.getIndex(),
+          columnId: column.id
+        }) }
         onKeyDown={ onKeyDown }
         // @todo move to new dynamic type system
         // onPaste={ onPaste }
         ref={ element }
         role='button'
+        style={ { width: isInAutoWidthColumnEditMode ? columnWrapperWidth : undefined } }
         tabIndex={ 0 }
       >
         <EditableCellContextProvider value={ editableCellContextValue }>
-          {ComponentRenderer !== null ? ComponentRenderer(props) : <>Cell type not supported</>}
+          { ComponentRenderer !== null ? ComponentRenderer(props) : <>Cell type not supported</> }
         </EditableCellContextProvider>
       </div>
     )
-  }, [isInEditMode, props.getValue(), row, row.getIsSelected(), isEditable])
+  }, [isInEditMode, props.getValue(), row, row.getIsSelected(), isEditable, props.active, props.modified])
 
   function getCssClasses (): string[] {
     const classes: string[] = []
+
+    if (props.active === true) {
+      classes.push('default-cell--active')
+    }
 
     if (props.modified === true) {
       classes.push('default-cell--modified')
@@ -100,6 +113,12 @@ export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element =
   function enableEditMode (): void {
     if (!isEditable) {
       return
+    }
+
+    if (!isInEditMode) {
+      if (element.current !== null) {
+        setColumnWrapperWidth(element.current.offsetWidth)
+      }
     }
 
     if (isEditable && table.options.meta?.onUpdateCellData === undefined) {

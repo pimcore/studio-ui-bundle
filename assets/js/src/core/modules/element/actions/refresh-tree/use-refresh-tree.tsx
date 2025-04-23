@@ -11,70 +11,49 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type ElementType } from 'types/element-type.d'
-import { useAppDispatch } from '@Pimcore/app/store'
-import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { api as dataObjectApi } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { type Element } from '@Pimcore/modules/element/element-helper'
+import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { TreePermission } from '../../../perspectives/enums/tree-permission'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { refreshNodeChildren, setNodeExpanded } from '@Pimcore/components/element-tree/element-tree-slice'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { useTreeId } from '../../tree/provider/tree-id-provider/use-tree-id'
+import { ContextMenuActionName } from '..'
 
 export interface UseRefreshTreeHookReturn {
-  refreshTree: (parentId: number) => void
   refreshTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  refreshContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
+  refreshTree: (parentId: number) => void
 }
 
 export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookReturn => {
-  const dispatch = useAppDispatch()
   const { t } = useTranslation()
+  const { isTreeActionAllowed } = useTreePermission()
+  const dispatch = useAppDispatch()
+  const { treeId } = useTreeId(true)
 
   const refreshTree = (parentId: number): void => {
-    if (elementType === 'asset') {
-      dispatch(
-        assetApi.util.invalidateTags(
-          invalidatingTags.ASSET_TREE_ID(parentId)
-        )
-      )
-    } else if (elementType === 'data-object') {
-      dispatch(
-        dataObjectApi.util.invalidateTags(
-          invalidatingTags.DATA_OBJECT_TREE_ID(parentId)
-        )
-      )
-    }
+    dispatch(refreshNodeChildren({ nodeId: String(parentId), elementType }))
   }
 
   const refreshTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.tree.refresh'),
-      key: 'refresh',
+      key: ContextMenuActionName.refresh,
       icon: <Icon value={ 'refresh' } />,
+      hidden: !isTreeActionAllowed(TreePermission.Refresh),
       onClick: () => {
         refreshTree(parseInt(node.id))
-      }
-    }
-  }
-
-  const refreshContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
-    return {
-      label: t('element.tree.refresh'),
-      key: 'refresh',
-      icon: <Icon value={ 'refresh' } />,
-      onClick: () => {
-        refreshTree(node.parentId)
-        onFinish?.()
+        dispatch(setNodeExpanded({ treeId, nodeId: String(node.id), expanded: true }))
       }
     }
   }
 
   return {
     refreshTree,
-    refreshTreeContextMenuItem,
-    refreshContextMenuItem
+    refreshTreeContextMenuItem
   }
 }

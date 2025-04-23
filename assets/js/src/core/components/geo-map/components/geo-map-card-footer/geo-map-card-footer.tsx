@@ -25,8 +25,8 @@ export interface GeoMapCardFooterProps {
   onSearch: (geoPoint: GeoPoint) => void
   emptyValue: () => void
   dropdown?: React.ReactNode
+  disabled?: boolean
   removeButtonDisabled?: boolean
-  searchDisabled?: boolean
 }
 
 export const GeoMapCardFooter = (props: GeoMapCardFooterProps): React.JSX.Element => {
@@ -43,24 +43,27 @@ export const GeoMapCardFooter = (props: GeoMapCardFooterProps): React.JSX.Elemen
         gap="mini"
       >
 
-        <AddressSearchField
-          disabled={ props.searchDisabled }
-          onSearch={ props.onSearch }
-        />
+        { props.disabled !== true && (
+          <AddressSearchField
+            onSearch={ props.onSearch }
+          />
+        )}
 
         {props.dropdown}
 
-        <div className="remove-button-wrapper">
-          <Tooltip
-            title={ t('set-to-null') }
-          >
-            <IconButton
-              disabled={ props.removeButtonDisabled }
-              icon={ { value: 'trash' } }
-              onClick={ props.emptyValue }
-            />
-          </Tooltip>
-        </div>
+        { props.disabled !== true && (
+          <div className="remove-button-wrapper">
+            <Tooltip
+              title={ t('set-to-null') }
+            >
+              <IconButton
+                disabled={ props.removeButtonDisabled }
+                icon={ { value: 'trash' } }
+                onClick={ props.emptyValue }
+              />
+            </Tooltip>
+          </div>
+        )}
       </Flex>
     </Box>
   )

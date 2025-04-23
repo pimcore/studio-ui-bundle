@@ -17,15 +17,14 @@ import { type RootState, injectSliceWithState } from '@Pimcore/app/store'
 import { type PropertiesDraft, usePropertiesReducers } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { type EntityAdapter } from '@reduxjs/toolkit/src/entities/models'
 import { type CustomMetadataDraft, useCustomMetadataReducers } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
-import {
-  type TrackableChangesDraft,
-  useTrackableChangesReducers
-} from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
+import { type CustomSettingsDraft, useCustomSettingsReducers } from '@Pimcore/modules/asset/draft/hooks/use-custom-settings'
+import { type TrackableChangesDraft, useTrackableChangesReducers } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
 import { useImageSettingsReducers } from '@Pimcore/modules/asset/draft/hooks/use-image-settings'
+import { type TextDataDraft, useTextDataReducers } from '@Pimcore/modules/asset/draft/hooks/use-text-settings'
 import { type SchedulesDraft, useSchedulesReducers } from '@Pimcore/modules/element/draft/hooks/use-schedules'
 import { initialTabsStateValue, type TabsDraft, useTabsReducers } from '../element/draft/hooks/use-tabs'
 
-export interface AssetDraft extends Asset, PropertiesDraft, SchedulesDraft, CustomMetadataDraft, TrackableChangesDraft, TabsDraft {
+export interface AssetDraft extends Asset, PropertiesDraft, SchedulesDraft, CustomMetadataDraft, CustomSettingsDraft, TextDataDraft, TrackableChangesDraft, TabsDraft {
   imageSettings: ImageData
 }
 
@@ -37,6 +36,8 @@ export const slice = createSlice({
     modified: false,
     properties: [],
     customMetadata: [],
+    customSettings: [],
+    textData: {},
     imageSettings: [],
     schedule: [],
     changes: {},
@@ -59,7 +60,9 @@ export const slice = createSlice({
     ...usePropertiesReducers(assetsAdapter),
     ...useSchedulesReducers(assetsAdapter),
     ...useCustomMetadataReducers(assetsAdapter),
+    ...useCustomSettingsReducers(assetsAdapter),
     ...useImageSettingsReducers(assetsAdapter),
+    ...useTextDataReducers(assetsAdapter),
     ...useTabsReducers(assetsAdapter)
   }
 })
@@ -94,6 +97,11 @@ export const {
   removeCustomMetadata: removeCustomMetadataFromAsset,
   updateCustomMetadata: updateCustomMetadataForAsset,
   setCustomMetadata: setCustomMetadataForAsset,
-  setActiveTab: setActiveTabForAsset
+  setActiveTab: setActiveTabForAsset,
+
+  updateTextData: updateTextDataForAsset,
+
+  setCustomSettings: setCustomSettingsForAsset,
+  removeCustomSettings: removeCustomSettingsFromAsset
 } = slice.actions
 export const { selectById: selectAssetById } = assetsAdapter.getSelectors((state: RootState) => state['asset-draft'])

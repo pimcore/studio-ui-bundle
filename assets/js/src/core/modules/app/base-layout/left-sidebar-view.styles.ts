@@ -13,7 +13,7 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStlyes = createStyles(({
+export const useStyles = createStyles(({
   token,
   css
 }) => {
@@ -23,7 +23,7 @@ export const useStlyes = createStyles(({
       top: 0;
       left: 0;
       bottom: 0;
-      z-index: 1001;
+      z-index: 1000;
       pointer-events: none;
 
       .left-sidebar__avatar {

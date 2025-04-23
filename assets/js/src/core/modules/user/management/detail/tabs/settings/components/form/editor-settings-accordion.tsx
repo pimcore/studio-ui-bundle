@@ -18,9 +18,11 @@ import { LanguageTable } from '@Pimcore/modules/user/management/detail/tabs/sett
 
 interface IEditorSettingsAccordionProps {
   data: any
+  viewData: any
+  editData: any
   onChange: (data: any) => void
 }
-const EditorSettingsAccordion = ({ data, onChange, ...props }: IEditorSettingsAccordionProps): React.JSX.Element => {
+const EditorSettingsAccordion = ({ data, viewData, editData, onChange, ...props }: IEditorSettingsAccordionProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const content = [
@@ -30,7 +32,9 @@ const EditorSettingsAccordion = ({ data, onChange, ...props }: IEditorSettingsAc
       children: (
         <LanguageTable
           data={ data }
+          editData={ editData }
           onChangeOrder={ (languages) => { onChange(languages) } }
+          viewData={ viewData }
         />
       )
     }

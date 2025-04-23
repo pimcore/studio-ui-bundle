@@ -21,34 +21,34 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
 
 interface IToolbarProps {
-  test?: string
   onReload: () => void
-  onAddUser: () => void
-  onAddFolder: () => void
+  onAddItem?: () => void
+  onAddFolder?: () => void
+  actions?: any[]
 }
 
-export const ToolbarTree = ({ onReload, onAddUser, onAddFolder, ...props }: IToolbarProps): React.JSX.Element => {
+export const ToolbarTree = ({ actions, onReload, onAddItem, onAddFolder }: IToolbarProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const items = [
+  const items = actions ?? [
     {
       key: '1',
-      label: t('tree.actions.add-user'),
-      icon: <Icon value='user-plus-01'></Icon>,
-      onClick: onAddUser
+      label: t('tree.actions.user'),
+      icon: <Icon value='add-user'></Icon>,
+      onClick: onAddItem ?? (() => {})
     },
     {
       key: '2',
-      label: t('tree.actions.add-folder'),
+      label: t('tree.actions.folder'),
       icon: <Icon value='folder-plus'></Icon>,
-      onClick: onAddFolder
+      onClick: onAddFolder ?? (() => {})
     }
   ]
 
   return (
     <ToolbarView>
       <IconButton
-        icon={ { value: 'refresh-ccw-03' } }
+        icon={ { value: 'refresh' } }
         onClick={ onReload }
       >
         {t('toolbar.reload')}
@@ -64,7 +64,7 @@ export const ToolbarTree = ({ onReload, onAddUser, onAddFolder, ...props }: IToo
           >
             <Icon
               options={ { width: 18, height: 18 } }
-              value={ 'PlusOutlined' }
+              value={ 'new' }
             ></Icon> {t('toolbar.new')}
           </Flex>
         </DropdownButton>

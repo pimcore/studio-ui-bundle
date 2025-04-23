@@ -14,7 +14,6 @@
 import React, { useState } from 'react'
 import { type Meta, type StoryObj } from '@storybook/react'
 import { Form } from '@Pimcore/components/form/form'
-import FormItem from 'antd/es/form/FormItem'
 import { DateRangePicker, type DateRangePickerProps } from '@Pimcore/components/date-picker/date-range-picker'
 import { type DatePickerValueType, formatDatePickerDate } from '@Pimcore/components/date-picker/utils/date-picker-utils'
 
@@ -39,12 +38,12 @@ const ExampleForm = (props: DateRangePickerProps): React.JSX.Element => {
 
   return (
     <Form>
-      <FormItem>
+      <Form.Item>
         <DateRangePicker
           { ...props }
           onChange={ handleDateChange }
         />
-      </FormItem>
+      </Form.Item>
       <div>
         <strong>Selected Dates:</strong>
         <pre>{dates !== null && dates !== undefined

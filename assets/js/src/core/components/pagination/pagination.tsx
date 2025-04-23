@@ -21,11 +21,11 @@ import { isSet } from '@Pimcore/utils/helpers'
 import { SizeChanger } from '@Pimcore/components/pagination/size-changer/size-changer'
 import { InlineTextfield } from '@Pimcore/components/pagination/inline-textfield/inline-textfield'
 
-interface PaginationProps {
+export interface PaginationProps {
   total: number
   current?: number
   defaultPageSize?: number
-  pageSizeOptions?: number[] | string[]
+  pageSizeOptions?: number[]
   showSizeChanger?: boolean
   amountOfVisiblePages?: number
   hideOnSinglePage?: boolean
@@ -48,8 +48,8 @@ export const Pagination = ({
 
   const hashId = useCssComponentHash('pagination')
 
-  const [currentPage, setCurrentPage] = useState(current)
-  const [pageSize, setPageSize] = useState(defaultPageSize)
+  const [currentPage, setCurrentPage] = useState<number>(current)
+  const [pageSize, setPageSize] = useState<number>(defaultPageSize)
 
   useEffect(() => {
     if (isSet(onChange)) {
@@ -76,7 +76,7 @@ export const Pagination = ({
   const getPageNumberItems = (pageNumberRange: number[]): React.JSX.Element[] => {
     return pageNumberRange.map((pageNumber) => {
       return PageNumberNode(
-        pageNumber.toString(),
+        pageNumber,
         getClassNameForPageNumber(pageNumber, currentPage),
         (e) => {
           onClickPageNumber(pageNumber)
@@ -185,14 +185,13 @@ export const Pagination = ({
 
 function PreviousButton (prop): React.JSX.Element {
   const { currentPage, onClickPrev } = prop
-  const iconOptions = { width: 10, height: 10 }
   return (
     <li className={ `ant-pagination-prev ${currentPage === 1 ? 'ant-pagination-disabled' : ''}` }>
       <Button
         className={ 'ant-pagination-item-link' }
         disabled={ currentPage === 1 }
         icon={ <Icon
-          options={ iconOptions }
+          options={ { width: 18, height: 18 } }
           value='chevron-left'
                /> }
         onClick={ onClickPrev }
@@ -205,14 +204,13 @@ function PreviousButton (prop): React.JSX.Element {
 
 function NextButton (prop): React.JSX.Element {
   const { currentPage, pages, onClickNext } = prop
-  const iconOptions = { width: 10, height: 10 }
   return (
     <li className={ `ant-pagination-next ${currentPage === pages ? 'ant-pagination-disabled' : ''}` }>
       <Button
         className={ 'ant-pagination-item-link' }
         disabled={ currentPage === pages }
         icon={ <Icon
-          options={ iconOptions }
+          options={ { width: 18, height: 18 } }
           value='chevron-right'
                /> }
         onClick={ onClickNext }
@@ -260,15 +258,15 @@ function getRightPageNumberRange (
 }
 
 function PageNumberNode (
-  pageNumber: string,
+  pageNumber: number,
   className: string,
   onClick: (e) => void
 ): React.JSX.Element {
   return (
     <li
-      className={ `ant-pagination-item ant-pagination-item-${pageNumber} ${className}` }
+      className={ `ant-pagination-item ant-pagination-item-${pageNumber.toString()} ${className}` }
       key={ pageNumber }
-      title={ pageNumber }
+      title={ pageNumber.toString() }
     >
       <Button
         className={ 'page-number-node' }

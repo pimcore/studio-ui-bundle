@@ -38,37 +38,31 @@ export const useStyles = createStyles(({ token, css }) => {
         background-color: ${themeToken.highlightBackgroundColor};
       }
 
-      .ant-card-extra {
-        height: 44px;
-      }
-
       .sub-title {
         font-weight: normal;
         margin-right: 4px;
         color: ${themeToken.colorTextDescription};
       }
 
-      .title-tag {
-        font-size: 12px;
+      .ant-tag {
+        display: flex;
+        align-items: center;
       }
 
-      .tag-icon {
-        position: relative;
-        right: 3px;
-        bottom: 1px;
+      .ant-tag-geekblue {
+        background-color: ${token.Colors.Base.Geekblue['2']} !important;
+        color: ${token.Colors.Base.Geekblue['6']} !important;
+        border-color: ${token.Colors.Base.Geekblue['3']} !important;
       }
+    `,
 
-      .id-tag {
-        width: 56px;
-        height: 22px;
+    compareButton: css`
+      background-color: ${token.Colors.Neutral.Fill.colorFill} !important;
+    `,
 
-        display: inline-grid;
-        justify-content: center;
-
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 20px;
-      }
+    notificationMessage: css`
+      text-align: center;
+      max-width: 200px;
     `
   }
 }, { hashPriority: 'low' })

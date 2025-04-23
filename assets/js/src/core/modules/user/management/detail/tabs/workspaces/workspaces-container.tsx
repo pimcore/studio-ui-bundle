@@ -27,7 +27,7 @@ import { Button } from '@Pimcore/components/button/button'
 const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useUserContext()
-  const { user, isLoading } = useUserDraft(id)
+  const { user, isLoading, changeUserInState } = useUserDraft(id)
 
   const [assetWorkspaces, setAssetWorkspaces] = React.useState<UserWorkspace[]>(user?.assetWorkspaces ?? [])
   const [documentWorkspaces, setDocumentWorkspaces] = React.useState<UserWorkspace[]>(user?.documentWorkspaces ?? [])
@@ -41,14 +41,18 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
     type: 'error'
   })
 
+  if (user === undefined) {
+    return <></>
+  }
+
   const documentsAccordion = [
     {
       key: '1',
       title: <>{ t('user-management.workspaces.documents') }</>,
       info: <> <IconTextButton
-        icon={ { value: 'folder-search' } }
+        icon={ { value: 'add-find' } }
         onClick={ () => {
-          setDocumentWorkspaces([...documentWorkspaces, {
+          setDocumentWorkspaces([...user.documentWorkspaces, {
             cid: new Date().getTime(), // after path update is set to document id
             cpath: '',
             list: false,
@@ -61,17 +65,15 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
             versions: false,
             properties: false
           }])
-
-          console.log('documentWorkspaces', documentWorkspaces)
         } }
                >{ t('user-management.workspaces.add') }</IconTextButton></>,
       children: <Table
         data={ documentWorkspaces }
         isLoading={ isLoading }
+        onUpdateData={ (data) => { changeUserInState({ documentWorkspaces: data }) } }
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
-        type={ 'documents' }
                 />
     }
   ]
@@ -81,9 +83,9 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       key: '1',
       title: <>{ t('user-management.workspaces.assets') }</>,
       info: <> <IconTextButton
-        icon={ { value: 'folder-search' } }
+        icon={ { value: 'add-find' } }
         onClick={ () => {
-          setAssetWorkspaces([...assetWorkspaces, {
+          setAssetWorkspaces([...user.assetWorkspaces, {
             cid: new Date().getTime(), // after path update is set to document id
             cpath: '',
             list: false,
@@ -101,10 +103,10 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       children: <Table
         data={ assetWorkspaces }
         isLoading={ isLoading }
+        onUpdateData={ (data) => { changeUserInState({ assetWorkspaces: data }) } }
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
-        type={ 'assets' }
                 />
     }
   ]
@@ -114,9 +116,9 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       key: '1',
       title: <>{ t('user-management.workspaces.objects') }</>,
       info: <> <IconTextButton
-        icon={ { value: 'folder-search' } }
+        icon={ { value: 'add-find' } }
         onClick={ () => {
-          setObjectWorkspaces([...objectWorkspaces, {
+          setObjectWorkspaces([...user.dataObjectWorkspaces, {
             cid: new Date().getTime(), // after path update is set to document id
             cpath: '',
             list: false,
@@ -134,10 +136,10 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       children: <Table
         data={ objectWorkspaces }
         isLoading={ isLoading }
+        onUpdateData={ (data) => { changeUserInState({ dataObjectWorkspaces: data }) } }
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
-        type={ 'objects' }
                 />
     }
   ]

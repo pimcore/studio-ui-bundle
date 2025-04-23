@@ -18,6 +18,19 @@ export const useStyles = createStyles(({ token, css }) => {
     treeNode: css`
       user-select: none;
 
+      &.tree-node--is-root {
+        & > .tree-node__content {
+          padding-left: ${token.paddingSM}px;
+        }
+      }
+
+      &.tree-node--danger {
+        & > .tree-node__content .tree-node__content-wrapper {
+          color: ${token.colorError};
+          text-decoration: line-through;
+        }
+      }
+
       .tree-node__content {
         cursor: pointer;
         width: 100%;
@@ -27,6 +40,7 @@ export const useStyles = createStyles(({ token, css }) => {
           
         .ant-upload-wrapper {
           width: 100%;
+          overflow: hidden;
             
           .ant-upload {
             width: 100%;
@@ -34,6 +48,11 @@ export const useStyles = createStyles(({ token, css }) => {
             align-items: center;
             gap: 8px
           }
+        }
+
+        .tree-node__content-wrapper {
+          width: 100%;
+          overflow: hidden;
         }
 
         @media (hover: hover) {
@@ -50,11 +69,6 @@ export const useStyles = createStyles(({ token, css }) => {
 
       &.tree-node--selected > .tree-node__content {
         background-color: ${token.controlItemBgActive};
-      }
-
-      .tree-node__content-wrapper {
-        //max-width: max(100%, calc(100px - 16px));
-        width: 100%;
       }
 
       .tree-node-content__label {

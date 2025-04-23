@@ -14,21 +14,47 @@
 import type { IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
 import {
   VersionsTabContainer
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-container'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-container/versions-container'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import {
   ComparisonView
 } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/comparison-view/comparison-view'
 import { SingleView } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/single-view/single-view'
+import { PreviewView } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/preview/preview-view'
+import {
+  FieldWidthProvider
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
+import { FieldCollectionProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/field-collection/providers/field-collection-provider'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export const TAB_VERSIONS: IEditorTab = {
   key: 'versions',
   label: 'version.label',
-  children: <VersionsTabContainer
-    ComparisonViewComponent={ ComparisonView }
-    SingleViewComponent={ SingleView }
-            />,
+  children: (
+    <FieldCollectionProvider>
+      <FieldWidthProvider>
+        <VersionsTabContainer
+          ComparisonViewComponent={ ComparisonView }
+          SingleViewComponent={ SingleView }
+        />
+      </FieldWidthProvider>
+    </FieldCollectionProvider>
+  ),
   icon: <Icon value={ 'history' } />,
-  isDetachable: true
+  isDetachable: true,
+  hidden: (element): boolean => {
+    return !checkElementPermission(element.permissions, 'versions')
+  }
+}
+
+export const TAB_PREVIEW: IEditorTab = {
+  key: 'preview',
+  label: 'preview.label',
+  children: <PreviewView />,
+  icon: <Icon value={ 'preview' } />,
+  isDetachable: true,
+  hidden: (element): boolean => {
+    return !(element.hasPreview!)
+  }
 }

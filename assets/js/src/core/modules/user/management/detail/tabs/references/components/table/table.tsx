@@ -11,13 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { type UserWorkspace } from '@Pimcore/modules/user/user-api-slice.gen'
+import { type DependencyToAnObject } from '@Pimcore/modules/user/user-api-slice.gen'
+
 interface ITableProps {
-  data: UserWorkspace[]
+  data: DependencyToAnObject[]
   isLoading: boolean
 }
 
@@ -26,33 +27,37 @@ export const Table = ({
   isLoading
 }: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const [gridData, setGridData] = React.useState<DependencyToAnObject[]>(data)
+
+  useEffect(() => {
+    setGridData(data)
+  }, [data])
 
   const columnHelper = createColumnHelper()
   const createColumns = (): any => [
     columnHelper.accessor('id', {
-      header: t('user-management.references.columns.id'),
+      header: t('user-management.workspaces.columns.id'),
       meta: {
         type: 'element-cell',
-        editable: false
+        editable: true
       },
-      size: 184
+      size: 100
     }),
-    columnHelper.accessor('cpath', {
-      header: t('user-management.references.columns.cpath'),
+    columnHelper.accessor('path', {
+      header: t('user-management.workspaces.columns.path'),
       meta: {
         type: 'element-cell',
-        editable: false,
+        editable: true,
         autoWidth: true
-      },
-      size: 270
+      }
     }),
     columnHelper.accessor('subtype', {
-      header: t('user-management.references.columns.subtype'),
+      header: t('user-management.workspaces.columns.subtype'),
       meta: {
         type: 'element-cell',
-        editable: false
+        editable: true
       },
-      size: 184
+      size: 150
     })
   ]
   const ownTableColumns = [
@@ -63,7 +68,7 @@ export const Table = ({
     <Grid
       autoWidth
       columns={ ownTableColumns }
-      data={ data }
+      data={ gridData }
       isLoading={ isLoading }
       resizable
       setRowId={ (row) => row.cid }

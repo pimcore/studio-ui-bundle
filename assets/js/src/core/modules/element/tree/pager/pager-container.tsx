@@ -11,29 +11,28 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { TreeContext, type TreePagerProps } from '@Pimcore/components/element-tree/element-tree'
+import { type TreePagerProps } from '@Pimcore/components/element-tree/element-tree'
+import { useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
-import React, { useContext, useEffect, useState } from 'react'
+import React from 'react'
+import { useTreeFilter } from '../provider/tree-filter-provider/use-tree-filter'
 
 const PagerContainer = (props: TreePagerProps): React.JSX.Element => {
-  const [page, setPage] = useState(1)
-  const { maxItemsPerNode } = useContext(TreeContext)
+  const { page, setPage } = useElementTreeNode(props.node.id)
+  const { pageSize } = useTreeFilter()
   const total = props.total
 
-  useEffect(() => {
-    setPage(1)
-  }, [props.total])
-
-  function onChange (page: number): void {
-    setPage(page)
-    props.mergeAdditionalQueryParams({ page })
+  function onChange (newPage: number): void {
+    if (page !== newPage) {
+      setPage(newPage)
+    }
   }
 
   return (
     <Pagination
       amountOfVisiblePages={ 3 }
       current={ page }
-      defaultPageSize={ maxItemsPerNode }
+      defaultPageSize={ pageSize }
       hideOnSinglePage
       onChange={ onChange }
       total={ total }

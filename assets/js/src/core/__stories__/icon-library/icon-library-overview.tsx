@@ -16,8 +16,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { Card, Flex, Form, Space } from 'antd'
-import Search from 'antd/es/input/Search'
+import { Card, Flex, Form, Space, Input } from 'antd'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 
 export const IconLibraryOverview = (): React.JSX.Element => {
@@ -36,7 +35,7 @@ export const IconLibraryOverview = (): React.JSX.Element => {
       style={ { padding: 20, width: '100%' } }
     >
       <Form.Item label="Search">
-        <Search
+        <Input.Search
           onChange={ onSearch }
           value={ searchValue }
         />

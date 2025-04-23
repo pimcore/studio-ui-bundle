@@ -16,7 +16,7 @@ import { reverseGeocode } from '@Pimcore/components/geo-map/utils/geocode'
 import { type GeoPoint } from '@Pimcore/components/geo-map/types/geo-types'
 import { convertLatLngToGeoPoint } from '@Pimcore/components/geo-map/utils/lat-lng-convert'
 
-export const addGeoPointToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGroup, geoPoint?: GeoPoint, onChange?: (geoPoint: GeoPoint) => void, disabled?: boolean): void => {
+export const addGeoPointToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGroup, reverseGeoCodeUrlTemplate: string, geoPoint?: GeoPoint, onChange?: (geoPoint: GeoPoint) => void, disabled?: boolean): void => {
   leafletMap.addLayer(featureGroup)
 
   const marker = geoPoint !== undefined ? L.marker([geoPoint.latitude, geoPoint.longitude]) : undefined
@@ -53,7 +53,7 @@ export const addGeoPointToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGro
     featureGroup.addLayer(layer)
 
     if (featureGroup.getLayers().length === 1) {
-      await reverseGeocode(layer).catch((error) => {
+      await reverseGeocode(layer, reverseGeoCodeUrlTemplate).catch((error) => {
         console.error(error)
       })
       onChange?.(convertLatLngToGeoPoint(layer.getLatLng()))
@@ -63,7 +63,7 @@ export const addGeoPointToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGro
   leafletMap.on('draw:editmove', async function (e) {
     const layer = e.layer as L.Marker
 
-    await reverseGeocode(layer).catch((error) => {
+    await reverseGeocode(layer, reverseGeoCodeUrlTemplate).catch((error) => {
       console.error(error)
     })
     onChange?.(convertLatLngToGeoPoint(layer.getLatLng()))

@@ -18,10 +18,13 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { useTranslation } from 'react-i18next'
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
+import { ContextMenuActionName } from '..'
 
 export interface UseOpenHookReturn {
   openContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
+  openGridContextMenuItem: (row: any) => ItemType | undefined
 }
 
 export const useOpen = (elementType: ElementType): UseOpenHookReturn => {
@@ -31,9 +34,9 @@ export const useOpen = (elementType: ElementType): UseOpenHookReturn => {
   const openContextMenuItem = (node: Element): ItemType => {
     return {
       label: t('element.open'),
-      key: 'open',
+      key: ContextMenuActionName.open,
       icon: <Icon value={ 'open-folder' } />,
-      hidden: !checkElementPermission(node.permissions!, 'view'),
+      hidden: !checkElementPermission(node.permissions, 'view'),
       onClick: async () => {
         await openElement({
           id: node.id,
@@ -43,7 +46,28 @@ export const useOpen = (elementType: ElementType): UseOpenHookReturn => {
     }
   }
 
+  const openGridContextMenuItem = (row: any): ItemType | undefined => {
+    const data: GridContextMenuProps = row.original ?? {}
+    if (data.id === undefined || data.isLocked === undefined || data.permissions === undefined) {
+      return
+    }
+
+    return {
+      label: t('element.open'),
+      key: ContextMenuActionName.open,
+      icon: <Icon value={ 'open-folder' } />,
+      hidden: !checkElementPermission(data.permissions, 'view'),
+      onClick: async () => {
+        await openElement({
+          id: data.id,
+          type: elementType
+        })
+      }
+    }
+  }
+
   return {
-    openContextMenuItem
+    openContextMenuItem,
+    openGridContextMenuItem
   }
 }

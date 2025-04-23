@@ -14,8 +14,6 @@
 import React, { useState, type Key, useEffect } from 'react'
 import { Tree, type TreeDataNode, type TreeProps } from 'antd'
 import cn from 'classnames'
-import { map } from 'lodash'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { TreeElementItem } from './tree-element-item'
 import { useStyles } from './tree-element.styles'
@@ -28,14 +26,13 @@ export interface TreeDataItem extends TreeDataNode {
 interface ITreeElementProps extends TreeProps {
   treeData: TreeDataItem[]
   className?: string
-  onActionsClick?: (key: any, action: string) => void
+  onActionsClick?: (key: string, action: string) => void
   onDragAndDrop?: (params: { node: TreeDataItem, dragNode: TreeDataItem, dropPosition: number }) => void
   onSelected?: (key: any) => void
   onLoadData?: (node: any) => Promise<any>
   onExpand?: (keys: Key[]) => void
   withCustomSwitcherIcon?: boolean
   isHideRootChecker?: boolean
-  filter?: string
 }
 
 const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
@@ -53,30 +50,13 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
     onLoadData,
     onExpand,
     withCustomSwitcherIcon,
-    isHideRootChecker = true,
-    filter
+    isHideRootChecker = true
   } = props
 
   const { styles } = useStyles({ isHideRootChecker })
 
   const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
   const [expandedKeys, setExpandedKeys] = useState<Key[]>(defaultExpandedKeys ?? [])
-
-  const getFilteredExpandedKeys = (): string[] => (
-    map(treeData[0].children, 'key').map(String)
-  )
-
-  useEffect(() => {
-    if (!isEmptyValue(filter)) {
-      const _expandedKeys = getFilteredExpandedKeys()
-
-      setExpandedKeys(['root', ..._expandedKeys])
-    }
-
-    if (isEmptyValue(filter)) {
-      setExpandedKeys(['root'])
-    }
-  }, [filter])
 
   const handleCustomSwitcherIcon = (): React.JSX.Element | undefined => {
     if (withCustomSwitcherIcon === false) return undefined
@@ -109,7 +89,6 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
       checkedKeys={ checkedKeys }
       className={ cn(styles.treeContainer, className) }
       draggable={ draggable }
-      expandAction='click'
       expandedKeys={ expandedKeys }
       loadData={ onLoadData !== null ? onLoadData : undefined }
       onCheck={ (checkedKeys, event): void => onCheck?.(checkedKeys, event) }
@@ -121,13 +100,14 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
         })
       } }
       onExpand={ (keys): void => { onExpand !== null && onExpand !== undefined ? onExpand(keys) : setExpandedKeys(keys) } }
+      selectable={ onSelected !== undefined }
       selectedKeys={ selectedKeys }
       showIcon
       switcherIcon={ handleCustomSwitcherIcon }
       titleRender={ (node) => (
         <TreeElementItem
           actions={ node.actions }
-          onActionsClick={ (action) => onActionsClick?.(node.key, action) }
+          onActionsClick={ (action) => onActionsClick?.(node.key.toString(), action) }
           onSelected={ () => {
             setSelectedKeys([node.key])
             onSelected?.(node.key)

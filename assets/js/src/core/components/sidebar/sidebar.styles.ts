@@ -27,7 +27,6 @@ export const useStyle = createStyles(({ token, css }) => {
           align-items: center;
           flex-shrink: 0;
           align-self: stretch;
-          border-right: 1px solid rgba(0, 0, 0, 0.08);
           border-left: 1px solid rgba(0, 0, 0, 0.08);
           justify-content: space-between;
           color: ${token.colorIconSidebar};
@@ -54,7 +53,7 @@ export const useStyle = createStyles(({ token, css }) => {
                   justify-content: center;
                   align-items: center;
 
-                  &:not(.active).entry--highlighted {
+                  &:not(.sidebar--active).entry--highlighted {
                       .pimcore-icon {
                           background: ${token.colorFillQuaternary};
                           border-radius: 2px;
@@ -72,7 +71,7 @@ export const useStyle = createStyles(({ token, css }) => {
                       }
                   }
 
-                  &.active {
+                  &.sidebar--active {
                       background: ${token.colorFillQuaternary};
                       border-right: 2px solid ${token.colorPrimaryActive};
 
@@ -104,7 +103,7 @@ export const useStyle = createStyles(({ token, css }) => {
         .tab {
           display: none;
           
-          &.active {
+          &.sidebar--active {
               display: flex;
               width: 100%;
               height: 100%;

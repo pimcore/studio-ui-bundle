@@ -13,23 +13,58 @@
 
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { addMissingTranslation } from './store/missingTranslations.slice'
+import { store } from '../store'
+
+const FALLBACK_LANGUAGE = 'en'
 
 i18n
   .use(initReactI18next)
 
   .init({
-    fallbackLng: 'en',
+    fallbackLng: FALLBACK_LANGUAGE,
     ns: ['translation'],
     resources: {},
-    saveMissing: true
+    saveMissing: true,
+    postProcess: ['returnKeyIfEmpty']
   })
 
-  .catch((error) => {
-    console.error(error)
+  .catch(() => {
+    trackError(new GeneralError('Could not load translations'))
   })
+
+i18n.use({
+  type: 'postProcessor',
+  name: 'returnKeyIfEmpty',
+  process (value, key, options, translator) {
+    let returnValue = value
+
+    if (value === '') {
+      returnValue = key
+
+      if (Array.isArray(key)) {
+        returnValue = key[0]
+      }
+    }
+
+    if (typeof returnValue !== 'string') {
+      try {
+        returnValue = JSON.stringify(returnValue)
+      } catch (e) {
+        throw new Error(`Translation key '${key}' with value '${value}' is not translatable. Error in i18n postProcessor: ${e}`)
+      }
+
+      console.warn('Malformed translation key detected:', key, value)
+    }
+
+    return returnValue
+  }
+})
 
 i18n.on('missingKey', (lngs, namespace, key, res) => {
-// @todo implement handling of missing keys after endpoints are available
+  store.dispatch(addMissingTranslation(key))
+  i18n.addResource(FALLBACK_LANGUAGE, namespace, key, key)
 })
 
 export default i18n

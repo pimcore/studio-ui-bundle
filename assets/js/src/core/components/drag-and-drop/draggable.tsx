@@ -37,8 +37,6 @@ function Draggable (props: DraggableProps): React.JSX.Element {
     throw new Error('Invalid React child element.')
   }
 
-  const Component = Child.type
-
   return useMemo(() => (
     <div
       ref={ setNodeRef }
@@ -46,9 +44,7 @@ function Draggable (props: DraggableProps): React.JSX.Element {
       { ...attributes }
     >
       <GlobalStyle />
-      <Component
-        { ...Child.props }
-      />
+      {props.children}
     </div>
   ), [props.children])
 }

@@ -12,21 +12,21 @@
 */
 
 import React, { useEffect, useState } from 'react'
-import { api } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import { api } from '@Pimcore/modules/auth/user/user-api-slice-enhanced'
 import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch, store } from '@Pimcore/app/store'
 import { useTranslationGetCollectionMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { useTranslation } from 'react-i18next'
-import { setUser } from '@Pimcore/modules/auth/user/user-slice'
+import { setUser, selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
 import { setSettings } from '@Pimcore/modules/app/settings/settings-slice'
-import {
-  useMercureCreateCookieMutation
-} from '../asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/mercure-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
 import { GlobalStyles } from '@Pimcore/styles/global.styles'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import { useMercureCreateCookieMutation } from './mercure-api-slice.gen'
+import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
+import { usePerspectives } from '../perspectives/hooks/use-perspectives'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -42,6 +42,10 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const [fetchMercureCookie] = useMercureCreateCookieMutation()
 
   const modal = useAlertModal()
+
+  const { loadPerspective } = usePerspectives()
+
+  const isAuthenticated = useIsAuthenticated()
 
   // Register the modal instance to allow centralized error message display throughout the project
   ErrorModalService.setModalInstance(modal)
@@ -83,26 +87,52 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     return await settingsFetcher
   }
 
+  async function initActivePerspective (): Promise<any> {
+    const user = selectCurrentUser(store.getState())
+    const perspectiveId = String(user?.activePerspective ?? 'studio_default_perspective')
+    return await loadPerspective(perspectiveId)
+  }
+
   async function loadTranslations (): Promise<any> {
     await translations({ translation: { locale: 'en', keys: [] } })
       .unwrap()
       .then(response => {
         i18n.addResourceBundle('en', 'translation', response.keys ?? [], true, true)
       })
-      .catch((error) => {
-        console.error('rejected', error)
+      .catch(() => {
+        trackError(new GeneralError('Error loading translations'))
       })
+  }
+
+  const loadUserData = async (): Promise<void> => {
+    const { isSuccess: isSuccessInitSetting } = await initSettings()
+
+    if (isSuccessInitSetting === true) {
+      Promise.allSettled([
+        initActivePerspective()
+      ]).then(() => {
+      }).catch(() => {})
+    }
   }
 
   useEffect(() => {
     Promise.all([
       initLoadUser(),
-      initSettings(),
       loadTranslations()
     ]).then(() => {
       setIsLoading(false)
     }).catch(() => {})
   }, [])
+
+  useEffect(() => {
+    const fetchUserData = async (): Promise<void> => {
+      await loadUserData()
+    }
+
+    if (isAuthenticated) {
+      void fetchUserData()
+    }
+  }, [isAuthenticated])
 
   return (
     <>

@@ -79,6 +79,7 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
 
   return (
     <GeoMapCardFooter
+      disabled={ props.disabled }
       dropdown={
         <Dropdown
           menu={ {
@@ -132,7 +133,6 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
       emptyValue={ emptyValue }
       onSearch={ onSearch }
       removeButtonDisabled={ (value.latitude === undefined && value.longitude === undefined) || props.disabled }
-      searchDisabled={ props.disabled }
     />
   )
 }

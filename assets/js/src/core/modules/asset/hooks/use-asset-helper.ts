@@ -18,6 +18,8 @@ import { type EditorContainerProps } from '../editor/editor-container'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { getElementIcon } from '@Pimcore/modules/element/element-helper'
+import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
+import { useAssetDraftFetcher } from './use-asset-draft-fetcher'
 
 interface OpenAssetWidgetProps {
   config: EditorContainerProps
@@ -30,20 +32,22 @@ interface UseAssetReturn {
 export const useAssetHelper = (): UseAssetReturn => {
   const { openMainWidget, isMainWidgetOpen } = useWidgetManager()
   const dispatch = useAppDispatch()
+  const { updateAssetDraft } = useAssetDraftFetcher()
 
-  async function openAsset (props: OpenAssetWidgetProps): Promise<void> {
+  const openAsset = async (props: OpenAssetWidgetProps): Promise<void> => {
     const { config } = props
-    const widgetId = `asset-${config.id}`
+    const widgetId = getWidgetId('asset', config.id)
 
     if (!isMainWidgetOpen(widgetId)) {
       dispatch(api.util.invalidateTags(invalidatingTags.ASSET_DETAIL_ID(config.id)))
+      void updateAssetDraft(config.id, true)
     }
 
     const { data } = await store.dispatch(api.endpoints.assetGetById.initiate({ id: config.id }))
 
     if (
       data === undefined ||
-      !checkElementPermission(data.permissions!, 'view')) {
+      !checkElementPermission(data.permissions, 'view')) {
       return
     }
 

@@ -18,11 +18,13 @@ import cn from 'classnames'
 import { Spin } from '../spin/spin'
 import { useStyles } from './button.styles'
 
-export interface ButtonProps extends AntdButtonProps {
+export interface ButtonProps extends Omit<AntdButtonProps, 'type' | 'color'> {
+  type?: AntdButtonProps['type'] | 'action'
   loading?: boolean
+  color?: 'default' | 'primary' | 'secondary' | 'danger'
 }
 
-const Component = ({ loading, children, className, ...props }: ButtonProps, ref: RefObject<HTMLButtonElement | null>): React.JSX.Element => {
+const Component = ({ loading, children, className, type, color, ...props }: ButtonProps, ref: RefObject<HTMLButtonElement | null>): React.JSX.Element => {
   const buttonRef = useRef<HTMLButtonElement>(null)
 
   const { styles } = useStyles()
@@ -31,6 +33,8 @@ const Component = ({ loading, children, className, ...props }: ButtonProps, ref:
 
   const buttonClassNames = cn(
     'button',
+    `button--type-${type}`,
+    `button--color-${color}`,
     styles.button,
     {
       'ant-btn-loading': loading
@@ -56,26 +60,30 @@ const Component = ({ loading, children, className, ...props }: ButtonProps, ref:
     <AntdButton
       className={ buttonClassNames }
       ref={ buttonRef }
+      type={ type === 'action' ? undefined : type }
       { ...props }
+      color={ color === 'secondary' ? undefined : color }
     >
-      <AnimatePresence>
-        <motion.div
-          animate={ { opacity: 1 } }
-          exit={ { opacity: 0 } }
-          initial={ { opacity: loading === true ? 0 : 1 } }
-          key={ loading === true ? 'loading' : 'loaded' }
-        >
-          {loading === true && (
-            <Spin
+      { loading === true
+        ? (
+          <AnimatePresence>
+            <motion.div
+              animate={ { opacity: 1 } }
               className='button__loading-spinner'
-              size='small'
-              spinning={ loading }
-            />
-          )}
+              exit={ { opacity: 0 } }
+              initial={ { opacity: 0 } }
+              key={ 'loading' }
+            >
+              <Spin
+                size='small'
+                spinning
+              />
+            </motion.div>
+          </AnimatePresence>
+          )
+        : null }
 
-          {loading !== true && children}
-        </motion.div>
-      </AnimatePresence>
+      <span className={ 'button__text' }>{children}</span>
     </AntdButton>
   )
 }

@@ -41,7 +41,7 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
       current={ props.page }
       defaultPageSize={ 20 }
       onChange={ props.onChange }
-      pageSizeOptions={ ['10', '20', '50', '100'] }
+      pageSizeOptions={ [10, 20, 50, 100] }
       showSizeChanger
       showTotal={ (total) => t('pagination.show-total', { total }) }
       total={ props.totalItems ?? 0 }

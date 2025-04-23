@@ -1,3 +1,29 @@
+common.owner: Owner
+common.modification-date: Modification date
+common.globally: Globally
+error.error_something_generic_went_wrong: Element not found
+error.error_element_exists: Element already exists
+error.error_folder_exists: Folder already exists
+error.error_invalid_argument: Invalid argument
+error.error_widget_name_missing: Widget name have to be provided
+error.error_widget_name_invalid: Widget name is invalid (only alphanumeric characters, underscores and spaces are allowed, must be at least 3 characters long and less than 80 long)
+error.error_validation_failed: Validation failed
+error.error_element_not_found: Element not found
+modal-search.field.mimeType: MIME-Type
+modal-search.field.thumbnail: Thumbnail
+modal-search.field.id: ID
+modal-search.field.userOwner: User Owner
+modal-search.field.userOwnerName: User Owner Name
+modal-search.field.userModification: User Modification
+modal-search.field.userModificationName: User Modification Name
+modal-search.field.creationDate: Creation Date
+modal-search.field.modificationDate: Modification Date
+modal-search.field.description: Description
+modal-search.field.name: Name
+modal-search.field.previewImage: Preview Image
+modal-search.field.title: Title
+modal-search.field.class: Class
+modal-search.field.language: Language
 asset.sidebar.details: Details
 asset.asset-tree.title: Asset Tree
 asset.asset-tree.search: Search in {{folderName}}
@@ -15,9 +41,17 @@ asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
 asset.tree.context-menu.upload-new-version: Upload new version
 asset.upload: Upload
 asset.upload.label: Select file
+asset.upload.files.uploading: "{{processedItems}}/{{totalItems}} files are uploading ..."
+asset.upload.files.uploaded: "{{successItems}} files are uploaded"
+asset.upload.files.completed: Completed!
+asset.upload.files.successfully-uploaded: Successfully uploaded
+asset.upload.files.completed-actions: Completed actions
 asset.upload.validation: 'Please add a file'
+asset.select.type.nullable: 'All types'
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
+data-object.tree.context-menu.add-object: Add Object
+data-object.create-data-object: Add new Object of type {{className}}
 workflow.label: Workflow
 workflow.headline: Workflow Details
 workflow.no-workflows-found: No workflows found
@@ -26,9 +60,12 @@ folder.folder-editor-tabs.view: List
 toolbar.reload.confirmation: Are you sure you want to reload this tab? All unsaved changes will be lost.
 toolbar.reload: Reload
 toolbar.save-and-publish: Save & Publish
+toolbar.save: Save
+toolbar.save-draft: Save draft
 toolbar.more: More
 toolbar.workflow: Workflow
 toolbar.new: New
+toolbar.switch-layout: Switch custom layout
 example-prefix: Example Prefix
 pagination.show-total: Total {{total}} items
 pagination.page: Page
@@ -59,6 +96,18 @@ aria.asset.image.editor.zoom.preconfigured-zoom-levels: Predefined zoom levels s
 asset.preview.no-video-support: Your browser does not support video.
 asset.preview.no-audio-support: Your browser does not support audio.
 grid.copy-notice: Copied to clipboard
+grid.configuration.no-saved-templates: No saved templates available
+grid.configuration.template: Template
+grid.configuration.save-template: Save as template
+grid.configuration.save-new-template: Save as new template
+grid.configuration.update-template: Update the template
+grid.configuration.edit-template-details: Edit template details
+grid.configuration.delete-template: Delete Template
+grid.configuration.delete-this-template: Delete this template
+grid.configuration.delete-template-confirmation: Are you sure that you want to delete this template?
+grid.configuration.save-template-configuration: Save configuration as template
+grid.configuration.set-default-template: Set as default template
+grid.configuration.shared: Shared
 component.workflow-card.action-btn: Workflow Actions
 component.pql.description: Pimcore Query Language (PQL) is a simple yet powerful query language that lets you search data using various criteria, including filtering values in related elements, to enable precise and comprehensive data retrieval. For details see <anchorPQL>PQL Documentation</anchorPQL>
 asset.asset-editor-tabs.embedded-metadata.headline: Meta Info
@@ -89,13 +138,16 @@ workflow-transitions.finish-review: Finish Review
 workflow-transitions.restart-review: Restart Review
 save-success: Successfully saved
 save-failed: Save failed
+auto-save-failed: Auto save failed
 version.label: Versions
 version.versions: Versions
 version.version: Version
 version.publish: Publish
 version.published: Published
+version.autosaved: Auto saved
 version.schedule-for: Scheduled for
 version.note: Note
+version.note.add: Add a note
 version.own-draft: Own Draft
 version.compare-versions: Compare Versions
 version.fileName: Name
@@ -104,12 +156,20 @@ version.creationDate: Creation Date
 version.modificationDate: Modification Date
 version.fileSize: File Size
 version.mimeType: Mime Type
+version.fullPath: Path
 version.additionalAttributes: Additional Attributes
 version.image: Image
 version.no-versions-to-show: There are no versions to show.
+version.no-preview-available: No preview available for this file.
 version.clear-unpublished: Clear Unpublished
 version.clear-unpublished-versions: Clear unpublished versions
 version.confirm-clear-unpublished: Are you sure you want to clear all unpublished versions?
+version.preview-notification: Preview details will be displayed once a version is selected.
+version.expand-unmodified-fields: Expand all
+version.no-difference: There is no difference between the selected versions.
+version.category.title.systemData: System Data
+version.category.title.baseData: Base Data
+version.category.title.meta: Meta Data
 aria.version.delete: Delete version
 aria.version.expand: Expand version
 clear-all: Clear all
@@ -129,7 +189,7 @@ schedule.columns.actions: Delete
 schedule.upcoming: Upcoming
 schedule.all: All scheduled (upcoming & archive)
 schedule.toolbar.filters.active-switch: Active only
-schedule.toolbar.add: Add
+schedule.toolbar.new: New
 schedule.toolbar.save-scheduled-tasks: Save scheduled tasks
 schedule.version.delete: Delete version
 schedule.version.publish: Publish version
@@ -143,25 +203,22 @@ dependencies.required-by: Required by
 dependencies.columns.subtype: Subtype
 dependencies.columns.path: Path
 dependencies.columns.open: Open
-asset.listing.groups.system: System
-asset.listing.groups.default_metadata: Default Metadata
-asset.listing.groups.predefined_metadata: Predefined Metadata
-asset.listing.column.preview: Preview
-asset.listing.column.id: ID
-asset.listing.column.type: Type
-asset.listing.column.filename: Filename
-asset.listing.column.fullpath: Full path
-asset.listing.column.modificationDate: Modification date
-asset.listing.column.creationDate: Creation date
-asset.listing.column.size: Size
-asset.listing.column.title: Title
-asset.listing.column.alt: Alt
-asset.listing.column.copyright: Copyright
-asset.listing.column.author: Author
-asset.listing.column.authorLink: Author Link
-asset.listing.column.license: License
-asset.listing.column.licensePath: License Path
-asset.listing.column.source: Source
+system: System
+default_metadata: Default Metadata
+predefined_metadata: Predefined Metadata
+preview: Preview
+id: ID
+type: Type
+filename: Filename
+fullpath: Full path
+modificationDate: Modification date
+creationDate: Creation date
+fileSize: File size
+mimetype: MIME type
+key: Key
+published: Published
+classname: Classname
+index: Index
 listing.grid-config.title: Grid config
 listing.add-column: Add a column
 listing.actions: Apply to selection
@@ -169,7 +226,9 @@ listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download
 listing.actions.export: Export
 listing.actions.csv-export: CSV Export
+listing.actions.xlsx-export: Excel Export
 listing.actions.batch-edit: Batch edit
+listing.selection.total: "{{total}} selected"
 data-type.input: Input
 data-type.textarea: Textarea
 data-type.date: Date
@@ -178,11 +237,38 @@ data-type.document: Document
 data-type.asset: Asset
 data-type.object: Object
 data-type.checkbox: Checkbox
+open-data-object.button: Open Data Object
+open-data-object-modal.title: Open Data Object
+open-data-object-modal.label: Please enter the ID or Path of the data object
+open-data-object-modal.required-message: Please enter an ID or Path
+open-data-object-modal.ok-button: OK
+open-data-object-modal.cancel-button: Cancel
+open-asset.button: Open Asset
+open-asset-modal.title: Open Asset
+open-asset-modal.label: Please enter the ID or Path of the asset
+open-asset-modal.ok-button: OK
+open-asset-modal.cancel-button: Cancel
+open-asset-modal.required-message: Please enter an ID or Path of the document
+open-document.button: Open Document
+open-document-modal.title: Open Document
+open-document-modal.label: Please enter the ID or Path of the document
+open-document-modal.ok-button: OK
+open-document-modal.cancel-button: Cancel
+open-document-modal.required-message: Please enter an ID, Path or URL
+notes-and-events-modal.detail-information: Detail Information
+notes-and-events.columns.type: Type
+notes-and-events.columns.element: Element
+notes-and-events.columns.title: Title
+notes-and-events.columns.description: Description
+notes-and-events.columns.details: Details
+notes-and-events.columns.user: User
+notes-and-events.columns.date: Date
+notes-and-events.columns.actions: Actions
 properties.label: Properties
 properties.editable-properties: Editable Properties
 properties.all-properties: All Properties
 properties.predefined-properties: Predefined Properties
-properties.add-custom-property: Add a custom property
+properties.new-custom-property: New custom property
 properties.columns.type: Type
 properties.columns.key: Key
 properties.columns.name: Name
@@ -193,7 +279,7 @@ properties.columns.actions: Actions
 properties.inherited.properties: Inherited Properties
 properties.add-custom-property.cancel: Cancel
 properties.add-custom-property.key: Key
-properties.add-custom-property.add: Add
+properties.add-custom-property.create: Create
 properties.add-custom-property.type: Type
 properties.property-already-exist.title: Property already exists
 properties.property-already-exist.error: Name is already in use, please choose a different one
@@ -202,15 +288,19 @@ properties.add-property-mandatory-fields-missing.error: Key and type are mandato
 button.ok: Ok
 button.apply: Apply
 button.cancel: Cancel
+button.save-apply: Save & Apply
+button.add-edit: Add & Edit
+button.cancel-edits: Cancel edits
 actions.open: Open
 open: Open
+edit: Edit
 component.no-content.no-content-available: No content available
 notes-and-events.label: Notes & Events
 notes-and-events.notes-and-events: Notes & Events
 notes-and-events.details: Details
-notes-and-events.name: name
-notes-and-events.type: type
-notes-and-events.value: value
+notes-and-events.name: Name
+notes-and-events.type: Type
+notes-and-events.value: Value
 notes-and-events.new-note: New Note
 notes-and-events.content: content
 notes-and-events.seo: seo
@@ -226,13 +316,13 @@ tags.remove-and-apply-tags-to-children: Remove and apply tags to children
 tags.columns.path: Path
 tags.columns.actions: Remove
 add: Add
+new: New
 save: Save
-type: Type
 title: Title
 description: Description
 select: Select
 asset.asset-editor-tabs.custom-metadata.text: Custom Metadata
-asset.asset-editor-tabs.custom-metadata.add-custom-definition.add: Add custom definition
+asset.asset-editor-tabs.custom-metadata.new-custom-metadata: New custom metadata
 asset.asset-editor-tabs.custom-metadata.add-custom-metadata.name: Name
 asset.asset-editor-tabs.custom-metadata.add-custom-metadata.type: Type
 asset.asset-editor-tabs.custom-metadata.add-custom-metadata.language: Language
@@ -243,7 +333,7 @@ asset.asset-editor-tabs.custom-metadata.columns.name: Name
 asset.asset-editor-tabs.custom-metadata.columns.language: Language
 asset.asset-editor-tabs.custom-metadata.columns.value: Value
 asset.asset-editor-tabs.custom-metadata.columns.actions: Actions
-asset.asset-editor-tabs.custom-metadata.add-custom-metadata.add: Add
+asset.asset-editor-tabs.custom-metadata.new-custom-metadata.create: Create
 asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.title: Custom Metadata already exists
 asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error: Name is already in use, please choose a different one
 asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title: Mandatory fields missing
@@ -271,18 +361,23 @@ jobs.job.finished: "{{title}} finished"
 jobs.job.finished-with-errors: "{{title}} finished with errors"
 jobs.job.progress: "{{progress}}% completed"
 jobs.job.button-retry: Retry
+jobs.job.button-reload: Reload
 jobs.job.button-hide: hide
-jobs.job.button-hide-and-reload: hide and reload folder
 jobs.job.button-download: download
 jobs.job.button-ignore-and-reload: ignore and reload
 jobs.zip-job.title: "ZIP of {{title}}"
 jobs.batch-edit-job.title: "Batch Edit of {{title}}"
 jobs.csv-job.title: "CSV of {{title}}"
+jobs.xlsx-job.title: "XLSX of {{title}}"
+batch-edit.job-title: Batch Edit
 batch-edit.modal-title: Batch Edit
 batch-edit.no-content: There are no added columns yet
 batch-edit.modal-footer.apply-changes: Apply changes
 batch-edit.modal-footer.discard-all-changes: Discard All Changes
 batch-edit.modal-footer.add-a-column: Add a column
+batch-edit.append-mode.replace: Batch replace
+batch-edit.append-mode.add: Batch add
+batch-edit.append-mode.remove: Batch remove
 export-csv-form.modal-title: Export CSV
 export-csv-form.export-notice: Please note that the export does not support some fields(e.g. preview, size). Press OK to continue with the export.
 export-csv-form.form-field.delimiter: Delimiter
@@ -290,10 +385,20 @@ export-csv-form.form-field.header: Header
 export-csv-form.form-field.header.option.name: System key
 export-csv-form.form-field.header.option.title: Label
 export-csv-form.form-field.header.option.no-header: No header
+export-xlsx-form.modal-title: Export Excel
+export-xlsx-form.export-notice: Please note that the export does not support some fields(e.g. preview, size). Press OK to continue with the export.
+export-xlsx-form.form-field.delimiter: Delimiter
+export-xlsx-form.form-field.header: Header
+export-xlsx-form.form-field.header.option.name: System key
+export-xlsx-form.form-field.header.option.title: Label
+export-xlsx-form.form-field.header.option.no-header: No header
 form.validation.required: This field is required
 form.validation.numeric-range.first-value-missing: First value is missing
 form.validation.numeric-range.second-value-missing: Second value is missing
 form.validation.numeric-range.second-value-greater: Second value cannot be smaller than the first value
+form.validation.provide-name: Please provide a name
+form.validation.provide-description: Please provide a description
+form.label.new-item: Enter the name of the new item
 thumbnail: Thumbnail
 select-image-preview: Select Image Preview
 choose-media: Choose Media
@@ -307,14 +412,19 @@ close-unmodified: Close Unmodified
 close-all: Close All
 asset.tree.context-menu.download: Download
 asset.tree.context-menu.download-as-zip: Download as ZIP
-element.tree.context-menu.add-assets: Add Asset(s)
+element.tree.context-menu.new-assets: New Asset(s)
 element.tree.context-menu.add-assets.upload-files: Upload Files
 element.tree.context-menu.add-assets.upload-zip: Upload Zip
 element.tree.context-menu.advanced: Advanced
 element.tree.context-menu.search-and-move: Search & Move
 element.tree.context-menu.expand-children: Expand Children
+asset.tree.context-menu.clear-thumbnails: Clear Thumbnails
 element.tree.copy: Copy
 element.tree.paste: Paste
+element.tree.paste-as-child: Paste as child
+element.tree.paste-as-child-recursive: Paste as child (recursive)
+element.tree.paste-recursive-updating-references: Paste recursive, updating references
+element.tree.paste-only-contents: Paste only contents here
 element.tree.cut: Cut
 element.tree.paste-cut: Paste cut-out element
 element.lock: Lock
@@ -322,9 +432,8 @@ element.lock-and-propagate-to-children: Lock and propagate to children
 element.unlock: Unlock
 element.unlock-and-propagate-to-children: Unlock and propagate to children
 element.tree.refresh: Refresh
-element.add-folder: Add Folder
-element.add-folder.label: 'Enter the name of the new item'
-element.add-folder.validation: 'Please enter a valid name'
+element.new-folder: New Folder
+element.new-folder.validation: 'Please enter a valid name'
 element.rename: Rename
 element.rename.label: 'Please enter the new name'
 element.rename.validation: 'Please enter a valid name'
@@ -333,6 +442,13 @@ element.delete.confirmation.title: Delete item
 element.delete.confirmation.text: Do you really want to delete this item?
 element.delete.confirmation.ok: Delete permanently
 element.open: Open
+element.toolbar.copy-id: ID {{id}} - Copy
+element.toolbar.copy-full-path-to-clipboard: Copy full path to clipboard
+element.toolbar.copy-deep-link-to-clipboard: Copy deep link to clipboard
+element.toolbar.copy-className: Class {{className}} - Copy
+element.unpublish: Unpublish
+element.publish: Publish
+element.locate-in-tree: Locate in Tree
 male: Male
 female: Female
 other: Other
@@ -344,6 +460,7 @@ no-value-set: No value set
 set-to-null: Empty (set to null)
 remove: Remove
 delete: Delete
+clone: Clone
 latitude: Latitude
 longitude: Longitude
 search-address: Search address
@@ -356,6 +473,8 @@ relations.id: ID
 relations.reference: Reference
 relations.type: Type
 relations.subtype: Subtype
+relations.classname: Class
+relations.fullpath: Full Path
 relations.remove-all.confirm: Do you really want to delete all relations?
 relation: relation
 items-limit-reached: The maximum number of items ({{maxItems}}) has been reached.
@@ -371,13 +490,53 @@ text: Text
 video: Video
 processing: Processing
 upload: Upload
+close: Close
 upload.assets-items-failed-message: Some items could not be uploaded.
 quantity-value.converted-units: Converted Units
-structured-table.empty.confirm: Are you sure you want to clear all data?
+table.empty.confirm: Are you sure you want to clear all data?
+table.new-column: New column
+table.delete-column: Delete column
+table.new-row: New row
+table.delete-row: Delete row
+table.duplicate-row: Duplicate row
+table.copy: Copy
+table.paste: Paste
+table.empty: Empty
+table.paste-placeholder: Paste your data here
+empty.confirm: Are you sure you want to clear all data?
 tree.actions.clone-user: Clone User
 tree.actions.remove-user: Remove User
+tree.actions.folder: Folder
+tree.actions.user: User
 tree.actions.add-folder: Add Folder
+tree.actions.add-tag: New Tag
+tree.actions.delete-tag: Delete
+tree.actions.rename-tag: Rename
 tree.actions.add-user: Add User
+tree.actions.add-role: Add Role
+tree.actions.clone-role: Clone Role
+tree.actions.remove-role: Remove Role
+tree.actions.remove-folder: Remove Folder
+tag-configuration.new: New
+tag-configuration.new-tag: New Tag
+tag-configuration.name: Name
+tag-configuration.parent-tag: Parent Tag
+tag-configuration.create: Create
+tag-configuration.save: Save
+tag-configuration.rename: Rename Tag
+tag-configuration.successful-add: Tag has been added successfully
+tag-configuration.successful-update: Tag has been updated successfully
+tag-configuration.successful-deletion: Tag has been deleted successfully
+tag-configuration.warn-delete-tag-modal-title: Delete this tag
+tag-configuration.warn-delete-parent-tag-modal-title: Delete this parent tag
+tag-configuration.warn-delete-all-tags-title: Delete all tags
+tag-configuration.warn-delete-all-tags-modal-text: Are you sure you want to delete all tags?
+tag-configuration.warn-delete-tag-modal-text: Are you sure you want to delete this tag?
+tag-configuration.warn-delete-parent-tag-modal-text: Are you sure you want to delete this parent tag? All the tags associated with it will be deleted.
+tag-configuration.delete-tag: Delete
+tag-configuration.delete-all: Delete all
+tag-configuration.delete-parent-tag: Delete the parent tag and all children tags
+tag-configuration.cancel: Cancel
 user-management.admin: Admin
 user-management.tree.all: All Users
 user-management.settings.title: Settings
@@ -411,7 +570,9 @@ user-management.key-bindings.recycleBin: Recycle Bin
 user-management.key-bindings.notesEvents: Notes & Events
 user-management.key-bindings.tagManager: Tag Manager
 user-management.key-bindings.tagConfiguration: Tag Configuration
+user-management.key-bindings.user: User
 user-management.key-bindings.users: Users
+user-management.key-bindings.role: Role
 user-management.key-bindings.roles: Roles
 user-management.key-bindings.clearAllCaches: Clear All Caches
 user-management.key-bindings.clearDataCache: Clear Data Cache
@@ -432,6 +593,8 @@ user-management.general: General
 user-management.active: Active
 user-management.name: Name
 user-management.password: Password
+user-management.user.search: Search for a user
+user-management.role.search: Search for a role
 user-management.twoFactorAuthenticationEnabled: Two Factor Authentication Enabled
 user-management.firstname: Firstname
 user-management.lastname: Lastname
@@ -475,13 +638,127 @@ user-management.workspaces.columns.create: Create
 user-management.workspaces.columns.settings: Settings
 user-management.workspaces.columns.versions: Versions
 user-management.workspaces.columns.properties: Properties
+user-management.workspaces.columns.path: Path
+user-management.workspaces.columns.id: ID
+user-management.workspaces.columns.subtype: Subtype
+user-management.add-folder.success: Folder added successfully
+user-management.remove-folder.success: Folder removed successfully
+user-management.clone-user.success: User cloned successfully
+user-management.save-user.success: User saved successfully
+user-management.add-user.success: User added successfully
+user-management.remove-user.success: User removed successfully
+user-management.upload-image.success: Image uploaded successfully
+roles.tree.all: All Roles
+roles.save-item.success: Role saved successfully
+roles.clone-item.success: Role cloned successfully
+roles.remove-folder.success: Folder removed successfully
+roles.remove-item.success: Role removed successfully
+roles.add-item.success: Role added successfully
+roles.add-folder.success: Folder added successfully
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
 navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
+navigation.customise: Customise
+navigation.tag-configuration: Tag Configuration
+navigation.user-and-roles: User & Roles
+navigation.users: Users
+navigation.roles: Roles
+navigation.open-asset: Open Asset
+navigation.open-document: Open Document
+navigation.open-data-object: Open Data Object
+navigation.notes-and-events: Notes & Events
+navigation.file: File
+navigation.settings: Settings
+navigation.tools: Tools
+perspective.default: Default
+perspective.switching.title: Switching perspective
+perspective.switching.description: Currently switching to the following perspective
+widget.notes-and-events: Notes & Events
+widget.tag-configuration: Tag Configuration
+widget.role-management: Roles
+widget.user-management: Users
 external-image.preview-placeholder: Add an external image
-image.dnd-target: Upload or drop an image here
+empty-image: Empty Image
+image.dnd-target: Drop an image here
 fallback: Fallback
 url-slug.add-site: Add Site
 url-slug.invalid: Please enter a valid URL slug (starting with a '/')
 collection.empty: No available fields yet. Start by adding a field.
+video.type: Video Type
+video.type.asset: Asset
+video.type.youtube: YouTube
+video.type.vimeo: Vimeo
+video.type.dailymotion: Dailymotion
+video.id: Video ID
+video.url: Video URL
+video.settings: Video Settings
+video.poster: Poster-Image
+video.path: Path
+video.dnd-target: Drop a video here
+many-to-one-relation.drop-placeholder: Drop an item here
+many-to-one-relation.drop-placeholder-text-input: Drop an item here or enter a value
+reverse-object-relation.owner-hint: The current object is not the owner of these relations, making changes here might make saving the object slow.
+reverse-object-relation.owner-class: Owner class
+reverse-object-relation.owner-field: Owner field
+link.not-set: not set
+link.edit-title: Edit Link
+link.tab.basic: Basic
+link.tab.advanced: Advanced
+link.text: Text
+link.path: Path
+link.properties: Properties
+link.target: Target
+link.parameters: Parameters
+link.anchor: Anchor
+link.title: Title
+link.accesskey: Accesskey
+link.rel: Relation
+link.tabindex: Tabindex
+link.class: Class
+crop: Crop
+crop.remove: Remove Crop
+hotspots-markers-modal.edit-button: Add & Edit data
+hotspots-markers-data-modal.title: Add & Edit data
+hotspots-markers-data-modal.new-data: New
+hotspots-markers-data-modal.apply: Apply
+hotspots-markers-data-modal.name: Name
+hotspots-markers-data-modal.data: Data
+hotspots-markers-data-modal.data-type.name: Name
+hotspots-markers-data-modal.data-type.value: Value
+hotspots-markers-data-modal.data-type.text-field: Text Field
+hotspots-markers-data-modal.data-type.text-area: Text Area
+hotspots-markers-data-modal.data-type.checkbox: Checkbox
+hotspots-markers-data-modal.data-type.object: Object
+hotspots-markers-data-modal.data-type.document: Document
+hotspots-markers-data-modal.data-type.asset: Asset
+hotspots.edit: Edit marker and hotspots
+hotspots.show: Show marker and hotspots
+hotspots.new-marker: New Marker
+hotspots.new-hotspot: New Hotspot
+hotspots.clear-data: Clear all edits (marker, hotspot, cropping)
+hotspots.clear-data.dnd-message: This image contains additional data like markers or hotspots. Do you want to clear them as well?
+hotspots.data-cleared: Hotspots, Markers and Cropping Data cleared
+hotspots.has-hotspots-or-marker: Hotspots or markers have been added to this item
+home: Home
+preview.label: Preview
+inheritance-active: "Data inherited from object ID {{id}}"
+inheritance-broken: "Data inheritance broken"
+main: Main
+main_admin: Main (Admin Mode)
+draft-alert: The current version is a draft. You can delete the draft to restore the previous version.
+draft-alert-auto-save: The current version is a auto saved draft. You can delete the draft to restore the previous version.
+delete-draft: Delete draft
+delete-draft-auto-save: Delete auto saved draft
+delete-draft-confirmation: Are you sure you want to delete the draft?
+auto-save.tooltip: This version is auto saved.
+auto-save.loading-tooltip: Auto save in progress
+detached-tab.draft-tooltip: The current version is a draft.
+detached-tab.draft-tooltip-addon:  You can publish in the associated element/object main/mother tab.
+details: Details
+element: Element
+entries: entries
+entry: entry
+error_element_validation_failed: 'Validation failed'
+element.delete.deleting-folder: Deleting Folder
+component.pagination.showing-items: Showing {{total}} items

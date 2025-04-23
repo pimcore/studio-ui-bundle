@@ -24,17 +24,49 @@ export type LoginApiArg = {
 };
 export type LogoutApiResponse = unknown;
 export type LogoutApiArg = void;
+export type ElementIcon = {
+    /** Icon type */
+    type: "name" | "path";
+    /** Icon value */
+    value: string;
+};
+export type PerspectiveConfig = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Perspective ID */
+    id: string;
+    /** Name */
+    name: string;
+    /** Icon */
+    icon: ElementIcon;
+    /** Is Writeable */
+    isWriteable: boolean;
+};
 export type UserInformation = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
+    /** User ID */
+    id: number;
     /** Username */
     username: string;
     /** Permissions */
     permissions: string[];
     /** If user is an admin user */
     isAdmin: boolean;
+    /** Allowed classes to create */
+    classes: string[];
+    /** Allowed doc types to create */
+    docTypes: string[];
+    /** User Language */
+    language: string;
+    /** Active studio perspective ID */
+    activePerspective: any;
+    /** Allowed studio perspectives */
+    perspectives: PerspectiveConfig[];
 };
 export type InvalidCredentials = {
     /** Error */

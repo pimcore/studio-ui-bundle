@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './asset-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
@@ -38,7 +38,20 @@ const api = baseApi.enhanceEndpoints({
     },
 
     assetGetTree: {
-      providesTags: (result, error, args) => args.parentId !== undefined ? providingTags.ASSET_TREE_ID(args.parentId) : providingTags.ASSET_TREE()
+      providesTags: (result, error, args) => {
+        let providingTagsForTree: Tag[] = []
+        if (result !== undefined) {
+          providingTagsForTree = result?.items.flatMap((item) => providingTags.ASSET_DETAIL_ID(item.id))
+        }
+
+        providingTagsForTree = [
+          ...providingTagsForTree,
+          ...providingTags.ASSET_TREE(),
+          ...args.parentId !== undefined ? providingTags.ASSET_TREE_ID(args.parentId) : []
+        ]
+
+        return providingTagsForTree
+      }
     },
 
     assetUpdateById: {
@@ -49,12 +62,24 @@ const api = baseApi.enhanceEndpoints({
       invalidatesTags: (result, error, args) => invalidatingTags.ASSET_TREE_ID(args.parentId)
     },
 
-    assetGetGrid: {
-      invalidatesTags: []
+    assetPatchById: {
+      invalidatesTags: (result, error, args) => {
+        const invalidatingTagsForPatch: Tag[] = []
+
+        for (const asset of args.body.data) {
+          invalidatingTagsForPatch.push(...invalidatingTags.ASSET_DETAIL_ID(asset.id))
+        }
+
+        return invalidatingTagsForPatch
+      }
     },
 
     assetGetGridConfigurationByFolderId: {
       providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_DETAIL(args.folderId, args.configurationId)
+    },
+
+    assetGetGrid: {
+      providesTags: (result, error, args) => providingTags.ASSET_GRID_ID(args.body.folderId)
     },
 
     assetSaveGridConfiguration: {
@@ -84,24 +109,25 @@ export type * from './asset-api-slice.gen'
 export const {
   useAssetGetByIdQuery,
   useAssetGetTreeQuery,
+  useLazyAssetGetTreeQuery,
   useAssetUpdateByIdMutation,
   useAssetCloneMutation,
   useAssetReplaceMutation,
   useAssetCustomMetadataGetByIdQuery,
   useAssetCustomSettingsGetByIdQuery,
   useAssetGetTextDataByIdQuery,
-  useAssetGetGridMutation,
+  useAssetGetGridQuery,
   useAssetPatchByIdMutation,
   useAssetExportZipAssetMutation,
   useAssetExportZipFolderMutation,
-  useAssetExportCsvAssetMutation,
-  useAssetExportCsvFolderMutation,
   useAssetGetSavedGridConfigurationsQuery,
   useAssetSaveGridConfigurationMutation,
   useAssetSetGridConfigurationAsFavoriteMutation,
   useAssetUpdateGridConfigurationMutation,
   useAssetDeleteGridConfigurationByConfigurationIdMutation,
-  useAssetGetGridConfigurationByFolderIdQuery
+  useAssetGetGridConfigurationByFolderIdQuery,
+  useAssetGetAvailableGridColumnsQuery,
+  useAssetPatchFolderByIdMutation
 } = api
 
 export { api }

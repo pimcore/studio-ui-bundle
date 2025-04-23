@@ -17,13 +17,14 @@ import { GeoMapCard, type GeoMapCardBaseProps } from '@Pimcore/components/geo-ma
 import { type GeoBounds, type GeoPoint } from '@Pimcore/components/geo-map/types/geo-types'
 import { type GeoMapAPI } from '@Pimcore/components/geo-map/geo-map'
 
-export interface GeoPolyDrawerProps extends GeoMapCardBaseProps {
+export interface GeoBoundsDrawerProps extends GeoMapCardBaseProps {
   onChange?: (value: GeoBounds | undefined) => void
   value?: GeoBounds | null
   disabled?: boolean
+  className?: string
 }
 
-export const GeoBoundsDrawer = ({ ...props }: GeoPolyDrawerProps): React.JSX.Element => {
+export const GeoBoundsDrawer = ({ ...props }: GeoBoundsDrawerProps): React.JSX.Element => {
   const [mapValue, setMapValue] = React.useState<GeoBounds | undefined>(props.value ?? undefined)
   const [footerValue, setFooterValue] = React.useState<GeoBounds | undefined>(props.value ?? undefined)
   const geoMapRef = useRef<GeoMapAPI>(null)
@@ -44,29 +45,33 @@ export const GeoBoundsDrawer = ({ ...props }: GeoPolyDrawerProps): React.JSX.Ele
 
   return (
     <GeoMapCard
+      className={ props?.className }
       disabled={ props.disabled }
-      footer={ <GeoBoundsDrawerFooter
-        disabled={ props.disabled }
-        onChange={ onChangeFooter }
-        onSearch={ (geoPoint?: GeoPoint) => {
-          setFooterValue(undefined)
-          setMapValue(undefined)
+      footer={ props.disabled === true
+        ? undefined
+        : (
+          <GeoBoundsDrawerFooter
+            onChange={ onChangeFooter }
+            onSearch={ (geoPoint?: GeoPoint) => {
+              setFooterValue(undefined)
+              setMapValue(undefined)
 
-          const geoMapAPI = geoMapRef.current
-          geoMapAPI?.setValue(undefined)
-          if (geoPoint === undefined) {
-            geoMapAPI?.reset()
-          } else {
-            geoMapAPI?.setLat(geoPoint.latitude)
-            geoMapAPI?.setLng(geoPoint.longitude)
-            geoMapAPI?.setZoom(15)
-          }
+              const geoMapAPI = geoMapRef.current
+              geoMapAPI?.setValue(undefined)
+              if (geoPoint === undefined) {
+                geoMapAPI?.reset()
+              } else {
+                geoMapAPI?.setLat(geoPoint.latitude)
+                geoMapAPI?.setLng(geoPoint.longitude)
+                geoMapAPI?.setZoom(15)
+              }
 
-          geoMapAPI?.forceRerender()
-          props.onChange?.(undefined)
-        } }
-        value={ footerValue }
-               /> }
+              geoMapAPI?.forceRerender()
+              props.onChange?.(undefined)
+            } }
+            value={ footerValue }
+          />
+          ) }
       height={ props.height }
       lat={ props.lat }
       lng={ props.lng }

@@ -11,11 +11,17 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import type React from 'react'
 import { isEmpty } from 'lodash'
+
+interface IError {
+  content: React.JSX.Element | string
+  title: string | null
+}
 
 interface IErrorModalServiceReturn {
   setModalInstance: (modal: any) => void
-  showError: (content: string) => void
+  showError: ({ content, title }: IError) => void
 }
 
 export const ErrorModalService = ((): IErrorModalServiceReturn => {
@@ -25,12 +31,12 @@ export const ErrorModalService = ((): IErrorModalServiceReturn => {
     modalInstance = modal
   }
 
-  const showError = (content: string): void => {
+  const showError = ({ content, title }: IError): void => {
     if (isEmpty(modalInstance)) {
       throw new Error('ErrorModalService: Modal instance is not set. Call setModalInstance first.')
     }
 
-    modalInstance.error({ content })
+    modalInstance.error({ content, title })
   }
 
   return {

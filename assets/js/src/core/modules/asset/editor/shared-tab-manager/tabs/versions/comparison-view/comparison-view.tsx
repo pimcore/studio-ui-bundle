@@ -12,28 +12,27 @@
 */
 
 import React, { useEffect, useState } from 'react'
-import {
-  api, type AssetVersion
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
-import {
-  ComparisonViewUi
-} from './comparison-view-ui'
+import { store } from '@Pimcore/app/store'
+import { api, type AssetVersion } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
+import { ComparisonViewUi } from './comparison-view-ui'
 import {
   type AssetVersionData,
-  hydrateVersionData, loadPreviewImage,
+  checkIsImageVersion,
+  hydrateVersionData,
+  loadPreviewImage,
   versionsDataToTableData
 } from '../details-functions'
-import { store } from '@Pimcore/app/store'
 import { Content } from '@Pimcore/components/content/content'
 import {
   type VersionComparisonViewProps
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-details-props'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 
 export const ComparisonView = ({
   versionIds
 }: VersionComparisonViewProps): React.JSX.Element => {
   const [gridData, setGridData] = useState([] as object[])
   const [versions, setVersions] = useState<AssetVersionData[]>([])
+  const [isImageVersion, setIsImageVersion] = useState(false)
 
   const handleImageVersions = (currentVersions: AssetVersionData[], imageUrls: Array<string | null>): void => {
     const imageVersions = currentVersions
@@ -66,6 +65,10 @@ export const ComparisonView = ({
         responses.forEach((response, versionIndex) => {
           const dataRaw = response.data as AssetVersion
 
+          if (checkIsImageVersion(dataRaw)) {
+            setIsImageVersion(true)
+          }
+
           currentVersions.push(hydrateVersionData(dataRaw, versionIds[versionIndex].id, versionIds[versionIndex].count))
           imagePromises.push(loadPreviewImage(dataRaw, versionIds[versionIndex].id))
         })
@@ -80,12 +83,19 @@ export const ComparisonView = ({
   }, [versionIds])
 
   if (gridData.length === 0) {
-    return <Content loading />
+    return (
+      <Content
+        fullPage
+        loading
+      />
+    )
   }
 
   return (
     <ComparisonViewUi
       gridData={ gridData }
+      isImageVersion={ isImageVersion }
+      versionIds={ versionIds }
       versions={ versions }
     />
   )

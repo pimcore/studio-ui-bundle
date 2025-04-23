@@ -26,13 +26,14 @@ import { findParentByKey, findNodeByKey } from '@Pimcore/modules/user/management
 
 interface ITreeContainerProps {
   treeData: TreeDataItem[]
+  isLoading: boolean
   onLoadTreeData: (node: TreeDataNode) => Promise<void>
   onUpdateTreeData: (key: any, items: any, add?: boolean) => void
   onReloadTree: () => void
   onRemoveItem: (key: any) => void
   onMoveItem: (dragNode: any, dropKey: any) => void
 }
-const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTree, onRemoveItem, onMoveItem, ...props }: ITreeContainerProps): React.JSX.Element => {
+const TreeContainer = ({ treeData, isLoading, onUpdateTreeData, onLoadTreeData, onReloadTree, onRemoveItem, onMoveItem, ...props }: ITreeContainerProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openUser, moveUserById, addNewUser, addNewFolder, removeUser, cloneUser, removeFolder } = useUserHelper()
   const { styles } = useStyle()
@@ -71,13 +72,14 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
       renderToolbar={
         <ToolbarTree
           onAddFolder={ () => { handleAddFolder('0') } }
-          onAddUser={ () => { handleAddUser('0') } }
+          onAddItem={ () => { handleAddUser('0') } }
           onReload={ onReloadTree }
         />
       }
     >
       <Content
         className={ classNames.join(', ') }
+        loading={ isLoading }
       >
         <TreeAutocomplete />
 

@@ -22,6 +22,8 @@ import {
   useWorkflow
 } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { useEffect } from 'react'
 
 interface UseSubmitWorkflowReturn {
   submitWorkflowAction: (actionType: string, transition: TransitionType, workFlowName: string, workFlowOptions: WorkflowOptions) => void
@@ -44,20 +46,33 @@ export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn
   const [fetchSubmitWorkflowActionMutation, {
     isLoading: submissionLoading,
     isSuccess: submissionSuccess,
-    isError: submissionError
+    isError: isSubmissionError,
+    error
   }] = useWorkflowActionSubmitMutation(
     { fixedCacheKey: `shared-submit-workflow-action-${workflowName}` }
   )
-  const workFlowTransition = (transition: TransitionType, actionType: string, workFlowName: string, workFlowOptions: WorkflowOptions): WorkflowActionSubmitApiArg => ({
-    submitAction: {
-      actionType,
-      elementId: id,
-      elementType,
-      workflowId: _.snakeCase(workFlowName),
-      transitionId: _.snakeCase(transition),
-      workflowOptions: workFlowOptions
+
+  useEffect(() => {
+    if (isSubmissionError) {
+      trackError(new ApiError(error))
     }
-  })
+  }, [isSubmissionError])
+
+  const workFlowTransition = (transition: TransitionType, actionType: string, workFlowName: string, workFlowOptions: WorkflowOptions): WorkflowActionSubmitApiArg => {
+    const workflowId = _.snakeCase(workFlowName)
+    const transitionId = _.snakeCase(transition)
+
+    return ({
+      submitAction: {
+        actionType,
+        elementId: id,
+        elementType,
+        workflowId,
+        transitionId,
+        workflowOptions: workFlowOptions
+      }
+    })
+  }
 
   const submitWorkflowAction = (transition: TransitionType, actionType: string, workflowName: string, workFlowOptions: WorkflowOptions): void => {
     setContextWorkflowDetails({ transition, action: actionType, workflowName })
@@ -70,16 +85,8 @@ export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn
           type: 'success',
           duration: 3
         })
-      } else if ('error' in response) {
-        throw new Error(JSON.stringify(response.error))
       }
     }).catch((error) => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      messageApi.error({
-        content: t('action-could-not-be-applied') + ': ' + t(`${workflowName}`),
-        type: 'error',
-        duration: 3
-      })
       console.error(`Failed to submit workflow action ${error}`)
     })
   }
@@ -88,6 +95,6 @@ export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn
     submitWorkflowAction,
     submissionLoading,
     submissionSuccess,
-    submissionError
+    submissionError: isSubmissionError
   }
 }

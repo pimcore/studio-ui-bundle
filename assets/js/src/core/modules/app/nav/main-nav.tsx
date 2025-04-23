@@ -17,17 +17,18 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useStlyes } from './main-nav.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useMainNav } from './hooks/use-main-nav'
-import { Button } from '@Pimcore/components/button/button'
-import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
-import type { IMainNavItem } from '@Pimcore/modules/app/nav/main-nav-slice'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useTranslation } from 'react-i18next'
+import { type IMainNavItem } from './services/main-nav-registry'
+import { isAllowedInPerspective } from '@Pimcore/modules/perspectives/permission-checker'
+import { isUndefined } from 'lodash'
+import { PerspectiveSwitch } from './perspective-switch'
 
 export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStlyes()
-  const { getNavItems } = useMainNav()
+  const { navItems } = useMainNav()
   const { openMainWidget } = useWidgetManager()
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
 
@@ -45,40 +46,68 @@ export const MainNav = (): React.JSX.Element => {
   }
 
   const renderNavItem = (item: IMainNavItem, index: string, level = 0): React.JSX.Element => {
+    const isVisible = (item.children !== undefined && item.children.length > 0) ||
+            (item.widgetConfig !== undefined) || (item.onClick !== undefined) || (item.button !== undefined)
+
+    const isHiddenInPerspective = item.perspectivePermissionHide !== undefined && isAllowedInPerspective(item.perspectivePermissionHide)
+
+    if (!isVisible || isHiddenInPerspective) {
+      return <></>
+    }
+
     return (
       <li
         className={ `main-nav__list-item ${openKeys.includes(index) ? 'is-active' : ''} ${item.className ?? ''}` }
-        key={ item.id }
+        key={ item.path }
       >
-        <button
-          className={ 'main-nav__list-btn' }
-          onClick={ () => {
-            if (item.children !== undefined && item.children.length > 0) {
-              handleOpenState(index)
-            } else if (item.widgetConfig !== undefined) {
-              openMainWidget(item.widgetConfig)
-              setIsOpen(false)
-            }
-          } }
-        >
-          {item.icon !== undefined ? (<Icon value={ item.icon } />) : null}
-          {item.label}
+        {!isUndefined(item.button)
+          ? (
+            <div>
+              {item.button()}
+            </div>
+            )
+          : (
+            <button
+              className={ 'main-nav__list-btn' }
+              onClick={ () => {
+                if (item.children !== undefined && item.children.length > 0) {
+                  handleOpenState(index)
+                } else if (item.onClick !== undefined) {
+                  item.onClick()
+                  setIsOpen(false)
+                } else if (item.widgetConfig !== undefined) {
+                  openMainWidget(item.widgetConfig)
+                  setIsOpen(false)
+                }
+              } }
+            >
+              {item.icon !== undefined ? (<Icon value={ item.icon } />) : null}
+              {t(`${item.label}`)}
 
-          {item.children !== undefined && item.children.length > 0
-            ? (
-              <Icon
-                className={ 'main-nav__list-btn-icon' }
-                value={ 'chevron-right' }
-              />
-              )
-            : null}
-        </button>
+              {item.children !== undefined && item.children.length > 0
+                ? (
+                  <Icon
+                    className={ 'main-nav__list-btn-icon' }
+                    value={ 'chevron-right' }
+                  />
+                  )
+                : null}
+            </button>
+            )}
 
         {item.children !== undefined && item.children.length > 0
           ? (
-            <ul className={ `main-nav__list main-nav__list--level-${level + 1}` }>
-              {item.children?.map((child: IMainNavItem, childIndex) => renderNavItem(child, `${index}-${childIndex}`, level))}
-            </ul>
+            <div className={ 'main-nav__list-detail' }>
+              <div className={ 'main-nav__list-detail-scroll-container' }>
+                <div className={ 'main-nav__list-detail-scroll' }>
+                  <ul
+                    className={ `main-nav__list main-nav__list--level-${level + 1}` }
+                  >
+                    {item.children?.map((child: IMainNavItem, childIndex) => renderNavItem(child, `${index}-${childIndex}`, level))}
+                  </ul>
+                </div>
+              </div>
+            </div>
             )
           : null}
       </li>
@@ -92,9 +121,16 @@ export const MainNav = (): React.JSX.Element => {
     }
   }
 
+  const navRef = useRef<HTMLUListElement | null>(null)
   useEffect(() => {
     if (isOpen) {
       document.addEventListener('click', handleClickOutside)
+
+      if (navRef.current !== null) {
+        const maxHeight = Array.from(document.querySelectorAll('.main-nav__list')).reduce((max, nav) => Math.max(max, nav.scrollHeight), 0)
+
+        navRef.current.style.height = `${maxHeight}px`
+      }
     }
 
     return () => {
@@ -106,7 +142,9 @@ export const MainNav = (): React.JSX.Element => {
     <div ref={ elRef }>
       <IconButton
         icon={ { value: 'menu' } }
-        onClick={ () => { setIsOpen(!isOpen) } }
+        onClick={ () => {
+          setIsOpen(!isOpen)
+        } }
         type={ 'text' }
       />
 
@@ -117,67 +155,24 @@ export const MainNav = (): React.JSX.Element => {
           initial={ { opacity: isOpen ? 0 : 1 } }
           key={ isOpen ? 'open' : 'closed' }
         >
-
           {isOpen
             ? (
               <div
                 className={ ['main-nav', styles.mainNav].join(' ') }
               >
-                <div className={ 'main-nav__top' }>
-                  <ul className={ 'main-nav__list-inline' }>
-                    <li>
-                      <IconTextButton
-                        icon={ { value: 'pin' } }
-                        type={ 'link' }
-                      >{t('navigation.document-types')}</IconTextButton></li>
-                    <li><Button type={ 'link' }>{t('navigation.clear-cache')}</Button></li>
-                    <li><Button type={ 'link' }>{t('navigation.custom-reports')}</Button></li>
-                  </ul>
-                  <Button type={ 'default' }>Customise</Button>
-                </div>
 
-                <Divider className={ 'main-nav__divider' } />
-
-                <ul className={ 'main-nav__list main-nav__list--level-0' }>
-                  {getNavItems.map((item, index) => (
+                <ul
+                  className={ 'main-nav__list main-nav__list--level-0' }
+                  ref={ navRef }
+                >
+                  {navItems.map((item, index) => (
                     renderNavItem(item, `${index}`)
                   ))}
                 </ul>
 
                 <Divider className={ 'main-nav__divider' } />
 
-                <div className={ 'main-nav__bottom' }>
-                  <div className={ 'main-nav__bottom-title' }>{t('navigation.perspectives')}</div>
-                  <ul className={ 'main-nav__list-inline' }>
-                    <li><IconTextButton
-                      icon={ { value: 'pimcore' } }
-                        >Default</IconTextButton></li>
-                    <li><IconTextButton
-                      icon={ { value: 'cdp' } }
-                      type={ 'default' }
-                        >CDP</IconTextButton></li>
-                    <li><IconTextButton
-                      icon={ { value: 'document' } }
-                      type={ 'default' }
-                        >CMS</IconTextButton></li>
-                    <li><IconTextButton
-                      icon={ { value: 'asset' } }
-                      type={ 'default' }
-                        >Commerce</IconTextButton></li>
-                    <li><IconTextButton
-                      icon={ { value: 'asset' } }
-                      type={ 'default' }
-                        >DAM</IconTextButton></li>
-                    <li><IconTextButton
-                      icon={ { value: 'data-object' } }
-                      type={ 'default' }
-                        >PIM</IconTextButton></li>
-                    <li><IconTextButton
-                      icon={ { value: 'catalog' } }
-                      type={ 'default' }
-                        >Catalogue</IconTextButton></li>
-                  </ul>
-                </div>
+                <PerspectiveSwitch setIsOpen={ setIsOpen } />
               </div>
               )
             : null}

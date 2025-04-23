@@ -19,8 +19,13 @@ import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
+import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
+import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 
 export interface ICreateZipDownloadProps {
   jobTitle: string
@@ -44,14 +49,22 @@ export interface UseZipDownloadHookProps {
 
 export interface UseZipDownloadHookReturn {
   createZipDownload: CreateFolderZipDownload | CreateAssetListZipDownload
-  createZipDownloadContextMenuItem: (node: TreeNodeProps) => ItemType
+  createZipDownloadContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
+  createZipDownloadTreeContextMenuItem: (node: TreeNodeProps) => ItemType
 }
 
 export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHookReturn => {
   const [fetchFolder] = useAssetExportZipFolderMutation()
-  const [fetchAssets] = useAssetExportZipAssetMutation()
+  const [fetchAssets, { isError, error }] = useAssetExportZipAssetMutation()
   const { addJob } = useJobs()
   const { t } = useTranslation()
+  const { isTreeActionAllowed } = useTreePermission()
+
+  useEffect(() => {
+    if (isError) {
+      trackError(new ApiError(error))
+    }
+  }, [isError])
 
   const createZipDownload = ({ jobTitle, requestData }: ICreateZipFolderDownloadProps | ICreateZipFolderAssetListProps): void => {
     addJob(createJob({
@@ -68,10 +81,6 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
           promise = fetchAssets(requestData as AssetExportZipAssetApiArg)
         }
 
-        promise.catch(() => {
-          console.error('Failed to create zip')
-        })
-
         const response = (await promise) as any
         const data = response.data as AssetExportZipAssetApiResponse | AssetExportZipFolderApiResponse
         return data.jobRunId
@@ -79,12 +88,27 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
     }))
   }
 
-  const createZipDownloadContextMenuItem = (node: TreeNodeProps): ItemType => {
+  const createZipDownloadContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
     return {
       label: t('asset.tree.context-menu.download-as-zip'),
-      key: 'download-as-zip',
+      key: ContextMenuActionName.downloadAsZip,
       icon: <Icon value={ 'download-zip' } />,
       hidden: node.type !== 'folder' || !checkElementPermission(node.permissions, 'view'),
+      onClick: () => {
+        createZipDownload({
+          jobTitle: getElementKey(node, 'asset'),
+          requestData: { body: { folders: [node.id] } }
+        })
+      }
+    }
+  }
+
+  const createZipDownloadTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+    return {
+      label: t('asset.tree.context-menu.download-as-zip'),
+      key: ContextMenuActionName.downloadAsZip,
+      icon: <Icon value={ 'download-zip' } />,
+      hidden: !isTreeActionAllowed(TreePermission.DownloadZip) || node.type !== 'folder' || !checkElementPermission(node.permissions, 'view'),
       onClick: () => {
         createZipDownload({
           jobTitle: node.label,
@@ -97,12 +121,14 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
   if (props.type === 'folder') {
     return {
       createZipDownload: createZipDownload as CreateFolderZipDownload,
+      createZipDownloadTreeContextMenuItem,
       createZipDownloadContextMenuItem
     }
   }
 
   return {
     createZipDownload: createZipDownload as CreateAssetListZipDownload,
+    createZipDownloadTreeContextMenuItem,
     createZipDownloadContextMenuItem
   }
 }

@@ -15,6 +15,7 @@ import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropd
 import React, { useRef, useState, useMemo } from 'react'
 import { type Model, TabNode } from 'flexlayout-react'
 import type { MenuRef } from 'antd'
+import { isUndefined } from 'lodash'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { useClickOutside } from '@Pimcore/utils/hooks/use-click-outside'
 
@@ -44,9 +45,11 @@ export const useContextMenu = (
   const dropdownRef = useRef<MenuRef>(null)
   const { closeWidget } = useWidgetManager()
 
-  if (createContextMenuItems === undefined) {
-    return {}
+  const closeContextMenu = (): void => {
+    setContextMenuState(null)
   }
+
+  useClickOutside(dropdownRef, closeContextMenu)
 
   const showContextMenu = (node: any, event: React.MouseEvent<HTMLElement, MouseEvent>): void => {
     if (node instanceof TabNode) {
@@ -56,29 +59,29 @@ export const useContextMenu = (
     }
   }
 
-  const closeContextMenu = (): void => {
-    setContextMenuState(null)
-  }
-
-  useClickOutside(dropdownRef, closeContextMenu)
-
   const menuItems = useMemo(() => {
-    if (contextMenuState !== null) {
+    if (contextMenuState !== null && !isUndefined(createContextMenuItems)) {
       return createContextMenuItems({ contextMenuState, closeContextMenu, model, closeWidget })
     }
     return []
   }, [contextMenuState, createContextMenuItems, model, closeWidget])
 
-  const dropdown = contextMenuState !== null
+  const dropdown = contextMenuState !== null && !isUndefined(createContextMenuItems)
     ? (
       <Dropdown
         menu={ { items: menuItems } }
         menuRef={ dropdownRef }
         open
         overlayStyle={ { position: 'absolute', left: contextMenuState.x, top: contextMenuState.y } }
-      ><span></span></Dropdown>
+      >
+        <span></span>
+      </Dropdown>
       )
     : null
+
+  if (createContextMenuItems === undefined) {
+    return {}
+  }
 
   return {
     showContextMenu,

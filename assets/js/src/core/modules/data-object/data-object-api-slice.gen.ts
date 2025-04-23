@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Data Objects", "Data Object Grid"] as const;
+export const addTagTypes = ["Data Objects", "Data Object Grid", "Search"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -34,6 +34,67 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
+            dataObjectDeleteGridConfigurationByConfigurationId: build.mutation<
+                DataObjectDeleteGridConfigurationByConfigurationIdApiResponse,
+                DataObjectDeleteGridConfigurationByConfigurationIdApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/configuration/${queryArg.configurationId}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Data Object Grid"],
+            }),
+            dataObjectGetGridConfiguration: build.query<
+                DataObjectGetGridConfigurationApiResponse,
+                DataObjectGetGridConfigurationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/configuration/${queryArg.folderId}/${queryArg.classId}`,
+                    params: { configurationId: queryArg.configurationId },
+                }),
+                providesTags: ["Data Object Grid"],
+            }),
+            dataObjectListSavedGridConfigurations: build.query<
+                DataObjectListSavedGridConfigurationsApiResponse,
+                DataObjectListSavedGridConfigurationsApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/configurations/${queryArg.classId}`,
+                }),
+                providesTags: ["Data Object Grid"],
+            }),
+            dataObjectSaveGridConfiguration: build.mutation<
+                DataObjectSaveGridConfigurationApiResponse,
+                DataObjectSaveGridConfigurationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/configuration/save/${queryArg.classId}`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Data Object Grid"],
+            }),
+            dataObjectSetGridConfigurationAsFavorite: build.mutation<
+                DataObjectSetGridConfigurationAsFavoriteApiResponse,
+                DataObjectSetGridConfigurationAsFavoriteApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/configuration/set-as-favorite/${queryArg.configurationId}/${queryArg.folderId}`,
+                    method: "POST",
+                }),
+                invalidatesTags: ["Data Object Grid"],
+            }),
+            dataObjectUpdateGridConfiguration: build.mutation<
+                DataObjectUpdateGridConfigurationApiResponse,
+                DataObjectUpdateGridConfigurationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/configuration/update/${queryArg.configurationId}`,
+                    method: "PUT",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Data Object Grid"],
+            }),
             dataObjectGetAvailableGridColumns: build.query<
                 DataObjectGetAvailableGridColumnsApiResponse,
                 DataObjectGetAvailableGridColumnsApiArg
@@ -43,16 +104,18 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Data Object Grid"],
             }),
-            dataObjectGetGrid: build.mutation<DataObjectGetGridApiResponse, DataObjectGetGridApiArg>({
+            dataObjectGetGrid: build.query<DataObjectGetGridApiResponse, DataObjectGetGridApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-objects/grid`,
+                    url: `/pimcore-studio/api/data-objects/grid/${queryArg.classId}`,
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Data Object Grid"],
+                providesTags: ["Data Object Grid"],
             }),
             dataObjectGetLayoutById: build.query<DataObjectGetLayoutByIdApiResponse, DataObjectGetLayoutByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/data-objects/${queryArg.id}/layout` }),
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/${queryArg.id}/layout/${queryArg.layoutId}`,
+                }),
                 providesTags: ["Data Objects"],
             }),
             dataObjectPatchById: build.mutation<DataObjectPatchByIdApiResponse, DataObjectPatchByIdApiArg>({
@@ -62,6 +125,32 @@ const injectedRtkApi = api
                     body: queryArg.body,
                 }),
                 invalidatesTags: ["Data Objects"],
+            }),
+            dataObjectPatchFolderById: build.mutation<
+                DataObjectPatchFolderByIdApiResponse,
+                DataObjectPatchFolderByIdApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/folder`,
+                    method: "PATCH",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Data Objects"],
+            }),
+            dataObjectFormatPath: build.mutation<DataObjectFormatPathApiResponse, DataObjectFormatPathApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/format-path`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Data Objects"],
+            }),
+            dataObjectPreviewById: build.query<DataObjectPreviewByIdApiResponse, DataObjectPreviewByIdApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/preview/${queryArg.id}`,
+                    params: { site: queryArg.site },
+                }),
+                providesTags: ["Data Objects"],
             }),
             dataObjectReplaceContent: build.mutation<
                 DataObjectReplaceContentApiResponse,
@@ -92,14 +181,35 @@ const injectedRtkApi = api
                         pageSize: queryArg.pageSize,
                         parentId: queryArg.parentId,
                         idSearchTerm: queryArg.idSearchTerm,
+                        pqlQuery: queryArg.pqlQuery,
                         excludeFolders: queryArg.excludeFolders,
                         path: queryArg.path,
                         pathIncludeParent: queryArg.pathIncludeParent,
                         pathIncludeDescendants: queryArg.pathIncludeDescendants,
                         className: queryArg.className,
+                        classIds: queryArg.classIds,
                     },
                 }),
                 providesTags: ["Data Objects"],
+            }),
+            dataObjectGetSearchConfiguration: build.query<
+                DataObjectGetSearchConfigurationApiResponse,
+                DataObjectGetSearchConfigurationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/search/configuration/data-objects`,
+                    params: { classId: queryArg.classId },
+                }),
+                providesTags: ["Search"],
+            }),
+            dataObjectGetSearch: build.query<DataObjectGetSearchApiResponse, DataObjectGetSearchApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/search/data-objects`,
+                    method: "POST",
+                    body: queryArg.body,
+                    params: { classId: queryArg.classId },
+                }),
+                providesTags: ["Search"],
             }),
         }),
         overrideExisting: false,
@@ -141,16 +251,89 @@ export type DataObjectUpdateByIdApiArg = {
     id: number;
     body: {
         data: {
-            parentId?: number | null;
-            index?: number | null;
-            key?: string | null;
-            locked?: string | null;
-            childrenSortBy?: string | null;
-            childrenSortOrder?: string | null;
-            published?: boolean | null;
-            editableData?: object | null;
-            properties?: UpdateDataProperty[] | null;
+            parentId?: any;
+            index?: any;
+            key?: any;
+            useDraftData?: any;
+            task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
+            locked?: any;
+            childrenSortBy?: any;
+            childrenSortOrder?: any;
+            published?: any;
+            editableData?: any;
+            properties?: UpdateDataProperty[];
         };
+    };
+};
+export type DataObjectDeleteGridConfigurationByConfigurationIdApiResponse =
+    /** status 200 Success */ GridDetailedConfiguration;
+export type DataObjectDeleteGridConfigurationByConfigurationIdApiArg = {
+    /** ConfigurationId of the element */
+    configurationId: number;
+};
+export type DataObjectGetGridConfigurationApiResponse =
+    /** status 200 data_object_get_grid_configuration_success_response */ GridDetailedConfiguration;
+export type DataObjectGetGridConfigurationApiArg = {
+    /** FolderId of the element */
+    folderId: number;
+    /** Class Id of the data object */
+    classId: string;
+    /** Configuration ID */
+    configurationId?: number;
+};
+export type DataObjectListSavedGridConfigurationsApiResponse =
+    /** status 200 List of saved grid configurations for data objects */ {
+        totalItems: number;
+        items: GridConfiguration[];
+    };
+export type DataObjectListSavedGridConfigurationsApiArg = {
+    /** Class Id of the data object */
+    classId: string;
+};
+export type DataObjectSaveGridConfigurationApiResponse =
+    /** status 200 Data Object grid configuration saved successfully */ GridConfiguration;
+export type DataObjectSaveGridConfigurationApiArg = {
+    /** Class Id of the data object */
+    classId: string;
+    body: {
+        folderId: number;
+        pageSize: number;
+        name: string;
+        description: string;
+        shareGlobal?: boolean;
+        setAsFavorite?: boolean;
+        saveFilter?: boolean;
+        sharedUsers?: object;
+        sharedRoles?: object;
+        columns: Column[];
+        filter?: GridFilter | null;
+    };
+};
+export type DataObjectSetGridConfigurationAsFavoriteApiResponse =
+    /** status 200 data_object_set_grid_configuration_as_favorite_response */ void;
+export type DataObjectSetGridConfigurationAsFavoriteApiArg = {
+    /** ConfigurationId of the configurationId */
+    configurationId: number;
+    /** FolderId of the folderId */
+    folderId: number;
+};
+export type DataObjectUpdateGridConfigurationApiResponse =
+    /** status 200 Data Object grid configuration updated successfully */ void;
+export type DataObjectUpdateGridConfigurationApiArg = {
+    /** ConfigurationId of the configurationId */
+    configurationId: number;
+    body: {
+        folderId: number;
+        pageSize: number;
+        name: string;
+        description: string;
+        shareGlobal?: boolean;
+        setAsFavorite?: boolean;
+        saveFilter?: boolean;
+        sharedUsers?: object;
+        sharedRoles?: object;
+        columns: Column[];
+        filter?: GridFilter | null;
     };
 };
 export type DataObjectGetAvailableGridColumnsApiResponse =
@@ -166,10 +349,15 @@ export type DataObjectGetAvailableGridColumnsApiArg = {
 export type DataObjectGetGridApiResponse = /** status 200 Data object grid data */ {
     totalItems: number;
     items: {
+        id?: number;
         columns?: GridColumnData[];
+        isLocked?: boolean;
+        permissions?: Permissions;
     }[];
 };
 export type DataObjectGetGridApiArg = {
+    /** Identifies the class name for which the the grid should be build. */
+    classId: string;
     body: {
         folderId: number;
         columns: GridColumnRequest[];
@@ -181,6 +369,8 @@ export type DataObjectGetLayoutByIdApiResponse =
 export type DataObjectGetLayoutByIdApiArg = {
     /** Id of the data-object */
     id: number;
+    /** ID to get specific layout */
+    layoutId?: string;
 };
 export type DataObjectPatchByIdApiResponse =
     /** status 200 Successfully patched data object */ void | /** status 201 Successfully created jobRun for patching multiple data objects */ {
@@ -192,15 +382,57 @@ export type DataObjectPatchByIdApiArg = {
         data: {
             /** Data Object ID */
             id: number;
-            parentId?: number | null;
-            index?: number | null;
-            key?: string | null;
-            locked?: string | null;
-            childrenSortBy?: string | null;
-            childrenSortOrder?: string | null;
-            published?: boolean | null;
+            parentId?: any;
+            index?: any;
+            key?: any;
+            task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
+            locked?: any;
+            childrenSortBy?: any;
+            childrenSortOrder?: any;
+            published?: any;
+            editableData?: any;
         }[];
     };
+};
+export type DataObjectPatchFolderByIdApiResponse =
+    /** status 201 Successfully created jobRun for patching multiple data objects */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type DataObjectPatchFolderByIdApiArg = {
+    body: {
+        data: {
+            /** Folder ID */
+            folderId: number;
+            parentId?: any;
+            index?: any;
+            key?: any;
+            locked?: any;
+            childrenSortBy?: any;
+            childrenSortOrder?: any;
+            published?: any;
+            editableData?: any;
+        }[];
+        filters?: GridFilter;
+    };
+};
+export type DataObjectFormatPathApiResponse = /** status 200 Formatted path of the objects */ {
+    totalItems: number;
+    items: SelectOption[];
+};
+export type DataObjectFormatPathApiArg = {
+    body: {
+        objectId: number;
+        targets: object;
+        context: object;
+    };
+};
+export type DataObjectPreviewByIdApiResponse = unknown;
+export type DataObjectPreviewByIdApiArg = {
+    /** Id of the data object */
+    id: number;
+    /** Site ID */
+    site?: any;
 };
 export type DataObjectReplaceContentApiResponse = /** status 200 Successfully replaced content of data object */ void;
 export type DataObjectReplaceContentApiArg = {
@@ -211,7 +443,7 @@ export type DataObjectReplaceContentApiArg = {
 };
 export type DataObjectGetSelectOptionsApiResponse = /** status 200 List of dynamic select options */ {
     totalItems: number;
-    items: SelectOption[];
+    items: SelectOption2[];
 };
 export type DataObjectGetSelectOptionsApiArg = {
     body: {
@@ -235,6 +467,8 @@ export type DataObjectGetTreeApiArg = {
     parentId?: number;
     /** Filter assets/data-objects by matching ids. As a wildcard * can be used */
     idSearchTerm?: string;
+    /** Pql query filter */
+    pqlQuery?: string;
     /** Filter folders from result. */
     excludeFolders?: boolean;
     /** Filter by path. */
@@ -243,8 +477,33 @@ export type DataObjectGetTreeApiArg = {
     pathIncludeParent?: boolean;
     /** Include all descendants in the result. */
     pathIncludeDescendants?: boolean;
-    /** Filter by class. */
+    /** When provided, the search is executed on the specific data object class index. */
     className?: string;
+    /** Filter results based on the provided class IDs. */
+    classIds?: string;
+};
+export type DataObjectGetSearchConfigurationApiResponse =
+    /** status 200 Data object search configuration */ GridDetailedConfiguration;
+export type DataObjectGetSearchConfigurationApiArg = {
+    /** Class Id of the data object */
+    classId?: string;
+};
+export type DataObjectGetSearchApiResponse = /** status 200 Data object search results */ {
+    totalItems: number;
+    items: {
+        id?: number;
+        columns?: GridColumnData[];
+        isLocked?: boolean;
+        permissions?: Permissions;
+    }[];
+};
+export type DataObjectGetSearchApiArg = {
+    /** Class Id of the data object */
+    classId?: string;
+    body: {
+        columns: GridColumnRequest[];
+        filters?: GridFilter;
+    };
 };
 export type Error = {
     /** Message */
@@ -283,29 +542,30 @@ export type Element = {
     parentId: number;
     /** path */
     path: string;
+    /** icon */
     icon?: ElementIcon;
     /** ID of owner */
     userOwner: number;
     /** User that modified the element */
     userModification: number;
     /** Locked */
-    locked: string | null;
+    locked: any;
     /** Is locked */
     isLocked: boolean;
     /** Creation date */
-    creationDate: number | null;
+    creationDate: any;
     /** Modification date */
-    modificationDate: number | null;
+    modificationDate: any;
 };
 export type CustomAttributes = {
     /** Custom Icon */
     icon: ElementIcon | null;
     /** Custom Tooltip */
-    tooltip: string | null;
+    tooltip: any;
     /** AdditionalIcons */
     additionalIcons: string[];
     /** Custom Key/Filename */
-    key: string | null;
+    key: any;
     /** Additional Css Classes */
     additionalCssClasses: string[];
 };
@@ -335,16 +595,22 @@ export type DataObjectPermissions = Permissions & {
     /** Unpublish */
     unpublish?: boolean;
     /** Localized Edit */
-    localizedEdit?: string | null;
+    localizedEdit?: any;
     /** Localized View */
-    localizedView?: string | null;
-    /** Layouts */
-    layouts?: string | null;
+    localizedView?: any;
+};
+export type DataObjectDraftData = {
+    /** ID */
+    id: number;
+    /** Modification date */
+    modificationDate: number;
+    /** Is auto save */
+    isAutoSave: boolean;
 };
 export type DataObject = Element & {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** Inheritance allowed */
     allowInheritance?: boolean;
@@ -354,6 +620,7 @@ export type DataObject = Element & {
     showVariants?: boolean;
     /** Has preview */
     hasPreview?: boolean;
+    /** Custom attributes for the tree */
     customAttributes?: CustomAttributes;
     /** Has workflow available */
     hasWorkflowAvailable?: boolean;
@@ -374,69 +641,34 @@ export type DataObject = Element & {
     permissions?: DataObjectPermissions;
     /** Custom index */
     index?: number;
+    /** Sort mode of children */
+    childrenSortBy?: string;
+    /** Sort order of children */
+    childrenSortOrder?: string;
     /** Detail object data */
     objectData?: object;
+    /** Inheritance object data */
+    inheritanceData?: object;
+    draftData?: DataObjectDraftData | null;
 };
 export type DataObjectFolder = DataObject;
 export type UpdateDataProperty = {
     /** key */
     key: string;
     /** data */
-    data: any | null;
+    data: any;
     /** type */
     type: string;
     /** inheritable */
     inheritable: boolean;
 };
-export type GridColumnConfiguration = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
-    };
-    /** Key */
+export type Column = {
+    /** Key of the Column */
     key: string;
-    /** Group */
+    /** Locale of the Column */
+    locale: any;
+    /** Group of the Column */
     group: string;
-    /** Sortable */
-    sortable: boolean;
-    /** Editable */
-    editable: boolean;
-    /** Exportable */
-    exportable?: boolean;
-    /** Localizable */
-    localizable: boolean;
-    /** Locale */
-    locale?: string | null;
-    /** Type */
-    type: string;
-    /** Frontend Type */
-    frontendType?: string;
-    /** Config */
-    config: object;
-};
-export type GridColumnData = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
-    };
-    /** Key */
-    key?: string;
-    /** Locale */
-    locale?: string | null;
-    /** Value */
-    value?: any | null;
-};
-export type GridColumnRequest = {
-    /** Key */
-    key: string;
-    /** Locale */
-    locale?: string | null;
-    /** Type */
-    type: string;
-    /** Group */
-    group?: string | null;
-    /** Config */
-    config: string[];
 };
 export type GridFilter = {
     /** Page */
@@ -450,10 +682,124 @@ export type GridFilter = {
     /** Sort Filter */
     sortFilter?: object;
 };
+export type GridDetailedConfiguration = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Name */
+    name: string;
+    /** Description */
+    description: string;
+    /** shareGlobal */
+    shareGlobal: boolean;
+    /** saveFilter */
+    saveFilter: boolean;
+    /** setAsFavorite */
+    setAsFavorite: boolean;
+    /** sharedUsers */
+    sharedUsers: object;
+    /** sharedRoles */
+    sharedRoles: object;
+    /** columns */
+    columns: Column[];
+    /** filter */
+    filter: GridFilter[];
+    /** Page Size */
+    pageSize: number;
+    /** Modification Date */
+    modificationDate?: any;
+    /** Creation Date */
+    creationDate?: any;
+    /** ID of the owner */
+    ownerId?: any;
+    /** ID of the configuration */
+    id?: any;
+};
+export type GridConfiguration = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID */
+    id: number;
+    /** Name */
+    name: string;
+    /** Description */
+    description: string;
+};
+export type GridColumnConfiguration = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Key */
+    key: string;
+    /** Group */
+    group: string;
+    /** Sortable */
+    sortable: boolean;
+    /** Editable */
+    editable: boolean;
+    /** Exportable */
+    exportable?: boolean;
+    /** Filterable */
+    filterable?: boolean;
+    /** Localizable */
+    localizable: boolean;
+    /** Locale */
+    locale?: any;
+    /** Type */
+    type: string;
+    /** Frontend Type */
+    frontendType?: string;
+    /** Config */
+    config: object;
+};
+export type GridColumnData = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Key */
+    key?: string;
+    /** Locale */
+    locale?: any;
+    /** Value */
+    value?: any;
+    /** inheritance */
+    inheritance?: any;
+};
+export type RelationFieldConfig = {
+    /** Relation Getter */
+    relation: string;
+    /** Field getter */
+    field: string;
+};
+export type SimpleFieldConfig = {
+    /** Field getter */
+    field: string;
+};
+export type AdvancedColumnConfig = {
+    /** advancedColumns */
+    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig)[];
+};
+export type GridColumnRequest = {
+    /** Key */
+    key: string;
+    /** Locale */
+    locale?: any;
+    /** Type */
+    type: string;
+    /** Group */
+    group?: any;
+    /** Config */
+    config: (string | AdvancedColumnConfig)[];
+};
 export type Layout = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** Name */
     name: string;
@@ -462,13 +808,13 @@ export type Layout = {
     /** Field Type */
     fieldType: string;
     /** Type */
-    type: string | null;
+    type: any;
     /** Layout */
-    layout: string | null;
+    layout: any;
     /** Region */
-    region: string | null;
+    region: any;
     /** Title */
-    title: string | null;
+    title: any;
     /** Width */
     width: number;
     /** Height */
@@ -478,11 +824,11 @@ export type Layout = {
     /** Collapsed */
     collapsed: boolean;
     /** Body Style */
-    bodyStyle: string | null;
+    bodyStyle: any;
     /** Locked */
     locked: boolean;
     /** Children */
-    children: any[];
+    children: object[];
     /** Icon */
     icon: ElementIcon | null;
     /** Label Align */
@@ -495,7 +841,17 @@ export type Layout = {
 export type SelectOption = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
+    };
+    /** Object Reference */
+    objectReference: string;
+    /** Formated Path */
+    formatedPath: string;
+};
+export type SelectOption2 = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
     };
     /** Key */
     key: string;
@@ -507,11 +863,22 @@ export const {
     useDataObjectCloneMutation,
     useDataObjectGetByIdQuery,
     useDataObjectUpdateByIdMutation,
+    useDataObjectDeleteGridConfigurationByConfigurationIdMutation,
+    useDataObjectGetGridConfigurationQuery,
+    useDataObjectListSavedGridConfigurationsQuery,
+    useDataObjectSaveGridConfigurationMutation,
+    useDataObjectSetGridConfigurationAsFavoriteMutation,
+    useDataObjectUpdateGridConfigurationMutation,
     useDataObjectGetAvailableGridColumnsQuery,
-    useDataObjectGetGridMutation,
+    useDataObjectGetGridQuery,
     useDataObjectGetLayoutByIdQuery,
     useDataObjectPatchByIdMutation,
+    useDataObjectPatchFolderByIdMutation,
+    useDataObjectFormatPathMutation,
+    useDataObjectPreviewByIdQuery,
     useDataObjectReplaceContentMutation,
     useDataObjectGetSelectOptionsMutation,
     useDataObjectGetTreeQuery,
+    useDataObjectGetSearchConfigurationQuery,
+    useDataObjectGetSearchQuery,
 } = injectedRtkApi;

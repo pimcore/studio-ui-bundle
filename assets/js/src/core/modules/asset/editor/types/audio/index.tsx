@@ -37,7 +37,7 @@ moduleSystem.registerModule({
       key: 'view',
       label: 'asset.asset-editor-tabs.view',
       children: <PreviewContainer />,
-      icon: <Icon value={ 'image' } />
+      icon: <Icon value={ 'view' } />
     })
 
     audioTabManager.register(TAB_CUSTOM_METADATA)

@@ -68,6 +68,7 @@ module.exports = {
     '@typescript-eslint/no-misused-promises': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/unbound-method': 'off',
+    'no-labels': ["error", { "allowLoop": true }],
     'react/jsx-boolean-value': 'error',
     'react/jsx-closing-bracket-location': 'error',
     'react/jsx-curly-spacing': ['error', 'always'],

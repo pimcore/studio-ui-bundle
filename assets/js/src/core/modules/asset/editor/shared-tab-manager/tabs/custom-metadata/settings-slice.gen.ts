@@ -27,7 +27,7 @@ export type AssetCustomMetadataGetByIdApiArg = {
 export type CustomMetadata = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** Name */
     name: string;
@@ -36,7 +36,7 @@ export type CustomMetadata = {
     /** Type */
     type: string;
     /** Data */
-    data: any | null;
+    data: any;
 };
 export type Error = {
     /** Message */

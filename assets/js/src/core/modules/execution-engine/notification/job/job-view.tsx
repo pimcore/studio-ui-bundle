@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next'
 
 interface ButtonAction {
   label: string
-  handler: () => void
+  handler: () => void | Promise<void>
 }
 
 export interface JobViewProps extends JobProps {

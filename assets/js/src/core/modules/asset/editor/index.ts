@@ -26,9 +26,13 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import {
   type ComponentRegistry as GlobalComponentRegistry
 } from '@Pimcore/modules/app/component-registry/component-registry'
-import { EditorToolbarContextMenu } from '@Pimcore/modules/asset/editor/toolbar/context-menu/context-menu'
 import { AssetEditorWidget } from '@Pimcore/modules/asset/editor/widget'
 import { type TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
+import { CustomMetadataTabContainer } from './shared-tab-manager/tabs/custom-metadata/custom-metadata-container'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import { AssetVersionsTabContainer } from './shared-tab-manager/tabs/versions/tab-container'
+import { EmbeddedMetadataTabContainer } from './shared-tab-manager/tabs/embedded-metadata/embedded-metadata-container'
+import { EditorContainer } from './editor-container'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -81,8 +85,23 @@ moduleSystem.registerModule({
     const componentRegistry = container.get<GlobalComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
 
     componentRegistry.register({
-      name: 'editorToolbarContextMenuAsset',
-      component: EditorToolbarContextMenu
+      name: componentConfig.asset.editor.container.name,
+      component: EditorContainer
+    })
+
+    componentRegistry.register({
+      name: componentConfig.asset.editor.tab.embeddedMetadata.name,
+      component: EmbeddedMetadataTabContainer
+    })
+
+    componentRegistry.register({
+      name: componentConfig.asset.editor.tab.customMetadata.name,
+      component: CustomMetadataTabContainer
+    })
+
+    componentRegistry.register({
+      name: componentConfig.asset.editor.tab.versions.name,
+      component: AssetVersionsTabContainer
     })
   }
 })

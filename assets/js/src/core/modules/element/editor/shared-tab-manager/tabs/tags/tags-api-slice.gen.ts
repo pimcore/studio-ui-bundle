@@ -19,6 +19,14 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Tags"],
             }),
+            tagCreate: build.mutation<TagCreateApiResponse, TagCreateApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/tag`,
+                    method: "POST",
+                    body: queryArg.createTagParameters,
+                }),
+                invalidatesTags: ["Tags"],
+            }),
             tagGetById: build.query<TagGetByIdApiResponse, TagGetByIdApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/tags/${queryArg.id}` }),
                 providesTags: ["Tags"],
@@ -86,6 +94,10 @@ export type TagGetCollectionApiArg = {
     /** Filter tags by parent id. */
     parentId?: number;
 };
+export type TagCreateApiResponse = /** status 200 tag_create_success_description */ Tag;
+export type TagCreateApiArg = {
+    createTagParameters: CreateTagParameters;
+};
 export type TagGetByIdApiResponse = /** status 200 Successfully retrieved tag data as JSON */ Tag;
 export type TagGetByIdApiArg = {
     /** Id of the tag */
@@ -149,20 +161,20 @@ export type TagUnassignFromElementApiArg = {
 export type Tag = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** tag ID */
-    id?: number;
+    id: number;
     /** parent tag ID */
-    parentId?: number;
+    parentId: number;
     /** tag text */
-    text?: string;
+    text: string;
     /** path */
-    path?: string;
+    path: string;
     /** has children */
-    hasChildren?: boolean;
+    hasChildren: boolean;
     /** IconName */
-    iconName?: string;
+    iconName: string;
     /** children */
     children?: Tag[];
 };
@@ -176,14 +188,21 @@ export type DevError = {
     /** Details */
     details: string;
 };
+export type CreateTagParameters = {
+    /** Parent id */
+    parentId?: number;
+    /** Tag name */
+    name?: string;
+};
 export type ChangeTagParameters = {
     /** Parent id */
-    parentId?: number | null;
+    parentId?: any;
     /** Tag name */
-    name?: string | null;
+    name?: any;
 };
 export const {
     useTagGetCollectionQuery,
+    useTagCreateMutation,
     useTagGetByIdQuery,
     useTagUpdateByIdMutation,
     useTagDeleteByIdMutation,

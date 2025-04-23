@@ -11,20 +11,11 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { Children, type ReactNode, isValidElement, useContext, useEffect, useState } from 'react'
+import React, { type ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import { type DragAndDropInfo, DragAndDropInfoContext } from './context-provider'
 import { type UniqueIdentifier, useDroppable } from '@dnd-kit/core'
-import { useStyle } from './droppable.styles'
-import { DroppableContextProvider } from './droppable-context-provider'
 import { uuid } from '@Pimcore/utils/uuid'
-import cn from 'classnames'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-
-export interface DroppableContentProps {
-  isDragActive: boolean
-  isOver: boolean
-  isValid: boolean
-}
+import { BaseDroppable } from '@Pimcore/components/drag-and-drop/droppable/base-droppable'
 
 export interface DroppableProps {
   className?: string
@@ -35,21 +26,24 @@ export interface DroppableProps {
   isValidData?: ((info: DragAndDropInfo) => boolean)
   onDrop: (info: DragAndDropInfo) => void
   onSort?: (info: DragAndDropInfo, dragId: UniqueIdentifier, dropId: UniqueIdentifier) => void
+  disabled?: boolean
 }
 
 export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
-  const { styles } = useStyle()
   const context = useContext(DragAndDropInfoContext)
   const [isValidContext, setIsValidContext] = useState(false)
   const [id] = useState(uuid())
   let isValidData = true
 
+  const info = useMemo(() => context.getInfo(), [context])
+
   if (typeof props.isValidData === 'function') {
-    isValidData = props.isValidData(context.getInfo())
+    isValidData = props.isValidData(info)
   }
 
   const { isOver, setNodeRef } = useDroppable({
-    id
+    id,
+    disabled: context.getInfo().sortable !== undefined || props.disabled === true
   })
 
   if (isValidContext && isOver && !isValidData) {
@@ -60,23 +54,23 @@ export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
 
   useEffect(() => {
     if (typeof props.isValidContext !== 'boolean') {
-      setIsValidContext(props.isValidContext(context.getInfo()))
+      setIsValidContext(props.isValidContext(info))
     } else {
       setIsValidContext(props.isValidContext as boolean)
     }
 
     context.callbackRegistry!.current.register(id, (event) => {
-      if (isValidContext && isValidData && context.getInfo().sortable !== undefined) {
+      if (isValidContext && isValidData && info.sortable !== undefined) {
         if (event.over === null) {
           return
         }
 
-        props.onSort?.(context.getInfo(), event.active.id, event.over.id)
+        props.onSort?.(info, event.active.id, event.over.id)
         return
       }
       if (!isValidData || !isValidContext || !isOver) return
 
-      props.onDrop(context.getInfo())
+      props.onDrop(info)
     })
 
     return () => {
@@ -84,29 +78,17 @@ export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
     }
   }, [context, isOver])
 
-  const Child = Children.only(props.children)
-
-  if (!isValidElement(Child)) {
-    trackError(new GeneralError('Children must be a valid react component'))
-
-    return null
-  }
-
-  const Component = Child.type
-
-  if (context.getInfo().sortable !== undefined) {
-    return Child
-  }
-
   return (
-    <div className={ cn(props.className, styles[props.variant ?? 'default'], props.shape !== 'angular' ? styles.round : undefined) }>
-      <DroppableContextProvider value={ { isDragActive: isValidContext, isOver: isOver && isValidContext, isValid: isValidData && isValidContext } }>
-        <Component
-          { ...Child.props }
-          key={ id }
-          ref={ setNodeRef }
-        />
-      </DroppableContextProvider>
-    </div>
+    <BaseDroppable
+      className={ props.className }
+      isOver={ isOver }
+      isValidContext={ isValidContext }
+      isValidData={ isValidData }
+      setNodeRef={ setNodeRef }
+      shape={ props.shape }
+      variant={ props.variant }
+    >
+      { props.children }
+    </BaseDroppable>
   )
 }

@@ -30,7 +30,7 @@ export type DocumentsListAvailableSitesApiArg = {
 export type Site = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** ID */
     id: number;
@@ -39,9 +39,9 @@ export type Site = {
     /** Domain */
     domain: string;
     /** ID of the root */
-    rootId?: number | null;
+    rootId?: any;
     /** Root path */
-    rootPath?: string | null;
+    rootPath?: any;
 };
 export type Error = {
     /** Message */

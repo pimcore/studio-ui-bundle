@@ -12,13 +12,12 @@
 */
 
 import React from 'react'
-import i18n from '@Pimcore/app/i18n'
-import { Grid } from '@Pimcore/components/grid/grid'
-import { createColumnHelper } from '@tanstack/react-table'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
-import { Flex, Space } from 'antd'
-import { type VersionIdentifiers } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-view'
+import { Flex } from 'antd'
+import { type VersionIdentifiers } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { EmptyState } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/components/empty-state/empty-state'
+import { VersionsFieldsList } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/versions-fields-list'
 
 interface SingleVersionViewUiProps {
   versionId: VersionIdentifiers
@@ -28,6 +27,8 @@ interface SingleVersionViewUiProps {
   lastVersion: boolean
   onClickPrevious: () => void
   onClickNext: () => void
+  isImageVersion: boolean
+  fileName?: string
 }
 
 export const SingleViewUi = ({
@@ -37,21 +38,15 @@ export const SingleViewUi = ({
   firstVersion,
   lastVersion,
   onClickPrevious,
-  onClickNext
+  onClickNext,
+  isImageVersion,
+  fileName
 }: SingleVersionViewUiProps): React.JSX.Element => {
-  const columnHelper = createColumnHelper<any>()
-
-  const columns = [
-    columnHelper.accessor(i18n.t('field'), { size: 162, meta: { type: 'asset-version-preview-field-label' } }),
-    columnHelper.accessor(i18n.t('version.version') + ' ' + versionId.count, { size: 180 })
-  ]
-
   return (
-    <Space
-      align="center"
-      direction="vertical"
-      size="large"
-      style={ { maxWidth: 600 } }
+    <Flex
+      gap="small"
+      style={ { minWidth: '100%' } }
+      vertical
     >
       <Flex
         align="center"
@@ -65,7 +60,7 @@ export const SingleViewUi = ({
           onClick={ onClickPrevious }
           type={ 'text' }
         />
-        {imgSrc !== null
+        {imgSrc !== null && isImageVersion
           ? (
             <PimcoreImage
               className={ 'image-slider__image' }
@@ -73,7 +68,12 @@ export const SingleViewUi = ({
               style={ { maxHeight: 500, maxWidth: 500 } }
             />
             )
-          : null}
+          : (
+            <EmptyState
+              fileName={ fileName }
+              id={ versionId.id }
+            />
+            )}
 
         <IconButton
           disabled={ lastVersion }
@@ -83,16 +83,7 @@ export const SingleViewUi = ({
         />
       </Flex>
 
-      <Flex
-        className="w-full"
-        justify='center'
-      >
-        <Grid
-          autoWidth
-          columns={ columns }
-          data={ data }
-        />
-      </Flex>
-    </Space>
+      <VersionsFieldsList data={ data } />
+    </Flex>
   )
 }

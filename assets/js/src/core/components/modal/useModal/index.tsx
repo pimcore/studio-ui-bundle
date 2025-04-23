@@ -87,7 +87,8 @@ export const withError = (Component: typeof Modal): typeof Modal => {
 
     return (
       <Component
-        iconName={ 'x-circle' }
+        className={ 'error' }
+        iconName={ 'close-filled' }
         title={ 'Error' }
         { ...inlineProps }
       >
@@ -105,7 +106,8 @@ export const withSuccess = (Component: typeof Modal): typeof Modal => {
 
     return (
       <Component
-        iconName={ 'check-circle' }
+        className={ 'success' }
+        iconName={ 'checkmark' }
         title={ 'Success' }
         { ...inlineProps }
       >
@@ -123,7 +125,8 @@ export const withInfo = (Component: typeof Modal): typeof Modal => {
 
     return (
       <Component
-        iconName={ 'info-circle' }
+        className={ 'info' }
+        iconName={ 'info' }
         title={ 'Info' }
         { ...inlineProps }
       >
@@ -141,7 +144,8 @@ export const withWarn = (Component: typeof Modal): typeof Modal => {
 
     return (
       <Component
-        iconName={ 'warning-circle' }
+        className={ 'alert' }
+        iconName={ 'alert' }
         title="Warn"
         { ...inlineProps }
       >

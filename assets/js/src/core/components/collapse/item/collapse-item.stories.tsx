@@ -18,6 +18,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Button } from '@Pimcore/components/button/button'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 
 const config: Meta = {
   title: 'Components/Layout/Collapse/CollapseItem',
@@ -61,6 +62,22 @@ export const ExtraPosition: StoryObj<CollapseItemProps> = {
   args: {
     ..._default.args,
     extra: <Button>New</Button>,
+    extraPosition: 'start'
+  }
+}
+
+export const ActionButtons: StoryObj<CollapseItemProps> = {
+  args: {
+    ..._default.args,
+    extra: <Flex>
+      <IconTextButton
+        icon={ { value: 'edit' } }
+        onClick={ (e) => { e.stopPropagation(); console.log('click action button 1') } }
+        type='action'
+      >
+        Edit
+      </IconTextButton>
+    </Flex>,
     extraPosition: 'start'
   }
 }

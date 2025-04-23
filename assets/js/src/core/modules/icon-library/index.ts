@@ -25,6 +25,7 @@ import addImage from '@Pimcore/assets/icons/add-image.inline.svg'
 import addPackage from '@Pimcore/assets/icons/add-package.inline.svg'
 import addSomething from '@Pimcore/assets/icons/add-something.inline.svg'
 import addUser from '@Pimcore/assets/icons/add-user.inline.svg'
+import alert from '@Pimcore/assets/icons/alert.inline.svg'
 import asset from '@Pimcore/assets/icons/asset.inline.svg'
 import attachment from '@Pimcore/assets/icons/attachment.inline.svg'
 import audio from '@Pimcore/assets/icons/audio.inline.svg'
@@ -32,7 +33,7 @@ import autoSave from '@Pimcore/assets/icons/auto-save.inline.svg'
 import batchSelection from '@Pimcore/assets/icons/batch-selection.inline.svg'
 import bodyStyle from '@Pimcore/assets/icons/body-style.inline.svg'
 import bookmark from '@Pimcore/assets/icons/bookmark.inline.svg'
-import brush from '@Pimcore/assets/icons/brush.inline.svg'
+import cache from '@Pimcore/assets/icons/cache.inline.svg'
 import calculator from '@Pimcore/assets/icons/calculator.inline.svg'
 import calendar from '@Pimcore/assets/icons/calendar.inline.svg'
 import car from '@Pimcore/assets/icons/car.inline.svg'
@@ -42,32 +43,37 @@ import cdp from '@Pimcore/assets/icons/cdp.inline.svg'
 import channels from '@Pimcore/assets/icons/channels.inline.svg'
 import checkCircle from '@Pimcore/assets/icons/check-circle.inline.svg'
 import checkbox from '@Pimcore/assets/icons/checkbox.inline.svg'
+import checkmark from '@Pimcore/assets/icons/checkmark.inline.svg'
 import chevronDown from '@Pimcore/assets/icons/chevron-down.inline.svg'
 import chevronLeft from '@Pimcore/assets/icons/chevron-left.inline.svg'
 import chevronRight from '@Pimcore/assets/icons/chevron-right.inline.svg'
 import chevronSelectorHorizontal from '@Pimcore/assets/icons/chevron-selector-horizontal.inline.svg'
 import chevronUp from '@Pimcore/assets/icons/chevron-up.inline.svg'
 import childrenGrid from '@Pimcore/assets/icons/children-grid.inline.svg'
+import closeFilled from '@Pimcore/assets/icons/close-filled.inline.svg'
 import close from '@Pimcore/assets/icons/close.inline.svg'
 import cms from '@Pimcore/assets/icons/cms.inline.svg'
 import collection from '@Pimcore/assets/icons/collection.inline.svg'
 import columns from '@Pimcore/assets/icons/columns.inline.svg'
+import contentDuplicate from '@Pimcore/assets/icons/content-duplicate.inline.svg'
 import content from '@Pimcore/assets/icons/content.inline.svg'
 import copilot from '@Pimcore/assets/icons/copilot.inline.svg'
 import copy from '@Pimcore/assets/icons/copy.inline.svg'
+import countrySelect from '@Pimcore/assets/icons/country-select.inline.svg'
 import crop from '@Pimcore/assets/icons/crop.inline.svg'
-import customMetadata from '@Pimcore/assets/icons/custom--metadata.inline.svg'
+import customMetadata from '@Pimcore/assets/icons/custom-metadata.inline.svg'
 import customerSegmentGroup from '@Pimcore/assets/icons/customer-segment-group.inline.svg'
 import customerSegment from '@Pimcore/assets/icons/customer-segment.inline.svg'
 import customer from '@Pimcore/assets/icons/customer.inline.svg'
 import customers from '@Pimcore/assets/icons/customers.inline.svg'
 import cut from '@Pimcore/assets/icons/cut.inline.svg'
 import dashboard from '@Pimcore/assets/icons/dashboard.inline.svg'
-import dataManagement from '@Pimcore/assets/icons/data-management.inline.svg'
 import dataObjectVariant from '@Pimcore/assets/icons/data-object-variant.inline.svg'
 import dataObject from '@Pimcore/assets/icons/data-object.inline.svg'
 import dataQuality from '@Pimcore/assets/icons/data-quality.inline.svg'
-import dataSheet from '@Pimcore/assets/icons/data-sheet.inline.svg'
+import dateTimeField from '@Pimcore/assets/icons/date-time-field.inline.svg'
+import deleteColumn from '@Pimcore/assets/icons/delete-column.inline.svg'
+import deleteRow from '@Pimcore/assets/icons/delete-row.inline.svg'
 import dependencies from '@Pimcore/assets/icons/dependencies.inline.svg'
 import details from '@Pimcore/assets/icons/details.inline.svg'
 import document from '@Pimcore/assets/icons/document.inline.svg'
@@ -83,7 +89,7 @@ import dragOption from '@Pimcore/assets/icons/drag-option.inline.svg'
 import dropTarget from '@Pimcore/assets/icons/drop-target.inline.svg'
 import editPen from '@Pimcore/assets/icons/edit-pen.inline.svg'
 import edit from '@Pimcore/assets/icons/edit.inline.svg'
-import embededMetadata from '@Pimcore/assets/icons/embeded-metadata.inline.svg'
+import embeddedMetadata from '@Pimcore/assets/icons/embedded-metadata.inline.svg'
 import event from '@Pimcore/assets/icons/event.inline.svg'
 import excludedFromNav from '@Pimcore/assets/icons/excluded-from-nav.inline.svg'
 import expand from '@Pimcore/assets/icons/expand.inline.svg'
@@ -109,9 +115,11 @@ import history from '@Pimcore/assets/icons/history.inline.svg'
 import homeRootFolder from '@Pimcore/assets/icons/home-root-folder.inline.svg'
 import image from '@Pimcore/assets/icons/image.inline.svg'
 import infoCircle from '@Pimcore/assets/icons/info-circle.inline.svg'
+import info from '@Pimcore/assets/icons/info.inline.svg'
+import inheritanceActive from '@Pimcore/assets/icons/inheritance-active.inline.svg'
 import inheritanceBroken from '@Pimcore/assets/icons/inheritance-broken.inline.svg'
-import inheritance from '@Pimcore/assets/icons/inheritance.inline.svg'
 import json from '@Pimcore/assets/icons/json.inline.svg'
+import languageSelect from '@Pimcore/assets/icons/language-select.inline.svg'
 import layout from '@Pimcore/assets/icons/layout.inline.svg'
 import list from '@Pimcore/assets/icons/list.inline.svg'
 import loading from '@Pimcore/assets/icons/loading.inline.svg'
@@ -121,6 +129,7 @@ import locked from '@Pimcore/assets/icons/locked.inline.svg'
 import logOut from '@Pimcore/assets/icons/log-out.inline.svg'
 import longText from '@Pimcore/assets/icons/long-text.inline.svg'
 import mailAnswer from '@Pimcore/assets/icons/mail-answer.inline.svg'
+import manyToMany from '@Pimcore/assets/icons/many-to-many.inline.svg'
 import market from '@Pimcore/assets/icons/market.inline.svg'
 import marketing from '@Pimcore/assets/icons/marketing.inline.svg'
 import menu from '@Pimcore/assets/icons/menu.inline.svg'
@@ -129,6 +138,7 @@ import minus from '@Pimcore/assets/icons/minus.inline.svg'
 import more from '@Pimcore/assets/icons/more.inline.svg'
 import moveDown from '@Pimcore/assets/icons/move-down.inline.svg'
 import moveUp from '@Pimcore/assets/icons/move-up.inline.svg'
+import multiSelect from '@Pimcore/assets/icons/multi-select.inline.svg'
 import newCircle from '@Pimcore/assets/icons/new-circle.inline.svg'
 import newColumn from '@Pimcore/assets/icons/new-column.inline.svg'
 import newHotspot from '@Pimcore/assets/icons/new-hotspot.inline.svg'
@@ -140,6 +150,7 @@ import news from '@Pimcore/assets/icons/news.inline.svg'
 import noContent from '@Pimcore/assets/icons/no-content.inline.svg'
 import notesEvents from '@Pimcore/assets/icons/notes-events.inline.svg'
 import notification from '@Pimcore/assets/icons/notification.inline.svg'
+import numberField from '@Pimcore/assets/icons/number-field.inline.svg'
 import openFolder from '@Pimcore/assets/icons/open-folder.inline.svg'
 import packageIcon from '@Pimcore/assets/icons/package.inline.svg'
 import paste from '@Pimcore/assets/icons/paste.inline.svg'
@@ -154,7 +165,12 @@ import presentation from '@Pimcore/assets/icons/presentation.inline.svg'
 import preview from '@Pimcore/assets/icons/preview.inline.svg'
 import properties from '@Pimcore/assets/icons/properties.inline.svg'
 import published from '@Pimcore/assets/icons/published.inline.svg'
+import questionmark from '@Pimcore/assets/icons/questionmark.inline.svg'
 import refresh from '@Pimcore/assets/icons/refresh.inline.svg'
+import removeImageThumbnail from '@Pimcore/assets/icons/remove-image-thumbnail.inline.svg'
+import removeMarker from '@Pimcore/assets/icons/remove-marker.inline.svg'
+import removePdfThumbnail from '@Pimcore/assets/icons/remove-pdf-thumbnail.inline.svg'
+import removeVideoThumbnail from '@Pimcore/assets/icons/remove-video-thumbnail.inline.svg'
 import rename from '@Pimcore/assets/icons/rename.inline.svg'
 import requiredBy from '@Pimcore/assets/icons/required-by.inline.svg'
 import requires from '@Pimcore/assets/icons/requires.inline.svg'
@@ -169,9 +185,11 @@ import settings from '@Pimcore/assets/icons/settings.inline.svg'
 import share from '@Pimcore/assets/icons/share.inline.svg'
 import sharedUsers from '@Pimcore/assets/icons/shared-users.inline.svg'
 import shield from '@Pimcore/assets/icons/shield.inline.svg'
+import showDetails from '@Pimcore/assets/icons/show-details.inline.svg'
 import spinner from '@Pimcore/assets/icons/spinner.inline.svg'
 import splitView from '@Pimcore/assets/icons/split-view.inline.svg'
 import style from '@Pimcore/assets/icons/style.inline.svg'
+import tagConfiguration from '@Pimcore/assets/icons/tag-configuration.inline.svg'
 import tag from '@Pimcore/assets/icons/tag.inline.svg'
 import target from '@Pimcore/assets/icons/target.inline.svg'
 import taxClass from '@Pimcore/assets/icons/tax-class.inline.svg'
@@ -185,7 +203,7 @@ import unknown from '@Pimcore/assets/icons/unknown.inline.svg'
 import unlocked from '@Pimcore/assets/icons/unlocked.inline.svg'
 import uploadCloud from '@Pimcore/assets/icons/upload-cloud.inline.svg'
 import uploadZip from '@Pimcore/assets/icons/upload-zip.inline.svg'
-import userPlus01 from '@Pimcore/assets/icons/user-plus-01.inline.svg'
+import userSelect from '@Pimcore/assets/icons/user-select.inline.svg'
 import user from '@Pimcore/assets/icons/user.inline.svg'
 import video from '@Pimcore/assets/icons/video.inline.svg'
 import view from '@Pimcore/assets/icons/view.inline.svg'
@@ -193,6 +211,7 @@ import warningCircle from '@Pimcore/assets/icons/warning-circle.inline.svg'
 import webhook from '@Pimcore/assets/icons/webhook.inline.svg'
 import widget from '@Pimcore/assets/icons/widget.inline.svg'
 import workflow from '@Pimcore/assets/icons/workflow.inline.svg'
+import wysiwygField from '@Pimcore/assets/icons/wysiwyg-field.inline.svg'
 import xCircle from '@Pimcore/assets/icons/x-circle.inline.svg'
 import xlsxCsv from '@Pimcore/assets/icons/xlsx-csv.inline.svg'
 
@@ -228,6 +247,10 @@ moduleSystem.registerModule({
       component: addUser
     })
     iconLibrary.register({
+      name: 'alert',
+      component: alert
+    })
+    iconLibrary.register({
       name: 'asset',
       component: asset
     })
@@ -256,8 +279,8 @@ moduleSystem.registerModule({
       component: bookmark
     })
     iconLibrary.register({
-      name: 'brush',
-      component: brush
+      name: 'cache',
+      component: cache
     })
     iconLibrary.register({
       name: 'calculator',
@@ -296,6 +319,10 @@ moduleSystem.registerModule({
       component: checkbox
     })
     iconLibrary.register({
+      name: 'checkmark',
+      component: checkmark
+    })
+    iconLibrary.register({
       name: 'chevron-down',
       component: chevronDown
     })
@@ -320,6 +347,10 @@ moduleSystem.registerModule({
       component: childrenGrid
     })
     iconLibrary.register({
+      name: 'close-filled',
+      component: closeFilled
+    })
+    iconLibrary.register({
       name: 'close',
       component: close
     })
@@ -336,6 +367,10 @@ moduleSystem.registerModule({
       component: columns
     })
     iconLibrary.register({
+      name: 'content-duplicate',
+      component: contentDuplicate
+    })
+    iconLibrary.register({
       name: 'content',
       component: content
     })
@@ -348,11 +383,15 @@ moduleSystem.registerModule({
       component: copy
     })
     iconLibrary.register({
+      name: 'country-select',
+      component: countrySelect
+    })
+    iconLibrary.register({
       name: 'crop',
       component: crop
     })
     iconLibrary.register({
-      name: 'custom--metadata',
+      name: 'custom-metadata',
       component: customMetadata
     })
     iconLibrary.register({
@@ -380,10 +419,6 @@ moduleSystem.registerModule({
       component: dashboard
     })
     iconLibrary.register({
-      name: 'data-management',
-      component: dataManagement
-    })
-    iconLibrary.register({
       name: 'data-object-variant',
       component: dataObjectVariant
     })
@@ -396,8 +431,16 @@ moduleSystem.registerModule({
       component: dataQuality
     })
     iconLibrary.register({
-      name: 'data-sheet',
-      component: dataSheet
+      name: 'date-time-field',
+      component: dateTimeField
+    })
+    iconLibrary.register({
+      name: 'delete-column',
+      component: deleteColumn
+    })
+    iconLibrary.register({
+      name: 'delete-row',
+      component: deleteRow
     })
     iconLibrary.register({
       name: 'dependencies',
@@ -460,8 +503,8 @@ moduleSystem.registerModule({
       component: edit
     })
     iconLibrary.register({
-      name: 'embeded-metadata',
-      component: embededMetadata
+      name: 'embedded-metadata',
+      component: embeddedMetadata
     })
     iconLibrary.register({
       name: 'event',
@@ -564,16 +607,24 @@ moduleSystem.registerModule({
       component: infoCircle
     })
     iconLibrary.register({
+      name: 'info',
+      component: info
+    })
+    iconLibrary.register({
+      name: 'inheritance-active',
+      component: inheritanceActive
+    })
+    iconLibrary.register({
       name: 'inheritance-broken',
       component: inheritanceBroken
     })
     iconLibrary.register({
-      name: 'inheritance',
-      component: inheritance
-    })
-    iconLibrary.register({
       name: 'json',
       component: json
+    })
+    iconLibrary.register({
+      name: 'language-select',
+      component: languageSelect
     })
     iconLibrary.register({
       name: 'layout',
@@ -612,6 +663,10 @@ moduleSystem.registerModule({
       component: mailAnswer
     })
     iconLibrary.register({
+      name: 'many-to-many',
+      component: manyToMany
+    })
+    iconLibrary.register({
       name: 'market',
       component: market
     })
@@ -642,6 +697,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'move-up',
       component: moveUp
+    })
+    iconLibrary.register({
+      name: 'multi-select',
+      component: multiSelect
     })
     iconLibrary.register({
       name: 'new-circle',
@@ -686,6 +745,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'notification',
       component: notification
+    })
+    iconLibrary.register({
+      name: 'number-field',
+      component: numberField
     })
     iconLibrary.register({
       name: 'open-folder',
@@ -744,8 +807,28 @@ moduleSystem.registerModule({
       component: published
     })
     iconLibrary.register({
+      name: 'questionmark',
+      component: questionmark
+    })
+    iconLibrary.register({
       name: 'refresh',
       component: refresh
+    })
+    iconLibrary.register({
+      name: 'remove-image-thumbnail',
+      component: removeImageThumbnail
+    })
+    iconLibrary.register({
+      name: 'remove-marker',
+      component: removeMarker
+    })
+    iconLibrary.register({
+      name: 'remove-pdf-thumbnail',
+      component: removePdfThumbnail
+    })
+    iconLibrary.register({
+      name: 'remove-video-thumbnail',
+      component: removeVideoThumbnail
     })
     iconLibrary.register({
       name: 'rename',
@@ -804,6 +887,10 @@ moduleSystem.registerModule({
       component: shield
     })
     iconLibrary.register({
+      name: 'show-details',
+      component: showDetails
+    })
+    iconLibrary.register({
       name: 'spinner',
       component: spinner
     })
@@ -814,6 +901,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'style',
       component: style
+    })
+    iconLibrary.register({
+      name: 'tag-configuration',
+      component: tagConfiguration
     })
     iconLibrary.register({
       name: 'tag',
@@ -868,8 +959,8 @@ moduleSystem.registerModule({
       component: uploadZip
     })
     iconLibrary.register({
-      name: 'user-plus-01',
-      component: userPlus01
+      name: 'user-select',
+      component: userSelect
     })
     iconLibrary.register({
       name: 'user',
@@ -898,6 +989,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'workflow',
       component: workflow
+    })
+    iconLibrary.register({
+      name: 'wysiwyg-field',
+      component: wysiwygField
     })
     iconLibrary.register({
       name: 'x-circle',

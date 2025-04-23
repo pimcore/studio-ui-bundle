@@ -12,29 +12,40 @@
 */
 
 import { useTranslation } from 'react-i18next'
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
-import React from 'react'
+import React, { useState } from 'react'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
-import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
+import { type GridContextMenuProps } from '@Pimcore/components/grid/grid'
+import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
+import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { TreePermission } from '../../../perspectives/enums/tree-permission'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { renameNode, setNodeLoadingInAllTree } from '@Pimcore/components/element-tree/element-tree-slice'
+import { updateKey } from '@Pimcore/modules/data-object/data-object-draft-slice'
+import { ContextMenuActionName } from '..'
 
 export interface UseRenameHookReturn {
   rename: (parentId: number, currentLabel: string) => void
   renameTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   renameContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
+  renameGridContextMenuItem: (row: any) => ItemType | undefined
   renameMutation: (parentId: number, value: string) => Promise<void>
 }
 
-export const useRename = (elementType: ElementType): UseRenameHookReturn => {
+export const useRename = (elementType: ElementType, cacheKey?: string): UseRenameHookReturn => {
   const { t } = useTranslation()
   const modal = useFormModal()
-  const { refreshTree } = useRefreshTree(elementType)
-  const { elementPatch } = useElementApi(elementType)
+  const { refreshGrid } = useRefreshGrid(elementType)
+  const { elementPatch, getElementById } = useElementApi(elementType, cacheKey)
+  const { isTreeActionAllowed } = useTreePermission()
+  const dispatch = useAppDispatch()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const rename = (
     id: number,
@@ -51,8 +62,11 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
         message: t('element.rename.validation')
       },
       onOk: async (value: string) => {
-        await renameMutation(id, value, parentId)
-        onFinish?.(value)
+        setIsLoading(true)
+        await renameMutation(id, value, parentId, () => {
+          onFinish?.(value)
+          setIsLoading(false)
+        })
       }
     })
   }
@@ -63,9 +77,10 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
   ): ItemType => {
     return {
       label: t('element.rename'),
-      key: 'rename',
+      key: ContextMenuActionName.rename,
+      isLoading,
       icon: <Icon value={ 'rename' } />,
-      hidden: !checkElementPermission(node.permissions!, 'rename') || node.isLocked,
+      hidden: !checkElementPermission(node.permissions, 'rename') || node.isLocked,
       onClick: () => {
         const parentId = node.parentId ?? undefined
         rename(node.id, getElementKey(node, elementType), parentId, onFinish)
@@ -73,12 +88,41 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
     }
   }
 
+  const renameGridContextMenuItem = (row: any): ItemType | undefined => {
+    const data: GridContextMenuProps = row.original ?? {}
+    if (data.id === undefined || data.isLocked === undefined || data.permissions === undefined) {
+      return
+    }
+
+    return {
+      label: t('element.rename'),
+      key: ContextMenuActionName.rename,
+      icon: <Icon value={ 'rename' } />,
+      hidden: !checkElementPermission(data.permissions, 'rename') || data.isLocked,
+      onClick: async () => {
+        await stagedLoading(data.id)
+      }
+    }
+  }
+
+  const stagedLoading = async (id: GridContextMenuProps['id']): Promise<void> => {
+    const node = await getElementById(id)
+
+    const parentId = node!.parentId ?? undefined
+    rename(
+      id,
+      getElementKey(node!, elementType),
+      parentId,
+      () => { void refreshGrid() }
+    )
+  }
+
   const renameTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.rename'),
-      key: 'rename',
+      key: ContextMenuActionName.rename,
       icon: <Icon value={ 'rename' } />,
-      hidden: !checkElementPermission(node.permissions, 'rename') || node.isLocked,
+      hidden: !isTreeActionAllowed(TreePermission.Rename) || !checkElementPermission(node.permissions, 'rename') || node.isLocked,
       onClick: () => {
         const id = parseInt(node.id)
         const parentId = node.parentId !== undefined ? parseInt(node.parentId) : undefined
@@ -87,7 +131,7 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
     }
   }
 
-  const renameMutation = async (id: number, value: string, parentId?: number): Promise<void> => {
+  const renameMutation = async (id: number, value: string, parentId?: number, onFinish?: () => void): Promise<void> => {
     const elementRenameTask = elementPatch({
       body: {
         data: [{
@@ -98,11 +142,17 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
     })
 
     try {
-      await elementRenameTask
+      dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType, loading: true }))
+      const success = await elementRenameTask
 
-      if (parentId !== undefined) {
-        refreshTree(parentId)
+      if (success) {
+        dispatch(renameNode({ elementType, nodeId: String(id), newLabel: value }))
       }
+
+      dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType, loading: false }))
+      dispatch(updateKey({ id, key: value }))
+
+      onFinish?.()
     } catch (error) {
       console.error('Error renaming ' + elementType, error)
     }
@@ -112,6 +162,7 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
     rename,
     renameTreeContextMenuItem,
     renameContextMenuItem,
+    renameGridContextMenuItem,
     renameMutation
   }
 }

@@ -22,6 +22,7 @@ export interface GeoPolyDrawerProps extends GeoMapCardBaseProps {
   value?: GeoPoints | null
   mode: 'geoPolyLine' | 'geoPolygon'
   disabled?: boolean
+  className?: string
 }
 
 export const GeoPolyDrawer = ({ ...props }: GeoPolyDrawerProps): React.JSX.Element => {
@@ -45,28 +46,32 @@ export const GeoPolyDrawer = ({ ...props }: GeoPolyDrawerProps): React.JSX.Eleme
 
   return (
     <GeoMapCard
+      className={ props.className }
       disabled={ props.disabled }
-      footer={ <GeoPolyDrawerFooter
-        disabled={ props.disabled }
-        onChange={ onChangeFooter }
-        onSearch={ (geoPoint?: GeoPoint) => {
-          setFooterValue(undefined)
-          setMapValue(undefined)
+      footer={ props.disabled === true
+        ? undefined
+        : (
+          <GeoPolyDrawerFooter
+            onChange={ onChangeFooter }
+            onSearch={ (geoPoint?: GeoPoint) => {
+              setFooterValue(undefined)
+              setMapValue(undefined)
 
-          const geoMapAPI = geoMapRef.current
-          geoMapAPI?.setValue(undefined)
-          if (geoPoint === undefined) {
-            geoMapAPI?.reset()
-          } else {
-            geoMapAPI?.setLat(geoPoint.latitude)
-            geoMapAPI?.setLng(geoPoint.longitude)
-            geoMapAPI?.setZoom(15)
-          }
-          geoMapAPI?.forceRerender()
-          props.onChange?.(undefined)
-        } }
-        value={ footerValue }
-               /> }
+              const geoMapAPI = geoMapRef.current
+              geoMapAPI?.setValue(undefined)
+              if (geoPoint === undefined) {
+                geoMapAPI?.reset()
+              } else {
+                geoMapAPI?.setLat(geoPoint.latitude)
+                geoMapAPI?.setLng(geoPoint.longitude)
+                geoMapAPI?.setZoom(15)
+              }
+              geoMapAPI?.forceRerender()
+              props.onChange?.(undefined)
+            } }
+            value={ footerValue }
+          />
+          ) }
       height={ props.height }
       lat={ props.lat }
       lng={ props.lng }
