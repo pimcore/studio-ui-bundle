@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { type Key, useEffect } from 'react'
 import {
   type Tag,
   type TagAssignToElementApiArg
@@ -24,7 +24,8 @@ import {
   createTreeStructure
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/create-tree-structure'
 import { useHandleCheck } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/hooks/use-handle-check-tags'
-import { isNull } from 'lodash'
+import { isNil, isNull } from 'lodash'
+import { useTranslation } from 'react-i18next'
 
 export interface TagsTreeProps {
   elementId: number
@@ -47,8 +48,9 @@ export const TagsTree = ({
   defaultCheckedTags,
   setDefaultCheckedTags
 }: TagsTreeProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const flatTags = flattenArray(tags).filter((tag) => tag.id !== undefined)
-
+  const [defaultExpandedKeys, setDefaultExpandedKeys] = React.useState<Key[]>([0, ...defaultCheckedTags])
   const { handleCheck, loadingNodes } = useHandleCheck({
     elementId,
     elementType,
@@ -77,7 +79,12 @@ export const TagsTree = ({
     return result
   }
 
-  const defaultExpandedKeys = (): Array<string | number> => (filter !== undefined && filter.length > 0) ? [0, ...getAllTreeKeys(treeData)] : [0]
+  useEffect(() => {
+    if (!isNil(filter) && filter.length > 0) {
+      setDefaultExpandedKeys([0, ...getAllTreeKeys(treeData)])
+    }
+  }, [filter])
+
   return (
     <Flex
       gap="small"
@@ -85,16 +92,14 @@ export const TagsTree = ({
     >
       <SearchInput
         loading={ isLoading }
-        onSearch={ (value) => {
-          setFilter(value)
-        } }
-        placeholder="Search"
+        onSearch={ setFilter }
+        placeholder={ t('search') }
       />
 
       <TreeElement
         checkStrictly
         checkedKeys={ { checked: defaultCheckedTags, halfChecked: [] } }
-        defaultExpandedKeys={ defaultExpandedKeys() }
+        defaultExpandedKeys={ defaultExpandedKeys }
         onCheck={ handleCheck }
         treeData={ treeData }
         withCustomSwitcherIcon
