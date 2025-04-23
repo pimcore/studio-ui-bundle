@@ -37,7 +37,7 @@ export const MyFirstTabComponent = (): React.JSX.Element => {
 
 ### Step-by-step guide
 
-For a step-by-step guide on how to add a new widget to the Widget Manager, refer to the [Add Your First Widget guide](../06_Plugins/03_Add_your_first_widget.md).
+For a step-by-step guide on how to add a new widget to the Widget Manager, refer to the [Add Your First Widget guide](../05_Plugins/03_Add_your_first_widget.md).
 
 ### Source
 
