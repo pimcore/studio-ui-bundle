@@ -1,7 +1,7 @@
 # How to Add a Main Navigation Entry
 
 ## Overview
-This guide demonstrates how to add a new main navigation entry to the Pimcore Studio UI. This can be useful for extending the interface with custom tools or plugins.
+This example demonstrates how to add a new main navigation entry to the Pimcore Studio UI. This can be useful for extending the interface with custom tools or plugins.
 
 ## Screenshot
 ![Main Nav Entry Example](../img/examples/additional-main-nav-entry.png)
