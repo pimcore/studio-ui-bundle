@@ -2,7 +2,7 @@
 
 This example demonstrates how to add a new main navigation entry to the Pimcore Studio UI. This can be useful for extending the interface with custom tools or plugins.
 
-![Main Nav Entry Example](../img/main-nav-entry-example.png)
+![Main Nav Entry Example](../img/examples/additional-main-nav-entry.png)
 
 New entries to the main navigation can be added via the `MainNavRegistry` service from the DI container.
 
