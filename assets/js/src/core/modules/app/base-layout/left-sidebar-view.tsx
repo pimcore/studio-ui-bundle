@@ -20,7 +20,7 @@ import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-rende
 
 export const LeftSidebarView = (): React.JSX.Element => {
   const { styles } = useStyles()
-  console.log('left sidebar slot', componentConfig.leftSidbar.slot)
+
   return (
     <div className={ styles.leftSidebar }>
       <Avatar
