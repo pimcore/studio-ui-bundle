@@ -17,7 +17,8 @@ import { EditorToolbarContextMenu } from '@Pimcore/modules/asset/editor/toolbar/
 import { MainNav } from '@Pimcore/modules/app/nav/main-nav'
 import { Search } from '@Pimcore/modules/search/search'
 import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
-import { EditorToolbarSaveButton } from '@Pimcore/modules/asset/editor/toolbar/save-button/save-button'
+import { EditorToolbarSaveButton as AssetEditorToolbarSaveButton } from '@Pimcore/modules/asset/editor/toolbar/save-button/save-button'
+import { EditorToolbarSaveButtons as DataObjectEditorToolbarSaveButtons } from '@Pimcore/modules/data-object/editor/toolbar/save-buttons/save-buttons'
 
 const defaultComponentConfig = {
   asset: {
@@ -43,7 +44,7 @@ const defaultComponentConfig = {
             name: 'asset.editor.toolbar.slots.right',
             defaultEntries: [
               { name: 'workflowMenu', priority: 100, component: EditorToolbarWorkflowMenu },
-              { name: 'saveButton', priority: 200, component: EditorToolbarSaveButton }
+              { name: 'saveButton', priority: 200, component: AssetEditorToolbarSaveButton }
             ]
           }
         }
@@ -56,7 +57,24 @@ const defaultComponentConfig = {
   dataObject: {
     editor: {
       toolbar: {
-        contextMenu: { type: ComponentType.SINGLE, name: 'dataObject.editor.toolbar.contextMenu' }
+        contextMenu: { type: ComponentType.SINGLE, name: 'dataObject.editor.toolbar.contextMenu' },
+        slots: {
+          left: {
+            type: ComponentType.SLOT,
+            name: 'dataObject.editor.toolbar.slots.left',
+            defaultEntries: [
+              { name: 'contextMenu', priority: 100, component: EditorToolbarContextMenu }
+            ]
+          },
+          right: {
+            type: ComponentType.SLOT,
+            name: 'dataObject.editor.toolbar.slots.right',
+            defaultEntries: [
+              { name: 'workflowMenu', priority: 100, component: EditorToolbarWorkflowMenu },
+              { name: 'saveButtons', priority: 200, component: DataObjectEditorToolbarSaveButtons }
+            ]
+          }
+        }
       }
     },
     tree: {

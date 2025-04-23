@@ -23,13 +23,9 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { TAB_EDIT } from '../types/object/tab-manager/tabs/edit/edit-container'
 import { LanguageSelection } from './language-selection/language-selection'
 import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-log-modal'
-import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
 import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
-
-import {
-  EditorToolbarSaveButtons
-} from '@Pimcore/modules/data-object/editor/toolbar/save-buttons/save-buttons'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 
 export const Toolbar = (): React.JSX.Element => {
   const { id } = useContext(DataObjectContext)
@@ -54,8 +50,9 @@ export const Toolbar = (): React.JSX.Element => {
           style={ { height: '32px' } }
           vertical={ false }
         >
-          <EditorToolbarWorkflowMenu />
-          <EditorToolbarSaveButtons />
+          <SlotRenderer
+            slot={ componentConfig.dataObject.editor.toolbar.slots.right }
+          />
         </Flex>
         <WorkflowLogModal />
       </WorkFlowProvider>
