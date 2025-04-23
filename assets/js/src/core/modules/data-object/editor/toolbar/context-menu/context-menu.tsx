@@ -11,6 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
@@ -24,8 +25,7 @@ import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
 import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
 import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
 import { type MenuProps } from 'antd'
-import ButtonGroup from 'antd/es/button/button-group'
-import React, { useContext, useState } from 'react'
+import React, { type ReactElement, useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const EditorToolbarContextMenu = (): React.JSX.Element => {
@@ -53,23 +53,33 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
     }
   }
 
-  return (
-    <ButtonGroup>
-      <ReloadButton />
+  const buttonGroupItems: ReactElement[] = []
 
-      {visibleItems.length > 0 && (
-        <Dropdown
-          menu={ {
-            items,
-            onClick: handleMenuClick
-          } }
-          open={ isOpen }
-        >
-          <DropdownButton key={ 'dropdown-button' }>
-            {t('toolbar.more')}
-          </DropdownButton>
-        </Dropdown>
-      )}
-    </ButtonGroup>
+  buttonGroupItems.push(
+    <ReloadButton key={ 'reload-button' } />
+  )
+
+  if (visibleItems.length > 0) {
+    buttonGroupItems.push(
+      <Dropdown
+        key={ 'dropdown-button' }
+        menu={ {
+          items,
+          onClick: handleMenuClick
+        } }
+        open={ isOpen }
+      >
+        <DropdownButton>
+          {t('toolbar.more')}
+        </DropdownButton>
+      </Dropdown>
+    )
+  }
+
+  return (
+    <ButtonGroup
+      items={ buttonGroupItems }
+      noSpacing
+    />
   )
 }
