@@ -1,4 +1,4 @@
-# Getting started with your first plugin
+# Getting Started With Your First Plugin
 
 The Pimcore Studio plugin system allows developers to extend the functionality of Pimcore Studio by creating custom plugins.
 
