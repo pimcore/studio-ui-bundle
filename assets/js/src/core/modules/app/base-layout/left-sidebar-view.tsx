@@ -12,15 +12,15 @@
 */
 
 import { Icon } from '@Pimcore/components/icon/icon'
-import { MainNav } from '@Pimcore/modules/app/nav/main-nav'
 import { Avatar } from 'antd'
 import React from 'react'
 import { useStyles } from './left-sidebar-view.styles'
-import { Search } from '@Pimcore/modules/search/search'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 
 export const LeftSidebarView = (): React.JSX.Element => {
   const { styles } = useStyles()
-
+  console.log('left sidebar slot', componentConfig.leftSidbar.slot)
   return (
     <div className={ styles.leftSidebar }>
       <Avatar
@@ -30,13 +30,14 @@ export const LeftSidebarView = (): React.JSX.Element => {
       />
 
       <ul className='left-sidebar__nav'>
-        <li>
-          <MainNav />
-        </li>
-
-        <li>
-          <Search />
-        </li>
+        <SlotRenderer
+          onRenderComponent={ (Component, context) => (
+            <li key={ context.name }>
+              { Component }
+            </li>
+          ) }
+          slot={ componentConfig.leftSidbar.slot }
+        />
       </ul>
     </div>
   )

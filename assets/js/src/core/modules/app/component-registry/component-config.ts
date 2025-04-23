@@ -14,6 +14,8 @@
 import { type ComponentRegistryConfig } from './component-registry'
 import { ComponentType } from './enums/component-type'
 import { EditorToolbarContextMenu } from '@Pimcore/modules/asset/editor/toolbar/context-menu/context-menu'
+import { MainNav } from '@Pimcore/modules/app/nav/main-nav'
+import { Search } from '@Pimcore/modules/search/search'
 
 const defaultComponentConfig = {
   asset: {
@@ -50,6 +52,16 @@ const defaultComponentConfig = {
     },
     tree: {
       contextMenu: { type: ComponentType.SINGLE, name: 'dataObject.tree.contextMenu' }
+    }
+  },
+  leftSidbar: {
+    slot: {
+      type: ComponentType.SLOT,
+      name: 'leftSidebar.slot',
+      defaultEntries: [
+        { name: 'mainNav', priority: 100, component: MainNav },
+        { name: 'search', priority: 200, component: Search }
+      ]
     }
   },
   wysiwyg: {
