@@ -54,9 +54,7 @@ export function useFormModal (): UseFormModalHookResponse {
   return React.useMemo<UseFormModalHookResponse>(
     () => ({
       input: (props) => {
-        const modalResult = modal.confirm(withInput(props, (value) => {
-          modalResult.destroy()
-        }))
+        const modalResult = modal.confirm(withInput(props, (value) => { modalResult.destroy() }, (loading) => { modalResult.update({ okButtonProps: { loading } }) }))
         // avoid that errors are logged in the console
         modalResult.then(() => { }, () => { })
         return modalResult
@@ -80,7 +78,7 @@ interface InputFormProps {
   fieldName: string
 }
 
-export function withInput (props: InputFormModalProps, onKeyBoardSubmit): ModalFuncProps {
+export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetModalLoading): ModalFuncProps {
   const inputRef = React.createRef<InputRef>()
   const uuid = pimcoreUUid()
   const fieldName = `input-${uuid}`
@@ -97,6 +95,7 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit): ModalF
   }
 
   const submit = async (fieldName): Promise<any> => {
+    onSetModalLoading?.(true)
     return await new Promise((resolve, reject) => {
       form!.validateFields()
         .then(async () => {
