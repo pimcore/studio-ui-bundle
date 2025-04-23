@@ -13,7 +13,9 @@
 
 import { type ComponentRegistryConfig } from './component-registry'
 import { ComponentType } from './enums/component-type'
-import { EditorToolbarContextMenu } from '@Pimcore/modules/asset/editor/toolbar/context-menu/context-menu'
+import { EditorToolbarContextMenu as AssetEditorToolbarContextMenu } from '@Pimcore/modules/asset/editor/toolbar/context-menu/context-menu'
+import { EditorToolbarContextMenu as DataObjectEditorToolbarContextMenu } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/context-menu'
+import { ConditionalLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/conditional-language-selection'
 import { MainNav } from '@Pimcore/modules/app/nav/main-nav'
 import { Search } from '@Pimcore/modules/search/search'
 import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
@@ -30,13 +32,12 @@ const defaultComponentConfig = {
         versions: { type: ComponentType.SINGLE, name: 'asset.editor.tab.versions' }
       },
       toolbar: {
-        contextMenu: { type: ComponentType.SINGLE, name: 'asset.editor.toolbar.contextMenu' },
         slots: {
           left: {
             type: ComponentType.SLOT,
             name: 'asset.editor.toolbar.slots.left',
             defaultEntries: [
-              { name: 'contextMenu', priority: 100, component: EditorToolbarContextMenu }
+              { name: 'contextMenu', priority: 100, component: AssetEditorToolbarContextMenu }
             ]
           },
           right: {
@@ -57,13 +58,13 @@ const defaultComponentConfig = {
   dataObject: {
     editor: {
       toolbar: {
-        contextMenu: { type: ComponentType.SINGLE, name: 'dataObject.editor.toolbar.contextMenu' },
         slots: {
           left: {
             type: ComponentType.SLOT,
             name: 'dataObject.editor.toolbar.slots.left',
             defaultEntries: [
-              { name: 'contextMenu', priority: 100, component: EditorToolbarContextMenu }
+              { name: 'contextMenu', priority: 100, component: DataObjectEditorToolbarContextMenu },
+              { name: 'languageSelection', priority: 200, component: ConditionalLanguageSelection }
             ]
           },
           right: {
