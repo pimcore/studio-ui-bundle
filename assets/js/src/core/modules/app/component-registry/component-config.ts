@@ -16,6 +16,8 @@ import { ComponentType } from './enums/component-type'
 import { EditorToolbarContextMenu } from '@Pimcore/modules/asset/editor/toolbar/context-menu/context-menu'
 import { MainNav } from '@Pimcore/modules/app/nav/main-nav'
 import { Search } from '@Pimcore/modules/search/search'
+import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
+import { EditorToolbarSaveButton } from '@Pimcore/modules/asset/editor/toolbar/save-button/save-button'
 
 const defaultComponentConfig = {
   asset: {
@@ -36,7 +38,14 @@ const defaultComponentConfig = {
               { name: 'contextMenu', priority: 100, component: EditorToolbarContextMenu }
             ]
           },
-          right: { type: ComponentType.SLOT, name: 'asset.editor.toolbar.slots.right' }
+          right: {
+            type: ComponentType.SLOT,
+            name: 'asset.editor.toolbar.slots.right',
+            defaultEntries: [
+              { name: 'workflowMenu', priority: 100, component: EditorToolbarWorkflowMenu },
+              { name: 'saveButton', priority: 200, component: EditorToolbarSaveButton }
+            ]
+          }
         }
       }
     },
