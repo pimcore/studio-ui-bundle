@@ -8,8 +8,8 @@ For practical examples and step-by-step guides on implementing specific features
 ## Table of Contents
 
 - [Plugin Architecture, Plugins, and Modules](./01_Plugin_Architecture_Plugins_Modules.md)  
+- [UI Components](./02_UI_Components.md)  
 - [Services and Dependency Injection](./03_Services_and_Dependency_Injection.md)
-- [Component Registry](./04_Component_Registry.md)  
-- [UI Components](./06_UI_Components.md)  
+- [Component Registry](./04_Component_Registry.md)
 - [Widget Manager](./06_Widget_Manager.md)
 
