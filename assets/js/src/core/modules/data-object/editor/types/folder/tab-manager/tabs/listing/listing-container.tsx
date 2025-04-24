@@ -25,7 +25,6 @@ export const ListingContainer = (): React.JSX.Element => {
 export const TAB_LISTING: IEditorTab = {
   key: 'listing',
   label: 'folder.folder-editor-tabs.view',
-  userPermission: 'listing',
   children: <ListingContainer />,
   icon: <Icon value={ 'list' } />,
   isDetachable: false
