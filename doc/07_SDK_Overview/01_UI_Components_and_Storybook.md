@@ -1,4 +1,4 @@
-# UI Components
+# UI Components and Storybook
 
 Pimcore Studio UI offers React components to simplify your work.  
 These components are designed to help you build consistent and efficient user interfaces.
