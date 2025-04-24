@@ -2,7 +2,7 @@
   "name": "@pimcore/studio-ui-bundle",
   "version": "0.0.1",
   "scripts": {
-    "dev-server": "NODE_OPTIONS=--max_old_space_size=4096 encore dev-server --port 3030",
+    "dev-server": "NODE_OPTIONS=--max_old_space_size=4096 encore dev-server --port 3038",
     "dev": "npm run dev-vendor && npm run dev-core-dll && encore dev && npm run dev-sdk",
     "dev-sdk": "encore dev --config webpack.sdk.config && tsc-alias",
     "dev-vendor": "encore dev --config webpack.vendor.config",

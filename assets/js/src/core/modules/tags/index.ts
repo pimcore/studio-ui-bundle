@@ -27,6 +27,7 @@ moduleSystem.registerModule({
       path: 'Settings/Tag Configuration',
       label: 'navigation.tag-configuration',
       className: 'item-style-modifier',
+      permission: 'tags_configuration',
       perspectivePermission: NavPermission.TagConfiguration,
       widgetConfig: {
         name: 'Tag Configuration',

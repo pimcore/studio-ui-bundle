@@ -27,6 +27,7 @@ moduleSystem.registerModule({
       path: 'Tools/Notes & Events',
       label: 'navigation.notes-and-events',
       className: 'item-style-modifier',
+      permission: 'notes_events',
       perspectivePermission: NavPermission.NotesAndEvents,
       widgetConfig: {
         name: 'Notes & Events',
