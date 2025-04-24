@@ -222,6 +222,6 @@ Now just ensure that our bundle is installed. And finally we should see our `con
 
 ### Further reading
 
-- [Plugin Development Examples](./05_Examples/01_Register_a_tab_for_a_folder_asset.md)
+- [Plugin Development Examples](./05_Examples/README.md)
 
 

@@ -1,4 +1,4 @@
-# How to register a new tab for a folder asset
+# How to Use the Tab Manager
 
 In this guide we want to add a new tab for a folder asset. Let's take our [basic plugin](./README.md) as starting point. 
 
