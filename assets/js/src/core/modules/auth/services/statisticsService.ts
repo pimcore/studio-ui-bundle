@@ -38,6 +38,6 @@ export const sendStatistics = async (isAdmin: boolean): Promise<void> => {
       }
     }
   } catch (e) {
-    console.error('Error while sending statistics')
+    console.error('Error while sending statistics: ', e)
   }
 }
