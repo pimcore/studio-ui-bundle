@@ -15,7 +15,7 @@ You can import the generated API slices directly from our SDK. This makes it eas
 
 > **Hint:** The structure of the API imports mirrors the folder structure of the linked SDK API directory.
 
-Examples:
+#### Examples:
 ```typescript
 // Fetch details of an asset by its ID
 import { useAssetGetByIdQuery } from '@pimcore/studio-ui-bundle/api/asset';
