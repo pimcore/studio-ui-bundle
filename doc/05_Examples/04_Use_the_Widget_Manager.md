@@ -1,6 +1,6 @@
 # How to Use the Widget Manager
 
-In this guide we want to add a new bottom widget when a user clicks a button. Let's take our [Folder tab plugin](./04_Use_the_Tab_Manager.md) as starting point. 
+In this guide we want to add a new bottom widget when a user clicks a button. Let's take our [Folder tab plugin](./05_Use_the_Tab_Manager.md) as starting point. 
 
 A widget is just a simple react component. So, let's create one:
 
