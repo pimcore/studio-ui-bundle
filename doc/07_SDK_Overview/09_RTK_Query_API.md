@@ -4,10 +4,10 @@ The RTK Query API (slices) is automatically generated from our OpenAPI specifica
 
 The generated API slices are fully typed, providing strong TypeScript support for a better developer experience and fewer runtime errors. These slices integrate seamlessly with [RTK Query](https://redux-toolkit.js.org/rtk-query/overview), enabling features such as:
 
+- **Auto-Generated Types**: The API slices include TypeScript types that are automatically generated from the OpenAPI specification. This ensures that all request parameters, response data, and other API-related structures are strongly typed, reducing runtime errors and improving code quality.
 - **Data Caching**: Automatically cache API responses for efficient data reuse.
 - **Automatic Refetching**: Keep your data fresh by refetching it when necessary.
 - **Error Handling**: Simplify error management with built-in mechanisms.
-- **Optimistic Updates**: Update the UI optimistically while waiting for server responses.
 
 ### SDK Imports
 
@@ -30,10 +30,3 @@ import { useWorkflowActionSubmitMutation } from '@pimcore/studio-ui-bundle/api/w
 In these examples, all hooks are generated from the OpenAPI specification. They can be used to fetch data, manage loading states, and handle errors seamlessly.
 
 For a general explanation of how Studio SDK imports work, refer to the [SDK Imports Section](./10_SDK_Imports.md).
-
-### Why Use the RTK Query API?
-
-1. **Consistency**: The API is always in sync with the backend, reducing discrepancies and ensuring reliability.
-2. **Efficiency**: Automation saves time and effort, allowing developers to focus on building features.
-3. **Scalability**: Easily extend the API as your application grows.
-4. **Maintainability**: Strong typing and automation make the codebase easier to maintain and debug.
