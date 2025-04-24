@@ -7,8 +7,9 @@ You can access the Pimcore Studio Admin UI at its default URL: `{your-domain}/pi
 ## Documentation Overview
 
 - [Installation](./doc/01_Installation.md)
-- [Studio UI Core Development](./doc/03_Studio_UI_Core_Development.md)
-- [Configuration](./doc/02_Configuration/README.md)
+- [SDK Overview](./doc/07_SDK_Overview/README.md)
 - [Getting Started With Your First Plugin](./doc/04_Plugins_Getting_Started.md)
 - [Plugin Development Examples](./doc/05_Examples/README.md)
-- [SDK Overview](./doc/07_SDK_Overview/README.md)
+- [Configuration](./doc/02_Configuration/README.md)
+- [Studio UI Core Development](./doc/03_Studio_UI_Core_Development.md)
+
