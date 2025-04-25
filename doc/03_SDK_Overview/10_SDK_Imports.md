@@ -34,7 +34,7 @@ This structure ensures that the imports are intuitive and easy to locate within 
 
 `@pimcore/studio-ui-bundle/modules/*`: The various provided modules and parts of the application, such as the asset editor, data object editor, user management, etc.
 
-## Utils
+### Utils
 
 `@pimcore/studio-ui-bundle/utils`: A collection of helper utilities, such as date and number formatters, UUID generation, and more.
 
