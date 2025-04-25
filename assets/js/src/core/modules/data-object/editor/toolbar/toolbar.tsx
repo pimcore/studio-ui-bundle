@@ -11,41 +11,23 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext } from 'react'
+import React from 'react'
 import { Toolbar as ToolbarView } from '@Pimcore/components/toolbar/toolbar'
-import { useDataObjectDraft } from '../../hooks/use-data-object-draft'
-import { DataObjectContext } from '../../data-object-provider'
 
-import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { container } from '@Pimcore/app/depency-injection'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { TAB_EDIT } from '../types/object/tab-manager/tabs/edit/edit-container'
-import { LanguageSelection } from './language-selection/language-selection'
 import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-log-modal'
-import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
 import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
-
-import {
-  EditorToolbarSaveButtons
-} from '@Pimcore/modules/data-object/editor/toolbar/save-buttons/save-buttons'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 
 export const Toolbar = (): React.JSX.Element => {
-  const { id } = useContext(DataObjectContext)
-  const { activeTab } = useDataObjectDraft(id)
-  const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
-  const ContextMenu = componentRegistry.get(componentConfig.dataObject.editor.toolbar.contextMenu.name)
-
   return (
     <ToolbarView>
       <WorkFlowProvider>
         <Flex>
-          <ContextMenu />
-
-          {activeTab === TAB_EDIT.key && (
-            <LanguageSelection />
-          )}
+          <SlotRenderer
+            slot={ componentConfig.dataObject.editor.toolbar.slots.left }
+          />
         </Flex>
 
         <Flex
@@ -54,8 +36,9 @@ export const Toolbar = (): React.JSX.Element => {
           style={ { height: '32px' } }
           vertical={ false }
         >
-          <EditorToolbarWorkflowMenu />
-          <EditorToolbarSaveButtons />
+          <SlotRenderer
+            slot={ componentConfig.dataObject.editor.toolbar.slots.right }
+          />
         </Flex>
         <WorkflowLogModal />
       </WorkFlowProvider>
