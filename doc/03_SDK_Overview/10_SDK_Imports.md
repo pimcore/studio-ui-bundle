@@ -30,7 +30,7 @@ This structure ensures that the imports are intuitive and easy to locate within 
 
 `@pimcore/studio-ui-bundle/components`: Predefined React UI components for building consistent user interfaces. [Read more here](01_UI_Components_and_Storybook.md).
 
-#### UI/Application Modules
+#### Application Modules
 
 `@pimcore/studio-ui-bundle/modules/*`: The various provided modules and parts of the application, such as the asset editor, data object editor, user management, etc.
 
