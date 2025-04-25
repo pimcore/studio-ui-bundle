@@ -18,27 +18,27 @@ This structure ensures that the imports are intuitive and easy to locate within 
 
 ## Most Important Imports
 
-### APIs
+#### APIs
 
 `@pimcore/studio-ui-bundle/api/*`: Provides access to RTK Query APIs, including hooks for fetching, mutating, and managing data. [See here](09_RTK_Query_API.md) for more details.
 
-### App Import
+#### App Import
 
 `@pimcore/studio-ui-bundle/app`: Provides some general modules like the DI container, APP config, redux store, and router.
 
-### UI Components
+#### UI Components
 
 `@pimcore/studio-ui-bundle/components`: Predefined React UI components for building consistent user interfaces. [Read more here](01_UI_Components_and_Storybook.md).
 
-### UI/Application Modules
+#### UI/Application Modules
 
 `@pimcore/studio-ui-bundle/modules/*`: The various provided modules and parts of the application, such as the asset editor, data object editor, user management, etc.
 
-### Utils
+#### Utils
 
 `@pimcore/studio-ui-bundle/utils`: A collection of helper utilities, such as date and number formatters, UUID generation, and more.
 
-### Example
+## Example
 
 Here’s an example of how to use an SDK import:
 
