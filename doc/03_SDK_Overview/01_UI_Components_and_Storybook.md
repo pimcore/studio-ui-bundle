@@ -19,7 +19,7 @@ Refer to the Storybook for detailed usage examples and prop documentation.
 
 ### Storybook
 
-Explore our [Storybook](../03_Studio_UI_Core_Development.md#storybook) to see live examples of all available components, including their configurations and variations.
+Explore our [Storybook](../09_Studio_UI_Core_Development.md#storybook) to see live examples of all available components, including their configurations and variations.
 
 ### Source 
 
