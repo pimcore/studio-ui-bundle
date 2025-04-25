@@ -63,6 +63,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
               return (
                 <Tooltip
                   key={ entry.key }
+                  placement="left"
                   title={ entry?.tooltip }
                 >
                   <div
