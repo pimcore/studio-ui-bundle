@@ -1,7 +1,7 @@
 # How to Add an Entry to the Left Sidebar
 
 ## Overview
-This example demonstrates how to add a heart icon to the left sidebar of the Pimcore Studio UI. When the icon is clicked, it opens a small modal message.
+This example demonstrates how to add a heart icon to the left sidebar of the Pimcore Studio UI. 
 
 ## Screenshot
 ![Heart Icon Example](../img/examples/left-sidebar.png)
