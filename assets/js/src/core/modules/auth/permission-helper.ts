@@ -24,7 +24,5 @@ export const isAllowed = (permission: IEditorTab['userPermission']): boolean => 
     return true
   }
 
-  console.log('permission', user.permissions)
-
   return (permission !== undefined && user.permissions.includes(permission))
 }
