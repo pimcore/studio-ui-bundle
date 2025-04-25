@@ -28,7 +28,7 @@ This structure ensures that the imports are intuitive and easy to locate within 
 
 ### UI Components
 
-[`@pimcore/studio-ui-bundle/components`](01_UI_Components_and_Storybook): Predefined React UI components for building consistent user interfaces.
+[`@pimcore/studio-ui-bundle/components`](01_UI_Components_and_Storybook.md): Predefined React UI components for building consistent user interfaces.
 
 ### UI/Application Modules
 
