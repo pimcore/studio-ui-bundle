@@ -44,7 +44,7 @@ export const LeftSidebarView = (): React.JSX.Element => {
               context={ context }
             />
           ) }
-          slot={ componentConfig.leftSidbar.slot }
+          slot={ componentConfig.leftSidebar.slot }
         />
       </ul>
     </div>
