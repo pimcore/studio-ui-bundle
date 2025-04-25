@@ -12,6 +12,7 @@
 */
 
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Title } from '@Pimcore/components/title/title'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
@@ -29,6 +30,8 @@ export const TagFiltersContainerInner = (): React.JSX.Element => {
   const { tags, setTags } = useTagFilters()
   const { setTags: setListingTags } = useListingTagFiler()
   const { setPage } = usePaging()
+
+  const { t } = useTranslation()
 
   const handleApplyClick = (): void => {
     setListingTags(tags)
@@ -70,7 +73,7 @@ export const TagFiltersContainerInner = (): React.JSX.Element => {
         padded
         padding="small"
       >
-        <Title>Tag Filters</Title>
+        <Title>{t('sidebar.tag_filters')}</Title>
 
         <TagsTreeFiltersContainer
           checkedKeys={ tagsAsStringArray }

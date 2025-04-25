@@ -11,8 +11,9 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { FilterContainer } from '../tabs/filters/filter-container'
 
@@ -21,6 +22,7 @@ export const generalFiltersTabKey = 'general-filters'
 export const withGeneralFiltersTab = (useBaseHook: AbstractDecoratorProps['useSidebarOptions']): AbstractDecoratorProps['useSidebarOptions'] => {
   const useSidebarGeneralFiltersExtension: typeof useBaseHook = () => {
     const { getProps: baseGetProps } = useBaseHook()
+    const { t } = useTranslation()
 
     const getProps: typeof baseGetProps = () => {
       const baseProps = baseGetProps()
@@ -33,7 +35,8 @@ export const withGeneralFiltersTab = (useBaseHook: AbstractDecoratorProps['useSi
           {
             component: <FilterContainer />,
             key: generalFiltersTabKey,
-            icon: <Icon value="filter" />
+            icon: <Icon value="filter" />,
+            tooltip: t('sidebar.search_filter')
           },
           ...baseProps.entries
         ]

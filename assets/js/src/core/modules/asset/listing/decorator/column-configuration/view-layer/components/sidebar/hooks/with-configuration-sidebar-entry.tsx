@@ -11,8 +11,9 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { GridConfig } from '../tabs/grid-config/grid-config'
 
@@ -23,6 +24,7 @@ export interface Settings {
 export const withConfigurationSidebarEntry = (useBaseHook: AbstractDecoratorProps['useSidebarOptions'], settings: Settings = { saveEnabled: true }): AbstractDecoratorProps['useSidebarOptions'] => {
   const useSidebarEntry: typeof useBaseHook = () => {
     const { getProps: baseGetProps } = useBaseHook()
+    const { t } = useTranslation()
 
     const getProps: typeof baseGetProps = () => {
       const baseProps = baseGetProps()
@@ -34,7 +36,8 @@ export const withConfigurationSidebarEntry = (useBaseHook: AbstractDecoratorProp
           {
             component: <GridConfig settings={ settings } />,
             key: 'configuration',
-            icon: <Icon value="settings" />
+            icon: <Icon value="settings" />,
+            tooltip: t('sidebar.grid_config')
           }
         ]
       }
