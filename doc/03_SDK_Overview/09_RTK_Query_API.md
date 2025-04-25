@@ -1,6 +1,6 @@
 # RTK Query API
 
-The RTK Query API (slices) is automatically generated from our OpenAPI specification. This ensures that the API definitions, including schemas and types, are always consistent with the backend. By automating this process, we reduce manual effort, minimize errors, and ensure that the API is always up-to-date with backend changes.
+The RTK Query API (slices) is automatically generated via [@rtk-query/codegen-openapi](https://redux-toolkit.js.org/rtk-query/usage/code-generation) from our [OpenAPI](https://www.openapis.org/) specification. This ensures that the API definitions, including schemas and types, are always consistent with the backend. By automating this process, we reduce manual effort, minimize errors, and ensure that the API is always up-to-date with backend changes.
 
 The generated API slices are fully typed, providing strong TypeScript support for a better developer experience and fewer runtime errors. These slices integrate seamlessly with [RTK Query](https://redux-toolkit.js.org/rtk-query/overview), enabling features such as:
 
