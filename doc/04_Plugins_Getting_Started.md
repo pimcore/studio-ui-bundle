@@ -6,7 +6,7 @@ Plugins can add new features, modify existing functionality, or integrate with e
 
 ## Getting started
 
-Since there’s no npm package available yet, follow the local development guide to install the Pimcore Studio UI as one of your frontend dependencies. To do this, change to the Pimcore Studio path (vendor/pimcore/studio-ui-bundle) and run these commands:
+Since there’s no npm package available yet, follow the local development guide to install the Pimcore Studio UI as one of your frontend dependencies. To do this, change to the Pimcore Studio path (vendor/pimcore/studio-ui-bundle/assets) and run these commands:
 
 ```
 npm install
