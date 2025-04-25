@@ -20,15 +20,15 @@ This structure ensures that the imports are intuitive and easy to locate within 
 
 ### APIs
 
-[`@pimcore/studio-ui-bundle/api/*`](09_RTK_Query_API.md): Provides access to RTK Query APIs, including hooks for fetching, mutating, and managing data.
+`@pimcore/studio-ui-bundle/api/*`: Provides access to RTK Query APIs, including hooks for fetching, mutating, and managing data. [See here](09_RTK_Query_API.md) for more details.
 
 ### App Import
 
-`@pimcore/studio-ui-bundle/app`: Provides some general modules like the DI container, APP config, redux store and router.
+`@pimcore/studio-ui-bundle/app`: Provides some general modules like the DI container, APP config, redux store, and router.
 
 ### UI Components
 
-[`@pimcore/studio-ui-bundle/components`](01_UI_Components_and_Storybook.md): Predefined React UI components for building consistent user interfaces.
+`@pimcore/studio-ui-bundle/components`: Predefined React UI components for building consistent user interfaces. [Read more here](01_UI_Components_and_Storybook.md).
 
 ### UI/Application Modules
 
@@ -37,7 +37,6 @@ This structure ensures that the imports are intuitive and easy to locate within 
 ## Utils
 
 `@pimcore/studio-ui-bundle/utils`: A collection of helper utilities, such as date and number formatters, UUID generation, and more.
-
 
 ### Example
 
