@@ -16,7 +16,7 @@ import { useAssetGetByIdQuery } from '@pimcore/studio-ui-bundle/api/asset';
 
 This structure ensures that the imports are intuitive and easy to locate within the SDK directory.
 
-## Most Important Imports
+## Different Types of Imports
 
 #### APIs
 
