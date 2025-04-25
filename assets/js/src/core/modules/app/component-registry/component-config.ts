@@ -82,7 +82,7 @@ const defaultComponentConfig = {
       contextMenu: { type: ComponentType.SINGLE, name: 'dataObject.tree.contextMenu' }
     }
   },
-  leftSidbar: {
+  leftSidebar: {
     slot: {
       type: ComponentType.SLOT,
       name: 'leftSidebar.slot',
