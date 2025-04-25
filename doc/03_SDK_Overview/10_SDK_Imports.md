@@ -8,7 +8,7 @@ For a full overview of all available import sources, you can refer to the [GitHu
 
 ## Folder Structure and Import Paths
 
-The folder structure in the SDK mirrors the import paths. Each folder and `index.ts` in the SDK corresponds directly to an importable module. For example, if there is a file located at `sdk/api/asset/index.ts`, you can import it in your project as follows:
+The folder structure in the SDK mirrors the import paths. Each folder and `index.ts` in the [SDK](https://github.com/pimcore/studio-ui-bundle/tree/1.x/assets/js/src/sdk) corresponds directly to an importable module. For example, if there is a file located at `sdk/api/asset/index.ts`, you can import it in your project as follows:
 
 ```typescript
 import { useAssetGetByIdQuery } from '@pimcore/studio-ui-bundle/api/asset';
