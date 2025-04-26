@@ -1,64 +1,20 @@
 # How to Use the Tab Manager
 
-In this guide we want to add a new tab for a folder asset. Let's take our [basic plugin](./README.md) as starting point. 
+## Overview
 
-First of all let's create a new module that takes care of the registration of a new tab.
+This example demonstrates how you can use the different tab-managers of Pimcore Studio. Commonly you want to add new tabs or overwrite existing one in the different element types
 
-`./modules/asset/folder-tab-extension.tsx`:
-``` typescript
-import React from 'react'
-import { type AbstractModule, Icon, type FolderTabManager, container, serviceIds } from 'pimcore-studio-ui'
-import { MyFirstTabComponent } from './components/my-first-tab-component';
+## Screenshot
 
-export const FolderTabExtension: AbstractModule = {
-  onInit: (): void => {
-    const tabManager = container.get<FolderTabManager>(serviceIds['Asset/Editor/FolderTabManager'])
+![Tab Manager Example](../img/examples/tab-manager-01.png)
+![Tab Manager Example](../img/examples/tab-manager-02.png)
 
-    tabManager.register({
-      children: <MyFirstTabComponent />,
-      icon: <Icon name={ 'camera' } />,
-      key: 'my-first-tab-component',
-      label: '1. tab component'
-    })
-  }
-}
-```
+## Details
 
-In our example we are importing the `MyFirstTabComponent` as the content for our new registered tab. Let's create it:
+There are two key components for using the widget manager:
 
-`./modules/asset/components/my-first-tab-component.tsx`:
-``` typescript
-import React from 'react';
+- The `WidgetRegistry`, where you can register a React component under a specific name.
+- The `useWidgetManager` hook, which allows you to open registered widgets. It also lets you decide in which of the four areas (main, left, bottom, right) the widget should be opened.
 
-export const MyFirstTabComponent = (): React.JSX.Element => {
-  return (
-    <div>
-      <h1>My First Tab</h1>
-      <p>This is a simple tab component.</p>
-    </div>
-  )
-}
-```
-
-And last but not least we have to register our newly created module:
-
-`./main.ts`
-``` typescript
-import { Pimcore } from 'pimcore-studio-ui'
-import { FolderTabExtension } from './modules/assets/folder-tab-extension'
-
-Pimcore.pluginSystem.registerPlugin({
-  name: 'pimcore-plugin',
-
-  // register modules here
-  onStartup: ({ moduleSystem }): void => {
-    moduleSystem.registerModule(FolderTabExtension)
-  }
-})
-```
-
-That's it! Our new tab is now rendered in our Pimcore Studio UI.
-
-
-
-
+## Code Example on GitHub
+> [Custom widgets example on GitHub](https://github.com/pimcore/studio-example-bundle/blob/main/assets/js/src/examples/custom-widgets/index.ts).
