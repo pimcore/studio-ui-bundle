@@ -14,6 +14,7 @@ on:
       - "*_actions"
       - "feature-*"
       - "nightly"
+  workflow_dispatch:
 
 permissions:
   contents: read

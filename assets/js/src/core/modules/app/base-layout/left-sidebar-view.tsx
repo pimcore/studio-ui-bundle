@@ -12,11 +12,18 @@
 */
 
 import { Icon } from '@Pimcore/components/icon/icon'
-import { MainNav } from '@Pimcore/modules/app/nav/main-nav'
 import { Avatar } from 'antd'
 import React from 'react'
 import { useStyles } from './left-sidebar-view.styles'
-import { Search } from '@Pimcore/modules/search/search'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
+
+// New functional component
+const SidebarNavItem = ({ Component, context }: { Component: React.ReactNode, context: { name?: string } }): React.ReactElement => (
+  <li key={ context.name }>
+    { Component }
+  </li>
+)
 
 export const LeftSidebarView = (): React.JSX.Element => {
   const { styles } = useStyles()
@@ -30,13 +37,15 @@ export const LeftSidebarView = (): React.JSX.Element => {
       />
 
       <ul className='left-sidebar__nav'>
-        <li>
-          <MainNav />
-        </li>
-
-        <li>
-          <Search />
-        </li>
+        <SlotRenderer
+          onRenderComponent={ (Component, context) => (
+            <SidebarNavItem
+              Component={ Component }
+              context={ context }
+            />
+          ) }
+          slot={ componentConfig.leftSidebar.slot }
+        />
       </ul>
     </div>
   )
