@@ -6,7 +6,8 @@ This example demonstrates how you can use the different tab-managers of Pimcore 
 
 ## Screenshot
 
-To be added.
+![Tab Manager Example](../img/examples/tab-manager-01.png)
+![Tab Manager Example](../img/examples/tab-manager-02.png)
 
 ## Details
 

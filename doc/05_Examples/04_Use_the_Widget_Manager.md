@@ -6,7 +6,7 @@ This example demonstrates how to utilize the widget manager in Pimcore Studio UI
 
 ## Screenshot
 
-To be added.
+![Widget Manager Example](../img/examples/widget-manager.png)
 
 ## Details
 
