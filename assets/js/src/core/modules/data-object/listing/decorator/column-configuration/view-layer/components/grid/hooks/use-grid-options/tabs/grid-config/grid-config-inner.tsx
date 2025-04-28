@@ -88,7 +88,12 @@ export const GridConfigInner = (): React.JSX.Element => {
   }, [data])
 
   useEffect(() => {
-    setColumns(selectedColumns.map(column => column.originalApiDefinition!) as AvailableColumn[])
+    setColumns(selectedColumns.map(column => {
+      return {
+        ...column.originalApiDefinition!,
+        locale: column?.locale
+      }
+    }) as AvailableColumn[])
   }, [selectedColumns])
 
   const onColumnClick = (column: AvailableColumn): void => {
