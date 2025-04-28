@@ -23,12 +23,15 @@ import { withLocalizedFieldsLocale } from '@Pimcore/modules/element/dynamic-type
 import { compose } from '@reduxjs/toolkit'
 import { NumberedList } from './numbered-list/numbered-list'
 import { withNumberedItemContext } from './item/with-numbered-item-context'
+import { useStyles } from './form.styles'
 
 export interface FormProps extends Omit<AntFormProps, 'children'> {
   children?: React.ReactNode
 }
 
 const Form = (({ ...props }: FormProps) => {
+  const { styles } = useStyles()
+
   const requiredMark: FormProps['requiredMark'] = (label, { required }): ReactNode => {
     return (
       <Space size='mini'>
@@ -37,6 +40,8 @@ const Form = (({ ...props }: FormProps) => {
       </Space>
     )
   }
+
+  props.className = `${props.className ?? ''} ${styles.container}`
 
   return (
     <AntForm
