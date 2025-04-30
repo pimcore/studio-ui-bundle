@@ -9,6 +9,10 @@ error.error_widget_name_missing: Widget name have to be provided
 error.error_widget_name_invalid: Widget name is invalid (only alphanumeric characters, underscores and spaces are allowed, must be at least 3 characters long and less than 80 long)
 error.error_validation_failed: Validation failed
 error.error_element_not_found: Element not found
+sidebar.selected_elements: Selected Elements
+sidebar.grid_config: Grid config
+sidebar.tag_filters: Tag Filters
+sidebar.search_filter: Search & Filter
 modal-search.field.mimeType: MIME-Type
 modal-search.field.thumbnail: Thumbnail
 modal-search.field.id: ID
