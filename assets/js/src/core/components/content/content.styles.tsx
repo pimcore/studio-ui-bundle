@@ -63,6 +63,11 @@ export const useStyles = createStyles(({ token, css }) => {
         justify-content: center;
         align-items: center;
       }
+      
+      &.content--padded .ant-table-thead,
+      &.p-t-small .ant-table-thead {
+        top: -${token.paddingSM}px;
+      }
     `,
 
     contentFullPage: css`
