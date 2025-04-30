@@ -26,6 +26,46 @@ export const useStyles = createStyles(({ token, css }) => {
         height: 0;
       }
 
+      table.withoutHeader {
+        .ant-table-tbody {
+          .ant-table-row:first-child {
+            .ant-table-cell {
+              border-top: 1px solid ${token.Table.colorBorderSecondary} !important;
+            }
+
+            .ant-table-cell:first-of-type {
+              border-top-left-radius: 8px;
+
+              .default-cell--active {
+                  border-top-left-radius: 7px;
+              }
+            }
+
+            .ant-table-cell:last-of-type {
+              border-top-right-radius: 8px;
+              
+              .default-cell--active {
+                border-top-right-radius: 7px;
+              }
+            }
+          }
+
+          .ant-table-row:last-of-type {
+            .ant-table-cell:first-of-type {
+              .default-cell--active {
+                border-bottom-left-radius: 7px;
+              }
+            }
+
+            .ant-table-cell:last-of-type {
+              .default-cell--active {
+                border-bottom-right-radius: 7px;
+              }
+            }
+          }
+        }
+      }
+
       th {
         user-select: none;
       }
@@ -56,6 +96,10 @@ export const useStyles = createStyles(({ token, css }) => {
         &:last-of-type {
           border-right: 1px solid #F0F0F0;
         }
+      }
+      
+      .ant-table-cell:last-of-type {
+        border-color: ${token.Table.colorBorderSecondary} !important;
       }
 
       .ant-table-thead {

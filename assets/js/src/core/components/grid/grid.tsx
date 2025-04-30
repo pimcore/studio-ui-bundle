@@ -250,7 +250,7 @@ export const Grid = ({
         <div className='ant-table-container'>
           <div className='ant-table-content'>
             <table
-              className={ cn({ withoutHeader: table.getHeaderGroups()?.length > 0 }) }
+              className={ cn({ withoutHeader: hideColumnHeaders }) }
               ref={ tableElement }
               style={ { width: tableAutoWidth ? '100%' : calculateTableWidth(), minWidth: table.getCenterTotalSize() } }
             >
