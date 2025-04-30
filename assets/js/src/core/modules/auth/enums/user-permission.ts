@@ -12,11 +12,10 @@
 */
 
 export enum UserPermission {
-    NotesAndEvents = 'notes_events',
-    Documents = 'documents',
-    Objects = 'objects',
-    Assets = 'assets',
-    TagsConfiguration = 'tags_configuration',
-    Users = 'users',
-  }
-  
+  NotesAndEvents = 'notes_events',
+  Documents = 'documents',
+  Objects = 'objects',
+  Assets = 'assets',
+  TagsConfiguration = 'tags_configuration',
+  Users = 'users',
+}

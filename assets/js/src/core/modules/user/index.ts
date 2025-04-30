@@ -20,7 +20,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '../app/nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
-import { UserPermission } from '../app/nav/user-permission'
+import { UserPermission } from '../auth/enums/user-permission'
 // import '@Pimcore/modules/asset/tree'
 
 moduleSystem.registerModule({
