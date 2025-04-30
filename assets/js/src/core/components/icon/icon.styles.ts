@@ -14,13 +14,14 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     subIcon: css`
       position: absolute;
-      width: 10px;
       height: 10px;
-      left: -5px;
-      top: 50%;
-      transform: translateY(-50%);
+      z-index: 100;
+      bottom: 0;
+      left: 0;
 
       & svg {
+        width: inherit;
+        height: inherit;
         color: ${token.gold7};
         background: ${token.gold1};
         border-radius: ${token.borderRadiusLG}px;
