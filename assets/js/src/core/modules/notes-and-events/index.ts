@@ -18,6 +18,7 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { NotesAndEventsContainer } from '@Pimcore/modules/notes-and-events/notes-and-events-container'
 import { type MainNavRegistry } from '../app/nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
+import { UserPermission } from '../app/nav/user-permission'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -27,7 +28,7 @@ moduleSystem.registerModule({
       path: 'Tools/Notes & Events',
       label: 'navigation.notes-and-events',
       className: 'item-style-modifier',
-      permission: 'notes_events',
+      permission: UserPermission.NotesAndEvents,
       perspectivePermission: NavPermission.NotesAndEvents,
       widgetConfig: {
         name: 'Notes & Events',

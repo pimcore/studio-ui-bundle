@@ -18,6 +18,7 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { TagConfigurationContainer } from '@Pimcore/modules/tags/tag-configuration-container'
 import { type MainNavRegistry } from '../app/nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
+import { UserPermission } from '../app/nav/user-permission'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -27,7 +28,7 @@ moduleSystem.registerModule({
       path: 'Settings/Tag Configuration',
       label: 'navigation.tag-configuration',
       className: 'item-style-modifier',
-      permission: 'tags_configuration',
+      permission: UserPermission.TagsConfiguration,
       perspectivePermission: NavPermission.TagConfiguration,
       widgetConfig: {
         name: 'Tag Configuration',

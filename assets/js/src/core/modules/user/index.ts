@@ -20,6 +20,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '../app/nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
+import { UserPermission } from '../app/nav/user-permission'
 // import '@Pimcore/modules/asset/tree'
 
 moduleSystem.registerModule({
@@ -36,6 +37,7 @@ moduleSystem.registerModule({
       path: 'Settings/User & Roles/Users',
       label: 'navigation.users',
       className: 'item-style-modifier',
+      permission: UserPermission.Users,
       perspectivePermission: NavPermission.Users,
       widgetConfig: {
         name: 'Users',
@@ -54,6 +56,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'Settings/User & Roles/Roles',
       label: 'navigation.roles',
+      permission: UserPermission.Users,
       perspectivePermission: NavPermission.Roles,
       widgetConfig: {
         name: 'Roles',
