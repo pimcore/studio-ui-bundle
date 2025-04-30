@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Content } from '@Pimcore/components/content/content'
+import { useStyles } from './structured-table.styles'
 
 export interface StructuredTableProps {
   disabled?: boolean
@@ -61,6 +62,8 @@ export const StructuredTable = (props: StructuredTableProps): React.JSX.Element 
   const [key, setKey] = useState<number>(0)
   const { t } = useTranslation()
   const { confirm } = useFormModal()
+
+  const { styles } = useStyles()
 
   const onChange = (value: StructuredTableValue | null): void => {
     setValue(value)
@@ -112,7 +115,7 @@ export const StructuredTable = (props: StructuredTableProps): React.JSX.Element 
       >
         <StructuredTableGrid
           castColumnValue={ castColumnValue }
-          className={ cn(props.className) }
+          className={ cn(styles.table, props.className) }
           cols={ props.cols }
           disabled={ props.disabled }
           key={ key }

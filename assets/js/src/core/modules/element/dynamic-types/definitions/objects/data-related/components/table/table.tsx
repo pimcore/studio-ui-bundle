@@ -26,6 +26,7 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Content } from '@Pimcore/components/content/content'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { useStyles } from './table.styles'
 
 export interface TableProps {
   rows: number | null
@@ -58,6 +59,8 @@ export const Table = (props: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const modal = useFormModal()
   const { confirm } = modal
+
+  const { styles } = useStyles()
 
   const columnConfigActivated = props.colsFixed === true ? props.columnConfigActivated ?? false : false
 
@@ -223,7 +226,7 @@ export const Table = (props: TableProps): React.JSX.Element => {
   }
 
   return (
-    <div>
+    <div className={ styles.table }>
       <Content
         style={ {
           width: toCssDimension(props.width === 320 ? undefined : props.width), // the default table width does not make sense in studio, 100% width is better
