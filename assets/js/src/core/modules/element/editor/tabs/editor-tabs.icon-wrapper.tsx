@@ -45,7 +45,6 @@ export const IconWrapper = ({ tabKey, activeTabKey, tabKeyInFocus, tabKeyOutOfFo
 
   return (
     <Tooltip
-      arrow={ false }
       open={ toolTipIsVisible }
       placement="top"
       title={ title }

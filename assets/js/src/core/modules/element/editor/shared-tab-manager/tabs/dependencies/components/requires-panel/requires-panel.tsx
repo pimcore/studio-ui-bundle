@@ -62,7 +62,7 @@ export const RequiresPanel = (): React.JSX.Element => {
     }
     >
       <Content
-        className={ 'pimcore-dependencies__requires' }
+        className={ 'pimcore-dependencies__requires p-r-none' }
         padded
       >
         <Header

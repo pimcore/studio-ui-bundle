@@ -12,7 +12,8 @@
 */
 
 import React from 'react'
-import { Badge, Card, Tag } from 'antd'
+import { Badge, Tag } from 'antd'
+import { Card } from '@Pimcore/components/card/card'
 import { useStyles } from '@Pimcore/components/workflow-card/workflow-card.styles'
 import { DropdownButton } from './components/dropdown-button/dropdown-button'
 import { type IWorkflowCardProps } from './types'

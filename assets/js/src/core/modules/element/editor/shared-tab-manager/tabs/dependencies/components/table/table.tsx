@@ -54,7 +54,8 @@ export const Table = ({ items, isLoading }: TableProps): React.JSX.Element => {
       meta: {
         type: 'open-element'
       },
-      size: 50
+      size: 50,
+      enableResizing: false
     })
   ]
 
