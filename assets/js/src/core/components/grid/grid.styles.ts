@@ -63,6 +63,14 @@ export const useStyles = createStyles(({ token, css }) => {
         top: 0;
         z-index: 1;
 
+        .ant-table-cell {
+          border-top: 1px solid ${token.Table.colorBorderSecondary} !important;
+        }
+
+        .ant-table-cell:last-of-type {
+          border-color: ${token.Table.colorBorderSecondary} !important;
+        }
+
         .grid__cell-content {
           display: flex;
           width: 100%;
@@ -84,7 +92,6 @@ export const useStyles = createStyles(({ token, css }) => {
 
       .ant-table-content {
         table {
-          border: 1px solid #F0F0F0;
           border-radius: 8px;
         }
           
@@ -93,8 +100,10 @@ export const useStyles = createStyles(({ token, css }) => {
               .ant-table-cell:first-of-type {
                 border-bottom-left-radius: 8px;
               }
+              
               .ant-table-cell:last-of-type {
                 border-bottom-right-radius: 8px;
+                border-color: ${token.Table.colorBorderSecondary} !important;
               }
             }
           }
