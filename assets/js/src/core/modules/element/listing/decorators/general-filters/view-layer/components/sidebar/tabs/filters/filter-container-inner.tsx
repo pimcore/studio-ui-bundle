@@ -11,6 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
 import { Checkbox, Space } from 'antd'
@@ -20,7 +22,6 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { PQLQueryInput } from '@Pimcore/components/pql-query-input/pql-query-input'
-import React, { useState } from 'react'
 import { FieldFiltersContainer } from './field-filters/field-filters-container'
 import {
   ContentLayout
@@ -57,6 +58,8 @@ export const FilterContainerInner = (): React.JSX.Element => {
     setPqlQuery,
     setSearchTerm
   } = useFilter()
+
+  const { t } = useTranslation()
 
   const handleApplyClick = (): void => {
     setListingFieldFilters(fieldFilters)
@@ -106,7 +109,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
           align='center'
           justify='space-between'
         >
-          <Title>Search & Filter</Title>
+          <Title>{t('sidebar.search_filter')}</Title>
           <Flex gap='extra-small'>
             <Text>Advanced Mode</Text>
             <Switch

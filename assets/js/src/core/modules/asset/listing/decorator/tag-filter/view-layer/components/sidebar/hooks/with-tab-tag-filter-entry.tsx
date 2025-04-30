@@ -11,8 +11,9 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { TagFiltersContainer } from '../tabs/tag-filters/tag-filters-container'
 import { useTagFilter } from '../../../../context-layer/provider/tag-filter/use-tag-filter'
@@ -21,6 +22,7 @@ export const withTabTagFilterEntry = (useBaseHook: AbstractDecoratorProps['useSi
   const useTabTagFilterEntry: typeof useBaseHook = () => {
     const { getProps: baseGetProps } = useBaseHook()
     const { tags } = useTagFilter()
+    const { t } = useTranslation()
 
     const getProps: typeof baseGetProps = () => {
       const baseProps = baseGetProps()
@@ -39,7 +41,8 @@ export const withTabTagFilterEntry = (useBaseHook: AbstractDecoratorProps['useSi
           {
             component: <TagFiltersContainer />,
             key: 'tag-filters',
-            icon: <Icon value="tag" />
+            icon: <Icon value="tag" />,
+            tooltip: t('sidebar.tag_filters')
           },
           ...baseProps.entries
         ]

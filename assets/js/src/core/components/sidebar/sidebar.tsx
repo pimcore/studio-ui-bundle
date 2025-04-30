@@ -15,6 +15,7 @@ import { useStyle } from './sidebar.styles'
 import React, { isValidElement, useState } from 'react'
 import { type ISidebarButton, type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 
 export interface SidebarProps {
   entries: ISidebarEntry[]
@@ -60,26 +61,31 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
           {
             preparedEntries.map((entry, index) => {
               return (
-                <div
-                  aria-controls={ entry.key }
-                  aria-selected={ entry.key === activeTab }
-                  className={ [
-                    'entry',
-                    entry.key === activeTab ? 'sidebar--active' : '',
-                    highlights.includes(entry.key) ? 'entry--highlighted' : ''
-                  ].join(' ') }
+                <Tooltip
                   key={ entry.key }
-                  onClick={ () => {
-                    handleSidebarClick(entry.key)
-                  } }
-                  onKeyDown={ () => {
-                    handleSidebarClick(entry.key)
-                  } }
-                  role={ 'tab' }
-                  tabIndex={ index }
+                  placement="left"
+                  title={ entry?.tooltip }
                 >
-                  {entry.icon}
-                </div>
+                  <div
+                    aria-controls={ entry.key }
+                    aria-selected={ entry.key === activeTab }
+                    className={ [
+                      'entry',
+                      entry.key === activeTab ? 'sidebar--active' : '',
+                      highlights.includes(entry.key) ? 'entry--highlighted' : ''
+                    ].join(' ') }
+                    onClick={ () => {
+                      handleSidebarClick(entry.key)
+                    } }
+                    onKeyDown={ () => {
+                      handleSidebarClick(entry.key)
+                    } }
+                    role={ 'tab' }
+                    tabIndex={ index }
+                  >
+                    {entry.icon}
+                  </div>
+                </Tooltip>
               )
             })
           }

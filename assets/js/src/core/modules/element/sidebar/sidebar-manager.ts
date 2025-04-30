@@ -17,6 +17,7 @@ export interface ISidebarEntry {
   key: string
   icon: React.JSX.Element
   component: React.JSX.Element
+  tooltip?: string
 }
 
 export interface ISidebarButton {
