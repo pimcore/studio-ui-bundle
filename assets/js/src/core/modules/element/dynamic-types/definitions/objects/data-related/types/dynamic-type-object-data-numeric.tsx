@@ -8,10 +8,22 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import React from 'react'
 import {
   DynamicTypeObjectDataAbstractNumeric
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-numeric'
+import { type EditMode, type GetGridCellDefinitionProps } from '../dynamic-type-object-data-abstract'
+import { Numeric } from '../../grid-cell-preview/numeric/numeric'
 
 export class DynamicTypeObjectDataNumeric extends DynamicTypeObjectDataAbstractNumeric {
   id: string = 'numeric'
+  gridCellEditMode: EditMode = 'edit-modal'
+
+  getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
+    const value = props.cellProps.getValue()
+
+    return (
+      <Numeric value={ value } />
+    )
+  }
 }
