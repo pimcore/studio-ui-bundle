@@ -8,9 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
-import Search from 'antd/es/input/Search'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Tooltip } from 'antd'
 import { Box } from '@Pimcore/components/box/box'
@@ -24,6 +23,8 @@ import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-
 import { createElementSelectorAreas, type IRelationAllowedTypesDataComponent } from '../../../../helpers/relations/allowed-types'
 import { type ManyToManyRelationValueItem } from '../../hooks/use-value'
 import { type SelectedItem } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
+import { SearchInput } from '@Pimcore/components/search-input/search-input'
+import { debounce } from 'lodash'
 
 export interface ManyToManyRelationToolbarProps extends IRelationAllowedTypesDataComponent {
   empty: () => void
@@ -115,6 +116,13 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
     )
   }
 
+  const debouncedSearch = useCallback(
+    debounce((value: string) => {
+      props.onSearch(value)
+    }, 200),
+    [props.onSearch]
+  )
+
   return (
     <Box padding="extra-small">
       <Flex
@@ -125,12 +133,17 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
         { buttons.length > 0 ? <ButtonGroup items={ buttons } /> : <div></div> }
 
         <div>
-          <Search
+          <SearchInput
+            onClear={ () => {
+              props.onSearch('')
+            }
+            }
             onInput={
             (e: React.ChangeEvent<HTMLInputElement>) => {
-              props.onSearch(e.target.value)
+              debouncedSearch(e.target.value)
             } }
             placeholder={ t('search') }
+            withoutAddon
           />
         </div>
       </Flex>
