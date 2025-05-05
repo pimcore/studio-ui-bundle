@@ -15,7 +15,7 @@ import React, { useState } from 'react'
 import { Upload as AntUpload, type UploadProps as AntUploadProps } from 'antd'
 import { api as assetApi, type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { UploadModal } from '@Pimcore/components/modal/upload-modal/components/upload-modal/upload-modal'
-import { type UploadFile } from 'antd/es/upload/interface'
+import type { RcFile, UploadFile } from 'antd/es/upload/interface'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
@@ -62,15 +62,26 @@ export const Upload = (props: UploadProps): React.JSX.Element => {
     showUploadList: false,
     maxCount: props.maxItems,
     fileList,
+    beforeUpload: (file: RcFile & UploadFile) => {
+      const isFileSizeValid = file.size / 1024 / 1024 < 500
+      if (!isFileSizeValid) {
+        file.status = 'error'
+        file.error = { status: 413 }
+      }
+      return isFileSizeValid
+    },
     onChange: async (info) => {
       setFileList(info.fileList)
       setIsModalOpen(true)
       props.onChange?.(info)
       const allFilesDone = info.fileList.every(file => file.status === 'done')
       const uploadFinished = info.fileList.every(file => file.status === 'done' || file.status === 'error')
+      const uploadDone = info.fileList.every(file => file.status === 'done' || file.status === 'error' || file.percent === 100)
 
-      if (uploadFinished) {
+      if (uploadDone) {
         setShowProcessing(true)
+      }
+      if (uploadFinished) {
         const assets: Asset[] = []
         for (const file of info.fileList) {
           if (file.status === 'done') {

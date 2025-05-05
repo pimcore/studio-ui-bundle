@@ -25,7 +25,6 @@ export interface UploadModalButtonProps extends UploadProps {
 export const UploadModalButton = (props: UploadModalButtonProps): React.JSX.Element => {
   const { t } = useTranslation()
   const alertModal = useAlertModal()
-  // const [isButtonLoading, setIsButtonLoading] = useState(false)
 
   if (props.showMaxItemsError === true) {
     return (
@@ -45,16 +44,12 @@ export const UploadModalButton = (props: UploadModalButtonProps): React.JSX.Elem
     <Upload
       { ...props }
       onChange={ (info) => {
-      //  setIsButtonLoading(false)
         props.onChange?.(info)
       } }
     >
       <Tooltip title={ t('upload') }>
         <IconButton
           icon={ { value: 'upload-cloud' } }
-          onClick={ () => {
-          //  setIsButtonLoading(true)
-          } }
           type="default"
         />
       </Tooltip>
