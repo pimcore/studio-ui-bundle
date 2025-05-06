@@ -15,7 +15,7 @@ import { type MainNavRegistry } from '../app/nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
 import { OpenElement } from '@Pimcore/modules/open-element/open-element'
 import React from 'react'
-import { UserPermission } from '../app/nav/user-permission'
+import { UserPermission } from '../auth/enums/user-permission'
 
 moduleSystem.registerModule({
   onInit: () => {
