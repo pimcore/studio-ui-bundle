@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Upload as AntUpload, type UploadProps as AntUploadProps } from 'antd'
 import { api as assetApi, type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { UploadModal } from '@Pimcore/components/modal/upload-modal/components/upload-modal/upload-modal'
@@ -19,27 +19,53 @@ import type { RcFile, UploadFile } from 'antd/es/upload/interface'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
-import { isEmpty, isUndefined } from 'lodash'
+import { isEmpty, isString, isUndefined } from 'lodash'
 import { type UploadChangeParam } from 'antd/lib/upload'
 
-export interface UploadProps {
-  onSuccess: (assets: Asset[]) => Promise<void>
+export interface UploadPropsBase {
+  accept?: AntUploadProps['accept']
+  multiple?: AntUploadProps['multiple']
+  name?: AntUploadProps['name']
+  beforeUpload?: AntUploadProps['beforeUpload']
   onChange?: <T = any>(info: UploadChangeParam<UploadFile<T>>) => void
   targetFolderPath?: string
+  targetFolderId?: number
   maxItems?: number
   children?: React.ReactNode
+  uploadRef?: React.Ref<any> // Pass ref as a prop
 }
+
+export interface UploadPropsWithAction extends UploadPropsBase {
+  action: string
+  onSuccess?: (assets: any) => Promise<void>
+}
+
+export interface UploadPropsWithoutAction extends UploadPropsBase {
+  action?: undefined
+  onSuccess?: (assets: Asset[]) => Promise<void>
+}
+
+export type UploadProps = UploadPropsWithAction | UploadPropsWithoutAction
 
 export const Upload = (props: UploadProps): React.JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [showUploadError, setShowUploadError] = useState(false)
   const [showProcessing, setShowProcessing] = useState(false)
-  const [targetFolderId, setTargetFolderId] = useState<number | undefined>(undefined)
+  const [targetFolderId, setTargetFolderId] = useState<number | undefined>(props.targetFolderId)
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const dispatch = useAppDispatch()
-  console.log('target folder path', props.targetFolderPath)
+
+  useEffect(() => {
+    if (targetFolderId !== props.targetFolderId) {
+      setTargetFolderId(props.targetFolderId)
+    }
+  }, [props.targetFolderId])
+
   const uploadProps: AntUploadProps = {
     action: async (): Promise<string> => {
+      if (isString(props.action)) {
+        return props.action
+      }
       const baseUrl = `${getPrefix()}/assets/add/`
       if (isUndefined(targetFolderId)) {
         if (isUndefined(props.targetFolderPath) || isEmpty(props.targetFolderPath) || props.targetFolderPath === '/') {
@@ -57,18 +83,20 @@ export const Upload = (props: UploadProps): React.JSX.Element => {
       }
       return baseUrl + targetFolderId
     },
-    name: 'file',
-    multiple: true,
+    name: props.name ?? 'file',
+    multiple: props.multiple ?? true,
+    accept: props.accept,
     showUploadList: false,
     maxCount: props.maxItems,
     fileList,
-    beforeUpload: (file: RcFile & UploadFile) => {
+    beforeUpload: (file: RcFile & UploadFile, fileList) => {
       const isFileSizeValid = file.size / 1024 / 1024 < 500
       if (!isFileSizeValid) {
         file.status = 'error'
         file.error = { status: 413 }
+        return false
       }
-      return isFileSizeValid
+      void props.beforeUpload?.(file, fileList)
     },
     onChange: async (info) => {
       setFileList(info.fileList)
@@ -82,17 +110,21 @@ export const Upload = (props: UploadProps): React.JSX.Element => {
         setShowProcessing(true)
       }
       if (uploadFinished) {
-        const assets: Asset[] = []
-        for (const file of info.fileList) {
-          if (file.status === 'done') {
-            const { data } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id: file.response.id as number }))
-            if (data !== undefined) {
-              assets.push(data as Asset)
+        if (props.action === undefined) {
+          const assets: Asset[] = []
+          for (const file of info.fileList) {
+            if (file.status === 'done') {
+              const { data } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id: file.response.id as number }))
+              if (data !== undefined) {
+                assets.push(data as Asset)
+              }
             }
           }
-        }
-        if (assets.length > 0) {
-          await props.onSuccess(assets)
+          if (assets.length > 0) {
+            await props.onSuccess?.(assets)
+          }
+        } else {
+          await props.onSuccess?.(info.fileList)
         }
 
         setShowProcessing(false)
@@ -122,7 +154,10 @@ export const Upload = (props: UploadProps): React.JSX.Element => {
         showProcessing={ showProcessing }
         showUploadError={ showUploadError }
       />
-      <AntUpload { ...uploadProps }>
+      <AntUpload
+        { ...uploadProps }
+        ref={ props.uploadRef }
+      >
         {props.children}
       </AntUpload>
     </>

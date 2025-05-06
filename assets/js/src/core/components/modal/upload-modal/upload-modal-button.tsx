@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { Upload, type UploadProps } from './upload'
 
-export interface UploadModalButtonProps extends UploadProps {
+export type UploadModalButtonProps = UploadProps & {
   showMaxItemsError?: boolean
 }
 

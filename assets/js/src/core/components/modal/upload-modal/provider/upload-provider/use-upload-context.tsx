@@ -1,0 +1,24 @@
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+*/
+
+import { useContext } from 'react'
+import { UploadContext, type UploadContextProps } from './upload-provider'
+import { isNil } from 'lodash'
+
+export const useUploadContext = (): UploadContextProps => {
+  const context = useContext(UploadContext)
+  if (isNil(context)) {
+    throw new Error('useUpload must be used within an UploadProvider')
+  }
+  return context
+}

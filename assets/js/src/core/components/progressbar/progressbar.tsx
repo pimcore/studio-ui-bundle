@@ -16,7 +16,7 @@ import React from 'react'
 import { useStyle } from '@Pimcore/components/progressbar/progressbar.style'
 
 interface IProgressProps extends ProgressProps {
-  description: string
+  description: string | React.ReactNode
   descriptionAction?: React.ReactNode
   progressStatus: string
 }

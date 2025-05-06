@@ -12,6 +12,7 @@
 */
 
 import { Progressbar } from '@Pimcore/components/progressbar/progressbar'
+import { Spin } from '@Pimcore/components/spin/spin'
 import { JobStatus } from '../../jobs/abstact-job'
 import { type JobProps } from './job'
 import React from 'react'
@@ -20,6 +21,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useStyles } from './job-view.styles'
 import { useTranslation } from 'react-i18next'
+import { isUndefined } from 'lodash'
 
 interface ButtonAction {
   label: string
@@ -31,11 +33,17 @@ export interface JobViewProps extends JobProps {
   failureButtonActions?: ButtonAction[]
   finishedWithErrorsButtonActions?: ButtonAction[]
   progress: number
+  step?: number
+  totalSteps?: number
 }
 
 export const JobView = (props: JobViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
+
+  const StepHint = !isUndefined(props.step) && !isUndefined(props.totalSteps)
+    ? <strong>{ t('jobs.job.step_hint', { step: props.step, total: props.totalSteps }) }: </strong>
+    : undefined
 
   return (
     <div>
@@ -46,12 +54,26 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
           initial={ { opacity: 0, height: 1 } }
           key={ props.status }
         >
+
+          { props.status === JobStatus.QUEUED && (
+            <Flex
+              align='center'
+              justify='space-between'
+            >
+              <Flex
+                align='center'
+                gap={ 'small' }
+              >
+                <Spin type="classic" /><span>{ t('jobs.job.queued', { title: props.title }) }</span>
+              </Flex>
+            </Flex>
+          ) }
+
           { props.status === JobStatus.RUNNING && (
             <Progressbar
-              description={ t('jobs.job.in-progress', { title: props.title }) }
+              description={ <>{StepHint}{t('jobs.job.in-progress', { title: props.title })}</> }
               percent={ props.progress }
               progressStatus={ t('jobs.job.progress', { progress: props.progress }) }
-
             />
           ) }
 

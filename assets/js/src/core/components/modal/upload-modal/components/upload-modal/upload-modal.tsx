@@ -60,7 +60,7 @@ export const UploadModal = (props: UploadModalProps): React.JSX.Element => {
     >
 
       {/* Total Progress */}
-      {props.fileList.length > 0 && (
+      {props.fileList.length > 1 && (
         <Box margin={ { top: 'small' } }>
           <Progress
             percent={ totalProgress }

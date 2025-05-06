@@ -37,6 +37,8 @@ export enum ContextMenuActionName {
 
   downloadAsZip = 'downloadAsZip',
   uploadNewVersion = 'uploadNewVersion',
+  upload = 'upload',
+  uploadZip = 'uploadZip',
   download = 'download',
   clearImageThumbnails = 'clearImageThumbnails',
   clearVideoThumbnails = 'clearVideoThumbnails',
