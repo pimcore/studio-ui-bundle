@@ -15,6 +15,8 @@ import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { useTranslation } from 'react-i18next'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { useEffect } from 'react'
+import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 
 export interface ManyToManyRelationValueItem {
   id: number
@@ -33,6 +35,7 @@ interface UseValueReturn {
   addItems: (items: ManyToManyRelationValueItem[]) => void
   addAssets: (assets: Asset[]) => Promise<void>
   maxRemainingItems?: number
+  pathFormatterClass?: string | null
 }
 
 export const useValue = (
@@ -41,13 +44,32 @@ export const useValue = (
   displayedValue: ManyToManyRelationValue | null,
   setDisplayedValue: (value: ManyToManyRelationValue | null) => void,
   maxItems: number | null,
-  allowMultipleAssignments?: boolean
+  allowMultipleAssignments?: boolean,
+  pathFormatterClass?: string | null
 ): UseValueReturn => {
+  const { formatPath } = useDataObjectHelper()
   const modal = useAlertModal()
+
   const { t } = useTranslation()
   const itemIsInValue = (id: number, type: string): boolean => {
     return value?.some(item => item.id === id && item.type === type) ?? false
   }
+
+  useEffect(() => {
+    if (pathFormatterClass !== null && value !== null) {
+      formatPath(value, 'pathrelation').then((data) => {
+        if (data.items !== undefined) {
+          const newValue = value.map((item, index) => ({
+            ...item,
+            fullPath: data.items[index].formatedPath
+          }))
+          setDisplayedValue(newValue)
+        }
+      }).catch(error => {
+        console.error('Error formatting path:', error)
+      })
+    }
+  }, [value])
 
   const addItems = (items: ManyToManyRelationValueItem[]): void => {
     const newItems = allowMultipleAssignments !== true

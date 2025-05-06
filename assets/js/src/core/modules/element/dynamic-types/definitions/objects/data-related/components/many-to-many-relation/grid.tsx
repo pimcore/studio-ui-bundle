@@ -22,7 +22,7 @@ import {
   type ManyToManyRelationValueItem
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { Tooltip } from 'antd'
+import { Tooltip, Tag, Flex } from 'antd'
 import { Trans, useTranslation } from 'react-i18next'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
@@ -36,6 +36,7 @@ import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 import { type ElementCellConfig, type ElementInfo } from '../../../../grid-cell/components/element-cell/element-cell'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 
 interface ManyToManyRelationGridProps {
   value?: ManyToManyRelationValue | null
@@ -94,7 +95,20 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
             editable: false,
             config: getElementCellConfig(props.inherited === true || props.disabled === true)
           },
-          size: 200
+          size: 200,
+          cell: (info) => {
+            return (
+              <Flex
+                align={ 'center' }
+                className={ 'p-mini' }
+              >
+                <Tag
+                  bordered={ false }
+                  color="geekblue"
+                ><SanitizeHtml html={ info.getValue() ?? '' } /></Tag>
+              </Flex>
+            )
+          }
         }),
         columnHelper.accessor('type', {
           header: t('relations.type'),

@@ -23,7 +23,7 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 import { SaveTaskType } from '../actions/save/use-save'
-import { useDataObjectUpdateByIdMutation } from '../data-object-api-slice.gen'
+import { useDataObjectUpdateByIdMutation, type DataObjectFormatPathApiResponse } from '../data-object-api-slice.gen'
 import { publishDraft, unpublishDraft } from '../data-object-draft-slice'
 import { type EditorContainerProps } from '../editor/editor-container'
 import { useDataObjectDraftFetcher } from './use-data-object-draft-fetcher'
@@ -35,6 +35,7 @@ interface OpenDataObjectWidgetProps {
 interface UseDataObjectReturn {
   openDataObject: (props: OpenDataObjectWidgetProps) => Promise<void>
   executeDataObjectTask: (id: number, task: SaveTaskType, onFinish?: () => void) => Promise<void>
+  formatPath: (items: any[], fieldname: string) => Promise<DataObjectFormatPathApiResponse>
 }
 
 export const useDataObjectHelper = (): UseDataObjectReturn => {
@@ -121,5 +122,37 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
     }
   }
 
-  return { openDataObject, executeDataObjectTask }
+  const formatPath = async (items: any[], fieldname: string): Promise<DataObjectFormatPathApiResponse> => {
+    const targets = items.reduce((acc, item) => {
+      acc[`object_${item.id}`] = {
+        id: item.id,
+        type: item.type,
+        label: item.fullPath,
+        path: item.fullPath,
+        nicePathKey: `object_${item.id}`
+      }
+      return acc
+    }, {})
+
+    const { data } = await store.dispatch(api.endpoints.dataObjectFormatPath.initiate({
+      body: {
+        objectId: 1194,
+        targets,
+        context: {
+          containerType: 'object',
+          fieldname,
+          objectId: 1194,
+          layoutId: '0'
+        }
+      }
+    }))
+
+    if (data === undefined) {
+      throw new Error('Failed to format path: API response is undefined.')
+    }
+
+    return data
+  }
+
+  return { openDataObject, executeDataObjectTask, formatPath }
 }

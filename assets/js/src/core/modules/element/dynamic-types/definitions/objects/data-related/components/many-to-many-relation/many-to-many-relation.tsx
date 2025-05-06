@@ -64,7 +64,7 @@ export interface ManyToManyRelationProps extends IRelationAllowedTypesDataCompon
 export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.Element => {
   const [value, setValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
   const [displayedValue, setDisplayedValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
-  const { onDrop, deleteItem, onSearch, addAssets, addItems, maxRemainingItems } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments)
+  const { onDrop, deleteItem, onSearch, addAssets, addItems, maxRemainingItems } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments, props.pathFormatterClass)
 
   useEffect(() => {
     if (!isEqual(value, props.value ?? null)) {
