@@ -766,3 +766,4 @@ entry: entry
 error_element_validation_failed: 'Validation failed'
 element.delete.deleting-folder: Deleting Folder
 component.pagination.showing-items: Showing {{total}} items
+preview-not-available: Preview not available
