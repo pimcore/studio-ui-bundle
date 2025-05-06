@@ -16,9 +16,9 @@ import { Tooltip } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useTranslation } from 'react-i18next'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
-import { Upload, type UploadProps } from './upload'
+import { ModalUpload, type ModalUploadProps } from './modal-upload'
 
-export type UploadModalButtonProps = UploadProps & {
+export type UploadModalButtonProps = ModalUploadProps & {
   showMaxItemsError?: boolean
 }
 
@@ -41,7 +41,7 @@ export const UploadModalButton = (props: UploadModalButtonProps): React.JSX.Elem
   }
 
   return (
-    <Upload
+    <ModalUpload
       { ...props }
       onChange={ (info) => {
         props.onChange?.(info)
@@ -53,6 +53,6 @@ export const UploadModalButton = (props: UploadModalButtonProps): React.JSX.Elem
           type="default"
         />
       </Tooltip>
-    </Upload>
+    </ModalUpload>
   )
 }

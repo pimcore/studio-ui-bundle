@@ -12,25 +12,25 @@
 */
 
 import React, { createContext, useRef, useMemo, useState } from 'react'
-import { Upload, type UploadProps } from '../../upload'
+import { ModalUpload, type ModalUploadProps } from '../../modal-upload'
 
-type UploadProviderProps = UploadProps & {
+type UploadProviderProps = ModalUploadProps & {
   children: React.ReactNode
 }
 
 export interface UploadContextProps {
-  triggerUpload: (props: UploadProps) => void
+  triggerUpload: (props: ModalUploadProps) => void
 }
 
 export const UploadContext = createContext<UploadContextProps | undefined>(undefined)
 
-export const UploadProvider: React.FC<UploadProviderProps> = ({ children, ...defaultUploadProps }) => {
+export const UploadModalProvider: React.FC<UploadProviderProps> = ({ children, ...defaultUploadProps }) => {
   const uploadRef = useRef<HTMLDivElement>(null)
-  const [uploadState, setUploadState] = useState<UploadProps>({
+  const [uploadState, setUploadState] = useState<ModalUploadProps>({
     ...defaultUploadProps
   })
 
-  const triggerUpload = (props: UploadProps): void => {
+  const triggerUpload = (props: ModalUploadProps): void => {
     setUploadState({ ...defaultUploadProps, ...props })
     setTimeout(() => uploadRef.current?.click(), 0)
   }
@@ -40,11 +40,11 @@ export const UploadProvider: React.FC<UploadProviderProps> = ({ children, ...def
   return (
     <UploadContext.Provider value={ contextValue }>
       <div style={ { display: 'none' } }>
-        <Upload
+        <ModalUpload
           { ...uploadState }
         >
           <span ref={ uploadRef } />
-        </Upload>
+        </ModalUpload>
       </div>
       {children}
     </UploadContext.Provider>

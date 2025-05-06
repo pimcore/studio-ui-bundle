@@ -11,19 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import type { Meta } from '@storybook/react'
-import { UploadModalButton } from '@Pimcore/components/modal/upload-modal/upload-modal-button'
+import { useContext } from 'react'
+import { UploadContext, type UploadContextProps } from './upload-modal-provider'
+import { isNil } from 'lodash'
 
-const config: Meta = {
-  title: 'Components/Data Entry/UploadModalButton',
-  component: UploadModalButton,
-  tags: ['autodocs']
-}
-
-export default config
-
-export const _default = {
-  args: {
-    maxItems: 5
+export const useUploadModalContext = (): UploadContextProps => {
+  const context = useContext(UploadContext)
+  if (isNil(context)) {
+    throw new Error('useUpload must be used within an UploadProvider')
   }
+  return context
 }

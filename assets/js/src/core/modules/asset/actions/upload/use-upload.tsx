@@ -17,7 +17,7 @@ import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-n
 import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
-import { useUploadContext } from '@Pimcore/components/modal/upload-modal/provider/upload-provider/use-upload-context'
+import { useUploadModalContext } from '@Pimcore/components/upload-modal/provider/upload-modal-provider/use-upload-modal-context'
 import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
@@ -36,7 +36,7 @@ export interface UseUploadHookReturn {
 }
 
 export const useUpload = (): UseUploadHookReturn => {
-  const { triggerUpload } = useUploadContext()
+  const { triggerUpload } = useUploadModalContext()
   const { t } = useTranslation()
   const { refreshTree } = useRefreshTree('asset')
   const { isTreeActionAllowed } = useTreePermission()

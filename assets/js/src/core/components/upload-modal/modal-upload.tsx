@@ -14,7 +14,7 @@
 import React, { useState, useEffect } from 'react'
 import { Upload as AntUpload, type UploadProps as AntUploadProps } from 'antd'
 import { api as assetApi, type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { UploadModal } from '@Pimcore/components/modal/upload-modal/components/upload-modal/upload-modal'
+import { UploadModal } from '@Pimcore/components/upload-modal/components/upload-modal/upload-modal'
 import type { RcFile, UploadFile } from 'antd/es/upload/interface'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
@@ -22,7 +22,7 @@ import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.ge
 import { isEmpty, isString, isUndefined } from 'lodash'
 import { type UploadChangeParam } from 'antd/lib/upload'
 
-export interface UploadPropsBase {
+export interface ModalUploadPropsBase {
   accept?: AntUploadProps['accept']
   multiple?: AntUploadProps['multiple']
   name?: AntUploadProps['name']
@@ -35,19 +35,19 @@ export interface UploadPropsBase {
   uploadRef?: React.Ref<any> // Pass ref as a prop
 }
 
-export interface UploadPropsWithAction extends UploadPropsBase {
+interface ModalUploadPropsWithAction extends ModalUploadPropsBase {
   action: string
   onSuccess?: (assets: any) => Promise<void>
 }
 
-export interface UploadPropsWithoutAction extends UploadPropsBase {
+interface ModalUploadPropsWithoutAction extends ModalUploadPropsBase {
   action?: undefined
   onSuccess?: (assets: Asset[]) => Promise<void>
 }
 
-export type UploadProps = UploadPropsWithAction | UploadPropsWithoutAction
+export type ModalUploadProps = ModalUploadPropsWithAction | ModalUploadPropsWithoutAction
 
-export const Upload = (props: UploadProps): React.JSX.Element => {
+export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [showUploadError, setShowUploadError] = useState(false)
   const [showProcessing, setShowProcessing] = useState(false)
