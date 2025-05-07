@@ -34,18 +34,6 @@ export const useStyles = createStyles(({ token, css }) => {
         padding: 2px ${token.paddingSM}px 2px 0;
         white-space: nowrap;
         align-items: center;
-          
-        .ant-upload-wrapper {
-          width: 100%;
-          overflow: hidden;
-            
-          .ant-upload {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 8px
-          }
-        }
 
         .tree-node__content-wrapper {
           width: 100%;
@@ -73,9 +61,6 @@ export const useStyles = createStyles(({ token, css }) => {
         text-overflow: ellipsis;
         overflow: hidden;
       }
-    `,
-    treeNodeUploadDragger: css`
-      border: 1px dashed ${token.colorBorder};
     `
   }
 }, { hashPriority: 'low' })

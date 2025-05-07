@@ -248,7 +248,6 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
           {
             paddingLeft: token.paddingSM + 20 * level,
             minWidth: `${20 * level + 200}px`
-            // outline: isUploadDragOver ? '1px dashed green' : undefined
           }
         }
           tabIndex={ -1 }
