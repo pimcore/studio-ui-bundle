@@ -43,6 +43,7 @@ import { DefaultCell } from './columns/default-cell'
 import { GridRow } from './grid-cell/grid-row'
 import { useStyles } from './grid.styles'
 import { Resizer } from './resizer/resizer'
+import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 
 export interface ColumnMetaType {
   editable?: boolean
@@ -106,6 +107,7 @@ export const Grid = ({
   const memoModifiedCells = useMemo(() => { return modifiedCells ?? [] }, [JSON.stringify(modifiedCells)])
   const autoColumnRef = useRef<HTMLTableCellElement>(null)
   const gridCellRegistry = useInjection<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/GridCellRegistry'])
+  const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
 
   useEffect(() => {
     onActiveCellChange?.(activeCell)
@@ -145,10 +147,26 @@ export const Grid = ({
   columns.forEach(column => {
     if (column.meta?.type !== undefined) {
       console.log('column.meta.type', column.meta.type)
-      const type = gridCellRegistry.getDynamicType(column.meta.type, false)
-      console.log('magic', type)
-      if (type?.getDefaultGridColumnWidth !== undefined) {
-        column.size = type.getDefaultGridColumnWidth()
+      const dynamicType = gridCellRegistry.getDynamicType(column.meta.type, false)
+      console.log('magic', dynamicType)
+
+      if (dynamicType !== undefined) {
+        if (dynamicType?.getDefaultGridColumnWidth !== undefined) {
+          column.size = dynamicType.getDefaultGridColumnWidth()
+        }
+
+        if (dynamicType.id === 'dataobject.adapter') {
+          const type = column.meta?.config?.dataObjectType as string
+
+          if (type !== undefined) {
+            const dynType = objectDataRegistry.getDynamicType(type)
+            console.log('dataObjectSpecific', dynType)
+
+            if (dynType?.getDefaultGridColumnWidth !== undefined) {
+              column.size = dynType.getDefaultGridColumnWidth()
+            }
+          }
+        }
       }
     }
 
