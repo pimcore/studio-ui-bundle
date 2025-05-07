@@ -72,7 +72,7 @@ export const getInitialModelJson = (): IJsonModel => {
         type: 'border',
         location: 'left',
         size: 315,
-        selected: getWidgetIndex(activePerspective?.widgetsLeft, activePerspective?.expandedLeft as string | undefined | null),
+        selected: getWidgetIndex(widgetsLeft, activePerspective?.expandedLeft as string | undefined | null),
         children: widgetsLeft
       },
 
@@ -80,7 +80,7 @@ export const getInitialModelJson = (): IJsonModel => {
         type: 'border',
         location: 'right',
         size: 315,
-        selected: getWidgetIndex(activePerspective?.widgetsRight, activePerspective?.expandedRight as string | undefined | null),
+        selected: getWidgetIndex(widgetsRight, activePerspective?.expandedRight as string | undefined | null),
         children: widgetsRight
       }
     ]
@@ -108,11 +108,12 @@ const getWidgetsBottom = (activePerspective: PerspectiveConfigDetail | null, use
   return widgetsToModelJson(activePerspective.widgetsBottom, usedIds)
 }
 
-const getWidgetIndex = (widgets?: WidgetConfig[], widgetId?: string | null): number | undefined => {
+const getWidgetIndex = (widgets?: IJsonTabNode[], widgetId?: string | null): number | undefined => {
   if (isNil(widgets) || isNil(widgetId)) {
     return undefined
   }
-  return widgets.findIndex(widget => widget.id === widgetId)
+  const widgetIndex = widgets.findIndex(widget => widget.id === widgetId)
+  return widgetIndex === -1 ? (widgets.length > 0 ? 0 : undefined) : widgetIndex
 }
 
 const widgetsToModelJson = (widgets: WidgetConfig[] | undefined, usedIds: Set<string>): IJsonTabNode[] => {
