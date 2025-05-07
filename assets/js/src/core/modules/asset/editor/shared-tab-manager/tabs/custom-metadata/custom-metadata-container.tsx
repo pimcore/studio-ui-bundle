@@ -53,6 +53,14 @@ export const CustomMetadataTabContainer = ({ disableHeaderTitle = false, disable
   const { asset, addCustomMetadata, customMetadata } = useAssetDraft(id)
   const [predefinedMetadata, { isFetching, isError, error }] = useLazyMetadataGetCollectionQuery()
 
+  console.log("here");
+  
+    useEffect(() => {
+      if (isError) {
+        trackError(new ApiError(error))
+      }
+    }, [isError])
+
   const {
     showModal: showDuplicateEntryModal,
     closeModal: closeDuplicateEntryModal,
