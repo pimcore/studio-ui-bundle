@@ -40,8 +40,6 @@ export const EditContainer = (): React.JSX.Element => {
     return <Content loading />
   }
 
-  console.log('layoutData', layoutData)
-
   return (
     <FieldCollectionProvider>
       <ObjectBrickProvider>
