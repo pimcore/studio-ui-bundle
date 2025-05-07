@@ -99,4 +99,8 @@ export class DynamicTypeObjectDataWysiwyg extends DynamicTypeObjectDataAbstract 
              />
     }
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 400
+  }
 }

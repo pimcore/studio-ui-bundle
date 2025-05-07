@@ -22,6 +22,6 @@ export class DynamicTypeGridCellBoolean extends DynamicTypeGridCellAbstract {
   }
 
   getDefaultGridColumnWidth (): number | undefined {
-    return 50
+    return 100
   }
 }

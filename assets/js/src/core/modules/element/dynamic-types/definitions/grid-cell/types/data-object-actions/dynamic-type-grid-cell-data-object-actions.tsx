@@ -20,4 +20,8 @@ export class DynamicTypeGridCellDataObjectActions extends DynamicTypeGridCellAbs
   getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
     return <DataObjectActionsCell { ...props } />
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 100
+  }
 }
