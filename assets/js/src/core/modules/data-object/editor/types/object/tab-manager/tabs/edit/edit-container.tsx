@@ -30,6 +30,7 @@ export const EditContainer = (): React.JSX.Element => {
 
   const { data: layoutData, isLoading, error: layoutError } = useDataObjectGetLayoutByIdQuery({ id, layoutId: currentLayout ?? undefined })
   const { dataObject, isLoading: isDraftLoading } = useDataObjectDraft(id)
+
   const { styles } = useStyles()
 
   if (layoutError !== undefined) {
