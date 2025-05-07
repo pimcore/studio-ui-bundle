@@ -13,6 +13,7 @@
 
 import React, { createContext, useRef, useMemo, useState } from 'react'
 import { ModalUpload, type ModalUploadProps } from '../../modal-upload'
+import { type UploadRef } from 'antd/es/upload/Upload'
 
 type UploadProviderProps = ModalUploadProps & {
   children: React.ReactNode
@@ -26,6 +27,7 @@ export const UploadContext = createContext<UploadContextProps | undefined>(undef
 
 export const UploadModalProvider: React.FC<UploadProviderProps> = ({ children, ...defaultUploadProps }) => {
   const uploadRef = useRef<HTMLDivElement>(null)
+  const uploadRef2 = useRef<UploadRef>(null)
   const [uploadState, setUploadState] = useState<ModalUploadProps>({
     ...defaultUploadProps
   })
@@ -41,6 +43,7 @@ export const UploadModalProvider: React.FC<UploadProviderProps> = ({ children, .
     <UploadContext.Provider value={ contextValue }>
       <div style={ { display: 'none' } }>
         <ModalUpload
+          uploadRef={ uploadRef2 }
           { ...uploadState }
         >
           <span ref={ uploadRef } />

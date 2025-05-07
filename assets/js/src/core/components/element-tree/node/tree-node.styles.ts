@@ -75,6 +75,9 @@ export const useStyles = createStyles(({ token, css }) => {
         text-overflow: ellipsis;
         overflow: hidden;
       }
+    `,
+    treeNodeUploadDragger: css`
+      border: 1px dashed ${token.colorBorder};
     `
   }
 }, { hashPriority: 'low' })

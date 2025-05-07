@@ -21,6 +21,7 @@ import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
 import { isEmpty, isString, isUndefined } from 'lodash'
 import { type UploadChangeParam } from 'antd/lib/upload'
+import { type UploadRef } from 'antd/es/upload/Upload'
 
 export interface ModalUploadPropsBase {
   accept?: AntUploadProps['accept']
@@ -32,7 +33,7 @@ export interface ModalUploadPropsBase {
   targetFolderId?: number
   maxItems?: number
   children?: React.ReactNode
-  uploadRef?: React.Ref<any> // Pass ref as a prop
+  uploadRef?: React.Ref<UploadRef>
 }
 
 interface ModalUploadPropsWithAction extends ModalUploadPropsBase {

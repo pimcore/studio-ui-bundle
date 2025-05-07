@@ -11,10 +11,11 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useRef } from 'react'
 import { Upload, type UploadProps } from 'antd'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useStyles } from '@Pimcore/components/element-tree/dnd-upload/dnd-upload.styles'
+import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 
 interface DndUploadProps {
   nodeId: string
@@ -25,20 +26,22 @@ interface DndUploadProps {
 export const DndUpload = ({ nodeId, nodeType, children }: DndUploadProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { Dragger } = Upload
-  //  const { fileList, setUploadContext } = useUploadContext()
+  const ref = useRef<HTMLDivElement>(null)
+  const visible = useElementVisible(ref, true)
 
   const uploadProps: UploadProps = {
-    action: `/pimcore-studio/api/assets/add/${nodeId}`,
     name: 'file',
     multiple: true,
     openFileDialogOnClick: false,
     showUploadList: false,
-    // fileList,
-    onChange: ({ fileList: currentFileList }) => {
-      /* setUploadContext(
-        'file',
-        currentFileList
-      ) */
+    beforeUpload: (file) => {
+      console.log('beforeUploadDragged', file)
+      return false
+    },
+    onDrop: (e) => {
+      console.log('drop it')
+      const targetElement = e.target as HTMLElement
+      console.log('onDropped!!!', targetElement.closest('.tree-node__content-wrapper'))
     }
   }
 
@@ -47,11 +50,17 @@ export const DndUpload = ({ nodeId, nodeType, children }: DndUploadProps): React
   }
 
   return (
-    <Dragger
-      className={ styles.dragger }
-      { ...uploadProps }
-    >
-      {children}
-    </Dragger>
+    <div ref={ ref }>
+      {visible
+        ? (
+          <Dragger
+            className={ styles.dragger }
+            { ...uploadProps }
+          >
+            {children}
+          </Dragger>
+          )
+        : children}
+    </div>
   )
 }

@@ -132,18 +132,19 @@ const ElementTree = (
   const treeContent = (
     <div className={ ['tree', styles.tree].join(' ') }>
       <TreeContext.Provider value={ treeContextValue }>
+
         {hasRootNode && (
-          <TreeNode
-            key={ preparedRootNode!.id }
-            level={ -1 }
-            { ...preparedRootNode! }
-          />
+        <TreeNode
+          key={ preparedRootNode!.id }
+          level={ -1 }
+          { ...preparedRootNode! }
+        />
         )}
 
         {!hasRootNode && (
-          <TreeList
-            node={ { ...preparedRootNode!, level: -1 } }
-          />
+        <TreeList
+          node={ { ...preparedRootNode!, level: -1 } }
+        />
 
         )}
       </TreeContext.Provider>

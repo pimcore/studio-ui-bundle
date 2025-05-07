@@ -26,7 +26,7 @@ export const useStyles = createStyles(({ token, css }) => {
             }
             
             &.ant-upload-drag-hover {
-                border-color: ${token.colorLinkHover} !important;
+               border-color: none !important;
             }
         }
     `
