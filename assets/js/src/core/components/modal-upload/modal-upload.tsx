@@ -96,14 +96,14 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
     showUploadList: false,
     maxCount: props.maxItems,
     fileList,
-    beforeUpload: (file: RcFile & UploadFile, fileList) => {
+    beforeUpload: async (file: RcFile & UploadFile, fileList) => {
       const isFileSizeValid = file.size / 1024 / 1024 < 500
       if (!isFileSizeValid) {
         file.status = 'error'
         file.error = { status: 413 }
         return false
       }
-      void props.beforeUpload?.(file, fileList)
+      await props.beforeUpload?.(file, fileList)
     },
     onChange: async (info) => {
       setFileList(info.fileList)
