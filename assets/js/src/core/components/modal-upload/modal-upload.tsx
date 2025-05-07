@@ -19,6 +19,7 @@ import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.ge
 import { isEmpty, isString, isUndefined } from 'lodash'
 import { type UploadChangeParam } from 'antd/lib/upload'
 import { type UploadRef } from 'antd/es/upload/Upload'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 export interface ModalUploadPropsBase {
   accept?: AntUploadProps['accept']
@@ -61,6 +62,7 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
   const [targetFolderId, setTargetFolderId] = useState<number | undefined>(props.targetFolderId)
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const dispatch = useAppDispatch()
+  const settings = useSettings()
 
   useEffect(() => {
     if (targetFolderId !== props.targetFolderId) {
@@ -97,7 +99,7 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
     maxCount: props.maxItems,
     fileList,
     beforeUpload: async (file: RcFile & UploadFile, fileList) => {
-      const isFileSizeValid = file.size / 1024 / 1024 < 500
+      const isFileSizeValid = file.size < (settings.upload_max_filesize ?? 1024 * 1024 * 10)
       if (!isFileSizeValid) {
         file.status = 'error'
         file.error = { status: 413 }
