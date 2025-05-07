@@ -14,6 +14,7 @@ import { type WidgetConfig, type PerspectiveConfigDetail } from '@Pimcore/module
 import { uuid } from '@Pimcore/utils/uuid'
 import { type IJsonTabNode, type IJsonModel } from 'flexlayout-react'
 import { isNil } from 'lodash'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 
 export const getInitialModelJson = (): IJsonModel => {
   const activePerspective = selectActivePerspective(store.getState())
@@ -117,9 +118,8 @@ const getWidgetIndex = (widgets?: WidgetConfig[], widgetId?: string | null): num
 const widgetsToModelJson = (widgets: WidgetConfig[] | undefined, usedIds: Set<string>): IJsonTabNode[] => {
   const result: IJsonTabNode[] = []
 
-  const userPermissions = store.getState().auth.permissions
-  const hasAssetPermission: boolean = Array.isArray(userPermissions) && userPermissions.includes('assets')
-  const hasObjectPermission: boolean = Array.isArray(userPermissions) && userPermissions.includes('objects')
+  const hasAssetPermission: boolean = isAllowed('assets')
+  const hasObjectPermission: boolean = isAllowed('objects')
 
   widgets?.forEach((widget) => {
     // skip document trees until we have a documents implementation
