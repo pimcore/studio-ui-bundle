@@ -22,6 +22,7 @@ import { Box } from '@Pimcore/components/box/box'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { uuid } from '@Pimcore/utils/uuid'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface CustomMetadataWithActions extends CustomMetadata {
   actions: React.ReactNode
@@ -36,10 +37,16 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
   const { asset, customMetadata, setCustomMetadata, removeCustomMetadata, updateAllCustomMetadata, setModifiedCells } = useAssetDraft(id)
-  const { data, isLoading } = useAssetCustomMetadataGetByIdQuery({ id })
+  const { data, isLoading, isError: isGetCustomMetadataError, error: getCustomMetadataError } = useAssetCustomMetadataGetByIdQuery({ id })
   const modifiedCellsType = 'customMetadata'
   const modifiedCells = asset?.modifiedCells[modifiedCellsType] ?? []
   const isEditable = checkElementPermission(asset?.permissions, 'publish')
+
+  useEffect(() => {
+    if (isGetCustomMetadataError) {
+      trackError(new ApiError(getCustomMetadataError))
+    }
+  }, [isGetCustomMetadataError])
 
   const enrichCustomMetadata = (data: CustomMetadataApi[]): CustomMetadata[] => {
     return data.map((item) => {
