@@ -14,11 +14,15 @@ import { Content } from '@Pimcore/components/content/content'
 export interface ILayoutSelectionContext {
   currentLayout: string | null
   setCurrentLayout: (layoutId: string) => void
+  hasLocalizedFields: boolean
+  setHasLocalizedFields: (hasLocalizedFields: boolean) => void
 }
 
 export const LayoutSelectionContext = createContext<ILayoutSelectionContext>({
   currentLayout: null,
-  setCurrentLayout: () => {}
+  setCurrentLayout: () => {},
+  hasLocalizedFields: false,
+  setHasLocalizedFields: () => {}
 })
 
 export interface LayoutSelectionProviderProps {
@@ -29,6 +33,7 @@ export interface LayoutSelectionProviderProps {
 
 export const LayoutSelectionProvider = ({ children, defaultLayout, isLoading }: LayoutSelectionProviderProps): React.JSX.Element => {
   const [currentLayout, setCurrentLayout] = useState<string | null>(defaultLayout)
+  const [hasLocalizedFields, setHasLocalizedFields] = useState<boolean>(false)
 
   useEffect(() => {
     if (currentLayout === null && defaultLayout !== null) {
@@ -38,7 +43,9 @@ export const LayoutSelectionProvider = ({ children, defaultLayout, isLoading }: 
 
   const value = useMemo(() => ({
     currentLayout,
-    setCurrentLayout
+    setCurrentLayout,
+    hasLocalizedFields,
+    setHasLocalizedFields
   }), [currentLayout])
   return (
     <LayoutSelectionContext.Provider value={ value }>

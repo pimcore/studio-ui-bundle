@@ -30,7 +30,6 @@ export const EditContainer = (): React.JSX.Element => {
 
   const { data: layoutData, isLoading, error: layoutError } = useDataObjectGetLayoutByIdQuery({ id, layoutId: currentLayout ?? undefined })
   const { dataObject, isLoading: isDraftLoading } = useDataObjectDraft(id)
-
   const { styles } = useStyles()
 
   if (layoutError !== undefined) {
@@ -40,6 +39,8 @@ export const EditContainer = (): React.JSX.Element => {
   if (layoutData === undefined || isLoading || isDraftLoading) {
     return <Content loading />
   }
+
+  console.log('layoutData', layoutData)
 
   return (
     <FieldCollectionProvider>

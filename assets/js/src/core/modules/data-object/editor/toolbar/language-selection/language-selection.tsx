@@ -15,10 +15,15 @@ import { useLanguageSelection } from './provider/use-language-selection'
 
 export const LanguageSelection = (): React.JSX.Element => {
   const settings = useSettings()
-  const { currentLanguage, setCurrentLanguage } = useLanguageSelection()
+  const { currentLanguage, setCurrentLanguage, hasLocalizedFields } = useLanguageSelection()
+
+  if (!hasLocalizedFields) {
+    return <></>
+  }
 
   return (
     <BaseLanguageSelection
+      key={ hasLocalizedFields ? 'localized' : 'not-localized' } // Force re-render when hasLocalizedFields changes
       languages={ [...settings.requiredLanguages] }
       onSelectLanguage={ setCurrentLanguage }
       selectedLanguage={ currentLanguage }

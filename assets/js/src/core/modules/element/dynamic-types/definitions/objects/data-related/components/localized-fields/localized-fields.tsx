@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { LocalizedFieldsProvider } from './provider/localized-fields-provider/localized-fields-provider'
 import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
 import { type AbstractObjectLayoutDefinition } from '../../../layout-related/dynamic-type-object-layout-abstract'
@@ -22,7 +22,11 @@ export interface LocalizedFieldsProps extends AbstractObjectDataDefinition {
 }
 
 export const LocalizedFields = ({ children, noteditable, className }: LocalizedFieldsProps): React.JSX.Element => {
-  const { currentLanguage } = useLanguageSelection()
+  const { currentLanguage, setHasLocalizedFields } = useLanguageSelection()
+
+  useEffect(() => {
+    setHasLocalizedFields(true)
+  }, [])
 
   return (
     <LocalizedFieldsProvider locales={ [currentLanguage] }>
