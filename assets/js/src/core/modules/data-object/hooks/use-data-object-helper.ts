@@ -32,10 +32,16 @@ interface OpenDataObjectWidgetProps {
   config: EditorContainerProps
 }
 
+interface IFormatPathItems {
+  id: number
+  type: string
+  fullPath: string
+}
+
 interface UseDataObjectReturn {
   openDataObject: (props: OpenDataObjectWidgetProps) => Promise<void>
   executeDataObjectTask: (id: number, task: SaveTaskType, onFinish?: () => void) => Promise<void>
-  formatPath: (items: any[], fieldname: string) => Promise<DataObjectFormatPathApiResponse>
+  formatPath: (items: IFormatPathItems[], fieldName: string, dataObjectId: number) => Promise<DataObjectFormatPathApiResponse>
 }
 
 export const useDataObjectHelper = (): UseDataObjectReturn => {
@@ -122,7 +128,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
     }
   }
 
-  const formatPath = async (items: any[], fieldname: string): Promise<DataObjectFormatPathApiResponse> => {
+  const formatPath = async (items: IFormatPathItems[], fieldName: string, dataObjectId: number): Promise<DataObjectFormatPathApiResponse> => {
     const targets = items.reduce((acc, item) => {
       acc[`object_${item.id}`] = {
         id: item.id,
@@ -136,12 +142,12 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
 
     const { data } = await store.dispatch(api.endpoints.dataObjectFormatPath.initiate({
       body: {
-        objectId: 1194,
+        objectId: dataObjectId,
         targets,
         context: {
           containerType: 'object',
-          fieldname,
-          objectId: 1194,
+          fieldname: fieldName,
+          objectId: dataObjectId,
           layoutId: '0'
         }
       }

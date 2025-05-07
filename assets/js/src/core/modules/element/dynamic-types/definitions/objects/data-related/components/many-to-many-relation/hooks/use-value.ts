@@ -17,6 +17,9 @@ import { useTranslation } from 'react-i18next'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useEffect } from 'react'
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
+import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-object'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import type { ApiErrorData } from '@Pimcore/modules/app/error-handler/classes/api-error'
 
 export interface ManyToManyRelationValueItem {
   id: number
@@ -43,10 +46,13 @@ export const useValue = (
   setValue: (value: ManyToManyRelationValue | null) => void,
   displayedValue: ManyToManyRelationValue | null,
   setDisplayedValue: (value: ManyToManyRelationValue | null) => void,
+  setIsLoading: (isLoading: boolean) => void,
   maxItems: number | null,
+  id: string | undefined,
   allowMultipleAssignments?: boolean,
   pathFormatterClass?: string | null
 ): UseValueReturn => {
+  const { id: dataObjectId } = useDataObject()
   const { formatPath } = useDataObjectHelper()
   const modal = useAlertModal()
 
@@ -56,18 +62,20 @@ export const useValue = (
   }
 
   useEffect(() => {
-    if (pathFormatterClass !== null && value !== null) {
-      formatPath(value, 'pathrelation').then((data) => {
+    if (pathFormatterClass !== null && value !== null && dataObjectId !== undefined && id !== undefined) {
+      setIsLoading(true)
+
+      formatPath(value, id, dataObjectId).then((data) => {
         if (data.items !== undefined) {
-          const newValue = value.map((item, index) => ({
+          const newValue = value.map((item) => ({
             ...item,
-            fullPath: data.items[index].formatedPath
+            fullPath: data.items.find(i => i.objectReference === `object_${item.id}`)?.formatedPath ?? item.fullPath
           }))
+
           setDisplayedValue(newValue)
+          setIsLoading(false)
         }
-      }).catch(error => {
-        console.error('Error formatting path:', error)
-      })
+      }).catch(error => { trackError(new ApiError(error as unknown as ApiErrorData)) })
     }
   }, [value])
 
