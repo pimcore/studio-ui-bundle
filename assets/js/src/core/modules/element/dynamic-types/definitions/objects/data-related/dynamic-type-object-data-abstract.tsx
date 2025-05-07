@@ -151,4 +151,8 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
   handleDefaultValue (props: AbstractObjectDataDefinition, form: FormInstance, fieldName: NamePath): void {
     // This method is intentionally left empty - can be implemented in subclasses
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return undefined
+  }
 }

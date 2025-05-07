@@ -13,11 +13,15 @@ import { DynamicTypeAbstract } from '../../registry/dynamic-type-registry-abstra
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { injectable } from 'inversify'
 
-export interface AbstractGridCellDefinition extends DefaultCellProps {}
+export interface AbstractGridCellDefinition extends DefaultCellProps { }
 
 // @todo check for copy and paste handler implementation
 @injectable()
 export abstract class DynamicTypeGridCellAbstract extends DynamicTypeAbstract {
   abstract readonly id: string
   abstract getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition>
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return undefined
+  }
 }
