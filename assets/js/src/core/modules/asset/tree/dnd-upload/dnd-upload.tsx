@@ -22,7 +22,6 @@ export const DndUpload = ({ nodeId, children }: DndUploadProps): React.JSX.Eleme
   return (
     <ModalUploadDragger
       onSuccess={ async (result) => {
-        console.log(result)
         refreshTree(parseInt(nodeId))
       } }
       skipAssetFetch
