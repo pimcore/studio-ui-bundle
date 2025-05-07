@@ -17,10 +17,24 @@ import { TreeExpander } from '../expander/tree-expander'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useElementTreeNode } from '../hooks/use-element-tree-node'
-import { isNil } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/utils/widget-content-scroll'
-import { DndUpload } from '@Pimcore/components/element-tree/dnd-upload/dnd-upload'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+
+export interface TreeNodeWrapperProps {
+  nodeId: string
+  nodeType: ElementType
+}
+
+interface ConditionalWrapperProps {
+  wrapper?: React.ComponentType<TreeNodeWrapperProps & { children: React.ReactNode }>
+  children: React.ReactNode
+  props: TreeNodeWrapperProps
+}
+
+const ConditionalWrapper: React.FC<ConditionalWrapperProps> = ({ wrapper: Wrapper, children, props }): React.ReactElement => {
+  return !isUndefined(Wrapper) ? <Wrapper { ...props }>{children}</Wrapper> : <>{children}</>
+}
 
 export interface TreeNodeProps {
   id: string
@@ -42,6 +56,7 @@ export interface TreeNodeProps {
   danger?: boolean
   ref?: MutableRefObject<HTMLDivElement>
   isPublished?: boolean
+  WrapperComponent?: React.ComponentType<TreeNodeWrapperProps & { children: React.ReactNode }>
 }
 
 export const defaultProps: TreeNodeProps = {
@@ -81,10 +96,10 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   isRoot = defaultProps.isRoot,
   isLoading = false,
   danger = false,
+  WrapperComponent,
   ...props
 }: TreeNodeProps, forwardRef: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { token } = useToken()
-  const { metaData } = props
   const { styles } = useStyles()
   const {
     renderNodeContent: RenderNodeContent,
@@ -211,52 +226,43 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     nodesRefs!.current[internalKey] = nodeRef
   }
 
-  function onDragOver (event: MouseEvent): void {
-    const assetMetaData = metaData?.asset
-
-    if (assetMetaData !== undefined && assetMetaData.type === 'folder') {
-      setSelectedIds([id])
-    }
-  }
-
   return (
     <div
       className={ getClasses() }
-      onDragOver={ onDragOver }
       ref={ forwardRef }
     >
-      <Flex
-        className='tree-node__content'
-        gap="small"
-        onClick={ onClick }
-        onContextMenu={ onContextMenu }
-        onKeyDown={ onKeyDown }
-        ref={ setRef }
-        role='button'
-        style={
+      <ConditionalWrapper
+        props={ { nodeId: id, nodeType: props.elementType! } }
+        wrapper={ WrapperComponent }
+      >
+        <Flex
+          className='tree-node__content'
+          gap="small"
+          onClick={ onClick }
+          onContextMenu={ onContextMenu }
+          onKeyDown={ onKeyDown }
+          ref={ setRef }
+          role='button'
+          style={
           {
             paddingLeft: token.paddingSM + 20 * level,
             minWidth: `${20 * level + 200}px`
           }
         }
-        tabIndex={ -1 }
-      >
-        {isRoot !== true && (
+          tabIndex={ -1 }
+        >
+          {isRoot !== true && (
           <TreeExpander
             node={ treeNodeProps }
             state={ [isExpanded, setExpanded] }
           />
-        )}
-
-        <DndUpload
-          nodeId={ id }
-          nodeType={ props.elementType! }
-        >
+          )}
           <div className="tree-node__content-wrapper">
             <RenderNodeContent node={ treeNodeProps } />
           </div>
-        </DndUpload>
-      </Flex>
+        </Flex>
+
+      </ConditionalWrapper>
 
       {isExpanded && (
         <TreeList node={ treeNodeProps } />

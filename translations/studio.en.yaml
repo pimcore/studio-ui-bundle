@@ -51,6 +51,8 @@ asset.upload.files.completed: Completed!
 asset.upload.files.successfully-uploaded: Successfully uploaded
 asset.upload.files.completed-actions: Completed actions
 asset.upload.validation: 'Please add a file'
+upload.error.file-too-large: 'The file is bigger than the actual upload limit of the server.'
+upload.error.generic: 'The file could not be uploaded.'
 asset.select.type.nullable: 'All types'
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
@@ -360,6 +362,7 @@ jobs.notification.title: Notifications
 jobs.notification.jobs_one: "{{count}} Action"
 jobs.notification.jobs_other: "{{count}} Actions"
 jobs.job.in-progress: "{{title}} in progress"
+jobs.job.queued: "{{title}} queued"
 jobs.job.failed: "{{title}} failed"
 jobs.job.finished: "{{title}} finished"
 jobs.job.finished-with-errors: "{{title}} finished with errors"
@@ -369,11 +372,15 @@ jobs.job.button-reload: Reload
 jobs.job.button-hide: hide
 jobs.job.button-download: download
 jobs.job.button-ignore-and-reload: ignore and reload
+jobs.job.step_hint: "Step {{step}}/{{total}}"
 jobs.zip-job.title: "ZIP of {{title}}"
 jobs.batch-edit-job.title: "Batch Edit of {{title}}"
 jobs.csv-job.title: "CSV of {{title}}"
 jobs.xlsx-job.title: "XLSX of {{title}}"
 batch-edit.job-title: Batch Edit
+jobs.zip-upload-job.title: "Upload ZIP"
+jobs.zip-upload-job.step1.title: "Extracting ZIP"
+jobs.zip-upload-job.step2.title: "Creating assets"
 batch-edit.modal-title: Batch Edit
 batch-edit.no-content: There are no added columns yet
 batch-edit.modal-footer.apply-changes: Apply changes

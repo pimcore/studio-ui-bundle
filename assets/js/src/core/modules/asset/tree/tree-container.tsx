@@ -17,6 +17,7 @@ import { SearchContainer } from './search/search-container'
 import { withDraggable } from './node/with-draggable'
 import { Skeleton } from '@Pimcore/components/element-tree/skeleton/skeleton'
 import { Box } from '@Pimcore/components/box/box'
+import { withDndUpload } from './node/with-dnd-upload'
 import { withDroppable } from './node/with-droppable/with-droppable'
 import { withActionStates } from './node/with-action-states'
 import { withDroppableStyling } from './node/with-droppable/with-droppable-styling'
@@ -24,13 +25,14 @@ import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-sli
 import { useElementTreeRootNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-root-node'
 import { useComponentRegistry } from '@Pimcore/modules/app/component-registry/use-component-registry'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import { UploadModalProvider } from '@Pimcore/components/modal-upload/provider/upload-modal-provider/upload-modal-provider'
 
 export interface TreeContainerProps {
   id: number
   showRoot?: boolean
 }
 
-export const AssetTreeNode = withDroppable(withDroppableStyling(withActionStates(withDraggable(TreeNodeComponent))))
+export const AssetTreeNode = withDndUpload(withDroppable(withDroppableStyling(withActionStates(withDraggable(TreeNodeComponent)))))
 
 const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
   const { openAsset } = useAssetHelper()
@@ -55,17 +57,19 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
   }
 
   return (
-    <ElementTree
-      contextMenu={ contextMenu as React.ElementType<TreeContextMenuProps> | undefined }
-      nodeId={ id }
-      onSelect={ onSelect }
-      renderFilter={ SearchContainer }
-      renderNode={ AssetTreeNode }
-      renderNodeContent={ defaultProps.renderNodeContent }
-      renderPager={ PagerContainer }
-      rootNode={ rootNode }
-      showRoot={ showRoot }
-    />
+    <UploadModalProvider>
+      <ElementTree
+        contextMenu={ contextMenu as React.ElementType<TreeContextMenuProps> | undefined }
+        nodeId={ id }
+        onSelect={ onSelect }
+        renderFilter={ SearchContainer }
+        renderNode={ AssetTreeNode }
+        renderNodeContent={ defaultProps.renderNodeContent }
+        renderPager={ PagerContainer }
+        rootNode={ rootNode }
+        showRoot={ showRoot }
+      />
+    </UploadModalProvider>
   )
 }
 
