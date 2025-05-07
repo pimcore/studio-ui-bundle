@@ -113,7 +113,10 @@ const getWidgetIndex = (widgets?: IJsonTabNode[], widgetId?: string | null): num
     return undefined
   }
   const widgetIndex = widgets.findIndex(widget => widget.id === widgetId)
-  return widgetIndex === -1 ? (widgets.length > 0 ? 0 : undefined) : widgetIndex
+  if (widgetIndex === -1) {
+    return widgets.length > 0 ? 0 : undefined
+  }
+  return widgetIndex
 }
 
 const widgetsToModelJson = (widgets: WidgetConfig[] | undefined, usedIds: Set<string>): IJsonTabNode[] => {
