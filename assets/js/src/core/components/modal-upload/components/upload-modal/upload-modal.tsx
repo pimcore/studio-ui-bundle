@@ -57,12 +57,29 @@ export const UploadModal = (props: UploadModalProps): React.JSX.Element => {
     >
 
       {/* Total Progress */}
-      {props.fileList.length > 1 && (
+      {props.fileList.length > 1 && !props.showProcessing && (
         <Box margin={ { top: 'small' } }>
           <Progress
             percent={ totalProgress }
             status="active"
           />
+        </Box>
+      )}
+
+      { props.showProcessing && (
+        <Box margin={ { top: 'normal' } }>
+          <Alert
+            message={ (
+              <Flex gap="small">
+                <Spin
+                  size="small"
+                />
+                <Text type="secondary">{ t('processing')}</Text>
+              </Flex>
+            ) }
+            type="info"
+          />
+
         </Box>
       )}
 
@@ -94,23 +111,6 @@ export const UploadModal = (props: UploadModalProps): React.JSX.Element => {
           />
         </Upload>
       </Box>
-
-      { props.showProcessing && (
-        <Box margin={ { top: 'normal' } }>
-          <Alert
-            message={ (
-              <Flex gap="small">
-                <Spin
-                  size="small"
-                />
-                <Text type="secondary">{ t('processing')}</Text>
-              </Flex>
-          ) }
-            type="info"
-          />
-
-        </Box>
-      )}
 
       { props.showUploadError && (
         <Box margin={ { top: 'extra-small' } }>

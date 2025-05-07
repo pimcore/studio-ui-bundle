@@ -21,15 +21,15 @@ import { isNil, isUndefined } from 'lodash'
 import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/utils/widget-content-scroll'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
-interface WrapperProps {
+export interface TreeNodeWrapperProps {
   nodeId: string
   nodeType: ElementType
 }
 
 interface ConditionalWrapperProps {
-  wrapper?: React.ComponentType<WrapperProps & { children: React.ReactNode }>
+  wrapper?: React.ComponentType<TreeNodeWrapperProps & { children: React.ReactNode }>
   children: React.ReactNode
-  props: WrapperProps
+  props: TreeNodeWrapperProps
 }
 
 const ConditionalWrapper: React.FC<ConditionalWrapperProps> = ({ wrapper: Wrapper, children, props }): React.ReactElement => {
@@ -56,7 +56,7 @@ export interface TreeNodeProps {
   danger?: boolean
   ref?: MutableRefObject<HTMLDivElement>
   isPublished?: boolean
-  WrapperComponent?: React.ComponentType<WrapperProps & { children: React.ReactNode }>
+  WrapperComponent?: React.ComponentType<TreeNodeWrapperProps & { children: React.ReactNode }>
 }
 
 export const defaultProps: TreeNodeProps = {
@@ -231,7 +231,6 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
       className={ getClasses() }
       ref={ forwardRef }
     >
-
       <ConditionalWrapper
         props={ { nodeId: id, nodeType: props.elementType! } }
         wrapper={ WrapperComponent }

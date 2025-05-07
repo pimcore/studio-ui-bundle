@@ -11,7 +11,7 @@
 import React, { useState, useEffect } from 'react'
 import { Upload as AntUpload, type UploadProps as AntUploadProps } from 'antd'
 import { api as assetApi, type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { UploadModal } from '@Pimcore/components/upload-modal/components/upload-modal/upload-modal'
+import { UploadModal } from '@Pimcore/components/modal-upload/components/upload-modal/upload-modal'
 import type { RcFile, UploadFile } from 'antd/es/upload/interface'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
@@ -31,19 +31,28 @@ export interface ModalUploadPropsBase {
   maxItems?: number
   children?: React.ReactNode
   uploadRef?: React.Ref<UploadRef>
+  uploadComponent?: React.ComponentType<AntUploadProps>
+  uploadComponentClassName?: string
 }
 
 interface ModalUploadPropsWithAction extends ModalUploadPropsBase {
   action: string
-  onSuccess?: (assets: any) => Promise<void>
+  onSuccess?: (result: any) => Promise<void>
 }
 
-interface ModalUploadPropsWithoutAction extends ModalUploadPropsBase {
+interface ModalUploadPropsWithoutAssetCheck extends ModalUploadPropsBase {
   action?: undefined
+  skipAssetFetch: true
+  onSuccess?: (result: any) => Promise<void>
+}
+
+interface ModalUploadPropsWithAssetCheck extends ModalUploadPropsBase {
+  action?: undefined
+  skipAssetFetch?: undefined
   onSuccess?: (assets: Asset[]) => Promise<void>
 }
 
-export type ModalUploadProps = ModalUploadPropsWithAction | ModalUploadPropsWithoutAction
+export type ModalUploadProps = ModalUploadPropsWithAction | ModalUploadPropsWithoutAssetCheck | ModalUploadPropsWithAssetCheck
 
 export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -108,16 +117,14 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
         setShowProcessing(true)
       }
       if (uploadFinished) {
-        if (props.action === undefined) {
-          const assets: Asset[] = []
-          for (const file of info.fileList) {
-            if (file.status === 'done') {
-              const { data } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id: file.response.id as number }))
-              if (data !== undefined) {
-                assets.push(data as Asset)
-              }
-            }
-          }
+        if (props.action === undefined && props.skipAssetFetch !== true) {
+          const assetFetchPromises = info.fileList
+            .filter(file => file.status === 'done')
+            .map(async file =>
+              await dispatch(assetApi.endpoints.assetGetById.initiate({ id: file.response.id as number }))
+                .then(({ data }) => data as Asset | undefined)
+            )
+          const assets = (await Promise.all(assetFetchPromises)).filter(asset => asset !== undefined)
           if (assets.length > 0) {
             await props.onSuccess?.(assets)
           }
@@ -143,6 +150,8 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
     setShowProcessing(false)
   }
 
+  const UploadComponent = props.uploadComponent ?? AntUpload
+
   return (
     <>
       <UploadModal
@@ -152,12 +161,13 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
         showProcessing={ showProcessing }
         showUploadError={ showUploadError }
       />
-      <AntUpload
+      <UploadComponent
         { ...uploadProps }
+        className={ props.uploadComponentClassName }
         ref={ props.uploadRef }
       >
         {props.children}
-      </AntUpload>
+      </UploadComponent>
     </>
   )
 }

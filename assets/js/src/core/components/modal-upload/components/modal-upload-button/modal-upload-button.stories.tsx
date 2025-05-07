@@ -9,11 +9,11 @@
  */
 
 import type { Meta } from '@storybook/react'
-import { UploadModalButton } from '@Pimcore/components/upload-modal/upload-modal-button'
+import { ModalUploadButton } from '@Pimcore/components/modal-upload/components/modal-upload-button/modal-upload-button'
 
 const config: Meta = {
-  title: 'Components/Data Entry/UploadModalButton',
-  component: UploadModalButton,
+  title: 'Components/Data Entry/ModalUploadButton',
+  component: ModalUploadButton,
   tags: ['autodocs']
 }
 

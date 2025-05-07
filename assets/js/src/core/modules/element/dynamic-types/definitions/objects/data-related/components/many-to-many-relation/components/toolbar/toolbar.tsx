@@ -15,7 +15,7 @@ import { Tooltip } from 'antd'
 import { Box } from '@Pimcore/components/box/box'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { useTranslation } from 'react-i18next'
-import { UploadModalButton } from '@Pimcore/components/upload-modal/upload-modal-button'
+import { ModalUploadButton } from '@Pimcore/components/modal-upload/components/modal-upload-button/modal-upload-button'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
@@ -107,7 +107,7 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
 
   if (props.enableUpload) {
     buttons.push(
-      <UploadModalButton
+      <ModalUploadButton
         maxItems={ props.uploadMaxItems }
         onSuccess={ props.addAssets }
         showMaxItemsError={ props.uploadShowMaxItemsError }

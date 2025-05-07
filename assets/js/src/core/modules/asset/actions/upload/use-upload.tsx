@@ -14,7 +14,7 @@ import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-n
 import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
-import { useUploadModalContext } from '@Pimcore/components/upload-modal/provider/upload-modal-provider/use-upload-modal-context'
+import { useUploadModalContext } from '@Pimcore/components/modal-upload/provider/upload-modal-provider/use-upload-modal-context'
 import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
@@ -24,6 +24,7 @@ import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { createJob } from '@Pimcore/modules/execution-engine/jobs/zip-upload/factory'
 import { isNumber, isUndefined } from 'lodash'
 import { JobStatus } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 
 export interface UseUploadHookReturn {
   upload: (id: string) => void
@@ -43,6 +44,7 @@ export const useUpload = (): UseUploadHookReturn => {
   const upload = (id: string): void => {
     triggerUpload({
       targetFolderId: parseInt(id),
+      skipAssetFetch: true,
       onSuccess: async (): Promise<void> => {
         refreshTree(parseInt(id))
       }
@@ -59,7 +61,7 @@ export const useUpload = (): UseUploadHookReturn => {
     })
 
     triggerUpload({
-      action: `/pimcore-studio/api/assets/add-zip/${id}`,
+      action: `${getPrefix()}/assets/add-zip/${id}`,
       accept: '.zip, .rar, .7zip',
       name: 'zipFile',
       multiple: false,

@@ -16,14 +16,26 @@ export const useStyles = createStyles(({ token, css }) => {
       .ant-upload {
         padding: 0 !important;
         background: none;
-        border-color: transparent;
+        border: none !important;
         
         &:hover {
-            border-color: transparent !important;
+            border: none !important;
         }
         
         &.ant-upload-drag-hover {
-            border-color: ${token.colorLinkHover} !important;
+          position: relative;
+          border-radius: ${token.borderRadius}px;
+
+          &::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px dashed ${token.colorLinkHover};
+            border-radius: ${token.borderRadius}px;
+            box-sizing: border-box;
+            pointer-events: none;
+            z-index: 1;
+          }
         }
 
         .ant-upload-drag-container {

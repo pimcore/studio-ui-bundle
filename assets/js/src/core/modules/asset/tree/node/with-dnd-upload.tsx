@@ -10,7 +10,7 @@
 
 import React, { type ReactElement, type Ref, type ComponentProps, forwardRef } from 'react'
 import { type TreeNode } from '@Pimcore/components/element-tree/node/tree-node'
-import { DndUpload } from '@Pimcore/components/element-tree/dnd-upload/dnd-upload'
+import { DndUpload } from '../dnd-upload/dnd-upload'
 
 export const withDndUpload = (Component: typeof TreeNode): typeof TreeNode => {
   const DndUploadNodeContent = (props: ComponentProps<typeof TreeNode>, ref: Ref<HTMLDivElement>): ReactElement => {

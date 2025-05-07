@@ -13,7 +13,7 @@ import { Tooltip } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useTranslation } from 'react-i18next'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
-import { ModalUpload, type ModalUploadProps } from './modal-upload'
+import { ModalUpload, type ModalUploadProps } from '../../modal-upload'
 
 export type UploadModalButtonProps = ModalUploadProps & {
   showMaxItemsError?: boolean
