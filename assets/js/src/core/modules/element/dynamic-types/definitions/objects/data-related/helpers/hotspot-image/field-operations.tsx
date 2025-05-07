@@ -1,20 +1,16 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { isNull, isUndefined } from 'lodash'
-import { Text as TextField } from '@Pimcore/components/text/text'
+import { isUndefined } from 'lodash'
 import { Space } from '@Pimcore/components/space/space'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '../../../../../../../../components/input/input'
@@ -22,7 +18,6 @@ import { Card } from '@Pimcore/components/card/card'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
-import { Flex } from '@Pimcore/components/flex/flex'
 import {
   type HotspotValueMap,
   type ExpandedHotspotMarkerData
@@ -30,15 +25,13 @@ import {
 import {
   Checkbox
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/checkbox/checkbox'
-import {
-  ManyToOneRelation, type ManyToOneRelationValue
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
-import useHotspotData
-  from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hooks/use-hotspot-data'
+import useHotspotData from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hooks/use-hotspot-data'
+import { type FormInstance } from 'antd'
+import { HotspotManyToOneRelation } from './components/hotspot-many-to-one-relation/hotspot-many-to-one-relation'
 
 interface FieldOperationsProps {
   hotspot: IHotspot | undefined
-  form: any
+  form: FormInstance
 }
 
 const FieldOperations = ({
@@ -46,7 +39,7 @@ const FieldOperations = ({
   form
 }: FieldOperationsProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { fields, updateName, updateTextValue, updateCheckboxValue, updateRelationValue, handleRemoveField, dataTypes } = useHotspotData(hotspot, form)
+  const { fields, handleRemoveField, dataTypes } = useHotspotData(hotspot, form)
 
   const getTypeLabel = (type: string): string => {
     const typeObj = dataTypes.find(dataType => dataType.key === type)
@@ -58,89 +51,49 @@ const FieldOperations = ({
       switch (field.type) {
         case 'checkbox':
           return (
-            <Flex gap={ 'small' }>
-              <Checkbox
-                checked={ field.value }
-                onChange={ (checked) => {
-                  !isNull(checked) && !isUndefined(checked) && updateCheckboxValue(index, checked)
-                } }
-              />
-              <TextField>{t('hotspots-markers-data-modal.data-type.checkbox')}</TextField>
-            </Flex>
+            <Checkbox
+              disableClearButton
+            />
           )
 
         case 'textarea':
           return (
-            <TextArea
-              onChange={ (e) => {
-                updateTextValue(index, e.target.value)
-              } }
-              value={ field.value }
-            />
+            <TextArea />
           )
 
         case 'textfield':
           return (
-            <Input
-              onChange={ (e) => {
-                updateTextValue(index, e.target.value)
-              } }
-              value={ field.value }
-            />
+            <Input />
           )
 
         case 'document':
           return (
-            <ManyToOneRelation
+            <HotspotManyToOneRelation
               allowPathTextInput
               assetsAllowed={ false }
               dataObjectsAllowed
               documentsAllowed={ false }
-              onChange={
-                  (newValue: ManyToOneRelationValue) => {
-                    if (isNull(newValue) || isUndefined(newValue.fullPath)) return
-                    updateRelationValue(index, 'document', newValue)
-                  }
-              }
-              value={
-              { type: 'document', id: field.value, fullPath: field.fullPath, subtype: 'object' }
-            }
+              type={ 'document' }
             />
           )
         case 'asset':
           return (
-            <ManyToOneRelation
+            <HotspotManyToOneRelation
               allowPathTextInput
               assetsAllowed
               dataObjectsAllowed={ false }
               documentsAllowed={ false }
-              onChange={
-                  (newValue: ManyToOneRelationValue) => {
-                    if (isNull(newValue) || isUndefined(newValue.fullPath)) return
-                    updateRelationValue(index, 'asset', newValue)
-                  }
-              }
-              value={
-                { type: 'asset', id: field.value, fullPath: field.fullPath, subtype: 'object' }
-              }
+              type={ 'asset' }
             />
           )
-        case 'data-object':
+        case 'object':
           return (
-            <ManyToOneRelation
+            <HotspotManyToOneRelation
               allowPathTextInput
               assetsAllowed={ false }
               dataObjectsAllowed
               documentsAllowed={ false }
-              onChange={
-                  (newValue: ManyToOneRelationValue) => {
-                    if (isNull(newValue) || isUndefined(newValue.fullPath)) return
-                    updateRelationValue(index, 'data-object', newValue)
-                  }
-              }
-              value={
-                { type: 'data-object', id: field.value, fullPath: field.fullPath, subtype: 'object' }
-              }
+              type={ 'object' }
             />
           )
       }
@@ -156,10 +109,7 @@ const FieldOperations = ({
           label={ t('hotspots-markers-data-modal.data-type.name') }
           name={ `name-${index}` }
         >
-          <Input
-            onChange={ (e) => { updateName(index, e.target.value) } }
-            value={ field.name }
-          />
+          <Input />
         </Form.Item>
         <Form.Item
           label={ t('hotspots-markers-data-modal.data-type.value') }
@@ -184,7 +134,7 @@ const FieldOperations = ({
             Edit
           </IconButton>
                 }
-        key={ index }
+        key={ index + field.type }
         title={ getTypeLabel(field.type as keyof HotspotValueMap) }
       >
         {renderFormItem(field, index)}

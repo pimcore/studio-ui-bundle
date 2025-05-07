@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
@@ -23,6 +20,9 @@ import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { ContextMenuActionName } from '..'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { setNodeLoadingInAllTree, setNodeLocked } from '@Pimcore/components/element-tree/element-tree-slice'
+import { isNil } from 'lodash'
 
 export interface UseLockHookReturn {
   lock: (id: number) => Promise<void>
@@ -40,28 +40,36 @@ export interface UseLockHookReturn {
   isLockMenuHidden: (node: Element | TreeNodeProps) => boolean
 }
 
+export enum LockType {
+  Self = 'self',
+  Propagate = 'propagate',
+  Unlock = '',
+  UnlockPropagate = 'unlockPropagate'
+}
+
 export const useLock = (elementType: ElementType): UseLockHookReturn => {
   const { t } = useTranslation()
   const { elementPatch } = useElementApi(elementType)
   const user = useUser()
   const { isTreeActionAllowed } = useTreePermission()
+  const dispatch = useAppDispatch()
 
   const lock = async (id: number): Promise<void> => {
-    await patchLock(id, 'self')
+    await patchLock(id, LockType.Self)
   }
 
   const lockAndPropagate = async (id: number): Promise<void> => {
-    await patchLock(id, 'propagate')
+    await patchLock(id, LockType.Propagate)
   }
   const unlock = async (id: number): Promise<void> => {
-    await patchLock(id, '')
+    await patchLock(id, LockType.Unlock)
   }
   const unlockAndPropagate = async (id: number): Promise<void> => {
-    await patchLock(id, 'unlockPropagate')
+    await patchLock(id, LockType.UnlockPropagate)
   }
 
-  const patchLock = async (id: number, lockType: 'self' | 'propagate' | '' | 'unlockPropagate'): Promise<void> => {
-    await elementPatch({
+  const patchLock = async (id: number, lockType: LockType): Promise<void> => {
+    const elementLockTask = elementPatch({
       body: {
         data: [{
           id,
@@ -69,6 +77,23 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
         }]
       }
     })
+
+    const getLockedFromLockType = (lockType: LockType): boolean => {
+      return lockType === 'self' || lockType === 'propagate'
+    }
+
+    try {
+      dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType, loading: true }))
+      const success = await elementLockTask
+
+      if (success) {
+        dispatch(setNodeLocked({ elementType, nodeId: String(id), isLocked: getLockedFromLockType(lockType), lockType }))
+      }
+
+      dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType, loading: false }))
+    } catch (error) {
+      console.error('Error renaming ' + elementType, error)
+    }
   }
 
   const lockTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
@@ -171,15 +196,31 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     }
   }
 
+  const isNodeDirectlyLocked = (node: Element | TreeNodeProps): boolean => {
+    return node.isLocked && !isNil(node.locked)
+  }
+
   const isLockHidden = (node: Element | TreeNodeProps): boolean => {
+    if (node.isLocked && isNil(node.locked)) {
+      return false
+    }
+
     return !isTreeActionAllowed(TreePermission.Lock) || node.isLocked || !user.isAdmin
   }
 
   const isLockPropagateHidden = (node: Element | TreeNodeProps): boolean => {
+    if (!isNodeDirectlyLocked(node)) {
+      return false
+    }
+
     return !isTreeActionAllowed(TreePermission.LockAndPropagate) || node.isLocked || !user.isAdmin
   }
 
   const isUnlockHidden = (node: Element | TreeNodeProps): boolean => {
+    if (!isNodeDirectlyLocked(node)) {
+      return true
+    }
+
     return !isTreeActionAllowed(TreePermission.Unlock) || !node.isLocked || !user.isAdmin
   }
 

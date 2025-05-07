@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -18,11 +15,13 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import {
   type CategoriesList,
+  type IAssetVersionField,
   type IAssetVersionsFieldsList,
   type VersionKeysList
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/styles/common-versions-fields-view.styles'
+import { isEmpty } from 'lodash'
 
 interface IAssetVersionsFieldsViewProps {
   categoriesList?: CategoriesList
@@ -37,12 +36,17 @@ export const AssetVersionsFieldsView = ({ categoriesList, versionViewData, versi
   const { styles } = useStyles()
   const { t } = useTranslation()
 
-  const renderFieldTitle = ({ key, value, categoryName }: { key: string, value: string, categoryName: VersionCategoryName }): React.JSX.Element => {
+  const renderFieldTitle = ({ categoryName, fieldData }: { categoryName: VersionCategoryName, fieldData: IAssetVersionField['Field'] }): React.JSX.Element => {
     const isShowValueWithoutTranslation = CATEGORIES_WITHOUT_TRANSLATION.includes(categoryName)
-    const textValue = isShowValueWithoutTranslation ? value : t(`version.${key}`)
+    const fieldValue = fieldData.field
+    const fieldLanguage = fieldData.language
+
+    const textValue = isShowValueWithoutTranslation ? fieldValue : t(`version.${fieldData.key}`)
 
     return (
-      <Text className={ styles.fieldTitle }>{textValue}</Text>
+      <Text className={ styles.fieldTitle }>
+        {textValue} {!isEmpty(fieldLanguage) && <Text type="secondary">| {fieldLanguage?.toUpperCase()}</Text>}
+      </Text>
     )
   }
 
@@ -64,7 +68,7 @@ export const AssetVersionsFieldsView = ({ categoriesList, versionViewData, versi
             {versionViewData.map((fieldItem, fieldIndex) =>
               category.fieldKeys.includes(fieldItem.Field.key) && (
               <div key={ `${fieldIndex}-${fieldItem.Field.key}` }>
-                {renderFieldTitle({ categoryName: category.key, key: fieldItem.Field.key, value: fieldItem.Field.field })}
+                {renderFieldTitle({ categoryName: category.key, fieldData: fieldItem.Field })}
                 <Flex gap="mini">
                   {versionKeysList.map((key, index) => {
                     const isModifiedField = modifiedFields.includes(fieldItem.Field.key)

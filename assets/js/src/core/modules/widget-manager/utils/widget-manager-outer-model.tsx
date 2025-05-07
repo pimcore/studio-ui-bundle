@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { store } from '@Pimcore/app/store'
 import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
@@ -120,9 +117,21 @@ const getWidgetIndex = (widgets?: WidgetConfig[], widgetId?: string | null): num
 const widgetsToModelJson = (widgets: WidgetConfig[] | undefined, usedIds: Set<string>): IJsonTabNode[] => {
   const result: IJsonTabNode[] = []
 
+  const userPermissions = store.getState().auth.permissions
+  const hasAssetPermission: boolean = Array.isArray(userPermissions) && userPermissions.includes('assets')
+  const hasObjectPermission: boolean = Array.isArray(userPermissions) && userPermissions.includes('objects')
+
   widgets?.forEach((widget) => {
     // skip document trees until we have a documents implementation
     if (widget.widgetType === 'element_tree' && 'elementType' in widget && widget.elementType === 'document') {
+      return
+    }
+
+    if (widget.widgetType === 'element_tree' && 'elementType' in widget && widget.elementType === 'asset' && !hasAssetPermission) {
+      return
+    }
+
+    if (widget.widgetType === 'element_tree' && 'elementType' in widget && widget.elementType === 'data-object' && !hasObjectPermission) {
       return
     }
 

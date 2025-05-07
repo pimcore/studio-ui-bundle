@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -107,7 +104,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
         maxWidth: toCssDimension(props.width, fieldWidth.large)
       } }
     >
-      <div style={ { flex: 1 } }>
+      <div className={ styles.droppableWrapper }>
         <Droppable
           isValidContext={ (info: DragAndDropInfo) => props.disabled !== true && isValidElementType(info.type) }
           isValidData={ (info: DragAndDropInfo) => dndIsValidData(info, props) }
@@ -126,7 +123,8 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           />
         </Droppable>
       </div>
-      { props.allowPathTextInput !== true && (
+      <Flex gap="extra-small">
+        { props.allowPathTextInput !== true && (
         <Tooltip
           key="open"
           title={ t('open') }
@@ -139,9 +137,9 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
             type="default"
           />
         </Tooltip>
-      ) }
+        ) }
 
-      { props.assetInlineDownloadAllowed === true && value?.textInput !== true && (
+        { props.assetInlineDownloadAllowed === true && value?.textInput !== true && (
         <Tooltip
           key="download"
           title={ t('download') }
@@ -157,9 +155,9 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
             type="default"
           />
         </Tooltip>
-      ) }
+        ) }
 
-      { props.allowToClearRelation === true && (
+        { props.allowToClearRelation === true && (
 
         <Tooltip
           key="empty"
@@ -174,9 +172,9 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
             type="default"
           />
         </Tooltip>
-      ) }
+        ) }
 
-      { props.disabled !== true && (
+        { props.disabled !== true && (
         <ElementSelectorButton
           elementSelectorConfig={ {
             selectionType: SelectionType.Single,
@@ -205,7 +203,8 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           } }
           type="default"
         />
-      ) }
+        ) }
+      </Flex>
     </Flex>
   )
 }

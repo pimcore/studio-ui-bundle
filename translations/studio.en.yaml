@@ -9,6 +9,10 @@ error.error_widget_name_missing: Widget name have to be provided
 error.error_widget_name_invalid: Widget name is invalid (only alphanumeric characters, underscores and spaces are allowed, must be at least 3 characters long and less than 80 long)
 error.error_validation_failed: Validation failed
 error.error_element_not_found: Element not found
+sidebar.selected_elements: Selected Elements
+sidebar.grid_config: Grid config
+sidebar.tag_filters: Tag Filters
+sidebar.search_filter: Search & Filter
 modal-search.field.mimeType: MIME-Type
 modal-search.field.thumbnail: Thumbnail
 modal-search.field.id: ID
@@ -228,6 +232,7 @@ listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download
 listing.actions.export: Export
 listing.actions.csv-export: CSV Export
+listing.actions.xlsx-export: Excel Export
 listing.actions.batch-edit: Batch edit
 listing.selection.total: "{{total}} selected"
 data-type.input: Input
@@ -363,6 +368,7 @@ jobs.job.finished: "{{title}} finished"
 jobs.job.finished-with-errors: "{{title}} finished with errors"
 jobs.job.progress: "{{progress}}% completed"
 jobs.job.button-retry: Retry
+jobs.job.button-reload: Reload
 jobs.job.button-hide: hide
 jobs.job.button-download: download
 jobs.job.button-ignore-and-reload: ignore and reload
@@ -370,6 +376,8 @@ jobs.job.step_hint: "Step {{step}}/{{total}}"
 jobs.zip-job.title: "ZIP of {{title}}"
 jobs.batch-edit-job.title: "Batch Edit of {{title}}"
 jobs.csv-job.title: "CSV of {{title}}"
+jobs.xlsx-job.title: "XLSX of {{title}}"
+batch-edit.job-title: Batch Edit
 jobs.zip-upload-job.title: "Upload ZIP"
 jobs.zip-upload-job.step1.title: "Extracting ZIP"
 jobs.zip-upload-job.step2.title: "Creating assets"
@@ -388,6 +396,13 @@ export-csv-form.form-field.header: Header
 export-csv-form.form-field.header.option.name: System key
 export-csv-form.form-field.header.option.title: Label
 export-csv-form.form-field.header.option.no-header: No header
+export-xlsx-form.modal-title: Export Excel
+export-xlsx-form.export-notice: Please note that the export does not support some fields(e.g. preview, size). Press OK to continue with the export.
+export-xlsx-form.form-field.delimiter: Delimiter
+export-xlsx-form.form-field.header: Header
+export-xlsx-form.form-field.header.option.name: System key
+export-xlsx-form.form-field.header.option.title: Label
+export-xlsx-form.form-field.header.option.no-header: No header
 form.validation.required: This field is required
 form.validation.numeric-range.first-value-missing: First value is missing
 form.validation.numeric-range.second-value-missing: Second value is missing

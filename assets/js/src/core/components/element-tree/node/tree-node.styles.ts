@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { createStyles } from 'antd-style'
 
@@ -40,6 +37,7 @@ export const useStyles = createStyles(({ token, css }) => {
           
         .ant-upload-wrapper {
           width: 100%;
+          overflow: hidden;
             
           .ant-upload {
             width: 100%;
@@ -47,6 +45,11 @@ export const useStyles = createStyles(({ token, css }) => {
             align-items: center;
             gap: 8px
           }
+        }
+
+        .tree-node__content-wrapper {
+          width: 100%;
+          overflow: hidden;
         }
 
         @media (hover: hover) {
@@ -63,11 +66,6 @@ export const useStyles = createStyles(({ token, css }) => {
 
       &.tree-node--selected > .tree-node__content {
         background-color: ${token.controlItemBgActive};
-      }
-
-      .tree-node__content-wrapper {
-        //max-width: max(100%, calc(100px - 16px));
-        width: 100%;
       }
 
       .tree-node-content__label {

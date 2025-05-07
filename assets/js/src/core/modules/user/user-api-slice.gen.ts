@@ -293,6 +293,8 @@ export type UserInformation = {
     classes: string[];
     /** Allowed doc types to create */
     docTypes: string[];
+    /** User Language */
+    language: string;
     /** Active studio perspective ID */
     activePerspective: any;
     /** Allowed studio perspectives */

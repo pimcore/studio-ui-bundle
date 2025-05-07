@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React from 'react'
 import { Form } from '@Pimcore/components/form/form'
@@ -41,12 +38,15 @@ export const HotspotMarkersDataModal = ({
 }: HotspotMarkersDataModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
-  const { fields, hotspotName, setHotspotName, dataTypes, editModeHotspot } = useHotspotData(hotspot, form)
+
+  const { getFieldsData, dataTypes } = useHotspotData(hotspot, form)
 
   const handleSave = (): void => {
     if (isUndefined(hotspot)) return
     form.validateFields().then(() => {
-      const updatedHotspot = { ...hotspot, data: fields, name: hotspotName }
+      const values = form.getFieldsValue()
+      const updatedHotspot = { ...hotspot, data: getFieldsData(), name: values.hotspotName }
+
       onUpdate(updatedHotspot)
       onClose()
     }).catch((error) => {
@@ -91,7 +91,7 @@ export const HotspotMarkersDataModal = ({
       footer={ dataModalFooter }
       okText={ t('save') }
       onCancel={ handleCancel }
-      open={ !isUndefined(editModeHotspot) }
+      open={ !isUndefined(hotspot) }
       size="M"
       title={ t('hotspots-markers-data-modal.title') }
       zIndex={ 1000 }
@@ -109,11 +109,7 @@ export const HotspotMarkersDataModal = ({
             label={ t('hotspots-markers-data-modal.name') }
             name="hotspotName"
           >
-            <Input
-              onChange={ (e) => {
-                setHotspotName(e.target.value)
-              } }
-            />
+            <Input />
           </Form.Item>
           <FieldOperations
             form={ form }

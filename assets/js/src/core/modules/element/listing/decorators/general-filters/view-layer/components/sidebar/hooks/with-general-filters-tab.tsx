@@ -1,18 +1,16 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
-import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { FilterContainer } from '../tabs/filters/filter-container'
 
@@ -21,6 +19,7 @@ export const generalFiltersTabKey = 'general-filters'
 export const withGeneralFiltersTab = (useBaseHook: AbstractDecoratorProps['useSidebarOptions']): AbstractDecoratorProps['useSidebarOptions'] => {
   const useSidebarGeneralFiltersExtension: typeof useBaseHook = () => {
     const { getProps: baseGetProps } = useBaseHook()
+    const { t } = useTranslation()
 
     const getProps: typeof baseGetProps = () => {
       const baseProps = baseGetProps()
@@ -33,7 +32,8 @@ export const withGeneralFiltersTab = (useBaseHook: AbstractDecoratorProps['useSi
           {
             component: <FilterContainer />,
             key: generalFiltersTabKey,
-            icon: <Icon value="filter" />
+            icon: <Icon value="filter" />,
+            tooltip: t('sidebar.search_filter')
           },
           ...baseProps.entries
         ]

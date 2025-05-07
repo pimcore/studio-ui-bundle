@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React, { useState, useRef } from 'react'
 import { type IModalProps, Modal } from '@Pimcore/components/modal/modal'
@@ -20,7 +17,7 @@ import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
 
-export interface IWindowModalProps extends Omit<IModalProps, 'mask' | 'maskClosable' | 'maskStyle' | 'maskTransitionName' | 'wrapStyle' | 'modalRender'> {
+export interface IWindowModalProps extends Omit<IModalProps, 'mask' | 'maskClosable' | 'maskStyle' | 'maskTransitionName' | 'wrapClassName' | 'modalRender'> {
 
 }
 
@@ -83,7 +80,7 @@ export const WindowModal = (props: IWindowModalProps): React.JSX.Element => {
           </Flex>
         </div>
       }
-      wrapStyle={ { pointerEvents: 'none' } }
+      wrapClassName={ styles.wrapper }
     >
       {props.children}
     </Modal>

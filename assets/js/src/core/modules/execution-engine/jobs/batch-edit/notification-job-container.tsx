@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React, { useEffect, useRef, useState } from 'react'
 import { JobStatus } from '../../jobs/abstact-job'
@@ -23,14 +20,17 @@ import { type BatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-
 
 export interface BatchEditProps extends JobProps {
   config: BatchEditJob['config']
+  refreshGrid: () => Promise<void>
 }
 export const NotificationJobContainer = (props: BatchEditProps): React.JSX.Element => {
-  const { id, topics, status, action } = props
-  const { open: openSEEvent, close: closeSEEvent } = useServerSideEvent({ topics, messageHandler, openHandler })
+  const { id, topics, status, action, refreshGrid } = props
+
   const [progress, setProgress] = useState<number>(0)
-  const { updateJob, removeJob } = useJobs()
   const jobId = useRef<number>()
   const { t } = useTranslation()
+
+  const { open: openSEEvent, close: closeSEEvent } = useServerSideEvent({ topics, messageHandler, openHandler })
+  const { updateJob, removeJob } = useJobs()
 
   useEffect(() => {
     if (JobStatus.QUEUED === status) {
@@ -42,42 +42,7 @@ export const NotificationJobContainer = (props: BatchEditProps): React.JSX.Eleme
     }
   }, [])
 
-  return (
-    <JobView
-      failureButtonActions={ [
-        {
-          label: t('jobs.job.button-retry'),
-          handler: failureButtonHandler
-        },
-
-        {
-          label: t('jobs.job.button-hide'),
-          handler: () => { removeJob(id) }
-        }
-      ] }
-
-      successButtonActions={ [
-        {
-          label: t('jobs.job.button-hide'),
-          handler: () => { removeJob(id) }
-        }
-      ] }
-
-      { ...props }
-      progress={ progress }
-    />
-  )
-
-  function failureButtonHandler (): void {
-    updateJob(id, {
-      status: JobStatus.QUEUED
-    })
-
-    openSEEvent()
-  }
-
   function openHandler (): void {
-    console.log('reopen')
     action().then(actionJobId => {
       jobId.current = actionJobId
     }).catch(console.error)
@@ -113,4 +78,39 @@ export const NotificationJobContainer = (props: BatchEditProps): React.JSX.Eleme
       }
     }
   }
+
+  const failureButtonHandler = (): void => {
+    updateJob(id, { status: JobStatus.QUEUED })
+
+    openSEEvent()
+  }
+
+  const successButtonHandler = async (): Promise<void> => { await refreshGrid() }
+
+  return (
+    <JobView
+      failureButtonActions={ [
+        {
+          label: t('jobs.job.button-retry'),
+          handler: failureButtonHandler
+        },
+        {
+          label: t('jobs.job.button-hide'),
+          handler: () => { removeJob(id) }
+        }
+      ] }
+      successButtonActions={ [
+        {
+          label: t('jobs.job.button-reload'),
+          handler: async () => { await successButtonHandler() }
+        },
+        {
+          label: t('jobs.job.button-hide'),
+          handler: () => { removeJob(id) }
+        }
+      ] }
+      { ...props }
+      progress={ progress }
+    />
+  )
 }
