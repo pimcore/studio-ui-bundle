@@ -64,4 +64,8 @@ export class DynamicTypeObjectDataReverseObjectRelation extends DynamicTypeObjec
 
     return <RelationList relations={ value } />
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 350
+  }
 }

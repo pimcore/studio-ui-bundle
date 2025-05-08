@@ -57,4 +57,8 @@ export class DynamicTypeObjectDataGeoPolyLine extends DynamicTypeObjectDataAbstr
 
     return isNil(value) ? <></> : <GeoPointList geoPoints={ value } />
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 250
+  }
 }

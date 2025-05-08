@@ -60,15 +60,19 @@ export class DynamicTypeObjectDataExternalImage extends DynamicTypeObjectDataAbs
           className='w-full'
           justify='center'
         >
-          { !isNil(value) && !isEmpty(value.url) && (
-          <ImagePreview
-            height={ 100 }
-            src={ value.url }
-            width={ 100 }
-          />
+          {!isNil(value) && !isEmpty(value.url) && (
+            <ImagePreview
+              height={ 100 }
+              src={ value.url }
+              width={ 100 }
+            />
           )}
         </Flex>
       </GridCellPreviewWrapper>
     )
+  }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 250
   }
 }

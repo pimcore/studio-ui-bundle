@@ -45,7 +45,7 @@ export class DynamicTypeObjectDataAdvancedManyToManyRelation extends DynamicType
     return (
       <AdvancedManyToManyRelation
         { ...props }
-        { ... convertAllowedTypes(props) }
+        { ...convertAllowedTypes(props) }
         className={ props.className }
         disabled={ props.noteditable === true }
       />
@@ -74,5 +74,9 @@ export class DynamicTypeObjectDataAdvancedManyToManyRelation extends DynamicType
         value={ value }
       />
     )
+  }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 350
   }
 }
