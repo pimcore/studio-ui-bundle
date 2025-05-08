@@ -22,10 +22,10 @@ export interface LocalizedFieldsProps extends AbstractObjectDataDefinition {
 }
 
 export const LocalizedFields = ({ children, noteditable, className }: LocalizedFieldsProps): React.JSX.Element => {
-  const { currentLanguage, setHasLocalizedFields } = useLanguageSelection()
+  const { currentLanguage, hasLocalizedFields, setHasLocalizedFields } = useLanguageSelection()
 
   useEffect(() => {
-    setHasLocalizedFields(true)
+    if (!hasLocalizedFields) setHasLocalizedFields(true)
   }, [])
 
   return (
