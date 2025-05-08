@@ -34,6 +34,7 @@ export interface ModalUploadPropsBase {
   uploadRef?: React.Ref<UploadRef>
   uploadComponent?: React.ComponentType<AntUploadProps>
   uploadComponentClassName?: string
+  openFileDialogOnClick?: AntUploadProps['openFileDialogOnClick']
 }
 
 interface ModalUploadPropsWithAction extends ModalUploadPropsBase {
@@ -97,6 +98,7 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
     accept: props.accept,
     showUploadList: false,
     maxCount: props.maxItems,
+    openFileDialogOnClick: props.openFileDialogOnClick,
     fileList,
     beforeUpload: async (file: RcFile & UploadFile, fileList) => {
       const isFileSizeValid = file.size < (settings.upload_max_filesize ?? 1024 * 1024 * 10)
