@@ -91,8 +91,6 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
       default:
         return null
     }
-
-    return null
   }
 
   const valueOn = useMemo(() => getDateValue(DatePickerSettingValue.ON) as number | null, [fieldFilter])
