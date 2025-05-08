@@ -18,11 +18,21 @@ import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/us
 
 enum DatePickerSettingValue {
   ON = 'on',
-  BETWEEN = 'between'
+  BETWEEN = 'between',
+  BEFORE = 'before',
+  AFTER = 'after'
 }
 
 interface FieldFilterDatetimeON {
   on: number
+}
+
+interface FieldFilterDatetimeBEFORE {
+  before: number
+}
+
+interface FieldFilterDatetimeAFTER {
+  after: number
 }
 
 interface FieldFilterDatetimeBetween {
@@ -31,12 +41,14 @@ interface FieldFilterDatetimeBetween {
 }
 
 interface FieldFilterDatetime {
-  filterValue?: FieldFilterDatetimeON | FieldFilterDatetimeBetween
+  filterValue?: FieldFilterDatetimeON | FieldFilterDatetimeBetween | FieldFilterDatetimeAFTER | FieldFilterDatetimeBEFORE
 }
 
 const SETTING_OPTIONS = [
   { label: 'On', value: DatePickerSettingValue.ON },
-  { label: 'Between', value: DatePickerSettingValue.BETWEEN }
+  { label: 'Between', value: DatePickerSettingValue.BETWEEN },
+  { label: 'Before', value: DatePickerSettingValue.BEFORE },
+  { label: 'After', value: DatePickerSettingValue.AFTER }
 ]
 
 const DATE_FORMAT = 'YYYY-MM-DD'
@@ -55,10 +67,28 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
 
     if (currentFilterValue == null) return null
 
-    if (datetimeType === DatePickerSettingValue.ON && 'on' in currentFilterValue) {
+    if (
+      datetimeType === DatePickerSettingValue.ON && 'on' in currentFilterValue
+    ) {
       setSettingValue(DatePickerSettingValue.ON)
 
       return currentFilterValue.on
+    }
+
+    if (
+      datetimeType === DatePickerSettingValue.BEFORE && 'before' in currentFilterValue
+    ) {
+      setSettingValue(DatePickerSettingValue.BEFORE)
+
+      return currentFilterValue.before
+    }
+
+    if (
+      datetimeType === DatePickerSettingValue.AFTER && 'after' in currentFilterValue
+    ) {
+      setSettingValue(DatePickerSettingValue.AFTER)
+
+      return currentFilterValue.after
     }
 
     if (
@@ -75,20 +105,31 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
   }
 
   const valueOn = useMemo(() => getDateValue(DatePickerSettingValue.ON) as number | null, [fieldFilter])
+  const valueBefore = useMemo(() => getDateValue(DatePickerSettingValue.BEFORE) as number | null, [fieldFilter])
+  const valueAfter = useMemo(() => getDateValue(DatePickerSettingValue.AFTER) as number | null, [fieldFilter])
   const valueBetween = useMemo(() => getDateValue(DatePickerSettingValue.BETWEEN) as DateRangeTargetValue | null, [fieldFilter])
 
   const [dateOnValue, setDateOnValue] = useState<null | number>(valueOn)
+  const [dateBeforeValue, setDateBeforeValue] = useState<null | number>(valueBefore)
+  const [dateAfterValue, setDateAfterValue] = useState<null | number>(valueAfter)
   const [dateBetweenValue, setDateBetweenValue] = useState<null | DateRangeTargetValue>(valueBetween)
 
   useEffect(() => {
     setSettingValue(DatePickerSettingValue.ON)
-  }, [data])
+  }, [])
 
   const handleChangeDateOnValue = (date: number): void => {
-    setDateOnValue(date)
+    if (settingValue === DatePickerSettingValue.BEFORE) {
+      setDateBeforeValue(date)
+      setData({ before: date })
+    } else if (settingValue === DatePickerSettingValue.AFTER) {
+      setDateAfterValue(date)
+      setData({ after: date })
+    } else {
+      setData({ on: date })
+      setDateOnValue(date)
+    }
     setDateBetweenValue(null)
-
-    setData({ on: date })
   }
 
   const handleChangeDateBetweenValue = (dates: DateRangeTargetValue): void => {
@@ -110,25 +151,31 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
         width={ 90 }
       />
 
-      {settingValue === DatePickerSettingValue.ON && (
-        <DatePicker
-          format={ DATE_FORMAT }
-          onChange={ handleChangeDateOnValue }
-          outputType='timestamp'
-          showTime
-          value={ dateOnValue }
-        />
+      {(settingValue === DatePickerSettingValue.ON || settingValue === DatePickerSettingValue.BEFORE || settingValue === DatePickerSettingValue.AFTER) && (
+      <DatePicker
+        format={ DATE_FORMAT }
+        onChange={ handleChangeDateOnValue }
+        outputType='timestamp'
+        showTime
+        value={
+        settingValue === DatePickerSettingValue.BEFORE
+          ? dateBeforeValue
+          : settingValue === DatePickerSettingValue.AFTER
+            ? dateAfterValue
+            : dateOnValue
+      }
+      />
       )}
 
       {settingValue === DatePickerSettingValue.BETWEEN && (
-        <DateRangePicker
-          allowEmpty={ [true, true] }
-          format={ DATE_FORMAT }
-          onChange={ handleChangeDateBetweenValue }
-          outputType='timestamp'
-          showTime
-          value={ dateBetweenValue }
-        />
+      <DateRangePicker
+        allowEmpty={ [true, true] }
+        format={ DATE_FORMAT }
+        onChange={ handleChangeDateBetweenValue }
+        outputType='timestamp'
+        showTime
+        value={ dateBetweenValue }
+      />
       )}
     </Flex>
   )
