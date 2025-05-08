@@ -15,6 +15,7 @@ import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-co
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { isAllowedToMove } from '@Pimcore/modules/element/tree/node/with-droppable/permission-helper'
+import { isUndefined } from 'lodash'
 
 export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
   const DroppableNodeContent = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
@@ -28,7 +29,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
 
     const currentObject: DataObject = props.metaData.dataObject
 
-    if (currentObject.type !== 'folder') {
+    if (!isAllowedToMove(currentObject)) {
       return (
         <Component { ...props } />
       )
@@ -50,36 +51,28 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
     }
 
     const checkForValidContext: DroppableProps['isValidContext'] = (context) => {
-      if (isAllowedToMove(currentObject)) {
-        return true
-      }
-
-      if (context.type === 'data-object') {
-        return true
-      }
-
-      return false
+      return context.type === 'data-object'
     }
 
     const checkForValidData: DroppableProps['isValidData'] = (context) => {
-      if (currentObject.type === 'folder') {
-        return true
-      }
-
-      return false
+      return isAllowedToMove(currentObject)
     }
 
     return (
-      <Droppable
-        isValidContext={ checkForValidContext }
-        isValidData={ checkForValidData }
-        onDrop={ onDrop }
-      >
-        <Component
-          { ...props }
-          ref={ ref }
-        />
-      </Droppable>
+      <Component
+        { ...props }
+        ref={ ref }
+        wrapNode={ (children) => (
+          <Droppable
+            isValidContext={ checkForValidContext }
+            isValidData={ checkForValidData }
+            onDrop={ onDrop }
+          >
+            {!isUndefined(props.wrapNode) ? props.wrapNode(children) : children}
+
+          </Droppable>
+        ) }
+      />
     )
   }
 
