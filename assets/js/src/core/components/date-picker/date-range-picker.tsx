@@ -20,6 +20,7 @@ import {
 } from './utils/date-picker-utils'
 import { useStyles } from '@Pimcore/components/date-picker/date-picker.styles'
 import cn from 'classnames'
+import { Icon } from '@Pimcore/components/icon/icon'
 
 export type DateRange = [start: Dayjs | null, end: Dayjs | null]
 export type DateRangeTargetValue = [start: DatePickerValueType, end: DatePickerValueType]
@@ -67,6 +68,7 @@ export const DateRangePicker = (props: DateRangePickerProps): React.JSX.Element 
       } }
       popupClassName={ styles.datePickerDropdown }
       rootClassName={ cn(styles.datePicker, props.className, { [styles.inherited]: props.inherited }) }
+      separator={ <Icon value="arrow-narrow-right" /> }
       value={ value }
     />
   )
