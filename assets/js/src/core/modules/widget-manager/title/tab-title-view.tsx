@@ -40,6 +40,11 @@ export const TabTitleView = ({ icon, title, onClose, onConfirm }: TabTitleViewPr
   return (
     <Space
       className={ ['widget-manager-tab-title', styles.title].join(' ') }
+      onMouseDown={ (evt: MouseEvent) => {
+        if (evt.button === 1) {
+          triggerClose()
+        }
+      } }
       size='mini'
     >
       <Icon
