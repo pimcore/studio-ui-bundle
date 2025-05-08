@@ -123,8 +123,8 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
     const isAfter = settingValue === DatePickerSettingValue.AFTER
 
     setData({
-      from: isBefore ? null : date,
-      to: isAfter ? date : null
+      from: isAfter ? date : null,
+      to: isBefore ? date : null
     })
 
     setDateBeforeValue(isBefore ? date : null)
