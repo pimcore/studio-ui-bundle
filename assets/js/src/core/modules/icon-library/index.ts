@@ -23,6 +23,7 @@ import addPackage from '@Pimcore/assets/icons/add-package.inline.svg'
 import addSomething from '@Pimcore/assets/icons/add-something.inline.svg'
 import addUser from '@Pimcore/assets/icons/add-user.inline.svg'
 import alert from '@Pimcore/assets/icons/alert.inline.svg'
+import arrowNarrowRight from '@Pimcore/assets/icons/arrow-narrow-right.inline.svg'
 import asset from '@Pimcore/assets/icons/asset.inline.svg'
 import attachment from '@Pimcore/assets/icons/attachment.inline.svg'
 import audio from '@Pimcore/assets/icons/audio.inline.svg'
@@ -246,6 +247,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'alert',
       component: alert
+    })
+    iconLibrary.register({
+      name: 'arrow-narrow-right',
+      component: arrowNarrowRight
     })
     iconLibrary.register({
       name: 'asset',
