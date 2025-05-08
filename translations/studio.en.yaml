@@ -184,6 +184,7 @@ yes: Yes
 no: No
 by: By
 field: Field
+no-data-available: No Data Available
 no-data-available-yet: No data available yet.
 schedule.label: Schedule
 schedule.headline: Schedule
