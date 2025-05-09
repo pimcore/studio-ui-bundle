@@ -11,7 +11,10 @@
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { type Element } from '@Pimcore/modules/element/element-helper'
 
-export const isAllowedToMove = (element: Element): boolean => {
-  return checkElementPermission(element.permissions, 'create') &&
-    checkElementPermission(element.permissions, 'settings')
+export const isDndTargetAllowed = (element: Element): boolean => {
+  return checkElementPermission(element.permissions, 'create')
+}
+
+export const isDndSourceAllowed = (element: Element): boolean => {
+  return checkElementPermission(element.permissions, 'settings') && !element.isLocked
 }

@@ -14,8 +14,12 @@ import { Droppable, type DroppableProps } from '@Pimcore/components/drag-and-dro
 import { type Asset } from '../../../asset-api-slice-enhanced'
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { isAllowedToMove } from '@Pimcore/modules/element/tree/node/with-droppable/permission-helper'
+import { isDndSourceAllowed, isDndTargetAllowed as isDndTargetPermissionAllowed } from '@Pimcore/modules/element/tree/node/with-droppable/permission-helper'
 import { isUndefined } from 'lodash'
+
+const isDndTargetAllowed = (asset: Asset): boolean => {
+  return isDndTargetPermissionAllowed(asset) && asset.type === 'folder'
+}
 
 export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
   const DroppableNodeContent = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
@@ -27,39 +31,40 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
       )
     }
 
-    const currentAsset: Asset = props.metaData.asset
+    const targetAsset: Asset = props.metaData.asset
 
-    if (currentAsset.type !== 'folder') {
+    if (targetAsset.type !== 'folder') {
       return (
         <Component { ...props } />
       )
     }
 
     const onDrop: DroppableProps['onDrop'] = (info) => {
-      const droppedAsset: Asset = info.data
-      console.log('onDrop?', info, droppedAsset)
-      if (!isAllowedToMove(currentAsset)) {
+      const sourceAsset: Asset = info.data
+      console.log('onDrop?', info, sourceAsset)
+      if (!isDndSourceAllowed(sourceAsset) || !isDndTargetAllowed(targetAsset)) {
         return
       }
-      console.log('onDrop', info, droppedAsset)
+      console.log('onDrop', info, sourceAsset)
       move({
-        currentElement: { id: droppedAsset.id, parentId: droppedAsset.parentId },
-        targetElement: { id: currentAsset.id, parentId: currentAsset.parentId }
+        currentElement: { id: sourceAsset.id, parentId: sourceAsset.parentId },
+        targetElement: { id: targetAsset.id, parentId: targetAsset.parentId }
       }).catch(() => {
         trackError(new GeneralError('Item could not be moved'))
       })
     }
 
-    const checkForValidContext: DroppableProps['isValidContext'] = (context) => {
-      if (context.type === 'asset') {
-        return true
-      }
-
-      return false
+    const checkForValidContext: DroppableProps['isValidContext'] = (info) => {
+      return info.type === 'asset'
     }
 
-    const checkForValidData: DroppableProps['isValidData'] = (context) => {
-      return isAllowedToMove(currentAsset)
+    const checkForValidData: DroppableProps['isValidData'] = (info) => {
+      const sourceAsset: Asset = info.data
+      if (targetAsset.id === 287) {
+        console.log('checkForValidData', info, targetAsset, info.type === 'asset' && isDndSourceAllowed(sourceAsset) && isDndTargetAllowed(targetAsset))
+      }
+
+      return info.type === 'asset' && isDndSourceAllowed(sourceAsset) && isDndTargetAllowed(targetAsset)
     }
 
     return (

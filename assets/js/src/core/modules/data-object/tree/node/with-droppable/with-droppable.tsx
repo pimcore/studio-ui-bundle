@@ -14,7 +14,7 @@ import { Droppable, type DroppableProps } from '@Pimcore/components/drag-and-dro
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
-import { isAllowedToMove } from '@Pimcore/modules/element/tree/node/with-droppable/permission-helper'
+import { isDndSourceAllowed, isDndTargetAllowed } from '@Pimcore/modules/element/tree/node/with-droppable/permission-helper'
 import { isUndefined } from 'lodash'
 
 export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
@@ -27,24 +27,24 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
       )
     }
 
-    const currentObject: DataObject = props.metaData.dataObject
+    const targetObject: DataObject = props.metaData.dataObject
 
-    if (!isAllowedToMove(currentObject)) {
+    if (!isDndSourceAllowed(targetObject)) {
       return (
         <Component { ...props } />
       )
     }
 
     const onDrop: DroppableProps['onDrop'] = (info) => {
-      const droppedObject: DataObject = info.data
+      const sourceObject: DataObject = info.data
 
-      if (!isAllowedToMove(currentObject)) {
+      if (!isDndSourceAllowed(sourceObject) || !isDndTargetAllowed(targetObject)) {
         return
       }
 
       move({
-        currentElement: { id: droppedObject.id, parentId: droppedObject.parentId },
-        targetElement: { id: currentObject.id, parentId: currentObject.parentId }
+        currentElement: { id: sourceObject.id, parentId: sourceObject.parentId },
+        targetElement: { id: targetObject.id, parentId: targetObject.parentId }
       }).catch(() => {
         trackError(new GeneralError('Item could not be moved'))
       })
@@ -54,8 +54,9 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
       return context.type === 'data-object'
     }
 
-    const checkForValidData: DroppableProps['isValidData'] = (context) => {
-      return isAllowedToMove(currentObject)
+    const checkForValidData: DroppableProps['isValidData'] = (info) => {
+      const sourceObject: DataObject = info.data
+      return info.type === 'data-object' && isDndSourceAllowed(sourceObject) && isDndTargetAllowed(targetObject)
     }
 
     return (
@@ -69,7 +70,6 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
             onDrop={ onDrop }
           >
             {!isUndefined(props.wrapNode) ? props.wrapNode(children) : children}
-
           </Droppable>
         ) }
       />
