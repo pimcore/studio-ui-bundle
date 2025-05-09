@@ -8,10 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactElement } from 'react'
-import { type AbstractGridCellDefinition, DynamicTypeGridCellAbstract } from '../../dynamic-type-grid-cell-abstract'
+import { type ColumnMeta } from '@tanstack/react-table'
 import { injectable } from 'inversify'
+import React, { type ReactElement } from 'react'
 import { DataObjectAdapterCell } from '../../components/data-object-adapter/data-object-adapter-cell'
+import { type AbstractGridCellDefinition, DynamicTypeGridCellAbstract } from '../../dynamic-type-grid-cell-abstract'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import { type DynamicTypeObjectDataRegistry } from '../../../objects/data-related/dynamic-type-object-data-registry'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 @injectable()
 export class DynamicTypeGridCellDataObjectAdapter extends DynamicTypeGridCellAbstract {
@@ -19,5 +23,19 @@ export class DynamicTypeGridCellDataObjectAdapter extends DynamicTypeGridCellAbs
 
   getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
     return <DataObjectAdapterCell { ...props } />
+  }
+
+  getDefaultGridColumnWidth (props: ColumnMeta<any, any>): number | undefined {
+    const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+    const type = props.config?.dataObjectType as string
+
+    if (type !== undefined) {
+      const dynType = objectDataRegistry.getDynamicType(type)
+      if (dynType?.getDefaultGridColumnWidth !== undefined) {
+        return dynType.getDefaultGridColumnWidth()
+      }
+    }
+
+    return undefined
   }
 }
