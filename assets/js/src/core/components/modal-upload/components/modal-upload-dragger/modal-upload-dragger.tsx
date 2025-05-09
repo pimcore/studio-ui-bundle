@@ -26,6 +26,7 @@ export const ModalUploadDragger = (props: ModalUploadProps): React.JSX.Element =
         ? (
           <ModalUpload
             { ...props }
+            openFileDialogOnClick={ false }
             uploadComponent={ Dragger }
             uploadComponentClassName={ styles.dragger }
           />

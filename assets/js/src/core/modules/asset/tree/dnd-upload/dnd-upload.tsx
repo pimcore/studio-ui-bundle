@@ -8,13 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type TreeNodeWrapperProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { ModalUploadDragger } from '@Pimcore/components/modal-upload/components/modal-upload-dragger/modal-upload-dragger'
 import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import React from 'react'
 
-interface DndUploadProps extends TreeNodeWrapperProps {
+interface DndUploadProps {
   children: React.ReactNode
+  nodeId: string
 }
 
 export const DndUpload = ({ nodeId, children }: DndUploadProps): React.JSX.Element => {
