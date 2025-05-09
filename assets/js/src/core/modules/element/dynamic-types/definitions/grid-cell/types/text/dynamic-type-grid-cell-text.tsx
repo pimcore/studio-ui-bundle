@@ -22,6 +22,6 @@ export class DynamicTypeGridCellText extends DynamicTypeGridCellAbstract {
   }
 
   getDefaultGridColumnWidth (): number | undefined {
-    return 350 // asset -> type column // asset -> filename column
+    return 350
   }
 }
