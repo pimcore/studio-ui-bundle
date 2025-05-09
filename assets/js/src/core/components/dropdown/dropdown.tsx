@@ -95,7 +95,7 @@ export const Dropdown = ({ selectedKeys, onSelect, menu, ...props }: DropdownPro
           items: filteredItems
         } }
         onSelect={ onSelect }
-        overlayClassName={ styles.dropdown }
+        overlayClassName={ [props.overlayClassName, styles.dropdown].join(' ') }
       />
     </SelectionProvider>
   )
