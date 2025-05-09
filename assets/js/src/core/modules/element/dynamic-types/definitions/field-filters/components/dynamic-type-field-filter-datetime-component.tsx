@@ -15,6 +15,7 @@ import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
 import { DateRangePicker, type DateRangeTargetValue } from '@Pimcore/components/date-picker/date-range-picker'
 import type { AbstractFieldFilterDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
+import { t } from 'i18next'
 
 enum DatePickerSettingValue {
   ON = 'on',
@@ -36,13 +37,6 @@ interface FieldFilterDatetime {
   filterValue?: FieldFilterDatetimeON | FieldFilterDatetimeBetween
 }
 
-const SETTING_OPTIONS = [
-  { label: 'On', value: DatePickerSettingValue.ON },
-  { label: 'Between', value: DatePickerSettingValue.BETWEEN },
-  { label: 'Before', value: DatePickerSettingValue.BEFORE },
-  { label: 'After', value: DatePickerSettingValue.AFTER }
-]
-
 const DATE_FORMAT = 'YYYY-MM-DD'
 
 export interface DynamicTypeFieldFilterDatetimeProps extends AbstractFieldFilterDefinition {}
@@ -51,6 +45,13 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
   const [settingValue, setSettingValue] = useState<DatePickerSettingValue>(DatePickerSettingValue.ON)
 
   const { data, setData } = useDynamicFilter()
+
+  const SETTING_OPTIONS = [
+    { label: t('grid.filter.datetime.on'), value: t(DatePickerSettingValue.ON) },
+    { label: t('grid.filter.datetime.between'), value: t(DatePickerSettingValue.BETWEEN) },
+    { label: t('grid.filter.datetime.before'), value: t(DatePickerSettingValue.BEFORE) },
+    { label: t('grid.filter.datetime.after'), value: t(DatePickerSettingValue.AFTER) }
+  ]
 
   const fieldFilter = data as FieldFilterDatetime
 
@@ -147,13 +148,13 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
     if (data !== undefined) {
       switch (newValue) {
         case DatePickerSettingValue.ON:
-          if (settingValue === 'before') {
+          if (settingValue === DatePickerSettingValue.BEFORE) {
             setDateOnValue(dateBeforeValue)
             setData({ on: dateBeforeValue })
-          } else if (settingValue === 'after') {
+          } else if (settingValue === DatePickerSettingValue.AFTER) {
             setDateOnValue(dateAfterValue)
             setData({ on: dateAfterValue })
-          } else if (settingValue === 'between') {
+          } else if (settingValue === DatePickerSettingValue.BETWEEN) {
             const dateBetweenFromValue = dateBetweenValue !== null && dateBetweenValue[1] !== undefined ? Number(dateBetweenValue[1]) : null
             setDateOnValue(dateBetweenFromValue)
             setData({ on: dateBetweenFromValue })
@@ -161,13 +162,13 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
           break
 
         case DatePickerSettingValue.BEFORE:
-          if (settingValue === 'on') {
+          if (settingValue === DatePickerSettingValue.ON) {
             setDateBeforeValue(dateOnValue)
             setData({ from: null, to: dateOnValue })
-          } else if (settingValue === 'after') {
+          } else if (settingValue === DatePickerSettingValue.AFTER) {
             setDateBeforeValue(dateAfterValue)
             setData({ from: dateAfterValue, to: null })
-          } else if (settingValue === 'between') {
+          } else if (settingValue === DatePickerSettingValue.BETWEEN) {
             const dateBetweenToValue = dateBetweenValue !== null && dateBetweenValue[0] !== undefined ? Number(dateBetweenValue[0]) : null
             setDateBeforeValue(dateBetweenToValue)
             setData({ from: null, to: dateBetweenToValue })
@@ -175,13 +176,13 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
           break
 
         case DatePickerSettingValue.AFTER:
-          if (settingValue === 'on') {
+          if (settingValue === DatePickerSettingValue.ON) {
             setDateAfterValue(dateOnValue)
             setData({ from: dateOnValue, to: null })
-          } else if (settingValue === 'before') {
+          } else if (settingValue === DatePickerSettingValue.BEFORE) {
             setDateAfterValue(dateBeforeValue)
             setData({ from: dateBeforeValue, to: null })
-          } else if (settingValue === 'between') {
+          } else if (settingValue === DatePickerSettingValue.BETWEEN) {
             const dateBetweenFromValue = dateBetweenValue !== null && dateBetweenValue[0] !== undefined ? Number(dateBetweenValue[0]) : null
             setDateAfterValue(dateBetweenFromValue)
             setData({ from: dateBetweenFromValue, to: null })
@@ -189,13 +190,13 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
           break
 
         case DatePickerSettingValue.BETWEEN:
-          if (settingValue === 'on') {
+          if (settingValue === DatePickerSettingValue.ON) {
             setDateBetweenValue([dateOnValue, null])
             setData({ from: dateOnValue, to: null })
-          } else if (settingValue === 'after') {
+          } else if (settingValue === DatePickerSettingValue.AFTER) {
             setDateBetweenValue([dateAfterValue, null])
             setData({ from: dateAfterValue, to: null })
-          } else if (settingValue === 'before') {
+          } else if (settingValue === DatePickerSettingValue.BEFORE) {
             setDateBetweenValue([null, dateBeforeValue])
             setData({ from: null, to: dateBeforeValue })
           }
