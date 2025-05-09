@@ -41,11 +41,9 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
 
     const onDrop: DroppableProps['onDrop'] = (info) => {
       const sourceAsset: Asset = info.data
-      console.log('onDrop?', info, sourceAsset)
       if (!isDndSourceAllowed(sourceAsset) || !isDndTargetAllowed(targetAsset)) {
         return
       }
-      console.log('onDrop', info, sourceAsset)
       move({
         currentElement: { id: sourceAsset.id, parentId: sourceAsset.parentId },
         targetElement: { id: targetAsset.id, parentId: targetAsset.parentId }
@@ -60,10 +58,6 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
 
     const checkForValidData: DroppableProps['isValidData'] = (info) => {
       const sourceAsset: Asset = info.data
-      if (targetAsset.id === 287) {
-        console.log('checkForValidData', info, targetAsset, info.type === 'asset' && isDndSourceAllowed(sourceAsset) && isDndTargetAllowed(targetAsset))
-      }
-
       return info.type === 'asset' && isDndSourceAllowed(sourceAsset) && isDndTargetAllowed(targetAsset)
     }
 
