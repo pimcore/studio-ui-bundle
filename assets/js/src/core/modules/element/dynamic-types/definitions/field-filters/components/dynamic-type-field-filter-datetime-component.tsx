@@ -143,13 +143,79 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
     setDateAfterValue(null)
   }
 
+  const handleChangeDatePicker = (newValue: DatePickerSettingValue): void => {
+    if (data !== undefined) {
+      switch (newValue) {
+        case DatePickerSettingValue.ON:
+          if (settingValue === 'before') {
+            setDateOnValue(dateBeforeValue)
+            setData({ on: dateBeforeValue })
+          } else if (settingValue === 'after') {
+            setDateOnValue(dateAfterValue)
+            setData({ on: dateAfterValue })
+          } else if (settingValue === 'between') {
+            const dateBetweenFromValue = dateBetweenValue !== null && dateBetweenValue[1] !== undefined ? Number(dateBetweenValue[1]) : null
+            setDateOnValue(dateBetweenFromValue)
+            setData({ on: dateBetweenFromValue })
+          }
+          break
+
+        case DatePickerSettingValue.BEFORE:
+          if (settingValue === 'on') {
+            setDateBeforeValue(dateOnValue)
+            setData({ from: null, to: dateOnValue })
+          } else if (settingValue === 'after') {
+            setDateBeforeValue(dateAfterValue)
+            setData({ from: dateAfterValue, to: null })
+          } else if (settingValue === 'between') {
+            const dateBetweenToValue = dateBetweenValue !== null && dateBetweenValue[0] !== undefined ? Number(dateBetweenValue[0]) : null
+            setDateBeforeValue(dateBetweenToValue)
+            setData({ from: null, to: dateBetweenToValue })
+          }
+          break
+
+        case DatePickerSettingValue.AFTER:
+          if (settingValue === 'on') {
+            setDateAfterValue(dateOnValue)
+            setData({ from: dateOnValue, to: null })
+          } else if (settingValue === 'before') {
+            setDateAfterValue(dateBeforeValue)
+            setData({ from: dateBeforeValue, to: null })
+          } else if (settingValue === 'between') {
+            const dateBetweenFromValue = dateBetweenValue !== null && dateBetweenValue[0] !== undefined ? Number(dateBetweenValue[0]) : null
+            setDateAfterValue(dateBetweenFromValue)
+            setData({ from: dateBetweenFromValue, to: null })
+          }
+          break
+
+        case DatePickerSettingValue.BETWEEN:
+          if (settingValue === 'on') {
+            setDateBetweenValue([dateOnValue, null])
+            setData({ from: dateOnValue, to: null })
+          } else if (settingValue === 'after') {
+            setDateBetweenValue([dateAfterValue, null])
+            setData({ from: dateAfterValue, to: null })
+          } else if (settingValue === 'before') {
+            setDateBetweenValue([null, dateBeforeValue])
+            setData({ from: null, to: dateBeforeValue })
+          }
+          break
+
+        default:
+          break
+      }
+    }
+
+    setSettingValue(newValue)
+  }
+
   return (
     <Flex
       align="center"
       gap="extra-small"
     >
       <Select
-        onChange={ (value: DatePickerSettingValue) => { setSettingValue(value) } }
+        onChange={ (value: DatePickerSettingValue) => { handleChangeDatePicker(value) } }
         options={ SETTING_OPTIONS }
         value={ settingValue }
         width={ 90 }
