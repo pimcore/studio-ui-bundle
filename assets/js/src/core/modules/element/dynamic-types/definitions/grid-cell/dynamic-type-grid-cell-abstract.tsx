@@ -8,10 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
+import { type ColumnMeta } from '@tanstack/react-table'
+import { injectable } from 'inversify'
 import { type ReactElement } from 'react'
 import { DynamicTypeAbstract } from '../../registry/dynamic-type-registry-abstract'
-import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import { injectable } from 'inversify'
 
 export interface AbstractGridCellDefinition extends DefaultCellProps { }
 
@@ -21,7 +22,7 @@ export abstract class DynamicTypeGridCellAbstract extends DynamicTypeAbstract {
   abstract readonly id: string
   abstract getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition>
 
-  getDefaultGridColumnWidth (): number | undefined {
+  getDefaultGridColumnWidth (props: ColumnMeta<any, any>): number | undefined {
     return undefined
   }
 }

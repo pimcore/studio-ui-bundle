@@ -71,6 +71,8 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
   }
 
   getDefaultGridColumnWidth (): number | undefined {
-    return 350
+    return 600
+
+    // TODO: anzahl der spalten -> * column.width (fallback 150 - 200) = full witdh
   }
 }

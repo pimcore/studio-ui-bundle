@@ -77,6 +77,6 @@ export class DynamicTypeObjectDataAdvancedManyToManyRelation extends DynamicType
   }
 
   getDefaultGridColumnWidth (): number | undefined {
-    return 350
+    return 600
   }
 }
