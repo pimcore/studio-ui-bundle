@@ -31,6 +31,8 @@ import type {
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { getElementCellConfig } from '../many-to-many-relation/grid'
+import { Flex } from 'antd'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 
 export interface AdvancedManyToManyRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -88,7 +90,17 @@ export const AdvancedManyToManyRelation = (props: AdvancedManyToManyRelationProp
           editable: false,
           config: getElementCellConfig(props.inherited === true || props.disabled === true)
         },
-        size: 200
+        size: 200,
+        cell: (info) => {
+          return (
+            <Flex
+              align={ 'center' }
+              className={ 'p-mini' }
+            >
+              <SanitizeHtml html={ info.getValue() ?? '' } />
+            </Flex>
+          )
+        }
       }),
       ...columnDefinition,
       columnHelper.accessor('type', {

@@ -18,8 +18,6 @@ import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useEffect } from 'react'
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-object'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import type { ApiErrorData } from '@Pimcore/modules/app/error-handler/classes/api-error'
 
 export interface ManyToManyRelationValueItem {
   id: number
@@ -62,20 +60,24 @@ export const useValue = (
   }
 
   useEffect(() => {
+    console.log(pathFormatterClass, value, dataObjectId, id)
     if (pathFormatterClass !== null && value !== null && dataObjectId !== undefined && id !== undefined) {
       setIsLoading(true)
 
       formatPath(value, id, dataObjectId).then((data) => {
-        if (data.items !== undefined) {
-          const newValue = value.map((item) => ({
-            ...item,
-            fullPath: data.items.find(i => i.objectReference === `object_${item.id}`)?.formatedPath ?? item.fullPath
-          }))
-
-          setDisplayedValue(newValue)
-          setIsLoading(false)
+        if (data === undefined) {
+          return
         }
-      }).catch(error => { trackError(new ApiError(error as unknown as ApiErrorData)) })
+
+        const newValue = value.map((item) => ({
+          ...item,
+          fullPath: data.items.find(i => i.objectReference === `object_${item.id}`)?.formatedPath ?? item.fullPath
+        }))
+
+        console.log('newValue', newValue)
+        setDisplayedValue(newValue)
+        setIsLoading(false)
+      }).catch(error => { console.error(error) })
     }
   }, [value])
 
