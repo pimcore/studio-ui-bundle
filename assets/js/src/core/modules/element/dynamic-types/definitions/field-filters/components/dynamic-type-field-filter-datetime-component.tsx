@@ -16,6 +16,8 @@ import { DateRangePicker, type DateRangeTargetValue } from '@Pimcore/components/
 import type { AbstractFieldFilterDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { t } from 'i18next'
+import { Form } from '@Pimcore/components/form/form'
+import { type FormInstance } from 'antd'
 
 enum DatePickerSettingValue {
   ON = 'on',
@@ -34,7 +36,7 @@ interface FieldFilterDatetimeBetween {
 }
 
 interface FieldFilterDatetime {
-  filterValue?: FieldFilterDatetimeON | FieldFilterDatetimeBetween
+  filterValue?: number[]
 }
 
 const DATE_FORMAT = 'YYYY-MM-DD'
@@ -43,6 +45,7 @@ export interface DynamicTypeFieldFilterDatetimeProps extends AbstractFieldFilter
 
 export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldFilterDatetimeProps): React.JSX.Element => {
   const [settingValue, setSettingValue] = useState<DatePickerSettingValue>(DatePickerSettingValue.ON)
+  let form: FormInstance<any> | null = null
 
   const { data, setData } = useDynamicFilter()
 
@@ -54,6 +57,14 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
   ]
 
   const fieldFilter = data as FieldFilterDatetime
+
+  const [tmpForm] = Form.useForm()
+  form = tmpForm
+
+  const initialValues = {
+    date_picker_setting_value: settingValue,
+    date_picker_value: null
+  }
 
   const getDateValue = (datetimeType: DatePickerSettingValue): null | number | number[] => {
     const currentFilterValue = fieldFilter?.filterValue
@@ -110,7 +121,7 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
     setSettingValue(DatePickerSettingValue.ON)
   }, [])
 
-  const handleChangeDateOnValue = (date: number): void => {
+  const handleChangeDateValue = (date: number): void => {
     setData({ on: date })
     setDateOnValue(date)
 
@@ -215,46 +226,67 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
       align="center"
       gap="extra-small"
     >
-      <Select
-        onChange={ (value: DatePickerSettingValue) => { handleChangeDatePicker(value) } }
-        options={ SETTING_OPTIONS }
-        value={ settingValue }
-        width={ 90 }
-      />
-
-      {settingValue === DatePickerSettingValue.ON && (
-      <DatePicker
-        format={ DATE_FORMAT }
-        onChange={ handleChangeDateOnValue }
-        outputType='timestamp'
-        showTime
-        value={ dateOnValue }
-      />
-      )}
-
-      {(settingValue === DatePickerSettingValue.BEFORE || settingValue === DatePickerSettingValue.AFTER) && (
-      <DatePicker
-        format={ DATE_FORMAT }
-        onChange={ handleChangeDateBeforeAfterValue }
-        outputType='timestamp'
-        showTime
-        value={
+      <Form
+        form={ form }
+        initialValues={ initialValues }
+        layout={ 'vertical' }
+        onSubmitCapture={ async () => { await submit(props.fieldName) } }
+      >
+        <Form.Item
+          label={ 'date_picker_setting_value' }
+          name={ 'date_picker_setting_value' }
+          rules={ [] }
+        >
+          <Select
+            onChange={ (value: DatePickerSettingValue) => { handleChangeDatePicker(value) } }
+            options={ SETTING_OPTIONS }
+            width={ 90 }
+          />
+        </Form.Item>
+          {(settingValue !== DatePickerSettingValue.BETWEEN && (
+            <Form.Item
+            label={ 'date_picker_value' }
+            name={ 'date_picker_value' }
+            rules={ [] }
+            >
+              <DatePicker
+              format={ DATE_FORMAT }
+              outputType='timestamp'
+              showTime
+              />
+              </Form.Item>)}
+        {settingValue === DatePickerSettingValue.BETWEEN && (
+        <DateRangePicker
+          allowEmpty={ [true, true] }
+          format={ DATE_FORMAT }
+          outputType='timestamp'
+          showTime
+        />
+        )}
+        {/* {(settingValue === DatePickerSettingValue.BEFORE || settingValue === DatePickerSettingValue.AFTER) && (
+        <DatePicker
+          format={ DATE_FORMAT }
+          onChange={ handleChangeDateBeforeAfterValue }
+          outputType='timestamp'
+          showTime
+          value={
         settingValue === DatePickerSettingValue.BEFORE
           ? dateBeforeValue
           : dateAfterValue }
-      />
-      )}
+        />
+        )}
 
-      {settingValue === DatePickerSettingValue.BETWEEN && (
-      <DateRangePicker
-        allowEmpty={ [true, true] }
-        format={ DATE_FORMAT }
-        onChange={ handleChangeDateBetweenValue }
-        outputType='timestamp'
-        showTime
-        value={ dateBetweenValue }
-      />
-      )}
+        {settingValue === DatePickerSettingValue.BETWEEN && (
+        <DateRangePicker
+          allowEmpty={ [true, true] }
+          format={ DATE_FORMAT }
+          onChange={ handleChangeDateBetweenValue }
+          outputType='timestamp'
+          showTime
+          value={ dateBetweenValue }
+        />
+        )} */}
+      </Form>
     </Flex>
   )
 }
