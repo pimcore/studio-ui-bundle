@@ -35,6 +35,7 @@ import {
 import { useSearchTermFilter } from '../../../../../context-layer/provider/search-term-filter/use-search-term-filter'
 import { useGeneralFiltersConfig } from '../../../../../context-layer/provider/general-filters-config/use-general-filters-config'
 import { SearchTermFilter } from '../../../search/search-term-filter'
+import { type FieldFilter } from '../../../../../context-layer/provider/field-filters/field-filters-provider'
 
 export const FilterContainerInner = (): React.JSX.Element => {
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
@@ -58,8 +59,34 @@ export const FilterContainerInner = (): React.JSX.Element => {
 
   const { t } = useTranslation()
 
+  const transformDateTimeFieldFilters = (): FieldFilter[] => {
+    return fieldFilters.map((f) => {
+      if (f != null && f.key === 'creationDate' && f.type === 'system.datetime') {
+        const [firstValue, secondValue] = f.filterValue.dateValue
+        const setting = f.filterValue.setting
+
+        switch (setting) {
+          case 'on':
+            return { key: f.key, type: f.type, filterValue: { on: firstValue } }
+          case 'before':
+            return { key: f.key, type: f.type, filterValue: { from: null, to: secondValue } }
+          case 'after':
+            return { key: f.key, type: f.type, filterValue: { from: firstValue, to: null } }
+          case 'between':
+            return { key: f.key, type: f.type, filterValue: { from: firstValue, to: secondValue } }
+          default:
+            return f
+        }
+      }
+
+      return f
+    })
+  }
+
   const handleApplyClick = (): void => {
-    setListingFieldFilters(fieldFilters)
+    const transfomredFilters = transformDateTimeFieldFilters()
+
+    setListingFieldFilters(transfomredFilters)
     setListingOnlyDirectChildren(onlyDirectChildren)
     setListingPqlQuery(pqlQuery)
 
