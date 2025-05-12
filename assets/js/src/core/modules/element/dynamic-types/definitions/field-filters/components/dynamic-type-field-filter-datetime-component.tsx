@@ -45,11 +45,20 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
   }
 
   const [form] = Form.useForm<FormValues>()
-
   const { data, setData } = useDynamicFilter()
-  const datePickerSettigVal = Form.useWatch('setting', form) as FormValues['setting']
 
-  console.log('data', data)
+  React.useEffect(() => {
+    if (data != null) {
+      form.setFieldsValue({
+        setting: data.setting,
+        from: data.from,
+        to: data.to,
+        on: data.on
+      })
+    }
+  }, [data, form])
+
+  const datePickerSettigVal = Form.useWatch('setting', form) as FormValues['setting']
 
   const SETTING_OPTIONS = [
     { label: t('grid.filter.datetime.on'), value: DatePickerSettingValue.ON },
@@ -69,8 +78,6 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
 
     return undefined
   }
-
-  console.log('datName', datePickerFormItemName())
 
   const handleDatePickerValuesChange = (
     changedValues: any,
