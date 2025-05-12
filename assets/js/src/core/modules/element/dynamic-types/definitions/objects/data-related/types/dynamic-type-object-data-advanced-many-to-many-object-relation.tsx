@@ -40,31 +40,55 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
     modalSize: 'XL',
     formLayout: 'vertical'
   }
+
   columnDefaultWidth: number = 250
 
-  getObjectDataComponent(props: AdvancedManyToManyObjectRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+  getObjectDataComponent (props: AdvancedManyToManyObjectRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+    const columns: RelationColumnDefinition[] = []
+    const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+
+    if (!isNil(props.columns)) {
+      props.columns.forEach(column => {
+        const dynType = objectDataRegistry.getDynamicType(column.type!, false)
+        if (dynType?.getDefaultGridColumnWidth !== undefined) {
+          columns.push({
+            ...column,
+            width: dynType.getDefaultGridColumnWidth()
+          })
+
+          return
+        }
+
+        columns.push({
+          ...column,
+          width: this.columnDefaultWidth
+        })
+      })
+    }
+
     return (
       <AdvancedManyToManyObjectRelation
-        {...props}
-        className={props.className}
-        disabled={props.noteditable === true}
+        { ...props }
+        className={ props.className }
+        columns={ columns }
+        disabled={ props.noteditable === true }
       />
     )
   }
 
-  getObjectDataFormItemProps(props: AdvancedManyToManyObjectRelationObjectDataDefinition): FormItemProps {
+  getObjectDataFormItemProps (props: AdvancedManyToManyObjectRelationObjectDataDefinition): FormItemProps {
     return {
       ...super.getObjectDataFormItemProps(props),
       label: <ManyToManyRelationLabel
 
-        disabled={props.noteditable === true}
-        label={props.title}
-        name={props.name}
-      />
+        disabled={ props.noteditable === true }
+        label={ props.title }
+        name={ props.name }
+             />
     }
   }
 
-  getGridCellPreviewComponent(props: GetGridCellDefinitionProps): React.ReactElement {
+  getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
     const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
     const value: AdvancedManyToManyRelationValue | null = props.cellProps.getValue()
     const objectProps: AdvancedManyToManyObjectRelationObjectDataDefinition = props.objectProps as AdvancedManyToManyObjectRelationObjectDataDefinition
@@ -91,13 +115,13 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
 
     return (
       <AdvancedManyToManyRelationList
-        columnDefinition={columns}
-        value={value}
+        columnDefinition={ columns }
+        value={ value }
       />
     )
   }
 
-  getDefaultGridColumnWidth(props: ColumnMeta<any, any>): number | undefined {
+  getDefaultGridColumnWidth (props: ColumnMeta<any, any>): number | undefined {
     const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
     const fieldDefinition = props.config?.dataObjectConfig.fieldDefinition
     const columns = fieldDefinition?.columns ?? null

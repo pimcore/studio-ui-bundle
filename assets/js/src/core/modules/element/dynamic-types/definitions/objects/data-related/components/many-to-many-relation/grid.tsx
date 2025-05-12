@@ -110,7 +110,6 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
       ]
 
   columns.push(
-
     columnHelper.accessor('actions', {
       header: t('actions'),
       size: 110,
@@ -240,7 +239,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
             onUpdateCellData={ props.onUpdateCellData }
             resizable
           />
-          { props.hint }
+          {props.hint}
         </div>
       </Content>
     </div>
