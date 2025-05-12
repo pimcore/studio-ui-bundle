@@ -14,4 +14,8 @@ import {
 
 export class DynamicTypeObjectDataSelect extends DynamicTypeObjectDataAbstractSelect {
   id: string = 'select'
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 350
+  }
 }

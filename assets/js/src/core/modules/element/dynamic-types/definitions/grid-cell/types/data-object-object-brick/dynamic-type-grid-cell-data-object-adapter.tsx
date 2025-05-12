@@ -32,7 +32,7 @@ export class DynamicTypeGridCellDataObjectObjectBrick extends DynamicTypeGridCel
     if (type !== undefined) {
       const dynType = objectDataRegistry.getDynamicType(type)
       if (dynType?.getDefaultGridColumnWidth !== undefined) {
-        return dynType.getDefaultGridColumnWidth()
+        return dynType.getDefaultGridColumnWidth(props)
       }
     }
 

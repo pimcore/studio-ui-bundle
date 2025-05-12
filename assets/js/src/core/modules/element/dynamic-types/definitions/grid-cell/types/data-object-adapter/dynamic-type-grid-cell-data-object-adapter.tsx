@@ -25,14 +25,14 @@ export class DynamicTypeGridCellDataObjectAdapter extends DynamicTypeGridCellAbs
     return <DataObjectAdapterCell { ...props } />
   }
 
-  getDefaultGridColumnWidth (props: ColumnMeta<any, any>): number | undefined {
+  getDefaultGridColumnWidth (props?: ColumnMeta<any, any>): number | undefined {
     const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
-    const type = props.config?.dataObjectType as string
+    const type = props?.config?.dataObjectType as string | undefined
 
     if (type !== undefined) {
       const dynType = objectDataRegistry.getDynamicType(type)
       if (dynType?.getDefaultGridColumnWidth !== undefined) {
-        return dynType.getDefaultGridColumnWidth()
+        return dynType.getDefaultGridColumnWidth(props)
       }
     }
 

@@ -29,6 +29,10 @@ import {
 import { type AdvancedManyToManyRelationValue } from '../helpers/relations/types/advanced-many-to-many-relation'
 import { type AdvancedManyToManyObjectRelationObjectDataDefinition } from './dynamic-type-object-data-advanced-many-to-many-object-relation'
 import { AdvancedManyToManyRelationList } from '../../grid-cell-preview/advanced-many-to-many-relation/advanced-many-to-many-relation'
+import { type ColumnMeta } from '@tanstack/react-table'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import { type DynamicTypeObjectDataRegistry } from '../dynamic-type-object-data-registry'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 export type AdvancedManyToManyRelationObjectDataDefinition = AbstractObjectDataDefinition & IRelationAllowedTypesClassDefinition & AdvancedManyToManyRelationClassDefinitionProps
 
@@ -76,7 +80,32 @@ export class DynamicTypeObjectDataAdvancedManyToManyRelation extends DynamicType
     )
   }
 
-  getDefaultGridColumnWidth (): number | undefined {
-    return 600
+  getDefaultGridColumnWidth (props: ColumnMeta<any, any>): number | undefined {
+    const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+    const fieldDefinition = props.config?.dataObjectConfig.fieldDefinition
+    const columns = fieldDefinition?.columns ?? null
+    const columnDefaultWith = 250
+    let calcColumnWidth = 350
+
+    console.log('herreeee')
+
+    if (columns !== null) {
+      columns.forEach(column => {
+        console.log('column', column)
+        const dynType = objectDataRegistry.getDynamicType(column.dataType as string)
+        if (dynType?.getDefaultGridColumnWidth !== undefined) {
+          console.log('dynType', dynType)
+          const columnWidth = dynType.getDefaultGridColumnWidth(props)
+          if (columnWidth !== undefined) {
+            calcColumnWidth += columnWidth
+            return
+          }
+        }
+
+        calcColumnWidth += columnDefaultWith
+      })
+    }
+
+    return calcColumnWidth
   }
 }

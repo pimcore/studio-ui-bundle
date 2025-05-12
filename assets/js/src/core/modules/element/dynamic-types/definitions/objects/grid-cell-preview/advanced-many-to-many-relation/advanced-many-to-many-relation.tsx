@@ -27,6 +27,7 @@ interface AdvancedManyToManyRelationProps {
 export const AdvancedManyToManyRelationList = ({ value, columnDefinition }: AdvancedManyToManyRelationProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
+  console.log('rendered')
 
   if (isNil(value) || isEmpty(value)) {
     return <></>
@@ -54,7 +55,10 @@ export const AdvancedManyToManyRelationList = ({ value, columnDefinition }: Adva
 
   return (
     <GridCellPreviewWrapper overflow="auto">
-      <table className={ classNames(styles.table) }>
+      <table
+        className={ classNames(styles.table) + ' foooobar' }
+        style={ { tableLayout: 'auto' } }
+      >
         <thead>
           <tr>
             <th>{t('element')}</th>
@@ -74,9 +78,20 @@ export const AdvancedManyToManyRelationList = ({ value, columnDefinition }: Adva
                   published={ item.element.isPublished ?? undefined }
                 />
               </td>
-              {columnDefinition.map((col) => (
-                <td key={ `${col.key}-${index}` }>{formatMetaValue(item.data?.[col.key] ?? '')}</td>
-              ))}
+              {columnDefinition.map((col) => {
+                let columnStyle: React.CSSProperties | undefined
+
+                if (!isNil(col.width)) {
+                  columnStyle = { width: `${col.width}px` }
+                }
+
+                return (
+                  <td
+                    key={ `${col.key}-${index}` }
+                    style={ columnStyle }
+                  >{formatMetaValue(item.data?.[col.key] ?? '')}</td>
+                )
+              })}
             </tr>
           ))}
         </tbody>
