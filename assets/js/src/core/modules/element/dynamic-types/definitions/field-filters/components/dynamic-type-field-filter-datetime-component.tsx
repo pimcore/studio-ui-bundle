@@ -32,18 +32,24 @@ export interface DynamicTypeFieldFilterDatetimeProps extends AbstractFieldFilter
 export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldFilterDatetimeProps): React.JSX.Element => {
   interface FormValues {
     setting: DatePickerSettingValue
-    dateValue: [number | null, number | null]
+    from: number | null
+    to: number | null
+    on: number | null
   }
 
   const initialFormValues: FormValues = {
     setting: DatePickerSettingValue.ON,
-    dateValue: [null, null]
+    from: null,
+    to: null,
+    on: null
   }
 
   const [form] = Form.useForm<FormValues>()
 
   const { data, setData } = useDynamicFilter()
   const datePickerSettigVal = Form.useWatch('setting', form) as FormValues['setting']
+
+  console.log('data', data)
 
   const SETTING_OPTIONS = [
     { label: t('grid.filter.datetime.on'), value: DatePickerSettingValue.ON },
@@ -52,25 +58,67 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
     { label: t('grid.filter.datetime.after'), value: DatePickerSettingValue.AFTER }
   ]
 
+  const datePickerFormItemName = (): string | undefined => {
+    if (datePickerSettigVal === DatePickerSettingValue.ON) {
+      return 'on'
+    } else if (datePickerSettigVal === DatePickerSettingValue.BEFORE) {
+      return 'to'
+    } else if (datePickerSettigVal === DatePickerSettingValue.AFTER) {
+      return 'from'
+    }
+
+    return undefined
+  }
+
+  console.log('datName', datePickerFormItemName())
+
+  const handleDatePickerValuesChange = (
+    changedValues: any,
+    allValues: any
+  ): void => {
+    const prevData = data ?? { from: null, to: null, on: null, setting: DatePickerSettingValue.ON }
+    const newSetting = changedValues.setting as DatePickerSettingValue
+
+    const isRangeSetting = [DatePickerSettingValue.BEFORE, DatePickerSettingValue.AFTER, DatePickerSettingValue.BETWEEN].includes(newSetting)
+    const isOnSetting = newSetting === DatePickerSettingValue.ON
+
+    if (isRangeSetting) {
+      const shouldUseOnAsFrom = [DatePickerSettingValue.AFTER, DatePickerSettingValue.BETWEEN].includes(newSetting)
+      const shouldUseOnAsTo = newSetting === DatePickerSettingValue.BEFORE
+
+      const newFrom = prevData.from ?? (shouldUseOnAsFrom ? prevData.on : null) ?? null
+      const newTo = prevData.to ?? (shouldUseOnAsTo ? prevData.on : null) ?? null
+
+      setData({
+        setting: newSetting,
+        from: newFrom,
+        to: newTo,
+        on: null
+      })
+    } else if (isOnSetting) {
+      const newOn = prevData.from ?? prevData.to ?? null
+
+      setData({
+        setting: newSetting,
+        from: null,
+        to: null,
+        on: newOn
+      })
+    } else {
+      setData({
+        setting: allValues.setting ?? prevData.setting,
+        from: allValues.from ?? prevData.from,
+        to: allValues.to ?? prevData.to,
+        on: allValues.on ?? prevData.on
+      })
+    }
+  }
+
   return (
     <Form
       form={ form }
       initialValues={ initialFormValues }
-      onValuesChange={ (_, allValues) => {
-        const safeDateValue = Array.isArray(allValues.dateValue)
-          ? allValues.dateValue.map((v) => (typeof v === 'number' ? v : null))
-          : [null, null]
-
-        const prevData = data ?? { dateValue: [null, null], setting: DatePickerSettingValue.ON }
-
-        setData({
-          dateValue: [
-            safeDateValue[0] ?? prevData.dateValue?.[0] ?? null,
-            safeDateValue[1] ?? prevData.dateValue?.[1] ?? null
-          ],
-          setting: allValues.setting ?? prevData.setting
-        })
-      } }
+      onValuesChange={ (changedValues, allValues) => { handleDatePickerValuesChange(changedValues, allValues) } }
     >
       <Flex
         align="center"
@@ -85,44 +133,42 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
           />
         </Form.Item>
 
-        {(datePickerSettigVal === DatePickerSettingValue.ON || datePickerSettigVal === DatePickerSettingValue.AFTER) && (
-          <Form.Item
-            name={ ['dateValue', 0] }
-            style={ { flex: 3, margin: 0 } }
-          >
-            <DatePicker
-              format={ DATE_FORMAT }
-              outputType="timestamp"
-              showTime
-            />
-          </Form.Item>
-        )}
-
-        {datePickerSettigVal === DatePickerSettingValue.BEFORE && (
-          <Form.Item
-            name={ ['dateValue', 1] }
-            style={ { flex: 3, margin: 0 } }
-          >
-            <DatePicker
-              format={ DATE_FORMAT }
-              outputType="timestamp"
-              showTime
-            />
-          </Form.Item >
-        )}
-
         {datePickerSettigVal === DatePickerSettingValue.BETWEEN && (
-          <Form.Item
-            name="dateValue"
-            style={ { flex: 3, margin: 0 } }
-          >
-            <DateRangePicker
-              allowEmpty={ [true, true] }
-              format={ DATE_FORMAT }
-              outputType="timestamp"
-              showTime
-            />
-          </Form.Item>
+        <Form.Item
+          noStyle
+          shouldUpdate
+        >
+          {({ getFieldValue, setFieldsValue }) => {
+            const from = getFieldValue('from')
+            const to = getFieldValue('to')
+
+            return (
+              <DateRangePicker
+                allowEmpty={ [true, true] }
+                format={ DATE_FORMAT }
+                onChange={ ([newFrom, newTo]) => {
+                  setFieldsValue({ from: newFrom ?? null, to: newTo ?? null })
+                } }
+                outputType="timestamp"
+                showTime
+                value={ [from, to] }
+              />
+            )
+          }}
+        </Form.Item>
+        )}
+
+        {datePickerSettigVal !== DatePickerSettingValue.BETWEEN && (
+        <Form.Item
+          name={ datePickerFormItemName() }
+          style={ { flex: 3, margin: 0 } }
+        >
+          <DatePicker
+            format={ DATE_FORMAT }
+            outputType="timestamp"
+            showTime
+          />
+        </Form.Item >
         )}
       </Flex>
     </Form>
