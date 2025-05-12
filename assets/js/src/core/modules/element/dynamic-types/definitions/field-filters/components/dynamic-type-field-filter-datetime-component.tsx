@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
@@ -53,42 +53,42 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
   ]
 
   return (
-    <Flex
-      align="center"
-      gap="extra-small"
+    <Form
+      form={ form }
+      initialValues={ initialFormValues }
+      onValuesChange={ (_, allValues) => {
+        const safeDateValue = Array.isArray(allValues.dateValue)
+          ? allValues.dateValue.map((v) => (typeof v === 'number' ? v : null))
+          : [null, null]
+
+        const prevData = data ?? { dateValue: [null, null], setting: DatePickerSettingValue.ON }
+
+        setData({
+          dateValue: [
+            safeDateValue[0] ?? prevData.dateValue?.[0] ?? null,
+            safeDateValue[1] ?? prevData.dateValue?.[1] ?? null
+          ],
+          setting: allValues.setting ?? prevData.setting
+        })
+      } }
     >
-      <Form
-        form={ form }
-        initialValues={ initialFormValues }
-        layout="vertical"
-        onValuesChange={ (_, allValues) => {
-          const safeDateValue = Array.isArray(allValues.dateValue)
-            ? allValues.dateValue.map((v) => (typeof v === 'number' ? v : null))
-            : [null, null]
-
-          const prevData = data ?? { dateValue: [null, null], setting: DatePickerSettingValue.ON }
-
-          setData({
-            dateValue: [
-              safeDateValue[0] ?? prevData.dateValue?.[0] ?? null,
-              safeDateValue[1] ?? prevData.dateValue?.[1] ?? null
-            ],
-            setting: allValues.setting ?? prevData.setting
-          })
-        } }
+      <Flex
+        align="center"
+        gap="extra-small"
       >
         <Form.Item
           name="setting"
+          style={ { flex: 1, margin: 0 } }
         >
           <Select
             options={ SETTING_OPTIONS }
-            width={ 90 }
           />
         </Form.Item>
 
         {(datePickerSettigVal === DatePickerSettingValue.ON || datePickerSettigVal === DatePickerSettingValue.AFTER) && (
           <Form.Item
             name={ ['dateValue', 0] }
+            style={ { flex: 3, margin: 0 } }
           >
             <DatePicker
               format={ DATE_FORMAT }
@@ -99,20 +99,22 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
         )}
 
         {datePickerSettigVal === DatePickerSettingValue.BEFORE && (
-        <Form.Item
-          name={ ['dateValue', 1] }
-        >
-          <DatePicker
-            format={ DATE_FORMAT }
-            outputType="timestamp"
-            showTime
-          />
-        </Form.Item >
+          <Form.Item
+            name={ ['dateValue', 1] }
+            style={ { flex: 3, margin: 0 } }
+          >
+            <DatePicker
+              format={ DATE_FORMAT }
+              outputType="timestamp"
+              showTime
+            />
+          </Form.Item >
         )}
 
         {datePickerSettigVal === DatePickerSettingValue.BETWEEN && (
           <Form.Item
             name="dateValue"
+            style={ { flex: 3, margin: 0 } }
           >
             <DateRangePicker
               allowEmpty={ [true, true] }
@@ -122,7 +124,7 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
             />
           </Form.Item>
         )}
-      </Form>
-    </Flex>
+      </Flex>
+    </Form>
   )
 }
