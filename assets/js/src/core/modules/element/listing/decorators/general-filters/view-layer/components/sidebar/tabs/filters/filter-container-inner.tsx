@@ -67,13 +67,13 @@ export const FilterContainerInner = (): React.JSX.Element => {
 
         switch (setting) {
           case 'on':
-            return { key: f.key, type: f.type, filterValue: { on: firstValue } }
+            return { ...f, filterValue: { on: firstValue } }
           case 'before':
-            return { key: f.key, type: f.type, filterValue: { from: null, to: secondValue } }
+            return { ...f, filterValue: { from: null, to: secondValue } }
           case 'after':
-            return { key: f.key, type: f.type, filterValue: { from: firstValue, to: null } }
+            return { ...f, filterValue: { from: firstValue, to: null } }
           case 'between':
-            return { key: f.key, type: f.type, filterValue: { from: firstValue, to: secondValue } }
+            return { ...f, filterValue: { from: firstValue, to: secondValue } }
           default:
             return f
         }
