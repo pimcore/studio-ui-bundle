@@ -101,6 +101,10 @@ aria.asset.image.editor.zoom.zoom-out: Zoom out
 aria.asset.image.editor.zoom.preconfigured-zoom-levels: Predefined zoom levels select
 asset.preview.no-video-support: Your browser does not support video.
 asset.preview.no-audio-support: Your browser does not support audio.
+grid.filter.datetime.before: Before
+grid.filter.datetime.after: After
+grid.filter.datetime.between: Between
+grid.filter.datetime.on: On
 grid.copy-notice: Copied to clipboard
 grid.configuration.no-saved-templates: No saved templates available
 grid.configuration.template: Template
