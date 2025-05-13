@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Data Objects", "Data Object Grid", "Search"] as const;
+export const addTagTypes = ["Data Objects", "Data Object Grid"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -191,25 +191,6 @@ const injectedRtkApi = api
                     },
                 }),
                 providesTags: ["Data Objects"],
-            }),
-            dataObjectGetSearchConfiguration: build.query<
-                DataObjectGetSearchConfigurationApiResponse,
-                DataObjectGetSearchConfigurationApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/search/configuration/data-objects`,
-                    params: { classId: queryArg.classId },
-                }),
-                providesTags: ["Search"],
-            }),
-            dataObjectGetSearch: build.query<DataObjectGetSearchApiResponse, DataObjectGetSearchApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/search/data-objects`,
-                    method: "POST",
-                    body: queryArg.body,
-                    params: { classId: queryArg.classId },
-                }),
-                providesTags: ["Search"],
             }),
         }),
         overrideExisting: false,
@@ -481,29 +462,6 @@ export type DataObjectGetTreeApiArg = {
     className?: string;
     /** Filter results based on the provided class IDs. */
     classIds?: string;
-};
-export type DataObjectGetSearchConfigurationApiResponse =
-    /** status 200 Data object search configuration */ GridDetailedConfiguration;
-export type DataObjectGetSearchConfigurationApiArg = {
-    /** Class Id of the data object */
-    classId?: string;
-};
-export type DataObjectGetSearchApiResponse = /** status 200 Data object search results */ {
-    totalItems: number;
-    items: {
-        id?: number;
-        columns?: GridColumnData[];
-        isLocked?: boolean;
-        permissions?: Permissions;
-    }[];
-};
-export type DataObjectGetSearchApiArg = {
-    /** Class Id of the data object */
-    classId?: string;
-    body: {
-        columns: GridColumnRequest[];
-        filters?: GridFilter;
-    };
 };
 export type Error = {
     /** Message */
@@ -879,6 +837,4 @@ export const {
     useDataObjectReplaceContentMutation,
     useDataObjectGetSelectOptionsMutation,
     useDataObjectGetTreeQuery,
-    useDataObjectGetSearchConfigurationQuery,
-    useDataObjectGetSearchQuery,
 } = injectedRtkApi;
