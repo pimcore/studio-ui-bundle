@@ -63,13 +63,13 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
       setData({
         setting: newSetting,
         from: null,
-        to: prevData.to ?? prevData.on ?? null,
+        to: prevData.to ?? prevData.on ?? prevData.from ?? null,
         on: null
       })
     } else if (newSetting === DatePickerSettingValue.AFTER) {
       setData({
         setting: newSetting,
-        from: prevData.from ?? prevData.on ?? null,
+        from: prevData.from ?? prevData.on ?? prevData.to ?? null,
         to: null,
         on: null
       })
@@ -91,9 +91,6 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
   }
 
   const handleDateChange = (field: 'on' | 'from' | 'to', value: number | null): void => {
-    console.log('changing from', value)
-    console.log('changing fielD', field)
-
     setData({
       setting: currentSetting,
       from: (field === 'from') ? value : null,
@@ -103,9 +100,6 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
   }
 
   const handleDateRangeChange = (newFrom: number | null, newTo: number | null): void => {
-    console.log('changing newFrom', newFrom)
-    console.log('changing newTo', newTo)
-
     setData({
       setting: data.setting,
       from: newFrom ?? data.from ?? null,
