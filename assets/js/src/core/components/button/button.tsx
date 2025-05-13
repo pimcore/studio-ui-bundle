@@ -33,6 +33,7 @@ const Component = ({ loading, children, className, type, color, ...props }: Butt
 
   const buttonClassNames = cn(
     'button',
+    'button2',
     `button--type-${type}`,
     `button--color-${color}`,
     styles.button,

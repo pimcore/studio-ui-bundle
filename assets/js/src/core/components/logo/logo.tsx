@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import PimcoreLogo from '@Pimcore/assets/images/pimcore.inline.svg'
+import PimcoreLogo from '@Pimcore/assets/images/pimcore.inline.svg?react'
 import { useStlyes } from './logo.styles'
 
 export const Logo = (): React.JSX.Element => {

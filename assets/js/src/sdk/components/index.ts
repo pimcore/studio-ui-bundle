@@ -10,8 +10,9 @@
 *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
-
+export const test = 'test3';
 export * from '@Pimcore/components/accordion/accordion'
+export * from '@Pimcore/components/button/button'
 export * from '@Pimcore/components/accordion-timeline/accordion-timeline'
 export * from '@Pimcore/components/alert/alert'
 export * from '@Pimcore/components/asset-target/asset-target'
@@ -19,7 +20,6 @@ export * from '@Pimcore/components/background/background'
 export * from '@Pimcore/components/badge/badge'
 export * from '@Pimcore/components/breadcrumb/breadcrumb'
 export * from '@Pimcore/components/box/box'
-export * from '@Pimcore/components/button/button'
 export * from '@Pimcore/components/card/card'
 export * from '@Pimcore/components/checkbox/checkbox'
 export * from '@Pimcore/components/collapse/collapse'

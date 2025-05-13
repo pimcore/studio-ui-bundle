@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type NonEmptyArray } from 'types/non-empty-array'
+import { type NonEmptyArray } from '@Pimcore/types/non-empty-array'
 import { type topics } from '../topics'
 
 export enum JobStatus {

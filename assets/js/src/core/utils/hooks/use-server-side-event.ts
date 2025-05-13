@@ -13,7 +13,7 @@
 
 import { useEffect } from 'react'
 import { type topics } from '../../modules/execution-engine/topics'
-import { type NonEmptyArray } from 'types/non-empty-array'
+import { type NonEmptyArray } from '@Pimcore/types/non-empty-array'
 import { appConfig } from '@Pimcore/app/config/app-config'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 

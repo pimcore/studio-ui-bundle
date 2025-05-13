@@ -15,8 +15,8 @@ import React, { useEffect, useRef, useImperativeHandle, forwardRef } from 'react
 import { type WysiwygEditorRef, type WysiwygProps } from '../interface/wysiwyg'
 import { isNull } from 'lodash'
 import { useStyles } from './default-wysiwyg-editor.styles'
-import { type DragAndDropInfo } from 'src/sdk/components'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
 
 export const DefaultWysiwygEditor = forwardRef<WysiwygEditorRef, WysiwygProps>(
   ({ value, onChange, disabled, width }, ref): React.JSX.Element => {

@@ -12,14 +12,11 @@
 */
 
 import { container } from '../depency-injection'
-import { pluginSystem } from '../plugin-system/plugin-system'
 
 export interface PublicApi {
   container: typeof container
-  pluginSystem: typeof pluginSystem
 }
 
 export const Pimcore: PublicApi = {
-  container,
-  pluginSystem
+  container
 }

@@ -19,9 +19,9 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { DynamicTypeFieldFilterAbstract } from '../../field-filters/dynamic-type-field-filter-abstract'
 import { container } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeGridCellRegistry } from '../../grid-cell/dynamic-type-grid-cell-registry'
-import { type SelectCellConfig } from 'src/sdk/modules/element'
 import { useMetadataSelectOptions } from '../hooks/use-metadata-select-options'
 import { addColumnConfig } from '@Pimcore/components/grid/columns/helpers'
+import { type SelectCellConfig } from '../../grid-cell/components/select/select-cell'
 
 @injectable()
 export class DynamicTypeMetaDataSelect extends DynamicTypeMetadataAbstract {

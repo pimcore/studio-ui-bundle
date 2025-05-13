@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import UnknownFlag from '@Pimcore/assets/images/flags/_unknown.inline.svg'
+import UnknownFlag from '@Pimcore/assets/images/flags/_unknown.inline.svg?react'
 
 interface IFlagIconProps {
   value: string | null

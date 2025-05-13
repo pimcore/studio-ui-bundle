@@ -24,6 +24,7 @@ if (module.hot !== undefined) {
 declare global {
   interface Window {
     Pimcore: typeof Pimcore
+    pluginRemotes: Record<string, string>
   }
 }
 

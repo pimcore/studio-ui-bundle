@@ -18,6 +18,7 @@ const webpack = require('webpack')
 const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const { ModuleFederationPlugin } = require('@module-federation/enhanced/webpack');
 const uuid = require('uuid');
 const buildId = uuid.v4();
 const fs = require('fs');
@@ -114,10 +115,10 @@ Encore
     options.allowedHosts = 'all'
   })
 
-  .enableEslintPlugin({
+  /*.enableEslintPlugin({
     extensions: ['js', 'jsx', 'ts', 'tsx'],
     fix: true
-  })
+  })*/
 
   .addAliases({
     '@Pimcore': path.resolve(__dirname, 'js', 'src', 'core'),
@@ -143,24 +144,44 @@ Encore
 
   .addPlugin(new ForkTsCheckerWebpackPlugin())
 
+  .addPlugin(
+    new ModuleFederationPlugin({
+      name: 'pimcore_studio_ui_bundle',
+      filename: 'remoteEntry.js',
+      dts: false,
+      exposes: {
+        '.': './js/src/sdk/main.ts',
+        './components': './js/src/sdk/components/index.ts',
+        './app': './js/src/sdk/app/index.ts',
+        './modules/app': './js/src/sdk/modules/app/index.ts',
+        './modules/widget-manager': './js/src/sdk/modules/widget-manager/index.ts',
+      },
+      shared: {
+        react: {
+          singleton: true,
+          eager: true,
+        },
+        'react-dom': {
+          singleton: true,
+          eager: true,
+        },
+        'inversify': {
+          singleton: true,
+          eager: true,
+          version: '6.1.x',
+        },
+        'antd': {
+          singleton: true,
+          eager: true,
+        }
+      }
+    })
+  )
+
 if (!Encore.isDevServer()) {
   // only needed for CDN's or sub-directory deploy
   Encore
     .setManifestKeyPrefix('bundles/pimcorestudioui/build/' + buildId)
-
-    .addPlugin(
-      new webpack.DllReferencePlugin({
-        context: __dirname,
-        manifest: path.join(__dirname, 'dist', 'core-dll', 'core-manifest.json')
-      }),
-    )
-
-    .addPlugin(
-      new webpack.DllReferencePlugin({
-        context: __dirname,
-        manifest: path.join(__dirname, 'dist', 'vendor',  'vendor-manifest.json')
-      }),
-    )
 }
 
 if (!Encore.isDevServer() && !Encore.isProduction()) {

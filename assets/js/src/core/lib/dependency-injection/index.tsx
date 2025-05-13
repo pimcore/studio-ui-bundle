@@ -25,29 +25,36 @@ interface DiInstance {
 
 export function createDiInstance (): DiInstance {
   const container = new Container()
-  const ContainerContext = createContext(container)
+
+  if (window.Pimcore?.container === undefined) {
+    window.Pimcore = window.Pimcore ?? {}
+    window.Pimcore.container = container
+  }
+  
+  const currentContainer = window.Pimcore.container
+  const ContainerContext = createContext(currentContainer)
 
   const ContainerProvider = ({ children }: { children: React.JSX.Element }): React.JSX.Element => {
-    return <ContainerContext.Provider value={ container }>{children}</ContainerContext.Provider>
+    return <ContainerContext.Provider value={ currentContainer }>{children}</ContainerContext.Provider>
   }
 
   const useInjection = function<T>(identifier: string): T {
-    const container = window.Pimcore.container
+    const container = currentContainer
     return container.get<T>(identifier)
   }
 
   const useOptionalInjection = function<T>(identifier: string): T | null {
-    const container = window.Pimcore.container
+    const container = currentContainer
     return container.isBound(identifier) ? container.get<T>(identifier) : null
   }
 
   const useMultiInjection = function<T>(identifier: string): T[] {
-    const container = window.Pimcore.container
+    const container = currentContainer
     return container.getAll<T>(identifier)
   }
 
   return {
-    container,
+    container: currentContainer,
     ContainerContext,
     ContainerProvider,
     useInjection,

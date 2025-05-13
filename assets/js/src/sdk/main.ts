@@ -11,9 +11,22 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { type Pimcore as PimcoreApi } from '@Pimcore/app/public-api'
+import { components, PimcoreThemeConfig, tokens } from '@Pimcore/modules/app/theme/utils/themes/default-theme'
 export { type AbstractModule } from '@Pimcore/app/module-system/module-system'
 export { type IAbstractPlugin } from '@Pimcore/app/plugin-system/plugin-system'
 
+declare global {
+  interface Window {
+    Pimcore: typeof PimcoreApi
+    pluginRemotes: Record<string, string>
+  }
+}
+
+declare module 'antd-style' {
+  export interface ThemeConfig extends PimcoreThemeConfig {}
+  export interface FullToken extends tokens, components {}
+}
+
 export const Pimcore = window.Pimcore
 export const container = window.Pimcore.container
-export const pluginSystem = window.Pimcore.pluginSystem

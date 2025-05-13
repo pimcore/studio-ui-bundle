@@ -15,9 +15,10 @@ import type { DefaultCellProps } from '@Pimcore/components/grid/columns/default-
 import React from 'react'
 import { IconView } from '@Pimcore/components/grid/columns/views/icon/icon-view'
 import { useInjection } from '@Pimcore/app/depency-injection'
-import { type DynamicTypeMetadataAbstract, type DynamicTypeMetaDataRegistry } from 'src/sdk/modules/element'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { isUndefined } from 'lodash'
+import { type DynamicTypeMetaDataRegistry } from '../../../../meta-data/dynamic-type-metadata-registry'
+import { type DynamicTypeMetadataAbstract } from '../../../../meta-data/dynamic-type-metadata-abstract'
 
 export const TypeIconCell = (props: DefaultCellProps): React.JSX.Element => {
   const propertyType: string = props.row.original.type

@@ -28,11 +28,11 @@ final class WebpackEntryPointProvider implements WebpackEntryPointProviderInterf
 
     public function getEntryPoints(): array
     {
-        return ['vendor', 'core-dll', 'main'];
+        return ['main', 'exposeRemote'];
     }
 
     public function getOptionalEntryPoints(): array
     {
-        return ['vendor', 'core-dll'];
+        return [];
     }
 }
