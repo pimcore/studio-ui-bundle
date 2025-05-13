@@ -29,7 +29,7 @@ const DATE_FORMAT = 'YYYY-MM-DD'
 export interface DynamicTypeFieldFilterDatetimeProps extends AbstractFieldFilterDefinition {}
 
 export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldFilterDatetimeProps): React.JSX.Element => {
-  interface FormValues {
+  interface DateValue {
     setting: DatePickerSettingValue
     from: number | null
     to: number | null
@@ -38,7 +38,7 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
 
   const { data, setData } = useDynamicFilter()
 
-  data as FormValues
+  data as DateValue
 
   const SETTING_OPTIONS = [
     { label: t('grid.filter.datetime.on'), value: DatePickerSettingValue.ON },
@@ -54,19 +54,10 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
   ): void => {
     const prevData = data ?? { from: null, to: null, on: null, setting: DatePickerSettingValue.ON }
 
-    // const updateDataValuesNotSetting = (): void => {
-    //   setData({
-    //     setting: newSetting ?? prevData.setting,
-    //     from: allValues.from ?? prevData.from,
-    //     to: allValues.to ?? prevData.to,
-    //     on: allValues.on ?? prevData.on
-    //   })
-    // }
-
     if (newSetting === DatePickerSettingValue.BEFORE) {
       setData({
         setting: newSetting,
-        from: prevData.from ?? null,
+        from: null,
         to: prevData.to ?? prevData.on ?? null,
         on: null
       })
@@ -74,8 +65,8 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
       setData({
         setting: newSetting,
         from: prevData.from ?? prevData.on ?? null,
-        to: prevData.to ?? null,
-        on: undefined
+        to: null,
+        on: null
       })
     } else if (newSetting === DatePickerSettingValue.ON) {
       setData({
@@ -109,6 +100,7 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
       <Select
         onChange={ (value: unknown) => { handleSettingChange(value as DatePickerSettingValue) } }
         options={ SETTING_OPTIONS }
+        width={ 90 }
       />
 
       {currentSetting === DatePickerSettingValue.BETWEEN && (
