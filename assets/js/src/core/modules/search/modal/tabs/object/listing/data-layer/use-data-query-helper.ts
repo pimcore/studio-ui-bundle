@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type DataObjectGetSearchApiArg, type DataObjectGetGridApiArg } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { type DataObjectGetGridApiArg } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { type SettingsProviderProps } from '@Pimcore/modules/element/listing/abstract/settings/settings-provider'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
@@ -17,6 +17,7 @@ import { useTypeSelect } from '@Pimcore/modules/element/components/type-select/p
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeObjectRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/dynamic-type-object-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type DataObjectGetSearchApiArg } from '@Pimcore/modules/search/search-api-slice.gen'
 
 export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = () => {
   const { selectedColumns } = useSelectedColumns()

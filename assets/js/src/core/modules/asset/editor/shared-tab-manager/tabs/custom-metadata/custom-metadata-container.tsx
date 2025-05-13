@@ -18,7 +18,9 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/components/table/table'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import {
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
+
+  useLazyMetadataGetCollectionQuery
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useModal } from '@Pimcore/components/modal/useModal'
@@ -34,9 +36,6 @@ import { Space } from '@Pimcore/components/space/space'
 import { Select } from '@Pimcore/components/select/select'
 import { type DynamicTypeMetaDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/meta-data/dynamic-type-metadata-registry'
 import { uuid } from '@Pimcore/utils/uuid'
-import {
-  useLazyMetadataGetCollectionQuery
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 

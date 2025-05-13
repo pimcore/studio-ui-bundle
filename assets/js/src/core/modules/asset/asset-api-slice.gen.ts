@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Assets", "Asset Grid", "Metadata", "Search", "Versions"] as const;
+export const addTagTypes = ["Assets", "Asset Grid", "Metadata"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -314,25 +314,6 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/custom-metadata` }),
                 providesTags: ["Metadata"],
-            }),
-            assetGetSearchConfiguration: build.query<
-                AssetGetSearchConfigurationApiResponse,
-                AssetGetSearchConfigurationApiArg
-            >({
-                query: () => ({ url: `/pimcore-studio/api/search/configuration/assets` }),
-                providesTags: ["Search"],
-            }),
-            assetGetSearch: build.query<AssetGetSearchApiResponse, AssetGetSearchApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/search/assets`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                providesTags: ["Search"],
-            }),
-            versionAssetDownloadById: build.query<VersionAssetDownloadByIdApiResponse, VersionAssetDownloadByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}/asset/download` }),
-                providesTags: ["Versions"],
             }),
         }),
         overrideExisting: false,
@@ -760,29 +741,6 @@ export type AssetCustomMetadataGetByIdApiArg = {
     /** Id of the asset */
     id: number;
 };
-export type AssetGetSearchConfigurationApiResponse =
-    /** status 200 Asset search configuration */ GridDetailedConfiguration;
-export type AssetGetSearchConfigurationApiArg = void;
-export type AssetGetSearchApiResponse = /** status 200 Assets for search grid */ {
-    totalItems: number;
-    items: {
-        id?: number;
-        columns?: GridColumnData[];
-        isLocked?: boolean;
-        permissions?: Permissions;
-    }[];
-};
-export type AssetGetSearchApiArg = {
-    body: {
-        columns: GridColumnRequest[];
-        filters?: GridFilter;
-    };
-};
-export type VersionAssetDownloadByIdApiResponse = /** status 200 Asset version binary file */ Blob;
-export type VersionAssetDownloadByIdApiArg = {
-    /** Id of the version */
-    id: number;
-};
 export type Error = {
     /** Message */
     message: string;
@@ -1162,7 +1120,4 @@ export const {
     useAssetVideoDownloadByThumbnailQuery,
     useAssetVideoStreamByThumbnailQuery,
     useAssetCustomMetadataGetByIdQuery,
-    useAssetGetSearchConfigurationQuery,
-    useAssetGetSearchQuery,
-    useVersionAssetDownloadByIdQuery,
 } = injectedRtkApi;

@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Search", "User Management"] as const;
+export const addTagTypes = ["Search"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -52,16 +52,6 @@ const injectedRtkApi = api
                     params: { page: queryArg.page, pageSize: queryArg.pageSize, searchTerm: queryArg.searchTerm },
                 }),
                 providesTags: ["Search"],
-            }),
-            pimcoreStudioApiUserSearch: build.query<
-                PimcoreStudioApiUserSearchApiResponse,
-                PimcoreStudioApiUserSearchApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/user/search`,
-                    params: { searchQuery: queryArg.searchQuery },
-                }),
-                providesTags: ["User Management"],
             }),
         }),
         overrideExisting: false,
@@ -129,14 +119,6 @@ export type SimpleSearchGetApiArg = {
     pageSize: number;
     /** Search term */
     searchTerm?: string;
-};
-export type PimcoreStudioApiUserSearchApiResponse = /** status 200 user_search_summary_response */ {
-    totalItems: number;
-    items: SimpleUser[];
-};
-export type PimcoreStudioApiUserSearchApiArg = {
-    /** Query to search for an user. This can be a part of username, firstname, lastname, email or id. */
-    searchQuery?: string;
 };
 export type Column = {
     /** Key of the Column */
@@ -350,16 +332,6 @@ export type SimpleSearchResult = {
     /** icon */
     icon: ElementIcon;
 };
-export type SimpleUser = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID of the User */
-    id: number;
-    /** Name of the User */
-    username?: string;
-};
 export const {
     useAssetGetSearchConfigurationQuery,
     useAssetGetSearchQuery,
@@ -367,5 +339,4 @@ export const {
     useDataObjectGetSearchQuery,
     useSimpleSearchPreviewGetQuery,
     useSimpleSearchGetQuery,
-    usePimcoreStudioApiUserSearchQuery,
 } = injectedRtkApi;
