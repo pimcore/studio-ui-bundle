@@ -1,16 +1,13 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
-export const test = 'test3';
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
 export * from '@Pimcore/components/accordion/accordion'
 export * from '@Pimcore/components/button/button'
 export * from '@Pimcore/components/accordion-timeline/accordion-timeline'
@@ -49,7 +46,6 @@ export { type NodeState, type UseElementTreeReturnType, useElementTree } from '@
 export { type NodeState as xy, useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
 export * from '@Pimcore/components/element-tree/hooks/use-element-tree-root-node'
 export * from '@Pimcore/components/element-tree/expander/tree-expander'
-export * from '@Pimcore/components/element-tree/dnd-upload/dnd-upload'
 export * from '@Pimcore/components/element-tree/list/tree-list'
 export { TreeNode, type TreeNodeProps, defaultProps as treeNodeDefaultProps } from '@Pimcore/components/element-tree/node/tree-node'
 export * from '@Pimcore/components/element-tree/node/content/tree-node-content'
@@ -97,8 +93,10 @@ export * from '@Pimcore/components/modal/footer/modal-footer'
 export * from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 export * from '@Pimcore/components/modal/modal-title/modal-title'
 export * from '@Pimcore/components/modal/popconfirm/popconfirm'
-export * from '@Pimcore/components/modal/upload-modal/upload-modal-button'
-export * from '@Pimcore/components/modal/upload-modal/components/upload-modal/upload-modal'
+export * from '@Pimcore/components/modal-upload/components/modal-upload-button/modal-upload-button'
+export * from '@Pimcore/components/modal-upload/components/upload-modal/upload-modal'
+export * from '@Pimcore/components/modal-upload/provider/upload-modal-provider/upload-modal-provider'
+export * from '@Pimcore/components/modal-upload/provider/upload-modal-provider/use-upload-modal-context'
 export * from '@Pimcore/components/modal/window-modal/window-modal'
 export * from '@Pimcore/components/no-content/no-content'
 export * from '@Pimcore/components/notification/useNotification'
@@ -142,10 +140,6 @@ export * from '@Pimcore/components/toolbar/toolbar'
 export * from '@Pimcore/components/toolstrip/tool-strip'
 export * from '@Pimcore/components/toolstrip/box/tool-strip-box'
 export * from '@Pimcore/components/tree-element/tree-element'
-export * from '@Pimcore/components/upload/upload'
-export * from '@Pimcore/components/upload/upload-list/upload-list'
-export * from '@Pimcore/components/upload/upload-progress/upload-progress'
-export * from '@Pimcore/components/upload/zip-upload'
 export * from '@Pimcore/components/users-roles-dropdown/users-roles-dropdown'
 export * from '@Pimcore/components/vertical-timeline/vertical-timeline'
 

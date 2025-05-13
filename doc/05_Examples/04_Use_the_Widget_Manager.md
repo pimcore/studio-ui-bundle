@@ -1,81 +1,19 @@
-# How to Use the Widget Manager
+# How to use the widget manager
 
-In this guide we want to add a new bottom widget when a user clicks a button. Let's take our [Folder tab plugin](./05_Use_the_Tab_Manager.md) as starting point. 
+## Overview
 
-A widget is just a simple react component. So, let's create one:
+This example demonstrates how to utilize the widget manager in Pimcore Studio UI. 
 
-`./modules/asset/widgets/my-first-widget.tsx`
-``` typescript
-import React from 'react';
+## Screenshot
 
-export const MyFirstWidget = (): React.JSX.Element => {
-  return (
-    <div>
-      <h1>My First Widget</h1>
-      <p>This is a simple widget component.</p>
-    </div>
-  );
-}
-```
+![Widget Manager Example](../img/examples/widget-manager.png)
 
-Now, with the react component defined - we have to tell Pimcore Studio to handle it as a widget:
+## Details
 
-`./modules/asset/folder-tab-extension.tsx`:
-``` typescript
-import React from 'react'
-import { type AbstractModule Icon, type FolderTabManager, container, serviceIds, WidgetRegistry } from 'pimcore-studio-ui'
-import { MyFirstTabComponent } from './components/my-first-tab-component';
-import { MyFirstWidget } from './widgets/my-first-widget';
+There are two key components for using the widget manager:
 
-export const FolderTabExtension: AbstractModule = {
-  onInit: (): void => {
-    // registration of our new widget
-    const widgetManager = container.get<WidgetRegistry>(serviceIds.widgetManager)
+- The `WidgetRegistry`, where you can register a React component under a specific name.
+- The `useWidgetManager` hook, which allows you to open registered widgets. It also lets you decide in which of the four areas (main, left, bottom, right) the widget should be opened.
 
-    widgetManager.registerWidget({
-      name: 'my-first-widget',
-      component: MyFirstWidget
-    })
-
-    const tabManager = container.get<FolderTabManager>(serviceIds['Asset/Editor/FolderTabManager'])
-
-    tabManager.register({
-      children: <MyFirstTabComponent />,
-      icon: <Icon name={ 'camera' } />,
-      key: 'my-first-tab-component',
-      label: '1. tab component'
-    })
-  }
-}
-```
-
-Last but not least we have to open up the widget via button click. For that let's extend our tab component:
-
-`./modules/asset/components/my-first-tab-component.tsx`:
-``` typescript
-import React from 'react';
-import { Button } from 'antd';
-import { useWidgetManager } from 'pimcore-studio-ui';
-
-export const MyFirstTabComponent = (): React.JSX.Element => {
-  const widgetManager = useWidgetManager();
-
-  function onClick(): void {
-    widgetManager.openBottomWidget({
-      name: 'My first widget',
-      component: 'my-first-widget',
-    });
-  }
-
-  return (
-    <div>
-      <h1>My First Tab</h1>
-      <p>This is a simple tab component.</p>
-      
-      <Button type="primary" onClick={onClick}>Open up my first widget</Button>
-    </div>
-  );
-}
-```
-
-That's it! We can now open up our first widget via button click.
+## Code Example on GitHub
+> [Custom widgets example on GitHub](https://github.com/pimcore/studio-example-bundle/blob/main/assets/js/src/examples/custom-widgets/index.ts).

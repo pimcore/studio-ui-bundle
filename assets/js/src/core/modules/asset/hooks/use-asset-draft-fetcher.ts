@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { useAppDispatch } from '@Pimcore/app/store'
 import { api as assetApi, type AssetGetByIdApiResponse, type ImageData } from '../asset-api-slice-enhanced'
@@ -18,7 +15,6 @@ import { assetReceived } from '../asset-draft-slice'
 import { isUndefined } from 'lodash'
 import { initialTabsStateValue } from '@Pimcore/modules/element/draft/hooks/use-tabs'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
 import { addFailedDraftId, removeFailedDraftId } from '../asset-draft-error-slice'
 
 // Global map to track fetching drafts
@@ -49,7 +45,7 @@ export const useAssetDraftFetcher = (): UseAssetDraftFetcherReturn => {
 
   async function getCustomSettings (id: number): Promise<ImageData | undefined> {
     let objectToReturn: ImageData = {}
-    const { data, isSuccess, isError: isAssetCustomSettingsError, error: assetCustomSettingsError } = await dispatch(settingsApi.endpoints.assetCustomSettingsGetById.initiate({ id }))
+    const { data, isSuccess, isError: isAssetCustomSettingsError, error: assetCustomSettingsError } = await dispatch(assetApi.endpoints.assetCustomSettingsGetById.initiate({ id }))
 
     if (isAssetCustomSettingsError) {
       trackError(new ApiError(assetCustomSettingsError))

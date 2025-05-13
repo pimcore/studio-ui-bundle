@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { defaultProps, ElementTree, type TreeContextMenuProps } from '@Pimcore/components/element-tree/element-tree'
 import React from 'react'
@@ -22,18 +19,20 @@ import { Skeleton } from '@Pimcore/components/element-tree/skeleton/skeleton'
 import { Box } from '@Pimcore/components/box/box'
 import { withDroppable } from './node/with-droppable/with-droppable'
 import { withActionStates } from './node/with-action-states'
-import { withDroppableStyling } from './node/with-droppable/with-droppable-styling'
+import { withDroppableStyling } from '@Pimcore/modules/element/tree/node/with-droppable/with-droppable-styling'
 import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
 import { useElementTreeRootNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-root-node'
 import { useComponentRegistry } from '@Pimcore/modules/app/component-registry/use-component-registry'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import { UploadModalProvider } from '@Pimcore/components/modal-upload/provider/upload-modal-provider/upload-modal-provider'
+import { withDndUpload } from './node/with-dnd-upload'
 
 export interface TreeContainerProps {
   id: number
   showRoot?: boolean
 }
 
-export const AssetTreeNode = withDroppable(withDroppableStyling(withActionStates(withDraggable(TreeNodeComponent))))
+export const AssetTreeNode = withDndUpload(withDroppableStyling(withDroppable(withActionStates(withDraggable(TreeNodeComponent)))))
 
 const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
   const { openAsset } = useAssetHelper()
@@ -58,17 +57,19 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
   }
 
   return (
-    <ElementTree
-      contextMenu={ contextMenu as React.ElementType<TreeContextMenuProps> | undefined }
-      nodeId={ id }
-      onSelect={ onSelect }
-      renderFilter={ SearchContainer }
-      renderNode={ AssetTreeNode }
-      renderNodeContent={ defaultProps.renderNodeContent }
-      renderPager={ PagerContainer }
-      rootNode={ rootNode }
-      showRoot={ showRoot }
-    />
+    <UploadModalProvider>
+      <ElementTree
+        contextMenu={ contextMenu as React.ElementType<TreeContextMenuProps> | undefined }
+        nodeId={ id }
+        onSelect={ onSelect }
+        renderFilter={ SearchContainer }
+        renderNode={ AssetTreeNode }
+        renderNodeContent={ defaultProps.renderNodeContent }
+        renderPager={ PagerContainer }
+        rootNode={ rootNode }
+        showRoot={ showRoot }
+      />
+    </UploadModalProvider>
   )
 }
 

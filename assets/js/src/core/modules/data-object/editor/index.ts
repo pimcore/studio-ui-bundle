@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { container } from '@Pimcore/app/depency-injection'
 import '@Pimcore/modules/data-object/editor/types/object'
@@ -17,13 +14,8 @@ import '@Pimcore/modules/data-object/editor/types/folder'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import type {
-  ComponentRegistry as GlobalComponentRegistry
-} from '@Pimcore/modules/app/component-registry/component-registry'
-import { EditorToolbarContextMenu } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/context-menu'
 import { DataObjectEditorWidget } from '@Pimcore/modules/data-object/editor/widget'
 import { type TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
-import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -42,12 +34,5 @@ moduleSystem.registerModule({
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
     widgetRegistryService.registerWidget(DataObjectEditorWidget)
-
-    const componentRegistry = container.get<GlobalComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
-
-    componentRegistry.register({
-      name: componentConfig.dataObject.editor.toolbar.contextMenu.name,
-      component: EditorToolbarContextMenu
-    })
   }
 })

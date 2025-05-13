@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { Flex, theme } from 'antd'
 import React, { forwardRef, type KeyboardEvent, type MouseEvent, type MutableRefObject, useContext, useEffect } from 'react'
@@ -22,9 +19,9 @@ import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useElementTreeNode } from '../hooks/use-element-tree-node'
 import { isNil } from 'lodash'
 import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/utils/widget-content-scroll'
-import { DndUpload } from '@Pimcore/components/element-tree/dnd-upload/dnd-upload'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
+export type TreeNodeWrapper = (children: React.ReactNode) => React.ReactNode
 export interface TreeNodeProps {
   id: string
   icon: ElementIcon
@@ -45,6 +42,7 @@ export interface TreeNodeProps {
   danger?: boolean
   ref?: MutableRefObject<HTMLDivElement>
   isPublished?: boolean
+  wrapNode?: TreeNodeWrapper
 }
 
 export const defaultProps: TreeNodeProps = {
@@ -84,10 +82,10 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   isRoot = defaultProps.isRoot,
   isLoading = false,
   danger = false,
+  wrapNode = (children: React.ReactNode): React.ReactNode => children,
   ...props
 }: TreeNodeProps, forwardRef: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { token } = useToken()
-  const { metaData } = props
   const { styles } = useStyles()
   const {
     renderNodeContent: RenderNodeContent,
@@ -214,52 +212,41 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     nodesRefs!.current[internalKey] = nodeRef
   }
 
-  function onDragOver (event: MouseEvent): void {
-    const assetMetaData = metaData?.asset
-
-    if (assetMetaData !== undefined && assetMetaData.type === 'folder') {
-      setSelectedIds([id])
-    }
-  }
-
-  return (
-    <div
-      className={ getClasses() }
-      onDragOver={ onDragOver }
-      ref={ forwardRef }
-    >
-      <Flex
-        className='tree-node__content'
-        gap="small"
-        onClick={ onClick }
-        onContextMenu={ onContextMenu }
-        onKeyDown={ onKeyDown }
-        ref={ setRef }
-        role='button'
-        style={
+  const nodeContent = (
+    <Flex
+      className='tree-node__content'
+      gap="small"
+      onClick={ onClick }
+      onContextMenu={ onContextMenu }
+      onKeyDown={ onKeyDown }
+      ref={ setRef }
+      role='button'
+      style={
           {
             paddingLeft: token.paddingSM + 20 * level,
             minWidth: `${20 * level + 200}px`
           }
         }
-        tabIndex={ -1 }
-      >
-        {isRoot !== true && (
-          <TreeExpander
-            node={ treeNodeProps }
-            state={ [isExpanded, setExpanded] }
-          />
-        )}
+      tabIndex={ -1 }
+    >
+      {isRoot !== true && (
+      <TreeExpander
+        node={ treeNodeProps }
+        state={ [isExpanded, setExpanded] }
+      />
+      )}
+      <div className="tree-node__content-wrapper">
+        <RenderNodeContent node={ treeNodeProps } />
+      </div>
+    </Flex>
+  )
 
-        <DndUpload
-          nodeId={ id }
-          nodeType={ props.elementType! }
-        >
-          <div className="tree-node__content-wrapper">
-            <RenderNodeContent node={ treeNodeProps } />
-          </div>
-        </DndUpload>
-      </Flex>
+  return (
+    <div
+      className={ getClasses() }
+      ref={ forwardRef }
+    >
+      {wrapNode(nodeContent)}
 
       {isExpanded && (
         <TreeList node={ treeNodeProps } />

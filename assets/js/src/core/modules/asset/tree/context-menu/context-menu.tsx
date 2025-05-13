@@ -1,21 +1,18 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
+import React from 'react'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { type TreeContextMenuProps } from '@Pimcore/components/element-tree/element-tree'
 import { defaultProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { Upload } from '@Pimcore/components/upload/upload'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 import { useUploadNewVersion } from '@Pimcore/modules/asset/actions/upload-new-version/upload-new-version'
 import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
@@ -29,18 +26,12 @@ import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helpe
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
-import { Button } from 'antd'
-import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useUploadContext } from '@Pimcore/modules/element/upload/upload-provider'
-import { ZipUpload } from '@Pimcore/components/upload/zip-upload'
+import { useUpload } from '../../actions/upload/use-upload'
 
 export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
   const node = props.node ?? defaultProps
-  const uploadFileRef = React.useRef<HTMLButtonElement>(null)
-  const uploadZipRef = React.useRef<HTMLButtonElement>(null)
-  const { setUploadingNode } = useUploadContext()
   const { createZipDownloadTreeContextMenuItem } = useZipDownload({ type: 'folder' })
   const { addFolderTreeContextMenuItem } = useAddFolder('asset')
   const { renameTreeContextMenuItem } = useRename('asset', getElementActionCacheKey('asset', 'rename', parseInt(node.id)))
@@ -50,13 +41,8 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
   const { copyTreeContextMenuItem, cutTreeContextMenuItem, pasteTreeContextMenuItem, pasteCutContextMenuItem } = useCopyPaste('asset')
   const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem, isLockMenuHidden } = useLock('asset')
   const { uploadNewVersionTreeContextMenuItem } = useUploadNewVersion()
+  const { uploadContextMenuItem, zipUploadContextMenuItem } = useUpload()
   const { isTreeActionAllowed } = useTreePermission()
-
-  useEffect(() => {
-    if (node !== undefined) {
-      setUploadingNode(node.id)
-    }
-  }, [node])
 
   const isUploadMenuHidden = isTreeActionAllowed(TreePermission.HideAdd) ||
     (!isTreeActionAllowed(TreePermission.AddUpload) && !isTreeActionAllowed(TreePermission.AddUploadZip)) ||
@@ -70,28 +56,8 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
       icon: <Icon value={ 'asset' } />,
       hidden: isUploadMenuHidden,
       children: [
-        {
-          icon: <Icon value={ 'upload-cloud' } />,
-          label: t('element.tree.context-menu.add-assets.upload-files'),
-          key: 'add-upload',
-          hidden: !isTreeActionAllowed(TreePermission.AddUpload),
-          onClick: () => {
-            if (uploadFileRef.current !== null) {
-              uploadFileRef.current?.click()
-            }
-          }
-        },
-        {
-          icon: <Icon value={ 'upload-zip' } />,
-          label: t('element.tree.context-menu.add-assets.upload-zip'),
-          key: 'add-upload-zip',
-          hidden: !isTreeActionAllowed(TreePermission.AddUploadZip),
-          onClick: () => {
-            if (uploadZipRef.current !== null) {
-              uploadZipRef.current?.click()
-            }
-          }
-        }
+        uploadContextMenuItem(node),
+        zipUploadContextMenuItem(node)
       ]
     },
     addFolderTreeContextMenuItem(node),
@@ -128,27 +94,11 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
   ]
 
   return (
-    <>
-      <Upload>
-        <Button
-          ref={ uploadFileRef }
-          style={ { display: 'none' } }
-        ></Button>
-      </Upload>
-
-      <ZipUpload>
-        <Button
-          ref={ uploadZipRef }
-          style={ { display: 'none' } }
-        ></Button>
-      </ZipUpload>
-
-      <Dropdown
-        menu={ { items } }
-        trigger={ ['contextMenu'] }
-      >
-        {props.children}
-      </Dropdown>
-    </>
+    <Dropdown
+      menu={ { items } }
+      trigger={ ['contextMenu'] }
+    >
+      {props.children}
+    </Dropdown>
   )
 }
