@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\StudioUiBundle\Controller;
 
+use Pimcore\Bundle\StudioBackendBundle\Mercure\Service\UrlServiceInterface;
 use Pimcore\Bundle\StudioUiBundle\Service\StaticResourcesResolverInterface;
 use Pimcore\Controller\FrontendController;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,8 +26,8 @@ final class DefaultController extends FrontendController
     #[Route('/{elementType}/{id}', requirements: ['elementType' => 'asset|data-object|document', 'id' => '\d+'])]
     public function indexAction(
         StaticResourcesResolverInterface $staticResourcesResolver,
+        UrlServiceInterface $mercureUrlService,
         string $studioUrlUrlPath,
-        string $studioMercureClientUrl,
         array $studioWysiwygConfiguration
     ): Response {
         return $this->render('@PimcoreStudioUi/default/index.html.twig', [
@@ -37,7 +38,7 @@ final class DefaultController extends FrontendController
             'additionalCssFiles' => $staticResourcesResolver->getAdditionalCssFiles(),
             'additionalJsFiles' => $staticResourcesResolver->getAdditionalJsFiles(),
             'baseUrl' => $studioUrlUrlPath,
-            'mercureUrl' => $studioMercureClientUrl,
+            'mercureUrl' => $mercureUrlService->getClientSideUrl(),
             'wysiwygConfiguration' => $studioWysiwygConfiguration,
         ]);
     }
