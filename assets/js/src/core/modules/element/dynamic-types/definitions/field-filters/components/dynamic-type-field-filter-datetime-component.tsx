@@ -109,15 +109,15 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
   }
 
   const getDatePickerValue = (): number | null => {
-        if (currentSetting === DatePickerSettingValue.ON) {
-          return data?.on ?? null;
-        } else if (currentSetting === DatePickerSettingValue.BEFORE) {
-          return data?.to ?? null;
-        } else if (currentSetting === DatePickerSettingValue.AFTER) {
-          return data?.from ?? null;
-        } else return null
-      }
-      
+    if (currentSetting === DatePickerSettingValue.ON) {
+      return data?.on ?? null
+    } else if (currentSetting === DatePickerSettingValue.BEFORE) {
+      return data?.to ?? null
+    } else if (currentSetting === DatePickerSettingValue.AFTER) {
+      return data?.from ?? null
+    } else return null
+  }
+
   return (
     <Flex
       align="center"
