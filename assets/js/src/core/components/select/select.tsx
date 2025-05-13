@@ -10,12 +10,13 @@
 
 import React, { forwardRef, useRef, useImperativeHandle, useState, useEffect } from 'react'
 import type { RefSelectProps } from 'antd/es/select'
-import { Checkbox, Select as AntdSelect, type SelectProps as AntdSelectProps } from 'antd'
+import { Checkbox, Flex, Select as AntdSelect, type SelectProps as AntdSelectProps } from 'antd'
 import cn from 'classnames'
 import { isEmpty, isString } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './select.styles'
+import { useTranslation } from 'react-i18next'
 
 export const sizeOptions = {
   normal: 150
@@ -30,6 +31,7 @@ export interface SelectProps extends AntdSelectProps {
 }
 
 export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, width, allowClear, inherited, value, minWidth, ...antdSelectProps }, ref): React.JSX.Element => {
+  const { t } = useTranslation()
   const selectRef = useRef<RefSelectProps>(null)
 
   const [isActive, setIsActive] = useState(false)
@@ -114,6 +116,14 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
         className={ selectClassNames }
         menuItemSelectedIcon={ getItemSelectedIcon() }
         mode={ mode }
+        notFoundContent={ <Flex
+          align={ 'center' }
+          justify={ 'center' }
+                          >
+          <Icon
+            className={ 'm-r-mini' }
+            value={ 'warning-circle' }
+          /> {t('no-data-available')}</Flex> }
         onBlur={ () => { setIsFocus(false) } }
         onDropdownVisibleChange={ handleClick }
         onFocus={ () => { setIsFocus(true) } }

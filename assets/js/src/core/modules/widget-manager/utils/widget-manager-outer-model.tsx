@@ -14,6 +14,7 @@ import { type WidgetConfig, type PerspectiveConfigDetail } from '@Pimcore/module
 import { uuid } from '@Pimcore/utils/uuid'
 import { type IJsonTabNode, type IJsonModel } from 'flexlayout-react'
 import { isNil } from 'lodash'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 
 export const getInitialModelJson = (): IJsonModel => {
   const activePerspective = selectActivePerspective(store.getState())
@@ -71,7 +72,7 @@ export const getInitialModelJson = (): IJsonModel => {
         type: 'border',
         location: 'left',
         size: 315,
-        selected: getWidgetIndex(activePerspective?.widgetsLeft, activePerspective?.expandedLeft as string | undefined | null),
+        selected: getWidgetIndex(widgetsLeft, activePerspective?.expandedLeft as string | undefined | null),
         children: widgetsLeft
       },
 
@@ -79,7 +80,7 @@ export const getInitialModelJson = (): IJsonModel => {
         type: 'border',
         location: 'right',
         size: 315,
-        selected: getWidgetIndex(activePerspective?.widgetsRight, activePerspective?.expandedRight as string | undefined | null),
+        selected: getWidgetIndex(widgetsRight, activePerspective?.expandedRight as string | undefined | null),
         children: widgetsRight
       }
     ]
@@ -107,19 +108,34 @@ const getWidgetsBottom = (activePerspective: PerspectiveConfigDetail | null, use
   return widgetsToModelJson(activePerspective.widgetsBottom, usedIds)
 }
 
-const getWidgetIndex = (widgets?: WidgetConfig[], widgetId?: string | null): number | undefined => {
+const getWidgetIndex = (widgets?: IJsonTabNode[], widgetId?: string | null): number | undefined => {
   if (isNil(widgets) || isNil(widgetId)) {
     return undefined
   }
-  return widgets.findIndex(widget => widget.id === widgetId)
+  const widgetIndex = widgets.findIndex(widget => widget.id === widgetId)
+  if (widgetIndex === -1) {
+    return widgets.length > 0 ? 0 : undefined
+  }
+  return widgetIndex
 }
 
 const widgetsToModelJson = (widgets: WidgetConfig[] | undefined, usedIds: Set<string>): IJsonTabNode[] => {
   const result: IJsonTabNode[] = []
 
+  const hasAssetPermission: boolean = isAllowed('assets')
+  const hasObjectPermission: boolean = isAllowed('objects')
+
   widgets?.forEach((widget) => {
     // skip document trees until we have a documents implementation
     if (widget.widgetType === 'element_tree' && 'elementType' in widget && widget.elementType === 'document') {
+      return
+    }
+
+    if (widget.widgetType === 'element_tree' && 'elementType' in widget && widget.elementType === 'asset' && !hasAssetPermission) {
+      return
+    }
+
+    if (widget.widgetType === 'element_tree' && 'elementType' in widget && widget.elementType === 'data-object' && !hasObjectPermission) {
       return
     }
 

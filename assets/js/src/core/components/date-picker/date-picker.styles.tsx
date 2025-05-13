@@ -24,6 +24,10 @@ export const useStyles = createStyles(({ token, css }) => {
       &.versionFieldItemHighlight {
         background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
       }
+      
+      .ant-picker-range-separator {
+        color: ${token.colorTextDisabled};
+      }
     `,
 
     datePickerDropdown: css`

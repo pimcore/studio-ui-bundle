@@ -20,7 +20,6 @@ import React, {
 import { TreeNode as TreeNodeComponent, type TreeNodeProps } from './node/tree-node'
 import { TreeNodeContent, type TreeNodeContentProps } from './node/content/tree-node-content'
 import { useStyles } from './element-tree.styles'
-import { UploadProvider } from '@Pimcore/modules/element/upload/upload-provider'
 import { Skeleton } from './skeleton/skeleton'
 import { Box } from '../box/box'
 import { useElementTreeNode } from './hooks/use-element-tree-node'
@@ -130,18 +129,19 @@ const ElementTree = (
   const treeContent = (
     <div className={ ['tree', styles.tree].join(' ') }>
       <TreeContext.Provider value={ treeContextValue }>
+
         {hasRootNode && (
-          <TreeNode
-            key={ preparedRootNode!.id }
-            level={ -1 }
-            { ...preparedRootNode! }
-          />
+        <TreeNode
+          key={ preparedRootNode!.id }
+          level={ -1 }
+          { ...preparedRootNode! }
+        />
         )}
 
         {!hasRootNode && (
-          <TreeList
-            node={ { ...preparedRootNode!, level: -1 } }
-          />
+        <TreeList
+          node={ { ...preparedRootNode!, level: -1 } }
+        />
 
         )}
       </TreeContext.Provider>
@@ -149,7 +149,7 @@ const ElementTree = (
   )
 
   return (
-    <UploadProvider>
+    <>
       {isLoading === true && !hasRootNode && (
         <Box padding={ { left: 'extra-small' } }>
           <Skeleton />
@@ -167,7 +167,7 @@ const ElementTree = (
               treeContent
             )
       )}
-    </UploadProvider>
+    </>
   )
 }
 

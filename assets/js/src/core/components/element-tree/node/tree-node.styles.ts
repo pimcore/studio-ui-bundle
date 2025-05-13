@@ -16,13 +16,13 @@ export const useStyles = createStyles(({ token, css }) => {
       user-select: none;
 
       &.tree-node--is-root {
-        & > .tree-node__content {
+        .tree-node__content {
           padding-left: ${token.paddingSM}px;
         }
       }
 
       &.tree-node--danger {
-        & > .tree-node__content .tree-node__content-wrapper {
+        .tree-node__content .tree-node__content-wrapper {
           color: ${token.colorError};
           text-decoration: line-through;
         }
@@ -34,18 +34,6 @@ export const useStyles = createStyles(({ token, css }) => {
         padding: 2px ${token.paddingSM}px 2px 0;
         white-space: nowrap;
         align-items: center;
-          
-        .ant-upload-wrapper {
-          width: 100%;
-          overflow: hidden;
-            
-          .ant-upload {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 8px
-          }
-        }
 
         .tree-node__content-wrapper {
           width: 100%;

@@ -16,6 +16,9 @@ import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppa
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
 import { type ElementInfo } from './element-cell'
+import { isPlainObject } from 'lodash'
+import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
+import { type ElementReference } from '@Pimcore/modules/element/element-helper'
 
 export interface ElementCellContentProps extends DefaultCellProps {
   dropDisabled?: boolean
@@ -38,7 +41,20 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
     const includesPathInformation = propertyData.data !== null && (propertyData.data?.fullPath !== undefined || propertyData.data?.path !== undefined)
     const hasFullPath = includesPathInformation && propertyData.data?.fullPath !== undefined
 
-    let fullPath = props.getValue()
+    const value = props.getValue()
+
+    if (isPlainObject(value)) {
+      const element: ElementReference = value as ElementReference
+      const elementType = mapToElementType(String(element.type))
+      return {
+        elementType: elementType ?? undefined,
+        id: element.id,
+        fullPath: element.fullPath,
+        published: element.isPublished ?? undefined
+      }
+    }
+
+    let fullPath = value
 
     if (includesPathInformation && hasFullPath) {
       fullPath = propertyData.data.fullPath
