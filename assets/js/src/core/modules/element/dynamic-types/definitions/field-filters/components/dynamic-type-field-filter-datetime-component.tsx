@@ -36,9 +36,14 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
     on: number | null
   }
 
-  const { data, setData } = useDynamicFilter()
+  const { data: rawData, setData } = useDynamicFilter()
 
-  data as DateValue
+  const data: DateValue = rawData ?? {
+    setting: DatePickerSettingValue.ON,
+    from: null,
+    to: null,
+    on: null
+  }
 
   const SETTING_OPTIONS = [
     { label: t('grid.filter.datetime.on'), value: DatePickerSettingValue.ON },
@@ -86,9 +91,26 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
   }
 
   const handleDateChange = (field: 'on' | 'from' | 'to', value: number | null): void => {
+    console.log('changing from', value)
+    console.log('changing fielD', field)
+
     setData({
-      ...data,
-      [field]: value
+      setting: currentSetting,
+      from: (field === 'from') ? value : null,
+      to: (field === 'to') ? value : null,
+      on: (field === 'on') ? value : null
+    })
+  }
+
+  const handleDateRangeChange = (newFrom: number | null, newTo: number | null): void => {
+    console.log('changing newFrom', newFrom)
+    console.log('changing newTo', newTo)
+
+    setData({
+      setting: data.setting,
+      from: newFrom ?? data.from ?? null,
+      to: newTo ?? data.to ?? null,
+      on: null
     })
   }
 
@@ -98,7 +120,8 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
       gap="extra-small"
     >
       <Select
-        onChange={ (value: unknown) => { handleSettingChange(value as DatePickerSettingValue) } }
+        defaultValue={ DatePickerSettingValue.ON }
+        onChange={ (value: DatePickerSettingValue) => { handleSettingChange(value as DatePickerSettingValue) } }
         options={ SETTING_OPTIONS }
         width={ 90 }
       />
@@ -109,8 +132,7 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
           format={ DATE_FORMAT }
           onChange={ (value: unknown) => {
             const [newFrom, newTo] = value as [number | null, number | null]
-            handleDateChange('from', newFrom)
-            handleDateChange('to', newTo)
+            handleDateRangeChange(newFrom, newTo)
           } }
           outputType="timestamp"
           showTime

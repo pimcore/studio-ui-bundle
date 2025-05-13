@@ -35,10 +35,14 @@ export const DynamicFilterProvider = ({ children, id, type, data, onChange, fron
   const [_data, _setData] = useState<DynamicFilterData['data']>(data)
 
   useEffect(() => {
+    console.log('data dynamic', _data)
     _setData(data)
   }, [data])
 
   const setData = (data: any): void => {
+    console.log('on change', onChange)
+    console.log('data', data)
+
     _setData(data)
     if (onChange !== undefined) {
       onChange(data)
