@@ -13,7 +13,6 @@ import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
 import { DateRangePicker } from '@Pimcore/components/date-picker/date-range-picker'
-import { Form } from '@Pimcore/components/form/form'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { t } from 'i18next'
 import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
@@ -37,28 +36,9 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
     on: number | null
   }
 
-  const initialFormValues: FormValues = {
-    setting: DatePickerSettingValue.ON,
-    from: null,
-    to: null,
-    on: null
-  }
-
-  const [form] = Form.useForm<FormValues>()
   const { data, setData } = useDynamicFilter()
 
-  React.useEffect(() => {
-    if (data != null) {
-      form.setFieldsValue({
-        setting: data.setting,
-        from: data.from,
-        to: data.to,
-        on: data.on
-      })
-    }
-  }, [data, form])
-
-  const datePickerSettigVal = Form.useWatch('setting', form) as FormValues['setting']
+  data as FormValues
 
   const SETTING_OPTIONS = [
     { label: t('grid.filter.datetime.on'), value: DatePickerSettingValue.ON },
@@ -67,117 +47,110 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
     { label: t('grid.filter.datetime.after'), value: DatePickerSettingValue.AFTER }
   ]
 
-  const datePickerFormItemName = (): string | undefined => {
-    if (datePickerSettigVal === DatePickerSettingValue.ON) {
-      return 'on'
-    } else if (datePickerSettigVal === DatePickerSettingValue.BEFORE) {
-      return 'to'
-    } else if (datePickerSettigVal === DatePickerSettingValue.AFTER) {
-      return 'from'
-    }
+  const currentSetting = data?.setting ?? DatePickerSettingValue.ON
 
-    return undefined
-  }
-
-  const handleDatePickerValuesChange = (
-    changedValues: any,
-    allValues: any
+  const handleSettingChange = (
+    newSetting: DatePickerSettingValue
   ): void => {
     const prevData = data ?? { from: null, to: null, on: null, setting: DatePickerSettingValue.ON }
-    const newSetting = changedValues.setting as DatePickerSettingValue
 
-    const isRangeSetting = [DatePickerSettingValue.BEFORE, DatePickerSettingValue.AFTER, DatePickerSettingValue.BETWEEN].includes(newSetting)
-    const isOnSetting = newSetting === DatePickerSettingValue.ON
+    // const updateDataValuesNotSetting = (): void => {
+    //   setData({
+    //     setting: newSetting ?? prevData.setting,
+    //     from: allValues.from ?? prevData.from,
+    //     to: allValues.to ?? prevData.to,
+    //     on: allValues.on ?? prevData.on
+    //   })
+    // }
 
-    if (isRangeSetting) {
-      const shouldUseOnAsFrom = [DatePickerSettingValue.AFTER, DatePickerSettingValue.BETWEEN].includes(newSetting)
-      const shouldUseOnAsTo = newSetting === DatePickerSettingValue.BEFORE
-
-      const newFrom = prevData.from ?? (shouldUseOnAsFrom ? prevData.on : null) ?? null
-      const newTo = prevData.to ?? (shouldUseOnAsTo ? prevData.on : null) ?? null
-
+    if (newSetting === DatePickerSettingValue.BEFORE) {
       setData({
         setting: newSetting,
-        from: newFrom,
-        to: newTo,
+        from: prevData.from ?? null,
+        to: prevData.to ?? prevData.on ?? null,
         on: null
       })
-    } else if (isOnSetting) {
-      const newOn = prevData.from ?? prevData.to ?? null
-
+    } else if (newSetting === DatePickerSettingValue.AFTER) {
+      setData({
+        setting: newSetting,
+        from: prevData.from ?? prevData.on ?? null,
+        to: prevData.to ?? null,
+        on: undefined
+      })
+    } else if (newSetting === DatePickerSettingValue.ON) {
       setData({
         setting: newSetting,
         from: null,
         to: null,
-        on: newOn
+        on: prevData.from ?? prevData.to ?? null
       })
-    } else {
+    } else if (newSetting === DatePickerSettingValue.BETWEEN) {
       setData({
-        setting: allValues.setting ?? prevData.setting,
-        from: allValues.from ?? prevData.from,
-        to: allValues.to ?? prevData.to,
-        on: allValues.on ?? prevData.on
+        setting: newSetting,
+        from: prevData.from ?? prevData.on ?? null,
+        to: prevData.to ?? null,
+        on: null
       })
     }
   }
 
+  const handleDateChange = (field: 'on' | 'from' | 'to', value: number | null): void => {
+    setData({
+      ...data,
+      [field]: value
+    })
+  }
+
   return (
-    <Form
-      form={ form }
-      initialValues={ initialFormValues }
-      onValuesChange={ (changedValues, allValues) => { handleDatePickerValuesChange(changedValues, allValues) } }
+    <Flex
+      align="center"
+      gap="extra-small"
     >
-      <Flex
-        align="center"
-        gap="extra-small"
-      >
-        <Form.Item
-          name="setting"
-          style={ { flex: 1, margin: 0 } }
-        >
-          <Select
-            options={ SETTING_OPTIONS }
-          />
-        </Form.Item>
+      <Select
+        onChange={ (value: unknown) => { handleSettingChange(value as DatePickerSettingValue) } }
+        options={ SETTING_OPTIONS }
+      />
 
-        {datePickerSettigVal === DatePickerSettingValue.BETWEEN && (
-        <Form.Item
-          noStyle
-          shouldUpdate
-        >
-          {({ getFieldValue, setFieldsValue }) => {
-            const from = getFieldValue('from')
-            const to = getFieldValue('to')
+      {currentSetting === DatePickerSettingValue.BETWEEN && (
+        <DateRangePicker
+          allowEmpty={ [true, true] }
+          format={ DATE_FORMAT }
+          onChange={ (value: unknown) => {
+            const [newFrom, newTo] = value as [number | null, number | null]
+            handleDateChange('from', newFrom)
+            handleDateChange('to', newTo)
+          } }
+          outputType="timestamp"
+          showTime
+          value={ [data?.from ?? null, data?.to ?? null] }
+        />
+      )
+          }
+      {currentSetting !== DatePickerSettingValue.BETWEEN && (
+      <DatePicker
+        format={ DATE_FORMAT }
+        onChange={ (value: unknown) => {
+          const newValue = typeof value === 'number' ? value : null
 
-            return (
-              <DateRangePicker
-                allowEmpty={ [true, true] }
-                format={ DATE_FORMAT }
-                onChange={ ([newFrom, newTo]) => {
-                  setFieldsValue({ from: newFrom ?? null, to: newTo ?? null })
-                } }
-                outputType="timestamp"
-                showTime
-                value={ [from, to] }
-              />
-            )
-          }}
-        </Form.Item>
-        )}
-
-        {datePickerSettigVal !== DatePickerSettingValue.BETWEEN && (
-        <Form.Item
-          name={ datePickerFormItemName() }
-          style={ { flex: 3, margin: 0 } }
-        >
-          <DatePicker
-            format={ DATE_FORMAT }
-            outputType="timestamp"
-            showTime
-          />
-        </Form.Item >
-        )}
-      </Flex>
-    </Form>
+          if (currentSetting === DatePickerSettingValue.ON) {
+            handleDateChange('on', newValue)
+          } else if (currentSetting === DatePickerSettingValue.BEFORE) {
+            handleDateChange('to', newValue)
+          } else if (currentSetting === DatePickerSettingValue.AFTER) {
+            handleDateChange('from', newValue)
+          }
+        } }
+        outputType="timestamp"
+        showTime
+        value={
+          currentSetting === DatePickerSettingValue.ON
+            ? data?.on ?? null
+            : currentSetting === DatePickerSettingValue.BEFORE
+              ? data?.to ?? null
+              : data?.from ?? null
+        }
+      />
+      )}
+    </Flex>
   )
 }
