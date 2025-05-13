@@ -15,6 +15,7 @@ import { ThemeProvider } from '@Pimcore/modules/app/theme/theme-provider'
 import React from 'react'
 import { Provider } from 'react-redux'
 import { ElementSelectorProvider } from '../element/element-selector/provider/element-selector/element-selector-provider'
+import { UploadModalProvider } from '@Pimcore/components/modal-upload/provider/upload-modal-provider/upload-modal-provider'
 
 export interface GlobalProviderProps {
   children: React.ReactNode
@@ -27,7 +28,9 @@ export const GlobalProvider = ({ children }: GlobalProviderProps): React.JSX.Ele
         <Provider store={ store }>
           <DragAndDropContextProvider>
             <ElementSelectorProvider>
-              {children}
+              <UploadModalProvider>
+                {children}
+              </UploadModalProvider>
             </ElementSelectorProvider>
           </DragAndDropContextProvider>
         </Provider>
