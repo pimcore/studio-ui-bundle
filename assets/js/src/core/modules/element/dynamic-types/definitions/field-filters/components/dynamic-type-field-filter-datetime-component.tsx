@@ -108,6 +108,16 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
     })
   }
 
+  const getDatePickerValue = (): number | null => {
+        if (currentSetting === DatePickerSettingValue.ON) {
+          return data?.on ?? null;
+        } else if (currentSetting === DatePickerSettingValue.BEFORE) {
+          return data?.to ?? null;
+        } else if (currentSetting === DatePickerSettingValue.AFTER) {
+          return data?.from ?? null;
+        } else return null
+      }
+      
   return (
     <Flex
       align="center"
@@ -150,13 +160,7 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
         } }
         outputType="timestamp"
         showTime
-        value={
-          currentSetting === DatePickerSettingValue.ON
-            ? data?.on ?? null
-            : currentSetting === DatePickerSettingValue.BEFORE
-              ? data?.to ?? null
-              : data?.from ?? null
-        }
+        value={ getDatePickerValue() }
       />
       )}
     </Flex>
