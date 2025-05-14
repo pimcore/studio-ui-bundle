@@ -41,7 +41,7 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
     formLayout: 'vertical'
   }
 
-  columnDefaultWidth: number = 250
+  columnDefaultWidth: number = 150 // TODO: committed value
 
   getObjectDataComponent (props: AdvancedManyToManyObjectRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     const columns: RelationColumnDefinition[] = []
@@ -49,6 +49,12 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
 
     if (!isNil(props.columns)) {
       props.columns.forEach(column => {
+        console.log('beforeAdd', column)
+        if (column.width !== undefined) {
+          columns.push(column)
+          return
+        }
+
         const dynType = objectDataRegistry.getDynamicType(column.type!, false)
         if (dynType?.getDefaultGridColumnWidth !== undefined) {
           columns.push({
@@ -65,6 +71,8 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
         })
       })
     }
+
+    console.log('original', columns)
 
     return (
       <AdvancedManyToManyObjectRelation
@@ -96,6 +104,11 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
 
     if (!isNil(objectProps.columns)) {
       objectProps.columns.forEach(column => {
+        if (column.width !== undefined) {
+          columns.push(column)
+          return
+        }
+
         const dynType = objectDataRegistry.getDynamicType(column.type!, false)
         if (dynType?.getDefaultGridColumnWidth !== undefined) {
           columns.push({
@@ -129,19 +142,27 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
 
     if (columns !== null) {
       columns.forEach(column => {
-        console.log('column', column)
+        console.log('column-loop', column)
+
+        if (column.width !== undefined) {
+          console.log('add column width', column.width)
+
+          calcColumnWidth += column.width
+          return
+        }
+
         const dynType = objectDataRegistry.getDynamicType(column.type as string, false)
         if (dynType?.getDefaultGridColumnWidth !== undefined) {
-          console.log('dynType', dynType)
+          // console.log('dynType', dynType)
           const columnWidth = dynType.getDefaultGridColumnWidth(props)
           if (columnWidth !== undefined) {
-            console.log('add specific column width', columnWidth)
+            // console.log('add specific column width', columnWidth)
             calcColumnWidth += columnWidth
             return
           }
         }
 
-        console.log('add default column width', this.columnDefaultWidth)
+        // console.log('add default column width', this.columnDefaultWidth)
         calcColumnWidth += this.columnDefaultWidth
       })
     }
