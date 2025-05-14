@@ -22,7 +22,7 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 import {
   type CustomMetadata as CustomMetadataApi
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'

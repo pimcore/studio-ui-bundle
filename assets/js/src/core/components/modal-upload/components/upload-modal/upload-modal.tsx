@@ -57,8 +57,8 @@ export const UploadModal = (props: UploadModalProps): React.JSX.Element => {
     >
 
       {/* Total Progress */}
-      {props.fileList.length > 1 && !props.showProcessing && (
-        <Box margin={ { top: 'small' } }>
+      {props.fileList.length > 1 && !props.showProcessing && !props.showUploadError && (
+        <Box margin={ { y: 'extra-small' } }>
           <Progress
             percent={ totalProgress }
             status="active"
@@ -66,8 +66,26 @@ export const UploadModal = (props: UploadModalProps): React.JSX.Element => {
         </Box>
       )}
 
+      { props.showUploadError && (
+        <Box margin={ { y: 'extra-small' } }>
+          <Alert
+
+            action={
+              <Button
+                onClick={ props.closeModal }
+                size="small"
+              >
+                { t('ok') }
+              </Button>
+                  }
+            message={ t('upload.assets-items-failed-message') }
+            type="warning"
+          />
+        </Box>
+      ) }
+
       { props.showProcessing && (
-        <Box margin={ { top: 'normal' } }>
+        <Box margin={ { y: 'extra-small' } }>
           <Alert
             message={ (
               <Flex gap="small">
@@ -89,9 +107,9 @@ export const UploadModal = (props: UploadModalProps): React.JSX.Element => {
             itemRender={ (originNode, file) => {
               const errorMessage =
               file.error?.status === 413
-                ? t('upload.error.file-too-large') // Custom translation key for HTTP 413
+                ? t('upload.error.file-too-large')
                 : !isNil(file.error)
-                    ? t('upload.error.generic') // Custom translation key for other errors
+                    ? t('upload.error.generic')
                     : undefined
 
               const clonedNode = React.cloneElement(originNode, {
@@ -111,24 +129,6 @@ export const UploadModal = (props: UploadModalProps): React.JSX.Element => {
           />
         </Upload>
       </Box>
-
-      { props.showUploadError && (
-        <Box margin={ { top: 'extra-small' } }>
-          <Alert
-
-            action={
-              <Button
-                onClick={ props.closeModal }
-                size="small"
-              >
-                { t('ok') }
-              </Button>
-                  }
-            message={ t('upload.assets-items-failed-message') }
-            type="warning"
-          />
-        </Box>
-      ) }
     </Modal>
   )
 }

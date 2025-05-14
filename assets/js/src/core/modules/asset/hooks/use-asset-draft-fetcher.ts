@@ -15,7 +15,6 @@ import { assetReceived } from '../asset-draft-slice'
 import { isUndefined } from 'lodash'
 import { initialTabsStateValue } from '@Pimcore/modules/element/draft/hooks/use-tabs'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
 import { addFailedDraftId, removeFailedDraftId } from '../asset-draft-error-slice'
 
 // Global map to track fetching drafts
@@ -46,7 +45,7 @@ export const useAssetDraftFetcher = (): UseAssetDraftFetcherReturn => {
 
   async function getCustomSettings (id: number): Promise<ImageData | undefined> {
     let objectToReturn: ImageData = {}
-    const { data, isSuccess, isError: isAssetCustomSettingsError, error: assetCustomSettingsError } = await dispatch(settingsApi.endpoints.assetCustomSettingsGetById.initiate({ id }))
+    const { data, isSuccess, isError: isAssetCustomSettingsError, error: assetCustomSettingsError } = await dispatch(assetApi.endpoints.assetCustomSettingsGetById.initiate({ id }))
 
     if (isAssetCustomSettingsError) {
       trackError(new ApiError(assetCustomSettingsError))
