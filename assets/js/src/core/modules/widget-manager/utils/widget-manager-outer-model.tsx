@@ -122,12 +122,13 @@ const getWidgetIndex = (widgets?: IJsonTabNode[], widgetId?: string | null): num
 const widgetsToModelJson = (widgets: WidgetConfig[] | undefined, usedIds: Set<string>): IJsonTabNode[] => {
   const result: IJsonTabNode[] = []
 
+  const hasDocumentPermission: boolean = process.env.NODE_ENV === 'production' ? false : isAllowed('documents')
   const hasAssetPermission: boolean = isAllowed('assets')
   const hasObjectPermission: boolean = isAllowed('objects')
 
   widgets?.forEach((widget) => {
     // skip document trees until we have a documents implementation
-    if (widget.widgetType === 'element_tree' && 'elementType' in widget && widget.elementType === 'document') {
+    if (widget.widgetType === 'element_tree' && 'elementType' in widget && widget.elementType === 'document' && !hasDocumentPermission) {
       return
     }
 

@@ -148,7 +148,7 @@ export type GridDetailedConfiguration = {
     /** Name */
     name: string;
     /** Description */
-    description: string;
+    description?: any;
     /** shareGlobal */
     shareGlobal: boolean;
     /** saveFilter */
@@ -200,23 +200,23 @@ export type GridColumnData = {
 };
 export type Permissions = {
     /** List */
-    list?: boolean;
+    list: boolean;
     /** View */
-    view?: boolean;
+    view: boolean;
     /** Publish */
-    publish?: boolean;
+    publish: boolean;
     /** Delete */
-    delete?: boolean;
+    delete: boolean;
     /** Rename */
-    rename?: boolean;
+    rename: boolean;
     /** Create */
-    create?: boolean;
+    create: boolean;
     /** Settings */
-    settings?: boolean;
+    settings: boolean;
     /** Versions */
-    versions?: boolean;
+    versions: boolean;
     /** Properties */
-    properties?: boolean;
+    properties: boolean;
 };
 export type RelationFieldConfig = {
     /** Relation Getter */

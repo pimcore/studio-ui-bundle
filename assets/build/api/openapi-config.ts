@@ -53,8 +53,12 @@ const config: ConfigFile = {
   outputFiles: {
     '../../js/src/core/modules/asset/asset-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/assets?/i)
-    },'../../js/src/core/modules/data-object/data-object-api-slice.gen.ts': {
+    },
+    '../../js/src/core/modules/data-object/data-object-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/data-object?/i)
+    },
+    '../../js/src/core/modules/document/document-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/api\/document?/i)
     },
     '../../js/src/core/modules/app/translations/translations-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/translation/i)

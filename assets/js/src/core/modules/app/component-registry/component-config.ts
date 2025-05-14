@@ -79,6 +79,14 @@ const defaultComponentConfig = {
       contextMenu: { type: ComponentType.SINGLE, name: 'dataObject.tree.contextMenu' }
     }
   },
+  document: {
+    editor: {
+      container: { type: ComponentType.SINGLE, name: 'document.editor.container' }
+    },
+    tree: {
+      contextMenu: { type: ComponentType.SINGLE, name: 'document.tree.contextMenu' }
+    }
+  },
   leftSidebar: {
     slot: {
       type: ComponentType.SLOT,

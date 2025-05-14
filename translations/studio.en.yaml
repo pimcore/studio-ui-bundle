@@ -54,6 +54,8 @@ asset.upload.validation: 'Please add a file'
 upload.error.file-too-large: 'The file is bigger than the actual upload limit of the server.'
 upload.error.generic: 'The file could not be uploaded.'
 asset.select.type.nullable: 'All types'
+document.document-tree.title: Document Tree
+document.document-tree.search: Search in {{folderName}}
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 data-object.tree.context-menu.add-object: Add Object

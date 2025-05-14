@@ -17,13 +17,22 @@ import { type UserInformation } from '@Pimcore/modules/auth/user/user-api-slice-
 const initialState: UserInformation = {
   id: 0,
   username: '',
+  email: '',
+  firstname: '',
+  lastname: '',
   permissions: [],
   isAdmin: false,
   classes: [],
   docTypes: [],
   activePerspective: 0,
   perspectives: [],
-  language: 'en'
+  language: 'en',
+  dateTimeLocale: '',
+  welcomeScreen: false,
+  memorizeTabs: false,
+  hasImage: false,
+  contentLanguages: [],
+  keyBindings: []
 }
 
 const slice = createSlice({

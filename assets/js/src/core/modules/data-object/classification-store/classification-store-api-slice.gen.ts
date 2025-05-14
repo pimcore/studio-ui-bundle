@@ -167,6 +167,8 @@ export type ClassificationStoreCollection = {
     name: string;
     /** Description */
     description?: string;
+    /** List of Group IDs in collection */
+    groups?: object;
 };
 export type Error = {
     /** Message */

@@ -24,6 +24,28 @@ export type LoginApiArg = {
 };
 export type LogoutApiResponse = unknown;
 export type LogoutApiArg = void;
+export type KeyBindingForAUser = {
+    /** ASCII Code for a key on the Keyboard */
+    key: number;
+    /** The action the key binding shoudl execute */
+    action: string;
+    /** If CTRL key should be pressed */
+    ctrl: boolean;
+    /** If ALT key should be pressed */
+    alt: boolean;
+    /** If SHIFT key should be pressed */
+    shift: boolean;
+};
+export type TwoFactorAuthenticationData = {
+    /** Required */
+    required: boolean;
+    /** Enabled */
+    enabled: boolean;
+    /** Type */
+    type: string;
+    /** Active */
+    active: boolean;
+};
 export type ElementIcon = {
     /** Icon type */
     type: "name" | "path";
@@ -53,6 +75,12 @@ export type UserInformation = {
     id: number;
     /** Username */
     username: string;
+    /** Email */
+    email: any;
+    /** Firstname */
+    firstname: any;
+    /** Lastname */
+    lastname: any;
     /** Permissions */
     permissions: string[];
     /** If user is an admin user */
@@ -63,6 +91,20 @@ export type UserInformation = {
     docTypes: string[];
     /** User Language */
     language: string;
+    /** Locale for dateTime */
+    dateTimeLocale: any;
+    /** Welcome Screen */
+    welcomeScreen: boolean;
+    /** Memorize Tabs */
+    memorizeTabs: boolean;
+    /** Has Image */
+    hasImage: boolean;
+    /** List of available content Language already sorted. */
+    contentLanguages: object;
+    /** Key Bindings */
+    keyBindings: KeyBindingForAUser[];
+    /** Two Factor Authentication */
+    twoFactorAuthentication?: TwoFactorAuthenticationData[];
     /** Active studio perspective ID */
     activePerspective: any;
     /** Allowed studio perspectives */
