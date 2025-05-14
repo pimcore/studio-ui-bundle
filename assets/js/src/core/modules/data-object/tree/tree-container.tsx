@@ -18,19 +18,19 @@ import { PagerContainer } from '@Pimcore/modules/element/tree/pager/pager-contai
 import { Box } from '@Pimcore/components/box/box'
 import { Skeleton } from '@Pimcore/components/element-tree/skeleton/skeleton'
 import { withDroppable } from './node/with-droppable/with-droppable'
-import { withDroppableStyling } from './node/with-droppable/with-droppable-styling'
 import { withActionStates } from './node/with-action-states'
 import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
 import { useElementTreeRootNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-root-node'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { useComponentRegistry } from '@Pimcore/modules/app/component-registry/use-component-registry'
+import { withDroppableStyling } from '@Pimcore/modules/element/tree/node/with-droppable/with-droppable-styling'
 
 export interface TreeContainerProps {
   id: number
   showRoot?: boolean
 }
 
-export const DataObjectTreeNode = withDroppable(withDroppableStyling(withActionStates(withDraggable(TreeNodeComponent))))
+export const DataObjectTreeNode = withDroppableStyling(withDroppable(withActionStates(withDraggable(TreeNodeComponent))))
 
 const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
   const { openDataObject } = useDataObjectHelper()

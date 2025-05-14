@@ -13,11 +13,15 @@ import React, { createContext, useMemo, useState } from 'react'
 export interface ILanguageSelectionContext {
   currentLanguage: string
   setCurrentLanguage: (language: string) => void
+  hasLocalizedFields: boolean
+  setHasLocalizedFields: (hasLocalizedFields: boolean) => void
 }
 
 export const LanguageSelectionContext = createContext<ILanguageSelectionContext>({
   currentLanguage: 'en',
-  setCurrentLanguage: () => {}
+  setCurrentLanguage: () => {},
+  hasLocalizedFields: false,
+  setHasLocalizedFields: () => {}
 })
 
 export interface LanguageSelectionProviderProps {
@@ -27,10 +31,11 @@ export interface LanguageSelectionProviderProps {
 export const LanguageSelectionProvider = ({ children }: LanguageSelectionProviderProps): React.JSX.Element => {
   // @todo check for default language
   const [currentLanguage, setCurrentLanguage] = useState('en')
+  const [hasLocalizedFields, setHasLocalizedFields] = useState(false)
 
   return useMemo(() => (
-    <LanguageSelectionContext.Provider value={ { currentLanguage, setCurrentLanguage } }>
+    <LanguageSelectionContext.Provider value={ { currentLanguage, setCurrentLanguage, setHasLocalizedFields, hasLocalizedFields } }>
       {children}
     </LanguageSelectionContext.Provider>
-  ), [currentLanguage, children])
+  ), [currentLanguage, hasLocalizedFields, children])
 }
