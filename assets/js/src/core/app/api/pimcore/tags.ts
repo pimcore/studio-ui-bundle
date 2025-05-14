@@ -53,18 +53,16 @@ export const providingTags = {
   ASSET_TREE: () => [tagNames.ASSET, tagNames.ASSET_TREE],
   ASSET_TREE_ID: (id: number) => [tagNames.ASSET, { type: tagNames.ASSET_TREE, id }],
   ASSET_GRID_CONFIGURATION: () => [tagNames.ASSET_GRID_CONFIGURATION],
-  ASSET_GRID_CONFIGURATION_LIST: (folderId: number) => [
+  ASSET_GRID_CONFIGURATION_LIST: () => [
     tagNames.ASSET,
-    { type: tagNames.ASSET_DETAIL, id: folderId },
     tagNames.ASSET_GRID_CONFIGURATION,
-    { type: tagNames.ASSET_GRID_CONFIGURATION_LIST, id: folderId }
+    { type: tagNames.ASSET_GRID_CONFIGURATION_LIST }
   ],
-  ASSET_GRID_CONFIGURATION_DETAIL: (folderId?: number, configurationId?: number) => [
+  ASSET_GRID_CONFIGURATION_DETAIL: (configurationId?: number) => [
     tagNames.ASSET,
-    { type: tagNames.ASSET_DETAIL, id: folderId },
+    { type: tagNames.ASSET_DETAIL },
     tagNames.ASSET_GRID_CONFIGURATION,
-    { type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: `${folderId}-${configurationId}` },
-    { type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: `-${configurationId}` }
+    { type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: configurationId }
   ],
   ASSET_GRID_ID: (id: number) => [tagNames.ASSET, { type: tagNames.ASSET_GRID, id }],
   DATA_OBJECT_DETAIL: () => [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_DETAIL],
@@ -101,8 +99,8 @@ export const invalidatingTags = {
   ASSET_TREE: () => [tagNames.ASSET_TREE],
   ASSET_TREE_ID: (id: number) => [{ type: tagNames.ASSET_TREE, id }],
   ASSET_GRID_CONFIGURATION: () => [tagNames.ASSET_GRID_CONFIGURATION],
-  ASSET_GRID_CONFIGURATION_DETAIL: (folderId?: number, configurationId?: number) => [{ type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: `${folderId}-${configurationId}` }, { type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: `${folderId}-${configurationId}` }],
-  ASSET_GRID_CONFIGURATION_LIST: (folderId: number) => [{ type: tagNames.ASSET_GRID_CONFIGURATION_LIST, id: folderId }],
+  ASSET_GRID_CONFIGURATION_DETAIL: (configurationId?: number) => [{ type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: configurationId }, { type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: configurationId }],
+  ASSET_GRID_CONFIGURATION_LIST: () => [{ type: tagNames.ASSET_GRID_CONFIGURATION_LIST }],
   ASSET_GRID_ID: (id: number) => [{ type: tagNames.ASSET_GRID, id }],
   DATA_OBJECT: () => [tagNames.DATA_OBJECT],
   DATA_OBJECT_DETAIL: () => [tagNames.DATA_OBJECT_DETAIL],

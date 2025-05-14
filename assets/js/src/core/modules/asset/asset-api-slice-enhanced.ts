@@ -72,7 +72,7 @@ const api = baseApi.enhanceEndpoints({
     },
 
     assetGetGridConfigurationByFolderId: {
-      providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_DETAIL(args.folderId, args.configurationId)
+      providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_DETAIL(args.configurationId)
     },
 
     assetGetGrid: {
@@ -80,23 +80,23 @@ const api = baseApi.enhanceEndpoints({
     },
 
     assetSaveGridConfiguration: {
-      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION_LIST(args.body.folderId)
+      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION_LIST()
     },
 
     assetSetGridConfigurationAsFavorite: {
-      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION_LIST(args.folderId)
+      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION_LIST()
     },
 
     assetUpdateGridConfiguration: {
-      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION_DETAIL(undefined, args.configurationId)
+      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION_DETAIL(args.configurationId)
     },
 
     assetDeleteGridConfigurationByConfigurationId: {
-      invalidatesTags: (result, error, args) => [...invalidatingTags.ASSET_GRID_CONFIGURATION_DETAIL(0), ...invalidatingTags.ASSET_GRID_CONFIGURATION_LIST(0)]
+      invalidatesTags: (result, error, args) => [...invalidatingTags.ASSET_GRID_CONFIGURATION_DETAIL(), ...invalidatingTags.ASSET_GRID_CONFIGURATION_LIST()]
     },
 
     assetGetSavedGridConfigurations: {
-      providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_LIST(0)
+      providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_LIST()
     }
   }
 })
