@@ -17,9 +17,13 @@ import { useTypeSelect } from '@Pimcore/modules/element/components/type-select/p
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeObjectRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/dynamic-type-object-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 
 export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = () => {
+  console.log('dataQuerzHelper')
+
   const { selectedColumns } = useSelectedColumns()
+  const { availableColumns } = useAvailableColumns()
   const { selectedClassDefinition } = useClassDefinitionSelection()
   const { dataLoadingState, setDataLoadingState } = useData()
   const { value } = useTypeSelect()
@@ -39,7 +43,26 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
     config: column.config
   }))
 
+  // problem ist nicht das sie anfänglich nicht da sind sondern das filter apply sie weg macht
+  const systemColumns = availableColumns.filter(column => column.group === 'system')
+  console.log('systemColumns', systemColumns)
+
+  systemColumns.forEach(column => {
+    const hasColumn = columnsArg.some(selectedColumn => selectedColumn.key === column.key)
+
+    if (!hasColumn) {
+      columnsArg.push({
+        key: column.key,
+        type: column.type,
+        locale: column.locale,
+        config: []
+      })
+    }
+  })
+
   const getArgs = (): DataObjectGetSearchApiArg => {
+    console.log('columnArgs', columnsArg)
+
     return {
       classId: isValidClass ? selectedClassDefinition?.id : undefined,
       body: {
