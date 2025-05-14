@@ -8,27 +8,30 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import {
+  AdvancedManyToManyObjectRelation,
+  type AdvancedManyToManyObjectRelationClassDefinitionProps,
+  type RelationColumnDefinition
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/advanced-many-to-many-object-relation/advanced-many-to-many-object-relation'
 import {
   type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract,
   type EditModalSettings,
   type EditMode,
   type GetGridCellDefinitionProps
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
-import type { FormItemProps } from 'antd/es/form/FormItem'
 import {
   ManyToManyRelationLabel
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/components/label/label'
-import {
-  AdvancedManyToManyObjectRelation, type RelationColumnDefinition, type AdvancedManyToManyObjectRelationClassDefinitionProps
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/advanced-many-to-many-object-relation/advanced-many-to-many-object-relation'
-import { type AdvancedManyToManyRelationValue } from '../helpers/relations/types/advanced-many-to-many-relation'
-import { AdvancedManyToManyRelationList } from '../../grid-cell-preview/advanced-many-to-many-relation/advanced-many-to-many-relation'
-import { useInjection } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type DynamicTypeObjectDataRegistry } from '../dynamic-type-object-data-registry'
+import { addDefaultWithToColumnDefinition, DEFAULT_COLUMN_WIDTH } from '@Pimcore/modules/element/dynamic-types/utils/column-helper'
 import { type ColumnMeta } from '@tanstack/react-table'
+import type { FormItemProps } from 'antd/es/form/FormItem'
 import { isNil } from 'lodash'
+import React from 'react'
+import { AdvancedManyToManyRelationList } from '../../grid-cell-preview/advanced-many-to-many-relation/advanced-many-to-many-relation'
+import { type DynamicTypeObjectDataRegistry } from '../dynamic-type-object-data-registry'
+import { type AdvancedManyToManyRelationValue } from '../helpers/relations/types/advanced-many-to-many-relation'
 
 export type AdvancedManyToManyObjectRelationObjectDataDefinition = AbstractObjectDataDefinition & AdvancedManyToManyObjectRelationClassDefinitionProps
 
@@ -41,15 +44,12 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
     formLayout: 'vertical'
   }
 
-  columnDefaultWidth: number = 150 // TODO: committed value
-
   getObjectDataComponent (props: AdvancedManyToManyObjectRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
-    const columns: RelationColumnDefinition[] = []
-    const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+    let columns: RelationColumnDefinition[] = []
 
     if (!isNil(props.columns)) {
-      props.columns.forEach(column => {
-        console.log('beforeAdd', column)
+      columns = addDefaultWithToColumnDefinition(props.columns)
+      /* props.columns.forEach(column => {
         if (column.width !== undefined) {
           columns.push(column)
           return
@@ -69,7 +69,7 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
           ...column,
           width: this.columnDefaultWidth
         })
-      })
+      }) */
     }
 
     console.log('original', columns)
@@ -97,13 +97,13 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
   }
 
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
-    const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
     const value: AdvancedManyToManyRelationValue | null = props.cellProps.getValue()
     const objectProps: AdvancedManyToManyObjectRelationObjectDataDefinition = props.objectProps as AdvancedManyToManyObjectRelationObjectDataDefinition
-    const columns: RelationColumnDefinition[] = []
+    let columns: RelationColumnDefinition[] = []
 
     if (!isNil(objectProps.columns)) {
-      objectProps.columns.forEach(column => {
+      columns = columns = addDefaultWithToColumnDefinition(objectProps.columns)
+      /* objectProps.columns.forEach(column => {
         if (column.width !== undefined) {
           columns.push(column)
           return
@@ -123,7 +123,7 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
           ...column,
           width: this.columnDefaultWidth
         })
-      })
+      }) */
     }
 
     return (
@@ -142,32 +142,23 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
 
     if (columns !== null) {
       columns.forEach(column => {
-        console.log('column-loop', column)
-
         if (column.width !== undefined) {
-          console.log('add column width', column.width)
-
           calcColumnWidth += column.width
           return
         }
 
         const dynType = objectDataRegistry.getDynamicType(column.type as string, false)
         if (dynType?.getDefaultGridColumnWidth !== undefined) {
-          // console.log('dynType', dynType)
           const columnWidth = dynType.getDefaultGridColumnWidth(props)
           if (columnWidth !== undefined) {
-            // console.log('add specific column width', columnWidth)
             calcColumnWidth += columnWidth
             return
           }
         }
 
-        // console.log('add default column width', this.columnDefaultWidth)
-        calcColumnWidth += this.columnDefaultWidth
+        calcColumnWidth += DEFAULT_COLUMN_WIDTH
       })
     }
-
-    console.log('calcColumnWidth', calcColumnWidth)
 
     return calcColumnWidth
   }
