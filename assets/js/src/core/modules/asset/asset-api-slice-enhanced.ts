@@ -92,11 +92,11 @@ const api = baseApi.enhanceEndpoints({
     },
 
     assetDeleteGridConfigurationByConfigurationId: {
-      invalidatesTags: (result, error, args) => [...invalidatingTags.ASSET_GRID_CONFIGURATION_DETAIL(args.folderId), ...invalidatingTags.ASSET_GRID_CONFIGURATION_LIST(args.folderId)]
+      invalidatesTags: (result, error, args) => [...invalidatingTags.ASSET_GRID_CONFIGURATION_DETAIL(0), ...invalidatingTags.ASSET_GRID_CONFIGURATION_LIST(0)]
     },
 
     assetGetSavedGridConfigurations: {
-      providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_LIST(args.folderId)
+      providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_LIST(0)
     }
   }
 })

@@ -505,7 +505,7 @@ export type Element = {
     /** ID of owner */
     userOwner: number;
     /** User that modified the element */
-    userModification: number;
+    userModification: any;
     /** Locked */
     locked: any;
     /** Is locked */
@@ -529,23 +529,23 @@ export type CustomAttributes = {
 };
 export type Permissions = {
     /** List */
-    list?: boolean;
+    list: boolean;
     /** View */
-    view?: boolean;
+    view: boolean;
     /** Publish */
-    publish?: boolean;
+    publish: boolean;
     /** Delete */
-    delete?: boolean;
+    delete: boolean;
     /** Rename */
-    rename?: boolean;
+    rename: boolean;
     /** Create */
-    create?: boolean;
+    create: boolean;
     /** Settings */
-    settings?: boolean;
+    settings: boolean;
     /** Versions */
-    versions?: boolean;
+    versions: boolean;
     /** Properties */
-    properties?: boolean;
+    properties: boolean;
 };
 export type DataObjectPermissions = Permissions & {
     /** Save */
@@ -648,7 +648,7 @@ export type GridDetailedConfiguration = {
     /** Name */
     name: string;
     /** Description */
-    description: string;
+    description?: any;
     /** shareGlobal */
     shareGlobal: boolean;
     /** saveFilter */
@@ -684,7 +684,7 @@ export type GridConfiguration = {
     /** Name */
     name: string;
     /** Description */
-    description: string;
+    description?: any;
 };
 export type GridColumnConfiguration = {
     /** AdditionalAttributes */

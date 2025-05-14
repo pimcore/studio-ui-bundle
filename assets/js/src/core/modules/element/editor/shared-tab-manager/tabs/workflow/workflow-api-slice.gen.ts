@@ -26,7 +26,8 @@ const injectedRtkApi = api
     });
 export { injectedRtkApi as api };
 export type WorkflowGetDetailsApiResponse = /** status 200 Detail data of element workflows */ {
-    items?: WorkflowDetails[];
+    items: WorkflowDetails[];
+    layoutId: string;
 };
 export type WorkflowGetDetailsApiArg = {
     /** ID of the element */
@@ -52,8 +53,10 @@ export type WorkflowStatus = {
     title: string;
     /** label */
     label: string;
+    /** layoutId */
+    layoutId: any;
     /** visibleInDetail */
-    visibleInDetail?: boolean;
+    visibleInDetail: boolean;
 };
 export type AllowedTransition = {
     /** name */
@@ -82,12 +85,20 @@ export type GlobalAction = {
     notes: object[];
 };
 export type WorkflowDetails = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
     /** workflowName */
     workflowName: string;
+    /** workflowLabel */
+    workflowLabel: string;
     /** workflowStatus */
     workflowStatus: WorkflowStatus[];
     /** graph */
     graph: string;
+    /** workflowLayoutId */
+    workflowLayoutId: any;
     /** allowedTransitions */
     allowedTransitions: AllowedTransition[];
     /** globalActions */

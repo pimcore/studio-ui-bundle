@@ -79,7 +79,7 @@ const injectedRtkApi = api
                 AssetDeleteGridConfigurationByConfigurationIdApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/grid/configuration/${queryArg.folderId}/${queryArg.configurationId}`,
+                    url: `/pimcore-studio/api/assets/grid/configuration/${queryArg.configurationId}`,
                     method: "DELETE",
                 }),
                 invalidatesTags: ["Asset Grid"],
@@ -105,7 +105,7 @@ const injectedRtkApi = api
                 AssetGetSavedGridConfigurationsApiResponse,
                 AssetGetSavedGridConfigurationsApiArg
             >({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/grid/configurations/${queryArg.folderId}` }),
+                query: () => ({ url: `/pimcore-studio/api/assets/grid/configurations` }),
                 providesTags: ["Asset Grid"],
             }),
             assetSaveGridConfiguration: build.mutation<
@@ -428,8 +428,6 @@ export type AssetUpdateByIdApiArg = {
 export type AssetDeleteGridConfigurationByConfigurationIdApiResponse =
     /** status 200 Success */ GridDetailedConfiguration;
 export type AssetDeleteGridConfigurationByConfigurationIdApiArg = {
-    /** FolderId of the element */
-    folderId: number;
     /** ConfigurationId of the element */
     configurationId: number;
 };
@@ -451,10 +449,7 @@ export type AssetGetSavedGridConfigurationsApiResponse =
         totalItems: number;
         items: GridConfiguration[];
     };
-export type AssetGetSavedGridConfigurationsApiArg = {
-    /** FolderId of the folderId */
-    folderId: number;
-};
+export type AssetGetSavedGridConfigurationsApiArg = void;
 export type AssetSaveGridConfigurationApiResponse =
     /** status 200 Asset grid configuration saved successfully */ GridConfiguration;
 export type AssetSaveGridConfigurationApiArg = {
@@ -797,7 +792,7 @@ export type Element = {
     /** ID of owner */
     userOwner: number;
     /** User that modified the element */
-    userModification: number;
+    userModification: any;
     /** Locked */
     locked: any;
     /** Is locked */
@@ -821,23 +816,23 @@ export type CustomAttributes = {
 };
 export type Permissions = {
     /** List */
-    list?: boolean;
+    list: boolean;
     /** View */
-    view?: boolean;
+    view: boolean;
     /** Publish */
-    publish?: boolean;
+    publish: boolean;
     /** Delete */
-    delete?: boolean;
+    delete: boolean;
     /** Rename */
-    rename?: boolean;
+    rename: boolean;
     /** Create */
-    create?: boolean;
+    create: boolean;
     /** Settings */
-    settings?: boolean;
+    settings: boolean;
     /** Versions */
-    versions?: boolean;
+    versions: boolean;
     /** Properties */
-    properties?: boolean;
+    properties: boolean;
 };
 export type AssetPermissions = Permissions;
 export type Asset = Element & {
@@ -952,7 +947,7 @@ export type GridDetailedConfiguration = {
     /** Name */
     name: string;
     /** Description */
-    description: string;
+    description?: any;
     /** shareGlobal */
     shareGlobal: boolean;
     /** saveFilter */
@@ -1016,7 +1011,7 @@ export type GridConfiguration = {
     /** Name */
     name: string;
     /** Description */
-    description: string;
+    description?: any;
 };
 export type GridColumnData = {
     /** AdditionalAttributes */

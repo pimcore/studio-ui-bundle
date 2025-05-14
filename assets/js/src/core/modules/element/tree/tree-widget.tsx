@@ -10,6 +10,7 @@
 
 import { TreeContainer as AssetTreeContainer } from '@Pimcore/modules/asset/tree/tree-container'
 import { TreeContainer as DataObjectTreeContainer } from '@Pimcore/modules/data-object/tree/tree-container'
+import { TreeContainer as DocumentTreeContainer } from '@Pimcore/modules/document/tree/tree-container'
 import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
 import React from 'react'
 import { TreeFilterProvider } from './provider/tree-filter-provider/tree-filter-provider'
@@ -18,6 +19,7 @@ import { TreeIdProvider } from './provider/tree-id-provider/tree-id-provider'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { useNodeApiHook as useNodeApiHookDataObject } from '@Pimcore/modules/data-object/tree/hooks/use-node-api-hook'
 import { useNodeApiHook as useNodeApiHookAsset } from '@Pimcore/modules/asset/tree/hooks/use-node-api-hook'
+import { useNodeApiHook as useNodeApiHookDocument } from '@Pimcore/modules/document/tree/hooks/use-node-api-hook'
 import { NodeApiHookProvider } from '@Pimcore/components/element-tree/provider/node-api-hook-provider/node-api-hook-provider'
 
 export interface TreeWidgetProps {
@@ -55,6 +57,15 @@ export const TreeWidget = ({ id, elementType, rootFolderId, classes, pql, pageSi
 
           <NodeApiHookProvider nodeApiHook={ useNodeApiHookDataObject }>
             <DataObjectTreeContainer
+              id={ rootFolderId ?? 1 }
+              showRoot={ showRoot }
+            />
+          </NodeApiHookProvider>
+          )}
+          { elementType === elementTypes.document && (
+
+          <NodeApiHookProvider nodeApiHook={ useNodeApiHookDocument }>
+            <DocumentTreeContainer
               id={ rootFolderId ?? 1 }
               showRoot={ showRoot }
             />
