@@ -25,11 +25,11 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
 
+  const [logout] = useLogoutMutation()
   const handleLogout = (): void => {
-    const [logout] = useLogoutMutation()
     const logoutTask = logout()
 
-    logoutTask.then((response) => {
+    logoutTask.then(() => {
       window.location.reload()
     }).catch((error: Error) => {
       trackError(new ApiError(error))
@@ -65,9 +65,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       key: 'logout',
       label: t('user-menu.log-out'),
       icon: <Icon value={ 'log-out' } />,
-      onClick: () => {
-        handleLogout()
-      }
+      onClick: handleLogout
     }
   ]
 
