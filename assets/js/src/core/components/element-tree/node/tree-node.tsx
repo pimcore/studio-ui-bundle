@@ -214,7 +214,6 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
 
   const nodeContent = (
     <Flex
-      className='tree-node__content'
       gap="small"
       onClick={ onClick }
       onContextMenu={ onContextMenu }
@@ -246,7 +245,9 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
       className={ getClasses() }
       ref={ forwardRef }
     >
-      {wrapNode(nodeContent)}
+      <div className="tree-node__content">
+        {wrapNode(nodeContent)}
+      </div>
 
       {isExpanded && (
         <TreeList node={ treeNodeProps } />
