@@ -73,13 +73,11 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
   ]
 
   return (
-    <>
-      <Dropdown
-        menu={ { items } }
-        trigger={ ['contextMenu'] }
-      >
-        {props.children}
-      </Dropdown>
-    </>
+    <Dropdown
+      menu={ { items } }
+      trigger={ ['contextMenu'] }
+    >
+      {props.children}
+    </Dropdown>
   )
 }
