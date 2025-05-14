@@ -16,6 +16,14 @@ export const useStyle = createStyles(({ token, css }) => {
       .user-menu__title {
         text-transform: uppercase;
       }
+      
+      .user-menu__item-extra {
+        margin-left: auto;
+      }
+      
+      .ant-dropdown-menu-item .ant-flex {
+        width: 100%;
+      }
     
       .ant-badge .ant-badge-count {
         background: ${token.colorPrimary};

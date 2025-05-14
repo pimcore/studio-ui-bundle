@@ -9,12 +9,14 @@
  */
 
 import { Icon } from '@Pimcore/components/icon/icon'
-import { Flex, Badge, Avatar, type MenuProps } from 'antd'
+import { Badge, Avatar, type MenuProps } from 'antd'
 import React from 'react'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { useTranslation } from 'react-i18next'
 import { useStyle } from './user-menu.styles'
 import { Button } from '@Pimcore/components/button/button'
+import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface IUserMenuProps {
   className?: string
@@ -23,53 +25,48 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
 
+  const handleLogout = (): void => {
+    const [logout] = useLogoutMutation()
+    const logoutTask = logout()
+
+    logoutTask.then((response) => {
+      window.location.reload()
+    }).catch((error: Error) => {
+      trackError(new ApiError(error))
+    })
+  }
+
   const items: MenuProps['items'] = [
     {
       key: 'title',
       label: (
         <div className={ 'user-menu__title' }>{t('user-menu.title')}</div>
       ),
-      disabled: true
+      type: 'group'
     },
     {
       key: 'notifications',
-      label: (
-        <Flex gap={ 'small' }>
-          <Badge
-            count={ 5 }
-          />
-          {t('user-menu.notifications')}
-
-          <Button size={ 'small' }>Send</Button>
-        </Flex>
-      )
+      label: t('user-menu.notifications'),
+      icon: <Badge count={ 5 } />,
+      extra: <Button
+        className={ 'user-menu__item-extra' }
+        size={ 'small' }
+             >{t('user-menu.notifications-send')}</Button>
     },
     {
       key: 'myprofile',
-      label: (
-        <Flex
-          gap={ 'small' }
-        >
-          <Icon value={ 'user' } />
-          {t('user-menu.my-profile')}
-        </Flex>
-      ),
+      label: t('user-menu.my-profile'),
+      icon: <Icon value={ 'user' } />,
       onClick: () => {
         console.log('My Profile clicked')
       }
     },
     {
       key: 'logout',
-      label: (
-        <Flex
-          gap={ 'small' }
-        >
-          <Icon value={ 'log-out' } />
-          {t('user-menu.log-out')}
-        </Flex>
-      ),
+      label: t('user-menu.log-out'),
+      icon: <Icon value={ 'log-out' } />,
       onClick: () => {
-        console.log('logout clicked')
+        handleLogout()
       }
     }
   ]
@@ -79,6 +76,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       className={ className }
       menu={ { items } }
       overlayClassName={ [styles.userMenu].join(' ') }
+      overlayStyle={ { minWidth: 275 } }
     >
       <Avatar
         icon={ <Icon value='user' /> }
