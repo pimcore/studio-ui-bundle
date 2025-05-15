@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 export * from '@Pimcore/modules/asset/actions/clear-thumbnails/use-clear-thumbnails'
 export * from '@Pimcore/modules/asset/actions/download/use-download'
@@ -21,8 +18,6 @@ export * from '@Pimcore/modules/asset/draft/hooks/use-image-settings'
 
 export * from '@Pimcore/modules/asset/editor/shared-tab-manager/tab-definitions'
 export * as MetadataApiSlice from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice.gen'
-// @todo is this really the right location for settings?
-export * as SettingsApiSlice from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 export * from '@Pimcore/modules/asset/editor/types/archive/tab-manager/archive-tab-manager'
 export * from '@Pimcore/modules/asset/editor/types/audio/tab-manager/audio-tab-manager'
 export * from '@Pimcore/modules/asset/editor/types/document/tab-manager/document-tab-manager'

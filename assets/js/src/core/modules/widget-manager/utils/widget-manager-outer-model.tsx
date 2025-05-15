@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { store } from '@Pimcore/app/store'
 import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
@@ -17,6 +14,7 @@ import { type WidgetConfig, type PerspectiveConfigDetail } from '@Pimcore/module
 import { uuid } from '@Pimcore/utils/uuid'
 import { type IJsonTabNode, type IJsonModel } from 'flexlayout-react'
 import { isNil } from 'lodash'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 
 export const getInitialModelJson = (): IJsonModel => {
   const activePerspective = selectActivePerspective(store.getState())
@@ -74,7 +72,7 @@ export const getInitialModelJson = (): IJsonModel => {
         type: 'border',
         location: 'left',
         size: 315,
-        selected: getWidgetIndex(activePerspective?.widgetsLeft, activePerspective?.expandedLeft as string | undefined | null),
+        selected: getWidgetIndex(widgetsLeft, activePerspective?.expandedLeft as string | undefined | null),
         children: widgetsLeft
       },
 
@@ -82,7 +80,7 @@ export const getInitialModelJson = (): IJsonModel => {
         type: 'border',
         location: 'right',
         size: 315,
-        selected: getWidgetIndex(activePerspective?.widgetsRight, activePerspective?.expandedRight as string | undefined | null),
+        selected: getWidgetIndex(widgetsRight, activePerspective?.expandedRight as string | undefined | null),
         children: widgetsRight
       }
     ]
@@ -110,19 +108,35 @@ const getWidgetsBottom = (activePerspective: PerspectiveConfigDetail | null, use
   return widgetsToModelJson(activePerspective.widgetsBottom, usedIds)
 }
 
-const getWidgetIndex = (widgets?: WidgetConfig[], widgetId?: string | null): number | undefined => {
+const getWidgetIndex = (widgets?: IJsonTabNode[], widgetId?: string | null): number | undefined => {
   if (isNil(widgets) || isNil(widgetId)) {
     return undefined
   }
-  return widgets.findIndex(widget => widget.id === widgetId)
+  const widgetIndex = widgets.findIndex(widget => widget.id === widgetId)
+  if (widgetIndex === -1) {
+    return widgets.length > 0 ? 0 : undefined
+  }
+  return widgetIndex
 }
 
 const widgetsToModelJson = (widgets: WidgetConfig[] | undefined, usedIds: Set<string>): IJsonTabNode[] => {
   const result: IJsonTabNode[] = []
 
+  const hasDocumentPermission: boolean = process.env.NODE_ENV === 'production' ? false : isAllowed('documents')
+  const hasAssetPermission: boolean = isAllowed('assets')
+  const hasObjectPermission: boolean = isAllowed('objects')
+
   widgets?.forEach((widget) => {
     // skip document trees until we have a documents implementation
-    if (widget.widgetType === 'element_tree' && 'elementType' in widget && widget.elementType === 'document') {
+    if (widget.widgetType === 'element_tree' && 'elementType' in widget && widget.elementType === 'document' && !hasDocumentPermission) {
+      return
+    }
+
+    if (widget.widgetType === 'element_tree' && 'elementType' in widget && widget.elementType === 'asset' && !hasAssetPermission) {
+      return
+    }
+
+    if (widget.widgetType === 'element_tree' && 'elementType' in widget && widget.elementType === 'data-object' && !hasObjectPermission) {
       return
     }
 

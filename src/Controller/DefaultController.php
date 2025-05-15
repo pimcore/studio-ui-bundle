@@ -2,20 +2,18 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 namespace Pimcore\Bundle\StudioUiBundle\Controller;
 
+use Pimcore\Bundle\StudioBackendBundle\Mercure\Service\UrlServiceInterface;
 use Pimcore\Bundle\StudioUiBundle\Service\StaticResourcesResolverInterface;
 use Pimcore\Controller\FrontendController;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,8 +26,8 @@ final class DefaultController extends FrontendController
     #[Route('/{elementType}/{id}', requirements: ['elementType' => 'asset|data-object|document', 'id' => '\d+'])]
     public function indexAction(
         StaticResourcesResolverInterface $staticResourcesResolver,
+        UrlServiceInterface $mercureUrlService,
         string $studioUrlUrlPath,
-        string $studioMercureClientUrl,
         array $studioWysiwygConfiguration
     ): Response {
         return $this->render('@PimcoreStudioUi/default/index.html.twig', [
@@ -40,7 +38,7 @@ final class DefaultController extends FrontendController
             'additionalCssFiles' => $staticResourcesResolver->getAdditionalCssFiles(),
             'additionalJsFiles' => $staticResourcesResolver->getAdditionalJsFiles(),
             'baseUrl' => $studioUrlUrlPath,
-            'mercureUrl' => $studioMercureClientUrl,
+            'mercureUrl' => $mercureUrlService->getClientSideUrl(),
             'wysiwygConfiguration' => $studioWysiwygConfiguration,
         ]);
     }

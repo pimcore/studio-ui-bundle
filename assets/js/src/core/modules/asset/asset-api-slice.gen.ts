@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Assets", "Asset Grid", "Metadata", "Search", "Versions"] as const;
+export const addTagTypes = ["Assets", "Asset Grid", "Metadata"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -79,7 +79,7 @@ const injectedRtkApi = api
                 AssetDeleteGridConfigurationByConfigurationIdApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/grid/configuration/${queryArg.folderId}/${queryArg.configurationId}`,
+                    url: `/pimcore-studio/api/assets/grid/configuration/${queryArg.configurationId}`,
                     method: "DELETE",
                 }),
                 invalidatesTags: ["Asset Grid"],
@@ -105,7 +105,7 @@ const injectedRtkApi = api
                 AssetGetSavedGridConfigurationsApiResponse,
                 AssetGetSavedGridConfigurationsApiArg
             >({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/grid/configurations/${queryArg.folderId}` }),
+                query: () => ({ url: `/pimcore-studio/api/assets/grid/configurations` }),
                 providesTags: ["Asset Grid"],
             }),
             assetSaveGridConfiguration: build.mutation<
@@ -315,25 +315,6 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/custom-metadata` }),
                 providesTags: ["Metadata"],
             }),
-            assetGetSearchConfiguration: build.query<
-                AssetGetSearchConfigurationApiResponse,
-                AssetGetSearchConfigurationApiArg
-            >({
-                query: () => ({ url: `/pimcore-studio/api/search/configuration/assets` }),
-                providesTags: ["Search"],
-            }),
-            assetGetSearch: build.query<AssetGetSearchApiResponse, AssetGetSearchApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/search/assets`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                providesTags: ["Search"],
-            }),
-            versionAssetDownloadById: build.query<VersionAssetDownloadByIdApiResponse, VersionAssetDownloadByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}/asset/download` }),
-                providesTags: ["Versions"],
-            }),
         }),
         overrideExisting: false,
     });
@@ -447,8 +428,6 @@ export type AssetUpdateByIdApiArg = {
 export type AssetDeleteGridConfigurationByConfigurationIdApiResponse =
     /** status 200 Success */ GridDetailedConfiguration;
 export type AssetDeleteGridConfigurationByConfigurationIdApiArg = {
-    /** FolderId of the element */
-    folderId: number;
     /** ConfigurationId of the element */
     configurationId: number;
 };
@@ -470,10 +449,7 @@ export type AssetGetSavedGridConfigurationsApiResponse =
         totalItems: number;
         items: GridConfiguration[];
     };
-export type AssetGetSavedGridConfigurationsApiArg = {
-    /** FolderId of the folderId */
-    folderId: number;
-};
+export type AssetGetSavedGridConfigurationsApiArg = void;
 export type AssetSaveGridConfigurationApiResponse =
     /** status 200 Asset grid configuration saved successfully */ GridConfiguration;
 export type AssetSaveGridConfigurationApiArg = {
@@ -760,29 +736,6 @@ export type AssetCustomMetadataGetByIdApiArg = {
     /** Id of the asset */
     id: number;
 };
-export type AssetGetSearchConfigurationApiResponse =
-    /** status 200 Asset search configuration */ GridDetailedConfiguration;
-export type AssetGetSearchConfigurationApiArg = void;
-export type AssetGetSearchApiResponse = /** status 200 Assets for search grid */ {
-    totalItems: number;
-    items: {
-        id?: number;
-        columns?: GridColumnData[];
-        isLocked?: boolean;
-        permissions?: Permissions;
-    }[];
-};
-export type AssetGetSearchApiArg = {
-    body: {
-        columns: GridColumnRequest[];
-        filters?: GridFilter;
-    };
-};
-export type VersionAssetDownloadByIdApiResponse = /** status 200 Asset version binary file */ Blob;
-export type VersionAssetDownloadByIdApiArg = {
-    /** Id of the version */
-    id: number;
-};
 export type Error = {
     /** Message */
     message: string;
@@ -839,7 +792,7 @@ export type Element = {
     /** ID of owner */
     userOwner: number;
     /** User that modified the element */
-    userModification: number;
+    userModification: any;
     /** Locked */
     locked: any;
     /** Is locked */
@@ -863,23 +816,23 @@ export type CustomAttributes = {
 };
 export type Permissions = {
     /** List */
-    list?: boolean;
+    list: boolean;
     /** View */
-    view?: boolean;
+    view: boolean;
     /** Publish */
-    publish?: boolean;
+    publish: boolean;
     /** Delete */
-    delete?: boolean;
+    delete: boolean;
     /** Rename */
-    rename?: boolean;
+    rename: boolean;
     /** Create */
-    create?: boolean;
+    create: boolean;
     /** Settings */
-    settings?: boolean;
+    settings: boolean;
     /** Versions */
-    versions?: boolean;
+    versions: boolean;
     /** Properties */
-    properties?: boolean;
+    properties: boolean;
 };
 export type AssetPermissions = Permissions;
 export type Asset = Element & {
@@ -994,7 +947,7 @@ export type GridDetailedConfiguration = {
     /** Name */
     name: string;
     /** Description */
-    description: string;
+    description?: any;
     /** shareGlobal */
     shareGlobal: boolean;
     /** saveFilter */
@@ -1058,7 +1011,7 @@ export type GridConfiguration = {
     /** Name */
     name: string;
     /** Description */
-    description: string;
+    description?: any;
 };
 export type GridColumnData = {
     /** AdditionalAttributes */
@@ -1162,7 +1115,4 @@ export const {
     useAssetVideoDownloadByThumbnailQuery,
     useAssetVideoStreamByThumbnailQuery,
     useAssetCustomMetadataGetByIdQuery,
-    useAssetGetSearchConfigurationQuery,
-    useAssetGetSearchQuery,
-    useVersionAssetDownloadByIdQuery,
 } = injectedRtkApi;

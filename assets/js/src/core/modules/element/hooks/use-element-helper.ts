@@ -1,20 +1,18 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { type SaveTaskType } from '@Pimcore/modules/data-object/actions/save/use-save'
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
+import { useDocumentHelper } from '@Pimcore/modules/document/hooks/use-document-helper'
 import { mapToElementType as mapType } from '@Pimcore/modules/element/utils/element-type'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
@@ -32,6 +30,7 @@ interface UseElementReturn {
 export const useElementHelper = (): UseElementReturn => {
   const { openAsset } = useAssetHelper()
   const { openDataObject } = useDataObjectHelper()
+  const { openDocument } = useDocumentHelper()
   const { executeDataObjectTask } = useDataObjectHelper()
 
   async function openElement (props: OpenElementWidgetProps): Promise<void> {
@@ -48,8 +47,12 @@ export const useElementHelper = (): UseElementReturn => {
           id: props.id
         }
       })
-    } else {
-      console.log('Opening ' + elementType + ' is not supported yet.')
+    } else if (elementType === 'document') {
+      void openDocument({
+        config: {
+          id: props.id
+        }
+      })
     }
   }
 

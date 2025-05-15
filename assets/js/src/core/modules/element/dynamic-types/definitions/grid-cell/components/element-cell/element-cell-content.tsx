@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React, { forwardRef, type MutableRefObject } from 'react'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
@@ -19,6 +16,9 @@ import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppa
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
 import { type ElementInfo } from './element-cell'
+import { isPlainObject } from 'lodash'
+import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
+import { type ElementReference } from '@Pimcore/modules/element/element-helper'
 
 export interface ElementCellContentProps extends DefaultCellProps {
   dropDisabled?: boolean
@@ -41,7 +41,20 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
     const includesPathInformation = propertyData.data !== null && (propertyData.data?.fullPath !== undefined || propertyData.data?.path !== undefined)
     const hasFullPath = includesPathInformation && propertyData.data?.fullPath !== undefined
 
-    let fullPath = props.getValue()
+    const value = props.getValue()
+
+    if (isPlainObject(value)) {
+      const element: ElementReference = value as ElementReference
+      const elementType = mapToElementType(String(element.type))
+      return {
+        elementType: elementType ?? undefined,
+        id: element.id,
+        fullPath: element.fullPath,
+        published: element.isPublished ?? undefined
+      }
+    }
+
+    let fullPath = value
 
     if (includesPathInformation && hasFullPath) {
       fullPath = propertyData.data.fullPath

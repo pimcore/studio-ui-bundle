@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import type { ActionCreatorWithPayload, PayloadAction } from '@reduxjs/toolkit'
 import type { EntityAdapter, EntityState } from '@reduxjs/toolkit/src/entities/models'
@@ -17,7 +14,7 @@ import type { EntityAdapter, EntityState } from '@reduxjs/toolkit/src/entities/m
 import { useAppDispatch } from '@Pimcore/app/store'
 import type {
   CustomMetadata as CustomMetadataApi
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'
 import { type TrackableChangesDraft } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 

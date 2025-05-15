@@ -195,7 +195,7 @@ export type Element = {
     /** ID of owner */
     userOwner: number;
     /** User that modified the element */
-    userModification: number;
+    userModification: any;
     /** Locked */
     locked: any;
     /** Is locked */

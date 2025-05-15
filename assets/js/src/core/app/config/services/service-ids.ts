@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/FieldFilterRegistry': 'DynamicTypes/FieldFilterRegistry',
@@ -46,6 +43,15 @@ export const serviceIds = {
   'DataObject/Editor/TypeRegistry': 'DataObject/Editor/TypeRegistry',
   'DataObject/Editor/ObjectTabManager': 'DataObject/Editor/ObjectTabManager',
   'DataObject/Editor/FolderTabManager': 'DataObject/Editor/FolderTabManager',
+
+  // Documents
+  'Document/Editor/TypeRegistry': 'Document/Editor/TypeRegistry',
+  'Document/Editor/PageTabManager': 'Document/Editor/PageTabManager',
+  'Document/Editor/EmailTabManager': 'Document/Editor/EmailTabManager',
+  'Document/Editor/FolderTabManager': 'Document/Editor/FolderTabManager',
+  'Document/Editor/HardlinkTabManager': 'Document/Editor/HardlinkTabManager',
+  'Document/Editor/LinkTabManager': 'Document/Editor/LinkTabManager',
+  'Document/Editor/SnippetTabManager': 'Document/Editor/SnippetTabManager',
 
   // icon library
   iconLibrary: 'IconLibrary',

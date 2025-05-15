@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
@@ -32,6 +29,9 @@ export const tagNames = {
   DATA_OBJECT_DETAIL: 'DATA_OBJECT_DETAIL',
   DATA_OBJECT_TREE: 'DATA_OBJECT_TREE',
   DATA_OBJECT_GRID: 'DATA_OBJECT_GRID',
+  DOCUMENT: 'DOCUMENT',
+  DOCUMENT_DETAIL: 'DOCUMENT_DETAIL',
+  DOCUMENT_TREE: 'DOCUMENT_TREE',
   WORKFLOW: 'WORKFLOW',
   VERSIONS: 'VERSION',
   PROPERTIES: 'PROPERTIES',
@@ -53,18 +53,16 @@ export const providingTags = {
   ASSET_TREE: () => [tagNames.ASSET, tagNames.ASSET_TREE],
   ASSET_TREE_ID: (id: number) => [tagNames.ASSET, { type: tagNames.ASSET_TREE, id }],
   ASSET_GRID_CONFIGURATION: () => [tagNames.ASSET_GRID_CONFIGURATION],
-  ASSET_GRID_CONFIGURATION_LIST: (folderId: number) => [
+  ASSET_GRID_CONFIGURATION_LIST: () => [
     tagNames.ASSET,
-    { type: tagNames.ASSET_DETAIL, id: folderId },
     tagNames.ASSET_GRID_CONFIGURATION,
-    { type: tagNames.ASSET_GRID_CONFIGURATION_LIST, id: folderId }
+    { type: tagNames.ASSET_GRID_CONFIGURATION_LIST }
   ],
-  ASSET_GRID_CONFIGURATION_DETAIL: (folderId?: number, configurationId?: number) => [
+  ASSET_GRID_CONFIGURATION_DETAIL: (configurationId?: number) => [
     tagNames.ASSET,
-    { type: tagNames.ASSET_DETAIL, id: folderId },
+    { type: tagNames.ASSET_DETAIL },
     tagNames.ASSET_GRID_CONFIGURATION,
-    { type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: `${folderId}-${configurationId}` },
-    { type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: `-${configurationId}` }
+    { type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: configurationId }
   ],
   ASSET_GRID_ID: (id: number) => [tagNames.ASSET, { type: tagNames.ASSET_GRID, id }],
   DATA_OBJECT_DETAIL: () => [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_DETAIL],
@@ -72,6 +70,10 @@ export const providingTags = {
   DATA_OBJECT_TREE: () => [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_TREE],
   DATA_OBJECT_TREE_ID: (id: number) => [tagNames.DATA_OBJECT, { type: tagNames.DATA_OBJECT_TREE, id }],
   DATA_OBJECT_GRID_ID: (id: number) => [tagNames.DATA_OBJECT, { type: tagNames.DATA_OBJECT_GRID, id }],
+  DOCUMENT_DETAIL: () => [tagNames.DOCUMENT, tagNames.DOCUMENT_DETAIL],
+  DOCUMENT_DETAIL_ID: (id: number) => [tagNames.DOCUMENT, { type: tagNames.DOCUMENT_DETAIL, id }],
+  DOCUMENT_TREE: () => [tagNames.DOCUMENT, tagNames.DOCUMENT_TREE],
+  DOCUMENT_TREE_ID: (id: number) => [tagNames.DOCUMENT, { type: tagNames.DOCUMENT_TREE, id }],
   ELEMENT_DEPENDENCIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.DEPENDENCIES, elementType, id)],
   ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.WORKFLOW, elementType, id)],
   PROPERTY_DETAIL: (id: string) => [{ type: tagNames.PROPERTIES, id }],
@@ -97,8 +99,8 @@ export const invalidatingTags = {
   ASSET_TREE: () => [tagNames.ASSET_TREE],
   ASSET_TREE_ID: (id: number) => [{ type: tagNames.ASSET_TREE, id }],
   ASSET_GRID_CONFIGURATION: () => [tagNames.ASSET_GRID_CONFIGURATION],
-  ASSET_GRID_CONFIGURATION_DETAIL: (folderId?: number, configurationId?: number) => [{ type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: `${folderId}-${configurationId}` }, { type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: `${folderId}-${configurationId}` }],
-  ASSET_GRID_CONFIGURATION_LIST: (folderId: number) => [{ type: tagNames.ASSET_GRID_CONFIGURATION_LIST, id: folderId }],
+  ASSET_GRID_CONFIGURATION_DETAIL: (configurationId?: number) => [{ type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: configurationId }, { type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: configurationId }],
+  ASSET_GRID_CONFIGURATION_LIST: () => [{ type: tagNames.ASSET_GRID_CONFIGURATION_LIST }],
   ASSET_GRID_ID: (id: number) => [{ type: tagNames.ASSET_GRID, id }],
   DATA_OBJECT: () => [tagNames.DATA_OBJECT],
   DATA_OBJECT_DETAIL: () => [tagNames.DATA_OBJECT_DETAIL],
@@ -106,6 +108,11 @@ export const invalidatingTags = {
   DATA_OBJECT_TREE: () => [tagNames.DATA_OBJECT_TREE],
   DATA_OBJECT_TREE_ID: (id: number) => [{ type: tagNames.DATA_OBJECT_TREE, id }],
   DATA_OBJECT_GRID_ID: (id: number) => [{ type: tagNames.DATA_OBJECT_GRID, id }],
+  DOCUMENT: () => [tagNames.DOCUMENT],
+  DOCUMENT_DETAIL: () => [tagNames.DOCUMENT_DETAIL],
+  DOCUMENT_DETAIL_ID: (id: number) => [{ type: tagNames.DOCUMENT_DETAIL, id }, elementUnspecificDataTag],
+  DOCUMENT_TREE: () => [tagNames.DOCUMENT_TREE],
+  DOCUMENT_TREE_ID: (id: number) => [{ type: tagNames.DOCUMENT_TREE, id }],
   ELEMENT_DEPENDENCIES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.DEPENDENCIES, elementType, id)],
   ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.WORKFLOW, elementType, id)],
   PROPERTY_DETAIL: (id: string) => [{ type: tagNames.PROPERTIES, id }],
