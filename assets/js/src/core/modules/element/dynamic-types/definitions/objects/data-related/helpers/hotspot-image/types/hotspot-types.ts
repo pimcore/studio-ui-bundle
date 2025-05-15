@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 export interface Hotspot {
   top: number
@@ -23,11 +20,11 @@ export interface Hotspot {
 export interface Marker {
   top: number
   left: number
-  data: any
+  data?: any
   name?: string | null
 }
 
-export type HotspotMarkerRelationDataType = 'data-object' | 'asset' | 'document'
+export type HotspotMarkerRelationDataType = 'object' | 'asset' | 'document'
 
 export type ExpandedHotspotMarkerDataBase<T extends keyof HotspotValueMap> = {
   type: T
@@ -37,17 +34,17 @@ export type ExpandedHotspotMarkerDataBase<T extends keyof HotspotValueMap> = {
   : { value: HotspotValueMap[T] })
 
 export interface HotspotObjectType {
-  value: number
+  value: number | null
   fullPath: string
   published: boolean | null
-  subtype: 'object'
+  subtype: string
 }
 
 export interface HotspotValueMap {
   textfield: string
   textarea: string
   checkbox: boolean
-  'data-object': HotspotObjectType
+  object: HotspotObjectType
   document: HotspotObjectType
   asset: HotspotObjectType
 }

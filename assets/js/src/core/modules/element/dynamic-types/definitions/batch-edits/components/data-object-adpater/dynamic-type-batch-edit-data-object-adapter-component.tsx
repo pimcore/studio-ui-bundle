@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React from 'react'
 import {
@@ -19,8 +16,8 @@ import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type DynamicTypeObjectDataRegistry } from '../../../objects/data-related/dynamic-type-object-data-registry'
 import { type AbstractDateObjectDataDefinition } from '../../../objects/data-related/types/abstract/dynamic-type-object-data-abstract-date'
-import { Form } from '@Pimcore/components/form/form'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
+import { BatchEditFormItem } from '../../helpers/data-object/batch-edit-form-item'
 
 export const DynamicTypeBatchEditDataObjectAdapterComponent = ({ batchEdit }: AbstractBatchEditDefinition): React.JSX.Element => {
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
@@ -51,8 +48,10 @@ export const DynamicTypeBatchEditDataObjectAdapterComponent = ({ batchEdit }: Ab
   }
 
   return (
-    <Form.Item name={ formItemKey }>
-      {component}
-    </Form.Item>
+    <BatchEditFormItem
+      component={ component }
+      name={ formItemKey }
+      supportsBatchAppendModes={ dynType.supportsBatchAppendModes }
+    />
   )
 }

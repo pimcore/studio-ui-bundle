@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React from 'react'
 import { type AbstractObjectDataDefinition, type WithEditModalGridCellDefinition } from '../../../../objects/data-related/dynamic-type-object-data-abstract'
@@ -23,6 +20,7 @@ import { FieldCollectionProvider } from '../../../../objects/data-related/compon
 import { InheritanceLayer } from '../inheritance-layer'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
+import { META_SUPPORTS_BATCH_APPEND_MODE } from '@Pimcore/modules/data-object/listing/batch-actions/batch-append-mode/batch-append-mode'
 
 export interface EditModalModeCellProps {
   objectCellDefinition: WithEditModalGridCellDefinition
@@ -35,7 +33,10 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
   const [form] = Form.useForm()
 
   const onFormFinish = (values): void => {
-    fireOnUpdateCellDataEvent(values.value)
+    fireOnUpdateCellDataEvent(values.value, {
+      [META_SUPPORTS_BATCH_APPEND_MODE]: props.objectCellDefinition.supportsBatchAppendModes
+    })
+
     disableEditMode()
   }
 

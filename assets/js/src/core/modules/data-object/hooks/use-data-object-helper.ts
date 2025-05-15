@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { store, useAppDispatch } from '@Pimcore/app/store'
@@ -26,6 +23,7 @@ import { SaveTaskType } from '../actions/save/use-save'
 import { useDataObjectUpdateByIdMutation } from '../data-object-api-slice.gen'
 import { publishDraft, unpublishDraft } from '../data-object-draft-slice'
 import { type EditorContainerProps } from '../editor/editor-container'
+import { useDataObjectDraftFetcher } from './use-data-object-draft-fetcher'
 
 interface OpenDataObjectWidgetProps {
   config: EditorContainerProps
@@ -40,6 +38,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
   const { openMainWidget, isMainWidgetOpen } = useWidgetManager()
   const dispatch = useAppDispatch()
   const [update] = useDataObjectUpdateByIdMutation()
+  const { updateDataObjectDraft } = useDataObjectDraftFetcher()
 
   async function openDataObject (props: OpenDataObjectWidgetProps): Promise<void> {
     const { config } = props
@@ -47,6 +46,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
 
     if (!isMainWidgetOpen(widgetId)) {
       dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_DETAIL_ID(config.id)))
+      void updateDataObjectDraft(config.id, true)
     }
 
     const { data } = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id: config.id }))

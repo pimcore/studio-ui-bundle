@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import {
   type DataProperty as DataPropertyApi
@@ -30,6 +27,7 @@ import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-co
 import { Text } from '@Pimcore/components/text/text'
 import { Box } from '@Pimcore/components/box/box'
 import { uuid } from '@Pimcore/utils/uuid'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 interface ITableProps {
   propertiesTableTab: string
@@ -51,7 +49,8 @@ export const Table = ({
   const { styles } = useStyles()
   const { id, elementType } = useElementContext()
   const { element, properties, setProperties, updateProperty, removeProperty, setModifiedCells } = useElementDraft(id, elementType)
-  const arePropertiesAvailable = properties !== undefined && properties.length > 0
+  const arePropertiesAvailable = properties !== undefined
+  const isEditable = checkElementPermission(element?.permissions, 'publish') || checkElementPermission(element?.permissions, 'save')
 
   const { data, isLoading } = usePropertyGetCollectionForElementByTypeAndIdQuery({
     elementType,
@@ -103,12 +102,12 @@ export const Table = ({
       meta: {
         type: 'property-icon'
       },
-      size: 40
+      size: 44
     }),
     columnHelper.accessor('key', {
       header: t('properties.columns.key'),
       meta: {
-        editable: true
+        editable: isEditable && tableType === 'own'
       },
       size: 200
     }),
@@ -124,17 +123,17 @@ export const Table = ({
       header: t('properties.columns.data'),
       meta: {
         type: 'property-value',
-        editable: tableType === 'own',
+        editable: isEditable && tableType === 'own',
         autoWidth: true
       },
       size: 300
     }),
     columnHelper.accessor('inheritable', {
       header: t('properties.columns.inheritable'),
-      size: 70,
+      size: 74,
       meta: {
         type: 'checkbox',
-        editable: tableType === 'own',
+        editable: isEditable && tableType === 'own',
         config: {
           align: 'center'
         }

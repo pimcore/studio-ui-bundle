@@ -1,20 +1,18 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, type FormProps, Input } from 'antd'
+import { type FormProps, Input } from 'antd'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
+import { Form } from '@Pimcore/components/form/form'
 import {
   useNoteElementGetTypeCollectionQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
@@ -37,7 +35,7 @@ export const AddNoteForm = ({ elementType, ...props }: AddNoteFormProps): React.
     return <Content loading />
   }
 
-  const noteTypeOptions = noteTypesResponse?.items?.map((noteType) => ({ value: noteType.id, label: t('notes-and-events.' + noteType.id) }))
+  const noteTypeOptions = noteTypesResponse?.items?.map((noteType) => ({ value: noteType.id, label: noteType.id }))
 
   return (
     <Form

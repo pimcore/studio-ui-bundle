@@ -1,19 +1,15 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { kebabCase } from 'lodash'
 import {
   type Note
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
@@ -46,6 +42,7 @@ interface NotesAndEventsTabViewProps {
   onClickTrash: (id: number) => void
   elementType: ElementType
   elementId: number
+  deleteLoading: boolean
 }
 
 export const NotesAndEventsTabView = ({
@@ -53,7 +50,8 @@ export const NotesAndEventsTabView = ({
   pagination,
   onClickTrash,
   elementId,
-  elementType
+  elementType,
+  deleteLoading
 }: NotesAndEventsTabViewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [addNoteModalOpen, setAddNoteModalOpen] = useState<boolean>(false)
@@ -65,7 +63,7 @@ export const NotesAndEventsTabView = ({
     key: string
   }> = notes.map((note) => {
     const extra = (): React.JSX.Element => {
-      const type = note.type !== '' ? t(`notes-and-events.${kebabCase(note.type)}`) : undefined
+      const type = note.type ?? undefined
 
       return (
         <Space
@@ -74,15 +72,18 @@ export const NotesAndEventsTabView = ({
         >
           {type !== undefined && <Tag>{type}</Tag>}
           <span>{formatDateTime({ timestamp: note.date, dateStyle: 'short', timeStyle: 'medium' })}</span>
+          { !note.locked && (
           <IconButton
             aria-label={ i18n.t('aria.notes-and-events.delete') }
             icon={ { value: 'trash' } }
+            loading={ deleteLoading }
             onClick={ (e) => {
               e.stopPropagation()
               onClickTrash(note.id)
             } }
             theme='primary'
           />
+          )}
         </Space>
       )
     }
@@ -139,6 +140,7 @@ export const NotesAndEventsTabView = ({
         padded
       >
         <Header
+          className={ 'p-l-mini' }
           title={ t('notes-and-events.notes-and-events') }
         >
           <IconTextButton

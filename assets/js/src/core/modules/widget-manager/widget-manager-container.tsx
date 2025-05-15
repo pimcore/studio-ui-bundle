@@ -1,17 +1,14 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { WidgetManagerView } from './widget-manager-view'
 import { widgetManagerFactory } from './utils/widget-manager-factory'
 import { Actions, type ITabRenderValues, Model, type TabNode, type TabSetNode } from 'flexlayout-react'
@@ -25,13 +22,11 @@ export const WidgetManagerContainer = (): React.JSX.Element => {
   const model = Model.fromJson(modelJson)
   const bottomTabset = model.getNodeById('bottom_tabset') as TabSetNode
 
-  useEffect(() => {
-    model.doAction(Actions.updateModelAttributes({
-      tabSetTabStripHeight: 34,
-      tabSetTabHeaderHeight: 34,
-      borderBarSize: 50
-    }))
-  }, [])
+  model.doAction(Actions.updateModelAttributes({
+    tabSetTabStripHeight: 34,
+    tabSetTabHeaderHeight: 34,
+    borderBarSize: 50
+  }))
 
   if (bottomTabset.getChildren().length === 0) {
     model.doAction(Actions.updateNodeAttributes(bottomTabset.getId(), { height: -8 }))

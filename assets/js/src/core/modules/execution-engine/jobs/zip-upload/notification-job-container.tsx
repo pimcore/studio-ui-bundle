@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React, { useEffect, useRef, useState } from 'react'
 import { JobStatus } from '../../jobs/abstact-job'
@@ -21,6 +18,7 @@ import { type ZipUploadJob } from './factory'
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
+import { isUndefined } from 'lodash'
 
 export interface ZipUploadJobProps extends JobProps {
   config: ZipUploadJob['config']
@@ -33,13 +31,15 @@ export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.El
   const { updateJob, removeJob } = useJobs()
   const jobId = useRef<number>()
   const { t } = useTranslation()
-  const [title, setTitle] = useState(props.title)
+  const [step, setStep] = useState<number | undefined>(undefined)
   const dispatch = useAppDispatch()
 
   const openHandler = (): void => {
     action().then(actionJobId => {
       jobId.current = actionJobId
-    }).catch(console.error)
+    }).catch(
+      () => { removeJob(id) }
+    )
   }
 
   const handleMessageProgress = (data: any): void => {
@@ -61,21 +61,13 @@ export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.El
   }
 
   const handleMessageStatus = (data: any): void => {
-    if (
-      (data.status === 'finished' || data.status === 'finished_with_errors') &&
-      data.jobRunName === 'studio_ee_job_upload_assets'
-    ) {
-      dispatch(refreshNodeChildren({ nodeId: props.config.parentFolder, elementType: 'asset' }))
-    }
-
     if (data.status !== undefined) {
       if (data.status === 'finished' && data.messages !== undefined) {
         const messages: { jobRunChildId?: number } = data.messages
 
         if (messages.jobRunChildId !== undefined) {
           jobId.current = messages.jobRunChildId
-
-          setTitle('Creating assets')
+          setStep(2)
           setProgress(0)
         }
 
@@ -112,17 +104,22 @@ export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.El
 
   useEffect(() => {
     if (JobStatus.QUEUED === status) {
-      updateJob(id, {
-        status: JobStatus.RUNNING
-      })
-
       openSEEvent()
     }
 
+    if (JobStatus.RUNNING === status) {
+      setStep(1)
+    }
+
     if (JobStatus.SUCCESS === status) {
-      // TODO: reload folder (parentFolder)
+      setStep(undefined)
+      dispatch(refreshNodeChildren({ nodeId: props.config.parentFolder, elementType: 'asset' }))
     }
   }, [props.status])
+
+  const title = isUndefined(step)
+    ? props.title
+    : t(`jobs.zip-upload-job.step${step}.title`)
 
   return (
     <JobView
@@ -144,7 +141,9 @@ export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.El
 
       { ...props }
       progress={ progress }
+      step={ step }
       title={ title }
+      totalSteps={ 2 }
     />
   )
 }

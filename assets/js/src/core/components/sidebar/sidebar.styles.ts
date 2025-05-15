@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { createStyles } from 'antd-style'
 
@@ -27,7 +24,6 @@ export const useStyle = createStyles(({ token, css }) => {
           align-items: center;
           flex-shrink: 0;
           align-self: stretch;
-          border-right: 1px solid rgba(0, 0, 0, 0.08);
           border-left: 1px solid rgba(0, 0, 0, 0.08);
           justify-content: space-between;
           color: ${token.colorIconSidebar};

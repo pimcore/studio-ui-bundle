@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React, { useState } from 'react'
 import {
@@ -23,6 +20,8 @@ import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { useTranslation } from 'react-i18next'
 import { Content } from '@Pimcore/components/content/content'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { isUndefined } from 'lodash'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export const NotesAndEventsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -30,14 +29,22 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
 
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
-  const [deleteNote] = useNoteDeleteByIdMutation()
+  const [deleteNote, { error: deleteError, isLoading: deleteLoading }] = useNoteDeleteByIdMutation()
 
-  const { isLoading, data } = useNoteElementGetCollectionQuery({
+  const { isLoading, data, error } = useNoteElementGetCollectionQuery({
     id,
     elementType,
     page,
     pageSize
   })
+
+  if (!isUndefined(error)) {
+    trackError(new ApiError(error))
+  }
+
+  if (!isUndefined(deleteError)) {
+    trackError(new ApiError(deleteError))
+  }
 
   async function onClickTrash (id: number): Promise<void> {
     await deleteNote({ id })
@@ -49,6 +56,7 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
 
   return (
     <NotesAndEventsTabView
+      deleteLoading={ deleteLoading }
       elementId={ id }
       elementType={ elementType }
       notes={ data!.items }

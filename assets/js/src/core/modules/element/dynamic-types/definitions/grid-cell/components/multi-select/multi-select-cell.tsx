@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React, { useEffect, useRef, useState } from 'react'
 import { type RefSelectProps } from 'antd/es/select'
@@ -21,11 +18,13 @@ import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-
 import { Spin } from '@Pimcore/components/spin/spin'
 import { resolveOptions, type SelectOptionType } from '../../utils/select-options'
 import { isNil } from 'lodash'
+import { META_SUPPORTS_BATCH_APPEND_MODE } from '@Pimcore/modules/data-object/listing/batch-actions/batch-append-mode/batch-append-mode'
 
 export interface MultiSelectCellConfig {
   options?: string[] | SelectOptionType[]
   optionsUseHook?: (fieldName: string) => { isLoading: boolean, options: SelectOptionType[] } | undefined
   fieldName?: string
+  [META_SUPPORTS_BATCH_APPEND_MODE]?: boolean
 }
 
 export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
@@ -60,10 +59,11 @@ export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
     return <>{ value.join(', ') }</>
   }
 
-  const displayOptions = value.map((value: string) => {
-    const option = options.find((option: SelectOptionType) => option.value === value)
-    return option?.displayValue ?? option?.label ?? value
+  const displayOptions = value.map((_value: string) => {
+    const option = options.find((option: SelectOptionType) => option.value === _value)
+    return option?.displayValue ?? option?.label ?? _value
   })
+
   const displayValue = displayOptions.join(', ')
 
   if (!isInEditMode) {
@@ -90,6 +90,11 @@ export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
   )
 
   function onChange (value: string): void {
-    fireOnUpdateCellDataEvent(value)
+    const meta = config?.[META_SUPPORTS_BATCH_APPEND_MODE] === true
+      ? {
+          [META_SUPPORTS_BATCH_APPEND_MODE]: true
+        }
+      : undefined
+    fireOnUpdateCellDataEvent(value, meta)
   }
 }

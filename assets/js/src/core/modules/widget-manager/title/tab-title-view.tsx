@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Popconfirm } from 'antd'
@@ -43,6 +40,11 @@ export const TabTitleView = ({ icon, title, onClose, onConfirm }: TabTitleViewPr
   return (
     <Space
       className={ ['widget-manager-tab-title', styles.title].join(' ') }
+      onMouseDown={ (evt: MouseEvent) => {
+        if (evt.button === 1) {
+          triggerClose()
+        }
+      } }
       size='mini'
     >
       <Icon

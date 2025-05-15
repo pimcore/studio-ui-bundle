@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './asset-api-slice.gen'
@@ -75,7 +72,7 @@ const api = baseApi.enhanceEndpoints({
     },
 
     assetGetGridConfigurationByFolderId: {
-      providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_DETAIL(args.folderId, args.configurationId)
+      providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_DETAIL(args.configurationId)
     },
 
     assetGetGrid: {
@@ -83,23 +80,23 @@ const api = baseApi.enhanceEndpoints({
     },
 
     assetSaveGridConfiguration: {
-      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION_LIST(args.body.folderId)
+      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION_LIST()
     },
 
     assetSetGridConfigurationAsFavorite: {
-      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION_LIST(args.folderId)
+      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION_LIST()
     },
 
     assetUpdateGridConfiguration: {
-      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION_DETAIL(undefined, args.configurationId)
+      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION_DETAIL(args.configurationId)
     },
 
     assetDeleteGridConfigurationByConfigurationId: {
-      invalidatesTags: (result, error, args) => [...invalidatingTags.ASSET_GRID_CONFIGURATION_DETAIL(args.folderId), ...invalidatingTags.ASSET_GRID_CONFIGURATION_LIST(args.folderId)]
+      invalidatesTags: (result, error, args) => [...invalidatingTags.ASSET_GRID_CONFIGURATION_DETAIL(), ...invalidatingTags.ASSET_GRID_CONFIGURATION_LIST()]
     },
 
     assetGetSavedGridConfigurations: {
-      providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_LIST(args.folderId)
+      providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_LIST()
     }
   }
 })
@@ -120,8 +117,6 @@ export const {
   useAssetPatchByIdMutation,
   useAssetExportZipAssetMutation,
   useAssetExportZipFolderMutation,
-  useAssetExportCsvAssetMutation,
-  useAssetExportCsvFolderMutation,
   useAssetGetSavedGridConfigurationsQuery,
   useAssetSaveGridConfigurationMutation,
   useAssetSetGridConfigurationAsFavoriteMutation,

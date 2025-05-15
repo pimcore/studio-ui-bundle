@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { useAssetGetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import React, { useContext, useMemo, useState } from 'react'
@@ -20,6 +17,8 @@ import {
   ContentLayout
 } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
+import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { Pagination } from './pagination/pagination'
 
 const PreviewContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
@@ -43,35 +42,31 @@ const PreviewContainer = (): React.JSX.Element => {
     setPageSize(pageSize)
   }
 
-  console.log({ total, onPagerChange })
-
   return useMemo(() => (
     <ContentLayout
       renderToolbar={
-        <>
-          {/* @todo toolbar should not be shared with the grid...
-          <GridToolbarContainer
-          pager={ data !== undefined && data.totalItems > 0
-            ? {
-                current: currentPage,
-                total,
-                pageSize,
-                onChange: onPagerChange
-              }
-            : undefined }
-          /> */}
-        </>
+        <Toolbar
+          justify={ 'flex-end' }
+          theme='secondary'
+        >
+          <Pagination
+            current={ currentPage }
+            defaultPageSize={ pageSize }
+            onChange={ onPagerChange }
+            total={ total }
+          />
+        </Toolbar>
       }
     >
       <Content
         loading={ isLoading }
         padded
       >
-        { data?.items !== undefined && data.items.length > 0 && (
+        {data?.items !== undefined && data.items.length > 0 && (
           <FlexContainer assets={ data } />
         )}
       </Content>
-    </ContentLayout>
+    </ContentLayout >
   ), [currentPage, pageSize, data, isLoading])
 }
 

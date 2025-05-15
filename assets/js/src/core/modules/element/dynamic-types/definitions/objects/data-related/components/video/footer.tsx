@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React, { type ReactElement, useEffect, useState } from 'react'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -20,7 +17,6 @@ import {
 import { useTranslation } from 'react-i18next'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Form } from '@Pimcore/components/form/form'
-import FormItem from 'antd/es/form/FormItem'
 import { Space } from '@Pimcore/components/space/space'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { Input } from '@Pimcore/components/input/input'
@@ -193,7 +189,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
             direction='vertical'
             size='small'
           >
-            <FormItem
+            <Form.Item
               label={ t('video.type') }
               name="type"
             >
@@ -205,9 +201,10 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
                 } }
                 options={ getVideoTypeOptions() }
               />
-            </FormItem>
+            </Form.Item>
 
-            <FormItem
+            <Form.Item
+              key={ 'data-' + type }
               label={ t(type === 'asset' ? 'video.path' : 'video.id') }
               name="data"
             >
@@ -223,10 +220,10 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
                 : (
                   <Input placeholder={ t('video.url') } />
                   )}
-            </FormItem>
+            </Form.Item>
             { type === 'asset' && (
             <>
-              <FormItem
+              <Form.Item
                 label={ t('video.poster') }
                 name="poster"
               >
@@ -236,14 +233,14 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
                   disabled={ props.disabled }
                   onOpenElement={ () => { setIsModalVisible(false) } }
                 />
-              </FormItem>
-              <FormItem
+              </Form.Item>
+              <Form.Item
                 label={ t('title') }
                 name="title"
               >
                 <Input disabled={ props.disabled } />
-              </FormItem>
-              <FormItem
+              </Form.Item>
+              <Form.Item
                 label={ t('description') }
                 name="description"
               >
@@ -251,7 +248,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
                   autoSize={ { minRows: 3 } }
                   disabled={ props.disabled }
                 />
-              </FormItem>
+              </Form.Item>
             </>
             ) }
           </Space>

@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { createStyles } from 'antd-style'
 
@@ -21,8 +18,15 @@ export const useStyles = createStyles(({ token, css }) => {
         padding-right: ${token.paddingXXS}px;
 
         + .ant-tabs-tab {
-          margin-left: ${token.marginXXS}px;
+          margin-left: ${token.marginSM}px;
         }
+      }
+
+      &.tabs--has-sticky-header > .ant-tabs-nav {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: ${token.colorBgContainer};
       }
 
       &.ant-tabs-top > .ant-tabs-nav {
@@ -67,6 +71,11 @@ export const useStyles = createStyles(({ token, css }) => {
           opacity: 0;
           font-size: 8px;
         }
+      }
+
+      .ant-tabs-tab-active .ant-tabs-tab-btn {
+        font-weight: 600;
+        text-shadow: none !important;
       }
       
       &.ant-tabs-line .ant-tabs-nav .ant-tabs-tab-active .ant-tabs-tab-remove {

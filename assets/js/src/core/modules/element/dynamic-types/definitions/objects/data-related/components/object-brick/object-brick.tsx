@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React, { useContext, useEffect, useMemo, useRef } from 'react'
 import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
@@ -85,6 +82,8 @@ export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
 
     const newValue = isEmpty(filteredValue) ? [] : filteredValue
 
+    console.log({ newValue, old: valueRef.current })
+
     if (!isEqual(newValue, valueRef.current)) {
       props.onChange(newValue)
       valueRef.current = newValue
@@ -103,7 +102,6 @@ export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
   return (
     <Form.KeyedList
       getAdditionalComponentProps={ getAdditionalComponentProps }
-      name={ props.name }
       onChange={ onChange }
       onFieldChange={ onFieldChange }
       value={ mergedValue }

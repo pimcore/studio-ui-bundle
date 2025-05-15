@@ -1,79 +1,87 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { useContext, useEffect } from 'react'
-import { isNull, isUndefined } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import { useTranslation } from 'react-i18next'
 import {
-  type ExpandedHotspotMarkerData, type HotspotMarkerRelationDataType, type HotspotObjectType
+  type ExpandedHotspotMarkerData, type HotspotMarkerRelationDataType
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
-import {
-  type ManyToOneRelationValue
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
 import {
   HotspotContext
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-data-provider'
+import { type FormInstance } from 'antd'
 interface UseHotspotDataHookReturn {
   fields: ExpandedHotspotMarkerData[]
   setFields: React.Dispatch<React.SetStateAction<ExpandedHotspotMarkerData[]>>
-  hotspotName: string
-  setHotspotName: (name: string) => void
   handleRemoveField: (index: number) => void
   updateName: (index: number, value: string) => void
-  updateTextValue: (index: number, value: string) => void
-  updateCheckboxValue: (index: number, checked: boolean) => void
-  updateRelationValue: (index: number, type: HotspotMarkerRelationDataType, newValue: ManyToOneRelationValue | null) => void
+  getFieldsData: () => ExpandedHotspotMarkerData[]
   dataTypes: Array<{ key: string, label: string, onClick: () => void }>
-  editModeHotspot: IHotspot | undefined
-  setEditModeHotspot: (hotspot: IHotspot | undefined) => void
 }
 
-const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDataHookReturn => {
+const useHotspotData = (hotspot: IHotspot | undefined, form: FormInstance): UseHotspotDataHookReturn => {
   const { t } = useTranslation()
-  const { fields, setFields, hotspotName, setHotspotName, editModeHotspot, setEditModeHotspot } = useContext(HotspotContext)
+  const { fields, setFields } = useContext(HotspotContext)
 
   useEffect(() => {
-    setFields([])
-    form.resetFields()
-  }, [editModeHotspot])
-
-  useEffect(() => {
-    if (!isUndefined(hotspot) && !isUndefined(hotspot.data)) {
-      setFields(hotspot.data)
-
-      form.setFieldsValue(
-        hotspot.data.reduce<Record<string, unknown>>((acc, field, index) => {
-          acc[`name-${index}`] = field.name
-          if (field.type === 'textfield' || field.type === 'textarea' || field.type === 'checkbox') {
-            acc[`value-${index}`] = field.value
-          } else {
-            acc[`value-${index}`] = { ...field }
-          }
-
-          return acc
-        }, {})
-      )
-
-      if (!isUndefined(hotspot.name) && !isNull(hotspot.name)) {
-        setHotspotName(hotspot.name)
-        form.setFieldsValue({ hotspotName: hotspot.name })
+    if (!isUndefined(hotspot)) {
+      if (!isNil(hotspot.data)) {
+        setFields(hotspot.data)
       }
+      form.setFieldsValue({ hotspotName: hotspot.name ?? null })
     } else {
       setFields([])
       form.resetFields()
     }
   }, [hotspot])
+
+  useEffect(() => {
+    const newFieldValues = fields.reduce<Record<string, unknown>>((acc, field, index) => {
+      acc[`name-${index}`] = field.name
+      if (field.type === 'textfield' || field.type === 'textarea' || field.type === 'checkbox') {
+        acc[`value-${index}`] = field.value
+      } else {
+        acc[`value-${index}`] = { ...field }
+      }
+
+      return acc
+    }, {})
+
+    form.setFieldsValue(
+      newFieldValues
+    )
+  }, [fields])
+
+  const getFieldsData = (): ExpandedHotspotMarkerData[] => {
+    const updatedFields = fields.map((field, index) => {
+      const name = form.getFieldValue(`name-${index}`)
+      const value = form.getFieldValue(`value-${index}`)
+
+      if (field.type === 'textfield' || field.type === 'textarea' || field.type === 'checkbox') {
+        return {
+          ...field,
+          name: name ?? field.name,
+          value: value ?? field.value
+        }
+      }
+      return {
+        ...field,
+        ...value,
+        name: name ?? ''
+      }
+    })
+
+    return updatedFields
+  }
 
   const handleTextTypeSelect = (textType: 'textarea' | 'textfield'): void => {
     const newField = {
@@ -81,7 +89,7 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
       name: '',
       value: ''
     }
-    setFields((prevFields) => [...prevFields, newField])
+    setFields([...getFieldsData(), newField])
   }
 
   const handleCheckboxTypeSelect = (): void => {
@@ -90,19 +98,19 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
       name: '',
       value: false
     }
-    setFields((prevFields) => [...prevFields, newField])
+    setFields([...getFieldsData(), newField])
   }
 
   const handleRelationTypeSelect = (type: HotspotMarkerRelationDataType): void => {
     const newField: ExpandedHotspotMarkerData = {
       type,
       name: '',
-      value: 0,
+      value: null,
       fullPath: '',
       subtype: 'object',
       published: null
     }
-    setFields((prevFields) => [...prevFields, newField])
+    setFields([...getFieldsData(), newField])
   }
 
   const dataTypes = [
@@ -122,9 +130,9 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
       onClick: () => { handleCheckboxTypeSelect() }
     },
     {
-      key: 'data-object',
+      key: 'object',
       label: t('hotspots-markers-data-modal.data-type.object'),
-      onClick: () => { handleRelationTypeSelect('data-object') }
+      onClick: () => { handleRelationTypeSelect('object') }
     },
     {
       key: 'document',
@@ -138,15 +146,12 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
     }
   ]
   const handleRemoveField = (index: number): void => {
-    setFields((prevFields) => prevFields.filter((_, i) => i !== index))
+    const currentFields = getFieldsData()
+    const newFields = currentFields.filter((_, i) => i !== index)
 
-    if (!isUndefined(hotspot) && !isUndefined(hotspot.data)) {
-      const resetValues: Record<string, string> = {}
-      resetValues[`name-${index}`] = ''
-      resetValues[`value-${index}`] = ''
+    console.log('new fields', newFields)
 
-      form.setFieldsValue(resetValues)
-    }
+    setFields(newFields)
   }
 
   const updateName = (index: number, value: string): void => {
@@ -159,50 +164,7 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: any): UseHotspotDat
     )
   }
 
-  const updateTextValue = (index: number, value: string): void => {
-    setFields((prevFields) =>
-      prevFields.map((field, i) =>
-        i === index && (field.type === 'textfield' || field.type === 'textarea')
-          ? { ...field, value }
-          : field
-      )
-    )
-  }
-
-  const updateCheckboxValue = (index: number, checked: boolean): void => {
-    setFields((prevFields) =>
-      prevFields.map((field, i) =>
-        i === index && (field.type === 'checkbox')
-          ? { ...field, value: checked }
-          : field
-      )
-    )
-  }
-
-  const updateRelationValue = (
-    index: number,
-    type: HotspotMarkerRelationDataType,
-    newValue: ManyToOneRelationValue | null
-  ): void => {
-    if (isUndefined(newValue?.fullPath)) return
-
-    const formattedValue: HotspotObjectType = {
-      value: newValue.id,
-      fullPath: newValue.fullPath,
-      subtype: 'object',
-      published: newValue?.isPublished ?? null
-    }
-
-    setFields((prevFields) =>
-      prevFields.map((field, i) =>
-        i === index && field.type === type
-          ? { ...field, ...formattedValue }
-          : field
-      )
-    )
-  }
-
-  return { fields, setFields, hotspotName, setHotspotName, handleRemoveField, updateName, updateTextValue, updateCheckboxValue, updateRelationValue, dataTypes, editModeHotspot, setEditModeHotspot }
+  return { fields, setFields, handleRemoveField, updateName, getFieldsData, dataTypes }
 }
 
 export default useHotspotData

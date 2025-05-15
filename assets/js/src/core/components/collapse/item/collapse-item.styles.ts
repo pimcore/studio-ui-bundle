@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { createStyles } from 'antd-style'
 
@@ -35,6 +32,10 @@ export const useStyles = createStyles(({ css, token }) => {
           align-items: center;
         }
 
+        &.ant-collapse-small .collapse-header__title {
+          font-weight: 400;
+        }
+
         &>.ant-collapse-item >.ant-collapse-header {
           .button--type-action {
             margin-bottom: -4px;
@@ -43,6 +44,9 @@ export const useStyles = createStyles(({ css, token }) => {
 
         .collapse-header__title-container {
           flex-grow: 0;
+        }
+        .collapse-header__title {           
+          font-weight: ${token.fontWeightStrong};
         }
 
         .collapse-header__extra {
@@ -65,6 +69,21 @@ export const useStyles = createStyles(({ css, token }) => {
 
           &.collapse-item--bordered {
             border: 1px solid ${token.colorBorderSecondary};
+          }
+          
+          &.collapse-item--separator .ant-collapse-content {
+            border-top: 1px solid ${themeToken.colorBorderSecondary};
+          }
+        }
+
+        .collapse-item--theme-border-highlight {
+          background-color: ${themeToken.colorBgContainer};
+          border-left: 3px solid #D5CFDA;
+          border-radius: 0;
+
+          &.collapse-item--bordered {
+            border: 1px solid ${token.colorBorderSecondary};
+            border-left: 3px solid #D5CFDA;
           }
           
           &.collapse-item--separator .ant-collapse-content {

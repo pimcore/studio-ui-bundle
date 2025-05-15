@@ -9,6 +9,10 @@ error.error_widget_name_missing: Widget name have to be provided
 error.error_widget_name_invalid: Widget name is invalid (only alphanumeric characters, underscores and spaces are allowed, must be at least 3 characters long and less than 80 long)
 error.error_validation_failed: Validation failed
 error.error_element_not_found: Element not found
+sidebar.selected_elements: Selected Elements
+sidebar.grid_config: Grid config
+sidebar.tag_filters: Tag Filters
+sidebar.search_filter: Search & Filter
 modal-search.field.mimeType: MIME-Type
 modal-search.field.thumbnail: Thumbnail
 modal-search.field.id: ID
@@ -47,7 +51,11 @@ asset.upload.files.completed: Completed!
 asset.upload.files.successfully-uploaded: Successfully uploaded
 asset.upload.files.completed-actions: Completed actions
 asset.upload.validation: 'Please add a file'
+upload.error.file-too-large: 'The file is bigger than the actual upload limit of the server.'
+upload.error.generic: 'The file could not be uploaded.'
 asset.select.type.nullable: 'All types'
+document.document-tree.title: Document Tree
+document.document-tree.search: Search in {{folderName}}
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 data-object.tree.context-menu.add-object: Add Object
@@ -95,6 +103,10 @@ aria.asset.image.editor.zoom.zoom-out: Zoom out
 aria.asset.image.editor.zoom.preconfigured-zoom-levels: Predefined zoom levels select
 asset.preview.no-video-support: Your browser does not support video.
 asset.preview.no-audio-support: Your browser does not support audio.
+grid.filter.datetime.before: Before
+grid.filter.datetime.after: After
+grid.filter.datetime.between: Between
+grid.filter.datetime.on: On
 grid.copy-notice: Copied to clipboard
 grid.configuration.no-saved-templates: No saved templates available
 grid.configuration.template: Template
@@ -178,6 +190,7 @@ yes: Yes
 no: No
 by: By
 field: Field
+no-data-available: No Data Available
 no-data-available-yet: No data available yet.
 schedule.label: Schedule
 schedule.headline: Schedule
@@ -203,25 +216,22 @@ dependencies.required-by: Required by
 dependencies.columns.subtype: Subtype
 dependencies.columns.path: Path
 dependencies.columns.open: Open
-listing.groups.system: System
-listing.groups.default_metadata: Default Metadata
-listing.groups.predefined_metadata: Predefined Metadata
-listing.column.preview: Preview
-listing.column.id: ID
-listing.column.type: Type
-listing.column.filename: Filename
-listing.column.fullpath: Full path
-listing.column.modificationDate: Modification date
-listing.column.creationDate: Creation date
-listing.column.size: Size
-listing.column.title: Title
-listing.column.alt: Alt
-listing.column.copyright: Copyright
-listing.column.author: Author
-listing.column.authorLink: Author Link
-listing.column.license: License
-listing.column.licensePath: License Path
-listing.column.source: Source
+system: System
+default_metadata: Default Metadata
+predefined_metadata: Predefined Metadata
+preview: Preview
+id: ID
+type: Type
+filename: Filename
+fullpath: Full path
+modificationDate: Modification date
+creationDate: Creation date
+fileSize: File size
+mimetype: MIME type
+key: Key
+published: Published
+classname: Classname
+index: Index
 listing.grid-config.title: Grid config
 listing.add-column: Add a column
 listing.actions: Apply to selection
@@ -229,6 +239,7 @@ listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download
 listing.actions.export: Export
 listing.actions.csv-export: CSV Export
+listing.actions.xlsx-export: Excel Export
 listing.actions.batch-edit: Batch edit
 listing.selection.total: "{{total}} selected"
 data-type.input: Input
@@ -320,7 +331,6 @@ tags.columns.actions: Remove
 add: Add
 new: New
 save: Save
-type: Type
 title: Title
 description: Description
 select: Select
@@ -359,22 +369,33 @@ jobs.notification.title: Notifications
 jobs.notification.jobs_one: "{{count}} Action"
 jobs.notification.jobs_other: "{{count}} Actions"
 jobs.job.in-progress: "{{title}} in progress"
+jobs.job.queued: "{{title}} queued"
 jobs.job.failed: "{{title}} failed"
 jobs.job.finished: "{{title}} finished"
 jobs.job.finished-with-errors: "{{title}} finished with errors"
 jobs.job.progress: "{{progress}}% completed"
 jobs.job.button-retry: Retry
+jobs.job.button-reload: Reload
 jobs.job.button-hide: hide
 jobs.job.button-download: download
 jobs.job.button-ignore-and-reload: ignore and reload
+jobs.job.step_hint: "Step {{step}}/{{total}}"
 jobs.zip-job.title: "ZIP of {{title}}"
 jobs.batch-edit-job.title: "Batch Edit of {{title}}"
 jobs.csv-job.title: "CSV of {{title}}"
+jobs.xlsx-job.title: "XLSX of {{title}}"
+batch-edit.job-title: Batch Edit
+jobs.zip-upload-job.title: "Upload ZIP"
+jobs.zip-upload-job.step1.title: "Extracting ZIP"
+jobs.zip-upload-job.step2.title: "Creating assets"
 batch-edit.modal-title: Batch Edit
 batch-edit.no-content: There are no added columns yet
 batch-edit.modal-footer.apply-changes: Apply changes
 batch-edit.modal-footer.discard-all-changes: Discard All Changes
 batch-edit.modal-footer.add-a-column: Add a column
+batch-edit.append-mode.replace: Batch replace
+batch-edit.append-mode.add: Batch add
+batch-edit.append-mode.remove: Batch remove
 export-csv-form.modal-title: Export CSV
 export-csv-form.export-notice: Please note that the export does not support some fields(e.g. preview, size). Press OK to continue with the export.
 export-csv-form.form-field.delimiter: Delimiter
@@ -382,6 +403,13 @@ export-csv-form.form-field.header: Header
 export-csv-form.form-field.header.option.name: System key
 export-csv-form.form-field.header.option.title: Label
 export-csv-form.form-field.header.option.no-header: No header
+export-xlsx-form.modal-title: Export Excel
+export-xlsx-form.export-notice: Please note that the export does not support some fields(e.g. preview, size). Press OK to continue with the export.
+export-xlsx-form.form-field.delimiter: Delimiter
+export-xlsx-form.form-field.header: Header
+export-xlsx-form.form-field.header.option.name: System key
+export-xlsx-form.form-field.header.option.title: Label
+export-xlsx-form.form-field.header.option.no-header: No header
 form.validation.required: This field is required
 form.validation.numeric-range.first-value-missing: First value is missing
 form.validation.numeric-range.second-value-missing: Second value is missing
@@ -481,7 +509,7 @@ video: Video
 processing: Processing
 upload: Upload
 close: Close
-upload.assets-items-failed-message: Some items could not be uploaded.
+upload.assets-items-failed-message: Upload finished with errors.
 quantity-value.converted-units: Converted Units
 table.empty.confirm: Are you sure you want to clear all data?
 table.new-column: New column
@@ -751,3 +779,10 @@ entries: entries
 entry: entry
 error_element_validation_failed: 'Validation failed'
 element.delete.deleting-folder: Deleting Folder
+component.pagination.showing-items: Showing {{total}} items
+preview-not-available: Preview not available
+user-menu.notifications: Notifications
+user-menu.notifications-send: Send
+user-menu.my-profile: My Profile
+user-menu.log-out: Log out
+user-menu.title: Profile

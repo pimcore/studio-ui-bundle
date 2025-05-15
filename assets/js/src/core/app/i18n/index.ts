@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
@@ -38,13 +35,27 @@ i18n.use({
   type: 'postProcessor',
   name: 'returnKeyIfEmpty',
   process (value, key, options, translator) {
+    let returnValue = value
+
     if (value === '') {
+      returnValue = key
+
       if (Array.isArray(key)) {
-        return key[0]
+        returnValue = key[0]
       }
-      return key
     }
-    return value
+
+    if (typeof returnValue !== 'string') {
+      try {
+        returnValue = JSON.stringify(returnValue)
+      } catch (e) {
+        throw new Error(`Translation key '${key}' with value '${value}' is not translatable. Error in i18n postProcessor: ${e}`)
+      }
+
+      console.warn('Malformed translation key detected:', key, value)
+    }
+
+    return returnValue
   }
 })
 

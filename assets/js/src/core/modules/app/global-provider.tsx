@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { ContainerProvider } from '@Pimcore/app/depency-injection'
 import { store } from '@Pimcore/app/store'
@@ -18,6 +15,7 @@ import { ThemeProvider } from '@Pimcore/modules/app/theme/theme-provider'
 import React from 'react'
 import { Provider } from 'react-redux'
 import { ElementSelectorProvider } from '../element/element-selector/provider/element-selector/element-selector-provider'
+import { UploadModalProvider } from '@Pimcore/components/modal-upload/provider/upload-modal-provider/upload-modal-provider'
 
 export interface GlobalProviderProps {
   children: React.ReactNode
@@ -30,7 +28,9 @@ export const GlobalProvider = ({ children }: GlobalProviderProps): React.JSX.Ele
         <Provider store={ store }>
           <DragAndDropContextProvider>
             <ElementSelectorProvider>
-              {children}
+              <UploadModalProvider>
+                {children}
+              </UploadModalProvider>
             </ElementSelectorProvider>
           </DragAndDropContextProvider>
         </Provider>

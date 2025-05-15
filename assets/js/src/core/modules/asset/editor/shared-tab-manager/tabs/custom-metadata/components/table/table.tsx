@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React, { useContext, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -25,6 +22,7 @@ import { Box } from '@Pimcore/components/box/box'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { uuid } from '@Pimcore/utils/uuid'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface CustomMetadataWithActions extends CustomMetadata {
   actions: React.ReactNode
@@ -39,10 +37,16 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
   const { asset, customMetadata, setCustomMetadata, removeCustomMetadata, updateAllCustomMetadata, setModifiedCells } = useAssetDraft(id)
-  const { data, isLoading } = useAssetCustomMetadataGetByIdQuery({ id })
+  const { data, isLoading, isError: isGetCustomMetadataError, error: getCustomMetadataError } = useAssetCustomMetadataGetByIdQuery({ id })
   const modifiedCellsType = 'customMetadata'
   const modifiedCells = asset?.modifiedCells[modifiedCellsType] ?? []
   const isEditable = checkElementPermission(asset?.permissions, 'publish')
+
+  useEffect(() => {
+    if (isGetCustomMetadataError) {
+      trackError(new ApiError(getCustomMetadataError))
+    }
+  }, [isGetCustomMetadataError])
 
   const enrichCustomMetadata = (data: CustomMetadataApi[]): CustomMetadata[] => {
     return data.map((item) => {
@@ -84,7 +88,7 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
       meta: {
         type: 'asset-custom-metadata-icon'
       },
-      size: 40
+      size: 44
     }),
     columnHelper.accessor('name', {
       header: t('asset.asset-editor-tabs.custom-metadata.columns.name'),

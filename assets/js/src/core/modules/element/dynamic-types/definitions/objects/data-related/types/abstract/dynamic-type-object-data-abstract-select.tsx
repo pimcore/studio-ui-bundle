@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React from 'react'
 
@@ -22,7 +19,7 @@ import {
   type InputObjectDataDefinition
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-input'
 import { toCssDimension } from '@Pimcore/utils/css'
-import { Trans } from 'react-i18next'
+import i18n from '@Pimcore/app/i18n'
 
 export type SelectProps = AbstractObjectDataDefinition & {
   defaultValue?: string | number | string[] | null
@@ -64,11 +61,11 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
     }
   }
 
-  convertOptions (options: Array<{ key: string, value: string | number }> | null): Array<{ label: React.ReactElement, value: string | number }> | undefined {
+  convertOptions (options: Array<{ key: string, value: string | number }> | null): Array<{ label: string, value: string | number }> | undefined {
     if (options === null) {
       return
     }
-    return options.map(option => ({ label: <Trans>{ option.key }</Trans>, value: option.value }))
+    return options.map(option => ({ label: i18n.t(option.key), value: option.value }))
   }
 
   getGridCellColumnMeta (props: GetGridCellDefinitionProps): GridCellColumnMeta {

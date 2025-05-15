@@ -1,26 +1,21 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React from 'react'
 import { TabTitleContainer, type TabTitleContainerProps } from '@Pimcore/modules/widget-manager/title/tab-title-container'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useTranslation } from 'react-i18next'
-import { useDataObjectGetByIdQuery } from '../../data-object-api-slice-enhanced'
 
 export const TitleContainer = (props: TabTitleContainerProps): React.JSX.Element => {
   const { node } = props
   const { dataObject } = useDataObjectDraft(node.getConfig().id as number)
-  const { data } = useDataObjectGetByIdQuery({ id: node.getConfig().id })
   const { t } = useTranslation()
 
   const nodeName = node.getName()
@@ -29,7 +24,7 @@ export const TitleContainer = (props: TabTitleContainerProps): React.JSX.Element
       node.getName = () => t('home')
     }
 
-    return data?.key ?? nodeName
+    return dataObject?.key ?? nodeName
   }
 
   return (

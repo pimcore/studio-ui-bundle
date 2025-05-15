@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React, { type ReactNode } from 'react'
 import { Form as AntForm, type FormProps as AntFormProps, type FormItemProps } from 'antd'
@@ -23,12 +20,15 @@ import { withLocalizedFieldsLocale } from '@Pimcore/modules/element/dynamic-type
 import { compose } from '@reduxjs/toolkit'
 import { NumberedList } from './numbered-list/numbered-list'
 import { withNumberedItemContext } from './item/with-numbered-item-context'
+import { useStyles } from './form.styles'
 
 export interface FormProps extends Omit<AntFormProps, 'children'> {
   children?: React.ReactNode
 }
 
 const Form = (({ ...props }: FormProps) => {
+  const { styles } = useStyles()
+
   const requiredMark: FormProps['requiredMark'] = (label, { required }): ReactNode => {
     return (
       <Space size='mini'>
@@ -37,6 +37,8 @@ const Form = (({ ...props }: FormProps) => {
       </Space>
     )
   }
+
+  props.className = `${props.className ?? ''} ${styles.container}`
 
   return (
     <AntForm

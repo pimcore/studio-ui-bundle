@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React, { type ReactNode } from 'react'
 import { StackList, type StackListProps } from '@Pimcore/components/stack-list/stack-list'
@@ -44,13 +41,19 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
 
   const stackListItems: ColumnStackListProps['items'] = columns.map((column) => {
     const uniqueId = uuid()
+    let translationKey = `${column.key}`
+
+    if ('fieldDefinition' in column.config) {
+      const fieldDefinition = column.config.fieldDefinition as Record<string, any>
+      translationKey = fieldDefinition?.title ?? column.key
+    }
 
     return {
       id: uniqueId,
       sortable: true,
       meta: column,
 
-      children: <Tag>{t(`${column.key}`)}</Tag>,
+      children: <Tag>{t(`${translationKey}`)}</Tag>,
 
       renderRightToolbar: (
         <Space size='mini'>

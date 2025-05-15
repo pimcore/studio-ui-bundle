@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { createStyles } from 'antd-style'
 import { type TabsToken } from 'antd/es/tabs/style'
@@ -164,7 +161,6 @@ export const useStyles = createStyles(({ token, css }) => {
           overflow: visible;
           background: ${token.colorBgContainer};
           box-shadow: 0px 8px 24px 0px rgba(0, 0, 0, 0.07), 2px 2px 0px 0px rgba(79, 78, 183, 0.05);
-          border-right: 1px solid ${token.Tabs.colorBorderContainer}66;
           border-bottom: 1px solid ${token.Tabs.colorBorderContainer}66;
           border-left: 1px solid ${token.Tabs.colorBorderContainer}66;
           border-radius: 0 8px 8px 8px;

@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React from 'react'
 
@@ -21,7 +18,7 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/quantity-value/quantity-value'
 import type { FormInstance } from 'antd'
 import type { NamePath } from 'rc-field-form/es/interface'
-import _, { isNull } from 'lodash'
+import { isEmpty } from 'lodash'
 import { QuantityValue as QuantityValuePreview } from '../../grid-cell-preview/quantity-value/quantity-value'
 
 export type QuantityValueObjectDataDefinition = AbstractObjectDataDefinition & {
@@ -49,10 +46,10 @@ export class DynamicTypeObjectDataQuantityValue extends DynamicTypeObjectDataAbs
   }
 
   handleDefaultValue (props: QuantityValueObjectDataDefinition, form: FormInstance, fieldName: NamePath): void {
-    if (_.isEmpty(props.defaultValue) && _.isEmpty(props.defaultUnit)) {
+    if (isEmpty(props.defaultValue) && isEmpty(props.defaultUnit)) {
       return
     }
-    if (_.isEmpty(form.getFieldValue(fieldName))) {
+    if (isEmpty(form.getFieldValue(fieldName))) {
       form.setFieldValue(fieldName, {
         value: props.defaultValue,
         unitId: props.defaultUnit
@@ -63,7 +60,7 @@ export class DynamicTypeObjectDataQuantityValue extends DynamicTypeObjectDataAbs
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
     const value: QuantityValueValue | null = props.cellProps.getValue()
 
-    return isNull(value)
+    return isEmpty(value)
       ? <></>
       : (
         <QuantityValuePreview

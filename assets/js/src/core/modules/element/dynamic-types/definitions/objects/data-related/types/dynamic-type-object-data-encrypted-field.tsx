@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React from 'react'
 import {
@@ -24,6 +21,8 @@ import type { FormItemProps } from 'antd/es/form/FormItem'
 import { container } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeObjectDataRegistry } from '../dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { EditFormProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
+import { SaveProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/save-provider'
 
 export type EncryptedFieldObjectDataDefinition = AbstractObjectDataDefinition & {
   delegateDatatype: string
@@ -42,6 +41,16 @@ export class DynamicTypeObjectDataEncryptedField extends DynamicTypeObjectDataAb
         name={ props.name }
         { ...props.delegate }
       />
+    )
+  }
+
+  getVersionObjectDataComponent (props: EncryptedFieldObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+    return (
+      <SaveProvider>
+        <EditFormProvider>
+          {this.getObjectDataComponent(props)}
+        </EditFormProvider>
+      </SaveProvider>
     )
   }
 

@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { createStyles } from 'antd-style'
 
@@ -49,14 +46,13 @@ export const useStyle = createStyles(({ token, css }) => {
         display: block;
         position: absolute;
         top: 0;
-        inset-inline-end: 0;
-        bottom: 0;
-        inset-inline-start: 0;
         padding: unset;
         margin: auto;
 
         width: ${token.controlHeight}px;
         height: ${token.controlHeight}px;
+        border: 1px solid ${token.colorBorder};
+        box-shadow: none;
       }
 
       .input-field.remove-decoration {
@@ -70,6 +66,11 @@ export const useStyle = createStyles(({ token, css }) => {
 
       button.inline-label-dots {
         border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        color: rgba(0, 0, 0, 0.60);
       }
 
       button.inline-label-dots, button.inline-label {

@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React, { useContext, useRef, useState, useEffect, type ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -21,7 +18,9 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/components/table/table'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import {
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
+
+  useLazyMetadataGetCollectionQuery
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useModal } from '@Pimcore/components/modal/useModal'
@@ -37,9 +36,6 @@ import { Space } from '@Pimcore/components/space/space'
 import { Select } from '@Pimcore/components/select/select'
 import { type DynamicTypeMetaDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/meta-data/dynamic-type-metadata-registry'
 import { uuid } from '@Pimcore/utils/uuid'
-import {
-  useLazyMetadataGetCollectionQuery
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
@@ -191,6 +187,7 @@ export const CustomMetadataTabContainer = ({ disableHeaderTitle = false, disable
   return (
     <Content padded>
       <Header
+        className={ 'p-l-mini' }
         title={ !disableHeaderTitle ? t('asset.asset-editor-tabs.custom-metadata.text') : '' }
       >
         <div className='pimcore-custom-metadata-toolbar'>

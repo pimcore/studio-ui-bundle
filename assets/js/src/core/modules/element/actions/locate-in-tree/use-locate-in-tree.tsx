@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { store, useAppDispatch } from '@Pimcore/app/store'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
@@ -22,13 +19,13 @@ import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-pe
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { isNil, isNull } from 'lodash'
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ContextMenuActionName } from '..'
 
 export interface UseLocateInTreeHookReturn {
   locateInTree: (elementId: number, onFinished?: () => void) => void
-  locateInTreeGridContextMenuItem: (row: any) => ItemType | undefined
+  locateInTreeGridContextMenuItem: (row: any, onFinish?: () => void) => ItemType | undefined
 }
 
 export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookReturn => {
@@ -36,6 +33,7 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
   const dispatch = useAppDispatch()
   const activePerspective = selectActivePerspective(store.getState())
   const { switchToWidget } = useWidgetManager()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const locateInTree = (elementId: number, onFinished?: () => void): void => {
     if (isNull(activePerspective)) {
@@ -63,7 +61,7 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
       .catch(() => { trackError(new GeneralError('An error occured while locating in the tree')) })
   }
 
-  const locateInTreeGridContextMenuItem = (row: any): ItemType | undefined => {
+  const locateInTreeGridContextMenuItem = (row: any, onFinish?: () => void): ItemType | undefined => {
     const data: GridContextMenuProps = row.original ?? {}
     if (data.id === undefined) {
       return
@@ -72,9 +70,14 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
     return {
       label: t('element.locate-in-tree'),
       key: ContextMenuActionName.locateInTree,
+      isLoading,
       icon: <Icon value={ 'target' } />,
       onClick: async () => {
-        locateInTree(data.id)
+        setIsLoading(true)
+        locateInTree(data.id, () => {
+          onFinish?.()
+          setIsLoading(false)
+        })
       }
     }
   }

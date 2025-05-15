@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -177,6 +174,7 @@ export const AssetEditorSidebarDetailsView = ({
     <Content
       className={ styles.sidebarContentEntry }
       padded
+      padding={ { top: 'none', x: 'small', bottom: 'mini' } }
     >
       <Header title={ t('asset.sidebar.details') } />
 
@@ -186,13 +184,13 @@ export const AssetEditorSidebarDetailsView = ({
             <p>{t('width')}</p>
             <p>{t('height')}</p>
           </div>
-          <div className={ 'entry-content__dimensions-content' }>
+          <div className={ 'm-t-mini entry-content__dimensions-content' }>
             <p>{width} px</p>
             <p>{height} px</p>
           </div>
         </div>
 
-        <div className={ styles.sidebarContentDownload }>
+        <div className={ ['m-t-small', styles.sidebarContentDownload].join(' ') }>
           <p className={ 'sidebar__content-label' }>{t('download')}</p>
 
           <div className={ 'entry-content__download-content' }>
@@ -215,6 +213,7 @@ export const AssetEditorSidebarDetailsView = ({
               <CollapseItem
                 { ...CUSTOM_DOWNLOAD_OPTIONS }
                 defaultActive
+                size={ 'small' }
                 theme='simple'
               />
             </div>

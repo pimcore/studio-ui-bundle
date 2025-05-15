@@ -1,17 +1,15 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { Progressbar } from '@Pimcore/components/progressbar/progressbar'
+import { Spin } from '@Pimcore/components/spin/spin'
 import { JobStatus } from '../../jobs/abstact-job'
 import { type JobProps } from './job'
 import React from 'react'
@@ -20,10 +18,11 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useStyles } from './job-view.styles'
 import { useTranslation } from 'react-i18next'
+import { isUndefined } from 'lodash'
 
 interface ButtonAction {
   label: string
-  handler: () => void
+  handler: () => void | Promise<void>
 }
 
 export interface JobViewProps extends JobProps {
@@ -31,11 +30,17 @@ export interface JobViewProps extends JobProps {
   failureButtonActions?: ButtonAction[]
   finishedWithErrorsButtonActions?: ButtonAction[]
   progress: number
+  step?: number
+  totalSteps?: number
 }
 
 export const JobView = (props: JobViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
+
+  const StepHint = !isUndefined(props.step) && !isUndefined(props.totalSteps)
+    ? <strong>{ t('jobs.job.step_hint', { step: props.step, total: props.totalSteps }) }: </strong>
+    : undefined
 
   return (
     <div>
@@ -46,12 +51,26 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
           initial={ { opacity: 0, height: 1 } }
           key={ props.status }
         >
+
+          { props.status === JobStatus.QUEUED && (
+            <Flex
+              align='center'
+              justify='space-between'
+            >
+              <Flex
+                align='center'
+                gap={ 'small' }
+              >
+                <Spin type="classic" /><span>{ t('jobs.job.queued', { title: props.title }) }</span>
+              </Flex>
+            </Flex>
+          ) }
+
           { props.status === JobStatus.RUNNING && (
             <Progressbar
-              description={ t('jobs.job.in-progress', { title: props.title }) }
+              description={ <>{StepHint}{t('jobs.job.in-progress', { title: props.title })}</> }
               percent={ props.progress }
               progressStatus={ t('jobs.job.progress', { progress: props.progress }) }
-
             />
           ) }
 

@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import { createStyles } from 'antd-style'
 
@@ -28,7 +25,7 @@ export const useStyle = createStyles(({ token, css }) => {
         display: flex;
         height: 100%;
       }
-
+      
       &.ant-tabs > .ant-tabs-nav > .ant-tabs-nav-wrap > .ant-tabs-nav-list > .ant-tabs-tab {
         margin: 0 ${token.paddingXS}px !important;
         transition: color .2s;
@@ -52,6 +49,7 @@ export const useStyle = createStyles(({ token, css }) => {
       }
       &.ant-tabs-top >.ant-tabs-nav {
         margin-bottom: 0;
+        padding-right: ${token.paddingXXS}px;
           
         .ant-tabs-nav-wrap {
           display: flex;

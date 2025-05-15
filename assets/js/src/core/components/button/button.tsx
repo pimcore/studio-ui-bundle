@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React, { type RefObject, useEffect, useImperativeHandle, useRef } from 'react'
 import { Button as AntdButton, type ButtonProps as AntdButtonProps } from 'antd'
@@ -69,20 +66,21 @@ const Component = ({ loading, children, className, type, color, ...props }: Butt
           <AnimatePresence>
             <motion.div
               animate={ { opacity: 1 } }
+              className='button__loading-spinner'
               exit={ { opacity: 0 } }
               initial={ { opacity: 0 } }
               key={ 'loading' }
             >
               <Spin
-                className='button__loading-spinner'
                 size='small'
                 spinning
               />
             </motion.div>
           </AnimatePresence>
           )
-        : children
-        }
+        : null }
+
+      <span className={ 'button__text' }>{children}</span>
     </AntdButton>
   )
 }

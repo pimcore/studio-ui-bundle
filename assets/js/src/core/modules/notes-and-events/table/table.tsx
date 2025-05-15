@@ -1,15 +1,12 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
-*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 import React, { useEffect, useState } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
@@ -28,9 +25,11 @@ import { isEmpty, isUndefined } from 'lodash'
 import { NoteModal } from '@Pimcore/modules/notes-and-events/note-modal'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { type ElementInfo } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/element-cell/element-cell'
+import { formatDateTime } from '@Pimcore/utils/date-time'
 
 type DataNoteWithActions = DataNote & {
   actions: React.ReactNode
+  dateFormatted: string
 }
 
 export interface TableProps {
@@ -56,7 +55,8 @@ export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): R
     data.map((item) => ({
       ...item,
       fields: item.data.length,
-      rowId: uuid()
+      rowId: uuid(),
+      dateFormatted: formatDateTime({ timestamp: item.date, dateStyle: 'short', timeStyle: 'short' })
     })
     )
 
@@ -64,7 +64,7 @@ export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): R
   const createColumns = (): any => [
     columnHelper.accessor('type', {
       header: t('notes-and-events.columns.type'),
-      size: 80
+      size: 100
     }),
     columnHelper.accessor(row => ({ path: row.cPath, elementType: row.cType, id: row.cId }), {
       id: 'element',
@@ -101,14 +101,11 @@ export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): R
     }),
     columnHelper.accessor('userName', {
       header: t('notes-and-events.columns.user'),
-      size: 70
+      size: 120
     }),
-    columnHelper.accessor('date', {
+    columnHelper.accessor('dateFormatted', {
       header: t('notes-and-events.columns.date'),
-      size: 70,
-      meta: {
-        type: 'date'
-      }
+      size: 120
     }),
     columnHelper.accessor('actions', {
       header: t('notes-and-events.columns.actions'),
