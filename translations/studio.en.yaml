@@ -779,9 +779,8 @@ entries: entries
 entry: entry
 error_element_validation_failed: 'Validation failed'
 element.delete.deleting-folder: Deleting Folder
-component.pagination.showing-items: Showing {{total}} 
+component.pagination.showing-items: Showing {{total}}
 edit-modal.inline-edit: Inline edit
 edit-modal.apply-changes: Apply changes
 edit-modal.discard: Discard
-component.pagination.showing-items: Showing {{total}} items
 preview-not-available: Preview not available
