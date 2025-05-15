@@ -12,11 +12,11 @@ import React from 'react'
 import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
-import { useNotesAndEvents } from '@Pimcore/modules/notes-and-events/hooks/use-global-notes-and-events'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { useTranslation } from 'react-i18next'
 import { Content } from '@Pimcore/components/content/content'
 import { Box } from '@Pimcore/components/box/box'
+import { useNotifications } from './hooks/use-notifications'
 
 const NotificationsContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -24,7 +24,6 @@ const NotificationsContainer = (): React.JSX.Element => {
     totalItems,
     notifications,
     isLoading,
-    isFetching,
     page,
     setPage,
     setPageSize
