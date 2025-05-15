@@ -9,12 +9,12 @@
  */
 
 import { useEffect, useMemo, useState } from 'react'
-import { NotificationGetCollectionApiArg, NotificationListItem, useNotificationGetCollectionMutation } from '../notifications-slice.gen'
+import { type NotificationGetCollectionApiArg, type NotificationListItem, useNotificationGetCollectionMutation } from '../notifications-slice.gen'
 import { isNil } from 'lodash'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface UseNotificationsReturn {
-getAllNotifications: () => Promise<void> 
+  getAllNotifications: () => Promise<void>
   totalItems: number
   notifications: NotificationListItem[]
   isLoading: boolean
@@ -30,18 +30,20 @@ export const useNotifications = (): UseNotificationsReturn => {
   const [notifications, setNotifications] = useState<NotificationListItem[]>([])
   const [totalItems, setTotalItems] = useState<number>(0)
 
-  const queryArgs: NotificationGetCollectionApiArg = useMemo(() => ({ body: { filters: { page, pageSize, "includeDescendants": true } }}), [page, pageSize])
+  const queryArgs: NotificationGetCollectionApiArg = useMemo(() => ({ body: { filters: { page, pageSize, includeDescendants: true } } }), [page, pageSize])
 
-  const [requestNotifications, {isLoading, isSuccess, isError, error}] = useNotificationGetCollectionMutation()
+  const [requestNotifications, { isLoading, isSuccess, isError, error }] = useNotificationGetCollectionMutation()
+
+  console.log('dosomethingWithSuccess', isSuccess)
 
   const getAllNotifications = async (): Promise<void> => {
-      await requestNotifications(queryArgs).then((response) => {
-        if (response?.data !== undefined) {
-          setTotalItems(response.data.totalItems)
-          setNotifications(response.data.items)
-        }
-      })
-    }
+    await requestNotifications(queryArgs).then((response) => {
+      if (response?.data !== undefined) {
+        setTotalItems(response.data.totalItems)
+        setNotifications(response.data.items)
+      }
+    })
+  }
 
   useEffect(() => {
     if (isError && !isNil(error)) {
@@ -51,13 +53,12 @@ export const useNotifications = (): UseNotificationsReturn => {
 
   return {
     getAllNotifications,
-    totalItems: totalItems,
-    notifications: notifications,
+    totalItems,
+    notifications,
     isLoading,
     page,
     setPage,
     pageSize,
-    setPageSize,
+    setPageSize
   }
 }
-
