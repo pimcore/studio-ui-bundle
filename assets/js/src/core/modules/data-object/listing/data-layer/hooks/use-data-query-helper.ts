@@ -14,11 +14,13 @@ import { type SettingsProviderProps } from '@Pimcore/modules/element/listing/abs
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useClassDefinitionSelection } from '../../decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
+import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 
 export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = () => {
   const { useElementId } = useSettings()
   const { getId } = useElementId()
   const { selectedColumns } = useSelectedColumns()
+  const { availableColumns } = useAvailableColumns()
   const { selectedClassDefinition } = useClassDefinitionSelection()
   const { dataLoadingState, setDataLoadingState } = useData()
 
@@ -28,6 +30,21 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
     locale: column.locale,
     config: column.config
   }))
+
+  const systemColumns = availableColumns.filter(column => column.group === 'system')
+
+  systemColumns.forEach(column => {
+    const hasColumn = columnsArg.some(selectedColumn => selectedColumn.key === column.key)
+
+    if (!hasColumn) {
+      columnsArg.push({
+        key: column.key,
+        type: column.type,
+        locale: column.locale,
+        config: []
+      })
+    }
+  })
 
   const getArgs = (): DataObjectGetGridApiArg => {
     if (selectedClassDefinition === undefined) {
