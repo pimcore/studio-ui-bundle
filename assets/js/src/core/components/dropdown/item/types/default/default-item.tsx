@@ -53,6 +53,10 @@ export const WithExtendedApi = (Component: typeof Menu.Item): ComponentType<Defa
 
           <span>{label}</span>
 
+          {props.extra !== undefined && (
+          <>{props.extra}</>
+          )}
+
           {selectable === true && selectionType !== 'disabled' && (
             <SelectionButton
               id={ id }

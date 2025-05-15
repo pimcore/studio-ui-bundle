@@ -781,3 +781,8 @@ error_element_validation_failed: 'Validation failed'
 element.delete.deleting-folder: Deleting Folder
 component.pagination.showing-items: Showing {{total}} items
 preview-not-available: Preview not available
+user-menu.notifications: Notifications
+user-menu.notifications-send: Send
+user-menu.my-profile: My Profile
+user-menu.log-out: Log out
+user-menu.title: Profile
