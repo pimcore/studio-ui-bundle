@@ -47,7 +47,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   // Register the modal instance to allow centralized error message display throughout the project
   ErrorModalService.setModalInstance(modal)
 
-  async function initLoadUser(): Promise<any> {
+  async function initLoadUser (): Promise<any> {
     const userFetcher = dispatch(api.endpoints.userGetCurrentInformation.initiate())
     await fetchMercureCookie()
 
@@ -68,7 +68,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     return await userFetcher
   }
 
-  async function initSettings(): Promise<any> {
+  async function initSettings (): Promise<any> {
     const settingsFetcher = dispatch(settingsApi.endpoints.systemSettingsGet.initiate())
 
     settingsFetcher
@@ -84,18 +84,19 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     return await settingsFetcher
   }
 
-  async function initActivePerspective(): Promise<any> {
+  async function initActivePerspective (): Promise<any> {
     const user = selectCurrentUser(store.getState())
     const perspectiveId = String(user?.activePerspective ?? 'studio_default_perspective')
     return await loadPerspective(perspectiveId)
   }
 
-  async function loadTranslations(): Promise<any> {
+  async function loadTranslations (): Promise<any> {
     const user = selectCurrentUser(store.getState())
-    await translations({ translation: { locale: user.language, keys: [] } })
+    await translations({ translation: { locale: user.language, keys: [], useFallback: true } })
       .unwrap()
       .then(response => {
         i18n.addResourceBundle(user.language, 'translation', response.keys ?? [], true, true)
+        void i18n.changeLanguage(user.language)
       })
       .catch(() => {
         trackError(new GeneralError('Error loading translations'))
