@@ -19,13 +19,14 @@ import { Flex } from 'antd'
 interface ITableProps {
   data: UserWorkspace[]
   isLoading: boolean
+  type?: string
   showDuplicatePropertyModal: () => void
   onUpdateData: (data: UserWorkspace[]) => void
 }
 
 export const Table = ({
   showDuplicatePropertyModal,
-  data,
+  data, type,
   isLoading, onUpdateData
 }: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -40,7 +41,7 @@ export const Table = ({
     columnHelper.accessor('cpath', {
       header: t('user-management.workspaces.columns.cpath'),
       meta: {
-        type: 'element-cell',
+        type,
         editable: true,
         autoWidth: true
       },

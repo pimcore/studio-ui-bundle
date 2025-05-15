@@ -71,6 +71,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
+        type={ 'document' }
                 />
     }
   ]
@@ -104,6 +105,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
+        type={ 'asset' }
                 />
     }
   ]
@@ -137,6 +139,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
+        type={ 'object' }
                 />
     }
   ]
