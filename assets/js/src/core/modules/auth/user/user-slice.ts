@@ -27,7 +27,6 @@ const initialState: UserInformation = {
   language: 'en',
   activePerspective: 0,
   perspectives: [],
-  language: 'en',
   dateTimeLocale: '',
   welcomeScreen: false,
   memorizeTabs: false,
