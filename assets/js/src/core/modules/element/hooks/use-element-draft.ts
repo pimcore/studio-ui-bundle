@@ -21,6 +21,7 @@ import { type UseTabsDraftReturn } from '../draft/hooks/use-tabs'
 import { type ElementEditorType } from '@Pimcore/modules/element/editor/services/type-registry'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 
 export interface IElementDraft extends PropertiesDraft, SchedulesDraft, TrackableChangesDraft {
   id: number
@@ -57,6 +58,12 @@ export const useElementDraft = (id: number, elementType: ElementType): UseElemen
     return { ...draft, element: draft.dataObject }
   }
 
-  trackError(new GeneralError('Element type not supported: ' + elementType))
-  throw new Error('Element type not supported: ' + elementType)
+  if (elementType === 'document') {
+    const draft = useDocumentDraft(id)
+
+    return { ...draft, element: draft.document }
+  }
+
+  trackError(new GeneralError('Element type not supported'))
+  throw new Error('Element type not supported')
 }

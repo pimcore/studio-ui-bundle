@@ -10,7 +10,8 @@
 
 import React, { createContext, useRef, useMemo, useState } from 'react'
 import { ModalUpload, type ModalUploadProps } from '../../modal-upload'
-import { type UploadRef } from 'antd/es/upload/Upload'
+import { UploadModal } from '../../components/upload-modal/upload-modal'
+import { type UploadFile } from 'antd'
 
 type UploadProviderProps = ModalUploadProps & {
   children: React.ReactNode
@@ -18,34 +19,68 @@ type UploadProviderProps = ModalUploadProps & {
 
 export interface UploadContextProps {
   triggerUpload: (props: ModalUploadProps) => void
+  setIsModalOpen: (open: boolean) => void
+  setShowUploadError: (showUploadError: boolean) => void
+  setShowProcessing: (showProcessing: boolean) => void
+  setFileList: (fileList: UploadFile[]) => void
+  fileList: UploadFile[]
+
 }
 
 export const UploadContext = createContext<UploadContextProps | undefined>(undefined)
 
 export const UploadModalProvider: React.FC<UploadProviderProps> = ({ children, ...defaultUploadProps }) => {
   const uploadRef = useRef<HTMLDivElement>(null)
-  const uploadRef2 = useRef<UploadRef>(null)
   const [uploadState, setUploadState] = useState<ModalUploadProps>({
     ...defaultUploadProps
   })
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [showUploadError, setShowUploadError] = useState(false)
+  const [showProcessing, setShowProcessing] = useState(false)
+  const [fileList, setFileList] = useState<UploadFile[]>([])
 
   const triggerUpload = (props: ModalUploadProps): void => {
     setUploadState({ ...defaultUploadProps, ...props })
     setTimeout(() => uploadRef.current?.click(), 0)
   }
 
-  const contextValue = useMemo(() => ({ triggerUpload }), [defaultUploadProps])
+  const contextValue = useMemo(() => ({
+    triggerUpload,
+    setIsModalOpen,
+    setShowUploadError,
+    setShowProcessing,
+    setFileList,
+    fileList
+  }), [defaultUploadProps, fileList])
+
+  const closeModal = (): void => {
+    setIsModalOpen(false)
+    setFileList([])
+    setShowUploadError(false)
+    setShowProcessing(false)
+  }
 
   return (
     <UploadContext.Provider value={ contextValue }>
       <div style={ { display: 'none' } }>
         <ModalUpload
-          uploadRef={ uploadRef2 }
           { ...uploadState }
         >
           <span ref={ uploadRef } />
         </ModalUpload>
       </div>
+
+      { isModalOpen && (
+        <UploadModal
+          closeModal={ closeModal }
+          fileList={ fileList }
+          open
+          showProcessing={ showProcessing }
+          showUploadError={ showUploadError }
+        />
+      )}
+
       {children}
     </UploadContext.Provider>
   )

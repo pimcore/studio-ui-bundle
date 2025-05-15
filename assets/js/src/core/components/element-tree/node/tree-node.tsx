@@ -17,25 +17,11 @@ import { TreeExpander } from '../expander/tree-expander'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useElementTreeNode } from '../hooks/use-element-tree-node'
-import { isNil, isUndefined } from 'lodash'
+import { isNil } from 'lodash'
 import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/utils/widget-content-scroll'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
-export interface TreeNodeWrapperProps {
-  nodeId: string
-  nodeType: ElementType
-}
-
-interface ConditionalWrapperProps {
-  wrapper?: React.ComponentType<TreeNodeWrapperProps & { children: React.ReactNode }>
-  children: React.ReactNode
-  props: TreeNodeWrapperProps
-}
-
-const ConditionalWrapper: React.FC<ConditionalWrapperProps> = ({ wrapper: Wrapper, children, props }): React.ReactElement => {
-  return !isUndefined(Wrapper) ? <Wrapper { ...props }>{children}</Wrapper> : <>{children}</>
-}
-
+export type TreeNodeWrapper = (children: React.ReactNode) => React.ReactNode
 export interface TreeNodeProps {
   id: string
   icon: ElementIcon
@@ -56,7 +42,7 @@ export interface TreeNodeProps {
   danger?: boolean
   ref?: MutableRefObject<HTMLDivElement>
   isPublished?: boolean
-  WrapperComponent?: React.ComponentType<TreeNodeWrapperProps & { children: React.ReactNode }>
+  wrapNode?: TreeNodeWrapper
 }
 
 export const defaultProps: TreeNodeProps = {
@@ -96,7 +82,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   isRoot = defaultProps.isRoot,
   isLoading = false,
   danger = false,
-  WrapperComponent,
+  wrapNode = (children: React.ReactNode): React.ReactNode => children,
   ...props
 }: TreeNodeProps, forwardRef: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { token } = useToken()
@@ -226,43 +212,42 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     nodesRefs!.current[internalKey] = nodeRef
   }
 
-  return (
-    <div
-      className={ getClasses() }
-      ref={ forwardRef }
-    >
-      <ConditionalWrapper
-        props={ { nodeId: id, nodeType: props.elementType! } }
-        wrapper={ WrapperComponent }
-      >
-        <Flex
-          className='tree-node__content'
-          gap="small"
-          onClick={ onClick }
-          onContextMenu={ onContextMenu }
-          onKeyDown={ onKeyDown }
-          ref={ setRef }
-          role='button'
-          style={
+  const nodeContent = (
+    <Flex
+      gap="small"
+      onClick={ onClick }
+      onContextMenu={ onContextMenu }
+      onKeyDown={ onKeyDown }
+      ref={ setRef }
+      role='button'
+      style={
           {
             paddingLeft: token.paddingSM + 20 * level,
             minWidth: `${20 * level + 200}px`
           }
         }
-          tabIndex={ -1 }
-        >
-          {isRoot !== true && (
-          <TreeExpander
-            node={ treeNodeProps }
-            state={ [isExpanded, setExpanded] }
-          />
-          )}
-          <div className="tree-node__content-wrapper">
-            <RenderNodeContent node={ treeNodeProps } />
-          </div>
-        </Flex>
+      tabIndex={ -1 }
+    >
+      {isRoot !== true && (
+      <TreeExpander
+        node={ treeNodeProps }
+        state={ [isExpanded, setExpanded] }
+      />
+      )}
+      <div className="tree-node__content-wrapper">
+        <RenderNodeContent node={ treeNodeProps } />
+      </div>
+    </Flex>
+  )
 
-      </ConditionalWrapper>
+  return (
+    <div
+      className={ getClasses() }
+      ref={ forwardRef }
+    >
+      <div className="tree-node__content">
+        {wrapNode(nodeContent)}
+      </div>
 
       {isExpanded && (
         <TreeList node={ treeNodeProps } />

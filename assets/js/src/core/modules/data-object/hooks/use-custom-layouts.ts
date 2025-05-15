@@ -15,6 +15,7 @@ import {
 } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { isUndefined } from 'lodash'
+import { useWorkflowGetDetailsQuery } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
 
 type Layout = CustomLayoutsInCompactFormatToBeUsedForEGListings
 
@@ -32,6 +33,8 @@ export const useCustomLayouts = (id: number): UseCustomLayoutsReturn => {
   }
 
   const layouts = data !== undefined ? data.items : undefined
+  const hasWorkflowAvailable = dataObject?.hasWorkflowAvailable === true
+  const { data: workflowDetailsData, isFetching: isFetchingWorkflowDetails } = useWorkflowGetDetailsQuery({ elementType: 'data-object', elementId: id }, { skip: !hasWorkflowAvailable })
 
   const getDefaultLayoutId = (currentLayout?: string | null): string | null => {
     if (isUndefined(layouts)) {
@@ -39,13 +42,14 @@ export const useCustomLayouts = (id: number): UseCustomLayoutsReturn => {
     }
     const defaultLayout = layouts.find(layout => layout.default) ??
             layouts.find(layout => layout.id === currentLayout) ??
+            layouts.find(layout => layout.id === workflowDetailsData?.layoutId) ??
             layouts.find(layout => layout.id === '0') ??
             layouts[0] ??
             null
 
     return defaultLayout?.id ?? null
   }
-  const isLoading = isDraftLoading || (isCustomLayoutLoading && dataObject?.type !== 'folder')
+  const isLoading = isDraftLoading || isFetchingWorkflowDetails || (isCustomLayoutLoading && dataObject?.type !== 'folder')
   return {
     layouts,
     getDefaultLayoutId,
