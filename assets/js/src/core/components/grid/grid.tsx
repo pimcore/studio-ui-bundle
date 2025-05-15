@@ -35,7 +35,7 @@ import {
 } from '@tanstack/react-table'
 import { Checkbox, Skeleton } from 'antd'
 import cn from 'classnames'
-import { isEmpty } from 'lodash'
+import { isEmpty, isNumber } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
@@ -144,12 +144,12 @@ export const Grid = ({
 
   columns.forEach(column => {
     if (column.meta?.type !== undefined) {
+      if (isNumber(column.size)) {
+        return
+      }
       const dynamicType = gridCellRegistry.getDynamicType(column.meta.type, false)
-
-      if (dynamicType !== undefined) {
-        if (dynamicType?.getDefaultGridColumnWidth !== undefined) {
-          column.size = dynamicType.getDefaultGridColumnWidth(column.meta)
-        }
+      if (dynamicType?.getDefaultGridColumnWidth !== undefined) {
+        column.size = dynamicType.getDefaultGridColumnWidth(column.meta)
       }
     }
   })
