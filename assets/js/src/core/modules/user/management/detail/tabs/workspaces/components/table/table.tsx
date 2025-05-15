@@ -204,7 +204,7 @@ export const Table = ({
 
     const updatedProperties = [...(gridData ?? [])]
     const propertyIndex = updatedProperties.findIndex((property) => property.cpath === rowData.cpath)
-    const updatedProperty = { ...updatedProperties.at(propertyIndex)!, [columnId]: value }
+    const updatedProperty = { ...updatedProperties.at(propertyIndex)!, [columnId]: value, cid: value.id !== undefined ? value.id : rowData.cid, cpath: value.fullPath !== undefined ? value.fullPath : rowData.cpath }
     updatedProperties[propertyIndex] = updatedProperty
     const hasDuplicate = updatedProperties.filter(property => property.cpath === updatedProperty.cpath).length > 1
 
