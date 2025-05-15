@@ -14,7 +14,7 @@ import type { EntityAdapter, EntityState } from '@reduxjs/toolkit/src/entities/m
 import { useAppDispatch } from '@Pimcore/app/store'
 import type {
   CustomMetadata as CustomMetadataApi
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'
 import { type TrackableChangesDraft } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 

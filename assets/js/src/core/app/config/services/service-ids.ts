@@ -44,6 +44,15 @@ export const serviceIds = {
   'DataObject/Editor/ObjectTabManager': 'DataObject/Editor/ObjectTabManager',
   'DataObject/Editor/FolderTabManager': 'DataObject/Editor/FolderTabManager',
 
+  // Documents
+  'Document/Editor/TypeRegistry': 'Document/Editor/TypeRegistry',
+  'Document/Editor/PageTabManager': 'Document/Editor/PageTabManager',
+  'Document/Editor/EmailTabManager': 'Document/Editor/EmailTabManager',
+  'Document/Editor/FolderTabManager': 'Document/Editor/FolderTabManager',
+  'Document/Editor/HardlinkTabManager': 'Document/Editor/HardlinkTabManager',
+  'Document/Editor/LinkTabManager': 'Document/Editor/LinkTabManager',
+  'Document/Editor/SnippetTabManager': 'Document/Editor/SnippetTabManager',
+
   // icon library
   iconLibrary: 'IconLibrary',
 

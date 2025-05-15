@@ -50,7 +50,7 @@ export const GridConfigInner = (): React.JSX.Element => {
   const userData = useUser()
   const { id: selectedGridConfigId, setId: setSelectedGridConfigId } = useSelectedGridConfigId()
   const { gridConfig, setGridConfig } = useGridConfig()
-  const { isLoading, isFetching, data } = useAssetGetSavedGridConfigurationsQuery({ folderId: getId() })
+  const { isLoading, isFetching, data } = useAssetGetSavedGridConfigurationsQuery()
   const { data: roleList } = useRoleGetCollectionQuery()
   const { data: userList } = useUserGetCollectionQuery()
   const { isFetching: gridConfigIsLoading } = useAssetGetGridConfigurationByFolderIdQuery({
@@ -118,7 +118,7 @@ export const GridConfigInner = (): React.JSX.Element => {
 
   const onDeleteClick = async (): Promise<void> => {
     if (isSavedConfiguration) {
-      await fetchDeleteGridConfig({ configurationId: gridConfig.id!, folderId: getId() }).then(() => {
+      await fetchDeleteGridConfig({ configurationId: gridConfig.id! }).then(() => {
         setView(ViewState.Edit)
         setSelectedGridConfigId(undefined)
       })

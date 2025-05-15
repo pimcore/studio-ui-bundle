@@ -100,6 +100,14 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["User Management"],
             }),
+            userUpdateProfile: build.mutation<UserUpdateProfileApiResponse, UserUpdateProfileApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/user/update-profile`,
+                    method: "PUT",
+                    body: queryArg.updateUserProfile,
+                }),
+                invalidatesTags: ["User Management"],
+            }),
             userUploadImage: build.mutation<UserUploadImageApiResponse, UserUploadImageApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/user/upload-image/${queryArg.id}`,
@@ -210,6 +218,10 @@ export type UserUpdatePasswordByIdApiArg = {
         passwordConfirmation: string;
     };
 };
+export type UserUpdateProfileApiResponse = /** status 200 Successfully updated user profile */ UserInformation;
+export type UserUpdateProfileApiArg = {
+    updateUserProfile: UserProfile;
+};
 export type UserUploadImageApiResponse = /** status 200 Success */ void;
 export type UserUploadImageApiArg = {
     /** Id of the User */
@@ -256,6 +268,28 @@ export type DevError = {
     /** Details */
     details: string;
 };
+export type KeyBindingForAUser = {
+    /** ASCII Code for a key on the Keyboard */
+    key: number;
+    /** The action the key binding shoudl execute */
+    action: string;
+    /** If CTRL key should be pressed */
+    ctrl: boolean;
+    /** If ALT key should be pressed */
+    alt: boolean;
+    /** If SHIFT key should be pressed */
+    shift: boolean;
+};
+export type TwoFactorAuthenticationData = {
+    /** Required */
+    required: boolean;
+    /** Enabled */
+    enabled: boolean;
+    /** Type */
+    type: string;
+    /** Active */
+    active: boolean;
+};
 export type ElementIcon = {
     /** Icon type */
     type: "name" | "path";
@@ -285,6 +319,12 @@ export type UserInformation = {
     id: number;
     /** Username */
     username: string;
+    /** Email */
+    email: any;
+    /** Firstname */
+    firstname: any;
+    /** Lastname */
+    lastname: any;
     /** Permissions */
     permissions: string[];
     /** If user is an admin user */
@@ -295,22 +335,24 @@ export type UserInformation = {
     docTypes: string[];
     /** User Language */
     language: string;
+    /** Locale for dateTime */
+    dateTimeLocale: any;
+    /** Welcome Screen */
+    welcomeScreen: boolean;
+    /** Memorize Tabs */
+    memorizeTabs: boolean;
+    /** Has Image */
+    hasImage: boolean;
+    /** List of available content Language already sorted. */
+    contentLanguages: object;
+    /** Key Bindings */
+    keyBindings: KeyBindingForAUser[];
+    /** Two Factor Authentication */
+    twoFactorAuthentication?: TwoFactorAuthenticationData[];
     /** Active studio perspective ID */
     activePerspective: any;
     /** Allowed studio perspectives */
     perspectives: PerspectiveConfig[];
-};
-export type KeyBindingForAUser = {
-    /** ASCII Code for a key on the Keyboard */
-    key: number;
-    /** The action the key binding shoudl execute */
-    action: string;
-    /** If CTRL key should be pressed */
-    ctrl: boolean;
-    /** If ALT key should be pressed */
-    alt: boolean;
-    /** If SHIFT key should be pressed */
-    shift: boolean;
 };
 export type UserWorkspace = {
     /** ID of the element */
@@ -467,6 +509,24 @@ export type ResetPassword = {
     /** Username */
     username: string;
 };
+export type UserProfile = {
+    /** Firstname of the User */
+    firstname: any;
+    /** Lastname of the User */
+    lastname: any;
+    /** Email of the User */
+    email: any;
+    /** Language of the User */
+    language: string;
+    /** Date Time Locale for the User */
+    dateTimeLocale: string;
+    welcomeScreen: boolean;
+    memorizeTabs: boolean;
+    /** List of available content Language already sorted. */
+    contentLanguages: object;
+    /** Key Bindings */
+    keyBindings: KeyBindingForAUser[];
+};
 export const {
     useUserCloneByIdMutation,
     useUserCreateMutation,
@@ -483,6 +543,7 @@ export const {
     usePimcoreStudioApiUserSearchQuery,
     useUserUpdateActivePerspectiveMutation,
     useUserUpdatePasswordByIdMutation,
+    useUserUpdateProfileMutation,
     useUserUploadImageMutation,
     useUserGetImageQuery,
     useUserGetTreeQuery,

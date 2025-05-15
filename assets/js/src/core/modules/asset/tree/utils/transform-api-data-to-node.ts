@@ -32,7 +32,7 @@ export const transformApiDataToNodes = (node: DataTransformerSourceNode, data: A
       metaData: {
         asset: assetNode
       },
-      permissions: assetNode.permissions ?? [] as AssetPermissions,
+      permissions: assetNode.permissions ?? [] as unknown as AssetPermissions,
       internalKey: `${node.internalKey}-${assetNode.id}`
     })
   })

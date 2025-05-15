@@ -12,6 +12,7 @@ import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useContext } from 'react'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
+import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface UseElementContextReturn {
@@ -35,11 +36,14 @@ export const useElementContext = (): UseElementContextReturn => {
 export const useOptionalElementContext = (): UseElementContextReturn | null => {
   const { id: assetId } = useContext(AssetContext)
   const { id: dataObjectId } = useContext(DataObjectContext)
+  const { id: documentId } = useContext(DocumentContext)
 
   if (assetId !== 0) {
     return { id: assetId, elementType: 'asset' }
   } else if (dataObjectId !== 0) {
     return { id: dataObjectId, elementType: 'data-object' }
+  } else if (documentId !== 0) {
+    return { id: documentId, elementType: 'document' }
   } else {
     return null
   }

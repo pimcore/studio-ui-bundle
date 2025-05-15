@@ -18,8 +18,6 @@ export * from '@Pimcore/modules/asset/draft/hooks/use-image-settings'
 
 export * from '@Pimcore/modules/asset/editor/shared-tab-manager/tab-definitions'
 export * as MetadataApiSlice from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice.gen'
-// @todo is this really the right location for settings?
-export * as SettingsApiSlice from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 export * from '@Pimcore/modules/asset/editor/types/archive/tab-manager/archive-tab-manager'
 export * from '@Pimcore/modules/asset/editor/types/audio/tab-manager/audio-tab-manager'
 export * from '@Pimcore/modules/asset/editor/types/document/tab-manager/document-tab-manager'

@@ -96,8 +96,10 @@ export type TranslationUpdate = {
 export type Translation = {
     /** Locale */
     locale: string;
-    /** Keys */
+    /** Keys for Translation - Fallback will be  applied to all Keys automatically */
     keys: string[];
+    /** Apply Fallback Language. Used only if no keys are defined */
+    useFallback?: boolean;
 };
 export const {
     useTranslationCreateMutation,

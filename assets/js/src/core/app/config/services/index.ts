@@ -162,6 +162,11 @@ import { DynamicTypeObjectObject } from '@Pimcore/modules/element/dynamic-types/
 import { DynamicTypeObjectVariant } from '@Pimcore/modules/element/dynamic-types/definitions/objects/types/dynamic-type-object-variant'
 import { DynamicTypeObjectDataClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-classification-store'
 import { DynamicTypeGridCellBoolean } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/boolean/dynamic-type-grid-cell-boolean'
+import { PageTabManager } from '@Pimcore/modules/document/editor/types/page/tab-manager/page-tab-manager'
+import { EmailTabManager } from '@Pimcore/modules/document/editor/types/email/tab-manager/email-tab-manager'
+import { HardlinkTabManager } from '@Pimcore/modules/document/editor/types/hardlink/tab-manager/hardlink-tab-manager'
+import { LinkTabManager } from '@Pimcore/modules/document/editor/types/link/tab-manager/link-tab-manager'
+import { SnippetTabManager } from '@Pimcore/modules/document/editor/types/snippet/tab-manager/snippet-tab-manager'
 
 // Main nav
 container.bind(serviceIds.mainNavRegistry).to(MainNavRegistry).inSingletonScope()
@@ -182,9 +187,17 @@ container.bind(serviceIds['Asset/Editor/UnknownTabManager']).to(UnknownTabManage
 
 // Data Objects
 container.bind(serviceIds['DataObject/Editor/TypeRegistry']).to(TypeRegistry).inSingletonScope()
-
 container.bind(serviceIds['DataObject/Editor/ObjectTabManager']).to(ObjectTabManager).inSingletonScope()
 container.bind(serviceIds['DataObject/Editor/FolderTabManager']).to(FolderTabManager).inSingletonScope()
+
+// Documents
+container.bind(serviceIds['Document/Editor/TypeRegistry']).to(TypeRegistry).inSingletonScope()
+container.bind(serviceIds['Document/Editor/PageTabManager']).to(PageTabManager).inSingletonScope()
+container.bind(serviceIds['Document/Editor/EmailTabManager']).to(EmailTabManager).inSingletonScope()
+container.bind(serviceIds['Document/Editor/FolderTabManager']).to(FolderTabManager).inSingletonScope()
+container.bind(serviceIds['Document/Editor/HardlinkTabManager']).to(HardlinkTabManager).inSingletonScope()
+container.bind(serviceIds['Document/Editor/LinkTabManager']).to(LinkTabManager).inSingletonScope()
+container.bind(serviceIds['Document/Editor/SnippetTabManager']).to(SnippetTabManager).inSingletonScope()
 
 // Icon library
 container.bind(serviceIds.iconLibrary).to(IconLibrary).inSingletonScope()

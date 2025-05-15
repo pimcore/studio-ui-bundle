@@ -75,7 +75,6 @@ export type ExportCsvApiArg = {
         elements?: number[];
         columns?: GridColumnRequest[];
         config?: {
-            delimiter?: string;
             header?:
                 | "id"
                 | "custom_report_config"
@@ -98,6 +97,7 @@ export type ExportCsvApiArg = {
                 | "int"
                 | "string"
                 | "bool";
+            delimiter?: string;
         };
         elementType?: "data-object" | "object" | "asset" | "document";
     };
@@ -112,7 +112,6 @@ export type ExportCsvFolderApiArg = {
         columns?: GridColumnRequest[];
         filters?: GridFilter;
         config?: {
-            delimiter?: string;
             header?:
                 | "id"
                 | "custom_report_config"
@@ -135,6 +134,7 @@ export type ExportCsvFolderApiArg = {
                 | "int"
                 | "string"
                 | "bool";
+            delimiter?: string;
         };
         elementType?: "data-object" | "object" | "asset" | "document";
     };
@@ -158,7 +158,6 @@ export type ExportXlsxApiArg = {
         elements?: number[];
         columns?: GridColumnRequest[];
         config?: {
-            delimiter?: string;
             header?:
                 | "id"
                 | "custom_report_config"
@@ -196,7 +195,6 @@ export type ExportXlsxFolderApiArg = {
         columns?: GridColumnRequest[];
         filters?: GridFilter;
         config?: {
-            delimiter?: string;
             header?:
                 | "id"
                 | "custom_report_config"
