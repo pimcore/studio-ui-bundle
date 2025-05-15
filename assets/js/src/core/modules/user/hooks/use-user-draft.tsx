@@ -19,7 +19,7 @@ import {
 import {
   api, type UserGetAvailablePermissionsApiResponse,
   type UserGetByIdApiResponse
-} from '@Pimcore/modules/user/user-api-slice.gen'
+} from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useEffect, useState } from 'react'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 

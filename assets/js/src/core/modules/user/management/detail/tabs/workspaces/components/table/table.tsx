@@ -12,7 +12,7 @@ import React, { useEffect } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { type UserWorkspace } from '@Pimcore/modules/user/user-api-slice.gen'
+import { type UserWorkspace } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from 'antd'
 
