@@ -123,6 +123,9 @@ const config: ConfigFile = {
     '../../js/src/core/modules/perspectives/perspectives-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/perspectives\//i)
     },
+    '../../js/src/core/modules/app/base-layout/profile/notifications-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/api\/notifications\/?/i)
+    },
     '../../js/src/core/modules/search/search-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/search\/?/i)
     },
