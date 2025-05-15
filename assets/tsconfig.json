@@ -8,6 +8,7 @@
     "baseUrl": "./js/",
     "paths": {
       "@Pimcore/*": ["./src/core/*"],
+      "@sdk/*": ["./src/sdk/*"],
       "@test-utils/*": ["./test-utils/*"],
     },
     "strictNullChecks": true,

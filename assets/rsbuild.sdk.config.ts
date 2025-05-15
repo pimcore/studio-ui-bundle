@@ -23,14 +23,7 @@ if (!fs.existsSync(buildPath)) {
   fs.mkdirSync(buildPath, { recursive: true });
 }
 
-const envs = {
-  development: 'development',
-  production: 'production'
-} as const;
-const env = process.env.NODE_ENV === 'development' ? envs.development : envs.production;
-
 export default defineConfig({
-  mode: env,
   server: {
     port: 3030,
   },
@@ -44,6 +37,11 @@ export default defineConfig({
     decorators: {
       version: 'legacy'
     }
+  },
+  tools: {
+    bundlerChain: (chain, { env }) => {
+      chain.output.uniqueName('pimcore_studio_ui_bundle');
+    },
   },
   output: {
     manifest: true,

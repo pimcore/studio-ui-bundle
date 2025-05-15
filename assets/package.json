@@ -19,13 +19,9 @@
   },
   "exports": {
     ".": {
-      "import": "./dist/sdk/main.js",
-      "require": "./dist/sdk/main.js",
       "types": "./dist/build/types/src/sdk/main.d.ts"
     },
     "./*": {
-      "import": "./dist/sdk/*/index.js",
-      "require": "./dist/sdk/*/index.js",
       "types": "./dist/build/types/src/sdk/*/index.d.ts"
     }
   },

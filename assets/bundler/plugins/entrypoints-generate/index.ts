@@ -112,7 +112,7 @@ const generateEntrypoints = (data: data, devServer?: DevServerContext): Entrypoi
   fs.writeFileSync(
     `${data.environments.web.config.output.distPath.root}/exposeRemote.js`,
     `
-      ${(manifest.entries['pimcore_studio_ui_bundle'] !== undefined) ? `window.StudioUIBundleRemoteUrl = '${manifest.entries['pimcore_studio_ui_bundle'].initial!.js![0]}'` : ''}
+      ${(manifest.entries['pimcore_studio_ui_bundle'] !== undefined) ? `window.StudioUIBundleRemoteUrl = '${hasDevServer && !hasDomain ? `http${devServer.https ? 's' : ''}://${host}:${devServer.port}` : ''}${manifest.entries['pimcore_studio_ui_bundle'].initial!.js![0]}'` : ''}
     `
   )
 

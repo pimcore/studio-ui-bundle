@@ -16,7 +16,6 @@ if (!fs.existsSync(buildPath)) {
 }
 
 export default defineConfig({
-  // mode: 'development',
   server: {
     port: 3032,
   },
@@ -56,8 +55,9 @@ export default defineConfig({
       name: 'pimcore_studio_ui_bundle_core',
       dts: false,
       remotes: {
-        '@pimcore/studio-ui-bundle': `promise new Promise(resolve => {
+        '@sdk': `promise new Promise(resolve => {
           const studioUIBundleRemoteUrl = window.StudioUIBundleRemoteUrl
+          console.log('studioUIBundleRemoteUrl', studioUIBundleRemoteUrl);
           const script = document.createElement('script')
           script.src = studioUIBundleRemoteUrl
           script.onload = () => {
