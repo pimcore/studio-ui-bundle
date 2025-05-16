@@ -58,6 +58,6 @@ export class DynamicTypeObjectDataGeoBounds extends DynamicTypeObjectDataAbstrac
   }
 
   getDefaultGridColumnWidth (): number | undefined {
-    return 250
+    return 350
   }
 }

@@ -48,6 +48,6 @@ export class DynamicTypeObjectDataInput extends DynamicTypeObjectDataAbstractInp
   }
 
   getDefaultGridColumnWidth (): number | undefined {
-    return 250
+    return 350
   }
 }

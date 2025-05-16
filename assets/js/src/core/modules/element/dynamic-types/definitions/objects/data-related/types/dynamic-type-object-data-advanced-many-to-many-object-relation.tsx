@@ -45,11 +45,7 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
   }
 
   getObjectDataComponent (props: AdvancedManyToManyObjectRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
-    let columns: RelationColumnDefinition[] = []
-
-    if (!isNil(props.columns)) {
-      columns = addDefaultWithToColumnDefinition(props.columns)
-    }
+    const columns: RelationColumnDefinition[] = !isNil(props.columns) ? addDefaultWithToColumnDefinition(props.columns) : []
 
     return (
       <AdvancedManyToManyObjectRelation

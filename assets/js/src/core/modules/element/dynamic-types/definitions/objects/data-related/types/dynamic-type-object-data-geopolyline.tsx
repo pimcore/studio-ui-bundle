@@ -59,6 +59,6 @@ export class DynamicTypeObjectDataGeoPolyLine extends DynamicTypeObjectDataAbstr
   }
 
   getDefaultGridColumnWidth (): number | undefined {
-    return 250
+    return 350
   }
 }

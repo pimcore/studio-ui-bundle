@@ -11,7 +11,7 @@
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { container } from '@Pimcore/app/depency-injection'
 import {
-  AdvancedManyToManyRelation, type AdvancedManyToManyRelationClassDefinitionProps
+  AdvancedManyToManyRelation, type RelationColumnDefinition, type AdvancedManyToManyRelationClassDefinitionProps
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/advanced-many-to-many-relation/advanced-many-to-many-relation'
 import {
   type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract,
@@ -33,6 +33,8 @@ import { AdvancedManyToManyRelationList } from '../../grid-cell-preview/advanced
 import { type DynamicTypeObjectDataRegistry } from '../dynamic-type-object-data-registry'
 import { type AdvancedManyToManyRelationValue } from '../helpers/relations/types/advanced-many-to-many-relation'
 import { type AdvancedManyToManyObjectRelationObjectDataDefinition } from './dynamic-type-object-data-advanced-many-to-many-object-relation'
+import { isNil } from 'lodash'
+import { addDefaultWithToColumnDefinition } from '@Pimcore/modules/element/dynamic-types/utils/column-helper'
 
 export type AdvancedManyToManyRelationObjectDataDefinition = AbstractObjectDataDefinition & IRelationAllowedTypesClassDefinition & AdvancedManyToManyRelationClassDefinitionProps
 
@@ -46,11 +48,14 @@ export class DynamicTypeObjectDataAdvancedManyToManyRelation extends DynamicType
   }
 
   getObjectDataComponent (props: AdvancedManyToManyRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+    const columns: RelationColumnDefinition[] = !isNil(props.columns) ? addDefaultWithToColumnDefinition(props.columns) : []
+
     return (
       <AdvancedManyToManyRelation
         { ...props }
         { ...convertAllowedTypes(props) }
         className={ props.className }
+        columns={ columns }
         disabled={ props.noteditable === true }
       />
     )
@@ -92,7 +97,7 @@ export class DynamicTypeObjectDataAdvancedManyToManyRelation extends DynamicType
     if (columns !== null) {
       columns.forEach(column => {
         console.log('column', column)
-        const dynType = objectDataRegistry.getDynamicType(column.dataType as string)
+        const dynType = objectDataRegistry.getDynamicType(column.dataType as string, false)
         if (dynType?.getDefaultGridColumnWidth !== undefined) {
           console.log('dynType', dynType)
           const columnWidth = dynType.getDefaultGridColumnWidth(props)

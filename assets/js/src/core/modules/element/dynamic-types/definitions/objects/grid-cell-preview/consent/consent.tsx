@@ -26,7 +26,7 @@ export const Consent = ({ consent }: ConsentProps): React.JSX.Element => {
       { consent?.consent === true && t('yes') }
       { consent?.consent === false && t('no') }
       { !isNil(consent?.noteContent) && !isEmpty(consent?.noteContent) && (
-        <span> ({ consent.noteContent })</span>
+        <span>&nbsp;({ consent.noteContent })</span>
       ) }
 
     </GridCellPreviewWrapper>

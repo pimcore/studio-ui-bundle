@@ -77,4 +77,8 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
       }
     }
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 200
+  }
 }
