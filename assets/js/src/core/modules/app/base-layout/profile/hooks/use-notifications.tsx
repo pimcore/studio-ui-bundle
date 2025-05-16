@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { type NotificationGetCollectionApiArg, type NotificationListItem, useNotificationGetCollectionMutation } from '../notifications-slice.gen'
 import { isNil } from 'lodash'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
@@ -47,10 +47,6 @@ export const useNotifications = (): UseNotificationsReturn => {
       trackError(new GeneralError('Unexpected error fetching notifications'))
     }
   }, [requestNotifications, queryArgs])
-
-  useEffect(() => {
-    void getAllNotifications()
-  }, [getAllNotifications])
 
   return {
     getAllNotifications,

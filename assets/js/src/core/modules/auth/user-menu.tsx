@@ -19,6 +19,7 @@ import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useWidgetManager } from '../widget-manager/hooks/use-widget-manager'
 import { type WidgetManagerTabConfig } from '../widget-manager/widget-manager-slice'
+import { useNotifications } from '../app/base-layout/profile/hooks/use-notifications'
 
 interface IUserMenuProps {
   className?: string
@@ -29,6 +30,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
 
   const [logout] = useLogoutMutation()
   const { openMainWidget } = useWidgetManager()
+  const { getAllNotifications } = useNotifications()
 
   const notificationsWidget: WidgetManagerTabConfig = {
     component: 'notifications',
@@ -38,9 +40,14 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       translationKey: t('notifications.label'),
       icon: {
         type: 'name',
-        value: 'notification-message'
+        value: 'notification'
       }
     }
+  }
+
+  const openNotificationWidget = async (): Promise<void> => {
+    await getAllNotifications()
+    openMainWidget(notificationsWidget)
   }
 
   const handleLogout = (): void => {
@@ -65,7 +72,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       key: 'notifications',
       label: t('user-menu.notifications'),
       icon: <Badge count={ 5 } />,
-      onClick: () => { openMainWidget(notificationsWidget) },
+      onClick: async () => { await openNotificationWidget() },
       extra: <Button
         className={ 'user-menu__item-extra' }
         size={ 'small' }
