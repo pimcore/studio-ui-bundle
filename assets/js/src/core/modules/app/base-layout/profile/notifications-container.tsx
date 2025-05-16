@@ -29,8 +29,6 @@ const NotificationsContainer = (): React.JSX.Element => {
     setPageSize
   } = useNotifications()
 
-  console.log('gets there')
-
   return (
     <ContentLayout
       renderToolbar={ notifications.length !== 0
