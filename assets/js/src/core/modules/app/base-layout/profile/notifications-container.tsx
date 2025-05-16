@@ -41,7 +41,7 @@ const NotificationsContainer = (): React.JSX.Element => {
       }
     }
     void fetchNotifications()
-  }, [getAllNotifications])
+  }, [])
 
   return (
     <ContentLayout
