@@ -20,7 +20,7 @@ export abstract class DynamicTypeAbstract {
 export abstract class DynamicTypeRegistryAbstract<GenericDynamicTypeAbstract extends DynamicTypeAbstract> {
   protected readonly dynamicTypes = new Map<string, GenericDynamicTypeAbstract>()
 
-  registerDynamicType(type: GenericDynamicTypeAbstract): void {
+  registerDynamicType (type: GenericDynamicTypeAbstract): void {
     if (this.dynamicTypes.has(type.id)) {
       trackError(new GeneralError(`Dynamic type with id "${type.id}" already exists`))
     }
@@ -28,7 +28,7 @@ export abstract class DynamicTypeRegistryAbstract<GenericDynamicTypeAbstract ext
     this.dynamicTypes.set(type.id, type)
   }
 
-  getDynamicType(id: string, throwException: boolean = true): GenericDynamicTypeAbstract {
+  getDynamicType (id: string, throwException: boolean = true): GenericDynamicTypeAbstract {
     const dynamicType = this.dynamicTypes.get(id)
 
     if (dynamicType === undefined && throwException) {
@@ -38,11 +38,11 @@ export abstract class DynamicTypeRegistryAbstract<GenericDynamicTypeAbstract ext
     return dynamicType!
   }
 
-  getDynamicTypes(): GenericDynamicTypeAbstract[] {
+  getDynamicTypes (): GenericDynamicTypeAbstract[] {
     return Array.from(this.dynamicTypes.values())
   }
 
-  overrideDynamicType(type: GenericDynamicTypeAbstract): void {
+  overrideDynamicType (type: GenericDynamicTypeAbstract): void {
     if (!this.dynamicTypes.has(type.id)) {
       trackError(new GeneralError(`Dynamic type with id "${type.id}" not found`))
     }
@@ -50,7 +50,7 @@ export abstract class DynamicTypeRegistryAbstract<GenericDynamicTypeAbstract ext
     this.dynamicTypes.set(type.id, type)
   }
 
-  hasDynamicType(id: string): boolean {
+  hasDynamicType (id: string): boolean {
     return this.dynamicTypes.has(id)
   }
 }
