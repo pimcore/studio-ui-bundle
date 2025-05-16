@@ -142,7 +142,7 @@ import { DynamicTypeBatchEditElementDropzone } from '@Pimcore/modules/element/dy
 import { DynamicTypeObjectDataFieldCollection } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-field-collection'
 import { DynamicTypeObjectDataObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-object-brick'
 import { DynamicTypeGridCellDataObjectAdapter } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/data-object-adapter/dynamic-type-grid-cell-data-object-adapter'
-import { MainNavRegistry } from '@Pimcore/modules/app/nav/services/main-nav-registry'
+import { MainNavRegistry } from '@Pimcore/modules/app/base-layout/nav/services/main-nav-registry'
 import { DynamicTypeGridCellDataObjectActions } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/data-object-actions/dynamic-type-grid-cell-data-object-actions'
 import { DynamicTypeGridCellDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/data-object-object-brick/dynamic-type-grid-cell-data-object-adapter'
 import { DynamicTypeBatchEditDataObjectAdapter } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/data-object-adapter/dynamic-type-batch-edit-data-object-adpater'
