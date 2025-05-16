@@ -19,7 +19,7 @@ import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useWidgetManager } from '../../../widget-manager/hooks/use-widget-manager'
 import { useNotifications } from '../../../notifications/hooks/use-notifications'
-import { NOTIFICATIONS } from '../../../notifications/widget-config'
+import { NOTIFICATIONS } from '@Pimcore/modules/notifications'
 
 interface IUserMenuProps {
   className?: string

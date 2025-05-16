@@ -13,6 +13,20 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { NotificationsContainer } from './notifications-container'
+import { type WidgetManagerTabConfig } from '../widget-manager/widget-manager-slice'
+
+export const NOTIFICATIONS: WidgetManagerTabConfig = {
+  component: 'notifications',
+  name: 'Notifications',
+  id: 'notifications',
+  config: {
+    translationKey: 'notifications.label',
+    icon: {
+      type: 'name',
+      value: 'notification'
+    }
+  }
+}
 
 moduleSystem.registerModule({
   onInit: () => {
