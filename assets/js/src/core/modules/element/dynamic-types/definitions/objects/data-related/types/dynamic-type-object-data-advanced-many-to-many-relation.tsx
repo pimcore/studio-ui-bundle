@@ -30,7 +30,7 @@ import { type AdvancedManyToManyRelationValue } from '../helpers/relations/types
 import { type AdvancedManyToManyObjectRelationObjectDataDefinition } from './dynamic-type-object-data-advanced-many-to-many-object-relation'
 import { AdvancedManyToManyRelationList } from '../../grid-cell-preview/advanced-many-to-many-relation/advanced-many-to-many-relation'
 import { type ColumnMeta } from '@tanstack/react-table'
-import { useInjection } from '@Pimcore/app/depency-injection'
+import { container, useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeObjectDataRegistry } from '../dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
@@ -81,7 +81,7 @@ export class DynamicTypeObjectDataAdvancedManyToManyRelation extends DynamicType
   }
 
   getDefaultGridColumnWidth (props: ColumnMeta<any, any>): number | undefined {
-    const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+    const objectDataRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
     const fieldDefinition = props.config?.dataObjectConfig.fieldDefinition
     const columns = fieldDefinition?.columns ?? null
     const columnDefaultWith = 250

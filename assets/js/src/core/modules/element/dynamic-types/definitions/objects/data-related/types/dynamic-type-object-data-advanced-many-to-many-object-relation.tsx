@@ -9,7 +9,7 @@
  */
 
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { useInjection } from '@Pimcore/app/depency-injection'
+import { container } from '@Pimcore/app/depency-injection'
 import {
   AdvancedManyToManyObjectRelation,
   type AdvancedManyToManyObjectRelationClassDefinitionProps,
@@ -91,7 +91,7 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
   }
 
   getDefaultGridColumnWidth (props: ColumnMeta<any, any>): number | undefined {
-    const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+    const objectDataRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
     const fieldDefinition = props.config?.dataObjectConfig.fieldDefinition
     const columns = fieldDefinition?.columns ?? null
     let calcColumnWidth = 350

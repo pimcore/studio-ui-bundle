@@ -9,7 +9,7 @@
  */
 
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { useInjection } from '@Pimcore/app/depency-injection'
+import { container } from '@Pimcore/app/depency-injection'
 import { type ColumnMeta } from '@tanstack/react-table'
 import { injectable } from 'inversify'
 import React, { type ReactElement } from 'react'
@@ -26,7 +26,7 @@ export class DynamicTypeGridCellDataObjectObjectBrick extends DynamicTypeGridCel
   }
 
   getDefaultGridColumnWidth (props: ColumnMeta<any, any>): number | undefined {
-    const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+    const objectDataRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
     const type = props.config?.dataObjectType as string
 
     if (type !== undefined) {
