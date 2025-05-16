@@ -133,8 +133,8 @@ export const Grid = ({
           ...column,
           cell: <Skeleton.Input
             active
-            size={'small'}
-          />
+            size={ 'small' }
+                />
         }))
         : props.columns,
     [props.isLoading, props.columns]
@@ -247,43 +247,43 @@ export const Grid = ({
   const renderSortButton = ({ headerColumn }: { headerColumn: Column<any> }): JSX.Element => (
     <div className='grid__sorter'>
       <SortButton
-        allowUnsorted={sorting === undefined}
-        onSortingChange={(value) => {
+        allowUnsorted={ sorting === undefined }
+        onSortingChange={ (value) => {
           updateSortDirection(headerColumn, value)
-        }}
-        value={getSortDirection(headerColumn)}
+        } }
+        value={ getSortDirection(headerColumn) }
       />
     </div>
   )
 
   return useMemo(() => (
-    <div className={cn('ant-table-wrapper', hashId, styles.grid, props.className, { [styles.disabledGrid]: disabled })}>
+    <div className={ cn('ant-table-wrapper', hashId, styles.grid, props.className, { [styles.disabledGrid]: disabled }) }>
       <div className="ant-table ant-table-small">
         <div className='ant-table-container'>
           <div className='ant-table-content'>
             <table
-              ref={tableElement}
-              style={{ width: tableAutoWidth ? '100%' : calculateTableWidth(), minWidth: table.getCenterTotalSize() }}
+              ref={ tableElement }
+              style={ { width: tableAutoWidth ? '100%' : calculateTableWidth(), minWidth: table.getCenterTotalSize() } }
             >
               {!hideColumnHeaders && (
                 <thead className='ant-table-thead'>
                   {table.getHeaderGroups().map(headerGroup => (
-                    <tr key={headerGroup.id}>
+                    <tr key={ headerGroup.id }>
                       {headerGroup.headers.map((header, index) => (
                         <th
                           className='ant-table-cell'
-                          key={header.id}
-                          ref={header.column.columnDef.meta?.autoWidth === true ? autoColumnRef : null}
+                          key={ header.id }
+                          ref={ header.column.columnDef.meta?.autoWidth === true ? autoColumnRef : null }
                           style={
                             header.column.columnDef.meta?.autoWidth === true && !header.column.getIsResizing()
                               ? {
-                                width: 'auto',
-                                minWidth: header.column.getSize()
-                              }
+                                  width: 'auto',
+                                  minWidth: header.column.getSize()
+                                }
                               : {
-                                width: header.column.getSize(),
-                                maxWidth: header.column.getSize()
-                              }
+                                  width: header.column.getSize(),
+                                  maxWidth: header.column.getSize()
+                                }
                           }
                         >
                           <div className='grid__cell-content'>
@@ -299,9 +299,9 @@ export const Grid = ({
 
                           {props.resizable === true && header.column.getCanResize() && (
                             <Resizer
-                              header={header}
-                              isResizing={header.column.getIsResizing()}
-                              table={table}
+                              header={ header }
+                              isResizing={ header.column.getIsResizing() }
+                              table={ table }
                             />
                           )}
                         </th>
@@ -312,10 +312,10 @@ export const Grid = ({
               )}
               <tbody className="ant-table-tbody">
                 {table.getRowModel().rows.length === 0 && (
-                  <tr className={'ant-table-row'}>
+                  <tr className={ 'ant-table-row' }>
                     <td
                       className='ant-table-cell ant-table-cell__no-data'
-                      colSpan={table.getAllColumns().length}
+                      colSpan={ table.getAllColumns().length }
                     >
                       {t('no-data-available-yet')}
                     </td>
@@ -323,16 +323,16 @@ export const Grid = ({
                 )}
                 {table.getRowModel().rows.map(row => (
                   <GridRow
-                    activeColumId={highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell.columnId : undefined}
-                    columns={columns}
-                    contextMenu={props.contextMenu}
-                    isSelected={row.getIsSelected()}
-                    key={row.id}
-                    modifiedCells={JSON.stringify(getModifiedRow(row.id))}
-                    onFocusCell={onFocusCell}
-                    onRowDoubleClick={props.onRowDoubleClick}
-                    row={row}
-                    tableElement={tableElement}
+                    activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell.columnId : undefined }
+                    columns={ columns }
+                    contextMenu={ props.contextMenu }
+                    isSelected={ row.getIsSelected() }
+                    key={ row.id }
+                    modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
+                    onFocusCell={ onFocusCell }
+                    onRowDoubleClick={ props.onRowDoubleClick }
+                    row={ row }
+                    tableElement={ tableElement }
                   />
                 ))}
               </tbody>
@@ -343,19 +343,19 @@ export const Grid = ({
     </div>
   ), [table, modifiedCells, table.getTotalSize(), data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined])
 
-  function getModifiedRow(rowIndex: string): GridProps['modifiedCells'] {
+  function getModifiedRow (rowIndex: string): GridProps['modifiedCells'] {
     return memoModifiedCells.filter(({ rowIndex: rIndex }) => String(rIndex) === String(rowIndex)) ?? []
   }
 
-  function updateRowSelection(selectedRows: RowSelectionState): void {
+  function updateRowSelection (selectedRows: RowSelectionState): void {
     props.onSelectedRowsChange?.(selectedRows)
   }
 
-  function hasRowSelectionColumn(): boolean {
+  function hasRowSelectionColumn (): boolean {
     return columns.some(column => column.id === 'selection')
   }
 
-  function addRowSelectionColumn(): void {
+  function addRowSelectionColumn (): void {
     if (hasRowSelectionColumn()) {
       return
     }
@@ -364,21 +364,21 @@ export const Grid = ({
       id: 'selection',
       header: enableMultipleRowSelection
         ? ({ table }): React.JSX.Element => (
-          <div style={{ display: 'Flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+          <div style={ { display: 'Flex', alignItems: 'center', justifyContent: 'center', width: '100%' } }>
             <Checkbox
-              checked={table.getIsAllRowsSelected()}
-              indeterminate={table.getIsSomeRowsSelected()}
-              onChange={table.getToggleAllRowsSelectedHandler()}
+              checked={ table.getIsAllRowsSelected() }
+              indeterminate={ table.getIsSomeRowsSelected() }
+              onChange={ table.getToggleAllRowsSelectedHandler() }
             />
           </div>
-        )
+          )
         : '',
 
       cell: ({ row }): React.JSX.Element => (
-        <div style={{ display: 'Flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={ { display: 'Flex', alignItems: 'center', justifyContent: 'center' } }>
           <Checkbox
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
+            checked={ row.getIsSelected() }
+            onChange={ row.getToggleSelectedHandler() }
           />
         </div>
       ),
@@ -393,7 +393,7 @@ export const Grid = ({
     )
   }
 
-  function removeRowSelectionColumn(): void {
+  function removeRowSelectionColumn (): void {
     if (!hasRowSelectionColumn()) {
       return
     }
@@ -405,7 +405,7 @@ export const Grid = ({
     }
   }
 
-  function updateRowSelectionColumn(): void {
+  function updateRowSelectionColumn (): void {
     if (isRowSelectionEnabled) {
       addRowSelectionColumn()
     } else {
@@ -413,7 +413,7 @@ export const Grid = ({
     }
   }
 
-  function updateSorting(sorting: SortingState): void {
+  function updateSorting (sorting: SortingState): void {
     if (props.onSortingChange !== undefined) {
       props.onSortingChange(sorting)
       return
@@ -422,7 +422,7 @@ export const Grid = ({
     setInternalSorting(sorting)
   }
 
-  function updateSortDirection(column, direction: SortDirection): void {
+  function updateSortDirection (column, direction: SortDirection): void {
     if (direction === undefined) {
       table.setSorting([])
       return
@@ -431,7 +431,7 @@ export const Grid = ({
     table.setSorting([{ id: column.id, desc: direction === SortDirections.DESC }])
   }
 
-  function getSortDirection(column: Column<any>): SortDirection | undefined {
+  function getSortDirection (column: Column<any>): SortDirection | undefined {
     const sortDirection = internalSorting.find(({ id }) => id === column.id)?.desc
 
     if (sortDirection === undefined) {
