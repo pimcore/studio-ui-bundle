@@ -27,7 +27,7 @@ import {
 import { addDefaultWithToColumnDefinition, DEFAULT_COLUMN_WIDTH } from '@Pimcore/modules/element/dynamic-types/utils/column-helper'
 import { type ColumnMeta } from '@tanstack/react-table'
 import type { FormItemProps } from 'antd/es/form/FormItem'
-import { isNil } from 'lodash'
+import { isNil, isNumber } from 'lodash'
 import React from 'react'
 import { AdvancedManyToManyRelationList } from '../../grid-cell-preview/advanced-many-to-many-relation/advanced-many-to-many-relation'
 import { type DynamicTypeObjectDataRegistry } from '../dynamic-type-object-data-registry'
@@ -50,8 +50,6 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
     if (!isNil(props.columns)) {
       columns = addDefaultWithToColumnDefinition(props.columns)
     }
-
-    console.log('original', columns)
 
     return (
       <AdvancedManyToManyObjectRelation
@@ -100,7 +98,7 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
 
     if (columns !== null) {
       columns.forEach(column => {
-        if (column.width !== undefined) {
+        if (isNumber(column.width)) {
           calcColumnWidth += column.width
           return
         }
