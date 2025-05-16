@@ -11,7 +11,7 @@
 import React, { useState } from 'react'
 import { Toolbar as ToolbarView } from '@Pimcore/components/toolbar/toolbar'
 import { useTranslation } from 'react-i18next'
-import { Button } from '@sdk/components';
+import { Button } from '@sdk/components'
 import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
 import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'

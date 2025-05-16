@@ -27,7 +27,7 @@ export function createDiInstance (): DiInstance {
     window.Pimcore = window.Pimcore ?? {}
     window.Pimcore.container = container
   }
-  
+
   const currentContainer = window.Pimcore.container
   const ContainerContext = createContext(currentContainer)
 

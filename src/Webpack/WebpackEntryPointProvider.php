@@ -25,7 +25,7 @@ final class WebpackEntryPointProvider implements WebpackEntryPointProviderInterf
 
     public function getEntryPoints(): array
     {
-        return ['main', 'exposeRemote'];
+        return ['exposeRemote', 'main'];
     }
 
     public function getOptionalEntryPoints(): array

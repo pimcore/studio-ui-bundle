@@ -1,4 +1,4 @@
-import { defineConfig } from '@rsbuild/core'
+import { defineConfig, rspack } from '@rsbuild/core'
 import { pluginReact } from '@rsbuild/plugin-react'
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { pluginGenerateEntrypoints } from './bundler/plugins/entrypoints-generate';
@@ -23,12 +23,21 @@ if (!fs.existsSync(buildPath)) {
   fs.mkdirSync(buildPath, { recursive: true });
 }
 
+let nodeEnv = process.env.NODE_ENV;
+let env: 'development' | 'production' = 'production';
+
+const isDevServer = nodeEnv === 'dev-server';
+if (nodeEnv !== env) {
+  env = 'development';
+}
+
 export default defineConfig({
+  mode: env,
   server: {
     port: 3030,
   },
   dev: {
-    assetPrefix: '/bundles/pimcorestudioui/build/' + buildId,
+    ...(!isDevServer ? {assetPrefix: '/bundles/pimcorestudioui/build/' + buildId} : {}),
   },
   source: {
     entry: {
@@ -42,6 +51,23 @@ export default defineConfig({
     bundlerChain: (chain, { env }) => {
       chain.output.uniqueName('pimcore_studio_ui_bundle');
     },
+    rspack: {
+      plugins: [
+        new rspack.BannerPlugin({
+          banner: `
+            /**
+             * This source file is available under the terms of the
+             * Pimcore Open Core License (POCL)
+             * Full copyright and license information is available in
+             * LICENSE.md which is distributed with this source code.
+             *
+             *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+             *  @license    Pimcore Open Core License (POCL)
+             */
+          `
+        })
+      ]
+    }
   },
   output: {
     manifest: true,
@@ -61,7 +87,7 @@ export default defineConfig({
     }),
     pluginModuleFederation({
       name: 'pimcore_studio_ui_bundle',
-      filename: './static/js/remoteEntry.js',
+      filename: 'static/js/remoteEntry.js',
       exposes: {
       '.': './js/src/sdk/main.ts',
       './components': './js/src/sdk/components/index.ts',
@@ -101,21 +127,21 @@ export default defineConfig({
         react: {
           singleton: true,
           eager: true,
-          requiredVersion: packages.peerDependencies.react
+          requiredVersion: packages.dependencies.react
         },
         'react-dom': {
           singleton: true,
           eager: true,
-          requiredVersion: packages.peerDependencies['react-dom']
+          requiredVersion: packages.dependencies['react-dom']
         },
         'inversify': {
           eager: true,
-          version: packages.peerDependencies.inversify
+          version: packages.dependencies.inversify
         },
         'antd': {
           singleton: true,
           eager: true,
-          requiredVersion: packages.peerDependencies.antd
+          requiredVersion: packages.dependencies.antd
         }
       }
     })
