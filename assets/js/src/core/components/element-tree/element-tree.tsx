@@ -14,8 +14,7 @@ import React, {
   type MutableRefObject,
   useCallback,
   useMemo,
-  useRef,
-  useState
+  useRef
 } from 'react'
 import { TreeNode as TreeNodeComponent, type TreeNodeProps } from './node/tree-node'
 import { TreeNodeContent, type TreeNodeContentProps } from './node/content/tree-node-content'
@@ -38,7 +37,7 @@ export interface TreePagerProps {
 }
 
 export interface TreeContextMenuProps {
-  children: React.ReactNode
+  children?: React.ReactNode
   node?: TreeNodeProps
 }
 
@@ -113,12 +112,9 @@ const ElementTree = (
       return 0
     })
   }, [nodesRefs.current])
-  const [rightClickedNode, setRightClickedNode] = useState<TreeNodeProps | undefined>(undefined)
 
   async function onRightClick (event: React.MouseEvent, node: TreeNodeProps): Promise<void> {
     event.preventDefault()
-
-    setRightClickedNode(node)
   }
 
   const treeContextValue: ITreeContext = useMemo(() => ({ ...props, nodesRefs, nodeOrder, renderNode, renderNodeContent, onRightClick }), [props, nodesRefs, nodeOrder, renderNode, renderNodeContent, onRightClick])
@@ -156,17 +152,7 @@ const ElementTree = (
         </Box>
       )}
 
-      {(items.length !== 0 || hasRootNode) && (
-        ContextMenu !== undefined
-          ? (
-            <ContextMenu node={ rightClickedNode }>
-              {treeContent}
-            </ContextMenu>
-            )
-          : (
-              treeContent
-            )
-      )}
+      {(items.length !== 0 || hasRootNode) && (treeContent)}
     </>
   )
 }

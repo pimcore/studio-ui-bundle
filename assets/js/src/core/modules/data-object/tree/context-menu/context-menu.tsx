@@ -27,7 +27,6 @@ import { usePublish } from '@Pimcore/modules/element/actions/publish/use-publish
 
 export interface DataObjectTreeContextMenuProps {
   node: TreeNodeProps
-  children: React.ReactNode
 }
 
 export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps): React.JSX.Element => {
@@ -99,9 +98,9 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
     <>
       <Dropdown
         menu={ { items } }
-        trigger={ ['contextMenu'] }
+        open
       >
-        {props.children}
+        <span></span>
       </Dropdown>
     </>
   )
