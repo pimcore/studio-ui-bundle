@@ -12,6 +12,7 @@ import { useInjection } from '@Pimcore/app/depency-injection'
 import { type RelationColumnDefinition } from '../definitions/objects/data-related/components/advanced-many-to-many-object-relation/advanced-many-to-many-object-relation'
 import { type DynamicTypeObjectDataRegistry } from '../definitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { isNumber } from 'lodash'
 
 export const DEFAULT_COLUMN_WIDTH = 150
 
@@ -19,8 +20,8 @@ export const addDefaultWithToColumnDefinition = (columns: RelationColumnDefiniti
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const tmpColumns: RelationColumnDefinition[] = []
 
-  columns.forEach(column => {
-    if (column.width !== undefined) {
+  columns.forEach((column, index) => {
+    if (isNumber(column.width)) {
       tmpColumns.push(column)
       return
     }
@@ -41,5 +42,5 @@ export const addDefaultWithToColumnDefinition = (columns: RelationColumnDefiniti
     })
   })
 
-  return columns
+  return tmpColumns
 }
