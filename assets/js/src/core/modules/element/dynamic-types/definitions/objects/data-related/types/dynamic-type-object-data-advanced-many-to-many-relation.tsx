@@ -8,31 +8,31 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { container } from '@Pimcore/app/depency-injection'
+import {
+  AdvancedManyToManyRelation, type AdvancedManyToManyRelationClassDefinitionProps
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/advanced-many-to-many-relation/advanced-many-to-many-relation'
 import {
   type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract,
   type EditModalSettings,
   type EditMode,
   type GetGridCellDefinitionProps
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
-import type { FormItemProps } from 'antd/es/form/FormItem'
-import {
-  ManyToManyRelationLabel
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/components/label/label'
-import {
-  AdvancedManyToManyRelation, type AdvancedManyToManyRelationClassDefinitionProps
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/advanced-many-to-many-relation/advanced-many-to-many-relation'
 import {
   convertAllowedTypes,
   type IRelationAllowedTypesClassDefinition
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
+import {
+  ManyToManyRelationLabel
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/components/label/label'
+import { type ColumnMeta } from '@tanstack/react-table'
+import type { FormItemProps } from 'antd/es/form/FormItem'
+import React from 'react'
+import { AdvancedManyToManyRelationList } from '../../grid-cell-preview/advanced-many-to-many-relation/advanced-many-to-many-relation'
+import { type DynamicTypeObjectDataRegistry } from '../dynamic-type-object-data-registry'
 import { type AdvancedManyToManyRelationValue } from '../helpers/relations/types/advanced-many-to-many-relation'
 import { type AdvancedManyToManyObjectRelationObjectDataDefinition } from './dynamic-type-object-data-advanced-many-to-many-object-relation'
-import { AdvancedManyToManyRelationList } from '../../grid-cell-preview/advanced-many-to-many-relation/advanced-many-to-many-relation'
-import { type ColumnMeta } from '@tanstack/react-table'
-import { container, useInjection } from '@Pimcore/app/depency-injection'
-import { type DynamicTypeObjectDataRegistry } from '../dynamic-type-object-data-registry'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 export type AdvancedManyToManyRelationObjectDataDefinition = AbstractObjectDataDefinition & IRelationAllowedTypesClassDefinition & AdvancedManyToManyRelationClassDefinitionProps
 
