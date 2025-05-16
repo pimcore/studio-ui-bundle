@@ -19,7 +19,6 @@ import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useWidgetManager } from '../widget-manager/hooks/use-widget-manager'
 import { type WidgetManagerTabConfig } from '../widget-manager/widget-manager-slice'
-import { NotificationsContainer } from '../app/base-layout/profile/notifications-container'
 
 interface IUserMenuProps {
   className?: string
@@ -32,9 +31,10 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   const { openMainWidget } = useWidgetManager()
 
   const notificationsWidget: WidgetManagerTabConfig = {
+    component: 'notifications',
+    name: 'Notifications',
+    id: 'notifications',
     config: {
-      name: 'notifications',
-      component: NotificationsContainer,
       translationKey: t('notifications.label')
     }
   }
