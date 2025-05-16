@@ -18,7 +18,11 @@ import { addColumnConfig } from '@Pimcore/components/grid/columns/helpers'
 export class DynamicTypeGridCellObjectLink extends DynamicTypeGridCellAbstract {
   readonly id = 'object-link'
 
-  getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
-    return <ElementCell { ...addColumnConfig(props, { allowedTypes: ['data-object'] }) } />
+  getGridCellComponent(props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
+    return <ElementCell {...addColumnConfig(props, { allowedTypes: ['data-object'] })} />
+  }
+
+  getDefaultGridColumnWidth(): number | undefined {
+    return 350
   }
 }
