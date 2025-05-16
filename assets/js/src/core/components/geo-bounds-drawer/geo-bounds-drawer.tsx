@@ -22,13 +22,9 @@ export interface GeoBoundsDrawerProps extends GeoMapCardBaseProps {
 }
 
 export const GeoBoundsDrawer = ({ ...props }: GeoBoundsDrawerProps): React.JSX.Element => {
-  const [mapValue, setMapValue] = React.useState<GeoBounds | undefined>(props.value ?? undefined)
-  const [footerValue, setFooterValue] = React.useState<GeoBounds | undefined>(props.value ?? undefined)
   const geoMapRef = useRef<GeoMapAPI>(null)
 
   const onChangeFooter = (newValue?: GeoBounds): void => {
-    setFooterValue(newValue)
-    setMapValue(newValue)
     props.onChange?.(newValue)
     const geoMapAPI = geoMapRef.current
     geoMapAPI?.reset()
@@ -36,7 +32,6 @@ export const GeoBoundsDrawer = ({ ...props }: GeoBoundsDrawerProps): React.JSX.E
   }
 
   const onChangeMap = (newValue: GeoBounds): void => {
-    setFooterValue(newValue)
     props.onChange?.(newValue)
   }
 
@@ -50,8 +45,7 @@ export const GeoBoundsDrawer = ({ ...props }: GeoBoundsDrawerProps): React.JSX.E
           <GeoBoundsDrawerFooter
             onChange={ onChangeFooter }
             onSearch={ (geoPoint?: GeoPoint) => {
-              setFooterValue(undefined)
-              setMapValue(undefined)
+              props.onChange?.(undefined)
 
               const geoMapAPI = geoMapRef.current
               geoMapAPI?.setValue(undefined)
@@ -66,14 +60,14 @@ export const GeoBoundsDrawer = ({ ...props }: GeoBoundsDrawerProps): React.JSX.E
               geoMapAPI?.forceRerender()
               props.onChange?.(undefined)
             } }
-            value={ footerValue }
+            value={ props.value ?? undefined }
           />
           ) }
       height={ props.height }
       lat={ props.lat }
       lng={ props.lng }
       mapMode="geoBounds"
-      mapValue={ mapValue }
+      mapValue={ props.value ?? undefined }
       onChangeMap={ onChangeMap }
       ref={ geoMapRef }
       width={ props.width }
