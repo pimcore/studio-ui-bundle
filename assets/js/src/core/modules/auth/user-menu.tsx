@@ -35,7 +35,11 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     name: 'Notifications',
     id: 'notifications',
     config: {
-      translationKey: t('notifications.label')
+      translationKey: t('notifications.label'),
+      icon: {
+        type: 'name',
+        value: 'notification-message'
+      }
     }
   }
 

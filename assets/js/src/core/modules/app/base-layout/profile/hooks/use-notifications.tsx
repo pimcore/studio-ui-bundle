@@ -8,10 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { type NotificationGetCollectionApiArg, type NotificationListItem, useNotificationGetCollectionMutation } from '../notifications-slice.gen'
 import { isNil } from 'lodash'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface UseNotificationsReturn {
   getAllNotifications: () => Promise<void>
@@ -32,24 +32,25 @@ export const useNotifications = (): UseNotificationsReturn => {
 
   const queryArgs: NotificationGetCollectionApiArg = useMemo(() => ({ body: { filters: { page, pageSize, includeDescendants: true } } }), [page, pageSize])
 
-  const [requestNotifications, { isLoading, isSuccess, isError, error }] = useNotificationGetCollectionMutation()
+  const [requestNotifications, { isLoading }] = useNotificationGetCollectionMutation()
 
-  console.log('dosomethingWithSuccess', isSuccess)
-
-  const getAllNotifications = async (): Promise<void> => {
-    await requestNotifications(queryArgs).then((response) => {
-      if (response?.data !== undefined) {
+  const getAllNotifications = useCallback(async (): Promise<void> => {
+    try {
+      const response = await requestNotifications(queryArgs)
+      if ('data' in response && !isNil(response.data)) {
         setTotalItems(response.data.totalItems)
         setNotifications(response.data.items)
+      } else if ('error' in response && !isNil(response.error)) {
+        trackError(new ApiError(response.error))
       }
-    })
-  }
+    } catch (unexpectedError) {
+      trackError(new GeneralError('Unexpected error fetching notifications'))
+    }
+  }, [requestNotifications, queryArgs])
 
   useEffect(() => {
-    if (isError && !isNil(error)) {
-      trackError(new ApiError(error))
-    }
-  }, [isError, error])
+    void getAllNotifications()
+  }, [getAllNotifications])
 
   return {
     getAllNotifications,

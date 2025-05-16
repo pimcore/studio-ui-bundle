@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
@@ -21,7 +21,6 @@ import { useNotifications } from './hooks/use-notifications'
 const NotificationsContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const {
-    getAllNotifications,
     totalItems,
     notifications,
     isLoading,
@@ -31,17 +30,6 @@ const NotificationsContainer = (): React.JSX.Element => {
   } = useNotifications()
 
   console.log('gets there')
-
-  useEffect(() => {
-    const fetchNotifications = async (): Promise<void> => {
-      try {
-        await getAllNotifications()
-      } catch (error) {
-        console.error('Failed to fetch notifications', error)
-      }
-    }
-    void fetchNotifications()
-  }, [])
 
   return (
     <ContentLayout
