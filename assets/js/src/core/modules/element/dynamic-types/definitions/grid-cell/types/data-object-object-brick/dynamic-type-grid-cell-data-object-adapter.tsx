@@ -16,6 +16,8 @@ import React, { type ReactElement } from 'react'
 import { type DynamicTypeObjectDataRegistry } from 'src/sdk/modules/element'
 import { DataObjectAdapterCell } from '../../components/data-object-adapter/data-object-adapter-cell'
 import { type AbstractGridCellDefinition, DynamicTypeGridCellAbstract } from '../../dynamic-type-grid-cell-abstract'
+import { type AbstractObjectDataDefinition } from '../../../objects/data-related/dynamic-type-object-data-abstract'
+import { defaultFieldWidthValues } from '../../../objects/data-related/providers/field-width/field-width-provider'
 
 @injectable()
 export class DynamicTypeGridCellDataObjectObjectBrick extends DynamicTypeGridCellAbstract {
@@ -32,7 +34,11 @@ export class DynamicTypeGridCellDataObjectObjectBrick extends DynamicTypeGridCel
     if (type !== undefined) {
       const dynType = objectDataRegistry.getDynamicType(type)
       if (dynType?.getDefaultGridColumnWidth !== undefined) {
-        return dynType.getDefaultGridColumnWidth(props)
+        const objectDataDefinition: AbstractObjectDataDefinition = {
+          ...props.config?.dataObjectConfig.fieldDefinition,
+          defaultFieldWidth: defaultFieldWidthValues
+        }
+        return dynType.getDefaultGridColumnWidth(objectDataDefinition)
       }
     }
 

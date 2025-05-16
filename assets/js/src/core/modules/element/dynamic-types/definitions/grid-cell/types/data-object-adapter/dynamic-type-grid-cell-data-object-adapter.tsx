@@ -16,6 +16,8 @@ import React, { type ReactElement } from 'react'
 import { type DynamicTypeObjectDataRegistry } from '../../../objects/data-related/dynamic-type-object-data-registry'
 import { DataObjectAdapterCell } from '../../components/data-object-adapter/data-object-adapter-cell'
 import { type AbstractGridCellDefinition, DynamicTypeGridCellAbstract } from '../../dynamic-type-grid-cell-abstract'
+import { type AbstractObjectDataDefinition } from '../../../objects/data-related/dynamic-type-object-data-abstract'
+import { defaultFieldWidthValues } from '../../../objects/data-related/providers/field-width/field-width-provider'
 
 @injectable()
 export class DynamicTypeGridCellDataObjectAdapter extends DynamicTypeGridCellAbstract {
@@ -25,14 +27,18 @@ export class DynamicTypeGridCellDataObjectAdapter extends DynamicTypeGridCellAbs
     return <DataObjectAdapterCell { ...props } />
   }
 
-  getDefaultGridColumnWidth (props?: ColumnMeta<any, any>): number | undefined {
+  getDefaultGridColumnWidth (props: ColumnMeta<any, any>): number | undefined {
     const objectDataRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
     const type = props?.config?.dataObjectType as string | undefined
 
     if (type !== undefined) {
       const dynType = objectDataRegistry.getDynamicType(type)
       if (dynType?.getDefaultGridColumnWidth !== undefined) {
-        return dynType.getDefaultGridColumnWidth(props)
+        const objectDataDefinition: AbstractObjectDataDefinition = {
+          ...props.config?.dataObjectConfig.fieldDefinition,
+          defaultFieldWidth: defaultFieldWidthValues
+        }
+        return dynType.getDefaultGridColumnWidth(objectDataDefinition)
       }
     }
 

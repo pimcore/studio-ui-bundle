@@ -25,7 +25,6 @@ import {
   ManyToManyRelationLabel
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/components/label/label'
 import { addDefaultWithToColumnDefinition, DEFAULT_COLUMN_WIDTH } from '@Pimcore/modules/element/dynamic-types/utils/column-helper'
-import { type ColumnMeta } from '@tanstack/react-table'
 import type { FormItemProps } from 'antd/es/form/FormItem'
 import { isNil, isNumber } from 'lodash'
 import React from 'react'
@@ -86,10 +85,9 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
     )
   }
 
-  getDefaultGridColumnWidth (props: ColumnMeta<any, any>): number | undefined {
+  getDefaultGridColumnWidth (props?: AdvancedManyToManyObjectRelationObjectDataDefinition): number | undefined {
     const objectDataRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
-    const fieldDefinition = props.config?.dataObjectConfig.fieldDefinition
-    const columns = fieldDefinition?.columns ?? null
+    const columns = props?.columns ?? null
     let calcColumnWidth = 350
 
     if (columns !== null) {
@@ -99,7 +97,7 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
           return
         }
 
-        const dynType = objectDataRegistry.getDynamicType(column.type as string, false)
+        const dynType = objectDataRegistry.getDynamicType(column.type!, false)
         if (dynType?.getDefaultGridColumnWidth !== undefined) {
           const columnWidth = dynType.getDefaultGridColumnWidth(props)
           if (columnWidth !== undefined) {
