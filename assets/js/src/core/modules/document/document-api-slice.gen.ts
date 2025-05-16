@@ -6,6 +6,14 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            documentAdd: build.mutation<DocumentAddApiResponse, DocumentAddApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/add/${queryArg.parentId}`,
+                    method: "POST",
+                    body: queryArg.documentAddParameters,
+                }),
+                invalidatesTags: ["Documents"],
+            }),
             documentsListAvailableSites: build.query<
                 DocumentsListAvailableSitesApiResponse,
                 DocumentsListAvailableSitesApiArg
@@ -48,6 +56,15 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type DocumentAddApiResponse = /** status 200 ID of added document */ {
+    /** ID of created document element */
+    id: number;
+};
+export type DocumentAddApiArg = {
+    /** ParentId of the document */
+    parentId: number;
+    documentAddParameters: DocumentAdd;
+};
 export type DocumentsListAvailableSitesApiResponse = /** status 200 List of available sites */ {
     items: Site[];
 };
@@ -96,6 +113,34 @@ export type DocumentGetTreeApiArg = {
     /** Include all descendants in the result. */
     pathIncludeDescendants?: boolean;
 };
+export type Error = {
+    /** Message */
+    message: string;
+};
+export type DevError = {
+    /** Message */
+    message: string;
+    /** Details */
+    details: string;
+};
+export type DocumentAdd = {
+    /** Key */
+    key: string;
+    /** Type */
+    type: string;
+    /** Title */
+    title: any;
+    /** Navigation name */
+    navigationName: any;
+    /** Document type ID */
+    docTypeId: any;
+    /** Id of the base document for new translation */
+    translationsSourceId: any;
+    /** Document language when adding a translation */
+    language: any;
+    /** Id of the base document for content */
+    inheritanceSourceId: any;
+};
 export type Site = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -111,16 +156,6 @@ export type Site = {
     rootId?: any;
     /** Root path */
     rootPath?: any;
-};
-export type Error = {
-    /** Message */
-    message: string;
-};
-export type DevError = {
-    /** Message */
-    message: string;
-    /** Details */
-    details: string;
 };
 export type ElementIcon = {
     /** Icon type */
@@ -299,6 +334,7 @@ export type Snippet = Document & {
     staticGeneratorLifetime?: number;
 };
 export const {
+    useDocumentAddMutation,
     useDocumentsListAvailableSitesQuery,
     useDocumentGetByIdQuery,
     useDocumentPageStreamPreviewQuery,

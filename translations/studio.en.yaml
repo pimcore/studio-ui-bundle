@@ -784,3 +784,8 @@ edit-modal.inline-edit: Inline edit
 edit-modal.apply-changes: Apply changes
 edit-modal.discard: Discard
 preview-not-available: Preview not available
+user-menu.notifications: Notifications
+user-menu.notifications-send: Send
+user-menu.my-profile: My Profile
+user-menu.log-out: Log out
+user-menu.title: Profile
