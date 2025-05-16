@@ -113,6 +113,10 @@ jobs:
         working-directory: ./assets
         run: npm run lint-fix
 
+      - name: Run type checks
+        working-directory: ./assets
+        run: npm run check-types
+
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
             commit_message: Apply eslint-fixer changes
@@ -146,7 +150,7 @@ jobs:
 
       - name: Run production build
         working-directory: ./assets
-        run: npm run build
+        run: npm run build-app
 
       - name: Create package archive
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/1.x' }}
