@@ -8,15 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useCallback, useMemo, useState } from 'react'
-import { type NotificationGetCollectionApiArg, type NotificationListItem, useNotificationGetCollectionMutation } from '../notifications-slice.gen'
-import { isNil } from 'lodash'
-import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import { useMemo, useState } from 'react'
+import { type NotificationGetCollectionApiArg, type NotificationGetCollectionApiResponse, useNotificationGetCollectionQuery } from '../notifications-slice.gen'
 
 interface UseNotificationsReturn {
-  getAllNotifications: () => Promise<void>
-  totalItems: number
-  notifications: NotificationListItem[]
+  notifications: NotificationGetCollectionApiResponse | undefined
   isLoading: boolean
   page: number
   setPage: (page: number) => void
@@ -27,30 +23,12 @@ interface UseNotificationsReturn {
 export const useNotifications = (): UseNotificationsReturn => {
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState(20)
-  const [notifications, setNotifications] = useState<NotificationListItem[]>([])
-  const [totalItems, setTotalItems] = useState<number>(0)
 
   const queryArgs: NotificationGetCollectionApiArg = useMemo(() => ({ body: { filters: { page, pageSize, includeDescendants: true } } }), [page, pageSize])
 
-  const [requestNotifications, { isLoading }] = useNotificationGetCollectionMutation()
-
-  const getAllNotifications = useCallback(async (): Promise<void> => {
-    try {
-      const response = await requestNotifications(queryArgs)
-      if ('data' in response && !isNil(response.data)) {
-        setTotalItems(response.data.totalItems)
-        setNotifications(response.data.items)
-      } else if ('error' in response && !isNil(response.error)) {
-        trackError(new ApiError(response.error))
-      }
-    } catch (unexpectedError) {
-      trackError(new GeneralError('Unexpected error fetching notifications'))
-    }
-  }, [requestNotifications, queryArgs])
+  const { data: notifications, isLoading } = useNotificationGetCollectionQuery(queryArgs)
 
   return {
-    getAllNotifications,
-    totalItems,
     notifications,
     isLoading,
     page,

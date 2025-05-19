@@ -21,7 +21,6 @@ import { useNotifications } from './hooks/use-notifications'
 const NotificationsContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const {
-    totalItems,
     notifications,
     isLoading,
     page,
@@ -31,7 +30,7 @@ const NotificationsContainer = (): React.JSX.Element => {
 
   return (
     <ContentLayout
-      renderToolbar={ notifications.length !== 0
+      renderToolbar={ notifications?.totalItems !== 0
         ? (
           <Toolbar
             justify='flex-end'
@@ -45,7 +44,7 @@ const NotificationsContainer = (): React.JSX.Element => {
               } }
               showSizeChanger
               showTotal={ (total) => t('pagination.show-total', { total }) }
-              total={ totalItems }
+              total={ notifications?.totalItems ?? 0 }
             />
           </Toolbar>
           )
@@ -66,7 +65,7 @@ const NotificationsContainer = (): React.JSX.Element => {
     >
       <Content
         loading={ isLoading }
-        none={ notifications.length === 0 }
+        none={ notifications?.totalItems === 0 }
       >
         <Box
           margin={ {
