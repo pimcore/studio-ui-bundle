@@ -27,7 +27,6 @@ import {
   type IFormattedDataStructureData,
   type IProcessVersionFieldDataProps
 } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
-import { type ColumnMeta } from '@tanstack/react-table'
 
 export type EditMode = 'default' | 'edit-modal' | 'column-meta'
 export interface EditModalSettings {
@@ -153,7 +152,7 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
     // This method is intentionally left empty - can be implemented in subclasses
   }
 
-  getDefaultGridColumnWidth (props?: ColumnMeta<any, any>): number | undefined {
+  getDefaultGridColumnWidth (props?: AbstractObjectDataDefinition): number | undefined {
     return undefined
   }
 }

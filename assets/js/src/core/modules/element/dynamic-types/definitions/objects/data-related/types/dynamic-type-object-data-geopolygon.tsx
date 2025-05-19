@@ -59,6 +59,6 @@ export class DynamicTypeObjectDataGeoPolygon extends DynamicTypeObjectDataAbstra
   }
 
   getDefaultGridColumnWidth (): number | undefined {
-    return 250
+    return 350
   }
 }

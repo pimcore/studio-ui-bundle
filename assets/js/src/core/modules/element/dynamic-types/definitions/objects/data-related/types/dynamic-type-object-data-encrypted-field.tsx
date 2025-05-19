@@ -75,4 +75,8 @@ export class DynamicTypeObjectDataEncryptedField extends DynamicTypeObjectDataAb
     const dynType = objectDataRegistry.getDynamicType(objectProps.delegateDatatype)
     return dynType.getGridCellDefinition(props)
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 350
+  }
 }

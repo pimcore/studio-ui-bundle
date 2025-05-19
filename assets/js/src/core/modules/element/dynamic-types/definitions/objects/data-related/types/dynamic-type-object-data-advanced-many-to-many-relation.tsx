@@ -44,11 +44,14 @@ export class DynamicTypeObjectDataAdvancedManyToManyRelation extends DynamicType
   }
 
   getObjectDataComponent (props: AdvancedManyToManyRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+    const columns: RelationColumnDefinition[] = !isNil(props.columns) ? addDefaultWithToColumnDefinition(props.columns) : []
+
     return (
       <AdvancedManyToManyRelation
         { ...props }
         { ...convertAllowedTypes(props) }
         className={ props.className }
+        columns={ columns }
         disabled={ props.noteditable === true }
       />
     )
