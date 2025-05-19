@@ -16,22 +16,24 @@ import { type GeoMapAPI } from '@Pimcore/components/geo-map/geo-map'
 
 export interface GeoBoundsDrawerProps extends GeoMapCardBaseProps {
   onChange?: (value: GeoBounds | undefined) => void
-  value?: GeoBounds | null
+  value?: GeoBounds
   disabled?: boolean
   className?: string
 }
 
 export const GeoBoundsDrawer = ({ ...props }: GeoBoundsDrawerProps): React.JSX.Element => {
+  const geoValue = props.value
   const geoMapRef = useRef<GeoMapAPI>(null)
 
-  const onChangeFooter = (newValue?: GeoBounds): void => {
+  const handleChangeFooter = (newValue?: GeoBounds): void => {
     props.onChange?.(newValue)
+
     const geoMapAPI = geoMapRef.current
     geoMapAPI?.reset()
     geoMapAPI?.forceRerender()
   }
 
-  const onChangeMap = (newValue: GeoBounds): void => {
+  const handleChangeMap = (newValue: GeoBounds): void => {
     props.onChange?.(newValue)
   }
 
@@ -43,11 +45,14 @@ export const GeoBoundsDrawer = ({ ...props }: GeoBoundsDrawerProps): React.JSX.E
         ? undefined
         : (
           <GeoBoundsDrawerFooter
-            onChange={ onChangeFooter }
+            onChange={ handleChangeFooter }
             onSearch={ (geoPoint?: GeoPoint) => {
               props.onChange?.(undefined)
 
               const geoMapAPI = geoMapRef.current
+
+              if (geoMapAPI === null) return
+
               geoMapAPI?.setValue(undefined)
               if (geoPoint === undefined) {
                 geoMapAPI?.reset()
@@ -55,20 +60,18 @@ export const GeoBoundsDrawer = ({ ...props }: GeoBoundsDrawerProps): React.JSX.E
                 geoMapAPI?.setLat(geoPoint.latitude)
                 geoMapAPI?.setLng(geoPoint.longitude)
                 geoMapAPI?.setZoom(15)
+                geoMapAPI?.forceRerender()
               }
-
-              geoMapAPI?.forceRerender()
-              props.onChange?.(undefined)
             } }
-            value={ props.value ?? undefined }
+            value={ geoValue }
           />
           ) }
       height={ props.height }
       lat={ props.lat }
       lng={ props.lng }
       mapMode="geoBounds"
-      mapValue={ props.value ?? undefined }
-      onChangeMap={ onChangeMap }
+      mapValue={ geoValue }
+      onChangeMap={ handleChangeMap }
       ref={ geoMapRef }
       width={ props.width }
       zoom={ props.zoom }

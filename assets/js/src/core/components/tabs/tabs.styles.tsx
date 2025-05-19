@@ -25,7 +25,7 @@ export const useStyles = createStyles(({ token, css }) => {
       &.tabs--has-sticky-header > .ant-tabs-nav {
         position: sticky;
         top: 0;
-        z-index: 2;
+        z-index: 99999;
         background: ${token.colorBgContainer};
       }
 

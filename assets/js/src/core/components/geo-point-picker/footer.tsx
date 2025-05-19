@@ -8,7 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React from 'react'
+import { isUndefined } from 'lodash'
 import { Button, InputNumber } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { Form } from '@Pimcore/components/form/form'
@@ -33,7 +34,7 @@ interface GeoPointFormValues {
 export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const [value, setValue] = React.useState<GeoPointFormValues>({ latitude: props.value?.latitude, longitude: props.value?.longitude })
+
   const [form] = Form.useForm()
 
   const valueToGeoPoint = (val: GeoPointFormValues | undefined): GeoPoint | undefined => {
@@ -47,32 +48,24 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
     }
   }
 
-  const onChange = (): void => {
+  const handleChange = (): void => {
     const fieldValues = form.getFieldsValue() as GeoPointFormValues
-    setValue(fieldValues)
     const newValue = valueToGeoPoint(fieldValues)
 
     props.onChange?.(newValue)
   }
 
-  const emptyValue = (): void => {
-    setValue({ latitude: undefined, longitude: undefined })
+  const clearValue = (): void => {
     form.resetFields()
     props.onChange?.(undefined)
   }
 
-  const onSearch = (geoPoint?: GeoPoint): void => {
+  const handleSearch = (geoPoint?: GeoPoint): void => {
     const newValue = { latitude: geoPoint?.latitude, longitude: geoPoint?.longitude }
-    setValue(newValue)
+
     form.setFieldsValue(newValue)
     props.onChange?.(geoPoint)
   }
-
-  useEffect(() => {
-    const newValue = { latitude: props.value?.latitude, longitude: props.value?.longitude }
-    setValue(newValue)
-    form.setFieldsValue(newValue)
-  }, [props.value])
 
   return (
     <GeoMapCardFooter
@@ -97,7 +90,7 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
                       >
                         <InputNumber
                           disabled={ props.disabled }
-                          onChange={ onChange }
+                          onChange={ handleChange }
                         />
                       </Form.Item>
                       <Form.Item
@@ -106,7 +99,7 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
                       >
                         <InputNumber
                           disabled={ props.disabled }
-                          onChange={ onChange }
+                          onChange={ handleChange }
                         />
                       </Form.Item>
                     </Form>
@@ -127,9 +120,9 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
           />
         </Dropdown>
           }
-      emptyValue={ emptyValue }
-      onSearch={ onSearch }
-      removeButtonDisabled={ (value.latitude === undefined && value.longitude === undefined) || props.disabled }
+      emptyValue={ clearValue }
+      onSearch={ handleSearch }
+      removeButtonDisabled={ (isUndefined(props?.value?.latitude) && isUndefined(props?.value?.longitude)) || props.disabled }
     />
   )
 }
