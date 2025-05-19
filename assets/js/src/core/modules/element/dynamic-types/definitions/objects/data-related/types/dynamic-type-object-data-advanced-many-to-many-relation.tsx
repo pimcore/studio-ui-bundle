@@ -9,7 +9,7 @@
  */
 
 import {
-  AdvancedManyToManyRelation, type AdvancedManyToManyRelationClassDefinitionProps
+  AdvancedManyToManyRelation, type RelationColumnDefinition, type AdvancedManyToManyRelationClassDefinitionProps
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/advanced-many-to-many-relation/advanced-many-to-many-relation'
 import {
   type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract,
@@ -24,13 +24,14 @@ import {
 import {
   ManyToManyRelationLabel
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/components/label/label'
-import { calculateColumnWithOfTableCells } from '@Pimcore/modules/element/dynamic-types/utils/column-helper'
+import { addDefaultWithToColumnDefinition, calculateColumnWithOfTableCells } from '@Pimcore/modules/element/dynamic-types/utils/column-helper'
 import { type ColumnMeta } from '@tanstack/react-table'
 import type { FormItemProps } from 'antd/es/form/FormItem'
 import React from 'react'
 import { AdvancedManyToManyRelationList } from '../../grid-cell-preview/advanced-many-to-many-relation/advanced-many-to-many-relation'
 import { type AdvancedManyToManyRelationValue } from '../helpers/relations/types/advanced-many-to-many-relation'
 import { type AdvancedManyToManyObjectRelationObjectDataDefinition } from './dynamic-type-object-data-advanced-many-to-many-object-relation'
+import { isNil } from 'lodash'
 
 export type AdvancedManyToManyRelationObjectDataDefinition = AbstractObjectDataDefinition & IRelationAllowedTypesClassDefinition & AdvancedManyToManyRelationClassDefinitionProps
 
@@ -44,7 +45,9 @@ export class DynamicTypeObjectDataAdvancedManyToManyRelation extends DynamicType
   }
 
   getObjectDataComponent (props: AdvancedManyToManyRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
-    const columns: RelationColumnDefinition[] = !isNil(props.columns) ? addDefaultWithToColumnDefinition(props.columns) : []
+    const columns: RelationColumnDefinition[] = !isNil(props.columns)
+      ? addDefaultWithToColumnDefinition(props.columns)
+      : []
 
     return (
       <AdvancedManyToManyRelation

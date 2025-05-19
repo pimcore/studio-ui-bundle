@@ -22,7 +22,7 @@ import {
 import {
   ManyToManyRelationLabel
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/components/label/label'
-import { addDefaultWithToColumnDefinition } from '@Pimcore/modules/element/dynamic-types/utils/column-helper'
+import { addDefaultWithToColumnDefinition, calculateColumnWithOfTableCells } from '@Pimcore/modules/element/dynamic-types/utils/column-helper'
 import { type ColumnMeta } from '@tanstack/react-table'
 import type { FormItemProps } from 'antd/es/form/FormItem'
 import { isNil } from 'lodash'
@@ -42,7 +42,9 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
   }
 
   getObjectDataComponent (props: AdvancedManyToManyObjectRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
-    const columns: RelationColumnDefinition[] = !isNil(props.columns) ? addDefaultWithToColumnDefinition(props.columns) : []
+    const columns: RelationColumnDefinition[] = !isNil(props.columns)
+      ? addDefaultWithToColumnDefinition(props.columns)
+      : []
 
     return (
       <AdvancedManyToManyObjectRelation

@@ -8,12 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useInjection } from '@Pimcore/app/depency-injection'
+import { type ColumnMeta } from '@tanstack/react-table'
+import { isNumber } from 'lodash'
 import { type RelationColumnDefinition } from '../definitions/objects/data-related/components/advanced-many-to-many-object-relation/advanced-many-to-many-object-relation'
 import { type DynamicTypeObjectDataRegistry } from '../definitions/objects/data-related/dynamic-type-object-data-registry'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { isNumber } from 'lodash'
-import { type ColumnMeta } from '@tanstack/react-table'
 
 export const DEFAULT_COLUMN_WIDTH = 150
 
