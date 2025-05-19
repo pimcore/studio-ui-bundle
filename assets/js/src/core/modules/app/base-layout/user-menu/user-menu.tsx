@@ -30,10 +30,6 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   const [logout] = useLogoutMutation()
   const { openMainWidget } = useWidgetManager()
 
-  const openNotificationWidget = (): void => {
-    openMainWidget(NOTIFICATIONS)
-  }
-
   const handleLogout = (): void => {
     const logoutTask = logout()
 
@@ -56,7 +52,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       key: 'notifications',
       label: t('user-menu.notifications'),
       icon: <Badge count={ 5 } />,
-      onClick: () => { openNotificationWidget() },
+      onClick: () => { openMainWidget(NOTIFICATIONS) },
       extra: <Button
         className={ 'user-menu__item-extra' }
         size={ 'small' }
