@@ -82,7 +82,7 @@ export const NotificationList = (): React.JSX.Element => {
 
   return (
     <Collapse
-      accordion={ false }
+      accordion
       items={ Notifications(notifications?.items ?? []) }
     />
   )
