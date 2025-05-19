@@ -48,6 +48,10 @@ const config: ConfigFile = {
     {
       pattern: 'metadataGetCollection',
       type: 'query'
+    },
+        {
+      pattern: 'notificationGetCollection',
+      type: 'query'
     }
   ],
   outputFiles: {

@@ -6,7 +6,7 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            notificationGetCollection: build.mutation<
+            notificationGetCollection: build.query<
                 NotificationGetCollectionApiResponse,
                 NotificationGetCollectionApiArg
             >({
@@ -15,7 +15,7 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Notifications"],
+                providesTags: ["Notifications"],
             }),
             notificationDeleteAll: build.mutation<NotificationDeleteAllApiResponse, NotificationDeleteAllApiArg>({
                 query: () => ({ url: `/pimcore-studio/api/notifications`, method: "DELETE" }),
@@ -140,7 +140,7 @@ export type SendEmailParameters = {
     attachmentId?: any;
 };
 export const {
-    useNotificationGetCollectionMutation,
+    useNotificationGetCollectionQuery,
     useNotificationDeleteAllMutation,
     useNotificationGetByIdQuery,
     useNotificationReadByIdMutation,
