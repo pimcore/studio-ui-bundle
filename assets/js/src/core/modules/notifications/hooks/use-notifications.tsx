@@ -9,8 +9,9 @@
  */
 
 import { useEffect, useMemo, useState } from 'react'
-import { type NotificationGetByIdApiArg, type Notification, type NotificationGetCollectionApiArg, type NotificationGetCollectionApiResponse, useNotificationGetByIdQuery, useNotificationGetCollectionQuery } from '../notifications-slice.gen'
+import { type Notification, type NotificationGetCollectionApiArg, type NotificationGetCollectionApiResponse, useNotificationGetByIdQuery, useNotificationGetCollectionQuery } from '../notifications-slice.gen'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { skipToken } from '@reduxjs/toolkit/query'
 
 interface UseNotificationsReturn {
   notifications: NotificationGetCollectionApiResponse | undefined
@@ -21,20 +22,20 @@ interface UseNotificationsReturn {
   setPage: (page: number) => void
   pageSize: number
   setPageSize: (pageSize: number) => void
-  expandedNotificationId: number
+  expandedNotificationId: number | undefined
   setExpandedNotificationId: (expandedId: number) => void
 }
 
 export const useNotifications = (): UseNotificationsReturn => {
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState(20)
-  const [expandedNotificationId, setExpandedNotificationId] = useState<number>(0)
+  const [expandedNotificationId, setExpandedNotificationId] = useState<number | undefined>(undefined)
 
   const getCollectionQueryArgs: NotificationGetCollectionApiArg = useMemo(() => ({ body: { filters: { page, pageSize, includeDescendants: true } } }), [page, pageSize])
-  const getNotificationDetailQueryArgs: NotificationGetByIdApiArg = useMemo(() => ({ id: expandedNotificationId }), [expandedNotificationId])
 
   const { data: notifications, isLoading: notificationsAreLoading, isError: getCollectionIsError, error: getCollectionError } = useNotificationGetCollectionQuery(getCollectionQueryArgs)
-  const { data: notificationDetail, isLoading: notificationDetailIsLoading, isError: notificationDetailIsError, error: notificationDetailError } = useNotificationGetByIdQuery(getNotificationDetailQueryArgs)
+  const { data: notificationDetail, isLoading: notificationDetailIsLoading, isError: notificationDetailIsError, error: notificationDetailError } = useNotificationGetByIdQuery(
+    expandedNotificationId !== undefined ? { id: expandedNotificationId } : skipToken)
 
   useEffect(() => {
     if (notificationDetailIsError) {

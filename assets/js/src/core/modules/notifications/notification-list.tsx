@@ -22,11 +22,14 @@ import { type NotificationListItem } from './notifications-slice.gen'
 
 export const NotificationList = (): React.JSX.Element => {
   const {
-    notifications
+    notifications,
+    notificationDetail,
+    setExpandedNotificationId
   } = useNotifications()
 
   const Notifications = (notificationItems: NotificationListItem[]): Array<{
     key: string
+    onClick: () => void
     label: React.JSX.Element
     extra: React.JSX.Element
     children: React.JSX.Element
@@ -47,14 +50,17 @@ export const NotificationList = (): React.JSX.Element => {
 
     const children = (): React.JSX.Element => {
       return (
-        <>
-          <Paragraph>{respectLineBreak('lorum ipsum dolor')}</Paragraph>
-        </>
+        <Paragraph>
+          {notificationDetail !== undefined && typeof notificationDetail.message === 'string'
+            ? respectLineBreak(notificationDetail.message)
+            : ''}
+        </Paragraph>
       )
     }
 
     return ({
       key: notification.id.toString(),
+      onClick: () => { setExpandedNotificationId(notification.id) },
       label: <Split
         dividerSize='small'
         size='extra-small'
