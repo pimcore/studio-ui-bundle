@@ -11,7 +11,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { type NotificationGetCollectionApiArg, type NotificationGetCollectionApiResponse, useNotificationGetCollectionQuery } from '../notifications-slice.gen'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { isUndefined } from 'lodash'
 
 interface UseNotificationsReturn {
   notifications: NotificationGetCollectionApiResponse | undefined
