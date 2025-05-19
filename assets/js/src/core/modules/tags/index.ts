@@ -13,7 +13,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { TagConfigurationContainer } from '@Pimcore/modules/tags/tag-configuration-container'
-import { type MainNavRegistry } from '../app/base-layout/nav/services/main-nav-registry'
+import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
 import { UserPermission } from '../auth/enums/user-permission'
 
