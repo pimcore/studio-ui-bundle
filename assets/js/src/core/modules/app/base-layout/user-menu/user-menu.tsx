@@ -17,6 +17,8 @@ import { useStyle } from './user-menu.styles'
 import { Button } from '@Pimcore/components/button/button'
 import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { useWidgetManager } from '../../../widget-manager/hooks/use-widget-manager'
+import { NOTIFICATIONS } from '@Pimcore/modules/notifications'
 
 interface IUserMenuProps {
   className?: string
@@ -26,6 +28,8 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   const { styles } = useStyle()
 
   const [logout] = useLogoutMutation()
+  const { openMainWidget } = useWidgetManager()
+
   const handleLogout = (): void => {
     const logoutTask = logout()
 
@@ -48,6 +52,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       key: 'notifications',
       label: t('user-menu.notifications'),
       icon: <Badge count={ 5 } />,
+      onClick: () => { openMainWidget(NOTIFICATIONS) },
       extra: <Button
         className={ 'user-menu__item-extra' }
         size={ 'small' }
