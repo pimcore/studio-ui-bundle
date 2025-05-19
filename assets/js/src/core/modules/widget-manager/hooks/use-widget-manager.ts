@@ -38,8 +38,6 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
   const dispatch = useAppDispatch()
 
   function openMainWidget (tabConfig: WidgetManagerTabConfig): void {
-    console.log('tabConfig', tabConfig)
-
     dispatch(openMainWidgetAction(tabConfig))
   }
 
