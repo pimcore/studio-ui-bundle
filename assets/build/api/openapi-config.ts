@@ -38,6 +38,10 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'notificationGetCollection',
+      type: 'query'
+    },
+    {
       pattern: 'assetGetSearch',
       type: 'query',
     },

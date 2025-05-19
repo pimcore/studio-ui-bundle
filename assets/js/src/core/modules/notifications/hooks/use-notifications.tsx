@@ -9,38 +9,55 @@
  */
 
 import { useEffect, useMemo, useState } from 'react'
-import { type NotificationGetCollectionApiArg, type NotificationGetCollectionApiResponse, useNotificationGetCollectionQuery } from '../notifications-slice.gen'
+import { type NotificationGetByIdApiArg, type Notification, type NotificationGetCollectionApiArg, type NotificationGetCollectionApiResponse, useNotificationGetByIdQuery, useNotificationGetCollectionQuery } from '../notifications-slice.gen'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface UseNotificationsReturn {
   notifications: NotificationGetCollectionApiResponse | undefined
-  isLoading: boolean
+  notificationsAreLoading: boolean
+  notificationDetail: Notification | undefined
+  notificationDetailIsLoading: boolean
   page: number
   setPage: (page: number) => void
   pageSize: number
   setPageSize: (pageSize: number) => void
+  expandedNotificationId: number
+  setExpandedNotificationId: (expandedId: number) => void
 }
 
 export const useNotifications = (): UseNotificationsReturn => {
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState(20)
+  const [expandedNotificationId, setExpandedNotificationId] = useState<number>(0)
 
-  const queryArgs: NotificationGetCollectionApiArg = useMemo(() => ({ body: { filters: { page, pageSize, includeDescendants: true } } }), [page, pageSize])
+  const getCollectionQueryArgs: NotificationGetCollectionApiArg = useMemo(() => ({ body: { filters: { page, pageSize, includeDescendants: true } } }), [page, pageSize])
+  const getNotificationDetailQueryArgs: NotificationGetByIdApiArg = useMemo(() => ({ id: expandedNotificationId }), [expandedNotificationId])
 
-  const { data: notifications, isLoading, isError, error } = useNotificationGetCollectionQuery(queryArgs)
+  const { data: notifications, isLoading: notificationsAreLoading, isError: getCollectionIsError, error: getCollectionError } = useNotificationGetCollectionQuery(getCollectionQueryArgs)
+  const { data: notificationDetail, isLoading: notificationDetailIsLoading, isError: notificationDetailIsError, error: notificationDetailError } = useNotificationGetByIdQuery(getNotificationDetailQueryArgs)
 
   useEffect(() => {
-    if (isError) {
-      trackError(new ApiError(error))
+    if (notificationDetailIsError) {
+      trackError(new ApiError(notificationDetailError))
     }
-  }, [isError])
+  }, [notificationDetailIsError])
+
+  useEffect(() => {
+    if (getCollectionIsError) {
+      trackError(new ApiError(getCollectionError))
+    }
+  }, [getCollectionIsError])
 
   return {
     notifications,
-    isLoading,
+    notificationsAreLoading,
+    notificationDetail,
+    notificationDetailIsLoading,
     page,
     setPage,
     pageSize,
-    setPageSize
+    setPageSize,
+    expandedNotificationId,
+    setExpandedNotificationId
   }
 }

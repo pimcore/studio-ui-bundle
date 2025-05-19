@@ -23,7 +23,7 @@ const NotificationsContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const {
     notifications,
-    isLoading,
+    notificationsAreLoading,
     page,
     setPage,
     setPageSize
@@ -65,7 +65,7 @@ const NotificationsContainer = (): React.JSX.Element => {
             }
     >
       <Content
-        loading={ isLoading }
+        loading={ notificationsAreLoading }
         none={ notifications?.totalItems === 0 }
       >
         <Box
