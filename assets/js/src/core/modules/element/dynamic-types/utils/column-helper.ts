@@ -26,7 +26,7 @@ export const addDefaultWithToColumnDefinition = (columns: RelationColumnDefiniti
       return
     }
 
-    const columnWidth = getDefaultGridColumnWidthFromDynamicType(column.type)
+    const columnWidth = getDefaultGridColumnWidthFromDynamicObjectType(column.type)
     if (columnWidth !== undefined) {
       tmpColumns.push({
         ...column,
@@ -57,7 +57,7 @@ export const calculateColumnWithOfTableCells = (props: ColumnMeta<any, any>): nu
         return
       }
 
-      const columnWidth = getDefaultGridColumnWidthFromDynamicType(column.type as string, props)
+      const columnWidth = getDefaultGridColumnWidthFromDynamicObjectType(column.type as string, props)
       if (columnWidth !== undefined) {
         calcColumnWidth += columnWidth
         return
@@ -70,7 +70,7 @@ export const calculateColumnWithOfTableCells = (props: ColumnMeta<any, any>): nu
   return calcColumnWidth
 }
 
-export const getDefaultGridColumnWidthFromDynamicType = (columnType?: string, columnMeta?: ColumnMeta<any, any>): number | undefined => {
+export const getDefaultGridColumnWidthFromDynamicObjectType = (columnType?: string, columnMeta?: ColumnMeta<any, any>): number | undefined => {
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
 
   if (columnType !== undefined) {

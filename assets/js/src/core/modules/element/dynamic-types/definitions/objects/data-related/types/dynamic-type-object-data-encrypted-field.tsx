@@ -23,6 +23,8 @@ import { type DynamicTypeObjectDataRegistry } from '../dynamic-type-object-data-
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { EditFormProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
 import { SaveProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/save-provider'
+import { type ColumnMeta } from '@tanstack/react-table'
+import { getDefaultGridColumnWidthFromDynamicObjectType } from '@Pimcore/modules/element/dynamic-types/utils/column-helper'
 
 export type EncryptedFieldObjectDataDefinition = AbstractObjectDataDefinition & {
   delegateDatatype: string
@@ -78,5 +80,19 @@ export class DynamicTypeObjectDataEncryptedField extends DynamicTypeObjectDataAb
 
   getDefaultGridColumnWidth (): number | undefined {
     return 350
+  }
+
+  getDefaultGridColumnWidth (props?: ColumnMeta<any, any>): number | undefined {
+    const columnConfig = props?.config
+
+    console.log('with', columnConfig.dataObjectConfig.fieldDefinition.delegateDatatype, getDefaultGridColumnWidthFromDynamicObjectType(
+      columnConfig.dataObjectConfig.fieldDefinition.delegateDatatype as string ?? undefined,
+      props
+    ))
+
+    return getDefaultGridColumnWidthFromDynamicObjectType(
+      columnConfig.dataObjectConfig.fieldDefinition.delegateDatatype as string ?? undefined,
+      props
+    )
   }
 }

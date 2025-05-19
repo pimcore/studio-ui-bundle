@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { getDefaultGridColumnWidthFromDynamicType } from '@Pimcore/modules/element/dynamic-types/utils/column-helper'
+import { getDefaultGridColumnWidthFromDynamicObjectType } from '@Pimcore/modules/element/dynamic-types/utils/column-helper'
 import { type ColumnMeta } from '@tanstack/react-table'
 import { injectable } from 'inversify'
 import React, { type ReactElement } from 'react'
@@ -26,7 +26,7 @@ export class DynamicTypeGridCellDataObjectAdapter extends DynamicTypeGridCellAbs
   getDefaultGridColumnWidth (props?: ColumnMeta<any, any>): number | undefined {
     const columnConfig = props?.config
 
-    return getDefaultGridColumnWidthFromDynamicType(
+    return getDefaultGridColumnWidthFromDynamicObjectType(
       columnConfig.dataObjectType as string | undefined,
       props
     )

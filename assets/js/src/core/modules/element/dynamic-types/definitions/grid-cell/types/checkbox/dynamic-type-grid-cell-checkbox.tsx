@@ -13,6 +13,8 @@ import { type AbstractGridCellDefinition, DynamicTypeGridCellAbstract } from '..
 import { injectable } from 'inversify'
 import { CheckboxCell } from '../../components/checkbox/checkbox-cell'
 
+export const DEFAULT_CHECKBOX_COLUMN_WIDTH = 100
+
 @injectable()
 export class DynamicTypeGridCellCheckbox extends DynamicTypeGridCellAbstract {
   readonly id = 'checkbox'
@@ -22,6 +24,6 @@ export class DynamicTypeGridCellCheckbox extends DynamicTypeGridCellAbstract {
   }
 
   getDefaultGridColumnWidth (): number | undefined {
-    return 100
+    return DEFAULT_CHECKBOX_COLUMN_WIDTH
   }
 }
