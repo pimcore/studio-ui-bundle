@@ -8,23 +8,22 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { container } from '@Pimcore/app/depency-injection'
+import {
+  DataComponent
+} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/data-component'
+import { EditFormProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
+import { SaveProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/save-provider'
 import {
   type AbstractObjectDataDefinition, type ColumnMetaGridCellDefinition, type DefaultGridCellDefinition, DynamicTypeObjectDataAbstract,
   type GetGridCellDefinitionProps,
   type WithEditModalGridCellDefinition
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
-import {
-  DataComponent
-} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/data-component'
-import type { FormItemProps } from 'antd/es/form/FormItem'
-import { container } from '@Pimcore/app/depency-injection'
-import { type DynamicTypeObjectDataRegistry } from '../dynamic-type-object-data-registry'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { EditFormProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
-import { SaveProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/save-provider'
-import { type ColumnMeta } from '@tanstack/react-table'
 import { getDefaultGridColumnWidthFromDynamicObjectType } from '@Pimcore/modules/element/dynamic-types/utils/column-helper'
+import type { FormItemProps } from 'antd/es/form/FormItem'
+import React from 'react'
+import { type DynamicTypeObjectDataRegistry } from '../dynamic-type-object-data-registry'
 
 export type EncryptedFieldObjectDataDefinition = AbstractObjectDataDefinition & {
   delegateDatatype: string
@@ -78,7 +77,7 @@ export class DynamicTypeObjectDataEncryptedField extends DynamicTypeObjectDataAb
     return dynType.getGridCellDefinition(props)
   }
 
-  getDefaultGridColumnWidth (props?: ColumnMeta<any, any>): number | undefined {
+  getDefaultGridColumnWidth (props?: AbstractObjectDataDefinition): number | undefined {
     const columnConfig = props?.config
 
     console.log('with', columnConfig.dataObjectConfig.fieldDefinition.delegateDatatype, getDefaultGridColumnWidthFromDynamicObjectType(

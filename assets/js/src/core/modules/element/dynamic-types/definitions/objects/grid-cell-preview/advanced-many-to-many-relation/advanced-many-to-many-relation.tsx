@@ -27,7 +27,6 @@ interface AdvancedManyToManyRelationProps {
 export const AdvancedManyToManyRelationList = ({ value, columnDefinition }: AdvancedManyToManyRelationProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  console.log('rendered')
 
   if (isNil(value) || isEmpty(value)) {
     return <></>

@@ -23,7 +23,6 @@ import {
   ManyToManyRelationLabel
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/components/label/label'
 import { addDefaultWithToColumnDefinition, calculateColumnWithOfTableCells } from '@Pimcore/modules/element/dynamic-types/utils/column-helper'
-import { type ColumnMeta } from '@tanstack/react-table'
 import type { FormItemProps } from 'antd/es/form/FormItem'
 import { isNil } from 'lodash'
 import React from 'react'
@@ -85,7 +84,7 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
     )
   }
 
-  getDefaultGridColumnWidth (props: ColumnMeta<any, any>): number | undefined {
+  getDefaultGridColumnWidth (props?: AdvancedManyToManyObjectRelationObjectDataDefinition): number | undefined {
     return calculateColumnWithOfTableCells(props)
   }
 }

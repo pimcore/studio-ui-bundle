@@ -9,7 +9,9 @@
  */
 
 import {
-  AdvancedManyToManyRelation, type RelationColumnDefinition, type AdvancedManyToManyRelationClassDefinitionProps
+  AdvancedManyToManyRelation,
+  type AdvancedManyToManyRelationClassDefinitionProps,
+  type RelationColumnDefinition
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/advanced-many-to-many-relation/advanced-many-to-many-relation'
 import {
   type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract,
@@ -25,13 +27,12 @@ import {
   ManyToManyRelationLabel
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/components/label/label'
 import { addDefaultWithToColumnDefinition, calculateColumnWithOfTableCells } from '@Pimcore/modules/element/dynamic-types/utils/column-helper'
-import { type ColumnMeta } from '@tanstack/react-table'
 import type { FormItemProps } from 'antd/es/form/FormItem'
+import { isNil } from 'lodash'
 import React from 'react'
 import { AdvancedManyToManyRelationList } from '../../grid-cell-preview/advanced-many-to-many-relation/advanced-many-to-many-relation'
 import { type AdvancedManyToManyRelationValue } from '../helpers/relations/types/advanced-many-to-many-relation'
 import { type AdvancedManyToManyObjectRelationObjectDataDefinition } from './dynamic-type-object-data-advanced-many-to-many-object-relation'
-import { isNil } from 'lodash'
 
 export type AdvancedManyToManyRelationObjectDataDefinition = AbstractObjectDataDefinition & IRelationAllowedTypesClassDefinition & AdvancedManyToManyRelationClassDefinitionProps
 
@@ -84,7 +85,7 @@ export class DynamicTypeObjectDataAdvancedManyToManyRelation extends DynamicType
     )
   }
 
-  getDefaultGridColumnWidth (props: ColumnMeta<any, any>): number | undefined {
+  getDefaultGridColumnWidth (props?: AdvancedManyToManyRelationObjectDataDefinition): number | undefined {
     return calculateColumnWithOfTableCells(props)
   }
 }

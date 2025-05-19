@@ -19,7 +19,6 @@ import { type DataComponentProps } from '@Pimcore/modules/data-object/editor/typ
 import { FieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label'
 import { defaultFieldWidthValues, type IFieldWidthContext } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
-import { type ColumnMeta } from '@tanstack/react-table'
 import { type FormInstance } from 'antd'
 import { type FormItemProps } from 'antd/es/form/FormItem'
 import { injectable } from 'inversify'
@@ -153,7 +152,7 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
     // This method is intentionally left empty - can be implemented in subclasses
   }
 
-  getDefaultGridColumnWidth (props?: ColumnMeta<any, any>): number | undefined {
+  getDefaultGridColumnWidth (props?: AbstractObjectDataDefinition): number | undefined {
     return undefined
   }
 }

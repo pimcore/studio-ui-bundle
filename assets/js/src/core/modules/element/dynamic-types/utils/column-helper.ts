@@ -10,10 +10,11 @@
 
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useInjection } from '@Pimcore/app/depency-injection'
-import { type ColumnMeta } from '@tanstack/react-table'
 import { isNumber } from 'lodash'
 import { type RelationColumnDefinition } from '../definitions/objects/data-related/components/advanced-many-to-many-object-relation/advanced-many-to-many-object-relation'
+import { type AbstractObjectDataDefinition } from '../definitions/objects/data-related/dynamic-type-object-data-abstract'
 import { type DynamicTypeObjectDataRegistry } from '../definitions/objects/data-related/dynamic-type-object-data-registry'
+import { defaultFieldWidthValues } from '../definitions/objects/data-related/providers/field-width/field-width-provider'
 
 export const DEFAULT_COLUMN_WIDTH = 150
 
@@ -45,9 +46,9 @@ export const addDefaultWithToColumnDefinition = (columns: RelationColumnDefiniti
   return tmpColumns
 }
 
-export const calculateColumnWithOfTableCells = (props: ColumnMeta<any, any>): number => {
-  const fieldDefinition = props.config?.dataObjectConfig.fieldDefinition
-  const columns = fieldDefinition?.columns ?? null
+export const calculateColumnWithOfTableCells = (props?: AbstractObjectDataDefinition): number => {
+  const fieldDefinition = props?.config?.dataObjectConfig.fieldDefinition
+  const columns = props?.columns ?? null
   let calcColumnWidth = 350
 
   if (columns !== null) {
@@ -57,7 +58,12 @@ export const calculateColumnWithOfTableCells = (props: ColumnMeta<any, any>): nu
         return
       }
 
-      const columnWidth = getDefaultGridColumnWidthFromDynamicObjectType(column.type as string, props)
+      const objectDataDefinition: AbstractObjectDataDefinition = {
+        ...fieldDefinition,
+        defaultFieldWidth: defaultFieldWidthValues
+      }
+
+      const columnWidth = getDefaultGridColumnWidthFromDynamicObjectType(column.type as string, objectDataDefinition)
       if (columnWidth !== undefined) {
         calcColumnWidth += columnWidth
         return
@@ -70,7 +76,7 @@ export const calculateColumnWithOfTableCells = (props: ColumnMeta<any, any>): nu
   return calcColumnWidth
 }
 
-export const getDefaultGridColumnWidthFromDynamicObjectType = (columnType?: string, columnMeta?: ColumnMeta<any, any>): number | undefined => {
+export const getDefaultGridColumnWidthFromDynamicObjectType = (columnType?: string, columnMeta?: AbstractObjectDataDefinition): number | undefined => {
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
 
   if (columnType !== undefined) {
