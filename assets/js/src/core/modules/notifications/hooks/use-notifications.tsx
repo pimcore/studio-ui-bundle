@@ -8,8 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { type NotificationGetCollectionApiArg, type NotificationGetCollectionApiResponse, useNotificationGetCollectionQuery } from '../notifications-slice.gen'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { isUndefined } from 'lodash'
 
 interface UseNotificationsReturn {
   notifications: NotificationGetCollectionApiResponse | undefined
@@ -26,7 +28,17 @@ export const useNotifications = (): UseNotificationsReturn => {
 
   const queryArgs: NotificationGetCollectionApiArg = useMemo(() => ({ body: { filters: { page, pageSize, includeDescendants: true } } }), [page, pageSize])
 
-  const { data: notifications, isLoading } = useNotificationGetCollectionQuery(queryArgs)
+  const { data: notifications, isLoading, isError, error } = useNotificationGetCollectionQuery(queryArgs)
+
+  useEffect(() => {
+    if (isError) {
+      trackError(new ApiError(error))
+    }
+  }, [isError])
+
+  if (!isUndefined(error)) {
+    trackError(new ApiError(error))
+  }
 
   return {
     notifications,
