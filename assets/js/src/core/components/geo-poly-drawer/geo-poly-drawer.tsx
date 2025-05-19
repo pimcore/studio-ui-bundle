@@ -8,6 +8,16 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
 import React, { useRef } from 'react'
 import { GeoPolyDrawerFooter } from './footer'
 import { GeoMapCard, type GeoMapCardBaseProps } from '@Pimcore/components/geo-map/components/geo-map-card/geo-map-card'
@@ -23,17 +33,21 @@ export interface GeoPolyDrawerProps extends GeoMapCardBaseProps {
 }
 
 export const GeoPolyDrawer = ({ ...props }: GeoPolyDrawerProps): React.JSX.Element => {
-  const geoValue = props?.value ?? undefined
+  const [mapValue, setMapValue] = React.useState<GeoPoints | undefined>(props.value ?? undefined)
+  const [footerValue, setFooterValue] = React.useState<GeoPoints | undefined>(props.value ?? undefined)
   const geoMapRef = useRef<GeoMapAPI>(null)
 
-  const handleChangeFooter = (newValue?: GeoPoints): void => {
+  const onChangeFooter = (newValue?: GeoPoints): void => {
+    setFooterValue(newValue)
+    setMapValue(newValue)
     props.onChange?.(newValue)
     const geoMapAPI = geoMapRef.current
     geoMapAPI?.reset()
     geoMapAPI?.forceRerender()
   }
 
-  const handleChangeMap = (newValue: GeoPoints): void => {
+  const onChangeMap = (newValue: GeoPoints): void => {
+    setFooterValue(newValue)
     props.onChange?.(newValue)
   }
 
@@ -45,8 +59,11 @@ export const GeoPolyDrawer = ({ ...props }: GeoPolyDrawerProps): React.JSX.Eleme
         ? undefined
         : (
           <GeoPolyDrawerFooter
-            onChange={ handleChangeFooter }
+            onChange={ onChangeFooter }
             onSearch={ (geoPoint?: GeoPoint) => {
+              setFooterValue(undefined)
+              setMapValue(undefined)
+
               const geoMapAPI = geoMapRef.current
               geoMapAPI?.setValue(undefined)
               if (geoPoint === undefined) {
@@ -59,15 +76,15 @@ export const GeoPolyDrawer = ({ ...props }: GeoPolyDrawerProps): React.JSX.Eleme
               geoMapAPI?.forceRerender()
               props.onChange?.(undefined)
             } }
-            value={ geoValue }
+            value={ footerValue }
           />
           ) }
       height={ props.height }
       lat={ props.lat }
       lng={ props.lng }
       mapMode={ props.mode }
-      mapValue={ geoValue }
-      onChangeMap={ handleChangeMap }
+      mapValue={ mapValue }
+      onChangeMap={ onChangeMap }
       ref={ geoMapRef }
       width={ props.width }
       zoom={ props.zoom }

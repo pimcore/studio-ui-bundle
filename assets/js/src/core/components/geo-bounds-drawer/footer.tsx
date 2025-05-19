@@ -19,7 +19,7 @@ export interface GeoBoundsDrawerFooterProps {
 }
 
 export const GeoBoundsDrawerFooter = (props: GeoBoundsDrawerFooterProps): React.JSX.Element => {
-  const resetValue = (): void => {
+  const clearValue = (): void => {
     if (props.onChange !== undefined) {
       props.onChange(undefined)
     }
@@ -27,9 +27,9 @@ export const GeoBoundsDrawerFooter = (props: GeoBoundsDrawerFooterProps): React.
 
   return (
     <GeoMapCardFooter
-      emptyValue={ resetValue }
+      emptyValue={ clearValue }
       onSearch={ props.onSearch }
-      removeButtonDisabled={ props?.value === undefined }
+      removeButtonDisabled={ props.value === undefined }
     />
   )
 }

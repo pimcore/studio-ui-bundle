@@ -27,17 +27,20 @@ export interface GeoPointPickerProps {
 }
 
 export const GeoPointPicker = ({ ...props }: GeoPointPickerProps): React.JSX.Element => {
-  const geoValue = props.value ?? undefined
+  const [footerValue, setFooterValue] = React.useState<GeoPoint | undefined>(props.value ?? undefined)
+  const [mapValue, setMapValue] = React.useState<GeoPoint | undefined>(props.value ?? undefined)
   const geoMapRef = useRef<GeoMapAPI>(null)
 
-  const handleChangeFooter = (newValue: GeoPoint): void => {
+  const onChangeFooter = (newValue: GeoPoint): void => {
+    setFooterValue(newValue)
+    setMapValue(newValue)
     props.onChange?.(newValue)
-
     const geoMapAPI = geoMapRef.current
     geoMapAPI?.forceRerender()
   }
 
-  const handleChangeMap = (newValue: GeoPoint): void => {
+  const onChangeMap = (newValue: GeoPoint): void => {
+    setFooterValue(newValue)
     props.onChange?.(newValue)
   }
 
@@ -45,19 +48,17 @@ export const GeoPointPicker = ({ ...props }: GeoPointPickerProps): React.JSX.Ele
     <GeoMapCard
       className={ props?.className }
       disabled={ props.disabled }
-      footer={ (
-        <GeoPointPickerFooter
-          disabled={ props.disabled }
-          onChange={ handleChangeFooter }
-          value={ geoValue }
-        />)
-     }
+      footer={ <GeoPointPickerFooter
+        disabled={ props.disabled }
+        onChange={ onChangeFooter }
+        value={ footerValue }
+               /> }
       height={ props.height }
       lat={ props.lat }
       lng={ props.lng }
       mapMode={ 'geoPoint' }
-      mapValue={ geoValue }
-      onChangeMap={ handleChangeMap }
+      mapValue={ mapValue }
+      onChangeMap={ onChangeMap }
       ref={ geoMapRef }
       width={ props.width }
       zoom={ props.zoom }
