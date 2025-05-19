@@ -9,11 +9,11 @@
  */
 
 import React, { type ComponentType } from 'react'
-import { type MenuItemType } from '../../../dropdown'
+import { type MenuItemType } from '@Pimcore/components/menu/menu'
 import { Flex, Menu } from 'antd'
 import { useStyles } from './default-item.styles'
-import { SelectionButton } from '@Pimcore/components/dropdown/selection/selection-button'
-import { useSelection } from '@Pimcore/components/dropdown/selection/hooks/use-selection'
+import { SelectionButton } from '@Pimcore/components/menu/selection/selection-button'
+import { useSelection } from '@Pimcore/components/menu/selection/hooks/use-selection'
 import { Spin } from '@Pimcore/components/spin/spin'
 
 export interface DefaultItemProps extends MenuItemType {

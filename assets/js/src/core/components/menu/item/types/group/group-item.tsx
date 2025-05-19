@@ -9,10 +9,10 @@
  */
 
 import { Menu } from 'antd'
-import { type ItemType, type MenuItemGroupType } from '../../../dropdown'
-import { renderDropdownItem } from '../../utils/dropdown-item'
 import React, { type ComponentType } from 'react'
 import { useStyles } from './group-item.styles'
+import { MenuItem } from '../../menu-item'
+import { type ItemType, type MenuItemGroupType } from '@Pimcore/components/menu/menu'
 
 export const WithExtendedApi = (Component: typeof Menu.ItemGroup): ComponentType<MenuItemGroupType> => {
   const ExtendedMenuItemGroup = ({ children, label, ...props }: MenuItemGroupType): React.JSX.Element => {
@@ -26,7 +26,7 @@ export const WithExtendedApi = (Component: typeof Menu.ItemGroup): ComponentType
         className={ styles.groupItem }
       >
         {children?.map((item: ItemType) => (
-          renderDropdownItem({ item })
+          MenuItem({ item })
         ))}
       </Component>
     )

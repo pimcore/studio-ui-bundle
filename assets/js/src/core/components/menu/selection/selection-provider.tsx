@@ -9,7 +9,7 @@
  */
 
 import React, { createContext, useEffect, useMemo, useState } from 'react'
-import { type DropdownProps } from '../dropdown'
+import { type IMenuProps } from '../menu'
 
 export enum SelectionType {
   Disabled = 'disabled',
@@ -21,7 +21,7 @@ export interface ISelectionContext {
   selectionType: SelectionType
   selectedKeys: React.Key[]
   setSelectedKeys: (selected: React.Key[]) => void
-  onSelected: DropdownProps['onSelect']
+  onSelected: IMenuProps['onSelect']
 }
 
 export const SelectionContext = createContext<ISelectionContext>({
@@ -35,7 +35,7 @@ export interface SelectionProviderProps {
   selectedKeys?: ISelectionContext['selectedKeys']
   selectionType: SelectionType
   children: React.ReactNode
-  onSelected?: DropdownProps['onSelect']
+  onSelected?: IMenuProps['onSelect']
 }
 
 export const SelectionProvider = ({ children, onSelected, ...props }: SelectionProviderProps): React.JSX.Element => {

@@ -9,9 +9,9 @@
  */
 
 import { Menu } from 'antd'
-import { type ItemType, type SubMenuItemType } from '../../../dropdown'
-import { renderDropdownItem } from '../../utils/dropdown-item'
+import { type ItemType, type SubMenuItemType } from '@Pimcore/components/menu/menu'
 import React, { type ComponentType } from 'react'
+import { MenuItem } from '../../menu-item'
 
 export const WithExtendedApi = (Component: typeof Menu.SubMenu): ComponentType<SubMenuItemType> => {
   const ExtendedSubmenu = ({ children, popupOffset, label, ...props }: SubMenuItemType): React.JSX.Element => {
@@ -21,7 +21,7 @@ export const WithExtendedApi = (Component: typeof Menu.SubMenu): ComponentType<S
         { ...props }
       >
         {children?.map((item: ItemType) => (
-          renderDropdownItem({ item })
+          MenuItem({ item })
         ))}
       </Component>
     )

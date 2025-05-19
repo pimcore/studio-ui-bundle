@@ -8,12 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Menu } from 'antd'
-import { type MenuDividerType } from '../../../dropdown'
 import React from 'react'
+import { type MenuItemCustomType } from '@Pimcore/components/menu/menu'
 
-export const DividerItem = (props: MenuDividerType): React.JSX.Element => {
+export const CustomItem = ({ component }: MenuItemCustomType): React.JSX.Element => {
   return (
-    <Menu.Divider { ...props } />
+    <>
+      {component}
+    </>
   )
 }

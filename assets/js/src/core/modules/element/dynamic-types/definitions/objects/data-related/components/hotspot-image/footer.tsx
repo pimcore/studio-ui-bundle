@@ -23,7 +23,7 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/hotspot-image/utils/value-data'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
-import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
+import { SelectionType } from '@Pimcore/components/menu/selection/selection-provider'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { type ImageValue } from '../image/image'
 
