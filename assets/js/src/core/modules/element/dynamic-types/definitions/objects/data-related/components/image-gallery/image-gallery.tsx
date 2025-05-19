@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import cn from 'classnames'
 import {
   type ImageValue
@@ -79,7 +79,8 @@ const removeKeys = (items: ImageGalleryValue): ImageGalleryValue => {
 }
 
 export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
-  const [value, setValueState] = useState<ImageGalleryValue>(addKeys(props.value ?? []))
+  const imageValue = addKeys(props.value ?? [])
+
   const { t } = useTranslation()
   const { styles } = useStyles()
 
@@ -88,12 +89,12 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
 
   const hotspotMarkersModalContainerRef = useRef<HotspotMarkersModalContainerRef>(null)
 
-  const setValue = (newValue: ImageGalleryValue): void => {
+  const handleChange = (newValue: ImageGalleryValue): void => {
     const updatedValue = addKeys(newValue)
 
-    if (!isEqual(updatedValue, value)) {
-      setValueState(updatedValue)
+    if (!isEqual(updatedValue, imageValue)) {
       const changedValue = removeKeys(updatedValue.filter(item => item.image !== null))
+
       props.onChange?.(changedValue.length > 0 ? changedValue : null)
     }
   }
@@ -111,7 +112,7 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
             <IconButton
               disabled={ isEmpty(props.value) }
               icon={ { value: 'trash' } }
-              onClick={ () => { setValue([]) } }
+              onClick={ () => { handleChange([]) } }
             />
           </Tooltip>
           ) }
@@ -122,10 +123,10 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
       >
         <SortableContext
           disabled={ props.disabled }
-          items={ value.map((item, index) => ({ id: String(index) })) }
+          items={ imageValue.map((item, index) => ({ id: String(index) })) }
           strategy={ rectSortingStrategy }
         >
-          { value.map((item, index) => (
+          { imageValue.map((item, index) => (
             <ImageGallerySortableItem
               disabled={ props.disabled }
               height={ height! }
@@ -134,19 +135,19 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
               index={ index }
               item={ item }
               key={ item.key }
-              setValue={ setValue }
-              value={ value }
+              setValue={ handleChange }
+              value={ imageValue }
               width={ width! }
             />
           )) }
         </SortableContext>
-        { (props.disabled !== true || isEmpty(value)) && (
+        { (props.disabled !== true || isEmpty(imageValue)) && (
           <ImageGalleryImageTarget
             disabled={ props.disabled }
             height={ height! }
-            index={ value.length }
-            setValue={ setValue }
-            value={ value }
+            index={ imageValue.length }
+            setValue={ handleChange }
+            value={ imageValue }
             width={ width! }
           />
         ) }

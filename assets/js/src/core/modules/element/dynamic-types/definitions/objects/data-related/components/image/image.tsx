@@ -35,7 +35,7 @@ export interface ImageProps {
 }
 
 export const Image = (props: ImageProps): React.JSX.Element => {
-  const imageValue = props.value
+  const imageValue = props.value ?? null
 
   const { t } = useTranslation()
   const { styles } = useStyles()

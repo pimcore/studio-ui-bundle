@@ -56,29 +56,30 @@ export interface HotspotImageProps {
 }
 
 export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
-  const [value, setValueState] = React.useState<HotspotImageValue | null>(props.value ?? null)
+  const imageValue = props.value ?? null
+
   const [markerModalOpen, setMarkerModalOpen] = useState(false)
   const [cropModalOpen, setCropModalOpen] = useState(false)
+
   const { confirm } = useFormModal()
   const { t } = useTranslation()
   const { styles } = useStyles()
 
-  const setValue = (newValue: HotspotImageValue | null): void => {
-    if (!_.isEqual(newValue, value)) {
-      setValueState(newValue)
+  const handleChange = (newValue: HotspotImageValue | null): void => {
+    if (!_.isEqual(newValue, imageValue)) {
       props.onChange?.(newValue)
     }
   }
 
-  const emptyValue = (): void => {
-    setValue(null)
+  const clearValue = (): void => {
+    props.onChange?.(null)
   }
 
   const width = toCssDimension(props.width, 300)
   const height = toCssDimension(props.height, 150)
 
   const replaceImage = (newImage: ImageValue): void => {
-    if (hasValueData(value)) {
+    if (hasValueData(imageValue)) {
       confirm({
         title: t('hotspots.clear-data'),
         content: t('hotspots.clear-data.dnd-message'),
@@ -97,7 +98,7 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
   }
 
   const setImage = (image: ImageValue, replaceValueData: boolean): void => {
-    let newValue: HotspotImageValue = value === null ? { image: null, hotspots: [], marker: [], crop: {} } : { ...value }
+    let newValue: HotspotImageValue = imageValue === null ? { image: null, hotspots: [], marker: [], crop: {} } : { ...imageValue }
 
     if (replaceValueData) {
       newValue = { image, hotspots: [], marker: [], crop: {} }
@@ -105,23 +106,25 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
       newValue = { ...newValue, image }
     }
 
-    setValue(newValue)
+    handleChange(newValue)
   }
 
   return (
     <Card
       className={ cn('max-w-full', styles.image, props.className) }
       fitContent
-      footer={ <HotspotImageFooter
-        disabled={ props.disabled }
-        emptyValue={ emptyValue }
-        key="image-footer"
-        replaceImage={ replaceImage }
-        setCropModalOpen={ setCropModalOpen }
-        setMarkerModalOpen={ setMarkerModalOpen }
-        setValue={ setValue }
-        value={ value }
-               /> }
+      footer={ (
+        <HotspotImageFooter
+          disabled={ props.disabled }
+          emptyValue={ clearValue }
+          key="image-footer"
+          replaceImage={ replaceImage }
+          setCropModalOpen={ setCropModalOpen }
+          setMarkerModalOpen={ setMarkerModalOpen }
+          setValue={ handleChange }
+          value={ imageValue }
+        />)
+      }
     >
       <Droppable
         isValidContext={ (info: DragAndDropInfo) => props.disabled !== true }
@@ -133,18 +136,18 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
         variant="outline"
       >
         { // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-          value !== null && value?.image !== null
+          imageValue !== null && imageValue?.image !== null
             ? (
               <HotspotImagePreview
-                assetId={ value.image.id }
+                assetId={ imageValue.image.id }
                 cropModalOpen={ cropModalOpen }
                 disabled={ props.disabled }
                 height={ height! }
                 markerModalOpen={ markerModalOpen }
-                onChange={ setValue }
+                onChange={ handleChange }
                 setCropModalOpen={ setCropModalOpen }
                 setMarkerModalOpen={ setMarkerModalOpen }
-                value={ value }
+                value={ imageValue }
                 width={ width! }
               />
               )
