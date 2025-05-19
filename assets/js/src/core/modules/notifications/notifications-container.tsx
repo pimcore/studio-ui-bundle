@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { Content } from '@Pimcore/components/content/content'
 import { Box } from '@Pimcore/components/box/box'
 import { useNotifications } from './hooks/use-notifications'
+import { NotificationList } from './notification-list'
 
 const NotificationsContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -73,6 +74,7 @@ const NotificationsContainer = (): React.JSX.Element => {
             y: 'none'
           } }
         >
+          <NotificationList />
         </Box>
       </Content>
     </ContentLayout>
