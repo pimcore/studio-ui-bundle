@@ -81,8 +81,6 @@ export const useConvertRelationEditableColumns = (
     const columnDefinition: Array<ColumnDef<any>> = []
 
     for (const column of columns) {
-      console.log('flexxxxxxx', column)
-
       columnDefinition.push(
         columnHelper.accessor(EDITABLE_COLUMN_PREFIX + column.key, {
           header: !_.isEmpty(column.label) ? t(String(column.label)) : undefined,
