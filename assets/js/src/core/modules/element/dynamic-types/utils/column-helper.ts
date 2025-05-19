@@ -13,6 +13,7 @@ import { type RelationColumnDefinition } from '../definitions/objects/data-relat
 import { type DynamicTypeObjectDataRegistry } from '../definitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { isNumber } from 'lodash'
+import { type ColumnMeta } from '@tanstack/react-table'
 
 export const DEFAULT_COLUMN_WIDTH = 150
 
@@ -43,4 +44,47 @@ export const addDefaultWithToColumnDefinition = (columns: RelationColumnDefiniti
   })
 
   return tmpColumns
+}
+
+export const calculateColumnWithOfTableCells = (props: ColumnMeta<any, any>): number => {
+  const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+  const fieldDefinition = props.config?.dataObjectConfig.fieldDefinition
+  const columns = fieldDefinition?.columns ?? null
+  let calcColumnWidth = 350
+
+  if (columns !== null) {
+    columns.forEach(column => {
+      if (isNumber(column.width)) {
+        calcColumnWidth += column.width
+        return
+      }
+
+      const dynType = objectDataRegistry.getDynamicType(column.type as string, false)
+      if (dynType?.getDefaultGridColumnWidth !== undefined) {
+        const columnWidth = dynType.getDefaultGridColumnWidth(props)
+        if (columnWidth !== undefined) {
+          calcColumnWidth += columnWidth
+          return
+        }
+      }
+
+      calcColumnWidth += DEFAULT_COLUMN_WIDTH
+    })
+  }
+
+  return calcColumnWidth
+}
+
+export const getDefaultGridColumnWidthFromDynamicType = (props?: ColumnMeta<any, any>): number | undefined => {
+  const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+  const type = props?.config?.dataObjectType as string | undefined
+
+  if (type !== undefined) {
+    const dynType = objectDataRegistry.getDynamicType(type)
+    if (dynType?.getDefaultGridColumnWidth !== undefined) {
+      return dynType.getDefaultGridColumnWidth(props)
+    }
+  }
+
+  return undefined
 }

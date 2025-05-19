@@ -8,8 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { container } from '@Pimcore/app/depency-injection'
 import {
   AdvancedManyToManyObjectRelation,
   type AdvancedManyToManyObjectRelationClassDefinitionProps,
@@ -24,13 +22,12 @@ import {
 import {
   ManyToManyRelationLabel
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/components/label/label'
-import { addDefaultWithToColumnDefinition, DEFAULT_COLUMN_WIDTH } from '@Pimcore/modules/element/dynamic-types/utils/column-helper'
+import { addDefaultWithToColumnDefinition, calculateColumnWithOfTableCells } from '@Pimcore/modules/element/dynamic-types/utils/column-helper'
 import { type ColumnMeta } from '@tanstack/react-table'
 import type { FormItemProps } from 'antd/es/form/FormItem'
-import { isNil, isNumber } from 'lodash'
+import { isNil } from 'lodash'
 import React from 'react'
 import { AdvancedManyToManyRelationList } from '../../grid-cell-preview/advanced-many-to-many-relation/advanced-many-to-many-relation'
-import { type DynamicTypeObjectDataRegistry } from '../dynamic-type-object-data-registry'
 import { type AdvancedManyToManyRelationValue } from '../helpers/relations/types/advanced-many-to-many-relation'
 
 export type AdvancedManyToManyObjectRelationObjectDataDefinition = AbstractObjectDataDefinition & AdvancedManyToManyObjectRelationClassDefinitionProps
@@ -91,31 +88,6 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
   }
 
   getDefaultGridColumnWidth (props: ColumnMeta<any, any>): number | undefined {
-    const objectDataRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
-    const fieldDefinition = props.config?.dataObjectConfig.fieldDefinition
-    const columns = fieldDefinition?.columns ?? null
-    let calcColumnWidth = 350
-
-    if (columns !== null) {
-      columns.forEach(column => {
-        if (isNumber(column.width)) {
-          calcColumnWidth += column.width
-          return
-        }
-
-        const dynType = objectDataRegistry.getDynamicType(column.type as string, false)
-        if (dynType?.getDefaultGridColumnWidth !== undefined) {
-          const columnWidth = dynType.getDefaultGridColumnWidth(props)
-          if (columnWidth !== undefined) {
-            calcColumnWidth += columnWidth
-            return
-          }
-        }
-
-        calcColumnWidth += DEFAULT_COLUMN_WIDTH
-      })
-    }
-
-    return calcColumnWidth
+    return calculateColumnWithOfTableCells(props)
   }
 }
