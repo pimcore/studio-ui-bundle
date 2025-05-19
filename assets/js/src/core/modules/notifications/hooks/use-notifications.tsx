@@ -36,10 +36,6 @@ export const useNotifications = (): UseNotificationsReturn => {
     }
   }, [isError])
 
-  if (!isUndefined(error)) {
-    trackError(new ApiError(error))
-  }
-
   return {
     notifications,
     isLoading,
