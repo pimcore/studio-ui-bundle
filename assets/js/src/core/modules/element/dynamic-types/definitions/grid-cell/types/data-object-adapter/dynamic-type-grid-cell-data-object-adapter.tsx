@@ -24,6 +24,11 @@ export class DynamicTypeGridCellDataObjectAdapter extends DynamicTypeGridCellAbs
   }
 
   getDefaultGridColumnWidth (props?: ColumnMeta<any, any>): number | undefined {
-    return getDefaultGridColumnWidthFromDynamicType(props)
+    const columnConfig = props?.config
+
+    return getDefaultGridColumnWidthFromDynamicType(
+      columnConfig.dataObjectType as string | undefined,
+      props
+    )
   }
 }

@@ -18,20 +18,19 @@ import { type ColumnMeta } from '@tanstack/react-table'
 export const DEFAULT_COLUMN_WIDTH = 150
 
 export const addDefaultWithToColumnDefinition = (columns: RelationColumnDefinition[]): RelationColumnDefinition[] => {
-  const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const tmpColumns: RelationColumnDefinition[] = []
 
-  columns.forEach((column, index) => {
+  columns.forEach((column) => {
     if (isNumber(column.width)) {
       tmpColumns.push(column)
       return
     }
 
-    const dynType = objectDataRegistry.getDynamicType(column.type!, false)
-    if (dynType?.getDefaultGridColumnWidth !== undefined) {
+    const columnWidth = getDefaultGridColumnWidthFromDynamicType(column.type)
+    if (columnWidth !== undefined) {
       tmpColumns.push({
         ...column,
-        width: dynType.getDefaultGridColumnWidth()
+        width: columnWidth
       })
 
       return
@@ -47,7 +46,6 @@ export const addDefaultWithToColumnDefinition = (columns: RelationColumnDefiniti
 }
 
 export const calculateColumnWithOfTableCells = (props: ColumnMeta<any, any>): number => {
-  const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const fieldDefinition = props.config?.dataObjectConfig.fieldDefinition
   const columns = fieldDefinition?.columns ?? null
   let calcColumnWidth = 350
@@ -59,13 +57,10 @@ export const calculateColumnWithOfTableCells = (props: ColumnMeta<any, any>): nu
         return
       }
 
-      const dynType = objectDataRegistry.getDynamicType(column.type as string, false)
-      if (dynType?.getDefaultGridColumnWidth !== undefined) {
-        const columnWidth = dynType.getDefaultGridColumnWidth(props)
-        if (columnWidth !== undefined) {
-          calcColumnWidth += columnWidth
-          return
-        }
+      const columnWidth = getDefaultGridColumnWidthFromDynamicType(column.type as string, props)
+      if (columnWidth !== undefined) {
+        calcColumnWidth += columnWidth
+        return
       }
 
       calcColumnWidth += DEFAULT_COLUMN_WIDTH
@@ -75,14 +70,13 @@ export const calculateColumnWithOfTableCells = (props: ColumnMeta<any, any>): nu
   return calcColumnWidth
 }
 
-export const getDefaultGridColumnWidthFromDynamicType = (props?: ColumnMeta<any, any>): number | undefined => {
+export const getDefaultGridColumnWidthFromDynamicType = (columnType?: string, columnMeta?: ColumnMeta<any, any>): number | undefined => {
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
-  const type = props?.config?.dataObjectType as string | undefined
 
-  if (type !== undefined) {
-    const dynType = objectDataRegistry.getDynamicType(type)
+  if (columnType !== undefined) {
+    const dynType = objectDataRegistry.getDynamicType(columnType, false)
     if (dynType?.getDefaultGridColumnWidth !== undefined) {
-      return dynType.getDefaultGridColumnWidth(props)
+      return dynType.getDefaultGridColumnWidth(columnMeta)
     }
   }
 

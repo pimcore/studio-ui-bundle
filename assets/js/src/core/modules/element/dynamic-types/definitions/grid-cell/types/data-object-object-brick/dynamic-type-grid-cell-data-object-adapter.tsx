@@ -24,6 +24,6 @@ export class DynamicTypeGridCellDataObjectObjectBrick extends DynamicTypeGridCel
   }
 
   getDefaultGridColumnWidth (props: ColumnMeta<any, any>): number | undefined {
-    return getDefaultGridColumnWidthFromDynamicType(props)
+    return getDefaultGridColumnWidthFromDynamicType(props?.config?.dataObjectType as string | undefined)
   }
 }
