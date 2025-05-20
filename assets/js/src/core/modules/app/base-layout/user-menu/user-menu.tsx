@@ -44,7 +44,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       ),
       type: 'group'
     },
-    /*{
+    /* {
       key: 'notifications',
       label: t('user-menu.notifications'),
       icon: <Badge count={ 5 } />,
@@ -61,7 +61,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       onClick: () => {
         console.log('My Profile clicked')
       }
-    },*/
+    }, */
     {
       key: 'logout',
       label: t('user-menu.log-out'),
