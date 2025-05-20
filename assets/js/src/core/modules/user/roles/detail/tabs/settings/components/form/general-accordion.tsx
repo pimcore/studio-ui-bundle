@@ -14,10 +14,26 @@ import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
 import { Select } from '@Pimcore/components/select/select'
 import { useRoleContext } from '@Pimcore/modules/user/roles/hooks/use-role-context'
+import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
 
-const GeneralAccordion = ({ ...props }): React.JSX.Element => {
+const GeneralAccordion = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useRoleContext()
+  const { getPerspectiveConfigCollection } = usePerspectives()
+
+  let perspectiveOptions: any = []
+  getPerspectiveConfigCollection().then((data) => {
+    if (data === undefined) {
+      return
+    }
+
+    perspectiveOptions = data.items.map((item) => ({
+      value: item.id,
+      label: item.name
+    }))
+  }).catch((error) => {
+    console.error('Error fetching perspective config collection:', error)
+  })
 
   const content = [
     {
@@ -25,15 +41,28 @@ const GeneralAccordion = ({ ...props }): React.JSX.Element => {
       title: <>{ t('roles.general') }</>,
       info: 'ID: ' + id,
       children: (
-        <Form.Item
-          name="perspectives"
-        >
-          <Select
-            mode="multiple"
-            options={ [] }
-            placeholder={ t('roles.perspectives') }
-          ></Select>
-        </Form.Item>
+        <>
+          <Form.Item
+            name="perspectives"
+          >
+            <Select
+              mode="multiple"
+              options={ [] }
+              placeholder={ t('roles.perspectives') }
+            ></Select>
+          </Form.Item>
+
+          <Form.Item
+            label={ t('user-management.perspectives') }
+            name="perspectives"
+          >
+            <Select
+              mode="multiple"
+              options={ perspectiveOptions }
+              placeholder={ t('user-management.perspectives.default') }
+            ></Select>
+          </Form.Item>
+        </>
       )
     }
   ]

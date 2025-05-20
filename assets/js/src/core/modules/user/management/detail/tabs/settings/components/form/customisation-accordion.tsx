@@ -15,9 +15,25 @@ import { useTranslation } from 'react-i18next'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { Select } from '@Pimcore/components/select/select'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
 const CustomisationAccordion = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
   const { availableAdminLanguages } = useSettings()
+  const { getPerspectiveConfigCollection } = usePerspectives()
+
+  let perspectiveOptions: any = []
+  getPerspectiveConfigCollection().then((data) => {
+    if (data === undefined) {
+      return
+    }
+
+    perspectiveOptions = data.items.map((item) => ({
+      value: item.id,
+      label: item.name
+    }))
+  }).catch((error) => {
+    console.error('Error fetching perspective config collection:', error)
+  })
 
   const content = [
     {
@@ -56,6 +72,31 @@ const CustomisationAccordion = ({ ...props }): React.JSX.Element => {
             })) }
             placeholder={ t('user-management.language') }
           />
+        </Form.Item>
+
+        <Form.Item
+          label={ t('user-management.roles') }
+          name="roles"
+        >
+          <Select
+            mode="multiple"
+            options={ [{
+              value: 'test',
+              label: 'Asdf'
+            }] }
+            placeholder={ t('user-management.roles.default') }
+          ></Select>
+        </Form.Item>
+
+        <Form.Item
+          label={ t('user-management.perspectives') }
+          name="perspectives"
+        >
+          <Select
+            mode="multiple"
+            options={ perspectiveOptions }
+            placeholder={ t('user-management.perspectives.default') }
+          ></Select>
         </Form.Item>
 
         <Form.Item
