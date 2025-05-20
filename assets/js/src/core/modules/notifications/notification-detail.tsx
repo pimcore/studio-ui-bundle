@@ -57,13 +57,11 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
 
   const item: {
     key: string
-    onClick: () => void
     label: React.JSX.Element
     extra: React.JSX.Element
     children: React.JSX.Element
   } = {
     key: notification.id.toString(),
-    onClick: () => { setExpandedNotificationId(notification.id) },
     label: <Split
       dividerSize='small'
       size='extra-small'
@@ -82,10 +80,12 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     children: children()
   }
 
+  const isExpanded = expandedNotificationId?.toString() === notification.id.toString()
+
   return (
     <Collapse
       activeKeys={
-      expandedNotificationId?.toString() === notification.id.toString()
+      isExpanded
         ? [notification.id.toString()]
         : []
     }
