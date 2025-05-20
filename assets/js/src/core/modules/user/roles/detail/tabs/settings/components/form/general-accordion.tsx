@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Form } from 'antd'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
@@ -19,18 +19,19 @@ import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspec
 const GeneralAccordion = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useRoleContext()
+  const [perspectiveOptions, setPerspectiveOptions] = useState<any[]>([])
   const { getPerspectiveConfigCollection } = usePerspectives()
 
-  let perspectiveOptions: any = []
   getPerspectiveConfigCollection().then((data) => {
     if (data === undefined) {
       return
     }
 
-    perspectiveOptions = data.items.map((item) => ({
+    setPerspectiveOptions(data.items.map((item) => ({
       value: item.id,
       label: item.name
     }))
+    )
   }).catch((error) => {
     console.error('Error fetching perspective config collection:', error)
   })

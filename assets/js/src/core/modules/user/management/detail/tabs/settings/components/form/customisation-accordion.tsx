@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Form, Input } from 'antd'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
@@ -16,24 +16,47 @@ import { Switch } from '@Pimcore/components/switch/switch'
 import { Select } from '@Pimcore/components/select/select'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
+import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helper'
 const CustomisationAccordion = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
   const { availableAdminLanguages } = useSettings()
+  const [roleOptions, setRoleOptions] = useState<any[]>([])
+  const [perspectiveOptions, setPerspectiveOptions] = useState<any[]>([])
+
+  const { getRoleCollection } = useRoleHelper()
   const { getPerspectiveConfigCollection } = usePerspectives()
 
-  let perspectiveOptions: any = []
   getPerspectiveConfigCollection().then((data) => {
     if (data === undefined) {
       return
     }
 
-    perspectiveOptions = data.items.map((item) => ({
-      value: item.id,
-      label: item.name
-    }))
+    setPerspectiveOptions(
+      data.items.map((item) => ({
+        value: item.id,
+        label: item.name
+      }))
+    )
   }).catch((error) => {
     console.error('Error fetching perspective config collection:', error)
   })
+
+  getRoleCollection().then((data) => {
+    console.log('data', data)
+    if (data === undefined) {
+      return
+    }
+    setRoleOptions(data.items.map((item) => ({
+      value: item.id,
+      label: item.name
+    })))
+
+    console.log('roleOptions', roleOptions)
+  }).catch((error) => {
+    console.error('Error fetching role collection:', error)
+  })
+
+  console.log('asdf roleOptions', roleOptions)
 
   const content = [
     {
@@ -80,10 +103,7 @@ const CustomisationAccordion = ({ ...props }): React.JSX.Element => {
         >
           <Select
             mode="multiple"
-            options={ [{
-              value: 'test',
-              label: 'Asdf'
-            }] }
+            options={ roleOptions }
             placeholder={ t('user-management.roles.default') }
           ></Select>
         </Form.Item>
