@@ -14,7 +14,7 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface UseNotificationsReturn {
   notifications: NotificationGetCollectionApiResponse | undefined
-  notificationsAreLoading: boolean
+  isLoading: boolean
   page: number
   setPage: (page: number) => void
   pageSize: number
@@ -27,17 +27,17 @@ export const useNotifications = (): UseNotificationsReturn => {
 
   const getCollectionQueryArgs: NotificationGetCollectionApiArg = useMemo(() => ({ body: { filters: { page, pageSize, includeDescendants: true } } }), [page, pageSize])
 
-  const { data: notifications, isLoading: notificationsAreLoading, isError: getCollectionIsError, error: getCollectionError } = useNotificationGetCollectionQuery(getCollectionQueryArgs)
+  const { data: notifications, isLoading, isError, error } = useNotificationGetCollectionQuery(getCollectionQueryArgs)
 
   useEffect(() => {
-    if (getCollectionIsError) {
-      trackError(new ApiError(getCollectionError))
+    if (isError) {
+      trackError(new ApiError(error))
     }
-  }, [getCollectionIsError])
+  }, [isError])
 
   return {
     notifications,
-    notificationsAreLoading,
+    isLoading,
     page,
     setPage,
     pageSize,

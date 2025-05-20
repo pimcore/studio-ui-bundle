@@ -15,7 +15,7 @@ import { skipToken } from '@reduxjs/toolkit/query'
 
 interface UseNotificationsReturn {
   notificationDetail: Notification | undefined
-  notificationDetailIsLoading: boolean
+  isLoading: boolean
   expandedNotificationId: number | undefined
   setExpandedNotificationId: (expandedId: number | undefined) => void
 }
@@ -23,18 +23,18 @@ interface UseNotificationsReturn {
 export const useNotificationDetail = (): UseNotificationsReturn => {
   const [expandedNotificationId, setExpandedNotificationId] = useState<number | undefined>(undefined)
 
-  const { data: notificationDetail, isLoading: notificationDetailIsLoading, isError: notificationDetailIsError, error: notificationDetailError } = useNotificationGetByIdQuery(
+  const { data: notificationDetail, isLoading, isError, error } = useNotificationGetByIdQuery(
     expandedNotificationId !== undefined ? { id: expandedNotificationId } : skipToken)
 
   useEffect(() => {
-    if (notificationDetailIsError) {
-      trackError(new ApiError(notificationDetailError))
+    if (isError) {
+      trackError(new ApiError(error))
     }
-  }, [notificationDetailIsError])
+  }, [isError])
 
   return {
     notificationDetail,
-    notificationDetailIsLoading,
+    isLoading,
     expandedNotificationId,
     setExpandedNotificationId
   }
