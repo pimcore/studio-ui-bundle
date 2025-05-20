@@ -69,7 +69,7 @@ const GeneralAccordion = (): React.JSX.Element => {
             <Select
               mode="multiple"
               options={ perspectiveOptions }
-              placeholder={ t('user-management.perspectives.default') }
+              placeholder={ t('user-management.perspectives') }
             ></Select>
           </Form.Item>
         </>

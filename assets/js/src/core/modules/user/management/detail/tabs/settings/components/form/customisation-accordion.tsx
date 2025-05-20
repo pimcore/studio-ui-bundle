@@ -17,7 +17,11 @@ import { Select } from '@Pimcore/components/select/select'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
 import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helper'
-const CustomisationAccordion = ({ ...props }): React.JSX.Element => {
+
+interface ICustomisationAccordion {
+  isAdmin?: boolean
+}
+const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion): React.JSX.Element => {
   const { t } = useTranslation()
   const { availableAdminLanguages } = useSettings()
   const [roleOptions, setRoleOptions] = useState<any[]>([])
@@ -101,27 +105,33 @@ const CustomisationAccordion = ({ ...props }): React.JSX.Element => {
           />
         </Form.Item>
 
-        <Form.Item
-          label={ t('user-management.roles') }
-          name="roles"
-        >
-          <Select
-            mode="multiple"
-            options={ roleOptions }
-            placeholder={ t('user-management.roles.default') }
-          ></Select>
-        </Form.Item>
+        {isAdmin === false
+          ? (
+            <>
+              <Form.Item
+                label={ t('user-management.roles') }
+                name="roles"
+              >
+                <Select
+                  mode="multiple"
+                  options={ roleOptions }
+                  placeholder={ t('user-management.roles') }
+                ></Select>
+              </Form.Item>
 
-        <Form.Item
-          label={ t('user-management.perspectives') }
-          name="perspectives"
-        >
-          <Select
-            mode="multiple"
-            options={ perspectiveOptions }
-            placeholder={ t('user-management.perspectives.default') }
-          ></Select>
-        </Form.Item>
+              <Form.Item
+                label={ t('user-management.perspectives') }
+                name="perspectives"
+              >
+                <Select
+                  mode="multiple"
+                  options={ perspectiveOptions }
+                  placeholder={ t('user-management.perspectives') }
+                ></Select>
+              </Form.Item>
+            </>
+            )
+          : null }
 
         <Form.Item
           label={ 'TODO ' + t('user-management.dateTime') }

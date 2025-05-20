@@ -153,7 +153,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
           <UserAvatar id={ id } />
         </Col>
         <Col span={ 16 }>
-          <CustomisationAccordion />
+          <CustomisationAccordion isAdmin={ openedUser?.admin } />
         </Col>
         <Col span={ 16 }>
           <AdminAccordion isDisabled={ user?.id === openedUser?.id } />
