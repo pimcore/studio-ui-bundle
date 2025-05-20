@@ -9,19 +9,20 @@
  */
 
 import React from 'react'
-import { Collapse } from '@Pimcore/components/collapse/collapse'
 import { useNotifications } from './hooks/use-notifications'
 import { NotificationDetail } from './notification-detail'
 
 export const NotificationList = (): React.JSX.Element => {
   const {
-    notifications,
+    notifications
   } = useNotifications()
 
   return (
-    <Collapse
-      accordion
-      items={ notifications?.items.map(notification => <NotificationDetail notification={notification}/>)}
-    />
+    <>{notifications?.items.map(notification => (
+      <NotificationDetail
+        key={ notification.id }
+        notification={ notification }
+      />
+    ))}</>
   )
 }

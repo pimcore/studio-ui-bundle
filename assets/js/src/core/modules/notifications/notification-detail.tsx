@@ -17,67 +17,77 @@ import { Text } from '@Pimcore/components/text/text'
 import { Split } from '@Pimcore/components/split/split'
 import { Paragraph } from '@Pimcore/components/paragraph/paragraph'
 import { Collapse } from '@Pimcore/components/collapse/collapse'
-import { useNotifications } from './hooks/use-notifications'
 import { type Notification } from './notifications-slice.gen'
+import { useNotificationDetail } from './hooks/use-notification-detail'
 
 export interface NotificationDetailProps {
   notification: Notification
 }
 
-export const NotificationDetail = ({notification}: NotificationDetailProps): Array<{
+export const NotificationDetail = ({ notification }: NotificationDetailProps): React.JSX.Element => {
+  const {
+    setExpandedNotificationId,
+    expandedNotificationId,
+    notificationDetail
+  } = useNotificationDetail()
+
+  const expanded = expandedNotificationId === notification.id
+
+  const extra = (): React.JSX.Element => {
+    const hasAttachment = notification.hasAttachment ?? undefined
+
+    return (
+      <Space
+        align='center'
+        size="extra-small"
+      >
+        {hasAttachment !== undefined && <Tag>attachment</Tag>}
+        {notification.creationDate !== undefined && <span>{formatDateTime({ timestamp: notification.creationDate, dateStyle: 'short', timeStyle: 'medium' })}</span>}
+      </Space>
+    )
+  }
+
+  const children = (): React.JSX.Element => {
+    return (
+      <Paragraph>
+        {notificationDetail !== undefined && typeof notificationDetail.message === 'string'
+          ? respectLineBreak(notificationDetail.message)
+          : ''}
+      </Paragraph>
+    )
+  }
+
+  const item: {
     key: string
     onClick: () => void
     label: React.JSX.Element
     extra: React.JSX.Element
     children: React.JSX.Element
-  }> => {
-  const {
-    setExpandedNotificationId,
-    notificationDetail
-  } = useNotifications()
-
-    const extra = (): React.JSX.Element => {
-      const hasAttachment = notification.hasAttachment ?? undefined
-
-      return (
-        <Space
-          align='center'
-          size="extra-small"
-        >
-          {hasAttachment !== undefined && <Tag>attachment</Tag>}
-          {notification.creationDate !== undefined && <span>{formatDateTime({ timestamp: notification.creationDate, dateStyle: 'short', timeStyle: 'medium' })}</span>}
-        </Space>
-      )
-    }
-
-    const children = (): React.JSX.Element => {
-      return (
-        <Paragraph>
-          {notificationDetail !== undefined && typeof notificationDetail.message === 'string'
-            ? respectLineBreak(notificationDetail.message)
-            : ''}
-        </Paragraph>
-      )
-    }
-
-    return ({
-      key: notification.id.toString(),
-      onClick: () => { setExpandedNotificationId(notification.id) },
-      label: <Split
-        dividerSize='small'
-        size='extra-small'
-        theme='secondary'
-             >
-        {notification.title !== '' && (
+  } = {
+    key: notification.id.toString(),
+    onClick: () => { setExpandedNotificationId(notification.id) },
+    label: <Split
+      dividerSize='small'
+      size='extra-small'
+      theme='secondary'
+           >
+      {notification.title !== '' && (
         <>
           <Text
             strong
           >{notification.title}</Text>
         </>
-        )}
-        <Text type='secondary'>{notification.sender}</Text>
-      </Split>,
-      extra: extra(),
-      children: children()
-    })
+      )}
+      <Text type='secondary'>{notification.sender}</Text>
+    </Split>,
+    extra: extra(),
+    children: children()
   }
+
+  return (
+    <Collapse
+      activeKeys={ expanded ? [notification.id.toString()] : undefined }
+      items={ [item] }
+    />
+  )
+}
