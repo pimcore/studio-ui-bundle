@@ -9,16 +9,14 @@
  */
 
 import { Icon } from '@Pimcore/components/icon/icon'
-import { Badge, Avatar, type MenuProps } from 'antd'
+import { Avatar, type MenuProps } from 'antd'
 import React from 'react'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { useTranslation } from 'react-i18next'
 import { useStyle } from './user-menu.styles'
-import { Button } from '@Pimcore/components/button/button'
 import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useWidgetManager } from '../../../widget-manager/hooks/use-widget-manager'
-import { NOTIFICATIONS } from '@Pimcore/modules/notifications'
 
 interface IUserMenuProps {
   className?: string
