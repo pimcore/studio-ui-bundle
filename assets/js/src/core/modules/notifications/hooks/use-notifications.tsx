@@ -19,14 +19,11 @@ interface UseNotificationsReturn {
   setPage: (page: number) => void
   pageSize: number
   setPageSize: (pageSize: number) => void
-  expandedNotificationId: number | undefined
-  setExpandedNotificationId: (expandedId: number) => void
 }
 
 export const useNotifications = (): UseNotificationsReturn => {
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState(20)
-  const [expandedNotificationId, setExpandedNotificationId] = useState<number | undefined>(undefined)
 
   const getCollectionQueryArgs: NotificationGetCollectionApiArg = useMemo(() => ({ body: { filters: { page, pageSize, includeDescendants: true } } }), [page, pageSize])
 
@@ -44,8 +41,6 @@ export const useNotifications = (): UseNotificationsReturn => {
     page,
     setPage,
     pageSize,
-    setPageSize,
-    expandedNotificationId,
-    setExpandedNotificationId
+    setPageSize
   }
 }
