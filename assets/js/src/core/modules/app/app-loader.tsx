@@ -24,6 +24,7 @@ import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-h
 import { useMercureCreateCookieMutation } from './mercure-api-slice.gen'
 import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
 import { usePerspectives } from '../perspectives/hooks/use-perspectives'
+import { FALLBACK_LANGUAGE } from '@Pimcore/app/i18n'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -47,7 +48,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   // Register the modal instance to allow centralized error message display throughout the project
   ErrorModalService.setModalInstance(modal)
 
-  async function initLoadUser (): Promise<any> {
+  async function initLoadUser(): Promise<any> {
     const userFetcher = dispatch(api.endpoints.userGetCurrentInformation.initiate())
     await fetchMercureCookie()
 
@@ -56,19 +57,29 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
         // @todo check handling of 401
         const _error = error as unknown as any
         if (_error?.status !== 401) {
+          setIsLoading(true)
+
+          void loadPublicTranslations().then(() => {
+            setIsLoading(false)
+          })
+
           isError && trackError(new ApiError(error))
         }
 
         if (isSuccess && data !== undefined) {
           dispatch(setUser(data))
+          setIsLoading(false)
         }
+      })
+      .then(() => {
+        setIsLoading(false)
       })
       .catch(() => { })
 
     return await userFetcher
   }
 
-  async function initSettings (): Promise<any> {
+  async function initSettings(): Promise<any> {
     const settingsFetcher = dispatch(settingsApi.endpoints.systemSettingsGet.initiate())
 
     settingsFetcher
@@ -84,19 +95,37 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     return await settingsFetcher
   }
 
-  async function initActivePerspective (): Promise<any> {
+  async function initActivePerspective(): Promise<any> {
     const user = selectCurrentUser(store.getState())
     const perspectiveId = String(user?.activePerspective ?? 'studio_default_perspective')
     return await loadPerspective(perspectiveId)
   }
 
-  async function loadTranslations (): Promise<any> {
+  async function loadTranslations(): Promise<any> {
     const user = selectCurrentUser(store.getState())
     await translations({ translation: { locale: user.language, keys: [], useFallback: true } })
       .unwrap()
       .then(response => {
         i18n.addResourceBundle(user.language, 'translation', response.keys ?? [], true, true)
         void i18n.changeLanguage(user.language)
+      })
+      .catch(() => {
+        trackError(new GeneralError('Error loading translations'))
+      })
+  }
+
+  async function loadPublicTranslations(): Promise<any> {
+    await translations({
+      translation: {
+        locale: FALLBACK_LANGUAGE,
+        keys: [],
+        useFallback: true
+      }
+    })
+      .unwrap()
+      .then(response => {
+        i18n.addResourceBundle(FALLBACK_LANGUAGE, 'translation', response.keys ?? [], true, true)
+        void i18n.changeLanguage(FALLBACK_LANGUAGE)
       })
       .catch(() => {
         trackError(new GeneralError('Error loading translations'))
@@ -116,11 +145,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   }
 
   useEffect(() => {
-    Promise.all([
-      initLoadUser()
-    ]).then(() => {
-      setIsLoading(false)
-    }).catch(() => { })
+    void initLoadUser()
   }, [])
 
   useEffect(() => {
