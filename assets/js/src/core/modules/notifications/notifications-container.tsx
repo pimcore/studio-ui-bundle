@@ -16,8 +16,8 @@ import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { useTranslation } from 'react-i18next'
 import { Content } from '@Pimcore/components/content/content'
 import { Box } from '@Pimcore/components/box/box'
-import { useNotifications } from './hooks/use-notifications'
 import { NotificationList } from './notification-list'
+import { useNotifications } from './hooks/use-notifications'
 
 const NotificationsContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
