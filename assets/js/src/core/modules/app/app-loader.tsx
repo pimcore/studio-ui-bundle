@@ -71,9 +71,6 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           setIsLoading(false)
         }
       })
-      .then(() => {
-        setIsLoading(false)
-      })
       .catch(() => { })
 
     return await userFetcher
