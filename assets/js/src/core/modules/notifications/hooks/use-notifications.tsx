@@ -9,15 +9,12 @@
  */
 
 import { useEffect, useMemo, useState } from 'react'
-import { type Notification, type NotificationGetCollectionApiArg, type NotificationGetCollectionApiResponse, useNotificationGetByIdQuery, useNotificationGetCollectionQuery } from '../notifications-slice.gen'
+import { type NotificationGetCollectionApiArg, type NotificationGetCollectionApiResponse, useNotificationGetCollectionQuery } from '../notifications-slice.gen'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { skipToken } from '@reduxjs/toolkit/query'
 
 interface UseNotificationsReturn {
   notifications: NotificationGetCollectionApiResponse | undefined
   notificationsAreLoading: boolean
-  notificationDetail: Notification | undefined
-  notificationDetailIsLoading: boolean
   page: number
   setPage: (page: number) => void
   pageSize: number
@@ -34,14 +31,6 @@ export const useNotifications = (): UseNotificationsReturn => {
   const getCollectionQueryArgs: NotificationGetCollectionApiArg = useMemo(() => ({ body: { filters: { page, pageSize, includeDescendants: true } } }), [page, pageSize])
 
   const { data: notifications, isLoading: notificationsAreLoading, isError: getCollectionIsError, error: getCollectionError } = useNotificationGetCollectionQuery(getCollectionQueryArgs)
-  const { data: notificationDetail, isLoading: notificationDetailIsLoading, isError: notificationDetailIsError, error: notificationDetailError } = useNotificationGetByIdQuery(
-    expandedNotificationId !== undefined ? { id: expandedNotificationId } : skipToken)
-
-  useEffect(() => {
-    if (notificationDetailIsError) {
-      trackError(new ApiError(notificationDetailError))
-    }
-  }, [notificationDetailIsError])
 
   useEffect(() => {
     if (getCollectionIsError) {
@@ -52,8 +41,6 @@ export const useNotifications = (): UseNotificationsReturn => {
   return {
     notifications,
     notificationsAreLoading,
-    notificationDetail,
-    notificationDetailIsLoading,
     page,
     setPage,
     pageSize,
