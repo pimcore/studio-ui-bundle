@@ -39,8 +39,8 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const { id } = useUserContext()
   const user = useUser()
   const { user: openedUser, isLoading, changeUserInState } = useUserDraft(id)
-  const { availablePermissions } = useUserHelper()
-  const permissions = getGroupedPermissions(availablePermissions)
+  const { getAvailablePermissions } = useUserHelper()
+  const permissions = getGroupedPermissions(getAvailablePermissions())
 
   useEffect(() => {
     if (!isLoading) {
@@ -159,12 +159,20 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
         <Col span={ 16 }>
           <AdminAccordion isDisabled={ user?.id === openedUser?.id } />
         </Col>
-        <Col span={ 16 }>
-          <PermissionsAccordion permissions={ permissions } />
-        </Col>
-        <Col span={ 16 }>
-          <TypesAndClassesAccordion />
-        </Col>
+
+        {openedUser?.admin === false
+          ? (
+            <>
+              <Col span={ 16 }>
+                <PermissionsAccordion permissions={ permissions } />
+              </Col>
+              <Col span={ 16 }>
+                <TypesAndClassesAccordion />
+              </Col>
+            </>
+            )
+          : null}
+
         <Col span={ 16 }>
           <EditorSettingsAccordion
             data={ openedUser?.contentLanguages }
@@ -173,6 +181,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
             viewData={ openedUser?.websiteTranslationLanguagesView }
           />
         </Col>
+
         {openedUser?.admin === false
           ? (
             <Col span={ 16 }>

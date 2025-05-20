@@ -18,21 +18,25 @@ import { GeneralAccordion } from '@Pimcore/modules/user/roles/detail/tabs/settin
 import { PermissionsAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/permissions-accordion'
 import { TypesAndClassesAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/types-classes-accordion'
 import { SharedTranslationSettingsAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/shared-translation-settings-accordion'
-import { getGroupedPermissions } from '@Pimcore/modules/user/management/detail/tabs/settings/settings-helper'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { useRoleDraft } from '@Pimcore/modules/user/roles/hooks/use-roles-draft'
+import { getGroupedPermissions } from '@Pimcore/modules/user/management/detail/tabs/settings/settings-helper'
+import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
 
 const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const { validLanguages } = useSettings()
   const [form] = Form.useForm()
   const { id } = useRoleContext()
   const { role, isLoading, changeRoleInState } = useRoleDraft(id)
-  const permissions = getGroupedPermissions(role?.permissions as [] ?? [])
+  const { getAvailablePermissions } = useUserHelper()
+  const permissions = getGroupedPermissions(getAvailablePermissions())
 
   useEffect(() => {
     if (!isLoading) {
       form.setFieldsValue({
-        name: role?.name
+        name: role?.name,
+        permissionsDefault: Array.isArray(role?.permissions) ? role.permissions.filter((permission) => permissions.default.some((defaultPermission) => defaultPermission.key === permission)) : [],
+        permissionsBundles: Array.isArray(role?.permissions) ? role.permissions.filter((permission) => permissions.bundles.some((defaultPermission) => defaultPermission.key === permission)) : []
       })
     }
   }, [role, isLoading])
