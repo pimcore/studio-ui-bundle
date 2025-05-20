@@ -20,6 +20,8 @@ import { Collapse } from '@Pimcore/components/collapse/collapse'
 import { type Notification } from './notifications-slice.gen'
 import { useNotificationDetail } from './hooks/use-notification-detail'
 import { Content } from '@Pimcore/components/content/content'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import i18n from '@Pimcore/app/i18n'
 
 export interface NotificationDetailProps {
   notification: Notification
@@ -30,8 +32,14 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     setExpandedNotificationId,
     expandedNotificationId,
     notificationDetail,
-    isLoading
+    detailLoading,
+    deleteNotification,
+    deleteLoading
   } = useNotificationDetail()
+
+  const onClickTrash = async (id: number): Promise<void> => {
+    await deleteNotification({ id })
+  }
 
   const extra = (): React.JSX.Element => {
     const hasAttachment = notification.hasAttachment ?? undefined
@@ -43,6 +51,16 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
       >
         {hasAttachment !== undefined && <Tag>attachment</Tag>}
         {notification.creationDate !== undefined && <span>{formatDateTime({ timestamp: notification.creationDate, dateStyle: 'short', timeStyle: 'medium' })}</span>}
+        <IconButton
+          aria-label={ i18n.t('aria.notes-and-events.delete') }
+          icon={ { value: 'trash' } }
+          loading={ deleteLoading }
+          onClick={ (e) => {
+            e.stopPropagation()
+            onClickTrash(notification.id)
+          } }
+          theme='primary'
+        />
       </Space>
     )
   }
@@ -50,7 +68,7 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
   const children = (): React.JSX.Element => {
     return (
       <Content
-        loading={ isLoading }
+        loading={ detailLoading }
         none={ notificationDetail === undefined || notificationDetail.message.length === 0 }
       >
         {notificationDetail !== undefined && typeof notificationDetail.message === 'string' &&

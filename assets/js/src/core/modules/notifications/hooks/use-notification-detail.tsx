@@ -9,33 +9,45 @@
  */
 
 import { useEffect, useState } from 'react'
-import { type Notification, useNotificationGetByIdQuery } from '../notifications-slice.gen'
+import { type Notification, useNotificationDeleteByIdMutation, useNotificationGetByIdQuery } from '../notifications-slice.gen'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { skipToken } from '@reduxjs/toolkit/query'
 
 interface UseNotificationsReturn {
   notificationDetail: Notification | undefined
-  isLoading: boolean
+  detailLoading: boolean
   expandedNotificationId: number | undefined
   setExpandedNotificationId: (expandedId: number | undefined) => void
+  deleteNotification: (arg: { id: number }) => Promise<unknown>
+  deleteLoading: boolean
 }
 
 export const useNotificationDetail = (): UseNotificationsReturn => {
   const [expandedNotificationId, setExpandedNotificationId] = useState<number | undefined>(undefined)
 
-  const { data: notificationDetail, isLoading, isError, error } = useNotificationGetByIdQuery(
+  const { data: notificationDetail, isLoading: detailLoading, isError: isDetailError, error: detailError } = useNotificationGetByIdQuery(
     expandedNotificationId !== undefined ? { id: expandedNotificationId } : skipToken)
 
+  const [deleteNotification, { isError: isDeleteError, error: deleteError, isLoading: deleteLoading }] = useNotificationDeleteByIdMutation()
+
   useEffect(() => {
-    if (isError) {
-      trackError(new ApiError(error))
+    if (isDetailError) {
+      trackError(new ApiError(detailError))
     }
-  }, [isError])
+  }, [isDetailError])
+
+  useEffect(() => {
+    if (isDeleteError) {
+      trackError(new ApiError(deleteError))
+    }
+  }, [isDeleteError])
 
   return {
     notificationDetail,
-    isLoading,
+    detailLoading,
     expandedNotificationId,
-    setExpandedNotificationId
+    setExpandedNotificationId,
+    deleteNotification,
+    deleteLoading
   }
 }
