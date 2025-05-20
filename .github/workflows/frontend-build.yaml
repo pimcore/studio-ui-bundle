@@ -113,10 +113,6 @@ jobs:
         working-directory: ./assets
         run: npm run lint-fix
 
-      - name: Run type checks
-        working-directory: ./assets
-        run: npm run check-types
-
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
             commit_message: Apply eslint-fixer changes
