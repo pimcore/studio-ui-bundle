@@ -35,6 +35,8 @@ Thumbs.db
 assets/node_modules
 assets/dist/*
 !assets/dist/.gitkeep
+!assets/dist/types
+!assets/dist/types/*
 
 # code style fixer
 .php_cs
@@ -51,3 +53,5 @@ assets/dist/*
 /.htaccess
 /auth.json
 /config.json
+
+.eslintcache

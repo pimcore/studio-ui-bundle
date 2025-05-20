@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-interface PimcoreThemeConfig {
+export interface PimcoreThemeConfig {
   token: Record<string, unknown>
   components: Record<string, unknown>
 }
@@ -211,14 +211,9 @@ const defaultTheme = {
   }
 }
 
-type tokens = typeof defaultTheme.token
-type components = typeof defaultTheme.components
+export type tokens = typeof defaultTheme.token
+export type components = typeof defaultTheme.components
 
 const PimcoreDefaultTheme: PimcoreThemeConfig = defaultTheme
 
 export { PimcoreDefaultTheme }
-
-declare module 'antd-style' {
-  export interface ThemeConfig extends PimcoreThemeConfig {}
-  export interface FullToken extends tokens, components {}
-}
