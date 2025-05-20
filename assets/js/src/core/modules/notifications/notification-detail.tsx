@@ -87,7 +87,7 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
       activeKeys={
       expandedNotificationId?.toString() === notification.id.toString()
         ? [notification.id.toString()]
-        : undefined
+        : []
     }
       items={ [item] }
       onChange={ (expandedKeys) => {
