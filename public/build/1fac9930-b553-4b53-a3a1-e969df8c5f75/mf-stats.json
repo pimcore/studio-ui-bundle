@@ -22,7 +22,7 @@
     "globalName": "pimcore_studio_ui_bundle",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
-    "publicPath": "/bundles/pimcorestudioui/build/fb9a6694-b31e-4025-8214-be553d2ff8de/"
+    "publicPath": "/bundles/pimcorestudioui/build/1fac9930-b553-4b53-a3a1-e969df8c5f75/"
   },
   "shared": [
     {
@@ -47,14 +47,14 @@
         }
       },
       "usedIn": [
+        "./modules/wysiwyg",
         "./app",
         "./components",
         "./modules/asset",
         "./modules/data-object",
         "./modules/element",
         "./modules/user",
-        "./modules/widget-manager",
-        "./modules/wysiwyg"
+        "./modules/widget-manager"
       ]
     },
     {
@@ -106,10 +106,10 @@
         }
       },
       "usedIn": [
-        "./modules/asset",
-        "./modules/app",
-        "./modules/data-object",
         "./modules/element",
+        "./modules/app",
+        "./modules/asset",
+        "./modules/data-object",
         "./modules/icon-library",
         "./modules/widget-manager"
       ]
@@ -194,7 +194,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.49577c12.css"
+            "static/css/async/968.2edcde94.css"
           ],
           "async": []
         }
@@ -230,7 +230,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.49577c12.css"
+            "static/css/async/968.2edcde94.css"
           ],
           "async": []
         }
@@ -627,7 +627,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.49577c12.css"
+            "static/css/async/968.2edcde94.css"
           ],
           "async": []
         }
@@ -664,7 +664,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.49577c12.css"
+            "static/css/async/968.2edcde94.css"
           ],
           "async": []
         }
@@ -722,7 +722,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.49577c12.css"
+            "static/css/async/968.2edcde94.css"
           ],
           "async": []
         }
@@ -757,7 +757,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.49577c12.css"
+            "static/css/async/968.2edcde94.css"
           ],
           "async": []
         }
@@ -866,7 +866,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.49577c12.css"
+            "static/css/async/968.2edcde94.css"
           ],
           "async": []
         }
