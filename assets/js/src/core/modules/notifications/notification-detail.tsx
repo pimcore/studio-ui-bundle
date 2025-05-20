@@ -37,10 +37,6 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     deleteLoading
   } = useNotificationDetail({ id: notification.id })
 
-  const onClickTrash = async (id: number): Promise<void> => {
-    await deleteNotification({ id })
-  }
-
   const extra = (): React.JSX.Element => {
     const hasAttachment = notification.hasAttachment ?? undefined
 
@@ -57,7 +53,7 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
           loading={ deleteLoading }
           onClick={ async (e) => {
             e.stopPropagation()
-            await onClickTrash(notification.id)
+            await deleteNotification()
           } }
           theme='primary'
         />

@@ -22,7 +22,7 @@ interface UseNotificationsReturn {
   detailLoading: boolean
   isExpanded: boolean
   setIsExpanded: (isExpanded: boolean) => void
-  deleteNotification: (arg: { id: number }) => Promise<unknown>
+  deleteNotification: () => Promise<unknown>
   deleteLoading: boolean
 }
 
@@ -33,6 +33,10 @@ export const useNotificationDetail = ({ id }: UseNotificationDetailProps): UseNo
     isExpanded ? { id } : skipToken)
 
   const [deleteNotification, { isError: isDeleteError, error: deleteError, isLoading: deleteLoading }] = useNotificationDeleteByIdMutation()
+
+  const deleteNotificationDetail = async (): Promise<void> => {
+    await deleteNotification({ id })
+  }
 
   useEffect(() => {
     if (isDetailError) {
@@ -51,7 +55,7 @@ export const useNotificationDetail = ({ id }: UseNotificationDetailProps): UseNo
     detailLoading,
     isExpanded,
     setIsExpanded,
-    deleteNotification,
+    deleteNotification: deleteNotificationDetail,
     deleteLoading
   }
 }
