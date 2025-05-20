@@ -32,7 +32,7 @@
     },
     "./rsbuild/plugins": {
       "default": "./dist/build/rsbuild/plugins/entrypoints.js",
-      "types": "./dist/build/rsbuild/plugins/entrypoints.d.ts"
+      "types": "./dist/types/entrypoints.d.ts"
     }
   },
   "files": [
