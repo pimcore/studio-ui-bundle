@@ -16,7 +16,6 @@ import { useTranslation } from 'react-i18next'
 import { useStyle } from './user-menu.styles'
 import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { useWidgetManager } from '../../../widget-manager/hooks/use-widget-manager'
 
 interface IUserMenuProps {
   className?: string
@@ -26,7 +25,6 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   const { styles } = useStyle()
 
   const [logout] = useLogoutMutation()
-  const { openMainWidget } = useWidgetManager()
 
   const handleLogout = (): void => {
     const logoutTask = logout()
