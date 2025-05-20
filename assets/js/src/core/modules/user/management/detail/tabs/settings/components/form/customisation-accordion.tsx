@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form, Input } from 'antd'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
@@ -26,37 +26,41 @@ const CustomisationAccordion = ({ ...props }): React.JSX.Element => {
   const { getRoleCollection } = useRoleHelper()
   const { getPerspectiveConfigCollection } = usePerspectives()
 
-  getPerspectiveConfigCollection().then((data) => {
-    if (data === undefined) {
-      return
+  useEffect(() => {
+    if (perspectiveOptions.length === 0) {
+      getPerspectiveConfigCollection().then((data) => {
+        if (data === undefined) {
+          return
+        }
+
+        setPerspectiveOptions(
+          data.items.map((item) => ({
+            value: item.id,
+            label: item.name
+          }))
+        )
+      }).catch((error) => {
+        console.error('Error fetching perspective config collection:', error)
+      })
     }
 
-    setPerspectiveOptions(
-      data.items.map((item) => ({
-        value: item.id,
-        label: item.name
-      }))
-    )
-  }).catch((error) => {
-    console.error('Error fetching perspective config collection:', error)
-  })
+    if (roleOptions.length === 0) {
+      getRoleCollection().then((data) => {
+        console.log('data', data)
+        if (data === undefined) {
+          return
+        }
+        setRoleOptions(data.items.map((item) => ({
+          value: item.id,
+          label: item.name
+        })))
 
-  getRoleCollection().then((data) => {
-    console.log('data', data)
-    if (data === undefined) {
-      return
+        console.log('roleOptions', roleOptions)
+      }).catch((error) => {
+        console.error('Error fetching role collection:', error)
+      })
     }
-    setRoleOptions(data.items.map((item) => ({
-      value: item.id,
-      label: item.name
-    })))
-
-    console.log('roleOptions', roleOptions)
-  }).catch((error) => {
-    console.error('Error fetching role collection:', error)
-  })
-
-  console.log('asdf roleOptions', roleOptions)
+  }, [])
 
   const content = [
     {
@@ -158,6 +162,7 @@ const CustomisationAccordion = ({ ...props }): React.JSX.Element => {
       </>
     }
   ]
+
   return (
     <Accordion
       activeKey={ '1' }

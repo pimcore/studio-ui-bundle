@@ -79,7 +79,6 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
   if (isLoading) {
     return <Content loading></Content>
   }
-
   return (
     <Form
       form={ form }
