@@ -24,6 +24,7 @@ import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-h
 import { useMercureCreateCookieMutation } from './mercure-api-slice.gen'
 import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
 import { usePerspectives } from '../perspectives/hooks/use-perspectives'
+import { FALLBACK_LANGUAGE } from '@Pimcore/app/i18n'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -56,11 +57,18 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
         // @todo check handling of 401
         const _error = error as unknown as any
         if (_error?.status !== 401) {
+          setIsLoading(true)
+
+          void loadPublicTranslations().then(() => {
+            setIsLoading(false)
+          })
+
           isError && trackError(new ApiError(error))
         }
 
         if (isSuccess && data !== undefined) {
           dispatch(setUser(data))
+          setIsLoading(false)
         }
       })
       .catch(() => { })
@@ -103,6 +111,24 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
       })
   }
 
+  async function loadPublicTranslations (): Promise<any> {
+    await translations({
+      translation: {
+        locale: FALLBACK_LANGUAGE,
+        keys: [],
+        useFallback: true
+      }
+    })
+      .unwrap()
+      .then(response => {
+        i18n.addResourceBundle(FALLBACK_LANGUAGE, 'translation', response.keys ?? [], true, true)
+        void i18n.changeLanguage(FALLBACK_LANGUAGE)
+      })
+      .catch(() => {
+        trackError(new GeneralError('Error loading translations'))
+      })
+  }
+
   const loadUserData = async (): Promise<void> => {
     const { isSuccess: isSuccessInitSetting } = await initSettings()
 
@@ -116,11 +142,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   }
 
   useEffect(() => {
-    Promise.all([
-      initLoadUser()
-    ]).then(() => {
-      setIsLoading(false)
-    }).catch(() => { })
+    void initLoadUser()
   }, [])
 
   useEffect(() => {
