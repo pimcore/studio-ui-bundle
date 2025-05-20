@@ -1,0 +1,14 @@
+{
+  "bundles/pimcorestudioui/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/core-dll.css": "/bundles/pimcorestudioui/build/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/core-dll.css",
+  "bundles/pimcorestudioui/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/core-dll.js": "/bundles/pimcorestudioui/build/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/core-dll.js",
+  "bundles/pimcorestudioui/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/105.js": "/bundles/pimcorestudioui/build/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/105.js",
+  "bundles/pimcorestudioui/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/fonts/Lato-Light.ttf": "/bundles/pimcorestudioui/build/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/fonts/Lato-Light.c7400fca.ttf",
+  "bundles/pimcorestudioui/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/fonts/Lato-Regular.ttf": "/bundles/pimcorestudioui/build/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/fonts/Lato-Regular.9d883d54.ttf",
+  "bundles/pimcorestudioui/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/fonts/Lato-Bold.ttf": "/bundles/pimcorestudioui/build/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/fonts/Lato-Bold.636be8de.ttf",
+  "bundles/pimcorestudioui/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/images/spritesheet.svg": "/bundles/pimcorestudioui/build/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/images/spritesheet.a4e0eb7a.svg",
+  "bundles/pimcorestudioui/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/images/spritesheet-2x.png": "/bundles/pimcorestudioui/build/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/images/spritesheet-2x.7ea3a6d4.png",
+  "bundles/pimcorestudioui/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/images/spritesheet.png": "/bundles/pimcorestudioui/build/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/images/spritesheet.ef32ea2b.png",
+  "bundles/pimcorestudioui/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/images/marker-icon.png": "/bundles/pimcorestudioui/build/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/images/marker-icon.2b3e1faf.png",
+  "bundles/pimcorestudioui/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/images/layers-2x.png": "/bundles/pimcorestudioui/build/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/images/layers-2x.8f2c4d11.png",
+  "bundles/pimcorestudioui/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/images/layers.png": "/bundles/pimcorestudioui/build/e84019af-79fb-4c1b-8a9c-1f2fe9e50c24/images/layers.416d9136.png"
+}
