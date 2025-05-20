@@ -25,9 +25,9 @@ export const useNotifications = (): UseNotificationsReturn => {
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState(20)
 
-  const getCollectionQueryArgs: NotificationGetCollectionApiArg = useMemo(() => ({ body: { filters: { page, pageSize, includeDescendants: true } } }), [page, pageSize])
+  const queryArgs: NotificationGetCollectionApiArg = useMemo(() => ({ body: { filters: { page, pageSize, includeDescendants: true } } }), [page, pageSize])
 
-  const { data: notifications, isLoading, isError, error } = useNotificationGetCollectionQuery(getCollectionQueryArgs)
+  const { data: notifications, isLoading, isError, error } = useNotificationGetCollectionQuery(queryArgs)
 
   useEffect(() => {
     if (isError) {
