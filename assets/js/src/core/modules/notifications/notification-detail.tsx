@@ -31,8 +31,6 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     notificationDetail
   } = useNotificationDetail()
 
-  const expanded = expandedNotificationId === notification.id
-
   const extra = (): React.JSX.Element => {
     const hasAttachment = notification.hasAttachment ?? undefined
 
@@ -86,8 +84,19 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
 
   return (
     <Collapse
-      activeKeys={ expanded ? [notification.id.toString()] : undefined }
+      activeKeys={
+      expandedNotificationId?.toString() === notification.id.toString()
+        ? [notification.id.toString()]
+        : undefined
+    }
       items={ [item] }
+      onChange={ (expandedKeys) => {
+        if (expandedKeys.length > 0) {
+          setExpandedNotificationId(Number(expandedKeys[0]))
+        } else {
+          setExpandedNotificationId(undefined)
+        }
+      } }
     />
   )
 }

@@ -17,7 +17,7 @@ interface UseNotificationsReturn {
   notificationDetail: Notification | undefined
   notificationDetailIsLoading: boolean
   expandedNotificationId: number | undefined
-  setExpandedNotificationId: (expandedId: number) => void
+  setExpandedNotificationId: (expandedId: number | undefined) => void
 }
 
 export const useNotificationDetail = (): UseNotificationsReturn => {
