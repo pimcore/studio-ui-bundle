@@ -35,6 +35,9 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
     if (!isLoading) {
       form.setFieldsValue({
         name: role?.name,
+        classes: role?.classes ?? [],
+        docTypes: role?.docTypes,
+        perspectives: role?.perspectives ?? [],
         permissionsDefault: Array.isArray(role?.permissions) ? role.permissions.filter((permission) => permissions.default.some((defaultPermission) => defaultPermission.key === permission)) : [],
         permissionsBundles: Array.isArray(role?.permissions) ? role.permissions.filter((permission) => permissions.bundles.some((defaultPermission) => defaultPermission.key === permission)) : []
       })

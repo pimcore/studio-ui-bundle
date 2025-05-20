@@ -55,7 +55,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     if (error !== undefined) {
       notificationApi.open({
         type: 'error',
-        message: error.data.message ?? t('error')
+        message: error?.data?.message ?? t('error')
       })
     } else {
       notificationApi.open({
