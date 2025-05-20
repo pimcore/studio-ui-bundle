@@ -29,13 +29,13 @@ export interface NotificationDetailProps {
 
 export const NotificationDetail = ({ notification }: NotificationDetailProps): React.JSX.Element => {
   const {
-    setExpandedNotificationId,
-    expandedNotificationId,
+    isExpanded,
+    setIsExpanded,
     notificationDetail,
     detailLoading,
     deleteNotification,
     deleteLoading
-  } = useNotificationDetail()
+  } = useNotificationDetail({ id: notification.id })
 
   const onClickTrash = async (id: number): Promise<void> => {
     await deleteNotification({ id })
@@ -55,9 +55,9 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
           aria-label={ i18n.t('aria.notes-and-events.delete') }
           icon={ { value: 'trash' } }
           loading={ deleteLoading }
-          onClick={ (e) => {
+          onClick={ async (e) => {
             e.stopPropagation()
-            onClickTrash(notification.id)
+            await onClickTrash(notification.id)
           } }
           theme='primary'
         />
@@ -102,8 +102,6 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     children: children()
   }
 
-  const isExpanded = expandedNotificationId?.toString() === notification.id.toString()
-
   return (
     <Collapse
       activeKeys={
@@ -114,9 +112,9 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
       items={ [item] }
       onChange={ (expandedKeys) => {
         if (expandedKeys.length > 0) {
-          setExpandedNotificationId(Number(expandedKeys[0]))
+          setIsExpanded(true)
         } else {
-          setExpandedNotificationId(undefined)
+          setIsExpanded(false)
         }
       } }
     />

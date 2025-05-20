@@ -13,20 +13,24 @@ import { type Notification, useNotificationDeleteByIdMutation, useNotificationGe
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { skipToken } from '@reduxjs/toolkit/query'
 
+export interface UseNotificationDetailProps {
+  id: number
+}
+
 interface UseNotificationsReturn {
   notificationDetail: Notification | undefined
   detailLoading: boolean
-  expandedNotificationId: number | undefined
-  setExpandedNotificationId: (expandedId: number | undefined) => void
+  isExpanded: boolean
+  setIsExpanded: (isExpanded: boolean) => void
   deleteNotification: (arg: { id: number }) => Promise<unknown>
   deleteLoading: boolean
 }
 
-export const useNotificationDetail = (): UseNotificationsReturn => {
-  const [expandedNotificationId, setExpandedNotificationId] = useState<number | undefined>(undefined)
+export const useNotificationDetail = ({ id }: UseNotificationDetailProps): UseNotificationsReturn => {
+  const [isExpanded, setIsExpanded] = useState<boolean>(false)
 
   const { data: notificationDetail, isLoading: detailLoading, isError: isDetailError, error: detailError } = useNotificationGetByIdQuery(
-    expandedNotificationId !== undefined ? { id: expandedNotificationId } : skipToken)
+    isExpanded ? { id } : skipToken)
 
   const [deleteNotification, { isError: isDeleteError, error: deleteError, isLoading: deleteLoading }] = useNotificationDeleteByIdMutation()
 
@@ -45,8 +49,8 @@ export const useNotificationDetail = (): UseNotificationsReturn => {
   return {
     notificationDetail,
     detailLoading,
-    expandedNotificationId,
-    setExpandedNotificationId,
+    isExpanded,
+    setIsExpanded,
     deleteNotification,
     deleteLoading
   }
