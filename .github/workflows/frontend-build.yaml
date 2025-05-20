@@ -185,6 +185,10 @@ jobs:
         working-directory: ./assets
         run: npm run build-app
 
+      - name: Run rsbuild plugins build
+        working-directory: ./assets
+        run: npm run build-rsbuild-plugins
+
       - name: Create package archive
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/1.x' }}
         continue-on-error: true
