@@ -19,6 +19,7 @@ import { Paragraph } from '@Pimcore/components/paragraph/paragraph'
 import { Collapse } from '@Pimcore/components/collapse/collapse'
 import { type Notification } from './notifications-slice.gen'
 import { useNotificationDetail } from './hooks/use-notification-detail'
+import { Content } from '@Pimcore/components/content/content'
 
 export interface NotificationDetailProps {
   notification: Notification
@@ -28,7 +29,8 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
   const {
     setExpandedNotificationId,
     expandedNotificationId,
-    notificationDetail
+    notificationDetail,
+    isLoading
   } = useNotificationDetail()
 
   const extra = (): React.JSX.Element => {
@@ -47,11 +49,13 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
 
   const children = (): React.JSX.Element => {
     return (
-      <Paragraph>
-        {notificationDetail !== undefined && typeof notificationDetail.message === 'string'
-          ? respectLineBreak(notificationDetail.message)
-          : ''}
-      </Paragraph>
+      <Content
+        loading={ isLoading }
+        none={ notificationDetail === undefined || notificationDetail.message.length === 0 }
+      >
+        {notificationDetail !== undefined && typeof notificationDetail.message === 'string' &&
+          (<Paragraph>{respectLineBreak(notificationDetail.message)}</Paragraph>)}
+      </Content>
     )
   }
 
