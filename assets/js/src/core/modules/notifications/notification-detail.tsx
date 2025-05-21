@@ -21,7 +21,7 @@ import { type Notification } from './notifications-slice.gen'
 import { useNotificationDetail } from './hooks/use-notification-detail'
 import { Content } from '@Pimcore/components/content/content'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import i18n from '@Pimcore/app/i18n'
+import { Icon } from '@sdk/components'
 
 export interface NotificationDetailProps {
   notification: Notification
@@ -45,10 +45,12 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
         align='center'
         size="extra-small"
       >
-        {hasAttachment !== undefined && <Tag>attachment</Tag>}
+        {hasAttachment !== undefined && <IconButton
+          icon={ { value: 'attachment' } }
+          theme='primary'
+        />}
         {notification.creationDate !== undefined && <span>{formatDateTime({ timestamp: notification.creationDate, dateStyle: 'short', timeStyle: 'medium' })}</span>}
         <IconButton
-          aria-label={ i18n.t('aria.notes-and-events.delete') }
           icon={ { value: 'trash' } }
           loading={ deleteLoading }
           onClick={ async (e) => {
@@ -85,6 +87,7 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
       size='extra-small'
       theme='secondary'
            >
+    <Icon value='notifications'/>
       {notification.title !== '' && (
         <>
           <Text
