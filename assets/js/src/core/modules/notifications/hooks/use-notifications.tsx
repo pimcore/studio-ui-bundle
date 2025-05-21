@@ -9,12 +9,14 @@
  */
 
 import { useEffect, useMemo, useState } from 'react'
-import { type NotificationGetCollectionApiArg, type NotificationGetCollectionApiResponse, useNotificationGetCollectionQuery } from '../notifications-slice.gen'
+import { type NotificationGetCollectionApiArg, type NotificationGetCollectionApiResponse, useNotificationDeleteAllMutation, useNotificationGetCollectionQuery } from '../notifications-slice.gen'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface UseNotificationsReturn {
   notifications: NotificationGetCollectionApiResponse | undefined
   isLoading: boolean
+  deleteNotificationsForUser: () => void
+  deleteLoading: boolean
   page: number
   setPage: (page: number) => void
   pageSize: number
@@ -28,6 +30,8 @@ export const useNotifications = (): UseNotificationsReturn => {
   const queryArgs: NotificationGetCollectionApiArg = useMemo(() => ({ body: { filters: { page, pageSize, includeDescendants: true } } }), [page, pageSize])
 
   const { data: notifications, isLoading, isError, error } = useNotificationGetCollectionQuery(queryArgs)
+  const [deleteNotificationsForUser, { isError: isDeleteError, error: deleteError, isLoading: deleteLoading }] = useNotificationDeleteAllMutation()
+
 
   useEffect(() => {
     if (isError) {
@@ -35,9 +39,17 @@ export const useNotifications = (): UseNotificationsReturn => {
     }
   }, [isError])
 
+    useEffect(() => {
+    if (isDeleteError) {
+      trackError(new ApiError(deleteError))
+    }
+  }, [isDeleteError])
+
   return {
     notifications,
     isLoading,
+    deleteNotificationsForUser,
+    deleteLoading,
     page,
     setPage,
     pageSize,
