@@ -8,11 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { GeoBoundsDrawerFooter } from './footer'
 import { GeoMapCard, type GeoMapCardBaseProps } from '@Pimcore/components/geo-map/components/geo-map-card/geo-map-card'
 import { type GeoBounds, type GeoPoint } from '@Pimcore/components/geo-map/types/geo-types'
 import { type GeoMapAPI } from '@Pimcore/components/geo-map/geo-map'
+import { isEqual } from 'lodash'
 
 export interface GeoBoundsDrawerProps extends GeoMapCardBaseProps {
   onChange?: (value: GeoBounds | undefined) => void
@@ -22,23 +23,28 @@ export interface GeoBoundsDrawerProps extends GeoMapCardBaseProps {
 }
 
 export const GeoBoundsDrawer = ({ ...props }: GeoBoundsDrawerProps): React.JSX.Element => {
-  const [mapValue, setMapValue] = React.useState<GeoBounds | undefined>(props.value ?? undefined)
-  const [footerValue, setFooterValue] = React.useState<GeoBounds | undefined>(props.value ?? undefined)
+  const [mapValue, setMapValue] = useState<GeoBounds | undefined>(props.value ?? undefined)
   const geoMapRef = useRef<GeoMapAPI>(null)
 
-  const onChangeFooter = (newValue?: GeoBounds): void => {
-    setFooterValue(newValue)
+  const handleChangeFooter = (newValue?: GeoBounds): void => {
     setMapValue(newValue)
     props.onChange?.(newValue)
+
     const geoMapAPI = geoMapRef.current
     geoMapAPI?.reset()
     geoMapAPI?.forceRerender()
   }
 
-  const onChangeMap = (newValue: GeoBounds): void => {
-    setFooterValue(newValue)
+  const handleChangeMap = (newValue: GeoBounds): void => {
+    setMapValue(newValue)
     props.onChange?.(newValue)
   }
+
+  useEffect(() => {
+    if (!isEqual(mapValue, props.value)) {
+      setMapValue(props.value ?? undefined)
+    }
+  }, [props.value])
 
   return (
     <GeoMapCard
@@ -48,9 +54,8 @@ export const GeoBoundsDrawer = ({ ...props }: GeoBoundsDrawerProps): React.JSX.E
         ? undefined
         : (
           <GeoBoundsDrawerFooter
-            onChange={ onChangeFooter }
+            onChange={ handleChangeFooter }
             onSearch={ (geoPoint?: GeoPoint) => {
-              setFooterValue(undefined)
               setMapValue(undefined)
 
               const geoMapAPI = geoMapRef.current
@@ -66,7 +71,7 @@ export const GeoBoundsDrawer = ({ ...props }: GeoBoundsDrawerProps): React.JSX.E
               geoMapAPI?.forceRerender()
               props.onChange?.(undefined)
             } }
-            value={ footerValue }
+            value={ mapValue }
           />
           ) }
       height={ props.height }
@@ -74,7 +79,7 @@ export const GeoBoundsDrawer = ({ ...props }: GeoBoundsDrawerProps): React.JSX.E
       lng={ props.lng }
       mapMode="geoBounds"
       mapValue={ mapValue }
-      onChangeMap={ onChangeMap }
+      onChangeMap={ handleChangeMap }
       ref={ geoMapRef }
       width={ props.width }
       zoom={ props.zoom }

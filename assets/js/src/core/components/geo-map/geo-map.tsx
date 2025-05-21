@@ -9,6 +9,7 @@
  */
 
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
+import { isEqual } from 'lodash'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-draw'
@@ -54,15 +55,17 @@ export interface GeoMapAPI {
 }
 
 const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Element => {
-  const { styles } = useStyles()
   const mapContainer = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+
   const [lat, setLat] = useState<number | undefined>(props.lat)
   const [lng, setLng] = useState<number | undefined>(props.lng)
   const [zoom, setZoom] = useState<number | undefined>(props.zoom)
   const [value, setValue] = useState<GeoType | undefined>(props.value)
   const [key, setKey] = useState<number>(0)
-  const containerRef = useRef<HTMLDivElement>(null)
+
   const settings = useSettings()
+  const { styles } = useStyles()
 
   const geoMapApi: GeoMapAPI = {
     reset: () => {
@@ -115,19 +118,27 @@ const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Elemen
   }
 
   useEffect(() => {
-    setValue(props.value)
+    if (!isEqual(value, props.value)) {
+      setValue(props.value)
+    }
   }, [props.value])
 
   useEffect(() => {
-    setLat(props.lat)
+    if (!isEqual(lat, props.lat)) {
+      setLat(props.lat)
+    }
   }, [props.lat])
 
   useEffect(() => {
-    setLng(props.lng)
+    if (!isEqual(lng, props.lng)) {
+      setLng(props.lng)
+    }
   }, [props.lng])
 
   useEffect(() => {
-    setZoom(props.zoom)
+    if (!isEqual(zoom, props.zoom)) {
+      setZoom(props.zoom)
+    }
   }, [props.zoom])
 
   const isVisible = useElementVisible(containerRef)
