@@ -1,0 +1,24 @@
+{
+  "entrypoints": {
+    "main": {
+      "js": [
+        "/bundles/pimcorestudioui/build/ee45174f-3481-490a-a701-6f3f9726fa41/static/js/async/lib-router.4be2a34d.js",
+        "/bundles/pimcorestudioui/build/ee45174f-3481-490a-a701-6f3f9726fa41/static/js/async/673.15a62918.js",
+        "/bundles/pimcorestudioui/build/ee45174f-3481-490a-a701-6f3f9726fa41/static/js/async/402.1f57d497.js",
+        "/bundles/pimcorestudioui/build/ee45174f-3481-490a-a701-6f3f9726fa41/static/js/async/105.7e29d731.js",
+        "/bundles/pimcorestudioui/build/ee45174f-3481-490a-a701-6f3f9726fa41/static/js/main.441642b6.js",
+        "/bundles/pimcorestudioui/build/ee45174f-3481-490a-a701-6f3f9726fa41/static/js/170.cc18108c.js"
+      ],
+      "css": [
+        "/bundles/pimcorestudioui/build/ee45174f-3481-490a-a701-6f3f9726fa41/static/css/async/673.10078a0a.css",
+        "/bundles/pimcorestudioui/build/ee45174f-3481-490a-a701-6f3f9726fa41/static/css/async/105.408e926f.css"
+      ]
+    },
+    "exposeRemote": {
+      "js": [
+        "/bundles/pimcorestudioui/build/ee45174f-3481-490a-a701-6f3f9726fa41/exposeRemote.js"
+      ],
+      "css": []
+    }
+  }
+}

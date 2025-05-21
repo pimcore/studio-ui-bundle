@@ -48,6 +48,10 @@ const config: ConfigFile = {
     {
       pattern: 'metadataGetCollection',
       type: 'query'
+    },
+        {
+      pattern: 'notificationGetCollection',
+      type: 'query'
     }
   ],
   outputFiles: {
@@ -122,6 +126,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/perspectives/perspectives-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/perspectives\//i)
+    },
+    '../../js/src/core/modules/notifications/notifications-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/api\/notifications\/?/i)
     },
     '../../js/src/core/modules/search/search-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/search\/?/i)

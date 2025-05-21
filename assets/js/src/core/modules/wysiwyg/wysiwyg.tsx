@@ -11,9 +11,9 @@
 import React, { useRef } from 'react'
 import { type WysiwygEditorRef, type WysiwygProps } from './interface/wysiwyg'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
-import { type DragAndDropInfo } from 'src/sdk/components'
 import { isValidElementType } from '../element/utils/element-type'
 import WysiwygEditor from './wysiwyg-editor'
+import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
 
 export const Wysiwyg = (props: WysiwygProps): React.JSX.Element => {
   const wysiwygEditorRef = useRef<WysiwygEditorRef>(null)

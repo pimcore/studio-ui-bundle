@@ -61,7 +61,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const handleApplyClick = (): void => {
     setListingFieldFilters(fieldFilters)
     setListingOnlyDirectChildren(onlyDirectChildren)
-    setListingPqlQuery(pqlQuery)
+    setListingPqlQuery(isAdvancedMode ? pqlQuery : '')
 
     if (handleSearchTermInSidebar) {
       setListingSearchTerm(searchTerm)

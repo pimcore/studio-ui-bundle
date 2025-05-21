@@ -24,6 +24,7 @@ import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-h
 import { useMercureCreateCookieMutation } from './mercure-api-slice.gen'
 import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
 import { usePerspectives } from '../perspectives/hooks/use-perspectives'
+import { FALLBACK_LANGUAGE } from '@Pimcore/app/i18n'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -56,14 +57,21 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
         // @todo check handling of 401
         const _error = error as unknown as any
         if (_error?.status !== 401) {
+          setIsLoading(true)
+
+          void loadPublicTranslations().then(() => {
+            setIsLoading(false)
+          })
+
           isError && trackError(new ApiError(error))
         }
 
         if (isSuccess && data !== undefined) {
           dispatch(setUser(data))
+          setIsLoading(false)
         }
       })
-      .catch(() => {})
+      .catch(() => { })
 
     return await userFetcher
   }
@@ -79,7 +87,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           dispatch(setSettings(data))
         }
       })
-      .catch(() => {})
+      .catch(() => { })
 
     return await settingsFetcher
   }
@@ -91,10 +99,30 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   }
 
   async function loadTranslations (): Promise<any> {
-    await translations({ translation: { locale: 'en', keys: [] } })
+    const user = selectCurrentUser(store.getState())
+    await translations({ translation: { locale: user.language, keys: [], useFallback: true } })
       .unwrap()
       .then(response => {
-        i18n.addResourceBundle('en', 'translation', response.keys ?? [], true, true)
+        i18n.addResourceBundle(user.language, 'translation', response.keys ?? [], true, true)
+        void i18n.changeLanguage(user.language)
+      })
+      .catch(() => {
+        trackError(new GeneralError('Error loading translations'))
+      })
+  }
+
+  async function loadPublicTranslations (): Promise<any> {
+    await translations({
+      translation: {
+        locale: FALLBACK_LANGUAGE,
+        keys: [],
+        useFallback: true
+      }
+    })
+      .unwrap()
+      .then(response => {
+        i18n.addResourceBundle(FALLBACK_LANGUAGE, 'translation', response.keys ?? [], true, true)
+        void i18n.changeLanguage(FALLBACK_LANGUAGE)
       })
       .catch(() => {
         trackError(new GeneralError('Error loading translations'))
@@ -106,19 +134,15 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
 
     if (isSuccessInitSetting === true) {
       Promise.allSettled([
-        initActivePerspective()
+        initActivePerspective(),
+        loadTranslations()
       ]).then(() => {
-      }).catch(() => {})
+      }).catch(() => { })
     }
   }
 
   useEffect(() => {
-    Promise.all([
-      initLoadUser(),
-      loadTranslations()
-    ]).then(() => {
-      setIsLoading(false)
-    }).catch(() => {})
+    void initLoadUser()
   }, [])
 
   useEffect(() => {

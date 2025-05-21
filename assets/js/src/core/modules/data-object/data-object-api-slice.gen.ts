@@ -100,7 +100,8 @@ const injectedRtkApi = api
                 DataObjectGetAvailableGridColumnsApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-object/grid/available-columns/${queryArg.classId}/${queryArg.folderId}`,
+                    url: `/pimcore-studio/api/data-object/grid/available-columns`,
+                    params: { classId: queryArg.classId, folderId: queryArg.folderId },
                 }),
                 providesTags: ["Data Object Grid"],
             }),
@@ -323,9 +324,9 @@ export type DataObjectGetAvailableGridColumnsApiResponse =
     };
 export type DataObjectGetAvailableGridColumnsApiArg = {
     /** Identifies the class name for which the columns should be retrieved. */
-    classId: string;
-    /** FolderId of the element */
-    folderId: number;
+    classId?: string;
+    /** folderId */
+    folderId?: number;
 };
 export type DataObjectGetGridApiResponse = /** status 200 Data object grid data */ {
     totalItems: number;
@@ -405,7 +406,8 @@ export type DataObjectFormatPathApiArg = {
     body: {
         objectId: number;
         targets: object;
-        context: object;
+        /** Fieldname for the PathFormatter. Given as Dot Notation */
+        fieldName?: string;
     };
 };
 export type DataObjectPreviewByIdApiResponse = unknown;

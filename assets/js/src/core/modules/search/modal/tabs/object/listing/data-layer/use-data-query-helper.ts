@@ -18,9 +18,11 @@ import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeObjectRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/dynamic-type-object-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type DataObjectGetSearchApiArg } from '@Pimcore/modules/search/search-api-slice.gen'
+import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 
 export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = () => {
   const { selectedColumns } = useSelectedColumns()
+  const { availableColumns } = useAvailableColumns()
   const { selectedClassDefinition } = useClassDefinitionSelection()
   const { dataLoadingState, setDataLoadingState } = useData()
   const { value } = useTypeSelect()
@@ -39,6 +41,21 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
     locale: column.locale,
     config: column.config
   }))
+
+  const systemColumns = availableColumns.filter(column => column.group === 'system')
+
+  systemColumns.forEach(column => {
+    const hasColumn = columnsArg.some(selectedColumn => selectedColumn.key === column.key)
+
+    if (!hasColumn) {
+      columnsArg.push({
+        key: column.key,
+        type: column.type,
+        locale: column.locale,
+        config: []
+      })
+    }
+  })
 
   const getArgs = (): DataObjectGetSearchApiArg => {
     return {
