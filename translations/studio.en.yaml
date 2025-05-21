@@ -783,7 +783,12 @@ element.delete.deleting-folder: Deleting Folder
 component.pagination.showing-items: Showing {{total}} items
 preview-not-available: Preview not available
 user-menu.notifications: Notifications
-user-menu.notifications-send: Send
 user-menu.my-profile: My Profile
 user-menu.log-out: Log out
 user-menu.title: Profile
+user-menu.notification.send: Send
+user-menu.notification.modal.send-a-notification: Send a notification
+user-menu.notification.modal.to: To
+user-menu.notification.modal.title: Title
+user-menu.notification.modal.message: Message
+user-menu.notification.modal.add-an-attachment: Add an attachment
