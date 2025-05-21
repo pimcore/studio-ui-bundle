@@ -9,8 +9,8 @@
  */
 
 import { type dynamicTypeRegistriesServiceIds } from '@Pimcore/app/config/services/service-ids'
+import { type NonEmptyArray } from '@Pimcore/types/non-empty-array'
 import React, { createContext, useContext, useMemo } from 'react'
-import { type NonEmptyArray } from 'types/non-empty-array'
 
 interface IDynamicTypeRegistryContext {
   serviceIds: NonEmptyArray<keyof typeof dynamicTypeRegistriesServiceIds>

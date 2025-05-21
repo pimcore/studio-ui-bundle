@@ -9,7 +9,7 @@
  */
 
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
-import { Button } from '@Pimcore/components/button/button'
+import { Button } from '@sdk/components'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Icon } from '@Pimcore/components/icon/icon'

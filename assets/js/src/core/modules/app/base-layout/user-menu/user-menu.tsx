@@ -14,11 +14,11 @@ import React, { useState } from 'react'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { useTranslation } from 'react-i18next'
 import { useStyle } from './user-menu.styles'
-import { Button } from '@Pimcore/components/button/button'
 import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { useWidgetManager } from '../../../widget-manager/hooks/use-widget-manager'
 import { NOTIFICATIONS } from '@Pimcore/modules/notifications'
+import { Button } from '@Pimcore/components/button/button'
+import { useWidgetManager } from '@sdk/modules/widget-manager'
 import { SendNotificationModal } from '@Pimcore/modules/notifications/send-notification/send-notification-modal'
 
 interface IUserMenuProps {
