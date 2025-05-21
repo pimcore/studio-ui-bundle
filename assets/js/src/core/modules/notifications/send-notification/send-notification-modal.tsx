@@ -69,16 +69,18 @@ export const SendNotificationModal = ({ open, ...props }: SendNotificationModalP
           <Form.Item
             label={ t('user-menu.notification.modal.to') }
             name={ 'to' }
-            rules={ [{ required: true, message: 'This field is required!' }] }
+            rules={ [{ required: true, message: t('user-menu.notification.modal.form.validation.provide-recipient') }] }
           >
             <UserSelect
-              onChange={ (value) => { form.setFieldValue('to', value) } }
+              onChange={ (value) => {
+                form.setFieldValue('to', value)
+              } }
             />
           </Form.Item>
           <Form.Item
             label={ t('user-menu.notification.modal.title') }
             name={ 'title' }
-            rules={ [{ required: true, message: 'This field is required!' }] }
+            rules={ [{ required: true, message: t('user-menu.notification.modal.form.validation.provide-title') }] }
           >
             <Input />
           </Form.Item>
@@ -86,7 +88,7 @@ export const SendNotificationModal = ({ open, ...props }: SendNotificationModalP
           <Form.Item
             label={ t('user-menu.notification.modal.message') }
             name={ 'message' }
-            rules={ [{ required: true, message: 'This field is required!' }] }
+            rules={ [{ required: true, message: t('user-menu.notification.modal.form.validation.provide-message') }] }
           >
             <Input.TextArea />
           </Form.Item>
