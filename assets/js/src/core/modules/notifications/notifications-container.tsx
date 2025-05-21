@@ -18,6 +18,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { Box } from '@Pimcore/components/box/box'
 import { NotificationList } from './notification-list'
 import { useNotifications } from './hooks/use-notifications'
+import {IconTextButton } from '@sdk/components'
 
 const NotificationsContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -34,9 +35,10 @@ const NotificationsContainer = (): React.JSX.Element => {
       renderToolbar={ notifications?.totalItems !== 0
         ? (
           <Toolbar
-            justify='flex-end'
+            justify='space-between'
             theme='secondary'
           >
+            <IconTextButton icon={ { value: 'trash' } }>{t('notifications.remove-all')}</IconTextButton>
             <Pagination
               current={ page }
               onChange={ (page, pageSize) => {
