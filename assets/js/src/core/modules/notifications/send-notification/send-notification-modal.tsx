@@ -24,10 +24,15 @@ interface SendNotificationModalProps {
   onClose: () => void
 }
 
-export const SendNotificationModal = ({ open, onClose }: SendNotificationModalProps): React.JSX.Element => {
+export const SendNotificationModal = ({ open, ...props }: SendNotificationModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const { sendNotification } = useNotification()
+
+  const onClose = (): void => {
+    form.resetFields()
+    props.onClose()
+  }
 
   const handleSend = (): void => {
     form.validateFields().then(() => {
@@ -41,7 +46,6 @@ export const SendNotificationModal = ({ open, onClose }: SendNotificationModalPr
         attachmentId: values.attachment?.id
       }, () => {
         onClose()
-        form.resetFields()
       })
     }).catch((error) => {
       console.error('Validation failed:', error)
@@ -50,17 +54,17 @@ export const SendNotificationModal = ({ open, onClose }: SendNotificationModalPr
 
   return (
     <WindowModal
-      okText={t('user-menu.notification.send')}
-      onCancel={onClose}
-      onOk={handleSend}
-      open={open}
+      okText={ t('user-menu.notification.send') }
+      onCancel={ onClose }
+      onOk={ handleSend }
+      open={ open }
       size="M"
-      title={t('user-menu.notification.modal.send-a-notification')}
-      zIndex={1000}
+      title={ t('user-menu.notification.modal.send-a-notification') }
+      zIndex={ 1000 }
     >
       <FieldWidthProvider>
         <Form
-          form={form}
+          form={ form }
           layout="vertical"
         >
           <Space
@@ -69,33 +73,33 @@ export const SendNotificationModal = ({ open, onClose }: SendNotificationModalPr
             size='none'
           >
             <Form.Item
-              label={t('user-menu.notification.modal.to')}
-              name={'to'}
-              rules={[{ required: true, message: 'This field is required!' }]}
+              label={ t('user-menu.notification.modal.to') }
+              name={ 'to' }
+              rules={ [{ required: true, message: 'This field is required!' }] }
             >
               <UserSelect
-                onChange={(value) => { form.setFieldValue('to', value) }}
+                onChange={ (value) => { form.setFieldValue('to', value) } }
               />
             </Form.Item>
             <Form.Item
-              label={t('user-menu.notification.modal.title')}
-              name={'title'}
-              rules={[{ required: true, message: 'This field is required!' }]}
+              label={ t('user-menu.notification.modal.title') }
+              name={ 'title' }
+              rules={ [{ required: true, message: 'This field is required!' }] }
             >
               <Input />
             </Form.Item>
 
             <Form.Item
-              label={t('user-menu.notification.modal.message')}
-              name={'message'}
-              rules={[{ required: true, message: 'This field is required!' }]}
+              label={ t('user-menu.notification.modal.message') }
+              name={ 'message' }
+              rules={ [{ required: true, message: 'This field is required!' }] }
             >
               <Input.TextArea />
             </Form.Item>
 
             <Form.Item
-              label={t('user-menu.notification.modal.add-an-attachment')}
-              name={'attachment'}
+              label={ t('user-menu.notification.modal.add-an-attachment') }
+              name={ 'attachment' }
             >
               <ManyToOneRelation
                 allowToClearRelation
