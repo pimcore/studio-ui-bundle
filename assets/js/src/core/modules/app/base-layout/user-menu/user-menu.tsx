@@ -16,6 +16,9 @@ import { useTranslation } from 'react-i18next'
 import { useStyle } from './user-menu.styles'
 import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { NOTIFICATIONS } from '@Pimcore/modules/notifications'
+import { Badge, Button } from '@sdk/components'
+import { useWidgetManager } from '@sdk/modules/widget-manager'
 
 interface IUserMenuProps {
   className?: string
@@ -25,6 +28,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   const { styles } = useStyle()
 
   const [logout] = useLogoutMutation()
+  const {openMainWidget} = useWidgetManager()
 
   const handleLogout = (): void => {
     const logoutTask = logout()
@@ -44,7 +48,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       ),
       type: 'group'
     },
-    /* {
+   {
       key: 'notifications',
       label: t('user-menu.notifications'),
       icon: <Badge count={ 5 } />,
@@ -61,7 +65,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       onClick: () => {
         console.log('My Profile clicked')
       }
-    }, */
+    }, 
     {
       key: 'logout',
       label: t('user-menu.log-out'),
