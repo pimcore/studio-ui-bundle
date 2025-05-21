@@ -56,7 +56,10 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       onClick: () => { openMainWidget(NOTIFICATIONS) },
       extra: <Button
         className={ 'user-menu__item-extra' }
-        onClick={ () => { setSendModal(true) } }
+        onClick={ (e) => {
+          e.stopPropagation()
+          setSendModal(true)
+        } }
         size={ 'small' }
              >{t('user-menu.notification.send')}</Button>
     },
