@@ -130,7 +130,7 @@ files.forEach((file: string) => {
 
     const variableName: string = generateVariableName(file);
     content += `
-import ${variableName} from '@Pimcore/assets/icons/${importFileName}'`;
+import ${variableName} from '@Pimcore/assets/icons/${importFileName}?react'`;
 });
 
 content += `

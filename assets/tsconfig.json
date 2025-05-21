@@ -8,7 +8,8 @@
     "baseUrl": "./js/",
     "paths": {
       "@Pimcore/*": ["./src/core/*"],
-      "@test-utils/*": ["./test-utils/*"]
+      "@sdk/*": ["./src/sdk/*"],
+      "@test-utils/*": ["./test-utils/*"],
     },
     "strictNullChecks": true,
     "jsx": "react",
@@ -18,9 +19,10 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "declaration": true,
-    "declarationMap": false,
+    "emitDeclarationOnly": true,
     "outDir": "./dist/build/types",
-    "composite": true
+    "declarationDir": "./dist/build/types",
+    "skipLibCheck": true,
   },
   "include": [
     "./js/**/*"
