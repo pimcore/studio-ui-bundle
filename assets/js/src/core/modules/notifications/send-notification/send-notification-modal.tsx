@@ -10,14 +10,13 @@
 
 import { Form } from '@Pimcore/components/form/form'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
-import { Space } from '@Pimcore/components/space/space'
+import { ManyToOneRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
+import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 import { Input } from 'antd'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { UserSelect } from './components/user-select/user-select'
-import { ManyToOneRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
-import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 import { useNotification } from '../hooks/use-notification'
+import { UserSelect } from './components/user-select/user-select'
 
 interface SendNotificationModalProps {
   open: boolean
@@ -67,48 +66,42 @@ export const SendNotificationModal = ({ open, ...props }: SendNotificationModalP
           form={ form }
           layout="vertical"
         >
-          <Space
-            className='w-full'
-            direction='vertical'
-            size='none'
+          <Form.Item
+            label={ t('user-menu.notification.modal.to') }
+            name={ 'to' }
+            rules={ [{ required: true, message: 'This field is required!' }] }
           >
-            <Form.Item
-              label={ t('user-menu.notification.modal.to') }
-              name={ 'to' }
-              rules={ [{ required: true, message: 'This field is required!' }] }
-            >
-              <UserSelect
-                onChange={ (value) => { form.setFieldValue('to', value) } }
-              />
-            </Form.Item>
-            <Form.Item
-              label={ t('user-menu.notification.modal.title') }
-              name={ 'title' }
-              rules={ [{ required: true, message: 'This field is required!' }] }
-            >
-              <Input />
-            </Form.Item>
+            <UserSelect
+              onChange={ (value) => { form.setFieldValue('to', value) } }
+            />
+          </Form.Item>
+          <Form.Item
+            label={ t('user-menu.notification.modal.title') }
+            name={ 'title' }
+            rules={ [{ required: true, message: 'This field is required!' }] }
+          >
+            <Input />
+          </Form.Item>
 
-            <Form.Item
-              label={ t('user-menu.notification.modal.message') }
-              name={ 'message' }
-              rules={ [{ required: true, message: 'This field is required!' }] }
-            >
-              <Input.TextArea />
-            </Form.Item>
+          <Form.Item
+            label={ t('user-menu.notification.modal.message') }
+            name={ 'message' }
+            rules={ [{ required: true, message: 'This field is required!' }] }
+          >
+            <Input.TextArea />
+          </Form.Item>
 
-            <Form.Item
-              label={ t('user-menu.notification.modal.add-an-attachment') }
-              name={ 'attachment' }
-            >
-              <ManyToOneRelation
-                allowToClearRelation
-                assetsAllowed
-                dataObjectsAllowed
-                documentsAllowed
-              />
-            </Form.Item>
-          </Space>
+          <Form.Item
+            label={ t('user-menu.notification.modal.add-an-attachment') }
+            name={ 'attachment' }
+          >
+            <ManyToOneRelation
+              allowToClearRelation
+              assetsAllowed
+              dataObjectsAllowed
+              documentsAllowed
+            />
+          </Form.Item>
         </Form>
       </FieldWidthProvider>
     </WindowModal>
