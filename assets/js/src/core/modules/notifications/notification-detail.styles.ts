@@ -14,6 +14,9 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     unreadNotificationIcon: css`
         color: ${token.Colors.Brand.Info.colorAccentSecondary};
-    `
+    `,
+    attachmentIcon: css`
+        margin: 5px;
+    `,
   }
 })

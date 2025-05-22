@@ -13,7 +13,6 @@ import { respectLineBreak } from '@Pimcore/utils/helpers'
 import { Space } from '@Pimcore/components/space/space'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { Text } from '@Pimcore/components/text/text'
-import { Split } from '@Pimcore/components/split/split'
 import { Paragraph } from '@Pimcore/components/paragraph/paragraph'
 import { Collapse } from '@Pimcore/components/collapse/collapse'
 import { NotificationListItem } from './notifications-slice.gen'
@@ -46,8 +45,9 @@ const { styles } = useStyles()
         align='center'
         size="extra-small"
       >
-        {notification.hasAttachment && 
+        {!notification.hasAttachment && 
         <Icon 
+        className={styles.attachmentIcon}
         value={'attachment'}
         />
         }
