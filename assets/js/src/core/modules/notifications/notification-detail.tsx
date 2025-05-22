@@ -19,7 +19,7 @@ import { NotificationListItem } from './notifications-slice.gen'
 import { useNotificationDetail } from './hooks/use-notification-detail'
 import { Content } from '@Pimcore/components/content/content'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { Icon } from '@sdk/components'
+import { Flex, Icon, Split } from '@sdk/components'
 import { useStyles } from './notification-detail.styles'
 
 export interface NotificationDetailProps {
@@ -43,11 +43,12 @@ const { styles } = useStyles()
     return (
       <Space
         align='center'
+        justify-content='center'
         size="extra-small"
       >
         {!notification.hasAttachment && 
         <Icon 
-        className={styles.attachmentIcon}
+        className={styles.margin}
         value={'attachment'}
         />
         }
@@ -84,22 +85,19 @@ const { styles } = useStyles()
     children: React.JSX.Element
   } = {
     key: notification.id.toString(),
-    label: <Space size={'extra-small'}>
+    label: <Flex align={'center'} justify-content={'center'}>
     {notification.read === false ? 
     <Icon 
     className={styles.unreadNotificationIcon}
     value={'notification-unread'}/> :
     <Icon
+    className={styles.margin}
     value={'notification-read'}/>}
-      {notification.title !== '' && (
-        <>
-          <Text
-            strong
-          >{notification.title}</Text>
-        </>
-      )}
+    <Split dividerSize="small" theme="secondary" size='extra-small'> 
+    {notification.title !== '' && (<Text strong>{notification.title}</Text>)}
       <Text type='secondary'>{notification.sender}</Text>
-    </Space>,
+    </Split>
+    </Flex>,
     extra: extra(),
     children: children()
   }
