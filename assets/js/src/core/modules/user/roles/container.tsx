@@ -16,16 +16,19 @@ import type { TreeDataItem } from '@Pimcore/components/tree-element/tree-element
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import type { TreeDataNode } from 'antd'
-import { findNodeByKey, findParentByKey } from '@Pimcore/modules/user/management/tree/tree-helper'
+import { findNodeByKey } from '@Pimcore/modules/user/management/tree/tree-helper'
 import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helper'
+import { Spin } from '@Pimcore/components/spin/spin'
 
 const RoleContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
   const { getRoleTree } = useRoleHelper()
 
+  const [expandedKeys, setExpandedKeys] = React.useState<any[]>([0])
+
   const treeParentItem = {
     title: t('roles.tree.all'),
-    key: '0',
+    key: 0,
     icon: <Icon value={ 'folder' } />,
     children: [],
     actions: [
@@ -34,7 +37,6 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
     ]
   }
   const [treeData, setTreeData] = useState<TreeDataItem[]>([treeParentItem])
-  const [treeIsLoading, setTreeIsLoading] = useState<boolean>(false)
 
   const createNodeByResponse = (items: any): TreeDataNode[] => {
     return items.map((item: any) => ({
@@ -58,20 +60,33 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
     }))
   }
 
-  const updateTreeData = (key, items, add?): void => {
+  const updateTreeData = (key, items): void => {
+    setNodeLoading(key, false)
+
     setTreeData((data: TreeDataNode[]): TreeDataNode[] => {
       const parentNode = findNodeByKey(data, key)
       if (parentNode !== undefined) {
         parentNode.children = parentNode.children ?? []
 
-        if (add === true) {
-          parentNode.isLeaf = false
-          parentNode.children.push(...createNodeByResponse(items))
-          parentNode.children.sort((a, b) => (typeof a.title === 'string' ? a.title : '').localeCompare(typeof b.title === 'string' ? b.title : ''))
+        if (items.length === 0) {
+          parentNode.isLeaf = true
+          setExpandedKeys((prevKeys) => prevKeys.filter((k) => k !== key))
         } else {
-          parentNode.children = createNodeByResponse(items)
+          parentNode.isLeaf = false
         }
+
+        const newChildren = createNodeByResponse(items)
+
+        const newKeys = new Set(newChildren.map((child) => child.key))
+        parentNode.children = parentNode.children.filter((child) => newKeys.has(child.key))
+
+        const existingKeys = new Set(parentNode.children.map((child) => child.key))
+        parentNode.children = [
+          ...parentNode.children,
+          ...newChildren.filter((child) => !existingKeys.has(child.key))
+        ]
       }
+
       return [...data]
     })
   }
@@ -82,14 +97,24 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
     })
   }
 
-  const reloadTree = async (): Promise<void> => {
-    setTreeIsLoading(true)
-    setTreeData([treeParentItem])
+  const setNodeLoading = (key: any, isLoading: boolean): void => {
+    const node = findNodeByKey(treeData, key)
+    if (node !== undefined) {
+      node.switcherIcon = isLoading
+        ? <Spin type="classic" />
+        : undefined
+    }
 
-    const { items } = await getRoleTree({ parentId: 0 })
-    updateTreeData('0', items)
+    setTreeData([...treeData])
+  }
 
-    setTreeIsLoading(false)
+  const reloadTree = async (key: any): Promise<void> => {
+    if (key === undefined) {
+      key = 0
+    }
+
+    const { items } = await getRoleTree({ parentId: key })
+    updateTreeData(key, items)
   }
 
   const sidebar = {
@@ -98,34 +123,17 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
     minSize: 170,
     children: [
       <TreeContainer
-        isLoading={ treeIsLoading }
+        expandedKeys={ expandedKeys }
         key="role-tree"
         onLoadTreeData={ handleOnLoadData }
-        onMoveItem={ (dragNode, dropKey) => {
-          const parent = findParentByKey(treeData, dragNode.key)
-          const newParent = findNodeByKey(treeData, dropKey)
-
-          if (parent?.children !== undefined && (newParent !== undefined)) {
-            parent.children = parent.children.filter(child => child.key !== dragNode.key)
-            newParent.children = [...(newParent.children ?? []), dragNode]
-
-            setTreeData([...treeData])
+        onReloadTree={ async (keys) => {
+          for (const key of keys) {
+            setNodeLoading(key, true)
+            await reloadTree(key)
           }
         } }
-        onReloadTree={ reloadTree }
-        onRemoveItem={ (key) => {
-          const parent = findParentByKey(treeData, key)
-          if (parent?.children !== undefined) {
-            const updatedTreeData = parent.children.filter((child: TreeDataNode) => child.key !== key)
-            setTreeData((data: TreeDataNode[]): TreeDataNode[] => {
-              parent.children = updatedTreeData
-              return [...data]
-            })
-
-            if (parent?.children.length === 0) {
-              parent.isLeaf = true
-            }
-          }
+        onSetExpandedKeys={ (keys) => {
+          setExpandedKeys(keys)
         } }
         onUpdateTreeData={ updateTreeData }
         treeData={ treeData }
@@ -140,11 +148,13 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
     children: [
       <Detail
         key="role-detail"
-        onCloneRole={ async (data) => {
-          await reloadTree()
+        onCloneRole={ async (data, parentId) => {
+          setNodeLoading(parentId, true)
+          await reloadTree(parentId)
         } }
-        onRemoveRole={ async (id) => {
-          await reloadTree()
+        onRemoveRole={ async (id, parentId) => {
+          setNodeLoading(parentId, true)
+          await reloadTree(parentId)
         } }
       />
     ]
