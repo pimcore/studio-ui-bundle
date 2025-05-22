@@ -117523,6 +117523,18 @@ const withGeneralFiltersQueryArg = (useBaseHook)=>{
         const { onlyDirectChildren } = (0,_context_layer_provider_direct_children_filter_use_direct_children_filter__WEBPACK_IMPORTED_MODULE_2__.useDirectChildrenFilter)();
         const { fieldFilters } = (0,_context_layer_provider_field_filters_use_field_filters__WEBPACK_IMPORTED_MODULE_5__.useFieldFilters)();
         const { availableColumns } = (0,_Pimcore_modules_element_listing_decorators_utils_column_configuration_context_layer_provider_available_columns_use_available_columns__WEBPACK_IMPORTED_MODULE_6__.useAvailableColumns)();
+        const getUpdatedColumnFilters = (columnFilters)=>{
+            // Override 'type' with 'filterType' for specific cases (e.g., 'dataobject.adapter')
+            return columnFilters.map((param)=>{
+                let { filterType, ...rest } = param;
+                return {
+                    ...rest,
+                    ...filterType !== undefined && {
+                        type: filterType
+                    }
+                };
+            });
+        };
         const getArgs = ()=>{
             const baseArgs = baseGetArgs();
             const searchTermFilter = getSearchTermFilterArg();
@@ -117542,18 +117554,6 @@ const withGeneralFiltersQueryArg = (useBaseHook)=>{
             if (fieldFilters.length > 0) {
                 newColumnFilters.push(...fieldFilters);
             }
-            const getUpdatedNewColumnFilters = ()=>{
-                // Override 'type' with 'filterType' for specific cases (e.g., 'dataobject.adapter')
-                return newColumnFilters.map((param)=>{
-                    let { filterType, ...rest } = param;
-                    return {
-                        ...rest,
-                        ...filterType !== undefined && {
-                            type: filterType
-                        }
-                    };
-                });
-            };
             return {
                 ...baseArgs,
                 body: {
@@ -117561,7 +117561,7 @@ const withGeneralFiltersQueryArg = (useBaseHook)=>{
                     filters: {
                         ...baseArgs.body.filters,
                         includeDescendants: !onlyDirectChildren,
-                        columnFilters: getUpdatedNewColumnFilters()
+                        columnFilters: getUpdatedColumnFilters(newColumnFilters)
                     }
                 }
             };
