@@ -8,9 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ElementTag } from '@sdk/components'
-import { useElementDraft } from '@sdk/modules/element'
+import { useElementApi } from '@sdk/modules/element'
 import { ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 export interface NotificationAttachmentProps {
@@ -18,7 +18,9 @@ export interface NotificationAttachmentProps {
   attachmentType: string
 }
 
-export const NotificationAttachment = ({ attachmentId, attachmentType }: NotificationAttachmentProps): React.JSX.Element => {
+export const NotificationAttachment = ({ attachmentId, attachmentType }: NotificationAttachmentProps): React.JSX.Element | null=> {
+  const [element, setElement] = useState<any>(null)
+
 
   const getElementType = (): ElementType => {
     if (attachmentType === 'object') return elementTypes.dataObject
@@ -26,15 +28,30 @@ export const NotificationAttachment = ({ attachmentId, attachmentType }: Notific
 else if (attachmentType === 'document') return elementTypes.document
 else return 'asset'}
 
-  const {element} = useElementDraft(attachmentId, getElementType())
+  const { getElementById } = useElementApi(getElementType())
 
+  useEffect(() => {
+    const fetchElement = async () => {
+      try {
+        const result = await getElementById(attachmentId)
+        setElement(result)
+      } catch (error) {
+        console.error('Error fetching element:', error)
+      }
+    }
+
+    fetchElement()
+  }, [attachmentId, getElementById])
+  
   console.log({element});
   
-  if (element?.fullPath !== undefined) return (
-        <ElementTag
-        elementType={getElementType()}
-        id={element.id}
-        path={element.fullPath}
-        />
-    ); else return <></>
+  if (!element?.fullPath) return null
+
+  return (
+    <ElementTag
+      elementType={getElementType()}
+      id={element.id}
+      path={element.fullPath}
+    />
+  )
 }
