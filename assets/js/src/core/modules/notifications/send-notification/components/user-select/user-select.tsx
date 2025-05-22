@@ -26,9 +26,9 @@ export const UserSelect = ({ onChange }: UserSelectProps): React.JSX.Element => 
 
   return (
     <Select
-      loading={isLoading}
-      onChange={onChange}
-      options={options}
+      loading={ isLoading }
+      onChange={ onChange }
+      options={ options }
     />
   )
 }
