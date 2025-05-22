@@ -21,6 +21,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex, Icon, Split } from '@sdk/components'
 import { useStyles } from './notification-detail.styles'
+import { NotificationAttachment } from './notification-attachment'
 
 export interface NotificationDetailProps {
   notification: NotificationListItem
@@ -82,6 +83,11 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
       >
         {notificationDetail !== undefined && typeof notificationDetail.message === 'string' &&
           (<Paragraph>{respectLineBreak(notificationDetail.message)}</Paragraph>)}
+        {notificationDetail?.attachmentId !== undefined &&
+        <NotificationAttachment
+        attachmentId={notificationDetail.attachmentId}
+        attachmentType={notificationDetail.attachmentId}
+        />}
       </Content>
     )
   }
