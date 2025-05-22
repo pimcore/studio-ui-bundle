@@ -8,8 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { Select } from '@Pimcore/components/select/select'
 import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice.gen'
-import { Select } from 'antd'
 import React from 'react'
 
 interface UserSelectProps {
@@ -26,9 +26,9 @@ export const UserSelect = ({ onChange }: UserSelectProps): React.JSX.Element => 
 
   return (
     <Select
-      loading={ isLoading }
-      onChange={ onChange }
-      options={ options }
+      loading={isLoading}
+      onChange={onChange}
+      options={options}
     />
   )
 }
