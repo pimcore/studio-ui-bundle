@@ -129,6 +129,8 @@ login-form.remember-me: Remember me
 login-form.forgot-password: Forgot password
 login-form.login: Login
 login-form-additional-logins.or: or
+login-form.username: Username
+login-form.password: Password
 aria.login-form-additional-logins.additional-login-provider: "Additional login provider:"
 aria.login-form-additional-logins.remember-me-checkbox: Remember me checkbox
 unsaved-notice: Please save to confirm your changes
