@@ -85,6 +85,25 @@ const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Elemen
 
   useImperativeHandle(ref, () => geoMapApi)
 
+  const setupToolbar = ({ mode, map, group, value }: { mode: GeoMapMode, map: L.Map, group: L.FeatureGroup, value: GeoType | undefined }): void => {
+    const toolbars: Record<GeoMapMode, () => void> = {
+      geoPoint: () => {
+        addGeoPointToolbar(map, group, settings.maps.reverse_geocoding_url_template as string, value as GeoPoint, props.onChange, props.disabled)
+      },
+      geoPolyLine: () => {
+        addGeoPolyLineToolbar(map, group, value as GeoPoints, props.onChange, props.disabled)
+      },
+      geoPolygon: () => {
+        addGeoPolygonToolbar(map, group, value as GeoPoints, props.onChange, props.disabled)
+      },
+      geoBounds: () => {
+        addGeoBoundsToolbar(map, group, value as GeoBounds, props.onChange, props.disabled)
+      }
+    }
+
+    toolbars[mode]?.()
+  }
+
   const initializeMap = (): L.Map | null => {
     if (mapContainer.current !== null) {
       const map = L.map(mapContainer.current)
@@ -102,15 +121,7 @@ const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Elemen
 
       const featureGroup = L.featureGroup().addTo(map)
 
-      if (props.mode === 'geoPoint') {
-        addGeoPointToolbar(map, featureGroup, settings.maps.reverse_geocoding_url_template as string, value as GeoPoint, props.onChange, props.disabled)
-      } else if (props.mode === 'geoPolyLine') {
-        addGeoPolyLineToolbar(map, featureGroup, value as GeoPoints, props.onChange, props.disabled)
-      } else if (props.mode === 'geoPolygon') {
-        addGeoPolygonToolbar(map, featureGroup, value as GeoPoints, props.onChange, props.disabled)
-      } else if (props.mode === 'geoBounds') {
-        addGeoBoundsToolbar(map, featureGroup, value as GeoBounds, props.onChange, props.disabled)
-      }
+      setupToolbar({ mode: props.mode ?? 'geoBounds', map, group: featureGroup, value })
 
       return map
     }
@@ -118,28 +129,11 @@ const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Elemen
   }
 
   useEffect(() => {
-    if (!isEqual(value, props.value)) {
-      setValue(props.value)
-    }
-  }, [props.value])
-
-  useEffect(() => {
-    if (!isEqual(lat, props.lat)) {
-      setLat(props.lat)
-    }
-  }, [props.lat])
-
-  useEffect(() => {
-    if (!isEqual(lng, props.lng)) {
-      setLng(props.lng)
-    }
-  }, [props.lng])
-
-  useEffect(() => {
-    if (!isEqual(zoom, props.zoom)) {
-      setZoom(props.zoom)
-    }
-  }, [props.zoom])
+    setValue(prev => isEqual(prev, props.value) ? prev : props.value)
+    setLat(prev => prev === props.lat ? prev : props.lat)
+    setLng(prev => prev === props.lng ? prev : props.lng)
+    setZoom(prev => prev === props.zoom ? prev : props.zoom)
+  }, [props.value, props.lat, props.lng, props.zoom])
 
   const isVisible = useElementVisible(containerRef)
 
@@ -149,6 +143,7 @@ const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Elemen
     }
 
     const map = initializeMap()
+
     return () => {
       if (map !== null) {
         map.remove()
