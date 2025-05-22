@@ -12,7 +12,7 @@ import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-h
 import { type SendEmailParameters, useNotificationSendMutation } from '../notifications-slice.gen'
 
 interface UseNotificationReturn {
-  sendNotification: (notification: SendEmailParameters, onSuccess?: () => void) => void
+  sendNotification: (notification: SendEmailParameters, onSuccess?: () => void) => Promise<void>
 }
 
 export const useNotification = (): UseNotificationReturn => {
