@@ -166,7 +166,11 @@ const defaultTheme = {
       Brand: {
         Warning: {
           colorWarningBg: '#fffbe6',
-          colorWarningBorder: '#ffe58f'
+          colorWarningBorder: '#ffe58f',
+          colorAccentSecondary: '#08979C'
+        },
+        Info: {
+          colorAccentSecondary: '#08979C'
         }
       },
       Base: {

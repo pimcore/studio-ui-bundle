@@ -21,6 +21,7 @@ import { useNotificationDetail } from './hooks/use-notification-detail'
 import { Content } from '@Pimcore/components/content/content'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Icon } from '@sdk/components'
+import { useStyles } from './notification-detail.styles'
 
 export interface NotificationDetailProps {
   notification: NotificationListItem
@@ -36,6 +37,8 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     deleteLoading
   } = useNotificationDetail({ id: notification.id })
 
+const { styles } = useStyles()
+  
   const extra = (): React.JSX.Element => {
 
     return (
@@ -83,7 +86,12 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     key: notification.id.toString(),
     label: <Space
            >
-    {notification.read === false ? <Icon value={'notification'}/> : <Icon value={'notification-read'}/>}
+    {notification.read === false ? 
+    <Icon 
+    className={styles.unreadNotificationIcon}
+    value={'notification-unread'}/> :
+    <Icon
+    value={'notification-read'}/>}
       {notification.title !== '' && (
         <>
           <Text
