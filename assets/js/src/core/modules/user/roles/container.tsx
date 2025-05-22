@@ -70,7 +70,7 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
 
         if (items.length === 0) {
           parentNode.isLeaf = true
-          setExpandedKeys((prevKeys) => prevKeys.filter((k) => k !== key))
+          setExpandedKeys(expandedKeys.filter((k) => k !== key))
         } else {
           parentNode.isLeaf = false
         }
