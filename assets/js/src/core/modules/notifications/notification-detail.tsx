@@ -10,21 +10,20 @@
 
 import React from 'react'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
-import { Tag } from 'antd'
 import { Space } from '@Pimcore/components/space/space'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { Text } from '@Pimcore/components/text/text'
 import { Split } from '@Pimcore/components/split/split'
 import { Paragraph } from '@Pimcore/components/paragraph/paragraph'
 import { Collapse } from '@Pimcore/components/collapse/collapse'
-import { type Notification } from './notifications-slice.gen'
+import { NotificationListItem } from './notifications-slice.gen'
 import { useNotificationDetail } from './hooks/use-notification-detail'
 import { Content } from '@Pimcore/components/content/content'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Icon } from '@sdk/components'
 
 export interface NotificationDetailProps {
-  notification: Notification
+  notification: NotificationListItem
 }
 
 export const NotificationDetail = ({ notification }: NotificationDetailProps): React.JSX.Element => {
@@ -38,17 +37,17 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
   } = useNotificationDetail({ id: notification.id })
 
   const extra = (): React.JSX.Element => {
-    const hasAttachment = notification.hasAttachment ?? undefined
 
     return (
       <Space
         align='center'
         size="extra-small"
       >
-        {hasAttachment !== undefined && <IconButton
-          icon={ { value: 'attachment' } }
-          theme='primary'
-        />}
+        {notification.hasAttachment && 
+        <Icon 
+        value={'attachment'}
+        />
+        }
         {notification.creationDate !== undefined && <span>{formatDateTime({ timestamp: notification.creationDate, dateStyle: 'short', timeStyle: 'medium' })}</span>}
         <IconButton
           icon={ { value: 'trash' } }
@@ -82,12 +81,9 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     children: React.JSX.Element
   } = {
     key: notification.id.toString(),
-    label: <Split
-      dividerSize='small'
-      size='extra-small'
-      theme='secondary'
+    label: <Space
            >
-    <Icon value='notifications'/>
+    {notification.read === false ? <Icon value={'notification'}/> : <Icon value={'notification-read'}/>}
       {notification.title !== '' && (
         <>
           <Text
@@ -96,7 +92,7 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
         </>
       )}
       <Text type='secondary'>{notification.sender}</Text>
-    </Split>,
+    </Space>,
     extra: extra(),
     children: children()
   }
