@@ -84,8 +84,7 @@ const { styles } = useStyles()
     children: React.JSX.Element
   } = {
     key: notification.id.toString(),
-    label: <Space
-           >
+    label: <Space size={'extra-small'}>
     {notification.read === false ? 
     <Icon 
     className={styles.unreadNotificationIcon}
