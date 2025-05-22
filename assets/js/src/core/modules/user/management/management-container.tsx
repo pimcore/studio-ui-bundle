@@ -37,7 +37,6 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
     ]
   }
   const [treeData, setTreeData] = React.useState<TreeDataItem[]>([treeParentItem])
-  // const [treeIsLoading] = React.useState<boolean>(false)
 
   const createNodeByResponse = (items: any): TreeDataNode[] => {
     return items.map((item: any) => ({
@@ -71,7 +70,7 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
 
         if (items.length === 0) {
           parentNode.isLeaf = true
-          setExpandedKeys((prevKeys) => prevKeys.filter((k) => k !== key))
+          setExpandedKeys(expandedKeys.filter((k) => k !== key))
         } else {
           parentNode.isLeaf = false
         }
