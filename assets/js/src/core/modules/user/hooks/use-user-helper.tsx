@@ -123,7 +123,7 @@ export const useUserHelper = (): UseUserReturn => {
 
   async function getUserTree (props: UserGetTreeApiArg): Promise<UserGetTreeApiResponse> {
     const { parentId } = props
-    const { data }: any = await dispatch(api.endpoints.userGetTree.initiate({ parentId }))
+    const { data }: any = await dispatch(api.endpoints.userGetTree.initiate({ parentId }, { forceRefetch: true }))
 
     return data
   }
@@ -148,6 +148,7 @@ export const useUserHelper = (): UseUserReturn => {
   async function removeUser (props: UserDeleteByIdApiArg): Promise<{ data: UserDeleteByIdApiResponse, error: Error }> {
     const { id } = props
     const { data, error }: any = await dispatch(api.endpoints.userDeleteById.initiate({ id }))
+    console.log('data', data)
 
     handleNotification(t('user-management.remove-user.success'), error)
     return data

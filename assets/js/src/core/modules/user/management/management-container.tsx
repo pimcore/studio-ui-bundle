@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback } from 'react'
+import React from 'react'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { TreeContainer } from '@Pimcore/modules/user/management/tree/tree-container'
 import { ManagementDetail } from '@Pimcore/modules/user/management/detail/management-detail'
@@ -16,16 +16,19 @@ import type { TreeDataItem } from '@Pimcore/components/tree-element/tree-element
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import type { TreeDataNode } from 'antd'
-import { findNodeByKey, findParentByKey } from '@Pimcore/modules/user/management/tree/tree-helper'
 import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
+import { findNodeByKey } from '@Pimcore/modules/user/management/tree/tree-helper'
+import { Spin } from '@Pimcore/components/spin/spin'
 
 const ManagementContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
   const { getUserTree } = useUserHelper()
 
+  const [expandedKeys, setExpandedKeys] = React.useState<any[]>([0])
+
   const treeParentItem = {
     title: t('user-management.tree.all'),
-    key: '0',
+    key: 0,
     icon: <Icon value={ 'folder' } />,
     children: [],
     actions: [
@@ -34,9 +37,9 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
     ]
   }
   const [treeData, setTreeData] = React.useState<TreeDataItem[]>([treeParentItem])
-  const [treeIsLoading, setTreeIsLoading] = React.useState<boolean>(false)
+  // const [treeIsLoading] = React.useState<boolean>(false)
 
-  const createNodeByResponse = useCallback((items: any): TreeDataNode[] => {
+  const createNodeByResponse = (items: any): TreeDataNode[] => {
     return items.map((item: any) => ({
       title: item.name,
       key: item.id,
@@ -56,21 +59,35 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
       children: [],
       isLeaf: item.children === false
     }))
-  }, [treeData])
+  }
 
-  const updateTreeData = (key, items, add?): void => {
+  const updateTreeData = (key, items): void => {
+    setNodeLoading(key, false)
+
     setTreeData((data: TreeDataNode[]): TreeDataNode[] => {
       const parentNode = findNodeByKey(data, key)
       if (parentNode !== undefined) {
         parentNode.children = parentNode.children ?? []
 
-        if (add === true) {
-          parentNode.children.push(...createNodeByResponse(items))
-          parentNode.children.sort((a, b) => (typeof a.title === 'string' ? a.title : '').localeCompare(typeof b.title === 'string' ? b.title : ''))
+        if (items.length === 0) {
+          parentNode.isLeaf = true
+          setExpandedKeys((prevKeys) => prevKeys.filter((k) => k !== key))
         } else {
-          parentNode.children = createNodeByResponse(items)
+          parentNode.isLeaf = false
         }
+
+        const newChildren = createNodeByResponse(items)
+
+        const newKeys = new Set(newChildren.map((child) => child.key))
+        parentNode.children = parentNode.children.filter((child) => newKeys.has(child.key))
+
+        const existingKeys = new Set(parentNode.children.map((child) => child.key))
+        parentNode.children = [
+          ...parentNode.children,
+          ...newChildren.filter((child) => !existingKeys.has(child.key))
+        ]
       }
+
       return [...data]
     })
   }
@@ -81,12 +98,24 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
     })
   }
 
-  const reloadTree = async (): Promise<void> => {
-    setTreeIsLoading(true)
+  const setNodeLoading = (key: any, isLoading: boolean): void => {
+    const node = findNodeByKey(treeData, key)
+    if (node !== undefined) {
+      node.switcherIcon = isLoading
+        ? <Spin type="classic" />
+        : undefined
+    }
 
-    const { items } = await getUserTree({ parentId: 0 })
-    updateTreeData('0', items)
-    setTreeIsLoading(false)
+    setTreeData([...treeData])
+  }
+
+  const reloadTree = async (key: any): Promise<void> => {
+    if (key === undefined) {
+      key = 0
+    }
+
+    const { items } = await getUserTree({ parentId: key })
+    updateTreeData(key, items)
   }
 
   const sidebar = {
@@ -95,32 +124,17 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
     minSize: 170,
     children: [
       <TreeContainer
-        isLoading={ treeIsLoading }
+        expandedKeys={ expandedKeys }
         key="user-tree"
         onLoadTreeData={ handleOnLoadData }
-        onMoveItem={ (dragNode, dropKey) => {
-          const parent = findParentByKey(treeData, dragNode.key)
-          const newParent = findNodeByKey(treeData, dropKey)
-
-          if (parent?.children !== undefined && (newParent !== undefined)) {
-            parent.children = parent.children.filter(child => child.key !== dragNode.key)
-            newParent.children = [...(newParent.children ?? []), dragNode]
-
-            setTreeData([...treeData])
+        onReloadTree={ async (keys) => {
+          for (const key of keys) {
+            setNodeLoading(key, true)
+            await reloadTree(key)
           }
         } }
-        onReloadTree={ async () => {
-          await reloadTree()
-        } }
-        onRemoveItem={ (key) => {
-          const parent = findParentByKey(treeData, key)
-          if (parent?.children !== undefined) {
-            const updatedTreeData = parent.children.filter((child: TreeDataNode) => child.key !== key)
-            setTreeData((data: TreeDataNode[]): TreeDataNode[] => {
-              parent.children = updatedTreeData
-              return [...data]
-            })
-          }
+        onSetExpandedKeys={ (keys) => {
+          setExpandedKeys(keys)
         } }
         onUpdateTreeData={ updateTreeData }
         treeData={ treeData }
@@ -135,11 +149,13 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
     children: [
       <ManagementDetail
         key="user-detail"
-        onCloneUser={ async () => {
-          await reloadTree()
+        onCloneUser={ async (data, parentId) => {
+          setNodeLoading(parentId, true)
+          await reloadTree(parentId)
         } }
-        onRemoveItem={ async () => {
-          await reloadTree()
+        onRemoveItem={ async (id, parentId) => {
+          setNodeLoading(parentId, true)
+          await reloadTree(parentId)
         } }
       />
     ]
