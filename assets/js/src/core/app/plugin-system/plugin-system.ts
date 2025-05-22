@@ -50,7 +50,7 @@ export class PluginSystem {
     init(initConfig)
 
     for (const remote of initConfig.remotes) {
-      promises.push(loadRemote(remote.alias))
+      promises.push(loadRemote(remote.alias!))
     }
 
     const result = await Promise.allSettled(promises)
