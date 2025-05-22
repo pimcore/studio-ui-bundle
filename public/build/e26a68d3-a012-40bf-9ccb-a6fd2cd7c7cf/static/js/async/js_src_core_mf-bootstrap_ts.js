@@ -92805,36 +92805,23 @@ const getInitialValue = (value)=>{
 };
 const UrlSlug = (props)=>{
     _s();
-    const initialValue = getInitialValue(props.value);
-    if ((0,lodash__WEBPACK_IMPORTED_MODULE_11__.isPlainObject)(initialValue) && !initialValue.some((entry)=>entry.siteId === 0)) {
-        initialValue.unshift({
+    const value = getInitialValue(props.value);
+    if ((0,lodash__WEBPACK_IMPORTED_MODULE_11__.isPlainObject)(value) && !value.some((entry)=>entry.siteId === 0)) {
+        value.unshift({
             slug: '',
             siteId: 0
         });
     }
-    const [value, setValue] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(initialValue);
     const [errors, setErrors] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]);
     const { t } = (0,react_i18next__WEBPACK_IMPORTED_MODULE_7__.useTranslation)();
     const { styles } = (0,_url_slug_styles__WEBPACK_IMPORTED_MODULE_13__.useStyles)();
     const { getSiteById, getRemainingSites } = (0,_Pimcore_modules_document_hooks_use_sites__WEBPACK_IMPORTED_MODULE_6__.useSites)();
     const fieldWidth = (0,_Pimcore_modules_element_dynamic_types_definitions_objects_data_related_providers_field_width_use_field_width__WEBPACK_IMPORTED_MODULE_12__.useFieldWidth)();
     const { Text } = antd__WEBPACK_IMPORTED_MODULE_2__.Typography;
-    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{
-        if (!(0,lodash__WEBPACK_IMPORTED_MODULE_11__.isEqual)(initialValue, value)) {
-            var _props_onChange;
-            (_props_onChange = props.onChange) === null || _props_onChange === void 0 ? void 0 : _props_onChange.call(props, value);
-        }
-    }, [
-        value
-    ]);
-    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{
-        const newValue = getInitialValue(props.value);
-        if (!(0,lodash__WEBPACK_IMPORTED_MODULE_11__.isEqual)(value, newValue)) {
-            setValue(newValue);
-        }
-    }, [
-        props.value
-    ]);
+    const handleChange = (value)=>{
+        var _props_onChange;
+        (_props_onChange = props.onChange) === null || _props_onChange === void 0 ? void 0 : _props_onChange.call(props, value);
+    };
     const validateSlug = (slug)=>{
         if (slug !== '') {
             if (!slug.startsWith('/') || slug.length < 2) {
@@ -92857,7 +92844,7 @@ const UrlSlug = (props)=>{
             ...errors
         ];
         newErrors[index] = !validateSlug(newSlug);
-        setValue(newValue);
+        handleChange(newValue);
         setErrors(newErrors);
     };
     const remainingSites = getRemainingSites(value.map((item)=>item.siteId), props.availableSites ?? undefined);
@@ -92865,7 +92852,7 @@ const UrlSlug = (props)=>{
             key: site.id,
             label: site.domain,
             onClick: ()=>{
-                setValue([
+                handleChange([
                     ...value,
                     {
                         slug: '',
@@ -92894,17 +92881,17 @@ const UrlSlug = (props)=>{
                     children: t('url-slug.add-site')
                 }, void 0, false, {
                     fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related/components/url-slug/url-slug.tsx",
-                    lineNumber: 121,
+                    lineNumber: 111,
                     columnNumber: 11
                 }, void 0)
             }, void 0, false, {
                 fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related/components/url-slug/url-slug.tsx",
-                lineNumber: 117,
+                lineNumber: 107,
                 columnNumber: 9
             }, void 0)
         }, void 0, false, {
             fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related/components/url-slug/url-slug.tsx",
-            lineNumber: 116,
+            lineNumber: 106,
             columnNumber: 7
         }, void 0),
         renderItem: (item, index)=>{
@@ -92924,7 +92911,7 @@ const UrlSlug = (props)=>{
                             children: item.siteId === 0 ? t('fallback') : (_getSiteById = getSiteById(item.siteId)) === null || _getSiteById === void 0 ? void 0 : _getSiteById.domain
                         }, void 0, false, {
                             fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related/components/url-slug/url-slug.tsx",
-                            lineNumber: 135,
+                            lineNumber: 125,
                             columnNumber: 13
                         }, void 0),
                         /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)("div", {
@@ -92939,7 +92926,7 @@ const UrlSlug = (props)=>{
                                     value: item.slug
                                 }, void 0, false, {
                                     fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related/components/url-slug/url-slug.tsx",
-                                    lineNumber: 142,
+                                    lineNumber: 132,
                                     columnNumber: 15
                                 }, void 0),
                                 errors[index] && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(Text, {
@@ -92947,13 +92934,13 @@ const UrlSlug = (props)=>{
                                     children: t('url-slug.invalid')
                                 }, void 0, false, {
                                     fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related/components/url-slug/url-slug.tsx",
-                                    lineNumber: 149,
+                                    lineNumber: 139,
                                     columnNumber: 15
                                 }, void 0)
                             ]
                         }, void 0, true, {
                             fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related/components/url-slug/url-slug.tsx",
-                            lineNumber: 141,
+                            lineNumber: 131,
                             columnNumber: 13
                         }, void 0),
                         props.disabled !== true && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(antd__WEBPACK_IMPORTED_MODULE_2__.Tooltip, {
@@ -92968,30 +92955,30 @@ const UrlSlug = (props)=>{
                                         ...value
                                     ];
                                     newValue.splice(index, 1);
-                                    setValue(newValue);
+                                    handleChange(newValue);
                                 },
                                 style: {
                                     visibility: item.siteId === 0 ? 'hidden' : undefined
                                 }
                             }, void 0, false, {
                                 fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related/components/url-slug/url-slug.tsx",
-                                lineNumber: 156,
+                                lineNumber: 146,
                                 columnNumber: 15
                             }, void 0)
                         }, void 0, false, {
                             fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related/components/url-slug/url-slug.tsx",
-                            lineNumber: 155,
+                            lineNumber: 145,
                             columnNumber: 13
                         }, void 0)
                     ]
                 }, void 0, true, {
                     fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related/components/url-slug/url-slug.tsx",
-                    lineNumber: 129,
+                    lineNumber: 119,
                     columnNumber: 11
                 }, void 0)
             }, void 0, false, {
                 fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related/components/url-slug/url-slug.tsx",
-                lineNumber: 128,
+                lineNumber: 118,
                 columnNumber: 9
             }, void 0);
         },
@@ -93001,11 +92988,11 @@ const UrlSlug = (props)=>{
         }
     }, void 0, false, {
         fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related/components/url-slug/url-slug.tsx",
-        lineNumber: 111,
+        lineNumber: 101,
         columnNumber: 5
     }, undefined);
 };
-_s(UrlSlug, "ytnrvYCQHJHgNX6/+3eS0gDg0bc=", false, function() {
+_s(UrlSlug, "ehaVJXjDVVe6Adm8ay3y3njZ6TA=", false, function() {
     return [
         react_i18next__WEBPACK_IMPORTED_MODULE_7__.useTranslation,
         _url_slug_styles__WEBPACK_IMPORTED_MODULE_13__.useStyles,

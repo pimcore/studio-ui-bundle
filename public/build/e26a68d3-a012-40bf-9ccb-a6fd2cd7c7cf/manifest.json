@@ -1,5 +1,6 @@
 {
   "allFiles": [
+    "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/async/lib-router.js",
     "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/vendors-node_modules_antd_es_index_js-node_modules_react-dom_index_js-node_modules_react_inde-101f6d.js",
     "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/css/async/vendors-node_modules_ant-design_icons_es_icons_UserOutlined_js-node_modules_dnd-kit_sortable_-8b387f.css",
     "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/async/vendors-node_modules_ant-design_icons_es_icons_UserOutlined_js-node_modules_dnd-kit_sortable_-8b387f.js",
@@ -7,7 +8,6 @@
     "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/async/js_src_core_mf-bootstrap_ts.js",
     "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/async/js_src_core_app_public-api_index_ts.js",
     "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/main.js",
-    "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/async/lib-router.js",
     "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/svg/rs.inline.689a8671.svg",
     "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/svg/do.inline.264768fd.svg",
     "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/svg/me.inline.db16b5ec.svg",
@@ -101,20 +101,19 @@
     "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/mf-stats.json",
     "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/mf-manifest.json",
     "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/main.html",
+    "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/async/lib-router.js.map",
     "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/vendors-node_modules_antd_es_index_js-node_modules_react-dom_index_js-node_modules_react_inde-101f6d.js.map",
     "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/async/vendors-node_modules_ant-design_icons_es_icons_UserOutlined_js-node_modules_dnd-kit_sortable_-8b387f.js.map",
-    "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/js_src_core_mf-bootstrap_ts.d6dc7e9d97c33a79.hot-update.js.map",
+    "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/js_src_core_mf-bootstrap_ts.b1822e1c673c641e.hot-update.js.map",
     "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/async/js_src_core_mf-bootstrap_ts.js.map",
     "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/async/js_src_core_app_public-api_index_ts.js.map",
-    "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/main.d6dc7e9d97c33a79.hot-update.js.map",
-    "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/main.js.map",
-    "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/async/lib-router.js.map"
+    "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/main.b1822e1c673c641e.hot-update.js.map",
+    "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/main.js.map"
   ],
   "entries": {
     "main": {
       "assets": [
-        "static/js/async/lib-router.js.map",
-        "main.d6dc7e9d97c33a79.hot-update.js.map",
+        "main.b1822e1c673c641e.hot-update.js.map",
         "static/js/main.js.map",
         "static/js/async/js_src_core_app_public-api_index_ts.js.map",
         "static/svg/va.inline.405dc2da.svg",
@@ -130,7 +129,6 @@
         "static/svg/er.inline.2e140c5e.svg",
         "static/svg/tv.inline.e8951bab.svg",
         "static/svg/sv.inline.753cddcc.svg",
-        "js_src_core_mf-bootstrap_ts.d6dc7e9d97c33a79.hot-update.js.map",
         "static/svg/fj.inline.18618864.svg",
         "static/svg/zw.inline.36270d52.svg",
         "static/svg/py.inline.c62aae82.svg",
@@ -140,6 +138,7 @@
         "static/svg/ki.inline.36212d50.svg",
         "static/svg/bt.inline.47a891b1.svg",
         "static/svg/vi.inline.d0ea2e5b.svg",
+        "js_src_core_mf-bootstrap_ts.b1822e1c673c641e.hot-update.js.map",
         "static/svg/ec.inline.f4507970.svg",
         "static/svg/mz.inline.5d303717.svg",
         "static/svg/bn.inline.07cc7c59.svg",
@@ -210,7 +209,8 @@
         "static/svg/do.inline.264768fd.svg",
         "static/svg/spritesheet.ac8b36fa.svg",
         "static/js/async/vendors-node_modules_ant-design_icons_es_icons_UserOutlined_js-node_modules_dnd-kit_sortable_-8b387f.js.map",
-        "static/js/vendors-node_modules_antd_es_index_js-node_modules_react-dom_index_js-node_modules_react_inde-101f6d.js.map"
+        "static/js/vendors-node_modules_antd_es_index_js-node_modules_react-dom_index_js-node_modules_react_inde-101f6d.js.map",
+        "static/js/async/lib-router.js.map"
       ],
       "html": [
         "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/main.html"
@@ -223,10 +223,10 @@
       },
       "async": {
         "js": [
-          "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/async/lib-router.js",
           "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/async/js_src_core_app_public-api_index_ts.js",
           "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/async/js_src_core_mf-bootstrap_ts.js",
-          "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/async/vendors-node_modules_ant-design_icons_es_icons_UserOutlined_js-node_modules_dnd-kit_sortable_-8b387f.js"
+          "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/async/vendors-node_modules_ant-design_icons_es_icons_UserOutlined_js-node_modules_dnd-kit_sortable_-8b387f.js",
+          "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/js/async/lib-router.js"
         ],
         "css": [
           "/bundles/pimcorestudioui/build/e26a68d3-a012-40bf-9ccb-a6fd2cd7c7cf/static/css/async/js_src_core_mf-bootstrap_ts.css",
