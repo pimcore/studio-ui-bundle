@@ -117850,6 +117850,10 @@ var _s = $RefreshSig$();
 const FILTER_FIELD_KEY_IGNORE_LIST = [
     'size'
 ];
+const FILTER_TYPE_OVERRIDE_WHITELIST = [
+    'dataobject.adapter',
+    'dataobject.objectbrick'
+];
 const FieldFiltersContainer = ()=>{
     _s();
     const { t } = (0,react_i18next__WEBPACK_IMPORTED_MODULE_4__.useTranslation)();
@@ -117888,15 +117892,18 @@ const FieldFiltersContainer = ()=>{
     ]);
     const handleColumnClick = (column)=>{
         const objectDataType = objectDataRegistry.getDynamicType(column.frontendType);
+        const shouldOverrideFilterType = FILTER_TYPE_OVERRIDE_WHITELIST.includes(column.type);
         setFilters((prevFilters)=>[
                 ...prevFilters,
                 {
                     data: undefined,
                     id: column.key,
                     type: column.type,
-                    filterType: objectDataType.getFieldFilterType(),
                     frontendType: column.frontendType,
-                    config: column.config
+                    config: column.config,
+                    ...shouldOverrideFilterType && {
+                        filterType: objectDataType.getFieldFilterType()
+                    }
                 }
             ]);
     };
@@ -117950,7 +117957,7 @@ const FieldFiltersContainer = ()=>{
                 onChange: onFilterChange
             }, void 0, false, {
                 fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/listing/decorators/general-filters/view-layer/components/sidebar/tabs/filters/field-filters/field-filters-container.tsx",
-                lineNumber: 123,
+                lineNumber: 125,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_Pimcore_components_dropdown_dropdown__WEBPACK_IMPORTED_MODULE_8__.Dropdown, {
@@ -117965,18 +117972,18 @@ const FieldFiltersContainer = ()=>{
                     children: t('listing.add-column')
                 }, void 0, false, {
                     fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/listing/decorators/general-filters/view-layer/components/sidebar/tabs/filters/field-filters/field-filters-container.tsx",
-                    lineNumber: 129,
+                    lineNumber: 131,
                     columnNumber: 9
                 }, undefined)
             }, void 0, false, {
                 fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/listing/decorators/general-filters/view-layer/components/sidebar/tabs/filters/field-filters/field-filters-container.tsx",
-                lineNumber: 128,
+                lineNumber: 130,
                 columnNumber: 7
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/listing/decorators/general-filters/view-layer/components/sidebar/tabs/filters/field-filters/field-filters-container.tsx",
-        lineNumber: 119,
+        lineNumber: 121,
         columnNumber: 5
     }, undefined);
 };
