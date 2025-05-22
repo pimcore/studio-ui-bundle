@@ -17,6 +17,10 @@ import { injectable } from 'inversify'
 export class DynamicTypeFieldFilterDatetime implements DynamicTypeFieldFilterAbstract {
   id = 'datetime'
 
+  getFieldFilterType (): string {
+    return 'system.datetime'
+  }
+
   getFieldFilterComponent (props: DynamicTypeFieldFilterDatetimeProps): ReactElement<DynamicTypeFieldFilterDatetimeProps> {
     return (
       <DynamicTypeFieldFilterDatetimeComponent { ...props } />

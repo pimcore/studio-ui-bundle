@@ -10,14 +10,14 @@
 
 import React, { type ReactElement } from 'react'
 import { injectable } from 'inversify'
-import { type DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
+import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
 import {
   DynamicTypeFieldFilterObjectBrickComponent,
   type DynamicTypeFieldFilterObjectBrickProps
 } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-object-object-brick'
 
 @injectable()
-export class DynamicTypeFieldFilterDataObjectObjectBrick implements DynamicTypeFieldFilterAbstract {
+export class DynamicTypeFieldFilterDataObjectObjectBrick extends DynamicTypeFieldFilterAbstract {
   id = 'dataobject.objectbrick'
 
   getFieldFilterComponent (props: DynamicTypeFieldFilterObjectBrickProps): ReactElement<DynamicTypeFieldFilterObjectBrickProps> {

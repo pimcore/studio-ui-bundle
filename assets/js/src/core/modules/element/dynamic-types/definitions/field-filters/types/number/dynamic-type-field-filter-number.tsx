@@ -17,6 +17,10 @@ import { injectable } from 'inversify'
 export class DynamicTypeFieldFilterNumber implements DynamicTypeFieldFilterAbstract {
   id = 'id'
 
+  getFieldFilterType (): string {
+    return 'system.id'
+  }
+
   getFieldFilterComponent (props: DynamicTypeFieldFilterNumberProps): ReactElement<DynamicTypeFieldFilterNumberProps> {
     return (
       <DynamicTypeFieldFilterNumberComponent { ...props } />
