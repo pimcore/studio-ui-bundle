@@ -22,39 +22,34 @@
     "globalName": "pimcore_studio_ui_bundle_core",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
-    "publicPath": "/bundles/pimcorestudioui/build/0eab3a2f-ee9d-4a0e-a944-cc89019cefbc/"
+    "publicPath": "/bundles/pimcorestudioui/build/c630c151-4193-4586-9ec7-bfa20c22e4a1/"
   },
   "shared": [
     {
-      "singleton": true,
-      "requiredVersion": "18.3.x",
-      "shareScope": "default",
-      "eager": true,
+      "id": "pimcore_studio_ui_bundle_core:react",
       "name": "react",
       "version": "18.3.x",
-      "id": "pimcore_studio_ui_bundle_core:react",
-      "assets": {
-        "js": {
-          "async": [],
-          "sync": [
-            "static/js/170.cc18108c.js"
-          ]
-        },
-        "css": {
-          "async": [],
-          "sync": []
-        }
-      },
-      "usedIn": []
-    },
-    {
       "singleton": true,
       "requiredVersion": "18.3.x",
-      "shareScope": "default",
-      "eager": true,
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/170.cc18108c.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      }
+    },
+    {
+      "id": "pimcore_studio_ui_bundle_core:react-dom",
       "name": "react-dom",
       "version": "18.3.x",
-      "id": "pimcore_studio_ui_bundle_core:react-dom",
+      "singleton": true,
+      "requiredVersion": "18.3.x",
       "assets": {
         "js": {
           "async": [],
@@ -66,17 +61,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "5.22.x",
-      "shareScope": "default",
-      "eager": true,
+      "id": "pimcore_studio_ui_bundle_core:antd",
       "name": "antd",
       "version": "5.22.x",
-      "id": "pimcore_studio_ui_bundle_core:antd",
+      "singleton": true,
+      "requiredVersion": "5.22.x",
       "assets": {
         "js": {
           "async": [],
@@ -88,17 +80,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
+      "id": "pimcore_studio_ui_bundle_core:inversify",
+      "name": "inversify",
+      "version": "6.1.x",
       "singleton": true,
       "requiredVersion": "^6.1.4",
-      "shareScope": "default",
-      "eager": true,
-      "version": "6.1.x",
-      "name": "inversify",
-      "id": "pimcore_studio_ui_bundle_core:inversify",
       "assets": {
         "js": {
           "async": [],
@@ -110,32 +99,21 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     }
   ],
   "remotes": [
     {
-      "alias": "@sdk",
-      "consumingFederationContainerName": "pimcore_studio_ui_bundle_core",
       "federationContainerName": "promise new Promise(resolve => {\n          const studioUIBundleRemoteUrl = window.StudioUIBundleRemoteUrl\n          const script = document.createElement('script')\n          script.src = studioUIBundleRemoteUrl\n          script.onload = () => {\n            const proxy = {\n              get: (request) => window['pimcore_studio_ui_bundle'].get(request),\n              init: (...arg) => {\n                try {\n                  return window['pimcore_studio_ui_bundle'].init(...arg)\n                } catch(e) {\n                  console.log('remote container already initialized')\n                }\n              }\n            }\n            resolve(proxy)\n          }\n          document.head.appendChild(script);\n        })\n        ",
       "moduleName": "components",
-      "usedIn": [
-        "js/src/core/app/router/router.tsx + 34 modules",
-        "js/src/core/bootstrap.ts + 1052 modules",
-        "js/src/core/modules/app/component-registry/component-config.ts + 50 modules"
-      ],
-      "version": "*"
+      "alias": "@sdk",
+      "entry": "*"
     },
     {
-      "alias": "@sdk",
-      "consumingFederationContainerName": "pimcore_studio_ui_bundle_core",
       "federationContainerName": "promise new Promise(resolve => {\n          const studioUIBundleRemoteUrl = window.StudioUIBundleRemoteUrl\n          const script = document.createElement('script')\n          script.src = studioUIBundleRemoteUrl\n          script.onload = () => {\n            const proxy = {\n              get: (request) => window['pimcore_studio_ui_bundle'].get(request),\n              init: (...arg) => {\n                try {\n                  return window['pimcore_studio_ui_bundle'].init(...arg)\n                } catch(e) {\n                  console.log('remote container already initialized')\n                }\n              }\n            }\n            resolve(proxy)\n          }\n          document.head.appendChild(script);\n        })\n        ",
       "moduleName": "modules/widget-manager",
-      "usedIn": [
-        "js/src/core/app/router/router.tsx + 34 modules"
-      ],
-      "version": "*"
+      "alias": "@sdk",
+      "entry": "*"
     }
   ],
   "exposes": []

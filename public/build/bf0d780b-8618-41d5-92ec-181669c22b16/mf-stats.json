@@ -22,7 +22,7 @@
     "globalName": "pimcore_studio_ui_bundle",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
-    "publicPath": "/bundles/pimcorestudioui/build/9a73046e-ed86-4428-be4a-c9e81d186729/"
+    "publicPath": "/bundles/pimcorestudioui/build/bf0d780b-8618-41d5-92ec-181669c22b16/"
   },
   "shared": [
     {
@@ -47,11 +47,11 @@
         }
       },
       "usedIn": [
-        "./modules/element",
         "./app",
         "./components",
         "./modules/asset",
         "./modules/data-object",
+        "./modules/element",
         "./modules/user",
         "./modules/widget-manager",
         "./modules/wysiwyg"
@@ -194,7 +194,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.df356f82.css"
+            "static/css/async/968.6558a33c.css"
           ],
           "async": []
         }
@@ -230,7 +230,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.df356f82.css"
+            "static/css/async/968.6558a33c.css"
           ],
           "async": []
         }
@@ -627,7 +627,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.df356f82.css"
+            "static/css/async/968.6558a33c.css"
           ],
           "async": []
         }
@@ -664,7 +664,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.df356f82.css"
+            "static/css/async/968.6558a33c.css"
           ],
           "async": []
         }
@@ -722,7 +722,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.df356f82.css"
+            "static/css/async/968.6558a33c.css"
           ],
           "async": []
         }
@@ -757,7 +757,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.df356f82.css"
+            "static/css/async/968.6558a33c.css"
           ],
           "async": []
         }
@@ -866,7 +866,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.df356f82.css"
+            "static/css/async/968.6558a33c.css"
           ],
           "async": []
         }
