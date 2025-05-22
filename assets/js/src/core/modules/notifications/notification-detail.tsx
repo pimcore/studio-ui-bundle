@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
 import { Space } from '@Pimcore/components/space/space'
 import { formatDateTime } from '@Pimcore/utils/date-time'
@@ -35,8 +35,16 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     deleteNotification,
     deleteLoading
   } = useNotificationDetail({ id: notification.id })
+  
+  const { styles } = useStyles()
 
-const { styles } = useStyles()
+  const [notificationRead, setNotificationRead] = useState<boolean>(notification.read)
+  
+  useEffect(() => {
+    if(notificationDetail !== undefined){
+    setNotificationRead(notificationDetail?.read)
+    }
+  },[notificationDetail])
   
   const extra = (): React.JSX.Element => {
 
@@ -85,18 +93,22 @@ const { styles } = useStyles()
     children: React.JSX.Element
   } = {
     key: notification.id.toString(),
-    label: <Flex align={'center'} justify-content={'center'}>
-    {notification.read === false ? 
-    <Icon 
-    className={styles.unreadNotificationIcon}
-    value={'notification-unread'}/> :
-    <Icon
-    className={styles.margin}
-    value={'notification-read'}/>}
-    <Split dividerSize="small" theme="secondary" size='extra-small'> 
-    {notification.title !== '' && (<Text strong>{notification.title}</Text>)}
-      <Text type='secondary'>{notification.sender}</Text>
-    </Split>
+    label:
+    <Flex align={'center'} justify-content={'center'}>
+        {notificationRead
+        ? 
+        <Icon
+        className={styles.margin}
+        value={'notification-read'}/>
+        :
+        <Icon 
+        className={styles.unreadNotificationIcon}
+        value={'notification-unread'}/>
+        }
+        <Split dividerSize="small" theme="secondary" size='extra-small'> 
+            {notification.title !== '' && (<Text strong>{notification.title}</Text>)}
+            <Text type='secondary'>{notification.sender}</Text>
+            </Split>
     </Flex>,
     extra: extra(),
     children: children()
