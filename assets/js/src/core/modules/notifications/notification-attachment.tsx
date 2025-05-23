@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react'
 import { ElementTag, Flex, IconButton } from '@sdk/components'
 import { useElementApi, useElementHelper } from '@sdk/modules/element'
 import { ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
-import { useStyles } from './notification-detail.styles'
+import { useStyles } from './notifications.styles'
 
 export interface NotificationAttachmentProps {
   attachmentId: number

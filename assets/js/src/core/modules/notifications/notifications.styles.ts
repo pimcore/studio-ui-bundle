@@ -22,5 +22,8 @@ export const useStyles = createStyles(({ token, css }) => {
     elementTag: css`
         width: fit-content;
     `,
+    notificationsList: css`
+        width: 100%;
+    `,
   }
 })

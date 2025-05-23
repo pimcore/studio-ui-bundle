@@ -11,18 +11,22 @@
 import React from 'react'
 import { useNotifications } from './hooks/use-notifications'
 import { NotificationDetail } from './notification-detail'
+import { Space } from 'antd'
+import { useStyles } from './notifications.styles'
 
 export const NotificationList = (): React.JSX.Element => {
   const {
     notifications
   } = useNotifications()
 
+const { styles } = useStyles()
+  
   return (
-    <>{notifications?.items.map(notification => (
+    <Space className={styles.notificationsList} size={'small'} direction={'vertical'} >{notifications?.items.map(notification => (
       <NotificationDetail
         key={ notification.id }
         notification={ notification }
       />
-    ))}</>
+    ))}</Space>
   )
 }

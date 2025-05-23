@@ -20,7 +20,7 @@ import { useNotificationDetail } from './hooks/use-notification-detail'
 import { Content } from '@Pimcore/components/content/content'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex, Icon, Split } from '@sdk/components'
-import { useStyles } from './notification-detail.styles'
+import { useStyles } from './notifications.styles'
 import { NotificationAttachment } from './notification-attachment'
 import { useElementHelper } from '@sdk/modules/element'
 

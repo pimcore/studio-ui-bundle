@@ -27,7 +27,7 @@ export const useNotifications = (): UseNotificationsReturn => {
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState(20)
 
-  const queryArgs: NotificationGetCollectionApiArg = useMemo(() => ({ body: { filters: { page, pageSize, includeDescendants: true } } }), [page, pageSize])
+  const queryArgs: NotificationGetCollectionApiArg = useMemo(() => ({ body: { filters: { page, pageSize, includeDescendants: true } } }), [page, pageSize, page])
 
   const { data: notifications, isLoading, isError, error } = useNotificationGetCollectionQuery(queryArgs)
   const [deleteNotificationsForUser, { isError: isDeleteError, error: deleteError, isLoading: deleteLoading }] = useNotificationDeleteAllMutation()
