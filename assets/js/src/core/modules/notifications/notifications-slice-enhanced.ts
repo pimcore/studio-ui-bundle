@@ -30,11 +30,11 @@ export const api = baseApi.enhanceEndpoints({
     },
     notificationDeleteById: {
       invalidatesTags: (result, error, args) => invalidatingTags.NOTIFICATION(args.id)
-  },
+    },
     notificationDeleteAll: {
       invalidatesTags: (result, error, args) => invalidatingTags.NOTIFICATIONS()
+    }
   }
-}
 })
 
 export type * from './notifications-slice.gen'

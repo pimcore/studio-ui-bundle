@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { NOTIFICATIONS } from '@Pimcore/modules/notifications'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 export type Tag = string | {

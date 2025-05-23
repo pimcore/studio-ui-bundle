@@ -29,10 +29,10 @@ interface UseNotificationsReturn {
 export const useNotificationDetail = ({ id }: UseNotificationDetailProps): UseNotificationsReturn => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
 
-  const { data: notificationDetail, isLoading: detailLoading, isError: isDetailError, error: detailError } = useNotificationGetByIdQuery(
-    isExpanded ? { id } : skipToken)
-
   const [deleteNotification, { isError: isDeleteError, error: deleteError, isLoading: deleteLoading }] = useNotificationDeleteByIdMutation()
+
+  const { data: notificationDetail, isLoading: detailLoading, isError: isDetailError, error: detailError } = useNotificationGetByIdQuery(
+    (isExpanded && !deleteLoading) ? { id } : skipToken)
 
   const deleteNotificationDetail = async (): Promise<void> => {
     await deleteNotification({ id })

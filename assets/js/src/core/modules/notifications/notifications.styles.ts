@@ -24,6 +24,6 @@ export const useStyles = createStyles(({ token, css }) => {
     `,
     notificationsList: css`
         width: 100%;
-    `,
+    `
   }
 })

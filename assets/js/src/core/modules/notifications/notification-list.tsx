@@ -19,10 +19,14 @@ export const NotificationList = (): React.JSX.Element => {
     notifications
   } = useNotifications()
 
-const { styles } = useStyles()
-  
+  const { styles } = useStyles()
+
   return (
-    <Space className={styles.notificationsList} size={'small'} direction={'vertical'} >{notifications?.items.map(notification => (
+    <Space
+      className={ styles.notificationsList }
+      direction={ 'vertical' }
+      size={ 'small' }
+    >{notifications?.items.map(notification => (
       <NotificationDetail
         key={ notification.id }
         notification={ notification }

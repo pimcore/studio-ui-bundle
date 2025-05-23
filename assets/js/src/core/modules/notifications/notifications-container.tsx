@@ -40,7 +40,10 @@ const NotificationsContainer = (): React.JSX.Element => {
             justify='space-between'
             theme='secondary'
           >
-            <IconTextButton icon={ { value: 'trash' } } onClick={() => deleteNotificationsForUser()}>{t('notifications.remove-all')}</IconTextButton>
+            <IconTextButton
+              icon={ { value: 'trash' } }
+              onClick={ () => { deleteNotificationsForUser() } }
+            >{t('notifications.remove-all')}</IconTextButton>
             <Pagination
               current={ page }
               onChange={ (page, pageSize) => {

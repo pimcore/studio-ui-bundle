@@ -1,14 +1,11 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - Pimcore Open Core License (POCL)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH
- *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 /* eslint-disable max-lines */
@@ -219,7 +216,7 @@ import xlsxCsv from '@Pimcore/assets/icons/xlsx-csv.inline.svg?react'
 
 moduleSystem.registerModule({
   onInit: () => {
-    const iconLibrary = container.get<IconLibrary>(serviceIds.iconLibrary);
+    const iconLibrary = container.get<IconLibrary>(serviceIds.iconLibrary)
     iconLibrary.register({
       name: 'accessory',
       component: accessory

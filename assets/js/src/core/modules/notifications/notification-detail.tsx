@@ -15,7 +15,7 @@ import { formatDateTime } from '@Pimcore/utils/date-time'
 import { Text } from '@Pimcore/components/text/text'
 import { Paragraph } from '@Pimcore/components/paragraph/paragraph'
 import { Collapse } from '@Pimcore/components/collapse/collapse'
-import { NotificationListItem } from './notifications-slice.gen'
+import { type NotificationListItem } from './notifications-slice.gen'
 import { useNotificationDetail } from './hooks/use-notification-detail'
 import { Content } from '@Pimcore/components/content/content'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -37,37 +37,36 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     deleteNotification,
     deleteLoading
   } = useNotificationDetail({ id: notification.id })
-  
-    const { mapToElementType } = useElementHelper()
 
-     const elementType = notificationDetail?.attachmentId
-    ? mapToElementType(notificationDetail.attachmentType)
-    : undefined;
+  const { mapToElementType } = useElementHelper()
+
+  const elementType = notificationDetail?.attachmentType !== undefined
+    ? mapToElementType(notificationDetail.attachmentType as string)
+    : undefined
 
   const { styles } = useStyles()
 
   const [notificationRead, setNotificationRead] = useState<boolean>(notification.read)
-  
-  useEffect(() => {
-    if(notificationDetail !== undefined){
-    setNotificationRead(notificationDetail?.read)
-    }
-  },[notificationDetail])
-  
-  const extra = (): React.JSX.Element => {
 
+  useEffect(() => {
+    if (notificationDetail !== undefined) {
+      setNotificationRead(notificationDetail?.read)
+    }
+  }, [notificationDetail])
+
+  const extra = (): React.JSX.Element => {
     return (
       <Space
         align='center'
         justify-content='center'
         size="extra-small"
       >
-        {notification.hasAttachment && 
-        <Icon 
-        className={styles.margin}
-        value={'attachment'}
+        {notification.hasAttachment && (
+        <Icon
+          className={ styles.margin }
+          value={ 'attachment' }
         />
-        }
+        )}
         {notification.creationDate !== undefined && <span>{formatDateTime({ timestamp: notification.creationDate, dateStyle: 'short', timeStyle: 'medium' })}</span>}
         <IconButton
           icon={ { value: 'trash' } }
@@ -88,13 +87,17 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
         loading={ detailLoading }
         none={ notificationDetail === undefined || notificationDetail.message.length === 0 }
       >
-        <Flex vertical gap={0}>
-        {notificationDetail !== undefined && typeof notificationDetail.message === 'string' && (<Paragraph>{respectLineBreak(notificationDetail.message)}</Paragraph>)}
-        {notificationDetail?.attachmentId !== undefined && elementType !== undefined &&
-        <NotificationAttachment
-        attachmentId={notificationDetail.attachmentId}
-        attachmentType={elementType}
-        />}
+        <Flex
+          gap={ 0 }
+          vertical
+        >
+          {notificationDetail !== undefined && typeof notificationDetail.message === 'string' && (<Paragraph>{respectLineBreak(notificationDetail.message)}</Paragraph>)}
+          {notificationDetail?.attachmentId !== undefined && elementType !== undefined && (
+          <NotificationAttachment
+            attachmentId={ notificationDetail.attachmentId }
+            attachmentType={ elementType }
+          />
+          )}
         </Flex>
       </Content>
     )
@@ -108,22 +111,33 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
   } = {
     key: notification.id.toString(),
     label:
-    <Flex align={'center'} justify-content={'center'}>
-        {notificationRead
-        ? 
+  <Flex
+    align={ 'center' }
+    justify-content={ 'center' }
+  >
+    {notificationRead
+      ? (
         <Icon
-        className={styles.margin}
-        value={'notification-read'}/>
-        :
-        <Icon 
-        className={styles.unreadNotificationIcon}
-        value={'notification-unread'}/>
+          className={ styles.margin }
+          value={ 'notification-read' }
+        />
+        )
+      : (
+        <Icon
+          className={ styles.unreadNotificationIcon }
+          value={ 'notification-unread' }
+        />
+        )
         }
-        <Split dividerSize="small" theme="secondary" size='extra-small'> 
-            {notification.title !== '' && (<Text strong>{notification.title}</Text>)}
-            <Text type='secondary'>{notification.sender}</Text>
-            </Split>
-    </Flex>,
+    <Split
+      dividerSize="small"
+      size='extra-small'
+      theme="secondary"
+    >
+      {notification.title !== '' && (<Text strong>{notification.title}</Text>)}
+      <Text type='secondary'>{notification.sender}</Text>
+    </Split>
+  </Flex>,
     extra: extra(),
     children: children()
   }

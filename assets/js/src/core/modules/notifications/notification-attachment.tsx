@@ -11,7 +11,7 @@
 import React, { useEffect, useState } from 'react'
 import { ElementTag, Flex, IconButton } from '@sdk/components'
 import { useElementApi, useElementHelper } from '@sdk/modules/element'
-import { ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useStyles } from './notifications.styles'
 
 export interface NotificationAttachmentProps {
@@ -19,7 +19,7 @@ export interface NotificationAttachmentProps {
   attachmentType: ElementType
 }
 
-export const NotificationAttachment = ({ attachmentId, attachmentType }: NotificationAttachmentProps): React.JSX.Element | null=> {
+export const NotificationAttachment = ({ attachmentId, attachmentType }: NotificationAttachmentProps): React.JSX.Element | null => {
   const { styles } = useStyles()
   const { openElement } = useElementHelper()
   const { getElementById } = useElementApi(attachmentType)
@@ -27,7 +27,7 @@ export const NotificationAttachment = ({ attachmentId, attachmentType }: Notific
   const [element, setElement] = useState<any>(null)
 
   useEffect(() => {
-    const fetchElement = async () => {
+    const fetchElement = async (): Promise<void> => {
       try {
         const result = await getElementById(attachmentId)
         setElement(result)
@@ -36,29 +36,32 @@ export const NotificationAttachment = ({ attachmentId, attachmentType }: Notific
       }
     }
 
-    fetchElement()
+    void fetchElement()
   }, [attachmentId, getElementById])
-  
-  console.log({element});
-  
-  if (!element?.fullPath) return null
+
+  if (element?.fullPath === undefined) return null
 
   return (
-  <Flex className={styles.elementTag} align='center'>
-    <ElementTag
-      elementType={attachmentType}
-      id={element.id}
-      path={element.fullPath}
-    />
-    <IconButton
-    icon={ { value: 'open-folder' } }
-    onClick={ async(e) => {
-    e.stopPropagation()
-    await openElement({
-        type: attachmentType,
-        id: element.id
-      })} }
-    theme='primary'/>
+    <Flex
+      align='center'
+      className={ styles.elementTag }
+    >
+      <ElementTag
+        elementType={ attachmentType }
+        id={ element.id }
+        path={ element.fullPath }
+      />
+      <IconButton
+        icon={ { value: 'open-folder' } }
+        onClick={ async (e) => {
+          e.stopPropagation()
+          await openElement({
+            type: attachmentType,
+            id: element.id
+          })
+        } }
+        theme='primary'
+      />
     </Flex>
   )
 }

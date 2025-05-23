@@ -32,14 +32,13 @@ export const useNotifications = (): UseNotificationsReturn => {
   const { data: notifications, isLoading, isError, error } = useNotificationGetCollectionQuery(queryArgs)
   const [deleteNotificationsForUser, { isError: isDeleteError, error: deleteError, isLoading: deleteLoading }] = useNotificationDeleteAllMutation()
 
-
   useEffect(() => {
     if (isError) {
       trackError(new ApiError(error))
     }
   }, [isError])
 
-    useEffect(() => {
+  useEffect(() => {
     if (isDeleteError) {
       trackError(new ApiError(deleteError))
     }
