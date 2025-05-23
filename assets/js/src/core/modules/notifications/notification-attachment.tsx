@@ -52,7 +52,7 @@ else return 'asset'}
   if (!element?.fullPath) return null
 
   return (
-  <Flex className={styles.elementTag}>
+  <Flex className={styles.elementTag} align='center'>
     <ElementTag
       elementType={getElementType()}
       id={element.id}
