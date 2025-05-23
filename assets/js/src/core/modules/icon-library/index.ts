@@ -14,7 +14,6 @@ import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type IconLibrary } from './services/icon-library'
-
 import accessory from '@Pimcore/assets/icons/accessory.inline.svg?react'
 import addFind from '@Pimcore/assets/icons/add-find.inline.svg?react'
 import addFolder from '@Pimcore/assets/icons/add-folder.inline.svg?react'
