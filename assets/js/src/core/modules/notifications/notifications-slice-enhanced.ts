@@ -29,24 +29,10 @@ export const api = baseApi.enhanceEndpoints({
       providesTags: (result, error, args) => providingTags.NOTIFICATION_DETAIL(args.id)
     },
     notificationDeleteById: {
-      invalidatesTags: (result, error, args): Tag[] => {
-       const tags: Tag[] = []
-
-      tags.push(...invalidatingTags.NOTIFICAION_DETAIL(args.id))
-      tags.push(...invalidatingTags.NOTIFICATION(args.id))
-
-      return tags
-    }
+      invalidatesTags: (result, error, args) => invalidatingTags.NOTIFICATION(args.id)
   },
     notificationDeleteAll: {
-      invalidatesTags: (result, error, args): Tag[] => {
-       const tags: Tag[] = []
-
-      tags.push(...invalidatingTags.NOTIFICAION_DETAILS())
-      tags.push(...invalidatingTags.NOTIFICATIONS())
-
-      return tags
-    }
+      invalidatesTags: (result, error, args) => invalidatingTags.NOTIFICATIONS()
   }
 }
 })
