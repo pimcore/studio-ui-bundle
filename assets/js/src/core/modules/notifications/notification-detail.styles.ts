@@ -19,5 +19,8 @@ export const useStyles = createStyles(({ token, css }) => {
     margin: css`
         margin: 5px;
     `,
+    elementTag: css`
+        width: fit-content;
+    `,
   }
 })

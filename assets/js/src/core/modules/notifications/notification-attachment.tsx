@@ -9,9 +9,10 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { ElementTag } from '@sdk/components'
-import { useElementApi } from '@sdk/modules/element'
+import { ElementTag, Flex, IconButton } from '@sdk/components'
+import { useElementApi, useElementHelper } from '@sdk/modules/element'
 import { ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { useStyles } from './notification-detail.styles'
 
 export interface NotificationAttachmentProps {
   attachmentId: number
@@ -19,16 +20,19 @@ export interface NotificationAttachmentProps {
 }
 
 export const NotificationAttachment = ({ attachmentId, attachmentType }: NotificationAttachmentProps): React.JSX.Element | null=> {
+  const { styles } = useStyles()
   const [element, setElement] = useState<any>(null)
 
+    const { openElement } = useElementHelper()
 
   const getElementType = (): ElementType => {
     if (attachmentType === 'object') return elementTypes.dataObject
   else if (attachmentType === 'asset') return elementTypes.asset
 else if (attachmentType === 'document') return elementTypes.document
 else return 'asset'}
-
   const { getElementById } = useElementApi(getElementType())
+
+
 
   useEffect(() => {
     const fetchElement = async () => {
@@ -48,10 +52,21 @@ else return 'asset'}
   if (!element?.fullPath) return null
 
   return (
+  <Flex className={styles.elementTag}>
     <ElementTag
       elementType={getElementType()}
       id={element.id}
       path={element.fullPath}
     />
+    <IconButton
+    icon={ { value: 'open-folder' } }
+    onClick={ async(e) => {
+    e.stopPropagation()
+    await openElement({
+        type: getElementType(),
+        id: element.id
+      })} }
+    theme='primary'/>
+    </Flex>
   )
 }
