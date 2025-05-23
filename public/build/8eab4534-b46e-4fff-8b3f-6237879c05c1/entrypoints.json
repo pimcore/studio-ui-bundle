@@ -1,0 +1,74 @@
+{
+  "entrypoints": {
+    "pimcore_studio_ui_bundle": {
+      "js": [
+        "http://localhost:3030/static/js/async/js_src_core_modules_asset_editor_toolbar_workflow-log-modal_workflow-log-modal_tsx-js_src_cor-d7ca85.js",
+        "http://localhost:3030/static/js/async/js_src_core_components_asset-target_asset-target_tsx-js_src_core_components_breadcrumb_breadc-9495ea.js",
+        "http://localhost:3030/static/js/async/js_src_core_modules_user_roles_roles-api-slice_gen_ts-js_src_core_modules_user_user-api-slice-f3ad67.js",
+        "http://localhost:3030/static/js/async/js_src_core_utils_compose_ts-js_src_core_utils_css_tsx-js_src_core_utils_date-time_ts-js_src_-a6ef26.js",
+        "http://localhost:3030/static/js/async/js_src_core_modules_data-object_data-object-api-slice-enhanced_ts.js",
+        "http://localhost:3030/static/js/async/js_src_core_modules_asset_asset-api-slice-enhanced_ts.js",
+        "http://localhost:3030/static/js/async/js_src_core_modules_widget-manager_hooks_use-widget-manager_ts.js",
+        "http://localhost:3030/static/js/async/js_src_core_modules_app_error-handler_error-handler_tsx-js_src_core_modules_app_error-handler-176acb.js",
+        "http://localhost:3030/static/js/async/js_src_core_app_api_pimcore_index_ts-js_src_core_app_api_pimcore_tags_ts.js",
+        "http://localhost:3030/static/js/async/vendors-node_modules_codemirror_lang-json_dist_index_js-node_modules_codemirror_lang-markdown-9f0010.js",
+        "http://localhost:3030/static/js/async/vendors-node_modules_dnd-kit_sortable_dist_sortable_esm_js-node_modules_leaflet-draw_dist_lea-2e5a6b.js",
+        "http://localhost:3030/static/js/async/vendors-node_modules_i18next_dist_esm_i18next_js.js",
+        "http://localhost:3030/static/js/async/vendors-node_modules_flexlayout-react_lib_index_js-node_modules_uuid_dist_esm-browser_v4_js.js",
+        "http://localhost:3030/static/js/async/vendors-node_modules_tslib_tslib_es6_mjs.js",
+        "http://localhost:3030/static/js/async/vendors-node_modules_antd-style_es_functions_index_js-node_modules_react_jsx-dev-runtime_js-n-35b13e.js",
+        "http://localhost:3030/static/js/async/vendors-node_modules_lodash_lodash_js.js",
+        "http://localhost:3030/static/js/async/vendors-node_modules_reduxjs_toolkit_dist_query_react_rtk-query-react_modern_mjs.js",
+        "http://localhost:3030/static/js/async/__federation_expose_api__tags.js",
+        "http://localhost:3030/static/js/async/__federation_expose_modules__widget_manager.js",
+        "http://localhost:3030/static/js/async/__federation_expose_api__elements.js",
+        "http://localhost:3030/static/js/async/__federation_expose_api__perspectives.js",
+        "http://localhost:3030/static/js/async/__federation_expose_components.js",
+        "http://localhost:3030/static/js/async/__federation_expose_api__properties.js",
+        "http://localhost:3030/static/js/async/__federation_expose_api__user.js",
+        "http://localhost:3030/static/js/async/__federation_expose_api__dependencies.js",
+        "http://localhost:3030/static/js/async/__federation_expose_api__settings.js",
+        "http://localhost:3030/static/js/async/__federation_expose_utils.js",
+        "http://localhost:3030/static/js/async/__federation_expose_modules__user.js",
+        "http://localhost:3030/static/js/async/__federation_expose_api__schedule.js",
+        "http://localhost:3030/static/js/async/__federation_expose_modules__asset.js",
+        "http://localhost:3030/static/js/async/__federation_expose_modules__data_object.js",
+        "http://localhost:3030/static/js/async/__federation_expose_modules__element.js",
+        "http://localhost:3030/static/js/async/__federation_expose_api__thumbnails.js",
+        "http://localhost:3030/static/js/async/__federation_expose_modules__app.js",
+        "http://localhost:3030/static/js/async/__federation_expose_app.js",
+        "http://localhost:3030/static/js/async/__federation_expose_api__data_object.js",
+        "http://localhost:3030/static/js/async/__federation_expose_api__documents.js",
+        "http://localhost:3030/static/js/async/__federation_expose_api__translations.js",
+        "http://localhost:3030/static/js/async/__federation_expose_api__metadata.js",
+        "http://localhost:3030/static/js/async/__federation_expose_api__role.js",
+        "http://localhost:3030/static/js/async/__federation_expose_api__workflow.js",
+        "http://localhost:3030/static/js/async/lib-router.js",
+        "http://localhost:3030/static/js/async/__federation_expose_default_export.js",
+        "http://localhost:3030/static/js/async/__federation_expose_api__custom_metadata.js",
+        "http://localhost:3030/static/js/async/__federation_expose_api.js",
+        "http://localhost:3030/static/js/async/__federation_expose_modules__wysiwyg.js",
+        "http://localhost:3030/static/js/async/__federation_expose_api__version.js",
+        "http://localhost:3030/static/js/async/__federation_expose_modules__icon_library.js",
+        "http://localhost:3030/static/js/async/__federation_expose_modules__class_definitions.js",
+        "http://localhost:3030/static/js/remoteEntry.js"
+      ],
+      "css": [
+        "http://localhost:3030/static/css/async/vendors-node_modules_dnd-kit_sortable_dist_sortable_esm_js-node_modules_leaflet-draw_dist_lea-2e5a6b.css"
+      ]
+    },
+    "index": {
+      "js": [
+        "http://localhost:3030/static/js/vendors-node_modules_antd_es_index_js-node_modules_react-dom_index_js-node_modules_react_inde-f8d720.js",
+        "http://localhost:3030/static/js/index.js"
+      ],
+      "css": []
+    },
+    "exposeRemote": {
+      "js": [
+        "/bundles/pimcorestudioui/build/8eab4534-b46e-4fff-8b3f-6237879c05c1/exposeRemote.js"
+      ],
+      "css": []
+    }
+  }
+}
