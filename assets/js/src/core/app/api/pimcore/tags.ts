@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { NOTIFICATIONS } from '@Pimcore/modules/notifications'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 export type Tag = string | {
@@ -38,6 +39,8 @@ export const tagNames = {
   SCHEDULES: 'SCHEDULES',
   DEPENDENCIES: 'DEPENDENCIES',
   NOTES_AND_EVENTS: 'NOTES_AND_EVENTS',
+  NOTIFICATIONS: 'NOTIFICATIONS',
+  NOTIFICATION_DETAILS: 'NOTIFICATION_DETAILS',
   AVAILABLE_TAGS: 'AVAILABLE_TAGS',
   ELEMENT_TAGS: 'TAGS',
   ROLE: 'ROLE',
@@ -84,6 +87,8 @@ export const providingTags = {
   ELEMENT_VERSIONS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.VERSIONS, elementType, id)],
   NOTES_AND_EVENTS_DETAIL: (id: number) => [{ type: tagNames.NOTES_AND_EVENTS, id }],
   ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.NOTES_AND_EVENTS, elementType, id)],
+  NOTIFICATION: (id: number) => [{ type: tagNames.NOTIFICATIONS, id }],
+  NOTIFICATION_DETAIL: (id: number) => [{ type: tagNames.NOTIFICATION_DETAILS, id }],
   AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS],
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.ELEMENT_TAGS, elementType, id)],
   ROLE: () => [tagNames.ROLE],
@@ -122,6 +127,10 @@ export const invalidatingTags = {
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
   ELEMENT_VERSIONS: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.VERSIONS, elementType, id)],
   NOTES_AND_EVENTS_DETAIL: (id: number) => [{ type: tagNames.NOTES_AND_EVENTS, id }],
+  NOTIFICATION: (id: number) => [{ type: tagNames.NOTIFICATIONS, id }],
+  NOTIFICAION_DETAIL: (id: number) => [{ type: tagNames.NOTIFICATION_DETAILS, id }],
+  NOTIFICATIONS: () => [tagNames.NOTIFICATIONS],
+  NOTIFICAION_DETAILS: () => [tagNames.NOTIFICATION_DETAILS],
   ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.NOTES_AND_EVENTS, elementType, id)],
   AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS],
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.ELEMENT_TAGS, elementType, id)],
