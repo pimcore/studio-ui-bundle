@@ -88,12 +88,14 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
         loading={ detailLoading }
         none={ notificationDetail === undefined || notificationDetail.message.length === 0 }
       >
+        <Flex vertical gap={0}>
         {notificationDetail !== undefined && typeof notificationDetail.message === 'string' && (<Paragraph>{respectLineBreak(notificationDetail.message)}</Paragraph>)}
         {notificationDetail?.attachmentId !== undefined && elementType !== undefined &&
         <NotificationAttachment
         attachmentId={notificationDetail.attachmentId}
         attachmentType={elementType}
         />}
+        </Flex>
       </Content>
     )
   }
