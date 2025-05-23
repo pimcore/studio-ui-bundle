@@ -9,7 +9,6 @@
  */
 
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
-// import '@Pimcore/modules/asset/editor'
 import { ManagementContainer } from '@Pimcore/modules/user/management/management-container'
 import { RoleContainer } from '@Pimcore/modules/user/roles/container'
 import { container } from '@Pimcore/app/depency-injection'
@@ -18,7 +17,7 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
 import { UserPermission } from '../auth/enums/user-permission'
-// import '@Pimcore/modules/asset/tree'
+import {ProfileContainer} from "@Pimcore/modules/user/profile/profile-container";
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -80,6 +79,11 @@ moduleSystem.registerModule({
     widgetRegistryService.registerWidget({
       name: 'role-management',
       component: RoleContainer
+    })
+
+    widgetRegistryService.registerWidget({
+      name: 'user-profile',
+      component: ProfileContainer
     })
   }
 })

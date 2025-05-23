@@ -17,6 +17,7 @@ import { useStyle } from './user-menu.styles'
 import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { NOTIFICATIONS } from '@Pimcore/modules/notifications'
+import { USERPROFILE } from '@Pimcore/modules/user/profile/profile-container'
 import { Badge, Button } from '@sdk/components'
 import { useWidgetManager } from '@sdk/modules/widget-manager'
 
@@ -61,10 +62,8 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     {
       key: 'myprofile',
       label: t('user-menu.my-profile'),
-      icon: <Icon value={ 'user' } />,
-      onClick: () => {
-        console.log('My Profile clicked')
-      }
+      icon: <Icon value={'user'}/>,
+      onClick: () => {openMainWidget(USERPROFILE)},
     },
     {
       key: 'logout',

@@ -20,8 +20,8 @@ interface ITableProps {
   data: any[]
   onChangeOrder?: (data) => void
   onChange?: (data) => void
-  viewData: any[]
-  editData: any[]
+  viewData?: any[]
+  editData?: any[]
 }
 
 export const LanguageTable = ({
@@ -41,8 +41,8 @@ export const LanguageTable = ({
     {
       name: getDisplyNameByAbbreviation(name),
       abbreviation: name,
-      view: viewData.includes(name) || false,
-      edit: editData.includes(name) || false
+      ...viewData && { view: viewData.includes(name) || false },
+      ...editData && { edit: editData.includes(name) || false },
     })
   )
   const [gridData, setGridData] = useState<any[]>(columnsData)
