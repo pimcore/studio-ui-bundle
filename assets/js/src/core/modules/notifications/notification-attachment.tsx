@@ -16,23 +16,15 @@ import { useStyles } from './notification-detail.styles'
 
 export interface NotificationAttachmentProps {
   attachmentId: number
-  attachmentType: string
+  attachmentType: ElementType
 }
 
 export const NotificationAttachment = ({ attachmentId, attachmentType }: NotificationAttachmentProps): React.JSX.Element | null=> {
   const { styles } = useStyles()
+  const { openElement } = useElementHelper()
+  const { getElementById } = useElementApi(attachmentType)
+
   const [element, setElement] = useState<any>(null)
-
-    const { openElement } = useElementHelper()
-
-  const getElementType = (): ElementType => {
-    if (attachmentType === 'object') return elementTypes.dataObject
-  else if (attachmentType === 'asset') return elementTypes.asset
-else if (attachmentType === 'document') return elementTypes.document
-else return 'asset'}
-  const { getElementById } = useElementApi(getElementType())
-
-
 
   useEffect(() => {
     const fetchElement = async () => {
@@ -54,7 +46,7 @@ else return 'asset'}
   return (
   <Flex className={styles.elementTag} align='center'>
     <ElementTag
-      elementType={getElementType()}
+      elementType={attachmentType}
       id={element.id}
       path={element.fullPath}
     />
@@ -63,7 +55,7 @@ else return 'asset'}
     onClick={ async(e) => {
     e.stopPropagation()
     await openElement({
-        type: getElementType(),
+        type: attachmentType,
         id: element.id
       })} }
     theme='primary'/>

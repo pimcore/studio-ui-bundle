@@ -22,6 +22,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex, Icon, Split } from '@sdk/components'
 import { useStyles } from './notification-detail.styles'
 import { NotificationAttachment } from './notification-attachment'
+import { useElementHelper } from '@sdk/modules/element'
 
 export interface NotificationDetailProps {
   notification: NotificationListItem
@@ -37,6 +38,12 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     deleteLoading
   } = useNotificationDetail({ id: notification.id })
   
+    const { mapToElementType } = useElementHelper()
+
+     const elementType = notificationDetail?.attachmentId
+    ? mapToElementType(notificationDetail.attachmentType)
+    : undefined;
+
   const { styles } = useStyles()
 
   const [notificationRead, setNotificationRead] = useState<boolean>(notification.read)
@@ -55,7 +62,7 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
         justify-content='center'
         size="extra-small"
       >
-        {!notification.hasAttachment && 
+        {notification.hasAttachment && 
         <Icon 
         className={styles.margin}
         value={'attachment'}
@@ -81,12 +88,11 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
         loading={ detailLoading }
         none={ notificationDetail === undefined || notificationDetail.message.length === 0 }
       >
-        {notificationDetail !== undefined && typeof notificationDetail.message === 'string' &&
-          (<Paragraph>{respectLineBreak(notificationDetail.message)}</Paragraph>)}
-        {notificationDetail?.attachmentId !== undefined &&
+        {notificationDetail !== undefined && typeof notificationDetail.message === 'string' && (<Paragraph>{respectLineBreak(notificationDetail.message)}</Paragraph>)}
+        {notificationDetail?.attachmentId !== undefined && elementType !== undefined &&
         <NotificationAttachment
         attachmentId={notificationDetail.attachmentId}
-        attachmentType={notificationDetail.attachmentId}
+        attachmentType={elementType}
         />}
       </Content>
     )
