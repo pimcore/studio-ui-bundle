@@ -97,8 +97,9 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
         color: ${token.colorTextTreeElement};
         cursor: pointer;
         padding: 0;
-        font-size: ${token.fontSize}px; 
-                
+        font-family: ${token.fontFamily};
+        font-size: ${token.fontSize}px;
+        
         &:after {
           content: '';
           position: absolute;
