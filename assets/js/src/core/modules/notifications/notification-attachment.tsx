@@ -26,16 +26,15 @@ export const NotificationAttachment = ({ attachmentId, attachmentType }: Notific
 
   const [element, setElement] = useState<any>(null)
 
-  useEffect(() => {
-    const fetchElement = async (): Promise<void> => {
-      {
-        const result = await getElementById(attachmentId)
-        setElement(result)
-      } 
-    }
+useEffect(() => {
+  const fetchElement = async (): Promise<void> => {
+    const result = await getElementById(attachmentId)
+    setElement(result)
+  }
 
-    void fetchElement()
-  }, [attachmentId, getElementById])
+  void fetchElement()
+}, [attachmentId, getElementById])
+
 
   if (element?.fullPath === undefined) return null
 
