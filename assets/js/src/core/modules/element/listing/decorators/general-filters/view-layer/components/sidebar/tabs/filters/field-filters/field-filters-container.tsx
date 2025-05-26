@@ -90,11 +90,15 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
     const hasDynamicType = hasType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.frontendType!] })
     const isIgnoredField = FILTER_FIELD_KEY_IGNORE_LIST.includes(column.key) || column.filterable !== true
 
+    console.log('columnCheck', column.key, hasDynamicType, isIgnoredField, hasDynamicType && !isIgnoredField && !filters.some((filter) => filter.id === column.key))
+
     return hasDynamicType && !isIgnoredField && !filters.some((filter) => filter.id === column.key)
   }), [availableColumns, filters])
 
   const getFilteredDropDownMenuItems = useMemo(() => (): DropdownProps['menu']['items'] => {
     const groupedItems: DropdownProps['menu']['items'] = []
+
+    console.log('availableFilterColumns', availableFilterColumns, availableColumns);
 
     availableFilterColumns.forEach((column) => {
       const group = column.group
@@ -130,16 +134,16 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
       direction='vertical'
     >
       <FieldFilters
-        data={ filters }
-        onChange={ onFilterChange }
+        data={filters}
+        onChange={onFilterChange}
       />
 
-      <Dropdown menu={ { items: getFilteredDropDownMenuItems() } }>
+      <Dropdown menu={{ items: getFilteredDropDownMenuItems() }}>
         <IconTextButton
-          icon={ { value: 'new' } }
+          icon={{ value: 'new' }}
           type='link'
         >
-          { t('listing.add-column') }
+          {t('listing.add-column')}
         </IconTextButton>
       </Dropdown>
     </Space>

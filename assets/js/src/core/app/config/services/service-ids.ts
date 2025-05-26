@@ -68,6 +68,7 @@ export const serviceIds = {
   'DynamicTypes/FieldFilter/Number': 'DynamicTypes/FieldFilter/Number',
   'DynamicTypes/FieldFilter/Select': 'DynamicTypes/FieldFilter/Select',
   'DynamicTypes/FieldFilter/Datetime': 'DynamicTypes/FieldFilter/Datetime',
+  'DynamicTypes/FieldFilter/Checkbox': 'DynamicTypes/FieldFilter/Checkbox',
 
   'DynamicTypes/BatchEdit/Text': 'DynamicTypes/BatchEdit/Text',
   'DynamicTypes/BatchEdit/TextArea': 'DynamicTypes/BatchEdit/TextArea',
