@@ -33,8 +33,8 @@ const FIELDS_TO_CONVERT_TO_DATE = ['creationDate', 'modificationDate']
 const SPECIAL_DATA_TYPES = ['documentData', 'objectData']
 
 export const KeyValueList = ({ items, skipEmpty = true }: KeyValueListProps): React.JSX.Element => {
-  const { styles } = useStyles()
   const { t } = useTranslation()
+  const { styles } = useStyles()
 
   const preparedItems: KeyValueListItem[] = []
 

@@ -22557,8 +22557,8 @@ const SPECIAL_DATA_TYPES = [
 const KeyValueList = (param)=>{
     let { items, skipEmpty = true } = param;
     _s();
-    const { styles } = (0,_key_value_list_styles__WEBPACK_IMPORTED_MODULE_8__.useStyles)();
     const { t } = (0,react_i18next__WEBPACK_IMPORTED_MODULE_3__.useTranslation)();
+    const { styles } = (0,_key_value_list_styles__WEBPACK_IMPORTED_MODULE_8__.useStyles)();
     const preparedItems = [];
     const shouldSkipValue = (value)=>skipEmpty && ((0,_Pimcore_utils_type_utils__WEBPACK_IMPORTED_MODULE_6__.isEmptyValue)(value) || (0,lodash__WEBPACK_IMPORTED_MODULE_2__.isEqual)(value, false));
     items.forEach((item)=>{
@@ -22649,10 +22649,10 @@ const KeyValueList = (param)=>{
         columnNumber: 5
     }, undefined);
 };
-_s(KeyValueList, "npbODhKiVXMAM/EtpCiaKc7TtqU=", false, function() {
+_s(KeyValueList, "RLrtxoYLhU6K3pUxNPOpN7Ah0UQ=", false, function() {
     return [
-        _key_value_list_styles__WEBPACK_IMPORTED_MODULE_8__.useStyles,
-        react_i18next__WEBPACK_IMPORTED_MODULE_3__.useTranslation
+        react_i18next__WEBPACK_IMPORTED_MODULE_3__.useTranslation,
+        _key_value_list_styles__WEBPACK_IMPORTED_MODULE_8__.useStyles
     ];
 });
 _c = KeyValueList;
