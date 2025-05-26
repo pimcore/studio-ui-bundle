@@ -9,7 +9,7 @@
  */
 
 import { useEffect, useMemo, useState } from 'react'
-import { type NotificationGetCollectionApiArg, type NotificationGetCollectionApiResponse, useNotificationDeleteAllMutation, useNotificationGetCollectionQuery } from '../notifications-slice.gen'
+import { type NotificationGetCollectionApiArg, type NotificationGetCollectionApiResponse, useNotificationDeleteAllMutation, useNotificationGetCollectionQuery } from '../notifications-slice-enhanced'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface UseNotificationsReturn {

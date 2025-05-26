@@ -38,4 +38,4 @@ export const api = baseApi.enhanceEndpoints({
 })
 
 export type * from './notifications-slice.gen'
-export const { useNotificationDeleteByIdMutation, useNotificationGetCollectionQuery, useNotificationGetByIdQuery } = api
+export const { useNotificationDeleteByIdMutation, useNotificationDeleteAllMutation, useNotificationGetCollectionQuery, useNotificationGetByIdQuery } = api
