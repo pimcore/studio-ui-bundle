@@ -15,6 +15,7 @@ export interface IDynamicFilter {
   type: string
   data: any
   frontendType?: string
+  filterType?: string
   config?: any
 }
 
