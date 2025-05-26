@@ -99,6 +99,10 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
       const { data } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
 
       if (data !== undefined) {
+        if ('error' in data) {
+          trackError(new GeneralError("Could not get Asset by Id"))
+        }
+
         return data
       }
 
@@ -110,6 +114,9 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
       const { data } = await dispatch(dataObjectApi.endpoints.dataObjectGetById.initiate({ id }))
 
       if (data !== undefined) {
+        if ('error' in data) {
+          trackError(new GeneralError("Could not get Object by Id"))
+        }
         return data
       }
 

@@ -28,12 +28,10 @@ export const NotificationAttachment = ({ attachmentId, attachmentType }: Notific
 
   useEffect(() => {
     const fetchElement = async (): Promise<void> => {
-      try {
+      {
         const result = await getElementById(attachmentId)
         setElement(result)
-      } catch (error) {
-        console.error('Error fetching element:', error)
-      }
+      } 
     }
 
     void fetchElement()
