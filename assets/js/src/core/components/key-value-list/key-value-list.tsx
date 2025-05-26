@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { isEqual, isObject, isString } from 'lodash'
+import { isEqual, isObject } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Text } from '@Pimcore/components/text/text'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
@@ -56,10 +56,7 @@ export const KeyValueList = ({ items, skipEmpty = true }: KeyValueListProps): Re
             if (isObject(value)) {
               renderObjectValue(value)
             } else {
-              // @TODO: delete after the task is completed (https://github.com/pimcore/studio-backend-bundle/issues/953)
-              const isTableValue = isString(value) && value.includes('<table>')
-
-              !isTableValue && preparedItems.push({ key, value, withoutTranslate: item.key === 'objectData' })
+              preparedItems.push({ key, value, withoutTranslate: item.key === 'objectData' })
             }
           })
         }
