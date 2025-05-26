@@ -100,7 +100,7 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
 
       if (data !== undefined) {
         if ('error' in data) {
-          trackError(new GeneralError("Could not get Asset by Id"))
+          trackError(new GeneralError('Could not get Asset by Id'))
         }
 
         return data
@@ -115,7 +115,7 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
 
       if (data !== undefined) {
         if ('error' in data) {
-          trackError(new GeneralError("Could not get Object by Id"))
+          trackError(new GeneralError('Could not get Object by Id'))
         }
         return data
       }
