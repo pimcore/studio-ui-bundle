@@ -23,7 +23,6 @@ import { FieldFilters, type FieldFiltersProps } from '@Pimcore/components/field-
 import { useFilter } from '../provider/filter-provider/use-filter'
 
 const FILTER_FIELD_KEY_IGNORE_LIST = ['size']
-const FILTER_TYPE_OVERRIDE_WHITELIST = ['dataobject.adapter', 'dataobject.objectbrick']
 
 export const FieldFiltersContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -63,8 +62,16 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
   }, [initialFilters])
 
   const handleColumnClick = (column: AvailableColumn): void => {
-    const objectDataType = objectDataRegistry.getDynamicType(column.frontendType!)
-    const shouldOverrideFilterType = FILTER_TYPE_OVERRIDE_WHITELIST.includes(column.type)
+    const objectDataByFrontendType = objectDataRegistry.getDynamicType(column.frontendType!)
+
+    const isObjectHasDataByColumnType = objectDataRegistry.hasDynamicType(column.type)
+    let shouldOverrideFilterType = false
+
+    if (isObjectHasDataByColumnType) {
+      const objectDataByColumnType = objectDataRegistry.getDynamicType(column.type)
+
+      shouldOverrideFilterType = objectDataByColumnType.shouldOverrideFilterType()
+    }
 
     setFilters((prevFilters) => [
       ...prevFilters,
@@ -74,7 +81,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
         type: column.type,
         frontendType: column.frontendType,
         config: column.config,
-        ...(shouldOverrideFilterType && { filterType: objectDataType.getFieldFilterType() })
+        ...(shouldOverrideFilterType && { filterType: objectDataByFrontendType.getFieldFilterType() })
       }
     ])
   }

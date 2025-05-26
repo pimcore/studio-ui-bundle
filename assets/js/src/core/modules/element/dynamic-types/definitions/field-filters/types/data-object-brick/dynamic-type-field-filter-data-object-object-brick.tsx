@@ -20,6 +20,10 @@ import {
 export class DynamicTypeFieldFilterDataObjectObjectBrick extends DynamicTypeFieldFilterAbstract {
   id = 'dataobject.objectbrick'
 
+  shouldOverrideFilterType (): boolean {
+    return true
+  }
+
   getFieldFilterComponent (props: DynamicTypeFieldFilterObjectBrickProps): ReactElement<DynamicTypeFieldFilterObjectBrickProps> {
     return (
       <DynamicTypeFieldFilterObjectBrickComponent { ...props } />

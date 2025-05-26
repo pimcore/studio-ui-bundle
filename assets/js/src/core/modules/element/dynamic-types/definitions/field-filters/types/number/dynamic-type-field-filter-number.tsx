@@ -9,12 +9,12 @@
  */
 
 import React, { type ReactElement } from 'react'
-import { type DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
+import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
 import { DynamicTypeFieldFilterNumberComponent, type DynamicTypeFieldFilterNumberProps } from '../../components/dynamic-type-field-filter-number-component'
 import { injectable } from 'inversify'
 
 @injectable()
-export class DynamicTypeFieldFilterNumber implements DynamicTypeFieldFilterAbstract {
+export class DynamicTypeFieldFilterNumber extends DynamicTypeFieldFilterAbstract {
   id = 'id'
 
   getFieldFilterType (): string {
