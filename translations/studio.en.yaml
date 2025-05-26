@@ -309,6 +309,7 @@ open: Open
 edit: Edit
 component.no-content.no-content-available: No content available
 notifications.label: Notifications
+notifications.remove-all: Remove all
 notes-and-events.label: Notes & Events
 notes-and-events.notes-and-events: Notes & Events
 notes-and-events.details: Details
