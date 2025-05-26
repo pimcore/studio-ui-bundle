@@ -22,12 +22,12 @@ export const LoginPage = (): React.JSX.Element => {
   const location = useLocation()
 
   const user = useUser()
-  const isAuthenticated = useIsAuthenticated()
+  const { isAuthenticated } = useIsAuthenticated()
 
   const { styles } = useStyle()
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated === true) {
       (async () => {
         const redirectPath: string = location?.state?.from?.pathname
 
