@@ -11,8 +11,8 @@
 import React from 'react'
 import { useNotifications } from './hooks/use-notifications'
 import { NotificationDetail } from './notification-detail'
-import { Space } from 'antd'
 import { useStyles } from './notifications.styles'
+import { Space } from '@sdk/components'
 
 export const NotificationList = (): React.JSX.Element => {
   const {
