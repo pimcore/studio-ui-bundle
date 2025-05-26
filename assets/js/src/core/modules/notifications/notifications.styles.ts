@@ -13,7 +13,7 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     unreadNotificationIcon: css`
-        color: ${token.Colors.Brand.Info.colorAccentSecondary};
+        color: ${token.colorAccentSecondary};
         margin: 5px;
     `,
     margin: css`
