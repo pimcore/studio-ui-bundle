@@ -50,7 +50,7 @@ export const SendNotificationModal = ({ open, ...props }: SendNotificationModalP
         onClose()
       })
     }).catch((error) => {
-      trackError(new GeneralError("Validation of notification failed"))
+      trackError(new GeneralError("Validation of notification form failed"))
     })
   }
 
@@ -73,8 +73,9 @@ export const SendNotificationModal = ({ open, ...props }: SendNotificationModalP
                         type='primary'
                         onClick={handleSend}
                         loading={isLoading}
-                      >
-                        {t('nuser-menu.notification.send')}
+                        disabled={
+                          !form.getFieldValue('to') || !form.getFieldValue('title') || !form.getFieldValue('message')}>
+                        {t('user-menu.notification.send')}
                       </Button>
               </ModalFooter>
             ) }
