@@ -57,7 +57,6 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
           value: item.id,
           label: item.name
         })))
-
       }).catch((error) => {
         console.error('Error fetching role collection:', error)
       })
