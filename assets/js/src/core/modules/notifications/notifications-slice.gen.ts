@@ -51,7 +51,13 @@ export type NotificationGetCollectionApiResponse = /** status 200 Paginated noti
 };
 export type NotificationGetCollectionApiArg = {
     body: {
-        filters?: GridFilter;
+        filters?: {
+            page?: number;
+            pageSize?: number;
+            includeDescendants?: boolean;
+            columnFilters?: object;
+            sortFilter?: object;
+        };
     };
 };
 export type NotificationDeleteAllApiResponse = /** status 200 Successfully deleted all notifications */ void;
@@ -91,7 +97,7 @@ export type NotificationListItem = {
     /** has attachment */
     hasAttachment: boolean;
     /** creation date */
-    creationDate?: number;
+    creationDate: number;
     /** sender */
     sender: any;
 };
@@ -104,18 +110,6 @@ export type DevError = {
     message: string;
     /** Details */
     details: string;
-};
-export type GridFilter = {
-    /** Page */
-    page: number;
-    /** Page Size */
-    pageSize: number;
-    /** Include Descendant Items */
-    includeDescendants: boolean;
-    /** Column Filter */
-    columnFilters?: object;
-    /** Sort Filter */
-    sortFilter?: object;
 };
 export type Notification = NotificationListItem & {
     /** message */

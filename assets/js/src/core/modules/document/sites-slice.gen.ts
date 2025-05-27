@@ -39,9 +39,9 @@ export type Site = {
     /** Domain */
     domain: string;
     /** ID of the root */
-    rootId?: any;
+    rootId: any;
     /** Root path */
-    rootPath?: any;
+    rootPath: any;
 };
 export type Error = {
     /** Message */

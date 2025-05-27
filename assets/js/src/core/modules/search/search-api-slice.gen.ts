@@ -228,9 +228,13 @@ export type SimpleFieldConfig = {
     /** Field getter */
     field: string;
 };
+export type StaticTextConfig = {
+    /** Static Text */
+    text: string;
+};
 export type AdvancedColumnConfig = {
     /** advancedColumns */
-    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig)[];
+    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
 };
 export type GridColumnRequest = {
     /** Key */
