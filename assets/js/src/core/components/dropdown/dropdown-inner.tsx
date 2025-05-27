@@ -22,8 +22,6 @@ export const DropdownInner = ({ menu, onSelect, selectedKeys, menuRef, ...props 
     <Menu
       ref={ menuRef }
       { ...menu }
-      onSelect={ onSelect }
-      selectedKeys={ selectedKeys }
     />
   )
 
