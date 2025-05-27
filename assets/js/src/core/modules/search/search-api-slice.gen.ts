@@ -27,9 +27,7 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/search/configuration/data-objects`,
-                    params: {
-                        classId: queryArg.classId,
-                    },
+                    params: { classId: queryArg.classId },
                 }),
                 providesTags: ["Search"],
             }),
@@ -38,9 +36,7 @@ const injectedRtkApi = api
                     url: `/pimcore-studio/api/search/data-objects`,
                     method: "POST",
                     body: queryArg.body,
-                    params: {
-                        classId: queryArg.classId,
-                    },
+                    params: { classId: queryArg.classId },
                 }),
                 providesTags: ["Search"],
             }),
@@ -53,11 +49,7 @@ const injectedRtkApi = api
             simpleSearchGet: build.query<SimpleSearchGetApiResponse, SimpleSearchGetApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/search`,
-                    params: {
-                        page: queryArg.page,
-                        pageSize: queryArg.pageSize,
-                        searchTerm: queryArg.searchTerm,
-                    },
+                    params: { page: queryArg.page, pageSize: queryArg.pageSize, searchTerm: queryArg.searchTerm },
                 }),
                 providesTags: ["Search"],
             }),
@@ -132,7 +124,7 @@ export type Column = {
     /** Key of the Column */
     key: string;
     /** Locale of the Column */
-    locale: string | null;
+    locale: any;
     /** Group of the Column */
     group: string;
 };
@@ -156,7 +148,7 @@ export type GridDetailedConfiguration = {
     /** Name */
     name: string;
     /** Description */
-    description?: string | null;
+    description?: any;
     /** shareGlobal */
     shareGlobal: boolean;
     /** saveFilter */
@@ -174,13 +166,13 @@ export type GridDetailedConfiguration = {
     /** Page Size */
     pageSize: number;
     /** Modification Date */
-    modificationDate?: number | null;
+    modificationDate?: any;
     /** Creation Date */
-    creationDate?: number | null;
+    creationDate?: any;
     /** ID of the owner */
-    ownerId?: number | null;
+    ownerId?: any;
     /** ID of the configuration */
-    id?: number | null;
+    id?: any;
 };
 export type Error = {
     /** Message */
@@ -200,11 +192,11 @@ export type GridColumnData = {
     /** Key */
     key?: string;
     /** Locale */
-    locale?: string | null;
+    locale?: any;
     /** Value */
-    value?: any | null;
+    value?: any;
     /** inheritance */
-    inheritance?: object | null;
+    inheritance?: any;
 };
 export type Permissions = {
     /** List */
@@ -244,11 +236,11 @@ export type GridColumnRequest = {
     /** Key */
     key: string;
     /** Locale */
-    locale?: string | null;
+    locale?: any;
     /** Type */
     type: string;
     /** Group */
-    group?: string | null;
+    group?: any;
     /** Config */
     config: (string | AdvancedColumnConfig)[];
 };
@@ -264,45 +256,45 @@ export type SimpleSearchDetail = {
     /** Type */
     type: string;
     /** Id of owner */
-    userOwner: number | null;
+    userOwner: any;
     /** Name of owner */
-    userOwnerName: string | null;
+    userOwnerName: any;
     /** Id of the user that modified the element */
-    userModification: number | null;
+    userModification: any;
     /** Name of the user that modified the element */
-    userModificationName: number | null;
+    userModificationName: any;
     /** Creation date */
-    creationDate: number | null;
+    creationDate: any;
     /** Modification date */
-    modificationDate: number | null;
+    modificationDate: any;
 };
 export type SimpleSearchAssetDetail = SimpleSearchDetail & {
     /** Mimetype */
-    mimeType: string | null;
+    mimeType?: any;
     /** Thumbnail path */
-    thumbnail: string | null;
+    thumbnail?: any;
 };
 export type SimpleSearchDataObjectDetail = SimpleSearchDetail & {
     /** Class name and Id */
-    class: string | null;
+    class?: any;
     /** Detail object data */
-    objectData: object;
+    objectData?: object;
 };
 export type SimpleSearchPageDetail = {
     /** Title */
-    title: string | null;
+    title: any;
     /** Description */
-    description: string | null;
+    description: any;
     /** Navigation name */
-    name: string | null;
+    name: any;
     /** Has Preview image */
     hasPreviewImage?: boolean;
 };
 export type SimpleSearchDocumentDetail = SimpleSearchDetail & {
     /** Document Language */
-    language: string | null;
+    language?: any;
     /** Page document data */
-    documentData: SimpleSearchPageDetail | null;
+    documentData?: SimpleSearchPageDetail | null;
 };
 export type ElementIcon = {
     /** Icon type */
@@ -314,11 +306,11 @@ export type CustomAttributes = {
     /** Custom Icon */
     icon: ElementIcon | null;
     /** Custom Tooltip */
-    tooltip: string | null;
+    tooltip: any;
     /** AdditionalIcons */
     additionalIcons: string[];
     /** Custom Key/Filename */
-    key: string | null;
+    key: any;
     /** Additional Css Classes */
     additionalCssClasses: string[];
 };

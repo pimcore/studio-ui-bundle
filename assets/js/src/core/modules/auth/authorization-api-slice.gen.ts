@@ -76,11 +76,11 @@ export type UserInformation = {
     /** Username */
     username: string;
     /** Email */
-    email: string | null;
+    email: any;
     /** Firstname */
-    firstname: string | null;
+    firstname: any;
     /** Lastname */
-    lastname: string | null;
+    lastname: any;
     /** Permissions */
     permissions: string[];
     /** If user is an admin user */
@@ -92,7 +92,7 @@ export type UserInformation = {
     /** User Language */
     language: string;
     /** Locale for dateTime */
-    dateTimeLocale: string | null;
+    dateTimeLocale: any;
     /** Welcome Screen */
     welcomeScreen: boolean;
     /** Memorize Tabs */
@@ -106,7 +106,7 @@ export type UserInformation = {
     /** Two Factor Authentication */
     twoFactorAuthentication?: TwoFactorAuthenticationData[];
     /** Active studio perspective ID */
-    activePerspective: string | null;
+    activePerspective: any;
     /** Allowed studio perspectives */
     perspectives: PerspectiveConfig[];
 };

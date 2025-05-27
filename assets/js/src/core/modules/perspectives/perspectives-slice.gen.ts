@@ -98,7 +98,7 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type PerspectiveCreateApiResponse = unknown;
+export type PerspectiveCreateApiResponse = /** status 200 Id of the new perspective */ void;
 export type PerspectiveCreateApiArg = {
     addPerspectiveConfig: AddPerspectiveConfig;
 };
@@ -113,24 +113,25 @@ export type PerspectiveGetConfigByIdApiArg = {
     /** Get perspective by matching Id */
     perspectiveId: string;
 };
-export type PerspectiveUpdateConfigByIdApiResponse = unknown;
+export type PerspectiveUpdateConfigByIdApiResponse =
+    /** status 200 Successfully updated perspective configuration */ void;
 export type PerspectiveUpdateConfigByIdApiArg = {
     /** Update perspective by matching Id */
     perspectiveId: string;
     savePerspectiveConfig: CreatePerspectiveConfig;
 };
-export type PerspectiveDeleteApiResponse = unknown;
+export type PerspectiveDeleteApiResponse = /** status 200 Successfully deleted perspective */ void;
 export type PerspectiveDeleteApiArg = {
     /** Get perspective by matching Id */
     perspectiveId: string;
 };
-export type PerspectiveWidgetCreateApiResponse = unknown;
+export type PerspectiveWidgetCreateApiResponse = /** status 200 Id of the new widget */ void;
 export type PerspectiveWidgetCreateApiArg = {
     /** Create widget by matching widget type */
     widgetType: string;
     body: {
         data: {
-            name?: string | null;
+            name?: any;
         };
     };
 };
@@ -149,7 +150,8 @@ export type PerspectiveWidgetGetConfigByIdApiArg = {
     /** Filter widgets by matching widget type */
     widgetType: string;
 };
-export type PerspectiveWidgetUpdateConfigByIdApiResponse = unknown;
+export type PerspectiveWidgetUpdateConfigByIdApiResponse =
+    /** status 200 Successfully updated widget configuration */ void;
 export type PerspectiveWidgetUpdateConfigByIdApiArg = {
     /** Update widget by matching widget Id */
     widgetId: string;
@@ -157,11 +159,11 @@ export type PerspectiveWidgetUpdateConfigByIdApiArg = {
     widgetType: string;
     body: {
         data: {
-            name?: string | null;
+            name?: any;
         };
     };
 };
-export type PerspectiveWidgetDeleteApiResponse = unknown;
+export type PerspectiveWidgetDeleteApiResponse = /** status 200 Successfully deleted widget */ void;
 export type PerspectiveWidgetDeleteApiArg = {
     /** Filter widgets by matching widget Id */
     widgetId: string;
@@ -372,53 +374,53 @@ export type DocumentContextPermissions = SaveDocumentContextPermissions & {
 };
 export type ElementTreeWidget = WidgetConfig & {
     /** Context Permissions */
-    contextPermissions: AssetContextPermissions | DataObjectContextPermissions | DocumentContextPermissions;
+    contextPermissions?: AssetContextPermissions | DataObjectContextPermissions | DocumentContextPermissions;
     /** Element Type */
-    elementType: string;
+    elementType?: string;
     /** Root Folder */
-    rootFolder: string;
+    rootFolder?: string;
     /** Root Folder ID */
-    rootFolderId: number;
+    rootFolderId?: number;
     /** Show Root */
-    showRoot: boolean;
+    showRoot?: boolean;
     /** Classes */
-    classes: object;
+    classes?: object;
     /** PQL */
-    pql: string | null;
+    pql?: any;
     /** Page size */
-    pageSize: number | null;
+    pageSize?: any;
     /** Is Writeable */
-    isWriteable: boolean;
+    isWriteable?: boolean;
 };
 export type PerspectiveConfigDetail = PerspectiveConfig & {
     /** Context Permissions */
-    contextPermissions: object;
+    contextPermissions?: object;
     /** Widgets Left */
-    widgetsLeft: ElementTreeWidget[];
+    widgetsLeft?: ElementTreeWidget[];
     /** Widgets Right */
-    widgetsRight: ElementTreeWidget[];
+    widgetsRight?: ElementTreeWidget[];
     /** Widgets Bottom */
-    widgetsBottom: ElementTreeWidget[];
+    widgetsBottom?: ElementTreeWidget[];
     /** Left Expanded Widget */
-    expandedLeft: string | null;
+    expandedLeft?: any;
     /** Right Expanded Widget */
-    expandedRight: string | null;
+    expandedRight?: any;
 };
 export type CreatePerspectiveConfig = AddPerspectiveConfig & {
     /** Icon */
-    icon: ElementIcon;
+    icon?: ElementIcon;
     /** Context Permissions */
-    contextPermissions: object;
+    contextPermissions?: object;
     /** Widgets Left */
-    widgetsLeft: object;
+    widgetsLeft?: object;
     /** Widgets Right */
-    widgetsRight: object;
+    widgetsRight?: object;
     /** Widgets Bottom */
-    widgetsBottom: object;
+    widgetsBottom?: object;
     /** Left Expanded Widget */
-    expandedLeft: string | null;
+    expandedLeft?: any;
     /** Right Expanded Widget */
-    expandedRight: string | null;
+    expandedRight?: any;
 };
 export type WidgetType = {
     /** AdditionalAttributes */

@@ -155,7 +155,7 @@ export type PimcoreStudioApiClassCustomLayoutUpdateApiArg = {
     customLayoutId: string;
     customLayoutUpdate: SchemaUsedToUpdateCustomLayouts;
 };
-export type PimcoreStudioApiClassCustomLayoutDeleteApiResponse = unknown;
+export type PimcoreStudioApiClassCustomLayoutDeleteApiResponse = /** status 200 Custom layout deleted */ void;
 export type PimcoreStudioApiClassCustomLayoutDeleteApiArg = {
     /** Id of custom layout */
     customLayoutId: string;
@@ -232,7 +232,7 @@ export type ClassDefinitionListItem = {
     /** icon */
     icon: ElementIcon;
     /** Group */
-    group: string | null;
+    group: any;
 };
 export type Error = {
     /** Message */
@@ -268,13 +268,13 @@ export type Layout = {
     /** Field Type */
     fieldType: string;
     /** Type */
-    type: string | null;
+    type: any;
     /** Layout */
-    layout: string | null;
+    layout: any;
     /** Region */
-    region: string | null;
+    region: any;
     /** Title */
-    title: string | null;
+    title: any;
     /** Width */
     width: number;
     /** Height */
@@ -284,7 +284,7 @@ export type Layout = {
     /** Collapsed */
     collapsed: boolean;
     /** Body Style */
-    bodyStyle: string | null;
+    bodyStyle: any;
     /** Locked */
     locked: boolean;
     /** Children */
@@ -344,15 +344,15 @@ export type FieldCollectionLayoutDefinition = {
     /** Data Type */
     datatype: string;
     /** Group */
-    group?: string | null;
+    group?: any;
     /** Name */
-    name?: string | null;
+    name?: any;
     /** Type */
-    type?: string | null;
+    type?: any;
     /** Region */
-    region?: string | null;
+    region?: any;
     /** Title */
-    title: string | null;
+    title: any;
     /** Width */
     width: number;
     /** Height */
@@ -390,9 +390,9 @@ export type ClassDefinition = {
     /** Description */
     description: string;
     /** Creation date timestamp */
-    creationDate: number | null;
+    creationDate: any;
     /** Modification date timestamp */
-    modificationDate: number | null;
+    modificationDate: any;
     /** User id of owner */
     userOwner: number;
     /** Namespace of parent class */
@@ -434,7 +434,7 @@ export type ClassDefinition = {
     /** Whether the class definition can be written to */
     isWriteable: boolean;
     /** Group */
-    group: string | null;
+    group: any;
 };
 export type ObjectBrickLayoutDefinition = {
     /** AdditionalAttributes */
@@ -446,13 +446,13 @@ export type ObjectBrickLayoutDefinition = {
     /** Data Type */
     datatype: string;
     /** Name */
-    name?: string | null;
+    name?: any;
     /** Type */
-    type?: string | null;
+    type?: any;
     /** Region */
-    region?: string | null;
+    region?: any;
     /** Title */
-    title: string | null;
+    title: any;
     /** Width */
     width: number;
     /** Height */

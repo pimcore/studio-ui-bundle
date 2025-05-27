@@ -44,10 +44,7 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/versions/${queryArg.elementType}/${queryArg.id}`,
-                    params: {
-                        page: queryArg.page,
-                        pageSize: queryArg.pageSize,
-                    },
+                    params: { page: queryArg.page, pageSize: queryArg.pageSize },
                 }),
                 providesTags: ["Versions"],
             }),
@@ -88,7 +85,7 @@ export type VersionGetByIdApiArg = {
     /** Id of the version */
     id: number;
 };
-export type VersionUpdateByIdApiResponse = unknown;
+export type VersionUpdateByIdApiResponse = /** status 200 Successfully updated version */ void;
 export type VersionUpdateByIdApiArg = {
     /** Id of the version */
     id: number;
@@ -102,7 +99,7 @@ export type VersionPublishByIdApiArg = {
     /** Id of the version */
     id: number;
 };
-export type VersionDeleteByIdApiResponse = unknown;
+export type VersionDeleteByIdApiResponse = /** status 200 Successfully deleted version */ void;
 export type VersionDeleteByIdApiArg = {
     /** Id of the version */
     id: number;
@@ -146,17 +143,17 @@ export type CustomMetadataVersion = {
     /** Name */
     name: string;
     /** Language */
-    language?: string | null;
+    language?: any;
     /** Type */
     type: string;
     /** Data */
-    data: string | null;
+    data: any;
 };
 export type VersionDimensions = {
     /** width */
-    width?: number | null;
+    width?: any;
     /** height */
-    height?: number | null;
+    height?: any;
 };
 export type AssetVersion = {
     /** AdditionalAttributes */
@@ -170,7 +167,7 @@ export type AssetVersion = {
     /** creation date */
     creationDate: number;
     /** modification date */
-    modificationDate?: number | null;
+    modificationDate?: any;
     /** file size */
     fileSize: number;
     /** mime type */
@@ -198,15 +195,15 @@ export type Element = {
     /** ID of owner */
     userOwner: number;
     /** User that modified the element */
-    userModification: number | null;
+    userModification: any;
     /** Locked */
-    locked: string | null;
+    locked: any;
     /** Is locked */
     isLocked: boolean;
     /** Creation date */
-    creationDate: number | null;
+    creationDate: any;
     /** Modification date */
-    modificationDate: number | null;
+    modificationDate: any;
 };
 export type DataObjectVersion = Element & {
     /** AdditionalAttributes */
@@ -224,21 +221,21 @@ export type DataObjectVersion = Element & {
     /** Has workflow available */
     hasWorkflowAvailable?: boolean;
     /** Key */
-    key: string;
+    key?: string;
     /** Type */
-    type: string;
+    type?: string;
     /** Has children */
-    hasChildren: boolean;
+    hasChildren?: boolean;
     /** Full path */
-    fullPath: string;
+    fullPath?: string;
     /** Custom index */
-    index: number;
+    index?: number;
     /** Class name */
-    className: string | null;
+    className?: any;
     /** Published */
-    published: boolean | null;
+    published?: any;
     /** Detail object data */
-    objectData: object;
+    objectData?: object;
 };
 export type DocumentVersion = {
     /** AdditionalAttributes */
@@ -254,15 +251,15 @@ export type DocumentVersion = {
 };
 export type UpdateVersion = {
     /** Public */
-    public?: boolean | null;
+    public?: any;
     /** Note */
-    note?: string | null;
+    note?: any;
 };
 export type VersionUser = {
     /** ID */
-    id?: number | null;
+    id?: any;
     /** name */
-    name?: string | null;
+    name?: any;
 };
 export type Version = {
     /** AdditionalAttributes */
@@ -290,7 +287,7 @@ export type Version = {
     /** user */
     user: VersionUser;
     /** scheduled */
-    scheduled?: number | null;
+    scheduled?: any;
 };
 export const {
     useVersionAssetDownloadByIdQuery,

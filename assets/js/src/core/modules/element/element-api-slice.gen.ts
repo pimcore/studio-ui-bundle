@@ -45,9 +45,7 @@ const injectedRtkApi = api
             elementGetIdByPath: build.query<ElementGetIdByPathApiResponse, ElementGetIdByPathApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/elements/${queryArg.elementType}/path`,
-                    params: {
-                        elementPath: queryArg.elementPath,
-                    },
+                    params: { elementPath: queryArg.elementPath },
                 }),
                 providesTags: ["Elements"],
             }),
@@ -63,9 +61,7 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/elements/${queryArg.elementType}/resolve`,
-                    params: {
-                        searchTerm: queryArg.searchTerm,
-                    },
+                    params: { searchTerm: queryArg.searchTerm },
                 }),
                 providesTags: ["Elements"],
             }),
@@ -74,7 +70,7 @@ const injectedRtkApi = api
     });
 export { injectedRtkApi as api };
 export type ElementDeleteApiResponse =
-    /** status 201 Successfully created jobRun for deleting element and its children */ {
+    /** status 200 Successfully deleted element */ void | /** status 201 Successfully created jobRun for deleting element and its children */ {
         /** ID of created jobRun */
         jobRunId: number;
     };
@@ -91,7 +87,7 @@ export type ElementGetDeleteInfoApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
 };
-export type ElementFolderCreateApiResponse = unknown;
+export type ElementFolderCreateApiResponse = /** status 200 Successfully created folder */ void;
 export type ElementFolderCreateApiArg = {
     /** ParentId of the element */
     parentId: number;

@@ -12,21 +12,14 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/unit/quantity-value/convert-all`,
-                    params: {
-                        fromUnitId: queryArg.fromUnitId,
-                        value: queryArg.value,
-                    },
+                    params: { fromUnitId: queryArg.fromUnitId, value: queryArg.value },
                 }),
                 providesTags: ["Units"],
             }),
             unitQuantityValueConvert: build.query<UnitQuantityValueConvertApiResponse, UnitQuantityValueConvertApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/unit/quantity-value/convert`,
-                    params: {
-                        fromUnitId: queryArg.fromUnitId,
-                        toUnitId: queryArg.toUnitId,
-                        value: queryArg.value,
-                    },
+                    params: { fromUnitId: queryArg.fromUnitId, toUnitId: queryArg.toUnitId, value: queryArg.value },
                 }),
                 providesTags: ["Units"],
             }),
@@ -97,23 +90,23 @@ export type QuantityValueUnit = {
         [key: string]: string | number | boolean | object;
     };
     /** ID */
-    id: string | null;
+    id: any;
     /** Abbreviation */
-    abbreviation: string | null;
+    abbreviation: any;
     /** Group */
-    group: string | null;
+    group: any;
     /** Long Name */
-    longName: string | null;
+    longName: any;
     /** Base Unit */
-    baseUnit: string | null;
+    baseUnit: any;
     /** Reference */
-    reference: string | null;
+    reference: any;
     /** Factor */
-    factor: number | null;
+    factor: any;
     /** Conversion Offset */
-    conversionOffset: number | null;
+    conversionOffset: any;
     /** Converter */
-    converter: string | null;
+    converter: any;
 };
 export const { useUnitQuantityValueConvertAllQuery, useUnitQuantityValueConvertQuery, useUnitQuantityValueListQuery } =
     injectedRtkApi;

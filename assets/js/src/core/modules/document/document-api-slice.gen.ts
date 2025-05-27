@@ -20,18 +20,14 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/documents/sites/list-available`,
-                    params: {
-                        excludeMainSite: queryArg.excludeMainSite,
-                    },
+                    params: { excludeMainSite: queryArg.excludeMainSite },
                 }),
                 providesTags: ["Documents"],
             }),
             documentDocTypeList: build.query<DocumentDocTypeListApiResponse, DocumentDocTypeListApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/documents/doc-types`,
-                    params: {
-                        type: queryArg["type"],
-                    },
+                    params: { type: queryArg["type"] },
                 }),
                 providesTags: ["Documents"],
             }),
@@ -114,7 +110,7 @@ export type DocumentPageStreamPreviewApiArg = {
     /** Id of the page */
     id: number;
 };
-export type DocumentReplaceContentApiResponse = unknown;
+export type DocumentReplaceContentApiResponse = /** status 200 Successfully replaced contents of the document */ void;
 export type DocumentReplaceContentApiArg = {
     /** SourceId of the document */
     sourceId: number;
@@ -161,17 +157,17 @@ export type DocumentAdd = {
     /** Type */
     type: string;
     /** Title */
-    title: string | null;
+    title: any;
     /** Navigation name */
-    navigationName: string | null;
+    navigationName: any;
     /** Document type ID */
-    docTypeId: string | null;
+    docTypeId: any;
     /** Id of the base document for new translation */
-    translationsSourceId: number | null;
+    translationsSourceId: any;
     /** Document language when adding a translation */
-    language: string | null;
+    language: any;
     /** Id of the base document for content */
-    inheritanceSourceId: number | null;
+    inheritanceSourceId: any;
 };
 export type Site = {
     /** AdditionalAttributes */
@@ -185,9 +181,9 @@ export type Site = {
     /** Domain */
     domain: string;
     /** ID of the root */
-    rootId?: number | null;
+    rootId?: any;
     /** Root path */
-    rootPath?: string | null;
+    rootPath?: any;
 };
 export type DocType = {
     /** AdditionalAttributes */
@@ -201,17 +197,17 @@ export type DocType = {
     /** Type */
     type: string;
     /** Group */
-    group: string | null;
+    group: any;
     /** Controller */
-    controller: string | null;
+    controller: any;
     /** Template */
-    template: string | null;
+    template: any;
     /** Priority */
     priority: number;
     /** Creation date */
-    creationDate: number | null;
+    creationDate: any;
     /** Modification date */
-    modificationDate: number | null;
+    modificationDate: any;
     /** Static generator enabled */
     staticGeneratorEnabled: boolean;
     /** Is writeable */
@@ -235,25 +231,25 @@ export type Element = {
     /** ID of owner */
     userOwner: number;
     /** User that modified the element */
-    userModification: number | null;
+    userModification: any;
     /** Locked */
-    locked: string | null;
+    locked: any;
     /** Is locked */
     isLocked: boolean;
     /** Creation date */
-    creationDate: number | null;
+    creationDate: any;
     /** Modification date */
-    modificationDate: number | null;
+    modificationDate: any;
 };
 export type CustomAttributes = {
     /** Custom Icon */
     icon: ElementIcon | null;
     /** Custom Tooltip */
-    tooltip: string | null;
+    tooltip: any;
     /** AdditionalIcons */
     additionalIcons: string[];
     /** Custom Key/Filename */
-    key: string | null;
+    key: any;
     /** Additional Css Classes */
     additionalCssClasses: string[];
 };
@@ -279,9 +275,9 @@ export type Permissions = {
 };
 export type DocumentPermissions = Permissions & {
     /** Save */
-    save: boolean;
+    save?: boolean;
     /** Unpublish */
-    unpublish: boolean;
+    unpublish?: boolean;
 };
 export type Document = Element & {
     /** AdditionalAttributes */
@@ -291,107 +287,107 @@ export type Document = Element & {
     /** Custom attributes for the tree */
     customAttributes?: CustomAttributes;
     /** Has workflow available */
-    hasWorkflowAvailable: boolean;
+    hasWorkflowAvailable?: boolean;
     /** Full path */
-    fullPath: string;
+    fullPath?: string;
     /** Published */
-    published: boolean;
+    published?: boolean;
     /** Type */
-    type: string;
+    type?: string;
     /** Key */
-    key: string;
+    key?: string;
     /** Has children */
-    hasChildren: boolean;
+    hasChildren?: boolean;
     /** Workflow permissions */
-    hasWorkflowWithPermissions: boolean;
-    permissions: DocumentPermissions;
+    hasWorkflowWithPermissions?: boolean;
+    permissions?: DocumentPermissions;
 };
 export type DocumentFolder = Document;
 export type Email = Document & {
     /** Controller */
-    controller: string;
+    controller?: string;
     /** Template */
-    template: string;
+    template?: string;
     /** Main document ID */
-    contentMainDocumentId: number;
+    contentMainDocumentId?: number;
     /** Supports main content */
-    supportsContentMain: boolean;
+    supportsContentMain?: boolean;
     /** Is missing required editable */
-    missingRequiredEditable: boolean;
+    missingRequiredEditable?: boolean;
     /** Is static generator enabled */
-    staticGeneratorEnabled: boolean;
+    staticGeneratorEnabled?: boolean;
     /** Lifetime of static generator */
-    staticGeneratorLifetime: number;
+    staticGeneratorLifetime?: number;
     /** Subject */
-    subject: string;
+    subject?: string;
     /** From */
-    from: string;
+    from?: string;
     /** Reply to */
-    replyTo: string;
+    replyTo?: string;
     /** To */
-    to: string;
+    to?: string;
     /** CC */
-    cc: string;
+    cc?: string;
     /** BCC */
-    bcc: string;
+    bcc?: string;
 };
 export type Hardlink = Document & {
     /** Source ID */
-    sourceId: number | null;
+    sourceId?: any;
     /** Properties from source */
-    propertiesFromSource: boolean;
+    propertiesFromSource?: boolean;
     /** Children from source */
-    childrenFromSource: boolean;
+    childrenFromSource?: boolean;
 };
 export type Link = Document & {
     /** Internal ID */
-    internal: number | null;
+    internal?: any;
     /** Internal type */
-    internalType: string | null;
+    internalType?: any;
     /** Direct */
-    direct: string;
+    direct?: string;
     /** Link type */
-    linkType: string;
+    linkType?: string;
     /** Href */
-    href: string;
+    href?: string;
 };
 export type Page = Document & {
     /** Controller */
-    controller: string;
+    controller?: string;
     /** Template */
-    template: string;
+    template?: string;
     /** Main document ID */
-    contentMainDocumentId: number;
+    contentMainDocumentId?: number;
     /** Supports main content */
-    supportsContentMain: boolean;
+    supportsContentMain?: boolean;
     /** Is missing required editable */
-    missingRequiredEditable: boolean;
+    missingRequiredEditable?: boolean;
     /** Is static generator enabled */
-    staticGeneratorEnabled: boolean;
+    staticGeneratorEnabled?: boolean;
     /** Lifetime of static generator */
-    staticGeneratorLifetime: number;
+    staticGeneratorLifetime?: number;
     /** Title */
-    title: string | null;
+    title?: any;
     /** Description */
-    description: string | null;
+    description?: any;
     /** Pretty Url */
-    prettyUrl: string | null;
+    prettyUrl?: any;
 };
 export type Snippet = Document & {
     /** Controller */
-    controller: string;
+    controller?: string;
     /** Template */
-    template: string;
+    template?: string;
     /** Main document ID */
-    contentMainDocumentId: number;
+    contentMainDocumentId?: number;
     /** Supports main content */
-    supportsContentMain: boolean;
+    supportsContentMain?: boolean;
     /** Is missing required editable */
-    missingRequiredEditable: boolean;
+    missingRequiredEditable?: boolean;
     /** Is static generator enabled */
-    staticGeneratorEnabled: boolean;
+    staticGeneratorEnabled?: boolean;
     /** Lifetime of static generator */
-    staticGeneratorLifetime: number;
+    staticGeneratorLifetime?: number;
 };
 export const {
     useDocumentAddMutation,

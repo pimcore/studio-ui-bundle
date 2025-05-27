@@ -14,7 +14,7 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type MercureCreateCookieApiResponse = unknown;
+export type MercureCreateCookieApiResponse = /** status 200 Retrieve JWT token for Mercure hub as cookie */ void;
 export type MercureCreateCookieApiArg = void;
 export type Error = {
     /** Message */
