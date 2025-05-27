@@ -13,6 +13,7 @@ import { type DropdownProps as AntdDropdownProps, type MenuProps, type MenuRef }
 import { DropdownInner } from './dropdown-inner'
 import { useStyle } from './dropdown.styles'
 import { type ItemType } from '../menu/menu'
+import cn from 'classnames'
 
 export type { ItemType, MenuItemType, SubMenuItemType, MenuItemGroupType, MenuItemCustomType } from '../menu/menu'
 export interface DropdownMenuProps extends Omit<MenuProps, 'items'> {
@@ -30,19 +31,10 @@ export const Dropdown = ({ menu, ...props }: DropdownProps): React.JSX.Element =
   const { styles } = useStyle()
 
   return (
-    <SelectionProvider
-      selectedKeys={ selectedKeys }
-      selectionType={ selectionType }
-    >
-      <DropdownInner
-        { ...props }
-        menu={ {
-          ...menu,
-          items: filteredItems
-        } }
-        onSelect={ onSelect }
-        overlayClassName={ [props.overlayClassName, styles.dropdown].join(' ') }
-      />
-    </SelectionProvider>
+    <DropdownInner
+      { ...props }
+      menu={ menu }
+      overlayClassName={ cn(props.overlayClassName, styles.dropdown) }
+    />
   )
 }
