@@ -793,6 +793,7 @@ user-menu.notification.send: Send
 user-menu.notification.cancel: Cancel
 user-menu.notification.modal.send-a-notification: Send a notification
 user-menu.notification.modal.to: To
+user-menu.notification.modal.selec: Select
 user-menu.notification.modal.title: Title
 user-menu.notification.modal.message: Message
 user-menu.notification.modal.add-an-attachment: Add an attachment

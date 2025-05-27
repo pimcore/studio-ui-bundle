@@ -87,6 +87,9 @@ export const SendNotificationModal = ({ open, ...props }: SendNotificationModalP
             rules={ [{ required: true, message: t('user-menu.notification.modal.form.validation.provide-recipient') }] }
           >
             <UserSelect
+            showSearch={true}
+            optionFilterProp="label"
+            placeholder={t('user-menu.notification.modal.select')}
               onChange={ (value) => {
                 form.setFieldValue('to', value)
               } }
