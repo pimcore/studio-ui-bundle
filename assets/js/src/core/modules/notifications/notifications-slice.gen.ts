@@ -54,24 +54,24 @@ export type NotificationGetCollectionApiArg = {
         filters?: GridFilter;
     };
 };
-export type NotificationDeleteAllApiResponse = /** status 200 Successfully deleted all notifications */ void;
+export type NotificationDeleteAllApiResponse = unknown;
 export type NotificationDeleteAllApiArg = void;
 export type NotificationGetByIdApiResponse = /** status 200 Notification data as JSON */ Notification;
 export type NotificationGetByIdApiArg = {
     /** Id of the notification */
     id: number;
 };
-export type NotificationReadByIdApiResponse = /** status 200 Successfully marked notification as read */ void;
+export type NotificationReadByIdApiResponse = unknown;
 export type NotificationReadByIdApiArg = {
     /** Id of the notification */
     id: number;
 };
-export type NotificationDeleteByIdApiResponse = /** status 200 Successfully deleted notification */ void;
+export type NotificationDeleteByIdApiResponse = unknown;
 export type NotificationDeleteByIdApiArg = {
     /** Id of the notification */
     id: number;
 };
-export type NotificationSendApiResponse = /** status 200 Successfully sent notification */ void;
+export type NotificationSendApiResponse = unknown;
 export type NotificationSendApiArg = {
     sendNotificationParameters: SendEmailParameters;
 };
@@ -93,7 +93,7 @@ export type NotificationListItem = {
     /** creation date */
     creationDate?: number;
     /** sender */
-    sender: any;
+    sender: string | null;
 };
 export type Error = {
     /** Message */
@@ -119,13 +119,13 @@ export type GridFilter = {
 };
 export type Notification = NotificationListItem & {
     /** message */
-    message?: any;
+    message: string | null;
     /** payload */
-    payload?: any;
+    payload: string | null;
     /** linked attachment type */
-    attachmentType?: any;
+    attachmentType: string | null;
     /** linked attachment ID */
-    attachmentId?: any;
+    attachmentId: number | null;
 };
 export type SendEmailParameters = {
     /** recipient ID */
@@ -135,9 +135,9 @@ export type SendEmailParameters = {
     /** message */
     message: string;
     /** type of the attachment */
-    attachmentType?: "asset" | "document" | "object";
+    attachmentType?: ("asset" | "document" | "object") | ("asset" | "document" | "object");
     /** ID of the attachment */
-    attachmentId?: any;
+    attachmentId?: number | null;
 };
 export const {
     useNotificationGetCollectionQuery,
