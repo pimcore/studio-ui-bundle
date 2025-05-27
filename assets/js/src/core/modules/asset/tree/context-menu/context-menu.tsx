@@ -8,8 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
-import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import React, { type ReactElement } from 'react'
 import { type TreeContextMenuProps } from '@Pimcore/components/element-tree/element-tree'
 import { defaultProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -28,8 +27,9 @@ import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permiss
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
 import { useTranslation } from 'react-i18next'
 import { useUpload } from '../../actions/upload/use-upload'
+import { type IMenuProps, Menu } from '@Pimcore/components/menu/menu'
 
-export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Element => {
+export const AssetTreeContextMenu = (props: TreeContextMenuProps): ReactElement => {
   const { t } = useTranslation()
   const node = props.node ?? defaultProps
   const { createZipDownloadTreeContextMenuItem } = useZipDownload({ type: 'folder' })
@@ -49,7 +49,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     !checkElementPermission(node.permissions, 'create') ||
     node?.type !== 'folder'
 
-  const items: DropdownMenuProps['items'] = [
+  const items: IMenuProps['items'] = [
     {
       label: t('element.tree.context-menu.new-assets'),
       key: 'new-assets',
@@ -94,11 +94,8 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
   ]
 
   return (
-    <Dropdown
-      menu={ { items } }
-      trigger={ ['contextMenu'] }
-    >
-      {props.children}
-    </Dropdown>
+    <Menu
+      items={ items }
+    />
   )
 }

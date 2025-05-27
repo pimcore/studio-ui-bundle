@@ -11,7 +11,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { defaultProps, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
-import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useAddFolder } from '@Pimcore/modules/element/actions/add-folder/use-add-folder'
 import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
@@ -22,10 +21,10 @@ import { useLock } from '@Pimcore/modules/element/actions/lock/use-lock'
 import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
 import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
 import { usePublish } from '@Pimcore/modules/element/actions/publish/use-publish'
+import { type IMenuProps, Menu } from '@Pimcore/components/menu/menu'
 
 export interface DocumentTreeContextMenuProps {
   node: TreeNodeProps
-  children: React.ReactNode
 }
 
 export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): React.JSX.Element => {
@@ -40,7 +39,7 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
   const { unpublishTreeContextMenuItem } = useUnpublish('document')
   const { publishTreeContextMenuItem } = usePublish('document')
 
-  const items: DropdownMenuProps['items'] = [
+  const items: IMenuProps['items'] = [
     addFolderTreeContextMenuItem(node),
     renameTreeContextMenuItem(node),
     copyTreeContextMenuItem(node),
@@ -73,11 +72,8 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
   ]
 
   return (
-    <Dropdown
-      menu={ { items } }
-      trigger={ ['contextMenu'] }
-    >
-      {props.children}
-    </Dropdown>
+    <Menu
+      items={ items }
+    />
   )
 }
