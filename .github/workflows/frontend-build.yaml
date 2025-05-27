@@ -45,7 +45,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./assets
-        run: npm ci --include=dev
+        run: npm ci
 
   api-client-build:
     needs: install
