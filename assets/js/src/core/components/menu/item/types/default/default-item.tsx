@@ -12,8 +12,6 @@ import React, { type ComponentType } from 'react'
 import { type MenuItemType } from '@Pimcore/components/menu/menu'
 import { Flex, Menu } from 'antd'
 import { useStyles } from './default-item.styles'
-import { SelectionButton } from '@Pimcore/components/menu/selection/selection-button'
-import { useSelection } from '@Pimcore/components/menu/selection/hooks/use-selection'
 import { Spin } from '@Pimcore/components/spin/spin'
 
 export interface DefaultItemProps extends MenuItemType {
@@ -23,14 +21,9 @@ export interface DefaultItemProps extends MenuItemType {
 export const WithExtendedApi = (Component: typeof Menu.Item): ComponentType<DefaultItemProps> => {
   const DecoratedMenuItem = ({ label, key, selectable, id, icon, ...props }: DefaultItemProps): React.JSX.Element => {
     const { styles } = useStyles()
-    const { selectionType } = useSelection()
     const classes = [styles.dropdownItem]
 
     classes.push('is-custom-item')
-
-    if (selectable === true && selectionType !== 'disabled') {
-      classes.push('default-item--with-icon-right')
-    }
 
     return (
       <Component
@@ -57,12 +50,6 @@ export const WithExtendedApi = (Component: typeof Menu.Item): ComponentType<Defa
           <>{props.extra}</>
           )}
 
-          {selectable === true && selectionType !== 'disabled' && (
-            <SelectionButton
-              id={ id }
-              key={ id }
-            />
-          )}
         </Flex>
       </Component>
     )

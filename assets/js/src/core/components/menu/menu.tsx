@@ -16,7 +16,6 @@ import {
 
 } from 'antd/es/menu/interface'
 import { MenuItem } from './item/menu-item'
-import { SelectionProvider, SelectionType } from './selection/selection-provider'
 
 type OldItemType = Extract<MenuProps['items'], any[]>[0]
 type OldMenuItemGroupType = Extract<OldItemType, { type: 'group' }>
@@ -43,11 +42,9 @@ export interface MenuItemCustomType extends Pick<MenuItemType, 'key'> {
 
 export type ItemType<T extends MenuItemType = MenuItemType> = T | MenuItemGroupType | SubMenuItemType | MenuDividerType | MenuItemCustomType | null
 
-export interface IMenuProps extends Omit<MenuProps, 'items' | 'selectedKeys' | 'onSelect'> {
+export interface IMenuProps extends Omit<MenuProps, 'items' > {
   items?: ItemType[]
   ref?: React.Ref<MenuRef>
-  selectedKeys?: React.Key[]
-  onSelect?: (keys: React.Key[]) => void
 }
 
 export const Menu = (props: IMenuProps): JSX.Element => {
@@ -70,26 +67,12 @@ export const Menu = (props: IMenuProps): JSX.Element => {
     return true
   })
 
-  const { selectable, multiple, selectedKeys } = props
-  let selectionType = SelectionType.Disabled
-
-  if (selectable === true) {
-    selectionType = multiple === true ? SelectionType.Multiple : SelectionType.Single
-  }
-
   return (
-    <SelectionProvider
-      selectedKeys={ selectedKeys }
-      selectionType={ selectionType }
-    >
       <AntMenu
         { ...props }
         items={ undefined }
-        onSelect={ undefined }
-        selectedKeys={ undefined }
       >
         {filteredItems?.map((item: ItemType) => MenuItem({ item }))}
       </AntMenu>
-    </SelectionProvider>
   )
 }

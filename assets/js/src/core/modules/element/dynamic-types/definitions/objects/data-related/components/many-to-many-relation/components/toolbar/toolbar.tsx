@@ -19,7 +19,7 @@ import { ModalUploadButton } from '@Pimcore/components/modal-upload/components/m
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
-import { SelectionType } from '@Pimcore/components/menu/selection/selection-provider'
+import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { createElementSelectorAreas, type IRelationAllowedTypesDataComponent } from '../../../../helpers/relations/allowed-types'
 import { type ManyToManyRelationValueItem } from '../../hooks/use-value'
 import { type SelectedItem } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'

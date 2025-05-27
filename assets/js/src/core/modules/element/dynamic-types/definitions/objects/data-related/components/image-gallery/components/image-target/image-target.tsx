@@ -15,7 +15,7 @@ import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-
 import type { ImageGalleryValueItem } from '../../image-gallery'
 import { useTranslation } from 'react-i18next'
 import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
-import { SelectionType } from '@Pimcore/components/menu/selection/selection-provider'
+import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { isEmpty } from 'lodash'
 import { useStyles } from '../../image-gallery.styles'
 
