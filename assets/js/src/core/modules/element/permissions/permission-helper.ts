@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { ElementPermissionKeys, type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
+import { type ElementPermissionKeys, type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { isUndefined } from 'lodash'
 
 export const checkElementPermission = (permissions: ElementPermissions | undefined, permission: ElementPermissionKeys): boolean => {
