@@ -13,11 +13,12 @@ import { type SendEmailParameters, useNotificationSendMutation } from '../notifi
 
 interface UseNotificationReturn {
   sendNotification: (notification: SendEmailParameters, onSuccess?: () => void) => Promise<void>
+  isLoading: boolean
 }
 
 export const useNotification = (): UseNotificationReturn => {
-  const [sendNotificationMutation] = useNotificationSendMutation()
-
+  const [sendNotificationMutation, {isLoading}] = useNotificationSendMutation()
+  
   const sendNotification = async (notification: SendEmailParameters, onSuccess?: () => void): Promise<void> => {
     const sendNottificationTask = sendNotificationMutation({
       sendNotificationParameters: notification
@@ -40,6 +41,7 @@ export const useNotification = (): UseNotificationReturn => {
   }
 
   return {
-    sendNotification
+    sendNotification,
+    isLoading
   }
 }

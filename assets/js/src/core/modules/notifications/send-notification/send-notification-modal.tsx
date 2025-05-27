@@ -18,6 +18,7 @@ import { useNotification } from '../hooks/use-notification'
 import { UserSelect } from '../../user/components/user-select/user-select'
 import { Input } from '@Pimcore/components/input/input'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
+import { GeneralError, trackError } from '@sdk/modules/app'
 
 interface SendNotificationModalProps {
   open: boolean
@@ -27,7 +28,7 @@ interface SendNotificationModalProps {
 export const SendNotificationModal = ({ open, ...props }: SendNotificationModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
-  const { sendNotification } = useNotification()
+  const { sendNotification, isLoading } = useNotification()
 
   const onClose = (): void => {
     form.resetFields()
@@ -48,7 +49,7 @@ export const SendNotificationModal = ({ open, ...props }: SendNotificationModalP
         onClose()
       })
     }).catch((error) => {
-      console.error('Validation failed:', error)
+      trackError(new GeneralError("Validation of notification failed"))
     })
   }
 
