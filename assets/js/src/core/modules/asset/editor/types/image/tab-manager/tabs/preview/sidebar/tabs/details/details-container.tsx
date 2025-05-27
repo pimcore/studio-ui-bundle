@@ -80,7 +80,7 @@ const DetailContainer = (): React.JSX.Element => {
       .then(async (response) => await response.blob())
       .then((imageBlob) => {
         const imageURL = URL.createObjectURL(imageBlob)
-        downloadShortcutsHandlerForCustomSettings(imageData.filename!, imageURL, format)
+        downloadShortcutsHandlerForCustomSettings(imageData.filename, imageURL, format)
       })
       .catch(() => {
         trackError(new GeneralError('Could not download image'))
@@ -101,7 +101,7 @@ const DetailContainer = (): React.JSX.Element => {
       .then((imageBlob) => {
         const imageURL = URL.createObjectURL(imageBlob)
 
-        downloadShortcutsHandler(imageData.filename!, imageURL, format)
+        downloadShortcutsHandler(imageData.filename, imageURL, format)
       })
       .catch(() => { trackError(new GeneralError('Could not prepare download')) })
   }

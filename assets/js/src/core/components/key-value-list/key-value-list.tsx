@@ -19,7 +19,7 @@ import { useStyles } from './key-value-list.styles'
 
 export interface KeyValueListItem {
   key: string
-  value: string
+  value: string | number | object | null
   withoutTranslate?: boolean
 }
 
@@ -71,7 +71,7 @@ export const KeyValueList = ({ items, skipEmpty = true }: KeyValueListProps): Re
   const renderItem = (item: KeyValueListItem): React.JSX.Element => {
     let fieldValue: any = item?.value
 
-    if (FIELDS_TO_CONVERT_TO_DATE.includes(item.key)) {
+    if (FIELDS_TO_CONVERT_TO_DATE.includes(item.key) && !isObject(item?.value)) {
       fieldValue = formatDateTime({ timestamp: item?.value ?? null, dateStyle: 'short', timeStyle: 'short' })
     }
 

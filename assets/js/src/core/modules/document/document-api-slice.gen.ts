@@ -14,17 +14,20 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Documents"],
             }),
-            documentsListAvailableSites: build.query<
-                DocumentsListAvailableSitesApiResponse,
-                DocumentsListAvailableSitesApiArg
-            >({
+            documentClone: build.mutation<DocumentCloneApiResponse, DocumentCloneApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/documents/sites/list-available`,
-                    params: {
-                        excludeMainSite: queryArg.excludeMainSite,
-                    },
+                    url: `/pimcore-studio/api/documents/${queryArg.id}/clone/${queryArg.parentId}`,
+                    method: "POST",
+                    body: queryArg.documentCloneParameters,
                 }),
-                providesTags: ["Documents"],
+                invalidatesTags: ["Documents"],
+            }),
+            documentConvert: build.mutation<DocumentConvertApiResponse, DocumentConvertApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/${queryArg.id}/convert/${queryArg["type"]}`,
+                    method: "POST",
+                }),
+                invalidatesTags: ["Documents"],
             }),
             documentDocTypeList: build.query<DocumentDocTypeListApiResponse, DocumentDocTypeListApiArg>({
                 query: (queryArg) => ({
@@ -46,12 +49,80 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/documents/${queryArg.id}/page/stream/preview` }),
                 providesTags: ["Documents"],
             }),
+            documentAvailableControllersList: build.query<
+                DocumentAvailableControllersListApiResponse,
+                DocumentAvailableControllersListApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/documents/get-available-controllers` }),
+                providesTags: ["Documents"],
+            }),
+            documentAvailableTemplatesList: build.query<
+                DocumentAvailableTemplatesListApiResponse,
+                DocumentAvailableTemplatesListApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/documents/get-available-templates` }),
+                providesTags: ["Documents"],
+            }),
             documentReplaceContent: build.mutation<DocumentReplaceContentApiResponse, DocumentReplaceContentApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/documents/${queryArg.sourceId}/replace/${queryArg.targetId}`,
                     method: "POST",
                 }),
                 invalidatesTags: ["Documents"],
+            }),
+            documentsListAvailableSites: build.query<
+                DocumentsListAvailableSitesApiResponse,
+                DocumentsListAvailableSitesApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/sites/list-available`,
+                    params: {
+                        excludeMainSite: queryArg.excludeMainSite,
+                    },
+                }),
+                providesTags: ["Documents"],
+            }),
+            documentUpdateSite: build.mutation<DocumentUpdateSiteApiResponse, DocumentUpdateSiteApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/site/${queryArg.id}`,
+                    method: "POST",
+                    body: queryArg.update20Site,
+                }),
+                invalidatesTags: ["Documents"],
+            }),
+            documentDeleteSite: build.mutation<DocumentDeleteSiteApiResponse, DocumentDeleteSiteApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/documents/site/${queryArg.id}`, method: "DELETE" }),
+                invalidatesTags: ["Documents"],
+            }),
+            documentAddTranslation: build.mutation<DocumentAddTranslationApiResponse, DocumentAddTranslationApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/translations/${queryArg.id}/add/${queryArg.translationId}`,
+                    method: "POST",
+                }),
+                invalidatesTags: ["Documents"],
+            }),
+            documentDeleteTranslation: build.mutation<
+                DocumentDeleteTranslationApiResponse,
+                DocumentDeleteTranslationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/translations/${queryArg.id}/delete/${queryArg.translationId}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Documents"],
+            }),
+            documentGetTranslations: build.query<DocumentGetTranslationsApiResponse, DocumentGetTranslationsApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/documents/translations/${queryArg.id}` }),
+                providesTags: ["Documents"],
+            }),
+            documentGetTranslationParentByLanguage: build.query<
+                DocumentGetTranslationParentByLanguageApiResponse,
+                DocumentGetTranslationParentByLanguageApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/translations/${queryArg.id}/get-parent/${queryArg.language}`,
+                }),
+                providesTags: ["Documents"],
             }),
             documentGetTree: build.query<DocumentGetTreeApiResponse, DocumentGetTreeApiArg>({
                 query: (queryArg) => ({
@@ -83,12 +154,24 @@ export type DocumentAddApiArg = {
     parentId: number;
     documentAddParameters: DocumentAdd;
 };
-export type DocumentsListAvailableSitesApiResponse = /** status 200 List of available sites */ {
-    items: Site[];
+export type DocumentCloneApiResponse =
+    /** status 201 Successfully copied parent document and created <strong>jobRun</strong> for copying children */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type DocumentCloneApiArg = {
+    /** Id of the document */
+    id: number;
+    /** ParentId of the document */
+    parentId: number;
+    documentCloneParameters: DocumentCloneParameters;
 };
-export type DocumentsListAvailableSitesApiArg = {
-    /** Exclude main site from the list */
-    excludeMainSite?: boolean;
+export type DocumentConvertApiResponse = unknown;
+export type DocumentConvertApiArg = {
+    /** Id of the document */
+    id: number;
+    /** Document type to convert to */
+    type: string;
 };
 export type DocumentDocTypeListApiResponse = /** status 200 List of all DocTypes */ {
     items: DocType[];
@@ -114,12 +197,68 @@ export type DocumentPageStreamPreviewApiArg = {
     /** Id of the page */
     id: number;
 };
+export type DocumentAvailableControllersListApiResponse =
+    /** status 200 document_available_controllers_list_success_response */ {
+        items: DocumentController[];
+    };
+export type DocumentAvailableControllersListApiArg = void;
+export type DocumentAvailableTemplatesListApiResponse =
+    /** status 200 document_available_templates_list_success_response */ {
+        items: DocumentTemplate[];
+    };
+export type DocumentAvailableTemplatesListApiArg = void;
 export type DocumentReplaceContentApiResponse = unknown;
 export type DocumentReplaceContentApiArg = {
     /** SourceId of the document */
     sourceId: number;
     /** TargetId of the document */
     targetId: number;
+};
+export type DocumentsListAvailableSitesApiResponse = /** status 200 List of available sites */ {
+    items: Site[];
+};
+export type DocumentsListAvailableSitesApiArg = {
+    /** Exclude main site from the list */
+    excludeMainSite?: boolean;
+};
+export type DocumentUpdateSiteApiResponse = unknown;
+export type DocumentUpdateSiteApiArg = {
+    /** Id of the document */
+    id: number;
+    update20Site: Update20Site;
+};
+export type DocumentDeleteSiteApiResponse = unknown;
+export type DocumentDeleteSiteApiArg = {
+    /** Id of the document */
+    id: number;
+};
+export type DocumentAddTranslationApiResponse = unknown;
+export type DocumentAddTranslationApiArg = {
+    /** Id of the document */
+    id: number;
+    /** TranslationId of the document */
+    translationId: number;
+};
+export type DocumentDeleteTranslationApiResponse = unknown;
+export type DocumentDeleteTranslationApiArg = {
+    /** Id of the document */
+    id: number;
+    /** TranslationId of the document */
+    translationId: number;
+};
+export type DocumentGetTranslationsApiResponse =
+    /** status 200 Get all existing translations */ Document20Translation20Links;
+export type DocumentGetTranslationsApiArg = {
+    /** Id of the document */
+    id: number;
+};
+export type DocumentGetTranslationParentByLanguageApiResponse =
+    /** status 200 Parent translation document data */ Document20Translation20Parent;
+export type DocumentGetTranslationParentByLanguageApiArg = {
+    /** Id of the document */
+    id: number;
+    /** Language code for the translation parent */
+    language: string;
 };
 export type DocumentGetTreeApiResponse = /** status 200 document_get_tree_success_description */ {
     totalItems: number;
@@ -173,21 +312,15 @@ export type DocumentAdd = {
     /** Id of the base document for content */
     inheritanceSourceId: number | null;
 };
-export type Site = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** ID */
-    id: number;
-    /** Domains */
-    domains: string[];
-    /** Domain */
-    domain: string;
-    /** ID of the root */
-    rootId?: number | null;
-    /** Root path */
-    rootPath?: string | null;
+export type DocumentCloneParameters = {
+    /** Language for the new translation */
+    language: string | null;
+    /** Enable Inheritance */
+    enableInheritance: boolean;
+    /** Recursive */
+    recursive: boolean;
+    /** Update References */
+    updateReferences: boolean;
 };
 export type DocType = {
     /** AdditionalAttributes */
@@ -393,12 +526,92 @@ export type Snippet = Document & {
     /** Lifetime of static generator */
     staticGeneratorLifetime: number;
 };
+export type DocumentController = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Name */
+    name: string;
+};
+export type DocumentTemplate = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Path */
+    path: string;
+};
+export type Site = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID */
+    id: number;
+    /** Domains */
+    domains: string[];
+    /** Domain */
+    domain: string;
+    /** ID of the root */
+    rootId: number | null;
+    /** Root path */
+    rootPath: string | null;
+};
+export type Update20Site = {
+    /** Main domain */
+    mainDomain: string;
+    /** Domains */
+    domains: string[];
+    /** Error document */
+    errorDocument: string;
+    /** Localized error documents */
+    localizedErrorDocuments: object;
+    /** Redirect to main domain */
+    redirectToMainDomain: boolean;
+};
+export type Document20Translation20Link = {
+    /** Language */
+    language: string;
+    /** Document Id */
+    documentId: number;
+};
+export type Document20Translation20Links = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Language */
+    language: string;
+    /** Translation links */
+    translationLinks?: Document20Translation20Link[];
+};
+export type Document20Translation20Parent = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Document Id */
+    id: number;
+    /** Document full path */
+    fullPath: string;
+};
 export const {
     useDocumentAddMutation,
-    useDocumentsListAvailableSitesQuery,
+    useDocumentCloneMutation,
+    useDocumentConvertMutation,
     useDocumentDocTypeListQuery,
     useDocumentGetByIdQuery,
     useDocumentPageStreamPreviewQuery,
+    useDocumentAvailableControllersListQuery,
+    useDocumentAvailableTemplatesListQuery,
     useDocumentReplaceContentMutation,
+    useDocumentsListAvailableSitesQuery,
+    useDocumentUpdateSiteMutation,
+    useDocumentDeleteSiteMutation,
+    useDocumentAddTranslationMutation,
+    useDocumentDeleteTranslationMutation,
+    useDocumentGetTranslationsQuery,
+    useDocumentGetTranslationParentByLanguageQuery,
     useDocumentGetTreeQuery,
 } = injectedRtkApi;

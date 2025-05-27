@@ -21,7 +21,7 @@ import {
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
-import { isEmpty } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDataObjectAddMutation } from '../../data-object-api-slice.gen'
@@ -49,7 +49,7 @@ export const useAddObject = (): UseAddObjectHookReturn => {
     const structuredClassDefinitions = [...classDefinitions]
       .sort((a, b) => a.name.localeCompare(b.name))
       .reduce<Record<string, ClassDefinitionListItem[]>>((acc, classDefinition) => {
-      const groupName = isEmpty(classDefinition.group)
+      const groupName = isNil(classDefinition.group) || isEmpty(classDefinition.group)
         ? 'undefined'
         : classDefinition.group
 

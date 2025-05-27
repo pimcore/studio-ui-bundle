@@ -25,7 +25,7 @@ export const withDraggable = (Component: typeof TreeNode): typeof TreeNode => {
 
     return (
       <Draggable
-        info={ { icon: metaData!.icon!.value, title: metaData!.key!, type: 'data-object', data: { ...metaData } } }
+        info={ { icon: metaData!.icon!.value, title: metaData!.key, type: 'data-object', data: { ...metaData } } }
       >
         <Component
           { ...props }
