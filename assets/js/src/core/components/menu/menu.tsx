@@ -68,11 +68,11 @@ export const Menu = (props: IMenuProps): JSX.Element => {
   })
 
   return (
-      <AntMenu
-        { ...props }
-        items={ undefined }
-      >
-        {filteredItems?.map((item: ItemType) => MenuItem({ item }))}
-      </AntMenu>
+    <AntMenu
+      { ...props }
+      items={ undefined }
+    >
+      {filteredItems?.map((item: ItemType) => MenuItem({ item }))}
+    </AntMenu>
   )
 }
