@@ -23,6 +23,7 @@ import { Flex, Icon, Split } from '@sdk/components'
 import { useStyles } from './notifications.styles'
 import { NotificationAttachment } from './notification-attachment'
 import { useElementHelper } from '@sdk/modules/element'
+import { isNil } from 'lodash'
 
 export interface NotificationDetailProps {
   notification: NotificationListItem
@@ -41,7 +42,7 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
   const { mapToElementType } = useElementHelper()
 
   const elementType = notificationDetail?.attachmentType !== undefined
-    ? mapToElementType(notificationDetail.attachmentType as string)
+    ? mapToElementType(notificationDetail.attachmentType!)
     : undefined
 
   const { styles } = useStyles()
@@ -85,14 +86,14 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     return (
       <Content
         loading={ detailLoading }
-        none={ notificationDetail === undefined || notificationDetail.message.length === 0 }
+        none={ notificationDetail === undefined || notificationDetail.message?.length === 0 }
       >
         <Flex
           gap={ 0 }
           vertical
         >
           {notificationDetail !== undefined && typeof notificationDetail.message === 'string' && (<Paragraph>{respectLineBreak(notificationDetail.message)}</Paragraph>)}
-          {notificationDetail?.attachmentId !== undefined && elementType !== undefined && (
+          {!isNil(notificationDetail?.attachmentId) && elementType !== undefined && (
           <NotificationAttachment
             attachmentId={ notificationDetail.attachmentId }
             attachmentType={ elementType }

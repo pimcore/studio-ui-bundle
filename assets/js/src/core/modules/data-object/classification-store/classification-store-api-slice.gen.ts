@@ -63,7 +63,10 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/classification-store/layout-by-collection/${queryArg.collectionId}`,
-                    params: { objectId: queryArg.objectId, fieldName: queryArg.fieldName },
+                    params: {
+                        objectId: queryArg.objectId,
+                        fieldName: queryArg.fieldName,
+                    },
                 }),
                 providesTags: ["Classification Store"],
             }),
@@ -73,7 +76,10 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/classification-store/layout-by-group/${queryArg.groupId}`,
-                    params: { objectId: queryArg.objectId, fieldName: queryArg.fieldName },
+                    params: {
+                        objectId: queryArg.objectId,
+                        fieldName: queryArg.fieldName,
+                    },
                 }),
                 providesTags: ["Classification Store"],
             }),
@@ -190,7 +196,7 @@ export type ClassificationStoreGroup = {
     /** Name */
     name: string;
     /** Description */
-    description?: any;
+    description?: string | null;
 };
 export type ClassificationStoreKeyGroupRelation = {
     /** AdditionalAttributes */
@@ -206,9 +212,9 @@ export type ClassificationStoreKeyGroupRelation = {
     /** Group Name */
     groupName: string;
     /** Key Description */
-    keyDescription?: any;
+    keyDescription?: string | null;
     /** Key Description */
-    groupDescription?: any;
+    groupDescription?: string | null;
 };
 export type ClassificationStoreCollection2 = {
     /** ID */
@@ -230,7 +236,7 @@ export type ClassificationStoreGroupLayout2 = {
     /** Name */
     name: string;
     /** Description */
-    description?: any;
+    description?: string | null;
     /** Description */
     keys: ClassificationStoreCollection2[];
 };

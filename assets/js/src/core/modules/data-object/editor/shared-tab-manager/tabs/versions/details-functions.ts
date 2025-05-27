@@ -64,7 +64,7 @@ export const getFormattedDataStructure = async ({ objectId, layout, versionData,
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
           if (!isEmpty(processedDataItem?.fieldData?.children) && !fieldTypesRequiringChildren.includes(processedDataItem?.fieldData?.fieldtype as DynamicTypesList)) {
-            const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, processedDataItem?.fieldData?.title as string)
+            const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, processedDataItem?.fieldData?.title ?? '')
 
             return await processLayoutData({ data: [processedDataItem?.fieldData], objectValuesData: { ...objectValuesData, [processedDataItem?.fieldData?.name]: processedDataItem?.fieldValue }, fieldBreadcrumbTitle: breadcrumbTitle })
           }

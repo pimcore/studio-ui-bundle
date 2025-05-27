@@ -24,7 +24,9 @@ const api = baseApi.enhanceEndpoints({
   }
 })
 
-export type ElementPermissions = AssetPermissions & DataObjectPermissions
+export type ElementPermissions = AssetPermissions | DataObjectPermissions
+
+export type ElementPermissionKeys = keyof (AssetPermissions & DataObjectPermissions)
 
 export const {
   useElementDeleteMutation,
