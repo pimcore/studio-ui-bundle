@@ -55,7 +55,6 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
   }
 
   function reloadUser (): void {
-    removeUserFromState()
     getUser()
   }
 

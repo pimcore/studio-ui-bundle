@@ -67,6 +67,10 @@ const KeyBindings = ({ values, onChange, onResetKeyBindings, ...props }:IKeyBind
   }
 
   useEffect(() => {
+    if (!values || values.length === 0) {
+      return
+    }
+
     values.forEach((keyBinding: any) => {
       onChange(keyBinding.action, keyBinding, renderKeyCombination(keyBinding), false)
     })

@@ -24,8 +24,8 @@ import { type UserDraft } from '@Pimcore/modules/user/user-slice'
 
 interface IToolbarProps {
   id: number
-  onCloneUser: () => void
-  onRemoveUser: () => void
+  onCloneUser?: () => void
+  onRemoveUser?: () => void
 }
 
 export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarProps): React.JSX.Element => {
@@ -96,14 +96,16 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
           </IconButton>
         </Popconfirm>
 
-        <Dropdown
-          menu={ { items } }
-          trigger={ ['click'] }
-        >
-          <DropdownButton>
-            {t('toolbar.more')}
-          </DropdownButton>
-        </Dropdown>
+        {onCloneUser || onRemoveUser ? (
+            <Dropdown
+                menu={ { items } }
+                trigger={ ['click'] }
+            >
+              <DropdownButton>
+                {t('toolbar.more')}
+              </DropdownButton>
+            </Dropdown>
+        ):null}
       </Flex>
 
       <Button

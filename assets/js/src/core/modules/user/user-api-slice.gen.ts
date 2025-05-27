@@ -271,7 +271,7 @@ export type DevError = {
 export type KeyBindingForAUser = {
     /** ASCII Code for a key on the Keyboard */
     key: number;
-    /** The action the key binding shoudl execute */
+    /** The action the key binding should execute */
     action: string;
     /** If CTRL key should be pressed */
     ctrl: boolean;
