@@ -8,16 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-/**
- * This source file is available under the terms of the
- * Pimcore Open Core License (POCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
- *  @license    Pimcore Open Core License (POCL)
- */
-
 import React, { useEffect, useRef } from 'react'
 import { GeoPolyDrawerFooter } from './footer'
 import { GeoMapCard, type GeoMapCardBaseProps } from '@Pimcore/components/geo-map/components/geo-map-card/geo-map-card'
