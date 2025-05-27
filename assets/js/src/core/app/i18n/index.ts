@@ -14,7 +14,7 @@ import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { addMissingTranslation } from './store/missingTranslations.slice'
 import { store } from '../store'
 
-const FALLBACK_LANGUAGE = 'en'
+export const FALLBACK_LANGUAGE = 'en'
 
 i18n
   .use(initReactI18next)

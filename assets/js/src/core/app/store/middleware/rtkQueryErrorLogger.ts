@@ -31,9 +31,9 @@ const initialState: UserInformation = {
   isAdmin: false,
   classes: [],
   docTypes: [],
+  language: 'en',
   activePerspective: 0,
   perspectives: [],
-  language: 'en',
   dateTimeLocale: '',
   welcomeScreen: false,
   memorizeTabs: false,
@@ -47,10 +47,17 @@ export const rtkQueryErrorLogger: Middleware =
     // RTK Query uses `createAsyncThunk` from redux-toolkit under the hood, so we're able to utilize these matchers!
     if (isRejectedWithValue(action)) {
       const payload = action.payload as ErrorPayload
+      const actionMetaArgs = action.meta?.arg as any
 
       // Handle the case when the user's session has expired and further requests return a 401 status.
+      // @todo - check if we can bind it to another endpoint that is specific to the user session
       if (payload?.status === 401) {
+        if ('endpointName' in actionMetaArgs && actionMetaArgs.endpointName === 'userGetCurrentInformation') {
+          return next(action)
+        }
+
         api.dispatch({ type: 'auth/setUser', payload: initialState })
+        api.dispatch({ type: 'authentication/setAuthState', payload: false })
 
         // Need to prevent further handling of the error to avoid triggering the error boundary etc.
         return

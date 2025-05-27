@@ -8,12 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Icon } from '@Pimcore/components/icon/icon'
-import { Avatar } from 'antd'
 import React from 'react'
 import { useStyles } from './left-sidebar-view.styles'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
+import { UserMenu } from '@Pimcore/modules/app/base-layout/user-menu/user-menu'
 
 // New functional component
 const SidebarNavItem = ({ Component, context }: { Component: React.ReactNode, context: { name?: string } }): React.ReactElement => (
@@ -27,11 +26,7 @@ export const LeftSidebarView = (): React.JSX.Element => {
 
   return (
     <div className={ styles.leftSidebar }>
-      <Avatar
-        className='left-sidebar__avatar'
-        icon={ <Icon value='user' /> }
-        size={ 26 }
-      />
+      <UserMenu className='left-sidebar__avatar' />
 
       <ul className='left-sidebar__nav'>
         <SlotRenderer

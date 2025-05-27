@@ -30,11 +30,19 @@ export const Dropdown = ({ menu, ...props }: DropdownProps): React.JSX.Element =
   const { styles } = useStyle()
 
   return (
-
-    <DropdownInner
-      { ...props }
-      menu={ menu }
-      overlayClassName={ styles.dropdown }
-    />
+    <SelectionProvider
+      selectedKeys={ selectedKeys }
+      selectionType={ selectionType }
+    >
+      <DropdownInner
+        { ...props }
+        menu={ {
+          ...menu,
+          items: filteredItems
+        } }
+        onSelect={ onSelect }
+        overlayClassName={ [props.overlayClassName, styles.dropdown].join(' ') }
+      />
+    </SelectionProvider>
   )
 }

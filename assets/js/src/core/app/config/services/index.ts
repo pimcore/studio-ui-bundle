@@ -27,6 +27,8 @@ import { DynamicTypeFieldFilterRegistry } from '@Pimcore/modules/element/dynamic
 import { DynamicTypeListingRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/listing/dynamic-type-listing-registry'
 import { DynamicTypeListingAssetLink } from '@Pimcore/modules/element/dynamic-types/definitions/listing/types/dynamic-type-listing-asset-link'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { DynamicTypeFieldFilterObjectAdapter } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/data-object-adapter/dynamic-type-field-filter-data-object-adapter'
+import { DynamicTypeFieldFilterDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/data-object-brick/dynamic-type-field-filter-data-object-object-brick'
 import { DynamicTypeFieldFilterText } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/text/dynamic-type-field-filter-text'
 import { DynamicTypeFieldFilterNumber } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/number/dynamic-type-field-filter-number'
 import { DynamicTypeFieldFilterSelect } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/select/dynamic-type-field-filter-select'
@@ -142,10 +144,10 @@ import { DynamicTypeBatchEditElementDropzone } from '@Pimcore/modules/element/dy
 import { DynamicTypeObjectDataFieldCollection } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-field-collection'
 import { DynamicTypeObjectDataObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-object-brick'
 import { DynamicTypeGridCellDataObjectAdapter } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/data-object-adapter/dynamic-type-grid-cell-data-object-adapter'
-import { MainNavRegistry } from '@Pimcore/modules/app/nav/services/main-nav-registry'
+import { MainNavRegistry } from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'
 import { DynamicTypeGridCellDataObjectActions } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/data-object-actions/dynamic-type-grid-cell-data-object-actions'
 import { DynamicTypeGridCellDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/data-object-object-brick/dynamic-type-grid-cell-data-object-adapter'
-import { DynamicTypeBatchEditDataObjectAdapter } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/data-object-adapter/dynamic-type-batch-edit-data-object-adpater'
+import { DynamicTypeBatchEditDataObjectAdapter } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/data-object-adapter/dynamic-type-batch-edit-data-object-adapter'
 import { DynamicTypeBatchEditDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/data-object-object-brick/dynamic-type-batch-edit-data-object-object-brick'
 import { DynamicTypeAssetRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/asset/dynamic-type-asset-registry'
 import { DynamicTypeAssetImage } from '@Pimcore/modules/element/dynamic-types/definitions/asset/types/dynamic-type-asset-image'
@@ -204,6 +206,8 @@ container.bind(serviceIds.iconLibrary).to(IconLibrary).inSingletonScope()
 
 // dynamic types field filters
 container.bind(serviceIds['DynamicTypes/FieldFilterRegistry']).to(DynamicTypeFieldFilterRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/DataObjectAdapter']).to(DynamicTypeFieldFilterObjectAdapter).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/DataObjectObjectBrick']).to(DynamicTypeFieldFilterDataObjectObjectBrick).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Text']).to(DynamicTypeFieldFilterText).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Number']).to(DynamicTypeFieldFilterNumber).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Select']).to(DynamicTypeFieldFilterSelect).inSingletonScope()

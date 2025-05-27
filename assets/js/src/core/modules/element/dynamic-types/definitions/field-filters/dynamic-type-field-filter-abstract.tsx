@@ -17,4 +17,13 @@ export interface AbstractFieldFilterDefinition {}
 export abstract class DynamicTypeFieldFilterAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
   abstract getFieldFilterComponent (props: AbstractFieldFilterDefinition): ReactElement<AbstractFieldFilterDefinition>
+
+  shouldOverrideFilterType (): boolean {
+    return false
+  }
+
+  getFieldFilterType (): string {
+    // This method intentionally returns an empty value to avoid duplication in classes that do not override it
+    return ''
+  }
 }

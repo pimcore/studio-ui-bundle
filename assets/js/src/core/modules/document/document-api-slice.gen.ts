@@ -6,6 +6,14 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            documentAdd: build.mutation<DocumentAddApiResponse, DocumentAddApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/add/${queryArg.parentId}`,
+                    method: "POST",
+                    body: queryArg.documentAddParameters,
+                }),
+                invalidatesTags: ["Documents"],
+            }),
             documentsListAvailableSites: build.query<
                 DocumentsListAvailableSitesApiResponse,
                 DocumentsListAvailableSitesApiArg
@@ -13,6 +21,13 @@ const injectedRtkApi = api
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/documents/sites/list-available`,
                     params: { excludeMainSite: queryArg.excludeMainSite },
+                }),
+                providesTags: ["Documents"],
+            }),
+            documentDocTypeList: build.query<DocumentDocTypeListApiResponse, DocumentDocTypeListApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/doc-types`,
+                    params: { type: queryArg["type"] },
                 }),
                 providesTags: ["Documents"],
             }),
@@ -26,6 +41,13 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/documents/${queryArg.id}/page/stream/preview` }),
                 providesTags: ["Documents"],
+            }),
+            documentReplaceContent: build.mutation<DocumentReplaceContentApiResponse, DocumentReplaceContentApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/${queryArg.sourceId}/replace/${queryArg.targetId}`,
+                    method: "POST",
+                }),
+                invalidatesTags: ["Documents"],
             }),
             documentGetTree: build.query<DocumentGetTreeApiResponse, DocumentGetTreeApiArg>({
                 query: (queryArg) => ({
@@ -48,12 +70,28 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type DocumentAddApiResponse = /** status 200 ID of added document */ {
+    /** ID of created document element */
+    id: number;
+};
+export type DocumentAddApiArg = {
+    /** ParentId of the document */
+    parentId: number;
+    documentAddParameters: DocumentAdd;
+};
 export type DocumentsListAvailableSitesApiResponse = /** status 200 List of available sites */ {
     items: Site[];
 };
 export type DocumentsListAvailableSitesApiArg = {
     /** Exclude main site from the list */
     excludeMainSite?: boolean;
+};
+export type DocumentDocTypeListApiResponse = /** status 200 List of all DocTypes */ {
+    items: DocType[];
+};
+export type DocumentDocTypeListApiArg = {
+    /** Filter results by docType type */
+    type?: string;
 };
 export type DocumentGetByIdApiResponse = /** status 200 Successfully retrieved document data as JSON */
     | Document
@@ -71,6 +109,13 @@ export type DocumentPageStreamPreviewApiResponse = /** status 200 Page preview s
 export type DocumentPageStreamPreviewApiArg = {
     /** Id of the page */
     id: number;
+};
+export type DocumentReplaceContentApiResponse = /** status 200 Successfully replaced contents of the document */ void;
+export type DocumentReplaceContentApiArg = {
+    /** SourceId of the document */
+    sourceId: number;
+    /** TargetId of the document */
+    targetId: number;
 };
 export type DocumentGetTreeApiResponse = /** status 200 document_get_tree_success_description */ {
     totalItems: number;
@@ -96,6 +141,34 @@ export type DocumentGetTreeApiArg = {
     /** Include all descendants in the result. */
     pathIncludeDescendants?: boolean;
 };
+export type Error = {
+    /** Message */
+    message: string;
+};
+export type DevError = {
+    /** Message */
+    message: string;
+    /** Details */
+    details: string;
+};
+export type DocumentAdd = {
+    /** Key */
+    key: string;
+    /** Type */
+    type: string;
+    /** Title */
+    title: any;
+    /** Navigation name */
+    navigationName: any;
+    /** Document type ID */
+    docTypeId: any;
+    /** Id of the base document for new translation */
+    translationsSourceId: any;
+    /** Document language when adding a translation */
+    language: any;
+    /** Id of the base document for content */
+    inheritanceSourceId: any;
+};
 export type Site = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -112,15 +185,33 @@ export type Site = {
     /** Root path */
     rootPath?: any;
 };
-export type Error = {
-    /** Message */
-    message: string;
-};
-export type DevError = {
-    /** Message */
-    message: string;
-    /** Details */
-    details: string;
+export type DocType = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID */
+    id: string;
+    /** Name */
+    name: string;
+    /** Type */
+    type: string;
+    /** Group */
+    group: any;
+    /** Controller */
+    controller: any;
+    /** Template */
+    template: any;
+    /** Priority */
+    priority: number;
+    /** Creation date */
+    creationDate: any;
+    /** Modification date */
+    modificationDate: any;
+    /** Static generator enabled */
+    staticGeneratorEnabled: boolean;
+    /** Is writeable */
+    writeable: boolean;
 };
 export type ElementIcon = {
     /** Icon type */
@@ -299,8 +390,11 @@ export type Snippet = Document & {
     staticGeneratorLifetime?: number;
 };
 export const {
+    useDocumentAddMutation,
     useDocumentsListAvailableSitesQuery,
+    useDocumentDocTypeListQuery,
     useDocumentGetByIdQuery,
     useDocumentPageStreamPreviewQuery,
+    useDocumentReplaceContentMutation,
     useDocumentGetTreeQuery,
 } = injectedRtkApi;
