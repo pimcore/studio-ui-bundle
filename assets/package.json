@@ -12,7 +12,7 @@
     "build-app": "npm run build-sdk && npm run build && npm run generate-types",
     "build-rsbuild-plugins": "rsbuild build --config rsbuild.plugins.config.ts",
     "build-storybook": "storybook build --output-dir ./storybook-static",
-    "build-api-client": "npx @rtk-query/codegen-openapi ./build/api/openapi-config.ts",
+    "build-api-client": "npx @rtk-query/codegen-openapi@1.2.0 ./build/api/openapi-config.ts",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./js",
     "lint-fix": "eslint --ext .js,.jsx,.ts,.tsx ./js --fix",
     "lint-fix-watch": "nodemon --watch './js/**/*' --exec \"eslint --ext .js,.jsx,.ts,.tsx ./js --fix --cache\" -e js,jsx,ts,tsx",
