@@ -51,16 +51,16 @@ const GeneralAccordion = (): React.JSX.Element => {
       title: <>{ t('roles.general') }</>,
       info: 'ID: ' + id,
       children: (
-          <Form.Item
-              label={ t('user-management.perspectives') }
-              name="perspectives"
-          >
-            <Select
-                mode="multiple"
-                options={ perspectiveOptions }
-                placeholder={ t('user-management.perspectives') }
-            ></Select>
-          </Form.Item>
+        <Form.Item
+          label={ t('user-management.perspectives') }
+          name="perspectives"
+        >
+          <Select
+            mode="multiple"
+            options={ perspectiveOptions }
+            placeholder={ t('user-management.perspectives') }
+          ></Select>
+        </Form.Item>
       )
     }
   ]
