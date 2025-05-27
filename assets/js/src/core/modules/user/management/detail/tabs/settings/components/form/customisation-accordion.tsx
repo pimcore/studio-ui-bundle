@@ -50,7 +50,6 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
 
     if (roleOptions.length === 0) {
       getRoleCollection().then((data) => {
-        console.log('data', data)
         if (data === undefined) {
           return
         }
@@ -59,7 +58,6 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
           label: item.name
         })))
 
-        console.log('roleOptions', roleOptions)
       }).catch((error) => {
         console.error('Error fetching role collection:', error)
       })

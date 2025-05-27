@@ -22,8 +22,6 @@ const AdminAccordion = ({ isDisabled, ...props }: IAdminAccordion): React.JSX.El
   const { t } = useTranslation()
   const { Text } = Typography
 
-  console.log('isDisabled', isDisabled)
-
   const content = [
     {
       key: '1',
@@ -42,7 +40,7 @@ const AdminAccordion = ({ isDisabled, ...props }: IAdminAccordion): React.JSX.El
         <div className={ 'm-t-normal' }>
           <Button
             disabled={ isDisabled }
-            onClick={ () => { console.log('login') } }
+            onClick={ () => { console.log('todo login') } }
             type="default"
           >{t('user-management.admin.login')}</Button>
         </div>
