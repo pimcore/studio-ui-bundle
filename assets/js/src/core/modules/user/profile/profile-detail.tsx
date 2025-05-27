@@ -26,6 +26,7 @@ import {KeyBindings} from "@Pimcore/modules/user/management/detail/tabs/key-bind
 import {useUserHelper} from "@Pimcore/modules/user/hooks/use-user-helper";
 import {useUserDraft} from "@Pimcore/modules/user/hooks/use-user-draft";
 import {debounce} from "lodash";
+import {Content} from "@Pimcore/components/content/content";
 
 interface IProfileDetail {
     id: number
@@ -35,7 +36,7 @@ const ProfileDetail = ({id, ...props}:IProfileDetail): React.JSX.Element => {
     const [form] = Form.useForm()
     const { t } = useTranslation()
     const { availableAdminLanguages } = useSettings()
-    const { user, isLoading, updateUserKeyBinding, changeUserInState } = useUserDraft(id)
+    const { user, updateUserKeyBinding, changeUserInState } = useUserDraft(id)
 
     const { getDefaultKeyBindings } = useUserHelper()
     const [defaultKeyBindings, setDefaultKeyBindings] = React.useState<any>(user?.keyBindings)
@@ -96,6 +97,10 @@ const ProfileDetail = ({id, ...props}:IProfileDetail): React.JSX.Element => {
         }, 300),
         [changeUserInState]
     )
+
+    if (!user) {
+        return <Content none></Content>
+    }
 
     return (
         <Form form={ form } layout="vertical" onValuesChange={ onValuesChange }>
