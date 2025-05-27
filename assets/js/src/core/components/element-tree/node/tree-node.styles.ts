@@ -31,7 +31,6 @@ export const useStyles = createStyles(({ token, css }) => {
       .tree-node__content {
         cursor: pointer;
         width: 100%;
-        padding: 2px ${token.paddingSM}px 2px 0;
         white-space: nowrap;
         align-items: center;
 
@@ -50,6 +49,10 @@ export const useStyles = createStyles(({ token, css }) => {
           outline: none;
           background-color: ${token.controlItemBgActiveHover};
         }
+      }
+
+      .tree-node__content-inner {
+        padding: 2px ${token.paddingSM}px 2px 0;
       }
 
       &.tree-node--selected > .tree-node__content {

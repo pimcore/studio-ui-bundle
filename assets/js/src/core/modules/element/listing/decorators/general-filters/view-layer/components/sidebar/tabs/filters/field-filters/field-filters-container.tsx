@@ -12,6 +12,9 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { Space } from 'antd'
 import { useTranslation } from 'react-i18next'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import type { DynamicTypeFieldFilterRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-registry'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
@@ -27,6 +30,8 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
   const { hasType } = useDynamicTypeResolver()
   const { fieldFilters, setFieldFilters } = useFilter()
 
+  const objectDataRegistry = useInjection<DynamicTypeFieldFilterRegistry>(serviceIds['DynamicTypes/FieldFilterRegistry'])
+
   const initialFilters: FieldFiltersProps['data'] = useMemo(() => fieldFilters.map((filter) => {
     const currentColumn = availableColumns.find((column) => column.key === filter.key)
 
@@ -34,6 +39,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
       id: filter.key,
       data: filter.filterValue,
       type: filter.type,
+      filterType: filter?.filterType,
       frontendType: currentColumn?.frontendType,
       config: currentColumn?.config
     }
@@ -45,6 +51,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
     setFilters(data)
     setFieldFilters(data.map((filter) => ({
       key: filter.id,
+      filterType: filter?.filterType,
       filterValue: filter.data,
       type: filter.type
     })))
@@ -55,6 +62,17 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
   }, [initialFilters])
 
   const handleColumnClick = (column: AvailableColumn): void => {
+    const objectDataByFrontendType = objectDataRegistry.getDynamicType(column.frontendType!)
+
+    const isObjectHasDataByColumnType = objectDataRegistry.hasDynamicType(column.type)
+    let shouldOverrideFilterType = false
+
+    if (isObjectHasDataByColumnType) {
+      const objectDataByColumnType = objectDataRegistry.getDynamicType(column.type)
+
+      shouldOverrideFilterType = objectDataByColumnType.shouldOverrideFilterType()
+    }
+
     setFilters((prevFilters) => [
       ...prevFilters,
       {
@@ -62,7 +80,8 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
         id: column.key,
         type: column.type,
         frontendType: column.frontendType,
-        config: column.config
+        config: column.config,
+        ...(shouldOverrideFilterType && { filterType: objectDataByFrontendType.getFieldFilterType() })
       }
     ])
   }

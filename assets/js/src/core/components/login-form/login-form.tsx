@@ -16,10 +16,10 @@ import { useStyle } from '@Pimcore/components/login-form/login-form-style'
 import { useDispatch } from 'react-redux'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useTranslation } from 'react-i18next'
-import { setUser } from '@Pimcore/modules/auth/user/user-slice'
 import { Icon } from '../icon/icon'
 import { type Credentials, useLoginMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { setAuthState } from '@Pimcore/modules/auth/auth-slice'
 
 export interface IAdditionalLogins {
   key: string
@@ -66,8 +66,7 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
 
       setIsLoginLoading(false)
 
-      const userInformation = response.data!
-      dispatch(setUser(userInformation))
+      dispatch(setAuthState(true))
     } catch (e: any) {
       setIsLoginLoading(false)
 
@@ -82,13 +81,13 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
       <form onSubmit={ handleAuthentication }>
         <Input
           onChange={ (e) => { setFormState({ ...formState, username: e.target.value }) } }
-          placeholder="Username"
+          placeholder={ t('login-form.username') }
           prefix={ <Icon value="user" /> }
         />
         <Input.Password
           // iconRender={ (visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />) }
           onChange={ (e) => { setFormState({ ...formState, password: e.target.value }) } }
-          placeholder="Password"
+          placeholder={ t('login-form.password') }
         />
         <div className={ 'flex-space' }>
           <Checkbox
