@@ -34,6 +34,7 @@ const ProfileContainer = (): React.JSX.Element => {
     const user = useUser()
     const { isLoading } = useUserDraft(user.id)
 
+    console.log('user', user.id)
     return (
         <ContentLayout
             renderToolbar={

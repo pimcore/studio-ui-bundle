@@ -576,6 +576,7 @@ key-bindings.openObject: Open Object
 key-bindings.openClassEditor: Open Class Editor
 key-bindings.openInTree: Open in Tree
 key-bindings.closeAllTabs: Close All Tabs
+key-bindings.search: Search
 key-bindings.searchDocument: Search Document
 key-bindings.searchAsset: Search Asset
 key-bindings.searchObject: Search Object
@@ -599,10 +600,11 @@ key-bindings.customReports: Custom Reports
 key-bindings.reports: Reports
 key-bindings.applicationLogger: Application Logger
 key-bindings.glossary: Glossary
+key-bindings.seo: SEO
 key-bindings.seoDocumentEditor: SEO Document Editor
 key-bindings.robots: Robots
 key-bindings.httpErrorLog: HTTP Error Log
-key-bindings.redirects: redirects
+key-bindings.redirects: Redirects
 user-management.references.title: References
 user-management.references.documents: Documents
 user-management.references.columns.id: ID
@@ -787,6 +789,7 @@ user-menu.notifications-send: Send
 user-menu.my-profile: My Profile
 user-menu.log-out: Log out
 user-menu.title: Profile
+user-profile.general: General Data
 user-profile.change-password: Change Password
 user-profile.password-old: Old Password
 user-profile.password-new: New Password
