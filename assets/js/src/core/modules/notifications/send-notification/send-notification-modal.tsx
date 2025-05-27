@@ -19,7 +19,7 @@ import { UserSelect } from '../../user/components/user-select/user-select'
 import { Input } from '@Pimcore/components/input/input'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { GeneralError, trackError } from '@sdk/modules/app'
-import { Button, ModalFooter } from '@sdk/components'
+import { Button, Icon, ModalFooter, Flex } from '@sdk/components'
 
 interface SendNotificationModalProps {
   open: boolean
@@ -60,26 +60,22 @@ export const SendNotificationModal = ({ open, ...props }: SendNotificationModalP
       onCancel={ onClose }
       open={ open }
       size="M"
-      title={ t('user-menu.notification.modal.send-a-notification') }
+      title={ <Flex align='center' gap={'extra-small'}><Icon value={'notes-events'}/><>{t('user-menu.notification.modal.send-a-notification')}</></Flex> }
       zIndex={ 1000 }
       footer={(<ModalFooter>
-                      <Button
-                        type='default'
-                        onClick={ onClose }
-                      >
-                        {t('user-menu.notification.cancel')}
-                      </Button>
-                      <Button
-                        type='primary'
-                        onClick={handleSend}
-                        loading={isLoading}
-                        disabled={
-                          !form.getFieldValue('to') || !form.getFieldValue('title') || !form.getFieldValue('message')}>
-                        {t('user-menu.notification.send')}
-                      </Button>
-              </ModalFooter>
-            ) }
-    >
+        <Button
+        type='default'
+        onClick={ onClose }
+        >
+          {t('user-menu.notification.cancel')}
+          </Button>
+          <Button
+          type='primary'
+          onClick={handleSend}
+          loading={isLoading}>
+          {t('user-menu.notification.send')}
+          </Button>
+          </ModalFooter>)}>
       <FieldWidthProvider>
         <Form
           form={ form }
