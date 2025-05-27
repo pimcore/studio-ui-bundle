@@ -26,3 +26,4 @@ export class DynamicTypeFieldFilterTextArea extends DynamicTypeFieldFilterAbstra
       <DynamicTypeFieldFilterTextAreaComponent {...props} />
     )
   }
+}
