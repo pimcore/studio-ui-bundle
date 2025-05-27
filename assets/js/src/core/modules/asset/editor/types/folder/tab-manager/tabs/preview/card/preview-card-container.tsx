@@ -21,6 +21,7 @@ import { useOpen } from '@Pimcore/modules/element/actions/open/open'
 import type { DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
+import { isString } from 'lodash'
 
 interface PreviewCardContainerProps {
   asset: AssetGetTreeApiResponse['items'][number]
@@ -66,9 +67,9 @@ export const PreviewCardContainer = ({ asset }: PreviewCardContainerProps): Reac
   return (
     <PreviewCard
       dropdownItems={ dropdownItems }
-      imgSrc={ 'imageThumbnailPath' in asset ? asset.imageThumbnailPath : asset.icon }
+      imgSrc={ 'imageThumbnailPath' in asset && isString(asset.imageThumbnailPath) ? asset.imageThumbnailPath : asset.icon }
       key={ asset.id }
-      name={ asset.filename! }
+      name={ asset.filename }
       onClick={ onClickCard }
     />
   )

@@ -23,7 +23,7 @@ const PreviewContainer = (): React.JSX.Element => {
   return (
     <ContentLayout>
       <PreviewView
-        src={ data!.fullPath! }
+        src={ data!.fullPath }
       />
     </ContentLayout>
   )

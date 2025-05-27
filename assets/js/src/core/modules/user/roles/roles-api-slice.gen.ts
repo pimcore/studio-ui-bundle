@@ -49,7 +49,9 @@ const injectedRtkApi = api
             roleGetTree: build.query<RoleGetTreeApiResponse, RoleGetTreeApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/roles/tree`,
-                    params: { parentId: queryArg.parentId },
+                    params: {
+                        parentId: queryArg.parentId,
+                    },
                 }),
                 providesTags: ["Role Management"],
             }),
@@ -68,18 +70,18 @@ export type RoleCloneByIdApiArg = {
 export type RoleFolderCreateApiResponse = /** status 200 Node of the new created Folder */ TreeNode;
 export type RoleFolderCreateApiArg = {
     body: {
-        parentId: any;
+        parentId: number | null;
         name: string;
     };
 };
 export type RoleCreateApiResponse = /** status 200 Node of the new created Role. */ TreeNode;
 export type RoleCreateApiArg = {
     body: {
-        parentId: any;
+        parentId: number | null;
         name: string;
     };
 };
-export type RoleFolderDeleteByIdApiResponse = /** status 200 Success */ void;
+export type RoleFolderDeleteByIdApiResponse = unknown;
 export type RoleFolderDeleteByIdApiArg = {
     /** Id of the folder */
     id: number;
@@ -95,7 +97,7 @@ export type RoleUpdateByIdApiArg = {
     id: number;
     updateRole: UpdateUserRole;
 };
-export type RoleDeleteByIdApiResponse = /** status 200 Success */ void;
+export type RoleDeleteByIdApiResponse = unknown;
 export type RoleDeleteByIdApiArg = {
     /** Id of the role */
     id: number;
@@ -189,10 +191,10 @@ export type DetailedUserRole = {
     /** ID of the User */
     id: number;
     /** Name of Folder or Role */
-    name: any;
+    name: string | null;
     /** Classes the user is allows to see */
     classes: object;
-    parentId: any;
+    parentId: number | null;
     /** List of permissions for the user */
     permissions: object;
     /** List of document types for the role */
@@ -210,10 +212,10 @@ export type DetailedUserRole = {
 };
 export type UpdateUserRole = {
     /** Name of Folder or Role */
-    name: any;
+    name: string | null;
     /** Classes the user is allows to see */
     classes: object;
-    parentId: any;
+    parentId: number | null;
     /** List of permissions for the user */
     permissions: object;
     /** List of document types for the role */
