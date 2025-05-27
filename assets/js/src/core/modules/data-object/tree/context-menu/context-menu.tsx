@@ -97,7 +97,6 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
   return (
     <Menu
       items={ items }
-      onSelect={ () => { console.log('select it baby') } }
     />
   )
 }
