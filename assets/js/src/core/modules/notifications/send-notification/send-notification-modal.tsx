@@ -19,7 +19,8 @@ import { UserSelect } from '../../user/components/user-select/user-select'
 import { Input } from '@Pimcore/components/input/input'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { GeneralError, trackError } from '@sdk/modules/app'
-import { Button, Icon, ModalFooter, Flex } from '@sdk/components'
+import { Button, Icon, ModalFooter, Flex, useMessage } from '@sdk/components'
+import { message } from 'antd'
 
 interface SendNotificationModalProps {
   open: boolean
@@ -30,6 +31,7 @@ export const SendNotificationModal = ({ open, ...props }: SendNotificationModalP
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const { sendNotification, isLoading } = useNotification()
+  const { success } = useMessage()
 
   const onClose = (): void => {
     form.resetFields()
@@ -48,6 +50,7 @@ export const SendNotificationModal = ({ open, ...props }: SendNotificationModalP
         attachmentId: values.attachment?.id
       }, () => {
         onClose()
+        success(t('user-menu.notification.modal.success-notification-has-been-sent'))
       })
     }).catch((error) => {
       trackError(new GeneralError("Validation of notification form failed"))
