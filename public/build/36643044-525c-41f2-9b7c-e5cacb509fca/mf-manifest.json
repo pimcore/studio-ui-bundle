@@ -22,7 +22,7 @@
     "globalName": "pimcore_studio_ui_bundle",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
-    "publicPath": "/bundles/pimcorestudioui/build/c41ae8f7-1714-4166-9b1f-ff6b651f079d/"
+    "publicPath": "/bundles/pimcorestudioui/build/36643044-525c-41f2-9b7c-e5cacb509fca/"
   },
   "shared": [
     {
@@ -154,7 +154,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.6c16d6fe.css"
+            "static/css/async/968.2f8a6194.css"
           ],
           "async": []
         }
@@ -186,7 +186,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.6c16d6fe.css"
+            "static/css/async/968.2f8a6194.css"
           ],
           "async": []
         }
@@ -543,7 +543,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.6c16d6fe.css"
+            "static/css/async/968.2f8a6194.css"
           ],
           "async": []
         }
@@ -575,7 +575,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.6c16d6fe.css"
+            "static/css/async/968.2f8a6194.css"
           ],
           "async": []
         }
@@ -625,7 +625,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.6c16d6fe.css"
+            "static/css/async/968.2f8a6194.css"
           ],
           "async": []
         }
@@ -661,7 +661,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.6c16d6fe.css"
+            "static/css/async/968.2f8a6194.css"
           ],
           "async": []
         }
@@ -753,7 +753,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.6c16d6fe.css"
+            "static/css/async/968.2f8a6194.css"
           ],
           "async": []
         }
