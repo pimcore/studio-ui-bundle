@@ -14,7 +14,6 @@ import { ApiError, trackError } from '@sdk/modules/app'
 import { NotificationsView } from './notifications-view'
 
 const NotificationsContainer = (): React.JSX.Element => {
-
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState(20)
 
