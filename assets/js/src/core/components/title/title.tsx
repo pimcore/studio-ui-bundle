@@ -18,7 +18,7 @@ const { Title: AntTitle } = Typography
 export interface TitleProps extends AntTitleProps {
   icon?: React.JSX.Element
   titleClass?: string
-  theme: 'primary' | 'secondary'
+  theme?: 'primary' | 'secondary'
 }
 
 export const Title = ({ children, icon, titleClass, theme = 'primary', ...props }: TitleProps): React.JSX.Element => {
