@@ -10,9 +10,9 @@ Since there’s no npm package available yet, follow the local development guide
 
 ```
 npm install
-npm run build // for production builds
+npm run build-app // for production builds
 // or 
-npm run dev // for development builds 
+npm run dev-app // for development builds 
 npm pack --pack-destination ~
 ```
 

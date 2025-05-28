@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { isEqual, isObject, isString } from 'lodash'
+import { isEqual, isObject } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Text } from '@Pimcore/components/text/text'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
@@ -19,7 +19,7 @@ import { useStyles } from './key-value-list.styles'
 
 export interface KeyValueListItem {
   key: string
-  value: string
+  value: string | number | object | null
   withoutTranslate?: boolean
 }
 
@@ -33,8 +33,8 @@ const FIELDS_TO_CONVERT_TO_DATE = ['creationDate', 'modificationDate']
 const SPECIAL_DATA_TYPES = ['documentData', 'objectData']
 
 export const KeyValueList = ({ items, skipEmpty = true }: KeyValueListProps): React.JSX.Element => {
-  const { styles } = useStyles()
   const { t } = useTranslation()
+  const { styles } = useStyles()
 
   const preparedItems: KeyValueListItem[] = []
 
@@ -56,10 +56,7 @@ export const KeyValueList = ({ items, skipEmpty = true }: KeyValueListProps): Re
             if (isObject(value)) {
               renderObjectValue(value)
             } else {
-              // @TODO: delete after the task is completed (https://github.com/pimcore/studio-backend-bundle/issues/953)
-              const isTableValue = isString(value) && value.includes('<table>')
-
-              !isTableValue && preparedItems.push({ key, value, withoutTranslate: item.key === 'objectData' })
+              preparedItems.push({ key, value, withoutTranslate: item.key === 'objectData' })
             }
           })
         }
@@ -74,7 +71,7 @@ export const KeyValueList = ({ items, skipEmpty = true }: KeyValueListProps): Re
   const renderItem = (item: KeyValueListItem): React.JSX.Element => {
     let fieldValue: any = item?.value
 
-    if (FIELDS_TO_CONVERT_TO_DATE.includes(item.key)) {
+    if (FIELDS_TO_CONVERT_TO_DATE.includes(item.key) && !isObject(item?.value)) {
       fieldValue = formatDateTime({ timestamp: item?.value ?? null, dateStyle: 'short', timeStyle: 'short' })
     }
 

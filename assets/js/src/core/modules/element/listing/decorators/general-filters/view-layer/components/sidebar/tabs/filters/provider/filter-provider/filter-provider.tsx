@@ -60,10 +60,6 @@ export const FilterProvider = (props: FilterProviderProps): React.JSX.Element =>
     setFieldFilters(listingFieldFilters)
   }, [listingFieldFilters])
 
-  useEffect(() => {
-    setPqlQuery(listingPqlQuery)
-  }, [listingPqlQuery])
-
   return useMemo(() => (
     <FilterProviderContext.Provider value={ {
       searchTerm,
