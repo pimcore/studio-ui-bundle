@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { StrictMode } from 'react'
+import React, { StrictMode, useState } from 'react'
 import { GlobalProvider } from './global-provider'
 import { App as AntApp } from 'antd'
 import { RouterProvider } from 'react-router-dom'
