@@ -97548,7 +97548,7 @@ class DynamicTypeObjectDataClassificationStore extends _dynamic_type_object_data
             ...props
         }, void 0, false, {
             fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-classification-store.tsx",
-            lineNumber: 27,
+            lineNumber: 28,
             columnNumber: 12
         }, this);
     }
@@ -97571,7 +97571,7 @@ class DynamicTypeObjectDataClassificationStore extends _dynamic_type_object_data
             };
         };
         const processClassificationStoreData = (param)=>{
-            let { data, updatedFieldBreadcrumbTitle = fieldBreadcrumbTitle, groupKey } = param;
+            let { data, updatedFieldBreadcrumbTitle = fieldBreadcrumbTitle, groupId } = param;
             return data.flatMap((dataItem)=>{
                 if (!(0,lodash__WEBPACK_IMPORTED_MODULE_2__.isEmpty)(dataItem.keys)) {
                     const breadcrumbField = dataItem.title ?? dataItem.name;
@@ -97579,11 +97579,12 @@ class DynamicTypeObjectDataClassificationStore extends _dynamic_type_object_data
                     return processClassificationStoreData({
                         data: dataItem.keys,
                         updatedFieldBreadcrumbTitle: breadcrumbTitle,
-                        groupKey: dataItem.id
+                        groupId: dataItem.id
                     });
                 }
                 if (!(0,lodash__WEBPACK_IMPORTED_MODULE_2__.isEmpty)(dataItem.definition)) {
-                    const fieldValue = (0,lodash__WEBPACK_IMPORTED_MODULE_2__.get)(fieldValueByName, groupKey ?? '');
+                    if ((0,lodash__WEBPACK_IMPORTED_MODULE_2__.isUndefined)(groupId)) return [];
+                    const fieldValue = (0,lodash__WEBPACK_IMPORTED_MODULE_2__.get)(fieldValueByName, groupId);
                     if ((0,lodash__WEBPACK_IMPORTED_MODULE_2__.isEmpty)(fieldValue)) {
                         return getFieldData({
                             fieldData: {

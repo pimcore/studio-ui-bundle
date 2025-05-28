@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { get, isEmpty } from 'lodash'
+import { get, isEmpty, isUndefined } from 'lodash'
 import { type FormItemProps } from 'antd'
 import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { ClassificationStore } from '../components/classification-store/classification-store'
@@ -19,6 +19,7 @@ import {
   type IProcessVersionFieldDataProps
 } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 import { getBreadcrumbTitle } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
+import { type ClassificationStoreGroup } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 
 export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectDataAbstract {
   id: string = 'classificationstore'
@@ -34,7 +35,7 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
     }
   }
 
-  async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<any> {
+  async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<IFormattedDataStructureData[]> {
     const { item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount } = props
 
     const getFieldData = ({ fieldData, fieldValue, fieldBreadcrumbTitle }: { fieldData: any, fieldValue: any, fieldBreadcrumbTitle: string }): IFormattedDataStructureData => {
@@ -47,17 +48,19 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
       }
     }
 
-    const processClassificationStoreData = ({ data, updatedFieldBreadcrumbTitle = fieldBreadcrumbTitle, groupKey }: { data: any[], updatedFieldBreadcrumbTitle?: string, groupKey?: number }): IFormattedDataStructureData[] => {
+    const processClassificationStoreData = ({ data, updatedFieldBreadcrumbTitle = fieldBreadcrumbTitle, groupId }: { data: ClassificationStoreGroup[], updatedFieldBreadcrumbTitle?: string, groupId?: number }): IFormattedDataStructureData[] => {
       return data.flatMap((dataItem: any) => {
         if (!isEmpty(dataItem.keys)) {
           const breadcrumbField = dataItem.title ?? dataItem.name
           const breadcrumbTitle = getBreadcrumbTitle(updatedFieldBreadcrumbTitle, breadcrumbField as string)
 
-          return processClassificationStoreData({ data: dataItem.keys, updatedFieldBreadcrumbTitle: breadcrumbTitle, groupKey: dataItem.id })
+          return processClassificationStoreData({ data: dataItem.keys, updatedFieldBreadcrumbTitle: breadcrumbTitle, groupId: dataItem.id })
         }
 
         if (!isEmpty(dataItem.definition)) {
-          const fieldValue: object = get(fieldValueByName, groupKey ?? '')
+          if (isUndefined(groupId)) return []
+
+          const fieldValue: object = get(fieldValueByName, groupId)
 
           if (isEmpty(fieldValue)) {
             return getFieldData({ fieldData: { ...dataItem.definition }, fieldValue, fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle })
