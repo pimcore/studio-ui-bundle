@@ -15,6 +15,7 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 interface UseNotificationsReturn {
   notifications: NotificationGetCollectionApiResponse | undefined
   isLoading: boolean
+  isFetching: boolean
   deleteNotificationsForUser: () => void
   deleteLoading: boolean
   page: number
@@ -29,7 +30,8 @@ export const useNotifications = (): UseNotificationsReturn => {
 
   const queryArgs: NotificationGetCollectionApiArg = useMemo(() => ({ body: { filters: { page, pageSize, includeDescendants: true } } }), [page, pageSize, page])
 
-  const { data: notifications, isLoading, isError, error } = useNotificationGetCollectionQuery(queryArgs)
+  const { data: notifications, isLoading, isFetching, isError, error } = useNotificationGetCollectionQuery(queryArgs)
+
   const [deleteNotificationsForUser, { isError: isDeleteError, error: deleteError, isLoading: deleteLoading }] = useNotificationDeleteAllMutation()
 
   useEffect(() => {
@@ -47,6 +49,7 @@ export const useNotifications = (): UseNotificationsReturn => {
   return {
     notifications,
     isLoading,
+    isFetching,
     deleteNotificationsForUser,
     deleteLoading,
     page,

@@ -25,6 +25,7 @@ const NotificationsContainer = (): React.JSX.Element => {
   const {
     notifications,
     isLoading,
+    isFetching,
     deleteNotificationsForUser,
     deleteLoading,
     page,
@@ -72,7 +73,7 @@ const NotificationsContainer = (): React.JSX.Element => {
             }
     >
       <Content
-        loading={ isLoading || deleteLoading }
+        loading={ isLoading || isFetching || deleteLoading }
         none={ notifications === undefined || notifications.totalItems === 0 }
       >
         <Box
