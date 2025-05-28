@@ -22,106 +22,15 @@
     "globalName": "pimcore_studio_ui_bundle",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
-    "publicPath": "/bundles/pimcorestudioui/build/c9d6933e-7257-4d29-9444-afaaa86da798/"
+    "publicPath": "/bundles/pimcorestudioui/build/95bee023-d6b5-4767-a238-eba71665118a/"
   },
   "shared": [
     {
-      "singleton": true,
-      "requiredVersion": "18.3.x",
-      "shareScope": "default",
-      "eager": true,
+      "id": "pimcore_studio_ui_bundle:react",
       "name": "react",
       "version": "18.3.x",
-      "id": "pimcore_studio_ui_bundle:react",
-      "assets": {
-        "js": {
-          "async": [],
-          "sync": [
-            "static/js/remoteEntry.js",
-            "static/js/820.74f3c910.js"
-          ]
-        },
-        "css": {
-          "async": [],
-          "sync": []
-        }
-      },
-      "usedIn": [
-        "./app",
-        "./components",
-        "./modules/asset",
-        "./modules/data-object",
-        "./modules/element",
-        "./modules/user",
-        "./modules/widget-manager",
-        "./modules/wysiwyg"
-      ]
-    },
-    {
-      "singleton": true,
-      "requiredVersion": "5.22.x",
-      "shareScope": "default",
-      "eager": true,
-      "name": "antd",
-      "version": "5.22.x",
-      "id": "pimcore_studio_ui_bundle:antd",
-      "assets": {
-        "js": {
-          "async": [],
-          "sync": [
-            "static/js/remoteEntry.js",
-            "static/js/820.74f3c910.js"
-          ]
-        },
-        "css": {
-          "async": [],
-          "sync": []
-        }
-      },
-      "usedIn": [
-        "./components",
-        "./modules/data-object",
-        "./modules/element"
-      ]
-    },
-    {
-      "singleton": true,
-      "requiredVersion": "^6.1.4",
-      "shareScope": "default",
-      "eager": true,
-      "version": "6.1.x",
-      "name": "inversify",
-      "id": "pimcore_studio_ui_bundle:inversify",
-      "assets": {
-        "js": {
-          "async": [],
-          "sync": [
-            "static/js/remoteEntry.js",
-            "static/js/820.74f3c910.js"
-          ]
-        },
-        "css": {
-          "async": [],
-          "sync": []
-        }
-      },
-      "usedIn": [
-        "./modules/app",
-        "./modules/asset",
-        "./modules/data-object",
-        "./modules/element",
-        "./modules/icon-library",
-        "./modules/widget-manager"
-      ]
-    },
-    {
       "singleton": true,
       "requiredVersion": "18.3.x",
-      "shareScope": "default",
-      "eager": true,
-      "name": "react-dom",
-      "version": "18.3.x",
-      "id": "pimcore_studio_ui_bundle:react-dom",
       "assets": {
         "js": {
           "async": [],
@@ -134,18 +43,74 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
+    },
+    {
+      "id": "pimcore_studio_ui_bundle:antd",
+      "name": "antd",
+      "version": "5.22.x",
+      "singleton": true,
+      "requiredVersion": "5.22.x",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/remoteEntry.js",
+            "static/js/820.74f3c910.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      }
+    },
+    {
+      "id": "pimcore_studio_ui_bundle:inversify",
+      "name": "inversify",
+      "version": "6.1.x",
+      "singleton": true,
+      "requiredVersion": "^6.1.4",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/remoteEntry.js",
+            "static/js/820.74f3c910.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      }
+    },
+    {
+      "id": "pimcore_studio_ui_bundle:react-dom",
+      "name": "react-dom",
+      "version": "18.3.x",
+      "singleton": true,
+      "requiredVersion": "18.3.x",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/remoteEntry.js",
+            "static/js/820.74f3c910.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      }
     }
   ],
   "remotes": [],
   "exposes": [
     {
-      "path": ".",
       "id": "pimcore_studio_ui_bundle:.",
       "name": ".",
-      "requires": [],
-      "file": "js/src/sdk/main.ts",
       "assets": {
         "js": {
           "sync": [
@@ -157,17 +122,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "."
     },
     {
-      "path": "./components",
       "id": "pimcore_studio_ui_bundle:components",
       "name": "components",
-      "requires": [
-        "react",
-        "antd"
-      ],
-      "file": "js/src/sdk/components/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -182,7 +142,7 @@
             "static/js/async/938.ea2a708f.js",
             "static/js/async/869.10fe15c7.js",
             "static/js/async/563.a76635f4.js",
-            "static/js/async/__federation_expose_modules__element.b514e417.js",
+            "static/js/async/__federation_expose_modules__element.1827f3d4.js",
             "static/js/async/__federation_expose_components.d7f5417b.js",
             "static/js/async/__federation_expose_app.9c365a5c.js",
             "static/js/async/__federation_expose_modules__app.7edd724a.js",
@@ -194,20 +154,16 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.028ef621.css"
+            "static/css/async/968.666a76da.css"
           ],
           "async": []
         }
-      }
+      },
+      "path": "./components"
     },
     {
-      "path": "./app",
       "id": "pimcore_studio_ui_bundle:app",
       "name": "app",
-      "requires": [
-        "react"
-      ],
-      "file": "js/src/sdk/app/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -222,7 +178,7 @@
             "static/js/async/938.ea2a708f.js",
             "static/js/async/869.10fe15c7.js",
             "static/js/async/563.a76635f4.js",
-            "static/js/async/__federation_expose_modules__element.b514e417.js",
+            "static/js/async/__federation_expose_modules__element.1827f3d4.js",
             "static/js/async/__federation_expose_components.d7f5417b.js",
             "static/js/async/__federation_expose_app.9c365a5c.js"
           ],
@@ -230,18 +186,16 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.028ef621.css"
+            "static/css/async/968.666a76da.css"
           ],
           "async": []
         }
-      }
+      },
+      "path": "./app"
     },
     {
-      "path": "./api/role",
       "id": "pimcore_studio_ui_bundle:api/role",
       "name": "api/role",
-      "requires": [],
-      "file": "js/src/sdk/api/asset/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -255,14 +209,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/role"
     },
     {
-      "path": "./api",
       "id": "pimcore_studio_ui_bundle:api",
       "name": "api",
-      "requires": [],
-      "file": "js/src/sdk/api/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -275,14 +227,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api"
     },
     {
-      "path": "./api/custom-metadata",
       "id": "pimcore_studio_ui_bundle:api/custom-metadata",
       "name": "api/custom-metadata",
-      "requires": [],
-      "file": "js/src/sdk/api/custom-metadata/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -295,14 +245,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/custom-metadata"
     },
     {
-      "path": "./api/data-object",
       "id": "pimcore_studio_ui_bundle:api/data-object",
       "name": "api/data-object",
-      "requires": [],
-      "file": "js/src/sdk/api/data-object/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -315,14 +263,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/data-object"
     },
     {
-      "path": "./api/dependencies",
       "id": "pimcore_studio_ui_bundle:api/dependencies",
       "name": "api/dependencies",
-      "requires": [],
-      "file": "js/src/sdk/api/dependencies/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -335,14 +281,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/dependencies"
     },
     {
-      "path": "./api/documents",
       "id": "pimcore_studio_ui_bundle:api/documents",
       "name": "api/documents",
-      "requires": [],
-      "file": "js/src/sdk/api/documents/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -355,14 +299,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/documents"
     },
     {
-      "path": "./api/elements",
       "id": "pimcore_studio_ui_bundle:api/elements",
       "name": "api/elements",
-      "requires": [],
-      "file": "js/src/sdk/api/elements/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -375,14 +317,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/elements"
     },
     {
-      "path": "./api/metadata",
       "id": "pimcore_studio_ui_bundle:api/metadata",
       "name": "api/metadata",
-      "requires": [],
-      "file": "js/src/sdk/api/metadata/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -395,14 +335,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/metadata"
     },
     {
-      "path": "./api/perspectives",
       "id": "pimcore_studio_ui_bundle:api/perspectives",
       "name": "api/perspectives",
-      "requires": [],
-      "file": "js/src/sdk/api/perspectives/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -415,14 +353,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/perspectives"
     },
     {
-      "path": "./api/properties",
       "id": "pimcore_studio_ui_bundle:api/properties",
       "name": "api/properties",
-      "requires": [],
-      "file": "js/src/sdk/api/properties/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -435,14 +371,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/properties"
     },
     {
-      "path": "./api/schedule",
       "id": "pimcore_studio_ui_bundle:api/schedule",
       "name": "api/schedule",
-      "requires": [],
-      "file": "js/src/sdk/api/schedule/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -455,14 +389,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/schedule"
     },
     {
-      "path": "./api/settings",
       "id": "pimcore_studio_ui_bundle:api/settings",
       "name": "api/settings",
-      "requires": [],
-      "file": "js/src/sdk/api/settings/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -475,14 +407,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/settings"
     },
     {
-      "path": "./api/tags",
       "id": "pimcore_studio_ui_bundle:api/tags",
       "name": "api/tags",
-      "requires": [],
-      "file": "js/src/sdk/api/tags/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -495,14 +425,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/tags"
     },
     {
-      "path": "./api/thumbnails",
       "id": "pimcore_studio_ui_bundle:api/thumbnails",
       "name": "api/thumbnails",
-      "requires": [],
-      "file": "js/src/sdk/api/thumbnails/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -515,14 +443,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/thumbnails"
     },
     {
-      "path": "./api/translations",
       "id": "pimcore_studio_ui_bundle:api/translations",
       "name": "api/translations",
-      "requires": [],
-      "file": "js/src/sdk/api/translations/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -535,14 +461,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/translations"
     },
     {
-      "path": "./api/user",
       "id": "pimcore_studio_ui_bundle:api/user",
       "name": "api/user",
-      "requires": [],
-      "file": "js/src/sdk/api/user/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -555,14 +479,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/user"
     },
     {
-      "path": "./api/version",
       "id": "pimcore_studio_ui_bundle:api/version",
       "name": "api/version",
-      "requires": [],
-      "file": "js/src/sdk/api/version/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -575,14 +497,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/version"
     },
     {
-      "path": "./api/workflow",
       "id": "pimcore_studio_ui_bundle:api/workflow",
       "name": "api/workflow",
-      "requires": [],
-      "file": "js/src/sdk/api/workflow/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -595,16 +515,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/workflow"
     },
     {
-      "path": "./modules/app",
       "id": "pimcore_studio_ui_bundle:modules/app",
       "name": "modules/app",
-      "requires": [
-        "inversify"
-      ],
-      "file": "js/src/sdk/modules/app/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -619,7 +535,7 @@
             "static/js/async/938.ea2a708f.js",
             "static/js/async/869.10fe15c7.js",
             "static/js/async/563.a76635f4.js",
-            "static/js/async/__federation_expose_modules__element.b514e417.js",
+            "static/js/async/__federation_expose_modules__element.1827f3d4.js",
             "static/js/async/__federation_expose_components.d7f5417b.js",
             "static/js/async/__federation_expose_modules__app.7edd724a.js"
           ],
@@ -627,21 +543,16 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.028ef621.css"
+            "static/css/async/968.666a76da.css"
           ],
           "async": []
         }
-      }
+      },
+      "path": "./modules/app"
     },
     {
-      "path": "./modules/asset",
       "id": "pimcore_studio_ui_bundle:modules/asset",
       "name": "modules/asset",
-      "requires": [
-        "react",
-        "inversify"
-      ],
-      "file": "js/src/sdk/modules/asset/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -656,7 +567,7 @@
             "static/js/async/938.ea2a708f.js",
             "static/js/async/869.10fe15c7.js",
             "static/js/async/563.a76635f4.js",
-            "static/js/async/__federation_expose_modules__element.b514e417.js",
+            "static/js/async/__federation_expose_modules__element.1827f3d4.js",
             "static/js/async/__federation_expose_components.d7f5417b.js",
             "static/js/async/__federation_expose_modules__asset.b8c71c43.js"
           ],
@@ -664,18 +575,16 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.028ef621.css"
+            "static/css/async/968.666a76da.css"
           ],
           "async": []
         }
-      }
+      },
+      "path": "./modules/asset"
     },
     {
-      "path": "./modules/class-definitions",
       "id": "pimcore_studio_ui_bundle:modules/class-definitions",
       "name": "modules/class-definitions",
-      "requires": [],
-      "file": "js/src/sdk/modules/class-definitions/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -688,18 +597,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./modules/class-definitions"
     },
     {
-      "path": "./modules/data-object",
       "id": "pimcore_studio_ui_bundle:modules/data-object",
       "name": "modules/data-object",
-      "requires": [
-        "react",
-        "antd",
-        "inversify"
-      ],
-      "file": "js/src/sdk/modules/data-object/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -714,7 +617,7 @@
             "static/js/async/938.ea2a708f.js",
             "static/js/async/869.10fe15c7.js",
             "static/js/async/563.a76635f4.js",
-            "static/js/async/__federation_expose_modules__element.b514e417.js",
+            "static/js/async/__federation_expose_modules__element.1827f3d4.js",
             "static/js/async/__federation_expose_components.d7f5417b.js",
             "static/js/async/__federation_expose_modules__data_object.9aea0f42.js"
           ],
@@ -722,22 +625,16 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.028ef621.css"
+            "static/css/async/968.666a76da.css"
           ],
           "async": []
         }
-      }
+      },
+      "path": "./modules/data-object"
     },
     {
-      "path": "./modules/element",
       "id": "pimcore_studio_ui_bundle:modules/element",
       "name": "modules/element",
-      "requires": [
-        "react",
-        "antd",
-        "inversify"
-      ],
-      "file": "js/src/sdk/modules/element/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -752,7 +649,7 @@
             "static/js/async/938.ea2a708f.js",
             "static/js/async/869.10fe15c7.js",
             "static/js/async/563.a76635f4.js",
-            "static/js/async/__federation_expose_modules__element.b514e417.js",
+            "static/js/async/__federation_expose_modules__element.1827f3d4.js",
             "static/js/async/__federation_expose_components.d7f5417b.js",
             "static/js/async/__federation_expose_app.9c365a5c.js",
             "static/js/async/__federation_expose_modules__app.7edd724a.js",
@@ -764,20 +661,16 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.028ef621.css"
+            "static/css/async/968.666a76da.css"
           ],
           "async": []
         }
-      }
+      },
+      "path": "./modules/element"
     },
     {
-      "path": "./modules/icon-library",
       "id": "pimcore_studio_ui_bundle:modules/icon-library",
       "name": "modules/icon-library",
-      "requires": [
-        "inversify"
-      ],
-      "file": "js/src/sdk/modules/icon-library/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -789,16 +682,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./modules/icon-library"
     },
     {
-      "path": "./modules/user",
       "id": "pimcore_studio_ui_bundle:modules/user",
       "name": "modules/user",
-      "requires": [
-        "react"
-      ],
-      "file": "js/src/sdk/modules/user/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -815,17 +704,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./modules/user"
     },
     {
-      "path": "./modules/widget-manager",
       "id": "pimcore_studio_ui_bundle:modules/widget-manager",
       "name": "modules/widget-manager",
-      "requires": [
-        "react",
-        "inversify"
-      ],
-      "file": "js/src/sdk/modules/widget-manager/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -841,16 +725,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./modules/widget-manager"
     },
     {
-      "path": "./modules/wysiwyg",
       "id": "pimcore_studio_ui_bundle:modules/wysiwyg",
       "name": "modules/wysiwyg",
-      "requires": [
-        "react"
-      ],
-      "file": "js/src/sdk/modules/wysiwyg/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -865,7 +745,7 @@
             "static/js/async/938.ea2a708f.js",
             "static/js/async/869.10fe15c7.js",
             "static/js/async/563.a76635f4.js",
-            "static/js/async/__federation_expose_modules__element.b514e417.js",
+            "static/js/async/__federation_expose_modules__element.1827f3d4.js",
             "static/js/async/__federation_expose_components.d7f5417b.js",
             "static/js/async/__federation_expose_modules__wysiwyg.5e9d94f5.js"
           ],
@@ -873,18 +753,16 @@
         },
         "css": {
           "sync": [
-            "static/css/async/968.028ef621.css"
+            "static/css/async/968.666a76da.css"
           ],
           "async": []
         }
-      }
+      },
+      "path": "./modules/wysiwyg"
     },
     {
-      "path": "./utils",
       "id": "pimcore_studio_ui_bundle:utils",
       "name": "utils",
-      "requires": [],
-      "file": "js/src/sdk/utils/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -899,7 +777,8 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./utils"
     }
   ]
 }
