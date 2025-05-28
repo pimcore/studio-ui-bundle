@@ -23,43 +23,37 @@ import { findParentByKey, findNodeByKey } from '@Pimcore/modules/user/management
 
 interface ITreeContainerProps {
   treeData: TreeDataItem[]
-  isLoading: boolean
+  expandedKeys: any[]
   onLoadTreeData: (node: TreeDataNode) => Promise<void>
+  onReloadTree: (keys: any[]) => void
+  onSetExpandedKeys: (keys: any[]) => void
   onUpdateTreeData: (key: any, items: any, add?: boolean) => void
-  onReloadTree: () => void
-  onRemoveItem: (key: any) => void
-  onMoveItem: (dragNode: any, dropKey: any) => void
 }
-const TreeContainer = ({ treeData, isLoading, onUpdateTreeData, onLoadTreeData, onReloadTree, onRemoveItem, onMoveItem, ...props }: ITreeContainerProps): React.JSX.Element => {
+const TreeContainer = ({ expandedKeys, treeData, onLoadTreeData, onReloadTree, onSetExpandedKeys, onUpdateTreeData, ...props }: ITreeContainerProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openUser, moveUserById, addNewUser, addNewFolder, removeUser, cloneUser, removeFolder } = useUserHelper()
   const { styles } = useStyle()
   const classNames = [styles.treeContainer]
 
-  const [expandedKeys, setExpandedKeys] = React.useState<any[]>(['0'])
   const modal = useFormModal()
 
-  const handleAddUser = (key: string): void => {
+  const handleAddUser = (key: number): void => {
     modal.input({
       title: t('user-management.add-user'),
       label: t('user-management.add-user.label'),
       onOk: async (value: string) => {
-        const data = await addNewUser({ parentId: parseInt(key), name: value })
-        if (data !== undefined) {
-          onUpdateTreeData(key, [data], true)
-        }
+        await addNewUser({ parentId: key, name: value })
+        onReloadTree([key])
       }
     })
   }
-  const handleAddFolder = (key: string): void => {
+  const handleAddFolder = (key: number): void => {
     modal.input({
       title: t('user-management.add-folder'),
       label: t('user-management.add-folder.label'),
       onOk: async (value: string) => {
-        const data = await addNewFolder({ parentId: parseInt(key), name: value })
-        if (data !== undefined) {
-          onUpdateTreeData(key, [data], true)
-        }
+        await addNewFolder({ parentId: key, name: value })
+        onReloadTree([key])
       }
     })
   }
@@ -68,22 +62,26 @@ const TreeContainer = ({ treeData, isLoading, onUpdateTreeData, onLoadTreeData, 
     <ContentLayout
       renderToolbar={
         <ToolbarTree
-          onAddFolder={ () => { handleAddFolder('0') } }
-          onAddItem={ () => { handleAddUser('0') } }
-          onReload={ onReloadTree }
+          onAddFolder={ () => { handleAddFolder(0) } }
+          onAddItem={ () => { handleAddUser(0) } }
+          onReload={ () => { onReloadTree([0]) } }
         />
       }
     >
       <Content
         className={ classNames.join(', ') }
-        loading={ isLoading }
       >
         <TreeAutocomplete />
 
         <Tree
           defaultExpandedKeys={ expandedKeys }
           draggable
-          onActionsClick={ (key: string, action: string) => {
+          expandedKeys={ expandedKeys }
+          onActionsClick={ (key: string | number, action: string) => {
+            if (typeof key === 'string') {
+              key = parseInt(key)
+            }
+
             switch (action) {
               case 'add-folder':
                 handleAddFolder(key)
@@ -98,11 +96,11 @@ const TreeContainer = ({ treeData, isLoading, onUpdateTreeData, onLoadTreeData, 
                   title: t('user-management.clone-user'),
                   label: t('user-management.clone-user.label'),
                   onOk: async (value: string) => {
-                    const parentId = (findParentByKey(treeData, key)?.key)?.toString()
-                    const data = await cloneUser({ id: parseInt(key), name: value })
+                    const parentId = findParentByKey(treeData, key)?.key
+                    const data = await cloneUser({ id: key, name: value })
 
                     if (data !== undefined) {
-                      onUpdateTreeData(parentId, [data], true)
+                      onReloadTree([parentId])
                     }
                   }
                 })
@@ -114,8 +112,7 @@ const TreeContainer = ({ treeData, isLoading, onUpdateTreeData, onLoadTreeData, 
                   content: t('user-management.remove-user.text'),
                   onOk: async () => {
                     await removeUser({ id: Number(key) })
-
-                    onRemoveItem(key)
+                    onReloadTree([findParentByKey(treeData, key)?.key])
                   }
                 })
 
@@ -126,8 +123,7 @@ const TreeContainer = ({ treeData, isLoading, onUpdateTreeData, onLoadTreeData, 
                   content: t('user-management.remove-folder.text'),
                   onOk: async () => {
                     await removeFolder({ id: Number(key) })
-
-                    onRemoveItem(key)
+                    onReloadTree([findParentByKey(treeData, key)?.key])
                   }
                 })
 
@@ -138,11 +134,11 @@ const TreeContainer = ({ treeData, isLoading, onUpdateTreeData, onLoadTreeData, 
             const data = await moveUserById({ id: Number(params.dragNode.key), parentId: Number(params.node.key) })
 
             if (data !== undefined) {
-              onMoveItem(params.dragNode, params.node.key)
+              onReloadTree([findParentByKey(treeData, params.dragNode.key)?.key, params.node.key])
             }
           } }
           onExpand={ (keys) => {
-            setExpandedKeys(keys)
+            onSetExpandedKeys(keys)
           } }
           onLoadData={ onLoadTreeData }
           onSelected={ (key) => {

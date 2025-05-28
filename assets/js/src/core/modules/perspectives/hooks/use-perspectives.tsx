@@ -10,13 +10,16 @@
 
 import React, { useState } from 'react'
 import { useAppDispatch } from '@Pimcore/app/store'
-import { useUserUpdateActivePerspectiveMutation } from '@Pimcore/modules/user/user-api-slice.gen'
+import { useUserUpdateActivePerspectiveMutation } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { setActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
 import { updateOuterModel } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { getInitialModelJson } from '@Pimcore/modules/widget-manager/utils/widget-manager-outer-model'
 import { setUser } from '@Pimcore/modules/auth/user/user-slice'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
-import { api, type PerspectiveConfig } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+import {
+  api,
+  type PerspectiveConfig, type PerspectiveGetConfigCollectionApiResponse
+} from '@Pimcore/modules/perspectives/perspectives-slice.gen'
 import trackError, { ApiError } from '../../app/error-handler'
 import { isPlainObject, isUndefined } from 'lodash'
 import { App } from 'antd'
@@ -29,6 +32,7 @@ import { Box } from '@Pimcore/components/box/box'
 export interface UsePerspectiveSwitcherReturn {
   switchPerspective: (perspective: PerspectiveConfig) => Promise<void>
   loadPerspective: (perspectiveId: string) => Promise<any>
+  getPerspectiveConfigCollection: () => Promise<PerspectiveGetConfigCollectionApiResponse | undefined>
   isLoading: boolean
 }
 
@@ -97,5 +101,13 @@ export const usePerspectives = (): UsePerspectiveSwitcherReturn => {
     }, 500)
   }
 
-  return { switchPerspective, loadPerspective, isLoading }
+  const getPerspectiveConfigCollection = async (): Promise<PerspectiveGetConfigCollectionApiResponse | undefined> => {
+    const { data, isError, error } = await dispatch(api.endpoints.perspectiveGetConfigCollection.initiate())
+    if (isError) {
+      trackError(new ApiError(error))
+    }
+    return data
+  }
+
+  return { switchPerspective, loadPerspective, getPerspectiveConfigCollection, isLoading }
 }

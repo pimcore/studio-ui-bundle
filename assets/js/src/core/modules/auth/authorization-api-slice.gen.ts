@@ -27,7 +27,7 @@ export type LogoutApiArg = void;
 export type KeyBindingForAUser = {
     /** ASCII Code for a key on the Keyboard */
     key: number;
-    /** The action the key binding shoudl execute */
+    /** The action the key binding should execute */
     action: string;
     /** If CTRL key should be pressed */
     ctrl: boolean;
@@ -76,11 +76,11 @@ export type UserInformation = {
     /** Username */
     username: string;
     /** Email */
-    email: any;
+    email: string | null;
     /** Firstname */
-    firstname: any;
+    firstname: string | null;
     /** Lastname */
-    lastname: any;
+    lastname: string | null;
     /** Permissions */
     permissions: string[];
     /** If user is an admin user */
@@ -92,7 +92,7 @@ export type UserInformation = {
     /** User Language */
     language: string;
     /** Locale for dateTime */
-    dateTimeLocale: any;
+    dateTimeLocale: string | null;
     /** Welcome Screen */
     welcomeScreen: boolean;
     /** Memorize Tabs */
@@ -106,7 +106,7 @@ export type UserInformation = {
     /** Two Factor Authentication */
     twoFactorAuthentication?: TwoFactorAuthenticationData[];
     /** Active studio perspective ID */
-    activePerspective: any;
+    activePerspective: string | null;
     /** Allowed studio perspectives */
     perspectives: PerspectiveConfig[];
 };

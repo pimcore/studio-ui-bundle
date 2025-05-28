@@ -23,7 +23,7 @@ export const transformApiDataToNodes = (node: DataTransformerSourceNode, data: D
       id: dataObjectNode.id.toString(),
       elementType: elementTypes.dataObject,
       icon: getElementIcon(dataObjectNode, { type: 'name', value: 'data-object' }),
-      label: dataObjectNode.key!,
+      label: dataObjectNode.key,
       type: dataObjectNode.type,
       parentId: dataObjectNode.parentId.toString(),
       hasChildren: dataObjectNode.hasChildren,

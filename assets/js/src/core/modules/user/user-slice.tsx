@@ -11,7 +11,7 @@
 import type { EntityAdapter } from '@reduxjs/toolkit/src/entities/models'
 import { createEntityAdapter, createSlice, type PayloadAction, type Update } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@Pimcore/app/store'
-import { type UserGetAvailablePermissionsApiResponse, type UserPermission, type User } from '@Pimcore/modules/user/user-api-slice.gen'
+import { type UserGetAvailablePermissionsApiResponse, type UserPermission, type User } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import {
   type TrackableChangesDraft,
   useTrackableChangesReducers

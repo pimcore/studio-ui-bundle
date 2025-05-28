@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
-import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
+import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 interface ImageFooterProps {

@@ -71,7 +71,8 @@ const UserDetailTab = ({ id, ...props }: IUserDetailTabProps): React.JSX.Element
     {
       key: 'workspaces',
       label: t('user-management.workspaces.title'),
-      children: <WorkspacesContainer />
+      children: <WorkspacesContainer />,
+      disabled: user.admin
     },
     {
       key: 'key-bindings',

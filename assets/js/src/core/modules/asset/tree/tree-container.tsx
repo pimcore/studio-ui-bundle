@@ -25,13 +25,14 @@ import { useElementTreeRootNode } from '@Pimcore/components/element-tree/hooks/u
 import { useComponentRegistry } from '@Pimcore/modules/app/component-registry/use-component-registry'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { withDndUpload } from './node/with-dnd-upload'
+import { withContextMenu } from './node/with-context-menu'
 
 export interface TreeContainerProps {
   id: number
   showRoot?: boolean
 }
 
-export const AssetTreeNode = withDndUpload(withDroppableStyling(withDroppable(withActionStates(withDraggable(TreeNodeComponent)))))
+export const AssetTreeNode = withDndUpload(withDroppableStyling(withDroppable(withActionStates(withDraggable(withContextMenu(TreeNodeComponent))))))
 
 const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
   const { openAsset } = useAssetHelper()
