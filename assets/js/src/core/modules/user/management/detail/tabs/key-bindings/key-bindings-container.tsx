@@ -22,22 +22,13 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
   const { user, isLoading, updateUserKeyBinding, changeUserInState } = useUserDraft(id)
   const { resetUserKeyBindings, getDefaultKeyBindings } = useUserHelper()
 
-  const handleOnChange = (name: string, code: object, combination: string, updateInState: boolean = true): void => {
-      form.setFieldsValue({
-        [name]: combination
-      })
-
-    if (updateInState) {
-      updateUserKeyBinding(name, code)
-    }
+  const handleOnChange = (name: string, code: object): void => {
+    updateUserKeyBinding(name, code)
   }
-
-  const [defaultValues, setDefaultValues] = React.useState<any>(user?.keyBindings)
 
   if (!isLoading) {
     if (user?.keyBindings?.length === 0) {
       getDefaultKeyBindings().then((data) => {
-        setDefaultValues(data.items)
         changeUserInState({ keyBindings: data.items })
       }).catch((error) => {
         console.error('error setting default key bindings', error)
@@ -54,7 +45,7 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
       form={ form }
       layout="vertical"
     >
-      <KeyBindings values={defaultValues} onResetKeyBindings={async () => await resetUserKeyBindings(id)} onChange={handleOnChange} />
+      <KeyBindings values={user?.keyBindings} onResetKeyBindings={async () => await resetUserKeyBindings(id)} onChange={handleOnChange} />
     </Form>
   )
 }

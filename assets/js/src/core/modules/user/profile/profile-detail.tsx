@@ -39,7 +39,6 @@ const ProfileDetail = ({id, ...props}:IProfileDetail): React.JSX.Element => {
     const { user, updateUserKeyBinding, changeUserInState } = useUserDraft(id)
 
     const { getDefaultKeyBindings } = useUserHelper()
-    const [defaultKeyBindings, setDefaultKeyBindings] = React.useState<any>(user?.keyBindings)
 
     useEffect(() => {
         form.setFieldsValue({
@@ -68,27 +67,22 @@ const ProfileDetail = ({id, ...props}:IProfileDetail): React.JSX.Element => {
             websiteTranslationLanguagesEdit: user?.websiteTranslationLanguagesEdit ?? [],
             websiteTranslationLanguagesView: user?.websiteTranslationLanguagesView ?? [],
         })
-
     }, [user])
 
-    if (defaultKeyBindings?.length === 0) {
+    if (user?.keyBindings?.length === 0) {
         getDefaultKeyBindings().then((data) => {
-            setDefaultKeyBindings(data.items)
+            changeUserInState({ keyBindings: data.items })
         })
     }
 
-    const handleOnChangeKeyBindings = (name: string, code: object, combination: string, updateInState: boolean = true): void => {
-        form.setFieldsValue({
-            [name]: combination
-        })
-
-        if (updateInState) {
-            updateUserKeyBinding(name, code)
-        }
+    const handleOnChangeKeyBindings = (name: string, code: object): void => {
+        updateUserKeyBinding(name, code)
     }
 
     const handleOnResetKeyBindings = async () => {
-        console.log('handleOnReset')
+        getDefaultKeyBindings().then((data) => {
+            changeUserInState({ keyBindings: data.items })
+        })
     }
 
     const onValuesChange = useCallback(
@@ -244,7 +238,7 @@ const ProfileDetail = ({id, ...props}:IProfileDetail): React.JSX.Element => {
             </Row>
             <Row gutter={ [10, 10] } className={'m-t-extra-large'}>
                 <Col span={ 24 }>
-                    <KeyBindings values={defaultKeyBindings} onResetKeyBindings={handleOnResetKeyBindings} onChange={handleOnChangeKeyBindings} />
+                    <KeyBindings values={user?.keyBindings} onResetKeyBindings={handleOnResetKeyBindings} onChange={handleOnChangeKeyBindings} />
                 </Col>
             </Row>
         </Form>

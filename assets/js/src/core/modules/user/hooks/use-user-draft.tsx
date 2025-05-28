@@ -109,13 +109,15 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
   }
 
   function updateUserKeyBinding (name: string, code: object): void {
-    const updatedKeyBindings = user.keyBindings.map((keyBinding: any) => {
-      if (keyBinding.action === name) {
-        keyBinding = code
-        return keyBinding
-      }
-      return keyBinding
-    })
+    const updatedKeyBindings = [...user.keyBindings];
+    const existingKeyBindingIndex = updatedKeyBindings.findIndex((keyBinding: any) => keyBinding.action === name);
+
+    if (existingKeyBindingIndex !== -1) {
+      updatedKeyBindings[existingKeyBindingIndex] = code;
+    } else {
+      updatedKeyBindings.push(code);
+    }
+
     dispatch(changeUser({ id: user.id, changes: { keyBindings: updatedKeyBindings } }))
   }
 

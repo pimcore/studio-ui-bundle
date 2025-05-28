@@ -18,11 +18,12 @@ import { Button } from '@Pimcore/components/button/button'
 interface IKeyBindings {
     values?: any
     onResetKeyBindings: () => void
-    onChange: (name: string, code: object, combination: string, updateInState?: boolean) => void
+    onChange: (name: string, code: object) => void
 }
 
 const KeyBindings = ({ values, onChange, onResetKeyBindings, ...props }:IKeyBindings): React.JSX.Element => {
   const { t } = useTranslation()
+  const [form] = Form.useForm()
 
   const getKeyName = (key: number): string => {
     let name = ''
@@ -61,7 +62,11 @@ const KeyBindings = ({ values, onChange, onResetKeyBindings, ...props }:IKeyBind
     code.shift = evt.shiftKey
 
 
-    onChange(name, code, renderKeyCombination(code))
+    form.setFieldsValue({
+        [name]: renderKeyCombination(code)
+    })
+
+    onChange(name, code)
 
     return code
   }
@@ -72,7 +77,9 @@ const KeyBindings = ({ values, onChange, onResetKeyBindings, ...props }:IKeyBind
     }
 
     values.forEach((keyBinding: any) => {
-      onChange(keyBinding.action, keyBinding, renderKeyCombination(keyBinding), false)
+      form.setFieldsValue({
+        [keyBinding.action]: renderKeyCombination(keyBinding)
+      })
     })
   }, [values]);
 
@@ -202,67 +209,69 @@ const KeyBindings = ({ values, onChange, onResetKeyBindings, ...props }:IKeyBind
   ]
 
   return (
-      <Row gutter={ [10, 10] }>
-        <Col span={ 14 }>
-          <Flex
-            align={ 'center' }
-            justify={ 'space-between' }
-          >
-            <Alert
-              message={ t('key-bindings.info') }
-              showIcon
-              type={ 'info' }
-            />
+      <Form form={ form } layout="vertical">
+        <Row gutter={ [10, 10] }>
+          <Col span={ 14 }>
+            <Flex
+                align={ 'center' }
+                justify={ 'space-between' }
+            >
+              <Alert
+                  message={ t('key-bindings.info') }
+                  showIcon
+                  type={ 'info' }
+              />
 
-            <Button onClick={ onResetKeyBindings }>{ t('key-bindings.reset') }</Button>
-          </Flex>
-        </Col>
-        <Col span={ 14 }>
-          <Accordion
-            activeKey={ '1' }
-            bordered
-            items={ generalAccordion }
-            size={ 'small' }
-          >
-          </Accordion>
-        </Col>
-        <Col span={ 14 }>
-          <Accordion
-            activeKey={ '1' }
-            bordered
-            items={ navigationAccordion }
-            size={ 'small' }
-          >
-          </Accordion>
-        </Col>
-        <Col span={ 14 }>
-          <Accordion
-            activeKey={ '1' }
-            bordered
-            items={ searchAccordion }
-            size={ 'small' }
-          >
-          </Accordion>
-        </Col>
-        <Col span={ 14 }>
-          <Accordion
-            activeKey={ '1' }
-            bordered
-            items={ systemAccordion }
-            size={ 'small' }
-          >
-          </Accordion>
-        </Col>
-        <Col span={ 14 }>
-          <Accordion
-            activeKey={ '1' }
-            bordered
-            items={ seoAccordion }
-            size={ 'small' }
-          >
-          </Accordion>
-        </Col>
-      </Row>
+              <Button onClick={ onResetKeyBindings }>{ t('key-bindings.reset') }</Button>
+            </Flex>
+          </Col>
+          <Col span={ 14 }>
+            <Accordion
+                activeKey={ '1' }
+                bordered
+                items={ generalAccordion }
+                size={ 'small' }
+            >
+            </Accordion>
+          </Col>
+          <Col span={ 14 }>
+            <Accordion
+                activeKey={ '1' }
+                bordered
+                items={ navigationAccordion }
+                size={ 'small' }
+            >
+            </Accordion>
+          </Col>
+          <Col span={ 14 }>
+            <Accordion
+                activeKey={ '1' }
+                bordered
+                items={ searchAccordion }
+                size={ 'small' }
+            >
+            </Accordion>
+          </Col>
+          <Col span={ 14 }>
+            <Accordion
+                activeKey={ '1' }
+                bordered
+                items={ systemAccordion }
+                size={ 'small' }
+            >
+            </Accordion>
+          </Col>
+          <Col span={ 14 }>
+            <Accordion
+                activeKey={ '1' }
+                bordered
+                items={ seoAccordion }
+                size={ 'small' }
+            >
+            </Accordion>
+          </Col>
+        </Row>
+      </Form>
   )
 }
 
