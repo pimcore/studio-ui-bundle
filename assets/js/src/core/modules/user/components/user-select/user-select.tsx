@@ -9,8 +9,8 @@
  */
 
 import { Select, type SelectProps } from '@Pimcore/components/select/select'
-import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice.gen'
 import React from 'react'
+import { useUserGetCollectionQuery } from '../../user-api-slice-enhanced'
 
 interface UserSelectProps extends SelectProps {
   onChange: (value: string | null) => void
