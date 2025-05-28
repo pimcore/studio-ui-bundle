@@ -9,7 +9,7 @@
  */
 
 import { Select } from '@Pimcore/components/select/select'
-import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice.gen'
+import { useUserGetCollectionQuery } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import React from 'react'
 
 interface UserSelectProps {
