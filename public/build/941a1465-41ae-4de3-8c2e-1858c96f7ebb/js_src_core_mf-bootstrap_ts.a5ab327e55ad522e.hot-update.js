@@ -1,3 +1,26 @@
+/*!
+ * 
+ *             /**
+ *              * This source file is available under the terms of the
+ *              * Pimcore Open Core License (POCL)
+ *              * Full copyright and license information is available in
+ *              * LICENSE.md which is distributed with this source code.
+ *              *
+ *              *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *              *  @license    Pimcore Open Core License (POCL)
+ *              * /
+ *
+ */
+"use strict";
+self["webpackHotUpdatepimcore_studio_ui_bundle_core"]("js_src_core_mf-bootstrap_ts", {
+"./js/src/core/components/select/select.styles.ts": (function (module, __webpack_exports__, __webpack_require__) {
+__webpack_require__.r(__webpack_exports__);
+__webpack_require__.d(__webpack_exports__, {
+  useStyles: () => (useStyles)
+});
+/* ESM import */var antd_style__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./node_modules/antd-style/es/functions/index.js");
+/* ESM import */var _Pimcore_utils_type_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./js/src/core/utils/type-utils.ts");
+/* provided dependency */ var $ReactRefreshRuntime$ = __webpack_require__("./node_modules/@rspack/plugin-react-refresh/client/reactRefresh.js");
 /**
  * This source file is available under the terms of the
  * Pimcore Open Core License (POCL)
@@ -6,20 +29,13 @@
  *
  *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
  *  @license    Pimcore Open Core License (POCL)
- */
+ */ 
 
-import { createStyles } from 'antd-style'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
-
-interface StylesProps {
-  width?: number
-}
-
-const ICON_WIDTH = 16
-
-export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
-  return {
-    selectContainer: css`
+const ICON_WIDTH = 16;
+const useStyles = (0,antd_style__WEBPACK_IMPORTED_MODULE_1__.createStyles)((param, props)=>{
+    let { css, token } = param;
+    return {
+        selectContainer: css`
       position: relative;
       
       &:hover {
@@ -28,9 +44,8 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
         }
       }
     `,
-
-    // WARNING state
-    selectContainerWarning: css`
+        // WARNING state
+        selectContainerWarning: css`
       &:hover {
         .custom-select-icon {
           color: ${token.colorWarningHover} !important;
@@ -59,9 +74,8 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
         }
        }
     `,
-
-    // ERROR state
-    selectContainerError: css`
+        // ERROR state
+        selectContainerError: css`
       &:hover {
         .custom-select-icon {
           color: ${token.colorErrorHover} !important;
@@ -90,19 +104,15 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
         }
       }
     `,
-
-    selectContainerWithClear: css`
+        selectContainerWithClear: css`
       &:hover {
-        .ant-select:not(.ant-select-disabled) {
-          .ant-select-arrow {
-            display: none;
-          }
+        .ant-select-arrow {
+          display: none;
         }
       }
     `,
-
-    select: css`
-      width: ${!isEmptyValue(props.width) ? `${props.width}px` : 'initial'};
+        select: css`
+      width: ${!(0,_Pimcore_utils_type_utils__WEBPACK_IMPORTED_MODULE_0__.isEmptyValue)(props.width) ? `${props.width}px` : 'initial'};
       
       .ant-select-selector {
         padding: 0 ${token.controlPaddingHorizontal}px !important;
@@ -208,20 +218,17 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
         }
       }
     `,
-
-    arrowIcon: css`
+        arrowIcon: css`
       pointer-events: none !important
     `,
-
-    selectWithCustomIcon: css`
+        selectWithCustomIcon: css`
       &.ant-select {
         .ant-select-selector {
           padding: 0 ${token.controlPaddingHorizontal}px 0 ${token.controlPaddingHorizontal + ICON_WIDTH + token.marginXXS}px !important;
         }
       }
     `,
-
-    customIcon: css`
+        customIcon: css`
       position: absolute;
       left: 10px;
       top: 50%;
@@ -229,17 +236,30 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
       z-index: 1;
       color: ${token.colorIcon};
     `,
-
-    customIconActive: css`
+        customIconActive: css`
        color: ${token.colorPrimary} !important;
      `,
-
-    customIconWarning: css`
+        customIconWarning: css`
        color: ${token.colorWarningHover};
      `,
-
-    customIconError: css`
+        customIconError: css`
        color: ${token.colorErrorHover};
      `
-  }
-})
+    };
+});
+
+function $RefreshSig$() {
+  return $ReactRefreshRuntime$.createSignatureFunctionForTransform();
+}
+function $RefreshReg$(type, id) {
+  $ReactRefreshRuntime$.register(type, module.id + "_" + id);
+}
+Promise.resolve().then(function() {
+  $ReactRefreshRuntime$.refresh(module.id, module.hot);
+});
+
+
+}),
+
+});
+//# sourceMappingURL=js_src_core_mf-bootstrap_ts.a5ab327e55ad522e.hot-update.js.map

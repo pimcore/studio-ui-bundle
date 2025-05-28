@@ -28428,8 +28428,10 @@ const useStyles = (0,antd_style__WEBPACK_IMPORTED_MODULE_1__.createStyles)((para
     `,
         selectContainerWithClear: css`
       &:hover {
-        .ant-select-arrow {
-          display: none;
+        .ant-select:not(.ant-select-disabled) {
+          .ant-select-arrow {
+            display: none;
+          }
         }
       }
     `,
@@ -88201,7 +88203,7 @@ const useStyles = (0,antd_style__WEBPACK_IMPORTED_MODULE_0__.createStyles)((para
           color: ${token.colorText} !important;
         }
 
-        .ant-select-disabled .ant-select-selector,
+        .ant-select.ant-select-disabled .ant-select-selector,
         .ant-input-disabled {
           border-color: transparent !important;
         }
@@ -88213,7 +88215,7 @@ const useStyles = (0,antd_style__WEBPACK_IMPORTED_MODULE_0__.createStyles)((para
           background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
         }
 
-        .ant-select-disabled .ant-select-selector,
+        .ant-select.ant-select-disabled .ant-select-selector,
         .ant-input-disabled {
           border-color: ${token.colorBorder} !important;
         }
@@ -92219,7 +92221,7 @@ const useStyles = (0,antd_style__WEBPACK_IMPORTED_MODULE_0__.createStyles)((para
           color: ${token.colorText} !important;
         }
 
-        .ant-select-disabled .ant-select-selector,
+        .ant-select.ant-select-disabled .ant-select-selector,
         .ant-input-number-disabled {
           border-color: transparent !important;
         }
@@ -92231,7 +92233,7 @@ const useStyles = (0,antd_style__WEBPACK_IMPORTED_MODULE_0__.createStyles)((para
           background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
         }
 
-        .ant-select-disabled .ant-select-selector,
+        .ant-select.ant-select-disabled .ant-select-selector,
         .ant-input-number-disabled {
           border-color: ${token.colorBorder} !important;
         }
