@@ -14,10 +14,12 @@ import { ManyToOneRelation } from '@Pimcore/modules/element/dynamic-types/defini
 import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNotification } from '../hooks/use-notification'
+import { useNotification } from '../hooks/use-send-notification'
 import { UserSelect } from '../../user/components/user-select/user-select'
 import { Input } from '@Pimcore/components/input/input'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
+import { GeneralError, trackError } from '@sdk/modules/app'
+import { Button, Icon, ModalFooter, Flex, useMessage } from '@sdk/components'
 
 interface SendNotificationModalProps {
   open: boolean
@@ -27,7 +29,8 @@ interface SendNotificationModalProps {
 export const SendNotificationModal = ({ open, ...props }: SendNotificationModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
-  const { sendNotification } = useNotification()
+  const { sendNotification, isLoading } = useNotification()
+  const { success } = useMessage()
 
   const onClose = (): void => {
     form.resetFields()
@@ -44,22 +47,39 @@ export const SendNotificationModal = ({ open, ...props }: SendNotificationModalP
         message: values.message,
         attachmentType: values.attachment?.type,
         attachmentId: values.attachment?.id
-      }, () => {
+      }, async () => {
         onClose()
+        await success(t('user-menu.notification.modal.success-notification-has-been-sent'))
       })
-    }).catch((error) => {
-      console.error('Validation failed:', error)
+    }).catch(() => {
+      trackError(new GeneralError('Validation of notification form failed'))
     })
   }
 
   return (
     <WindowModal
-      okText={ t('user-menu.notification.send') }
+      footer={ (<ModalFooter>
+        <Button
+          onClick={ onClose }
+          type='default'
+        >
+          {t('user-menu.notification.cancel')}
+        </Button>
+        <Button
+          loading={ isLoading }
+          onClick={ handleSend }
+          type='primary'
+        >
+          {t('user-menu.notification.send')}
+        </Button>
+      </ModalFooter>) }
       onCancel={ onClose }
-      onOk={ handleSend }
       open={ open }
       size="M"
-      title={ t('user-menu.notification.modal.send-a-notification') }
+      title={ <Flex
+        align='center'
+        gap={ 'extra-small' }
+              ><Icon value={ 'notes-events' } /><>{t('user-menu.notification.modal.send-a-notification')}</></Flex> }
       zIndex={ 1000 }
     >
       <FieldWidthProvider>
@@ -76,6 +96,9 @@ export const SendNotificationModal = ({ open, ...props }: SendNotificationModalP
               onChange={ (value) => {
                 form.setFieldValue('to', value)
               } }
+              optionFilterProp="label"
+              placeholder={ t('user-menu.notification.modal.select') }
+              showSearch
             />
           </Form.Item>
           <Form.Item
