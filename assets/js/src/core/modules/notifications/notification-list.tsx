@@ -12,13 +12,13 @@ import React from 'react'
 import { NotificationDetail } from './notification-detail'
 import { useStyles } from './notifications.styles'
 import { Space } from '@sdk/components'
-import { NotificationGetCollectionApiResponse } from './notifications-slice-enhanced'
+import { type NotificationGetCollectionApiResponse } from './notifications-slice-enhanced'
 
 export interface NotificationDetailProps {
   notifications: NotificationGetCollectionApiResponse
 }
 
-export const NotificationList = ({notifications}: NotificationDetailProps): React.JSX.Element => {
+export const NotificationList = ({ notifications }: NotificationDetailProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   return (

@@ -17,8 +17,8 @@ interface UseNotificationReturn {
 }
 
 export const useNotification = (): UseNotificationReturn => {
-  const [sendNotificationMutation, {isLoading}] = useNotificationSendMutation()
-  
+  const [sendNotificationMutation, { isLoading }] = useNotificationSendMutation()
+
   const sendNotification = async (notification: SendEmailParameters, onSuccess?: () => void): Promise<void> => {
     const sendNottificationTask = sendNotificationMutation({
       sendNotificationParameters: notification

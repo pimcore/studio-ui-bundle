@@ -20,7 +20,6 @@ import { Input } from '@Pimcore/components/input/input'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { GeneralError, trackError } from '@sdk/modules/app'
 import { Button, Icon, ModalFooter, Flex, useMessage } from '@sdk/components'
-import { message } from 'antd'
 
 interface SendNotificationModalProps {
   open: boolean
@@ -48,37 +47,42 @@ export const SendNotificationModal = ({ open, ...props }: SendNotificationModalP
         message: values.message,
         attachmentType: values.attachment?.type,
         attachmentId: values.attachment?.id
-      }, () => {
+      }, async () => {
         onClose()
-        success(t('user-menu.notification.modal.success-notification-has-been-sent'))
+        await success(t('user-menu.notification.modal.success-notification-has-been-sent'))
       })
-    }).catch((error) => {
-      trackError(new GeneralError("Validation of notification form failed"))
+    }).catch(() => {
+      trackError(new GeneralError('Validation of notification form failed'))
     })
   }
 
   return (
     <WindowModal
+      footer={ (<ModalFooter>
+        <Button
+          onClick={ onClose }
+          type='default'
+        >
+          {t('user-menu.notification.cancel')}
+        </Button>
+        <Button
+          loading={ isLoading }
+          onClick={ handleSend }
+          type='primary'
+        >
+          {t('user-menu.notification.send')}
+        </Button>
+      </ModalFooter>) }
       okText={ t('user-menu.notification.send') }
       onCancel={ onClose }
       open={ open }
       size="M"
-      title={ <Flex align='center' gap={'extra-small'}><Icon value={'notes-events'}/><>{t('user-menu.notification.modal.send-a-notification')}</></Flex> }
+      title={ <Flex
+        align='center'
+        gap={ 'extra-small' }
+              ><Icon value={ 'notes-events' } /><>{t('user-menu.notification.modal.send-a-notification')}</></Flex> }
       zIndex={ 1000 }
-      footer={(<ModalFooter>
-        <Button
-        type='default'
-        onClick={ onClose }
-        >
-          {t('user-menu.notification.cancel')}
-          </Button>
-          <Button
-          type='primary'
-          onClick={handleSend}
-          loading={isLoading}>
-          {t('user-menu.notification.send')}
-          </Button>
-          </ModalFooter>)}>
+    >
       <FieldWidthProvider>
         <Form
           form={ form }
@@ -90,12 +94,12 @@ export const SendNotificationModal = ({ open, ...props }: SendNotificationModalP
             rules={ [{ required: true, message: t('user-menu.notification.modal.form.validation.provide-recipient') }] }
           >
             <UserSelect
-            showSearch={true}
-            optionFilterProp="label"
-            placeholder={t('user-menu.notification.modal.select')}
               onChange={ (value) => {
                 form.setFieldValue('to', value)
               } }
+              optionFilterProp="label"
+              placeholder={ t('user-menu.notification.modal.select') }
+              showSearch
             />
           </Form.Item>
           <Form.Item

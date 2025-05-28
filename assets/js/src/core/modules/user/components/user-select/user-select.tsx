@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Select, SelectProps } from '@Pimcore/components/select/select'
+import { Select, type SelectProps } from '@Pimcore/components/select/select'
 import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice.gen'
 import React from 'react'
 
