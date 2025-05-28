@@ -37,6 +37,16 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
   async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<any> {
     const { item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount } = props
 
+    const getFieldData = ({ fieldData, fieldValue, fieldBreadcrumbTitle }: { fieldData: any, fieldValue: any, fieldBreadcrumbTitle: string }): IFormattedDataStructureData => {
+      return {
+        fieldBreadcrumbTitle,
+        versionId,
+        versionCount,
+        fieldData,
+        fieldValue
+      }
+    }
+
     const processClassificationStoreData = ({ data, updatedFieldBreadcrumbTitle = fieldBreadcrumbTitle, groupKey }: { data: any[], updatedFieldBreadcrumbTitle?: string, groupKey?: number }): IFormattedDataStructureData[] => {
       return data.flatMap((dataItem: any) => {
         if (!isEmpty(dataItem.keys)) {
@@ -47,15 +57,15 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
         }
 
         if (!isEmpty(dataItem.definition)) {
-          const fieldValue = get(fieldValueByName, groupKey ?? '')
+          const fieldValue: object = get(fieldValueByName, groupKey ?? '')
 
-          return {
-            fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle,
-            fieldData: { ...dataItem.definition },
-            fieldValue,
-            versionId,
-            versionCount
+          if (isEmpty(fieldValue)) {
+            return getFieldData({ fieldData: { ...dataItem.definition }, fieldValue, fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle })
           }
+
+          return Object.entries(fieldValue).map(([key, value]) => {
+            return getFieldData({ fieldData: { ...dataItem.definition, locale: key }, fieldValue: value[dataItem.id], fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle })
+          })
         }
 
         return []
