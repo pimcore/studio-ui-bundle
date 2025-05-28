@@ -10,8 +10,8 @@
 
 import React from 'react'
 import { get, isEmpty } from 'lodash'
-import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { type FormItemProps } from 'antd'
+import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { ClassificationStore } from '../components/classification-store/classification-store'
 import { type ClassificationStoreContentProps } from '../components/classification-store/classification-store-content'
 import {
@@ -72,15 +72,20 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
       })
     }
 
-    async function handleClassificationStoreData (): Promise<any> {
+    async function handleClassificationStoreData (): Promise<IFormattedDataStructureData[]> {
       try {
         if (isEmpty(item)) return []
 
-        const breadcrumbField = item.title ?? item.name
-        const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, breadcrumbField as string)
+        const breadcrumbField: string = item.title ?? item.name
+        const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, breadcrumbField)
 
-        return processClassificationStoreData({ data: item.activeGroupDefinitions, updatedFieldBreadcrumbTitle: breadcrumbTitle })
+        return processClassificationStoreData({
+          data: item.activeGroupDefinitions,
+          updatedFieldBreadcrumbTitle: breadcrumbTitle
+        })
       } catch (e) {
+        console.error('Error while handling Classification Store data:', e)
+
         return []
       }
     }

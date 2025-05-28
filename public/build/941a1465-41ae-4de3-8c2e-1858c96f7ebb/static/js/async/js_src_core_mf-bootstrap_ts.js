@@ -97618,6 +97618,7 @@ class DynamicTypeObjectDataClassificationStore extends _dynamic_type_object_data
                     updatedFieldBreadcrumbTitle: breadcrumbTitle
                 });
             } catch (e) {
+                console.error('Error while handling Classification Store data:', e);
                 return [];
             }
         }
