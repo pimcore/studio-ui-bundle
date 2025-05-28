@@ -14,7 +14,7 @@ import { ManyToOneRelation } from '@Pimcore/modules/element/dynamic-types/defini
 import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNotification } from '../hooks/use-notification'
+import { useNotification } from '../hooks/use-send-notification'
 import { UserSelect } from '../../user/components/user-select/user-select'
 import { Input } from '@Pimcore/components/input/input'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
