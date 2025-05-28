@@ -18,19 +18,22 @@ const { Title: AntTitle } = Typography
 export interface TitleProps extends AntTitleProps {
   icon?: React.JSX.Element
   titleClass?: string
+  theme: 'primary' | 'secondary'
 }
 
-export const Title = ({ children, icon, titleClass, ...props }: TitleProps): React.JSX.Element => {
+export const Title = ({ children, icon, titleClass, theme = 'primary', ...props }: TitleProps): React.JSX.Element => {
   const { styles } = useStyle()
+
+  const titleClassNames = [styles.title, 'pimcore-title', `title--theme-${theme}`, titleClass ?? null].join(' ')
 
   return (
     <Flex
       align={ 'center' }
-      className={ styles.flex }
+      className={ [styles.flex, `title--theme-${theme}`].join(' ') }
     >
       {icon}
       <AntTitle
-        className={ [styles.title, 'pimcore-title', titleClass ?? null].join(' ') }
+        className={ titleClassNames }
         { ...props }
       >{children}</AntTitle>
     </Flex>
