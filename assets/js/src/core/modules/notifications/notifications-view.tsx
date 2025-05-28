@@ -34,8 +34,6 @@ interface NotificationsViewProps {
 const NotificationsView = ({ notifications, isLoading, isFetching, deleteNotificationsForUser, deleteLoading, page, setPage, setPageSize }: NotificationsViewProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  console.log('notifications', notifications)
-
   return (
     <ContentLayout
       renderToolbar={ notifications?.totalItems !== 0
