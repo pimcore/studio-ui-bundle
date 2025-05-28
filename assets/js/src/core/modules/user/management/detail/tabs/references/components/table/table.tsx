@@ -12,7 +12,7 @@ import React, { useEffect } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { type DependencyToAnObject } from '@Pimcore/modules/user/user-api-slice.gen'
+import { type DependencyToAnObject } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 
 interface ITableProps {
   data: DependencyToAnObject[]

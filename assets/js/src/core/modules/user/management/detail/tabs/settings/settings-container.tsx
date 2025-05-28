@@ -29,6 +29,7 @@ import { PermissionsAccordion } from '@Pimcore/modules/user/management/detail/ta
 import { TypesAndClassesAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/types-classes-accordion'
 import { EditorSettingsAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/editor-settings-accordion'
 import { SharedTranslationSettingsAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/shared-translation-settings-accordion'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 
 const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const { validLanguages } = useSettings()
@@ -36,31 +37,32 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
   const { Text } = Typography
   const { id } = useUserContext()
-  const { user, isLoading, changeUserInState } = useUserDraft(id)
-  const { availablePermissions } = useUserHelper()
-  const permissions = getGroupedPermissions(availablePermissions)
+  const user = useUser()
+  const { user: openedUser, isLoading, changeUserInState } = useUserDraft(id)
+  const { getAvailablePermissions } = useUserHelper()
+  const permissions = getGroupedPermissions(getAvailablePermissions())
 
   useEffect(() => {
     if (!isLoading) {
       form.setFieldsValue({
-        active: user?.active,
-        admin: user?.admin,
-        classes: user?.classes,
-        name: user?.name,
-        twoFactorAuthenticationEnabled: user?.twoFactorAuthenticationEnabled,
-        firstname: user?.firstname,
-        lastname: user?.lastname,
-        email: user?.email,
-        language: user?.language,
-        welcomeScreen: user?.welcomeScreen,
-        memorizeTabs: user?.memorizeTabs,
-        allowDirtyClose: user?.allowDirtyClose,
-        closeWarning: user?.closeWarning,
-        permissionsDefault: Array.isArray(user?.permissions) ? user.permissions.filter((permission) => permissions.default.some((defaultPermission) => defaultPermission.key === permission)) : [],
-        permissionsBundles: Array.isArray(user?.permissions) ? user.permissions.filter((permission) => permissions.bundles.some((defaultPermission) => defaultPermission.key === permission)) : []
+        active: openedUser?.active,
+        admin: openedUser?.admin,
+        classes: openedUser?.classes,
+        name: openedUser?.name,
+        twoFactorAuthenticationEnabled: openedUser?.twoFactorAuthenticationEnabled,
+        firstname: openedUser?.firstname,
+        lastname: openedUser?.lastname,
+        email: openedUser?.email,
+        language: openedUser?.language,
+        welcomeScreen: openedUser?.welcomeScreen,
+        memorizeTabs: openedUser?.memorizeTabs,
+        allowDirtyClose: openedUser?.allowDirtyClose,
+        closeWarning: openedUser?.closeWarning,
+        permissionsDefault: Array.isArray(openedUser?.permissions) ? openedUser.permissions.filter((permission) => permissions.default.some((defaultPermission) => defaultPermission.key === permission)) : [],
+        permissionsBundles: Array.isArray(openedUser?.permissions) ? openedUser.permissions.filter((permission) => permissions.bundles.some((defaultPermission) => defaultPermission.key === permission)) : []
       })
     }
-  }, [user, isLoading])
+  }, [openedUser, isLoading])
 
   const onValuesChange = useCallback(
     debounce((changedValues, allValues) => {
@@ -77,7 +79,6 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
   if (isLoading) {
     return <Content loading></Content>
   }
-
   return (
     <Form
       form={ form }
@@ -100,16 +101,18 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                     gap="small"
                   >
                     <Form.Item
+                      className={ 'm-b-none' }
                       name="active"
                     >
                       <Switch
+                        disabled={ user?.id === openedUser?.id }
                         labelRight={ t('user-management.active') }
                       />
                     </Form.Item>
 
-                    { user?.lastLogin !== undefined && user?.lastLogin !== null
+                    { openedUser?.lastLogin !== undefined && openedUser?.lastLogin !== null
                       ? (
-                        <Text disabled>{ t('user-management.last-login') }: { user.lastLogin }</Text>
+                        <Text disabled>{ t('user-management.last-login') }: { openedUser.lastLogin }</Text>
                         )
                       : null}
                   </Flex>
@@ -150,38 +153,51 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
           <UserAvatar id={ id } />
         </Col>
         <Col span={ 16 }>
-          <CustomisationAccordion />
+          <CustomisationAccordion isAdmin={ openedUser?.admin } />
         </Col>
         <Col span={ 16 }>
-          <AdminAccordion />
+          <AdminAccordion isDisabled={ user?.id === openedUser?.id } />
         </Col>
-        <Col span={ 16 }>
-          <PermissionsAccordion permissions={ permissions } />
-        </Col>
-        <Col span={ 16 }>
-          <TypesAndClassesAccordion />
-        </Col>
+
+        {openedUser?.admin === false
+          ? (
+            <>
+              <Col span={ 16 }>
+                <PermissionsAccordion permissions={ permissions } />
+              </Col>
+              <Col span={ 16 }>
+                <TypesAndClassesAccordion />
+              </Col>
+            </>
+            )
+          : null}
+
         <Col span={ 16 }>
           <EditorSettingsAccordion
-            data={ user?.contentLanguages }
-            editData={ user?.websiteTranslationLanguagesEdit }
+            data={ openedUser?.contentLanguages }
+            editData={ openedUser?.websiteTranslationLanguagesEdit }
             onChange={ (languages) => { changeUserInState({ contentLanguages: languages }) } }
-            viewData={ user?.websiteTranslationLanguagesView }
+            viewData={ openedUser?.websiteTranslationLanguagesView }
           />
         </Col>
-        <Col span={ 16 }>
-          <SharedTranslationSettingsAccordion
-            data={ validLanguages }
-            editData={ user?.websiteTranslationLanguagesEdit }
-            onChange={ (languages) => {
-              changeUserInState({
-                websiteTranslationLanguagesEdit: languages.filter((language) => language.edit).map((language) => language.abbreviation),
-                websiteTranslationLanguagesView: languages.filter((language) => language.view).map((language) => language.abbreviation)
-              })
-            } }
-            viewData={ user?.websiteTranslationLanguagesView }
-          />
-        </Col>
+
+        {openedUser?.admin === false
+          ? (
+            <Col span={ 16 }>
+              <SharedTranslationSettingsAccordion
+                data={ validLanguages }
+                editData={ openedUser?.websiteTranslationLanguagesEdit }
+                onChange={ (languages) => {
+                  changeUserInState({
+                    websiteTranslationLanguagesEdit: languages.filter((language) => language.edit).map((language) => language.abbreviation),
+                    websiteTranslationLanguagesView: languages.filter((language) => language.view).map((language) => language.abbreviation)
+                  })
+                } }
+                viewData={ openedUser?.websiteTranslationLanguagesView }
+              />
+            </Col>
+            )
+          : null }
       </Row>
     </Form>
   )
