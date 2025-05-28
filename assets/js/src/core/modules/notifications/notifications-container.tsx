@@ -73,7 +73,7 @@ const NotificationsContainer = (): React.JSX.Element => {
     >
       <Content
         loading={ isLoading || deleteLoading }
-        none={ notifications?.totalItems === 0 }
+        none={!notifications || notifications.totalItems === 0}
       >
         <Box
           margin={ {
@@ -81,7 +81,7 @@ const NotificationsContainer = (): React.JSX.Element => {
             y: 'none'
           } }
         >
-          <NotificationList />
+          {notifications !== undefined && <NotificationList notifications={notifications}/>}
         </Box>
       </Content>
     </ContentLayout>
