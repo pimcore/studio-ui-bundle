@@ -58631,15 +58631,34 @@ const getFormattedDataStructure = async (param)=>{
         ...layoutData
     ];
 };
+const getUniqFieldKey = (item)=>{
+    var _item_fieldData, _item_fieldData1;
+    const path = item.fieldBreadcrumbTitle ?? '';
+    const name = ((_item_fieldData = item.fieldData) === null || _item_fieldData === void 0 ? void 0 : _item_fieldData.name) ?? '';
+    const locale = ((_item_fieldData1 = item.fieldData) === null || _item_fieldData1 === void 0 ? void 0 : _item_fieldData1.locale) ?? 'default';
+    return `${path}-${name}-${locale}`;
+};
 const versionsDataToTableData = (param)=>{
     let { data } = param;
     const resultList = [];
     const mainVersionData = data[0] ?? [];
+    const mainVersionMap = new Map(mainVersionData.map((item)=>[
+            getUniqFieldKey(item),
+            item
+        ]));
     const compareVersionData = data[1] ?? [];
+    const compareVersionMap = new Map(compareVersionData.map((item)=>[
+            getUniqFieldKey(item),
+            item
+        ]));
     const isComparisonMode = !(0,lodash__WEBPACK_IMPORTED_MODULE_0__.isEmpty)(compareVersionData);
-    for(let index = 0; index < mainVersionData.length; index++){
-        const mainVersionItem = mainVersionData[index];
-        const compareVersionItem = compareVersionData[index];
+    const allKeys = new Set([
+        ...mainVersionMap.keys(),
+        ...compareVersionMap.keys()
+    ]);
+    for (const key of allKeys){
+        const mainVersionItem = mainVersionMap.get(key);
+        const compareVersionItem = compareVersionMap.get(key);
         const isEmptyField = isFieldValueEmpty(mainVersionItem === null || mainVersionItem === void 0 ? void 0 : mainVersionItem.fieldValue) && isFieldValueEmpty(compareVersionItem === null || compareVersionItem === void 0 ? void 0 : compareVersionItem.fieldValue);
         if (isEmptyField) {
             continue;
@@ -58647,8 +58666,8 @@ const versionsDataToTableData = (param)=>{
         const hasCompareVersion = !(0,lodash__WEBPACK_IMPORTED_MODULE_0__.isUndefined)(compareVersionItem);
         const field = {
             Field: {
-                fieldBreadcrumbTitle: mainVersionItem === null || mainVersionItem === void 0 ? void 0 : mainVersionItem.fieldBreadcrumbTitle,
-                ...mainVersionItem === null || mainVersionItem === void 0 ? void 0 : mainVersionItem.fieldData
+                fieldBreadcrumbTitle: (mainVersionItem === null || mainVersionItem === void 0 ? void 0 : mainVersionItem.fieldBreadcrumbTitle) ?? (compareVersionItem === null || compareVersionItem === void 0 ? void 0 : compareVersionItem.fieldBreadcrumbTitle),
+                ...(mainVersionItem === null || mainVersionItem === void 0 ? void 0 : mainVersionItem.fieldData) ?? (compareVersionItem === null || compareVersionItem === void 0 ? void 0 : compareVersionItem.fieldData)
             }
         };
         // Set the field for the main version count
