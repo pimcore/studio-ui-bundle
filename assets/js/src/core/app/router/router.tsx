@@ -30,17 +30,20 @@ export const routes = {
 }
 
 const AuthenticatedRoute = ({ children }: { children: React.JSX.Element }): React.ReactElement => {
-  const isAuthenticated = useIsAuthenticated()
+  const { isAuthenticated } = useIsAuthenticated()
   const location = useLocation()
 
-  return isAuthenticated
-    ? children
-    : (
-      <Navigate
-        state={ { from: location } }
-        to={ routes.login }
-      />
-      )
+  return (
+    <>
+      {isAuthenticated === true && children}
+      {isAuthenticated === false && (
+        <Navigate
+          state={ { from: location } }
+          to={ routes.login }
+        />
+      )}
+    </>
+  )
 }
 
 export const router = createBrowserRouter([

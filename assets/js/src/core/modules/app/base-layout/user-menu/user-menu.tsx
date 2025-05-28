@@ -10,7 +10,7 @@
 
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Avatar, type MenuProps } from 'antd'
-import React from 'react'
+import React, { useState } from 'react'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { useTranslation } from 'react-i18next'
 import { useStyle } from './user-menu.styles'
@@ -18,8 +18,10 @@ import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { NOTIFICATIONS } from '@Pimcore/modules/notifications'
 import { USERPROFILE } from '@Pimcore/modules/user/profile/profile-container'
-import { Badge, Button } from '@sdk/components'
+import { Button } from '@Pimcore/components/button/button'
 import { useWidgetManager } from '@sdk/modules/widget-manager'
+import { SendNotificationModal } from '@Pimcore/modules/notifications/send-notification/send-notification-modal'
+import { Badge } from '@Pimcore/components/badge/badge'
 
 interface IUserMenuProps {
   className?: string
@@ -27,7 +29,7 @@ interface IUserMenuProps {
 export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
-
+  const [sendModal, setSendModal] = useState<boolean>(false)
   const [logout] = useLogoutMutation()
   const { openMainWidget } = useWidgetManager()
 
@@ -56,8 +58,12 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       onClick: () => { openMainWidget(NOTIFICATIONS) },
       extra: <Button
         className={ 'user-menu__item-extra' }
+        onClick={ (e) => {
+          e.stopPropagation()
+          setSendModal(true)
+        } }
         size={ 'small' }
-             >{t('user-menu.notifications-send')}</Button>
+             >{t('user-menu.notification.send')}</Button>
     },
     {
       key: 'myprofile',
@@ -74,16 +80,23 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   ]
 
   return (
-    <Dropdown
-      className={ className }
-      menu={ { items } }
-      overlayClassName={ [styles.userMenu].join(' ') }
-      overlayStyle={ { minWidth: 275 } }
-    >
-      <Avatar
-        icon={ <Icon value='user' /> }
-        size={ 26 }
+    <>
+      <Dropdown
+        className={ className }
+        menu={ { items } }
+        overlayClassName={ [styles.userMenu].join(' ') }
+        overlayStyle={ { minWidth: 275 } }
+      >
+        <Avatar
+          icon={ <Icon value='user' /> }
+          size={ 26 }
+        />
+      </Dropdown>
+
+      <SendNotificationModal
+        onClose={ () => { setSendModal(false) } }
+        open={ sendModal }
       />
-    </Dropdown>
+    </>
   )
 }

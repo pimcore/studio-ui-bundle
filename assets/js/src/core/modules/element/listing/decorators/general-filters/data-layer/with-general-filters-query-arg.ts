@@ -26,6 +26,14 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
     const { fieldFilters } = useFieldFilters()
     const { availableColumns } = useAvailableColumns()
 
+    const getUpdatedColumnFilters = (columnFilters: any[]): any[] => {
+      // Override 'type' with 'filterType' for specific cases (e.g., 'dataobject.adapter')
+      return columnFilters.map(({ filterType, ...rest }) => ({
+        ...rest,
+        ...(filterType !== undefined && { type: filterType })
+      }))
+    }
+
     const getArgs: typeof baseGetArgs = () => {
       const baseArgs = baseGetArgs()
       const searchTermFilter = getSearchTermFilterArg()
@@ -58,7 +66,7 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
           filters: {
             ...baseArgs.body.filters,
             includeDescendants: !onlyDirectChildren,
-            columnFilters: newColumnFilters
+            columnFilters: getUpdatedColumnFilters(newColumnFilters)
           }
         }
       }

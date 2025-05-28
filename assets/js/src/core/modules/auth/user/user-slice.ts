@@ -25,7 +25,7 @@ const initialState: UserInformation = {
   classes: [],
   docTypes: [],
   language: 'en',
-  activePerspective: 0,
+  activePerspective: '0',
   perspectives: [],
   dateTimeLocale: '',
   welcomeScreen: false,

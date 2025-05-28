@@ -52,7 +52,7 @@ export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn =
       key: ContextMenuActionName.unpublish,
       isLoading,
       icon: <Icon value='eye-off' />,
-      hidden: node.published === false || isUnpublishHidden(node),
+      hidden: !node.published || isUnpublishHidden(node),
       onClick: () => {
         setIsLoading(true)
         unpublishTreeNode(node, () => {
