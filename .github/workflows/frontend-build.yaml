@@ -158,6 +158,9 @@ jobs:
       contents: write
 
     steps:
+      - name: Pull latest changes
+        run: |
+          git pull
       - name: Checkout code
         uses: actions/checkout@v4
         with:
@@ -190,11 +193,6 @@ jobs:
         continue-on-error: true
         working-directory: ./assets
         run: npm pack && mv ./pimcore-studio-ui*.tgz ../public/build/studio-npm-package.tgz
-      - name: Pull latest changes
-        run: |
-          git config --global user.email "action@github.com"
-          git config --global user.name "GitHub Action"
-          git pull --rebase
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           file_pattern: './public/'
