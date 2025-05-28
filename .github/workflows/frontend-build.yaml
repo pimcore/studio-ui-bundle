@@ -158,15 +158,14 @@ jobs:
       contents: write
 
     steps:
-      - name: Pull latest changes
-        run: |
-          git pull
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-
+      - name: Pull latest changes
+        run: |
+          git pull
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
