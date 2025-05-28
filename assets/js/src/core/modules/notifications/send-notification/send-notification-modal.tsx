@@ -73,7 +73,6 @@ export const SendNotificationModal = ({ open, ...props }: SendNotificationModalP
           {t('user-menu.notification.send')}
         </Button>
       </ModalFooter>) }
-      okText={ t('user-menu.notification.send') }
       onCancel={ onClose }
       open={ open }
       size="M"

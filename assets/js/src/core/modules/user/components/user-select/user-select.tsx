@@ -12,11 +12,9 @@ import { Select, type SelectProps } from '@Pimcore/components/select/select'
 import React from 'react'
 import { useUserGetCollectionQuery } from '../../user-api-slice-enhanced'
 
-interface UserSelectProps extends SelectProps {
-  onChange: (value: string | null) => void
-}
+interface UserSelectProps extends SelectProps {}
 
-export const UserSelect = ({ onChange, ...selectProps }: UserSelectProps): React.JSX.Element => {
+export const UserSelect = ({ ...selectProps }: UserSelectProps): React.JSX.Element => {
   const { data, isLoading } = useUserGetCollectionQuery()
 
   const options = data?.items.map((user) => ({
@@ -27,7 +25,6 @@ export const UserSelect = ({ onChange, ...selectProps }: UserSelectProps): React
   return (
     <Select
       loading={ isLoading }
-      onChange={ onChange }
       options={ options }
       { ...selectProps }
     />
