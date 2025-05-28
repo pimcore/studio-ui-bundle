@@ -23,7 +23,7 @@ export const NOTIFICATIONS: WidgetManagerTabConfig = {
     translationKey: 'notifications.label',
     icon: {
       type: 'name',
-      value: 'notification'
+      value: 'notification-read'
     }
   }
 }

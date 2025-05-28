@@ -122,7 +122,7 @@ export const GridConfigInner = (): React.JSX.Element => {
         folderId: getId(),
         columns: prepareColumns(columns),
         name: gridConfig.name,
-        description: gridConfig.description,
+        description: gridConfig.description ?? '',
         setAsFavorite: gridConfig.setAsFavorite,
         shareGlobal: gridConfig.shareGlobal,
         sharedRoles: gridConfig.sharedRoles,
@@ -214,9 +214,10 @@ export const GridConfigInner = (): React.JSX.Element => {
 
   const onApplyClick = (): void => {
     setSelectedColumns(columns.map(column => {
+      const locale = column.locale === null && column.localizable ? currentLanguage : column.locale
       return {
         key: column.key,
-        locale: column.locale === null && column.localizable ? currentLanguage : column.locale,
+        locale: locale ?? undefined,
         type: column.type,
         config: column.config,
         sortable: column.sortable,
