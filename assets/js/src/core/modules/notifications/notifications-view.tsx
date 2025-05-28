@@ -18,7 +18,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { Box } from '@Pimcore/components/box/box'
 import { NotificationList } from './notification-list'
 import { IconTextButton } from '@sdk/components'
-import { NotificationGetCollectionApiResponse } from './notifications-slice.gen'
+import { type NotificationGetCollectionApiResponse } from './notifications-slice.gen'
 
 interface NotificationsViewProps {
   notifications: NotificationGetCollectionApiResponse | undefined
@@ -31,11 +31,11 @@ interface NotificationsViewProps {
   setPageSize: (pageSize: number) => void
 }
 
-const NotificationsView = ({notifications, isLoading, isFetching, deleteNotificationsForUser, deleteLoading, page, setPage, setPageSize}: NotificationsViewProps): React.JSX.Element => {
+const NotificationsView = ({ notifications, isLoading, isFetching, deleteNotificationsForUser, deleteLoading, page, setPage, setPageSize }: NotificationsViewProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  console.log("notifications", notifications);
-  
+  console.log('notifications', notifications)
+
   return (
     <ContentLayout
       renderToolbar={ notifications?.totalItems !== 0
