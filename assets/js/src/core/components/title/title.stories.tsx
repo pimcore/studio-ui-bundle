@@ -38,6 +38,6 @@ export const WithIcon = {
   args: {
     children: 'Title with Icon',
     theme: 'primary',
-    icon: <Icon value={ 'notes-events' }/>
+    icon: <Icon value={ 'notes-events' } />
   }
 }

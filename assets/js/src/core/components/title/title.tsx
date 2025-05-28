@@ -21,7 +21,7 @@ export interface TitleProps extends AntTitleProps {
   theme: 'primary' | 'secondary'
 }
 
-export const Title = ({ children, icon, titleClass, theme = 'primary',...props }: TitleProps): React.JSX.Element => {
+export const Title = ({ children, icon, titleClass, theme = 'primary', ...props }: TitleProps): React.JSX.Element => {
   const { styles } = useStyle()
 
   const titleClassNames = [styles.title, 'pimcore-title', `title--theme-${theme}`, titleClass ?? null].join(' ')
@@ -39,4 +39,3 @@ export const Title = ({ children, icon, titleClass, theme = 'primary',...props }
     </Flex>
   )
 }
-
