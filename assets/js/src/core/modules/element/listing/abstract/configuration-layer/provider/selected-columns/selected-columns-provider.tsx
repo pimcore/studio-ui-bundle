@@ -20,7 +20,7 @@ export interface SelectedColumn {
   localizable: boolean
   exportable?: boolean
   frontendType?: string
-  locale?: string
+  locale?: string | null
   group?: string
   originalApiDefinition?: Record<string, any>
   meta?: Record<string, any>

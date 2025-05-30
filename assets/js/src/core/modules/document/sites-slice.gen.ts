@@ -12,7 +12,9 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/documents/sites/list-available`,
-                    params: { excludeMainSite: queryArg.excludeMainSite },
+                    params: {
+                        excludeMainSite: queryArg.excludeMainSite,
+                    },
                 }),
                 providesTags: ["Documents"],
             }),
@@ -39,9 +41,9 @@ export type Site = {
     /** Domain */
     domain: string;
     /** ID of the root */
-    rootId?: any;
+    rootId: number | null;
     /** Root path */
-    rootPath?: any;
+    rootPath: string | null;
 };
 export type Error = {
     /** Message */

@@ -33,7 +33,7 @@ export type MetadataGetCollectionApiResponse = /** status 200 Predefined metadat
 };
 export type MetadataGetCollectionApiArg = {
     body: {
-        filter?: any;
+        filter?: string | null;
     };
 };
 export type CustomMetadata = {
@@ -48,7 +48,7 @@ export type CustomMetadata = {
     /** Type */
     type: string;
     /** Data */
-    data: any;
+    data: any | null;
 };
 export type Error = {
     /** Message */
@@ -70,19 +70,19 @@ export type PredefinedMetadata = {
     /** Name */
     name: string;
     /** Description */
-    description?: any;
+    description?: string | null;
     /** Type */
     type: string;
     /** Target sub type */
-    targetSubType?: any;
+    targetSubType?: string | null;
     /** Data */
-    data?: any;
+    data?: any | null;
     /** Config */
-    config?: any;
+    config?: string | null;
     /** Language */
-    language?: any;
+    language?: string | null;
     /** Group */
-    group?: any;
+    group?: string | null;
     /** Creation Date */
     creationDate: number;
     /** Modfication Date */

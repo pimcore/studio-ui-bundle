@@ -26,8 +26,8 @@ import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
 import { Popconfirm } from 'antd'
 
 interface IManagementDetailProps {
-  onRemoveItem: (id: any) => void
-  onCloneUser: (data: any) => void
+  onRemoveItem: (id: any, parentId: any) => void
+  onCloneUser: (data: any, parentId: any) => void
 }
 
 const ManagementDetail = ({ onCloneUser, onRemoveItem, ...props }: IManagementDetailProps): React.JSX.Element => {
@@ -69,7 +69,7 @@ const ManagementDetail = ({ onCloneUser, onRemoveItem, ...props }: IManagementDe
       label: t('user-management.clone-user.label'),
       onOk: async (value: string) => {
         const data = await cloneUser({ id: activeId, name: value })
-        onCloneUser(data)
+        onCloneUser(data, user?.parentId)
       }
     })
   }
@@ -79,10 +79,10 @@ const ManagementDetail = ({ onCloneUser, onRemoveItem, ...props }: IManagementDe
       title: t('user-management.remove-user'),
       content: t('user-management.remove-user.text'),
       onOk: async () => {
-        closeUser(activeId)
+        triggerConfirm()
         await removeUser({ id: activeId })
 
-        onRemoveItem(activeId)
+        onRemoveItem(activeId, user?.parentId)
       }
     })
   }

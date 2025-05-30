@@ -14,7 +14,6 @@ import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type IconLibrary } from './services/icon-library'
-import arrowNarrowRight from '@Pimcore/assets/icons/arrow-narrow-right.inline.svg?react'
 import accessory from '@Pimcore/assets/icons/accessory.inline.svg?react'
 import addFind from '@Pimcore/assets/icons/add-find.inline.svg?react'
 import addFolder from '@Pimcore/assets/icons/add-folder.inline.svg?react'
@@ -23,6 +22,7 @@ import addPackage from '@Pimcore/assets/icons/add-package.inline.svg?react'
 import addSomething from '@Pimcore/assets/icons/add-something.inline.svg?react'
 import addUser from '@Pimcore/assets/icons/add-user.inline.svg?react'
 import alert from '@Pimcore/assets/icons/alert.inline.svg?react'
+import arrowNarrowRight from '@Pimcore/assets/icons/arrow-narrow-right.inline.svg?react'
 import asset from '@Pimcore/assets/icons/asset.inline.svg?react'
 import attachment from '@Pimcore/assets/icons/attachment.inline.svg?react'
 import audio from '@Pimcore/assets/icons/audio.inline.svg?react'
@@ -146,7 +146,8 @@ import newIcon from '@Pimcore/assets/icons/new.inline.svg?react'
 import news from '@Pimcore/assets/icons/news.inline.svg?react'
 import noContent from '@Pimcore/assets/icons/no-content.inline.svg?react'
 import notesEvents from '@Pimcore/assets/icons/notes-events.inline.svg?react'
-import notification from '@Pimcore/assets/icons/notification.inline.svg?react'
+import notificationRead from '@Pimcore/assets/icons/notification-read.inline.svg?react'
+import notificationUnread from '@Pimcore/assets/icons/notification-unread.inline.svg?react'
 import numberField from '@Pimcore/assets/icons/number-field.inline.svg?react'
 import openFolder from '@Pimcore/assets/icons/open-folder.inline.svg?react'
 import packageIcon from '@Pimcore/assets/icons/package.inline.svg?react'
@@ -744,8 +745,12 @@ moduleSystem.registerModule({
       component: notesEvents
     })
     iconLibrary.register({
-      name: 'notification',
-      component: notification
+      name: 'notification-read',
+      component: notificationRead
+    })
+    iconLibrary.register({
+      name: 'notification-unread',
+      component: notificationUnread
     })
     iconLibrary.register({
       name: 'number-field',

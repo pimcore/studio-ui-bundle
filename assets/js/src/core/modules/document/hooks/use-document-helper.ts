@@ -12,7 +12,7 @@ import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { store, useAppDispatch } from '@sdk/app'
 import { type IconProps } from '@Pimcore/components/icon/icon'
 import { api, type ElementIcon } from '@Pimcore/modules/document/document-api-slice-enhanced'
-import { getElementIcon } from '@Pimcore/modules/element/element-helper'
+import { type Element, getElementIcon } from '@Pimcore/modules/element/element-helper'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
@@ -49,7 +49,7 @@ export const useDocumentHelper = (): UseDocumentReturn => {
       return
     }
 
-    const icon = getElementIcon(data, { value: 'widget', type: 'name' })
+    const icon = getElementIcon(data as Element, { value: 'widget', type: 'name' })
     const iconConfig: IconProps & ElementIcon = {
       type: icon.type,
       value: icon.value

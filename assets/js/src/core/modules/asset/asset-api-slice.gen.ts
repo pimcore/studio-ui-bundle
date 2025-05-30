@@ -97,7 +97,9 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/assets/grid/configuration/${queryArg.folderId}`,
-                    params: { configurationId: queryArg.configurationId },
+                    params: {
+                        configurationId: queryArg.configurationId,
+                    },
                 }),
                 providesTags: ["Asset Grid"],
             }),
@@ -254,7 +256,9 @@ const injectedRtkApi = api
             assetUploadInfo: build.query<AssetUploadInfoApiResponse, AssetUploadInfoApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/assets/exists/${queryArg.parentId}`,
-                    params: { fileName: queryArg.fileName },
+                    params: {
+                        fileName: queryArg.fileName,
+                    },
                 }),
                 providesTags: ["Assets"],
             }),
@@ -320,7 +324,7 @@ const injectedRtkApi = api
     });
 export { injectedRtkApi as api };
 export type AssetCloneApiResponse =
-    /** status 200 Successfully copied asset */ void | /** status 201 Successfully copied parent asset and created <strong>jobRun</strong> for copying child assets */ {
+    /** status 201 Successfully copied parent asset and created <strong>jobRun</strong> for copying child assets */ {
         /** ID of created jobRun */
         jobRunId: number;
     };
@@ -355,7 +359,7 @@ export type AssetDownloadZipApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
 };
-export type AssetDeleteZipApiResponse = /** status 200 Success */ void;
+export type AssetDeleteZipApiResponse = unknown;
 export type AssetDeleteZipApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
@@ -413,14 +417,14 @@ export type AssetUpdateByIdApiArg = {
     id: number;
     body: {
         data: {
-            parentId?: any;
-            key?: any;
-            locked?: any;
-            data?: any;
-            dataUri?: any;
-            metadata?: UpdateCustomMetadata[];
-            customSettings?: UpdateCustomSettings[];
-            properties?: UpdateDataProperty[];
+            parentId?: number | null;
+            key?: string | null;
+            locked?: string | null;
+            data?: string | null;
+            dataUri?: string | null;
+            metadata?: UpdateCustomMetadata[] | null;
+            customSettings?: UpdateCustomSettings[] | null;
+            properties?: UpdateDataProperty[] | null;
             image?: ImageData | null;
         };
     };
@@ -469,16 +473,14 @@ export type AssetSaveGridConfigurationApiArg = {
         filter?: GridFilter | null;
     };
 };
-export type AssetSetGridConfigurationAsFavoriteApiResponse =
-    /** status 200 asset_set_grid_configuration_as_favorite_response */ void;
+export type AssetSetGridConfigurationAsFavoriteApiResponse = unknown;
 export type AssetSetGridConfigurationAsFavoriteApiArg = {
     /** ConfigurationId of the configurationId */
     configurationId: number;
     /** FolderId of the folderId */
     folderId: number;
 };
-export type AssetUpdateGridConfigurationApiResponse =
-    /** status 200 Asset grid configuration updated successfully */ void;
+export type AssetUpdateGridConfigurationApiResponse = unknown;
 export type AssetUpdateGridConfigurationApiArg = {
     /** ConfigurationId of the configurationId */
     configurationId: number;
@@ -589,20 +591,19 @@ export type AssetImageDownloadByThumbnailApiArg = {
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
 };
-export type AssetPatchByIdApiResponse =
-    /** status 200 Successfully patched asset */ void | /** status 201 Successfully created jobRun for patching multiple assets */ {
-        /** ID of created jobRun */
-        jobRunId: number;
-    };
+export type AssetPatchByIdApiResponse = /** status 201 Successfully created jobRun for patching multiple assets */ {
+    /** ID of created jobRun */
+    jobRunId: number;
+};
 export type AssetPatchByIdApiArg = {
     body: {
         data: {
             /** Asset ID */
             id: number;
-            parentId?: any;
-            key?: any;
-            locked?: any;
-            metadata?: PatchCustomMetadata[];
+            parentId?: number | null;
+            key?: string | null;
+            locked?: string | null;
+            metadata?: PatchCustomMetadata[] | null;
         }[];
     };
 };
@@ -616,15 +617,15 @@ export type AssetPatchFolderByIdApiArg = {
         data: {
             /** Folder ID */
             folderId: number;
-            parentId?: any;
-            key?: any;
-            locked?: any;
-            metadata?: PatchCustomMetadata[];
+            parentId?: number | null;
+            key?: string | null;
+            locked?: string | null;
+            metadata?: PatchCustomMetadata[] | null;
         }[];
         filters?: GridFilter;
     };
 };
-export type AssetClearThumbnailApiResponse = /** status 200 Success */ void;
+export type AssetClearThumbnailApiResponse = unknown;
 export type AssetClearThumbnailApiArg = {
     /** Id of the asset */
     id: number;
@@ -792,25 +793,25 @@ export type Element = {
     /** ID of owner */
     userOwner: number;
     /** User that modified the element */
-    userModification: any;
+    userModification: number | null;
     /** Locked */
-    locked: any;
+    locked: string | null;
     /** Is locked */
     isLocked: boolean;
     /** Creation date */
-    creationDate: any;
+    creationDate: number | null;
     /** Modification date */
-    modificationDate: any;
+    modificationDate: number | null;
 };
 export type CustomAttributes = {
     /** Custom Icon */
     icon: ElementIcon | null;
     /** Custom Tooltip */
-    tooltip: any;
+    tooltip: string | null;
     /** AdditionalIcons */
     additionalIcons: string[];
     /** Custom Key/Filename */
-    key: any;
+    key: string | null;
     /** Additional Css Classes */
     additionalCssClasses: string[];
 };
@@ -841,55 +842,55 @@ export type Asset = Element & {
         [key: string]: string | number | boolean | object;
     };
     /** Custom attributes for the tree */
-    customAttributes?: CustomAttributes;
+    customAttributes: CustomAttributes;
     /** Has workflow available */
-    hasWorkflowAvailable?: boolean;
+    hasWorkflowAvailable: boolean;
     /** Has children */
-    hasChildren?: boolean;
+    hasChildren: boolean;
     /** Type */
-    type?: string;
+    type: string;
     /** Filename */
-    filename?: string;
+    filename: string;
     /** Mimetype */
-    mimeType?: any;
+    mimeType: string | null;
     /** Has metadata */
-    hasMetadata?: boolean;
+    hasMetadata: boolean;
     /** Workflow permissions */
-    hasWorkflowWithPermissions?: boolean;
+    hasWorkflowWithPermissions: boolean;
     /** Full path */
-    fullPath?: string;
-    permissions?: AssetPermissions;
+    fullPath: string;
+    permissions: AssetPermissions;
 };
 export type Image = Asset & {
     /** Format */
-    format?: string;
+    format: string;
     /** width */
-    width?: number;
+    width: number;
     /** height */
-    height?: number;
+    height: number;
     /** is vector graphic */
-    isVectorGraphic?: boolean;
+    isVectorGraphic: boolean;
     /** is animated */
-    isAnimated?: boolean;
+    isAnimated: boolean;
     /** path to thumbnail */
-    imageThumbnailPath?: string;
+    imageThumbnailPath: string;
 };
 export type AssetDocument = Asset & {
     /** Page count */
-    pageCount?: any;
+    pageCount: number | null;
     /** Path to image thumbnail */
-    imageThumbnailPath?: any;
+    imageThumbnailPath: string | null;
 };
 export type Audio = Asset;
 export type Video = Asset & {
     /** Duration */
-    duration?: any;
+    duration?: number | null;
     /** Width */
-    width?: any;
+    width?: number | null;
     /** Height */
-    height?: any;
+    height?: number | null;
     /** Path to Image Thumbnail */
-    imageThumbnailPath?: any;
+    imageThumbnailPath?: string | null;
 };
 export type Archive = Asset;
 export type Text = Asset;
@@ -903,19 +904,19 @@ export type UpdateCustomMetadata = {
     /** Type */
     type: string;
     /** Data */
-    data: any;
+    data: any | null;
 };
 export type UpdateCustomSettings = {
     /** Key */
     key: string;
     /** Value */
-    value: any;
+    value: any | null;
 };
 export type UpdateDataProperty = {
     /** key */
     key: string;
     /** data */
-    data: any;
+    data: any | null;
     /** type */
     type: string;
     /** inheritable */
@@ -935,7 +936,7 @@ export type Column = {
     /** Key of the Column */
     key: string;
     /** Locale of the Column */
-    locale: any;
+    locale: string | null;
     /** Group of the Column */
     group: string;
 };
@@ -947,7 +948,7 @@ export type GridDetailedConfiguration = {
     /** Name */
     name: string;
     /** Description */
-    description?: any;
+    description?: string | null;
     /** shareGlobal */
     shareGlobal: boolean;
     /** saveFilter */
@@ -965,13 +966,13 @@ export type GridDetailedConfiguration = {
     /** Page Size */
     pageSize: number;
     /** Modification Date */
-    modificationDate?: any;
+    modificationDate?: number | null;
     /** Creation Date */
-    creationDate?: any;
+    creationDate?: number | null;
     /** ID of the owner */
-    ownerId?: any;
+    ownerId?: number | null;
     /** ID of the configuration */
-    id?: any;
+    id?: number | null;
 };
 export type GridColumnConfiguration = {
     /** AdditionalAttributes */
@@ -993,7 +994,7 @@ export type GridColumnConfiguration = {
     /** Localizable */
     localizable: boolean;
     /** Locale */
-    locale?: any;
+    locale?: string | null;
     /** Type */
     type: string;
     /** Frontend Type */
@@ -1011,7 +1012,7 @@ export type GridConfiguration = {
     /** Name */
     name: string;
     /** Description */
-    description?: any;
+    description?: string | null;
 };
 export type GridColumnData = {
     /** AdditionalAttributes */
@@ -1021,11 +1022,11 @@ export type GridColumnData = {
     /** Key */
     key?: string;
     /** Locale */
-    locale?: any;
+    locale?: string | null;
     /** Value */
-    value?: any;
+    value?: any | null;
     /** inheritance */
-    inheritance?: any;
+    inheritance?: object | null;
 };
 export type RelationFieldConfig = {
     /** Relation Getter */
@@ -1037,19 +1038,23 @@ export type SimpleFieldConfig = {
     /** Field getter */
     field: string;
 };
+export type StaticTextConfig = {
+    /** Static Text */
+    text: string;
+};
 export type AdvancedColumnConfig = {
     /** advancedColumns */
-    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig)[];
+    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
 };
 export type GridColumnRequest = {
     /** Key */
     key: string;
     /** Locale */
-    locale?: any;
+    locale?: string | null;
     /** Type */
     type: string;
     /** Group */
-    group?: any;
+    group?: string | null;
     /** Config */
     config: (string | AdvancedColumnConfig)[];
 };
@@ -1057,11 +1062,11 @@ export type PatchCustomMetadata = {
     /** Name */
     name: string;
     /** Language */
-    language: any;
+    language: string | null;
     /** Type */
     type: string;
     /** Data */
-    data: any;
+    data: string | null;
 };
 export type CustomMetadata = {
     /** AdditionalAttributes */
@@ -1075,7 +1080,7 @@ export type CustomMetadata = {
     /** Type */
     type: string;
     /** Data */
-    data: any;
+    data: any | null;
 };
 export const {
     useAssetCloneMutation,

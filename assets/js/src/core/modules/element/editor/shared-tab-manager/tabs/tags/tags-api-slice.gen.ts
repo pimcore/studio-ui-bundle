@@ -196,9 +196,9 @@ export type CreateTagParameters = {
 };
 export type ChangeTagParameters = {
     /** Parent id */
-    parentId?: any;
+    parentId?: number | null;
     /** Tag name */
-    name?: any;
+    name?: string | null;
 };
 export const {
     useTagGetCollectionQuery,

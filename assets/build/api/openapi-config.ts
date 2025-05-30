@@ -80,9 +80,6 @@ const config: ConfigFile = {
     '../../js/src/core/modules/auth/user/user-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/user/i)
     },
-    '../../js/src/core/modules/user/user-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/user/i)
-    },
     '../../js/src/core/modules/user/roles/roles-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/role/i)
     },

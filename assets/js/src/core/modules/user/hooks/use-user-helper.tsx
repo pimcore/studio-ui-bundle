@@ -19,7 +19,6 @@ import {
   type UserFolderCreateApiResponse,
   type UserFolderDeleteByIdApiResponse,
   type Error,
-  type UserGetAvailablePermissionsApiResponse,
   type UserGetByIdApiResponse,
   type UserGetCollectionApiResponse,
   type PimcoreStudioApiUserSearchApiResponse,
@@ -27,9 +26,13 @@ import {
   type UserUploadImageApiResponse,
   type UserGetTreeApiArg,
   type UserDeleteByIdApiArg,
-  type UserFolderDeleteByIdApiArg, type User2, type User, type UserGetImageApiResponse
+  type UserFolderDeleteByIdApiArg,
+  type User2,
+  type User,
+  type UserGetImageApiResponse,
+  type UserGetAvailablePermissionsApiResponse
 } from '@Pimcore/modules/user/user-api-slice-enhanced'
-import { userOpened, userClosed, userUpdated, changeUser, userImageLoaded } from '@Pimcore/modules/user/user-slice'
+import { userOpened, userClosed, userUpdated, changeUser, userImageLoaded, userAvailablePermissionsFetched } from '@Pimcore/modules/user/user-slice'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
 import type { UseTrackableChangesDraftReturn } from '@Pimcore/modules/user/hooks/use-user-trackable-changes'
@@ -51,7 +54,6 @@ interface UseUserReturn extends
   cloneUser: (props: { id: number, name: string }) => Promise<{ data: UserCloneByIdApiResponse, error: any }>
   updateUserById: (props: { id: number, user: User2 | User }) => Promise<{ data: UserUpdateByIdApiResponse, error: any }>
   moveUserById: (props: { id: number, parentId: number }) => Promise<{ data: UserUpdateByIdApiResponse, error: any }>
-  getAvailablePermissions: (props) => Promise<{ data: UserGetAvailablePermissionsApiResponse, error: any }>
   addNewFolder: (props: AddItemArgs) => Promise<{ data: UserFolderCreateApiResponse, error: any }>
   fetchUserList: () => Promise<UserGetCollectionApiResponse>
   searchUserByText: (query: string) => Promise<PimcoreStudioApiUserSearchApiResponse>
@@ -60,7 +62,7 @@ interface UseUserReturn extends
   fetchUserImageById: (props: { id: number }) => Promise<{ data: UserGetImageApiResponse | undefined, error?: any }>
   activeId: number
   getAllIds: number[]
-  availablePermissions: any[]
+  getAvailablePermissions: () => any[]
   getDefaultKeyBindings: () => Promise<UserDefaultKeyBindingsApiResponse>
 }
 
@@ -121,7 +123,7 @@ export const useUserHelper = (): UseUserReturn => {
 
   async function getUserTree (props: UserGetTreeApiArg): Promise<UserGetTreeApiResponse> {
     const { parentId } = props
-    const { data }: any = await dispatch(api.endpoints.userGetTree.initiate({ parentId }))
+    const { data }: any = await dispatch(api.endpoints.userGetTree.initiate({ parentId }, { forceRefetch: true }))
 
     return data
   }
@@ -215,11 +217,6 @@ export const useUserHelper = (): UseUserReturn => {
     return data
   }
 
-  async function getAvailablePermissions (props): Promise<{ data: UserGetAvailablePermissionsApiResponse, error: Error }> {
-    const { data }: any = await dispatch(api.endpoints.userGetAvailablePermissions.initiate())
-    return data
-  }
-
   async function uploadUserAvatar (props: { id: number, file: File }): Promise<{ data: UserUploadImageApiResponse, error: Error }> {
     const { data, error }: any = await dispatch(api.endpoints.userUploadImage.initiate({ id: props.id, body: { userImage: props.file } }))
 
@@ -246,9 +243,35 @@ export const useUserHelper = (): UseUserReturn => {
     return { data }
   }
 
+  async function fetchUserAvailablePermissions (): Promise<UserGetAvailablePermissionsApiResponse> {
+    const { data, isError: isFetchUserAvailablePermissionsError, error } = await dispatch(api.endpoints.userGetAvailablePermissions.initiate())
+
+    if (data !== undefined) {
+      dispatch(userAvailablePermissionsFetched(data))
+      return data
+    }
+
+    if (isFetchUserAvailablePermissionsError) {
+      trackError(new ApiError(error))
+    }
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    return {} as UserGetAvailablePermissionsApiResponse
+  }
+
+  const getAvailablePermissions = (): any[] => {
+    let availablePermissions = useAppSelector(state => state.user.availablePermissions)
+    if (availablePermissions.length === 0) {
+      fetchUserAvailablePermissions().then((data) => {
+        availablePermissions = data.items
+      }).catch((error) => {
+        console.error(error)
+      })
+    }
+    return availablePermissions
+  }
+
   const activeId = useAppSelector(state => state.user.activeId)
   const getAllIds = useAppSelector(state => state.user.ids)
-  const availablePermissions = useAppSelector(state => state.user.availablePermissions)
 
   return {
     removeTrackedChanges (): void {},
@@ -263,15 +286,14 @@ export const useUserHelper = (): UseUserReturn => {
     removeFolder,
     updateUserById,
     moveUserById,
-    getAvailablePermissions,
     fetchUserList,
     searchUserByText,
     resetUserKeyBindings,
     getDefaultKeyBindings,
     uploadUserAvatar,
     fetchUserImageById,
+    getAvailablePermissions,
     activeId,
-    getAllIds,
-    availablePermissions
+    getAllIds
   }
 }

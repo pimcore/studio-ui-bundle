@@ -9,7 +9,10 @@ const injectedRtkApi = api
             workflowGetDetails: build.query<WorkflowGetDetailsApiResponse, WorkflowGetDetailsApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/workflows/details`,
-                    params: { elementId: queryArg.elementId, elementType: queryArg.elementType },
+                    params: {
+                        elementId: queryArg.elementId,
+                        elementType: queryArg.elementType,
+                    },
                 }),
                 providesTags: ["Workflows"],
             }),
@@ -54,7 +57,7 @@ export type WorkflowStatus = {
     /** label */
     label: string;
     /** layoutId */
-    layoutId: any;
+    layoutId: string | null;
     /** visibleInDetail */
     visibleInDetail: boolean;
 };
@@ -98,7 +101,7 @@ export type WorkflowDetails = {
     /** graph */
     graph: string;
     /** workflowLayoutId */
-    workflowLayoutId: any;
+    workflowLayoutId: string | null;
     /** allowedTransitions */
     allowedTransitions: AllowedTransition[];
     /** globalActions */

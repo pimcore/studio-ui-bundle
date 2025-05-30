@@ -72,7 +72,7 @@ export const getInitialModelJson = (): IJsonModel => {
         type: 'border',
         location: 'left',
         size: 315,
-        selected: getWidgetIndex(widgetsLeft, activePerspective?.expandedLeft as string | undefined | null),
+        selected: getWidgetIndex(widgetsLeft, activePerspective?.expandedLeft),
         children: widgetsLeft
       },
 
@@ -80,7 +80,7 @@ export const getInitialModelJson = (): IJsonModel => {
         type: 'border',
         location: 'right',
         size: 315,
-        selected: getWidgetIndex(widgetsRight, activePerspective?.expandedRight as string | undefined | null),
+        selected: getWidgetIndex(widgetsRight, activePerspective?.expandedRight),
         children: widgetsRight
       }
     ]

@@ -81,13 +81,13 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
       <form onSubmit={ handleAuthentication }>
         <Input
           onChange={ (e) => { setFormState({ ...formState, username: e.target.value }) } }
-          placeholder="Username"
+          placeholder={ t('login-form.username') }
           prefix={ <Icon value="user" /> }
         />
         <Input.Password
           // iconRender={ (visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />) }
           onChange={ (e) => { setFormState({ ...formState, password: e.target.value }) } }
-          placeholder="Password"
+          placeholder={ t('login-form.password') }
         />
         <div className={ 'flex-space' }>
           <Checkbox

@@ -61,7 +61,7 @@ export type ExportDownloadCsvApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
 };
-export type ExportDeleteCsvApiResponse = /** status 200 Success */ void;
+export type ExportDeleteCsvApiResponse = unknown;
 export type ExportDeleteCsvApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
@@ -144,7 +144,7 @@ export type ExportDownloadXlsxApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
 };
-export type ExportDeleteXlsxApiResponse = /** status 200 Success */ void;
+export type ExportDeleteXlsxApiResponse = unknown;
 export type ExportDeleteXlsxApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
@@ -241,19 +241,23 @@ export type SimpleFieldConfig = {
     /** Field getter */
     field: string;
 };
+export type StaticTextConfig = {
+    /** Static Text */
+    text: string;
+};
 export type AdvancedColumnConfig = {
     /** advancedColumns */
-    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig)[];
+    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
 };
 export type GridColumnRequest = {
     /** Key */
     key: string;
     /** Locale */
-    locale?: any;
+    locale?: string | null;
     /** Type */
     type: string;
     /** Group */
-    group?: any;
+    group?: string | null;
     /** Config */
     config: (string | AdvancedColumnConfig)[];
 };

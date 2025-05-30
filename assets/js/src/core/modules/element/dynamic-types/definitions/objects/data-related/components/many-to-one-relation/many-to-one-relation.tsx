@@ -15,7 +15,6 @@ import { isEmpty, isEqual, isUndefined } from 'lodash'
 import cn from 'classnames'
 import type { DragAndDropInfo } from '@sdk/components'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
-import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
@@ -32,6 +31,7 @@ import { toCssDimension } from '@Pimcore/utils/css'
 import { PathTarget } from './path-target'
 import { useStyles } from './many-to-one-relation.styles'
 import { convertDragAndDropInfoToElementReference } from '@Pimcore/modules/element/element-helper'
+import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 
 export type ManyToOneRelationValueType = ManyToOneRelationValue | PathTextInputValue | null
 

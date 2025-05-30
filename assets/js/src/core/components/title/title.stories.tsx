@@ -10,6 +10,8 @@
 
 import { type Meta } from '@storybook/react'
 import { Title } from './title'
+import { Icon } from '@sdk/components'
+import React from 'react'
 
 const config: Meta = {
   title: 'Components/General/Typography/Title',
@@ -22,5 +24,20 @@ export default config
 export const _default = {
   args: {
     children: 'Default Title'
+  }
+}
+
+export const Secondary = {
+  args: {
+    children: 'Secondary Title',
+    theme: 'secondary'
+  }
+}
+
+export const WithIcon = {
+  args: {
+    children: 'Title with Icon',
+    theme: 'primary',
+    icon: <Icon value={ 'notes-events' } />
   }
 }

@@ -214,6 +214,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
 
   const nodeContent = (
     <Flex
+      className="tree-node__content-inner"
       gap="small"
       onClick={ onClick }
       onContextMenu={ onContextMenu }

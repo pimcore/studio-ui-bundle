@@ -15,7 +15,7 @@ import { useAppDispatch } from '@sdk/app'
 import { useTransition } from 'react'
 
 export interface PublishedDraft {
-  published?: boolean
+  published: boolean
 }
 
 interface UsePublishedDataReducersReturn {
