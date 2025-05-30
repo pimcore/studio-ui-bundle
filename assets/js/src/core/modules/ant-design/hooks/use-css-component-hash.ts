@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { theme } from 'antd';
+import { theme } from 'antd'
 const { useToken } = theme
 
 export const useCssComponentHash = (): string => {
