@@ -22,7 +22,7 @@ import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector
 import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
 import { createElementSelectorAreas, type IRelationAllowedTypesDataComponent } from '../../../../helpers/relations/allowed-types'
 import { type ManyToManyRelationValueItem } from '../../hooks/use-value'
-import { type SelectedItem } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
+import { type SelectedItem } from '@sdk/modules/element'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { debounce } from 'lodash'
 

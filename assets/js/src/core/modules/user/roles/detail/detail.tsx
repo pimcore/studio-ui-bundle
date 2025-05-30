@@ -13,7 +13,7 @@ import { DetailTab } from '@Pimcore/modules/user/roles/detail/tabs/detail-tab'
 import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helper'
 import { Content } from '@Pimcore/components/content/content'
 import { selectRoleById } from '@Pimcore/modules/user/roles/roles-slice'
-import { store } from '@Pimcore/app/store'
+import { store } from '@sdk/app'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import {
   ContentLayout

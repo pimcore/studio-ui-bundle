@@ -1,4 +1,4 @@
-import { api } from "../../../../../../app/api/pimcore/index";
+import { api } from "@sdk/api";
 export const addTagTypes = ["Metadata"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({

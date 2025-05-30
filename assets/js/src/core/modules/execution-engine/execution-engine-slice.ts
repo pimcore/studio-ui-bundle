@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { injectSliceWithState, type RootState } from '@Pimcore/app/store'
+import { injectSliceWithState, type RootState } from '@sdk/app'
 import { createEntityAdapter, createSlice } from '@reduxjs/toolkit'
 import { type AbstractJob } from './jobs/abstact-job'
 

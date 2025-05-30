@@ -1,2 +1,0 @@
-/*! For license information please see 402.1f57d497.js.LICENSE.txt */
-"use strict";(self.webpackChunkpimcore_studio_ui_bundle_core=self.webpackChunkpimcore_studio_ui_bundle_core||[]).push([["402"],{9836:function(e,u,c){c.r(u),c.d(u,{Pimcore:()=>i});let i={container:c(80380).nC}}}]);

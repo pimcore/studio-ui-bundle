@@ -9,7 +9,7 @@
  */
 
 import { useContext } from 'react'
-import { type IDroppableContext, droppableContext } from '../droppable-context-provider'
+import { type IDroppableContext, droppableContext } from '@sdk/components'
 
 interface DroppableHookReturn extends IDroppableContext {
   getStateClasses: () => string[]

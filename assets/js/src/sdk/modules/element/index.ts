@@ -203,6 +203,7 @@ export * from '@Pimcore/modules/element/element-helper'
 
 export * from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
 export * from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
+export * from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 
 export * from '@Pimcore/modules/element/hooks/use-cache-update'
 export * from '@Pimcore/modules/element/hooks/use-element-api'

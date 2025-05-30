@@ -14,7 +14,7 @@ import {
   type TagGetCollectionForElementByTypeAndIdApiArg,
   type TagGetCollectionForElementByTypeAndIdApiResponse
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import { type Key } from 'react'
 
 // @TODO: Find replacement for PatchCollection since dist imports should not be used

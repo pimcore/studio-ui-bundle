@@ -105,6 +105,12 @@ export default defineConfig({
         `,
       },
       shared: {
+        ...packages.dependencies,
+        classnames: {
+          singleton: true,
+          eager: true,
+          requiredVersion: packages.dependencies.classnames
+        },
         react: {
           singleton: true,
           eager: true,

@@ -11,7 +11,7 @@
 import { container } from '@Pimcore/app/depency-injection'
 import { type Container } from 'inversify'
 import { moduleSystem } from '../module-system/module-system'
-import { init, loadRemote } from '@module-federation/enhanced/runtime'
+import { getInstance, init, loadRemote } from '@module-federation/enhanced/runtime'
 
 export interface ILifeCycleEvents {
   onInit?: (config: { container: Container }) => void
@@ -47,7 +47,7 @@ export class PluginSystem {
       }
     }
 
-    init(initConfig)
+    getInstance()?.registerRemotes(initConfig.remotes)
 
     for (const remote of initConfig.remotes) {
       promises.push(loadRemote(remote.alias!))

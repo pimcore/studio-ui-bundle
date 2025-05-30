@@ -11,7 +11,7 @@
 import { type Asset, type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import type { ElementType } from '../../types/enums/element/element-type'
-import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
+import { type DragAndDropInfo } from '@sdk/components'
 import { isBoolean } from 'lodash'
 
 export type Element = Asset | DataObject

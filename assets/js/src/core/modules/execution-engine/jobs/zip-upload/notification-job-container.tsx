@@ -16,7 +16,7 @@ import { JobView } from '../../notification/job/job-view'
 import { type JobProps } from '../../notification/job/job'
 import { type ZipUploadJob } from './factory'
 import { useTranslation } from 'react-i18next'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
 import { isUndefined } from 'lodash'
 
