@@ -86,19 +86,15 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
     ])
   }
 
-  const availableFilterColumns = useMemo(() => availableColumns.filter((column) => {
+  const availableFilterColumns = useMemo(() => availableColumns.filter((column) => {    
     const hasDynamicType = hasType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.frontendType!] })
     const isIgnoredField = FILTER_FIELD_KEY_IGNORE_LIST.includes(column.key) || column.filterable !== true
-
-    console.log('columnCheck', column.key, hasDynamicType, isIgnoredField, hasDynamicType && !isIgnoredField && !filters.some((filter) => filter.id === column.key))
 
     return hasDynamicType && !isIgnoredField && !filters.some((filter) => filter.id === column.key)
   }), [availableColumns, filters])
 
   const getFilteredDropDownMenuItems = useMemo(() => (): DropdownProps['menu']['items'] => {
     const groupedItems: DropdownProps['menu']['items'] = []
-
-    console.log('availableFilterColumns', availableFilterColumns, availableColumns);
 
     availableFilterColumns.forEach((column) => {
       const group = column.group
