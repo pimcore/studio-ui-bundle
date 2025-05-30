@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
+import { useAppDispatch, useAppSelector } from '@sdk/app'
 import {
   selectRoleById,
   roleFetched,

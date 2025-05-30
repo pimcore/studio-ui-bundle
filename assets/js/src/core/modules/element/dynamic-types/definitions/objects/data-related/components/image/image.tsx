@@ -18,7 +18,7 @@ import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import { useTranslation } from 'react-i18next'
 import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
-import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
+import type { DragAndDropInfo } from '@sdk/components'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { useStyles } from './image.styles'
 

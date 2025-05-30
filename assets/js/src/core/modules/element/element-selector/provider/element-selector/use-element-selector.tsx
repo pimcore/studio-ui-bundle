@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type ElementSelectorConfig } from './element-selector-provider'
+import { type ElementSelectorConfig } from '@sdk/modules/element'
 import { useElementSelectorHelper } from './use-element-selector-helper'
 
 export interface UseElementSelectorReturn {

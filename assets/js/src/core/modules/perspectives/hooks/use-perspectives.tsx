@@ -9,8 +9,8 @@
  */
 
 import React, { useState } from 'react'
-import { useAppDispatch } from '@Pimcore/app/store'
-import { useUserUpdateActivePerspectiveMutation } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import { useAppDispatch } from '@sdk/app'
+import { useUserUpdateActivePerspectiveMutation } from '@Pimcore/modules/user/user-api-slice.gen'
 import { setActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
 import { updateOuterModel } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { getInitialModelJson } from '@Pimcore/modules/widget-manager/utils/widget-manager-outer-model'

@@ -11,7 +11,7 @@
 import { type EditorContainerProps } from '@Pimcore/modules/document/editor/editor-container'
 import { TitleContainer } from '@Pimcore/modules/document/editor/title/title-container'
 import { selectDocumentById } from '@Pimcore/modules/document/document-draft-slice'
-import { store } from '@Pimcore/app/store'
+import { store } from '@sdk/app'
 import React from 'react'
 import { DocumentProvider } from '@Pimcore/modules/document/document-provider'
 import { type Widget } from '@Pimcore/modules/widget-manager/services/widget-registry'

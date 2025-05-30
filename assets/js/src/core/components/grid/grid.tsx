@@ -91,7 +91,7 @@ export const Grid = ({
   ...props
 }: GridProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const hashId = useCssComponentHash('table')
+  const hashId = useCssComponentHash()
   const { styles } = useStyles()
   const [columnResizeMode] = useState<ColumnResizeMode>('onChange')
   const [activeCell, setActiveCell] = useState<GridCellReference | undefined>()

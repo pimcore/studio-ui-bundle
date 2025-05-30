@@ -13,7 +13,7 @@ import { type ClassDefinitionCollectionApiArg, type ClassDefinitionCollectionApi
 import { type TypedUseQueryHookResult } from '@reduxjs/toolkit/dist/query/react'
 import React, { createContext, useEffect, useMemo, useState } from 'react'
 import { type ClassDefinitionFolderCollectionApiResponse, useClassDefinitionCollectionQuery } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/classes/api-error'
 import { Content } from '@Pimcore/components/content/content'

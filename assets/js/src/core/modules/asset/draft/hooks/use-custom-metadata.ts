@@ -11,7 +11,7 @@
 import type { ActionCreatorWithPayload, PayloadAction } from '@reduxjs/toolkit'
 import type { EntityAdapter, EntityState } from '@reduxjs/toolkit/src/entities/models'
 
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import type {
   CustomMetadata as CustomMetadataApi
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'

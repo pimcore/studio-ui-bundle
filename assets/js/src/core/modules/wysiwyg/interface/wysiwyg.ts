@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
+import { type DragAndDropInfo } from '@sdk/components'
 
 export interface WysiwygProps {
   value?: string | null

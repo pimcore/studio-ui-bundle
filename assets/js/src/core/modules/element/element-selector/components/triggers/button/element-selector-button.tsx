@@ -11,7 +11,7 @@
 import { IconButton, type IconButtonProps } from '@Pimcore/components/icon-button/icon-button'
 import React from 'react'
 import { useElementSelector } from '../../../provider/element-selector/use-element-selector'
-import { type ElementSelectorConfig } from '../../../provider/element-selector/element-selector-provider'
+import { type ElementSelectorConfig } from '@sdk/modules/element'
 
 export interface ElementSelectorButtonProps extends Omit<IconButtonProps, 'onClick' | 'icon'> {
   elementSelectorConfig: ElementSelectorConfig

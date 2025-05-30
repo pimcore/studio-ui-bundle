@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { store } from '@Pimcore/app/store'
+import { store } from '@sdk/app'
 import { Content } from '@Pimcore/components/content/content'
 import { GlobalStyles } from '@Pimcore/styles/global.styles'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'

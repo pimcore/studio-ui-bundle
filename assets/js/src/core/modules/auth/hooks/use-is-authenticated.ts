@@ -10,7 +10,7 @@
 
 import { useEffect } from 'react'
 import { useUserGetCurrentInformationQuery } from '../user/user-api-slice-enhanced'
-import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
+import { useAppDispatch, useAppSelector } from '@sdk/app'
 import { selectIsAuthenticated, setAuthState } from '../auth-slice'
 
 export interface UseIsAuthenticatedReturn {

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { store, useAppDispatch } from '@Pimcore/app/store'
+import { store, useAppDispatch } from '@sdk/app'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { api as dataObjectApi } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { type TagDescription } from '@reduxjs/toolkit/query'

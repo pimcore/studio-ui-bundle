@@ -10,7 +10,7 @@
 
 import React, { Children, isValidElement, type ReactNode, type RefCallback, useMemo, useState } from 'react'
 import cn from 'classnames'
-import { DroppableContextProvider } from '@Pimcore/components/drag-and-drop/droppable-context-provider'
+import { DroppableContextProvider } from '@sdk/components'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useStyle } from './base-droppable.styles'
 import { uuid } from '@Pimcore/utils/uuid'
