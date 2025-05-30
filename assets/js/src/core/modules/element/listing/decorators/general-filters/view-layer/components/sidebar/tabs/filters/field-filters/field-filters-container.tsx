@@ -86,7 +86,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
     ])
   }
 
-  const availableFilterColumns = useMemo(() => availableColumns.filter((column) => {    
+  const availableFilterColumns = useMemo(() => availableColumns.filter((column) => {
     const hasDynamicType = hasType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.frontendType!] })
     const isIgnoredField = FILTER_FIELD_KEY_IGNORE_LIST.includes(column.key) || column.filterable !== true
 
@@ -130,13 +130,13 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
       direction='vertical'
     >
       <FieldFilters
-        data={filters}
-        onChange={onFilterChange}
+        data={ filters }
+        onChange={ onFilterChange }
       />
 
-      <Dropdown menu={{ items: getFilteredDropDownMenuItems() }}>
+      <Dropdown menu={ { items: getFilteredDropDownMenuItems() } }>
         <IconTextButton
-          icon={{ value: 'new' }}
+          icon={ { value: 'new' } }
           type='link'
         >
           {t('listing.add-column')}

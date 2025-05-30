@@ -10,20 +10,20 @@
 
 import { injectable } from 'inversify'
 import React, { type ReactElement } from 'react'
-import { DynamicTypeFieldFilterCheckboxComponent, DynamicTypeFieldFilterCheckboxProps } from '../../components/dynamic-type-field-filter-segmented-button-component'
+import { DynamicTypeFieldFilterCheckboxComponent, type DynamicTypeFieldFilterCheckboxProps } from '../../components/dynamic-type-field-filter-checkbox-component'
 import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
 
 @injectable()
 export class DynamicTypeFieldFilterCheckbox extends DynamicTypeFieldFilterAbstract {
   id = 'checkbox'
 
-  getFieldFilterType(): string {
+  getFieldFilterType (): string {
     return 'system.string'
   }
 
-  getFieldFilterComponent(props: DynamicTypeFieldFilterCheckboxProps): ReactElement<DynamicTypeFieldFilterCheckboxProps> {
+  getFieldFilterComponent (props: DynamicTypeFieldFilterCheckboxProps): ReactElement<DynamicTypeFieldFilterCheckboxProps> {
     return (
-      <DynamicTypeFieldFilterCheckboxComponent {...props} />
+      <DynamicTypeFieldFilterCheckboxComponent { ...props } />
     )
   }
 }

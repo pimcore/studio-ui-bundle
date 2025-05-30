@@ -18,13 +18,13 @@ export interface DynamicTypeFieldFilterTextAreaProps extends AbstractFieldFilter
 export const DynamicTypeFieldFilterTextAreaComponent = (): React.JSX.Element => {
   const { data, setData } = useDynamicFilter()
   const [_value, setValue] = useState(data)
-  
+
   useEffect(() => {
     setValue(data)
   }, [data])
 
-    useEffect(() => {
-    setData("")
+  useEffect(() => {
+    setData('')
   }, [])
 
   return (

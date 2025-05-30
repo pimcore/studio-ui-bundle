@@ -151,10 +151,10 @@ import { type DynamicTypeObjectObject } from './definitions/objects/types/dynami
 import { type DynamicTypeObjectVariant } from './definitions/objects/types/dynamic-type-object-variant'
 import { type DynamicTypeObjectDataClassificationStore } from './definitions/objects/data-related/types/dynamic-type-object-data-classification-store'
 import { type DynamicTypeGridCellBoolean } from './definitions/grid-cell/types/boolean/dynamic-type-grid-cell-boolean'
-import { DynamicTypeFieldFilterCheckbox } from './definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
+import { type DynamicTypeFieldFilterCheckbox } from './definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
 
 moduleSystem.registerModule({
-  onInit() {
+  onInit () {
     const fieldFilterRegistry = container.get<DynamicTypeFieldFilterRegistry>(serviceIds['DynamicTypes/FieldFilterRegistry'])
 
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterObjectAdapter>(serviceIds['DynamicTypes/FieldFilter/DataObjectAdapter']))
