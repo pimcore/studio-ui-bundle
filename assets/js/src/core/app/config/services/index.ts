@@ -211,11 +211,11 @@ container.bind(serviceIds['DynamicTypes/FieldFilterRegistry']).to(DynamicTypeFie
 container.bind(serviceIds['DynamicTypes/FieldFilter/DataObjectAdapter']).to(DynamicTypeFieldFilterObjectAdapter).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/DataObjectObjectBrick']).to(DynamicTypeFieldFilterDataObjectObjectBrick).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Text']).to(DynamicTypeFieldFilterText).inSingletonScope()
+// container.bind(serviceIds['DynamicTypes/FieldFilter/Textarea']).to(DynamicTypeFieldFilterTextArea).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Number']).to(DynamicTypeFieldFilterNumber).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Select']).to(DynamicTypeFieldFilterSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Datetime']).to(DynamicTypeFieldFilterDatetime).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Checkbox']).to(DynamicTypeFieldFilterCheckbox).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/FieldFilter/Textarea']).to(DynamicTypeFieldFilterTextArea).inSingletonScope()
 
 // dynamic types batch edit
 container.bind(serviceIds['DynamicTypes/BatchEditRegistry']).to(DynamicTypeBatchEditRegistry).inSingletonScope()

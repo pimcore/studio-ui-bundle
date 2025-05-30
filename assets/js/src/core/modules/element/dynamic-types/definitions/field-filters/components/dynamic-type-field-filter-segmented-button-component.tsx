@@ -8,13 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { FocusEventHandler, useEffect, useState } from 'react'
-import { type DefaultOptionType } from 'antd/es/select'
-import { Select, type SelectProps } from '@Pimcore/components/select/select'
+import React, { useEffect } from 'react'
 import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
-import { Checkbox } from 'antd'
-import { CheckboxChangeEvent } from 'antd/es/checkbox'
 import { Segmented } from '@sdk/components'
 
 export interface DynamicTypeFieldFilterCheckboxProps extends AbstractFieldFilterDefinition {
@@ -23,22 +19,23 @@ export interface DynamicTypeFieldFilterCheckboxProps extends AbstractFieldFilter
 
 export const DynamicTypeFieldFilterCheckboxComponent = (props: DynamicTypeFieldFilterCheckboxProps): React.JSX.Element => {
   const { setData, data } = useDynamicFilter()
-  const [_value, setValue] = useState(data)
-  const options: DefaultOptionType[] = []
 
   useEffect(() => {
-    setValue(data)
-  }, [data])
-
-  const handleBlur = (): void => { console.log('setValue', _value); setData(_value) }
-
-  const handleChange = (e): void => { setValue(e.target.checked) }
+    setData(false)
+  }, [])
+  
+  const handleChange = (val: 'true' | 'false'): void => { 
+    const boolValue = val === 'true'
+    setData(boolValue)
+  }
 
   return (
     <Segmented
-    options={["true", "false"]}
-      value={_value}
-      onBlur={handleBlur}
+     options={[
+        { label: 'True', value: 'true' },
+        { label: 'False', value: 'false' }
+      ]}
+      value={data ? 'true' : 'false'}
       onChange={handleChange}
     />
     
