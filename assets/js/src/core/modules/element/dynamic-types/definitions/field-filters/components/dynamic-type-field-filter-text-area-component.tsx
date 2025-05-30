@@ -23,6 +23,10 @@ export const DynamicTypeFieldFilterTextAreaComponent = (): React.JSX.Element => 
     setValue(data)
   }, [data])
 
+    useEffect(() => {
+    setData("")
+  }, [])
+
   return (
     <TextArea
       onBlur={ onBlur }
