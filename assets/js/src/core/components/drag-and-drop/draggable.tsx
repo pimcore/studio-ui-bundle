@@ -10,7 +10,7 @@
 
 import React, { Children, isValidElement, useMemo, useState } from 'react'
 import { useDraggable } from '@dnd-kit/core'
-import { type DragAndDropInfo } from './context-provider'
+import { type DragAndDropInfo } from '@sdk/components'
 import { uuid } from '@Pimcore/utils/uuid'
 import { GlobalStyle } from './draggable.styles'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'

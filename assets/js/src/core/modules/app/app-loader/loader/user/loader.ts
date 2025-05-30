@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { setUser } from '@Pimcore/modules/auth/user/user-slice'
 import { api } from '@Pimcore/modules/user/user-api-slice-enhanced'

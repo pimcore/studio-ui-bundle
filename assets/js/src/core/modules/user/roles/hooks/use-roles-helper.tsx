@@ -8,22 +8,22 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
+import { useAppDispatch, useAppSelector } from '@sdk/app'
 import { roleOpened, roleClosed, roleUpdated } from '@Pimcore/modules/user/roles/roles-slice'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
-import { api } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
-import type {
-  Error,
-  RoleCloneByIdApiResponse,
-  RoleCreateApiResponse, RoleDeleteByIdApiArg,
-  RoleDeleteByIdApiResponse, RoleFolderCreateApiResponse, RoleFolderDeleteByIdApiArg,
-  RoleGetTreeApiArg,
-  RoleGetTreeApiResponse,
-  RoleUpdateByIdApiResponse,
-  DetailedUserRole,
-  RoleFolderDeleteByIdApiResponse,
-  RoleGetByIdApiResponse
+import {
+  api, type RoleGetCollectionApiResponse,
+  type Error,
+  type RoleCloneByIdApiResponse,
+  type RoleCreateApiResponse, type RoleDeleteByIdApiArg,
+  type RoleDeleteByIdApiResponse, type RoleFolderCreateApiResponse, type RoleFolderDeleteByIdApiArg,
+  type RoleGetTreeApiArg,
+  type RoleGetTreeApiResponse,
+  type RoleUpdateByIdApiResponse,
+  type DetailedUserRole,
+  type RoleFolderDeleteByIdApiResponse,
+  type RoleGetByIdApiResponse
 } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
 
 interface IAddRoleArgs {
@@ -42,6 +42,7 @@ interface IUseRoleReturn {
   addNewFolder: (props: IAddRoleArgs) => Promise<{ data: RoleFolderCreateApiResponse, error: any }>
   updateRoleById: (props: { id: number, item: DetailedUserRole }) => Promise<{ data: RoleUpdateByIdApiResponse, error: any }>
   moveRoleById: (props: { id: number, parentId: number }) => Promise<{ data: RoleUpdateByIdApiResponse, error: any }>
+  getRoleCollection: () => Promise<RoleGetCollectionApiResponse>
   activeId: number
   getAllIds: number[]
 }
@@ -55,7 +56,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     if (error !== undefined) {
       notificationApi.open({
         type: 'error',
-        message: error.data.message ?? t('error')
+        message: error?.data?.message ?? t('error')
       })
     } else {
       notificationApi.open({
@@ -166,6 +167,11 @@ export const useRoleHelper = (): IUseRoleReturn => {
     return data
   }
 
+  async function getRoleCollection (): Promise<RoleGetCollectionApiResponse> {
+    const { data }: any = await dispatch(api.endpoints.roleGetCollection.initiate())
+    return data
+  }
+
   const activeId = useAppSelector(state => state.role.activeId)
   const getAllIds = useAppSelector(state => state.role.ids)
 
@@ -180,6 +186,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     removeFolder,
     updateRoleById,
     moveRoleById,
+    getRoleCollection,
     activeId,
     getAllIds
   }

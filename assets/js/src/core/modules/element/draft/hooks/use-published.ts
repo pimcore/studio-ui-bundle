@@ -11,11 +11,11 @@
 import type { ActionCreatorWithPayload, PayloadAction } from '@reduxjs/toolkit'
 import type { EntityAdapter, EntityState } from '@reduxjs/toolkit/src/entities/models'
 
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import { useTransition } from 'react'
 
 export interface PublishedDraft {
-  published?: boolean
+  published: boolean
 }
 
 interface UsePublishedDataReducersReturn {

@@ -9,20 +9,28 @@
  */
 
 import React from 'react'
-import { useNotifications } from './hooks/use-notifications'
 import { NotificationDetail } from './notification-detail'
+import { useStyles } from './notifications.styles'
+import { Space } from '@sdk/components'
+import { type NotificationGetCollectionApiResponse } from './notifications-slice-enhanced'
 
-export const NotificationList = (): React.JSX.Element => {
-  const {
-    notifications
-  } = useNotifications()
+export interface NotificationDetailProps {
+  notifications: NotificationGetCollectionApiResponse
+}
+
+export const NotificationList = ({ notifications }: NotificationDetailProps): React.JSX.Element => {
+  const { styles } = useStyles()
 
   return (
-    <>{notifications?.items.map(notification => (
+    <Space
+      className={ styles.notificationsList }
+      direction={ 'vertical' }
+      size={ 'small' }
+    >{notifications?.items.map(notification => (
       <NotificationDetail
         key={ notification.id }
         notification={ notification }
       />
-    ))}</>
+    ))}</Space>
   )
 }

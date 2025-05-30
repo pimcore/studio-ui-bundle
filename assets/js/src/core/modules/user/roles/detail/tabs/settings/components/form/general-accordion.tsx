@@ -8,16 +8,42 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { Form } from 'antd'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
 import { Select } from '@Pimcore/components/select/select'
 import { useRoleContext } from '@Pimcore/modules/user/roles/hooks/use-role-context'
+import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
 
-const GeneralAccordion = ({ ...props }): React.JSX.Element => {
+const GeneralAccordion = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useRoleContext()
+  const [perspectiveOptions, setPerspectiveOptions] = useState<any[]>([])
+  const { getPerspectiveConfigCollection } = usePerspectives()
+
+  const fetchPerspectiveConfig = useCallback(() => {
+    getPerspectiveConfigCollection()
+      .then((data) => {
+        if (data?.items !== undefined) {
+          setPerspectiveOptions(
+            data.items.map((item) => ({
+              value: item.id,
+              label: item.name
+            }))
+          )
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching perspective config collection:', error)
+      })
+  }, [getPerspectiveConfigCollection])
+
+  useEffect(() => {
+    if (perspectiveOptions.length === 0) {
+      fetchPerspectiveConfig()
+    }
+  }, [id])
 
   const content = [
     {
@@ -26,12 +52,13 @@ const GeneralAccordion = ({ ...props }): React.JSX.Element => {
       info: 'ID: ' + id,
       children: (
         <Form.Item
+          label={ t('user-management.perspectives') }
           name="perspectives"
         >
           <Select
             mode="multiple"
-            options={ [] }
-            placeholder={ t('roles.perspectives') }
+            options={ perspectiveOptions }
+            placeholder={ t('user-management.perspectives') }
           ></Select>
         </Form.Item>
       )

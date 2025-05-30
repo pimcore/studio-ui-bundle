@@ -9,7 +9,7 @@
  */
 
 import { useEffect, useState } from 'react'
-import { type Notification, useNotificationDeleteByIdMutation, useNotificationGetByIdQuery } from '../notifications-slice.gen'
+import { type Notification, useNotificationDeleteByIdMutation, useNotificationGetByIdQuery } from '../notifications-slice-enhanced'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { skipToken } from '@reduxjs/toolkit/query'
 
@@ -30,7 +30,7 @@ export const useNotificationDetail = ({ id }: UseNotificationDetailProps): UseNo
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
 
   const { data: notificationDetail, isLoading: detailLoading, isError: isDetailError, error: detailError } = useNotificationGetByIdQuery(
-    isExpanded ? { id } : skipToken)
+    (isExpanded) ? { id } : skipToken)
 
   const [deleteNotification, { isError: isDeleteError, error: deleteError, isLoading: deleteLoading }] = useNotificationDeleteByIdMutation()
 

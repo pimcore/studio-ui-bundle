@@ -1,4 +1,4 @@
-import { api } from "../../../../../../app/api/pimcore/index";
+import { api } from "@sdk/api";
 export const addTagTypes = ["Notes"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
@@ -66,7 +66,7 @@ export type NoteGetCollectionApiArg = {
         fieldFilters?: object;
     };
 };
-export type NoteDeleteByIdApiResponse = /** status 200 note_delete_by_id_success_description */ void;
+export type NoteDeleteByIdApiResponse = unknown;
 export type NoteDeleteByIdApiArg = {
     /** Id of the element */
     id: number;
@@ -135,9 +135,9 @@ export type Note = {
     /** Data of note */
     data: (string | number | boolean | object)[];
     /** User ID */
-    userId?: any;
+    userId?: number | null;
     /** Username */
-    userName?: any;
+    userName?: string | null;
 };
 export type Error = {
     /** Message */

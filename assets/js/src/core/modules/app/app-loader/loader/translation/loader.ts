@@ -9,7 +9,7 @@
  */
 
 import i18n, { FALLBACK_LANGUAGE } from '@Pimcore/app/i18n'
-import { store } from '@Pimcore/app/store'
+import { store } from '@sdk/app'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useTranslationGetCollectionMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'

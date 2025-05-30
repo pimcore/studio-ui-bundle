@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type RootState, injectSliceWithState } from '@Pimcore/app/store'
+import { type RootState, injectSliceWithState } from '@sdk/app'
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 export interface GlobalContext {

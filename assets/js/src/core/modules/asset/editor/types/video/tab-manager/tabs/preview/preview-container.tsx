@@ -10,7 +10,7 @@
 
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { PreviewView } from './preview-view'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+import { AssetContext } from '@sdk/modules/asset'
 import {
   ContentLayout
 } from '@Pimcore/components/content-layout/content-layout'

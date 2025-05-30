@@ -11,7 +11,7 @@
 import type { DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import React from 'react'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
-import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
+import { type DragAndDropInfo } from '@sdk/components'
 import { ElementCellContent } from './element-cell-content'
 import { useStyle } from './element-cell.styles'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'

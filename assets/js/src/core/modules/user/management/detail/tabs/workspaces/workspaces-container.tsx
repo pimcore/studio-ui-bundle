@@ -13,7 +13,7 @@ import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
 import { Table } from '@Pimcore/modules/user/management/detail/tabs/workspaces/components/table/table'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import type { UserWorkspace } from '@Pimcore/modules/user/user-api-slice.gen'
+import type { UserWorkspace } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
 import { useUserContext } from '@Pimcore/modules/user/hooks/use-user-context'
 import { Flex } from 'antd'
@@ -71,6 +71,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
+        type={ 'document' }
                 />
     }
   ]
@@ -104,6 +105,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
+        type={ 'asset' }
                 />
     }
   ]
@@ -137,6 +139,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
+        type={ 'object' }
                 />
     }
   ]

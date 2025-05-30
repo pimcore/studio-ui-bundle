@@ -10,7 +10,7 @@
 
 /* eslint-disable max-lines */
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { injectSliceWithState, type RootState } from '@Pimcore/app/store'
+import { injectSliceWithState, type RootState } from '@sdk/app'
 import { isEqual, isUndefined } from 'lodash'
 import { createSelector } from 'reselect'
 import { type TreeLevelData } from '@Pimcore/modules/element/element-api-slice.gen'

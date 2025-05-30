@@ -10,7 +10,7 @@
 
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useContext } from 'react'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+import { AssetContext } from '@sdk/modules/asset'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'

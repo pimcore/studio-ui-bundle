@@ -13,7 +13,7 @@ import type { TreeDataItem } from '@Pimcore/components/tree-element/tree-element
 
 export const findNodeByKey = (data: TreeDataNode[], key: any): TreeDataItem | undefined => {
   for (const node of data) {
-    if (node.key === key) {
+    if (parseInt(node.key as string) === parseInt(key as string)) {
       return node
     }
     if (node.children !== undefined && node.children !== null) {
@@ -28,7 +28,7 @@ export const findNodeByKey = (data: TreeDataNode[], key: any): TreeDataItem | un
 
 export const findParentByKey = (data: TreeDataNode[], key: any, parent: TreeDataNode | null = null): TreeDataNode | null => {
   for (const node of data) {
-    if (node.key === key) {
+    if (parseInt(node.key as string) === parseInt(key as string)) {
       return parent
     }
     if (node.children !== undefined && node.children !== null) {

@@ -12,11 +12,15 @@ import { Background } from '@Pimcore/components/background/background'
 import { BaseLayoutView } from '@Pimcore/modules/app/base-layout/base-layout-view'
 import React from 'react'
 import { ClassDefinitionsProvider } from '../data-object/utils/provider/class-defintions/class-definitions-provider'
-import { ElementSelectorProvider } from '../element/element-selector/provider/element-selector/element-selector-provider'
+import { ElementSelectorProvider } from '@sdk/modules/element'
 import { useHandleDeepLink } from './hook/use-handle-deeplink'
+import useTableStyle from 'antd/es/table/style'
+import usePaginationStyle from 'antd/es/pagination/style'
 
 export const DefaultPage = (): React.JSX.Element => {
   useHandleDeepLink()
+  useTableStyle('ant-table')
+  usePaginationStyle('ant-pagination')
 
   const preventDrop = (event: React.DragEvent<HTMLDivElement>): void => {
     event.preventDefault()

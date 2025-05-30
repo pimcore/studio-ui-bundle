@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { store } from '@Pimcore/app/store'
+import { store } from '@sdk/app'
 import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
 import { type WidgetConfig, type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
 import { uuid } from '@Pimcore/utils/uuid'
@@ -72,7 +72,7 @@ export const getInitialModelJson = (): IJsonModel => {
         type: 'border',
         location: 'left',
         size: 315,
-        selected: getWidgetIndex(widgetsLeft, activePerspective?.expandedLeft as string | undefined | null),
+        selected: getWidgetIndex(widgetsLeft, activePerspective?.expandedLeft),
         children: widgetsLeft
       },
 
@@ -80,7 +80,7 @@ export const getInitialModelJson = (): IJsonModel => {
         type: 'border',
         location: 'right',
         size: 315,
-        selected: getWidgetIndex(widgetsRight, activePerspective?.expandedRight as string | undefined | null),
+        selected: getWidgetIndex(widgetsRight, activePerspective?.expandedRight),
         children: widgetsRight
       }
     ]

@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { store } from '@Pimcore/app/store'
+import { store } from '@sdk/app'
 import { api, type AssetVersion } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
 import { ComparisonViewUi } from './comparison-view-ui'
 import {

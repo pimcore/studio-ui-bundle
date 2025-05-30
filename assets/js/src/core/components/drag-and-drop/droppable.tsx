@@ -9,7 +9,7 @@
  */
 
 import React, { type ReactNode, useContext, useEffect, useMemo, useState } from 'react'
-import { type DragAndDropInfo, DragAndDropInfoContext } from './context-provider'
+import { type DragAndDropInfo, DragAndDropInfoContext } from '@sdk/components'
 import { type UniqueIdentifier, useDroppable } from '@dnd-kit/core'
 import { uuid } from '@Pimcore/utils/uuid'
 import { BaseDroppable } from '@Pimcore/components/drag-and-drop/droppable/base-droppable'

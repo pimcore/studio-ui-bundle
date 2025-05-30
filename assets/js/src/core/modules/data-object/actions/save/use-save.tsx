@@ -23,7 +23,7 @@ import {
 import { isNil, isUndefined } from 'lodash'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { type SerializedError } from '@reduxjs/toolkit'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import { setNodePublished } from '@Pimcore/components/element-tree/element-tree-slice'
 
 export enum SaveTaskType {

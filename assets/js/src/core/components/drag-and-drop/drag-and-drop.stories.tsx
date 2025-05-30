@@ -14,7 +14,7 @@ import { Draggable } from './draggable'
 import { DNDDemoDroppableContent } from './__STORIES__/dnd-demo-droppable-content'
 import { Button } from '../button/button'
 import { Droppable } from './droppable'
-import { type DragAndDropInfo } from './context-provider'
+import { type DragAndDropInfo } from '@sdk/components'
 
 const DragAndDropDemo = (): React.JSX.Element => {
   const [valueDemo1, setValueDemo1] = useState<any>('')

@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { type DragAndDropInfo } from './context-provider'
+import { type DragAndDropInfo } from '@sdk/components'
 import { Icon } from '../icon/icon'
 import { useStyle } from './drag-overlay.styles'
 

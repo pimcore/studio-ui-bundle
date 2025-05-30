@@ -60,7 +60,7 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
 
   const onSaveClick = (): void => {
     updateUserById({ id, user: user as UserDraft }).catch(() => {
-      console.log('error')
+      console.error('error')
     })
   }
 

@@ -22,7 +22,7 @@ import {
   useLazyMetadataGetCollectionQuery
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+import { AssetContext } from '@sdk/modules/asset'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { useInjection } from '@Pimcore/app/depency-injection'

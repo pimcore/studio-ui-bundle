@@ -8,23 +8,25 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
-import { Tag } from 'antd'
 import { Space } from '@Pimcore/components/space/space'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { Text } from '@Pimcore/components/text/text'
-import { Split } from '@Pimcore/components/split/split'
 import { Paragraph } from '@Pimcore/components/paragraph/paragraph'
 import { Collapse } from '@Pimcore/components/collapse/collapse'
-import { type Notification } from './notifications-slice.gen'
+import { type NotificationListItem } from './notifications-slice.gen'
 import { useNotificationDetail } from './hooks/use-notification-detail'
 import { Content } from '@Pimcore/components/content/content'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import i18n from '@Pimcore/app/i18n'
+import { Flex, Icon, Split } from '@sdk/components'
+import { useStyles } from './notifications.styles'
+import { NotificationAttachment } from './notification-attachment'
+import { useElementHelper } from '@sdk/modules/element'
+import { isNil } from 'lodash'
 
 export interface NotificationDetailProps {
-  notification: Notification
+  notification: NotificationListItem
 }
 
 export const NotificationDetail = ({ notification }: NotificationDetailProps): React.JSX.Element => {
@@ -37,18 +39,37 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     deleteLoading
   } = useNotificationDetail({ id: notification.id })
 
-  const extra = (): React.JSX.Element => {
-    const hasAttachment = notification.hasAttachment ?? undefined
+  const { mapToElementType } = useElementHelper()
 
+  const elementType = notificationDetail?.attachmentType !== undefined
+    ? mapToElementType(notificationDetail.attachmentType!)
+    : undefined
+
+  const { styles } = useStyles()
+
+  const [notificationRead, setNotificationRead] = useState<boolean>(notification.read)
+
+  useEffect(() => {
+    if (notificationDetail !== undefined) {
+      setNotificationRead(notificationDetail?.read)
+    }
+  }, [notificationDetail])
+
+  const extra = (): React.JSX.Element => {
     return (
       <Space
         align='center'
+        justify-content='center'
         size="extra-small"
       >
-        {hasAttachment !== undefined && <Tag>attachment</Tag>}
+        {notification.hasAttachment && (
+        <Icon
+          className={ styles.margin }
+          value={ 'attachment' }
+        />
+        )}
         {notification.creationDate !== undefined && <span>{formatDateTime({ timestamp: notification.creationDate, dateStyle: 'short', timeStyle: 'medium' })}</span>}
         <IconButton
-          aria-label={ i18n.t('aria.notes-and-events.delete') }
           icon={ { value: 'trash' } }
           loading={ deleteLoading }
           onClick={ async (e) => {
@@ -65,10 +86,20 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     return (
       <Content
         loading={ detailLoading }
-        none={ notificationDetail === undefined || notificationDetail.message.length === 0 }
+        none={ notificationDetail === undefined || notificationDetail.message?.length === 0 }
       >
-        {notificationDetail !== undefined && typeof notificationDetail.message === 'string' &&
-          (<Paragraph>{respectLineBreak(notificationDetail.message)}</Paragraph>)}
+        <Flex
+          gap={ 0 }
+          vertical
+        >
+          {notificationDetail !== undefined && typeof notificationDetail.message === 'string' && (<Paragraph>{respectLineBreak(notificationDetail.message)}</Paragraph>)}
+          {!isNil(notificationDetail?.attachmentId) && elementType !== undefined && (
+          <NotificationAttachment
+            attachmentId={ notificationDetail.attachmentId }
+            attachmentType={ elementType }
+          />
+          )}
+        </Flex>
       </Content>
     )
   }
@@ -80,20 +111,34 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     children: React.JSX.Element
   } = {
     key: notification.id.toString(),
-    label: <Split
-      dividerSize='small'
+    label:
+  <Flex
+    align={ 'center' }
+    justify-content={ 'center' }
+  >
+    {notificationRead
+      ? (
+        <Icon
+          className={ styles.margin }
+          value={ 'notification-read' }
+        />
+        )
+      : (
+        <Icon
+          className={ styles.unreadNotificationIcon }
+          value={ 'notification-unread' }
+        />
+        )
+        }
+    <Split
+      dividerSize="small"
       size='extra-small'
-      theme='secondary'
-           >
-      {notification.title !== '' && (
-        <>
-          <Text
-            strong
-          >{notification.title}</Text>
-        </>
-      )}
+      theme="secondary"
+    >
+      {notification.title !== '' && (<Text strong>{notification.title}</Text>)}
       <Text type='secondary'>{notification.sender}</Text>
-    </Split>,
+    </Split>
+  </Flex>,
     extra: extra(),
     children: children()
   }

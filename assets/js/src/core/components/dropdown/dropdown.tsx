@@ -8,42 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactNode, type Ref } from 'react'
+import React, { type Ref } from 'react'
 import { type DropdownProps as AntdDropdownProps, type MenuProps, type MenuRef } from 'antd'
-import {
-  type MenuItemType as AntdMenuType,
-  type SubMenuType as AntdSubMenuType
-
-} from 'antd/es/menu/interface'
 import { DropdownInner } from './dropdown-inner'
-import { SelectionProvider, SelectionType } from './selection/selection-provider'
 import { useStyle } from './dropdown.styles'
+import { type ItemType } from '../menu/menu'
+import cn from 'classnames'
 
-type OldItemType = Extract<MenuProps['items'], any[]>[0]
-type OldMenuItemGroupType = Extract<OldItemType, { type: 'group' }>
-export type MenuDividerType = Extract<OldItemType, { type: 'divider' }>
-
-export interface MenuItemType extends AntdMenuType {
-  selectable?: boolean
-  isLoading?: boolean
-}
-
-export interface SubMenuItemType extends Omit<AntdSubMenuType, 'children'> {
-  children: ItemType[]
-}
-
-export interface MenuItemGroupType extends Omit<OldMenuItemGroupType, 'children'> {
-  children?: ItemType[]
-}
-
-export interface MenuItemCustomType extends Pick<MenuItemType, 'key'> {
-  type: 'custom'
-  component: ReactNode
-  hidden?: boolean
-}
-
-export type ItemType<T extends MenuItemType = MenuItemType> = T | MenuItemGroupType | SubMenuItemType | MenuDividerType | MenuItemCustomType | null
-
+export type { ItemType, MenuItemType, SubMenuItemType, MenuItemGroupType, MenuItemCustomType } from '../menu/menu'
 export interface DropdownMenuProps extends Omit<MenuProps, 'items'> {
   items?: ItemType[]
 }
@@ -55,48 +27,14 @@ export interface DropdownProps extends Omit<AntdDropdownProps, 'dropdownRender' 
   onSelect?: (keys: React.Key[]) => void
 }
 
-export const Dropdown = ({ selectedKeys, onSelect, menu, ...props }: DropdownProps): React.JSX.Element => {
+export const Dropdown = ({ menu, ...props }: DropdownProps): React.JSX.Element => {
   const { styles } = useStyle()
-  const { selectable, multiple, items } = menu
-  let selectionType = SelectionType.Disabled
-
-  if (selectable === true) {
-    selectionType = multiple === true ? SelectionType.Multiple : SelectionType.Single
-  }
-
-  const filteredItems = items?.filter(function filterItems (item: ItemType) {
-    // @ts-expect-error - the prop exists trust me bro ;)
-    if (item?.hidden === true) {
-      return false
-    }
-
-    // @ts-expect-error - the prop exists trust me bro ;)
-    if (item?.children !== undefined) {
-      // @ts-expect-error - the prop exists trust me bro ;)
-      const filteredChildren = item.children.filter(filterItems)
-      // @ts-expect-error - the prop exists trust me bro ;)
-      item.children = filteredChildren
-
-      return filteredChildren.length
-    }
-
-    return true
-  })
 
   return (
-    <SelectionProvider
-      selectedKeys={ selectedKeys }
-      selectionType={ selectionType }
-    >
-      <DropdownInner
-        { ...props }
-        menu={ {
-          ...menu,
-          items: filteredItems
-        } }
-        onSelect={ onSelect }
-        overlayClassName={ [props.overlayClassName, styles.dropdown].join(' ') }
-      />
-    </SelectionProvider>
+    <DropdownInner
+      { ...props }
+      menu={ menu }
+      overlayClassName={ cn(props.overlayClassName, styles.dropdown) }
+    />
   )
 }

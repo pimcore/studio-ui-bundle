@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import { api as assetApi, type AssetGetByIdApiResponse, type ImageData } from '../asset-api-slice-enhanced'
 
 import { assetReceived } from '../asset-draft-slice'
