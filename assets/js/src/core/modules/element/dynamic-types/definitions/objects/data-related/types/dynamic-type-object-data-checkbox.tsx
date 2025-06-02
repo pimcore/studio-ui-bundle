@@ -8,15 +8,16 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
-import {
-  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
 import {
   Checkbox
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/checkbox/checkbox'
+import {
+  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
 import type { FormInstance } from 'antd'
 import type { NamePath } from 'rc-field-form/es/interface'
+import React from 'react'
+import { DEFAULT_CHECKBOX_COLUMN_WIDTH } from '../../../grid-cell/types/checkbox/dynamic-type-grid-cell-checkbox'
 
 export type CheckboxObjectDataDefinition = AbstractObjectDataDefinition & {
   defaultValue: boolean | number | null
@@ -43,5 +44,9 @@ export class DynamicTypeObjectDataCheckbox extends DynamicTypeObjectDataAbstract
     if (typeof form.getFieldValue(fieldName) !== 'boolean') {
       form.setFieldValue(fieldName, Boolean(props.defaultValue))
     }
+  }
+
+  getDefaultGridColumnWidth (props?: AbstractObjectDataDefinition): number | undefined {
+    return DEFAULT_CHECKBOX_COLUMN_WIDTH
   }
 }

@@ -21,6 +21,7 @@ import { InheritanceLayer } from '../inheritance-layer'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { META_SUPPORTS_BATCH_APPEND_MODE } from '@Pimcore/modules/data-object/listing/batch-actions/batch-append-mode/batch-append-mode'
+import { useTranslation } from 'react-i18next'
 
 export interface EditModalModeCellProps {
   objectCellDefinition: WithEditModalGridCellDefinition
@@ -31,6 +32,7 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
   const { decodeColumnIdentifier } = useSelectedColumns()
   const { isInEditMode, fireOnUpdateCellDataEvent, disableEditMode } = useEditMode(props.cellProps)
   const [form] = Form.useForm()
+  const { t } = useTranslation()
 
   const onFormFinish = (values): void => {
     fireOnUpdateCellDataEvent(values.value, {
@@ -62,15 +64,15 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
         {props.objectCellDefinition.previewComponent}
       </InheritanceLayer>
 
-      { isInEditMode && !isUndefined(props.objectCellDefinition.editModalSettings) && (
+      {isInEditMode && !isUndefined(props.objectCellDefinition.editModalSettings) && (
         <WindowModal
-          cancelText='Discard'
-          okText='Apply Changes'
+          cancelText={ t('edit-modal.discard') }
+          okText={ t('edit-modal.apply-changes') }
           onCancel={ onCancel }
           onOk={ () => { form.submit() } }
           open={ isInEditMode }
           size={ props.objectCellDefinition.editModalSettings.modalSize }
-          title={ 'Inline edit' }
+          title={ t('edit-modal.inline-edit') }
         >
           <FieldWidthProvider>
             <FieldCollectionProvider id={ props.cellProps.row.original.id }>
@@ -90,7 +92,7 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
             </FieldCollectionProvider>
           </FieldWidthProvider>
         </WindowModal>
-      ) }
+      )}
     </Flex>
   )
 }

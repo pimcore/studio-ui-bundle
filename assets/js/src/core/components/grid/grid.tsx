@@ -10,7 +10,13 @@
 
 /* eslint-disable max-lines */
 
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { useInjection } from '@Pimcore/app/depency-injection'
 import { useCssComponentHash } from '@Pimcore/modules/ant-design/hooks/use-css-component-hash'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import type { AssetGetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type DynamicTypeGridCellRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/dynamic-type-grid-cell-registry'
+import { type GridProps } from '@Pimcore/types/components/types'
 import {
   type CellContext,
   type Column,
@@ -27,19 +33,16 @@ import {
   type TableOptions,
   useReactTable
 } from '@tanstack/react-table'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { isEmpty } from 'lodash'
+import { Checkbox, Skeleton } from 'antd'
 import cn from 'classnames'
+import { isEmpty, isNumber } from 'lodash'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
+import { DefaultCell } from './columns/default-cell'
+import { GridRow } from './grid-cell/grid-row'
 import { useStyles } from './grid.styles'
 import { Resizer } from './resizer/resizer'
-import { DefaultCell } from './columns/default-cell'
-import { useTranslation } from 'react-i18next'
-import { Checkbox, Skeleton } from 'antd'
-import { GridRow } from './grid-cell/grid-row'
-import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
-import { type GridProps } from '@Pimcore/types/components/types'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import type { AssetGetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 export interface ColumnMetaType {
   editable?: boolean
@@ -51,8 +54,7 @@ export interface ColumnMetaType {
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  export interface ColumnMeta<TData extends RowData, TValue> extends ColumnMetaType {
-  }
+  export interface ColumnMeta<TData extends RowData, TValue> extends ColumnMetaType { }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   export interface TableMeta<TData extends RowData> {
@@ -101,6 +103,7 @@ export const Grid = ({
   const [internalSorting, setInternalSorting] = useState<SortingState>(sorting ?? [])
   const memoModifiedCells = useMemo(() => { return modifiedCells ?? [] }, [JSON.stringify(modifiedCells)])
   const autoColumnRef = useRef<HTMLTableCellElement>(null)
+  const gridCellRegistry = useInjection<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/GridCellRegistry'])
 
   useEffect(() => {
     onActiveCellChange?.(activeCell)
@@ -136,6 +139,18 @@ export const Grid = ({
         : props.columns,
     [props.isLoading, props.columns]
   ) as Array<ColumnDef<any>>
+
+  columns.forEach(column => {
+    if (column.meta?.type !== undefined) {
+      if (isNumber(column.size)) {
+        return
+      }
+      const dynamicType = gridCellRegistry.getDynamicType(column.meta.type, false)
+      if (dynamicType?.getDefaultGridColumnWidth !== undefined) {
+        column.size = dynamicType.getDefaultGridColumnWidth(column.meta)
+      }
+    }
+  })
 
   useMemo(() => {
     updateRowSelectionColumn()
@@ -251,7 +266,7 @@ export const Grid = ({
               ref={ tableElement }
               style={ { width: tableAutoWidth ? '100%' : calculateTableWidth(), minWidth: table.getCenterTotalSize() } }
             >
-              { !hideColumnHeaders && (
+              {!hideColumnHeaders && (
                 <thead className='ant-table-thead'>
                   {table.getHeaderGroups().map(headerGroup => (
                     <tr key={ headerGroup.id }>
@@ -261,16 +276,16 @@ export const Grid = ({
                           key={ header.id }
                           ref={ header.column.columnDef.meta?.autoWidth === true ? autoColumnRef : null }
                           style={
-                              header.column.columnDef.meta?.autoWidth === true && !header.column.getIsResizing()
-                                ? {
-                                    width: 'auto',
-                                    minWidth: header.column.getSize()
-                                  }
-                                : {
-                                    width: header.column.getSize(),
-                                    maxWidth: header.column.getSize()
-                                  }
-                            }
+                            header.column.columnDef.meta?.autoWidth === true && !header.column.getIsResizing()
+                              ? {
+                                  width: 'auto',
+                                  minWidth: header.column.getSize()
+                                }
+                              : {
+                                  width: header.column.getSize(),
+                                  maxWidth: header.column.getSize()
+                                }
+                          }
                         >
                           <div className='grid__cell-content'>
                             <span>

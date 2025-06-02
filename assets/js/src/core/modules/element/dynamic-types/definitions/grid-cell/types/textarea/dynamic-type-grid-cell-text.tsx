@@ -20,4 +20,8 @@ export class DynamicTypeGridCellTextarea extends DynamicTypeGridCellAbstract {
   getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
     return <TextareaCell { ...props } />
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 400
+  }
 }

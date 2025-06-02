@@ -21,4 +21,8 @@ export class DynamicTypeGridCellDocumentLink extends DynamicTypeGridCellAbstract
   getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
     return <ElementCell { ...addColumnConfig(props, { allowedTypes: ['document'] }) } />
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 350
+  }
 }

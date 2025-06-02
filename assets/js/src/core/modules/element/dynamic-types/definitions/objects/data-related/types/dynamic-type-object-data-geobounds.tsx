@@ -56,4 +56,8 @@ export class DynamicTypeObjectDataGeoBounds extends DynamicTypeObjectDataAbstrac
 
     return isNil(value) ? <></> : <GeoPointList geoPoints={ [value.southWest, value.northEast] } />
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 350
+  }
 }

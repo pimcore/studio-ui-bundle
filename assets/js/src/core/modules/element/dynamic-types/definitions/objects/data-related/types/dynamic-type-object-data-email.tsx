@@ -14,4 +14,8 @@ import {
 
 export class DynamicTypeObjectDataEmail extends DynamicTypeObjectDataAbstractInput {
   id: string = 'email'
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 350
+  }
 }

@@ -53,7 +53,7 @@ export class DynamicTypeObjectDataVideo extends DynamicTypeObjectDataAbstract {
           className='w-full'
           justify='center'
         >
-          { !isNil(value) && value.type === 'asset' && (
+          {!isNil(value) && value.type === 'asset' && (
             <VideoPreview
               height={ 100 }
               value={ value }
@@ -61,11 +61,15 @@ export class DynamicTypeObjectDataVideo extends DynamicTypeObjectDataAbstract {
             />
           )}
 
-          { !isNil(value) && value?.type !== 'asset' && (
+          {!isNil(value) && value?.type !== 'asset' && (
             <span style={ { whiteSpace: 'normal' } }><Trans>video.type.{value.type}</Trans> (<Trans>video.id</Trans>: {value.data})</span>
           )}
         </Flex>
       </GridCellPreviewWrapper>
     )
+  }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 250
   }
 }

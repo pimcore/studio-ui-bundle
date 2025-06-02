@@ -27,6 +27,7 @@ export interface typeProps {
 export interface UseDynamicTypeResolverReturnType {
   getComponentRenderer: (props: typeProps) => IComponentRenderer
   hasType: (props: typeProps) => boolean
+  getType: (dynamicTypeId: DynamicTypeAbstract['id']) => DynamicTypeAbstract | null
 }
 
 export const useDynamicTypeResolver = (): UseDynamicTypeResolverReturnType => {
@@ -39,7 +40,7 @@ export const useDynamicTypeResolver = (): UseDynamicTypeResolverReturnType => {
   const { serviceIds } = context!
   const registries = serviceIds.map(serviceId => container.get<InstanceType<typeof DynamicTypeRegistryAbstract>>(serviceId))
 
-  function getComponentRenderer <T> (props: typeProps): IComponentRenderer {
+  function getComponentRenderer<T> (props: typeProps): IComponentRenderer {
     const { target, dynamicTypeIds } = props
     const dynamicTypeResolver = new DynamicTypeResolver()
 
@@ -79,8 +80,21 @@ export const useDynamicTypeResolver = (): UseDynamicTypeResolverReturnType => {
     return false
   }
 
+  function getType (dynamicTypeId: DynamicTypeAbstract['id']): DynamicTypeAbstract | null {
+    for (const registry of registries) {
+      if (registry.hasDynamicType(dynamicTypeId)) {
+        const dynamicType = registry.getDynamicType(dynamicTypeId)
+
+        return dynamicType
+      }
+    }
+
+    return null
+  }
+
   return {
     getComponentRenderer,
-    hasType
+    hasType,
+    getType
   }
 }

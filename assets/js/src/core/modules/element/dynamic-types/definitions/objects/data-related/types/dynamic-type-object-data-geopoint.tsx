@@ -56,4 +56,8 @@ export class DynamicTypeObjectDataGeoPoint extends DynamicTypeObjectDataAbstract
 
     return isNil(value) ? <></> : <GeoPointList geoPoints={ [value] } />
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 250
+  }
 }

@@ -21,4 +21,8 @@ export class DynamicTypeGridCellAssetLink extends DynamicTypeGridCellAbstract {
   getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
     return <ElementCell { ...addColumnConfig(props, { allowedTypes: ['asset'] }) } />
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 350
+  }
 }
