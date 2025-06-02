@@ -9,6 +9,7 @@
  */
 
 import React, { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { isObject, find } from 'lodash'
 import { type ClassificationStoreProps } from './classification-store'
 import { useKeyedList } from '@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list'
@@ -20,16 +21,20 @@ import { useLanguageSelection } from '@Pimcore/modules/data-object/editor/toolba
 import { LocalizationSwitch } from './localization-switch'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Space } from '@Pimcore/components/space/space'
+import { Button } from '@Pimcore/components/button/button'
+import { Icon } from '@Pimcore/components/icon/icon'
 
 export interface ClassificationStoreContentProps extends ClassificationStoreProps {}
 
 export const ClassificationStoreContent = (props: ClassificationStoreContentProps): React.JSX.Element => {
+  const [localizationMode, setLocalizationMode] = useState<string>('default')
+  const { t } = useTranslation()
+
   const { values } = useKeyedList()
   const { activeGroups, groupCollectionMapping, ...groups } = values
-  const [localizationMode, setLocalizationMode] = useState<string>('default')
   const { currentLanguage } = useLanguageSelection()
-  let localizationGroup = 'default'
 
+  let localizationGroup = 'default'
   const isLocalizable = props.localized ?? false
   const activeGroupLayout = props.activeGroupDefinitions ?? []
 
@@ -48,11 +53,17 @@ export const ClassificationStoreContent = (props: ClassificationStoreContentProp
       collapsible
       extra={
         <Flex
+          align='center'
           className='w-full'
           justify='space-between'
         >
-          {/* @todo add Button goes here */}
-          <div />
+          <Button
+            color="default"
+            icon={ <Icon value="folder-search" /> }
+            variant="filled"
+          >
+            {t('add')}
+          </Button>
 
           {isLocalizable
             ? (

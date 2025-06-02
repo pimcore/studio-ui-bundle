@@ -14,6 +14,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type IconLibrary } from './services/icon-library'
+
 import accessory from '@Pimcore/assets/icons/accessory.inline.svg?react'
 import addFind from '@Pimcore/assets/icons/add-find.inline.svg?react'
 import addFolder from '@Pimcore/assets/icons/add-folder.inline.svg?react'
@@ -102,6 +103,7 @@ import flag from '@Pimcore/assets/icons/flag.inline.svg?react'
 import flipForward from '@Pimcore/assets/icons/flip-forward.inline.svg?react'
 import focalPoint from '@Pimcore/assets/icons/focal-point.inline.svg?react'
 import folderPlus from '@Pimcore/assets/icons/folder-plus.inline.svg?react'
+import folderSearch from '@Pimcore/assets/icons/folder-search.inline.svg?react'
 import folder from '@Pimcore/assets/icons/folder.inline.svg?react'
 import graph from '@Pimcore/assets/icons/graph.inline.svg?react'
 import groupByKeys from '@Pimcore/assets/icons/group-by-keys.inline.svg?react'
@@ -567,6 +569,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'folder-plus',
       component: folderPlus
+    })
+    iconLibrary.register({
+      name: 'folder-search',
+      component: folderSearch
     })
     iconLibrary.register({
       name: 'folder',
