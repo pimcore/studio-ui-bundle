@@ -23,7 +23,7 @@ export class DynamicTypeFieldFilterSelect extends DynamicTypeFieldFilterAbstract
 
   getFieldFilterComponent (): ReactElement<DynamicTypeFieldFilterAbstract> {
     return (
-      <DynamicTypeFieldFilterSelectComponent/>
+      <DynamicTypeFieldFilterSelectComponent />
     )
   }
 }

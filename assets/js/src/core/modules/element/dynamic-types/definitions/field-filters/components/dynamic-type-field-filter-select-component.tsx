@@ -11,24 +11,24 @@
 import React, { useEffect, useState } from 'react'
 import { Select } from '@Pimcore/components/select/select'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
-import { DefaultOptionType } from 'antd/es/select'
+import { type DefaultOptionType } from 'antd/es/select'
 
 interface SelectConfig {
-  options: string[];
+  options: string[]
 }
 
 export const DynamicTypeFieldFilterSelectComponent = (): React.JSX.Element => {
   const { setData, data, config: rawConfig } = useDynamicFilter()
   const [_value, setValue] = useState(data)
- 
-  const config = rawConfig as SelectConfig;
 
-  const rawOptions = config.options ;
+  const config = rawConfig as SelectConfig
+
+  const rawOptions = config.options
   const formattedOptions: DefaultOptionType[] = rawOptions.map((opt: string) => ({
     label: opt,
     value: opt
-  }));
-  
+  }))
+
   useEffect(() => {
     setValue(data)
   }, [data])

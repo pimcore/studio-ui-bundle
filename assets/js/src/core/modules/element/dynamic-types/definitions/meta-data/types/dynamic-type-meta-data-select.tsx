@@ -30,7 +30,6 @@ export class DynamicTypeMetaDataSelect extends DynamicTypeMetadataAbstract {
   @inject(serviceIds['DynamicTypes/GridCell/Select']) protected dynamicTypeGridCellType: DynamicTypeGridCellAbstract
   @inject(serviceIds['DynamicTypes/FieldFilter/Select']) protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract
 
-
   getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
     const GridCellRegistry = container.get<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/GridCellRegistry'])
     const config: SelectCellConfig = {
