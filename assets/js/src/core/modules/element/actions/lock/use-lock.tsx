@@ -20,7 +20,7 @@ import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { ContextMenuActionName } from '..'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import { setNodeLoadingInAllTree, setNodeLocked } from '@Pimcore/components/element-tree/element-tree-slice'
 import { isNil } from 'lodash'
 

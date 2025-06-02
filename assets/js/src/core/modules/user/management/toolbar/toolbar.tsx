@@ -11,7 +11,7 @@
 import React, { useState } from 'react'
 import { Toolbar as ToolbarView } from '@Pimcore/components/toolbar/toolbar'
 import { useTranslation } from 'react-i18next'
-import { Button } from '@Pimcore/components/button/button'
+import { Button } from '@sdk/components'
 import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
 import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -60,7 +60,7 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
 
   const onSaveClick = (): void => {
     updateUserById({ id, user: user as UserDraft }).catch(() => {
-      console.log('error')
+      console.error('error')
     })
   }
 

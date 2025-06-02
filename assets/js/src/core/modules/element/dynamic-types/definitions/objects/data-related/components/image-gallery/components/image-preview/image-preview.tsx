@@ -14,7 +14,7 @@ import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
-import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
+import { type DragAndDropInfo } from '@sdk/components'
 import type { ImageGalleryValueItem } from '../../image-gallery'
 import type { UniqueIdentifier } from '@dnd-kit/core'
 import {
@@ -38,7 +38,7 @@ import {
   type CropSettings
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
-import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
+import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
 
 interface ImageGalleryImagePreviewProps {

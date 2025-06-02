@@ -13,24 +13,44 @@ import { Form } from 'antd'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
 import { Select } from '@Pimcore/components/select/select'
+import {
+  useClassDefinitionCollectionQuery
+} from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 
-const TypesAndClassesAccordion = ({ ...props }): React.JSX.Element => {
+const TypesAndClassesAccordion = (): React.JSX.Element => {
   const { t } = useTranslation()
+  const { data, isLoading: classesLoading } = useClassDefinitionCollectionQuery()
 
   const content = [
     {
       key: '1',
       title: <>{ t('user-management.types-and-classes') }</>,
       children: (
-        <Form.Item
-          name="classes"
-        >
-          <Select
-            mode="multiple"
-            options={ [] }
-            placeholder={ t('user-management.classes') }
-          ></Select>
-        </Form.Item>
+        <>
+          <Form.Item
+            name="docTypes"
+          >
+            <Select
+              disabled={ classesLoading }
+              mode="multiple"
+              options={ [] }
+              placeholder={ t('user-management.doc-types') }
+            ></Select>
+          </Form.Item>
+          <Form.Item
+            name="classes"
+          >
+            <Select
+              disabled={ classesLoading }
+              mode="multiple"
+              options={ data?.items.map((item) => ({
+                label: item.name,
+                value: item.id
+              })) }
+              placeholder={ t('user-management.classes') }
+            ></Select>
+          </Form.Item>
+        </>
       )
     }
   ]

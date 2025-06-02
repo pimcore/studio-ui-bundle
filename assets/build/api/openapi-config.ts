@@ -22,7 +22,7 @@ const pathMatcher = (pattern: RegExp): EndpointMatcherFunction => {
 
 const config: ConfigFile = {
   schemaFile: './docs.jsonopenapi.json',
-  apiFile: '../../js/src/core/app/api/pimcore/index.ts',
+  apiFile: '@sdk/api',
   apiImport: 'api',
   endpointOverrides: [
     {
@@ -38,6 +38,10 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'notificationGetCollection',
+      type: 'query'
+    },
+    {
       pattern: 'assetGetSearch',
       type: 'query',
     },
@@ -47,6 +51,10 @@ const config: ConfigFile = {
     },
     {
       pattern: 'metadataGetCollection',
+      type: 'query'
+    },
+        {
+      pattern: 'notificationGetCollection',
       type: 'query'
     }
   ],
@@ -70,9 +78,6 @@ const config: ConfigFile = {
       filterEndpoints: pathMatcher(/api\/workflow/i)
     },
     '../../js/src/core/modules/auth/user/user-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/user/i)
-    },
-    '../../js/src/core/modules/user/user-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/user/i)
     },
     '../../js/src/core/modules/user/roles/roles-api-slice.gen.ts': {
@@ -122,6 +127,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/perspectives/perspectives-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/perspectives\//i)
+    },
+    '../../js/src/core/modules/notifications/notifications-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/api\/notifications\/?/i)
     },
     '../../js/src/core/modules/search/search-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/search\/?/i)

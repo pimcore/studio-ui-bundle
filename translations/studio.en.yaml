@@ -129,6 +129,8 @@ login-form.remember-me: Remember me
 login-form.forgot-password: Forgot password
 login-form.login: Login
 login-form-additional-logins.or: or
+login-form.username: Username
+login-form.password: Password
 aria.login-form-additional-logins.additional-login-provider: "Additional login provider:"
 aria.login-form-additional-logins.remember-me-checkbox: Remember me checkbox
 unsaved-notice: Please save to confirm your changes
@@ -308,6 +310,8 @@ actions.open: Open
 open: Open
 edit: Edit
 component.no-content.no-content-available: No content available
+notifications.label: Notifications
+notifications.remove-all: Remove all
 notes-and-events.label: Notes & Events
 notes-and-events.notes-and-events: Notes & Events
 notes-and-events.details: Details
@@ -665,7 +669,8 @@ user-management.clone-user.success: User cloned successfully
 user-management.save-user.success: User saved successfully
 user-management.add-user.success: User added successfully
 user-management.remove-user.success: User removed successfully
-user-management.upload-image.success: Image uploaded successfully
+user-management.perspectives: Perspectives
+user-management.roles: Roles
 roles.tree.all: All Roles
 roles.save-item.success: Role saved successfully
 roles.clone-item.success: Role cloned successfully
@@ -785,7 +790,18 @@ edit-modal.apply-changes: Apply changes
 edit-modal.discard: Discard
 preview-not-available: Preview not available
 user-menu.notifications: Notifications
-user-menu.notifications-send: Send
 user-menu.my-profile: My Profile
 user-menu.log-out: Log out
 user-menu.title: Profile
+user-menu.notification.send: Send
+user-menu.notification.cancel: Cancel
+user-menu.notification.modal.send-a-notification: Send a notification
+user-menu.notification.modal.success-notification-has-been-sent: Success - Notificaion has been sent
+user-menu.notification.modal.to: To
+user-menu.notification.modal.select: Select
+user-menu.notification.modal.title: Title
+user-menu.notification.modal.message: Message
+user-menu.notification.modal.add-an-attachment: Add an attachment
+user-menu.notification.modal.form.validation.provide-recipient: Please provide a recipient
+user-menu.notification.modal.form.validation.provide-title: Please provide a title
+user-menu.notification.modal.form.validation.provide-message: Please provide a message

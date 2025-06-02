@@ -8,30 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import useTableStyle from 'antd/es/table/style'
-import usePaginationStyle from 'antd/es/pagination/style'
-import { ConfigContext } from 'antd/es/config-provider/context'
-import { useContext } from 'react'
+import { theme } from 'antd'
+const { useToken } = theme
 
-export const useCssComponentHash = (componentName: string): string => {
-  const context = useContext(ConfigContext)
-  const prefix = context.getPrefixCls(componentName, '')
-
-  const tableHashId = useTableStyle(prefix)[1]
-  const paginationHashId = usePaginationStyle(prefix)[1]
-
-  let hashId
-  switch (componentName) {
-    case 'table':
-      hashId = tableHashId
-      break
-    case 'pagination':
-      hashId = paginationHashId
-      break
-
-    default:
-      hashId = ''
-  }
+export const useCssComponentHash = (): string => {
+  const { hashId } = useToken()
 
   return hashId
 }

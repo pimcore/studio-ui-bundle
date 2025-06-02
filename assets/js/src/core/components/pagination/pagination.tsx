@@ -43,7 +43,7 @@ export const Pagination = ({
 }: PaginationProps): React.JSX.Element => {
   const { styles } = useStyle()
 
-  const hashId = useCssComponentHash('pagination')
+  const hashId = useCssComponentHash()
 
   const [currentPage, setCurrentPage] = useState<number>(current)
   const [pageSize, setPageSize] = useState<number>(defaultPageSize)

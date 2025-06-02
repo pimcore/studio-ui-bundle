@@ -14,7 +14,11 @@ import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@Pimcore/components/button/button'
 import { Switch } from '@Pimcore/components/switch/switch'
-const AdminAccordion = ({ ...props }): React.JSX.Element => {
+
+interface IAdminAccordion {
+  isDisabled?: boolean
+}
+const AdminAccordion = ({ isDisabled, ...props }: IAdminAccordion): React.JSX.Element => {
   const { t } = useTranslation()
   const { Text } = Typography
 
@@ -26,13 +30,17 @@ const AdminAccordion = ({ ...props }): React.JSX.Element => {
         <Form.Item
           name={ 'admin' }
         >
-          <Switch labelRight={ t('user-management.admin') } />
+          <Switch
+            disabled={ isDisabled }
+            labelRight={ t('user-management.admin') }
+          />
         </Form.Item>
 
         <Text disabled>{ t('user-management.admin.info') }</Text>
-        <div>
+        <div className={ 'm-t-normal' }>
           <Button
-            onClick={ () => { console.log('login') } }
+            disabled={ isDisabled }
+            onClick={ () => { console.log('todo login') } }
             type="default"
           >{t('user-management.admin.login')}</Button>
         </div>

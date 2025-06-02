@@ -1,4 +1,4 @@
-import { api } from "../../app/api/pimcore/index";
+import { api } from "@sdk/api";
 export const addTagTypes = ["Units"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
@@ -12,14 +12,21 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/unit/quantity-value/convert-all`,
-                    params: { fromUnitId: queryArg.fromUnitId, value: queryArg.value },
+                    params: {
+                        fromUnitId: queryArg.fromUnitId,
+                        value: queryArg.value,
+                    },
                 }),
                 providesTags: ["Units"],
             }),
             unitQuantityValueConvert: build.query<UnitQuantityValueConvertApiResponse, UnitQuantityValueConvertApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/unit/quantity-value/convert`,
-                    params: { fromUnitId: queryArg.fromUnitId, toUnitId: queryArg.toUnitId, value: queryArg.value },
+                    params: {
+                        fromUnitId: queryArg.fromUnitId,
+                        toUnitId: queryArg.toUnitId,
+                        value: queryArg.value,
+                    },
                 }),
                 providesTags: ["Units"],
             }),
@@ -90,23 +97,23 @@ export type QuantityValueUnit = {
         [key: string]: string | number | boolean | object;
     };
     /** ID */
-    id: any;
+    id: string | null;
     /** Abbreviation */
-    abbreviation: any;
+    abbreviation: string | null;
     /** Group */
-    group: any;
+    group: string | null;
     /** Long Name */
-    longName: any;
+    longName: string | null;
     /** Base Unit */
-    baseUnit: any;
+    baseUnit: string | null;
     /** Reference */
-    reference: any;
+    reference: string | null;
     /** Factor */
-    factor: any;
+    factor: number | null;
     /** Conversion Offset */
-    conversionOffset: any;
+    conversionOffset: number | null;
     /** Converter */
-    converter: any;
+    converter: string | null;
 };
 export const { useUnitQuantityValueConvertAllQuery, useUnitQuantityValueConvertQuery, useUnitQuantityValueListQuery } =
     injectedRtkApi;

@@ -10,7 +10,7 @@
 
 import React, { type MutableRefObject, forwardRef, useContext } from 'react'
 import { useStyle } from './dnd-demo-droppable-content.styles'
-import { droppableContext } from '../droppable-context-provider'
+import { droppableContext } from '@sdk/components'
 
 interface DNDDemoDroppableContentProps {
   value: string

@@ -1,4 +1,4 @@
-import { api } from "../../../../../../app/api/pimcore/index";
+import { api } from "@sdk/api";
 export const addTagTypes = ["Tags", "Tags for Element"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
@@ -196,9 +196,9 @@ export type CreateTagParameters = {
 };
 export type ChangeTagParameters = {
     /** Parent id */
-    parentId?: any;
+    parentId?: number | null;
     /** Tag name */
-    name?: any;
+    name?: string | null;
 };
 export const {
     useTagGetCollectionQuery,

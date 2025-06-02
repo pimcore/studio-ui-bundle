@@ -1,4 +1,4 @@
-import { api } from "../../app/api/pimcore/index";
+import { api } from "@sdk/api";
 export const addTagTypes = ["Data Objects", "Data Object Grid"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
@@ -50,7 +50,9 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/data-object/grid/configuration/${queryArg.folderId}/${queryArg.classId}`,
-                    params: { configurationId: queryArg.configurationId },
+                    params: {
+                        configurationId: queryArg.configurationId,
+                    },
                 }),
                 providesTags: ["Data Object Grid"],
             }),
@@ -100,7 +102,11 @@ const injectedRtkApi = api
                 DataObjectGetAvailableGridColumnsApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-object/grid/available-columns/${queryArg.classId}/${queryArg.folderId}`,
+                    url: `/pimcore-studio/api/data-object/grid/available-columns`,
+                    params: {
+                        classId: queryArg.classId,
+                        folderId: queryArg.folderId,
+                    },
                 }),
                 providesTags: ["Data Object Grid"],
             }),
@@ -148,7 +154,9 @@ const injectedRtkApi = api
             dataObjectPreviewById: build.query<DataObjectPreviewByIdApiResponse, DataObjectPreviewByIdApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/data-objects/preview/${queryArg.id}`,
-                    params: { site: queryArg.site },
+                    params: {
+                        site: queryArg.site,
+                    },
                 }),
                 providesTags: ["Data Objects"],
             }),
@@ -206,7 +214,7 @@ export type DataObjectAddApiArg = {
     dataObjectAddParameters: DataObjectAdd;
 };
 export type DataObjectCloneApiResponse =
-    /** status 200 Successfully copied data object */ void | /** status 201 Successfully copied parent data object and created <strong>jobRun</strong> for copying child objects */ {
+    /** status 201 Successfully copied parent data object and created <strong>jobRun</strong> for copying child objects */ {
         /** ID of created jobRun */
         jobRunId: number;
     };
@@ -232,17 +240,17 @@ export type DataObjectUpdateByIdApiArg = {
     id: number;
     body: {
         data: {
-            parentId?: any;
-            index?: any;
-            key?: any;
-            useDraftData?: any;
+            parentId?: number | null;
+            index?: number | null;
+            key?: string | null;
+            useDraftData?: boolean | null;
             task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
-            locked?: any;
-            childrenSortBy?: any;
-            childrenSortOrder?: any;
-            published?: any;
-            editableData?: any;
-            properties?: UpdateDataProperty[];
+            locked?: string | null;
+            childrenSortBy?: string | null;
+            childrenSortOrder?: string | null;
+            published?: boolean | null;
+            editableData?: object | null;
+            properties?: UpdateDataProperty[] | null;
         };
     };
 };
@@ -290,16 +298,14 @@ export type DataObjectSaveGridConfigurationApiArg = {
         filter?: GridFilter | null;
     };
 };
-export type DataObjectSetGridConfigurationAsFavoriteApiResponse =
-    /** status 200 data_object_set_grid_configuration_as_favorite_response */ void;
+export type DataObjectSetGridConfigurationAsFavoriteApiResponse = unknown;
 export type DataObjectSetGridConfigurationAsFavoriteApiArg = {
     /** ConfigurationId of the configurationId */
     configurationId: number;
     /** FolderId of the folderId */
     folderId: number;
 };
-export type DataObjectUpdateGridConfigurationApiResponse =
-    /** status 200 Data Object grid configuration updated successfully */ void;
+export type DataObjectUpdateGridConfigurationApiResponse = unknown;
 export type DataObjectUpdateGridConfigurationApiArg = {
     /** ConfigurationId of the configurationId */
     configurationId: number;
@@ -323,9 +329,9 @@ export type DataObjectGetAvailableGridColumnsApiResponse =
     };
 export type DataObjectGetAvailableGridColumnsApiArg = {
     /** Identifies the class name for which the columns should be retrieved. */
-    classId: string;
-    /** FolderId of the element */
-    folderId: number;
+    classId?: string;
+    /** folderId */
+    folderId?: number;
 };
 export type DataObjectGetGridApiResponse = /** status 200 Data object grid data */ {
     totalItems: number;
@@ -354,7 +360,7 @@ export type DataObjectGetLayoutByIdApiArg = {
     layoutId?: string;
 };
 export type DataObjectPatchByIdApiResponse =
-    /** status 200 Successfully patched data object */ void | /** status 201 Successfully created jobRun for patching multiple data objects */ {
+    /** status 201 Successfully created jobRun for patching multiple data objects */ {
         /** ID of created jobRun */
         jobRunId: number;
     };
@@ -363,15 +369,15 @@ export type DataObjectPatchByIdApiArg = {
         data: {
             /** Data Object ID */
             id: number;
-            parentId?: any;
-            index?: any;
-            key?: any;
+            parentId?: number | null;
+            index?: number | null;
+            key?: string | null;
             task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
-            locked?: any;
-            childrenSortBy?: any;
-            childrenSortOrder?: any;
-            published?: any;
-            editableData?: any;
+            locked?: string | null;
+            childrenSortBy?: string | null;
+            childrenSortOrder?: string | null;
+            published?: boolean | null;
+            editableData?: object | null;
         }[];
     };
 };
@@ -385,14 +391,14 @@ export type DataObjectPatchFolderByIdApiArg = {
         data: {
             /** Folder ID */
             folderId: number;
-            parentId?: any;
-            index?: any;
-            key?: any;
-            locked?: any;
-            childrenSortBy?: any;
-            childrenSortOrder?: any;
-            published?: any;
-            editableData?: any;
+            parentId?: number | null;
+            index?: number | null;
+            key?: string | null;
+            locked?: string | null;
+            childrenSortBy?: string | null;
+            childrenSortOrder?: string | null;
+            published?: boolean | null;
+            editableData?: object | null;
         }[];
         filters?: GridFilter;
     };
@@ -405,7 +411,8 @@ export type DataObjectFormatPathApiArg = {
     body: {
         objectId: number;
         targets: object;
-        context: object;
+        /** Fieldname for the PathFormatter. Given as Dot Notation */
+        fieldName?: string;
     };
 };
 export type DataObjectPreviewByIdApiResponse = unknown;
@@ -415,7 +422,7 @@ export type DataObjectPreviewByIdApiArg = {
     /** Site ID */
     site?: any;
 };
-export type DataObjectReplaceContentApiResponse = /** status 200 Successfully replaced content of data object */ void;
+export type DataObjectReplaceContentApiResponse = unknown;
 export type DataObjectReplaceContentApiArg = {
     /** SourceId of the data-object */
     sourceId: number;
@@ -505,25 +512,25 @@ export type Element = {
     /** ID of owner */
     userOwner: number;
     /** User that modified the element */
-    userModification: any;
+    userModification: number | null;
     /** Locked */
-    locked: any;
+    locked: string | null;
     /** Is locked */
     isLocked: boolean;
     /** Creation date */
-    creationDate: any;
+    creationDate: number | null;
     /** Modification date */
-    modificationDate: any;
+    modificationDate: number | null;
 };
 export type CustomAttributes = {
     /** Custom Icon */
     icon: ElementIcon | null;
     /** Custom Tooltip */
-    tooltip: any;
+    tooltip: string | null;
     /** AdditionalIcons */
     additionalIcons: string[];
     /** Custom Key/Filename */
-    key: any;
+    key: string | null;
     /** Additional Css Classes */
     additionalCssClasses: string[];
 };
@@ -549,13 +556,13 @@ export type Permissions = {
 };
 export type DataObjectPermissions = Permissions & {
     /** Save */
-    save?: boolean;
+    save: boolean;
     /** Unpublish */
-    unpublish?: boolean;
+    unpublish: boolean;
     /** Localized Edit */
-    localizedEdit?: any;
+    localizedEdit: string | null;
     /** Localized View */
-    localizedView?: any;
+    localizedView: string | null;
 };
 export type DataObjectDraftData = {
     /** ID */
@@ -571,50 +578,50 @@ export type DataObject = Element & {
         [key: string]: string | number | boolean | object;
     };
     /** Inheritance allowed */
-    allowInheritance?: boolean;
+    allowInheritance: boolean;
     /** Variants allowed */
-    allowVariants?: boolean;
+    allowVariants: boolean;
     /** Show variants */
-    showVariants?: boolean;
+    showVariants: boolean;
     /** Has preview */
-    hasPreview?: boolean;
+    hasPreview: boolean;
     /** Custom attributes for the tree */
-    customAttributes?: CustomAttributes;
+    customAttributes: CustomAttributes;
     /** Has workflow available */
     hasWorkflowAvailable?: boolean;
     /** Key */
-    key?: string;
+    key: string;
     /** Class name */
-    className?: string;
+    className: string;
     /** Type */
-    type?: string;
+    type: string;
     /** Published */
-    published?: boolean;
+    published: boolean;
     /** Has children */
-    hasChildren?: boolean;
+    hasChildren: boolean;
     /** Workflow permissions */
-    hasWorkflowWithPermissions?: boolean;
+    hasWorkflowWithPermissions: boolean;
     /** Full path */
-    fullPath?: string;
-    permissions?: DataObjectPermissions;
+    fullPath: string;
+    permissions: DataObjectPermissions;
     /** Custom index */
-    index?: number;
+    index: number;
     /** Sort mode of children */
-    childrenSortBy?: string;
+    childrenSortBy: string;
     /** Sort order of children */
-    childrenSortOrder?: string;
+    childrenSortOrder: string;
     /** Detail object data */
-    objectData?: object;
+    objectData: object;
     /** Inheritance object data */
-    inheritanceData?: object;
-    draftData?: DataObjectDraftData | null;
+    inheritanceData: object;
+    draftData: DataObjectDraftData | null;
 };
 export type DataObjectFolder = DataObject;
 export type UpdateDataProperty = {
     /** key */
     key: string;
     /** data */
-    data: any;
+    data: any | null;
     /** type */
     type: string;
     /** inheritable */
@@ -624,7 +631,7 @@ export type Column = {
     /** Key of the Column */
     key: string;
     /** Locale of the Column */
-    locale: any;
+    locale: string | null;
     /** Group of the Column */
     group: string;
 };
@@ -648,7 +655,7 @@ export type GridDetailedConfiguration = {
     /** Name */
     name: string;
     /** Description */
-    description?: any;
+    description?: string | null;
     /** shareGlobal */
     shareGlobal: boolean;
     /** saveFilter */
@@ -666,13 +673,13 @@ export type GridDetailedConfiguration = {
     /** Page Size */
     pageSize: number;
     /** Modification Date */
-    modificationDate?: any;
+    modificationDate?: number | null;
     /** Creation Date */
-    creationDate?: any;
+    creationDate?: number | null;
     /** ID of the owner */
-    ownerId?: any;
+    ownerId?: number | null;
     /** ID of the configuration */
-    id?: any;
+    id?: number | null;
 };
 export type GridConfiguration = {
     /** AdditionalAttributes */
@@ -684,7 +691,7 @@ export type GridConfiguration = {
     /** Name */
     name: string;
     /** Description */
-    description?: any;
+    description?: string | null;
 };
 export type GridColumnConfiguration = {
     /** AdditionalAttributes */
@@ -706,7 +713,7 @@ export type GridColumnConfiguration = {
     /** Localizable */
     localizable: boolean;
     /** Locale */
-    locale?: any;
+    locale?: string | null;
     /** Type */
     type: string;
     /** Frontend Type */
@@ -722,11 +729,11 @@ export type GridColumnData = {
     /** Key */
     key?: string;
     /** Locale */
-    locale?: any;
+    locale?: string | null;
     /** Value */
-    value?: any;
+    value?: any | null;
     /** inheritance */
-    inheritance?: any;
+    inheritance?: object | null;
 };
 export type RelationFieldConfig = {
     /** Relation Getter */
@@ -738,19 +745,23 @@ export type SimpleFieldConfig = {
     /** Field getter */
     field: string;
 };
+export type StaticTextConfig = {
+    /** Static Text */
+    text: string;
+};
 export type AdvancedColumnConfig = {
     /** advancedColumns */
-    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig)[];
+    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
 };
 export type GridColumnRequest = {
     /** Key */
     key: string;
     /** Locale */
-    locale?: any;
+    locale?: string | null;
     /** Type */
     type: string;
     /** Group */
-    group?: any;
+    group?: string | null;
     /** Config */
     config: (string | AdvancedColumnConfig)[];
 };
@@ -766,13 +777,13 @@ export type Layout = {
     /** Field Type */
     fieldType: string;
     /** Type */
-    type: any;
+    type: string | null;
     /** Layout */
-    layout: any;
+    layout: string | null;
     /** Region */
-    region: any;
+    region: string | null;
     /** Title */
-    title: any;
+    title: string | null;
     /** Width */
     width: number;
     /** Height */
@@ -782,7 +793,7 @@ export type Layout = {
     /** Collapsed */
     collapsed: boolean;
     /** Body Style */
-    bodyStyle: any;
+    bodyStyle: string | null;
     /** Locked */
     locked: boolean;
     /** Children */

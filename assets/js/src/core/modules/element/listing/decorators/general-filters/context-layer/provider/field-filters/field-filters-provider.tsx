@@ -14,6 +14,7 @@ export interface FieldFilter {
   key: string
   type: string
   filterValue: any
+  filterType?: string
 }
 
 export interface FieldFiltersData {

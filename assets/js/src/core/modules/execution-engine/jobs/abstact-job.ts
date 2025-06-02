@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type NonEmptyArray } from 'types/non-empty-array'
+import { type NonEmptyArray } from '@Pimcore/types/non-empty-array'
 import { type topics } from '../topics'
 
 export enum JobStatus {

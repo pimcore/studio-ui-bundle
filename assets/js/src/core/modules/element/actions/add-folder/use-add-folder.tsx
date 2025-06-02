@@ -24,7 +24,7 @@ import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useRefreshTree } from '../refresh-tree/use-refresh-tree'
 import { useTreeId } from '../../tree/provider/tree-id-provider/use-tree-id'
 import { setNodeFetching } from '@Pimcore/components/element-tree/element-tree-slice'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import { ContextMenuActionName } from '..'
 
 export interface UseAddFolderHookReturn {

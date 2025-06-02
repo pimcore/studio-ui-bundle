@@ -30,7 +30,7 @@ import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'

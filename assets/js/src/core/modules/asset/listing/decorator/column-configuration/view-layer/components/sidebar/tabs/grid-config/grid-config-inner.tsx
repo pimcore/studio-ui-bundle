@@ -137,7 +137,7 @@ export const GridConfigInner = (): React.JSX.Element => {
         folderId: getId(),
         columns: prepareColumns(columns),
         name: gridConfig.name,
-        description: gridConfig.description,
+        description: gridConfig.description ?? '',
         setAsFavorite: gridConfig.setAsFavorite,
         shareGlobal: gridConfig.shareGlobal,
         sharedRoles: gridConfig.sharedRoles,

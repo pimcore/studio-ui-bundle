@@ -12,7 +12,7 @@ import { useAssetGetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice-enh
 import React, { useContext, useMemo, useState } from 'react'
 import { FlexContainer } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/preview/flex-container'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+import { AssetContext } from '@sdk/modules/asset'
 import {
   ContentLayout
 } from '@Pimcore/components/content-layout/content-layout'

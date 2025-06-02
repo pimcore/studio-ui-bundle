@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { api as baseApi } from './user-api-slice.gen'
+import { api as baseApi } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
   endpoints: {
@@ -26,7 +26,7 @@ const api = baseApi.enhanceEndpoints({
   }
 })
 
-export type * from './user-api-slice.gen'
+export type * from '@Pimcore/modules/auth/user/user-api-slice.gen'
 
 export const {
   useUserCloneByIdMutation,

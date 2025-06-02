@@ -12,7 +12,7 @@ import React, { useEffect, useRef, useState, type ReactElement, type CSSProperti
 import { Breadcrumb as AntBreadcrumb, type MenuItemProps, type BreadcrumbProps as AntBreadcrumbProps } from 'antd'
 import { type BreadcrumbItemType, type ItemType } from 'antd/es/breadcrumb/Breadcrumb'
 import cn from 'classnames'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { Text } from '@Pimcore/components/text/text'

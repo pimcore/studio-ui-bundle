@@ -1,4 +1,4 @@
-import { api } from "../../../app/api/pimcore/index";
+import { api } from "@sdk/api";
 export const addTagTypes = ["User Management"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
@@ -78,7 +78,9 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/user/search`,
-                    params: { searchQuery: queryArg.searchQuery },
+                    params: {
+                        searchQuery: queryArg.searchQuery,
+                    },
                 }),
                 providesTags: ["User Management"],
             }),
@@ -123,7 +125,9 @@ const injectedRtkApi = api
             userGetTree: build.query<UserGetTreeApiResponse, UserGetTreeApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/users/tree`,
-                    params: { parentId: queryArg.parentId },
+                    params: {
+                        parentId: queryArg.parentId,
+                    },
                 }),
                 providesTags: ["User Management"],
             }),
@@ -142,14 +146,14 @@ export type UserCloneByIdApiArg = {
 export type UserCreateApiResponse = /** status 200 Node of the new created User. */ TreeNode;
 export type UserCreateApiArg = {
     body: {
-        parentId: any;
+        parentId: number | null;
         name: string;
     };
 };
 export type UserFolderCreateApiResponse = /** status 200 Node of the new created Folder. */ TreeNode;
 export type UserFolderCreateApiArg = {
     body: {
-        parentId: any;
+        parentId: number | null;
         name: string;
     };
 };
@@ -166,12 +170,12 @@ export type UserUpdateByIdApiArg = {
     id: number;
     updateUser: User2;
 };
-export type UserDeleteByIdApiResponse = /** status 200 Success */ void;
+export type UserDeleteByIdApiResponse = unknown;
 export type UserDeleteByIdApiArg = {
     /** Id of the user */
     id: number;
 };
-export type UserFolderDeleteByIdApiResponse = /** status 200 Success */ void;
+export type UserFolderDeleteByIdApiResponse = unknown;
 export type UserFolderDeleteByIdApiArg = {
     /** Id of the user-folder */
     id: number;
@@ -191,7 +195,7 @@ export type UserGetCollectionApiResponse = /** status 200 List of users */ {
     items: SimpleUser[];
 };
 export type UserGetCollectionApiArg = void;
-export type UserResetPasswordApiResponse = /** status 200 Success */ void;
+export type UserResetPasswordApiResponse = unknown;
 export type UserResetPasswordApiArg = {
     resetPassword: ResetPassword;
 };
@@ -203,13 +207,12 @@ export type PimcoreStudioApiUserSearchApiArg = {
     /** Query to search for an user. This can be a part of username, firstname, lastname, email or id. */
     searchQuery?: string;
 };
-export type UserUpdateActivePerspectiveApiResponse =
-    /** status 200 Updated active perspective for the current user. */ void;
+export type UserUpdateActivePerspectiveApiResponse = unknown;
 export type UserUpdateActivePerspectiveApiArg = {
     /** Set active perspective by Id */
     perspectiveId: string;
 };
-export type UserUpdatePasswordByIdApiResponse = /** status 200 Success */ void;
+export type UserUpdatePasswordByIdApiResponse = unknown;
 export type UserUpdatePasswordByIdApiArg = {
     /** Id of the User */
     id: number;
@@ -222,7 +225,7 @@ export type UserUpdateProfileApiResponse = /** status 200 Successfully updated u
 export type UserUpdateProfileApiArg = {
     updateUserProfile: UserProfile;
 };
-export type UserUploadImageApiResponse = /** status 200 Success */ void;
+export type UserUploadImageApiResponse = unknown;
 export type UserUploadImageApiArg = {
     /** Id of the User */
     id: number;
@@ -271,7 +274,7 @@ export type DevError = {
 export type KeyBindingForAUser = {
     /** ASCII Code for a key on the Keyboard */
     key: number;
-    /** The action the key binding shoudl execute */
+    /** The action the key binding should execute */
     action: string;
     /** If CTRL key should be pressed */
     ctrl: boolean;
@@ -320,11 +323,11 @@ export type UserInformation = {
     /** Username */
     username: string;
     /** Email */
-    email: any;
+    email: string | null;
     /** Firstname */
-    firstname: any;
+    firstname: string | null;
     /** Lastname */
-    lastname: any;
+    lastname: string | null;
     /** Permissions */
     permissions: string[];
     /** If user is an admin user */
@@ -336,7 +339,7 @@ export type UserInformation = {
     /** User Language */
     language: string;
     /** Locale for dateTime */
-    dateTimeLocale: any;
+    dateTimeLocale: string | null;
     /** Welcome Screen */
     welcomeScreen: boolean;
     /** Memorize Tabs */
@@ -350,7 +353,7 @@ export type UserInformation = {
     /** Two Factor Authentication */
     twoFactorAuthentication?: TwoFactorAuthenticationData[];
     /** Active studio perspective ID */
-    activePerspective: any;
+    activePerspective: string | null;
     /** Allowed studio perspectives */
     perspectives: PerspectiveConfig[];
 };
@@ -400,13 +403,13 @@ export type User = {
     /** ID of the User */
     id: number;
     /** Name of Folder or User */
-    name?: any;
+    name?: string | null;
     /** Email of the User */
-    email?: any;
+    email?: string | null;
     /** Firstname of the User */
-    firstname?: any;
+    firstname?: string | null;
     /** Lastname of the User */
-    lastname?: any;
+    lastname?: string | null;
     /** If a User is active */
     active: boolean;
     /** If User is admin */
@@ -423,9 +426,9 @@ export type User = {
     /** Language of the User */
     language: string;
     /** Timestamp of the last login */
-    lastLogin?: any;
+    lastLogin?: number | null;
     memorizeTabs: boolean;
-    parentId: any;
+    parentId: number | null;
     /** List of permissions for the user */
     permissions: object;
     /** ID List of roles the user is assigned */
@@ -447,11 +450,11 @@ export type User = {
 };
 export type User2 = {
     /** Email of the User */
-    email?: any;
+    email?: string | null;
     /** Firstname of the User */
-    firstname?: any;
+    firstname?: string | null;
     /** Lastname of the User */
-    lastname?: any;
+    lastname?: string | null;
     /** If User is admin */
     admin?: boolean;
     /** If User is active */
@@ -511,11 +514,11 @@ export type ResetPassword = {
 };
 export type UserProfile = {
     /** Firstname of the User */
-    firstname: any;
+    firstname: string | null;
     /** Lastname of the User */
-    lastname: any;
+    lastname: string | null;
     /** Email of the User */
-    email: any;
+    email: string | null;
     /** Language of the User */
     language: string;
     /** Date Time Locale for the User */

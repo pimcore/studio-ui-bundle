@@ -13,7 +13,7 @@ import { DetailTab } from '@Pimcore/modules/user/roles/detail/tabs/detail-tab'
 import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helper'
 import { Content } from '@Pimcore/components/content/content'
 import { selectRoleById } from '@Pimcore/modules/user/roles/roles-slice'
-import { store } from '@Pimcore/app/store'
+import { store } from '@sdk/app'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import {
   ContentLayout
@@ -26,8 +26,8 @@ import { Popconfirm } from 'antd'
 import { useRoleDraft } from '@Pimcore/modules/user/roles/hooks/use-roles-draft'
 
 interface IDetailProps {
-  onRemoveRole: (id: any) => void
-  onCloneRole: (data: any) => void
+  onRemoveRole: (id: any, parentId: any) => void
+  onCloneRole: (data: any, parentId: any) => void
 }
 
 const Detail = ({ onCloneRole, onRemoveRole, ...props }: IDetailProps): React.JSX.Element => {
@@ -68,7 +68,7 @@ const Detail = ({ onCloneRole, onRemoveRole, ...props }: IDetailProps): React.JS
       label: t('roles.clone-item.label'),
       onOk: async (value: string) => {
         const data = await cloneRole({ id: activeId, name: value })
-        onCloneRole(data)
+        onCloneRole(data, role?.parentId ?? 0)
       }
     })
   }
@@ -78,10 +78,9 @@ const Detail = ({ onCloneRole, onRemoveRole, ...props }: IDetailProps): React.JS
       title: t('roles.remove-item'),
       content: t('roles.remove-item.text'),
       onOk: async () => {
-        closeRole(activeId)
+        triggerConfirm()
         await removeRole({ id: activeId })
-
-        onRemoveRole(activeId)
+        onRemoveRole(activeId, role?.parentId ?? 0)
       }
     })
   }

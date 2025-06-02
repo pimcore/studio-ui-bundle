@@ -10,7 +10,7 @@
 
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { api } from '../asset-api-slice-enhanced'
-import { store, useAppDispatch } from '@Pimcore/app/store'
+import { store, useAppDispatch } from '@sdk/app'
 import { type EditorContainerProps } from '../editor/editor-container'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'

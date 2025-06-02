@@ -12,7 +12,7 @@ import React from 'react'
 import { useStyles } from './left-sidebar-view.styles'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
-import { UserMenu } from '@Pimcore/modules/auth/user-menu'
+import { UserMenu } from '@Pimcore/modules/app/base-layout/user-menu/user-menu'
 
 // New functional component
 const SidebarNavItem = ({ Component, context }: { Component: React.ReactNode, context: { name?: string } }): React.ReactElement => (

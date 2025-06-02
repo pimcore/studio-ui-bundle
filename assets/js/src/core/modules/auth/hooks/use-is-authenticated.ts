@@ -8,11 +8,37 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useMemo } from 'react'
-import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { useEffect } from 'react'
+import { useUserGetCurrentInformationQuery } from '../user/user-api-slice-enhanced'
+import { useAppDispatch, useAppSelector } from '@sdk/app'
+import { selectIsAuthenticated, setAuthState } from '../auth-slice'
 
-export const useIsAuthenticated = (): boolean => {
-  const user = useUser()
+export interface UseIsAuthenticatedReturn {
+  isAuthenticated?: boolean
+  recheck: () => void
+}
 
-  return useMemo(() => (user.username !== ''), [user])
+export const useIsAuthenticated = (): UseIsAuthenticatedReturn => {
+  const isAuthenticated = useAppSelector(selectIsAuthenticated)
+  const dispatch = useAppDispatch()
+  const { isError, error, isSuccess, refetch } = useUserGetCurrentInformationQuery(undefined, { skip: isAuthenticated !== undefined })
+
+  const recheck = (): void => {
+    void refetch()
+  }
+
+  useEffect(() => {
+    if (isError) {
+      dispatch(setAuthState(false))
+    }
+
+    if (isSuccess) {
+      dispatch(setAuthState(true))
+    }
+  }, [isError, isSuccess, error])
+
+  return {
+    isAuthenticated,
+    recheck
+  }
 }

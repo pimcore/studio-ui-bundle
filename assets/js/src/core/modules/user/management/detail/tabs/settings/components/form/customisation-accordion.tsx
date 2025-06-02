@@ -8,16 +8,60 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form, Input } from 'antd'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { Select } from '@Pimcore/components/select/select'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
-const CustomisationAccordion = ({ ...props }): React.JSX.Element => {
+import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
+import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helper'
+
+interface ICustomisationAccordion {
+  isAdmin?: boolean
+}
+const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion): React.JSX.Element => {
   const { t } = useTranslation()
   const { availableAdminLanguages } = useSettings()
+  const [roleOptions, setRoleOptions] = useState<any[]>([])
+  const [perspectiveOptions, setPerspectiveOptions] = useState<any[]>([])
+
+  const { getRoleCollection } = useRoleHelper()
+  const { getPerspectiveConfigCollection } = usePerspectives()
+
+  useEffect(() => {
+    if (perspectiveOptions.length === 0) {
+      getPerspectiveConfigCollection().then((data) => {
+        if (data === undefined) {
+          return
+        }
+
+        setPerspectiveOptions(
+          data.items.map((item) => ({
+            value: item.id,
+            label: item.name
+          }))
+        )
+      }).catch((error) => {
+        console.error('Error fetching perspective config collection:', error)
+      })
+    }
+
+    if (roleOptions.length === 0) {
+      getRoleCollection().then((data) => {
+        if (data === undefined) {
+          return
+        }
+        setRoleOptions(data.items.map((item) => ({
+          value: item.id,
+          label: item.name
+        })))
+      }).catch((error) => {
+        console.error('Error fetching role collection:', error)
+      })
+    }
+  }, [])
 
   const content = [
     {
@@ -58,6 +102,34 @@ const CustomisationAccordion = ({ ...props }): React.JSX.Element => {
           />
         </Form.Item>
 
+        {isAdmin === false
+          ? (
+            <>
+              <Form.Item
+                label={ t('user-management.roles') }
+                name="roles"
+              >
+                <Select
+                  mode="multiple"
+                  options={ roleOptions }
+                  placeholder={ t('user-management.roles') }
+                ></Select>
+              </Form.Item>
+
+              <Form.Item
+                label={ t('user-management.perspectives') }
+                name="perspectives"
+              >
+                <Select
+                  mode="multiple"
+                  options={ perspectiveOptions }
+                  placeholder={ t('user-management.perspectives') }
+                ></Select>
+              </Form.Item>
+            </>
+            )
+          : null }
+
         <Form.Item
           label={ 'TODO ' + t('user-management.dateTime') }
           name="dateTime"
@@ -97,6 +169,7 @@ const CustomisationAccordion = ({ ...props }): React.JSX.Element => {
       </>
     }
   ]
+
   return (
     <Accordion
       activeKey={ '1' }

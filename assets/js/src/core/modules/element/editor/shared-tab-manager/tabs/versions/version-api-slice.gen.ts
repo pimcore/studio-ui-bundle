@@ -1,4 +1,4 @@
-import { api } from "../../../../../../app/api/pimcore/index";
+import { api } from "@sdk/api";
 export const addTagTypes = ["Versions"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
@@ -44,7 +44,10 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/versions/${queryArg.elementType}/${queryArg.id}`,
-                    params: { page: queryArg.page, pageSize: queryArg.pageSize },
+                    params: {
+                        page: queryArg.page,
+                        pageSize: queryArg.pageSize,
+                    },
                 }),
                 providesTags: ["Versions"],
             }),
@@ -85,7 +88,7 @@ export type VersionGetByIdApiArg = {
     /** Id of the version */
     id: number;
 };
-export type VersionUpdateByIdApiResponse = /** status 200 Successfully updated version */ void;
+export type VersionUpdateByIdApiResponse = unknown;
 export type VersionUpdateByIdApiArg = {
     /** Id of the version */
     id: number;
@@ -99,7 +102,7 @@ export type VersionPublishByIdApiArg = {
     /** Id of the version */
     id: number;
 };
-export type VersionDeleteByIdApiResponse = /** status 200 Successfully deleted version */ void;
+export type VersionDeleteByIdApiResponse = unknown;
 export type VersionDeleteByIdApiArg = {
     /** Id of the version */
     id: number;
@@ -143,17 +146,17 @@ export type CustomMetadataVersion = {
     /** Name */
     name: string;
     /** Language */
-    language?: any;
+    language?: string | null;
     /** Type */
     type: string;
     /** Data */
-    data: any;
+    data: string | null;
 };
 export type VersionDimensions = {
     /** width */
-    width?: any;
+    width?: number | null;
     /** height */
-    height?: any;
+    height?: number | null;
 };
 export type AssetVersion = {
     /** AdditionalAttributes */
@@ -167,7 +170,7 @@ export type AssetVersion = {
     /** creation date */
     creationDate: number;
     /** modification date */
-    modificationDate?: any;
+    modificationDate?: number | null;
     /** file size */
     fileSize: number;
     /** mime type */
@@ -195,15 +198,15 @@ export type Element = {
     /** ID of owner */
     userOwner: number;
     /** User that modified the element */
-    userModification: any;
+    userModification: number | null;
     /** Locked */
-    locked: any;
+    locked: string | null;
     /** Is locked */
     isLocked: boolean;
     /** Creation date */
-    creationDate: any;
+    creationDate: number | null;
     /** Modification date */
-    modificationDate: any;
+    modificationDate: number | null;
 };
 export type DataObjectVersion = Element & {
     /** AdditionalAttributes */
@@ -221,21 +224,21 @@ export type DataObjectVersion = Element & {
     /** Has workflow available */
     hasWorkflowAvailable?: boolean;
     /** Key */
-    key?: string;
+    key: string;
     /** Type */
-    type?: string;
+    type: string;
     /** Has children */
-    hasChildren?: boolean;
+    hasChildren: boolean;
     /** Full path */
-    fullPath?: string;
+    fullPath: string;
     /** Custom index */
-    index?: number;
+    index: number;
     /** Class name */
-    className?: any;
+    className: string | null;
     /** Published */
-    published?: any;
+    published: boolean | null;
     /** Detail object data */
-    objectData?: object;
+    objectData: object;
 };
 export type DocumentVersion = {
     /** AdditionalAttributes */
@@ -251,15 +254,15 @@ export type DocumentVersion = {
 };
 export type UpdateVersion = {
     /** Public */
-    public?: any;
+    public?: boolean | null;
     /** Note */
-    note?: any;
+    note?: string | null;
 };
 export type VersionUser = {
     /** ID */
-    id?: any;
+    id?: number | null;
     /** name */
-    name?: any;
+    name?: string | null;
 };
 export type Version = {
     /** AdditionalAttributes */
@@ -287,7 +290,7 @@ export type Version = {
     /** user */
     user: VersionUser;
     /** scheduled */
-    scheduled?: any;
+    scheduled?: number | null;
 };
 export const {
     useVersionAssetDownloadByIdQuery,

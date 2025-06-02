@@ -10,22 +10,24 @@
 
 import React, { useEffect, useState } from 'react'
 import { type DefaultOptionType } from 'antd/es/select'
-import { Select } from '@Pimcore/components/select/select'
+import { Select, type SelectProps } from '@Pimcore/components/select/select'
 import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 
-export interface DynamicTypeFieldFilterSelectProps extends AbstractFieldFilterDefinition {}
+export interface DynamicTypeFieldFilterSelectProps extends AbstractFieldFilterDefinition {
+  options: SelectProps['options']
+}
 
 export const DynamicTypeFieldFilterSelectComponent = (props: DynamicTypeFieldFilterSelectProps): React.JSX.Element => {
-  const { setData, data, config } = useDynamicFilter()
+  const { setData, data } = useDynamicFilter()
   const [_value, setValue] = useState(data)
   const options: DefaultOptionType[] = []
 
-  if (config.options !== undefined) {
-    for (const option of config.options) {
+  if (props.options !== undefined) {
+    for (const option of props.options) {
       options.push({
-        label: option,
-        value: option
+        label: option?.key,
+        value: option?.value
       })
     }
   }

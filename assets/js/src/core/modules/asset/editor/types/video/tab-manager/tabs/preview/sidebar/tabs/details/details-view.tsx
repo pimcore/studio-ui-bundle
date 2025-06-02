@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next'
 import ButtonGroup from 'antd/es/button/button-group'
 import Meta from 'antd/es/card/Meta'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
-import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
+import type { DragAndDropInfo } from '@sdk/components'
 import {
   DroppableContent
 } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/sidebar/tabs/details/droppable-content'

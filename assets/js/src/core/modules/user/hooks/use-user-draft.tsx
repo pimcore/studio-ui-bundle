@@ -8,18 +8,17 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
+import { useAppDispatch, useAppSelector } from '@sdk/app'
 import {
   selectUserById,
   userFetched,
   userRemoved,
-  changeUser,
-  userAvailablePermissionsFetched
+  changeUser
 } from '@Pimcore/modules/user/user-slice'
 import {
-  api, type UserGetAvailablePermissionsApiResponse,
+  api,
   type UserGetByIdApiResponse
-} from '@Pimcore/modules/user/user-api-slice.gen'
+} from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useEffect, useState } from 'react'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
@@ -59,20 +58,6 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
     getUser()
   }
 
-  async function fetchUserAvailablePermissions (): Promise<UserGetAvailablePermissionsApiResponse> {
-    const { data, isError: isFetchUserAvailablePermissionsError, error } = await dispatch(api.endpoints.userGetAvailablePermissions.initiate())
-
-    if (data !== undefined) {
-      return data
-    }
-
-    if (isFetchUserAvailablePermissionsError) {
-      trackError(new ApiError(error))
-    }
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    return {} as UserGetAvailablePermissionsApiResponse
-  }
-
   useEffect(() => {
     if (user === undefined && id !== undefined) {
       getUser()
@@ -89,12 +74,6 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
       setIsError(true)
     }).finally(() => {
       setIsLoading(false)
-    })
-
-    fetchUserAvailablePermissions().then((data) => {
-      dispatch(userAvailablePermissionsFetched(data))
-    }).catch((e) => {
-      console.error(e)
     })
   }
 

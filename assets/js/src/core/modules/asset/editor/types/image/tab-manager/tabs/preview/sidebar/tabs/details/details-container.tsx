@@ -10,7 +10,7 @@
 
 import React, { useContext } from 'react'
 import { type Image, useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+import { AssetContext } from '@sdk/modules/asset'
 import {
   AssetEditorSidebarDetailsView,
   type CustomDownloadProps
@@ -80,7 +80,7 @@ const DetailContainer = (): React.JSX.Element => {
       .then(async (response) => await response.blob())
       .then((imageBlob) => {
         const imageURL = URL.createObjectURL(imageBlob)
-        downloadShortcutsHandlerForCustomSettings(imageData.filename!, imageURL, format)
+        downloadShortcutsHandlerForCustomSettings(imageData.filename, imageURL, format)
       })
       .catch(() => {
         trackError(new GeneralError('Could not download image'))
@@ -101,7 +101,7 @@ const DetailContainer = (): React.JSX.Element => {
       .then((imageBlob) => {
         const imageURL = URL.createObjectURL(imageBlob)
 
-        downloadShortcutsHandler(imageData.filename!, imageURL, format)
+        downloadShortcutsHandler(imageData.filename, imageURL, format)
       })
       .catch(() => { trackError(new GeneralError('Could not prepare download')) })
   }

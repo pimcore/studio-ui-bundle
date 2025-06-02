@@ -93,7 +93,7 @@ export const Grid = ({
   ...props
 }: GridProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const hashId = useCssComponentHash('table')
+  const hashId = useCssComponentHash()
   const { styles } = useStyles()
   const [columnResizeMode] = useState<ColumnResizeMode>('onChange')
   const [activeCell, setActiveCell] = useState<GridCellReference | undefined>()
@@ -262,6 +262,7 @@ export const Grid = ({
         <div className='ant-table-container'>
           <div className='ant-table-content'>
             <table
+              className={ cn({ withoutHeader: hideColumnHeaders }) }
               ref={ tableElement }
               style={ { width: tableAutoWidth ? '100%' : calculateTableWidth(), minWidth: table.getCenterTotalSize() } }
             >

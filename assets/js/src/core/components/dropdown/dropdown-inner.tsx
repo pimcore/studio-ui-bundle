@@ -9,24 +9,20 @@
  */
 
 import React, { type ReactNode, type Ref } from 'react'
-import { Dropdown as AntdDropdown, Menu, type MenuRef } from 'antd'
-import { renderDropdownItem } from './item/utils/dropdown-item'
-import { type DropdownProps, type ItemType } from './dropdown'
+import { Dropdown as AntdDropdown, type MenuRef } from 'antd'
+import { type DropdownProps } from './dropdown'
+import { Menu } from '../menu/menu'
 
 export type DropdownInnerProps = DropdownProps & {
   menuRef?: Ref<MenuRef>
 }
 
-export const DropdownInner = ({ selectedKeys, onSelect, menu, menuRef, ...props }: DropdownInnerProps): React.JSX.Element => {
-  const { items, ...rest } = menu
-
+export const DropdownInner = ({ menu, onSelect, selectedKeys, menuRef, ...props }: DropdownInnerProps): React.JSX.Element => {
   const renderMenuComponent = (): ReactNode => (
     <Menu
       ref={ menuRef }
-      { ...rest }
-    >
-      {items?.map((item: ItemType) => renderDropdownItem({ item }))}
-    </Menu>
+      { ...menu }
+    />
   )
 
   return (

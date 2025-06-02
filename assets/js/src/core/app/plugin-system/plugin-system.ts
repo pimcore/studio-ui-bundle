@@ -11,6 +11,7 @@
 import { container } from '@Pimcore/app/depency-injection'
 import { type Container } from 'inversify'
 import { moduleSystem } from '../module-system/module-system'
+import { getInstance, type init, loadRemote } from '@module-federation/enhanced/runtime'
 
 export interface ILifeCycleEvents {
   onInit?: (config: { container: Container }) => void
@@ -26,23 +27,58 @@ export class PluginSystem {
 
   async loadPlugins (): Promise<void> {
     const promises: any[] = []
-    document.querySelectorAll('[data-pimcore-studio-plugin]').forEach((element: HTMLScriptElement) => {
-      const promise = new Promise((resolve, reject) => {
-        const src = element.dataset.pimcoreStudioPlugin!
+    const remotes = window.pluginRemotes
 
-        element.addEventListener('load', () => {
-          element.removeAttribute('data-pimcore-studio-plugin')
-          resolve(true)
+    if (remotes === undefined) {
+      return
+    }
+
+    const initConfig: Parameters<typeof init>[0] = {
+      name: 'mf-test',
+      remotes: []
+    }
+    for (const [name, url] of Object.entries(remotes)) {
+      if (url !== undefined) {
+        initConfig.remotes.push({
+          name,
+          entry: url,
+          alias: name
         })
+      }
+    }
 
-        element.onerror = reject
-        element.setAttribute('src', src)
-      })
+    getInstance()?.registerRemotes(initConfig.remotes)
 
-      promises.push(promise)
-    })
+    for (const remote of initConfig.remotes) {
+      promises.push(loadRemote(remote.alias!))
+    }
 
-    await Promise.allSettled(promises)
+    const result = await Promise.allSettled(promises)
+
+    for (const remoteResponse of result) {
+      const isValidResponse = remoteResponse.status === 'fulfilled'
+
+      if (!isValidResponse) {
+        console.error('Error loading remote plugin', remoteResponse)
+        continue
+      }
+
+      const plugins: Record<string, IAbstractPlugin> = remoteResponse.value
+
+      for (const plugin of Object.values(plugins)) {
+        if (plugin.name === undefined) {
+          console.error('Plugin name is undefined', plugin)
+          continue
+        }
+
+        if (this.registry[plugin.name] !== undefined) {
+          console.error('Plugin already registered', plugin.name)
+          continue
+        }
+
+        this.registerPlugin(plugin)
+      }
+    }
   }
 
   registerPlugin (plugin: IAbstractPlugin): void {

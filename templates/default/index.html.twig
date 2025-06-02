@@ -31,12 +31,12 @@
             wysiwyg: wysiwygConfiguration,
         }|json_encode }}"></div>
 
-        {% for jsFile in studioJsFiles %}
+        {% for jsFile in bundleJsFiles %}
             <script src="{{ jsFile }}"></script>
         {% endfor %}
 
-        {% for jsFile in bundleJsFiles %}
-            <script data-pimcore-studio-plugin="{{ jsFile }}"></script>
+        {% for jsFile in studioJsFiles %}
+            <script src="{{ jsFile }}"></script>
         {% endfor %}
 
         {% for jsFile in additionalJsFiles %}

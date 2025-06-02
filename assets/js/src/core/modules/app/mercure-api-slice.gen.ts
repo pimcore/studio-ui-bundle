@@ -1,4 +1,4 @@
-import { api } from "../../app/api/pimcore/index";
+import { api } from "@sdk/api";
 export const addTagTypes = ["Mercure"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
@@ -14,7 +14,7 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type MercureCreateCookieApiResponse = /** status 200 Retrieve JWT token for Mercure hub as cookie */ void;
+export type MercureCreateCookieApiResponse = unknown;
 export type MercureCreateCookieApiArg = void;
 export type Error = {
     /** Message */

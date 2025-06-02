@@ -11,10 +11,10 @@
 import type { ActionCreatorWithPayload, PayloadAction } from '@reduxjs/toolkit'
 import type { EntityAdapter, EntityState } from '@reduxjs/toolkit/src/entities/models'
 
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
-interface ModifiedCell {
+export interface ModifiedCell {
   rowIndex: number | string
   columnId: string
 }

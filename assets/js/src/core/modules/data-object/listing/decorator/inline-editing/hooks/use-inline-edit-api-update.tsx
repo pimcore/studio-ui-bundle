@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { api, type DataObjectGetGridApiArg, useDataObjectPatchByIdMutation } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { type UseInlineEditApiUpdateReturn } from '@Pimcore/modules/element/listing/decorators/inline-edit/inline-edit-decorator'
@@ -33,8 +33,8 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
         for (const column of item.columns!) {
           if (column.key === columnToUpdate.key && column.locale === columnToUpdate.locale) {
             column.value = value
-            if (column.inheritance === true) {
-              column.inheritance = 'broken'
+            if (!isNil(column.inheritance) && 'inherited' in column.inheritance && column.inheritance.inherited === true) {
+              column.inheritance.inherited = false
             }
             // for now we assume that there can be only one value updated at the time
             break item_loop

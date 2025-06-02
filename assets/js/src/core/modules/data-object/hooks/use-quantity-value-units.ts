@@ -15,7 +15,7 @@ import {
   api,
   useUnitQuantityValueListQuery
 } from '@Pimcore/modules/data-object/unit-slice.gen'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 
 interface UseQuantityValueUnitsReturn {
   getSelectOptions: (validUnits?: string[]) => DefaultOptionType[]

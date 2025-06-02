@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useAppSelector } from '@Pimcore/app/store'
+import { useAppSelector } from '@sdk/app'
 import {
   addCustomMetadataToAsset,
   addImageSettingsToAsset,
