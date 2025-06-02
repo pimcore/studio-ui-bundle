@@ -9,11 +9,11 @@
  */
 
 import React, { useMemo, useState } from 'react'
+import { isObject, find } from 'lodash'
 import { type ClassificationStoreProps } from './classification-store'
 import { useKeyedList } from '@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
-import { isObject } from 'lodash'
 import { BaseView } from '../../../layout-related/views/base-view'
 import { ClassificationStoreItem } from './classification-store-item'
 import { useLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/use-language-selection'
@@ -31,6 +31,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreContentProp
   let localizationGroup = 'default'
 
   const isLocalizable = props.localized ?? false
+  const activeGroupLayout = props.activeGroupDefinitions ?? []
 
   const onLocalizationChange = (value: string): void => {
     setLocalizationMode(value)
@@ -77,9 +78,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreContentProp
             key={ `${key}` }
             name={ [key, localizationGroup] }
           >
-            <ClassificationStoreItem
-              groupId={ key }
-            />
+            <ClassificationStoreItem groupLayout={ find(activeGroupLayout, { id: parseInt(key) }) } />
           </Form.Group>
         ))}
       </Space>
