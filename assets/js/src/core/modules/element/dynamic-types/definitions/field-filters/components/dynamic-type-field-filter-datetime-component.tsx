@@ -139,7 +139,6 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
             handleDateRangeChange(newFrom, newTo)
           } }
           outputType="timestamp"
-          showTime
           value={ [data?.from ?? null, data?.to ?? null] }
         />
       )
@@ -159,7 +158,6 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
           }
         } }
         outputType="timestamp"
-        showTime
         value={ getDatePickerValue() }
       />
       )}
