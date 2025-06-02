@@ -10,7 +10,7 @@
 
 import React, { type ReactElement } from 'react'
 import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
-import { DynamicTypeFieldFilterSelectComponent, type DynamicTypeFieldFilterSelectProps } from '../../components/dynamic-type-field-filter-select-component'
+import { DynamicTypeFieldFilterSelectComponent } from '../../components/dynamic-type-field-filter-select-component'
 import { injectable } from 'inversify'
 
 @injectable()
@@ -21,9 +21,9 @@ export class DynamicTypeFieldFilterSelect extends DynamicTypeFieldFilterAbstract
     return 'system.string'
   }
 
-  getFieldFilterComponent (props: DynamicTypeFieldFilterSelectProps): ReactElement<DynamicTypeFieldFilterSelectProps> {
+  getFieldFilterComponent (): ReactElement<DynamicTypeFieldFilterAbstract> {
     return (
-      <DynamicTypeFieldFilterSelectComponent { ...props } />
+      <DynamicTypeFieldFilterSelectComponent/>
     )
   }
 }
