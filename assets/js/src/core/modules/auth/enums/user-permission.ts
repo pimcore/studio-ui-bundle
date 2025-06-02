@@ -14,5 +14,6 @@ export enum UserPermission {
   Objects = 'objects',
   Assets = 'assets',
   TagsConfiguration = 'tags_configuration',
+  PredefinedProperties = 'predefined_properties',
   Users = 'users',
 }

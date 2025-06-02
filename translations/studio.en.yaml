@@ -684,6 +684,7 @@ navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
 navigation.customise: Customise
 navigation.tag-configuration: Tag Configuration
+navigation.predefined-properties: Predefined Properties
 navigation.user-and-roles: User & Roles
 navigation.users: Users
 navigation.roles: Roles
@@ -699,6 +700,7 @@ perspective.switching.title: Switching perspective
 perspective.switching.description: Currently switching to the following perspective
 widget.notes-and-events: Notes & Events
 widget.tag-configuration: Tag Configuration
+widget.predefined-properties: Predefined Properties
 widget.role-management: Roles
 widget.user-management: Users
 external-image.preview-placeholder: Add an external image
