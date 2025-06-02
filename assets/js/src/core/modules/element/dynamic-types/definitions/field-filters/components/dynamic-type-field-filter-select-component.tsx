@@ -8,11 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
-import { type DefaultOptionType } from 'antd/es/select'
+import React, { useContext, useEffect, useState } from 'react'
 import { Select, type SelectProps } from '@Pimcore/components/select/select'
 import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
+import { useMetadataSelectOptions } from '../../meta-data/hooks/use-metadata-select-options'
+import { DynamicFilterContext } from '@Pimcore/components/dynamic-filter/provider/dynamic-filter-provider'
 
 export interface DynamicTypeFieldFilterSelectProps extends AbstractFieldFilterDefinition {
   options: SelectProps['options']
@@ -21,16 +22,8 @@ export interface DynamicTypeFieldFilterSelectProps extends AbstractFieldFilterDe
 export const DynamicTypeFieldFilterSelectComponent = (props: DynamicTypeFieldFilterSelectProps): React.JSX.Element => {
   const { setData, data } = useDynamicFilter()
   const [_value, setValue] = useState(data)
-  const options: DefaultOptionType[] = []
-
-  if (props.options !== undefined) {
-    for (const option of props.options) {
-      options.push({
-        label: option?.key,
-        value: option?.value
-      })
-    }
-  }
+    const context = useContext(DynamicFilterContext);    
+    const {options} = useMetadataSelectOptions(context?.id ?? "")
 
   useEffect(() => {
     setValue(data)
