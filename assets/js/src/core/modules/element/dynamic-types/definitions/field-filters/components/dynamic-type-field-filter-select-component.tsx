@@ -8,23 +8,27 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useContext, useEffect, useState } from 'react'
-import { Select, type SelectProps } from '@Pimcore/components/select/select'
-import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
+import React, { useEffect, useState } from 'react'
+import { Select } from '@Pimcore/components/select/select'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
-import { useMetadataSelectOptions } from '../../meta-data/hooks/use-metadata-select-options'
-import { DynamicFilterContext } from '@Pimcore/components/dynamic-filter/provider/dynamic-filter-provider'
+import { DefaultOptionType } from 'antd/es/select'
 
-export interface DynamicTypeFieldFilterSelectProps extends AbstractFieldFilterDefinition {
-  options: SelectProps['options']
+interface SelectConfig {
+  options: string[];
 }
 
-export const DynamicTypeFieldFilterSelectComponent = (props: DynamicTypeFieldFilterSelectProps): React.JSX.Element => {
-  const { setData, data } = useDynamicFilter()
+export const DynamicTypeFieldFilterSelectComponent = (): React.JSX.Element => {
+  const { setData, data, config: rawConfig } = useDynamicFilter()
   const [_value, setValue] = useState(data)
-    const context = useContext(DynamicFilterContext);    
-    const {options} = useMetadataSelectOptions(context?.id ?? "")
+ 
+  const config = rawConfig as SelectConfig;
 
+  const rawOptions = config.options ;
+  const formattedOptions: DefaultOptionType[] = rawOptions.map((opt: string) => ({
+    label: opt,
+    value: opt
+  }));
+  
   useEffect(() => {
     setValue(data)
   }, [data])
@@ -33,7 +37,7 @@ export const DynamicTypeFieldFilterSelectComponent = (props: DynamicTypeFieldFil
     <Select
       onBlur={ onBlur }
       onChange={ (value: string) => { setValue(value) } }
-      options={ options }
+      options={ formattedOptions }
       style={ { width: '100%' } }
       value={ _value }
     />
