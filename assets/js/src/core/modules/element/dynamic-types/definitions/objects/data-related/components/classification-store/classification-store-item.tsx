@@ -8,40 +8,38 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Content } from '@Pimcore/components/content/content'
+import React, { useMemo } from 'react'
+import { isArray } from 'lodash'
 import { useItem } from '@Pimcore/components/form/item/provider/item/use-item'
-import { useClassificationStoreGetLayoutByGroupQuery } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { isArray } from 'lodash'
-import React, { useMemo } from 'react'
 import { BaseView } from '../../../layout-related/views/base-view'
+import { type ClassificationStoreGroup } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 
+type ClassificationStoreGroupWithKeys = ClassificationStoreGroup & {
+  keys?: any[]
+}
 export interface ClassificationStoreItemProps {
-  groupId: string
+  groupLayout: ClassificationStoreGroupWithKeys
 }
 
 export const ClassificationStoreItem = (props: ClassificationStoreItemProps): React.JSX.Element => {
+  const { groupLayout } = props
+
   const { name } = useItem()
   const fieldName = isArray(name) ? name[name.length - 1] : name
-  const { groupId } = props
   const { id } = useElementContext()
-  const { isLoading, data } = useClassificationStoreGetLayoutByGroupQuery({ fieldName, groupId: parseInt(groupId), objectId: id })
 
   return useMemo(() => {
-    if (isLoading) {
-      return <Content loading />
-    }
-
     return (
       <BaseView
         border={ false }
         collapsed={ false }
         collapsible
         theme='border-highlight'
-        title={ data?.name }
+        title={ groupLayout?.name }
       >
-        {data?.keys.map((item) => (
+        {(groupLayout?.keys)?.map((item) => (
           <ObjectComponent
             key={ item.id }
             { ...item.definition }
@@ -50,5 +48,5 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
         ))}
       </BaseView>
     )
-  }, [data, isLoading, groupId, id, fieldName])
+  }, [groupLayout, id, fieldName])
 }
