@@ -93,8 +93,10 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
 
     selectContainerWithClear: css`
       &:hover {
-        .ant-select-arrow {
-          display: none;
+        .ant-select:not(.ant-select-disabled) {
+          .ant-select-arrow {
+            display: none;
+          }
         }
       }
     `,

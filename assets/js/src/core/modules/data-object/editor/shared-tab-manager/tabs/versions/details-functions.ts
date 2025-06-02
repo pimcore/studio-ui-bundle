@@ -97,16 +97,29 @@ export const getFormattedDataStructure = async ({ objectId, layout, versionData,
   return [...generalSystemData, ...layoutData]
 }
 
+const getUniqFieldKey = (item: any): string => {
+  const path = item.fieldBreadcrumbTitle ?? ''
+  const name = item.fieldData?.name ?? ''
+  const locale = item.fieldData?.locale ?? 'default'
+
+  return `${path}-${name}-${locale}`
+}
+
 export const versionsDataToTableData = ({ data }: { data: IFormattedDataStructureData[][] }): IObjectVersionField[] => {
   const resultList: IObjectVersionField[] = []
 
   const mainVersionData = data[0] ?? []
-  const compareVersionData = data[1] ?? []
-  const isComparisonMode = !isEmpty(compareVersionData)
+  const mainVersionMap = new Map(mainVersionData.map(item => [getUniqFieldKey(item), item]))
 
-  for (let index = 0; index < mainVersionData.length; index++) {
-    const mainVersionItem = mainVersionData[index]
-    const compareVersionItem = compareVersionData[index]
+  const compareVersionData = data[1] ?? []
+  const compareVersionMap = new Map(compareVersionData.map(item => [getUniqFieldKey(item), item]))
+
+  const isComparisonMode = !isEmpty(compareVersionData)
+  const allKeys = new Set([...mainVersionMap.keys(), ...compareVersionMap.keys()])
+
+  for (const key of allKeys) {
+    const mainVersionItem = mainVersionMap.get(key)
+    const compareVersionItem = compareVersionMap.get(key)
 
     const isEmptyField = isFieldValueEmpty(mainVersionItem?.fieldValue) && isFieldValueEmpty(compareVersionItem?.fieldValue)
 
@@ -116,8 +129,8 @@ export const versionsDataToTableData = ({ data }: { data: IFormattedDataStructur
 
     const field: IObjectVersionField = {
       Field: {
-        fieldBreadcrumbTitle: mainVersionItem?.fieldBreadcrumbTitle,
-        ...mainVersionItem?.fieldData
+        fieldBreadcrumbTitle: (mainVersionItem?.fieldBreadcrumbTitle ?? compareVersionItem?.fieldBreadcrumbTitle)!,
+        ...(mainVersionItem?.fieldData ?? compareVersionItem?.fieldData)
       }
     }
 
