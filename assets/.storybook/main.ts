@@ -9,8 +9,7 @@
  */
 
 import type { Options } from '@swc/core';
-import type { StorybookConfig } from "@storybook/react-webpack5";
-import path from "path";
+import type { StorybookConfig } from "storybook-react-rsbuild";
 
 const config: StorybookConfig = {
   stories: ["../js/**/*.mdx", "../js/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
@@ -35,9 +34,10 @@ const config: StorybookConfig = {
     "@storybook/addon-webpack5-compiler-swc"
   ],
   framework: {
-    name: "@storybook/react-webpack5",
+    name: "storybook-react-rsbuild",
     options: {
-      builder: {},
+      builder: {
+      },
     },
   },
 
@@ -45,36 +45,40 @@ const config: StorybookConfig = {
     autodocs: "tag",
   },
 
-  webpackFinal: async (config) => {
-    config.resolve!.alias = {
-      ...config.resolve!.alias,
-      "@Pimcore": path.resolve(__dirname, "../js/src/core"),
-    };
+  rsbuildFinal: (config) => {
+    const pluginsToFilterOut = [
+      'entrypoints-generate',
+      'rsbuild:module-federation-enhanced'
+    ]
 
-    // disable whatever is already set to load SVGs
-    // Exclude inline SVGs for package "@svgr/webpack" from the default encore rule
-    config?.module?.rules?.forEach(rule => {
-      if (!rule || typeof rule !== 'object') return;
-      if (rule.test instanceof RegExp && rule.test.test('.svg')) {
-        rule.exclude = /\.inline.svg$/;
+    const plugins = config.plugins!.filter((plugin) => {
+      // Filter out specific plugins
+      if (typeof plugin === 'object' && 'name' in plugin! && pluginsToFilterOut.includes(plugin!.name)) {
+        return false;
       }
+
+      return true;
     });
 
-    // add SVGR instead
-    config!.module!.rules!.push({
-      test: /\.inline.svg$/,
-      use: [
-        {
-          loader: '@svgr/webpack',
-          options: { 
-            icon: true,
-            typescript: true
-          } 
+    return {
+      ...config,
+      dev: {
+        ...config.dev,
+        client: {
+          port: 6006
         },
-      ],
-    });
-
-    return config;
+        writeToDisk: false,
+        assetPrefix: '/storybook/'
+      },
+      output: {
+        ...config.output,
+        sourceMap: false,
+        assetPrefix: '/storybook/',
+      },
+      plugins: [
+        ...plugins
+      ]
+    };
   },
 
   // Enable typescript decorators for storybook

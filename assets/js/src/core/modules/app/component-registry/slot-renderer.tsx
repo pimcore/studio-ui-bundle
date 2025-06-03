@@ -8,34 +8,19 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useRef } from 'react'
-import { type ComponentRegistryEntry, useComponentRegistry } from './component-registry'
+import React from 'react'
+import { useComponentRegistry } from './component-registry'
 import { isUndefined } from 'lodash'
 
 interface SlotRendererProps {
-  slot: {
-    name: string
-    defaultEntries?: Array<ComponentRegistryEntry<any>>
-  }
+  slot: string,
   props?: Record<string, any>
   onRenderComponent?: (Component: React.JSX.Element, context: { name?: string, index?: number, props?: Record<string, any> }) => React.JSX.Element
 }
 
 export const SlotRenderer = ({ slot, props, onRenderComponent }: SlotRendererProps): React.JSX.Element => {
-  const { name, defaultEntries } = slot
+  const name = slot
   const ComponentRegistry = useComponentRegistry()
-
-  const hasRegisteredDefaults = useRef(false)
-
-  if (!hasRegisteredDefaults.current && !isUndefined(defaultEntries)) {
-    const existingEntries = ComponentRegistry.getSlotComponents(name).map(({ name }) => name)
-    defaultEntries.forEach((entry) => {
-      if (!existingEntries.includes(entry.name)) {
-        ComponentRegistry.registerToSlot(name, entry)
-      }
-    })
-    hasRegisteredDefaults.current = true
-  }
 
   const components = ComponentRegistry.getSlotComponents(name)
 

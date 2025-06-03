@@ -9,9 +9,14 @@
  */
 
 import { theme } from 'antd'
+import useTableStyle from 'antd/es/table/style'
+import usePaginationStyle from 'antd/es/pagination/style'
 const { useToken } = theme
 
+
 export const useCssComponentHash = (): string => {
+  useTableStyle('ant-table')
+  usePaginationStyle('ant-pagination')
   const { hashId } = useToken()
 
   return hashId
