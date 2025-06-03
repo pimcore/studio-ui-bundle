@@ -29,7 +29,7 @@ To begin, ensure you have a basic [Pimcore Bundle](https://pimcore.com/docs/plat
 
 With our dependency in place we should now setup our bundling process. We recommend [Rsbuild](https://rsbuild.rs/).
 
-> [Example webpack configuration](https://github.com/pimcore/studio-example-bundle/blob/main/assets/rsbuild.config.ts)
+> [Example Rsbuild configuration](https://github.com/pimcore/studio-example-bundle/blob/main/assets/rsbuild.config.ts)
 
 Update your package.json with the following commands, to run Symfony Encore:
 
