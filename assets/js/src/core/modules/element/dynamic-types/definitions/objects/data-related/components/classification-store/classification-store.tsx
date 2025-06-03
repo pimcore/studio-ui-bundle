@@ -8,16 +8,17 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { get, isEmpty, isEqual, isPlainObject } from 'lodash'
+import { type NamePath } from 'antd/es/form/interface'
 import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
 import { Form } from '@Pimcore/components/form/form'
 import { ClassificationStoreContent } from './classification-store-content'
-import { get, isEmpty, isEqual, isPlainObject } from 'lodash'
-import { type NamePath } from 'antd/es/form/interface'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
 import { filterInheritedFields, getMergedValue } from './utils/group-value'
+import { ClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
 
 export interface ClassificationStoreProps extends AbstractObjectDataDefinition {
   storeId: number
@@ -41,6 +42,8 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
   const valueRef = useRef(props.value)
   const inheritanceState = useInheritanceState()
   const changedFieldsRef = useRef<Set<string>>(new Set())
+
+  const [isOpenModal, setIsOpenModal] = useState(false)
 
   const fieldNameToString = (field: NamePath): string => {
     return Array.isArray(field) ? field.join('.') : field
@@ -99,13 +102,22 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
   }, [props.value])
 
   return (
-    <Form.KeyedList
-      getAdditionalComponentProps={ getAdditionalComponentProps }
-      onChange={ onChange }
-      onFieldChange={ onFieldChange }
-      value={ mergedValue }
-    >
-      <ClassificationStoreContent { ...props } />
-    </Form.KeyedList>
+    <>
+      <Form.KeyedList
+        getAdditionalComponentProps={ getAdditionalComponentProps }
+        onChange={ onChange }
+        onFieldChange={ onFieldChange }
+        value={ mergedValue }
+      >
+        <ClassificationStoreContent
+          openModal={ () => { setIsOpenModal(true) } }
+          { ...props }
+        />
+      </Form.KeyedList>
+      <ClassificationStoreModal
+        close={ () => { setIsOpenModal(false) } }
+        isOpen={ isOpenModal }
+      />
+    </>
   )
 }

@@ -24,7 +24,9 @@ import { Space } from '@Pimcore/components/space/space'
 import { Button } from '@Pimcore/components/button/button'
 import { Icon } from '@Pimcore/components/icon/icon'
 
-export interface ClassificationStoreContentProps extends ClassificationStoreProps {}
+export interface ClassificationStoreContentProps extends ClassificationStoreProps {
+  openModal: () => void
+}
 
 export const ClassificationStoreContent = (props: ClassificationStoreContentProps): React.JSX.Element => {
   const [localizationMode, setLocalizationMode] = useState<string>('default')
@@ -38,7 +40,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreContentProp
   const isLocalizable = props.localized ?? false
   const activeGroupLayout = props.activeGroupDefinitions ?? []
 
-  const onLocalizationChange = (value: string): void => {
+  const handleLocalizationChange = (value: string): void => {
     setLocalizationMode(value)
   }
 
@@ -60,6 +62,11 @@ export const ClassificationStoreContent = (props: ClassificationStoreContentProp
           <Button
             color="default"
             icon={ <Icon value="folder-search" /> }
+            onClick={ (e) => {
+              e.stopPropagation()
+
+              props.openModal()
+            } }
             variant="filled"
           >
             {t('add')}
@@ -69,7 +76,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreContentProp
             ? (
               <LocalizationSwitch
                 initialValue={ localizationGroup }
-                onChange={ onLocalizationChange }
+                onChange={ handleLocalizationChange }
               />
               )
             : <></>}

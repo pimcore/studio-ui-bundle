@@ -9,9 +9,51 @@
  */
 
 import React from 'react'
+import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
+import { Modal } from '@Pimcore/components/modal/modal'
 
-export const ClassificationStoreModal = (): React.JSX.Element => {
+interface ClassificationStoreModalProps {
+  isOpen: boolean
+  close: () => void
+}
+
+export const ClassificationStoreModal = (props: ClassificationStoreModalProps): React.JSX.Element => {
+  const { isOpen, close } = props
+
+  const tabItems: ITabsProps['items'] = [
+    {
+      label: 'Collection',
+      key: 'collection',
+      children: <div>Collection</div>
+    },
+    {
+      label: 'Group',
+      key: 'group',
+      children: <div>Group</div>
+    },
+    {
+      label: 'Group by key',
+      key: 'group-by-key',
+      children: <div>Group by key</div>
+    }
+  ]
+
   return (
-    <div>Modal</div>
+    <>
+      {isOpen && (
+        <Modal
+          closable
+          footer={ null }
+          onCancel={ () => { close() } }
+          open={ isOpen }
+          size={ 'XL' }
+        >
+          <Tabs
+            items={ tabItems }
+            noTabBarMargin
+          />
+        </Modal>
+      )}
+    </>
   )
 }
