@@ -19,12 +19,18 @@ import { uuid } from '@Pimcore/utils/uuid'
 import { usePredefinedProperties } from '../hooks/use-predefined-properties'
 import { PredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
 import { IconButton } from '@sdk/components'
+import { verifyUpdate } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/verify-cell-update'
 
 type PredefinedPropertyWithActions = PredefinedProperty & {
   actions: React.ReactNode
 }
 
-export const Table = (): React.JSX.Element => {
+interface ITableProps {
+  showDuplicatePropertyModal: () => void
+  showMandatoryModal: () => void
+}
+
+export const Table = ({showDuplicatePropertyModal, showMandatoryModal}:ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
   // const { openElement, mapToElementType } = useElementHelper()
   const { styles } = useStyles()
@@ -44,11 +50,6 @@ export const Table = (): React.JSX.Element => {
       })
     }
 
-  // useEffect(() => {
-  //   if (data !== undefined && element?.changes.properties === undefined && Array.isArray(data.items)) {
-  //     setProperties(enrichProperties(data?.items))
-  //   }
-  // }, [data])
 
   useEffect(() => {
     if (arePredefinedPropertiesAvailable) {
@@ -137,18 +138,18 @@ export const Table = (): React.JSX.Element => {
     ...createColumns()
   ]
 
-  // const onUpdateCellData = ({ rowIndex, columnId, value, rowData }): void => {
-  //   const updatedProperties = [...(properties ?? [])]
-  //   const propertyIndex = updatedProperties.findIndex((property) => property.key === rowData.key && !property.inherited)
-  //   const updatedProperty = { ...updatedProperties.at(propertyIndex)!, [columnId]: value }
-  //   updatedProperties[propertyIndex] = updatedProperty
-  //   const hasDuplicate = updatedProperties.filter(property => property.key === updatedProperty.key && !property.inherited).length > 1
+  const onUpdateCellData = ({ rowIndex, columnId, value, rowData }): void => {
+    const updatedProperties = [...(predefinedProperties ?? [])]
+    const propertyIndex = updatedProperties.findIndex((property) => property.key === rowData.key)
+    const updatedProperty = { ...updatedProperties.at(propertyIndex)!, [columnId]: value }
+    updatedProperties[propertyIndex] = updatedProperty
+    const hasDuplicate = updatedProperties.filter(property => property.key === updatedProperty.key).length > 1
 
-  //   if (verifyUpdate(value, columnId, 'key', hasDuplicate, showMandatoryModal, showDuplicatePropertyModal)) {
-  //     updateProperty(rowData.key as string, updatedProperty)
-  //     setModifiedCells(modifiedCellsType, [...modifiedCells, { rowIndex: rowData.rowId, columnId }])
-  //   }
-  // }
+    if (verifyUpdate(value, columnId, 'key', hasDuplicate, showMandatoryModal, showDuplicatePropertyModal)) {
+      // updateProperty(rowData.key as string, updatedProperty)
+      // setModifiedCells(modifiedCellsType, [...modifiedCells, { rowIndex: rowData.rowId, columnId }])
+    }
+  }
 
   return (
     <div className={ styles.table }>
@@ -158,7 +159,7 @@ export const Table = (): React.JSX.Element => {
               data={ gridDataOwn }
               isLoading={ isLoading }
               modifiedCells={ []}
-              onUpdateCellData={ () => console.log("update")}
+              onUpdateCellData={ onUpdateCellData}
               resizable
               setRowId={ (row: DataProperty) => row.rowId }
             />

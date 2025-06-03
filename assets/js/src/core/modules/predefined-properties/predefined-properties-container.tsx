@@ -18,6 +18,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { usePredefinedProperties } from './hooks/use-predefined-properties'
 import { Table } from './table/table'
+import { Button, ModalFooter, useModal } from '@sdk/components'
 
 export type Mode = 'create' | 'update'
 
@@ -29,6 +30,43 @@ export interface TreeAction {
 const PredefinedPropertiesContainer = (): React.JSX.Element => {
 
  const {predefinedProperties, isLoading} = usePredefinedProperties()
+
+   const {
+     showModal: showDuplicatePropertyModal,
+     closeModal: closeDuplicatePropertyModal,
+     renderModal: DuplicatePropertyModal
+   } = useModal({
+     type: 'error'
+   })
+   const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
+     type: 'error'
+   })
+   
+ const warningModals = (<div className={ 'pimcore-properties-toolbar__predefined-properties' }>
+              <DuplicatePropertyModal
+                footer={ <ModalFooter>
+                  <Button
+                    onClick={ closeDuplicatePropertyModal }
+                    type='primary'
+                  >{t('button.ok')}</Button>
+                </ModalFooter> }
+                title={ t('properties.property-already-exist.title') }
+              >
+                {t('properties.property-already-exist.error')}
+              </DuplicatePropertyModal>
+  
+              <MandatoryModal
+                footer={ <ModalFooter>
+                  <Button
+                    onClick={ closeMandatoryModal }
+                    type='primary'
+                  >{t('button.ok')}</Button>
+                </ModalFooter> }
+                title={ t('properties.add-property-mandatory-fields-missing.title') }
+              >
+                {t('properties.add-property-mandatory-fields-missing.error')}
+              </MandatoryModal>
+              </div>)
 
   return (
     <ContentLayout
@@ -66,7 +104,10 @@ const PredefinedPropertiesContainer = (): React.JSX.Element => {
         } }
         none={ predefinedProperties === undefined || predefinedProperties.length === 0 }
       >
-<Table/>
+        {warningModals}
+<Table
+        showDuplicatePropertyModal={ showDuplicatePropertyModal }
+        showMandatoryModal={ showMandatoryModal }/>
 </Content>
     </ContentLayout>
   )
