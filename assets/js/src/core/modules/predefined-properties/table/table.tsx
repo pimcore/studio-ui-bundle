@@ -81,7 +81,7 @@ export const Table = (): React.JSX.Element => {
       meta: {
         editable: false
       },
-      size: 200
+      size: 100
      }),
     columnHelper.accessor('data', {
       header: t('properties.columns.data'),
@@ -90,7 +90,7 @@ export const Table = (): React.JSX.Element => {
         editable: true,
         autoWidth: true
       },
-      size: 300
+      size: 250
     }),
     columnHelper.accessor('config', {
       header: t('properties.columns.configuration'),
@@ -98,7 +98,7 @@ export const Table = (): React.JSX.Element => {
     }),
     columnHelper.accessor('ctype', {
       header: t('properties.columns.content-type'),
-      size: 200
+      size: 100
     }),
     columnHelper.accessor('inheritable', {
       header: t('properties.columns.inheritable'),
@@ -118,7 +118,7 @@ export const Table = (): React.JSX.Element => {
         return (
           <div className={ 'properties-table--actions-column' }>
              <IconButton
-                icon={ { value: 'trash' } }
+                icon={ { value: 'translate' } }
                 onClick={ () => console.log("translate")}
                 type="link"
               />

@@ -35,7 +35,7 @@ moduleSystem.registerModule({
           translationKey: 'widget.predefined-properties',
           icon: {
             type: 'name',
-            value: 'predefined-properties'
+            value: 'properties'
           }
         }
       }
