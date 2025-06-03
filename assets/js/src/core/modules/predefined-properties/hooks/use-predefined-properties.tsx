@@ -9,7 +9,6 @@
  */
 
 import { PredefinedProperty, usePropertyGetCollectionQuery } from "@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced"
-import { useElementContext } from "@Pimcore/modules/element/hooks/use-element-context"
 import { useEffect } from "react"
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
@@ -19,12 +18,8 @@ interface UsePredefinedPropertiesReturn {
 }
 
 export const usePredefinedProperties = (): UsePredefinedPropertiesReturn => {
-
-  const { elementType } = useElementContext()
   
-  const { data, isLoading, isError, error } = usePropertyGetCollectionQuery({
-    elementType
-  })
+  const { data, isLoading, isError, error } = usePropertyGetCollectionQuery({})
   
   useEffect(() => {
     if (isError) {

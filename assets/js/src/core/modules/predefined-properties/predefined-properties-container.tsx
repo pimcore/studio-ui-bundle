@@ -58,12 +58,12 @@ const PredefinedPropertiesContainer = (): React.JSX.Element => {
         }
     >
       <Content
-        loading={ false }
+        loading={ isLoading }
         margin={ {
           x: 'extra-small',
           y: 'none'
         } }
-        none={ false }
+        none={ predefinedProperties === undefined || predefinedProperties.length === 0 }
       >
         {predefinedProperties !== undefined && predefinedProperties.map(property => (<>{property.name}</>))}
       </Content>

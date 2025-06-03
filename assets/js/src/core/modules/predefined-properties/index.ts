@@ -12,10 +12,10 @@ import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/wi
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { TagConfigurationContainer } from '@Pimcore/modules/tags/tag-configuration-container'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
 import { UserPermission } from '../auth/enums/user-permission'
+import { PredefinedPropertiesContainer } from './predefined-properties-container'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -44,8 +44,8 @@ moduleSystem.registerModule({
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
     widgetRegistryService.registerWidget({
-      name: 'tag-configuration',
-      component: TagConfigurationContainer
+      name: 'predefined-properties',
+      component: PredefinedPropertiesContainer
     })
   }
 })
