@@ -25,7 +25,7 @@ import { Button } from '@Pimcore/components/button/button'
 import { Icon } from '@Pimcore/components/icon/icon'
 
 export interface ClassificationStoreContentProps extends ClassificationStoreProps {
-  openModal: () => void
+  openAddModal: () => void
 }
 
 export const ClassificationStoreContent = (props: ClassificationStoreContentProps): React.JSX.Element => {
@@ -65,7 +65,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreContentProp
             onClick={ (e) => {
               e.stopPropagation()
 
-              props.openModal()
+              props.openAddModal()
             } }
             variant="filled"
           >

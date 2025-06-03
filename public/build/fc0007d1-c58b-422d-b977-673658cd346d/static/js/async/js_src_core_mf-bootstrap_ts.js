@@ -84277,7 +84277,7 @@ const ClassificationStoreContent = (props)=>{
                         }, void 0),
                         onClick: (e)=>{
                             e.stopPropagation();
-                            props.openModal();
+                            props.openAddModal();
                         },
                         variant: "filled",
                         children: t('add')
@@ -84536,14 +84536,14 @@ const getOriginalValue = (value, name)=>{
 };
 const ClassificationStore = (props)=>{
     _s();
+    const [isOpenModal, setIsOpenModal] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
+    const valueRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(props.value);
+    const changedFieldsRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(new Set());
     const { id } = (0,_Pimcore_modules_element_hooks_use_element_context__WEBPACK_IMPORTED_MODULE_5__.useElementContext)();
     const { dataObject } = (0,_Pimcore_modules_data_object_hooks_use_data_object_draft__WEBPACK_IMPORTED_MODULE_6__.useDataObjectDraft)(id);
     const objectData = (dataObject === null || dataObject === void 0 ? void 0 : dataObject.objectData) ?? {};
     const originalValue = getOriginalValue(objectData, props.name);
-    const valueRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(props.value);
     const inheritanceState = (0,_Pimcore_modules_data_object_editor_types_object_tab_manager_tabs_edit_providers_inheritance_state_provider_use_inheritance_state__WEBPACK_IMPORTED_MODULE_7__.useInheritanceState)();
-    const changedFieldsRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(new Set());
-    const [isOpenModal, setIsOpenModal] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
     const fieldNameToString = (field)=>{
         return Array.isArray(field) ? field.join('.') : field;
     };
@@ -84606,7 +84606,7 @@ const ClassificationStore = (props)=>{
                 onFieldChange: onFieldChange,
                 value: mergedValue,
                 children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_classification_store_content__WEBPACK_IMPORTED_MODULE_4__.ClassificationStoreContent, {
-                    openModal: ()=>{
+                    openAddModal: ()=>{
                         setIsOpenModal(true);
                     },
                     ...props
@@ -84624,7 +84624,8 @@ const ClassificationStore = (props)=>{
                 close: ()=>{
                     setIsOpenModal(false);
                 },
-                isOpen: isOpenModal
+                isOpen: isOpenModal,
+                ...props
             }, void 0, false, {
                 fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/classification-store.tsx",
                 lineNumber: 117,
@@ -84633,7 +84634,7 @@ const ClassificationStore = (props)=>{
         ]
     }, void 0, true);
 };
-_s(ClassificationStore, "f/QvKk+LIbChCVLNy1e+g5CqFZk=", false, function() {
+_s(ClassificationStore, "dR5pbpkHvaznC5+Qs3xeCP5mig8=", false, function() {
     return [
         _Pimcore_modules_element_hooks_use_element_context__WEBPACK_IMPORTED_MODULE_5__.useElementContext,
         _Pimcore_modules_data_object_hooks_use_data_object_draft__WEBPACK_IMPORTED_MODULE_6__.useDataObjectDraft,
@@ -84690,7 +84691,7 @@ const ClassificationStoreModal = (props)=>{
                 children: "Collection"
             }, void 0, false, {
                 fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal.tsx",
-                lineNumber: 27,
+                lineNumber: 28,
                 columnNumber: 17
             }, undefined)
         },
@@ -84701,7 +84702,7 @@ const ClassificationStoreModal = (props)=>{
                 children: "Group"
             }, void 0, false, {
                 fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal.tsx",
-                lineNumber: 32,
+                lineNumber: 33,
                 columnNumber: 17
             }, undefined)
         },
@@ -84712,7 +84713,7 @@ const ClassificationStoreModal = (props)=>{
                 children: "Group by key"
             }, void 0, false, {
                 fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal.tsx",
-                lineNumber: 37,
+                lineNumber: 38,
                 columnNumber: 17
             }, undefined)
         }
@@ -84731,12 +84732,12 @@ const ClassificationStoreModal = (props)=>{
                 noTabBarMargin: true
             }, void 0, false, {
                 fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal.tsx",
-                lineNumber: 51,
+                lineNumber: 52,
                 columnNumber: 11
             }, undefined)
         }, void 0, false, {
             fileName: "/var/www/html/dev/pimcore/studio-ui-bundle/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal.tsx",
-            lineNumber: 44,
+            lineNumber: 45,
             columnNumber: 9
         }, undefined)
     }, void 0, false);

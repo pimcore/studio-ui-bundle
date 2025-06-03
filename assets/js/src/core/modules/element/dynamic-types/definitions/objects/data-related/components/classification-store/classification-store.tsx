@@ -35,15 +35,15 @@ const getOriginalValue = (value: any, name: NamePath): object => {
 }
 
 export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.Element => {
+  const [isOpenModal, setIsOpenModal] = useState(false)
+  const valueRef = useRef(props.value)
+  const changedFieldsRef = useRef<Set<string>>(new Set())
+
   const { id } = useElementContext()
   const { dataObject } = useDataObjectDraft(id)
   const objectData = dataObject?.objectData ?? {}
   const originalValue = getOriginalValue(objectData, props.name)
-  const valueRef = useRef(props.value)
   const inheritanceState = useInheritanceState()
-  const changedFieldsRef = useRef<Set<string>>(new Set())
-
-  const [isOpenModal, setIsOpenModal] = useState(false)
 
   const fieldNameToString = (field: NamePath): string => {
     return Array.isArray(field) ? field.join('.') : field
@@ -110,13 +110,14 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
         value={ mergedValue }
       >
         <ClassificationStoreContent
-          openModal={ () => { setIsOpenModal(true) } }
+          openAddModal={ () => { setIsOpenModal(true) } }
           { ...props }
         />
       </Form.KeyedList>
       <ClassificationStoreModal
         close={ () => { setIsOpenModal(false) } }
         isOpen={ isOpenModal }
+        { ...props }
       />
     </>
   )

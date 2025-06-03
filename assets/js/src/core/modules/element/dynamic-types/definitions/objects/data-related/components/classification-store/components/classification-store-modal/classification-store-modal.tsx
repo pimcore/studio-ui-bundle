@@ -11,8 +11,9 @@
 import React from 'react'
 import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
 import { Modal } from '@Pimcore/components/modal/modal'
+import { type ClassificationStoreProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/classification-store'
 
-interface ClassificationStoreModalProps {
+interface ClassificationStoreModalProps extends ClassificationStoreProps {
   isOpen: boolean
   close: () => void
 }
