@@ -763,6 +763,9 @@ hotspots.clear-data: Clear all edits (marker, hotspot, cropping)
 hotspots.clear-data.dnd-message: This image contains additional data like markers or hotspots. Do you want to clear them as well?
 hotspots.data-cleared: Hotspots, Markers and Cropping Data cleared
 hotspots.has-hotspots-or-marker: Hotspots or markers have been added to this item
+classification-store.collection: Collection
+classification-store.group: Group
+classification-store.group-by-key: Group by key
 home: Home
 preview.label: Preview
 inheritance-active: "Data inherited from object ID {{id}}"

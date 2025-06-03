@@ -9,9 +9,13 @@
  */
 
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
 import { Modal } from '@Pimcore/components/modal/modal'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Icon } from '@Pimcore/components/icon/icon'
 import { type ClassificationStoreProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/classification-store'
+import { useStyles } from './classification-store-modal.styles'
 
 interface ClassificationStoreModalProps extends ClassificationStoreProps {
   isOpen: boolean
@@ -21,19 +25,55 @@ interface ClassificationStoreModalProps extends ClassificationStoreProps {
 export const ClassificationStoreModal = (props: ClassificationStoreModalProps): React.JSX.Element => {
   const { isOpen, close } = props
 
+  const { t } = useTranslation()
+  const { styles } = useStyles()
+
   const tabItems: ITabsProps['items'] = [
     {
-      label: 'Collection',
+      label: (
+        <Flex
+          align="center"
+          gap="mini"
+        >
+          <Icon
+            className={ styles.titleIcon }
+            value="folder"
+          />
+          <div>{t('classification-store.collection')}</div>
+        </Flex>
+      ),
       key: 'collection',
       children: <div>Collection</div>
     },
     {
-      label: 'Group',
+      label: (
+        <Flex
+          align="center"
+          gap="mini"
+        >
+          <Icon
+            className={ styles.titleIcon }
+            value="folder"
+          />
+          <div>{t('classification-store.group')}</div>
+        </Flex>
+      ),
       key: 'group',
       children: <div>Group</div>
     },
     {
-      label: 'Group by key',
+      label: (
+        <Flex
+          align="center"
+          gap="mini"
+        >
+          <Icon
+            className={ styles.titleIcon }
+            value="folder"
+          />
+          <div>{t('classification-store.group-by-key')}</div>
+        </Flex>
+      ),
       key: 'group-by-key',
       children: <div>Group by key</div>
     }
