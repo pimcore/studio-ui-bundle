@@ -16,6 +16,7 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
+import { usePredefinedProperties } from './hooks/use-predefined-properties'
 
 export type Mode = 'create' | 'update'
 
@@ -25,6 +26,8 @@ export interface TreeAction {
 }
 
 const PredefinedPropertiesContainer = (): React.JSX.Element => {
+
+ const {predefinedProperties, isLoading} = usePredefinedProperties()
 
   return (
     <ContentLayout
@@ -62,6 +65,7 @@ const PredefinedPropertiesContainer = (): React.JSX.Element => {
         } }
         none={ false }
       >
+        {predefinedProperties !== undefined && predefinedProperties.map(property => (<>{property.name}</>))}
       </Content>
     </ContentLayout>
   )
