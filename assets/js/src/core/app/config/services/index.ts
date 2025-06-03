@@ -170,6 +170,9 @@ import { HardlinkTabManager } from '@Pimcore/modules/document/editor/types/hardl
 import { LinkTabManager } from '@Pimcore/modules/document/editor/types/link/tab-manager/link-tab-manager'
 import { SnippetTabManager } from '@Pimcore/modules/document/editor/types/snippet/tab-manager/snippet-tab-manager'
 
+// Component registry
+container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
+
 // Main nav
 container.bind(serviceIds.mainNavRegistry).to(MainNavRegistry).inSingletonScope()
 
@@ -361,6 +364,3 @@ container.bind(serviceIds['DynamicTypes/Object/Variant']).to(DynamicTypeObjectVa
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()
-
-// Component registry
-container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
