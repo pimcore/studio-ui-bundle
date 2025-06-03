@@ -37,7 +37,7 @@ export const ClassificationStoreModal = (props: ClassificationStoreModalProps): 
         >
           <Icon
             className={ styles.titleIcon }
-            value="folder"
+            value="keyboard"
           />
           <div>{t('classification-store.collection')}</div>
         </Flex>
@@ -53,7 +53,7 @@ export const ClassificationStoreModal = (props: ClassificationStoreModalProps): 
         >
           <Icon
             className={ styles.titleIcon }
-            value="folder"
+            value="keys"
           />
           <div>{t('classification-store.group')}</div>
         </Flex>
@@ -69,7 +69,7 @@ export const ClassificationStoreModal = (props: ClassificationStoreModalProps): 
         >
           <Icon
             className={ styles.titleIcon }
-            value="folder"
+            value="key"
           />
           <div>{t('classification-store.group-by-key')}</div>
         </Flex>

@@ -118,6 +118,9 @@ import info from '@Pimcore/assets/icons/info.inline.svg?react'
 import inheritanceActive from '@Pimcore/assets/icons/inheritance-active.inline.svg?react'
 import inheritanceBroken from '@Pimcore/assets/icons/inheritance-broken.inline.svg?react'
 import json from '@Pimcore/assets/icons/json.inline.svg?react'
+import key from '@Pimcore/assets/icons/key.inline.svg?react'
+import keyboard from '@Pimcore/assets/icons/keyboard.inline.svg?react'
+import keys from '@Pimcore/assets/icons/keys.inline.svg?react'
 import languageSelect from '@Pimcore/assets/icons/language-select.inline.svg?react'
 import layout from '@Pimcore/assets/icons/layout.inline.svg?react'
 import list from '@Pimcore/assets/icons/list.inline.svg?react'
@@ -629,6 +632,18 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'json',
       component: json
+    })
+    iconLibrary.register({
+      name: 'key',
+      component: key
+    })
+    iconLibrary.register({
+      name: 'keyboard',
+      component: keyboard
+    })
+    iconLibrary.register({
+      name: 'keys',
+      component: keys
     })
     iconLibrary.register({
       name: 'language-select',
