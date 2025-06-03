@@ -22,7 +22,7 @@
     "globalName": "pimcore_studio_ui_bundle",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
-    "publicPath": "/bundles/pimcorestudioui/build/d83342c2-4fa0-4315-bfbf-2b27671abdcd/"
+    "publicPath": "/bundles/pimcorestudioui/build/1b7c712a-a30e-4d3d-a062-73428464b3cc/"
   },
   "shared": [
     {
@@ -110,10 +110,10 @@
         }
       },
       "usedIn": [
-        "./modules/wysiwyg",
         "./components",
         "./modules/data-object",
-        "./modules/element"
+        "./modules/element",
+        "./modules/wysiwyg"
       ]
     },
     {
@@ -346,10 +346,10 @@
         }
       },
       "usedIn": [
+        "./modules/element",
         "./modules/app",
         "./modules/asset",
         "./modules/data-object",
-        "./modules/element",
         "./modules/icon-library",
         "./modules/widget-manager"
       ]
@@ -903,7 +903,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6903.1bee81cf.css"
+            "static/css/async/6903.b1e0e7ee.css"
           ],
           "async": []
         }
@@ -1387,7 +1387,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6903.1bee81cf.css"
+            "static/css/async/6903.b1e0e7ee.css"
           ],
           "async": []
         }
@@ -1471,7 +1471,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6903.1bee81cf.css"
+            "static/css/async/6903.b1e0e7ee.css"
           ],
           "async": []
         }
@@ -1525,7 +1525,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6903.1bee81cf.css"
+            "static/css/async/6903.b1e0e7ee.css"
           ],
           "async": []
         }
@@ -1560,7 +1560,7 @@
         "css": {
           "sync": [],
           "async": [
-            "static/css/async/6903.1bee81cf.css"
+            "static/css/async/6903.b1e0e7ee.css"
           ]
         }
       }
