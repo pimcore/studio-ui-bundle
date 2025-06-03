@@ -27,13 +27,13 @@ npm install ~/package-name.tgz
 To begin, ensure you have a basic [Pimcore Bundle](https://pimcore.com/docs/platform/Pimcore/Extending_Pimcore/Bundle_Developers_Guide/). For this guide, let’s call our plugin `PimcoreStudioUiDemoPluginBundle`.
 
 
-With our dependency in place we should now setup our bundling process. we recommend using [Symfony Encore](https://symfony.com/doc/current/frontend/encore/installation.html). Later on, you’ll need a generated manifest from it.
+With our dependency in place we should now setup our bundling process. We recommend [Rsbuild](https://rsbuild.rs/).
 
-> [Example webpack configuration](https://github.com/pimcore/studio-example-bundle/blob/main/assets/webpack.config.js)
+> [Example webpack configuration](https://github.com/pimcore/studio-example-bundle/blob/main/assets/rsbuild.config.ts)
 
 Update your package.json with the following commands, to run Symfony Encore:
 
-> [npm commands](https://github.com/pimcore/studio-example-bundle/blob/5715004cf377e91adfd1fce68b054181046edbc0/assets/package.json#L5-L8)
+> [npm commands](https://github.com/pimcore/studio-example-bundle/blob/14b74bc27c25598cb872c704470c90c3d8c6ca6a/assets/package.json#L5-L7)
 
 We are now able to bundle files. So, let's create our main entry point `main.ts`. Use our boilerplate to get started quickly:
 
