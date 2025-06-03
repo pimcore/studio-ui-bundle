@@ -22,8 +22,6 @@ export class DynamicTypeFieldFilterSelect extends DynamicTypeFieldFilterAbstract
   }
 
   getFieldFilterComponent (props: DynamicTypeFieldFilterSelectProps): ReactElement<DynamicTypeFieldFilterSelectProps> {
-    console.log('props')
-
     return (
       <DynamicTypeFieldFilterSelectComponent { ...props } />
     )
