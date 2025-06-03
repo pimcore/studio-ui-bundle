@@ -23,6 +23,11 @@ services:
 
     Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProvider: ~
 
+    Pimcore\Bundle\StudioUiBundle\EventSubscriber\EditmodeSubscriber:
+        tags: ['kernel.event_subscriber']
+        calls:
+            - [ setLogger, [ '@logger' ] ]
+
     Pimcore\Bundle\StudioUiBundle\Installer:
         public: true
         arguments:
