@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { get, isEmpty, isEqual, isPlainObject } from 'lodash'
+import { get, isArray, isEmpty, isEqual, isPlainObject } from 'lodash'
 import { type NamePath } from 'antd/es/form/interface'
 import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
 import { Form } from '@Pimcore/components/form/form'
@@ -35,15 +35,18 @@ const getOriginalValue = (value: any, name: NamePath): object => {
 }
 
 export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.Element => {
+  const { name: classificationStoreName, value } = props
+
   const [isOpenModal, setIsOpenModal] = useState(false)
-  const valueRef = useRef(props.value)
+  const valueRef = useRef(value)
   const changedFieldsRef = useRef<Set<string>>(new Set())
 
   const { id } = useElementContext()
   const { dataObject } = useDataObjectDraft(id)
   const objectData = dataObject?.objectData ?? {}
-  const originalValue = getOriginalValue(objectData, props.name)
+  const originalValue = getOriginalValue(objectData, classificationStoreName)
   const inheritanceState = useInheritanceState()
+  const fieldName = isArray(classificationStoreName) ? classificationStoreName[classificationStoreName.length - 1] : classificationStoreName
 
   const fieldNameToString = (field: NamePath): string => {
     return Array.isArray(field) ? field.join('.') : field
@@ -64,7 +67,7 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
   }
 
   const isInherited = (name: string): boolean => {
-    const fullFieldNamePath = [...props.name, ...name.split('.')]
+    const fullFieldNamePath = [...classificationStoreName, ...name.split('.')]
     return !changedFieldsRef.current.has(fullFieldNamePath.join('.')) && inheritanceState?.getInheritanceState(fullFieldNamePath)?.inherited === true
   }
 
@@ -93,13 +96,13 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
   }
 
   const mergedValue = useMemo(
-    () => getMergedValue(valueRef.current, originalValue, props.value, isInherited)
+    () => getMergedValue(valueRef.current, originalValue, value, isInherited)
     , [valueRef.current, originalValue]
   )
 
   useEffect(() => {
-    valueRef.current = props.value
-  }, [props.value])
+    valueRef.current = value
+  }, [value])
 
   return (
     <>
@@ -116,7 +119,9 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
       </Form.KeyedList>
       <ClassificationStoreModal
         close={ () => { setIsOpenModal(false) } }
+        fieldName={ fieldName }
         isOpen={ isOpenModal }
+        objectId={ id }
         { ...props }
       />
     </>

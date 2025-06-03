@@ -16,14 +16,17 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type ClassificationStoreProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/classification-store'
 import { useStyles } from './classification-store-modal.styles'
+import { CollectionTab } from './tabs/collection/collection-tab'
 
 interface ClassificationStoreModalProps extends ClassificationStoreProps {
   isOpen: boolean
   close: () => void
+  objectId: number
+  fieldName: string
 }
 
 export const ClassificationStoreModal = (props: ClassificationStoreModalProps): React.JSX.Element => {
-  const { isOpen, close } = props
+  const { isOpen, close, storeId, objectId, fieldName } = props
 
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -43,7 +46,13 @@ export const ClassificationStoreModal = (props: ClassificationStoreModalProps): 
         </Flex>
       ),
       key: 'collection',
-      children: <div>Collection</div>
+      children: (
+        <CollectionTab
+          fieldName={ fieldName }
+          objectId={ objectId }
+          storeId={ storeId }
+        />
+      )
     },
     {
       label: (
@@ -90,6 +99,7 @@ export const ClassificationStoreModal = (props: ClassificationStoreModalProps): 
           size={ 'XL' }
         >
           <Tabs
+            destroyInactiveTabPane
             items={ tabItems }
             noTabBarMargin
           />
