@@ -13,7 +13,7 @@ import { useComponentRegistry } from './component-registry'
 import { isUndefined } from 'lodash'
 
 interface SlotRendererProps {
-  slot: string,
+  slot: string
   props?: Record<string, any>
   onRenderComponent?: (Component: React.JSX.Element, context: { name?: string, index?: number, props?: Record<string, any> }) => React.JSX.Element
 }

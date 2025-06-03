@@ -31,7 +31,7 @@ interface ComponentRegistryConfigEntrySlotItem extends Omit<ComponentRegistryEnt
 interface ComponentRegistryConfigEntrySlot {
   name: string
   type: ComponentType.SLOT
-  defaultEntries?: Array<ComponentRegistryConfigEntrySlotItem>
+  defaultEntries?: ComponentRegistryConfigEntrySlotItem[]
 }
 
 export type ComponentRegistryConfigEntry = ComponentRegistryConfigEntrySingle | ComponentRegistryConfigEntrySlot

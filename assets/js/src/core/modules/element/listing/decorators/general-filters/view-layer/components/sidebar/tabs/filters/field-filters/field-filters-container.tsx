@@ -34,7 +34,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
 
   const initialFilters: FieldFiltersProps['data'] = useMemo(() => fieldFilters.map((filter) => {
     const currentColumn = availableColumns.find((column) => column.key === filter.key)
-    
+
     return {
       id: filter.key,
       data: filter.filterValue,
