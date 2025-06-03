@@ -12,7 +12,7 @@ import React from 'react'
 import { WidgetManagerView } from './widget-manager-view'
 import { widgetManagerFactory } from './utils/widget-manager-factory'
 import { Actions, type ITabRenderValues, Model, type TabNode, type TabSetNode } from 'flexlayout-react'
-import { useAppDispatch, useAppSelector } from '@Pimcore/app/store/index'
+import { useAppDispatch, useAppSelector } from '@sdk/app'
 import { selectOuterModel, updateOuterModel } from './widget-manager-slice'
 import { TabTitleContainer } from './title/tab-title-container'
 

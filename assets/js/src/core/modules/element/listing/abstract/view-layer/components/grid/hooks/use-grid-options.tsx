@@ -8,14 +8,15 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
-import { type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
-import { type AccessorColumnDef, type IdentifiedColumnDef } from '@tanstack/react-table'
-import { type GridProps as BaseGridProps } from '@Pimcore/types/components/types'
-import { useTranslation } from 'react-i18next'
-import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { DefaultCell } from '@Pimcore/components/grid/columns/default-cell'
+import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
+import { DEFAULT_COLUMN_WIDTH } from '@Pimcore/modules/element/dynamic-types/utils/column-helper'
+import { type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
+import { type GridProps as BaseGridProps } from '@Pimcore/types/components/types'
+import { type AccessorColumnDef, type IdentifiedColumnDef } from '@tanstack/react-table'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export type GridProps = Pick<BaseGridProps, 'contextMenu' | 'enableMultipleRowSelection' | 'enableRowSelection' | 'enableSorting' | 'modifiedCells' | 'onSelectedRowsChange' | 'onSortingChange' | 'onUpdateCellData' | 'selectedRows' | 'sorting' | 'onRowDoubleClick' | 'manualSorting'>
 
@@ -39,7 +40,8 @@ export const useGridOptions = (): UseGridOptionsReturn => {
       meta: {
         type: isMainTypeIncluded ? column.type : column.frontendType,
         columnKey: column.key
-      }
+      },
+      size: getDefaultSystemColumnSize(column) // change if its a system colum
     }
 
     if (!isTypeIncluded) {
@@ -74,6 +76,32 @@ export const useGridOptions = (): UseGridOptionsReturn => {
 
   const getGridProps = (): GridProps => {
     return {}
+  }
+
+  const getDefaultSystemColumnSize = (column: SelectedColumn): number | undefined => {
+    if (column.group === 'system') {
+      if (
+        column.key === 'id' ||
+        column.key === 'index' ||
+        column.key === 'type'
+      ) {
+        return 100
+      }
+
+      if (
+        column.key === 'mimetype' ||
+        column.key === 'fileSize'
+      ) {
+        return DEFAULT_COLUMN_WIDTH
+      }
+
+      if (
+        column.key === 'key' ||
+        column.key === 'classname'
+      ) {
+        return 200
+      }
+    }
   }
 
   return {

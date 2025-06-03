@@ -47,4 +47,8 @@ export class DynamicTypeObjectDataBooleanSelect extends DynamicTypeObjectDataAbs
       defaultValue: 0
     })
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 150
+  }
 }

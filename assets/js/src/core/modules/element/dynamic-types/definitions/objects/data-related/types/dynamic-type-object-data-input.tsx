@@ -46,4 +46,8 @@ export class DynamicTypeObjectDataInput extends DynamicTypeObjectDataAbstractInp
       form.setFieldValue(fieldName, props.defaultValue)
     }
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 350
+  }
 }

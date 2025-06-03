@@ -8,25 +8,25 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { injectable } from 'inversify'
-import { type DynamicTypeAbstract } from '../../../registry/dynamic-type-registry-abstract'
-import React, { type ReactNode, type ReactElement } from 'react'
-import { type DataComponentProps } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/data-component'
-import { type FormItemProps } from 'antd/es/form/FormItem'
-import { respectLineBreak } from '@Pimcore/utils/helpers'
-import { type FormInstance } from 'antd'
-import { type NamePath } from 'rc-field-form/es/interface'
-import { FieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label'
-import { type InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
-import { defaultFieldWidthValues, type IFieldWidthContext } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
-import { DefaultPreview } from './components/grid-cells/image/default-preview'
-import { type AbstractGridCellDefinition } from '../../grid-cell/dynamic-type-grid-cell-abstract'
 import { type ColumnMetaType } from '@Pimcore/components/grid/grid'
+import { type InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 import { type ModalSize } from '@Pimcore/components/modal/modal'
 import {
   type IFormattedDataStructureData,
   type IProcessVersionFieldDataProps
 } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
+import { type DataComponentProps } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/data-component'
+import { FieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label'
+import { defaultFieldWidthValues, type IFieldWidthContext } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
+import { respectLineBreak } from '@Pimcore/utils/helpers'
+import { type FormInstance } from 'antd'
+import { type FormItemProps } from 'antd/es/form/FormItem'
+import { injectable } from 'inversify'
+import { type NamePath } from 'rc-field-form/es/interface'
+import React, { type ReactElement, type ReactNode } from 'react'
+import { type DynamicTypeAbstract } from '../../../registry/dynamic-type-registry-abstract'
+import { type AbstractGridCellDefinition } from '../../grid-cell/dynamic-type-grid-cell-abstract'
+import { DefaultPreview } from './components/grid-cells/image/default-preview'
 
 export type EditMode = 'default' | 'edit-modal' | 'column-meta'
 export interface EditModalSettings {
@@ -150,5 +150,9 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
 
   handleDefaultValue (props: AbstractObjectDataDefinition, form: FormInstance, fieldName: NamePath): void {
     // This method is intentionally left empty - can be implemented in subclasses
+  }
+
+  getDefaultGridColumnWidth (props?: AbstractObjectDataDefinition): number | undefined {
+    return undefined
   }
 }

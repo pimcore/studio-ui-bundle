@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import { api as documentApi } from '../document-api-slice-enhanced'
 import { documentReceived } from '../document-draft-slice'
 import { addFailedDraftId, removeFailedDraftId } from '../document-draft-error-slice' // Import the new action

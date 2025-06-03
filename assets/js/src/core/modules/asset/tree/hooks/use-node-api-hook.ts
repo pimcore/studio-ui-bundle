@@ -15,7 +15,7 @@ import {
 import { transformApiDataToNodes } from '../utils/transform-api-data-to-node'
 import { useTreeFilter } from '@Pimcore/modules/element/tree/provider/tree-filter-provider/use-tree-filter'
 import { type NodeApiHookReturnType, type DataTransformerReturnType, type DataTransformerSourceNode } from '@Pimcore/components/element-tree/types/node-api-hook'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type NodeState } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
 import { isUndefined } from 'lodash'

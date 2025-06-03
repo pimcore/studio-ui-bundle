@@ -36,4 +36,8 @@ export class DynamicTypeObjectDataTextarea extends DynamicTypeObjectDataAbstract
       />
     )
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 400
+  }
 }

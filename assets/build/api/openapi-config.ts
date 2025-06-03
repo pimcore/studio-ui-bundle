@@ -22,7 +22,7 @@ const pathMatcher = (pattern: RegExp): EndpointMatcherFunction => {
 
 const config: ConfigFile = {
   schemaFile: './docs.jsonopenapi.json',
-  apiFile: '../../js/src/core/app/api/pimcore/index.ts',
+  apiFile: '@sdk/api',
   apiImport: 'api',
   endpointOverrides: [
     {

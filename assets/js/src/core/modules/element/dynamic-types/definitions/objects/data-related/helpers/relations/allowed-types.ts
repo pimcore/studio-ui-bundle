@@ -9,10 +9,10 @@
  */
 
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
+import type { DragAndDropInfo } from '@sdk/components'
 import _ from 'lodash'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
-import { type ElementSelectorConfig } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
+import { type ElementSelectorConfig } from '@sdk/modules/element'
 
 export interface IRelationAllowedTypesClassDefinition {
   assetsAllowed: boolean

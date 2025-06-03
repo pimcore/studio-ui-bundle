@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { store, useAppDispatch } from '@Pimcore/app/store'
+import { store, useAppDispatch } from '@sdk/app'
 import {
   closeWidget as closeWidgetAction,
   openBottomWidget as openBottomWidgetAction,

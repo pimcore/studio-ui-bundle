@@ -18,7 +18,7 @@ import {
   type ManyToManyRelationValue, type ManyToManyRelationValueItem,
   useValue
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
-import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
+import type { DragAndDropInfo } from '@sdk/components'
 import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 import {
   ManyToManyRelationToolbar

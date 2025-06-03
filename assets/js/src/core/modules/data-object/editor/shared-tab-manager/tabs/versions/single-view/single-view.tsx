@@ -10,7 +10,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { isEmpty, isUndefined } from 'lodash'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import {
   api,
   type DataObjectVersion

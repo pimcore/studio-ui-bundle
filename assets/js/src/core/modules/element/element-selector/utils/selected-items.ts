@@ -9,7 +9,7 @@
  */
 
 import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
-import { type SelectedItem } from '../provider/element-selector/element-selector-provider'
+import { type SelectedItem } from '@sdk/modules/element'
 import { isArray } from 'lodash'
 
 export const getFinishedEventSelectedItems = (eventData: any): SelectedItem[] => {

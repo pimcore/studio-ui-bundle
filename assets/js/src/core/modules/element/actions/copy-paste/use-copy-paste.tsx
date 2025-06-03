@@ -28,7 +28,7 @@ import {
   refreshTargetNode,
   setNodeFetching
 } from '@Pimcore/components/element-tree/element-tree-slice'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import { isUndefined } from 'lodash'
 import { useTreeId } from '../../tree/provider/tree-id-provider/use-tree-id'
 import { ContextMenuActionName } from '..'

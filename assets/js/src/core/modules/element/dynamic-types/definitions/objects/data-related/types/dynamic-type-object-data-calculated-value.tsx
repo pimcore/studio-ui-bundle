@@ -86,4 +86,8 @@ export class DynamicTypeObjectDataCalculatedValue extends DynamicTypeObjectDataA
       </GridCellPreviewWrapper>
     )
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 350
+  }
 }

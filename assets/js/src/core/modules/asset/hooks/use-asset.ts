@@ -9,7 +9,7 @@
  */
 
 import { useContext } from 'react'
-import { AssetContext } from '../asset-provider'
+import { AssetContext } from '@sdk/modules/asset'
 
 export interface UseAssetReturn {
   id: number

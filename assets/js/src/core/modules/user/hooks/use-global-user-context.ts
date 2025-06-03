@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
+import { useAppDispatch, useAppSelector } from '@sdk/app'
 import { type GlobalContext, addGlobalContext, selectContextByType, removeGlobalContext } from '@Pimcore/modules/app/global-context/global-context-slice'
 
 export interface GlobalUserContext extends GlobalContext {

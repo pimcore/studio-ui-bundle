@@ -13,7 +13,7 @@ import { isEmpty, isUndefined } from 'lodash'
 import {
   type VersionComparisonViewProps
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import {
   api,
