@@ -18,8 +18,9 @@ import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-prop
 import { uuid } from '@Pimcore/utils/uuid'
 import { usePredefinedProperties } from '../hooks/use-predefined-properties'
 import { PredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
+import { IconButton } from '@sdk/components'
 
-type DataPropertyWithActions = DataProperty & {
+type PredefinedPropertyWithActions = PredefinedProperty & {
   actions: React.ReactNode
 }
 
@@ -58,88 +59,78 @@ export const Table = (): React.JSX.Element => {
 
   console.log("predefined Pros", predefinedProperties);
   
-  const columnHelper = createColumnHelper<DataPropertyWithActions>()
+  const columnHelper = createColumnHelper<PredefinedPropertyWithActions>()
   const createColumns = (): any => [
+      columnHelper.accessor('name', {
+      header: t('properties.columns.name'),
+      size: 200
+    }),
+      columnHelper.accessor('description', {
+      header: t('properties.columns.description'),
+      size: 200
+    }),
+      columnHelper.accessor('key', {
+      header: t('properties.columns.key'),
+      meta: {
+        editable: true
+      },
+      size: 200
+    }),
     columnHelper.accessor('type', {
       header: t('properties.columns.type'),
       meta: {
-        type: 'property-icon'
+        editable: false
       },
-      size: 44
-     })
-    // columnHelper.accessor('key', {
-    //   header: t('properties.columns.key'),
-    //   meta: {
-    //     editable: isEditable && tableType === 'own'
-    //   },
-    //   size: 200
-    // }),
-    // columnHelper.accessor('predefinedName', {
-    //   header: t('properties.columns.name'),
-    //   size: 200
-    // }),
-    // columnHelper.accessor('description', {
-    //   header: t('properties.columns.description'),
-    //   size: 200
-    // }),
-    // columnHelper.accessor('data', {
-    //   header: t('properties.columns.data'),
-    //   meta: {
-    //     type: 'property-value',
-    //     editable: isEditable && tableType === 'own',
-    //     autoWidth: true
-    //   },
-    //   size: 300
-    // }),
-    // columnHelper.accessor('inheritable', {
-    //   header: t('properties.columns.inheritable'),
-    //   size: 74,
-    //   meta: {
-    //     type: 'checkbox',
-    //     editable: isEditable && tableType === 'own',
-    //     config: {
-    //       align: 'center'
-    //     }
-    //   }
-    // }),
-    // columnHelper.accessor('actions', {
-    //   header: t('properties.columns.actions'),
-    //   size: 70,
-    //   cell: (info) => {
-    //     return (
-    //       <div className={ 'properties-table--actions-column' }>
-    //         {
-    //           ['document', 'asset', 'object'].includes(info.row.original.type) &&
-    //             info.row.original.data !== null &&
-    //           (
-    //             <IconButton
-    //               icon={ { value: 'open-folder' } }
-    //               onClick={ async () => {
-    //                 const typeValue = mapToElementType(info.row.original.type)
-
-    //                 !isUndefined(typeValue) && await openElement({
-    //                   type: typeValue,
-    //                   id: info.row.original.data.id
-    //                 })
-    //               } }
-    //               type="link"
-    //             />
-    //           )
-    //         }
-
-    //         {tableType === 'own' && (
-    //           <IconButton
-    //             icon={ { value: 'trash' } }
-    //             onClick={ () => {
-    //               removeProperty(info.row.original)
-    //             } }
-    //             type="link"
-    //           />
-    //         )}
-    //       </div>
-    //     )
-    //   }
-    // })
+      size: 200
+     }),
+    columnHelper.accessor('data', {
+      header: t('properties.columns.data'),
+      meta: {
+        type: 'property-value',
+        editable: true,
+        autoWidth: true
+      },
+      size: 300
+    }),
+    columnHelper.accessor('config', {
+      header: t('properties.columns.configuration'),
+      size: 200
+    }),
+    columnHelper.accessor('ctype', {
+      header: t('properties.columns.content-type'),
+      size: 200
+    }),
+    columnHelper.accessor('inheritable', {
+      header: t('properties.columns.inheritable'),
+      size: 74,
+      meta: {
+        type: 'checkbox',
+        editable: true,
+        config: {
+          align: 'center'
+        }
+      }
+    }),
+    columnHelper.accessor('actions', {
+      header: t('properties.columns.actions'),
+      size: 70,
+      cell: (info) => {
+        return (
+          <div className={ 'properties-table--actions-column' }>
+             <IconButton
+                icon={ { value: 'trash' } }
+                onClick={ () => console.log("translate")}
+                type="link"
+              />
+              <IconButton
+                icon={ { value: 'trash' } }
+                onClick={ () => console.log("remove prop")}
+                type="link"
+              />
+          </div>
+        )
+      }
+    })
   ]
 
   const tableColumns = [
@@ -161,9 +152,6 @@ export const Table = (): React.JSX.Element => {
 
   return (
     <div className={ styles.table }>
-      {(
-        <>
-          (
             <Grid
               autoWidth
               columns={ tableColumns }
@@ -174,9 +162,6 @@ export const Table = (): React.JSX.Element => {
               resizable
               setRowId={ (row: DataProperty) => row.rowId }
             />
-          )
-        </>
-      )}
     </div>
   )
 }

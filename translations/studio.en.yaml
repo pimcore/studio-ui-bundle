@@ -289,6 +289,8 @@ properties.columns.key: Key
 properties.columns.name: Name
 properties.columns.description: Description
 properties.columns.data: Value
+properties.columns.configuration: Configuration
+properties.columns.content-type: Content-Type
 properties.columns.inheritable: Inheritable
 properties.columns.actions: Actions
 properties.inherited.properties: Inherited Properties
