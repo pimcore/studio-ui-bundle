@@ -17,6 +17,7 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { usePredefinedProperties } from './hooks/use-predefined-properties'
+import { Table } from './table/table'
 
 export type Mode = 'create' | 'update'
 
@@ -65,8 +66,8 @@ const PredefinedPropertiesContainer = (): React.JSX.Element => {
         } }
         none={ predefinedProperties === undefined || predefinedProperties.length === 0 }
       >
-        {predefinedProperties !== undefined && predefinedProperties.map(property => (<>{property.name}</>))}
-      </Content>
+<Table/>
+</Content>
     </ContentLayout>
   )
 }
