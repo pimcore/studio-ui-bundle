@@ -40,6 +40,7 @@ export const CollectionTab = (props: CollectionTabProps): React.JSX.Element => {
         fieldName: props.fieldName
       } }
       queryHook={ useClassificationStoreGetCollectionsQuery }
+      tabId="collection"
     />
   )
 }

@@ -40,6 +40,7 @@ export const GroupTab = (props: GroupTabProps): React.JSX.Element => {
         fieldName: props.fieldName
       } }
       queryHook={ useClassificationStoreGetGroupsQuery }
+      tabId="group"
     />
   )
 }

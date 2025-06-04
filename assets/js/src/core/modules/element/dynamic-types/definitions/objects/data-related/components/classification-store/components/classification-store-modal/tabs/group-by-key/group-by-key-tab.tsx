@@ -48,6 +48,7 @@ export const GroupByKeyTab = (props: GroupByKeyTabProps): React.JSX.Element => {
         fieldName: props.fieldName
       } }
       queryHook={ useClassificationStoreGetKeyGroupRelationsQuery }
+      tabId="group-by-key"
     />
   )
 }

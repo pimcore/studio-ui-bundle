@@ -18,8 +18,10 @@ import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Grid } from '@Pimcore/components/grid/grid'
+import { useSearch } from '../../provider/use-search'
 
 interface ClassificationStoreDataTabProps<T> {
+  tabId: 'collection' | 'group' | 'group-by-key'
   queryHook: (args: any, options?: any) => {
     isLoading: boolean
     isFetching: boolean
@@ -30,9 +32,11 @@ interface ClassificationStoreDataTabProps<T> {
   columns: any[]
 }
 
-export const ClassificationStoreDataTab = <T,>({ queryHook, queryArgs, columns }: ClassificationStoreDataTabProps<T>): React.JSX.Element => {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [searchQuery, setSearchQuery] = useState('')
+export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, columns }: ClassificationStoreDataTabProps<T>): React.JSX.Element => {
+  const { getSearchValue, setSearchValue } = useSearch()
+
+  const [searchTerm, setSearchTerm] = useState(getSearchValue(tabId))
+  const [searchQuery, setSearchQuery] = useState(getSearchValue(tabId))
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
 
@@ -42,6 +46,7 @@ export const ClassificationStoreDataTab = <T,>({ queryHook, queryArgs, columns }
   )
 
   const handleSearch = (value: string): void => {
+    setSearchValue(tabId, value)
     setSearchTerm(value)
   }
 
