@@ -9,6 +9,7 @@
  */
 
 import React, { useState } from 'react'
+import { type RowSelectionState } from '@tanstack/react-table'
 import { Refetch } from '../refetch/refetch'
 import { Pagination } from '../pagination/pagination'
 import { Split } from '@Pimcore/components/split/split'
@@ -19,6 +20,7 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useSearch } from '../../provider/use-search'
+import { Button } from '@Pimcore/components/button/button'
 
 interface ClassificationStoreDataTabProps<T> {
   tabId: 'collection' | 'group' | 'group-by-key'
@@ -40,6 +42,8 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
 
+  const [selectedItems, setSelectedItems] = useState<RowSelectionState | undefined>(undefined)
+
   const { isLoading, data, isFetching, refetch } = queryHook(
     { ...queryArgs, page, pageSize, searchTerm },
     { refetchOnMountOrArgChange: true }
@@ -50,8 +54,8 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
     setSearchTerm(value)
   }
 
-  if (isLoading) {
-    return <Content loading />
+  const handleApplySelectionClick = (): void => {
+    console.log('------>>>>>> selectedItems: ', selectedItems)
   }
 
   return (
@@ -69,9 +73,15 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
                 pageSize={ pageSize }
                 setPage={ setPage }
                 setPageSize={ setPageSize }
-                totalItems={ data!.totalItems }
+                totalItems={ data?.totalItems ?? 0 }
               />
             </Split>
+            <Button
+              onClick={ handleApplySelectionClick }
+              type="primary"
+            >
+              Apply selection
+            </Button>
           </Toolbar>
             }
         renderTopBar={
@@ -93,6 +103,11 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
           <Grid
             columns={ columns }
             data={ data?.items ?? [] }
+            enableMultipleRowSelection
+            isLoading={ isLoading }
+            onSelectedRowsChange={ (row: RowSelectionState) => { setSelectedItems(row) } }
+            selectedRows={ selectedItems }
+            setRowId={ (row) => row.id }
           />
         </Box>
       </ContentLayout>

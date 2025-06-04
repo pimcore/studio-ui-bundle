@@ -15,6 +15,10 @@ import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/objec
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { BaseView } from '../../../layout-related/views/base-view'
 import { type ClassificationStoreGroup } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { Button } from '@Pimcore/components/button/button'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { useKeyedList } from '@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list'
 
 type ClassificationStoreGroupWithKeys = ClassificationStoreGroup & {
   keys?: any[]
@@ -27,8 +31,16 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
   const { groupLayout } = props
 
   const { name } = useItem()
-  const fieldName = isArray(name) ? name[name.length - 1] : name
+  const { operations } = useKeyedList()
   const { id } = useElementContext()
+
+  const fieldName: string = isArray(name) ? name[name.length - 1] : name
+
+  const handleItemDelete = (e): void => {
+    e.stopPropagation()
+
+    operations.remove(`${groupLayout?.id}`)
+  }
 
   return useMemo(() => {
     return (
@@ -36,6 +48,17 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
         border={ false }
         collapsed={ false }
         collapsible
+        extra={ (
+          <Flex className='w-full'>
+            <Button
+              color="default"
+              icon={ <Icon value="trash" /> }
+              onClick={ handleItemDelete }
+              variant="filled"
+            />
+          </Flex>
+        ) }
+        extraPosition="start"
         theme='border-highlight'
         title={ groupLayout?.name }
       >

@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { get, isArray, isEmpty, isEqual, isPlainObject } from 'lodash'
+import { forEach, get, isArray, isEmpty, isEqual, isPlainObject, isUndefined, keys, union } from 'lodash'
 import { type NamePath } from 'antd/es/form/interface'
 import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
 import { Form } from '@Pimcore/components/form/form'
@@ -17,7 +17,7 @@ import { ClassificationStoreContent } from './classification-store-content'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
-import { filterInheritedFields, getMergedValue } from './utils/group-value'
+import { DELETED, filterInheritedFields, getMergedValue } from './utils/group-value'
 import { ClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
 
 export interface ClassificationStoreProps extends AbstractObjectDataDefinition {
@@ -39,6 +39,7 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
 
   const [isOpenModal, setIsOpenModal] = useState(false)
   const valueRef = useRef(value)
+  const deletedGroupsRef = useRef(new Set<string>())
   const changedFieldsRef = useRef<Set<string>>(new Set())
 
   const { id } = useElementContext()
@@ -73,7 +74,7 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
 
   const onChange = (changedValue: any): void => {
     const filteredValue = filterInheritedFields(changedValue, isInherited)
-    /* const allGroupNames = union([...keys(originalValue), ...keys(valueRef.current)])
+    const allGroupNames = union([...keys(originalValue), ...keys(valueRef.current)])
 
     forEach(allGroupNames, key => {
       if (isUndefined(filteredValue[key])) {
@@ -85,7 +86,7 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
 
     forEach(Array.from(deletedGroupsRef.current.keys()), key => {
       filteredValue[key] = { action: DELETED }
-    }) */
+    })
 
     const newValue = isEmpty(filteredValue) ? [] : filteredValue
 
