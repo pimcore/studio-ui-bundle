@@ -19,6 +19,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { usePredefinedProperties } from './hooks/use-predefined-properties'
 import { Table } from './table/table'
 import { Button, ModalFooter, useModal } from '@sdk/components'
+import { PredefinedPropertyProvider } from './predefined-properties-provider'
 
 export type Mode = 'create' | 'update'
 
@@ -68,7 +69,7 @@ const PredefinedPropertiesContainer = (): React.JSX.Element => {
               </MandatoryModal>
               </div>)
 
-  return (
+  const content = (
     <ContentLayout
       renderToolbar={
         <Toolbar theme="secondary">
@@ -110,6 +111,12 @@ const PredefinedPropertiesContainer = (): React.JSX.Element => {
         showMandatoryModal={ showMandatoryModal }/>
 </Content>
     </ContentLayout>
+  )
+
+  return (
+    <PredefinedPropertyProvider>
+{content}
+</PredefinedPropertyProvider>
   )
 }
 

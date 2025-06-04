@@ -1,30 +1,30 @@
 import React, { createContext, useContext, useState } from 'react'
 import { PredefinedProperty } from '@sdk/api/properties'
 
-export type GlobalProperty = PredefinedProperty & { rowId: string }
+export type PredefinedPropertyWithId = PredefinedProperty & { rowId: string }
 
-interface PredefinedPropertyContext {
-  properties: GlobalProperty[]
-  setProperties: (properties: GlobalProperty[]) => void
-  addProperty: (property: GlobalProperty) => void
-  updateProperty: (key: string, updatedProperty: GlobalProperty) => void
+interface IPredefinedPropertyContext {
+  properties: PredefinedPropertyWithId[]
+  setProperties: (properties: PredefinedPropertyWithId[]) => void
+  addProperty: (property: PredefinedPropertyWithId) => void
+  updateProperty: (key: string, updatedProperty: PredefinedPropertyWithId) => void
   removeProperty: (key: string) => void
 }
 
-const PredefinedPropertyContext = createContext<PredefinedPropertyContext | undefined>(undefined)
+export const PredefinedPropertyContext = createContext<IPredefinedPropertyContext | undefined>(undefined)
 
 export const PredefinedPropertyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [properties, setPropertiesState] = useState<GlobalProperty[]>([])
+  const [properties, setPropertiesState] = useState<PredefinedPropertyWithId[]>([])
 
-  const setProperties = (props: GlobalProperty[]) => {
+  const setProperties = (props: PredefinedPropertyWithId[]) => {
     setPropertiesState(props)
   }
 
-  const addProperty = (property: GlobalProperty) => {
+  const addProperty = (property: PredefinedPropertyWithId) => {
     setPropertiesState(prev => [...prev, property])
   }
 
-  const updateProperty = (key: string, updatedProperty: GlobalProperty) => {
+  const updateProperty = (key: string, updatedProperty: PredefinedPropertyWithId) => {
     setPropertiesState(prev =>
       prev.map(prop => (prop.key === key ? updatedProperty : prop))
     )
@@ -43,10 +43,3 @@ export const PredefinedPropertyProvider: React.FC<{ children: React.ReactNode }>
   )
 }
 
-export const useGlobalProperties = (): PredefinedPropertyContext => {
-  const context = useContext(PredefinedPropertyContext)
-  if (!context) {
-    throw new Error('useGlobalProperties must be used within a GlobalPropertiesProvider')
-  }
-  return context
-}

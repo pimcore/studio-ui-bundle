@@ -1,15 +1,19 @@
-import { useAppDispatch, useAppSelector } from '@sdk/app'
-import { addProperty, setProperties, updateProperty, removeProperty } from '../global-properties-slice'
+import { useContext } from 'react'
+import { PredefinedPropertyContext, PredefinedPropertyWithId } from '../predefined-properties-provider'
 
-export const useGlobalProperties = () => {
-  const dispatch = useAppDispatch()
-  const properties = useAppSelector(state => state.globalProperties.properties)
+interface UsePredefinedPropertyReturn {
+  properties: PredefinedPropertyWithId[]
+  setProperties: (properties: PredefinedPropertyWithId[]) => void
+  addProperty: (property: PredefinedPropertyWithId) => void
+  updateProperty: (key: string, updatedProperty: PredefinedPropertyWithId) => void
+  removeProperty: (key: string) => void
+}
 
-  return {
-    properties,
-    addProperty: (property) => dispatch(addProperty(property)),
-    setProperties: (properties) => dispatch(setProperties(properties)),
-    updateProperty: (key, updatedProperty) => dispatch(updateProperty({ key, updatedProperty })),
-    removeProperty: (key) => dispatch(removeProperty(key))
+export const usePredefinedProperty = (): UsePredefinedPropertyReturn => {
+  const context = useContext(PredefinedPropertyContext)
+  if (context === undefined) {
+    throw new Error('usePredefinedProperty must be used within a PredefinedPropertyProvider')
   }
+
+  return context
 }

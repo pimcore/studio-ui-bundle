@@ -8,8 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
@@ -20,87 +19,53 @@ import { usePredefinedProperties } from '../hooks/use-predefined-properties'
 import { PredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
 import { IconButton } from '@sdk/components'
 import { verifyUpdate } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/verify-cell-update'
-import { useSelector } from 'react-redux'
-import { useGlobalProperties } from '../hooks/use-global-properties'
+import { usePredefinedProperty } from '../hooks/use-global-properties'
 
-type PredefinedPropertyWithActions = PredefinedProperty & {
-  actions: React.ReactNode
-}
+type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
 
 interface ITableProps {
   showDuplicatePropertyModal: () => void
   showMandatoryModal: () => void
 }
 
-export const Table = ({showDuplicatePropertyModal, showMandatoryModal}:ITableProps): React.JSX.Element => {
+export const Table = ({ showDuplicatePropertyModal, showMandatoryModal }: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
-  // const { openElement, mapToElementType } = useElementHelper()
   const { styles } = useStyles()
   const { predefinedProperties, isLoading } = usePredefinedProperties()
-  const [gridDataOwn, setGridDataOwn] = useState<PredefinedProperty[]>([])
-  // const modifiedCellsType = 'properties'
-  // const modifiedCells = element?.modifiedCells[modifiedCellsType] ?? []
 
-const { properties, setProperties, updateProperty} = useGlobalProperties()
-  const arePropertiesAvailable = properties !== undefined
-
-console.log("global props", properties);
-
-    const enrichPredefinedProperties = (predefinedProperties: PredefinedProperty[]): PredefinedProperty[] => {
-      return predefinedProperties.map((item) => {
-        return {
-          ...item,
-          rowId: uuid()
-        }
-      })
-    }
-
-      useEffect(() => {
-        if (predefinedProperties !== undefined &&  Array.isArray(predefinedProperties)) {
-          setProperties(enrichPredefinedProperties(predefinedProperties))
-        }
-      }, [predefinedProperties])
+  const { properties, setProperties, updateProperty } = usePredefinedProperty()
 
   useEffect(() => {
-    if (arePropertiesAvailable) {
-      setGridDataOwn(properties)
+    if (predefinedProperties && Array.isArray(predefinedProperties)) {
+      const enriched = predefinedProperties.map(item => ({ ...item, rowId: uuid() }))
+      setProperties(enriched)
     }
-  }, [properties])
+  }, [predefinedProperties, setProperties])
 
-
-  console.log("predefined Pros", predefinedProperties);
-  
   const columnHelper = createColumnHelper<PredefinedPropertyWithActions>()
-  const createColumns = (): any => [
-      columnHelper.accessor('name', {
+
+  const tableColumns = [
+    columnHelper.accessor('name', {
       header: t('properties.columns.name'),
       size: 200
     }),
-      columnHelper.accessor('description', {
+    columnHelper.accessor('description', {
       header: t('properties.columns.description'),
       size: 200
     }),
-      columnHelper.accessor('key', {
+    columnHelper.accessor('key', {
       header: t('properties.columns.key'),
-      meta: {
-        editable: true
-      },
+      meta: { editable: true },
       size: 200
     }),
     columnHelper.accessor('type', {
       header: t('properties.columns.type'),
-      meta: {
-        editable: false
-      },
+      meta: { editable: false },
       size: 100
-     }),
+    }),
     columnHelper.accessor('data', {
       header: t('properties.columns.data'),
-      meta: {
-        type: 'property-value',
-        editable: true,
-        autoWidth: true
-      },
+      meta: { type: 'property-value', editable: true, autoWidth: true },
       size: 250
     }),
     columnHelper.accessor('config', {
@@ -114,67 +79,41 @@ console.log("global props", properties);
     columnHelper.accessor('inheritable', {
       header: t('properties.columns.inheritable'),
       size: 74,
-      meta: {
-        type: 'checkbox',
-        editable: true,
-        config: {
-          align: 'center'
-        }
-      }
+      meta: { type: 'checkbox', editable: true, config: { align: 'center' } }
     }),
     columnHelper.accessor('actions', {
       header: t('properties.columns.actions'),
       size: 70,
-      cell: (info) => {
-        return (
-          <div className={ 'properties-table--actions-column' }>
-             <IconButton
-                icon={ { value: 'translate' } }
-                onClick={ () => console.log("translate")}
-                type="link"
-              />
-              <IconButton
-                icon={ { value: 'trash' } }
-                onClick={ () => console.log("remove prop")}
-                type="link"
-              />
-          </div>
-        )
-      }
+      cell: () => (
+        <div className="properties-table--actions-column">
+          <IconButton icon={{ value: 'translate' }} onClick={() => console.log('translate')} type="link" />
+          <IconButton icon={{ value: 'trash' }} onClick={() => console.log('remove prop')} type="link" />
+        </div>
+      )
     })
   ]
 
-  const tableColumns = [
-    ...createColumns()
-  ]
-
   const onUpdateCellData = ({ rowIndex, columnId, value, rowData }): void => {
-    const updatedProperties = [...(predefinedProperties ?? [])]
-    const propertyIndex = updatedProperties.findIndex((property) => property.key === rowData.key)
-    const updatedProperty = { ...updatedProperties.at(propertyIndex)!, [columnId]: value }
-    updatedProperties[propertyIndex] = updatedProperty
-    const hasDuplicate = updatedProperties.filter(property => property.key === updatedProperty.key).length > 1
+    const updatedProperty = { ...rowData, [columnId]: value }
+    const hasDuplicate = properties.filter(property => property.key === updatedProperty.key).length > 1
 
-    console.log("updatedProperty", updatedProperty);
-    
     if (verifyUpdate(value, columnId, 'key', hasDuplicate, showMandatoryModal, showDuplicatePropertyModal)) {
       updateProperty(rowData.key as string, updatedProperty)
-      // setModifiedCells(modifiedCellsType, [...modifiedCells, { rowIndex: rowData.rowId, columnId }])
     }
   }
 
   return (
-    <div className={ styles.table }>
-            <Grid
-              autoWidth
-              columns={ tableColumns }
-              data={ gridDataOwn }
-              isLoading={ isLoading }
-              modifiedCells={ []}
-              onUpdateCellData={ onUpdateCellData}
-              resizable
-              setRowId={ (row: DataProperty) => row.rowId }
-            />
+    <div className={styles.table}>
+      <Grid
+        autoWidth
+        columns={tableColumns}
+        data={properties}
+        isLoading={isLoading}
+        modifiedCells={[]}
+        onUpdateCellData={onUpdateCellData}
+        resizable
+        setRowId={(row: DataProperty) => row.rowId}
+      />
     </div>
   )
 }
