@@ -8,6 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+if (module.hot !== undefined) {
+  module.hot.accept()
+}
+
 export * from '@Pimcore/modules/element/actions/add-folder/use-add-folder'
 export * from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 export * from '@Pimcore/modules/element/actions/delete/use-delete'
