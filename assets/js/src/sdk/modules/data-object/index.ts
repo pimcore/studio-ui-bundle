@@ -8,6 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+if (module.hot !== undefined) {
+  module.hot.accept()
+}
+
 export * from '@Pimcore/modules/data-object/actions/add-object/use-add-object'
 export * from '@Pimcore/modules/data-object/actions/delete-draft/use-delete-draft'
 export * from '@Pimcore/modules/data-object/actions/save/use-save'

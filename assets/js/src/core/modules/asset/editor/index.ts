@@ -29,6 +29,9 @@ import { CustomMetadataTabContainer } from './shared-tab-manager/tabs/custom-met
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { AssetVersionsTabContainer } from './shared-tab-manager/tabs/versions/tab-container'
 import { EmbeddedMetadataTabContainer } from './shared-tab-manager/tabs/embedded-metadata/embedded-metadata-container'
+import { EditorToolbarContextMenu as AssetEditorToolbarContextMenu } from '@Pimcore/modules/asset/editor/toolbar/context-menu/context-menu'
+import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
+import { EditorToolbarSaveButton as AssetEditorToolbarSaveButton } from '@Pimcore/modules/asset/editor/toolbar/save-button/save-button'
 import { EditorContainer } from './editor-container'
 
 moduleSystem.registerModule({
@@ -99,6 +102,24 @@ moduleSystem.registerModule({
     componentRegistry.register({
       name: componentConfig.asset.editor.tab.versions.name,
       component: AssetVersionsTabContainer
+    })
+
+    componentRegistry.registerToSlot('asset.editor.toolbar.slots.left', {
+      name: 'contextMenu',
+      priority: 100,
+      component: AssetEditorToolbarContextMenu
+    })
+
+    componentRegistry.registerToSlot('asset.editor.toolbar.slots.right', {
+      name: 'workflowMenu',
+      priority: 100,
+      component: EditorToolbarWorkflowMenu
+    })
+
+    componentRegistry.registerToSlot('asset.editor.toolbar.slots.right', {
+      name: 'saveButton',
+      priority: 200,
+      component: AssetEditorToolbarSaveButton
     })
   }
 })

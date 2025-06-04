@@ -8,6 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+if (module.hot !== undefined) {
+  module.hot.accept()
+}
+
 export * from '@Pimcore/modules/user/hooks/use-global-user-context'
 export * from '@Pimcore/modules/user/hooks/use-user-draft'
 export * from '@Pimcore/modules/user/hooks/use-user-helper'
