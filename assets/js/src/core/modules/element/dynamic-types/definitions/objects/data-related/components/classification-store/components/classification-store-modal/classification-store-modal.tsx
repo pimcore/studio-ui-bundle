@@ -20,8 +20,8 @@ import { CollectionTab } from './tabs/collection/collection-tab'
 import { GroupTab } from './tabs/group/group-tab'
 import { GroupByKeyTab } from './tabs/group-by-key/group-by-key-tab'
 import {
-  SearchProvider
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/provider/search-provider'
+  ClassificationStoreProvider
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classification-store-provider'
 
 interface ClassificationStoreModalProps extends ClassificationStoreProps {
   isOpen: boolean
@@ -85,13 +85,13 @@ export const ClassificationStoreModal = (props: ClassificationStoreModalProps): 
           open={ isOpen }
           size={ 'XL' }
         >
-          <SearchProvider>
+          <ClassificationStoreProvider>
             <Tabs
               destroyInactiveTabPane
               items={ tabItems }
               noTabBarMargin
             />
-          </SearchProvider>
+          </ClassificationStoreProvider>
         </Modal>
       )}
     </>

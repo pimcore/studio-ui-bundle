@@ -21,7 +21,7 @@ export interface SearchProviderProps {
   children: React.ReactNode
 }
 
-export const SearchProvider = ({ children }: SearchProviderProps): React.JSX.Element => {
+export const ClassificationStoreProvider = ({ children }: SearchProviderProps): React.JSX.Element => {
   const [searchValues, setSearchValues] = useState<Record<string, string>>({})
 
   const getSearchValue = useCallback((tabId: string): string => {

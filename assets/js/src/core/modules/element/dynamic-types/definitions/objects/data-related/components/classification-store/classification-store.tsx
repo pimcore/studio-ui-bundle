@@ -117,14 +117,14 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
           openAddModal={ () => { setIsOpenModal(true) } }
           { ...props }
         />
+        <ClassificationStoreModal
+          close={ () => { setIsOpenModal(false) } }
+          fieldName={ fieldName }
+          isOpen={ isOpenModal }
+          objectId={ id }
+          { ...props }
+        />
       </Form.KeyedList>
-      <ClassificationStoreModal
-        close={ () => { setIsOpenModal(false) } }
-        fieldName={ fieldName }
-        isOpen={ isOpenModal }
-        objectId={ id }
-        { ...props }
-      />
     </>
   )
 }

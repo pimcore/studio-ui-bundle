@@ -9,18 +9,18 @@
  */
 
 import { useContext } from 'react'
-import { SearchContext } from './search-provider'
+import { SearchContext } from './classification-store-provider'
 
 export interface UseSearchReturn {
   setSearchValue: (tabId: string, value: string) => void
   getSearchValue: (tabId: string) => string
 }
 
-export const useSearch = (): UseSearchReturn => {
+export const useClassificationStore = (): UseSearchReturn => {
   const context = useContext(SearchContext)
 
   if (context === undefined) {
-    throw new Error('useSearch must be used within a SearchProvider')
+    throw new Error('useClassificationStore must be used within a ClassificationStoreProvider')
   }
 
   return {

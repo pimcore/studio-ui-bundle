@@ -19,8 +19,8 @@ import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { useSearch } from '../../provider/use-search'
 import { Button } from '@Pimcore/components/button/button'
+import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/use-classification-store'
 
 interface ClassificationStoreDataTabProps<T> {
   tabId: 'collection' | 'group' | 'group-by-key'
@@ -35,7 +35,7 @@ interface ClassificationStoreDataTabProps<T> {
 }
 
 export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, columns }: ClassificationStoreDataTabProps<T>): React.JSX.Element => {
-  const { getSearchValue, setSearchValue } = useSearch()
+  const { getSearchValue, setSearchValue } = useClassificationStore()
 
   const [searchTerm, setSearchTerm] = useState(getSearchValue(tabId))
   const [searchQuery, setSearchQuery] = useState(getSearchValue(tabId))
@@ -55,7 +55,9 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
   }
 
   const handleApplySelectionClick = (): void => {
-    console.log('------>>>>>> selectedItems: ', selectedItems)
+    // const currentItem = find(data?.items, { id: 3 })
+
+    // operations.add('3')
   }
 
   return (
@@ -77,6 +79,7 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
               />
             </Split>
             <Button
+              disabled={ isFetching }
               onClick={ handleApplySelectionClick }
               type="primary"
             >
