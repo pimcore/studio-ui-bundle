@@ -9,6 +9,7 @@
  */
 
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { type RowSelectionState } from '@tanstack/react-table'
 import { Refetch } from '../refetch/refetch'
 import { Pagination } from '../pagination/pagination'
@@ -48,6 +49,7 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
     { ...queryArgs, page, pageSize, searchTerm },
     { refetchOnMountOrArgChange: true }
   )
+  const { t } = useTranslation()
 
   const handleSearch = (value: string): void => {
     setSearchValue(tabId, value)
@@ -83,7 +85,7 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
               onClick={ handleApplySelectionClick }
               type="primary"
             >
-              Apply selection
+              {t('common.apply-selection')}
             </Button>
           </Toolbar>
             }
