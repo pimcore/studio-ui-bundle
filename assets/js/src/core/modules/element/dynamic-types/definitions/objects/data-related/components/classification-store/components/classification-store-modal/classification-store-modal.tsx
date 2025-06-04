@@ -39,52 +39,34 @@ export const ClassificationStoreModal = (props: ClassificationStoreModalProps): 
     fieldName
   }
 
+  const renderTabLabel = ({ iconValue, titleKeyValue }: { iconValue: string, titleKeyValue: string }): React.JSX.Element => {
+    return (
+      <Flex
+        align="center"
+        gap="mini"
+      >
+        <Icon
+          className={ styles.titleIcon }
+          value={ iconValue }
+        />
+        <div>{t(`classification-store.${titleKeyValue}`)}</div>
+      </Flex>
+    )
+  }
+
   const tabItems: ITabsProps['items'] = [
     {
-      label: (
-        <Flex
-          align="center"
-          gap="mini"
-        >
-          <Icon
-            className={ styles.titleIcon }
-            value="keyboard"
-          />
-          <div>{t('classification-store.collection')}</div>
-        </Flex>
-      ),
+      label: renderTabLabel({ iconValue: 'keyboard', titleKeyValue: 'collection' }),
       key: 'collection',
       children: <CollectionTab { ...tabProps } />
     },
     {
-      label: (
-        <Flex
-          align="center"
-          gap="mini"
-        >
-          <Icon
-            className={ styles.titleIcon }
-            value="keys"
-          />
-          <div>{t('classification-store.group')}</div>
-        </Flex>
-      ),
+      label: renderTabLabel({ iconValue: 'keys', titleKeyValue: 'group' }),
       key: 'group',
       children: <GroupTab { ...tabProps } />
     },
     {
-      label: (
-        <Flex
-          align="center"
-          gap="mini"
-        >
-          <Icon
-            className={ styles.titleIcon }
-            value="key"
-          />
-          <div>{t('classification-store.group-by-key')}</div>
-        </Flex>
-      ),
+      label: renderTabLabel({ iconValue: 'key', titleKeyValue: 'group-by-key' }),
       key: 'group-by-key',
       children: <GroupByKeyTab { ...tabProps } />
     }

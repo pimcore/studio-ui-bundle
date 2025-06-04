@@ -30,11 +30,7 @@ interface ClassificationStoreDataTabProps<T> {
   columns: any[]
 }
 
-export const ClassificationStoreDataTab = <T,>({
-  queryHook,
-  queryArgs,
-  columns
-}: ClassificationStoreDataTabProps<T>): React.JSX.Element => {
+export const ClassificationStoreDataTab = <T,>({ queryHook, queryArgs, columns }: ClassificationStoreDataTabProps<T>): React.JSX.Element => {
   const [searchTerm, setSearchTerm] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [page, setPage] = useState(1)
