@@ -47,10 +47,12 @@ export const Table = ({ showDuplicatePropertyModal, showMandatoryModal }: ITable
   const tableColumns = [
     columnHelper.accessor('name', {
       header: t('properties.columns.name'),
+      meta: { editable: true },
       size: 200
     }),
     columnHelper.accessor('description', {
       header: t('properties.columns.description'),
+      meta: { editable: true },
       size: 200
     }),
     columnHelper.accessor('key', {
@@ -60,7 +62,7 @@ export const Table = ({ showDuplicatePropertyModal, showMandatoryModal }: ITable
     }),
     columnHelper.accessor('type', {
       header: t('properties.columns.type'),
-      meta: { editable: false },
+      meta: { editable: true },
       size: 100
     }),
     columnHelper.accessor('data', {
@@ -70,10 +72,12 @@ export const Table = ({ showDuplicatePropertyModal, showMandatoryModal }: ITable
     }),
     columnHelper.accessor('config', {
       header: t('properties.columns.configuration'),
+      meta: { editable: true },
       size: 200
     }),
     columnHelper.accessor('ctype', {
       header: t('properties.columns.content-type'),
+      meta: { editable: true },
       size: 100
     }),
     columnHelper.accessor('inheritable', {
@@ -93,7 +97,7 @@ export const Table = ({ showDuplicatePropertyModal, showMandatoryModal }: ITable
     })
   ]
 
-  const onUpdateCellData = ({ rowIndex, columnId, value, rowData }): void => {
+  const onUpdateCellData = ({ columnId, value, rowData }): void => {
     const updatedProperty = { ...rowData, [columnId]: value }
     const hasDuplicate = properties.filter(property => property.key === updatedProperty.key).length > 1
 
