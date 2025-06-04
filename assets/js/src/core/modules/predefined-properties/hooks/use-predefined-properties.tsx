@@ -8,10 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { PredefinedProperty, usePropertyGetCollectionQuery } from "@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced"
-import { useContext, useEffect } from "react"
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { PredefinedProperty } from "@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced"
+import { useContext, useState, useEffect } from "react"
 import { PredefinedPropertyContext, PredefinedPropertyWithId } from "../predefined-properties-provider"
+import { uuid } from '@Pimcore/utils/uuid'
 
 interface UsePredefinedPropertiesReturn {
   predefinedProperties: PredefinedProperty[] | undefined
@@ -24,18 +24,37 @@ interface UsePredefinedPropertiesReturn {
 }
 
 export const usePredefinedProperties = (): UsePredefinedPropertiesReturn => {
-  
-    const context = useContext(PredefinedPropertyContext)
-    if (context === undefined) {
-      throw new Error('usePredefinedProperty must be used within a PredefinedPropertyProvider')
-    }
-      
-  const { data, isLoading, isError, error } = usePropertyGetCollectionQuery({})
-  
-  useEffect(() => {
-    if (isError) {
-      trackError(new ApiError(error))}
-    },[isError])
+  const context = useContext(PredefinedPropertyContext)
+  if (context === undefined) {
+    throw new Error('usePredefinedProperties must be used within a PredefinedPropertyProvider')
+  }
 
-    return { predefinedProperties: data?.items, isLoading, ...context}
+  const { predefinedProperties, isLoading } = context
+  const [properties, setPropertiesState] = useState<PredefinedPropertyWithId[]>([])
+
+  useEffect(() => {
+    if (predefinedProperties && Array.isArray(predefinedProperties)) {
+      const enriched = predefinedProperties.map(item => ({
+        ...item,
+        rowId: uuid()
+      }))
+      setPropertiesState(enriched)
+    }
+  }, [predefinedProperties])
+
+  const setProperties = (props: PredefinedPropertyWithId[]) => setPropertiesState(props)
+  const addProperty = (property: PredefinedPropertyWithId) => setPropertiesState(prev => [...prev, property])
+  const updateProperty = (key: string, updatedProperty: PredefinedPropertyWithId) =>
+    setPropertiesState(prev => prev.map(prop => (prop.key === key ? updatedProperty : prop)))
+  const removeProperty = (key: string) => setPropertiesState(prev => prev.filter(prop => prop.key !== key))
+
+  return {
+    predefinedProperties,
+    isLoading,
+    properties,
+    setProperties,
+    addProperty,
+    updateProperty,
+    removeProperty,
+  }
 }
