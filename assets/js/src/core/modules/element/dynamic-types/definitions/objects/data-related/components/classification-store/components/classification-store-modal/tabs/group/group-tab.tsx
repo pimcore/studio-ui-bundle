@@ -11,18 +11,18 @@
 import React from 'react'
 import { createColumnHelper } from '@tanstack/react-table'
 import {
-  type ClassificationStoreGetCollectionsApiArg,
-  useClassificationStoreGetCollectionsQuery
+  type ClassificationStoreGetGroupsApiArg,
+  useClassificationStoreGetGroupsQuery
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 import { ClassificationStoreDataTab } from '../../components/classification-store-data-tab/classification-store-data-tab'
 
 interface CollectionTabProps {
-  storeId: ClassificationStoreGetCollectionsApiArg['storeId']
-  objectId: ClassificationStoreGetCollectionsApiArg['objectId']
-  fieldName: ClassificationStoreGetCollectionsApiArg['fieldName']
+  storeId: ClassificationStoreGetGroupsApiArg['storeId']
+  objectId: ClassificationStoreGetGroupsApiArg['objectId']
+  fieldName: ClassificationStoreGetGroupsApiArg['fieldName']
 }
 
-export const CollectionTab = (props: CollectionTabProps): React.JSX.Element => {
+export const GroupTab = (props: CollectionTabProps): React.JSX.Element => {
   const columnHelper = createColumnHelper()
 
   const columns = [
@@ -39,7 +39,7 @@ export const CollectionTab = (props: CollectionTabProps): React.JSX.Element => {
         objectId: props.objectId,
         fieldName: props.fieldName
       } }
-      queryHook={ useClassificationStoreGetCollectionsQuery }
+      queryHook={ useClassificationStoreGetGroupsQuery }
     />
   )
 }

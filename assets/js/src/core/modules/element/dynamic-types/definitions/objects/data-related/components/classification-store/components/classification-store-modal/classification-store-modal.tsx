@@ -17,6 +17,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { type ClassificationStoreProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/classification-store'
 import { useStyles } from './classification-store-modal.styles'
 import { CollectionTab } from './tabs/collection/collection-tab'
+import { GroupTab } from './tabs/group/group-tab'
 
 interface ClassificationStoreModalProps extends ClassificationStoreProps {
   isOpen: boolean
@@ -30,6 +31,12 @@ export const ClassificationStoreModal = (props: ClassificationStoreModalProps): 
 
   const { t } = useTranslation()
   const { styles } = useStyles()
+
+  const tabProps = {
+    storeId,
+    objectId,
+    fieldName
+  }
 
   const tabItems: ITabsProps['items'] = [
     {
@@ -46,13 +53,7 @@ export const ClassificationStoreModal = (props: ClassificationStoreModalProps): 
         </Flex>
       ),
       key: 'collection',
-      children: (
-        <CollectionTab
-          fieldName={ fieldName }
-          objectId={ objectId }
-          storeId={ storeId }
-        />
-      )
+      children: <CollectionTab { ...tabProps } />
     },
     {
       label: (
@@ -68,7 +69,7 @@ export const ClassificationStoreModal = (props: ClassificationStoreModalProps): 
         </Flex>
       ),
       key: 'group',
-      children: <div>Group</div>
+      children: <GroupTab { ...tabProps } />
     },
     {
       label: (
