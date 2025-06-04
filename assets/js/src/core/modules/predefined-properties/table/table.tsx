@@ -20,6 +20,8 @@ import { usePredefinedProperties } from '../hooks/use-predefined-properties'
 import { PredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
 import { IconButton } from '@sdk/components'
 import { verifyUpdate } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/verify-cell-update'
+import { useSelector } from 'react-redux'
+import { useGlobalProperties } from '../hooks/use-global-properties'
 
 type PredefinedPropertyWithActions = PredefinedProperty & {
   actions: React.ReactNode
@@ -35,11 +37,14 @@ export const Table = ({showDuplicatePropertyModal, showMandatoryModal}:ITablePro
   // const { openElement, mapToElementType } = useElementHelper()
   const { styles } = useStyles()
   const { predefinedProperties, isLoading } = usePredefinedProperties()
-  const arePredefinedPropertiesAvailable = predefinedProperties !== undefined
-
   const [gridDataOwn, setGridDataOwn] = useState<PredefinedProperty[]>([])
   // const modifiedCellsType = 'properties'
   // const modifiedCells = element?.modifiedCells[modifiedCellsType] ?? []
+
+const { properties, setProperties, updateProperty} = useGlobalProperties()
+  const arePropertiesAvailable = properties !== undefined
+
+console.log("global props", properties);
 
     const enrichPredefinedProperties = (predefinedProperties: PredefinedProperty[]): PredefinedProperty[] => {
       return predefinedProperties.map((item) => {
@@ -50,12 +55,17 @@ export const Table = ({showDuplicatePropertyModal, showMandatoryModal}:ITablePro
       })
     }
 
+      useEffect(() => {
+        if (predefinedProperties !== undefined &&  Array.isArray(predefinedProperties)) {
+          setProperties(enrichPredefinedProperties(predefinedProperties))
+        }
+      }, [predefinedProperties])
 
   useEffect(() => {
-    if (arePredefinedPropertiesAvailable) {
-      setGridDataOwn(enrichPredefinedProperties(predefinedProperties))
+    if (arePropertiesAvailable) {
+      setGridDataOwn(properties)
     }
-  }, [predefinedProperties])
+  }, [properties])
 
 
   console.log("predefined Pros", predefinedProperties);
@@ -145,8 +155,10 @@ export const Table = ({showDuplicatePropertyModal, showMandatoryModal}:ITablePro
     updatedProperties[propertyIndex] = updatedProperty
     const hasDuplicate = updatedProperties.filter(property => property.key === updatedProperty.key).length > 1
 
+    console.log("updatedProperty", updatedProperty);
+    
     if (verifyUpdate(value, columnId, 'key', hasDuplicate, showMandatoryModal, showDuplicatePropertyModal)) {
-      // updateProperty(rowData.key as string, updatedProperty)
+      updateProperty(rowData.key as string, updatedProperty)
       // setModifiedCells(modifiedCellsType, [...modifiedCells, { rowIndex: rowData.rowId, columnId }])
     }
   }
