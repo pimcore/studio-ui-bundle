@@ -28,9 +28,8 @@ export interface TreeAction {
   icon: string
 }
 
-const PredefinedPropertiesContainer = (): React.JSX.Element => {
-
- const {predefinedProperties, isLoading} = usePredefinedProperties()
+const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
+  const {predefinedProperties, isLoading} = usePredefinedProperties()
 
    const {
      showModal: showDuplicatePropertyModal,
@@ -113,11 +112,13 @@ const PredefinedPropertiesContainer = (): React.JSX.Element => {
     </ContentLayout>
   )
 
-  return (
-    <PredefinedPropertyProvider>
-{content}
-</PredefinedPropertyProvider>
-  )
+  return content
 }
+
+const PredefinedPropertiesContainer = (): React.JSX.Element => (
+  <PredefinedPropertyProvider>
+    <PredefinedPropertiesContainerInner />
+  </PredefinedPropertyProvider>
+)
 
 export { PredefinedPropertiesContainer }

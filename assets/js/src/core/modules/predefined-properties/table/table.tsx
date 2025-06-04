@@ -19,7 +19,6 @@ import { usePredefinedProperties } from '../hooks/use-predefined-properties'
 import { PredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
 import { IconButton } from '@sdk/components'
 import { verifyUpdate } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/verify-cell-update'
-import { usePredefinedProperty } from '../hooks/use-global-properties'
 
 type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
 
@@ -31,9 +30,7 @@ interface ITableProps {
 export const Table = ({ showDuplicatePropertyModal, showMandatoryModal }: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const { predefinedProperties, isLoading } = usePredefinedProperties()
-
-  const { properties, setProperties, updateProperty } = usePredefinedProperty()
+  const { predefinedProperties, isLoading, properties, setProperties, updateProperty } = usePredefinedProperties()
 
   useEffect(() => {
     if (predefinedProperties && Array.isArray(predefinedProperties)) {
@@ -42,6 +39,8 @@ export const Table = ({ showDuplicatePropertyModal, showMandatoryModal }: ITable
     }
   }, [predefinedProperties, setProperties])
 
+  console.log("predefinedProperties", predefinedProperties);
+  
   const columnHelper = createColumnHelper<PredefinedPropertyWithActions>()
 
   const tableColumns = [

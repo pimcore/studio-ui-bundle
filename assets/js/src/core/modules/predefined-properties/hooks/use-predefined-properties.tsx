@@ -9,16 +9,27 @@
  */
 
 import { PredefinedProperty, usePropertyGetCollectionQuery } from "@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced"
-import { useEffect } from "react"
+import { useContext, useEffect } from "react"
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { PredefinedPropertyContext, PredefinedPropertyWithId } from "../predefined-properties-provider"
 
 interface UsePredefinedPropertiesReturn {
   predefinedProperties: PredefinedProperty[] | undefined
   isLoading: boolean
+  properties: PredefinedPropertyWithId[]
+  setProperties: (properties: PredefinedPropertyWithId[]) => void
+  addProperty: (property: PredefinedPropertyWithId) => void
+  updateProperty: (key: string, updatedProperty: PredefinedPropertyWithId) => void
+  removeProperty: (key: string) => void
 }
 
 export const usePredefinedProperties = (): UsePredefinedPropertiesReturn => {
   
+    const context = useContext(PredefinedPropertyContext)
+    if (context === undefined) {
+      throw new Error('usePredefinedProperty must be used within a PredefinedPropertyProvider')
+    }
+      
   const { data, isLoading, isError, error } = usePropertyGetCollectionQuery({})
   
   useEffect(() => {
@@ -26,5 +37,5 @@ export const usePredefinedProperties = (): UsePredefinedPropertiesReturn => {
       trackError(new ApiError(error))}
     },[isError])
 
-    return { predefinedProperties: data?.items, isLoading}
+    return { predefinedProperties: data?.items, isLoading, ...context}
 }
