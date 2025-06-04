@@ -16,13 +16,13 @@ import {
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 import { ClassificationStoreDataTab } from '../../components/classification-store-data-tab/classification-store-data-tab'
 
-interface CollectionTabProps {
+interface GroupTabProps {
   storeId: ClassificationStoreGetGroupsApiArg['storeId']
   objectId: ClassificationStoreGetGroupsApiArg['objectId']
   fieldName: ClassificationStoreGetGroupsApiArg['fieldName']
 }
 
-export const GroupTab = (props: CollectionTabProps): React.JSX.Element => {
+export const GroupTab = (props: GroupTabProps): React.JSX.Element => {
   const columnHelper = createColumnHelper()
 
   const columns = [

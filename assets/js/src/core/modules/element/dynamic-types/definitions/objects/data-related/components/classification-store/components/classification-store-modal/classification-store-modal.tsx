@@ -18,6 +18,7 @@ import { type ClassificationStoreProps } from '@Pimcore/modules/element/dynamic-
 import { useStyles } from './classification-store-modal.styles'
 import { CollectionTab } from './tabs/collection/collection-tab'
 import { GroupTab } from './tabs/group/group-tab'
+import { GroupByKeyTab } from './tabs/group-by-key/group-by-key-tab'
 
 interface ClassificationStoreModalProps extends ClassificationStoreProps {
   isOpen: boolean
@@ -85,7 +86,7 @@ export const ClassificationStoreModal = (props: ClassificationStoreModalProps): 
         </Flex>
       ),
       key: 'group-by-key',
-      children: <div>Group by key</div>
+      children: <GroupByKeyTab { ...tabProps } />
     }
   ]
 
