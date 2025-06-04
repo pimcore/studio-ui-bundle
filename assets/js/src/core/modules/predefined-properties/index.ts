@@ -45,7 +45,9 @@ moduleSystem.registerModule({
 
     widgetRegistryService.registerWidget({
       name: 'predefined-properties',
-      component: PredefinedPropertiesContainer
+      component: (<PredefinedPropertyProvider>
+      PredefinedPropertiesContainer
+      </PredefinedPropertyProvider>)
     })
   }
 })
