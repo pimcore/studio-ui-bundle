@@ -8,6 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+if (module.hot !== undefined) {
+  module.hot.accept()
+}
+
 export * from '@Pimcore/modules/asset/actions/clear-thumbnails/use-clear-thumbnails'
 export * from '@Pimcore/modules/asset/actions/download/use-download'
 export * from '@Pimcore/modules/asset/actions/upload-new-version/upload-new-version'

@@ -8,6 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+if (module.hot !== undefined) {
+  module.hot.accept()
+}
+
 export * from '@Pimcore/app/store'
 export * from '@Pimcore/app/config/app-config'
 export * from '@Pimcore/app/config/date-time'
