@@ -22,9 +22,10 @@ import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { Button } from '@Pimcore/components/button/button'
 import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/use-classification-store'
+import { type TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 
 interface ClassificationStoreDataTabProps<T> {
-  tabId: 'collection' | 'group' | 'group-by-key'
+  tabId: TabId
   queryHook: (args: any, options?: any) => {
     isLoading: boolean
     isFetching: boolean

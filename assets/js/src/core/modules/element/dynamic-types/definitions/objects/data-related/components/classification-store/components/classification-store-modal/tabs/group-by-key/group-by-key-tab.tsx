@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { createColumnHelper } from '@tanstack/react-table'
 import {
   type ClassificationStoreGetKeyGroupRelationsApiArg,
@@ -16,6 +17,7 @@ import {
   useClassificationStoreGetKeyGroupRelationsQuery
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 import { ClassificationStoreDataTab } from '../../components/classification-store-data-tab/classification-store-data-tab'
+import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 
 interface GroupByKeyTabProps {
   storeId: ClassificationStoreGetKeyGroupRelationsApiArg['storeId']
@@ -25,18 +27,19 @@ interface GroupByKeyTabProps {
 
 export const GroupByKeyTab = (props: GroupByKeyTabProps): React.JSX.Element => {
   const columnHelper = createColumnHelper<ClassificationStoreKeyGroupRelation>()
+  const { t } = useTranslation()
 
   const columns = [
     columnHelper.accessor(
       row => `${row.groupId}-${row.keyId}`,
       {
         id: 'groupId-keyId',
-        header: 'Id'
+        header: t('classification-store.column.id')
       }
     ),
-    columnHelper.accessor('groupName', { header: 'Group' }),
-    columnHelper.accessor('keyName', { header: 'Name' }),
-    columnHelper.accessor('keyDescription', { header: 'Description' })
+    columnHelper.accessor('groupName', { header: t('classification-store.column.group') }),
+    columnHelper.accessor('keyName', { header: t('classification-store.column.name') }),
+    columnHelper.accessor('keyDescription', { header: t('classification-store.column.description') })
   ]
 
   return (
@@ -48,7 +51,7 @@ export const GroupByKeyTab = (props: GroupByKeyTabProps): React.JSX.Element => {
         fieldName: props.fieldName
       } }
       queryHook={ useClassificationStoreGetKeyGroupRelationsQuery }
-      tabId="group-by-key"
+      tabId={ TabId.GroupByKey }
     />
   )
 }

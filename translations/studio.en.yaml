@@ -767,6 +767,10 @@ hotspots.has-hotspots-or-marker: Hotspots or markers have been added to this ite
 classification-store.collection: Collection
 classification-store.group: Group
 classification-store.group-by-key: Group by key
+classification-store.column.id: ID
+classification-store.column.group: Group
+classification-store.column.name: Name
+classification-store.column.description: Description
 home: Home
 preview.label: Preview
 inheritance-active: "Data inherited from object ID {{id}}"
