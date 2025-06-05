@@ -697,6 +697,9 @@ navigation.notes-and-events: Notes & Events
 navigation.file: File
 navigation.settings: Settings
 navigation.tools: Tools
+predefined-properties.new: New
+predefined-properties.type: Type
+predefined-properties.name: Name
 perspective.default: Default
 perspective.switching.title: Switching perspective
 perspective.switching.description: Currently switching to the following perspective

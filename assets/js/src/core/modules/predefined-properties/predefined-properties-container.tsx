@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useRef } from 'react'
 import { Title } from '@Pimcore/components/title/title'
 import { t } from 'i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -18,8 +18,11 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { usePredefinedProperties } from './hooks/use-predefined-properties'
 import { Table } from './table/table'
-import { Button, ModalFooter, useModal } from '@sdk/components'
+import { Button, IconTextButton, Input, ModalFooter, Select, useModal } from '@sdk/components'
 import { PredefinedPropertyProvider } from './predefined-properties-provider'
+import { serviceIds, useInjection } from '@sdk/app'
+import { DynamicTypeMetaDataRegistry } from '@sdk/modules/element'
+import { InputRef } from 'antd'
 
 export type Mode = 'create' | 'update'
 
@@ -30,6 +33,27 @@ export interface TreeAction {
 
 const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
   const {predefinedProperties, isLoading} = usePredefinedProperties()
+
+    const metadataTypeRegistry = useInjection<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
+    const typeSelectOptions = [...metadataTypeRegistry.getTypeSelectionTypes().keys()].map((type) => {
+      return { value: type, label: t('data-type.' + type.split('.')[1]) }
+    })
+    
+    const onAddNewPredefinedProperty = (): void => {
+      console.log("add new")
+    }
+
+    const nameInputValue = useRef<string>('')
+    const nameInputRef = useRef<InputRef>(null)
+    const typeSelectValue = useRef<string>('input')
+      
+      function onNameInputChange (event: React.ChangeEvent<HTMLInputElement>): void {
+        nameInputValue.current = event.target.value
+      }
+    
+      function onTypeSelectChange (value: string): void {
+        typeSelectValue.current = value
+      }
 
    const {
      showModal: showDuplicatePropertyModal,
@@ -75,9 +99,7 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
           <IconButton
             icon={ { value: 'refresh' } }
             onClick={ () => {
-        console.log("clicked");
-        
-            }
+        console.log("clicked")}
           }
           />
         </Toolbar> }
@@ -90,9 +112,29 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
           } }
           theme='secondary'
         >
-          <Flex gap={ 'small' }>
-            <Title titleClass={ 'm-none' }>{t('widget.predefined-properties')}</Title>
-          </Flex>
+                    <Flex gap={ 'small' }>
+                      <Title titleClass={ 'm-none' }>{t('widget.predefined-properties')}</Title>                      
+                                      <Input
+                                        onChange={ onNameInputChange }
+                                        placeholder={ t('predefined-properties.name') }
+                                        ref={ nameInputRef }
+                                      />
+                      
+                                      <Select
+                                        className='min-w-100'
+                                        defaultValue={ typeSelectValue.current }
+                                        onSelect={ onTypeSelectChange }
+                                        options={ typeSelectOptions }
+                                        placeholder={ t('predefined-properties.type') }
+                                      />
+                      <IconTextButton
+                        disabled={ isLoading }
+                        icon={ { value: 'new' } }
+                        onClick={ () => {
+                          onAddNewPredefinedProperty()
+                        }}
+                      >{t('predefined-properties.new')}</IconTextButton>
+                    </Flex>
         </Toolbar>
         }
     >
