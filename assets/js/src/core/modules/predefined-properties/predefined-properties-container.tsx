@@ -36,36 +36,26 @@ export interface TreeAction {
 
 const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
   const {predefinedProperties, isLoading: predefinedPropertiesLoading} = usePredefinedProperties()
-  
-    const metadataTypeRegistry = useInjection<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
-    const typeSelectOptions = [...metadataTypeRegistry.getTypeSelectionTypes().keys()].map((type) => {
-      return { value: type, label: t('data-type.' + type.split('.')[1]) }
-    })
-    
-        const [form] = Form.useForm()
+  const {createProperty, createLoading} = usePredefinedProperty()
 
-      const onClose = (): void => {
-    form.resetFields()
-  }
+    // const handleSend = (): void => {
+    // form.validateFields().then(() => {
+    //   const values = form.getFieldsValue()
 
-    const handleSend = (): void => {
-    form.validateFields().then(() => {
-      const values = form.getFieldsValue()
-
-      void createProperty({
-        recipientId: values.to,
-        title: values.title,
-        message: values.message,
-        attachmentType: values.attachment?.type,
-        attachmentId: values.attachment?.id
-      }, async () => {
-        onClose()
-        await success(t('user-menu.notification.modal.success-notification-has-been-sent'))
-      })
-    }).catch(() => {
-      trackError(new GeneralError('Validation of notification form failed'))
-    })
-  }
+    //   void createProperty({
+    //     recipientId: values.to,
+    //     title: values.title,
+    //     message: values.message,
+    //     attachmentType: values.attachment?.type,
+    //     attachmentId: values.attachment?.id
+    //   }, async () => {
+    //     onClose()
+    //     await success(t('user-menu.notification.modal.success-notification-has-been-sent'))
+    //   })
+    // }).catch(() => {
+    //   trackError(new GeneralError('Validation of notification form failed'))
+    // })
+  // }
 
     const onAddNewPredefinedProperty = (): void => {
       console.log("add new")
@@ -131,37 +121,17 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
         >
                     <Flex gap={ 'small' }>
                       <Title titleClass={ 'm-none' }>{t('widget.predefined-properties')}</Title>       
-                              <Form
-          form={ form }
-          layout="horizontal"
-        >           
-                                      <Input
-                                        onChange={ onNameInputChange }
-                                        placeholder={ t('predefined-properties.name') }
-                                        ref={ nameInputRef }
-                                      />
-                      
-                                      <Select
-                                        className='min-w-100'
-                                        defaultValue={ typeSelectValue.current }
-                                        onSelect={ onTypeSelectChange }
-                                        options={ typeSelectOptions }
-                                        placeholder={ t('predefined-properties.type') }
-                                      />
-                                      </Form>    
                       <IconTextButton
-                        disabled={ isLoading }
+                        disabled={ predefinedPropertiesLoading }
                         icon={ { value: 'new' } }
-                        onClick={ () => {
-                          onAddNewPredefinedProperty()
-                        }}
+                        onClick={ async () => {createProperty()}}
                       >{t('predefined-properties.new')}</IconTextButton>
                     </Flex>
         </Toolbar>
         }
     >
       <Content
-        loading={ isLoading }
+        loading={ predefinedPropertiesLoading }
         margin={ {
           x: 'extra-small',
           y: 'none'

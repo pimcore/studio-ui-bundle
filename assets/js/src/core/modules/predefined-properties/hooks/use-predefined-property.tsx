@@ -13,10 +13,6 @@ import { useEffect } from "react"
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { UpdatePredefinedProperty, usePropertyUpdateMutation } from "@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen"
 
-interface UsePredefinedPropertyProps {
-  id: string
-}
-
 interface UsePredefinedPropertiyReturn {
   createProperty: () => Promise<unknown>
   createLoading: boolean
@@ -26,7 +22,7 @@ interface UsePredefinedPropertiyReturn {
   updateLoading: boolean
 }
 
-export const usePredefinedProperty = ({id}: UsePredefinedPropertyProps): UsePredefinedPropertiyReturn => {
+export const usePredefinedProperty = (): UsePredefinedPropertiyReturn => {
   
     const [createProperty, {
       isLoading: createLoading,
@@ -34,9 +30,19 @@ export const usePredefinedProperty = ({id}: UsePredefinedPropertyProps): UsePred
       error: createError
     }] = usePropertyCreateMutation()
   
-    const createPropertyById = async (): Promise<void> => {
-    await createProperty({ id })
-  }
+//     const createPropertyById = async (): Promise<void> => {
+
+//       try {
+// const response = await createProperty()
+
+//       if (response.error !== undefined) {
+//         trackError(new ApiError(response.error))
+//         return
+//       }
+//         onSuccess()
+//       }
+    
+//   }
     
       const [deleteProperty, {
         isLoading: deleteLoading,
