@@ -19,20 +19,17 @@ import { useStyles } from './classification-store-modal.styles'
 import { CollectionTab } from './tabs/collection/collection-tab'
 import { GroupTab } from './tabs/group/group-tab'
 import { GroupByKeyTab } from './tabs/group-by-key/group-by-key-tab'
-import {
-  ClassificationStoreProvider
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classification-store-provider'
+import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
 
 interface ClassificationStoreModalProps extends ClassificationStoreProps {
-  isOpen: boolean
-  close: () => void
   objectId: number
   fieldName: string
 }
 
 export const ClassificationStoreModal = (props: ClassificationStoreModalProps): React.JSX.Element => {
-  const { isOpen, close, storeId, objectId, fieldName } = props
+  const { storeId, objectId, fieldName } = props
 
+  const { isOpenModal: isOpen, closeModal } = useClassificationStore()
   const { t } = useTranslation()
   const { styles } = useStyles()
 
@@ -81,17 +78,15 @@ export const ClassificationStoreModal = (props: ClassificationStoreModalProps): 
         <Modal
           closable
           footer={ null }
-          onCancel={ () => { close() } }
+          onCancel={ closeModal }
           open={ isOpen }
           size={ 'XL' }
         >
-          <ClassificationStoreProvider>
-            <Tabs
-              destroyInactiveTabPane
-              items={ tabItems }
-              noTabBarMargin
-            />
-          </ClassificationStoreProvider>
+          <Tabs
+            destroyInactiveTabPane
+            items={ tabItems }
+            noTabBarMargin
+          />
         </Modal>
       )}
     </>

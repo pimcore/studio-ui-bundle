@@ -9,22 +9,30 @@
  */
 
 import { useContext } from 'react'
-import { SearchContext } from './classification-store-provider'
+import { ClassificationStoreContext } from './classification-store-provider'
 
-export interface UseSearchReturn {
+export interface UseClassificationStoreReturn {
+  isOpenModal: boolean
+  openModal: () => void
+  closeModal: () => void
   setSearchValue: (tabId: string, value: string) => void
   getSearchValue: (tabId: string) => string
 }
 
-export const useClassificationStore = (): UseSearchReturn => {
-  const context = useContext(SearchContext)
+const useClassificationStore = (): UseClassificationStoreReturn => {
+  const context = useContext(ClassificationStoreContext)
 
   if (context === undefined) {
     throw new Error('useClassificationStore must be used within a ClassificationStoreProvider')
   }
 
   return {
+    isOpenModal: context.isOpen,
+    openModal: context.open,
+    closeModal: context.close,
     setSearchValue: context.setSearchValue,
     getSearchValue: context.getSearchValue
   }
 }
+
+export default useClassificationStore

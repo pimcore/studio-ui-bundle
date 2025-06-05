@@ -21,7 +21,7 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { Button } from '@Pimcore/components/button/button'
-import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/use-classification-store'
+import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
 import { type TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 
 interface ClassificationStoreDataTabProps<T> {
@@ -37,7 +37,7 @@ interface ClassificationStoreDataTabProps<T> {
 }
 
 export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, columns }: ClassificationStoreDataTabProps<T>): React.JSX.Element => {
-  const { getSearchValue, setSearchValue } = useClassificationStore()
+  const { getSearchValue, setSearchValue, closeModal } = useClassificationStore()
 
   const [searchTerm, setSearchTerm] = useState(getSearchValue(tabId))
   const [searchQuery, setSearchQuery] = useState(getSearchValue(tabId))
@@ -61,6 +61,7 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
     // const currentItem = find(data?.items, { id: 3 })
 
     // operations.add('3')
+    closeModal()
   }
 
   return (

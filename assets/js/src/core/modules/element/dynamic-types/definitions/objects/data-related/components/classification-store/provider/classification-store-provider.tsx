@@ -10,18 +10,22 @@
 
 import React, { createContext, useCallback, useState, useMemo } from 'react'
 
-export interface SearchContextData {
+export interface ClassificationStoreContextData {
+  isOpen: boolean
+  open: () => void
+  close: () => void
   setSearchValue: (tabId: string, value: string) => void
   getSearchValue: (tabId: string) => string
 }
 
-export const SearchContext = createContext<SearchContextData | undefined>(undefined)
+export const ClassificationStoreContext = createContext<ClassificationStoreContextData | undefined>(undefined)
 
-export interface SearchProviderProps {
+export interface ClassificationStoreProviderProps {
   children: React.ReactNode
 }
 
-export const ClassificationStoreProvider = ({ children }: SearchProviderProps): React.JSX.Element => {
+const ClassificationStoreProvider = ({ children }: ClassificationStoreProviderProps): React.JSX.Element => {
+  const [isOpen, setIsOpen] = useState(false)
   const [searchValues, setSearchValues] = useState<Record<string, string>>({})
 
   const getSearchValue = useCallback((tabId: string): string => {
@@ -35,14 +39,23 @@ export const ClassificationStoreProvider = ({ children }: SearchProviderProps): 
     }))
   }, [])
 
+  const open = (): void => { setIsOpen(true) }
+
+  const close = (): void => { setIsOpen(false) }
+
   const contextValue = useMemo(() => ({
+    isOpen,
+    open,
+    close,
     getSearchValue,
     setSearchValue
-  }), [getSearchValue, setSearchValue])
+  }), [getSearchValue, setSearchValue, isOpen, open, close])
 
   return (
-    <SearchContext.Provider value={ contextValue }>
+    <ClassificationStoreContext.Provider value={ contextValue }>
       {children}
-    </SearchContext.Provider>
+    </ClassificationStoreContext.Provider>
   )
 }
+
+export default ClassificationStoreProvider

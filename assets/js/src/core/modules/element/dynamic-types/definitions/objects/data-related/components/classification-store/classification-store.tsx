@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { forEach, get, isArray, isEmpty, isEqual, isPlainObject, isUndefined, keys, union } from 'lodash'
 import { type NamePath } from 'antd/es/form/interface'
 import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
@@ -19,6 +19,7 @@ import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-
 import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
 import { DELETED, filterInheritedFields, getMergedValue } from './utils/group-value'
 import { ClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
+import { ClassificationStoreProvider } from './provider'
 
 export interface ClassificationStoreProps extends AbstractObjectDataDefinition {
   storeId: number
@@ -37,7 +38,6 @@ const getOriginalValue = (value: any, name: NamePath): object => {
 export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.Element => {
   const { name: classificationStoreName, value } = props
 
-  const [isOpenModal, setIsOpenModal] = useState(false)
   const valueRef = useRef(value)
   const deletedGroupsRef = useRef(new Set<string>())
   const changedFieldsRef = useRef<Set<string>>(new Set())
@@ -106,25 +106,20 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
   }, [value])
 
   return (
-    <>
+    <ClassificationStoreProvider>
       <Form.KeyedList
         getAdditionalComponentProps={ getAdditionalComponentProps }
         onChange={ onChange }
         onFieldChange={ onFieldChange }
         value={ mergedValue }
       >
-        <ClassificationStoreContent
-          openAddModal={ () => { setIsOpenModal(true) } }
-          { ...props }
-        />
+        <ClassificationStoreContent { ...props } />
         <ClassificationStoreModal
-          close={ () => { setIsOpenModal(false) } }
           fieldName={ fieldName }
-          isOpen={ isOpenModal }
           objectId={ id }
           { ...props }
         />
       </Form.KeyedList>
-    </>
+    </ClassificationStoreProvider>
   )
 }

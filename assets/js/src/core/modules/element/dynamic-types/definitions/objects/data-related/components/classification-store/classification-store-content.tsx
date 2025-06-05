@@ -23,15 +23,13 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Space } from '@Pimcore/components/space/space'
 import { Button } from '@Pimcore/components/button/button'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
 
-export interface ClassificationStoreContentProps extends ClassificationStoreProps {
-  openAddModal: () => void
-}
-
-export const ClassificationStoreContent = (props: ClassificationStoreContentProps): React.JSX.Element => {
+export const ClassificationStoreContent = (props: ClassificationStoreProps): React.JSX.Element => {
   const [localizationMode, setLocalizationMode] = useState<string>('default')
   const { t } = useTranslation()
 
+  const { openModal } = useClassificationStore()
   const { values } = useKeyedList()
   const { activeGroups, groupCollectionMapping, ...groups } = values
   const { currentLanguage } = useLanguageSelection()
@@ -65,7 +63,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreContentProp
             onClick={ (e) => {
               e.stopPropagation()
 
-              props.openAddModal()
+              openModal()
             } }
             variant="filled"
           >
