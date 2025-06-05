@@ -18,11 +18,14 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { usePredefinedProperties } from './hooks/use-predefined-properties'
 import { Table } from './table/table'
-import { Button, IconTextButton, Input, ModalFooter, Select, useModal } from '@sdk/components'
+import { Button, Form, IconTextButton, Input, ModalFooter, Select, useModal } from '@sdk/components'
 import { PredefinedPropertyProvider } from './predefined-properties-provider'
 import { serviceIds, useInjection } from '@sdk/app'
 import { DynamicTypeMetaDataRegistry } from '@sdk/modules/element'
 import { InputRef } from 'antd'
+import { usePredefinedProperty } from './hooks/use-predefined-property'
+import { usePropertyCreateMutation } from '../element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
+import trackError, { GeneralError } from '../app/error-handler'
 
 export type Mode = 'create' | 'update'
 
@@ -32,29 +35,43 @@ export interface TreeAction {
 }
 
 const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
-  const {predefinedProperties, isLoading} = usePredefinedProperties()
-
+  const {predefinedProperties, isLoading: predefinedPropertiesLoading} = usePredefinedProperties()
+  
     const metadataTypeRegistry = useInjection<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
     const typeSelectOptions = [...metadataTypeRegistry.getTypeSelectionTypes().keys()].map((type) => {
       return { value: type, label: t('data-type.' + type.split('.')[1]) }
     })
     
+        const [form] = Form.useForm()
+
+      const onClose = (): void => {
+    form.resetFields()
+  }
+
+    const handleSend = (): void => {
+    form.validateFields().then(() => {
+      const values = form.getFieldsValue()
+
+      void createProperty({
+        recipientId: values.to,
+        title: values.title,
+        message: values.message,
+        attachmentType: values.attachment?.type,
+        attachmentId: values.attachment?.id
+      }, async () => {
+        onClose()
+        await success(t('user-menu.notification.modal.success-notification-has-been-sent'))
+      })
+    }).catch(() => {
+      trackError(new GeneralError('Validation of notification form failed'))
+    })
+  }
+
     const onAddNewPredefinedProperty = (): void => {
       console.log("add new")
     }
 
-    const nameInputValue = useRef<string>('')
-    const nameInputRef = useRef<InputRef>(null)
-    const typeSelectValue = useRef<string>('input')
-      
-      function onNameInputChange (event: React.ChangeEvent<HTMLInputElement>): void {
-        nameInputValue.current = event.target.value
-      }
-    
-      function onTypeSelectChange (value: string): void {
-        typeSelectValue.current = value
-      }
-
+  
    const {
      showModal: showDuplicatePropertyModal,
      closeModal: closeDuplicatePropertyModal,
@@ -113,7 +130,11 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
           theme='secondary'
         >
                     <Flex gap={ 'small' }>
-                      <Title titleClass={ 'm-none' }>{t('widget.predefined-properties')}</Title>                      
+                      <Title titleClass={ 'm-none' }>{t('widget.predefined-properties')}</Title>       
+                              <Form
+          form={ form }
+          layout="horizontal"
+        >           
                                       <Input
                                         onChange={ onNameInputChange }
                                         placeholder={ t('predefined-properties.name') }
@@ -127,6 +148,7 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
                                         options={ typeSelectOptions }
                                         placeholder={ t('predefined-properties.type') }
                                       />
+                                      </Form>    
                       <IconTextButton
                         disabled={ isLoading }
                         icon={ { value: 'new' } }

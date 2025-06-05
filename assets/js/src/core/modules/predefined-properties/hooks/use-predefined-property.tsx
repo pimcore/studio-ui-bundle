@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { usePropertyDeleteMutation } from "@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced"
+import { usePropertyCreateMutation, usePropertyDeleteMutation } from "@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced"
 import { useEffect } from "react"
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { UpdatePredefinedProperty, usePropertyUpdateMutation } from "@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen"
@@ -18,6 +18,8 @@ interface UsePredefinedPropertyProps {
 }
 
 interface UsePredefinedPropertiyReturn {
+  createProperty: () => Promise<unknown>
+  createLoading: boolean
   deletePropertyById: () => Promise<unknown>
   deleteLoading: boolean
   updatePropertyById: (updatePredefinedProperty: UpdatePredefinedProperty) => Promise<unknown>
@@ -26,6 +28,16 @@ interface UsePredefinedPropertiyReturn {
 
 export const usePredefinedProperty = ({id}: UsePredefinedPropertyProps): UsePredefinedPropertiyReturn => {
   
+    const [createProperty, {
+      isLoading: createLoading,
+      isError: isCreateError,
+      error: createError
+    }] = usePropertyCreateMutation()
+  
+    const createPropertyById = async (): Promise<void> => {
+    await createProperty({ id })
+  }
+    
       const [deleteProperty, {
         isLoading: deleteLoading,
         isSuccess: deleteSuccess,
@@ -58,6 +70,10 @@ export const usePredefinedProperty = ({id}: UsePredefinedPropertyProps): UsePred
       trackError(new ApiError(updateError))}
     },[isUpdateError])
 
+    useEffect(() => {
+    if (isCreateError) {
+      trackError(new ApiError(createError))}
+    },[isCreateError])
 
-    return { deletePropertyById, deleteLoading, updatePropertyById, updateLoading }
+    return { createProperty, createLoading, deletePropertyById, deleteLoading, updatePropertyById, updateLoading }
 }

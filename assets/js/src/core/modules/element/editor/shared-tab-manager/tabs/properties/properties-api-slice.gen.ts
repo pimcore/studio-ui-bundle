@@ -9,12 +9,13 @@ const injectedRtkApi = api
             propertyGetCollection: build.query<PropertyGetCollectionApiResponse, PropertyGetCollectionApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/properties`,
-                    params: {
-                        elementType: queryArg.elementType,
-                        filter: queryArg.filter,
-                    },
+                    params: { elementType: queryArg.elementType, filter: queryArg.filter },
                 }),
                 providesTags: ["Properties"],
+            }),
+            propertyCreate: build.mutation<PropertyCreateApiResponse, PropertyCreateApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/property`, method: "POST" }),
+                invalidatesTags: ["Properties"],
             }),
             propertyUpdate: build.mutation<PropertyUpdateApiResponse, PropertyUpdateApiArg>({
                 query: (queryArg) => ({
@@ -49,13 +50,16 @@ export type PropertyGetCollectionApiArg = {
     /** Filter for properties */
     filter?: string;
 };
+export type PropertyCreateApiResponse =
+    /** status 200 Created predefined property with default values */ PredefinedProperty;
+export type PropertyCreateApiArg = void;
 export type PropertyUpdateApiResponse = /** status 200 Updated predefined property */ PredefinedProperty;
 export type PropertyUpdateApiArg = {
     /** Id of the property */
     id: string;
     updatePredefinedProperty: UpdatePredefinedProperty;
 };
-export type PropertyDeleteApiResponse = unknown;
+export type PropertyDeleteApiResponse = /** status 200 Successfully deleted property with given id */ void;
 export type PropertyDeleteApiArg = {
     /** Id of the property */
     id: string;
@@ -79,15 +83,15 @@ export type PredefinedProperty = {
     /** name */
     name: string;
     /** description */
-    description?: string | null;
+    description?: any;
     /** key */
     key: string;
     /** type */
     type: string;
     /** data */
-    data?: string | null;
+    data?: any;
     /** config */
-    config?: string | null;
+    config?: any;
     /** ctype */
     ctype: string;
     /** inheritable */
@@ -111,15 +115,15 @@ export type UpdatePredefinedProperty = {
     /** name */
     name: string;
     /** description */
-    description?: string | null;
+    description?: any;
     /** key */
     key: string;
     /** type */
     type: string;
     /** data */
-    data?: string | null;
+    data?: any;
     /** config */
-    config?: string | null;
+    config?: any;
     /** ctype */
     ctype: string;
     /** inheritable */
@@ -133,7 +137,7 @@ export type DataProperty = {
     /** key */
     key: string;
     /** data */
-    data: any | null;
+    data: any;
     /** type */
     type: string;
     /** inheritable */
@@ -141,14 +145,15 @@ export type DataProperty = {
     /** inherited */
     inherited: boolean;
     /** config */
-    config?: string | null;
+    config?: any;
     /** predefinedName */
-    predefinedName?: string | null;
+    predefinedName?: any;
     /** description */
-    description?: string | null;
+    description?: any;
 };
 export const {
     usePropertyGetCollectionQuery,
+    usePropertyCreateMutation,
     usePropertyUpdateMutation,
     usePropertyDeleteMutation,
     usePropertyGetCollectionForElementByTypeAndIdQuery,
