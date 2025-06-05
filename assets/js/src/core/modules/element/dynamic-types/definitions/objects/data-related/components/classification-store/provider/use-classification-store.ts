@@ -17,6 +17,8 @@ export interface UseClassificationStoreReturn {
   closeModal: () => void
   setSearchValue: (tabId: string, value: string) => void
   getSearchValue: (tabId: string) => string
+  currentLayoutData: any[]
+  updateCurrentLayoutData: (layoutData: any[]) => void
 }
 
 const useClassificationStore = (): UseClassificationStoreReturn => {
@@ -31,7 +33,9 @@ const useClassificationStore = (): UseClassificationStoreReturn => {
     openModal: context.open,
     closeModal: context.close,
     setSearchValue: context.setSearchValue,
-    getSearchValue: context.getSearchValue
+    getSearchValue: context.getSearchValue,
+    currentLayoutData: context.currentLayoutData,
+    updateCurrentLayoutData: context.setCurrentLayoutData
   }
 }
 

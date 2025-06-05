@@ -8,9 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isObject, find } from 'lodash'
+import { isObject, find, isEmpty } from 'lodash'
 import { type ClassificationStoreProps } from './classification-store'
 import { useKeyedList } from '@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list'
 import { Form } from '@Pimcore/components/form/form'
@@ -29,14 +29,19 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
   const [localizationMode, setLocalizationMode] = useState<string>('default')
   const { t } = useTranslation()
 
-  const { openModal } = useClassificationStore()
+  const { openModal, currentLayoutData, updateCurrentLayoutData } = useClassificationStore()
   const { values } = useKeyedList()
   const { activeGroups, groupCollectionMapping, ...groups } = values
   const { currentLanguage } = useLanguageSelection()
 
   let localizationGroup = 'default'
   const isLocalizable = props.localized ?? false
-  const activeGroupLayout = props.activeGroupDefinitions ?? []
+
+  useEffect(() => {
+    const activeGroupLayout: any[] = !isEmpty(currentLayoutData) ? currentLayoutData : (props.activeGroupDefinitions ?? [])
+
+    updateCurrentLayoutData(activeGroupLayout)
+  }, [])
 
   const handleLocalizationChange = (value: string): void => {
     setLocalizationMode(value)
@@ -89,14 +94,16 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
         direction='vertical'
         size='small'
       >
-        {Object.keys(isObject(groups) ? groups : {}).map((key) => (
-          <Form.Group
-            key={ `${key}` }
-            name={ [key, localizationGroup] }
-          >
-            <ClassificationStoreItem groupLayout={ find(activeGroupLayout, { id: parseInt(key) }) } />
-          </Form.Group>
-        ))}
+        {Object.keys(isObject(groups) ? groups : {}).map((key) => {
+          return (
+            <Form.Group
+              key={ `${key}` }
+              name={ [key, localizationGroup] }
+            >
+              <ClassificationStoreItem groupLayout={ find(currentLayoutData, { id: parseInt(key) }) } />
+            </Form.Group>
+          )
+        })}
       </Space>
 
       <Form.Item

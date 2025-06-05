@@ -16,6 +16,8 @@ export interface ClassificationStoreContextData {
   close: () => void
   setSearchValue: (tabId: string, value: string) => void
   getSearchValue: (tabId: string) => string
+  currentLayoutData: any[]
+  setCurrentLayoutData: (layoutData: any[]) => void
 }
 
 export const ClassificationStoreContext = createContext<ClassificationStoreContextData | undefined>(undefined)
@@ -27,6 +29,7 @@ export interface ClassificationStoreProviderProps {
 const ClassificationStoreProvider = ({ children }: ClassificationStoreProviderProps): React.JSX.Element => {
   const [isOpen, setIsOpen] = useState(false)
   const [searchValues, setSearchValues] = useState<Record<string, string>>({})
+  const [currentLayoutData, setCurrentLayoutData] = useState<any>([])
 
   const getSearchValue = useCallback((tabId: string): string => {
     return searchValues[tabId] ?? ''
@@ -48,8 +51,10 @@ const ClassificationStoreProvider = ({ children }: ClassificationStoreProviderPr
     open,
     close,
     getSearchValue,
-    setSearchValue
-  }), [getSearchValue, setSearchValue, isOpen, open, close])
+    setSearchValue,
+    currentLayoutData,
+    setCurrentLayoutData
+  }), [getSearchValue, setSearchValue, isOpen, open, close, currentLayoutData, setCurrentLayoutData])
 
   return (
     <ClassificationStoreContext.Provider value={ contextValue }>

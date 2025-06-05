@@ -24,6 +24,10 @@ import { Button } from '@Pimcore/components/button/button'
 import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
 import { type TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import { useKeyedList } from '@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list'
+import {
+  useLazyClassificationStoreGetLayoutByCollectionQuery,
+  useLazyClassificationStoreGetLayoutByGroupQuery
+} from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
 
 interface ClassificationStoreDataTabProps<T> {
   tabId: TabId
@@ -38,7 +42,9 @@ interface ClassificationStoreDataTabProps<T> {
 }
 
 export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, columns }: ClassificationStoreDataTabProps<T>): React.JSX.Element => {
-  const { getSearchValue, setSearchValue, closeModal } = useClassificationStore()
+  const { getSearchValue, setSearchValue, closeModal, currentLayoutData, updateCurrentLayoutData } = useClassificationStore()
+  const { operations } = useKeyedList()
+  const { t } = useTranslation()
 
   const [searchTerm, setSearchTerm] = useState(getSearchValue(tabId))
   const [searchQuery, setSearchQuery] = useState(getSearchValue(tabId))
@@ -47,12 +53,28 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
 
   const [selectedItems, setSelectedItems] = useState<RowSelectionState | undefined>(undefined)
 
-  const { operations } = useKeyedList()
   const { isLoading, data, isFetching, refetch } = queryHook(
     { ...queryArgs, page, pageSize, searchTerm },
     { refetchOnMountOrArgChange: true }
   )
-  const { t } = useTranslation()
+  const [fetchCollectionLayout] = useLazyClassificationStoreGetLayoutByCollectionQuery()
+  const [fetchGroupLayout] = useLazyClassificationStoreGetLayoutByGroupQuery()
+
+  const fetchCollectionLayoutData = async (collectionId: string): Promise<any> => {
+    return await fetchCollectionLayout({
+      objectId: queryArgs.objectId,
+      fieldName: queryArgs.fieldName,
+      collectionId: parseInt(collectionId)
+    }).unwrap()
+  }
+
+  const fetchGroupLayoutData = async (groupId: string): Promise<any> => {
+    return await fetchGroupLayout({
+      objectId: queryArgs.objectId,
+      fieldName: queryArgs.fieldName,
+      groupId: parseInt(groupId)
+    }).unwrap()
+  }
 
   const handleSearch = (value: string): void => {
     setSearchValue(tabId, value)
@@ -63,7 +85,21 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
     const keys = Object.keys(selectedItems ?? {})
 
     for (const key of keys) {
-      operations.add(key, {})
+      if (tabId === 'collection') {
+        const collectionData = await fetchCollectionLayoutData(key)
+        const group: any = collectionData?.groups
+
+        updateCurrentLayoutData([...currentLayoutData, ...group])
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        operations.add(group[0]?.id, {})
+      } else {
+        const groupData = await fetchGroupLayoutData(key)
+        console.log('----- groupData: ', groupData)
+
+        updateCurrentLayoutData([...currentLayoutData, groupData])
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        operations.add(groupData?.id, {})
+      }
     }
 
     closeModal()
