@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
@@ -21,6 +21,9 @@ import { IconButton } from '@sdk/components'
 import { verifyUpdate } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/verify-cell-update'
 import { usePredefinedProperty } from '../hooks/use-predefined-property'
 import { Row } from 'antd'
+import { PredefinedPropertyWithId } from "../predefined-properties-provider"
+import { isUndefined } from 'lodash'
+
 
 type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
 
@@ -32,17 +35,17 @@ interface ITableProps {
 export const Table = ({ showDuplicatePropertyModal, showMandatoryModal }: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const { predefinedProperties, isLoading, properties, setProperties, updateProperty } = usePredefinedProperties()
-  const { deleteProperty, deleteLoading } = usePredefinedProperty()
-
+  const { predefinedProperties, isLoading } = usePredefinedProperties()
+  const { deletePropertyById, deleteLoading } = usePredefinedProperty()
+const [enrichedProperties, setEnrichedProperties] = useState<PredefinedPropertyWithId[]>([])
 
   useEffect(() => {
     if (predefinedProperties && Array.isArray(predefinedProperties)) {
       const sorted = [...predefinedProperties].sort((a, b) => b.creationDate - a.creationDate);
       const enriched = sorted.map(item => ({ ...item, rowId: uuid() }))
-      setProperties(enriched)
+      setEnrichedProperties(enriched)
     }
-  }, [predefinedProperties, setProperties])
+  }, [predefinedProperties])
 
   console.log("predefinedProperties", predefinedProperties);
   
@@ -93,23 +96,25 @@ export const Table = ({ showDuplicatePropertyModal, showMandatoryModal }: ITable
       header: t('properties.columns.actions'),
       size: 70,
       cell: (info) => {
-      const id: string = info.row.getValue('id')
-
-        return (
+      const id = info.row.id
+      return  (
         <div className="properties-table--actions-column">
           <IconButton icon={{ value: 'translate' }} onClick={() => console.log('Open Translate View')} type="link" />
-          <IconButton icon={{ value: 'trash' }} onClick={() => deleteProperty(id)} type="link" />
+          <IconButton icon={{ value: 'trash' }} onClick={(idx) => {
+            deletePropertyById(id)
+            }} type="link" />
         </div>
-      )}
+      )
+  }
     })
   ]
 
   const onUpdateCellData = ({ columnId, value, rowData }): void => {
     const updatedProperty = { ...rowData, [columnId]: value }
-    const hasDuplicate = properties.filter(property => property.key === updatedProperty.key).length > 1
+    const hasDuplicate = enrichedProperties.filter(property => property.key === updatedProperty.key).length > 1
 
     if (verifyUpdate(value, columnId, 'key', hasDuplicate, showMandatoryModal, showDuplicatePropertyModal)) {
-      updateProperty(rowData.key as string, updatedProperty)
+console.log("update");
     }
   }
 
@@ -118,7 +123,7 @@ export const Table = ({ showDuplicatePropertyModal, showMandatoryModal }: ITable
       <Grid
         autoWidth
         columns={tableColumns}
-        data={properties}
+        data={enrichedProperties}
         isLoading={isLoading}
         modifiedCells={[]}
         onUpdateCellData={onUpdateCellData}

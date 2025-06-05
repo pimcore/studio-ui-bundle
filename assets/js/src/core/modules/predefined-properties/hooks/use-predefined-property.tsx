@@ -16,7 +16,7 @@ import { UpdatePredefinedProperty, usePropertyUpdateMutation } from "@Pimcore/mo
 interface UsePredefinedPropertiyReturn {
   createProperty: () => Promise<unknown>
   createLoading: boolean
-  deleteProperty: (id: string) => Promise<unknown>
+  deletePropertyById: (id: string) => Promise<unknown>
   deleteLoading: boolean
   updatePropertyById: (updatePredefinedProperty: UpdatePredefinedProperty) => Promise<unknown>
   updateLoading: boolean
@@ -51,6 +51,9 @@ export const usePredefinedProperty = (): UsePredefinedPropertiyReturn => {
         error: deleteError
       }] = usePropertyDeleteMutation()
 
+          const deletePropertyById = async (id: string): Promise<void> => {
+    await deleteProperty({ id})
+  }
         const [updateProperty, {
         isLoading: updateLoading,
         isSuccess: updateSuccess,
@@ -77,5 +80,5 @@ export const usePredefinedProperty = (): UsePredefinedPropertiyReturn => {
       trackError(new ApiError(createError))}
     },[isCreateError])
 
-    return { createProperty, createLoading, deleteProperty, deleteLoading, updatePropertyById, updateLoading }
+    return { createProperty, createLoading, deletePropertyById, deleteLoading, updatePropertyById, updateLoading }
 }

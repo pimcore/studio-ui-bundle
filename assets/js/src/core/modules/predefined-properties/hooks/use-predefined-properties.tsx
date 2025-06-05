@@ -16,11 +16,11 @@ import { uuid } from '@Pimcore/utils/uuid'
 interface UsePredefinedPropertiesReturn {
   predefinedProperties: PredefinedProperty[] | undefined
   isLoading: boolean
-  properties: PredefinedPropertyWithId[]
-  setProperties: (properties: PredefinedPropertyWithId[]) => void
-  addProperty: (property: PredefinedPropertyWithId) => void
-  updateProperty: (key: string, updatedProperty: PredefinedPropertyWithId) => void
-  removeProperty: (key: string) => void
+  // properties: PredefinedPropertyWithId[]
+  // setProperties: (properties: PredefinedPropertyWithId[]) => void
+  // addProperty: (property: PredefinedPropertyWithId) => void
+  // updateProperty: (key: string, updatedProperty: PredefinedPropertyWithId) => void
+  // removeProperty: (key: string) => void
 }
 
 export const usePredefinedProperties = (): UsePredefinedPropertiesReturn => {
@@ -30,31 +30,31 @@ export const usePredefinedProperties = (): UsePredefinedPropertiesReturn => {
   }
 
   const { predefinedProperties, isLoading } = context
-  const [properties, setPropertiesState] = useState<PredefinedPropertyWithId[]>([])
+  // const [properties, setPropertiesState] = useState<PredefinedPropertyWithId[]>([])
 
-  useEffect(() => {
-    if (predefinedProperties && Array.isArray(predefinedProperties)) {
-      const enriched = predefinedProperties.map(item => ({
-        ...item,
-        rowId: uuid()
-      }))
-      setPropertiesState(enriched)
-    }
-  }, [predefinedProperties])
+  // useEffect(() => {
+  //   if (predefinedProperties && Array.isArray(predefinedProperties)) {
+  //     const enriched = predefinedProperties.map(item => ({
+  //       ...item,
+  //       rowId: uuid()
+  //     }))
+  //     setPropertiesState(enriched)
+  //   }
+  // }, [predefinedProperties])
 
-  const setProperties = (props: PredefinedPropertyWithId[]) => setPropertiesState(props)
-  const addProperty = (property: PredefinedPropertyWithId) => setPropertiesState(prev => [...prev, property])
-  const updateProperty = (key: string, updatedProperty: PredefinedPropertyWithId) =>
-    setPropertiesState(prev => prev.map(prop => (prop.key === key ? updatedProperty : prop)))
-  const removeProperty = (key: string) => setPropertiesState(prev => prev.filter(prop => prop.key !== key))
+  // const setProperties = (props: PredefinedPropertyWithId[]) => setPropertiesState(props)
+  // const addProperty = (property: PredefinedPropertyWithId) => setPropertiesState(prev => [...prev, property])
+  // const updateProperty = (key: string, updatedProperty: PredefinedPropertyWithId) =>
+  //   setPropertiesState(prev => prev.map(prop => (prop.key === key ? updatedProperty : prop)))
+  // const removeProperty = (key: string) => setPropertiesState(prev => prev.filter(prop => prop.key !== key))
 
   return {
     predefinedProperties,
     isLoading,
-    properties,
-    setProperties,
-    addProperty,
-    updateProperty,
-    removeProperty,
+    // properties,
+    // setProperties,
+    // addProperty,
+    // updateProperty,
+    // removeProperty,
   }
 }
