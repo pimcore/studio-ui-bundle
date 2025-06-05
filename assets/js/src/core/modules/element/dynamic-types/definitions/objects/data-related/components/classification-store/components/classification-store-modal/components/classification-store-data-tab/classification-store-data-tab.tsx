@@ -96,43 +96,58 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
 
     const activeGroupsUpdate: Record<string, boolean> = {}
     const groupCollectionMappingUpdate: Record<string, number | null> = {}
+    const promises: Array<Promise<any>> = []
 
     for (const key of keys) {
       if (tabId === TabId.Collection) {
-        const collectionData = await fetchCollectionLayoutData(key)
-        const groups = collectionData?.groups
+        const promise = fetchCollectionLayoutData(key).then((collectionData) => {
+          const groups = collectionData?.groups ?? []
 
-        updateCurrentLayoutData([...currentLayoutData, ...groups])
+          groups.forEach((groupItem) => {
+            operations.add(String(groupItem?.id), {})
 
-        groups?.forEach((groupItem) => {
-          operations.add(String(groupItem?.id), {})
+            activeGroupsUpdate[groupItem.id] = true
+            groupCollectionMappingUpdate[groupItem.id] = parseInt(key)
+          })
 
-          activeGroupsUpdate[groupItem.id] = true
-          groupCollectionMappingUpdate[groupItem.id] = parseInt(key)
+          return groups
         })
+
+        promises.push(promise)
       }
 
       if (tabId === TabId.Group) {
-        const groupData = await fetchGroupLayoutData(key)
+        const promise = fetchGroupLayoutData(key).then((groupData) => {
+          operations.add(String(groupData?.id), {})
 
-        updateCurrentLayoutData([...currentLayoutData, groupData])
-        operations.add(String(groupData?.id), {})
+          activeGroupsUpdate[groupData?.id] = true
+          groupCollectionMappingUpdate[groupData?.id] = null
 
-        activeGroupsUpdate[groupData?.id] = true
-        groupCollectionMappingUpdate[groupData?.id] = null
+          return [groupData]
+        })
+
+        promises.push(promise)
       }
 
       if (tabId === TabId.GroupByKey) {
         const groupId = key.split('-')[0]
-        const groupData = await fetchGroupLayoutData(groupId)
 
-        updateCurrentLayoutData([...currentLayoutData, groupData])
-        operations.add(String(groupData?.id), {})
+        const promise = fetchGroupLayoutData(groupId).then((groupData) => {
+          operations.add(String(groupData?.id), {})
 
-        activeGroupsUpdate[groupData?.id] = true
-        groupCollectionMappingUpdate[groupData?.id] = null
+          activeGroupsUpdate[groupData?.id] = true
+          groupCollectionMappingUpdate[groupData?.id] = null
+
+          return [groupData]
+        })
+
+        promises.push(promise)
       }
     }
+
+    const results = await Promise.all(promises)
+    const allGroups = results.flat()
+    updateCurrentLayoutData([...currentLayoutData, ...allGroups])
 
     operations.update('activeGroups', activeGroupsUpdate, false)
     operations.update('groupCollectionMapping', groupCollectionMappingUpdate, false)
