@@ -94,6 +94,9 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
   const handleApplySelectionClick = async (): Promise<void> => {
     const keys = Object.keys(selectedItems ?? {})
 
+    const activeGroupsUpdate: Record<string, boolean> = {}
+    const groupCollectionMappingUpdate: Record<string, number | null> = {}
+
     for (const key of keys) {
       if (tabId === TabId.Collection) {
         const collectionData = await fetchCollectionLayoutData(key)
@@ -103,6 +106,9 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
 
         groups?.forEach((groupItem) => {
           operations.add(String(groupItem?.id), {})
+
+          activeGroupsUpdate[groupItem.id] = true
+          groupCollectionMappingUpdate[groupItem.id] = parseInt(key)
         })
       }
 
@@ -111,6 +117,9 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
 
         updateCurrentLayoutData([...currentLayoutData, groupData])
         operations.add(String(groupData?.id), {})
+
+        activeGroupsUpdate[groupData?.id] = true
+        groupCollectionMappingUpdate[groupData?.id] = null
       }
 
       if (tabId === TabId.GroupByKey) {
@@ -119,8 +128,14 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
 
         updateCurrentLayoutData([...currentLayoutData, groupData])
         operations.add(String(groupData?.id), {})
+
+        activeGroupsUpdate[groupData?.id] = true
+        groupCollectionMappingUpdate[groupData?.id] = null
       }
     }
+
+    operations.update('activeGroups', activeGroupsUpdate, false)
+    operations.update('groupCollectionMapping', groupCollectionMappingUpdate, false)
 
     closeModal()
   }

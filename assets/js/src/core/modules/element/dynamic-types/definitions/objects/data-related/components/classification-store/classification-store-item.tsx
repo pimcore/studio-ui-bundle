@@ -19,6 +19,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useKeyedList } from '@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list'
+import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
 
 type ClassificationStoreGroupWithKeys = ClassificationStoreGroup & {
   keys?: any[]
@@ -30,6 +31,7 @@ export interface ClassificationStoreItemProps {
 export const ClassificationStoreItem = (props: ClassificationStoreItemProps): React.JSX.Element => {
   const { groupLayout } = props
 
+  const { currentLayoutData } = useClassificationStore()
   const { name } = useItem()
   const { operations } = useKeyedList()
   const { id } = useElementContext()
@@ -39,6 +41,7 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
   const handleItemDelete = (e): void => {
     e.stopPropagation()
 
+    currentLayoutData.filter(item => item.id !== groupLayout?.id)
     operations.remove(`${groupLayout?.id}`)
   }
 
