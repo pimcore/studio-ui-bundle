@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useRef } from 'react'
+import React from 'react'
 import { Title } from '@Pimcore/components/title/title'
 import { t } from 'i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -18,14 +18,9 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { usePredefinedProperties } from './hooks/use-predefined-properties'
 import { Table } from './table/table'
-import { Button, Form, IconTextButton, Input, ModalFooter, Select, useModal } from '@sdk/components'
+import { Button, IconTextButton, ModalFooter, useModal } from '@sdk/components'
 import { PredefinedPropertyProvider } from './predefined-properties-provider'
-import { serviceIds, useInjection } from '@sdk/app'
-import { DynamicTypeMetaDataRegistry } from '@sdk/modules/element'
-import { InputRef } from 'antd'
 import { usePredefinedProperty } from './hooks/use-predefined-property'
-import { usePropertyCreateMutation } from '../element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
-import trackError, { GeneralError } from '../app/error-handler'
 
 export type Mode = 'create' | 'update'
 
@@ -56,10 +51,6 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
     //   trackError(new GeneralError('Validation of notification form failed'))
     // })
   // }
-
-    const onAddNewPredefinedProperty = (): void => {
-      console.log("add new")
-    }
 
   
    const {
@@ -122,7 +113,7 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
                     <Flex gap={ 'small' }>
                       <Title titleClass={ 'm-none' }>{t('widget.predefined-properties')}</Title>       
                       <IconTextButton
-                        disabled={ predefinedPropertiesLoading }
+                        disabled={ predefinedPropertiesLoading || createLoading }
                         icon={ { value: 'new' } }
                         onClick={ async () => {createProperty()}}
                       >{t('predefined-properties.new')}</IconTextButton>

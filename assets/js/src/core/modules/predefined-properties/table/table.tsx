@@ -34,7 +34,8 @@ export const Table = ({ showDuplicatePropertyModal, showMandatoryModal }: ITable
 
   useEffect(() => {
     if (predefinedProperties && Array.isArray(predefinedProperties)) {
-      const enriched = predefinedProperties.map(item => ({ ...item, rowId: uuid() }))
+      const sorted = [...predefinedProperties].sort((a, b) => b.creationDate - a.creationDate);
+      const enriched = sorted.map(item => ({ ...item, rowId: uuid() }))
       setProperties(enriched)
     }
   }, [predefinedProperties, setProperties])
@@ -115,6 +116,7 @@ export const Table = ({ showDuplicatePropertyModal, showMandatoryModal }: ITable
         modifiedCells={[]}
         onUpdateCellData={onUpdateCellData}
         resizable
+        enableSorting = {true}
         setRowId={(row: DataProperty) => row.rowId}
       />
     </div>
