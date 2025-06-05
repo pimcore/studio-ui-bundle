@@ -23,6 +23,7 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { Button } from '@Pimcore/components/button/button'
 import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
 import { type TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
+import { useKeyedList } from '@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list'
 
 interface ClassificationStoreDataTabProps<T> {
   tabId: TabId
@@ -46,6 +47,7 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
 
   const [selectedItems, setSelectedItems] = useState<RowSelectionState | undefined>(undefined)
 
+  const { operations } = useKeyedList()
   const { isLoading, data, isFetching, refetch } = queryHook(
     { ...queryArgs, page, pageSize, searchTerm },
     { refetchOnMountOrArgChange: true }
@@ -57,10 +59,13 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
     setSearchTerm(value)
   }
 
-  const handleApplySelectionClick = (): void => {
-    // const currentItem = find(data?.items, { id: 3 })
+  const handleApplySelectionClick = async (): Promise<void> => {
+    const keys = Object.keys(selectedItems ?? {})
 
-    // operations.add('3')
+    for (const key of keys) {
+      operations.add(key, {})
+    }
+
     closeModal()
   }
 
@@ -83,7 +88,7 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
               />
             </Split>
             <Button
-              disabled={ isFetching }
+              disabled={ isLoading }
               onClick={ handleApplySelectionClick }
               type="primary"
             >
