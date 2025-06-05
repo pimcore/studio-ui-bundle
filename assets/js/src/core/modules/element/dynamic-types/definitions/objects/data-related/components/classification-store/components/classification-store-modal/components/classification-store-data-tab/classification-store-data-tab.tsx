@@ -10,6 +10,7 @@
 
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { isUndefined } from 'lodash'
 import { type RowSelectionState } from '@tanstack/react-table'
 import { Refetch } from '../refetch/refetch'
 import { Pagination } from '../pagination/pagination'
@@ -21,13 +22,20 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { Button } from '@Pimcore/components/button/button'
-import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
-import { type TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
+import {
+  useClassificationStore
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
+import {
+  TabId
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import { useKeyedList } from '@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list'
 import {
   useLazyClassificationStoreGetLayoutByCollectionQuery,
   useLazyClassificationStoreGetLayoutByGroupQuery
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
+import {
+  type ClassificationStoreGroupLayout
+} from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 
 interface ClassificationStoreDataTabProps<T> {
   tabId: TabId
@@ -53,6 +61,8 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
 
   const [selectedItems, setSelectedItems] = useState<RowSelectionState | undefined>(undefined)
 
+  const isGroupByKey = tabId === TabId.GroupByKey
+
   const { isLoading, data, isFetching, refetch } = queryHook(
     { ...queryArgs, page, pageSize, searchTerm },
     { refetchOnMountOrArgChange: true }
@@ -60,7 +70,7 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
   const [fetchCollectionLayout] = useLazyClassificationStoreGetLayoutByCollectionQuery()
   const [fetchGroupLayout] = useLazyClassificationStoreGetLayoutByGroupQuery()
 
-  const fetchCollectionLayoutData = async (collectionId: string): Promise<any> => {
+  const fetchCollectionLayoutData = async (collectionId: string): Promise<ClassificationStoreGroupLayout> => {
     return await fetchCollectionLayout({
       objectId: queryArgs.objectId,
       fieldName: queryArgs.fieldName,
@@ -85,20 +95,30 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
     const keys = Object.keys(selectedItems ?? {})
 
     for (const key of keys) {
-      if (tabId === 'collection') {
+      if (tabId === TabId.Collection) {
         const collectionData = await fetchCollectionLayoutData(key)
-        const group: any = collectionData?.groups
+        const groups = collectionData?.groups
 
-        updateCurrentLayoutData([...currentLayoutData, ...group])
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        operations.add(group[0]?.id, {})
-      } else {
+        updateCurrentLayoutData([...currentLayoutData, ...groups])
+
+        groups?.forEach((groupItem) => {
+          operations.add(String(groupItem?.id), {})
+        })
+      }
+
+      if (tabId === TabId.Group) {
         const groupData = await fetchGroupLayoutData(key)
-        console.log('----- groupData: ', groupData)
 
         updateCurrentLayoutData([...currentLayoutData, groupData])
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        operations.add(groupData?.id, {})
+        operations.add(String(groupData?.id), {})
+      }
+
+      if (tabId === TabId.GroupByKey) {
+        const groupId = key.split('-')[0]
+        const groupData = await fetchGroupLayoutData(groupId)
+
+        updateCurrentLayoutData([...currentLayoutData, groupData])
+        operations.add(String(groupData?.id), {})
       }
     }
 
@@ -155,7 +175,7 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
             isLoading={ isLoading }
             onSelectedRowsChange={ (row: RowSelectionState) => { setSelectedItems(row) } }
             selectedRows={ selectedItems }
-            setRowId={ (row) => row.id }
+            setRowId={ (row) => isGroupByKey && !isUndefined(row.groupId) ? `${row.groupId}-${row.keyId}` : row.id }
           />
         </Box>
       </ContentLayout>

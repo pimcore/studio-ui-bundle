@@ -107,7 +107,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
       </Space>
 
       <Form.Item
-        name={ ['groupCollectionMapping'] }
+        name={ ['activeGroups'] }
         style={ { display: 'none' } }
       >
         <Input
