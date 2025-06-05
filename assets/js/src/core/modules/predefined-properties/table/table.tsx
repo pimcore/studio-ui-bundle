@@ -19,6 +19,8 @@ import { usePredefinedProperties } from '../hooks/use-predefined-properties'
 import { PredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
 import { IconButton } from '@sdk/components'
 import { verifyUpdate } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/verify-cell-update'
+import { usePredefinedProperty } from '../hooks/use-predefined-property'
+import { Row } from 'antd'
 
 type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
 
@@ -31,6 +33,8 @@ export const Table = ({ showDuplicatePropertyModal, showMandatoryModal }: ITable
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { predefinedProperties, isLoading, properties, setProperties, updateProperty } = usePredefinedProperties()
+  const { deleteProperty, deleteLoading } = usePredefinedProperty()
+
 
   useEffect(() => {
     if (predefinedProperties && Array.isArray(predefinedProperties)) {
@@ -88,12 +92,15 @@ export const Table = ({ showDuplicatePropertyModal, showMandatoryModal }: ITable
     columnHelper.accessor('actions', {
       header: t('properties.columns.actions'),
       size: 70,
-      cell: () => (
+      cell: (info) => {
+      const id: string = info.row.getValue('id')
+
+        return (
         <div className="properties-table--actions-column">
-          <IconButton icon={{ value: 'translate' }} onClick={() => console.log('translate')} type="link" />
-          <IconButton icon={{ value: 'trash' }} onClick={() => console.log('remove prop')} type="link" />
+          <IconButton icon={{ value: 'translate' }} onClick={() => console.log('Open Translate View')} type="link" />
+          <IconButton icon={{ value: 'trash' }} onClick={() => deleteProperty(id)} type="link" />
         </div>
-      )
+      )}
     })
   ]
 

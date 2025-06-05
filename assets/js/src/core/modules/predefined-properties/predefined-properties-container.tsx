@@ -31,7 +31,7 @@ export interface TreeAction {
 
 const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
   const {predefinedProperties, isLoading: predefinedPropertiesLoading} = usePredefinedProperties()
-  const {createProperty, createLoading} = usePredefinedProperty()
+  const {createProperty, createLoading } = usePredefinedProperty()
 
     // const handleSend = (): void => {
     // form.validateFields().then(() => {
