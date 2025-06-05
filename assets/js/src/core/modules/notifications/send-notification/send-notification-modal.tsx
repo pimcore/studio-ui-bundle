@@ -9,17 +9,17 @@
  */
 
 import { Form } from '@Pimcore/components/form/form'
+import { Input } from '@Pimcore/components/input/input'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
+import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { ManyToOneRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
 import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
+import { Button, ModalFooter, ModalTitle, useMessage } from '@sdk/components'
+import { GeneralError, trackError } from '@sdk/modules/app'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNotification } from '../hooks/use-send-notification'
 import { UserSelect } from '../../user/components/user-select/user-select'
-import { Input } from '@Pimcore/components/input/input'
-import { TextArea } from '@Pimcore/components/textarea/textarea'
-import { GeneralError, trackError } from '@sdk/modules/app'
-import { Button, Icon, ModalFooter, Flex, useMessage } from '@sdk/components'
+import { useNotification } from '../hooks/use-send-notification'
 
 interface SendNotificationModalProps {
   open: boolean
@@ -58,68 +58,71 @@ export const SendNotificationModal = ({ open, ...props }: SendNotificationModalP
 
   return (
     <WindowModal
-      footer={ (<ModalFooter>
+      footer={(<ModalFooter>
         <Button
-          onClick={ onClose }
+          onClick={onClose}
           type='default'
         >
           {t('user-menu.notification.cancel')}
         </Button>
         <Button
-          loading={ isLoading }
-          onClick={ handleSend }
+          loading={isLoading}
+          onClick={handleSend}
           type='primary'
         >
           {t('user-menu.notification.send')}
         </Button>
-      </ModalFooter>) }
-      onCancel={ onClose }
-      open={ open }
+      </ModalFooter>)}
+      onCancel={onClose}
+      open={open}
       size="M"
-      title={ <Flex
-        align='center'
-        gap={ 'extra-small' }
-              ><Icon value={ 'notes-events' } /><>{t('user-menu.notification.modal.send-a-notification')}</></Flex> }
-      zIndex={ 1000 }
+      title={
+        <ModalTitle
+          iconName='notes-events'
+        >
+          {t('user-menu.notification.modal.send-a-notification')}
+        </ModalTitle>
+      }
+      zIndex={1000}
     >
       <FieldWidthProvider>
         <Form
-          form={ form }
+          form={form}
           layout="vertical"
         >
           <Form.Item
-            label={ t('user-menu.notification.modal.to') }
-            name={ 'to' }
-            rules={ [{ required: true, message: t('user-menu.notification.modal.form.validation.provide-recipient') }] }
+            label={t('user-menu.notification.modal.to')}
+            name={'to'}
+            rules={[{ required: true, message: t('user-menu.notification.modal.form.validation.provide-recipient') }]}
           >
             <UserSelect
-              onChange={ (value) => {
+              onChange={(value) => {
                 form.setFieldValue('to', value)
-              } }
+              }}
               optionFilterProp="label"
-              placeholder={ t('user-menu.notification.modal.select') }
+              placeholder={t('user-menu.notification.modal.select')}
               showSearch
             />
           </Form.Item>
           <Form.Item
-            label={ t('user-menu.notification.modal.title') }
-            name={ 'title' }
-            rules={ [{ required: true, message: t('user-menu.notification.modal.form.validation.provide-title') }] }
+            label={t('user-menu.notification.modal.title')}
+            name={'title'}
+            rules={[{ required: true, message: t('user-menu.notification.modal.form.validation.provide-title') }]}
           >
             <Input />
           </Form.Item>
 
           <Form.Item
-            label={ t('user-menu.notification.modal.message') }
-            name={ 'message' }
-            rules={ [{ required: true, message: t('user-menu.notification.modal.form.validation.provide-message') }] }
+            label={t('user-menu.notification.modal.message')}
+            name={'message'}
+            rules={[{ required: true, message: t('user-menu.notification.modal.form.validation.provide-message') }]}
           >
             <TextArea />
           </Form.Item>
 
           <Form.Item
-            label={ t('user-menu.notification.modal.add-an-attachment') }
-            name={ 'attachment' }
+            label={t('user-menu.notification.modal.add-an-attachment')}
+            name={'attachment'}
           >
             <ManyToOneRelation
               allowToClearRelation
