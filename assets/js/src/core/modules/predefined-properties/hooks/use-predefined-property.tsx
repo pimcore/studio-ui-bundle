@@ -18,7 +18,7 @@ interface UsePredefinedPropertiyReturn {
   createLoading: boolean
   deletePropertyById: (id: string) => Promise<unknown>
   deleteLoading: boolean
-  updatePropertyById: (updatePredefinedProperty: UpdatePredefinedProperty) => Promise<unknown>
+  updatePropertyById: (id: string, updatePredefinedProperty: UpdatePredefinedProperty) => Promise<unknown>
   updateLoading: boolean
 }
 
@@ -29,20 +29,6 @@ export const usePredefinedProperty = (): UsePredefinedPropertiyReturn => {
       isError: isCreateError,
       error: createError
     }] = usePropertyCreateMutation()
-  
-//     const createPropertyById = async (): Promise<void> => {
-
-//       try {
-// const response = await createProperty()
-
-//       if (response.error !== undefined) {
-//         trackError(new ApiError(response.error))
-//         return
-//       }
-//         onSuccess()
-//       }
-    
-//   }
     
       const [deleteProperty, {
         isLoading: deleteLoading,
@@ -61,7 +47,11 @@ export const usePredefinedProperty = (): UsePredefinedPropertiyReturn => {
         error: updateError
       }] = usePropertyUpdateMutation()
 
-    const updatePropertyById = async (updatePredefinedProperty: UpdatePredefinedProperty): Promise<void> => {
+    const updatePropertyById = async (id: string, updatePredefinedProperty: UpdatePredefinedProperty): Promise<void> => {
+      console.log("ih", id);
+            console.log("updatePredefinedProperty", updatePredefinedProperty);
+
+      
     await updateProperty({ id, updatePredefinedProperty})
   }
 

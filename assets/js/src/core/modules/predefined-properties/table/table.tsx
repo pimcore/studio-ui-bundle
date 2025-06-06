@@ -16,13 +16,14 @@ import { useStyles } from './table.styles'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { uuid } from '@Pimcore/utils/uuid'
 import { usePredefinedProperties } from '../hooks/use-predefined-properties'
-import { PredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
+import { PredefinedProperty, UpdatePredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
 import { IconButton } from '@sdk/components'
 import { verifyUpdate } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/verify-cell-update'
 import { usePredefinedProperty } from '../hooks/use-predefined-property'
 import { Row } from 'antd'
 import { PredefinedPropertyWithId } from "../predefined-properties-provider"
 import { isUndefined } from 'lodash'
+import { log } from '@module-federation/runtime-core/dist/src/utils'
 
 
 type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
@@ -36,7 +37,7 @@ export const Table = ({ showDuplicatePropertyModal, showMandatoryModal }: ITable
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { predefinedProperties, isLoading } = usePredefinedProperties()
-  const { deletePropertyById, deleteLoading } = usePredefinedProperty()
+  const { deletePropertyById, deleteLoading, updatePropertyById, updateLoading } = usePredefinedProperty()
 const [enrichedProperties, setEnrichedProperties] = useState<PredefinedPropertyWithId[]>([])
 
   useEffect(() => {
@@ -99,7 +100,7 @@ const [enrichedProperties, setEnrichedProperties] = useState<PredefinedPropertyW
       return  (
         <div className="properties-table--actions-column">
           <IconButton icon={{ value: 'translate' }} onClick={() => console.log('Open Translate View')} type="link" />
-          <IconButton icon={{ value: 'trash' }} onClick={() => deletePropertyById(id)} type="link" />
+          <IconButton icon={{ value: 'trash' }} loading= {deleteLoading} onClick={() => deletePropertyById(id)} type="link" />
         </div>
       )
   }
@@ -108,10 +109,23 @@ const [enrichedProperties, setEnrichedProperties] = useState<PredefinedPropertyW
 
   const onUpdateCellData = ({ columnId, value, rowData }): void => {
     const updatedProperty = { ...rowData, [columnId]: value }
-    const hasDuplicate = enrichedProperties.filter(property => property.key === updatedProperty.key).length > 1
+    const hasDuplicate = enrichedProperties.filter(property => property.id === updatedProperty.id).length > 1
+    console.log("update", updatedProperty)
+const apiProperty: UpdatePredefinedProperty = {
+  name: updatedProperty.name ?? "",
+  description: updatedProperty.description ?? "",
+  key: updatedProperty.key ?? "",
+  type: updatedProperty.type ?? "",
+  data: updatedProperty.data ?? "",
+  config: updatedProperty.config ?? "",
+  ctype: updatedProperty.ctype ?? "",
+  inheritable: updatedProperty.inheritable
+}
 
     if (verifyUpdate(value, columnId, 'key', hasDuplicate, showMandatoryModal, showDuplicatePropertyModal)) {
-console.log("update");
+updatePropertyById(updatedProperty.id, apiProperty)
+    console.log("update", updatedProperty)
+
     }
   }
 
