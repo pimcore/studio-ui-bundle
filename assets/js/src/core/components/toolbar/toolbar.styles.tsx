@@ -45,6 +45,10 @@ export const useStyles = createStyles(({ token, css }) => {
       &.toolbar--size-small {
         height: 40px;
       }
+
+      &.toolbar--size-auto {
+        height: 100%;
+      }
     `
   }
 })

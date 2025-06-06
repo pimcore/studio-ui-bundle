@@ -22,20 +22,14 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { Button } from '@Pimcore/components/button/button'
-import {
-  useClassificationStore
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
-import {
-  TabId
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
+import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
+import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import { useKeyedList } from '@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list'
 import {
   useLazyClassificationStoreGetLayoutByCollectionQuery,
   useLazyClassificationStoreGetLayoutByGroupQuery
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
-import {
-  type ClassificationStoreGroupLayout
-} from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+import { type ClassificationStoreGroupLayout } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 
 interface ClassificationStoreDataTabProps<T> {
   tabId: TabId
@@ -61,6 +55,7 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
   const [pageSize, setPageSize] = useState(10)
 
   const [selectedItems, setSelectedItems] = useState<RowSelectionState | undefined>(undefined)
+  const [isApplyingSelection, setIsApplyingSelection] = useState(false)
 
   const isGroupByKey = tabId === TabId.GroupByKey
 
@@ -112,6 +107,8 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
 
               activeGroupsUpdate[groupItem.id] = true
               groupCollectionMappingUpdate[groupItem.id] = parseInt(key)
+
+              setIsApplyingSelection(true)
             }
 
             return isNewGroup
@@ -130,6 +127,8 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
           activeGroupsUpdate[groupData?.id] = true
           groupCollectionMappingUpdate[groupData?.id] = null
 
+          setIsApplyingSelection(true)
+
           return [groupData]
         })
 
@@ -146,6 +145,8 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
 
           activeGroupsUpdate[groupData?.id] = true
           groupCollectionMappingUpdate[groupData?.id] = null
+
+          setIsApplyingSelection(true)
 
           return [groupData]
         })
@@ -165,14 +166,18 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
     operations.update('activeGroups', updatedActiveGroups, false)
     operations.update('groupCollectionMapping', updatedGroupCollectionMapping, false)
 
+    setIsApplyingSelection(false)
     closeModal()
   }
 
   return (
-    <Content>
+    <Content loading={ isApplyingSelection }>
       <ContentLayout
         renderToolbar={
-          <Toolbar theme='secondary'>
+          <Toolbar
+            borderStyle='primary'
+            theme='secondary'
+          >
             <Split size='extra-small'>
               <Refetch
                 isFetching={ isFetching }
@@ -197,8 +202,10 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
             }
         renderTopBar={
           <Toolbar
+            borderStyle='primary'
             padding={ { top: 'extra-small', bottom: 'extra-small', left: 'none', right: 'none' } }
             position='top'
+            size='auto'
             theme='secondary'
           >
             <SearchInput
@@ -210,7 +217,7 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
           </Toolbar>
             }
       >
-        <Box padding={ { top: 'extra-small', bottom: 'extra-small' } }>
+        <Box padding={ { top: 'small', bottom: 'small' } }>
           <Grid
             columns={ columns }
             data={ data?.items ?? [] }
