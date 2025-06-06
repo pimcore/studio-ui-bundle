@@ -100,7 +100,11 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
               key={ `${key}` }
               name={ [key, localizationGroup] }
             >
-              <ClassificationStoreItem groupLayout={ find(currentLayoutData, { id: parseInt(key) }) } />
+              <ClassificationStoreItem
+                currentLayoutData={ currentLayoutData }
+                groupLayout={ find(currentLayoutData, { id: parseInt(key) }) }
+                updateCurrentLayoutData={ updateCurrentLayoutData }
+              />
             </Form.Group>
           )
         })}
@@ -126,5 +130,5 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
         />
       </Form.Item>
     </BaseView>
-  ), [values, localizationGroup])
+  ), [values, localizationGroup, currentLayoutData])
 }
