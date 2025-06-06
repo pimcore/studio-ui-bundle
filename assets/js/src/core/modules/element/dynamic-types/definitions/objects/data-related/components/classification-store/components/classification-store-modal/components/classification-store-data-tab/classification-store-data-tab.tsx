@@ -10,7 +10,7 @@
 
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isUndefined } from 'lodash'
+import { isUndefined, uniqBy } from 'lodash'
 import { type RowSelectionState } from '@tanstack/react-table'
 import { Refetch } from '../refetch/refetch'
 import { Pagination } from '../pagination/pagination'
@@ -51,7 +51,7 @@ interface ClassificationStoreDataTabProps<T> {
 
 export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, columns }: ClassificationStoreDataTabProps<T>): React.JSX.Element => {
   const { getSearchValue, setSearchValue, closeModal, currentLayoutData, updateCurrentLayoutData } = useClassificationStore()
-  const { operations } = useKeyedList()
+  const { operations, values } = useKeyedList()
   const { t } = useTranslation()
 
   const [searchTerm, setSearchTerm] = useState(getSearchValue(tabId))
@@ -147,10 +147,14 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
 
     const results = await Promise.all(promises)
     const allGroups = results.flat()
-    updateCurrentLayoutData([...currentLayoutData, ...allGroups])
+    const uniqueGroups = uniqBy(allGroups, 'id')
+    updateCurrentLayoutData([...currentLayoutData, ...uniqueGroups])
 
-    operations.update('activeGroups', activeGroupsUpdate, false)
-    operations.update('groupCollectionMapping', groupCollectionMappingUpdate, false)
+    const updatedActiveGroups = { ...values.activeGroups, ...activeGroupsUpdate }
+    const updatedGroupCollectionMapping = { ...values.groupCollectionMapping, ...groupCollectionMappingUpdate }
+
+    operations.update('activeGroups', updatedActiveGroups, false)
+    operations.update('groupCollectionMapping', updatedGroupCollectionMapping, false)
 
     closeModal()
   }

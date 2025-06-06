@@ -161,16 +161,16 @@
     "http://localhost:3031/bundles/pimcorestudioui/build/deb0156b-af94-4d5e-85c3-ac41bb00ec5a/static/js/async/node_modules_dnd-kit_utilities_dist_utilities_esm_js-_ce1b1.js.map",
     "http://localhost:3031/bundles/pimcorestudioui/build/deb0156b-af94-4d5e-85c3-ac41bb00ec5a/static/js/async/vendors-node_modules_codemirror_lang-html_dist_index_js.js.map",
     "http://localhost:3031/bundles/pimcorestudioui/build/deb0156b-af94-4d5e-85c3-ac41bb00ec5a/static/js/async/vendors-node_modules_dnd-kit_core_dist_core_esm_js.js.map",
-    "http://localhost:3031/bundles/pimcorestudioui/build/deb0156b-af94-4d5e-85c3-ac41bb00ec5a/js_src_core_mf-bootstrap_ts.b25b2392c92ff7df.hot-update.js.map",
     "http://localhost:3031/bundles/pimcorestudioui/build/deb0156b-af94-4d5e-85c3-ac41bb00ec5a/static/js/async/js_src_core_mf-bootstrap_ts.js.map",
-    "http://localhost:3031/bundles/pimcorestudioui/build/deb0156b-af94-4d5e-85c3-ac41bb00ec5a/static/js/main.js.map",
-    "http://localhost:3031/bundles/pimcorestudioui/build/deb0156b-af94-4d5e-85c3-ac41bb00ec5a/main.b25b2392c92ff7df.hot-update.js.map"
+    "http://localhost:3031/bundles/pimcorestudioui/build/deb0156b-af94-4d5e-85c3-ac41bb00ec5a/js_src_core_mf-bootstrap_ts.d4512e3bc6f19467.hot-update.js.map",
+    "http://localhost:3031/bundles/pimcorestudioui/build/deb0156b-af94-4d5e-85c3-ac41bb00ec5a/main.d4512e3bc6f19467.hot-update.js.map",
+    "http://localhost:3031/bundles/pimcorestudioui/build/deb0156b-af94-4d5e-85c3-ac41bb00ec5a/static/js/main.js.map"
   ],
   "entries": {
     "main": {
       "assets": [
+        "main.d4512e3bc6f19467.hot-update.js.map",
         "static/js/main.js.map",
-        "main.b25b2392c92ff7df.hot-update.js.map",
         "static/svg/va.inline.405dc2da.svg",
         "static/svg/uy.inline.4efdfc41.svg",
         "static/svg/mx.inline.bdf8bbb3.svg",
@@ -184,7 +184,6 @@
         "static/svg/er.inline.2e140c5e.svg",
         "static/svg/tv.inline.e8951bab.svg",
         "static/svg/sv.inline.753cddcc.svg",
-        "js_src_core_mf-bootstrap_ts.b25b2392c92ff7df.hot-update.js.map",
         "static/svg/fj.inline.18618864.svg",
         "static/svg/zw.inline.36270d52.svg",
         "static/svg/py.inline.c62aae82.svg",
@@ -251,6 +250,7 @@
         "static/svg/ls.inline.c4c9c030.svg",
         "static/svg/ug.inline.b5df8cbf.svg",
         "static/js/async/js_src_core_mf-bootstrap_ts.js.map",
+        "js_src_core_mf-bootstrap_ts.d4512e3bc6f19467.hot-update.js.map",
         "static/svg/aq.inline.e3ff2bd6.svg",
         "static/svg/rs.inline.689a8671.svg",
         "static/svg/sm.inline.bcf311fd.svg",
