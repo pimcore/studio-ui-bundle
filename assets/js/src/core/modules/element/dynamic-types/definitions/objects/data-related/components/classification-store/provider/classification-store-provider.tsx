@@ -9,6 +9,7 @@
  */
 
 import React, { createContext, useCallback, useState, useMemo } from 'react'
+import type { ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 
 export interface ClassificationStoreContextData {
   isOpen: boolean
@@ -16,8 +17,8 @@ export interface ClassificationStoreContextData {
   close: () => void
   setSearchValue: (tabId: string, value: string) => void
   getSearchValue: (tabId: string) => string
-  currentLayoutData: any[]
-  setCurrentLayoutData: (layoutData: any[]) => void
+  currentLayoutData: ClassificationStoreGroupLayout2[]
+  setCurrentLayoutData: (layoutData: ClassificationStoreGroupLayout2[]) => void
 }
 
 export const ClassificationStoreContext = createContext<ClassificationStoreContextData | undefined>(undefined)

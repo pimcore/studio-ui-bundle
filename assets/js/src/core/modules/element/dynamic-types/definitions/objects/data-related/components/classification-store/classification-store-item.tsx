@@ -14,19 +14,16 @@ import { useItem } from '@Pimcore/components/form/item/provider/item/use-item'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { BaseView } from '../../../layout-related/views/base-view'
-import { type ClassificationStoreGroup } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+import { type ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useKeyedList } from '@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list'
 
-type ClassificationStoreGroupWithKeys = ClassificationStoreGroup & {
-  keys?: any[]
-}
 export interface ClassificationStoreItemProps {
-  groupLayout: ClassificationStoreGroupWithKeys
-  currentLayoutData: any[]
-  updateCurrentLayoutData: (value: any[]) => void
+  groupLayout?: ClassificationStoreGroupLayout2
+  currentLayoutData: ClassificationStoreGroupLayout2[]
+  updateCurrentLayoutData: (value: ClassificationStoreGroupLayout2[]) => void
 }
 
 export const ClassificationStoreItem = (props: ClassificationStoreItemProps): React.JSX.Element => {

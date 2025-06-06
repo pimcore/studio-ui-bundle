@@ -24,6 +24,7 @@ import { Space } from '@Pimcore/components/space/space'
 import { Button } from '@Pimcore/components/button/button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
+import { type ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 
 export const ClassificationStoreContent = (props: ClassificationStoreProps): React.JSX.Element => {
   const [localizationMode, setLocalizationMode] = useState<string>('default')
@@ -38,7 +39,8 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
   const isLocalizable = props.localized ?? false
 
   useEffect(() => {
-    const activeGroupLayout: any[] = !isEmpty(currentLayoutData) ? currentLayoutData : (props.activeGroupDefinitions ?? [])
+    const initialLayout = props.activeGroupDefinitions ?? []
+    const activeGroupLayout: ClassificationStoreGroupLayout2[] = !isEmpty(currentLayoutData) ? currentLayoutData : initialLayout
 
     updateCurrentLayoutData(activeGroupLayout)
   }, [])

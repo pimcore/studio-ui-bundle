@@ -10,6 +10,7 @@
 
 import { useContext } from 'react'
 import { ClassificationStoreContext } from './classification-store-provider'
+import type { ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 
 export interface UseClassificationStoreReturn {
   isOpenModal: boolean
@@ -17,8 +18,8 @@ export interface UseClassificationStoreReturn {
   closeModal: () => void
   setSearchValue: (tabId: string, value: string) => void
   getSearchValue: (tabId: string) => string
-  currentLayoutData: any[]
-  updateCurrentLayoutData: (layoutData: any[]) => void
+  currentLayoutData: ClassificationStoreGroupLayout2[]
+  updateCurrentLayoutData: (layoutData: ClassificationStoreGroupLayout2[]) => void
 }
 
 const useClassificationStore = (): UseClassificationStoreReturn => {
