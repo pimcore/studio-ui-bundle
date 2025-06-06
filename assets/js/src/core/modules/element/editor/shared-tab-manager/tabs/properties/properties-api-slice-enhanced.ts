@@ -19,7 +19,7 @@ export const api = baseApi.enhanceEndpoints({
         const propertyCollection: Tag[] = []
 
         result?.items?.forEach((property) => {
-          propertyCollection.push(...providingTags.PROPERTY_DETAIL(property.key))
+          propertyCollection.push(...providingTags.PROPERTY_DETAIL(property.id))
         })
 
         return [...propertyCollection, ...providingTags.ELEMENT_PROPERTIES(args.elementType, args.id)]
@@ -30,7 +30,7 @@ export const api = baseApi.enhanceEndpoints({
         const propertyCollection: Tag[] = []
 
         result?.items?.forEach((property) => {
-          propertyCollection.push(...providingTags.PROPERTY_DETAIL(property.key))
+          propertyCollection.push(...providingTags.PROPERTY_DETAIL(property.id))
         })
 
         return propertyCollection

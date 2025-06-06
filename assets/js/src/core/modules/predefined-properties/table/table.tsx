@@ -135,7 +135,7 @@ updatePropertyById(updatedProperty.id, apiProperty)
         autoWidth
         columns={tableColumns}
         data={enrichedProperties}
-        isLoading={isLoading}
+        isLoading={isLoading || deleteLoading || updateLoading}
         modifiedCells={[]}
         onUpdateCellData={onUpdateCellData}
         resizable

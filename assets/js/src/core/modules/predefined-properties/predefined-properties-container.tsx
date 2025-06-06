@@ -122,7 +122,7 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
         }
     >
       <Content
-        loading={ predefinedPropertiesLoading }
+        loading={ predefinedPropertiesLoading}
         margin={ {
           x: 'extra-small',
           y: 'none'
