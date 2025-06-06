@@ -29,7 +29,7 @@ import {
   useLazyClassificationStoreGetLayoutByCollectionQuery,
   useLazyClassificationStoreGetLayoutByGroupQuery
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice-enhanced'
-import { type ClassificationStoreGroupLayout } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+import type { ClassificationStoreGroupLayout, ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 
 interface ClassificationStoreDataTabProps<T> {
   tabId: TabId
@@ -88,13 +88,13 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
   }
 
   const handleApplySelectionClick = async (): Promise<void> => {
-    const keys = Object.keys(selectedItems ?? {})
+    const selectedKeys = Object.keys(selectedItems ?? {})
 
     const activeGroupsUpdate: Record<string, boolean> = {}
     const groupCollectionMappingUpdate: Record<string, number | null> = {}
-    const promises: Array<Promise<any>> = []
+    const promisesList: Array<Promise<any>> = []
 
-    for (const key of keys) {
+    for (const key of selectedKeys) {
       if (tabId === TabId.Collection) {
         const promise = fetchCollectionLayoutData(key).then((collectionData) => {
           const groups = collectionData?.groups ?? []
@@ -115,7 +115,7 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
           })
         })
 
-        promises.push(promise)
+        promisesList.push(promise)
       }
 
       if (tabId === TabId.Group) {
@@ -132,7 +132,7 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
           return [groupData]
         })
 
-        promises.push(promise)
+        promisesList.push(promise)
       }
 
       if (tabId === TabId.GroupByKey) {
@@ -151,12 +151,12 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
           return [groupData]
         })
 
-        promises.push(promise)
+        promisesList.push(promise)
       }
     }
 
-    const results = await Promise.all(promises)
-    const allGroups = results.flat()
+    const results = await Promise.all(promisesList)
+    const allGroups: ClassificationStoreGroupLayout2[] = results.flat()
     const uniqueGroups = uniqBy(allGroups, 'id')
     updateCurrentLayoutData([...currentLayoutData, ...uniqueGroups])
 
