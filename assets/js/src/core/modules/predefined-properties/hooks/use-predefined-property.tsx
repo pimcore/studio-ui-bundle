@@ -52,7 +52,7 @@ export const usePredefinedProperty = (): UsePredefinedPropertiyReturn => {
       }] = usePropertyDeleteMutation()
 
           const deletePropertyById = async (id: string): Promise<void> => {
-    await deleteProperty({ id})
+    await deleteProperty({ id: id})
   }
         const [updateProperty, {
         isLoading: updateLoading,
