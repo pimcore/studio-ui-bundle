@@ -10,7 +10,7 @@
 
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isUndefined, uniqBy } from 'lodash'
+import { has, isUndefined, uniqBy } from 'lodash'
 import { type RowSelectionState } from '@tanstack/react-table'
 import { Refetch } from '../refetch/refetch'
 import { Pagination } from '../pagination/pagination'
@@ -52,6 +52,7 @@ interface ClassificationStoreDataTabProps<T> {
 export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, columns }: ClassificationStoreDataTabProps<T>): React.JSX.Element => {
   const { getSearchValue, setSearchValue, closeModal, currentLayoutData, updateCurrentLayoutData } = useClassificationStore()
   const { operations, values } = useKeyedList()
+  const { activeGroups, groupCollectionMapping, ...activeGroupsData } = values
   const { t } = useTranslation()
 
   const [searchTerm, setSearchTerm] = useState(getSearchValue(tabId))
@@ -103,14 +104,18 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
         const promise = fetchCollectionLayoutData(key).then((collectionData) => {
           const groups = collectionData?.groups ?? []
 
-          groups.forEach((groupItem) => {
-            operations.add(String(groupItem?.id), {})
+          return groups.filter((groupItem) => {
+            const isNewGroup = !has(activeGroupsData, String(groupItem.id))
 
-            activeGroupsUpdate[groupItem.id] = true
-            groupCollectionMappingUpdate[groupItem.id] = parseInt(key)
+            if (isNewGroup) {
+              operations.add(String(groupItem?.id), {})
+
+              activeGroupsUpdate[groupItem.id] = true
+              groupCollectionMappingUpdate[groupItem.id] = parseInt(key)
+            }
+
+            return isNewGroup
           })
-
-          return groups
         })
 
         promises.push(promise)
@@ -118,6 +123,8 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
 
       if (tabId === TabId.Group) {
         const promise = fetchGroupLayoutData(key).then((groupData) => {
+          if (has(activeGroupsData, String(groupData?.id))) return []
+
           operations.add(String(groupData?.id), {})
 
           activeGroupsUpdate[groupData?.id] = true
@@ -133,6 +140,8 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
         const groupId = key.split('-')[0]
 
         const promise = fetchGroupLayoutData(groupId).then((groupData) => {
+          if (has(activeGroupsData, String(groupData?.id))) return []
+
           operations.add(String(groupData?.id), {})
 
           activeGroupsUpdate[groupData?.id] = true
