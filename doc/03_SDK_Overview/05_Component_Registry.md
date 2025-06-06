@@ -62,7 +62,7 @@ const defaultComponentConfig = {
             type: ComponentType.SLOT,
             name: 'asset.editor.toolbar.slots.left',
             defaultEntries: [
-              { name: 'contextMenu', priority: 100, component: EditorToolbarContextMenu }
+              { name: 'contextMenu', priority: 100 }
             ]
           }
         }

@@ -9,28 +9,25 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { type DefaultOptionType } from 'antd/es/select'
-import { Select, type SelectProps } from '@Pimcore/components/select/select'
-import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
+import { Select } from '@Pimcore/components/select/select'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
+import { type DefaultOptionType } from 'antd/es/select'
 
-export interface DynamicTypeFieldFilterSelectProps extends AbstractFieldFilterDefinition {
-  options: SelectProps['options']
+interface SelectConfig {
+  options: string[]
 }
 
-export const DynamicTypeFieldFilterSelectComponent = (props: DynamicTypeFieldFilterSelectProps): React.JSX.Element => {
-  const { setData, data } = useDynamicFilter()
+export const DynamicTypeFieldFilterSelectComponent = (): React.JSX.Element => {
+  const { setData, data, config: rawConfig } = useDynamicFilter()
   const [_value, setValue] = useState(data)
-  const options: DefaultOptionType[] = []
 
-  if (props.options !== undefined) {
-    for (const option of props.options) {
-      options.push({
-        label: option?.key,
-        value: option?.value
-      })
-    }
-  }
+  const config = rawConfig as SelectConfig
+
+  const rawOptions = config.options
+  const formattedOptions: DefaultOptionType[] = rawOptions.map((opt: string) => ({
+    label: opt,
+    value: opt
+  }))
 
   useEffect(() => {
     setValue(data)
@@ -40,7 +37,7 @@ export const DynamicTypeFieldFilterSelectComponent = (props: DynamicTypeFieldFil
     <Select
       onBlur={ onBlur }
       onChange={ (value: string) => { setValue(value) } }
-      options={ options }
+      options={ formattedOptions }
       style={ { width: '100%' } }
       value={ _value }
     />

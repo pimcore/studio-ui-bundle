@@ -2,7 +2,7 @@
 
 The Studio UI Bundle provides a Backend UI for [Pimcore](https://pimcore.com/). The Studio UI relies on the [Studio Backend Bundle](https://github.com/pimcore/studio-backend-bundle/), which provides the backend API for the Studio UI.
 
-It is built using the following **key technologies**: [React](https://react.dev/), [Ant Design](https://ant.design/), [TypeScript](https://www.typescriptlang.org/), [Redux](https://redux.js.org/), [RTK Query](https://redux-toolkit.js.org/rtk-query/overview), [Mercure](https://mercure.rocks/), [Webpack](https://webpack.js.org/).
+It is built using the following **key technologies**: [React](https://react.dev/), [Ant Design](https://ant.design/), [TypeScript](https://www.typescriptlang.org/), [Redux](https://redux.js.org/), [RTK Query](https://redux-toolkit.js.org/rtk-query/overview), [Mercure](https://mercure.rocks/), [Rsbuild](https://rsbuild.rs/).
 
 #### Access Studio in the Browser:
 You can access the Pimcore Studio Admin UI at its default URL: `{your-domain}/pimcore-studio`.

@@ -8,6 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+if (module.hot !== undefined) {
+  module.hot.accept()
+}
+
 export * from '@Pimcore/modules/element/actions/add-folder/use-add-folder'
 export * from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 export * from '@Pimcore/modules/element/actions/delete/use-delete'
@@ -36,6 +40,7 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/ty
 export * from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/text/dynamic-type-batch-edit-text'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/text/dynamic-type-batch-edit-text-area'
 
+export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-checkbox-component'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-datetime-component'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-number-component'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-select-component'

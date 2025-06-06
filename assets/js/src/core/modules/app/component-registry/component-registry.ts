@@ -26,10 +26,12 @@ interface ComponentRegistryConfigEntrySingle {
   type: ComponentType.SINGLE
 }
 
+interface ComponentRegistryConfigEntrySlotItem extends Omit<ComponentRegistryEntry<any>, 'component'> {}
+
 interface ComponentRegistryConfigEntrySlot {
   name: string
   type: ComponentType.SLOT
-  defaultEntries?: Array<ComponentRegistryEntry<any>>
+  defaultEntries?: ComponentRegistryConfigEntrySlotItem[]
 }
 
 export type ComponentRegistryConfigEntry = ComponentRegistryConfigEntrySingle | ComponentRegistryConfigEntrySlot
