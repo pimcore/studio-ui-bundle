@@ -100,7 +100,7 @@ const [enrichedProperties, setEnrichedProperties] = useState<PredefinedPropertyW
       return  (
         <div className="properties-table--actions-column">
           <IconButton icon={{ value: 'translate' }} onClick={() => console.log('Open Translate View')} type="link" />
-          <IconButton icon={{ value: 'trash' }} loading= {deleteLoading} onClick={() => deletePropertyById(id)} type="link" />
+          <IconButton icon={{ value: 'trash' }} onClick={() => deletePropertyById(id)} type="link" />
         </div>
       )
   }
