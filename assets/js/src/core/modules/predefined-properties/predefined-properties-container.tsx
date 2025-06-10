@@ -18,7 +18,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { usePredefinedProperties } from './hooks/use-predefined-properties'
 import { Table } from './table/table'
-import { IconTextButton } from '@sdk/components'
+import { Box, IconTextButton } from '@sdk/components'
 import { PredefinedPropertyProvider } from './predefined-properties-provider'
 import { usePredefinedProperty } from './hooks/use-predefined-property'
 
@@ -75,7 +75,14 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
         } }
         none={ (predefinedProperties === undefined || predefinedProperties.length === 0) && !predefinedPropertiesLoading }
       >
+                <Box
+                  margin={ {
+                    x: 'extra-small',
+                    y: 'none'
+                  } }
+                >
         <Table />
+        </Box>
       </Content>
     </ContentLayout>
   )

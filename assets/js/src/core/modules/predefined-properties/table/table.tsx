@@ -68,7 +68,7 @@ export const Table = (): React.JSX.Element => {
     }),
     columnHelper.accessor('type', {
       header: t('properties.columns.type'),
-      meta: { editable: true },
+      meta: { type: 'select', editable: true, config: { options: ['text', 'document', 'asset', 'object', 'boolean', 'select']} },
       size: 100
     }),
     columnHelper.accessor('data', {
@@ -83,12 +83,12 @@ export const Table = (): React.JSX.Element => {
     }),
     columnHelper.accessor('ctype', {
       header: t('properties.columns.content-type'),
-      meta: { editable: true },
-      size: 100
+      meta: { type: 'select', editable: true, config: { options: ['document',  'object', 'asset',]} },
+      size: 110
     }),
     columnHelper.accessor('inheritable', {
       header: t('properties.columns.inheritable'),
-      size: 80,
+      size: 95,
       meta: { type: 'checkbox', editable: true, config: { align: 'center' } }
     }),
     columnHelper.accessor('actions', {
