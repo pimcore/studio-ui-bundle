@@ -58,14 +58,18 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       icon: <Badge count={ 5 } />,
       onClick: () => { openMainWidget(NOTIFICATIONS) },
       hidden: !isAllowed(UserPermission.Notifications),
-      extra: isAllowed(UserPermission.SendNotifications) ? (<Button
-        className={'user-menu__item-extra'}
-        onClick={(e) => {
-          e.stopPropagation()
-          setSendModal(true)
-        }}
-        size={'small'}
-      >{t('user-menu.notification.send')}</Button>) : null
+      extra: isAllowed(UserPermission.SendNotifications)
+        ? (
+          <Button
+            className={ 'user-menu__item-extra' }
+            onClick={ (e) => {
+              e.stopPropagation()
+              setSendModal(true)
+            } }
+            size={ 'small' }
+          >{t('user-menu.notification.send')}</Button>
+          )
+        : null
     },
     {
       key: 'myprofile',
