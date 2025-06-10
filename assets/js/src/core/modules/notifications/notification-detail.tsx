@@ -24,12 +24,14 @@ import { useStyles } from './notifications.styles'
 import { NotificationAttachment } from './notification-attachment'
 import { useElementHelper } from '@sdk/modules/element'
 import { isNil } from 'lodash'
+import { useTranslation } from 'react-i18next'
 
 export interface NotificationDetailProps {
   notification: NotificationListItem
 }
 
 export const NotificationDetail = ({ notification }: NotificationDetailProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const {
     isExpanded,
     setIsExpanded,
@@ -104,7 +106,7 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
                   />
                 }
               >
-                Attachments
+                {t('user-menu.notification.attachments')}
               </Title>
               <NotificationAttachment
                 attachmentId={notificationDetail.attachmentId}
