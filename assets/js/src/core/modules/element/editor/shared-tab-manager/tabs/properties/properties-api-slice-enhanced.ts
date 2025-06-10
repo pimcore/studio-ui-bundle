@@ -19,6 +19,8 @@ export const api = baseApi.enhanceEndpoints({
         const propertyCollection: Tag[] = []
 
         result?.items?.forEach((property) => {
+          console.log("property", property);
+          
           propertyCollection.push(...providingTags.PROPERTY_DETAIL(property.id))
         })
 

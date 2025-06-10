@@ -33,6 +33,8 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
   const {predefinedProperties, isLoading: predefinedPropertiesLoading} = usePredefinedProperties()
   const {createProperty, createLoading } = usePredefinedProperty()
 
+  console.log("predefinedPropertiesLoading", predefinedPropertiesLoading);
+  
   const content = (
     <ContentLayout
       renderToolbar={
@@ -70,7 +72,7 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
           x: 'extra-small',
           y: 'none'
         } }
-        none={ predefinedProperties === undefined || predefinedProperties.length === 0 }
+        none={ (predefinedProperties === undefined || predefinedProperties.length === 0) && !predefinedPropertiesLoading}
       >
 <Table/>
 </Content>

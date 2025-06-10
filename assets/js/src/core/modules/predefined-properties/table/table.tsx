@@ -30,6 +30,7 @@ export const Table = (): React.JSX.Element => {
   const { predefinedProperties, isLoading } = usePredefinedProperties()
   const { deletePropertyById, deleteLoading, updatePropertyById, updateLoading } = usePredefinedProperty()
 const [enrichedProperties, setEnrichedProperties] = useState<PredefinedPropertyWithId[]>([])
+const [deletingRowId, setDeletingRowId] = useState<string | null>(null);
 
   useEffect(() => {
     if (predefinedProperties && Array.isArray(predefinedProperties)) {
@@ -41,6 +42,15 @@ const [enrichedProperties, setEnrichedProperties] = useState<PredefinedPropertyW
 
   
   const columnHelper = createColumnHelper<PredefinedPropertyWithActions>()
+
+  const handleDelete = async (id: string) => {
+  try {
+    setDeletingRowId(id);
+    await deletePropertyById(id);
+  } finally {
+    setDeletingRowId(null);
+  }
+};
 
   const tableColumns = [
     columnHelper.accessor('name', {
@@ -91,7 +101,7 @@ const [enrichedProperties, setEnrichedProperties] = useState<PredefinedPropertyW
       return  (
         <div className="properties-table--actions-column">
           <IconButton icon={{ value: 'translate' }} onClick={() => console.log('Open Translate View')} type="link" />
-          <IconButton icon={{ value: 'trash' }} onClick={() => deletePropertyById(id)} type="link" />
+          <IconButton icon={{ value: 'trash' }} loading={deletingRowId == id} onClick={() => handleDelete(id)} type="link" />
         </div>
       )
   }
@@ -120,7 +130,6 @@ const toApiProperty = (row: PredefinedPropertyWithId): UpdatePredefinedProperty 
         autoWidth
         columns={tableColumns}
         data={enrichedProperties}
-        isLoading={isLoading || deleteLoading || updateLoading}
         modifiedCells={[]}
         onUpdateCellData={onUpdateCellData}
         resizable
