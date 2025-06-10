@@ -72,7 +72,6 @@ export default defineConfig({
   output: {
     manifest: true,
     assetPrefix: '/bundles/pimcorestudioui/build/' + buildId,
-    sourceMap: false,
     distPath: {
       root: buildPath
     },
