@@ -10,7 +10,7 @@
 
 import { Badge } from '@Pimcore/components/badge/badge'
 import { Button } from '@Pimcore/components/button/button'
-import { Dropdown, DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
@@ -48,14 +48,14 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     {
       key: 'title',
       label: (
-        <div className={'user-menu__title'}>{t('user-menu.title')}</div>
+        <div className={ 'user-menu__title' }>{t('user-menu.title')}</div>
       ),
       type: 'group'
     },
     {
       key: 'notifications',
       label: t('user-menu.notifications'),
-      icon: <Badge count={5} />,
+      icon: <Badge count={ 5 } />,
       onClick: () => { openMainWidget(NOTIFICATIONS) },
       hidden: !isAllowed(UserPermission.Notifications),
       extra: isAllowed(UserPermission.SendNotifications) ? (<Button
@@ -70,7 +70,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     {
       key: 'myprofile',
       label: t('user-menu.my-profile'),
-      icon: <Icon value={'user'} />,
+      icon: <Icon value={ 'user' } />,
       onClick: () => {
         console.log('My Profile clicked')
       }
@@ -78,7 +78,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     {
       key: 'logout',
       label: t('user-menu.log-out'),
-      icon: <Icon value={'log-out'} />,
+      icon: <Icon value={ 'log-out' } />,
       onClick: handleLogout
     }
   ]
@@ -86,20 +86,20 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   return (
     <>
       <Dropdown
-        className={className}
-        menu={{ items }}
-        overlayClassName={[styles.userMenu].join(' ')}
-        overlayStyle={{ minWidth: 275 }}
+        className={ className }
+        menu={ { items } }
+        overlayClassName={ [styles.userMenu].join(' ') }
+        overlayStyle={ { minWidth: 275 } }
       >
         <Avatar
-          icon={<Icon value='user' />}
-          size={26}
+          icon={ <Icon value='user' /> }
+          size={ 26 }
         />
       </Dropdown>
 
       <SendNotificationModal
-        onClose={() => { setSendModal(false) }}
-        open={sendModal}
+        onClose={ () => { setSendModal(false) } }
+        open={ sendModal }
       />
     </>
   )
