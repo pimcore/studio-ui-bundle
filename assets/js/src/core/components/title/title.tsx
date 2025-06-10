@@ -29,13 +29,13 @@ export const Title = ({ children, icon, titleClass, theme = 'primary', weight = 
 
   return (
     <Flex
-      align={'center'}
-      className={[styles.flex, `title--theme-${theme}`].join(' ')}
+      align={ 'center' }
+      className={ [styles.flex, `title--theme-${theme}`].join(' ') }
     >
       {icon}
       <AntTitle
-        className={titleClassNames}
-        {...props}
+        className={ titleClassNames }
+        { ...props }
       >{children}</AntTitle>
     </Flex>
   )
