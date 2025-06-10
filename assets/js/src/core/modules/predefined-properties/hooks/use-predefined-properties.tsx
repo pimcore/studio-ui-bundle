@@ -8,9 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { PredefinedProperty } from "@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced"
-import { useContext } from "react"
-import { PredefinedPropertyContext } from "../predefined-properties-provider"
+import { type PredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
+import { useContext } from 'react'
+import { PredefinedPropertyContext } from '../predefined-properties-provider'
 
 interface UsePredefinedPropertiesReturn {
   predefinedProperties: PredefinedProperty[] | undefined
@@ -23,7 +23,7 @@ export const usePredefinedProperties = (): UsePredefinedPropertiesReturn => {
     throw new Error('usePredefinedProperties must be used within a PredefinedPropertyProvider')
   }
 
-  const { predefinedProperties, isLoading } = context  
+  const { predefinedProperties, isLoading } = context
 
   return {
     predefinedProperties,

@@ -30,11 +30,11 @@ export interface TreeAction {
 }
 
 const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
-  const {predefinedProperties, isLoading: predefinedPropertiesLoading} = usePredefinedProperties()
-  const {createProperty, createLoading } = usePredefinedProperty()
+  const { predefinedProperties, isLoading: predefinedPropertiesLoading } = usePredefinedProperties()
+  const { createProperty, createLoading } = usePredefinedProperty()
 
-  console.log("predefinedPropertiesLoading", predefinedPropertiesLoading);
-  
+  console.log('predefinedPropertiesLoading', predefinedPropertiesLoading)
+
   const content = (
     <ContentLayout
       renderToolbar={
@@ -42,7 +42,8 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
           <IconButton
             icon={ { value: 'refresh' } }
             onClick={ () => {
-        console.log("clicked")}
+              console.log('clicked')
+            }
           }
           />
         </Toolbar> }
@@ -55,27 +56,27 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
           } }
           theme='secondary'
         >
-                    <Flex gap={ 'small' }>
-                      <Title titleClass={ 'm-none' }>{t('widget.predefined-properties')}</Title>       
-                      <IconTextButton
-                        disabled={ predefinedPropertiesLoading || createLoading }
-                        icon={ { value: 'new' } }
-                        onClick={ async () => {createProperty()}}
-                      >{t('predefined-properties.new')}</IconTextButton>
-                    </Flex>
+          <Flex gap={ 'small' }>
+            <Title titleClass={ 'm-none' }>{t('widget.predefined-properties')}</Title>
+            <IconTextButton
+              disabled={ predefinedPropertiesLoading || createLoading }
+              icon={ { value: 'new' } }
+              onClick={ async () => { await createProperty() } }
+            >{t('predefined-properties.new')}</IconTextButton>
+          </Flex>
         </Toolbar>
         }
     >
       <Content
-        loading={ predefinedPropertiesLoading}
+        loading={ predefinedPropertiesLoading }
         margin={ {
           x: 'extra-small',
           y: 'none'
         } }
-        none={ (predefinedProperties === undefined || predefinedProperties.length === 0) && !predefinedPropertiesLoading}
+        none={ (predefinedProperties === undefined || predefinedProperties.length === 0) && !predefinedPropertiesLoading }
       >
-<Table/>
-</Content>
+        <Table />
+      </Content>
     </ContentLayout>
   )
 
