@@ -22,7 +22,7 @@
     "globalName": "pimcore_studio_ui_bundle_core",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
-    "publicPath": "/bundles/pimcorestudioui/build/4b514575-fba5-496b-8f8e-1eb3ccae3801/"
+    "publicPath": "/bundles/pimcorestudioui/build/74b9236f-bffc-4098-9ad0-15d997e9750c/"
   },
   "shared": [
     {
@@ -765,7 +765,7 @@
       "moduleName": "components",
       "usedIn": [
         "js/src/core/app/router/router.tsx + 37 modules",
-        "js/src/core/bootstrap.ts + 1182 modules",
+        "js/src/core/bootstrap.ts + 1181 modules",
         "js/src/core/components/drag-and-drop/droppable.tsx + 2 modules",
         "js/src/core/components/drag-and-drop/hooks/use-droppable.tsx",
         "js/src/core/modules/app/utils/app-runner.tsx + 12 modules",
@@ -781,7 +781,7 @@
       "usedIn": [
         "js/src/core/app/i18n/index.ts + 4 modules",
         "js/src/core/app/router/router.tsx + 37 modules",
-        "js/src/core/bootstrap.ts + 1182 modules",
+        "js/src/core/bootstrap.ts + 1181 modules",
         "js/src/core/components/element-tree/element-tree-slice.ts",
         "js/src/core/components/modal-upload/modal-upload.tsx",
         "js/src/core/modules/app/settings/settings-slice.ts",
@@ -835,7 +835,7 @@
       "usedIn": [
         "js/src/core/app/i18n/index.ts + 4 modules",
         "js/src/core/app/router/router.tsx + 37 modules",
-        "js/src/core/bootstrap.ts + 1182 modules",
+        "js/src/core/bootstrap.ts + 1181 modules",
         "js/src/core/modules/app/translations/translations-api-slice.gen.ts",
         "js/src/core/modules/app/utils/app-runner.tsx + 12 modules",
         "js/src/core/modules/asset/asset-api-slice.gen.ts",
@@ -882,7 +882,7 @@
       "federationContainerName": "promise new Promise(resolve => {\n          const studioUIBundleRemoteUrl = window.StudioUIBundleRemoteUrl\n          const script = document.createElement('script')\n          script.src = studioUIBundleRemoteUrl\n          script.onload = () => {\n            const proxy = {\n              get: (request) => window['pimcore_studio_ui_bundle'].get(request),\n              init: (...arg) => {\n                try {\n                  return window['pimcore_studio_ui_bundle'].init(...arg)\n                } catch(e) {\n                  console.log('remote container already initialized')\n                }\n              }\n            }\n            resolve(proxy)\n          }\n          document.head.appendChild(script);\n        })\n        ",
       "moduleName": "modules/asset",
       "usedIn": [
-        "js/src/core/bootstrap.ts + 1182 modules"
+        "js/src/core/bootstrap.ts + 1181 modules"
       ],
       "version": "*"
     },

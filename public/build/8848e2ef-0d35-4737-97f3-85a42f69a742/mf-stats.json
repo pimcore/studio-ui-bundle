@@ -22,7 +22,7 @@
     "globalName": "pimcore_studio_ui_bundle",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
-    "publicPath": "/bundles/pimcorestudioui/build/8b5e8b56-630e-4c74-b987-bdaf04e93a00/"
+    "publicPath": "/bundles/pimcorestudioui/build/8848e2ef-0d35-4737-97f3-85a42f69a742/"
   },
   "shared": [
     {
@@ -47,12 +47,12 @@
         }
       },
       "usedIn": [
-        "./modules/user",
+        "./modules/element",
         "./app",
         "./components",
         "./modules/asset",
         "./modules/data-object",
-        "./modules/element"
+        "./modules/user"
       ]
     },
     {
@@ -77,13 +77,13 @@
         }
       },
       "usedIn": [
-        "./modules/user",
         "./app",
         "./components",
         "./modules/app",
         "./modules/asset",
         "./modules/data-object",
         "./modules/element",
+        "./modules/user",
         "./modules/widget-manager",
         "./modules/wysiwyg"
       ]
@@ -890,7 +890,7 @@
             "static/js/async/6903.4f9b2aa5.js",
             "static/js/async/1869.8f74c87d.js",
             "static/js/async/7230.77c0c5a8.js",
-            "static/js/async/__federation_expose_app.e9c26967.js",
+            "static/js/async/__federation_expose_app.e846ee46.js",
             "static/js/async/__federation_expose_modules__data_object.4606772e.js",
             "static/js/async/__federation_expose_modules__user.ceeba2c9.js",
             "static/js/async/__federation_expose_modules__wysiwyg.830a8760.js"
@@ -903,7 +903,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6903.3a907b83.css"
+            "static/css/async/6903.1cb19e93.css"
           ],
           "async": []
         }
@@ -1376,7 +1376,7 @@
             "static/js/async/6903.4f9b2aa5.js",
             "static/js/async/1869.8f74c87d.js",
             "static/js/async/7230.77c0c5a8.js",
-            "static/js/async/__federation_expose_app.e9c26967.js",
+            "static/js/async/__federation_expose_app.e846ee46.js",
             "static/js/async/__federation_expose_modules__data_object.4606772e.js"
           ],
           "async": [
@@ -1387,7 +1387,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6903.3a907b83.css"
+            "static/css/async/6903.1cb19e93.css"
           ],
           "async": []
         }
@@ -1460,7 +1460,7 @@
             "static/js/async/6903.4f9b2aa5.js",
             "static/js/async/1869.8f74c87d.js",
             "static/js/async/7230.77c0c5a8.js",
-            "static/js/async/__federation_expose_app.e9c26967.js",
+            "static/js/async/__federation_expose_app.e846ee46.js",
             "static/js/async/__federation_expose_modules__user.ceeba2c9.js"
           ],
           "async": [
@@ -1471,7 +1471,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6903.3a907b83.css"
+            "static/css/async/6903.1cb19e93.css"
           ],
           "async": []
         }
@@ -1514,7 +1514,7 @@
             "static/js/async/6903.4f9b2aa5.js",
             "static/js/async/1869.8f74c87d.js",
             "static/js/async/7230.77c0c5a8.js",
-            "static/js/async/__federation_expose_app.e9c26967.js",
+            "static/js/async/__federation_expose_app.e846ee46.js",
             "static/js/async/__federation_expose_modules__wysiwyg.830a8760.js"
           ],
           "async": [
@@ -1525,7 +1525,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6903.3a907b83.css"
+            "static/css/async/6903.1cb19e93.css"
           ],
           "async": []
         }
@@ -1551,7 +1551,7 @@
             "static/js/async/6903.4f9b2aa5.js",
             "static/js/async/1869.8f74c87d.js",
             "static/js/async/7230.77c0c5a8.js",
-            "static/js/async/__federation_expose_app.e9c26967.js",
+            "static/js/async/__federation_expose_app.e846ee46.js",
             "static/js/async/__federation_expose_modules__data_object.4606772e.js",
             "static/js/async/__federation_expose_modules__user.ceeba2c9.js",
             "static/js/async/__federation_expose_modules__wysiwyg.830a8760.js"
@@ -1560,7 +1560,7 @@
         "css": {
           "sync": [],
           "async": [
-            "static/css/async/6903.3a907b83.css"
+            "static/css/async/6903.1cb19e93.css"
           ]
         }
       }
