@@ -14,8 +14,11 @@ import { container } from '@Pimcore/app/depency-injection'
 import DefaultWysiwygEditor from './default-wysiwyg-editor/default-wysiwyg-editor'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
+console.log({ moduleSystem })
+
 moduleSystem.registerModule({
   onInit: () => {
+    console.log('Wysiwyg module initialized')
     const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
 
     componentRegistry.register({

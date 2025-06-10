@@ -9,7 +9,7 @@
  */
 
 import { ContainerProvider } from '@Pimcore/app/depency-injection'
-import { store } from '@sdk/app'
+import { store } from '@Pimcore/app/store'
 import { DragAndDropContextProvider } from '@sdk/components'
 import { ThemeProvider } from '@Pimcore/modules/app/theme/theme-provider'
 import React from 'react'
