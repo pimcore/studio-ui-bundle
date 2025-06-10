@@ -75,13 +75,13 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
         } }
         none={ (predefinedProperties === undefined || predefinedProperties.length === 0) && !predefinedPropertiesLoading }
       >
-                <Box
-                  margin={ {
-                    x: 'extra-small',
-                    y: 'none'
-                  } }
-                >
-        <Table />
+        <Box
+          margin={ {
+            x: 'extra-small',
+            y: 'none'
+          } }
+        >
+          <Table />
         </Box>
       </Content>
     </ContentLayout>

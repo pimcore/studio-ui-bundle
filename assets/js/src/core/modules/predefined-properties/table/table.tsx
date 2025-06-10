@@ -68,7 +68,7 @@ export const Table = (): React.JSX.Element => {
     }),
     columnHelper.accessor('type', {
       header: t('properties.columns.type'),
-      meta: { type: 'select', editable: true, config: { options: ['text', 'document', 'asset', 'object', 'boolean', 'select']} },
+      meta: { type: 'select', editable: true, config: { options: ['text', 'document', 'asset', 'object', 'boolean', 'select'] } },
       size: 100
     }),
     columnHelper.accessor('data', {
@@ -83,7 +83,7 @@ export const Table = (): React.JSX.Element => {
     }),
     columnHelper.accessor('ctype', {
       header: t('properties.columns.content-type'),
-      meta: { type: 'select', editable: true, config: { options: ['document',  'object', 'asset',]} },
+      meta: { type: 'select', editable: true, config: { options: ['document', 'object', 'asset'] } },
       size: 110
     }),
     columnHelper.accessor('inheritable', {
