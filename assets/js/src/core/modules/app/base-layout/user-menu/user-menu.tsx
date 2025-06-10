@@ -22,6 +22,7 @@ import { Avatar } from 'antd'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStyle } from './user-menu.styles'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 
 interface IUserMenuProps {
   className?: string
@@ -56,15 +57,15 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       label: t('user-menu.notifications'),
       icon: <Badge count={5} />,
       onClick: () => { openMainWidget(NOTIFICATIONS) },
-      hidden: !isAllowed('notifications'),
-      extra: <Button
+      hidden: !isAllowed(UserPermission.Notifications),
+      extra: isAllowed(UserPermission.SendNotifications) ? (<Button
         className={'user-menu__item-extra'}
         onClick={(e) => {
           e.stopPropagation()
           setSendModal(true)
         }}
         size={'small'}
-      >{t('user-menu.notification.send')}</Button>
+      >{t('user-menu.notification.send')}</Button>) : null
     },
     {
       key: 'myprofile',
