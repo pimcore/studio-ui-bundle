@@ -13,7 +13,7 @@ import cn from 'classnames'
 import { isNull, isUndefined } from 'lodash'
 import { FocalPointContext } from '@Pimcore/components/focal-point/context/focal-point-context'
 import { type ISidebarButton } from '@Pimcore/modules/element/sidebar/sidebar-manager'
-import { AssetContext } from '@sdk/modules/asset'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 
 interface SidebarButtonProps extends Omit<ISidebarButton, 'component'> {
