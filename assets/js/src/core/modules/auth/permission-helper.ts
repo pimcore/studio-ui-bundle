@@ -9,7 +9,7 @@
  */
 
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
-import { store } from '@Pimcore/app/store'
+import { store } from '@sdk/app'
 import { selectCurrentUser, type userSliceName } from '@Pimcore/modules/auth/user/user-slice'
 import type { UserInformation } from '@Pimcore/modules/auth/user/user-api-slice-enhanced'
 

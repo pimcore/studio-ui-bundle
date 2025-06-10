@@ -30,8 +30,8 @@ export default defineConfig({
     port: 3031,
   },
   dev: {
-    assetPrefix: '/bundles/pimcorestudioui/build/' + buildId,
-    writeToDisk: true,
+    assetPrefix: (isDevServer ? 'http://localhost:3031' : '') + '/bundles/pimcorestudioui/build/' + buildId,
+    writeToDisk: !isDevServer,
   },
   source: {
     entry: {
@@ -105,6 +105,12 @@ export default defineConfig({
         `,
       },
       shared: {
+        ...packages.dependencies,
+        classnames: {
+          singleton: true,
+          eager: true,
+          requiredVersion: packages.dependencies.classnames
+        },
         react: {
           singleton: true,
           eager: true,

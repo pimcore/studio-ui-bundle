@@ -60,7 +60,7 @@ export const Toolbar = ({ id, onCloneRole, onRemoveRole }: IToolbar): React.JSX.
 
   const onSaveClick = (): void => {
     updateRoleById({ id, item: role as IRole }).catch((error) => {
-      console.log(error)
+      console.error(error)
     })
   }
 

@@ -10,7 +10,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { api, type AssetVersion } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
-import { store } from '@Pimcore/app/store'
+import { store } from '@sdk/app'
 import { hydrateVersionData, checkIsImageVersion, versionsDataToTableData } from '../details-functions'
 import { SingleViewUi } from './single-view-ui'
 import { Content } from '@Pimcore/components/content/content'

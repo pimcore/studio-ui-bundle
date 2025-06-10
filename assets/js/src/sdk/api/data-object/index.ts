@@ -8,4 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+if (module.hot !== undefined) {
+  module.hot.accept()
+}
+
 export * from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'

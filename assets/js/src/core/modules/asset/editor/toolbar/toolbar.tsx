@@ -22,7 +22,7 @@ export const Toolbar = (): React.JSX.Element => {
       <WorkFlowProvider>
         <Flex>
           <SlotRenderer
-            slot={ componentConfig.asset.editor.toolbar.slots.left }
+            slot={ componentConfig.asset.editor.toolbar.slots.left.name }
           />
         </Flex>
         <Flex
@@ -30,7 +30,7 @@ export const Toolbar = (): React.JSX.Element => {
           vertical={ false }
         >
           <SlotRenderer
-            slot={ componentConfig.asset.editor.toolbar.slots.right }
+            slot={ componentConfig.asset.editor.toolbar.slots.right.name }
           />
         </Flex>
         <WorkflowLogModal />

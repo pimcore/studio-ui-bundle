@@ -12,20 +12,21 @@ import React, { useEffect } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { type UserWorkspace } from '@Pimcore/modules/user/user-api-slice.gen'
+import { type UserWorkspace } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from 'antd'
 
 interface ITableProps {
   data: UserWorkspace[]
   isLoading: boolean
+  type?: string
   showDuplicatePropertyModal: () => void
   onUpdateData: (data: UserWorkspace[]) => void
 }
 
 export const Table = ({
   showDuplicatePropertyModal,
-  data,
+  data, type,
   isLoading, onUpdateData
 }: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -40,7 +41,7 @@ export const Table = ({
     columnHelper.accessor('cpath', {
       header: t('user-management.workspaces.columns.cpath'),
       meta: {
-        type: 'element-cell',
+        type,
         editable: true,
         autoWidth: true
       },
@@ -203,7 +204,7 @@ export const Table = ({
 
     const updatedProperties = [...(gridData ?? [])]
     const propertyIndex = updatedProperties.findIndex((property) => property.cpath === rowData.cpath)
-    const updatedProperty = { ...updatedProperties.at(propertyIndex)!, [columnId]: value }
+    const updatedProperty = { ...updatedProperties.at(propertyIndex)!, [columnId]: value, cid: value.id !== undefined ? value.id : rowData.cid, cpath: value.fullPath !== undefined ? value.fullPath : rowData.cpath }
     updatedProperties[propertyIndex] = updatedProperty
     const hasDuplicate = updatedProperties.filter(property => property.cpath === updatedProperty.cpath).length > 1
 

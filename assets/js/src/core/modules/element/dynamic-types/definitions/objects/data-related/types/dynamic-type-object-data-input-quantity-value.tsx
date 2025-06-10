@@ -65,4 +65,8 @@ export class DynamicTypeObjectDataInputQuantityValue extends DynamicTypeObjectDa
         />
         )
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 300
+  }
 }

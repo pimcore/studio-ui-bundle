@@ -20,4 +20,8 @@ export class DynamicTypeGridCellBoolean extends DynamicTypeGridCellAbstract {
   getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
     return <CheckboxCell { ...props } />
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 100
+  }
 }

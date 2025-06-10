@@ -9,7 +9,7 @@
  */
 
 import { useContext } from 'react'
-import { ElementSelectorContext, type ElementSelectorData } from './element-selector-provider'
+import { ElementSelectorContext, type ElementSelectorData } from '@sdk/modules/element'
 import { uuid } from '@Pimcore/utils/uuid'
 
 export interface UseElementSelectorHelperReturn extends ElementSelectorData {

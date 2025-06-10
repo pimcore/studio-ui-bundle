@@ -14,19 +14,24 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     flex: css`
       .pimcore-icon {
-        color: ${token.colorPrimary};
         margin-right: 4px;
+      }
+
+      &.title--theme-primary .pimcore-icon {
+       color: ${token.colorPrimary};
       }
     `,
     title: css`
       &.pimcore-title.ant-typography {
         font-size: 12px;
         font-weight: 600;
-        color: ${token.colorPrimary};
       }
       .pimcore-icon {
-        color: ${token.colorPrimary};
         margin-right: 4px;
+      }
+
+      &.pimcore-title.ant-typography.title--theme-primary {
+       color: ${token.colorPrimary};
       }
     `
   }

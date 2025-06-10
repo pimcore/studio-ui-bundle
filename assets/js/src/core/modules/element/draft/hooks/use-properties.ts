@@ -14,7 +14,7 @@ import type {
   DataProperty as DataPropertyApi
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
 
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import { type TrackableChangesDraft } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 

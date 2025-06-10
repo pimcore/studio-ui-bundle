@@ -10,7 +10,7 @@
 
 import { detectLanguageFromFilename, type SupportedLanguage } from '@Pimcore/components/text-editor/detect-language'
 import { useAssetGetTextDataByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+import { AssetContext } from '@sdk/modules/asset'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { isSet } from '@Pimcore/utils/helpers'
 import { isString } from 'lodash'

@@ -221,7 +221,7 @@ export const GridConfigInner = (): React.JSX.Element => {
     setSelectedColumns(columns.map(column => {
       return {
         key: column.key,
-        locale: column.locale ?? undefined,
+        locale: column.locale,
         type: column.type,
         config: column.config,
         sortable: column.sortable,

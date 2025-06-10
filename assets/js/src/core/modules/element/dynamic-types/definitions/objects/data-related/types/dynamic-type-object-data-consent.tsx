@@ -39,4 +39,8 @@ export class DynamicTypeObjectDataConsent extends DynamicTypeObjectDataAbstract 
 
     return <ConsentPreview consent={ value } />
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 400
+  }
 }

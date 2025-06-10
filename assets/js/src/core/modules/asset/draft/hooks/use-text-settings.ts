@@ -10,7 +10,7 @@
 
 import type { ActionCreatorWithPayload, PayloadAction } from '@reduxjs/toolkit'
 import type { EntityAdapter, EntityState } from '@reduxjs/toolkit/src/entities/models'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import type { TrackableChangesDraft } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
 import type { AssetGetTextDataByIdApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
 

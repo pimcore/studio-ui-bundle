@@ -25,7 +25,7 @@ export class DynamicTypeMetaDataDate extends DynamicTypeMetadataAbstract {
   visibleInTypeSelection: boolean = true
 
   @inject(serviceIds['DynamicTypes/GridCell/Date']) protected dynamicTypeGridCellType: DynamicTypeGridCellAbstract
-  @inject(serviceIds['DynamicTypes/FieldFilter/Text']) protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract
+  @inject(serviceIds['DynamicTypes/FieldFilter/Datetime']) protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract
 
   getVersionPreviewComponent (data: number | null): JSX.Element {
     if (isNil(data)) {

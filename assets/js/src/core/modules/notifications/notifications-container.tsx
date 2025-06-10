@@ -8,83 +8,44 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
-import { Title } from '@Pimcore/components/title/title'
-import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
-import { Pagination } from '@Pimcore/components/pagination/pagination'
-import { useTranslation } from 'react-i18next'
-import { Content } from '@Pimcore/components/content/content'
-import { Box } from '@Pimcore/components/box/box'
-import { NotificationList } from './notification-list'
-import { useNotifications } from './hooks/use-notifications'
-import { IconTextButton } from '@sdk/components'
+import React, { useEffect, useMemo, useState } from 'react'
+import { type NotificationGetCollectionApiArg, useNotificationDeleteAllMutation, useNotificationGetCollectionQuery } from './notifications-slice-enhanced'
+import { ApiError, trackError } from '@sdk/modules/app'
+import { NotificationsView } from './notifications-view'
 
 const NotificationsContainer = (): React.JSX.Element => {
-  const { t } = useTranslation()
-  const {
-    notifications,
-    isLoading,
-    deleteNotificationsForUser,
-    deleteLoading,
-    page,
-    setPage,
-    setPageSize
-  } = useNotifications()
+  const [page, setPage] = useState<number>(1)
+  const [pageSize, setPageSize] = useState(20)
+
+  const queryArgs: NotificationGetCollectionApiArg = useMemo(() => ({ body: { filters: { page, pageSize, includeDescendants: true } } }), [page, pageSize, page])
+
+  const { data: notifications, isLoading, isFetching, isError, error } = useNotificationGetCollectionQuery(queryArgs)
+
+  const [deleteNotificationsForUser, { isError: isDeleteError, error: deleteError, isLoading: deleteLoading }] = useNotificationDeleteAllMutation()
+
+  useEffect(() => {
+    if (isError) {
+      trackError(new ApiError(error))
+    }
+  }, [isError])
+
+  useEffect(() => {
+    if (isDeleteError) {
+      trackError(new ApiError(deleteError))
+    }
+  }, [isDeleteError])
 
   return (
-    <ContentLayout
-      renderToolbar={ notifications?.totalItems !== 0
-        ? (
-          <Toolbar
-            justify='space-between'
-            theme='secondary'
-          >
-            <IconTextButton
-              icon={ { value: 'trash' } }
-              onClick={ () => { deleteNotificationsForUser() } }
-            >{t('notifications.remove-all')}</IconTextButton>
-            <Pagination
-              current={ page }
-              onChange={ (page, pageSize) => {
-                setPage(page)
-                setPageSize(pageSize)
-              } }
-              showSizeChanger
-              showTotal={ (total) => t('pagination.show-total', { total }) }
-              total={ notifications?.totalItems ?? 0 }
-            />
-          </Toolbar>
-          )
-        : undefined }
-      renderTopBar={
-        <Toolbar
-          justify='space-between'
-          margin={ {
-            x: 'mini',
-            y: 'none'
-          }
-                    }
-          theme='secondary'
-        >
-          <Title>{t('notifications.label')}</Title>
-        </Toolbar>
-            }
-    >
-      <Content
-        loading={ isLoading || deleteLoading }
-        none={ notifications?.totalItems === 0 }
-      >
-        <Box
-          margin={ {
-            x: 'extra-small',
-            y: 'none'
-          } }
-        >
-          <NotificationList />
-        </Box>
-      </Content>
-    </ContentLayout>
+    <NotificationsView
+      deleteLoading={ deleteLoading }
+      deleteNotificationsForUser={ deleteNotificationsForUser }
+      isFetching={ isFetching }
+      isLoading={ isLoading }
+      notifications={ notifications }
+      page={ page }
+      setPage={ setPage }
+      setPageSize={ setPageSize }
+    />
   )
 }
 

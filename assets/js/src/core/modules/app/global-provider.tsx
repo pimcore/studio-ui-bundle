@@ -9,12 +9,12 @@
  */
 
 import { ContainerProvider } from '@Pimcore/app/depency-injection'
-import { store } from '@Pimcore/app/store'
-import { DragAndDropContextProvider } from '@Pimcore/components/drag-and-drop/context-provider'
+import { store } from '@sdk/app'
+import { DragAndDropContextProvider } from '@sdk/components'
 import { ThemeProvider } from '@Pimcore/modules/app/theme/theme-provider'
 import React from 'react'
 import { Provider } from 'react-redux'
-import { ElementSelectorProvider } from '../element/element-selector/provider/element-selector/element-selector-provider'
+import { ElementSelectorProvider } from '@sdk/modules/element'
 import { UploadModalProvider } from '@Pimcore/components/modal-upload/provider/upload-modal-provider/upload-modal-provider'
 
 export interface GlobalProviderProps {

@@ -10,7 +10,7 @@
 
 import { EditorContainer, type EditorContainerProps } from '@Pimcore/modules/data-object/editor/editor-container'
 import { TitleContainer } from '@Pimcore/modules/data-object/editor/title/title-container'
-import { store } from '@Pimcore/app/store'
+import { store } from '@sdk/app'
 import React from 'react'
 import { type Widget } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { DataObjectProvider } from '@Pimcore/modules/data-object/data-object-provider'

@@ -9,7 +9,7 @@
  */
 
 import { type ElementType } from '../../../../types/enums/element/element-type'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { api as dataObjectApi } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'

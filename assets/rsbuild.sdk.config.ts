@@ -72,6 +72,7 @@ export default defineConfig({
   output: {
     manifest: true,
     assetPrefix: '/bundles/pimcorestudioui/build/' + buildId,
+    sourceMap: false,
     distPath: {
       root: buildPath
     },
@@ -124,6 +125,12 @@ export default defineConfig({
       },
       dts: false,
       shared: {
+        ...packages.dependencies,
+        classnames: {
+          singleton: true,
+          eager: true,
+          requiredVersion: packages.dependencies.classnames
+        },
         react: {
           singleton: true,
           eager: true,
