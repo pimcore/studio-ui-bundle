@@ -33,7 +33,7 @@ export const ErrorModalService = ((): IErrorModalServiceReturn => {
       console.warn('ErrorModalService: Modal instance is not set. Call setModalInstance first.')
       console.warn('Error title:', title)
       console.warn('Error content:', content)
-      return;
+      return
       // throw new Error('ErrorModalService: Modal instance is not set. Call setModalInstance first.')
     }
 
