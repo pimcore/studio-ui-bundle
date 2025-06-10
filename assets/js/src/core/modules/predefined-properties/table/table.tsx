@@ -18,22 +18,13 @@ import { uuid } from '@Pimcore/utils/uuid'
 import { usePredefinedProperties } from '../hooks/use-predefined-properties'
 import { PredefinedProperty, UpdatePredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
 import { IconButton } from '@sdk/components'
-import { verifyUpdate } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/verify-cell-update'
 import { usePredefinedProperty } from '../hooks/use-predefined-property'
-import { Row } from 'antd'
 import { PredefinedPropertyWithId } from "../predefined-properties-provider"
-import { isUndefined } from 'lodash'
-import { log } from '@module-federation/runtime-core/dist/src/utils'
 
 
 type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
 
-interface ITableProps {
-  showDuplicatePropertyModal: () => void
-  showMandatoryModal: () => void
-}
-
-export const Table = ({ showDuplicatePropertyModal, showMandatoryModal }: ITableProps): React.JSX.Element => {
+export const Table = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { predefinedProperties, isLoading } = usePredefinedProperties()
@@ -107,26 +98,20 @@ const [enrichedProperties, setEnrichedProperties] = useState<PredefinedPropertyW
     })
   ]
 
+const toApiProperty = (row: PredefinedPropertyWithId): UpdatePredefinedProperty => ({
+  name: row.name ?? "",
+  description: row.description ?? "",
+  key: row.key ?? "",
+  type: row.type ?? "",
+  data: row.data ?? "",
+  config: row.config ?? "",
+  ctype: row.ctype ?? "",
+  inheritable: row.inheritable
+})
+
   const onUpdateCellData = ({ columnId, value, rowData }): void => {
     const updatedProperty = { ...rowData, [columnId]: value }
-    const hasDuplicate = enrichedProperties.filter(property => property.id === updatedProperty.id).length > 1
-    console.log("update", updatedProperty)
-const apiProperty: UpdatePredefinedProperty = {
-  name: updatedProperty.name ?? "",
-  description: updatedProperty.description ?? "",
-  key: updatedProperty.key ?? "",
-  type: updatedProperty.type ?? "",
-  data: updatedProperty.data ?? "",
-  config: updatedProperty.config ?? "",
-  ctype: updatedProperty.ctype ?? "",
-  inheritable: updatedProperty.inheritable
-}
-
-    if (verifyUpdate(value, columnId, 'key', hasDuplicate, showMandatoryModal, showDuplicatePropertyModal)) {
-updatePropertyById(updatedProperty.id, apiProperty)
-    console.log("update", updatedProperty)
-
-    }
+      updatePropertyById(updatedProperty.id, toApiProperty(updatedProperty))
   }
 
   return (

@@ -18,7 +18,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { usePredefinedProperties } from './hooks/use-predefined-properties'
 import { Table } from './table/table'
-import { Button, IconTextButton, ModalFooter, useModal } from '@sdk/components'
+import { IconTextButton } from '@sdk/components'
 import { PredefinedPropertyProvider } from './predefined-properties-provider'
 import { usePredefinedProperty } from './hooks/use-predefined-property'
 
@@ -32,63 +32,6 @@ export interface TreeAction {
 const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
   const {predefinedProperties, isLoading: predefinedPropertiesLoading} = usePredefinedProperties()
   const {createProperty, createLoading } = usePredefinedProperty()
-
-    // const handleSend = (): void => {
-    // form.validateFields().then(() => {
-    //   const values = form.getFieldsValue()
-
-    //   void createProperty({
-    //     recipientId: values.to,
-    //     title: values.title,
-    //     message: values.message,
-    //     attachmentType: values.attachment?.type,
-    //     attachmentId: values.attachment?.id
-    //   }, async () => {
-    //     onClose()
-    //     await success(t('user-menu.notification.modal.success-notification-has-been-sent'))
-    //   })
-    // }).catch(() => {
-    //   trackError(new GeneralError('Validation of notification form failed'))
-    // })
-  // }
-
-  
-   const {
-     showModal: showDuplicatePropertyModal,
-     closeModal: closeDuplicatePropertyModal,
-     renderModal: DuplicatePropertyModal
-   } = useModal({
-     type: 'error'
-   })
-   const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
-     type: 'error'
-   })
-   
- const warningModals = (<div className={ 'pimcore-properties-toolbar__predefined-properties' }>
-              <DuplicatePropertyModal
-                footer={ <ModalFooter>
-                  <Button
-                    onClick={ closeDuplicatePropertyModal }
-                    type='primary'
-                  >{t('button.ok')}</Button>
-                </ModalFooter> }
-                title={ t('properties.property-already-exist.title') }
-              >
-                {t('properties.property-already-exist.error')}
-              </DuplicatePropertyModal>
-  
-              <MandatoryModal
-                footer={ <ModalFooter>
-                  <Button
-                    onClick={ closeMandatoryModal }
-                    type='primary'
-                  >{t('button.ok')}</Button>
-                </ModalFooter> }
-                title={ t('properties.add-property-mandatory-fields-missing.title') }
-              >
-                {t('properties.add-property-mandatory-fields-missing.error')}
-              </MandatoryModal>
-              </div>)
 
   const content = (
     <ContentLayout
@@ -129,10 +72,7 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
         } }
         none={ predefinedProperties === undefined || predefinedProperties.length === 0 }
       >
-        {warningModals}
-<Table
-        showDuplicatePropertyModal={ showDuplicatePropertyModal }
-        showMandatoryModal={ showMandatoryModal }/>
+<Table/>
 </Content>
     </ContentLayout>
   )

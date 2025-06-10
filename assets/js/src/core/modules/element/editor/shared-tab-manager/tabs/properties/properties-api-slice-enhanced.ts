@@ -33,7 +33,7 @@ export const api = baseApi.enhanceEndpoints({
           propertyCollection.push(...providingTags.PROPERTY_DETAIL(property.id))
         })
 
-        return propertyCollection
+        return [...propertyCollection, ...providingTags.GLOBAL_PROPERTIES()]
       }
     },
     propertyUpdate: {
@@ -41,6 +41,9 @@ export const api = baseApi.enhanceEndpoints({
     },
     propertyDelete: {
       invalidatesTags: (result, error, args) => invalidatingTags.PROPERTY_DETAIL(args.id)
+    },
+    propertyCreate: {
+      invalidatesTags: (result, error, args) => invalidatingTags.GLOBAL_PROPERTIES()
     }
   }
 })
