@@ -32,7 +32,7 @@ export const Table = (): React.JSX.Element => {
   const [deletingRowId, setDeletingRowId] = useState<string | null>(null)
 
   useEffect(() => {
-    if (predefinedProperties !== undefined && predefinedProperties && Array.isArray(predefinedProperties)) {
+    if (predefinedProperties !== undefined && Array.isArray(predefinedProperties)) {
       const sorted = [...predefinedProperties].sort((a, b) => b.creationDate - a.creationDate)
       const enriched = sorted.map(item => ({ ...item, rowId: uuid() }))
       setEnrichedProperties(enriched)
@@ -127,7 +127,7 @@ export const Table = (): React.JSX.Element => {
   })
 
   const onUpdateCellData = async ({ columnId, value, rowData }): Promise<void> => {
-    const updatedProperty = { ...rowData, [columnId]: value }
+    const updatedProperty: PredefinedPropertyWithId = { ...rowData, [columnId]: value }
     await updatePropertyById(updatedProperty.id, toApiProperty(updatedProperty))
   }
 
