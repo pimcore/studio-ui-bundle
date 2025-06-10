@@ -17,7 +17,7 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
 import { UserPermission } from '../auth/enums/user-permission'
-import {ProfileContainer} from "@Pimcore/modules/user/profile/profile-container";
+import { UserProfileWidget } from '@Pimcore/modules/user/profile/widget'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -81,9 +81,6 @@ moduleSystem.registerModule({
       component: RoleContainer
     })
 
-    widgetRegistryService.registerWidget({
-      name: 'user-profile',
-      component: ProfileContainer
-    })
+    widgetRegistryService.registerWidget(UserProfileWidget)
   }
 })

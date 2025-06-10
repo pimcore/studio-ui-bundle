@@ -30,9 +30,7 @@ export const slice = createSlice({
     modified: false,
     activeId: undefined as number | undefined,
     changedIds: [] as number[],
-    availablePermissions: [] as UserPermission[],
-    changes: {},
-    modifiedCells: {}
+    availablePermissions: [] as UserPermission[]
   }),
   reducers: {
     userOpened: (state, action: PayloadAction<number>): void => {

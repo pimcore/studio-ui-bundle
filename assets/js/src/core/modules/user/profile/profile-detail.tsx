@@ -32,7 +32,7 @@ interface IProfileDetail {
     id: number
 }
 
-const ProfileDetail = ({id, ...props}:IProfileDetail): React.JSX.Element => {
+const ProfileDetail = ({id}:IProfileDetail): React.JSX.Element => {
     const [form] = Form.useForm()
     const { t } = useTranslation()
     const { availableAdminLanguages } = useSettings()
@@ -106,7 +106,7 @@ const ProfileDetail = ({id, ...props}:IProfileDetail): React.JSX.Element => {
                         items={ [
                             {
                                 key: '1',
-                                title: <>{ t('user-profile.general') }</>,
+                                title: <>{ t('user-management.general') }</>,
                                 children: <>
                                     <Form.Item
                                         label={ t('user-management.firstname') }
