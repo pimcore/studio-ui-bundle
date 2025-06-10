@@ -22,7 +22,7 @@
     "globalName": "pimcore_studio_ui_bundle",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
-    "publicPath": "/bundles/pimcorestudioui/build/3f6157e0-b67c-45ac-82e5-ede4190e97fc/"
+    "publicPath": "/bundles/pimcorestudioui/build/b0b9851d-4682-4386-91fe-96daa5a29203/"
   },
   "shared": [
     {
@@ -47,10 +47,10 @@
         }
       },
       "usedIn": [
+        "./modules/data-object",
         "./app",
         "./components",
         "./modules/asset",
-        "./modules/data-object",
         "./modules/element",
         "./modules/user"
       ]
@@ -77,7 +77,6 @@
         }
       },
       "usedIn": [
-        "./modules/wysiwyg",
         "./app",
         "./components",
         "./modules/app",
@@ -85,7 +84,8 @@
         "./modules/data-object",
         "./modules/element",
         "./modules/user",
-        "./modules/widget-manager"
+        "./modules/widget-manager",
+        "./modules/wysiwyg"
       ]
     },
     {
@@ -110,9 +110,9 @@
         }
       },
       "usedIn": [
+        "./modules/element",
         "./components",
         "./modules/data-object",
-        "./modules/element",
         "./modules/wysiwyg"
       ]
     },
@@ -138,9 +138,9 @@
         }
       },
       "usedIn": [
+        "./modules/element",
         "./components",
-        "./modules/data-object",
-        "./modules/element"
+        "./modules/data-object"
       ]
     },
     {
@@ -346,9 +346,9 @@
         }
       },
       "usedIn": [
+        "./modules/data-object",
         "./modules/app",
         "./modules/asset",
-        "./modules/data-object",
         "./modules/element",
         "./modules/icon-library",
         "./modules/widget-manager"
@@ -376,9 +376,9 @@
         }
       },
       "usedIn": [
+        "./modules/data-object",
         "./components",
         "./modules/app",
-        "./modules/data-object",
         "./modules/element"
       ]
     },
@@ -890,7 +890,7 @@
             "static/js/async/6903.4f9b2aa5.js",
             "static/js/async/1869.8f74c87d.js",
             "static/js/async/7230.77c0c5a8.js",
-            "static/js/async/__federation_expose_app.a89a7964.js",
+            "static/js/async/__federation_expose_app.b4af7154.js",
             "static/js/async/__federation_expose_modules__data_object.4606772e.js",
             "static/js/async/__federation_expose_modules__user.ceeba2c9.js",
             "static/js/async/__federation_expose_modules__wysiwyg.830a8760.js"
@@ -903,7 +903,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6903.222ebddd.css"
+            "static/css/async/6903.de937573.css"
           ],
           "async": []
         }
@@ -1376,7 +1376,7 @@
             "static/js/async/6903.4f9b2aa5.js",
             "static/js/async/1869.8f74c87d.js",
             "static/js/async/7230.77c0c5a8.js",
-            "static/js/async/__federation_expose_app.a89a7964.js",
+            "static/js/async/__federation_expose_app.b4af7154.js",
             "static/js/async/__federation_expose_modules__data_object.4606772e.js"
           ],
           "async": [
@@ -1387,7 +1387,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6903.222ebddd.css"
+            "static/css/async/6903.de937573.css"
           ],
           "async": []
         }
@@ -1460,7 +1460,7 @@
             "static/js/async/6903.4f9b2aa5.js",
             "static/js/async/1869.8f74c87d.js",
             "static/js/async/7230.77c0c5a8.js",
-            "static/js/async/__federation_expose_app.a89a7964.js",
+            "static/js/async/__federation_expose_app.b4af7154.js",
             "static/js/async/__federation_expose_modules__user.ceeba2c9.js"
           ],
           "async": [
@@ -1471,7 +1471,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6903.222ebddd.css"
+            "static/css/async/6903.de937573.css"
           ],
           "async": []
         }
@@ -1514,7 +1514,7 @@
             "static/js/async/6903.4f9b2aa5.js",
             "static/js/async/1869.8f74c87d.js",
             "static/js/async/7230.77c0c5a8.js",
-            "static/js/async/__federation_expose_app.a89a7964.js",
+            "static/js/async/__federation_expose_app.b4af7154.js",
             "static/js/async/__federation_expose_modules__wysiwyg.830a8760.js"
           ],
           "async": [
@@ -1525,7 +1525,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6903.222ebddd.css"
+            "static/css/async/6903.de937573.css"
           ],
           "async": []
         }
@@ -1551,7 +1551,7 @@
             "static/js/async/6903.4f9b2aa5.js",
             "static/js/async/1869.8f74c87d.js",
             "static/js/async/7230.77c0c5a8.js",
-            "static/js/async/__federation_expose_app.a89a7964.js",
+            "static/js/async/__federation_expose_app.b4af7154.js",
             "static/js/async/__federation_expose_modules__data_object.4606772e.js",
             "static/js/async/__federation_expose_modules__user.ceeba2c9.js",
             "static/js/async/__federation_expose_modules__wysiwyg.830a8760.js"
@@ -1560,7 +1560,7 @@
         "css": {
           "sync": [],
           "async": [
-            "static/css/async/6903.222ebddd.css"
+            "static/css/async/6903.de937573.css"
           ]
         }
       }
