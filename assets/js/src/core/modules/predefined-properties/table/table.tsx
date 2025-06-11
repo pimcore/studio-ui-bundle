@@ -66,7 +66,7 @@ export const Table = (): React.JSX.Element => {
     }),
     columnHelper.accessor('data', {
       header: t('properties.columns.data'),
-      meta: { type: 'property-value', editable: true, autoWidth: true },
+      meta: { editable: true },
       size: 150
     }),
     columnHelper.accessor('config', {
@@ -91,17 +91,6 @@ export const Table = (): React.JSX.Element => {
     })
   ]
 
-  const toApiProperty = (row: PredefinedPropertyWithId): UpdatePredefinedProperty => ({
-    name: row.name ?? '',
-    description: row.description ?? '',
-    key: row.key ?? '',
-    type: row.type ?? '',
-    data: row.data ?? '',
-    config: row.config ?? '',
-    ctype: row.ctype ?? '',
-    inheritable: row.inheritable
-  })
-
   const onUpdateCellData = async ({ columnId, value, rowData }): Promise<void> => {
     const updatedProperty: PredefinedPropertyWithId = { ...rowData, [columnId]: value }
     const rowId: string = rowData.rowId
@@ -117,7 +106,7 @@ export const Table = (): React.JSX.Element => {
         rowIndex: rowId
       }])
 
-    await updatePropertyById(updatedProperty.id, toApiProperty(updatedProperty))
+    await updatePropertyById(updatedProperty.id, updatedProperty)
   }
 
   return (

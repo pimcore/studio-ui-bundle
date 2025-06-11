@@ -12,8 +12,6 @@ import React, { createContext, useEffect, useMemo } from 'react'
 import { type PredefinedProperty, usePropertyGetCollectionQuery } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
 import trackError, { ApiError } from '../app/error-handler'
 
-export type PredefinedPropertyWithId = PredefinedProperty & { rowId: string }
-
 interface IPredefinedPropertyContext {
   predefinedProperties: PredefinedProperty[]
   isLoading: boolean
