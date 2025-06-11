@@ -79,7 +79,7 @@ export const Table = ({predefinedPropertyRows, setPredefinedPropertyRows}: Table
     columnHelper.accessor('actions', {
       header: t('properties.columns.actions'),
       size: 80,
-      cell: (info) => <ActionsCell info={info}/>
+      cell: (info) => <ActionsCell info={info} setPredefinedPropertyRows={setPredefinedPropertyRows}/>
     })
   ]
 
