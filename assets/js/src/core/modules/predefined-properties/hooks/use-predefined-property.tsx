@@ -41,9 +41,7 @@ export const usePredefinedProperty = (): UsePredefinedPropertiyReturn => {
 }
 
   const [deleteProperty, {
-    isLoading: deleteLoading,
-    isError: isDeleteError,
-    error: deleteError
+    isLoading: deleteLoading
   }] = usePropertyDeleteMutation()
 
 const deletePropertyById = async (id: string): Promise<boolean> => {
@@ -57,9 +55,7 @@ const deletePropertyById = async (id: string): Promise<boolean> => {
 }
 
   const [updateProperty, {
-    isLoading: updateLoading,
-    isError: isUpdateError,
-    error: updateError
+    isLoading: updateLoading
   }] = usePropertyUpdateMutation()
 
     const toApiProperty = (row: PredefinedPropertyRow): UpdatePredefinedProperty => ({
@@ -73,16 +69,16 @@ const deletePropertyById = async (id: string): Promise<boolean> => {
       inheritable: row.inheritable
     })
     
-  const updatePropertyById = async (id: string, row: PredefinedPropertyRow): Promise<void> => {
-const updatePredefinedProperty = toApiProperty(row)
-    await updateProperty({ id, updatePredefinedProperty })
+const updatePropertyById = async (id: string, row: PredefinedPropertyRow): Promise<boolean> => {
+  const updatePredefinedProperty = toApiProperty(row)
+  try {
+    const result = await updateProperty({ id, updatePredefinedProperty })
+    return 'data' in result
+  } catch (e) {
+    trackError(new ApiError(e))
+    return false
   }
-
-  useEffect(() => {
-    if (isUpdateError) {
-      trackError(new ApiError(updateError))
-    }
-  }, [isUpdateError])
+}
 
   return { createNewProperty, createLoading, deletePropertyById, deleteLoading, updatePropertyById, updateLoading }
 }

@@ -83,23 +83,37 @@ export const Table = ({predefinedPropertyRows, setPredefinedPropertyRows}: Table
     })
   ]
 
-  const onUpdateCellData = async ({ columnId, value, rowData }): Promise<void> => {
-    const updatedProperty: PredefinedPropertyRow = { ...rowData, [columnId]: value }
-    const rowId: string = rowData.rowId
+const onUpdateCellData = async ({
+  columnId,
+  value,
+  rowData
+}: {
+  columnId: string
+  value: unknown
+  rowData: PredefinedPropertyRow
+}): Promise<void> => {
+  const rowId = rowData.rowId
+  const updatedRow: PredefinedPropertyRow = { ...rowData, [columnId]: value }
 
+  setPredefinedPropertyRows(prev =>
+    prev.map(row =>
+      row.rowId === rowId ? updatedRow : row
+    )
+  )
+
+  setModifiedCells([{ columnId, rowIndex: rowId }])
+
+  const success = await updatePropertyById(updatedRow.id, updatedRow)
+
+  if (!success) {
     setPredefinedPropertyRows(prev =>
       prev.map(row =>
-        row.rowId === rowId ? updatedProperty : row
+        row.rowId === rowId ? rowData : row 
       )
     )
-
-      setModifiedCells([{
-        columnId,
-        rowIndex: rowId
-      }])
-
-    await updatePropertyById(updatedProperty.id, updatedProperty)
   }
+}
+
 
   return (
     <div className={ styles.table }>
