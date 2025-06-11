@@ -25,6 +25,7 @@ import { usePropertyGetCollectionQuery } from '../element/editor/shared-tab-mana
 import trackError, { ApiError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { type PredefinedPropertyRow, usePredefinedProperty } from './hooks/use-predefined-property'
+import { isUndefined } from 'lodash'
 
 export const PredefinedPropertiesContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
@@ -36,7 +37,7 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
   const predefinedProperties = data?.items
 
   const sortedPredefinedPropertyRows = useMemo(() => {
-    if (predefinedProperties === undefined || predefinedProperties.length === 0) return []
+    if (isUndefined(predefinedProperties) || predefinedProperties.length === 0) return []
 
     return [...predefinedProperties]
       .sort((a, b) => b.creationDate - a.creationDate)
@@ -72,7 +73,7 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
         <Toolbar theme="secondary">
           <IconButton
             icon={ { value: 'refresh' } }
-            loading={predefinedPropertiesFetching}
+            disabled={predefinedPropertiesFetching}
             onClick={ () => dispatch(
               api.util.invalidateTags(
                 invalidatingTags.GLOBAL_PROPERTIES()
@@ -108,7 +109,7 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
           x: 'extra-small',
           y: 'none'
         } }
-        none={ predefinedPropertyRows.length === 0 && !predefinedPropertiesLoading }
+        none={ isUndefined(predefinedProperties) || predefinedProperties.length === 0 }
       >
         <Box
           margin={ {
