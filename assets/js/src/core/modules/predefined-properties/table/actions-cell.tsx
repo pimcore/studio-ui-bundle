@@ -26,7 +26,7 @@ export const ActionsCell = ({ info, setPredefinedPropertyRows }: ActionsCellProp
   const { deletePropertyById, deleteLoading } = usePredefinedProperty()
 
   const handleDelete = async (): Promise<void> => {
-    const success = await deletePropertyById(id)
+    const {success} = await deletePropertyById(id)
     if (success) {
       setPredefinedPropertyRows(prev => prev.filter(row => row.id !== id))
     }
