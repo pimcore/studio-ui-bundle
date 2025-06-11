@@ -30,7 +30,7 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
   const { predefinedProperties, isLoading: predefinedPropertiesLoading } = usePredefinedProperties()
   const { createProperty, createLoading } = usePredefinedProperty()
 
-  const content = (
+  return (
     <ContentLayout
       renderToolbar={
         <Toolbar theme="secondary">
@@ -83,8 +83,6 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
       </Content>
     </ContentLayout>
   )
-
-  return content
 }
 
 const PredefinedPropertiesContainer = (): React.JSX.Element => (
