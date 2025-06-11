@@ -33,8 +33,6 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
   const { predefinedProperties, isLoading: predefinedPropertiesLoading } = usePredefinedProperties()
   const { createProperty, createLoading } = usePredefinedProperty()
 
-  console.log('predefinedPropertiesLoading', predefinedPropertiesLoading)
-
   const content = (
     <ContentLayout
       renderToolbar={
@@ -57,7 +55,7 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
           theme='secondary'
         >
           <Flex gap={ 'small' }>
-            <Title titleClass={ 'm-none' }>{t('widget.predefined-properties')}</Title>
+            <Title>{t('widget.predefined-properties')}</Title>
             <IconTextButton
               disabled={ predefinedPropertiesLoading || createLoading }
               icon={ { value: 'new' } }
