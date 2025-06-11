@@ -9,7 +9,10 @@ const injectedRtkApi = api
             propertyGetCollection: build.query<PropertyGetCollectionApiResponse, PropertyGetCollectionApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/properties`,
-                    params: { elementType: queryArg.elementType, filter: queryArg.filter },
+                    params: {
+                        elementType: queryArg.elementType,
+                        filter: queryArg.filter,
+                    },
                 }),
                 providesTags: ["Properties"],
             }),
@@ -59,7 +62,7 @@ export type PropertyUpdateApiArg = {
     id: string;
     updatePredefinedProperty: UpdatePredefinedProperty;
 };
-export type PropertyDeleteApiResponse = /** status 200 Successfully deleted property with given id */ void;
+export type PropertyDeleteApiResponse = unknown;
 export type PropertyDeleteApiArg = {
     /** Id of the property */
     id: string;
@@ -83,15 +86,15 @@ export type PredefinedProperty = {
     /** name */
     name: string;
     /** description */
-    description?: any;
+    description?: string | null;
     /** key */
     key: string;
     /** type */
     type: string;
     /** data */
-    data?: any;
+    data?: string | null;
     /** config */
-    config?: any;
+    config?: string | null;
     /** ctype */
     ctype: string;
     /** inheritable */
@@ -115,15 +118,15 @@ export type UpdatePredefinedProperty = {
     /** name */
     name: string;
     /** description */
-    description?: any;
+    description?: string | null;
     /** key */
     key: string;
     /** type */
     type: string;
     /** data */
-    data?: any;
+    data?: string | null;
     /** config */
-    config?: any;
+    config?: string | null;
     /** ctype */
     ctype: string;
     /** inheritable */
@@ -137,7 +140,7 @@ export type DataProperty = {
     /** key */
     key: string;
     /** data */
-    data: any;
+    data: any | null;
     /** type */
     type: string;
     /** inheritable */
@@ -145,11 +148,11 @@ export type DataProperty = {
     /** inherited */
     inherited: boolean;
     /** config */
-    config?: any;
+    config?: string | null;
     /** predefinedName */
-    predefinedName?: any;
+    predefinedName?: string | null;
     /** description */
-    description?: any;
+    description?: string | null;
 };
 export const {
     usePropertyGetCollectionQuery,
