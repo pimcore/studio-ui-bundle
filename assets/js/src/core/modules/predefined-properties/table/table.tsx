@@ -110,7 +110,8 @@ export const Table = ({ predefinedPropertyRows, setPredefinedPropertyRows }: Tab
 
     const success = await updatePropertyById(updatedRow.id, updatedRow)
 
-    if (!success) {
+    if (success) setModifiedCells([])
+    else {
       setPredefinedPropertyRows(prev =>
         prev.map(row =>
           row.rowId === rowId ? rowData : row
