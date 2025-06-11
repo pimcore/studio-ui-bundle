@@ -139,7 +139,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
           icon={ { value: 'new' } }
           type='link'
         >
-          { t('listing.add-column') }
+          {t('listing.add-column')}
         </IconTextButton>
       </Dropdown>
     </Space>

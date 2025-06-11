@@ -12,7 +12,7 @@ import React, { createContext, useContext, useMemo, useState } from 'react'
 import { PreviewView } from './preview-view'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { sidebarManager } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar'
-import { AssetContext } from '@sdk/modules/asset'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { FocalPointProvider } from '@Pimcore/components/focal-point/provider/focal-point-provider'
 import {
   ContentLayout

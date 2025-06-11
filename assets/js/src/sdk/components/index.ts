@@ -8,6 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+if (module.hot !== undefined) {
+  module.hot.accept()
+}
+
 export * from '@Pimcore/components/accordion/accordion'
 export * from '@Pimcore/components/button/button'
 export * from '@Pimcore/components/accordion-timeline/accordion-timeline'

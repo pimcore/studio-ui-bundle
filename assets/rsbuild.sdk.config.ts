@@ -72,7 +72,6 @@ export default defineConfig({
   output: {
     manifest: true,
     assetPrefix: '/bundles/pimcorestudioui/build/' + buildId,
-    sourceMap: false,
     distPath: {
       root: buildPath
     },
@@ -91,6 +90,7 @@ export default defineConfig({
       filename: 'static/js/remoteEntry.js',
       exposes: {
       '.': './js/src/sdk/main.ts',
+      './_internal_/mf-bootstrap': './js/src/sdk/_internal_/mf-bootstrap.ts',
       './components': './js/src/sdk/components/index.ts',
       './app': './js/src/sdk/app/index.ts',
       './api/asset': './js/src/sdk/api/asset/index.ts',

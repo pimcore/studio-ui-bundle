@@ -13,7 +13,7 @@ import { UserDetailTab } from '@Pimcore/modules/user/management/detail/tabs/user
 import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
 import { Content } from '@Pimcore/components/content/content'
 import { selectUserById } from '@Pimcore/modules/user/user-slice'
-import { store } from '@sdk/app'
+import { store } from '@Pimcore/app/store'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import {
   ContentLayout

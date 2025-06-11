@@ -9,7 +9,7 @@
  */
 
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { store, useAppDispatch } from '@sdk/app'
+import { store, useAppDispatch } from '@Pimcore/app/store'
 import { type IconProps } from '@Pimcore/components/icon/icon'
 import { api, type ElementIcon } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { type Element, getElementIcon } from '@Pimcore/modules/element/element-helper'
