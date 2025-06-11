@@ -13,7 +13,6 @@ import { type DynamicTypeAbstract } from '../../../registry/dynamic-type-registr
 import { type ReactElement } from 'react'
 import { type ColumnMetaType } from '@Pimcore/components/grid/grid'
 
-
 export interface AbstractDocumentEditableDefinition {
   id: string
   name: string
@@ -35,5 +34,4 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
   initializeInIframe: boolean = false
 
   abstract getEditableDataComponent (props: AbstractDocumentEditableDefinition): ReactElement<AbstractDocumentEditableDefinition>
-
 }

@@ -10,7 +10,7 @@
 
 import { injectable } from 'inversify'
 import { DynamicTypeRegistryAbstract } from '../../../registry/dynamic-type-registry-abstract'
-import { DynamicTypeDocumentEditableAbstract } from './dynamic-type-document-editable-abstract'
+import { type DynamicTypeDocumentEditableAbstract } from './dynamic-type-document-editable-abstract'
 
 @injectable()
 export class DynamicTypeDocumentEditableRegistry extends DynamicTypeRegistryAbstract<DynamicTypeDocumentEditableAbstract> {}

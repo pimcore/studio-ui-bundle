@@ -13,67 +13,67 @@ import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-d
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { EditablesRenderer } from './components/editables-renderer/editables-renderer'
+import { isNil } from 'lodash'
 
 export const EditContainer = (): React.JSX.Element => {
   const { id } = useContext(DocumentContext)
-  const { document: documentDraft } = useDocumentDraft( id )
+  const { document: documentDraft } = useDocumentDraft(id)
   const { t } = useTranslation()
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const styleSheetRef = useRef<CSSStyleSheet | null>(null)
-  const [stylesInjected, setStylesInjected] = useState<boolean|undefined>(undefined)
+  const [stylesInjected, setStylesInjected] = useState<boolean | undefined>(undefined)
 
-  const onLoad = () => {
+  const onLoad = (): void => {
     const iframeDoc = iframeRef.current?.contentDocument
-    if (!iframeDoc?.body) return
+    if (isNil(iframeDoc?.body)) return
 
     const iframeWin = iframeRef.current?.contentWindow
 
-
-    if (iframeWin) {
-      const sheet = new iframeWin.CSSStyleSheet()
+    if (!isNil(iframeWin)) {
+      const sheet = new (iframeWin as any).CSSStyleSheet()
       styleSheetRef.current = sheet
     }
-    
+
     setStylesInjected(false)
-    
   }
 
-  // Delayed style injection after portal components are mounted and styled
   useEffect(() => {
-    if (stylesInjected) return
+    if (stylesInjected === true) return
 
-    // Wait for Button and Card styles to be generated
     const timeout = setTimeout(() => {
       const iframeWin = iframeRef.current?.contentWindow
       const iframeDoc = iframeRef.current?.contentDocument
-      if (!iframeWin || !iframeDoc) return
+      if (isNil(iframeWin) || isNil(iframeDoc)) return
 
       const styleTags = Array.from(
         document.head.querySelectorAll('style')
       )
       const combinedCSS = styleTags.map(tag => tag.textContent ?? '').join('\n')
 
-      if (!styleSheetRef.current) return
+      if (isNil(styleSheetRef.current)) return
       styleSheetRef.current.replaceSync(combinedCSS)
 
       setStylesInjected(true)
     }, 0)
 
-    return () => clearTimeout(timeout)
+    return () => { clearTimeout(timeout) }
   }, [stylesInjected])
 
   return (
     <>
       <iframe
-          className={ ['w-full h-full'].join(' ') }
-          ref={ iframeRef }
-          src={ `${documentDraft?.fullPath}?pimcore_editmode=true&pimcore_studio=true` }
-          title={ `${t('edit.label')}-${id}` }
-          onLoad={ onLoad }
-        />
-      {styleSheetRef.current && (
-          <EditablesRenderer iframeRef={iframeRef} styleSheet={styleSheetRef.current} />
-        )}
+        className={ ['w-full h-full'].join(' ') }
+        onLoad={ onLoad }
+        ref={ iframeRef }
+        src={ `${documentDraft?.fullPath}?pimcore_editmode=true&pimcore_studio=true` }
+        title={ `${t('edit.label')}-${id}` }
+      />
+      {!isNil(styleSheetRef.current) && (
+      <EditablesRenderer
+        iframeRef={ iframeRef }
+        styleSheet={ styleSheetRef.current }
+      />
+      )}
     </>
   )
 }

@@ -13,7 +13,6 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { EditContainer } from './tabs/edit/edit-container'
 
-
 export const TAB_EDIT: IEditorTab = {
   key: 'edit',
   label: 'edit.label',
