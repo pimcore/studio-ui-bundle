@@ -1,1 +1,1 @@
-import('./bootstrap')
+import('@sdk/_internal_/mf-bootstrap-document-editor-iframe')
