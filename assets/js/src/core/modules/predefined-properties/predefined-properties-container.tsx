@@ -21,15 +21,12 @@ import { Table } from './table/table'
 import { Box, IconTextButton } from '@sdk/components'
 import { PredefinedPropertyProvider } from './predefined-properties-provider'
 import { usePredefinedProperty } from './hooks/use-predefined-property'
-
-export type Mode = 'create' | 'update'
-
-export interface TreeAction {
-  key: string
-  icon: string
-}
+import { useAppDispatch } from '@sdk/app'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { api } from '@sdk/api/properties'
 
 const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
+  const dispatch = useAppDispatch()
   const { predefinedProperties, isLoading: predefinedPropertiesLoading } = usePredefinedProperties()
   const { createProperty, createLoading } = usePredefinedProperty()
 
@@ -39,9 +36,11 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
         <Toolbar theme="secondary">
           <IconButton
             icon={ { value: 'refresh' } }
-            onClick={ () => {
-              console.log('clicked')
-            }
+            onClick={ () => dispatch(
+              api.util.invalidateTags(
+                invalidatingTags.GLOBAL_PROPERTIES()
+              )
+            )
           }
           />
         </Toolbar> }

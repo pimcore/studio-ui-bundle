@@ -13,7 +13,7 @@ import { useContext } from 'react'
 import { PredefinedPropertyContext } from '../predefined-properties-provider'
 
 interface UsePredefinedPropertiesReturn {
-  predefinedProperties: PredefinedProperty[] 
+  predefinedProperties: PredefinedProperty[]
   isLoading: boolean
 }
 

@@ -10,7 +10,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { CellContext, createColumnHelper } from '@tanstack/react-table'
+import { type CellContext, createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './table.styles'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
@@ -53,23 +53,23 @@ export const Table = (): React.JSX.Element => {
   }
 
   const actionsCell = (info: CellContext<PredefinedPropertyWithActions, React.ReactNode>): JSX.Element => {
-        const id = info.row.original.id
-        return (
-          <div className="properties-table--actions-column">
-            <IconButton
-              icon={ { value: 'translate' } }
-              onClick={ () => { console.log('Open Translate View') } }
-              type="link"
-            />
-            <IconButton
-              icon={ { value: 'trash' } }
-              loading={ deletingRowId === id }
-              onClick={ async () => { await handleDelete(id) } }
-              type="link"
-            />
-          </div>
-        )
-      }
+    const id = info.row.original.id
+    return (
+      <div className="properties-table--actions-column">
+        <IconButton
+          icon={ { value: 'translate' } }
+          onClick={ () => { console.log('Open Translate View') } }
+          type="link"
+        />
+        <IconButton
+          icon={ { value: 'trash' } }
+          loading={ deletingRowId === id }
+          onClick={ async () => { await handleDelete(id) } }
+          type="link"
+        />
+      </div>
+    )
+  }
 
   const tableColumns = [
     columnHelper.accessor('name', {
