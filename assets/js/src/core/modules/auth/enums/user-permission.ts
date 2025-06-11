@@ -15,4 +15,6 @@ export enum UserPermission {
   Assets = 'assets',
   TagsConfiguration = 'tags_configuration',
   Users = 'users',
+  Notifications = 'notifications',
+  SendNotifications = 'notifications_send',
 }
