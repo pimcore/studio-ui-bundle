@@ -797,7 +797,7 @@ user-menu.notification.send: Send
 user-menu.notification.attachments: Attachments
 user-menu.notification.cancel: Cancel
 user-menu.notification.modal.send-a-notification: Send a notification
-user-menu.notification.modal.success-notification-has-been-sent: Success - Notificaion has been sent
+user-menu.notification.modal.success-notification-has-been-sent: Success - Notification has been sent
 user-menu.notification.modal.to: To
 user-menu.notification.modal.select: Select
 user-menu.notification.modal.title: Title
