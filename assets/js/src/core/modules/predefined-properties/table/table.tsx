@@ -20,7 +20,9 @@ import { type PredefinedProperty, type UpdatePredefinedProperty } from '@Pimcore
 import { IconButton } from '@sdk/components'
 import { usePredefinedProperty } from '../hooks/use-predefined-property'
 import { type PredefinedPropertyWithId } from '../predefined-properties-provider'
-import { ModifiedCells } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
+import { type ModifiedCells } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
+import { ContentType } from '../enums/content-type'
+import { ElementType } from '../enums/element-type'
 
 type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
 
@@ -70,7 +72,7 @@ export const Table = (): React.JSX.Element => {
     }),
     columnHelper.accessor('type', {
       header: t('properties.columns.type'),
-      meta: { type: 'select', editable: true, config: { options: ['text', 'document', 'asset', 'object', 'boolean', 'select']} },
+      meta: { type: 'select', editable: true, config: { options: Object.values(ContentType) } },
       size: 100
     }),
     columnHelper.accessor('data', {
@@ -85,7 +87,7 @@ export const Table = (): React.JSX.Element => {
     }),
     columnHelper.accessor('ctype', {
       header: t('properties.columns.content-type'),
-      meta: { type: 'select', editable: true, config: { options: ['document',  'object', 'asset',]} },
+      meta: { type: 'select', editable: true, config: { options: Object.values(ElementType) } },
       size: 110
     }),
     columnHelper.accessor('inheritable', {
@@ -130,13 +132,20 @@ export const Table = (): React.JSX.Element => {
 
   const onUpdateCellData = async ({ columnId, value, rowData }): Promise<void> => {
     const updatedProperty: PredefinedPropertyWithId = { ...rowData, [columnId]: value }
+    const rowId: string = rowData.rowId
+
+    setEnrichedProperties(prev =>
+      prev.map(row =>
+        row.rowId === rowId ? updatedProperty : row
+      )
+    )
+
     await updatePropertyById(updatedProperty.id, toApiProperty(updatedProperty))
-      const rowId: string = rowData.rowId
-      
-      setModifiedCells([{
-        columnId,
-        rowIndex: rowId
-      }])
+
+    setModifiedCells([{
+      columnId,
+      rowIndex: rowId
+    }])
   }
 
   return (
