@@ -29,7 +29,7 @@ import { type PredefinedPropertyRow, usePredefinedProperty } from './hooks/use-p
 export const PredefinedPropertiesContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
   const { createNewProperty, createLoading } = usePredefinedProperty()
-  const { data, isLoading: predefinedPropertiesLoading, isError, error } = usePropertyGetCollectionQuery({})
+  const { data, isLoading: predefinedPropertiesLoading, isFetching: predefinedPropertiesFetching, isError, error } = usePropertyGetCollectionQuery({})
 
   const [predefinedPropertyRows, setPredefinedPropertyRows] = useState<PredefinedPropertyRow[]>([])
 
@@ -72,6 +72,7 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
         <Toolbar theme="secondary">
           <IconButton
             icon={ { value: 'refresh' } }
+            loading={predefinedPropertiesFetching}
             onClick={ () => dispatch(
               api.util.invalidateTags(
                 invalidatingTags.GLOBAL_PROPERTIES()
