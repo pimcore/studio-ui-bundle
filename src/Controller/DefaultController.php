@@ -24,8 +24,7 @@ final class DefaultController extends FrontendController
     public function __construct(
         private StaticResourcesResolverInterface $staticResourcesResolver,
         private UrlServiceInterface $mercureUrlService,
-    )
-    {
+    ) {
 
     }
 

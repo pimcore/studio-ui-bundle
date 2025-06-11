@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\StudioUiBundle\DependencyInjection;
 
 use Exception;
-use Pimcore\Bundle\StudioUiBundle\Service\StaticResourcesResolverInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;

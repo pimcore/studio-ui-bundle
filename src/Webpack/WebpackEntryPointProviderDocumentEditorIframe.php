@@ -32,5 +32,4 @@ final class WebpackEntryPointProviderDocumentEditorIframe implements WebpackEntr
     {
         return [];
     }
-
 }
