@@ -16,7 +16,6 @@ namespace Pimcore\Bundle\StudioUiBundle\EventSubscriber;
 use Pimcore\Bundle\CoreBundle\EventListener\Traits\PimcoreContextAwareTrait;
 use Pimcore\Bundle\StudioUiBundle\Service\StaticResourcesResolverInterface;
 use Pimcore\Document\Editable\EditmodeEditableDefinitionCollector;
-use Pimcore\Extension\Bundle\PimcoreBundleManager;
 use Pimcore\Http\Request\Resolver\DocumentResolver;
 use Pimcore\Http\Request\Resolver\EditmodeResolver;
 use Pimcore\Http\Request\Resolver\PimcoreContextResolver;
@@ -28,7 +27,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Modifies responses for editmode
@@ -48,8 +46,6 @@ final class EditmodeSubscriber implements EventSubscriberInterface
         private readonly EditmodeResolver $editmodeResolver,
         private readonly DocumentResolver $documentResolver,
         private readonly UserLoader $userLoader,
-        private readonly PimcoreBundleManager $bundleManager,
-        private readonly RouterInterface $router,
         private EditmodeEditableDefinitionCollector $editableConfigCollector,
         private StaticResourcesResolverInterface $staticResourcesResolver
     ) {
