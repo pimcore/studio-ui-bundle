@@ -17,8 +17,13 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { RenderEditable } from '../components/editables-renderer/render-editable'
 import { isNull } from 'lodash'
 
+export interface DocumentEditorIframeWindow extends Window {
+  editableDefinitions?: AbstractDocumentEditableDefinition[]
+  clipboardData?: any
+}
+
 export const DocumentEditorIframeAppView = (): React.JSX.Element => {
-  const editableDefinitions: AbstractDocumentEditableDefinition[] = window.editableDefinitions ?? []
+  const editableDefinitions: AbstractDocumentEditableDefinition[] = (window as DocumentEditorIframeWindow).editableDefinitions ?? []
   const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
 
   return (

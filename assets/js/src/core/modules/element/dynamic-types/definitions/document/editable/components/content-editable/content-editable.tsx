@@ -11,6 +11,7 @@
 import React, { useRef } from 'react'
 import { useStyle } from './content-editable.styles'
 import { isNil } from 'lodash'
+import { DocumentEditorIframeWindow } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/iframe-app/iframe-app-view'
 
 export interface ContentEditableProps {
   value?: string | null
@@ -65,8 +66,8 @@ const ContentEditable = ({ value, onChange, className, placeholder, required, wi
     let text = ''
     if (!isNil(e.clipboardData)) {
       text = e.clipboardData.getData('text/plain')
-    } else if (!isNil(window.clipboardData)) {
-      text = (window.clipboardData as any).getData('Text')
+    } else if (!isNil((window as DocumentEditorIframeWindow).clipboardData)) {
+      text = ((window as DocumentEditorIframeWindow).clipboardData).getData('Text')
     }
 
     text = text.replace(/\r\n|\n/g, ' ').trim()
