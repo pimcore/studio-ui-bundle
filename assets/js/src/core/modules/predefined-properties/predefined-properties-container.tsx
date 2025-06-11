@@ -103,7 +103,7 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
         }
     >
       <Content
-        loading={ predefinedPropertiesLoading }
+        loading={ predefinedPropertiesLoading || predefinedPropertiesFetching}
         margin={ {
           x: 'extra-small',
           y: 'none'
