@@ -15,22 +15,36 @@ export const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.ASSET_DETAIL, tagNames.DATA_OBJECT_DETAIL],
   endpoints: {
     propertyGetCollectionForElementByTypeAndId: {
-      providesTags: (result, error, args) => providingTags.ELEMENT_PROPERTIES(args.elementType, args.id)
+      providesTags: (result, error, args) => {
+        const propertyCollection: Tag[] = []
+
+        result?.items?.forEach((property) => {
+          propertyCollection.push(...providingTags.PROPERTY_DETAIL(property.key))
+        })
+
+        return [...propertyCollection, ...providingTags.ELEMENT_PROPERTIES(args.elementType, args.id)]
+      }
     },
     propertyGetCollection: {
       providesTags: (result, error, args) => {
         const propertyCollection: Tag[] = []
 
         result?.items?.forEach((property) => {
-          propertyCollection.push(...providingTags.PROPERTY_DETAIL(property.id))
+          propertyCollection.push(...providingTags.PROPERTY_DETAIL(property.key))
         })
 
         return [...propertyCollection, ...providingTags.GLOBAL_PROPERTIES()]
       }
+    },
+    propertyUpdate: {
+      invalidatesTags: (result, error, args) => invalidatingTags.PROPERTY_DETAIL(args.id)
+    },
+    propertyDelete: {
+      invalidatesTags: (result, error, args) => invalidatingTags.PROPERTY_DETAIL(args.id)
     }
   }
 })
 
 export type * from './properties-api-slice.gen'
 
-export const { usePropertyGetCollectionQuery, usePropertyGetCollectionForElementByTypeAndIdQuery, usePropertyDeleteMutation, usePropertyCreateMutation, usePropertyUpdateMutation } = api
+export const { usePropertyGetCollectionQuery, usePropertyGetCollectionForElementByTypeAndIdQuery } = api
