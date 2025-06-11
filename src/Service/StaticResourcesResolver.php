@@ -17,6 +17,7 @@ use Exception;
 use Pimcore\Bundle\StudioUiBundle\Exception\InvalidEntryPointsJsonException;
 use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointManager;
 use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProvider;
+use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProviderDocumentEditorIframe;
 use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProviderInterface;
 use Pimcore\ValueObject\Collection\ArrayOfStrings;
 
@@ -31,7 +32,6 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
 
     public function __construct(
         private WebpackEntryPointManager $webpackEntryPointManager,
-        private WebpackEntryPointProvider $studioEntryPointProvider,
         array $additionalCssFiles = [],
         array $additionalJsFiles = []
     ) {
@@ -44,7 +44,7 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
      */
     public function getStudioCssFiles(): array
     {
-        return $this->getFilesFromEntryPointsJson('css', [$this->studioEntryPointProvider]);
+        return $this->getFilesFromEntryPointsJson('css', true);
     }
 
     /**
@@ -52,7 +52,7 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
      */
     public function getStudioJsFiles(): array
     {
-        return $this->getFilesFromEntryPointsJson('js', [$this->studioEntryPointProvider]);
+        return $this->getFilesFromEntryPointsJson('js', true);
     }
 
     /**
@@ -82,13 +82,14 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
     }
 
     /**
-     * @param WebpackEntryPointProviderInterface[]|null $providers
-     *
      * @throws InvalidEntryPointsJsonException
      */
-    private function getFilesFromEntryPointsJson(string $type, ?array $providers = null): array
+    private function getFilesFromEntryPointsJson(string $type, bool $fromStudioCore = false): array
     {
-        $entryPointProviders = $providers ?? $this->webpackEntryPointManager->getProviders();
+        $entryPointProviders = array_filter(
+            $this->webpackEntryPointManager->getProviders(),
+            fn ($provider) => $fromStudioCore === $this->isStudioCoreProvider($provider)
+        );
 
         $files = [];
         foreach ($entryPointProviders as $entryPointProvider) {
@@ -180,5 +181,11 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
                 $entryPointsJsonLocation
             )
         );
+    }
+
+    private function isStudioCoreProvider(WebpackEntryPointProviderInterface $entryPointProvider): bool
+    {
+        return $entryPointProvider instanceof WebpackEntryPointProvider
+            || $entryPointProvider instanceof WebpackEntryPointProviderDocumentEditorIframe;
     }
 }

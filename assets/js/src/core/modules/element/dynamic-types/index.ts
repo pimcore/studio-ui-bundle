@@ -151,6 +151,11 @@ import { type DynamicTypeObjectObject } from './definitions/objects/types/dynami
 import { type DynamicTypeObjectVariant } from './definitions/objects/types/dynamic-type-object-variant'
 import { type DynamicTypeObjectDataClassificationStore } from './definitions/objects/data-related/types/dynamic-type-object-data-classification-store'
 import { type DynamicTypeGridCellBoolean } from './definitions/grid-cell/types/boolean/dynamic-type-grid-cell-boolean'
+import { type DynamicTypeDocumentEditableRegistry } from './definitions/document/editable/dynamic-type-document-editable-registry'
+import { type DynamicTypeDocumentEditableNumeric } from './definitions/document/editable/types/dynamic-type-document-editable-numeric'
+import { type DynamicTypeDocumentEditableRelation } from './definitions/document/editable/types/dynamic-type-document-editable-relation'
+import { type DynamicTypeDocumentEditableInput } from './definitions/document/editable/types/dynamic-type-document-editable-input'
+import { type DynamicTypeDocumentEditableWysiwyg } from './definitions/document/editable/types/dynamic-type-document-editable-wysiwyg'
 import { type DynamicTypeFieldFilterCheckbox } from './definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
 
 moduleSystem.registerModule({
@@ -295,6 +300,13 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataFieldCollection>(serviceIds['DynamicTypes/ObjectData/FieldCollection']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataObjectBrick>(serviceIds['DynamicTypes/ObjectData/ObjectBrick']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataClassificationStore>(serviceIds['DynamicTypes/ObjectData/ClassificationStore']))
+
+    const documentEditableRegistry = container.get<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
+
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableInput>(serviceIds['DynamicTypes/DocumentEditable/Input']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableNumeric>(serviceIds['DynamicTypes/DocumentEditable/Numeric']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableRelation>(serviceIds['DynamicTypes/DocumentEditable/Relation']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableWysiwyg>(serviceIds['DynamicTypes/DocumentEditable/Wysiwyg']))
 
     const assetRegistry = container.get<DynamicTypeAssetRegistry>(serviceIds['DynamicTypes/AssetRegistry'])
 

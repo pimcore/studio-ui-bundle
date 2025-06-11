@@ -16,6 +16,7 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/MetadataRegistry': 'DynamicTypes/MetadataRegistry',
   'DynamicTypes/ObjectLayoutRegistry': 'DynamicTypes/ObjectLayoutRegistry',
   'DynamicTypes/ObjectDataRegistry': 'DynamicTypes/ObjectDataRegistry',
+  'DynamicTypes/DocumentEditableRegistry': 'DynamicTypes/DocumentEditableRegistry',
   'DynamicTypes/AssetRegistry': 'DynamicTypes/AssetRegistry',
   'DynamicTypes/ObjectRegistry': 'DynamicTypes/ObjectRegistry'
 }
@@ -192,6 +193,27 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/FieldCollection': 'DynamicTypes/ObjectData/FieldCollection',
   'DynamicTypes/ObjectData/ObjectBrick': 'DynamicTypes/ObjectData/ObjectBrick',
   'DynamicTypes/ObjectData/ClassificationStore': 'DynamicTypes/ObjectData/ClassificationStore',
+
+  // Document editables
+  'DynamicTypes/DocumentEditable/Area': 'DynamicTypes/DocumentEditable/Area',
+  'DynamicTypes/DocumentEditable/Checkbox': 'DynamicTypes/DocumentEditable/Checkbox',
+  'DynamicTypes/DocumentEditable/Date': 'DynamicTypes/DocumentEditable/Date',
+  'DynamicTypes/DocumentEditable/Embed': 'DynamicTypes/DocumentEditable/Embed',
+  'DynamicTypes/DocumentEditable/Image': 'DynamicTypes/DocumentEditable/Image',
+  'DynamicTypes/DocumentEditable/Input': 'DynamicTypes/DocumentEditable/Input',
+  'DynamicTypes/DocumentEditable/Link': 'DynamicTypes/DocumentEditable/Link',
+  'DynamicTypes/DocumentEditable/Multiselect': 'DynamicTypes/DocumentEditable/Multiselect',
+  'DynamicTypes/DocumentEditable/Numeric': 'DynamicTypes/DocumentEditable/Numeric',
+  'DynamicTypes/DocumentEditable/Pdf': 'DynamicTypes/DocumentEditable/Pdf',
+  'DynamicTypes/DocumentEditable/Relation': 'DynamicTypes/DocumentEditable/Relation',
+  'DynamicTypes/DocumentEditable/Relations': 'DynamicTypes/DocumentEditable/Relations',
+  'DynamicTypes/DocumentEditable/Renderlet': 'DynamicTypes/DocumentEditable/Renderlet',
+  'DynamicTypes/DocumentEditable/Select': 'DynamicTypes/DocumentEditable/Select',
+  'DynamicTypes/DocumentEditable/Snippet': 'DynamicTypes/DocumentEditable/Snippet',
+  'DynamicTypes/DocumentEditable/Table': 'DynamicTypes/DocumentEditable/Table',
+  'DynamicTypes/DocumentEditable/Textarea': 'DynamicTypes/DocumentEditable/Textarea',
+  'DynamicTypes/DocumentEditable/Video': 'DynamicTypes/DocumentEditable/Video',
+  'DynamicTypes/DocumentEditable/Wysiwyg': 'DynamicTypes/DocumentEditable/Wysiwyg',
 
   // Asset types
   'DynamicTypes/Asset/Video': 'DynamicTypes/Asset/Video',

@@ -21,7 +21,7 @@ interface WebpackEntryPointProviderInterface
 
     /**
      * Can be used to define entry points that are allowed to be empty.
-     * This is useful for bundles that have optional entryp oints which are created e.g. for the dev environment only.
+     * This is useful for bundles that have optional entry points which are created e.g. for the dev environment only.
      */
     public function getOptionalEntryPoints(): array;
 }
