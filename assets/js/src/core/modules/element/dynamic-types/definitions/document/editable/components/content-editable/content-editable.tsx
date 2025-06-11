@@ -36,7 +36,8 @@ const pasteHtmlAtCaret = function (html: string): void {
     let node: ChildNode | null = null
     let lastNode: ChildNode | null = null
 
-    while ((!isNil(node = el.firstChild))) {
+    while (!isNil(el.firstChild)) {
+      node = el.firstChild;
       lastNode = frag.appendChild(node)
     }
 
