@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Title } from '@Pimcore/components/title/title'
 import { t } from 'i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -18,20 +18,45 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Table } from './table/table'
 import { Box, IconTextButton } from '@sdk/components'
-import { usePredefinedProperty } from './hooks/use-predefined-property'
+import { PredefinedPropertyRow, usePredefinedProperty } from './hooks/use-predefined-property'
 import { useAppDispatch } from '@sdk/app'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { api } from '@sdk/api/properties'
 import { usePropertyGetCollectionQuery } from '../element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
 import trackError, { ApiError } from '../app/error-handler'
 import { isUndefined } from 'lodash'
+import { uuid } from '@sdk/utils'
 
 export const PredefinedPropertiesContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
-  const { createProperty, createLoading } = usePredefinedProperty()
+  const { createNewProperty, createLoading } = usePredefinedProperty()
   const { data, isLoading: predefinedPropertiesLoading, isError, error } = usePropertyGetCollectionQuery({})
 
+  const [predefinedPropertyRows, setPredefinedPropertyRows] = useState<PredefinedPropertyRow[]>([])
+  
   const predefinedProperties = data?.items
+
+  useEffect(() => {
+    if (!isUndefined(predefinedProperties) && predefinedProperties.length !== 0) {
+      const sorted = [...predefinedProperties].sort((a, b) => b.creationDate - a.creationDate)
+      const enriched = sorted.map(item => ({ ...item, rowId: uuid() }))
+      setPredefinedPropertyRows(enriched)
+    }
+  }, [data])
+
+const onCreateProperty = async (): Promise<void> => {
+  const created = await createNewProperty()
+
+  if (created) {
+    setPredefinedPropertyRows(prev => [
+      {
+        ...created,
+        rowId: uuid()
+      },
+      ...prev
+    ])
+  }
+}
 
     useEffect(() => {
       if (isError) {
@@ -68,7 +93,7 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
               disabled={ predefinedPropertiesLoading || createLoading }
               loading={ createLoading }
               icon={ { value: 'new' } }
-              onClick={ async () => { await createProperty() } }
+              onClick={ onCreateProperty }
             >{t('predefined-properties.new')}</IconTextButton>
           </Flex>
         </Toolbar>
@@ -80,7 +105,7 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
           x: 'extra-small',
           y: 'none'
         } }
-        none={ (!isUndefined(predefinedProperties) && predefinedProperties.length === 0) && !predefinedPropertiesLoading }
+        none={ (isUndefined(predefinedPropertyRows) || predefinedPropertyRows.length === 0) && !predefinedPropertiesLoading }
       >
         <Box
           margin={ {
@@ -88,7 +113,7 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
             y: 'none'
           } }
         >
-          { !isUndefined(predefinedProperties) && <Table predefinedProperties={predefinedProperties}/>}
+          { !isUndefined(predefinedPropertyRows) && <Table predefinedPropertyRows={predefinedPropertyRows} setPredefinedPropertyRows={setPredefinedPropertyRows}/>}
         </Box>
       </Content>
     </ContentLayout>

@@ -8,13 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './table.styles'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
-import { uuid } from '@Pimcore/utils/uuid'
 import { type PredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
 import { PredefinedPropertyRow, usePredefinedProperty } from '../hooks/use-predefined-property'
 import { ContentType } from '../enums/content-type'
@@ -24,23 +23,15 @@ import { ActionsCell } from './actions-cell'
 type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
 
 interface TableProps {
-  predefinedProperties: PredefinedProperty[]
+  predefinedPropertyRows: PredefinedPropertyRow[]
+  setPredefinedPropertyRows: React.Dispatch<React.SetStateAction<PredefinedPropertyRow[]>>
 }
 
-export const Table = ({predefinedProperties}: TableProps ): React.JSX.Element => {
+export const Table = ({predefinedPropertyRows, setPredefinedPropertyRows}: TableProps ): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { updatePropertyById } = usePredefinedProperty()
-  const [enrichedProperties, setEnrichedProperties] = useState<PredefinedPropertyRow[]>([])
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
-
-  useEffect(() => {
-    if (predefinedProperties.length !== 0) {
-      const sorted = [...predefinedProperties].sort((a, b) => b.creationDate - a.creationDate)
-      const enriched = sorted.map(item => ({ ...item, rowId: uuid() }))
-      setEnrichedProperties(enriched)
-    }
-  }, [predefinedProperties])
 
   const columnHelper = createColumnHelper<PredefinedPropertyWithActions>()
 
@@ -96,7 +87,7 @@ export const Table = ({predefinedProperties}: TableProps ): React.JSX.Element =>
     const updatedProperty: PredefinedPropertyRow = { ...rowData, [columnId]: value }
     const rowId: string = rowData.rowId
 
-    setEnrichedProperties(prev =>
+    setPredefinedPropertyRows(prev =>
       prev.map(row =>
         row.rowId === rowId ? updatedProperty : row
       )
@@ -115,7 +106,7 @@ export const Table = ({predefinedProperties}: TableProps ): React.JSX.Element =>
       <Grid
         autoWidth
         columns={ tableColumns }
-        data={ enrichedProperties }
+        data={ predefinedPropertyRows }
         enableSorting
         modifiedCells={ modifiedCells }
         onUpdateCellData={ onUpdateCellData }

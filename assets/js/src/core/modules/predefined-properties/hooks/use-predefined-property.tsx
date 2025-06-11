@@ -15,7 +15,7 @@ import { PredefinedProperty, type UpdatePredefinedProperty, usePropertyUpdateMut
 
 export type PredefinedPropertyRow = PredefinedProperty & { rowId: string }
 interface UsePredefinedPropertiyReturn {
-  createProperty: () => Promise<unknown>
+  createNewProperty: () => Promise<PredefinedProperty| undefined>
   createLoading: boolean
   deletePropertyById: (id: string) => Promise<unknown>
   deleteLoading: boolean
@@ -29,6 +29,18 @@ export const usePredefinedProperty = (): UsePredefinedPropertiyReturn => {
     isError: isCreateError,
     error: createError
   }] = usePropertyCreateMutation()
+
+  const createNewProperty = async (): Promise<PredefinedProperty | undefined> => {
+  try {
+    const result = await createProperty() 
+    if ('data' in result) {
+      return result.data
+    }
+  } catch (e) {
+    trackError(new ApiError(e))
+  }
+  return undefined
+}
 
   const [deleteProperty, {
     isLoading: deleteLoading,
@@ -73,11 +85,5 @@ const updatePredefinedProperty = toApiProperty(row)
     }
   }, [isUpdateError])
 
-  useEffect(() => {
-    if (isCreateError) {
-      trackError(new ApiError(createError))
-    }
-  }, [isCreateError])
-
-  return { createProperty, createLoading, deletePropertyById, deleteLoading, updatePropertyById, updateLoading }
+  return { createNewProperty, createLoading, deletePropertyById, deleteLoading, updatePropertyById, updateLoading }
 }
