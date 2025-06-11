@@ -21,7 +21,7 @@ import { IconButton } from '@sdk/components'
 import { usePredefinedProperty } from '../hooks/use-predefined-property'
 import { type PredefinedPropertyWithId } from '../predefined-properties-provider'
 import { ContentType } from '../enums/content-type'
-import { ElementType } from '../enums/element-type'
+import { allLegacyElementTypes } from '@sdk/modules/element'
 
 type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
 
@@ -104,7 +104,7 @@ export const Table = (): React.JSX.Element => {
     }),
     columnHelper.accessor('ctype', {
       header: t('properties.columns.content-type'),
-      meta: { type: 'select', editable: true, config: { options: Object.values(ElementType) } },
+      meta: { type: 'select', editable: true, config: { options: allLegacyElementTypes } },
       size: 110
     }),
     columnHelper.accessor('inheritable', {
