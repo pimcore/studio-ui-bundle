@@ -72,8 +72,8 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme="secondary">
           <IconButton
+            disabled={ predefinedPropertiesFetching }
             icon={ { value: 'refresh' } }
-            disabled={predefinedPropertiesFetching}
             onClick={ () => dispatch(
               api.util.invalidateTags(
                 invalidatingTags.GLOBAL_PROPERTIES()
@@ -104,7 +104,7 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
         }
     >
       <Content
-        loading={ predefinedPropertiesLoading || predefinedPropertiesFetching}
+        loading={ predefinedPropertiesLoading || predefinedPropertiesFetching }
         margin={ {
           x: 'extra-small',
           y: 'none'

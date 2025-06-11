@@ -108,7 +108,7 @@ export const Table = ({ predefinedPropertyRows, setPredefinedPropertyRows }: Tab
 
     setModifiedCells([{ columnId, rowIndex: rowId }])
 
-    const success = await updatePropertyById(updatedRow.id, updatedRow)
+    const { success } = await updatePropertyById(updatedRow.id, updatedRow)
 
     if (success) setModifiedCells([])
     else {
