@@ -1,16 +1,14 @@
 import React from 'react'
 import { AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract';
-import { ManyToOneRelation } from '@sdk/modules/element';
+import ContentEditable from '../components/content-editable/content-editable';
 
-export class DynamicTypeDocumentEditableRelation extends DynamicTypeDocumentEditableAbstract {
-  id: string = 'relation'
+export class DynamicTypeDocumentEditableInput extends DynamicTypeDocumentEditableAbstract {
+  id: string = 'input'
+  initializeInIframe: boolean = true
 
   getEditableDataComponent (props: AbstractDocumentEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <ManyToOneRelation 
-      assetsAllowed 
-      documentsAllowed 
-      dataObjectsAllowed/>
+      <ContentEditable />
     )
   }
 }

@@ -43,7 +43,7 @@ class PimcoreStudioUiExtension extends Extension
 
         $container->setParameter('pimcore_studio_ui.url_path', rtrim($config['url_path'], '/'));
 
-        $container->getDefinition(StaticResourcesResolverInterface::class)
+        $container->getDefinition('pimcore_studio.static_resources_resolver.default')
             ->setArgument('$additionalCssFiles', array_unique($config['static_resources']['css']))
             ->setArgument('$additionalJsFiles', array_unique($config['static_resources']['js']));
 

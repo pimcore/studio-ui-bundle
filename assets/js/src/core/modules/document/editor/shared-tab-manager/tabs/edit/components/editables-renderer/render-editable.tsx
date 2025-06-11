@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Form } from '@sdk/components';
+import { Alert, DragAndDropContextProvider, Form } from '@sdk/components';
 import { AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract';
 import { DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry';
 import { serviceIds, useInjection } from '@sdk/app';
@@ -16,16 +16,26 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
     if (isNil(editableType)) {
         return <Alert message={(<>Editable type "{editableDefinition.type}" not found:<p>{JSON.stringify(editableDefinition)}</p></>)} type="warning" />
     }
-    return (
 
-        <ElementSelectorProvider>
-            <FieldWidthProvider>
-                    <Form initialValues={{ [editableDefinition.id]: editableDefinition.data }}>
-                        <Form.Item name={editableDefinition.id}>
-                            {editableType.getEditableDataComponent(editableDefinition)}
-                        </Form.Item>
-                    </Form>
-            </FieldWidthProvider>
-        </ElementSelectorProvider>
+    return (
+        <DragAndDropContextProvider>
+            <ElementSelectorProvider>
+                <FieldWidthProvider>
+
+                    {
+                        React.cloneElement(
+                            editableType.getEditableDataComponent(editableDefinition),
+                            {
+                                value: editableDefinition.data,
+                                onChange: (newValue) => {
+                                    // TODO: handle the change logic here
+                                    console.log(`Editable ${editableDefinition.id} changed to`, newValue);
+                                },
+                            }
+                        )
+                    }
+                </FieldWidthProvider>
+            </ElementSelectorProvider>
+        </DragAndDropContextProvider>
     )
 };

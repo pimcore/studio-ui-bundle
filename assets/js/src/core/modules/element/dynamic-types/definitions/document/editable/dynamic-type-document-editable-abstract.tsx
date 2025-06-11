@@ -23,6 +23,8 @@ export interface AbstractDocumentEditableDefinition {
   type: string
   inherited: boolean
   inDialogBox: string | null
+  value?: any
+  onChange?: (value: any) => void
 }
 
 export type GridCellColumnMeta = ColumnMetaType & { type: string }
@@ -30,6 +32,7 @@ export type GridCellColumnMeta = ColumnMetaType & { type: string }
 @injectable()
 export abstract class DynamicTypeDocumentEditableAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
+  initializeInIframe: boolean = false
 
   abstract getEditableDataComponent (props: AbstractDocumentEditableDefinition): ReactElement<AbstractDocumentEditableDefinition>
 

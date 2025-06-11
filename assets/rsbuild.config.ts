@@ -35,7 +35,8 @@ export default defineConfig({
   },
   source: {
     entry: {
-      main: './js/src/core/main.ts'
+      main: './js/src/core/main.ts',
+      documentEditorIframe: './js/src/core/modules/document/editor/shared-tab-manager/tabs/edit/iframe-app/main.ts'
     },
     decorators: {
       version: 'legacy'

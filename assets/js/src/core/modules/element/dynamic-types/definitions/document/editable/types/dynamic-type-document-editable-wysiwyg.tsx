@@ -1,16 +1,14 @@
 import React from 'react'
 import { AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract';
-import { ManyToOneRelation } from '@sdk/modules/element';
+import { Wysiwyg } from '@sdk/modules/wysiwyg';
 
-export class DynamicTypeDocumentEditableRelation extends DynamicTypeDocumentEditableAbstract {
-  id: string = 'relation'
+export class DynamicTypeDocumentEditableWysiwyg extends DynamicTypeDocumentEditableAbstract {
+  id: string = 'wysiwyg'
+  initializeInIframe: boolean = true
 
   getEditableDataComponent (props: AbstractDocumentEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <ManyToOneRelation 
-      assetsAllowed 
-      documentsAllowed 
-      dataObjectsAllowed/>
+      <Wysiwyg />
     )
   }
 }
