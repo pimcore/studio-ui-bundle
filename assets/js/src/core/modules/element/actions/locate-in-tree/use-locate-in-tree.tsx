@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { store, useAppDispatch } from '@sdk/app'
+import { store, useAppDispatch } from '@Pimcore/app/store'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { locateInTree as locateInTreeAction } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type GridContextMenuProps } from '@Pimcore/components/grid/grid'

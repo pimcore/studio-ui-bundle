@@ -90,7 +90,7 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
     {
         $entryPointProviders = array_filter(
             $this->webpackEntryPointManager->getProviders(),
-            fn($provider) => $fromStudioCore === $this->isStudioCoreProvider($provider)
+            fn ($provider) => $fromStudioCore === $this->isStudioCoreProvider($provider)
         );
 
         $files = [];
@@ -185,9 +185,9 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
         );
     }
 
-    private function isStudioCoreProvider(WebpackEntryPointProviderInterface $entryPointProvider): bool 
+    private function isStudioCoreProvider(WebpackEntryPointProviderInterface $entryPointProvider): bool
     {
-        return $entryPointProvider instanceof WebpackEntryPointProvider 
+        return $entryPointProvider instanceof WebpackEntryPointProvider
             || $entryPointProvider instanceof WebpackEntryPointProviderDocumentEditor;
     }
 }
