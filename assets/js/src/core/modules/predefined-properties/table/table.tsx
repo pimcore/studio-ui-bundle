@@ -15,9 +15,9 @@ import { useTranslation } from 'react-i18next'
 import { useStyles } from './table.styles'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { type PredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
-import { PredefinedPropertyRow, usePredefinedProperty } from '../hooks/use-predefined-property'
+import { type PredefinedPropertyRow, usePredefinedProperty } from '../hooks/use-predefined-property'
 import { ContentType } from '../enums/content-type'
-import { allLegacyElementTypes, ModifiedCells } from '@sdk/modules/element'
+import { allLegacyElementTypes, type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
 
 type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
@@ -27,7 +27,7 @@ interface TableProps {
   setPredefinedPropertyRows: React.Dispatch<React.SetStateAction<PredefinedPropertyRow[]>>
 }
 
-export const Table = ({predefinedPropertyRows, setPredefinedPropertyRows}: TableProps ): React.JSX.Element => {
+export const Table = ({ predefinedPropertyRows, setPredefinedPropertyRows }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { updatePropertyById } = usePredefinedProperty()
@@ -79,41 +79,45 @@ export const Table = ({predefinedPropertyRows, setPredefinedPropertyRows}: Table
     columnHelper.accessor('actions', {
       header: t('properties.columns.actions'),
       size: 80,
-      cell: (info) => <ActionsCell info={info} setPredefinedPropertyRows={setPredefinedPropertyRows}/>
+      cell: (info) => (
+        <ActionsCell
+          info={ info }
+          setPredefinedPropertyRows={ setPredefinedPropertyRows }
+        />
+      )
     })
   ]
 
-const onUpdateCellData = async ({
-  columnId,
-  value,
-  rowData
-}: {
-  columnId: string
-  value: unknown
-  rowData: PredefinedPropertyRow
-}): Promise<void> => {
-  const rowId = rowData.rowId
-  const updatedRow: PredefinedPropertyRow = { ...rowData, [columnId]: value }
+  const onUpdateCellData = async ({
+    columnId,
+    value,
+    rowData
+  }: {
+    columnId: string
+    value: unknown
+    rowData: PredefinedPropertyRow
+  }): Promise<void> => {
+    const rowId = rowData.rowId
+    const updatedRow: PredefinedPropertyRow = { ...rowData, [columnId]: value }
 
-  setPredefinedPropertyRows(prev =>
-    prev.map(row =>
-      row.rowId === rowId ? updatedRow : row
-    )
-  )
-
-  setModifiedCells([{ columnId, rowIndex: rowId }])
-
-  const success = await updatePropertyById(updatedRow.id, updatedRow)
-
-  if (!success) {
     setPredefinedPropertyRows(prev =>
       prev.map(row =>
-        row.rowId === rowId ? rowData : row 
+        row.rowId === rowId ? updatedRow : row
       )
     )
-  }
-}
 
+    setModifiedCells([{ columnId, rowIndex: rowId }])
+
+    const success = await updatePropertyById(updatedRow.id, updatedRow)
+
+    if (!success) {
+      setPredefinedPropertyRows(prev =>
+        prev.map(row =>
+          row.rowId === rowId ? rowData : row
+        )
+      )
+    }
+  }
 
   return (
     <div className={ styles.table }>

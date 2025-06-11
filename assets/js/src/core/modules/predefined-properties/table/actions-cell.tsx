@@ -12,41 +12,39 @@ import React from 'react'
 import { type CellContext } from '@tanstack/react-table'
 import { type PredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
 import { IconButton } from '@sdk/components'
-import { PredefinedPropertyRow, usePredefinedProperty } from '../hooks/use-predefined-property'
+import { type PredefinedPropertyRow, usePredefinedProperty } from '../hooks/use-predefined-property'
 
 type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
 
 interface ActionsCellProps {
- info : CellContext<PredefinedPropertyWithActions, React.ReactNode>
+  info: CellContext<PredefinedPropertyWithActions, React.ReactNode>
   setPredefinedPropertyRows: React.Dispatch<React.SetStateAction<PredefinedPropertyRow[]>>
 }
 
-  export const ActionsCell = ({info, setPredefinedPropertyRows}: ActionsCellProps): JSX.Element => {
-    const id = info.row.original.id
-    const {deletePropertyById, deleteLoading} = usePredefinedProperty()
+export const ActionsCell = ({ info, setPredefinedPropertyRows }: ActionsCellProps): JSX.Element => {
+  const id = info.row.original.id
+  const { deletePropertyById, deleteLoading } = usePredefinedProperty()
 
-     const handleDelete = async (): Promise<void> => {
+  const handleDelete = async (): Promise<void> => {
     const success = await deletePropertyById(id)
     if (success) {
       setPredefinedPropertyRows(prev => prev.filter(row => row.id !== id))
     }
   }
 
-    return (
-      <div className="properties-table--actions-column">
-        <IconButton
-          icon={ { value: 'translate' } }
-          onClick={ () => { console.log('Open Translate View') } }
-          type="link"
-        />
-        <IconButton
-          icon={ { value: 'trash' } }
-          loading={ deleteLoading }
-          onClick={ handleDelete }
-          type="link"
-        />
-      </div>
-    )
-  }
-
- 
+  return (
+    <div className="properties-table--actions-column">
+      <IconButton
+        icon={ { value: 'translate' } }
+        onClick={ () => { console.log('Open Translate View') } }
+        type="link"
+      />
+      <IconButton
+        icon={ { value: 'trash' } }
+        loading={ deleteLoading }
+        onClick={ handleDelete }
+        type="link"
+      />
+    </div>
+  )
+}

@@ -16,7 +16,7 @@ export const isValidElementType = (type: string): boolean => {
 
 export const allElementTypes = ['asset', 'document', 'data-object']
 
-//TODO: remove once legacy element types were replaces
+// TODO: remove once legacy element types were replaces
 export const allLegacyElementTypes = ['asset', 'document', 'object']
 
 export const mapToElementType = (elementType: string): ElementType | null => {

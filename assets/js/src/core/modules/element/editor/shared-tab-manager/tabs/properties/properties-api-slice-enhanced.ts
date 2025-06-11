@@ -47,4 +47,4 @@ export const api = baseApi.enhanceEndpoints({
 
 export type * from './properties-api-slice.gen'
 
-export const { usePropertyGetCollectionQuery, usePropertyGetCollectionForElementByTypeAndIdQuery } = api
+export const { usePropertyGetCollectionQuery, usePropertyGetCollectionForElementByTypeAndIdQuery, usePropertyUpdateMutation, usePropertyDeleteMutation } = api

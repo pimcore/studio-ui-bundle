@@ -8,77 +8,80 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { usePropertyCreateMutation, usePropertyDeleteMutation } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
-import { useEffect } from 'react'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { PredefinedProperty, type UpdatePredefinedProperty, usePropertyUpdateMutation } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import {
+  type PredefinedProperty,
+  type UpdatePredefinedProperty,
+  usePropertyCreateMutation,
+  usePropertyDeleteMutation,
+  usePropertyUpdateMutation
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
 
 export type PredefinedPropertyRow = PredefinedProperty & { rowId: string }
-interface UsePredefinedPropertiyReturn {
-  createNewProperty: () => Promise<PredefinedProperty| undefined>
+
+interface UsePredefinedPropertyReturn {
+  createNewProperty: () => Promise<{ success: boolean, data?: PredefinedProperty }>
   createLoading: boolean
-  deletePropertyById: (id: string) => Promise<unknown>
+  deletePropertyById: (id: string) => Promise<{ success: boolean }>
   deleteLoading: boolean
-  updatePropertyById: (id: string, row: PredefinedPropertyRow) => Promise<unknown>
+  updatePropertyById: (id: string, row: PredefinedPropertyRow) => Promise<{ success: boolean }>
   updateLoading: boolean
 }
 
-export const usePredefinedProperty = (): UsePredefinedPropertiyReturn => {
-  const [createProperty, {
-    isLoading: createLoading
-  }] = usePropertyCreateMutation()
+export const usePredefinedProperty = (): UsePredefinedPropertyReturn => {
+  const [createProperty, { isLoading: createLoading }] = usePropertyCreateMutation()
+  const [deleteProperty, { isLoading: deleteLoading }] = usePropertyDeleteMutation()
+  const [updateProperty, { isLoading: updateLoading }] = usePropertyUpdateMutation()
 
-  const createNewProperty = async (): Promise<PredefinedProperty | undefined> => {
-  try {
-    const result = await createProperty() 
-    if ('data' in result) {
-      return result.data
+  const createNewProperty = async (): Promise<{ success: boolean, data?: PredefinedProperty }> => {
+    try {
+      const result = await createProperty()
+      if ('data' in result) {
+        return { success: true, data: result.data }
+      }
+    } catch (e) {
+      trackError(new GeneralError('Was not able to create Property'))
     }
-  } catch (e) {
-    trackError(new ApiError(e))
+    return { success: false }
   }
-  return undefined
-}
 
-  const [deleteProperty, {
-    isLoading: deleteLoading
-  }] = usePropertyDeleteMutation()
-
-const deletePropertyById = async (id: string): Promise<boolean> => {
-  try {
-    const result = await deleteProperty({ id })
-    return 'data' in result
-  } catch (e) {
-    trackError(new ApiError(e))
-    return false
+  const deletePropertyById = async (id: string): Promise<{ success: boolean }> => {
+    try {
+      const result = await deleteProperty({ id })
+      return { success: 'data' in result }
+    } catch (e) {
+      trackError(new GeneralError('Was not able to delete Property'))
+      return { success: false }
+    }
   }
-}
 
-  const [updateProperty, {
-    isLoading: updateLoading
-  }] = usePropertyUpdateMutation()
+  const toApiProperty = (row: PredefinedPropertyRow): UpdatePredefinedProperty => ({
+    name: row.name ?? '',
+    description: row.description ?? '',
+    key: row.key ?? '',
+    type: row.type ?? '',
+    data: row.data ?? '',
+    config: row.config ?? '',
+    ctype: row.ctype ?? '',
+    inheritable: row.inheritable
+  })
 
-    const toApiProperty = (row: PredefinedPropertyRow): UpdatePredefinedProperty => ({
-      name: row.name ?? '',
-      description: row.description ?? '',
-      key: row.key ?? '',
-      type: row.type ?? '',
-      data: row.data ?? '',
-      config: row.config ?? '',
-      ctype: row.ctype ?? '',
-      inheritable: row.inheritable
-    })
-    
-const updatePropertyById = async (id: string, row: PredefinedPropertyRow): Promise<boolean> => {
-  const updatePredefinedProperty = toApiProperty(row)
-  try {
-    const result = await updateProperty({ id, updatePredefinedProperty })
-    return 'data' in result
-  } catch (e) {
-    trackError(new ApiError(e))
-    return false
+  const updatePropertyById = async (id: string, row: PredefinedPropertyRow): Promise<{ success: boolean }> => {
+    try {
+      const result = await updateProperty({ id, updatePredefinedProperty: toApiProperty(row) })
+      return { success: 'data' in result }
+    } catch (e) {
+      trackError(new GeneralError('Was not able to update Property'))
+      return { success: false }
+    }
   }
-}
 
-  return { createNewProperty, createLoading, deletePropertyById, deleteLoading, updatePropertyById, updateLoading }
+  return {
+    createNewProperty,
+    createLoading,
+    deletePropertyById,
+    deleteLoading,
+    updatePropertyById,
+    updateLoading
+  }
 }
