@@ -22,7 +22,7 @@
     "globalName": "pimcore_studio_ui_bundle",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
-    "publicPath": "/bundles/pimcorestudioui/build/79d4d9c1-63c6-409c-a974-68fbf3c631d3/"
+    "publicPath": "/bundles/pimcorestudioui/build/c9347ce5-3b01-4a36-a27f-a1210fe57131/"
   },
   "shared": [
     {
@@ -77,12 +77,12 @@
         }
       },
       "usedIn": [
+        "./modules/element",
         "./app",
         "./components",
         "./modules/app",
         "./modules/asset",
         "./modules/data-object",
-        "./modules/element",
         "./modules/user",
         "./modules/widget-manager",
         "./modules/wysiwyg"
@@ -138,9 +138,9 @@
         }
       },
       "usedIn": [
-        "./modules/element",
         "./components",
-        "./modules/data-object"
+        "./modules/data-object",
+        "./modules/element"
       ]
     },
     {
@@ -265,10 +265,10 @@
         }
       },
       "usedIn": [
+        "./modules/element",
         "./components",
         "./modules/app",
-        "./modules/data-object",
-        "./modules/element"
+        "./modules/data-object"
       ]
     },
     {
@@ -293,9 +293,9 @@
         }
       },
       "usedIn": [
-        "./modules/element",
         "./components",
         "./modules/data-object",
+        "./modules/element",
         "./utils"
       ]
     },
@@ -346,10 +346,10 @@
         }
       },
       "usedIn": [
+        "./modules/element",
         "./modules/app",
         "./modules/asset",
         "./modules/data-object",
-        "./modules/element",
         "./modules/icon-library",
         "./modules/widget-manager"
       ]
@@ -903,7 +903,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6903.304baaf1.css"
+            "static/css/async/6903.29d35c17.css"
           ],
           "async": []
         }
@@ -1387,7 +1387,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6903.304baaf1.css"
+            "static/css/async/6903.29d35c17.css"
           ],
           "async": []
         }
@@ -1471,7 +1471,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6903.304baaf1.css"
+            "static/css/async/6903.29d35c17.css"
           ],
           "async": []
         }
@@ -1525,7 +1525,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/6903.304baaf1.css"
+            "static/css/async/6903.29d35c17.css"
           ],
           "async": []
         }
@@ -1560,7 +1560,7 @@
         "css": {
           "sync": [],
           "async": [
-            "static/css/async/6903.304baaf1.css"
+            "static/css/async/6903.29d35c17.css"
           ]
         }
       }
