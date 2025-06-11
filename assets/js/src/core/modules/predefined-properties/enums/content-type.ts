@@ -13,6 +13,6 @@ export enum ContentType {
   Document = 'document',
   Asset = 'asset',
   Object = 'object',
-  Boolean = 'boolean',
+  Boolean = 'bool',
   Select = 'select',
 }
