@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, DragAndDropContextProvider, Form } from '@sdk/components';
+import { Alert, DragAndDropContextProvider } from '@sdk/components';
 import { AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract';
 import { DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry';
 import { serviceIds, useInjection } from '@sdk/app';

@@ -51,7 +51,7 @@ export const EditContainer = (): React.JSX.Element => {
       const styleTags = Array.from(
         document.head.querySelectorAll('style')
       )
-      const combinedCSS = styleTags.map(tag => tag.textContent || '').join('\n')
+      const combinedCSS = styleTags.map(tag => tag.textContent ?? '').join('\n')
 
       if (!styleSheetRef.current) return
       styleSheetRef.current.replaceSync(combinedCSS)

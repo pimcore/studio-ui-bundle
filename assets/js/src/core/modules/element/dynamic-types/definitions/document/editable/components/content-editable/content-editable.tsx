@@ -30,7 +30,6 @@ const pasteHtmlAtCaret = function (html: string): void {
                 lastNode = frag.appendChild(node);
             }
 
-            const firstNode = frag.firstChild;
             range.insertNode(frag);
 
             // Preserve the selection
@@ -72,7 +71,7 @@ const ContentEditable = ({ value, onChange, className, placeholder, required, wi
     };
 
     const handleKeyUp = () => {
-        const textContent = contentRef.current?.textContent?.trim() || '';
+        const textContent = contentRef.current?.textContent?.trim() ?? '';
         if (required && textContent.length < 1) {
             contentRef.current?.classList.add('empty');
         } else {
@@ -97,6 +96,7 @@ const ContentEditable = ({ value, onChange, className, placeholder, required, wi
             onKeyDown={handleKeyDown}
             onKeyUp={handleKeyUp}
             dangerouslySetInnerHTML={{ __html: (value ?? '') + '<br>' }}
+            role="none"
         />
     );
 };

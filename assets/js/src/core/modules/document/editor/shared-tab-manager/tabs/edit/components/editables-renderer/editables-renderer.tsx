@@ -20,10 +20,7 @@ const getTargetContainer = (
         return null;
     }
 
-    let shadowRoot = targetElement.shadowRoot;
-    if (!shadowRoot) {
-        shadowRoot = targetElement.attachShadow({ mode: 'open' });
-    }
+    const shadowRoot = targetElement.shadowRoot ?? targetElement.attachShadow({ mode: 'open' })
 
     shadowRoot.adoptedStyleSheets = [styleSheet];
 

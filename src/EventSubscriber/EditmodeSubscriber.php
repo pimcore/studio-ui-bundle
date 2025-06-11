@@ -76,7 +76,6 @@ final class EditmodeSubscriber implements EventSubscriberInterface
         }
 
         // trigger this once to make sure it is resolved properly
-        // TODO is this needed?
         $this->editmodeResolver->isEditmode($request);
     }
 
