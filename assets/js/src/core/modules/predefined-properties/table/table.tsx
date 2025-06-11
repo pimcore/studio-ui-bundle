@@ -15,22 +15,23 @@ import { useTranslation } from 'react-i18next'
 import { useStyles } from './table.styles'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { uuid } from '@Pimcore/utils/uuid'
-import { usePredefinedProperties } from '../hooks/use-predefined-properties'
-import { type PredefinedProperty, type UpdatePredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
-import { usePredefinedProperty } from '../hooks/use-predefined-property'
-import { type PredefinedPropertyWithId } from '../predefined-properties-provider'
+import { type PredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
+import { PredefinedPropertyRow, usePredefinedProperty } from '../hooks/use-predefined-property'
 import { ContentType } from '../enums/content-type'
 import { allLegacyElementTypes, ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
 
 type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
 
-export const Table = (): React.JSX.Element => {
+interface TableProps {
+  predefinedProperties: PredefinedProperty[]
+}
+
+export const Table = ({predefinedProperties}: TableProps ): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const { predefinedProperties } = usePredefinedProperties()
   const { updatePropertyById } = usePredefinedProperty()
-  const [enrichedProperties, setEnrichedProperties] = useState<PredefinedPropertyWithId[]>([])
+  const [enrichedProperties, setEnrichedProperties] = useState<PredefinedPropertyRow[]>([])
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
 
   useEffect(() => {
@@ -92,7 +93,7 @@ export const Table = (): React.JSX.Element => {
   ]
 
   const onUpdateCellData = async ({ columnId, value, rowData }): Promise<void> => {
-    const updatedProperty: PredefinedPropertyWithId = { ...rowData, [columnId]: value }
+    const updatedProperty: PredefinedPropertyRow = { ...rowData, [columnId]: value }
     const rowId: string = rowData.rowId
 
     setEnrichedProperties(prev =>

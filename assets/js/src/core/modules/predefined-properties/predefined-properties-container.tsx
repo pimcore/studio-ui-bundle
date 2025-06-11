@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Title } from '@Pimcore/components/title/title'
 import { t } from 'i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -16,20 +16,29 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
-import { usePredefinedProperties } from './hooks/use-predefined-properties'
 import { Table } from './table/table'
 import { Box, IconTextButton } from '@sdk/components'
-import { PredefinedPropertyProvider } from './predefined-properties-provider'
 import { usePredefinedProperty } from './hooks/use-predefined-property'
 import { useAppDispatch } from '@sdk/app'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { api } from '@sdk/api/properties'
+import { usePropertyGetCollectionQuery } from '../element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
+import trackError, { ApiError } from '../app/error-handler'
+import { isUndefined } from 'lodash'
 
-const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
+export const PredefinedPropertiesContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
-  const { predefinedProperties, isLoading: predefinedPropertiesLoading } = usePredefinedProperties()
   const { createProperty, createLoading } = usePredefinedProperty()
+  const { data, isLoading: predefinedPropertiesLoading, isError, error } = usePropertyGetCollectionQuery({})
 
+  const predefinedProperties = data?.items
+
+    useEffect(() => {
+      if (isError) {
+        trackError(new ApiError(error))
+      }
+    }, [isError])
+    
   return (
     <ContentLayout
       renderToolbar={
@@ -71,7 +80,7 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
           x: 'extra-small',
           y: 'none'
         } }
-        none={ predefinedProperties.length === 0 && !predefinedPropertiesLoading }
+        none={ (!isUndefined(predefinedProperties) && predefinedProperties.length === 0) && !predefinedPropertiesLoading }
       >
         <Box
           margin={ {
@@ -79,17 +88,9 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
             y: 'none'
           } }
         >
-          <Table />
+          { !isUndefined(predefinedProperties) && <Table predefinedProperties={predefinedProperties}/>}
         </Box>
       </Content>
     </ContentLayout>
   )
 }
-
-const PredefinedPropertiesContainer = (): React.JSX.Element => (
-  <PredefinedPropertyProvider>
-    <PredefinedPropertiesContainerInner />
-  </PredefinedPropertyProvider>
-)
-
-export { PredefinedPropertiesContainer }
