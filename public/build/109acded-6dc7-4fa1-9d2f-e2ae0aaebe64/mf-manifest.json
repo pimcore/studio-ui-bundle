@@ -22,17 +22,15 @@
     "globalName": "pimcore_studio_ui_bundle_core",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
-    "publicPath": "/bundles/pimcorestudioui/build/1dde9180-dd21-4866-9385-f48cb1972b54/"
+    "publicPath": "/bundles/pimcorestudioui/build/109acded-6dc7-4fa1-9d2f-e2ae0aaebe64/"
   },
   "shared": [
     {
-      "singleton": true,
-      "requiredVersion": "18.3.x",
-      "shareScope": "default",
-      "eager": true,
+      "id": "pimcore_studio_ui_bundle_core:react",
       "name": "react",
       "version": "18.3.x",
-      "id": "pimcore_studio_ui_bundle_core:react",
+      "singleton": true,
+      "requiredVersion": "18.3.x",
       "assets": {
         "js": {
           "async": [],
@@ -44,18 +42,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "0.2.x",
-      "shareScope": "default",
-      "import": "reflect-metadata",
+      "id": "pimcore_studio_ui_bundle_core:reflect-metadata",
       "name": "reflect-metadata",
       "version": "0.2.x",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:reflect-metadata",
+      "singleton": true,
+      "requiredVersion": "0.2.x",
       "assets": {
         "js": {
           "async": [],
@@ -67,17 +61,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "18.3.x",
-      "shareScope": "default",
-      "eager": true,
+      "id": "pimcore_studio_ui_bundle_core:react-dom",
       "name": "react-dom",
       "version": "18.3.x",
-      "id": "pimcore_studio_ui_bundle_core:react-dom",
+      "singleton": true,
+      "requiredVersion": "18.3.x",
       "assets": {
         "js": {
           "async": [],
@@ -89,18 +80,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^14.1.3",
-      "shareScope": "default",
-      "import": "react-i18next",
+      "id": "pimcore_studio_ui_bundle_core:react-i18next",
       "name": "react-i18next",
       "version": "14.1.3",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:react-i18next",
+      "singleton": true,
+      "requiredVersion": "^14.1.3",
       "assets": {
         "js": {
           "async": [],
@@ -112,17 +99,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "5.22.x",
-      "shareScope": "default",
-      "eager": true,
+      "id": "pimcore_studio_ui_bundle_core:antd",
       "name": "antd",
       "version": "5.22.x",
-      "id": "pimcore_studio_ui_bundle_core:antd",
+      "singleton": true,
+      "requiredVersion": "5.22.x",
       "assets": {
         "js": {
           "async": [],
@@ -134,18 +118,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^23.16.8",
-      "shareScope": "default",
-      "import": "i18next",
+      "id": "pimcore_studio_ui_bundle_core:i18next",
       "name": "i18next",
       "version": "23.16.8",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:i18next",
+      "singleton": true,
+      "requiredVersion": "^23.16.8",
       "assets": {
         "js": {
           "async": [],
@@ -157,18 +137,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^6.28.0",
-      "shareScope": "default",
-      "import": "react-router-dom",
+      "id": "pimcore_studio_ui_bundle_core:react-router-dom",
       "name": "react-router-dom",
       "version": "6.28.0",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:react-router-dom",
+      "singleton": true,
+      "requiredVersion": "^6.28.0",
       "assets": {
         "js": {
           "async": [],
@@ -180,17 +156,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^2.5.1",
-      "shareScope": "default",
-      "eager": true,
+      "id": "pimcore_studio_ui_bundle_core:classnames",
       "name": "classnames",
       "version": "2.5.1",
-      "id": "pimcore_studio_ui_bundle_core:classnames",
+      "singleton": true,
+      "requiredVersion": "^2.5.1",
       "assets": {
         "js": {
           "async": [],
@@ -202,17 +175,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
+      "id": "pimcore_studio_ui_bundle_core:inversify",
+      "name": "inversify",
+      "version": "6.1.x",
       "singleton": true,
       "requiredVersion": "^6.1.4",
-      "shareScope": "default",
-      "eager": true,
-      "version": "6.1.x",
-      "name": "inversify",
-      "id": "pimcore_studio_ui_bundle_core:inversify",
       "assets": {
         "js": {
           "async": [],
@@ -224,18 +194,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^4.17.21",
-      "shareScope": "default",
-      "import": "lodash",
+      "id": "pimcore_studio_ui_bundle_core:lodash",
       "name": "lodash",
       "version": "4.17.21",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:lodash",
+      "singleton": true,
+      "requiredVersion": "^4.17.21",
       "assets": {
         "js": {
           "async": [],
@@ -247,18 +213,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^2.3.0",
-      "shareScope": "default",
-      "import": "@reduxjs/toolkit",
+      "id": "pimcore_studio_ui_bundle_core:@reduxjs/toolkit",
       "name": "@reduxjs/toolkit",
       "version": "^2.3.0",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:@reduxjs/toolkit",
+      "singleton": true,
+      "requiredVersion": "^2.3.0",
       "assets": {
         "js": {
           "async": [],
@@ -270,18 +232,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^9.1.2",
-      "shareScope": "default",
-      "import": "react-redux",
+      "id": "pimcore_studio_ui_bundle_core:react-redux",
       "name": "react-redux",
       "version": "9.1.2",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:react-redux",
+      "singleton": true,
+      "requiredVersion": "^9.1.2",
       "assets": {
         "js": {
           "async": [],
@@ -293,18 +251,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^11.11.17",
-      "shareScope": "default",
-      "import": "framer-motion",
+      "id": "pimcore_studio_ui_bundle_core:framer-motion",
       "name": "framer-motion",
       "version": "11.11.17",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:framer-motion",
+      "singleton": true,
+      "requiredVersion": "^11.11.17",
       "assets": {
         "js": {
           "async": [],
@@ -316,18 +270,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "3.7.x",
-      "shareScope": "default",
-      "import": "antd-style",
+      "id": "pimcore_studio_ui_bundle_core:antd-style",
       "name": "antd-style",
       "version": "3.7.x",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:antd-style",
+      "singleton": true,
+      "requiredVersion": "3.7.x",
       "assets": {
         "js": {
           "async": [],
@@ -339,18 +289,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^0.7.15",
-      "shareScope": "default",
-      "import": "flexlayout-react",
+      "id": "pimcore_studio_ui_bundle_core:flexlayout-react",
       "name": "flexlayout-react",
       "version": "0.7.15",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:flexlayout-react",
+      "singleton": true,
+      "requiredVersion": "^0.7.15",
       "assets": {
         "js": {
           "async": [],
@@ -362,18 +308,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^3.2.1",
-      "shareScope": "default",
-      "import": "dompurify",
+      "id": "pimcore_studio_ui_bundle_core:dompurify",
       "name": "dompurify",
       "version": "3.2.1",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:dompurify",
+      "singleton": true,
+      "requiredVersion": "^3.2.1",
       "assets": {
         "js": {
           "async": [],
@@ -385,18 +327,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^8.20.5",
-      "shareScope": "default",
-      "import": "@tanstack/react-table",
+      "id": "pimcore_studio_ui_bundle_core:@tanstack/react-table",
       "name": "@tanstack/react-table",
       "version": "^8.20.5",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:@tanstack/react-table",
+      "singleton": true,
+      "requiredVersion": "^8.20.5",
       "assets": {
         "js": {
           "async": [],
@@ -408,18 +346,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^8.0.0",
-      "shareScope": "default",
-      "import": "@dnd-kit/sortable",
+      "id": "pimcore_studio_ui_bundle_core:@dnd-kit/sortable",
       "name": "@dnd-kit/sortable",
       "version": "^8.0.0",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:@dnd-kit/sortable",
+      "singleton": true,
+      "requiredVersion": "^8.0.0",
       "assets": {
         "js": {
           "async": [],
@@ -431,18 +365,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^6.1.0",
-      "shareScope": "default",
-      "import": "@dnd-kit/core",
+      "id": "pimcore_studio_ui_bundle_core:@dnd-kit/core",
       "name": "@dnd-kit/core",
       "version": "^6.1.0",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:@dnd-kit/core",
+      "singleton": true,
+      "requiredVersion": "^6.1.0",
       "assets": {
         "js": {
           "async": [],
@@ -454,18 +384,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^10.0.0",
-      "shareScope": "default",
-      "import": "uuid",
+      "id": "pimcore_studio_ui_bundle_core:uuid",
       "name": "uuid",
       "version": "10.0.0",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:uuid",
+      "singleton": true,
+      "requiredVersion": "^10.0.0",
       "assets": {
         "js": {
           "async": [],
@@ -477,18 +403,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^10.1.1",
-      "shareScope": "default",
-      "import": "immer",
+      "id": "pimcore_studio_ui_bundle_core:immer",
       "name": "immer",
       "version": "10.1.1",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:immer",
+      "singleton": true,
+      "requiredVersion": "^10.1.1",
       "assets": {
         "js": {
           "async": [],
@@ -500,18 +422,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^4.4.6",
-      "shareScope": "default",
-      "import": "react-draggable",
+      "id": "pimcore_studio_ui_bundle_core:react-draggable",
       "name": "react-draggable",
       "version": "4.4.6",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:react-draggable",
+      "singleton": true,
+      "requiredVersion": "^4.4.6",
       "assets": {
         "js": {
           "async": [],
@@ -523,18 +441,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^1.9.4",
-      "shareScope": "default",
-      "import": "leaflet",
+      "id": "pimcore_studio_ui_bundle_core:leaflet",
       "name": "leaflet",
       "version": "1.9.4",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:leaflet",
+      "singleton": true,
+      "requiredVersion": "^1.9.4",
       "assets": {
         "js": {
           "async": [],
@@ -546,18 +460,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^1.0.4",
-      "shareScope": "default",
-      "import": "leaflet-draw",
+      "id": "pimcore_studio_ui_bundle_core:leaflet-draw",
       "name": "leaflet-draw",
       "version": "1.0.4",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:leaflet-draw",
+      "singleton": true,
+      "requiredVersion": "^1.0.4",
       "assets": {
         "js": {
           "async": [],
@@ -569,18 +479,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^6.4.9",
-      "shareScope": "default",
-      "import": "@codemirror/lang-html",
+      "id": "pimcore_studio_ui_bundle_core:@codemirror/lang-html",
       "name": "@codemirror/lang-html",
       "version": "^6.4.9",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:@codemirror/lang-html",
+      "singleton": true,
+      "requiredVersion": "^6.4.9",
       "assets": {
         "js": {
           "async": [],
@@ -592,18 +498,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^6.3.0",
-      "shareScope": "default",
-      "import": "@codemirror/lang-css",
+      "id": "pimcore_studio_ui_bundle_core:@codemirror/lang-css",
       "name": "@codemirror/lang-css",
       "version": "^6.3.0",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:@codemirror/lang-css",
+      "singleton": true,
+      "requiredVersion": "^6.3.0",
       "assets": {
         "js": {
           "async": [],
@@ -615,18 +517,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^6.2.2",
-      "shareScope": "default",
-      "import": "@codemirror/lang-javascript",
+      "id": "pimcore_studio_ui_bundle_core:@codemirror/lang-javascript",
       "name": "@codemirror/lang-javascript",
       "version": "^6.2.2",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:@codemirror/lang-javascript",
+      "singleton": true,
+      "requiredVersion": "^6.2.2",
       "assets": {
         "js": {
           "async": [],
@@ -638,18 +536,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^6.0.1",
-      "shareScope": "default",
-      "import": "@codemirror/lang-json",
+      "id": "pimcore_studio_ui_bundle_core:@codemirror/lang-json",
       "name": "@codemirror/lang-json",
       "version": "^6.0.1",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:@codemirror/lang-json",
+      "singleton": true,
+      "requiredVersion": "^6.0.1",
       "assets": {
         "js": {
           "async": [],
@@ -661,18 +555,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^6.1.0",
-      "shareScope": "default",
-      "import": "@codemirror/lang-xml",
+      "id": "pimcore_studio_ui_bundle_core:@codemirror/lang-xml",
       "name": "@codemirror/lang-xml",
       "version": "^6.1.0",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:@codemirror/lang-xml",
+      "singleton": true,
+      "requiredVersion": "^6.1.0",
       "assets": {
         "js": {
           "async": [],
@@ -684,18 +574,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^6.8.0",
-      "shareScope": "default",
-      "import": "@codemirror/lang-sql",
+      "id": "pimcore_studio_ui_bundle_core:@codemirror/lang-sql",
       "name": "@codemirror/lang-sql",
       "version": "^6.8.0",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:@codemirror/lang-sql",
+      "singleton": true,
+      "requiredVersion": "^6.8.0",
       "assets": {
         "js": {
           "async": [],
@@ -707,18 +593,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^6.3.1",
-      "shareScope": "default",
-      "import": "@codemirror/lang-markdown",
+      "id": "pimcore_studio_ui_bundle_core:@codemirror/lang-markdown",
       "name": "@codemirror/lang-markdown",
       "version": "^6.3.1",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:@codemirror/lang-markdown",
+      "singleton": true,
+      "requiredVersion": "^6.3.1",
       "assets": {
         "js": {
           "async": [],
@@ -730,18 +612,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^4.23.6",
-      "shareScope": "default",
-      "import": "@uiw/react-codemirror",
+      "id": "pimcore_studio_ui_bundle_core:@uiw/react-codemirror",
       "name": "@uiw/react-codemirror",
       "version": "^4.23.6",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle_core:@uiw/react-codemirror",
+      "singleton": true,
+      "requiredVersion": "^4.23.6",
       "assets": {
         "js": {
           "async": [],
@@ -753,148 +631,51 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     }
   ],
   "remotes": [
     {
-      "alias": "@sdk",
-      "consumingFederationContainerName": "pimcore_studio_ui_bundle_core",
       "federationContainerName": "promise new Promise(resolve => {\n          const studioUIBundleRemoteUrl = window.StudioUIBundleRemoteUrl\n          const script = document.createElement('script')\n          script.src = studioUIBundleRemoteUrl\n          script.onload = () => {\n            const proxy = {\n              get: (request) => window['pimcore_studio_ui_bundle'].get(request),\n              init: (...arg) => {\n                try {\n                  return window['pimcore_studio_ui_bundle'].init(...arg)\n                } catch(e) {\n                  console.log('remote container already initialized')\n                }\n              }\n            }\n            resolve(proxy)\n          }\n          document.head.appendChild(script);\n        })\n        ",
       "moduleName": "components",
-      "usedIn": [
-        "js/src/core/app/router/router.tsx + 37 modules",
-        "js/src/core/bootstrap.ts + 1191 modules",
-        "js/src/core/components/drag-and-drop/droppable.tsx + 2 modules",
-        "js/src/core/components/drag-and-drop/hooks/use-droppable.tsx",
-        "js/src/core/modules/app/utils/app-runner.tsx + 12 modules",
-        "js/src/core/modules/notifications/index.tsx + 8 modules"
-      ],
-      "version": "*"
+      "alias": "@sdk",
+      "entry": "*"
     },
     {
-      "alias": "@sdk",
-      "consumingFederationContainerName": "pimcore_studio_ui_bundle_core",
       "federationContainerName": "promise new Promise(resolve => {\n          const studioUIBundleRemoteUrl = window.StudioUIBundleRemoteUrl\n          const script = document.createElement('script')\n          script.src = studioUIBundleRemoteUrl\n          script.onload = () => {\n            const proxy = {\n              get: (request) => window['pimcore_studio_ui_bundle'].get(request),\n              init: (...arg) => {\n                try {\n                  return window['pimcore_studio_ui_bundle'].init(...arg)\n                } catch(e) {\n                  console.log('remote container already initialized')\n                }\n              }\n            }\n            resolve(proxy)\n          }\n          document.head.appendChild(script);\n        })\n        ",
       "moduleName": "app",
-      "usedIn": [
-        "js/src/core/app/i18n/index.ts + 4 modules",
-        "js/src/core/app/router/router.tsx + 37 modules",
-        "js/src/core/bootstrap.ts + 1191 modules",
-        "js/src/core/components/element-tree/element-tree-slice.ts",
-        "js/src/core/components/modal-upload/modal-upload.tsx",
-        "js/src/core/modules/app/settings/settings-slice.ts",
-        "js/src/core/modules/app/utils/app-runner.tsx + 12 modules",
-        "js/src/core/modules/asset/asset-draft-error-slice.ts",
-        "js/src/core/modules/asset/asset-draft-slice.tsx",
-        "js/src/core/modules/asset/draft/hooks/use-custom-metadata.ts",
-        "js/src/core/modules/asset/draft/hooks/use-custom-settings.ts",
-        "js/src/core/modules/asset/draft/hooks/use-image-settings.ts",
-        "js/src/core/modules/asset/draft/hooks/use-text-settings.ts",
-        "js/src/core/modules/asset/hooks/use-asset-draft-fetcher.ts",
-        "js/src/core/modules/asset/hooks/use-asset-helper.ts",
-        "js/src/core/modules/auth/auth-slice.ts",
-        "js/src/core/modules/auth/hooks/use-is-authenticated.ts + 1 modules",
-        "js/src/core/modules/auth/permission-helper.ts",
-        "js/src/core/modules/auth/user/user-slice.ts",
-        "js/src/core/modules/data-object/actions/save/use-save.tsx",
-        "js/src/core/modules/data-object/data-object-draft-error-slice.ts",
-        "js/src/core/modules/data-object/data-object-draft-slice.tsx",
-        "js/src/core/modules/data-object/draft/hooks/use-draft-data.ts",
-        "js/src/core/modules/data-object/draft/hooks/use-modified-object-data.ts",
-        "js/src/core/modules/data-object/hooks/use-data-object-draft-fetcher.ts",
-        "js/src/core/modules/data-object/hooks/use-data-object-draft.ts",
-        "js/src/core/modules/data-object/hooks/use-data-object-helper.ts",
-        "js/src/core/modules/data-object/utils/provider/class-defintions/class-definitions-provider.tsx",
-        "js/src/core/modules/document/document-draft-error-slice.ts",
-        "js/src/core/modules/document/document-draft-slice.tsx",
-        "js/src/core/modules/document/hooks/use-document-helper.ts + 1 modules",
-        "js/src/core/modules/element/actions/lock/use-lock.tsx",
-        "js/src/core/modules/element/draft/hooks/use-properties.ts",
-        "js/src/core/modules/element/draft/hooks/use-published.ts",
-        "js/src/core/modules/element/draft/hooks/use-schedules.ts",
-        "js/src/core/modules/element/draft/hooks/use-tabs.ts",
-        "js/src/core/modules/element/draft/hooks/use-trackable-changes.ts",
-        "js/src/core/modules/element/hooks/use-cache-update.ts",
-        "js/src/core/modules/element/hooks/use-element-api.ts",
-        "js/src/core/modules/execution-engine/hooks/useJobs.ts + 1 modules",
-        "js/src/core/modules/perspectives/active-perspective-slice.ts",
-        "js/src/core/modules/perspectives/hooks/use-perspectives.tsx + 2 modules",
-        "js/src/core/modules/widget-manager/hooks/use-widget-manager.ts",
-        "js/src/core/modules/widget-manager/utils/widget-manager-outer-model.tsx",
-        "js/src/core/modules/widget-manager/widget-manager-slice.ts + 1 modules"
-      ],
-      "version": "*"
+      "alias": "@sdk",
+      "entry": "*"
     },
     {
-      "alias": "@sdk",
-      "consumingFederationContainerName": "pimcore_studio_ui_bundle_core",
       "federationContainerName": "promise new Promise(resolve => {\n          const studioUIBundleRemoteUrl = window.StudioUIBundleRemoteUrl\n          const script = document.createElement('script')\n          script.src = studioUIBundleRemoteUrl\n          script.onload = () => {\n            const proxy = {\n              get: (request) => window['pimcore_studio_ui_bundle'].get(request),\n              init: (...arg) => {\n                try {\n                  return window['pimcore_studio_ui_bundle'].init(...arg)\n                } catch(e) {\n                  console.log('remote container already initialized')\n                }\n              }\n            }\n            resolve(proxy)\n          }\n          document.head.appendChild(script);\n        })\n        ",
       "moduleName": "api",
-      "usedIn": [
-        "js/src/core/app/i18n/index.ts + 4 modules",
-        "js/src/core/app/router/router.tsx + 37 modules",
-        "js/src/core/bootstrap.ts + 1191 modules",
-        "js/src/core/modules/app/translations/translations-api-slice.gen.ts",
-        "js/src/core/modules/app/utils/app-runner.tsx + 12 modules",
-        "js/src/core/modules/asset/asset-api-slice.gen.ts",
-        "js/src/core/modules/auth/user/user-api-slice.gen.ts",
-        "js/src/core/modules/class-definition/class-definition-slice.gen.ts",
-        "js/src/core/modules/data-object/data-object-api-slice.gen.ts",
-        "js/src/core/modules/document/document-api-slice-enhanced.ts + 1 modules",
-        "js/src/core/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen.ts",
-        "js/src/core/modules/element/element-api-slice.gen.ts",
-        "js/src/core/modules/notifications/notifications-slice.gen.ts",
-        "js/src/core/modules/perspectives/hooks/use-perspectives.tsx + 2 modules",
-        "js/src/core/modules/search/search-api-slice.gen.ts",
-        "js/src/core/modules/user/roles/roles-api-slice.gen.ts"
-      ],
-      "version": "*"
+      "alias": "@sdk",
+      "entry": "*"
     },
     {
-      "alias": "@sdk",
-      "consumingFederationContainerName": "pimcore_studio_ui_bundle_core",
       "federationContainerName": "promise new Promise(resolve => {\n          const studioUIBundleRemoteUrl = window.StudioUIBundleRemoteUrl\n          const script = document.createElement('script')\n          script.src = studioUIBundleRemoteUrl\n          script.onload = () => {\n            const proxy = {\n              get: (request) => window['pimcore_studio_ui_bundle'].get(request),\n              init: (...arg) => {\n                try {\n                  return window['pimcore_studio_ui_bundle'].init(...arg)\n                } catch(e) {\n                  console.log('remote container already initialized')\n                }\n              }\n            }\n            resolve(proxy)\n          }\n          document.head.appendChild(script);\n        })\n        ",
       "moduleName": "modules/element",
-      "usedIn": [
-        "js/src/core/app/router/router.tsx + 37 modules",
-        "js/src/core/modules/app/utils/app-runner.tsx + 12 modules",
-        "js/src/core/modules/element/element-selector/provider/element-selector/use-element-selector-helper.tsx",
-        "js/src/core/modules/notifications/index.tsx + 8 modules"
-      ],
-      "version": "*"
+      "alias": "@sdk",
+      "entry": "*"
     },
     {
-      "alias": "@sdk",
-      "consumingFederationContainerName": "pimcore_studio_ui_bundle_core",
       "federationContainerName": "promise new Promise(resolve => {\n          const studioUIBundleRemoteUrl = window.StudioUIBundleRemoteUrl\n          const script = document.createElement('script')\n          script.src = studioUIBundleRemoteUrl\n          script.onload = () => {\n            const proxy = {\n              get: (request) => window['pimcore_studio_ui_bundle'].get(request),\n              init: (...arg) => {\n                try {\n                  return window['pimcore_studio_ui_bundle'].init(...arg)\n                } catch(e) {\n                  console.log('remote container already initialized')\n                }\n              }\n            }\n            resolve(proxy)\n          }\n          document.head.appendChild(script);\n        })\n        ",
       "moduleName": "modules/app",
-      "usedIn": [
-        "js/src/core/app/router/router.tsx + 37 modules",
-        "js/src/core/modules/notifications/index.tsx + 8 modules"
-      ],
-      "version": "*"
+      "alias": "@sdk",
+      "entry": "*"
     },
     {
-      "alias": "@sdk",
-      "consumingFederationContainerName": "pimcore_studio_ui_bundle_core",
       "federationContainerName": "promise new Promise(resolve => {\n          const studioUIBundleRemoteUrl = window.StudioUIBundleRemoteUrl\n          const script = document.createElement('script')\n          script.src = studioUIBundleRemoteUrl\n          script.onload = () => {\n            const proxy = {\n              get: (request) => window['pimcore_studio_ui_bundle'].get(request),\n              init: (...arg) => {\n                try {\n                  return window['pimcore_studio_ui_bundle'].init(...arg)\n                } catch(e) {\n                  console.log('remote container already initialized')\n                }\n              }\n            }\n            resolve(proxy)\n          }\n          document.head.appendChild(script);\n        })\n        ",
       "moduleName": "modules/asset",
-      "usedIn": [
-        "js/src/core/bootstrap.ts + 1191 modules"
-      ],
-      "version": "*"
+      "alias": "@sdk",
+      "entry": "*"
     },
     {
-      "alias": "@sdk",
-      "consumingFederationContainerName": "pimcore_studio_ui_bundle_core",
       "federationContainerName": "promise new Promise(resolve => {\n          const studioUIBundleRemoteUrl = window.StudioUIBundleRemoteUrl\n          const script = document.createElement('script')\n          script.src = studioUIBundleRemoteUrl\n          script.onload = () => {\n            const proxy = {\n              get: (request) => window['pimcore_studio_ui_bundle'].get(request),\n              init: (...arg) => {\n                try {\n                  return window['pimcore_studio_ui_bundle'].init(...arg)\n                } catch(e) {\n                  console.log('remote container already initialized')\n                }\n              }\n            }\n            resolve(proxy)\n          }\n          document.head.appendChild(script);\n        })\n        ",
       "moduleName": "modules/widget-manager",
-      "usedIn": [
-        "js/src/core/app/router/router.tsx + 37 modules"
-      ],
-      "version": "*"
+      "alias": "@sdk",
+      "entry": "*"
     }
   ],
   "exposes": []
