@@ -11,7 +11,7 @@
 import React, { useRef } from 'react'
 import { useStyle } from './content-editable.styles'
 import { isNil } from 'lodash'
-import { DocumentEditorIframeWindow } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/iframe-app/iframe-app-view'
+import { type DocumentEditorIframeWindow } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/iframe-app/iframe-app-view'
 
 export interface ContentEditableProps {
   value?: string | null

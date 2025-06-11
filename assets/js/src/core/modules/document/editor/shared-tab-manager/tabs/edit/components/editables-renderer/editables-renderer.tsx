@@ -16,7 +16,7 @@ import ReactDOM from 'react-dom'
 import { serviceIds, useInjection } from '@sdk/app'
 import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
 import { isNull } from 'lodash'
-import { DocumentEditorIframeWindow } from '../../iframe-app/iframe-app-view'
+import { type DocumentEditorIframeWindow } from '../../iframe-app/iframe-app-view'
 
 export interface EditableRendererProps {
   iframeRef: RefObject<HTMLIFrameElement>
