@@ -12,6 +12,12 @@ import { type ComponentRegistryConfig } from './component-registry'
 import { ComponentType } from './enums/component-type'
 
 const defaultComponentConfig = {
+  global: {
+    feedback: {
+      type: ComponentType.SLOT,
+      name: 'global.feedback'
+    }
+  },
   asset: {
     editor: {
       container: { type: ComponentType.SINGLE, name: 'asset.editor.container' },
