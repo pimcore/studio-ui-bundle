@@ -64,9 +64,11 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
         trackError(new ApiError(response.error))
       }
 
-      setIsLoginLoading(false)
+      if (response.error === undefined) {
+        dispatch(setAuthState(true))
+      }
 
-      dispatch(setAuthState(true))
+      setIsLoginLoading(false)
     } catch (e: any) {
       setIsLoginLoading(false)
 
