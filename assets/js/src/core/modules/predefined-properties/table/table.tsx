@@ -20,6 +20,7 @@ import { type PredefinedProperty, type UpdatePredefinedProperty } from '@Pimcore
 import { IconButton } from '@sdk/components'
 import { usePredefinedProperty } from '../hooks/use-predefined-property'
 import { type PredefinedPropertyWithId } from '../predefined-properties-provider'
+import { ModifiedCells } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
 
 type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
 
@@ -30,6 +31,7 @@ export const Table = (): React.JSX.Element => {
   const { deletePropertyById, updatePropertyById } = usePredefinedProperty()
   const [enrichedProperties, setEnrichedProperties] = useState<PredefinedPropertyWithId[]>([])
   const [deletingRowId, setDeletingRowId] = useState<string | null>(null)
+  const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
 
   useEffect(() => {
     if (predefinedProperties !== undefined && Array.isArray(predefinedProperties)) {
@@ -74,7 +76,7 @@ export const Table = (): React.JSX.Element => {
     columnHelper.accessor('data', {
       header: t('properties.columns.data'),
       meta: { type: 'property-value', editable: true, autoWidth: true },
-      size: 250
+      size: 200
     }),
     columnHelper.accessor('config', {
       header: t('properties.columns.configuration'),
@@ -129,6 +131,12 @@ export const Table = (): React.JSX.Element => {
   const onUpdateCellData = async ({ columnId, value, rowData }): Promise<void> => {
     const updatedProperty: PredefinedPropertyWithId = { ...rowData, [columnId]: value }
     await updatePropertyById(updatedProperty.id, toApiProperty(updatedProperty))
+      const rowId: string = rowData.rowId
+      
+      setModifiedCells([{
+        columnId,
+        rowIndex: rowId
+      }])
   }
 
   return (
@@ -138,7 +146,7 @@ export const Table = (): React.JSX.Element => {
         columns={ tableColumns }
         data={ enrichedProperties }
         enableSorting
-        modifiedCells={ [] }
+        modifiedCells={ modifiedCells }
         onUpdateCellData={ onUpdateCellData }
         resizable
         setRowId={ (row: DataProperty) => row.rowId }
