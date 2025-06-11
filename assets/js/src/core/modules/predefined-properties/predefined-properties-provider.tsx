@@ -15,7 +15,7 @@ import trackError, { ApiError } from '../app/error-handler'
 export type PredefinedPropertyWithId = PredefinedProperty & { rowId: string }
 
 interface IPredefinedPropertyContext {
-  predefinedProperties: PredefinedProperty[] | undefined
+  predefinedProperties: PredefinedProperty[]
   isLoading: boolean
 }
 
@@ -30,7 +30,7 @@ export const PredefinedPropertyProvider: React.FC<{ children: React.ReactNode }>
   }, [isError])
 
   const contextValue = useMemo(() => ({
-    predefinedProperties: data?.items,
+    predefinedProperties: data?.items ?? [],
     isLoading
   }), [data?.items, isLoading])
 

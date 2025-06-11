@@ -10,7 +10,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { createColumnHelper } from '@tanstack/react-table'
+import { CellContext, createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './table.styles'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
@@ -34,7 +34,7 @@ export const Table = (): React.JSX.Element => {
   const [deletingRowId, setDeletingRowId] = useState<string | null>(null)
 
   useEffect(() => {
-    if (predefinedProperties !== undefined && Array.isArray(predefinedProperties)) {
+    if (predefinedProperties.length !== 0) {
       const sorted = [...predefinedProperties].sort((a, b) => b.creationDate - a.creationDate)
       const enriched = sorted.map(item => ({ ...item, rowId: uuid() }))
       setEnrichedProperties(enriched)
@@ -51,6 +51,25 @@ export const Table = (): React.JSX.Element => {
       setDeletingRowId(null)
     }
   }
+
+  const actionsCell = (info: CellContext<PredefinedPropertyWithActions, React.ReactNode>): JSX.Element => {
+        const id = info.row.original.id
+        return (
+          <div className="properties-table--actions-column">
+            <IconButton
+              icon={ { value: 'translate' } }
+              onClick={ () => { console.log('Open Translate View') } }
+              type="link"
+            />
+            <IconButton
+              icon={ { value: 'trash' } }
+              loading={ deletingRowId === id }
+              onClick={ async () => { await handleDelete(id) } }
+              type="link"
+            />
+          </div>
+        )
+      }
 
   const tableColumns = [
     columnHelper.accessor('name', {
@@ -96,24 +115,7 @@ export const Table = (): React.JSX.Element => {
     columnHelper.accessor('actions', {
       header: t('properties.columns.actions'),
       size: 80,
-      cell: (info) => {
-        const id = info.row.original.id
-        return (
-          <div className="properties-table--actions-column">
-            <IconButton
-              icon={ { value: 'translate' } }
-              onClick={ () => { console.log('Open Translate View') } }
-              type="link"
-            />
-            <IconButton
-              icon={ { value: 'trash' } }
-              loading={ deletingRowId === id }
-              onClick={ async () => { await handleDelete(id) } }
-              type="link"
-            />
-          </div>
-        )
-      }
+      cell: (info) => actionsCell(info)
     })
   ]
 

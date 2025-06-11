@@ -71,7 +71,7 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
           x: 'extra-small',
           y: 'none'
         } }
-        none={ (predefinedProperties === undefined || predefinedProperties.length === 0) && !predefinedPropertiesLoading }
+        none={ predefinedProperties.length === 0 && !predefinedPropertiesLoading }
       >
         <Box
           margin={ {
