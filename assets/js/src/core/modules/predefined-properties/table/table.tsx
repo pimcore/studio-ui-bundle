@@ -10,18 +10,18 @@
 
 import React, { useEffect, useState } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { type CellContext, createColumnHelper } from '@tanstack/react-table'
+import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './table.styles'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { uuid } from '@Pimcore/utils/uuid'
 import { usePredefinedProperties } from '../hooks/use-predefined-properties'
 import { type PredefinedProperty, type UpdatePredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
-import { IconButton } from '@sdk/components'
 import { usePredefinedProperty } from '../hooks/use-predefined-property'
 import { type PredefinedPropertyWithId } from '../predefined-properties-provider'
 import { ContentType } from '../enums/content-type'
 import { allLegacyElementTypes } from '@sdk/modules/element'
+import { ActionsCell } from './actions-cell'
 
 type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
 
@@ -29,9 +29,8 @@ export const Table = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { predefinedProperties } = usePredefinedProperties()
-  const { deletePropertyById, updatePropertyById } = usePredefinedProperty()
+  const { updatePropertyById } = usePredefinedProperty()
   const [enrichedProperties, setEnrichedProperties] = useState<PredefinedPropertyWithId[]>([])
-  const [deletingRowId, setDeletingRowId] = useState<string | null>(null)
 
   useEffect(() => {
     if (predefinedProperties.length !== 0) {
@@ -42,34 +41,6 @@ export const Table = (): React.JSX.Element => {
   }, [predefinedProperties])
 
   const columnHelper = createColumnHelper<PredefinedPropertyWithActions>()
-
-  const handleDelete = async (id: string): Promise<void> => {
-    try {
-      setDeletingRowId(id)
-      await deletePropertyById(id)
-    } finally {
-      setDeletingRowId(null)
-    }
-  }
-
-  const actionsCell = (info: CellContext<PredefinedPropertyWithActions, React.ReactNode>): JSX.Element => {
-    const id = info.row.original.id
-    return (
-      <div className="properties-table--actions-column">
-        <IconButton
-          icon={ { value: 'translate' } }
-          onClick={ () => { console.log('Open Translate View') } }
-          type="link"
-        />
-        <IconButton
-          icon={ { value: 'trash' } }
-          loading={ deletingRowId === id }
-          onClick={ async () => { await handleDelete(id) } }
-          type="link"
-        />
-      </div>
-    )
-  }
 
   const tableColumns = [
     columnHelper.accessor('name', {
@@ -115,7 +86,7 @@ export const Table = (): React.JSX.Element => {
     columnHelper.accessor('actions', {
       header: t('properties.columns.actions'),
       size: 80,
-      cell: (info) => actionsCell(info)
+      cell: (info) => <ActionsCell info={info}/>
     })
   ]
 
