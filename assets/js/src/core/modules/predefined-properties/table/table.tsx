@@ -20,7 +20,7 @@ import { type PredefinedProperty, type UpdatePredefinedProperty } from '@Pimcore
 import { usePredefinedProperty } from '../hooks/use-predefined-property'
 import { type PredefinedPropertyWithId } from '../predefined-properties-provider'
 import { ContentType } from '../enums/content-type'
-import { allLegacyElementTypes } from '@sdk/modules/element'
+import { allLegacyElementTypes, ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
 
 type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
@@ -31,6 +31,7 @@ export const Table = (): React.JSX.Element => {
   const { predefinedProperties } = usePredefinedProperties()
   const { updatePropertyById } = usePredefinedProperty()
   const [enrichedProperties, setEnrichedProperties] = useState<PredefinedPropertyWithId[]>([])
+  const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
 
   useEffect(() => {
     if (predefinedProperties.length !== 0) {
@@ -111,6 +112,11 @@ export const Table = (): React.JSX.Element => {
       )
     )
 
+      setModifiedCells([{
+        columnId,
+        rowIndex: rowId
+      }])
+
     await updatePropertyById(updatedProperty.id, toApiProperty(updatedProperty))
   }
 
@@ -121,7 +127,7 @@ export const Table = (): React.JSX.Element => {
         columns={ tableColumns }
         data={ enrichedProperties }
         enableSorting
-        modifiedCells={ [] }
+        modifiedCells={ modifiedCells }
         onUpdateCellData={ onUpdateCellData }
         resizable
         setRowId={ (row: DataProperty) => row.rowId }

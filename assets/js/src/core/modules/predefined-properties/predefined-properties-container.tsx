@@ -57,6 +57,7 @@ const PredefinedPropertiesContainerInner = (): React.JSX.Element => {
             <Title>{t('widget.predefined-properties')}</Title>
             <IconTextButton
               disabled={ predefinedPropertiesLoading || createLoading }
+              loading={ createLoading }
               icon={ { value: 'new' } }
               onClick={ async () => { await createProperty() } }
             >{t('predefined-properties.new')}</IconTextButton>
