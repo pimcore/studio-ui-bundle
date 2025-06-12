@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Title } from '@Pimcore/components/title/title'
 import { t } from 'i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -36,28 +36,27 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
 
   const predefinedProperties = data?.items
 
-  const sortedPredefinedPropertyRows = useMemo(() => {
-    if (isUndefined(predefinedProperties) || predefinedProperties.length === 0) return []
-
-    return [...predefinedProperties]
-      .sort((a, b) => b.creationDate - a.creationDate)
-      .map(item => ({ ...item, rowId: uuid() }))
-  }, [predefinedProperties])
+  const sortedRows = () => {
+    return [...predefinedPropertyRows].sort((a, b) => b.creationDate - a.creationDate)
+  }
 
   useEffect(() => {
-    setPredefinedPropertyRows(sortedPredefinedPropertyRows)
-  }, [sortedPredefinedPropertyRows])
+    if (!isUndefined(predefinedProperties)) {
+      setPredefinedPropertyRows(
+        predefinedProperties.map(item => ({ ...item, rowId: uuid() }))
+      )
+    }
+  }, [predefinedProperties])
 
   const onCreateProperty = async (): Promise<void> => {
     const { success, data } = await createNewProperty()
     if (success && data !== undefined) {
-      setPredefinedPropertyRows(prev => [
-        {
-          ...data,
-          rowId: uuid()
-        },
-        ...prev
-      ])
+      setPredefinedPropertyRows(prev =>
+        [
+          { ...data, rowId: uuid() },
+          ...prev
+        ]
+      )
     }
   }
 
@@ -118,7 +117,7 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
           } }
         >
           <Table
-            predefinedPropertyRows={ predefinedPropertyRows }
+            predefinedPropertyRows={ sortedRows }
             setPredefinedPropertyRows={ setPredefinedPropertyRows }
           />
         </Box>
