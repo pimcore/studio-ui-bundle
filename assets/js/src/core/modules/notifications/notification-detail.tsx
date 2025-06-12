@@ -19,7 +19,6 @@ import { respectLineBreak } from '@Pimcore/utils/helpers'
 import { Flex, Icon, Split } from '@sdk/components'
 import { isNil } from 'lodash'
 import React, { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useNotificationDetail } from './hooks/use-notification-detail'
 import { NotificationAttachment } from './notification-attachment'
 import { type NotificationListItem } from './notifications-slice.gen'
@@ -30,7 +29,6 @@ export interface NotificationDetailProps {
 }
 
 export const NotificationDetail = ({ notification }: NotificationDetailProps): React.JSX.Element => {
-  const { t } = useTranslation()
   const {
     isExpanded,
     setIsExpanded,
