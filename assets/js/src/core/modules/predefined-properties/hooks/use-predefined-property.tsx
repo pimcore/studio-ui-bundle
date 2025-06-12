@@ -41,8 +41,8 @@ export const usePredefinedProperty = (): UsePredefinedPropertyReturn => {
       }
     } catch (e) {
       trackError(new GeneralError('Was not able to create Property'))
-      return { success: false }
     }
+    return { success: false }
   }
 
   const deletePropertyById = async (id: string): Promise<{ success: boolean }> => {

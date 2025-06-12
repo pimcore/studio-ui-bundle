@@ -36,9 +36,7 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
 
   const predefinedProperties = data?.items
 
-  const sortedRows = () => {
-    return [...predefinedPropertyRows].sort((a, b) => b.creationDate - a.creationDate)
-  }
+  const sortedRows = [...predefinedPropertyRows].sort((a, b) => b.creationDate - a.creationDate)
 
   useEffect(() => {
     if (!isUndefined(predefinedProperties)) {
