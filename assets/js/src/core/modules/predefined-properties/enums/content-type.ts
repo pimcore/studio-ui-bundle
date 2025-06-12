@@ -8,14 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-export enum UserPermission {
-  NotesAndEvents = 'notes_events',
-  Documents = 'documents',
-  Objects = 'objects',
-  Assets = 'assets',
-  TagsConfiguration = 'tags_configuration',
-  PredefinedProperties = 'predefined_properties',
-  Users = 'users',
-  Notifications = 'notifications',
-  SendNotifications = 'notifications_send',
+export enum ContentType {
+  Text = 'text',
+  Document = 'document',
+  Asset = 'asset',
+  Object = 'object',
+  Boolean = 'bool',
+  Select = 'select',
 }

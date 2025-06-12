@@ -72,7 +72,7 @@ const config: ConfigFile = {
       filterEndpoints: pathMatcher(/api\/translation/i)
     },
     '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/properties/i)
+      filterEndpoints: pathMatcher(/api\/propert(y|ies)/i)
     },
     '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/workflow/i)
