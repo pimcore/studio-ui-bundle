@@ -6,8 +6,11 @@ import { useBackgroundProcessor, useBackgroundProcessorMessage } from "../backgr
 
 export const NotificationUpdates = (): React.JSX.Element => {
   // Handle the message from the demo process
-  useBackgroundProcessorMessage('demo-process', (message) => {
-    console.log('Received message from demo process:', message);
+  useBackgroundProcessorMessage({
+    processName: 'demo-process',
+    callback: (message) => {
+      console.log('Received message from demo process:', message);
+    }
   });
 
   // Alternative syntax for conditional listening
@@ -15,11 +18,24 @@ export const NotificationUpdates = (): React.JSX.Element => {
   const shouldListen = true; // Replace with your actual condition
 
   useEffect(() => {
+    // Subscribe to the demo process messages if the condition is met
+    let subscriberId: string | undefined;
+
     if (shouldListen) {
-      backgroundProcessor.subscribeToProcessMessages('demo-process', (message) => {
-        console.log('Received message from demo process:', message);
+      subscriberId = backgroundProcessor.subscribeToProcessMessages({
+        processName: 'demo-process',
+        callback: (message) => {
+          console.log('Received message from demo process:', message);
+        }
       });
     }
+
+    // Cleanup function to unsubscribe when the component unmounts or condition changes
+    return () => {
+      if (subscriberId) {
+        backgroundProcessor.unsubscribeFromProcessMessages(subscriberId);
+      }
+    };
   })
 
   return <></>

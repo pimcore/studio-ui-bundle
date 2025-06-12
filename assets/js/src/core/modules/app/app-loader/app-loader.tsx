@@ -21,9 +21,6 @@ import { useMercureCreateCookieMutation } from '../mercure-api-slice.gen'
 import { useSettingsLoader } from './loader/settings/loader'
 import { selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
 import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
-import { container } from '@Pimcore/app/depency-injection'
-import { BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -79,8 +76,6 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           loadSettings(),
           initActivePerspective()
         ])
-
-        container.get<BackgroundProcessor>(serviceIds.backgroundProcessor).startDaemons();
 
         setIsLoading(() => false)
       }

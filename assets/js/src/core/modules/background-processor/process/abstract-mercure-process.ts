@@ -1,8 +1,6 @@
 import { appConfig } from "@Pimcore/app/config/app-config";
 import { AbstractBackgroundProcess } from "./abstract-background-process";
 
-console.log({appConfig})
-
 export abstract class AbstractMercureProcess extends AbstractBackgroundProcess {
   protected abstract readonly topics: string[];
   protected eventSource?: EventSource;
