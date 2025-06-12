@@ -29,6 +29,36 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Documents"],
             }),
+            documentDocTypeAdd: build.mutation<DocumentDocTypeAddApiResponse, DocumentDocTypeAddApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/doc-types/add`,
+                    method: "POST",
+                    body: queryArg.docTypeAddParameters,
+                }),
+                invalidatesTags: ["Documents"],
+            }),
+            documentDocTypeUpdateById: build.mutation<
+                DocumentDocTypeUpdateByIdApiResponse,
+                DocumentDocTypeUpdateByIdApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/doc-types/${queryArg.id}`,
+                    method: "PUT",
+                    body: queryArg.docTypeUpdateParameters,
+                }),
+                invalidatesTags: ["Documents"],
+            }),
+            documentDocTypeDelete: build.mutation<DocumentDocTypeDeleteApiResponse, DocumentDocTypeDeleteApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/doc-types/${queryArg.id}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Documents"],
+            }),
+            documentDocTypeTypeList: build.query<DocumentDocTypeTypeListApiResponse, DocumentDocTypeTypeListApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/documents/doc-types/types` }),
+                providesTags: ["Documents"],
+            }),
             documentDocTypeList: build.query<DocumentDocTypeListApiResponse, DocumentDocTypeListApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/documents/doc-types`,
@@ -41,6 +71,14 @@ const injectedRtkApi = api
             documentGetById: build.query<DocumentGetByIdApiResponse, DocumentGetByIdApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/documents/${queryArg.id}` }),
                 providesTags: ["Documents"],
+            }),
+            documentUpdateById: build.mutation<DocumentUpdateByIdApiResponse, DocumentUpdateByIdApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/${queryArg.id}`,
+                    method: "PUT",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Documents"],
             }),
             documentPageStreamPreview: build.query<
                 DocumentPageStreamPreviewApiResponse,
@@ -173,6 +211,25 @@ export type DocumentConvertApiArg = {
     /** Document type to convert to */
     type: string;
 };
+export type DocumentDocTypeAddApiResponse = /** status 200 New DocType data as JSON */ DocType;
+export type DocumentDocTypeAddApiArg = {
+    docTypeAddParameters: DocTypeAdd;
+};
+export type DocumentDocTypeUpdateByIdApiResponse = /** status 200 Successfully updated DocType */ DocType;
+export type DocumentDocTypeUpdateByIdApiArg = {
+    /** The Id of the DocType to update */
+    id: string;
+    docTypeUpdateParameters: DocTypeUpdate;
+};
+export type DocumentDocTypeDeleteApiResponse = unknown;
+export type DocumentDocTypeDeleteApiArg = {
+    /** The Id of the DocType to delete */
+    id: string;
+};
+export type DocumentDocTypeTypeListApiResponse = /** status 200 List of available DocType types */ {
+    items: DocTypeType[];
+};
+export type DocumentDocTypeTypeListApiArg = void;
 export type DocumentDocTypeListApiResponse = /** status 200 List of all DocTypes */ {
     items: DocType[];
 };
@@ -191,6 +248,32 @@ export type DocumentGetByIdApiResponse = /** status 200 Successfully retrieved d
 export type DocumentGetByIdApiArg = {
     /** Id of the document */
     id: number;
+};
+export type DocumentUpdateByIdApiResponse = /** status 200 Successfully updated document */
+    | Document
+    | DocumentFolder
+    | Email
+    | Hardlink
+    | Link
+    | Page
+    | Snippet;
+export type DocumentUpdateByIdApiArg = {
+    /** Id of the document */
+    id: number;
+    body: {
+        data: {
+            parentId?: number | null;
+            index?: number | null;
+            key?: string | null;
+            task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
+            locked?: string | null;
+            published?: boolean | null;
+            editableData?: object | null;
+            settingsData?: object | null;
+            missingRequiredEditable?: boolean | null;
+            properties?: UpdateDataProperty[] | null;
+        };
+    };
 };
 export type DocumentPageStreamPreviewApiResponse = /** status 200 Page preview stream */ Blob;
 export type DocumentPageStreamPreviewApiArg = {
@@ -260,10 +343,11 @@ export type DocumentGetTranslationParentByLanguageApiArg = {
     /** Language code for the translation parent */
     language: string;
 };
-export type DocumentGetTreeApiResponse = /** status 200 document_get_tree_success_description */ {
-    totalItems: number;
-    items: (Document | DocumentFolder | Email | Hardlink | Link | Page | Snippet)[];
-};
+export type DocumentGetTreeApiResponse =
+    /** status 200 Paginated documents with total count as header param as JSON */ {
+        totalItems: number;
+        items: (Document | DocumentFolder | Email | Hardlink | Link | Page | Snippet)[];
+    };
 export type DocumentGetTreeApiArg = {
     /** Page number */
     page: number;
@@ -350,6 +434,50 @@ export type DocType = {
     /** Is writeable */
     writeable: boolean;
 };
+export type DocTypeAdd = {
+    /** Name */
+    name: string;
+    /** Type */
+    type: string;
+};
+export type DocTypeUpdate = {
+    /** Name */
+    name: string;
+    /** Type */
+    type: string;
+    /** Group */
+    group: string | null;
+    /** Controller */
+    controller: string | null;
+    /** Template */
+    template: string | null;
+    /** Priority */
+    priority: number;
+    /** Static generator enabled */
+    staticGeneratorEnabled: boolean;
+};
+export type DocTypeType = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Name */
+    name: string;
+    /** Valid table */
+    validTable?: string;
+    /** Children supported */
+    childrenSupported?: boolean;
+    /** Direct route */
+    directRoute?: boolean;
+    /** Predefined document types */
+    predefinedDocumentTypes?: boolean;
+    /** Translatable */
+    translatable?: boolean;
+    /** Translatable Inheritance */
+    translatableInheritance?: boolean;
+    /** Only printable children */
+    onlyPrintableChildren?: boolean;
+};
 export type ElementIcon = {
     /** Icon type */
     type: "name" | "path";
@@ -433,13 +561,25 @@ export type Document = Element & {
     type: string;
     /** Key */
     key: string;
+    /** Custom index */
+    index: number;
     /** Has children */
     hasChildren: boolean;
     /** Workflow permissions */
     hasWorkflowWithPermissions: boolean;
     permissions: DocumentPermissions;
+    /** Detail document data */
+    documentDetailData: object;
 };
 export type DocumentFolder = Document;
+export type PageSnippetDraftData = {
+    /** ID */
+    id: number;
+    /** Modification date */
+    modificationDate: number;
+    /** Is auto save */
+    isAutoSave: boolean;
+};
 export type Email = Document & {
     /** Controller */
     controller: string;
@@ -455,6 +595,7 @@ export type Email = Document & {
     staticGeneratorEnabled: boolean;
     /** Lifetime of static generator */
     staticGeneratorLifetime: number;
+    draftData: PageSnippetDraftData;
     /** Subject */
     subject: string;
     /** From */
@@ -503,6 +644,7 @@ export type Page = Document & {
     staticGeneratorEnabled: boolean;
     /** Lifetime of static generator */
     staticGeneratorLifetime: number;
+    draftData: PageSnippetDraftData;
     /** Title */
     title: string | null;
     /** Description */
@@ -525,6 +667,17 @@ export type Snippet = Document & {
     staticGeneratorEnabled: boolean;
     /** Lifetime of static generator */
     staticGeneratorLifetime: number;
+    draftData: PageSnippetDraftData;
+};
+export type UpdateDataProperty = {
+    /** key */
+    key: string;
+    /** data */
+    data: any | null;
+    /** type */
+    type: string;
+    /** inheritable */
+    inheritable: boolean;
 };
 export type DocumentController = {
     /** AdditionalAttributes */
@@ -600,8 +753,13 @@ export const {
     useDocumentAddMutation,
     useDocumentCloneMutation,
     useDocumentConvertMutation,
+    useDocumentDocTypeAddMutation,
+    useDocumentDocTypeUpdateByIdMutation,
+    useDocumentDocTypeDeleteMutation,
+    useDocumentDocTypeTypeListQuery,
     useDocumentDocTypeListQuery,
     useDocumentGetByIdQuery,
+    useDocumentUpdateByIdMutation,
     useDocumentPageStreamPreviewQuery,
     useDocumentAvailableControllersListQuery,
     useDocumentAvailableTemplatesListQuery,

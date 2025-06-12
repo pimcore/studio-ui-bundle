@@ -34,6 +34,17 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
+            dataObjectGetGridPreview: build.mutation<
+                DataObjectGetGridPreviewApiResponse,
+                DataObjectGetGridPreviewApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/grid/preview`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Data Object Grid"],
+            }),
             dataObjectDeleteGridConfigurationByConfigurationId: build.mutation<
                 DataObjectDeleteGridConfigurationByConfigurationIdApiResponse,
                 DataObjectDeleteGridConfigurationByConfigurationIdApiArg
@@ -252,6 +263,14 @@ export type DataObjectUpdateByIdApiArg = {
             editableData?: object | null;
             properties?: UpdateDataProperty[] | null;
         };
+    };
+};
+export type DataObjectGetGridPreviewApiResponse =
+    /** status 200 Preview of an Advanced Column Grid for a given Data Object. */ GridColumnData;
+export type DataObjectGetGridPreviewApiArg = {
+    body: {
+        objectId: number;
+        column: GridColumnRequest;
     };
 };
 export type DataObjectDeleteGridConfigurationByConfigurationIdApiResponse =
@@ -627,6 +646,62 @@ export type UpdateDataProperty = {
     /** inheritable */
     inheritable: boolean;
 };
+export type GridColumnData = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Key */
+    key?: string;
+    /** Locale */
+    locale?: string | null;
+    /** Value */
+    value?: any | null;
+    /** inheritance */
+    inheritance?: object | null;
+};
+export type RelationFieldConfig = {
+    /** Relation Getter */
+    relation: string;
+    /** Field getter */
+    field: string;
+};
+export type SimpleFieldConfig = {
+    /** Field getter */
+    field: string;
+};
+export type StaticTextConfig = {
+    /** Static Text */
+    text: string;
+};
+export type ExistingColumnConfig = {
+    /** Name of the existing Column */
+    existingColumnName?: string;
+};
+export type Transformer = {
+    /** Key of the Transformer */
+    key: string;
+};
+export type AdvancedColumnConfig = {
+    /** advancedColumns */
+    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig | ExistingColumnConfig)[];
+    /** Concatenation symbol to combine multiple columns */
+    concatenationSymbol?: string;
+    /** List if Transformers that should be applied */
+    transformers?: Transformer[];
+};
+export type GridColumnRequest = {
+    /** Key */
+    key: string;
+    /** Locale */
+    locale?: string | null;
+    /** Type */
+    type: string;
+    /** Group */
+    group?: string | null;
+    /** Config */
+    config: (string | AdvancedColumnConfig)[];
+};
 export type Column = {
     /** Key of the Column */
     key: string;
@@ -721,50 +796,6 @@ export type GridColumnConfiguration = {
     /** Config */
     config: object;
 };
-export type GridColumnData = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Key */
-    key?: string;
-    /** Locale */
-    locale?: string | null;
-    /** Value */
-    value?: any | null;
-    /** inheritance */
-    inheritance?: object | null;
-};
-export type RelationFieldConfig = {
-    /** Relation Getter */
-    relation: string;
-    /** Field getter */
-    field: string;
-};
-export type SimpleFieldConfig = {
-    /** Field getter */
-    field: string;
-};
-export type StaticTextConfig = {
-    /** Static Text */
-    text: string;
-};
-export type AdvancedColumnConfig = {
-    /** advancedColumns */
-    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
-};
-export type GridColumnRequest = {
-    /** Key */
-    key: string;
-    /** Locale */
-    locale?: string | null;
-    /** Type */
-    type: string;
-    /** Group */
-    group?: string | null;
-    /** Config */
-    config: (string | AdvancedColumnConfig)[];
-};
 export type Layout = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -832,6 +863,7 @@ export const {
     useDataObjectCloneMutation,
     useDataObjectGetByIdQuery,
     useDataObjectUpdateByIdMutation,
+    useDataObjectGetGridPreviewMutation,
     useDataObjectDeleteGridConfigurationByConfigurationIdMutation,
     useDataObjectGetGridConfigurationQuery,
     useDataObjectListSavedGridConfigurationsQuery,
