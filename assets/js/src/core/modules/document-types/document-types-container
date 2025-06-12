@@ -1,0 +1,104 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React, { useEffect, useState } from 'react'
+import { t } from 'i18next'
+import trackError, { ApiError } from '../app/error-handler'
+import { isUndefined } from 'lodash'
+
+export const DocumentTypesContainer = (): React.JSX.Element => {
+  const dispatch = useAppDispatch()
+//   const { createNewDocument, createLoading } = useDocumentType()
+  const { data, isLoading: documentTypesLoading, isFetching: documentTypesFetching, isError, error } = useDocumentDocTypeListQuery({})
+
+  const [documentTypeRows, setDocumentTypeRows] = useState<DocumentTypeRow[]>([])
+
+  const documentTypes = data?.items
+
+  const sortedRows = [...documentTypes].sort((a, b) => b.creationDate - a.creationDate)
+
+  useEffect(() => {
+    if (!isUndefined(documentTypes)) {
+      setDocumentTypeRows(
+        documentTypes.map(item => ({ ...item, rowId: uuid() }))
+      )
+    }
+  }, [documentTypes])
+
+  const onCreateDocumentType = async (): Promise<void> => {
+    const { success, data } = await createNewDocumentType()
+    if (success && data !== undefined) {
+      setDocumentTypeRows(prev =>
+        [
+          { ...data, rowId: uuid() },
+          ...prev
+        ]
+      )
+    }
+  }
+
+  useEffect(() => {
+    if (isError) {
+      trackError(new ApiError(error))
+    }
+  }, [isError])
+
+  return (
+    <ContentLayout
+      renderToolbar={
+        <Toolbar theme="secondary">
+          <IconButton
+            disabled={ documentTypesFetching }
+            icon={ { value: 'refresh' } }
+            onClick={ () => dispatch(
+              api.util.invalidateTags(
+                invalidatingTags.GLOBAL_PROPERTIES()
+              )
+            )}></IconButton>
+        </Toolbar>}
+      renderTopBar={
+        <Toolbar
+          justify='space-between'
+          margin={ {
+            x: 'mini',
+            y: 'none'
+          } }
+          theme='secondary'
+        >
+          <Flex gap={ 'small' }>
+            <Title>{t('widget.document-types')}</Title>
+            <IconTextButton
+              disabled={ documentTypesLoading || createLoading }
+              icon={ { value: 'new' } }
+              loading={ createLoading }
+              onClick={ onCreateDocumentType }
+            >{t('document-types.new')}</IconTextButton>
+          </Flex>
+        </Toolbar>
+        } />
+      <Content
+        loading={ documentTypesLoading || documentTypesFetching }
+        margin={ {
+          x: 'extra-small',
+          y: 'none'
+        } }
+        none={ isUndefined(documentTypes) || documentTypes.length === 0 }
+      >
+        <Box
+          margin={ {
+            x: 'extra-small',
+            y: 'none'
+          } }
+        >
+        </Box>
+      </Content>
+    </ContentLayout>
+  )
+}
