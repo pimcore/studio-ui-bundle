@@ -813,3 +813,4 @@ user-menu.notification.modal.add-an-attachment: Add an attachment
 user-menu.notification.modal.form.validation.provide-recipient: Please provide a recipient
 user-menu.notification.modal.form.validation.provide-title: Please provide a title
 user-menu.notification.modal.form.validation.provide-message: Please provide a message
+loading: Loading...
