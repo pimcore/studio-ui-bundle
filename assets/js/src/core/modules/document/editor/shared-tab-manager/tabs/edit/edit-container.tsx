@@ -63,15 +63,15 @@ export const EditContainer = (): React.JSX.Element => {
   return (
     <>
       <Iframe
-        onLoad={onLoad}
-        ref={iframeRef}
-        src={`${documentDraft?.fullPath}?pimcore_editmode=true&pimcore_studio=true`}
-        title={`${t('edit.label')}-${id}`}
+        onLoad={ onLoad }
+        ref={ iframeRef }
+        src={ `${documentDraft?.fullPath}?pimcore_editmode=true&pimcore_studio=true` }
+        title={ `${t('edit.label')}-${id}` }
       />
       {!isNil(styleSheetRef.current) && (
         <EditablesRenderer
-          iframeRef={iframeRef}
-          styleSheet={styleSheetRef.current}
+          iframeRef={ iframeRef }
+          styleSheet={ styleSheetRef.current }
         />
       )}
     </>

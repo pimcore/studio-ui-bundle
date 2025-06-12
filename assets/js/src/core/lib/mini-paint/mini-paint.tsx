@@ -19,7 +19,7 @@ export const MiniPaint = (): React.JSX.Element => {
 
   return (
     <Iframe
-      src={iframeSrc}
+      src={ iframeSrc }
       title="Image Editor"
     />
   )

@@ -34,9 +34,9 @@ export const DataObjectPreview = ({ id }: DataObjectPreviewProps): React.JSX.Ele
 
   return (
     <Iframe
-      ref={iframeRef}
-      src={`${getPrefix()}/data-objects/preview/${id}?timestamp=${timestamp}`}
-      title={`${t('preview.label')}-${id}`}
+      ref={ iframeRef }
+      src={ `${getPrefix()}/data-objects/preview/${id}?timestamp=${timestamp}` }
+      title={ `${t('preview.label')}-${id}` }
     />
   )
 }
