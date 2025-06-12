@@ -8,9 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Alert, ElementTag, Flex, Icon, IconButton, SkeletonInput, Title } from '@sdk/components'
-import { useElementApi, useElementHelper } from '@sdk/modules/element'
-import React, { useEffect, useState } from 'react'
+import { Alert, ElementTag, Flex, Icon, IconButton, Title } from '@sdk/components'
+import { useElementHelper } from '@sdk/modules/element'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Notification } from './notifications-slice.gen'
 import { useStyles } from './notifications.styles'
@@ -19,14 +19,12 @@ export interface NotificationAttachmentProps extends Notification {
   attachmentId: number
 }
 
-export const NotificationAttachment = ({ attachmentId, attachmentType }: NotificationAttachmentProps): React.JSX.Element | null => {
+export const NotificationAttachment = ({ attachmentId, attachmentType, attachmentFullPath }: NotificationAttachmentProps): React.JSX.Element | null => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { openElement } = useElementHelper()
   const { mapToElementType } = useElementHelper()
   const elementType = mapToElementType(attachmentType!) ?? undefined
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [element, setElement] = useState<any>(null)
 
   if (elementType === undefined) {
     return (
@@ -36,17 +34,6 @@ export const NotificationAttachment = ({ attachmentId, attachmentType }: Notific
       />
     )
   }
-
-  const { getElementById } = useElementApi(elementType)
-  useEffect(() => {
-    const fetchElement = async (): Promise<void> => {
-      const result = await getElementById(attachmentId)
-      setElement(result)
-      setIsLoading(false)
-    }
-
-    void fetchElement()
-  }, [attachmentId, getElementById])
 
   return (
     <>
@@ -62,33 +49,27 @@ export const NotificationAttachment = ({ attachmentId, attachmentType }: Notific
         {t('user-menu.notification.attachments')}
       </Title>
 
-      {isLoading ? (
-        <SkeletonInput size="default" />
-      ) : (
-        <Flex
-          align='center'
-          className={styles.elementTag}
-        >
-          <ElementTag
-            elementType={elementType}
-            id={element.id}
-            path={element.fullPath}
-          />
-          <IconButton
-            icon={{ value: 'open-folder' }}
-            onClick={async (e) => {
-              e.stopPropagation()
-              await openElement({
-                type: elementType,
-                id: element.id
-              })
-            }}
-            theme='primary'
-          />
-        </Flex>
-      )}
-
-
+      <Flex
+        align='center'
+        className={styles.elementTag}
+      >
+        <ElementTag
+          elementType={elementType}
+          id={attachmentId}
+          path={attachmentFullPath!}
+        />
+        <IconButton
+          icon={{ value: 'open-folder' }}
+          onClick={async (e) => {
+            e.stopPropagation()
+            await openElement({
+              type: elementType,
+              id: attachmentId
+            })
+          }}
+          theme='primary'
+        />
+      </Flex>
     </>
 
   )
