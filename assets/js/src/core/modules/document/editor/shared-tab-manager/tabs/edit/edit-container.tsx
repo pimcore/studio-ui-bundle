@@ -14,6 +14,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { EditablesRenderer } from './components/editables-renderer/editables-renderer'
 import { isNil } from 'lodash'
+import { Iframe } from '../../../../../../components/iframe/iframe'
 
 export const EditContainer = (): React.JSX.Element => {
   const { id } = useContext(DocumentContext)
@@ -61,18 +62,17 @@ export const EditContainer = (): React.JSX.Element => {
 
   return (
     <>
-      <iframe
-        className={ ['w-full h-full'].join(' ') }
-        onLoad={ onLoad }
-        ref={ iframeRef }
-        src={ `${documentDraft?.fullPath}?pimcore_editmode=true&pimcore_studio=true` }
-        title={ `${t('edit.label')}-${id}` }
+      <Iframe
+        onLoad={onLoad}
+        ref={iframeRef}
+        src={`${documentDraft?.fullPath}?pimcore_editmode=true&pimcore_studio=true`}
+        title={`${t('edit.label')}-${id}`}
       />
       {!isNil(styleSheetRef.current) && (
-      <EditablesRenderer
-        iframeRef={ iframeRef }
-        styleSheet={ styleSheetRef.current }
-      />
+        <EditablesRenderer
+          iframeRef={iframeRef}
+          styleSheet={styleSheetRef.current}
+        />
       )}
     </>
   )
