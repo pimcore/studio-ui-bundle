@@ -1,8 +1,13 @@
-import { AbstractMessage } from "../process/abstract-background-process";
-import { AbstractBackgroundSubscriber } from "./abstract-background-subscriber";
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
-export class DefaultBackgroundSubscriber extends AbstractBackgroundSubscriber {
-  constructor(callback: (message: AbstractMessage) => void) {
-    super(callback);
-  }
-}
+import { AbstractBackgroundSubscriber } from './abstract-background-subscriber'
+
+export class DefaultBackgroundSubscriber extends AbstractBackgroundSubscriber {}
