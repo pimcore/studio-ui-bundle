@@ -289,6 +289,8 @@ properties.columns.key: Key
 properties.columns.name: Name
 properties.columns.description: Description
 properties.columns.data: Value
+properties.columns.configuration: Configuration
+properties.columns.content-type: Content-Type
 properties.columns.inheritable: Inheritable
 properties.columns.actions: Actions
 properties.inherited.properties: Inherited Properties
@@ -684,6 +686,7 @@ navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
 navigation.customise: Customise
 navigation.tag-configuration: Tag Configuration
+navigation.predefined-properties: Predefined Properties
 navigation.user-and-roles: User & Roles
 navigation.users: Users
 navigation.roles: Roles
@@ -694,11 +697,15 @@ navigation.notes-and-events: Notes & Events
 navigation.file: File
 navigation.settings: Settings
 navigation.tools: Tools
+predefined-properties.new: New
+predefined-properties.type: Type
+predefined-properties.name: Name
 perspective.default: Default
 perspective.switching.title: Switching perspective
 perspective.switching.description: Currently switching to the following perspective
 widget.notes-and-events: Notes & Events
 widget.tag-configuration: Tag Configuration
+widget.predefined-properties: Predefined Properties
 widget.role-management: Roles
 widget.user-management: Users
 external-image.preview-placeholder: Add an external image
