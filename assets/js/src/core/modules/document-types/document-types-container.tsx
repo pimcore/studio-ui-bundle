@@ -11,18 +11,30 @@
 import React, { useEffect, useState } from 'react'
 import { t } from 'i18next'
 import trackError, { ApiError } from '../app/error-handler'
+import { useAppDispatch } from '@sdk/app'
+import { useDocumentDocTypeListQuery } from '../document/document-api-slice-enhanced'
+import { DocumentTypeRow, useDocumentType } from './hooks/use-document-type'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
+import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Title } from '@Pimcore/components/title/title'
+import { Content } from '@Pimcore/components/content/content'
+import { Box, IconButton, IconTextButton } from '@sdk/components'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { uuid } from '@sdk/utils'
 import { isUndefined } from 'lodash'
 
+
 export const DocumentTypesContainer = (): React.JSX.Element => {
-  const dispatch = useAppDispatch()
-//   const { createNewDocument, createLoading } = useDocumentType()
+  // const dispatch = useAppDispatch()
+  const { createNewDocumentType, createLoading } = useDocumentType()
   const { data, isLoading: documentTypesLoading, isFetching: documentTypesFetching, isError, error } = useDocumentDocTypeListQuery({})
 
   const [documentTypeRows, setDocumentTypeRows] = useState<DocumentTypeRow[]>([])
 
-  const documentTypes = data?.items
+  const documentTypes = data?.items ?? [];
 
-  const sortedRows = [...documentTypes].sort((a, b) => b.creationDate - a.creationDate)
+  // const sortedRows = [...documentTypes].sort((a, b) => b.creationDate - a.creationDate)
 
   useEffect(() => {
     if (!isUndefined(documentTypes)) {
@@ -57,11 +69,14 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
           <IconButton
             disabled={ documentTypesFetching }
             icon={ { value: 'refresh' } }
-            onClick={ () => dispatch(
-              api.util.invalidateTags(
-                invalidatingTags.GLOBAL_PROPERTIES()
-              )
-            )}></IconButton>
+            onClick={ () => 
+            //   dispatch(
+            //   api.util.invalidateTags(
+            //     invalidatingTags.()
+            //   )
+            // )
+            console.log("refresh")
+            }></IconButton>
         </Toolbar>}
       renderTopBar={
         <Toolbar
@@ -82,8 +97,8 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
             >{t('document-types.new')}</IconTextButton>
           </Flex>
         </Toolbar>
-        } />
-      <Content
+        }>
+          <Content
         loading={ documentTypesLoading || documentTypesFetching }
         margin={ {
           x: 'extra-small',
@@ -97,6 +112,7 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
             y: 'none'
           } }
         >
+          {documentTypeRows.toString()}
         </Box>
       </Content>
     </ContentLayout>

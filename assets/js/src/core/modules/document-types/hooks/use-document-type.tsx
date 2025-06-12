@@ -9,13 +9,13 @@
  */
 
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { DocTypeType, DocTypeUpdate, useDocumentDocTypeAddMutation, useDocumentDocTypeDeleteMutation, useDocumentDocTypeUpdateByIdMutation } from '@Pimcore/modules/document/document-api-slice.gen'
+import { DocType, DocTypeType, DocTypeUpdate, DocumentDocTypeAddApiArg, useDocumentDocTypeAddMutation, useDocumentDocTypeDeleteMutation, useDocumentDocTypeUpdateByIdMutation } from '@Pimcore/modules/document/document-api-slice.gen'
 
 
 export type DocumentTypeRow = DocTypeType & { rowId: string }
 
 interface UseDocumentTypeReturn {
-  createNewDocumentType: () => Promise<{ success: boolean, data?: DocumentType }>
+  createNewDocumentType: () => Promise<{ success: boolean, data?: DocType }>
   createLoading: boolean
   deleteDocumentTypeById: (id: string) => Promise<{ success: boolean }>
   deleteLoading: boolean
@@ -24,19 +24,24 @@ interface UseDocumentTypeReturn {
 }
 
 export const useDocumentType = (): UseDocumentTypeReturn => {
-//   const [createDocumentType, { isLoading: createLoading }] = useDocumentDocTypeAddMutation()
+  const [createDocumentType, { isLoading: createLoading }] = useDocumentDocTypeAddMutation()
   const [deleteDocumentType, { isLoading: deleteLoading }] = useDocumentDocTypeDeleteMutation()
   const [updateDocumentType, { isLoading: updateLoading }] = useDocumentDocTypeUpdateByIdMutation()
 
-  const createNewDocumentType = async (): Promise<{ success: boolean, data?: DocumentType }> => {
-    // try {
-    //   const result = await createDocumentType()
-    //   if ('data' in result) {
-    //     return { success: true, data: result.data }
-    //   }
-    // } catch (e) {
-    //   trackError(new GeneralError('Was not able to create DocumentType'))
-    // }
+  const dummyDocumentType: DocumentDocTypeAddApiArg = {
+  docTypeAddParameters: {
+    name: "New Document Type",
+    type: "page"}
+}
+  const createNewDocumentType = async (): Promise<{ success: boolean, data?: DocType }> => {
+    try {
+      const result = await createDocumentType(dummyDocumentType)
+      if ('data' in result) {
+        return { success: true, data: result.data }
+      }
+    } catch (e) {
+      trackError(new GeneralError('Was not able to create DocumentType'))
+    }
     return { success: false }
   }
 
@@ -72,7 +77,7 @@ export const useDocumentType = (): UseDocumentTypeReturn => {
 
   return {
     createNewDocumentType,
-    createLoading: true,
+    createLoading,
     deleteDocumentTypeById,
     deleteLoading,
     updateDocumentTypeById,

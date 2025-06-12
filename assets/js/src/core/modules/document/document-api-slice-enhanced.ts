@@ -44,7 +44,8 @@ export const {
   // useDocumentCloneMutation,
   useDocumentGetByIdQuery,
   // useDocumentUpdateByIdMutation,
-  useDocumentGetTreeQuery
+  useDocumentGetTreeQuery,
+  useDocumentDocTypeListQuery
 } = api
 
 export { api }
