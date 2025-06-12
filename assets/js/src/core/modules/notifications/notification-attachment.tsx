@@ -12,7 +12,7 @@ import { Alert, ElementTag, Flex, Icon, IconButton, Title } from '@sdk/component
 import { useElementHelper } from '@sdk/modules/element'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Notification } from './notifications-slice.gen'
+import { type Notification } from './notifications-slice.gen'
 import { useStyles } from './notifications.styles'
 
 export interface NotificationAttachmentProps extends Notification {
@@ -29,8 +29,8 @@ export const NotificationAttachment = ({ attachmentId, attachmentType, attachmen
   if (elementType === undefined) {
     return (
       <Alert
+        description={ t('user-menu.notification.type-not-supported') }
         type="error"
-        description={t('user-menu.notification.type-not-supported')}
       />
     )
   }
@@ -40,7 +40,7 @@ export const NotificationAttachment = ({ attachmentId, attachmentType, attachmen
       <Title
         icon={
           <Icon
-            value={'attachment'}
+            value={ 'attachment' }
           />
         }
         theme='secondary'
@@ -51,22 +51,22 @@ export const NotificationAttachment = ({ attachmentId, attachmentType, attachmen
 
       <Flex
         align='center'
-        className={styles.elementTag}
+        className={ styles.elementTag }
       >
         <ElementTag
-          elementType={elementType}
-          id={attachmentId}
-          path={attachmentFullPath!}
+          elementType={ elementType }
+          id={ attachmentId }
+          path={ attachmentFullPath! }
         />
         <IconButton
-          icon={{ value: 'open-folder' }}
-          onClick={async (e) => {
+          icon={ { value: 'open-folder' } }
+          onClick={ async (e) => {
             e.stopPropagation()
             await openElement({
               type: elementType,
               id: attachmentId
             })
-          }}
+          } }
           theme='primary'
         />
       </Flex>
