@@ -12,14 +12,17 @@ import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import ContentEditable from '../components/content-editable/content-editable'
 
-export class DynamicTypeDocumentEditableInput extends DynamicTypeDocumentEditableAbstract {
-  id: string = 'input'
+export class DynamicTypeDocumentEditableTextarea extends DynamicTypeDocumentEditableAbstract {
+  id: string = 'textarea'
+
   initializeInIframe: boolean = false
   useShadowDom: boolean = false
 
   getEditableDataComponent (props: AbstractDocumentEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <ContentEditable />
+      <ContentEditable 
+        allowMultiLine
+      />
     )
   }
 }

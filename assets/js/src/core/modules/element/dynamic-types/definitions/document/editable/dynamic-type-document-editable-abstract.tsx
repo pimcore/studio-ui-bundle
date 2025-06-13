@@ -32,6 +32,7 @@ export type GridCellColumnMeta = ColumnMetaType & { type: string }
 export abstract class DynamicTypeDocumentEditableAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
   initializeInIframe: boolean = false
+  useShadowDom: boolean = true
 
   abstract getEditableDataComponent (props: AbstractDocumentEditableDefinition): ReactElement<AbstractDocumentEditableDefinition>
 }

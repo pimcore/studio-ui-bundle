@@ -24,6 +24,7 @@ import {
 import { type SchedulesDraft, useSchedulesReducers } from '@Pimcore/modules/element/draft/hooks/use-schedules'
 import { type Document } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { usePublishedReducers, type PublishedDraft } from '../element/draft/hooks/use-published'
+import { useModifiedDocumentEditablesReducers } from './draft/hooks/use-modified-editable-data'
 
 export interface DocumentDraft extends Document, PropertiesDraft, SchedulesDraft, TrackableChangesDraft, TabsDraft, PublishedDraft {
 }
@@ -77,6 +78,7 @@ export const slice = createSlice({
     ...usePropertiesReducers(documentsAdapter),
     ...useSchedulesReducers(documentsAdapter),
     ...useTabsReducers(documentsAdapter),
+    ...useModifiedDocumentEditablesReducers(documentsAdapter),
     ...usePublishedReducers(documentsAdapter)
   }
 })
@@ -103,6 +105,8 @@ export const {
   updateSchedule: updateScheduleForDocument,
   resetSchedulesChanges: resetSchedulesChangesForDocument,
   setActiveTab: setActiveTabForDocument,
+
+  markDocumentEditablesAsModified,
 
   publishDraft,
   unpublishDraft

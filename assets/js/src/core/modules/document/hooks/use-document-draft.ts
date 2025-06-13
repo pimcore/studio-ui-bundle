@@ -23,7 +23,8 @@ import {
   updatePropertyForDocument,
   updateScheduleForDocument,
   publishDraft,
-  unpublishDraft
+  unpublishDraft,
+  markDocumentEditablesAsModified
 } from '../document-draft-slice'
 import { useEffect, useState } from 'react'
 import { usePropertiesDraft, type UsePropertiesDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-properties'
@@ -39,12 +40,14 @@ import { useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/
 
 import { usePublishedDraft, type UsePublishedData } from '@Pimcore/modules/element/draft/hooks/use-published'
 import { isFailedDraftId } from '../document-draft-error-slice'
+import { useModifiedDocumentEditablesDraft, UseModifiedDocumentEditablesDraftReturn } from '../draft/hooks/use-modified-editable-data'
 
 export interface UseDocumentDraftReturn extends
   UsePropertiesDraftReturn,
   UseSchedulesDraftReturn,
   UseTabsDraftReturn,
   UseTrackableChangesDraftReturn,
+  UseModifiedDocumentEditablesDraftReturn,
   UsePublishedData {
   isLoading: boolean
   isError: boolean
@@ -103,6 +106,12 @@ export const useDocumentDraft = (id: number): UseDocumentDraftReturn => {
     unpublishDraft
   )
 
+  const modifiedDocumentEditablesActions = useModifiedDocumentEditablesDraft(
+      id,
+      document,
+      markDocumentEditablesAsModified
+    )
+
   const editorType = document?.type === undefined
     ? undefined
     : (typeRegistry.get(document.type) ?? typeRegistry.get('document'))
@@ -116,6 +125,7 @@ export const useDocumentDraft = (id: number): UseDocumentDraftReturn => {
     ...propertyActions,
     ...schedulesActions,
     ...tabsActions,
+    ...modifiedDocumentEditablesActions,
     ...publishedActions
   }
 }

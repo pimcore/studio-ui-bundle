@@ -13,6 +13,7 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ css }) => {
   return {
     dragOverlay: css`
+      position: relative;
       display: inline-flex;
       gap: 5px;
       align-items: center;
@@ -20,6 +21,18 @@ export const useStyle = createStyles(({ css }) => {
       width: max-content;
       background: white;
       box-shadow: 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);
+      box-sizing: border-box;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: -5000px;
+        left: -5000px;
+        right: -5000px;
+        bottom: -5000px;
+        z-index: 0;
+      }
+
     `
   }
 })

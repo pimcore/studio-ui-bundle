@@ -21,6 +21,7 @@ export class DynamicTypeDocumentEditableRelation extends DynamicTypeDocumentEdit
         assetsAllowed
         dataObjectsAllowed
         documentsAllowed
+        allowToClearRelation
       />
     )
   }

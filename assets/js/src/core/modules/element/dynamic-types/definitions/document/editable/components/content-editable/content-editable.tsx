@@ -20,20 +20,22 @@ export interface ContentEditableProps {
   placeholder?: string
   required?: boolean
   width?: number
+  height?: number 
   nowrap?: boolean
+  allowMultiLine?: boolean 
 }
 
-const pasteHtmlAtCaret = function (html: string): void {
+const pasteHtmlAtCaret = function (html: string, currentWindow: Window): void {
   let range: Range
 
-  const sel = window.getSelection()
+  const sel = currentWindow.getSelection()
   if (!isNil(sel) && !isNil(sel.getRangeAt) && sel.rangeCount > 0) {
     range = sel.getRangeAt(0)
     range.deleteContents()
 
-    const el = document.createElement('div')
+    const el = currentWindow.document.createElement('div')
     el.innerHTML = html
-    const frag = document.createDocumentFragment()
+    const frag = currentWindow.document.createDocumentFragment()
     let node: ChildNode | null = null
     let lastNode: ChildNode | null = null
 
@@ -55,7 +57,7 @@ const pasteHtmlAtCaret = function (html: string): void {
   }
 }
 
-const ContentEditable = ({ value, onChange, className, placeholder, required, width, nowrap }: ContentEditableProps): JSX.Element => {
+const ContentEditable = ({ value, onChange, className, placeholder, required, width, height, nowrap, allowMultiLine = false }: ContentEditableProps): JSX.Element => {
   const contentRef = useRef<HTMLDivElement>(null)
 
   const { styles } = useStyle()
@@ -63,20 +65,27 @@ const ContentEditable = ({ value, onChange, className, placeholder, required, wi
   const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>): void => {
     e.preventDefault()
 
+    const currentWindow = contentRef.current?.ownerDocument.defaultView
+    if (!currentWindow) return
+
     let text = ''
     if (!isNil(e.clipboardData)) {
       text = e.clipboardData.getData('text/plain')
-    } else if (!isNil((window as DocumentEditorIframeWindow).clipboardData)) {
-      text = ((window as DocumentEditorIframeWindow).clipboardData).getData('Text')
+    } else if (!isNil((currentWindow as DocumentEditorIframeWindow).clipboardData)) {
+      text = ((currentWindow as DocumentEditorIframeWindow).clipboardData).getData('Text')
     }
 
-    text = text.replace(/\r\n|\n/g, ' ').trim()
+    if (!allowMultiLine) {
+      text = text.replace(/\r\n|\n/g, ' ').trim()
+    } else {
+      text = text.replace(/\r\n|\n/g, '<br>').trim()
+    }
 
-    pasteHtmlAtCaret(text)
+    pasteHtmlAtCaret(text, currentWindow)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
-    if (e.key === 'Enter') {
+    if (!allowMultiLine && e.key === 'Enter') { 
       e.preventDefault()
     }
   }
@@ -103,9 +112,10 @@ const ContentEditable = ({ value, onChange, className, placeholder, required, wi
       ref={ contentRef }
       role="none"
       style={ {
-        display: !isNil(width) ? 'inline-block' : undefined,
+        display: !isNil(width) || !isNil(height) ? 'inline-block' : undefined,
         width: !isNil(width) ? `${width}px` : undefined,
-        overflow: (!isNil(nowrap) && nowrap) || !isNil(width) ? 'auto' : undefined,
+        height: !isNil(height) ? `${height}px` : undefined,
+        overflow: (!isNil(nowrap) && nowrap) || !isNil(width) || !isNil(height) ? 'auto' : undefined,
         whiteSpace: !isNil(nowrap) && nowrap ? 'nowrap' : undefined
       } }
     />

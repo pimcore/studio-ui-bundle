@@ -17,6 +17,7 @@ import { serviceIds, useInjection } from '@sdk/app'
 import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
 import { isNull } from 'lodash'
 import { type DocumentEditorIframeWindow } from '../../iframe-app/iframe-app-view'
+import { StyleProvider } from 'antd-style'
 
 export interface EditableRendererProps {
   iframeRef: RefObject<HTMLIFrameElement>
@@ -30,6 +31,10 @@ const getTargetContainer = (
 ): HTMLElement | null => {
   if (isNull(targetElement) || editableType?.initializeInIframe !== false) {
     return null
+  }
+
+  if (editableType?.useShadowDom !== true) {
+    return targetElement
   }
 
   const shadowRoot = targetElement.shadowRoot ?? targetElement.attachShadow({ mode: 'open' })
@@ -57,8 +62,11 @@ export const EditablesRenderer = (props: EditableRendererProps): React.JSX.Eleme
 
         const targetContainer = getTargetContainer(targetElement, editableType, props.styleSheet)
         if (!isNull(targetContainer)) {
+          console.log('styleprovider', editableType?.useShadowDom ? targetContainer : props.iframeRef.current?.contentDocument?.head)
           return ReactDOM.createPortal(
-            <RenderEditable editableDefinition={ editable } />,
+            <StyleProvider container={ editableType?.useShadowDom ? targetContainer : props.iframeRef.current?.contentDocument?.head }>
+              <RenderEditable editableDefinition={ editable } />
+            </StyleProvider>,
             targetContainer
           )
         }
