@@ -1,11 +1,14 @@
 /**
- * This source file is available under the terms of the
- * Pimcore Open Core License (POCL)
+ * Pimcore
+ *
+ * This source file is available under two different licenses:
+ * - Pimcore Open Core License (POCL)
+ * - Pimcore Commercial License (PCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
- *  @license    Pimcore Open Core License (POCL)
+ *  @copyright  Copyright (c) Pimcore GmbH
+ *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
  */
 
 /* eslint-disable max-lines */
@@ -14,6 +17,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type IconLibrary } from './services/icon-library'
+
 import accessory from '@Pimcore/assets/icons/accessory.inline.svg?react'
 import addFind from '@Pimcore/assets/icons/add-find.inline.svg?react'
 import addFolder from '@Pimcore/assets/icons/add-folder.inline.svg?react'
@@ -125,6 +129,7 @@ import lock from '@Pimcore/assets/icons/lock.inline.svg?react'
 import locked from '@Pimcore/assets/icons/locked.inline.svg?react'
 import logOut from '@Pimcore/assets/icons/log-out.inline.svg?react'
 import longText from '@Pimcore/assets/icons/long-text.inline.svg?react'
+import mail02 from '@Pimcore/assets/icons/mail-02.inline.svg?react'
 import mailAnswer from '@Pimcore/assets/icons/mail-answer.inline.svg?react'
 import manyToMany from '@Pimcore/assets/icons/many-to-many.inline.svg?react'
 import market from '@Pimcore/assets/icons/market.inline.svg?react'
@@ -215,7 +220,7 @@ import xlsxCsv from '@Pimcore/assets/icons/xlsx-csv.inline.svg?react'
 
 moduleSystem.registerModule({
   onInit: () => {
-    const iconLibrary = container.get<IconLibrary>(serviceIds.iconLibrary)
+    const iconLibrary = container.get<IconLibrary>(serviceIds.iconLibrary);
     iconLibrary.register({
       name: 'accessory',
       component: accessory
@@ -659,6 +664,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'long-text',
       component: longText
+    })
+    iconLibrary.register({
+      name: 'mail-02',
+      component: mail02
     })
     iconLibrary.register({
       name: 'mail-answer',
