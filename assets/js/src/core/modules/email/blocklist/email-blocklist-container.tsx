@@ -6,12 +6,17 @@ import { IconButton } from "@Pimcore/components/icon-button/icon-button"
 import { IconTextButton } from "@Pimcore/components/icon-text-button/icon-text-button"
 import { Title } from "@Pimcore/components/title/title"
 import { Toolbar } from "@Pimcore/components/toolbar/toolbar"
-import { Icon } from "@sdk/components"
+import { Alert, Card, Icon } from "@sdk/components"
 import React from "react"
 import { useTranslation } from "react-i18next"
+import { useEmailBlocklist } from "./hooks/use-email-blocklist"
+import { useEmailBlocklistGetCollectionQuery } from "../emails-api-slice.gen"
+import { EmailCard } from "./components/email-card/email-card"
 
 export const EmailBlocklistContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
+  const { addNewEmail } = useEmailBlocklist()
+  const { isLoading, data } = useEmailBlocklistGetCollectionQuery({ page: 1, pageSize: 50 })
 
   return (
     <ContentLayout
@@ -32,12 +37,22 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
             </Title>
             <IconTextButton
               icon={{ value: 'new' }}
+              onClick={() => addNewEmail()}
             >{t('email-blocklist.add')}</IconTextButton>
           </Flex>
         </Toolbar>
       }
     >
-      <Content>Test</Content>
+      <Content
+        padded
+        loading={isLoading}
+      >
+        {data?.items && data.items.length > 0 ? (
+          data.items.map((item) => (
+            <EmailCard entry={item} />
+          ))
+        ) : ''}
+      </Content>
     </ContentLayout>
   )
 }
