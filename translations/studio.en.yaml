@@ -814,3 +814,6 @@ user-menu.notification.modal.form.validation.provide-recipient: Please provide a
 user-menu.notification.modal.form.validation.provide-title: Please provide a title
 user-menu.notification.modal.form.validation.provide-message: Please provide a message
 loading: Loading...
+navigation.email: Email
+navigation.email-blocklist: Email Blocklist
+widget.email-blocklist: Email Blocklist
