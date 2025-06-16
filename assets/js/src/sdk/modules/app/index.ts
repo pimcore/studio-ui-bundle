@@ -8,10 +8,16 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+if (module.hot !== undefined) {
+  module.hot.accept()
+}
+
 export * from '@Pimcore/modules/app/component-registry/component-registry'
 
 export * from '@Pimcore/modules/app/error-boundary/error-boundary'
 export { default as trackError, ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+
+export * from '@Pimcore/modules/app/theme/theme-provider'
 
 export * from '@Pimcore/modules/app/settings/hooks/use-settings'
 

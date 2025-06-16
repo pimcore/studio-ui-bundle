@@ -8,6 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+if (module.hot !== undefined) {
+  module.hot.accept()
+}
+
 export * from '@Pimcore/components/accordion/accordion'
 export * from '@Pimcore/components/button/button'
 export * from '@Pimcore/components/accordion-timeline/accordion-timeline'
@@ -34,6 +38,7 @@ export * from '@Pimcore/components/drag-and-drop/drag-overlay'
 export * from '@Pimcore/components/drag-and-drop/draggable'
 export * from '@Pimcore/components/drag-and-drop/droppable'
 export * from '@Pimcore/components/drag-and-drop/context-provider'
+export * from '@Pimcore/components/drag-and-drop/droppable-context-provider'
 export * from '@Pimcore/components/dropdown/dropdown'
 export * from '@Pimcore/components/dropdown-button/dropdown-button'
 export * from '@Pimcore/components/dynamic-filter/dynamic-filter'

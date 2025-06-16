@@ -76,6 +76,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "nodemon": "^3.1.10",
     "storybook": "^8.4.4",
+    "storybook-react-rsbuild": "^1.0.1",
     "stream": "^0.0.2",
     "ts-jest": "^29.2.5",
     "ts-loader": "^9.5.1",

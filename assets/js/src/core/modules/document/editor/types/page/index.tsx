@@ -21,11 +21,13 @@ import {
   TAB_WORKFLOW
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
 import { TAB_VERSIONS } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tab-definitions'
+import { TAB_EDIT } from '../../shared-tab-manager/tab-definitions'
 
 moduleSystem.registerModule({
   onInit: () => {
     const pageEditorTabManager = container.get<PageTabManager>(serviceIds['Document/Editor/PageTabManager'])
 
+    pageEditorTabManager.register(TAB_EDIT)
     pageEditorTabManager.register(TAB_PROPERTIES)
     pageEditorTabManager.register(TAB_VERSIONS)
     pageEditorTabManager.register(TAB_SCHEDULE)

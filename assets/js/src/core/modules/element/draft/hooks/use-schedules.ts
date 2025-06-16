@@ -12,7 +12,7 @@ import type { ActionCreatorWithPayload, PayloadAction } from '@reduxjs/toolkit'
 import type { EntityAdapter, EntityState } from '@reduxjs/toolkit/src/entities/models'
 import { type Schedule as ApiSchedule } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/schedule-api-slice-enhanced'
 
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import { type TrackableChangesDraft } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 

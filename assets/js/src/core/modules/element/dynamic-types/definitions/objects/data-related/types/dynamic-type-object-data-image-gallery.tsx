@@ -50,4 +50,8 @@ export class DynamicTypeObjectDataImageGallery extends DynamicTypeObjectDataAbst
       <ImageGalleryPreview value={ value } />
     )
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 350
+  }
 }

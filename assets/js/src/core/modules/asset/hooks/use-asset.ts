@@ -9,7 +9,7 @@
  */
 
 import { useContext } from 'react'
-import { AssetContext } from '../asset-provider'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 
 export interface UseAssetReturn {
   id: number

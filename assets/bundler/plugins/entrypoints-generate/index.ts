@@ -44,11 +44,9 @@ const generateEntrypoints = (data: data, devServer?: DevServerContext): Entrypoi
 
     entrypoints.entrypoints[key] = {
       js: [
-        ...value?.async?.js ?? [],
         ...value?.initial?.js ?? [],
       ],
       css: [
-        ...value?.async?.css ?? [],
         ...value?.initial?.css ?? [],
       ]
     }

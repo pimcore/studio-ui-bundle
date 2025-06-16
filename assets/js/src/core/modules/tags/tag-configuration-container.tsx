@@ -27,7 +27,7 @@ import {
   api
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Content } from '@Pimcore/components/content/content'
@@ -177,7 +177,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
           theme='secondary'
         >
           <Flex gap={ 'small' }>
-            <Title titleClass={ 'm-none' }>{t('widget.tag-configuration')}</Title>
+            <Title>{t('widget.tag-configuration')}</Title>
             <IconTextButton
               disabled={ loadingTagKey !== undefined }
               icon={ { value: 'new' } }

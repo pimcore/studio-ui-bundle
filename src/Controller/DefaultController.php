@@ -21,24 +21,29 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class DefaultController extends FrontendController
 {
+    public function __construct(
+        private StaticResourcesResolverInterface $staticResourcesResolver,
+        private UrlServiceInterface $mercureUrlService,
+    ) {
+
+    }
+
     #[Route('')]
     #[Route('/login')]
     #[Route('/{elementType}/{id}', requirements: ['elementType' => 'asset|data-object|document', 'id' => '\d+'])]
     public function indexAction(
-        StaticResourcesResolverInterface $staticResourcesResolver,
-        UrlServiceInterface $mercureUrlService,
         string $studioUrlUrlPath,
         array $studioWysiwygConfiguration
     ): Response {
         return $this->render('@PimcoreStudioUi/default/index.html.twig', [
-            'studioCssFiles' => $staticResourcesResolver->getStudioCssFiles(),
-            'studioJsFiles' => $staticResourcesResolver->getStudioJsFiles(),
-            'bundleCssFiles' => $staticResourcesResolver->getBundleCssFiles(),
-            'bundleJsFiles' => $staticResourcesResolver->getBundleJsFiles(),
-            'additionalCssFiles' => $staticResourcesResolver->getAdditionalCssFiles(),
-            'additionalJsFiles' => $staticResourcesResolver->getAdditionalJsFiles(),
+            'studioCssFiles' => $this->staticResourcesResolver->getStudioCssFiles(),
+            'studioJsFiles' => $this->staticResourcesResolver->getStudioJsFiles(),
+            'bundleCssFiles' => $this->staticResourcesResolver->getBundleCssFiles(),
+            'bundleJsFiles' => $this->staticResourcesResolver->getBundleJsFiles(),
+            'additionalCssFiles' => $this->staticResourcesResolver->getAdditionalCssFiles(),
+            'additionalJsFiles' => $this->staticResourcesResolver->getAdditionalJsFiles(),
             'baseUrl' => $studioUrlUrlPath,
-            'mercureUrl' => $mercureUrlService->getClientSideUrl(),
+            'mercureUrl' => $this->mercureUrlService->getClientSideUrl(),
             'wysiwygConfiguration' => $studioWysiwygConfiguration,
         ]);
     }

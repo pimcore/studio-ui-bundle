@@ -30,12 +30,13 @@ export default defineConfig({
     port: 3031,
   },
   dev: {
-    assetPrefix: '/bundles/pimcorestudioui/build/' + buildId,
-    writeToDisk: true,
+    assetPrefix: (isDevServer ? 'http://localhost:3031' : '') + '/bundles/pimcorestudioui/build/' + buildId,
+    writeToDisk: !isDevServer,
   },
   source: {
     entry: {
-      main: './js/src/core/main.ts'
+      main: './js/src/core/main.ts',
+      documentEditorIframe: './js/src/core/modules/document/editor/shared-tab-manager/tabs/edit/iframe-app/main.ts'
     },
     decorators: {
       version: 'legacy'
@@ -105,6 +106,12 @@ export default defineConfig({
         `,
       },
       shared: {
+        ...packages.dependencies,
+        classnames: {
+          singleton: true,
+          eager: true,
+          requiredVersion: packages.dependencies.classnames
+        },
         react: {
           singleton: true,
           eager: true,
@@ -123,6 +130,17 @@ export default defineConfig({
           singleton: true,
           eager: true,
           requiredVersion: packages.dependencies.antd
+        },
+        'reflect-metadata': {
+          singleton: true,
+          eager: true,
+          requiredVersion: false
+        },
+        '@uiw/react-codemirror': {
+          singleton: true,
+          eager: true,
+          version: packages.dependencies['@uiw/react-codemirror'],
+          requiredVersion: packages.dependencies['@uiw/react-codemirror']
         }
       }
     })

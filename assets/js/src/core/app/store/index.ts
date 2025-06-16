@@ -10,7 +10,7 @@
 
 import { type Reducer, combineSlices, configureStore, type CombinedSliceReducer, createDynamicMiddleware, type MiddlewareApiConfig } from '@reduxjs/toolkit'
 import { type TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-import { api as pimcoreApi } from '@Pimcore/app/api/pimcore'
+import { api as pimcoreApi } from '@sdk/api'
 import { rtkQueryErrorLogger } from './middleware/rtkQueryErrorLogger'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

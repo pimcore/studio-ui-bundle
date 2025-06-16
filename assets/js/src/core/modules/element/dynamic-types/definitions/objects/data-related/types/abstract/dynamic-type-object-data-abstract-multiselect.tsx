@@ -37,4 +37,8 @@ export abstract class DynamicTypeObjectDataAbstractMultiSelect extends DynamicTy
       }
     }
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 300
+  }
 }

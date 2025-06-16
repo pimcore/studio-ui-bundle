@@ -47,4 +47,8 @@ export class DynamicTypeObjectDataUrlSlug extends DynamicTypeObjectDataAbstract 
       <UrlSlugPreview value={ value } />
     )
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 250
+  }
 }

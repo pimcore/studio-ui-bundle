@@ -8,15 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Select } from '@Pimcore/components/select/select'
-import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice.gen'
+import { Select, type SelectProps } from '@Pimcore/components/select/select'
 import React from 'react'
+import { useUserGetCollectionQuery } from '../../user-api-slice-enhanced'
 
-interface UserSelectProps {
-  onChange: (value: string | null) => void
-}
+interface UserSelectProps extends SelectProps {}
 
-export const UserSelect = ({ onChange }: UserSelectProps): React.JSX.Element => {
+export const UserSelect = ({ ...selectProps }: UserSelectProps): React.JSX.Element => {
   const { data, isLoading } = useUserGetCollectionQuery()
 
   const options = data?.items.map((user) => ({
@@ -27,8 +25,8 @@ export const UserSelect = ({ onChange }: UserSelectProps): React.JSX.Element => 
   return (
     <Select
       loading={ isLoading }
-      onChange={ onChange }
       options={ options }
+      { ...selectProps }
     />
   )
 }

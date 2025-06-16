@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { markNodeDeleting } from '@Pimcore/components/element-tree/element-tree-slice'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'

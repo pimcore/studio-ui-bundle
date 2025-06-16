@@ -13,6 +13,10 @@ import { type components, type PimcoreThemeConfig, type tokens } from '@Pimcore/
 export { type AbstractModule } from '@Pimcore/app/module-system/module-system'
 export { type IAbstractPlugin } from '@Pimcore/app/plugin-system/plugin-system'
 
+if (module.hot !== undefined) {
+  module.hot.accept()
+}
+
 declare global {
   interface Window {
     Pimcore: typeof PimcoreApi

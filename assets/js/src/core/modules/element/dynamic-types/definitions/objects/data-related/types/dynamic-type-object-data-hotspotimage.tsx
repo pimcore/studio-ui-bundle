@@ -49,7 +49,7 @@ export class DynamicTypeObjectDataHotspotImage extends DynamicTypeObjectDataAbst
           className='w-full'
           justify='center'
         >
-          { !isNil(value) && !isNil(value.image) && (
+          {!isNil(value) && !isNil(value.image) && (
             <ImagePreview
               assetId={ value.image.id }
               height={ 100 }
@@ -60,5 +60,9 @@ export class DynamicTypeObjectDataHotspotImage extends DynamicTypeObjectDataAbst
         </Flex>
       </GridCellPreviewWrapper>
     )
+  }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 250
   }
 }

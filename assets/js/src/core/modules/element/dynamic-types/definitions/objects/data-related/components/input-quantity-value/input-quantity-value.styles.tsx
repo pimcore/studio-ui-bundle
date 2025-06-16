@@ -25,7 +25,7 @@ export const useStyles = createStyles(({ css, token }) => {
           color: ${token.colorText} !important;
         }
 
-        .ant-select-disabled .ant-select-selector,
+        .ant-select.ant-select-disabled .ant-select-selector,
         .ant-input-disabled {
           border-color: transparent !important;
         }
@@ -37,7 +37,7 @@ export const useStyles = createStyles(({ css, token }) => {
           background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
         }
 
-        .ant-select-disabled .ant-select-selector,
+        .ant-select.ant-select-disabled .ant-select-selector,
         .ant-input-disabled {
           border-color: ${token.colorBorder} !important;
         }

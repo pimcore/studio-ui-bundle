@@ -12,8 +12,9 @@ import { Background } from '@Pimcore/components/background/background'
 import { BaseLayoutView } from '@Pimcore/modules/app/base-layout/base-layout-view'
 import React from 'react'
 import { ClassDefinitionsProvider } from '../data-object/utils/provider/class-defintions/class-definitions-provider'
-import { ElementSelectorProvider } from '../element/element-selector/provider/element-selector/element-selector-provider'
+import { ElementSelectorProvider } from '@sdk/modules/element'
 import { useHandleDeepLink } from './hook/use-handle-deeplink'
+import { SlotRenderer } from './component-registry/slot-renderer'
 
 export const DefaultPage = (): React.JSX.Element => {
   useHandleDeepLink()
@@ -33,6 +34,8 @@ export const DefaultPage = (): React.JSX.Element => {
           <BaseLayoutView />
         </ElementSelectorProvider>
       </ClassDefinitionsProvider>
+
+      <SlotRenderer slot="global.feedback" />
     </div>
   )
 }

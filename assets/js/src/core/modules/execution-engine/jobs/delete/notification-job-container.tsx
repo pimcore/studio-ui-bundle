@@ -15,7 +15,7 @@ import { useJobs } from '../../hooks/useJobs'
 import { JobView } from '../../notification/job/job-view'
 import { type JobProps } from '../../notification/job/job'
 import { useTranslation } from 'react-i18next'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch } from '@sdk/app'
 import { type DeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/factory'
 import { refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
 

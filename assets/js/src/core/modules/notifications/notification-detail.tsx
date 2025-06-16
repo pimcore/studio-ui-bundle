@@ -8,22 +8,21 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
-import { respectLineBreak } from '@Pimcore/utils/helpers'
-import { Space } from '@Pimcore/components/space/space'
-import { formatDateTime } from '@Pimcore/utils/date-time'
-import { Text } from '@Pimcore/components/text/text'
-import { Paragraph } from '@Pimcore/components/paragraph/paragraph'
 import { Collapse } from '@Pimcore/components/collapse/collapse'
-import { type NotificationListItem } from './notifications-slice.gen'
-import { useNotificationDetail } from './hooks/use-notification-detail'
 import { Content } from '@Pimcore/components/content/content'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Paragraph } from '@Pimcore/components/paragraph/paragraph'
+import { Space } from '@Pimcore/components/space/space'
+import { Text } from '@Pimcore/components/text/text'
+import { formatDateTime } from '@Pimcore/utils/date-time'
+import { respectLineBreak } from '@Pimcore/utils/helpers'
 import { Flex, Icon, Split } from '@sdk/components'
-import { useStyles } from './notifications.styles'
-import { NotificationAttachment } from './notification-attachment'
-import { useElementHelper } from '@sdk/modules/element'
 import { isNil } from 'lodash'
+import React, { useEffect, useState } from 'react'
+import { useNotificationDetail } from './hooks/use-notification-detail'
+import { NotificationAttachment } from './notification-attachment'
+import { type NotificationListItem } from './notifications-slice.gen'
+import { useStyles } from './notifications.styles'
 
 export interface NotificationDetailProps {
   notification: NotificationListItem
@@ -38,12 +37,6 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     deleteNotification,
     deleteLoading
   } = useNotificationDetail({ id: notification.id })
-
-  const { mapToElementType } = useElementHelper()
-
-  const elementType = notificationDetail?.attachmentType !== undefined
-    ? mapToElementType(notificationDetail.attachmentType!)
-    : undefined
 
   const { styles } = useStyles()
 
@@ -63,10 +56,10 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
         size="extra-small"
       >
         {notification.hasAttachment && (
-        <Icon
-          className={ styles.margin }
-          value={ 'attachment' }
-        />
+          <Icon
+            className={ styles.margin }
+            value={ 'attachment' }
+          />
         )}
         {notification.creationDate !== undefined && <span>{formatDateTime({ timestamp: notification.creationDate, dateStyle: 'short', timeStyle: 'medium' })}</span>}
         <IconButton
@@ -93,11 +86,11 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
           vertical
         >
           {notificationDetail !== undefined && typeof notificationDetail.message === 'string' && (<Paragraph>{respectLineBreak(notificationDetail.message)}</Paragraph>)}
-          {!isNil(notificationDetail?.attachmentId) && elementType !== undefined && (
-          <NotificationAttachment
-            attachmentId={ notificationDetail.attachmentId }
-            attachmentType={ elementType }
-          />
+          {!isNil(notificationDetail?.attachmentId) && (
+            <NotificationAttachment
+              { ...notificationDetail }
+              attachmentId={ notificationDetail.attachmentId }
+            />
           )}
         </Flex>
       </Content>
@@ -146,10 +139,10 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
   return (
     <Collapse
       activeKeys={
-      isExpanded
-        ? [notification.id.toString()]
-        : []
-    }
+        isExpanded
+          ? [notification.id.toString()]
+          : []
+      }
       items={ [item] }
       onChange={ (expandedKeys) => {
         if (expandedKeys.length > 0) {

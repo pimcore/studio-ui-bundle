@@ -8,6 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+if (module.hot !== undefined) {
+  module.hot.accept()
+}
+
 export * from '@Pimcore/app/api/pimcore/index'
 export * from '@Pimcore/app/api/pimcore/route'
 export * from '@Pimcore/app/api/pimcore/tags'

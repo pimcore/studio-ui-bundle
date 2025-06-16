@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
+import { useAppDispatch, useAppSelector } from '@sdk/app'
 import { jobDeleted, jobReceived, jobUpdated, selectAll } from '../execution-engine-slice'
 import { type AbstractJob } from '../jobs/abstact-job'
 

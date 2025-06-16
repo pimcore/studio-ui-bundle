@@ -22,7 +22,7 @@ const pathMatcher = (pattern: RegExp): EndpointMatcherFunction => {
 
 const config: ConfigFile = {
   schemaFile: './docs.jsonopenapi.json',
-  apiFile: '../../js/src/core/app/api/pimcore/index.ts',
+  apiFile: '@sdk/api',
   apiImport: 'api',
   endpointOverrides: [
     {
@@ -72,15 +72,12 @@ const config: ConfigFile = {
       filterEndpoints: pathMatcher(/api\/translation/i)
     },
     '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/properties/i)
+      filterEndpoints: pathMatcher(/api\/propert(y|ies)/i)
     },
     '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/workflow/i)
     },
     '../../js/src/core/modules/auth/user/user-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/user/i)
-    },
-    '../../js/src/core/modules/user/user-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/user/i)
     },
     '../../js/src/core/modules/user/roles/roles-api-slice.gen.ts': {

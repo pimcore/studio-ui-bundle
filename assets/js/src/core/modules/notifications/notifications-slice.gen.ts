@@ -1,4 +1,4 @@
-import { api } from "../../app/api/pimcore/index";
+import { api } from "@sdk/api";
 export const addTagTypes = ["Notifications"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
@@ -120,6 +120,8 @@ export type Notification = NotificationListItem & {
     attachmentType: string | null;
     /** linked attachment ID */
     attachmentId: number | null;
+    /** linked attachment fullPath */
+    attachmentFullPath: string | null;
 };
 export type SendEmailParameters = {
     /** recipient ID */

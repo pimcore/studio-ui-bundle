@@ -10,7 +10,7 @@
 
 import type { EntityAdapter } from '@reduxjs/toolkit/src/entities/models'
 import { createEntityAdapter, createSlice, type PayloadAction, type Update } from '@reduxjs/toolkit'
-import { injectSliceWithState, type RootState } from '@Pimcore/app/store'
+import { injectSliceWithState, type RootState } from '@sdk/app'
 import type { DetailedUserRole } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
 
 export interface IRole extends DetailedUserRole {

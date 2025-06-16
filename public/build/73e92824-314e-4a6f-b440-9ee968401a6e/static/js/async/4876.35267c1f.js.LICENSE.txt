@@ -1,0 +1,23 @@
+/* @preserve
+ * Leaflet 1.9.4, a JS library for interactive maps. https://leafletjs.com
+ * (c) 2010-2023 Vladimir Agafonkin, (c) 2010-2011 CloudMade
+ */
+
+/*!
+ * 
+ *             /**
+ *              * This source file is available under the terms of the
+ *              * Pimcore Open Core License (POCL)
+ *              * Full copyright and license information is available in
+ *              * LICENSE.md which is distributed with this source code.
+ *              *
+ *              *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *              *  @license    Pimcore Open Core License (POCL)
+ *              * /
+ *
+<<<<<<<< HEAD:public/build/2b2e2968-e605-4815-8bf6-9ff8e8c2d039/static/css/async/673.8dd9aff4.css
+ */
+@font-face{font-family:Lato;src:url(/bundles/pimcorestudioui/build/2b2e2968-e605-4815-8bf6-9ff8e8c2d039/static/font/Lato-Regular.4291f48c.ttf)}@font-face{font-family:Lato;src:url(/bundles/pimcorestudioui/build/2b2e2968-e605-4815-8bf6-9ff8e8c2d039/static/font/Lato-Light.bec6f0ae.ttf);font-weight:300}@font-face{font-family:Lato;src:url(/bundles/pimcorestudioui/build/2b2e2968-e605-4815-8bf6-9ff8e8c2d039/static/font/Lato-Bold.2c00c297.ttf);font-weight:700}
+========
+ */
+>>>>>>>> origin/1.x:public/build/73e92824-314e-4a6f-b440-9ee968401a6e/static/js/async/4876.35267c1f.js.LICENSE.txt

@@ -54,4 +54,8 @@ export class DynamicTypeObjectDataLink extends DynamicTypeObjectDataAbstract {
       </GridCellPreviewWrapper>
     )
   }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 350
+  }
 }

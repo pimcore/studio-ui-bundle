@@ -23,43 +23,37 @@ import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helpe
 
 interface ITreeContainerProps {
   treeData: TreeDataItem[]
-  isLoading: boolean
+  expandedKeys: any[]
   onLoadTreeData: (node: TreeDataNode) => Promise<void>
+  onReloadTree: (keys: any[]) => void
+  onSetExpandedKeys: (keys: any[]) => void
   onUpdateTreeData: (key: any, items: any, add?: boolean) => void
-  onReloadTree: () => void
-  onRemoveItem: (key: any) => void
-  onMoveItem: (dragNode: any, dropKey: any) => void
 }
-const TreeContainer = ({ treeData, isLoading, onUpdateTreeData, onLoadTreeData, onReloadTree, onRemoveItem, onMoveItem, ...props }: ITreeContainerProps): React.JSX.Element => {
+const TreeContainer = ({ expandedKeys, treeData, onLoadTreeData, onReloadTree, onSetExpandedKeys, onUpdateTreeData, ...props }: ITreeContainerProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openRole, addNewRole, addNewFolder, removeRole, cloneRole, removeFolder, moveRoleById } = useRoleHelper()
   const { styles } = useStyle()
   const classNames = [styles.treeContainer]
 
-  const [expandedKeys, setExpandedKeys] = React.useState<any[]>(['0'])
   const modal = useFormModal()
 
-  const handleAddRole = (key: string): void => {
+  const handleAddRole = (key: number): void => {
     modal.input({
       title: t('roles.add-role'),
       label: t('roles.add-role.label'),
       onOk: async (value: string) => {
-        const data = await addNewRole({ parentId: parseInt(key), name: value })
-        if (data !== undefined) {
-          onUpdateTreeData(key, [data], true)
-        }
+        await addNewRole({ parentId: key, name: value })
+        onReloadTree([key])
       }
     })
   }
-  const handleAddFolder = (key: string): void => {
+  const handleAddFolder = (key: number): void => {
     modal.input({
       title: t('roles.add-folder'),
       label: t('roles.add-folder.label'),
       onOk: async (value: string) => {
-        const data = await addNewFolder({ parentId: parseInt(key), name: value })
-        if (data !== undefined) {
-          onUpdateTreeData(key, [data], true)
-        }
+        await addNewFolder({ parentId: key, name: value })
+        onReloadTree([key])
       }
     })
   }
@@ -73,27 +67,31 @@ const TreeContainer = ({ treeData, isLoading, onUpdateTreeData, onLoadTreeData, 
               key: 'add-role',
               label: t('tree.actions.add-role'),
               icon: <Icon value='add-user'></Icon>,
-              onClick: () => { handleAddRole('0') }
+              onClick: () => { handleAddRole(0) }
             },
             {
               key: 'add-folder',
               label: t('tree.actions.add-folder'),
               icon: <Icon value='folder-plus'></Icon>,
-              onClick: () => { handleAddFolder('0') }
+              onClick: () => { handleAddFolder(0) }
             }
           ] }
-          onReload={ onReloadTree }
+          onReload={ () => { onReloadTree([0]) } }
         />
       }
     >
       <Content
         className={ classNames.join(', ') }
-        loading={ isLoading }
       >
         <Tree
           defaultExpandedKeys={ expandedKeys }
           draggable
-          onActionsClick={ (key: string, action: string) => {
+          expandedKeys={ expandedKeys }
+          onActionsClick={ (key: string | number, action: string) => {
+            if (typeof key === 'string') {
+              key = parseInt(key)
+            }
+
             switch (action) {
               case 'add-folder':
                 handleAddFolder(key)
@@ -108,11 +106,11 @@ const TreeContainer = ({ treeData, isLoading, onUpdateTreeData, onLoadTreeData, 
                   title: t('roles.clone-role'),
                   label: t('roles.clone-role.label'),
                   onOk: async (value: string) => {
-                    const parentId = (findParentByKey(treeData, key)?.key)?.toString()
-                    const data = await cloneRole({ id: parseInt(key), name: value })
+                    const parentId = findParentByKey(treeData, key)?.key
+                    const data = await cloneRole({ id: key, name: value })
 
                     if (data !== undefined) {
-                      onUpdateTreeData(parentId, [data], true)
+                      onReloadTree([parentId])
                     }
                   }
                 })
@@ -124,8 +122,7 @@ const TreeContainer = ({ treeData, isLoading, onUpdateTreeData, onLoadTreeData, 
                   content: t('roles.remove-role.text'),
                   onOk: async () => {
                     await removeRole({ id: Number(key) })
-
-                    onRemoveItem(key)
+                    onReloadTree([findParentByKey(treeData, key)?.key])
                   }
                 })
 
@@ -136,8 +133,7 @@ const TreeContainer = ({ treeData, isLoading, onUpdateTreeData, onLoadTreeData, 
                   content: t('roles.remove-folder.text'),
                   onOk: async () => {
                     await removeFolder({ id: Number(key) })
-
-                    onRemoveItem(key)
+                    onReloadTree([findParentByKey(treeData, key)?.key])
                   }
                 })
 
@@ -148,11 +144,11 @@ const TreeContainer = ({ treeData, isLoading, onUpdateTreeData, onLoadTreeData, 
             const data = await moveRoleById({ id: Number(params.dragNode.key), parentId: Number(params.node.key) })
 
             if (data !== undefined) {
-              onMoveItem(params.dragNode, params.node.key)
+              onReloadTree([findParentByKey(treeData, params.dragNode.key)?.key, params.node.key])
             }
           } }
           onExpand={ (keys) => {
-            setExpandedKeys(keys)
+            onSetExpandedKeys(keys)
           } }
           onLoadData={ onLoadTreeData }
           onSelected={ (key) => {

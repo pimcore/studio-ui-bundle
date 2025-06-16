@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { injectSliceWithState } from '@Pimcore/app/store'
+import { injectSliceWithState } from '@sdk/app'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
 export interface DataObjectDraftErrorState {

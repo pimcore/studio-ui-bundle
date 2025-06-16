@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { addAppMiddleware, injectSliceWithState, type RootState } from '@Pimcore/app/store'
+import { addAppMiddleware, injectSliceWithState, type RootState } from '@sdk/app'
 import { createListenerMiddleware, createSlice } from '@reduxjs/toolkit'
 import { debounce } from 'lodash'
 import { addNewTranslations } from '../helper/translation-helper'

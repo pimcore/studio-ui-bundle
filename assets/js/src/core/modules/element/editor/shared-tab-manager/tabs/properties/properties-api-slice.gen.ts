@@ -1,4 +1,4 @@
-import { api } from "../../../../../../app/api/pimcore/index";
+import { api } from "@sdk/api";
 export const addTagTypes = ["Properties"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
@@ -15,6 +15,10 @@ const injectedRtkApi = api
                     },
                 }),
                 providesTags: ["Properties"],
+            }),
+            propertyCreate: build.mutation<PropertyCreateApiResponse, PropertyCreateApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/property`, method: "POST" }),
+                invalidatesTags: ["Properties"],
             }),
             propertyUpdate: build.mutation<PropertyUpdateApiResponse, PropertyUpdateApiArg>({
                 query: (queryArg) => ({
@@ -49,6 +53,9 @@ export type PropertyGetCollectionApiArg = {
     /** Filter for properties */
     filter?: string;
 };
+export type PropertyCreateApiResponse =
+    /** status 200 Created predefined property with default values */ PredefinedProperty;
+export type PropertyCreateApiArg = void;
 export type PropertyUpdateApiResponse = /** status 200 Updated predefined property */ PredefinedProperty;
 export type PropertyUpdateApiArg = {
     /** Id of the property */
@@ -149,6 +156,7 @@ export type DataProperty = {
 };
 export const {
     usePropertyGetCollectionQuery,
+    usePropertyCreateMutation,
     usePropertyUpdateMutation,
     usePropertyDeleteMutation,
     usePropertyGetCollectionForElementByTypeAndIdQuery,

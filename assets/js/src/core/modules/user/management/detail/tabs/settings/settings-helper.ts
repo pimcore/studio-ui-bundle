@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import type { UserPermission } from '@Pimcore/modules/user/user-api-slice.gen'
+import type { UserPermission } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 
 export const generatePassword = (len = 20): string => {
   const string = 'abcdefghijklmnopqrstuvwxyz'

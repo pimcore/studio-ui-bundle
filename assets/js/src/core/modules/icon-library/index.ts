@@ -14,6 +14,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type IconLibrary } from './services/icon-library'
+
 import accessory from '@Pimcore/assets/icons/accessory.inline.svg?react'
 import addFind from '@Pimcore/assets/icons/add-find.inline.svg?react'
 import addFolder from '@Pimcore/assets/icons/add-folder.inline.svg?react'
@@ -102,6 +103,7 @@ import flag from '@Pimcore/assets/icons/flag.inline.svg?react'
 import flipForward from '@Pimcore/assets/icons/flip-forward.inline.svg?react'
 import focalPoint from '@Pimcore/assets/icons/focal-point.inline.svg?react'
 import folderPlus from '@Pimcore/assets/icons/folder-plus.inline.svg?react'
+import folderSearch from '@Pimcore/assets/icons/folder-search.inline.svg?react'
 import folder from '@Pimcore/assets/icons/folder.inline.svg?react'
 import graph from '@Pimcore/assets/icons/graph.inline.svg?react'
 import groupByKeys from '@Pimcore/assets/icons/group-by-keys.inline.svg?react'
@@ -116,6 +118,9 @@ import info from '@Pimcore/assets/icons/info.inline.svg?react'
 import inheritanceActive from '@Pimcore/assets/icons/inheritance-active.inline.svg?react'
 import inheritanceBroken from '@Pimcore/assets/icons/inheritance-broken.inline.svg?react'
 import json from '@Pimcore/assets/icons/json.inline.svg?react'
+import key from '@Pimcore/assets/icons/key.inline.svg?react'
+import keyboard from '@Pimcore/assets/icons/keyboard.inline.svg?react'
+import keys from '@Pimcore/assets/icons/keys.inline.svg?react'
 import languageSelect from '@Pimcore/assets/icons/language-select.inline.svg?react'
 import layout from '@Pimcore/assets/icons/layout.inline.svg?react'
 import list from '@Pimcore/assets/icons/list.inline.svg?react'
@@ -569,6 +574,10 @@ moduleSystem.registerModule({
       component: folderPlus
     })
     iconLibrary.register({
+      name: 'folder-search',
+      component: folderSearch
+    })
+    iconLibrary.register({
       name: 'folder',
       component: folder
     })
@@ -623,6 +632,18 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'json',
       component: json
+    })
+    iconLibrary.register({
+      name: 'key',
+      component: key
+    })
+    iconLibrary.register({
+      name: 'keyboard',
+      component: keyboard
+    })
+    iconLibrary.register({
+      name: 'keys',
+      component: keys
     })
     iconLibrary.register({
       name: 'language-select',

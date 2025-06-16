@@ -43,7 +43,7 @@ export class DynamicTypeObjectDataManyToManyRelation extends DynamicTypeObjectDa
     return (
       <ManyToManyRelation
         { ...props }
-        { ... convertAllowedTypes(props) }
+        { ...convertAllowedTypes(props) }
         className={ props.className }
         disabled={ props.noteditable === true }
       />
@@ -65,5 +65,9 @@ export class DynamicTypeObjectDataManyToManyRelation extends DynamicTypeObjectDa
     const value: ManyToManyRelationValue | null = props.cellProps.getValue()
 
     return <RelationList relations={ value } />
+  }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 350
   }
 }

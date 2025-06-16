@@ -8,4 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+if (module.hot !== undefined) {
+  module.hot.accept()
+}
+
 export * from '@Pimcore/modules/asset/asset-api-slice-enhanced'

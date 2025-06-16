@@ -11,7 +11,7 @@
 import React from 'react'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
-import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
+import type { DragAndDropInfo } from '@sdk/components'
 import type { ImageGalleryValueItem } from '../../image-gallery'
 import { useTranslation } from 'react-i18next'
 import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'

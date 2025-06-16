@@ -55,8 +55,8 @@ server {
       proxy_pass http://node:6006/;
   }
 
-  location ^~ /__webpack_hmr {
-      proxy_pass http://node:6006/__webpack_hmr;
+  location ^~ /rsbuild-hmr?compilationId=web_pimcore_studio_ui_bundle_core {
+      proxy_pass http://node:6006/rsbuild-hmr?compilationId=web_pimcore_studio_ui_bundle_core;
   }
 }
 ```

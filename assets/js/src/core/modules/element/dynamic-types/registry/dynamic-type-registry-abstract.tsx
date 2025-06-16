@@ -28,10 +28,10 @@ export abstract class DynamicTypeRegistryAbstract<GenericDynamicTypeAbstract ext
     this.dynamicTypes.set(type.id, type)
   }
 
-  getDynamicType (id: string): GenericDynamicTypeAbstract {
+  getDynamicType (id: string, throwException: boolean = true): GenericDynamicTypeAbstract {
     const dynamicType = this.dynamicTypes.get(id)
 
-    if (dynamicType === undefined) {
+    if (dynamicType === undefined && throwException) {
       trackError(new GeneralError(`Dynamic type with id "${id}" not found`))
     }
 

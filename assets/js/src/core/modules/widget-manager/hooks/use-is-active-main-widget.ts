@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useAppSelector } from '@Pimcore/app/store'
+import { useAppSelector } from '@sdk/app'
 import { selectMainWidgetContext } from '../widget-manager-slice'
 import { useContext } from 'react'
 import { WidgetContext } from '@Pimcore/modules/widget-manager/widget/widget-container'

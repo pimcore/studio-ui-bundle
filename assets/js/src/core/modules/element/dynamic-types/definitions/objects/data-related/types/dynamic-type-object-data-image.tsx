@@ -48,7 +48,7 @@ export class DynamicTypeObjectDataImage extends DynamicTypeObjectDataAbstract {
           className='w-full'
           justify='center'
         >
-          { value !== null && value !== undefined && (
+          {value !== null && value !== undefined && (
             <ImagePreview
               assetId={ value.id }
               height={ 100 }
@@ -58,5 +58,9 @@ export class DynamicTypeObjectDataImage extends DynamicTypeObjectDataAbstract {
         </Flex>
       </GridCellPreviewWrapper>
     )
+  }
+
+  getDefaultGridColumnWidth (): number | undefined {
+    return 250
   }
 }

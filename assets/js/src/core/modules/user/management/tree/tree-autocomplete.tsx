@@ -33,7 +33,6 @@ const TreeAutocomplete = ({ loading = true, ...props }: ITreeAutocompleteProps):
     setSearchValue(value)
 
     searchUserByText(searchValue).then(response => {
-      console.log(response)
       setSearchOptions(response.items.map((item) => ({
         value: item.id.toString(),
         label: (
