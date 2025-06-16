@@ -94,13 +94,13 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
   const convertValueToISOFormat = (timestamp: number | null): string | null => {
     if (timestamp === null) return null
 
-    return dayjs.unix(timestamp).format(DATE_FORMAT)
+    return dayjs.unix(timestamp).format()
   }
 
   const convertISOToTimestamp = (dateStr: string | null): number | null => {
     if (dateStr === null) return null
 
-    return dayjs(dateStr, DATE_FORMAT).startOf('day').unix()
+    return dayjs(dateStr).startOf('day').unix()
   }
 
   const handleDateChange = (field: 'on' | 'from' | 'to', value: string | null): void => {
