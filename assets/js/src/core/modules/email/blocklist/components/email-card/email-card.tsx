@@ -28,7 +28,6 @@ export const EmailCard = ({ entry }: EmailCardProps): React.JSX.Element => {
           <IconButton
             icon={isLoading ? { value: 'spinner' } : { value: 'trash' }}
             type="link"
-            role={'button'}
             loading={isLoading}
             onClick={() => {
               setIsLoading(true)
