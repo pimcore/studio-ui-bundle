@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import dayjs from 'dayjs'
 import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
@@ -31,9 +32,9 @@ export interface DynamicTypeFieldFilterDatetimeProps extends AbstractFieldFilter
 export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldFilterDatetimeProps): React.JSX.Element => {
   interface DateValue {
     setting: DatePickerSettingValue
-    from: number | null
-    to: number | null
-    on: number | null
+    from: string | null
+    to: string | null
+    on: string | null
   }
 
   const { data: rawData, setData } = useDynamicFilter()
@@ -90,7 +91,19 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
     }
   }
 
-  const handleDateChange = (field: 'on' | 'from' | 'to', value: number | null): void => {
+  const convertValueToISOFormat = (timestamp: number | null): string | null => {
+    if (timestamp === null) return null
+
+    return dayjs.unix(timestamp).format(DATE_FORMAT)
+  }
+
+  const convertISOToTimestamp = (dateStr: string | null): number | null => {
+    if (dateStr === null) return null
+
+    return dayjs(dateStr, DATE_FORMAT).startOf('day').unix()
+  }
+
+  const handleDateChange = (field: 'on' | 'from' | 'to', value: string | null): void => {
     setData({
       setting: currentSetting,
       from: (field === 'from') ? value : null,
@@ -99,7 +112,7 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
     })
   }
 
-  const handleDateRangeChange = (newFrom: number | null, newTo: number | null): void => {
+  const handleDateRangeChange = (newFrom: string | null, newTo: string | null): void => {
     setData({
       setting: data.setting,
       from: newFrom ?? data.from ?? null,
@@ -108,7 +121,7 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
     })
   }
 
-  const getDatePickerValue = (): number | null => {
+  const getDatePickerValue = (): string | null => {
     if (currentSetting === DatePickerSettingValue.ON) {
       return data?.on ?? null
     } else if (currentSetting === DatePickerSettingValue.BEFORE) {
@@ -136,10 +149,11 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
           format={ DATE_FORMAT }
           onChange={ (value: unknown) => {
             const [newFrom, newTo] = value as [number | null, number | null]
-            handleDateRangeChange(newFrom, newTo)
+
+            handleDateRangeChange(convertValueToISOFormat(newFrom), convertValueToISOFormat(newTo))
           } }
           outputType="timestamp"
-          value={ [data?.from ?? null, data?.to ?? null] }
+          value={ [convertISOToTimestamp(data?.from ?? null), convertISOToTimestamp(data?.to ?? null)] }
         />
       )
           }
@@ -148,17 +162,18 @@ export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldF
         format={ DATE_FORMAT }
         onChange={ (value: unknown) => {
           const newValue = typeof value === 'number' ? value : null
+          const convertedValue = convertValueToISOFormat(newValue)
 
           if (currentSetting === DatePickerSettingValue.ON) {
-            handleDateChange('on', newValue)
+            handleDateChange('on', convertedValue)
           } else if (currentSetting === DatePickerSettingValue.BEFORE) {
-            handleDateChange('to', newValue)
+            handleDateChange('to', convertedValue)
           } else if (currentSetting === DatePickerSettingValue.AFTER) {
-            handleDateChange('from', newValue)
+            handleDateChange('from', convertedValue)
           }
         } }
         outputType="timestamp"
-        value={ getDatePickerValue() }
+        value={ convertISOToTimestamp(getDatePickerValue()) }
       />
       )}
     </Flex>
