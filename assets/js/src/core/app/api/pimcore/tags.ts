@@ -97,7 +97,7 @@ export const providingTags = {
   PREDEFINED_ASSET_METADATA: () => [tagNames.PREDEFINED_ASSET_METADATA],
   CURRENT_USER_INFORMATION: () => [tagNames.CURRENT_USER_INFORMATION],
   EMAIL_BLOCKLIST: () => [tagNames.EMAIL_BLOCKLIST],
-  EMAIL_BLOCKLIST_DETAIL: (id: number) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }]
+  EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }]
 }
 
 export const invalidatingTags = {
@@ -140,7 +140,8 @@ export const invalidatingTags = {
   ROLE: () => [tagNames.ROLE],
   PREDEFINED_ASSET_METADATA: () => [tagNames.PREDEFINED_ASSET_METADATA],
   ELEMENT_DETAIL: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
-  EMAIL_BLOCKLIST: () => [tagNames.EMAIL_BLOCKLIST]
+  EMAIL_BLOCKLIST: () => [tagNames.EMAIL_BLOCKLIST],
+  EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }]
 }
 
 const elementUnspecificDataTag = tagNames.AVAILABLE_TAGS
