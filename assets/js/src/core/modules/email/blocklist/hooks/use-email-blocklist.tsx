@@ -1,6 +1,5 @@
 import { useFormModal } from "@Pimcore/components/modal/form-modal/hooks/use-form-modal";
 import { ApiError, GeneralError, trackError } from "@sdk/modules/app";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useEmailBlocklistAddMutation, useEmailBlocklistDeleteMutation } from "../../emails-api-slice.gen";
 

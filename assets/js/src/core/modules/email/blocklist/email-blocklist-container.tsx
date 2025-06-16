@@ -12,9 +12,13 @@ import { useTranslation } from "react-i18next"
 import { useEmailBlocklist } from "./hooks/use-email-blocklist"
 import { useEmailBlocklistGetCollectionQuery } from "../emails-api-slice.gen"
 import { EmailCard } from "./components/email-card/email-card"
+import { useAppDispatch } from "@Pimcore/app/store"
+import { api } from "@Pimcore/modules/email/emails-api-slice-enhanced"
+import { invalidatingTags, tagNames } from "@sdk/api"
 
 export const EmailBlocklistContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
   const { addNewEmail } = useEmailBlocklist()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
@@ -55,14 +59,27 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
       }
       renderToolbar={
         <Toolbar
-          justify={'flex-end'}
+          justify='space-between'
           theme='secondary'
         >
+          <IconButton
+            icon={{ value: 'refresh' }}
+            onClick={() => {
+              dispatch(
+                api.util.invalidateTags(
+                  invalidatingTags.EMAIL_BLOCKLIST()
+                )
+              )
+            }
+            }
+          />
           <Pagination
             current={currentPage}
             defaultPageSize={pageSize}
             onChange={onPagerChange}
             total={total}
+            showSizeChanger
+            showTotal={(total) => t('pagination.show-total', { total })}
           />
         </Toolbar>
       }
