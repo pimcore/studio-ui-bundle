@@ -11,13 +11,17 @@
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { store, useAppDispatch } from '@Pimcore/app/store'
 import { type IconProps } from '@Pimcore/components/icon/icon'
-import { api, type ElementIcon } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { api, useDocumentUpdateByIdMutation, type ElementIcon } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { type Element, getElementIcon } from '@Pimcore/modules/element/element-helper'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 import { type EditorContainerProps } from '../editor/editor-container'
 import { useDocumentDraftFetcher } from './use-document-draft-fetcher'
+import { SaveTaskType } from '../actions/save/use-save'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import { setNodeLoadingInAllTree, setNodePublished } from '@Pimcore/components/element-tree/element-tree-slice'
+import { publishDraft, unpublishDraft } from '../document-draft-slice'
 
 interface OpenDocumentWidgetProps {
   config: EditorContainerProps
@@ -25,12 +29,14 @@ interface OpenDocumentWidgetProps {
 
 interface UseDocumentReturn {
   openDocument: (props: OpenDocumentWidgetProps) => Promise<void>
+  executeDocumentTask: (id: number, task: SaveTaskType, onFinish?: () => void) => Promise<void>
 }
 
 export const useDocumentHelper = (): UseDocumentReturn => {
   const { openMainWidget, isMainWidgetOpen } = useWidgetManager()
   const dispatch = useAppDispatch()
   const { updateDocumentDraft } = useDocumentDraftFetcher()
+  const [update] = useDocumentUpdateByIdMutation()
 
   async function openDocument (props: OpenDocumentWidgetProps): Promise<void> {
     const { config } = props
@@ -66,5 +72,50 @@ export const useDocumentHelper = (): UseDocumentReturn => {
     })
   }
 
-  return { openDocument }
+ 
+   const executeDocumentTask = async (id: number, task: SaveTaskType, onFinish?: () => void): Promise<void> => {
+     const updateTask = update({
+       id,
+       body: {
+         data: {
+           task
+         }
+       }
+     })
+ 
+     updateTask.catch((error: Error) => {
+       trackError(new ApiError(error))
+     })
+ 
+     try {
+       dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: true }))
+       const response = (await updateTask)
+ 
+       if (response.error !== undefined) {
+         dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: false }))
+         trackError(new ApiError(response.error))
+         onFinish?.()
+         return
+       }
+ 
+       if (task === SaveTaskType.Unpublish) {
+         dispatch(unpublishDraft({ id }))
+       }
+ 
+       if (task === SaveTaskType.Publish) {
+         dispatch(publishDraft({ id }))
+       }
+ 
+       if (task === SaveTaskType.Unpublish || task === SaveTaskType.Publish) {
+         dispatch(setNodePublished({ nodeId: String(id), elementType: 'data-object', isPublished: task === 'publish' }))
+       }
+ 
+       dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: false }))
+       onFinish?.()
+     } catch (e: any) {
+       trackError(new GeneralError(e.message as string))
+     }
+   }
+
+  return { openDocument, executeDocumentTask }
 }

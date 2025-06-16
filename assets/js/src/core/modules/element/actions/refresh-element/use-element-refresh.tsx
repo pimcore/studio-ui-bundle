@@ -17,6 +17,8 @@ import { removeAsset } from '@Pimcore/modules/asset/asset-draft-slice'
 import { removeDataObject } from '@Pimcore/modules/data-object/data-object-draft-slice'
 import { useDataObjectDraftFetcher } from '@Pimcore/modules/data-object/hooks/use-data-object-draft-fetcher'
 import { useAssetDraftFetcher } from '@Pimcore/modules/asset/hooks/use-asset-draft-fetcher'
+import { removeDocument } from '@Pimcore/modules/document/document-draft-slice'
+import { useDocumentDraftFetcher } from '@Pimcore/modules/document/hooks/use-document-draft-fetcher'
 
 interface UseElementRefreshHookReturn {
   refreshElement: (id: number, inElementTab?: boolean) => void
@@ -26,6 +28,7 @@ export const useElementRefresh = (elementType: ElementType): UseElementRefreshHo
   const dispatch = useAppDispatch()
   const { updateDataObjectDraft } = useDataObjectDraftFetcher()
   const { updateAssetDraft } = useAssetDraftFetcher()
+  const { updateDocumentDraft } = useDocumentDraftFetcher()
 
   const refreshElement = (id: number, inElementTab?: boolean): void => {
     if (elementType === 'asset') {
@@ -53,6 +56,16 @@ export const useElementRefresh = (elementType: ElementType): UseElementRefreshHo
       )
 
       void updateDataObjectDraft(id, true)
+
+    } else if (elementType === 'document') {
+      dispatch(removeDocument(id))
+      dispatch(
+        dataObjectApi.util.invalidateTags(
+          invalidatingTags.DOCUMENT_DETAIL_ID(id)
+        )
+      )
+
+      void updateDocumentDraft(id, true)
     }
   }
 

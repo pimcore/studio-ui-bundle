@@ -1042,9 +1042,21 @@ export type StaticTextConfig = {
     /** Static Text */
     text: string;
 };
+export type ExistingColumnConfig = {
+    /** Name of the existing Column */
+    existingColumnName?: string;
+};
+export type Transformer = {
+    /** Key of the Transformer */
+    key: string;
+};
 export type AdvancedColumnConfig = {
     /** advancedColumns */
-    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
+    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig | ExistingColumnConfig)[];
+    /** Concatenation symbol to combine multiple columns */
+    concatenationSymbol?: string;
+    /** List if Transformers that should be applied */
+    transformers?: Transformer[];
 };
 export type GridColumnRequest = {
     /** Key */

@@ -18,15 +18,10 @@ import { Spin } from '@Pimcore/components/spin/spin'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useDeleteDraft } from '@Pimcore/modules/element/actions/delete-draft/use-delete-draft'
-import { SaveTaskType, useSave } from '@Pimcore/modules/data-object/actions/save/use-save'
-import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
-import {
-  useEditFormContext
-} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
+import { SaveTaskType, useSave } from '@Pimcore/modules/document/actions/save/use-save'
 import {
   useSaveContext
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/use-save-context'
-import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import {
   useSaveSchedules
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
@@ -34,12 +29,15 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { isNil } from 'lodash'
 import React, { type ReactElement, useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { DocumentContext } from '@Pimcore/modules/document/document-provider'
+import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
+import { useDocumentEditor } from '../../shared-tab-manager/tabs/edit/provider/use-document-editor'
 
 export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { id } = useContext(DataObjectContext)
-  const { dataObject, removeTrackedChanges, publishDraft } = useDataObjectDraft(id)
-  const { save: saveDataObject, isLoading, isSuccess, isError, error } = useSave()
+  const { id } = useContext(DocumentContext)
+  const { document, removeTrackedChanges, publishDraft } = useDocumentDraft(id)
+  const { save: saveDocument, isLoading, isSuccess, isError, error } = useSave()
   const { isAutoSaveLoading, runningTask } = useSaveContext()
   const {
     saveSchedules,
@@ -47,11 +45,11 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     isSuccess: isSchedulesSuccess,
     isError: isSchedulesError,
     error: schedulesError
-  } = useSaveSchedules('data-object', id, false)
-  const { getModifiedDataObjectAttributes, resetModifiedDataObjectAttributes } = useEditFormContext()
-  const { deleteDraft, isLoading: isDraftDeleteLoading, buttonText: deleteDraftButtonText } = useDeleteDraft('data-object')
+  } = useSaveSchedules('document', id, false)
+  const { getValues } = useDocumentEditor()
+  const { deleteDraft, isLoading: isDraftDeleteLoading, buttonText: deleteDraftButtonText } = useDeleteDraft('document')
   const messageApi = useMessage()
-  const isAutoSaved = dataObject?.draftData?.isAutoSave === true
+  const isAutoSaved = document?.draftData?.isAutoSave === true
 
   useEffect(() => {
     const handleSuccessEvent = async (): Promise<void> => {
@@ -75,10 +73,9 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   }, [isError, isSchedulesError, error, schedulesError])
 
   async function handleSaveClick (task: SaveTaskType, onFinish?: () => void): Promise<void> {
-    if (dataObject?.changes === undefined) return
+    if (document?.changes === undefined) return
     Promise.all([
-      saveDataObject(getModifiedDataObjectAttributes(), task, () => {
-        resetModifiedDataObjectAttributes()
+      saveDocument(getValues(), task, () => {
         onFinish?.()
       }),
       saveSchedules()
@@ -91,8 +88,8 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     const secondaryButtons: ReactElement[] = []
     const isDraftLoading = (runningTask === SaveTaskType.Version && (isLoading || isSchedulesLoading)) || isDraftDeleteLoading
 
-    if (checkElementPermission(dataObject?.permissions, 'save')) {
-      if (dataObject?.published === true) {
+    if (checkElementPermission(document?.permissions, 'save')) {
+      if (document?.published === true) {
         secondaryButtons.push(
           <Button
             disabled={ isLoading || isSchedulesLoading || isDraftLoading }
@@ -110,7 +107,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
 
       const saveDisabled = isLoading || isSchedulesLoading || isDraftLoading
 
-      if (dataObject?.published === false && checkElementPermission(dataObject?.permissions, 'save')) {
+      if (document?.published === false && checkElementPermission(document?.permissions, 'save')) {
         secondaryButtons.push(
           <Button
             disabled={ saveDisabled }
@@ -128,7 +125,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
         )
       }
 
-      if (!isNil(dataObject?.draftData)) {
+      if (!isNil(document?.draftData)) {
         secondaryButtons.push(
           <Dropdown
             key="dropdown"
@@ -162,7 +159,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
 
     const saveDisabled = isLoading || isSchedulesLoading || isDraftDeleteLoading
 
-    if (dataObject?.published === true && checkElementPermission(dataObject?.permissions, 'publish')) {
+    if (document?.published === true && checkElementPermission(document?.permissions, 'publish')) {
       primaryButtons.push(
         <Button
           disabled={ saveDisabled }
@@ -177,7 +174,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
       )
     }
 
-    if (dataObject?.published === false && checkElementPermission(dataObject?.permissions, 'save')) {
+    if (document?.published === false && checkElementPermission(document?.permissions, 'save')) {
       primaryButtons.push(
         <Button
           disabled={ saveDisabled }

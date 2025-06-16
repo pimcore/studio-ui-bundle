@@ -22,6 +22,7 @@ import {
   setSchedulesForDocument,
   updatePropertyForDocument,
   updateScheduleForDocument,
+  setDraftData,
   publishDraft,
   unpublishDraft,
   markDocumentEditablesAsModified
@@ -41,6 +42,7 @@ import { useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/
 import { usePublishedDraft, type UsePublishedData } from '@Pimcore/modules/element/draft/hooks/use-published'
 import { isFailedDraftId } from '../document-draft-error-slice'
 import { useModifiedDocumentEditablesDraft, UseModifiedDocumentEditablesDraftReturn } from '../draft/hooks/use-modified-editable-data'
+import { useDraftDataDraft } from '@Pimcore/modules/element/draft/hooks/use-draft-data'
 
 export interface UseDocumentDraftReturn extends
   UsePropertiesDraftReturn,
@@ -100,6 +102,11 @@ export const useDocumentDraft = (id: number): UseDocumentDraftReturn => {
     setActiveTabForDocument
   )
 
+  const draftDataActions = useDraftDataDraft(
+    id,
+    setDraftData
+  )
+
   const publishedActions = usePublishedDraft(
     id,
     publishDraft,
@@ -126,6 +133,7 @@ export const useDocumentDraft = (id: number): UseDocumentDraftReturn => {
     ...schedulesActions,
     ...tabsActions,
     ...modifiedDocumentEditablesActions,
+    ...draftDataActions,
     ...publishedActions
   }
 }

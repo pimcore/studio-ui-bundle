@@ -15,9 +15,12 @@ import React, { type RefObject } from 'react'
 import ReactDOM from 'react-dom'
 import { serviceIds, useInjection } from '@sdk/app'
 import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
-import { isNull } from 'lodash'
+import { get, isNull } from 'lodash'
 import { type DocumentEditorIframeWindow } from '../../iframe-app/iframe-app-view'
 import { StyleProvider } from 'antd-style'
+import { DocumentEditorProvider } from '../../provider/document-editor-provider'
+import { SaveProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/save-provider'
+import { useDocumentEditor } from '../../provider/use-document-editor'
 
 export interface EditableRendererProps {
   iframeRef: RefObject<HTMLIFrameElement>
@@ -49,10 +52,24 @@ const getTargetContainer = (
   return shadowContainer
 }
 
+const getInitialData = (editableDefinitions: AbstractDocumentEditableDefinition[]): Record<string, {type: string, data: any}> => {
+  const initialData: Record<string, any> = {}
+  editableDefinitions.forEach((editable) => {
+    initialData[editable.name] = {
+      type: editable.type,
+      data: editable.data ?? null
+    }
+  })
+  return initialData
+}
+
 export const EditablesRenderer = (props: EditableRendererProps): React.JSX.Element => {
   const editableDefinitions: AbstractDocumentEditableDefinition[] = (props.iframeRef.current?.contentWindow as DocumentEditorIframeWindow | null)?.editableDefinitions ?? []
   const iframeDocument = props.iframeRef.current?.contentDocument
   const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
+  const { initializeData } = useDocumentEditor()
+
+  initializeData(getInitialData(editableDefinitions))
 
   return (
     <>
@@ -62,13 +79,12 @@ export const EditablesRenderer = (props: EditableRendererProps): React.JSX.Eleme
 
         const targetContainer = getTargetContainer(targetElement, editableType, props.styleSheet)
         if (!isNull(targetContainer)) {
-          console.log('styleprovider', editableType?.useShadowDom ? targetContainer : props.iframeRef.current?.contentDocument?.head)
           return ReactDOM.createPortal(
             <StyleProvider container={ editableType?.useShadowDom ? targetContainer : props.iframeRef.current?.contentDocument?.head }>
               <RenderEditable editableDefinition={ editable } />
             </StyleProvider>,
             targetContainer
-          )
+          ) 
         }
 
         return null

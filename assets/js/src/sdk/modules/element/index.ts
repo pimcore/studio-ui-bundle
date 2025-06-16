@@ -15,6 +15,7 @@ if (module.hot !== undefined) {
 export * from '@Pimcore/modules/element/actions/add-folder/use-add-folder'
 export * from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 export * from '@Pimcore/modules/element/actions/delete/use-delete'
+export * from '@Pimcore/modules/element/actions/delete-draft/use-delete-draft'
 export * from '@Pimcore/modules/element/actions/locate-in-tree/use-locate-in-tree'
 export * from '@Pimcore/modules/element/actions/lock/use-lock'
 export * from '@Pimcore/modules/element/actions/open/open'
@@ -23,6 +24,7 @@ export * from '@Pimcore/modules/element/actions/refresh-element/use-element-refr
 export * from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 export * from '@Pimcore/modules/element/actions/rename/use-rename'
 
+export * from '@Pimcore/modules/element/draft/hooks/use-draft-data'
 export * from '@Pimcore/modules/element/draft/hooks/use-properties'
 export * from '@Pimcore/modules/element/draft/hooks/use-published'
 export * from '@Pimcore/modules/element/draft/hooks/use-schedules'

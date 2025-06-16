@@ -21,8 +21,9 @@ import { useElementHelper } from '../../hooks/use-element-helper'
 import { checkElementPermission } from '../../permissions/permission-helper'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { ContextMenuActionName } from '..'
+import { Document } from '@Pimcore/modules/document/document-api-slice.gen'
 
-type Element = DataObject
+type Element = DataObject | Document
 
 interface UseUnpublishHookReturn {
   unpublishTreeContextMenuItem: (node: TreeNodeProps) => ItemType

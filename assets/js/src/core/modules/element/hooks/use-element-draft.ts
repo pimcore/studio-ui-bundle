@@ -31,7 +31,12 @@ export interface IElementDraft extends PropertiesDraft, SchedulesDraft, Trackabl
   hasChildren?: boolean
   permissions?: ElementPermissions
   hasWorkflowAvailable?: boolean
-  hasPreview?: boolean
+  hasPreview?: boolean,
+  draftData?: {
+    id: number,
+    modificationDate: number,
+    isAutoSave: boolean
+  } | null
 }
 
 interface UseElementDraftReturn extends

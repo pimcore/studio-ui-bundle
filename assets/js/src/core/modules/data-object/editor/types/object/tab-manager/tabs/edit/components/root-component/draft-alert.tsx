@@ -19,12 +19,12 @@ import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-prov
 import { isNil } from 'lodash'
 import {
   IS_AUTO_SAVE_DRAFT_CREATED
-} from '@Pimcore/modules/data-object/draft/hooks/use-draft-data'
-import { useDeleteDraft } from '@Pimcore/modules/data-object/actions/delete-draft/use-delete-draft'
+} from '@Pimcore/modules/element/draft/hooks/use-draft-data'
+import { useDeleteDraft } from '@Pimcore/modules/element/actions/delete-draft/use-delete-draft'
 
 export const DraftAlert = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { deleteDraft, isLoading, buttonText } = useDeleteDraft()
+  const { deleteDraft, isLoading, buttonText } = useDeleteDraft('data-object')
   const { id } = useContext(DataObjectContext)
   const { dataObject } = useDataObjectDraft(id)
 

@@ -27,10 +27,10 @@ import {
   type ModifiedObjectDataDraft,
   useModifiedObjectDataReducers
 } from '@Pimcore/modules/data-object/draft/hooks/use-modified-object-data'
-import { useDraftDataReducers } from '@Pimcore/modules/data-object/draft/hooks/use-draft-data'
+import { DraftDataDraft, useDraftDataReducers } from '@Pimcore/modules/element/draft/hooks/use-draft-data'
 import { usePublishedReducers, type PublishedDraft } from '../element/draft/hooks/use-published'
 
-export interface DataObjectDraft extends DataObject, PropertiesDraft, SchedulesDraft, TrackableChangesDraft, TabsDraft, ModifiedObjectDataDraft, PublishedDraft {
+export interface DataObjectDraft extends DataObject, PropertiesDraft, SchedulesDraft, TrackableChangesDraft, TabsDraft, ModifiedObjectDataDraft, DraftDataDraft, PublishedDraft {
 }
 
 export const dataObjectsAdapter: EntityAdapter<DataObjectDraft, number> = createEntityAdapter<DataObjectDraft>({})

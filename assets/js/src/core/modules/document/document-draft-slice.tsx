@@ -22,11 +22,12 @@ import {
   useTabsReducers
 } from '@Pimcore/modules/element/draft/hooks/use-tabs'
 import { type SchedulesDraft, useSchedulesReducers } from '@Pimcore/modules/element/draft/hooks/use-schedules'
-import { type Document } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { DocumentDetailData } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { usePublishedReducers, type PublishedDraft } from '../element/draft/hooks/use-published'
 import { useModifiedDocumentEditablesReducers } from './draft/hooks/use-modified-editable-data'
+import { DraftDataDraft, useDraftDataReducers } from '../element/draft/hooks/use-draft-data'
 
-export interface DocumentDraft extends Document, PropertiesDraft, SchedulesDraft, TrackableChangesDraft, TabsDraft, PublishedDraft {
+export interface DocumentDraft extends Omit<DocumentDetailData, 'draftData'>, PropertiesDraft, SchedulesDraft, TrackableChangesDraft, TabsDraft, DraftDataDraft, PublishedDraft {
 }
 
 export const documentsAdapter: EntityAdapter<DocumentDraft, number> = createEntityAdapter<DocumentDraft>({})
@@ -79,6 +80,7 @@ export const slice = createSlice({
     ...useSchedulesReducers(documentsAdapter),
     ...useTabsReducers(documentsAdapter),
     ...useModifiedDocumentEditablesReducers(documentsAdapter),
+    ...useDraftDataReducers(documentsAdapter),
     ...usePublishedReducers(documentsAdapter)
   }
 })
@@ -107,6 +109,7 @@ export const {
   setActiveTab: setActiveTabForDocument,
 
   markDocumentEditablesAsModified,
+  setDraftData,
 
   publishDraft,
   unpublishDraft

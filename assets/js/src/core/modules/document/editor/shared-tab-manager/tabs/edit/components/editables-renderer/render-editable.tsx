@@ -17,6 +17,7 @@ import { isNil } from 'lodash'
 import { ElementSelectorProvider, FieldWidthProvider } from '@sdk/modules/element'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
+import { useDocumentEditor } from '../../provider/use-document-editor'
 
 interface RenderEditableProps {
   editableDefinition: AbstractDocumentEditableDefinition
@@ -27,7 +28,7 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
   const editableType = documentEditableRegistry.hasDynamicType(editableDefinition.type) ? documentEditableRegistry.getDynamicType(editableDefinition.type) : undefined
   const {id} = useContext(DocumentContext)
   const {document, markDocumentEditablesAsModified}= useDocumentDraft(id)
-
+  const { updateValue } = useDocumentEditor()
   
   if (isNil(editableType)) {
     return (
@@ -46,8 +47,7 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
                 {
                   value: editableDefinition.data,
                   onChange: (newValue) => {
-                    // TODO: handle the change logic here
-                    console.log(`Editable ${editableDefinition.id} changed to`, newValue, document)
+                    updateValue(editableDefinition.name, newValue)
                     markDocumentEditablesAsModified()
                   }
                 }
