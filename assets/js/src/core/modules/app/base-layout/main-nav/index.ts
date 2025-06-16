@@ -43,16 +43,16 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'Tools/Email',
       label: 'navigation.email',
-      //permission: UserPermission.Emails,
-      //perspectivePermissionHide: NavPermission.ToolsHidden
+      permission: UserPermission.Emails,
+      perspectivePermission: NavPermission.Mails
     })
 
     mainNavRegistryService.registerMainNavItem({
       path: 'Tools/Email/Email-Blocklist',
       label: 'navigation.email-blocklist',
       className: 'item-style-modifier',
-      //permission: UserPermission.Emails,
-      //perspectivePermissionHide: NavPermission.Mails, //TODO: double check https://github.com/pimcore/admin-ui-classic-bundle/blob/2.x/public/js/pimcore/layout/toolbar.js#L349
+      permission: UserPermission.Emails,
+      perspectivePermission: NavPermission.Mails,
       widgetConfig: {
         name: 'EmailBlocklist',
         id: 'email-blocklist',
