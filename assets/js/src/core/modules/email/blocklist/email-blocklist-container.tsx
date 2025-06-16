@@ -89,7 +89,7 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
       >
         {data?.items && data.items.length > 0 ? (
           data.items.map((item) => (
-            <EmailCard entry={item} />
+            <EmailCard key={item.email} entry={item} />
           ))
         ) : ''}
       </Content>
