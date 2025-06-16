@@ -1,29 +1,36 @@
 import { Card } from "@Pimcore/components/card/card"
 import { Flex } from "@Pimcore/components/flex/flex"
 import { Blocklist } from "@Pimcore/modules/email/emails-api-slice.gen"
-import { Icon } from "@sdk/components"
-import { formatDate } from "@sdk/utils"
+import { IconButton } from "@sdk/components"
+import { formatDateTime } from "@sdk/utils"
 import { Space } from "antd"
 import React from "react"
-import { useStyles } from "./email-card.styles"
+import { useEmailBlocklist } from "../../hooks/use-email-blocklist"
+import { useTranslation } from "react-i18next"
 
 interface EmailCardProps {
   entry: Blocklist
 }
 
 export const EmailCard = ({ entry }: EmailCardProps): React.JSX.Element => {
-  const { styles } = useStyles()
+  const { t } = useTranslation()
+  const { removeEmail } = useEmailBlocklist()
 
   return (
-    <Card className={styles.emailCard}>
-      <Flex justify="space-between">
+    <Card>
+      <Flex align="center" justify="space-between">
         <span>{entry.email}</span>
 
         <Space>
-          <span>{formatDate(entry.modificationDate!)}</span>
-          <Flex>
-            <Icon value="trash" />
-          </Flex>
+          <span>{formatDateTime({ timestamp: entry.modificationDate!, dateStyle: 'short', timeStyle: 'short' })}</span>
+
+          <IconButton
+            icon={{ value: 'trash' }}
+            type="link"
+            role={'button'}
+            onClick={() => removeEmail(entry.email)}
+            aria-label={t('aria.email-blocklist.remove.email')}
+          />
         </Space>
       </Flex>
     </Card>

@@ -6,8 +6,8 @@ import { IconButton } from "@Pimcore/components/icon-button/icon-button"
 import { IconTextButton } from "@Pimcore/components/icon-text-button/icon-text-button"
 import { Title } from "@Pimcore/components/title/title"
 import { Toolbar } from "@Pimcore/components/toolbar/toolbar"
-import { Alert, Card, Icon } from "@sdk/components"
-import React from "react"
+import { Alert, Card, Icon, Pagination } from "@sdk/components"
+import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useEmailBlocklist } from "./hooks/use-email-blocklist"
 import { useEmailBlocklistGetCollectionQuery } from "../emails-api-slice.gen"
@@ -16,7 +16,18 @@ import { EmailCard } from "./components/email-card/email-card"
 export const EmailBlocklistContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { addNewEmail } = useEmailBlocklist()
-  const { isLoading, data } = useEmailBlocklistGetCollectionQuery({ page: 1, pageSize: 50 })
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(20)
+  const { data, isLoading } = useEmailBlocklistGetCollectionQuery({
+    page: currentPage,
+    pageSize
+  })
+  const total = data?.totalItems ?? 0
+
+  function onPagerChange(page: number, pageSize: number): void {
+    setCurrentPage(page)
+    setPageSize(pageSize)
+  }
 
   return (
     <ContentLayout
@@ -40,6 +51,19 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
               onClick={() => addNewEmail()}
             >{t('email-blocklist.add')}</IconTextButton>
           </Flex>
+        </Toolbar>
+      }
+      renderToolbar={
+        <Toolbar
+          justify={'flex-end'}
+          theme='secondary'
+        >
+          <Pagination
+            current={currentPage}
+            defaultPageSize={pageSize}
+            onChange={onPagerChange}
+            total={total}
+          />
         </Toolbar>
       }
     >
