@@ -1,11 +1,21 @@
-import { useFormModal } from "@Pimcore/components/modal/form-modal/hooks/use-form-modal";
-import { ApiError, GeneralError, trackError } from "@sdk/modules/app";
-import { useTranslation } from "react-i18next";
-import { useEmailBlocklistAddMutation, useEmailBlocklistDeleteMutation } from "../../emails-api-slice.gen";
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { ApiError, GeneralError, trackError } from '@sdk/modules/app'
+import { useTranslation } from 'react-i18next'
+import { useEmailBlocklistAddMutation, useEmailBlocklistDeleteMutation } from '../../emails-api-slice.gen'
 
 interface UseEmailBlocklistHookReturn {
-  addNewEmail: (onFinish?: () => void) => Promise<void>;
-  removeEmail: (email: string, onFinish?: () => void) => Promise<void>;
+  addNewEmail: (onFinish?: () => void) => Promise<void>
+  removeEmail: (email: string, onFinish?: () => void) => Promise<void>
 }
 
 export const useEmailBlocklist = (): UseEmailBlocklistHookReturn => {
@@ -48,7 +58,6 @@ export const useEmailBlocklist = (): UseEmailBlocklistHookReturn => {
       onFinish?.()
     } catch (error) {
       trackError(new GeneralError('Failed to add email to blocklist'))
-      return
     }
   }
 
@@ -67,7 +76,6 @@ export const useEmailBlocklist = (): UseEmailBlocklistHookReturn => {
       onFinish?.()
     } catch (error) {
       trackError(new GeneralError('Failed to remove email from blocklist'))
-      return
     }
   }
 

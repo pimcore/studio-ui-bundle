@@ -1,3 +1,13 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
 import { invalidatingTags, providingTags, tagNames, type Tag } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './emails-api-slice.gen'
 
@@ -22,7 +32,7 @@ export const api = baseApi.enhanceEndpoints({
     },
     emailBlocklistDelete: {
       invalidatesTags: (result, error, args) => {
-        return invalidatingTags.EMAIL_BLOCKLIST_DETAIL(args.email!)
+        return invalidatingTags.EMAIL_BLOCKLIST_DETAIL(args.email)
       }
     }
   }
@@ -41,5 +51,5 @@ export const {
   useEmailLogGetTextQuery,
   useEmailLogForwardByIdMutation,
   useEmailLogResendByIdMutation,
-  useEmailSendTestMutation,
+  useEmailSendTestMutation
 } = api
