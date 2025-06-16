@@ -45,17 +45,17 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows }: TableProps): Re
     }),
     columnHelper.accessor('controller', {
       header: t('document-types.columns.controller'),
-      meta: { editable: true },
+      meta: { type: 'select', editable: true, config: { options: Object.values([]) } },
       size: 200
     }),
     columnHelper.accessor('template', {
       header: t('document-types.columns.template'),
-      meta: { editable: true },
+      meta: { type: 'select', editable: true, config: { options: Object.values([]) } },
       size: 150
     }),
     columnHelper.accessor('type', {
       header: t('document-types.columns.type'),
-      meta: { editable: true },
+      meta: { type: 'select', editable: true, config: { options: Object.values([]) } },
       size: 80
     }),
     columnHelper.accessor('static', {
@@ -70,12 +70,19 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows }: TableProps): Re
     }),
             columnHelper.accessor('creationDate', {
       header: t('document-types.columns.creation-date'),
-      meta: { editable: true },
+      meta: { type: 'date', editable: true },
+      value: 
+      cell: (info) => (
+        <DateCell
+          info={ info }
+          setDocumentTypeRows={ setDocumentTypeRows }
+        />
+      )
       size: 150
     }),
                 columnHelper.accessor('modificationDate', {
       header: t('document-types.columns.modification-date'),
-      meta: { editable: true },
+      meta: { type: 'date', editable: true },
       size: 150
     }),
     columnHelper.accessor('actions', {
