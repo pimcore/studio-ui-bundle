@@ -1,12 +1,12 @@
 import { Card } from "@Pimcore/components/card/card"
 import { Flex } from "@Pimcore/components/flex/flex"
 import { Blocklist } from "@Pimcore/modules/email/emails-api-slice.gen"
-import { IconButton, Spin } from "@sdk/components"
+import { IconButton } from "@sdk/components"
 import { formatDateTime } from "@sdk/utils"
 import { Space } from "antd"
 import React, { useState } from "react"
-import { useEmailBlocklist } from "../../hooks/use-email-blocklist"
 import { useTranslation } from "react-i18next"
+import { useEmailBlocklist } from "../../hooks/use-email-blocklist"
 
 interface EmailCardProps {
   entry: Blocklist

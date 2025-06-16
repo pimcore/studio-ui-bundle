@@ -1,20 +1,19 @@
+import { useAppDispatch } from "@Pimcore/app/store"
 import { ContentLayout } from "@Pimcore/components/content-layout/content-layout"
 import { Content } from "@Pimcore/components/content/content"
 import { Flex } from "@Pimcore/components/flex/flex"
-import { Header } from "@Pimcore/components/header/header"
 import { IconButton } from "@Pimcore/components/icon-button/icon-button"
 import { IconTextButton } from "@Pimcore/components/icon-text-button/icon-text-button"
 import { Title } from "@Pimcore/components/title/title"
 import { Toolbar } from "@Pimcore/components/toolbar/toolbar"
-import { Alert, Card, Icon, Pagination } from "@sdk/components"
+import { api } from "@Pimcore/modules/email/emails-api-slice-enhanced"
+import { invalidatingTags } from "@sdk/api"
+import { Icon, Pagination } from "@sdk/components"
 import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useEmailBlocklist } from "./hooks/use-email-blocklist"
 import { useEmailBlocklistGetCollectionQuery } from "../emails-api-slice.gen"
 import { EmailCard } from "./components/email-card/email-card"
-import { useAppDispatch } from "@Pimcore/app/store"
-import { api } from "@Pimcore/modules/email/emails-api-slice-enhanced"
-import { invalidatingTags, tagNames } from "@sdk/api"
+import { useEmailBlocklist } from "./hooks/use-email-blocklist"
 
 export const EmailBlocklistContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -52,7 +51,7 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
             </Title>
             <IconTextButton
               icon={{ value: 'new' }}
-              onClick={() => addNewEmail()}
+              onClick={() => void addNewEmail()}
             >{t('email-blocklist.add')}</IconTextButton>
           </Flex>
         </Toolbar>

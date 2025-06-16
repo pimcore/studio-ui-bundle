@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useEmailBlocklistAddMutation, useEmailBlocklistDeleteMutation } from "../../emails-api-slice.gen";
 
 interface UseEmailBlocklistHookReturn {
-  addNewEmail: (onFinish?: () => void) => void;
+  addNewEmail: (onFinish?: () => void) => Promise<void>;
   removeEmail: (email: string, onFinish?: () => void) => Promise<void>;
 }
 
@@ -14,7 +14,7 @@ export const useEmailBlocklist = (): UseEmailBlocklistHookReturn => {
   const [emailBlocklistAddMutation] = useEmailBlocklistAddMutation()
   const [emailBlocklistDeleteMutation] = useEmailBlocklistDeleteMutation()
 
-  const addNewEmail = (onFinish?: (value: string) => void) => {
+  const addNewEmail = async (onFinish?: (value: string) => void): Promise<void> => {
     modal.input({
       title: t('email-blocklist.add.label'),
       label: t('email-blocklist.add.email-address.label'),
