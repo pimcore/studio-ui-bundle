@@ -1,6 +1,7 @@
 common.owner: Owner
 common.modification-date: Modification date
 common.globally: Globally
+common.apply-selection: Apply selection
 error.error_something_generic_went_wrong: Element not found
 error.error_element_exists: Element already exists
 error.error_folder_exists: Folder already exists
@@ -770,6 +771,13 @@ hotspots.clear-data: Clear all edits (marker, hotspot, cropping)
 hotspots.clear-data.dnd-message: This image contains additional data like markers or hotspots. Do you want to clear them as well?
 hotspots.data-cleared: Hotspots, Markers and Cropping Data cleared
 hotspots.has-hotspots-or-marker: Hotspots or markers have been added to this item
+classification-store.collection: Collection
+classification-store.group: Group
+classification-store.group-by-key: Group by key
+classification-store.column.id: ID
+classification-store.column.group: Group
+classification-store.column.name: Name
+classification-store.column.description: Description
 home: Home
 preview.label: Preview
 inheritance-active: "Data inherited from object ID {{id}}"
