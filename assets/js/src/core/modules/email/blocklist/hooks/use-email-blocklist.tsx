@@ -5,7 +5,7 @@ import { useEmailBlocklistAddMutation, useEmailBlocklistDeleteMutation } from ".
 
 interface UseEmailBlocklistHookReturn {
   addNewEmail: (onFinish?: () => void) => void;
-  removeEmail: (email: string, onFinish?: () => void) => void;
+  removeEmail: (email: string, onFinish?: () => void) => Promise<void>;
 }
 
 export const useEmailBlocklist = (): UseEmailBlocklistHookReturn => {

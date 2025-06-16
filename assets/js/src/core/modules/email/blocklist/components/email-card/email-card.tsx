@@ -32,7 +32,7 @@ export const EmailCard = ({ entry }: EmailCardProps): React.JSX.Element => {
             loading={isLoading}
             onClick={() => {
               setIsLoading(true)
-              removeEmail(entry.email)
+              void removeEmail(entry.email)
             }}
             aria-label={t('aria.email-blocklist.remove.email')}
           />
