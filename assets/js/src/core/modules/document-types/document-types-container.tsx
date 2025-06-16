@@ -23,6 +23,7 @@ import { Box, IconButton, IconTextButton } from '@sdk/components'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { uuid } from '@sdk/utils'
 import { isUndefined } from 'lodash'
+import { Table } from './table/table'
 
 
 export const DocumentTypesContainer = (): React.JSX.Element => {
@@ -33,8 +34,6 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
   const [documentTypeRows, setDocumentTypeRows] = useState<DocumentTypeRow[]>([])
 
   const documentTypes = data?.items ?? [];
-
-  // const sortedRows = [...documentTypes].sort((a, b) => b.creationDate - a.creationDate)
 
   useEffect(() => {
     if (!isUndefined(documentTypes)) {
@@ -112,8 +111,10 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
             y: 'none'
           } }
         >
-          {documentTypeRows.toString()}
-        </Box>
+          <Table
+            documentTypeRows={ documentTypeRows }
+            setDocumentTypeRows={ setDocumentTypeRows }
+          />        </Box>
       </Content>
     </ContentLayout>
   )

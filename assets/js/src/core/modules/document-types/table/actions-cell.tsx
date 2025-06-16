@@ -10,30 +10,28 @@
 
 import React from 'react'
 import { type CellContext } from '@tanstack/react-table'
-import { type PredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
 import { IconButton } from '@sdk/components'
-import { type PredefinedPropertyRow, usePredefinedProperty } from '../hooks/use-predefined-property'
-
-type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
+import { DocumentTypeRow, useDocumentType } from '../hooks/use-document-type'
+import { type DocumentTypesWithActions } from './table'
 
 interface ActionsCellProps {
-  info: CellContext<PredefinedPropertyWithActions, React.ReactNode>
-  setPredefinedPropertyRows: React.Dispatch<React.SetStateAction<PredefinedPropertyRow[]>>
+  info: CellContext<DocumentTypesWithActions, React.ReactNode>
+  setDocumentTypeRows: React.Dispatch<React.SetStateAction<DocumentTypeRow[]>>
 }
 
-export const ActionsCell = ({ info, setPredefinedPropertyRows }: ActionsCellProps): JSX.Element => {
+export const ActionsCell = ({ info, setDocumentTypeRows }: ActionsCellProps): JSX.Element => {
   const id = info.row.original.id
-  const { deletePropertyById, deleteLoading } = usePredefinedProperty()
+  const { deleteDocumentTypeById, deleteLoading } = useDocumentType()
 
   const handleDelete = async (): Promise<void> => {
-    const { success } = await deletePropertyById(id)
+    const { success } = await deleteDocumentTypeById(id)
     if (success) {
-      setPredefinedPropertyRows(prev => prev.filter(row => row.id !== id))
+      setDocumentTypeRows(prev => prev.filter(row => row.id !== id))
     }
   }
 
   return (
-    <div className="properties-table--actions-column">
+    <div className="document-types-table--actions-column">
       <IconButton
         icon={ { value: 'translate' } }
         onClick={ () => { console.log('Open Translate View') } }

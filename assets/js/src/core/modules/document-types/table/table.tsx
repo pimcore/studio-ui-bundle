@@ -13,76 +13,78 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './table.styles'
-import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
-import { type PredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
-import { type PredefinedPropertyRow, usePredefinedProperty } from '../hooks/use-predefined-property'
-import { ContentType } from '../enums/content-type'
 import { allLegacyElementTypes, type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
+import { DocumentTypeRow, useDocumentType } from '../hooks/use-document-type'
 
-type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
+export type DocumentTypeWithActions = DocumentType & { actions: React.ReactNode }
 
 interface TableProps {
-  predefinedPropertyRows: PredefinedPropertyRow[]
-  setPredefinedPropertyRows: React.Dispatch<React.SetStateAction<PredefinedPropertyRow[]>>
+  documentTypeRows: DocumentTypeRow[]
+  setDocumentTypeRows: React.Dispatch<React.SetStateAction<DocumentTypeRow[]>>
 }
 
-export const Table = ({ predefinedPropertyRows, setPredefinedPropertyRows }: TableProps): React.JSX.Element => {
+export const Table = ({ documentTypeRows, setDocumentTypeRows }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const { updatePropertyById } = usePredefinedProperty()
+  const { updateDocumentTypeById } = useDocumentType()
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
 
-  const columnHelper = createColumnHelper<PredefinedPropertyWithActions>()
+  const columnHelper = createColumnHelper<DocumentTypeWithActions>()
 
   const tableColumns = [
     columnHelper.accessor('name', {
-      header: t('properties.columns.name'),
+      header: t('document-types.columns.name'),
       meta: { editable: true },
       size: 200
     }),
-    columnHelper.accessor('description', {
-      header: t('properties.columns.description'),
+    columnHelper.accessor('group', {
+      header: t('document-types.columns.group'),
       meta: { editable: true },
       size: 200
     }),
-    columnHelper.accessor('key', {
-      header: t('properties.columns.key'),
+    columnHelper.accessor('controller', {
+      header: t('document-types.columns.controller'),
       meta: { editable: true },
       size: 200
+    }),
+    columnHelper.accessor('template', {
+      header: t('document-types.columns.template'),
+      meta: { editable: true },
+      size: 150
     }),
     columnHelper.accessor('type', {
-      header: t('properties.columns.type'),
-      meta: { type: 'select', editable: true, config: { options: Object.values(ContentType) } },
-      size: 100
-    }),
-    columnHelper.accessor('data', {
-      header: t('properties.columns.data'),
+      header: t('document-types.columns.type'),
       meta: { editable: true },
       size: 150
     }),
-    columnHelper.accessor('config', {
-      header: t('properties.columns.configuration'),
-      meta: { editable: true },
-      size: 150
-    }),
-    columnHelper.accessor('ctype', {
-      header: t('properties.columns.content-type'),
-      meta: { type: 'select', editable: true, config: { options: allLegacyElementTypes } },
-      size: 110
-    }),
-    columnHelper.accessor('inheritable', {
-      header: t('properties.columns.inheritable'),
+    columnHelper.accessor('static', {
+      header: t('document-types.columns.static'),
       size: 95,
       meta: { type: 'checkbox', editable: true, config: { align: 'center' } }
     }),
+        columnHelper.accessor('priority', {
+      header: t('document-types.columns.priority'),
+      meta: { editable: true },
+      size: 80
+    }),
+            columnHelper.accessor('creation-date', {
+      header: t('document-types.columns.creation-date'),
+      meta: { editable: true },
+      size: 80
+    }),
+                columnHelper.accessor('motdification-date', {
+      header: t('document-types.columns.motdification-date'),
+      meta: { editable: true },
+      size: 80
+    }),
     columnHelper.accessor('actions', {
-      header: t('properties.columns.actions'),
+      header: t('document-types.columns.actions'),
       size: 80,
       cell: (info) => (
         <ActionsCell
           info={ info }
-          setPredefinedPropertyRows={ setPredefinedPropertyRows }
+          setDocumentTypeRows={ setDocumentTypeRows }
         />
       )
     })
@@ -95,12 +97,12 @@ export const Table = ({ predefinedPropertyRows, setPredefinedPropertyRows }: Tab
   }: {
     columnId: string
     value: unknown
-    rowData: PredefinedPropertyRow
+    rowData: DocumentTypeRow
   }): Promise<void> => {
     const rowId = rowData.rowId
-    const updatedRow: PredefinedPropertyRow = { ...rowData, [columnId]: value }
+    const updatedRow: DocumentTypeRow = { ...rowData, [columnId]: value }
 
-    setPredefinedPropertyRows(prev =>
+    setDocumentTypeRows(prev =>
       prev.map(row =>
         row.rowId === rowId ? updatedRow : row
       )
@@ -108,11 +110,11 @@ export const Table = ({ predefinedPropertyRows, setPredefinedPropertyRows }: Tab
 
     setModifiedCells([{ columnId, rowIndex: rowId }])
 
-    const { success } = await updatePropertyById(updatedRow.id, updatedRow)
+    const { success } = await updateDocumentTypeById(updatedRow.id, updatedRow)
 
     if (success) setModifiedCells([])
     else {
-      setPredefinedPropertyRows(prev =>
+      setDocumentTypeRows(prev =>
         prev.map(row =>
           row.rowId === rowId ? rowData : row
         )
@@ -125,7 +127,7 @@ export const Table = ({ predefinedPropertyRows, setPredefinedPropertyRows }: Tab
       <Grid
         autoWidth
         columns={ tableColumns }
-        data={ predefinedPropertyRows }
+        data={ documentTypeRows }
         enableSorting
         modifiedCells={ modifiedCells }
         onUpdateCellData={ onUpdateCellData }
