@@ -120,6 +120,8 @@ export type Notification = NotificationListItem & {
     attachmentType: string | null;
     /** linked attachment ID */
     attachmentId: number | null;
+    /** linked attachment fullPath */
+    attachmentFullPath: string | null;
 };
 export type SendEmailParameters = {
     /** recipient ID */

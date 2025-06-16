@@ -1,0 +1,41 @@
+{
+  "id": "pimcore_studio_ui_bundle_core",
+  "name": "pimcore_studio_ui_bundle_core",
+  "metaData": {
+    "name": "pimcore_studio_ui_bundle_core",
+    "type": "app",
+    "buildInfo": {
+      "buildVersion": "0.0.1",
+      "buildName": "@pimcore/studio-ui-bundle"
+    },
+    "remoteEntry": {
+      "name": "",
+      "path": "",
+      "type": "global"
+    },
+    "types": {
+      "path": "",
+      "name": "",
+      "zip": "",
+      "api": ""
+    },
+    "globalName": "pimcore_studio_ui_bundle_core",
+    "pluginVersion": "0.13.1",
+    "prefetchInterface": false,
+    "publicPath": "/bundles/pimcorestudioui/build/ee5ebfca-dde6-4335-86e8-c985240b1cae/"
+  },
+  "shared": [],
+  "remotes": [
+    {
+      "alias": "@sdk",
+      "consumingFederationContainerName": "pimcore_studio_ui_bundle_core",
+      "federationContainerName": "promise new Promise(resolve => {\n          const studioUIBundleRemoteUrl = window.StudioUIBundleRemoteUrl\n          const script = document.createElement('script')\n          script.src = studioUIBundleRemoteUrl\n          script.onload = () => {\n            const proxy = {\n              get: (request) => window['pimcore_studio_ui_bundle'].get(request),\n              init: (...arg) => {\n                try {\n                  return window['pimcore_studio_ui_bundle'].init(...arg)\n                } catch(e) {\n                  console.log('remote container already initialized')\n                }\n              }\n            }\n            resolve(proxy)\n          }\n          document.head.appendChild(script);\n        })\n        ",
+      "moduleName": "_internal_/mf-bootstrap",
+      "usedIn": [
+        "js/src/core/main.ts"
+      ],
+      "version": "*"
+    }
+  ],
+  "exposes": []
+}
