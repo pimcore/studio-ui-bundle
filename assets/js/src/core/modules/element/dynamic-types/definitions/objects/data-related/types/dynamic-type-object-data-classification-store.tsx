@@ -12,8 +12,7 @@ import React from 'react'
 import { get, isEmpty, isUndefined } from 'lodash'
 import { type FormItemProps } from 'antd'
 import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
-import { ClassificationStore } from '../components/classification-store/classification-store'
-import { type ClassificationStoreContentProps } from '../components/classification-store/classification-store-content'
+import { ClassificationStore, type ClassificationStoreProps } from '../components/classification-store/classification-store'
 import {
   type IFormattedDataStructureData,
   type IProcessVersionFieldDataProps
@@ -24,11 +23,11 @@ import { type ClassificationStoreGroup } from '@Pimcore/modules/data-object/clas
 export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectDataAbstract {
   id: string = 'classificationstore'
 
-  getObjectDataComponent (props: ClassificationStoreContentProps): React.ReactElement<ClassificationStoreContentProps> {
+  getObjectDataComponent (props: ClassificationStoreProps): React.ReactElement<ClassificationStoreProps> {
     return <ClassificationStore { ...props } />
   }
 
-  getObjectDataFormItemProps (props: ClassificationStoreContentProps): FormItemProps {
+  getObjectDataFormItemProps (props: ClassificationStoreProps): FormItemProps {
     return {
       ...super.getObjectDataFormItemProps(props),
       label: null

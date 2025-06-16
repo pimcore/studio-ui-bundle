@@ -9,11 +9,11 @@
  */
 
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
-import { useStyles } from '@Pimcore/components/data-object-preview/data-object-preview.styles'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Iframe } from '../iframe/iframe'
 
 interface DataObjectPreviewProps {
   id: number
@@ -21,7 +21,6 @@ interface DataObjectPreviewProps {
 
 export const DataObjectPreview = ({ id }: DataObjectPreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { styles } = useStyles()
   const [timestamp, setTimestamp] = useState<number>(Date.now())
   const { dataObject } = useDataObjectDraft(id)
   const iframeRef = React.useRef<HTMLIFrameElement>(null)
@@ -34,8 +33,7 @@ export const DataObjectPreview = ({ id }: DataObjectPreviewProps): React.JSX.Ele
   }, [dataObject?.draftData?.modificationDate, isVisible])
 
   return (
-    <iframe
-      className={ ['w-full h-full', styles.preview].join(' ') }
+    <Iframe
       ref={ iframeRef }
       src={ `${getPrefix()}/data-objects/preview/${id}?timestamp=${timestamp}` }
       title={ `${t('preview.label')}-${id}` }
