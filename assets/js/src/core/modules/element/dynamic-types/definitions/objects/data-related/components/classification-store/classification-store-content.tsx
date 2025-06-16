@@ -8,31 +8,44 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { isObject, find, isEmpty } from 'lodash'
 import { type ClassificationStoreProps } from './classification-store'
 import { useKeyedList } from '@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
-import { isObject } from 'lodash'
 import { BaseView } from '../../../layout-related/views/base-view'
 import { ClassificationStoreItem } from './classification-store-item'
 import { useLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/use-language-selection'
-import { LocalizationSwitch } from './localization-switch'
+import { LocalizationSwitch } from './components/localization-switch/localization-switch'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Space } from '@Pimcore/components/space/space'
+import { Button } from '@Pimcore/components/button/button'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
+import { type ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 
-export interface ClassificationStoreContentProps extends ClassificationStoreProps {}
+export const ClassificationStoreContent = (props: ClassificationStoreProps): React.JSX.Element => {
+  const [localizationMode, setLocalizationMode] = useState<string>('default')
+  const { t } = useTranslation()
 
-export const ClassificationStoreContent = (props: ClassificationStoreContentProps): React.JSX.Element => {
+  const { openModal, currentLayoutData, updateCurrentLayoutData } = useClassificationStore()
   const { values } = useKeyedList()
   const { activeGroups, groupCollectionMapping, ...groups } = values
-  const [localizationMode, setLocalizationMode] = useState<string>('default')
   const { currentLanguage } = useLanguageSelection()
-  let localizationGroup = 'default'
 
+  let localizationGroup = 'default'
   const isLocalizable = props.localized ?? false
 
-  const onLocalizationChange = (value: string): void => {
+  useEffect(() => {
+    const initialLayout = props.activeGroupDefinitions ?? []
+    const activeGroupLayout: ClassificationStoreGroupLayout2[] = !isEmpty(currentLayoutData) ? currentLayoutData : initialLayout
+
+    updateCurrentLayoutData(activeGroupLayout)
+  }, [])
+
+  const handleLocalizationChange = (value: string): void => {
     setLocalizationMode(value)
   }
 
@@ -47,17 +60,28 @@ export const ClassificationStoreContent = (props: ClassificationStoreContentProp
       collapsible
       extra={
         <Flex
+          align='center'
           className='w-full'
           justify='space-between'
         >
-          {/* @todo add Button goes here */}
-          <div />
+          <Button
+            color="default"
+            icon={ <Icon value="folder-search" /> }
+            onClick={ (e) => {
+              e.stopPropagation()
+
+              openModal()
+            } }
+            variant="filled"
+          >
+            {t('add')}
+          </Button>
 
           {isLocalizable
             ? (
               <LocalizationSwitch
                 initialValue={ localizationGroup }
-                onChange={ onLocalizationChange }
+                onChange={ handleLocalizationChange }
               />
               )
             : <></>}
@@ -72,20 +96,24 @@ export const ClassificationStoreContent = (props: ClassificationStoreContentProp
         direction='vertical'
         size='small'
       >
-        {Object.keys(isObject(groups) ? groups : {}).map((key) => (
-          <Form.Group
-            key={ `${key}` }
-            name={ [key, localizationGroup] }
-          >
-            <ClassificationStoreItem
-              groupId={ key }
-            />
-          </Form.Group>
-        ))}
+        {Object.keys(isObject(groups) ? groups : {}).map((key) => {
+          return (
+            <Form.Group
+              key={ `${key}` }
+              name={ [key, localizationGroup] }
+            >
+              <ClassificationStoreItem
+                currentLayoutData={ currentLayoutData }
+                groupLayout={ find(currentLayoutData, { id: parseInt(key) }) }
+                updateCurrentLayoutData={ updateCurrentLayoutData }
+              />
+            </Form.Group>
+          )
+        })}
       </Space>
 
       <Form.Item
-        name={ ['groupCollectionMapping'] }
+        name={ ['activeGroups'] }
         style={ { display: 'none' } }
       >
         <Input
@@ -104,5 +132,5 @@ export const ClassificationStoreContent = (props: ClassificationStoreContentProp
         />
       </Form.Item>
     </BaseView>
-  ), [values, localizationGroup])
+  ), [values, localizationGroup, currentLayoutData])
 }

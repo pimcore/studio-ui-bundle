@@ -19,6 +19,7 @@ export enum NavPermission {
 
   SettingsHidden = 'settings.hidden',
   TagConfiguration = 'settings.tagConfiguration',
+  PredefinedProperties = 'settings.predefinedProperties',
   UsersHidden = 'settings.users_hidden',
   Users = 'settings.users_users',
   Roles = 'settings.users_roles',

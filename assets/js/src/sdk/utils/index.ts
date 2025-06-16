@@ -8,6 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+if (module.hot !== undefined) {
+  module.hot.accept()
+}
+
 export * from '@Pimcore/utils/compose'
 export * from '@Pimcore/utils/css'
 export * from '@Pimcore/utils/currency'

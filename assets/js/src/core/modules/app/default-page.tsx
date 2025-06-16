@@ -14,13 +14,10 @@ import React from 'react'
 import { ClassDefinitionsProvider } from '../data-object/utils/provider/class-defintions/class-definitions-provider'
 import { ElementSelectorProvider } from '@sdk/modules/element'
 import { useHandleDeepLink } from './hook/use-handle-deeplink'
-import useTableStyle from 'antd/es/table/style'
-import usePaginationStyle from 'antd/es/pagination/style'
+import { SlotRenderer } from './component-registry/slot-renderer'
 
 export const DefaultPage = (): React.JSX.Element => {
   useHandleDeepLink()
-  useTableStyle('ant-table')
-  usePaginationStyle('ant-pagination')
 
   const preventDrop = (event: React.DragEvent<HTMLDivElement>): void => {
     event.preventDefault()
@@ -37,6 +34,8 @@ export const DefaultPage = (): React.JSX.Element => {
           <BaseLayoutView />
         </ElementSelectorProvider>
       </ClassDefinitionsProvider>
+
+      <SlotRenderer slot="global.feedback" />
     </div>
   )
 }

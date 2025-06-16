@@ -33,9 +33,9 @@ export const getMergedValue = (currentValue: any, originalValue: any, propsValue
     const fieldNameLevel = splittedFieldName.length - 1
     const groupName = fieldName.split('.')[0]
 
-    /* if (currentValue[groupName].action === DELETED) {
+    if (currentValue[groupName].action === DELETED) {
       return
-    } */
+    }
 
     if (isInherited(fieldName)) {
       setWith(mergedValue, fieldName, get(originalValue, fieldName), setAsObject)

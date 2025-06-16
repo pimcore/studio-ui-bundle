@@ -8,8 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Button } from '@Pimcore/components/button/button'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Button } from '@Pimcore/components/button/button'
 import { useGlobalRowSelection } from '../../provider/global-row-selection/use-global-row-selection'
 import { useElementSelectorHelper } from '../../provider/element-selector/use-element-selector-helper'
 import { getFinishedEventSelectedItems } from '../../utils/selected-items'
@@ -19,6 +20,8 @@ export const ApplyButton = (): React.JSX.Element => {
   const { onFinish } = helper.config
   const { getSelectedData, getSelectionCount } = useGlobalRowSelection()
 
+  const { t } = useTranslation()
+
   const onButtonFinishClick = (): void => {
     if (onFinish !== undefined) {
       onFinish({ items: getFinishedEventSelectedItems(getSelectedData()) })
@@ -27,12 +30,13 @@ export const ApplyButton = (): React.JSX.Element => {
     helper.close()
   }
 
-  // @todo translation
   return (
     <Button
       disabled={ getSelectionCount() === 0 }
       onClick={ onButtonFinishClick }
       type='primary'
-    >Apply selection</Button>
+    >
+      {t('common.apply-selection')}
+    </Button>
   )
 }

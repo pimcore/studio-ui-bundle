@@ -8,6 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+if (module.hot !== undefined) {
+  module.hot.accept()
+}
+
 export * from '@Pimcore/modules/app/component-registry/component-registry'
 
 export * from '@Pimcore/modules/app/error-boundary/error-boundary'
