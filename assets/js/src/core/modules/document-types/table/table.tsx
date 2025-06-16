@@ -41,7 +41,7 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows }: TableProps): Re
     columnHelper.accessor('group', {
       header: t('document-types.columns.group'),
       meta: { editable: true },
-      size: 200
+      size: 100
     }),
     columnHelper.accessor('controller', {
       header: t('document-types.columns.controller'),
@@ -56,11 +56,11 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows }: TableProps): Re
     columnHelper.accessor('type', {
       header: t('document-types.columns.type'),
       meta: { editable: true },
-      size: 150
+      size: 80
     }),
     columnHelper.accessor('static', {
       header: t('document-types.columns.static'),
-      size: 95,
+      size: 70,
       meta: { type: 'checkbox', editable: true, config: { align: 'center' } }
     }),
         columnHelper.accessor('priority', {
@@ -68,15 +68,15 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows }: TableProps): Re
       meta: { editable: true },
       size: 80
     }),
-            columnHelper.accessor('creation-date', {
+            columnHelper.accessor('creationDate', {
       header: t('document-types.columns.creation-date'),
       meta: { editable: true },
-      size: 80
+      size: 150
     }),
-                columnHelper.accessor('motdification-date', {
-      header: t('document-types.columns.motdification-date'),
+                columnHelper.accessor('modificationDate', {
+      header: t('document-types.columns.modification-date'),
       meta: { editable: true },
-      size: 80
+      size: 150
     }),
     columnHelper.accessor('actions', {
       header: t('document-types.columns.actions'),
