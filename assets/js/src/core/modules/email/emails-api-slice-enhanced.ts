@@ -32,7 +32,7 @@ export const api = baseApi.enhanceEndpoints({
     },
     emailBlocklistDelete: {
       invalidatesTags: (result, error, args) => {
-        return invalidatingTags.EMAIL_BLOCKLIST_DETAIL(args.email)
+        return invalidatingTags.EMAIL_BLOCKLIST_DETAIL(args.email!)
       }
     }
   }
