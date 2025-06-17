@@ -48,7 +48,6 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
     }
 
     const processClassificationStoreData = ({ data, updatedFieldBreadcrumbTitle = fieldBreadcrumbTitle, groupId }: { data: ClassificationStoreGroup[], updatedFieldBreadcrumbTitle?: string, groupId?: number }): IFormattedDataStructureData[] => {
-      console.log('=---- data: ', data)
       return data.flatMap((dataItem: any) => {
         if (!isEmpty(dataItem.keys)) {
           const breadcrumbField = dataItem.title ?? dataItem.name
@@ -81,8 +80,6 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
 
         const breadcrumbField: string = item.title ?? item.name
         const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, breadcrumbField)
-
-        console.log('----ITEM: ', item.activeGroupDefinitions)
 
         return processClassificationStoreData({
           data: item.activeGroupDefinitions,
