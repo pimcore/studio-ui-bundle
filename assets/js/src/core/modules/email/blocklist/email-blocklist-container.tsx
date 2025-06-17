@@ -31,7 +31,8 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
   const { addNewEmail } = useEmailBlocklist()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
-  const { data, isLoading } = useEmailBlocklistGetCollectionQuery({
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { data, isLoading: isRTKLoading } = useEmailBlocklistGetCollectionQuery({
     page: currentPage,
     pageSize
   })
@@ -50,13 +51,16 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
           theme='secondary'
         >
           <IconButton
+            disabled={isLoading || isRTKLoading}
             icon={{ value: 'refresh' }}
             onClick={() => {
+              setIsLoading(true)
               dispatch(
                 api.util.invalidateTags(
                   invalidatingTags.EMAIL_BLOCKLIST()
                 )
               )
+              setIsLoading(false)
             }
             }
           />
@@ -86,8 +90,13 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
               {t('widget.email-blocklist')}
             </Title>
             <IconTextButton
+              disabled={isLoading || isRTKLoading}
               icon={{ value: 'new' }}
-              onClick={async () => { await addNewEmail() }}
+              onClick={async () => {
+                await addNewEmail(() => {
+                  setIsLoading(false)
+                })
+              }}
             >{t('email-blocklist.add')}</IconTextButton>
           </Flex>
         </Toolbar>
