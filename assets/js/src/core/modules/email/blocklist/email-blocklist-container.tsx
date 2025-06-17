@@ -105,8 +105,8 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
     >
       <Content
         loading={ isLoading }
+        none={ isUndefined(data?.items) || data.items.length === 0 }
         padded
-        none={isUndefined(data?.items) || data.items.length === 0}
       >
         {data?.items !== undefined && data?.items?.length > 0
           ? (
