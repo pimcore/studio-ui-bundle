@@ -29,9 +29,17 @@ export const fromDayJs = (value: Dayjs | null, outputType?: OutputType, outputFo
   if (value === null) {
     return null
   }
+
   if (outputType === 'timestamp') {
-    return value.unix()
+    const normalized = value.startOf('day')
+
+    const year = normalized.year()
+    const month = normalized.month()
+    const day = normalized.date()
+
+    return new Date(year, month, day).getTime() / 1000
   }
+
   if (outputType === 'dateString') {
     return outputFormat !== undefined ? value.format(outputFormat) : value.format()
   }
