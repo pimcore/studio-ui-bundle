@@ -43,6 +43,10 @@ import { DefaultCell } from './columns/default-cell'
 import { GridRow } from './grid-cell/grid-row'
 import { useStyles } from './grid.styles'
 import { Resizer } from './resizer/resizer'
+import {
+  SortableContext,
+  verticalListSortingStrategy
+} from '@dnd-kit/sortable'
 
 export interface ColumnMetaType {
   editable?: boolean
@@ -256,7 +260,7 @@ export const Grid = ({
     </div>
   )
 
-  return useMemo(() => (
+  return (
     <div className={ cn('ant-table-wrapper', hashId, styles.grid, props.className, { [styles.disabledGrid]: disabled }) }>
       <div className="ant-table ant-table-small">
         <div className='ant-table-container'>
@@ -322,27 +326,32 @@ export const Grid = ({
                     </td>
                   </tr>
                 )}
-                {table.getRowModel().rows.map(row => (
-                  <GridRow
-                    activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell.columnId : undefined }
-                    columns={ columns }
-                    contextMenu={ props.contextMenu }
-                    isSelected={ row.getIsSelected() }
-                    key={ row.id }
-                    modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
-                    onFocusCell={ onFocusCell }
-                    onRowDoubleClick={ props.onRowDoubleClick }
-                    row={ row }
-                    tableElement={ tableElement }
-                  />
-                ))}
+                <SortableContext
+                  items={ table.getRowModel().rows.map(item => item.id) }
+                  strategy={ verticalListSortingStrategy }
+                >
+                  {table.getRowModel().rows.map(row => (
+                    <GridRow
+                      activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell.columnId : undefined }
+                      columns={ columns }
+                      contextMenu={ props.contextMenu }
+                      isSelected={ row.getIsSelected() }
+                      key={ row.id }
+                      modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
+                      onFocusCell={ onFocusCell }
+                      onRowDoubleClick={ props.onRowDoubleClick }
+                      row={ row }
+                      tableElement={ tableElement }
+                    />
+                  ))}
+                </SortableContext>
               </tbody>
             </table>
           </div>
         </div>
       </div>
     </div>
-  ), [table, modifiedCells, table.getTotalSize(), data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined])
+  )
 
   function getModifiedRow (rowIndex: string): GridProps['modifiedCells'] {
     return memoModifiedCells.filter(({ rowIndex: rIndex }) => String(rIndex) === String(rowIndex)) ?? []

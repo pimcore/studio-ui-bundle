@@ -9,11 +9,13 @@
  */
 
 import { type Row } from '@tanstack/react-table'
-import React, { useMemo } from 'react'
+import React, { type CSSProperties, useMemo } from 'react'
 import { GridCell } from './grid-cell'
 import { type GridContextProviderProps } from '../grid-context'
 import { type GridProps, type ListGridContextMenuComponents, type ListGridContextMenuProps } from '@Pimcore/types/components/types'
 import { type GridCellReference } from '@Pimcore/components/grid/grid'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 export interface GridRowProps {
   row: Row<any>
@@ -50,15 +52,28 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
     }
   }
 
-  return useMemo(() => renderWithContextMenu(
+  const { setNodeRef, transform, transition, isDragging } = useSortable({
+    id: row.id
+  })
+
+  const style: CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.8 : 1,
+    zIndex: isDragging ? 1 : 'auto',
+    position: isDragging ? 'relative' : 'static'
+  }
+
+  return renderWithContextMenu(
     <tr
       className={ [
         'ant-table-row',
         row.getIsSelected() ? 'ant-table-row-selected' : '',
         props.onRowDoubleClick !== undefined ? 'hover' : ''
       ].join(' ') }
-      key={ row.id }
       onDoubleClick={ onRowDoubleClick }
+      ref={ setNodeRef }
+      style={ style }
     >
       {row.getVisibleCells().map(cell => (
         <td
@@ -86,13 +101,13 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
         </td>
       ))}
     </tr>
-  ), [JSON.stringify(row), memoModifiedCells, isSelected, props.columns])
+  )
 
   function isModifiedCell (cellId: string): boolean {
     return memoModifiedCells.find((item) => item.columnId === cellId) !== undefined
   }
 }
 
-const CachedGridRow = React.memo(GridRow)
+const CachedGridRow = GridRow
 
 export { CachedGridRow as GridRow }

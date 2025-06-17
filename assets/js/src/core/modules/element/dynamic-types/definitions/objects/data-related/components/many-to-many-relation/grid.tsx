@@ -8,8 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, type MutableRefObject, type ReactElement } from 'react'
-import { isUndefined } from 'lodash'
+import React, { forwardRef, type MutableRefObject, type ReactElement, useEffect, useState } from 'react'
+import { isNil, isUndefined } from 'lodash'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
@@ -33,6 +33,9 @@ import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 import { type ElementCellConfig, type ElementInfo } from '../../../../grid-cell/components/element-cell/element-cell'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
+import { useSortable, arrayMove } from '@dnd-kit/sortable'
+import { DndContext, KeyboardSensor, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core'
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 
 interface ManyToManyRelationGridProps {
   value?: ManyToManyRelationValue | null
@@ -48,13 +51,11 @@ interface ManyToManyRelationGridProps {
   onUpdateCellData?: (event: OnUpdateCellDataEvent) => void
   className?: string
 }
-
 export const getElementCellConfig = (disabled?: boolean): ElementCellConfig => {
   return {
     allowedTypes: [],
     getElementInfo: (itemProps: DefaultCellProps): ElementInfo => {
       const element: ManyToManyRelationValueItem = itemProps.row.original as ManyToManyRelationValueItem
-
       const elementType = mapToElementType(element.type)
       return {
         elementType: elementType ?? undefined,
@@ -66,13 +67,31 @@ export const getElementCellConfig = (disabled?: boolean): ElementCellConfig => {
     }
   }
 }
-
 export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid (props: ManyToManyRelationGridProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { getStateClasses } = useDroppable()
   const { confirm } = useFormModal()
   const { openElement, mapToElementType } = useElementHelper()
   const { t } = useTranslation()
   const { download } = useDownload()
+  const sensors = useSensors(
+    useSensor(MouseSensor),
+    useSensor(TouchSensor),
+    useSensor(KeyboardSensor)
+  )
+  const RowDragHandleCell = ({ rowId }: { rowId: string }): React.JSX.Element => {
+    const { attributes, listeners } = useSortable({
+      id: rowId
+    })
+    return (
+      <button
+        style={ { cursor: 'grab' } }
+        { ...attributes }
+        { ...listeners }
+      >
+        Move
+      </button>
+    )
+  }
 
   const columnHelper = createColumnHelper()
 
@@ -108,7 +127,14 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
           size: 150
         })
       ]
-
+  columns.push(
+    columnHelper.accessor('move', {
+      id: 'drag-handle',
+      header: 'Move',
+      cell: ({ row }) => <RowDragHandleCell rowId={ row.id } />,
+      size: 60
+    })
+  )
   columns.push(
     columnHelper.accessor('actions', {
       header: t('actions'),
@@ -199,7 +225,6 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
       }
     })
   )
-
   const getDataArray = (): ManyToManyRelationValue => {
     const result = props.value ?? []
     return result.map((item: ManyToManyRelationValueItem) => {
@@ -213,7 +238,27 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
       return resultRow
     })
   }
+  const [data, setData] = useState(getDataArray())
 
+  useEffect(() => {
+    setData(getDataArray())
+  }, [props.value])
+  const handleDragEnd = (event: DragEndEvent): void => {
+    const { active, over } = event
+    console.log('----->>>>> active: ', active)
+    console.log('----->>>>> over: ', over)
+
+    if (!isNil(active) && !isNil(over) && active.id !== over.id) {
+      setData(prev => {
+        const oldIndex = prev.findIndex(row => row.id === active.id)
+        const newIndex = prev.findIndex(row => row.id === over.id)
+
+        if (oldIndex === -1 || newIndex === -1) return prev
+
+        return arrayMove(prev, oldIndex, newIndex)
+      })
+    }
+  }
   return (
     <div
       className={ cn(...getStateClasses()) }
@@ -230,15 +275,23 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
             maxWidth: 'calc(100% - 2px)'
           } }
         >
-          <Grid
-            autoWidth
-            className={ props.className }
-            columns={ columns }
-            data={ getDataArray() }
-            disabled={ props.disabled === true || props.inherited === true }
-            onUpdateCellData={ props.onUpdateCellData }
-            resizable
-          />
+          <DndContext
+            collisionDetection={ closestCenter }
+            modifiers={ [restrictToVerticalAxis] }
+            onDragEnd={ handleDragEnd }
+            sensors={ sensors }
+          >
+            <Grid
+              autoWidth
+              className={ props.className }
+              columns={ columns }
+              data={ data }
+              disabled={ props.disabled === true || props.inherited === true }
+              onUpdateCellData={ props.onUpdateCellData }
+              resizable
+              setRowId={ (originalRow) => originalRow.id }
+            />
+          </DndContext>
           {props.hint}
         </div>
       </Content>
