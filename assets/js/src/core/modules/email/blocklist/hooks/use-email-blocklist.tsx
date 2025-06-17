@@ -59,7 +59,7 @@ export const useEmailBlocklist = (): UseEmailBlocklistHookReturn => {
       }
 
       onFinish?.()
-      success(t('email-blocklist.add.email.success'))
+      void success(t('email-blocklist.add.email.success'))
     } catch (error) {
       trackError(new GeneralError('Failed to add email to blocklist'))
     }
