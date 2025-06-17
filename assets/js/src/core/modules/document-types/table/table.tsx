@@ -71,13 +71,12 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows }: TableProps): Re
             columnHelper.accessor('creationDate', {
       header: t('document-types.columns.creation-date'),
       meta: { type: 'date', editable: true },
-      value: 
-      cell: (info) => (
-        <DateCell
+      cell: (info) => {
+        return (<DateCell
           info={ info }
           setDocumentTypeRows={ setDocumentTypeRows }
-        />
-      )
+        />)
+      },
       size: 150
     }),
                 columnHelper.accessor('modificationDate', {
