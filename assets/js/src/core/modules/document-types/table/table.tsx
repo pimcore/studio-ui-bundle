@@ -16,6 +16,8 @@ import { useStyles } from './table.styles'
 import { allLegacyElementTypes, type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
 import { DocumentTypeRow, useDocumentType } from '../hooks/use-document-type'
+import { useDocumentConfig } from '../hooks/use-document-config'
+
 
 export type DocumentTypeWithActions = DocumentType & { actions: React.ReactNode }
 
@@ -28,6 +30,8 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows }: TableProps): Re
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { updateDocumentTypeById } = useDocumentType()
+  const { controllers, controllersLoading, templates, templatesLoading, sites, sitesLoading } = useDocumentConfig()
+
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
 
   const columnHelper = createColumnHelper<DocumentTypeWithActions>()
@@ -40,17 +44,17 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows }: TableProps): Re
     }),
     columnHelper.accessor('group', {
       header: t('document-types.columns.group'),
-      meta: { editable: true },
+      meta: { type: 'select', editable: true, config: { options: Object.values(sites) } },
       size: 100
     }),
     columnHelper.accessor('controller', {
       header: t('document-types.columns.controller'),
-      meta: { type: 'select', editable: true, config: { options: Object.values([]) } },
+      meta: { type: 'select', editable: true, config: { options: Object.values(controllers) } },
       size: 200
     }),
     columnHelper.accessor('template', {
       header: t('document-types.columns.template'),
-      meta: { type: 'select', editable: true, config: { options: Object.values([]) } },
+      meta: { type: 'select', editable: true, config: { options: Object.values(templates) } },
       size: 150
     }),
     columnHelper.accessor('type', {
@@ -71,12 +75,12 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows }: TableProps): Re
             columnHelper.accessor('creationDate', {
       header: t('document-types.columns.creation-date'),
       meta: { type: 'date', editable: true },
-      cell: (info) => {
-        return (<DateCell
-          info={ info }
-          setDocumentTypeRows={ setDocumentTypeRows }
-        />)
-      },
+      // cell: (info) => {
+      //   return (<DateCell
+      //     info={ info }
+      //     setDocumentTypeRows={ setDocumentTypeRows }
+      //   />)
+      // },
       size: 150
     }),
                 columnHelper.accessor('modificationDate', {
