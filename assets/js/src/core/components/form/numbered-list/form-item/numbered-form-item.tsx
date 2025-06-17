@@ -24,7 +24,7 @@ export const NumberedFormItem = ({ Component, componentProps }: NumberedFormItem
 
   return (
     <Component { ...baseProps } >
-      <NumberedFormItemControl>
+      <NumberedFormItemControl getValueFromEvent={ baseProps.getValueFromEvent }>
         { currentChildren }
       </NumberedFormItemControl>
     </Component>
