@@ -10,6 +10,7 @@
 
 import { DocType, DocTypeType, DocumentController, DocumentTemplate, useDocumentAvailableControllersListQuery,useDocumentDocTypeTypeListQuery, useDocumentAvailableTemplatesListQuery} from '@Pimcore/modules/document/document-api-slice.gen'
 import { isUndefined } from 'lodash'
+import React, { useEffect } from 'react'
 
 
 export type DocumentTypeRow = DocType & { rowId: string }

@@ -24,6 +24,7 @@ import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { uuid } from '@sdk/utils'
 import { isUndefined } from 'lodash'
 import { Table } from './table/table'
+import { api } from '@sdk/api/documents'
 
 
 export const DocumentTypesContainer = (): React.JSX.Element => {
@@ -76,7 +77,6 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
                 invalidatingTags.DOCUMENT_TYPES()
               )
             )
-            console.log("refresh")
             }></IconButton>
         </Toolbar>}
       renderTopBar={
