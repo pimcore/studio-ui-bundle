@@ -12,6 +12,8 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import { ApiError, GeneralError, trackError } from '@sdk/modules/app'
 import { useTranslation } from 'react-i18next'
 import { useEmailBlocklistAddMutation, useEmailBlocklistDeleteMutation } from '../../emails-api-slice.gen'
+import { isUndefined } from 'lodash'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 
 interface UseEmailBlocklistHookReturn {
   addNewEmail: (onFinish?: () => void) => Promise<void>
@@ -23,6 +25,7 @@ export const useEmailBlocklist = (): UseEmailBlocklistHookReturn => {
   const { t } = useTranslation()
   const [emailBlocklistAddMutation] = useEmailBlocklistAddMutation()
   const [emailBlocklistDeleteMutation] = useEmailBlocklistDeleteMutation()
+  const { success } = useMessage()
 
   const addNewEmail = async (onFinish?: (value: string) => void): Promise<void> => {
     modal.input({
@@ -51,11 +54,12 @@ export const useEmailBlocklist = (): UseEmailBlocklistHookReturn => {
     try {
       const response = await emailToBlocklistTask
 
-      if (response.error !== undefined) {
+      if (!isUndefined(response.error)) {
         trackError(new ApiError(response.error))
       }
 
       onFinish?.()
+      success(t('email-blocklist.add.email.success'))
     } catch (error) {
       trackError(new GeneralError('Failed to add email to blocklist'))
     }

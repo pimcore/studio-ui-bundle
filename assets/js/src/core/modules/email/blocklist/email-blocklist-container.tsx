@@ -52,9 +52,9 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
           theme='secondary'
         >
           <IconButton
-            disabled={ isLoading || isRTKLoading }
-            icon={ { value: 'refresh' } }
-            onClick={ () => {
+            disabled={isLoading || isRTKLoading}
+            icon={{ value: 'refresh' }}
+            onClick={() => {
               setIsLoading(true)
               dispatch(
                 api.util.invalidateTags(
@@ -66,57 +66,57 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
             }
           />
           <Pagination
-            current={ currentPage }
-            defaultPageSize={ pageSize }
-            onChange={ onPagerChange }
+            current={currentPage}
+            defaultPageSize={pageSize}
+            onChange={onPagerChange}
             showSizeChanger
-            showTotal={ (total) => t('pagination.show-total', { total }) }
-            total={ total }
+            showTotal={(total) => t('pagination.show-total', { total })}
+            total={total}
           />
         </Toolbar>
       }
       renderTopBar={
         <Toolbar
           justify='space-between'
-          margin={ {
+          margin={{
             x: 'mini',
             y: 'none'
-          } }
+          }}
           theme='secondary'
         >
-          <Flex gap={ 'small' }>
+          <Flex gap={'small'}>
             <Title
-              icon={ <Icon value="users-x" /> }
+              icon={<Icon value="users-x" />}
             >
               {t('widget.email-blocklist')}
             </Title>
             <IconTextButton
-              disabled={ isLoading || isRTKLoading }
-              icon={ { value: 'new' } }
-              onClick={ async () => {
+              disabled={isLoading || isRTKLoading}
+              icon={{ value: 'new' }}
+              onClick={async () => {
                 await addNewEmail(() => {
                   setIsLoading(false)
                 })
-              } }
+              }}
             >{t('email-blocklist.add')}</IconTextButton>
           </Flex>
         </Toolbar>
       }
     >
       <Content
-        loading={ isLoading }
+        loading={isRTKLoading}
         padded
         none={isUndefined(data?.items) || data.items.length === 0}
       >
         {data?.items !== undefined && data?.items?.length > 0
           ? (
-              data.items.map((item) => (
-                <EmailCard
-                  entry={ item }
-                  key={ item.email }
-                />
-              ))
-            )
+            data.items.map((item) => (
+              <EmailCard
+                entry={item}
+                key={item.email}
+              />
+            ))
+          )
           : ''}
       </Content>
     </ContentLayout>
