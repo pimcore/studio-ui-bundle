@@ -30,9 +30,13 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows }: TableProps): Re
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { updateDocumentTypeById } = useDocumentType()
-  const { controllers, controllersLoading, templates, templatesLoading, sites, sitesLoading } = useDocumentConfig()
+  const { controllers, controllersLoading, templates, templatesLoading, docTypes, docTypesLoading } = useDocumentConfig()
 
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
+
+  const controllerNames = controllers.map(item => item.name);
+  const templatePaths = templates.map(template => template.path);
+  const docTypeNames = docTypes.map(template => template.name);
 
   const columnHelper = createColumnHelper<DocumentTypeWithActions>()
 
@@ -44,22 +48,22 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows }: TableProps): Re
     }),
     columnHelper.accessor('group', {
       header: t('document-types.columns.group'),
-      meta: { type: 'select', editable: true, config: { options: Object.values(sites) } },
+      meta: { editable: true },
       size: 100
     }),
     columnHelper.accessor('controller', {
       header: t('document-types.columns.controller'),
-      meta: { type: 'select', editable: true, config: { options: Object.values(controllers) } },
+      meta: { type: 'select', editable: true, config: { options: Object.values(controllerNames) } },
       size: 200
     }),
     columnHelper.accessor('template', {
       header: t('document-types.columns.template'),
-      meta: { type: 'select', editable: true, config: { options: Object.values(templates) } },
+      meta: { type: 'select', editable: true, config: { options: Object.values(templatePaths) } },
       size: 150
     }),
     columnHelper.accessor('type', {
       header: t('document-types.columns.type'),
-      meta: { type: 'select', editable: true, config: { options: Object.values([]) } },
+      meta: { type: 'select', editable: true, config: { options: Object.values(docTypeNames) } },
       size: 80
     }),
     columnHelper.accessor('static', {
