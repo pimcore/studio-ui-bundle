@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next'
 import { useEmailBlocklistGetCollectionQuery } from '../emails-api-slice.gen'
 import { EmailCard } from './components/email-card/email-card'
 import { useEmailBlocklist } from './hooks/use-email-blocklist'
+import { isUndefined } from 'lodash'
 
 export const EmailBlocklistContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -105,6 +106,7 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
       <Content
         loading={isLoading}
         padded
+        none={isUndefined(data?.items) || data.items.length === 0}
       >
         {data?.items !== undefined && data?.items?.length > 0
           ? (
