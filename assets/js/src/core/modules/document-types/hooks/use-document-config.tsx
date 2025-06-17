@@ -8,11 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { DocTypeType, DocumentController, DocumentTemplate, useDocumentAvailableControllersListQuery,useDocumentDocTypeTypeListQuery, useDocumentAvailableTemplatesListQuery} from '@Pimcore/modules/document/document-api-slice.gen'
+import { DocType, DocTypeType, DocumentController, DocumentTemplate, useDocumentAvailableControllersListQuery,useDocumentDocTypeTypeListQuery, useDocumentAvailableTemplatesListQuery} from '@Pimcore/modules/document/document-api-slice.gen'
 import { isUndefined } from 'lodash'
 
 
-export type DocumentTypeRow = DocTypeType & { rowId: string }
+export type DocumentTypeRow = DocType & { rowId: string }
 
 interface UseDocumentConfigReturn {
 controllers: DocumentController[]
@@ -26,8 +26,6 @@ doyTypesLoading: boolean
 export const useDocumentConfig = (): UseDocumentConfigReturn => {
   const {data: controllers, isLoading: controllersLoading } = useDocumentAvailableControllersListQuery()
   const {data: templates, isLoading: templatesLoading } = useDocumentAvailableTemplatesListQuery()
-
-  const listAvailableSitesQueryArgs: DocumentsListAvailableSitesApiArg = {excludeMainSite: false}
   const {data: docTypes, isLoading: docTypesLoading } = useDocumentDocTypeTypeListQuery()
 
 

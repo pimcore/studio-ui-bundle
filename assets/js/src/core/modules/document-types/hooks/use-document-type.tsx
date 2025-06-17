@@ -12,7 +12,7 @@ import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { DocType, DocTypeType, DocTypeUpdate, DocumentDocTypeAddApiArg, useDocumentDocTypeAddMutation, useDocumentDocTypeDeleteMutation, useDocumentDocTypeUpdateByIdMutation } from '@Pimcore/modules/document/document-api-slice.gen'
 
 
-export type DocumentTypeRow = DocTypeType & { rowId: string }
+export type DocumentTypeRow = DocType & { rowId: string }
 
 interface UseDocumentTypeReturn {
   createNewDocumentType: () => Promise<{ success: boolean, data?: DocType }>
@@ -56,16 +56,17 @@ export const useDocumentType = (): UseDocumentTypeReturn => {
   }
 
   const toApiDocumentType = (row: DocumentTypeRow): DocTypeUpdate => ({
-    name: '',
-    type: '',
-    group: '',
-    controller: '',
-    template: '',
-    priority: 1,
-    staticGeneratorEnabled: false
+    name: row.name ?? '',
+    type: row.type ?? '',
+    group: row.group ?? '',
+    controller: row.controller ?? '',
+    template: row.template ?? '',
+    priority: row.priority ?? 0 ,
+    staticGeneratorEnabled: row.staticGeneratorEnabled ?? 0
   })
 
   const updateDocumentTypeById = async (id: string, row: DocumentTypeRow): Promise<{ success: boolean }> => {
+    console.log("row", row)
     try {
       const result = await updateDocumentType({ id, docTypeUpdateParameters: toApiDocumentType(row) })
       return { success: 'data' in result }
