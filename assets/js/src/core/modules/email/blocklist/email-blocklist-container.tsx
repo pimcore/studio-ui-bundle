@@ -37,7 +37,7 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
   })
   const total = data?.totalItems ?? 0
 
-  function onPagerChange (page: number, pageSize: number): void {
+  const onPagerChange = (page: number, pageSize: number): void => {
     setCurrentPage(page)
     setPageSize(pageSize)
   }
@@ -50,8 +50,8 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
           theme='secondary'
         >
           <IconButton
-            icon={ { value: 'refresh' } }
-            onClick={ () => {
+            icon={{ value: 'refresh' }}
+            onClick={() => {
               dispatch(
                 api.util.invalidateTags(
                   invalidatingTags.EMAIL_BLOCKLIST()
@@ -61,51 +61,51 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
             }
           />
           <Pagination
-            current={ currentPage }
-            defaultPageSize={ pageSize }
-            onChange={ onPagerChange }
+            current={currentPage}
+            defaultPageSize={pageSize}
+            onChange={onPagerChange}
             showSizeChanger
-            showTotal={ (total) => t('pagination.show-total', { total }) }
-            total={ total }
+            showTotal={(total) => t('pagination.show-total', { total })}
+            total={total}
           />
         </Toolbar>
       }
       renderTopBar={
         <Toolbar
           justify='space-between'
-          margin={ {
+          margin={{
             x: 'mini',
             y: 'none'
-          } }
+          }}
           theme='secondary'
         >
-          <Flex gap={ 'small' }>
+          <Flex gap={'small'}>
             <Title
-              icon={ <Icon value="users-x" /> }
+              icon={<Icon value="users-x" />}
             >
               {t('widget.email-blocklist')}
             </Title>
             <IconTextButton
-              icon={ { value: 'new' } }
-              onClick={ async () => { await addNewEmail() } }
+              icon={{ value: 'new' }}
+              onClick={async () => { await addNewEmail() }}
             >{t('email-blocklist.add')}</IconTextButton>
           </Flex>
         </Toolbar>
       }
     >
       <Content
-        loading={ isLoading }
+        loading={isLoading}
         padded
       >
         {data?.items !== undefined && data?.items?.length > 0
           ? (
-              data.items.map((item) => (
-                <EmailCard
-                  entry={ item }
-                  key={ item.email }
-                />
-              ))
-            )
+            data.items.map((item) => (
+              <EmailCard
+                entry={item}
+                key={item.email}
+              />
+            ))
+          )
           : ''}
       </Content>
     </ContentLayout>
