@@ -13,9 +13,9 @@ import type {WidgetManagerTabConfig} from "@Pimcore/modules/widget-manager/widge
 import {ContentLayout} from '@Pimcore/components/content-layout/content-layout'
 import {Content} from "@Pimcore/components/content/content";
 import {useUser} from "@Pimcore/modules/auth/hooks/use-user";
-import {useUserDraft} from "@Pimcore/modules/user/hooks/use-user-draft";
-import {Toolbar} from "@Pimcore/modules/user/management/toolbar/toolbar";
-import {ProfileDetail} from "@Pimcore/modules/user/profile/profile-detail";
+import {useUserDraft} from "@Pimcore/modules/auth/hooks/use-user-draft";
+import {Toolbar} from "@Pimcore/modules/auth/profile/toolbar/toolbar";
+import {ProfileDetail} from "@Pimcore/modules/auth/profile/profile-detail";
 
 export const USERPROFILE: WidgetManagerTabConfig = {
     component: 'user-profile',

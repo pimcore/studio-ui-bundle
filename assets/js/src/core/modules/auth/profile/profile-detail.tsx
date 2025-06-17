@@ -24,7 +24,7 @@ import {
 } from "@Pimcore/modules/user/management/detail/tabs/settings/components/form/editor-settings-accordion";
 import {KeyBindings} from "@Pimcore/modules/user/management/detail/tabs/key-bindings/key-bindings";
 import {useUserHelper} from "@Pimcore/modules/user/hooks/use-user-helper";
-import {useUserDraft} from "@Pimcore/modules/user/hooks/use-user-draft";
+import {useUserDraft} from "@Pimcore/modules/auth/hooks/use-user-draft";
 import {debounce} from "lodash";
 import {Content} from "@Pimcore/components/content/content";
 
@@ -36,42 +36,46 @@ const ProfileDetail = ({id}:IProfileDetail): React.JSX.Element => {
     const [form] = Form.useForm()
     const { t } = useTranslation()
     const { availableAdminLanguages } = useSettings()
-    const { user, updateUserKeyBinding, changeUserInState } = useUserDraft(id)
+    const { user, updateUserKeyBinding, setModifiedCells } = useUserDraft(id)
 
     const { getDefaultKeyBindings } = useUserHelper()
 
     useEffect(() => {
-        form.setFieldsValue({
-            classes: user?.classes,
-            username: user?.username,
-            firstname: user?.firstname,
-            lastname: user?.lastname,
-            email: user?.email,
-            language: user?.language,
-            memorizeTabs: user?.memorizeTabs,
-            welcomeScreen: user?.welcomeScreen,
-            keyBindings: user?.keyBindings,
-            active: user?.active,
-            admin: user?.admin,
-            allowDirtyClose: user?.allowDirtyClose,
-            assetWorkspaces: user?.assetWorkspaces,
-            closeWarning: user?.closeWarning,
-            contentLanguages: user?.contentLanguages,
-            dataObjectWorkspaces: user?.dataObjectWorkspaces,
-            documentWorkspaces: user?.documentWorkspaces,
-            parentId: user?.parentId,
-            permissions: user?.permissions ?? [],
-            perspectives: user?.perspectives ?? [],
-            roles: user?.roles ?? [],
-            twoFactorAuthenticationEnabled: user?.twoFactorAuthenticationEnabled,
-            websiteTranslationLanguagesEdit: user?.websiteTranslationLanguagesEdit ?? [],
-            websiteTranslationLanguagesView: user?.websiteTranslationLanguagesView ?? [],
-        })
-    }, [user])
+        if (user?.modified === false) {
+            form.setFieldsValue({
+                classes: user?.classes,
+                username: user?.username,
+                firstname: user?.firstname,
+                lastname: user?.lastname,
+                email: user?.email,
+                language: user?.language,
+                memorizeTabs: user?.memorizeTabs,
+                welcomeScreen: user?.welcomeScreen,
+                keyBindings: user?.keyBindings,
+                active: user?.active,
+                admin: user?.admin,
+                allowDirtyClose: user?.allowDirtyClose,
+                assetWorkspaces: user?.assetWorkspaces,
+                closeWarning: user?.closeWarning,
+                contentLanguages: user?.contentLanguages,
+                dataObjectWorkspaces: user?.dataObjectWorkspaces,
+                documentWorkspaces: user?.documentWorkspaces,
+                parentId: user?.parentId,
+                permissions: user?.permissions ?? [],
+                perspectives: user?.perspectives ?? [],
+                roles: user?.roles ?? [],
+                twoFactorAuthenticationEnabled: user?.twoFactorAuthenticationEnabled,
+                websiteTranslationLanguagesEdit: user?.websiteTranslationLanguagesEdit ?? [],
+                websiteTranslationLanguagesView: user?.websiteTranslationLanguagesView ?? []
+            })
+        }
+    }, [user?.modified])
 
     if (user?.keyBindings?.length === 0) {
         getDefaultKeyBindings().then((data) => {
-            changeUserInState({ keyBindings: data.items })
+            console.log('changeUserInState')
+            // setModifiedCells('keyBindings', data.items)
+            // changeUserInState({ keyBindings: data.items })
         })
     }
 
@@ -81,16 +85,17 @@ const ProfileDetail = ({id}:IProfileDetail): React.JSX.Element => {
 
     const handleOnResetKeyBindings = async () => {
         getDefaultKeyBindings().then((data) => {
-            changeUserInState({ keyBindings: data.items })
+            console.log('changeUserInState')
+            // changeUserInState({ keyBindings: data.items })
         })
     }
 
     const onValuesChange = useCallback(
         debounce((changedValues, allValues) => {
-            changeUserInState(allValues)
+            setModifiedCells('auth', changedValues);
         }, 300),
-        [changeUserInState]
-    )
+        [setModifiedCells, form]
+    );
 
     if (!user) {
         return <Content none></Content>
@@ -187,7 +192,7 @@ const ProfileDetail = ({id}:IProfileDetail): React.JSX.Element => {
                                 children: <>
                                     <Form.Item
                                         label={ t('user-profile.password-old') }
-                                        name={ 'passwordold' }
+                                        name={ 'passwordOld' }
                                     >
                                         <Input />
                                     </Form.Item>
@@ -201,7 +206,8 @@ const ProfileDetail = ({id}:IProfileDetail): React.JSX.Element => {
                                             icon={ { value: 'lightning-01' } }
                                             onClick={ () => {
                                                 const newPassword = generatePassword()
-                                                form.setFieldValue('password', newPassword); changeUserInState({ password: newPassword })
+                                                form.setFieldValue('password', newPassword);
+                                                // changeUserInState({ password: newPassword })
                                             } }
                                             title={ t('user-management.generate-password') }
                                         /> }
@@ -209,7 +215,7 @@ const ProfileDetail = ({id}:IProfileDetail): React.JSX.Element => {
                                     </Form.Item>
                                     <Form.Item
                                         label={ t('user-profile.password-repeat') }
-                                        name={ 'password-repeat' }
+                                        name={ 'passwordConfirmation' }
                                         dependencies={['password']}
                                         rules={ [{ min: 10 }, ({ getFieldValue }) => ({
                                             validator(_, value) {
@@ -232,7 +238,7 @@ const ProfileDetail = ({id}:IProfileDetail): React.JSX.Element => {
                 <Col span={ 14 }>
                     <EditorSettingsAccordion
                         data={ user?.contentLanguages }
-                        onChange={ (languages) => { changeUserInState({ contentLanguages: languages }) } }
+                        // onChange={ (languages) => { changeUserInState({ contentLanguages: languages }) } }
                     />
                 </Col>
             </Row>
