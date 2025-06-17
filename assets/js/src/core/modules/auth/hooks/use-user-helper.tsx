@@ -21,7 +21,7 @@ import { useTranslation } from 'react-i18next'
 
 interface UseUserReturn {
   getDefaultKeyBindings: () => Promise<UserDefaultKeyBindingsApiResponse>
-  updateUserProfile: (props) => Promise<{ data: UserUpdateProfileApiResponse, error: any }>
+  updateUserProfile: (user) => Promise<{ data: UserUpdateProfileApiResponse, error: any }>
 }
 
 export const useUserHelper = (): UseUserReturn => {
@@ -33,7 +33,7 @@ export const useUserHelper = (): UseUserReturn => {
     if (error !== undefined) {
       notificationApi.open({
         type: 'error',
-        message: error.data.message
+        message: error.data?.message || t('user-management.save-user.error'),
       })
     } else {
       notificationApi.open({
@@ -43,37 +43,45 @@ export const useUserHelper = (): UseUserReturn => {
     }
   }
 
-  async function updateUserProfile (props): Promise<{ data: UserUpdateProfileApiResponse, error: Error }> {
-    const user = props.user
+  async function updateUserProfile (user): Promise<{ data: UserUpdateProfileApiResponse, error: Error }> {
+    console.log('updateUserProfile', user)
+    console.log(user)
 
-    const { data, error }: any = await dispatch(api.endpoints.updateUserProfile.initiate({
-      email: user.email,
+    //here we want to merge modifiedCells with the user object to safe it
+    if (user.modifiedCells !== undefined) {
+      user = {
+        ...user,
+        ...user.modifiedCells.auth
+      }
+    }
+    console.log('sending this', {
       firstname: user.firstname,
       lastname: user.lastname,
-      active: user.active,
-      admin: user.admin,
-      classes: user.classes,
-      twoFactorAuthenticationEnabled: user.twoFactorAuthenticationEnabled,
+      email: user.email,
       language: user.language,
+      dateTimeLocale: user.dateTimeLocale,
       welcomeScreen: user.welcomeScreen,
       memorizeTabs: user.memorizeTabs,
-      allowDirtyClose: user.allowDirtyClose,
-      closeWarning: user.closeWarning,
-      permissions: user.permissions,
-      parentId: user.parentId ?? 0,
-      roles: user.roles,
       contentLanguages: user.contentLanguages,
-      websiteTranslationLanguagesEdit: user.websiteTranslationLanguagesEdit,
-      websiteTranslationLanguagesView: user.websiteTranslationLanguagesView,
-      keyBindings: user.keyBindings,
-      assetWorkspaces: user.assetWorkspaces,
-      dataObjectWorkspaces: user.dataObjectWorkspaces,
-      documentWorkspaces: user.documentWorkspaces,
-      perspectives: user.perspectives
+      keyBindings: user.keyBindings
+    })
+    const { data, error }: any = await dispatch(api.endpoints.userUpdateProfile.initiate({
+      updateUserProfile: {
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        language: user.language,
+        dateTimeLocale: user.dateTimeLocale,
+        welcomeScreen: user.welcomeScreen,
+        memorizeTabs: user.memorizeTabs,
+        contentLanguages: user.contentLanguages,
+        keyBindings: user.keyBindings
+      }
     }))
 
+    console.log('updateUserProfile result', data, error)
     handleNotification(t('user-management.save-user.success'), error)
-    dispatch(userProfileUpdated(data))
+    // dispatch(userProfileUpdated(data))
     return data
   }
 

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, {useCallback, useEffect} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import {Form} from "@Pimcore/components/form/form";
 import {Col, Input, Row} from "antd";
 import {Accordion} from "@Pimcore/components/accordion/accordion";
@@ -23,7 +23,6 @@ import {
     EditorSettingsAccordion
 } from "@Pimcore/modules/user/management/detail/tabs/settings/components/form/editor-settings-accordion";
 import {KeyBindings} from "@Pimcore/modules/user/management/detail/tabs/key-bindings/key-bindings";
-import {useUserHelper} from "@Pimcore/modules/user/hooks/use-user-helper";
 import {useUserDraft} from "@Pimcore/modules/auth/hooks/use-user-draft";
 import {debounce} from "lodash";
 import {Content} from "@Pimcore/components/content/content";
@@ -36,9 +35,8 @@ const ProfileDetail = ({id}:IProfileDetail): React.JSX.Element => {
     const [form] = Form.useForm()
     const { t } = useTranslation()
     const { availableAdminLanguages } = useSettings()
-    const { user, updateUserKeyBinding, setModifiedCells } = useUserDraft(id)
-
-    const { getDefaultKeyBindings } = useUserHelper()
+    const { user, setModifiedCells } = useUserDraft(id)
+    const [keyBindingsModified, setKeyBindingsModified] = useState(false)
 
     useEffect(() => {
         if (user?.modified === false) {
@@ -68,26 +66,18 @@ const ProfileDetail = ({id}:IProfileDetail): React.JSX.Element => {
                 websiteTranslationLanguagesEdit: user?.websiteTranslationLanguagesEdit ?? [],
                 websiteTranslationLanguagesView: user?.websiteTranslationLanguagesView ?? []
             })
+            setKeyBindingsModified(false)
         }
     }, [user?.modified])
 
-    if (user?.keyBindings?.length === 0) {
-        getDefaultKeyBindings().then((data) => {
-            console.log('changeUserInState')
-            // setModifiedCells('keyBindings', data.items)
-            // changeUserInState({ keyBindings: data.items })
-        })
-    }
-
     const handleOnChangeKeyBindings = (name: string, code: object): void => {
-        updateUserKeyBinding(name, code)
+        setModifiedCells('auth', {keyBindings: {[name]: code}})
+        setKeyBindingsModified(true)
     }
 
-    const handleOnResetKeyBindings = async () => {
-        getDefaultKeyBindings().then((data) => {
-            console.log('changeUserInState')
-            // changeUserInState({ keyBindings: data.items })
-        })
+    const handleOnResetKeyBindings = async (items) => {
+        setModifiedCells('auth', {keyBindings: items})
+        setKeyBindingsModified(false)
     }
 
     const onValuesChange = useCallback(
@@ -244,7 +234,7 @@ const ProfileDetail = ({id}:IProfileDetail): React.JSX.Element => {
             </Row>
             <Row gutter={ [10, 10] } className={'m-t-extra-large'}>
                 <Col span={ 24 }>
-                    <KeyBindings values={user?.keyBindings} onResetKeyBindings={handleOnResetKeyBindings} onChange={handleOnChangeKeyBindings} />
+                    <KeyBindings modified={keyBindingsModified} values={user?.keyBindings} onResetKeyBindings={handleOnResetKeyBindings} onChange={handleOnChangeKeyBindings} />
                 </Col>
             </Row>
         </Form>

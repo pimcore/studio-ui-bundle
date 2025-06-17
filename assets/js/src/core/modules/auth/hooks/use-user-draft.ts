@@ -42,8 +42,6 @@ export const useUserDraft = (id: number): UseUserDraftReturn => {
         (action) => setModifiedCells(action)
     );
 
-    console.log('trackableChangesActions', trackableChangesActions);
-
     return {
         isLoading,
         user,

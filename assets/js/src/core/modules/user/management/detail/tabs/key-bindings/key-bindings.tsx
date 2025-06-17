@@ -14,16 +14,19 @@ import { Form } from '@Pimcore/components/form/form'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@Pimcore/components/button/button'
+import {useUserHelper} from "@Pimcore/modules/user/hooks/use-user-helper";
 
 interface IKeyBindings {
     values?: any
-    onResetKeyBindings: () => void
-    onChange: (name: string, code: object) => void
+  modified?: boolean
+  onResetKeyBindings: (items) => void
+  onChange: (name: string, code: object) => void
 }
 
-const KeyBindings = ({ values, onChange, onResetKeyBindings, ...props }:IKeyBindings): React.JSX.Element => {
+const KeyBindings = ({ values, modified, onChange, onResetKeyBindings, ...props }:IKeyBindings): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
+  const { getDefaultKeyBindings } = useUserHelper()
 
   const getKeyName = (key: number): string => {
     let name = ''
@@ -72,6 +75,7 @@ const KeyBindings = ({ values, onChange, onResetKeyBindings, ...props }:IKeyBind
   }
 
   useEffect(() => {
+    console.log('useEffect called with values:', values);
     if (!values || values.length === 0) {
       return
     }
@@ -81,7 +85,7 @@ const KeyBindings = ({ values, onChange, onResetKeyBindings, ...props }:IKeyBind
         [keyBinding.action]: renderKeyCombination(keyBinding)
       })
     })
-  }, [values]);
+  }, [values, modified]);
 
   const generalFields = ['save', 'publish', 'unpublish', 'rename', 'refresh']
   const generalAccordion = [
@@ -208,6 +212,19 @@ const KeyBindings = ({ values, onChange, onResetKeyBindings, ...props }:IKeyBind
     }
   ]
 
+  const setKeyBindingsToDefault = (): void => {
+    getDefaultKeyBindings().then((data) => {
+      onResetKeyBindings(data.items)
+
+      data.items.forEach((keyBinding: any) => {
+        form.setFieldsValue({
+          [keyBinding.action]: renderKeyCombination(keyBinding)
+        })
+      })
+
+    })
+  }
+
   return (
       <Form form={ form } layout="vertical">
         <Row gutter={ [10, 10] }>
@@ -222,7 +239,7 @@ const KeyBindings = ({ values, onChange, onResetKeyBindings, ...props }:IKeyBind
                   type={ 'info' }
               />
 
-              <Button onClick={ onResetKeyBindings }>{ t('key-bindings.reset') }</Button>
+              <Button onClick={ setKeyBindingsToDefault }>{ t('key-bindings.reset') }</Button>
             </Flex>
           </Col>
           <Col span={ 14 }>

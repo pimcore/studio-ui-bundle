@@ -19,6 +19,7 @@ import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-but
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { Flex } from '@Pimcore/components/flex/flex'
+import {useUserHelper} from "@Pimcore/modules/auth/hooks/use-user-helper";
 
 interface IToolbarProps {
   id: number
@@ -29,7 +30,7 @@ interface IToolbarProps {
 export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { user, isLoading, removeTrackedChanges } = useUserDraft(id)
-  // const { updateUserById } = useUserHelper()
+  const { updateUserProfile } = useUserHelper()
 
   const hasChanges = user?.modified === true
 
@@ -58,9 +59,7 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
   }
 
   const onSaveClick = (): void => {
-    // updateUserById({ id, user: user as UserDraft }).catch(() => {
-    //   console.error('error')
-    // })
+    updateUserProfile(user)
   }
 
   const items = [
