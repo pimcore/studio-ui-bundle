@@ -27,6 +27,10 @@ const api = baseApi.enhanceEndpoints({
       providesTags: (result, error, args) => args.parentId !== undefined ? providingTags.DOCUMENT_TREE_ID(args.parentId) : providingTags.DOCUMENT_TREE()
     }
 
+    documentDocTypeList: {
+      providesTags: (result, error, args) => providingTags.DOCUMENT_TYPES()
+    }
+
     // documentUpdateById: {
     //  invalidatesTags: (result, error, args) => args.body.data.task === 'autoSave' ? [] : invalidatingTags.DOCUMENT_DETAIL_ID(args.id)
     // },
@@ -44,6 +48,7 @@ export const {
   // useDocumentCloneMutation,
   useDocumentGetByIdQuery,
   // useDocumentUpdateByIdMutation,
+  useDocumentDocTypeListQuery,
   useDocumentGetTreeQuery,
   useDocumentDocTypeListQuery
 } = api

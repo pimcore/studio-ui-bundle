@@ -27,7 +27,7 @@ import { Table } from './table/table'
 
 
 export const DocumentTypesContainer = (): React.JSX.Element => {
-  // const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch()
   const { createNewDocumentType, createLoading } = useDocumentType()
   const { data, isLoading: documentTypesLoading, isFetching: documentTypesFetching, isError, error } = useDocumentDocTypeListQuery({})
 
@@ -71,11 +71,11 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
             disabled={ documentTypesFetching }
             icon={ { value: 'refresh' } }
             onClick={ () => 
-            //   dispatch(
-            //   api.util.invalidateTags(
-            //     invalidatingTags.()
-            //   )
-            // )
+              dispatch(
+              api.util.invalidateTags(
+                invalidatingTags.DOCUMENT_TYPES()
+              )
+            )
             console.log("refresh")
             }></IconButton>
         </Toolbar>}
