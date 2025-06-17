@@ -10,7 +10,7 @@
 
 import { DocType, DocTypeType, DocumentController, DocumentTemplate,} from '@Pimcore/modules/document/document-api-slice.gen'
 import { useDocumentAvailableControllersListQuery,useDocumentDocTypeTypeListQuery, useDocumentAvailableTemplatesListQuery} from '@Pimcore/modules/document/document-api-slice-enhanced'
-
+import trackError, { ApiError } from '../app/error-handler'
 import { isUndefined } from 'lodash'
 import { useEffect } from 'react'
 
