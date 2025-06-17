@@ -8,9 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { DocType, DocTypeType, DocumentController, DocumentTemplate, useDocumentAvailableControllersListQuery,useDocumentDocTypeTypeListQuery, useDocumentAvailableTemplatesListQuery} from '@Pimcore/modules/document/document-api-slice.gen'
+import { DocType, DocTypeType, DocumentController, DocumentTemplate,} from '@Pimcore/modules/document/document-api-slice.gen'
+import { useDocumentAvailableControllersListQuery,useDocumentDocTypeTypeListQuery, useDocumentAvailableTemplatesListQuery} from '@Pimcore/modules/document/document-api-slice-enhanced'
+
 import { isUndefined } from 'lodash'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 
 
 export type DocumentTypeRow = DocType & { rowId: string }
