@@ -9,7 +9,7 @@
  */
 
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { DocType, DocTypeType, DocTypeUpdate, DocumentDocTypeAddApiArg, useDocumentDocTypeAddMutation, useDocumentDocTypeDeleteMutation, useDocumentDocTypeUpdateByIdMutation } from '@Pimcore/modules/document/document-api-slice.gen'
+import { DocType, DocTypeUpdate, DocumentDocTypeAddApiArg, useDocumentDocTypeAddMutation, useDocumentDocTypeDeleteMutation, useDocumentDocTypeUpdateByIdMutation } from '@Pimcore/modules/document/document-api-slice.gen'
 
 
 export type DocumentTypeRow = DocType & { rowId: string }
@@ -62,11 +62,11 @@ export const useDocumentType = (): UseDocumentTypeReturn => {
     controller: row.controller ?? '',
     template: row.template ?? '',
     priority: row.priority ?? 0 ,
-    staticGeneratorEnabled: row.staticGeneratorEnabled ?? 0
+    staticGeneratorEnabled: row.staticGeneratorEnabled ?? false
   })
 
   const updateDocumentTypeById = async (id: string, row: DocumentTypeRow): Promise<{ success: boolean }> => {
-    console.log("row", row)
+    console.log("rowX", row)
     try {
       const result = await updateDocumentType({ id, docTypeUpdateParameters: toApiDocumentType(row) })
       return { success: 'data' in result }

@@ -35,6 +35,8 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
 
   const documentTypes = data?.items ?? [];
 
+  const sortedRows = [...documentTypeRows].sort((a, b) => b.creationDate - a.creationDate)
+  
   useEffect(() => {
     if (!isUndefined(documentTypes)) {
       setDocumentTypeRows(
@@ -112,7 +114,7 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
           } }
         >
           <Table
-            documentTypeRows={ documentTypeRows }
+            documentTypeRows={ sortedRows }
             setDocumentTypeRows={ setDocumentTypeRows }
           />        </Box>
       </Content>

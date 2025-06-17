@@ -66,28 +66,22 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows }: TableProps): Re
       meta: { type: 'select', editable: true, config: { options: Object.values(docTypeNames) } },
       size: 80
     }),
-    columnHelper.accessor('static', {
+    columnHelper.accessor('staticGeneratorEnabled', {
       header: t('document-types.columns.static'),
       size: 70,
       meta: { type: 'checkbox', editable: true, config: { align: 'center' } }
     }),
-        columnHelper.accessor('priority', {
+    columnHelper.accessor('priority', {
       header: t('document-types.columns.priority'),
       meta: { editable: true },
       size: 80
     }),
-            columnHelper.accessor('creationDate', {
+    columnHelper.accessor('creationDate', {
       header: t('document-types.columns.creation-date'),
       meta: { type: 'date', editable: true },
-      // cell: (info) => {
-      //   return (<DateCell
-      //     info={ info }
-      //     setDocumentTypeRows={ setDocumentTypeRows }
-      //   />)
-      // },
       size: 150
     }),
-                columnHelper.accessor('modificationDate', {
+    columnHelper.accessor('modificationDate', {
       header: t('document-types.columns.modification-date'),
       meta: { type: 'date', editable: true },
       size: 150
@@ -116,6 +110,7 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows }: TableProps): Re
     const rowId = rowData.rowId
     const updatedRow: DocumentTypeRow = { ...rowData, [columnId]: value }
 
+    console.log("rowData", rowData)
     setDocumentTypeRows(prev =>
       prev.map(row =>
         row.rowId === rowId ? updatedRow : row

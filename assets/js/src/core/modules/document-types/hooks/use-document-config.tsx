@@ -20,14 +20,31 @@ controllersLoading: boolean
 templates: DocumentTemplate[]
 templatesLoading: boolean
 docTypes: DocTypeType[]
-doyTypesLoading: boolean
+docTypesLoading: boolean
 }
 
 export const useDocumentConfig = (): UseDocumentConfigReturn => {
-  const {data: controllers, isLoading: controllersLoading } = useDocumentAvailableControllersListQuery()
-  const {data: templates, isLoading: templatesLoading } = useDocumentAvailableTemplatesListQuery()
-  const {data: docTypes, isLoading: docTypesLoading } = useDocumentDocTypeTypeListQuery()
+  const {data: controllers, isLoading: controllersLoading, isError: isControllerError, error: controllerError } = useDocumentAvailableControllersListQuery()
+  const {data: templates, isLoading: templatesLoading, isError: isTemplatesError, error: templatesError } = useDocumentAvailableTemplatesListQuery()
+  const {data: docTypes, isLoading: docTypesLoading, isError: isDocTypesError, error: docTypeError} = useDocumentDocTypeTypeListQuery()
 
+  useEffect(() => {
+    if (isControllerError) {
+      trackError(new ApiError(controllerError))
+    }
+  }, [isControllerError])
+
+  useEffect(() => {
+    if (isTemplatesError) {
+      trackError(new ApiError(templatesError))
+    }
+  }, [isTemplatesError])
+
+  useEffect(() => {
+    if (isDocTypesError) {
+      trackError(new ApiError(docTypeError))
+    }
+  }, [isDocTypesError])
 
   return {
     controllers: !isUndefined(controllers) ? controllers?.items : [],
