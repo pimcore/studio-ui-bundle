@@ -91,7 +91,7 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
           <Flex gap={ 'small' }>
             <Title>{t('widget.document-types')}</Title>
             <IconTextButton
-              disabled={ documentTypesLoading || createLoading }
+              disabled={ documentTypesLoading ?? createLoading }
               icon={ { value: 'new' } }
               loading={ createLoading }
               onClick={ onCreateDocumentType }
@@ -100,12 +100,12 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
         </Toolbar>
         }>
           <Content
-        loading={ documentTypesLoading || documentTypesFetching }
+        loading={ documentTypesLoading ?? documentTypesFetching }
         margin={ {
           x: 'extra-small',
           y: 'none'
         } }
-        none={ isUndefined(documentTypes) || documentTypes.length === 0 }
+        none={ isUndefined(documentTypes) ?? documentTypes.length === 0 }
       >
         <Box
           margin={ {

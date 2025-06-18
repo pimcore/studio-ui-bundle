@@ -36,10 +36,15 @@ export const useDocumentType = (): UseDocumentTypeReturn => {
   const createNewDocumentType = async (): Promise<{ success: boolean, data?: DocType }> => {
     try {
       const result = await createDocumentType(dummyDocumentType)
+
+      if (!isUndefined(response.error)) {
+        trackError(new ApiError(response.error))
+      }
+
       if ('data' in result) {
         return { success: true, data: result.data }
       }
-    } catch (e) {
+    } catch () {
       trackError(new GeneralError('Was not able to create DocumentType'))
     }
     return { success: false }
@@ -48,8 +53,13 @@ export const useDocumentType = (): UseDocumentTypeReturn => {
   const deleteDocumentTypeById = async (id: string): Promise<{ success: boolean }> => {
     try {
       const result = await deleteDocumentType({ id })
+
+      if (!isUndefined(response.error)) {
+        trackError(new ApiError(response.error))
+      }
+
       return { success: 'data' in result }
-    } catch (e) {
+    } catch () {
       trackError(new GeneralError('Was not able to delete DocumentType'))
       return { success: false }
     }
@@ -66,9 +76,12 @@ export const useDocumentType = (): UseDocumentTypeReturn => {
   })
 
   const updateDocumentTypeById = async (id: string, row: DocumentTypeRow): Promise<{ success: boolean }> => {
-    console.log("rowX", row)
     try {
       const result = await updateDocumentType({ id, docTypeUpdateParameters: toApiDocumentType(row) })
+
+        if (!isUndefined(response.error)) {
+        trackError(new ApiError(response.error))
+      }
       return { success: 'data' in result }
     } catch (e) {
       trackError(new GeneralError('Was not able to update DocumentType'))
