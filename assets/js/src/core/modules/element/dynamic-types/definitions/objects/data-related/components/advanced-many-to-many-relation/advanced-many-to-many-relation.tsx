@@ -27,7 +27,9 @@ import type {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { getElementCellConfig } from '../many-to-many-relation/grid'
+import {
+  getElementCellConfig
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/utils/helpers'
 
 export interface AdvancedManyToManyRelationClassDefinitionProps {
   allowToClearRelation: boolean

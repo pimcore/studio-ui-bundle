@@ -8,31 +8,23 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, type MutableRefObject, type ReactElement, useEffect, useState } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
-import { isNil, isUndefined } from 'lodash'
-import { Tooltip } from 'antd'
+import React, { forwardRef, type MutableRefObject, useEffect, useState } from 'react'
+import { isNil } from 'lodash'
 import cn from 'classnames'
 import { arrayMove } from '@dnd-kit/sortable'
 import { DndContext, PointerSensor, closestCenter, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
+import { type ColumnDef } from '@tanstack/react-table'
 import { type ManyToManyRelationValue, type ManyToManyRelationValueItem } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
-import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
-import { Box } from '@Pimcore/components/box/box'
-import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
-import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Content } from '@Pimcore/components/content/content'
 import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
-import { getElementCellConfig } from './utils/helpers'
-import { ROW_DRAG_COLUMN_ID } from '@Pimcore/components/grid/constants'
+import { useColumns } from './hooks/use-columns'
 
-interface ManyToManyRelationGridProps {
+export interface ManyToManyRelationGridProps {
   value?: ManyToManyRelationValue | null
   deleteItem: (rowIndex: number) => void
   assetInlineDownloadAllowed: boolean
@@ -50,147 +42,11 @@ interface ManyToManyRelationGridProps {
 }
 
 export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid (props: ManyToManyRelationGridProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
-  const { enableRowDrag } = props
-
   const { getStateClasses } = useDroppable()
-  const { confirm } = useFormModal()
-  const { openElement, mapToElementType } = useElementHelper()
-  const { t } = useTranslation()
-  const { download } = useDownload()
+  const { mapToElementType } = useElementHelper()
+  const { columns } = useColumns(props)
+
   const sensors = useSensors(useSensor(PointerSensor))
-
-  const columnHelper = createColumnHelper()
-
-  const defaultColumns = [
-    columnHelper.accessor('id', {
-      header: t('relations.id'),
-      size: 80
-    }),
-    columnHelper.accessor('fullPath', {
-      header: t('relations.reference'),
-      meta: {
-        type: 'element',
-        autoWidth: true,
-        editable: false,
-        config: getElementCellConfig(props.inherited === true || props.disabled === true)
-      },
-      size: 200
-    }),
-    columnHelper.accessor('type', {
-      header: t('relations.type'),
-      meta: {
-        type: 'translate'
-      },
-      size: 150
-    }),
-    columnHelper.accessor('subtype', {
-      header: t('relations.subtype'),
-      meta: {
-        type: 'translate'
-      },
-      size: 150
-    })
-  ]
-  const columns = !isUndefined(props.columnDefinition)
-    ? [...props.columnDefinition]
-    : defaultColumns
-
-  if (enableRowDrag) {
-    columns.unshift(
-      columnHelper.accessor(ROW_DRAG_COLUMN_ID, { header: '', size: 40 })
-    )
-  }
-
-  columns.push(
-    columnHelper.accessor('actions', {
-      header: t('actions'),
-      size: 110,
-      cell: (info) => {
-        const rowIndex = info.row.index
-        const rowValue = info.row.original as ManyToManyRelationValueItem
-
-        const buttons: ReactElement[] = []
-        buttons.push(
-          <Tooltip
-            key="open"
-            title={ t('open') }
-          >
-            <IconButton
-              icon={ { value: 'open-folder' } }
-              onClick={ async () => {
-                const typeValue = mapToElementType(rowValue.type)
-
-                !isUndefined(typeValue) && await openElement({
-                  type: typeValue,
-                  id: rowValue.id
-                })
-              } }
-              type="link"
-            />
-          </Tooltip>
-        )
-
-        if (props.assetInlineDownloadAllowed && rowValue.type === 'asset') {
-          buttons.push(
-            <Tooltip
-              key="download"
-              title={ t('download') }
-            >
-              <IconButton
-                aria-label={ t('aria.asset.image-sidebar.tab.details.download-thumbnail') }
-                icon={ { value: 'download' } }
-                onClick={ () => {
-                  download(
-                    rowValue.id.toString()
-                  )
-                } }
-                type="link"
-              />
-            </Tooltip>
-          )
-        }
-
-        if (props.disabled !== true) {
-          buttons.push(
-            <Tooltip
-              key="remove"
-              title={ t('remove') }
-            >
-              <IconButton
-                icon={ { value: 'trash' } }
-                onClick={ () => {
-                  confirm({
-                    title: t('remove'),
-                    content: <Trans
-                      i18nKey={ 'delete-confirmation-advanced' }
-                      shouldUnescape
-                      values={ {
-                        type: t('relation'),
-                        value: rowValue.fullPath
-                      } }
-                             />,
-                    onOk: () => {
-                      props.deleteItem(rowIndex)
-                    }
-                  })
-                } }
-                type="link"
-              />
-            </Tooltip>
-          )
-        }
-
-        return (
-          <Box padding="mini">
-            <ButtonGroup
-              items={ buttons }
-              noSpacing
-            />
-          </Box>
-        )
-      }
-    })
-  )
 
   const getDataArray = (): ManyToManyRelationValue => {
     const result = props.value ?? []
