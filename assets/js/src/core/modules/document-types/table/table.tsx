@@ -30,7 +30,7 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows }: TableProps): Re
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { updateDocumentTypeById } = useDocumentType()
-  const { controllers, controllersLoading, templates, templatesLoading, docTypes, docTypesLoading } = useDocumentConfig()
+  const { controllers, templates, docTypes } = useDocumentConfig()
 
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
 
@@ -89,12 +89,7 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows }: TableProps): Re
     columnHelper.accessor('actions', {
       header: t('document-types.columns.actions'),
       size: 80,
-      cell: (info) => (
-        <ActionsCell
-          info={ info }
-          setDocumentTypeRows={ setDocumentTypeRows }
-        />
-      )
+      cell: (info) => ActionsCell({info, setDocumentTypeRows})
     })
   ]
 

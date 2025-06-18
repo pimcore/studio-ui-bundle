@@ -29,11 +29,11 @@ const api = baseApi.enhanceEndpoints({
 
     documentDocTypeList: {
       providesTags: (result, error, args) => providingTags.DOCUMENT_TYPES()
-    }
+    },
 
-    documentDocTypeDelete: {}
+    documentDocTypeDelete: {},
 
-    documentDocTypeUpdateById: {}
+    documentDocTypeUpdateById: {},
 
     documentDocTypeAdd: {}
 
@@ -55,7 +55,10 @@ export const {
   useDocumentGetByIdQuery,
   // useDocumentUpdateByIdMutation,
   useDocumentGetTreeQuery,
+  useDocumentAvailableTemplatesListQuery,
   useDocumentDocTypeListQuery,
+  useDocumentDocTypeTypeListQuery,
+  useDocumentAvailableControllersListQuery,
   useDocumentDocTypeAddMutation,
   useDocumentDocTypeUpdateByIdMutation,
   useDocumentDocTypeDeleteMutation
