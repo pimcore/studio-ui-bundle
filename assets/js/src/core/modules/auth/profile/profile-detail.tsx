@@ -41,8 +41,6 @@ const ProfileDetail = ({id}:IProfileDetail): React.JSX.Element => {
     useEffect(() => {
         if (user?.modified === false) {
             form.setFieldsValue({
-                classes: user?.classes,
-                username: user?.username,
                 firstname: user?.firstname,
                 lastname: user?.lastname,
                 email: user?.email,
@@ -50,39 +48,31 @@ const ProfileDetail = ({id}:IProfileDetail): React.JSX.Element => {
                 memorizeTabs: user?.memorizeTabs,
                 welcomeScreen: user?.welcomeScreen,
                 keyBindings: user?.keyBindings,
-                active: user?.active,
-                admin: user?.admin,
-                allowDirtyClose: user?.allowDirtyClose,
-                assetWorkspaces: user?.assetWorkspaces,
-                closeWarning: user?.closeWarning,
-                contentLanguages: user?.contentLanguages,
-                dataObjectWorkspaces: user?.dataObjectWorkspaces,
-                documentWorkspaces: user?.documentWorkspaces,
-                parentId: user?.parentId,
-                permissions: user?.permissions ?? [],
-                perspectives: user?.perspectives ?? [],
-                roles: user?.roles ?? [],
-                twoFactorAuthenticationEnabled: user?.twoFactorAuthenticationEnabled,
-                websiteTranslationLanguagesEdit: user?.websiteTranslationLanguagesEdit ?? [],
-                websiteTranslationLanguagesView: user?.websiteTranslationLanguagesView ?? []
+                contentLanguages: user?.contentLanguages
             })
+
             setKeyBindingsModified(false)
         }
     }, [user?.modified])
 
     const handleOnChangeKeyBindings = (name: string, code: object): void => {
-        setModifiedCells('auth', {keyBindings: {[name]: code}})
+        let modifiedKeyBindings = user?.modifiedCells.keyBindings || []
+        modifiedKeyBindings = modifiedKeyBindings.some((keyBinding) => keyBinding.action === name) ?
+            modifiedKeyBindings.map((keyBinding) => keyBinding.action === name ? { ...keyBinding, ...code } : keyBinding)
+            : [...modifiedKeyBindings, { action: name, ...code }];
+
+        setModifiedCells({keyBindings: modifiedKeyBindings})
         setKeyBindingsModified(true)
     }
 
     const handleOnResetKeyBindings = async (items) => {
-        setModifiedCells('auth', {keyBindings: items})
+        setModifiedCells({keyBindings: items})
         setKeyBindingsModified(false)
     }
 
     const onValuesChange = useCallback(
         debounce((changedValues, allValues) => {
-            setModifiedCells('auth', changedValues);
+            setModifiedCells(changedValues);
         }, 300),
         [setModifiedCells, form]
     );
@@ -228,7 +218,7 @@ const ProfileDetail = ({id}:IProfileDetail): React.JSX.Element => {
                 <Col span={ 14 }>
                     <EditorSettingsAccordion
                         data={ user?.contentLanguages }
-                        // onChange={ (languages) => { changeUserInState({ contentLanguages: languages }) } }
+                        onChange={ (languages) => { setModifiedCells({ contentLanguages: languages }) } }
                     />
                 </Col>
             </Row>

@@ -20,7 +20,6 @@ export interface ModifiedCell {
 export type ModifiedCells = ModifiedCell[]
 
 export interface ModifiedCellsAction {
-  type: string
   modifiedCells: ModifiedCells
 }
 
@@ -43,8 +42,8 @@ export const useTrackableChangesReducers = (): UseTrackableChangesReturn => {
   }
 
   const setModifiedCells = (state: TrackableChangesDraft, action: PayloadAction<ModifiedCellsAction>): void => {
-    state.modifiedCells[action.payload.type] = {
-      ...state.modifiedCells[action.payload.type],
+    state.modifiedCells = {
+      ...state.modifiedCells,
       ...action.payload.modifiedCells
     };
     state.modified = true
@@ -58,7 +57,7 @@ export const useTrackableChangesReducers = (): UseTrackableChangesReturn => {
 
 export interface UseTrackableChangesDraftReturn {
   removeTrackedChanges: () => void
-  setModifiedCells: (type: string, modifiedCells: ModifiedCells) => void
+  setModifiedCells: (modifiedCells: ModifiedCells) => void
 }
 
 export const useTrackableChangesDraft = (
@@ -71,8 +70,8 @@ export const useTrackableChangesDraft = (
     removeTrackedChanges: (): void => {
       dispatch(resetChangesAction());
     },
-    setModifiedCells: (type: string, modifiedCells: ModifiedCells): void => {
-      dispatch(setModifiedCellsAction({ type, modifiedCells }));
+    setModifiedCells: (modifiedCells: ModifiedCells): void => {
+      dispatch(setModifiedCellsAction({ modifiedCells }));
     },
   };
 };
