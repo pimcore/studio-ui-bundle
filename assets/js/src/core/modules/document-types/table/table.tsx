@@ -75,7 +75,7 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows, config }: TablePr
     }),
     columnHelper.accessor('priority', {
       header: t('document-types.columns.priority'),
-      meta: { editable: true },
+      meta: { type: 'number', editable: true },
       size: 80
     }),
     columnHelper.accessor('creationDate', {
