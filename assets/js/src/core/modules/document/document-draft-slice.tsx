@@ -22,10 +22,10 @@ import {
   useTabsReducers
 } from '@Pimcore/modules/element/draft/hooks/use-tabs'
 import { type SchedulesDraft, useSchedulesReducers } from '@Pimcore/modules/element/draft/hooks/use-schedules'
-import { DocumentDetailData } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { type DocumentDetailData } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { usePublishedReducers, type PublishedDraft } from '../element/draft/hooks/use-published'
 import { useModifiedDocumentEditablesReducers } from './draft/hooks/use-modified-editable-data'
-import { DraftDataDraft, useDraftDataReducers } from '../element/draft/hooks/use-draft-data'
+import { type DraftDataDraft, useDraftDataReducers } from '../element/draft/hooks/use-draft-data'
 import { updateKeyOrFilename } from '../element/draft/utils/update-key'
 
 export interface DocumentDraft extends Omit<DocumentDetailData, 'draftData'>, PropertiesDraft, SchedulesDraft, TrackableChangesDraft, TabsDraft, DraftDataDraft, PublishedDraft {

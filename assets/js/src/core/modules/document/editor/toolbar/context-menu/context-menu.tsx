@@ -11,7 +11,7 @@
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
-import { Document } from '@Pimcore/modules/document/document-api-slice.gen'
+import { type Document } from '@Pimcore/modules/document/document-api-slice.gen'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'

@@ -1,6 +1,15 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
 import React, { useRef, useEffect } from 'react'
-import { useStyle } from './content-editable.styles'
-import { isNil } from 'lodash'
+import { isNil, isNull } from 'lodash'
 import { escapeHtml, pasteHtmlAtCaret, stripTags } from '@Pimcore/utils/html'
 
 export interface ContentEditableProps {
@@ -9,9 +18,9 @@ export interface ContentEditableProps {
   placeholder?: string
   required?: boolean
   width?: number
-  height?: number 
+  height?: number
   nowrap?: boolean
-  allowMultiLine?: boolean 
+  allowMultiLine?: boolean
 }
 
 const ContentEditable = ({
@@ -28,9 +37,11 @@ const ContentEditable = ({
   const valueRef = useRef<string | null>(value ?? null)
 
   useEffect(() => {
-    if (!contentRef.current) return
-    const html = allowMultiLine 
-      ? (valueRef.current ?? '').replace(/\r\n|\n/g, '<br>') 
+    if (isNull(contentRef.current)) {
+      return
+    }
+    const html = allowMultiLine
+      ? (valueRef.current ?? '').replace(/\r\n|\n/g, '<br>')
       : (valueRef.current ?? '') + '<br>'
 
     if (contentRef.current.innerHTML !== html) {
@@ -39,7 +50,9 @@ const ContentEditable = ({
   }, [allowMultiLine])
 
   const getValue = (): string => {
-    if (!contentRef.current) return ''
+    if (isNull(contentRef.current)) {
+      return ''
+    }
     let newValue = contentRef.current.innerHTML ?? ''
     newValue = stripTags(newValue, ['br'])
     newValue = newValue.replace(/<br>/g, '\n').trim()
@@ -49,7 +62,9 @@ const ContentEditable = ({
   const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>): void => {
     e.preventDefault()
     const currentWindow = contentRef.current?.ownerDocument.defaultView
-    if (!currentWindow || !contentRef.current) return
+    if (isNil(currentWindow) || isNil(contentRef.current)) {
+      return
+    }
 
     let text = ''
     if (!isNil(e.clipboardData)) {
@@ -74,7 +89,7 @@ const ContentEditable = ({
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
-    if (!allowMultiLine && e.key === 'Enter') { 
+    if (!allowMultiLine && e.key === 'Enter') {
       e.preventDefault()
     }
   }
@@ -95,20 +110,20 @@ const ContentEditable = ({
   return (
     <div
       className="pimcorestudio_content-editable"
-      contentEditable={true}
-      data-placeholder={placeholder}
-      ref={contentRef}
+      contentEditable
+      data-placeholder={ placeholder }
+      onInput={ handleInput }
+      onKeyDown={ handleKeyDown }
+      onPaste={ handlePaste }
+      ref={ contentRef }
       role="none"
-      onPaste={handlePaste}
-      onKeyDown={handleKeyDown}
-      onInput={handleInput}
-      style={{
+      style={ {
         display: !isNil(width) || !isNil(height) ? 'inline-block' : undefined,
         width: !isNil(width) ? `${width}px` : undefined,
         height: !isNil(height) ? `${height}px` : undefined,
         overflow: (!isNil(nowrap) && nowrap) || !isNil(width) || !isNil(height) ? 'auto' : undefined,
         whiteSpace: !isNil(nowrap) && nowrap ? 'nowrap' : undefined
-      }}
+      } }
     />
   )
 }

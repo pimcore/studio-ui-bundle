@@ -27,7 +27,7 @@ import {
   type ModifiedObjectDataDraft,
   useModifiedObjectDataReducers
 } from '@Pimcore/modules/data-object/draft/hooks/use-modified-object-data'
-import { DraftDataDraft, useDraftDataReducers } from '@Pimcore/modules/element/draft/hooks/use-draft-data'
+import { type DraftDataDraft, useDraftDataReducers } from '@Pimcore/modules/element/draft/hooks/use-draft-data'
 import { usePublishedReducers, type PublishedDraft } from '../element/draft/hooks/use-published'
 import { updateKeyOrFilename } from '../element/draft/utils/update-key'
 

@@ -18,7 +18,7 @@ export class DynamicTypeDocumentEditableTextarea extends DynamicTypeDocumentEdit
 
   getEditableDataComponent (props: AbstractDocumentEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <ContentEditable 
+      <ContentEditable
         allowMultiLine
       />
     )

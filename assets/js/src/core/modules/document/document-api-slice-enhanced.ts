@@ -29,11 +29,11 @@ const api = baseApi.enhanceEndpoints({
 
     documentUpdateById: {
       invalidatesTags: (result, error, args) => args.body.data.task === 'autoSave' ? [] : invalidatingTags.DOCUMENT_DETAIL_ID(args.id)
-     },
+    },
 
     documentAdd: {
       invalidatesTags: (result, error, args) => invalidatingTags.DOCUMENT_TREE_ID(args.parentId)
-    },
+    }
   }
 })
 

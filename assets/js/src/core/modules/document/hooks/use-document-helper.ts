@@ -72,50 +72,49 @@ export const useDocumentHelper = (): UseDocumentReturn => {
     })
   }
 
- 
-   const executeDocumentTask = async (id: number, task: SaveTaskType, onFinish?: () => void): Promise<void> => {
-     const updateTask = update({
-       id,
-       body: {
-         data: {
-           task
-         }
-       }
-     })
- 
-     updateTask.catch((error: Error) => {
-       trackError(new ApiError(error))
-     })
- 
-     try {
-       dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: true }))
-       const response = (await updateTask)
- 
-       if (response.error !== undefined) {
-         dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: false }))
-         trackError(new ApiError(response.error))
-         onFinish?.()
-         return
-       }
- 
-       if (task === SaveTaskType.Unpublish) {
-         dispatch(unpublishDraft({ id }))
-       }
- 
-       if (task === SaveTaskType.Publish) {
-         dispatch(publishDraft({ id }))
-       }
- 
-       if (task === SaveTaskType.Unpublish || task === SaveTaskType.Publish) {
-         dispatch(setNodePublished({ nodeId: String(id), elementType: 'data-object', isPublished: task === 'publish' }))
-       }
- 
-       dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: false }))
-       onFinish?.()
-     } catch (e: any) {
-       trackError(new GeneralError(e.message as string))
-     }
-   }
+  const executeDocumentTask = async (id: number, task: SaveTaskType, onFinish?: () => void): Promise<void> => {
+    const updateTask = update({
+      id,
+      body: {
+        data: {
+          task
+        }
+      }
+    })
+
+    updateTask.catch((error: Error) => {
+      trackError(new ApiError(error))
+    })
+
+    try {
+      dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: true }))
+      const response = (await updateTask)
+
+      if (response.error !== undefined) {
+        dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: false }))
+        trackError(new ApiError(response.error))
+        onFinish?.()
+        return
+      }
+
+      if (task === SaveTaskType.Unpublish) {
+        dispatch(unpublishDraft({ id }))
+      }
+
+      if (task === SaveTaskType.Publish) {
+        dispatch(publishDraft({ id }))
+      }
+
+      if (task === SaveTaskType.Unpublish || task === SaveTaskType.Publish) {
+        dispatch(setNodePublished({ nodeId: String(id), elementType: 'data-object', isPublished: task === 'publish' }))
+      }
+
+      dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: false }))
+      onFinish?.()
+    } catch (e: any) {
+      trackError(new GeneralError(e.message as string))
+    }
+  }
 
   return { openDocument, executeDocumentTask }
 }

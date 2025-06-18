@@ -80,7 +80,7 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
               }
 
             renderToolbar={
-              <Toolbar/>
+              <Toolbar />
               }
           />
         </DocumentEditorProvider>

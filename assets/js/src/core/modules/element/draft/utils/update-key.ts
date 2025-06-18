@@ -1,3 +1,13 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
 interface UpdatableEntity {
   path?: string
   fullPath?: string
@@ -10,7 +20,7 @@ interface UpdatableEntity {
  * @param newValue - The new key or filename value.
  * @param keyField - The field name to update ('key' or 'filename').
  */
-export function updateKeyOrFilename(entity: UpdatableEntity, newValue: string, keyField: 'key' | 'filename'): void {
+export function updateKeyOrFilename (entity: UpdatableEntity, newValue: string, keyField: 'key' | 'filename'): void {
   entity[keyField] = newValue
 
   if (entity.fullPath !== undefined) {

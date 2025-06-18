@@ -86,7 +86,7 @@ const defaultComponentConfig = {
             type: ComponentType.SLOT,
             name: 'document.editor.toolbar.slots.left',
             defaultEntries: [
-              { name: 'contextMenu', priority: 100 },
+              { name: 'contextMenu', priority: 100 }
             ]
           },
           right: {

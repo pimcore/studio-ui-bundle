@@ -16,7 +16,6 @@ import ReactDOM from 'react-dom'
 import { serviceIds, useInjection } from '@sdk/app'
 import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
 import { isNull } from 'lodash'
-import { StyleProvider } from '@ant-design/cssinjs'
 import { useDocumentEditor } from '../../provider/use-document-editor'
 
 export interface EditableRendererProps {
@@ -33,7 +32,7 @@ const getTargetContainer = (
     return null
   }
 
-  if (editableType?.useShadowDom !== true) {
+  if (editableType?.useShadowDom === false) {
     return targetElement
   }
 
@@ -49,7 +48,7 @@ const getTargetContainer = (
   return shadowContainer
 }
 
-const getInitialData = (editableDefinitions: AbstractDocumentEditableDefinition[]): Record<string, {type: string, data: any}> => {
+const getInitialData = (editableDefinitions: AbstractDocumentEditableDefinition[]): Record<string, { type: string, data: any }> => {
   const initialData: Record<string, any> = {}
   editableDefinitions.forEach((editable) => {
     initialData[editable.name] = {
@@ -66,38 +65,29 @@ interface DocumentEditorIframeWindow extends Window {
 }
 
 export const EditablesRenderer = (props: EditableRendererProps): React.JSX.Element => {
-  const editableDefinitions: AbstractDocumentEditableDefinition[] = (props.iframeRef.current?.contentWindow as DocumentEditorIframeWindow | null)?.editableDefinitions ?? [];
-  const iframeDocument = props.iframeRef.current?.contentDocument;
-  const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry']);
-  const { initializeData } = useDocumentEditor();
+  const editableDefinitions: AbstractDocumentEditableDefinition[] = (props.iframeRef.current?.contentWindow as DocumentEditorIframeWindow | null)?.editableDefinitions ?? []
+  const iframeDocument = props.iframeRef.current?.contentDocument
+  const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
+  const { initializeData } = useDocumentEditor()
 
-  initializeData(getInitialData(editableDefinitions));
+  initializeData(getInitialData(editableDefinitions))
 
   return (
     <>
       {editableDefinitions.map((editable) => {
-        const targetElement = iframeDocument?.getElementById(editable.id) ?? null;
-        const editableType = documentEditableRegistry.hasDynamicType(editable.type) ? documentEditableRegistry.getDynamicType(editable.type) : undefined;
-        const targetContainer = getTargetContainer(targetElement, editableType, props.styleSheet);
+        const targetElement = iframeDocument?.getElementById(editable.id) ?? null
+        const editableType = documentEditableRegistry.hasDynamicType(editable.type) ? documentEditableRegistry.getDynamicType(editable.type) : undefined
+        const targetContainer = getTargetContainer(targetElement, editableType, props.styleSheet)
 
         if (!isNull(targetContainer)) {
-          if (editableType?.useShadowDom !== true) {
-            return ReactDOM.createPortal(
-              <RenderEditable editableDefinition={editable} />,
-              targetContainer
-            );
-          } else {
-            return ReactDOM.createPortal(
-              <StyleProvider container={targetContainer}>
-                <RenderEditable editableDefinition={editable} />
-              </StyleProvider>,
-              targetContainer
-            );
-          }
+          return ReactDOM.createPortal(
+            <RenderEditable editableDefinition={ editable } />,
+            targetContainer
+          )
         }
 
-        return null;
+        return null
       })}
     </>
-  );
-};
+  )
+}

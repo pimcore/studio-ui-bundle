@@ -91,7 +91,6 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
 
         return isUndefined(response.error)
       } else if (elementType === 'document') {
-
         if (args.body.data.length !== 1) {
           trackError(new GeneralError('Document patching only supports a single element'))
         }

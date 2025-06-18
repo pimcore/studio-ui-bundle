@@ -22,7 +22,6 @@ export const ReloadButton = (): React.JSX.Element => {
   const { document } = useDocumentDraft(id)
   const { refreshElement } = useElementRefresh('document')
 
-
   const hasDataChanged = (): boolean => {
     return Object.keys(document?.changes ?? {}).length > 0
   }

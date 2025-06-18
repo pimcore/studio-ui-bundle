@@ -18,10 +18,10 @@ export class DynamicTypeDocumentEditableRelation extends DynamicTypeDocumentEdit
   getEditableDataComponent (props: AbstractDocumentEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
       <ManyToOneRelation
+        allowToClearRelation
         assetsAllowed
         dataObjectsAllowed
         documentsAllowed
-        allowToClearRelation
       />
     )
   }

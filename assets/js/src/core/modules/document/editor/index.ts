@@ -75,7 +75,6 @@ moduleSystem.registerModule({
       component: EditorToolbarContextMenu
     })
 
-
     componentRegistry.registerToSlot(componentConfig.document.editor.toolbar.slots.right.name, {
       name: 'workflowMenu',
       priority: 100,
@@ -91,6 +90,5 @@ moduleSystem.registerModule({
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
     widgetRegistryService.registerWidget(DocumentEditorWidget)
-    
   }
 })

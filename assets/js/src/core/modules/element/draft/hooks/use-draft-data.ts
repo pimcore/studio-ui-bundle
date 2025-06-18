@@ -14,14 +14,14 @@ import type { EntityAdapter, EntityState } from '@reduxjs/toolkit/src/entities/m
 import { useAppDispatch } from '@sdk/app'
 import { useTransition } from 'react'
 import { isNil } from 'lodash'
-import { TrackableChangesDraft } from './use-trackable-changes'
+import { type TrackableChangesDraft } from './use-trackable-changes'
 
 export const IS_AUTO_SAVE_DRAFT_CREATED = 'isAutoSaveDraftCreated'
 
-type DraftData = {
-  id: number;
-  modificationDate: number;
-  isAutoSave: boolean;
+export interface DraftData {
+  id: number
+  modificationDate: number
+  isAutoSave: boolean
 }
 
 export interface DraftDataDraft extends TrackableChangesDraft {

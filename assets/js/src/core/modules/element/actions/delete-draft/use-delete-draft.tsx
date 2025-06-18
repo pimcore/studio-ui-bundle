@@ -14,7 +14,7 @@ import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-elem
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import ApiError from '@Pimcore/modules/app/error-handler/classes/api-error'
 import { isNil } from 'lodash'
-import { ElementType } from '@Pimcore/types/enums/element/element-type'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementDraft } from '@sdk/modules/element'
 

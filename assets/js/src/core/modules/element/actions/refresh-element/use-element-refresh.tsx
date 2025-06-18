@@ -56,7 +56,6 @@ export const useElementRefresh = (elementType: ElementType): UseElementRefreshHo
       )
 
       void updateDataObjectDraft(id, true)
-
     } else if (elementType === 'document') {
       dispatch(removeDocument(id))
       dispatch(

@@ -1,3 +1,13 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
 import { SaveTaskType, useSave } from '@Pimcore/modules/document/actions/save/use-save'
 import React, { useContext, useEffect, useMemo, useRef } from 'react'
 import { useMessage } from '@Pimcore/components/message/useMessage'
@@ -19,14 +29,14 @@ export interface DocumentEditorProviderProps {
   children: React.ReactNode
 }
 
-type ValueType = { type: string, data: any }
+interface ValueType { type: string, data: any }
 
 export const DocumentEditorProvider = ({ children }: DocumentEditorProviderProps): React.JSX.Element => {
   const valuesRef = useRef<Record<string, ValueType>>({})
   const initializedRef = useRef<boolean>(false)
   const { save, isError } = useSave()
-  const {id} = useContext(DocumentContext)
-  const {markDocumentEditablesAsModified}= useDocumentDraft(id)
+  const { id } = useContext(DocumentContext)
+  const { markDocumentEditablesAsModified } = useDocumentDraft(id)
 
   const messageApi = useMessage()
   const { t } = useTranslation()
@@ -50,7 +60,7 @@ export const DocumentEditorProvider = ({ children }: DocumentEditorProviderProps
 
   const contextValue = useMemo(() => ({
     updateValue: (key: string, value: any): void => {
-      valuesRef.current[key]['data'] = value
+      valuesRef.current[key].data = value
       updateDraft().catch((error) => {
         console.error('Error updating document draft:', error)
       })
@@ -68,7 +78,7 @@ export const DocumentEditorProvider = ({ children }: DocumentEditorProviderProps
   }), [])
 
   return (
-    <DocumentEditorContext.Provider value={contextValue}>
+    <DocumentEditorContext.Provider value={ contextValue }>
       {children}
     </DocumentEditorContext.Provider>
   )

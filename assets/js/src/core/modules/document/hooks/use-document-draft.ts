@@ -41,8 +41,8 @@ import { useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/
 
 import { usePublishedDraft, type UsePublishedData } from '@Pimcore/modules/element/draft/hooks/use-published'
 import { isFailedDraftId } from '../document-draft-error-slice'
-import { useModifiedDocumentEditablesDraft, UseModifiedDocumentEditablesDraftReturn } from '../draft/hooks/use-modified-editable-data'
-import { useDraftDataDraft } from '@Pimcore/modules/element/draft/hooks/use-draft-data'
+import { useModifiedDocumentEditablesDraft, type UseModifiedDocumentEditablesDraftReturn } from '../draft/hooks/use-modified-editable-data'
+import { useDraftDataDraft, type UseDraftDataReturn } from '@Pimcore/modules/element/draft/hooks/use-draft-data'
 
 export interface UseDocumentDraftReturn extends
   UsePropertiesDraftReturn,
@@ -50,6 +50,7 @@ export interface UseDocumentDraftReturn extends
   UseTabsDraftReturn,
   UseTrackableChangesDraftReturn,
   UseModifiedDocumentEditablesDraftReturn,
+  UseDraftDataReturn,
   UsePublishedData {
   isLoading: boolean
   isError: boolean
@@ -114,10 +115,10 @@ export const useDocumentDraft = (id: number): UseDocumentDraftReturn => {
   )
 
   const modifiedDocumentEditablesActions = useModifiedDocumentEditablesDraft(
-      id,
-      document,
-      markDocumentEditablesAsModified
-    )
+    id,
+    document,
+    markDocumentEditablesAsModified
+  )
 
   const editorType = document?.type === undefined
     ? undefined

@@ -26,8 +26,8 @@ interface RenderEditableProps {
 export const RenderEditable = ({ editableDefinition }: RenderEditableProps): React.JSX.Element => {
   const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
   const editableType = documentEditableRegistry.hasDynamicType(editableDefinition.type) ? documentEditableRegistry.getDynamicType(editableDefinition.type) : undefined
-  const {id} = useContext(DocumentContext)
-  const {document, markDocumentEditablesAsModified}= useDocumentDraft(id)
+  const { id } = useContext(DocumentContext)
+  const { markDocumentEditablesAsModified } = useDocumentDraft(id)
   const { updateValue, getValue } = useDocumentEditor()
 
   const [localValue, setLocalValue] = useState(getValue(editableDefinition.name))
@@ -42,8 +42,8 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
   }
 
   return (
-        <FieldWidthProvider fieldWidthValues={{large: 9999}}>
-          {
+    <FieldWidthProvider fieldWidthValues={ { large: 9999 } }>
+      {
               React.cloneElement(
                 editableType.getEditableDataComponent(editableDefinition),
                 {
@@ -57,6 +57,6 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
                 }
               )
           }
-        </FieldWidthProvider>
+    </FieldWidthProvider>
   )
 }
