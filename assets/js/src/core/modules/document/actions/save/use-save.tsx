@@ -133,7 +133,7 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
 
   return {
     save,
-    isLoading: isLoading || !isNil(queuedTask),
+    isLoading: Boolean(isLoading) || !isNil(queuedTask),
     isSuccess,
     isError,
     error

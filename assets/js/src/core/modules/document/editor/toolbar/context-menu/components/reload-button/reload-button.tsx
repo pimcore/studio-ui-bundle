@@ -31,20 +31,18 @@ export const ReloadButton = (): React.JSX.Element => {
   }
 
   return (
-    <>
-      <ReloadPopconfirm
-        hasDataChanged={ hasDataChanged }
-        key="reload"
-        onReload={ onReload }
-        title={ t('toolbar.reload.confirmation') }
+    <ReloadPopconfirm
+      hasDataChanged={ hasDataChanged }
+      key="reload"
+      onReload={ onReload }
+      title={ t('toolbar.reload.confirmation') }
+    >
+      <IconButton
+        icon={ { value: 'refresh' } }
       >
-        <IconButton
-          icon={ { value: 'refresh' } }
-        >
-          {t('toolbar.reload')}
-        </IconButton>
+        {t('toolbar.reload')}
+      </IconButton>
 
-      </ReloadPopconfirm>
-    </>
+    </ReloadPopconfirm>
   )
 }
