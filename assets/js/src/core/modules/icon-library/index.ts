@@ -1,11 +1,14 @@
 /**
- * This source file is available under the terms of the
- * Pimcore Open Core License (POCL)
+ * Pimcore
+ *
+ * This source file is available under two different licenses:
+ * - Pimcore Open Core License (POCL)
+ * - Pimcore Commercial License (PCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
- *  @license    Pimcore Open Core License (POCL)
+ *  @copyright  Copyright (c) Pimcore GmbH
+ *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
  */
 
 /* eslint-disable max-lines */
@@ -184,6 +187,7 @@ import save from '@Pimcore/assets/icons/save.inline.svg?react'
 import schedule from '@Pimcore/assets/icons/schedule.inline.svg?react'
 import search from '@Pimcore/assets/icons/search.inline.svg?react'
 import segmentTagging from '@Pimcore/assets/icons/segment-tagging.inline.svg?react'
+import send03 from '@Pimcore/assets/icons/send-03.inline.svg?react'
 import seo from '@Pimcore/assets/icons/seo.inline.svg?react'
 import settings from '@Pimcore/assets/icons/settings.inline.svg?react'
 import share from '@Pimcore/assets/icons/share.inline.svg?react'
@@ -222,7 +226,7 @@ import xlsxCsv from '@Pimcore/assets/icons/xlsx-csv.inline.svg?react'
 
 moduleSystem.registerModule({
   onInit: () => {
-    const iconLibrary = container.get<IconLibrary>(serviceIds.iconLibrary)
+    const iconLibrary = container.get<IconLibrary>(serviceIds.iconLibrary);
     iconLibrary.register({
       name: 'accessory',
       component: accessory
@@ -898,6 +902,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'segment-tagging',
       component: segmentTagging
+    })
+    iconLibrary.register({
+      name: 'send-03',
+      component: send03
     })
     iconLibrary.register({
       name: 'seo',

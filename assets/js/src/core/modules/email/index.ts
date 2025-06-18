@@ -13,6 +13,7 @@ import { type WidgetRegistry } from '../widget-manager/services/widget-registry'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { EmailBlocklistContainer } from './blocklist/email-blocklist-container'
+import { EmailLogContainer } from './log/email-log-container'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -21,6 +22,11 @@ moduleSystem.registerModule({
     widgetRegistryService.registerWidget({
       name: 'email-blocklist',
       component: EmailBlocklistContainer
+    })
+
+    widgetRegistryService.registerWidget({
+      name: 'email-log',
+      component: EmailLogContainer
     })
   }
 })
