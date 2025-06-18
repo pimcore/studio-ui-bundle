@@ -52,7 +52,7 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
     }
   }
 
-  const { setNodeRef, transform, transition, isDragging } = useSortable({
+  const { setNodeRef, transform, transition, isDragging, attributes, listeners } = useSortable({
     id: row.id
   })
 
@@ -60,11 +60,11 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.8 : 1,
-    zIndex: isDragging ? 1 : 'auto',
-    position: isDragging ? 'relative' : 'static'
+    zIndex: isDragging ? 1 : 0,
+    position: 'relative'
   }
 
-  return renderWithContextMenu(
+  return useMemo(() => renderWithContextMenu(
     <tr
       className={ [
         'ant-table-row',
@@ -75,6 +75,15 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
       ref={ setNodeRef }
       style={ style }
     >
+      <td>
+        <button
+          { ...attributes }
+          { ...listeners }
+          style={ { cursor: 'grab' } }
+        >
+          Move
+        </button>
+      </td>
       {row.getVisibleCells().map(cell => (
         <td
           className='ant-table-cell'
@@ -88,7 +97,7 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
                 width: cell.column.getSize(),
                 maxWidth: cell.column.getSize()
               }
-          }
+                }
         >
           <GridCell
             cell={ cell }
@@ -101,7 +110,7 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
         </td>
       ))}
     </tr>
-  )
+  ), [JSON.stringify(row), memoModifiedCells, isSelected, props.columns, style])
 
   function isModifiedCell (cellId: string): boolean {
     return memoModifiedCells.find((item) => item.columnId === cellId) !== undefined

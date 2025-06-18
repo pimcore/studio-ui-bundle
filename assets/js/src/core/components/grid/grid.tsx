@@ -260,7 +260,7 @@ export const Grid = ({
     </div>
   )
 
-  return (
+  return useMemo(() => (
     <div className={ cn('ant-table-wrapper', hashId, styles.grid, props.className, { [styles.disabledGrid]: disabled }) }>
       <div className="ant-table ant-table-small">
         <div className='ant-table-container'>
@@ -351,7 +351,7 @@ export const Grid = ({
         </div>
       </div>
     </div>
-  )
+  ), [table, modifiedCells, table.getTotalSize(), data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined])
 
   function getModifiedRow (rowIndex: string): GridProps['modifiedCells'] {
     return memoModifiedCells.filter(({ rowIndex: rIndex }) => String(rIndex) === String(rowIndex)) ?? []

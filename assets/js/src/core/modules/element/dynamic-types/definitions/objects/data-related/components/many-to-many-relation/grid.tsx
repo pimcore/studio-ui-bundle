@@ -33,8 +33,8 @@ import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 import { type ElementCellConfig, type ElementInfo } from '../../../../grid-cell/components/element-cell/element-cell'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
-import { useSortable, arrayMove } from '@dnd-kit/sortable'
-import { DndContext, KeyboardSensor, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core'
+import { arrayMove } from '@dnd-kit/sortable'
+import { DndContext, PointerSensor, closestCenter, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 
 interface ManyToManyRelationGridProps {
@@ -73,25 +73,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
   const { openElement, mapToElementType } = useElementHelper()
   const { t } = useTranslation()
   const { download } = useDownload()
-  const sensors = useSensors(
-    useSensor(MouseSensor),
-    useSensor(TouchSensor),
-    useSensor(KeyboardSensor)
-  )
-  const RowDragHandleCell = ({ rowId }: { rowId: string }): React.JSX.Element => {
-    const { attributes, listeners } = useSortable({
-      id: rowId
-    })
-    return (
-      <button
-        style={ { cursor: 'grab' } }
-        { ...attributes }
-        { ...listeners }
-      >
-        Move
-      </button>
-    )
-  }
+  const sensors = useSensors(useSensor(PointerSensor))
 
   const columnHelper = createColumnHelper()
 
@@ -127,14 +109,6 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
           size: 150
         })
       ]
-  columns.push(
-    columnHelper.accessor('move', {
-      id: 'drag-handle',
-      header: 'Move',
-      cell: ({ row }) => <RowDragHandleCell rowId={ row.id } />,
-      size: 60
-    })
-  )
   columns.push(
     columnHelper.accessor('actions', {
       header: t('actions'),
@@ -245,8 +219,6 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
   }, [props.value])
   const handleDragEnd = (event: DragEndEvent): void => {
     const { active, over } = event
-    console.log('----->>>>> active: ', active)
-    console.log('----->>>>> over: ', over)
 
     if (!isNil(active) && !isNil(over) && active.id !== over.id) {
       setData(prev => {
