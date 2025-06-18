@@ -15,46 +15,53 @@ import { Text } from '@Pimcore/components/text/text'
 export interface CollapseHeaderProps {
   label?: React.ReactNode
   subLabel?: React.ReactNode
+  subLabelPosition?: 'inline' | 'block'
   extra?: React.ReactNode
   extraPosition?: 'start' | 'end'
   expandIcon?: React.ReactNode
   expandIconPosition?: 'start' | 'end' | 'left' | 'right'
 }
 
-export const CollapseHeader = ({ label, subLabel, extra, extraPosition, expandIcon, expandIconPosition }: CollapseHeaderProps): React.JSX.Element => {
+export const CollapseHeader = ({ label, subLabel, extra, extraPosition, expandIcon, expandIconPosition, subLabelPosition = 'block' }: CollapseHeaderProps): React.JSX.Element => {
   const extraAdjustment = extraPosition === 'start' ? 'flex-start' : 'flex-end'
 
   return (
     <Flex
       align='center'
-      gap={ 'extra-small' }
+      gap={'extra-small'}
     >
-      <div className='collapse-header__title-container'>
+      <Flex
+        className={`collapse-header__title-container`}
+        vertical={subLabelPosition === 'block'}
+        gap={4}
+      >
         <Flex
           align='center'
-          gap={ 'mini' }
+          gap={'mini'}
         >
           {(expandIconPosition === 'start' || expandIconPosition === 'left') && expandIcon}
-          <Text className={ 'collapse-header__title' }>{label}</Text>
+          <Text className={'collapse-header__title'}>{label}</Text>
           {(expandIconPosition === 'end' || expandIconPosition === 'right') && expandIcon}
         </Flex>
 
         {subLabel !== undefined && (
-        <Text
-          className='collapse-header__subtitle'
-          type='secondary'
-        >{subLabel}</Text>
+          <Text
+            className='collapse-header__subtitle'
+            type='secondary'
+          >{subLabel}</Text>
         )}
-      </div>
+      </Flex>
 
-      {extra !== undefined && (
-        <Flex
-          className='collapse-header__extra'
-          justify={ extraAdjustment }
-        >
-          {extra}
-        </Flex>
-      )}
-    </Flex>
+      {
+        extra !== undefined && (
+          <Flex
+            className='collapse-header__extra'
+            justify={extraAdjustment}
+          >
+            {extra}
+          </Flex>
+        )
+      }
+    </Flex >
   )
 }
