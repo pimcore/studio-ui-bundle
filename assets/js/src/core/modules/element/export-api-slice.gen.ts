@@ -245,7 +245,6 @@ export type StaticTextConfig = {
     /** Static Text */
     text: string;
 };
-<<<<<<< HEAD
 export type Transformer = {
     /** Key of the Transformer */
     key: string;
@@ -255,21 +254,6 @@ export type Transformer = {
 export type AdvancedColumnConfig = {
     /** advancedColumns */
     advancedColumn?: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
-=======
-export type ExistingColumnConfig = {
-    /** Name of the existing Column */
-    existingColumnName?: string;
-};
-export type Transformer = {
-    /** Key of the Transformer */
-    key: string;
-};
-export type AdvancedColumnConfig = {
-    /** advancedColumns */
-    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig | ExistingColumnConfig)[];
-    /** Concatenation symbol to combine multiple columns */
-    concatenationSymbol?: string;
->>>>>>> origin/1.x
     /** List if Transformers that should be applied */
     transformers?: Transformer[];
 };
