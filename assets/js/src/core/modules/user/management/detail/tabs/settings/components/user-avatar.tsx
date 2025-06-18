@@ -25,8 +25,6 @@ const UserAvatar = ({ user, ...props }: IUserAvatar): React.JSX.Element => {
   const { styles } = useStyle()
   const classNames = ['avatar--default', styles.avatar]
 
-  console.log('UserAvatar', user)
-  const id = user?.id;
   const { uploadUserAvatar, fetchUserImageById } = useUserHelper()
 
   const [userImage, setUserImage] = React.useState<any>(user?.image ?? null)

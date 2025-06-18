@@ -66,7 +66,6 @@ export const useUserHelper = (): UseUserReturn => {
 
     handleNotification(t('user-management.save-user.success'), error)
 
-    console.log(data)
     dispatch(userProfileUpdated(data))
     return data
   }
