@@ -1,11 +1,14 @@
 /**
- * This source file is available under the terms of the
- * Pimcore Open Core License (POCL)
+ * Pimcore
+ *
+ * This source file is available under two different licenses:
+ * - Pimcore Open Core License (POCL)
+ * - Pimcore Commercial License (PCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
- *  @license    Pimcore Open Core License (POCL)
+ *  @copyright  Copyright (c) Pimcore GmbH
+ *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
  */
 
 /* eslint-disable max-lines */
@@ -74,6 +77,7 @@ import deleteColumn from '@Pimcore/assets/icons/delete-column.inline.svg?react'
 import deleteRow from '@Pimcore/assets/icons/delete-row.inline.svg?react'
 import dependencies from '@Pimcore/assets/icons/dependencies.inline.svg?react'
 import details from '@Pimcore/assets/icons/details.inline.svg?react'
+import documentTypes from '@Pimcore/assets/icons/document-types.inline.svg?react'
 import document from '@Pimcore/assets/icons/document.inline.svg?react'
 import doubleArrowDown from '@Pimcore/assets/icons/double-arrow-down.inline.svg?react'
 import doubleArrowLeft from '@Pimcore/assets/icons/double-arrow-left.inline.svg?react'
@@ -220,7 +224,7 @@ import xlsxCsv from '@Pimcore/assets/icons/xlsx-csv.inline.svg?react'
 
 moduleSystem.registerModule({
   onInit: () => {
-    const iconLibrary = container.get<IconLibrary>(serviceIds.iconLibrary)
+    const iconLibrary = container.get<IconLibrary>(serviceIds.iconLibrary);
     iconLibrary.register({
       name: 'accessory',
       component: accessory
@@ -456,6 +460,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'details',
       component: details
+    })
+    iconLibrary.register({
+      name: 'document-types',
+      component: documentTypes
     })
     iconLibrary.register({
       name: 'document',
