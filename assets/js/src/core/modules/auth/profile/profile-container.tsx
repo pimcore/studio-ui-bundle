@@ -32,7 +32,7 @@ export const USERPROFILE: WidgetManagerTabConfig = {
 
 const ProfileContainer = (): React.JSX.Element => {
     const user = useUser()
-    const { isLoading } = useUserDraft(user.id)
+    const { isLoading } = useUserDraft()
 
     return (
         <ContentLayout

@@ -87,14 +87,14 @@ export const useUserManagementDraft = (id: number): UseUserReturnDraft => {
     dispatch(changeUser({ id: user.id, changes }))
   }
 
-  function updateUserKeyBinding (name: string, code: object): void {
+  function updateUserKeyBinding (name: string, code: { key: number, ctrl: boolean, alt: boolean, shift: boolean }): void {
     const updatedKeyBindings = [...user.keyBindings];
     const existingKeyBindingIndex = updatedKeyBindings.findIndex((keyBinding: any) => keyBinding.action === name);
 
     if (existingKeyBindingIndex !== -1) {
-      updatedKeyBindings[existingKeyBindingIndex] = code;
+      updatedKeyBindings[existingKeyBindingIndex] = {action:name, ...code};
     } else {
-      updatedKeyBindings.push(code);
+      updatedKeyBindings.push({action:name, ...code});
     }
 
     dispatch(changeUser({ id: user.id, changes: { keyBindings: updatedKeyBindings } }))

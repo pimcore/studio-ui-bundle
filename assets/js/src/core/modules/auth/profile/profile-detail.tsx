@@ -35,7 +35,7 @@ const ProfileDetail = ({id}:IProfileDetail): React.JSX.Element => {
     const [form] = Form.useForm()
     const { t } = useTranslation()
     const { availableAdminLanguages } = useSettings()
-    const { user, setModifiedCells } = useUserDraft(id)
+    const { user, setModifiedCells } = useUserDraft()
     const [keyBindingsModified, setKeyBindingsModified] = useState(false)
 
     useEffect(() => {
@@ -56,7 +56,8 @@ const ProfileDetail = ({id}:IProfileDetail): React.JSX.Element => {
     }, [user?.modified])
 
     const handleOnChangeKeyBindings = (name: string, code: object): void => {
-        let modifiedKeyBindings = user?.modifiedCells.keyBindings ?? []
+        let modifiedKeyBindings = user?.modifiedCells?.keyBindings ?? []
+
         modifiedKeyBindings = modifiedKeyBindings.some((keyBinding) => keyBinding.action === name) ?
             modifiedKeyBindings.map((keyBinding) => keyBinding.action === name ? { ...keyBinding, ...code } : keyBinding)
             : [...modifiedKeyBindings, { action: name, ...code }];

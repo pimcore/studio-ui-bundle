@@ -13,7 +13,12 @@ import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
 import { type UserInformation } from '../user/user-api-slice.gen'
 
-export const useUser = (): UserInformation => {
+interface IExtendsUserInformation extends UserInformation {
+  modified?: boolean,
+  modifiedCells?: Record<string, boolean>
+}
+
+export const useUser = (): IExtendsUserInformation => {
   const user = useSelector(selectCurrentUser)
 
   return useMemo(() => (user), [user])

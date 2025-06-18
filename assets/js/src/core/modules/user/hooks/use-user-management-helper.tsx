@@ -35,6 +35,7 @@ import {
 import { userOpened, userClosed, userUpdated, changeUser, userImageLoaded, userAvailablePermissionsFetched } from '@Pimcore/modules/user/user-management-slice'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
+import type { UseTrackableChangesDraftReturn } from '@Pimcore/modules/user/hooks/use-user-management-trackable-changes'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface AddItemArgs {
@@ -42,7 +43,8 @@ interface AddItemArgs {
   name: string
 }
 
-interface UseUserReturn {
+interface UseUserReturn extends
+    UseTrackableChangesDraftReturn {
   openUser: (id: number) => void
   closeUser: (id: number) => void
   getUserTree: (props: UserGetTreeApiArg) => Promise<UserGetTreeApiResponse>

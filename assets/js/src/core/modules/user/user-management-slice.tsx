@@ -12,10 +12,15 @@ import type { EntityAdapter } from '@reduxjs/toolkit/src/entities/models'
 import { createEntityAdapter, createSlice, type PayloadAction, type Update } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@sdk/app'
 import { type UserGetAvailablePermissionsApiResponse, type UserPermission, type User } from '@Pimcore/modules/user/user-api-slice.gen'
+import {
+  type TrackableChangesDraft,
+  useTrackableChangesReducers
+} from '@Pimcore/modules/user/hooks/use-user-management-trackable-changes'
 
-export interface UserDraft extends User {
+export interface UserDraft extends User, TrackableChangesDraft {
   password?: string
   image?: string
+  modified: boolean
 }
 
 export const userAdapter: EntityAdapter<UserDraft, number> = createEntityAdapter<UserDraft>({})
@@ -69,7 +74,8 @@ export const slice = createSlice({
     },
     userAvailablePermissionsFetched: (state, action: PayloadAction<UserGetAvailablePermissionsApiResponse>): void => {
       state.availablePermissions = action.payload.items
-    }
+    },
+    ...useTrackableChangesReducers(userAdapter)
   }
 })
 

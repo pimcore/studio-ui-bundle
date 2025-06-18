@@ -29,7 +29,7 @@ interface IToolbarProps {
 
 export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { user, isLoading, removeTrackedChanges } = useUserDraft(id)
+  const { user, isLoading, removeTrackedChanges } = useUserDraft()
   const { updateUserProfile } = useUserHelper()
 
   const hasChanges = user?.modified === true

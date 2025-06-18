@@ -17,15 +17,18 @@ import {
     useTrackableChangesDraft,
     type UseTrackableChangesDraftReturn
 } from '@Pimcore/modules/auth/hooks/use-trackable-changes'
-// import { useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-tabs'
 import { type UserInformation } from '@Pimcore/modules/auth/user/user-api-slice-enhanced'
 
+interface IExtendsUserInformation extends UserInformation {
+    modified?: boolean,
+    modifiedCells?: Record<string, boolean>
+}
 export interface UseUserDraftReturn extends UseTrackableChangesDraftReturn {
     isLoading: boolean,
-    user: UserInformation
+    user: IExtendsUserInformation
 }
 
-export const useUserDraft = (id: number): UseUserDraftReturn => {
+export const useUserDraft = (): UseUserDraftReturn => {
     const user = useAppSelector(state => selectCurrentUser(state))
     const [isLoading, setIsLoading] = useState<boolean>(true)
 
