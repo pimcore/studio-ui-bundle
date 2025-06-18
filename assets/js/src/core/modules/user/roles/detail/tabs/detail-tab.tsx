@@ -15,7 +15,7 @@ import { WorkspacesContainer } from '@Pimcore/modules/user/roles/detail/tabs/wor
 import { useTranslation } from 'react-i18next'
 import { RoleProvider } from '@Pimcore/modules/user/roles/role-provider'
 import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
-import { useGlobalUserContext } from '@Pimcore/modules/user/hooks/use-global-user-context'
+import { useGlobalUserContext } from '@Pimcore/modules/user/hooks/use-global-user-management-context'
 import { useRoleDraft } from '@Pimcore/modules/user/roles/hooks/use-roles-draft'
 import { Content } from '@Pimcore/components/content/content'
 

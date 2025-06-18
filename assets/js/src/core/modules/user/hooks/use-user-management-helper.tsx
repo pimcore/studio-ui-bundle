@@ -32,10 +32,9 @@ import {
   type UserGetImageApiResponse,
   type UserGetAvailablePermissionsApiResponse
 } from '@Pimcore/modules/user/user-api-slice-enhanced'
-import { userOpened, userClosed, userUpdated, changeUser, userImageLoaded, userAvailablePermissionsFetched } from '@Pimcore/modules/user/user-slice'
+import { userOpened, userClosed, userUpdated, changeUser, userImageLoaded, userAvailablePermissionsFetched } from '@Pimcore/modules/user/user-management-slice'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
-import type { UseTrackableChangesDraftReturn } from '@Pimcore/modules/user/hooks/use-user-trackable-changes'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface AddItemArgs {
@@ -43,8 +42,7 @@ interface AddItemArgs {
   name: string
 }
 
-interface UseUserReturn extends
-  UseTrackableChangesDraftReturn {
+interface UseUserReturn {
   openUser: (id: number) => void
   closeUser: (id: number) => void
   getUserTree: (props: UserGetTreeApiArg) => Promise<UserGetTreeApiResponse>
@@ -66,7 +64,7 @@ interface UseUserReturn extends
   getDefaultKeyBindings: () => Promise<UserDefaultKeyBindingsApiResponse>
 }
 
-export const useUserHelper = (): UseUserReturn => {
+export const useUserManagementHelper = (): UseUserReturn => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const [notificationApi] = useNotification()

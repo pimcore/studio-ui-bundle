@@ -15,10 +15,10 @@ import { WorkspacesContainer } from '@Pimcore/modules/user/management/detail/tab
 import { KeyBindingsContainer } from '@Pimcore/modules/user/management/detail/tabs/key-bindings/key-bindings-container'
 import { ReferenceContainer } from '@Pimcore/modules/user/management/detail/tabs/references/references-container'
 import { useTranslation } from 'react-i18next'
-import { UserProvider } from '@Pimcore/modules/user/user-provider'
+import { UserManagementProvider } from '@Pimcore/modules/user/user-management-provider'
 import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
-import { useGlobalUserContext } from '@Pimcore/modules/user/hooks/use-global-user-context'
-import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
+import { useGlobalUserContext } from '@Pimcore/modules/user/hooks/use-global-user-management-context'
+import { useUserManagementDraft } from '@Pimcore/modules/user/hooks/use-user-management-draft'
 import { Content } from '@Pimcore/components/content/content'
 
 interface IUserDetailTabProps {
@@ -29,7 +29,7 @@ const UserDetailTab = ({ id, ...props }: IUserDetailTabProps): React.JSX.Element
   const { t } = useTranslation()
   const isWidgetActive = useIsAcitveMainWidget()
   const { setContext, removeContext } = useGlobalUserContext()
-  const { user, isLoading, isError, removeUserFromState } = useUserDraft(id)
+  const { user, isLoading, isError, removeUserFromState } = useUserManagementDraft(id)
 
   useEffect(() => {
     return () => {
@@ -87,14 +87,14 @@ const UserDetailTab = ({ id, ...props }: IUserDetailTabProps): React.JSX.Element
   ]
 
   return (
-    <UserProvider id={ id }>
+    <UserManagementProvider id={ id }>
       <Tabs
         defaultActiveKey="1"
         destroyInactiveTabPane
         items={ items }
       >
       </Tabs>
-    </UserProvider>
+    </UserManagementProvider>
   )
 }
 

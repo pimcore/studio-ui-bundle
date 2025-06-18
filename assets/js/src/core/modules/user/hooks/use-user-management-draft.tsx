@@ -14,7 +14,7 @@ import {
   userFetched,
   userRemoved,
   changeUser
-} from '@Pimcore/modules/user/user-slice'
+} from '@Pimcore/modules/user/user-management-slice'
 import {
   api,
   type UserGetByIdApiResponse
@@ -33,7 +33,7 @@ interface UseUserReturnDraft {
   reloadUser: () => void
 }
 
-export const useUserDraft = (id: number): UseUserReturnDraft => {
+export const useUserManagementDraft = (id: number): UseUserReturnDraft => {
   const dispatch = useAppDispatch()
   const user = useAppSelector(state => selectUserById(state, id))
   const [isLoading, setIsLoading] = useState<boolean>(true)

@@ -15,10 +15,10 @@ import { Form } from '@Pimcore/components/form/form'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { useTranslation } from 'react-i18next'
-import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
-import { useUserContext } from '@Pimcore/modules/user/hooks/use-user-context'
+import { useUserManagementDraft } from '@Pimcore/modules/user/hooks/use-user-management-draft'
+import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-management-context'
 import { Content } from '@Pimcore/components/content/content'
-import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
+import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
 import { UserAvatar } from '@Pimcore/modules/user/management/detail/tabs/settings/components/user-avatar'
 import { generatePassword, getGroupedPermissions } from '@Pimcore/modules/user/management/detail/tabs/settings/settings-helper'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -36,10 +36,10 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const [form] = Form.useForm()
   const { t } = useTranslation()
   const { Text } = Typography
-  const { id } = useUserContext()
+  const { id } = useUserManagementContext()
   const user = useUser()
-  const { user: openedUser, isLoading, changeUserInState } = useUserDraft(id)
-  const { getAvailablePermissions } = useUserHelper()
+  const { user: openedUser, isLoading, changeUserInState } = useUserManagementDraft(id)
+  const { getAvailablePermissions } = useUserManagementHelper()
   const permissions = getGroupedPermissions(getAvailablePermissions())
 
   useEffect(() => {

@@ -18,13 +18,13 @@ export interface GlobalUserContext extends GlobalContext {
   }
 }
 
-interface UseGlobalUserContext {
+interface UseGlobalUserManagementContext {
   context: GlobalUserContext | undefined
   setContext: (config: GlobalUserContext['config']) => void
   removeContext: () => void
 }
 
-export const useGlobalUserContext = (): UseGlobalUserContext => {
+export const useGlobalUserContext = (): UseGlobalUserManagementContext => {
   const disptach = useAppDispatch()
   const context = useAppSelector(state => selectContextByType(state, 'user')) as GlobalUserContext | undefined
 

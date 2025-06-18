@@ -21,7 +21,7 @@ export interface IUserProviderProps {
 
 export const UserContext = createContext<IUserContext>({ id: -1 })
 
-export const UserProvider = ({ id, children }: IUserProviderProps): React.JSX.Element => {
+export const UserManagementProvider = ({ id, children }: IUserProviderProps): React.JSX.Element => {
   return useMemo(() => (
     <UserContext.Provider value={ { id } }>
       {children}

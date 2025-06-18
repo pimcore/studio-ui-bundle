@@ -10,17 +10,17 @@
 
 import React from 'react'
 import { Form } from '@Pimcore/components/form/form'
-import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
-import { useUserContext } from '@Pimcore/modules/user/hooks/use-user-context'
+import { useUserManagementDraft } from '@Pimcore/modules/user/hooks/use-user-management-draft'
+import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-management-context'
 import { Content } from '@Pimcore/components/content/content'
-import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
+import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
 import {KeyBindings} from "@Pimcore/modules/user/management/detail/tabs/key-bindings/key-bindings";
 
 const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
   const [form] = Form.useForm()
-  const { id } = useUserContext()
-  const { user, isLoading, updateUserKeyBinding, changeUserInState } = useUserDraft(id)
-  const { resetUserKeyBindings, getDefaultKeyBindings } = useUserHelper()
+  const { id } = useUserManagementContext()
+  const { user, isLoading, updateUserKeyBinding, changeUserInState } = useUserManagementDraft(id)
+  const { resetUserKeyBindings, getDefaultKeyBindings } = useUserManagementHelper()
 
   const handleOnChange = (name: string, code: object): void => {
     updateUserKeyBinding(name, code)

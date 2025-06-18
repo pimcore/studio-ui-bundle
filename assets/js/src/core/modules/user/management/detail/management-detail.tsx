@@ -10,9 +10,9 @@
 
 import React, { useState, useEffect } from 'react'
 import { UserDetailTab } from '@Pimcore/modules/user/management/detail/tabs/user-detail-tab'
-import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
+import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
 import { Content } from '@Pimcore/components/content/content'
-import { selectUserById } from '@Pimcore/modules/user/user-slice'
+import { selectUserById } from '@Pimcore/modules/user/user-management-slice'
 import { store } from '@sdk/app'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import {
@@ -22,7 +22,7 @@ import { Toolbar } from '@Pimcore/modules/user/management/toolbar/toolbar'
 import { useStyle } from '@Pimcore/modules/user/management/detail/management-detail.styles'
 import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
-import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
+import { useUserManagementDraft } from '@Pimcore/modules/user/hooks/use-user-management-draft'
 import { Popconfirm } from 'antd'
 
 interface IManagementDetailProps {
@@ -36,8 +36,8 @@ const ManagementDetail = ({ onCloneUser, onRemoveItem, ...props }: IManagementDe
   const classNames = ['detail-tabs', styles.detailTabs]
   const modal = useFormModal()
 
-  const { openUser, closeUser, removeUser, cloneUser, getAllIds, activeId } = useUserHelper()
-  const { user } = useUserDraft(activeId)
+  const { openUser, closeUser, removeUser, cloneUser, getAllIds, activeId } = useUserManagementHelper()
+  const { user } = useUserManagementDraft(activeId)
   const [popConfirmOpen, setPopConfirmOpen] = useState<number | null>(null)
 
   const triggerConfirm = (): void => {

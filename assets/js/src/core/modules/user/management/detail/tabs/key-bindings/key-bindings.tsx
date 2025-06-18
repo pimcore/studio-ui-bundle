@@ -14,7 +14,7 @@ import { Form } from '@Pimcore/components/form/form'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@Pimcore/components/button/button'
-import {useUserHelper} from "@Pimcore/modules/user/hooks/use-user-helper";
+import {useUserManagementHelper} from "@Pimcore/modules/user/hooks/use-user-management-helper";
 
 interface IKeyBindings {
     values?: any
@@ -26,7 +26,7 @@ interface IKeyBindings {
 const KeyBindings = ({ values, modified, onChange, onResetKeyBindings, ...props }:IKeyBindings): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
-  const { getDefaultKeyBindings } = useUserHelper()
+  const { getDefaultKeyBindings } = useUserManagementHelper()
 
   const getKeyName = (key: number): string => {
     let name = ''

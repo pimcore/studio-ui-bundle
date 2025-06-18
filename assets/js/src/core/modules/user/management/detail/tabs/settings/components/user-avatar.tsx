@@ -15,7 +15,7 @@ import { Avatar, Flex, Upload, Skeleton } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import { Button } from '@Pimcore/components/button/button'
 import { useStyle } from '@Pimcore/modules/user/management/detail/tabs/settings/components/user-avatar.styles'
-import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
+import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
 
 interface IUserAvatar {
   user: any
@@ -25,7 +25,7 @@ const UserAvatar = ({ user, ...props }: IUserAvatar): React.JSX.Element => {
   const { styles } = useStyle()
   const classNames = ['avatar--default', styles.avatar]
 
-  const { uploadUserAvatar, fetchUserImageById } = useUserHelper()
+  const { uploadUserAvatar, fetchUserImageById } = useUserManagementHelper()
 
   const [userImage, setUserImage] = React.useState<any>(user?.image ?? null)
   const [userImageLoading, setUserImageLoading] = React.useState<boolean>(user?.hasImage === true && userImage === null)

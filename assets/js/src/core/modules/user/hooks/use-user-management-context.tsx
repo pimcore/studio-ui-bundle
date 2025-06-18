@@ -9,13 +9,13 @@
  */
 
 import { useContext } from 'react'
-import { UserContext } from '../user-provider'
+import { UserContext } from '../user-management-provider'
 
 export interface UseDataObjectReturn {
   id: number
 }
 
-export const useUserContext = (): UseDataObjectReturn => {
+export const useUserManagementContext = (): UseDataObjectReturn => {
   const { id } = useContext(UserContext)
 
   return {
