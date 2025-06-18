@@ -10,7 +10,7 @@
 
 import React, { useEffect, useState } from 'react'
 import type { ColumnDef } from '@tanstack/react-table'
-import { isEqual } from 'lodash'
+import { isEqual, isNil } from 'lodash'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import { ManyToManyRelationGrid } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/grid'
 import { type ManyToManyRelationValue, type ManyToManyRelationValueItem, useValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
@@ -44,13 +44,16 @@ export interface ManyToManyRelationProps extends IRelationAllowedTypesDataCompon
   hint?: React.ReactNode | null
   allowMultipleAssignments?: boolean
   className?: string
+  enableRowDrag?: boolean
 }
 
-export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.Element => {
+export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToManyRelationProps): React.JSX.Element => {
   const [value, setValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
   const [displayedValue, setDisplayedValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
 
   const { onDrop, deleteItem, onSearch, onOrderChange, addAssets, addItems, maxRemainingItems } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments)
+
+  const allowDragAndDrop = !isNil(displayedValue) && displayedValue?.length > 1
 
   useEffect(() => {
     if (!isEqual(value, props.value ?? null)) {
@@ -91,6 +94,7 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
           columnDefinition={ props.columnDefinition }
           deleteItem={ deleteItem }
           disabled={ props.disabled }
+          enableRowDrag={ enableRowDrag && allowDragAndDrop }
           enrichRowData={ props.enrichRowData }
           handleOrderChange={ onOrderChange }
           height={ props.height }

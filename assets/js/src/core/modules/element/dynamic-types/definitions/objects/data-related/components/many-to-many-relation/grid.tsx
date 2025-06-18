@@ -50,6 +50,7 @@ interface ManyToManyRelationGridProps {
   hint?: React.ReactNode | null
   onUpdateCellData?: (event: OnUpdateCellDataEvent) => void
   className?: string
+  enableRowDrag: boolean
   handleOrderChange: (data: ManyToManyRelationValue) => void
 }
 export const getElementCellConfig = (disabled?: boolean): ElementCellConfig => {
@@ -69,6 +70,8 @@ export const getElementCellConfig = (disabled?: boolean): ElementCellConfig => {
   }
 }
 export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid (props: ManyToManyRelationGridProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
+  const { enableRowDrag } = props
+
   const { getStateClasses } = useDroppable()
   const { confirm } = useFormModal()
   const { openElement, mapToElementType } = useElementHelper()
@@ -110,9 +113,13 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
           size: 150
         })
       ]
-  columns.unshift(
-    columnHelper.accessor('move', { header: '', size: 40 })
-  )
+
+  if (enableRowDrag) {
+    columns.unshift(
+      columnHelper.accessor('move', { header: '', size: 40 })
+    )
+  }
+
   columns.push(
     columnHelper.accessor('actions', {
       header: t('actions'),
