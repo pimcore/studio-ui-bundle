@@ -24,9 +24,21 @@ docTypes: DocTypeType[]
 }
 
 export const useDocumentConfig = (): UseDocumentConfigReturn => {
-  const {data: controllers, isError: isControllerError, error: controllerError } = useDocumentAvailableControllersListQuery()
-  const {data: templates, isError: isTemplatesError, error: templatesError } = useDocumentAvailableTemplatesListQuery()
-  const {data: docTypes, isError: isDocTypesError, error: docTypeError} = useDocumentDocTypeTypeListQuery()
+  const {data: controllers, isError: isControllerError, error: controllerError } = useDocumentAvailableControllersListQuery(undefined,
+    { refetchOnMountOrArgChange: false,
+      refetchOnReconnect: false,
+      refetchOnFocus: false
+    })
+  const {data: templates, isError: isTemplatesError, error: templatesError } = useDocumentAvailableTemplatesListQuery(undefined,
+    { refetchOnMountOrArgChange: false,
+      refetchOnReconnect: false,
+      refetchOnFocus: false
+    })
+  const {data: docTypes, isError: isDocTypesError, error: docTypeError} = useDocumentDocTypeTypeListQuery(undefined,
+    { refetchOnMountOrArgChange: false,
+      refetchOnReconnect: false,
+      refetchOnFocus: false
+    })
 
   useEffect(() => {
     if (isControllerError) {

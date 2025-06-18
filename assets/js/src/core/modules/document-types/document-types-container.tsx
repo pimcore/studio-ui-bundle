@@ -14,6 +14,7 @@ import trackError, { ApiError } from '../app/error-handler'
 import { useAppDispatch } from '@sdk/app'
 import { useDocumentDocTypeListQuery } from '../document/document-api-slice-enhanced'
 import { DocumentTypeRow, useDocumentType } from './hooks/use-document-type'
+import { DocumentTypeRow, useDocumentConfig, type UseDocumentConfigReturn } from './hooks/use-document-config'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -30,6 +31,8 @@ import { api } from '@sdk/api/documents'
 export const DocumentTypesContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
   const { createNewDocumentType, createLoading } = useDocumentType()
+  const config = useDocumentConfig()
+
   const { data, isLoading: documentTypesLoading, isFetching: documentTypesFetching, isError, error } = useDocumentDocTypeListQuery({})
 
   const [documentTypeRows, setDocumentTypeRows] = useState<DocumentTypeRow[]>([])
@@ -119,6 +122,7 @@ const sortedRows = [...documentTypeRows].sort((a, b) => {
           <Table
             documentTypeRows={ sortedRows }
             setDocumentTypeRows={ setDocumentTypeRows }
+            config={config}
           />        </Box>
       </Content>
     </ContentLayout>

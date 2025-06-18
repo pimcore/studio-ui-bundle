@@ -38,8 +38,8 @@ export const useDocumentType = (): UseDocumentTypeReturn => {
     try {
       const result = await createDocumentType(dummyDocumentType)
 
-      if (!isUndefined(response.error)) {
-        trackError(new ApiError(response.error))
+      if (!isUndefined(result.error)) {
+        trackError(new ApiError(result.error))
       }
 
       if ('data' in result) {
@@ -55,8 +55,8 @@ export const useDocumentType = (): UseDocumentTypeReturn => {
     try {
       const result = await deleteDocumentType({ id })
 
-      if (!isUndefined(response.error)) {
-        trackError(new ApiError(response.error))
+      if (!isUndefined(result.error)) {
+        trackError(new ApiError(result.error))
       }
 
       return { success: 'data' in result }
@@ -80,8 +80,8 @@ export const useDocumentType = (): UseDocumentTypeReturn => {
     try {
       const result = await updateDocumentType({ id, docTypeUpdateParameters: toApiDocumentType(row) })
 
-        if (!isUndefined(response.error)) {
-        trackError(new ApiError(response.error))
+        if (!isUndefined(result.error)) {
+        trackError(new ApiError(result.error))
       }
       return { success: 'data' in result }
     } catch (e) {

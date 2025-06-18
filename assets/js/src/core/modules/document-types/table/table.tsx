@@ -15,7 +15,6 @@ import { useTranslation } from 'react-i18next'
 import { type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
 import { DocumentTypeRow, useDocumentType } from '../hooks/use-document-type'
-import { useDocumentConfig } from '../hooks/use-document-config'
 
 
 export type DocumentTypeWithActions = DocumentType & { actions: React.ReactNode }
@@ -23,12 +22,17 @@ export type DocumentTypeWithActions = DocumentType & { actions: React.ReactNode 
 interface TableProps {
   documentTypeRows: DocumentTypeRow[]
   setDocumentTypeRows: React.Dispatch<React.SetStateAction<DocumentTypeRow[]>>
+  config: {
+    controllers: DocumentController[]
+    templates: DocumentTemplate[]
+    docTypes: DocTypeType[]
+  }
 }
 
-export const Table = ({ documentTypeRows, setDocumentTypeRows }: TableProps): React.JSX.Element => {
+export const Table = ({ documentTypeRows, setDocumentTypeRows, config }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { updateDocumentTypeById } = useDocumentType()
-  const { controllers, templates, docTypes } = useDocumentConfig()
+  const { controllers, templates, docTypes } = config
 
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
 
