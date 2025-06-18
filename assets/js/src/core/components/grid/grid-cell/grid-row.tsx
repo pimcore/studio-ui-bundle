@@ -16,6 +16,7 @@ import { type GridProps, type ListGridContextMenuComponents, type ListGridContex
 import { type GridCellReference } from '@Pimcore/components/grid/grid'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 export interface GridRowProps {
   row: Row<any>
@@ -75,15 +76,6 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
       ref={ setNodeRef }
       style={ style }
     >
-      <td>
-        <button
-          { ...attributes }
-          { ...listeners }
-          style={ { cursor: 'grab' } }
-        >
-          Move
-        </button>
-      </td>
       {row.getVisibleCells().map(cell => (
         <td
           className='ant-table-cell'
@@ -99,14 +91,25 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
               }
                 }
         >
-          <GridCell
-            cell={ cell }
-            isActive={ props.activeColumId === cell.column.id }
-            isModified={ isModifiedCell(cell.column.id) }
-            key={ cell.id }
-            onFocusCell={ props.onFocusCell }
-            tableElement={ props.tableElement }
-          />
+          {cell.column.id === 'move'
+            ? (
+              <IconButton
+                icon={ { value: 'drag-option' } }
+                { ...attributes }
+                { ...listeners }
+                style={ { cursor: 'grab' } }
+                tabIndex={ -1 }
+              />
+              )
+            : (
+              <GridCell
+                cell={ cell }
+                isActive={ props.activeColumId === cell.column.id }
+                isModified={ isModifiedCell(cell.column.id) }
+                onFocusCell={ props.onFocusCell }
+                tableElement={ props.tableElement }
+              />
+              )}
         </td>
       ))}
     </tr>

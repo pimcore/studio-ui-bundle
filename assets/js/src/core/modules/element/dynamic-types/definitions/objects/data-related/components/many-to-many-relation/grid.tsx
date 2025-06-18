@@ -109,6 +109,9 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
           size: 150
         })
       ]
+  columns.unshift(
+    columnHelper.accessor('move', { header: '', size: 40 })
+  )
   columns.push(
     columnHelper.accessor('actions', {
       header: t('actions'),
