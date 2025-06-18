@@ -75,7 +75,6 @@ const KeyBindings = ({ values, modified, onChange, onResetKeyBindings, ...props 
   }
 
   useEffect(() => {
-    console.log('useEffect called with values:', values);
     if (!values || values.length === 0) {
       return
     }
