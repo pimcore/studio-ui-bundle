@@ -26,6 +26,7 @@ import { DocumentDetailData } from '@Pimcore/modules/document/document-api-slice
 import { usePublishedReducers, type PublishedDraft } from '../element/draft/hooks/use-published'
 import { useModifiedDocumentEditablesReducers } from './draft/hooks/use-modified-editable-data'
 import { DraftDataDraft, useDraftDataReducers } from '../element/draft/hooks/use-draft-data'
+import { updateKeyOrFilename } from '../element/draft/utils/update-key'
 
 export interface DocumentDraft extends Omit<DocumentDetailData, 'draftData'>, PropertiesDraft, SchedulesDraft, TrackableChangesDraft, TabsDraft, DraftDataDraft, PublishedDraft {
 }
@@ -58,20 +59,7 @@ export const slice = createSlice({
     updateKey (state, action: PayloadAction<{ id: number, key: string }>): void {
       if (state.entities[action.payload.id] !== undefined) {
         const document = state.entities[action.payload.id]
-
-        document.key = action.payload.key
-
-        if (document.fullPath !== undefined) {
-          const fullPathAsArray = document.fullPath?.split('/')
-          fullPathAsArray[fullPathAsArray.length - 1] = action.payload.key
-          document.fullPath = fullPathAsArray.join('/')
-        }
-
-        if (document.path !== undefined) {
-          const pathAsArray = document.path.split('/')
-          pathAsArray[pathAsArray.length - 1] = action.payload.key
-          document.path = pathAsArray.join('/')
-        }
+        updateKeyOrFilename(document, action.payload.key, 'key')
       }
     },
 

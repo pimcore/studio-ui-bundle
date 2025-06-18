@@ -1,22 +1,11 @@
-/**
- * This source file is available under the terms of the
- * Pimcore Open Core License (POCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
- *  @license    Pimcore Open Core License (POCL)
- */
-
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { useStyle } from './content-editable.styles'
 import { isNil } from 'lodash'
-import { type DocumentEditorIframeWindow } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/iframe-app/iframe-app-view'
+import { escapeHtml, pasteHtmlAtCaret, stripTags } from '@Pimcore/utils/html'
 
 export interface ContentEditableProps {
   value?: string | null
   onChange?: (newValue: string | null) => void
-  className?: string
   placeholder?: string
   required?: boolean
   width?: number
@@ -25,55 +14,51 @@ export interface ContentEditableProps {
   allowMultiLine?: boolean 
 }
 
-const pasteHtmlAtCaret = function (html: string, currentWindow: Window): void {
-  let range: Range
-
-  const sel = currentWindow.getSelection()
-  if (!isNil(sel) && !isNil(sel.getRangeAt) && sel.rangeCount > 0) {
-    range = sel.getRangeAt(0)
-    range.deleteContents()
-
-    const el = currentWindow.document.createElement('div')
-    el.innerHTML = html
-    const frag = currentWindow.document.createDocumentFragment()
-    let node: ChildNode | null = null
-    let lastNode: ChildNode | null = null
-
-    while (!isNil(el.firstChild)) {
-      node = el.firstChild
-      lastNode = frag.appendChild(node)
-    }
-
-    range.insertNode(frag)
-
-    // Preserve the selection
-    if (!isNil(lastNode)) {
-      range = range.cloneRange()
-      range.setStartAfter(lastNode)
-      range.collapse(true)
-      sel.removeAllRanges()
-      sel.addRange(range)
-    }
-  }
-}
-
-const ContentEditable = ({ value, onChange, className, placeholder, required, width, height, nowrap, allowMultiLine = false }: ContentEditableProps): JSX.Element => {
+const ContentEditable = ({
+  value,
+  onChange,
+  placeholder,
+  required,
+  width,
+  height,
+  nowrap,
+  allowMultiLine = false
+}: ContentEditableProps): JSX.Element => {
   const contentRef = useRef<HTMLDivElement>(null)
+  const valueRef = useRef<string | null>(value ?? null)
 
-  const { styles } = useStyle()
+  useEffect(() => {
+    if (!contentRef.current) return
+    const html = allowMultiLine 
+      ? (valueRef.current ?? '').replace(/\r\n|\n/g, '<br>') 
+      : (valueRef.current ?? '') + '<br>'
+
+    if (contentRef.current.innerHTML !== html) {
+      contentRef.current.innerHTML = html
+    }
+  }, [allowMultiLine])
+
+  const getValue = (): string => {
+    if (!contentRef.current) return ''
+    let newValue = contentRef.current.innerHTML ?? ''
+    newValue = stripTags(newValue, ['br'])
+    newValue = newValue.replace(/<br>/g, '\n').trim()
+    return newValue
+  }
 
   const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>): void => {
     e.preventDefault()
-
     const currentWindow = contentRef.current?.ownerDocument.defaultView
-    if (!currentWindow) return
+    if (!currentWindow || !contentRef.current) return
 
     let text = ''
     if (!isNil(e.clipboardData)) {
       text = e.clipboardData.getData('text/plain')
-    } else if (!isNil((currentWindow as DocumentEditorIframeWindow).clipboardData)) {
-      text = ((currentWindow as DocumentEditorIframeWindow).clipboardData).getData('Text')
+    } else if (!isNil((currentWindow as any).clipboardData)) {
+      text = ((currentWindow as any).clipboardData).getData('Text')
     }
+
+    text = escapeHtml(text)
 
     if (!allowMultiLine) {
       text = text.replace(/\r\n|\n/g, ' ').trim()
@@ -82,6 +67,10 @@ const ContentEditable = ({ value, onChange, className, placeholder, required, wi
     }
 
     pasteHtmlAtCaret(text, currentWindow)
+
+    const newValue = getValue()
+    valueRef.current = newValue
+    onChange?.(newValue)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
@@ -90,34 +79,36 @@ const ContentEditable = ({ value, onChange, className, placeholder, required, wi
     }
   }
 
-  const handleKeyUp = (): void => {
-    const textContent = contentRef.current?.textContent?.trim() ?? ''
-    if (required === true && textContent.length < 1) {
+  const handleInput = (): void => {
+    const newValue = getValue()
+    valueRef.current = newValue
+
+    if (required === true && newValue.length < 1) {
       contentRef.current?.classList.add('empty')
     } else {
       contentRef.current?.classList.remove('empty')
     }
-    onChange?.(textContent)
+
+    onChange?.(newValue)
   }
 
   return (
     <div
-      className={ `${className} ${styles.contentEditable}` }
-      contentEditable="true"
-      dangerouslySetInnerHTML={ { __html: (value ?? '') + '<br>' } }
-      data-placeholder={ placeholder }
-      onKeyDown={ handleKeyDown }
-      onKeyUp={ handleKeyUp }
-      onPaste={ handlePaste }
-      ref={ contentRef }
+      className="pimcorestudio_content-editable"
+      contentEditable={true}
+      data-placeholder={placeholder}
+      ref={contentRef}
       role="none"
-      style={ {
+      onPaste={handlePaste}
+      onKeyDown={handleKeyDown}
+      onInput={handleInput}
+      style={{
         display: !isNil(width) || !isNil(height) ? 'inline-block' : undefined,
         width: !isNil(width) ? `${width}px` : undefined,
         height: !isNil(height) ? `${height}px` : undefined,
         overflow: (!isNil(nowrap) && nowrap) || !isNil(width) || !isNil(height) ? 'auto' : undefined,
         whiteSpace: !isNil(nowrap) && nowrap ? 'nowrap' : undefined
-      } }
+      }}
     />
   )
 }

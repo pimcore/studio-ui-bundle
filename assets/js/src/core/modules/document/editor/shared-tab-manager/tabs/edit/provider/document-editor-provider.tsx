@@ -9,6 +9,7 @@ import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 export interface DocumentEditorContextProps {
   updateValue: (key: string, value: any) => void
   getValues: () => Record<string, any>
+  getValue: (key: string) => any
   initializeData: (data: Record<string, any>) => void
 }
 
@@ -55,6 +56,9 @@ export const DocumentEditorProvider = ({ children }: DocumentEditorProviderProps
       })
     },
     getValues: (): Record<string, ValueType> => valuesRef.current,
+    getValue: (key: string): any => {
+      return valuesRef.current[key]?.data
+    },
     initializeData: (data: Record<string, ValueType>): void => {
       if (!initializedRef.current) {
         valuesRef.current = { ...data }

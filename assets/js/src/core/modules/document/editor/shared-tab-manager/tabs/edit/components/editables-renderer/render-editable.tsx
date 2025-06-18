@@ -8,13 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useContext } from 'react'
-import { Alert, DragAndDropContextProvider } from '@sdk/components'
+import React, { useContext, useState } from 'react'
+import { Alert } from '@sdk/components'
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
 import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
 import { serviceIds, useInjection } from '@sdk/app'
 import { isNil } from 'lodash'
-import { ElementSelectorProvider, FieldWidthProvider } from '@sdk/modules/element'
+import { FieldWidthProvider } from '@sdk/modules/element'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import { useDocumentEditor } from '../../provider/use-document-editor'
@@ -28,8 +28,10 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
   const editableType = documentEditableRegistry.hasDynamicType(editableDefinition.type) ? documentEditableRegistry.getDynamicType(editableDefinition.type) : undefined
   const {id} = useContext(DocumentContext)
   const {document, markDocumentEditablesAsModified}= useDocumentDraft(id)
-  const { updateValue } = useDocumentEditor()
-  
+  const { updateValue, getValue } = useDocumentEditor()
+
+  const [localValue, setLocalValue] = useState(getValue(editableDefinition.name))
+
   if (isNil(editableType)) {
     return (
       <Alert
@@ -45,8 +47,10 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
               React.cloneElement(
                 editableType.getEditableDataComponent(editableDefinition),
                 {
-                  value: editableDefinition.data,
+                  key: editableDefinition.name,
+                  value: localValue,
                   onChange: (newValue) => {
+                    setLocalValue(newValue)
                     updateValue(editableDefinition.name, newValue)
                     markDocumentEditablesAsModified()
                   }
