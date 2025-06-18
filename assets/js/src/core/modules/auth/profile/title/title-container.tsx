@@ -11,16 +11,14 @@
 import React from 'react'
 import { TabTitleContainer, type TabTitleContainerProps } from '@Pimcore/modules/widget-manager/title/tab-title-container'
 import {useUser} from "@Pimcore/modules/auth/hooks/use-user";
-import {useUserDraft} from "@Pimcore/modules/user/hooks/use-user-draft";
 
 export const TitleContainer = (props: TabTitleContainerProps): React.JSX.Element => {
   const { node } = props
   const user = useUser()
-  const { user:currentUser } = useUserDraft(user.id)
 
   return (
     <TabTitleContainer
-      modified={ currentUser?.modified ?? false }
+      modified={ user?.modified ?? false }
       node={ node }
     />
   )

@@ -10,7 +10,6 @@
 
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { useAppDispatch } from '@sdk/app'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface ModifiedCell {
   rowIndex: number | string

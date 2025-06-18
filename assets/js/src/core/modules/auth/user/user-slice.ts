@@ -9,14 +9,10 @@
  */
 
 import type { PayloadAction } from '@reduxjs/toolkit'
-import {createEntityAdapter, createSlice} from '@reduxjs/toolkit'
+import {createSlice} from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@sdk/app'
 import { type UserInformation } from '@Pimcore/modules/auth/user/user-api-slice-enhanced'
 import {useTrackableChangesReducers} from "@Pimcore/modules/auth/hooks/use-trackable-changes";
-import type {EntityAdapter} from "@reduxjs/toolkit/src/entities/models";
-import {UserDraft} from "@Pimcore/modules/user/user-slice";
-
-export const authAdapter: EntityAdapter<UserDraft, number> = createEntityAdapter<UserDraft>({})
 
 // The logic dependency is in the rtkQueryErrorLogger middleware
 const initialState: UserInformation = {
@@ -42,12 +38,12 @@ const initialState: UserInformation = {
 
 const slice = createSlice({
   name: 'auth',
-  initialState: authAdapter.getInitialState({
+  initialState: {
     modified: false,
     changes: {},
     modifiedCells: {},
     ...initialState
-  }),
+  },
   reducers: {
     setUser: (
       state,
@@ -56,11 +52,17 @@ const slice = createSlice({
       return { ...state, ...payload }
     },
 
-    userProfileUpdated: () => {
-      console.log('User information updated')
+    userProfileUpdated: (state, {payload}:PayloadAction<any>) => {
+      return {
+        ...state,
+        ...payload,
+        modified: false,
+        modifiedCells: {},
+        changes: {}
+      }
     },
 
-    ...useTrackableChangesReducers(authAdapter),
+    ...useTrackableChangesReducers(),
   }
 })
 
@@ -76,4 +78,3 @@ export const {
 } = slice.actions
 
 export const selectCurrentUser = (state: RootState): UserInformation => state.auth
-// export const {selectById: selectCurrentUser} = authAdapter.getSelectors((state: RootState) => state['auth'])

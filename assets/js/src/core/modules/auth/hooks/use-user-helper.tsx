@@ -14,10 +14,9 @@ import {
   type Error,
   type UserDefaultKeyBindingsApiResponse, UserUpdateProfileApiResponse,
 } from '@Pimcore/modules/auth/user/user-api-slice-enhanced'
-import { userProfileUpdated } from '@Pimcore/modules/auth/user/user-slice'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
-// import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import { userProfileUpdated } from '@Pimcore/modules/auth/user/user-slice'
 
 interface UseUserReturn {
   getDefaultKeyBindings: () => Promise<UserDefaultKeyBindingsApiResponse>
@@ -44,27 +43,13 @@ export const useUserHelper = (): UseUserReturn => {
   }
 
   async function updateUserProfile (user): Promise<{ data: UserUpdateProfileApiResponse, error: Error }> {
-    console.log('updateUserProfile', user)
-    console.log(user)
-
-    //here we want to merge modifiedCells with the user object to safe it
     if (user.modifiedCells !== undefined) {
       user = {
         ...user,
-        ...user.modifiedCells.auth
+        ...user.modifiedCells
       }
     }
-    console.log('sending this', {
-      firstname: user.firstname,
-      lastname: user.lastname,
-      email: user.email,
-      language: user.language,
-      dateTimeLocale: user.dateTimeLocale,
-      welcomeScreen: user.welcomeScreen,
-      memorizeTabs: user.memorizeTabs,
-      contentLanguages: user.contentLanguages,
-      keyBindings: user.keyBindings
-    })
+
     const { data, error }: any = await dispatch(api.endpoints.userUpdateProfile.initiate({
       updateUserProfile: {
         firstname: user.firstname,
@@ -79,9 +64,10 @@ export const useUserHelper = (): UseUserReturn => {
       }
     }))
 
-    console.log('updateUserProfile result', data, error)
     handleNotification(t('user-management.save-user.success'), error)
-    // dispatch(userProfileUpdated(data))
+
+    console.log(data)
+    dispatch(userProfileUpdated(data))
     return data
   }
 
