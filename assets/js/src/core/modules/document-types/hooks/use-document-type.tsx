@@ -84,7 +84,7 @@ export const useDocumentType = (): UseDocumentTypeReturn => {
         trackError(new ApiError(result.error))
       }
       return { success: 'data' in result }
-    } catch (e) {
+    } catch {
       trackError(new GeneralError('Was not able to update DocumentType'))
       return { success: false }
     }
