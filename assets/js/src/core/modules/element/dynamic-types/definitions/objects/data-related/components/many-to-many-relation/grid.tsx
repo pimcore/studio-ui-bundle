@@ -9,33 +9,28 @@
  */
 
 import React, { forwardRef, type MutableRefObject, type ReactElement, useEffect, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import { isNil, isUndefined } from 'lodash'
+import { Tooltip } from 'antd'
+import cn from 'classnames'
+import { arrayMove } from '@dnd-kit/sortable'
+import { DndContext, PointerSensor, closestCenter, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core'
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
-
-import {
-  type ManyToManyRelationValue,
-  type ManyToManyRelationValueItem
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
+import { type ManyToManyRelationValue, type ManyToManyRelationValueItem } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { Tooltip } from 'antd'
-import { Trans, useTranslation } from 'react-i18next'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Box } from '@Pimcore/components/box/box'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
-import cn from 'classnames'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Content } from '@Pimcore/components/content/content'
 import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
-import { type ElementCellConfig, type ElementInfo } from '../../../../grid-cell/components/element-cell/element-cell'
-import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
-import { arrayMove } from '@dnd-kit/sortable'
-import { DndContext, PointerSensor, closestCenter, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core'
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
+import { getElementCellConfig } from './utils/helpers'
+import { ROW_DRAG_COLUMN_ID } from '@Pimcore/components/grid/constants'
 
 interface ManyToManyRelationGridProps {
   value?: ManyToManyRelationValue | null
@@ -53,22 +48,7 @@ interface ManyToManyRelationGridProps {
   enableRowDrag: boolean
   handleOrderChange: (data: ManyToManyRelationValue) => void
 }
-export const getElementCellConfig = (disabled?: boolean): ElementCellConfig => {
-  return {
-    allowedTypes: [],
-    getElementInfo: (itemProps: DefaultCellProps): ElementInfo => {
-      const element: ManyToManyRelationValueItem = itemProps.row.original as ManyToManyRelationValueItem
-      const elementType = mapToElementType(element.type)
-      return {
-        elementType: elementType ?? undefined,
-        id: element.id,
-        fullPath: element.fullPath,
-        published: element.isPublished ?? undefined,
-        disabled
-      }
-    }
-  }
-}
+
 export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid (props: ManyToManyRelationGridProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { enableRowDrag } = props
 
@@ -81,42 +61,43 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
 
   const columnHelper = createColumnHelper()
 
-  const columns = props.columnDefinition !== undefined
+  const defaultColumns = [
+    columnHelper.accessor('id', {
+      header: t('relations.id'),
+      size: 80
+    }),
+    columnHelper.accessor('fullPath', {
+      header: t('relations.reference'),
+      meta: {
+        type: 'element',
+        autoWidth: true,
+        editable: false,
+        config: getElementCellConfig(props.inherited === true || props.disabled === true)
+      },
+      size: 200
+    }),
+    columnHelper.accessor('type', {
+      header: t('relations.type'),
+      meta: {
+        type: 'translate'
+      },
+      size: 150
+    }),
+    columnHelper.accessor('subtype', {
+      header: t('relations.subtype'),
+      meta: {
+        type: 'translate'
+      },
+      size: 150
+    })
+  ]
+  const columns = !isUndefined(props.columnDefinition)
     ? [...props.columnDefinition]
-    : [
-        columnHelper.accessor('id', {
-          header: t('relations.id'),
-          size: 80
-        }),
-        columnHelper.accessor('fullPath', {
-          header: t('relations.reference'),
-          meta: {
-            type: 'element',
-            autoWidth: true,
-            editable: false,
-            config: getElementCellConfig(props.inherited === true || props.disabled === true)
-          },
-          size: 200
-        }),
-        columnHelper.accessor('type', {
-          header: t('relations.type'),
-          meta: {
-            type: 'translate'
-          },
-          size: 150
-        }),
-        columnHelper.accessor('subtype', {
-          header: t('relations.subtype'),
-          meta: {
-            type: 'translate'
-          },
-          size: 150
-        })
-      ]
+    : defaultColumns
 
   if (enableRowDrag) {
     columns.unshift(
-      columnHelper.accessor('move', { header: '', size: 40 })
+      columnHelper.accessor(ROW_DRAG_COLUMN_ID, { header: '', size: 40 })
     )
   }
 
@@ -210,6 +191,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
       }
     })
   )
+
   const getDataArray = (): ManyToManyRelationValue => {
     const result = props.value ?? []
     return result.map((item: ManyToManyRelationValueItem) => {

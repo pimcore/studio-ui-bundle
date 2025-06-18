@@ -17,6 +17,7 @@ import { type GridCellReference } from '@Pimcore/components/grid/grid'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { ROW_DRAG_COLUMN_ID } from '@Pimcore/components/grid/constants'
 
 export interface GridRowProps {
   row: Row<any>
@@ -91,7 +92,7 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
               }
                 }
         >
-          {cell.column.id === 'move'
+          {cell.column.id === ROW_DRAG_COLUMN_ID
             ? (
               <IconButton
                 icon={ { value: 'drag-option' } }
