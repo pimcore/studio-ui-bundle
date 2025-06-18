@@ -106,7 +106,7 @@ const sortedRows = [...documentTypeRows].sort((a, b) => {
         </Toolbar>
         }>
           <Content
-        loading={ documentTypesLoading ?? documentTypesFetching }
+        loading={ documentTypesLoading || documentTypesFetching }
         margin={ {
           x: 'extra-small',
           y: 'none'

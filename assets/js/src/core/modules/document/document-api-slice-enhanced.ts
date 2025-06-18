@@ -31,11 +31,17 @@ const api = baseApi.enhanceEndpoints({
       providesTags: (result, error, args) => providingTags.DOCUMENT_TYPES()
     },
 
-    documentDocTypeDelete: {},
+    documentDocTypeDelete: {
+        invalidatesTags: () => []
+    },
 
-    documentDocTypeUpdateById: {},
+    documentDocTypeUpdateById: {
+        invalidatesTags: () => []
+    },
 
-    documentDocTypeAdd: {}
+    documentDocTypeAdd: {
+        invalidatesTags: () => []
+    }
 
     // documentUpdateById: {
     //  invalidatesTags: (result, error, args) => args.body.data.task === 'autoSave' ? [] : invalidatingTags.DOCUMENT_DETAIL_ID(args.id)
