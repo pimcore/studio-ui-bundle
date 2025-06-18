@@ -50,6 +50,7 @@ interface ManyToManyRelationGridProps {
   hint?: React.ReactNode | null
   onUpdateCellData?: (event: OnUpdateCellDataEvent) => void
   className?: string
+  handleOrderChange: (data: ManyToManyRelationValue) => void
 }
 export const getElementCellConfig = (disabled?: boolean): ElementCellConfig => {
   return {
@@ -230,7 +231,11 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
 
         if (oldIndex === -1 || newIndex === -1) return prev
 
-        return arrayMove(prev, oldIndex, newIndex)
+        const updData = arrayMove(prev, oldIndex, newIndex)
+
+        props.handleOrderChange(updData)
+
+        return updData
       })
     }
   }
