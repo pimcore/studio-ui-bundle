@@ -8,14 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type Row } from '@tanstack/react-table'
 import React, { type CSSProperties, useMemo } from 'react'
+import { type Row } from '@tanstack/react-table'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import { GridCell } from './grid-cell'
 import { type GridContextProviderProps } from '../grid-context'
 import { type GridProps, type ListGridContextMenuComponents, type ListGridContextMenuProps } from '@Pimcore/types/components/types'
 import { type GridCellReference } from '@Pimcore/components/grid/grid'
-import { useSortable } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { ROW_DRAG_COLUMN_ID } from '@Pimcore/components/grid/constants'
 
@@ -32,7 +32,19 @@ export interface GridRowProps {
 }
 
 const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): React.JSX.Element => {
+  const { setNodeRef, transform, transition, isDragging, attributes, listeners } = useSortable({
+    id: row.id
+  })
+
   const memoModifiedCells = useMemo(() => { return JSON.parse(modifiedCells) }, [modifiedCells])
+
+  const style: CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.8 : 1,
+    zIndex: isDragging ? 1 : 0,
+    position: 'relative'
+  }
 
   const renderWithContextMenu = (children: React.ReactNode): React.JSX.Element => {
     if (props.contextMenu !== undefined) {
@@ -52,18 +64,6 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
     if (props.onRowDoubleClick !== undefined) {
       props.onRowDoubleClick(row)
     }
-  }
-
-  const { setNodeRef, transform, transition, isDragging, attributes, listeners } = useSortable({
-    id: row.id
-  })
-
-  const style: CSSProperties = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.8 : 1,
-    zIndex: isDragging ? 1 : 0,
-    position: 'relative'
   }
 
   return useMemo(() => renderWithContextMenu(

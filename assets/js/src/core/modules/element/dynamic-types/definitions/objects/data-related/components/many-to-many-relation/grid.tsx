@@ -9,7 +9,7 @@
  */
 
 import React, { forwardRef, type MutableRefObject, useEffect, useState } from 'react'
-import { isNil } from 'lodash'
+import { isEqual, isNil } from 'lodash'
 import cn from 'classnames'
 import { arrayMove } from '@dnd-kit/sortable'
 import { DndContext, PointerSensor, closestCenter, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core'
@@ -48,8 +48,15 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
 
   const sensors = useSensors(useSensor(PointerSensor))
 
-  const getDataArray = (): ManyToManyRelationValue => {
+  const [data, setData] = useState(getDataArray())
+
+  useEffect(() => {
+    setData(getDataArray())
+  }, [props.value])
+
+  function getDataArray (): ManyToManyRelationValue {
     const result = props.value ?? []
+
     return result.map((item: ManyToManyRelationValueItem) => {
       const elementType = mapToElementType(item.type)
       const resultRow = { ...item, type: elementType ?? '' }
@@ -61,26 +68,22 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
       return resultRow
     })
   }
-  const [data, setData] = useState(getDataArray())
 
-  useEffect(() => {
-    setData(getDataArray())
-  }, [props.value])
   const handleDragEnd = (event: DragEndEvent): void => {
     const { active, over } = event
 
-    if (!isNil(active) && !isNil(over) && active.id !== over.id) {
+    if (!isNil(active) && !isNil(over) && !isEqual(active.id, over.id)) {
       setData(prev => {
         const oldIndex = prev.findIndex(row => row.id === active.id)
         const newIndex = prev.findIndex(row => row.id === over.id)
 
         if (oldIndex === -1 || newIndex === -1) return prev
 
-        const updData = arrayMove(prev, oldIndex, newIndex)
+        const reorderedData = arrayMove(prev, oldIndex, newIndex)
 
-        props.handleOrderChange(updData)
+        props.handleOrderChange(reorderedData)
 
-        return updData
+        return reorderedData
       })
     }
   }
@@ -95,11 +98,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
           height: toCssDimension(props.height)
         } }
       >
-        <div
-          style={ {
-            maxWidth: 'calc(100% - 2px)'
-          } }
-        >
+        <div style={ { maxWidth: 'calc(100% - 2px)' } }>
           <DndContext
             collisionDetection={ closestCenter }
             modifiers={ [restrictToVerticalAxis] }
