@@ -31,7 +31,8 @@ export type GridCellColumnMeta = ColumnMetaType & { type: string }
 @injectable()
 export abstract class DynamicTypeDocumentEditableAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
-  initializeInIframe: boolean = false
+  // if true, the editable will be rendered inside a shadow DOM with embedded styles. if false, it will be rendered in the normal DOM and styles need to be applied individually
+  useShadowDom: boolean = true
 
   abstract getEditableDataComponent (props: AbstractDocumentEditableDefinition): ReactElement<AbstractDocumentEditableDefinition>
 }

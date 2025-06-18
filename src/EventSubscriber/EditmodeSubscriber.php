@@ -207,6 +207,7 @@ final class EditmodeSubscriber implements EventSubscriberInterface
         }
 
         $stylesheets = array_merge(
+            ['/bundles/pimcorestudioui/css/editmode.css'],
             $this->staticResourcesResolver->getStudioCssFiles(),
             $this->staticResourcesResolver->getBundleCssFiles()
         );

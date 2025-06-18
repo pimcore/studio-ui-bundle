@@ -91,7 +91,6 @@ export default defineConfig({
       exposes: {
       '.': './js/src/sdk/main.ts',
       './_internal_/mf-bootstrap': './js/src/sdk/_internal_/mf-bootstrap.ts',
-      './_internal_/mf-bootstrap-document-editor-iframe': './js/src/sdk/_internal_/mf-bootstrap-document-editor-iframe.ts',
       './components': './js/src/sdk/components/index.ts',
       './app': './js/src/sdk/app/index.ts',
       './api/asset': './js/src/sdk/api/asset/index.ts',
