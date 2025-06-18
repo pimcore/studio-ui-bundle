@@ -32,7 +32,7 @@ export const useUserHelper = (): UseUserReturn => {
     if (error !== undefined) {
       notificationApi.open({
         type: 'error',
-        message: error.data?.message || t('user-management.save-user.error'),
+        message: error.data?.message ?? t('user-management.save-user.error'),
       })
     } else {
       notificationApi.open({

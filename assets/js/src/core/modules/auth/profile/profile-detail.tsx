@@ -56,7 +56,7 @@ const ProfileDetail = ({id}:IProfileDetail): React.JSX.Element => {
     }, [user?.modified])
 
     const handleOnChangeKeyBindings = (name: string, code: object): void => {
-        let modifiedKeyBindings = user?.modifiedCells.keyBindings || []
+        let modifiedKeyBindings = user?.modifiedCells.keyBindings ?? []
         modifiedKeyBindings = modifiedKeyBindings.some((keyBinding) => keyBinding.action === name) ?
             modifiedKeyBindings.map((keyBinding) => keyBinding.action === name ? { ...keyBinding, ...code } : keyBinding)
             : [...modifiedKeyBindings, { action: name, ...code }];
