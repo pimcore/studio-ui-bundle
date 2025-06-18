@@ -12,7 +12,6 @@ import React, { useState } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { useStyles } from './table.styles'
 import { type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
 import { DocumentTypeRow, useDocumentType } from '../hooks/use-document-type'
@@ -28,7 +27,6 @@ interface TableProps {
 
 export const Table = ({ documentTypeRows, setDocumentTypeRows }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { styles } = useStyles()
   const { updateDocumentTypeById } = useDocumentType()
   const { controllers, templates, docTypes } = useDocumentConfig()
 
@@ -105,7 +103,6 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows }: TableProps): Re
     const rowId = rowData.rowId
     const updatedRow: DocumentTypeRow = { ...rowData, [columnId]: value }
 
-    console.log("rowData", rowData)
     setDocumentTypeRows(prev =>
       prev.map(row =>
         row.rowId === rowId ? updatedRow : row
@@ -127,7 +124,7 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows }: TableProps): Re
   }
 
   return (
-    <div className={ styles.table }>
+    <div>
       <Grid
         autoWidth
         columns={ tableColumns }

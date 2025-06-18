@@ -26,7 +26,7 @@ docTypes: DocTypeType[]
 export const useDocumentConfig = (): UseDocumentConfigReturn => {
   const {data: controllers, isError: isControllerError, error: controllerError } = useDocumentAvailableControllersListQuery()
   const {data: templates, isError: isTemplatesError, error: templatesError } = useDocumentAvailableTemplatesListQuery()
-  const {data: docTypes,  isError: isDocTypesError, error: docTypeError} = useDocumentDocTypeTypeListQuery()
+  const {data: docTypes, isError: isDocTypesError, error: docTypeError} = useDocumentDocTypeTypeListQuery()
 
   useEffect(() => {
     if (isControllerError) {

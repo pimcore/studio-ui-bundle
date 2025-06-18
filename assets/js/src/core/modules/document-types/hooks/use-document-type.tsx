@@ -8,8 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import trackError, { GeneralError, ApiError } from '@Pimcore/modules/app/error-handler'
 import { DocType, DocTypeUpdate, DocumentDocTypeAddApiArg, useDocumentDocTypeAddMutation, useDocumentDocTypeDeleteMutation, useDocumentDocTypeUpdateByIdMutation } from '@Pimcore/modules/document/document-api-slice.gen'
+import { isUndefined } from 'lodash'
 
 
 export type DocumentTypeRow = DocType & { rowId: string }
@@ -44,7 +45,7 @@ export const useDocumentType = (): UseDocumentTypeReturn => {
       if ('data' in result) {
         return { success: true, data: result.data }
       }
-    } catch () {
+    } catch {
       trackError(new GeneralError('Was not able to create DocumentType'))
     }
     return { success: false }
@@ -59,7 +60,7 @@ export const useDocumentType = (): UseDocumentTypeReturn => {
       }
 
       return { success: 'data' in result }
-    } catch () {
+    } catch {
       trackError(new GeneralError('Was not able to delete DocumentType'))
       return { success: false }
     }

@@ -12,7 +12,6 @@ import React, { useState } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { useStyles } from './table.styles'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { type PredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
 import { type PredefinedPropertyRow, usePredefinedProperty } from '../hooks/use-predefined-property'
@@ -29,7 +28,6 @@ interface TableProps {
 
 export const Table = ({ predefinedPropertyRows, setPredefinedPropertyRows }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { styles } = useStyles()
   const { updatePropertyById } = usePredefinedProperty()
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
 
@@ -121,7 +119,7 @@ export const Table = ({ predefinedPropertyRows, setPredefinedPropertyRows }: Tab
   }
 
   return (
-    <div className={ styles.table }>
+    <div>
       <Grid
         autoWidth
         columns={ tableColumns }

@@ -36,8 +36,11 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
 
   const documentTypes = data?.items ?? [];
 
-  const sortedRows = [...documentTypeRows].sort((a, b) => b.creationDate - a.creationDate)
-  
+const sortedRows = [...documentTypeRows].sort((a, b) => {
+  const dateA = a.creationDate ?? 0
+  const dateB = b.creationDate ?? 0
+  return dateB - dateA
+})  
   useEffect(() => {
     if (!isUndefined(documentTypes)) {
       setDocumentTypeRows(
