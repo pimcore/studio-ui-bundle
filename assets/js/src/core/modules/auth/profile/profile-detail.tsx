@@ -182,12 +182,11 @@ const ProfileDetail = ({id}:IProfileDetail): React.JSX.Element => {
                                         name={ 'password' }
                                         rules={ [{ min: 10 }] }
                                     >
-                                        <Input.Password suffix={ <IconButton
-                                            icon={ { value: 'lightning-01' } }
+                                        <Input suffix={ <IconButton
+                                            icon={ { value: 'locked' } }
                                             onClick={ () => {
                                                 const newPassword = generatePassword()
                                                 form.setFieldValue('password', newPassword);
-                                                // changeUserInState({ password: newPassword })
                                             } }
                                             title={ t('user-management.generate-password') }
                                         /> }
