@@ -129,6 +129,17 @@ export default defineConfig({
           singleton: true,
           eager: true,
           requiredVersion: packages.dependencies.antd
+        },
+        'reflect-metadata': {
+          singleton: true,
+          eager: true,
+          requiredVersion: false
+        },
+        '@uiw/react-codemirror': {
+          singleton: true,
+          eager: true,
+          version: packages.dependencies['@uiw/react-codemirror'],
+          requiredVersion: packages.dependencies['@uiw/react-codemirror']
         }
       }
     })

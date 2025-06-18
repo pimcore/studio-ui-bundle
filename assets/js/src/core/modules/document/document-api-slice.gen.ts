@@ -243,7 +243,18 @@ export type DocumentGetByIdApiArg = {
     /** Id of the document */
     id: number;
 };
+<<<<<<< HEAD
 export type DocumentUpdateByIdApiResponse = /** status 200 Successfully updated document */ DocumentDetailData;
+=======
+export type DocumentUpdateByIdApiResponse = /** status 200 Successfully updated document */
+    | Document
+    | DocumentFolder
+    | Email
+    | Hardlink
+    | Link
+    | Page
+    | Snippet;
+>>>>>>> origin/1.x
 export type DocumentUpdateByIdApiArg = {
     /** Id of the document */
     id: number;
@@ -333,7 +344,11 @@ export type DocumentGetTranslationParentByLanguageApiArg = {
 export type DocumentGetTreeApiResponse =
     /** status 200 Paginated documents with total count as header param as JSON */ {
         totalItems: number;
+<<<<<<< HEAD
         items: Document[];
+=======
+        items: (Document | DocumentFolder | Email | Hardlink | Link | Page | Snippet)[];
+>>>>>>> origin/1.x
     };
 export type DocumentGetTreeApiArg = {
     /** Page number */
@@ -553,11 +568,18 @@ export type Document = Element & {
     /** Workflow permissions */
     hasWorkflowWithPermissions: boolean;
     permissions: DocumentPermissions;
+<<<<<<< HEAD
     /** Is document a site */
     isSite: boolean;
     /** Exclude document from navigation */
     navigationExclude: boolean;
 };
+=======
+    /** Detail document data */
+    documentDetailData: object;
+};
+export type DocumentFolder = Document;
+>>>>>>> origin/1.x
 export type PageSnippetDraftData = {
     /** ID */
     id: number;
@@ -566,6 +588,7 @@ export type PageSnippetDraftData = {
     /** Is auto save */
     isAutoSave: boolean;
 };
+<<<<<<< HEAD
 export type DocumentDetailData = Document & {
     /** Document Editable Data */
     editableData: object;
@@ -577,6 +600,97 @@ export type DocumentDetailData = Document & {
     /** Has workflow available */
     hasWorkflowAvailable: boolean;
 };
+=======
+export type Email = Document & {
+    /** Controller */
+    controller: string;
+    /** Template */
+    template: string;
+    /** Main document ID */
+    contentMainDocumentId: number;
+    /** Supports main content */
+    supportsContentMain: boolean;
+    /** Is missing required editable */
+    missingRequiredEditable: boolean;
+    /** Is static generator enabled */
+    staticGeneratorEnabled: boolean;
+    /** Lifetime of static generator */
+    staticGeneratorLifetime: number;
+    draftData: PageSnippetDraftData;
+    /** Subject */
+    subject: string;
+    /** From */
+    from: string;
+    /** Reply to */
+    replyTo: string;
+    /** To */
+    to: string;
+    /** CC */
+    cc: string;
+    /** BCC */
+    bcc: string;
+};
+export type Hardlink = Document & {
+    /** Source ID */
+    sourceId: number | null;
+    /** Properties from source */
+    propertiesFromSource: boolean;
+    /** Children from source */
+    childrenFromSource: boolean;
+};
+export type Link = Document & {
+    /** Internal ID */
+    internal: number | null;
+    /** Internal type */
+    internalType: string | null;
+    /** Direct */
+    direct: string;
+    /** Link type */
+    linkType: string;
+    /** Href */
+    href: string;
+};
+export type Page = Document & {
+    /** Controller */
+    controller: string;
+    /** Template */
+    template: string;
+    /** Main document ID */
+    contentMainDocumentId: number;
+    /** Supports main content */
+    supportsContentMain: boolean;
+    /** Is missing required editable */
+    missingRequiredEditable: boolean;
+    /** Is static generator enabled */
+    staticGeneratorEnabled: boolean;
+    /** Lifetime of static generator */
+    staticGeneratorLifetime: number;
+    draftData: PageSnippetDraftData;
+    /** Title */
+    title: string | null;
+    /** Description */
+    description: string | null;
+    /** Pretty Url */
+    prettyUrl: string | null;
+};
+export type Snippet = Document & {
+    /** Controller */
+    controller: string;
+    /** Template */
+    template: string;
+    /** Main document ID */
+    contentMainDocumentId: number;
+    /** Supports main content */
+    supportsContentMain: boolean;
+    /** Is missing required editable */
+    missingRequiredEditable: boolean;
+    /** Is static generator enabled */
+    staticGeneratorEnabled: boolean;
+    /** Lifetime of static generator */
+    staticGeneratorLifetime: number;
+    draftData: PageSnippetDraftData;
+};
+>>>>>>> origin/1.x
 export type UpdateDataProperty = {
     /** key */
     key: string;

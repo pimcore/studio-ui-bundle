@@ -1,6 +1,7 @@
 common.owner: Owner
 common.modification-date: Modification date
 common.globally: Globally
+common.apply-selection: Apply selection
 error.error_something_generic_went_wrong: Element not found
 error.error_element_exists: Element already exists
 error.error_folder_exists: Folder already exists
@@ -770,6 +771,13 @@ hotspots.clear-data: Clear all edits (marker, hotspot, cropping)
 hotspots.clear-data.dnd-message: This image contains additional data like markers or hotspots. Do you want to clear them as well?
 hotspots.data-cleared: Hotspots, Markers and Cropping Data cleared
 hotspots.has-hotspots-or-marker: Hotspots or markers have been added to this item
+classification-store.collection: Collection
+classification-store.group: Group
+classification-store.group-by-key: Group by key
+classification-store.column.id: ID
+classification-store.column.group: Group
+classification-store.column.name: Name
+classification-store.column.description: Description
 home: Home
 preview.label: Preview
 inheritance-active: "Data inherited from object ID {{id}}"
@@ -802,6 +810,7 @@ user-menu.log-out: Log out
 user-menu.title: Profile
 user-menu.notification.send: Send
 user-menu.notification.attachments: Attachments
+user-menu.notification.type-not-supported: Attachment type not supported
 user-menu.notification.cancel: Cancel
 user-menu.notification.modal.send-a-notification: Send a notification
 user-menu.notification.modal.success-notification-has-been-sent: Success - Notification has been sent
@@ -814,3 +823,12 @@ user-menu.notification.modal.form.validation.provide-recipient: Please provide a
 user-menu.notification.modal.form.validation.provide-title: Please provide a title
 user-menu.notification.modal.form.validation.provide-message: Please provide a message
 loading: Loading...
+navigation.email: Email
+navigation.email-blocklist: Email Blocklist
+widget.email-blocklist: Email Blocklist
+email-blocklist.add: Add
+email-blocklist.add.validation: Please enter a valid email address
+email-blocklist.add.label: Add Email Address
+email-blocklist.add.email-address.label: Email Address
+email-blocklist.add.email.success: Email address has been added successfully
+aria.email-blocklist.remove.email: Remove email address

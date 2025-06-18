@@ -11,6 +11,7 @@
 export enum NavPermission {
   ToolsHidden = 'extras.hidden',
   NotesAndEvents = 'extras.notesEvents',
+  Mails = 'extras.emails',
 
   FileHidden = 'file.hidden',
   OpenDocument = 'file.open_document',
