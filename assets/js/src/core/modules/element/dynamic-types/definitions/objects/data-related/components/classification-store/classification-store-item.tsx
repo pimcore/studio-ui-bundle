@@ -10,6 +10,7 @@
 
 import React, { useMemo } from 'react'
 import { isArray } from 'lodash'
+import { useTranslation } from 'react-i18next'
 import { useItem } from '@Pimcore/components/form/item/provider/item/use-item'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
@@ -19,6 +20,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useKeyedList } from '@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 
 export interface ClassificationStoreItemProps {
   groupLayout?: ClassificationStoreGroupLayout2
@@ -33,15 +35,29 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
   const { operations } = useKeyedList()
   const { id } = useElementContext()
 
+  const modal = useFormModal()
+  const { t } = useTranslation()
+
   const fieldName: string = isArray(name) ? name[name.length - 1] : name
 
-  const handleItemDelete = (e): void => {
-    e.stopPropagation()
-
+  const handleItemDelete = (): void => {
     const updatedLayout = currentLayoutData.filter(item => item.id !== groupLayout?.id)
     updateCurrentLayoutData(updatedLayout)
 
     operations.remove(String(groupLayout?.id))
+  }
+
+  const handleClose: (e: React.MouseEvent<HTMLButtonElement>) => void = (e) => {
+    e.stopPropagation()
+
+    modal.confirm({
+      content: (
+        <span>{t('element.delete.confirmation.text')}</span>
+      ),
+      okText: t('yes'),
+      cancelText: t('no'),
+      onOk: () => { handleItemDelete() }
+    })
   }
 
   return useMemo(() => {
@@ -55,7 +71,7 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
             <Button
               color="default"
               icon={ <Icon value="trash" /> }
-              onClick={ handleItemDelete }
+              onClick={ handleClose }
               variant="filled"
             />
           </Flex>
