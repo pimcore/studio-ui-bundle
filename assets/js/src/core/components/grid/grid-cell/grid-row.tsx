@@ -36,8 +36,6 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
     id: row.id
   })
 
-  const memoModifiedCells = useMemo(() => { return JSON.parse(modifiedCells) }, [modifiedCells])
-
   const style: CSSProperties = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -45,6 +43,8 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
     zIndex: isDragging ? 1 : 0,
     position: 'relative'
   }
+
+  const memoModifiedCells = useMemo(() => { return JSON.parse(modifiedCells) }, [modifiedCells])
 
   const renderWithContextMenu = (children: React.ReactNode): React.JSX.Element => {
     if (props.contextMenu !== undefined) {
@@ -59,6 +59,16 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
 
     return <>{children}</>
   }
+
+  const renderRowReorderButton = (): React.JSX.Element => (
+    <IconButton
+      icon={ { value: 'drag-option' } }
+      { ...attributes }
+      { ...listeners }
+      style={ { cursor: 'grab' } }
+      tabIndex={ -1 }
+    />
+  )
 
   const onRowDoubleClick = (): void => {
     if (props.onRowDoubleClick !== undefined) {
@@ -93,15 +103,7 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
                 }
         >
           {cell.column.id === ROW_DRAG_COLUMN_ID
-            ? (
-              <IconButton
-                icon={ { value: 'drag-option' } }
-                { ...attributes }
-                { ...listeners }
-                style={ { cursor: 'grab' } }
-                tabIndex={ -1 }
-              />
-              )
+            ? renderRowReorderButton()
             : (
               <GridCell
                 cell={ cell }
