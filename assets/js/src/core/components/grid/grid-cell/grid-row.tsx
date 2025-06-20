@@ -126,6 +126,6 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
   }
 }
 
-const CachedGridRow = GridRow
+const CachedGridRow = React.memo(GridRow)
 
 export { CachedGridRow as GridRow }
