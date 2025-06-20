@@ -17,6 +17,7 @@ import { type GridContextProviderProps } from '../grid-context'
 import { type GridProps, type ListGridContextMenuComponents, type ListGridContextMenuProps } from '@Pimcore/types/components/types'
 import { type GridCellReference } from '@Pimcore/components/grid/grid'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { ROW_DRAG_COLUMN_ID } from '@Pimcore/components/grid/constants'
 
 export interface GridRowProps {
@@ -61,13 +62,15 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
   }
 
   const renderRowReorderButton = (): React.JSX.Element => (
-    <IconButton
-      icon={ { value: 'drag-option' } }
-      { ...attributes }
-      { ...listeners }
-      style={ { cursor: 'grab' } }
-      tabIndex={ -1 }
-    />
+    <Flex justify="center">
+      <IconButton
+        icon={ { value: 'drag-option' } }
+        { ...attributes }
+        { ...listeners }
+        style={ { cursor: 'grab' } }
+        tabIndex={ -1 }
+      />
+    </Flex>
   )
 
   const onRowDoubleClick = (): void => {
