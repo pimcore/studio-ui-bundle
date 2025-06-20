@@ -23,7 +23,7 @@ export const KeyedFormItem = ({ Component, componentProps }: KeyedFormItemProps)
 
   return useMemo(() => (
     <Component { ...baseProps } >
-      <KeyedFormItemControl>
+      <KeyedFormItemControl getValueFromEvent={ baseProps.getValueFromEvent }>
         { currentChildren }
       </KeyedFormItemControl>
     </Component>
