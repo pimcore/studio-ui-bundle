@@ -25,6 +25,9 @@ import {
 } from '@Pimcore/modules/app/component-registry/component-registry'
 import { EditorContainer } from './editor-container'
 import { type TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
+import { EditorToolbarContextMenu } from './toolbar/context-menu/context-menu'
+import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
+import { EditorToolbarSaveButtons } from './toolbar/save-buttons/save-buttons'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -64,6 +67,24 @@ moduleSystem.registerModule({
     componentRegistry.register({
       name: componentConfig.document.editor.container.name,
       component: EditorContainer
+    })
+
+    componentRegistry.registerToSlot(componentConfig.document.editor.toolbar.slots.left.name, {
+      name: 'contextMenu',
+      priority: 100,
+      component: EditorToolbarContextMenu
+    })
+
+    componentRegistry.registerToSlot(componentConfig.document.editor.toolbar.slots.right.name, {
+      name: 'workflowMenu',
+      priority: 100,
+      component: EditorToolbarWorkflowMenu
+    })
+
+    componentRegistry.registerToSlot(componentConfig.document.editor.toolbar.slots.right.name, {
+      name: 'saveButtons',
+      priority: 200,
+      component: EditorToolbarSaveButtons
     })
 
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)

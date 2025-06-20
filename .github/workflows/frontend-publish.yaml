@@ -1,0 +1,65 @@
+name: Publish Package on Tag
+
+on:
+  push:
+    tags:
+      - 'v*'  # Triggers on tags that begin with "v"
+
+jobs:
+  determine-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.extract_version.outputs.version }}
+      npm_tag: ${{ steps.extract_npm.outputs.npm_tag }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Extract version from tag
+        id: extract_version
+        shell: bash
+        run: |
+          # In a push event on a tag, github.ref_name contains the tag name (e.g. "v1.2.3")
+          TAG_NAME="${GITHUB_REF_NAME}"  
+          echo "Detected tag: ${TAG_NAME}"
+          # Remove the leading "v" using Bash parameter expansion
+          VERSION="${TAG_NAME#v}"
+          echo "Computed version: ${VERSION}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Extract npm tag
+        id: extract_npm
+        shell: bash
+        run: |
+          # Retrieve the version from the previous step
+          VERSION="${{ steps.extract_version.outputs.version }}"
+          echo "Using version: ${VERSION}"
+          
+          # Determine the npm tag:
+          # If the version contains a hyphen, assume there is a pre-release identifier.
+          if [[ "$VERSION" == *"-"* ]]; then
+              # Extract text after the first hyphen
+              pre_release="${VERSION#*-}"
+              # Extract only the leading contiguous alphabetical string
+              npm_tag="$(echo "$pre_release" | grep -oE '^[A-Za-z]+' | tr '[:upper:]' '[:lower:]')"
+              
+              # Fallback: if nothing is extracted, default to latest.
+              if [ -z "$npm_tag" ]; then
+                  npm_tag="latest"
+              fi
+          else
+              npm_tag="latest"
+          fi
+          echo "Computed npm tag: ${npm_tag}"
+          
+          # Export the npm tag as an output for downstream steps
+          echo "npm_tag=${npm_tag}" >> "$GITHUB_OUTPUT"
+
+  publish:
+    needs: determine-version
+    uses: ./.github/workflows/shared-npm-publish.yaml
+    with:
+      version: "${{ needs.determine-version.outputs.version }}"
+      tag: "${{ needs.determine-version.outputs.npm_tag }}"
+    secrets:
+      NPM_ACCESSTOKEN: ${{ secrets.NPM_ACCESSTOKEN }}

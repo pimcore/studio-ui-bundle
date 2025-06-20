@@ -24,7 +24,9 @@ import { useTreePermission } from '../../tree/provider/tree-permission-provider/
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useAppDispatch } from '@sdk/app'
 import { renameNode, setNodeLoadingInAllTree } from '@Pimcore/components/element-tree/element-tree-slice'
-import { updateKey } from '@Pimcore/modules/data-object/data-object-draft-slice'
+import { updateKey as updateDataObjectKey } from '@Pimcore/modules/data-object/data-object-draft-slice'
+import { updateKey as updateDocumentKey } from '@Pimcore/modules/document/document-draft-slice'
+import { updateFilename as updateAssetFilename } from '@Pimcore/modules/asset/asset-draft-slice'
 import { ContextMenuActionName } from '..'
 
 export interface UseRenameHookReturn {
@@ -147,11 +149,21 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
       }
 
       dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType, loading: false }))
-      dispatch(updateKey({ id, key: value }))
+      updateFilenameOrKey(id, value)
 
       onFinish?.()
     } catch (error) {
       console.error('Error renaming ' + elementType, error)
+    }
+  }
+
+  const updateFilenameOrKey = (id: number, value: string): void => {
+    if (elementType === 'data-object') {
+      dispatch(updateDataObjectKey({ id, key: value }))
+    } else if (elementType === 'document') {
+      dispatch(updateDocumentKey({ id, key: value }))
+    } else if (elementType === 'asset') {
+      dispatch(updateAssetFilename({ id, filename: value }))
     }
   }
 

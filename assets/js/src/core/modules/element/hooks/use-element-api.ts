@@ -20,6 +20,7 @@ import { api as assetApi, useAssetCloneMutation } from '@Pimcore/modules/asset/a
 import { api as dataObjectApi, useDataObjectCloneMutation } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { isUndefined } from 'lodash'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import { useDocumentUpdateByIdMutation } from '@Pimcore/modules/document/document-api-slice.gen'
 
 /**
  * Abstracts the logic for some basic API calls across element types (assets, data objects, documents)
@@ -62,10 +63,12 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
   const dispatch = useAppDispatch()
   const [assetPatch] = useAssetPatchByIdMutation({ fixedCacheKey: cacheKey })
   const [dataObjectPatch] = useDataObjectPatchByIdMutation({ fixedCacheKey: cacheKey })
+  const [documentUpdate] = useDocumentUpdateByIdMutation({ fixedCacheKey: cacheKey })
   const [assetClone] = useAssetCloneMutation()
   const [dataObjectClone] = useDataObjectCloneMutation()
   const { updateFieldValue: updateAssetFieldValue } = useCacheUpdate('asset', ['ASSET_TREE'])
   const { updateFieldValue: updateDataObjectFieldValue } = useCacheUpdate('data-object', ['DATA_OBJECT_TREE'])
+  const { updateFieldValue: updateDocumentFieldValue } = useCacheUpdate('document', ['DATA_OBJECT_TREE'])
 
   const elementPatch = async (args: ElementPatchArgs): Promise<boolean> => {
     try {
@@ -85,6 +88,28 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
         }
 
         updateDataObjectFieldValue(args.body.data[0].id, 'key', args.body.data[0].key)
+
+        return isUndefined(response.error)
+      } else if (elementType === 'document') {
+        if (args.body.data.length !== 1) {
+          trackError(new GeneralError('Document patching only supports a single element'))
+        }
+
+        const response = await documentUpdate({
+          id: args.body.data[0].id,
+          body: {
+            data: {
+              parentId: args.body.data[0].parentId,
+              key: args.body.data[0].key,
+              locked: args.body.data[0].locked
+            }
+          }
+        })
+        if (!isUndefined(response.error)) {
+          trackError(new ApiError(response.error))
+        }
+
+        updateDocumentFieldValue(args.body.data[0].id, 'key', args.body.data[0].key)
 
         return isUndefined(response.error)
       }

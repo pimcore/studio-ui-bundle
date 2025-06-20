@@ -237,26 +237,13 @@ export type DocumentDocTypeListApiArg = {
     /** Filter results by docType type */
     type?: string;
 };
-export type DocumentGetByIdApiResponse = /** status 200 Successfully retrieved document data as JSON */
-    | Document
-    | DocumentFolder
-    | Email
-    | Hardlink
-    | Link
-    | Page
-    | Snippet;
+export type DocumentGetByIdApiResponse =
+    /** status 200 Successfully retrieved document data as JSON */ DocumentDetailData;
 export type DocumentGetByIdApiArg = {
     /** Id of the document */
     id: number;
 };
-export type DocumentUpdateByIdApiResponse = /** status 200 Successfully updated document */
-    | Document
-    | DocumentFolder
-    | Email
-    | Hardlink
-    | Link
-    | Page
-    | Snippet;
+export type DocumentUpdateByIdApiResponse = /** status 200 Successfully updated document */ DocumentDetailData;
 export type DocumentUpdateByIdApiArg = {
     /** Id of the document */
     id: number;
@@ -346,7 +333,7 @@ export type DocumentGetTranslationParentByLanguageApiArg = {
 export type DocumentGetTreeApiResponse =
     /** status 200 Paginated documents with total count as header param as JSON */ {
         totalItems: number;
-        items: (Document | DocumentFolder | Email | Hardlink | Link | Page | Snippet)[];
+        items: Document[];
     };
 export type DocumentGetTreeApiArg = {
     /** Page number */
@@ -551,8 +538,6 @@ export type Document = Element & {
     };
     /** Custom attributes for the tree */
     customAttributes?: CustomAttributes;
-    /** Has workflow available */
-    hasWorkflowAvailable: boolean;
     /** Full path */
     fullPath: string;
     /** Published */
@@ -568,10 +553,11 @@ export type Document = Element & {
     /** Workflow permissions */
     hasWorkflowWithPermissions: boolean;
     permissions: DocumentPermissions;
-    /** Detail document data */
-    documentDetailData: object;
+    /** Is document a site */
+    isSite: boolean;
+    /** Exclude document from navigation */
+    navigationExclude: boolean;
 };
-export type DocumentFolder = Document;
 export type PageSnippetDraftData = {
     /** ID */
     id: number;
@@ -580,94 +566,16 @@ export type PageSnippetDraftData = {
     /** Is auto save */
     isAutoSave: boolean;
 };
-export type Email = Document & {
-    /** Controller */
-    controller: string;
-    /** Template */
-    template: string;
-    /** Main document ID */
-    contentMainDocumentId: number;
-    /** Supports main content */
-    supportsContentMain: boolean;
+export type DocumentDetailData = Document & {
+    /** Document Editable Data */
+    editableData: object;
     /** Is missing required editable */
     missingRequiredEditable: boolean;
-    /** Is static generator enabled */
-    staticGeneratorEnabled: boolean;
-    /** Lifetime of static generator */
-    staticGeneratorLifetime: number;
+    /** Document Settings Data */
+    settingsData: object;
     draftData: PageSnippetDraftData;
-    /** Subject */
-    subject: string;
-    /** From */
-    from: string;
-    /** Reply to */
-    replyTo: string;
-    /** To */
-    to: string;
-    /** CC */
-    cc: string;
-    /** BCC */
-    bcc: string;
-};
-export type Hardlink = Document & {
-    /** Source ID */
-    sourceId: number | null;
-    /** Properties from source */
-    propertiesFromSource: boolean;
-    /** Children from source */
-    childrenFromSource: boolean;
-};
-export type Link = Document & {
-    /** Internal ID */
-    internal: number | null;
-    /** Internal type */
-    internalType: string | null;
-    /** Direct */
-    direct: string;
-    /** Link type */
-    linkType: string;
-    /** Href */
-    href: string;
-};
-export type Page = Document & {
-    /** Controller */
-    controller: string;
-    /** Template */
-    template: string;
-    /** Main document ID */
-    contentMainDocumentId: number;
-    /** Supports main content */
-    supportsContentMain: boolean;
-    /** Is missing required editable */
-    missingRequiredEditable: boolean;
-    /** Is static generator enabled */
-    staticGeneratorEnabled: boolean;
-    /** Lifetime of static generator */
-    staticGeneratorLifetime: number;
-    draftData: PageSnippetDraftData;
-    /** Title */
-    title: string | null;
-    /** Description */
-    description: string | null;
-    /** Pretty Url */
-    prettyUrl: string | null;
-};
-export type Snippet = Document & {
-    /** Controller */
-    controller: string;
-    /** Template */
-    template: string;
-    /** Main document ID */
-    contentMainDocumentId: number;
-    /** Supports main content */
-    supportsContentMain: boolean;
-    /** Is missing required editable */
-    missingRequiredEditable: boolean;
-    /** Is static generator enabled */
-    staticGeneratorEnabled: boolean;
-    /** Lifetime of static generator */
-    staticGeneratorLifetime: number;
-    draftData: PageSnippetDraftData;
+    /** Has workflow available */
+    hasWorkflowAvailable: boolean;
 };
 export type UpdateDataProperty = {
     /** key */

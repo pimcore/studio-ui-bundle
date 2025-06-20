@@ -54,7 +54,6 @@ export type NotificationGetCollectionApiArg = {
         filters?: {
             page?: number;
             pageSize?: number;
-            includeDescendants?: boolean;
             columnFilters?: object;
             sortFilter?: object;
         };

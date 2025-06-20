@@ -1,0 +1,41 @@
+{
+  "id": "pimcore_studio_ui_bundle_core",
+  "name": "pimcore_studio_ui_bundle_core",
+  "metaData": {
+    "name": "pimcore_studio_ui_bundle_core",
+    "type": "app",
+    "buildInfo": {
+      "buildVersion": "0.0.1",
+      "buildName": "@pimcore/studio-ui-bundle"
+    },
+    "remoteEntry": {
+      "name": "",
+      "path": "",
+      "type": "global"
+    },
+    "types": {
+      "path": "",
+      "name": "",
+      "zip": "",
+      "api": ""
+    },
+    "globalName": "pimcore_studio_ui_bundle_core",
+    "pluginVersion": "0.13.1",
+    "prefetchInterface": false,
+<<<<<<<< HEAD:public/build/3d5b934f-4277-482c-9025-d7bcd9d0e9f8/mf-manifest.json
+    "publicPath": "/bundles/pimcorestudioui/build/3d5b934f-4277-482c-9025-d7bcd9d0e9f8/"
+========
+    "publicPath": "/bundles/pimcorestudioui/build/6c166cba-255f-43a1-aa99-e9511d81b950/"
+>>>>>>>> origin/1.x:public/build/6c166cba-255f-43a1-aa99-e9511d81b950/mf-manifest.json
+  },
+  "shared": [],
+  "remotes": [
+    {
+      "federationContainerName": "promise new Promise(resolve => {\n          const studioUIBundleRemoteUrl = window.StudioUIBundleRemoteUrl\n          const script = document.createElement('script')\n          script.src = studioUIBundleRemoteUrl\n          script.onload = () => {\n            const proxy = {\n              get: (request) => window['pimcore_studio_ui_bundle'].get(request),\n              init: (...arg) => {\n                try {\n                  return window['pimcore_studio_ui_bundle'].init(...arg)\n                } catch(e) {\n                  console.log('remote container already initialized')\n                }\n              }\n            }\n            resolve(proxy)\n          }\n          document.head.appendChild(script);\n        })\n        ",
+      "moduleName": "_internal_/mf-bootstrap",
+      "alias": "@sdk",
+      "entry": "*"
+    }
+  ],
+  "exposes": []
+}

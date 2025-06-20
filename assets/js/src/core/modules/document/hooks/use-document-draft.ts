@@ -22,8 +22,10 @@ import {
   setSchedulesForDocument,
   updatePropertyForDocument,
   updateScheduleForDocument,
+  setDraftData,
   publishDraft,
-  unpublishDraft
+  unpublishDraft,
+  markDocumentEditablesAsModified
 } from '../document-draft-slice'
 import { useEffect, useState } from 'react'
 import { usePropertiesDraft, type UsePropertiesDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-properties'
@@ -39,12 +41,16 @@ import { useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/
 
 import { usePublishedDraft, type UsePublishedData } from '@Pimcore/modules/element/draft/hooks/use-published'
 import { isFailedDraftId } from '../document-draft-error-slice'
+import { useModifiedDocumentEditablesDraft, type UseModifiedDocumentEditablesDraftReturn } from '../draft/hooks/use-modified-editable-data'
+import { useDraftDataDraft, type UseDraftDataReturn } from '@Pimcore/modules/element/draft/hooks/use-draft-data'
 
 export interface UseDocumentDraftReturn extends
   UsePropertiesDraftReturn,
   UseSchedulesDraftReturn,
   UseTabsDraftReturn,
   UseTrackableChangesDraftReturn,
+  UseModifiedDocumentEditablesDraftReturn,
+  UseDraftDataReturn,
   UsePublishedData {
   isLoading: boolean
   isError: boolean
@@ -97,10 +103,21 @@ export const useDocumentDraft = (id: number): UseDocumentDraftReturn => {
     setActiveTabForDocument
   )
 
+  const draftDataActions = useDraftDataDraft(
+    id,
+    setDraftData
+  )
+
   const publishedActions = usePublishedDraft(
     id,
     publishDraft,
     unpublishDraft
+  )
+
+  const modifiedDocumentEditablesActions = useModifiedDocumentEditablesDraft(
+    id,
+    document,
+    markDocumentEditablesAsModified
   )
 
   const editorType = document?.type === undefined
@@ -116,6 +133,8 @@ export const useDocumentDraft = (id: number): UseDocumentDraftReturn => {
     ...propertyActions,
     ...schedulesActions,
     ...tabsActions,
+    ...modifiedDocumentEditablesActions,
+    ...draftDataActions,
     ...publishedActions
   }
 }

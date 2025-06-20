@@ -10,7 +10,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isObject, find, isEmpty } from 'lodash'
+import { isObject, find, isEmpty, isArray } from 'lodash'
 import { type ClassificationStoreProps } from './classification-store'
 import { useKeyedList } from '@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list'
 import { Form } from '@Pimcore/components/form/form'
@@ -40,9 +40,12 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
 
   useEffect(() => {
     const initialLayout = props.activeGroupDefinitions ?? []
-    const activeGroupLayout: ClassificationStoreGroupLayout2[] = !isEmpty(currentLayoutData) ? currentLayoutData : initialLayout
+    const activeGroupLayout = !isEmpty(currentLayoutData) ? currentLayoutData : initialLayout
 
-    updateCurrentLayoutData(activeGroupLayout)
+    const isGroupType = isObject(activeGroupLayout) && !isArray(activeGroupLayout)
+    const activeGroupLayoutData: ClassificationStoreGroupLayout2[] = isGroupType ? Object.values(activeGroupLayout) : activeGroupLayout
+
+    updateCurrentLayoutData(activeGroupLayoutData)
   }, [])
 
   const handleLocalizationChange = (value: string): void => {
