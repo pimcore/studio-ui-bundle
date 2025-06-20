@@ -22,7 +22,7 @@
     "globalName": "pimcore_studio_ui_bundle",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
-    "publicPath": "/bundles/pimcorestudioui/build/bac378d7-cb8b-47d1-9123-a38c0d2b5c48/"
+    "publicPath": "/bundles/pimcorestudioui/build/e6e26e46-50d0-430c-be86-8e640ccb0ba3/"
   },
   "shared": [
     {
@@ -684,8 +684,8 @@
         },
         "css": {
           "sync": [
-            "static/css/async/9469.f9ed508c.css",
-            "static/css/async/__federation_expose__internal___mf_bootstrap.1c0ec7a1.css"
+            "static/css/async/9469.7aaa90ba.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.18c37a20.css"
           ],
           "async": []
         }
@@ -734,8 +734,8 @@
         },
         "css": {
           "sync": [
-            "static/css/async/9469.f9ed508c.css",
-            "static/css/async/__federation_expose__internal___mf_bootstrap.1c0ec7a1.css"
+            "static/css/async/9469.7aaa90ba.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.18c37a20.css"
           ],
           "async": []
         }
@@ -1124,8 +1124,8 @@
         },
         "css": {
           "sync": [
-            "static/css/async/9469.f9ed508c.css",
-            "static/css/async/__federation_expose__internal___mf_bootstrap.1c0ec7a1.css"
+            "static/css/async/9469.7aaa90ba.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.18c37a20.css"
           ],
           "async": []
         }
@@ -1172,7 +1172,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/9469.f9ed508c.css"
+            "static/css/async/9469.7aaa90ba.css"
           ],
           "async": []
         }
@@ -1232,7 +1232,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/9469.f9ed508c.css"
+            "static/css/async/9469.7aaa90ba.css"
           ],
           "async": []
         }
@@ -1274,7 +1274,7 @@
         },
         "css": {
           "sync": [
-            "static/css/async/9469.f9ed508c.css"
+            "static/css/async/9469.7aaa90ba.css"
           ],
           "async": []
         }
@@ -1309,8 +1309,8 @@
         "css": {
           "sync": [],
           "async": [
-            "static/css/async/9469.f9ed508c.css",
-            "static/css/async/__federation_expose__internal___mf_bootstrap.1c0ec7a1.css"
+            "static/css/async/9469.7aaa90ba.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.18c37a20.css"
           ]
         }
       },
