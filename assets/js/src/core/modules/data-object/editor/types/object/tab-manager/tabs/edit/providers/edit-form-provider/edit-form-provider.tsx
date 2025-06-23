@@ -96,20 +96,18 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }
 
   const executeUpdateDraft = debounce(async () => {
-
     const modifiedAttributes = getModifiedDataObjectAttributes()
 
     if (!isEmpty(modifiedAttributes)) {
       if (!modifiedRef.current) {
         markObjectDataAsModified()
       }
-  
+
       await save(modifiedAttributes, SaveTaskType.AutoSave)
     }
   }, 800)
 
   const updateDraft = async (): Promise<void> => {
-
     await executeUpdateDraft()
   }
 
