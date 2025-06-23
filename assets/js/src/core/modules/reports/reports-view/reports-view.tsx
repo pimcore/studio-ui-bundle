@@ -9,9 +9,13 @@
  */
 
 import React from 'react'
+import { ReportsChart } from '@Pimcore/modules/reports/components/reports-chart/reports-chart'
 
 export const ReportsView = (): React.JSX.Element => {
   return (
-    <div>Reports</div>
+    <div>
+      <h1>Reports</h1>
+      <ReportsChart />
+    </div>
   )
 }
