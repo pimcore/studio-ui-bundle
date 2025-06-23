@@ -214,6 +214,7 @@ import uploadZip from '@Pimcore/assets/icons/upload-zip.inline.svg?react'
 import userSelect from '@Pimcore/assets/icons/user-select.inline.svg?react'
 import user from '@Pimcore/assets/icons/user.inline.svg?react'
 import usersX from '@Pimcore/assets/icons/users-x.inline.svg?react'
+import vector from '@Pimcore/assets/icons/vector.inline.svg?react'
 import video from '@Pimcore/assets/icons/video.inline.svg?react'
 import view from '@Pimcore/assets/icons/view.inline.svg?react'
 import warningCircle from '@Pimcore/assets/icons/warning-circle.inline.svg?react'
@@ -1010,6 +1011,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'users-x',
       component: usersX
+    })
+    iconLibrary.register({
+      name: 'vector',
+      component: vector
     })
     iconLibrary.register({
       name: 'video',
