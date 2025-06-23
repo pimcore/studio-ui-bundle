@@ -22,6 +22,7 @@ import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { isUndefined } from 'lodash'
 import { useWebsiteSettingsGetCollectionQuery, WebsiteSetting, WebsiteSettingsGetCollectionApiArg } from './website-settings-api-slice.gen'
+import { Table } from './table/table'
 
 export type WebsiteSettingRow = WebsiteSetting & { rowId: string }
 
@@ -50,9 +51,13 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
   
   const [websiteSettingRows, setWebsiteSettingRows] = useState<WebsiteSettingRow[]>([])
 
-  const websiteSettings = data?.items
+  const websiteSettings = data?.items ?? []
 
-  // const sortedSettings = [...websiteSettings].sort((a, b) => b.creationDate - a.creationDate)
+  const sortedSettings = [...websiteSettingRows].sort((a, b) => {
+  const nameA = a.name ?? ''
+  const nameB = b.name ?? ''
+  return nameA.localeCompare(nameB)
+  })
 
   useEffect(() => {
     if (!isUndefined(websiteSettings)) {
@@ -144,10 +149,10 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
             y: 'none'
           } }
         >
-          {/* <Table
-            predefinedPropertyRows={ sortedSettings }
-            setPredefinedPropertyRows={ setWebsiteSettingRows }
-          /> */}
+          <Table
+            websiteSettingRows={ sortedSettings }
+            setWebsiteSettingRows={ setWebsiteSettingRows }
+          />
         </Box>
       </Content>
     </ContentLayout>
