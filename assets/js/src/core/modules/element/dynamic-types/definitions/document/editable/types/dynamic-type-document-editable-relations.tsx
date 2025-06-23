@@ -12,7 +12,7 @@ import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import { ManyToManyRelation } from '@sdk/modules/element'
 import { isArray, isEmpty, isNil } from 'lodash'
-import { ManyToManyRelationValue } from '../../../objects/data-related/components/many-to-many-relation/hooks/use-value'
+import { type ManyToManyRelationValue } from '../../../objects/data-related/components/many-to-many-relation/hooks/use-value'
 
 export type RelationsEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
@@ -49,24 +49,24 @@ export class DynamicTypeDocumentEditableRelations extends DynamicTypeDocumentEdi
       <ManyToManyRelation
         allowToClearRelation
         allowedAssetTypes={ props.config?.subtypes?.asset }
-        allowedDocumentTypes={ props.config?.subtypes?.document }
-        allowedDataObjectTypes={ props.config?.subtypes?.object }
         allowedClasses={ props.config?.classes }
-        assetsAllowed={ isTypeAllowed(props.config?.types, 'asset') }
-        dataObjectsAllowed={ isTypeAllowed(props.config?.types, 'object') }
-        documentsAllowed={ isTypeAllowed(props.config?.types, 'document') }
-        width={ props.config?.width ?? null }
-        height={ props.config?.height ?? null }
-        pathFormatterClass={ null }
-        maxItems={null}
+        allowedDataObjectTypes={ props.config?.subtypes?.object }
+        allowedDocumentTypes={ props.config?.subtypes?.document }
         assetUploadPath={ props.config?.uploadPath ?? undefined }
-        disableInlineUpload={ props.config?.disableInlineUpload ?? undefined }
+        assetsAllowed={ isTypeAllowed(props.config?.types, 'asset') }
         className={ props.config?.class }
+        dataObjectsAllowed={ isTypeAllowed(props.config?.types, 'object') }
+        disableInlineUpload={ props.config?.disableInlineUpload ?? undefined }
+        documentsAllowed={ isTypeAllowed(props.config?.types, 'document') }
+        height={ props.config?.height ?? null }
+        maxItems={ null }
+        pathFormatterClass={ null }
+        width={ props.config?.width ?? null }
       />
     )
   }
 
-  transformValue(value: any): ManyToManyRelationValue | null {
+  transformValue (value: any): ManyToManyRelationValue | null {
     if (isNil(value) || !isArray(value)) {
       return null
     }
@@ -76,14 +76,13 @@ export class DynamicTypeDocumentEditableRelations extends DynamicTypeDocumentEdi
     value.forEach((item: any) => {
       result.push({
         id: item[0],
-        type: item[2], 
+        type: item[2],
         fullPath: item[1],
         subtype: item[3],
-        isPublished: null,  
+        isPublished: null
       })
     })
 
     return result
-    
   }
 }
