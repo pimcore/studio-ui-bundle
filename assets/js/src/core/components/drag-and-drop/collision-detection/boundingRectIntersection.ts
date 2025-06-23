@@ -9,6 +9,7 @@
  */
 
 import { type Collision, type CollisionDetection, pointerWithin } from '@dnd-kit/core'
+import { isNil, isNull } from 'lodash'
 
 export const transformBoundingRectToCoordinates = (rect: DOMRect): { x1: number, x2: number, y1: number, y2: number } => {
   return {
@@ -19,10 +20,84 @@ export const transformBoundingRectToCoordinates = (rect: DOMRect): { x1: number,
   }
 }
 
+const iframeCache = new Map<Document, HTMLIFrameElement | null>()
+
+const getIframeOffset = (document: Document | null): { x: number, y: number } => {
+  if (isNull(document) || document === window.parent.document) {
+    return { x: 0, y: 0 }
+  }
+
+  if (!iframeCache.has(document)) {
+    const iframes = window.parent.document.querySelectorAll('iframe')
+    const matchingIframe = Array.from(iframes).find(iframe => iframe.contentDocument === document)
+    iframeCache.set(document, matchingIframe ?? null)
+  }
+
+  const cachedIframe = iframeCache.get(document)
+  if (!isNil(cachedIframe)) {
+    const iframeRect = cachedIframe.getBoundingClientRect()
+    return { x: iframeRect.left, y: iframeRect.top }
+  }
+
+  return { x: 0, y: 0 }
+}
+
 export const boundingRectIntersection: CollisionDetection = (props) => {
-  const pointerCollisions = pointerWithin(props)
+  const adjustedPointerProps = {
+    ...props,
+    droppableContainers: props.droppableContainers.map(container => {
+      if (container.node.current === null) {
+        return container
+      }
+
+      const iframeOffset = getIframeOffset(container.node.current.ownerDocument)
+
+      const adjustedNode = {
+        ...container.node,
+        current: {
+          ...container.node.current,
+          getBoundingClientRect: () => {
+            const rect = container.node.current?.getBoundingClientRect() ?? new DOMRect()
+            return new DOMRect(
+              rect.left - iframeOffset.x,
+              rect.top - iframeOffset.y,
+              rect.width,
+              rect.height
+            )
+          }
+        }
+      }
+
+      return {
+        ...container,
+        node: adjustedNode
+      }
+    }),
+    droppableRects: new Map(
+      props.droppableContainers.map(container => {
+        if (container.node.current === null) {
+          return [container.id, new DOMRect()]
+        }
+
+        const iframeOffset = getIframeOffset(container.node.current.ownerDocument)
+
+        const rect = container.node.current.getBoundingClientRect()
+        const adjustedRect = new DOMRect(
+          rect.left + iframeOffset.x,
+          rect.top + iframeOffset.y,
+          rect.width,
+          rect.height
+        )
+
+        return [container.id, adjustedRect]
+      })
+    )
+  }
+  console.log('adjustedPointerProps', adjustedPointerProps, props)
+  const pointerCollisions = pointerWithin(adjustedPointerProps)
 
   if (pointerCollisions.length > 0) {
+    console.log('pointerCollisions', pointerCollisions)
     return pointerCollisions
   }
 
@@ -50,7 +125,14 @@ export const boundingRectIntersection: CollisionDetection = (props) => {
       continue
     }
 
-    const droppableRectCoordinates = transformBoundingRectToCoordinates(droppableRect)
+    const iframeOffset = getIframeOffset(container.node.current.ownerDocument)
+
+    const droppableRectCoordinates = {
+      x1: droppableRect.left + iframeOffset.x,
+      x2: droppableRect.right + iframeOffset.x,
+      y1: droppableRect.top + iframeOffset.y,
+      y2: droppableRect.bottom + iframeOffset.y
+    }
 
     const intersectX1 = Math.max(draggableRectCoordinates.x1, droppableRectCoordinates.x1)
     const intersectX2 = Math.min(draggableRectCoordinates.x2, droppableRectCoordinates.x2)
@@ -65,6 +147,7 @@ export const boundingRectIntersection: CollisionDetection = (props) => {
       })
     }
   }
+  console.log('collisions', collisions)
   return collisions.sort((a, b) => b.ratio - a.ratio)
 }
 

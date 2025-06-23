@@ -177,6 +177,7 @@ import { DynamicTypeDocumentEditableWysiwyg } from '@Pimcore/modules/element/dyn
 import { DynamicTypeFieldFilterCheckbox } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
 import { DynamicTypeFieldFilterTextArea } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/text-area/dynamic-type-field-filter-text-area'
 import { BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
+import { DynamicTypeDocumentEditableTextarea } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-textarea'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -360,6 +361,7 @@ container.bind(serviceIds['DynamicTypes/DocumentEditableRegistry']).to(DynamicTy
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Input']).to(DynamicTypeDocumentEditableInput).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Numeric']).to(DynamicTypeDocumentEditableNumeric).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Relation']).to(DynamicTypeDocumentEditableRelation).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Textarea']).to(DynamicTypeDocumentEditableTextarea).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Wysiwyg']).to(DynamicTypeDocumentEditableWysiwyg).inSingletonScope()
 
 // Asset Types

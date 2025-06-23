@@ -45,7 +45,9 @@ export const tagNames = {
   ELEMENT_TAGS: 'TAGS',
   ROLE: 'ROLE',
   PREDEFINED_ASSET_METADATA: 'PREDEFINED_ASSET_METADATA',
-  CURRENT_USER_INFORMATION: 'CURRENT_USER_INFORMATION'
+  CURRENT_USER_INFORMATION: 'CURRENT_USER_INFORMATION',
+  EMAIL_BLOCKLIST: 'EMAIL_BLOCKLIST',
+  EMAIL_BLOCKLIST_DETAIL: 'EMAIL_BLOCKLIST_DETAIL'
 }
 
 export const providingTags = {
@@ -95,7 +97,9 @@ export const providingTags = {
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.ELEMENT_TAGS, elementType, id)],
   ROLE: () => [tagNames.ROLE],
   PREDEFINED_ASSET_METADATA: () => [tagNames.PREDEFINED_ASSET_METADATA],
-  CURRENT_USER_INFORMATION: () => [tagNames.CURRENT_USER_INFORMATION]
+  CURRENT_USER_INFORMATION: () => [tagNames.CURRENT_USER_INFORMATION],
+  EMAIL_BLOCKLIST: () => [tagNames.EMAIL_BLOCKLIST],
+  EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }]
 }
 
 export const invalidatingTags = {
@@ -138,7 +142,9 @@ export const invalidatingTags = {
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.ELEMENT_TAGS, elementType, id)],
   ROLE: () => [tagNames.ROLE],
   PREDEFINED_ASSET_METADATA: () => [tagNames.PREDEFINED_ASSET_METADATA],
-  ELEMENT_DETAIL: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)]
+  ELEMENT_DETAIL: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
+  EMAIL_BLOCKLIST: () => [tagNames.EMAIL_BLOCKLIST],
+  EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }]
 }
 
 const elementUnspecificDataTag = tagNames.AVAILABLE_TAGS

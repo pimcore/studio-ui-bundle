@@ -103,6 +103,7 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetMo
         })
         .catch(() => {
           reject(new Error('Invalid form'))
+          onSetModalLoading?.(false)
         })
     })
   }

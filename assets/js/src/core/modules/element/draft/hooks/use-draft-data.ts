@@ -13,19 +13,28 @@ import type { EntityAdapter, EntityState } from '@reduxjs/toolkit/src/entities/m
 
 import { useAppDispatch } from '@sdk/app'
 import { useTransition } from 'react'
-import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
-import { type DataObjectDraft } from '@Pimcore/modules/data-object/data-object-draft-slice'
 import { isNil } from 'lodash'
+import { type TrackableChangesDraft } from './use-trackable-changes'
 
 export const IS_AUTO_SAVE_DRAFT_CREATED = 'isAutoSaveDraftCreated'
 
-interface UseDraftDataReducersReturn {
-  setDraftData: (state: EntityState<DataObjectDraft, number>, action: PayloadAction<{ id: number, draftData: any }>) => void
+export interface DraftData {
+  id: number
+  modificationDate: number
+  isAutoSave: boolean
 }
 
-export const useDraftDataReducers = (entityAdapter: EntityAdapter<DataObjectDraft, number>): UseDraftDataReducersReturn => {
-  const setDraftData = (state: EntityState<DataObjectDraft, number>, action: PayloadAction<{ id: number, draftData: DataObject['draftData'] }>): void => {
-    modifyDraft(state, action.payload.id, (draft: DataObjectDraft): DataObjectDraft => {
+export interface DraftDataDraft extends TrackableChangesDraft {
+  draftData: DraftData | null
+}
+
+interface UseDraftDataReducersReturn {
+  setDraftData: (state: EntityState<DraftDataDraft, number>, action: PayloadAction<{ id: number, draftData: any }>) => void
+}
+
+export const useDraftDataReducers = (entityAdapter: EntityAdapter<DraftDataDraft, number>): UseDraftDataReducersReturn => {
+  const setDraftData = (state: EntityState<DraftDataDraft, number>, action: PayloadAction<{ id: number, draftData: DraftData | null }>): void => {
+    modifyDraft(state, action.payload.id, (draft: DraftDataDraft): DraftDataDraft => {
       if (isNil(draft.draftData) && action.payload.draftData?.isAutoSave === true) {
         draft.changes = {
           ...draft.changes,
@@ -37,7 +46,7 @@ export const useDraftDataReducers = (entityAdapter: EntityAdapter<DataObjectDraf
     })
   }
 
-  const modifyDraft = (state: EntityState<DataObjectDraft, number>, id: number, modification: (draft: DataObjectDraft) => DataObjectDraft): void => {
+  const modifyDraft = (state: EntityState<DraftDataDraft, number>, id: number, modification: (draft: DraftDataDraft) => DraftDataDraft): void => {
     const draft = entityAdapter.getSelectors().selectById(state, id)
     if (draft === undefined) {
       return

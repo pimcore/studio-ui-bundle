@@ -27,10 +27,11 @@ import {
   type ModifiedObjectDataDraft,
   useModifiedObjectDataReducers
 } from '@Pimcore/modules/data-object/draft/hooks/use-modified-object-data'
-import { useDraftDataReducers } from '@Pimcore/modules/data-object/draft/hooks/use-draft-data'
+import { type DraftDataDraft, useDraftDataReducers } from '@Pimcore/modules/element/draft/hooks/use-draft-data'
 import { usePublishedReducers, type PublishedDraft } from '../element/draft/hooks/use-published'
+import { updateKeyOrFilename } from '../element/draft/utils/update-key'
 
-export interface DataObjectDraft extends DataObject, PropertiesDraft, SchedulesDraft, TrackableChangesDraft, TabsDraft, ModifiedObjectDataDraft, PublishedDraft {
+export interface DataObjectDraft extends DataObject, PropertiesDraft, SchedulesDraft, TrackableChangesDraft, TabsDraft, ModifiedObjectDataDraft, DraftDataDraft, PublishedDraft {
 }
 
 export const dataObjectsAdapter: EntityAdapter<DataObjectDraft, number> = createEntityAdapter<DataObjectDraft>({})
@@ -62,20 +63,7 @@ export const slice = createSlice({
     updateKey (state, action: PayloadAction<{ id: number, key: string }>): void {
       if (state.entities[action.payload.id] !== undefined) {
         const dataObject = state.entities[action.payload.id]
-
-        dataObject.key = action.payload.key
-
-        if (dataObject.fullPath !== undefined) {
-          const fullPathAsArray = dataObject.fullPath?.split('/')
-          fullPathAsArray[fullPathAsArray.length - 1] = action.payload.key
-          dataObject.fullPath = fullPathAsArray.join('/')
-        }
-
-        if (dataObject.path !== undefined) {
-          const pathAsArray = dataObject.path.split('/')
-          pathAsArray[pathAsArray.length - 1] = action.payload.key
-          dataObject.path = pathAsArray.join('/')
-        }
+        updateKeyOrFilename(dataObject, action.payload.key, 'key')
       }
     },
 

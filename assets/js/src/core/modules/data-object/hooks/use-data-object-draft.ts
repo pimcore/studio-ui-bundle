@@ -42,7 +42,7 @@ import {
   useModifiedObjectDataDraft,
   type UseModifiedObjectDataDraftReturn
 } from '@Pimcore/modules/data-object/draft/hooks/use-modified-object-data'
-import { useDraftDataDraft, type UseDraftDataReturn } from '@Pimcore/modules/data-object/draft/hooks/use-draft-data'
+import { useDraftDataDraft, type UseDraftDataReturn } from '@Pimcore/modules/element/draft/hooks/use-draft-data'
 import { usePublishedDraft, type UsePublishedData } from '@Pimcore/modules/element/draft/hooks/use-published'
 import { isFailedDraftId } from '../data-object-draft-error-slice'
 

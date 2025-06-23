@@ -29,9 +29,8 @@ interface UseElementReturn {
 
 export const useElementHelper = (): UseElementReturn => {
   const { openAsset } = useAssetHelper()
-  const { openDataObject } = useDataObjectHelper()
-  const { openDocument } = useDocumentHelper()
-  const { executeDataObjectTask } = useDataObjectHelper()
+  const { openDataObject, executeDataObjectTask } = useDataObjectHelper()
+  const { openDocument, executeDocumentTask } = useDocumentHelper()
 
   async function openElement (props: OpenElementWidgetProps): Promise<void> {
     const elementType = mapToElementType(props.type)
@@ -70,6 +69,11 @@ export const useElementHelper = (): UseElementReturn => {
   const executeElementTask = (elementType: ElementType, id: number, task: SaveTaskType, onFinish?: () => void): void => {
     if (elementType === 'data-object') {
       void executeDataObjectTask(id, task, onFinish)
+      return
+    }
+
+    if (elementType === 'document') {
+      void executeDocumentTask(id, task, onFinish)
       return
     }
 

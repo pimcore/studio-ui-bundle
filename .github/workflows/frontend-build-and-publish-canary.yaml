@@ -1,0 +1,54 @@
+name: "Frontend Build"
+
+on:
+  push:
+    branches:
+      - "[0-9]+.x"
+  workflow_dispatch:
+  
+env:
+ BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
+ TARGET_RELEASE: 1.0.0
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    permissions:
+      contents: write
+    uses: ./.github/workflows/shared-frontend-build.yaml
+
+  generate-version:
+    needs: build
+    runs-on: ubuntu-latest
+    outputs:
+      generated_version: ${{ steps.gen.outputs.version }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Generate Canary Version
+        id: gen
+        shell: bash
+        run: |
+          # Get the base version (e.g., "1.2.3") from package.json
+          BASE_VERSION=${{ env.TARGET_RELEASE }}
+          # Remove any pre-release suffix if present
+          BASE_VERSION=${BASE_VERSION%%-*}
+          # Create a timestamp (YYYYMMDD--HHMMSS)
+          TIMESTAMP=$(date +'%Y%m%d-%H%M%S')
+          # Get a short commit hash (7 characters)
+          GIT_HASH=$(git rev-parse --short=7 HEAD)
+          NEW_VERSION="${BASE_VERSION}-canary.${TIMESTAMP}-${GIT_HASH}"
+          echo "Computed version: ${NEW_VERSION}"
+          echo "version=${NEW_VERSION}" >> "$GITHUB_OUTPUT"
+
+  publish:
+    needs: generate-version
+    uses: ./.github/workflows/shared-npm-publish.yaml
+    with:
+      version: "${{ needs.generate-version.outputs.generated_version }}"
+      tag: "canary"
+    secrets:
+      NPM_ACCESSTOKEN: ${{ secrets.NPM_ACCESSTOKEN }}

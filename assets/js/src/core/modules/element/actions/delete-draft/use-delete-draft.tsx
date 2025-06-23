@@ -8,15 +8,15 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
-import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useVersionDeleteByIdMutation } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
 import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import ApiError from '@Pimcore/modules/app/error-handler/classes/api-error'
 import { isNil } from 'lodash'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { useElementDraft } from '@sdk/modules/element'
 
 export interface UseDeleteDraftHookReturn {
   deleteDraft: () => Promise<void>
@@ -25,22 +25,22 @@ export interface UseDeleteDraftHookReturn {
   isError: boolean
 }
 
-export const useDeleteDraft = (): UseDeleteDraftHookReturn => {
+export const useDeleteDraft = (elementType: ElementType): UseDeleteDraftHookReturn => {
   const { t } = useTranslation()
-  const { id } = useContext(DataObjectContext)
-  const { dataObject } = useDataObjectDraft(id)
+  const { id } = useElementContext()
+  const { element } = useElementDraft(id, elementType)
   const [deleteVersion, { isLoading, isError, error }] = useVersionDeleteByIdMutation()
-  const { refreshElement } = useElementRefresh('data-object')
+  const { refreshElement } = useElementRefresh(elementType)
   const { confirm } = useFormModal()
 
   if (isError) {
     throw new ApiError(error)
   }
 
-  const buttonText = t(dataObject?.draftData?.isAutoSave === true ? 'delete-draft-auto-save' : 'delete-draft')
+  const buttonText = t(element?.draftData?.isAutoSave === true ? 'delete-draft-auto-save' : 'delete-draft')
 
   const deleteDraft = async (): Promise<void> => {
-    if (isNil(dataObject?.draftData)) {
+    if (isNil(element?.draftData)) {
       return
     }
 
@@ -48,12 +48,12 @@ export const useDeleteDraft = (): UseDeleteDraftHookReturn => {
       title: buttonText,
       content: t('delete-draft-confirmation'),
       onOk: async () => {
-        if (isNil(dataObject?.draftData)) {
+        if (isNil(element?.draftData)) {
           return
         }
-        await deleteVersion({ id: dataObject.draftData.id })
+        await deleteVersion({ id: element.draftData.id })
           .then(() => {
-            refreshElement(dataObject.id)
+            refreshElement(element.id)
           })
       }
     })

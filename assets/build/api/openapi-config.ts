@@ -53,7 +53,7 @@ const config: ConfigFile = {
       pattern: 'metadataGetCollection',
       type: 'query'
     },
-        {
+    {
       pattern: 'notificationGetCollection',
       type: 'query'
     }
@@ -139,7 +139,12 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/element/export-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/export\/?/i)
+    },
+    '../../js/src/core/modules/email/emails-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/emails\/?/i)
     }
+
+
   },
   exportName: 'api',
   hooks: true,

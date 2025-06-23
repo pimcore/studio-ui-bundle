@@ -8,16 +8,16 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './document-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.DOCUMENT, tagNames.DOCUMENT_TREE, tagNames.DOCUMENT_DETAIL, tagNames.DOCUMENT_TYPES],
   endpoints: {
 
-    // documentClone: {
-    //   invalidatesTags: (result, error, args) => invalidatingTags.DOCUMENT_TREE_ID(args.parentId)
-    // },
+    documentClone: {
+      invalidatesTags: (result, error, args) => invalidatingTags.DOCUMENT_TREE_ID(args.parentId)
+    },
 
     documentGetById: {
       providesTags: (result, error, args) => providingTags.DOCUMENT_DETAIL_ID(args.id)
@@ -43,13 +43,13 @@ const api = baseApi.enhanceEndpoints({
         invalidatesTags: () => []
     }
 
-    // documentUpdateById: {
-    //  invalidatesTags: (result, error, args) => args.body.data.task === 'autoSave' ? [] : invalidatingTags.DOCUMENT_DETAIL_ID(args.id)
-    // },
+    documentUpdateById: {
+      invalidatesTags: (result, error, args) => args.body.data.task === 'autoSave' ? [] : invalidatingTags.DOCUMENT_DETAIL_ID(args.id)
+    },
 
-    // documentAdd: {
-    //  invalidatesTags: (result, error, args) => invalidatingTags.DOCUMENT_TREE_ID(args.parentId)
-    // },
+    documentAdd: {
+      invalidatesTags: (result, error, args) => invalidatingTags.DOCUMENT_TREE_ID(args.parentId)
+    }
   }
 })
 
