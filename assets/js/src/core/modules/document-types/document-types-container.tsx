@@ -45,9 +45,9 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
   const documentTypes = data?.items ?? []
 
   const sortedRows = [...documentTypeRows].sort((a, b) => {
-  const nameA = a.name ?? ''
-  const nameB = b.name ?? ''
-  return nameA.localeCompare(nameB)
+    const nameA = a.name ?? ''
+    const nameB = b.name ?? ''
+    return nameA.localeCompare(nameB)
   })
 
   useEffect(() => {
