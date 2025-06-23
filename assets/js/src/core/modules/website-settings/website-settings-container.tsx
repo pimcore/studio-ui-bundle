@@ -100,13 +100,13 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
           theme='secondary'
         >
           <Flex gap={ 'small' }>
-            <Title>{t('widget.predefined-properties')}</Title>
+            <Title>{t('widget.website-settings')}</Title>
             <IconTextButton
               disabled={ websiteSettingsLoading }
               icon={ { value: 'new' } }
               loading={ false }
               onClick={ () => console.log("clicked") }
-            >{t('predefined-properties.new')}</IconTextButton>
+            >{t('website-settings.new')}</IconTextButton>
           </Flex>
         </Toolbar>
         }
