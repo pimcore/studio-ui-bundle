@@ -35,4 +35,8 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
   useShadowDom: boolean = true
 
   abstract getEditableDataComponent (props: AbstractDocumentEditableDefinition): ReactElement<AbstractDocumentEditableDefinition>
+
+  transformValue( value: any): any {
+    return value;
+  }
 }

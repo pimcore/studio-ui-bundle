@@ -96,6 +96,14 @@ export const useValue = (
         isPublished: null,
         fullPath: info.data.fullPath
       }
+    } else if (info.type === 'document') {
+      newValue = {
+        id: info.data.id,
+        type: info.type,
+        subtype: info.data.type,
+        isPublished: info.data.published,
+        fullPath: info.data.fullPath
+      }
     }
 
     if (newValue === undefined) {

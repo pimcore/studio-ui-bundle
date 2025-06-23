@@ -93,11 +93,9 @@ export const boundingRectIntersection: CollisionDetection = (props) => {
       })
     )
   }
-  console.log('adjustedPointerProps', adjustedPointerProps, props)
   const pointerCollisions = pointerWithin(adjustedPointerProps)
 
   if (pointerCollisions.length > 0) {
-    console.log('pointerCollisions', pointerCollisions)
     return pointerCollisions
   }
 
@@ -147,7 +145,6 @@ export const boundingRectIntersection: CollisionDetection = (props) => {
       })
     }
   }
-  console.log('collisions', collisions)
   return collisions.sort((a, b) => b.ratio - a.ratio)
 }
 

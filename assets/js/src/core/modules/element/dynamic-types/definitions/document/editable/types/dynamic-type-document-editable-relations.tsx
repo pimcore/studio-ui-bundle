@@ -10,10 +10,11 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { ManyToOneRelation, ManyToOneRelationValue } from '@sdk/modules/element'
-import { isEmpty, isNil } from 'lodash'
+import { ManyToManyRelation } from '@sdk/modules/element'
+import { isArray, isEmpty, isNil } from 'lodash'
+import { ManyToManyRelationValue } from '../../../objects/data-related/components/many-to-many-relation/hooks/use-value'
 
-export type RelationEditableDefinition = AbstractDocumentEditableDefinition & {
+export type RelationsEditableDefinition = AbstractDocumentEditableDefinition & {
   config?: {
     types?: string[]
     subtypes?: {
@@ -24,7 +25,10 @@ export type RelationEditableDefinition = AbstractDocumentEditableDefinition & {
     classes?: string[]
     reload?: boolean
     width?: number
+    height?: number
+    title: string
     uploadPath?: string
+    disableInlineUpload?: boolean
     class?: string
   }
 }
@@ -37,12 +41,12 @@ const isTypeAllowed = (types: string[] | undefined, type: string): boolean => {
   return types.includes(type)
 }
 
-export class DynamicTypeDocumentEditableRelation extends DynamicTypeDocumentEditableAbstract {
-  id: string = 'relation'
+export class DynamicTypeDocumentEditableRelations extends DynamicTypeDocumentEditableAbstract {
+  id: string = 'relations'
 
-  getEditableDataComponent (props: RelationEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
+  getEditableDataComponent (props: RelationsEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <ManyToOneRelation
+      <ManyToManyRelation
         allowToClearRelation
         allowedAssetTypes={ props.config?.subtypes?.asset }
         allowedDocumentTypes={ props.config?.subtypes?.document }
@@ -52,22 +56,34 @@ export class DynamicTypeDocumentEditableRelation extends DynamicTypeDocumentEdit
         dataObjectsAllowed={ isTypeAllowed(props.config?.types, 'object') }
         documentsAllowed={ isTypeAllowed(props.config?.types, 'document') }
         width={ props.config?.width }
+        height={ props.config?.height }
+        pathFormatterClass={ props.config?.pathFormatterClass ?? null }
+        maxItems={null}
+        assetUploadPath={ props.config?.uploadPath ?? undefined }
+        disableInlineUpload={ props.config?.disableInlineUpload ?? undefined }
         className={ props.config?.class }
       />
     )
   }
 
-  transformValue(value: any): ManyToOneRelationValue | null {
-    if (isNil(value)) {
+  transformValue(value: any): ManyToManyRelationValue | null {
+    if (isNil(value) || !isArray(value)) {
       return null
     }
 
-    return {
-      id: value.id,
-      type: value.elementType, 
-      fullPath: value.path,
-      subtype: value.subType,
-    }
+    const result: ManyToManyRelationValue = []
+
+    value.forEach((item: any) => {
+      result.push({
+        id: item[0],
+        type: item[2], 
+        fullPath: item[1],
+        subtype: item[3],
+        isPublished: null,  
+      })
+    })
+
+    return result
     
   }
 }
