@@ -48,7 +48,6 @@ const getTargetContainer = (
   return shadowContainer
 }
 
-
 interface DocumentEditorIframeWindow extends Window {
   editableDefinitions?: AbstractDocumentEditableDefinition[]
   clipboardData?: any
@@ -60,12 +59,11 @@ export const EditablesRenderer = (props: EditableRendererProps): React.JSX.Eleme
   const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
   const { initializeData } = useDocumentEditor()
 
-
   const getInitialData = (editableDefinitions: AbstractDocumentEditableDefinition[]): Record<string, { type: string, data: any }> => {
     const initialData: Record<string, any> = {}
     editableDefinitions.forEach((editable) => {
       const editableType = documentEditableRegistry.hasDynamicType(editable.type) ? documentEditableRegistry.getDynamicType(editable.type) : undefined
-        
+
       initialData[editable.name] = {
         type: editable.type,
         data: isUndefined(editableType) ? (editable.data ?? null) : editableType.transformValue(editable.data)
