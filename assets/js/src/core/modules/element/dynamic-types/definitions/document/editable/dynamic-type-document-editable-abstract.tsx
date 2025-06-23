@@ -12,7 +12,7 @@ import { injectable } from 'inversify'
 import { type DynamicTypeAbstract } from '../../../registry/dynamic-type-registry-abstract'
 import { type ReactElement } from 'react'
 import { type ColumnMetaType } from '@Pimcore/components/grid/grid'
-import { IFieldWidthContext } from '@sdk/modules/element'
+import { type IFieldWidthContext } from '@sdk/modules/element'
 
 export interface AbstractDocumentEditableDefinition {
   id: string

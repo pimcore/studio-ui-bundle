@@ -51,7 +51,6 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
     )
   }, [editableType, editableProps, localValue, editableDefinition.name, updateValue])
 
-
   if (isNil(editableType)) {
     return (
       <Alert

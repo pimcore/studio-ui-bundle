@@ -30,10 +30,10 @@ export class DynamicTypeDocumentEditableNumeric extends DynamicTypeDocumentEdita
 
   getEditableDataComponent (props: NumericEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <InputNumber 
-        min={ props.config?.minValue }
-        max={ props.config?.maxValue }
+      <InputNumber
         className={ cn('w-full', props.config?.class) }
+        max={ props.config?.maxValue }
+        min={ props.config?.minValue }
         style={ { maxWidth: toCssDimension(props.config?.width, props.defaultFieldWidth.small) } }
       />
     )
