@@ -14,7 +14,7 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Website Settings"],
             }),
-            websiteSettingsGetCollection: build.mutation<
+            websiteSettingsGetCollection: build.query<
                 WebsiteSettingsGetCollectionApiResponse,
                 WebsiteSettingsGetCollectionApiArg
             >({
@@ -23,7 +23,7 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Website Settings"],
+                providesTags: ["Website Settings"],
             }),
             websiteSettingsUpdate: build.mutation<WebsiteSettingsUpdateApiResponse, WebsiteSettingsUpdateApiArg>({
                 query: (queryArg) => ({
@@ -156,7 +156,7 @@ export type DocType = {
 };
 export const {
     useWebsiteSettingsAddMutation,
-    useWebsiteSettingsGetCollectionMutation,
+    useWebsiteSettingsGetCollectionQuery,
     useWebsiteSettingsUpdateMutation,
     useWebsiteSettingsDeleteMutation,
     useWebsiteSettingsListTypesQuery,

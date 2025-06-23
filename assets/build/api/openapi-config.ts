@@ -38,6 +38,10 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'websiteSettingsGetCollection',
+      type: 'query'
+    },
+    {
       pattern: 'notificationGetCollection',
       type: 'query'
     },
@@ -51,10 +55,6 @@ const config: ConfigFile = {
     },
     {
       pattern: 'metadataGetCollection',
-      type: 'query'
-    },
-    {
-      pattern: 'notificationGetCollection',
       type: 'query'
     }
   ],
