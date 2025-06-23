@@ -16,6 +16,7 @@ import { type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
 import { WebsiteSettingRow } from '../website-settings-container'
 import { WebsiteSetting } from '../website-settings-api-slice.gen'
+import { useWebsiteSetting } from '../hooks/use-website-settings'
 
 export type WebsiteSettingWithActions = WebsiteSetting & { actions: React.ReactNode }
 
@@ -26,7 +27,7 @@ interface TableProps {
 
 export const Table = ({ websiteSettingRows, setWebsiteSettingRows }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
-  // const { updatePropertyById } = usePredefinedProperty()
+  const { updateSettingById } = useWebsiteSetting()
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
 
   const columnHelper = createColumnHelper<WebsiteSettingWithActions>()
@@ -69,37 +70,37 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows }: TableProps)
     })
   ]
 
-  // const onUpdateCellData = async ({
-  //   columnId,
-  //   value,
-  //   rowData
-  // }: {
-  //   columnId: string
-  //   value: unknown
-  //   rowData: PredefinedPropertyRow
-  // }): Promise<void> => {
-  //   const rowId = rowData.rowId
-  //   const updatedRow: PredefinedPropertyRow = { ...rowData, [columnId]: value }
+  const onUpdateCellData = async ({
+    columnId,
+    value,
+    rowData
+  }: {
+    columnId: string
+    value: unknown
+    rowData: WebsiteSettingRow
+  }): Promise<void> => {
+    const rowId = rowData.rowId
+    const updatedRow: WebsiteSettingRow = { ...rowData, [columnId]: value }
 
-  //   setPredefinedPropertyRows(prev =>
-  //     prev.map(row =>
-  //       row.rowId === rowId ? updatedRow : row
-  //     )
-  //   )
+    setWebsiteSettingRows(prev =>
+      prev.map(row =>
+        row.rowId === rowId ? updatedRow : row
+      )
+    )
 
-  //   setModifiedCells([{ columnId, rowIndex: rowId }])
+    setModifiedCells([{ columnId, rowIndex: rowId }])
 
-  //   const { success } = await updatePropertyById(updatedRow.id, updatedRow)
+    const { success } = await updateSettingById(updatedRow.id, updatedRow)
 
-  //   if (success) setModifiedCells([])
-  //   else {
-  //     setPredefinedPropertyRows(prev =>
-  //       prev.map(row =>
-  //         row.rowId === rowId ? rowData : row
-  //       )
-  //     )
-  //   }
-  // }
+    if (success) setModifiedCells([])
+    else {
+      setWebsiteSettingRows(prev =>
+        prev.map(row =>
+          row.rowId === rowId ? rowData : row
+        )
+      )
+    }
+  }
 
   return (
     <div>
@@ -109,7 +110,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows }: TableProps)
         data={ websiteSettingRows }
         enableSorting
         modifiedCells={ modifiedCells }
-        // onUpdateCellData={ onUpdateCellData }
+        onUpdateCellData={ onUpdateCellData }
         resizable
         setRowId={ (row: WebsiteSettingRow) => row.rowId }
       />
