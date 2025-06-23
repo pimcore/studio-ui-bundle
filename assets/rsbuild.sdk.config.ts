@@ -34,11 +34,15 @@ if (nodeEnv !== env) {
 export default defineConfig({
   mode: env,
   server: {
-    port: 3030,
+    port: 3033,
   },
   dev: {
     ...(!isDevServer ? {assetPrefix: '/bundles/pimcorestudioui/build/' + buildId} : {}),
+    client: {
+      port: 3033}
   },
+
+
   source: {
     entry: {
       index: './index.ts'

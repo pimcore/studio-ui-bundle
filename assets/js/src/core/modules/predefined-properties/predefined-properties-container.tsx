@@ -30,7 +30,11 @@ import { isUndefined } from 'lodash'
 export const PredefinedPropertiesContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
   const { createNewProperty, createLoading } = usePredefinedProperty()
-  const { data, isLoading: predefinedPropertiesLoading, isFetching: predefinedPropertiesFetching, isError, error } = usePropertyGetCollectionQuery({})
+  const { data, isLoading: predefinedPropertiesLoading, isFetching: predefinedPropertiesFetching, isError, error, refetch } = usePropertyGetCollectionQuery({})
+
+  useEffect(() => {
+    refetch()
+  }, [])
 
   const [predefinedPropertyRows, setPredefinedPropertyRows] = useState<PredefinedPropertyRow[]>([])
 

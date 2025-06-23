@@ -55,7 +55,7 @@ export class BackgroundProcessor {
       throw new Error(`Process with name ${processName} does not exist.`)
     }
 
-    this.startProcess(processName)
+    // this.startProcess(processName)
 
     return subscriber.getId()
   }
