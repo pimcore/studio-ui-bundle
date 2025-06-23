@@ -10,7 +10,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { t } from 'i18next'
-import trackError, { ApiError } from '../app/error-handler'
+import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { useAppDispatch } from '@sdk/app'
 import { useDocumentDocTypeListQuery, api } from '../document/document-api-slice-enhanced'
 import { type DocumentTypeRow, useDocumentType } from './hooks/use-document-type'
@@ -31,7 +31,17 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
   const { createNewDocumentType, createLoading } = useDocumentType()
   const config = useDocumentConfig()
 
-  const { data, isLoading: documentTypesLoading, isFetching: documentTypesFetching, isError, error } = useDocumentDocTypeListQuery({})
+  const { data, isLoading: documentTypesLoading, isFetching: documentTypesFetching, isError, error, refetch } = useDocumentDocTypeListQuery({})
+
+    const handleRefetch = (): void => {
+    void refetch().catch(() => {
+      trackError(new GeneralError('Error while reloading'))
+    })
+  }
+
+  useEffect(() => {
+    handleRefetch()
+  }, [])
 
   const [documentTypeRows, setDocumentTypeRows] = useState<DocumentTypeRow[]>([])
 
@@ -42,7 +52,7 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
   const nameB = b.name ?? ''
   return nameA.localeCompare(nameB)
   })
-  
+
   useEffect(() => {
     if (!isUndefined(documentTypes)) {
       setDocumentTypeRows(
@@ -76,13 +86,7 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
           <IconButton
             disabled={ documentTypesFetching }
             icon={ { value: 'refresh' } }
-            onClick={ () =>
-              dispatch(
-                api.util.invalidateTags(
-                  invalidatingTags.DOCUMENT_TYPES()
-                )
-              )
-            }
+            onClick={ handleRefetch }
           ></IconButton>
         </Toolbar> }
       renderTopBar={
