@@ -15,9 +15,10 @@ import { useTranslation } from 'react-i18next'
 import { type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
 import { DocumentTypeRow, useDocumentType } from '../hooks/use-document-type'
+import { type DocumentController, type DocumentTemplate, type DocTypeType} from '../../document/document-api-slice.gen'
 
 
-export type DocumentTypeWithActions = DocumentType & { actions: React.ReactNode }
+export type DocumentTypeWithActions = DocumentTypeRow & { actions: React.ReactNode }
 
 interface TableProps {
   documentTypeRows: DocumentTypeRow[]
@@ -137,7 +138,7 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows, config }: TablePr
         modifiedCells={ modifiedCells }
         onUpdateCellData={ onUpdateCellData }
         resizable
-        setRowId={ (row: DataProperty) => row.rowId }
+        setRowId={ (row: DocumentTypeRow) => row.rowId }
       />
     </div>
   )

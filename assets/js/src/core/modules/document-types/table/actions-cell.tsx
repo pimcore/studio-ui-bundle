@@ -12,10 +12,10 @@ import React from 'react'
 import { type CellContext } from '@tanstack/react-table'
 import { IconButton } from '@sdk/components'
 import { DocumentTypeRow, useDocumentType } from '../hooks/use-document-type'
-import { type DocumentTypesWithActions } from './table'
+import { type DocumentTypeWithActions } from './table'
 
 interface ActionsCellProps {
-  info: CellContext<DocumentTypesWithActions, React.ReactNode>
+  info: CellContext<DocumentTypeWithActions, React.ReactNode>
   setDocumentTypeRows: React.Dispatch<React.SetStateAction<DocumentTypeRow[]>>
 }
 
