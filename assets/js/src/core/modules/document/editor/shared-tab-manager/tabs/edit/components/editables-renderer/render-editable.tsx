@@ -8,15 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useContext, useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { Alert, Form } from '@sdk/components'
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
 import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
 import { serviceIds, useInjection } from '@sdk/app'
 import { isNil, isUndefined } from 'lodash'
-import { FieldWidthProvider } from '@sdk/modules/element'
-import { DocumentContext } from '@Pimcore/modules/document/document-provider'
-import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
+import { defaultFieldWidthValues, FieldWidthProvider, useFieldWidth } from '@sdk/modules/element'
 import { useDocumentEditor } from '../../provider/use-document-editor'
 interface RenderEditableProps {
   editableDefinition: AbstractDocumentEditableDefinition
@@ -25,9 +23,14 @@ interface RenderEditableProps {
 export const RenderEditable = ({ editableDefinition }: RenderEditableProps): React.JSX.Element => {
   const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
   const editableType = documentEditableRegistry.hasDynamicType(editableDefinition.type) ? documentEditableRegistry.getDynamicType(editableDefinition.type) : undefined
-  const { id } = useContext(DocumentContext)
-  const { markDocumentEditablesAsModified } = useDocumentDraft(id)
   const { updateValue, getValue } = useDocumentEditor()
+  const editableProps: AbstractDocumentEditableDefinition = {
+    ...editableDefinition,
+    defaultFieldWidth: {
+      ...defaultFieldWidthValues,
+      large: 9999
+    }
+  }
 
   const [localValue, setLocalValue] = useState(getValue(editableDefinition.name))
 
@@ -40,22 +43,21 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
     )
   }
 
-  const renderEditableComponent = (): React.ReactElement => {
+  const renderEditableComponent = useMemo((): React.ReactElement => {
     return React.cloneElement(
-      editableType.getEditableDataComponent(editableDefinition),
+      editableType.getEditableDataComponent(editableProps),
       {
         key: editableDefinition.name,
         value: localValue,
         onChange: (newValue) => {
           setLocalValue(newValue)
           updateValue(editableDefinition.name, newValue)
-          markDocumentEditablesAsModified()
         }
       }
     )
-  }
+  }, [editableType, editableProps, localValue, editableDefinition.name, updateValue])
 
-  const label = editableType.getLabel(editableDefinition)
+  const label = editableType.getLabel(editableProps)
 
   return (
     <FieldWidthProvider fieldWidthValues={ { large: 9999 } }>
@@ -66,11 +68,11 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
               label={ label }
               layout="vertical"
             >
-              { renderEditableComponent() }
+              { renderEditableComponent }
             </Form.Item>
             )
           : (
-              renderEditableComponent()
+              renderEditableComponent
             )
       }
     </FieldWidthProvider>
