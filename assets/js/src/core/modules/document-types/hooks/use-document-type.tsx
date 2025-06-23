@@ -9,9 +9,8 @@
  */
 
 import trackError, { GeneralError, ApiError } from '@Pimcore/modules/app/error-handler'
-import { DocType, DocTypeUpdate, DocumentDocTypeAddApiArg, useDocumentDocTypeAddMutation, useDocumentDocTypeDeleteMutation, useDocumentDocTypeUpdateByIdMutation } from '@Pimcore/modules/document/document-api-slice.gen'
+import { type DocType, type DocTypeUpdate, type DocumentDocTypeAddApiArg, useDocumentDocTypeAddMutation, useDocumentDocTypeDeleteMutation, useDocumentDocTypeUpdateByIdMutation } from '@Pimcore/modules/document/document-api-slice.gen'
 import { isUndefined } from 'lodash'
-
 
 export type DocumentTypeRow = DocType & { rowId: string }
 
@@ -30,10 +29,11 @@ export const useDocumentType = (): UseDocumentTypeReturn => {
   const [updateDocumentType, { isLoading: updateLoading }] = useDocumentDocTypeUpdateByIdMutation()
 
   const dummyDocumentType: DocumentDocTypeAddApiArg = {
-  docTypeAddParameters: {
-    name: "New Document Type",
-    type: "page"}
-}
+    docTypeAddParameters: {
+      name: 'New Document Type',
+      type: 'page'
+    }
+  }
   const createNewDocumentType = async (): Promise<{ success: boolean, data?: DocType }> => {
     try {
       const result = await createDocumentType(dummyDocumentType)
@@ -72,7 +72,7 @@ export const useDocumentType = (): UseDocumentTypeReturn => {
     group: row.group ?? '',
     controller: row.controller ?? '',
     template: row.template ?? '',
-    priority: row.priority ?? 0 ,
+    priority: row.priority ?? 0,
     staticGeneratorEnabled: row.staticGeneratorEnabled ?? false
   })
 
@@ -80,7 +80,7 @@ export const useDocumentType = (): UseDocumentTypeReturn => {
     try {
       const result = await updateDocumentType({ id, docTypeUpdateParameters: toApiDocumentType(row) })
 
-        if (!isUndefined(result.error)) {
+      if (!isUndefined(result.error)) {
         trackError(new ApiError(result.error))
       }
       return { success: 'data' in result }
