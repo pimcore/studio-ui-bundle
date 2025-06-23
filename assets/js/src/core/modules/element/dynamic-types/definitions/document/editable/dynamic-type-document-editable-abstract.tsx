@@ -39,4 +39,8 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
   transformValue (value: any): any {
     return value
   }
+
+  getLabel (props: AbstractDocumentEditableDefinition): React.ReactElement | undefined {
+    return undefined
+  }
 }

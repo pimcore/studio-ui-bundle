@@ -13,6 +13,7 @@ import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbs
 import { ManyToManyRelation } from '@sdk/modules/element'
 import { isArray, isEmpty, isNil } from 'lodash'
 import { type ManyToManyRelationValue } from '../../../objects/data-related/components/many-to-many-relation/hooks/use-value'
+import { ManyToManyRelationLabel } from '../../../objects/data-related/helpers/relations/components/label/label'
 
 export type RelationsEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
@@ -84,5 +85,18 @@ export class DynamicTypeDocumentEditableRelations extends DynamicTypeDocumentEdi
     })
 
     return result
+  }
+
+  getLabel (props: RelationsEditableDefinition): React.ReactElement | undefined {
+    if (isNil(props.config?.title) || isEmpty(props.config?.title)) {
+      return undefined
+    }
+
+    return (
+      <ManyToManyRelationLabel
+        label={ props.config?.title }
+        name={ props.name }
+      />
+    )
   }
 }
