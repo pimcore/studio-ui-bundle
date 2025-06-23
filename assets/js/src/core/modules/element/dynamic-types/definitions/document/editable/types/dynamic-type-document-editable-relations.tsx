@@ -55,9 +55,9 @@ export class DynamicTypeDocumentEditableRelations extends DynamicTypeDocumentEdi
         assetsAllowed={ isTypeAllowed(props.config?.types, 'asset') }
         dataObjectsAllowed={ isTypeAllowed(props.config?.types, 'object') }
         documentsAllowed={ isTypeAllowed(props.config?.types, 'document') }
-        width={ props.config?.width }
-        height={ props.config?.height }
-        pathFormatterClass={ props.config?.pathFormatterClass ?? null }
+        width={ props.config?.width ?? null }
+        height={ props.config?.height ?? null }
+        pathFormatterClass={ null }
         maxItems={null}
         assetUploadPath={ props.config?.uploadPath ?? undefined }
         disableInlineUpload={ props.config?.disableInlineUpload ?? undefined }
