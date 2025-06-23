@@ -19,7 +19,6 @@ import { useTranslation } from 'react-i18next'
 import { userProfileUpdated } from '@Pimcore/modules/auth/user/user-slice'
 
 interface UseUserReturn {
-  getDefaultKeyBindings: () => Promise<UserDefaultKeyBindingsApiResponse>
   updateUserProfile: (user) => Promise<{ data: UserUpdateProfileApiResponse, error: any }>
 }
 
@@ -44,10 +43,20 @@ export const useUserHelper = (): UseUserReturn => {
 
   async function updateUserProfile (user): Promise<{ data: UserUpdateProfileApiResponse, error: Error }> {
     if (user.modifiedCells !== undefined) {
+      const mergedKeyBindings = Array.from(
+          [
+            ...(user.keyBindings ?? []),
+            ...(user.modifiedCells.keyBindings ?? [])
+          ].reduce((map, item) => map.set(item.action, item), new Map()).values()
+      );
+
+      const { keyBindings, ...restModifiedCells } = user.modifiedCells;
+
       user = {
         ...user,
-        ...user.modifiedCells
-      }
+        ...restModifiedCells,
+        keyBindings: mergedKeyBindings
+      };
     }
 
     const { data, error }: any = await dispatch(api.endpoints.userUpdateProfile.initiate({
@@ -60,7 +69,7 @@ export const useUserHelper = (): UseUserReturn => {
         welcomeScreen: user.welcomeScreen,
         memorizeTabs: user.memorizeTabs,
         contentLanguages: user.contentLanguages,
-        keyBindings: user.keyBindings
+        keyBindings: user.keyBindings,
       }
     }))
 

@@ -58,10 +58,6 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
     removeTrackedChanges()
   }
 
-  const onSaveClick = async (): void => {
-    await updateUserProfile(user)
-  }
-
   const items = [
     {
       key: '1',
@@ -111,7 +107,7 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
       <Button
         disabled={ !hasChanges || isLoading }
         loading={ isLoading }
-        onClick={ onSaveClick }
+        onClick={ () => updateUserProfile(user) }
         type="primary"
       >
         {t('toolbar.save-and-publish')}

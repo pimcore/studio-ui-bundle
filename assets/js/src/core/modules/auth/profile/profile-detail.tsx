@@ -22,11 +22,11 @@ import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import {
   EditorSettingsAccordion
 } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/editor-settings-accordion'
-import { KeyBindings } from '@Pimcore/modules/user/management/detail/tabs/key-bindings/key-bindings'
+import { KeyBindings, type KeyBinding } from '@Pimcore/modules/user/management/detail/tabs/key-bindings/key-bindings'
 import { useUserDraft } from '@Pimcore/modules/auth/hooks/use-user-draft'
 import { debounce } from 'lodash'
 import { Content } from '@Pimcore/components/content/content'
-import { type ModifiedCells } from '@Pimcore/modules/auth/hooks/use-trackable-changes'
+// import { type ModifiedCells } from '@Pimcore/modules/auth/hooks/use-trackable-changes'
 
 interface IProfileDetail {
   id: number
@@ -57,7 +57,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
   }, [user?.modified])
 
   const handleOnChangeKeyBindings = (name: string, code: object): void => {
-    let modifiedKeyBindings = Array.isArray(user?.modifiedCells?.keyBindings)
+    let modifiedKeyBindings: KeyBinding[] = Array.isArray(user?.modifiedCells?.keyBindings)
       ? user?.modifiedCells?.keyBindings
       : []
 
@@ -78,7 +78,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
 
   const onValuesChange = useCallback(
     debounce((changedValues, allValues) => {
-      setModifiedCells(changedValues as ModifiedCells)
+      setModifiedCells(changedValues)
     }, 300),
     [setModifiedCells, form]
   )

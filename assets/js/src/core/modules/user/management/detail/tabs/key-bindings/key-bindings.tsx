@@ -21,7 +21,7 @@ export interface KeyBinding {
   ctrl?: boolean
   alt?: boolean
   shift?: boolean
-  key: number
+  key?: number
 }
 interface IKeyBindings {
   values?: any
