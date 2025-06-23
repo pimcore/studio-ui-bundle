@@ -66,7 +66,7 @@ export const EditablesRenderer = (props: EditableRendererProps): React.JSX.Eleme
 
       initialData[editable.name] = {
         type: editable.type,
-        data: isUndefined(editableType) ? (editable.data ?? null) : editableType.transformValue(editable.data)
+        data: isUndefined(editableType) ? (editable.data ?? null) : editableType.transformValue(editable.data, editable)
       }
     })
     return initialData
