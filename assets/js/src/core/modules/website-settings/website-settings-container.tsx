@@ -17,28 +17,29 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Box, IconTextButton, Pagination, SearchInput } from '@sdk/components'
-import { useAppDispatch } from '@sdk/app'
 import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { isUndefined } from 'lodash'
 import { useWebsiteSettingsGetCollectionQuery, WebsiteSetting, WebsiteSettingsGetCollectionApiArg } from './website-settings-api-slice-enhanced'
 import { Table } from './table/table'
+import { useWebsiteSetting } from './hooks/use-website-settings'
 
 export type WebsiteSettingRow = WebsiteSetting & { rowId: string }
 
 export const WebsiteSettingsContainer = (): React.JSX.Element => {
   
-  const dispatch = useAppDispatch()
   const [filter, setFilter] = useState<string>('')
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
 
     const queryArgs: WebsiteSettingsGetCollectionApiArg = useMemo(() => ( { body: {filters: {
       page, pageSize
-    }} }), [filter])
+    }} }), [filter, page, pageSize])
 
   const { data, isLoading: websiteSettingsLoading, isFetching: websiteSettingsFetching, isError, error, refetch } = useWebsiteSettingsGetCollectionQuery(queryArgs)
 
+  const {createNewSetting, createLoading} = useWebsiteSetting()
+  
     const handleRefetch = (): void => {
     void refetch().catch(() => {
       trackError(new GeneralError('Error while reloading'))
@@ -67,17 +68,17 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
     }
   }, [websiteSettings])
 
-  // const onCreateProperty = async (): Promise<void> => {
-  //   const { success, data } = await createNewProperty()
-  //   if (success && data !== undefined) {
-  //     setPredefinedPropertyRows(prev =>
-  //       [
-  //         { ...data, rowId: uuid() },
-  //         ...prev
-  //       ]
-  //     )
-  //   }
-  // }
+  const onCreateProperty = async (name: string, type: string): Promise<void> => {
+    const { success, data } = await createNewSetting(name, type)
+    if (success && data !== undefined) {
+      setWebsiteSettingRows(prev =>
+        [
+          { ...data, rowId: uuid() },
+          ...prev
+        ]
+      )
+    }
+  }
 
   useEffect(() => {
     if (isError) {
@@ -120,7 +121,7 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
               disabled={ websiteSettingsLoading }
               icon={ { value: 'new' } }
               loading={ false }
-              onClick={ () => console.log("clicked") }
+              onClick={ () => onCreateProperty("testName", "object") }
             >{t('website-settings.new')}</IconTextButton>
           </Flex>
                     <SearchInput
