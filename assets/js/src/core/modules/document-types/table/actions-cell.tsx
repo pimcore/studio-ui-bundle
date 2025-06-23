@@ -11,7 +11,7 @@
 import React from 'react'
 import { type CellContext } from '@tanstack/react-table'
 import { IconButton } from '@sdk/components'
-import { DocumentTypeRow, useDocumentType } from '../hooks/use-document-type'
+import { type DocumentTypeRow, useDocumentType } from '../hooks/use-document-type'
 import { type DocumentTypeWithActions } from './table'
 
 interface ActionsCellProps {

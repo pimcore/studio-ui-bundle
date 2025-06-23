@@ -32,15 +32,15 @@ const api = baseApi.enhanceEndpoints({
     },
 
     documentDocTypeDelete: {
-        invalidatesTags: () => []
+      invalidatesTags: () => []
     },
 
     documentDocTypeUpdateById: {
-        invalidatesTags: () => []
+      invalidatesTags: () => []
     },
 
     documentDocTypeAdd: {
-        invalidatesTags: () => []
+      invalidatesTags: () => []
     }
 
     // documentUpdateById: {

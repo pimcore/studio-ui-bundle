@@ -13,7 +13,7 @@ import { t } from 'i18next'
 import trackError, { ApiError } from '../app/error-handler'
 import { useAppDispatch } from '@sdk/app'
 import { useDocumentDocTypeListQuery } from '../document/document-api-slice-enhanced'
-import { DocumentTypeRow, useDocumentType } from './hooks/use-document-type'
+import { type DocumentTypeRow, useDocumentType } from './hooks/use-document-type'
 import { useDocumentConfig } from './hooks/use-document-config'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
@@ -27,7 +27,6 @@ import { isUndefined } from 'lodash'
 import { Table } from './table/table'
 import { api } from '@sdk/api/documents'
 
-
 export const DocumentTypesContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
   const { createNewDocumentType, createLoading } = useDocumentType()
@@ -37,13 +36,13 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
 
   const [documentTypeRows, setDocumentTypeRows] = useState<DocumentTypeRow[]>([])
 
-  const documentTypes = data?.items ?? [];
+  const documentTypes = data?.items ?? []
 
-const sortedRows = [...documentTypeRows].sort((a, b) => {
-  const dateA = a.creationDate ?? 0
-  const dateB = b.creationDate ?? 0
-  return dateB - dateA
-})  
+  const sortedRows = [...documentTypeRows].sort((a, b) => {
+    const dateA = a.creationDate ?? 0
+    const dateB = b.creationDate ?? 0
+    return dateB - dateA
+  })
   useEffect(() => {
     if (!isUndefined(documentTypes)) {
       setDocumentTypeRows(
@@ -77,14 +76,15 @@ const sortedRows = [...documentTypeRows].sort((a, b) => {
           <IconButton
             disabled={ documentTypesFetching }
             icon={ { value: 'refresh' } }
-            onClick={ () => 
+            onClick={ () =>
               dispatch(
-              api.util.invalidateTags(
-                invalidatingTags.DOCUMENT_TYPES()
+                api.util.invalidateTags(
+                  invalidatingTags.DOCUMENT_TYPES()
+                )
               )
-            )
-            }></IconButton>
-        </Toolbar>}
+            }
+          ></IconButton>
+        </Toolbar> }
       renderTopBar={
         <Toolbar
           justify='space-between'
@@ -104,8 +104,9 @@ const sortedRows = [...documentTypeRows].sort((a, b) => {
             >{t('document-types.new')}</IconTextButton>
           </Flex>
         </Toolbar>
-        }>
-          <Content
+        }
+    >
+      <Content
         loading={ documentTypesLoading || documentTypesFetching }
         margin={ {
           x: 'extra-small',
@@ -120,9 +121,9 @@ const sortedRows = [...documentTypeRows].sort((a, b) => {
           } }
         >
           <Table
+            config={ config }
             documentTypeRows={ sortedRows }
             setDocumentTypeRows={ setDocumentTypeRows }
-            config={config}
           />        </Box>
       </Content>
     </ContentLayout>

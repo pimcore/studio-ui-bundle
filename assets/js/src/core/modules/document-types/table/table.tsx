@@ -14,9 +14,8 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
-import { DocumentTypeRow, useDocumentType } from '../hooks/use-document-type'
-import { type DocumentController, type DocumentTemplate, type DocTypeType} from '../../document/document-api-slice.gen'
-
+import { type DocumentTypeRow, useDocumentType } from '../hooks/use-document-type'
+import { type DocumentController, type DocumentTemplate, type DocTypeType } from '../../document/document-api-slice.gen'
 
 export type DocumentTypeWithActions = DocumentTypeRow & { actions: React.ReactNode }
 
@@ -37,9 +36,9 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows, config }: TablePr
 
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
 
-  const controllerNames = controllers.map(item => item.name);
-  const templatePaths = templates.map(template => template.path);
-  const docTypeNames = docTypes.map(template => template.name);
+  const controllerNames = controllers.map(item => item.name)
+  const templatePaths = templates.map(template => template.path)
+  const docTypeNames = docTypes.map(template => template.name)
 
   const columnHelper = createColumnHelper<DocumentTypeWithActions>()
 
@@ -81,7 +80,7 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows, config }: TablePr
     }),
     columnHelper.accessor('creationDate', {
       header: t('document-types.columns.creation-date'),
-      meta: { type: 'date'},
+      meta: { type: 'date' },
       size: 150
     }),
     columnHelper.accessor('modificationDate', {
@@ -92,7 +91,7 @@ export const Table = ({ documentTypeRows, setDocumentTypeRows, config }: TablePr
     columnHelper.accessor('actions', {
       header: t('document-types.columns.actions'),
       size: 80,
-      cell: (info) => ActionsCell({info, setDocumentTypeRows})
+      cell: (info) => ActionsCell({ info, setDocumentTypeRows })
     })
   ]
 
