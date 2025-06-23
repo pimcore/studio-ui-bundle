@@ -16,7 +16,7 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
-import { Box, IconTextButton } from '@sdk/components'
+import { Box, IconTextButton, Pagination, SearchInput } from '@sdk/components'
 import { useAppDispatch } from '@sdk/app'
 import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
@@ -89,6 +89,16 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
             icon={ { value: 'refresh' } }
             onClick={ handleRefetch }
           />
+          <Pagination
+                        current={ page }
+                        onChange={ (page, pageSize) => {
+                          setPage(page)
+                          setPageSize(pageSize)
+                        } }
+                        showSizeChanger
+                        showTotal={ (total) => t('pagination.show-total', { total }) }
+                        total={ data?.totalItems ?? 0 }
+                      />
         </Toolbar> }
       renderTopBar={
         <Toolbar
@@ -108,6 +118,15 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
               onClick={ () => console.log("clicked") }
             >{t('website-settings.new')}</IconTextButton>
           </Flex>
+                    <SearchInput
+                      loading={ websiteSettingsFetching }
+                      onSearch={ (value) => {
+                        setFilter(value)
+                      } }
+                      placeholder="Search"
+                      withPrefix={ false }
+                      withoutAddon={ false }
+                    />
         </Toolbar>
         }
     >

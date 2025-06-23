@@ -26,7 +26,7 @@ moduleSystem.registerModule({
       label: 'navigation.website-settings',
       className: 'item-style-modifier',
       permission: UserPermission.WebsiteSettings,
-      perspectivePermission: NavPermission.WebsiteSettings,
+      // perspectivePermission: NavPermission.WebsiteSettings,
       widgetConfig: {
         name: 'Website Settings',
         id: 'website-settings',

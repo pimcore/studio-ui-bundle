@@ -681,6 +681,7 @@ roles.remove-folder.success: Folder removed successfully
 roles.remove-item.success: Role removed successfully
 roles.add-item.success: Role added successfully
 roles.add-folder.success: Folder added successfully
+navigation.website: Website Settings
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
 navigation.custom-reports: Custom Reports
@@ -699,6 +700,7 @@ navigation.file: File
 navigation.settings: Settings
 navigation.tools: Tools
 predefined-properties.new: New
+website-settings.new: New
 predefined-properties.type: Type
 predefined-properties.name: Name
 perspective.default: Default
@@ -707,6 +709,7 @@ perspective.switching.description: Currently switching to the following perspect
 widget.notes-and-events: Notes & Events
 widget.tag-configuration: Tag Configuration
 widget.predefined-properties: Predefined Properties
+widget.website-settings: Website Settings
 widget.role-management: Roles
 widget.user-management: Users
 external-image.preview-placeholder: Add an external image
