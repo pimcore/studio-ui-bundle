@@ -32,7 +32,15 @@ import {
   type UserGetImageApiResponse,
   type UserGetAvailablePermissionsApiResponse
 } from '@Pimcore/modules/user/user-api-slice-enhanced'
-import { userOpened, userClosed, userUpdated, changeUser, userImageLoaded, userAvailablePermissionsFetched } from '@Pimcore/modules/user/user-management-slice'
+import {
+  userOpened,
+  userClosed,
+  userUpdated,
+  changeUser,
+  userImageLoaded,
+  userAvailablePermissionsFetched,
+  type UserDraft
+} from '@Pimcore/modules/user/user-management-slice'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
 import type { UseTrackableChangesDraftReturn } from '@Pimcore/modules/user/hooks/use-user-management-trackable-changes'
@@ -115,23 +123,19 @@ export const useUserManagementHelper = (): UseUserReturn => {
 
   async function resetUserKeyBindings (id: number): Promise<UserDefaultKeyBindingsApiResponse> {
     const data = await getDefaultKeyBindings()
-
     dispatch(changeUser({ id, changes: { keyBindings: data.items } }))
-
     return data
   }
 
   async function getUserTree (props: UserGetTreeApiArg): Promise<UserGetTreeApiResponse> {
     const { parentId } = props
     const { data }: any = await dispatch(api.endpoints.userGetTree.initiate({ parentId }, { forceRefetch: true }))
-
     return data
   }
 
   async function addNewUser (props: AddItemArgs): Promise<{ data: UserCreateApiResponse, error: Error }> {
     const { parentId, name } = props
     const { data, error }: any = await dispatch(api.endpoints.userCreate.initiate({ body: { parentId, name } }))
-
     handleNotification(t('user-management.add-user.success'), error)
     return data
   }
@@ -139,7 +143,6 @@ export const useUserManagementHelper = (): UseUserReturn => {
   async function addNewFolder (props: AddItemArgs): Promise<{ data: UserFolderCreateApiResponse, error: Error }> {
     const { parentId, name } = props
     const { data, error }: any = await dispatch(api.endpoints.userFolderCreate.initiate({ body: { parentId, name } }))
-
     handleNotification(t('user-management.add-folder.success'), error)
 
     return data
@@ -148,7 +151,6 @@ export const useUserManagementHelper = (): UseUserReturn => {
   async function removeUser (props: UserDeleteByIdApiArg): Promise<{ data: UserDeleteByIdApiResponse, error: Error }> {
     const { id } = props
     const { data, error }: any = await dispatch(api.endpoints.userDeleteById.initiate({ id }))
-
     handleNotification(t('user-management.remove-user.success'), error)
     return data
   }
@@ -156,7 +158,6 @@ export const useUserManagementHelper = (): UseUserReturn => {
   async function removeFolder (props: UserFolderDeleteByIdApiArg): Promise<{ data: UserFolderDeleteByIdApiResponse, error: Error }> {
     const { id } = props
     const { data, error }: any = await dispatch(api.endpoints.userFolderDeleteById.initiate({ id }))
-
     handleNotification(t('user-management.remove-folder.success'), error)
     return data
   }
@@ -172,7 +173,6 @@ export const useUserManagementHelper = (): UseUserReturn => {
 
   async function updateUserById (props: { id: number, user: User2 | User }): Promise<{ data: UserUpdateByIdApiResponse, error: Error }> {
     const { id, user } = props
-
     const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({
       id,
       updateUser: {
@@ -201,9 +201,14 @@ export const useUserManagementHelper = (): UseUserReturn => {
         perspectives: user.perspectives
       }
     }))
-
     handleNotification(t('user-management.save-user.success'), error)
-    dispatch(userUpdated(data))
+    const userDraft: UserDraft = {
+      ...data,
+      modified: false,
+      changes: {},
+      modifiedCells: {}
+    }
+    dispatch(userUpdated(userDraft))
     return data
   }
 
@@ -212,14 +217,12 @@ export const useUserManagementHelper = (): UseUserReturn => {
 
     const user = await fetchUserById({ id })
     const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId } }))
-
     handleNotification(t('user-management.save-user.success'), error)
     return data
   }
 
   async function uploadUserAvatar (props: { id: number, file: File }): Promise<{ data: UserUploadImageApiResponse, error: Error }> {
     const { data, error }: any = await dispatch(api.endpoints.userUploadImage.initiate({ id: props.id, body: { userImage: props.file } }))
-
     handleNotification(t('user-management.upload-image.success'), error)
     return data
   }
@@ -227,7 +230,6 @@ export const useUserManagementHelper = (): UseUserReturn => {
   async function fetchUserImageById (props): Promise<{ data: UserGetImageApiResponse | undefined, error?: Error }> {
     const { id } = props
     let data
-
     await fetch(`/pimcore-studio/api/user/image/${id}`)
       .then(async (response) => await response.blob())
       .then((imageBlob) => {
@@ -239,18 +241,15 @@ export const useUserManagementHelper = (): UseUserReturn => {
           : new GeneralError('An error occurred while loading the image')
         trackError(apiError)
       })
-
     return { data }
   }
 
   async function fetchUserAvailablePermissions (): Promise<UserGetAvailablePermissionsApiResponse> {
     const { data, isError: isFetchUserAvailablePermissionsError, error } = await dispatch(api.endpoints.userGetAvailablePermissions.initiate())
-
     if (data !== undefined) {
       dispatch(userAvailablePermissionsFetched(data))
       return data
     }
-
     if (isFetchUserAvailablePermissionsError) {
       trackError(new ApiError(error))
     }
@@ -272,7 +271,6 @@ export const useUserManagementHelper = (): UseUserReturn => {
 
   const activeId = useAppSelector(state => state.user.activeId)
   const getAllIds = useAppSelector(state => state.user.ids)
-
   return {
     removeTrackedChanges (): void {},
     setModifiedCells (type: string, modifiedCells): void {},

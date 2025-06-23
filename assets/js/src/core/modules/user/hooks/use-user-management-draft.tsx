@@ -68,7 +68,12 @@ export const useUserManagementDraft = (id: number): UseUserReturnDraft => {
   function getUser (): void {
     setIsLoading(true)
     fetchUser().then((data) => {
-      dispatch(userFetched(data))
+      dispatch(userFetched({
+        ...data,
+        modified: false,
+        changes: {},
+        modifiedCells: {}
+      }))
     }).catch(() => {
       setIsError(true)
     }).finally(() => {

@@ -11,12 +11,12 @@
 import { useAppDispatch } from '@sdk/app'
 import {
   api,
-  type Error,
-  type UserDefaultKeyBindingsApiResponse, type UserUpdateProfileApiResponse
+  type Error, type UserUpdateProfileApiResponse
 } from '@Pimcore/modules/auth/user/user-api-slice-enhanced'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
 import { userProfileUpdated } from '@Pimcore/modules/auth/user/user-slice'
+import { type KeyBindingForAUser } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 
 interface UseUserReturn {
   updateUserProfile: (user) => Promise<{ data: UserUpdateProfileApiResponse, error: any }>
@@ -43,20 +43,18 @@ export const useUserHelper = (): UseUserReturn => {
 
   async function updateUserProfile (user): Promise<{ data: UserUpdateProfileApiResponse, error: Error }> {
     if (user.modifiedCells !== undefined) {
-      const mergedKeyBindings = Array.from(
-          [
-            ...(user.keyBindings ?? []),
-            ...(user.modifiedCells.keyBindings ?? [])
-          ].reduce((map, item) => map.set(item.action, item), new Map()).values()
-      );
+      const mergedKeyBindings = Array.from(([...(user.keyBindings ?? []), ...(user.modifiedCells.keyBindings ?? [])].reduce(
+        (map, item: KeyBindingForAUser) => map.set(item.action, item), new Map<string, KeyBindingForAUser>()) as Map<string, KeyBindingForAUser>
+      ).values()
+      )
 
-      const { keyBindings, ...restModifiedCells } = user.modifiedCells;
+      const { keyBindings, ...restModifiedCells } = user.modifiedCells
 
       user = {
         ...user,
         ...restModifiedCells,
         keyBindings: mergedKeyBindings
-      };
+      }
     }
 
     const { data, error }: any = await dispatch(api.endpoints.userUpdateProfile.initiate({
@@ -69,7 +67,7 @@ export const useUserHelper = (): UseUserReturn => {
         welcomeScreen: user.welcomeScreen,
         memorizeTabs: user.memorizeTabs,
         contentLanguages: user.contentLanguages,
-        keyBindings: user.keyBindings,
+        keyBindings: user.keyBindings
       }
     }))
 

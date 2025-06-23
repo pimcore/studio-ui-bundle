@@ -96,7 +96,7 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
           </IconButton>
         </Popconfirm>
 
-        {onCloneUser || onRemoveUser
+        {onCloneUser !== null || onRemoveUser !== null
           ? (
             <Dropdown
               menu={ { items } }

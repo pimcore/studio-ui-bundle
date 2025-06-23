@@ -11,9 +11,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { useAppDispatch } from '@sdk/app'
 
-export interface ModifiedCell {
-  [key: string]: any
-}
+export type ModifiedCell = Record<string, any>
 
 export interface ModifiedCellsAction {
   modifiedCells: ModifiedCell

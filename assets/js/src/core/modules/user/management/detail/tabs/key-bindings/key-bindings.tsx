@@ -34,7 +34,6 @@ const KeyBindings = ({ values, modified, onChange, onResetKeyBindings, ...props 
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const { getDefaultKeyBindings } = useUserManagementHelper()
-
   const getKeyName = (key: number): string => {
     let name = ''
     if (key >= 112 && key <= 123) {

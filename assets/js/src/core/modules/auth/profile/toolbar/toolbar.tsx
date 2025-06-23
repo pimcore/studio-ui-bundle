@@ -107,7 +107,7 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
       <Button
         disabled={ !hasChanges || isLoading }
         loading={ isLoading }
-        onClick={ () => updateUserProfile(user) }
+        onClick={ async () => await updateUserProfile(user) }
         type="primary"
       >
         {t('toolbar.save-and-publish')}

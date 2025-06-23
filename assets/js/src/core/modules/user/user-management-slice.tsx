@@ -41,9 +41,9 @@ export const slice = createSlice({
       state.activeId = undefined
       userAdapter.removeOne(state, action.payload)
     },
-    userFetched: (state, action: PayloadAction<any>): void => {
+    userFetched: (state, action: PayloadAction<UserDraft>): void => {
       if (action.payload.id !== undefined) {
-        userAdapter.upsertOne(state, { ...action.payload, modified: false })
+        userAdapter.upsertOne(state, { ...action.payload })
       }
     },
     userRemoved: (state, action: PayloadAction<number>): void => {
@@ -69,8 +69,8 @@ export const slice = createSlice({
       }
       userAdapter.updateOne(state, update)
     },
-    userUpdated: (state, action: PayloadAction<any>): void => {
-      userAdapter.upsertOne(state, { ...action.payload, modified: false })
+    userUpdated: (state, action: PayloadAction<UserDraft>): void => {
+      userAdapter.upsertOne(state, { ...action.payload })
     },
     userAvailablePermissionsFetched: (state, action: PayloadAction<UserGetAvailablePermissionsApiResponse>): void => {
       state.availablePermissions = action.payload.items

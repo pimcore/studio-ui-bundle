@@ -26,7 +26,7 @@ import { KeyBindings, type KeyBinding } from '@Pimcore/modules/user/management/d
 import { useUserDraft } from '@Pimcore/modules/auth/hooks/use-user-draft'
 import { debounce } from 'lodash'
 import { Content } from '@Pimcore/components/content/content'
-// import { type ModifiedCells } from '@Pimcore/modules/auth/hooks/use-trackable-changes'
+import { type ModifiedCell } from '@Pimcore/modules/auth/hooks/use-trackable-changes'
 
 interface IProfileDetail {
   id: number
@@ -78,7 +78,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
 
   const onValuesChange = useCallback(
     debounce((changedValues, allValues) => {
-      setModifiedCells(changedValues)
+      setModifiedCells(changedValues as ModifiedCell)
     }, 300),
     [setModifiedCells, form]
   )
