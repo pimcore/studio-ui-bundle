@@ -17,7 +17,7 @@ import { ActionsCell } from './actions-cell'
 import { WebsiteSettingRow } from '../website-settings-container'
 import { WebsiteSetting } from '../website-settings-api-slice.gen'
 
-type WebsiteSettingWithActions = WebsiteSetting & { actions: React.ReactNode }
+export type WebsiteSettingWithActions = WebsiteSetting & { actions: React.ReactNode }
 
 interface TableProps {
   websiteSettingRows: WebsiteSettingRow[]
@@ -56,18 +56,17 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows }: TableProps)
       header: t('website-settings.columns.site'),
       meta: { editable: true },
       size: 110
+    }),
+    columnHelper.accessor('actions', {
+      header: t('properties.columns.actions'),
+      size: 80,
+      cell: (info) => (
+        <ActionsCell
+          info={ info }
+          setWebsiteSettingRows={ setWebsiteSettingRows }
+        />
+      )
     })
-    // ,
-    // columnHelper.accessor('actions', {
-    //   header: t('properties.columns.actions'),
-    //   size: 80,
-    //   cell: (info) => (
-    //     <ActionsCell
-    //       info={ info }
-    //       setWebsiteSettingRows={ setWebsiteSettingRows }
-    //     />
-    //   )
-    // })
   ]
 
   // const onUpdateCellData = async ({
