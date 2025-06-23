@@ -19,7 +19,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { Table } from './table/table'
 import { Box, IconTextButton } from '@sdk/components'
 import { usePropertyGetCollectionQuery } from '../element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
-import trackError, { ApiError } from '../app/error-handler'
+import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { type PredefinedPropertyRow, usePredefinedProperty } from './hooks/use-predefined-property'
 import { isUndefined } from 'lodash'
@@ -28,8 +28,14 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
   const { createNewProperty, createLoading } = usePredefinedProperty()
   const { data, isLoading: predefinedPropertiesLoading, isFetching: predefinedPropertiesFetching, isError, error, refetch } = usePropertyGetCollectionQuery({})
 
+  const handleRefetch = (): void => {
+    void refetch().catch(() => {
+      trackError(new GeneralError('Error while reloading'))
+    })
+  }
+
   useEffect(() => {
-    refetch()
+    handleRefetch()
   }, [])
 
   const [predefinedPropertyRows, setPredefinedPropertyRows] = useState<PredefinedPropertyRow[]>([])
@@ -46,6 +52,12 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
     }
   }, [predefinedProperties])
 
+  useEffect(() => {
+    if (isError) {
+      trackError(new ApiError(error))
+    }
+  }, [isError])
+
   const onCreateProperty = async (): Promise<void> => {
     const { success, data } = await createNewProperty()
     if (success && data !== undefined) {
@@ -58,12 +70,6 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
     }
   }
 
-  useEffect(() => {
-    if (isError) {
-      trackError(new ApiError(error))
-    }
-  }, [isError])
-
   return (
     <ContentLayout
       renderToolbar={
@@ -71,8 +77,7 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
           <IconButton
             disabled={ predefinedPropertiesFetching }
             icon={ { value: 'refresh' } }
-            onClick={ async () => await refetch()
-          }
+            onClick={ handleRefetch }
           />
         </Toolbar> }
       renderTopBar={
