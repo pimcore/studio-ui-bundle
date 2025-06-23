@@ -567,48 +567,48 @@ user-management.tree.all: All Users
 user-management.settings.title: Settings
 user-management.workspaces.title: Workspaces
 user-management.key-bindings.title: Key Bindings
-user-management.key-bindings.info: Please don’t forget to reload Pimcore after your modification!
-user-management.key-bindings.reset: Reset to default
-user-management.key-bindings.general: General
-user-management.key-bindings.save: Save
-user-management.key-bindings.publish: Publish
-user-management.key-bindings.unpublish: Unpublish
-user-management.key-bindings.rename: Rename
-user-management.key-bindings.refresh: Refresh
-user-management.key-bindings.navigation: Navigation
-user-management.key-bindings.openDocument: Open Document
-user-management.key-bindings.openAsset: Open Asset
-user-management.key-bindings.openObject: Open Object
-user-management.key-bindings.openClassEditor: Open Class Editor
-user-management.key-bindings.openInTree: Open in Tree
-user-management.key-bindings.closeAllTabs: Close All Tabs
-user-management.key-bindings.searchDocument: Search Document
-user-management.key-bindings.searchAsset: Search Asset
-user-management.key-bindings.searchObject: Search Object
-user-management.key-bindings.searchAndReplaceAssignments: Search and Replace Assignments
-user-management.key-bindings.quickSearch: Quick Search
-user-management.key-bindings.system: System
-user-management.key-bindings.showMetaInfo: Show Meta Info
-user-management.key-bindings.showElementHistory: Show Element History
-user-management.key-bindings.sharedTranslations: Shared Translations
-user-management.key-bindings.recycleBin: Recycle Bin
-user-management.key-bindings.notesEvents: Notes & Events
-user-management.key-bindings.tagManager: Tag Manager
-user-management.key-bindings.tagConfiguration: Tag Configuration
-user-management.key-bindings.user: User
-user-management.key-bindings.users: Users
-user-management.key-bindings.role: Role
-user-management.key-bindings.roles: Roles
-user-management.key-bindings.clearAllCaches: Clear All Caches
-user-management.key-bindings.clearDataCache: Clear Data Cache
-user-management.key-bindings.customReports: Custom Reports
-user-management.key-bindings.reports: Reports
-user-management.key-bindings.applicationLogger: Application Logger
-user-management.key-bindings.glossary: Glossary
-user-management.key-bindings.seoDocumentEditor: SEO Document Editor
-user-management.key-bindings.robots: Robots
-user-management.key-bindings.httpErrorLog: HTTP Error Log
-user-management.key-bindings.redirects: redirects
+key-bindings.info: Please don’t forget to reload Pimcore after your modification!
+key-bindings.reset: Reset to default
+key-bindings.general: General
+key-bindings.save: Save
+key-bindings.publish: Publish
+key-bindings.unpublish: Unpublish
+key-bindings.rename: Rename
+key-bindings.refresh: Refresh
+key-bindings.navigation: Navigation
+key-bindings.openDocument: Open Document
+key-bindings.openAsset: Open Asset
+key-bindings.openObject: Open Object
+key-bindings.openClassEditor: Open Class Editor
+key-bindings.openInTree: Open in Tree
+key-bindings.closeAllTabs: Close All Tabs
+key-bindings.searchDocument: Search Document
+key-bindings.searchAsset: Search Asset
+key-bindings.searchObject: Search Object
+key-bindings.searchAndReplaceAssignments: Search and Replace Assignments
+key-bindings.quickSearch: Quick Search
+key-bindings.system: System
+key-bindings.showMetaInfo: Show Meta Info
+key-bindings.showElementHistory: Show Element History
+key-bindings.sharedTranslations: Shared Translations
+key-bindings.recycleBin: Recycle Bin
+key-bindings.notesEvents: Notes & Events
+key-bindings.tagManager: Tag Manager
+key-bindings.tagConfiguration: Tag Configuration
+key-bindings.user: User
+key-bindings.users: Users
+key-bindings.role: Role
+key-bindings.roles: Roles
+key-bindings.clearAllCaches: Clear All Caches
+key-bindings.clearDataCache: Clear Data Cache
+key-bindings.customReports: Custom Reports
+key-bindings.reports: Reports
+key-bindings.applicationLogger: Application Logger
+key-bindings.glossary: Glossary
+key-bindings.seoDocumentEditor: SEO Document Editor
+key-bindings.robots: Robots
+key-bindings.httpErrorLog: HTTP Error Log
+key-bindings.redirects: redirects
 user-management.references.title: References
 user-management.references.documents: Documents
 user-management.references.columns.id: ID
