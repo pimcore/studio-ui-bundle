@@ -14,7 +14,9 @@ import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/us
 import { type DefaultOptionType } from 'antd/es/select'
 
 interface SelectConfig {
-  options: string[]
+  fieldDefinition: {
+    options: string[]
+  }
 }
 
 export const DynamicTypeFieldFilterSelectComponent = (): React.JSX.Element => {
@@ -23,10 +25,10 @@ export const DynamicTypeFieldFilterSelectComponent = (): React.JSX.Element => {
 
   const config = rawConfig as SelectConfig
 
-  const rawOptions = config.options
-  const formattedOptions: DefaultOptionType[] = rawOptions.map((opt: string) => ({
-    label: opt,
-    value: opt
+  const rawOptions = config.fieldDefinition.options
+  const formattedOptions: DefaultOptionType[] = rawOptions.map((opt: any) => ({
+    label: opt?.key,
+    value: opt?.value
   }))
 
   useEffect(() => {
