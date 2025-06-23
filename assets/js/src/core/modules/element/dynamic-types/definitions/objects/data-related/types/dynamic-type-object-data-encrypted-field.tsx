@@ -79,7 +79,7 @@ export class DynamicTypeObjectDataEncryptedField extends DynamicTypeObjectDataAb
 
   getDefaultGridColumnWidth (props?: EncryptedFieldObjectDataDefinition): number | undefined {
     return getDefaultGridColumnWidthFromDynamicObjectType(
-      props?.delegateDatatype as string ?? undefined,
+      props?.delegateDatatype,
       props
     )
   }
