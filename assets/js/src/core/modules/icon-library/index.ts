@@ -1,11 +1,14 @@
 /**
- * This source file is available under the terms of the
- * Pimcore Open Core License (POCL)
+ * Pimcore
+ *
+ * This source file is available under two different licenses:
+ * - Pimcore Open Core License (POCL)
+ * - Pimcore Commercial License (PCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
- *  @license    Pimcore Open Core License (POCL)
+ *  @copyright  Copyright (c) Pimcore GmbH
+ *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
  */
 
 /* eslint-disable max-lines */
@@ -213,6 +216,7 @@ import usersX from '@Pimcore/assets/icons/users-x.inline.svg?react'
 import video from '@Pimcore/assets/icons/video.inline.svg?react'
 import view from '@Pimcore/assets/icons/view.inline.svg?react'
 import warningCircle from '@Pimcore/assets/icons/warning-circle.inline.svg?react'
+import webSettings from '@Pimcore/assets/icons/web-settings.inline.svg?react'
 import webhook from '@Pimcore/assets/icons/webhook.inline.svg?react'
 import widget from '@Pimcore/assets/icons/widget.inline.svg?react'
 import workflow from '@Pimcore/assets/icons/workflow.inline.svg?react'
@@ -222,7 +226,7 @@ import xlsxCsv from '@Pimcore/assets/icons/xlsx-csv.inline.svg?react'
 
 moduleSystem.registerModule({
   onInit: () => {
-    const iconLibrary = container.get<IconLibrary>(serviceIds.iconLibrary)
+    const iconLibrary = container.get<IconLibrary>(serviceIds.iconLibrary);
     iconLibrary.register({
       name: 'accessory',
       component: accessory
@@ -1014,6 +1018,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'warning-circle',
       component: warningCircle
+    })
+    iconLibrary.register({
+      name: 'web-settings',
+      component: webSettings
     })
     iconLibrary.register({
       name: 'webhook',
