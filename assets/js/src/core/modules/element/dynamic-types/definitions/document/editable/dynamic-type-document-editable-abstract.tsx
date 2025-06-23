@@ -36,7 +36,7 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
 
   abstract getEditableDataComponent (props: AbstractDocumentEditableDefinition): ReactElement<AbstractDocumentEditableDefinition>
 
-  transformValue( value: any): any {
-    return value;
+  transformValue (value: any): any {
+    return value
   }
 }

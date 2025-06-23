@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { ManyToOneRelation, ManyToOneRelationValue } from '@sdk/modules/element'
+import { ManyToOneRelation, type ManyToOneRelationValue } from '@sdk/modules/element'
 import { isEmpty, isNil } from 'lodash'
 
 export type RelationEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
@@ -45,29 +45,28 @@ export class DynamicTypeDocumentEditableRelation extends DynamicTypeDocumentEdit
       <ManyToOneRelation
         allowToClearRelation
         allowedAssetTypes={ props.config?.subtypes?.asset }
-        allowedDocumentTypes={ props.config?.subtypes?.document }
-        allowedDataObjectTypes={ props.config?.subtypes?.object }
         allowedClasses={ props.config?.classes }
+        allowedDataObjectTypes={ props.config?.subtypes?.object }
+        allowedDocumentTypes={ props.config?.subtypes?.document }
         assetsAllowed={ isTypeAllowed(props.config?.types, 'asset') }
+        className={ props.config?.class }
         dataObjectsAllowed={ isTypeAllowed(props.config?.types, 'object') }
         documentsAllowed={ isTypeAllowed(props.config?.types, 'document') }
         width={ props.config?.width }
-        className={ props.config?.class }
       />
     )
   }
 
-  transformValue(value: any): ManyToOneRelationValue | null {
+  transformValue (value: any): ManyToOneRelationValue | null {
     if (isNil(value)) {
       return null
     }
 
     return {
       id: value.id,
-      type: value.elementType, 
+      type: value.elementType,
       fullPath: value.path,
-      subtype: value.subType,
+      subtype: value.subType
     }
-    
   }
 }
