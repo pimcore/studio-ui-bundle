@@ -11,7 +11,7 @@
 import React, { useEffect, useState } from 'react'
 import { t } from 'i18next'
 import trackError, { ApiError, GeneralError } from '../app/error-handler'
-import { useDocumentDocTypeListQuery, api } from '../document/document-api-slice-enhanced'
+import { useDocumentDocTypeListQuery } from '../document/document-api-slice-enhanced'
 import { type DocumentTypeRow, useDocumentType } from './hooks/use-document-type'
 import { useDocumentConfig } from './hooks/use-document-config'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
