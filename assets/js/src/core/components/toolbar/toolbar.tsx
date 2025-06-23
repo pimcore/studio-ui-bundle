@@ -21,7 +21,7 @@ export interface ToolbarProps {
   theme?: 'primary' | 'secondary'
   borderStyle?: 'default' | 'primary'
   position?: 'top' | 'bottom'
-  size?: 'small' | 'default'
+  size?: 'small' | 'auto' | 'default'
   padding?: BoxProps['padding']
   margin?: BoxProps['margin']
 }

@@ -53,7 +53,7 @@ const config: ConfigFile = {
       pattern: 'metadataGetCollection',
       type: 'query'
     },
-        {
+    {
       pattern: 'notificationGetCollection',
       type: 'query'
     }
@@ -72,7 +72,7 @@ const config: ConfigFile = {
       filterEndpoints: pathMatcher(/api\/translation/i)
     },
     '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/properties/i)
+      filterEndpoints: pathMatcher(/api\/propert(y|ies)/i)
     },
     '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/workflow/i)
@@ -139,7 +139,12 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/element/export-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/export\/?/i)
+    },
+    '../../js/src/core/modules/email/emails-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/emails\/?/i)
     }
+
+
   },
   exportName: 'api',
   hooks: true,

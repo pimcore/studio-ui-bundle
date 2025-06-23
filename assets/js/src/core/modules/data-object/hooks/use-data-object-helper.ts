@@ -9,7 +9,7 @@
  */
 
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { store, useAppDispatch } from '@sdk/app'
+import { store, useAppDispatch } from '@Pimcore/app/store'
 import { setNodeLoadingInAllTree, setNodePublished } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type IconProps } from '@Pimcore/components/icon/icon'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'

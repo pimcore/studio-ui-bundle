@@ -7,21 +7,46 @@ services:
             $studioWysiwygConfiguration: '%pimcore_studio_ui.wysiwyg_configuration%'
             $studioUrlUrlPath: '%pimcore_studio_ui.url_path%'
 
-    # controllers are imported separately to make sure they're public
-    # and have a tag that allows actions to type-hint services
-    Pimcore\Bundle\StudioUiBundle\Controller\:
-        resource: '../src/Controller'
+    Pimcore\Bundle\StudioUiBundle\Controller\DefaultController:
         public: true
         tags: ['controller.service_arguments']
+        arguments:
+            $staticResourcesResolver: '@pimcore_studio.static_resources_resolver.default'
 
-    Pimcore\Bundle\StudioUiBundle\Service\StaticResourcesResolverInterface:
+    Pimcore\Bundle\StudioUiBundle\Controller\ImageEditorController:
+        public: true
+        tags: [ 'controller.service_arguments' ]
+
+    pimcore_studio.static_resources_resolver.default:
         class: Pimcore\Bundle\StudioUiBundle\Service\StaticResourcesResolver
+        arguments:
+            $webpackEntryPointManager: '@pimcore_studio.entry_point_manager.default'
 
-    Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointManager:
+    pimcore_studio.entry_point_manager.default:
+        class: Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointManager
         arguments:
             - !tagged_iterator pimcore_studio_ui.webpack_entry_point_provider
 
-    Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProvider: ~
+    pimcore_studio.static_resources_resolver.document_editor_iframe:
+        class: Pimcore\Bundle\StudioUiBundle\Service\StaticResourcesResolver
+        arguments:
+            $webpackEntryPointManager: '@pimcore_studio.entry_point_manager.document_editor_iframe'
+
+    pimcore_studio.entry_point_manager.document_editor_iframe:
+        class: Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointManager
+        arguments:
+            - !tagged_iterator pimcore_studio_ui.webpack_entry_point_provider.document_editor_iframe
+
+    Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProvider: 
+        tags:
+           - { name: 'pimcore_studio_ui.webpack_entry_point_provider' }
+
+    Pimcore\Bundle\StudioUiBundle\EventSubscriber\EditmodeSubscriber:
+        tags: ['kernel.event_subscriber']
+        arguments:
+            $staticResourcesResolver: '@pimcore_studio.static_resources_resolver.document_editor_iframe'
+        calls:
+            - [ setLogger, [ '@logger' ] ]
 
     Pimcore\Bundle\StudioUiBundle\Installer:
         public: true

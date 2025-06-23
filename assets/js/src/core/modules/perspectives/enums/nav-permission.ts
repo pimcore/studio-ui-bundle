@@ -11,6 +11,7 @@
 export enum NavPermission {
   ToolsHidden = 'extras.hidden',
   NotesAndEvents = 'extras.notesEvents',
+  Mails = 'extras.emails',
 
   FileHidden = 'file.hidden',
   OpenDocument = 'file.open_document',
@@ -19,6 +20,7 @@ export enum NavPermission {
 
   SettingsHidden = 'settings.hidden',
   TagConfiguration = 'settings.tagConfiguration',
+  PredefinedProperties = 'settings.predefinedProperties',
   UsersHidden = 'settings.users_hidden',
   Users = 'settings.users_users',
   Roles = 'settings.users_roles',

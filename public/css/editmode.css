@@ -1,0 +1,17 @@
+.pimcorestudio_content-editable {
+    outline: 0 auto;
+    overflow-y: visible;
+}
+
+.pimcorestudio_content-editable:hover {
+    outline: 2px dashed #BABABA;
+    outline-offset: 5px;
+}
+
+.pimcorestudio_content-editable:focus {
+    outline: none;
+}
+
+.pimcorestudio_content-editable.empty {
+    outline: 1px dashed #BABABA;
+}

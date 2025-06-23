@@ -35,7 +35,7 @@ export default defineConfig({
   },
   source: {
     entry: {
-      main: './js/src/core/main.ts'
+      main: './js/src/core/main.ts',
     },
     decorators: {
       version: 'legacy'
@@ -129,6 +129,17 @@ export default defineConfig({
           singleton: true,
           eager: true,
           requiredVersion: packages.dependencies.antd
+        },
+        'reflect-metadata': {
+          singleton: true,
+          eager: true,
+          requiredVersion: false
+        },
+        '@uiw/react-codemirror': {
+          singleton: true,
+          eager: true,
+          version: packages.dependencies['@uiw/react-codemirror'],
+          requiredVersion: packages.dependencies['@uiw/react-codemirror']
         }
       }
     })

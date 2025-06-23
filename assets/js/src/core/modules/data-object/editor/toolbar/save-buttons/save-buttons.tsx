@@ -17,7 +17,7 @@ import { useMessage } from '@Pimcore/components/message/useMessage'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { useDeleteDraft } from '@Pimcore/modules/data-object/actions/delete-draft/use-delete-draft'
+import { useDeleteDraft } from '@Pimcore/modules/element/actions/delete-draft/use-delete-draft'
 import { SaveTaskType, useSave } from '@Pimcore/modules/data-object/actions/save/use-save'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
 import {
@@ -49,7 +49,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     error: schedulesError
   } = useSaveSchedules('data-object', id, false)
   const { getModifiedDataObjectAttributes, resetModifiedDataObjectAttributes } = useEditFormContext()
-  const { deleteDraft, isLoading: isDraftDeleteLoading, buttonText: deleteDraftButtonText } = useDeleteDraft()
+  const { deleteDraft, isLoading: isDraftDeleteLoading, buttonText: deleteDraftButtonText } = useDeleteDraft('data-object')
   const messageApi = useMessage()
   const isAutoSaved = dataObject?.draftData?.isAutoSave === true
 

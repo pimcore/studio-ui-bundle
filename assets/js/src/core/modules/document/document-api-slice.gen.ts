@@ -29,6 +29,36 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Documents"],
             }),
+            documentDocTypeAdd: build.mutation<DocumentDocTypeAddApiResponse, DocumentDocTypeAddApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/doc-types/add`,
+                    method: "POST",
+                    body: queryArg.docTypeAddParameters,
+                }),
+                invalidatesTags: ["Documents"],
+            }),
+            documentDocTypeUpdateById: build.mutation<
+                DocumentDocTypeUpdateByIdApiResponse,
+                DocumentDocTypeUpdateByIdApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/doc-types/${queryArg.id}`,
+                    method: "PUT",
+                    body: queryArg.docTypeUpdateParameters,
+                }),
+                invalidatesTags: ["Documents"],
+            }),
+            documentDocTypeDelete: build.mutation<DocumentDocTypeDeleteApiResponse, DocumentDocTypeDeleteApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/doc-types/${queryArg.id}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Documents"],
+            }),
+            documentDocTypeTypeList: build.query<DocumentDocTypeTypeListApiResponse, DocumentDocTypeTypeListApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/documents/doc-types/types` }),
+                providesTags: ["Documents"],
+            }),
             documentDocTypeList: build.query<DocumentDocTypeListApiResponse, DocumentDocTypeListApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/documents/doc-types`,
@@ -41,6 +71,14 @@ const injectedRtkApi = api
             documentGetById: build.query<DocumentGetByIdApiResponse, DocumentGetByIdApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/documents/${queryArg.id}` }),
                 providesTags: ["Documents"],
+            }),
+            documentUpdateById: build.mutation<DocumentUpdateByIdApiResponse, DocumentUpdateByIdApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/${queryArg.id}`,
+                    method: "PUT",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Documents"],
             }),
             documentPageStreamPreview: build.query<
                 DocumentPageStreamPreviewApiResponse,
@@ -173,6 +211,25 @@ export type DocumentConvertApiArg = {
     /** Document type to convert to */
     type: string;
 };
+export type DocumentDocTypeAddApiResponse = /** status 200 New DocType data as JSON */ DocType;
+export type DocumentDocTypeAddApiArg = {
+    docTypeAddParameters: DocTypeAdd;
+};
+export type DocumentDocTypeUpdateByIdApiResponse = /** status 200 Successfully updated DocType */ DocType;
+export type DocumentDocTypeUpdateByIdApiArg = {
+    /** The Id of the DocType to update */
+    id: string;
+    docTypeUpdateParameters: DocTypeUpdate;
+};
+export type DocumentDocTypeDeleteApiResponse = unknown;
+export type DocumentDocTypeDeleteApiArg = {
+    /** The Id of the DocType to delete */
+    id: string;
+};
+export type DocumentDocTypeTypeListApiResponse = /** status 200 List of available DocType types */ {
+    items: DocTypeType[];
+};
+export type DocumentDocTypeTypeListApiArg = void;
 export type DocumentDocTypeListApiResponse = /** status 200 List of all DocTypes */ {
     items: DocType[];
 };
@@ -180,17 +237,30 @@ export type DocumentDocTypeListApiArg = {
     /** Filter results by docType type */
     type?: string;
 };
-export type DocumentGetByIdApiResponse = /** status 200 Successfully retrieved document data as JSON */
-    | Document
-    | DocumentFolder
-    | Email
-    | Hardlink
-    | Link
-    | Page
-    | Snippet;
+export type DocumentGetByIdApiResponse =
+    /** status 200 Successfully retrieved document data as JSON */ DocumentDetailData;
 export type DocumentGetByIdApiArg = {
     /** Id of the document */
     id: number;
+};
+export type DocumentUpdateByIdApiResponse = /** status 200 Successfully updated document */ DocumentDetailData;
+export type DocumentUpdateByIdApiArg = {
+    /** Id of the document */
+    id: number;
+    body: {
+        data: {
+            parentId?: number | null;
+            index?: number | null;
+            key?: string | null;
+            task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
+            locked?: string | null;
+            published?: boolean | null;
+            editableData?: object | null;
+            settingsData?: object | null;
+            missingRequiredEditable?: boolean | null;
+            properties?: UpdateDataProperty[] | null;
+        };
+    };
 };
 export type DocumentPageStreamPreviewApiResponse = /** status 200 Page preview stream */ Blob;
 export type DocumentPageStreamPreviewApiArg = {
@@ -260,10 +330,11 @@ export type DocumentGetTranslationParentByLanguageApiArg = {
     /** Language code for the translation parent */
     language: string;
 };
-export type DocumentGetTreeApiResponse = /** status 200 document_get_tree_success_description */ {
-    totalItems: number;
-    items: (Document | DocumentFolder | Email | Hardlink | Link | Page | Snippet)[];
-};
+export type DocumentGetTreeApiResponse =
+    /** status 200 Paginated documents with total count as header param as JSON */ {
+        totalItems: number;
+        items: Document[];
+    };
 export type DocumentGetTreeApiArg = {
     /** Page number */
     page: number;
@@ -350,6 +421,50 @@ export type DocType = {
     /** Is writeable */
     writeable: boolean;
 };
+export type DocTypeAdd = {
+    /** Name */
+    name: string;
+    /** Type */
+    type: string;
+};
+export type DocTypeUpdate = {
+    /** Name */
+    name: string;
+    /** Type */
+    type: string;
+    /** Group */
+    group: string | null;
+    /** Controller */
+    controller: string | null;
+    /** Template */
+    template: string | null;
+    /** Priority */
+    priority: number;
+    /** Static generator enabled */
+    staticGeneratorEnabled: boolean;
+};
+export type DocTypeType = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Name */
+    name: string;
+    /** Valid table */
+    validTable?: string;
+    /** Children supported */
+    childrenSupported?: boolean;
+    /** Direct route */
+    directRoute?: boolean;
+    /** Predefined document types */
+    predefinedDocumentTypes?: boolean;
+    /** Translatable */
+    translatable?: boolean;
+    /** Translatable Inheritance */
+    translatableInheritance?: boolean;
+    /** Only printable children */
+    onlyPrintableChildren?: boolean;
+};
 export type ElementIcon = {
     /** Icon type */
     type: "name" | "path";
@@ -423,8 +538,6 @@ export type Document = Element & {
     };
     /** Custom attributes for the tree */
     customAttributes?: CustomAttributes;
-    /** Has workflow available */
-    hasWorkflowAvailable: boolean;
     /** Full path */
     fullPath: string;
     /** Published */
@@ -433,98 +546,46 @@ export type Document = Element & {
     type: string;
     /** Key */
     key: string;
+    /** Custom index */
+    index: number;
     /** Has children */
     hasChildren: boolean;
     /** Workflow permissions */
     hasWorkflowWithPermissions: boolean;
     permissions: DocumentPermissions;
+    /** Is document a site */
+    isSite: boolean;
+    /** Exclude document from navigation */
+    navigationExclude: boolean;
 };
-export type DocumentFolder = Document;
-export type Email = Document & {
-    /** Controller */
-    controller: string;
-    /** Template */
-    template: string;
-    /** Main document ID */
-    contentMainDocumentId: number;
-    /** Supports main content */
-    supportsContentMain: boolean;
+export type PageSnippetDraftData = {
+    /** ID */
+    id: number;
+    /** Modification date */
+    modificationDate: number;
+    /** Is auto save */
+    isAutoSave: boolean;
+};
+export type DocumentDetailData = Document & {
+    /** Document Editable Data */
+    editableData: object;
     /** Is missing required editable */
     missingRequiredEditable: boolean;
-    /** Is static generator enabled */
-    staticGeneratorEnabled: boolean;
-    /** Lifetime of static generator */
-    staticGeneratorLifetime: number;
-    /** Subject */
-    subject: string;
-    /** From */
-    from: string;
-    /** Reply to */
-    replyTo: string;
-    /** To */
-    to: string;
-    /** CC */
-    cc: string;
-    /** BCC */
-    bcc: string;
+    /** Document Settings Data */
+    settingsData: object;
+    draftData: PageSnippetDraftData;
+    /** Has workflow available */
+    hasWorkflowAvailable: boolean;
 };
-export type Hardlink = Document & {
-    /** Source ID */
-    sourceId: number | null;
-    /** Properties from source */
-    propertiesFromSource: boolean;
-    /** Children from source */
-    childrenFromSource: boolean;
-};
-export type Link = Document & {
-    /** Internal ID */
-    internal: number | null;
-    /** Internal type */
-    internalType: string | null;
-    /** Direct */
-    direct: string;
-    /** Link type */
-    linkType: string;
-    /** Href */
-    href: string;
-};
-export type Page = Document & {
-    /** Controller */
-    controller: string;
-    /** Template */
-    template: string;
-    /** Main document ID */
-    contentMainDocumentId: number;
-    /** Supports main content */
-    supportsContentMain: boolean;
-    /** Is missing required editable */
-    missingRequiredEditable: boolean;
-    /** Is static generator enabled */
-    staticGeneratorEnabled: boolean;
-    /** Lifetime of static generator */
-    staticGeneratorLifetime: number;
-    /** Title */
-    title: string | null;
-    /** Description */
-    description: string | null;
-    /** Pretty Url */
-    prettyUrl: string | null;
-};
-export type Snippet = Document & {
-    /** Controller */
-    controller: string;
-    /** Template */
-    template: string;
-    /** Main document ID */
-    contentMainDocumentId: number;
-    /** Supports main content */
-    supportsContentMain: boolean;
-    /** Is missing required editable */
-    missingRequiredEditable: boolean;
-    /** Is static generator enabled */
-    staticGeneratorEnabled: boolean;
-    /** Lifetime of static generator */
-    staticGeneratorLifetime: number;
+export type UpdateDataProperty = {
+    /** key */
+    key: string;
+    /** data */
+    data: any | null;
+    /** type */
+    type: string;
+    /** inheritable */
+    inheritable: boolean;
 };
 export type DocumentController = {
     /** AdditionalAttributes */
@@ -600,8 +661,13 @@ export const {
     useDocumentAddMutation,
     useDocumentCloneMutation,
     useDocumentConvertMutation,
+    useDocumentDocTypeAddMutation,
+    useDocumentDocTypeUpdateByIdMutation,
+    useDocumentDocTypeDeleteMutation,
+    useDocumentDocTypeTypeListQuery,
     useDocumentDocTypeListQuery,
     useDocumentGetByIdQuery,
+    useDocumentUpdateByIdMutation,
     useDocumentPageStreamPreviewQuery,
     useDocumentAvailableControllersListQuery,
     useDocumentAvailableTemplatesListQuery,

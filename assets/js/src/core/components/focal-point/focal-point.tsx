@@ -11,7 +11,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { isNull, isUndefined } from 'lodash'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
-import { AssetContext } from '@sdk/modules/asset'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { FocalPointContext } from '@Pimcore/components/focal-point/context/focal-point-context'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'

@@ -8,20 +8,21 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { Badge } from '@Pimcore/components/badge/badge'
+import { Button } from '@Pimcore/components/button/button'
+import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { Avatar, type MenuProps } from 'antd'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
+import { NOTIFICATIONS } from '@Pimcore/modules/notifications'
+import { SendNotificationModal } from '@Pimcore/modules/notifications/send-notification/send-notification-modal'
+import { useWidgetManager } from '@sdk/modules/widget-manager'
+import { Avatar } from 'antd'
 import React, { useState } from 'react'
-import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { useTranslation } from 'react-i18next'
 import { useStyle } from './user-menu.styles'
-import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { NOTIFICATIONS } from '@Pimcore/modules/notifications'
-import { USERPROFILE } from '@Pimcore/modules/auth/profile/profile-container'
-import { Button } from '@Pimcore/components/button/button'
-import { useWidgetManager } from '@sdk/modules/widget-manager'
-import { SendNotificationModal } from '@Pimcore/modules/notifications/send-notification/send-notification-modal'
-import { Badge } from '@Pimcore/components/badge/badge'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 
 interface IUserMenuProps {
   className?: string
@@ -43,7 +44,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     })
   }
 
-  const items: MenuProps['items'] = [
+  const items: DropdownMenuProps['items'] = [
     {
       key: 'title',
       label: (
@@ -56,20 +57,27 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       label: t('user-menu.notifications'),
       icon: <Badge count={ 5 } />,
       onClick: () => { openMainWidget(NOTIFICATIONS) },
-      extra: <Button
-        className={ 'user-menu__item-extra' }
-        onClick={ (e) => {
-          e.stopPropagation()
-          setSendModal(true)
-        } }
-        size={ 'small' }
-             >{t('user-menu.notification.send')}</Button>
+      hidden: !isAllowed(UserPermission.Notifications),
+      extra: isAllowed(UserPermission.SendNotifications)
+        ? (
+          <Button
+            className={ 'user-menu__item-extra' }
+            onClick={ (e) => {
+              e.stopPropagation()
+              setSendModal(true)
+            } }
+            size={ 'small' }
+          >{t('user-menu.notification.send')}</Button>
+          )
+        : null
     },
     {
       key: 'myprofile',
       label: t('user-menu.my-profile'),
       icon: <Icon value={ 'user' } />,
-      onClick: () => { openMainWidget(USERPROFILE) }
+      onClick: () => {
+        console.log('My Profile clicked')
+      }
     },
     {
       key: 'logout',

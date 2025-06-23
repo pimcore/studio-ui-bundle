@@ -1,0 +1,94 @@
+name: shared-npm-publish
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: "The new version to set (e.g., 1.2.3)"
+        required: true
+        type: string
+      tag:
+        description: "The npm tag to use when publishing (default: latest)"
+        required: false
+        type: string
+        default: "latest"
+    secrets:
+      NPM_ACCESSTOKEN:
+        description: "NPM Authentication token"
+        required: true
+
+env:
+ BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
+
+permissions:
+  contents: read
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BRANCH_NAME }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ./assets/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        working-directory: ./assets
+        run: npm ci
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BRANCH_NAME }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ./assets/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Run build types
+        working-directory: ./assets
+        run: npm run generate-types
+
+      - name: Run rsbuild plugins build
+        working-directory: ./assets
+        run: npm run build-rsbuild-plugins
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set package version
+        working-directory: ./assets
+        run: npm version ${{ inputs.version }} --no-git-tag-version --allow-same-version
+
+      - name: Set auth token
+        working-directory: ./assets
+        run: npm set //registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESSTOKEN }}
+
+      - name: Publish package to npm
+        working-directory: ./assets
+        run: npm publish --tag ${{ inputs.tag }} --access public

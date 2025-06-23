@@ -11,7 +11,7 @@
 import React, { useContext } from 'react'
 import { PreviewView } from './preview-view'
 import { useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { AssetContext } from '@sdk/modules/asset'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
   ContentLayout
 } from '@Pimcore/components/content-layout/content-layout'

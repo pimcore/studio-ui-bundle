@@ -44,7 +44,9 @@ export const tagNames = {
   ELEMENT_TAGS: 'TAGS',
   ROLE: 'ROLE',
   PREDEFINED_ASSET_METADATA: 'PREDEFINED_ASSET_METADATA',
-  CURRENT_USER_INFORMATION: 'CURRENT_USER_INFORMATION'
+  CURRENT_USER_INFORMATION: 'CURRENT_USER_INFORMATION',
+  EMAIL_BLOCKLIST: 'EMAIL_BLOCKLIST',
+  EMAIL_BLOCKLIST_DETAIL: 'EMAIL_BLOCKLIST_DETAIL'
 }
 
 export const providingTags = {
@@ -79,6 +81,7 @@ export const providingTags = {
   ELEMENT_DEPENDENCIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.DEPENDENCIES, elementType, id)],
   ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.WORKFLOW, elementType, id)],
   PROPERTY_DETAIL: (id: string) => [{ type: tagNames.PROPERTIES, id }],
+  GLOBAL_PROPERTIES: () => [tagNames.PROPERTIES],
   ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.PROPERTIES, elementType, id)],
   SCHEDULE_DETAIL: (id: number) => [{ type: tagNames.SCHEDULES, id }, tagNames.SCHEDULES],
   ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.SCHEDULES, elementType, id)],
@@ -92,7 +95,9 @@ export const providingTags = {
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.ELEMENT_TAGS, elementType, id)],
   ROLE: () => [tagNames.ROLE],
   PREDEFINED_ASSET_METADATA: () => [tagNames.PREDEFINED_ASSET_METADATA],
-  CURRENT_USER_INFORMATION: () => [tagNames.CURRENT_USER_INFORMATION]
+  CURRENT_USER_INFORMATION: () => [tagNames.CURRENT_USER_INFORMATION],
+  EMAIL_BLOCKLIST: () => [tagNames.EMAIL_BLOCKLIST],
+  EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }]
 }
 
 export const invalidatingTags = {
@@ -121,6 +126,7 @@ export const invalidatingTags = {
   ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.WORKFLOW, elementType, id)],
   PROPERTY_DETAIL: (id: string) => [{ type: tagNames.PROPERTIES, id }],
   ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.PROPERTIES, elementType, id)],
+  GLOBAL_PROPERTIES: () => [tagNames.PROPERTIES],
   SCHEDULE_DETAIL: (id: number) => [{ type: tagNames.SCHEDULES, id }],
   ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.SCHEDULES, elementType, id)],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
@@ -133,7 +139,9 @@ export const invalidatingTags = {
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.ELEMENT_TAGS, elementType, id)],
   ROLE: () => [tagNames.ROLE],
   PREDEFINED_ASSET_METADATA: () => [tagNames.PREDEFINED_ASSET_METADATA],
-  ELEMENT_DETAIL: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)]
+  ELEMENT_DETAIL: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
+  EMAIL_BLOCKLIST: () => [tagNames.EMAIL_BLOCKLIST],
+  EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }]
 }
 
 const elementUnspecificDataTag = tagNames.AVAILABLE_TAGS

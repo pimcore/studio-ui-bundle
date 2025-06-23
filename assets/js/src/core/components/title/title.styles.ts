@@ -20,11 +20,19 @@ export const useStyle = createStyles(({ token, css }) => {
       &.title--theme-primary .pimcore-icon {
        color: ${token.colorPrimary};
       }
+
+      &.title--theme-secondary .pimcore-icon {
+       color: ${token.colorTextSecondary};
+      }
     `,
     title: css`
       &.pimcore-title.ant-typography {
-        font-size: 12px;
         font-weight: 600;
+        font-size: 12px;
+
+        &.title--weight-normal {
+          font-weight: 400;
+        }
       }
       .pimcore-icon {
         margin-right: 4px;
@@ -32,6 +40,10 @@ export const useStyle = createStyles(({ token, css }) => {
 
       &.pimcore-title.ant-typography.title--theme-primary {
        color: ${token.colorPrimary};
+      }
+
+      &.pimcore-title.ant-typography.title--theme-secondary {
+       color: ${token.colorTextSecondary};
       }
     `
   }

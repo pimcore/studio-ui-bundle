@@ -8,9 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { store, useAppDispatch } from '@sdk/app'
+import { store, useAppDispatch } from '@Pimcore/app/store'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { api as dataObjectApi } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { api as documentApi } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { type TagDescription } from '@reduxjs/toolkit/query'
 import { type ElementType } from '../../../types/enums/element/element-type'
 import { type Element } from '../element-helper'
@@ -41,13 +42,17 @@ export const useCacheUpdate = (elementType: ElementType, tags: ReadonlyArray<Tag
     )
   }
 
-  function getElementTypeDependantApi (): typeof assetApi | typeof dataObjectApi {
+  function getElementTypeDependantApi (): typeof assetApi | typeof dataObjectApi | typeof documentApi {
     if (elementType === 'asset') {
       return assetApi
     }
 
     if (elementType === 'data-object') {
       return dataObjectApi
+    }
+
+    if (elementType === 'document') {
+      return documentApi
     }
 
     throw new Error('Unknown element type')

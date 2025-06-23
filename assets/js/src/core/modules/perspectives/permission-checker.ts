@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { store } from '@sdk/app'
+import { store } from '@Pimcore/app/store'
 import { selectActivePerspective } from './active-perspective-slice'
 import { isNil } from 'lodash'
 
