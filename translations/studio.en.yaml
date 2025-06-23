@@ -683,6 +683,8 @@ roles.add-item.success: Role added successfully
 roles.add-folder.success: Folder added successfully
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
+navigation.marketing: Marketing
+navigation.reports: Reports
 navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
 navigation.customise: Customise

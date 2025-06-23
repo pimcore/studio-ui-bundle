@@ -66,5 +66,12 @@ moduleSystem.registerModule({
         }
       }
     })
+
+    mainNavRegistryService.registerMainNavItem({
+      path: 'Marketing',
+      label: 'navigation.marketing',
+      icon: 'marketing',
+      perspectivePermissionHide: NavPermission.SettingsHidden
+    })
   }
 })
