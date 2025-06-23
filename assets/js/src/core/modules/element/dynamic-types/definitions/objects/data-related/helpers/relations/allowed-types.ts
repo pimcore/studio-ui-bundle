@@ -10,7 +10,7 @@
 
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import type { DragAndDropInfo } from '@sdk/components'
-import _, { isNil, isString } from 'lodash'
+import _, { isNil } from 'lodash'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 import { type ElementSelectorConfig } from '@sdk/modules/element'
 

@@ -14,7 +14,7 @@ import { ManyToManyRelation } from '@sdk/modules/element'
 import { isArray, isEmpty, isNil } from 'lodash'
 import { ManyToManyRelationValue } from '../../../objects/data-related/components/many-to-many-relation/hooks/use-value'
 
-export type RelationsEditableDefinition = AbstractDocumentEditableDefinition & {
+export type RelationsEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
     types?: string[]
     subtypes?: {

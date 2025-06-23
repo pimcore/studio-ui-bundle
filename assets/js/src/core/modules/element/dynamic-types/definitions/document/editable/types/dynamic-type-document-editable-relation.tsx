@@ -13,7 +13,7 @@ import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbs
 import { ManyToOneRelation, ManyToOneRelationValue } from '@sdk/modules/element'
 import { isEmpty, isNil } from 'lodash'
 
-export type RelationEditableDefinition = AbstractDocumentEditableDefinition & {
+export type RelationEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
     types?: string[]
     subtypes?: {
