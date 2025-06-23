@@ -18,9 +18,6 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Table } from './table/table'
 import { Box, IconTextButton } from '@sdk/components'
-import { useAppDispatch } from '@sdk/app'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { api } from '@sdk/api/properties'
 import { usePropertyGetCollectionQuery } from '../element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
 import trackError, { ApiError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
@@ -28,7 +25,6 @@ import { type PredefinedPropertyRow, usePredefinedProperty } from './hooks/use-p
 import { isUndefined } from 'lodash'
 
 export const PredefinedPropertiesContainer = (): React.JSX.Element => {
-  const dispatch = useAppDispatch()
   const { createNewProperty, createLoading } = usePredefinedProperty()
   const { data, isLoading: predefinedPropertiesLoading, isFetching: predefinedPropertiesFetching, isError, error, refetch } = usePropertyGetCollectionQuery({})
 
@@ -75,11 +71,7 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
           <IconButton
             disabled={ predefinedPropertiesFetching }
             icon={ { value: 'refresh' } }
-            onClick={ () => dispatch(
-              api.util.invalidateTags(
-                invalidatingTags.GLOBAL_PROPERTIES()
-              )
-            )
+            onClick={ async () => await refetch()
           }
           />
         </Toolbar> }
