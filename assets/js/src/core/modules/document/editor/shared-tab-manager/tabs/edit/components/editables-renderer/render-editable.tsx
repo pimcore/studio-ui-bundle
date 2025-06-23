@@ -14,7 +14,7 @@ import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/elemen
 import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
 import { serviceIds, useInjection } from '@sdk/app'
 import { isNil, isUndefined } from 'lodash'
-import { defaultFieldWidthValues, FieldWidthProvider, useFieldWidth } from '@sdk/modules/element'
+import { defaultFieldWidthValues, FieldWidthProvider } from '@sdk/modules/element'
 import { useDocumentEditor } from '../../provider/use-document-editor'
 interface RenderEditableProps {
   editableDefinition: AbstractDocumentEditableDefinition
@@ -34,16 +34,10 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
 
   const [localValue, setLocalValue] = useState(getValue(editableDefinition.name))
 
-  if (isNil(editableType)) {
-    return (
-      <Alert
-        message={ (<>Editable type &quot;{editableDefinition.type}&quot; not found:<p>{JSON.stringify(editableDefinition)}</p></>) }
-        type="warning"
-      />
-    )
-  }
-
   const renderEditableComponent = useMemo((): React.ReactElement => {
+    if (isNil(editableType)) {
+      return <></>
+    }
     return React.cloneElement(
       editableType.getEditableDataComponent(editableProps),
       {
@@ -56,6 +50,16 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
       }
     )
   }, [editableType, editableProps, localValue, editableDefinition.name, updateValue])
+
+
+  if (isNil(editableType)) {
+    return (
+      <Alert
+        message={ (<>Editable type &quot;{editableDefinition.type}&quot; not found:<p>{JSON.stringify(editableDefinition)}</p></>) }
+        type="warning"
+      />
+    )
+  }
 
   const label = editableType.getLabel(editableProps)
 

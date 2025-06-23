@@ -61,7 +61,9 @@ export const DocumentEditorProvider = ({ children }: DocumentEditorProviderProps
   const contextValue = useMemo(() => ({
     updateValue: (key: string, value: any): void => {
       valuesRef.current[key].data = value
-      updateDraft()
+      updateDraft()?.catch((error) => {
+        console.error('Error updating draft:', error)
+      })
     },
     getValues: (): Record<string, ValueType> => valuesRef.current,
     getValue: (key: string): any => {
