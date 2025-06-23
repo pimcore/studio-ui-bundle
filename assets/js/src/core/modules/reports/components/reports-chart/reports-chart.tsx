@@ -43,10 +43,21 @@ export const ReportsChart = (): React.JSX.Element => {
     innerRadius: 0.6,
     legend: {
       color: {
-        title: false,
         position: 'right',
-        rowPadding: 5
+        layout: {
+          justifyContent: 'center'
+        },
+        rowPadding: 10,
+        itemLabelFontSize: 14
       }
+    },
+    tooltip: {
+      items: [
+        (datum) => ({
+          name: `${datum.type}:`,
+          value: `${datum.value} (${Math.round((datum.value * 100) / totalCount)}%)`
+        })
+      ]
     },
     annotations: [
       {
