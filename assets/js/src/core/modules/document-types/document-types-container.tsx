@@ -11,7 +11,6 @@
 import React, { useEffect, useState } from 'react'
 import { t } from 'i18next'
 import trackError, { ApiError, GeneralError } from '../app/error-handler'
-import { useAppDispatch } from '@sdk/app'
 import { useDocumentDocTypeListQuery, api } from '../document/document-api-slice-enhanced'
 import { type DocumentTypeRow, useDocumentType } from './hooks/use-document-type'
 import { useDocumentConfig } from './hooks/use-document-config'
@@ -21,19 +20,17 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Title } from '@Pimcore/components/title/title'
 import { Content } from '@Pimcore/components/content/content'
 import { Box, IconButton, IconTextButton } from '@sdk/components'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { uuid } from '@sdk/utils'
 import { isUndefined } from 'lodash'
 import { Table } from './table/table'
 
 export const DocumentTypesContainer = (): React.JSX.Element => {
-  const dispatch = useAppDispatch()
   const { createNewDocumentType, createLoading } = useDocumentType()
   const config = useDocumentConfig()
 
   const { data, isLoading: documentTypesLoading, isFetching: documentTypesFetching, isError, error, refetch } = useDocumentDocTypeListQuery({})
 
-    const handleRefetch = (): void => {
+  const handleRefetch = (): void => {
     void refetch().catch(() => {
       trackError(new GeneralError('Error while reloading'))
     })
