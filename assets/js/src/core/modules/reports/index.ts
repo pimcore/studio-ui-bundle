@@ -31,7 +31,11 @@ moduleSystem.registerModule({
         id: 'reports',
         component: 'reports',
         config: {
-          translationKey: 'navigation.reports'
+          translationKey: 'navigation.reports',
+          icon: {
+            type: 'name',
+            value: 'pie-chart'
+          }
         }
       }
     })
@@ -45,7 +49,11 @@ moduleSystem.registerModule({
         id: 'custom-reports',
         component: 'custom-reports',
         config: {
-          translationKey: 'navigation.custom-reports'
+          translationKey: 'navigation.custom-reports',
+          icon: {
+            type: 'name',
+            value: 'pie-chart'
+          }
         }
       }
     })
