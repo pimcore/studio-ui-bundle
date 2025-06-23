@@ -18,9 +18,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Box, IconTextButton } from '@sdk/components'
 import { useAppDispatch } from '@sdk/app'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { api } from '@sdk/api/properties'
-import trackError, { ApiError } from '../app/error-handler'
+import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { isUndefined } from 'lodash'
 import { useWebsiteSettingsGetCollectionQuery, WebsiteSetting, WebsiteSettingsGetCollectionApiArg } from './website-settings-api-slice.gen'
@@ -38,8 +36,18 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
       page, pageSize
     }} }), [filter])
 
-  const { data, isLoading: websiteSettingsLoading, isFetching: websiteSettingsFetching, isError, error } = useWebsiteSettingsGetCollectionQuery(queryArgs)
+  const { data, isLoading: websiteSettingsLoading, isFetching: websiteSettingsFetching, isError, error, refetch } = useWebsiteSettingsGetCollectionQuery(queryArgs)
 
+    const handleRefetch = (): void => {
+    void refetch().catch(() => {
+      trackError(new GeneralError('Error while reloading'))
+    })
+  }
+
+  useEffect(() => {
+    handleRefetch()
+  }, [])
+  
   const [websiteSettingRows, setWebsiteSettingRows] = useState<WebsiteSettingRow[]>([])
 
   const websiteSettings = data?.items
@@ -79,12 +87,7 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
           <IconButton
             disabled={ websiteSettingsFetching }
             icon={ { value: 'refresh' } }
-            onClick={ () => dispatch(
-              api.util.invalidateTags(
-                invalidatingTags.GLOBAL_PROPERTIES()
-              )
-            )
-          }
+            onClick={ handleRefetch }
           />
         </Toolbar> }
       renderTopBar={
