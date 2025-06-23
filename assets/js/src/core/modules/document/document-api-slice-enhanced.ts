@@ -56,8 +56,8 @@ const api = baseApi.enhanceEndpoints({
 export type * from './document-api-slice.gen'
 
 export const {
-  // useDocumentAddMutation,
-  // useDocumentCloneMutation,
+  useDocumentAddMutation,
+  useDocumentCloneMutation,
   useDocumentGetByIdQuery,
   useDocumentUpdateByIdMutation,
   useDocumentGetTreeQuery,
