@@ -27,13 +27,11 @@ if (nodeEnv !== env) {
 export default defineConfig({
   mode: env,
   server: {
-    port: 3032,
+    port: 3031,
   },
   dev: {
-    assetPrefix: '/bundles/pimcorestudioui/build/' + buildId,
+    assetPrefix: (isDevServer ? 'http://localhost:3031' : '') + '/bundles/pimcorestudioui/build/' + buildId,
     writeToDisk: !isDevServer,
-    client: {
-      port: 3032}
   },
   source: {
     entry: {
