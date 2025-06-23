@@ -16,7 +16,7 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
-import { Box, IconTextButton, Pagination, SearchInput } from '@sdk/components'
+import { Box, IconTextButton, Input, Pagination, SearchInput, Select, Space } from '@sdk/components'
 import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { isUndefined } from 'lodash'
@@ -117,12 +117,32 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
         >
           <Flex gap={ 'small' }>
             <Title>{t('widget.website-settings')}</Title>
+            <Space size="extra-small">
+              <Input
+                onChange={ () => console.log("selected")}
+                placeholder={ t('properties.add-custom-property.key') }
+                // ref={ keyInputRef }
+              />
+
+              <Select
+                className='min-w-100'
+                onSelect={ () => console.log("selected")}
+                options={ [
+                  { value: 'text', label: t('data-type.text') },
+                  { value: 'document', label: t('data-type.document') },
+                  { value: 'asset', label: t('data-type.asset') },
+                  { value: 'object', label: t('data-type.object') },
+                  { value: 'bool', label: t('data-type.checkbox') }
+                ] }
+                placeholder={ t('properties.add-custom-property.type') }
+              />
             <IconTextButton
               disabled={ websiteSettingsLoading }
               icon={ { value: 'new' } }
               loading={ false }
               onClick={ () => onCreateProperty("testName", "object") }
             >{t('website-settings.new')}</IconTextButton>
+            </Space>
           </Flex>
                     <SearchInput
                       loading={ websiteSettingsFetching }
