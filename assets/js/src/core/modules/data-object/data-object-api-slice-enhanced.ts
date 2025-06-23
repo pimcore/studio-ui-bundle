@@ -42,9 +42,6 @@ const api = baseApi.enhanceEndpoints({
     },
 
     dataObjectGetLayoutById: {
-      query: (queryArg) => ({
-        url: queryArg.layoutId === undefined ? `${getPrefix()}/data-objects/${queryArg.id}/layout` : `${getPrefix()}/data-objects/${queryArg.id}/layout/${queryArg.layoutId}`
-      }),
       providesTags: (result, error, args) => providingTags.DATA_OBJECT_DETAIL_ID(args.id)
     },
 

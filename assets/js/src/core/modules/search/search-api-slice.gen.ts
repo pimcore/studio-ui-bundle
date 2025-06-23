@@ -248,7 +248,7 @@ export type Transformer = {
 };
 export type AdvancedColumnConfig = {
     /** advancedColumns */
-    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
+    advancedColumns: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
     /** List if Transformers that should be applied */
     transformers?: Transformer[];
 };
@@ -308,7 +308,7 @@ export type SimpleSearchPageDetail = {
     /** Navigation name */
     name: string | null;
     /** Has Preview image */
-    hasPreviewImage?: boolean;
+    hasPreviewImage: boolean;
 };
 export type SimpleSearchDocumentDetail = SimpleSearchDetail & {
     /** Document Language */
