@@ -14,7 +14,7 @@ import { useUserManagementDraft } from '@Pimcore/modules/user/hooks/use-user-man
 import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-management-context'
 import { Content } from '@Pimcore/components/content/content'
 import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
-import {KeyBindings} from "@Pimcore/modules/user/management/detail/tabs/key-bindings/key-bindings";
+import { KeyBindings } from '@Pimcore/modules/user/management/detail/tabs/key-bindings/key-bindings'
 
 const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
   const [form] = Form.useForm()
@@ -45,7 +45,11 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
       form={ form }
       layout="vertical"
     >
-      <KeyBindings values={user?.keyBindings} onResetKeyBindings={async () => await resetUserKeyBindings(id)} onChange={handleOnChange} />
+      <KeyBindings
+        onChange={ handleOnChange }
+        onResetKeyBindings={ async () => await resetUserKeyBindings(id) }
+        values={ user?.keyBindings }
+      />
     </Form>
   )
 }

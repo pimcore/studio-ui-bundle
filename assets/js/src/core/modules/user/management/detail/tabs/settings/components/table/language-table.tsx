@@ -42,7 +42,7 @@ export const LanguageTable = ({
       name: getDisplyNameByAbbreviation(name),
       abbreviation: name,
       ...viewData && { view: viewData.includes(name) || false },
-      ...editData && { edit: editData.includes(name) || false },
+      ...editData && { edit: editData.includes(name) || false }
     })
   )
   const [gridData, setGridData] = useState<any[]>(columnsData)

@@ -10,10 +10,10 @@
 
 import { TitleContainer } from '@Pimcore/modules/auth/profile/title/title-container'
 import { type Widget } from '@Pimcore/modules/widget-manager/services/widget-registry'
-import {ProfileContainer} from "@Pimcore/modules/auth/profile/profile-container";
+import { ProfileContainer } from '@Pimcore/modules/auth/profile/profile-container'
 
 export const UserProfileWidget: Widget = {
-    name: 'user-profile',
-    component: ProfileContainer,
-    titleComponent: TitleContainer
+  name: 'user-profile',
+  component: ProfileContainer,
+  titleComponent: TitleContainer
 }

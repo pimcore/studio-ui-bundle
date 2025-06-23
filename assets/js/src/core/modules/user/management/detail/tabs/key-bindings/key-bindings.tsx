@@ -8,22 +8,29 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { Input, Col, Row, Alert, Flex } from 'antd'
 import { Form } from '@Pimcore/components/form/form'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@Pimcore/components/button/button'
-import {useUserManagementHelper} from "@Pimcore/modules/user/hooks/use-user-management-helper";
+import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
 
+export interface KeyBinding {
+  action: string
+  ctrl?: boolean
+  alt?: boolean
+  shift?: boolean
+  key: number
+}
 interface IKeyBindings {
-    values?: any
+  values?: any
   modified?: boolean
   onResetKeyBindings: (items) => void
   onChange: (name: string, code: object) => void
 }
 
-const KeyBindings = ({ values, modified, onChange, onResetKeyBindings, ...props }:IKeyBindings): React.JSX.Element => {
+const KeyBindings = ({ values, modified, onChange, onResetKeyBindings, ...props }: IKeyBindings): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const { getDefaultKeyBindings } = useUserManagementHelper()
@@ -59,23 +66,19 @@ const KeyBindings = ({ values, modified, onChange, onResetKeyBindings, ...props 
     if (key === 9 || key === 8 || key === 27 || key === 46) {
       return false
     }
-
     code.ctrl = evt.ctrlKey
     code.alt = evt.altKey
     code.shift = evt.shiftKey
 
-
     form.setFieldsValue({
-        [name]: renderKeyCombination(code)
+      [name]: renderKeyCombination(code)
     })
-
     onChange(name, code)
-
     return code
   }
 
   useEffect(() => {
-    if (!values || values.length === 0) {
+    if (values === undefined && values.length === 0) {
       return
     }
 
@@ -84,7 +87,7 @@ const KeyBindings = ({ values, modified, onChange, onResetKeyBindings, ...props 
         [keyBinding.action]: renderKeyCombination(keyBinding)
       })
     })
-  }, [values, modified]);
+  }, [values, modified])
 
   const generalFields = ['save', 'publish', 'unpublish', 'rename', 'refresh']
   const generalAccordion = [
@@ -220,74 +223,78 @@ const KeyBindings = ({ values, modified, onChange, onResetKeyBindings, ...props 
           [keyBinding.action]: renderKeyCombination(keyBinding)
         })
       })
-
+    }).catch((error) => {
+      console.error('Error fetching default key bindings:', error)
     })
   }
 
   return (
-      <Form form={ form } layout="vertical">
-        <Row gutter={ [10, 10] }>
-          <Col span={ 14 }>
-            <Flex
-                align={ 'center' }
-                justify={ 'space-between' }
-            >
-              <Alert
-                  message={ t('key-bindings.info') }
-                  showIcon
-                  type={ 'info' }
-              />
+    <Form
+      form={ form }
+      layout="vertical"
+    >
+      <Row gutter={ [10, 10] }>
+        <Col span={ 14 }>
+          <Flex
+            align={ 'center' }
+            justify={ 'space-between' }
+          >
+            <Alert
+              message={ t('key-bindings.info') }
+              showIcon
+              type={ 'info' }
+            />
 
-              <Button onClick={ setKeyBindingsToDefault }>{ t('key-bindings.reset') }</Button>
-            </Flex>
-          </Col>
-          <Col span={ 14 }>
-            <Accordion
-                activeKey={ '1' }
-                bordered
-                items={ generalAccordion }
-                size={ 'small' }
-            >
-            </Accordion>
-          </Col>
-          <Col span={ 14 }>
-            <Accordion
-                activeKey={ '1' }
-                bordered
-                items={ navigationAccordion }
-                size={ 'small' }
-            >
-            </Accordion>
-          </Col>
-          <Col span={ 14 }>
-            <Accordion
-                activeKey={ '1' }
-                bordered
-                items={ searchAccordion }
-                size={ 'small' }
-            >
-            </Accordion>
-          </Col>
-          <Col span={ 14 }>
-            <Accordion
-                activeKey={ '1' }
-                bordered
-                items={ systemAccordion }
-                size={ 'small' }
-            >
-            </Accordion>
-          </Col>
-          <Col span={ 14 }>
-            <Accordion
-                activeKey={ '1' }
-                bordered
-                items={ seoAccordion }
-                size={ 'small' }
-            >
-            </Accordion>
-          </Col>
-        </Row>
-      </Form>
+            <Button onClick={ setKeyBindingsToDefault }>{ t('key-bindings.reset') }</Button>
+          </Flex>
+        </Col>
+        <Col span={ 14 }>
+          <Accordion
+            activeKey={ '1' }
+            bordered
+            items={ generalAccordion }
+            size={ 'small' }
+          >
+          </Accordion>
+        </Col>
+        <Col span={ 14 }>
+          <Accordion
+            activeKey={ '1' }
+            bordered
+            items={ navigationAccordion }
+            size={ 'small' }
+          >
+          </Accordion>
+        </Col>
+        <Col span={ 14 }>
+          <Accordion
+            activeKey={ '1' }
+            bordered
+            items={ searchAccordion }
+            size={ 'small' }
+          >
+          </Accordion>
+        </Col>
+        <Col span={ 14 }>
+          <Accordion
+            activeKey={ '1' }
+            bordered
+            items={ systemAccordion }
+            size={ 'small' }
+          >
+          </Accordion>
+        </Col>
+        <Col span={ 14 }>
+          <Accordion
+            activeKey={ '1' }
+            bordered
+            items={ seoAccordion }
+            size={ 'small' }
+          >
+          </Accordion>
+        </Col>
+      </Row>
+    </Form>
   )
 }
 

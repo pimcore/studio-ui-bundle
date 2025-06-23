@@ -68,8 +68,8 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     {
       key: 'myprofile',
       label: t('user-menu.my-profile'),
-      icon: <Icon value={'user'}/>,
-      onClick: () => {openMainWidget(USERPROFILE)},
+      icon: <Icon value={ 'user' } />,
+      onClick: () => { openMainWidget(USERPROFILE) }
     },
     {
       key: 'logout',

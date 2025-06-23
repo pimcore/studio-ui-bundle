@@ -12,7 +12,7 @@ import { useAppDispatch } from '@sdk/app'
 import {
   api,
   type Error,
-  type UserDefaultKeyBindingsApiResponse, UserUpdateProfileApiResponse,
+  type UserDefaultKeyBindingsApiResponse, type UserUpdateProfileApiResponse
 } from '@Pimcore/modules/auth/user/user-api-slice-enhanced'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
@@ -32,7 +32,7 @@ export const useUserHelper = (): UseUserReturn => {
     if (error !== undefined) {
       notificationApi.open({
         type: 'error',
-        message: error.data?.message ?? t('user-management.save-user.error'),
+        message: error.data?.message ?? t('user-management.save-user.error')
       })
     } else {
       notificationApi.open({
@@ -72,5 +72,5 @@ export const useUserHelper = (): UseUserReturn => {
 
   return {
     updateUserProfile
-  } as UseUserReturn
+  }
 }

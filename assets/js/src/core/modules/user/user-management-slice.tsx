@@ -43,7 +43,7 @@ export const slice = createSlice({
     },
     userFetched: (state, action: PayloadAction<any>): void => {
       if (action.payload.id !== undefined) {
-        userAdapter.upsertOne(state, {...action.payload, modified: false})
+        userAdapter.upsertOne(state, { ...action.payload, modified: false })
       }
     },
     userRemoved: (state, action: PayloadAction<number>): void => {

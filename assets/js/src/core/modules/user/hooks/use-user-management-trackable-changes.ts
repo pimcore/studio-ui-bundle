@@ -15,84 +15,84 @@ import { useAppDispatch } from '@sdk/app'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface ModifiedCell {
-    rowIndex: number | string
-    columnId: string
+  rowIndex: number | string
+  columnId: string
 }
 
 type ModifiedCells = ModifiedCell[]
 
 export interface ModifiedCellsAction {
-    id: number
-    type: string
-    modifiedCells: ModifiedCells
+  id: number
+  type: string
+  modifiedCells: ModifiedCells
 }
 
 export interface TrackableChangesDraft {
-    modified: boolean
-    changes: Record<string, boolean>
-    modifiedCells: Record<string, ModifiedCells>
+  modified: boolean
+  changes: Record<string, boolean>
+  modifiedCells: Record<string, ModifiedCells>
 }
 
 interface UseTrackableChangesReturn {
-    resetChanges: (state: EntityState<TrackableChangesDraft, number>, action: PayloadAction<number>) => void
-    setModifiedCells: (state: EntityState<TrackableChangesDraft, number>, action: PayloadAction<ModifiedCellsAction>) => void
+  resetChanges: (state: EntityState<TrackableChangesDraft, number>, action: PayloadAction<number>) => void
+  setModifiedCells: (state: EntityState<TrackableChangesDraft, number>, action: PayloadAction<ModifiedCellsAction>) => void
 }
 
 export const useTrackableChangesReducers = (entityAdapter: EntityAdapter<TrackableChangesDraft, number>): UseTrackableChangesReturn => {
-    const resetChanges = (state: EntityState<TrackableChangesDraft, number>, action: PayloadAction<number>): void => {
-        modifyDraft(state, action.payload, (draft: TrackableChangesDraft): TrackableChangesDraft => {
-            draft.changes = {}
-            draft.modifiedCells = {}
-            draft.modified = false
+  const resetChanges = (state: EntityState<TrackableChangesDraft, number>, action: PayloadAction<number>): void => {
+    modifyDraft(state, action.payload, (draft: TrackableChangesDraft): TrackableChangesDraft => {
+      draft.changes = {}
+      draft.modifiedCells = {}
+      draft.modified = false
 
-            return draft
-        })
+      return draft
+    })
+  }
+
+  const setModifiedCells = (state: EntityState<TrackableChangesDraft, number>, action: PayloadAction<ModifiedCellsAction>): void => {
+    modifyDraft(state, action.payload.id, (draft: TrackableChangesDraft): TrackableChangesDraft => {
+      draft.modifiedCells = {
+        ...draft.modifiedCells,
+        [action.payload.type]: action.payload.modifiedCells
+      }
+
+      return draft
+    })
+  }
+
+  const modifyDraft = (state: EntityState<TrackableChangesDraft, number>, id: number, modification: (draft: TrackableChangesDraft) => TrackableChangesDraft): void => {
+    const draft = entityAdapter.getSelectors().selectById(state, id)
+    if (draft === undefined) {
+      trackError(new GeneralError(`Item with id ${id} not found`))
     }
 
-    const setModifiedCells = (state: EntityState<TrackableChangesDraft, number>, action: PayloadAction<ModifiedCellsAction>): void => {
-        modifyDraft(state, action.payload.id, (draft: TrackableChangesDraft): TrackableChangesDraft => {
-            draft.modifiedCells = {
-                ...draft.modifiedCells,
-                [action.payload.type]: action.payload.modifiedCells
-            }
+    state.entities[id] = modification({ ...draft })
+  }
 
-            return draft
-        })
-    }
-
-    const modifyDraft = (state: EntityState<TrackableChangesDraft, number>, id: number, modification: (draft: TrackableChangesDraft) => TrackableChangesDraft): void => {
-        const draft = entityAdapter.getSelectors().selectById(state, id)
-        if (draft === undefined) {
-            trackError(new GeneralError(`Item with id ${id} not found`))
-        }
-
-        state.entities[id] = modification({ ...draft })
-    }
-
-    return {
-        resetChanges,
-        setModifiedCells
-    }
+  return {
+    resetChanges,
+    setModifiedCells
+  }
 }
 
 export interface UseTrackableChangesDraftReturn {
-    removeTrackedChanges: () => void
-    setModifiedCells: (type: string, modifiedCells: ModifiedCells) => void
+  removeTrackedChanges: () => void
+  setModifiedCells: (type: string, modifiedCells: ModifiedCells) => void
 }
 
 export const useTrackableChangesDraft = (
-    id: number,
-    resetChangesAction: ActionCreatorWithPayload<number>,
-    setModifiedCellsAction: ActionCreatorWithPayload<ModifiedCellsAction>
+  id: number,
+  resetChangesAction: ActionCreatorWithPayload<number>,
+  setModifiedCellsAction: ActionCreatorWithPayload<ModifiedCellsAction>
 ): UseTrackableChangesDraftReturn => {
-    const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch()
 
-    return {
-        removeTrackedChanges: (): void => {
-            dispatch(resetChangesAction(id))
-        },
-        setModifiedCells: (type, modifiedCells): void => {
-            dispatch(setModifiedCellsAction({ id, type, modifiedCells }))
-        }
+  return {
+    removeTrackedChanges: (): void => {
+      dispatch(resetChangesAction(id))
+    },
+    setModifiedCells: (type, modifiedCells): void => {
+      dispatch(setModifiedCellsAction({ id, type, modifiedCells }))
     }
+  }
 }

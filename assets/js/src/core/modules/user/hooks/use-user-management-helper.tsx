@@ -44,7 +44,7 @@ interface AddItemArgs {
 }
 
 interface UseUserReturn extends
-    UseTrackableChangesDraftReturn {
+  UseTrackableChangesDraftReturn {
   openUser: (id: number) => void
   closeUser: (id: number) => void
   getUserTree: (props: UserGetTreeApiArg) => Promise<UserGetTreeApiResponse>

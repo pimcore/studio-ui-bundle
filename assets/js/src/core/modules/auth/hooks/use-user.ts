@@ -14,7 +14,7 @@ import { selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
 import { type UserInformation } from '../user/user-api-slice.gen'
 
 interface IExtendsUserInformation extends UserInformation {
-  modified?: boolean,
+  modified?: boolean
   modifiedCells?: Record<string, boolean>
 }
 

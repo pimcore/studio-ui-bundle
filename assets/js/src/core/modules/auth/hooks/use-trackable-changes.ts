@@ -12,10 +12,10 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import { useAppDispatch } from '@sdk/app'
 
 export interface ModifiedCell {
-//   rowIndex: number | string
-//   columnId: string
+  rowIndex: number | string
+  columnId: string
 }
-//
+
 export type ModifiedCells = ModifiedCell[]
 
 export interface ModifiedCellsAction {
@@ -44,9 +44,9 @@ export const useTrackableChangesReducers = (): UseTrackableChangesReturn => {
     state.modifiedCells = {
       ...state.modifiedCells,
       ...action.payload.modifiedCells
-    };
-    state.modified = true;
-  };
+    }
+    state.modified = true
+  }
 
   return {
     resetChanges,
@@ -60,17 +60,17 @@ export interface UseTrackableChangesDraftReturn {
 }
 
 export const useTrackableChangesDraft = (
-    resetChangesAction: () => PayloadAction<void>,
-    setModifiedCellsAction: (action: ModifiedCellsAction) => PayloadAction<ModifiedCellsAction>
+  resetChangesAction: () => PayloadAction<void>,
+  setModifiedCellsAction: (action: ModifiedCellsAction) => PayloadAction<ModifiedCellsAction>
 ): UseTrackableChangesDraftReturn => {
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
   return {
     removeTrackedChanges: (): void => {
-      dispatch(resetChangesAction());
+      dispatch(resetChangesAction())
     },
     setModifiedCells: (modifiedCells: ModifiedCells): void => {
-      dispatch(setModifiedCellsAction({ modifiedCells }));
-    },
-  };
-};
+      dispatch(setModifiedCellsAction({ modifiedCells }))
+    }
+  }
+}

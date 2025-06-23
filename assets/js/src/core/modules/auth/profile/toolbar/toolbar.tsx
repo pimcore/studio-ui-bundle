@@ -19,7 +19,7 @@ import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-but
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { Flex } from '@Pimcore/components/flex/flex'
-import {useUserHelper} from "@Pimcore/modules/auth/hooks/use-user-helper";
+import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
 
 interface IToolbarProps {
   id: number
@@ -55,11 +55,11 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
 
   const onConfirm = (): void => {
     setPopConfirmOpen(false)
-    removeTrackedChanges();
+    removeTrackedChanges()
   }
 
-  const onSaveClick = (): void => {
-    updateUserProfile(user)
+  const onSaveClick = async (): void => {
+    await updateUserProfile(user)
   }
 
   const items = [
@@ -94,16 +94,18 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
           </IconButton>
         </Popconfirm>
 
-        {onCloneUser || onRemoveUser ? (
+        {onCloneUser !== null || onRemoveUser !== null
+          ? (
             <Dropdown
-                menu={ { items } }
-                trigger={ ['click'] }
+              menu={ { items } }
+              trigger={ ['click'] }
             >
               <DropdownButton>
                 {t('toolbar.more')}
               </DropdownButton>
             </Dropdown>
-        ):null}
+            )
+          : null}
       </Flex>
 
       <Button

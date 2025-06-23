@@ -9,10 +9,10 @@
  */
 
 import type { PayloadAction } from '@reduxjs/toolkit'
-import {createSlice} from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@sdk/app'
 import { type UserInformation } from '@Pimcore/modules/auth/user/user-api-slice-enhanced'
-import {useTrackableChangesReducers} from "@Pimcore/modules/auth/hooks/use-trackable-changes";
+import { useTrackableChangesReducers } from '@Pimcore/modules/auth/hooks/use-trackable-changes'
 
 // The logic dependency is in the rtkQueryErrorLogger middleware
 const initialState: UserInformation = {
@@ -52,7 +52,7 @@ const slice = createSlice({
       return { ...state, ...payload }
     },
 
-    userProfileUpdated: (state, {payload}:PayloadAction<any>) => {
+    userProfileUpdated: (state, { payload }: PayloadAction<any>) => {
       return {
         ...state,
         ...payload,
@@ -62,7 +62,7 @@ const slice = createSlice({
       }
     },
 
-    ...useTrackableChangesReducers(),
+    ...useTrackableChangesReducers()
   }
 })
 

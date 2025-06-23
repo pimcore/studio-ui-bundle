@@ -96,16 +96,18 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
           </IconButton>
         </Popconfirm>
 
-        {onCloneUser || onRemoveUser ? (
+        {onCloneUser || onRemoveUser
+          ? (
             <Dropdown
-                menu={ { items } }
-                trigger={ ['click'] }
+              menu={ { items } }
+              trigger={ ['click'] }
             >
               <DropdownButton>
                 {t('toolbar.more')}
               </DropdownButton>
             </Dropdown>
-        ):null}
+            )
+          : null}
       </Flex>
 
       <Button

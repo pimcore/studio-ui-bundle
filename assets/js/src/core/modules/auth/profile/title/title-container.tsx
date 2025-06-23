@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { TabTitleContainer, type TabTitleContainerProps } from '@Pimcore/modules/widget-manager/title/tab-title-container'
-import {useUser} from "@Pimcore/modules/auth/hooks/use-user";
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 
 export const TitleContainer = (props: TabTitleContainerProps): React.JSX.Element => {
   const { node } = props

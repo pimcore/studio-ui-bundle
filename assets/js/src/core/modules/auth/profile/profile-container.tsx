@@ -9,42 +9,45 @@
  */
 
 import React from 'react'
-import type {WidgetManagerTabConfig} from "@Pimcore/modules/widget-manager/widget-manager-slice";
-import {ContentLayout} from '@Pimcore/components/content-layout/content-layout'
-import {Content} from "@Pimcore/components/content/content";
-import {useUser} from "@Pimcore/modules/auth/hooks/use-user";
-import {useUserDraft} from "@Pimcore/modules/auth/hooks/use-user-draft";
-import {Toolbar} from "@Pimcore/modules/auth/profile/toolbar/toolbar";
-import {ProfileDetail} from "@Pimcore/modules/auth/profile/profile-detail";
+import type { WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
+import { Content } from '@Pimcore/components/content/content'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { useUserDraft } from '@Pimcore/modules/auth/hooks/use-user-draft'
+import { Toolbar } from '@Pimcore/modules/auth/profile/toolbar/toolbar'
+import { ProfileDetail } from '@Pimcore/modules/auth/profile/profile-detail'
 
 export const USERPROFILE: WidgetManagerTabConfig = {
-    component: 'user-profile',
-    name: 'user-profile',
-    id: 'user-profile',
-    config: {
-        translationKey: 'user-profile.label',
-        icon: {
-            type: 'name',
-            value: 'user'
-        }
+  component: 'user-profile',
+  name: 'user-profile',
+  id: 'user-profile',
+  config: {
+    translationKey: 'user-profile.label',
+    icon: {
+      type: 'name',
+      value: 'user'
     }
+  }
 }
 
 const ProfileContainer = (): React.JSX.Element => {
-    const user = useUser()
-    const { isLoading } = useUserDraft()
+  const user = useUser()
+  const { isLoading } = useUserDraft()
 
-    return (
-        <ContentLayout
-            renderToolbar={
-            <Toolbar id={ user.id }/>
+  return (
+    <ContentLayout
+      renderToolbar={
+        <Toolbar id={ user.id } />
         }
-        >
-            <Content padded loading={isLoading}>
-                <ProfileDetail id={user.id} />
-            </Content>
-        </ContentLayout>
-    )
+    >
+      <Content
+        loading={ isLoading }
+        padded
+      >
+        <ProfileDetail id={ user.id } />
+      </Content>
+    </ContentLayout>
+  )
 }
 
 export { ProfileContainer }
