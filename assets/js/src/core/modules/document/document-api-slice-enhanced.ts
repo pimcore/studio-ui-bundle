@@ -41,7 +41,7 @@ const api = baseApi.enhanceEndpoints({
 
     documentDocTypeAdd: {
         invalidatesTags: () => []
-    }
+    },
 
     documentUpdateById: {
       invalidatesTags: (result, error, args) => args.body.data.task === 'autoSave' ? [] : invalidatingTags.DOCUMENT_DETAIL_ID(args.id)
@@ -59,7 +59,7 @@ export const {
   // useDocumentAddMutation,
   // useDocumentCloneMutation,
   useDocumentGetByIdQuery,
-  // useDocumentUpdateByIdMutation,
+  useDocumentUpdateByIdMutation,
   useDocumentGetTreeQuery,
   useDocumentAvailableTemplatesListQuery,
   useDocumentDocTypeListQuery,

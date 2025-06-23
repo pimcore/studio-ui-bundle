@@ -25,7 +25,7 @@ import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { uuid } from '@sdk/utils'
 import { isUndefined } from 'lodash'
 import { Table } from './table/table'
-import { api } from '@sdk/api/document-types'
+import { api } from '../document/document-api-slice-enhanced'
 
 
 export const DocumentTypesContainer = (): React.JSX.Element => {
