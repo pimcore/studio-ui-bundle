@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
 import { WebsiteSettingRow } from '../website-settings-container'
-import { WebsiteSetting } from '../website-settings-api-slice.gen'
+import { WebsiteSetting } from '../website-settings-api-slice-enhanced'
 import { useWebsiteSetting } from '../hooks/use-website-settings'
 
 export type WebsiteSettingWithActions = WebsiteSetting & { actions: React.ReactNode }

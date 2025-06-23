@@ -21,7 +21,7 @@ import { useAppDispatch } from '@sdk/app'
 import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { isUndefined } from 'lodash'
-import { useWebsiteSettingsGetCollectionQuery, WebsiteSetting, WebsiteSettingsGetCollectionApiArg } from './website-settings-api-slice.gen'
+import { useWebsiteSettingsGetCollectionQuery, WebsiteSetting, WebsiteSettingsGetCollectionApiArg } from './website-settings-api-slice-enhanced'
 import { Table } from './table/table'
 
 export type WebsiteSettingRow = WebsiteSetting & { rowId: string }

@@ -10,7 +10,7 @@
 
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { WebsiteSettingRow } from '../website-settings-container'
-import { useWebsiteSettingsAddMutation, useWebsiteSettingsDeleteMutation, useWebsiteSettingsUpdateMutation, WebsiteSetting, WebsiteSettingsUpdate } from '../website-settings-api-slice.gen'
+import { useWebsiteSettingsAddMutation, useWebsiteSettingsDeleteMutation, useWebsiteSettingsUpdateMutation, WebsiteSetting, WebsiteSettingsUpdate } from '../website-settings-api-slice-enhanced'
 
 interface UseWebsiteSettingReturn {
   createNewSetting: (name: string, type: string) => Promise<{ success: boolean, data?: WebsiteSetting }>
