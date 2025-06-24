@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import cn from 'classnames'
 import {
   type ImageValue
@@ -44,6 +44,7 @@ import { useStyles } from './image-gallery.styles'
 import { toCssDimension } from '@Pimcore/utils/css'
 
 export interface ImageGalleryProps {
+  id: number
   value?: ImageGalleryValue | null
   onChange?: (value: ImageGalleryValue | null) => void
   disabled?: boolean
@@ -79,7 +80,7 @@ const removeKeys = (items: ImageGalleryValue): ImageGalleryValue => {
 }
 
 export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
-  const imageValue = addKeys(props.value ?? [])
+  const [internalValue, setInternalValue] = useState<ImageGalleryValue>(() => addKeys(props.value ?? []))
 
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -87,17 +88,22 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
   const width = toCssDimension(props.width, 200)
   const height = toCssDimension(props.height, 100)
 
-  const hotspotMarkersModalContainerRef = useRef<HotspotMarkersModalContainerRef>(null)
+  useEffect(() => {
+    setInternalValue(addKeys(props.value ?? []))
+  }, [props.value])
 
   const handleChange = (newValue: ImageGalleryValue): void => {
     const updatedValue = addKeys(newValue)
 
-    if (!isEqual(updatedValue, imageValue)) {
+    if (!isEqual(updatedValue, internalValue)) {
       const changedValue = removeKeys(updatedValue.filter(item => item.image !== null))
 
+      setInternalValue(updatedValue)
       props.onChange?.(changedValue.length > 0 ? changedValue : null)
     }
   }
+
+  const hotspotMarkersModalContainerRef = useRef<HotspotMarkersModalContainerRef>(null)
 
   return (
     <Card
@@ -123,31 +129,31 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
       >
         <SortableContext
           disabled={ props.disabled }
-          items={ imageValue.map((item, index) => ({ id: String(index) })) }
+          items={ internalValue.map((item) => ({ id: String(item.key) })) }
           strategy={ rectSortingStrategy }
         >
-          { imageValue.map((item, index) => (
+          { internalValue.map((item, index) => (
             <ImageGallerySortableItem
               disabled={ props.disabled }
               height={ height! }
               hotspotMarkersModalContainer={ hotspotMarkersModalContainerRef }
-              id={ String(index) }
+              id={ String(item.key) }
               index={ index }
               item={ item }
               key={ item.key }
               setValue={ handleChange }
-              value={ imageValue }
+              value={ internalValue }
               width={ width! }
             />
           )) }
         </SortableContext>
-        { (props.disabled !== true || isEmpty(imageValue)) && (
+        { (props.disabled !== true || isEmpty(internalValue)) && (
           <ImageGalleryImageTarget
             disabled={ props.disabled }
             height={ height! }
-            index={ imageValue.length }
+            index={ internalValue.length }
             setValue={ handleChange }
-            value={ imageValue }
+            value={ internalValue }
             width={ width! }
           />
         ) }
