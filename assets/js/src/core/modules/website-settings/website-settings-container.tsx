@@ -38,7 +38,7 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
 
   const { data, isLoading: websiteSettingsLoading, isFetching: websiteSettingsFetching, isError, error, refetch } = useWebsiteSettingsGetCollectionQuery(queryArgs)
 
-  const {createNewSetting, createLoading} = useWebsiteSetting()
+  const { createNewSetting, createLoading } = useWebsiteSetting()
   
     const handleRefetch = (): void => {
     void refetch().catch(() => {
@@ -139,7 +139,7 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
             <IconTextButton
               disabled={ websiteSettingsLoading }
               icon={ { value: 'new' } }
-              loading={ false }
+              loading={ createLoading }
               onClick={ () => onCreateProperty("testName", "object") }
             >{t('website-settings.new')}</IconTextButton>
             </Space>

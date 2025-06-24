@@ -15,10 +15,19 @@ import { useTranslation } from 'react-i18next'
 import { type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
 import { WebsiteSettingRow } from '../website-settings-container'
-import { WebsiteSetting } from '../website-settings-api-slice-enhanced'
 import { useWebsiteSetting } from '../hooks/use-website-settings'
+import { DocType, useWebsiteSettingsListTypesQuery } from '../website-settings-api-slice.gen'
+import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
+import { Site } from '@Pimcore/modules/document/sites-slice.gen'
+import { isUndefined } from 'lodash'
 
-export type WebsiteSettingWithActions = WebsiteSetting & { actions: React.ReactNode }
+type WebsiteSettingEnrichedRow = WebsiteSettingRow & {
+  siteDomain: string,
+}
+
+type WebsiteSettingEnrichedWithActions = WebsiteSettingEnrichedRow & {
+  actions: React.ReactNode
+}
 
 interface TableProps {
   websiteSettingRows: WebsiteSettingRow[]
@@ -30,12 +39,32 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows }: TableProps)
   const { updateSettingById } = useWebsiteSetting()
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
 
-  const columnHelper = createColumnHelper<WebsiteSettingWithActions>()
+  const {data: settingTypes, isLoading: settingTypesLoading } = useWebsiteSettingsListTypesQuery()
+
+  const {getAllSites, getSiteById} = useSites()
+
+  const tableData: WebsiteSettingEnrichedRow[] = websiteSettingRows.map(row => {
+    const site = getSiteById(row.siteId)
+    const domain = !isUndefined(site) ? site.domain : ""  
+    return ({
+  ...row,
+  siteDomain: domain
+})
+})
+
+  const availableSites: Site[] = getAllSites()
+  const siteDomains = availableSites.map(site => site.domain)
+  const websiteSettingTypes: DocType[] = settingTypes?.items ?? []
+
+  // @TODO needs to be changd to type.title once the API types were updated
+  const typeTitles = websiteSettingTypes.map(type => type.name)
+
+  const columnHelper = createColumnHelper<WebsiteSettingEnrichedWithActions>()
 
   const tableColumns = [
     columnHelper.accessor('type', {
       header: t('website-settings.columns.type'),
-      meta: { editable: true},
+      meta: { type: 'select', editable: true, config: { options: Object.values(typeTitles) } },
       size: 80
     }),
     columnHelper.accessor('name', {
@@ -53,9 +82,9 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows }: TableProps)
       meta: { editable: true },
       size: 150
     }),
-    columnHelper.accessor('siteId', {
+    columnHelper.accessor('siteDomain', {
       header: t('website-settings.columns.site'),
-      meta: { editable: true },
+      meta: { type: 'select', editable: true, config: { options: Object.values(siteDomains) } },
       size: 110
     }),
     columnHelper.accessor('actions', {
@@ -107,7 +136,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows }: TableProps)
       <Grid
         autoWidth
         columns={ tableColumns }
-        data={ websiteSettingRows }
+        data={ tableData }
         enableSorting
         modifiedCells={ modifiedCells }
         onUpdateCellData={ onUpdateCellData }
