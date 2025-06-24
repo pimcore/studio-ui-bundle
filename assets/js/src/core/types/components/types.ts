@@ -61,4 +61,5 @@ export interface GridProps {
   disabled?: boolean
   className?: string
   onRowDoubleClick?: (row: any) => void
+  enableRowDrag?: boolean
 }

@@ -23,6 +23,7 @@ import {
   type ColumnDef,
   type ColumnResizeMode,
   type ColumnSizingInfoState,
+  createColumnHelper,
   flexRender,
   functionalUpdate,
   getCoreRowModel,
@@ -94,6 +95,7 @@ export const Grid = ({
   enableRowSelection = false,
   selectedRows = {},
   disabled = false,
+  enableRowDrag,
   ...props
 }: GridProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -108,6 +110,7 @@ export const Grid = ({
   const memoModifiedCells = useMemo(() => { return modifiedCells ?? [] }, [JSON.stringify(modifiedCells)])
   const autoColumnRef = useRef<HTMLTableCellElement>(null)
   const gridCellRegistry = useInjection<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/GridCellRegistry'])
+  const columnHelper = createColumnHelper()
 
   useEffect(() => {
     onActiveCellChange?.(activeCell)
@@ -155,6 +158,12 @@ export const Grid = ({
       }
     }
   })
+
+  if (enableRowDrag === true) {
+    props.columns.unshift(
+      columnHelper.accessor('rowDragCol', { header: '', size: 40 })
+    )
+  }
 
   useMemo(() => {
     updateRowSelectionColumn()
@@ -335,6 +344,7 @@ export const Grid = ({
                       activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell.columnId : undefined }
                       columns={ columns }
                       contextMenu={ props.contextMenu }
+                      enableRowDrag={ enableRowDrag }
                       isSelected={ row.getIsSelected() }
                       key={ row.id }
                       modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }

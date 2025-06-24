@@ -1,0 +1,17 @@
+{
+  "entrypoints": {
+    "main": {
+      "js": [
+        "http://localhost:3031/bundles/pimcorestudioui/build/8fbc3f95-de62-4347-9794-2d3bae0156bf/static/js/vendors-_module-federation_runtime_rspack_js_data_text_javascript_import___module_federation_-94ddbb.js",
+        "http://localhost:3031/bundles/pimcorestudioui/build/8fbc3f95-de62-4347-9794-2d3bae0156bf/static/js/main.js"
+      ],
+      "css": []
+    },
+    "exposeRemote": {
+      "js": [
+        "/bundles/pimcorestudioui/build/8fbc3f95-de62-4347-9794-2d3bae0156bf/exposeRemote.js"
+      ],
+      "css": []
+    }
+  }
+}

@@ -87,6 +87,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
       })
     }
   }
+
   return (
     <div
       className={ cn(...getStateClasses()) }
@@ -111,6 +112,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
               columns={ columns }
               data={ data }
               disabled={ props.disabled === true || props.inherited === true }
+              enableRowDrag={ props.enableRowDrag }
               onUpdateCellData={ props.onUpdateCellData }
               resizable
               setRowId={ (originalRow) => originalRow.id }

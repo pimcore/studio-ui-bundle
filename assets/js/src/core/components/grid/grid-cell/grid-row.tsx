@@ -18,7 +18,6 @@ import { type GridProps, type ListGridContextMenuComponents, type ListGridContex
 import { type GridCellReference } from '@Pimcore/components/grid/grid'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { ROW_DRAG_COLUMN_ID } from '@Pimcore/components/grid/constants'
 
 export interface GridRowProps {
   row: Row<any>
@@ -30,9 +29,10 @@ export interface GridRowProps {
   onFocusCell?: (cell: GridCellReference) => void
   contextMenu?: ListGridContextMenuComponents
   onRowDoubleClick?: GridProps['onRowDoubleClick']
+  enableRowDrag?: boolean
 }
 
-const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): React.JSX.Element => {
+const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, ...props }: GridRowProps): React.JSX.Element => {
   const { setNodeRef, transform, transition, isDragging, attributes, listeners } = useSortable({
     id: row.id
   })
@@ -90,7 +90,7 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
       ref={ setNodeRef }
       style={ style }
     >
-      {row.getVisibleCells().map(cell => (
+      {row.getVisibleCells().map((cell, index) => (
         <td
           className='ant-table-cell'
           key={ cell.id }
@@ -105,7 +105,7 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
               }
                 }
         >
-          {cell.column.id === ROW_DRAG_COLUMN_ID
+          {enableRowDrag === true && index === 0
             ? renderRowReorderButton()
             : (
               <GridCell

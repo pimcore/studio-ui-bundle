@@ -13,7 +13,6 @@ import { Trans, useTranslation } from 'react-i18next'
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { isUndefined } from 'lodash'
 import { Tooltip } from 'antd'
-import { ROW_DRAG_COLUMN_ID } from '@Pimcore/components/grid/constants'
 import type { ManyToManyRelationValueItem } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Box } from '@Pimcore/components/box/box'
@@ -72,12 +71,6 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
   const columns = !isUndefined(props.columnDefinition)
     ? [...props.columnDefinition]
     : defaultColumns
-
-  if (props.enableRowDrag) {
-    columns.unshift(
-      columnHelper.accessor(ROW_DRAG_COLUMN_ID, { header: '', size: 40 })
-    )
-  }
 
   columns.push(
     columnHelper.accessor('actions', {
