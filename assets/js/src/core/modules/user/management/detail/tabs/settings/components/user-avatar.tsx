@@ -15,19 +15,17 @@ import { Avatar, Flex, Upload, Skeleton } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import { Button } from '@Pimcore/components/button/button'
 import { useStyle } from '@Pimcore/modules/user/management/detail/tabs/settings/components/user-avatar.styles'
-import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
-import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
+import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
 
 interface IUserAvatar {
-  id: number
+  user: any
 }
-const UserAvatar = ({ id, ...props }: IUserAvatar): React.JSX.Element => {
+const UserAvatar = ({ user, ...props }: IUserAvatar): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
   const classNames = ['avatar--default', styles.avatar]
 
-  const { user } = useUserDraft(id)
-  const { uploadUserAvatar, fetchUserImageById } = useUserHelper()
+  const { uploadUserAvatar, fetchUserImageById } = useUserManagementHelper()
 
   const [userImage, setUserImage] = React.useState<any>(user?.image ?? null)
   const [userImageLoading, setUserImageLoading] = React.useState<boolean>(user?.hasImage === true && userImage === null)
@@ -35,7 +33,7 @@ const UserAvatar = ({ id, ...props }: IUserAvatar): React.JSX.Element => {
   const getUserImage = (): void => {
     setUserImageLoading(true)
 
-    fetchUserImageById({ id }).then(response => {
+    fetchUserImageById({ id: user.id }).then(response => {
       setUserImage(response.data)
       setUserImageLoading(false)
     }).catch(error => {
@@ -47,8 +45,10 @@ const UserAvatar = ({ id, ...props }: IUserAvatar): React.JSX.Element => {
   useEffect(() => {
     if (user?.hasImage === true && userImage === null) {
       getUserImage()
+    } else {
+      setUserImage(null)
     }
-  }, [id])
+  }, [user.id])
 
   return (
     <Card title={ t('user-management.settings.avatar') }>
@@ -75,7 +75,7 @@ const UserAvatar = ({ id, ...props }: IUserAvatar): React.JSX.Element => {
         <div>
           <Upload
             customRequest={ async ({ file }) => {
-              await uploadUserAvatar({ id, file: file as File })
+              await uploadUserAvatar({ id: user?.id, file: file as File })
               getUserImage()
             } }
             headers={ {

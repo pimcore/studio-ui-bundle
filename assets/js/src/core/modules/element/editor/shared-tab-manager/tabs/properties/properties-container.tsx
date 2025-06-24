@@ -158,10 +158,14 @@ export const PropertiesContainer = (): React.JSX.Element => {
                   key={ 'properties-select' }
                   loading={ isLoading }
                   onSelect={ onPredefinedPropertyChange }
-                  options={ data?.items?.map((item) => ({
-                    label: item.name,
-                    value: item.id
-                  })) }
+                  options={ data?.items
+                    ?.slice()
+                    ?.sort((a, b) => a.name.localeCompare(b.name))
+                    ?.map((item) => ({
+                      label: item.name,
+                      value: item.id
+                    }))
+                  }
                   placeholder={ t('properties.predefined-properties') }
                   showSearch
                 />

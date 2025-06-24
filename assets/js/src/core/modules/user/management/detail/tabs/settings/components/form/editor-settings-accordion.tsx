@@ -15,8 +15,8 @@ import { LanguageTable } from '@Pimcore/modules/user/management/detail/tabs/sett
 
 interface IEditorSettingsAccordionProps {
   data: any
-  viewData: any
-  editData: any
+  viewData?: any
+  editData?: any
   onChange: (data: any) => void
 }
 const EditorSettingsAccordion = ({ data, viewData, editData, onChange, ...props }: IEditorSettingsAccordionProps): React.JSX.Element => {

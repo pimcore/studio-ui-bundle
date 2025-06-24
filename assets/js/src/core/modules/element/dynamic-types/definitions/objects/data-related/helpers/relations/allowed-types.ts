@@ -10,7 +10,7 @@
 
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import type { DragAndDropInfo } from '@sdk/components'
-import _ from 'lodash'
+import _, { isNil } from 'lodash'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 import { type ElementSelectorConfig } from '@sdk/modules/element'
 
@@ -27,6 +27,7 @@ export interface IRelationAllowedTypesDataComponent {
   allowedAssetTypes?: string[]
   allowedClasses?: string[]
   allowedDocumentTypes?: string[]
+  allowedDataObjectTypes?: string[]
   assetsAllowed?: boolean
   documentsAllowed?: boolean
   dataObjectsAllowed?: boolean
@@ -65,22 +66,29 @@ export const isAllowedSubType = (type: ElementType, subType: string, props: IRel
   }
 
   if (type === 'asset') {
-    return isValidSubType(props.allowedAssetTypes, subType)
+    return isValidType(props.allowedAssetTypes, subType)
   }
 
   if (type === 'data-object') {
-    return isValidSubType(props.allowedClasses, subType)
+    return isValidType(props.allowedDataObjectTypes, subType)
   }
 
   if (type === 'document') {
-    return isValidSubType(props.allowedDocumentTypes, subType)
+    return isValidType(props.allowedDocumentTypes, subType)
   }
 
   return false
 }
 
-const isValidSubType = (allowedTypes: string[] | null | undefined, subType: string): boolean => {
-  if (allowedTypes === null || allowedTypes === undefined) {
+export const isAllowedClass = (type: ElementType, className: string, props: IRelationAllowedTypesDataComponent): boolean => {
+  if (type === 'data-object') {
+    return isValidType(props.allowedClasses, className)
+  }
+  return true
+}
+
+const isValidType = (allowedTypes: string[] | null | undefined, subType: string): boolean => {
+  if (isNil(allowedTypes)) {
     return true
   }
 
@@ -99,8 +107,9 @@ export const dndIsValidData = (info: DragAndDropInfo, props: IRelationAllowedTyp
   if (type === null) {
     return false
   }
-  const subType: string = info.data.className !== undefined && !_.isEmpty(info.data.className) ? info.data.className : info.data.type
-  return isAllowedSubType(type, subType, props)
+  const className: string = info.data.className !== undefined && !_.isEmpty(info.data.className) ? info.data.className : info.data.type
+  const subType: string = info.data.type
+  return isAllowedSubType(type, subType, props) && isAllowedClass(type, className, props)
 }
 
 export const createElementSelectorAreas = (config: IRelationAllowedTypesDataComponent): ElementSelectorConfig['areas'] => {

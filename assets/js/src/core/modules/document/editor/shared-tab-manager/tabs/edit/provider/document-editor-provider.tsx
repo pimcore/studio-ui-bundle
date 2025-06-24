@@ -34,6 +34,7 @@ interface ValueType { type: string, data: any }
 export const DocumentEditorProvider = ({ children }: DocumentEditorProviderProps): React.JSX.Element => {
   const valuesRef = useRef<Record<string, ValueType>>({})
   const initializedRef = useRef<boolean>(false)
+  const modifiedRef = useRef<boolean>(false)
   const { save, isError } = useSave()
   const { id } = useContext(DocumentContext)
   const { markDocumentEditablesAsModified } = useDocumentDraft(id)
@@ -48,21 +49,20 @@ export const DocumentEditorProvider = ({ children }: DocumentEditorProviderProps
     }
   }, [isError])
 
-  const autoSave = debounce(async () => {
+  const updateDraft = debounce(async (): Promise<void> => {
+    if (!modifiedRef.current) {
+      markDocumentEditablesAsModified()
+      modifiedRef.current = true
+    }
+
     await save(valuesRef.current, SaveTaskType.AutoSave)
   }, 800)
-
-  const updateDraft = async (): Promise<void> => {
-    markDocumentEditablesAsModified()
-
-    await autoSave()
-  }
 
   const contextValue = useMemo(() => ({
     updateValue: (key: string, value: any): void => {
       valuesRef.current[key].data = value
-      updateDraft().catch((error) => {
-        console.error('Error updating document draft:', error)
+      updateDraft()?.catch((error) => {
+        console.error('Error updating draft:', error)
       })
     },
     getValues: (): Record<string, ValueType> => valuesRef.current,
