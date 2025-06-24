@@ -29,7 +29,7 @@ export interface GridRowProps {
   onFocusCell?: (cell: GridCellReference) => void
   contextMenu?: ListGridContextMenuComponents
   onRowDoubleClick?: GridProps['onRowDoubleClick']
-  enableRowDrag?: boolean
+  enableRowDrag: boolean
 }
 
 const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, ...props }: GridRowProps): React.JSX.Element => {
@@ -105,7 +105,7 @@ const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, ...props }: Gr
               }
                 }
         >
-          {enableRowDrag === true && index === 0
+          {enableRowDrag && index === 0
             ? renderRowReorderButton()
             : (
               <GridCell
