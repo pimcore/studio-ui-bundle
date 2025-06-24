@@ -16,7 +16,7 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
-import { Box, IconTextButton, Input, Pagination, SearchInput, Select, Space } from '@sdk/components'
+import { Box, Form, IconTextButton, Input, Pagination, SearchInput, Select, Space } from '@sdk/components'
 import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { isUndefined } from 'lodash'
@@ -28,6 +28,8 @@ export type WebsiteSettingRow = WebsiteSetting & { rowId: string }
 
 export const WebsiteSettingsContainer = (): React.JSX.Element => {
   
+  const [form] = Form.useForm()
+
   const [filter, setFilter] = useState<string>('')
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
@@ -69,6 +71,9 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
   }, [websiteSettings])
 
   const onCreateProperty = async (name: string, type: string): Promise<void> => {
+    console.log("name", name);
+    console.log("type", type);
+
     const { success, data } = await createNewSetting(name, type)
     if (success && data !== undefined) {
       setWebsiteSettingRows(prev =>
@@ -77,6 +82,7 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
           ...prev
         ]
       )
+      form.resetFields()
     }
   }
 
@@ -117,32 +123,49 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
         >
           <Flex gap={ 'small' }>
             <Title>{t('widget.website-settings')}</Title>
-            <Space size="extra-small">
-              <Input
-                onChange={ () => console.log("selected")}
-                placeholder={ t('properties.add-custom-property.key') }
-                // ref={ keyInputRef }
-              />
+  <Form
+  form={form}
+  layout="inline"
+  onFinish={({ name, type }) => {
+    void onCreateProperty(name, type)
+  }}
+>
+  <Flex>
+  <Form.Item
+    name="name"
+    rules={[{ required: true, message: t('validation.required') }]}
+  >
+    <Input placeholder={ t('properties.add-custom-property.key') } />
+  </Form.Item>
 
-              <Select
-                className='min-w-100'
-                onSelect={ () => console.log("selected")}
-                options={ [
-                  { value: 'text', label: t('data-type.text') },
-                  { value: 'document', label: t('data-type.document') },
-                  { value: 'asset', label: t('data-type.asset') },
-                  { value: 'object', label: t('data-type.object') },
-                  { value: 'bool', label: t('data-type.checkbox') }
-                ] }
-                placeholder={ t('properties.add-custom-property.type') }
-              />
-            <IconTextButton
-              disabled={ websiteSettingsLoading }
-              icon={ { value: 'new' } }
-              loading={ createLoading }
-              onClick={ () => onCreateProperty("testName", "object") }
-            >{t('website-settings.new')}</IconTextButton>
-            </Space>
+  <Form.Item
+    name="type"
+    rules={[{ required: true, message: t('validation.required') }]}
+  >
+    <Select
+      className="min-w-100"
+      options={[
+        { value: 'text', label: t('data-type.text') },
+        { value: 'document', label: t('data-type.document') },
+        { value: 'asset', label: t('data-type.asset') },
+        { value: 'object', label: t('data-type.object') },
+        { value: 'bool', label: t('data-type.checkbox') }
+      ]}
+      placeholder={ t('properties.add-custom-property.type') }
+    />
+  </Form.Item>
+
+  <Form.Item>
+    <IconTextButton
+      icon={{ value: 'new' }}
+      loading={ createLoading }
+      htmlType="submit"
+    >
+      {t('website-settings.new')}
+    </IconTextButton>
+  </Form.Item>
+  </Flex>
+</Form>
           </Flex>
                     <SearchInput
                       loading={ websiteSettingsFetching }
