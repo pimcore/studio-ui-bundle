@@ -8,43 +8,26 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
-import {
-  type ImageValue
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image/image'
-import { Flex } from '@Pimcore/components/flex/flex'
-import {
-  ImageGalleryImageTarget
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image-gallery/components/image-target/image-target'
-import { Card } from '@Pimcore/components/card/card'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { isEmpty, isEqual } from 'lodash'
 import { Tooltip } from 'antd'
-import { useTranslation } from 'react-i18next'
-import {
-  ImageGallerySortableItem
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image-gallery/components/sortable-item/sortable-item'
-import {
-  rectSortingStrategy,
-  SortableContext
-} from '@dnd-kit/sortable'
-import {
-  type Hotspot, type Marker
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
-import {
-  HotspotMarkersModalContainer,
-  type HotspotMarkersModalContainerRef
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-markers-modal-container'
-import {
-  type CropSettings
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
+import { rectSortingStrategy, SortableContext } from '@dnd-kit/sortable'
+import { type ImageValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image/image'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { ImageGalleryImageTarget } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image-gallery/components/image-target/image-target'
+import { Card } from '@Pimcore/components/card/card'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { ImageGallerySortableItem } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image-gallery/components/sortable-item/sortable-item'
+import { type Hotspot, type Marker } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
+import { HotspotMarkersModalContainer, type HotspotMarkersModalContainerRef } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-markers-modal-container'
+import { type CropSettings } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
 import { uuid } from '@Pimcore/utils/uuid'
-import { useStyles } from './image-gallery.styles'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { useStyles } from './image-gallery.styles'
 
 export interface ImageGalleryProps {
-  id: number
   value?: ImageGalleryValue | null
   onChange?: (value: ImageGalleryValue | null) => void
   disabled?: boolean
@@ -63,13 +46,11 @@ export interface ImageGalleryValueItem {
   key?: string
 }
 
-const addKeys = (value: ImageGalleryValue): ImageGalleryValue => {
-  return value.map((item, index) => {
-    if (item.key === undefined) {
-      return { ...item, key: uuid() }
-    }
-    return item
-  })
+const addKeys = (value: ImageGalleryValue | null | undefined): ImageGalleryValue => {
+  return (value ?? []).map((item) => ({
+    ...item,
+    key: item.key ?? uuid()
+  }))
 }
 
 const removeKeys = (items: ImageGalleryValue): ImageGalleryValue => {
@@ -80,8 +61,9 @@ const removeKeys = (items: ImageGalleryValue): ImageGalleryValue => {
 }
 
 export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
-  const [internalValue, setInternalValue] = useState<ImageGalleryValue>(() => addKeys(props.value ?? []))
+  const initialValue = useMemo(() => addKeys(props.value), [])
 
+  const [internalValue, setInternalValue] = useState<ImageGalleryValue>(initialValue)
   const { t } = useTranslation()
   const { styles } = useStyles()
 
@@ -89,16 +71,24 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
   const height = toCssDimension(props.height, 100)
 
   useEffect(() => {
-    setInternalValue(addKeys(props.value ?? []))
+    setInternalValue(prev => {
+      const newValue = addKeys(props.value)
+
+      if (!isEqual(removeKeys(prev), removeKeys(newValue))) {
+        return newValue
+      }
+
+      return prev
+    })
   }, [props.value])
 
   const handleChange = (newValue: ImageGalleryValue): void => {
     const updatedValue = addKeys(newValue)
 
     if (!isEqual(updatedValue, internalValue)) {
-      const changedValue = removeKeys(updatedValue.filter(item => item.image !== null))
-
       setInternalValue(updatedValue)
+
+      const changedValue = removeKeys(updatedValue.filter(item => item.image !== null))
       props.onChange?.(changedValue.length > 0 ? changedValue : null)
     }
   }
