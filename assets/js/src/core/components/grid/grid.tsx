@@ -274,6 +274,24 @@ export const Grid = ({
     </div>
   )
 
+  const renderRows = (): React.JSX.Element[] => {
+    return table.getRowModel().rows.map(row => (
+      <GridRow
+        activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell.columnId : undefined }
+        columns={ columns }
+        contextMenu={ props.contextMenu }
+        enableRowDrag={ enableRowDrag }
+        isSelected={ row.getIsSelected() }
+        key={ row.id }
+        modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
+        onFocusCell={ onFocusCell }
+        onRowDoubleClick={ props.onRowDoubleClick }
+        row={ row }
+        tableElement={ tableElement }
+      />
+    ))
+  }
+
   return useMemo(() => (
     <div className={ cn('ant-table-wrapper', hashId, styles.grid, props.className, { [styles.disabledGrid]: disabled }) }>
       <div className="ant-table ant-table-small">
@@ -340,34 +358,24 @@ export const Grid = ({
                     </td>
                   </tr>
                 )}
-                <DndContext
-                  collisionDetection={ closestCenter }
-                  modifiers={ [restrictToVerticalAxis] }
-                  onDragEnd={ handleDragEnd }
-                  sensors={ sensors }
-                >
-                  <SortableContext
-                    disabled={ enableRowDrag === false }
-                    items={ table.getRowModel().rows.map(item => item.id) }
-                    strategy={ verticalListSortingStrategy }
-                  >
-                    {table.getRowModel().rows.map(row => (
-                      <GridRow
-                        activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell.columnId : undefined }
-                        columns={ columns }
-                        contextMenu={ props.contextMenu }
-                        enableRowDrag={ enableRowDrag }
-                        isSelected={ row.getIsSelected() }
-                        key={ row.id }
-                        modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
-                        onFocusCell={ onFocusCell }
-                        onRowDoubleClick={ props.onRowDoubleClick }
-                        row={ row }
-                        tableElement={ tableElement }
-                      />
-                    ))}
-                  </SortableContext>
-                </DndContext>
+                {enableRowDrag === true
+                  ? (
+                    <DndContext
+                      collisionDetection={ closestCenter }
+                      modifiers={ [restrictToVerticalAxis] }
+                      onDragEnd={ handleDragEnd }
+                      sensors={ sensors }
+                    >
+                      <SortableContext
+                        items={ table.getRowModel().rows.map(item => item.id) }
+                        strategy={ verticalListSortingStrategy }
+                      >
+                        {renderRows()}
+                      </SortableContext>
+                    </DndContext>
+                    )
+                  : renderRows()
+                }
               </tbody>
             </table>
           </div>
