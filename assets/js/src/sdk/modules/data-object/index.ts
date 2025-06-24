@@ -13,11 +13,9 @@ if (module.hot !== undefined) {
 }
 
 export * from '@Pimcore/modules/data-object/actions/add-object/use-add-object'
-export * from '@Pimcore/modules/data-object/actions/delete-draft/use-delete-draft'
 export * from '@Pimcore/modules/data-object/actions/save/use-save'
 
 export * from '@Pimcore/modules/data-object/data-object-draft-slice'
-export * from '@Pimcore/modules/data-object/draft/hooks/use-draft-data'
 export * from '@Pimcore/modules/data-object/draft/hooks/use-modified-object-data'
 
 export * from '@Pimcore/modules/data-object/hooks/use-custom-layouts'

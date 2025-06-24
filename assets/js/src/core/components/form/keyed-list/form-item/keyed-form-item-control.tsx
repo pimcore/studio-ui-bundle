@@ -12,6 +12,7 @@ import React, { Children, isValidElement, useEffect, useMemo } from 'react'
 import { useKeyedList } from '../provider/keyed-list/use-keyed-list'
 import { useItem } from '../../item/provider/item/use-item'
 import { type FormItemProps } from 'antd'
+import { isUndefined } from 'lodash'
 
 export interface KeyedFormItemControlProps {
   children: React.ReactNode
@@ -22,8 +23,11 @@ export interface KeyedFormItemControlProps {
 }
 
 export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: baseValue, ...props }: KeyedFormItemControlProps): React.JSX.Element => {
+  const { getValueFromEvent } = props
+
   const { operations, getAdditionalComponentProps } = useKeyedList()
   const { name } = useItem()
+
   const Child = Children.only(children)
   const value = operations.getValue(name)
 
@@ -32,12 +36,11 @@ export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: 
   }, [])
 
   const onChange: KeyedFormItemControlProps['onChange'] = (value: any) => {
-    if (value?.target !== undefined && typeof value.target === 'object') {
-      operations.update(name, value.target.value, false)
-      return
-    }
+    const changedValue = !isUndefined(getValueFromEvent)
+      ? getValueFromEvent(value)
+      : value?.target?.value ?? value
 
-    operations.update(name, value, false)
+    operations.update(name, changedValue, false)
   }
 
   if (!isValidElement(Child)) {

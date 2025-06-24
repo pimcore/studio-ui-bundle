@@ -42,6 +42,7 @@ export const useEditFormContext = (): EditFormContextProps => {
 export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [form] = useForm()
   const modifiedDataObjectAttributesRef = useRef<Record<string, any>>({})
+  const modifiedRef = useRef<boolean>(false)
   const { id } = useElementContext()
   const { dataObject, markObjectDataAsModified } = useDataObjectDraft(id)
   const { save, isError } = useSave()
@@ -94,18 +95,20 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return fullKey
   }
 
-  const autoSave = debounce(async () => {
+  const executeUpdateDraft = debounce(async () => {
     const modifiedAttributes = getModifiedDataObjectAttributes()
 
     if (!isEmpty(modifiedAttributes)) {
+      if (!modifiedRef.current) {
+        markObjectDataAsModified()
+      }
+
       await save(modifiedAttributes, SaveTaskType.AutoSave)
     }
   }, 800)
 
   const updateDraft = async (): Promise<void> => {
-    markObjectDataAsModified()
-
-    await autoSave()
+    await executeUpdateDraft()
   }
 
   const value = useMemo(() => ({

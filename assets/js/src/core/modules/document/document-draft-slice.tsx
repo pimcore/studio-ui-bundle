@@ -22,10 +22,13 @@ import {
   useTabsReducers
 } from '@Pimcore/modules/element/draft/hooks/use-tabs'
 import { type SchedulesDraft, useSchedulesReducers } from '@Pimcore/modules/element/draft/hooks/use-schedules'
-import { type Document } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { type DocumentDetailData } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { usePublishedReducers, type PublishedDraft } from '../element/draft/hooks/use-published'
+import { useModifiedDocumentEditablesReducers } from './draft/hooks/use-modified-editable-data'
+import { type DraftDataDraft, useDraftDataReducers } from '../element/draft/hooks/use-draft-data'
+import { updateKeyOrFilename } from '../element/draft/utils/update-key'
 
-export interface DocumentDraft extends Document, PropertiesDraft, SchedulesDraft, TrackableChangesDraft, TabsDraft, PublishedDraft {
+export interface DocumentDraft extends Omit<DocumentDetailData, 'draftData'>, PropertiesDraft, SchedulesDraft, TrackableChangesDraft, TabsDraft, DraftDataDraft, PublishedDraft {
 }
 
 export const documentsAdapter: EntityAdapter<DocumentDraft, number> = createEntityAdapter<DocumentDraft>({})
@@ -56,20 +59,7 @@ export const slice = createSlice({
     updateKey (state, action: PayloadAction<{ id: number, key: string }>): void {
       if (state.entities[action.payload.id] !== undefined) {
         const document = state.entities[action.payload.id]
-
-        document.key = action.payload.key
-
-        if (document.fullPath !== undefined) {
-          const fullPathAsArray = document.fullPath?.split('/')
-          fullPathAsArray[fullPathAsArray.length - 1] = action.payload.key
-          document.fullPath = fullPathAsArray.join('/')
-        }
-
-        if (document.path !== undefined) {
-          const pathAsArray = document.path.split('/')
-          pathAsArray[pathAsArray.length - 1] = action.payload.key
-          document.path = pathAsArray.join('/')
-        }
+        updateKeyOrFilename(document, action.payload.key, 'key')
       }
     },
 
@@ -77,6 +67,8 @@ export const slice = createSlice({
     ...usePropertiesReducers(documentsAdapter),
     ...useSchedulesReducers(documentsAdapter),
     ...useTabsReducers(documentsAdapter),
+    ...useModifiedDocumentEditablesReducers(documentsAdapter),
+    ...useDraftDataReducers(documentsAdapter),
     ...usePublishedReducers(documentsAdapter)
   }
 })
@@ -103,6 +95,9 @@ export const {
   updateSchedule: updateScheduleForDocument,
   resetSchedulesChanges: resetSchedulesChangesForDocument,
   setActiveTab: setActiveTabForDocument,
+
+  markDocumentEditablesAsModified,
+  setDraftData,
 
   publishDraft,
   unpublishDraft

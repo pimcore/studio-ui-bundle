@@ -154,9 +154,11 @@ import { type DynamicTypeGridCellBoolean } from './definitions/grid-cell/types/b
 import { type DynamicTypeDocumentEditableRegistry } from './definitions/document/editable/dynamic-type-document-editable-registry'
 import { type DynamicTypeDocumentEditableNumeric } from './definitions/document/editable/types/dynamic-type-document-editable-numeric'
 import { type DynamicTypeDocumentEditableRelation } from './definitions/document/editable/types/dynamic-type-document-editable-relation'
+import { type DynamicTypeDocumentEditableRelations } from './definitions/document/editable/types/dynamic-type-document-editable-relations'
 import { type DynamicTypeDocumentEditableInput } from './definitions/document/editable/types/dynamic-type-document-editable-input'
 import { type DynamicTypeDocumentEditableWysiwyg } from './definitions/document/editable/types/dynamic-type-document-editable-wysiwyg'
 import { type DynamicTypeFieldFilterCheckbox } from './definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
+import { type DynamicTypeDocumentEditableTextarea } from './definitions/document/editable/types/dynamic-type-document-editable-textarea'
 
 moduleSystem.registerModule({
   onInit () {
@@ -306,6 +308,8 @@ moduleSystem.registerModule({
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableInput>(serviceIds['DynamicTypes/DocumentEditable/Input']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableNumeric>(serviceIds['DynamicTypes/DocumentEditable/Numeric']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableRelation>(serviceIds['DynamicTypes/DocumentEditable/Relation']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableRelations>(serviceIds['DynamicTypes/DocumentEditable/Relations']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableTextarea>(serviceIds['DynamicTypes/DocumentEditable/Textarea']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableWysiwyg>(serviceIds['DynamicTypes/DocumentEditable/Wysiwyg']))
 
     const assetRegistry = container.get<DynamicTypeAssetRegistry>(serviceIds['DynamicTypes/AssetRegistry'])

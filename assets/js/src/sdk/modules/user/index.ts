@@ -12,10 +12,9 @@ if (module.hot !== undefined) {
   module.hot.accept()
 }
 
-export * from '@Pimcore/modules/user/hooks/use-global-user-context'
-export * from '@Pimcore/modules/user/hooks/use-user-draft'
-export * from '@Pimcore/modules/user/hooks/use-user-helper'
-export * from '@Pimcore/modules/user/hooks/use-user-trackable-changes'
+export * from '@Pimcore/modules/user/hooks/use-global-user-management-context'
+export * from '@Pimcore/modules/user/hooks/use-user-management-draft'
+export * from '@Pimcore/modules/user/hooks/use-user-management-helper'
 
 export * from '@Pimcore/modules/user/roles/hooks/use-roles-draft'
 export * from '@Pimcore/modules/user/roles/hooks/use-roles-helper'

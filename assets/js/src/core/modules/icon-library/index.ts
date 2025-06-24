@@ -130,6 +130,7 @@ import lock from '@Pimcore/assets/icons/lock.inline.svg?react'
 import locked from '@Pimcore/assets/icons/locked.inline.svg?react'
 import logOut from '@Pimcore/assets/icons/log-out.inline.svg?react'
 import longText from '@Pimcore/assets/icons/long-text.inline.svg?react'
+import mail02 from '@Pimcore/assets/icons/mail-02.inline.svg?react'
 import mailAnswer from '@Pimcore/assets/icons/mail-answer.inline.svg?react'
 import manyToMany from '@Pimcore/assets/icons/many-to-many.inline.svg?react'
 import market from '@Pimcore/assets/icons/market.inline.svg?react'
@@ -208,6 +209,7 @@ import uploadCloud from '@Pimcore/assets/icons/upload-cloud.inline.svg?react'
 import uploadZip from '@Pimcore/assets/icons/upload-zip.inline.svg?react'
 import userSelect from '@Pimcore/assets/icons/user-select.inline.svg?react'
 import user from '@Pimcore/assets/icons/user.inline.svg?react'
+import usersX from '@Pimcore/assets/icons/users-x.inline.svg?react'
 import video from '@Pimcore/assets/icons/video.inline.svg?react'
 import view from '@Pimcore/assets/icons/view.inline.svg?react'
 import warningCircle from '@Pimcore/assets/icons/warning-circle.inline.svg?react'
@@ -682,6 +684,10 @@ moduleSystem.registerModule({
       component: longText
     })
     iconLibrary.register({
+      name: 'mail-02',
+      component: mail02
+    })
+    iconLibrary.register({
       name: 'mail-answer',
       component: mailAnswer
     })
@@ -992,6 +998,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'user',
       component: user
+    })
+    iconLibrary.register({
+      name: 'users-x',
+      component: usersX
     })
     iconLibrary.register({
       name: 'video',
