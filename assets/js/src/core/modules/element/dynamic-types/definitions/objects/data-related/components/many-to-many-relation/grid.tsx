@@ -12,8 +12,7 @@ import React, { forwardRef, type MutableRefObject, useEffect, useState } from 'r
 import { isEqual, isNil } from 'lodash'
 import cn from 'classnames'
 import { arrayMove } from '@dnd-kit/sortable'
-import { DndContext, PointerSensor, closestCenter, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core'
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
+import { type DragEndEvent } from '@dnd-kit/core'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { type ColumnDef } from '@tanstack/react-table'
@@ -45,8 +44,6 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
   const { getStateClasses } = useDroppable()
   const { mapToElementType } = useElementHelper()
   const { columns } = useColumns(props)
-
-  const sensors = useSensors(useSensor(PointerSensor))
 
   const [data, setData] = useState(getDataArray())
 
@@ -100,24 +97,18 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
         } }
       >
         <div style={ { maxWidth: 'calc(100% - 2px)' } }>
-          <DndContext
-            collisionDetection={ closestCenter }
-            modifiers={ [restrictToVerticalAxis] }
-            onDragEnd={ handleDragEnd }
-            sensors={ sensors }
-          >
-            <Grid
-              autoWidth
-              className={ props.className }
-              columns={ columns }
-              data={ data }
-              disabled={ props.disabled === true || props.inherited === true }
-              enableRowDrag={ props.enableRowDrag }
-              onUpdateCellData={ props.onUpdateCellData }
-              resizable
-              setRowId={ (originalRow) => originalRow.id }
-            />
-          </DndContext>
+          <Grid
+            autoWidth
+            className={ props.className }
+            columns={ columns }
+            data={ data }
+            disabled={ props.disabled === true || props.inherited === true }
+            enableRowDrag={ props.enableRowDrag }
+            handleDragEnd={ handleDragEnd }
+            onUpdateCellData={ props.onUpdateCellData }
+            resizable
+            setRowId={ (originalRow) => originalRow.id }
+          />
           {props.hint}
         </div>
       </Content>

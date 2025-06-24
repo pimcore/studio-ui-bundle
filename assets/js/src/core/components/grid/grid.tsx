@@ -48,6 +48,8 @@ import {
   SortableContext,
   verticalListSortingStrategy
 } from '@dnd-kit/sortable'
+import { DndContext, PointerSensor, closestCenter, useSensor, useSensors } from '@dnd-kit/core'
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 
 export interface ColumnMetaType {
   editable?: boolean
@@ -96,6 +98,7 @@ export const Grid = ({
   selectedRows = {},
   disabled = false,
   enableRowDrag,
+  handleDragEnd,
   ...props
 }: GridProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -111,6 +114,8 @@ export const Grid = ({
   const autoColumnRef = useRef<HTMLTableCellElement>(null)
   const gridCellRegistry = useInjection<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/GridCellRegistry'])
   const columnHelper = createColumnHelper()
+
+  const sensors = useSensors(useSensor(PointerSensor))
 
   useEffect(() => {
     onActiveCellChange?.(activeCell)
@@ -335,27 +340,34 @@ export const Grid = ({
                     </td>
                   </tr>
                 )}
-                <SortableContext
-                  disabled={ enableRowDrag === false }
-                  items={ table.getRowModel().rows.map(item => item.id) }
-                  strategy={ verticalListSortingStrategy }
+                <DndContext
+                  collisionDetection={ closestCenter }
+                  modifiers={ [restrictToVerticalAxis] }
+                  onDragEnd={ handleDragEnd }
+                  sensors={ sensors }
                 >
-                  {table.getRowModel().rows.map(row => (
-                    <GridRow
-                      activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell.columnId : undefined }
-                      columns={ columns }
-                      contextMenu={ props.contextMenu }
-                      enableRowDrag={ enableRowDrag }
-                      isSelected={ row.getIsSelected() }
-                      key={ row.id }
-                      modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
-                      onFocusCell={ onFocusCell }
-                      onRowDoubleClick={ props.onRowDoubleClick }
-                      row={ row }
-                      tableElement={ tableElement }
-                    />
-                  ))}
-                </SortableContext>
+                  <SortableContext
+                    disabled={ enableRowDrag === false }
+                    items={ table.getRowModel().rows.map(item => item.id) }
+                    strategy={ verticalListSortingStrategy }
+                  >
+                    {table.getRowModel().rows.map(row => (
+                      <GridRow
+                        activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell.columnId : undefined }
+                        columns={ columns }
+                        contextMenu={ props.contextMenu }
+                        enableRowDrag={ enableRowDrag }
+                        isSelected={ row.getIsSelected() }
+                        key={ row.id }
+                        modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
+                        onFocusCell={ onFocusCell }
+                        onRowDoubleClick={ props.onRowDoubleClick }
+                        row={ row }
+                        tableElement={ tableElement }
+                      />
+                    ))}
+                  </SortableContext>
+                </DndContext>
               </tbody>
             </table>
           </div>
