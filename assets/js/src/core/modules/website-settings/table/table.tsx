@@ -32,14 +32,13 @@ type WebsiteSettingEnrichedWithActions = WebsiteSettingEnrichedRow & {
 interface TableProps {
   websiteSettingRows: WebsiteSettingRow[]
   setWebsiteSettingRows: React.Dispatch<React.SetStateAction<WebsiteSettingRow[]>>
+  settingTypes: DocType[]
 }
 
-export const Table = ({ websiteSettingRows, setWebsiteSettingRows }: TableProps): React.JSX.Element => {
+export const Table = ({ websiteSettingRows, setWebsiteSettingRows, settingTypes }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { updateSettingById } = useWebsiteSetting()
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
-
-  const {data: settingTypes, isLoading: settingTypesLoading } = useWebsiteSettingsListTypesQuery()
 
   const {getAllSites, getSiteById} = useSites()
 

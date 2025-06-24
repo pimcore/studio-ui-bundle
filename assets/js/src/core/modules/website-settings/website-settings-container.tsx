@@ -20,7 +20,7 @@ import { Box, Form, IconTextButton, Input, Pagination, SearchInput, Select, Spac
 import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { isUndefined } from 'lodash'
-import { useWebsiteSettingsGetCollectionQuery, WebsiteSetting, WebsiteSettingsGetCollectionApiArg } from './website-settings-api-slice-enhanced'
+import { useWebsiteSettingsGetCollectionQuery, useWebsiteSettingsListTypesQuery, WebsiteSetting, WebsiteSettingsGetCollectionApiArg } from './website-settings-api-slice-enhanced'
 import { Table } from './table/table'
 import { useWebsiteSetting } from './hooks/use-website-settings'
 
@@ -34,12 +34,19 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
 
+      const {data: settingTypes, isLoading: settingTypesLoading } = useWebsiteSettingsListTypesQuery()
+
+      const typeOptions = settingTypes.map(({ value, domain }) => ({
+  value,
+  label: t(domain)
+}));
+
     const queryArgs: WebsiteSettingsGetCollectionApiArg = useMemo(() => ( { body: {filters: {
       page, pageSize
     }} }), [filter, page, pageSize])
 
   const { data, isLoading: websiteSettingsLoading, isFetching: websiteSettingsFetching, isError, error, refetch } = useWebsiteSettingsGetCollectionQuery(queryArgs)
-
+  
   const { createNewSetting, createLoading } = useWebsiteSetting()
   
     const handleRefetch = (): void => {
