@@ -159,7 +159,7 @@ export const Grid = ({
     }
   })
 
-  if (enableRowDrag) {
+  if (enableRowDrag === true) {
     props.columns.unshift(
       columnHelper.accessor('rowDragCol', { header: '', size: 40 })
     )
@@ -336,7 +336,7 @@ export const Grid = ({
                   </tr>
                 )}
                 <SortableContext
-                  disabled={ !enableRowDrag }
+                  disabled={ enableRowDrag === false }
                   items={ table.getRowModel().rows.map(item => item.id) }
                   strategy={ verticalListSortingStrategy }
                 >
