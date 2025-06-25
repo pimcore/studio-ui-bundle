@@ -104,7 +104,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
         type: 'language-select',
         editable: true
       },
-      size: 100
+      size: 60
     }),
     columnHelper.accessor('data', {
       header: t('website-settings.columns.value'),
@@ -122,7 +122,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
     }),
     columnHelper.accessor('actions', {
       header: t('properties.columns.actions'),
-      size: 50,
+      size: 60,
       cell: (info) => (
         <ActionsCell
           info={ info }
