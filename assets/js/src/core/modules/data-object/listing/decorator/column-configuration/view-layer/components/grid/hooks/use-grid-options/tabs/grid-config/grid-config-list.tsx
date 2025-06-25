@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactNode } from 'react'
+import React, { useMemo, type ReactNode } from 'react'
 import { StackList, type StackListProps } from '@Pimcore/components/stack-list/stack-list'
 import { Empty, Tag } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -20,7 +20,7 @@ import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { uuid } from '@Pimcore/utils/uuid'
 import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-list-item'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
-import { AdvancedColumnForm } from './advanced-column-form'
+import { AdvancedColumnForm } from './forms/advanced-column-form'
 
 interface GridConfigListProps {
   columns: AvailableColumn[]
@@ -55,11 +55,11 @@ export const GridConfigList = (): React.JSX.Element => {
       return item
     })
 
-    setColumns(itemList)
+    setColumns(() => itemList)
   }
 
-  const stackListItems: ColumnStackListProps['items'] = columns.map((column) => {
-    const uniqueId = uuid()
+  const stackListItems: ColumnStackListProps['items'] = useMemo(() => columns.map((column) => {
+    const uniqueId = column.__meta?.uniqueId ?? uuid()
     let translationKey = `${column.key}`
     const isAdvancedColumn = column.key === 'advanced'
     const advancedColumnName = column?.__meta?.advancedColumnConfig?.title
@@ -68,8 +68,6 @@ export const GridConfigList = (): React.JSX.Element => {
       const fieldDefinition = column.config.fieldDefinition as Record<string, any>
       translationKey = fieldDefinition?.title ?? column.key
     }
-
-    console.log({column})
 
     return {
       id: uniqueId,
@@ -95,7 +93,7 @@ export const GridConfigList = (): React.JSX.Element => {
         </Space>
       )
     }
-  })
+  }), [columns]);
     
   return (
     <>

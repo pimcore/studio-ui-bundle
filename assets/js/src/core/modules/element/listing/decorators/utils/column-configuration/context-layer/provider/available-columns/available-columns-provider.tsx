@@ -16,7 +16,11 @@ import { useTranslation } from 'react-i18next'
 
 // @todo: Create a union type for all the different element types
 export type AvailableColumn = (AssetGridColumnConfig | ObjectGridColumnConfig) & {
-  __meta?: Record<string, any>
+  __meta?: {
+    uniqueId?: string
+    advancedColumnConfig?: Record<string, any>
+    [key: string]: any
+  }
 }
 
 export interface OnMenuItemClickEvent {

@@ -144,7 +144,7 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
           direction='vertical'
           style={ { width: '100%' } }
         >
-          <GridConfigList columns={ columns } />
+          <GridConfigList />
 
           {!isEmpty(addColumnMenu) && (
             <Dropdown menu={ { items: addColumnMenu } }>
