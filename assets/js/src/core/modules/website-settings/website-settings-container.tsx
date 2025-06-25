@@ -36,10 +36,21 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
 
       const {data: settingTypes, isLoading: settingTypesLoading } = useWebsiteSettingsListTypesQuery()
 
-      const typeOptions = settingTypes.map(({ value, domain }) => ({
-  value,
-  label: t(domain)
-}));
+      const websiteSettingTypes = settingTypes?.items
+
+      // @TODO needs to be changd to type.title once the API types were updated also adjust in Select element line 157
+      const typeOptions = !isUndefined(websiteSettingTypes) ? websiteSettingTypes.map( setting => ({
+  value: docType.name,
+  label: docType.name,
+})) : undefined;
+
+console.log("hhoo", isUndefined(typeOptions) ? [
+        { value: 'text', label: t('data-type.text') },
+        { value: 'document', label: t('data-type.document') },
+        { value: 'asset', label: t('data-type.asset') },
+        { value: 'object', label: t('data-type.object') },
+        { value: 'bool', label: t('data-type.checkbox') }
+      ] : typeOptions);
 
     const queryArgs: WebsiteSettingsGetCollectionApiArg = useMemo(() => ( { body: {filters: {
       page, pageSize
@@ -151,13 +162,13 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
   >
     <Select
       className="min-w-100"
-      options={[
+      options={isUndefined(typeOptions) ? [
         { value: 'text', label: t('data-type.text') },
         { value: 'document', label: t('data-type.document') },
         { value: 'asset', label: t('data-type.asset') },
         { value: 'object', label: t('data-type.object') },
         { value: 'bool', label: t('data-type.checkbox') }
-      ]}
+      ] : typeOptions}
       placeholder={ t('properties.add-custom-property.type') }
     />
   </Form.Item>

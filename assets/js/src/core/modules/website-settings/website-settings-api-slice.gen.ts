@@ -75,7 +75,7 @@ export type WebsiteSettingsDeleteApiArg = {
     id: number;
 };
 export type WebsiteSettingsListTypesApiResponse = /** status 200 List of all available website setting types */ {
-    items: DocType[];
+    items: WebsiteSettingsType[];
 };
 export type WebsiteSettingsListTypesApiArg = void;
 export type WebsiteSetting = {
@@ -126,33 +126,15 @@ export type WebsiteSettingsUpdate = {
     /** Site ID */
     siteId: any;
 };
-export type DocType = {
+export type WebsiteSettingsType = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object;
     };
-    /** ID */
-    id: string;
-    /** Name */
-    name: string;
-    /** Type */
-    type: string;
-    /** Group */
-    group: any;
-    /** Controller */
-    controller: any;
-    /** Template */
-    template: any;
-    /** Priority */
-    priority: number;
-    /** Creation date */
-    creationDate: any;
-    /** Modification date */
-    modificationDate: any;
-    /** Static generator enabled */
-    staticGeneratorEnabled: boolean;
-    /** Is writeable */
-    writeable: boolean;
+    /** Key */
+    key: string;
+    /** Title */
+    title: string;
 };
 export const {
     useWebsiteSettingsAddMutation,
