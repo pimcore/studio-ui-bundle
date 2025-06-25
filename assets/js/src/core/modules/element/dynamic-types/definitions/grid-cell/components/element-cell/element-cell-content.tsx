@@ -19,9 +19,11 @@ import { type ElementInfo } from './element-cell'
 import { isPlainObject } from 'lodash'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 import { type ElementReference } from '@Pimcore/modules/element/element-helper'
+import { Flex, IconButton, useEditMode } from '@sdk/components'
 
 export interface ElementCellContentProps extends DefaultCellProps {
   dropDisabled?: boolean
+  clearDisabled?: boolean
   getElementInfo?: (props: DefaultCellProps) => ElementInfo
 }
 
@@ -29,6 +31,7 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
   const { styles } = useStyle()
   const propertyData = props.row.original
   const { getStateClasses } = useDroppable()
+  const { fireOnUpdateCellDataEvent } = useEditMode(props)
 
   const getElementInfo = props.getElementInfo ?? ((): ElementInfo => {
     // @todo check hardcoded type
@@ -36,8 +39,7 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
     const allowedTypes = props.column.columnDef.meta?.config?.allowedTypes
     if (allowedTypes !== undefined) {
       defaultType = allowedTypes[0] as ElementType
-    }
-
+    } 
     const includesPathInformation = propertyData.data !== null && (propertyData.data?.fullPath !== undefined || propertyData.data?.path !== undefined)
     const hasFullPath = includesPathInformation && propertyData.data?.fullPath !== undefined
 
@@ -85,13 +87,21 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
           published={ elementInfo.published }
         />
       )}
-
+<div>
       { props.dropDisabled !== true && (
       <Icon
-        className={ styles.dropTargetIcon }
+        className={ styles.elementOptionsIcon }
         value={ 'drop-target' }
       />
       )}
+      { props.clearDisabled !== true && (
+      <IconButton
+        icon={ { value: 'trash' } }
+        onClick={() => fireOnUpdateCellDataEvent('')}
+        type={'link'}
+      />
+      )}
+      </div>
 
     </div>
   )

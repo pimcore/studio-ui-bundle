@@ -38,9 +38,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
   const { t } = useTranslation()
   const { updateSettingById } = useWebsiteSetting()
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
-    
-  console.log({websiteSettingRows});
-  
+      
   const {getAllSites, getSiteById} = useSites()
 
   const tableData: WebsiteSettingEnrichedRow[] = websiteSettingRows.map(row => {
@@ -110,7 +108,10 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
     }),
     columnHelper.accessor('data', {
       header: t('website-settings.columns.value'),
-      meta: { editable: true },
+      meta: {
+        type: 'element',
+        editable: true
+      },
       size: 150
     }),
     columnHelper.accessor('siteDomain', {
@@ -120,12 +121,11 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
     }),
     columnHelper.accessor('actions', {
       header: t('properties.columns.actions'),
-      size: 80,
+      size: 50,
       cell: (info) => (
         <ActionsCell
           info={ info }
           setWebsiteSettingRows={ setWebsiteSettingRows }
-          onUpdateCellData={onUpdateCellData}
         />
       )
     })

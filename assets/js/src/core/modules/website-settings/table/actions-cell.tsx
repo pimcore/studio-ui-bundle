@@ -18,14 +18,9 @@ import { WebsiteSettingEnrichedWithActions } from './table'
 interface ActionsCellProps {
   info: CellContext<WebsiteSettingEnrichedWithActions, React.ReactNode>
   setWebsiteSettingRows: React.Dispatch<React.SetStateAction<WebsiteSettingRow[]>>
-  onUpdateCellData: (params: {
-    columnId: string;
-    value: string;
-    rowData: WebsiteSettingRow;
-  }) => Promise<void>
 }
 
-export const ActionsCell = ({ info, setWebsiteSettingRows, onUpdateCellData }: ActionsCellProps): JSX.Element => {
+export const ActionsCell = ({ info, setWebsiteSettingRows }: ActionsCellProps): JSX.Element => {
    const row = info.row.original
   const id = row.id
   const { deleteSettingById, deleteLoading } = useWebsiteSetting()
@@ -38,12 +33,7 @@ export const ActionsCell = ({ info, setWebsiteSettingRows, onUpdateCellData }: A
   }
 
   return (
-    <Flex justify="center" className="website-settings-table--actions-column">
-      <IconButton
-        icon={ { value: 'close' } }
-        onClick={ () => onUpdateCellData({columnId: "data", value: "", rowData: row}) }
-        type="link"
-      />
+    <Flex justify="center" align="center" className="website-settings-table--actions-column">
       <IconButton
         icon={ { value: 'trash' } }
         loading={ deleteLoading }
