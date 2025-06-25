@@ -48,7 +48,7 @@ export const useWebsiteSetting = (): UseWebsiteSettingReturn => {
     }
   }
 
-  const toApiProperty = (row: WebsiteSettingRow): WebsiteSettingsUpdate => ({
+  const toApiSetting = (row: WebsiteSettingRow): WebsiteSettingsUpdate => ({
     name: row.name ?? '',
     language: row.language ?? '',
     data: row.data ?? '',
@@ -57,7 +57,7 @@ export const useWebsiteSetting = (): UseWebsiteSettingReturn => {
 
   const updateSettingById = async (id: number, row: WebsiteSettingRow): Promise<{ success: boolean }> => {
     try {
-      const result = await updateSetting({ id, websiteSettingsUpdate: toApiProperty(row) })
+      const result = await updateSetting({ id, websiteSettingsUpdate: toApiSetting(row) })
       return { success: 'data' in result }
     } catch (e) {
       trackError(new GeneralError('Was not able to update Website Setting'))

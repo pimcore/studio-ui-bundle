@@ -22,7 +22,7 @@ import { isUndefined } from 'lodash'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 type WebsiteSettingEnrichedRow = WebsiteSettingRow & {
-  siteDomain: string,
+  siteDomain: string
 }
 
 type WebsiteSettingEnrichedWithActions = WebsiteSettingEnrichedRow & {
