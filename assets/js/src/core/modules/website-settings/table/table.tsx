@@ -14,9 +14,8 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
-import { WebsiteSettingRow } from '../website-settings-container'
+import { SelectOption, WebsiteSettingRow } from '../website-settings-container'
 import { useWebsiteSetting } from '../hooks/use-website-settings'
-import { DocType, useWebsiteSettingsListTypesQuery } from '../website-settings-api-slice.gen'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { Site } from '@Pimcore/modules/document/sites-slice.gen'
 import { isUndefined } from 'lodash'
@@ -32,10 +31,10 @@ type WebsiteSettingEnrichedWithActions = WebsiteSettingEnrichedRow & {
 interface TableProps {
   websiteSettingRows: WebsiteSettingRow[]
   setWebsiteSettingRows: React.Dispatch<React.SetStateAction<WebsiteSettingRow[]>>
-  settingTypes: DocType[]
+  typeSelectOptions: SelectOption[]
 }
 
-export const Table = ({ websiteSettingRows, setWebsiteSettingRows, settingTypes }: TableProps): React.JSX.Element => {
+export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOptions }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { updateSettingById } = useWebsiteSetting()
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
@@ -53,17 +52,13 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, settingTypes 
 
   const availableSites: Site[] = getAllSites()
   const siteDomains = availableSites.map(site => site.domain)
-  const websiteSettingTypes: DocType[] = settingTypes?.items ?? []
-
-  // @TODO needs to be changd to type.title once the API types were updated
-  const typeTitles = websiteSettingTypes.map(type => type.name)
 
   const columnHelper = createColumnHelper<WebsiteSettingEnrichedWithActions>()
 
   const tableColumns = [
     columnHelper.accessor('type', {
       header: t('website-settings.columns.type'),
-      meta: { type: 'select', editable: true, config: { options: Object.values(typeTitles) } },
+      meta: { type: 'select', editable: true, config: { options: typeSelectOptions } },
       size: 80
     }),
     columnHelper.accessor('name', {

@@ -20,11 +20,16 @@ import { Box, Form, IconTextButton, Input, Pagination, SearchInput, Select, Spac
 import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { isUndefined } from 'lodash'
-import { useWebsiteSettingsGetCollectionQuery, useWebsiteSettingsListTypesQuery, WebsiteSetting, WebsiteSettingsGetCollectionApiArg } from './website-settings-api-slice-enhanced'
+import { useWebsiteSettingsGetCollectionQuery, useWebsiteSettingsListTypesQuery, WebsiteSetting, WebsiteSettingsGetCollectionApiArg, WebsiteSettingsType } from './website-settings-api-slice-enhanced'
 import { Table } from './table/table'
 import { useWebsiteSetting } from './hooks/use-website-settings'
 
 export type WebsiteSettingRow = WebsiteSetting & { rowId: string }
+
+export type SelectOption = {
+  value: string;
+  label: string;
+};
 
 export const WebsiteSettingsContainer = (): React.JSX.Element => {
   
@@ -38,19 +43,10 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
 
       const websiteSettingTypes = settingTypes?.items
 
-      // @TODO needs to be changd to type.title once the API types were updated also adjust in Select element line 157
-      const typeOptions = !isUndefined(websiteSettingTypes) ? websiteSettingTypes.map( setting => ({
-  value: docType.name,
-  label: docType.name,
-})) : undefined;
-
-console.log("hhoo", isUndefined(typeOptions) ? [
-        { value: 'text', label: t('data-type.text') },
-        { value: 'document', label: t('data-type.document') },
-        { value: 'asset', label: t('data-type.asset') },
-        { value: 'object', label: t('data-type.object') },
-        { value: 'bool', label: t('data-type.checkbox') }
-      ] : typeOptions);
+      const typeOptions: SelectOption[] = !isUndefined(websiteSettingTypes) ? websiteSettingTypes.map( setting => ({
+  value: setting.key,
+  label: setting.title,
+})) : [];
 
     const queryArgs: WebsiteSettingsGetCollectionApiArg = useMemo(() => ( { body: {filters: {
       page, pageSize
@@ -89,9 +85,6 @@ console.log("hhoo", isUndefined(typeOptions) ? [
   }, [websiteSettings])
 
   const onCreateProperty = async (name: string, type: string): Promise<void> => {
-    console.log("name", name);
-    console.log("type", type);
-
     const { success, data } = await createNewSetting(name, type)
     if (success && data !== undefined) {
       setWebsiteSettingRows(prev =>
@@ -162,13 +155,7 @@ console.log("hhoo", isUndefined(typeOptions) ? [
   >
     <Select
       className="min-w-100"
-      options={isUndefined(typeOptions) ? [
-        { value: 'text', label: t('data-type.text') },
-        { value: 'document', label: t('data-type.document') },
-        { value: 'asset', label: t('data-type.asset') },
-        { value: 'object', label: t('data-type.object') },
-        { value: 'bool', label: t('data-type.checkbox') }
-      ] : typeOptions}
+      options={typeOptions}
       placeholder={ t('properties.add-custom-property.type') }
     />
   </Form.Item>
@@ -214,6 +201,7 @@ console.log("hhoo", isUndefined(typeOptions) ? [
           <Table
             websiteSettingRows={ sortedSettings }
             setWebsiteSettingRows={ setWebsiteSettingRows }
+            typeSelectOptions={ typeOptions }
           />
         </Box>
       </Content>
