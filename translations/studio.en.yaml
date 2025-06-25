@@ -286,6 +286,10 @@ website-settings.columns.language: Language
 website-settings.columns.value: Value
 website-settings.columns.site: Site
 website-settings.columns.actions: Actions
+website-settings.website-settings-already-exist.title: Website Setting already exists
+website-settings.website-settings-already-exist.error: Name is already in use, please choose a different one
+website-settings.website-settings.add-entry-mandatory-fields-missing.title: Mandatory fields missing
+website-settings.website-settings.add-entry-mandatory-fields-missing.error: Name and type are mandatory fields and need to be filled out.
 properties.label: Properties
 properties.editable-properties: Editable Properties
 properties.all-properties: All Properties

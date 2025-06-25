@@ -16,7 +16,7 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
-import { Box, Form, IconTextButton, Input, Pagination, SearchInput, Select, Space } from '@sdk/components'
+import { Box, Button, Form, IconTextButton, Input, ModalFooter, Pagination, SearchInput, Select, Space, useModal } from '@sdk/components'
 import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { isUndefined } from 'lodash'
@@ -84,7 +84,68 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
     }
   }, [websiteSettings])
 
-  const onCreateProperty = async (name: string, type: string): Promise<void> => {
+  useEffect(() => {
+    if (isError) {
+      trackError(new ApiError(error))
+    }
+  }, [isError])
+
+    const {
+      showModal: showDuplicateEntryModal,
+      closeModal: closeDuplicateEntryModal,
+      renderModal: DuplicateEntryModal
+    } = useModal({
+      type: 'error'
+    })
+    const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
+      type: 'error'
+    })
+    
+  const errorModals = (<><DuplicateEntryModal
+                  footer={ <ModalFooter>
+                    <Button
+                      onClick={ closeDuplicateEntryModal }
+                      type='primary'
+                    >{t('button.ok')}</Button>
+                  </ModalFooter> }
+                  title={ t('website-settings.website-settings-already-exist.title') }
+                >
+                  {t('website-settings.website-settings-already-exist.error')}
+                </DuplicateEntryModal>
+  
+                <MandatoryModal
+                  footer={ <ModalFooter>
+                    <Button
+                      onClick={ closeMandatoryModal }
+                      type='primary'
+                    >{t('button.ok')}</Button>
+                  </ModalFooter> }
+                  title={ t('website-settings.website-settings.add-entry-mandatory-fields-missing.title') }
+                >
+                  {t('website-settings.website-settings.add-entry-mandatory-fields-missing.error')}
+                </MandatoryModal>
+              </>)
+
+    const onCreateProperty = async (name: string, type: string): Promise<void> => {
+    const isValidNameInput = name !== "" && name !== undefined
+    const isValidTypeSelectValue = type !== undefined && type !== ""
+
+    console.log("name", name);
+        console.log("type", type);
+
+    
+    if (!isValidNameInput || !isValidTypeSelectValue) {
+      showMandatoryModal()
+      return
+    }
+
+    console.log("setting", websiteSettings);
+    
+    if (websiteSettingRows?.find((setting) => setting.name === name) !== undefined) {
+      showDuplicateEntryModal()
+      return
+    }
+
     const { success, data } = await createNewSetting(name, type)
     if (success && data !== undefined) {
       setWebsiteSettingRows(prev =>
@@ -96,12 +157,6 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
       form.resetFields()
     }
   }
-
-  useEffect(() => {
-    if (isError) {
-      trackError(new ApiError(error))
-    }
-  }, [isError])
 
   return (
     <ContentLayout
@@ -154,7 +209,6 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
 
   <Form.Item
     name="type"
-    rules={[{ required: true, message: t('validation.required') }]}
   >
     <Select
       className="min-w-100"
@@ -206,6 +260,7 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
             setWebsiteSettingRows={ setWebsiteSettingRows }
             typeSelectOptions={ typeOptions }
           />
+          {errorModals}
         </Box>
       </Content>
     </ContentLayout>
