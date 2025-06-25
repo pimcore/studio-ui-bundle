@@ -43,10 +43,6 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
   const { getAllSites, getSiteById } = useSites()
 
   const tableData: WebsiteSettingEnrichedRow[] = websiteSettingRows.map((row: WebsiteSettingEnrichedRow) => {
-    if (typeof row.siteId !== 'number') {
-      trackError(new GeneralError(`Expected row.siteId to be a number, but got ${typeof row.siteId}`))
-    }
-
     const site = getSiteById(row.siteId as number)
     const domain = !isUndefined(site) ? site.domain : ''
 
