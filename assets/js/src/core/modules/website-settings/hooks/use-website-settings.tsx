@@ -9,8 +9,8 @@
  */
 
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { WebsiteSettingRow } from '../website-settings-container'
-import { useWebsiteSettingsAddMutation, useWebsiteSettingsDeleteMutation, useWebsiteSettingsUpdateMutation, WebsiteSetting, WebsiteSettingsUpdate } from '../website-settings-api-slice-enhanced'
+import { type WebsiteSettingRow } from '../website-settings-container'
+import { useWebsiteSettingsAddMutation, useWebsiteSettingsDeleteMutation, useWebsiteSettingsUpdateMutation, type WebsiteSetting, type WebsiteSettingsUpdate } from '../website-settings-api-slice-enhanced'
 
 interface UseWebsiteSettingReturn {
   createNewSetting: (name: string, type: string) => Promise<{ success: boolean, data?: WebsiteSetting }>
@@ -28,7 +28,7 @@ export const useWebsiteSetting = (): UseWebsiteSettingReturn => {
 
   const createNewSetting = async (name: string, type: string): Promise<{ success: boolean, data?: WebsiteSetting }> => {
     try {
-      const result = await createSetting({websiteSettingsAdd: {name, type}})
+      const result = await createSetting({ websiteSettingsAdd: { name, type } })
       if ('data' in result) {
         return { success: true, data: result.data }
       }

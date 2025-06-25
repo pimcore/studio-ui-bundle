@@ -68,8 +68,8 @@ export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
     >
       <ElementCellContent
         { ...props }
-        dropDisabled={ dropDisabled }
         clearDisabled={ !clearable }
+        dropDisabled={ dropDisabled }
         getElementInfo={ config.getElementInfo }
       />
     </Droppable>

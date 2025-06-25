@@ -20,43 +20,48 @@ import { Box, Button, Form, IconTextButton, Input, ModalFooter, Pagination, Sear
 import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { isUndefined } from 'lodash'
-import { useWebsiteSettingsGetCollectionQuery, useWebsiteSettingsListTypesQuery, WebsiteSetting, WebsiteSettingsGetCollectionApiArg, WebsiteSettingsType } from './website-settings-api-slice-enhanced'
+import { useWebsiteSettingsGetCollectionQuery, useWebsiteSettingsListTypesQuery, type WebsiteSetting, type WebsiteSettingsGetCollectionApiArg, WebsiteSettingsType } from './website-settings-api-slice-enhanced'
 import { Table } from './table/table'
 import { useWebsiteSetting } from './hooks/use-website-settings'
 
 export type WebsiteSettingRow = WebsiteSetting & { rowId: string }
 
-export type SelectOption = {
-  value: string;
-  label: string;
-};
+export interface SelectOption {
+  value: string
+  label: string
+}
 
 export const WebsiteSettingsContainer = (): React.JSX.Element => {
-  
   const [form] = Form.useForm()
 
   const [filter, setFilter] = useState<string>('')
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
 
-      const {data: settingTypes, isLoading: settingTypesLoading } = useWebsiteSettingsListTypesQuery()
+  const { data: settingTypes, isLoading: settingTypesLoading } = useWebsiteSettingsListTypesQuery()
 
-      const websiteSettingTypes = settingTypes?.items
+  const websiteSettingTypes = settingTypes?.items
 
-      const typeOptions: SelectOption[] = !isUndefined(websiteSettingTypes) ? websiteSettingTypes.map( setting => ({
-  value: setting.key,
-  label: setting.title,
-})) : [];
+  const typeOptions: SelectOption[] = !isUndefined(websiteSettingTypes)
+    ? websiteSettingTypes.map(setting => ({
+      value: setting.key,
+      label: setting.title
+    }))
+    : []
 
-    const queryArgs: WebsiteSettingsGetCollectionApiArg = useMemo(() => ( { body: {filters: {
-      page, pageSize
-    }} }), [filter, page, pageSize])
+  const queryArgs: WebsiteSettingsGetCollectionApiArg = useMemo(() => ({
+    body: {
+      filters: {
+        page, pageSize
+      }
+    }
+  }), [filter, page, pageSize])
 
   const { data, isLoading: websiteSettingsLoading, isFetching: websiteSettingsFetching, isError, error, refetch } = useWebsiteSettingsGetCollectionQuery(queryArgs)
-  
+
   const { createNewSetting, createLoading } = useWebsiteSetting()
-  
-    const handleRefetch = (): void => {
+
+  const handleRefetch = (): void => {
     void refetch().catch(() => {
       trackError(new GeneralError('Error while reloading'))
     })
@@ -65,15 +70,15 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
   useEffect(() => {
     handleRefetch()
   }, [])
-  
+
   const [websiteSettingRows, setWebsiteSettingRows] = useState<WebsiteSettingRow[]>([])
 
   const websiteSettings = data?.items ?? []
 
   const sortedSettings = [...websiteSettingRows].sort((a, b) => {
-  const nameA = a.name ?? ''
-  const nameB = b.name ?? ''
-  return nameA.localeCompare(nameB)
+    const nameA = a.name ?? ''
+    const nameB = b.name ?? ''
+    return nameA.localeCompare(nameB)
   })
 
   useEffect(() => {
@@ -90,51 +95,53 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
     }
   }, [isError])
 
-    const {
-      showModal: showDuplicateEntryModal,
-      closeModal: closeDuplicateEntryModal,
-      renderModal: DuplicateEntryModal
-    } = useModal({
-      type: 'error'
-    })
-    const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
-      type: 'error'
-    })
-    
-  const errorModals = (<><DuplicateEntryModal
-                  footer={ <ModalFooter>
-                    <Button
-                      onClick={ closeDuplicateEntryModal }
-                      type='primary'
-                    >{t('button.ok')}</Button>
-                  </ModalFooter> }
-                  title={ t('website-settings.website-settings-already-exist.title') }
-                >
-                  {t('website-settings.website-settings-already-exist.error')}
-                </DuplicateEntryModal>
-  
-                <MandatoryModal
-                  footer={ <ModalFooter>
-                    <Button
-                      onClick={ closeMandatoryModal }
-                      type='primary'
-                    >{t('button.ok')}</Button>
-                  </ModalFooter> }
-                  title={ t('website-settings.website-settings.add-entry-mandatory-fields-missing.title') }
-                >
-                  {t('website-settings.website-settings.add-entry-mandatory-fields-missing.error')}
-                </MandatoryModal>
-              </>)
+  const {
+    showModal: showDuplicateEntryModal,
+    closeModal: closeDuplicateEntryModal,
+    renderModal: DuplicateEntryModal
+  } = useModal({
+    type: 'error'
+  })
+  const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
+    type: 'error'
+  })
 
-    const onCreateProperty = async (name: string, type: string): Promise<void> => {
-    const isValidNameInput = name !== "" && name !== undefined
-    const isValidTypeSelectValue = type !== undefined && type !== ""
-    
+  const errorModals = (
+    <><DuplicateEntryModal
+      footer={ <ModalFooter>
+        <Button
+          onClick={ closeDuplicateEntryModal }
+          type='primary'
+        >{t('button.ok')}</Button>
+      </ModalFooter> }
+      title={ t('website-settings.website-settings-already-exist.title') }
+      >
+      {t('website-settings.website-settings-already-exist.error')}
+    </DuplicateEntryModal>
+
+      <MandatoryModal
+        footer={ <ModalFooter>
+          <Button
+            onClick={ closeMandatoryModal }
+            type='primary'
+          >{t('button.ok')}</Button>
+        </ModalFooter> }
+        title={ t('website-settings.website-settings.add-entry-mandatory-fields-missing.title') }
+      >
+        {t('website-settings.website-settings.add-entry-mandatory-fields-missing.error')}
+      </MandatoryModal>
+    </>
+  )
+
+  const onCreateProperty = async (name: string, type: string): Promise<void> => {
+    const isValidNameInput = name !== '' && name !== undefined
+    const isValidTypeSelectValue = type !== undefined && type !== ''
+
     if (!isValidNameInput || !isValidTypeSelectValue) {
       showMandatoryModal()
       return
     }
-    
+
     if (websiteSettingRows?.find((setting) => setting.name === name) !== undefined) {
       showDuplicateEntryModal()
       return
@@ -162,15 +169,15 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
             onClick={ handleRefetch }
           />
           <Pagination
-                        current={ page }
-                        onChange={ (page, pageSize) => {
-                          setPage(page)
-                          setPageSize(pageSize)
-                        } }
-                        showSizeChanger
-                        showTotal={ (total) => t('pagination.show-total', { total }) }
-                        total={ data?.totalItems ?? 0 }
-                      />
+            current={ page }
+            onChange={ (page, pageSize) => {
+              setPage(page)
+              setPageSize(pageSize)
+            } }
+            showSizeChanger
+            showTotal={ (total) => t('pagination.show-total', { total }) }
+            total={ data?.totalItems ?? 0 }
+          />
         </Toolbar> }
       renderTopBar={
         <Toolbar
@@ -180,58 +187,58 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
             y: 'none'
           } }
           padding={ {
-            x: 'small',
+            x: 'small'
           } }
           theme='secondary'
         >
           <Flex gap={ 'small' }>
             <Title>{t('widget.website-settings')}</Title>
-  <Form
-  form={form}
-  layout="inline"
-  onFinish={({ name, type }) => {
-    void onCreateProperty(name, type)
-  }}
->
-  <Flex>
-  <Form.Item
-    name="name"
-    rules={[{ required: true, message: t('validation.required') }]}
-  >
-    <Input placeholder={ t('properties.add-custom-property.key') } />
-  </Form.Item>
+            <Form
+              form={ form }
+              layout="inline"
+              onFinish={ ({ name, type }) => {
+                void onCreateProperty(name, type)
+              } }
+            >
+              <Flex>
+                <Form.Item
+                  name="name"
+                  rules={ [{ required: true, message: t('validation.required') }] }
+                >
+                  <Input placeholder={ t('properties.add-custom-property.key') } />
+                </Form.Item>
 
-  <Form.Item
-    name="type"
-  >
-    <Select
-      className="min-w-100"
-      options={typeOptions}
-      placeholder={ t('properties.add-custom-property.type') }
-    />
-  </Form.Item>
+                <Form.Item
+                  name="type"
+                >
+                  <Select
+                    className="min-w-100"
+                    options={ typeOptions }
+                    placeholder={ t('properties.add-custom-property.type') }
+                  />
+                </Form.Item>
 
-  <Form.Item>
-    <IconTextButton
-      icon={{ value: 'new' }}
-      loading={ createLoading }
-      htmlType="submit"
-    >
-      {t('website-settings.new')}
-    </IconTextButton>
-  </Form.Item>
-  </Flex>
-</Form>
+                <Form.Item>
+                  <IconTextButton
+                    htmlType="submit"
+                    icon={ { value: 'new' } }
+                    loading={ createLoading }
+                  >
+                    {t('website-settings.new')}
+                  </IconTextButton>
+                </Form.Item>
+              </Flex>
+            </Form>
           </Flex>
-                    <SearchInput
-                      loading={ websiteSettingsFetching }
-                      onSearch={ (value) => {
-                        setFilter(value)
-                      } }
-                      placeholder="Search"
-                      withPrefix={ false }
-                      withoutAddon={ false }
-                    />
+          <SearchInput
+            loading={ websiteSettingsFetching }
+            onSearch={ (value) => {
+              setFilter(value)
+            } }
+            placeholder="Search"
+            withPrefix={ false }
+            withoutAddon={ false }
+          />
         </Toolbar>
         }
     >
@@ -250,9 +257,9 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
           } }
         >
           <Table
-            websiteSettingRows={ sortedSettings }
             setWebsiteSettingRows={ setWebsiteSettingRows }
             typeSelectOptions={ typeOptions }
+            websiteSettingRows={ sortedSettings }
           />
           {errorModals}
         </Box>

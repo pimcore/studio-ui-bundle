@@ -19,19 +19,19 @@ export const LanguageCell = (props: DefaultCellProps): React.JSX.Element => {
   const settings = useSettings()
 
   const availableLanguages = settings.availableAdminLanguages
-  const validLanguages: string[]= settings.validLanguages
-  
-const languageSelectionOptions = validLanguages.map(validLang => {
-  const match = availableLanguages.find(lang => lang.language === validLang);
-  if (!match) {
-    trackError(new GeneralError(`Language "${validLang}" not found in availableLanguages`));
-  }
-  return ({
-  value: match.language,
-  label: `${match.display} [${match.language}]`,
-  displayValue: match.language
-});
-});
+  const validLanguages: string[] = settings.validLanguages
+
+  const languageSelectionOptions = validLanguages.map(validLang => {
+    const match = availableLanguages.find(lang => lang.language === validLang)
+    if (!match) {
+      trackError(new GeneralError(`Language "${validLang}" not found in availableLanguages`))
+    }
+    return ({
+      value: match.language,
+      label: `${match.display} [${match.language}]`,
+      displayValue: match.language
+    })
+  })
 
   const columnConfig: SelectCellConfig = {
     options: languageSelectionOptions

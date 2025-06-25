@@ -12,8 +12,8 @@ import React from 'react'
 import { type CellContext } from '@tanstack/react-table'
 import { Flex, IconButton } from '@sdk/components'
 import { useWebsiteSetting } from '../hooks/use-website-settings'
-import { WebsiteSettingRow } from '../website-settings-container'
-import { WebsiteSettingEnrichedWithActions } from './table'
+import { type WebsiteSettingRow } from '../website-settings-container'
+import { type WebsiteSettingEnrichedWithActions } from './table'
 
 interface ActionsCellProps {
   info: CellContext<WebsiteSettingEnrichedWithActions, React.ReactNode>
@@ -21,7 +21,7 @@ interface ActionsCellProps {
 }
 
 export const ActionsCell = ({ info, setWebsiteSettingRows }: ActionsCellProps): JSX.Element => {
-   const row = info.row.original
+  const row = info.row.original
   const id = row.id
   const { deleteSettingById, deleteLoading } = useWebsiteSetting()
 
@@ -33,7 +33,11 @@ export const ActionsCell = ({ info, setWebsiteSettingRows }: ActionsCellProps): 
   }
 
   return (
-    <Flex justify="center" align="center" className="website-settings-table--actions-column">
+    <Flex
+      align="center"
+      className="website-settings-table--actions-column"
+      justify="center"
+    >
       <IconButton
         icon={ { value: 'trash' } }
         loading={ deleteLoading }

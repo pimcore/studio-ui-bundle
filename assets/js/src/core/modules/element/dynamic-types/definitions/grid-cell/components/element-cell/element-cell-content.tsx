@@ -39,7 +39,7 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
     const allowedTypes = props.column.columnDef.meta?.config?.allowedTypes
     if (allowedTypes !== undefined) {
       defaultType = allowedTypes[0] as ElementType
-    } 
+    }
     const includesPathInformation = propertyData.data !== null && (propertyData.data?.fullPath !== undefined || propertyData.data?.path !== undefined)
     const hasFullPath = includesPathInformation && propertyData.data?.fullPath !== undefined
 
@@ -87,20 +87,20 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
           published={ elementInfo.published }
         />
       )}
-<div>
-      { props.dropDisabled !== true && (
-      <Icon
-        className={ styles.elementOptionsIcon }
-        value={ 'drop-target' }
-      />
-      )}
-      { props.clearDisabled !== true && (
-      <IconButton
-        icon={ { value: 'trash' } }
-        onClick={() => fireOnUpdateCellDataEvent('')}
-        type={'link'}
-      />
-      )}
+      <div>
+        { props.dropDisabled !== true && (
+        <Icon
+          className={ styles.elementOptionsIcon }
+          value={ 'drop-target' }
+        />
+        )}
+        { props.clearDisabled !== true && (
+        <IconButton
+          icon={ { value: 'trash' } }
+          onClick={ () => { fireOnUpdateCellDataEvent('') } }
+          type={ 'link' }
+        />
+        )}
       </div>
 
     </div>

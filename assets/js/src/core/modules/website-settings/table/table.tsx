@@ -14,10 +14,10 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
-import { SelectOption, WebsiteSettingRow } from '../website-settings-container'
+import { type SelectOption, type WebsiteSettingRow } from '../website-settings-container'
 import { useWebsiteSetting } from '../hooks/use-website-settings'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
-import { Site } from '@Pimcore/modules/document/sites-slice.gen'
+import { type Site } from '@Pimcore/modules/document/sites-slice.gen'
 import { isUndefined } from 'lodash'
 
 type WebsiteSettingEnrichedRow = WebsiteSettingRow & {
@@ -38,22 +38,22 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
   const { t } = useTranslation()
   const { updateSettingById } = useWebsiteSetting()
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
-      
-  const {getAllSites, getSiteById} = useSites()
+
+  const { getAllSites, getSiteById } = useSites()
 
   const tableData: WebsiteSettingEnrichedRow[] = websiteSettingRows.map(row => {
     const site = getSiteById(row.siteId)
-    const domain = !isUndefined(site) ? site.domain : ""  
+    const domain = !isUndefined(site) ? site.domain : ''
     return ({
-  ...row,
-  siteDomain: domain
-})
-})
+      ...row,
+      siteDomain: domain
+    })
+  })
 
   const availableSites: Site[] = getAllSites()
   const siteDomains = availableSites.map(site => site.domain)
 
-    const onUpdateCellData = async ({
+  const onUpdateCellData = async ({
     columnId,
     value,
     rowData
@@ -84,7 +84,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
       )
     }
   }
-  
+
   const columnHelper = createColumnHelper<WebsiteSettingEnrichedWithActions>()
 
   const tableColumns = [

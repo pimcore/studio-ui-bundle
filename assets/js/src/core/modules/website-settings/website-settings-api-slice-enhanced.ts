@@ -33,7 +33,7 @@ const api = baseApi.enhanceEndpoints({
 
     websiteSettingsListTypes: {
       providesTags: () => []
-    },
+    }
   }
 })
 
