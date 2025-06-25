@@ -21,7 +21,7 @@ let env: 'development' | 'production' = 'production';
 const isDevServer = nodeEnv === 'dev-server';
 if (nodeEnv !== env) {
   env = 'development';
-  process.env.NODE_ENV = 'development'; 
+  process.env.NODE_ENV = 'development';
 }
 
 export default defineConfig({
@@ -30,8 +30,11 @@ export default defineConfig({
     port: 3031,
   },
   dev: {
-    assetPrefix: (isDevServer ? 'http://localhost:3031' : '') + '/bundles/pimcorestudioui/build/' + buildId,
-    writeToDisk: !isDevServer,
+    assetPrefix: (isDevServer ? '' : '') + '/bundles/pimcorestudioui/build/' + buildId,
+    writeToDisk: true,
+    //client: {
+    //  port: 3033
+    //}
   },
   source: {
     entry: {
@@ -41,7 +44,7 @@ export default defineConfig({
     decorators: {
       version: 'legacy'
     }
-  }, 
+  },
   output: {
     manifest: true,
     assetPrefix: '/bundles/pimcorestudioui/build/' + buildId,

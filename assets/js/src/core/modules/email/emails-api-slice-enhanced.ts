@@ -12,7 +12,7 @@ import { invalidatingTags, providingTags, tagNames, type Tag } from '@Pimcore/ap
 import { api as baseApi } from './emails-api-slice.gen'
 
 export const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.EMAIL_BLOCKLIST, tagNames.EMAIL_BLOCKLIST_DETAIL],
+  addTagTypes: [tagNames.EMAIL_BLOCKLIST, tagNames.EMAIL_BLOCKLIST_DETAIL, tagNames.EMAIL_LOG, tagNames.EMAIL_LOG_DETAIL],
   endpoints: {
     emailBlocklistGetCollection: {
       providesTags: (result, error, args) => {
@@ -33,6 +33,17 @@ export const api = baseApi.enhanceEndpoints({
     emailBlocklistDelete: {
       invalidatesTags: (result, error, args) => {
         return invalidatingTags.EMAIL_BLOCKLIST_DETAIL(args.email!)
+      }
+    },
+    emailLogGetCollection: {
+      providesTags: (result, error, args) => {
+        const logCollection: Tag[] = []
+
+        result?.items?.forEach((blocklistItem) => {
+          logCollection.push(...providingTags.EMAIL_LOG_DETAIL(blocklistItem.id))
+        })
+
+        return [...logCollection, ...providingTags.EMAIL_LOG()]
       }
     }
   }

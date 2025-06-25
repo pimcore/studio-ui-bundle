@@ -11,9 +11,13 @@ import { EmailCard } from "./components/email-card/email-card"
 import { Flex } from "@Pimcore/components/flex/flex"
 import { Title } from "@Pimcore/components/title/title"
 import { Icon } from "@Pimcore/components/icon/icon"
+import { useAppDispatch } from "@Pimcore/app/store"
+import { api } from '@Pimcore/modules/email/emails-api-slice-enhanced'
+import { invalidatingTags } from "@Pimcore/app/api/pimcore/tags"
 
 export const EmailLogContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -36,16 +40,16 @@ export const EmailLogContainer = (): React.JSX.Element => {
           theme='secondary'
         >
           <IconButton
-            disabled={isLoading || isRTKLoading}
+            disabled={isRTKLoading || isLoading}
             icon={{ value: 'refresh' }}
             onClick={() => {
-              /*setIsLoading(true)
+              setIsLoading(true)
               dispatch(
                 api.util.invalidateTags(
-                  invalidatingTags.EMAIL_BLOCKLIST()
+                  invalidatingTags.EMAIL_LOG()
                 )
               )
-              setIsLoading(false)*/
+              setIsLoading(false)
             }}
           />
           <Pagination
@@ -78,7 +82,7 @@ export const EmailLogContainer = (): React.JSX.Element => {
       }
     >
       <Content
-        loading={isLoading}
+        loading={isRTKLoading || isLoading}
         none={isUndefined(data?.items) || data.items.length === 0}
         padded
       >
