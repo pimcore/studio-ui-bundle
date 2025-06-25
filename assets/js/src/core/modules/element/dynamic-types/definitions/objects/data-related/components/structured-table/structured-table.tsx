@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React from 'react'
 import cn from 'classnames'
 import {
   StructuredTableGrid
@@ -56,7 +56,6 @@ export type StructuredTableColumnValue = string | null | number | boolean
 export const StructuredTable = (props: StructuredTableProps): React.JSX.Element => {
   const value = props.value ?? null
 
-  const [key, setKey] = useState<number>(0)
   const { t } = useTranslation()
   const { confirm } = useFormModal()
 
@@ -81,20 +80,7 @@ export const StructuredTable = (props: StructuredTableProps): React.JSX.Element 
     }
   }
 
-  const clearValue = (): void => {
-    if (value !== null) {
-      const newValue = value
-
-      for (const rowKey in value) {
-        for (const colKey in value[rowKey]) {
-          newValue[rowKey][colKey] = castColumnValue(null, colKey)
-        }
-      }
-
-      handleChange(newValue)
-      setKey(key + 1) // force re-render
-    }
-  }
+  const clearValue = (): void => { handleChange(null) }
 
   return (
     <>
@@ -109,7 +95,6 @@ export const StructuredTable = (props: StructuredTableProps): React.JSX.Element 
           className={ cn(props.className) }
           cols={ props.cols }
           disabled={ props.disabled }
-          key={ key }
           labelFirstCell={ props.labelFirstCell }
           labelWidth={ props.labelWidth }
           onChange={ handleChange }
