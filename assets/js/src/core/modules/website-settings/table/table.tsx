@@ -39,17 +39,6 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
   const { t } = useTranslation()
   const { updateSettingById } = useWebsiteSetting()
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
-
-  const settings = useSettings()
-    const availableLanguages = settings.availableAdminLanguages
-  const validLanguages: string[]= settings.validLanguages
-
-const languageSelectionOptions = validLanguages.map(validLang => {
-  const match = availableLanguages.find(
-    lang => lang.language === validLang
-  );
-  return match ? match.display : validLang;
-});
   
   const {getAllSites, getSiteById} = useSites()
 
@@ -80,7 +69,10 @@ const languageSelectionOptions = validLanguages.map(validLang => {
     }),
     columnHelper.accessor('language', {
       header: t('website-settings.columns.language'),
-      meta: { type: 'select', editable: true, config: { options: languageSelectionOptions } },
+      meta: {
+        type: 'language-select',
+        editable: true
+      },
       size: 100
     }),
     columnHelper.accessor('data', {

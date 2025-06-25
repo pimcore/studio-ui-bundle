@@ -13,12 +13,25 @@ import React from 'react'
 import { SelectCell, type SelectCellConfig } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/select/select-cell'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { addColumnConfig } from '@Pimcore/components/grid/columns/helpers'
+import { GeneralError, trackError } from '@sdk/modules/app'
 
 export const LanguageCell = (props: DefaultCellProps): React.JSX.Element => {
   const settings = useSettings()
 
+  const availableLanguages = settings.availableAdminLanguages
+  const validLanguages: string[]= settings.validLanguages
+  
+const languageSelectionOptions = validLanguages.map(validLang => {
+  const match = availableLanguages.find(lang => lang.language === validLang);
+  if (!match) {
+    trackError(new GeneralError(`Language "${validLang}" not found in availableLanguages`));
+  }
+  return `${match.display} [${match.language}]`;
+});
+
+
   const columnConfig: SelectCellConfig = {
-    options: settings.requiredLanguages
+    options: languageSelectionOptions
   }
 
   return (
