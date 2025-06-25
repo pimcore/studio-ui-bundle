@@ -11,7 +11,6 @@
 import { Checkbox, Input } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import React, { useState } from 'react'
-// import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons-old'
 import { useStyle } from '@Pimcore/components/login-form/login-form-style'
 import { useDispatch } from 'react-redux'
 import { useMessage } from '@Pimcore/components/message/useMessage'
@@ -92,10 +91,9 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
         <Input.Password
           aria-label={ t('login-form.password') }
           autoComplete="current-password"
-          placeholder={ t('login-form.password') }
           name={ 'password' }
-          // iconRender={ (visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />) }
           onChange={ (e) => { setFormState({ ...formState, password: e.target.value }) } }
+          placeholder={ t('login-form.password') }
         />
         <div className={ 'flex-space' }>
           <Checkbox
