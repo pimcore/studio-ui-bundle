@@ -130,6 +130,9 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
             x: 'mini',
             y: 'none'
           } }
+          padding={ {
+            x: 'small',
+          } }
           theme='secondary'
         >
           <Flex gap={ 'small' }>
