@@ -38,7 +38,7 @@ export const QuantityValueCalculatorContent = (props: QuantityValueCalculatorCon
         >
           <strong>{formatNumber({ value: props.value })} {getAbbreviation(props.unitId)}</strong>
           <span>=</span>
-          <span>{formatNumber({ value: item.convertedValue ?? 0 })} {!_.isEmpty(item.unitAbbreviation) ? t(item.unitAbbreviation!) : ''}</span>
+          <span>{formatNumber({ value: item.convertedValue ?? 0 })} {!_.isEmpty(item.unitAbbreviation) ? t(item.unitAbbreviation) : ''}</span>
         </Flex>
       ))}
     </>

@@ -362,7 +362,7 @@ export type FieldCollectionLayoutDefinition = {
     /** collapsed */
     collapsed: boolean;
     /** Children */
-    children: any[];
+    children: object;
 };
 export type ClassInDataObjectFolder = {
     /** AdditionalAttributes */
@@ -422,11 +422,11 @@ export type ClassDefinition = {
     /** Namespace of preview generator */
     previewGeneratorReference: string;
     /** Composite indices */
-    compositeIndices: any[];
+    compositeIndices: object;
     /** Show field lookup */
     showFieldLookup: boolean;
     /** Visibility of properties for grid, search, ... */
-    propertyVisibility: any[];
+    propertyVisibility: object;
     /** Whether grid locking is enabled */
     enableGridLocking: boolean;
     /** Blocked variables for export */
@@ -462,7 +462,7 @@ export type ObjectBrickLayoutDefinition = {
     /** collapsed */
     collapsed: boolean;
     /** Children */
-    children: any[];
+    children: object;
 };
 export const {
     useClassDefinitionCollectionQuery,
