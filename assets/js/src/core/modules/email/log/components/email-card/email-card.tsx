@@ -1,17 +1,18 @@
 import { Collapse, ICollapseItem } from "@Pimcore/components/collapse/collapse"
 import { Flex } from "@Pimcore/components/flex/flex"
 import { Icon } from "@Pimcore/components/icon/icon"
-import { ITabsProps, Tabs } from "@Pimcore/components/tabs/tabs"
+import { Tabs } from "@Pimcore/components/tabs/tabs"
 import { Text } from "@Pimcore/components/text/text"
 import { EmailLog } from "@Pimcore/modules/email/emails-api-slice.gen"
-import { formatDateTime } from "@sdk/utils"
-import React from "react"
-import { useTranslation } from "react-i18next"
-import { ParametersTab } from "../parameters-tab/parameters-tab"
 import { IconButton } from "@sdk/components"
+import { formatDateTime } from "@sdk/utils"
+import React, { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { useEmailLog } from "../../hooks/use-email-log"
-import { TextTab } from "../text-tab/text-tab"
-import { HtmlTab } from "../html-tab/html-tab"
+import { EmailPreview } from "../email-preview/email-preview"
+import { ForwardModal } from "../forward-modal/forward-modal"
+import { ParametersTab } from "../parameters-tab/parameters-tab"
+import { TextPreview } from "../text-preview/text-preview"
 
 interface EmailCardProps {
   emails: EmailLog[]
@@ -19,19 +20,20 @@ interface EmailCardProps {
 
 export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { resend, forward, remove } = useEmailLog()
+  const { resend, remove } = useEmailLog()
+  const [isForwardModalOpen, setIsForwardModalOpen] = useState<boolean>(false)
 
   const createEmailEntry = (email: EmailLog): ICollapseItem => {
     const tabItems = [
       {
         label: t('widget.email-log.tab.text'),
         key: 'text',
-        children: <TextTab email={email} />
+        children: <TextPreview email={email} />
       },
       {
         label: t('widget.email-log.tab.html'),
         key: 'html',
-        children: <HtmlTab email={email} />
+        children: <EmailPreview email={email} />
       },
       {
         label: t('widget.email-log.tab.parameters'),
@@ -73,7 +75,7 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
 
               <IconButton
                 icon={{ value: 'flip-forward' }}
-                onClick={() => forward(email.id)}
+                onClick={() => setIsForwardModalOpen(true)}
               />
 
               <IconButton
@@ -87,6 +89,12 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
             destroyInactiveTabPane
             items={tabItems}
             noPadding
+          />
+
+          <ForwardModal
+            email={email}
+            open={isForwardModalOpen}
+            setOpen={setIsForwardModalOpen}
           />
         </Flex>
       )

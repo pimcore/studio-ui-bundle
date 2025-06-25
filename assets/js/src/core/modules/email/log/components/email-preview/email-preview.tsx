@@ -2,15 +2,16 @@ import { Content } from "@Pimcore/components/content/content"
 import { EmailLog, useEmailLogGetHtmlQuery } from "@Pimcore/modules/email/emails-api-slice.gen"
 import { isUndefined } from "lodash"
 import React from "react"
-import { useStyles } from "./html-tab-styles"
+import { useStyles } from "./email-preview-styles"
 
-interface HtmlTabProps {
+interface EmailPreviewProps {
   email: EmailLog
+  height?: number
 }
 
-export const HtmlTab = ({ email }: HtmlTabProps): React.JSX.Element => {
-  const { data, isLoading } = useEmailLogGetHtmlQuery({ id: email.id })
+export const EmailPreview = ({ email, height = 650 }: EmailPreviewProps): React.JSX.Element => {
   const { styles } = useStyles()
+  const { data, isLoading } = useEmailLogGetHtmlQuery({ id: email.id })
 
   return (
     <Content
@@ -18,6 +19,7 @@ export const HtmlTab = ({ email }: HtmlTabProps): React.JSX.Element => {
       none={isUndefined(data?.data) || data.data.length === 0}
     >
       <iframe
+        height={height}
         className={styles.iframe}
         srcDoc={data?.data || ""}
         sandbox=""

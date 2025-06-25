@@ -842,8 +842,10 @@ widget.email-log.tab.html: HTML
 widget.email-log.tab.parameters: Parameters
 widget.email-log.grid.name: Name
 widget.email-log.grid.value: Value
+email-log.subject: Subject
 email-log.resend.email.success: Email has been resent successfully
 email-log.forward.email.success: Email has been forwarded successfully
 email-log.forward.label: Forward Email
+email-log.send.label: Send
 email-log.forward.email-address.label: Email Address
 email-log.delete.email.success: Email has been deleted successfully

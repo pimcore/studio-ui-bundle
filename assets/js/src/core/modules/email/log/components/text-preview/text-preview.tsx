@@ -4,13 +4,13 @@ import { EmailLog, useEmailLogGetTextQuery } from "@Pimcore/modules/email/emails
 import ReactCodeMirror from "@uiw/react-codemirror"
 import { isUndefined } from "lodash"
 import React from "react"
-import { useStyles } from "./text-tab-styles"
+import { useStyles } from "./text-preview-styles"
 
-interface TextTabProps {
+interface TextPreviewProps {
   email: EmailLog
 }
 
-export const TextTab = ({ email }: TextTabProps): React.JSX.Element => {
+export const TextPreview = ({ email }: TextPreviewProps): React.JSX.Element => {
   const { data, isLoading } = useEmailLogGetTextQuery({ id: email.id })
   const { styles } = useStyles()
 

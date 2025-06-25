@@ -7,8 +7,7 @@ import { useFormModal } from "@Pimcore/components/modal/form-modal/hooks/use-for
 
 interface UseEmailLogHookReturn {
   resend: (id: EmailLogResendByIdApiArg['id'], onFinish?: () => void) => Promise<void>
-  forward: (id: EmailLogForwardByIdApiArg['id'], onFinish?: () => void) => Promise<void>
-  forwardEmail: (id: EmailLogForwardByIdApiArg['id'], to: Blocklist2, onFinish?: () => void) => Promise<void>
+  forward: (id: EmailLogForwardByIdApiArg['id'], to: Blocklist2['email'], onFinish?: () => void) => Promise<void>
   remove: (id: EmailLogDeleteApiArg['id'], onFinish?: () => void) => Promise<void>
 }
 
@@ -19,27 +18,6 @@ export const useEmailLog = (): UseEmailLogHookReturn => {
   const [forwardMutation] = useEmailLogForwardByIdMutation()
   const [deleteMutation] = useEmailLogDeleteMutation()
   const { success } = useMessage()
-
-  const forward = async (id: EmailLogForwardByIdApiArg['id'], onFinish?: (value: string) => void): Promise<void> => {
-    modal.input({
-      title: t('email-log.forward.label'),
-      label: t('email-log.forward.email-address.label'),
-      rule: {
-        required: true,
-        type: 'email',
-        message: t('error.error_validation.email_failed')
-      },
-      onOk: async (value: string) => {
-        await forwardEmail(
-          id,
-          { email: value },
-          () => {
-            onFinish?.(value)
-          }
-        )
-      }
-    })
-  }
 
   const resend = async (id: EmailLogResendByIdApiArg['id'], onFinish?: () => void): Promise<void> => {
     const resendEmailTask = resendMutation({
@@ -60,10 +38,12 @@ export const useEmailLog = (): UseEmailLogHookReturn => {
     }
   }
 
-  const forwardEmail = async (id: EmailLogForwardByIdApiArg['id'], to: Blocklist2, onFinish?: () => void): Promise<void> => {
+  const forward = async (id: EmailLogForwardByIdApiArg['id'], to: Blocklist2['email'], onFinish?: () => void): Promise<void> => {
     const forwardEmailTask = forwardMutation({
       id,
-      emailAddressParameter: to
+      emailAddressParameter: {
+        email: to
+      }
     })
 
     try {
@@ -102,7 +82,6 @@ export const useEmailLog = (): UseEmailLogHookReturn => {
   return {
     resend,
     forward,
-    forwardEmail,
     remove
   }
 }
