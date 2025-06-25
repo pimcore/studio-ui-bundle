@@ -13,23 +13,34 @@ import { Select } from '@Pimcore/components/select/select'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { type DefaultOptionType } from 'antd/es/select'
 
-interface SelectConfig {
+interface IObjectSelectConfig {
   fieldDefinition: {
-    options: string[]
+    options: Array<{ key: string, value: string }>
   }
+}
+
+interface IAssetSelectConfig {
+  options: string[]
 }
 
 export const DynamicTypeFieldFilterSelectComponent = (): React.JSX.Element => {
   const { setData, data, config: rawConfig } = useDynamicFilter()
   const [_value, setValue] = useState(data)
 
-  const config = rawConfig as SelectConfig
+  const config: IAssetSelectConfig | IObjectSelectConfig = rawConfig
+  let formattedOptions: DefaultOptionType[] = []
 
-  const rawOptions = config.fieldDefinition.options
-  const formattedOptions: DefaultOptionType[] = rawOptions.map((opt: any) => ({
-    label: opt?.key,
-    value: opt?.value
-  }))
+  if ('fieldDefinition' in config) {
+    formattedOptions = config?.fieldDefinition?.options.map((opt) => ({
+      label: opt?.key,
+      value: opt?.value
+    }))
+  } else {
+    formattedOptions = config?.options?.map((opt) => ({
+      label: opt,
+      value: opt
+    }))
+  }
 
   useEffect(() => {
     setValue(data)
