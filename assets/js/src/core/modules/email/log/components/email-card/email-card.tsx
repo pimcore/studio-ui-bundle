@@ -10,6 +10,8 @@ import { useTranslation } from "react-i18next"
 import { ParametersTab } from "../parameters-tab/parameters-tab"
 import { IconButton } from "@sdk/components"
 import { useEmailLog } from "../../hooks/use-email-log"
+import { TextTab } from "../text-tab/text-tab"
+import { HtmlTab } from "../html-tab/html-tab"
 
 interface EmailCardProps {
   emails: EmailLog[]
@@ -24,12 +26,12 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
       {
         label: t('widget.email-log.tab.text'),
         key: 'text',
-        children: <div className="email-log-content__body">TEXT</div>
+        children: <TextTab email={email} />
       },
       {
         label: t('widget.email-log.tab.html'),
         key: 'html',
-        children: <div className="email-log-content__headers">HTML</div>
+        children: <HtmlTab email={email} />
       },
       {
         label: t('widget.email-log.tab.parameters'),
@@ -50,18 +52,19 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
         <span>{`${t('widget.email-log.from')}: ${email.from}`}</span> |
         <span>{`${t('widget.email-log.to')}: ${email.to}`}</span>
       </Flex>,
+      theme: email.hasError ? 'error' : 'default',
       subLabelPosition: 'inline',
       extra: <Flex gap={4} align="center">
-        {!email.hasError && <Icon value="x-circle" />}
+        {email.hasError && <Icon value="x-circle" />}
         <span>{formatDateTime({ timestamp: email.sentDate, dateStyle: 'short', timeStyle: 'short' })}</span>
       </Flex>,
       children: (
         <Flex className="email-log-content" vertical>
           <Flex className="email-log-content__header" justify="space-between">
-            <div>
+            <Flex vertical>
               <Text type="secondary">{`${t('widget.email-log.from')}: ${email.from}`}</Text>
               <Text type="secondary">{`${t('widget.email-log.to')}: ${email.from}`}</Text>
-            </div>
+            </Flex>
             <div>
               <IconButton
                 icon={{ value: 'vector' }}
