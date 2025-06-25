@@ -19,6 +19,7 @@ import { useWebsiteSetting } from '../hooks/use-website-settings'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { Site } from '@Pimcore/modules/document/sites-slice.gen'
 import { isUndefined } from 'lodash'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 type WebsiteSettingEnrichedRow = WebsiteSettingRow & {
   siteDomain: string,
@@ -39,6 +40,17 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
   const { updateSettingById } = useWebsiteSetting()
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
 
+  const settings = useSettings()
+    const availableLanguages = settings.availableAdminLanguages
+  const validLanguages: string[]= settings.validLanguages
+
+const languageSelectionOptions = validLanguages.map(validLang => {
+  const match = availableLanguages.find(
+    lang => lang.language === validLang
+  );
+  return match ? match.display : validLang;
+});
+  
   const {getAllSites, getSiteById} = useSites()
 
   const tableData: WebsiteSettingEnrichedRow[] = websiteSettingRows.map(row => {
@@ -68,7 +80,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
     }),
     columnHelper.accessor('language', {
       header: t('website-settings.columns.language'),
-      meta: { editable: true },
+      meta: { type: 'select', editable: true, config: { options: languageSelectionOptions } },
       size: 100
     }),
     columnHelper.accessor('data', {
