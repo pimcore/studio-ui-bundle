@@ -29,6 +29,7 @@ const languageSelectionOptions = validLanguages.map(validLang => {
   return ({
   value: match.language,
   label: `${match.display} [${match.language}]`,
+  displayValue: match.language
 });
 });
 
