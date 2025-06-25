@@ -129,17 +129,11 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
     const onCreateProperty = async (name: string, type: string): Promise<void> => {
     const isValidNameInput = name !== "" && name !== undefined
     const isValidTypeSelectValue = type !== undefined && type !== ""
-
-    console.log("name", name);
-        console.log("type", type);
-
     
     if (!isValidNameInput || !isValidTypeSelectValue) {
       showMandatoryModal()
       return
     }
-
-    console.log("setting", websiteSettings);
     
     if (websiteSettingRows?.find((setting) => setting.name === name) !== undefined) {
       showDuplicateEntryModal()

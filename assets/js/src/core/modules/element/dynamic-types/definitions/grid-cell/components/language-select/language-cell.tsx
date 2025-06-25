@@ -26,9 +26,11 @@ const languageSelectionOptions = validLanguages.map(validLang => {
   if (!match) {
     trackError(new GeneralError(`Language "${validLang}" not found in availableLanguages`));
   }
-  return `${match.display} [${match.language}]`;
+  return ({
+  value: match.language,
+  label: `${match.display} [${match.language}]`,
 });
-
+});
 
   const columnConfig: SelectCellConfig = {
     options: languageSelectionOptions
