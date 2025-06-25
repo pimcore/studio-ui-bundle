@@ -19,7 +19,7 @@ import { type ElementInfo } from './element-cell'
 import { isPlainObject } from 'lodash'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 import { type ElementReference } from '@Pimcore/modules/element/element-helper'
-import { Flex, IconButton, useEditMode } from '@sdk/components'
+import { IconButton, useEditMode } from '@sdk/components'
 
 export interface ElementCellContentProps extends DefaultCellProps {
   dropDisabled?: boolean

@@ -14,6 +14,7 @@ import { SelectCell, type SelectCellConfig } from '@Pimcore/modules/element/dyna
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { addColumnConfig } from '@Pimcore/components/grid/columns/helpers'
 import { GeneralError, trackError } from '@sdk/modules/app'
+import { isUndefined } from 'lodash'
 
 export const LanguageCell = (props: DefaultCellProps): React.JSX.Element => {
   const settings = useSettings()
@@ -23,7 +24,7 @@ export const LanguageCell = (props: DefaultCellProps): React.JSX.Element => {
 
   const languageSelectionOptions = validLanguages.map(validLang => {
     const match = availableLanguages.find(lang => lang.language === validLang)
-    if (!match) {
+    if (!isUndefined(match)) {
       trackError(new GeneralError(`Language "${validLang}" not found in availableLanguages`))
     }
     return ({

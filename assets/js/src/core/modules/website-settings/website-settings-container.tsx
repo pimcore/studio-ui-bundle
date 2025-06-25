@@ -16,11 +16,11 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
-import { Box, Button, Form, IconTextButton, Input, ModalFooter, Pagination, SearchInput, Select, Space, useModal } from '@sdk/components'
+import { Box, Button, Form, IconTextButton, Input, ModalFooter, Pagination, SearchInput, Select, useModal } from '@sdk/components'
 import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { isUndefined } from 'lodash'
-import { useWebsiteSettingsGetCollectionQuery, useWebsiteSettingsListTypesQuery, type WebsiteSetting, type WebsiteSettingsGetCollectionApiArg, WebsiteSettingsType } from './website-settings-api-slice-enhanced'
+import { useWebsiteSettingsGetCollectionQuery, useWebsiteSettingsListTypesQuery, type WebsiteSetting, type WebsiteSettingsGetCollectionApiArg } from './website-settings-api-slice-enhanced'
 import { Table } from './table/table'
 import { useWebsiteSetting } from './hooks/use-website-settings'
 
@@ -32,13 +32,18 @@ export interface SelectOption {
 }
 
 export const WebsiteSettingsContainer = (): React.JSX.Element => {
-  const [form] = Form.useForm()
+  interface FormValues {
+    name: string
+    type: string
+  }
+
+  const [form] = Form.useForm<FormValues>()
 
   const [filter, setFilter] = useState<string>('')
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
 
-  const { data: settingTypes, isLoading: settingTypesLoading } = useWebsiteSettingsListTypesQuery()
+  const { data: settingTypes } = useWebsiteSettingsListTypesQuery()
 
   const websiteSettingTypes = settingTypes?.items
 

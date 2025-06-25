@@ -19,6 +19,7 @@ import { useWebsiteSetting } from '../hooks/use-website-settings'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { type Site } from '@Pimcore/modules/document/sites-slice.gen'
 import { isUndefined } from 'lodash'
+import { GeneralError, trackError } from '@sdk/modules/app'
 
 type WebsiteSettingEnrichedRow = WebsiteSettingRow & {
   siteDomain: string
@@ -41,13 +42,18 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
 
   const { getAllSites, getSiteById } = useSites()
 
-  const tableData: WebsiteSettingEnrichedRow[] = websiteSettingRows.map(row => {
-    const site = getSiteById(row.siteId)
+  const tableData: WebsiteSettingEnrichedRow[] = websiteSettingRows.map((row: WebsiteSettingEnrichedRow) => {
+    if (typeof row.siteId !== 'number') {
+      trackError(new GeneralError(`Expected row.siteId to be a number, but got ${typeof row.siteId}`))
+    }
+
+    const site = getSiteById(row.siteId as number)
     const domain = !isUndefined(site) ? site.domain : ''
-    return ({
+
+    return {
       ...row,
       siteDomain: domain
-    })
+    }
   })
 
   const availableSites: Site[] = getAllSites()
