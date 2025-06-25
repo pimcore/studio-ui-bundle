@@ -82,20 +82,20 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
     <div className={ styles.form }>
       <form onSubmit={ handleAuthentication }>
         <Input
-            autoComplete="username"
-            name={'username'}
+          aria-label={ t('login-form.username') }
+          autoComplete="username"
+          name={ 'username' }
           onChange={ (e) => { setFormState({ ...formState, username: e.target.value }) } }
           placeholder={ t('login-form.username') }
           prefix={ <Icon value="user" /> }
-            aria-label={ t('login-form.username') }
         />
         <Input.Password
-            autoComplete="current-password"
-            name={'password'}
+          aria-label={ t('login-form.password') }
+          autoComplete="current-password"
+          placeholder={ t('login-form.password') }
+          name={ 'password' }
           // iconRender={ (visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />) }
           onChange={ (e) => { setFormState({ ...formState, password: e.target.value }) } }
-          placeholder={ t('login-form.password') }
-            aria-label={ t('login-form.password') }
         />
         <div className={ 'flex-space' }>
           <Checkbox
