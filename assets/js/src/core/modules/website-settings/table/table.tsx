@@ -19,13 +19,12 @@ import { useWebsiteSetting } from '../hooks/use-website-settings'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { Site } from '@Pimcore/modules/document/sites-slice.gen'
 import { isUndefined } from 'lodash'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 type WebsiteSettingEnrichedRow = WebsiteSettingRow & {
   siteDomain: string
 }
 
-type WebsiteSettingEnrichedWithActions = WebsiteSettingEnrichedRow & {
+export type WebsiteSettingEnrichedWithActions = WebsiteSettingEnrichedRow & {
   actions: React.ReactNode
 }
 
@@ -39,6 +38,8 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
   const { t } = useTranslation()
   const { updateSettingById } = useWebsiteSetting()
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
+    
+  console.log({websiteSettingRows});
   
   const {getAllSites, getSiteById} = useSites()
 
@@ -54,6 +55,38 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
   const availableSites: Site[] = getAllSites()
   const siteDomains = availableSites.map(site => site.domain)
 
+    const onUpdateCellData = async ({
+    columnId,
+    value,
+    rowData
+  }: {
+    columnId: string
+    value: unknown
+    rowData: WebsiteSettingRow
+  }): Promise<void> => {
+    const rowId = rowData.rowId
+    const updatedRow: WebsiteSettingRow = { ...rowData, [columnId]: value }
+
+    setWebsiteSettingRows(prev =>
+      prev.map(row =>
+        row.rowId === rowId ? updatedRow : row
+      )
+    )
+
+    setModifiedCells([{ columnId, rowIndex: rowId }])
+
+    const { success } = await updateSettingById(updatedRow.id, updatedRow)
+
+    if (success) setModifiedCells([])
+    else {
+      setWebsiteSettingRows(prev =>
+        prev.map(row =>
+          row.rowId === rowId ? rowData : row
+        )
+      )
+    }
+  }
+  
   const columnHelper = createColumnHelper<WebsiteSettingEnrichedWithActions>()
 
   const tableColumns = [
@@ -92,42 +125,11 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
         <ActionsCell
           info={ info }
           setWebsiteSettingRows={ setWebsiteSettingRows }
+          onUpdateCellData={onUpdateCellData}
         />
       )
     })
   ]
-
-  const onUpdateCellData = async ({
-    columnId,
-    value,
-    rowData
-  }: {
-    columnId: string
-    value: unknown
-    rowData: WebsiteSettingRow
-  }): Promise<void> => {
-    const rowId = rowData.rowId
-    const updatedRow: WebsiteSettingRow = { ...rowData, [columnId]: value }
-
-    setWebsiteSettingRows(prev =>
-      prev.map(row =>
-        row.rowId === rowId ? updatedRow : row
-      )
-    )
-
-    setModifiedCells([{ columnId, rowIndex: rowId }])
-
-    const { success } = await updateSettingById(updatedRow.id, updatedRow)
-
-    if (success) setModifiedCells([])
-    else {
-      setWebsiteSettingRows(prev =>
-        prev.map(row =>
-          row.rowId === rowId ? rowData : row
-        )
-      )
-    }
-  }
 
   return (
     <div>
