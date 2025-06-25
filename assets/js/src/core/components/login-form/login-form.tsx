@@ -82,7 +82,7 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
     <div className={ styles.form }>
       <form onSubmit={ handleAuthentication }>
         <Input
-            autocomplete="username"
+            autoComplete="username"
             name={'username'}
           onChange={ (e) => { setFormState({ ...formState, username: e.target.value }) } }
           placeholder={ t('login-form.username') }
@@ -90,7 +90,7 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
             aria-label={ t('login-form.username') }
         />
         <Input.Password
-            autocomplete="current-password"
+            autoComplete="current-password"
             name={'password'}
           // iconRender={ (visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />) }
           onChange={ (e) => { setFormState({ ...formState, password: e.target.value }) } }
