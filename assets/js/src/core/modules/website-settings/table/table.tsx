@@ -110,7 +110,8 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
       header: t('website-settings.columns.value'),
       meta: {
         type: 'element',
-        editable: true
+        editable: true,
+        clearable: true
       },
       size: 150
     }),

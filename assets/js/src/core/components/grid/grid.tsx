@@ -46,6 +46,7 @@ import { Resizer } from './resizer/resizer'
 
 export interface ColumnMetaType {
   editable?: boolean
+  clearable?: boolean
   autoWidth?: boolean
   type?: string
   columnKey?: string
