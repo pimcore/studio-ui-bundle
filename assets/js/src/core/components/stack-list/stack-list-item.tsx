@@ -31,7 +31,7 @@ export const StackListItem = (props: StackListItemProps): React.JSX.Element => {
   const { listeners, setNodeRef, setActivatorNodeRef, transform, transition } = useSortable({ id })
 
   const style = {
-    transform: CSS.Transform.toString(transform),
+    transform: CSS.Translate.toString(transform),
     transition: transition ?? undefined
   }
 

@@ -10,11 +10,14 @@
 
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import React, { createContext, useMemo, useState } from 'react'
-import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type GridColumnConfiguration as AssetGridColumnConfig } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type GridColumnConfiguration as ObjectGridColumnConfig } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useTranslation } from 'react-i18next'
 
 // @todo: Create a union type for all the different element types
-export type AvailableColumn = GridColumnConfiguration
+export type AvailableColumn = (AssetGridColumnConfig | ObjectGridColumnConfig) & {
+  __meta?: Record<string, any>
+}
 
 export interface OnMenuItemClickEvent {
   column: AvailableColumn

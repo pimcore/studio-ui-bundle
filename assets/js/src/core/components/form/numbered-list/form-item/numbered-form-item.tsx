@@ -17,7 +17,7 @@ export interface NumberedFormItemProps {
   componentProps: FormItemProps
 }
 
-export const NumberedFormItem = ({ Component, componentProps }: NumberedFormItemProps): React.JSX.Element => {
+const NumberedFormItem = ({ Component, componentProps }: NumberedFormItemProps): React.JSX.Element => {
   const { children, ...baseProps } = componentProps
 
   const currentChildren = children as unknown as React.ReactNode
@@ -30,3 +30,7 @@ export const NumberedFormItem = ({ Component, componentProps }: NumberedFormItem
     </Component>
   )
 }
+
+const memoedNumberedFormItem = React.memo(NumberedFormItem);
+
+export { memoedNumberedFormItem as NumberedFormItem }

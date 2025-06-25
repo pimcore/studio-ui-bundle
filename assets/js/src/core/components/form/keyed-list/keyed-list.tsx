@@ -27,7 +27,10 @@ export interface KeyedListProps {
 const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: KeyedListProps): React.JSX.Element => {
   const initialValue = isArray(baseValue) ? {} : baseValue ?? {}
   const [value, setValue] = useState(cloneDeep(initialValue))
-  const { name } = useItem()
+  const { name: tempItemName } = useItem()
+
+  const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
+  const name = useMemo(() => itemName[itemName.length - 1], [itemName])
 
   const onChange: KeyedListData['onChange'] = (newValue) => {
     baseOnChange !== undefined && baseOnChange(newValue)
@@ -70,7 +73,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   }
 
   const update: KeyedListData['operations']['update'] = (subFieldname, newSubValue, isInitialValue) => {
-    const currentName: string[] = isArray(name) ? name : [name]
+    const currentName: string[] = isArray(itemName) ? itemName : [itemName]
     const currentSubFieldname: string[] = isArray(subFieldname) ? subFieldname : [subFieldname]
 
     const nameDifference: string[] = []
@@ -101,7 +104,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   }
 
   const getValue = (subFieldNames: string[]): any => {
-    const currentName: string[] = isArray(name) ? name : [name]
+    const currentName: string[] = isArray(itemName) ? itemName : [itemName]
     const nameDifference: string[] = []
 
     for (let i = 0; i < subFieldNames.length; i++) {

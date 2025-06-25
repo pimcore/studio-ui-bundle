@@ -18,7 +18,9 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/ObjectDataRegistry': 'DynamicTypes/ObjectDataRegistry',
   'DynamicTypes/DocumentEditableRegistry': 'DynamicTypes/DocumentEditableRegistry',
   'DynamicTypes/AssetRegistry': 'DynamicTypes/AssetRegistry',
-  'DynamicTypes/ObjectRegistry': 'DynamicTypes/ObjectRegistry'
+  'DynamicTypes/ObjectRegistry': 'DynamicTypes/ObjectRegistry',
+  'DynamicTypes/Grid/SourceFieldsRegistry': 'DynamicTypes/Grid/SourceFieldsRegistry',
+  'DynamicTypes/Grid/TransformersRegistry': 'DynamicTypes/Grid/TransformersRegistry',
 }
 
 export const serviceIds = {
@@ -232,6 +234,12 @@ export const serviceIds = {
   'DynamicTypes/Object/Folder': 'DynamicTypes/Object/Folder',
   'DynamicTypes/Object/Object': 'DynamicTypes/Object/Object',
   'DynamicTypes/Object/Variant': 'DynamicTypes/Object/Variant',
+
+  // Advanced Columns source fields
+  'DynamicTypes/Grid/SourceFields/Text': 'DynamicTypes/Grid/SourceFields/Text',
+
+  // Advanced Columns transformers
+  'DynamicTypes/Grid/Transformers/ChangeCase': 'DynamicTypes/Grid/SourceFields/ChangeCase',
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',

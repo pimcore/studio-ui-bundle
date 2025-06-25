@@ -178,6 +178,9 @@ import { DynamicTypeFieldFilterCheckbox } from '@Pimcore/modules/element/dynamic
 import { DynamicTypeFieldFilterTextArea } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/text-area/dynamic-type-field-filter-text-area'
 import { BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
 import { DynamicTypeDocumentEditableTextarea } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-textarea'
+import { DynamicTypePipelineRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-registry'
+import { DynamicTypePipelineGridSourceFieldsText } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/types/text/text'
+import { DynamicTypePipelineGridTransformersChangeCase } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/change-case/change-case'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -380,6 +383,14 @@ container.bind(serviceIds['DynamicTypes/ObjectRegistry']).to(DynamicTypeObjectRe
 container.bind(serviceIds['DynamicTypes/Object/Folder']).to(DynamicTypeObjectFolder).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Object/Object']).to(DynamicTypeObjectObject).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Object/Variant']).to(DynamicTypeObjectVariant).inSingletonScope()
+
+// Advanced columns source fields
+container.bind(serviceIds['DynamicTypes/Grid/SourceFieldsRegistry']).to(DynamicTypePipelineRegistry).inSingletonScope();
+container.bind(serviceIds['DynamicTypes/Grid/SourceFields/Text']).to(DynamicTypePipelineGridSourceFieldsText).inSingletonScope()
+
+// Advanced columns transformers
+container.bind(serviceIds['DynamicTypes/Grid/TransformersRegistry']).to(DynamicTypePipelineRegistry).inSingletonScope();
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/ChangeCase']).to(DynamicTypePipelineGridTransformersChangeCase).inSingletonScope()
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()

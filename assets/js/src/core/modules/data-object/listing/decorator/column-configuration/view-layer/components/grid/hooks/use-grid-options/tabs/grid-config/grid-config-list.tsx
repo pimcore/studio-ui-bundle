@@ -20,6 +20,7 @@ import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { uuid } from '@Pimcore/utils/uuid'
 import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-list-item'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+import { AdvancedColumnForm } from './advanced-column-form'
 
 interface GridConfigListProps {
   columns: AvailableColumn[]
@@ -34,26 +35,54 @@ interface ColumnStackListProps extends Omit<StackListProps, 'items'> {
 }
 
 /* eslint-disable react/jsx-key */
-export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Element => {
-  const { setColumns } = useGridConfig()
+export const GridConfigList = (): React.JSX.Element => {
+  const { setColumns, columns } = useGridConfig()
   const settings = useSettings()
   const { t } = useTranslation()
+
+  const onAdvancedColumnChange = (column: AvailableColumn, id: string): void => {
+    const itemList = columns.map((item) => {
+      if (item.key === column.key) {
+        return {
+          ...item,
+          ...column,
+          __meta: {
+            ...item.__meta,
+            advancedColumnConfig: column.__meta?.advancedColumnConfig
+          }
+        }
+      }
+      return item
+    })
+
+    setColumns(itemList)
+  }
 
   const stackListItems: ColumnStackListProps['items'] = columns.map((column) => {
     const uniqueId = uuid()
     let translationKey = `${column.key}`
+    const isAdvancedColumn = column.key === 'advanced'
+    const advancedColumnName = column?.__meta?.advancedColumnConfig?.title
 
     if ('fieldDefinition' in column.config) {
       const fieldDefinition = column.config.fieldDefinition as Record<string, any>
       translationKey = fieldDefinition?.title ?? column.key
     }
 
+    console.log({column})
+
     return {
       id: uniqueId,
       sortable: true,
       meta: column,
 
-      children: <Tag>{t(`${translationKey}`)}</Tag>,
+      children: isAdvancedColumn ? <Tag>{advancedColumnName}</Tag> : <Tag>{t(`${translationKey}`)}</Tag>,
+
+      ...(column.key === 'advanced' ? {
+        body: (
+          <AdvancedColumnForm column={column} onChange={(newColumn) => onAdvancedColumnChange(newColumn, uniqueId)} />
+        )
+      } : {}),
 
       renderRightToolbar: (
         <Space size='mini'>
@@ -67,7 +96,7 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
       )
     }
   })
-
+    
   return (
     <>
       { stackListItems.length === 0 && <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } /> }

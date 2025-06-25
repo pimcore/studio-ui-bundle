@@ -9,7 +9,7 @@
  */
 
 import { type Form, type FormItemProps } from 'antd'
-import React, { useMemo } from 'react'
+import React from 'react'
 import { KeyedFormItemControl } from './keyed-form-item-control'
 
 export interface KeyedFormItemProps {
@@ -17,15 +17,18 @@ export interface KeyedFormItemProps {
   componentProps: FormItemProps
 }
 
-export const KeyedFormItem = ({ Component, componentProps }: KeyedFormItemProps): React.JSX.Element => {
+const KeyedFormItem = ({ Component, componentProps }: KeyedFormItemProps): React.JSX.Element => {
   const { children, ...baseProps } = componentProps
   const currentChildren = children as unknown as React.ReactNode
 
-  return useMemo(() => (
-    <Component { ...baseProps } >
-      <KeyedFormItemControl>
-        { currentChildren }
-      </KeyedFormItemControl>
-    </Component>
-  ), [baseProps.name])
+  return (
+  <Component { ...baseProps } >
+    <KeyedFormItemControl>
+      { currentChildren }
+    </KeyedFormItemControl>
+  </Component>
+  )
 }
+
+const memoedKeyedFormItem = React.memo(KeyedFormItem);
+export { memoedKeyedFormItem as KeyedFormItem }

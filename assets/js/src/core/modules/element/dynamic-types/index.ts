@@ -158,6 +158,9 @@ import { type DynamicTypeDocumentEditableInput } from './definitions/document/ed
 import { type DynamicTypeDocumentEditableWysiwyg } from './definitions/document/editable/types/dynamic-type-document-editable-wysiwyg'
 import { type DynamicTypeFieldFilterCheckbox } from './definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
 import { type DynamicTypeDocumentEditableTextarea } from './definitions/document/editable/types/dynamic-type-document-editable-textarea'
+import { DynamicTypePipelineRegistry } from './definitions/pipelines/dynamic-type-pipeline-registry'
+import { DynamicTypePipelineGridSourceFieldsText } from './definitions/pipelines/grid/source-fields/types/text/text'
+import { DynamicTypePipelineGridTransformersChangeCase } from './definitions/pipelines/grid/transformers/types/change-case/change-case'
 
 moduleSystem.registerModule({
   onInit () {
@@ -326,5 +329,13 @@ moduleSystem.registerModule({
     objectRegistry.registerDynamicType(container.get<DynamicTypeObjectFolder>(serviceIds['DynamicTypes/Object/Folder']))
     objectRegistry.registerDynamicType(container.get<DynamicTypeObjectObject>(serviceIds['DynamicTypes/Object/Object']))
     objectRegistry.registerDynamicType(container.get<DynamicTypeObjectVariant>(serviceIds['DynamicTypes/Object/Variant']))
+
+    const sourceFieldsRegistry = container.get<DynamicTypePipelineRegistry>(serviceIds['DynamicTypes/Grid/SourceFieldsRegistry']);
+    
+    sourceFieldsRegistry.registerDynamicType(container.get<DynamicTypePipelineGridSourceFieldsText>(serviceIds['DynamicTypes/Grid/SourceFields/Text']))
+
+    const transformersRegistry = container.get<DynamicTypePipelineRegistry>(serviceIds['DynamicTypes/Grid/TransformersRegistry']);
+    
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersChangeCase>(serviceIds['DynamicTypes/Grid/Transformers/ChangeCase']))
   }
 })
