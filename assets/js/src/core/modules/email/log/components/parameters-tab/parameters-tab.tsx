@@ -2,7 +2,7 @@ import { Content } from "@Pimcore/components/content/content"
 import { Grid } from "@Pimcore/components/grid/grid"
 import meta from "@Pimcore/components/iframe/iframe.stories"
 import { EmailLog, EmailLogObjectParameterData, EmailLogParameters, useEmailLogGetParamsQuery } from "@Pimcore/modules/email/emails-api-slice.gen"
-import { DefaultCell } from "@sdk/components"
+import { addColumnMeta, DefaultCell } from "@sdk/components"
 import { ElementCell, TextCell } from "@sdk/modules/element"
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table"
 import { isNil, isUndefined } from "lodash"
@@ -35,14 +35,9 @@ export const ParametersTab = ({ email }: ParametersTabProps): React.JSX.Element 
       cell: (info) => {
         const row: ExtendedEmailLogParameters = info.row.original
 
-        console.log('Cell', row, info)
-
-        return <>
-          {isNil(row.objectData)
-            ? <DefaultCell {...{ ...info, column: { ...info.column, columnDef: { ...info.column.columnDef, meta: { ...info.column.columnDef.meta ?? {}, type: 'text' } } } }} />
-            : <DefaultCell {...{ ...info, column: { ...info.column, columnDef: { ...info.column.columnDef, meta: { ...info.column.columnDef.meta ?? {}, type: 'element' } } } }} />
-          }
-        </>
+        return <DefaultCell
+          {...addColumnMeta(info, { type: isNil(row.objectData) ? 'text' : 'element' })}
+        />
       }
     })
   ]
