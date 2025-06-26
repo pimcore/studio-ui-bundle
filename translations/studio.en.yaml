@@ -14,6 +14,7 @@ sidebar.selected_elements: Selected Elements
 sidebar.grid_config: Grid config
 sidebar.tag_filters: Tag Filters
 sidebar.search_filter: Search & Filter
+site-domain.main_site: Main Site
 modal-search.field.mimeType: MIME-Type
 modal-search.field.thumbnail: Thumbnail
 modal-search.field.id: ID

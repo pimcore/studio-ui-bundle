@@ -50,7 +50,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
     }
 
     const site = getSiteById(row.siteId)
-    const domain = !isUndefined(site) ? site.domain : ''
+    const domain = !isUndefined(site) ? t('site.domain.' + site.domain) : ''
 
     return {
       ...row,
@@ -59,7 +59,12 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
   })
 
   const availableSites: Site[] = getAllSites()
-  const siteDomains = availableSites.map(site => site.domain)
+  const siteDomains = availableSites.map(site => ({
+    value: site.id,
+    label: site.domain
+  }))
+
+  console.log('siteDomains', siteDomains)
 
   const onUpdateCellData = async ({
     columnId,
