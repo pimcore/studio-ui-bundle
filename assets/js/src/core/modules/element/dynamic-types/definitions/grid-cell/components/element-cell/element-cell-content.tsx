@@ -16,10 +16,10 @@ import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppa
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
 import { type ElementInfo } from './element-cell'
-import { isPlainObject } from 'lodash'
+import { isPlainObject, isUndefined } from 'lodash'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 import { type ElementReference } from '@Pimcore/modules/element/element-helper'
-import { IconButton, useEditMode } from '@sdk/components'
+import { useEditMode } from '@sdk/components'
 
 export interface ElementCellContentProps extends DefaultCellProps {
   dropDisabled?: boolean
@@ -73,6 +73,8 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
 
   const elementInfo = getElementInfo(props)
 
+  const showClearIcon = props.clearDisabled !== true && (!isUndefined(elementInfo.fullPath) && elementInfo.fullPath !== '')
+
   return (
     <div
       className={ [styles.link, ...getStateClasses()].join(' ') }
@@ -80,9 +82,11 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
     >
       {elementInfo.fullPath !== false && (
         <ElementTag
+          closeIcon={ showClearIcon }
           disabled={ elementInfo.disabled }
           elementType={ elementInfo.elementType }
           id={ elementInfo.id }
+          onClose={ () => { fireOnUpdateCellDataEvent('') } }
           path={ elementInfo.fullPath }
           published={ elementInfo.published }
         />
@@ -92,13 +96,6 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
         <Icon
           className={ styles.elementOptionsIcon }
           value={ 'drop-target' }
-        />
-        )}
-        { props.clearDisabled !== true && (
-        <IconButton
-          icon={ { value: 'trash' } }
-          onClick={ () => { fireOnUpdateCellDataEvent('') } }
-          type={ 'link' }
         />
         )}
       </div>

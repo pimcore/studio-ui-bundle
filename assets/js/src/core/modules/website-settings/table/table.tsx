@@ -12,13 +12,15 @@ import React, { useState } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { type ModifiedCells } from '@sdk/modules/element'
+import { useElementHelper, type ElementInfo, type ModifiedCells, allElementTypes } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
 import { type SelectOption, type WebsiteSettingRow } from '../website-settings-container'
 import { useWebsiteSetting } from '../hooks/use-website-settings'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { type Site } from '@Pimcore/modules/document/sites-slice.gen'
-import { isUndefined } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
+import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
+import { useElementGetter } from '../hooks/use-element-getter'
 
 type WebsiteSettingEnrichedRow = WebsiteSettingRow & {
   siteDomain: string
@@ -40,6 +42,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
 
   const { getAllSites, getSiteById } = useSites()
+  const { mapToElementType } = useElementHelper()
 
   const tableData: WebsiteSettingEnrichedRow[] = websiteSettingRows.map((row: WebsiteSettingEnrichedRow) => {
     if (row.siteId == null) {
@@ -124,9 +127,21 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
       meta: {
         type: 'element',
         editable: true,
-        clearable: true
+        clearable: true,
+        config: {
+          allowedTypes: allElementTypes,
+          getElementInfo: (cellProps: DefaultCellProps): ElementInfo => {
+            const row = cellProps.row.original
+            const { elementId } = useElementGetter({ elementType: row.type, elementPath: row.data })
+            return {
+              elementType: mapToElementType(String(row.type), true),
+              id: elementId,
+              fullPath: isEmpty(row.data) ? '' : decodeURIComponent(String(row.data))
+            }
+          }
+        }
       },
-      size: 150
+      size: 300
     }),
     columnHelper.accessor('siteDomain', {
       header: t('website-settings.columns.site'),
