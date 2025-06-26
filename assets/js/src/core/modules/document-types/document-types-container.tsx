@@ -28,7 +28,7 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
   const { createNewDocumentType, createLoading } = useDocumentType()
   const config = useDocumentConfig()
 
-  const { data, isLoading: documentTypesLoading, isFetching: documentTypesFetching, isError, error, refetch } = useDocumentDocTypeListQuery({})
+  const { data, isLoading: documentTypesLoading, isFetching: documentTypesFetching, error, refetch } = useDocumentDocTypeListQuery({})
 
   const handleRefetch = (): void => {
     void refetch().catch(() => {
@@ -45,9 +45,9 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
   const documentTypes = data?.items ?? []
 
   const sortedRows = [...documentTypeRows].sort((a, b) => {
-  const nameA = a.name ?? ''
-  const nameB = b.name ?? ''
-  return nameA.localeCompare(nameB)
+    const nameA = a.name ?? ''
+    const nameB = b.name ?? ''
+    return nameA.localeCompare(nameB)
   })
 
   useEffect(() => {
@@ -71,10 +71,10 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
   }
 
   useEffect(() => {
-    if (isError) {
+    if (!isUndefined(error)) {
       trackError(new ApiError(error))
     }
-  }, [isError])
+  }, [error])
 
   return (
     <ContentLayout

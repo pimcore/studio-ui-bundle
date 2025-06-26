@@ -23,27 +23,27 @@ interface UseDocumentConfigReturn {
 }
 
 export const useDocumentConfig = (): UseDocumentConfigReturn => {
-  const { data: controllers, isError: isControllerError, error: controllerError } = useDocumentAvailableControllersListQuery()
-  const { data: templates, isError: isTemplatesError, error: templatesError } = useDocumentAvailableTemplatesListQuery()
-  const { data: docTypes, isError: isDocTypesError, error: docTypeError } = useDocumentDocTypeTypeListQuery()
+  const { data: controllers, error: controllerError } = useDocumentAvailableControllersListQuery()
+  const { data: templates, error: templatesError } = useDocumentAvailableTemplatesListQuery()
+  const { data: docTypes, error: docTypeError } = useDocumentDocTypeTypeListQuery()
 
   useEffect(() => {
-    if (isControllerError) {
+    if (!isUndefined(controllerError)) {
       trackError(new ApiError(controllerError))
     }
-  }, [isControllerError])
+  }, [controllerError])
 
   useEffect(() => {
-    if (isTemplatesError) {
+    if (!isUndefined(templatesError)) {
       trackError(new ApiError(templatesError))
     }
-  }, [isTemplatesError])
+  }, [templatesError])
 
   useEffect(() => {
-    if (isDocTypesError) {
+    if (!isUndefined(docTypeError)) {
       trackError(new ApiError(docTypeError))
     }
-  }, [isDocTypesError])
+  }, [docTypeError])
 
   return {
     controllers: !isUndefined(controllers) ? controllers?.items : [],
