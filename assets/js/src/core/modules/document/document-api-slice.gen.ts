@@ -124,7 +124,7 @@ const injectedRtkApi = api
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/documents/site/${queryArg.id}`,
                     method: "POST",
-                    body: queryArg.updateSite,
+                    body: queryArg.update20Site,
                 }),
                 invalidatesTags: ["Documents"],
             }),
@@ -295,7 +295,7 @@ export type DocumentUpdateSiteApiResponse = unknown;
 export type DocumentUpdateSiteApiArg = {
     /** Id of the document */
     id: number;
-    updateSite: UpdateSite;
+    update20Site: Update20Site;
 };
 export type DocumentDeleteSiteApiResponse = unknown;
 export type DocumentDeleteSiteApiArg = {
@@ -317,13 +317,13 @@ export type DocumentDeleteTranslationApiArg = {
     translationId: number;
 };
 export type DocumentGetTranslationsApiResponse =
-    /** status 200 Get all existing translations */ DocumentTranslationLinks;
+    /** status 200 Get all existing translations */ Document20Translation20Links;
 export type DocumentGetTranslationsApiArg = {
     /** Id of the document */
     id: number;
 };
 export type DocumentGetTranslationParentByLanguageApiResponse =
-    /** status 200 Parent translation document data */ DocumentTranslationParent;
+    /** status 200 Parent translation document data */ Document20Translation20Parent;
 export type DocumentGetTranslationParentByLanguageApiArg = {
     /** Id of the document */
     id: number;
@@ -451,7 +451,7 @@ export type DocTypeType = {
     /** Name */
     name: string;
     /** Valid table */
-    validTable: string;
+    validTable?: string;
     /** Children supported */
     childrenSupported?: boolean;
     /** Direct route */
@@ -619,7 +619,7 @@ export type Site = {
     /** Root path */
     rootPath: string | null;
 };
-export type UpdateSite = {
+export type Update20Site = {
     /** Main domain */
     mainDomain: string;
     /** Domains */
@@ -631,13 +631,13 @@ export type UpdateSite = {
     /** Redirect to main domain */
     redirectToMainDomain: boolean;
 };
-export type DocumentTranslationLink = {
+export type Document20Translation20Link = {
     /** Language */
     language: string;
     /** Document Id */
     documentId: number;
 };
-export type DocumentTranslationLinks = {
+export type Document20Translation20Links = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object;
@@ -645,9 +645,9 @@ export type DocumentTranslationLinks = {
     /** Language */
     language: string;
     /** Translation links */
-    translationLinks?: DocumentTranslationLink[];
+    translationLinks?: Document20Translation20Link[];
 };
-export type DocumentTranslationParent = {
+export type Document20Translation20Parent = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object;

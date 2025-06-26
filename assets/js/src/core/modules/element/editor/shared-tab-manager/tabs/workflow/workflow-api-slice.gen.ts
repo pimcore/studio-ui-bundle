@@ -125,9 +125,9 @@ export type SubmitAction = {
     /** Type of the element */
     elementType: string;
     /** Id of the workflow */
-    workflowId: string;
+    workflowId?: string;
     /** Id of the transition */
-    transitionId: string;
+    transitionId?: string;
     /** workflowOptions */
     workflowOptions: object;
 };

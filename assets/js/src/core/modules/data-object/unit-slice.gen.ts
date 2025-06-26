@@ -47,7 +47,7 @@ export type UnitQuantityValueConvertAllApiArg = {
 };
 export type UnitQuantityValueConvertApiResponse = /** status 200 Converted quantity value */ {
     /** Converted value */
-    data: number | number;
+    data: any | number;
 };
 export type UnitQuantityValueConvertApiArg = {
     /** Id of the unit to convert from */
@@ -63,11 +63,11 @@ export type UnitQuantityValueListApiResponse = /** status 200 List of quantity v
 export type UnitQuantityValueListApiArg = void;
 export type ConvertedQuantityValues2 = {
     /** Unit Abbreviation */
-    unitAbbreviation: string;
+    unitAbbreviation?: string;
     /** Unit Long Name */
-    unitLongName: string;
+    unitLongName?: string;
     /** Converted Values */
-    convertedValue: number;
+    convertedValue?: number;
 };
 export type ConvertedQuantityValues = {
     /** AdditionalAttributes */
