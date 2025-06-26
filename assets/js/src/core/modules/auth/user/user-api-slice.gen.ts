@@ -416,10 +416,13 @@ export type User = {
     admin: boolean;
     /** Classes the user is allows to see */
     classes: object;
+    /** Show close warning */
     closeWarning: boolean;
+    /** Allow Dirty Close */
     allowDirtyClose: boolean;
     /** List of available content Language already sorted. */
     contentLanguages: object;
+    /** If User has an Image */
     hasImage: boolean;
     /** Key Bindings */
     keyBindings: KeyBindingForAUser[];
@@ -427,15 +430,21 @@ export type User = {
     language: string;
     /** Timestamp of the last login */
     lastLogin?: number | null;
+    /** Memorize Tabs */
     memorizeTabs: boolean;
+    /** Parent ID */
     parentId: number | null;
     /** List of permissions for the user */
     permissions: object;
     /** ID List of roles the user is assigned */
     roles: object;
+    /** Two Factor Authentication Enabled */
     twoFactorAuthenticationEnabled: boolean;
+    /** Website Translation Languages Edit */
     websiteTranslationLanguagesEdit: object;
+    /** Website Translation Languages View */
     websiteTranslationLanguagesView: object;
+    /** Show Welcome Screen */
     welcomeScreen: boolean;
     /** Asset Workspace */
     assetWorkspaces: UserWorkspace[];
@@ -461,7 +470,9 @@ export type User2 = {
     active: boolean;
     /** Classes the user is allows to see */
     classes: object;
+    /** Show Close Warning */
     closeWarning: boolean;
+    /** Allow Dirty Close */
     allowDirtyClose: boolean;
     /** List of available content Language already sorted. */
     contentLanguages: object;
@@ -469,15 +480,21 @@ export type User2 = {
     keyBindings: KeyBindingForAUser[];
     /** Language of the User */
     language: string;
+    /** Memorize Tabs */
     memorizeTabs: boolean;
+    /** Parent ID */
     parentId: number;
     /** List of permissions for the user */
     permissions: object;
     /** ID List of roles the user is assigned */
     roles: object;
+    /** Two Factor Authentication Enabled */
     twoFactorAuthenticationEnabled: boolean;
+    /** Website Translation Languages Edit */
     websiteTranslationLanguagesEdit: object;
+    /** Website Translation Languages View */
     websiteTranslationLanguagesView: object;
+    /** Show welcome Screen */
     welcomeScreen: boolean;
     /** Asset Workspace */
     assetWorkspaces: UserWorkspace[];
@@ -506,7 +523,7 @@ export type SimpleUser = {
     /** ID of the User */
     id: number;
     /** Name of the User */
-    username?: string;
+    username: string;
 };
 export type ResetPassword = {
     /** Username */
@@ -523,7 +540,9 @@ export type UserProfile = {
     language: string;
     /** Date Time Locale for the User */
     dateTimeLocale: string;
+    /** Show Welcome Screen */
     welcomeScreen: boolean;
+    /** Memorize Tabs */
     memorizeTabs: boolean;
     /** List of available content Language already sorted. */
     contentLanguages: object;

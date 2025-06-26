@@ -9,7 +9,7 @@
  */
 
 import React, { useState } from 'react'
-import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
+import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
 import { AutoComplete, Avatar, Input, Row, Col, Typography } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { UserOutlined } from '@ant-design/icons'
@@ -23,7 +23,7 @@ interface ITreeAutocompleteProps {
 
 const TreeAutocomplete = ({ loading = true, ...props }: ITreeAutocompleteProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { openUser, searchUserByText } = useUserHelper()
+  const { openUser, searchUserByText } = useUserManagementHelper()
   const [searchOptions, setSearchOptions] = useState<Array<{ value: string }>>([])
   const [searchValue, setSearchValue] = useState<string>('')
   const { Text } = Typography

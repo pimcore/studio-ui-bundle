@@ -12,26 +12,26 @@ import React, { useState } from 'react'
 import { Toolbar as ToolbarView } from '@Pimcore/components/toolbar/toolbar'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@sdk/components'
-import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
-import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
+import { useUserManagementDraft } from '@Pimcore/modules/user/hooks/use-user-management-draft'
+import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Popconfirm } from 'antd'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { type UserDraft } from '@Pimcore/modules/user/user-slice'
+import { type UserDraft } from '@Pimcore/modules/user/user-management-slice'
 
 interface IToolbarProps {
   id: number
-  onCloneUser: () => void
-  onRemoveUser: () => void
+  onCloneUser?: () => void
+  onRemoveUser?: () => void
 }
 
 export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { user, isLoading, reloadUser } = useUserDraft(id)
-  const { updateUserById } = useUserHelper()
+  const { user, isLoading, reloadUser } = useUserManagementDraft(id)
+  const { updateUserById } = useUserManagementHelper()
 
   const hasChanges = user?.modified === true
 
@@ -96,14 +96,18 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
           </IconButton>
         </Popconfirm>
 
-        <Dropdown
-          menu={ { items } }
-          trigger={ ['click'] }
-        >
-          <DropdownButton>
-            {t('toolbar.more')}
-          </DropdownButton>
-        </Dropdown>
+        {onCloneUser !== null || onRemoveUser !== null
+          ? (
+            <Dropdown
+              menu={ { items } }
+              trigger={ ['click'] }
+            >
+              <DropdownButton>
+                {t('toolbar.more')}
+              </DropdownButton>
+            </Dropdown>
+            )
+          : null}
       </Flex>
 
       <Button

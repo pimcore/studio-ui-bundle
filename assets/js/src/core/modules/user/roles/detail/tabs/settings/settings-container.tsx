@@ -21,14 +21,14 @@ import { SharedTranslationSettingsAccordion } from '@Pimcore/modules/user/manage
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { useRoleDraft } from '@Pimcore/modules/user/roles/hooks/use-roles-draft'
 import { getGroupedPermissions } from '@Pimcore/modules/user/management/detail/tabs/settings/settings-helper'
-import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
+import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
 
 const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const { validLanguages } = useSettings()
   const [form] = Form.useForm()
   const { id } = useRoleContext()
   const { role, isLoading, changeRoleInState } = useRoleDraft(id)
-  const { getAvailablePermissions } = useUserHelper()
+  const { getAvailablePermissions } = useUserManagementHelper()
   const permissions = getGroupedPermissions(getAvailablePermissions())
 
   useEffect(() => {

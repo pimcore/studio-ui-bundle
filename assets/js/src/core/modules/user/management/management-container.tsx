@@ -16,13 +16,13 @@ import type { TreeDataItem } from '@Pimcore/components/tree-element/tree-element
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import type { TreeDataNode } from 'antd'
-import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
+import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
 import { findNodeByKey } from '@Pimcore/modules/user/management/tree/tree-helper'
 import { Spin } from '@Pimcore/components/spin/spin'
 
 const ManagementContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
-  const { getUserTree } = useUserHelper()
+  const { getUserTree } = useUserManagementHelper()
 
   const [expandedKeys, setExpandedKeys] = React.useState<any[]>([0])
 
