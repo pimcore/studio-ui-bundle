@@ -2,7 +2,7 @@ import { Content } from "@Pimcore/components/content/content"
 import { EmailLog, useEmailLogGetHtmlQuery } from "@Pimcore/modules/email/emails-api-slice.gen"
 import { isUndefined } from "lodash"
 import React from "react"
-import { useStyles } from "./email-preview-styles"
+import { useStyles } from "./email-preview.styles"
 
 interface EmailPreviewProps {
   email: EmailLog

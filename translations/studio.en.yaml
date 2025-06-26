@@ -837,6 +837,8 @@ navigation.email-log: Sent Emails
 widget.email-log: Sent Emails
 widget.email-log.from: From
 widget.email-log.to: To
+widget.email-log.cc: CC
+widget.email-log.bcc: BCC
 widget.email-log.tab.text: Text
 widget.email-log.tab.html: HTML
 widget.email-log.tab.parameters: Parameters

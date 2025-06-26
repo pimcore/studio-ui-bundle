@@ -4,7 +4,7 @@ import { EmailLog, useEmailLogGetTextQuery } from "@Pimcore/modules/email/emails
 import ReactCodeMirror from "@uiw/react-codemirror"
 import { isUndefined } from "lodash"
 import React from "react"
-import { useStyles } from "./text-preview-styles"
+import { useStyles } from "./text-preview.styles"
 
 interface TextPreviewProps {
   email: EmailLog
