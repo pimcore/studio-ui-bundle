@@ -19,7 +19,6 @@ import { useWebsiteSetting } from '../hooks/use-website-settings'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { type Site } from '@Pimcore/modules/document/sites-slice.gen'
 import { isUndefined } from 'lodash'
-import { GeneralError, trackError } from '@sdk/modules/app'
 
 type WebsiteSettingEnrichedRow = WebsiteSettingRow & {
   siteDomain: string

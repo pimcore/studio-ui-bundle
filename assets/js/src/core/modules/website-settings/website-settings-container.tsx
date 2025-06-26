@@ -216,7 +216,6 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
               <Flex>
                 <Form.Item
                   name="name"
-                  rules={ [{ required: true, message: t('validation.required') }] }
                 >
                   <Input placeholder={ t('properties.add-custom-property.key') } />
                 </Form.Item>
