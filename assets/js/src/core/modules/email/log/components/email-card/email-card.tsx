@@ -13,6 +13,7 @@ import { EmailPreview } from "../email-preview/email-preview"
 import { ForwardModal } from "../forward-modal/forward-modal"
 import { ParametersTab } from "../parameters-tab/parameters-tab"
 import { TextPreview } from "../text-preview/text-preview"
+import { useStyles } from "./email-card.styles"
 
 interface EmailCardProps {
   emails: EmailLog[]
@@ -20,6 +21,7 @@ interface EmailCardProps {
 
 export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
   const { resend, remove } = useEmailLog()
   const [isForwardModalOpen, setIsForwardModalOpen] = useState<boolean>(false)
 
@@ -57,7 +59,7 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
       theme: email.hasError ? 'error' : 'default',
       subLabelPosition: 'inline',
       extra: <Flex gap={4} align="center">
-        {email.hasError && <Icon value="x-circle" />}
+        {email.hasError && <Icon className={styles.errorIcon} value="close-filled" />}
         <span>{formatDateTime({ timestamp: email.sentDate, dateStyle: 'short', timeStyle: 'short' })}</span>
       </Flex>,
       children: (
