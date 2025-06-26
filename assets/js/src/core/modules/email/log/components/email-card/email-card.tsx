@@ -2,15 +2,13 @@ import { Collapse, ICollapseItem } from "@Pimcore/components/collapse/collapse"
 import { Flex } from "@Pimcore/components/flex/flex"
 import { Icon } from "@Pimcore/components/icon/icon"
 import { Tabs } from "@Pimcore/components/tabs/tabs"
-import { Text } from "@Pimcore/components/text/text"
 import { EmailLog } from "@Pimcore/modules/email/emails-api-slice.gen"
-import { IconButton } from "@sdk/components"
 import { formatDateTime } from "@sdk/utils"
-import React, { useState } from "react"
+import React from "react"
 import { useTranslation } from "react-i18next"
-import { useEmailLog } from "../../hooks/use-email-log"
+import { EmailCardHeader } from "../email-card-header/email-card-header"
+import { EmailError } from "../email-error/email-error"
 import { EmailPreview } from "../email-preview/email-preview"
-import { ForwardModal } from "../forward-modal/forward-modal"
 import { ParametersTab } from "../parameters-tab/parameters-tab"
 import { TextPreview } from "../text-preview/text-preview"
 import { useStyles } from "./email-card.styles"
@@ -22,8 +20,6 @@ interface EmailCardProps {
 export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const { resend, remove } = useEmailLog()
-  const [isForwardModalOpen, setIsForwardModalOpen] = useState<boolean>(false)
 
   const createEmailEntry = (email: EmailLog): ICollapseItem => {
     const tabItems = [
@@ -44,7 +40,6 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
       }
     ]
 
-
     return {
       key: email.id.toString(),
       label: <Flex align="center" gap="extra-small">
@@ -63,40 +58,19 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
         <span>{formatDateTime({ timestamp: email.sentDate, dateStyle: 'short', timeStyle: 'short' })}</span>
       </Flex>,
       children: (
-        <Flex className="email-log-content" vertical>
-          <Flex className="email-log-content__header" justify="space-between">
+        <Flex className="email-log-content" vertical gap={'small'}>
+          <EmailCardHeader email={email} />
+
+          {email.hasError && (
             <Flex vertical>
-              <Text type="secondary">{`${t('widget.email-log.from')}: ${email.from}`}</Text>
-              <Text type="secondary">{`${t('widget.email-log.to')}: ${email.from}`}</Text>
+              <EmailError email={email} />
             </Flex>
-            <div>
-              <IconButton
-                icon={{ value: 'vector' }}
-                onClick={() => resend(email.id)}
-              />
-
-              <IconButton
-                icon={{ value: 'flip-forward' }}
-                onClick={() => setIsForwardModalOpen(true)}
-              />
-
-              <IconButton
-                icon={{ value: 'trash' }}
-                onClick={() => remove(email.id)} //TODO: add confirmation modal
-              />
-            </div>
-          </Flex>
+          )}
 
           <Tabs
             destroyInactiveTabPane
             items={tabItems}
             noPadding
-          />
-
-          <ForwardModal
-            email={email}
-            open={isForwardModalOpen}
-            setOpen={setIsForwardModalOpen}
           />
         </Flex>
       )
