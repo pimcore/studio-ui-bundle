@@ -39,7 +39,7 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
 
   const [form] = Form.useForm<FormValues>()
 
-  const [filter, setFilter] = useState<string>('')
+  const [nameFilter, setNameFilter] = useState<string>('')
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
 
@@ -57,10 +57,18 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
   const queryArgs: WebsiteSettingsGetCollectionApiArg = useMemo(() => ({
     body: {
       filters: {
-        page, pageSize
+        page,
+        pageSize,
+        columnFilters: [
+          {
+            key: 'name',
+            type: 'like',
+            filterValue: nameFilter
+          }
+        ]
       }
     }
-  }), [filter, page, pageSize])
+  }), [nameFilter, page, pageSize])
 
   const { data, isLoading: websiteSettingsLoading, isFetching: websiteSettingsFetching, isError, error, refetch } = useWebsiteSettingsGetCollectionQuery(queryArgs)
 
@@ -212,7 +220,6 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
                 >
                   <Input placeholder={ t('properties.add-custom-property.key') } />
                 </Form.Item>
-
                 <Form.Item
                   name="type"
                 >
@@ -238,7 +245,7 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
           <SearchInput
             loading={ websiteSettingsFetching }
             onSearch={ (value) => {
-              setFilter(value)
+              setNameFilter(value)
             } }
             placeholder="Search"
             withPrefix={ false }

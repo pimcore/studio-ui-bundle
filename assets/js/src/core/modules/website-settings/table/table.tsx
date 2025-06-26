@@ -44,8 +44,6 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
 
   const tableData: WebsiteSettingEnrichedRow[] = websiteSettingRows.map((row: WebsiteSettingEnrichedRow) => {
     if (row.siteId == null) {
-      trackError(new GeneralError(`Expected row.siteId to be a number, but got ${row.siteId}`))
-
       return {
         ...row,
         siteDomain: ''
