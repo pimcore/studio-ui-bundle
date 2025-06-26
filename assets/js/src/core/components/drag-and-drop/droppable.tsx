@@ -8,11 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactNode, useContext, useEffect, useMemo, useState } from 'react'
-import { type DragAndDropInfo, DragAndDropInfoContext } from '@sdk/components'
-import { type UniqueIdentifier, useDroppable } from '@dnd-kit/core'
-import { uuid } from '@Pimcore/utils/uuid'
+import React, { type ReactNode } from 'react'
 import { BaseDroppable } from '@Pimcore/components/drag-and-drop/droppable/base-droppable'
+import cn from 'classnames'
+import { DroppableContextProvider } from './droppable-context-provider'
+import { IconProps } from '@sdk/components'
 
 export interface DroppableProps {
   className?: string
@@ -22,68 +22,38 @@ export interface DroppableProps {
   isValidContext: boolean | ((info: DragAndDropInfo) => boolean)
   isValidData?: ((info: DragAndDropInfo) => boolean)
   onDrop: (info: DragAndDropInfo) => void
-  onSort?: (info: DragAndDropInfo, dragId: UniqueIdentifier, dropId: UniqueIdentifier) => void
   disabled?: boolean
 }
 
+export interface DragAndDropInfo {
+  type: string
+  icon: IconProps
+  title: string
+  data: any
+  sortable?: any
+}
+
 export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
-  const context = useContext(DragAndDropInfoContext)
-  const [isValidContext, setIsValidContext] = useState(false)
-  const [id] = useState(uuid())
-  let isValidData = true
 
-  const info = useMemo(() => context.getInfo(), [context])
-
-  if (typeof props.isValidData === 'function') {
-    isValidData = props.isValidData(info)
+  if (props.disabled === true) {
+    return (
+      <div className={ cn(props.className) }> 
+        <DroppableContextProvider value={ { isDragActive: false, isOver: false, isValid: false } }>
+          {props.children}
+        </DroppableContextProvider>
+      </div>
+     )
   }
-
-  const { isOver, setNodeRef } = useDroppable({
-    id,
-    disabled: context.getInfo().sortable !== undefined || props.disabled === true
-  })
-
-  if (isValidContext && isOver && !isValidData) {
-    document.body.classList.add('dnd--invalid')
-  } else {
-    document.body.classList.remove('dnd--invalid')
-  }
-
-  useEffect(() => {
-    if (typeof props.isValidContext !== 'boolean') {
-      setIsValidContext(props.isValidContext(info))
-    } else {
-      setIsValidContext(props.isValidContext as boolean)
-    }
-
-    context.callbackRegistry!.current.register(id, (event) => {
-      if (isValidContext && isValidData && info.sortable !== undefined) {
-        if (event.over === null) {
-          return
-        }
-
-        props.onSort?.(info, event.active.id, event.over.id)
-        return
-      }
-      if (!isValidData || !isValidContext || !isOver) return
-
-      props.onDrop(info)
-    })
-
-    return () => {
-      context.callbackRegistry!.current.unregister(id)
-    }
-  }, [context, isOver])
 
   return (
     <BaseDroppable
       className={ props.className }
-      isOver={ isOver }
-      isValidContext={ isValidContext }
-      isValidData={ isValidData }
-      setNodeRef={ setNodeRef }
+      isValidContext={ props.isValidContext }
+      isValidData={ props.isValidData }
       shape={ props.shape }
       variant={ props.variant }
+      onDrop={ props.onDrop }
+      disabled={ props.disabled }
     >
       { props.children }
     </BaseDroppable>

@@ -8,51 +8,117 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { Children, isValidElement, type ReactNode, type RefCallback, useMemo, useState } from 'react'
+import React, { type ReactNode, useMemo, useState, useRef, useCallback, useEffect } from 'react'
 import cn from 'classnames'
-import { DroppableContextProvider } from '@sdk/components'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useStyle } from './base-droppable.styles'
-import { uuid } from '@Pimcore/utils/uuid'
+import { DragAndDropInfo } from '../droppable'
+import { isNull, isPlainObject, isUndefined } from 'lodash'
+import { DroppableContextProvider } from '../droppable-context-provider'
+import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 
 export interface BaseDroppableProps {
   children: ReactNode
   className?: string
   variant?: 'default' | 'outline'
   shape?: 'round' | 'angular'
-  isValidContext: boolean
-  isValidData: boolean
-  isOver: boolean
-  setNodeRef: RefCallback<HTMLElement>
+  isValidContext: boolean | ((info: DragAndDropInfo) => boolean)
+  isValidData?: ((info: DragAndDropInfo) => boolean)
+  onDrop: (info: DragAndDropInfo) => void
+  disabled?: boolean
 }
 
-export const BaseDroppable = ({ children, className, variant, shape, isValidContext, isValidData, isOver, setNodeRef }: BaseDroppableProps): React.JSX.Element | null => {
-  const { styles } = useStyle()
-  const [id] = useState(uuid())
-  const Child = Children.only(children)
+type dragStateType = 'inactive' | 'active' | 'valid' | 'error'
 
-  if (!isValidElement(Child)) {
-    trackError(new GeneralError('Children must be a valid react component'))
-    return null
+export const BaseDroppable = ({ children, className, variant, shape, isValidContext, isValidData, onDrop, disabled }: BaseDroppableProps): React.JSX.Element | null => {
+  const { styles } = useStyle();
+  const [dragState, setDragState] = useState<dragStateType>('inactive');
+  const validContext = useRef<boolean>(false);
+  const validData = useRef<boolean>(false);
+  const dragInfoRef = useRef<DragAndDropInfo | null>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const isVisible = useElementVisible(wrapperRef, true);
+
+  const isInfoValid = (): boolean => {
+    return !isNull(dragInfoRef.current) && validContext.current && validData.current
   }
 
-  const Component = Child.type
+  const updateDragState = (state: dragStateType) => {
+    setDragState(state);
+    if (state === 'error') {
+      document.body.classList.add('dnd--invalid');
+    } else {
+      document.body.classList.remove('dnd--invalid');
+    }
+  }
+  
 
-  if ('ref' in Child && Child.ref !== null) {
-    const ref = Child.ref as React.MutableRefObject<HTMLElement>
+  const handleChangeDragInfo = (event: CustomEvent) => {
+    dragInfoRef.current = event.detail;
 
-    setNodeRef(ref.current)
+    if (!isPlainObject(event.detail)) {
+      updateDragState('inactive');
+      validContext.current = false;
+      validData.current = false;
+    } else {
+      updateDragState('active');
+      validContext.current = typeof isValidContext === 'function' ?
+        isValidContext(event.detail) :
+        isValidContext;
+
+      validData.current = validContext.current && !isUndefined(isValidData) ? isValidData(event.detail) : true;
+    }
+  };
+
+  useEffect(() => {
+    if (isVisible) {
+
+      window.addEventListener('studioui:draggable:change-drag-info', handleChangeDragInfo);
+
+      return () => {
+        window.removeEventListener('studioui:draggable:change-drag-info', handleChangeDragInfo);
+      };
+    }
+  }, [isVisible]);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+
+    if (isNull(dragInfoRef.current)) {
+      updateDragState('inactive');
+      return;
+    }
+    updateDragState(isInfoValid() ? 'valid' : 'error')
+  }, []);
+
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    updateDragState(!isNull(dragInfoRef.current) ? 'active' : 'inactive')
+  }, [])
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    updateDragState('inactive');
+    if (isInfoValid()) {
+      onDrop(dragInfoRef.current!);
+    }
   }
 
   return useMemo(() => (
-    <div className={ cn(className, styles[variant ?? 'default'], shape !== 'angular' ? styles.round : undefined) }>
-      <DroppableContextProvider value={ { isDragActive: isValidContext, isOver: isOver && isValidContext, isValid: isValidData && isValidContext } }>
-        <Component
-          { ...Child.props }
-          key={ id }
-          ref={ 'ref' in Child && Child.ref !== null ? Child.ref : setNodeRef }
-        />
+    <div 
+      ref={wrapperRef}
+      className={ cn(
+        className, 
+        styles[variant ?? 'default'], 
+        shape !== 'angular' ? styles.round : undefined,
+      ) } 
+      onDragLeave={isVisible ? handleDragLeave : undefined}
+      onDragOver={isVisible ? handleDragOver : undefined}
+      onDrop={isVisible ? handleDrop : undefined}
+    > 
+      <DroppableContextProvider value={ { isDragActive: dragState !== 'inactive', isOver: dragState !== 'inactive' &&  dragState !== 'active', isValid: dragState === 'valid' } }>
+        {children}
       </DroppableContextProvider>
     </div>
-  ), [isOver, children, isValidContext, isValidData])
+  ), [dragState, children, className, variant, shape, isVisible])
 }

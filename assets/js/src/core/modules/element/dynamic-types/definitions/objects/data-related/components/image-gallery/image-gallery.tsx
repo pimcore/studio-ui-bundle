@@ -42,6 +42,7 @@ import {
 import { uuid } from '@Pimcore/utils/uuid'
 import { useStyles } from './image-gallery.styles'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 
 export interface ImageGalleryProps {
   value?: ImageGalleryValue | null
@@ -98,6 +99,11 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
     }
   }
 
+  const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 5 } })
+  const touchSensor = useSensor(TouchSensor, { activationConstraint: { distance: 5 } })
+
+  const sensors = useSensors(mouseSensor, touchSensor)
+
   return (
     <Card
       className={ cn(styles.imageGallery, props.className) }
@@ -120,26 +126,45 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
         gap="small"
         wrap
       >
-        <SortableContext
-          disabled={ props.disabled }
-          items={ value.map((item, index) => ({ id: String(index) })) }
-          strategy={ rectSortingStrategy }
+        <DndContext
+        autoScroll={ false }
+          sensors={ sensors }
+          onDragEnd={ (event) => {
+            const dragId = event.active.id
+            const dropId = event.over?.id
+            const newValue = [...value]
+      
+                      const dragValue = value[Number(dragId)]
+                      const dropValue = value[Number(dropId)]
+                      if (dragValue !== undefined && dropValue !== undefined) {
+                        newValue.splice(Number(dragId), 1)
+                        newValue.splice(Number(dropId), 0, dragValue)
+                        setValue(newValue)
+                      }
+          }}
         >
-          { value.map((item, index) => (
-            <ImageGallerySortableItem
-              disabled={ props.disabled }
-              height={ height! }
-              hotspotMarkersModalContainer={ hotspotMarkersModalContainerRef }
-              id={ String(index) }
-              index={ index }
-              item={ item }
-              key={ item.key }
-              setValue={ setValue }
-              value={ value }
-              width={ width! }
-            />
-          )) }
-        </SortableContext>
+          <SortableContext
+            disabled={ props.disabled }
+            items={ value.map((item, index) => ({ id: String(index) })) }
+            strategy={ rectSortingStrategy }
+
+          >
+            { value.map((item, index) => (
+              <ImageGallerySortableItem
+                disabled={ props.disabled }
+                height={ height! }
+                hotspotMarkersModalContainer={ hotspotMarkersModalContainerRef }
+                id={ String(index) }
+                index={ index }
+                item={ item }
+                key={ item.key }
+                setValue={ setValue }
+                value={ value }
+                width={ width! }
+              />
+            )) }
+          </SortableContext>
+        </DndContext>
         { (props.disabled !== true || isEmpty(value)) && (
           <ImageGalleryImageTarget
             disabled={ props.disabled }

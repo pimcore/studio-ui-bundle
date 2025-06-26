@@ -181,16 +181,6 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
           const newImage: ImageValue = { type: 'asset', id: info.data.id as number }
           replaceImage(newImage)
         } }
-        onSort={ (info: DragAndDropInfo, dragId: UniqueIdentifier, dropId: UniqueIdentifier) => {
-          const newValue = [...value]
-          const dragValue = value[Number(dragId)]
-          const dropValue = value[Number(dropId)]
-          if (dragValue !== undefined && dropValue !== undefined) {
-            newValue.splice(Number(dragId), 1)
-            newValue.splice(Number(dropId), 0, dragValue)
-            setValue(newValue)
-          }
-        } }
         variant="outline"
       >
         <ImagePreview

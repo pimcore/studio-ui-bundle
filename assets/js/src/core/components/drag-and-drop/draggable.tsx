@@ -8,42 +8,92 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { Children, isValidElement, useMemo, useState } from 'react'
-import { useDraggable } from '@dnd-kit/core'
-import { type DragAndDropInfo } from '@sdk/components'
-import { uuid } from '@Pimcore/utils/uuid'
+import React, { useMemo } from 'react'
+import { DragOverlay, type DragAndDropInfo } from '@sdk/components'
 import { GlobalStyle } from './draggable.styles'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import ReactDOMServer from 'react-dom/server'
 
 interface DraggableProps {
   children: React.ReactNode
   info: DragAndDropInfo
 }
 
-function Draggable (props: DraggableProps): React.JSX.Element {
-  const [id] = useState(uuid())
-  const { attributes, listeners, setNodeRef } = useDraggable({
-    id,
-    data: props.info
-  })
+const dispatchChangeDragInfoEvent = (info: DragAndDropInfo | null): void => {
+  const customEvent = new CustomEvent('studioui:draggable:change-drag-info', { detail: info })
+  window.dispatchEvent(customEvent)
+}
 
-  const Child = Children.only(props.children)
+function Draggable(props: DraggableProps): React.JSX.Element {
+  const updateOverlayPosition = (event: MouseEvent) => {
+    const overlay = document.getElementById('studio-dnd-overlay')
+    if (!overlay) return
 
-  if (!isValidElement(Child)) {
-    trackError(new GeneralError('Children must be a valid react component'))
-    throw new Error('Invalid React child element.')
+    if (event.screenX === 0 && event.screenY === 0) {
+      overlay.style.setProperty('display', 'none')
+      return
+    }
+
+    overlay.style.setProperty('display', 'block')
+    overlay.style.setProperty('top', `${event.clientY}px`)
+    overlay.style.setProperty('left', `${event.clientX}px`)
   }
 
-  return useMemo(() => (
-    <div
-      ref={ setNodeRef }
-      { ...listeners }
-      { ...attributes }
-    >
-      <GlobalStyle />
-      {props.children}
-    </div>
-  ), [props.children])
+  return useMemo(
+    () => (
+      <div
+        draggable={true}
+        onDragStart={(e) => {
+          e.stopPropagation()
+          document.body.classList.add('dnd--dragging')
+
+          const ghost = document.createElement('div')
+          ghost.style.width = '1px'
+          ghost.style.height = '1px'
+          ghost.style.position = 'absolute'
+          ghost.style.top = '-9999px'
+          document.body.appendChild(ghost)
+          e.dataTransfer.setDragImage(ghost, 0, 0)
+
+          let overlay = document.getElementById('studio-dnd-overlay')
+          if (!overlay) {
+            overlay = document.createElement('div')
+            overlay.id = 'studio-dnd-overlay'
+            overlay.style.position = 'fixed'
+            overlay.style.pointerEvents = 'none'
+            overlay.style.zIndex = '9999'
+            document.getElementById('global-overlay-container')?.appendChild(overlay)
+          }
+          overlay.style.display = 'none'
+          overlay.innerHTML = ReactDOMServer.renderToString(<DragOverlay info={props.info} />)
+
+          window.addEventListener('drag', updateOverlayPosition)
+
+          e.dataTransfer.effectAllowed = 'move'
+          e.dataTransfer.dropEffect = 'none'
+          e.dataTransfer.setData('application/json', JSON.stringify(props.info))
+
+          setTimeout(() => {
+            dispatchChangeDragInfoEvent(props.info)
+          }, 200)
+        }}
+        onDragEnd={(e) => {
+          e.stopPropagation()
+          window.removeEventListener('drag', updateOverlayPosition)
+          const overlay = document.getElementById('studio-dnd-overlay')
+          if (overlay) {
+            overlay.style.display = 'none'
+          }
+          document.body.classList.remove('dnd--dragging')
+
+          dispatchChangeDragInfoEvent(null)
+        }}
+      >
+        <GlobalStyle />
+        {props.children}
+      </div>
+    ),
+    [props.children]
+  )
 }
 
 const DraggableMemo = React.memo(Draggable)
