@@ -179,7 +179,7 @@ export const useStyles = createStyles(({ token, css }) => {
           }
           
           .ant-collapse-header {
-            padding: ${token.paddingXXS}px ${token.paddingSM}px;
+            padding: ${token.paddingXS}px ${token.paddingSM}px;
           }
         }
       }

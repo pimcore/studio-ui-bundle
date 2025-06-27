@@ -44,6 +44,10 @@ export const getElementKey = (element: Element, elementType: ElementType): strin
     return (element as DataObject).key ?? ''
   }
 
+  if (elementType === 'document') {
+    return (element as Document).key ?? ''
+  }
+
   return ''
 }
 

@@ -17,7 +17,6 @@ use Exception;
 use Pimcore\Bundle\StudioUiBundle\Exception\InvalidEntryPointsJsonException;
 use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointManager;
 use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProvider;
-use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProviderDocumentEditorIframe;
 use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProviderInterface;
 use Pimcore\ValueObject\Collection\ArrayOfStrings;
 
@@ -185,7 +184,6 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
 
     private function isStudioCoreProvider(WebpackEntryPointProviderInterface $entryPointProvider): bool
     {
-        return $entryPointProvider instanceof WebpackEntryPointProvider
-            || $entryPointProvider instanceof WebpackEntryPointProviderDocumentEditorIframe;
+        return $entryPointProvider instanceof WebpackEntryPointProvider;
     }
 }

@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { TreeElement as Tree, type TreeDataItem } from '@Pimcore/components/tree-element/tree-element'
-import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
+import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
 import { type TreeDataNode } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
@@ -31,7 +31,7 @@ interface ITreeContainerProps {
 }
 const TreeContainer = ({ expandedKeys, treeData, onLoadTreeData, onReloadTree, onSetExpandedKeys, onUpdateTreeData, ...props }: ITreeContainerProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { openUser, moveUserById, addNewUser, addNewFolder, removeUser, cloneUser, removeFolder } = useUserHelper()
+  const { openUser, moveUserById, addNewUser, addNewFolder, removeUser, cloneUser, removeFolder } = useUserManagementHelper()
   const { styles } = useStyle()
   const classNames = [styles.treeContainer]
 

@@ -172,11 +172,13 @@ import { SnippetTabManager } from '@Pimcore/modules/document/editor/types/snippe
 import { DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
 import { DynamicTypeDocumentEditableNumeric } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-numeric'
 import { DynamicTypeDocumentEditableRelation } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-relation'
+import { DynamicTypeDocumentEditableRelations } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-relations'
 import { DynamicTypeDocumentEditableInput } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-input'
 import { DynamicTypeDocumentEditableWysiwyg } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-wysiwyg'
 import { DynamicTypeFieldFilterCheckbox } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
 import { DynamicTypeFieldFilterTextArea } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/text-area/dynamic-type-field-filter-text-area'
 import { BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
+import { DynamicTypeDocumentEditableTextarea } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-textarea'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -360,6 +362,8 @@ container.bind(serviceIds['DynamicTypes/DocumentEditableRegistry']).to(DynamicTy
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Input']).to(DynamicTypeDocumentEditableInput).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Numeric']).to(DynamicTypeDocumentEditableNumeric).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Relation']).to(DynamicTypeDocumentEditableRelation).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Relations']).to(DynamicTypeDocumentEditableRelations).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Textarea']).to(DynamicTypeDocumentEditableTextarea).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Wysiwyg']).to(DynamicTypeDocumentEditableWysiwyg).inSingletonScope()
 
 // Asset Types

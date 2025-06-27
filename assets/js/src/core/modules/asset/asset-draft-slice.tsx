@@ -20,6 +20,7 @@ import { useImageSettingsReducers } from '@Pimcore/modules/asset/draft/hooks/use
 import { type TextDataDraft, useTextDataReducers } from '@Pimcore/modules/asset/draft/hooks/use-text-settings'
 import { type SchedulesDraft, useSchedulesReducers } from '@Pimcore/modules/element/draft/hooks/use-schedules'
 import { initialTabsStateValue, type TabsDraft, useTabsReducers } from '../element/draft/hooks/use-tabs'
+import { updateKeyOrFilename } from '../element/draft/utils/update-key'
 
 export interface AssetDraft extends Asset, PropertiesDraft, SchedulesDraft, CustomMetadataDraft, CustomSettingsDraft, TextDataDraft, TrackableChangesDraft, TabsDraft {
   imageSettings: ImageData
@@ -53,6 +54,14 @@ export const slice = createSlice({
         state.entities[action.payload] = assetsAdapter.getInitialState({ modified: false, properties: [], changes: {} }).entities[action.payload]
       }
     },
+
+    updateFilename (state, action: PayloadAction<{ id: number, filename: string }>): void {
+      if (state.entities[action.payload.id] !== undefined) {
+        const asset = state.entities[action.payload.id]
+        updateKeyOrFilename(asset, action.payload.filename, 'filename')
+      }
+    },
+
     ...useTrackableChangesReducers(assetsAdapter),
     ...usePropertiesReducers(assetsAdapter),
     ...useSchedulesReducers(assetsAdapter),
@@ -70,6 +79,7 @@ export const {
   assetReceived,
   removeAsset,
   resetAsset,
+  updateFilename,
 
   resetChanges,
   setModifiedCells,

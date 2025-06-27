@@ -8,14 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
-import { Alert, DragAndDropContextProvider } from '@sdk/components'
+import React, { useState, useMemo } from 'react'
+import { Alert, Form } from '@sdk/components'
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
 import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
 import { serviceIds, useInjection } from '@sdk/app'
-import { isNil } from 'lodash'
-import { ElementSelectorProvider, FieldWidthProvider } from '@sdk/modules/element'
-
+import { isNil, isUndefined } from 'lodash'
+import { defaultFieldWidthValues, FieldWidthProvider } from '@sdk/modules/element'
+import { useDocumentEditor } from '../../provider/use-document-editor'
 interface RenderEditableProps {
   editableDefinition: AbstractDocumentEditableDefinition
 }
@@ -23,6 +23,34 @@ interface RenderEditableProps {
 export const RenderEditable = ({ editableDefinition }: RenderEditableProps): React.JSX.Element => {
   const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
   const editableType = documentEditableRegistry.hasDynamicType(editableDefinition.type) ? documentEditableRegistry.getDynamicType(editableDefinition.type) : undefined
+  const { updateValue, getValue } = useDocumentEditor()
+  const editableProps: AbstractDocumentEditableDefinition = {
+    ...editableDefinition,
+    defaultFieldWidth: {
+      ...defaultFieldWidthValues,
+      large: 9999
+    }
+  }
+
+  const [localValue, setLocalValue] = useState(getValue(editableDefinition.name))
+
+  const renderEditableComponent = useMemo((): React.ReactElement => {
+    if (isNil(editableType)) {
+      return <></>
+    }
+    return React.cloneElement(
+      editableType.getEditableDataComponent(editableProps),
+      {
+        key: editableDefinition.name,
+        value: localValue,
+        onChange: (newValue) => {
+          setLocalValue(newValue)
+          updateValue(editableDefinition.name, newValue)
+        }
+      }
+    )
+  }, [editableType, editableProps, localValue, editableDefinition.name, updateValue])
+
   if (isNil(editableType)) {
     return (
       <Alert
@@ -32,25 +60,24 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
     )
   }
 
-  return (
-    <DragAndDropContextProvider>
-      <ElementSelectorProvider>
-        <FieldWidthProvider>
+  const label = editableType.getLabel(editableProps)
 
-          {
-                        React.cloneElement(
-                          editableType.getEditableDataComponent(editableDefinition),
-                          {
-                            value: editableDefinition.data,
-                            onChange: (newValue) => {
-                              // TODO: handle the change logic here
-                              console.log(`Editable ${editableDefinition.id} changed to`, newValue)
-                            }
-                          }
-                        )
-                    }
-        </FieldWidthProvider>
-      </ElementSelectorProvider>
-    </DragAndDropContextProvider>
+  return (
+    <FieldWidthProvider fieldWidthValues={ { large: 9999 } }>
+      {
+        !isUndefined(label)
+          ? (
+            <Form.Item
+              label={ label }
+              layout="vertical"
+            >
+              { renderEditableComponent }
+            </Form.Item>
+            )
+          : (
+              renderEditableComponent
+            )
+      }
+    </FieldWidthProvider>
   )
 }

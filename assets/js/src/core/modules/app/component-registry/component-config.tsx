@@ -79,7 +79,26 @@ const defaultComponentConfig = {
   },
   document: {
     editor: {
-      container: { type: ComponentType.SINGLE, name: 'document.editor.container' }
+      container: { type: ComponentType.SINGLE, name: 'document.editor.container' },
+      toolbar: {
+        slots: {
+          left: {
+            type: ComponentType.SLOT,
+            name: 'document.editor.toolbar.slots.left',
+            defaultEntries: [
+              { name: 'contextMenu', priority: 100 }
+            ]
+          },
+          right: {
+            type: ComponentType.SLOT,
+            name: 'document.editor.toolbar.slots.right',
+            defaultEntries: [
+              { name: 'workflowMenu', priority: 100 },
+              { name: 'saveButtons', priority: 200 }
+            ]
+          }
+        }
+      }
     },
     tree: {
       contextMenu: { type: ComponentType.SINGLE, name: 'document.tree.contextMenu' }
