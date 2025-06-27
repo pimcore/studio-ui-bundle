@@ -22,6 +22,6 @@ export const GlobalStyle = createGlobalStyle(({ theme: token }) => {
         background: token.colorErrorBg,
         color: token.colorErrorActive
       }
-    },
+    }
   }
 })
