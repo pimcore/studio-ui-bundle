@@ -14,9 +14,9 @@ interface EmailCardHeaderProps {
 
 export const EmailCardHeader = ({ email }: EmailCardHeaderProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { resend, removeWithConfirmation } = useEmailLog()
+  const { resendWithConfirmation, removeWithConfirmation } = useEmailLog()
   const [isForwardModalOpen, setIsForwardModalOpen] = useState<boolean>(false)
-  const { data, isLoading } = useEmailLogGetByIdQuery({ id: email.id })
+  const { data } = useEmailLogGetByIdQuery({ id: email.id })
 
   return (
     <Flex className="email-log-content__header" justify="space-between">
@@ -44,7 +44,7 @@ export const EmailCardHeader = ({ email }: EmailCardHeaderProps): React.JSX.Elem
       <div>
         <IconButton
           icon={{ value: 'vector' }}
-          onClick={() => resend(email.id)}
+          onClick={() => resendWithConfirmation(email.id)}
         />
 
         <IconButton

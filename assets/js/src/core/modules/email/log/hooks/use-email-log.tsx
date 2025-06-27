@@ -10,6 +10,7 @@ import { invalidatingTags } from "@Pimcore/app/api/pimcore/tags"
 import { api } from '@Pimcore/modules/email/emails-api-slice-enhanced'
 
 interface UseEmailLogHookReturn {
+  resendWithConfirmation: (id: EmailLogDeleteApiArg['id'], onFinish?: () => void) => void
   resend: (id: EmailLogResendByIdApiArg['id'], onFinish?: () => void) => Promise<void>
   forward: (id: EmailLogForwardByIdApiArg['id'], to: Blocklist2['email'], onFinish?: () => void) => Promise<void>
   remove: (id: EmailLogDeleteApiArg['id'], onFinish?: () => void) => Promise<void>
@@ -20,11 +21,25 @@ export const useEmailLog = (): UseEmailLogHookReturn => {
   const modal = useFormModal()
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [resendMutation] = useEmailLogResendByIdMutation()
   const [forwardMutation] = useEmailLogForwardByIdMutation()
   const [deleteMutation] = useEmailLogDeleteMutation()
   const { success } = useMessage()
+
+  const resendWithConfirmation = (id: EmailLogDeleteApiArg['id'], onFinish?: () => void): void => {
+    modal.confirm({
+      title: t('email-log.resend.confirmation.title'),
+      content: <>
+        <span>{t('email-log.resend.confirmation.text')} </span>
+      </>,
+      okText: t('email-log.resend.confirmation.ok'),
+      onOk: async () => {
+        await resend(id, () => {
+          onFinish?.()
+        })
+      }
+    })
+  }
 
   const resend = async (id: EmailLogResendByIdApiArg['id'], onFinish?: () => void): Promise<void> => {
     const resendEmailTask = resendMutation({
@@ -75,10 +90,8 @@ export const useEmailLog = (): UseEmailLogHookReturn => {
       </>,
       okText: t('element.delete.confirmation.ok'),
       onOk: async () => {
-        setIsLoading(true)
         await remove(id, () => {
           onFinish?.()
-          setIsLoading(false)
         })
       }
     })
@@ -110,6 +123,7 @@ export const useEmailLog = (): UseEmailLogHookReturn => {
   }
 
   return {
+    resendWithConfirmation,
     resend,
     forward,
     remove,
