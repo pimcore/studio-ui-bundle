@@ -45,7 +45,6 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
       label: <Flex align="center" gap="extra-small">
         <Icon value="send-03" />
         <span>{email.subject}</span>
-        <span>- {email.id}</span>
       </Flex>,
       subLabel: <Flex gap={4}>
         <span>{`${t('widget.email-log.from')}: ${email.from}`}</span> |

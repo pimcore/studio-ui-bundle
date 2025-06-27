@@ -1,19 +1,18 @@
+import { invalidatingTags } from "@Pimcore/app/api/pimcore/tags"
+import { useAppDispatch } from "@Pimcore/app/store"
 import { ContentLayout } from "@Pimcore/components/content-layout/content-layout"
 import { Content } from "@Pimcore/components/content/content"
+import { Flex } from "@Pimcore/components/flex/flex"
 import { IconButton } from "@Pimcore/components/icon-button/icon-button"
 import { Pagination } from "@Pimcore/components/pagination/pagination"
+import { Title } from "@Pimcore/components/title/title"
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { api } from '@Pimcore/modules/email/emails-api-slice-enhanced'
 import { isUndefined } from "lodash"
 import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useEmailLogGetCollectionQuery } from "../emails-api-slice.gen"
 import { EmailCard } from "./components/email-card/email-card"
-import { Flex } from "@Pimcore/components/flex/flex"
-import { Title } from "@Pimcore/components/title/title"
-import { Icon } from "@Pimcore/components/icon/icon"
-import { useAppDispatch } from "@Pimcore/app/store"
-import { api } from '@Pimcore/modules/email/emails-api-slice-enhanced'
-import { invalidatingTags } from "@Pimcore/app/api/pimcore/tags"
 
 export const EmailLogContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -72,9 +71,7 @@ export const EmailLogContainer = (): React.JSX.Element => {
           theme='secondary'
         >
           <Flex gap={'small'}>
-            <Title
-              icon={<Icon value="send-3" />}
-            >
+            <Title>
               {t('widget.email-log')}
             </Title>
           </Flex>
