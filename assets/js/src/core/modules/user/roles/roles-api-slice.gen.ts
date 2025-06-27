@@ -194,6 +194,7 @@ export type DetailedUserRole = {
     name: string | null;
     /** Classes the user is allows to see */
     classes: object;
+    /** Parent ID */
     parentId: number | null;
     /** List of permissions for the user */
     permissions: object;
@@ -215,6 +216,7 @@ export type UpdateUserRole = {
     name: string | null;
     /** Classes the user is allows to see */
     classes: object;
+    /** Parent ID */
     parentId: number | null;
     /** List of permissions for the user */
     permissions: object;
@@ -239,7 +241,7 @@ export type SimpleUserRole = {
     /** ID of the Role */
     id: number;
     /** Name of the Role */
-    name?: string;
+    name: string;
 };
 export const {
     useRoleCloneByIdMutation,

@@ -79,7 +79,7 @@ const injectedRtkApi = api
                 AssetDeleteGridConfigurationByConfigurationIdApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/grid/configuration/${queryArg.configurationId}`,
+                    url: `/pimcore-studio/api/assets/grid/configuration/${queryArg.configurationId}/delete`,
                     method: "DELETE",
                 }),
                 invalidatesTags: ["Asset Grid"],
@@ -457,8 +457,6 @@ export type AssetGetSavedGridConfigurationsApiArg = void;
 export type AssetSaveGridConfigurationApiResponse =
     /** status 200 Asset grid configuration saved successfully */ GridConfiguration;
 export type AssetSaveGridConfigurationApiArg = {
-    /** FolderId of the folder */
-    folderId: number;
     body: {
         folderId: number;
         pageSize: number;
@@ -923,9 +921,9 @@ export type UpdateDataProperty = {
     inheritable: boolean;
 };
 export type FocalPoint = {
-    /** x */
+    /** x Coordinate of FocalPoint */
     x: number;
-    /** y */
+    /** y Coordinate of FocalPoint */
     y: number;
 };
 export type ImageData = {
@@ -1042,19 +1040,15 @@ export type StaticTextConfig = {
     /** Static Text */
     text: string;
 };
-export type ExistingColumnConfig = {
-    /** Name of the existing Column */
-    existingColumnName?: string;
-};
 export type Transformer = {
     /** Key of the Transformer */
     key: string;
+    /** Configuration for the transformer */
+    config?: object;
 };
 export type AdvancedColumnConfig = {
     /** advancedColumns */
-    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig | ExistingColumnConfig)[];
-    /** Concatenation symbol to combine multiple columns */
-    concatenationSymbol?: string;
+    advancedColumns: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
     /** List if Transformers that should be applied */
     transformers?: Transformer[];
 };

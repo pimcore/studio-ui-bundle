@@ -240,19 +240,15 @@ export type StaticTextConfig = {
     /** Static Text */
     text: string;
 };
-export type ExistingColumnConfig = {
-    /** Name of the existing Column */
-    existingColumnName?: string;
-};
 export type Transformer = {
     /** Key of the Transformer */
     key: string;
+    /** Configuration for the transformer */
+    config?: object;
 };
 export type AdvancedColumnConfig = {
     /** advancedColumns */
-    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig | ExistingColumnConfig)[];
-    /** Concatenation symbol to combine multiple columns */
-    concatenationSymbol?: string;
+    advancedColumns: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
     /** List if Transformers that should be applied */
     transformers?: Transformer[];
 };
@@ -312,7 +308,7 @@ export type SimpleSearchPageDetail = {
     /** Navigation name */
     name: string | null;
     /** Has Preview image */
-    hasPreviewImage?: boolean;
+    hasPreviewImage: boolean;
 };
 export type SimpleSearchDocumentDetail = SimpleSearchDetail & {
     /** Document Language */
