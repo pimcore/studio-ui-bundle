@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, type MutableRefObject, type ReactElement } from 'react'
+import React, { forwardRef, type MutableRefObject, type ReactElement, useMemo } from 'react'
 import { isUndefined } from 'lodash'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { Grid } from '@Pimcore/components/grid/grid'
@@ -214,34 +214,38 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
     })
   }
 
+  const content = useMemo(() => (
+    <Content
+      style={ {
+        width: toCssDimension(props.width),
+        height: toCssDimension(props.height)
+      } }
+    >
+      <div
+        style={ {
+          maxWidth: 'calc(100% - 2px)'
+        } }
+      >
+        <Grid
+          autoWidth
+          className={ props.className }
+          columns={ columns }
+          data={ getDataArray() }
+          disabled={ props.disabled === true || props.inherited === true }
+          onUpdateCellData={ props.onUpdateCellData }
+          resizable
+        />
+        {props.hint}
+      </div>
+    </Content>
+  ), [props])
+
   return (
     <div
       className={ cn(...getStateClasses()) }
       ref={ ref }
     >
-      <Content
-        style={ {
-          width: toCssDimension(props.width),
-          height: toCssDimension(props.height)
-        } }
-      >
-        <div
-          style={ {
-            maxWidth: 'calc(100% - 2px)'
-          } }
-        >
-          <Grid
-            autoWidth
-            className={ props.className }
-            columns={ columns }
-            data={ getDataArray() }
-            disabled={ props.disabled === true || props.inherited === true }
-            onUpdateCellData={ props.onUpdateCellData }
-            resizable
-          />
-          {props.hint}
-        </div>
-      </Content>
+      {content}
     </div>
   )
 })
