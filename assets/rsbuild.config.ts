@@ -30,16 +30,12 @@ export default defineConfig({
     port: 3031,
   },
   dev: {
-    assetPrefix: (isDevServer ? '' : '') + '/bundles/pimcorestudioui/build/' + buildId,
-    writeToDisk: true,
-    //client: {
-    //  port: 3033
-    //}
+    assetPrefix: (isDevServer ? 'http://localhost:3031' : '') + '/bundles/pimcorestudioui/build/' + buildId,
+    writeToDisk: !isDevServer,
   },
   source: {
     entry: {
       main: './js/src/core/main.ts',
-      documentEditorIframe: './js/src/core/modules/document/editor/shared-tab-manager/tabs/edit/iframe-app/main.ts'
     },
     decorators: {
       version: 'legacy'
