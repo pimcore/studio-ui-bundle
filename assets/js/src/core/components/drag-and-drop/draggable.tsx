@@ -13,6 +13,7 @@ import ReactDOMServer from 'react-dom/server'
 import { DragOverlay, type DragAndDropInfo } from '@sdk/components'
 import { GlobalStyle } from './draggable.styles'
 import { isNull } from 'lodash'
+import { getIframeOffset } from '@sdk/utils'
 
 interface DraggableProps {
   children: React.ReactNode
@@ -63,9 +64,10 @@ function Draggable ({ children, info }: DraggableProps): React.JSX.Element {
     if (isNull(overlay)) return
 
     const { screenX, screenY, clientX, clientY } = event
+    const iframeOffset = getIframeOffset(event.view ?? window)
     overlay.style.display = screenX === 0 && screenY === 0 ? 'none' : 'block'
-    overlay.style.top = `${clientY}px`
-    overlay.style.left = `${clientX}px`
+    overlay.style.top = `${clientY + iframeOffset.y}px`
+    overlay.style.left = `${clientX + iframeOffset.x}px`
   }, [])
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>): void => {
