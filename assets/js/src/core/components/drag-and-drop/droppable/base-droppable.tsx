@@ -24,24 +24,28 @@ export interface BaseDroppableProps {
   isValidContext: boolean | ((info: DragAndDropInfo) => boolean)
   isValidData?: ((info: DragAndDropInfo) => boolean)
   onDrop: (info: DragAndDropInfo) => void
+  disableDndActiveIndicator?: boolean
 }
 
 type dragStateType = 'inactive' | 'active' | 'valid' | 'error'
 
-export const BaseDroppable = ({ children, className, variant, shape, isValidContext, isValidData, onDrop }: BaseDroppableProps): React.JSX.Element | null => {
+export const BaseDroppable = ({ children, className, variant, shape, isValidContext, isValidData, onDrop, disableDndActiveIndicator = false }: BaseDroppableProps): React.JSX.Element | null => {
   const { styles } = useStyle();
   const [dragState, setDragState] = useState<dragStateType>('inactive');
   const validContext = useRef<boolean>(false);
   const validData = useRef<boolean>(false);
   const dragInfoRef = useRef<DragAndDropInfo | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const isVisible = useElementVisible(wrapperRef, true);
+  const isVisible = useElementVisible(wrapperRef, true, disableDndActiveIndicator);
 
   const isInfoValid = (): boolean => {
     return !isNull(dragInfoRef.current) && validContext.current && validData.current
   }
 
   const updateDragState = (state: dragStateType) => {
+    if (disableDndActiveIndicator && state === 'active') {
+      state = 'inactive'
+    }
     setDragState(state);
     if (state === 'error') {
       document.body.classList.add('dnd--invalid');

@@ -23,6 +23,12 @@ export interface DroppableProps {
   isValidData?: ((info: DragAndDropInfo) => boolean)
   onDrop: (info: DragAndDropInfo) => void
   disabled?: boolean
+  /**
+   * If true, it does not update the drag state to 'active' when a drag operation starts. The active state is useful 
+   * for visually indicating all eligible drop zones before an item is dragged over them. For performance reasons,
+   * it is recommended to set this to true if the active indicator is not needed or re-rendering would be too resource intensive.
+   */
+  disableDndActiveIndicator?: boolean
 }
 
 export interface DragAndDropInfo {
@@ -48,6 +54,7 @@ export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
   return (
     <BaseDroppable
       className={ props.className }
+      disableDndActiveIndicator={ props.disableDndActiveIndicator }
       isValidContext={ props.isValidContext }
       isValidData={ props.isValidData }
       shape={ props.shape }

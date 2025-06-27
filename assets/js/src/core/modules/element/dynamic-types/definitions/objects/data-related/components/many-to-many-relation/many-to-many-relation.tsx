@@ -92,6 +92,7 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
   return (
     <>
       <Droppable
+        disableDndActiveIndicator
         isValidContext={ (info: DragAndDropInfo) => props.disabled !== true && isValidElementType(info.type) }
         isValidData={ (info: DragAndDropInfo) => dndIsValidData(info, props) }
         onDrop={ onDrop }
