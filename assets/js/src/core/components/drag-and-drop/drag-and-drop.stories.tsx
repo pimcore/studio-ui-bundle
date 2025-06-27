@@ -25,15 +25,15 @@ const DragAndDropDemo = (): React.JSX.Element => {
     <div style={ { display: 'flex', flexDirection: 'column', gap: 10 } }>
       <h3>Drag context 1</h3>
       <div style={ { display: 'flex', gap: 5 } }>
-        <Draggable info={ { type: 'dnd-demo-1', title: 'Button 1', icon: 'widget-default', data: { value: 'Button 1' } } }>
+        <Draggable info={ { type: 'dnd-demo-1', title: 'Button 1', icon: {value: 'widget-default'}, data: { value: 'Button 1' } } }>
           <Button>Button 1</Button>
         </Draggable>
 
-        <Draggable info={ { type: 'dnd-demo-1', title: 'Button 2', icon: 'widget-default', data: { value: 'Button 2' } } }>
+        <Draggable info={ { type: 'dnd-demo-1', title: 'Button 2', icon: {value: 'widget-default'}, data: { value: 'Button 2' } } }>
           <Button>Button 2</Button>
         </Draggable>
 
-        <Draggable info={ { type: 'dnd-demo-1', title: 'Button 3', icon: 'widget-default', data: { value: 'Button 3' } } }>
+        <Draggable info={ { type: 'dnd-demo-1', title: 'Button 3', icon: {value: 'widget-default'}, data: { value: 'Button 3' } } }>
           <Button>Button 3</Button>
         </Draggable>
       </div>
@@ -50,15 +50,15 @@ const DragAndDropDemo = (): React.JSX.Element => {
 
       <h3>Drag context 2</h3>
       <div style={ { display: 'flex', gap: 5 } }>
-        <Draggable info={ { type: 'dnd-demo-2', title: 'Button 1', icon: 'widget-default', data: { value: 'Button 1' } } }>
+        <Draggable info={ { type: 'dnd-demo-2', title: 'Button 1', icon: {value: 'widget-default'}, data: { value: 'Button 1' } } }>
           <Button>Button 1</Button>
         </Draggable>
 
-        <Draggable info={ { type: 'dnd-demo-2', title: 'Button 2', icon: 'widget-default', data: { value: 'Button 2' } } }>
+        <Draggable info={ { type: 'dnd-demo-2', title: 'Button 2', icon: {value: 'widget-default'}, data: { value: 'Button 2' } } }>
           <Button>Button 2</Button>
         </Draggable>
 
-        <Draggable info={ { type: 'dnd-demo-2', title: 'Button 3', icon: 'widget-default', data: { value: 'Button 3' } } }>
+        <Draggable info={ { type: 'dnd-demo-2', title: 'Button 3', icon: {value: 'widget-default'}, data: { value: 'Button 3' } } }>
           <Button>Button 3</Button>
         </Draggable>
       </div>
@@ -75,15 +75,15 @@ const DragAndDropDemo = (): React.JSX.Element => {
 
       <h3>Drag context 3</h3>
       <div style={ { display: 'flex', gap: 5 } }>
-        <Draggable info={ { type: 'dnd-demo-3', title: 'Button 1', icon: 'widget-default', data: { value: 'Button 1' } } }>
+        <Draggable info={ { type: 'dnd-demo-3', title: 'Button 1', icon: {value: 'widget-default'}, data: { value: 'Button 1' } } }>
           <Button>Button 1</Button>
         </Draggable>
 
-        <Draggable info={ { type: 'dnd-demo-3', title: 'Button 2', icon: 'widget-default', data: { value: 'Button 2' } } }>
+        <Draggable info={ { type: 'dnd-demo-3', title: 'Button 2', icon: {value: 'widget-default'}, data: { value: 'Button 2' } } }>
           <Button>Button 2</Button>
         </Draggable>
 
-        <Draggable info={ { type: 'dnd-demo-3', title: 'Button 3', icon: 'widget-default', data: { value: 'Button 3' } } }>
+        <Draggable info={ { type: 'dnd-demo-3', title: 'Button 3', icon: {value: 'widget-default'}, data: { value: 'Button 3' } } }>
           <Button>Button 3</Button>
         </Draggable>
       </div>

@@ -12,9 +12,10 @@ import React, { type ReactNode, useMemo, useState, useRef, useCallback, useEffec
 import cn from 'classnames'
 import { useStyle } from './base-droppable.styles'
 import { type DragAndDropInfo } from '../droppable'
-import { isNull, isPlainObject, isUndefined } from 'lodash'
+import { isNull, isUndefined } from 'lodash'
 import { DroppableContextProvider } from '../droppable-context-provider'
 import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
+import { type DragInfoChangeEvent } from '../draggable'
 
 export interface BaseDroppableProps {
   children: ReactNode
@@ -42,7 +43,7 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
     return !isNull(dragInfoRef.current) && validContext.current && validData.current
   }
 
-  const updateDragState = (state: dragStateType) => {
+  const updateDragState = (state: dragStateType): void => {
     if (disableDndActiveIndicator && state === 'active') {
       state = 'inactive'
     }
@@ -54,20 +55,20 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
     }
   }
 
-  const handleChangeDragInfo = (event: CustomEvent) => {
+  const handleChangeDragInfo = (event: DragInfoChangeEvent): void => {
     dragInfoRef.current = event.detail
 
-    if (!isPlainObject(event.detail)) {
+    if (isNull(dragInfoRef.current)) {
       updateDragState('inactive')
       validContext.current = false
       validData.current = false
     } else {
       updateDragState('active')
       validContext.current = typeof isValidContext === 'function'
-        ? isValidContext(event.detail)
+        ? isValidContext(dragInfoRef.current)
         : isValidContext
 
-      validData.current = validContext.current && !isUndefined(isValidData) ? isValidData(event.detail) : true
+      validData.current = validContext.current && !isUndefined(isValidData) ? isValidData(dragInfoRef.current) : true
     }
   }
 
@@ -99,7 +100,7 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
     updateDragState(!isNull(dragInfoRef.current) ? 'active' : 'inactive')
   }, [])
 
-  const handleDrop = (e: React.DragEvent) => {
+  const handleDrop = (e: React.DragEvent): void => {
     e.preventDefault()
     updateDragState('inactive')
     if (isInfoValid()) {

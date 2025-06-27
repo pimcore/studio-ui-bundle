@@ -12,21 +12,28 @@ import React, { useMemo } from 'react'
 import { DragOverlay, type DragAndDropInfo } from '@sdk/components'
 import { GlobalStyle } from './draggable.styles'
 import ReactDOMServer from 'react-dom/server'
+import { isNull } from 'lodash'
 
 interface DraggableProps {
   children: React.ReactNode
   info: DragAndDropInfo
 }
 
+export class DragInfoChangeEvent extends CustomEvent<DragAndDropInfo | null> {
+  constructor (detail: DragAndDropInfo | null) {
+    super('studioui:draggable:change-drag-info', { detail })
+  }
+}
+
 const dispatchChangeDragInfoEvent = (info: DragAndDropInfo | null): void => {
-  const customEvent = new CustomEvent('studioui:draggable:change-drag-info', { detail: info })
+  const customEvent = new DragInfoChangeEvent(info)
   window.dispatchEvent(customEvent)
 }
 
 function Draggable (props: DraggableProps): React.JSX.Element {
   const updateOverlayPosition = (event: MouseEvent): void => {
     const overlay = document.getElementById('studio-dnd-overlay')
-    if (overlay) return
+    if (isNull(overlay)) return
 
     if (event.screenX === 0 && event.screenY === 0) {
       overlay.style.setProperty('display', 'none')
@@ -46,7 +53,7 @@ function Draggable (props: DraggableProps): React.JSX.Element {
           e.stopPropagation()
           window.removeEventListener('drag', updateOverlayPosition)
           const overlay = document.getElementById('studio-dnd-overlay')
-          if (overlay) {
+          if (!isNull(overlay)) {
             overlay.style.display = 'none'
           }
           document.body.classList.remove('dnd--dragging')
@@ -66,7 +73,7 @@ function Draggable (props: DraggableProps): React.JSX.Element {
           e.dataTransfer.setDragImage(ghost, 0, 0)
 
           let overlay = document.getElementById('studio-dnd-overlay')
-          if (!overlay) {
+          if (isNull(overlay)) {
             overlay = document.createElement('div')
             overlay.id = 'studio-dnd-overlay'
             overlay.style.position = 'fixed'
