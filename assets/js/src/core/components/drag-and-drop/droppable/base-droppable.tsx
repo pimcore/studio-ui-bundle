@@ -12,7 +12,7 @@ import React, { type ReactNode, useMemo, useState, useRef, useCallback, useEffec
 import cn from 'classnames'
 import { useStyle } from './base-droppable.styles'
 import { type DragAndDropInfo } from '../droppable'
-import { isNull, isUndefined } from 'lodash'
+import { isNull } from 'lodash'
 import { DroppableContextProvider } from '../droppable-context-provider'
 import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 import { type DragInfoChangeEvent } from '../draggable'
@@ -28,48 +28,45 @@ export interface BaseDroppableProps {
   disableDndActiveIndicator?: boolean
 }
 
-type dragStateType = 'inactive' | 'active' | 'valid' | 'error'
+type DragState = 'inactive' | 'active' | 'valid' | 'error'
 
 export const BaseDroppable = ({ children, className, variant, shape, isValidContext, isValidData, onDrop, disableDndActiveIndicator = false }: BaseDroppableProps): React.JSX.Element | null => {
   const { styles } = useStyle()
-  const [dragState, setDragState] = useState<dragStateType>('inactive')
-  const validContext = useRef<boolean>(false)
-  const validData = useRef<boolean>(false)
+  const [dragState, setDragState] = useState<DragState>('inactive')
+  const isContextValid = useRef<boolean>(false)
+  const isDataValid = useRef<boolean>(false)
   const dragInfoRef = useRef<DragAndDropInfo | null>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
   const isVisible = useElementVisible(wrapperRef, true, disableDndActiveIndicator)
 
   const isInfoValid = (): boolean => {
-    return !isNull(dragInfoRef.current) && validContext.current && validData.current
+    return !isNull(dragInfoRef.current) && isContextValid.current && isDataValid.current
   }
 
-  const updateDragState = (state: dragStateType): void => {
-    if (disableDndActiveIndicator && state === 'active') {
-      state = 'inactive'
-    }
-    setDragState(state)
-    if (state === 'error') {
-      document.body.classList.add('dnd--invalid')
-    } else {
-      document.body.classList.remove('dnd--invalid')
-    }
+  const updateDragState = (state: DragState): void => {
+    const finalState = disableDndActiveIndicator && state === 'active' ? 'inactive' : state
+    setDragState(finalState)
+
+    document.body.classList.toggle('dnd--invalid', finalState === 'error')
   }
 
   const handleChangeDragInfo = (event: DragInfoChangeEvent): void => {
-    dragInfoRef.current = event.detail
+    const info = event.detail
+    dragInfoRef.current = info
 
-    if (isNull(dragInfoRef.current)) {
+    if (isNull(info)) {
+      isContextValid.current = false
+      isDataValid.current = false
       updateDragState('inactive')
-      validContext.current = false
-      validData.current = false
-    } else {
-      updateDragState('active')
-      validContext.current = typeof isValidContext === 'function'
-        ? isValidContext(dragInfoRef.current)
-        : isValidContext
-
-      validData.current = validContext.current && !isUndefined(isValidData) ? isValidData(dragInfoRef.current) : true
+      return
     }
+
+    isContextValid.current = typeof isValidContext === 'function'
+      ? isValidContext(info)
+      : isValidContext
+
+    isDataValid.current = isContextValid.current && (isValidData?.(info) ?? true)
+    updateDragState('active')
   }
 
   useEffect(() => {
@@ -119,6 +116,7 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
       onDragOver={ isVisible ? handleDragOver : undefined }
       onDrop={ isVisible ? handleDrop : undefined }
       ref={ wrapperRef }
+      role="none"
     >
       <DroppableContextProvider value={ { isDragActive: dragState !== 'inactive', isOver: dragState !== 'inactive' && dragState !== 'active', isValid: dragState === 'valid' } }>
         {children}

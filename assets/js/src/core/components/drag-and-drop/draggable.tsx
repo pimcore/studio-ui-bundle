@@ -8,10 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo } from 'react'
+import React, { useCallback } from 'react'
+import ReactDOMServer from 'react-dom/server'
 import { DragOverlay, type DragAndDropInfo } from '@sdk/components'
 import { GlobalStyle } from './draggable.styles'
-import ReactDOMServer from 'react-dom/server'
 import { isNull } from 'lodash'
 
 interface DraggableProps {
@@ -26,80 +26,88 @@ export class DragInfoChangeEvent extends CustomEvent<DragAndDropInfo | null> {
 }
 
 const dispatchChangeDragInfoEvent = (info: DragAndDropInfo | null): void => {
-  const customEvent = new DragInfoChangeEvent(info)
-  window.dispatchEvent(customEvent)
+  window.dispatchEvent(new DragInfoChangeEvent(info))
 }
 
-function Draggable (props: DraggableProps): React.JSX.Element {
-  const updateOverlayPosition = (event: MouseEvent): void => {
+const getOrCreateGhostElement = (): HTMLDivElement => {
+  let ghost = document.getElementById('studio-dnd-ghost') as HTMLDivElement | null
+  if (isNull(ghost)) {
+    ghost = document.createElement('div')
+    ghost.id = 'studio-dnd-ghost'
+    ghost.style.width = '1px'
+    ghost.style.height = '1px'
+    ghost.style.position = 'absolute'
+    ghost.style.top = '-9999px'
+    document.body.appendChild(ghost)
+  }
+  return ghost
+}
+
+const getOrCreateOverlay = (): HTMLDivElement => {
+  let overlay = document.getElementById('studio-dnd-overlay') as HTMLDivElement | null
+  if (isNull(overlay)) {
+    overlay = document.createElement('div')
+    overlay.id = 'studio-dnd-overlay'
+    overlay.style.position = 'fixed'
+    overlay.style.pointerEvents = 'none'
+    overlay.style.zIndex = '9999'
+    overlay.style.display = 'none'
+    document.getElementById('global-overlay-container')?.appendChild(overlay)
+  }
+  return overlay
+}
+
+function Draggable ({ children, info }: DraggableProps): React.JSX.Element {
+  const updateOverlayPosition = useCallback((event: MouseEvent): void => {
     const overlay = document.getElementById('studio-dnd-overlay')
     if (isNull(overlay)) return
 
-    if (event.screenX === 0 && event.screenY === 0) {
-      overlay.style.setProperty('display', 'none')
-      return
-    }
+    const { screenX, screenY, clientX, clientY } = event
+    overlay.style.display = screenX === 0 && screenY === 0 ? 'none' : 'block'
+    overlay.style.top = `${clientY}px`
+    overlay.style.left = `${clientX}px`
+  }, [])
 
-    overlay.style.setProperty('display', 'block')
-    overlay.style.setProperty('top', `${event.clientY}px`)
-    overlay.style.setProperty('left', `${event.clientX}px`)
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>): void => {
+    e.stopPropagation()
+    document.body.classList.add('dnd--dragging')
+
+    const ghost = getOrCreateGhostElement()
+    e.dataTransfer.setDragImage(ghost, 0, 0)
+
+    const overlay = getOrCreateOverlay()
+    overlay.innerHTML = ReactDOMServer.renderToString(<DragOverlay info={ info } />)
+
+    window.addEventListener('drag', updateOverlayPosition)
+
+    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.dropEffect = 'none'
+    e.dataTransfer.setData('application/json', JSON.stringify(info))
+
+    setTimeout(() => { dispatchChangeDragInfoEvent(info) }, 50)
   }
 
-  return useMemo(
-    () => (
-      <div
-        draggable
-        onDragEnd={ (e) => {
-          e.stopPropagation()
-          window.removeEventListener('drag', updateOverlayPosition)
-          const overlay = document.getElementById('studio-dnd-overlay')
-          if (!isNull(overlay)) {
-            overlay.style.display = 'none'
-          }
-          document.body.classList.remove('dnd--dragging')
+  const handleDragEnd = (e: React.DragEvent<HTMLDivElement>): void => {
+    e.stopPropagation()
+    window.removeEventListener('drag', updateOverlayPosition)
 
-          dispatchChangeDragInfoEvent(null)
-        } }
-        onDragStart={ (e) => {
-          e.stopPropagation()
-          document.body.classList.add('dnd--dragging')
+    const overlay = document.getElementById('studio-dnd-overlay')
+    if (!isNull(overlay)) overlay.style.display = 'none'
 
-          const ghost = document.createElement('div')
-          ghost.style.width = '1px'
-          ghost.style.height = '1px'
-          ghost.style.position = 'absolute'
-          ghost.style.top = '-9999px'
-          document.body.appendChild(ghost)
-          e.dataTransfer.setDragImage(ghost, 0, 0)
+    document.body.classList.remove('dnd--dragging')
+    dispatchChangeDragInfoEvent(null)
+  }
 
-          let overlay = document.getElementById('studio-dnd-overlay')
-          if (isNull(overlay)) {
-            overlay = document.createElement('div')
-            overlay.id = 'studio-dnd-overlay'
-            overlay.style.position = 'fixed'
-            overlay.style.pointerEvents = 'none'
-            overlay.style.zIndex = '9999'
-            document.getElementById('global-overlay-container')?.appendChild(overlay)
-          }
-          overlay.style.display = 'none'
-          overlay.innerHTML = ReactDOMServer.renderToString(<DragOverlay info={ props.info } />)
-
-          window.addEventListener('drag', updateOverlayPosition)
-
-          e.dataTransfer.effectAllowed = 'move'
-          e.dataTransfer.dropEffect = 'none'
-          e.dataTransfer.setData('application/json', JSON.stringify(props.info))
-
-          setTimeout(() => {
-            dispatchChangeDragInfoEvent(props.info)
-          }, 200)
-        } }
-      >
-        <GlobalStyle />
-        {props.children}
-      </div>
-    ),
-    [props.children]
+  return (
+    <div
+      draggable
+      onDragEnd={ handleDragEnd }
+      onDragStart={ handleDragStart }
+      role="none"
+    >
+      <GlobalStyle />
+      {children}
+    </div>
   )
 }
 
