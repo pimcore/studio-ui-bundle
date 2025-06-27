@@ -38,7 +38,7 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
   const dragInfoRef = useRef<DragAndDropInfo | null>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
   const isInIframe = wrapperRef.current?.ownerDocument !== document
-  const isVisible = useElementVisible(wrapperRef, true, disableDndActiveIndicator || isInIframe )
+  const isVisible = useElementVisible(wrapperRef, true, disableDndActiveIndicator || isInIframe)
 
   const isInfoValid = (): boolean => {
     return !isNull(dragInfoRef.current) && isContextValid.current && isDataValid.current
