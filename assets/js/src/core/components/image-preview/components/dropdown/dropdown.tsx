@@ -39,10 +39,10 @@ export const ImagePreviewDropdown = (props: ImagePreviewDropdownProps): React.JS
           className='dropdown-menu__icon'
           value="more"
                /> }
-        onClick={ (e) => { 
+        onClick={ (e) => {
           e.stopPropagation()
           e.preventDefault()
-         } }
+        } }
         size="small"
       />
     </Dropdown>

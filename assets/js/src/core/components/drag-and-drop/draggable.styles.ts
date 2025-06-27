@@ -26,15 +26,15 @@ export const GlobalStyle = createGlobalStyle(({ theme: token }) => {
 
     // Improve drag feedback
     '.dnd--drag-active': {
-      transition: 'all 0.2s ease',
+      transition: 'all 0.2s ease'
     },
 
     '.dnd--drag-valid': {
-      transition: 'all 0.2s ease',
+      transition: 'all 0.2s ease'
     },
 
     '.dnd--drag-error': {
-      transition: 'all 0.2s ease',
+      transition: 'all 0.2s ease'
     }
   }
 })

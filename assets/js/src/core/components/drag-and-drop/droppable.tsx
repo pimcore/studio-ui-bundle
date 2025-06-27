@@ -12,7 +12,7 @@ import React, { type ReactNode } from 'react'
 import { BaseDroppable } from '@Pimcore/components/drag-and-drop/droppable/base-droppable'
 import cn from 'classnames'
 import { DroppableContextProvider } from './droppable-context-provider'
-import { IconProps } from '@sdk/components'
+import { type IconProps } from '@sdk/components'
 
 export interface DroppableProps {
   className?: string
@@ -24,7 +24,7 @@ export interface DroppableProps {
   onDrop: (info: DragAndDropInfo) => void
   disabled?: boolean
   /**
-   * If true, it does not update the drag state to 'active' when a drag operation starts. The active state is useful 
+   * If true, it does not update the drag state to 'active' when a drag operation starts. The active state is useful
    * for visually indicating all eligible drop zones before an item is dragged over them. For performance reasons,
    * it is recommended to set this to true if the active indicator is not needed or re-rendering would be too resource intensive.
    */
@@ -40,15 +40,14 @@ export interface DragAndDropInfo {
 }
 
 export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
-
   if (props.disabled === true) {
     return (
-      <div className={ cn(props.className) }> 
+      <div className={ cn(props.className) }>
         <DroppableContextProvider value={ { isDragActive: false, isOver: false, isValid: false } }>
           {props.children}
         </DroppableContextProvider>
       </div>
-     )
+    )
   }
 
   return (
@@ -57,9 +56,9 @@ export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
       disableDndActiveIndicator={ props.disableDndActiveIndicator }
       isValidContext={ props.isValidContext }
       isValidData={ props.isValidData }
+      onDrop={ props.onDrop }
       shape={ props.shape }
       variant={ props.variant }
-      onDrop={ props.onDrop }
     >
       { props.children }
     </BaseDroppable>

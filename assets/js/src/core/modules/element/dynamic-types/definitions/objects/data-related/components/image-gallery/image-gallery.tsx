@@ -127,21 +127,21 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
         wrap
       >
         <DndContext
-        autoScroll={ false }
-          sensors={ sensors }
+          autoScroll={ false }
           onDragEnd={ (event) => {
             const dragId = event.active.id
             const dropId = event.over?.id
             const newValue = [...value]
-      
-                      const dragValue = value[Number(dragId)]
-                      const dropValue = value[Number(dropId)]
-                      if (dragValue !== undefined && dropValue !== undefined) {
-                        newValue.splice(Number(dragId), 1)
-                        newValue.splice(Number(dropId), 0, dragValue)
-                        setValue(newValue)
-                      }
-          }}
+
+            const dragValue = value[Number(dragId)]
+            const dropValue = value[Number(dropId)]
+            if (dragValue !== undefined && dropValue !== undefined) {
+              newValue.splice(Number(dragId), 1)
+              newValue.splice(Number(dropId), 0, dragValue)
+              setValue(newValue)
+            }
+          } }
+          sensors={ sensors }
         >
           <SortableContext
             disabled={ props.disabled }

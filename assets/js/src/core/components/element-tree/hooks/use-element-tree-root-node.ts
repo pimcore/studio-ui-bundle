@@ -79,7 +79,7 @@ export const useElementTreeRootNode = (id: number, showRoot: boolean): UseElemen
         ...treeNodeProps,
         icon: id === 1 ? { type: 'name', value: 'home-root-folder' } : treeNodeProps.icon,
         label: id === 1 ? t('home') : treeNodeProps.label,
-        
+
         permissions: {
           ...treeNodeProps.permissions,
           delete: false,

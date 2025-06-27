@@ -16,7 +16,6 @@ import { useTranslation } from 'react-i18next'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { type DragAndDropInfo } from '@sdk/components'
 import type { ImageGalleryValueItem } from '../../image-gallery'
-import type { UniqueIdentifier } from '@dnd-kit/core'
 import {
   fromIHotspots,
   toIHotspots

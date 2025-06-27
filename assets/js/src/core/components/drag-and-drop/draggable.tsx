@@ -23,10 +23,10 @@ const dispatchChangeDragInfoEvent = (info: DragAndDropInfo | null): void => {
   window.dispatchEvent(customEvent)
 }
 
-function Draggable(props: DraggableProps): React.JSX.Element {
-  const updateOverlayPosition = (event: MouseEvent) => {
+function Draggable (props: DraggableProps): React.JSX.Element {
+  const updateOverlayPosition = (event: MouseEvent): void => {
     const overlay = document.getElementById('studio-dnd-overlay')
-    if (!overlay) return
+    if (overlay) return
 
     if (event.screenX === 0 && event.screenY === 0) {
       overlay.style.setProperty('display', 'none')
@@ -41,8 +41,19 @@ function Draggable(props: DraggableProps): React.JSX.Element {
   return useMemo(
     () => (
       <div
-        draggable={true}
-        onDragStart={(e) => {
+        draggable
+        onDragEnd={ (e) => {
+          e.stopPropagation()
+          window.removeEventListener('drag', updateOverlayPosition)
+          const overlay = document.getElementById('studio-dnd-overlay')
+          if (overlay) {
+            overlay.style.display = 'none'
+          }
+          document.body.classList.remove('dnd--dragging')
+
+          dispatchChangeDragInfoEvent(null)
+        } }
+        onDragStart={ (e) => {
           e.stopPropagation()
           document.body.classList.add('dnd--dragging')
 
@@ -64,7 +75,7 @@ function Draggable(props: DraggableProps): React.JSX.Element {
             document.getElementById('global-overlay-container')?.appendChild(overlay)
           }
           overlay.style.display = 'none'
-          overlay.innerHTML = ReactDOMServer.renderToString(<DragOverlay info={props.info} />)
+          overlay.innerHTML = ReactDOMServer.renderToString(<DragOverlay info={ props.info } />)
 
           window.addEventListener('drag', updateOverlayPosition)
 
@@ -75,18 +86,7 @@ function Draggable(props: DraggableProps): React.JSX.Element {
           setTimeout(() => {
             dispatchChangeDragInfoEvent(props.info)
           }, 200)
-        }}
-        onDragEnd={(e) => {
-          e.stopPropagation()
-          window.removeEventListener('drag', updateOverlayPosition)
-          const overlay = document.getElementById('studio-dnd-overlay')
-          if (overlay) {
-            overlay.style.display = 'none'
-          }
-          document.body.classList.remove('dnd--dragging')
-
-          dispatchChangeDragInfoEvent(null)
-        }}
+        } }
       >
         <GlobalStyle />
         {props.children}

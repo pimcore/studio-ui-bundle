@@ -26,7 +26,7 @@ export const withDraggable = (Component: typeof TreeNode): typeof TreeNode => {
       )
     }
 
-    const title = isString(metaData?.key) && metaData?.key !== '' ? metaData?.key :  t('home')
+    const title = isString(metaData?.key) && metaData?.key !== '' ? metaData?.key : t('home')
 
     return (
       <Draggable

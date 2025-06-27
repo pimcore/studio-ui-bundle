@@ -29,7 +29,7 @@ export const withDraggable = (Component: typeof TreeNode): typeof TreeNode => {
       )
     }
 
-    const title = isString(metaData?.filename) && metaData?.filename !== '' ? metaData?.filename :  t('home')
+    const title = isString(metaData?.filename) && metaData?.filename !== '' ? metaData?.filename : t('home')
 
     return (
       <Draggable
