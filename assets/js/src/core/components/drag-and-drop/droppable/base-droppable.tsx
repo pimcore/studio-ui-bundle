@@ -87,6 +87,9 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
       updateDragState('inactive');
       return;
     }
+
+    e.stopPropagation();
+
     updateDragState(isInfoValid() ? 'valid' : 'error')
   }, []);
 
