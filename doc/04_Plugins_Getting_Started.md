@@ -6,25 +6,19 @@ Plugins can add new features, modify existing functionality, or integrate with e
 
 ## Getting started
 
-Since there’s no npm package available yet, follow the local development guide to install the Pimcore Studio UI as one of your frontend dependencies. To do this, change to the Pimcore Studio path (vendor/pimcore/studio-ui-bundle/assets) and run these commands:
+To get started, install the [Pimcore Studio UI npm package](https://www.npmjs.com/package/@pimcore/studio-ui-bundle?activeTab=readme), which offers full TypeScript support for the Pimcore SDK.
 
 ```
-npm install
-npm run build-app // for production builds
-// or 
-npm run dev-app // for development builds 
-npm pack --pack-destination ~
+npm install @pimcore/studio-ui-bundle
 ```
 
-This will create a installable tar file in our home directory. 
-
-Switch back to your bundle directory. We can now install the package directly in our Bundle via:
+💡 Want to adapt early to new features? There's also a canary release that includes typings for the most recent .x-branch updates:
 
 ```
-npm install ~/package-name.tgz
+npm install @pimcore/studio-ui-bundle@canary
 ```
 
-To begin, ensure you have a basic [Pimcore Bundle](https://pimcore.com/docs/platform/Pimcore/Extending_Pimcore/Bundle_Developers_Guide/). For this guide, let’s call our plugin `PimcoreStudioUiDemoPluginBundle`.
+Also ensure you have a basic [Pimcore Bundle](https://pimcore.com/docs/platform/Pimcore/Extending_Pimcore/Bundle_Developers_Guide/). For this guide, let’s call our plugin `PimcoreStudioUiDemoPluginBundle`.
 
 
 With our dependency in place we should now setup our bundling process. We recommend [Rsbuild](https://rsbuild.rs/).
