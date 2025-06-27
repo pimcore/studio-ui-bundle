@@ -854,6 +854,7 @@ email-log.forward.label: Forward Email
 email-log.send.label: Send
 email-log.forward.email-address.label: Email Address
 email-log.delete.email.success: Email has been deleted successfully
+aria.email-log.html.preview: HTML Preview
 user-profile.label: My Profile
 user-profile.general: General Data
 user-profile.change-password: Change Password

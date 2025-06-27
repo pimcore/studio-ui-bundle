@@ -15,7 +15,7 @@ export const EmailError = ({ email }: EmailErrorProps): React.JSX.Element => {
 
   return (
     <Alert
-      description={data?.error || ''}
+      description={data?.error ?? ''}
       showIcon
       type="error"
     />

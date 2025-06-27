@@ -7,6 +7,7 @@ import { IconButton } from "@Pimcore/components/icon-button/icon-button";
 import { ForwardModal } from "../forward-modal/forward-modal";
 import { Text } from "@sdk/components";
 import { Divider } from "antd";
+import { isNil } from "lodash";
 
 interface EmailCardHeaderProps {
   email: EmailLog;
@@ -25,14 +26,14 @@ export const EmailCardHeader = ({ email }: EmailCardHeaderProps): React.JSX.Elem
 
         <Flex gap="mini" align="center">
           <Text type="secondary">{`${t('widget.email-log.to')}: ${email.from}`}</Text>
-          {data?.cc && (
+          {isNil(data?.cc) === false && (
             <>
               <Divider type="vertical" />
               <Text type="secondary">{`${t('widget.email-log.cc')}: ${data.cc}`}</Text>
             </>
           )}
 
-          {data?.bcc && (
+          {isNil(data?.bcc) === false && (
             <>
               <Divider type="vertical" />
               <Text type="secondary">{`${t('widget.email-log.bcc')}: ${data.bcc}`}</Text>

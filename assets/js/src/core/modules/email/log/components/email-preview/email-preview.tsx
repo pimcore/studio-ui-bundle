@@ -3,6 +3,7 @@ import { EmailLog, useEmailLogGetHtmlQuery } from "@Pimcore/modules/email/emails
 import { isUndefined } from "lodash"
 import React from "react"
 import { useStyles } from "./email-preview.styles"
+import { useTranslation } from "react-i18next"
 
 interface EmailPreviewProps {
   email: EmailLog
@@ -10,6 +11,7 @@ interface EmailPreviewProps {
 }
 
 export const EmailPreview = ({ email, height = 650 }: EmailPreviewProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const { styles } = useStyles()
   const { data, isLoading } = useEmailLogGetHtmlQuery({ id: email.id })
 
@@ -19,9 +21,10 @@ export const EmailPreview = ({ email, height = 650 }: EmailPreviewProps): React.
       none={isUndefined(data?.data) || data.data.length === 0}
     >
       <iframe
+        title={t('aria.email-log.html.preview')}
         height={height}
         className={styles.iframe}
-        srcDoc={data?.data || ""}
+        srcDoc={data?.data ?? ""}
         sandbox=""
       />
     </Content>
