@@ -12,10 +12,13 @@ import React, { forwardRef, type Ref, type ReactElement } from 'react'
 import { Draggable } from '@Pimcore/components/drag-and-drop/draggable'
 import { type DataObject } from '../../data-object-api-slice-enhanced'
 import { type TreeNode, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
+import { isString } from 'lodash'
+import { useTranslation } from 'react-i18next'
 
 export const withDraggable = (Component: typeof TreeNode): typeof TreeNode => {
   const DraggableNodeContent = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
     const metaData: DataObject | undefined = props.metaData.dataObject
+    const { t } = useTranslation()
 
     if (props.metaData?.dataObject === undefined) {
       return (
@@ -23,9 +26,11 @@ export const withDraggable = (Component: typeof TreeNode): typeof TreeNode => {
       )
     }
 
+    const title = isString(metaData?.key) && metaData?.key !== '' ? metaData?.key : t('home')
+
     return (
       <Draggable
-        info={ { icon: metaData!.icon!.value, title: metaData!.key, type: 'data-object', data: { ...metaData } } }
+        info={ { icon: props.icon, title, type: 'data-object', data: { ...metaData } } }
       >
         <Component
           { ...props }

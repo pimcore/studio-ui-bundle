@@ -65,6 +65,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
         ref={ ref }
         wrapNode={ (children) => (
           <Droppable
+            disableDndActiveIndicator
             isValidContext={ checkForValidContext }
             isValidData={ checkForValidData }
             onDrop={ onDrop }

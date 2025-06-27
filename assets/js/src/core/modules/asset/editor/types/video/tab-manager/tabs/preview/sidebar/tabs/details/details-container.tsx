@@ -22,6 +22,9 @@ import { Content } from '@Pimcore/components/content/content'
 import { fetchBlobWithPolling } from '@Pimcore/utils/polling-helper'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
+type Callback = () => void
+const noop = (): void => {}
+
 const DetailContainer = (): React.JSX.Element => {
   const [isDownloading, setIsDownloading] = useState(false)
   const { playerPosition, setThumbnail } = React.useContext(VideoContext)
@@ -39,9 +42,6 @@ const DetailContainer = (): React.JSX.Element => {
   if (videoThumbnails === null || videoThumbnails === undefined) {
     return <Content loading />
   }
-
-  type Callback = () => void
-  const noop = (): void => {}
 
   return (
     <VideoEditorSidebarDetailsTab

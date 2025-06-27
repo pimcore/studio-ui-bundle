@@ -1,0 +1,1556 @@
+{
+  "id": "pimcore_studio_ui_bundle",
+  "name": "pimcore_studio_ui_bundle",
+  "metaData": {
+    "name": "pimcore_studio_ui_bundle",
+    "type": "app",
+    "buildInfo": {
+      "buildVersion": "0.0.1",
+      "buildName": "@pimcore/studio-ui-bundle"
+    },
+    "remoteEntry": {
+      "name": "static/js/remoteEntry.js",
+      "path": "",
+      "type": "global"
+    },
+    "types": {
+      "path": "",
+      "name": "",
+      "zip": "",
+      "api": ""
+    },
+    "globalName": "pimcore_studio_ui_bundle",
+    "pluginVersion": "0.13.1",
+    "prefetchInterface": false,
+    "publicPath": "/bundles/pimcorestudioui/build/3a0c3d8c-0234-4237-8fc9-5569d638ed38/"
+  },
+  "shared": [
+    {
+      "singleton": true,
+      "requiredVersion": "^14.1.3",
+      "shareScope": "default",
+      "import": "react-i18next",
+      "name": "react-i18next",
+      "version": "14.1.3",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:react-i18next",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/4650.2e475083.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": [
+        "./app",
+        "./modules/element"
+      ]
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "18.3.x",
+      "shareScope": "default",
+      "eager": true,
+      "name": "react",
+      "version": "18.3.x",
+      "id": "pimcore_studio_ui_bundle:react",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/1150.4a6b0826.js",
+            "static/js/remoteEntry.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": [
+        "./components",
+        "./modules/data-object",
+        "./modules/element"
+      ]
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^2.5.1",
+      "shareScope": "default",
+      "eager": true,
+      "name": "classnames",
+      "version": "2.5.1",
+      "id": "pimcore_studio_ui_bundle:classnames",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/1150.4a6b0826.js",
+            "static/js/remoteEntry.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": [
+        "./modules/element"
+      ]
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^*",
+      "shareScope": "default",
+      "eager": true,
+      "name": "reflect-metadata",
+      "version": "*",
+      "id": "pimcore_studio_ui_bundle:reflect-metadata",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/1150.4a6b0826.js",
+            "static/js/remoteEntry.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "5.22.x",
+      "shareScope": "default",
+      "eager": true,
+      "name": "antd",
+      "version": "5.22.x",
+      "id": "pimcore_studio_ui_bundle:antd",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/1150.4a6b0826.js",
+            "static/js/remoteEntry.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": [
+        "./components"
+      ]
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^6.4.9",
+      "shareScope": "default",
+      "import": "@codemirror/lang-html",
+      "name": "@codemirror/lang-html",
+      "version": "^6.4.9",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-html",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/7577.8bcede34.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^6.3.0",
+      "shareScope": "default",
+      "import": "@codemirror/lang-css",
+      "name": "@codemirror/lang-css",
+      "version": "^6.3.0",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-css",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/8360.37dcc5f2.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^6.2.2",
+      "shareScope": "default",
+      "import": "@codemirror/lang-javascript",
+      "name": "@codemirror/lang-javascript",
+      "version": "^6.2.2",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-javascript",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/7700.6fde9ad3.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^6.1.0",
+      "shareScope": "default",
+      "import": "@dnd-kit/core",
+      "name": "@dnd-kit/core",
+      "version": "^6.1.0",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@dnd-kit/core",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/4854.58d64832.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^undefined",
+      "shareScope": "default",
+      "eager": true,
+      "version": "6.1.x",
+      "name": "inversify",
+      "id": "pimcore_studio_ui_bundle:inversify",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/1150.4a6b0826.js",
+            "static/js/remoteEntry.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": [
+        "./modules/data-object"
+      ]
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^4.17.21",
+      "shareScope": "default",
+      "import": "lodash",
+      "name": "lodash",
+      "version": "4.17.21",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:lodash",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/3948.ca4bddea.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": [
+        "./utils"
+      ]
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "3.7.x",
+      "shareScope": "default",
+      "import": "antd-style",
+      "name": "antd-style",
+      "version": "3.7.x",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:antd-style",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/7448.b6c4afec.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": [
+        "./components"
+      ]
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^23.16.8",
+      "shareScope": "default",
+      "import": "i18next",
+      "name": "i18next",
+      "version": "23.16.8",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:i18next",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/1567.c410da58.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": [
+        "./utils"
+      ]
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^11.11.17",
+      "shareScope": "default",
+      "import": "framer-motion",
+      "name": "framer-motion",
+      "version": "11.11.17",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:framer-motion",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/3956.c2c369d8.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^2.3.0",
+      "shareScope": "default",
+      "import": "@reduxjs/toolkit",
+      "name": "@reduxjs/toolkit",
+      "version": "^2.3.0",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@reduxjs/toolkit",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/448.3498365b.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^9.1.2",
+      "shareScope": "default",
+      "import": "react-redux",
+      "name": "react-redux",
+      "version": "9.1.2",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:react-redux",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/7981.970f7b9e.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^6.28.0",
+      "shareScope": "default",
+      "import": "react-router-dom",
+      "name": "react-router-dom",
+      "version": "6.28.0",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:react-router-dom",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/5853.e0681c6c.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^10.0.0",
+      "shareScope": "default",
+      "import": "uuid",
+      "name": "uuid",
+      "version": "10.0.0",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:uuid",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/1888.71926ec6.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^0.7.15",
+      "shareScope": "default",
+      "import": "flexlayout-react",
+      "name": "flexlayout-react",
+      "version": "0.7.15",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:flexlayout-react",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/5435.f7ef0649.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^4.4.6",
+      "shareScope": "default",
+      "import": "react-draggable",
+      "name": "react-draggable",
+      "version": "4.4.6",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:react-draggable",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/1778.a1f5a658.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^8.20.5",
+      "shareScope": "default",
+      "import": "@tanstack/react-table",
+      "name": "@tanstack/react-table",
+      "version": "^8.20.5",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@tanstack/react-table",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/281.5cceb334.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^8.0.0",
+      "shareScope": "default",
+      "import": "@dnd-kit/sortable",
+      "name": "@dnd-kit/sortable",
+      "version": "^8.0.0",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@dnd-kit/sortable",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/1595.3793e4f4.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^3.2.1",
+      "shareScope": "default",
+      "import": "dompurify",
+      "name": "dompurify",
+      "version": "3.2.1",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:dompurify",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/7830.a6bff57b.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^1.9.4",
+      "shareScope": "default",
+      "import": "leaflet",
+      "name": "leaflet",
+      "version": "1.9.4",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:leaflet",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/4876.35267c1f.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^1.0.4",
+      "shareScope": "default",
+      "import": "leaflet-draw",
+      "name": "leaflet-draw",
+      "version": "1.0.4",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:leaflet-draw",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/6565.565c63bb.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^4.23.6",
+      "shareScope": "default",
+      "eager": true,
+      "version": "^4.23.6",
+      "name": "@uiw/react-codemirror",
+      "id": "pimcore_studio_ui_bundle:@uiw/react-codemirror",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/1150.4a6b0826.js",
+            "static/js/remoteEntry.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^6.0.1",
+      "shareScope": "default",
+      "import": "@codemirror/lang-json",
+      "name": "@codemirror/lang-json",
+      "version": "^6.0.1",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-json",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/5639.5ee87fc3.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^6.1.0",
+      "shareScope": "default",
+      "import": "@codemirror/lang-xml",
+      "name": "@codemirror/lang-xml",
+      "version": "^6.1.0",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-xml",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/8385.2a34f10f.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^6.8.0",
+      "shareScope": "default",
+      "import": "@codemirror/lang-sql",
+      "name": "@codemirror/lang-sql",
+      "version": "^6.8.0",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-sql",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/3969.2cf8ec77.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^6.3.1",
+      "shareScope": "default",
+      "import": "@codemirror/lang-markdown",
+      "name": "@codemirror/lang-markdown",
+      "version": "^6.3.1",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-markdown",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/1447.13bc4d3d.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "18.3.x",
+      "shareScope": "default",
+      "eager": true,
+      "name": "react-dom",
+      "version": "18.3.x",
+      "id": "pimcore_studio_ui_bundle:react-dom",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/1150.4a6b0826.js",
+            "static/js/remoteEntry.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^10.1.1",
+      "shareScope": "default",
+      "import": "immer",
+      "name": "immer",
+      "version": "10.1.1",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:immer",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/4374.c99deb71.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    }
+  ],
+  "remotes": [],
+  "exposes": [
+    {
+      "path": ".",
+      "id": "pimcore_studio_ui_bundle:.",
+      "name": ".",
+      "requires": [],
+      "file": "js/src/sdk/main.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/__federation_expose_default_export.b3f494c2.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./_internal_/mf-bootstrap",
+      "id": "pimcore_studio_ui_bundle:_internal_/mf-bootstrap",
+      "name": "_internal_/mf-bootstrap",
+      "requires": [],
+      "file": "js/src/sdk/_internal_/mf-bootstrap.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/4115.18d64165.js",
+            "static/js/async/1869.a9980fed.js",
+            "static/js/async/__federation_expose_utils.2e1d1baf.js",
+            "static/js/async/__federation_expose_app.3172c257.js",
+            "static/js/async/7952.811ee3dd.js",
+            "static/js/async/6792.feded582.js",
+            "static/js/async/__federation_expose_modules__asset.9f0de360.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.26a821c7.js"
+          ],
+          "async": [
+            "static/js/async/7599.f501b0a1.js",
+            "static/js/async/5402.277643cf.js"
+          ]
+        },
+        "css": {
+          "sync": [
+            "static/css/async/4115.c9c57cef.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.729f702d.css"
+          ],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./components",
+      "id": "pimcore_studio_ui_bundle:components",
+      "name": "components",
+      "requires": [
+        "react",
+        "antd",
+        "antd-style"
+      ],
+      "file": "js/src/sdk/components/index.ts",
+      "assets": {
+        "js": {
+          "sync": [],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./app",
+      "id": "pimcore_studio_ui_bundle:app",
+      "name": "app",
+      "requires": [
+        "react-i18next"
+      ],
+      "file": "js/src/sdk/app/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/4115.18d64165.js",
+            "static/js/async/1869.a9980fed.js",
+            "static/js/async/__federation_expose_utils.2e1d1baf.js",
+            "static/js/async/__federation_expose_app.3172c257.js",
+            "static/js/async/7952.811ee3dd.js",
+            "static/js/async/6792.feded582.js",
+            "static/js/async/__federation_expose_modules__asset.9f0de360.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.26a821c7.js",
+            "static/js/async/__federation_expose_modules__data_object.aa3edc79.js",
+            "static/js/async/__federation_expose_modules__user.4dd319ca.js",
+            "static/js/async/__federation_expose_modules__wysiwyg.c676fcab.js"
+          ],
+          "async": [
+            "static/js/async/7599.f501b0a1.js",
+            "static/js/async/5402.277643cf.js"
+          ]
+        },
+        "css": {
+          "sync": [
+            "static/css/async/4115.c9c57cef.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.729f702d.css"
+          ],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/role",
+      "id": "pimcore_studio_ui_bundle:api/role",
+      "name": "api/role",
+      "requires": [],
+      "file": "js/src/sdk/api/asset/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/1869.a9980fed.js",
+            "static/js/async/__federation_expose_api__role.1226ef66.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api",
+      "id": "pimcore_studio_ui_bundle:api",
+      "name": "api",
+      "requires": [],
+      "file": "js/src/sdk/api/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/__federation_expose_api.afaa2793.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/custom-metadata",
+      "id": "pimcore_studio_ui_bundle:api/custom-metadata",
+      "name": "api/custom-metadata",
+      "requires": [],
+      "file": "js/src/sdk/api/custom-metadata/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/__federation_expose_api__custom_metadata.75d266d2.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/data-object",
+      "id": "pimcore_studio_ui_bundle:api/data-object",
+      "name": "api/data-object",
+      "requires": [],
+      "file": "js/src/sdk/api/data-object/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/__federation_expose_api__data_object.c583aac3.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/dependencies",
+      "id": "pimcore_studio_ui_bundle:api/dependencies",
+      "name": "api/dependencies",
+      "requires": [],
+      "file": "js/src/sdk/api/dependencies/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/__federation_expose_api__dependencies.56ff02b1.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/documents",
+      "id": "pimcore_studio_ui_bundle:api/documents",
+      "name": "api/documents",
+      "requires": [],
+      "file": "js/src/sdk/api/documents/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/__federation_expose_api__documents.5726cfaa.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/elements",
+      "id": "pimcore_studio_ui_bundle:api/elements",
+      "name": "api/elements",
+      "requires": [],
+      "file": "js/src/sdk/api/elements/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/__federation_expose_api__elements.5d8e963b.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/metadata",
+      "id": "pimcore_studio_ui_bundle:api/metadata",
+      "name": "api/metadata",
+      "requires": [],
+      "file": "js/src/sdk/api/metadata/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/__federation_expose_api__metadata.2bfcdd31.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/perspectives",
+      "id": "pimcore_studio_ui_bundle:api/perspectives",
+      "name": "api/perspectives",
+      "requires": [],
+      "file": "js/src/sdk/api/perspectives/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/__federation_expose_api__perspectives.5a25e8fd.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/properties",
+      "id": "pimcore_studio_ui_bundle:api/properties",
+      "name": "api/properties",
+      "requires": [],
+      "file": "js/src/sdk/api/properties/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/__federation_expose_api__properties.d496aaed.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/schedule",
+      "id": "pimcore_studio_ui_bundle:api/schedule",
+      "name": "api/schedule",
+      "requires": [],
+      "file": "js/src/sdk/api/schedule/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/__federation_expose_api__schedule.e39ac975.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/settings",
+      "id": "pimcore_studio_ui_bundle:api/settings",
+      "name": "api/settings",
+      "requires": [],
+      "file": "js/src/sdk/api/settings/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/__federation_expose_api__settings.94251170.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/tags",
+      "id": "pimcore_studio_ui_bundle:api/tags",
+      "name": "api/tags",
+      "requires": [],
+      "file": "js/src/sdk/api/tags/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/__federation_expose_api__tags.8f757a58.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/thumbnails",
+      "id": "pimcore_studio_ui_bundle:api/thumbnails",
+      "name": "api/thumbnails",
+      "requires": [],
+      "file": "js/src/sdk/api/thumbnails/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/__federation_expose_api__thumbnails.dc57b1a6.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/translations",
+      "id": "pimcore_studio_ui_bundle:api/translations",
+      "name": "api/translations",
+      "requires": [],
+      "file": "js/src/sdk/api/translations/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/__federation_expose_api__translations.277d25cd.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/user",
+      "id": "pimcore_studio_ui_bundle:api/user",
+      "name": "api/user",
+      "requires": [],
+      "file": "js/src/sdk/api/user/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/__federation_expose_api__user.fa6b3f53.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/version",
+      "id": "pimcore_studio_ui_bundle:api/version",
+      "name": "api/version",
+      "requires": [],
+      "file": "js/src/sdk/api/version/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/__federation_expose_api__version.0a3b7a6c.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/workflow",
+      "id": "pimcore_studio_ui_bundle:api/workflow",
+      "name": "api/workflow",
+      "requires": [],
+      "file": "js/src/sdk/api/workflow/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/__federation_expose_api__workflow.47ef1870.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./modules/app",
+      "id": "pimcore_studio_ui_bundle:modules/app",
+      "name": "modules/app",
+      "requires": [],
+      "file": "js/src/sdk/modules/app/index.ts",
+      "assets": {
+        "js": {
+          "sync": [],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./modules/asset",
+      "id": "pimcore_studio_ui_bundle:modules/asset",
+      "name": "modules/asset",
+      "requires": [],
+      "file": "js/src/sdk/modules/asset/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/4115.18d64165.js",
+            "static/js/async/1869.a9980fed.js",
+            "static/js/async/__federation_expose_utils.2e1d1baf.js",
+            "static/js/async/__federation_expose_app.3172c257.js",
+            "static/js/async/7952.811ee3dd.js",
+            "static/js/async/6792.feded582.js",
+            "static/js/async/__federation_expose_modules__asset.9f0de360.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.26a821c7.js"
+          ],
+          "async": [
+            "static/js/async/7599.f501b0a1.js",
+            "static/js/async/5402.277643cf.js"
+          ]
+        },
+        "css": {
+          "sync": [
+            "static/css/async/4115.c9c57cef.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.729f702d.css"
+          ],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./modules/class-definitions",
+      "id": "pimcore_studio_ui_bundle:modules/class-definitions",
+      "name": "modules/class-definitions",
+      "requires": [],
+      "file": "js/src/sdk/modules/class-definitions/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/__federation_expose_modules__class_definitions.f5778ff3.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./modules/data-object",
+      "id": "pimcore_studio_ui_bundle:modules/data-object",
+      "name": "modules/data-object",
+      "requires": [
+        "react",
+        "inversify"
+      ],
+      "file": "js/src/sdk/modules/data-object/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/4115.18d64165.js",
+            "static/js/async/1869.a9980fed.js",
+            "static/js/async/__federation_expose_utils.2e1d1baf.js",
+            "static/js/async/__federation_expose_app.3172c257.js",
+            "static/js/async/7952.811ee3dd.js",
+            "static/js/async/__federation_expose_modules__data_object.aa3edc79.js"
+          ],
+          "async": [
+            "static/js/async/7599.f501b0a1.js"
+          ]
+        },
+        "css": {
+          "sync": [
+            "static/css/async/4115.c9c57cef.css"
+          ],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./modules/element",
+      "id": "pimcore_studio_ui_bundle:modules/element",
+      "name": "modules/element",
+      "requires": [
+        "react-i18next",
+        "react",
+        "classnames"
+      ],
+      "file": "js/src/sdk/modules/element/index.ts",
+      "assets": {
+        "js": {
+          "sync": [],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./modules/icon-library",
+      "id": "pimcore_studio_ui_bundle:modules/icon-library",
+      "name": "modules/icon-library",
+      "requires": [],
+      "file": "js/src/sdk/modules/icon-library/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/__federation_expose_modules__icon_library.43a2c8cb.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./modules/user",
+      "id": "pimcore_studio_ui_bundle:modules/user",
+      "name": "modules/user",
+      "requires": [],
+      "file": "js/src/sdk/modules/user/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/4115.18d64165.js",
+            "static/js/async/1869.a9980fed.js",
+            "static/js/async/__federation_expose_utils.2e1d1baf.js",
+            "static/js/async/__federation_expose_app.3172c257.js",
+            "static/js/async/6792.feded582.js",
+            "static/js/async/__federation_expose_modules__user.4dd319ca.js"
+          ],
+          "async": [
+            "static/js/async/7599.f501b0a1.js"
+          ]
+        },
+        "css": {
+          "sync": [
+            "static/css/async/4115.c9c57cef.css"
+          ],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./modules/widget-manager",
+      "id": "pimcore_studio_ui_bundle:modules/widget-manager",
+      "name": "modules/widget-manager",
+      "requires": [],
+      "file": "js/src/sdk/modules/widget-manager/index.ts",
+      "assets": {
+        "js": {
+          "sync": [],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./modules/wysiwyg",
+      "id": "pimcore_studio_ui_bundle:modules/wysiwyg",
+      "name": "modules/wysiwyg",
+      "requires": [],
+      "file": "js/src/sdk/modules/wysiwyg/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/4115.18d64165.js",
+            "static/js/async/1869.a9980fed.js",
+            "static/js/async/__federation_expose_utils.2e1d1baf.js",
+            "static/js/async/__federation_expose_app.3172c257.js",
+            "static/js/async/__federation_expose_modules__wysiwyg.c676fcab.js"
+          ],
+          "async": [
+            "static/js/async/7599.f501b0a1.js"
+          ]
+        },
+        "css": {
+          "sync": [
+            "static/css/async/4115.c9c57cef.css"
+          ],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./utils",
+      "id": "pimcore_studio_ui_bundle:utils",
+      "name": "utils",
+      "requires": [
+        "lodash",
+        "i18next"
+      ],
+      "file": "js/src/sdk/utils/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/4115.18d64165.js",
+            "static/js/async/1869.a9980fed.js",
+            "static/js/async/__federation_expose_utils.2e1d1baf.js",
+            "static/js/async/__federation_expose_app.3172c257.js",
+            "static/js/async/7952.811ee3dd.js",
+            "static/js/async/6792.feded582.js",
+            "static/js/async/__federation_expose_modules__asset.9f0de360.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.26a821c7.js",
+            "static/js/async/__federation_expose_modules__data_object.aa3edc79.js",
+            "static/js/async/__federation_expose_modules__user.4dd319ca.js",
+            "static/js/async/__federation_expose_modules__wysiwyg.c676fcab.js"
+          ],
+          "async": [
+            "static/js/async/7599.f501b0a1.js",
+            "static/js/async/8526.4e934ad8.js",
+            "static/js/async/1047.12877d03.js",
+            "static/js/async/4115.18d64165.js",
+            "static/js/async/1869.a9980fed.js",
+            "static/js/async/__federation_expose_utils.2e1d1baf.js",
+            "static/js/async/__federation_expose_app.3172c257.js",
+            "static/js/async/7952.811ee3dd.js",
+            "static/js/async/6792.feded582.js",
+            "static/js/async/__federation_expose_modules__asset.9f0de360.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.26a821c7.js",
+            "static/js/async/__federation_expose_modules__data_object.aa3edc79.js",
+            "static/js/async/__federation_expose_modules__user.4dd319ca.js",
+            "static/js/async/__federation_expose_modules__wysiwyg.c676fcab.js",
+            "static/js/async/5402.277643cf.js"
+          ]
+        },
+        "css": {
+          "sync": [
+            "static/css/async/4115.c9c57cef.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.729f702d.css"
+          ],
+          "async": [
+            "static/css/async/4115.c9c57cef.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.729f702d.css"
+          ]
+        }
+      }
+    }
+  ]
+}

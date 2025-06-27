@@ -19,14 +19,12 @@ export interface DragOverlayProps {
 
 export const DragOverlay = (props: DragOverlayProps): React.JSX.Element => {
   const { styles } = useStyle()
-  const ref = React.useRef<HTMLDivElement>(null)
 
   return (
     <div
       className={ ['dnd__overlay', styles.dragOverlay].join(' ') }
-      ref={ ref }
     >
-      <Icon value={ props.info.icon } /> {props.info.title}
+      <Icon { ...props.info.icon } /> {props.info.title}
     </div>
   )
 }
