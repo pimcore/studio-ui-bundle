@@ -253,7 +253,7 @@ export type Transformer = {
 };
 export type AdvancedColumnConfig = {
     /** advancedColumns */
-    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
+    advancedColumns: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
     /** List if Transformers that should be applied */
     transformers?: Transformer[];
 };

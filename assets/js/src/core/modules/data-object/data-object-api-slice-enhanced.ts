@@ -10,7 +10,6 @@
 
 import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './data-object-api-slice.gen'
-import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 
 const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_TREE, tagNames.DATA_OBJECT_DETAIL],
@@ -42,9 +41,6 @@ const api = baseApi.enhanceEndpoints({
     },
 
     dataObjectGetLayoutById: {
-      query: (queryArg) => ({
-        url: queryArg.layoutId === undefined ? `${getPrefix()}/data-objects/${queryArg.id}/layout` : `${getPrefix()}/data-objects/${queryArg.id}/layout/${queryArg.layoutId}`
-      }),
       providesTags: (result, error, args) => providingTags.DATA_OBJECT_DETAIL_ID(args.id)
     },
 
