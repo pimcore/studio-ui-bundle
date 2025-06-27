@@ -23,18 +23,5 @@ export const GlobalStyle = createGlobalStyle(({ theme: token }) => {
         color: token.colorErrorActive
       }
     },
-
-    // Improve drag feedback
-    '.dnd--drag-active': {
-      transition: 'all 0.2s ease'
-    },
-
-    '.dnd--drag-valid': {
-      transition: 'all 0.2s ease'
-    },
-
-    '.dnd--drag-error': {
-      transition: 'all 0.2s ease'
-    }
   }
 })
