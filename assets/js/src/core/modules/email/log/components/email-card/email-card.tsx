@@ -12,6 +12,7 @@ import { EmailPreview } from "../email-preview/email-preview"
 import { ParametersTab } from "../parameters-tab/parameters-tab"
 import { TextPreview } from "../text-preview/text-preview"
 import { useStyles } from "./email-card.styles"
+import { Divider } from "@Pimcore/components/divider/divider"
 
 interface EmailCardProps {
   emails: EmailLog[]
@@ -46,8 +47,9 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
         <Icon value="send-03" />
         <span>{email.subject}</span>
       </Flex>,
-      subLabel: <Flex gap={4}>
-        <span>{`${t('widget.email-log.from')}: ${email.from}`}</span> |
+      subLabel: <Flex gap={'mini'} align="center">
+        <span>{`${t('widget.email-log.from')}: ${email.from}`}</span>
+        <Divider type="vertical" className={styles.divider} />
         <span>{`${t('widget.email-log.to')}: ${email.to}`}</span>
       </Flex>,
       theme: email.hasError ? 'error' : 'default',
