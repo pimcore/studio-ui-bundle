@@ -53,7 +53,6 @@ export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
       shape={ props.shape }
       variant={ props.variant }
       onDrop={ props.onDrop }
-      disabled={ props.disabled }
     >
       { props.children }
     </BaseDroppable>

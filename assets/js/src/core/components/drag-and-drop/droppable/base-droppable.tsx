@@ -24,12 +24,11 @@ export interface BaseDroppableProps {
   isValidContext: boolean | ((info: DragAndDropInfo) => boolean)
   isValidData?: ((info: DragAndDropInfo) => boolean)
   onDrop: (info: DragAndDropInfo) => void
-  disabled?: boolean
 }
 
 type dragStateType = 'inactive' | 'active' | 'valid' | 'error'
 
-export const BaseDroppable = ({ children, className, variant, shape, isValidContext, isValidData, onDrop, disabled }: BaseDroppableProps): React.JSX.Element | null => {
+export const BaseDroppable = ({ children, className, variant, shape, isValidContext, isValidData, onDrop }: BaseDroppableProps): React.JSX.Element | null => {
   const { styles } = useStyle();
   const [dragState, setDragState] = useState<dragStateType>('inactive');
   const validContext = useRef<boolean>(false);
