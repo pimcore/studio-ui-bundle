@@ -58,5 +58,6 @@ Quickly recompile the app by using one of the npm commands listed above. When ev
 ### Further reading
 
 - [Plugin Development Examples](./05_Examples/README.md)
+- [Studio UI Core Development](./doc/09_Studio_UI_Core_Development.md)
 
 
