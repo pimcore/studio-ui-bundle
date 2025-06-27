@@ -161,6 +161,9 @@ import { type DynamicTypeDocumentEditableTextarea } from './definitions/document
 import { DynamicTypePipelineRegistry } from './definitions/pipelines/dynamic-type-pipeline-registry'
 import { DynamicTypePipelineGridSourceFieldsText } from './definitions/pipelines/grid/source-fields/types/text/text'
 import { DynamicTypePipelineGridTransformersChangeCase } from './definitions/pipelines/grid/transformers/types/change-case/change-case'
+import { DynamicTypePipelineGridTransformersCombine } from './definitions/pipelines/grid/transformers/types/combine/combine'
+import { DynamicTypePipelineGridSourceFieldsSimpleField } from './definitions/pipelines/grid/source-fields/types/simple-field/simple-field'
+import { DynamicTypePipelineGridSourceFieldsRelationField } from './definitions/pipelines/grid/source-fields/types/relation-field/relation-field'
 
 moduleSystem.registerModule({
   onInit () {
@@ -333,9 +336,12 @@ moduleSystem.registerModule({
     const sourceFieldsRegistry = container.get<DynamicTypePipelineRegistry>(serviceIds['DynamicTypes/Grid/SourceFieldsRegistry']);
     
     sourceFieldsRegistry.registerDynamicType(container.get<DynamicTypePipelineGridSourceFieldsText>(serviceIds['DynamicTypes/Grid/SourceFields/Text']))
+    sourceFieldsRegistry.registerDynamicType(container.get<DynamicTypePipelineGridSourceFieldsSimpleField>(serviceIds['DynamicTypes/Grid/SourceFields/SimpleField']))
+    sourceFieldsRegistry.registerDynamicType(container.get<DynamicTypePipelineGridSourceFieldsRelationField>(serviceIds['DynamicTypes/Grid/SourceFields/RelationField']))
 
     const transformersRegistry = container.get<DynamicTypePipelineRegistry>(serviceIds['DynamicTypes/Grid/TransformersRegistry']);
     
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersChangeCase>(serviceIds['DynamicTypes/Grid/Transformers/ChangeCase']))
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersCombine>(serviceIds['DynamicTypes/Grid/Transformers/Combine']))
   }
 })

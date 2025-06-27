@@ -46,7 +46,7 @@ export const DynamicGroupContent = ({ dynamicTypeRegistryId, id }: DynamicGroupC
       updatedItems.splice(newIndex, 0, active.id);
 
       operations.move(oldIndex, newIndex);
-      setItems(updatedItems);
+      setItems(() => updatedItems);
     }
   };
 

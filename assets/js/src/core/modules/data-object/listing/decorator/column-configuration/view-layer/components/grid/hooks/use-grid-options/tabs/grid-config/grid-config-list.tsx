@@ -40,23 +40,7 @@ export const GridConfigList = (): React.JSX.Element => {
   const settings = useSettings()
   const { t } = useTranslation()
 
-  const onAdvancedColumnChange = (column: AvailableColumn, id: string): void => {
-    const itemList = columns.map((item) => {
-      if (item.key === column.key) {
-        return {
-          ...item,
-          ...column,
-          __meta: {
-            ...item.__meta,
-            advancedColumnConfig: column.__meta?.advancedColumnConfig
-          }
-        }
-      }
-      return item
-    })
-
-    setColumns(() => itemList)
-  }
+  console.log({columns})
 
   const stackListItems: ColumnStackListProps['items'] = useMemo(() => columns.map((column) => {
     const uniqueId = column.__meta?.uniqueId ?? uuid()
@@ -74,6 +58,7 @@ export const GridConfigList = (): React.JSX.Element => {
       sortable: true,
       meta: column,
 
+      type: isAdvancedColumn ? 'collapse' : 'default',
       children: isAdvancedColumn ? <Tag>{advancedColumnName}</Tag> : <Tag>{t(`${translationKey}`)}</Tag>,
 
       ...(column.key === 'advanced' ? {
@@ -126,6 +111,28 @@ export const GridConfigList = (): React.JSX.Element => {
       />
     )
   }
+
+  function onAdvancedColumnChange(column: AvailableColumn, id: string): void {
+    const itemList = stackListItems.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          meta: {
+            ...item.meta,
+            __meta: {
+              ...item.meta.__meta,
+              advancedColumnConfig: column.__meta?.advancedColumnConfig
+            }
+          }
+        }
+      }
+      return item
+    })
+
+    const newColumns = itemList.map((item) => item.meta)
+    setColumns(newColumns)
+  }
+
 
   function onRemoveColumn (uniqueId: string): void {
     const itemList = stackListItems.filter((item) => item.id !== uniqueId)

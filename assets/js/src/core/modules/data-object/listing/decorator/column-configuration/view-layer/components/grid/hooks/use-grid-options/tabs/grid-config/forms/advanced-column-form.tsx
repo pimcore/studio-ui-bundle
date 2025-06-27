@@ -5,6 +5,7 @@ import { Input } from "antd";
 import React, { useEffect } from "react";
 import { AvailableColumn } from "@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider";
 import { isEqual } from "lodash";
+import { PipelineConfigProvider } from "@Pimcore/components/pipeline/provider/pipeline-config/pipeline-config-provider";
 
 export interface AdvancedColumnFormProps {
   column: AvailableColumn
@@ -36,39 +37,43 @@ export const AdvancedColumnForm = ({column, onChange }: AdvancedColumnFormProps)
     }
   }
 
+  console.log(column?.__meta?.advancedColumnConfig)
+
   return (
     <Form form={form} layout='vertical' onValuesChange={onValuesChange} initialValues={column?.__meta?.advancedColumnConfig}>
-      <Form.Item name="value">
-        <Pipeline
-          items={[
-            {
-              id: 'title',
-              component: <Pipeline.CustomItem>
-                <Form.Item name="title" label="Title">
-                  <Input />
-                </Form.Item>
-              </Pipeline.CustomItem>
-            },
+      <PipelineConfigProvider initialConfig={column?.config[0]}>
+        <Form.Item name="value">
+          <Pipeline
+            items={[
+              {
+                id: 'title',
+                component: <Pipeline.CustomItem>
+                  <Form.Item name="title" label="Title">
+                    <Input />
+                  </Form.Item>
+                </Pipeline.CustomItem>
+              },
 
-            {
-              id: 'source-field',
-              component: <Pipeline.DynamicGroupItem id='source-field' dynamicTypeRegistryId={serviceIds['DynamicTypes/Grid/SourceFieldsRegistry']} />
-            },
+              {
+                id: 'source-field',
+                component: <Pipeline.DynamicGroupItem id='source-field' dynamicTypeRegistryId={serviceIds['DynamicTypes/Grid/SourceFieldsRegistry']} />
+              },
 
-            {
-              id: 'transformation',
-              component: <Pipeline.DynamicGroupItem id='transformation' dynamicTypeRegistryId={serviceIds['DynamicTypes/Grid/TransformersRegistry']} />
-            },
+              {
+                id: 'transformation',
+                component: <Pipeline.DynamicGroupItem id='transformation' dynamicTypeRegistryId={serviceIds['DynamicTypes/Grid/TransformersRegistry']} />
+              },
 
-            {
-              id: 'Preview',
-              component: <Pipeline.CustomItem>
-                preview
-              </Pipeline.CustomItem>
-            },
-          ]}
-        />
-      </Form.Item>
+              {
+                id: 'Preview',
+                component: <Pipeline.CustomItem>
+                  preview
+                </Pipeline.CustomItem>
+              },
+            ]}
+          />
+        </Form.Item>
+      </PipelineConfigProvider>
     </Form>
   )
 }
