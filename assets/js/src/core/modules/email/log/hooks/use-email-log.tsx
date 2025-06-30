@@ -1,13 +1,23 @@
-import { invalidatingTags } from "@Pimcore/app/api/pimcore/tags"
-import { useAppDispatch } from "@Pimcore/app/store"
-import { useMessage } from "@Pimcore/components/message/useMessage"
-import { useFormModal } from "@Pimcore/components/modal/form-modal/hooks/use-form-modal"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { useMessage } from '@Pimcore/components/message/useMessage'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { api } from '@Pimcore/modules/email/emails-api-slice-enhanced'
-import { isUndefined } from "lodash"
-import React from "react"
-import { useTranslation } from "react-i18next"
-import { Blocklist2, EmailLogDeleteApiArg, EmailLogForwardByIdApiArg, EmailLogResendByIdApiArg, useEmailLogDeleteMutation, useEmailLogForwardByIdMutation, useEmailLogResendByIdMutation } from "../../emails-api-slice.gen"
+import { isUndefined } from 'lodash'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { type Blocklist2, type EmailLogDeleteApiArg, type EmailLogForwardByIdApiArg, type EmailLogResendByIdApiArg, useEmailLogDeleteMutation, useEmailLogForwardByIdMutation, useEmailLogResendByIdMutation } from '../../emails-api-slice.gen'
 
 interface UseEmailLogHookReturn {
   resendWithConfirmation: (id: EmailLogDeleteApiArg['id'], onFinish?: () => void) => void

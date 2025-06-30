@@ -1,9 +1,19 @@
-import { Content } from "@Pimcore/components/content/content"
-import { EmailLog, useEmailLogGetHtmlQuery } from "@Pimcore/modules/email/emails-api-slice.gen"
-import { isUndefined } from "lodash"
-import React from "react"
-import { useStyles } from "./email-preview.styles"
-import { useTranslation } from "react-i18next"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { Content } from '@Pimcore/components/content/content'
+import { type EmailLog, useEmailLogGetHtmlQuery } from '@Pimcore/modules/email/emails-api-slice.gen'
+import { isUndefined } from 'lodash'
+import React from 'react'
+import { useStyles } from './email-preview.styles'
+import { useTranslation } from 'react-i18next'
 
 interface EmailPreviewProps {
   email: EmailLog
@@ -17,15 +27,15 @@ export const EmailPreview = ({ email, height = 650 }: EmailPreviewProps): React.
 
   return (
     <Content
-      loading={isLoading}
-      none={isUndefined(data?.data) || data.data.length === 0}
+      loading={ isLoading }
+      none={ isUndefined(data?.data) || data.data.length === 0 }
     >
       <iframe
-        title={t('aria.email-log.html.preview')}
-        height={height}
-        className={styles.iframe}
-        srcDoc={data?.data ?? ""}
+        className={ styles.iframe }
+        height={ height }
         sandbox=""
+        srcDoc={ data?.data ?? '' }
+        title={ t('aria.email-log.html.preview') }
       />
     </Content>
   )

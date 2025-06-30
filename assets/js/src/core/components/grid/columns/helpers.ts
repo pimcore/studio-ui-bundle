@@ -28,6 +28,4 @@ export const addColumnMeta = (props: DefaultCellProps, meta: object): DefaultCel
       }
     }
   }
-
-
 }

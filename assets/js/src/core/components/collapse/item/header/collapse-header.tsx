@@ -28,19 +28,19 @@ export const CollapseHeader = ({ label, subLabel, extra, extraPosition, expandIc
   return (
     <Flex
       align='center'
-      gap={'extra-small'}
+      gap={ 'extra-small' }
     >
       <Flex
-        className={`collapse-header__title-container`}
-        vertical={subLabelPosition === 'block'}
-        gap={4}
+        className={ 'collapse-header__title-container' }
+        gap={ 4 }
+        vertical={ subLabelPosition === 'block' }
       >
         <Flex
           align='center'
-          gap={'mini'}
+          gap={ 'mini' }
         >
           {(expandIconPosition === 'start' || expandIconPosition === 'left') && expandIcon}
-          <Text className={'collapse-header__title'}>{label}</Text>
+          <Text className={ 'collapse-header__title' }>{label}</Text>
           {(expandIconPosition === 'end' || expandIconPosition === 'right') && expandIcon}
         </Flex>
 
@@ -56,7 +56,7 @@ export const CollapseHeader = ({ label, subLabel, extra, extraPosition, expandIc
         extra !== undefined && (
           <Flex
             className='collapse-header__extra'
-            justify={extraAdjustment}
+            justify={ extraAdjustment }
           >
             {extra}
           </Flex>

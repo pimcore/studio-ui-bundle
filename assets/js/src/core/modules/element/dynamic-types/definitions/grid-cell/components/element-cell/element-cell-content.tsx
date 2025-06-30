@@ -25,7 +25,7 @@ export interface ElementCellContentProps extends DefaultCellProps {
   getElementInfo?: (props: DefaultCellProps) => ElementInfo
 }
 
-export const ElementCellContent = forwardRef(function ElementCellContent(props: ElementCellContentProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
+export const ElementCellContent = forwardRef(function ElementCellContent (props: ElementCellContentProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { styles } = useStyle()
   const propertyData = props.row.original
   const { getStateClasses } = useDroppable()
@@ -73,23 +73,23 @@ export const ElementCellContent = forwardRef(function ElementCellContent(props: 
 
   return (
     <div
-      className={[styles.link, ...getStateClasses()].join(' ')}
-      ref={ref}
+      className={ [styles.link, ...getStateClasses()].join(' ') }
+      ref={ ref }
     >
       {elementInfo.fullPath !== false && (
         <ElementTag
-          disabled={elementInfo.disabled}
-          elementType={elementInfo.elementType}
-          id={elementInfo.id}
-          path={elementInfo.fullPath}
-          published={elementInfo.published}
+          disabled={ elementInfo.disabled }
+          elementType={ elementInfo.elementType }
+          id={ elementInfo.id }
+          path={ elementInfo.fullPath }
+          published={ elementInfo.published }
         />
       )}
 
       {props.dropDisabled !== true && (
         <Icon
-          className={styles.dropTargetIcon}
-          value={'drop-target'}
+          className={ styles.dropTargetIcon }
+          value={ 'drop-target' }
         />
       )}
 

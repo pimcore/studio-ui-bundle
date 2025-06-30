@@ -10,7 +10,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { Collapse, type CollapseProps } from 'antd'
-import { CollapseHeader, CollapseHeaderProps } from './header/collapse-header'
+import { CollapseHeader, type CollapseHeaderProps } from './header/collapse-header'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './collapse-item.styles'
 import cn from 'classnames'
@@ -38,7 +38,7 @@ export interface CollapseItemProps extends Omit<AntdCollapsePropsItem, 'key' | '
 }
 
 export const ExpandIcon = ({ isActive }: { isActive: boolean }): React.ReactElement => {
-  return <Icon value={isActive ? 'chevron-up' : 'chevron-down'} />
+  return <Icon value={ isActive ? 'chevron-up' : 'chevron-down' } />
 }
 
 export const CollapseItem = ({
@@ -100,17 +100,17 @@ export const CollapseItem = ({
     showArrow: false,
     label: (
       <CollapseHeader
-        expandIcon={expandIcon({ isActive: activeState })}
-        expandIconPosition={expandIconPosition}
-        extra={props.extra}
-        extraPosition={extraPosition}
-        label={props.label}
-        subLabel={subLabel}
-        subLabelPosition={subLabelPosition}
+        expandIcon={ expandIcon({ isActive: activeState }) }
+        expandIconPosition={ expandIconPosition }
+        extra={ props.extra }
+        extraPosition={ extraPosition }
+        label={ props.label }
+        subLabel={ subLabel }
+        subLabelPosition={ subLabelPosition }
       />
     ),
     children: (
-      <Box padding={contentPadding}>
+      <Box padding={ contentPadding }>
         {children}
       </Box>
     )
@@ -118,11 +118,11 @@ export const CollapseItem = ({
 
   return (
     <Collapse
-      activeKey={activeState ? 0 : -1}
-      className={classNames}
-      items={[item]}
-      onChange={onChangeHandler}
-      size={size}
+      activeKey={ activeState ? 0 : -1 }
+      className={ classNames }
+      items={ [item] }
+      onChange={ onChangeHandler }
+      size={ size }
     />
   )
 }
