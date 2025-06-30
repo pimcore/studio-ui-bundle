@@ -18,7 +18,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Table } from './table/table'
 import { Box, IconTextButton, SearchInput } from '@sdk/components'
-import { PropertyGetCollectionApiArg, usePropertyGetCollectionQuery } from '../element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
+import { type PropertyGetCollectionApiArg, usePropertyGetCollectionQuery } from '../element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
 import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { type PredefinedPropertyRow, usePredefinedProperty } from './hooks/use-predefined-property'
@@ -27,7 +27,7 @@ import { isUndefined } from 'lodash'
 export const PredefinedPropertiesContainer = (): React.JSX.Element => {
   const { createNewProperty, createLoading } = usePredefinedProperty()
 
-    const [filter, setFilter] = useState<string>('')
+  const [filter, setFilter] = useState<string>('')
 
   const queryArgs: PropertyGetCollectionApiArg = useMemo(() => ({ filter }), [filter])
 
