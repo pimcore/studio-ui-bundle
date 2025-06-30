@@ -150,12 +150,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
       body: {
         objectId: dataObjectId,
         targets,
-        context: {
-          containerType: 'object',
-          fieldname: fieldName,
-          objectId: dataObjectId,
-          layoutId: '0'
-        }
+        fieldName
       }
     }))
 

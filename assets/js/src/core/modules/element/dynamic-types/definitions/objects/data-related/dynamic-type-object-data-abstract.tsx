@@ -67,6 +67,7 @@ export interface AbstractObjectDataDefinition extends DataComponentProps {
   noteditable?: boolean | null
   title?: ReactNode
   defaultFieldWidth: IFieldWidthContext
+  virtualFieldName?: string
 }
 
 export type GridCellColumnMeta = ColumnMetaType & { type: string }

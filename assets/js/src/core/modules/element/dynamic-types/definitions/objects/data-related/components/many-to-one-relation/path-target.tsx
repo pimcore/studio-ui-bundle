@@ -20,6 +20,8 @@ import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
 import { isNil } from 'lodash'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { Flex } from 'antd'
+import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
+import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-object'
 
 export interface PathTargetProps {
   value: ManyToOneRelationValueType
@@ -27,6 +29,7 @@ export interface PathTargetProps {
   allowPathTextInput?: boolean
   onChange?: (value: ManyToOneRelationValueType) => void
   inherited?: boolean
+  virtualFieldName: string
 }
 
 export const PathTarget = forwardRef(function PathTarget (
@@ -37,6 +40,8 @@ export const PathTarget = forwardRef(function PathTarget (
   const [value, setValue] = React.useState<ManyToOneRelationValueType>(props.value ?? null)
   const { getStateClasses } = useDroppable()
   const { mapToElementType } = useElementHelper()
+  const { formatPath } = useDataObjectHelper()
+  const { id: dataObjectId } = useDataObject()
 
   useEffect(() => {
     setValue(props.value ?? null)
@@ -50,6 +55,20 @@ export const PathTarget = forwardRef(function PathTarget (
     if (value.textInput === true) {
       return value.fullPath ?? ''
     }
+    formatPath([props.value], props.virtualFieldName, dataObjectId).then((data) => {
+      if (data === undefined) {
+        return
+      }
+
+      const newValue = [props.value].map((item) => ({
+        ...item,
+        fullPath: data.items.find(i => i.objectReference === `object_${item.id}`)?.formatedPath ?? item.fullPath
+      }))
+
+      console.log('newValue', newValue)
+
+      return newValue
+    }).catch(error => { console.error(error) })
 
     return value.fullPath ?? String(value.id)
   }
@@ -60,6 +79,7 @@ export const PathTarget = forwardRef(function PathTarget (
   const showElementTagPrefix = props.allowPathTextInput !== true && hasElementTag
   const showElementTag = props.allowPathTextInput === true && hasElementTag
 
+  console.log('displayText', displayText)
   return (
     <div
       ref={ ref }

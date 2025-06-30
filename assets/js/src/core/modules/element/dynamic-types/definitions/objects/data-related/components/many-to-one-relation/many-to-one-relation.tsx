@@ -120,6 +120,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
             inherited={ props.inherited }
             onChange={ setValue }
             value={ value }
+            virtualFieldName={ props.virtualFieldName }
           />
         </Droppable>
       </div>

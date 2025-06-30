@@ -84,6 +84,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
     title,
     defaultFieldWidth: fieldWidth,
     name: formFieldName,
+    virtualFieldName: virtualFieldName.join('.'),
     inherited: inheritanceStateValue?.inherited === true,
     noteditable: Boolean(props.noteditable) || disabled
   }
