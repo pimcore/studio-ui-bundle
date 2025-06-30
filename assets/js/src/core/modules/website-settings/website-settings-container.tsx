@@ -70,7 +70,7 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
     }
   }), [nameFilter, page, pageSize])
 
-  const { data, isLoading: websiteSettingsLoading, isFetching: websiteSettingsFetching, isError, error, refetch } = useWebsiteSettingsGetCollectionQuery(queryArgs)
+  const { data, isLoading: websiteSettingsLoading, isFetching: websiteSettingsFetching, error, refetch } = useWebsiteSettingsGetCollectionQuery(queryArgs)
 
   const { createNewSetting, createLoading } = useWebsiteSetting()
 
@@ -103,10 +103,10 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
   }, [websiteSettings])
 
   useEffect(() => {
-    if (isError) {
+    if (!isUndefined(error)) {
       trackError(new ApiError(error))
     }
-  }, [isError])
+  }, [error])
 
   const {
     showModal: showDuplicateEntryModal,
