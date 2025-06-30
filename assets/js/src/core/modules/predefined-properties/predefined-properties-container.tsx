@@ -26,7 +26,7 @@ import { isUndefined } from 'lodash'
 
 export const PredefinedPropertiesContainer = (): React.JSX.Element => {
   const { createNewProperty, createLoading } = usePredefinedProperty()
-  const { data, isLoading: predefinedPropertiesLoading, isFetching: predefinedPropertiesFetching, isError, error, refetch } = usePropertyGetCollectionQuery({})
+  const { data, isLoading: predefinedPropertiesLoading, isFetching: predefinedPropertiesFetching, error, refetch } = usePropertyGetCollectionQuery({})
 
   const handleRefetch = (): void => {
     void refetch().catch(() => {
@@ -53,10 +53,10 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
   }, [predefinedProperties])
 
   useEffect(() => {
-    if (isError) {
+if(!isUndefined(error)) {
       trackError(new ApiError(error))
     }
-  }, [isError])
+  }, [error])
 
   const onCreateProperty = async (): Promise<void> => {
     const { success, data } = await createNewProperty()
