@@ -53,7 +53,7 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
   }, [predefinedProperties])
 
   useEffect(() => {
-if(!isUndefined(error)) {
+    if (!isUndefined(error)) {
       trackError(new ApiError(error))
     }
   }, [error])
