@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, type MutableRefObject, useEffect, useState } from 'react'
+import React, { forwardRef, type MutableRefObject, useEffect, useState, useMemo } from 'react'
 import { isEqual, isNil } from 'lodash'
 import cn from 'classnames'
 import { arrayMove } from '@dnd-kit/sortable'
@@ -85,33 +85,37 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
     }
   }
 
+  const content = useMemo(() => (
+    <Content
+      style={ {
+        width: toCssDimension(props.width),
+        height: toCssDimension(props.height)
+      } }
+    >
+      <div style={ { maxWidth: 'calc(100% - 2px)' } }>
+        <Grid
+          autoWidth
+          className={ props.className }
+          columns={ columns }
+          data={ data }
+          disabled={ props.disabled === true || props.inherited === true }
+          enableRowDrag={ props.enableRowDrag }
+          handleDragEnd={ handleDragEnd }
+          onUpdateCellData={ props.onUpdateCellData }
+          resizable
+          setRowId={ (originalRow) => originalRow.id }
+        />
+        {props.hint}
+      </div>
+    </Content>
+  ), [props])
+
   return (
     <div
       className={ cn(...getStateClasses()) }
       ref={ ref }
     >
-      <Content
-        style={ {
-          width: toCssDimension(props.width),
-          height: toCssDimension(props.height)
-        } }
-      >
-        <div style={ { maxWidth: 'calc(100% - 2px)' } }>
-          <Grid
-            autoWidth
-            className={ props.className }
-            columns={ columns }
-            data={ data }
-            disabled={ props.disabled === true || props.inherited === true }
-            enableRowDrag={ props.enableRowDrag }
-            handleDragEnd={ handleDragEnd }
-            onUpdateCellData={ props.onUpdateCellData }
-            resizable
-            setRowId={ (originalRow) => originalRow.id }
-          />
-          {props.hint}
-        </div>
-      </Content>
+      {content}
     </div>
   )
 })

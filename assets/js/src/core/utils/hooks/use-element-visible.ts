@@ -10,10 +10,13 @@
 
 import { useState, useEffect, type RefObject } from 'react'
 
-const useElementVisible = (ref: RefObject<HTMLElement>, continueObserving: boolean = false): boolean => {
-  const [isVisible, setIsVisible] = useState(false)
+const useElementVisible = (ref: RefObject<HTMLElement>, continueObserving: boolean = false, disable: boolean = false): boolean => {
+  const [isVisible, setIsVisible] = useState(disable)
 
   useEffect(() => {
+    if (disable) {
+      return
+    }
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
