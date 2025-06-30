@@ -45,13 +45,14 @@ interface ImageGalleryImagePreviewProps {
   index: number
   value: ImageGalleryValueItem[]
   setValue: React.Dispatch<React.SetStateAction<ImageGalleryValueItem[]>>
+  setInternalValue: (value: ImageGalleryValueItem[]) => void
   disabled?: boolean
   hotspotMarkersModalContainer: React.RefObject<HotspotMarkersModalContainerRef>
   width: string
   height: string
 }
 
-export const ImageGalleryImagePreview = ({ item, index, value, setValue, disabled, hotspotMarkersModalContainer, width, height }: ImageGalleryImagePreviewProps): React.JSX.Element => {
+export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue, setValue, disabled, hotspotMarkersModalContainer, width, height }: ImageGalleryImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [markerModalOpen, setMarkerModalOpen] = useState(false)
   const [cropModalOpen, setCropModalOpen] = useState(false)
@@ -194,7 +195,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
               onClick: () => {
                 const newValue = [...value]
                 newValue.splice(index + 1, 0, { image: null, hotspots: [], marker: [], crop: {} })
-                setValue(newValue)
+                setInternalValue(newValue)
               }
             },
             {

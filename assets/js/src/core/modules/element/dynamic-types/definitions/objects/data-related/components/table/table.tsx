@@ -69,7 +69,7 @@ export const Table = (props: TableProps): React.JSX.Element => {
 
   const {
     value,
-    setValue,
+    handleChange,
     activeCell,
     setActiveCell,
     key,
@@ -193,7 +193,7 @@ export const Table = (props: TableProps): React.JSX.Element => {
             okText: t('save'),
             onOk: (value: string) => {
               if (value !== '') {
-                setValue(fixColumnConfig(getPasteData(value)))
+                handleChange(fixColumnConfig(getPasteData(value)))
               }
             }
           })
@@ -235,7 +235,7 @@ export const Table = (props: TableProps): React.JSX.Element => {
           disabled={ props.disabled }
           key={ key }
           onActiveCellChange={ setActiveCell }
-          onChange={ setValue }
+          onChange={ handleChange }
           rows={ rows }
           value={ value }
         />

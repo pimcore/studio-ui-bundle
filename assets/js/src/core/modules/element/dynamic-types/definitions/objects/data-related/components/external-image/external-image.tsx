@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import cn from 'classnames'
 import { Card } from '@Pimcore/components/card/card'
 import { ExternalImageFooter } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/external-image/footer'
@@ -37,21 +37,19 @@ export interface ExternalImageProps {
 }
 
 export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
-  const [value, setValue] = React.useState<ExternalImageValue | null>(props.value ?? null)
+  const externalImageValue = props.value ?? null
+
   const { t } = useTranslation()
   const fieldWidth = useFieldWidth()
   const { useToken } = theme
   const { token } = useToken()
   const { styles } = useStyles()
 
-  const onChange = (value?: string): void => {
+  const handleChange = (value?: string): void => {
     const newUrl = value !== '' && value !== undefined ? value : null
-    setValue(newUrl === null ? null : { url: newUrl })
-  }
 
-  useEffect(() => {
-    props.onChange?.(value)
-  }, [value])
+    props.onChange?.(newUrl === null ? null : { url: newUrl })
+  }
 
   const previewWidth = Math.max(props.previewWidth ?? 300, 70)
   const previewHeight = Math.max(props.previewHeight ?? 150, 70)
@@ -67,18 +65,18 @@ export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
             disabled={ props.disabled }
             inputWidth={ props.inputWidth ?? undefined }
             key="external-image-footer"
-            onChange={ onChange }
-            placeholder={ isEmptyValue(value?.url) ? 'URL' : undefined }
-            value={ value?.url ?? undefined }
+            onChange={ handleChange }
+            placeholder={ isEmptyValue(externalImageValue?.url) ? 'URL' : undefined }
+            value={ externalImageValue?.url ?? undefined }
           />
         ) }
         style={ { maxWidth: toCssDimension(containerWidth) } }
       >
-        { value !== null && !isEmpty(value.url)
+        { externalImageValue !== null && !isEmpty(externalImageValue?.url)
           ? (
             <ImagePreview
               height={ previewHeight }
-              src={ value?.url }
+              src={ externalImageValue?.url }
               width={ previewWidth }
             />
             )
