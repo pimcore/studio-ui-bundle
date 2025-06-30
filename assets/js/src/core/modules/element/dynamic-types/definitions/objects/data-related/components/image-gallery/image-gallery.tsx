@@ -11,9 +11,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
-import { isEmpty, isEqual } from 'lodash'
+import { find, findIndex, isEmpty, isEqual, isUndefined } from 'lodash'
 import { Tooltip } from 'antd'
 import { rectSortingStrategy, SortableContext } from '@dnd-kit/sortable'
+import { DndContext, MouseSensor, TouchSensor, type UniqueIdentifier, useSensor, useSensors } from '@dnd-kit/core'
 import { type ImageValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image/image'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { ImageGalleryImageTarget } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image-gallery/components/image-target/image-target'
@@ -26,7 +27,6 @@ import { type CropSettings } from '@Pimcore/modules/element/dynamic-types/defini
 import { uuid } from '@Pimcore/utils/uuid'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { useStyles } from './image-gallery.styles'
-import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
 
 export interface ImageGalleryProps {
   value?: ImageGalleryValue | null
@@ -130,11 +130,18 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
             const dropId = event.over?.id
             const newValue = [...internalValue]
 
-            const dragValue = internalValue[Number(dragId)]
-            const dropValue = internalValue[Number(dropId)]
-            if (dragValue !== undefined && dropValue !== undefined) {
-              newValue.splice(Number(dragId), 1)
-              newValue.splice(Number(dropId), 0, dragValue)
+            if (isUndefined(dropId) || dragId === dropId) return
+
+            const getIndex = (key: UniqueIdentifier): number => findIndex(newValue, { key: key as string })
+
+            const dragValue = find(newValue, { key: dragId })
+            const fromIndex = getIndex(dragId)
+            const toIndex = getIndex(dropId)
+
+            if (!isUndefined(dragValue) && fromIndex !== -1 && toIndex !== -1) {
+              newValue.splice(fromIndex, 1)
+              newValue.splice(toIndex, 0, dragValue as ImageGalleryValueItem)
+
               handleChange(newValue)
             }
           } }
