@@ -154,6 +154,7 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
                 index={ index }
                 item={ item }
                 key={ item.key }
+                setInternalValue={ setInternalValue }
                 setValue={ handleChange }
                 value={ internalValue }
                 width={ width! }
