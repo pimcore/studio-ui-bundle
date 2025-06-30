@@ -41,6 +41,10 @@ services:
         tags:
            - { name: 'pimcore_studio_ui.webpack_entry_point_provider' }
 
+    Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProviderDocumentEditorIframe:
+        tags:
+            - { name: 'pimcore_studio_ui.webpack_entry_point_provider.document_editor_iframe' }
+
     Pimcore\Bundle\StudioUiBundle\EventSubscriber\EditmodeSubscriber:
         tags: ['kernel.event_subscriber']
         arguments:

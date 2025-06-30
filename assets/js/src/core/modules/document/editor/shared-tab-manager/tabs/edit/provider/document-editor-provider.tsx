@@ -20,20 +20,19 @@ export interface DocumentEditorContextProps {
   updateValue: (key: string, value: any) => void
   getValues: () => Record<string, any>
   getValue: (key: string) => any
-  initializeData: (data: Record<string, any>) => void
 }
 
 export const DocumentEditorContext = React.createContext<DocumentEditorContextProps | undefined>(undefined)
 
 export interface DocumentEditorProviderProps {
   children: React.ReactNode
+  initialData: Record<string, ValueType> // Add initialData prop
 }
 
 interface ValueType { type: string, data: any }
 
-export const DocumentEditorProvider = ({ children }: DocumentEditorProviderProps): React.JSX.Element => {
-  const valuesRef = useRef<Record<string, ValueType>>({})
-  const initializedRef = useRef<boolean>(false)
+export const DocumentEditorProvider = ({ children, initialData }: DocumentEditorProviderProps): React.JSX.Element => {
+  const valuesRef = useRef<Record<string, ValueType>>({ ...initialData }) // Initialize with initialData
   const modifiedRef = useRef<boolean>(false)
   const { save, isError } = useSave()
   const { id } = useContext(DocumentContext)
@@ -68,12 +67,6 @@ export const DocumentEditorProvider = ({ children }: DocumentEditorProviderProps
     getValues: (): Record<string, ValueType> => valuesRef.current,
     getValue: (key: string): any => {
       return valuesRef.current[key]?.data
-    },
-    initializeData: (data: Record<string, ValueType>): void => {
-      if (!initializedRef.current) {
-        valuesRef.current = { ...data }
-        initializedRef.current = true
-      }
     }
   }), [])
 
