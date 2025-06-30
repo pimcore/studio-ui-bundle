@@ -23,7 +23,6 @@ import {
   type ColumnDef,
   type ColumnResizeMode,
   type ColumnSizingInfoState,
-  createColumnHelper,
   flexRender,
   functionalUpdate,
   getCoreRowModel,
@@ -113,7 +112,6 @@ export const Grid = ({
   const memoModifiedCells = useMemo(() => { return modifiedCells ?? [] }, [JSON.stringify(modifiedCells)])
   const autoColumnRef = useRef<HTMLTableCellElement>(null)
   const gridCellRegistry = useInjection<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/GridCellRegistry'])
-  const columnHelper = createColumnHelper()
 
   const sensors = useSensors(useSensor(PointerSensor))
 
@@ -163,12 +161,6 @@ export const Grid = ({
       }
     }
   })
-
-  if (enableRowDrag === true) {
-    props.columns.unshift(
-      columnHelper.accessor('rowDragCol', { header: '', size: 40 })
-    )
-  }
 
   useMemo(() => {
     updateRowSelectionColumn()
