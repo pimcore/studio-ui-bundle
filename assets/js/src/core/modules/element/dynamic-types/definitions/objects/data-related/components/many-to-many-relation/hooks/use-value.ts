@@ -12,6 +12,9 @@ import type { DragAndDropInfo } from '@sdk/components'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { useTranslation } from 'react-i18next'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { useEffect } from 'react'
+import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
+import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-object'
 
 export interface ManyToManyRelationValueItem {
   id: number
@@ -30,6 +33,7 @@ interface UseValueReturn {
   addItems: (items: ManyToManyRelationValueItem[]) => void
   addAssets: (assets: Asset[]) => Promise<void>
   maxRemainingItems?: number
+  pathFormatterClass?: string | null
 }
 
 export const useValue = (
@@ -37,14 +41,42 @@ export const useValue = (
   setValue: (value: ManyToManyRelationValue | null) => void,
   displayedValue: ManyToManyRelationValue | null,
   setDisplayedValue: (value: ManyToManyRelationValue | null) => void,
+  setIsLoading: (isLoading: boolean) => void,
   maxItems: number | null,
-  allowMultipleAssignments?: boolean
+  id: string | undefined,
+  allowMultipleAssignments?: boolean,
+  pathFormatterClass?: string | null
 ): UseValueReturn => {
+  const { id: dataObjectId } = useDataObject()
+  const { formatPath } = useDataObjectHelper()
   const modal = useAlertModal()
+
   const { t } = useTranslation()
   const itemIsInValue = (id: number, type: string): boolean => {
     return value?.some(item => item.id === id && item.type === type) ?? false
   }
+
+  useEffect(() => {
+    console.log(pathFormatterClass, value, dataObjectId, id)
+    if (pathFormatterClass !== null && value !== null && dataObjectId !== undefined && id !== undefined) {
+      setIsLoading(true)
+
+      formatPath(value, id, dataObjectId).then((data) => {
+        if (data === undefined) {
+          return
+        }
+
+        const newValue = value.map((item) => ({
+          ...item,
+          fullPath: data.items.find(i => i.objectReference === `object_${item.id}`)?.formatedPath ?? item.fullPath
+        }))
+
+        console.log('newValue', newValue)
+        setDisplayedValue(newValue)
+        setIsLoading(false)
+      }).catch(error => { console.error(error) })
+    }
+  }, [value])
 
   const addItems = (items: ManyToManyRelationValueItem[]): void => {
     const newItems = allowMultipleAssignments !== true

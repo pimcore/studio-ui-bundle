@@ -8,30 +8,39 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { useRef } from 'react'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { store, useAppDispatch } from '@Pimcore/app/store'
 import { setNodeLoadingInAllTree, setNodePublished } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type IconProps } from '@Pimcore/components/icon/icon'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { api } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { api, type Error } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { getElementIcon } from '@Pimcore/modules/element/element-helper'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 import { SaveTaskType } from '../actions/save/use-save'
-import { useDataObjectUpdateByIdMutation } from '../data-object-api-slice.gen'
+import { useDataObjectUpdateByIdMutation, type DataObjectFormatPathApiResponse } from '../data-object-api-slice.gen'
 import { publishDraft, unpublishDraft } from '../data-object-draft-slice'
 import { type EditorContainerProps } from '../editor/editor-container'
 import { useDataObjectDraftFetcher } from './use-data-object-draft-fetcher'
+import type { ApiErrorData } from '@Pimcore/modules/app/error-handler/classes/api-error'
 
 interface OpenDataObjectWidgetProps {
   config: EditorContainerProps
 }
 
+interface IFormatPathItems {
+  id: number
+  type: string
+  fullPath: string
+}
+
 interface UseDataObjectReturn {
   openDataObject: (props: OpenDataObjectWidgetProps) => Promise<void>
   executeDataObjectTask: (id: number, task: SaveTaskType, onFinish?: () => void) => Promise<void>
+  formatPath: (items: IFormatPathItems[], fieldName: string, dataObjectId: number) => Promise<DataObjectFormatPathApiResponse | undefined>
 }
 
 export const useDataObjectHelper = (): UseDataObjectReturn => {
@@ -118,5 +127,46 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
     }
   }
 
-  return { openDataObject, executeDataObjectTask }
+  const formatPathCache = useRef(new Map<string, DataObjectFormatPathApiResponse | undefined>())
+  const formatPath = async (items: IFormatPathItems[], fieldName: string, dataObjectId: number): Promise<DataObjectFormatPathApiResponse | undefined> => {
+    const cacheKey = `dataObjectId_${dataObjectId}_${items.length}_fieldName_${fieldName}`
+
+    if (formatPathCache.current.has(cacheKey)) {
+      return formatPathCache.current.get(cacheKey)
+    }
+
+    const targets = items.reduce((acc, item) => {
+      acc[`object_${item.id}`] = {
+        id: item.id,
+        type: item.type,
+        label: item.fullPath,
+        path: item.fullPath,
+        nicePathKey: `object_${item.id}`
+      }
+      return acc
+    }, {})
+
+    const { data, error } = await store.dispatch(api.endpoints.dataObjectFormatPath.initiate({
+      body: {
+        objectId: dataObjectId,
+        targets,
+        context: {
+          containerType: 'object',
+          fieldname: fieldName,
+          objectId: dataObjectId,
+          layoutId: '0'
+        }
+      }
+    }))
+
+    if (data === undefined) {
+      trackError(new ApiError(error as unknown as ApiErrorData))
+    }
+
+    formatPathCache.current.set(cacheKey, data)
+
+    return data
+  }
+
+  return { openDataObject, executeDataObjectTask, formatPath }
 }
