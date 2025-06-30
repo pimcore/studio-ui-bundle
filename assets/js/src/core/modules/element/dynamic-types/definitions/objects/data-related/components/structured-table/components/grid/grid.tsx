@@ -32,6 +32,8 @@ interface StructuredTableGridProps {
   className?: string
 }
 
+const ROW_LABEL_ID = 'rowLabel'
+
 export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.Element => {
   const columnHelper = createColumnHelper()
   const { t } = useTranslation()
@@ -54,7 +56,7 @@ export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.
   }
 
   const columns: Array<ColumnDef<any>> = [
-    columnHelper.accessor('rowLabel', {
+    columnHelper.accessor(ROW_LABEL_ID, {
       header: !_.isEmpty(props.labelFirstCell) ? t(props.labelFirstCell!) : '',
       size: applyColWidth(props.labelWidth)
     })
@@ -83,6 +85,23 @@ export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.
     return rowData
   })
 
+  const normalizeValues = (newValue: Record<string, Record<string, StructuredTableColumnValue>>, rows: Array<{ rowLabel: string } & Record<string, any>>): StructuredTableValue => {
+    const result = {}
+
+    rows.forEach(row => {
+      const rowKey = row[ROW_LABEL_ID]
+      const columnKeys = Object.keys(row).filter(key => key !== ROW_LABEL_ID)
+
+      result[rowKey] = {}
+
+      columnKeys.forEach(columnKey => {
+        result[rowKey][columnKey] = newValue?.[rowKey]?.[columnKey] ?? ''
+      })
+    })
+
+    return result
+  }
+
   return (
     <Grid
       className={ props.className }
@@ -90,13 +109,14 @@ export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.
       data={ rows }
       disabled={ props.disabled }
       onUpdateCellData={ (data) => {
-        const newValue = {
+        const updatedValue = {
           ...props.value,
           [props.rows[data.rowIndex].key]: {
             ...props.value?.[props.rows[data.rowIndex].key],
             [data.columnId]: props.castColumnValue(data.value as StructuredTableColumnValue, data.columnId)
           }
         }
+        const newValue = normalizeValues(updatedValue, rows)
 
         props.onChange?.(newValue)
       } }

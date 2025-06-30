@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import cn from 'classnames'
 import { type InputNumberProps } from 'antd/es/input-number'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -54,26 +54,19 @@ export const validateSecondValueGreater = async (rule, value): Promise<any> => {
 }
 
 export const NumericRange = (props: NumericRangeProps): React.JSX.Element => {
-  const [value, setValue] = useState<NumericRangeValue | null>(props.value ?? null)
+  const numericRangeValue = props.value ?? null
 
   const { styles } = useStyles()
 
-  useEffect(() => {
-    if (props.onChange !== undefined) {
-      props.onChange(value)
+  const handleChange = (key: 'minimum' | 'maximum', newValue: ValueType | null): void => {
+    const updatedValue: NumericRangeValue = {
+      minimum: numericRangeValue?.minimum ?? null,
+      maximum: numericRangeValue?.maximum ?? null,
+      [key]: newValue
     }
-  }, [value])
+    const value = updatedValue.minimum === null && updatedValue.maximum === null ? null : updatedValue
 
-  const updateValue = (key: 'minimum' | 'maximum', newValue: ValueType | null): void => {
-    setValue((prevValue) => {
-      const updatedValue: NumericRangeValue = {
-        minimum: prevValue?.minimum ?? null,
-        maximum: prevValue?.maximum ?? null,
-        [key]: newValue
-      }
-
-      return updatedValue.minimum === null && updatedValue.maximum === null ? null : updatedValue
-    })
+    props.onChange?.(value)
   }
 
   return (
@@ -87,14 +80,14 @@ export const NumericRange = (props: NumericRangeProps): React.JSX.Element => {
       <InputNumber
         { ...props }
         className={ props.inputClassName }
-        onChange={ (newValue) => { updateValue('minimum', newValue) } }
-        value={ value !== null ? value.minimum : null }
+        onChange={ (newValue) => { handleChange('minimum', newValue) } }
+        value={ numericRangeValue !== null ? numericRangeValue.minimum : null }
       />
       <InputNumber
         { ...props }
         className={ props.inputClassName }
-        onChange={ (newValue) => { updateValue('maximum', newValue) } }
-        value={ value !== null ? value.maximum : null }
+        onChange={ (newValue) => { handleChange('maximum', newValue) } }
+        value={ numericRangeValue !== null ? numericRangeValue.maximum : null }
       />
     </Flex>
   )

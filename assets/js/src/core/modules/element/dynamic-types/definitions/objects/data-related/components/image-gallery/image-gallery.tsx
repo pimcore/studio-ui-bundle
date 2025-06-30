@@ -8,41 +8,25 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
-import {
-  type ImageValue
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image/image'
+import { find, findIndex, isEmpty, isEqual, isUndefined } from 'lodash'
+import { Tooltip } from 'antd'
+import { rectSortingStrategy, SortableContext } from '@dnd-kit/sortable'
+import { DndContext, MouseSensor, TouchSensor, type UniqueIdentifier, useSensor, useSensors } from '@dnd-kit/core'
+import { type ImageValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image/image'
 import { Flex } from '@Pimcore/components/flex/flex'
-import {
-  ImageGalleryImageTarget
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image-gallery/components/image-target/image-target'
+import { ImageGalleryImageTarget } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image-gallery/components/image-target/image-target'
 import { Card } from '@Pimcore/components/card/card'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { isEmpty, isEqual } from 'lodash'
-import { Tooltip } from 'antd'
-import { useTranslation } from 'react-i18next'
-import {
-  ImageGallerySortableItem
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image-gallery/components/sortable-item/sortable-item'
-import {
-  rectSortingStrategy,
-  SortableContext
-} from '@dnd-kit/sortable'
-import {
-  type Hotspot, type Marker
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
-import {
-  HotspotMarkersModalContainer,
-  type HotspotMarkersModalContainerRef
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-markers-modal-container'
-import {
-  type CropSettings
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
+import { ImageGallerySortableItem } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image-gallery/components/sortable-item/sortable-item'
+import { type Hotspot, type Marker } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
+import { HotspotMarkersModalContainer, type HotspotMarkersModalContainerRef } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-markers-modal-container'
+import { type CropSettings } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
 import { uuid } from '@Pimcore/utils/uuid'
-import { useStyles } from './image-gallery.styles'
 import { toCssDimension } from '@Pimcore/utils/css'
-import { DndContext, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
+import { useStyles } from './image-gallery.styles'
 
 export interface ImageGalleryProps {
   value?: ImageGalleryValue | null
@@ -63,13 +47,11 @@ export interface ImageGalleryValueItem {
   key?: string
 }
 
-const addKeys = (value: ImageGalleryValue): ImageGalleryValue => {
-  return value.map((item, index) => {
-    if (item.key === undefined) {
-      return { ...item, key: uuid() }
-    }
-    return item
-  })
+const addKeys = (value: ImageGalleryValue | null | undefined): ImageGalleryValue => {
+  return (value ?? []).map((item) => ({
+    ...item,
+    key: item.key ?? uuid()
+  }))
 }
 
 const removeKeys = (items: ImageGalleryValue): ImageGalleryValue => {
@@ -80,20 +62,33 @@ const removeKeys = (items: ImageGalleryValue): ImageGalleryValue => {
 }
 
 export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
-  const [value, setValueState] = useState<ImageGalleryValue>(addKeys(props.value ?? []))
+  const initialValue = useMemo(() => addKeys(props.value), [])
+
+  const [internalValue, setInternalValue] = useState<ImageGalleryValue>(initialValue)
   const { t } = useTranslation()
   const { styles } = useStyles()
 
   const width = toCssDimension(props.width, 200)
   const height = toCssDimension(props.height, 100)
 
-  const hotspotMarkersModalContainerRef = useRef<HotspotMarkersModalContainerRef>(null)
+  useEffect(() => {
+    setInternalValue(prev => {
+      const newValue = addKeys(props.value)
 
-  const setValue = (newValue: ImageGalleryValue): void => {
+      if (!isEqual(removeKeys(prev), removeKeys(newValue))) {
+        return newValue
+      }
+
+      return prev
+    })
+  }, [props.value])
+
+  const handleChange = (newValue: ImageGalleryValue): void => {
     const updatedValue = addKeys(newValue)
 
-    if (!isEqual(updatedValue, value)) {
-      setValueState(updatedValue)
+    if (!isEqual(updatedValue, internalValue)) {
+      setInternalValue(updatedValue)
+
       const changedValue = removeKeys(updatedValue.filter(item => item.image !== null))
       props.onChange?.(changedValue.length > 0 ? changedValue : null)
     }
@@ -103,6 +98,8 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
   const touchSensor = useSensor(TouchSensor, { activationConstraint: { distance: 5 } })
 
   const sensors = useSensors(mouseSensor, touchSensor)
+
+  const hotspotMarkersModalContainerRef = useRef<HotspotMarkersModalContainerRef>(null)
 
   return (
     <Card
@@ -117,7 +114,7 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
             <IconButton
               disabled={ isEmpty(props.value) }
               icon={ { value: 'trash' } }
-              onClick={ () => { setValue([]) } }
+              onClick={ () => { handleChange([]) } }
             />
           </Tooltip>
           ) }
@@ -131,47 +128,54 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
           onDragEnd={ (event) => {
             const dragId = event.active.id
             const dropId = event.over?.id
-            const newValue = [...value]
+            const newValue = [...internalValue]
 
-            const dragValue = value[Number(dragId)]
-            const dropValue = value[Number(dropId)]
-            if (dragValue !== undefined && dropValue !== undefined) {
-              newValue.splice(Number(dragId), 1)
-              newValue.splice(Number(dropId), 0, dragValue)
-              setValue(newValue)
+            if (isUndefined(dropId) || dragId === dropId) return
+
+            const getIndex = (key: UniqueIdentifier): number => findIndex(newValue, { key: key as string })
+
+            const dragValue = find(newValue, { key: dragId })
+            const fromIndex = getIndex(dragId)
+            const toIndex = getIndex(dropId)
+
+            if (!isUndefined(dragValue) && fromIndex !== -1 && toIndex !== -1) {
+              newValue.splice(fromIndex, 1)
+              newValue.splice(toIndex, 0, dragValue as ImageGalleryValueItem)
+
+              handleChange(newValue)
             }
           } }
           sensors={ sensors }
         >
           <SortableContext
             disabled={ props.disabled }
-            items={ value.map((item, index) => ({ id: String(index) })) }
+            items={ internalValue.map((item) => ({ id: String(item.key) })) }
             strategy={ rectSortingStrategy }
-
           >
-            { value.map((item, index) => (
+            { internalValue.map((item, index) => (
               <ImageGallerySortableItem
                 disabled={ props.disabled }
                 height={ height! }
                 hotspotMarkersModalContainer={ hotspotMarkersModalContainerRef }
-                id={ String(index) }
+                id={ String(item.key) }
                 index={ index }
                 item={ item }
                 key={ item.key }
-                setValue={ setValue }
-                value={ value }
+                setInternalValue={ setInternalValue }
+                setValue={ handleChange }
+                value={ internalValue }
                 width={ width! }
               />
             )) }
           </SortableContext>
         </DndContext>
-        { (props.disabled !== true || isEmpty(value)) && (
+        { (props.disabled !== true || isEmpty(internalValue)) && (
           <ImageGalleryImageTarget
             disabled={ props.disabled }
             height={ height! }
-            index={ value.length }
-            setValue={ setValue }
-            value={ value }
+            index={ internalValue.length }
+            setValue={ handleChange }
+            value={ internalValue }
             width={ width! }
           />
         ) }

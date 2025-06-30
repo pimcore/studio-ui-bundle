@@ -56,16 +56,18 @@ const valueFromDayJs = (value: DateRange | null, outputType?: OutputType, output
 }
 
 export const DateRangePicker = (props: DateRangePickerProps): React.JSX.Element => {
-  const [value, setValue] = React.useState<DateRange | null>(valueToDayJs(props.value))
+  const value = valueToDayJs(props.value)
+
   const { styles } = useStyles()
+
+  const handleChange = (dates: DateRange | null): void => {
+    props.onChange?.(valueFromDayJs(dates, props.outputType, props.outputFormat))
+  }
 
   return (
     <OriginalDatePicker.RangePicker
       { ...props }
-      onChange={ (dates: DateRange | null) => {
-        setValue(dates)
-        props.onChange?.(valueFromDayJs(dates, props.outputType, props.outputFormat))
-      } }
+      onChange={ handleChange }
       popupClassName={ styles.datePickerDropdown }
       rootClassName={ cn(styles.datePicker, props.className, { [styles.inherited]: props.inherited }) }
       separator={ <Icon value="arrow-narrow-right" /> }
