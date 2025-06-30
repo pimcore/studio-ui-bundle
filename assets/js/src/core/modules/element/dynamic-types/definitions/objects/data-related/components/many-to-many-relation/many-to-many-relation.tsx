@@ -46,6 +46,7 @@ export interface ManyToManyRelationClassDefinitionProps {
 }
 
 export interface ManyToManyRelationProps extends IRelationAllowedTypesDataComponent, ManyToManyRelationClassDefinitionProps {
+  id?: string
   disabled?: boolean
   inherited?: boolean
   value?: ManyToManyRelationValue | null
