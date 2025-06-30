@@ -12,10 +12,13 @@ import React, { type ReactElement, type Ref, type ComponentProps, forwardRef } f
 import { Draggable } from '@Pimcore/components/drag-and-drop/draggable'
 import { type Asset } from '../../asset-api-slice-enhanced'
 import { type TreeNode } from '@Pimcore/components/element-tree/node/tree-node'
+import { isString } from 'lodash'
+import { useTranslation } from 'react-i18next'
 
 export const withDraggable = (Component: typeof TreeNode): typeof TreeNode => {
   const DraggableNodeContent = (props: ComponentProps<typeof TreeNode>, ref: Ref<HTMLDivElement>): ReactElement => {
     const metaData: Asset | undefined = props.metaData?.asset
+    const { t } = useTranslation()
 
     if (props.metaData?.asset === undefined) {
       return (
@@ -26,9 +29,11 @@ export const withDraggable = (Component: typeof TreeNode): typeof TreeNode => {
       )
     }
 
+    const title = isString(metaData?.filename) && metaData?.filename !== '' ? metaData?.filename : t('home')
+
     return (
       <Draggable
-        info={ { icon: metaData!.icon!.value, title: metaData!.filename, type: 'asset', data: { ...metaData } } }
+        info={ { icon: props.icon, title, type: 'asset', data: { ...metaData } } }
       >
         <Component
           { ...props }

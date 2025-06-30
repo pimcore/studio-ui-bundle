@@ -34,6 +34,7 @@ Thumbs.db
 # Frontend related files
 assets/node_modules
 assets/dist/*
+assets/CLAUDE.md
 !assets/dist/.gitkeep
 !assets/dist/types
 !assets/dist/types/*

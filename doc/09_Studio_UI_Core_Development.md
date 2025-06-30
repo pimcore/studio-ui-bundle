@@ -10,13 +10,17 @@
 
 Create a new build by running:
 
-`npm run build`
+`npm run build-app`
 
 ### How to run the dev-server (HMR/Live reloading)
 
-Use the following command to run the dev-server:
+To use hmr you need two commands constantly running.
+And they need to be executed in the order like listed:
 
-`npm run dev-server`
+```
+npm run dev-server-sdk
+npm run dev-server
+```
 
 Now your dev-server should be running (the dev server started on the same URL, but it’s using Webpack HMR).  
 You can access it under your normal project domain: 
@@ -63,3 +67,19 @@ server {
 
 Now ensure that Storybook is running via `npm run storybook`.
 Finally, you can access it under `{your-domain/storybook}`
+
+### How to test the package
+
+To test or debug implementations you can build the package locally:
+
+```
+npm run build-app
+npm run build-rsbuild-plugins
+npm run generate-types
+npm link
+
+// in your bundle
+npm link @pimcore/studio-ui-bundle
+```
+
+Please note that the link in the bundle needs to be recreated after an npm install in the bundle.

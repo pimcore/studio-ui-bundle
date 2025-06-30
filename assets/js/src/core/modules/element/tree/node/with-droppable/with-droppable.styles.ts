@@ -13,10 +13,10 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     withDroppable: css`
-      .tree-node__content {
+      .tree-node__content-inner {
         background: ${token.colorBgContainerDisabled};
         border-radius: ${token.borderRadius}px;
-        border: 1px dashed ${token.colorBorder};
+        outline: 1px dashed ${token.colorBorder};
       }
 
       .tree-list .tree-node__content {
