@@ -11,6 +11,7 @@
 export enum UserPermission {
   NotesAndEvents = 'notes_events',
   Documents = 'documents',
+  DocumentTypes = 'document_types',
   Objects = 'objects',
   Assets = 'assets',
   TagsConfiguration = 'tags_configuration',

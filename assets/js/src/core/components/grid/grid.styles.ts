@@ -133,6 +133,7 @@ export const useStyles = createStyles(({ token, css }) => {
 
       .ant-table-content {
         table {
+          border: 1px solid transparent;
           border-radius: 8px;
         }
           

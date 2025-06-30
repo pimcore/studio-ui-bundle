@@ -36,6 +36,7 @@ export const DefaultPage = (): React.JSX.Element => {
       </ClassDefinitionsProvider>
 
       <SlotRenderer slot="global.feedback" />
+      <div id="global-overlay-container" />
     </div>
   )
 }

@@ -193,7 +193,6 @@ export const GridConfigInner = (): React.JSX.Element => {
 
     if (view === ViewState.Save) {
       await fetchSaveGridConfig({
-        folderId: getId(),
         body: {
           folderId: getId(),
           columns: columnsToSave,
