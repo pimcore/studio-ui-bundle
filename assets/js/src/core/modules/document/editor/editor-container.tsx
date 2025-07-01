@@ -17,7 +17,6 @@ import { Content } from '@Pimcore/components/content/content'
 import { TabsContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs-container'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import { Alert } from '@Pimcore/components/alert/alert'
-import { SaveProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/save-provider'
 import { Toolbar } from './toolbar/toolbar'
 
 export interface EditorContainerProps {

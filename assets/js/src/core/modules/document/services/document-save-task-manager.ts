@@ -17,6 +17,7 @@ import type { DataProperty } from '@Pimcore/modules/element/draft/hooks/use-prop
 import type {
   DataProperty as DataPropertyApi
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
+import { isNil, isUndefined } from 'lodash'
 
 export enum SaveTaskType {
   Version = 'version',
@@ -48,50 +49,50 @@ interface QueuedTask {
  * Handles running task state, queuing, and prevents concurrent saves
  */
 export class DocumentSaveTaskManager {
-  private static instances = new Map<number, DocumentSaveTaskManager>()
-  
+  private static readonly instances = new Map<number, DocumentSaveTaskManager>()
+
   private runningTask?: SaveTaskType
   private queuedTask?: QueuedTask
-  private taskCallbacks = new Set<(task?: SaveTaskType) => void>()
-  private errorCallbacks = new Set<(error: any, task?: SaveTaskType) => void>()
+  private readonly taskCallbacks = new Set<(task?: SaveTaskType) => void>()
+  private readonly errorCallbacks = new Set<(error: any, task?: SaveTaskType) => void>()
 
-  private constructor(private documentId: number) {}
+  private constructor (private readonly documentId: number) {}
 
-  static getInstance(documentId: number): DocumentSaveTaskManager {
+  static getInstance (documentId: number): DocumentSaveTaskManager {
     if (!this.instances.has(documentId)) {
       this.instances.set(documentId, new DocumentSaveTaskManager(documentId))
     }
     return this.instances.get(documentId)!
   }
 
-  static cleanup(documentId: number): void {
+  static cleanup (documentId: number): void {
     this.instances.delete(documentId)
   }
 
-  onRunningTaskChange(callback: (task?: SaveTaskType) => void): () => void {
+  onRunningTaskChange (callback: (task?: SaveTaskType) => void): () => void {
     this.taskCallbacks.add(callback)
     return () => this.taskCallbacks.delete(callback)
   }
 
-  onErrorChange(callback: (error: any, task?: SaveTaskType) => void): () => void {
+  onErrorChange (callback: (error: any, task?: SaveTaskType) => void): () => void {
     this.errorCallbacks.add(callback)
     return () => this.errorCallbacks.delete(callback)
   }
 
-  getRunningTask(): SaveTaskType | undefined {
+  getRunningTask (): SaveTaskType | undefined {
     return this.runningTask
   }
 
   /**
    * Execute a save task with proper queuing and concurrency control
    */
-  async executeSave(
+  async executeSave (
     task?: SaveTaskType,
     onFinish?: () => void,
     useDraftData: boolean = true
   ): Promise<void> {
     // Handle task queuing logic
-    if (this.runningTask) {
+    if (this.runningTask != null) {
       if (task === SaveTaskType.AutoSave) {
         // Don't queue auto-saves if something is already running - they're frequent and can be skipped
         return
@@ -111,7 +112,7 @@ export class DocumentSaveTaskManager {
     await this.performSave(task, onFinish, useDraftData)
   }
 
-  private async performSave(
+  private async performSave (
     task?: SaveTaskType,
     onFinish?: () => void,
     useDraftData: boolean = true
@@ -122,16 +123,16 @@ export class DocumentSaveTaskManager {
       const result = await this.saveDocument(task, useDraftData)
 
       if (result.success) {
-        store.dispatch(setDraftData({ 
-          id: this.documentId, 
-          draftData: result.data?.draftData ?? null 
+        store.dispatch(setDraftData({
+          id: this.documentId,
+          draftData: result.data?.draftData ?? null
         }))
 
         if (task === SaveTaskType.Publish) {
-          store.dispatch(setNodePublished({ 
-            nodeId: String(this.documentId), 
-            elementType: 'document', 
-            isPublished: true 
+          store.dispatch(setNodePublished({
+            nodeId: String(this.documentId),
+            elementType: 'document',
+            isPublished: true
           }))
         }
 
@@ -141,10 +142,10 @@ export class DocumentSaveTaskManager {
       }
     } catch (error) {
       console.error(`Save failed for document ${this.documentId}:`, error)
-      
+
       // Notify error callbacks immediately
-      this.errorCallbacks.forEach(callback => callback(error, task))
-      
+      this.errorCallbacks.forEach(callback => { callback(error, task) })
+
       throw error
     } finally {
       this.setRunningTask(undefined)
@@ -152,23 +153,23 @@ export class DocumentSaveTaskManager {
     }
   }
 
-  private async executeQueuedTask(): Promise<void> {
-    if (this.queuedTask) {
+  private async executeQueuedTask (): Promise<void> {
+    if (!isUndefined(this.queuedTask)) {
       const { task, onFinish } = this.queuedTask
       this.queuedTask = undefined
       await this.performSave(task, onFinish)
     }
   }
 
-  private setRunningTask(task?: SaveTaskType): void {
+  private setRunningTask (task?: SaveTaskType): void {
     this.runningTask = task
-    this.taskCallbacks.forEach(callback => callback(task))
+    this.taskCallbacks.forEach(callback => { callback(task) })
   }
 
   /**
    * Gets editable data from the iframe API for this document
    */
-  private getEditableData(): Record<string, any> {
+  private getEditableData (): Record<string, any> {
     try {
       const api = getPimcoreStudioApi()
       const iframeApi = api.document.getIframeApi(this.documentId)
@@ -179,21 +180,21 @@ export class DocumentSaveTaskManager {
     }
   }
 
-  private buildUpdateData(
+  private buildUpdateData (
     task: SaveTaskType = SaveTaskType.AutoSave,
     useDraftData: boolean = true
   ): any {
     const state = store.getState()
     const document = selectDocumentById(state, this.documentId)
-    
-    if (!document) {
+
+    if (isNil(document)) {
       throw new Error(`Document ${this.documentId} not found in state`)
     }
 
     const updatedData: any = {}
-    
+
     // Handle properties if they exist and have changes
-    if (document.changes?.properties && document.properties) {
+    if (document.changes?.properties) {
       const propertyUpdate = document.properties?.map((property: DataProperty): DataPropertyApi => {
         const { rowId, ...propertyApi } = property
 
@@ -215,9 +216,7 @@ export class DocumentSaveTaskManager {
       updatedData.editableData = editableData
     }
 
-    if (task) {
-      updatedData.task = task
-    }
+    updatedData.task = task
 
     updatedData.useDraftData = useDraftData
 
@@ -227,7 +226,7 @@ export class DocumentSaveTaskManager {
   /**
    * Performs the actual document save operation using RTK Query
    */
-  private async saveDocument(
+  private async saveDocument (
     task: SaveTaskType = SaveTaskType.AutoSave,
     useDraftData: boolean = true
   ): Promise<DocumentSaveResult> {
@@ -242,7 +241,7 @@ export class DocumentSaveTaskManager {
       })
     )
 
-    if (result.error) {
+    if (!isNil(result.error)) {
       console.error(`Failed to save document ${this.documentId}:`, result.error)
       return {
         success: false,

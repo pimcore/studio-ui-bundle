@@ -11,7 +11,7 @@
 import { useContext, useEffect, useState } from 'react'
 import { DocumentContext } from '../document-provider'
 import { DocumentSaveTaskManager, SaveTaskType } from '../services'
- 
+
 export interface UseDocumentSaveTaskReturn {
   runningTask?: SaveTaskType
   isAutoSaveLoading: boolean
@@ -24,16 +24,16 @@ export interface UseDocumentSaveTaskReturn {
 export const useDocumentSaveTask = (): UseDocumentSaveTaskReturn => {
   const { id } = useContext(DocumentContext)
   const [runningTask, setRunningTask] = useState<SaveTaskType | undefined>()
-  
+
   useEffect(() => {
     const taskManager = DocumentSaveTaskManager.getInstance(id)
-    
+
     // Subscribe to running task changes
     const unsubscribe = taskManager.onRunningTaskChange(setRunningTask)
-    
+
     // Initialize current state
     setRunningTask(taskManager.getRunningTask())
-    
+
     return () => {
       unsubscribe()
     }

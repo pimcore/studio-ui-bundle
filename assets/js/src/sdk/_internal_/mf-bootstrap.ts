@@ -11,8 +11,7 @@
 import '@Pimcore/bootstrap'
 import { runApp } from '@Pimcore/modules/app/utils/app-runner'
 import { pluginSystem } from '@Pimcore/app/plugin-system/plugin-system'
-import { type Pimcore } from '@Pimcore/app/public-api'
-import { PimcoreStudio, type PimcoreStudioApi } from '@Pimcore/app/public-api'
+import { type Pimcore, PimcoreStudio, type PimcoreStudioApi } from '@Pimcore/app/public-api'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 
 if (module.hot !== undefined) {

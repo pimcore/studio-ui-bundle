@@ -45,7 +45,7 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
         value: localValue,
         onChange: (newValue) => {
           setLocalValue(newValue)
-          updateValue(editableDefinition.name, {type: editableDefinition.type, data: newValue})
+          updateValue(editableDefinition.name, { type: editableDefinition.type, data: newValue })
         }
       }
     )

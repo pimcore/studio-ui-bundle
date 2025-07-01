@@ -20,7 +20,6 @@ export interface DocumentEditorContextProps {
   initializeData: (data: Record<string, ValueType>) => void
 }
 
-
 export const useDocumentEditor = (): DocumentEditorContextProps => {
   const { id } = useContext(DocumentContext)
 
@@ -34,7 +33,7 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
 
   const updateValue = useCallback((key: string, value: ValueType): void => {
     const api = getDocumentEditableApi()
-    
+
     api.updateValue(key, value)
 
     try {

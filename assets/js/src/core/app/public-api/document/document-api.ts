@@ -13,7 +13,7 @@ import { markDocumentEditablesAsModified } from '@Pimcore/modules/document/docum
 import { iframeDocumentEditorRegistry } from './iframe-registry'
 import { documentSaveService, SaveTaskType } from '@Pimcore/modules/document/services'
 import { debounce } from 'lodash'
-import { PublicApiDocumentEditorIframe } from '../document-editor-iframe'
+import { type PublicApiDocumentEditorIframe } from '../document-editor-iframe'
 
 export interface DocumentApi {
   markDraftAsModified: (documentId: number) => void
@@ -25,7 +25,7 @@ export interface DocumentApi {
 }
 
 class DocumentApiImpl implements DocumentApi {
-  private autoSaveCallbacks = new Map<number, ReturnType<typeof debounce>>()
+  private readonly autoSaveCallbacks = new Map<number, ReturnType<typeof debounce>>()
 
   markDraftAsModified (documentId: number): void {
     store.dispatch(markDocumentEditablesAsModified(documentId))
@@ -41,7 +41,7 @@ class DocumentApiImpl implements DocumentApi {
 
   registerIframe (documentId: number, iframe: HTMLIFrameElement): void {
     iframeDocumentEditorRegistry.register(documentId, iframe)
-    
+
     this.autoSaveCallbacks.set(documentId, debounce(async () => {
       await this.performAutoSave(documentId)
     }, 800))
@@ -54,7 +54,7 @@ class DocumentApiImpl implements DocumentApi {
 
   triggerValueChange (documentId: number, key: string, value: any): void {
     this.markDraftAsModified(documentId)
-    
+
     this.autoSaveCallbacks.get(documentId)?.()
   }
 

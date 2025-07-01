@@ -23,7 +23,7 @@ export interface DocumentEditorIframeWindow extends Window {
 
 export const DocumentEditorIframeAppView = (): React.JSX.Element => {
   const editableDefinitions: AbstractDocumentEditableDefinition[] = (window as DocumentEditorIframeWindow).editableDefinitions ?? []
-  
+
   // Extract document ID from URL parameters
   const urlParams = new URLSearchParams(window.location.search)
   const documentIdParam = urlParams.get('documentId')
@@ -33,10 +33,10 @@ export const DocumentEditorIframeAppView = (): React.JSX.Element => {
   if (isNil(documentId) || !isNumber(documentId) || isNaN(documentId) || documentId <= 0) {
     return (
       <Alert
-        message="Error: Invalid Document ID"
         description="A valid documentId parameter is required in the URL."
-        type="error"
+        message="Error: Invalid Document ID"
         showIcon
+        type="error"
       />
     )
   }
@@ -44,7 +44,7 @@ export const DocumentEditorIframeAppView = (): React.JSX.Element => {
   return (
     <GlobalProvider>
       <DocumentProvider id={ documentId }>
-          <EditablesRenderer editableDefinitions={ editableDefinitions } />
+        <EditablesRenderer editableDefinitions={ editableDefinitions } />
       </DocumentProvider>
     </GlobalProvider>
   )

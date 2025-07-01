@@ -42,10 +42,10 @@ export const useSave = (): UseSaveHookReturn => {
       setIsError(false)
       setError(undefined)
       setIsSuccess(false)
-      
+
       // Simply call the document save service
       await documentSaveService.saveDocument(id, task)
-      
+
       setIsSuccess(true)
       onFinish?.()
     } catch (error) {

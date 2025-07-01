@@ -36,7 +36,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { id } = useContext(DocumentContext)
   const { document, removeTrackedChanges, publishDraft } = useDocumentDraft(id)
   const { save: saveDocument, isLoading, isSuccess, isError, error } = useSave()
- 
+
   const { isAutoSaveLoading, runningTask } = useDocumentSaveTask()
   const {
     saveSchedules,
@@ -73,19 +73,20 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   // Handle auto-save errors via direct callback subscription
   useEffect(() => {
     const taskManager = DocumentSaveTaskManager.getInstance(id)
-    
+
     const unsubscribe = taskManager.onErrorChange((error, task) => {
       if (task === SaveTaskType.AutoSave) {
         void messageApi.error(t('auto-save-failed'))
+        console.error('Auto-save failed:', error)
       }
     })
-    
+
     return unsubscribe
   }, [id, messageApi, t])
 
   async function handleSaveClick (task: SaveTaskType, onFinish?: () => void): Promise<void> {
     if (document?.changes === undefined) return
-    
+
     Promise.all([
       saveDocument(task, () => {
         onFinish?.()

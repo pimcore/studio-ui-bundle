@@ -8,22 +8,23 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isNil } from 'lodash'
 import { type PimcoreStudioApi } from '../index'
 
 /**
  * Gets the PimcoreStudio API, checking parent window first, then current window
  * @throws Error if API is not available in either window
  */
-export function getPimcoreStudioApi(): PimcoreStudioApi {
+export function getPimcoreStudioApi (): PimcoreStudioApi {
   // First check parent window
   const parentWindow = window.parent as any
-  if (parentWindow && parentWindow.PimcoreStudio) {
+  if (!isNil(parentWindow?.PimcoreStudio)) {
     return parentWindow.PimcoreStudio
   }
 
   // Then check current window
   const currentWindow = window as any
-  if (currentWindow && currentWindow.PimcoreStudio) {
+  if (!isNil(currentWindow?.PimcoreStudio)) {
     return currentWindow.PimcoreStudio
   }
 
@@ -34,7 +35,7 @@ export function getPimcoreStudioApi(): PimcoreStudioApi {
 /**
  * Checks if the PimcoreStudio API is available
  */
-export function isPimcoreStudioApiAvailable(): boolean {
+export function isPimcoreStudioApiAvailable (): boolean {
   try {
     getPimcoreStudioApi()
     return true
