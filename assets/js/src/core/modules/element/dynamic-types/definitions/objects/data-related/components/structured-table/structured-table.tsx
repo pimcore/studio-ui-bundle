@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import cn from 'classnames'
 import {
   StructuredTableGrid
@@ -54,20 +54,14 @@ export type StructuredTableValue = Record<string, Record<string, StructuredTable
 export type StructuredTableColumnValue = string | null | number | boolean
 
 export const StructuredTable = (props: StructuredTableProps): React.JSX.Element => {
-  const [value, setValue] = useState<StructuredTableValue | null>(props.value ?? null)
-  const [key, setKey] = useState<number>(0)
+  const value = props.value ?? null
+
   const { t } = useTranslation()
   const { confirm } = useFormModal()
 
-  const onChange = (value: StructuredTableValue | null): void => {
-    setValue(value)
+  const handleChange = (value: StructuredTableValue | null): void => {
+    props.onChange?.(value)
   }
-
-  useEffect(() => {
-    if (props.onChange !== undefined) {
-      props.onChange(value)
-    }
-  }, [value])
 
   const castColumnValue = (value: StructuredTableColumnValue, columnId: string): StructuredTableColumnValue => {
     const column = props.cols.find((col) => col.key === columnId)
@@ -86,18 +80,7 @@ export const StructuredTable = (props: StructuredTableProps): React.JSX.Element 
     }
   }
 
-  const emptyValue = (): void => {
-    if (value !== null) {
-      const newValue = value
-      for (const rowKey in value) {
-        for (const colKey in value[rowKey]) {
-          newValue[rowKey][colKey] = castColumnValue(null, colKey)
-        }
-      }
-      setValue(newValue)
-      setKey(key + 1) // force re-render
-    }
-  }
+  const clearValue = (): void => { handleChange(null) }
 
   return (
     <>
@@ -112,10 +95,9 @@ export const StructuredTable = (props: StructuredTableProps): React.JSX.Element 
           className={ cn(props.className) }
           cols={ props.cols }
           disabled={ props.disabled }
-          key={ key }
           labelFirstCell={ props.labelFirstCell }
           labelWidth={ props.labelWidth }
-          onChange={ onChange }
+          onChange={ handleChange }
           rows={ props.rows }
           value={ value }
         />
@@ -129,7 +111,7 @@ export const StructuredTable = (props: StructuredTableProps): React.JSX.Element 
               confirm({
                 title: t('empty'),
                 content: t('empty.confirm'),
-                onOk: emptyValue
+                onOk: clearValue
               })
             } }
             type="default"

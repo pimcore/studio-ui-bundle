@@ -63,9 +63,9 @@ export class DynamicTypeObjectDataQuantityValueRange extends DynamicTypeObjectDa
       ? <></>
       : (
         <QuantityValueRangePreview
-          max={ value.maximum ?? undefined }
-          min={ value.minimum ?? undefined }
-          unitId={ value.unitId }
+          max={ value?.maximum ?? undefined }
+          min={ value?.minimum ?? undefined }
+          unitId={ value?.unitId }
         />
         )
   }

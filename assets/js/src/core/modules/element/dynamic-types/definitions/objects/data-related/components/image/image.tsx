@@ -8,14 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import cn from 'classnames'
-import { Card } from '@Pimcore/components/card/card'
-import {
-  ImageFooter
-} from './footer'
-import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import { useTranslation } from 'react-i18next'
+import { Card } from '@Pimcore/components/card/card'
+import { ImageFooter } from './footer'
+import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import type { DragAndDropInfo } from '@sdk/components'
@@ -37,17 +35,18 @@ export interface ImageProps {
 }
 
 export const Image = (props: ImageProps): React.JSX.Element => {
-  const [value, setValue] = React.useState<ImageValue | null>(props.value ?? null)
+  const imageValue = props.value ?? null
+
   const { t } = useTranslation()
   const { styles } = useStyles()
 
-  const emptyValue = (): void => {
-    setValue(null)
+  const clearValue = (): void => {
+    props.onChange?.(null)
   }
 
-  useEffect(() => {
+  const handleChange = (value: ImageValue | null): void => {
     props.onChange?.(value)
-  }, [value])
+  }
 
   const width = toCssDimension(props.width, 300)
   const height = toCssDimension(props.height, 150)
@@ -56,24 +55,26 @@ export const Image = (props: ImageProps): React.JSX.Element => {
     <Card
       className={ cn('max-w-full', styles.image, props.className) }
       fitContent
-      footer={ <ImageFooter
-        disabled={ props.disabled }
-        emptyValue={ emptyValue }
-        key="image-footer"
-        setValue={ setValue }
-        value={ value }
-               /> }
+      footer={ (
+        <ImageFooter
+          disabled={ props.disabled }
+          emptyValue={ clearValue }
+          key="image-footer"
+          setValue={ handleChange }
+          value={ imageValue }
+        />)
+      }
     >
       <Droppable
         isValidContext={ (info: DragAndDropInfo) => props.disabled !== true }
         isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
-        onDrop={ (info: DragAndDropInfo) => { setValue({ type: 'asset', id: info.data.id as number }) } }
+        onDrop={ (info: DragAndDropInfo) => { props.onChange?.({ type: 'asset', id: info.data.id as number }) } }
         variant="outline"
       >
-        { value !== null
+        { imageValue !== null
           ? (
             <ImagePreview
-              assetId={ value.id }
+              assetId={ imageValue?.id }
               height={ height! }
               width={ width! }
             />
@@ -86,7 +87,8 @@ export const Image = (props: ImageProps): React.JSX.Element => {
               uploadIcon={ props.disabled !== true }
               width={ width }
             />
-            ) }
+            )
+        }
       </Droppable>
     </Card>
   )

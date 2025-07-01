@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { type Dayjs } from 'dayjs'
 import {
   type DatePickerValueType,
@@ -31,24 +31,20 @@ export type TimePickerProps = GenericTimePickerProps & {
 
 export const TimePicker = (props: TimePickerProps): React.JSX.Element => {
   const outputFormat = props?.outputFormat ?? 'HH:mm:ss'
+  const value = toDayJs(props.value, outputFormat)
 
-  const [value, setValue] = React.useState<Dayjs | null>(toDayJs(props.value, outputFormat))
   const { styles } = useStyles()
 
-  useEffect(() => {
-    if (props.onChange !== undefined) {
-      props.onChange(fromDayJs(value, props.outputType, outputFormat))
-    }
-  }, [value, props.outputType, outputFormat])
+  const handleChange = (date: Dayjs | null): void => {
+    props.onChange?.(fromDayJs(date, props.outputType, outputFormat))
+  }
 
   const OriginalTimePicker = DatePicker.TimePicker
 
   return (
     <OriginalTimePicker
       { ...props }
-      onChange={ (date: Dayjs | null) => {
-        setValue(date)
-      } }
+      onChange={ handleChange }
       popupClassName={ styles.datePickerDropdown }
       rootClassName={ cn(styles.datePicker, props.className, { [styles.inherited]: props.inherited }) }
       value={ value }

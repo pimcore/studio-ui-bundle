@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Select, type SelectProps } from '@Pimcore/components/select/select'
 import { toCssDimension } from '@Pimcore/utils/css'
 
@@ -20,7 +20,7 @@ export interface BooleanSelectProps extends SelectProps {
 }
 
 export const BooleanSelect = (props: BooleanSelectProps): React.JSX.Element => {
-  const [value, setValue] = useState<boolean | null>(props.value ?? null)
+  const booleanSelectValue = props.value ?? null
 
   const mapValue = (value?: boolean | null): number | undefined => {
     if (value === undefined) {
@@ -44,16 +44,10 @@ export const BooleanSelect = (props: BooleanSelectProps): React.JSX.Element => {
     return value === 1
   }
 
-  useEffect(() => {
-    if (props.onChange !== undefined) {
-      props.onChange(value)
-    }
-  }, [value])
-
   const onChange = (value?: number): void => {
     const newValue = reverseMapValue(value)
-    setValue(newValue ?? null)
-    props.onChange?.(newValue)
+
+    props.onChange?.(newValue ?? null)
   }
 
   return (
@@ -61,7 +55,7 @@ export const BooleanSelect = (props: BooleanSelectProps): React.JSX.Element => {
       { ...props }
       onChange={ onChange }
       style={ { maxWidth: toCssDimension(props.maxWidth) } }
-      value={ mapValue(value) }
+      value={ mapValue(booleanSelectValue) }
     />
   )
 }

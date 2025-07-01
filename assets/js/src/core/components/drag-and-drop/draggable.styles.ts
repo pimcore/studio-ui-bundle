@@ -12,11 +12,12 @@ import { createGlobalStyle } from 'antd-style'
 
 export const GlobalStyle = createGlobalStyle(({ theme: token }) => {
   return {
-    '.dnd--dragging': {
-      cursor: 'move'
-    },
 
     '.dnd--invalid': {
+      cursor: 'not-allowed !important',
+      '& *': {
+        cursor: 'not-allowed !important'
+      },
       '.dnd__overlay': {
         background: token.colorErrorBg,
         color: token.colorErrorActive

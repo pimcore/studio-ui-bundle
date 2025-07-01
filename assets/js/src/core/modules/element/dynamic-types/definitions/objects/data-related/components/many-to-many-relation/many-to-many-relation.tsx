@@ -56,6 +56,7 @@ export interface ManyToManyRelationProps extends IRelationAllowedTypesDataCompon
   hint?: React.ReactNode | null
   allowMultipleAssignments?: boolean
   className?: string
+  disableInlineUpload?: boolean
 }
 
 export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.Element => {
@@ -91,6 +92,7 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
   return (
     <>
       <Droppable
+        disableDndActiveIndicator
         isValidContext={ (info: DragAndDropInfo) => props.disabled !== true && isValidElementType(info.type) }
         isValidData={ (info: DragAndDropInfo) => dndIsValidData(info, props) }
         onDrop={ onDrop }
@@ -127,7 +129,7 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
             setDisplayedValue(null)
             setValue(null)
           } }
-          enableUpload={ props.assetsAllowed === true && props.disabled !== true }
+          enableUpload={ props.assetsAllowed === true && props.disabled !== true && props.disableInlineUpload !== true }
           onSearch={ onSearch }
           uploadMaxItems={ maxRemainingItems !== undefined && maxRemainingItems > 0 ? maxRemainingItems : (props.maxItems ?? undefined) }
           uploadShowMaxItemsError={ maxRemainingItems !== undefined && maxRemainingItems <= 0 }

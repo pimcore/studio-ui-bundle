@@ -15,7 +15,7 @@ import React, { type RefObject } from 'react'
 import ReactDOM from 'react-dom'
 import { serviceIds, useInjection } from '@sdk/app'
 import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
-import { isNull } from 'lodash'
+import { isNull, isUndefined } from 'lodash'
 import { useDocumentEditor } from '../../provider/use-document-editor'
 
 export interface EditableRendererProps {
@@ -48,17 +48,6 @@ const getTargetContainer = (
   return shadowContainer
 }
 
-const getInitialData = (editableDefinitions: AbstractDocumentEditableDefinition[]): Record<string, { type: string, data: any }> => {
-  const initialData: Record<string, any> = {}
-  editableDefinitions.forEach((editable) => {
-    initialData[editable.name] = {
-      type: editable.type,
-      data: editable.data ?? null
-    }
-  })
-  return initialData
-}
-
 interface DocumentEditorIframeWindow extends Window {
   editableDefinitions?: AbstractDocumentEditableDefinition[]
   clipboardData?: any
@@ -69,6 +58,19 @@ export const EditablesRenderer = (props: EditableRendererProps): React.JSX.Eleme
   const iframeDocument = props.iframeRef.current?.contentDocument
   const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
   const { initializeData } = useDocumentEditor()
+
+  const getInitialData = (editableDefinitions: AbstractDocumentEditableDefinition[]): Record<string, { type: string, data: any }> => {
+    const initialData: Record<string, any> = {}
+    editableDefinitions.forEach((editable) => {
+      const editableType = documentEditableRegistry.hasDynamicType(editable.type) ? documentEditableRegistry.getDynamicType(editable.type) : undefined
+
+      initialData[editable.name] = {
+        type: editable.type,
+        data: isUndefined(editableType) ? (editable.data ?? null) : editableType.transformValue(editable.data, editable)
+      }
+    })
+    return initialData
+  }
 
   initializeData(getInitialData(editableDefinitions))
 

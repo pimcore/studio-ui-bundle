@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import cn from 'classnames'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useTranslation } from 'react-i18next'
@@ -55,18 +55,17 @@ export interface LinkProps {
 }
 
 export const Link = (props: LinkProps): React.JSX.Element => {
-  const [value, setValue] = useState<LinkValue | null>(props.value ?? null)
   const [isModalVisible, setIsModalVisible] = useState(false)
 
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { openElement } = useElementHelper()
 
-  useEffect(() => {
-    if (props.onChange !== undefined) {
-      props.onChange(value)
-    }
-  }, [value])
+  const value = props.value ?? null
+
+  const handleChange = (value: LinkValue | null): void => {
+    props.onChange?.(value)
+  }
 
   const showModal = (): void => {
     setIsModalVisible(true)
@@ -153,7 +152,7 @@ export const Link = (props: LinkProps): React.JSX.Element => {
         disabled={ props.disabled }
         disabledFields={ props.disabledFields }
         onClose={ hideModal }
-        onSave={ setValue }
+        onSave={ handleChange }
         open={ isModalVisible }
         value={ value }
       />

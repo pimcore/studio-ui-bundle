@@ -8,9 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { type GridCellReference } from '@Pimcore/components/grid/grid'
-import { isEqual } from 'lodash'
 
 export type TableValue = Array<Record<string, string> | string[]>
 
@@ -26,7 +25,7 @@ interface UseTableValueProps {
 
 interface UseTableValueReturn {
   value: TableValue | null
-  setValue: (value: TableValue | null) => void
+  handleChange: (value: TableValue | null) => void
   activeCell: GridCellReference | undefined
   setActiveCell: (cell: GridCellReference | undefined) => void
   key: number
@@ -42,15 +41,14 @@ interface UseTableValueReturn {
 }
 
 export const useTableValue = (props: UseTableValueProps): UseTableValueReturn => {
-  const [value, setValue] = useState<TableValue | null>(props.initialValue)
   const [activeCell, setActiveCell] = useState<GridCellReference | undefined>(undefined)
   const [key, setKey] = useState<number>(0)
 
-  useEffect(() => {
-    if (!isEqual(value, props.initialValue)) {
-      props.onChange?.(value)
-    }
-  }, [value])
+  const value = props.initialValue
+
+  const handleChange = (value: TableValue | null): void => {
+    props.onChange?.(value)
+  }
 
   const initializeValue = (): TableValue => {
     const rows = props.rows ?? 1
@@ -74,7 +72,7 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
   rows = Math.max(rows, 1)
 
   const emptyValue = (): void => {
-    setValue(props.emptyValue ?? [])
+    handleChange(props.emptyValue ?? [])
     setKey(key + 1) // force re-render
   }
 
@@ -99,7 +97,7 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
       newValue.push(newRow)
     }
 
-    setValue(newValue as TableValue)
+    handleChange(newValue as TableValue)
   }
 
   const newColumn = (): void => {
@@ -107,7 +105,7 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
     const newValue = [...(value !== null && value.length > 0 ? value : initializeValue())]
     newValue.forEach(row => (row as string[]).splice(activeCell?.columnIndex ?? (row as string[]).length, 0, ''))
 
-    setValue(newValue as TableValue)
+    handleChange(newValue as TableValue)
   }
 
   const deleteRow = (): void => {
@@ -116,7 +114,7 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
     const newValue = [...(value !== null && value.length > 0 ? value : initializeValue())]
     newValue.splice(activeCell.rowIndex, 1)
 
-    setValue(newValue as TableValue)
+    handleChange(newValue as TableValue)
   }
 
   const deleteColumn = (): void => {
@@ -125,7 +123,7 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
     const newValue = [...(value !== null && value.length > 0 ? value : initializeValue())]
     newValue.forEach(row => (row as string[]).splice(activeCell.columnIndex, 1))
 
-    setValue(newValue as TableValue)
+    handleChange(newValue as TableValue)
   }
 
   const duplicateRow = (): void => {
@@ -139,7 +137,7 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
       newValue.splice(activeCell.rowIndex, 0, { ...rowToDuplicate })
     }
 
-    setValue(newValue as TableValue)
+    handleChange(newValue as TableValue)
   }
 
   const fixColumnConfig = (value: TableValue): TableValue => {
@@ -159,7 +157,7 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
 
   return {
     value,
-    setValue,
+    handleChange,
     activeCell,
     setActiveCell,
     key,

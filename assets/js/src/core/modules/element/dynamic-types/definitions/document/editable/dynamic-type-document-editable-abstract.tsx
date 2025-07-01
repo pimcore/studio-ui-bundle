@@ -12,6 +12,7 @@ import { injectable } from 'inversify'
 import { type DynamicTypeAbstract } from '../../../registry/dynamic-type-registry-abstract'
 import { type ReactElement } from 'react'
 import { type ColumnMetaType } from '@Pimcore/components/grid/grid'
+import { type IFieldWidthContext } from '@sdk/modules/element'
 
 export interface AbstractDocumentEditableDefinition {
   id: string
@@ -24,6 +25,7 @@ export interface AbstractDocumentEditableDefinition {
   inDialogBox: string | null
   value?: any
   onChange?: (value: any) => void
+  defaultFieldWidth: IFieldWidthContext
 }
 
 export type GridCellColumnMeta = ColumnMetaType & { type: string }
@@ -35,4 +37,12 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
   useShadowDom: boolean = true
 
   abstract getEditableDataComponent (props: AbstractDocumentEditableDefinition): ReactElement<AbstractDocumentEditableDefinition>
+
+  transformValue (value: any, props: AbstractDocumentEditableDefinition): any {
+    return value
+  }
+
+  getLabel (props: AbstractDocumentEditableDefinition): React.ReactElement | undefined {
+    return undefined
+  }
 }

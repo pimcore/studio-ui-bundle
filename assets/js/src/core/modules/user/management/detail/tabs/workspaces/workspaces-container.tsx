@@ -14,8 +14,8 @@ import { useTranslation } from 'react-i18next'
 import { Table } from '@Pimcore/modules/user/management/detail/tabs/workspaces/components/table/table'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import type { UserWorkspace } from '@Pimcore/modules/auth/user/user-api-slice.gen'
-import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
-import { useUserContext } from '@Pimcore/modules/user/hooks/use-user-context'
+import { useUserManagementDraft } from '@Pimcore/modules/user/hooks/use-user-management-draft'
+import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-management-context'
 import { Flex } from 'antd'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
@@ -23,8 +23,8 @@ import { Button } from '@Pimcore/components/button/button'
 
 const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
-  const { id } = useUserContext()
-  const { user, isLoading, changeUserInState } = useUserDraft(id)
+  const { id } = useUserManagementContext()
+  const { user, isLoading, changeUserInState } = useUserManagementDraft(id)
 
   const [assetWorkspaces, setAssetWorkspaces] = React.useState<UserWorkspace[]>(user?.assetWorkspaces ?? [])
   const [documentWorkspaces, setDocumentWorkspaces] = React.useState<UserWorkspace[]>(user?.documentWorkspaces ?? [])
