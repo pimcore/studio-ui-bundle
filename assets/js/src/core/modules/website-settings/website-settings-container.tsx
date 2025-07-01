@@ -17,12 +17,14 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Box, Button, Form, IconTextButton, Input, ModalFooter, Pagination, SearchInput, Select, useModal } from '@sdk/components'
-import trackError, { ApiError, GeneralError } from '../app/error-handler'
+import trackError, { ApiError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { isUndefined } from 'lodash'
-import { useWebsiteSettingsGetCollectionQuery, useWebsiteSettingsListTypesQuery, type WebsiteSetting, type WebsiteSettingsGetCollectionApiArg } from './website-settings-api-slice-enhanced'
+import { api, useWebsiteSettingsGetCollectionQuery, useWebsiteSettingsListTypesQuery, type WebsiteSetting, type WebsiteSettingsGetCollectionApiArg } from './website-settings-api-slice-enhanced'
 import { Table } from './table/table'
 import { useWebsiteSetting } from './hooks/use-website-settings'
+import { useAppDispatch } from '@sdk/app'
+import { invalidatingTags } from '@sdk/api'
 
 export type WebsiteSettingRow = WebsiteSetting & { rowId: string }
 
@@ -70,19 +72,17 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
     }
   }), [nameFilter, page, pageSize])
 
-  const { data, isLoading: websiteSettingsLoading, isFetching: websiteSettingsFetching, error, refetch } = useWebsiteSettingsGetCollectionQuery(queryArgs)
+  const { data, isLoading: websiteSettingsLoading, isFetching: websiteSettingsFetching, error } = useWebsiteSettingsGetCollectionQuery(queryArgs, {
+    refetchOnMountOrArgChange: true
+  })
 
   const { createNewSetting, createLoading } = useWebsiteSetting()
 
-  const handleRefetch = (): void => {
-    void refetch().catch(() => {
-      trackError(new GeneralError('Error while reloading'))
-    })
-  }
+  const dispatch = useAppDispatch()
 
-  useEffect(() => {
-    handleRefetch()
-  }, [])
+  const reload = (): void => {
+    dispatch(api.util.invalidateTags(invalidatingTags.WEBSITE_SETTINGS()))
+  }
 
   const [websiteSettingRows, setWebsiteSettingRows] = useState<WebsiteSettingRow[]>([])
 
@@ -179,7 +179,7 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
           <IconButton
             disabled={ websiteSettingsFetching }
             icon={ { value: 'refresh' } }
-            onClick={ handleRefetch }
+            onClick={ reload }
           />
           <Pagination
             current={ page }

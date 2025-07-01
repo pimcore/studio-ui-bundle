@@ -66,8 +66,6 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
     label: site.domain
   }))
 
-  console.log('siteDomains', siteDomains)
-
   const onUpdateCellData = async ({
     columnId,
     value,
@@ -102,7 +100,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
 
   const columnHelper = createColumnHelper<WebsiteSettingEnrichedWithActions>()
 
-  //@TODO wait for elementId to be returned from API and add to column 
+  // @TODO wait for elementId to be returned from API and add to column
   const tableColumns = [
     columnHelper.accessor('type', {
       header: t('website-settings.columns.type'),
