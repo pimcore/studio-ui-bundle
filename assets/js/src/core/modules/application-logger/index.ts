@@ -14,6 +14,8 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { ApplicationLogger } from './application-logger-container'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
+import { UserPermission } from '../auth/enums/user-permission'
+import { NavPermission } from '../perspectives/enums/nav-permission'
 
 moduleSystem.registerModule({
   onInit: () => {
