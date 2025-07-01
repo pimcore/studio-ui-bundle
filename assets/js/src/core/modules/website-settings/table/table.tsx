@@ -77,15 +77,15 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
   }): Promise<void> => {
     const rowId = rowData.rowId
     const columnIdNormalised = columnId === 'siteDomain'
-    ? 'siteId'
-    : columnId
-      
+      ? 'siteId'
+      : columnId
+
     const valueNormalised = columnId === 'data'
-    ? (value as ElementInfo).fullPath
-    : value
+      ? (value as ElementInfo).fullPath
+      : value
 
     const updatedRow: WebsiteSettingRow = { ...rowData, [columnIdNormalised]: valueNormalised }
-  
+
     setWebsiteSettingRows(prev =>
       prev.map(row =>
         row.rowId === rowId ? updatedRow : row
