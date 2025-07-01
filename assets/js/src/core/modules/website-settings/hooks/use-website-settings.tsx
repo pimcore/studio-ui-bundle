@@ -32,7 +32,7 @@ export const useWebsiteSetting = (): UseWebsiteSettingReturn => {
       if ('data' in result) {
         return { success: true, data: result.data }
       }
-    } catch (e) {
+    } catch {
       trackError(new GeneralError('Was not able to create Website Setting'))
     }
     return { success: false }
@@ -42,7 +42,7 @@ export const useWebsiteSetting = (): UseWebsiteSettingReturn => {
     try {
       const result = await deleteSetting({ id })
       return { success: 'data' in result }
-    } catch (e) {
+    } catch {
       trackError(new GeneralError('Was not able to delete Website Setting'))
       return { success: false }
     }
@@ -59,7 +59,7 @@ export const useWebsiteSetting = (): UseWebsiteSettingReturn => {
     try {
       const result = await updateSetting({ id, websiteSettingsUpdate: toApiSetting(row) })
       return { success: 'data' in result }
-    } catch (e) {
+    } catch {
       trackError(new GeneralError('Was not able to update Website Setting'))
       return { success: false }
     }
