@@ -20,7 +20,6 @@ import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { type Site } from '@Pimcore/modules/document/sites-slice.gen'
 import { isEmpty, isUndefined } from 'lodash'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import { useElementGetter } from '../hooks/use-element-getter'
 
 type WebsiteSettingEnrichedRow = WebsiteSettingRow & {
   siteDomain: string
@@ -103,6 +102,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
 
   const columnHelper = createColumnHelper<WebsiteSettingEnrichedWithActions>()
 
+  //@TODO wait for elementId to be returned from API and add to column 
   const tableColumns = [
     columnHelper.accessor('type', {
       header: t('website-settings.columns.type'),
@@ -132,10 +132,9 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
           allowedTypes: allElementTypes,
           getElementInfo: (cellProps: DefaultCellProps): ElementInfo => {
             const row = cellProps.row.original
-            const { elementId } = useElementGetter({ elementType: row.type, elementPath: row.data })
             return {
               elementType: mapToElementType(String(row.type), true),
-              id: elementId,
+              id: undefined,
               fullPath: isEmpty(row.data) ? '' : decodeURIComponent(String(row.data))
             }
           }
