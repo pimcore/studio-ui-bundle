@@ -161,7 +161,7 @@ export class DocumentSaveTaskManager {
     }
   }
 
-  private setRunningTask (task?: SaveTaskType): void {
+  private setRunningTask (task: SaveTaskType | undefined): void {
     this.runningTask = task
     this.taskCallbacks.forEach(callback => { callback(task) })
   }
