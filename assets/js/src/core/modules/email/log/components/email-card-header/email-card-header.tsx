@@ -60,25 +60,25 @@ export const EmailCardHeader = ({ email }: EmailCardHeaderProps): React.JSX.Elem
 
       <div>
         <IconButton
-          icon={{ value: 'vector' }}
-          onClick={() => { resendWithConfirmation(email.id) }}
+          icon={ { value: 'vector' } }
+          onClick={ () => { resendWithConfirmation(email.id) } }
         />
 
         <IconButton
-          icon={{ value: 'flip-forward' }}
-          onClick={() => { setIsForwardModalOpen(true) }}
+          icon={ { value: 'flip-forward' } }
+          onClick={ () => { setIsForwardModalOpen(true) } }
         />
 
         <IconButton
-          icon={{ value: 'trash' }}
-          onClick={() => { removeWithConfirmation(email.id) }}
+          icon={ { value: 'trash' } }
+          onClick={ () => { removeWithConfirmation(email.id) } }
         />
       </div>
 
       <ForwardModal
-        email={email}
-        open={isForwardModalOpen}
-        setOpen={setIsForwardModalOpen}
+        email={ email }
+        open={ isForwardModalOpen }
+        setOpen={ setIsForwardModalOpen }
       />
     </Flex>
   )
