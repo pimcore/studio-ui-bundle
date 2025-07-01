@@ -39,9 +39,7 @@ export const useEmailLog = (): UseEmailLogHookReturn => {
   const resendWithConfirmation = (id: EmailLogDeleteApiArg['id'], onFinish?: () => void): void => {
     modal.confirm({
       title: t('email-log.resend.confirmation.title'),
-      content: <>
-        <span>{t('email-log.resend.confirmation.text')} </span>
-      </>,
+      content: <span>{t('email-log.resend.confirmation.text')} </span>,
       okText: t('email-log.resend.confirmation.ok'),
       onOk: async () => {
         await resend(id, () => {
@@ -95,9 +93,7 @@ export const useEmailLog = (): UseEmailLogHookReturn => {
   const removeWithConfirmation = (id: EmailLogDeleteApiArg['id'], onFinish?: () => void): void => {
     modal.confirm({
       title: t('element.delete.confirmation.title'),
-      content: <>
-        <span>{t('element.delete.confirmation.text')} </span>
-      </>,
+      content: <span>{t('element.delete.confirmation.text')} </span>,
       okText: t('element.delete.confirmation.ok'),
       onOk: async () => {
         await remove(id, () => {
