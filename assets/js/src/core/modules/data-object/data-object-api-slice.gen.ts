@@ -131,10 +131,7 @@ const injectedRtkApi = api
             }),
             dataObjectGetLayoutById: build.query<DataObjectGetLayoutByIdApiResponse, DataObjectGetLayoutByIdApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-objects/${queryArg.id}/layout`,
-                    params: {
-                        layoutId: queryArg.layoutId,
-                    },
+                    url: `/pimcore-studio/api/data-objects/${queryArg.id}/layout/${queryArg.layoutId}`,
                 }),
                 providesTags: ["Data Objects"],
             }),
@@ -442,7 +439,7 @@ export type DataObjectPreviewByIdApiArg = {
     /** Id of the data object */
     id: number;
     /** Site ID */
-    site?: number;
+    site?: any;
 };
 export type DataObjectReplaceContentApiResponse = unknown;
 export type DataObjectReplaceContentApiArg = {
@@ -685,7 +682,7 @@ export type Transformer = {
 };
 export type AdvancedColumnConfig = {
     /** advancedColumns */
-    advancedColumns: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
+    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
     /** List if Transformers that should be applied */
     transformers?: Transformer[];
 };

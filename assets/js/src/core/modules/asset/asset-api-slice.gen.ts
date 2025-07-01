@@ -79,7 +79,7 @@ const injectedRtkApi = api
                 AssetDeleteGridConfigurationByConfigurationIdApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/grid/configuration/${queryArg.configurationId}/delete`,
+                    url: `/pimcore-studio/api/assets/grid/configuration/${queryArg.configurationId}`,
                     method: "DELETE",
                 }),
                 invalidatesTags: ["Asset Grid"],
@@ -457,6 +457,8 @@ export type AssetGetSavedGridConfigurationsApiArg = void;
 export type AssetSaveGridConfigurationApiResponse =
     /** status 200 Asset grid configuration saved successfully */ GridConfiguration;
 export type AssetSaveGridConfigurationApiArg = {
+    /** FolderId of the folder */
+    folderId: number;
     body: {
         folderId: number;
         pageSize: number;
@@ -921,9 +923,9 @@ export type UpdateDataProperty = {
     inheritable: boolean;
 };
 export type FocalPoint = {
-    /** x Coordinate of FocalPoint */
+    /** x */
     x: number;
-    /** y Coordinate of FocalPoint */
+    /** y */
     y: number;
 };
 export type ImageData = {
@@ -1048,7 +1050,7 @@ export type Transformer = {
 };
 export type AdvancedColumnConfig = {
     /** advancedColumns */
-    advancedColumns: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
+    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
     /** List if Transformers that should be applied */
     transformers?: Transformer[];
 };
