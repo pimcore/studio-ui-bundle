@@ -31,7 +31,7 @@ interface OpenDataObjectWidgetProps {
   config: EditorContainerProps
 }
 
-interface IFormatPathItems {
+interface IFormatPathItem {
   id: number
   type: string
   fullPath: string
@@ -40,7 +40,7 @@ interface IFormatPathItems {
 interface UseDataObjectReturn {
   openDataObject: (props: OpenDataObjectWidgetProps) => Promise<void>
   executeDataObjectTask: (id: number, task: SaveTaskType, onFinish?: () => void) => Promise<void>
-  formatPath: (items: IFormatPathItems[], fieldName: string, dataObjectId: number) => Promise<DataObjectFormatPathApiResponse | undefined>
+  formatPath: (items: IFormatPathItem[], fieldName: string, dataObjectId: number) => Promise<DataObjectFormatPathApiResponse | undefined>
 }
 
 export const useDataObjectHelper = (): UseDataObjectReturn => {
@@ -128,7 +128,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
   }
 
   const formatPathCache = useRef(new Map<string, DataObjectFormatPathApiResponse | undefined>())
-  const formatPath = async (items: IFormatPathItems[], fieldName: string, dataObjectId: number): Promise<DataObjectFormatPathApiResponse | undefined> => {
+  const formatPath = async (items: IFormatPathItem[], fieldName: string, dataObjectId: number): Promise<DataObjectFormatPathApiResponse | undefined> => {
     const cacheKey = `dataObjectId_${dataObjectId}_${items.length}_fieldName_${fieldName}`
 
     if (formatPathCache.current.has(cacheKey)) {
@@ -145,6 +145,10 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
       }
       return acc
     }, {})
+
+    if (Object.keys(targets).length === 0) {
+      return undefined
+    }
 
     const { data, error } = await store.dispatch(api.endpoints.dataObjectFormatPath.initiate({
       body: {

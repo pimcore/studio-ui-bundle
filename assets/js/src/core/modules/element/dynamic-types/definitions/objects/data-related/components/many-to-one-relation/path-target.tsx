@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, type MutableRefObject, useEffect } from 'react'
+import React, { forwardRef, type MutableRefObject, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Input } from '@Pimcore/components/input/input'
 import {
@@ -22,6 +22,7 @@ import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-hel
 import { Flex } from 'antd'
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-object'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 
 export interface PathTargetProps {
   value: ManyToOneRelationValueType
@@ -30,6 +31,7 @@ export interface PathTargetProps {
   onChange?: (value: ManyToOneRelationValueType) => void
   inherited?: boolean
   virtualFieldName: string
+  pathFormatterClass?: string
 }
 
 export const PathTarget = forwardRef(function PathTarget (
@@ -42,9 +44,26 @@ export const PathTarget = forwardRef(function PathTarget (
   const { mapToElementType } = useElementHelper()
   const { formatPath } = useDataObjectHelper()
   const { id: dataObjectId } = useDataObject()
+  const [displayPath, setDisplayPath] = useState(String(value?.fullPath))
 
   useEffect(() => {
     setValue(props.value ?? null)
+
+    if (props.pathFormatterClass != null && props.pathFormatterClass !== '') {
+      console.log('formatPath', props.pathFormatterClass)
+      formatPath([props.value], props.virtualFieldName, dataObjectId).then((data) => {
+        if (data === undefined) {
+          return
+        }
+
+        const newValue = [props.value].map((item) => ({
+          ...item,
+          fullPath: data.items.find(i => i.objectReference === `object_${item.id}`)?.formatedPath ?? item.fullPath
+        }))
+
+        setDisplayPath(String(newValue[0].fullPath))
+      }).catch(error => { console.error(error) })
+    }
   }, [props.value])
 
   const getDisplayText: () => string | undefined = () => {
@@ -55,20 +74,6 @@ export const PathTarget = forwardRef(function PathTarget (
     if (value.textInput === true) {
       return value.fullPath ?? ''
     }
-    formatPath([props.value], props.virtualFieldName, dataObjectId).then((data) => {
-      if (data === undefined) {
-        return
-      }
-
-      const newValue = [props.value].map((item) => ({
-        ...item,
-        fullPath: data.items.find(i => i.objectReference === `object_${item.id}`)?.formatedPath ?? item.fullPath
-      }))
-
-      console.log('newValue', newValue)
-
-      return newValue
-    }).catch(error => { console.error(error) })
 
     return value.fullPath ?? String(value.id)
   }
@@ -79,11 +84,10 @@ export const PathTarget = forwardRef(function PathTarget (
   const showElementTagPrefix = props.allowPathTextInput !== true && hasElementTag
   const showElementTag = props.allowPathTextInput === true && hasElementTag
 
-  console.log('displayText', displayText)
+  console.log('props.pathFormatterClass', props.pathFormatterClass)
   return (
     <div
       ref={ ref }
-
       style={ { flexGrow: 1 } }
     >
       { showElementTag
@@ -96,19 +100,23 @@ export const PathTarget = forwardRef(function PathTarget (
             <Input
               disabled={ props.disabled }
               inherited={ props.inherited }
-              prefix={
-
-                <ElementTag
-                  disabled={ props.disabled === true || props.inherited === true }
-                  elementType={ mapToElementType(value.type) }
-                  id={ value.id }
-                  onClose={ () => {
-                    setValue(null)
-                    props.onChange?.(null)
-                  } }
-                  path={ String(value?.fullPath) }
-                  published={ value.isPublished ?? undefined }
-                />
+              prefix={ props.pathFormatterClass != null && props.pathFormatterClass !== ''
+                ? (
+                  <SanitizeHtml html={ displayPath ?? '' } />
+                  )
+                : (
+                  <ElementTag
+                    disabled={ props.disabled === true || props.inherited === true }
+                    elementType={ mapToElementType(value.type) }
+                    id={ value.id }
+                    onClose={ () => {
+                      setValue(null)
+                      props.onChange?.(null)
+                    } }
+                    path={ displayPath }
+                    published={ value.isPublished ?? undefined }
+                  />
+                  )
               }
               readOnly
             />
@@ -130,17 +138,21 @@ export const PathTarget = forwardRef(function PathTarget (
               props.onChange?.(newValue)
             } }
             placeholder={ showElementTagPrefix ? undefined : t(props.allowPathTextInput === true ? 'many-to-one-relation.drop-placeholder-text-input' : 'many-to-one-relation.drop-placeholder') }
-            prefix={ showElementTagPrefix
+            prefix={ props.pathFormatterClass != null && props.pathFormatterClass !== ''
               ? (
-                <ElementTag
-                  disabled={ props.disabled === true || props.inherited === true }
-                  elementType={ props.allowPathTextInput === true ? undefined : mapToElementType(value.type) }
-                  id={ props.allowPathTextInput === true ? undefined : value.id }
-                  path={ String(value?.fullPath) }
-                  published={ value.isPublished ?? undefined }
-                />
+                <SanitizeHtml html={ displayPath ?? '' } />
                 )
-              : undefined }
+              : showElementTagPrefix
+                ? (
+                  <ElementTag
+                    disabled={ props.disabled === true || props.inherited === true }
+                    elementType={ props.allowPathTextInput === true ? undefined : mapToElementType(value.type) }
+                    id={ props.allowPathTextInput === true ? undefined : value.id }
+                    path={ displayPath }
+                    published={ value.isPublished ?? undefined }
+                  />
+                  )
+                : undefined }
             readOnly={ props.allowPathTextInput !== true }
             value={ showElementTagPrefix ? undefined : displayText }
           />

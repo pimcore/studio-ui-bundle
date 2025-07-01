@@ -55,6 +55,7 @@ export interface ManyToOneRelationClassDefinitionProps {
   allowPathTextInput?: boolean
   width?: number | string | null
   inherited?: boolean
+  pathFormatterClass: string | null
 }
 
 export interface ManyToOneRelationProps extends IRelationAllowedTypesDataComponent, ManyToOneRelationClassDefinitionProps {
@@ -67,6 +68,8 @@ export interface ManyToOneRelationProps extends IRelationAllowedTypesDataCompone
 
 export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Element => {
   const [value, setValue] = React.useState<ManyToOneRelationValueType>(props.value ?? null)
+
+  console.log('ManyToOneRelation', props)
 
   const { openElement, mapToElementType } = useElementHelper()
   const { download } = useDownload()
@@ -119,6 +122,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
             disabled={ props.disabled }
             inherited={ props.inherited }
             onChange={ setValue }
+            pathFormatterClass={ props.pathFormatterClass }
             value={ value }
             virtualFieldName={ props.virtualFieldName }
           />

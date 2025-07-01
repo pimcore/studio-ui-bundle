@@ -41,7 +41,7 @@ export const useValue = (
   setValue: (value: ManyToManyRelationValue | null) => void,
   displayedValue: ManyToManyRelationValue | null,
   setDisplayedValue: (value: ManyToManyRelationValue | null) => void,
-  setIsLoading: (isLoading: boolean) => void,
+  // setIsLoading: (isLoading: boolean) => void,
   maxItems: number | null,
   virtualFieldName: string,
   allowMultipleAssignments?: boolean,
@@ -58,7 +58,7 @@ export const useValue = (
 
   useEffect(() => {
     if (pathFormatterClass !== null && value !== null && dataObjectId !== undefined && virtualFieldName !== undefined) {
-      setIsLoading(true)
+      // setIsLoading(true)
 
       formatPath(value, virtualFieldName, dataObjectId).then((data) => {
         if (data === undefined) {
@@ -72,7 +72,7 @@ export const useValue = (
 
         console.log('newValue', newValue)
         setDisplayedValue(newValue)
-        setIsLoading(false)
+        // setIsLoading(false)
       }).catch(error => { console.error(error) })
     }
   }, [value])

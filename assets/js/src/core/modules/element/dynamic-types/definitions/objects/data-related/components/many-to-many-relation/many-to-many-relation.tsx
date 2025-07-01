@@ -63,8 +63,7 @@ export interface ManyToManyRelationProps extends IRelationAllowedTypesDataCompon
 export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.Element => {
   const [value, setValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
   const [displayedValue, setDisplayedValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
-  const [isLoading, setIsLoading] = useState<boolean>(props.pathFormatterClass !== null)
-  const { onDrop, deleteItem, onSearch, addAssets, addItems, maxRemainingItems } = useValue(value, setValue, displayedValue, setDisplayedValue, setIsLoading, props.maxItems, props.virtualFieldName, props.allowMultipleAssignments, props.pathFormatterClass)
+  const { onDrop, deleteItem, onSearch, addAssets, addItems, maxRemainingItems } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.virtualFieldName, props.allowMultipleAssignments, props.pathFormatterClass)
 
   useEffect(() => {
     if (!isEqual(value, props.value ?? null)) {
@@ -79,7 +78,7 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
     }
   }, [JSON.stringify(props.value)])
 
-  if (isLoading || props.isLoading === true) {
+  if (props.isLoading === true) {
     return (
       <Content
         loading
