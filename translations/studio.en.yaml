@@ -851,3 +851,5 @@ user-profile.password-old: Old Password
 user-profile.password-new: New Password
 user-profile.password-repeat: Repeat Password
 user-profile.password-repeat-error: Passwords do not match
+navigation.application-logger: Application Logger
+widget.application-logger: Application Logger
