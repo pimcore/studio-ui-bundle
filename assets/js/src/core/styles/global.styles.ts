@@ -633,6 +633,10 @@ export const GlobalStyles = createGlobalStyle`
       min-width: 100px;
   }
 
+  .min-w-200 {
+      min-width: 200px;
+  }
+
   .h-full {
     height: 100%;
   }

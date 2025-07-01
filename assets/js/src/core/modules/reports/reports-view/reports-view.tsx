@@ -8,14 +8,70 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { isEmpty } from 'lodash'
 import { ReportsChart } from '@Pimcore/modules/reports/components/reports-chart/reports-chart'
+import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import { Content } from '@Pimcore/components/content/content'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
+import { Select } from '@Pimcore/components/select/select'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 
 export const ReportsView = (): React.JSX.Element => {
+  const [page] = useState(1)
+  const [pageSize] = useState(20)
+
+  const [reportsTreeOptions, setReportsTreeOptions] = useState<Array<{ label: string, value: string }> | undefined>(undefined)
+  const [currentReport, setCurrentReport] = useState<string | null>(null)
+
+  const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page, pageSize })
+
+  useEffect(() => {
+    if (!isEmpty(reportsTreeData)) {
+      const options = reportsTreeData?.items?.map((item) => ({
+        label: item.niceName,
+        value: item.name
+      }))
+
+      setReportsTreeOptions(options)
+    }
+  }, [reportsTreeData])
+
   return (
-    <div>
-      <h1>Reports</h1>
-      <ReportsChart />
-    </div>
+    <Content
+      loading={ isReportsTreeLoading && isEmpty(reportsTreeOptions) }
+      padded
+      padding={ { top: 'extra-small', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
+    >
+      <ContentLayout
+        renderToolbar={ <div>Toolbar Bottom</div> }
+        renderTopBar={
+          <Toolbar
+            padding={ { top: 'extra-small', bottom: 'extra-small', left: 'extra-small', right: 'extra-small' } }
+            position='top'
+            size='auto'
+            theme='secondary'
+          >
+            <Flex
+              align="center"
+              gap="extra-small"
+            >
+              <div>Name of the report</div>
+              <Select
+                className='min-w-200'
+                onChange={ (value: string) => { setCurrentReport(value) } }
+                options={ reportsTreeOptions }
+                placeholder="Select report"
+                title="test"
+                value={ currentReport }
+              />
+            </Flex>
+          </Toolbar>
+       }
+      >
+        <ReportsChart />
+      </ContentLayout>
+    </Content>
   )
 }
