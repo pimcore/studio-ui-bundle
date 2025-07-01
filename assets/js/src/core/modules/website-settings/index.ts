@@ -15,6 +15,7 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { UserPermission } from '../auth/enums/user-permission'
 import { WebsiteSettingsContainer } from './website-settings-container'
+import { NavPermission } from '../perspectives/enums/nav-permission'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -25,7 +26,7 @@ moduleSystem.registerModule({
       label: 'navigation.website-settings',
       className: 'item-style-modifier',
       permission: UserPermission.WebsiteSettings,
-      // perspectivePermission: NavPermission.WebsiteSettings,
+      perspectivePermission: NavPermission.WebsiteSettings,
       widgetConfig: {
         name: 'Website Settings',
         id: 'website-settings',
