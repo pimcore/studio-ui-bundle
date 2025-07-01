@@ -9,6 +9,7 @@
  */
 
 import { container } from '../depency-injection'
+import { documentApi, type DocumentApi } from './document/document-api'
 
 export interface PublicApi {
   container: typeof container
@@ -16,4 +17,12 @@ export interface PublicApi {
 
 export const Pimcore: PublicApi = {
   container
+}
+
+export interface PimcoreStudioApi {
+  document: DocumentApi
+}
+
+export const PimcoreStudio: PimcoreStudioApi = {
+  document: documentApi
 }

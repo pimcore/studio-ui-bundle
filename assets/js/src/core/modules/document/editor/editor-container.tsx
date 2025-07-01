@@ -18,7 +18,6 @@ import { TabsContainer } from '@Pimcore/modules/element/editor/shared-tab-manage
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { SaveProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/save-provider'
-import { DocumentEditorProvider } from './shared-tab-manager/tabs/edit/provider/document-editor-provider'
 import { Toolbar } from './toolbar/toolbar'
 
 export interface EditorContainerProps {
@@ -71,19 +70,17 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   return (
     <DocumentProvider id={ id }>
       <SaveProvider>
-        <DocumentEditorProvider>
-          <TabsToolbarView
-            renderTabbar={
-              <TabsContainer
-                elementEditorType={ editorType }
-              />
-              }
+        <TabsToolbarView
+          renderTabbar={
+            <TabsContainer
+              elementEditorType={ editorType }
+            />
+            }
 
-            renderToolbar={
-              <Toolbar />
-              }
-          />
-        </DocumentEditorProvider>
+          renderToolbar={
+            <Toolbar />
+            }
+        />
       </SaveProvider>
     </DocumentProvider>
   )

@@ -8,4 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import('@sdk/_internal_/mf-bootstrap-document-editor-iframe')
+import { documentEditableApi, type DocumentEditableApi } from './editable-data/editable-data'
+
+export interface PublicApiDocumentEditorIframe {
+  documentEditable: DocumentEditableApi
+}
+
+export const PimcoreDocumentEditor: PublicApiDocumentEditorIframe = {
+  documentEditable: documentEditableApi
+}

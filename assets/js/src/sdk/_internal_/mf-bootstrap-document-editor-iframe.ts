@@ -11,6 +11,7 @@
 import '@Pimcore/bootstrap'
 import { pluginSystem } from '@Pimcore/app/plugin-system/plugin-system'
 import { type Pimcore } from '@Pimcore/app/public-api'
+import { type PublicApiDocumentEditorIframe } from '@Pimcore/app/public-api/document-editor-iframe'
 import { moduleSystem } from '@Pimcore/app//module-system/module-system'
 import { runApp } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/iframe-app/app-runner'
 
@@ -21,11 +22,13 @@ if (module.hot !== undefined) {
 declare global {
   interface Window {
     Pimcore: typeof Pimcore
+    PimcoreDocumentEditor: PublicApiDocumentEditorIframe
     pluginRemotes: Record<string, string>
   }
 }
 
 window.Pimcore = (await import('@Pimcore/app/public-api')).Pimcore
+window.PimcoreDocumentEditor = (await import('@Pimcore/app/public-api/document-editor-iframe')).PimcoreDocumentEditor
 
 window.addEventListener('load', async () => {
   await pluginSystem.loadPlugins()
