@@ -13,7 +13,8 @@ import React from 'react'
 import { EditablesRenderer } from '../components/editables-renderer/editables-renderer'
 import { GlobalProvider } from '@Pimcore/modules/app/global-provider'
 import { DocumentProvider } from '@Pimcore/modules/document/document-provider'
-import { SaveProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/save-provider'
+import { isNaN, isNil, isNumber } from 'lodash'
+import { Alert } from '@Pimcore/components/alert/alert'
 
 export interface DocumentEditorIframeWindow extends Window {
   editableDefinitions?: AbstractDocumentEditableDefinition[]
@@ -22,13 +23,28 @@ export interface DocumentEditorIframeWindow extends Window {
 
 export const DocumentEditorIframeAppView = (): React.JSX.Element => {
   const editableDefinitions: AbstractDocumentEditableDefinition[] = (window as DocumentEditorIframeWindow).editableDefinitions ?? []
+  
+  // Extract document ID from URL parameters
+  const urlParams = new URLSearchParams(window.location.search)
+  const documentIdParam = urlParams.get('documentId')
+
+  const documentId = isNil(documentIdParam) ? undefined : parseInt(documentIdParam, 10)
+
+  if (isNil(documentId) || !isNumber(documentId) || isNaN(documentId) || documentId <= 0) {
+    return (
+      <Alert
+        message="Error: Invalid Document ID"
+        description="A valid documentId parameter is required in the URL."
+        type="error"
+        showIcon
+      />
+    )
+  }
 
   return (
     <GlobalProvider>
-      <DocumentProvider id={ 38 }>
-        <SaveProvider>
+      <DocumentProvider id={ documentId }>
           <EditablesRenderer editableDefinitions={ editableDefinitions } />
-        </SaveProvider>
       </DocumentProvider>
     </GlobalProvider>
   )

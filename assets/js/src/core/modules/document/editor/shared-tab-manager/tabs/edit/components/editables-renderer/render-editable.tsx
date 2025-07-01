@@ -32,7 +32,7 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
     }
   }
 
-  const [localValue, setLocalValue] = useState(getValue(editableDefinition.name))
+  const [localValue, setLocalValue] = useState(getValue(editableDefinition.name).data)
 
   const renderEditableComponent = useMemo((): React.ReactElement => {
     if (isNil(editableType)) {
@@ -45,7 +45,7 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
         value: localValue,
         onChange: (newValue) => {
           setLocalValue(newValue)
-          updateValue(editableDefinition.name, newValue)
+          updateValue(editableDefinition.name, {type: editableDefinition.type, data: newValue})
         }
       }
     )

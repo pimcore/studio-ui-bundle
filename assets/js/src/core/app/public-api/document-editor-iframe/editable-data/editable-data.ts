@@ -8,29 +8,31 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+export interface ValueType { type: string, data: any }
+
 export interface DocumentEditableApi {
-  getValues: () => Record<string, any>
-  getValue: (key: string) => any
-  updateValue: (key: string, value: any) => void
-  initializeValues: (initialValues: Record<string, any>) => void
+  getValues: () => Record<string, ValueType>
+  getValue: (key: string) => ValueType
+  updateValue: (key: string, value: ValueType) => void
+  initializeValues: (initialValues: Record<string, ValueType>) => void
 }
 
 class DocumentEditableApiImpl implements DocumentEditableApi {
-  private values: Record<string, any> = {}
+  private values: Record<string, ValueType> = {}
 
-  getValues (): Record<string, any> {
+  getValues (): Record<string, ValueType> {
     return { ...this.values }
   }
 
-  getValue (key: string): any {
+  getValue (key: string): ValueType {
     return this.values[key]
   }
 
-  updateValue (key: string, value: any): void {
+  updateValue (key: string, value: ValueType): void {
     this.values[key] = value
   }
 
-  initializeValues (initialValues: Record<string, any>): void {
+  initializeValues (initialValues: Record<string, ValueType>): void {
     Object.assign(this.values, initialValues)
   }
 }

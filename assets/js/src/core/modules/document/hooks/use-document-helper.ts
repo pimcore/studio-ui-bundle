@@ -18,10 +18,10 @@ import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widg
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 import { type EditorContainerProps } from '../editor/editor-container'
 import { useDocumentDraftFetcher } from './use-document-draft-fetcher'
-import { SaveTaskType } from '../actions/save/use-save'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { setNodeLoadingInAllTree, setNodePublished } from '@Pimcore/components/element-tree/element-tree-slice'
 import { publishDraft, unpublishDraft } from '../document-draft-slice'
+import { SaveTaskType } from '../services'
 
 interface OpenDocumentWidgetProps {
   config: EditorContainerProps

@@ -69,19 +69,17 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
 
   return (
     <DocumentProvider id={ id }>
-      <SaveProvider>
-        <TabsToolbarView
-          renderTabbar={
-            <TabsContainer
-              elementEditorType={ editorType }
-            />
-            }
+      <TabsToolbarView
+        renderTabbar={
+          <TabsContainer
+            elementEditorType={ editorType }
+          />
+          }
 
-          renderToolbar={
-            <Toolbar />
-            }
-        />
-      </SaveProvider>
+        renderToolbar={
+          <Toolbar />
+          }
+      />
     </DocumentProvider>
   )
 }
