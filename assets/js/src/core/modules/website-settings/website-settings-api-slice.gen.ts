@@ -69,13 +69,13 @@ export type WebsiteSettingsUpdateApiArg = {
     id: number;
     websiteSettingsUpdate: WebsiteSettingsUpdate;
 };
-export type WebsiteSettingsDeleteApiResponse = unknown;
+export type WebsiteSettingsDeleteApiResponse = /** status 200 Successfully deleted website setting */ void;
 export type WebsiteSettingsDeleteApiArg = {
     /** Id of the website setting */
     id: number;
 };
 export type WebsiteSettingsListTypesApiResponse = /** status 200 List of all available website setting types */ {
-    items: DocType[];
+    items: WebsiteSettingsType[];
 };
 export type WebsiteSettingsListTypesApiArg = void;
 export type WebsiteSetting = {
@@ -90,15 +90,15 @@ export type WebsiteSetting = {
     /** Language */
     language?: string;
     /** Type */
-    type: string | null;
+    type: any;
     /** Data */
-    data: string | null;
+    data: any;
     /** Site ID */
-    siteId?: number | null;
+    siteId?: any;
     /** Creation date */
-    creationDate?: number | null;
+    creationDate?: any;
     /** Modification date */
-    modificationDate?: number | null;
+    modificationDate?: any;
 };
 export type Error = {
     /** Message */
@@ -122,37 +122,19 @@ export type WebsiteSettingsUpdate = {
     /** Language */
     language: string;
     /** Data */
-    data: string | null;
+    data: any;
     /** Site ID */
-    siteId: number | null;
+    siteId: any;
 };
-export type DocType = {
+export type WebsiteSettingsType = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object;
     };
-    /** ID */
-    id: string;
-    /** Name */
-    name: string;
-    /** Type */
-    type: string;
-    /** Group */
-    group: string | null;
-    /** Controller */
-    controller: string | null;
-    /** Template */
-    template: string | null;
-    /** Priority */
-    priority: number;
-    /** Creation date */
-    creationDate: number | null;
-    /** Modification date */
-    modificationDate: number | null;
-    /** Static generator enabled */
-    staticGeneratorEnabled: boolean;
-    /** Is writeable */
-    writeable: boolean;
+    /** Key */
+    key: string;
+    /** Title */
+    title: string;
 };
 export const {
     useWebsiteSettingsAddMutation,
