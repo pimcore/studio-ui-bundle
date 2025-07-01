@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { ApplicationLogger } from "@Pimcore/modules/application-logger/application-logger-container";
+
 export enum UserPermission {
   NotesAndEvents = 'notes_events',
   Documents = 'documents',
@@ -19,5 +21,6 @@ export enum UserPermission {
   Users = 'users',
   Notifications = 'notifications',
   SendNotifications = 'notifications_send',
-  Emails = 'emails'
+  Emails = 'emails',
+  ApplicationLogger = 'application_logging'
 }
