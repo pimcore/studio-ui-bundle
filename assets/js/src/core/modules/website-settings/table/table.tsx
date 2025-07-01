@@ -146,7 +146,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
     }),
     columnHelper.accessor('siteDomain', {
       header: t('website-settings.columns.site'),
-      meta: { type: 'select', editable: true, config: { options: Object.values(siteDomains) } },
+      meta: { type: 'select', editable: true, config: { options: siteDomains } },
       size: 110
     }),
     columnHelper.accessor('actions', {
