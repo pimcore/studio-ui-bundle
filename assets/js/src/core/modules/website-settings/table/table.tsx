@@ -76,12 +76,16 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
     rowData: WebsiteSettingRow
   }): Promise<void> => {
     const rowId = rowData.rowId
-    const columnIdNormalised = (columnId === 'siteDomain'
-      ? 'siteId'
-      : columnId)
+    const columnIdNormalised = columnId === 'siteDomain'
+    ? 'siteId'
+    : columnId
+      
+    const valueNormalised = columnId === 'data'
+    ? (value as ElementInfo).fullPath
+    : value
 
-    const updatedRow: WebsiteSettingRow = { ...rowData, [columnIdNormalised]: value }
-
+    const updatedRow: WebsiteSettingRow = { ...rowData, [columnIdNormalised]: valueNormalised }
+  
     setWebsiteSettingRows(prev =>
       prev.map(row =>
         row.rowId === rowId ? updatedRow : row
@@ -137,7 +141,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
             return {
               elementType: mapToElementType(String(row.type), true),
               id: undefined,
-              fullPath: isEmpty(row.data) ? '' : decodeURIComponent(String(row.data))
+              fullPath: isEmpty(row.data) ? '' : String(row.data)
             }
           }
         }
