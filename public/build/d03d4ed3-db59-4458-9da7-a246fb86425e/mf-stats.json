@@ -22,15 +22,19 @@
     "globalName": "pimcore_studio_ui_bundle_core",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
-    "publicPath": "/bundles/pimcorestudioui/build/71f816ea-bbb3-44eb-94ef-79297d27c724/"
+    "publicPath": "/bundles/pimcorestudioui/build/d03d4ed3-db59-4458-9da7-a246fb86425e/"
   },
   "shared": [],
   "remotes": [
     {
+      "alias": "@sdk",
+      "consumingFederationContainerName": "pimcore_studio_ui_bundle_core",
       "federationContainerName": "promise new Promise(resolve => {\n          const studioUIBundleRemoteUrl = window.StudioUIBundleRemoteUrl\n          const script = document.createElement('script')\n          script.src = studioUIBundleRemoteUrl\n          script.onload = () => {\n            const proxy = {\n              get: (request) => window['pimcore_studio_ui_bundle'].get(request),\n              init: (...arg) => {\n                try {\n                  return window['pimcore_studio_ui_bundle'].init(...arg)\n                } catch(e) {\n                  console.log('remote container already initialized')\n                }\n              }\n            }\n            resolve(proxy)\n          }\n          document.head.appendChild(script);\n        })\n        ",
       "moduleName": "_internal_/mf-bootstrap",
-      "alias": "@sdk",
-      "entry": "*"
+      "usedIn": [
+        "js/src/core/main.ts"
+      ],
+      "version": "*"
     }
   ],
   "exposes": []
