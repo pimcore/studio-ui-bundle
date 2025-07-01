@@ -52,7 +52,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
     }
 
     const site = getSiteById(row.siteId)
-    const domain = !isUndefined(site) ? t('site.domain.' + site.domain) : ''
+    const domain = !isUndefined(site) ? t(site.domain) : ''
 
     return {
       ...row,
@@ -63,7 +63,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
   const availableSites: Site[] = getAllSites()
   const siteDomains = availableSites.map(site => ({
     value: site.id,
-    label: site.domain
+    label: t(site.domain)
   }))
 
   const onUpdateCellData = async ({
@@ -76,7 +76,11 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
     rowData: WebsiteSettingRow
   }): Promise<void> => {
     const rowId = rowData.rowId
-    const updatedRow: WebsiteSettingRow = { ...rowData, [columnId]: value }
+    const columnIdNormalised = (columnId === 'siteDomain'
+      ? 'siteId'
+      : columnId)
+
+    const updatedRow: WebsiteSettingRow = { ...rowData, [columnIdNormalised]: value }
 
     setWebsiteSettingRows(prev =>
       prev.map(row =>
