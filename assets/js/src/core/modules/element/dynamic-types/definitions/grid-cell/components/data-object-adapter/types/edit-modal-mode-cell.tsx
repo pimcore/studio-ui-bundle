@@ -49,9 +49,9 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
   props.objectCellDefinition.handleDefaultValue?.(props.objectCellDefinition.editComponent.props as AbstractObjectDataDefinition, form, ['value'])
 
   const column = decodeColumnIdentifier(props.cellProps.column.id)
-  const apiColumns = props.cellProps.row.original['__api-data']
+  const apiColumns = props?.cellProps?.row?.original?.['__api-data']
 
-  const currentApiColumn = apiColumns.columns.find((apiColumn) => {
+  const currentApiColumn = apiColumns?.columns?.find((apiColumn) => {
     return apiColumn.key === column?.key
   })
 

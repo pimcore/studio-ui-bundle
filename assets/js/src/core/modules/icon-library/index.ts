@@ -74,6 +74,7 @@ import deleteColumn from '@Pimcore/assets/icons/delete-column.inline.svg?react'
 import deleteRow from '@Pimcore/assets/icons/delete-row.inline.svg?react'
 import dependencies from '@Pimcore/assets/icons/dependencies.inline.svg?react'
 import details from '@Pimcore/assets/icons/details.inline.svg?react'
+import documentTypes from '@Pimcore/assets/icons/document-types.inline.svg?react'
 import document from '@Pimcore/assets/icons/document.inline.svg?react'
 import doubleArrowDown from '@Pimcore/assets/icons/double-arrow-down.inline.svg?react'
 import doubleArrowLeft from '@Pimcore/assets/icons/double-arrow-left.inline.svg?react'
@@ -459,6 +460,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'details',
       component: details
+    })
+    iconLibrary.register({
+      name: 'document-types',
+      component: documentTypes
     })
     iconLibrary.register({
       name: 'document',

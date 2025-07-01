@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { Tooltip } from 'antd'
 import cn from 'classnames'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
@@ -26,26 +26,24 @@ export interface CheckboxProps extends Omit<ICheckboxProps, 'value' | 'onChange'
 }
 
 export const Checkbox = (props: CheckboxProps): React.JSX.Element => {
-  const [value, setValue] = useState<boolean | null>(props.value ?? null)
+  const checkboxValue = props.value ?? null
   const { id } = useContext(DataObjectContext)
   const { dataObject } = useDataObjectDraft(id)
 
   const { t } = useTranslation()
   const { styles } = useStyles()
 
-  useEffect(() => {
-    if (props.onChange !== undefined) {
-      props.onChange(value)
-    }
-  }, [value])
-
-  const onChange = (e): void => {
+  const handleChange = (e): void => {
     const newValue = Boolean(e.nativeEvent.target.checked)
-    setValue(newValue ?? null)
-    props.onChange?.(newValue)
+
+    props.onChange?.(newValue ?? null)
   }
 
-  const showClearButton = props.disableClearButton !== true && value !== null && dataObject?.allowInheritance === true && props.disabled !== true
+  const clearValue = (): void => {
+    props.onChange?.(null)
+  }
+
+  const showClearButton = props.disableClearButton !== true && checkboxValue !== null && dataObject?.allowInheritance === true && props.disabled !== true
 
   return (
     <Flex
@@ -54,14 +52,14 @@ export const Checkbox = (props: CheckboxProps): React.JSX.Element => {
     >
       <DefaultCheckbox
         { ...props }
-        checked={ value ?? false }
-        onChange={ onChange }
+        checked={ checkboxValue ?? false }
+        onChange={ handleChange }
       />
       { showClearButton && (
         <Tooltip title={ t('set-to-null') }>
           <IconButton
             icon={ { value: 'trash' } }
-            onClick={ () => { setValue(null) } }
+            onClick={ clearValue }
           />
         </Tooltip>
       )}

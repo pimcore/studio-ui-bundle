@@ -16,7 +16,6 @@ import { useTranslation } from 'react-i18next'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { type DragAndDropInfo } from '@sdk/components'
 import type { ImageGalleryValueItem } from '../../image-gallery'
-import type { UniqueIdentifier } from '@dnd-kit/core'
 import {
   fromIHotspots,
   toIHotspots
@@ -46,13 +45,14 @@ interface ImageGalleryImagePreviewProps {
   index: number
   value: ImageGalleryValueItem[]
   setValue: React.Dispatch<React.SetStateAction<ImageGalleryValueItem[]>>
+  setInternalValue: (value: ImageGalleryValueItem[]) => void
   disabled?: boolean
   hotspotMarkersModalContainer: React.RefObject<HotspotMarkersModalContainerRef>
   width: string
   height: string
 }
 
-export const ImageGalleryImagePreview = ({ item, index, value, setValue, disabled, hotspotMarkersModalContainer, width, height }: ImageGalleryImagePreviewProps): React.JSX.Element => {
+export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue, setValue, disabled, hotspotMarkersModalContainer, width, height }: ImageGalleryImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [markerModalOpen, setMarkerModalOpen] = useState(false)
   const [cropModalOpen, setCropModalOpen] = useState(false)
@@ -181,16 +181,6 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
           const newImage: ImageValue = { type: 'asset', id: info.data.id as number }
           replaceImage(newImage)
         } }
-        onSort={ (info: DragAndDropInfo, dragId: UniqueIdentifier, dropId: UniqueIdentifier) => {
-          const newValue = [...value]
-          const dragValue = value[Number(dragId)]
-          const dropValue = value[Number(dropId)]
-          if (dragValue !== undefined && dropValue !== undefined) {
-            newValue.splice(Number(dragId), 1)
-            newValue.splice(Number(dropId), 0, dragValue)
-            setValue(newValue)
-          }
-        } }
         variant="outline"
       >
         <ImagePreview
@@ -205,7 +195,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
               onClick: () => {
                 const newValue = [...value]
                 newValue.splice(index + 1, 0, { image: null, hotspots: [], marker: [], crop: {} })
-                setValue(newValue)
+                setInternalValue(newValue)
               }
             },
             {

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Title } from '@Pimcore/components/title/title'
 import { t } from 'i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -17,20 +17,31 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Table } from './table/table'
-import { Box, IconTextButton } from '@sdk/components'
-import { useAppDispatch } from '@sdk/app'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { api } from '@sdk/api/properties'
-import { usePropertyGetCollectionQuery } from '../element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
-import trackError, { ApiError } from '../app/error-handler'
+import { Box, IconTextButton, SearchInput } from '@sdk/components'
+import { type PropertyGetCollectionApiArg, usePropertyGetCollectionQuery } from '../element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
+import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { type PredefinedPropertyRow, usePredefinedProperty } from './hooks/use-predefined-property'
 import { isUndefined } from 'lodash'
 
 export const PredefinedPropertiesContainer = (): React.JSX.Element => {
-  const dispatch = useAppDispatch()
   const { createNewProperty, createLoading } = usePredefinedProperty()
-  const { data, isLoading: predefinedPropertiesLoading, isFetching: predefinedPropertiesFetching, isError, error } = usePropertyGetCollectionQuery({})
+
+  const [filter, setFilter] = useState<string>('')
+
+  const queryArgs: PropertyGetCollectionApiArg = useMemo(() => ({ filter }), [filter])
+
+  const { data, isLoading: predefinedPropertiesLoading, isFetching: predefinedPropertiesFetching, error, refetch } = usePropertyGetCollectionQuery(queryArgs)
+
+  const handleRefetch = (): void => {
+    void refetch().catch(() => {
+      trackError(new GeneralError('Error while reloading'))
+    })
+  }
+
+  useEffect(() => {
+    handleRefetch()
+  }, [])
 
   const [predefinedPropertyRows, setPredefinedPropertyRows] = useState<PredefinedPropertyRow[]>([])
 
@@ -46,6 +57,12 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
     }
   }, [predefinedProperties])
 
+  useEffect(() => {
+    if (!isUndefined(error)) {
+      trackError(new ApiError(error))
+    }
+  }, [error])
+
   const onCreateProperty = async (): Promise<void> => {
     const { success, data } = await createNewProperty()
     if (success && data !== undefined) {
@@ -58,12 +75,6 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
     }
   }
 
-  useEffect(() => {
-    if (isError) {
-      trackError(new ApiError(error))
-    }
-  }, [isError])
-
   return (
     <ContentLayout
       renderToolbar={
@@ -71,12 +82,7 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
           <IconButton
             disabled={ predefinedPropertiesFetching }
             icon={ { value: 'refresh' } }
-            onClick={ () => dispatch(
-              api.util.invalidateTags(
-                invalidatingTags.GLOBAL_PROPERTIES()
-              )
-            )
-          }
+            onClick={ handleRefetch }
           />
         </Toolbar> }
       renderTopBar={
@@ -97,6 +103,15 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
               onClick={ onCreateProperty }
             >{t('predefined-properties.new')}</IconTextButton>
           </Flex>
+          <SearchInput
+            loading={ predefinedPropertiesFetching }
+            onSearch={ (value) => {
+              setFilter(value)
+            } }
+            placeholder="Search"
+            withPrefix={ false }
+            withoutAddon={ false }
+          />
         </Toolbar>
         }
     >

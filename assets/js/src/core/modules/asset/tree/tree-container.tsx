@@ -32,7 +32,7 @@ export interface TreeContainerProps {
   showRoot?: boolean
 }
 
-export const AssetTreeNode = withDndUpload(withDroppableStyling(withDroppable(withActionStates(withDraggable(withContextMenu(TreeNodeComponent))))))
+export const AssetTreeNode = withDroppableStyling(withDroppable(withDndUpload(withActionStates(withDraggable(withContextMenu(TreeNodeComponent))))))
 
 const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
   const { openAsset } = useAssetHelper()
