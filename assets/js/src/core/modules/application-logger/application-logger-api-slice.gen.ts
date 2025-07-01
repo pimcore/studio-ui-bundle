@@ -6,7 +6,7 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            bundleApplicationLoggerGetCollection: build.mutation<
+            bundleApplicationLoggerGetCollection: build.query<
                 BundleApplicationLoggerGetCollectionApiResponse,
                 BundleApplicationLoggerGetCollectionApiArg
             >({
@@ -15,7 +15,7 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Bundle Application Logger"],
+                providesTags: ["Bundle Application Logger"],
             }),
             bundleApplicationLoggerListComponents: build.query<
                 BundleApplicationLoggerListComponentsApiResponse,
@@ -97,7 +97,7 @@ export type DevError = {
     details: string;
 };
 export const {
-    useBundleApplicationLoggerGetCollectionMutation,
+    useBundleApplicationLoggerGetCollectionQuery,
     useBundleApplicationLoggerListComponentsQuery,
     useBundleApplicationLoggerListPrioritiesQuery,
 } = injectedRtkApi;
