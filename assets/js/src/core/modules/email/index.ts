@@ -14,7 +14,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { EmailBlocklistContainer } from './blocklist/email-blocklist-container'
 import { EmailLogContainer } from './log/email-log-container'
-import { MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
+import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { UserPermission } from '../auth/enums/user-permission'
 import { NavPermission } from '../perspectives/enums/nav-permission'
 
