@@ -58,6 +58,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
         memorizeTabs: openedUser?.memorizeTabs,
         allowDirtyClose: openedUser?.allowDirtyClose,
         closeWarning: openedUser?.closeWarning,
+        roles: openedUser?.roles ?? [],
         permissionsDefault: Array.isArray(openedUser?.permissions) ? openedUser.permissions.filter((permission) => permissions.default.some((defaultPermission) => defaultPermission.key === permission)) : [],
         permissionsBundles: Array.isArray(openedUser?.permissions) ? openedUser.permissions.filter((permission) => permissions.bundles.some((defaultPermission) => defaultPermission.key === permission)) : []
       })
