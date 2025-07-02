@@ -76,6 +76,16 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
   const { download } = useDownload()
 
   const columnHelper = createColumnHelper()
+  const renderFullPathCell = (info: any): React.JSX.Element => {
+    return (
+      <Flex
+        align={ 'center' }
+        className={ 'p-mini' }
+      >
+        <SanitizeHtml html={ info.getValue() ?? '' } />
+      </Flex>
+    )
+  }
 
   const columns = props.columnDefinition !== undefined
     ? [...props.columnDefinition]
@@ -93,16 +103,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
             config: getElementCellConfig(props.inherited === true || props.disabled === true)
           },
           size: 200,
-          cell: (info) => {
-            return (
-              <Flex
-                align={ 'center' }
-                className={ 'p-mini' }
-              >
-                <SanitizeHtml html={ info.getValue() ?? '' } />
-              </Flex>
-            )
-          }
+          cell: renderFullPathCell
         }),
         columnHelper.accessor('type', {
           header: t('relations.type'),

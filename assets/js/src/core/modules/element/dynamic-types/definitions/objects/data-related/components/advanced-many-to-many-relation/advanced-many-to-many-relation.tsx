@@ -72,6 +72,17 @@ export const AdvancedManyToManyRelation = (props: AdvancedManyToManyRelationProp
     props.onChange?.(convertToAdvancedManyToManyRelationValue(value))
   }
 
+  const renderFullPathCell = (info: any): React.JSX.Element => {
+    return (
+      <Flex
+        align={ 'center' }
+        className={ 'p-mini' }
+      >
+        <SanitizeHtml html={ info.getValue() ?? '' } />
+      </Flex>
+    )
+  }
+
   const addNotEditableColumns = (columnDefinition: Array<ColumnDef<any>>): Array<ColumnDef<any>> => {
     const columnHelper = createColumnHelper()
     return [
@@ -88,16 +99,7 @@ export const AdvancedManyToManyRelation = (props: AdvancedManyToManyRelationProp
           config: getElementCellConfig(props.inherited === true || props.disabled === true)
         },
         size: 200,
-        cell: (info) => {
-          return (
-            <Flex
-              align={ 'center' }
-              className={ 'p-mini' }
-            >
-              <SanitizeHtml html={ info.getValue() ?? '' } />
-            </Flex>
-          )
-        }
+        cell: renderFullPathCell
       }),
       ...columnDefinition,
       columnHelper.accessor('type', {
