@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { isUndefined } from 'lodash'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { ReportChart } from '@Pimcore/modules/reports/components/report-chart/report-chart'
 import {
   type CustomReportChartData,
@@ -17,7 +18,7 @@ import {
   useCustomReportsReportQuery
 } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 interface IReportDetailProps {
   currentReport: string
@@ -40,14 +41,13 @@ export const ReportDetail = ({ currentReport, page, pageSize }: IReportDetailPro
         : undefined
 
   return (
-    <div>
-      <p>ReportDetail</p>
+    <Flex>
       {isShowChart && !isUndefined(chartData) && (
         <ReportChart
           chartData={ chartData }
           reportData={ reportDetailData }
         />
       )}
-    </div>
+    </Flex>
   )
 }

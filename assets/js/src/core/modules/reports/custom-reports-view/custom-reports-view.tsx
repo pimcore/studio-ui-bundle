@@ -9,9 +9,15 @@
  */
 
 import React from 'react'
+import { Content } from '@Pimcore/components/content/content'
 
 export const CustomReportsView = (): React.JSX.Element => {
   return (
-    <div>Custom Reports</div>
+    <Content
+      padded
+      padding={ { top: 'extra-small', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
+    >
+      <div>Custom Reports</div>
+    </Content>
   )
 }

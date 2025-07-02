@@ -836,6 +836,9 @@ user-menu.notification.modal.add-an-attachment: Add an attachment
 user-menu.notification.modal.form.validation.provide-recipient: Please provide a recipient
 user-menu.notification.modal.form.validation.provide-title: Please provide a title
 user-menu.notification.modal.form.validation.provide-message: Please provide a message
+reports.report-name: Name of the report
+reports.select-report-name: Select the name of the report
+reports.select-report: Select report
 loading: Loading...
 navigation.email: Email
 navigation.email-blocklist: Email Blocklist

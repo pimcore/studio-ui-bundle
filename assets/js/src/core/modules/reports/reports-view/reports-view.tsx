@@ -9,6 +9,7 @@
  */
 
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
@@ -18,15 +19,22 @@ import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ReportDetail } from '@Pimcore/modules/reports/reports-view/components/report-detail/report-detail'
+import { Text } from '@Pimcore/components/text/text'
+import { useStyles } from './reports-view.styles'
 
 export const ReportsView = (): React.JSX.Element => {
   const [page] = useState(1)
   const [pageSize] = useState(10)
 
+  const { t } = useTranslation()
+  const { styles } = useStyles()
+
   const [reportsTreeOptions, setReportsTreeOptions] = useState<Array<{ label: string, value: string }> | undefined>(undefined)
   const [currentReport, setCurrentReport] = useState<string | null>(null)
 
   const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page, pageSize })
+
+  const isCurrentReportSelected = !isEmptyValue(currentReport)
 
   useEffect(() => {
     if (!isEmpty(reportsTreeData)) {
@@ -58,29 +66,37 @@ export const ReportsView = (): React.JSX.Element => {
               align="center"
               gap="extra-small"
             >
-              <div>Name of the report</div>
+              <Text className={ styles.selectReportLabel }>{t('reports.report-name')}</Text>
               <Select
                 className='min-w-200'
                 onChange={ (value: string) => { setCurrentReport(value) } }
                 options={ reportsTreeOptions }
-                placeholder="Select report"
-                title="test"
+                placeholder={ t('reports.select-report') }
                 value={ currentReport }
               />
             </Flex>
           </Toolbar>
        }
       >
-        {!isEmptyValue(currentReport)
-          ? (
-            <ReportDetail
-              currentReport={ currentReport! }
-              page={ page }
-              pageSize={ pageSize }
-            />
-            )
-          : <div>Choose the report</div>
-        }
+        <Content centered={ !isCurrentReportSelected }>
+          {isCurrentReportSelected
+            ? (
+              <ReportDetail
+                currentReport={ currentReport! }
+                page={ page }
+                pageSize={ pageSize }
+              />
+              )
+            : (
+              <Flex
+                align="center"
+                justify="center"
+              >
+                <Text>{t('reports.select-report-name')}</Text>
+              </Flex>
+              )
+          }
+        </Content>
       </ContentLayout>
     </Content>
   )
