@@ -353,6 +353,7 @@ export const Grid = ({
                 {enableRowDrag === true
                   ? (
                     <DndContext
+                      autoScroll={ false }
                       collisionDetection={ closestCenter }
                       modifiers={ [restrictToVerticalAxis] }
                       onDragEnd={ handleDragEnd }
