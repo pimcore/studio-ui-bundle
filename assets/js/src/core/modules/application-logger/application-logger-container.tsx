@@ -12,6 +12,7 @@ import { useBundleApplicationLoggerGetCollectionQuery } from "./application-logg
 import { useAppDispatch } from "@sdk/app"
 import { api } from '@Pimcore/modules/application-logger/application-logger-api-slice-enhanced'
 import { invalidatingTags } from "@Pimcore/app/api/pimcore/tags"
+import { Table } from "./components/table/table"
 
 export const ApplicationLogger = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -96,14 +97,7 @@ export const ApplicationLogger = (): React.JSX.Element => {
         padded
       >
         {data?.items !== undefined && data?.items?.length > 0
-          ? (
-            data.items.map((item) => (
-              <EmailCard
-                entry={item}
-                key={item.email}
-              />
-            ))
-          )
+          ? <Table items={data!.items} />
           : ''}
       </Content>
     </ContentLayout>
