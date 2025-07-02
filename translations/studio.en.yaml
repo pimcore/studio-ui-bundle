@@ -14,6 +14,7 @@ sidebar.selected_elements: Selected Elements
 sidebar.grid_config: Grid config
 sidebar.tag_filters: Tag Filters
 sidebar.search_filter: Search & Filter
+sidebar.clear-all-filters: Clear all filters
 modal-search.field.mimeType: MIME-Type
 modal-search.field.thumbnail: Thumbnail
 modal-search.field.id: ID
@@ -320,6 +321,7 @@ button.cancel: Cancel
 button.save-apply: Save & Apply
 button.add-edit: Add & Edit
 button.cancel-edits: Cancel edits
+toggle.advanced-mode: Advanced Mode
 actions.open: Open
 open: Open
 edit: Edit
@@ -485,6 +487,8 @@ element.toolbar.copy-className: Class {{className}} - Copy
 element.unpublish: Unpublish
 element.publish: Publish
 element.locate-in-tree: Locate in Tree
+element.sidebar.filter.only-direct-children: only direct children
+element.sidebar.field-filters: Field Filters
 male: Male
 female: Female
 other: Other

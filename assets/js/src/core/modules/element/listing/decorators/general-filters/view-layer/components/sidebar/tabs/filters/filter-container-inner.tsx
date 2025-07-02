@@ -85,21 +85,21 @@ export const FilterContainerInner = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme='secondary'>
           <IconTextButton
-            icon={ { value: 'close' } }
-            onClick={ handleResetAllFiltersClick }
+            icon={{ value: 'close' }}
+            onClick={handleResetAllFiltersClick}
             type='link'
           >
-            Clear all filters
+            {t('sidebar.clear-all-filters')}
           </IconTextButton>
 
           <Button
-            onClick={ handleApplyClick }
+            onClick={handleApplyClick}
             type='primary'
           >
-            Apply
+            {t('button.apply')}
           </Button>
         </Toolbar>
-            }
+      }
     >
       <Content padded>
         <Flex
@@ -108,12 +108,12 @@ export const FilterContainerInner = (): React.JSX.Element => {
         >
           <Title>{t('sidebar.search_filter')}</Title>
           <Flex gap='extra-small'>
-            <Text>Advanced Mode</Text>
+            <Text>{t('toggle.advanced-mode')}</Text>
             <Switch
-              checked={ isAdvancedMode }
-              onChange={ () => {
+              checked={isAdvancedMode}
+              onChange={() => {
                 setIsAdvancedMode(!isAdvancedMode)
-              } }
+              }}
             />
           </Flex>
         </Flex>
@@ -121,28 +121,28 @@ export const FilterContainerInner = (): React.JSX.Element => {
         {isAdvancedMode
           ? (
             <PQLQueryInput
-              handleBlur={ (e) => { setPqlQuery(e.target.value) } }
-              handleChange={ (e) => { setPqlQuery(e.target.value) } }
-              isShowError={ false }
-              value={ pqlQuery }
+              handleBlur={(e) => { setPqlQuery(e.target.value) }}
+              handleChange={(e) => { setPqlQuery(e.target.value) }}
+              isShowError={false}
+              value={pqlQuery}
             />
-            )
+          )
           : (
             <>
               <Form>
                 <Space
                   direction='vertical'
-                  style={ { width: '100%' } }
+                  style={{ width: '100%' }}
                 >
                   {handleSearchTermInSidebar && (
                     <SearchTermFilter />
                   )}
 
                   <Checkbox
-                    checked={ onlyDirectChildren }
-                    onChange={ (e) => { setOnlyDirectChildren(e.target.checked) } }
+                    checked={onlyDirectChildren}
+                    onChange={(e) => { setOnlyDirectChildren(e.target.checked) }}
                   >
-                    only direct children
+                    {t('element.sidebar.filter.only-direct-children')}
                   </Checkbox>
 
                   {/* <Checkbox */}
@@ -155,12 +155,12 @@ export const FilterContainerInner = (): React.JSX.Element => {
               </Form>
 
               <Title>
-                Field filters
+                {t('element.sidebar.field-filters')}
               </Title>
 
               <FieldFiltersContainer />
             </>
-            )}
+          )}
       </Content>
     </ContentLayout>
   )
