@@ -12,6 +12,19 @@ import { isNil } from 'lodash'
 
 const iframeCache = new Map<Document, HTMLIFrameElement | null>()
 
+/**
+ * Checks if the current window is running inside an iframe
+ * @returns true if running in an iframe, false otherwise
+ */
+export const isInIframe = (): boolean => {
+  try {
+    return window.parent !== null && window.parent !== window
+  } catch (error) {
+    // In case of cross-origin restrictions, assume we're in an iframe
+    return true
+  }
+}
+
 export const getIframeOffset = (view: Window): { x: number, y: number } => {
   const viewDocument = view.document
   if (viewDocument === window.parent.document) {

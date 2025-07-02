@@ -13,7 +13,8 @@ import { Tooltip } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useTranslation } from 'react-i18next'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
-import { ModalUpload, type ModalUploadProps } from '../../modal-upload'
+import { type ModalUploadProps } from '../../modal-upload'
+import { useUploadModal } from '../../hooks/use-upload-modal'
 
 export type ModalUploadButtonProps = ModalUploadProps & {
   showMaxItemsError?: boolean
@@ -22,6 +23,7 @@ export type ModalUploadButtonProps = ModalUploadProps & {
 export const ModalUploadButton = (props: ModalUploadButtonProps): React.JSX.Element => {
   const { t } = useTranslation()
   const alertModal = useAlertModal()
+  const { triggerUpload } = useUploadModal(props)
 
   if (props.showMaxItemsError === true) {
     return (
@@ -38,19 +40,13 @@ export const ModalUploadButton = (props: ModalUploadButtonProps): React.JSX.Elem
   }
 
   return (
-    <ModalUpload
-      { ...props }
-      onChange={ (info) => {
-        props.onChange?.(info)
-      } }
-    >
-      <Tooltip title={ t('upload') }>
-        <IconButton
-          icon={ { value: 'upload-cloud' } }
-          type="default"
-        />
-      </Tooltip>
-    </ModalUpload>
+    <Tooltip title={ t('upload') }>
+      <IconButton
+        icon={ { value: 'upload-cloud' } }
+        onClick={ () => triggerUpload(props) }
+        type="default"
+      />
+    </Tooltip>
   )
 }
 

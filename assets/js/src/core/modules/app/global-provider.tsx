@@ -15,6 +15,7 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import { ElementSelectorProvider } from '@sdk/modules/element'
 import { UploadModalProvider } from '@Pimcore/components/modal-upload/provider/upload-modal-provider/upload-modal-provider'
+import { ApiGateway } from '@Pimcore/app/public-api/api-gateway'
 
 export interface GlobalProviderProps {
   children: React.ReactNode
@@ -27,6 +28,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps): React.JSX.Ele
         <Provider store={ store }>
           <ElementSelectorProvider>
             <UploadModalProvider>
+              <ApiGateway />
               {children}
             </UploadModalProvider>
           </ElementSelectorProvider>

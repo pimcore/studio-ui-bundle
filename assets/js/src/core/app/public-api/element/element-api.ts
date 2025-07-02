@@ -12,6 +12,11 @@ import { assetOpeningService } from '@Pimcore/modules/asset/services/asset-openi
 import { documentOpeningService } from '@Pimcore/modules/document/services/document-opening-service'
 import { dataObjectOpeningService } from '@Pimcore/modules/data-object/services/data-object-opening-service'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { type ElementSelectorConfig } from '@sdk/modules/element'
+import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
+import { isInIframe } from '@Pimcore/utils/iframe'
+import { ApiGatewayEventType } from '@Pimcore/app/public-api/api-gateway'
+import { type ModalUploadProps } from '@Pimcore/components/modal-upload/modal-upload'
 
 class ElementOpeningService {
   async openAsset(config: { id: number }): Promise<void> {
@@ -53,6 +58,8 @@ export interface ElementApi {
   openDocument: (id: number) => Promise<void>
   openDataObject: (id: number) => Promise<void>
   openElement: (id: number, type: ElementType) => Promise<void>
+  openElementSelector: (config: ElementSelectorConfig) => void
+  openUploadModal: (props: ModalUploadProps) => void
 }
 
 class ElementApiImpl implements ElementApi {
@@ -70,6 +77,57 @@ class ElementApiImpl implements ElementApi {
 
   async openElement(id: number, type: ElementType): Promise<void> {
     await elementOpeningService.openElement(id, type)
+  }
+
+  openElementSelector(config: ElementSelectorConfig): void {
+    try {
+      const studioApi = getPimcoreStudioApi()
+      
+      if (isInIframe()) {
+        // We're in an iframe, call the parent's API
+        studioApi.element.openElementSelector(config)
+      } else {
+        // We're in the parent window, dispatch the event directly
+        this.openElementSelectorDirectly(config)
+      }
+    } catch (error) {
+      console.error('Failed to open element selector:', error)
+    }
+  }
+
+  private openElementSelectorDirectly(config: ElementSelectorConfig): void {
+    const event = new CustomEvent('pimcore:gateway:request', {
+      detail: {
+        type: ApiGatewayEventType.openElementSelector,
+        payload: config
+      }
+    })
+    window.dispatchEvent(event)
+  }
+
+  openUploadModal(props: ModalUploadProps): void {
+    try {
+      if (isInIframe()) {
+        // We're in an iframe, call the parent's API
+        const studioApi = getPimcoreStudioApi()
+        studioApi.element.openUploadModal(props)
+      } else {
+        // We're in the parent window, dispatch the event directly
+        this.openUploadModalDirectly(props)
+      }
+    } catch (error) {
+      console.error('Failed to open upload modal:', error)
+    }
+  }
+
+  private openUploadModalDirectly(props: ModalUploadProps): void {
+    const event = new CustomEvent('pimcore:gateway:request', {
+      detail: {
+        type: ApiGatewayEventType.openUploadModal,
+        payload: props
+      }
+    })
+    window.dispatchEvent(event)
   }
 }
 
