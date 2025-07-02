@@ -56,25 +56,29 @@ export const useValue = (
     return value?.some(item => item.id === id && item.type === type) ?? false
   }
 
+  function mapNewValue (value: ManyToManyRelationValue, data: { items: Array<{ objectReference: string, formatedPath: string }> }): ManyToManyRelationValue {
+    return value.map((item) => ({
+      ...item,
+      fullPath: data.items.find(i => i.objectReference === `object_${item.id}`)?.formatedPath ?? item.fullPath
+    }))
+  }
+
   useEffect(() => {
-    if (pathFormatterClass !== null && value !== null && dataObjectId !== undefined && virtualFieldName !== undefined) {
-      // setIsLoading(true)
-
-      formatPath(value, virtualFieldName, dataObjectId).then((data) => {
-        if (data === undefined) {
-          return
-        }
-
-        const newValue = value.map((item) => ({
-          ...item,
-          fullPath: data.items.find(i => i.objectReference === `object_${item.id}`)?.formatedPath ?? item.fullPath
-        }))
-
-        console.log('newValue', newValue)
-        setDisplayedValue(newValue)
-        // setIsLoading(false)
-      }).catch(error => { console.error(error) })
+    if (pathFormatterClass === null || value === null || dataObjectId === undefined || virtualFieldName === undefined) {
+      return
     }
+
+    // setIsLoading(true)
+
+    formatPath(value, virtualFieldName, dataObjectId).then((data) => {
+      if (data === undefined) return
+
+      const newValue = mapNewValue(value, data)
+      console.log('newValue', newValue)
+      setDisplayedValue(newValue)
+      // setIsLoading(false)
+    }).catch(error => { console.error(error) })
+    // }
   }, [value])
 
   const addItems = (items: ManyToManyRelationValueItem[]): void => {

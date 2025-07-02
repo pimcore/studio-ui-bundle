@@ -46,6 +46,13 @@ export const PathTarget = forwardRef(function PathTarget (
   const { id: dataObjectId } = useDataObject()
   const [displayPath, setDisplayPath] = useState(String(value?.fullPath))
 
+  function mapNewValue (value: ManyToOneRelationValueType[], data: { items: Array<{ objectReference: string, formatedPath: string }> }): ManyToOneRelationValueType[] {
+    return value.map((item) => ({
+      ...item,
+      fullPath: data.items.find(i => i.objectReference === `object_${item.id}`)?.formatedPath ?? item.fullPath
+    }))
+  }
+
   useEffect(() => {
     setValue(props.value ?? null)
 
@@ -56,11 +63,7 @@ export const PathTarget = forwardRef(function PathTarget (
           return
         }
 
-        const newValue = [props.value].map((item) => ({
-          ...item,
-          fullPath: data.items.find(i => i.objectReference === `object_${item.id}`)?.formatedPath ?? item.fullPath
-        }))
-
+        const newValue = mapNewValue([props.value], data)
         setDisplayPath(String(newValue[0].fullPath))
       }).catch(error => { console.error(error) })
     }
