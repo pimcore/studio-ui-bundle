@@ -87,7 +87,21 @@ export const PathTarget = forwardRef(function PathTarget (
   const showElementTagPrefix = props.allowPathTextInput !== true && hasElementTag
   const showElementTag = props.allowPathTextInput === true && hasElementTag
 
-  console.log('props.pathFormatterClass', props.pathFormatterClass)
+  let inputPrefix: React.ReactNode
+  if (props.pathFormatterClass != null && props.pathFormatterClass !== '') {
+    inputPrefix = <SanitizeHtml html={ displayPath ?? '' } />
+  } else if (showElementTagPrefix) {
+    inputPrefix = (
+      <ElementTag
+        disabled={ props.disabled === true || props.inherited === true }
+        elementType={ props.allowPathTextInput === true ? undefined : mapToElementType(value.type) }
+        id={ props.allowPathTextInput === true ? undefined : value.id }
+        path={ displayPath }
+        published={ value.isPublished ?? undefined }
+      />
+    )
+  }
+
   return (
     <div
       ref={ ref }
@@ -141,21 +155,7 @@ export const PathTarget = forwardRef(function PathTarget (
               props.onChange?.(newValue)
             } }
             placeholder={ showElementTagPrefix ? undefined : t(props.allowPathTextInput === true ? 'many-to-one-relation.drop-placeholder-text-input' : 'many-to-one-relation.drop-placeholder') }
-            prefix={ props.pathFormatterClass != null && props.pathFormatterClass !== ''
-              ? (
-                <SanitizeHtml html={ displayPath ?? '' } />
-                )
-              : showElementTagPrefix
-                ? (
-                  <ElementTag
-                    disabled={ props.disabled === true || props.inherited === true }
-                    elementType={ props.allowPathTextInput === true ? undefined : mapToElementType(value.type) }
-                    id={ props.allowPathTextInput === true ? undefined : value.id }
-                    path={ displayPath }
-                    published={ value.isPublished ?? undefined }
-                  />
-                  )
-                : undefined }
+            prefix={ inputPrefix }
             readOnly={ props.allowPathTextInput !== true }
             value={ showElementTagPrefix ? undefined : displayText }
           />
