@@ -25,23 +25,23 @@ export const sidebarManager = new AssetEditorSidebarManager()
 sidebarManager.registerEntry({
   key: 'details',
   icon: <Icon
-    options={ { width: '16px', height: '16px' } }
-    value={ 'details' }
-        />,
+    options={{ width: '16px', height: '16px' }}
+    value={'details'}
+  />,
   component: <DetailContainer />
 })
 
 sidebarManager.registerButton({
   key: 'focal-point',
   icon: <Icon
-    options={ { width: '16px', height: '16px' } }
-    value={ 'focal-point' }
-        />,
+    options={{ width: '16px', height: '16px' }}
+    value={'focal-point'}
+  />,
   component: <FocalPointSidebarButton
-    icon={ <Icon
-      options={ { width: '16px', height: '16px' } }
-      value={ 'focal-point' }
-           /> }
-    key={ 'focal-point' }
-             />
+    icon={<Icon
+      options={{ width: '16px', height: '16px' }}
+      value={'focal-point'}
+    />}
+    key={'focal-point'}
+  />
 })

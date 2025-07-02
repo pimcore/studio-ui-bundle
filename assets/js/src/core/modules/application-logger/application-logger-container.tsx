@@ -12,9 +12,9 @@ import { useBundleApplicationLoggerGetCollectionQuery } from "./application-logg
 import { useAppDispatch } from "@sdk/app"
 import { api } from '@Pimcore/modules/application-logger/application-logger-api-slice-enhanced'
 import { invalidatingTags } from "@Pimcore/app/api/pimcore/tags"
-import { Table } from "./components/table/table"
+import { ApplicationLogger } from "./application-logger"
 
-export const ApplicationLogger = (): React.JSX.Element => {
+export const ApplicationLoggerContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const [currentPage, setCurrentPage] = useState<number>(1)
@@ -96,9 +96,7 @@ export const ApplicationLogger = (): React.JSX.Element => {
         none={isUndefined(data?.items) || data.items.length === 0}
         padded
       >
-        {data?.items !== undefined && data?.items?.length > 0
-          ? <Table items={data!.items} />
-          : ''}
+        <ApplicationLogger items={data?.items ?? []} />
       </Content>
     </ContentLayout>
   )
