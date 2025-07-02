@@ -9,12 +9,15 @@
  */
 
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
-import React from 'react'
+import React, { StrictMode } from 'react'
 import { EditablesRenderer } from '../components/editables-renderer/editables-renderer'
 import { GlobalProvider } from '@Pimcore/modules/app/global-provider'
 import { DocumentProvider } from '@Pimcore/modules/document/document-provider'
 import { isNaN, isNil, isNumber } from 'lodash'
 import { Alert } from '@Pimcore/components/alert/alert'
+import { App as AntApp } from 'antd'
+import { DateTimeConfig } from '@Pimcore/app/config/date-time'
+import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 
 export interface DocumentEditorIframeWindow extends Window {
   editableDefinitions?: AbstractDocumentEditableDefinition[]
@@ -42,10 +45,18 @@ export const DocumentEditorIframeAppView = (): React.JSX.Element => {
   }
 
   return (
-    <GlobalProvider>
-      <DocumentProvider id={ documentId }>
-        <EditablesRenderer editableDefinitions={ editableDefinitions } />
-      </DocumentProvider>
-    </GlobalProvider>
+    <StrictMode>
+      <ErrorBoundary>
+        <GlobalProvider>
+          <AntApp>
+            <DateTimeConfig>
+              <DocumentProvider id={ documentId }>
+                <EditablesRenderer editableDefinitions={ editableDefinitions } />
+              </DocumentProvider>
+            </DateTimeConfig>
+          </AntApp>
+        </GlobalProvider>
+      </ErrorBoundary>
+    </StrictMode>
   )
 }
