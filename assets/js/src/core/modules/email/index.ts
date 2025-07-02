@@ -35,6 +35,13 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
+      path: 'Tools/Email',
+      label: 'navigation.email',
+      permission: UserPermission.Emails,
+      perspectivePermission: NavPermission.Mails
+    })
+
+    mainNavRegistryService.registerMainNavItem({
       path: 'Tools/Email/Sent-Emails',
       label: 'navigation.email-log',
       className: 'item-style-modifier',
