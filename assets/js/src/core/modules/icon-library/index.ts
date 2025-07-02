@@ -95,6 +95,7 @@ import edit from '@Pimcore/assets/icons/edit.inline.svg?react'
 import embeddedMetadata from '@Pimcore/assets/icons/embedded-metadata.inline.svg?react'
 import event from '@Pimcore/assets/icons/event.inline.svg?react'
 import excludedFromNav from '@Pimcore/assets/icons/excluded-from-nav.inline.svg?react'
+import expand01 from '@Pimcore/assets/icons/expand-01.inline.svg?react'
 import expand from '@Pimcore/assets/icons/expand.inline.svg?react'
 import exportIcon from '@Pimcore/assets/icons/export.inline.svg?react'
 import eyeOff from '@Pimcore/assets/icons/eye-off.inline.svg?react'
@@ -535,6 +536,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'excluded-from-nav',
       component: excludedFromNav
+    })
+    iconLibrary.register({
+      name: 'expand-01',
+      component: expand01
     })
     iconLibrary.register({
       name: 'expand',
