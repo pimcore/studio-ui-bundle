@@ -10,34 +10,21 @@
 
 import React from 'react'
 import { Pie } from '@ant-design/plots'
+import { type CustomReportChartData } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 
-const MOCK_DATA = [
-  {
-    carClass: 'Personal luxury car',
-    attributesAvailable: '',
-    'count(*)': 2
-  },
-  {
-    carClass: 'sports car',
-    attributesAvailable: 'A',
-    'count(*)': 169
-  },
-  {
-    carClass: 'Full-Size',
-    attributesAvailable: 'D',
-    'count(*)': 4
-  }
-]
+interface IReportsChartProps {
+  data?: CustomReportChartData[]
+}
 
-export const ReportsChart = (): React.JSX.Element => {
-  const data = MOCK_DATA.map(item => ({
-    type: item?.attributesAvailable ?? '',
+export const ReportsChart = ({ data }: IReportsChartProps): React.JSX.Element => {
+  const totalCount = data?.reduce((sum, item) => sum + item['count(*)'], 0)
+  const reportChartData = data?.map(item => ({
+    type: 'attributesAvailable' in item ? item?.attributesAvailable : '',
     value: item['count(*)']
   }))
-  const totalCount = MOCK_DATA.reduce((sum, item) => sum + item['count(*)'], 0)
 
   const config = {
-    data,
+    data: reportChartData,
     colorField: 'type',
     angleField: 'value',
     innerRadius: 0.6,

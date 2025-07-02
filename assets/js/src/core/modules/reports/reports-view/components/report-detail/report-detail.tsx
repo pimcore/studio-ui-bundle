@@ -9,11 +9,15 @@
  */
 
 import React from 'react'
+import { isUndefined } from 'lodash'
 import { ReportsChart } from '@Pimcore/modules/reports/components/reports-chart/reports-chart'
 import {
+  type CustomReportChartData,
   useCustomReportsChartQuery,
   useCustomReportsReportQuery
 } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import { Content } from '@Pimcore/components/content/content'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 interface IReportDetailProps {
   currentReport: string
@@ -25,14 +29,20 @@ export const ReportDetail = ({ currentReport, page, pageSize }: IReportDetailPro
   const { isLoading: isReportDetailLoading, data: reportDetailData } = useCustomReportsReportQuery({ name: currentReport })
   const { isLoading: isChartDetailLoading, data: chartDetailData } = useCustomReportsChartQuery({ name: currentReport, page, pageSize })
 
-  console.log('----- isLoading: ', isReportDetailLoading, isChartDetailLoading)
-  console.log('----- reportDetailData: ', reportDetailData)
-  console.log('----- chartDetailData: ', chartDetailData)
+  if (isReportDetailLoading && isChartDetailLoading) {
+    return <Content loading />
+  }
+
+  const isShowChart = !isEmptyValue(reportDetailData?.chartType)
+  const chartData: CustomReportChartData[] | undefined =
+      !isUndefined(chartDetailData) && 'data' in chartDetailData
+        ? chartDetailData.data as CustomReportChartData[]
+        : undefined
 
   return (
     <div>
       <p>ReportDetail</p>
-      <ReportsChart />
+      {isShowChart && <ReportsChart data={ chartData } />}
     </div>
   )
 }
