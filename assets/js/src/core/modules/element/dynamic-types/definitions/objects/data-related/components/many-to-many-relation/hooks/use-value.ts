@@ -33,7 +33,7 @@ interface UseValueReturn {
   addItems: (items: ManyToManyRelationValueItem[]) => void
   addAssets: (assets: Asset[]) => Promise<void>
   maxRemainingItems?: number
-  pathFormatterConfig?: object | null
+  pathFormatterConfig?: object
 }
 
 export const useValue = (
@@ -41,10 +41,9 @@ export const useValue = (
   setValue: (value: ManyToManyRelationValue | null) => void,
   displayedValue: ManyToManyRelationValue | null,
   setDisplayedValue: (value: ManyToManyRelationValue | null) => void,
-  // setIsLoading: (isLoading: boolean) => void,
   maxItems: number | null,
   allowMultipleAssignments?: boolean,
-  pathFormatterConfig?: { name: string, class: string } | null
+  pathFormatterConfig?: { name: string, class: string }
 ): UseValueReturn => {
   const { id: dataObjectId } = useDataObject()
   const { formatPath } = useDataObjectHelper()
@@ -67,15 +66,20 @@ export const useValue = (
       return
     }
 
-    // setIsLoading(true)
+    const loadingValue: ManyToManyRelationValue = value.map(item => ({
+      ...item,
+      fullPath: item.fullPath,
+      loading: true
+    })
+    )
+    setDisplayedValue(loadingValue)
 
+    console.log('before formatPath', value)
     formatPath(value, pathFormatterConfig.name, dataObjectId).then((data) => {
       if (data === undefined) return
 
       const newValue = mapNewValue(value, data)
-      console.log('newValue', newValue)
       setDisplayedValue(newValue)
-      // setIsLoading(false)
     }).catch(error => { console.error(error) })
     // }
   }, [value])

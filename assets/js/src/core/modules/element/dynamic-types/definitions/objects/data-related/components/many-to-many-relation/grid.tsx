@@ -34,6 +34,7 @@ import { type ElementCellConfig, type ElementInfo } from '../../../../grid-cell/
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
+import { LoadingOutlined } from '@ant-design/icons'
 
 interface ManyToManyRelationGridProps {
   value?: ManyToManyRelationValue | null
@@ -82,7 +83,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
         align={ 'center' }
         className={ 'p-mini' }
       >
-        <SanitizeHtml html={ info.getValue() ?? '' } />
+        {info.row.original.loading === true ? (<LoadingOutlined />) : (<SanitizeHtml html={ info.getValue() ?? '' } />)}
       </Flex>
     )
   }

@@ -23,6 +23,7 @@ import { Flex } from 'antd'
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-object'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
+import { LoadingOutlined } from '@ant-design/icons'
 
 export interface PathTargetProps {
   value: ManyToOneRelationValueType
@@ -45,6 +46,7 @@ export const PathTarget = forwardRef(function PathTarget (
   const { formatPath } = useDataObjectHelper()
   const { id: dataObjectId } = useDataObject()
   const [displayPath, setDisplayPath] = useState(String(value?.fullPath))
+  const [isLoading, setIsLoading] = useState(false)
 
   function mapNewValue (value: ManyToOneRelationValueType[], data: { items: Array<{ objectReference: string, formatedPath: string }> }): ManyToOneRelationValueType[] {
     return value.map((item) => ({
@@ -57,6 +59,8 @@ export const PathTarget = forwardRef(function PathTarget (
     setValue(props.value ?? null)
 
     if (props.pathFormatterClass != null && props.pathFormatterClass !== '') {
+      setIsLoading(true)
+
       console.log('formatPath', props.pathFormatterClass)
       formatPath([props.value], props.virtualFieldName, dataObjectId).then((data) => {
         if (data === undefined) {
@@ -65,6 +69,7 @@ export const PathTarget = forwardRef(function PathTarget (
 
         const newValue = mapNewValue([props.value], data)
         setDisplayPath(String(newValue[0].fullPath))
+        setIsLoading(false)
       }).catch(error => { console.error(error) })
     }
   }, [props.value])
@@ -89,7 +94,7 @@ export const PathTarget = forwardRef(function PathTarget (
 
   let inputPrefix: React.ReactNode
   if (props.pathFormatterClass != null && props.pathFormatterClass !== '') {
-    inputPrefix = <SanitizeHtml html={ displayPath ?? '' } />
+    inputPrefix = isLoading ? <LoadingOutlined /> : <SanitizeHtml html={ displayPath ?? '' } />
   } else if (showElementTagPrefix) {
     inputPrefix = (
       <ElementTag
