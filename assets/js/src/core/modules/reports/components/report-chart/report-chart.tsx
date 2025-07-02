@@ -10,23 +10,30 @@
 
 import React from 'react'
 import { Pie } from '@ant-design/plots'
-import { type CustomReportChartData } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import { type CustomReportChartData, type CustomReportDetails } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 
 interface IReportsChartProps {
-  data?: CustomReportChartData[]
+  chartData?: CustomReportChartData[]
+  reportData?: CustomReportDetails
 }
 
-export const ReportsChart = ({ data }: IReportsChartProps): React.JSX.Element => {
-  const totalCount = data?.reduce((sum, item) => sum + item['count(*)'], 0)
-  const reportChartData = data?.map(item => ({
-    type: 'attributesAvailable' in item ? item?.attributesAvailable : '',
-    value: item['count(*)']
+const CHART_FIELD_TYPE_KEY = 'type'
+const CHART_FIELD_VALUE_KEY = 'value'
+
+export const ReportChart = ({ chartData, reportData }: IReportsChartProps): React.JSX.Element => {
+  const pieLabelColumn = reportData?.pieLabelColumn ?? ''
+  const pieColumn = reportData?.pieColumn ?? ''
+
+  const totalCount = chartData?.reduce((sum, item) => sum + item?.[pieColumn], 0)
+  const reportChartData = chartData?.map(item => ({
+    [CHART_FIELD_TYPE_KEY]: item?.[pieLabelColumn],
+    [CHART_FIELD_VALUE_KEY]: item?.[pieColumn]
   }))
 
   const config = {
     data: reportChartData,
-    colorField: 'type',
-    angleField: 'value',
+    colorField: CHART_FIELD_TYPE_KEY,
+    angleField: CHART_FIELD_VALUE_KEY,
     innerRadius: 0.6,
     legend: {
       color: {

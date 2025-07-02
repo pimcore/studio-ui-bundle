@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { isUndefined } from 'lodash'
-import { ReportsChart } from '@Pimcore/modules/reports/components/reports-chart/reports-chart'
+import { ReportChart } from '@Pimcore/modules/reports/components/report-chart/report-chart'
 import {
   type CustomReportChartData,
   useCustomReportsChartQuery,
@@ -42,7 +42,12 @@ export const ReportDetail = ({ currentReport, page, pageSize }: IReportDetailPro
   return (
     <div>
       <p>ReportDetail</p>
-      {isShowChart && <ReportsChart data={ chartData } />}
+      {isShowChart && !isUndefined(chartData) && (
+        <ReportChart
+          chartData={ chartData }
+          reportData={ reportDetailData }
+        />
+      )}
     </div>
   )
 }
