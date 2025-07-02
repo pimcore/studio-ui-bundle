@@ -8,20 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { store, useAppDispatch } from '@Pimcore/app/store'
-import { type IconProps } from '@Pimcore/components/icon/icon'
-import { api, useDocumentUpdateByIdMutation, type ElementIcon } from '@Pimcore/modules/document/document-api-slice-enhanced'
-import { type Element, getElementIcon } from '@Pimcore/modules/element/element-helper'
-import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
-import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
+import { store } from '@Pimcore/app/store'
 import { type EditorContainerProps } from '../editor/editor-container'
-import { useDocumentDraftFetcher } from './use-document-draft-fetcher'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { setNodeLoadingInAllTree, setNodePublished } from '@Pimcore/components/element-tree/element-tree-slice'
 import { publishDraft, unpublishDraft } from '../document-draft-slice'
 import { SaveTaskType } from '../services'
+import { useDocumentUpdateByIdMutation } from '../document-api-slice.gen'
+import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 
 interface OpenDocumentWidgetProps {
   config: EditorContainerProps
@@ -33,43 +27,13 @@ interface UseDocumentReturn {
 }
 
 export const useDocumentHelper = (): UseDocumentReturn => {
-  const { openMainWidget, isMainWidgetOpen } = useWidgetManager()
-  const dispatch = useAppDispatch()
-  const { updateDocumentDraft } = useDocumentDraftFetcher()
+  const dispatch = store.dispatch
   const [update] = useDocumentUpdateByIdMutation()
 
   async function openDocument (props: OpenDocumentWidgetProps): Promise<void> {
     const { config } = props
-    const widgetId = getWidgetId('document', config.id)
-
-    if (!isMainWidgetOpen(widgetId)) {
-      dispatch(api.util.invalidateTags(invalidatingTags.DOCUMENT_DETAIL_ID(config.id)))
-      void updateDocumentDraft(config.id, true)
-    }
-
-    const { data } = await store.dispatch(api.endpoints.documentGetById.initiate({ id: config.id }))
-
-    if (
-      data === undefined ||
-      !checkElementPermission(data.permissions, 'view')) {
-      return
-    }
-
-    const icon = getElementIcon(data as Element, { value: 'widget', type: 'name' })
-    const iconConfig: IconProps & ElementIcon = {
-      type: icon.type,
-      value: icon.value
-    }
-
-    openMainWidget({
-      name: data?.key,
-      id: widgetId,
-      component: 'document-editor',
-      config: {
-        ...config,
-        icon: iconConfig
-      }
-    })
+    const { element } = getPimcoreStudioApi()
+    await element.openDocument(config.id)
   }
 
   const executeDocumentTask = async (id: number, task: SaveTaskType, onFinish?: () => void): Promise<void> => {

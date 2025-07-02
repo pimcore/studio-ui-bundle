@@ -11,6 +11,7 @@
 import { container } from '../depency-injection'
 import { documentApi, type DocumentApi } from './document/document-api'
 import { i18nApi, type I18nApi } from './i18n/i18n-api'
+import { elementApi, type ElementApi } from './element/element-api'
 
 export interface PublicApi {
   container: typeof container
@@ -23,9 +24,11 @@ export const Pimcore: PublicApi = {
 export interface PimcoreStudioApi {
   document: DocumentApi
   i18n: I18nApi
+  element: ElementApi
 }
 
 export const PimcoreStudio: PimcoreStudioApi = {
   document: documentApi,
-  i18n: i18nApi
+  i18n: i18nApi,
+  element: elementApi
 }
