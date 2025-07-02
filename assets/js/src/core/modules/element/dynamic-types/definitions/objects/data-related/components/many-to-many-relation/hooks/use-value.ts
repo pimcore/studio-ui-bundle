@@ -33,7 +33,7 @@ interface UseValueReturn {
   addItems: (items: ManyToManyRelationValueItem[]) => void
   addAssets: (assets: Asset[]) => Promise<void>
   maxRemainingItems?: number
-  pathFormatterClass?: string | null
+  pathFormatterConfig?: object | null
 }
 
 export const useValue = (
@@ -43,9 +43,8 @@ export const useValue = (
   setDisplayedValue: (value: ManyToManyRelationValue | null) => void,
   // setIsLoading: (isLoading: boolean) => void,
   maxItems: number | null,
-  virtualFieldName: string,
   allowMultipleAssignments?: boolean,
-  pathFormatterClass?: string | null
+  pathFormatterConfig?: { name: string, class: string } | null
 ): UseValueReturn => {
   const { id: dataObjectId } = useDataObject()
   const { formatPath } = useDataObjectHelper()
@@ -64,13 +63,13 @@ export const useValue = (
   }
 
   useEffect(() => {
-    if (pathFormatterClass === null || value === null || dataObjectId === undefined || virtualFieldName === undefined) {
+    if (pathFormatterConfig.class === null || value === null || dataObjectId === undefined || pathFormatterConfig.name === undefined) {
       return
     }
 
     // setIsLoading(true)
 
-    formatPath(value, virtualFieldName, dataObjectId).then((data) => {
+    formatPath(value, pathFormatterConfig.name, dataObjectId).then((data) => {
       if (data === undefined) return
 
       const newValue = mapNewValue(value, data)
