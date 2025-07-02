@@ -9,7 +9,7 @@
  */
 
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
-import React, { StrictMode } from 'react'
+import React, { StrictMode, useEffect, useState } from 'react'
 import { EditablesRenderer } from '../components/editables-renderer/editables-renderer'
 import { GlobalProvider } from '@Pimcore/modules/app/global-provider'
 import { DocumentProvider } from '@Pimcore/modules/document/document-provider'
@@ -18,6 +18,7 @@ import { Alert } from '@Pimcore/components/alert/alert'
 import { App as AntApp } from 'antd'
 import { DateTimeConfig } from '@Pimcore/app/config/date-time'
 import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
+import { useIframeI18nSetup } from '@Pimcore/app/i18n/hooks/use-iframe-i18n-setup'
 
 export interface DocumentEditorIframeWindow extends Window {
   editableDefinitions?: AbstractDocumentEditableDefinition[]
@@ -26,12 +27,21 @@ export interface DocumentEditorIframeWindow extends Window {
 
 export const DocumentEditorIframeAppView = (): React.JSX.Element => {
   const editableDefinitions: AbstractDocumentEditableDefinition[] = (window as DocumentEditorIframeWindow).editableDefinitions ?? []
+  const { isInitialized, error } = useIframeI18nSetup()
 
   // Extract document ID from URL parameters
   const urlParams = new URLSearchParams(window.location.search)
   const documentIdParam = urlParams.get('documentId')
 
   const documentId = isNil(documentIdParam) ? undefined : parseInt(documentIdParam, 10)
+
+  if (!isInitialized) {
+    return (
+      <div style={{ padding: '20px', textAlign: 'center' }}>
+        Loading translations...
+      </div>
+    )
+  }
 
   if (isNil(documentId) || !isNumber(documentId) || isNaN(documentId) || documentId <= 0) {
     return (
