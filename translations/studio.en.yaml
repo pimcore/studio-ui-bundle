@@ -865,3 +865,4 @@ application-logger.columns.related-object-id: Related Object ID
 application-logger.columns.component: Component
 application-logger.columns.source: Source
 application-logger.columns.details: Details
+application-logger.sidebar.search-parameter: Search Parameter

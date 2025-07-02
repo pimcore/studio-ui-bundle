@@ -12,7 +12,7 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type WidgetRegistry } from '../widget-manager/services/widget-registry'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { ApplicationLogger } from './application-logger-container'
+import { ApplicationLoggerContainer } from './application-logger-container'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { UserPermission } from '../auth/enums/user-permission'
 import { NavPermission } from '../perspectives/enums/nav-permission'
@@ -44,7 +44,7 @@ moduleSystem.registerModule({
 
     widgetRegistryService.registerWidget({
       name: 'application-logger',
-      component: ApplicationLogger
+      component: ApplicationLoggerContainer
     })
   }
 })
