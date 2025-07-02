@@ -46,45 +46,5 @@ moduleSystem.registerModule({
       permission: UserPermission.Emails,
       perspectivePermission: NavPermission.Mails
     })
-
-    mainNavRegistryService.registerMainNavItem({
-      path: 'Tools/Email/Sent-Emails',
-      label: 'navigation.email-log',
-      className: 'item-style-modifier',
-      permission: UserPermission.Emails,
-      perspectivePermission: NavPermission.Mails,
-      widgetConfig: {
-        name: 'emailLog',
-        id: 'email-log',
-        component: 'email-log',
-        config: {
-          translationKey: 'widget.email-log',
-          icon: {
-            type: 'name',
-            value: 'mail-02'
-          }
-        }
-      }
-    })
-
-    mainNavRegistryService.registerMainNavItem({
-      path: 'Tools/Email/Email-Blocklist',
-      label: 'navigation.email-blocklist',
-      className: 'item-style-modifier',
-      permission: UserPermission.Emails,
-      perspectivePermission: NavPermission.Mails,
-      widgetConfig: {
-        name: 'EmailBlocklist',
-        id: 'email-blocklist',
-        component: 'email-blocklist',
-        config: {
-          translationKey: 'widget.email-blocklist',
-          icon: {
-            type: 'name',
-            value: 'mail-02'
-          }
-        }
-      }
-    })
   }
 })

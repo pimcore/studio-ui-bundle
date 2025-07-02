@@ -14,6 +14,9 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { EmailBlocklistContainer } from './blocklist/email-blocklist-container'
 import { EmailLogContainer } from './log/email-log-container'
+import { MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
+import { UserPermission } from '../auth/enums/user-permission'
+import { NavPermission } from '../perspectives/enums/nav-permission'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -27,6 +30,48 @@ moduleSystem.registerModule({
     widgetRegistryService.registerWidget({
       name: 'email-log',
       component: EmailLogContainer
+    })
+
+    const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
+
+    mainNavRegistryService.registerMainNavItem({
+      path: 'Tools/Email/Sent-Emails',
+      label: 'navigation.email-log',
+      className: 'item-style-modifier',
+      permission: UserPermission.Emails,
+      perspectivePermission: NavPermission.Mails,
+      widgetConfig: {
+        name: 'emailLog',
+        id: 'email-log',
+        component: 'email-log',
+        config: {
+          translationKey: 'widget.email-log',
+          icon: {
+            type: 'name',
+            value: 'mail-02'
+          }
+        }
+      }
+    })
+
+    mainNavRegistryService.registerMainNavItem({
+      path: 'Tools/Email/Email-Blocklist',
+      label: 'navigation.email-blocklist',
+      className: 'item-style-modifier',
+      permission: UserPermission.Emails,
+      perspectivePermission: NavPermission.Mails,
+      widgetConfig: {
+        name: 'EmailBlocklist',
+        id: 'email-blocklist',
+        component: 'email-blocklist',
+        config: {
+          translationKey: 'widget.email-blocklist',
+          icon: {
+            type: 'name',
+            value: 'mail-02'
+          }
+        }
+      }
     })
   }
 })
