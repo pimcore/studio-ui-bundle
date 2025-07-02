@@ -10,17 +10,18 @@
 
 import React, { useEffect, useState } from 'react'
 import { isEmpty } from 'lodash'
-import { ReportsChart } from '@Pimcore/modules/reports/components/reports-chart/reports-chart'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { ReportDetail } from '@Pimcore/modules/reports/reports-view/components/report-detail/report-detail'
 
 export const ReportsView = (): React.JSX.Element => {
   const [page] = useState(1)
-  const [pageSize] = useState(20)
+  const [pageSize] = useState(10)
 
   const [reportsTreeOptions, setReportsTreeOptions] = useState<Array<{ label: string, value: string }> | undefined>(undefined)
   const [currentReport, setCurrentReport] = useState<string | null>(null)
@@ -70,7 +71,16 @@ export const ReportsView = (): React.JSX.Element => {
           </Toolbar>
        }
       >
-        <ReportsChart />
+        {!isEmptyValue(currentReport)
+          ? (
+            <ReportDetail
+              currentReport={ currentReport! }
+              page={ page }
+              pageSize={ pageSize }
+            />
+            )
+          : <div>Choose the report</div>
+        }
       </ContentLayout>
     </Content>
   )
