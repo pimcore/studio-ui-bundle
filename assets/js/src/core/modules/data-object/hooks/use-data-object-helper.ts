@@ -31,7 +31,7 @@ interface OpenDataObjectWidgetProps {
   config: EditorContainerProps
 }
 
-interface IFormatPathItem {
+export interface IFormatPathItem {
   id: number
   type: string
   fullPath: string

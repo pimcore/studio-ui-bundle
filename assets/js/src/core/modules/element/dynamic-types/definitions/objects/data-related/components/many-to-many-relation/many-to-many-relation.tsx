@@ -46,7 +46,7 @@ export interface ManyToManyRelationClassDefinitionProps {
 }
 
 export interface ManyToManyRelationProps extends IRelationAllowedTypesDataComponent, ManyToManyRelationClassDefinitionProps {
-  virtualFieldName: string
+  virtualFieldName?: string
   disabled?: boolean
   inherited?: boolean
   value?: ManyToManyRelationValue | null
@@ -63,7 +63,7 @@ export interface ManyToManyRelationProps extends IRelationAllowedTypesDataCompon
 export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.Element => {
   const [value, setValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
   const [displayedValue, setDisplayedValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
-  const { onDrop, deleteItem, onSearch, addAssets, addItems, maxRemainingItems } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments, { name: props.virtualFieldName, class: props.pathFormatterClass })
+  const { onDrop, deleteItem, onSearch, addAssets, addItems, maxRemainingItems } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments, { name: props.virtualFieldName, class: props.pathFormatterClass ?? undefined })
 
   useEffect(() => {
     if (!isEqual(value, props.value ?? null)) {

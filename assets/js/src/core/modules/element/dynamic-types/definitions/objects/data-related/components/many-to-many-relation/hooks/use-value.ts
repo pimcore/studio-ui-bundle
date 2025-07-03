@@ -43,7 +43,7 @@ export const useValue = (
   setDisplayedValue: (value: ManyToManyRelationValue | null) => void,
   maxItems: number | null,
   allowMultipleAssignments?: boolean,
-  pathFormatterConfig?: { name: string, class: string }
+  pathFormatterConfig?: { name: string | undefined, class: string | undefined }
 ): UseValueReturn => {
   const { id: dataObjectId } = useDataObject()
   const { formatPath } = useDataObjectHelper()
@@ -62,7 +62,7 @@ export const useValue = (
   }
 
   useEffect(() => {
-    if (pathFormatterConfig.class === null || value === null || dataObjectId === undefined || pathFormatterConfig.name === undefined) {
+    if (pathFormatterConfig?.name == null || value === null || dataObjectId === undefined) {
       return
     }
 

@@ -20,7 +20,7 @@ import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
 import { isNil } from 'lodash'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { Flex } from 'antd'
-import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
+import { useDataObjectHelper, type IFormatPathItem } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-object'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { LoadingOutlined } from '@ant-design/icons'
@@ -31,7 +31,7 @@ export interface PathTargetProps {
   allowPathTextInput?: boolean
   onChange?: (value: ManyToOneRelationValueType) => void
   inherited?: boolean
-  virtualFieldName: string
+  virtualFieldName?: string
   pathFormatterClass?: string
 }
 
@@ -45,10 +45,10 @@ export const PathTarget = forwardRef(function PathTarget (
   const { mapToElementType } = useElementHelper()
   const { formatPath } = useDataObjectHelper()
   const { id: dataObjectId } = useDataObject()
-  const [displayPath, setDisplayPath] = useState(String(value?.fullPath))
+  const [displayPath, setDisplayPath] = useState(String(value?.fullPath ?? ''))
   const [isLoading, setIsLoading] = useState(false)
 
-  function mapNewValue (value: ManyToOneRelationValueType[], data: { items: Array<{ objectReference: string, formatedPath: string }> }): ManyToOneRelationValueType[] {
+  function mapNewValue (value: IFormatPathItem[], data: { items: Array<{ objectReference: string, formatedPath: string }> }): IFormatPathItem[] {
     return value.map((item) => ({
       ...item,
       fullPath: data.items.find(i => i.objectReference === `object_${item.id}`)?.formatedPath ?? item.fullPath
@@ -58,17 +58,16 @@ export const PathTarget = forwardRef(function PathTarget (
   useEffect(() => {
     setValue(props.value ?? null)
 
-    if (props.pathFormatterClass != null && props.pathFormatterClass !== '') {
+    if (props.pathFormatterClass != null && props.pathFormatterClass !== '' && props.value !== null && props.virtualFieldName !== undefined && dataObjectId != null) {
       setIsLoading(true)
 
-      console.log('formatPath', props.pathFormatterClass)
-      formatPath([props.value], props.virtualFieldName, dataObjectId).then((data) => {
+      formatPath([props.value as IFormatPathItem], props.virtualFieldName, dataObjectId).then((data) => {
         if (data === undefined) {
           return
         }
 
-        const newValue = mapNewValue([props.value], data)
-        setDisplayPath(String(newValue[0].fullPath))
+        const newValue = mapNewValue([props.value as IFormatPathItem], data)
+        setDisplayPath(String(newValue[0]?.fullPath))
         setIsLoading(false)
       }).catch(error => { console.error(error) })
     }
