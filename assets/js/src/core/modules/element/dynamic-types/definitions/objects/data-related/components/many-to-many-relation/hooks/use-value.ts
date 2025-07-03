@@ -77,7 +77,7 @@ export const useValue = (
 
     // compare displayedValue and value to get the new one
     const newItems = getNewItems()
-    const loadingValue: ManyToManyRelationValue = displayedValue
+    const loadingValue: ManyToManyRelationValue = displayedValue !== null
       ? displayedValue.map(item => ({
         ...item,
         fullPath: item.fullPath,
