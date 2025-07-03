@@ -40,6 +40,10 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     columnHelper.accessor('message', {
       header: t('application-logger.columns.message')
     }),
+    columnHelper.accessor('priority', {
+      header: t('application-logger.columns.type'),
+      size: 40
+    }),
     columnHelper.accessor('fileObject', {
       header: t('application-logger.columns.file-object'),
       cell: info => {
