@@ -54,11 +54,20 @@ export const useValue = (
     return value?.some(item => item.id === id && item.type === type) ?? false
   }
 
-  function mapNewValue (value: ManyToManyRelationValue, data: { items: Array<{ objectReference: string, formatedPath: string }> }): ManyToManyRelationValue {
+  function mapNewValues (value: ManyToManyRelationValue, data: { items: Array<{ objectReference: string, formatedPath: string }> }): ManyToManyRelationValue {
     return value.map((item) => ({
       ...item,
       fullPath: data.items.find(i => i.objectReference === `object_${item.id}`)?.formatedPath ?? item.fullPath
     }))
+  }
+
+  function getNewItems (): ManyToManyRelationValue {
+    return value?.filter(item =>
+      !(
+        Array.isArray(displayedValue) &&
+            displayedValue.some(displayedItem => displayedItem.id === item.id && displayedItem.fullPath !== item.fullPath)
+      )
+    ) ?? []
   }
 
   useEffect(() => {
@@ -66,22 +75,33 @@ export const useValue = (
       return
     }
 
-    const loadingValue: ManyToManyRelationValue = value.map(item => ({
-      ...item,
-      fullPath: item.fullPath,
-      loading: true
-    })
-    )
+    // compare displayedValue and value to get the new one
+    const newItems = getNewItems()
+    const loadingValue: ManyToManyRelationValue = displayedValue
+      ? displayedValue.map(item => ({
+        ...item,
+        fullPath: item.fullPath,
+        loading: newItems.filter((newItem) => newItem.id === item.id).length > 0
+      })
+      )
+      : []
     setDisplayedValue(loadingValue)
 
-    console.log('before formatPath', value)
+    // const newItems = getNewItems()
+
+    // todo only request newItems
     formatPath(value, pathFormatterConfig.name, dataObjectId).then((data) => {
       if (data === undefined) return
-
-      const newValue = mapNewValue(value, data)
-      setDisplayedValue(newValue)
+      // const newValues = mapNewValues(newItems, data)
+      const newValues = mapNewValues(value, data)
+      setDisplayedValue(newValues)
+      // setDisplayedValue((prev = []) => {
+      //   return prev.map(item => {
+      //     const updated = newValues.find(newItem => newItem.id === item.id)
+      //     return updated ? { ...item, ...updated } : item
+      //   })
+      // })
     }).catch(error => { console.error(error) })
-    // }
   }, [value])
 
   const addItems = (items: ManyToManyRelationValueItem[]): void => {

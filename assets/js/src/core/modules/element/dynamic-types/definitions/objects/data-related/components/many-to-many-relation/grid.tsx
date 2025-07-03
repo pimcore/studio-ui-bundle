@@ -83,7 +83,8 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
         align={ 'center' }
         className={ 'p-mini' }
       >
-        {info.row.original.loading === true ? (<LoadingOutlined />) : (<SanitizeHtml html={ info.getValue() ?? '' } />)}
+        <SanitizeHtml html={ info.getValue() ?? '' } />
+        {info.row.original.loading === true ? (<LoadingOutlined style={ { marginLeft: 8 } } />) : null}
       </Flex>
     )
   }
