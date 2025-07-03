@@ -866,3 +866,4 @@ application-logger.columns.component: Component
 application-logger.columns.source: Source
 application-logger.columns.details: Details
 application-logger.sidebar.search-parameter: Search Parameter
+application-logger.columns.type: Type
