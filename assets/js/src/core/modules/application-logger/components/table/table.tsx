@@ -1,13 +1,14 @@
-import React from "react";
-import { BundleApplicationLoggerGetCollectionApiResponse, BundleApplicationLoggerLogEntry } from "../../application-logger-api-slice.gen";
-import { createColumnHelper } from "@tanstack/react-table";
-import { useTranslation } from "react-i18next";
-import { IconButton } from "@Pimcore/components/icon-button/icon-button";
 import { Flex } from "@Pimcore/components/flex/flex";
 import { Grid } from "@Pimcore/components/grid/grid";
-import { Default } from "@Pimcore/components/iframe/iframe.stories";
+import { IconButton } from "@Pimcore/components/icon-button/icon-button";
+import { useElementHelper } from "@Pimcore/modules/element/hooks/use-element-helper";
+import { ElementType } from "@Pimcore/types/enums/element/element-type";
 import { Button, DefaultCell } from "@sdk/components";
+import { createColumnHelper } from "@tanstack/react-table";
 import { isNil } from "lodash";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { BundleApplicationLoggerGetCollectionApiResponse, BundleApplicationLoggerLogEntry } from "../../application-logger-api-slice.gen";
 
 interface TableProps {
   items: BundleApplicationLoggerGetCollectionApiResponse['items']
@@ -19,14 +20,13 @@ interface BundleApplicationLoggerLogEntryWithActions extends BundleApplicationLo
 
 export const Table = ({ items }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { openElement } = useElementHelper()
 
   const columnHelper = createColumnHelper<BundleApplicationLoggerLogEntryWithActions>()
   const columns = [
     columnHelper.accessor('date', {
       header: t('application-logger.columns.timestamp'),
       cell: info => {
-        const column = info.row.original;
-
         return (
           <DefaultCell {...info} />
         )
@@ -44,6 +44,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
       header: t('application-logger.columns.file-object'),
       cell: info => {
         const column = info.row.original;
+        const fileObjectBasePath = '/admin/bundle/applicationlogger/log/show-file-object?filePath='
 
         if (isNil(column.fileObject)) {
           return <></>
@@ -52,17 +53,38 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
         return (
           <Button
             type="link"
-            href={column.fileObject}
+            href={fileObjectBasePath + column.fileObject}
             target="_blank"
           >
             {t('open')}
-          </Button>
+          </Button >
         )
       },
       size: 60
     }),
     columnHelper.accessor('relatedObjectId', {
       header: t('application-logger.columns.related-object-id'),
+      cell: info => {
+        const column = info.row.original;
+
+        if (isNil(column.relatedObjectId) || isNil(column.relatedObjectType)) {
+          return <></>
+        }
+
+        return (
+          <Button
+            type="link"
+            onClick={() => {
+              openElement({
+                id: column.relatedObjectId!,
+                type: column.relatedObjectType as ElementType
+              }).catch(() => { })
+            }}
+          >
+            {`${column.relatedObjectType} ${column.relatedObjectId}`}
+          </Button >
+        )
+      },
       size: 60
     }),
     columnHelper.accessor('component', {
