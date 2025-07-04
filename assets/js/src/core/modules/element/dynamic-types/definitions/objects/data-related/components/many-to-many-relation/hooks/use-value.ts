@@ -13,7 +13,7 @@ import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-a
 import { useTranslation } from 'react-i18next'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useEffect } from 'react'
-import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
+import { type IFormatPathItem, useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-object'
 
 export interface ManyToManyRelationValueItem {
@@ -62,10 +62,31 @@ export const useValue = (
     }))
   }
 
-  function getNewItems (): ManyToManyRelationValue {
-    return value?.filter(item =>
-      !(Array.isArray(displayedValue) && displayedValue.some(displayedItem => displayedItem.id === item.id && displayedItem.fullPath !== item.fullPath))
-    ) ?? []
+  const handleFormatPath = async (items, newItems?): Promise<ManyToManyRelationValue> => {
+    if (pathFormatterConfig?.name == null || value === null || dataObjectId === undefined) {
+      return items
+    }
+
+    const formatItems: ManyToManyRelationValue = newItems ?? items
+
+    // compare displayedValue and value to get the new one
+    return await formatPath(formatItems as IFormatPathItem[], pathFormatterConfig.name, dataObjectId).then((data) => {
+      if (data === undefined) return
+      const newValues = mapNewValues(formatItems, data)
+
+      const updatedDisplayedValue = items !== null
+        ? items.map(item => {
+          const updatedItem = newValues.find(newItem => newItem.id === item.id)
+          return {
+            ...item,
+            fullPath: updatedItem?.fullPath ?? item.fullPath,
+            loading: false
+          }
+        })
+        : []
+
+      return updatedDisplayedValue
+    }).catch(error => { console.error(error) })
   }
 
   useEffect(() => {
@@ -73,38 +94,15 @@ export const useValue = (
       return
     }
 
-    // compare displayedValue and value to get the new one
-    const newItems = getNewItems()
-    const loadingValue: ManyToManyRelationValue = displayedValue !== null
-      ? displayedValue.map(item => ({
-        ...item,
-        fullPath: item.fullPath,
-        loading: newItems.filter((newItem) => newItem.id === item.id).length > 0
-      })
-      )
-      : []
-
-    setDisplayedValue(loadingValue)
-
-    formatPath(newItems, pathFormatterConfig.name, dataObjectId).then((data) => {
-      if (data === undefined) return
-      const newValues = mapNewValues(newItems, data)
-
-      if (displayedValue === null) {
-        return
+    // const newItems = getNewItems()
+    handleFormatPath(value).then((formattedItems) => {
+      if (formattedItems !== undefined) {
+        setDisplayedValue(formattedItems)
       }
-
-      const updatedDisplayedValue = displayedValue.map(item => {
-        const updatedItem = newValues.find(newItem => newItem.id === item.id)
-        return {
-          ...item,
-          fullPath: updatedItem?.fullPath ?? item.fullPath,
-          loading: false
-        }
-      })
-      setDisplayedValue(updatedDisplayedValue)
-    }).catch(error => { console.error(error) })
-  }, [value])
+    }).catch(error => {
+      console.error('Error formatting path:', error)
+    })
+  }, [])
 
   const addItems = (items: ManyToManyRelationValueItem[]): void => {
     const newItems = allowMultipleAssignments !== true
@@ -116,10 +114,15 @@ export const useValue = (
       ...newItems
     ])
 
-    setDisplayedValue([
-      ...displayedValue ?? [],
-      ...newItems
-    ])
+    setDisplayedValue([...displayedValue ?? [], ...newItems])
+
+    handleFormatPath([...displayedValue ?? [], ...newItems], newItems).then((formattedItems) => {
+      if (formattedItems !== undefined) {
+        setDisplayedValue(formattedItems)
+      }
+    }).catch(error => {
+      console.error('Error formatting path:', error)
+    })
   }
 
   const addItem = (item: ManyToManyRelationValueItem): void => {

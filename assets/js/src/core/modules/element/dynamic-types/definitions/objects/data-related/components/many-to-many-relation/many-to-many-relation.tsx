@@ -103,6 +103,7 @@ export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToMan
           hint={ props.hint }
           inherited={ props.inherited }
           onUpdateCellData={ props.onUpdateCellData }
+          pathFormatterConfig={ { name: props.virtualFieldName, class: props.pathFormatterClass ?? undefined } }
           value={ displayedValue }
           width={ props.width }
         />

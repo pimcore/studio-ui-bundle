@@ -22,6 +22,9 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { type ManyToManyRelationGridProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/grid'
 import { getElementCellConfig } from '../utils/helpers'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { LoadingOutlined } from '@ant-design/icons'
 
 interface UseColumnsReturn {
   columns: Array<ColumnDef<any>>
@@ -36,6 +39,17 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
   const { download } = useDownload()
 
   const columnHelper = createColumnHelper()
+  const renderFullPathCell = (info: any): React.JSX.Element => {
+    return (
+      <Flex
+        align={ 'center' }
+        className={ 'p-mini' }
+      >
+        <SanitizeHtml html={ info.getValue() ?? '' } />
+        {info.row.original.loading !== false ? (<LoadingOutlined style={ { marginLeft: 8 } } />) : null}
+      </Flex>
+    )
+  }
 
   const defaultColumns = [
     columnHelper.accessor('id', {
@@ -50,7 +64,8 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
         editable: false,
         config: getElementCellConfig(props.inherited === true || props.disabled === true)
       },
-      size: 200
+      size: 200,
+      ...(props.pathFormatterConfig != null ? { cell: renderFullPathCell } : {})
     }),
     columnHelper.accessor('type', {
       header: t('relations.type'),
