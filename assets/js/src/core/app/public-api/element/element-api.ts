@@ -19,19 +19,19 @@ import { ApiGatewayEventType } from '@Pimcore/app/public-api/api-gateway'
 import { type ModalUploadProps } from '@Pimcore/components/modal-upload/modal-upload'
 
 class ElementOpeningService {
-  async openAsset(config: { id: number }): Promise<void> {
+  async openAsset (config: { id: number }): Promise<void> {
     await assetOpeningService.openAsset(config)
   }
 
-  async openDocument(config: { id: number }): Promise<void> {
+  async openDocument (config: { id: number }): Promise<void> {
     await documentOpeningService.openDocument(config)
   }
 
-  async openDataObject(config: { id: number }): Promise<void> {
+  async openDataObject (config: { id: number }): Promise<void> {
     await dataObjectOpeningService.openDataObject(config)
   }
 
-  async openElement(id: number, type: ElementType): Promise<void> {
+  async openElement (id: number, type: ElementType): Promise<void> {
     const config = { id }
     switch (type) {
       case 'asset':
@@ -63,26 +63,26 @@ export interface ElementApi {
 }
 
 class ElementApiImpl implements ElementApi {
-  async openAsset(id: number): Promise<void> {
+  async openAsset (id: number): Promise<void> {
     await elementOpeningService.openAsset({ id })
   }
 
-  async openDocument(id: number): Promise<void> {
+  async openDocument (id: number): Promise<void> {
     await elementOpeningService.openDocument({ id })
   }
 
-  async openDataObject(id: number): Promise<void> {
+  async openDataObject (id: number): Promise<void> {
     await elementOpeningService.openDataObject({ id })
   }
 
-  async openElement(id: number, type: ElementType): Promise<void> {
+  async openElement (id: number, type: ElementType): Promise<void> {
     await elementOpeningService.openElement(id, type)
   }
 
-  openElementSelector(config: ElementSelectorConfig): void {
+  openElementSelector (config: ElementSelectorConfig): void {
     try {
       const studioApi = getPimcoreStudioApi()
-      
+
       if (isInIframe()) {
         // We're in an iframe, call the parent's API
         studioApi.element.openElementSelector(config)
@@ -95,7 +95,7 @@ class ElementApiImpl implements ElementApi {
     }
   }
 
-  private openElementSelectorDirectly(config: ElementSelectorConfig): void {
+  private openElementSelectorDirectly (config: ElementSelectorConfig): void {
     const event = new CustomEvent('pimcore:gateway:request', {
       detail: {
         type: ApiGatewayEventType.openElementSelector,
@@ -105,7 +105,7 @@ class ElementApiImpl implements ElementApi {
     window.dispatchEvent(event)
   }
 
-  openUploadModal(props: ModalUploadProps): void {
+  openUploadModal (props: ModalUploadProps): void {
     try {
       if (isInIframe()) {
         // We're in an iframe, call the parent's API
@@ -120,7 +120,7 @@ class ElementApiImpl implements ElementApi {
     }
   }
 
-  private openUploadModalDirectly(props: ModalUploadProps): void {
+  private openUploadModalDirectly (props: ModalUploadProps): void {
     const event = new CustomEvent('pimcore:gateway:request', {
       detail: {
         type: ApiGatewayEventType.openUploadModal,

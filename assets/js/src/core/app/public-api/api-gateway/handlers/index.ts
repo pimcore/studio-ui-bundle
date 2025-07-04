@@ -1,3 +1,13 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
 import { registerApiGatewayHandler } from '../registry/handler-registry'
 import { ApiGatewayEventType } from '../types/event-types'
 import { openElementSelectorHandler } from './element-selector-handler'
@@ -7,7 +17,7 @@ export const initializeHandlers = (): void => {
   // Register all handlers here
   registerApiGatewayHandler(ApiGatewayEventType.openElementSelector, openElementSelectorHandler)
   registerApiGatewayHandler(ApiGatewayEventType.openUploadModal, openUploadModalHandler)
-  
+
   // Add more handlers as needed
   // registerApiGatewayHandler(ApiGatewayEventType.ANOTHER_EVENT_TYPE, anotherHandler)
 }

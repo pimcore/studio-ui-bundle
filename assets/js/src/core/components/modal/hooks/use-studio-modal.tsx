@@ -20,7 +20,7 @@ type ModalStaticFunctions = ReturnType<typeof App.useApp>['modal']
  * When in an iframe, it uses the parent window's modal instance.
  * When not in an iframe, it uses the current window's modal instance.
  */
-export function useStudioModal(): ModalStaticFunctions {
+export function useStudioModal (): ModalStaticFunctions {
   const { modal: localModal } = App.useApp()
 
   return useMemo<ModalStaticFunctions>(() => {
@@ -29,12 +29,11 @@ export function useStudioModal(): ModalStaticFunctions {
       try {
         // Get the parent window's modal instance through the studio API
         const studioApi = getPimcoreStudioApi()
-        
+
         // Check if the parent window has modal functionality available
         if (studioApi.modal) {
           return studioApi.modal
         }
-        
       } catch (error) {
         console.warn('Failed to access parent window modal, falling back to local modal:', error)
       }

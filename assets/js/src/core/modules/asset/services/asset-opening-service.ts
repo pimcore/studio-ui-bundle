@@ -29,22 +29,22 @@ interface AssetConfig {
  * Asset opening service that handles opening assets in the widget manager
  */
 export class AssetOpeningService {
-  private isWidgetOpen(widgetId: string): boolean {
+  private isWidgetOpen (widgetId: string): boolean {
     const state = store.getState()
     const innerModel = (state as any)['widget-manager']?.innerModel
     if (!innerModel) return false
-    
+
     const model = Model.fromJson(innerModel)
     return model.getNodeById(widgetId) !== undefined
   }
 
-  private switchToWidget(widgetId: string): void {
+  private switchToWidget (widgetId: string): void {
     store.dispatch(setActiveWidgetById(widgetId))
   }
 
-  private async fetchAndStoreAssetDraft(id: number): Promise<void> {
+  private async fetchAndStoreAssetDraft (id: number): Promise<void> {
     const { data } = await store.dispatch(api.endpoints.assetGetById.initiate({ id }))
-    
+
     if (data) {
       const mergedAssetData = {
         ...data,
@@ -64,7 +64,7 @@ export class AssetOpeningService {
     }
   }
 
-  async openAsset(config: AssetConfig): Promise<void> {
+  async openAsset (config: AssetConfig): Promise<void> {
     const { id } = config
     const widgetId = getWidgetId('asset', id)
 

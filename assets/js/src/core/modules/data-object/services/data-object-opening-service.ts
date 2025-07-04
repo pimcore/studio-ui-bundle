@@ -29,22 +29,22 @@ interface DataObjectConfig {
  * Data object opening service that handles opening data objects in the widget manager
  */
 export class DataObjectOpeningService {
-  private isWidgetOpen(widgetId: string): boolean {
+  private isWidgetOpen (widgetId: string): boolean {
     const state = store.getState()
     const innerModel = (state as any)['widget-manager']?.innerModel
     if (!innerModel) return false
-    
+
     const model = Model.fromJson(innerModel)
     return model.getNodeById(widgetId) !== undefined
   }
 
-  private switchToWidget(widgetId: string): void {
+  private switchToWidget (widgetId: string): void {
     store.dispatch(setActiveWidgetById(widgetId))
   }
 
-  private async fetchAndStoreDataObjectDraft(id: number): Promise<void> {
+  private async fetchAndStoreDataObjectDraft (id: number): Promise<void> {
     const { data } = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id }))
-    
+
     if (data) {
       const mergedDataObjectData = {
         ...data,
@@ -61,7 +61,7 @@ export class DataObjectOpeningService {
     }
   }
 
-  async openDataObject(config: DataObjectConfig): Promise<void> {
+  async openDataObject (config: DataObjectConfig): Promise<void> {
     const { id } = config
     const widgetId = getWidgetId('data-object', id)
 

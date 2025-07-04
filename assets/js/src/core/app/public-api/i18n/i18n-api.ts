@@ -20,10 +20,10 @@ export interface I18nApi {
 class I18nApiImpl implements I18nApi {
   getTranslationResources (): Record<string, any> {
     const resources: Record<string, any> = {}
-    
+
     // Get all loaded language resources from i18n
     const languages = i18n.languages || []
-    
+
     languages.forEach(language => {
       const resourceBundle = i18n.getResourceBundle(language, 'translation')
       if (resourceBundle) {

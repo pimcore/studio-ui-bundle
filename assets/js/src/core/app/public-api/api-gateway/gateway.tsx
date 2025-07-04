@@ -8,12 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import type React from 'react'
+import { useEffect } from 'react'
 import { useElementSelectorHelper } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector-helper'
 import { useUploadModalContext } from '@Pimcore/components/modal-upload/provider/upload-modal-provider/use-upload-modal-context'
 import { getApiGatewayHandler } from './registry/handler-registry'
 import { initializeHandlers } from './handlers'
-import { ApiGatewayEventType } from './types/event-types'
+import { type ApiGatewayEventType } from './types/event-types'
 
 /**
  * This component listens for various requests from the public API
@@ -29,18 +30,18 @@ export const ApiGateway = (): React.JSX.Element | null => {
   }, [])
 
   useEffect(() => {
-    const handleApiEvent = (event: CustomEvent<{ type: string; payload: any }>): void => {
+    const handleApiEvent = (event: CustomEvent<{ type: string, payload: any }>): void => {
       const { type, payload } = event.detail
-      
+
       try {
         // Convert string type to enum type
         const eventType = type as ApiGatewayEventType
         const handler = getApiGatewayHandler(eventType)
-        
+
         if (handler) {
-          handler(payload, { 
+          handler(payload, {
             elementSelectorHelper,
-            uploadModalContext,
+            uploadModalContext
             // Add other context dependencies here as needed
           })
         } else {

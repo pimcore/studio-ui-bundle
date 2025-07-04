@@ -1,6 +1,16 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
 import { type UseElementSelectorHelperReturn } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector-helper'
 import { type UploadContextProps } from '@Pimcore/components/modal-upload/provider/upload-modal-provider/upload-modal-provider'
-import { ApiGatewayEventType } from '../types/event-types'
+import { type ApiGatewayEventType } from '../types/event-types'
 
 // Define a context object that can be passed to handlers
 export interface ApiGatewayHandlerContext {

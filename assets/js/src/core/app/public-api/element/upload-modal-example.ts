@@ -14,10 +14,10 @@ import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
  * Example of how to use the upload modal from within an iframe
  * This can be called from iframe contexts or the parent window
  */
-export function openUploadModalExample(): void {
+export function openUploadModalExample (): void {
   try {
     const studioApi = getPimcoreStudioApi()
-    
+
     studioApi.element.openUploadModal({
       targetFolderId: 1, // Target folder ID for uploads
       maxItems: 10,
@@ -43,10 +43,10 @@ export function openUploadModalExample(): void {
 /**
  * Example with specific folder path and file restrictions
  */
-export function openRestrictedUploadExample(): void {
+export function openRestrictedUploadExample (): void {
   try {
     const studioApi = getPimcoreStudioApi()
-    
+
     studioApi.element.openUploadModal({
       targetFolderPath: '/uploads/images',
       maxItems: 5,

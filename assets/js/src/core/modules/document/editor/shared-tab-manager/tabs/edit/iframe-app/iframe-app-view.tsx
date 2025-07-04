@@ -37,7 +37,7 @@ export const DocumentEditorIframeAppView = (): React.JSX.Element => {
 
   if (!isInitialized) {
     return (
-      <div style={{ padding: '20px', textAlign: 'center' }}>
+      <div style={ { padding: '20px', textAlign: 'center' } }>
         Loading translations...
       </div>
     )

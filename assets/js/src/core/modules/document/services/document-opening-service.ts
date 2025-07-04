@@ -29,22 +29,22 @@ interface DocumentConfig {
  * Document opening service that handles opening documents in the widget manager
  */
 export class DocumentOpeningService {
-  private isWidgetOpen(widgetId: string): boolean {
+  private isWidgetOpen (widgetId: string): boolean {
     const state = store.getState()
     const innerModel = (state as any)['widget-manager']?.innerModel
     if (!innerModel) return false
-    
+
     const model = Model.fromJson(innerModel)
     return model.getNodeById(widgetId) !== undefined
   }
 
-  private switchToWidget(widgetId: string): void {
+  private switchToWidget (widgetId: string): void {
     store.dispatch(setActiveWidgetById(widgetId))
   }
 
-  private async fetchAndStoreDocumentDraft(id: number): Promise<void> {
+  private async fetchAndStoreDocumentDraft (id: number): Promise<void> {
     const { data } = await store.dispatch(api.endpoints.documentGetById.initiate({ id }))
-    
+
     if (data) {
       const mergedDocumentData = {
         ...data,
@@ -60,7 +60,7 @@ export class DocumentOpeningService {
     }
   }
 
-  async openDocument(config: DocumentConfig): Promise<void> {
+  async openDocument (config: DocumentConfig): Promise<void> {
     const { id } = config
     const widgetId = getWidgetId('document', id)
 

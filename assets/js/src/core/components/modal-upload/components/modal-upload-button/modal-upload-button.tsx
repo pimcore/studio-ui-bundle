@@ -43,7 +43,7 @@ export const ModalUploadButton = (props: ModalUploadButtonProps): React.JSX.Elem
     <Tooltip title={ t('upload') }>
       <IconButton
         icon={ { value: 'upload-cloud' } }
-        onClick={ () => triggerUpload(props) }
+        onClick={ () => { triggerUpload(props) } }
         type="default"
       />
     </Tooltip>

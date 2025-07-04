@@ -33,7 +33,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
 
   const modal = useAlertModal()
   const { modal: studioModal } = App.useApp()
-  
+
   // Register the modal instance to allow centralized error message display throughout the project
   ErrorModalService.setModalInstance(modal)
   // Register the modal instance for iframe communication

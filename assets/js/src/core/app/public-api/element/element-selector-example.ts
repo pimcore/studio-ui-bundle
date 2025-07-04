@@ -15,10 +15,10 @@ import { SelectionType } from '@Pimcore/modules/element/element-selector/provide
  * Example of how to use the element selector from within an iframe
  * This can be called from iframe contexts or the parent window
  */
-export function openElementSelectorExample(): void {
+export function openElementSelectorExample (): void {
   try {
     const studioApi = getPimcoreStudioApi()
-    
+
     studioApi.element.openElementSelector({
       selectionType: SelectionType.Multiple,
       areas: {
@@ -42,10 +42,10 @@ export function openElementSelectorExample(): void {
 /**
  * Example with restricted element types
  */
-export function openAssetSelectorExample(): void {
+export function openAssetSelectorExample (): void {
   try {
     const studioApi = getPimcoreStudioApi()
-    
+
     studioApi.element.openElementSelector({
       selectionType: SelectionType.Single,
       areas: {

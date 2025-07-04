@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { App } from 'antd'
+import { type App } from 'antd'
 
 type ModalStaticFunctions = ReturnType<typeof App.useApp>['modal']
 let modalInstance: ModalStaticFunctions | null = null
@@ -23,11 +23,11 @@ export interface ModalApi {
 }
 
 class ModalApiImpl implements ModalApi {
-  setModalInstance(modal: ModalStaticFunctions): void {
+  setModalInstance (modal: ModalStaticFunctions): void {
     modalInstance = modal
   }
 
-  private getModalInstance(): ModalStaticFunctions {
+  private getModalInstance (): ModalStaticFunctions {
     if (!modalInstance) {
       throw new Error('Modal instance not initialized. Make sure App.useApp() is called in the parent window.')
     }

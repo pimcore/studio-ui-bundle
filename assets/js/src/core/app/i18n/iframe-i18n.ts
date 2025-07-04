@@ -42,7 +42,7 @@ export const initializeIframeI18n = async (): Promise<void> => {
         ns: ['translation'],
         defaultNS: 'translation',
         resources,
-        saveMissing: true, 
+        saveMissing: true,
         postProcess: ['returnKeyIfEmpty'],
         interpolation: {
           escapeValue: false
@@ -56,16 +56,16 @@ export const initializeIframeI18n = async (): Promise<void> => {
     i18n.on('missingKey', (lngs, namespace, key, res) => {
       try {
         studioApi.i18n.reportMissingTranslation(key)
-        
+
         i18n.addResource(currentLanguage, namespace, key, key)
         if (currentLanguage !== fallbackLanguage) {
           i18n.addResource(fallbackLanguage, namespace, key, key)
         }
-        
+
         console.debug(`Missing translation key reported to parent: ${key}`)
       } catch (error) {
         console.warn(`Could not report missing translation key '${key}' to parent window:`, error)
-        
+
         i18n.addResource(currentLanguage, namespace, key, key)
         if (currentLanguage !== fallbackLanguage) {
           i18n.addResource(fallbackLanguage, namespace, key, key)
@@ -76,7 +76,7 @@ export const initializeIframeI18n = async (): Promise<void> => {
     console.log(`Iframe i18n initialized with ${Object.keys(translationResources).length} languages and missing key reporting`)
   } catch (error) {
     console.warn('Could not initialize iframe i18n from parent window, falling back to basic setup:', error)
-    
+
     // Fallback initialization if parent API is not available
     await i18n
       .use(initReactI18next)
