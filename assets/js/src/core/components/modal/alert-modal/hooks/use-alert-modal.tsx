@@ -13,6 +13,7 @@ import type React from 'react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isUndefined } from 'lodash'
+import { useStudioModal } from '@sdk/components'
 
 type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)
 
@@ -29,8 +30,7 @@ export interface UseAlertModalResponse {
 }
 
 export const useAlertModal = (): UseAlertModalResponse => {
-  const { modal } = App.useApp()
-
+  const modal = useStudioModal()
   const { t } = useTranslation()
 
   return useMemo<UseAlertModalResponse>(

@@ -9,11 +9,12 @@
  */
 
 import React, { forwardRef, type RefObject } from 'react'
-import { App, type FormInstance, Input, type InputRef, type ModalFuncProps } from 'antd'
+import { type FormInstance, Input, type InputRef, type ModalFuncProps } from 'antd'
 import { uuid as pimcoreUUid } from '@Pimcore/utils/uuid'
 import { type Rule } from 'antd/lib/form'
 import i18n from 'i18next'
 import { Form } from '@Pimcore/components/form/form'
+import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 
 let form: FormInstance<any> | null = null
 
@@ -43,7 +44,7 @@ export interface UseFormModalHookResponse {
 }
 
 export function useFormModal (): UseFormModalHookResponse {
-  const { modal } = App.useApp()
+  const modal = useStudioModal()
 
   const [tmpForm] = Form.useForm()
   form = tmpForm

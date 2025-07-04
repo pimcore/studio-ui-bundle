@@ -20,7 +20,7 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Tooltip } from 'antd'
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Box } from '@Pimcore/components/box/box'
@@ -69,7 +69,7 @@ export const getElementCellConfig = (disabled?: boolean): ElementCellConfig => {
 
 export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid (props: ManyToManyRelationGridProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { getStateClasses } = useDroppable()
-  const { confirm } = useFormModal()
+  const modal = useFormModal()
   const { openElement, mapToElementType } = useElementHelper()
   const { t } = useTranslation()
   const { download } = useDownload()
@@ -167,16 +167,13 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
               <IconButton
                 icon={ { value: 'trash' } }
                 onClick={ () => {
-                  confirm({
+                  modal.confirm({
                     title: t('remove'),
-                    content: <Trans
-                      i18nKey={ 'delete-confirmation-advanced' }
-                      shouldUnescape
-                      values={ {
-                        type: t('relation'),
-                        value: rowValue.fullPath
-                      } }
-                             />,
+                    content: t('delete-confirmation-advanced', {
+                      type: t('relation'),
+                      value: rowValue.fullPath,
+                      interpolation: { escapeValue: false }
+                    }),
                     onOk: () => {
                       props.deleteItem(rowIndex)
                     }

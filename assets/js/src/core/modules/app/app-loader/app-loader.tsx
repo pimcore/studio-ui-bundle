@@ -21,6 +21,8 @@ import { useMercureCreateCookieMutation } from '../mercure-api-slice.gen'
 import { useSettingsLoader } from './loader/settings/loader'
 import { selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
 import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
+import { App } from 'antd'
+import { modalApi } from '@Pimcore/app/public-api/modal/modal-api'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -30,8 +32,12 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const [isLoading, setIsLoading] = useState(true)
 
   const modal = useAlertModal()
+  const { modal: studioModal } = App.useApp()
+  
   // Register the modal instance to allow centralized error message display throughout the project
   ErrorModalService.setModalInstance(modal)
+  // Register the modal instance for iframe communication
+  modalApi.setModalInstance(studioModal)
 
   const { isAuthenticated } = useIsAuthenticated()
 
