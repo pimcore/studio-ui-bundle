@@ -20,7 +20,9 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ReportDetail } from '@Pimcore/modules/reports/reports-view/components/report-detail/report-detail'
 import { Text } from '@Pimcore/components/text/text'
+import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import { useStyles } from './reports-view.styles'
+import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
 
 export const ReportsView = (): React.JSX.Element => {
   const [page] = useState(1)
@@ -32,7 +34,7 @@ export const ReportsView = (): React.JSX.Element => {
   const [reportsTreeOptions, setReportsTreeOptions] = useState<Array<{ label: string, value: string }> | undefined>(undefined)
   const [currentReport, setCurrentReport] = useState<string | null>(null)
 
-  const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page, pageSize })
+  const { isLoading: isReportsTreeLoading, data: reportsTreeData, refetch, isFetching } = useCustomReportsGetTreeQuery({ page, pageSize })
 
   const isCurrentReportSelected = !isEmptyValue(currentReport)
 
@@ -47,9 +49,8 @@ export const ReportsView = (): React.JSX.Element => {
     }
   }, [reportsTreeData])
 
-  return (
+  const renderContent = (): React.JSX.Element => (
     <Content
-      loading={ isReportsTreeLoading && isEmpty(reportsTreeOptions) }
       padded
       padding={ { top: 'extra-small', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
     >
@@ -76,7 +77,7 @@ export const ReportsView = (): React.JSX.Element => {
               />
             </Flex>
           </Toolbar>
-       }
+          }
       >
         <Content centered={ !isCurrentReportSelected }>
           {isCurrentReportSelected
@@ -98,6 +99,22 @@ export const ReportsView = (): React.JSX.Element => {
           }
         </Content>
       </ContentLayout>
+    </Content>
+  )
+
+  return (
+    <Content loading={ isReportsTreeLoading && isEmpty(reportsTreeOptions) }>
+      <TabsToolbarView
+        renderTabbar={ renderContent() }
+        renderToolbar={ (
+          <Toolbar>
+            <Refetch
+              isFetching={ isFetching }
+              refetch={ refetch }
+            />
+          </Toolbar>
+        ) }
+      />
     </Content>
   )
 }
