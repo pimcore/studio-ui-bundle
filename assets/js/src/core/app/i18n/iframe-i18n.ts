@@ -73,7 +73,6 @@ export const initializeIframeI18n = async (): Promise<void> => {
       }
     })
 
-    console.log(`Iframe i18n initialized with ${Object.keys(translationResources).length} languages and missing key reporting`)
   } catch (error) {
     console.warn('Could not initialize iframe i18n from parent window, falling back to basic setup:', error)
 
