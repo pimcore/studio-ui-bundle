@@ -32,6 +32,7 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/utils/helpers'
 import { Flex } from 'antd'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
+import { LoadingOutlined } from '@ant-design/icons'
 
 export interface AdvancedManyToManyRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -81,6 +82,7 @@ export const AdvancedManyToManyRelation = (props: AdvancedManyToManyRelationProp
         className={ 'p-mini' }
       >
         <SanitizeHtml html={ info.getValue() ?? '' } />
+        {info.row.original.loading !== false ? (<LoadingOutlined style={ { marginLeft: 8 } } />) : null}
       </Flex>
     )
   }
@@ -101,7 +103,7 @@ export const AdvancedManyToManyRelation = (props: AdvancedManyToManyRelationProp
           config: getElementCellConfig(props.inherited === true || props.disabled === true)
         },
         size: 200,
-        cell: renderFullPathCell
+        ...(props.pathFormatterClass != null ? { cell: renderFullPathCell } : {})
       }),
       ...columnDefinition,
       columnHelper.accessor('type', {

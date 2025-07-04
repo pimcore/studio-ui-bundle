@@ -62,31 +62,36 @@ export const useValue = (
     }))
   }
 
-  const handleFormatPath = async (items, newItems?): Promise<ManyToManyRelationValue> => {
+  function getUpdatedDisplayedValue (
+    items: ManyToManyRelationValue | null,
+    newValues: ManyToManyRelationValue
+  ): ManyToManyRelationValue {
+    if (items === null) return []
+    return items.map(item => {
+      const updatedItem = newValues.find(newItem => newItem.id === item.id)
+      return {
+        ...item,
+        fullPath: updatedItem?.fullPath ?? item.fullPath,
+        loading: false
+      }
+    })
+  }
+
+  const handleFormatPath = async (items, newItems?): Promise<ManyToManyRelationValue | undefined> => {
     if (pathFormatterConfig?.name == null || value === null || dataObjectId === undefined) {
       return items
     }
 
     const formatItems: ManyToManyRelationValue = newItems ?? items
 
-    // compare displayedValue and value to get the new one
-    return await formatPath(formatItems as IFormatPathItem[], pathFormatterConfig.name, dataObjectId).then((data) => {
+    try {
+      const data = await formatPath(formatItems as IFormatPathItem[], pathFormatterConfig.name, dataObjectId)
       if (data === undefined) return
       const newValues = mapNewValues(formatItems, data)
-
-      const updatedDisplayedValue = items !== null
-        ? items.map(item => {
-          const updatedItem = newValues.find(newItem => newItem.id === item.id)
-          return {
-            ...item,
-            fullPath: updatedItem?.fullPath ?? item.fullPath,
-            loading: false
-          }
-        })
-        : []
-
-      return updatedDisplayedValue
-    }).catch(error => { console.error(error) })
+      return getUpdatedDisplayedValue(items as ManyToManyRelationValue, newValues)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   useEffect(() => {

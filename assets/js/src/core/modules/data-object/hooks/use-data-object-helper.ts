@@ -127,16 +127,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
     }
   }
 
-  // const formatPathCache = useRef(new Map<string, DataObjectFormatPathApiResponse | undefined>())
   const formatPath = async (items: IFormatPathItem[], fieldName: string, dataObjectId: number): Promise<DataObjectFormatPathApiResponse | undefined> => {
-    // const ids = items.map(item => item.id).join('_')
-    // const cacheKey = `dataObjectId_${dataObjectId}_ids_${ids}_fieldName_${fieldName}`
-
-    // if (formatPathCache.current.has(cacheKey)) {
-    //   console.log('Using cached formatPath for:', cacheKey)
-    // return formatPathCache.current.get(cacheKey)
-    // }
-
     const targets = items.reduce((acc, item) => {
       acc[`object_${item.id}`] = {
         id: item.id,

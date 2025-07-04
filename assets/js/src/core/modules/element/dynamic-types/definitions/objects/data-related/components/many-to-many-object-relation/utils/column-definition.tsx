@@ -21,10 +21,23 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/utils/helpers'
 import { Flex } from 'antd'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
+import { LoadingOutlined } from '@ant-design/icons'
 
-export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: Record<string, VisibleFieldDefinition>, disabled?: boolean): Array<ColumnDef<any>> => {
+export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: Record<string, VisibleFieldDefinition>, disabled: boolean, pathFormatterClass: string): Array<ColumnDef<any>> => {
   const columnDefinition: Array<ColumnDef<any>> = []
   const columnHelper = createColumnHelper()
+
+  const renderFullPathCell = (info: any): React.JSX.Element => {
+    return (
+      <Flex
+        align={ 'center' }
+        className={ 'p-mini' }
+      >
+        <SanitizeHtml html={ info.getValue() ?? '' } />
+        {info.row.original.loading !== false ? (<LoadingOutlined style={ { marginLeft: 8 } } />) : null}
+      </Flex>
+    )
+  }
 
   for (const key in visibleFieldDefinitions) {
     const field = visibleFieldDefinitions[key]
@@ -40,14 +53,7 @@ export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: Record
             }
           : undefined,
         size: getColumnWidth(key),
-        cell: (info) => (
-          <Flex
-            align='center'
-            className='p-mini'
-          >
-            <SanitizeHtml html={ info.getValue() ?? '' } />
-          </Flex>
-        )
+        ...(pathFormatterClass !== '' ? { cell: renderFullPathCell } : {})
       })
     )
   }
