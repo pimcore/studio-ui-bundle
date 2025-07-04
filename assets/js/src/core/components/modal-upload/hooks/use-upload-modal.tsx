@@ -17,7 +17,7 @@ export interface UseUploadModalReturn {
   triggerUpload: (props: ModalUploadProps) => void
 }
 
-export interface UseUploadModalProps extends ModalUploadProps {}
+export type UseUploadModalProps = ModalUploadProps
 
 export const useUploadModal = (props: UseUploadModalProps): UseUploadModalReturn => {
   const uploadModalContext = useUploadModalContext()
