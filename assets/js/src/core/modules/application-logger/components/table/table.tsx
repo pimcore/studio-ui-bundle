@@ -6,21 +6,29 @@ import { ElementType } from "@Pimcore/types/enums/element/element-type";
 import { Button, DefaultCell } from "@sdk/components";
 import { createColumnHelper } from "@tanstack/react-table";
 import { isNil } from "lodash";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BundleApplicationLoggerGetCollectionApiResponse, BundleApplicationLoggerLogEntry } from "../../application-logger-api-slice.gen";
+import { DetailModal } from "../detail-modal/detail-modal";
 
 interface TableProps {
   items: BundleApplicationLoggerGetCollectionApiResponse['items']
 }
 
-interface BundleApplicationLoggerLogEntryWithActions extends BundleApplicationLoggerLogEntry {
+export interface BundleApplicationLoggerLogEntryWithActions extends BundleApplicationLoggerLogEntry {
   actions: React.ReactNode
 }
 
 export const Table = ({ items }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openElement } = useElementHelper()
+  const [open, setOpen] = useState<boolean>(false);
+  const [modelData, setModelData] = useState<BundleApplicationLoggerLogEntryWithActions | null>(null);
+
+  const openModal = (data: BundleApplicationLoggerLogEntryWithActions): void => {
+    setModelData(data);
+    setOpen(true);
+  }
 
   const columnHelper = createColumnHelper<BundleApplicationLoggerLogEntryWithActions>()
   const columns = [
@@ -67,7 +75,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
       size: 60
     }),
     columnHelper.accessor('relatedObjectId', {
-      header: t('application-logger.columns.related-object-id'),
+      header: t('application-logger.columns.related-object'),
       cell: info => {
         const column = info.row.original;
 
@@ -111,7 +119,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
             <IconButton
               icon={{ value: 'expand-01' }}
               onClick={async () => {
-                console.log('open detail modal for ', column.id)
+                openModal(column)
               }}
               type="link"
             />
@@ -124,13 +132,21 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
 
 
   return (
-    <Grid
-      autoWidth
-      columns={columns}
-      data={items}
-      //isLoading={notesAndEventsFetching}
-      modifiedCells={[]}
-      resizable
-    />
+    <>
+      <Grid
+        autoWidth
+        columns={columns}
+        data={items}
+        //isLoading={notesAndEventsFetching}
+        modifiedCells={[]}
+        resizable
+      />
+
+      <DetailModal
+        data={modelData}
+        open={open}
+        setOpen={setOpen}
+      />
+    </>
   );
 }

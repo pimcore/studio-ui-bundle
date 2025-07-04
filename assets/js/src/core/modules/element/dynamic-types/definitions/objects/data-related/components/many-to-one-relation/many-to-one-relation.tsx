@@ -55,6 +55,7 @@ export interface ManyToOneRelationClassDefinitionProps {
   allowPathTextInput?: boolean
   width?: number | string | null
   inherited?: boolean
+  readonly?: boolean
 }
 
 export interface ManyToOneRelationProps extends IRelationAllowedTypesDataComponent, ManyToOneRelationClassDefinitionProps {
@@ -89,7 +90,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
     if (value !== null && value.textInput !== true) {
       const elementType = mapToElementType(value.type)
       if (!isUndefined(elementType)) {
-        openElement({ type: elementType, id: value.id }).catch(() => {})
+        openElement({ type: elementType, id: value.id }).catch(() => { })
       }
 
       props.onOpenElement?.()
@@ -98,112 +99,112 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
 
   return (
     <Flex
-      className={ cn(styles.container, props.className) }
+      className={cn(styles.container, props.className)}
       gap="extra-small"
-      style={ {
+      style={{
         maxWidth: toCssDimension(props.width, fieldWidth.large)
-      } }
+      }}
     >
-      <div className={ styles.droppableWrapper }>
+      <div className={styles.droppableWrapper}>
         <Droppable
-          isValidContext={ (info: DragAndDropInfo) => props.disabled !== true && isValidElementType(info.type) }
-          isValidData={ (info: DragAndDropInfo) => dndIsValidData(info, props) }
-          onDrop={ (info: DragAndDropInfo) => {
+          isValidContext={(info: DragAndDropInfo) => props.disabled !== true && isValidElementType(info.type)}
+          isValidData={(info: DragAndDropInfo) => dndIsValidData(info, props)}
+          onDrop={(info: DragAndDropInfo) => {
             const newValue: ManyToOneRelationValue | undefined = convertDragAndDropInfoToElementReference(info)
 
             setValue(newValue ?? null)
-          } }
+          }}
         >
           <PathTarget
-            allowPathTextInput={ props.allowPathTextInput }
-            disabled={ props.disabled }
-            inherited={ props.inherited }
-            onChange={ setValue }
-            value={ value }
+            allowPathTextInput={props.allowPathTextInput}
+            disabled={props.disabled}
+            inherited={props.inherited}
+            onChange={setValue}
+            value={value}
           />
         </Droppable>
       </div>
       <Flex gap="extra-small">
-        { props.allowPathTextInput !== true && (
-        <Tooltip
-          key="open"
-          title={ t('open') }
-        >
-          <IconButton
-            disabled={ value === null }
-            icon={ { value: 'open-folder' } }
-            onClick={ clickOpenElement }
-            style={ { flex: '0 0 auto' } }
-            type="default"
-          />
-        </Tooltip>
-        ) }
+        {props.allowPathTextInput !== true && (
+          <Tooltip
+            key="open"
+            title={t('open')}
+          >
+            <IconButton
+              disabled={value === null}
+              icon={{ value: 'open-folder' }}
+              onClick={clickOpenElement}
+              style={{ flex: '0 0 auto' }}
+              type="default"
+            />
+          </Tooltip>
+        )}
 
-        { props.assetInlineDownloadAllowed === true && value?.textInput !== true && (
-        <Tooltip
-          key="download"
-          title={ t('download') }
-        >
-          <IconButton
-            disabled={ value?.type !== 'asset' || value?.subtype === 'folder' }
-            icon={ { value: 'download' } }
-            onClick={ () => {
-              download(
-                String(value?.id)
-              )
-            } }
-            type="default"
-          />
-        </Tooltip>
-        ) }
+        {props.assetInlineDownloadAllowed === true && value?.textInput !== true && (
+          <Tooltip
+            key="download"
+            title={t('download')}
+          >
+            <IconButton
+              disabled={value?.type !== 'asset' || value?.subtype === 'folder'}
+              icon={{ value: 'download' }}
+              onClick={() => {
+                download(
+                  String(value?.id)
+                )
+              }}
+              type="default"
+            />
+          </Tooltip>
+        )}
 
-        { props.allowToClearRelation === true && (
+        {props.allowToClearRelation === true && (
 
-        <Tooltip
-          key="empty"
-          title={ t('empty') }
-        >
-          <IconButton
-            disabled={ value === null || props.disabled === true }
-            icon={ { value: 'trash' } }
-            onClick={ () => {
-              setValue(null)
-            } }
-            type="default"
-          />
-        </Tooltip>
-        ) }
+          <Tooltip
+            key="empty"
+            title={t('empty')}
+          >
+            <IconButton
+              disabled={value === null || props.disabled === true}
+              icon={{ value: 'trash' }}
+              onClick={() => {
+                setValue(null)
+              }}
+              type="default"
+            />
+          </Tooltip>
+        )}
 
-        { props.disabled !== true && (
-        <ElementSelectorButton
-          elementSelectorConfig={ {
-            selectionType: SelectionType.Single,
-            areas: createElementSelectorAreas(props),
-            config: {
-              assets: {
-                allowedTypes: props.allowedAssetTypes
+        {props.disabled !== true && (
+          <ElementSelectorButton
+            elementSelectorConfig={{
+              selectionType: SelectionType.Single,
+              areas: createElementSelectorAreas(props),
+              config: {
+                assets: {
+                  allowedTypes: props.allowedAssetTypes
+                },
+                documents: {
+                  allowedTypes: props.allowedAssetTypes
+                },
+                objects: {
+                  allowedTypes: props.allowedClasses
+                }
               },
-              documents: {
-                allowedTypes: props.allowedAssetTypes
-              },
-              objects: {
-                allowedTypes: props.allowedClasses
+              onFinish: (event) => {
+                if (!isEmpty(event.items)) {
+                  setValue({
+                    type: event.items[0].elementType,
+                    subtype: event.items[0].data.type,
+                    id: event.items[0].data.id,
+                    fullPath: event.items[0].data.fullpath
+                  })
+                }
               }
-            },
-            onFinish: (event) => {
-              if (!isEmpty(event.items)) {
-                setValue({
-                  type: event.items[0].elementType,
-                  subtype: event.items[0].data.type,
-                  id: event.items[0].data.id,
-                  fullPath: event.items[0].data.fullpath
-                })
-              }
-            }
-          } }
-          type="default"
-        />
-        ) }
+            }}
+            type="default"
+          />
+        )}
       </Flex>
     </Flex>
   )

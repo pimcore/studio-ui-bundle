@@ -861,9 +861,10 @@ application-logger.columns.timestamp: Timestamp
 application-logger.columns.pid: PID
 application-logger.columns.message: Message
 application-logger.columns.file-object: File Object
-application-logger.columns.related-object-id: Related Object ID
+application-logger.columns.related-object: Related Object
 application-logger.columns.component: Component
 application-logger.columns.source: Source
 application-logger.columns.details: Details
-application-logger.sidebar.search-parameter: Search Parameter
 application-logger.columns.type: Type
+application-logger.sidebar.search-parameter: Search Parameter
+application-logger.detail-modal.title: Detail information
