@@ -63,10 +63,7 @@ export const useValue = (
 
   function getNewItems (): ManyToManyRelationValue {
     return value?.filter(item =>
-      !(
-        Array.isArray(displayedValue) &&
-            displayedValue.some(displayedItem => displayedItem.id === item.id && displayedItem.fullPath !== item.fullPath)
-      )
+      !(Array.isArray(displayedValue) && displayedValue.some(displayedItem => displayedItem.id === item.id && displayedItem.fullPath !== item.fullPath))
     ) ?? []
   }
 
@@ -85,22 +82,26 @@ export const useValue = (
       })
       )
       : []
+
     setDisplayedValue(loadingValue)
 
-    // const newItems = getNewItems()
-
-    // todo only request newItems
-    formatPath(value, pathFormatterConfig.name, dataObjectId).then((data) => {
+    formatPath(newItems, pathFormatterConfig.name, dataObjectId).then((data) => {
       if (data === undefined) return
-      // const newValues = mapNewValues(newItems, data)
-      const newValues = mapNewValues(value, data)
-      setDisplayedValue(newValues)
-      // setDisplayedValue((prev = []) => {
-      //   return prev.map(item => {
-      //     const updated = newValues.find(newItem => newItem.id === item.id)
-      //     return updated ? { ...item, ...updated } : item
-      //   })
-      // })
+      const newValues = mapNewValues(newItems, data)
+
+      if (displayedValue === null) {
+        return
+      }
+
+      const updatedDisplayedValue = displayedValue.map(item => {
+        const updatedItem = newValues.find(newItem => newItem.id === item.id)
+        return {
+          ...item,
+          fullPath: updatedItem?.fullPath ?? item.fullPath,
+          loading: false
+        }
+      })
+      setDisplayedValue(updatedDisplayedValue)
     }).catch(error => { console.error(error) })
   }, [value])
 

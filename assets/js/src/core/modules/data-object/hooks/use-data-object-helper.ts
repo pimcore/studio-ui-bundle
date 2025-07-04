@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useRef } from 'react'
+// import { useRef } from 'react'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { store, useAppDispatch } from '@Pimcore/app/store'
 import { setNodeLoadingInAllTree, setNodePublished } from '@Pimcore/components/element-tree/element-tree-slice'
@@ -127,13 +127,15 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
     }
   }
 
-  const formatPathCache = useRef(new Map<string, DataObjectFormatPathApiResponse | undefined>())
+  // const formatPathCache = useRef(new Map<string, DataObjectFormatPathApiResponse | undefined>())
   const formatPath = async (items: IFormatPathItem[], fieldName: string, dataObjectId: number): Promise<DataObjectFormatPathApiResponse | undefined> => {
-    const cacheKey = `dataObjectId_${dataObjectId}_${items.length}_fieldName_${fieldName}`
+    // const ids = items.map(item => item.id).join('_')
+    // const cacheKey = `dataObjectId_${dataObjectId}_ids_${ids}_fieldName_${fieldName}`
 
-    if (formatPathCache.current.has(cacheKey)) {
-      return formatPathCache.current.get(cacheKey)
-    }
+    // if (formatPathCache.current.has(cacheKey)) {
+    //   console.log('Using cached formatPath for:', cacheKey)
+    // return formatPathCache.current.get(cacheKey)
+    // }
 
     const targets = items.reduce((acc, item) => {
       acc[`object_${item.id}`] = {
@@ -162,7 +164,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
       trackError(new ApiError(error as unknown as ApiErrorData))
     }
 
-    formatPathCache.current.set(cacheKey, data)
+    // formatPathCache.current.set(cacheKey, data)
 
     return data
   }
