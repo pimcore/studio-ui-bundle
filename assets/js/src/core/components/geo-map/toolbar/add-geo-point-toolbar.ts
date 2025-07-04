@@ -57,12 +57,16 @@ export const addGeoPointToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGro
     }
   })
 
-  leafletMap.on('draw:editmove', async function (e) {
-    const layer = e.layer as L.Marker
-
-    await reverseGeocode(layer, reverseGeoCodeUrlTemplate).catch((error) => {
-      console.error(error)
-    })
-    onChange?.(convertLatLngToGeoPoint(layer.getLatLng()))
+  leafletMap.on(L.Draw.Event.EDITSTOP, async function (e) {
+    for (const layerId in e.target._layers) {
+      if (Object.prototype.hasOwnProperty.call(e.target._layers, layerId) === true) {
+        const layer = e.target._layers[layerId]
+        if (Object.prototype.hasOwnProperty.call(layer, 'edited') === true) {
+          if (onChange !== undefined) {
+            onChange(convertLatLngToGeoPoint(layer._latlng as L.LatLng))
+          }
+        }
+      }
+    }
   })
 }

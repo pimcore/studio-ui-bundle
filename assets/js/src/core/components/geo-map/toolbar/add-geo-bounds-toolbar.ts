@@ -77,21 +77,28 @@ export const addGeoBoundsToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGr
     }
   })
 
-  leafletMap.on(L.Draw.Event.EDITRESIZE + ' ' + L.Draw.Event.EDITMOVE, function (e) {
-    if (onChange !== undefined) {
-      const ne = e.layer.getBounds().getNorthEast()
-      const sw = e.layer.getBounds().getSouthWest()
+  leafletMap.on(L.Draw.Event.EDITSTOP, function (e) {
+    for (const layerId in e.target._layers) {
+      if (Object.prototype.hasOwnProperty.call(e.target._layers, layerId) === true) {
+        const layer = e.target._layers[layerId]
+        if (Object.prototype.hasOwnProperty.call(layer, 'edited') === true) {
+          if (onChange !== undefined) {
+            const ne = layer._bounds._northEast
+            const sw = layer._bounds._southWest
 
-      onChange({
-        northEast: {
-          latitude: ne.lat,
-          longitude: ne.lng
-        },
-        southWest: {
-          latitude: sw.lat,
-          longitude: sw.lng
+            onChange({
+              northEast: {
+                latitude: ne.lat,
+                longitude: ne.lng
+              },
+              southWest: {
+                latitude: sw.lat,
+                longitude: sw.lng
+              }
+            })
+          }
         }
-      })
+      }
     }
   })
 }
