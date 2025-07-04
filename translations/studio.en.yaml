@@ -280,6 +280,17 @@ notes-and-events.columns.details: Details
 notes-and-events.columns.user: User
 notes-and-events.columns.date: Date
 notes-and-events.columns.actions: Actions
+document-types.new: New
+document-types.columns.name: Name
+document-types.columns.group: Group
+document-types.columns.controller: Controller
+document-types.columns.template: Template
+document-types.columns.type: Type
+document-types.columns.static: Static
+document-types.columns.priority: Priority
+document-types.columns.creation-date: Creation Date
+document-types.columns.modification-date: Modification Date
+document-types.columns.actions: Actions
 properties.label: Properties
 properties.editable-properties: Editable Properties
 properties.all-properties: All Properties
@@ -707,6 +718,7 @@ perspective.switching.description: Currently switching to the following perspect
 widget.notes-and-events: Notes & Events
 widget.tag-configuration: Tag Configuration
 widget.predefined-properties: Predefined Properties
+widget.document-types: Document Types
 widget.role-management: Roles
 widget.user-management: Users
 external-image.preview-placeholder: Add an external image

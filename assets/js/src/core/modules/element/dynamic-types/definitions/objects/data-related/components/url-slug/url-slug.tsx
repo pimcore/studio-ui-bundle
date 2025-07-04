@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Input, List, Tooltip, Typography } from 'antd'
 import cn from 'classnames'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { cloneDeep, isEmpty, isEqual, isNil, isPlainObject } from 'lodash'
+import { cloneDeep, isEmpty, isNil, isPlainObject } from 'lodash'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import { useStyles } from './url-slug.styles'
 
@@ -42,13 +42,12 @@ const getInitialValue = (value?: UrlSlugEntry[] | null): UrlSlugEntry[] => {
 }
 
 export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
-  const initialValue = getInitialValue(props.value)
+  const value = getInitialValue(props.value)
 
-  if (isPlainObject(initialValue) && !initialValue.some(entry => entry.siteId === 0)) {
-    initialValue.unshift({ slug: '', siteId: 0 })
+  if (isPlainObject(value) && !value.some(entry => entry.siteId === 0)) {
+    value.unshift({ slug: '', siteId: 0 })
   }
 
-  const [value, setValue] = useState<UrlSlugEntry[]>(initialValue)
   const [errors, setErrors] = useState<boolean[]>([])
 
   const { t } = useTranslation()
@@ -57,18 +56,9 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
   const fieldWidth = useFieldWidth()
   const { Text } = Typography
 
-  useEffect(() => {
-    if (!isEqual(initialValue, value)) {
-      props.onChange?.(value)
-    }
-  }, [value])
-
-  useEffect(() => {
-    const newValue = getInitialValue(props.value)
-    if (!isEqual(value, newValue)) {
-      setValue(newValue)
-    }
-  }, [props.value])
+  const handleChange = (value: UrlSlugEntry[]): void => {
+    props.onChange?.(value)
+  }
 
   const validateSlug = (slug: string): boolean => {
     if (slug !== '') {
@@ -93,7 +83,7 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
 
     const newErrors = [...errors]
     newErrors[index] = !validateSlug(newSlug)
-    setValue(newValue)
+    handleChange(newValue)
     setErrors(newErrors)
   }
 
@@ -102,7 +92,7 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
   const remainingSitesMenuItems = remainingSites.map(site => ({
     key: site.id,
     label: site.domain,
-    onClick: () => { setValue([...value, { slug: '', siteId: site.id }]) }
+    onClick: () => { handleChange([...value, { slug: '', siteId: site.id }]) }
   }))
 
   const sortedValue = [...value].sort((a, b) => a.siteId === 0 ? -1 : 0)
@@ -159,7 +149,7 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
                 onClick={ () => {
                   const newValue = [...value]
                   newValue.splice(index, 1)
-                  setValue(newValue)
+                  handleChange(newValue)
                 } }
                 style={ { visibility: item.siteId === 0 ? 'hidden' : undefined } }
               />

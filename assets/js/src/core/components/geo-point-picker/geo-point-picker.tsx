@@ -8,7 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { isEqual } from 'lodash'
 import { type GeoMapAPI } from '@Pimcore/components/geo-map/geo-map'
 import { GeoPointPickerFooter } from '@Pimcore/components/geo-point-picker/footer'
 import { type GeoPoint } from '@Pimcore/components/geo-map/types/geo-types'
@@ -27,22 +28,27 @@ export interface GeoPointPickerProps {
 }
 
 export const GeoPointPicker = ({ ...props }: GeoPointPickerProps): React.JSX.Element => {
-  const [footerValue, setFooterValue] = React.useState<GeoPoint | undefined>(props.value ?? undefined)
-  const [mapValue, setMapValue] = React.useState<GeoPoint | undefined>(props.value ?? undefined)
+  const [mapValue, setMapValue] = useState<GeoPoint | undefined>(props.value ?? undefined)
   const geoMapRef = useRef<GeoMapAPI>(null)
 
-  const onChangeFooter = (newValue: GeoPoint): void => {
-    setFooterValue(newValue)
+  const handleChangeFooter = (newValue: GeoPoint): void => {
     setMapValue(newValue)
     props.onChange?.(newValue)
+
     const geoMapAPI = geoMapRef.current
     geoMapAPI?.forceRerender()
   }
 
-  const onChangeMap = (newValue: GeoPoint): void => {
-    setFooterValue(newValue)
+  const handleChangeMap = (newValue: GeoPoint): void => {
+    setMapValue(newValue)
     props.onChange?.(newValue)
   }
+
+  useEffect(() => {
+    if (!isEqual(mapValue, props.value)) {
+      setMapValue(props.value ?? undefined)
+    }
+  }, [props.value])
 
   return (
     <GeoMapCard
@@ -50,15 +56,15 @@ export const GeoPointPicker = ({ ...props }: GeoPointPickerProps): React.JSX.Ele
       disabled={ props.disabled }
       footer={ <GeoPointPickerFooter
         disabled={ props.disabled }
-        onChange={ onChangeFooter }
-        value={ footerValue }
+        onChange={ handleChangeFooter }
+        value={ mapValue }
                /> }
       height={ props.height }
       lat={ props.lat }
       lng={ props.lng }
       mapMode={ 'geoPoint' }
       mapValue={ mapValue }
-      onChangeMap={ onChangeMap }
+      onChangeMap={ handleChangeMap }
       ref={ geoMapRef }
       width={ props.width }
       zoom={ props.zoom }

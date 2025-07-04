@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { type GeoBounds, type GeoPoint } from '@Pimcore/components/geo-map/types/geo-types'
 import { GeoMapCardFooter } from '@Pimcore/components/geo-map/components/geo-map-card-footer/geo-map-card-footer'
 
@@ -19,24 +19,17 @@ export interface GeoBoundsDrawerFooterProps {
 }
 
 export const GeoBoundsDrawerFooter = (props: GeoBoundsDrawerFooterProps): React.JSX.Element => {
-  const [value, setValue] = React.useState<GeoBounds | undefined>(props.value)
-
-  const emptyValue = (): void => {
-    setValue(undefined)
+  const clearValue = (): void => {
     if (props.onChange !== undefined) {
       props.onChange(undefined)
     }
   }
 
-  useEffect(() => {
-    setValue(props.value)
-  }, [props.value])
-
   return (
     <GeoMapCardFooter
-      emptyValue={ emptyValue }
+      emptyValue={ clearValue }
       onSearch={ props.onSearch }
-      removeButtonDisabled={ value === undefined }
+      removeButtonDisabled={ props.value === undefined }
     />
   )
 }

@@ -12,7 +12,7 @@ import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimc
 import { api as baseApi } from './document-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.DOCUMENT, tagNames.DOCUMENT_TREE, tagNames.DOCUMENT_DETAIL],
+  addTagTypes: [tagNames.DOCUMENT, tagNames.DOCUMENT_TREE, tagNames.DOCUMENT_DETAIL, tagNames.DOCUMENT_TYPES],
   endpoints: {
 
     documentClone: {
@@ -25,6 +25,22 @@ const api = baseApi.enhanceEndpoints({
 
     documentGetTree: {
       providesTags: (result, error, args) => args.parentId !== undefined ? providingTags.DOCUMENT_TREE_ID(args.parentId) : providingTags.DOCUMENT_TREE()
+    },
+
+    documentDocTypeList: {
+      providesTags: (result, error, args) => providingTags.DOCUMENT_TYPES()
+    },
+
+    documentDocTypeDelete: {
+      invalidatesTags: () => []
+    },
+
+    documentDocTypeUpdateById: {
+      invalidatesTags: () => []
+    },
+
+    documentDocTypeAdd: {
+      invalidatesTags: () => []
     },
 
     documentUpdateById: {
@@ -44,7 +60,14 @@ export const {
   useDocumentCloneMutation,
   useDocumentGetByIdQuery,
   useDocumentUpdateByIdMutation,
-  useDocumentGetTreeQuery
+  useDocumentGetTreeQuery,
+  useDocumentAvailableTemplatesListQuery,
+  useDocumentDocTypeListQuery,
+  useDocumentDocTypeTypeListQuery,
+  useDocumentAvailableControllersListQuery,
+  useDocumentDocTypeAddMutation,
+  useDocumentDocTypeUpdateByIdMutation,
+  useDocumentDocTypeDeleteMutation
 } = api
 
 export { api }
