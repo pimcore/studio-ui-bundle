@@ -20,6 +20,7 @@ import { Model } from 'flexlayout-react'
 // Import draft fetcher functions directly
 import { documentReceived } from '../document-draft-slice'
 import { initialTabsStateValue } from '@Pimcore/modules/element/draft/hooks/use-tabs'
+import { isNil } from 'lodash'
 
 interface DocumentConfig {
   id: number
@@ -32,9 +33,10 @@ export class DocumentOpeningService {
   private isWidgetOpen (widgetId: string): boolean {
     const state = store.getState()
     const innerModel = (state as any)['widget-manager']?.innerModel
-    if (!innerModel) return false
+    if (isNil(innerModel)) return false
 
-    const model = Model.fromJson(innerModel)
+    // Type assertion for the Model.fromJson parameter
+    const model = Model.fromJson(innerModel as Parameters<typeof Model.fromJson>[0])
     return model.getNodeById(widgetId) !== undefined
   }
 
@@ -45,7 +47,7 @@ export class DocumentOpeningService {
   private async fetchAndStoreDocumentDraft (id: number): Promise<void> {
     const { data } = await store.dispatch(api.endpoints.documentGetById.initiate({ id }))
 
-    if (data) {
+    if (!isNil(data)) {
       const mergedDocumentData = {
         ...data,
         id,
@@ -72,7 +74,7 @@ export class DocumentOpeningService {
     store.dispatch(api.util.invalidateTags(invalidatingTags.DOCUMENT_DETAIL_ID(id)))
     const { data } = await store.dispatch(api.endpoints.documentGetById.initiate({ id }))
 
-    if (data === undefined || !checkElementPermission(data.permissions, 'view')) {
+    if (isNil(data) || !checkElementPermission(data.permissions, 'view')) {
       return
     }
 

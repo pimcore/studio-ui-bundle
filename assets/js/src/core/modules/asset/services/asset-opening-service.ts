@@ -16,10 +16,9 @@ import { getElementIcon } from '@Pimcore/modules/element/element-helper'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 import { openMainWidget, setActiveWidgetById } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { Model } from 'flexlayout-react'
-
-// Import draft fetcher functions directly
 import { assetReceived } from '../asset-draft-slice'
 import { initialTabsStateValue } from '@Pimcore/modules/element/draft/hooks/use-tabs'
+import { isNil } from 'lodash'
 
 interface AssetConfig {
   id: number
@@ -32,9 +31,10 @@ export class AssetOpeningService {
   private isWidgetOpen (widgetId: string): boolean {
     const state = store.getState()
     const innerModel = (state as any)['widget-manager']?.innerModel
-    if (!innerModel) return false
+    if (isNil(innerModel)) return false
 
-    const model = Model.fromJson(innerModel)
+    // Type assertion for the Model.fromJson parameter
+    const model = Model.fromJson(innerModel as Parameters<typeof Model.fromJson>[0])
     return model.getNodeById(widgetId) !== undefined
   }
 
@@ -45,7 +45,7 @@ export class AssetOpeningService {
   private async fetchAndStoreAssetDraft (id: number): Promise<void> {
     const { data } = await store.dispatch(api.endpoints.assetGetById.initiate({ id }))
 
-    if (data) {
+    if (!isNil(data)) {
       const mergedAssetData = {
         ...data,
         id,
@@ -78,7 +78,7 @@ export class AssetOpeningService {
     store.dispatch(api.util.invalidateTags(invalidatingTags.ASSET_DETAIL_ID(id)))
     const { data } = await store.dispatch(api.endpoints.assetGetById.initiate({ id }))
 
-    if (data === undefined || !checkElementPermission(data.permissions, 'view')) {
+    if (isNil(data) || !checkElementPermission(data.permissions, 'view')) {
       return
     }
 

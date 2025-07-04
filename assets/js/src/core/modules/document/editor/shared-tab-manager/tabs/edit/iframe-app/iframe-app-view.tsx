@@ -9,7 +9,7 @@
  */
 
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
-import React, { StrictMode, useEffect, useState } from 'react'
+import React, { StrictMode } from 'react'
 import { EditablesRenderer } from '../components/editables-renderer/editables-renderer'
 import { GlobalProvider } from '@Pimcore/modules/app/global-provider'
 import { DocumentProvider } from '@Pimcore/modules/document/document-provider'
@@ -27,7 +27,7 @@ export interface DocumentEditorIframeWindow extends Window {
 
 export const DocumentEditorIframeAppView = (): React.JSX.Element => {
   const editableDefinitions: AbstractDocumentEditableDefinition[] = (window as DocumentEditorIframeWindow).editableDefinitions ?? []
-  const { isInitialized, error } = useIframeI18nSetup()
+  const { isInitialized } = useIframeI18nSetup()
 
   // Extract document ID from URL parameters
   const urlParams = new URLSearchParams(window.location.search)

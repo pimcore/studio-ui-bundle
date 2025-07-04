@@ -20,6 +20,7 @@ import { Model } from 'flexlayout-react'
 // Import draft fetcher functions directly
 import { dataObjectReceived } from '../data-object-draft-slice'
 import { initialTabsStateValue } from '@Pimcore/modules/element/draft/hooks/use-tabs'
+import { isNil } from 'lodash'
 
 interface DataObjectConfig {
   id: number
@@ -32,9 +33,10 @@ export class DataObjectOpeningService {
   private isWidgetOpen (widgetId: string): boolean {
     const state = store.getState()
     const innerModel = (state as any)['widget-manager']?.innerModel
-    if (!innerModel) return false
+    if (isNil(innerModel)) return false
 
-    const model = Model.fromJson(innerModel)
+    // Type assertion for the Model.fromJson parameter
+    const model = Model.fromJson(innerModel as Parameters<typeof Model.fromJson>[0])
     return model.getNodeById(widgetId) !== undefined
   }
 
@@ -45,7 +47,7 @@ export class DataObjectOpeningService {
   private async fetchAndStoreDataObjectDraft (id: number): Promise<void> {
     const { data } = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id }))
 
-    if (data) {
+    if (!isNil(data)) {
       const mergedDataObjectData = {
         ...data,
         id,
@@ -73,7 +75,7 @@ export class DataObjectOpeningService {
     store.dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_DETAIL_ID(id)))
     const { data } = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id }))
 
-    if (data === undefined || !checkElementPermission(data.permissions, 'view')) {
+    if (isNil(data) || !checkElementPermission(data.permissions, 'view')) {
       return
     }
 

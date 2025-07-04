@@ -15,6 +15,7 @@ import { useUploadModalContext } from '@Pimcore/components/modal-upload/provider
 import { getApiGatewayHandler } from './registry/handler-registry'
 import { initializeHandlers } from './handlers'
 import { type ApiGatewayEventType } from './types/event-types'
+import { isUndefined } from 'lodash'
 
 /**
  * This component listens for various requests from the public API
@@ -38,7 +39,7 @@ export const ApiGateway = (): React.JSX.Element | null => {
         const eventType = type as ApiGatewayEventType
         const handler = getApiGatewayHandler(eventType)
 
-        if (handler) {
+        if (!isUndefined(handler)) {
           handler(payload, {
             elementSelectorHelper,
             uploadModalContext

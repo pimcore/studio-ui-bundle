@@ -12,6 +12,7 @@ import { App } from 'antd'
 import { useMemo } from 'react'
 import { isInIframe } from '@Pimcore/utils/iframe'
 import { isPimcoreStudioApiAvailable, getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
+import { isNil } from 'lodash'
 
 type ModalStaticFunctions = ReturnType<typeof App.useApp>['modal']
 
@@ -31,7 +32,7 @@ export function useStudioModal (): ModalStaticFunctions {
         const studioApi = getPimcoreStudioApi()
 
         // Check if the parent window has modal functionality available
-        if (studioApi.modal) {
+        if (!isNil(studioApi.modal)) {
           return studioApi.modal
         }
       } catch (error) {

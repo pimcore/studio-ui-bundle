@@ -30,7 +30,8 @@ export const returnKeyIfEmptyProcessor = {
       try {
         returnValue = JSON.stringify(returnValue)
       } catch (e) {
-        console.warn(`Translation key '${key}' with value '${value}' is not translatable`)
+        const keyString = Array.isArray(key) ? key[0] : key
+        console.warn(`Translation key '${keyString}' with value '${value}' is not translatable`)
         return Array.isArray(key) ? key[0] : key
       }
     }

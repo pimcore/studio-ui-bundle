@@ -9,6 +9,7 @@
  */
 
 import { type App } from 'antd'
+import { isNull } from 'lodash'
 
 type ModalStaticFunctions = ReturnType<typeof App.useApp>['modal']
 let modalInstance: ModalStaticFunctions | null = null
@@ -28,29 +29,29 @@ class ModalApiImpl implements ModalApi {
   }
 
   private getModalInstance (): ModalStaticFunctions {
-    if (!modalInstance) {
+    if (isNull(modalInstance)) {
       throw new Error('Modal instance not initialized. Make sure App.useApp() is called in the parent window.')
     }
     return modalInstance
   }
 
-  info = (props: Parameters<ModalStaticFunctions['info']>[0]) => {
+  info = (props: Parameters<ModalStaticFunctions['info']>[0]): ReturnType<ModalStaticFunctions['info']> => {
     return this.getModalInstance().info(props)
   }
 
-  success = (props: Parameters<ModalStaticFunctions['success']>[0]) => {
+  success = (props: Parameters<ModalStaticFunctions['success']>[0]): ReturnType<ModalStaticFunctions['success']> => {
     return this.getModalInstance().success(props)
   }
 
-  error = (props: Parameters<ModalStaticFunctions['error']>[0]) => {
+  error = (props: Parameters<ModalStaticFunctions['error']>[0]): ReturnType<ModalStaticFunctions['error']> => {
     return this.getModalInstance().error(props)
   }
 
-  warning = (props: Parameters<ModalStaticFunctions['warning']>[0]) => {
+  warning = (props: Parameters<ModalStaticFunctions['warning']>[0]): ReturnType<ModalStaticFunctions['warning']> => {
     return this.getModalInstance().warning(props)
   }
 
-  confirm = (props: Parameters<ModalStaticFunctions['confirm']>[0]) => {
+  confirm = (props: Parameters<ModalStaticFunctions['confirm']>[0]): ReturnType<ModalStaticFunctions['confirm']> => {
     return this.getModalInstance().confirm(props)
   }
 }

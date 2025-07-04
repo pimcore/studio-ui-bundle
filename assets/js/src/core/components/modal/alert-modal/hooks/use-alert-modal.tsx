@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { App, type ModalFuncProps } from 'antd'
+import { type ModalFuncProps } from 'antd'
 import type React from 'react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'

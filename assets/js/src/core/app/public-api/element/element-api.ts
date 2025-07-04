@@ -44,7 +44,8 @@ class ElementOpeningService {
         await this.openDataObject(config)
         break
       default:
-        console.warn(`Unknown element type: ${type}`)
+        console.warn(`Unknown element type: ${String(type)}`)
+        break
     }
   }
 }

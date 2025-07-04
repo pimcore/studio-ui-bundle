@@ -9,6 +9,7 @@
  */
 
 import i18n from '@Pimcore/app/i18n'
+import { isNil } from 'lodash'
 
 export interface I18nApi {
   getTranslationResources: () => Record<string, any>
@@ -22,11 +23,11 @@ class I18nApiImpl implements I18nApi {
     const resources: Record<string, any> = {}
 
     // Get all loaded language resources from i18n
-    const languages = i18n.languages || []
+    const languages = i18n.languages ?? []
 
     languages.forEach(language => {
       const resourceBundle = i18n.getResourceBundle(language, 'translation')
-      if (resourceBundle) {
+      if (!isNil(resourceBundle)) {
         resources[language] = resourceBundle
       }
     })
@@ -39,7 +40,8 @@ class I18nApiImpl implements I18nApi {
   }
 
   getFallbackLanguage (): string {
-    return i18n.options.fallbackLng as string || 'en'
+    const fallbackLng = i18n.options.fallbackLng as string
+    return fallbackLng !== '' ? fallbackLng : 'en'
   }
 
   reportMissingTranslation (key: string): void {
