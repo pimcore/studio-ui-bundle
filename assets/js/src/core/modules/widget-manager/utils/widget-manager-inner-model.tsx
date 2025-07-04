@@ -14,7 +14,8 @@ export const getInitialModelJson = (): IJsonModel => {
   return {
     global: {
       tabEnableRename: false,
-      tabSetEnableMaximize: false
+      tabSetEnableMaximize: false,
+      enableUseVisibility: true
     },
 
     layout: {
