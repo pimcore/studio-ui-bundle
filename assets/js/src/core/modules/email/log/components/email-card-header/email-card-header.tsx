@@ -8,16 +8,19 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { useAppDispatch } from '@Pimcore/app/store'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { type EmailLog, useEmailLogGetByIdQuery } from '@Pimcore/modules/email/emails-api-slice.gen'
-import React, { useState } from 'react'
-import { useEmailLog } from '../../hooks/use-email-log'
-import { useTranslation } from 'react-i18next'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { ForwardModal } from '../forward-modal/forward-modal'
+import { api } from '@Pimcore/modules/email/emails-api-slice-enhanced'
+import { type EmailLog, useEmailLogGetByIdQuery } from '@Pimcore/modules/email/emails-api-slice.gen'
 import { Text } from '@sdk/components'
 import { Divider } from 'antd'
 import { isNil } from 'lodash'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useEmailLog } from '../../hooks/use-email-log'
+import { ForwardModal } from '../forward-modal/forward-modal'
 
 interface EmailCardHeaderProps {
   email: EmailLog
@@ -28,6 +31,7 @@ export const EmailCardHeader = ({ email }: EmailCardHeaderProps): React.JSX.Elem
   const { resendWithConfirmation, removeWithConfirmation } = useEmailLog()
   const [isForwardModalOpen, setIsForwardModalOpen] = useState<boolean>(false)
   const { data } = useEmailLogGetByIdQuery({ id: email.id })
+  const dispatch = useAppDispatch()
 
   return (
     <Flex
@@ -60,25 +64,41 @@ export const EmailCardHeader = ({ email }: EmailCardHeaderProps): React.JSX.Elem
 
       <div>
         <IconButton
-          icon={ { value: 'vector' } }
-          onClick={ () => { resendWithConfirmation(email.id) } }
+          icon={{ value: 'vector' }}
+          onClick={() => {
+            resendWithConfirmation(email.id, () => {
+              dispatch(
+                api.util.invalidateTags(
+                  invalidatingTags.EMAIL_LOG()
+                )
+              )
+            })
+          }}
         />
 
         <IconButton
-          icon={ { value: 'flip-forward' } }
-          onClick={ () => { setIsForwardModalOpen(true) } }
+          icon={{ value: 'flip-forward' }}
+          onClick={() => { setIsForwardModalOpen(true) }}
         />
 
         <IconButton
-          icon={ { value: 'trash' } }
-          onClick={ () => { removeWithConfirmation(email.id) } }
+          icon={{ value: 'trash' }}
+          onClick={() => {
+            removeWithConfirmation(email.id, () => {
+              dispatch(
+                api.util.invalidateTags(
+                  invalidatingTags.EMAIL_LOG()
+                )
+              )
+            })
+          }}
         />
       </div>
 
       <ForwardModal
-        email={ email }
-        open={ isForwardModalOpen }
-        setOpen={ setIsForwardModalOpen }
+        email={email}
+        open={isForwardModalOpen}
+        setOpen={setIsForwardModalOpen}
       />
     </Flex>
   )
