@@ -12,13 +12,10 @@ import React from 'react'
 import { isUndefined } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { ReportChart } from '@Pimcore/modules/reports/components/report-chart/report-chart'
-import {
-  type CustomReportChartData,
-  useCustomReportsChartQuery,
-  useCustomReportsReportQuery
-} from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import { type CustomReportChartData } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
 
 interface IReportDetailProps {
   currentReport: string
@@ -27,15 +24,14 @@ interface IReportDetailProps {
 }
 
 export const ReportDetail = ({ currentReport, page, pageSize }: IReportDetailProps): React.JSX.Element => {
-  const { isLoading: isReportDetailLoading, data: reportDetailData } = useCustomReportsReportQuery({ name: currentReport })
-  const { isLoading: isChartDetailLoading, data: chartDetailData } = useCustomReportsChartQuery({ name: currentReport, page, pageSize })
+  const { isLoading, reportDetailData, chartDetailData } = useReportData({ name: currentReport, page, pageSize })
 
-  if (isReportDetailLoading && isChartDetailLoading) {
+  if (isLoading) {
     return <Content loading />
   }
 
   const isShowChart = !isEmptyValue(reportDetailData?.chartType)
-  const chartData: CustomReportChartData[] | undefined =
+  const chartData =
       !isUndefined(chartDetailData) && 'data' in chartDetailData
         ? chartDetailData.data as CustomReportChartData[]
         : undefined

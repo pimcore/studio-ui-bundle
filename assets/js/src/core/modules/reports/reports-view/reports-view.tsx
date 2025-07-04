@@ -23,6 +23,7 @@ import { Text } from '@Pimcore/components/text/text'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import { useStyles } from './reports-view.styles'
 import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
+import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
 
 export const ReportsView = (): React.JSX.Element => {
   const [page] = useState(1)
@@ -34,7 +35,8 @@ export const ReportsView = (): React.JSX.Element => {
   const [reportsTreeOptions, setReportsTreeOptions] = useState<Array<{ label: string, value: string }> | undefined>(undefined)
   const [currentReport, setCurrentReport] = useState<string | null>(null)
 
-  const { isLoading: isReportsTreeLoading, data: reportsTreeData, refetch, isFetching } = useCustomReportsGetTreeQuery({ page, pageSize })
+  const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page, pageSize })
+  const { refetchAll, isFetching } = useReportData({ name: currentReport ?? '', page, pageSize })
 
   const isCurrentReportSelected = !isEmptyValue(currentReport)
 
@@ -110,7 +112,7 @@ export const ReportsView = (): React.JSX.Element => {
           <Toolbar>
             <Refetch
               isFetching={ isFetching }
-              refetch={ refetch }
+              refetch={ refetchAll }
             />
           </Toolbar>
         ) }
