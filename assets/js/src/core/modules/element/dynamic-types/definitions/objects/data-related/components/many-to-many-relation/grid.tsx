@@ -69,7 +69,7 @@ export const getElementCellConfig = (disabled?: boolean): ElementCellConfig => {
 
 export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid (props: ManyToManyRelationGridProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { getStateClasses } = useDroppable()
-  const modal = useFormModal()
+  const { confirm } = useFormModal()
   const { openElement, mapToElementType } = useElementHelper()
   const { t } = useTranslation()
   const { download } = useDownload()
@@ -167,7 +167,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
               <IconButton
                 icon={ { value: 'trash' } }
                 onClick={ () => {
-                  modal.confirm({
+                  confirm({
                     title: t('remove'),
                     content: t('delete-confirmation-advanced', {
                       type: t('relation'),
