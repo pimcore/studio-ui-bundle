@@ -17,6 +17,8 @@ interface IframeDocumentEditorReference {
   documentId: number
   contentWindow: Window
   iframeRef: React.RefObject<IframeRef>
+  isReady: boolean
+  readyCallbacks: Array<() => void>
 }
 
 class IframeDocumentEditorRegistry {
@@ -31,7 +33,9 @@ class IframeDocumentEditorRegistry {
       iframe,
       documentId,
       contentWindow: iframe.contentWindow,
-      iframeRef
+      iframeRef,
+      isReady: false,
+      readyCallbacks: []
     })
   }
 
@@ -71,6 +75,56 @@ class IframeDocumentEditorRegistry {
 
   getIframeRef (documentId: number): React.RefObject<IframeRef> | undefined {
     return this.iframes.get(documentId)?.iframeRef
+  }
+
+  /**
+   * Mark an iframe as ready and execute any pending callbacks
+   */
+  markAsReady (documentId: number): void {
+    const reference = this.iframes.get(documentId)
+    if (reference && !reference.isReady) {
+      reference.isReady = true
+      // Execute all pending callbacks
+      reference.readyCallbacks.forEach(callback => {
+        try {
+          callback()
+        } catch (error) {
+          console.error(`Error executing ready callback for document ${documentId}:`, error)
+        }
+      })
+      // Clear callbacks after execution
+      reference.readyCallbacks.length = 0
+    }
+  }
+
+  /**
+   * Check if an iframe is ready
+   */
+  isIframeReady (documentId: number): boolean {
+    return this.iframes.get(documentId)?.isReady ?? false
+  }
+
+  /**
+   * Register a callback to be executed when the iframe is ready
+   * If already ready, executes immediately
+   */
+  onReady (documentId: number, callback: () => void): void {
+    const reference = this.iframes.get(documentId)
+    if (!reference) {
+      throw new Error(`No iframe found for document ID ${documentId}`)
+    }
+
+    if (reference.isReady) {
+      // Already ready, execute immediately
+      try {
+        callback()
+      } catch (error) {
+        console.error(`Error executing immediate ready callback for document ${documentId}:`, error)
+      }
+    } else {
+      // Not ready yet, add to pending callbacks
+      reference.readyCallbacks.push(callback)
+    }
   }
 }
 

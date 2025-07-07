@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useCallback, useContext } from 'react'
+import { useCallback, useContext, useRef } from 'react'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { type ValueType } from '@Pimcore/app/public-api/document-editor-iframe/editable-data/editable-data'
@@ -19,10 +19,12 @@ export interface DocumentEditorContextProps {
   getValues: () => Record<string, ValueType>
   getValue: (key: string) => ValueType
   initializeData: (data: Record<string, ValueType>) => void
+  notifyReady: () => void
 }
 
 export const useDocumentEditor = (): DocumentEditorContextProps => {
   const { id } = useContext(DocumentContext)
+  const readyNotified = useRef(false)
 
   const getDocumentEditableApi = useCallback(() => {
     const documentEditableApi = window.PimcoreDocumentEditor?.documentEditable
@@ -73,11 +75,24 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
     api.initializeValues(data)
   }, [getDocumentEditableApi])
 
+  const notifyReady = useCallback((): void => {
+    if (!readyNotified.current) {
+      try {
+        const { document: documentApi } = getPimcoreStudioApi()
+        documentApi.notifyIframeReady(id)
+        readyNotified.current = true
+      } catch (error) {
+        console.warn('Could not notify parent window that iframe is ready:', error)
+      }
+    }
+  }, [id])
+
   return {
     updateValue,
     updateValueWithReload,
     getValues,
     getValue,
-    initializeData
+    initializeData,
+    notifyReady
   }
 }

@@ -13,9 +13,10 @@ import { createStyles } from 'antd-style'
 interface StylesProps {
   isLoaded: boolean
   isReloading: boolean
+  isActuallyLoading?: boolean
 }
 
-export const useStyle = createStyles(({ css, token }, props: StylesProps) => {
+export const useStyle = createStyles(({ css, token }, props: StylesProps & { useExternalReadyState?: boolean }) => {
   return {
     iframeContainer: css`
       width: 100%;
@@ -27,8 +28,10 @@ export const useStyle = createStyles(({ css, token }, props: StylesProps) => {
       width: 100%;
       height: 100%;
       border: none;
-      display: ${props.isLoaded ? 'block' : 'none'};
-      pointer-events: ${props.isReloading ? 'none' : 'auto'};
+      display: ${props.useExternalReadyState 
+        ? (props.isLoaded && !props.isActuallyLoading ? 'block' : 'none') 
+        : (props.isLoaded ? 'block' : 'none')};
+      pointer-events: ${props.isReloading || (props.useExternalReadyState && !props.isLoaded) ? 'none' : 'auto'};
     `,
 
     loadingOverlay: css`
@@ -37,8 +40,8 @@ export const useStyle = createStyles(({ css, token }, props: StylesProps) => {
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: ${props.isReloading ? 'rgba(255, 255, 255, 0.7)' : 'transparent'};
-      backdrop-filter: ${props.isReloading ? 'blur(2px)' : 'none'};
+      background-color: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(1px);
       display: flex;
       align-items: center;
       justify-content: center;

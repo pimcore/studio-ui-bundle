@@ -24,6 +24,8 @@ export interface DocumentApi {
   unregisterIframe: (documentId: number) => void
   triggerValueChange: (documentId: number, key: string, value: any) => void
   triggerValueChangeWithReload: (documentId: number, key: string, value: any) => void
+  notifyIframeReady: (documentId: number) => void
+  isIframeReady: (documentId: number) => boolean
 }
 
 class DocumentApiImpl implements DocumentApi {
@@ -47,6 +49,12 @@ class DocumentApiImpl implements DocumentApi {
     this.autoSaveCallbacks.set(documentId, debounce(async () => {
       await this.performAutoSave(documentId)
     }, 800))
+
+    // Automatically set up ready state notification when iframe becomes ready
+    iframeDocumentEditorRegistry.onReady(documentId, () => {
+      // Notify the iframe component that it's ready
+      iframeRef.current?.setReady(true)
+    })
   }
 
   unregisterIframe (documentId: number): void {
@@ -65,6 +73,14 @@ class DocumentApiImpl implements DocumentApi {
 
     // Perform immediate auto-save without debounce, then reload
     this.performAutoSaveAndReload(documentId)
+  }
+
+  notifyIframeReady (documentId: number): void {
+    iframeDocumentEditorRegistry.markAsReady(documentId)
+  }
+
+  isIframeReady (documentId: number): boolean {
+    return iframeDocumentEditorRegistry.isIframeReady(documentId)
   }
 
   private async performAutoSave (documentId: number): Promise<void> {

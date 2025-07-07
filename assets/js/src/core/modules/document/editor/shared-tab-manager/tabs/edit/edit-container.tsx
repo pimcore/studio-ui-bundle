@@ -52,6 +52,8 @@ export const EditContainer = (): React.JSX.Element => {
       ref={ iframeRef }
       src={ `${documentDraft?.fullPath}?pimcore_editmode=true&pimcore_studio=true&documentId=${id}` }
       title={ `${t('edit.label')}-${id}` }
+      useExternalReadyState={ true }
+      preserveScrollOnReload={ true }
     />
   )
 }
