@@ -9,6 +9,7 @@ error.error_invalid_argument: Invalid argument
 error.error_widget_name_missing: Widget name have to be provided
 error.error_widget_name_invalid: Widget name is invalid (only alphanumeric characters, underscores and spaces are allowed, must be at least 3 characters long and less than 80 long)
 error.error_validation_failed: Validation failed
+error.error_validation.email_failed: Please enter a valid email address
 error.error_element_not_found: Element not found
 sidebar.selected_elements: Selected Elements
 sidebar.grid_config: Grid config
@@ -849,6 +850,28 @@ email-blocklist.add.label: Add Email Address
 email-blocklist.add.email-address.label: Email Address
 email-blocklist.add.email.success: Email address has been added successfully
 aria.email-blocklist.remove.email: Remove email address
+navigation.email-log: Sent Emails
+widget.email-log: Sent Emails
+widget.email-log.from: From
+widget.email-log.to: To
+widget.email-log.cc: CC
+widget.email-log.bcc: BCC
+widget.email-log.tab.text: Text
+widget.email-log.tab.html: HTML
+widget.email-log.tab.parameters: Parameters
+widget.email-log.grid.name: Name
+widget.email-log.grid.value: Value
+email-log.subject: Subject
+email-log.resend.email.success: Email has been resent successfully
+email-log.resend.confirmation.title: Resend Email
+email-log.resend.confirmation.text: Please confirm that you want to send the email again to all recipients.
+email-log.resend.confirmation.ok: Resend Email
+email-log.forward.email.success: Email has been forwarded successfully
+email-log.forward.label: Forward Email
+email-log.send.label: Send
+email-log.forward.email-address.label: Email Address
+email-log.delete.email.success: Email has been deleted successfully
+aria.email-log.html.preview: HTML Preview
 user-profile.label: My Profile
 user-profile.general: General Data
 user-profile.change-password: Change Password

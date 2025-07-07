@@ -13,6 +13,7 @@ import { initReactI18next } from 'react-i18next'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { addMissingTranslation } from './store/missingTranslations.slice'
 import { store } from '../store'
+import { returnKeyIfEmptyProcessor } from './utils/post-processors'
 
 export const FALLBACK_LANGUAGE = 'en'
 
@@ -31,33 +32,7 @@ i18n
     trackError(new GeneralError('Could not load translations'))
   })
 
-i18n.use({
-  type: 'postProcessor',
-  name: 'returnKeyIfEmpty',
-  process (value, key, options, translator) {
-    let returnValue = value
-
-    if (value === '') {
-      returnValue = key
-
-      if (Array.isArray(key)) {
-        returnValue = key[0]
-      }
-    }
-
-    if (typeof returnValue !== 'string') {
-      try {
-        returnValue = JSON.stringify(returnValue)
-      } catch (e) {
-        throw new Error(`Translation key '${key}' with value '${value}' is not translatable. Error in i18n postProcessor: ${e}`)
-      }
-
-      console.warn('Malformed translation key detected:', key, value)
-    }
-
-    return returnValue
-  }
-})
+i18n.use(returnKeyIfEmptyProcessor)
 
 i18n.on('missingKey', (lngs, namespace, key, res) => {
   store.dispatch(addMissingTranslation(key))

@@ -43,6 +43,12 @@ import { DefaultCell } from './columns/default-cell'
 import { GridRow } from './grid-cell/grid-row'
 import { useStyles } from './grid.styles'
 import { Resizer } from './resizer/resizer'
+import {
+  SortableContext,
+  verticalListSortingStrategy
+} from '@dnd-kit/sortable'
+import { DndContext, PointerSensor, closestCenter, useSensor, useSensors } from '@dnd-kit/core'
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 
 export interface ColumnMetaType {
   editable?: boolean
@@ -90,6 +96,8 @@ export const Grid = ({
   enableRowSelection = false,
   selectedRows = {},
   disabled = false,
+  enableRowDrag,
+  handleDragEnd,
   ...props
 }: GridProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -104,6 +112,8 @@ export const Grid = ({
   const memoModifiedCells = useMemo(() => { return modifiedCells ?? [] }, [JSON.stringify(modifiedCells)])
   const autoColumnRef = useRef<HTMLTableCellElement>(null)
   const gridCellRegistry = useInjection<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/GridCellRegistry'])
+
+  const sensors = useSensors(useSensor(PointerSensor))
 
   useEffect(() => {
     onActiveCellChange?.(activeCell)
@@ -256,6 +266,24 @@ export const Grid = ({
     </div>
   )
 
+  const renderRows = (): React.JSX.Element[] => {
+    return table.getRowModel().rows.map(row => (
+      <GridRow
+        activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell.columnId : undefined }
+        columns={ columns }
+        contextMenu={ props.contextMenu }
+        enableRowDrag={ enableRowDrag }
+        isSelected={ row.getIsSelected() }
+        key={ row.id }
+        modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
+        onFocusCell={ onFocusCell }
+        onRowDoubleClick={ props.onRowDoubleClick }
+        row={ row }
+        tableElement={ tableElement }
+      />
+    ))
+  }
+
   return useMemo(() => (
     <div className={ cn('ant-table-wrapper', hashId, styles.grid, props.className, { [styles.disabledGrid]: disabled }) }>
       <div className="ant-table ant-table-small">
@@ -322,20 +350,25 @@ export const Grid = ({
                     </td>
                   </tr>
                 )}
-                {table.getRowModel().rows.map(row => (
-                  <GridRow
-                    activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell.columnId : undefined }
-                    columns={ columns }
-                    contextMenu={ props.contextMenu }
-                    isSelected={ row.getIsSelected() }
-                    key={ row.id }
-                    modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
-                    onFocusCell={ onFocusCell }
-                    onRowDoubleClick={ props.onRowDoubleClick }
-                    row={ row }
-                    tableElement={ tableElement }
-                  />
-                ))}
+                {enableRowDrag === true
+                  ? (
+                    <DndContext
+                      autoScroll={ false }
+                      collisionDetection={ closestCenter }
+                      modifiers={ [restrictToVerticalAxis] }
+                      onDragEnd={ handleDragEnd }
+                      sensors={ sensors }
+                    >
+                      <SortableContext
+                        items={ table.getRowModel().rows.map(item => item.id) }
+                        strategy={ verticalListSortingStrategy }
+                      >
+                        {renderRows()}
+                      </SortableContext>
+                    </DndContext>
+                    )
+                  : renderRows()
+                }
               </tbody>
             </table>
           </div>

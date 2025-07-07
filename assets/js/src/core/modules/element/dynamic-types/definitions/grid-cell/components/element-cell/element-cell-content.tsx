@@ -45,7 +45,7 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
 
     if (isPlainObject(value)) {
       const element: ElementReference = value as ElementReference
-      const elementType = mapToElementType(String(element.type))
+      const elementType = mapToElementType(String(element.elementType ?? element.type))
       return {
         elementType: elementType ?? undefined,
         id: element.id,
@@ -86,11 +86,11 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
         />
       )}
 
-      { props.dropDisabled !== true && (
-      <Icon
-        className={ styles.dropTargetIcon }
-        value={ 'drop-target' }
-      />
+      {props.dropDisabled !== true && (
+        <Icon
+          className={ styles.dropTargetIcon }
+          value={ 'drop-target' }
+        />
       )}
 
     </div>
