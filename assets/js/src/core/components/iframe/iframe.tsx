@@ -20,6 +20,7 @@ export interface IframeRef {
   setReloading: (loading: boolean) => void
   setReady: (ready: boolean) => void
   getIframeElement: () => HTMLIFrameElement | null
+  getElementRef: () => React.RefObject<HTMLIFrameElement>
 }
 
 interface IframeProps {
@@ -138,7 +139,10 @@ export const Iframe = forwardRef<IframeRef, IframeProps>(
           }
         }
       },
-      getIframeElement: () => iframeElement
+      getIframeElement: () => iframeElement,
+      getElementRef: () => ({
+        current: iframeElement
+      })
     }), [iframeElement, onReloadStart, onReloadEnd, onReady, isReloading, useExternalReadyState, savedScrollPosition, preserveScrollOnReload])
 
     const handleIframeLoad = (): void => {
