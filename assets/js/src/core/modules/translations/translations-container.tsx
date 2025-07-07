@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Title } from '@Pimcore/components/title/title'
 import { t } from 'i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -16,46 +16,43 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
-import { Table } from './table/table'
 import { Box, IconTextButton, SearchInput } from '@sdk/components'
-import { type PropertyGetCollectionApiArg, usePropertyGetCollectionQuery } from '../element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
 import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
-import { type PredefinedPropertyRow, usePredefinedProperty } from './hooks/use-predefined-property'
 import { isUndefined } from 'lodash'
+import { TranslationGetCollectionApiArg, useTranslationGetCollectionQuery } from '../app/translations/translations-api-slice.gen'
+import { useTranslation } from './hooks/use-translation'
+
+export type TranslationRow = { 
+  locale: string
+  key: string
+  value: string
+  rowId: string }
 
 export const PredefinedPropertiesContainer = (): React.JSX.Element => {
-  const { createNewProperty, createLoading } = usePredefinedProperty()
+  const { createNewTranslation, createLoading } = useTranslation()
 
-  const [filter, setFilter] = useState<string>('')
+  // const [filter, setFilter] = useState<string>('')
 
-  const queryArgs: PropertyGetCollectionApiArg = useMemo(() => ({ filter }), [filter])
+  const queryArgs: TranslationGetCollectionApiArg = { translation: {locale: "en", keys: [], useFallback: false} }
 
-  const { data, isLoading: predefinedPropertiesLoading, isFetching: predefinedPropertiesFetching, error, refetch } = usePropertyGetCollectionQuery(queryArgs)
+  const { data, isLoading: translationsLoading, isFetching: translationsFetching, error } = useTranslationGetCollectionQuery(queryArgs)
 
-  const handleRefetch = (): void => {
-    void refetch().catch(() => {
-      trackError(new GeneralError('Error while reloading'))
-    })
-  }
+  const [translationRows, setTranslationRows] = useState<TranslationRow[]>([])
 
-  useEffect(() => {
-    handleRefetch()
-  }, [])
+  const locale = data?.locale
+  const keys = data?.keys
 
-  const [predefinedPropertyRows, setPredefinedPropertyRows] = useState<PredefinedPropertyRow[]>([])
+  console.log("data", data);
+  
+  const sortedRows = [...translationRows].sort((a, b) => a.key.localeCompare(b.key, "en", { sensitivity: 'base' }))
 
-  const predefinedProperties = data?.items
-
-  const sortedRows = [...predefinedPropertyRows].sort((a, b) => b.creationDate - a.creationDate)
-
-  useEffect(() => {
-    if (!isUndefined(predefinedProperties)) {
-      setPredefinedPropertyRows(
-        predefinedProperties.map(item => ({ ...item, rowId: uuid() }))
-      )
-    }
-  }, [predefinedProperties])
+  // useEffect(() => {
+  //     setTranslationRows(
+  //       data.keys.map(translation => ({ locale: data.locale, key: translation.key, rowId: uuid() }))
+  //     )
+  //   }
+  // }, [predefinedProperties])
 
   useEffect(() => {
     if (!isUndefined(error)) {
@@ -63,10 +60,10 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
     }
   }, [error])
 
-  const onCreateProperty = async (): Promise<void> => {
-    const { success, data } = await createNewProperty()
+  const onCreateTranslation = async (): Promise<void> => {
+    const { success, data } = await createNewTranslation()
     if (success && data !== undefined) {
-      setPredefinedPropertyRows(prev =>
+      setTranslationRows(prev =>
         [
           { ...data, rowId: uuid() },
           ...prev
@@ -80,9 +77,9 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme="secondary">
           <IconButton
-            disabled={ predefinedPropertiesFetching }
+            disabled={ translationsFetching }
             icon={ { value: 'refresh' } }
-            onClick={ handleRefetch }
+            onClick={ () => alert("refetch") }
           />
         </Toolbar> }
       renderTopBar={
@@ -97,16 +94,16 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
           <Flex gap={ 'small' }>
             <Title>{t('widget.predefined-properties')}</Title>
             <IconTextButton
-              disabled={ predefinedPropertiesLoading || createLoading }
+              disabled={ translationsLoading || createLoading }
               icon={ { value: 'new' } }
               loading={ createLoading }
-              onClick={ onCreateProperty }
+              onClick={ onCreateTranslation }
             >{t('predefined-properties.new')}</IconTextButton>
           </Flex>
           <SearchInput
-            loading={ predefinedPropertiesFetching }
+            loading={ translationsFetching }
             onSearch={ (value) => {
-              setFilter(value)
+              console.log({value})
             } }
             placeholder="Search"
             withPrefix={ false }
@@ -116,12 +113,12 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
         }
     >
       <Content
-        loading={ predefinedPropertiesLoading || predefinedPropertiesFetching }
+        loading={ translationsLoading || translationsFetching }
         margin={ {
           x: 'extra-small',
           y: 'none'
         } }
-        none={ isUndefined(predefinedProperties) || predefinedProperties.length === 0 }
+        none={ isUndefined(data) || data.keys.length === 0 }
       >
         <Box
           margin={ {
@@ -129,10 +126,10 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
             y: 'none'
           } }
         >
-          <Table
-            predefinedPropertyRows={ sortedRows }
-            setPredefinedPropertyRows={ setPredefinedPropertyRows }
-          />
+          {/* <Table
+            translationRows={ sortedRows }
+            setTranslationRows={ setTranslationRows }
+          /> */}
         </Box>
       </Content>
     </ContentLayout>
