@@ -15,7 +15,7 @@ import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/eleme
 import { serviceIds, useInjection } from '@sdk/app'
 import { isNil, isUndefined } from 'lodash'
 import { defaultFieldWidthValues, FieldWidthProvider } from '@sdk/modules/element'
-import { useDocumentEditor } from '../../provider/use-document-editor'
+import { useDocumentEditor } from '../../hooks/use-document-editor'
 interface RenderEditableProps {
   editableDefinition: AbstractDocumentEditableDefinition
 }
@@ -32,7 +32,7 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
     }
   }
 
-  const [localValue, setLocalValue] = useState(getValue(editableDefinition.name))
+  const [localValue, setLocalValue] = useState(getValue(editableDefinition.name).data)
 
   const renderEditableComponent = useMemo((): React.ReactElement => {
     if (isNil(editableType)) {
@@ -45,7 +45,7 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
         value: localValue,
         onChange: (newValue) => {
           setLocalValue(newValue)
-          updateValue(editableDefinition.name, newValue)
+          updateValue(editableDefinition.name, { type: editableDefinition.type, data: newValue })
         }
       }
     )

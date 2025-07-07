@@ -9,7 +9,7 @@
  */
 
 import React, { type ReactElement } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { isUndefined } from 'lodash'
 import { Tooltip } from 'antd'
@@ -138,14 +138,11 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
                 onClick={ () => {
                   confirm({
                     title: t('remove'),
-                    content: <Trans
-                      i18nKey={ 'delete-confirmation-advanced' }
-                      shouldUnescape
-                      values={ {
-                        type: t('relation'),
-                        value: rowValue.fullPath
-                      } }
-                             />,
+                    content: t('delete-confirmation-advanced', {
+                      type: t('relation'),
+                      value: rowValue.fullPath,
+                      interpolation: { escapeValue: false }
+                    }),
                     onOk: () => {
                       props.deleteItem(rowIndex)
                     }
