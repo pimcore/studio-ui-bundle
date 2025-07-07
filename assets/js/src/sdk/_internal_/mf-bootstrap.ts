@@ -11,7 +11,7 @@
 import '@Pimcore/bootstrap'
 import { runApp } from '@Pimcore/modules/app/utils/app-runner'
 import { pluginSystem } from '@Pimcore/app/plugin-system/plugin-system'
-import { type Pimcore } from '@Pimcore/app/public-api'
+import { type Pimcore, PimcoreStudio, type PimcoreStudioApi } from '@Pimcore/app/public-api'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 
 if (module.hot !== undefined) {
@@ -21,11 +21,13 @@ if (module.hot !== undefined) {
 declare global {
   interface Window {
     Pimcore: typeof Pimcore
+    PimcoreStudio: PimcoreStudioApi
     pluginRemotes: Record<string, string>
   }
 }
 
 window.Pimcore = (await import('@Pimcore/app/public-api')).Pimcore
+window.PimcoreStudio = PimcoreStudio
 
 window.addEventListener('load', async () => {
   await pluginSystem.loadPlugins()

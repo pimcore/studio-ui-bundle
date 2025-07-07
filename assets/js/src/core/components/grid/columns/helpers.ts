@@ -11,6 +11,10 @@
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 
 export const addColumnConfig = (props: DefaultCellProps, config: object): DefaultCellProps => {
+  return addColumnMeta(props, { config })
+}
+
+export const addColumnMeta = (props: DefaultCellProps, meta: object): DefaultCellProps => {
   return {
     ...props,
     column: {
@@ -19,7 +23,7 @@ export const addColumnConfig = (props: DefaultCellProps, config: object): Defaul
         ...props.column.columnDef,
         meta: {
           ...props.column.columnDef.meta,
-          config
+          ...meta
         }
       }
     }

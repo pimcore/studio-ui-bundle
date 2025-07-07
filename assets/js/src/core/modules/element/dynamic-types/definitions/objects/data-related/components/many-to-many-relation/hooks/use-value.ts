@@ -27,6 +27,7 @@ interface UseValueReturn {
   onDrop: (info: DragAndDropInfo) => void
   deleteItem: (rowIndex: number) => void
   onSearch: (searchTerm: string) => void
+  onOrderChange: (data: ManyToManyRelationValue) => void
   addItems: (items: ManyToManyRelationValueItem[]) => void
   addAssets: (assets: Asset[]) => Promise<void>
   maxRemainingItems?: number
@@ -151,12 +152,18 @@ export const useValue = (
     addItems(items)
   }
 
+  const onOrderChange = (data: ManyToManyRelationValue): void => {
+    setValue(data)
+    setDisplayedValue(data)
+  }
+
   const maxRemainingItems = maxItems === null ? undefined : Math.max(maxItems - (value?.length ?? 0), 0)
 
   return {
     onDrop,
     deleteItem,
     onSearch,
+    onOrderChange,
     addItems,
     addAssets,
     maxRemainingItems

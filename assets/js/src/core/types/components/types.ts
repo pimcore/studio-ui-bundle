@@ -12,6 +12,7 @@ import type { ColumnDef, RowSelectionState, SortingState, TableOptions } from '@
 import { type GridCellReference, type GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { type ElementType } from 'react'
 import type React from 'react'
+import type { DragEndEvent } from '@dnd-kit/core'
 
 type GapStringType = 'mini' | 'extra-small' | 'small' | 'normal' | 'medium' | 'large' | 'extra-large' | 'maxi'
 export interface GapRowColGroupType { x: GapStringType | number, y: GapStringType | number }
@@ -61,4 +62,6 @@ export interface GridProps {
   disabled?: boolean
   className?: string
   onRowDoubleClick?: (row: any) => void
+  enableRowDrag?: boolean
+  handleDragEnd?: (event: DragEndEvent) => void
 }

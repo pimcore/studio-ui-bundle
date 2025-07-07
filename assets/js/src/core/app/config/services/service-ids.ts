@@ -205,7 +205,7 @@ export const serviceIds = {
   'DynamicTypes/DocumentEditable/Image': 'DynamicTypes/DocumentEditable/Image',
   'DynamicTypes/DocumentEditable/Input': 'DynamicTypes/DocumentEditable/Input',
   'DynamicTypes/DocumentEditable/Link': 'DynamicTypes/DocumentEditable/Link',
-  'DynamicTypes/DocumentEditable/Multiselect': 'DynamicTypes/DocumentEditable/Multiselect',
+  'DynamicTypes/DocumentEditable/MultiSelect': 'DynamicTypes/DocumentEditable/MultiSelect',
   'DynamicTypes/DocumentEditable/Numeric': 'DynamicTypes/DocumentEditable/Numeric',
   'DynamicTypes/DocumentEditable/Pdf': 'DynamicTypes/DocumentEditable/Pdf',
   'DynamicTypes/DocumentEditable/Relation': 'DynamicTypes/DocumentEditable/Relation',
