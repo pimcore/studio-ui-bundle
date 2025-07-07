@@ -13,11 +13,11 @@ import { useAppDispatch } from '@Pimcore/app/store'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
-import { api } from '@Pimcore/modules/email/emails-api-slice-enhanced'
+import { api, useEmailLogDeleteMutation } from '@Pimcore/modules/email/emails-api-slice-enhanced'
 import { isUndefined } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { type Blocklist2, type EmailLogDeleteApiArg, type EmailLogForwardByIdApiArg, type EmailLogResendByIdApiArg, useEmailLogDeleteMutation, useEmailLogForwardByIdMutation, useEmailLogResendByIdMutation } from '../../emails-api-slice.gen'
+import { type Blocklist2, type EmailLogDeleteApiArg, type EmailLogForwardByIdApiArg, type EmailLogResendByIdApiArg, useEmailLogForwardByIdMutation, useEmailLogResendByIdMutation } from '../../emails-api-slice.gen'
 
 interface UseEmailLogHookReturn {
   resendWithConfirmation: (id: EmailLogDeleteApiArg['id'], onFinish?: () => void) => void
