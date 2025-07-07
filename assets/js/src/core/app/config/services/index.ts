@@ -177,8 +177,10 @@ import { DynamicTypeDocumentEditableInput } from '@Pimcore/modules/element/dynam
 import { DynamicTypeDocumentEditableWysiwyg } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-wysiwyg'
 import { DynamicTypeFieldFilterCheckbox } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
 import { DynamicTypeFieldFilterTextArea } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/text-area/dynamic-type-field-filter-text-area'
-import { BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
 import { DynamicTypeDocumentEditableTextarea } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-textarea'
+import { DynamicTypeDocumentEditableMultiSelect } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-multiselect'
+import { DynamicTypeDocumentEditableSelect } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-select'
+import { BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -360,9 +362,11 @@ container.bind(serviceIds['DynamicTypes/ObjectData/ClassificationStore']).to(Dyn
 // Document editables
 container.bind(serviceIds['DynamicTypes/DocumentEditableRegistry']).to(DynamicTypeDocumentEditableRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Input']).to(DynamicTypeDocumentEditableInput).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/MultiSelect']).to(DynamicTypeDocumentEditableMultiSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Numeric']).to(DynamicTypeDocumentEditableNumeric).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Relation']).to(DynamicTypeDocumentEditableRelation).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Relations']).to(DynamicTypeDocumentEditableRelations).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Select']).to(DynamicTypeDocumentEditableSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Textarea']).to(DynamicTypeDocumentEditableTextarea).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Wysiwyg']).to(DynamicTypeDocumentEditableWysiwyg).inSingletonScope()
 
