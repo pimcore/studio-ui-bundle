@@ -21,7 +21,7 @@ interface RefetchProps {
 export const Refetch = ({ isFetching, refetch }: RefetchProps): React.JSX.Element => {
   if (isFetching) {
     return (
-      <Box padding={ { x: 'small' } }>
+      <Box padding={ { x: 'extra-small', y: 'extra-small' } }>
         <Spin />
       </Box>
     )

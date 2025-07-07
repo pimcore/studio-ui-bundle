@@ -10,9 +10,12 @@
 
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
-import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import {
+  type CustomReportChartData,
+  useCustomReportsGetTreeQuery
+} from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Select } from '@Pimcore/components/select/select'
@@ -24,10 +27,11 @@ import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-to
 import { useStyles } from './reports-view.styles'
 import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
 import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
+import { Pagination } from '@Pimcore/modules/reports/components/pagination/pagination'
 
 export const ReportsView = (): React.JSX.Element => {
-  const [page] = useState(1)
-  const [pageSize] = useState(10)
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
 
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -36,9 +40,13 @@ export const ReportsView = (): React.JSX.Element => {
   const [currentReport, setCurrentReport] = useState<string | null>(null)
 
   const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page, pageSize })
-  const { refetchAll, isFetching } = useReportData({ name: currentReport ?? '', page, pageSize })
+  const { refetchAll, isFetching, chartDetailData } = useReportData({ name: currentReport ?? '', page, pageSize })
 
   const isCurrentReportSelected = !isEmptyValue(currentReport)
+  const chartData =
+      !isUndefined(chartDetailData) && 'data' in chartDetailData
+        ? chartDetailData.data as CustomReportChartData[]
+        : undefined
 
   useEffect(() => {
     if (!isEmpty(reportsTreeData)) {
@@ -57,7 +65,22 @@ export const ReportsView = (): React.JSX.Element => {
       padding={ { top: 'extra-small', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
     >
       <ContentLayout
-        renderToolbar={ <div>Toolbar Bottom</div> }
+        renderToolbar={
+          <Toolbar
+            justify="flex-end"
+            theme="secondary"
+          >
+            {!isEmpty(chartData) && !isFetching && (
+              <Pagination
+                page={ page }
+                pageSize={ pageSize }
+                setPage={ setPage }
+                setPageSize={ setPageSize }
+                totalItems={ chartData!.length }
+              />
+            )}
+          </Toolbar>
+        }
         renderTopBar={
           <Toolbar
             padding={ { top: 'extra-small', bottom: 'extra-small', left: 'extra-small', right: 'extra-small' } }
