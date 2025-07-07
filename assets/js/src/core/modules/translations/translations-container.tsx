@@ -92,13 +92,13 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
           theme='secondary'
         >
           <Flex gap={ 'small' }>
-            <Title>{t('widget.predefined-properties')}</Title>
+            <Title>{t('widget.translations')}</Title>
             <IconTextButton
               disabled={ translationsLoading || createLoading }
               icon={ { value: 'new' } }
               loading={ createLoading }
               onClick={ onCreateTranslation }
-            >{t('predefined-properties.new')}</IconTextButton>
+            >{t('translations.new')}</IconTextButton>
           </Flex>
           <SearchInput
             loading={ translationsFetching }
