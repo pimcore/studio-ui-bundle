@@ -9,7 +9,7 @@
  */
 
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { RenderEditable } from './render-editable'
 import { isNull, isUndefined } from 'lodash'
@@ -25,7 +25,7 @@ export interface EditablesRendererProps {
 export const EditablesRenderer = ({ editableDefinitions }: EditablesRendererProps): React.JSX.Element => {
   const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
   const apiInitialized = useRef(false)
-  const { initializeData } = useDocumentEditor()
+  const { initializeData, notifyReady } = useDocumentEditor()
 
   const getInitialData = (editableDefinitions: AbstractDocumentEditableDefinition[]): Record<string, { type: string, data: any }> => {
     const initialData: Record<string, any> = {}
@@ -44,6 +44,13 @@ export const EditablesRenderer = ({ editableDefinitions }: EditablesRendererProp
     initializeData(getInitialData(editableDefinitions))
     apiInitialized.current = true
   }
+
+  // Notify parent that the iframe is ready after initialization
+  useEffect(() => {
+    if (apiInitialized.current) {
+      notifyReady()
+    }
+  }, [notifyReady])
 
   return (
     <>

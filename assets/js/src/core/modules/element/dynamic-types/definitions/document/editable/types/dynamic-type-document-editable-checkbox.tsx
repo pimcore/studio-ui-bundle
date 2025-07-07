@@ -20,6 +20,7 @@ export type CheckboxEditableDefinition = Omit<AbstractDocumentEditableDefinition
   config?: {
     label?: string
     class?: string
+    reload?: boolean
   }
 }
 
