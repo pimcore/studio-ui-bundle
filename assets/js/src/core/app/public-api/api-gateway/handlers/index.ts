@@ -17,9 +17,6 @@ export const initializeHandlers = (): void => {
   // Register all handlers here
   registerApiGatewayHandler(ApiGatewayEventType.openElementSelector, openElementSelectorHandler)
   registerApiGatewayHandler(ApiGatewayEventType.openUploadModal, openUploadModalHandler)
-
-  // Add more handlers as needed
-  // registerApiGatewayHandler(ApiGatewayEventType.ANOTHER_EVENT_TYPE, anotherHandler)
 }
 
 // Export all handlers for potential direct use

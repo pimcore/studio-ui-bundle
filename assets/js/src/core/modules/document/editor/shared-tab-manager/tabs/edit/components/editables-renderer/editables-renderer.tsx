@@ -16,7 +16,7 @@ import { isNull, isUndefined } from 'lodash'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { useDocumentEditor } from '../../provider/use-document-editor'
+import { useDocumentEditor } from '../../hooks/use-document-editor'
 
 export interface EditablesRendererProps {
   editableDefinitions: AbstractDocumentEditableDefinition[]

@@ -15,7 +15,7 @@ import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/eleme
 import { serviceIds, useInjection } from '@sdk/app'
 import { isNil, isUndefined } from 'lodash'
 import { defaultFieldWidthValues, FieldWidthProvider } from '@sdk/modules/element'
-import { useDocumentEditor } from '../../provider/use-document-editor'
+import { useDocumentEditor } from '../../hooks/use-document-editor'
 interface RenderEditableProps {
   editableDefinition: AbstractDocumentEditableDefinition
 }
