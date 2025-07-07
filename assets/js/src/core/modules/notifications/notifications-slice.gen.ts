@@ -33,13 +33,6 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/notifications/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Notifications"],
             }),
-            notificationGetUnreadCount: build.query<
-                NotificationGetUnreadCountApiResponse,
-                NotificationGetUnreadCountApiArg
-            >({
-                query: () => ({ url: `/pimcore-studio/api/notifications/unread-count` }),
-                providesTags: ["Notifications"],
-            }),
             notificationGetRecipients: build.query<
                 NotificationGetRecipientsApiResponse,
                 NotificationGetRecipientsApiArg
@@ -90,9 +83,6 @@ export type NotificationDeleteByIdApiArg = {
     /** Id of the notification */
     id: number;
 };
-export type NotificationGetUnreadCountApiResponse =
-    /** status 200 Count of unread notifications for the current user */ UnreadCount;
-export type NotificationGetUnreadCountApiArg = void;
 export type NotificationGetRecipientsApiResponse =
     /** status 200 List of notification recipients for the current user */ {
         totalItems: number;
@@ -145,10 +135,6 @@ export type Notification = NotificationListItem & {
     /** linked attachment fullPath */
     attachmentFullPath: string | null;
 };
-export type UnreadCount = {
-    /** Count of unread notifications */
-    unreadNotificationsCount: number;
-};
 export type Recipient = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -177,7 +163,6 @@ export const {
     useNotificationGetByIdQuery,
     useNotificationReadByIdMutation,
     useNotificationDeleteByIdMutation,
-    useNotificationGetUnreadCountQuery,
     useNotificationGetRecipientsQuery,
     useNotificationSendMutation,
 } = injectedRtkApi;

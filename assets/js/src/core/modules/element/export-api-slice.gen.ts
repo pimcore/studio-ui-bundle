@@ -259,7 +259,7 @@ export type AdvancedColumnConfig = {
 };
 export type GridColumnRequest = {
     /** Key */
-    key?: string;
+    key: string;
     /** Locale */
     locale?: string | null;
     /** Type */
@@ -267,7 +267,7 @@ export type GridColumnRequest = {
     /** Group */
     group?: string | null;
     /** Config */
-    config?: (string | AdvancedColumnConfig)[];
+    config: (string | AdvancedColumnConfig)[];
 };
 export type GridFilter = {
     /** Page */
