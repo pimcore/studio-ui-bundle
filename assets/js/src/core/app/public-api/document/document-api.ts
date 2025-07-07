@@ -14,14 +14,16 @@ import { iframeDocumentEditorRegistry } from './iframe-registry'
 import { documentSaveService, SaveTaskType } from '@Pimcore/modules/document/services'
 import { debounce } from 'lodash'
 import { type PublicApiDocumentEditorIframe } from '../document-editor-iframe'
+import { type IframeRef } from '@Pimcore/components/iframe/iframe'
 
 export interface DocumentApi {
   markDraftAsModified: (documentId: number) => void
   getIframeApi: (documentId: number) => PublicApiDocumentEditorIframe
   isIframeAvailable: (documentId: number) => boolean
-  registerIframe: (documentId: number, iframe: HTMLIFrameElement) => void
+  registerIframe: (documentId: number, iframe: HTMLIFrameElement, iframeRef: React.RefObject<IframeRef>) => void
   unregisterIframe: (documentId: number) => void
   triggerValueChange: (documentId: number, key: string, value: any) => void
+  triggerValueChangeWithReload: (documentId: number, key: string, value: any) => void
 }
 
 class DocumentApiImpl implements DocumentApi {
@@ -39,8 +41,8 @@ class DocumentApiImpl implements DocumentApi {
     return iframeDocumentEditorRegistry.isIframeRegistered(documentId)
   }
 
-  registerIframe (documentId: number, iframe: HTMLIFrameElement): void {
-    iframeDocumentEditorRegistry.register(documentId, iframe)
+  registerIframe (documentId: number, iframe: HTMLIFrameElement, iframeRef: React.RefObject<IframeRef>): void {
+    iframeDocumentEditorRegistry.register(documentId, iframe, iframeRef)
 
     this.autoSaveCallbacks.set(documentId, debounce(async () => {
       await this.performAutoSave(documentId)
@@ -58,11 +60,49 @@ class DocumentApiImpl implements DocumentApi {
     this.autoSaveCallbacks.get(documentId)?.()
   }
 
+  triggerValueChangeWithReload (documentId: number, key: string, value: any): void {
+    this.markDraftAsModified(documentId)
+
+    // Perform immediate auto-save without debounce, then reload
+    this.performAutoSaveAndReload(documentId)
+  }
+
   private async performAutoSave (documentId: number): Promise<void> {
     try {
       await documentSaveService.saveDocument(documentId, SaveTaskType.AutoSave)
     } catch (error) {
       console.error(`Auto-save failed for document ${documentId}:`, error)
+    }
+  }
+
+  private async performAutoSaveAndReload (documentId: number): Promise<void> {
+    try {
+      // Get the iframe ref to trigger loading state
+      const iframeRef = iframeDocumentEditorRegistry.getIframeRef(documentId)
+      if (iframeRef?.current) {
+        iframeRef.current.setReloading(true)
+      }
+
+      await documentSaveService.saveDocument(documentId, SaveTaskType.AutoSave)
+      
+      // Use the iframe ref's reload method instead of direct src manipulation
+      if (iframeRef?.current) {
+        iframeRef.current.reload()
+      } else {
+        // Fallback to direct iframe manipulation if ref not available
+        const iframe = iframeDocumentEditorRegistry.getIframe(documentId)
+        if (iframe) {
+          const currentSrc = iframe.src
+          iframe.src = currentSrc
+        }
+      }
+    } catch (error) {
+      console.error(`Auto-save and reload failed for document ${documentId}:`, error)
+      // Reset loading state on error
+      const iframeRef = iframeDocumentEditorRegistry.getIframeRef(documentId)
+      if (iframeRef?.current) {
+        iframeRef.current.setReloading(false)
+      }
     }
   }
 }

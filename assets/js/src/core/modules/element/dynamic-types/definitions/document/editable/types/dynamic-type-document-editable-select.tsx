@@ -22,6 +22,7 @@ export type SelectEditableDefinition = Omit<AbstractDocumentEditableDefinition, 
     width?: number
     class?: string
     defaultValue?: string
+    reload?: boolean
   }
 }
 export class DynamicTypeDocumentEditableSelect extends DynamicTypeDocumentEditableAbstract {

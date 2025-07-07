@@ -12,6 +12,7 @@ import { createStyles } from 'antd-style'
 
 interface StylesProps {
   isLoaded: boolean
+  isReloading: boolean
 }
 
 export const useStyle = createStyles(({ css, token }, props: StylesProps) => {
@@ -19,6 +20,7 @@ export const useStyle = createStyles(({ css, token }, props: StylesProps) => {
     iframeContainer: css`
       width: 100%;
       height: 100%;
+      position: relative;
     `,
 
     iframe: css`
@@ -26,6 +28,22 @@ export const useStyle = createStyles(({ css, token }, props: StylesProps) => {
       height: 100%;
       border: none;
       display: ${props.isLoaded ? 'block' : 'none'};
+      pointer-events: ${props.isReloading ? 'none' : 'auto'};
+    `,
+
+    loadingOverlay: css`
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: ${props.isReloading ? 'rgba(255, 255, 255, 0.7)' : 'transparent'};
+      backdrop-filter: ${props.isReloading ? 'blur(2px)' : 'none'};
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      pointer-events: all;
     `
   }
 })

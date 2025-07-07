@@ -16,6 +16,7 @@ import { serviceIds, useInjection } from '@sdk/app'
 import { isNil, isUndefined } from 'lodash'
 import { defaultFieldWidthValues, FieldWidthProvider } from '@sdk/modules/element'
 import { useDocumentEditor } from '../../hooks/use-document-editor'
+
 interface RenderEditableProps {
   editableDefinition: AbstractDocumentEditableDefinition
 }
@@ -23,7 +24,7 @@ interface RenderEditableProps {
 export const RenderEditable = ({ editableDefinition }: RenderEditableProps): React.JSX.Element => {
   const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
   const editableType = documentEditableRegistry.hasDynamicType(editableDefinition.type) ? documentEditableRegistry.getDynamicType(editableDefinition.type) : undefined
-  const { updateValue, getValue } = useDocumentEditor()
+  const { updateValue, updateValueWithReload, getValue } = useDocumentEditor()
   const editableProps: AbstractDocumentEditableDefinition = {
     ...editableDefinition,
     defaultFieldWidth: {
@@ -38,6 +39,9 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
     if (isNil(editableType)) {
       return <></>
     }
+    
+    const shouldReload = editableType.reloadOnChange(editableProps)
+    
     return React.cloneElement(
       editableType.getEditableDataComponent(editableProps),
       {
@@ -45,11 +49,16 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
         value: localValue,
         onChange: (newValue) => {
           setLocalValue(newValue)
-          updateValue(editableDefinition.name, { type: editableDefinition.type, data: newValue })
+          
+          if (shouldReload) {
+            updateValueWithReload(editableDefinition.name, { type: editableDefinition.type, data: newValue })
+          } else {
+            updateValue(editableDefinition.name, { type: editableDefinition.type, data: newValue })
+          }
         }
       }
     )
-  }, [editableType, editableProps, localValue, editableDefinition.name, updateValue])
+  }, [editableType, editableProps, localValue, editableDefinition.name, editableDefinition.type, updateValue, updateValueWithReload])
 
   if (isNil(editableType)) {
     return (

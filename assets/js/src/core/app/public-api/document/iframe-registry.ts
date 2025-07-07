@@ -10,17 +10,19 @@
 
 import { isNil, isNull } from 'lodash'
 import { type PublicApiDocumentEditorIframe } from '../document-editor-iframe'
+import { type IframeRef } from '@Pimcore/components/iframe/iframe'
 
 interface IframeDocumentEditorReference {
   iframe: HTMLIFrameElement
   documentId: number
   contentWindow: Window
+  iframeRef: React.RefObject<IframeRef>
 }
 
 class IframeDocumentEditorRegistry {
   private readonly iframes = new Map<number, IframeDocumentEditorReference>()
 
-  register (documentId: number, iframe: HTMLIFrameElement): void {
+  register (documentId: number, iframe: HTMLIFrameElement, iframeRef: React.RefObject<IframeRef>): void {
     if (isNull(iframe.contentWindow)) {
       throw new Error(`Iframe for document ${documentId} has no content window`)
     }
@@ -28,7 +30,8 @@ class IframeDocumentEditorRegistry {
     this.iframes.set(documentId, {
       iframe,
       documentId,
-      contentWindow: iframe.contentWindow
+      contentWindow: iframe.contentWindow,
+      iframeRef
     })
   }
 
@@ -64,6 +67,10 @@ class IframeDocumentEditorRegistry {
 
   getAllRegisteredDocumentIds (): number[] {
     return Array.from(this.iframes.keys())
+  }
+
+  getIframeRef (documentId: number): React.RefObject<IframeRef> | undefined {
+    return this.iframes.get(documentId)?.iframeRef
   }
 }
 

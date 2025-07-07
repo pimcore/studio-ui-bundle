@@ -15,6 +15,7 @@ import { type ValueType } from '@Pimcore/app/public-api/document-editor-iframe/e
 
 export interface DocumentEditorContextProps {
   updateValue: (key: string, value: ValueType) => void
+  updateValueWithReload: (key: string, value: ValueType) => void
   getValues: () => Record<string, ValueType>
   getValue: (key: string) => ValueType
   initializeData: (data: Record<string, ValueType>) => void
@@ -44,6 +45,19 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
     }
   }, [getDocumentEditableApi, id])
 
+  const updateValueWithReload = useCallback((key: string, value: ValueType): void => {
+    const api = getDocumentEditableApi()
+
+    api.updateValue(key, value)
+
+    try {
+      const { document: documentApi } = getPimcoreStudioApi()
+      documentApi.triggerValueChangeWithReload(id, key, value)
+    } catch (error) {
+      console.warn('Could not trigger reload for value change:', error)
+    }
+  }, [getDocumentEditableApi, id])
+
   const getValues = useCallback((): Record<string, ValueType> => {
     const api = getDocumentEditableApi()
     return api.getValues()
@@ -61,6 +75,7 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
 
   return {
     updateValue,
+    updateValueWithReload,
     getValues,
     getValue,
     initializeData
