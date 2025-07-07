@@ -51,8 +51,8 @@ export const useReportData = ({ name }: UseReportDataProps): UseReportDataReturn
     isFetching: isChartDetailFetching
   } = useCustomReportsChartQuery({ name, page, pageSize }, { skip: isEmptyValue(name), refetchOnMountOrArgChange: true })
 
-  const isLoading = isReportDetailLoading || isChartDetailLoading
-  const isFetching = isReportDetailFetching || isChartDetailFetching
+  const isLoading = isReportDetailLoading ?? isChartDetailLoading
+  const isFetching = isReportDetailFetching ?? isChartDetailFetching
 
   const refetchAll = (): void => {
     reportDetailRefetch().catch(e => { console.error(e) })
