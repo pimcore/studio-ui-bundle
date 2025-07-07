@@ -55,8 +55,8 @@ export const useReportData = ({ name }: UseReportDataProps): UseReportDataReturn
   const isFetching = isReportDetailFetching || isChartDetailFetching
 
   const refetchAll = (): void => {
-    void reportDetailRefetch()
-    void chartDetailRefetch()
+    reportDetailRefetch().catch(e => { console.error(e) })
+    chartDetailRefetch().catch(e => { console.error(e) })
   }
 
   return {
