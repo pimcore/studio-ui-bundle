@@ -11,8 +11,15 @@
 // Main API Gateway component
 export { ApiGateway } from './gateway'
 
+// Events
+export { ApiGatewayEvent, type ApiGatewayEventDetail, API_GATEWAY_EVENT } from './api-gateway-event'
+
 // Types
-export { ApiGatewayEventType } from './types/event-types'
+export {
+  ApiGatewayEventType,
+  type ApiGatewayEventPayloadMap,
+  type ApiGatewayEventPayload
+} from './types/event-types'
 
 // Registry
 export {

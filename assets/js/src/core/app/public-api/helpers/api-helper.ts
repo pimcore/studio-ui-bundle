@@ -15,14 +15,14 @@ import { type PimcoreStudioApi } from '../index'
  * Custom error classes for iframe API
  */
 export class PimcoreStudioApiNotAvailableError extends Error {
-  constructor(message: string = 'PimcoreStudio API is not available') {
+  constructor (message: string = 'PimcoreStudio API is not available') {
     super(message)
     this.name = 'PimcoreStudioApiNotAvailableError'
   }
 }
 
 export class CrossOriginApiAccessError extends Error {
-  constructor(message: string = 'Cross-origin access to PimcoreStudio API denied') {
+  constructor (message: string = 'Cross-origin access to PimcoreStudio API denied') {
     super(message)
     this.name = 'CrossOriginApiAccessError'
   }

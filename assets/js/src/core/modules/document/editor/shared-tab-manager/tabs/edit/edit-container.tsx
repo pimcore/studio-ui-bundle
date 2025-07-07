@@ -25,8 +25,8 @@ export const EditContainer = (): React.JSX.Element => {
   const handleIframeLoad = useCallback(() => {
     if (!isNull(iframeRef.current)) {
       try {
-        const studioApi = getPimcoreStudioApi()
-        studioApi.document.registerIframe(id, iframeRef.current)
+        const { document: documentApi } = getPimcoreStudioApi()
+        documentApi.registerIframe(id, iframeRef.current)
       } catch (error) {
         console.warn('Could not register iframe:', error)
       }
@@ -37,8 +37,8 @@ export const EditContainer = (): React.JSX.Element => {
   React.useEffect(() => {
     return () => {
       try {
-        const studioApi = getPimcoreStudioApi()
-        studioApi.document.unregisterIframe(id)
+        const { document: documentApi } = getPimcoreStudioApi()
+        documentApi.unregisterIframe(id)
       } catch (error) {
         console.warn('Could not unregister iframe:', error)
       }

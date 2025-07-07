@@ -37,8 +37,8 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
     api.updateValue(key, value)
 
     try {
-      const studioApi = getPimcoreStudioApi()
-      studioApi.document.triggerValueChange(id, key, value)
+      const { document: documentApi } = getPimcoreStudioApi()
+      documentApi.triggerValueChange(id, key, value)
     } catch (error) {
       console.warn('Could not notify parent window of value change:', error)
     }

@@ -14,7 +14,7 @@ import { useElementSelectorHelper } from '@Pimcore/modules/element/element-selec
 import { useUploadModalContext } from '@Pimcore/components/modal-upload/provider/upload-modal-provider/use-upload-modal-context'
 import { getApiGatewayHandler } from './registry/handler-registry'
 import { initializeHandlers } from './handlers'
-import { type ApiGatewayEventType } from './types/event-types'
+import { API_GATEWAY_EVENT, ApiGatewayEvent, type ApiGatewayEventDetail } from './api-gateway-event'
 import { isUndefined } from 'lodash'
 
 /**
@@ -31,13 +31,19 @@ export const ApiGateway = (): React.JSX.Element | null => {
   }, [])
 
   useEffect(() => {
-    const handleApiEvent = (event: CustomEvent<{ type: string, payload: any }>): void => {
-      const { type, payload } = event.detail
+    const handleApiEvent = (event: Event): void => {
+      // Type guard to ensure this is our custom ApiGatewayEvent
+      if (!(event instanceof ApiGatewayEvent)) {
+        console.warn('Received non-ApiGatewayEvent on API gateway listener')
+        return
+      }
+
+      // Cast to CustomEvent to access detail with proper typing
+      const customEvent = event as CustomEvent<ApiGatewayEventDetail>
+      const { type, payload } = customEvent.detail
 
       try {
-        // Convert string type to enum type
-        const eventType = type as ApiGatewayEventType
-        const handler = getApiGatewayHandler(eventType)
+        const handler = getApiGatewayHandler(type)
 
         if (!isUndefined(handler)) {
           handler(payload, {
@@ -53,10 +59,10 @@ export const ApiGateway = (): React.JSX.Element | null => {
       }
     }
 
-    window.addEventListener('pimcore:gateway:request', handleApiEvent as EventListener)
+    window.addEventListener(API_GATEWAY_EVENT, handleApiEvent)
 
     return () => {
-      window.removeEventListener('pimcore:gateway:request', handleApiEvent as EventListener)
+      window.removeEventListener(API_GATEWAY_EVENT, handleApiEvent)
     }
   }, [elementSelectorHelper, uploadModalContext])
 

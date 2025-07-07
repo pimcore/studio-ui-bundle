@@ -12,7 +12,6 @@ import { App } from 'antd'
 import { useMemo } from 'react'
 import { isInIframe } from '@Pimcore/utils/iframe'
 import { isPimcoreStudioApiAvailable, getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
-import { isNil } from 'lodash'
 
 type ModalStaticFunctions = ReturnType<typeof App.useApp>['modal']
 
@@ -29,12 +28,9 @@ export function useStudioModal (): ModalStaticFunctions {
     if (isInIframe() && isPimcoreStudioApiAvailable()) {
       try {
         // Get the parent window's modal instance through the studio API
-        const studioApi = getPimcoreStudioApi()
+        const { modal } = getPimcoreStudioApi()
 
-        // Check if the parent window has modal functionality available
-        if (!isNil(studioApi.modal)) {
-          return studioApi.modal
-        }
+        return modal
       } catch (error) {
         console.warn('Failed to access parent window modal, falling back to local modal:', error)
       }

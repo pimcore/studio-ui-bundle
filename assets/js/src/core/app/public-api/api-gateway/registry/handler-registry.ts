@@ -10,7 +10,7 @@
 
 import { type UseElementSelectorHelperReturn } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector-helper'
 import { type UploadContextProps } from '@Pimcore/components/modal-upload/provider/upload-modal-provider/upload-modal-provider'
-import { type ApiGatewayEventType } from '../types/event-types'
+import { type ApiGatewayEventType, type ApiGatewayEventPayload } from '../types/event-types'
 
 // Define a context object that can be passed to handlers
 export interface ApiGatewayHandlerContext {
@@ -19,15 +19,21 @@ export interface ApiGatewayHandlerContext {
   // Add other helpers here as needed
 }
 
-export type ApiGatewayHandler = (payload: any, context: ApiGatewayHandlerContext) => void
+export type ApiGatewayHandler<T extends ApiGatewayEventType = ApiGatewayEventType> = (
+  payload: ApiGatewayEventPayload<T>,
+  context: ApiGatewayHandlerContext
+) => void
 
 const handlerRegistry = new Map<ApiGatewayEventType, ApiGatewayHandler>()
 
-export const registerApiGatewayHandler = (type: ApiGatewayEventType, handler: ApiGatewayHandler): void => {
+export const registerApiGatewayHandler = <T extends ApiGatewayEventType>(
+  type: T,
+  handler: ApiGatewayHandler<T>
+): void => {
   if (handlerRegistry.has(type)) {
     console.warn(`A handler for the API gateway event type "${type}" is already registered. It will be overwritten.`)
   }
-  handlerRegistry.set(type, handler)
+  handlerRegistry.set(type, handler as ApiGatewayHandler)
 }
 
 export const getApiGatewayHandler = (type: ApiGatewayEventType): ApiGatewayHandler | undefined => {

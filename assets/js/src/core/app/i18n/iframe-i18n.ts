@@ -21,10 +21,10 @@ export const FALLBACK_LANGUAGE = 'en'
 export const initializeIframeI18n = async (): Promise<void> => {
   try {
     // Get translation resources from parent window
-    const studioApi = getPimcoreStudioApi()
-    const translationResources = studioApi.i18n.getTranslationResources()
-    const currentLanguage = studioApi.i18n.getCurrentLanguage()
-    const fallbackLanguage = studioApi.i18n.getFallbackLanguage()
+    const { i18n: i18nApi } = getPimcoreStudioApi()
+    const translationResources = i18nApi.getTranslationResources()
+    const currentLanguage = i18nApi.getCurrentLanguage()
+    const fallbackLanguage = i18nApi.getFallbackLanguage()
 
     const resources: Record<string, any> = {}
     Object.keys(translationResources).forEach(language => {
@@ -55,7 +55,7 @@ export const initializeIframeI18n = async (): Promise<void> => {
     // Set up missing key handler to report back to parent window
     i18n.on('missingKey', (lngs, namespace, key, res) => {
       try {
-        studioApi.i18n.reportMissingTranslation(key)
+        i18nApi.reportMissingTranslation(key)
 
         i18n.addResource(currentLanguage, namespace, key, key)
         if (currentLanguage !== fallbackLanguage) {
@@ -72,7 +72,6 @@ export const initializeIframeI18n = async (): Promise<void> => {
         }
       }
     })
-
   } catch (error) {
     console.warn('Could not initialize iframe i18n from parent window, falling back to basic setup:', error)
 

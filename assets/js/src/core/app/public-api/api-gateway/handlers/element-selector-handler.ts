@@ -9,12 +9,11 @@
  */
 
 import { type ApiGatewayHandler } from '../registry/handler-registry'
-import { type ElementSelectorConfig } from '@sdk/modules/element'
+import { type ApiGatewayEventType } from '../types/event-types'
 
-export const openElementSelectorHandler: ApiGatewayHandler = (payload, context) => {
-  const config: ElementSelectorConfig = payload
+export const openElementSelectorHandler: ApiGatewayHandler<ApiGatewayEventType.openElementSelector> = (payload, context) => {
   const { elementSelectorHelper } = context
 
-  elementSelectorHelper.setConfig(config)
+  elementSelectorHelper.setConfig(payload)
   elementSelectorHelper.open()
 }

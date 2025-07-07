@@ -15,7 +15,7 @@ import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { type ElementSelectorConfig } from '@sdk/modules/element'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import { isInIframe } from '@Pimcore/utils/iframe'
-import { ApiGatewayEventType } from '@Pimcore/app/public-api/api-gateway'
+import { ApiGatewayEventType, ApiGatewayEvent } from '@Pimcore/app/public-api/api-gateway'
 import { type ModalUploadProps } from '@Pimcore/components/modal-upload/modal-upload'
 
 class ElementOpeningService {
@@ -82,11 +82,11 @@ class ElementApiImpl implements ElementApi {
 
   openElementSelector (config: ElementSelectorConfig): void {
     try {
-      const studioApi = getPimcoreStudioApi()
+      const { element: elementApi } = getPimcoreStudioApi()
 
       if (isInIframe()) {
         // We're in an iframe, call the parent's API
-        studioApi.element.openElementSelector(config)
+        elementApi.openElementSelector(config)
       } else {
         // We're in the parent window, dispatch the event directly
         this.openElementSelectorDirectly(config)
@@ -97,12 +97,7 @@ class ElementApiImpl implements ElementApi {
   }
 
   private openElementSelectorDirectly (config: ElementSelectorConfig): void {
-    const event = new CustomEvent('pimcore:gateway:request', {
-      detail: {
-        type: ApiGatewayEventType.openElementSelector,
-        payload: config
-      }
-    })
+    const event = new ApiGatewayEvent(ApiGatewayEventType.openElementSelector, config)
     window.dispatchEvent(event)
   }
 
@@ -110,8 +105,8 @@ class ElementApiImpl implements ElementApi {
     try {
       if (isInIframe()) {
         // We're in an iframe, call the parent's API
-        const studioApi = getPimcoreStudioApi()
-        studioApi.element.openUploadModal(props)
+        const { element: elementApi } = getPimcoreStudioApi()
+        elementApi.openUploadModal(props)
       } else {
         // We're in the parent window, dispatch the event directly
         this.openUploadModalDirectly(props)
@@ -122,12 +117,7 @@ class ElementApiImpl implements ElementApi {
   }
 
   private openUploadModalDirectly (props: ModalUploadProps): void {
-    const event = new CustomEvent('pimcore:gateway:request', {
-      detail: {
-        type: ApiGatewayEventType.openUploadModal,
-        payload: props
-      }
-    })
+    const event = new ApiGatewayEvent(ApiGatewayEventType.openUploadModal, props)
     window.dispatchEvent(event)
   }
 }

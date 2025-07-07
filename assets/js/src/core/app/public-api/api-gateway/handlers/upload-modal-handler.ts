@@ -9,11 +9,10 @@
  */
 
 import { type ApiGatewayHandler } from '../registry/handler-registry'
-import { type ModalUploadProps } from '@Pimcore/components/modal-upload/modal-upload'
+import { type ApiGatewayEventType } from '../types/event-types'
 
-export const openUploadModalHandler: ApiGatewayHandler = (payload, context) => {
-  const uploadProps: ModalUploadProps = payload
+export const openUploadModalHandler: ApiGatewayHandler<ApiGatewayEventType.openUploadModal> = (payload, context) => {
   const { uploadModalContext } = context
 
-  uploadModalContext.triggerUpload(uploadProps)
+  uploadModalContext.triggerUpload(payload)
 }
