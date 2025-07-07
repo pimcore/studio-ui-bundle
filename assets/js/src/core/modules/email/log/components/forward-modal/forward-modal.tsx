@@ -60,60 +60,60 @@ export const ForwardModal = ({ email, ...props }: ForwardModalProps): React.JSX.
 
   return (
     <Modal
-      okButtonProps={{ loading: isLoading }}
-      okText={t('email-log.send.label')}
-      onCancel={() => {
+      okButtonProps={ { loading: isLoading } }
+      okText={ t('email-log.send.label') }
+      onCancel={ () => {
         props.setOpen(false)
         form.resetFields()
-      }}
-      onOk={() => { form.submit() }}
-      open={props.open}
+      } }
+      onOk={ () => { form.submit() } }
+      open={ props.open }
       size="L"
-      title={(
+      title={ (
         <ModalTitle iconName='flip-forward'>
           {t('email-log.forward.label')}
         </ModalTitle>
-      )}
+      ) }
     >
       <Flex
         gap="small"
         vertical
       >
         <Form
-          form={form}
+          form={ form }
           layout="vertical"
-          onFinish={onFinish}
+          onFinish={ onFinish }
         >
           <Form.Item
-            label={t('email-log.subject')}
+            label={ t('email-log.subject') }
           >
             <Input
               disabled
-              value={email.subject!}
+              value={ email.subject! }
             />
           </Form.Item>
 
           <Form.Item
-            label={t('widget.email-log.from')}
+            label={ t('widget.email-log.from') }
           >
             <Input
               disabled
-              value={email.from!}
+              value={ email.from! }
             />
           </Form.Item>
 
           <Form.Item
-            label={t('widget.email-log.to')}
+            label={ t('widget.email-log.to') }
             name="to"
-            rules={[{ type: 'email', required: true, message: t('email-blocklist.add.validation') }]}
+            rules={ [{ type: 'email', required: true, message: t('email-blocklist.add.validation') }] }
           >
             <Input />
           </Form.Item>
         </Form>
 
         <EmailPreview
-          email={email}
-          height={300}
+          email={ email }
+          height={ 300 }
         />
       </Flex>
     </Modal>

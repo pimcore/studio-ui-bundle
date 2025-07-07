@@ -64,8 +64,8 @@ export const EmailCardHeader = ({ email }: EmailCardHeaderProps): React.JSX.Elem
 
       <div>
         <IconButton
-          icon={{ value: 'vector' }}
-          onClick={() => {
+          icon={ { value: 'vector' } }
+          onClick={ () => {
             resendWithConfirmation(email.id, () => {
               dispatch(
                 api.util.invalidateTags(
@@ -73,17 +73,17 @@ export const EmailCardHeader = ({ email }: EmailCardHeaderProps): React.JSX.Elem
                 )
               )
             })
-          }}
+          } }
         />
 
         <IconButton
-          icon={{ value: 'flip-forward' }}
-          onClick={() => { setIsForwardModalOpen(true) }}
+          icon={ { value: 'flip-forward' } }
+          onClick={ () => { setIsForwardModalOpen(true) } }
         />
 
         <IconButton
-          icon={{ value: 'trash' }}
-          onClick={() => {
+          icon={ { value: 'trash' } }
+          onClick={ () => {
             removeWithConfirmation(email.id, () => {
               dispatch(
                 api.util.invalidateTags(
@@ -91,14 +91,14 @@ export const EmailCardHeader = ({ email }: EmailCardHeaderProps): React.JSX.Elem
                 )
               )
             })
-          }}
+          } }
         />
       </div>
 
       <ForwardModal
-        email={email}
-        open={isForwardModalOpen}
-        setOpen={setIsForwardModalOpen}
+        email={ email }
+        open={ isForwardModalOpen }
+        setOpen={ setIsForwardModalOpen }
       />
     </Flex>
   )
