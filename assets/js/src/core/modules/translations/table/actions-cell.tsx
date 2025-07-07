@@ -10,27 +10,27 @@
 
 import React from 'react'
 import { type CellContext } from '@tanstack/react-table'
-import { type PredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
 import { IconButton } from '@sdk/components'
-import { type PredefinedPropertyRow, usePredefinedProperty } from '../hooks/use-predefined-property'
+import { useTranslation } from '../hooks/use-translation'
+import { TranslationRow } from '../translations-container'
 
-type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
+type TranslationRowWithActions = TranslationRow & { actions: React.ReactNode }
 
 interface ActionsCellProps {
-  info: CellContext<PredefinedPropertyWithActions, React.ReactNode>
-  setPredefinedPropertyRows: React.Dispatch<React.SetStateAction<PredefinedPropertyRow[]>>
+  info: CellContext<TranslationRowWithActions, React.ReactNode>
+  setTranslations: React.Dispatch<React.SetStateAction<TranslationRow[]>>
 }
 
-export const ActionsCell = ({ info, setPredefinedPropertyRows }: ActionsCellProps): JSX.Element => {
+export const ActionsCell = ({ info, setTranslationRows }: ActionsCellProps): JSX.Element => {
   const id = info.row.original.id
-  const { deletePropertyById, deleteLoading } = usePredefinedProperty()
+  // const { deleteTranslationById, deleteLoading } = useTranslation()
 
-  const handleDelete = async (): Promise<void> => {
-    const { success } = await deletePropertyById(id)
-    if (success) {
-      setPredefinedPropertyRows(prev => prev.filter(row => row.id !== id))
-    }
-  }
+  // const handleDelete = async (): Promise<void> => {
+  //   const { success } = await deleteTranslationyById(id)
+  //   if (success) {
+  //     setTranslationRows(prev => prev.filter(row => row.id !== id))
+  //   }
+  // }
 
   return (
     <div className="properties-table--actions-column">
