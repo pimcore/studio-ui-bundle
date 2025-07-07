@@ -15,7 +15,9 @@ import { ReportChart } from '@Pimcore/modules/reports/components/report-chart/re
 import { type CustomReportChartData } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { Grid } from '@Pimcore/components/grid/grid'
 import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
+import { type AccessorKeyColumnDef, createColumnHelper } from '@tanstack/react-table'
 
 interface IReportDetailProps {
   currentReport: string
@@ -25,6 +27,8 @@ interface IReportDetailProps {
 
 export const ReportDetail = ({ currentReport, page, pageSize }: IReportDetailProps): React.JSX.Element => {
   const { isLoading, reportDetailData, chartDetailData } = useReportData({ name: currentReport, page, pageSize })
+
+  const columnHelper = createColumnHelper()
 
   if (isLoading) {
     return <Content loading />
@@ -36,13 +40,33 @@ export const ReportDetail = ({ currentReport, page, pageSize }: IReportDetailPro
         ? chartDetailData.data as CustomReportChartData[]
         : undefined
 
+  const columns: Array<AccessorKeyColumnDef<unknown, never>> = []
+
+  reportDetailData?.columnConfigurations?.forEach((item, index) => {
+    columns.push(
+      columnHelper.accessor(item?.name ?? `id-${index}`, {
+        header: item?.label ?? ''
+      })
+    )
+  })
+
   return (
-    <Flex>
+    <Flex
+      gap="large"
+      vertical
+    >
       {isShowChart && !isUndefined(chartData) && (
-        <ReportChart
-          chartData={ chartData }
-          reportData={ reportDetailData }
-        />
+        <>
+          <ReportChart
+            chartData={ chartData }
+            reportData={ reportDetailData }
+          />
+          <Grid
+            autoWidth
+            columns={ columns }
+            data={ chartData }
+          />
+        </>
       )}
     </Flex>
   )

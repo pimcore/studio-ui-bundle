@@ -11,6 +11,7 @@
 import React from 'react'
 import { Pie } from '@ant-design/plots'
 import { type CustomReportChartData, type CustomReportDetails } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 interface IReportsChartProps {
   chartData?: CustomReportChartData[]
@@ -70,6 +71,8 @@ export const ReportChart = ({ chartData, reportData }: IReportsChartProps): Reac
   }
 
   return (
-    <Pie { ...config } />
+    <Flex style={ { maxHeight: '350px' } }>
+      <Pie { ...config } />
+    </Flex>
   )
 }
