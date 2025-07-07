@@ -21,7 +21,7 @@ let env: 'development' | 'production' = 'production';
 const isDevServer = nodeEnv === 'dev-server';
 if (nodeEnv !== env) {
   env = 'development';
-  process.env.NODE_ENV = 'development'; 
+  process.env.NODE_ENV = 'development';
 }
 
 export default defineConfig({
@@ -41,7 +41,7 @@ export default defineConfig({
     decorators: {
       version: 'legacy'
     }
-  }, 
+  },
   output: {
     manifest: true,
     assetPrefix: '/bundles/pimcorestudioui/build/' + buildId,
