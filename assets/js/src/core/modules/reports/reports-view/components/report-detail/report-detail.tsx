@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { isUndefined } from 'lodash'
+import { type AccessorKeyColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { ReportChart } from '@Pimcore/modules/reports/components/report-chart/report-chart'
 import { type CustomReportChartData } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
@@ -17,7 +18,6 @@ import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
-import { type AccessorKeyColumnDef, createColumnHelper } from '@tanstack/react-table'
 
 interface IReportDetailProps {
   currentReport: string
@@ -26,27 +26,26 @@ interface IReportDetailProps {
 export const ReportDetail = ({ currentReport }: IReportDetailProps): React.JSX.Element => {
   const { isLoading, isFetching, reportDetailData, chartDetailData } = useReportData({ name: currentReport })
 
-  const columnHelper = createColumnHelper()
-
   if (isLoading || isFetching) {
     return <Content loading />
   }
+
+  const getColumns = (): Array<AccessorKeyColumnDef<unknown, never>> | undefined => (
+    reportDetailData?.columnConfigurations?.map((item, index) => (
+      columnHelper.accessor(item?.name ?? `id-${index}`, {
+        header: item?.label ?? ''
+      })
+    )
+    ))
+
+  const columnHelper = createColumnHelper()
+  const columns = getColumns() ?? []
 
   const isShowChart = !isEmptyValue(reportDetailData?.chartType)
   const chartData =
       !isUndefined(chartDetailData) && 'data' in chartDetailData
         ? chartDetailData.data as CustomReportChartData[]
         : undefined
-
-  const columns: Array<AccessorKeyColumnDef<unknown, never>> = []
-
-  reportDetailData?.columnConfigurations?.forEach((item, index) => {
-    columns.push(
-      columnHelper.accessor(item?.name ?? `id-${index}`, {
-        header: item?.label ?? ''
-      })
-    )
-  })
 
   return (
     <Flex
