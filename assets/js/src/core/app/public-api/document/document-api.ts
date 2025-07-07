@@ -102,7 +102,7 @@ class DocumentApiImpl implements DocumentApi {
 
       if (!isNil(iframeRef?.current)) {
         iframeRef.current.reload()
-      } 
+      }
     } catch (error) {
       console.error(`Auto-save and reload failed for document ${documentId}:`, error)
       // Reset loading state on error
