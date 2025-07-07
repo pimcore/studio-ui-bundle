@@ -15,27 +15,27 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
 import { UserPermission } from '../auth/enums/user-permission'
-import { PredefinedPropertiesContainer } from './predefined-properties-container'
+import { TranslationsContainer } from './translations-container'
 
 moduleSystem.registerModule({
   onInit: () => {
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Settings/Predefined Properties',
-      label: 'navigation.predefined-properties',
+      path: 'Settings/Translations',
+      label: 'navigation.translations',
       className: 'item-style-modifier',
-      permission: UserPermission.PredefinedProperties,
+      permission: UserPermission.Translations,
       perspectivePermission: NavPermission.PredefinedProperties,
       widgetConfig: {
-        name: 'Predefined Properties',
-        id: 'predefined-properties',
-        component: 'predefined-properties',
+        name: 'Translations',
+        id: 'translations',
+        component: 'translations',
         config: {
-          translationKey: 'widget.predefined-properties',
+          translationKey: 'widget.translations',
           icon: {
             type: 'name',
-            value: 'properties'
+            value: 'translations'
           }
         }
       }
@@ -44,8 +44,8 @@ moduleSystem.registerModule({
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
     widgetRegistryService.registerWidget({
-      name: 'predefined-properties',
-      component: PredefinedPropertiesContainer
+      name: 'translations',
+      component: TranslationsContainer
     })
   }
 })
