@@ -18,8 +18,10 @@ import { type SelectOption, type WebsiteSettingRow } from '../website-settings-c
 import { useWebsiteSetting } from '../hooks/use-website-settings'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { type Site } from '@Pimcore/modules/document/sites-slice.gen'
-import { isEmpty, isUndefined } from 'lodash'
+import { isEmpty, isNil, isUndefined } from 'lodash'
 import { DefaultCell, type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
+import { addColumnMeta } from '@Pimcore/components/grid/columns/helpers'
+import { log } from '@module-federation/runtime-core/dist/src/utils'
 
 type WebsiteSettingEnrichedRow = WebsiteSettingRow & {
   siteDomain: string
@@ -128,23 +130,30 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
       },
       size: 60
     }),
-// columnHelper.accessor('data', {
-//       id: 'data',
-//       header: t('website-settings.columns.value'),
-//       meta: {
-//         editable: false,
-//         clearable: true
-//       },
-//       cell: (info) => {
-//         const row: WebsiteSettingRow = info.row.original
+columnHelper.accessor('data', {
+      id: 'data',
+      header: t('website-settings.columns.value'),
+      meta: {
+        editable: true,
+        clearable: true
+      },
+      cell: (info) => {
+        const row: WebsiteSettingRow = info.row.original
 
-//         return (
-//           <DefaultCell
-//             { ...addColumnMeta(info, { type: isNil(row.objectData) ? 'text' : 'element' }) }
-//           />
-//         )
-//       }
-//     })
+        const getType = (): string => {
+          if (row.type === 'text') return 'text'
+          else if (row.type === 'bool') return 'checkbox'
+          else return 'element'
+        }
+
+        console.log("test", getType())
+        return (
+          <DefaultCell
+            { ...addColumnMeta(info, { type: getType() }) }
+          />
+        )
+      }
+    }),
     // columnHelper.accessor('data', {
     //   header: t('website-settings.columns.value'),
     //   meta: {
