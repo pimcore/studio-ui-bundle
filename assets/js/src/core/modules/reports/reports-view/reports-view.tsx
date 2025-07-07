@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isEmpty, isUndefined } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
@@ -34,7 +34,6 @@ export const ReportsView = (): React.JSX.Element => {
   const { styles } = useStyles()
 
   const [currentReport, setCurrentReport] = useState<string | null>(null)
-  const [reportsTreeOptions, setReportsTreeOptions] = useState<Array<{ label: string, value: string }> | undefined>(undefined)
 
   // TODO: need to update logic for using page/pageSize
   const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page: 1, pageSize: 10 })
@@ -48,16 +47,17 @@ export const ReportsView = (): React.JSX.Element => {
         ? chartDetailData.data as CustomReportChartData[]
         : undefined
 
-  useEffect(() => {
+  const reportsTreeOptions = useMemo(() => {
     if (!isEmpty(reportsTreeData)) {
-      const options = reportsTreeData?.items?.map((item) => ({
+      return reportsTreeData?.items?.map((item) => ({
         label: item.niceName,
         value: item.name
       }))
-
-      setReportsTreeOptions(options)
     }
+
+    return []
   }, [reportsTreeData])
+  const isLoadingReportsTree = isReportsTreeLoading && isEmpty(reportsTreeOptions)
 
   const renderContent = (): React.JSX.Element => (
     <ContentLayout
@@ -71,7 +71,7 @@ export const ReportsView = (): React.JSX.Element => {
             pageSize={ pageSize }
             setPage={ setPage }
             setPageSize={ setPageSize }
-            totalItems={ chartData!.length }
+            totalItems={ chartData?.length ?? 0 }
           />
         </Toolbar>
       ) }
@@ -126,7 +126,7 @@ export const ReportsView = (): React.JSX.Element => {
   )
 
   return (
-    <Content loading={ isReportsTreeLoading && isEmpty(reportsTreeOptions) }>
+    <Content loading={ isLoadingReportsTree }>
       <TabsToolbarView
         renderTabbar={ renderContent() }
         renderToolbar={ (
