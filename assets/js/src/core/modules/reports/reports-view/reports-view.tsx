@@ -30,17 +30,17 @@ import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useRe
 import { Pagination } from '@Pimcore/modules/reports/components/pagination/pagination'
 
 export const ReportsView = (): React.JSX.Element => {
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
-
   const { t } = useTranslation()
   const { styles } = useStyles()
 
-  const [reportsTreeOptions, setReportsTreeOptions] = useState<Array<{ label: string, value: string }> | undefined>(undefined)
   const [currentReport, setCurrentReport] = useState<string | null>(null)
+  const [reportsTreeOptions, setReportsTreeOptions] = useState<Array<{ label: string, value: string }> | undefined>(undefined)
 
-  const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page, pageSize })
-  const { refetchAll, isFetching, chartDetailData } = useReportData({ name: currentReport ?? '', page, pageSize })
+  // TODO: need to update logic for using page/pageSize
+  const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page: 1, pageSize: 10 })
+  const { page, setPage, pageSize, setPageSize, refetchAll, isFetching, chartDetailData } = useReportData({
+    name: currentReport ?? ''
+  })
 
   const isCurrentReportSelected = !isEmptyValue(currentReport)
   const chartData =
@@ -110,11 +110,7 @@ export const ReportsView = (): React.JSX.Element => {
       >
         {isCurrentReportSelected
           ? (
-            <ReportDetail
-              currentReport={ currentReport! }
-              page={ page }
-              pageSize={ pageSize }
-            />
+            <ReportDetail currentReport={ currentReport! } />
             )
           : (
             <Flex

@@ -21,12 +21,10 @@ import { type AccessorKeyColumnDef, createColumnHelper } from '@tanstack/react-t
 
 interface IReportDetailProps {
   currentReport: string
-  page: number
-  pageSize: number
 }
 
-export const ReportDetail = ({ currentReport, page, pageSize }: IReportDetailProps): React.JSX.Element => {
-  const { isLoading, isFetching, reportDetailData, chartDetailData } = useReportData({ name: currentReport, page, pageSize })
+export const ReportDetail = ({ currentReport }: IReportDetailProps): React.JSX.Element => {
+  const { isLoading, isFetching, reportDetailData, chartDetailData } = useReportData({ name: currentReport })
 
   const columnHelper = createColumnHelper()
 

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useMemo } from 'react'
+import { useState } from 'react'
 import {
   type CustomReportDetails,
   type CustomReportsChartApiResponse,
@@ -19,11 +19,13 @@ import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 interface UseReportDataProps {
   name: string
-  page: number
-  pageSize: number
 }
 
 interface UseReportDataReturn {
+  page: number
+  setPage: (page: number) => void
+  pageSize: number
+  setPageSize: (pageSize: number) => void
   reportDetailData: CustomReportDetails | undefined
   chartDetailData: CustomReportsChartApiResponse | undefined
   isLoading: boolean
@@ -31,7 +33,10 @@ interface UseReportDataReturn {
   refetchAll: () => void
 }
 
-export const useReportData = ({ name, page, pageSize }: UseReportDataProps): UseReportDataReturn => {
+export const useReportData = ({ name }: UseReportDataProps): UseReportDataReturn => {
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+
   const {
     isLoading: isReportDetailLoading,
     data: reportDetailData,
@@ -54,17 +59,15 @@ export const useReportData = ({ name, page, pageSize }: UseReportDataProps): Use
     void chartDetailRefetch()
   }
 
-  return useMemo(() => ({
+  return {
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
     reportDetailData,
     chartDetailData,
     isLoading,
     isFetching,
     refetchAll
-  }), [
-    reportDetailData,
-    chartDetailData,
-    isLoading,
-    isFetching,
-    refetchAll
-  ])
+  }
 }
