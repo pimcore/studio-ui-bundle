@@ -39,6 +39,9 @@ assets/CLAUDE.md
 !assets/dist/types
 !assets/dist/types/*
 
+# Build artifacts
+public/build/*
+
 # code style fixer
 .php_cs
 .php_cs.cache

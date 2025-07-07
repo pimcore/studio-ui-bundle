@@ -61,7 +61,7 @@ export const useContextMenu = (
       return createContextMenuItems({ contextMenuState, closeContextMenu, model, closeWidget })
     }
     return []
-  }, [contextMenuState, createContextMenuItems, model, closeWidget])
+  }, [contextMenuState, createContextMenuItems, model, closeWidget, closeContextMenu])
 
   const dropdown = contextMenuState !== null && !isUndefined(createContextMenuItems)
     ? (
