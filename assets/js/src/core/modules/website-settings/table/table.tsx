@@ -19,7 +19,7 @@ import { useWebsiteSetting } from '../hooks/use-website-settings'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { type Site } from '@Pimcore/modules/document/sites-slice.gen'
 import { isEmpty, isUndefined } from 'lodash'
-import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
+import { DefaultCell, type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 
 type WebsiteSettingEnrichedRow = WebsiteSettingRow & {
   siteDomain: string
@@ -128,26 +128,43 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
       },
       size: 60
     }),
-    columnHelper.accessor('data', {
-      header: t('website-settings.columns.value'),
-      meta: {
-        type: 'element',
-        editable: true,
-        clearable: true,
-        config: {
-          allowedTypes: allElementTypes,
-          getElementInfo: (cellProps: DefaultCellProps): ElementInfo => {
-            const row = cellProps.row.original
-            return {
-              elementType: mapToElementType(String(row.type), true),
-              id: undefined,
-              fullPath: isEmpty(row.data) ? '' : String(row.data)
-            }
-          }
-        }
-      },
-      size: 300
-    }),
+// columnHelper.accessor('data', {
+//       id: 'data',
+//       header: t('website-settings.columns.value'),
+//       meta: {
+//         editable: false,
+//         clearable: true
+//       },
+//       cell: (info) => {
+//         const row: WebsiteSettingRow = info.row.original
+
+//         return (
+//           <DefaultCell
+//             { ...addColumnMeta(info, { type: isNil(row.objectData) ? 'text' : 'element' }) }
+//           />
+//         )
+//       }
+//     })
+    // columnHelper.accessor('data', {
+    //   header: t('website-settings.columns.value'),
+    //   meta: {
+    //     type: 'element',
+    //     editable: true,
+    //     clearable: true,
+    //     config: {
+    //       allowedTypes: allElementTypes,
+    //       getElementInfo: (cellProps: DefaultCellProps): ElementInfo => {
+    //         const row = cellProps.row.original
+    //         return {
+    //           elementType: mapToElementType(String(row.type), true),
+    //           id: undefined,
+    //           fullPath: isEmpty(row.data) ? '' : String(row.data)
+    //         }
+    //       }
+    //     }
+    //   },
+    //   size: 300
+    // }),
     columnHelper.accessor('siteDomain', {
       header: t('website-settings.columns.site'),
       meta: { type: 'select', editable: true, config: { options: siteDomains } },
