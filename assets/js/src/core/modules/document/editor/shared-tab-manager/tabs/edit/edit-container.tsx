@@ -14,6 +14,7 @@ import React, { useContext, useRef, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Iframe, type IframeRef } from '../../../../../../components/iframe/iframe'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
+import { isNil } from 'lodash'
 
 export const EditContainer = (): React.JSX.Element => {
   const { id } = useContext(DocumentContext)
@@ -23,8 +24,8 @@ export const EditContainer = (): React.JSX.Element => {
 
   const handleIframeLoad = useCallback(() => {
     const iframeElement = iframeRef.current?.getIframeElement()
-    
-    if (iframeElement) {
+
+    if (!isNil(iframeElement)) {
       try {
         const { document: documentApi } = getPimcoreStudioApi()
         documentApi.registerIframe(id, iframeElement, iframeRef)
@@ -49,11 +50,11 @@ export const EditContainer = (): React.JSX.Element => {
   return (
     <Iframe
       onLoad={ handleIframeLoad }
+      preserveScrollOnReload
       ref={ iframeRef }
       src={ `${documentDraft?.fullPath}?pimcore_editmode=true&pimcore_studio=true&documentId=${id}` }
       title={ `${t('edit.label')}-${id}` }
-      useExternalReadyState={ true }
-      preserveScrollOnReload={ true }
+      useExternalReadyState
     />
   )
 }

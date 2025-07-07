@@ -39,9 +39,9 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
     if (isNil(editableType)) {
       return <></>
     }
-    
+
     const shouldReload = editableType.reloadOnChange(editableProps)
-    
+
     return React.cloneElement(
       editableType.getEditableDataComponent(editableProps),
       {
@@ -49,7 +49,7 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
         value: localValue,
         onChange: (newValue) => {
           setLocalValue(newValue)
-          
+
           if (shouldReload) {
             updateValueWithReload(editableDefinition.name, { type: editableDefinition.type, data: newValue })
           } else {

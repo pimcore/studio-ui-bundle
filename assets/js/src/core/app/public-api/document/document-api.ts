@@ -12,7 +12,7 @@ import { store } from '@Pimcore/app/store'
 import { markDocumentEditablesAsModified } from '@Pimcore/modules/document/document-draft-slice'
 import { iframeDocumentEditorRegistry } from './iframe-registry'
 import { documentSaveService, SaveTaskType } from '@Pimcore/modules/document/services'
-import { debounce } from 'lodash'
+import { debounce, isNil } from 'lodash'
 import { type PublicApiDocumentEditorIframe } from '../document-editor-iframe'
 import { type IframeRef } from '@Pimcore/components/iframe/iframe'
 
@@ -65,14 +65,14 @@ class DocumentApiImpl implements DocumentApi {
   triggerValueChange (documentId: number, key: string, value: any): void {
     this.markDraftAsModified(documentId)
 
-    this.autoSaveCallbacks.get(documentId)?.()
+    void this.autoSaveCallbacks.get(documentId)?.()
   }
 
   triggerValueChangeWithReload (documentId: number, key: string, value: any): void {
     this.markDraftAsModified(documentId)
 
     // Perform immediate auto-save without debounce, then reload
-    this.performAutoSaveAndReload(documentId)
+    void this.performAutoSaveAndReload(documentId)
   }
 
   notifyIframeReady (documentId: number): void {
@@ -95,19 +95,19 @@ class DocumentApiImpl implements DocumentApi {
     try {
       // Get the iframe ref to trigger loading state
       const iframeRef = iframeDocumentEditorRegistry.getIframeRef(documentId)
-      if (iframeRef?.current) {
+      if (!isNil(iframeRef?.current)) {
         iframeRef.current.setReloading(true)
       }
 
       await documentSaveService.saveDocument(documentId, SaveTaskType.AutoSave)
-      
+
       // Use the iframe ref's reload method instead of direct src manipulation
-      if (iframeRef?.current) {
+      if (!isNil(iframeRef?.current)) {
         iframeRef.current.reload()
       } else {
         // Fallback to direct iframe manipulation if ref not available
         const iframe = iframeDocumentEditorRegistry.getIframe(documentId)
-        if (iframe) {
+        if (!isNil(iframe)) {
           const currentSrc = iframe.src
           iframe.src = currentSrc
         }
@@ -116,7 +116,7 @@ class DocumentApiImpl implements DocumentApi {
       console.error(`Auto-save and reload failed for document ${documentId}:`, error)
       // Reset loading state on error
       const iframeRef = iframeDocumentEditorRegistry.getIframeRef(documentId)
-      if (iframeRef?.current) {
+      if (!isNil(iframeRef?.current)) {
         iframeRef.current.setReloading(false)
       }
     }

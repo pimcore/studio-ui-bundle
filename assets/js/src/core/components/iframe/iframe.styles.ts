@@ -28,10 +28,10 @@ export const useStyle = createStyles(({ css, token }, props: StylesProps & { use
       width: 100%;
       height: 100%;
       border: none;
-      display: ${props.useExternalReadyState 
-        ? (props.isLoaded && !props.isActuallyLoading ? 'block' : 'none') 
+      display: ${props.useExternalReadyState === true
+        ? (props.isLoaded && props.isActuallyLoading !== true ? 'block' : 'none')
         : (props.isLoaded ? 'block' : 'none')};
-      pointer-events: ${props.isReloading || (props.useExternalReadyState && !props.isLoaded) ? 'none' : 'auto'};
+      pointer-events: ${props.isReloading || (props.useExternalReadyState === true && !props.isLoaded) ? 'none' : 'auto'};
     `,
 
     loadingOverlay: css`

@@ -82,7 +82,7 @@ class IframeDocumentEditorRegistry {
    */
   markAsReady (documentId: number): void {
     const reference = this.iframes.get(documentId)
-    if (reference && !reference.isReady) {
+    if (!isNil(reference) && !reference.isReady) {
       reference.isReady = true
       // Execute all pending callbacks
       reference.readyCallbacks.forEach(callback => {
@@ -110,20 +110,20 @@ class IframeDocumentEditorRegistry {
    */
   onReady (documentId: number, callback: () => void): void {
     const reference = this.iframes.get(documentId)
-    if (!reference) {
-      throw new Error(`No iframe found for document ID ${documentId}`)
-    }
-
-    if (reference.isReady) {
-      // Already ready, execute immediately
-      try {
-        callback()
-      } catch (error) {
-        console.error(`Error executing immediate ready callback for document ${documentId}:`, error)
+    if (!isNil(reference)) {
+      if (reference.isReady) {
+        // Already ready, execute immediately
+        try {
+          callback()
+        } catch (error) {
+          console.error(`Error executing immediate ready callback for document ${documentId}:`, error)
+        }
+      } else {
+        // Not ready yet, add to pending callbacks
+        reference.readyCallbacks.push(callback)
       }
     } else {
-      // Not ready yet, add to pending callbacks
-      reference.readyCallbacks.push(callback)
+      throw new Error(`No iframe found for document ID ${documentId}`)
     }
   }
 }

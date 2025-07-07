@@ -13,6 +13,7 @@ import { Spin } from '@Pimcore/components/spin/spin'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyle } from './iframe.styles'
 import { useTranslation } from 'react-i18next'
+import { isNull, isNil } from 'lodash'
 
 export interface IframeRef {
   reload: () => void
@@ -35,31 +36,31 @@ interface IframeProps {
 }
 
 export const Iframe = forwardRef<IframeRef, IframeProps>(
-  ({ src, title, loadingTip, reloadingTip, onLoad, onReloadStart, onReloadEnd, onReady, useExternalReadyState, preserveScrollOnReload }, ref): React.JSX.Element => {
+  ({ src, title, loadingTip, reloadingTip, onLoad, onReloadStart, onReloadEnd, onReady, useExternalReadyState = false, preserveScrollOnReload }, ref): React.JSX.Element => {
     const [isLoaded, setIsLoaded] = useState(false)
     const [isReady, setIsReady] = useState(false)
     const [isReloading, setIsReloading] = useState(false)
     const [isActuallyLoading, setIsActuallyLoading] = useState(true) // Track actual iframe loading state
     const [iframeElement, setIframeElement] = useState<HTMLIFrameElement | null>(null)
     const [savedScrollPosition, setSavedScrollPosition] = useState<{ x: number, y: number } | null>(null)
-    const { styles } = useStyle({ 
-      isLoaded: useExternalReadyState ? isReady : isLoaded, 
-      isReloading, 
+    const { styles } = useStyle({
+      isLoaded: useExternalReadyState ? isReady : isLoaded,
+      isReloading,
       isActuallyLoading,
-      useExternalReadyState 
+      useExternalReadyState
     })
     const { t } = useTranslation()
 
     // Capture scroll position from iframe
     const captureScrollPosition = (): { x: number, y: number } | null => {
-      if (!iframeElement || !preserveScrollOnReload) return null
-      
+      if (isNil(iframeElement) || preserveScrollOnReload !== true) return null
+
       try {
-        const iframeDocument = iframeElement.contentDocument || iframeElement.contentWindow?.document
-        if (iframeDocument) {
+        const iframeDocument = iframeElement.contentDocument ?? iframeElement.contentWindow?.document
+        if (!isNil(iframeDocument)) {
           return {
-            x: iframeDocument.documentElement.scrollLeft || iframeDocument.body.scrollLeft,
-            y: iframeDocument.documentElement.scrollTop || iframeDocument.body.scrollTop
+            x: iframeDocument.documentElement.scrollLeft !== 0 ? iframeDocument.documentElement.scrollLeft : iframeDocument.body.scrollLeft,
+            y: iframeDocument.documentElement.scrollTop !== 0 ? iframeDocument.documentElement.scrollTop : iframeDocument.body.scrollTop
           }
         }
       } catch (error) {
@@ -70,11 +71,11 @@ export const Iframe = forwardRef<IframeRef, IframeProps>(
 
     // Restore scroll position in iframe
     const restoreScrollPosition = (position: { x: number, y: number }): void => {
-      if (!iframeElement || !preserveScrollOnReload) return
-      
+      if (isNull(iframeElement) || preserveScrollOnReload !== true) return
+
       try {
-        const iframeDocument = iframeElement.contentDocument || iframeElement.contentWindow?.document
-        if (iframeDocument) {
+        const iframeDocument = iframeElement.contentDocument ?? iframeElement.contentWindow?.document
+        if (!isNil(iframeDocument)) {
           iframeDocument.documentElement.scrollLeft = position.x
           iframeDocument.documentElement.scrollTop = position.y
           iframeDocument.body.scrollLeft = position.x
@@ -87,19 +88,19 @@ export const Iframe = forwardRef<IframeRef, IframeProps>(
 
     useImperativeHandle(ref, () => ({
       reload: () => {
-        if (iframeElement) {
+        if (!isNull(iframeElement)) {
           // Capture scroll position before reload
-          if (preserveScrollOnReload) {
+          if (preserveScrollOnReload === true) {
             const scrollPos = captureScrollPosition()
             setSavedScrollPosition(scrollPos)
           }
-          
+
           setIsReloading(true)
           if (useExternalReadyState) {
             setIsReady(false)
           }
           onReloadStart?.()
-          
+
           // Set actually loading state when we change the src
           setIsActuallyLoading(true)
           const currentSrc = iframeElement.src
@@ -119,16 +120,18 @@ export const Iframe = forwardRef<IframeRef, IframeProps>(
         if (ready) {
           setIsActuallyLoading(false) // Not actually loading anymore when ready
           onReady?.()
-          
+
           // Restore scroll position after iframe is ready
-          if (isReloading && savedScrollPosition && preserveScrollOnReload) {
+          if (isReloading && !isNull(savedScrollPosition) && preserveScrollOnReload === true) {
             // Use setTimeout to ensure DOM is fully rendered
             setTimeout(() => {
-              restoreScrollPosition(savedScrollPosition)
-              setSavedScrollPosition(null)
+              if (!isNull(savedScrollPosition)) {
+                restoreScrollPosition(savedScrollPosition)
+                setSavedScrollPosition(null)
+              }
             }, 0)
           }
-          
+
           if (isReloading) {
             setIsReloading(false)
             onReloadEnd?.()
@@ -154,7 +157,7 @@ export const Iframe = forwardRef<IframeRef, IframeProps>(
       setIframeElement(element)
     }
 
-    const showLoadingOverlay = useExternalReadyState 
+    const showLoadingOverlay = useExternalReadyState
       ? (!isReady || isReloading)
       : (!isLoaded || isReloading)
     const loadingMessage = loadingTip ?? reloadingTip ?? t('please-wait')
