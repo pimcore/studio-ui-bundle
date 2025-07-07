@@ -60,28 +60,26 @@ export const ReportsView = (): React.JSX.Element => {
   }, [reportsTreeData])
 
   const renderContent = (): React.JSX.Element => (
-    <Content
-      padded
-      padding={ { top: 'extra-small', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
-    >
-      <ContentLayout
-        renderToolbar={
-          <Toolbar
-            justify="flex-end"
-            theme="secondary"
-          >
-            {!isEmpty(chartData) && !isFetching && (
-              <Pagination
-                page={ page }
-                pageSize={ pageSize }
-                setPage={ setPage }
-                setPageSize={ setPageSize }
-                totalItems={ chartData!.length }
-              />
-            )}
-          </Toolbar>
-        }
-        renderTopBar={
+    <ContentLayout
+      renderToolbar={ !isEmpty(chartData) && !isFetching && (
+        <Toolbar
+          justify="flex-end"
+          theme="secondary"
+        >
+          <Pagination
+            page={ page }
+            pageSize={ pageSize }
+            setPage={ setPage }
+            setPageSize={ setPageSize }
+            totalItems={ chartData!.length }
+          />
+        </Toolbar>
+      ) }
+      renderTopBar={
+        <Content
+          padded
+          padding={ { top: 'extra-small', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
+        >
           <Toolbar
             padding={ { top: 'extra-small', bottom: 'extra-small', left: 'extra-small', right: 'extra-small' } }
             position='top'
@@ -102,29 +100,33 @@ export const ReportsView = (): React.JSX.Element => {
               />
             </Flex>
           </Toolbar>
-          }
-      >
-        <Content centered={ !isCurrentReportSelected }>
-          {isCurrentReportSelected
-            ? (
-              <ReportDetail
-                currentReport={ currentReport! }
-                page={ page }
-                pageSize={ pageSize }
-              />
-              )
-            : (
-              <Flex
-                align="center"
-                justify="center"
-              >
-                <Text>{t('reports.select-report-name')}</Text>
-              </Flex>
-              )
-          }
         </Content>
-      </ContentLayout>
-    </Content>
+          }
+    >
+      <Content
+        centered={ !isCurrentReportSelected }
+        padded
+        padding={ { top: 'extra-small', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
+      >
+        {isCurrentReportSelected
+          ? (
+            <ReportDetail
+              currentReport={ currentReport! }
+              page={ page }
+              pageSize={ pageSize }
+            />
+            )
+          : (
+            <Flex
+              align="center"
+              justify="center"
+            >
+              <Text>{t('reports.select-report-name')}</Text>
+            </Flex>
+            )
+          }
+      </Content>
+    </ContentLayout>
   )
 
   return (
