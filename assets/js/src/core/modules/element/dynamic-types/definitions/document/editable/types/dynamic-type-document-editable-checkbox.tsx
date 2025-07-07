@@ -77,10 +77,4 @@ export class DynamicTypeDocumentEditableCheckbox extends DynamicTypeDocumentEdit
   transformValue (value: any): boolean {
     return Boolean(value)
   }
-
-  getLabel (props: CheckboxEditableDefinition): React.ReactElement | undefined {
-    // Return undefined so the render system doesn't wrap in vertical Form.Item
-    // The label is handled directly in the CheckboxWrapper component
-    return undefined
-  }
 }
