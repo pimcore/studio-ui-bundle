@@ -93,7 +93,6 @@ class DocumentApiImpl implements DocumentApi {
 
   private async performAutoSaveAndReload (documentId: number): Promise<void> {
     try {
-      // Get the iframe ref to trigger loading state
       const iframeRef = iframeDocumentEditorRegistry.getIframeRef(documentId)
       if (!isNil(iframeRef?.current)) {
         iframeRef.current.setReloading(true)
@@ -101,17 +100,9 @@ class DocumentApiImpl implements DocumentApi {
 
       await documentSaveService.saveDocument(documentId, SaveTaskType.AutoSave)
 
-      // Use the iframe ref's reload method instead of direct src manipulation
       if (!isNil(iframeRef?.current)) {
         iframeRef.current.reload()
-      } else {
-        // Fallback to direct iframe manipulation if ref not available
-        const iframe = iframeDocumentEditorRegistry.getIframe(documentId)
-        if (!isNil(iframe)) {
-          const currentSrc = iframe.src
-          iframe.src = currentSrc
-        }
-      }
+      } 
     } catch (error) {
       console.error(`Auto-save and reload failed for document ${documentId}:`, error)
       // Reset loading state on error
