@@ -26,11 +26,11 @@ interface IReportDetailProps {
 }
 
 export const ReportDetail = ({ currentReport, page, pageSize }: IReportDetailProps): React.JSX.Element => {
-  const { isLoading, reportDetailData, chartDetailData } = useReportData({ name: currentReport, page, pageSize })
+  const { isLoading, isFetching, reportDetailData, chartDetailData } = useReportData({ name: currentReport, page, pageSize })
 
   const columnHelper = createColumnHelper()
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return <Content loading />
   }
 

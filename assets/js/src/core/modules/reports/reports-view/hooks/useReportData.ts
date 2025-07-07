@@ -37,14 +37,14 @@ export const useReportData = ({ name, page, pageSize }: UseReportDataProps): Use
     data: reportDetailData,
     refetch: reportDetailRefetch,
     isFetching: isReportDetailFetching
-  } = useCustomReportsReportQuery({ name }, { skip: isEmptyValue(name) })
+  } = useCustomReportsReportQuery({ name }, { skip: isEmptyValue(name), refetchOnMountOrArgChange: true })
 
   const {
     isLoading: isChartDetailLoading,
     data: chartDetailData,
     refetch: chartDetailRefetch,
     isFetching: isChartDetailFetching
-  } = useCustomReportsChartQuery({ name, page, pageSize }, { skip: isEmptyValue(name) })
+  } = useCustomReportsChartQuery({ name, page, pageSize }, { skip: isEmptyValue(name), refetchOnMountOrArgChange: true })
 
   const isLoading = isReportDetailLoading || isChartDetailLoading
   const isFetching = isReportDetailFetching || isChartDetailFetching
