@@ -1,8 +1,8 @@
 {
   "allFiles": [
+    "http://localhost:3030/static/js/async/vendors-node_modules_react-draggable_build_cjs_cjs_js.js",
     "http://localhost:3030/static/js/async/vendors-node_modules_react-redux_dist_react-redux_mjs.js",
     "http://localhost:3030/static/js/async/vendors-node_modules_lodash_lodash_js.js",
-    "http://localhost:3030/static/js/async/vendors-node_modules_react-draggable_build_cjs_cjs_js.js",
     "http://localhost:3030/static/js/async/vendors-node_modules_codemirror_lang-javascript_dist_index_js.js",
     "http://localhost:3030/static/js/async/vendors-node_modules_immer_dist_immer_mjs.js",
     "http://localhost:3030/static/js/async/vendors-node_modules_codemirror_lang-css_dist_index_js.js",
@@ -91,10 +91,8 @@
     "http://localhost:3030/static/svg/gt.inline.79c6d996.svg",
     "http://localhost:3030/static/svg/ad.inline.5718e36e.svg",
     "http://localhost:3030/static/svg/ai.inline.f1f4c108.svg",
-    "http://localhost:3030/mf-stats.json",
     "http://localhost:3030/static/svg/bz.inline.85c81fc9.svg",
     "http://localhost:3030/static/svg/om.inline.0bf08070.svg",
-    "http://localhost:3030/mf-manifest.json",
     "http://localhost:3030/static/svg/vg.inline.ddc1f05b.svg",
     "http://localhost:3030/static/svg/mp.inline.4d37bdb2.svg",
     "http://localhost:3030/static/svg/gs.inline.50e91486.svg",
@@ -165,10 +163,12 @@
     "http://localhost:3030/static/svg/aq.inline.e3ff2bd6.svg",
     "http://localhost:3030/static/svg/cc.inline.d0755117.svg",
     "http://localhost:3030/static/svg/kr.inline.3a674081.svg",
+    "http://localhost:3030/mf-manifest.json",
+    "http://localhost:3030/mf-stats.json",
     "http://localhost:3030/index.html",
+    "http://localhost:3030/static/js/async/vendors-node_modules_react-draggable_build_cjs_cjs_js.js.map",
     "http://localhost:3030/static/js/async/vendors-node_modules_react-redux_dist_react-redux_mjs.js.map",
     "http://localhost:3030/static/js/async/vendors-node_modules_lodash_lodash_js.js.map",
-    "http://localhost:3030/static/js/async/vendors-node_modules_react-draggable_build_cjs_cjs_js.js.map",
     "http://localhost:3030/static/js/async/vendors-node_modules_codemirror_lang-javascript_dist_index_js.js.map",
     "http://localhost:3030/static/js/async/vendors-node_modules_immer_dist_immer_mjs.js.map",
     "http://localhost:3030/static/js/async/vendors-node_modules_codemirror_lang-css_dist_index_js.js.map",
@@ -197,7 +197,9 @@
     "http://localhost:3030/static/js/async/__federation_expose_default_export.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_api__perspectives.js.map",
     "http://localhost:3030/static/js/async/__federation_expose__internal___mf_bootstrap.js.map",
+    "http://localhost:3030/__federation_expose__internal___mf_bootstrap.d137930420d59869.hot-update.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_api__schedule.js.map",
+    "http://localhost:3030/pimcore_studio_ui_bundle.d137930420d59869.hot-update.js.map",
     "http://localhost:3030/static/js/remoteEntry.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_api__role.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_api__settings.js.map",
@@ -214,6 +216,7 @@
     "http://localhost:3030/static/js/async/__federation_expose_api__translations.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_modules__wysiwyg.js.map",
     "http://localhost:3030/static/js/index.js.map",
+    "http://localhost:3030/index.d137930420d59869.hot-update.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_api__metadata.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_api__data_object.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_api__workflow.js.map",
@@ -246,6 +249,7 @@
         "static/js/async/vendors-node_modules_lezer_lr_dist_index_js.js.map",
         "static/js/async/vendors-node_modules_reselect_dist_reselect_mjs.js.map",
         "static/js/index.js.map",
+        "index.d137930420d59869.hot-update.js.map",
         "static/js/async/vendors-node_modules_i18next_dist_esm_i18next_js.js.map",
         "static/js/async/vendors-node_modules_codemirror_lang-markdown_dist_index_js.js.map",
         "static/js/async/node_modules_codemirror_lang-json_dist_index_js.js.map",
@@ -268,9 +272,9 @@
         "static/js/async/vendors-node_modules_codemirror_lang-css_dist_index_js.js.map",
         "static/js/async/vendors-node_modules_immer_dist_immer_mjs.js.map",
         "static/js/async/vendors-node_modules_codemirror_lang-javascript_dist_index_js.js.map",
-        "static/js/async/vendors-node_modules_react-draggable_build_cjs_cjs_js.js.map",
         "static/js/async/vendors-node_modules_lodash_lodash_js.js.map",
-        "static/js/async/vendors-node_modules_react-redux_dist_react-redux_mjs.js.map"
+        "static/js/async/vendors-node_modules_react-redux_dist_react-redux_mjs.js.map",
+        "static/js/async/vendors-node_modules_react-draggable_build_cjs_cjs_js.js.map"
       ],
       "html": [
         "http://localhost:3030/index.html"
@@ -309,9 +313,9 @@
           "http://localhost:3030/static/js/async/vendors-node_modules_codemirror_lang-css_dist_index_js.js",
           "http://localhost:3030/static/js/async/vendors-node_modules_immer_dist_immer_mjs.js",
           "http://localhost:3030/static/js/async/vendors-node_modules_codemirror_lang-javascript_dist_index_js.js",
-          "http://localhost:3030/static/js/async/vendors-node_modules_react-draggable_build_cjs_cjs_js.js",
           "http://localhost:3030/static/js/async/vendors-node_modules_lodash_lodash_js.js",
-          "http://localhost:3030/static/js/async/vendors-node_modules_react-redux_dist_react-redux_mjs.js"
+          "http://localhost:3030/static/js/async/vendors-node_modules_react-redux_dist_react-redux_mjs.js",
+          "http://localhost:3030/static/js/async/vendors-node_modules_react-draggable_build_cjs_cjs_js.js"
         ]
       }
     },
@@ -439,9 +443,11 @@
         "static/js/async/__federation_expose_api__documents.js.map",
         "static/js/async/__federation_expose_api__settings.js.map",
         "static/js/async/__federation_expose_api__role.js.map",
+        "pimcore_studio_ui_bundle.d137930420d59869.hot-update.js.map",
         "static/js/remoteEntry.js.map",
         "static/js/async/__federation_expose_api__schedule.js.map",
         "static/js/async/__federation_expose__internal___mf_bootstrap.js.map",
+        "__federation_expose__internal___mf_bootstrap.d137930420d59869.hot-update.js.map",
         "static/font/Lato-Light.bec6f0ae.ttf",
         "static/font/Lato-Bold.2c00c297.ttf",
         "static/font/Lato-Regular.4291f48c.ttf",
@@ -472,9 +478,9 @@
         "static/js/async/vendors-node_modules_codemirror_lang-css_dist_index_js.js.map",
         "static/js/async/vendors-node_modules_immer_dist_immer_mjs.js.map",
         "static/js/async/vendors-node_modules_codemirror_lang-javascript_dist_index_js.js.map",
-        "static/js/async/vendors-node_modules_react-draggable_build_cjs_cjs_js.js.map",
         "static/js/async/vendors-node_modules_lodash_lodash_js.js.map",
-        "static/js/async/vendors-node_modules_react-redux_dist_react-redux_mjs.js.map"
+        "static/js/async/vendors-node_modules_react-redux_dist_react-redux_mjs.js.map",
+        "static/js/async/vendors-node_modules_react-draggable_build_cjs_cjs_js.js.map"
       ],
       "initial": {
         "js": [
@@ -547,9 +553,9 @@
           "http://localhost:3030/static/js/async/vendors-node_modules_codemirror_lang-css_dist_index_js.js",
           "http://localhost:3030/static/js/async/vendors-node_modules_immer_dist_immer_mjs.js",
           "http://localhost:3030/static/js/async/vendors-node_modules_codemirror_lang-javascript_dist_index_js.js",
-          "http://localhost:3030/static/js/async/vendors-node_modules_react-draggable_build_cjs_cjs_js.js",
           "http://localhost:3030/static/js/async/vendors-node_modules_lodash_lodash_js.js",
-          "http://localhost:3030/static/js/async/vendors-node_modules_react-redux_dist_react-redux_mjs.js"
+          "http://localhost:3030/static/js/async/vendors-node_modules_react-redux_dist_react-redux_mjs.js",
+          "http://localhost:3030/static/js/async/vendors-node_modules_react-draggable_build_cjs_cjs_js.js"
         ],
         "css": [
           "http://localhost:3030/static/css/async/vendors-node_modules_ant-design_icons_es_icons_UserOutlined_js-node_modules_ant-design_plots_-c53284.css",
