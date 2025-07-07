@@ -11,10 +11,10 @@
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import { Checkbox, Flex, Text } from '@sdk/components'
-import cn from 'classnames'
 import {
   FieldLabel
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label'
+import { isUndefined } from 'lodash'
 
 export type CheckboxEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
@@ -23,42 +23,47 @@ export type CheckboxEditableDefinition = Omit<AbstractDocumentEditableDefinition
   }
 }
 
-// Wrapper component to handle value -> checked prop mapping and horizontal label
-const CheckboxWrapper = ({ value, onChange, className, label, name, ...otherProps }: any) => {
-  const handleChange = (e: any) => {
+interface CheckboxWrapperProps {
+  value?: any
+  onChange?: (checked: boolean) => void
+  className?: string
+  label?: string
+  name?: string
+  [key: string]: any // For other props that get spread to Checkbox
+}
+
+// Wrapper component to add a horizontal label if needed
+const CheckboxWrapper = ({ value, onChange, className, label, name, ...otherProps }: CheckboxWrapperProps): React.JSX.Element => {
+  const handleChange = (e: any): void => {
     const checked = e.target?.checked ?? e
-    onChange?.(checked)
+    onChange?.(Boolean(checked))
   }
 
-  if (label) {
-    // For checkboxes with labels, render them horizontally aligned and vertically centered
+  const checkboxProps = {
+    ...otherProps,
+    checked: Boolean(value),
+    className,
+    onChange: handleChange
+  }
+
+  if (!isUndefined(label)) {
     return (
-      <Flex align="center" gap="extra-small">
-        <Checkbox
-          {...otherProps}
-          checked={Boolean(value)}
-          className={className}
-          onChange={handleChange}
-        />
+      <Flex
+        align="center"
+        gap="extra-small"
+      >
+        <Checkbox { ...checkboxProps } />
         <Text>
-            <FieldLabel
-                name={name}
-                label={label}
-            />
+          <FieldLabel
+            label={ label }
+            name={ name }
+          />
         </Text>
       </Flex>
     )
   }
 
-  // For checkboxes without labels, render normally
-  return (
-    <Checkbox
-      {...otherProps}
-      checked={Boolean(value)}
-      className={className}
-      onChange={handleChange}
-    />
-  )
+  return <Checkbox { ...checkboxProps } />
 }
 
 export class DynamicTypeDocumentEditableCheckbox extends DynamicTypeDocumentEditableAbstract {
@@ -67,9 +72,9 @@ export class DynamicTypeDocumentEditableCheckbox extends DynamicTypeDocumentEdit
   getEditableDataComponent (props: CheckboxEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
       <CheckboxWrapper
-        className={ cn('w-full', props.config?.class) }
-        label={props.config?.label}
-        name={props.name}
+        className={ props.config?.class }
+        label={ props.config?.label }
+        name={ props.name }
       />
     )
   }
