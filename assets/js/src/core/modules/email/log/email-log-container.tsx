@@ -55,37 +55,37 @@ export const EmailLogContainer = (): React.JSX.Element => {
           theme='secondary'
         >
           <IconButton
-            disabled={isRTKLoading || isLoading}
-            icon={{ value: 'refresh' }}
-            onClick={() => {
+            disabled={ isRTKLoading || isLoading }
+            icon={ { value: 'refresh' } }
+            onClick={ () => {
               setIsLoading(true)
               dispatch(
                 api.util.invalidateTags(
                   invalidatingTags.EMAIL_LOG()
                 )
               )
-            }}
+            } }
           />
           <Pagination
-            current={currentPage}
-            defaultPageSize={pageSize}
-            onChange={onPagerChange}
+            current={ currentPage }
+            defaultPageSize={ pageSize }
+            onChange={ onPagerChange }
             showSizeChanger
-            showTotal={(total) => t('pagination.show-total', { total })}
-            total={total}
+            showTotal={ (total) => t('pagination.show-total', { total }) }
+            total={ total }
           />
         </Toolbar>
       }
       renderTopBar={
         <Toolbar
           justify='space-between'
-          margin={{
+          margin={ {
             x: 'mini',
             y: 'none'
-          }}
+          } }
           theme='secondary'
         >
-          <Flex gap={'small'}>
+          <Flex gap={ 'small' }>
             <Title>
               {t('widget.email-log')}
             </Title>
@@ -94,11 +94,11 @@ export const EmailLogContainer = (): React.JSX.Element => {
       }
     >
       <Content
-        loading={isRTKLoading || (isLoading && isFetching)}
-        none={isUndefined(data?.items) || data.items.length === 0}
+        loading={ isRTKLoading || (isLoading && isFetching) }
+        none={ isUndefined(data?.items) || data.items.length === 0 }
         padded
       >
-        {!isUndefined(data?.items) && <EmailCard emails={data.items} />}
+        {!isUndefined(data?.items) && <EmailCard emails={ data.items } />}
       </Content>
     </ContentLayout>
   )
