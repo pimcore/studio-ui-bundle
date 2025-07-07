@@ -18,20 +18,18 @@ import {
 } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
-import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ReportDetail } from '@Pimcore/modules/reports/reports-view/components/report-detail/report-detail'
 import { Text } from '@Pimcore/components/text/text'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
-import { useStyles } from './reports-view.styles'
 import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
 import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
-import { Pagination } from '@Pimcore/modules/reports/components/pagination/pagination'
+import { ReportToolbar } from '@Pimcore/modules/reports/reports-view/components/report-toolbar/report-toolbar'
+import { ReportTopBar } from '@Pimcore/modules/reports/reports-view/components/report-top-bar/report-top-bar'
 
 export const ReportsView = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { styles } = useStyles()
 
   const [currentReport, setCurrentReport] = useState<string | null>(null)
 
@@ -59,69 +57,46 @@ export const ReportsView = (): React.JSX.Element => {
   }, [reportsTreeData])
   const isLoadingReportsTree = isReportsTreeLoading && isEmpty(reportsTreeOptions)
 
+  const renderMainContent = (): React.JSX.Element => (
+    <Content
+      centered={ !isCurrentReportSelected }
+      padded
+      padding={ { top: 'extra-small', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
+    >
+      {isCurrentReportSelected
+        ? <ReportDetail currentReport={ currentReport! } />
+        : (
+          <Flex
+            align="center"
+            justify="center"
+          >
+            <Text>{t('reports.select-report-name')}</Text>
+          </Flex>
+          )
+        }
+    </Content>
+  )
+
   const renderContent = (): React.JSX.Element => (
     <ContentLayout
       renderToolbar={ !isEmpty(chartData) && !isFetching && (
-        <Toolbar
-          justify="flex-end"
-          theme="secondary"
-        >
-          <Pagination
-            page={ page }
-            pageSize={ pageSize }
-            setPage={ setPage }
-            setPageSize={ setPageSize }
-            totalItems={ chartData?.length ?? 0 }
-          />
-        </Toolbar>
+        <ReportToolbar
+          page={ page }
+          pageSize={ pageSize }
+          setPage={ setPage }
+          setPageSize={ setPageSize }
+          totalItems={ chartData?.length ?? 0 }
+        />
       ) }
-      renderTopBar={
-        <Content
-          padded
-          padding={ { top: 'extra-small', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
-        >
-          <Toolbar
-            padding={ { top: 'extra-small', bottom: 'extra-small', left: 'extra-small', right: 'extra-small' } }
-            position='top'
-            size='auto'
-            theme='secondary'
-          >
-            <Flex
-              align="center"
-              gap="extra-small"
-            >
-              <Text className={ styles.selectReportLabel }>{t('reports.report-name')}</Text>
-              <Select
-                className='min-w-200'
-                onChange={ (value: string) => { setCurrentReport(value) } }
-                options={ reportsTreeOptions }
-                placeholder={ t('reports.select-report') }
-                value={ currentReport }
-              />
-            </Flex>
-          </Toolbar>
-        </Content>
-          }
+      renderTopBar={ (
+        <ReportTopBar
+          currentReport={ currentReport }
+          reportsTreeOptions={ reportsTreeOptions }
+          setCurrentReport={ setCurrentReport }
+        />
+      ) }
     >
-      <Content
-        centered={ !isCurrentReportSelected }
-        padded
-        padding={ { top: 'extra-small', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
-      >
-        {isCurrentReportSelected
-          ? (
-            <ReportDetail currentReport={ currentReport! } />
-            )
-          : (
-            <Flex
-              align="center"
-              justify="center"
-            >
-              <Text>{t('reports.select-report-name')}</Text>
-            </Flex>
-            )
-          }
-      </Content>
+      {renderMainContent()}
     </ContentLayout>
   )
 

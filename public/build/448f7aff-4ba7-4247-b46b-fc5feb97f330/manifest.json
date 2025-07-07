@@ -1,0 +1,28 @@
+{
+  "allFiles": [
+    "http://localhost:3031/bundles/pimcorestudioui/build/448f7aff-4ba7-4247-b46b-fc5feb97f330/static/js/main.js",
+    "http://localhost:3031/bundles/pimcorestudioui/build/448f7aff-4ba7-4247-b46b-fc5feb97f330/static/js/vendors-_module-federation_runtime_rspack_js_data_text_javascript_import___module_federation_-376ef4.js",
+    "http://localhost:3031/bundles/pimcorestudioui/build/448f7aff-4ba7-4247-b46b-fc5feb97f330/mf-stats.json",
+    "http://localhost:3031/bundles/pimcorestudioui/build/448f7aff-4ba7-4247-b46b-fc5feb97f330/mf-manifest.json",
+    "http://localhost:3031/bundles/pimcorestudioui/build/448f7aff-4ba7-4247-b46b-fc5feb97f330/main.html",
+    "http://localhost:3031/bundles/pimcorestudioui/build/448f7aff-4ba7-4247-b46b-fc5feb97f330/static/js/main.js.map",
+    "http://localhost:3031/bundles/pimcorestudioui/build/448f7aff-4ba7-4247-b46b-fc5feb97f330/static/js/vendors-_module-federation_runtime_rspack_js_data_text_javascript_import___module_federation_-376ef4.js.map"
+  ],
+  "entries": {
+    "main": {
+      "assets": [
+        "static/js/vendors-_module-federation_runtime_rspack_js_data_text_javascript_import___module_federation_-376ef4.js.map",
+        "static/js/main.js.map"
+      ],
+      "html": [
+        "http://localhost:3031/bundles/pimcorestudioui/build/448f7aff-4ba7-4247-b46b-fc5feb97f330/main.html"
+      ],
+      "initial": {
+        "js": [
+          "http://localhost:3031/bundles/pimcorestudioui/build/448f7aff-4ba7-4247-b46b-fc5feb97f330/static/js/vendors-_module-federation_runtime_rspack_js_data_text_javascript_import___module_federation_-376ef4.js",
+          "http://localhost:3031/bundles/pimcorestudioui/build/448f7aff-4ba7-4247-b46b-fc5feb97f330/static/js/main.js"
+        ]
+      }
+    }
+  }
+}
