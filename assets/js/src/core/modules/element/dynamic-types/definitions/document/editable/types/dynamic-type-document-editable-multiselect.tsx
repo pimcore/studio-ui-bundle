@@ -13,12 +13,12 @@ import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbs
 import { Select } from '@sdk/components'
 import { isNil } from 'lodash'
 import { toCssDimension } from '@sdk/utils'
-import { SelectOptionType } from '@sdk/modules/element'
+import { type SelectOptionType } from '@sdk/modules/element'
 import i18n from '@Pimcore/app/i18n'
 
 export type MultiSelectEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
-    store: [string|number|null, string][]
+    store: Array<[string | number | null, string]>
     width?: number
     class?: string
   }
@@ -27,7 +27,6 @@ export class DynamicTypeDocumentEditableMultiSelect extends DynamicTypeDocumentE
   id: string = 'multiselect'
 
   getEditableDataComponent (props: MultiSelectEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
-
     const options: SelectOptionType[] = props.config?.store?.map(([value, label]) => ({
       value,
       label: i18n.t(label)
@@ -36,13 +35,13 @@ export class DynamicTypeDocumentEditableMultiSelect extends DynamicTypeDocumentE
     return (
       <Select
         className={ props.config?.class }
-        style={ { 
-          width: '100%',
-          maxWidth: toCssDimension(props.config?.width, props.defaultFieldWidth.large) 
-        } }
         mode="multiple"
         optionFilterProp="label"
         options={ options }
+        style={ {
+          width: '100%',
+          maxWidth: toCssDimension(props.config?.width, props.defaultFieldWidth.large)
+        } }
       />
     )
   }

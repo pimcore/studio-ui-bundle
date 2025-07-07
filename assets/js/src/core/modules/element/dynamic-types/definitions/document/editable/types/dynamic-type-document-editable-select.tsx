@@ -13,12 +13,12 @@ import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbs
 import { Select } from '@sdk/components'
 import { isEmpty, isNil } from 'lodash'
 import { toCssDimension } from '@sdk/utils'
-import { SelectOptionType } from '@sdk/modules/element'
+import { type SelectOptionType } from '@sdk/modules/element'
 import i18n from '@Pimcore/app/i18n'
 
 export type SelectEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
-    store: [string|number|null, string][]
+    store: Array<[string | number | null, string]>
     width?: number
     class?: string
     defaultValue?: string
@@ -28,7 +28,6 @@ export class DynamicTypeDocumentEditableSelect extends DynamicTypeDocumentEditab
   id: string = 'select'
 
   getEditableDataComponent (props: SelectEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
-
     const options: SelectOptionType[] = props.config?.store?.map(([value, label]) => ({
       value,
       label: i18n.t(label)
@@ -37,13 +36,13 @@ export class DynamicTypeDocumentEditableSelect extends DynamicTypeDocumentEditab
     return (
       <Select
         className={ props.config?.class }
-        style={ { 
-          width: '100%',
-          maxWidth: toCssDimension(props.config?.width, props.defaultFieldWidth.medium) 
-        } }
         optionFilterProp="label"
         options={ options }
         showSearch
+        style={ {
+          width: '100%',
+          maxWidth: toCssDimension(props.config?.width, props.defaultFieldWidth.medium)
+        } }
       />
     )
   }

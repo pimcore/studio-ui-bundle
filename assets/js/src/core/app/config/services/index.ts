@@ -182,7 +182,6 @@ import { DynamicTypeDocumentEditableMultiSelect } from '@Pimcore/modules/element
 import { DynamicTypeDocumentEditableSelect } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-select'
 import { BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
 
-
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
 
