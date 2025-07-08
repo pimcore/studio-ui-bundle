@@ -11,7 +11,7 @@
 import type React from 'react'
 import type { GlobalToken } from 'antd'
 import { isUndefined } from 'lodash'
-import { FullToken } from 'antd-style'
+import { type FullToken } from 'antd-style'
 
 export type Sizings =
   | 'none'
