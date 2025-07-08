@@ -11,6 +11,7 @@
 import type React from 'react'
 import type { GlobalToken } from 'antd'
 import { isUndefined } from 'lodash'
+import { FullToken } from 'antd-style'
 
 export type Sizings =
   | 'none'
@@ -45,7 +46,7 @@ export const SIZING_VALUES: readonly Sizings[] = [
 ] as const
 
 const getTokenValue = (
-  token: GlobalToken,
+  token: GlobalToken | FullToken,
   size: Sizings,
   type: 'margin' | 'padding'
 ): number => {
@@ -78,7 +79,7 @@ const getTokenValue = (
 }
 
 const generateStyles = (
-  token: GlobalToken,
+  token: GlobalToken | FullToken,
   definition: SizeDefinition | undefined,
   type: 'margin' | 'padding'
 ): React.CSSProperties => {
@@ -102,7 +103,7 @@ const generateStyles = (
   }
 
   for (const [key, props] of Object.entries(propMapping)) {
-    if (Object.prototype.hasOwnProperty.call(definition, key)) {
+    if (Object.prototype.hasOwnProperty.call(definition, key) === true) {
       const size = definition[key as keyof typeof definition]
       if (!isUndefined(size)) {
         const value = getTokenValue(token, size, type)
@@ -117,12 +118,12 @@ const generateStyles = (
 }
 
 export const getMarginStyles = (
-  token: GlobalToken,
+  token: GlobalToken | FullToken,
   margin: SizeDefinition | undefined
 ): React.CSSProperties => generateStyles(token, margin, 'margin')
 
 export const getPaddingStyles = (
-  token: GlobalToken,
+  token: GlobalToken | FullToken,
   padding: SizeDefinition | undefined
 ): React.CSSProperties => generateStyles(token, padding, 'padding')
 
@@ -132,7 +133,7 @@ const generateSpacingCSS = (
   size: Sizings,
   locations: Array<'x' | 'y' | 'top' | 'bottom' | 'left' | 'right'>,
   spacingType: 'margin' | 'padding',
-  token: GlobalToken
+  token: GlobalToken | FullToken
 ): string => {
   const value = getTokenValue(token, size, spacingType)
   const rules: string[] = []
@@ -165,7 +166,7 @@ const generateSpacingCSS = (
 const generateAllSizingCSS = (
   prefixCls: string,
   modifier: string,
-  token: GlobalToken,
+  token: GlobalToken | FullToken,
   locations: Array<'x' | 'y' | 'top' | 'bottom' | 'left' | 'right'>,
   type: 'margin' | 'padding'
 ): string =>
@@ -176,13 +177,13 @@ const generateAllSizingCSS = (
 export const generateAllMarginSizingCSS = (
   prefixCls: string,
   modifier: string,
-  token: GlobalToken,
+  token: GlobalToken | FullToken,
   locations: Array<'x' | 'y' | 'top' | 'bottom' | 'left' | 'right'>
 ): string => generateAllSizingCSS(prefixCls, modifier, token, locations, 'margin')
 
 export const generateAllPaddingSizingCSS = (
   prefixCls: string,
   modifier: string,
-  token: GlobalToken,
+  token: GlobalToken | FullToken,
   locations: Array<'x' | 'y' | 'top' | 'bottom' | 'left' | 'right'>
 ): string => generateAllSizingCSS(prefixCls, modifier, token, locations, 'padding')

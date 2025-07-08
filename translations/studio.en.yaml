@@ -875,3 +875,6 @@ user-profile.password-old: Old Password
 user-profile.password-new: New Password
 user-profile.password-repeat: Repeat Password
 user-profile.password-repeat-error: Passwords do not match
+creatable-select.add-custom-option: Add custom option
+creatable-select.add: Add
+creatable-select.option-already-exists: Option already exists
