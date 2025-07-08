@@ -175,3 +175,4 @@ export * from '@Pimcore/components/form-item-wrapper/form-item-wrapper'
 
 // @todo move those to another folder or make it a more generic iframe component
 export * from '@Pimcore/components/data-object-preview/data-object-preview'
+export * from '@Pimcore/components/creatable-select/creatable-select'
