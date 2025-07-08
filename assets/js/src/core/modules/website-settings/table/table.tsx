@@ -12,16 +12,13 @@ import React, { useState } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { useElementHelper, type ElementInfo, type ModifiedCells, allElementTypes } from '@sdk/modules/element'
+import { type ElementInfo, type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
 import { type SelectOption, type WebsiteSettingRow } from '../website-settings-container'
 import { useWebsiteSetting } from '../hooks/use-website-settings'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { type Site } from '@Pimcore/modules/document/sites-slice.gen'
-import { isEmpty, isNil, isUndefined } from 'lodash'
-import { DefaultCell, type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import { addColumnMeta } from '@Pimcore/components/grid/columns/helpers'
-import { log } from '@module-federation/runtime-core/dist/src/utils'
+import { isUndefined } from 'lodash'
 
 type WebsiteSettingEnrichedRow = WebsiteSettingRow & {
   siteDomain: string
@@ -43,7 +40,6 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
 
   const { getAllSites, getSiteById } = useSites()
-  const { mapToElementType } = useElementHelper()
 
   const tableData: WebsiteSettingEnrichedRow[] = websiteSettingRows.map((row: WebsiteSettingEnrichedRow) => {
     if (row.siteId == null) {
@@ -77,6 +73,12 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
     value: unknown
     rowData: WebsiteSettingRow
   }): Promise<void> => {
+
+    console.log("columnId", columnId)
+        console.log("value", value)
+                console.log("rowData", rowData)
+
+
     const rowId = rowData.rowId
     const columnIdNormalised = columnId === 'siteDomain'
     ? 'siteId'
@@ -130,50 +132,15 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
       },
       size: 60
     }),
-columnHelper.accessor('data', {
-      id: 'data',
+    columnHelper.accessor('data', {
       header: t('website-settings.columns.value'),
       meta: {
+        type: 'website-settings-value',
         editable: true,
         clearable: true
       },
-      cell: (info) => {
-        const row: WebsiteSettingRow = info.row.original
-
-        const getType = (): string => {
-          if (row.type === 'text') return 'text'
-          else if (row.type === 'bool') return 'checkbox'
-          else return 'element'
-        }
-
-        console.log("test", getType())
-        return (
-          <DefaultCell
-            { ...addColumnMeta(info, { type: getType() }) }
-          />
-        )
-      }
+      size: 200
     }),
-    // columnHelper.accessor('data', {
-    //   header: t('website-settings.columns.value'),
-    //   meta: {
-    //     type: 'element',
-    //     editable: true,
-    //     clearable: true,
-    //     config: {
-    //       allowedTypes: allElementTypes,
-    //       getElementInfo: (cellProps: DefaultCellProps): ElementInfo => {
-    //         const row = cellProps.row.original
-    //         return {
-    //           elementType: mapToElementType(String(row.type), true),
-    //           id: undefined,
-    //           fullPath: isEmpty(row.data) ? '' : String(row.data)
-    //         }
-    //       }
-    //     }
-    //   },
-    //   size: 300
-    // }),
     columnHelper.accessor('siteDomain', {
       header: t('website-settings.columns.site'),
       meta: { type: 'select', editable: true, config: { options: siteDomains } },

@@ -54,6 +54,7 @@ import { DynamicTypeGridCellAssetCustomMetadataIcon } from '@Pimcore/modules/ele
 import { DynamicTypeGridCellAssetCustomMetadataValue } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_meta-data/dynamic-type-grid-cell-asset-custom-metadata-value'
 import { DynamicTypeGridCellPropertyIcon } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_properties/dynamic-type-grid-cell-property-icon'
 import { DynamicTypeGridCellPropertyValue } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_properties/dynamic-type-grid-cell-property-value'
+import { DynamicTypeGridCellWebsiteSettingsValue } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_website-settings/dynamic-type-grid-cell-website-settings-value'
 import { DynamicTypeGridCellScheduleActionsSelect } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_schedule/dynamic-type-grid-cell-schedule-actions-select'
 import { DynamicTypeGridCellVersionIdSelect } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_schedule/dynamic-type-grid-cell-version-id-select'
 import { DynamicTypeGridCellAssetVersionPreviewFieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_versions/dynamic-type-grid-cell-asset-version-preview-field-label'
@@ -266,6 +267,7 @@ container.bind(serviceIds['DynamicTypes/GridCell/AssetCustomMetadataIcon']).to(D
 container.bind(serviceIds['DynamicTypes/GridCell/AssetCustomMetadataValue']).to(DynamicTypeGridCellAssetCustomMetadataValue).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/PropertyIcon']).to(DynamicTypeGridCellPropertyIcon).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/PropertyValue']).to(DynamicTypeGridCellPropertyValue).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/WebsiteSettingsValue']).to(DynamicTypeGridCellWebsiteSettingsValue).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/ScheduleActionsSelect']).to(DynamicTypeGridCellScheduleActionsSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/VersionsIdSelect']).to(DynamicTypeGridCellVersionIdSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/AssetVersionPreviewFieldLabel']).to(DynamicTypeGridCellAssetVersionPreviewFieldLabel).inSingletonScope()
