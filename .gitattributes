@@ -12,3 +12,6 @@
 /CONTRIBUTING.md export-ignore
 /codeception.dist.yml export-ignore
 /phpstan* export-ignore
+
+# Mark as generated files
+/public/build/* linguist-generated=true
