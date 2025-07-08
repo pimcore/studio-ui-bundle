@@ -30,11 +30,10 @@ const typeMapping = {
 
 export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
 
-  console.log("here");
   
-  const propertyType = props.row.original.type as string
+  const settingType = props.row.original.type as string
   const gridCellRegistry = useInjection<DynamicTypeGridCellRegistry>('DynamicTypes/GridCellRegistry')
-  const type: string = typeMapping[propertyType] ?? propertyType
+  const type: string = typeMapping[settingType] ?? settingType
   const { mapToElementType } = useElementHelper()
 
   const renderCell = (): React.JSX.Element => {
@@ -48,11 +47,18 @@ export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
       )
     }
 
+      console.log("type", type);
+
     const dynamicType = gridCellRegistry.getDynamicType(type)
         let enrichedProps = props
    if (type === 'element') {
+                              console.log("row");
+
       const getElementInfo = (cellProps: DefaultCellProps): ElementInfo => {
+
                   const row = cellProps.row.original
+                                            console.log("row", cellProps);
+
                   const element: WebsiteSettingsObjectData = row.data
                   return {
                     elementType: mapToElementType(String(row.type), true),

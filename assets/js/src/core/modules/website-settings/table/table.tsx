@@ -84,7 +84,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
     ? 'siteId'
     : columnId
       
-    const valueNormalised = columnId === 'data'
+    const valueNormalised = (columnId === 'data' && typeof value === 'object' )
     ? (value as ElementInfo).fullPath
     : value
 
@@ -112,7 +112,6 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
 
   const columnHelper = createColumnHelper<WebsiteSettingEnrichedWithActions>()
 
-  // @TODO wait for elementId to be returned from API and add to column
   const tableColumns = [
     columnHelper.accessor('type', {
       header: t('website-settings.columns.type'),

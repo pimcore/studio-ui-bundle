@@ -40,12 +40,14 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
     if (allowedTypes !== undefined) {
       defaultType = allowedTypes[0] as ElementType
     }
+  
+    const includesTypeInformation = propertyData.data !== null && (propertyData.data?.type !== undefined)
     const includesPathInformation = propertyData.data !== null && (propertyData.data?.fullPath !== undefined || propertyData.data?.path !== undefined)
     const hasFullPath = includesPathInformation && propertyData.data?.fullPath !== undefined
 
-    const value = props.getValue()
+    const value = props.getValue()    
 
-    if (isPlainObject(value)) {
+    if (isPlainObject(value) && includesTypeInformation) {
       const element: ElementReference = value as ElementReference
       const elementType = mapToElementType(String(element.type))
       return {
@@ -72,7 +74,6 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
   })
 
   const elementInfo = getElementInfo(props)
-
   const showClearIcon = props.clearDisabled !== true && (!isUndefined(elementInfo.fullPath) && elementInfo.fullPath !== '')
 
   return (
