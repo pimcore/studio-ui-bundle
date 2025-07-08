@@ -6,6 +6,7 @@ on:
       - "[0-9]+.[0-9]+"
       - "feature-*"
       - "nightly"
+      - "test-pr2"
   pull_request_target:
     branches:
       - "[0-9]+.[0-9]+"
