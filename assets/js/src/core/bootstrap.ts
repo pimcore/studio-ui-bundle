@@ -33,5 +33,3 @@ import '@Pimcore/modules/open-element'
 import '@Pimcore/modules/wysiwyg'
 import 'flexlayout-react/style/light.css'
 import '../../../css/globals.css'
-
-// test
