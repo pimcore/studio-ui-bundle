@@ -19,6 +19,7 @@ import { useWebsiteSetting } from '../hooks/use-website-settings'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { type Site } from '@Pimcore/modules/document/sites-slice.gen'
 import { isUndefined } from 'lodash'
+import { WebsiteSettingsObjectData } from '../website-settings-api-slice.gen'
 
 type WebsiteSettingEnrichedRow = WebsiteSettingRow & {
   siteDomain: string
@@ -74,11 +75,6 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
     rowData: WebsiteSettingRow
   }): Promise<void> => {
 
-    console.log("columnId", columnId)
-        console.log("value", value)
-                console.log("rowData", rowData)
-
-
     const rowId = rowData.rowId
     const columnIdNormalised = columnId === 'siteDomain'
     ? 'siteId'
@@ -88,7 +84,12 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
     ? (value as ElementInfo).fullPath
     : value
 
-    const updatedRow: WebsiteSettingRow = { ...rowData, [columnIdNormalised]: valueNormalised }
+    const normalizedData =
+    rowData.data && typeof rowData.data === 'object' && 'path' in rowData.data
+      ? (rowData.data as WebsiteSettingsObjectData).path
+      : rowData.data
+
+    const updatedRow: WebsiteSettingRow = { ...rowData, [columnIdNormalised]: valueNormalised, data: normalizedData }
   
     setWebsiteSettingRows(prev =>
       prev.map(row =>
