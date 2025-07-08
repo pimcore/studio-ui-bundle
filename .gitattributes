@@ -14,5 +14,5 @@
 /phpstan* export-ignore
 
 # Mark as generated files
-/public/build/*/* linguist-generated=true
-/public/build/*/* linguist-vendored
+/public/build/* linguist-generated=true
+/public/build/* linguist-vendored
