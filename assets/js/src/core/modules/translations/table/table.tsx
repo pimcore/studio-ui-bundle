@@ -8,13 +8,21 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
 import { TranslationRow } from '../translations-container'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { isUndefined } from 'lodash'
+import { GeneralError, trackError } from '@sdk/modules/app'
+
+type Language = {
+  language: string
+  display: string
+}
 
 type TranslationWithActions = TranslationRow & { actions: React.ReactNode }
 
@@ -28,9 +36,41 @@ export const Table = ({ translationRows, setTranslationRows }: TableProps): Reac
   // const { updateTranslationByKey } = useTranslations()
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
 
+  const settings = useSettings()
+  
+  const availableLanguages = settings.availableAdminLanguages
+  const validLanguages: string[] = settings.validLanguages
+
+  const languages: Language[] = validLanguages.map(validLang => {
+    const match = availableLanguages.find(lang => lang.language === validLang)
+    if (isUndefined(match)) {
+      trackError(new GeneralError(`Language "${validLang}" not found in availableLanguages`))
+      return { language: validLang, display: validLang } 
+    }
+    return match
+  }).filter(Boolean)
+  
   const columnHelper = createColumnHelper<TranslationWithActions>()
 
-  const tableColumns = [
+  const languageColumns = useMemo(() => {
+    return languages.map(lang => 
+      columnHelper.accessor(`_${lang.language}` as keyof TranslationWithActions, {
+        id: `_${lang.language}`,
+        header: lang.display,
+        meta: { 
+          editable: true,
+          type: 'text'
+        },
+        size: 200,
+        cell: (info) => {
+          const value = info.getValue()
+          return typeof value === 'string' ? value : ''
+        }
+      })
+    )
+  }, [languages, columnHelper])
+
+  const tableColumns = useMemo(() => [
     columnHelper.accessor('key', {
       header: t('translations.columns.key'),
       meta: { editable: true },
@@ -39,8 +79,9 @@ export const Table = ({ translationRows, setTranslationRows }: TableProps): Reac
     columnHelper.accessor('type', {
       header: t('translations.columns.type'),
       meta: { editable: true },
-      size: 200
+      size: 100
     }),
+    ...languageColumns,
     columnHelper.accessor('actions', {
       header: t('translations.columns.actions'),
       size: 80,
@@ -51,7 +92,7 @@ export const Table = ({ translationRows, setTranslationRows }: TableProps): Reac
         />
       )
     })
-  ]
+  ], [languageColumns, translationRows])
 
   const onUpdateCellData = ({
     columnId,
