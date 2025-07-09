@@ -8,11 +8,5 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { PieChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/pie-chart/pie-chart'
-
-export const DEFAULT_CHART_TYPE = 'pie'
-export const CHART_COMPONENTS = {
-  pie: PieChart
-} as const
 export const CHART_FIELD_TYPE_KEY = 'type'
 export const CHART_FIELD_VALUE_KEY = 'value'

@@ -12,13 +12,8 @@ import React from 'react'
 import { isUndefined } from 'lodash'
 import { type CustomReportChartData, type CustomReportDetails } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
-import { type IChartDataItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
-import {
-  CHART_COMPONENTS,
-  CHART_FIELD_TYPE_KEY,
-  CHART_FIELD_VALUE_KEY,
-  DEFAULT_CHART_TYPE
-} from '@Pimcore/modules/reports/reports-view/components/report-chart/constants/chart-data'
+import { PieChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/pie-chart/pie-chart'
+import { LineChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/line-chart/line-chart'
 
 interface IReportsChartProps {
   chartData?: CustomReportChartData[]
@@ -26,26 +21,23 @@ interface IReportsChartProps {
 }
 
 export const ReportChart = ({ chartData, reportData }: IReportsChartProps): React.JSX.Element => {
-  const chartType = reportData?.chartType ?? DEFAULT_CHART_TYPE
-  const pieLabelColumn = reportData?.pieLabelColumn ?? ''
-  const pieColumn = reportData?.pieColumn ?? ''
-
-  const reportChartData: IChartDataItem[] | undefined = chartData?.map(item => ({
-    [CHART_FIELD_TYPE_KEY]: item?.[pieLabelColumn],
-    [CHART_FIELD_VALUE_KEY]: item?.[pieColumn]
-  }))
-
-  if (isUndefined(reportChartData)) {
+  if (isUndefined(reportData) || isUndefined(chartData)) {
     return <Content loading />
   }
 
-  const ChartComponent = CHART_COMPONENTS[chartType]
+  const chartType = reportData?.chartType ?? 'default'
 
-  return (
-    <ChartComponent
-      chartData={ chartData }
-      pieColumn={ pieColumn }
-      reportChartData={ reportChartData }
-    />
-  )
+  const commonProps = {
+    reportData,
+    chartData
+  }
+
+  switch (chartType) {
+    case 'pie':
+      return <PieChart { ...commonProps } />
+    case 'line':
+      return <LineChart { ...commonProps } />
+    default:
+      return <PieChart { ...commonProps } />
+  }
 }

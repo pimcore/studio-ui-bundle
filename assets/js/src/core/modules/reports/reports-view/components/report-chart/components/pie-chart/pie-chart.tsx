@@ -14,17 +14,24 @@ import { Pie } from '@ant-design/plots'
 import { isEmpty } from 'lodash'
 import { ChartLegend } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/chart-legend/chart-legend'
 import { generateRandomColors } from '@Pimcore/modules/reports/reports-view/components/report-chart/utils/helpers'
-import type { CustomReportChartData } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import type { CustomReportChartData, CustomReportDetails } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import type { IChartDataItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
 import { CHART_FIELD_VALUE_KEY, CHART_FIELD_TYPE_KEY } from '@Pimcore/modules/reports/reports-view/components/report-chart/constants/chart-data'
 
 export interface IPieChartProps {
-  reportChartData: IChartDataItem[]
-  chartData?: CustomReportChartData[]
-  pieColumn: string
+  chartData: CustomReportChartData[]
+  reportData: CustomReportDetails
 }
 
-export const PieChart = ({ chartData, reportChartData, pieColumn }: IPieChartProps): React.JSX.Element => {
+export const PieChart = ({ reportData, chartData }: IPieChartProps): React.JSX.Element => {
+  const pieLabelColumn = reportData?.pieLabelColumn ?? ''
+  const pieColumn = reportData?.pieColumn ?? ''
+
+  const reportChartData: IChartDataItem[] | undefined = chartData?.map(item => ({
+    [CHART_FIELD_TYPE_KEY]: item?.[pieLabelColumn],
+    [CHART_FIELD_VALUE_KEY]: item?.[pieColumn]
+  }))
+
   const [colorList] = useState<string[]>(generateRandomColors(reportChartData?.length))
   const [disabledItems, setDisabledItems] = useState<string[]>([])
   const [chartRef, setChartRef] = useState<any>(null)
