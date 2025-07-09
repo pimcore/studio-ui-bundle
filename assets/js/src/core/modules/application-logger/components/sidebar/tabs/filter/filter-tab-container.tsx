@@ -16,8 +16,6 @@ export const FilterTabContainer = (): React.JSX.Element => {
     updateFilters
   } = useFilter()
 
-  //TODO: move helpers to helper
-
   const convertValueToISOFormat = (timestamp: number | null): string | null => {
     if (timestamp === null) return null
 
@@ -30,13 +28,18 @@ export const FilterTabContainer = (): React.JSX.Element => {
     return dayjs(dateStr).startOf('day').unix()
   }
 
+  const handleResetFilters = (): void => {
+    resetFilters()
+    form.resetFields()
+  }
+
   return (
     <ContentLayout
       renderToolbar={
         <Toolbar theme='secondary'>
           <IconTextButton
             icon={{ value: 'close' }}
-            onClick={resetFilters}
+            onClick={handleResetFilters}
             type='link'
           >
             {t('sidebar.clear-all-filters')}

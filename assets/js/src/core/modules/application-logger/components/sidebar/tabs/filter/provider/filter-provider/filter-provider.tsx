@@ -36,8 +36,8 @@ export const FilterProvider = (props: FilterProviderProps): React.JSX.Element =>
   }
 
   const resetFilters = (): void => {
-    setDateFrom(null)
-    setDateTo(null)
+    setDateFrom(() => null)
+    setDateTo(() => null)
     setColumnFilters([])
   }
 
