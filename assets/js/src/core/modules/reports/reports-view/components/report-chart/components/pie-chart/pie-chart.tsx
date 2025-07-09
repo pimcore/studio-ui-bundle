@@ -105,11 +105,10 @@ export const PieChart = ({ reportData, chartData }: IPieChartProps): React.JSX.E
   }
 
   return (
-    <Flex
-      align="center"
-      style={ { maxHeight: '400px' } }
-    >
-      <Pie { ...config } />
+    <Flex align="center">
+      <Flex style={ { width: '100%' } }>
+        <Pie { ...config } />
+      </Flex>
       <ChartLegend
         colorList={ colorList }
         data={ reportChartData }
