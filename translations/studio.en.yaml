@@ -311,12 +311,15 @@ properties.columns.actions: Actions
 properties.inherited.properties: Inherited Properties
 properties.add-custom-property.cancel: Cancel
 properties.add-custom-property.key: Key
+translations.add-translation.key: Key
 properties.add-custom-property.create: Create
 properties.add-custom-property.type: Type
 properties.property-already-exist.title: Property already exists
 properties.property-already-exist.error: Name is already in use, please choose a different one
 properties.add-property-mandatory-fields-missing.title: Mandatory fields missing
 properties.add-property-mandatory-fields-missing.error: Key and type are mandatory fields and need to be filled out.
+translations.add-translation-mandatory-field-missing.title: Mandatory field missing
+translations.add-translation-mandatory-field-missing.error: Key is a mandatory field and needs to be filled out.
 button.ok: Ok
 button.apply: Apply
 button.cancel: Cancel

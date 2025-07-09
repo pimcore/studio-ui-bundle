@@ -16,12 +16,13 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
-import { Box, IconTextButton, SearchInput } from '@sdk/components'
+import { Box, Button, Form, IconTextButton, Input, ModalFooter, SearchInput, useModal } from '@sdk/components'
 import trackError, { GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { useTranslationGetCollectionMutation, type Translation } from '../app/translations/translations-api-slice.gen'
 import { useTranslation } from './hooks/use-translation'
 import { Table } from './table/table'
+import { keyframes } from 'antd-style'
 
 export type TranslationDataItem = {
   key: string
@@ -80,7 +81,13 @@ console.log("new data shape");
   return []
 }
 
+interface FormValues {
+  translationKey: string
+}
+
 export const TranslationsContainer = (): React.JSX.Element => {
+    const [form] = Form.useForm<FormValues>()
+
   const { createNewTranslation, createLoading } = useTranslation()
 
   // const [filter, setFilter] = useState<string>('')
@@ -118,7 +125,15 @@ export const TranslationsContainer = (): React.JSX.Element => {
   
   const sortedRows = [...translationRows].sort((a, b) => a.key.localeCompare(b.key, "en", { sensitivity: 'base' }))
 
-  const onCreateTranslation = async (): Promise<void> => {
+  const onCreateTranslation = async (translationKey: string): Promise<void> => {
+
+    const isValidKeyInput = translationKey !== '' && translationKey !== undefined
+
+    if (!isValidKeyInput) {
+      showMandatoryModal()
+      return
+    }
+
     const { success, data } = await createNewTranslation()
     if (success && data !== undefined) {
       const newRows = translationToRows(data)
@@ -126,8 +141,27 @@ export const TranslationsContainer = (): React.JSX.Element => {
         ...newRows,
         ...prev
       ])
+    form.resetFields()
     }
   }
+
+    const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
+    type: 'error'
+  })
+  
+  const errorModals = (
+      <MandatoryModal
+        footer={ <ModalFooter>
+          <Button
+            onClick={ closeMandatoryModal }
+            type='primary'
+          >{t('button.ok')}</Button>
+        </ModalFooter> }
+        title={ t('translations.add-translation-mandatory-field-missing.title') }
+      >
+        {t('translations.add-translation-mandatory-field-missing.error')}
+      </MandatoryModal>
+  )
 
   return (
     <ContentLayout
@@ -150,12 +184,30 @@ export const TranslationsContainer = (): React.JSX.Element => {
         >
           <Flex gap={ 'small' }>
             <Title>{t('widget.translations')}</Title>
-            <IconTextButton
-              disabled={ translationsLoading || createLoading }
-              icon={ { value: 'new' } }
-              loading={ createLoading }
-              onClick={ onCreateTranslation }
-            >{t('translations.new')}</IconTextButton>
+            <Form
+              form={ form }
+              layout="inline"
+              onFinish={ ({ translationKey }) => {
+                void onCreateTranslation(translationKey)
+              } }
+            >
+              <Flex>
+                <Form.Item
+                  name="translationKey"
+                >
+                  <Input placeholder={ t('translations.add-translation.key') } />
+                </Form.Item>
+                <Form.Item>
+                  <IconTextButton
+                    htmlType="submit"
+                    icon={ { value: 'new' } }
+                    loading={ createLoading }
+                  >
+                    {t('translation.new')}
+                  </IconTextButton>
+                </Form.Item>
+              </Flex>
+            </Form>
           </Flex>
           <SearchInput
             loading={ translationsLoading }
@@ -187,6 +239,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
             translationRows={ sortedRows }
             setTranslationRows={ setTranslationRows }
           />
+          {errorModals}
         </Box>
       </Content>
     </ContentLayout>
