@@ -33,10 +33,10 @@ export interface SelectOption {
   label: string
 }
 
-  interface FormValues {
-    name: string
-    type: string
-  }
+interface FormValues {
+  name: string
+  type: string
+}
 
 export const WebsiteSettingsContainer = (): React.JSX.Element => {
   const [form] = Form.useForm<FormValues>()

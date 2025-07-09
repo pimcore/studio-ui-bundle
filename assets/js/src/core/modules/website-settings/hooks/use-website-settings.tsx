@@ -30,7 +30,7 @@ export const useWebsiteSetting = (): UseWebsiteSettingReturn => {
   const createNewSetting = async (name: string, type: string): Promise<{ success: boolean, data?: WebsiteSetting }> => {
     try {
       const result = await createSetting({ websiteSettingsAdd: { name, type } })
-      
+
       if (!isUndefined(result.error)) {
         trackError(new ApiError(result.error))
       }

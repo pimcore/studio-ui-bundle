@@ -19,7 +19,6 @@ import { useWebsiteSetting } from '../hooks/use-website-settings'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { type Site } from '@Pimcore/modules/document/sites-slice.gen'
 import { isUndefined } from 'lodash'
-import { WebsiteSettingsObjectData } from '../website-settings-api-slice.gen'
 
 type WebsiteSettingEnrichedRow = WebsiteSettingRow & {
   siteDomain: string
@@ -50,7 +49,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
       }
     }
 
-    const site = getSiteById(row.siteId)
+    const site = !isNaN(Number(row?.siteId)) ? getSiteById(Number(row.siteId)) : undefined
     const domain = !isUndefined(site) ? t(site.domain) : ''
 
     return {
@@ -74,23 +73,23 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
     value: unknown
     rowData: WebsiteSettingRow
   }): Promise<void> => {
-
     const rowId = rowData.rowId
     const columnIdNormalised = columnId === 'siteDomain'
-    ? 'siteId'
-    : columnId
-      
-    const valueNormalised = (columnId === 'data' && typeof value === 'object' )
-    ? (value as ElementInfo).fullPath
-    : value
+      ? 'siteId'
+      : columnId
 
+    const valueNormalised = (columnId === 'data' && typeof value === 'object')
+      ? (value as ElementInfo).fullPath
+      : value
+
+    const data = rowData.data
     const normalizedData =
-    rowData.data && typeof rowData.data === 'object' && 'path' in rowData.data
-      ? (rowData.data as WebsiteSettingsObjectData).path
-      : rowData.data
+    typeof data === 'object' && data !== null && 'path' in data
+      ? (data as { path: string }).path
+      : data
 
     const updatedRow: WebsiteSettingRow = { ...rowData, [columnIdNormalised]: valueNormalised, data: normalizedData }
-  
+
     setWebsiteSettingRows(prev =>
       prev.map(row =>
         row.rowId === rowId ? updatedRow : row

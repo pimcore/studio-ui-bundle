@@ -13,12 +13,10 @@ import React from 'react'
 import { Alert } from 'antd'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeGridCellRegistry } from '../../../dynamic-type-grid-cell-registry'
-import { addColumnConfig } from '@Pimcore/components/grid/columns/helpers'
-import { isEmpty, isString } from 'lodash'
-import { ElementInfo } from '../../element-cell/element-cell'
+import { type ElementInfo } from '../../element-cell/element-cell'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
-import { WebsiteSettingsObjectData } from '@Pimcore/modules/website-settings/website-settings-api-slice.gen'
-import { ElementCellContentProps } from '../../element-cell/element-cell-content'
+import { type WebsiteSettingsObjectData } from '@Pimcore/modules/website-settings/website-settings-api-slice.gen'
+import { type ElementCellContentProps } from '../../element-cell/element-cell-content'
 
 const typeMapping = {
   text: 'input',
@@ -29,8 +27,6 @@ const typeMapping = {
 }
 
 export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
-
-  
   const settingType = props.row.original.type as string
   const gridCellRegistry = useInjection<DynamicTypeGridCellRegistry>('DynamicTypes/GridCellRegistry')
   const type: string = typeMapping[settingType] ?? settingType
@@ -47,28 +43,20 @@ export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
       )
     }
 
-      console.log("type", type);
-
     const dynamicType = gridCellRegistry.getDynamicType(type)
-        let enrichedProps = props
-   if (type === 'element') {
-                              console.log("row");
 
-      const getElementInfo = (cellProps: DefaultCellProps): ElementInfo => {
-
-                  const row = cellProps.row.original
-                                            console.log("row", cellProps);
-
-                  const element: WebsiteSettingsObjectData = row.data
-                  return {
-                    elementType: mapToElementType(String(row.type), true),
-                    id: element.id,
-                    fullPath: element.path
-                  }
+    const enrichedProps: ElementCellContentProps = {
+      ...props,
+      getElementInfo: (cellProps: DefaultCellProps): ElementInfo => {
+        const row = cellProps.row.original
+        const element: WebsiteSettingsObjectData = row.data
+        return {
+          elementType: mapToElementType(String(row.type), true),
+          id: element.id,
+          fullPath: element.path
+        }
+      }
     }
-
-    enrichedProps = {getElementInfo, ...props} as ElementCellContentProps
-  }
 
     return dynamicType.getGridCellComponent(enrichedProps)
   }
