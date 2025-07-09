@@ -12,21 +12,23 @@ import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import React, { useContext, useRef, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Iframe } from '../../../../../../components/iframe/iframe'
+import { Iframe, type IframeRef } from '../../../../../../components/iframe/iframe'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
-import { isNull } from 'lodash'
+import { isNil } from 'lodash'
 
 export const EditContainer = (): React.JSX.Element => {
   const { id } = useContext(DocumentContext)
   const { document: documentDraft } = useDocumentDraft(id)
   const { t } = useTranslation()
-  const iframeRef = useRef<HTMLIFrameElement>(null)
+  const iframeRef = useRef<IframeRef>(null)
 
   const handleIframeLoad = useCallback(() => {
-    if (!isNull(iframeRef.current)) {
+    const iframeElement = iframeRef.current?.getIframeElement()
+
+    if (!isNil(iframeElement)) {
       try {
         const { document: documentApi } = getPimcoreStudioApi()
-        documentApi.registerIframe(id, iframeRef.current)
+        documentApi.registerIframe(id, iframeElement, iframeRef)
       } catch (error) {
         console.warn('Could not register iframe:', error)
       }
@@ -48,9 +50,11 @@ export const EditContainer = (): React.JSX.Element => {
   return (
     <Iframe
       onLoad={ handleIframeLoad }
+      preserveScrollOnReload
       ref={ iframeRef }
       src={ `${documentDraft?.fullPath}?pimcore_editmode=true&pimcore_studio=true&documentId=${id}` }
       title={ `${t('edit.label')}-${id}` }
+      useExternalReadyState
     />
   )
 }
