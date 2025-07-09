@@ -18,7 +18,7 @@ import type { CustomReportChartData } from '@Pimcore/modules/reports/custom-repo
 import type { IChartDataItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
 import { CHART_FIELD_VALUE_KEY, CHART_FIELD_TYPE_KEY } from '@Pimcore/modules/reports/reports-view/components/report-chart/constants/chart-data'
 
-interface IPieChartProps {
+export interface IPieChartProps {
   reportChartData: IChartDataItem[]
   chartData?: CustomReportChartData[]
   pieColumn: string
