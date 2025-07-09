@@ -90,6 +90,10 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
       ? (value as ElementInfo).fullPath
       : value
 
+    console.log('columnId', columnId)
+    console.log('value', value)
+    console.log('rowData', rowData)
+
     const data = rowData.data
     const normalizedData =
     typeof data === 'object' && data !== null && 'path' in data
@@ -97,6 +101,8 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
       : data
 
     const updatedRow: WebsiteSettingRow = { ...rowData, [columnIdNormalised]: valueNormalised, data: normalizedData }
+
+    console.log('updatedRow', updatedRow)
 
     setWebsiteSettingRows(prev =>
       prev.map(row =>
@@ -123,7 +129,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
   const tableColumns = [
     columnHelper.accessor('type', {
       header: t('website-settings.columns.type'),
-      meta: { type: 'select', editable: true, config: { options: typeSelectOptions } },
+      meta: { type: 'select', editable: false, config: { options: typeSelectOptions } },
       size: 80
     }),
     columnHelper.accessor('name', {
