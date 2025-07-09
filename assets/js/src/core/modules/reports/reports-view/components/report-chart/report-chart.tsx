@@ -14,6 +14,7 @@ import { type CustomReportChartData, type CustomReportDetails } from '@Pimcore/m
 import { Content } from '@Pimcore/components/content/content'
 import { PieChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/pie-chart/pie-chart'
 import { LineChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/line-chart/line-chart'
+import { BarChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/bar-chart/bar-chart'
 
 interface IReportsChartProps {
   chartData?: CustomReportChartData[]
@@ -37,6 +38,8 @@ export const ReportChart = ({ chartData, reportData }: IReportsChartProps): Reac
       return <PieChart { ...commonProps } />
     case 'line':
       return <LineChart { ...commonProps } />
+    case 'bar':
+      return <BarChart { ...commonProps } />
     default:
       return <PieChart { ...commonProps } />
   }
