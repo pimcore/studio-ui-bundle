@@ -35,7 +35,7 @@ moduleSystem.registerModule({
           translationKey: 'widget.translations',
           icon: {
             type: 'name',
-            value: 'translations'
+            value: 'translate'
           }
         }
       }

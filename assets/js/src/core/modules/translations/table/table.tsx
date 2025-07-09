@@ -9,6 +9,7 @@
  */
 
 import React, { useState } from 'react'
+import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { type ModifiedCells } from '@sdk/modules/element'
@@ -52,12 +53,17 @@ export const Table = ({ translationRows, setTranslationRows }: TableProps): Reac
     })
   ]
 
-  const onUpdateCellData = ({columnId, value, rowData}):  {
+  const onUpdateCellData = ({
+    columnId,
+    value,
+    rowData
+  }: {
     columnId: string
     value: unknown
     rowData: TranslationRow
   }): void => { 
-    console.log("update", {columnId, value, rowData})}
+    console.log("update", { columnId, value, rowData })
+  }
 
   // const onUpdateCellData = async ({
   //   columnId,
@@ -101,7 +107,7 @@ export const Table = ({ translationRows, setTranslationRows }: TableProps): Reac
         modifiedCells={ modifiedCells }
         onUpdateCellData={ onUpdateCellData }
         resizable
-        setRowId={ (row: DataProperty) => row.rowId }
+        setRowId={ (row: TranslationRow) => row.rowId }
       />
     </div>
   )

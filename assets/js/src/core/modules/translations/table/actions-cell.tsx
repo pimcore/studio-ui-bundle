@@ -35,11 +35,6 @@ export const ActionsCell = ({ info, setTranslationRows }: ActionsCellProps): JSX
   return (
     <div className="translations-table--actions-column">
       <IconButton
-        icon={ { value: 'translate' } }
-        onClick={ () => { console.log('Open Translate View') } }
-        type="link"
-      />
-      <IconButton
         icon={ { value: 'trash' } }
         loading={ false }
         onClick={ () => console.log("hi")}
