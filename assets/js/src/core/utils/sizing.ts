@@ -24,6 +24,8 @@ export type Sizings =
   | 'extra-large'
   | 'maxi'
 
+export type SizingLocation = 'x' | 'y' | 'top' | 'bottom' | 'left' | 'right'
+
 export type SizeDefinition = Sizings | {
   x?: Sizings
   y?: Sizings
@@ -131,7 +133,7 @@ const generateSpacingCSS = (
   prefixCls: string,
   modifier: string,
   size: Sizings,
-  locations: Array<'x' | 'y' | 'top' | 'bottom' | 'left' | 'right'>,
+  locations: SizingLocation[],
   spacingType: 'margin' | 'padding',
   token: GlobalToken | FullToken
 ): string => {
@@ -167,7 +169,7 @@ const generateAllSizingCSS = (
   prefixCls: string,
   modifier: string,
   token: GlobalToken | FullToken,
-  locations: Array<'x' | 'y' | 'top' | 'bottom' | 'left' | 'right'>,
+  locations: SizingLocation[],
   type: 'margin' | 'padding'
 ): string =>
   SIZING_VALUES.map((size) =>
@@ -178,12 +180,12 @@ export const generateAllMarginSizingCSS = (
   prefixCls: string,
   modifier: string,
   token: GlobalToken | FullToken,
-  locations: Array<'x' | 'y' | 'top' | 'bottom' | 'left' | 'right'>
+  locations: SizingLocation[]
 ): string => generateAllSizingCSS(prefixCls, modifier, token, locations, 'margin')
 
 export const generateAllPaddingSizingCSS = (
   prefixCls: string,
   modifier: string,
   token: GlobalToken | FullToken,
-  locations: Array<'x' | 'y' | 'top' | 'bottom' | 'left' | 'right'>
+  locations: SizingLocation[]
 ): string => generateAllSizingCSS(prefixCls, modifier, token, locations, 'padding')
