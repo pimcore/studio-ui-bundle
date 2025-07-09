@@ -11,7 +11,6 @@
 import React from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Line } from '@ant-design/plots'
-import { CHART_FIELD_VALUE_KEY } from '@Pimcore/modules/reports/reports-view/components/report-chart/constants/chart-data'
 import {
   type CustomReportChartData,
   type CustomReportDetails
@@ -27,7 +26,6 @@ export const LineChart = ({ chartData, reportData }: ILineChartProps): React.JSX
     data: chartData,
     xField: reportData?.xAxis,
     yField: reportData?.yAxis,
-    seriesField: CHART_FIELD_VALUE_KEY,
     point: {
       shapeField: 'square',
       sizeField: 4

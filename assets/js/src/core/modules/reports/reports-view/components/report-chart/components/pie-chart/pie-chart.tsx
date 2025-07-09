@@ -12,16 +12,18 @@ import React, { useEffect, useState } from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Pie } from '@ant-design/plots'
 import { isEmpty } from 'lodash'
-import { ChartLegend } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/chart-legend/chart-legend'
+import { ChartLegend } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/pie-chart/components/chart-legend/chart-legend'
 import { generateRandomColors } from '@Pimcore/modules/reports/reports-view/components/report-chart/utils/helpers'
 import type { CustomReportChartData, CustomReportDetails } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import type { IChartDataItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
-import { CHART_FIELD_VALUE_KEY, CHART_FIELD_TYPE_KEY } from '@Pimcore/modules/reports/reports-view/components/report-chart/constants/chart-data'
 
 export interface IPieChartProps {
   chartData: CustomReportChartData[]
   reportData: CustomReportDetails
 }
+
+const CHART_FIELD_TYPE_KEY = 'type'
+const CHART_FIELD_VALUE_KEY = 'value'
 
 export const PieChart = ({ reportData, chartData }: IPieChartProps): React.JSX.Element => {
   const pieLabelColumn = reportData?.pieLabelColumn ?? ''
