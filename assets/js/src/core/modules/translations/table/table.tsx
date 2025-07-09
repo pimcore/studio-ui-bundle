@@ -9,70 +9,36 @@
  */
 
 import React, { useState } from 'react'
-import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
-import { type PredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
-import { type PredefinedPropertyRow, usePredefinedProperty } from '../hooks/use-predefined-property'
-import { ContentType } from '../enums/content-type'
-import { allLegacyElementTypes, type ModifiedCells } from '@sdk/modules/element'
+import { type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
+import { TranslationRow } from '../translations-container'
 
-type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
+type TranslationWithActions = TranslationRow & { actions: React.ReactNode }
 
 interface TableProps {
-  predefinedPropertyRows: PredefinedPropertyRow[]
-  setPredefinedPropertyRows: React.Dispatch<React.SetStateAction<PredefinedPropertyRow[]>>
+  translationRows: TranslationRow[]
+  setTranslationRows: React.Dispatch<React.SetStateAction<TranslationRow[]>>
 }
 
-export const Table = ({ predefinedPropertyRows, setPredefinedPropertyRows }: TableProps): React.JSX.Element => {
+export const Table = ({ translationRows, setTranslationRows }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { updatePropertyById } = usePredefinedProperty()
+  // const { updateTranslationByKey } = useTranslations()
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
 
-  const columnHelper = createColumnHelper<PredefinedPropertyWithActions>()
+  const columnHelper = createColumnHelper<TranslationWithActions>()
 
   const tableColumns = [
-    columnHelper.accessor('name', {
-      header: t('properties.columns.name'),
-      meta: { editable: true },
-      size: 200
-    }),
-    columnHelper.accessor('description', {
-      header: t('properties.columns.description'),
-      meta: { editable: true },
-      size: 200
-    }),
     columnHelper.accessor('key', {
-      header: t('properties.columns.key'),
+      header: t('translations.columns.key'),
       meta: { editable: true },
       size: 200
     }),
     columnHelper.accessor('type', {
-      header: t('properties.columns.type'),
-      meta: { type: 'select', editable: true, config: { options: Object.values(ContentType) } },
-      size: 100
-    }),
-    columnHelper.accessor('data', {
-      header: t('properties.columns.data'),
+      header: t('translations.columns.type'),
       meta: { editable: true },
-      size: 150
-    }),
-    columnHelper.accessor('config', {
-      header: t('properties.columns.configuration'),
-      meta: { editable: true },
-      size: 150
-    }),
-    columnHelper.accessor('ctype', {
-      header: t('properties.columns.content-type'),
-      meta: { type: 'select', editable: true, config: { options: allLegacyElementTypes } },
-      size: 110
-    }),
-    columnHelper.accessor('inheritable', {
-      header: t('properties.columns.inheritable'),
-      size: 95,
-      meta: { type: 'checkbox', editable: true, config: { align: 'center' } }
+      size: 200
     }),
     columnHelper.accessor('actions', {
       header: t('properties.columns.actions'),
@@ -80,50 +46,57 @@ export const Table = ({ predefinedPropertyRows, setPredefinedPropertyRows }: Tab
       cell: (info) => (
         <ActionsCell
           info={ info }
-          setPredefinedPropertyRows={ setPredefinedPropertyRows }
+          setTranslationRows={ setTranslationRows }
         />
       )
     })
   ]
 
-  const onUpdateCellData = async ({
-    columnId,
-    value,
-    rowData
-  }: {
+  const onUpdateCellData = ({columnId, value, rowData}):  {
     columnId: string
     value: unknown
-    rowData: PredefinedPropertyRow
-  }): Promise<void> => {
-    const rowId = rowData.rowId
-    const updatedRow: PredefinedPropertyRow = { ...rowData, [columnId]: value }
+    rowData: TranslationRow
+  }): void => { 
+    console.log("update", {columnId, value, rowData})}
 
-    setPredefinedPropertyRows(prev =>
-      prev.map(row =>
-        row.rowId === rowId ? updatedRow : row
-      )
-    )
+  // const onUpdateCellData = async ({
+  //   columnId,
+  //   value,
+  //   rowData
+  // }: {
+  //   columnId: string
+  //   value: unknown
+  //   rowData: TranslationRow
+  // }): Promise<void> => {
+  //   const rowId = rowData.rowId
+  //   const updatedRow: TranslationRow = { ...rowData, [columnId]: value }
 
-    setModifiedCells([{ columnId, rowIndex: rowId }])
+  //   setTranslationRows(prev =>
+  //     prev.map(row =>
+  //       row.rowId === rowId ? updatedRow : row
+  //     )
+  //   )
 
-    const { success } = await updatePropertyById(updatedRow.id, updatedRow)
+  //   setModifiedCells([{ columnId, rowIndex: rowId }])
 
-    if (success) setModifiedCells([])
-    else {
-      setPredefinedPropertyRows(prev =>
-        prev.map(row =>
-          row.rowId === rowId ? rowData : row
-        )
-      )
-    }
-  }
+  //   const { success } = await updateTranslationByKey(updatedRow.key, updatedRow)
+
+  //   if (success) setModifiedCells([])
+  //   else {
+  //     setTranslationRows(prev =>
+  //       prev.map(row =>
+  //         row.rowId === rowId ? rowData : row
+  //       )
+  //     )
+  //   }
+  // }
 
   return (
     <div>
       <Grid
         autoWidth
         columns={ tableColumns }
-        data={ predefinedPropertyRows }
+        data={ translationRows }
         enableSorting
         modifiedCells={ modifiedCells }
         onUpdateCellData={ onUpdateCellData }

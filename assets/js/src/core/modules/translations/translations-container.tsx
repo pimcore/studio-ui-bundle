@@ -21,6 +21,7 @@ import trackError, { GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { useTranslationGetCollectionMutation, type Translation } from '../app/translations/translations-api-slice.gen'
 import { useTranslation } from './hooks/use-translation'
+import { Table } from './table/table'
 
 export type TranslationDataItem = {
   key: string
@@ -182,10 +183,10 @@ export const TranslationsContainer = (): React.JSX.Element => {
             y: 'none'
           } }
         >
-          {/* <Table
+          <Table
             translationRows={ sortedRows }
             setTranslationRows={ setTranslationRows }
-          /> */}
+          />
         </Box>
       </Content>
     </ContentLayout>
