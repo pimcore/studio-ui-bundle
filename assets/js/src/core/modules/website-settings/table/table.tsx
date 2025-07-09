@@ -84,8 +84,8 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
     const columnIdNormalised = columnId === 'siteDomain'
       ? 'siteId'
       : columnId
-      
-    const updatedRow: WebsiteSettingRow = { ...rowData, [columnIdNormalised]: value}
+
+    const updatedRow: WebsiteSettingRow = { ...rowData, [columnIdNormalised]: value }
 
     setWebsiteSettingRows(prev =>
       prev.map(row =>
@@ -134,7 +134,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
         type: 'website-settings-value',
         editable: true,
         clearable: true,
-        showPublishedState: false,
+        showPublishedState: false
       },
       size: 200
     }),

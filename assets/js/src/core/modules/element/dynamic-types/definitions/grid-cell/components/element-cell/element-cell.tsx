@@ -36,7 +36,7 @@ export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
   const { column } = props
   const editable = Boolean(props.column.columnDef.meta?.editable ?? true)
   const clearable = Boolean(props.column.columnDef.meta?.clearable ?? true)
-  const showPublishedState =  Boolean(props.column.columnDef.meta?.showPublishedState ?? true)
+  const showPublishedState = Boolean(props.column.columnDef.meta?.showPublishedState ?? true)
   const config = column.columnDef.meta?.config as ElementCellConfig | null ?? {
     allowedTypes: ['asset', 'data-object', 'document']
   }
@@ -47,7 +47,7 @@ export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
     return allowedTypes.includes(info.type as ElementType) && editable
   }
 
-  function onDrop (info: DragAndDropInfo): void {    
+  function onDrop (info: DragAndDropInfo): void {
     if (props.column.columnDef.meta?.editable !== undefined && props.table.options.meta?.onUpdateCellData !== undefined) {
       props.table.options.meta?.onUpdateCellData({
         rowIndex: props.row.index,
