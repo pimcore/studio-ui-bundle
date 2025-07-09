@@ -73,6 +73,9 @@ Gets the iframe API for a specific document, providing access to:
 - `documentEditable.getValues()`: Retrieve editable values from the document iframe
 - Other document-specific iframe interactions
 
+#### `isIframeReady(documentId: number): boolean`
+Checks if a document iframe is fully loaded and ready.
+
 ## Usage Examples
 
 ```typescript

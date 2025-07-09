@@ -841,6 +841,7 @@ reports.report-name: Name of the report
 reports.select-report-name: Select the name of the report
 reports.select-report: Select report
 loading: Loading...
+please-wait: Please wait...
 navigation.email: Email
 navigation.email-blocklist: Email Blocklist
 widget.email-blocklist: Email Blocklist
