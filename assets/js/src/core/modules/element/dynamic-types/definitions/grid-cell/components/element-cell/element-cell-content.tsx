@@ -87,7 +87,7 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
           disabled={ elementInfo.disabled }
           elementType={ elementInfo.elementType }
           id={ elementInfo.id }
-          onClose={ () => { fireOnUpdateCellDataEvent('') } }
+          onClose={ () => { fireOnUpdateCellDataEvent(null) } }
           path={ elementInfo.fullPath }
           published={ elementInfo.published }
         />

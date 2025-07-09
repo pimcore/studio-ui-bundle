@@ -12,13 +12,13 @@ import React, { useState } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { type ElementInfo, type ModifiedCells } from '@sdk/modules/element'
+import { type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
 import { type SelectOption, type WebsiteSettingRow } from '../website-settings-container'
 import { useWebsiteSetting } from '../hooks/use-website-settings'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { type Site } from '@Pimcore/modules/document/sites-slice.gen'
-import { type WebsiteSettingsObjectData, type WebsiteSettingsUpdate } from '../website-settings-api-slice.gen'
+import { type WebsiteSettingsUpdate } from '../website-settings-api-slice.gen'
 import { isUndefined } from 'lodash'
 
 type WebsiteSettingEnrichedRow = WebsiteSettingRow & {
@@ -84,20 +84,8 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
     const columnIdNormalised = columnId === 'siteDomain'
       ? 'siteId'
       : columnId
-
-    const valueNormalised = (columnId === 'data' && typeof value === 'object')
-      ? (value as ElementInfo).fullPath
-      : value
-
-    const data = rowData.data
-    const normalizedData =
-    typeof data === 'object' && data !== null && 'path' in data
-      ? (data as { path: string }).path
-      : data
-
-    const updatedRow: WebsiteSettingRow = columnIdNormalised === 'data'
-      ? { ...rowData, data: valueNormalised as string | boolean | WebsiteSettingsObjectData | null }
-      : { ...rowData, [columnIdNormalised]: valueNormalised, data: normalizedData }
+      
+    const updatedRow: WebsiteSettingRow = { ...rowData, [columnIdNormalised]: value}
 
     setWebsiteSettingRows(prev =>
       prev.map(row =>
@@ -145,7 +133,8 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
       meta: {
         type: 'website-settings-value',
         editable: true,
-        clearable: true
+        clearable: true,
+        showPublishedState: false,
       },
       size: 200
     }),

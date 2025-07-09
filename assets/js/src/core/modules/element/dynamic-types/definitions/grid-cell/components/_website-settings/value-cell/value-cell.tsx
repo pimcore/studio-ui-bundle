@@ -53,7 +53,7 @@ export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
         return {
           elementType: mapToElementType(String(row.type), true),
           id: element.id,
-          fullPath: element.path
+          fullPath: element.fullPath
         }
       }
     }

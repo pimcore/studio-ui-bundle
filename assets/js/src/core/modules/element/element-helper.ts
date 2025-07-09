@@ -71,7 +71,7 @@ export interface ElementReference {
   subtype?: string
 }
 
-export const convertDragAndDropInfoToElementReference = (info: DragAndDropInfo): ElementReference => {
+export const convertDragAndDropInfoToElementReference = (info: DragAndDropInfo, showPublishedState: boolean): ElementReference => {
   const elementData = info.data as Element
 
   const getSubType = (info: DragAndDropInfo): string | undefined => {
@@ -87,7 +87,7 @@ export const convertDragAndDropInfoToElementReference = (info: DragAndDropInfo):
     id: elementData.id,
     type: (info.type === 'data-object' ? 'object' : info.type) as ElementReference['type'],
     fullPath: String(elementData.fullPath),
-    isPublished: isBoolean(published) ? published : null,
+    isPublished: (showPublishedState && isBoolean(published)) ? published : null,
     subtype: getSubType(info)
   }
 }
