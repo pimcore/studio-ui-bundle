@@ -18,7 +18,7 @@ interface UseWebsiteSettingReturn {
   createLoading: boolean
   deleteSettingById: (id: number) => Promise<{ success: boolean }>
   deleteLoading: boolean
-  updateSettingById: (id: number, row: WebsiteSettingRow) => Promise<{ success: boolean }>
+  updateSettingById: (id: number, websiteSettingsUpdate: WebsiteSettingsUpdate) => Promise<{ success: boolean }>
   updateLoading: boolean
 }
 
@@ -59,16 +59,9 @@ export const useWebsiteSetting = (): UseWebsiteSettingReturn => {
     }
   }
 
-  const toApiSetting = (row: WebsiteSettingRow): WebsiteSettingsUpdate => ({
-    name: row.name ?? '',
-    language: row.language ?? '',
-    data: row.data ?? '',
-    siteId: row.siteId ?? 0
-  })
-
-  const updateSettingById = async (id: number, row: WebsiteSettingRow): Promise<{ success: boolean }> => {
+  const updateSettingById = async (id: number, websiteSettingsUpdate: WebsiteSettingsUpdate): Promise<{ success: boolean }> => {
     try {
-      const result = await updateSetting({ id, websiteSettingsUpdate: toApiSetting(row) })
+      const result = await updateSetting({ id, websiteSettingsUpdate })
 
       if (!isUndefined(result.error)) {
         trackError(new ApiError(result.error))

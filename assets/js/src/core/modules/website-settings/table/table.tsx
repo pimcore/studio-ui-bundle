@@ -18,6 +18,7 @@ import { type SelectOption, type WebsiteSettingRow } from '../website-settings-c
 import { useWebsiteSetting } from '../hooks/use-website-settings'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { type Site } from '@Pimcore/modules/document/sites-slice.gen'
+import { type WebsiteSettingsUpdate } from '../website-settings-api-slice.gen'
 import { isUndefined } from 'lodash'
 
 type WebsiteSettingEnrichedRow = WebsiteSettingRow & {
@@ -40,6 +41,13 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
 
   const { getAllSites, getSiteById } = useSites()
+
+  const rowToApiUpdate = (row: WebsiteSettingRow): WebsiteSettingsUpdate => ({
+    name: row.name ?? '',
+    language: row.language ?? '',
+    data: row.data as string | boolean | null,
+    siteId: row.siteId ?? 0
+  })
 
   const tableData: WebsiteSettingEnrichedRow[] = websiteSettingRows.map((row: WebsiteSettingEnrichedRow) => {
     if (row.siteId == null) {
@@ -98,7 +106,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
 
     setModifiedCells([{ columnId, rowIndex: rowId }])
 
-    const { success } = await updateSettingById(updatedRow.id, updatedRow)
+    const { success } = await updateSettingById(updatedRow.id, rowToApiUpdate(updatedRow))
 
     if (success) setModifiedCells([])
     else {
