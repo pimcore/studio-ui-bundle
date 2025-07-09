@@ -47,7 +47,7 @@ export interface IMenuProps extends Omit<MenuProps, 'items' > {
   ref?: React.Ref<MenuRef>
 }
 
-export const Menu = (props: IMenuProps): JSX.Element => {
+export const Menu = React.forwardRef<MenuRef, IMenuProps>((props, ref): JSX.Element => {
   const filteredItems = props.items?.filter(function filterItems (item: ItemType) {
     // @ts-expect-error - the prop exists trust me bro ;)
     if (item?.hidden === true) {
@@ -70,9 +70,10 @@ export const Menu = (props: IMenuProps): JSX.Element => {
   return (
     <AntMenu
       { ...props }
+      ref={ ref }
       items={ undefined }
     >
       {filteredItems?.map((item: ItemType) => MenuItem({ item }))}
     </AntMenu>
   )
-}
+})
