@@ -162,6 +162,7 @@ import { type DynamicTypeFieldFilterCheckbox } from './definitions/field-filters
 import { type DynamicTypeDocumentEditableTextarea } from './definitions/document/editable/types/dynamic-type-document-editable-textarea'
 import { type DynamicTypeDocumentEditableMultiSelect } from './definitions/document/editable/types/dynamic-type-document-editable-multiselect'
 import { type DynamicTypeDocumentEditableSelect } from './definitions/document/editable/types/dynamic-type-document-editable-select'
+import { type DynamicTypeDocumentEditableTable } from './definitions/document/editable/types/dynamic-type-document-editable-table'
 
 moduleSystem.registerModule({
   onInit () {
@@ -313,10 +314,11 @@ moduleSystem.registerModule({
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableNumeric>(serviceIds['DynamicTypes/DocumentEditable/Numeric']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableRelation>(serviceIds['DynamicTypes/DocumentEditable/Relation']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableRelations>(serviceIds['DynamicTypes/DocumentEditable/Relations']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableSelect>(serviceIds['DynamicTypes/DocumentEditable/Select']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableTable>(serviceIds['DynamicTypes/DocumentEditable/Table']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableTextarea>(serviceIds['DynamicTypes/DocumentEditable/Textarea']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableWysiwyg>(serviceIds['DynamicTypes/DocumentEditable/Wysiwyg']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableMultiSelect>(serviceIds['DynamicTypes/DocumentEditable/MultiSelect']))
-    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableSelect>(serviceIds['DynamicTypes/DocumentEditable/Select']))
 
     const assetRegistry = container.get<DynamicTypeAssetRegistry>(serviceIds['DynamicTypes/AssetRegistry'])
 
