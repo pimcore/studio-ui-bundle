@@ -26,13 +26,16 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Translation"],
             }),
-            translationGetCollection: build.query<TranslationGetCollectionApiResponse, TranslationGetCollectionApiArg>({
+            translationGetCollection: build.mutation<
+                TranslationGetCollectionApiResponse,
+                TranslationGetCollectionApiArg
+            >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/translations`,
                     method: "POST",
                     body: queryArg.translation,
                 }),
-                providesTags: ["Translation"],
+                invalidatesTags: ["Translation"],
             }),
         }),
         overrideExisting: false,
@@ -102,5 +105,5 @@ export const {
     useTranslationCreateMutation,
     useTranslationDeleteByKeyMutation,
     useTranslationUpdateMutation,
-    useTranslationGetCollectionQuery,
+    useTranslationGetCollectionMutation,
 } = injectedRtkApi;

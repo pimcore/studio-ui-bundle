@@ -17,58 +17,114 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Box, IconTextButton, SearchInput } from '@sdk/components'
-import trackError, { ApiError, GeneralError } from '../app/error-handler'
+import trackError, { GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
-import { isUndefined } from 'lodash'
-import { TranslationGetCollectionApiArg, useTranslationGetCollectionQuery } from '../app/translations/translations-api-slice.gen'
+import { useTranslationGetCollectionMutation, type Translation } from '../app/translations/translations-api-slice.gen'
 import { useTranslation } from './hooks/use-translation'
 
-export type TranslationRow = { 
-  locale: string
+export type TranslationDataItem = {
   key: string
-  value: string
-  rowId: string }
+  type: string
+  creationDate?: number
+  modificationDate?: number
+} & {
+  [localeKey: `_${string}`]: string
+}
 
-export const PredefinedPropertiesContainer = (): React.JSX.Element => {
+export type TranslationRow = TranslationDataItem & { 
+  rowId: string
+}
+
+export type TranslationCollectionResponse = {
+  data: TranslationDataItem[]
+  success: boolean
+  total: number
+}
+
+const getAvailableLocales = (rows: TranslationRow[]): string[] => {
+  if (rows.length === 0) return []
+  
+  // Get all keys from the first row that start with underscore (locale keys)
+  const localeKeys = Object.keys(rows[0]).filter(key => key.startsWith('_'))
+  
+  // Remove the underscore prefix to get clean locale codes
+  return localeKeys.map(key => key.substring(1))
+}
+
+// Helper function to convert Translation to TranslationRow(s)
+// This handles both current and future backend response formats
+const translationToRows = (translation: Translation | TranslationCollectionResponse | TranslationDataItem): TranslationRow[] => {
+  // Check if this is the new collection response format
+  if ('totalItems' in translation) {
+console.log("new data shape");
+  }
+  
+  // Cast to Translation for the remaining checks
+  const translationObj = translation as Translation
+  
+  // Current API response structure: { locale: "en", keys: { "key1": "value1", "key2": "value2", ... } }
+  if ('locale' in translationObj && 'keys' in translationObj && typeof translationObj.keys === 'object' && !Array.isArray(translationObj.keys)) {
+    const locale = translationObj.locale
+    const keysObject = translationObj.keys as Record<string, string>
+    
+    return Object.entries(keysObject).map(([key, value]) => ({
+      key,
+      type: 'simple', // Default type
+      [`_${locale}`]: value || '', // Use the locale from the response
+      rowId: uuid()
+    }))
+  }
+  
+  // Fallback for unexpected structure
+  return []
+}
+
+export const TranslationsContainer = (): React.JSX.Element => {
   const { createNewTranslation, createLoading } = useTranslation()
 
   // const [filter, setFilter] = useState<string>('')
 
-  const queryArgs: TranslationGetCollectionApiArg = { translation: {locale: "en", keys: [], useFallback: false} }
-
-  const { data, isLoading: translationsLoading, isFetching: translationsFetching, error } = useTranslationGetCollectionQuery(queryArgs)
-
+  const [fetchTranslations, { isLoading: translationsLoading }] = useTranslationGetCollectionMutation()
   const [translationRows, setTranslationRows] = useState<TranslationRow[]>([])
 
-  const locale = data?.locale
-  const keys = data?.keys
+  const loadTranslations = async (): Promise<void> => {
+    try {
+      const response = await fetchTranslations({ 
+        translation: { locale: "en", keys: [], useFallback: true } 
+      }).unwrap()
 
-  console.log("data", data);
-  
-  const sortedRows = [...translationRows].sort((a, b) => a.key.localeCompare(b.key, "en", { sensitivity: 'base' }))
-
-  // useEffect(() => {
-  //     setTranslationRows(
-  //       data.keys.map(translation => ({ locale: data.locale, key: translation.key, rowId: uuid() }))
-  //     )
-  //   }
-  // }, [predefinedProperties])
+      if (response) {
+        const rows = translationToRows(response)
+        setTranslationRows(rows)
+      }
+    } catch (error) {
+      console.error('Error loading translations', error)
+      trackError(new GeneralError('Error loading translations'))
+    }
+  }
 
   useEffect(() => {
-    if (!isUndefined(error)) {
-      trackError(new ApiError(error))
-    }
-  }, [error])
+    loadTranslations()
+  }, [])
+
+  // Extract available locales from the translation data
+  const availableLocales = getAvailableLocales(translationRows)
+
+  console.log("availableLocales", availableLocales);
+  
+
+  console.log("translationRows", translationRows)
+  
+  const sortedRows = [...translationRows].sort((a, b) => a.key.localeCompare(b.key, "en", { sensitivity: 'base' }))
 
   const onCreateTranslation = async (): Promise<void> => {
     const { success, data } = await createNewTranslation()
     if (success && data !== undefined) {
-      setTranslationRows(prev =>
-        [
-          { ...data, rowId: uuid() },
-          ...prev
-        ]
-      )
+      const newRows = translationToRows(data)
+      setTranslationRows(prev => [
+        ...newRows,
+        ...prev
+      ])
     }
   }
 
@@ -77,9 +133,9 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme="secondary">
           <IconButton
-            disabled={ translationsFetching }
+            disabled={ translationsLoading }
             icon={ { value: 'refresh' } }
-            onClick={ () => alert("refetch") }
+            onClick={ loadTranslations }
           />
         </Toolbar> }
       renderTopBar={
@@ -101,7 +157,7 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
             >{t('translations.new')}</IconTextButton>
           </Flex>
           <SearchInput
-            loading={ translationsFetching }
+            loading={ translationsLoading }
             onSearch={ (value) => {
               console.log({value})
             } }
@@ -113,12 +169,12 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
         }
     >
       <Content
-        loading={ translationsLoading || translationsFetching }
+        loading={ translationsLoading }
         margin={ {
           x: 'extra-small',
           y: 'none'
         } }
-        none={ isUndefined(data) || data.keys.length === 0 }
+        none={ translationRows.length === 0 }
       >
         <Box
           margin={ {
