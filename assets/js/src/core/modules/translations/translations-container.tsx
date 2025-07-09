@@ -91,7 +91,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const loadTranslations = async (): Promise<void> => {
     try {
       const response = await fetchTranslations({ 
-        translation: { locale: "en", keys: [], useFallback: true } 
+        translation: { locale: "en", keys: ["actions", "bla", 'blub'], useFallback: true } 
       }).unwrap()
 
       if (response) {

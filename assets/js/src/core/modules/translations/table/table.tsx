@@ -1,5 +1,8 @@
 /**
- * This source file is available under the terms of the
+ * This source file is availabexport const Table = ({ translationRows, setTranslationRows }: TableProps): React.JSX.Element => {
+  const { t } = useI18n()
+  const { updateTranslationByKey } = useTranslation()
+  const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])nder the terms of the
  * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
@@ -11,10 +14,11 @@
 import React, { useState, useMemo } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
-import { useTranslation } from 'react-i18next'
+import { useTranslation as useI18n } from 'react-i18next'
 import { type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
 import { TranslationRow } from '../translations-container'
+import { useTranslation } from '../hooks/use-translation'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { isUndefined } from 'lodash'
 import { GeneralError, trackError } from '@sdk/modules/app'
@@ -32,8 +36,8 @@ interface TableProps {
 }
 
 export const Table = ({ translationRows, setTranslationRows }: TableProps): React.JSX.Element => {
-  const { t } = useTranslation()
-  // const { updateTranslationByKey } = useTranslations()
+  const { t } = useI18n()
+  const { updateTranslationByKey } = useTranslation()
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
 
   const settings = useSettings()
@@ -61,11 +65,7 @@ export const Table = ({ translationRows, setTranslationRows }: TableProps): Reac
           editable: true,
           type: 'text'
         },
-        size: 200,
-        cell: (info) => {
-          const value = info.getValue()
-          return typeof value === 'string' ? value : ''
-        }
+        size: 200
       })
     )
   }, [languages, columnHelper])
@@ -73,7 +73,7 @@ export const Table = ({ translationRows, setTranslationRows }: TableProps): Reac
   const tableColumns = useMemo(() => [
     columnHelper.accessor('key', {
       header: t('translations.columns.key'),
-      meta: { editable: true },
+      meta: { editable: false },
       size: 200
     }),
     columnHelper.accessor('type', {
@@ -94,7 +94,7 @@ export const Table = ({ translationRows, setTranslationRows }: TableProps): Reac
     })
   ], [languageColumns, translationRows])
 
-  const onUpdateCellData = ({
+  const onUpdateCellData = async ({
     columnId,
     value,
     rowData
@@ -102,41 +102,29 @@ export const Table = ({ translationRows, setTranslationRows }: TableProps): Reac
     columnId: string
     value: unknown
     rowData: TranslationRow
-  }): void => { 
-    console.log("update", { columnId, value, rowData })
+  }): Promise<void> => {
+    const rowId = rowData.rowId
+    const updatedRow: TranslationRow = { ...rowData, [columnId]: value }
+
+    setTranslationRows(prev =>
+      prev.map(row =>
+        row.rowId === rowId ? updatedRow : row
+      )
+    )
+
+    setModifiedCells([{ columnId, rowIndex: rowId }])
+
+    const { success } = await updateTranslationByKey(columnId, updatedRow)
+
+    if (success) setModifiedCells([])
+    else {
+      setTranslationRows(prev =>
+        prev.map(row =>
+          row.rowId === rowId ? rowData : row
+        )
+      )
+    }
   }
-
-  // const onUpdateCellData = async ({
-  //   columnId,
-  //   value,
-  //   rowData
-  // }: {
-  //   columnId: string
-  //   value: unknown
-  //   rowData: TranslationRow
-  // }): Promise<void> => {
-  //   const rowId = rowData.rowId
-  //   const updatedRow: TranslationRow = { ...rowData, [columnId]: value }
-
-  //   setTranslationRows(prev =>
-  //     prev.map(row =>
-  //       row.rowId === rowId ? updatedRow : row
-  //     )
-  //   )
-
-  //   setModifiedCells([{ columnId, rowIndex: rowId }])
-
-  //   const { success } = await updateTranslationByKey(updatedRow.key, updatedRow)
-
-  //   if (success) setModifiedCells([])
-  //   else {
-  //     setTranslationRows(prev =>
-  //       prev.map(row =>
-  //         row.rowId === rowId ? rowData : row
-  //       )
-  //     )
-  //   }
-  // }
 
   return (
     <div>

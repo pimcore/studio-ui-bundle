@@ -23,21 +23,21 @@ interface ActionsCellProps {
 
 export const ActionsCell = ({ info, setTranslationRows }: ActionsCellProps): JSX.Element => {
   const key = info.row.original.key
-  // const { deleteTranslationById, deleteLoading } = useTranslation()
+  const { deleteTranslationByKey, deleteLoading } = useTranslation()
 
-  // const handleDelete = async (): Promise<void> => {
-  //   const { success } = await deleteTranslationyById(id)
-  //   if (success) {
-  //     setTranslationRows(prev => prev.filter(row => row.id !== id))
-  //   }
-  // }
+  const handleDelete = async (): Promise<void> => {
+    const { success } = await deleteTranslationByKey(key)
+    if (success) {
+      setTranslationRows(prev => prev.filter(row => row.key !== key))
+    }
+  }
 
   return (
     <div className="translations-table--actions-column">
       <IconButton
         icon={ { value: 'trash' } }
-        loading={ false }
-        onClick={ () => console.log("hi")}
+        loading={ deleteLoading }
+        onClick={ handleDelete }
         type="link"
       />
     </div>
