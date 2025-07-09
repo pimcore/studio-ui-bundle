@@ -9,7 +9,6 @@
  */
 
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
-import { type WebsiteSettingRow } from '../website-settings-container'
 import { useWebsiteSettingsAddMutation, useWebsiteSettingsDeleteMutation, useWebsiteSettingsUpdateMutation, type WebsiteSetting, type WebsiteSettingsUpdate } from '../website-settings-api-slice-enhanced'
 import { isUndefined } from 'lodash'
 
