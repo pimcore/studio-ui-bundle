@@ -7,7 +7,9 @@ export interface FilterProviderData {
   setDateFrom: (date: string | null) => void;
   dateTo: string | null;
   setDateTo: (date: string | null) => void;
-  getColumnFilters: () => ColumnFilters;
+  columnFilters: ColumnFilters;
+  updateFilters: () => void;
+  resetFilters: () => void;
 }
 export type FilterContextProps = FilterProviderData | undefined
 
@@ -27,6 +29,17 @@ export interface ColumnFilters extends Array<DateFromFilter> { }
 export const FilterProvider = (props: FilterProviderProps): React.JSX.Element => {
   const [dateFrom, setDateFrom] = React.useState<string | null>(null)
   const [dateTo, setDateTo] = React.useState<string | null>(null)
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFilters>([])
+
+  const updateFilters = (): void => {
+    setColumnFilters(getColumnFilters())
+  }
+
+  const resetFilters = (): void => {
+    setDateFrom(null)
+    setDateTo(null)
+    setColumnFilters([])
+  }
 
   const getColumnFilters = (): ColumnFilters => {
     const filters: ColumnFilters = []
@@ -53,6 +66,8 @@ export const FilterProvider = (props: FilterProviderProps): React.JSX.Element =>
       })
     }
 
+    console.log('filters -inside', filters)
+
     return filters
   }
 
@@ -62,10 +77,12 @@ export const FilterProvider = (props: FilterProviderProps): React.JSX.Element =>
       setDateFrom,
       dateTo,
       setDateTo,
-      getColumnFilters
+      columnFilters,
+      updateFilters,
+      resetFilters
     }}
     >
       {props.children}
     </FilterProviderContext.Provider>
-  ), [dateFrom, dateTo])
+  ), [dateFrom, dateTo, columnFilters])
 }

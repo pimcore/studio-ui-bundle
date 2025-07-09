@@ -22,16 +22,14 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
   const [pageSize, setPageSize] = useState<number>(20)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [searchFilter, setSearchFilter] = useState<string>('')
-  const { getColumnFilters } = useFilter()
-
-  console.log('filters', getColumnFilters())
+  const { columnFilters } = useFilter()
 
   const { data, isLoading: isRTKLoading } = useBundleApplicationLoggerGetCollectionQuery({
     body: {
       filters: {
         page: currentPage,
         pageSize,
-        columnFilters: getColumnFilters()
+        columnFilters
       }
     }
   })
@@ -97,7 +95,6 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
     >
       <Content
         loading={isLoading}
-        none={isUndefined(data?.items) || data.items.length === 0}
         padded
       >
         <ApplicationLogger items={data?.items ?? []} />

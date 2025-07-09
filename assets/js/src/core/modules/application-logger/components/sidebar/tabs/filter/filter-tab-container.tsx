@@ -3,47 +3,31 @@ import dayjs from 'dayjs'
 import React from "react"
 import { useTranslation } from "react-i18next"
 import { useFilter } from "./provider/filter-provider/use-filter"
-import { useAppDispatch } from "@sdk/app"
-import { api } from '@Pimcore/modules/application-logger/application-logger-api-slice-enhanced'
-import { invalidatingTags } from "@Pimcore/app/api/pimcore/tags"
 
 export const FilterTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
-  const dispatch = useAppDispatch()
-
   const {
+    dateFrom,
     setDateFrom,
-    setDateTo
+    dateTo,
+    setDateTo,
+    resetFilters,
+    updateFilters
   } = useFilter()
 
-  const handleApplyClick = (): void => {
-    // Invalidate the APPLICATION_LOGGER tags to trigger a refetch with new filters
-    dispatch(
-      api.util.invalidateTags(
-        invalidatingTags.APPLICATION_LOGGER()
-      )
-    )
-  }
-
-  const handleClearFiltersClick = (): void => {
-    // Clear the date filters
-    setDateFrom(null)
-    setDateTo(null)
-    // Reset the form
-    form.resetFields()
-    // Invalidate tags to refetch with cleared filters
-    dispatch(
-      api.util.invalidateTags(
-        invalidatingTags.APPLICATION_LOGGER()
-      )
-    )
-  }
+  //TODO: move helpers to helper
 
   const convertValueToISOFormat = (timestamp: number | null): string | null => {
     if (timestamp === null) return null
 
     return dayjs.unix(timestamp).format()
+  }
+
+  const convertISOToTimestamp = (dateStr: string | null): number | null => {
+    if (dateStr === null) return null
+
+    return dayjs(dateStr).startOf('day').unix()
   }
 
   return (
@@ -52,14 +36,14 @@ export const FilterTabContainer = (): React.JSX.Element => {
         <Toolbar theme='secondary'>
           <IconTextButton
             icon={{ value: 'close' }}
-            onClick={handleClearFiltersClick}
+            onClick={resetFilters}
             type='link'
           >
             {t('sidebar.clear-all-filters')}
           </IconTextButton>
 
           <Button
-            onClick={handleApplyClick}
+            onClick={updateFilters}
             type='primary'
           >
             {t('button.apply')}
@@ -91,6 +75,7 @@ export const FilterTabContainer = (): React.JSX.Element => {
                   setDateFrom(convertValueToISOFormat(newFrom))
                   setDateTo(convertValueToISOFormat(newTo))
                 }}
+                value={[convertISOToTimestamp(dateFrom), convertISOToTimestamp(dateTo)]}
               />
             </Form.Item>
           </Space>

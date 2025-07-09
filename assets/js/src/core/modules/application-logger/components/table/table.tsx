@@ -126,7 +126,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
           </Flex>
         )
       },
-      size: 30
+      size: 40
     })
   ]
 
