@@ -42,7 +42,7 @@ export const Table = ({ translationRows, setTranslationRows }: TableProps): Reac
       size: 200
     }),
     columnHelper.accessor('actions', {
-      header: t('properties.columns.actions'),
+      header: t('translations.columns.actions'),
       size: 80,
       cell: (info) => (
         <ActionsCell
