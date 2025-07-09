@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { Select } from '@sdk/components'
+import { CreatableSelect } from '@sdk/components'
 import { isEmpty, isNil } from 'lodash'
 import { toCssDimension } from '@sdk/utils'
 import { type SelectOptionType } from '@sdk/modules/element'
@@ -23,22 +23,29 @@ export type SelectEditableDefinition = Omit<AbstractDocumentEditableDefinition, 
     class?: string
     defaultValue?: string
     reload?: boolean
+    editable?: boolean
   }
 }
+
 export class DynamicTypeDocumentEditableSelect extends DynamicTypeDocumentEditableAbstract {
   id: string = 'select'
 
   getEditableDataComponent (props: SelectEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
-    const options: SelectOptionType[] = props.config?.store?.map(([value, label]) => ({
-      value,
+    const baseOptions: SelectOptionType[] = props.config?.store?.map(([value, label]) => ({
+      value: String(value),
       label: i18n.t(label)
     })) ?? []
 
+    const isEditable = props.config?.editable !== false
+
     return (
-      <Select
+      <CreatableSelect
+        allowClear
+        allowDuplicates={ false }
         className={ props.config?.class }
+        creatable={ isEditable }
         optionFilterProp="label"
-        options={ options }
+        options={ baseOptions }
         showSearch
         style={ {
           width: '100%',
