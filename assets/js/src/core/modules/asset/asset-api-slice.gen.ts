@@ -508,7 +508,7 @@ export type AssetGetGridApiResponse = /** status 200 Asset grid data */ {
 export type AssetGetGridApiArg = {
     body: {
         folderId: number;
-        columns: GridColumnRequest[];
+        columns?: GridColumnRequest[];
         filters?: GridFilter;
     };
 };
@@ -552,7 +552,7 @@ export type AssetImageStreamCustomApiArg = {
     frame?: boolean;
     /** Cover */
     cover?: boolean;
-    /** ForceResize */
+    /** Force resize */
     forceResize?: boolean;
     cropPercent?: boolean;
     /** CropWidth of downloaded image */
@@ -1054,7 +1054,7 @@ export type AdvancedColumnConfig = {
 };
 export type GridColumnRequest = {
     /** Key */
-    key: string;
+    key?: string;
     /** Locale */
     locale?: string | null;
     /** Type */
@@ -1062,7 +1062,7 @@ export type GridColumnRequest = {
     /** Group */
     group?: string | null;
     /** Config */
-    config: (string | AdvancedColumnConfig)[];
+    config?: (string | AdvancedColumnConfig)[];
 };
 export type PatchCustomMetadata = {
     /** Name */
