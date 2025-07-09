@@ -43,7 +43,7 @@ export type UnitQuantityValueConvertAllApiArg = {
     /** Id of the unit to convert from */
     fromUnitId: string;
     /** Value to convert. */
-    value: number | number;
+    value: number;
 };
 export type UnitQuantityValueConvertApiResponse = /** status 200 Converted quantity value */ {
     /** Converted value */
@@ -55,7 +55,7 @@ export type UnitQuantityValueConvertApiArg = {
     /** Id of the unit to convert to */
     toUnitId: string;
     /** Value to convert. */
-    value: number | number;
+    value: number;
 };
 export type UnitQuantityValueListApiResponse = /** status 200 List of quantity value units */ {
     items: QuantityValueUnit[];

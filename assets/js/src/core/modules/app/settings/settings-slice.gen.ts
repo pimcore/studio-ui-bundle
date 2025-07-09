@@ -18,6 +18,7 @@ export type SystemSettingsGetApiResponse = /** status 200 System settings data *
     [key: string]: any;
 };
 export type SystemSettingsGetApiArg = void;
+
 export type Error = {
     /** Message */
     message: string;
