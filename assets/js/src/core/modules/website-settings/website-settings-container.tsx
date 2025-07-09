@@ -259,7 +259,7 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
           x: 'extra-small',
           y: 'none'
         } }
-        none={ isUndefined(websiteSettings) || websiteSettings.length === 0 }
+        none={ isUndefined(websiteSettingRows) || websiteSettingRows.length === 0 }
       >
         <Box
           margin={ {
