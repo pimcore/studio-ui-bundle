@@ -17,20 +17,6 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Bundle Application Logger"],
             }),
-            bundleApplicationLoggerListComponents: build.query<
-                BundleApplicationLoggerListComponentsApiResponse,
-                BundleApplicationLoggerListComponentsApiArg
-            >({
-                query: () => ({ url: `/pimcore-studio/api/bundle/application-logger/components` }),
-                providesTags: ["Bundle Application Logger"],
-            }),
-            bundleApplicationLoggerListPriorities: build.query<
-                BundleApplicationLoggerListPrioritiesApiResponse,
-                BundleApplicationLoggerListPrioritiesApiArg
-            >({
-                query: () => ({ url: `/pimcore-studio/api/bundle/application-logger/priorities` }),
-                providesTags: ["Bundle Application Logger"],
-            }),
         }),
         overrideExisting: false,
     });
@@ -50,16 +36,6 @@ export type BundleApplicationLoggerGetCollectionApiArg = {
         };
     };
 };
-export type BundleApplicationLoggerListComponentsApiResponse = /** status 200 List of available components */ {
-    /** Log components used in the ApplicationLogger. */
-    items: string[];
-};
-export type BundleApplicationLoggerListComponentsApiArg = void;
-export type BundleApplicationLoggerListPrioritiesApiResponse = /** status 200 List of available priorities */ {
-    /** Log priority levels used in the ApplicationLogger. */
-    priorities: number[];
-};
-export type BundleApplicationLoggerListPrioritiesApiArg = void;
 export type BundleApplicationLoggerLogEntry = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -96,8 +72,4 @@ export type DevError = {
     /** Details */
     details: string;
 };
-export const {
-    useBundleApplicationLoggerGetCollectionQuery,
-    useBundleApplicationLoggerListComponentsQuery,
-    useBundleApplicationLoggerListPrioritiesQuery,
-} = injectedRtkApi;
+export const { useBundleApplicationLoggerGetCollectionQuery } = injectedRtkApi;
