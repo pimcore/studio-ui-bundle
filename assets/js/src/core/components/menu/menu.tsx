@@ -70,10 +70,12 @@ export const Menu = React.forwardRef<MenuRef, IMenuProps>((props, ref): JSX.Elem
   return (
     <AntMenu
       { ...props }
-      ref={ ref }
       items={ undefined }
+      ref={ ref }
     >
       {filteredItems?.map((item: ItemType) => MenuItem({ item }))}
     </AntMenu>
   )
 })
+
+Menu.displayName = 'Menu'
