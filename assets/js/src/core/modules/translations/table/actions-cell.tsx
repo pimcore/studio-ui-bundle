@@ -18,11 +18,11 @@ type TranslationRowWithActions = TranslationRow & { actions: React.ReactNode }
 
 interface ActionsCellProps {
   info: CellContext<TranslationRowWithActions, React.ReactNode>
-  setTranslations: React.Dispatch<React.SetStateAction<TranslationRow[]>>
+  setTranslationRows: React.Dispatch<React.SetStateAction<TranslationRow[]>>
 }
 
 export const ActionsCell = ({ info, setTranslationRows }: ActionsCellProps): JSX.Element => {
-  const id = info.row.original.id
+  const key = info.row.original.key
   // const { deleteTranslationById, deleteLoading } = useTranslation()
 
   // const handleDelete = async (): Promise<void> => {
@@ -41,8 +41,8 @@ export const ActionsCell = ({ info, setTranslationRows }: ActionsCellProps): JSX
       />
       <IconButton
         icon={ { value: 'trash' } }
-        loading={ deleteLoading }
-        onClick={ handleDelete }
+        loading={ false }
+        onClick={ () => console.log("hi")}
         type="link"
       />
     </div>

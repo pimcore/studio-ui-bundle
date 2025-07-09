@@ -296,6 +296,9 @@ properties.editable-properties: Editable Properties
 properties.all-properties: All Properties
 properties.predefined-properties: Predefined Properties
 properties.new-custom-property: New custom property
+translations.columns.type: Type
+translations.columns.key: Key
+translations.columns.actions: Actions
 properties.columns.type: Type
 properties.columns.key: Key
 properties.columns.name: Name
