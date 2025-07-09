@@ -75,6 +75,7 @@ export const ReportChart = ({ chartData, reportData }: IReportsChartProps): Reac
     data: reportChartData,
     colorField: CHART_FIELD_TYPE_KEY,
     angleField: CHART_FIELD_VALUE_KEY,
+    autoFit: true,
     scale: {
       color: {
         type: 'ordinal',

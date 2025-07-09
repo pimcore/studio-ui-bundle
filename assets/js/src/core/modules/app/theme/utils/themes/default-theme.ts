@@ -48,7 +48,7 @@ const defaultTheme = {
     colorIconSidebar: '#22075e',
     colorBorderActive: '#00bab3',
     colorLogo: '#5520a6',
-    colorBorderTertiary: '#/',
+    colorBorderTertiary: '#eae8ed',
     colorTextTreeElement: '#404655',
     colorIconTree: '#404655',
     colorIconTreeUnpublished: 'rgba(64, 70, 85, 0.4)',
