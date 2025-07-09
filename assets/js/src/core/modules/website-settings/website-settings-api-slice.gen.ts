@@ -69,7 +69,7 @@ export type WebsiteSettingsUpdateApiArg = {
     id: number;
     websiteSettingsUpdate: WebsiteSettingsUpdate;
 };
-export type WebsiteSettingsDeleteApiResponse = unknown;
+export type WebsiteSettingsDeleteApiResponse = /** status 200 Successfully deleted website setting */ void;
 export type WebsiteSettingsDeleteApiArg = {
     /** Id of the website setting */
     id: number;
@@ -79,10 +79,10 @@ export type WebsiteSettingsListTypesApiResponse = /** status 200 List of all ava
 };
 export type WebsiteSettingsListTypesApiArg = void;
 export type WebsiteSettingsObjectData = {
-    /** id */
+    /** element id */
     id: number;
-    /** path */
-    path: string;
+    /** element fullPath */
+    fullPath: string;
 };
 export type WebsiteSetting = {
     /** AdditionalAttributes */
@@ -96,15 +96,15 @@ export type WebsiteSetting = {
     /** Language */
     language?: string;
     /** Type */
-    type: string | null;
+    type: any;
     /** Data */
     data: string | boolean | WebsiteSettingsObjectData | null;
     /** Site ID */
-    siteId?: number | null;
+    siteId?: any;
     /** Creation date */
-    creationDate?: number | null;
+    creationDate?: any;
     /** Modification date */
-    modificationDate?: number | null;
+    modificationDate?: any;
 };
 export type Error = {
     /** Message */
@@ -128,9 +128,9 @@ export type WebsiteSettingsUpdate = {
     /** Language */
     language: string;
     /** Data */
-    data: string | boolean | null;
+    data: string | boolean | WebsiteSettingsObjectData | null;
     /** Site ID */
-    siteId: number | null;
+    siteId: any;
 };
 export type WebsiteSettingsType = {
     /** AdditionalAttributes */
