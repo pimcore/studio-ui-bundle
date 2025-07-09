@@ -8,12 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { type MainNavRegistry } from './services/main-nav-registry'
 import { NavPermission } from '@Pimcore/modules/perspectives/enums/nav-permission'
-import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
+import { type MainNavRegistry } from './services/main-nav-registry'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -38,33 +37,6 @@ moduleSystem.registerModule({
       label: 'navigation.tools',
       icon: 'accessory',
       perspectivePermissionHide: NavPermission.ToolsHidden
-    })
-
-    mainNavRegistryService.registerMainNavItem({
-      path: 'Tools/Email',
-      label: 'navigation.email',
-      permission: UserPermission.Emails,
-      perspectivePermission: NavPermission.Mails
-    })
-
-    mainNavRegistryService.registerMainNavItem({
-      path: 'Tools/Email/Email-Blocklist',
-      label: 'navigation.email-blocklist',
-      className: 'item-style-modifier',
-      permission: UserPermission.Emails,
-      perspectivePermission: NavPermission.Mails,
-      widgetConfig: {
-        name: 'EmailBlocklist',
-        id: 'email-blocklist',
-        component: 'email-blocklist',
-        config: {
-          translationKey: 'widget.email-blocklist',
-          icon: {
-            type: 'name',
-            value: 'mail-02'
-          }
-        }
-      }
     })
   }
 })

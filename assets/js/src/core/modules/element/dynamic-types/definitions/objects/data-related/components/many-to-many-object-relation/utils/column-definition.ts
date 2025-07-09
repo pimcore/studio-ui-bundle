@@ -15,7 +15,9 @@ import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import type {
   ManyToManyRelationValueItem
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
-import { getElementCellConfig } from '../../many-to-many-relation/grid'
+import {
+  getElementCellConfig
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/utils/helpers'
 
 export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: Record<string, VisibleFieldDefinition>, disabled?: boolean): Array<ColumnDef<any>> => {
   const columnDefinition: Array<ColumnDef<any>> = []

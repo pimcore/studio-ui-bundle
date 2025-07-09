@@ -33,8 +33,6 @@ export type GridCellColumnMeta = ColumnMetaType & { type: string }
 @injectable()
 export abstract class DynamicTypeDocumentEditableAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
-  // if true, the editable will be rendered inside a shadow DOM with embedded styles. if false, it will be rendered in the normal DOM and styles need to be applied individually
-  useShadowDom: boolean = true
 
   abstract getEditableDataComponent (props: AbstractDocumentEditableDefinition): ReactElement<AbstractDocumentEditableDefinition>
 
@@ -44,5 +42,21 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
 
   getLabel (props: AbstractDocumentEditableDefinition): React.ReactElement | undefined {
     return undefined
+  }
+
+  /**
+   * Helper method to check if the editable has reload config enabled
+   */
+  protected hasReloadConfig (props: AbstractDocumentEditableDefinition): boolean {
+    return Boolean(props.config?.reload)
+  }
+
+  /**
+   * Determines if the editable should trigger immediate auto-save and reload on change
+   * @param props The editable props
+   * @returns true if should reload on change, false for normal debounced auto-save
+   */
+  reloadOnChange (props: AbstractDocumentEditableDefinition): boolean {
+    return this.hasReloadConfig(props)
   }
 }

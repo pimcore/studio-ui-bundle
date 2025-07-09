@@ -233,6 +233,8 @@ export type EmailLogDetail = EmailLog & {
 export type EmailLogObjectParameterData = {
     /** id */
     id: number;
+    /** elementType */
+    elementType?: string;
     /** type */
     type: string;
     /** class */

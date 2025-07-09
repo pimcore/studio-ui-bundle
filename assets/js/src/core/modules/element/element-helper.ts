@@ -66,6 +66,7 @@ export const getElementActionCacheKey = (elementType: ElementType, action: strin
 export interface ElementReference {
   id: number
   type: 'asset' | 'object' | 'document'
+  elementType?: ElementType
   fullPath: string
   isPublished?: boolean | null
   subtype?: string

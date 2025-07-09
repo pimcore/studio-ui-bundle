@@ -13,7 +13,7 @@ import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-
 import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Iframe } from '../iframe/iframe'
+import { Iframe, type IframeRef } from '../iframe/iframe'
 
 interface DataObjectPreviewProps {
   id: number
@@ -23,8 +23,8 @@ export const DataObjectPreview = ({ id }: DataObjectPreviewProps): React.JSX.Ele
   const { t } = useTranslation()
   const [timestamp, setTimestamp] = useState<number>(Date.now())
   const { dataObject } = useDataObjectDraft(id)
-  const iframeRef = React.useRef<HTMLIFrameElement>(null)
-  const isVisible = useElementVisible(iframeRef, true)
+  const iframeRef = React.useRef<IframeRef>(null)
+  const isVisible = useElementVisible(iframeRef.current?.getElementRef(), true)
 
   useEffect(() => {
     if (isVisible) {

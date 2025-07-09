@@ -20,9 +20,6 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useDeleteDraft } from '@Pimcore/modules/element/actions/delete-draft/use-delete-draft'
 import { SaveTaskType, useSave } from '@Pimcore/modules/document/actions/save/use-save'
 import {
-  useSaveContext
-} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/use-save-context'
-import {
   useSaveSchedules
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
@@ -31,14 +28,16 @@ import React, { type ReactElement, useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
-import { useDocumentEditor } from '../../shared-tab-manager/tabs/edit/provider/use-document-editor'
+import { useDocumentSaveTask } from '@Pimcore/modules/document/hooks/use-document-save-task'
+import { DocumentSaveTaskManager } from '@Pimcore/modules/document/services'
 
 export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DocumentContext)
   const { document, removeTrackedChanges, publishDraft } = useDocumentDraft(id)
   const { save: saveDocument, isLoading, isSuccess, isError, error } = useSave()
-  const { isAutoSaveLoading, runningTask } = useSaveContext()
+
+  const { isAutoSaveLoading, runningTask } = useDocumentSaveTask()
   const {
     saveSchedules,
     isLoading: isSchedulesLoading,
@@ -46,7 +45,6 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     isError: isSchedulesError,
     error: schedulesError
   } = useSaveSchedules('document', id, false)
-  const { getValues } = useDocumentEditor()
   const { deleteDraft, isLoading: isDraftDeleteLoading, buttonText: deleteDraftButtonText } = useDeleteDraft('document')
   const messageApi = useMessage()
   const isAutoSaved = document?.draftData?.isAutoSave === true
@@ -72,10 +70,25 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     }
   }, [isError, isSchedulesError, error, schedulesError])
 
+  // Handle auto-save errors via direct callback subscription
+  useEffect(() => {
+    const taskManager = DocumentSaveTaskManager.getInstance(id)
+
+    const unsubscribe = taskManager.onErrorChange((error, task) => {
+      if (task === SaveTaskType.AutoSave) {
+        void messageApi.error(t('auto-save-failed'))
+        console.error('Auto-save failed:', error)
+      }
+    })
+
+    return unsubscribe
+  }, [id, messageApi, t])
+
   async function handleSaveClick (task: SaveTaskType, onFinish?: () => void): Promise<void> {
     if (document?.changes === undefined) return
+
     Promise.all([
-      saveDocument(getValues(), task, () => {
+      saveDocument(task, () => {
         onFinish?.()
       }),
       saveSchedules()

@@ -23,6 +23,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStyle } from './user-menu.styles'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
+import { USERPROFILE } from '@Pimcore/modules/auth/profile/profile-container'
 
 interface IUserMenuProps {
   className?: string
@@ -75,9 +76,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       key: 'myprofile',
       label: t('user-menu.my-profile'),
       icon: <Icon value={ 'user' } />,
-      onClick: () => {
-        console.log('My Profile clicked')
-      }
+      onClick: () => { openMainWidget(USERPROFILE) }
     },
     {
       key: 'logout',

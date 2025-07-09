@@ -1,0 +1,138 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { useMessage } from '@Pimcore/components/message/useMessage'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import { api, useEmailLogDeleteMutation } from '@Pimcore/modules/email/emails-api-slice-enhanced'
+import { isUndefined } from 'lodash'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { type Blocklist2, type EmailLogDeleteApiArg, type EmailLogForwardByIdApiArg, type EmailLogResendByIdApiArg, useEmailLogForwardByIdMutation, useEmailLogResendByIdMutation } from '../../emails-api-slice.gen'
+
+interface UseEmailLogHookReturn {
+  resendWithConfirmation: (id: EmailLogDeleteApiArg['id'], onFinish?: () => void) => void
+  resend: (id: EmailLogResendByIdApiArg['id'], onFinish?: () => void) => Promise<void>
+  forward: (id: EmailLogForwardByIdApiArg['id'], to: Blocklist2['email'], onFinish?: () => void) => Promise<void>
+  remove: (id: EmailLogDeleteApiArg['id'], onFinish?: () => void) => Promise<void>
+  removeWithConfirmation: (id: EmailLogDeleteApiArg['id'], onFinish?: () => void) => void
+}
+
+export const useEmailLog = (): UseEmailLogHookReturn => {
+  const modal = useFormModal()
+  const { t } = useTranslation()
+  const dispatch = useAppDispatch()
+  const [resendMutation] = useEmailLogResendByIdMutation()
+  const [forwardMutation] = useEmailLogForwardByIdMutation()
+  const [deleteMutation] = useEmailLogDeleteMutation()
+  const { success } = useMessage()
+
+  const resendWithConfirmation = (id: EmailLogDeleteApiArg['id'], onFinish?: () => void): void => {
+    modal.confirm({
+      title: t('email-log.resend.confirmation.title'),
+      content: <span>{t('email-log.resend.confirmation.text')} </span>,
+      okText: t('email-log.resend.confirmation.ok'),
+      onOk: async () => {
+        await resend(id, () => {
+          onFinish?.()
+        })
+      }
+    })
+  }
+
+  const resend = async (id: EmailLogResendByIdApiArg['id'], onFinish?: () => void): Promise<void> => {
+    const resendEmailTask = resendMutation({
+      id
+    })
+
+    try {
+      const response = await resendEmailTask
+
+      if (!isUndefined(response.error)) {
+        trackError(new ApiError(response.error))
+      }
+
+      onFinish?.()
+      void success(t('email-log.resend.email.success'))
+    } catch (error) {
+      trackError(new GeneralError('Failed to resend email'))
+    }
+  }
+
+  const forward = async (id: EmailLogForwardByIdApiArg['id'], to: Blocklist2['email'], onFinish?: () => void): Promise<void> => {
+    const forwardEmailTask = forwardMutation({
+      id,
+      emailAddressParameter: {
+        email: to
+      }
+    })
+
+    try {
+      const response = await forwardEmailTask
+
+      if (!isUndefined(response.error)) {
+        trackError(new ApiError(response.error))
+      }
+
+      onFinish?.()
+      void success(t('email-log.forward.email.success'))
+    } catch (error) {
+      trackError(new GeneralError('Failed to forward email'))
+    }
+  }
+
+  const removeWithConfirmation = (id: EmailLogDeleteApiArg['id'], onFinish?: () => void): void => {
+    modal.confirm({
+      title: t('element.delete.confirmation.title'),
+      content: <span>{t('element.delete.confirmation.text')} </span>,
+      okText: t('element.delete.confirmation.ok'),
+      onOk: async () => {
+        await remove(id, () => {
+          onFinish?.()
+        })
+      }
+    })
+  }
+
+  const remove = async (id: EmailLogDeleteApiArg['id'], onFinish?: () => void): Promise<void> => {
+    const deleteEmailLogTask = deleteMutation({
+      id
+    })
+
+    try {
+      const response = await deleteEmailLogTask
+
+      if (!isUndefined(response.error)) {
+        trackError(new ApiError(response.error))
+      }
+
+      dispatch(
+        api.util.invalidateTags(
+          invalidatingTags.EMAIL_LOG()
+        )
+      )
+
+      onFinish?.()
+      void success(t('email-log.delete.email.success'))
+    } catch (error) {
+      trackError(new GeneralError('Failed to delete email'))
+    }
+  }
+
+  return {
+    resendWithConfirmation,
+    resend,
+    forward,
+    remove,
+    removeWithConfirmation
+  }
+}

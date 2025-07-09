@@ -50,6 +50,8 @@ export const tagNames = {
   EMAIL_BLOCKLIST_DETAIL: 'EMAIL_BLOCKLIST_DETAIL',
   APPLICATION_LOGGER: 'APPLICATION_LOGGER',
   APPLICATION_LOGGER_DETAIL: 'APPLICATION_LOGGER_DETAIL'
+  EMAIL_LOG: 'EMAIL_LOG',
+  EMAIL_LOG_DETAIL: 'EMAIL_LOG_DETAIL'
 }
 
 export const providingTags = {
@@ -102,6 +104,8 @@ export const providingTags = {
   CURRENT_USER_INFORMATION: () => [tagNames.CURRENT_USER_INFORMATION],
   EMAIL_BLOCKLIST: () => [tagNames.EMAIL_BLOCKLIST],
   EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }],
+  EMAIL_LOG: () => [tagNames.EMAIL_LOG],
+  EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }],
   APPLICATION_LOGGER: () => [tagNames.APPLICATION_LOGGER],
   APPLICATION_LOGGER_DETAIL: (id: number) => [{ type: tagNames.APPLICATION_LOGGER_DETAIL, id }]
 }
@@ -150,7 +154,9 @@ export const invalidatingTags = {
   EMAIL_BLOCKLIST: () => [tagNames.EMAIL_BLOCKLIST],
   EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }],
   APPLICATION_LOGGER: () => [tagNames.APPLICATION_LOGGER],
-  APPLICATION_LOGGER_DETAIL: (id: number) => [{ type: tagNames.APPLICATION_LOGGER_DETAIL, id }]
+  APPLICATION_LOGGER_DETAIL: (id: number) => [{ type: tagNames.APPLICATION_LOGGER_DETAIL, id }],
+  EMAIL_LOG: () => [tagNames.EMAIL_LOG],
+  EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }]
 }
 
 const elementUnspecificDataTag = tagNames.AVAILABLE_TAGS
