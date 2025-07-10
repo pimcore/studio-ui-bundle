@@ -9,15 +9,13 @@
  */
 
 import { useContext } from 'react'
-import { FieldWidthContext, type IFieldWidthContext, defaultFieldWidthValues } from './field-width-provider'
+import { LinkModalContext, type LinkModalContextProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/provider/link-modal-provider'
 import { isNil } from 'lodash'
 
-export const useFieldWidth = (): IFieldWidthContext => {
-  const context = useContext(FieldWidthContext)
-  
+export const useLinkModalContext = (): LinkModalContextProps => {
+  const context = useContext(LinkModalContext)
   if (isNil(context)) {
-    return defaultFieldWidthValues
+    throw new Error('useLinkModalContext must be used within a LinkModalProvider')
   }
-  
   return context
 }

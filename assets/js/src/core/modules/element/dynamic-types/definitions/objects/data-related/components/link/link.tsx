@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React from 'react'
 import cn from 'classnames'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useTranslation } from 'react-i18next'
@@ -24,6 +24,7 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/utils/link-value-converter'
 import { useStyles } from './link.styles'
 import { LinkPreview } from './components/link-preview/link-preview'
+import { useLinkModal } from './hooks/use-link-modal'
 
 export interface LinkValue {
   text: string
@@ -55,25 +56,19 @@ export interface LinkProps {
 }
 
 export const Link = (props: LinkProps): React.JSX.Element => {
-  const [isModalVisible, setIsModalVisible] = useState(false)
-
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { openElement } = useElementHelper()
 
   const value = props.value ?? null
 
-  const handleChange = (value: LinkValue | null): void => {
-    props.onChange?.(value)
-  }
-
-  const showModal = (): void => {
-    setIsModalVisible(true)
-  }
-
-  const hideModal = (): void => {
-    setIsModalVisible(false)
-  }
+  const { openModal } = useLinkModal({
+    disabled: props.disabled,
+    allowedTypes: props.allowedTypes,
+    allowedTargets: props.allowedTargets,
+    disabledFields: props.disabledFields,
+    onSave: props.onChange
+  })
 
   const openLink = (): void => {
     if (value === null) {
@@ -94,6 +89,10 @@ export const Link = (props: LinkProps): React.JSX.Element => {
         console.error('Error while opening element:', error)
       })
     }
+  }
+
+  const showModal = (): void => {
+    openModal(value)
   }
 
   return (
@@ -145,17 +144,6 @@ export const Link = (props: LinkProps): React.JSX.Element => {
             />
           </Tooltip>
           ) }
-
-      <LinkModal
-        allowedTargets={ props.allowedTargets }
-        allowedTypes={ props.allowedTypes }
-        disabled={ props.disabled }
-        disabledFields={ props.disabledFields }
-        onClose={ hideModal }
-        onSave={ handleChange }
-        open={ isModalVisible }
-        value={ value }
-      />
 
     </Flex>
   )
