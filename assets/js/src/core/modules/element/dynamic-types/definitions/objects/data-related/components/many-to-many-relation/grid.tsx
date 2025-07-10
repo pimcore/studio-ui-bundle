@@ -38,6 +38,7 @@ export interface ManyToManyRelationGridProps {
   className?: string
   enableRowDrag: boolean
   handleOrderChange: (data: ManyToManyRelationValue) => void
+  pathFormatterConfig?: { name: string | undefined, class: string | undefined }
 }
 
 export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid (props: ManyToManyRelationGridProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
