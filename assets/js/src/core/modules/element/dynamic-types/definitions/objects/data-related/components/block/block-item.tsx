@@ -48,9 +48,8 @@ export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
         Array.isArray(children)
           ? children.map((child, index) => {
             return (
-              <CombinedFieldNameProvider combinedFieldNameParent={ [...(Array.isArray(props.name) ? props.name : [props.name])] }>
+              <CombinedFieldNameProvider combinedFieldNameParent={ [...(Array.isArray(props.name) ? props.name : [props.name])] } key={ index }>
                 <Form.Group
-                  key={ index }
                   name={ field }
                 >
                   <ObjectComponent

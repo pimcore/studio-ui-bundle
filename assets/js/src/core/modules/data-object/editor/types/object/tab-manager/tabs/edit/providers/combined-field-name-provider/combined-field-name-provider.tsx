@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isNil } from 'lodash'
 import React, { useMemo, useContext } from 'react'
 
 export interface ICombinedFieldNameContext {
@@ -26,7 +27,7 @@ export const CombinedFieldNameProvider = ({ combinedFieldNameParent, children }:
   
   const mergedCombinedFieldNameParent = useMemo(() => {
     // If there's a parent context, merge its array with the current one
-    if (parentContext?.combinedFieldNameParent) {
+    if (!isNil(parentContext?.combinedFieldNameParent)) {
       return [...parentContext.combinedFieldNameParent, ...combinedFieldNameParent]
     }
     // Otherwise, just use the current array

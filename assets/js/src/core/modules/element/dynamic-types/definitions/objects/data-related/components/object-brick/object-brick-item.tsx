@@ -50,9 +50,8 @@ export const ObjectBrickItem = (props: ObjectBrickItemProps): React.JSX.Element 
     <Box padding={ { x: 'small', y: 'small', top: 'none' } }>
       {layoutDefinition.children.map((child, index) => {
         return (
-          <CombinedFieldNameProvider combinedFieldNameParent={ [...(Array.isArray(props.name) ? props.name : [props.name]), type] }>
+          <CombinedFieldNameProvider combinedFieldNameParent={ [...(Array.isArray(props.name) ? props.name : [props.name]), type] } key={ index }>
             <ObjectComponent
-              key={ index }
               { ...child }
               noteditable={ props.noteditable }
             />

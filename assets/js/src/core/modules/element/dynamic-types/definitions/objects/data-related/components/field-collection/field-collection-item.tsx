@@ -84,9 +84,8 @@ export const FieldCollectionItem = (props: FieldCollectionItemProps): React.JSX.
         <Form.Group name={ [field, 'data'] }>
           {layoutDefinition.children.map((child, index) => {
             return (
-              <CombinedFieldNameProvider combinedFieldNameParent={ [...(Array.isArray(props.name) ? props.name : [props.name]), type] }>
+              <CombinedFieldNameProvider combinedFieldNameParent={ [...(Array.isArray(props.name) ? props.name : [props.name]), type] } key={ index }>
                 <ObjectComponent
-                  key={ index }
                   { ...child }
                   noteditable={ noteditable }
                   combinedParentName={ [field, 'hugo'] }
