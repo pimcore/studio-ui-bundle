@@ -56,9 +56,24 @@ const getAvailableLocales = (rows: TranslationRow[]): string[] => {
 // Helper function to convert Translation to TranslationRow(s)
 // This handles both current and future backend response formats
 const translationToRows = (translation: Translation | TranslationCollectionResponse | TranslationDataItem): TranslationRow[] => {
+  // Check if this is already a TranslationDataItem (from createNewTranslation)
+  if ('key' in translation && 'type' in translation && 'rowId' in translation) {
+    // It's already a TranslationRow, just return it as an array
+    return [translation as TranslationRow]
+  }
+  
+  // Check if this is a TranslationDataItem (from createNewTranslation)
+  if ('key' in translation && 'type' in translation && !('locale' in translation)) {
+    // Convert TranslationDataItem to TranslationRow
+    return [{
+      ...translation as TranslationDataItem,
+      rowId: uuid()
+    }]
+  }
+  
   // Check if this is the new collection response format
   if ('totalItems' in translation) {
-console.log("new data shape");
+    console.log("new data shape");
   }
   
   // Cast to Translation for the remaining checks
@@ -134,7 +149,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
       return
     }
 
-    const { success, data } = await createNewTranslation()
+    const { success, data } = await createNewTranslation(translationKey)
     if (success && data !== undefined) {
       const newRows = translationToRows(data)
       setTranslationRows(prev => [

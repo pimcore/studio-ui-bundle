@@ -14,7 +14,7 @@ import { TranslationRow, TranslationDataItem } from '../translations-container'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 interface UseTranslationReturn {
-  createNewTranslation: () => Promise<{ success: boolean, data?: TranslationDataItem }>
+  createNewTranslation: (key: string) => Promise<{ success: boolean, data?: TranslationDataItem }>
   createLoading: boolean
   deleteTranslationByKey: (key: string) => Promise<{ success: boolean }>
   deleteLoading: boolean
@@ -28,9 +28,9 @@ export const useTranslation = (): UseTranslationReturn => {
   const [deleteTranslation, { isLoading: deleteLoading }] = useTranslationDeleteByKeyMutation()
   const [updateTranslation, { isLoading: updateLoading }] = useTranslationUpdateMutation()
 
-  const createNewTranslation = async (): Promise<{ success: boolean, data?: TranslationDataItem }> => {
+  const createNewTranslation = async (key: string): Promise<{ success: boolean, data?: TranslationDataItem }> => {
     try {
-      const translationData: TranslationCreate = {translationData: [{key: "bla", type: "simple"}]}
+      const translationData: TranslationCreate = {translationData: [{key, type: "simple"}]}
       const result = await createTranslation({createTranslation: translationData})
       
       if ('data' in result) {
