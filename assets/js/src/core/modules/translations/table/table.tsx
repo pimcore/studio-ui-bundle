@@ -34,26 +34,29 @@ type TranslationWithActions = TranslationRow & { actions: React.ReactNode }
 interface TableProps {
   translationRows: TranslationRow[]
   setTranslationRows: React.Dispatch<React.SetStateAction<TranslationRow[]>>
+  visibleLocales: string[]
 }
 
-export const Table = ({ translationRows, setTranslationRows }: TableProps): React.JSX.Element => {
+export const Table = ({ translationRows, setTranslationRows, visibleLocales }: TableProps): React.JSX.Element => {
   const { t } = useI18n()
   const { updateTranslationByKey } = useTranslation()
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
 
   const settings = useSettings()
   
-  const availableLanguages = settings.availableAdminLanguages
-  const validLanguages: string[] = settings.validLanguages
+  const availableLanguages = settings?.availableAdminLanguages || []
+  const validLanguages: string[] = settings?.validLanguages || []
 
-  const languages: Language[] = validLanguages.map(validLang => {
-    const match = availableLanguages.find(lang => lang.language === validLang)
-    if (isUndefined(match)) {
-      trackError(new GeneralError(`Language "${validLang}" not found in availableLanguages`))
-      return { language: validLang, display: validLang } 
-    }
-    return match
-  }).filter(Boolean)
+  const languages: Language[] = validLanguages
+    .filter(validLang => visibleLocales.includes(validLang))
+    .map(validLang => {
+      const match = availableLanguages.find(lang => lang.language === validLang)
+      if (isUndefined(match)) {
+        trackError(new GeneralError(`Language "${validLang}" not found in availableLanguages`))
+        return { language: validLang, display: validLang } 
+      }
+      return match
+    }).filter(Boolean)
   
   const columnHelper = createColumnHelper<TranslationWithActions>()
 
@@ -74,7 +77,7 @@ export const Table = ({ translationRows, setTranslationRows }: TableProps): Reac
         size: 200
       })
     )
-  }, [languages, columnHelper])
+  }, [languages, columnHelper, visibleLocales])
 
   const tableColumns = useMemo(() => [
     columnHelper.accessor('key', {
@@ -98,7 +101,7 @@ export const Table = ({ translationRows, setTranslationRows }: TableProps): Reac
         />
       )
     })
-  ], [languageColumns, translationRows])
+  ], [languageColumns, translationRows, visibleLocales])
 
   const onUpdateCellData = async ({
     columnId,

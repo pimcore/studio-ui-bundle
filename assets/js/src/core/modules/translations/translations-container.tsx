@@ -16,12 +16,13 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
-import { Box, Button, Form, IconTextButton, Input, ModalFooter, SearchInput, useModal } from '@sdk/components'
+import { Box, Button, Form, IconTextButton, Input, ModalFooter, SearchInput, useModal, Select } from '@sdk/components'
 import trackError, { GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { useTranslationGetCollectionMutation, type Translation } from '../app/translations/translations-api-slice.gen'
 import { useTranslation } from './hooks/use-translation'
 import { Table } from './table/table'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { keyframes } from 'antd-style'
 
 export type TranslationDataItem = {
@@ -104,6 +105,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
     const [form] = Form.useForm<FormValues>()
 
   const { createNewTranslation, createLoading } = useTranslation()
+  const settings = useSettings()
 
   // const [filter, setFilter] = useState<string>('')
 
@@ -132,10 +134,20 @@ export const TranslationsContainer = (): React.JSX.Element => {
 
   // Extract available locales from the translation data
   const availableLocales = getAvailableLocales(translationRows)
+  
+  // State for managing visible locales
+  const [visibleLocales, setVisibleLocales] = useState<string[]>([])
+  
+  // Initialize visible locales when available locales change
+  useEffect(() => {
+    if (availableLocales.length > 0 && visibleLocales.length === 0) {
+      setVisibleLocales(availableLocales)
+    }
+  }, [availableLocales, visibleLocales.length])
 
   console.log("availableLocales", availableLocales);
+  console.log("visibleLocales", visibleLocales);
   
-
   console.log("translationRows", translationRows)
   
   const sortedRows = [...translationRows].sort((a, b) => a.key.localeCompare(b.key, "en", { sensitivity: 'base' }))
@@ -224,15 +236,45 @@ export const TranslationsContainer = (): React.JSX.Element => {
               </Flex>
             </Form>
           </Flex>
-          <SearchInput
-            loading={ translationsLoading }
-            onSearch={ (value) => {
-              console.log({value})
-            } }
-            placeholder="Search"
-            withPrefix={ false }
-            withoutAddon={ false }
-          />
+          <Flex gap="small">
+            <SearchInput
+              loading={ translationsLoading }
+              onSearch={ (value) => {
+                console.log({value})
+              } }
+              placeholder="Search"
+              withPrefix={ false }
+              withoutAddon={ false }
+            />
+            <Select
+              mode="multiple"
+              placeholder="Select languages"
+              style={{ minWidth: 220 }}
+              value={ visibleLocales }
+              disabled={ !settings || availableLocales.length === 0 }
+              onChange={ (selectedLocales: string[]) => {
+                // Ensure at least one locale is always selected
+                if (selectedLocales.length > 0) {
+                  setVisibleLocales(selectedLocales)
+                }
+              } }
+              options={ availableLocales.map(locale => {
+                // Find the display name for this locale
+                const languageInfo = settings?.availableAdminLanguages?.find(lang => lang.language === locale)
+                return {
+                  value: locale,
+                  label: languageInfo?.display || locale.toUpperCase()
+                }
+              }) }
+            />
+            <Button
+              size="small"
+              onClick={ () => setVisibleLocales(availableLocales) }
+              disabled={ !settings || visibleLocales.length === availableLocales.length || availableLocales.length === 0 }
+            >
+              {t('translations.show-all-languages')}
+            </Button>
+          </Flex>
         </Toolbar>
         }
     >
@@ -253,6 +295,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
           <Table
             translationRows={ sortedRows }
             setTranslationRows={ setTranslationRows }
+            visibleLocales={ visibleLocales }
           />
           {errorModals}
         </Box>
