@@ -8,25 +8,21 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useState } from 'react'
 import {
-  type CustomReportDetails,
+  type BundleCustomReportsDetails,
   type CustomReportsChartApiResponse,
-  useCustomReportsChartQuery,
+  useCustomReportsChartMutation,
   useCustomReportsReportQuery
 } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { useEffect, useRef } from 'react'
 
 interface UseReportDataProps {
   name: string
 }
 
 interface UseReportDataReturn {
-  page: number
-  setPage: (page: number) => void
-  pageSize: number
-  setPageSize: (pageSize: number) => void
-  reportDetailData: CustomReportDetails | undefined
+  reportDetailData: BundleCustomReportsDetails | undefined
   chartDetailData: CustomReportsChartApiResponse | undefined
   isLoading: boolean
   isFetching: boolean
@@ -34,36 +30,37 @@ interface UseReportDataReturn {
 }
 
 export const useReportData = ({ name }: UseReportDataProps): UseReportDataReturn => {
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
+  const previousName = useRef<string | undefined>(undefined)
 
   const {
     isLoading: isReportDetailLoading,
     data: reportDetailData,
     refetch: reportDetailRefetch,
     isFetching: isReportDetailFetching
-  } = useCustomReportsReportQuery({ name }, { skip: isEmptyValue(name), refetchOnMountOrArgChange: true })
+  } = useCustomReportsReportQuery({ name }, { skip: isEmptyValue(name) || name === previousName.current })
 
-  const {
+  const [fetchChartDetail, {
     isLoading: isChartDetailLoading,
-    data: chartDetailData,
-    refetch: chartDetailRefetch,
-    isFetching: isChartDetailFetching
-  } = useCustomReportsChartQuery({ name, page, pageSize }, { skip: isEmptyValue(name), refetchOnMountOrArgChange: true })
+    data: chartDetailData
+  }] = useCustomReportsChartMutation()
+
+  useEffect(() => {
+    if (!isEmptyValue(name) && name !== previousName.current) {
+      fetchChartDetail({ body: { name } }).catch(e => { console.error(e) })
+
+      previousName.current = name
+    }
+  }, [name, fetchChartDetail])
 
   const isLoading = isReportDetailLoading ?? isChartDetailLoading
-  const isFetching = isReportDetailFetching ?? isChartDetailFetching
+  const isFetching = isReportDetailFetching ?? isChartDetailLoading
 
   const refetchAll = (): void => {
     reportDetailRefetch().catch(e => { console.error(e) })
-    chartDetailRefetch().catch(e => { console.error(e) })
+    fetchChartDetail({ body: { name } }).catch(e => { console.error(e) })
   }
 
   return {
-    page,
-    setPage,
-    pageSize,
-    setPageSize,
     reportDetailData,
     chartDetailData,
     isLoading,

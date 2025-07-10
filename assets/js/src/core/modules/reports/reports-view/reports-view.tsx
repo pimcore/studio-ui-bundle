@@ -10,12 +10,9 @@
 
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty, isUndefined } from 'lodash'
+import { isEmpty } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
-import {
-  type CustomReportChartData,
-  useCustomReportsGetTreeQuery
-} from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -35,15 +32,12 @@ export const ReportsView = (): React.JSX.Element => {
 
   // TODO: need to update logic for using page/pageSize
   const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page: 1, pageSize: 10 })
-  const { page, setPage, pageSize, setPageSize, refetchAll, isFetching, chartDetailData } = useReportData({
+  const { refetchAll, isFetching, chartDetailData } = useReportData({
     name: currentReport ?? ''
   })
 
   const isCurrentReportSelected = !isEmptyValue(currentReport)
-  const chartData =
-      !isUndefined(chartDetailData) && 'data' in chartDetailData
-        ? chartDetailData.data as CustomReportChartData[]
-        : undefined
+  const chartData = chartDetailData?.items
 
   const reportsTreeOptions = useMemo(() => {
     if (!isEmpty(reportsTreeData)) {
@@ -81,10 +75,10 @@ export const ReportsView = (): React.JSX.Element => {
     <ContentLayout
       renderToolbar={ !isEmpty(chartData) && !isFetching && (
         <ReportToolbar
-          page={ page }
-          pageSize={ pageSize }
-          setPage={ setPage }
-          setPageSize={ setPageSize }
+          page={ 1 }
+          pageSize={ 20 }
+          setPage={ () => {} }
+          setPageSize={ () => {} }
           totalItems={ chartData?.length ?? 0 }
         />
       ) }
