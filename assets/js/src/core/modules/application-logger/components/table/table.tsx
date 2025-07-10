@@ -54,8 +54,8 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     }),
     columnHelper.accessor('fileObject', {
       header: t('application-logger.columns.file-object'),
-      cell: info => {
-        const column = info.row.original;
+      cell: ({ row }) => {
+        const column = row.original;
         const fileObjectBasePath = '/admin/bundle/applicationlogger/log/show-file-object?filePath='
 
         if (isNil(column.fileObject)) {
@@ -76,8 +76,8 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     }),
     columnHelper.accessor('relatedObjectId', {
       header: t('application-logger.columns.related-object'),
-      cell: info => {
-        const column = info.row.original;
+      cell: ({ row }) => {
+        const column = row.original;
 
         if (isNil(column.relatedObjectId) || isNil(column.relatedObjectType)) {
           return <></>
