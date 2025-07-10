@@ -23,9 +23,12 @@ interface UseReportDataProps {
   pageSize: number
 }
 
+export type IReportDetailData = BundleCustomReportsDetails | undefined
+export type IChartDetailData = CustomReportsChartApiResponse | undefined
+
 interface UseReportDataReturn {
-  reportDetailData: BundleCustomReportsDetails | undefined
-  chartDetailData: CustomReportsChartApiResponse | undefined
+  reportDetailData: IReportDetailData
+  chartDetailData: IChartDetailData
   isLoading: boolean
   isFetching: boolean
   refetchAll: () => void

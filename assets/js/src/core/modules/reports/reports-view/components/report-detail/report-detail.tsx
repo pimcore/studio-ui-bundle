@@ -16,15 +16,12 @@ import { ReportChart } from '@Pimcore/modules/reports/reports-view/components/re
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Grid } from '@Pimcore/components/grid/grid'
-import type {
-  BundleCustomReportsDetails,
-  CustomReportsChartApiResponse
-} from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import { type IChartDetailData, type IReportDetailData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
 
 interface IReportDetailProps {
   isLoading: boolean
-  reportDetailData: BundleCustomReportsDetails | undefined
-  chartDetailData: CustomReportsChartApiResponse | undefined
+  reportDetailData: IReportDetailData
+  chartDetailData: IChartDetailData
 }
 
 export const ReportDetail = ({ isLoading, reportDetailData, chartDetailData }: IReportDetailProps): React.JSX.Element => {

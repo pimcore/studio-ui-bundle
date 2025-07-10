@@ -25,12 +25,15 @@ import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useRe
 import { ReportToolbar } from '@Pimcore/modules/reports/reports-view/components/report-toolbar/report-toolbar'
 import { ReportTopBar } from '@Pimcore/modules/reports/reports-view/components/report-top-bar/report-top-bar'
 
+const PAGE_INITIAL = 1
+const PAGE_SIZE_INITIAL = 10
+
 export const ReportsView = (): React.JSX.Element => {
   const { t } = useTranslation()
 
   const [currentReport, setCurrentReport] = useState<string | null>(null)
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(1)
+  const [page, setPage] = useState(PAGE_INITIAL)
+  const [pageSize, setPageSize] = useState(PAGE_SIZE_INITIAL)
 
   const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page: 1, pageSize: 9999 })
   const { refetchAll, isFetching, isLoading, chartDetailData, reportDetailData } = useReportData({
@@ -40,12 +43,11 @@ export const ReportsView = (): React.JSX.Element => {
   })
 
   useEffect(() => {
-    setPage(1)
-    setPageSize(10)
+    setPage(PAGE_INITIAL)
+    setPageSize(PAGE_SIZE_INITIAL)
   }, [currentReport])
 
   const isCurrentReportSelected = !isEmptyValue(currentReport)
-
   const reportsTreeOptions = useMemo(() => {
     if (!isEmpty(reportsTreeData)) {
       return reportsTreeData?.items?.map((item) => ({
@@ -56,7 +58,9 @@ export const ReportsView = (): React.JSX.Element => {
 
     return []
   }, [reportsTreeData])
+
   const isLoadingReportsTree = isReportsTreeLoading && isEmpty(reportsTreeOptions)
+  const isLoadingReportsData = isLoading || isFetching
 
   const renderMainContent = (): React.JSX.Element => (
     <Content
@@ -68,7 +72,7 @@ export const ReportsView = (): React.JSX.Element => {
         ? (
           <ReportDetail
             chartDetailData={ chartDetailData }
-            isLoading={ isLoading || isFetching }
+            isLoading={ isLoadingReportsData }
             reportDetailData={ reportDetailData }
           />
           )
@@ -114,7 +118,7 @@ export const ReportsView = (): React.JSX.Element => {
         renderToolbar={ (
           <Toolbar>
             <Refetch
-              isFetching={ isFetching || isLoading }
+              isFetching={ isLoadingReportsData }
               refetch={ refetchAll }
             />
           </Toolbar>
