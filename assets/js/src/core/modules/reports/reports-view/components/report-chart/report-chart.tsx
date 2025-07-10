@@ -10,12 +10,11 @@
 
 import React from 'react'
 import { Pie } from '@ant-design/plots'
-import { type CustomReportChartData, type CustomReportDetails } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
-import { Flex } from '@Pimcore/components/flex/flex'
+import { type BundleCustomReportsDetails } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 
 interface IReportsChartProps {
-  chartData?: CustomReportChartData[]
-  reportData?: CustomReportDetails
+  chartData?: object[]
+  reportData?: BundleCustomReportsDetails
 }
 
 const CHART_FIELD_TYPE_KEY = 'type'
@@ -36,6 +35,8 @@ export const ReportChart = ({ chartData, reportData }: IReportsChartProps): Reac
     colorField: CHART_FIELD_TYPE_KEY,
     angleField: CHART_FIELD_VALUE_KEY,
     innerRadius: 0.6,
+    autoFit: true,
+    height: 350,
     legend: {
       color: {
         position: 'right',
@@ -71,8 +72,8 @@ export const ReportChart = ({ chartData, reportData }: IReportsChartProps): Reac
   }
 
   return (
-    <Flex style={ { maxHeight: '350px' } }>
+    <div>
       <Pie { ...config } />
-    </Flex>
+    </div>
   )
 }
