@@ -24,7 +24,7 @@ export interface CombinedFieldNameProviderProps {
 
 export const CombinedFieldNameProvider = ({ combinedFieldNameParent, children }: CombinedFieldNameProviderProps): React.JSX.Element => {
   const parentContext = useContext(CombinedFieldNameContext)
-  
+
   const mergedCombinedFieldNameParent = useMemo(() => {
     // If there's a parent context, merge its array with the current one
     if (!isNil(parentContext?.combinedFieldNameParent)) {

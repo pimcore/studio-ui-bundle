@@ -13,7 +13,7 @@ import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/objec
 import React, { useMemo } from 'react'
 import { type BlockProps } from './block'
 import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
-import { Form, FormItemProps } from '@Pimcore/components/form/form'
+import { Form, type FormItemProps } from '@Pimcore/components/form/form'
 import { BlockToolStrip } from './block-tool-strip'
 import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/combined-field-name-provider/combined-field-name-provider'
 
@@ -48,7 +48,10 @@ export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
         Array.isArray(children)
           ? children.map((child, index) => {
             return (
-              <CombinedFieldNameProvider combinedFieldNameParent={ [...(Array.isArray(props.name) ? props.name : [props.name])] } key={ index }>
+              <CombinedFieldNameProvider
+                combinedFieldNameParent={ [...(Array.isArray(props.name) ? props.name : [props.name])] }
+                key={ index }
+              >
                 <Form.Group
                   name={ field }
                 >

@@ -19,7 +19,7 @@ import { type FieldCollectionProps } from './field-collection'
 import { Form } from '@Pimcore/components/form/form'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { FieldCollectionToolStrip } from './field-collection-tool-strip'
-import { FormItemProps, Input } from 'antd'
+import { type FormItemProps, Input } from 'antd'
 import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/combined-field-name-provider/combined-field-name-provider'
 
 export interface FieldCollectionItemProps {
@@ -84,11 +84,14 @@ export const FieldCollectionItem = (props: FieldCollectionItemProps): React.JSX.
         <Form.Group name={ [field, 'data'] }>
           {layoutDefinition.children.map((child, index) => {
             return (
-              <CombinedFieldNameProvider combinedFieldNameParent={ [...(Array.isArray(props.name) ? props.name : [props.name]), type] } key={ index }>
+              <CombinedFieldNameProvider
+                combinedFieldNameParent={ [...(Array.isArray(props.name) ? props.name : [props.name]), type] }
+                key={ index }
+              >
                 <ObjectComponent
                   { ...child }
-                  noteditable={ noteditable }
                   combinedParentName={ [field, 'hugo'] }
+                  noteditable={ noteditable }
                 />
               </CombinedFieldNameProvider>
             )

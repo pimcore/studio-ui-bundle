@@ -56,8 +56,8 @@ export const FieldCollectionContent = (props: FieldCollectionContentProps): Reac
                 disallowReorder={ props.disallowReorder === true || isNoteditable }
                 docked={ props.border === true }
                 field={ index }
-                noteditable={ props.noteditable }
                 name={ props.name }
+                noteditable={ props.noteditable }
               />
             </div>
           ))}

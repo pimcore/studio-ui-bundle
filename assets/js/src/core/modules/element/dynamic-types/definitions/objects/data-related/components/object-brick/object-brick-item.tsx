@@ -16,7 +16,7 @@ import { Box } from '@Pimcore/components/box/box'
 import {
   type AbstractObjectDataDefinition
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
-import { FormItemProps } from '@sdk/components'
+import { type FormItemProps } from '@sdk/components'
 import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/combined-field-name-provider/combined-field-name-provider'
 
 export interface ObjectBrickItemProps {
@@ -50,7 +50,10 @@ export const ObjectBrickItem = (props: ObjectBrickItemProps): React.JSX.Element 
     <Box padding={ { x: 'small', y: 'small', top: 'none' } }>
       {layoutDefinition.children.map((child, index) => {
         return (
-          <CombinedFieldNameProvider combinedFieldNameParent={ [...(Array.isArray(props.name) ? props.name : [props.name]), type] } key={ index }>
+          <CombinedFieldNameProvider
+            combinedFieldNameParent={ [...(Array.isArray(props.name) ? props.name : [props.name]), type] }
+            key={ index }
+          >
             <ObjectComponent
               { ...child }
               noteditable={ props.noteditable }

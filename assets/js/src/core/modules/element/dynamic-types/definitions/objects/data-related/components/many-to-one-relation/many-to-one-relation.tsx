@@ -118,12 +118,12 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
         >
           <PathTarget
             allowPathTextInput={ props.allowPathTextInput }
+            combinedFieldName={ props.combinedFieldName }
             disabled={ props.disabled }
             inherited={ props.inherited }
             onChange={ setValue }
             pathFormatterClass={ props.pathFormatterClass }
             value={ value }
-            combinedFieldName={ props.combinedFieldName }
           />
         </Droppable>
       </div>

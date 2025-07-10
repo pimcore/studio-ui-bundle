@@ -53,7 +53,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const groupContext = useFormGroupOptional()
   const localizedContext = useLocalizedFields()
   const combinedParentName = useCombinedFieldName()
-  const combinedFieldName: Array<string> = combinedParentName !== undefined ? [...combinedParentName.combinedFieldNameParent, name] : [name]
+  const combinedFieldName: string[] = combinedParentName !== undefined ? [...combinedParentName.combinedFieldNameParent, name] : [name]
 
   if (groupContext !== undefined) {
     virtualFieldName = [...(isArray(groupContext.name) ? groupContext.name : [groupContext.name]), ...virtualFieldName]
