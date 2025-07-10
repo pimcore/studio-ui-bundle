@@ -49,6 +49,7 @@ export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.El
           <ObjectBrickItem
             noteditable={ props.noteditable }
             type={ key }
+            name={ props.name }
           />
         </Form.Group>
       )

@@ -34,7 +34,7 @@ export interface ManyToManyRelationClassDefinitionProps {
 }
 
 export interface ManyToManyRelationProps extends IRelationAllowedTypesDataComponent, ManyToManyRelationClassDefinitionProps {
-  virtualFieldName?: string
+  combinedFieldName?: string
   disabled?: boolean
   inherited?: boolean
   value?: ManyToManyRelationValue | null
@@ -53,7 +53,7 @@ export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToMan
   const [value, setValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
   const [displayedValue, setDisplayedValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
 
-  const { onDrop, deleteItem, onSearch, onOrderChange, addAssets, addItems, maxRemainingItems } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments, { name: props.virtualFieldName, class: props.pathFormatterClass ?? undefined })
+  const { onDrop, deleteItem, onSearch, onOrderChange, addAssets, addItems, maxRemainingItems } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments, { name: props.combinedFieldName, class: props.pathFormatterClass ?? undefined })
   const allowDragAndDrop = !isNil(displayedValue) && displayedValue?.length > 1
 
   useEffect(() => {
@@ -103,7 +103,7 @@ export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToMan
           hint={ props.hint }
           inherited={ props.inherited }
           onUpdateCellData={ props.onUpdateCellData }
-          pathFormatterConfig={ { name: props.virtualFieldName, class: props.pathFormatterClass ?? undefined } }
+          pathFormatterConfig={ { name: props.combinedFieldName, class: props.pathFormatterClass ?? undefined } }
           value={ displayedValue }
           width={ props.width }
         />

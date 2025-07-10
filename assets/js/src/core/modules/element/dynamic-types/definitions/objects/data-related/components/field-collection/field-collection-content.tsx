@@ -57,6 +57,7 @@ export const FieldCollectionContent = (props: FieldCollectionContentProps): Reac
                 docked={ props.border === true }
                 field={ index }
                 noteditable={ props.noteditable }
+                name={ props.name }
               />
             </div>
           ))}

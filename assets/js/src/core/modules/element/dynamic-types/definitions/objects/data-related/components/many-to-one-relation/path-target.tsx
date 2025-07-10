@@ -31,7 +31,7 @@ export interface PathTargetProps {
   allowPathTextInput?: boolean
   onChange?: (value: ManyToOneRelationValueType) => void
   inherited?: boolean
-  virtualFieldName?: string
+  combinedFieldName?: string
   pathFormatterClass?: string
 }
 
@@ -58,10 +58,10 @@ export const PathTarget = forwardRef(function PathTarget (
   useEffect(() => {
     setValue(props.value ?? null)
 
-    if (props.pathFormatterClass != null && props.pathFormatterClass !== '' && props.value !== null && props.virtualFieldName !== undefined && dataObjectId != null) {
+    if (props.pathFormatterClass != null && props.pathFormatterClass !== '' && props.value !== null && props.combinedFieldName !== undefined && dataObjectId != null) {
       setIsLoading(true)
 
-      formatPath([props.value as IFormatPathItem], props.virtualFieldName, dataObjectId).then((data) => {
+      formatPath([props.value as IFormatPathItem], props.combinedFieldName, dataObjectId).then((data) => {
         if (data === undefined) {
           return
         }

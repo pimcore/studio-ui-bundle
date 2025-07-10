@@ -13,8 +13,9 @@ import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/objec
 import React, { useMemo } from 'react'
 import { type BlockProps } from './block'
 import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
-import { Form } from '@Pimcore/components/form/form'
+import { Form, FormItemProps } from '@Pimcore/components/form/form'
 import { BlockToolStrip } from './block-tool-strip'
+import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/combined-field-name-provider/combined-field-name-provider'
 
 export interface BlockItemProps {
   field: number
@@ -23,6 +24,7 @@ export interface BlockItemProps {
   disallowReorder: boolean
   disallowAdd: boolean
   disallowDelete: boolean
+  name: FormItemProps['name']
 }
 
 export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
@@ -46,16 +48,18 @@ export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
         Array.isArray(children)
           ? children.map((child, index) => {
             return (
-              <Form.Group
-                key={ index }
-                name={ field }
-              >
-                <ObjectComponent
-                  key={ field }
-                  { ...child }
-                  noteditable={ noteditable === true }
-                />
-              </Form.Group>
+              <CombinedFieldNameProvider combinedFieldNameParent={ [...(Array.isArray(props.name) ? props.name : [props.name])] }>
+                <Form.Group
+                  key={ index }
+                  name={ field }
+                >
+                  <ObjectComponent
+                    key={ field }
+                    { ...child }
+                    noteditable={ noteditable === true }
+                  />
+                </Form.Group>
+              </CombinedFieldNameProvider>
             )
           })
           : undefined

@@ -63,7 +63,7 @@ export interface ManyToOneRelationProps extends IRelationAllowedTypesDataCompone
   onChange?: (value: ManyToOneRelationValueType) => void
   onOpenElement?: () => void
   className?: string
-  virtualFieldName?: string
+  combinedFieldName?: string
   pathFormatterClass?: string
 }
 
@@ -123,7 +123,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
             onChange={ setValue }
             pathFormatterClass={ props.pathFormatterClass }
             value={ value }
-            virtualFieldName={ props.virtualFieldName }
+            combinedFieldName={ props.combinedFieldName }
           />
         </Droppable>
       </div>

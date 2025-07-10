@@ -55,6 +55,7 @@ export const BlockContent = (props: BlockContentProps): React.JSX.Element => {
                 disallowReorder={ props.disallowReorder === true || isNoteditable }
                 field={ index }
                 noteditable={ props.noteditable }
+                name={ props.name }
               >
                 {props.children}
               </BlockItem>
