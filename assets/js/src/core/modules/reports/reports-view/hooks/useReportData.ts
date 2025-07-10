@@ -44,9 +44,13 @@ export const useReportData = ({ name }: UseReportDataProps): UseReportDataReturn
     data: chartDetailData
   }] = useCustomReportsChartMutation()
 
+  const fetchChartDetailData = (): void => {
+    fetchChartDetail({ body: { name } }).catch(e => { console.error(e) })
+  }
+
   useEffect(() => {
     if (!isEmptyValue(name) && name !== previousName.current) {
-      fetchChartDetail({ body: { name } }).catch(e => { console.error(e) })
+      fetchChartDetailData()
 
       previousName.current = name
     }
@@ -57,7 +61,7 @@ export const useReportData = ({ name }: UseReportDataProps): UseReportDataReturn
 
   const refetchAll = (): void => {
     reportDetailRefetch().catch(e => { console.error(e) })
-    fetchChartDetail({ body: { name } }).catch(e => { console.error(e) })
+    fetchChartDetailData()
   }
 
   return {
