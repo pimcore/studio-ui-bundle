@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
@@ -29,15 +29,22 @@ export const ReportsView = (): React.JSX.Element => {
   const { t } = useTranslation()
 
   const [currentReport, setCurrentReport] = useState<string | null>(null)
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(1)
 
-  // TODO: need to update logic for using page/pageSize
-  const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page: 1, pageSize: 10 })
-  const { refetchAll, isFetching, chartDetailData } = useReportData({
-    name: currentReport ?? ''
+  const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page: 1, pageSize: 9999 })
+  const { refetchAll, isFetching, isLoading, chartDetailData, reportDetailData } = useReportData({
+    name: currentReport ?? '',
+    page,
+    pageSize
   })
 
+  useEffect(() => {
+    setPage(1)
+    setPageSize(10)
+  }, [currentReport])
+
   const isCurrentReportSelected = !isEmptyValue(currentReport)
-  const chartData = chartDetailData?.items
 
   const reportsTreeOptions = useMemo(() => {
     if (!isEmpty(reportsTreeData)) {
@@ -58,7 +65,13 @@ export const ReportsView = (): React.JSX.Element => {
       padding={ { top: 'extra-small', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
     >
       {isCurrentReportSelected
-        ? <ReportDetail currentReport={ currentReport! } />
+        ? (
+          <ReportDetail
+            chartDetailData={ chartDetailData }
+            isLoading={ isLoading || isFetching }
+            reportDetailData={ reportDetailData }
+          />
+          )
         : (
           <Flex
             align="center"
@@ -73,13 +86,13 @@ export const ReportsView = (): React.JSX.Element => {
 
   const renderContent = (): React.JSX.Element => (
     <ContentLayout
-      renderToolbar={ !isEmpty(chartData) && !isFetching && (
+      renderToolbar={ !isEmpty(chartDetailData?.items) && !isFetching && (
         <ReportToolbar
-          page={ 1 }
-          pageSize={ 20 }
-          setPage={ () => {} }
-          setPageSize={ () => {} }
-          totalItems={ chartData?.length ?? 0 }
+          page={ page }
+          pageSize={ pageSize }
+          setPage={ setPage }
+          setPageSize={ setPageSize }
+          totalItems={ chartDetailData?.totalItems ?? 0 }
         />
       ) }
       renderTopBar={ (
@@ -101,7 +114,7 @@ export const ReportsView = (): React.JSX.Element => {
         renderToolbar={ (
           <Toolbar>
             <Refetch
-              isFetching={ isFetching }
+              isFetching={ isFetching || isLoading }
               refetch={ refetchAll }
             />
           </Toolbar>
