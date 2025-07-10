@@ -14,7 +14,7 @@ export const useStyles = createStyles(({ css, token }) => {
   return {
     selectReportLabel: css`
       color: ${token.Tabs.itemActiveColor};
-      font-weight: 600;
+      font-weight: ${token.fontWeightStrong};
     `
   }
 })
