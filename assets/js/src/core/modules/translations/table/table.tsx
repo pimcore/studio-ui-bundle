@@ -20,6 +20,7 @@ import { ActionsCell } from './actions-cell'
 import { TranslationRow } from '../translations-container'
 import { useTranslation } from '../hooks/use-translation'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
 import { isUndefined } from 'lodash'
 import { GeneralError, trackError } from '@sdk/modules/app'
 
@@ -60,7 +61,12 @@ export const Table = ({ translationRows, setTranslationRows }: TableProps): Reac
     return languages.map(lang => 
       columnHelper.accessor(`_${lang.language}` as keyof TranslationWithActions, {
         id: `_${lang.language}`,
-        header: lang.display,
+        header: () => (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <FlagIcon value={ lang.language } />
+            <span>{lang.display}</span>
+          </div>
+        ),
         meta: { 
           editable: true,
           type: 'text'
