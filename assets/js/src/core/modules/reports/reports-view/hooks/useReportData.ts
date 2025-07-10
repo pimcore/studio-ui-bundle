@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { useEffect, useRef } from 'react'
 import {
   type BundleCustomReportsDetails,
   type CustomReportsChartApiResponse,
@@ -15,7 +16,6 @@ import {
   useCustomReportsReportQuery
 } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
-import { useEffect, useRef } from 'react'
 
 interface UseReportDataProps {
   name: string
@@ -37,7 +37,7 @@ export const useReportData = ({ name }: UseReportDataProps): UseReportDataReturn
     data: reportDetailData,
     refetch: reportDetailRefetch,
     isFetching: isReportDetailFetching
-  } = useCustomReportsReportQuery({ name }, { skip: isEmptyValue(name) || name === previousName.current })
+  } = useCustomReportsReportQuery({ name }, { skip: isEmptyValue(name) })
 
   const [fetchChartDetail, {
     isLoading: isChartDetailLoading,
