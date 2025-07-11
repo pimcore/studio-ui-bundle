@@ -30,7 +30,7 @@ export interface UseAlertModalResponse {
 }
 
 export const useAlertModal = (): UseAlertModalResponse => {
-  const modal = useStudioModal()
+  const { modal } = useStudioModal()
   const { t } = useTranslation()
 
   return useMemo<UseAlertModalResponse>(

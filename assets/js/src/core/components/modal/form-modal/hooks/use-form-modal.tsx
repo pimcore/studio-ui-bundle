@@ -44,7 +44,7 @@ export interface UseFormModalHookResponse {
 }
 
 export function useFormModal (): UseFormModalHookResponse {
-  const modal = useStudioModal()
+  const { modal, localModal } = useStudioModal()
 
   const [tmpForm] = Form.useForm()
   form = tmpForm
@@ -52,21 +52,21 @@ export function useFormModal (): UseFormModalHookResponse {
   return React.useMemo<UseFormModalHookResponse>(
     () => ({
       input: (props) => {
-        const modalResult = modal.confirm(withInput(props, (value) => { modalResult.destroy() }, (loading) => { modalResult.update({ okButtonProps: { loading } }) }))
+        const modalResult = localModal.confirm(withInput(props, (value) => { modalResult.destroy() }, (loading) => { modalResult.update({ okButtonProps: { loading } }) }))
         // avoid that errors are logged in the console
         modalResult.then(() => { }, () => { })
         return modalResult
       },
       textarea: (props) => {
-        const modalResult = modal.confirm(withTextarea(props))
+        const modalResult = localModal.confirm(withTextarea(props))
         // avoid that errors are logged in the console
         modalResult.then(() => { }, () => { })
         return modalResult
       },
       confirm: (props) => modal.confirm(withConfirm(props)),
-      upload: (props) => modal.confirm(withUpload(props))
+      upload: (props) => localModal.confirm(withUpload(props))
     }),
-    []
+    [modal, localModal]
   )
 }
 

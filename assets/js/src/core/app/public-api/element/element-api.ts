@@ -17,6 +17,8 @@ import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import { isInIframe } from '@Pimcore/utils/iframe'
 import { ApiGatewayEventType, ApiGatewayEvent } from '@Pimcore/app/public-api/api-gateway'
 import { type ModalUploadProps } from '@Pimcore/components/modal-upload/modal-upload'
+import { type LinkModalOptions } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/provider/link-modal-provider'
+import { type LinkValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/link'
 
 class ElementOpeningService {
   async openAsset (config: { id: number }): Promise<void> {
@@ -53,6 +55,11 @@ class ElementOpeningService {
 // Create singleton instance
 export const elementOpeningService = new ElementOpeningService()
 
+export interface LinkModalProps {
+  value?: LinkValue | null
+  options?: LinkModalOptions
+}
+
 // Public API interface and implementation
 export interface ElementApi {
   openAsset: (id: number) => Promise<void>
@@ -61,6 +68,7 @@ export interface ElementApi {
   openElement: (id: number, type: ElementType) => Promise<void>
   openElementSelector: (config: ElementSelectorConfig) => void
   openUploadModal: (props: ModalUploadProps) => void
+  openLinkModal: (props: LinkModalProps) => void
 }
 
 class ElementApiImpl implements ElementApi {
@@ -118,6 +126,26 @@ class ElementApiImpl implements ElementApi {
 
   private openUploadModalDirectly (props: ModalUploadProps): void {
     const event = new ApiGatewayEvent(ApiGatewayEventType.openUploadModal, props)
+    window.dispatchEvent(event)
+  }
+
+  openLinkModal (props: LinkModalProps): void {
+    try {
+      if (isInIframe()) {
+        // We're in an iframe, call the parent's API
+        const { element: elementApi } = getPimcoreStudioApi()
+        elementApi.openLinkModal(props)
+      } else {
+        // We're in the parent window, dispatch the event directly
+        this.openLinkModalDirectly(props)
+      }
+    } catch (error) {
+      console.error('Failed to open link modal:', error)
+    }
+  }
+
+  private openLinkModalDirectly (props: LinkModalProps): void {
+    const event = new ApiGatewayEvent(ApiGatewayEventType.openLinkModal, props)
     window.dispatchEvent(event)
   }
 }

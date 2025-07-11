@@ -10,12 +10,14 @@
 
 import { type UseElementSelectorHelperReturn } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector-helper'
 import { type UploadContextProps } from '@Pimcore/components/modal-upload/provider/upload-modal-provider/upload-modal-provider'
+import { type LinkModalContextProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/provider/link-modal-provider'
 import { type ApiGatewayEventType, type ApiGatewayEventPayload } from '../types/event-types'
 
 // Define a context object that can be passed to handlers
 export interface ApiGatewayHandlerContext {
   elementSelectorHelper: UseElementSelectorHelperReturn
   uploadModalContext: UploadContextProps
+  linkModalContext: LinkModalContextProps
   // Add other helpers here as needed
 }
 

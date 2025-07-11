@@ -38,6 +38,10 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'websiteSettingsGetCollection',
+      type: 'query'
+    },
+    {
       pattern: 'notificationGetCollection',
       type: 'query'
     },
@@ -54,10 +58,6 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
-      pattern: 'notificationGetCollection',
-      type: 'query'
-    },
-    {
       pattern: 'bundleApplicationLoggerGetCollection',
       type: 'query',
     }
@@ -71,6 +71,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/document/document-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/document?/i)
+    },
+    '../../js/src/core/modules/website-settings/website-settings-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/api\/website-settings?/i)
     },
     '../../js/src/core/modules/app/translations/translations-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/translation/i)
