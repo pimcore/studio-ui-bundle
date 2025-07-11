@@ -16,6 +16,7 @@ interface TableProps {
 }
 
 export interface BundleApplicationLoggerLogEntryWithActions extends BundleApplicationLoggerLogEntry {
+  translatedPriority: string
   actions: React.ReactNode
 }
 
@@ -48,9 +49,24 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     columnHelper.accessor('message', {
       header: t('application-logger.columns.message')
     }),
-    columnHelper.accessor('priority', {
+    columnHelper.accessor('translatedPriority', {
       header: t('application-logger.columns.type'),
-      size: 40
+      cell: info => {
+        const priority = info.row.original.priority;
+        const translatedPriority = t(`application-logger.filter.priority-level.${priority}`);
+
+        const getValue = (): any => translatedPriority; // Ensure the value is accessible in the cell
+
+        const newInfo = {
+          ...info,
+          getValue: getValue
+        }
+
+        return (
+          <DefaultCell {...newInfo} />
+        )
+      },
+      size: 60
     }),
     columnHelper.accessor('fileObject', {
       header: t('application-logger.columns.file-object'),

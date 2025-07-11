@@ -7,6 +7,16 @@ export interface FilterProviderData {
   setDateFrom: (date: string | null) => void;
   dateTo: string | null;
   setDateTo: (date: string | null) => void;
+  logLevel: string | null;
+  setLogLevel: (logLevel: string | null) => void;
+  component: string | null;
+  setComponent: (component: string | null) => void;
+  relatedObjectId: number | null;
+  setRelatedObjectId: (relatedObjectId: number | null) => void;
+  message: string | null;
+  setMessage: (message: string | null) => void;
+  pid: number | null;
+  setPid: (pid: number | null) => void;
   columnFilters: ColumnFilters;
   updateFilters: () => void;
   resetFilters: () => void;
@@ -21,7 +31,7 @@ export interface DateFromFilter {
   filterValue: {
     operator: string;
     value: string | null;
-  }
+  } | string | number
 }
 
 export interface ColumnFilters extends Array<DateFromFilter> { }
@@ -30,6 +40,11 @@ export const FilterProvider = (props: FilterProviderProps): React.JSX.Element =>
   const [dateFrom, setDateFrom] = React.useState<string | null>(null)
   const [dateTo, setDateTo] = React.useState<string | null>(null)
   const [columnFilters, setColumnFilters] = React.useState<ColumnFilters>([])
+  const [logLevel, setLogLevel] = React.useState<string | null>(null)
+  const [component, setComponent] = React.useState<string | null>(null)
+  const [relatedObjectId, setRelatedObjectId] = React.useState<number | null>(null)
+  const [message, setMessage] = React.useState<string | null>(null)
+  const [pid, setPid] = React.useState<number | null>(null)
 
   const updateFilters = (): void => {
     setColumnFilters(getColumnFilters())
@@ -38,6 +53,12 @@ export const FilterProvider = (props: FilterProviderProps): React.JSX.Element =>
   const resetFilters = (): void => {
     setDateFrom(() => null)
     setDateTo(() => null)
+    setLogLevel(() => null)
+    setComponent(() => null)
+    setRelatedObjectId(() => null)
+    setMessage(() => null)
+    setPid(() => null)
+
     setColumnFilters([])
   }
 
@@ -66,6 +87,46 @@ export const FilterProvider = (props: FilterProviderProps): React.JSX.Element =>
       })
     }
 
+    if (!isNil(logLevel)) {
+      filters.push({
+        key: 'priority',
+        type: 'equals',
+        filterValue: logLevel
+      })
+    }
+
+    if (!isNil(component)) {
+      filters.push({
+        key: 'component',
+        type: 'equals',
+        filterValue: component
+      })
+    }
+
+    if (!isNil(relatedObjectId)) {
+      filters.push({
+        key: 'relatedobject',
+        type: 'equals',
+        filterValue: relatedObjectId
+      })
+    }
+
+    if (!isNil(message)) {
+      filters.push({
+        key: 'message',
+        type: 'like',
+        filterValue: message
+      })
+    }
+
+    if (!isNil(pid)) {
+      filters.push({
+        key: 'pid',
+        type: 'equals',
+        filterValue: pid
+      })
+    }
+
     console.log('filters -inside', filters)
 
     return filters
@@ -77,6 +138,16 @@ export const FilterProvider = (props: FilterProviderProps): React.JSX.Element =>
       setDateFrom,
       dateTo,
       setDateTo,
+      logLevel,
+      setLogLevel,
+      component,
+      setComponent,
+      relatedObjectId,
+      setRelatedObjectId,
+      message,
+      setMessage,
+      pid,
+      setPid,
       columnFilters,
       updateFilters,
       resetFilters
@@ -84,5 +155,5 @@ export const FilterProvider = (props: FilterProviderProps): React.JSX.Element =>
     >
       {props.children}
     </FilterProviderContext.Provider>
-  ), [dateFrom, dateTo, columnFilters])
+  ), [dateFrom, dateTo, columnFilters, logLevel, component, relatedObjectId, message, pid])
 }
