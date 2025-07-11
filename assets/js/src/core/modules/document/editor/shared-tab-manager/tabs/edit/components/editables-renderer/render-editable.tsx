@@ -19,9 +19,10 @@ import { useDocumentEditor } from '../../hooks/use-document-editor'
 
 interface RenderEditableProps {
   editableDefinition: AbstractDocumentEditableDefinition
+  containerRef: React.RefObject<HTMLDivElement>
 }
 
-export const RenderEditable = ({ editableDefinition }: RenderEditableProps): React.JSX.Element => {
+export const RenderEditable = ({ editableDefinition, containerRef }: RenderEditableProps): React.JSX.Element => {
   const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
   const editableType = documentEditableRegistry.hasDynamicType(editableDefinition.type) ? documentEditableRegistry.getDynamicType(editableDefinition.type) : undefined
   const { updateValue, updateValueWithReload, getValue } = useDocumentEditor()
@@ -30,7 +31,8 @@ export const RenderEditable = ({ editableDefinition }: RenderEditableProps): Rea
     defaultFieldWidth: {
       ...defaultFieldWidthValues,
       large: 9999
-    }
+    },
+    containerRef
   }
 
   const [localValue, setLocalValue] = useState(getValue(editableDefinition.name).data)

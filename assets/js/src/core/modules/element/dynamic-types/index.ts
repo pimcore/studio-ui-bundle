@@ -158,6 +158,7 @@ import { type DynamicTypeDocumentEditableRelations } from './definitions/documen
 import { type DynamicTypeDocumentEditableInput } from './definitions/document/editable/types/dynamic-type-document-editable-input'
 import { type DynamicTypeDocumentEditableCheckbox } from './definitions/document/editable/types/dynamic-type-document-editable-checkbox'
 import { type DynamicTypeDocumentEditableDate } from './definitions/document/editable/types/dynamic-type-document-editable-date'
+import { type DynamicTypeDocumentEditableEmbed } from './definitions/document/editable/types/dynamic-type-document-editable-embed'
 import { type DynamicTypeDocumentEditableLink } from './definitions/document/editable/types/dynamic-type-document-editable-link'
 import { type DynamicTypeDocumentEditableWysiwyg } from './definitions/document/editable/types/dynamic-type-document-editable-wysiwyg'
 import { type DynamicTypeFieldFilterCheckbox } from './definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
@@ -313,6 +314,7 @@ moduleSystem.registerModule({
 
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableCheckbox>(serviceIds['DynamicTypes/DocumentEditable/Checkbox']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableDate>(serviceIds['DynamicTypes/DocumentEditable/Date']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableEmbed>(serviceIds['DynamicTypes/DocumentEditable/Embed']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableInput>(serviceIds['DynamicTypes/DocumentEditable/Input']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableLink>(serviceIds['DynamicTypes/DocumentEditable/Link']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableNumeric>(serviceIds['DynamicTypes/DocumentEditable/Numeric']))
