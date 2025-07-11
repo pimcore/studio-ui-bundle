@@ -48,7 +48,8 @@ export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
 
     const enrichedProps: ElementCellContentProps = {
       ...props,
-      ...addColumnConfig(props, { allowedTypes: [mapToElementType(String(props.row.original.type), true)] }),      getElementInfo: (cellProps: DefaultCellProps): ElementInfo => {
+      ...addColumnConfig(props, { allowedTypes: [mapToElementType(String(props.row.original.type), true)] }),
+      getElementInfo: (cellProps: DefaultCellProps): ElementInfo => {
         const row = cellProps.row.original
         const element: WebsiteSettingsObjectData = row.data
         return {
