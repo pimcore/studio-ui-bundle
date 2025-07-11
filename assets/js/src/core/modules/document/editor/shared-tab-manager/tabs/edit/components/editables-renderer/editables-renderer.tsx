@@ -9,7 +9,7 @@
  */
 
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, createRef } from 'react'
 import ReactDOM from 'react-dom'
 import { RenderEditable } from './render-editable'
 import { isNull, isUndefined } from 'lodash'
@@ -26,6 +26,14 @@ export const EditablesRenderer = ({ editableDefinitions }: EditablesRendererProp
   const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
   const apiInitialized = useRef(false)
   const { initializeData, notifyReady } = useDocumentEditor()
+  const editableContainerRefs = useRef<Record<string, React.RefObject<HTMLDivElement>>>({})
+
+  // Create refs for each editable if they don't exist
+  editableDefinitions.forEach(editable => {
+    if (isUndefined(editableContainerRefs.current[editable.id])) {
+      editableContainerRefs.current[editable.id] = createRef<HTMLDivElement>()
+    }
+  })
 
   const getInitialData = (editableDefinitions: AbstractDocumentEditableDefinition[]): Record<string, { type: string, data: any }> => {
     const initialData: Record<string, any> = {}
@@ -57,8 +65,16 @@ export const EditablesRenderer = ({ editableDefinitions }: EditablesRendererProp
       {editableDefinitions.map(editable => {
         const targetElement = document.getElementById(editable.id)
         if (!isNull(targetElement)) {
+          // Assign the DOM element to the ref's current property
+          if (!isNull(editableContainerRefs.current[editable.id]) && isNull(editableContainerRefs.current[editable.id].current)) {
+            (editableContainerRefs.current[editable.id] as React.MutableRefObject<HTMLDivElement>).current = targetElement as HTMLDivElement
+          }
+
           return ReactDOM.createPortal(
-            <RenderEditable editableDefinition={ editable } />,
+            <RenderEditable
+              containerRef={ editableContainerRefs.current[editable.id] }
+              editableDefinition={ editable }
+            />,
             targetElement
           )
         }
