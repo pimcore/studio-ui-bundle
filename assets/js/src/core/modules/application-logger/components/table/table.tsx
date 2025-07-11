@@ -42,11 +42,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
   const columns = [
     columnHelper.accessor('date', {
       header: t('application-logger.columns.timestamp'),
-      cell: info => {
-        return (
-          <DefaultCell {...info} />
-        )
-      },
+      cell: info => <DefaultCell {...info} />,
       size: 120
     }),
     columnHelper.accessor('pid', {
@@ -62,7 +58,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     }),
     columnHelper.accessor('fileObject', {
       header: t('application-logger.columns.file-object'),
-      cell: ({ row }) => {
+      cell: ({ row }): React.JSX.Element => {
         const column = row.original;
         const fileObjectBasePath = '/admin/bundle/applicationlogger/log/show-file-object?filePath='
 
@@ -84,7 +80,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     }),
     columnHelper.accessor('relatedObjectId', {
       header: t('application-logger.columns.related-object'),
-      cell: ({ row }) => {
+      cell: ({ row }): React.JSX.Element => {
         const column = row.original;
 
         if (isNil(column.relatedObjectId) || isNil(column.relatedObjectType)) {
@@ -116,7 +112,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     }),
     columnHelper.accessor('actions', {
       header: t('application-logger.columns.details'),
-      cell: ({ row }) => {
+      cell: ({ row }): React.JSX.Element => {
         const column = row.original;
 
         return (
