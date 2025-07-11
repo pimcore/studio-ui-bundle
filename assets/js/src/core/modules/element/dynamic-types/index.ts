@@ -40,6 +40,7 @@ import { type DynamicTypeGridCellAssetCustomMetadataIcon } from './definitions/g
 import { type DynamicTypeGridCellAssetCustomMetadataValue } from './definitions/grid-cell/types/_meta-data/dynamic-type-grid-cell-asset-custom-metadata-value'
 import { type DynamicTypeGridCellPropertyIcon } from './definitions/grid-cell/types/_properties/dynamic-type-grid-cell-property-icon'
 import { type DynamicTypeGridCellPropertyValue } from './definitions/grid-cell/types/_properties/dynamic-type-grid-cell-property-value'
+import { type DynamicTypeGridCellWebsiteSettingsValue } from './definitions/grid-cell/types/_website-settings/dynamic-type-grid-cell-website-settings-value'
 import { type DynamicTypeGridCellScheduleActionsSelect } from './definitions/grid-cell/types/_schedule/dynamic-type-grid-cell-schedule-actions-select'
 import { type DynamicTypeGridCellVersionIdSelect } from './definitions/grid-cell/types/_schedule/dynamic-type-grid-cell-version-id-select'
 import { type DynamicTypeGridCellAssetVersionPreviewFieldLabel } from './definitions/grid-cell/types/_versions/dynamic-type-grid-cell-asset-version-preview-field-label'
@@ -218,6 +219,7 @@ moduleSystem.registerModule({
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellAssetCustomMetadataValue>(serviceIds['DynamicTypes/GridCell/AssetCustomMetadataValue']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellPropertyIcon>(serviceIds['DynamicTypes/GridCell/PropertyIcon']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellPropertyValue>(serviceIds['DynamicTypes/GridCell/PropertyValue']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellWebsiteSettingsValue>(serviceIds['DynamicTypes/GridCell/WebsiteSettingsValue']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellScheduleActionsSelect>(serviceIds['DynamicTypes/GridCell/ScheduleActionsSelect']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellVersionIdSelect>(serviceIds['DynamicTypes/GridCell/VersionsIdSelect']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellAssetVersionPreviewFieldLabel>(serviceIds['DynamicTypes/GridCell/AssetVersionPreviewFieldLabel']))

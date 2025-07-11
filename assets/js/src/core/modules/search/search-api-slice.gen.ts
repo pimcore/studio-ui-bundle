@@ -248,13 +248,17 @@ export type Transformer = {
 };
 export type AdvancedColumnConfig = {
     /** advancedColumns */
-    advancedColumns: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
+    advancedColumns: {
+        /** Type of the column, e.g. "simpleField", "relationField", "staticText" */
+        key: string;
+        config: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
+    }[];
     /** List if Transformers that should be applied */
     transformers?: Transformer[];
 };
 export type GridColumnRequest = {
     /** Key */
-    key: string;
+    key?: string;
     /** Locale */
     locale?: string | null;
     /** Type */
@@ -262,7 +266,7 @@ export type GridColumnRequest = {
     /** Group */
     group?: string | null;
     /** Config */
-    config: (string | AdvancedColumnConfig)[];
+    config?: (string | AdvancedColumnConfig)[];
 };
 export type SimpleSearchDetail = {
     /** AdditionalAttributes */
