@@ -31,6 +31,13 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     setOpen(true);
   }
 
+  const tableItems = items.map((item) => {
+    return {
+      ...item,
+      translatedPriority: t(`application-logger.filter.priority-level.${item.priority}`)
+    }
+  })
+
   const columnHelper = createColumnHelper<BundleApplicationLoggerLogEntryWithActions>()
   const columns = [
     columnHelper.accessor('date', {
@@ -51,21 +58,6 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     }),
     columnHelper.accessor('translatedPriority', {
       header: t('application-logger.columns.type'),
-      cell: info => {
-        const priority = info.row.original.priority;
-        const translatedPriority = t(`application-logger.filter.priority-level.${priority}`);
-
-        const getValue = (): any => translatedPriority; // Ensure the value is accessible in the cell
-
-        const newInfo = {
-          ...info,
-          getValue: getValue
-        }
-
-        return (
-          <DefaultCell {...newInfo} />
-        )
-      },
       size: 60
     }),
     columnHelper.accessor('fileObject', {
@@ -152,7 +144,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
       <Grid
         autoWidth
         columns={columns}
-        data={items}
+        data={tableItems}
         //isLoading={notesAndEventsFetching}
         modifiedCells={[]}
         resizable

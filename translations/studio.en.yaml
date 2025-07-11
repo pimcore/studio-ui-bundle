@@ -895,3 +895,18 @@ application-logger.columns.details: Details
 application-logger.columns.type: Type
 application-logger.sidebar.search-parameter: Search Parameter
 application-logger.detail-modal.title: Detail information
+application-logger.filter.date-from: From
+application-logger.filter.date-to: To
+application-logger.filter.priority: Log Level
+application-logger.filter.component: Component
+application-logger.filter.related-object-id: Related Object ID
+application-logger.filter.message: Message
+application-logger.filter.pid: Pid
+application-logger.filter.priority-level.1: Emergency
+application-logger.filter.priority-level.2: Alert
+application-logger.filter.priority-level.3: Critical
+application-logger.filter.priority-level.4: Error
+application-logger.filter.priority-level.5: Warning
+application-logger.filter.priority-level.6: Notice
+application-logger.filter.priority-level.7: Info
+application-logger.filter.priority-level.8: Debug
