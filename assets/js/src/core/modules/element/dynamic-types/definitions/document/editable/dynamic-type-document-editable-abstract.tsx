@@ -26,6 +26,7 @@ export interface AbstractDocumentEditableDefinition {
   value?: any
   onChange?: (value: any) => void
   defaultFieldWidth: IFieldWidthContext
+  containerRef?: React.RefObject<HTMLDivElement>
 }
 
 export type GridCellColumnMeta = ColumnMetaType & { type: string }

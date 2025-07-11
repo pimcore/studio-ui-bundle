@@ -40,6 +40,7 @@ import { type DynamicTypeGridCellAssetCustomMetadataIcon } from './definitions/g
 import { type DynamicTypeGridCellAssetCustomMetadataValue } from './definitions/grid-cell/types/_meta-data/dynamic-type-grid-cell-asset-custom-metadata-value'
 import { type DynamicTypeGridCellPropertyIcon } from './definitions/grid-cell/types/_properties/dynamic-type-grid-cell-property-icon'
 import { type DynamicTypeGridCellPropertyValue } from './definitions/grid-cell/types/_properties/dynamic-type-grid-cell-property-value'
+import { type DynamicTypeGridCellWebsiteSettingsValue } from './definitions/grid-cell/types/_website-settings/dynamic-type-grid-cell-website-settings-value'
 import { type DynamicTypeGridCellScheduleActionsSelect } from './definitions/grid-cell/types/_schedule/dynamic-type-grid-cell-schedule-actions-select'
 import { type DynamicTypeGridCellVersionIdSelect } from './definitions/grid-cell/types/_schedule/dynamic-type-grid-cell-version-id-select'
 import { type DynamicTypeGridCellAssetVersionPreviewFieldLabel } from './definitions/grid-cell/types/_versions/dynamic-type-grid-cell-asset-version-preview-field-label'
@@ -158,6 +159,7 @@ import { type DynamicTypeDocumentEditableRelations } from './definitions/documen
 import { type DynamicTypeDocumentEditableInput } from './definitions/document/editable/types/dynamic-type-document-editable-input'
 import { type DynamicTypeDocumentEditableCheckbox } from './definitions/document/editable/types/dynamic-type-document-editable-checkbox'
 import { type DynamicTypeDocumentEditableDate } from './definitions/document/editable/types/dynamic-type-document-editable-date'
+import { type DynamicTypeDocumentEditableEmbed } from './definitions/document/editable/types/dynamic-type-document-editable-embed'
 import { type DynamicTypeDocumentEditableLink } from './definitions/document/editable/types/dynamic-type-document-editable-link'
 import { type DynamicTypeDocumentEditableWysiwyg } from './definitions/document/editable/types/dynamic-type-document-editable-wysiwyg'
 import { type DynamicTypeFieldFilterCheckbox } from './definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
@@ -219,6 +221,7 @@ moduleSystem.registerModule({
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellAssetCustomMetadataValue>(serviceIds['DynamicTypes/GridCell/AssetCustomMetadataValue']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellPropertyIcon>(serviceIds['DynamicTypes/GridCell/PropertyIcon']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellPropertyValue>(serviceIds['DynamicTypes/GridCell/PropertyValue']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellWebsiteSettingsValue>(serviceIds['DynamicTypes/GridCell/WebsiteSettingsValue']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellScheduleActionsSelect>(serviceIds['DynamicTypes/GridCell/ScheduleActionsSelect']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellVersionIdSelect>(serviceIds['DynamicTypes/GridCell/VersionsIdSelect']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellAssetVersionPreviewFieldLabel>(serviceIds['DynamicTypes/GridCell/AssetVersionPreviewFieldLabel']))
@@ -314,6 +317,7 @@ moduleSystem.registerModule({
 
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableCheckbox>(serviceIds['DynamicTypes/DocumentEditable/Checkbox']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableDate>(serviceIds['DynamicTypes/DocumentEditable/Date']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableEmbed>(serviceIds['DynamicTypes/DocumentEditable/Embed']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableInput>(serviceIds['DynamicTypes/DocumentEditable/Input']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableLink>(serviceIds['DynamicTypes/DocumentEditable/Link']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableNumeric>(serviceIds['DynamicTypes/DocumentEditable/Numeric']))
