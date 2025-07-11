@@ -11,14 +11,11 @@
 import React from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Line } from '@ant-design/plots'
-import {
-  type CustomReportChartData,
-  type CustomReportDetails
-} from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import type { ChartProps, ReportDataProps } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
 
 export interface ILineChartProps {
-  chartData: CustomReportChartData[]
-  reportData: CustomReportDetails
+  chartData: ChartProps
+  reportData: ReportDataProps
 }
 
 export const LineChart = ({ chartData, reportData }: ILineChartProps): React.JSX.Element => {

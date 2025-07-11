@@ -11,10 +11,12 @@
 import React, { useEffect, useState } from 'react'
 import { Pie } from '@ant-design/plots'
 import { isEmpty } from 'lodash'
-// import { ChartLegend } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/pie-chart/components/chart-legend/chart-legend'
 import { generateRandomColors } from '@Pimcore/modules/reports/reports-view/components/report-chart/utils/helpers'
-import type { CustomReportChartData, CustomReportDetails } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
-import type { IChartDataItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
+import type {
+  ChartProps,
+  IChartDataItem,
+  ReportDataProps
+} from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
 const MOCK_CHART_DATA = [
   { type: 'document', value: 7 },
   { type: 'folder', value: 48 },
@@ -68,8 +70,8 @@ const MOCK_CHART_DATA = [
   { type: 'faq', value: 2 }
 ]
 export interface IPieChartProps {
-  chartData: CustomReportChartData[]
-  reportData: CustomReportDetails
+  chartData: ChartProps
+  reportData: ReportDataProps
 }
 
 const CHART_FIELD_TYPE_KEY = 'type'

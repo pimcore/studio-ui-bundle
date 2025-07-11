@@ -8,7 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import type { IReportDetailData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
+
 export interface IChartDataItem {
   type: string
   value: number
 }
+
+export type ChartProps = object[]
+export type ReportDataProps = IReportDetailData
