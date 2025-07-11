@@ -128,16 +128,19 @@ documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEd
   - Handles API integration, state management, and business rules
   - Can import and compose multiple components to create complex features
   - Examples: asset editor, document editor, user management, settings
+  - **Module-specific UI components** should be placed in `components/` subdirectories within the module (e.g., `/core/modules/element/dynamic-types/definitions/document/editable/components/`) and do **NOT** require Storybook stories
 
 ### React Component Patterns
 - Use functional components with hooks
 - Prefer explicit function declarations with return type annotations: `export const ComponentName = (props: Props): React.JSX.Element => {}`
 - Use `useMemo` and `useCallback` for performance optimization, but only when there's a real benefit (expensive calculations, preventing unnecessary re-renders of child components)
 - Implement proper TypeScript interfaces for all props
+- **Separate styling into dedicated `.styles.ts` files** using `antd-style` with `createStyles()` - never include styles directly in component files
 
 ### UI Component Usage
 - Primary UI library is Ant Design - use antd components first
 - Use `antd-style` for component styling with CSS-in-JS
+- **Always create separate `.styles.ts` files** for component styling using `createStyles()` hook pattern
 - For complex layouts, consider `flexlayout-react`
 - Grid components should use `@tanstack/react-table`
 

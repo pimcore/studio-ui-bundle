@@ -69,6 +69,7 @@ export interface ElementApi {
   openElementSelector: (config: ElementSelectorConfig) => void
   openUploadModal: (props: ModalUploadProps) => void
   openLinkModal: (props: LinkModalProps) => void
+  locateInTree: (id: number, elementType: ElementType) => void
 }
 
 class ElementApiImpl implements ElementApi {
@@ -146,6 +147,27 @@ class ElementApiImpl implements ElementApi {
 
   private openLinkModalDirectly (props: LinkModalProps): void {
     const event = new ApiGatewayEvent(ApiGatewayEventType.openLinkModal, props)
+    window.dispatchEvent(event)
+  }
+
+  locateInTree (id: number, elementType: ElementType): void {
+    try {
+      const { element: elementApi } = getPimcoreStudioApi()
+
+      if (isInIframe()) {
+        // We're in an iframe, call the parent's API
+        elementApi.locateInTree(id, elementType)
+      } else {
+        // We're in the parent window, dispatch the event directly
+        this.locateInTreeDirectly(id, elementType)
+      }
+    } catch (error) {
+      console.error('Failed to locate in tree:', error)
+    }
+  }
+
+  private locateInTreeDirectly (id: number, elementType: ElementType): void {
+    const event = new ApiGatewayEvent(ApiGatewayEventType.locateInTree, { id, elementType })
     window.dispatchEvent(event)
   }
 }
