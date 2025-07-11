@@ -32,7 +32,7 @@ export const ReportDetail = ({ isLoading, reportDetailData, chartDetailData }: I
   const getColumns = (): Array<AccessorKeyColumnDef<unknown, never>> | undefined => (
     reportDetailData?.columnConfigurations?.map((item, index) => (
       columnHelper.accessor(item?.name ?? `id-${index}`, {
-        header: item?.label ?? ''
+        header: !isEmptyValue(item.label) ? item.label : item.name
       })
     )
     ))

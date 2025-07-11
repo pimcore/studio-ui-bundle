@@ -40,6 +40,7 @@ export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps)
     yField: CHART_FIELD_VALUE_KEY,
     seriesField: CHART_FIELD_NAME_KEY,
     colorField: CHART_FIELD_NAME_KEY,
+    height: 380,
     point: {
       shapeField: 'circle',
       sizeField: 4
@@ -86,8 +87,8 @@ export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps)
   }
 
   return (
-    <Flex>
+    <div>
       <Line { ...config } />
-    </Flex>
+    </div>
   )
 }

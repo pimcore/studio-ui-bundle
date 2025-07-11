@@ -21,8 +21,8 @@ export const BarChart = ({ chartData, reportData }: IChartProps): React.JSX.Elem
   }
 
   return (
-    <Flex>
+    <div>
       <Column { ...config } />
-    </Flex>
+    </div>
   )
 }
