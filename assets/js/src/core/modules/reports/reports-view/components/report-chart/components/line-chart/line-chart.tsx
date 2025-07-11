@@ -13,11 +13,14 @@ import { Line } from '@ant-design/plots'
 import { toNumber } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import type { IChartProps } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
+import { useStyles } from './line-chart.styles'
 
 const CHART_FIELD_NAME_KEY = 'name'
 const CHART_FIELD_VALUE_KEY = 'value'
 
 export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps): React.JSX.Element => {
+  const { styles } = useStyles()
+
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   const xAxis: string = reportData?.xAxis ?? ''
@@ -45,6 +48,39 @@ export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps)
       color: {
         position: 'bottom',
         labelFormatter: (text: any) => chartLabelMap[text] ?? text
+      }
+    },
+    interaction: {
+      tooltip: {
+        render: (event, { title, items }) => (
+          <Flex
+            gap="mini"
+            vertical
+          >
+            <div className={ styles.tooltipTitle }>{title}</div>
+            <Flex vertical>
+              {items.map((item: any) => (
+                <Flex
+                  gap="small"
+                  justify="space-between"
+                  key={ item.name }
+                >
+                  <Flex
+                    align={ 'center' }
+                    gap="mini"
+                  >
+                    <div
+                      className={ styles.circle }
+                      style={ { backgroundColor: item.color } }
+                    />
+                    <div>{chartLabelMap[item.name] ?? item.name}</div>
+                  </Flex>
+                  <div className={ styles.tooltipItemValue }>{item.value}</div>
+                </Flex>
+              ))}
+            </Flex>
+          </Flex>
+        )
       }
     }
   }
