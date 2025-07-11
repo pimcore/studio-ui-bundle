@@ -13,14 +13,14 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { Button, DefaultCell } from '@sdk/components'
+import { formatDateTime } from '@Pimcore/utils/date-time'
+import { Button } from '@sdk/components'
 import { createColumnHelper } from '@tanstack/react-table'
 import { isNil } from 'lodash'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type BundleApplicationLoggerGetCollectionApiResponse, type BundleApplicationLoggerLogEntry } from '../../application-logger-api-slice.gen'
 import { DetailModal } from '../detail-modal/detail-modal'
-import { formatDateTime } from '@Pimcore/utils/date-time'
 
 interface TableProps {
   items: BundleApplicationLoggerGetCollectionApiResponse['items']
