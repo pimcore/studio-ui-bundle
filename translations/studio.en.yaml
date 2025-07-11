@@ -892,3 +892,14 @@ user-profile.password-repeat-error: Passwords do not match
 creatable-select.add-custom-option: Add custom option
 creatable-select.add: Add
 creatable-select.option-already-exists: Option already exists
+embed.url-modal.title: Edit Embed URL
+embed.url-modal.label: URL (eg. https://www.youtube.com/watch?v=nPntDiARQYw)
+embed.url-modal.required-message: Please enter a valid URL
+embed.url-modal.ok-text: OK
+embed.url-modal.cancel-text: Cancel
+embed.placeholder: No URL set - Click to add an embed URL
+embed.add-url: Add URL
+embed.edit-url: Edit URL
+embed.clear: Clear
+embed.loading: Loading...
+embed.iframe-title: Embedded content
