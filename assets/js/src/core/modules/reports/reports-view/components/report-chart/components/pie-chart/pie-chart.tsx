@@ -12,11 +12,8 @@ import React, { useEffect, useState } from 'react'
 import { Pie } from '@ant-design/plots'
 import { isEmpty } from 'lodash'
 import { generateRandomColors } from '@Pimcore/modules/reports/reports-view/components/report-chart/utils/helpers'
-import type {
-  ChartProps,
-  IChartDataItem,
-  ReportDataProps
-} from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
+import type { IChartProps, IChartDataItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
+
 const MOCK_CHART_DATA = [
   { type: 'document', value: 7 },
   { type: 'folder', value: 48 },
@@ -69,15 +66,11 @@ const MOCK_CHART_DATA = [
   { type: 'manual', value: 3 },
   { type: 'faq', value: 2 }
 ]
-export interface IPieChartProps {
-  chartData: ChartProps
-  reportData: ReportDataProps
-}
 
 const CHART_FIELD_TYPE_KEY = 'type'
 const CHART_FIELD_VALUE_KEY = 'value'
 
-export const PieChart = ({ reportData, chartData }: IPieChartProps): React.JSX.Element => {
+export const PieChart = ({ reportData, chartData }: IChartProps): React.JSX.Element => {
   const pieLabelColumn = reportData?.pieLabelColumn ?? ''
   const pieColumn = reportData?.pieColumn ?? ''
 

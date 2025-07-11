@@ -15,5 +15,8 @@ export interface IChartDataItem {
   value: number
 }
 
-export type ChartProps = object[]
-export type ReportDataProps = IReportDetailData
+export interface IChartProps {
+  chartData: object[]
+  reportData: IReportDetailData
+  chartLabelMap: Record<string, string>
+}

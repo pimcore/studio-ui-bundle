@@ -11,14 +11,9 @@
 import React from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Column } from '@ant-design/plots'
-import type { ChartProps, ReportDataProps } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
+import type { IChartProps } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
 
-export interface IBarChartProps {
-  chartData: ChartProps
-  reportData: ReportDataProps
-}
-
-export const BarChart = ({ chartData, reportData }: IBarChartProps): React.JSX.Element => {
+export const BarChart = ({ chartData, reportData }: IChartProps): React.JSX.Element => {
   const config = {
     data: chartData,
     xField: reportData?.xAxis,

@@ -12,17 +12,12 @@ import React from 'react'
 import { Line } from '@ant-design/plots'
 import { toNumber } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
-import type { ChartProps, ReportDataProps } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
-
-export interface ILineChartProps {
-  chartData: ChartProps
-  reportData: ReportDataProps
-}
+import type { IChartProps } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
 
 const CHART_FIELD_NAME_KEY = 'name'
 const CHART_FIELD_VALUE_KEY = 'value'
 
-export const LineChart = ({ chartData, reportData }: ILineChartProps): React.JSX.Element => {
+export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps): React.JSX.Element => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   const xAxis: string = reportData?.xAxis ?? ''
@@ -49,13 +44,7 @@ export const LineChart = ({ chartData, reportData }: ILineChartProps): React.JSX
     legend: {
       color: {
         position: 'bottom',
-        labelFormatter: (text: any) => {
-          const customLabels: any = {
-            'count(*)': 'Count',
-            'sum(id)': 'Sum'
-          }
-          return customLabels[text] ?? text
-        }
+        labelFormatter: (text: any) => chartLabelMap[text] ?? text
       }
     }
   }

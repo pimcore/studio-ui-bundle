@@ -9,12 +9,13 @@
  */
 
 import React from 'react'
-import { isUndefined } from 'lodash'
+import { fromPairs, isUndefined, map } from 'lodash'
 import { type BundleCustomReportsDetails } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
 import { PieChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/pie-chart/pie-chart'
 import { LineChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/line-chart/line-chart'
 import { BarChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/bar-chart/bar-chart'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 interface IReportsChartProps {
   chartData?: object[]
@@ -27,10 +28,17 @@ export const ReportChart = ({ chartData, reportData }: IReportsChartProps): Reac
   }
 
   const chartType = reportData?.chartType ?? 'default'
+  const chartLabelMap = fromPairs(
+    map(reportData?.columnConfigurations, item => [
+      item.name,
+      !isEmptyValue(item.label) ? item.label : item.name
+    ])
+  )
 
   const commonProps = {
     reportData,
-    chartData
+    chartData,
+    chartLabelMap
   }
 
   switch (chartType) {
