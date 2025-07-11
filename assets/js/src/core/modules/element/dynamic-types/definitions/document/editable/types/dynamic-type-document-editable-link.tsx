@@ -20,33 +20,34 @@ export type LinkEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'c
     disabledFields?: string[]
     class?: string
     reload?: boolean
+    textPrefix?: string
+    textSuffix?: string
   }
 }
 
 export interface DocumentLinkEditableValue {
-  path?: string
-  parameters?: string
-  anchor?: string
-  accesskey?: string
-  rel?: string
-  tabindex?: string
-  target?: string
-  class?: string
-  attributes?: string
-  text?: string
-  linktype?: string
-  direct?: string
-  internalId?: number | null
+  text: string
+  linktype: 'direct' | 'internal'
+  internal?: boolean | null
   internalType?: string
-  fullPath?: string
-  title?: string
+  internalId?: number | null
+  fullPath: string
+  target: string | null
+  parameters: string
+  anchor: string
+  title: string
+  accesskey: string
+  rel: string
+  tabindex: string
+  class: string
+  path: string
+  attributes?: string
 }
 
 export class DynamicTypeDocumentEditableLink extends DynamicTypeDocumentEditableAbstract {
   id: string = 'link'
 
   getEditableDataComponent (props: LinkEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
-    // Convert config values to arrays with proper defaults
     const allowedTypes = isArray(props.config?.allowedTypes) ? props.config.allowedTypes : []
     const allowedTargets = isArray(props.config?.allowedTargets) ? props.config.allowedTargets : []
     const disabledFields = isArray(props.config?.disabledFields) ? props.config.disabledFields : []
@@ -57,6 +58,8 @@ export class DynamicTypeDocumentEditableLink extends DynamicTypeDocumentEditable
         allowedTargets={allowedTargets}
         disabledFields={disabledFields}
         className={props.config?.class}
+        textPrefix={props.config?.textPrefix}
+        textSuffix={props.config?.textSuffix}
       />
     )
   }
@@ -66,31 +69,11 @@ export class DynamicTypeDocumentEditableLink extends DynamicTypeDocumentEditable
       return null
     }
 
-    // Transform document link data format to LinkValue format
-    // Document link format: {"path":"","parameters":"","anchor":"","accesskey":"","rel":"","tabindex":"","target":"","class":"","attributes":""}
-    // LinkValue format from existing component
-    if (typeof value === 'object') {
-      // Ensure linktype is one of the allowed values
-      const linktype: 'direct' | 'internal' = value.linktype === 'internal' ? 'internal' : 'direct'
-      
-      return {
-        text: value.text || '',
-        linktype,
-        direct: value.path || value.direct || null,
-        internal: value.internalId || null,
-        internalType: value.internalType || null,
-        fullPath: value.fullPath || value.path || '',
-        target: value.target || null,
-        parameters: value.parameters || '',
-        anchor: value.anchor || '',
-        title: value.title || '',
-        accesskey: value.accesskey || '',
-        rel: value.rel || '',
-        tabindex: value.tabindex || '',
-        class: value.class || ''
-      }
+    return {
+      ...value,
+      internal: value.internalId ?? null,
+      fullPath: value.fullPath ?? value.path ?? '',
+      direct: value.path ?? null
     }
-
-    return null
   }
 }

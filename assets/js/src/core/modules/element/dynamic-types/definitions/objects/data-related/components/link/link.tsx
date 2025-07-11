@@ -53,6 +53,8 @@ export interface LinkProps {
   allowedTargets: string[]
   disabledFields: string[]
   className?: string
+  textPrefix?: string
+  textSuffix?: string
 }
 
 export const Link = (props: LinkProps): React.JSX.Element => {
@@ -105,6 +107,8 @@ export const Link = (props: LinkProps): React.JSX.Element => {
         className="studio-inherited-overlay"
         inherited={ props.inherited }
         value={ value }
+        textPrefix={ props.textPrefix }
+        textSuffix={ props.textSuffix }
       />
 
       <Tooltip

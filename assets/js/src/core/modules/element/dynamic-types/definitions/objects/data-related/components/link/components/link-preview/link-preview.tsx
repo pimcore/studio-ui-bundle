@@ -18,25 +18,32 @@ export interface LinkPreviewProps {
   inherited?: boolean
   value?: LinkValue | null
   className?: string
+  textPrefix?: string
+  textSuffix?: string
 }
 
 export const LinkPreview = (props: LinkPreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const getLinkText = (): string => {
+  const getDisplayText = (): string => {
     if (props.value === null) {
       return t('link.not-set')
-    }
-
-    if (!_.isEmpty(props.value?.text)) {
+    } else if (!_.isEmpty(props.value?.text)) {
       return props.value?.text ?? ''
-    }
-
-    if (!_.isEmpty(props.value?.fullPath)) {
+    } else if (!_.isEmpty(props.value?.fullPath)) {
       return props.value?.fullPath ?? ''
+    } else {
+      return t('link.not-set')
     }
+  }
 
-    return t('link.not-set')
+  const getLinkText = (): string => {
+    const displayText = getDisplayText()
+
+    const prefix = props.textPrefix ?? ''
+    const suffix = props.textSuffix ?? ''
+    
+    return prefix + displayText + suffix
   }
 
   return (
