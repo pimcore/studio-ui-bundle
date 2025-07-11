@@ -61,17 +61,17 @@ export const LinkModalProvider: React.FC<LinkModalProviderProps> = ({ children }
   }), [isOpen])
 
   return (
-    <LinkModalContext.Provider value={contextValue}>
+    <LinkModalContext.Provider value={ contextValue }>
       {isOpen && (
         <LinkModal
-          open={isOpen}
-          disabled={modalOptions.disabled ?? false}
-          value={currentValue}
-          onClose={closeModal}
-          onSave={handleSave}
-          allowedTypes={modalOptions.allowedTypes ?? []}
-          allowedTargets={modalOptions.allowedTargets ?? []}
-          disabledFields={modalOptions.disabledFields ?? []}
+          allowedTargets={ modalOptions.allowedTargets ?? [] }
+          allowedTypes={ modalOptions.allowedTypes ?? [] }
+          disabled={ modalOptions.disabled ?? false }
+          disabledFields={ modalOptions.disabledFields ?? [] }
+          onClose={ closeModal }
+          onSave={ handleSave }
+          open={ isOpen }
+          value={ currentValue }
         />
       )}
       {children}

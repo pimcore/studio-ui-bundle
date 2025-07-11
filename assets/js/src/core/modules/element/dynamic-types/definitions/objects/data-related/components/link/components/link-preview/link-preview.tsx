@@ -11,7 +11,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tag } from '@Pimcore/components/tag/tag'
-import _ from 'lodash'
+import { isEmpty } from 'lodash'
 import { type LinkValue } from '../../link'
 
 export interface LinkPreviewProps {
@@ -28,9 +28,9 @@ export const LinkPreview = (props: LinkPreviewProps): React.JSX.Element => {
   const getDisplayText = (): string => {
     if (props.value === null) {
       return t('link.not-set')
-    } else if (!_.isEmpty(props.value?.text)) {
+    } else if (!isEmpty(props.value?.text)) {
       return props.value?.text ?? ''
-    } else if (!_.isEmpty(props.value?.fullPath)) {
+    } else if (!isEmpty(props.value?.fullPath)) {
       return props.value?.fullPath ?? ''
     } else {
       return t('link.not-set')
@@ -42,7 +42,7 @@ export const LinkPreview = (props: LinkPreviewProps): React.JSX.Element => {
 
     const prefix = props.textPrefix ?? ''
     const suffix = props.textSuffix ?? ''
-    
+
     return prefix + displayText + suffix
   }
 

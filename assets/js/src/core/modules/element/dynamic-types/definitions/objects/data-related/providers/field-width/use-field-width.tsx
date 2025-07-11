@@ -14,10 +14,10 @@ import { isNil } from 'lodash'
 
 export const useFieldWidth = (): IFieldWidthContext => {
   const context = useContext(FieldWidthContext)
-  
+
   if (isNil(context)) {
     return defaultFieldWidthValues
   }
-  
+
   return context
 }

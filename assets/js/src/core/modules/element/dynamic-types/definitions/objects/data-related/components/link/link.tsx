@@ -14,10 +14,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
-import {
-  LinkModal
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/modal'
-import _ from 'lodash'
+import { isEmpty } from 'lodash'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import {
   convertType
@@ -76,7 +73,7 @@ export const Link = (props: LinkProps): React.JSX.Element => {
     if (value === null) {
       return
     }
-    if (value.linktype === 'direct' && value.direct !== null && !_.isEmpty(value.direct)) {
+    if (value.linktype === 'direct' && value.direct !== null && !isEmpty(value.direct)) {
       window.open(value.direct, '_blank')
     }
 
@@ -106,9 +103,9 @@ export const Link = (props: LinkProps): React.JSX.Element => {
       <LinkPreview
         className="studio-inherited-overlay"
         inherited={ props.inherited }
-        value={ value }
         textPrefix={ props.textPrefix }
         textSuffix={ props.textSuffix }
+        value={ value }
       />
 
       <Tooltip
@@ -116,7 +113,7 @@ export const Link = (props: LinkProps): React.JSX.Element => {
         title={ t('open') }
       >
         <IconButton
-          disabled={ value === null || _.isEmpty(value.fullPath) }
+          disabled={ value === null || isEmpty(value.fullPath) }
           icon={ { value: 'open-folder' } }
           onClick={ openLink }
           type="default"

@@ -54,12 +54,12 @@ export class DynamicTypeDocumentEditableLink extends DynamicTypeDocumentEditable
 
     return (
       <Link
-        allowedTypes={allowedTypes}
-        allowedTargets={allowedTargets}
-        disabledFields={disabledFields}
-        className={props.config?.class}
-        textPrefix={props.config?.textPrefix}
-        textSuffix={props.config?.textSuffix}
+        allowedTargets={ allowedTargets }
+        allowedTypes={ allowedTypes }
+        className={ props.config?.class }
+        disabledFields={ disabledFields }
+        textPrefix={ props.config?.textPrefix }
+        textSuffix={ props.config?.textSuffix }
       />
     )
   }
