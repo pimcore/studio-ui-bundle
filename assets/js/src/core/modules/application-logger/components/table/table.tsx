@@ -1,15 +1,26 @@
-import { Flex } from "@Pimcore/components/flex/flex";
-import { Grid } from "@Pimcore/components/grid/grid";
-import { IconButton } from "@Pimcore/components/icon-button/icon-button";
-import { useElementHelper } from "@Pimcore/modules/element/hooks/use-element-helper";
-import { ElementType } from "@Pimcore/types/enums/element/element-type";
-import { Button, DefaultCell } from "@sdk/components";
-import { createColumnHelper } from "@tanstack/react-table";
-import { isNil } from "lodash";
-import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { BundleApplicationLoggerGetCollectionApiResponse, BundleApplicationLoggerLogEntry } from "../../application-logger-api-slice.gen";
-import { DetailModal } from "../detail-modal/detail-modal";
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Grid } from '@Pimcore/components/grid/grid'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { Button, DefaultCell } from '@sdk/components'
+import { createColumnHelper } from '@tanstack/react-table'
+import { isNil } from 'lodash'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { type BundleApplicationLoggerGetCollectionApiResponse, type BundleApplicationLoggerLogEntry } from '../../application-logger-api-slice.gen'
+import { DetailModal } from '../detail-modal/detail-modal'
+import { formatDateTime } from '@Pimcore/utils/date-time'
 
 interface TableProps {
   items: BundleApplicationLoggerGetCollectionApiResponse['items']
@@ -23,17 +34,18 @@ export interface BundleApplicationLoggerLogEntryWithActions extends BundleApplic
 export const Table = ({ items }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openElement } = useElementHelper()
-  const [open, setOpen] = useState<boolean>(false);
-  const [modelData, setModelData] = useState<BundleApplicationLoggerLogEntryWithActions | null>(null);
+  const [open, setOpen] = useState<boolean>(false)
+  const [modelData, setModelData] = useState<BundleApplicationLoggerLogEntryWithActions | null>(null)
 
   const openModal = (data: BundleApplicationLoggerLogEntryWithActions): void => {
-    setModelData(data);
-    setOpen(true);
+    setModelData(data)
+    setOpen(true)
   }
 
   const tableItems = items.map((item) => {
     return {
       ...item,
+      date: formatDateTime({ timestamp: item.date, dateStyle: 'short', timeStyle: 'short' }),
       translatedPriority: t(`application-logger.filter.priority-level.${item.priority}`)
     }
   })
@@ -42,8 +54,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
   const columns = [
     columnHelper.accessor('date', {
       header: t('application-logger.columns.timestamp'),
-      cell: info => <DefaultCell {...info} />,
-      size: 120
+      size: 80
     }),
     columnHelper.accessor('pid', {
       header: t('application-logger.columns.pid'),
@@ -59,7 +70,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     columnHelper.accessor('fileObject', {
       header: t('application-logger.columns.file-object'),
       cell: ({ row }): React.JSX.Element => {
-        const column = row.original;
+        const column = row.original
         const fileObjectBasePath = '/admin/bundle/applicationlogger/log/show-file-object?filePath='
 
         if (isNil(column.fileObject)) {
@@ -68,9 +79,9 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
 
         return (
           <Button
-            type="link"
             href={fileObjectBasePath + column.fileObject}
             target="_blank"
+            type="link"
           >
             {t('open')}
           </Button >
@@ -81,7 +92,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     columnHelper.accessor('relatedObjectId', {
       header: t('application-logger.columns.related-object'),
       cell: ({ row }): React.JSX.Element => {
-        const column = row.original;
+        const column = row.original
 
         if (isNil(column.relatedObjectId) || isNil(column.relatedObjectType)) {
           return <></>
@@ -89,13 +100,13 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
 
         return (
           <Button
-            type="link"
             onClick={() => {
               openElement({
                 id: column.relatedObjectId!,
                 type: column.relatedObjectType as ElementType
               }).catch(() => { })
             }}
+            type="link"
           >
             {`${column.relatedObjectType} ${column.relatedObjectId}`}
           </Button >
@@ -113,7 +124,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     columnHelper.accessor('actions', {
       header: t('application-logger.columns.details'),
       cell: ({ row }): React.JSX.Element => {
-        const column = row.original;
+        const column = row.original
 
         return (
           <Flex
@@ -134,14 +145,13 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     })
   ]
 
-
   return (
     <>
       <Grid
         autoWidth
         columns={columns}
         data={tableItems}
-        //isLoading={notesAndEventsFetching}
+        // isLoading={notesAndEventsFetching}
         modifiedCells={[]}
         resizable
       />
@@ -152,5 +162,5 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
         setOpen={setOpen}
       />
     </>
-  );
+  )
 }
