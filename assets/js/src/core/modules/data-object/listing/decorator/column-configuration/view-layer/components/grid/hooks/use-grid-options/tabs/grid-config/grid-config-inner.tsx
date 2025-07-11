@@ -140,7 +140,7 @@ export const GridConfigInner = (): React.JSX.Element => {
       key: column.key,
       locale: column.locale ?? null,
       group: column.group,
-      type: column.type,
+      type: column.type
     }))
   }
 
