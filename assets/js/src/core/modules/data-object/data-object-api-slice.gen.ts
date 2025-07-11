@@ -329,7 +329,7 @@ export type DataObjectSaveGridConfigurationApiArg = {
         saveFilter?: boolean;
         sharedUsers?: object;
         sharedRoles?: object;
-        columns: Column[];
+        columns: GridColumnRequest[];
         filter?: GridFilter | null;
     };
 };
@@ -354,7 +354,7 @@ export type DataObjectUpdateGridConfigurationApiArg = {
         saveFilter?: boolean;
         sharedUsers?: object;
         sharedRoles?: object;
-        columns: Column[];
+        columns: GridColumnRequest[];
         filter?: GridFilter | null;
     };
 };
@@ -768,7 +768,7 @@ export type GridDetailedConfiguration = {
     /** sharedRoles */
     sharedRoles: object;
     /** columns */
-    columns: Column[];
+    columns: (Column | GridColumnRequest)[];
     /** filter */
     filter: GridFilter[];
     /** Page Size */

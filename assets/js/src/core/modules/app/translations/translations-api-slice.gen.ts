@@ -18,6 +18,10 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/translations/${queryArg.key}`, method: "DELETE" }),
                 invalidatesTags: ["Translation"],
             }),
+            translationGetDomains: build.query<TranslationGetDomainsApiResponse, TranslationGetDomainsApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/translations/domains` }),
+                providesTags: ["Translation"],
+            }),
             translationUpdate: build.mutation<TranslationUpdateApiResponse, TranslationUpdateApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/translations`,
@@ -50,6 +54,11 @@ export type TranslationDeleteByKeyApiArg = {
     /** Delete translations by matching key */
     key: string;
 };
+export type TranslationGetDomainsApiResponse = /** status 200 List of available translation domains */ {
+    /** List if all available domains in the system for translations. */
+    domains: string[];
+};
+export type TranslationGetDomainsApiArg = void;
 export type TranslationUpdateApiResponse = unknown;
 export type TranslationUpdateApiArg = {
     updateTranslation: TranslationUpdate;
@@ -104,6 +113,7 @@ export type Translation = {
 export const {
     useTranslationCreateMutation,
     useTranslationDeleteByKeyMutation,
+    useTranslationGetDomainsQuery,
     useTranslationUpdateMutation,
     useTranslationGetCollectionMutation,
 } = injectedRtkApi;
