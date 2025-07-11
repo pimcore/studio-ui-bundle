@@ -8,62 +8,64 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useState } from 'react'
+import { useEffect } from 'react'
 import {
-  type CustomReportDetails,
+  type BundleCustomReportsDetails,
   type CustomReportsChartApiResponse,
-  useCustomReportsChartQuery,
+  useCustomReportsChartMutation,
   useCustomReportsReportQuery
 } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 interface UseReportDataProps {
   name: string
+  page: number
+  pageSize: number
 }
 
+export type IReportDetailData = BundleCustomReportsDetails | undefined
+export type IChartDetailData = CustomReportsChartApiResponse | undefined
+
 interface UseReportDataReturn {
-  page: number
-  setPage: (page: number) => void
-  pageSize: number
-  setPageSize: (pageSize: number) => void
-  reportDetailData: CustomReportDetails | undefined
-  chartDetailData: CustomReportsChartApiResponse | undefined
+  reportDetailData: IReportDetailData
+  chartDetailData: IChartDetailData
   isLoading: boolean
   isFetching: boolean
   refetchAll: () => void
 }
 
-export const useReportData = ({ name }: UseReportDataProps): UseReportDataReturn => {
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
-
+export const useReportData = ({ name, page, pageSize }: UseReportDataProps): UseReportDataReturn => {
   const {
     isLoading: isReportDetailLoading,
     data: reportDetailData,
     refetch: reportDetailRefetch,
     isFetching: isReportDetailFetching
-  } = useCustomReportsReportQuery({ name }, { skip: isEmptyValue(name), refetchOnMountOrArgChange: true })
+  } = useCustomReportsReportQuery({ name }, { skip: isEmptyValue(name) })
 
-  const {
+  const [fetchChartDetail, {
     isLoading: isChartDetailLoading,
-    data: chartDetailData,
-    refetch: chartDetailRefetch,
-    isFetching: isChartDetailFetching
-  } = useCustomReportsChartQuery({ name, page, pageSize }, { skip: isEmptyValue(name), refetchOnMountOrArgChange: true })
+    data: chartDetailData
+  }] = useCustomReportsChartMutation()
 
-  const isLoading = isReportDetailLoading ?? isChartDetailLoading
-  const isFetching = isReportDetailFetching ?? isChartDetailFetching
+  const fetchChartDetailData = (): void => {
+    fetchChartDetail({ body: { name, page, pageSize } }).catch(e => { console.error(e) })
+  }
+
+  useEffect(() => {
+    if (!isEmptyValue(name)) {
+      fetchChartDetailData()
+    }
+  }, [name, page, pageSize, fetchChartDetail])
+
+  const isLoading: boolean = isReportDetailLoading || isChartDetailLoading
+  const isFetching: boolean = isReportDetailFetching || isChartDetailLoading
 
   const refetchAll = (): void => {
     reportDetailRefetch().catch(e => { console.error(e) })
-    chartDetailRefetch().catch(e => { console.error(e) })
+    fetchChartDetailData()
   }
 
   return {
-    page,
-    setPage,
-    pageSize,
-    setPageSize,
     reportDetailData,
     chartDetailData,
     isLoading,

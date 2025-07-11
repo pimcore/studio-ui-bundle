@@ -8,14 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty, isUndefined } from 'lodash'
+import { isEmpty } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
-import {
-  type CustomReportChartData,
-  useCustomReportsGetTreeQuery
-} from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -28,23 +25,29 @@ import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useRe
 import { ReportToolbar } from '@Pimcore/modules/reports/reports-view/components/report-toolbar/report-toolbar'
 import { ReportTopBar } from '@Pimcore/modules/reports/reports-view/components/report-top-bar/report-top-bar'
 
+const PAGE_INITIAL = 1
+const PAGE_SIZE_INITIAL = 10
+
 export const ReportsView = (): React.JSX.Element => {
   const { t } = useTranslation()
 
   const [currentReport, setCurrentReport] = useState<string | null>(null)
+  const [page, setPage] = useState(PAGE_INITIAL)
+  const [pageSize, setPageSize] = useState(PAGE_SIZE_INITIAL)
 
-  // TODO: need to update logic for using page/pageSize
-  const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page: 1, pageSize: 10 })
-  const { page, setPage, pageSize, setPageSize, refetchAll, isFetching, chartDetailData } = useReportData({
-    name: currentReport ?? ''
+  const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page: 1, pageSize: 9999 })
+  const { refetchAll, isFetching, isLoading, chartDetailData, reportDetailData } = useReportData({
+    name: currentReport ?? '',
+    page,
+    pageSize
   })
 
-  const isCurrentReportSelected = !isEmptyValue(currentReport)
-  const chartData =
-      !isUndefined(chartDetailData) && 'data' in chartDetailData
-        ? chartDetailData.data as CustomReportChartData[]
-        : undefined
+  useEffect(() => {
+    setPage(PAGE_INITIAL)
+    setPageSize(PAGE_SIZE_INITIAL)
+  }, [currentReport])
 
+  const isCurrentReportSelected = !isEmptyValue(currentReport)
   const reportsTreeOptions = useMemo(() => {
     if (!isEmpty(reportsTreeData)) {
       return reportsTreeData?.items?.map((item) => ({
@@ -55,7 +58,9 @@ export const ReportsView = (): React.JSX.Element => {
 
     return []
   }, [reportsTreeData])
+
   const isLoadingReportsTree = isReportsTreeLoading && isEmpty(reportsTreeOptions)
+  const isLoadingReportsData = isLoading || isFetching
 
   const renderMainContent = (): React.JSX.Element => (
     <Content
@@ -64,7 +69,13 @@ export const ReportsView = (): React.JSX.Element => {
       padding={ { top: 'extra-small', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
     >
       {isCurrentReportSelected
-        ? <ReportDetail currentReport={ currentReport! } />
+        ? (
+          <ReportDetail
+            chartDetailData={ chartDetailData }
+            isLoading={ isLoadingReportsData }
+            reportDetailData={ reportDetailData }
+          />
+          )
         : (
           <Flex
             align="center"
@@ -79,13 +90,13 @@ export const ReportsView = (): React.JSX.Element => {
 
   const renderContent = (): React.JSX.Element => (
     <ContentLayout
-      renderToolbar={ !isEmpty(chartData) && !isFetching && (
+      renderToolbar={ !isEmpty(chartDetailData?.items) && !isFetching && (
         <ReportToolbar
           page={ page }
           pageSize={ pageSize }
           setPage={ setPage }
           setPageSize={ setPageSize }
-          totalItems={ chartData?.length ?? 0 }
+          totalItems={ chartDetailData?.totalItems ?? 0 }
         />
       ) }
       renderTopBar={ (
@@ -107,7 +118,7 @@ export const ReportsView = (): React.JSX.Element => {
         renderToolbar={ (
           <Toolbar>
             <Refetch
-              isFetching={ isFetching }
+              isFetching={ isLoadingReportsData }
               refetch={ refetchAll }
             />
           </Toolbar>

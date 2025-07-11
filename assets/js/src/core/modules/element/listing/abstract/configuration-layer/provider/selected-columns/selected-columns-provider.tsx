@@ -12,7 +12,7 @@ import { uuid } from '@Pimcore/utils/uuid'
 import React, { createContext, useMemo, useState } from 'react'
 
 export interface SelectedColumn {
-  key: string
+  key?: string
   type: string
   config: any
   sortable: boolean
@@ -50,7 +50,7 @@ export const SelectedColumnsProvider = ({ children }: SelectedColumnsProviderPro
   const encodeColumnIdentifier = (column: SelectedColumn): string => {
     return JSON.stringify({
       uuid: uuid(),
-      key: column.key.replaceAll('.', '**'),
+      key: column?.key?.replaceAll('.', '**'),
       locale: column.locale
     })
   }

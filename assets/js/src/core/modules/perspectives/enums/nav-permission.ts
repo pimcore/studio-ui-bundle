@@ -25,6 +25,7 @@ export enum NavPermission {
   UsersHidden = 'settings.users_hidden',
   Users = 'settings.users_users',
   Roles = 'settings.users_roles',
+  CustomReports = 'settings.customReports',
 
-  CustomReports = 'settings.customReports'
+  MarketingHidden = 'marketing.hidden',
 }

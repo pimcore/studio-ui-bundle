@@ -10,15 +10,15 @@
 
 import React from 'react'
 import { isUndefined } from 'lodash'
-import { type CustomReportChartData, type CustomReportDetails } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import { type BundleCustomReportsDetails } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
 import { PieChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/pie-chart/pie-chart'
 import { LineChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/line-chart/line-chart'
 import { BarChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/bar-chart/bar-chart'
 
 interface IReportsChartProps {
-  chartData?: CustomReportChartData[]
-  reportData?: CustomReportDetails
+  chartData?: object[]
+  reportData?: BundleCustomReportsDetails
 }
 
 export const ReportChart = ({ chartData, reportData }: IReportsChartProps): React.JSX.Element => {

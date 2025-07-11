@@ -1,91 +1,109 @@
 import { api } from "@sdk/api";
-export const addTagTypes = ["Custom Reports"] as const;
+export const addTagTypes = ["Bundle Custom Reports"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            customReportsChart: build.query<CustomReportsChartApiResponse, CustomReportsChartApiArg>({
+            customReportsListDrillDownOptions: build.mutation<
+                CustomReportsListDrillDownOptionsApiResponse,
+                CustomReportsListDrillDownOptionsApiArg
+            >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/custom-reports/chart`,
-                    params: {
-                        name: queryArg.name,
-                        page: queryArg.page,
-                        pageSize: queryArg.pageSize,
-                        sortOrder: queryArg.sortOrder,
-                        sortBy: queryArg.sortBy,
-                        filter: queryArg.filter,
-                        reportOffset: queryArg.reportOffset,
-                        reportLimit: queryArg.reportLimit,
-                    },
+                    url: `/pimcore-studio/api/bundle/custom-reports/drill-down-options`,
+                    method: "POST",
+                    body: queryArg.body,
                 }),
-                providesTags: ["Custom Reports"],
+                invalidatesTags: ["Bundle Custom Reports"],
+            }),
+            customReportsChart: build.mutation<CustomReportsChartApiResponse, CustomReportsChartApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/bundle/custom-reports/chart`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Bundle Custom Reports"],
             }),
             customReportsConfigGetTree: build.query<
                 CustomReportsConfigGetTreeApiResponse,
                 CustomReportsConfigGetTreeApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/custom-reports/tree/config`,
+                    url: `/pimcore-studio/api/bundle/custom-reports/tree/config`,
                     params: {
                         page: queryArg.page,
                         pageSize: queryArg.pageSize,
                     },
                 }),
-                providesTags: ["Custom Reports"],
+                providesTags: ["Bundle Custom Reports"],
             }),
             customReportExportCsv: build.mutation<CustomReportExportCsvApiResponse, CustomReportExportCsvApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/custom-report/export/csv`,
+                    url: `/pimcore-studio/api/bundle/custom-reports/export/csv`,
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Custom Reports"],
+                invalidatesTags: ["Bundle Custom Reports"],
             }),
             customReportsReport: build.query<CustomReportsReportApiResponse, CustomReportsReportApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/custom-reports/report/${queryArg.name}` }),
-                providesTags: ["Custom Reports"],
+                query: (queryArg) => ({ url: `/pimcore-studio/api/bundle/custom-reports/report/${queryArg.name}` }),
+                providesTags: ["Bundle Custom Reports"],
             }),
             customReportsGetTree: build.query<CustomReportsGetTreeApiResponse, CustomReportsGetTreeApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/custom-reports/tree`,
+                    url: `/pimcore-studio/api/bundle/custom-reports/tree`,
                     params: {
                         page: queryArg.page,
                         pageSize: queryArg.pageSize,
                     },
                 }),
-                providesTags: ["Custom Reports"],
+                providesTags: ["Bundle Custom Reports"],
             }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type CustomReportsListDrillDownOptionsApiResponse = /** status 200 List of drill down options for the report */ {
+    items: BundleCustomReportsDrillDownOption[];
+};
+export type CustomReportsListDrillDownOptionsApiArg = {
+    body: {
+        name: string | null;
+        field: string | null;
+        filters?: {
+            columnFilters?: object;
+            drillDownFilters?: object;
+        };
+    };
+};
 export type CustomReportsChartApiResponse =
     /** status 200 Chart data as JSON. The actual data depends on the selected adapter in the report configuration. */ {
-        items?: CustomReportChartData[];
+        totalItems: number;
+        items: BundleCustomReportsChartData[];
     };
 export type CustomReportsChartApiArg = {
-    /** Name of the report */
-    name: string;
-    /** Page number */
-    page: number;
-    /** Number of items per page */
-    pageSize: number;
-    /** Sort order (asc or desc). */
-    sortOrder?: "ASC" | "DESC";
-    /** Sort by column parameter */
-    sortBy?: string;
-    /** Filter for chart data */
-    filter?: string;
-    /** Offset of the report data */
-    reportOffset?: number;
-    /** Limit of the report data */
-    reportLimit?: number;
+    body: {
+        name: string | null;
+        filters?: {
+            columnFilters?: object;
+            drillDownFilters?: object;
+        };
+        /** Sort by field. */
+        sortBy?: string;
+        /** Sort order (ASC or DESC). */
+        sortOrder?: string;
+        /** Page of the report data */
+        page?: number;
+        /** Page size of the report data */
+        pageSize?: number;
+        /** Fields to be included in the chart data. If not provided, all fields will be included. */
+        fields?: string[];
+    };
 };
 export type CustomReportsConfigGetTreeApiResponse =
     /** status 200 Get all reports for the current user to display in configuration tree. */ {
-        items?: CustomReportConfigurationTreeNode[];
+        items?: BundleCustomReportsConfigurationTreeNode[];
     };
 export type CustomReportsConfigGetTreeApiArg = {
     /** Page number */
@@ -100,23 +118,31 @@ export type CustomReportExportCsvApiResponse =
     };
 export type CustomReportExportCsvApiArg = {
     body: {
-        name?: string;
-        sortOrder?: string;
+        name: string | null;
+        filters?: {
+            columnFilters?: object;
+            drillDownFilters?: object;
+        };
+        /** Sort by field. */
         sortBy?: string;
-        filter?: string;
-        reportLimit?: number;
-        reportOffset?: number;
+        /** Sort order (ASC or DESC). */
+        sortOrder?: string;
+        /** Page of the report data */
+        page?: number;
+        /** Page size of the report data */
+        pageSize?: number;
         includeHeaders?: boolean;
+        delimiter?: string;
     };
 };
-export type CustomReportsReportApiResponse = /** status 200 Report data as JSON */ CustomReportDetails;
+export type CustomReportsReportApiResponse = /** status 200 Report data as JSON */ BundleCustomReportsDetails;
 export type CustomReportsReportApiArg = {
     /** Name of the report */
     name: string;
 };
 export type CustomReportsGetTreeApiResponse =
     /** status 200 Get all reports for the current user to display in tree. */ {
-        items?: CustomReportTreeNode[];
+        items?: BundleCustomReportsTreeNode[];
     };
 export type CustomReportsGetTreeApiArg = {
     /** Page number */
@@ -124,13 +150,15 @@ export type CustomReportsGetTreeApiArg = {
     /** Number of items per page */
     pageSize: number;
 };
-export type CustomReportChartData = {
+export type BundleCustomReportsDrillDownOption = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object;
     };
-    /** Chart data depending on the adapter in the report configuration. */
-    data: object;
+    /** name */
+    name: string | number;
+    /** value */
+    value: string | number | null;
 };
 export type Error = {
     /** Message */
@@ -142,7 +170,15 @@ export type DevError = {
     /** Details */
     details: string;
 };
-export type CustomReportConfigurationTreeNode = {
+export type BundleCustomReportsChartData = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Chart data depending on the adapter in the report configuration. */
+    data: object;
+};
+export type BundleCustomReportsConfigurationTreeNode = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object;
@@ -156,7 +192,7 @@ export type CustomReportConfigurationTreeNode = {
     /** writeable */
     writeable: boolean;
 };
-export type CustomReportColumnConfiguration = {
+export type BundleCustomReportsColumnConfiguration = {
     /** Name */
     name?: string;
     /** Display name of column */
@@ -169,8 +205,10 @@ export type CustomReportColumnConfiguration = {
     label?: string;
     /** Id */
     id?: string;
+    /** Drilldown filter */
+    filterDrilldown?: string | null;
 };
-export type CustomReportDetails = {
+export type BundleCustomReportsDetails = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object;
@@ -182,7 +220,7 @@ export type CustomReportDetails = {
     /** Configuration for data source. Content of array depends on selected adapter/data source */
     dataSourceConfig: object;
     /** Configuration for columns to be displayed in report */
-    columnConfigurations: CustomReportColumnConfiguration[];
+    columnConfigurations: BundleCustomReportsColumnConfiguration[];
     /** Label/nice name of report */
     niceName: string;
     /** Group icon class */
@@ -216,7 +254,7 @@ export type CustomReportDetails = {
     /** Y axis column information */
     yAxis: string[] | null;
 };
-export type CustomReportTreeNode = {
+export type BundleCustomReportsTreeNode = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object;
@@ -237,7 +275,8 @@ export type CustomReportTreeNode = {
     reportClass: string;
 };
 export const {
-    useCustomReportsChartQuery,
+    useCustomReportsListDrillDownOptionsMutation,
+    useCustomReportsChartMutation,
     useCustomReportsConfigGetTreeQuery,
     useCustomReportExportCsvMutation,
     useCustomReportsReportQuery,

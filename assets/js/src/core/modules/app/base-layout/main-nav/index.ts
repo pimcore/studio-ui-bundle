@@ -43,7 +43,7 @@ moduleSystem.registerModule({
       path: 'Marketing',
       label: 'navigation.marketing',
       icon: 'marketing',
-      perspectivePermissionHide: NavPermission.SettingsHidden
+      perspectivePermissionHide: NavPermission.MarketingHidden
     })
   }
 })

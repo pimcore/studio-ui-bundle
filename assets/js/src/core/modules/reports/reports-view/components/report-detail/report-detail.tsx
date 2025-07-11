@@ -13,20 +13,19 @@ import { isUndefined } from 'lodash'
 import { type AccessorKeyColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { ReportChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/report-chart'
-import { type CustomReportChartData } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
+import { type IChartDetailData, type IReportDetailData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
 
 interface IReportDetailProps {
-  currentReport: string
+  isLoading: boolean
+  reportDetailData: IReportDetailData
+  chartDetailData: IChartDetailData
 }
 
-export const ReportDetail = ({ currentReport }: IReportDetailProps): React.JSX.Element => {
-  const { isLoading, isFetching, reportDetailData, chartDetailData } = useReportData({ name: currentReport })
-
-  if (isLoading || isFetching) {
+export const ReportDetail = ({ isLoading, reportDetailData, chartDetailData }: IReportDetailProps): React.JSX.Element => {
+  if (isLoading) {
     return <Content loading />
   }
 
@@ -42,10 +41,7 @@ export const ReportDetail = ({ currentReport }: IReportDetailProps): React.JSX.E
   const columns = getColumns() ?? []
 
   const isShowChart = !isEmptyValue(reportDetailData?.chartType)
-  const chartData =
-      !isUndefined(chartDetailData) && 'data' in chartDetailData
-        ? chartDetailData.data as CustomReportChartData[]
-        : undefined
+  const chartData = chartDetailData?.items?.map((item) => item.data)
 
   return (
     <Flex
