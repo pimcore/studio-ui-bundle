@@ -884,6 +884,7 @@ creatable-select.add: Add
 creatable-select.option-already-exists: Option already exists
 navigation.application-logger: Application Logger
 widget.application-logger: Application Logger
+application-logger.label: Application Logger
 application-logger.columns.timestamp: Timestamp
 application-logger.columns.pid: PID
 application-logger.columns.message: Message
