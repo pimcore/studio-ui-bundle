@@ -91,7 +91,7 @@ export const FilterProvider = (props: FilterProviderProps): React.JSX.Element =>
       filters.push({
         key: 'priority',
         type: 'equals',
-        filterValue: logLevel
+        filterValue: parseInt(logLevel)
       })
     }
 
