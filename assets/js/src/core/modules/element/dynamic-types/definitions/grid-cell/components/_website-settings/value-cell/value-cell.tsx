@@ -17,6 +17,7 @@ import { type ElementInfo } from '../../element-cell/element-cell'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { type WebsiteSettingsObjectData } from '@Pimcore/modules/website-settings/website-settings-api-slice.gen'
 import { type ElementCellContentProps } from '../../element-cell/element-cell-content'
+import { addColumnConfig } from '@sdk/components'
 
 const typeMapping = {
   text: 'input',
@@ -47,7 +48,7 @@ export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
 
     const enrichedProps: ElementCellContentProps = {
       ...props,
-      getElementInfo: (cellProps: DefaultCellProps): ElementInfo => {
+      ...addColumnConfig(props, { allowedTypes: [mapToElementType(String(props.row.original.type), true)] }),      getElementInfo: (cellProps: DefaultCellProps): ElementInfo => {
         const row = cellProps.row.original
         const element: WebsiteSettingsObjectData = row.data
         return {
