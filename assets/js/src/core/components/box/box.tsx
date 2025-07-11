@@ -10,49 +10,14 @@
 
 import React, { useMemo } from 'react'
 import { useStyles } from './box.styles'
+import {
+  type SizeDefinition,
+  getPaddingStyles,
+  getMarginStyles
+} from '../../utils/sizing'
+import { theme } from 'antd'
 
-export type Sizings = 'none' | 'mini' | 'extra-small' | 'small' | 'normal' | 'medium' | 'large' | 'extra-large' | 'maxi'
-
-export type SizeDefinition = string | { x?: Sizings, y?: Sizings, top?: Sizings, bottom?: Sizings, left?: Sizings, right?: Sizings }
-
-export const getSizingClasses = (prefix: string, sizing: SizeDefinition | undefined): string[] => {
-  const classes: string[] = []
-
-  if (typeof sizing === 'string') {
-    classes.push(`${prefix}-${sizing}`)
-    return classes
-  }
-
-  if (typeof sizing === 'object') {
-    if ('x' in sizing) {
-      classes.push(`${prefix}-x-${sizing.x}`)
-    }
-
-    if ('y' in sizing) {
-      classes.push(`${prefix}-y-${sizing.y}`)
-    }
-
-    if ('top' in sizing) {
-      classes.push(`${prefix}-t-${sizing.top}`)
-    }
-
-    if ('bottom' in sizing) {
-      classes.push(`${prefix}-b-${sizing.bottom}`)
-    }
-
-    if ('left' in sizing) {
-      classes.push(`${prefix}-l-${sizing.left}`)
-    }
-
-    if ('right' in sizing) {
-      classes.push(`${prefix}-r-${sizing.right}`)
-    }
-
-    return classes
-  }
-
-  return classes
-}
+export type { SizeDefinition, Sizings } from '../../utils/sizing'
 
 export interface BoxProps extends React.HTMLAttributes<HTMLOrSVGElement> {
   children?: React.ReactNode
@@ -62,24 +27,41 @@ export interface BoxProps extends React.HTMLAttributes<HTMLOrSVGElement> {
   inline?: boolean
 }
 
-export const Box = ({ children, padding, margin, className, component = 'div', inline, ...props }: BoxProps): React.JSX.Element => {
+export const Box = ({
+  children,
+  padding,
+  margin,
+  className,
+  component = 'div',
+  inline,
+  style,
+  ...props
+}: BoxProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const classes: string[] = [
-    'box',
-    styles.box,
-    inline === true ? 'box--inline' : '',
-    className ?? ''
-  ]
-  const paddingClasses: string[] = getSizingClasses('p', padding)
-  const marginClasses: string[] = getSizingClasses('m', margin)
+  const { useToken } = theme
+  const { token } = useToken()
+
   const ComponentType = component
 
-  return useMemo(() => (
-    <ComponentType
-      className={ `${classes.join(' ')} ${paddingClasses.join(' ')} ${marginClasses.join(' ')}` }
-      { ...props }
-    >
-      {children}
-    </ComponentType>
-  ), [children, padding, margin, className, component, inline])
+  const combinedStyles = useMemo(() => {
+    const paddingStyles = getPaddingStyles(token, padding)
+    const marginStyles = getMarginStyles(token, margin)
+
+    return { ...paddingStyles, ...marginStyles, ...style }
+  }, [padding, margin, style, theme])
+
+  return useMemo(
+    () => (
+      <ComponentType
+        className={ `box ${styles.box} ${inline === true ? 'box--inline' : ''} ${
+          className ?? ''
+        }` }
+        style={ combinedStyles }
+        { ...props }
+      >
+        { children }
+      </ComponentType>
+    ),
+    [children, className, component, inline, combinedStyles]
+  )
 }

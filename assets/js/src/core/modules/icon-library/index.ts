@@ -216,6 +216,7 @@ import vector from '@Pimcore/assets/icons/vector.inline.svg?react'
 import video from '@Pimcore/assets/icons/video.inline.svg?react'
 import view from '@Pimcore/assets/icons/view.inline.svg?react'
 import warningCircle from '@Pimcore/assets/icons/warning-circle.inline.svg?react'
+import webSettings from '@Pimcore/assets/icons/web-settings.inline.svg?react'
 import webhook from '@Pimcore/assets/icons/webhook.inline.svg?react'
 import widget from '@Pimcore/assets/icons/widget.inline.svg?react'
 import workflow from '@Pimcore/assets/icons/workflow.inline.svg?react'
@@ -1029,6 +1030,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'warning-circle',
       component: warningCircle
+    })
+    iconLibrary.register({
+      name: 'web-settings',
+      component: webSettings
     })
     iconLibrary.register({
       name: 'webhook',

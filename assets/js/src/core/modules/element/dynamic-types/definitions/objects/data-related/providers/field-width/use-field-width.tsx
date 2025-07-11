@@ -9,12 +9,15 @@
  */
 
 import { useContext } from 'react'
-import { FieldWidthContext, type IFieldWidthContext } from './field-width-provider'
+import { FieldWidthContext, type IFieldWidthContext, defaultFieldWidthValues } from './field-width-provider'
+import { isNil } from 'lodash'
 
 export const useFieldWidth = (): IFieldWidthContext => {
   const context = useContext(FieldWidthContext)
-  if (context === undefined) {
-    throw new Error('useFieldWidth must be used within a FieldWidthProvider')
+
+  if (isNil(context)) {
+    return defaultFieldWidthValues
   }
+
   return context
 }
