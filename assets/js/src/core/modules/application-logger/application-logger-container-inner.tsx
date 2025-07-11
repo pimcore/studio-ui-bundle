@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next"
 import { ApplicationLogger } from "./application-logger"
 import { useBundleApplicationLoggerGetCollectionQuery } from "./application-logger-api-slice.gen"
 import { useFilter } from "./components/sidebar/tabs/filter/provider/filter-provider/use-filter"
+import { Box } from "@Pimcore/components/box/box"
 
 export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -83,9 +84,15 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
     >
       <Content
         loading={isLoading}
-        padded
       >
-        <ApplicationLogger items={data?.items ?? []} />
+        <Box
+          margin={{
+            x: 'extra-small',
+            y: 'none'
+          }}
+        >
+          <ApplicationLogger items={data?.items ?? []} />
+        </Box>
       </Content>
     </ContentLayout>
   )
