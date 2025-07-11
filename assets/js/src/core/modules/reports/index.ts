@@ -25,6 +25,7 @@ moduleSystem.registerModule({
       path: 'Marketing/Reports',
       label: 'navigation.reports',
       className: 'item-style-modifier',
+      // TODO: Update once this task is completed: https://github.com/pimcore/studio-backend-bundle/issues/1211
       perspectivePermission: NavPermission.CustomReports,
       widgetConfig: {
         name: 'Reports',
@@ -43,6 +44,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'Marketing/Custom Reports',
       label: 'navigation.custom-reports',
+      // TODO: Update once this task is completed: https://github.com/pimcore/studio-backend-bundle/issues/1211
       perspectivePermission: NavPermission.CustomReports,
       widgetConfig: {
         name: 'Custom Reports',
