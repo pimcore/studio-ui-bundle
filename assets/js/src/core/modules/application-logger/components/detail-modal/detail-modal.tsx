@@ -103,7 +103,6 @@ export const DetailModal = (props: DetailModalProps): React.JSX.Element => {
               name={'fileObject'}
             >
               <ManyToOneRelation
-                readOnly
                 assetsAllowed
                 dataObjectsAllowed
                 documentsAllowed
