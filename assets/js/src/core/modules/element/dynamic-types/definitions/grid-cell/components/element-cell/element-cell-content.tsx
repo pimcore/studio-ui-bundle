@@ -16,12 +16,14 @@ import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppa
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
 import { type ElementInfo } from './element-cell'
-import { isPlainObject } from 'lodash'
+import { isPlainObject, isUndefined } from 'lodash'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 import { type ElementReference } from '@Pimcore/modules/element/element-helper'
+import { useEditMode } from '@sdk/components'
 
 export interface ElementCellContentProps extends DefaultCellProps {
   dropDisabled?: boolean
+  clearDisabled?: boolean
   getElementInfo?: (props: DefaultCellProps) => ElementInfo
 }
 
@@ -29,6 +31,7 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
   const { styles } = useStyle()
   const propertyData = props.row.original
   const { getStateClasses } = useDroppable()
+  const { fireOnUpdateCellDataEvent } = useEditMode(props)
 
   const getElementInfo = props.getElementInfo ?? ((): ElementInfo => {
     // @todo check hardcoded type
@@ -38,14 +41,15 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
       defaultType = allowedTypes[0] as ElementType
     }
 
+    const includesTypeInformation = propertyData.data !== null && (propertyData.data?.type !== undefined)
     const includesPathInformation = propertyData.data !== null && (propertyData.data?.fullPath !== undefined || propertyData.data?.path !== undefined)
     const hasFullPath = includesPathInformation && propertyData.data?.fullPath !== undefined
 
     const value = props.getValue()
 
-    if (isPlainObject(value)) {
+    if (isPlainObject(value) && includesTypeInformation) {
       const element: ElementReference = value as ElementReference
-      const elementType = mapToElementType(String(element.elementType ?? element.type))
+      const elementType = mapToElementType(String(element.type))
       return {
         elementType: elementType ?? undefined,
         id: element.id,
@@ -70,6 +74,7 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
   })
 
   const elementInfo = getElementInfo(props)
+  const showClearIcon = props.clearDisabled !== true && (!isUndefined(elementInfo.fullPath) && elementInfo.fullPath !== '')
 
   return (
     <div
@@ -78,20 +83,23 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
     >
       {elementInfo.fullPath !== false && (
         <ElementTag
+          closeIcon={ showClearIcon }
           disabled={ elementInfo.disabled }
           elementType={ elementInfo.elementType }
           id={ elementInfo.id }
+          onClose={ () => { fireOnUpdateCellDataEvent(null) } }
           path={ elementInfo.fullPath }
           published={ elementInfo.published }
         />
       )}
-
-      {props.dropDisabled !== true && (
+      <div>
+        { props.dropDisabled !== true && (
         <Icon
-          className={ styles.dropTargetIcon }
+          className={ styles.elementOptionsIcon }
           value={ 'drop-target' }
         />
-      )}
+        )}
+      </div>
 
     </div>
   )
