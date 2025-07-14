@@ -15,19 +15,25 @@ import { generateRandomColors } from '@Pimcore/modules/reports/reports-view/comp
 import type { IChartProps, IChartDataItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
 import { ChartLegend } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/pie-chart/components/chart-legend/chart-legend'
 
+export interface IChartPieDataItem extends IChartDataItem {
+  color: string
+}
+
 const CHART_FIELD_TYPE_KEY = 'type'
 const CHART_FIELD_VALUE_KEY = 'value'
+const CHART_FIELD_COLOR_KEY = 'color'
 
 export const PieChart = ({ reportData, chartData }: IChartProps): React.JSX.Element => {
   const pieLabelColumn = reportData?.pieLabelColumn ?? ''
   const pieColumn = reportData?.pieColumn ?? ''
 
-  const reportChartData: IChartDataItem[] | undefined = chartData?.map(item => ({
+  const [colorList] = useState<string[]>(generateRandomColors(chartData?.length))
+  const reportChartData: IChartPieDataItem[] = chartData.map(((item, index) => ({
     [CHART_FIELD_TYPE_KEY]: item?.[pieLabelColumn],
-    [CHART_FIELD_VALUE_KEY]: item?.[pieColumn]
-  }))
+    [CHART_FIELD_VALUE_KEY]: item?.[pieColumn],
+    [CHART_FIELD_COLOR_KEY]: colorList[index]
+  })))
 
-  const [colorList] = useState<string[]>(generateRandomColors(reportChartData?.length))
   const [disabledItems, setDisabledItems] = useState<string[]>([])
   const [chartRef, setChartRef] = useState<any>(null)
   const [totalCount, setTotalCount] = useState<number>(0)
@@ -59,14 +65,13 @@ export const PieChart = ({ reportData, chartData }: IChartProps): React.JSX.Elem
 
   const config = {
     data: reportChartData,
-    colorField: CHART_FIELD_TYPE_KEY,
+    colorField: CHART_FIELD_COLOR_KEY,
     angleField: CHART_FIELD_VALUE_KEY,
     autoFit: true,
     height: 250,
     scale: {
       color: {
-        type: 'ordinal',
-        range: colorList
+        type: 'identity'
       }
     },
     innerRadius: 0.6,
@@ -102,7 +107,6 @@ export const PieChart = ({ reportData, chartData }: IChartProps): React.JSX.Elem
     <div>
       <Pie { ...config } />
       <ChartLegend
-        colorList={ colorList }
         data={ reportChartData }
         disabledItems={ disabledItems }
         handleLegendItemClick={ handleLegendItemClick }

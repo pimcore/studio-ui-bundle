@@ -9,20 +9,21 @@
  */
 
 import React from 'react'
+import cn from 'classnames'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
-import { type IChartDataItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
+import {
+  type IChartPieDataItem
+} from '@Pimcore/modules/reports/reports-view/components/report-chart/components/pie-chart/pie-chart'
 import { useStyles } from './chart-legend.styles'
-import cn from 'classnames'
 
 interface IChartLegendProps {
-  data: IChartDataItem[]
+  data: IChartPieDataItem[]
   disabledItems: string[]
   handleLegendItemClick: (value: string) => void
-  colorList: string[]
 }
 
-export const ChartLegend = ({ data, disabledItems, handleLegendItemClick, colorList }: IChartLegendProps): React.JSX.Element => {
+export const ChartLegend = ({ data, disabledItems, handleLegendItemClick }: IChartLegendProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   return (
@@ -45,7 +46,7 @@ export const ChartLegend = ({ data, disabledItems, handleLegendItemClick, colorL
           >
             <div
               className={ styles.circle }
-              style={ { background: colorList[index] } }
+              style={ { background: item.color } }
             />
             <Flex gap="small">
               <Text type="secondary">{item.type}</Text>
