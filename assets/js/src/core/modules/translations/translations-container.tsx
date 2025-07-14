@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Title } from '@Pimcore/components/title/title'
 import { t } from 'i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -17,7 +17,7 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Box, Button, Form, IconTextButton, Input, ModalFooter, SearchInput, useModal, Select } from '@sdk/components'
-import trackError, { ApiError, GeneralError } from '../app/error-handler'
+import trackError, { ApiError } from '../app/error-handler'
 import { useTranslationGetListQuery, useTranslationGetDomainsQuery } from '../app/translations/translations-api-slice.gen'
 import { useTranslation } from './hooks/use-translation'
 import { Table } from './table/table'
@@ -29,6 +29,7 @@ import {
   type TranslationRow
 } from './helpers/translation-helpers'
 import { isUndefined } from 'lodash'
+import { useAppDispatch } from '@sdk/app'
 
 interface FormValues {
   translationKey: string
@@ -42,14 +43,14 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const [selectedDomain, setSelectedDomain] = useState<string>('admin')
 
   const { data: domainsData, isLoading: domainsLoading, error: domainError } = useTranslationGetDomainsQuery()
-  const availableDomains = domainsData?.domains || []
+  const availableDomains = domainsData?.domains ?? []
 
-    useEffect(() => {
+  useEffect(() => {
     if (!isUndefined(domainError)) {
       trackError(new ApiError(domainError))
     }
   }, [domainError])
-  
+
   useEffect(() => {
     if (availableDomains.length > 0 && !availableDomains.includes(selectedDomain)) {
       setSelectedDomain(availableDomains[0])
@@ -60,7 +61,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize] = useState<number>(50)
 
-  const { data, isLoading: translationsLoading, refetch, error: translationListError } = useTranslationGetListQuery({
+  const queryArgs = useMemo(() => ({
     domain: selectedDomain,
     body: {
       filters: {
@@ -73,7 +74,20 @@ export const TranslationsContainer = (): React.JSX.Element => {
         }
       }
     }
-  })
+  }), [selectedDomain, currentPage, pageSize])
+
+  const {
+    data,
+    isLoading: translationsLoading,
+    error: translationListError
+  } = useTranslationGetListQuery(queryArgs)
+
+  const dispatch = useAppDispatch()
+
+  const reload = (): void => {
+    // dispatch(api.util.invalidateTags(invalidatingTags.WEBSITE_SETTINGS()))
+    console.log('refetching')
+  }
 
   useEffect(() => {
     if (!isUndefined(translationListError)) {
@@ -84,17 +98,13 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const [translationRows, setTranslationRows] = useState<TranslationRow[]>([])
 
   useEffect(() => {
-    if (data) {
+    if (data !== undefined) {
       const rows = translationsToRows(data.items)
       setTranslationRows(rows)
     }
   }, [data])
 
-  useEffect(() => {
-    refetch()
-  }, [currentPage, searchTerm, selectedDomain, refetch])
-
-  const availableLocales = getAvailableLocales(data?.items || [])
+  const availableLocales = getAvailableLocales(data?.items ?? [])
 
   const [visibleLocales, setVisibleLocales] = useState<string[] | null>(null)
 
@@ -149,7 +159,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
           <IconButton
             disabled={ translationsLoading }
             icon={ { value: 'refresh' } }
-            onClick={ async () => await refetch() }
+            onClick={ reload }
           />
         </Toolbar> }
       renderTopBar={
@@ -205,11 +215,11 @@ export const TranslationsContainer = (): React.JSX.Element => {
           <Flex gap="small">
             <Select
               allowClear
-              disabled={ !settings || availableLocales.length === 0 }
+              disabled={ availableLocales.length === 0 }
               dropdownMatchSelectWidth={ false }
               dropdownStyle={ { minWidth: 250 } }
               filterOption={ (input, option) => {
-                const label = option?.label?.toString() || ''
+                const label = option?.label?.toString() ?? ''
                 return label.toLowerCase().includes(input.toLowerCase())
               } }
               maxTagCount="responsive"
@@ -219,15 +229,17 @@ export const TranslationsContainer = (): React.JSX.Element => {
               } }
               options={ availableLocales.map(locale => {
                 const languageInfo = settings?.availableAdminLanguages?.find(lang => lang.language === locale)
+                const display = (languageInfo as { display?: string } | undefined)?.display
+
                 return {
                   value: locale,
-                  label: languageInfo?.display ? `${languageInfo.display} (${locale})` : locale.toUpperCase()
+                  label: display !== undefined ? `${display} (${locale})` : locale.toUpperCase()
                 }
               }) }
               placeholder={ t('translations.show-hide-locale') }
               showSearch
               style={ { minWidth: 220 } }
-              value={ visibleLocales || [] }
+              value={ visibleLocales ?? [] }
             />
             <SearchInput
               loading={ translationsLoading }
@@ -260,7 +272,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
           <Table
             setTranslationRows={ setTranslationRows }
             translationRows={ sortedRows }
-            visibleLocales={ visibleLocales || availableLocales }
+            visibleLocales={ visibleLocales ?? availableLocales }
           />
           {errorModals}
         </Box>
