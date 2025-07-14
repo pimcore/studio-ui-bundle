@@ -72,7 +72,8 @@ export const TranslationsContainer = (): React.JSX.Element => {
         sortFilter: {
           key: 'de',
           direction: 'ASC'
-        }
+        },
+        filter: searchTerm
       }
     }
   }), [selectedDomain, currentPage, pageSize])
@@ -107,8 +108,6 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const availableLocales = getAvailableLocales(data?.items ?? [])
 
   const [visibleLocales, setVisibleLocales] = useState<string[] | null>(null)
-
-  const sortedRows = [...translationRows].sort((a, b) => a.key.localeCompare(b.key, 'en', { sensitivity: 'base' }))
 
   const onCreateTranslation = async (translationKey: string): Promise<void> => {
     const isValidKeyInput = translationKey !== '' && translationKey !== undefined
@@ -216,7 +215,6 @@ export const TranslationsContainer = (): React.JSX.Element => {
             <Select
               allowClear
               disabled={ availableLocales.length === 0 }
-              dropdownMatchSelectWidth={ false }
               dropdownStyle={ { minWidth: 250 } }
               filterOption={ (input, option) => {
                 const label = option?.label?.toString() ?? ''
@@ -271,7 +269,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
         >
           <Table
             setTranslationRows={ setTranslationRows }
-            translationRows={ sortedRows }
+            translationRows={ translationRows }
             visibleLocales={ visibleLocales ?? availableLocales }
           />
           {errorModals}
