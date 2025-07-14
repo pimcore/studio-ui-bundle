@@ -39,7 +39,7 @@ export const ChartLegend = ({ data, disabledItems, handleLegendItemClick }: ICha
           <Flex
             align="center"
             className={ cn(styles.legendItem, { [styles.legendItemDisabled]: isDisabled }) }
-            key={ index }
+            key={ `${index}-${item.type}` }
             onClick={ () => {
               handleLegendItemClick(item.type)
             } }
