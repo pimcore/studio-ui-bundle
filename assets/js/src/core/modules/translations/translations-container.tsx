@@ -17,9 +17,8 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Box, Button, Form, IconTextButton, Input, ModalFooter, SearchInput, useModal, Select } from '@sdk/components'
-import trackError, { GeneralError } from '../app/error-handler'
-import { uuid } from '@sdk/utils'
-import { type Translations, useTranslationGetListQuery, useTranslationGetDomainsQuery, type Translation } from '../app/translations/translations-api-slice.gen'
+import trackError, { ApiError, GeneralError } from '../app/error-handler'
+import { useTranslationGetListQuery, useTranslationGetDomainsQuery } from '../app/translations/translations-api-slice.gen'
 import { useTranslation } from './hooks/use-translation'
 import { Table } from './table/table'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
@@ -27,9 +26,9 @@ import {
   getAvailableLocales,
   translationsToRows,
   translationDataToRow,
-  type TranslationDataItem,
   type TranslationRow
 } from './helpers/translation-helpers'
+import { isUndefined } from 'lodash'
 
 interface FormValues {
   translationKey: string
@@ -42,9 +41,15 @@ export const TranslationsContainer = (): React.JSX.Element => {
 
   const [selectedDomain, setSelectedDomain] = useState<string>('admin')
 
-  const { data: domainsData, isLoading: domainsLoading } = useTranslationGetDomainsQuery()
+  const { data: domainsData, isLoading: domainsLoading, error: domainError } = useTranslationGetDomainsQuery()
   const availableDomains = domainsData?.domains || []
 
+    useEffect(() => {
+    if (!isUndefined(domainError)) {
+      trackError(new ApiError(domainError))
+    }
+  }, [domainError])
+  
   useEffect(() => {
     if (availableDomains.length > 0 && !availableDomains.includes(selectedDomain)) {
       setSelectedDomain(availableDomains[0])
@@ -55,7 +60,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize] = useState<number>(50)
 
-  const { data, isLoading: translationsLoading, refetch } = useTranslationGetListQuery({
+  const { data, isLoading: translationsLoading, refetch, error: translationListError } = useTranslationGetListQuery({
     domain: selectedDomain,
     body: {
       filters: {
@@ -70,14 +75,18 @@ export const TranslationsContainer = (): React.JSX.Element => {
     }
   })
 
+  useEffect(() => {
+    if (!isUndefined(translationListError)) {
+      trackError(new ApiError(translationListError))
+    }
+  }, [translationListError])
+
   const [translationRows, setTranslationRows] = useState<TranslationRow[]>([])
-  const [totalItems, setTotalItems] = useState<number>(0)
 
   useEffect(() => {
     if (data) {
       const rows = translationsToRows(data.items)
       setTranslationRows(rows)
-      setTotalItems(data.totalItems)
     }
   }, [data])
 
@@ -106,7 +115,6 @@ export const TranslationsContainer = (): React.JSX.Element => {
         newRow,
         ...prev
       ])
-      setTotalItems(prev => prev + 1)
       form.resetFields()
     }
   }
