@@ -41,7 +41,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const { createNewTranslation, createLoading } = useTranslation()
   const settings = useSettings()
 
-  const [selectedDomain, setSelectedDomain] = useState<string>('admin')
+  const [selectedDomain, setSelectedDomain] = useState<string>('messages')
 
   const { data: domainsData, isLoading: domainsLoading, error: domainError } = useTranslationGetDomainsQuery()
   const availableDomains = domainsData?.domains ?? []
@@ -62,6 +62,8 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize] = useState<number>(50)
 
+  console.log('searchTerm', searchTerm)
+
   const queryArgs = useMemo(() => ({
     domain: selectedDomain,
     body: {
@@ -81,8 +83,14 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const {
     data,
     isLoading: translationsLoading,
+    isFetching: translationsFetching,
     error: translationListError
-  } = useTranslationGetListQuery(queryArgs)
+  } = useTranslationGetListQuery(queryArgs, {
+    refetchOnMountOrArgChange: true
+  })
+
+  console.log('translationsLoading', translationsLoading)
+  console.log('translationsFetching', translationsFetching)
 
   const dispatch = useAppDispatch()
 
@@ -254,12 +262,12 @@ export const TranslationsContainer = (): React.JSX.Element => {
         }
     >
       <Content
-        loading={ translationsLoading }
+        loading={ translationsLoading || translationsFetching }
         margin={ {
           x: 'extra-small',
           y: 'none'
         } }
-        none={ translationRows.length === 0 }
+        none={ !translationsLoading && translationRows.length === 0 }
       >
         <Box
           margin={ {
