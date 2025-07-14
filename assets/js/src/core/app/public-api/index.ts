@@ -9,6 +9,10 @@
  */
 
 import { container } from '../depency-injection'
+import { documentApi, type DocumentApi } from './document/document-api'
+import { i18nApi, type I18nApi } from './i18n/i18n-api'
+import { elementApi, type ElementApi } from './element/element-api'
+import { modalApi, type ModalApi } from './modal/modal-api'
 
 export interface PublicApi {
   container: typeof container
@@ -16,4 +20,18 @@ export interface PublicApi {
 
 export const Pimcore: PublicApi = {
   container
+}
+
+export interface PimcoreStudioApi {
+  document: DocumentApi
+  i18n: I18nApi
+  element: ElementApi
+  modal: ModalApi
+}
+
+export const PimcoreStudio: PimcoreStudioApi = {
+  document: documentApi,
+  i18n: i18nApi,
+  element: elementApi,
+  modal: modalApi
 }

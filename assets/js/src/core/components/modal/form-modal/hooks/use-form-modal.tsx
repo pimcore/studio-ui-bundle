@@ -9,11 +9,12 @@
  */
 
 import React, { forwardRef, type RefObject } from 'react'
-import { App, type FormInstance, Input, type InputRef, type ModalFuncProps } from 'antd'
+import { type FormInstance, Input, type InputRef, type ModalFuncProps } from 'antd'
 import { uuid as pimcoreUUid } from '@Pimcore/utils/uuid'
 import { type Rule } from 'antd/lib/form'
 import i18n from 'i18next'
 import { Form } from '@Pimcore/components/form/form'
+import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 
 let form: FormInstance<any> | null = null
 
@@ -43,7 +44,7 @@ export interface UseFormModalHookResponse {
 }
 
 export function useFormModal (): UseFormModalHookResponse {
-  const { modal } = App.useApp()
+  const { modal, localModal } = useStudioModal()
 
   const [tmpForm] = Form.useForm()
   form = tmpForm
@@ -51,21 +52,21 @@ export function useFormModal (): UseFormModalHookResponse {
   return React.useMemo<UseFormModalHookResponse>(
     () => ({
       input: (props) => {
-        const modalResult = modal.confirm(withInput(props, (value) => { modalResult.destroy() }, (loading) => { modalResult.update({ okButtonProps: { loading } }) }))
+        const modalResult = localModal.confirm(withInput(props, (value) => { modalResult.destroy() }, (loading) => { modalResult.update({ okButtonProps: { loading } }) }))
         // avoid that errors are logged in the console
         modalResult.then(() => { }, () => { })
         return modalResult
       },
       textarea: (props) => {
-        const modalResult = modal.confirm(withTextarea(props))
+        const modalResult = localModal.confirm(withTextarea(props))
         // avoid that errors are logged in the console
         modalResult.then(() => { }, () => { })
         return modalResult
       },
       confirm: (props) => modal.confirm(withConfirm(props)),
-      upload: (props) => modal.confirm(withUpload(props))
+      upload: (props) => localModal.confirm(withUpload(props))
     }),
-    []
+    [modal, localModal]
   )
 }
 

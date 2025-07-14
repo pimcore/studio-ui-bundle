@@ -44,12 +44,101 @@ export const Padding = {
   }
 }
 
+export const PaddingAsString = {
+  args: {
+    ..._default.args,
+    padding: 'large',
+    style: { background: '#f2f2f2' }
+  }
+}
+
+export const PaddingX = {
+  args: {
+    ..._default.args,
+    padding: { x: 'large' },
+    style: { background: '#f2f2f2' }
+  }
+}
+
+export const PaddingY = {
+  args: {
+    ..._default.args,
+    padding: { y: 'large' },
+    style: { background: '#f2f2f2' }
+  }
+}
+
+export const DetailedPadding = {
+  args: {
+    ..._default.args,
+    padding: { top: 'mini', right: 'small', bottom: 'medium', left: 'large' },
+    style: { background: '#f2f2f2' }
+  }
+}
+
 export const Margin = {
   args: {
     ..._default.args,
     margin: { x: 'small', y: 'medium' },
     style: { background: '#f2f2f2' }
-  }
+  },
+  render: (args) => (
+    <div style={ { border: '1px solid #ccc' } }>
+      <Box { ...args } />
+    </div>
+  )
+}
+
+export const MarginAsString = {
+  args: {
+    ..._default.args,
+    margin: 'large',
+    style: { background: '#f2f2f2' }
+  },
+  render: (args) => (
+    <div style={ { border: '1px solid #ccc' } }>
+      <Box { ...args } />
+    </div>
+  )
+}
+
+export const MarginX = {
+  args: {
+    ..._default.args,
+    margin: { x: 'large' },
+    style: { background: '#f2f2f2' }
+  },
+  render: (args) => (
+    <div style={ { border: '1px solid #ccc' } }>
+      <Box { ...args } />
+    </div>
+  )
+}
+
+export const MarginY = {
+  args: {
+    ..._default.args,
+    margin: { y: 'large' },
+    style: { background: '#f2f2f2' }
+  },
+  render: (args) => (
+    <div style={ { border: '1px solid #ccc' } }>
+      <Box { ...args } />
+    </div>
+  )
+}
+
+export const DetailedMargin = {
+  args: {
+    ..._default.args,
+    margin: { top: 'mini', right: 'small', bottom: 'medium', left: 'large' },
+    style: { background: '#f2f2f2' }
+  },
+  render: (args) => (
+    <div style={ { border: '1px solid #ccc' } }>
+      <Box { ...args } />
+    </div>
+  )
 }
 
 export const Inline = {

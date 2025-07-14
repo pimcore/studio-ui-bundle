@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
+import { Wysiwyg } from '@sdk/modules/wysiwyg'
 
 export class DynamicTypeDocumentEditableWysiwyg extends DynamicTypeDocumentEditableAbstract {
   id: string = 'wysiwyg'
@@ -17,7 +18,7 @@ export class DynamicTypeDocumentEditableWysiwyg extends DynamicTypeDocumentEdita
 
   getEditableDataComponent (props: AbstractDocumentEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <span>TODO:wysiwyg</span>
+      <Wysiwyg />
     )
   }
 }

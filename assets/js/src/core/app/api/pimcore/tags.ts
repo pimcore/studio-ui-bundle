@@ -42,13 +42,16 @@ export const tagNames = {
   NOTIFICATIONS: 'NOTIFICATIONS',
   NOTIFICATION_DETAILS: 'NOTIFICATION_DETAILS',
   AVAILABLE_TAGS: 'AVAILABLE_TAGS',
+  WEBSITE_SETTINGS: 'WEBSITE_SETTINGS',
   ELEMENT_TAGS: 'TAGS',
   ROLE: 'ROLE',
   DOMAIN_TRANSLATIONS: 'DOMAIN_TRANSLATIONS',
   PREDEFINED_ASSET_METADATA: 'PREDEFINED_ASSET_METADATA',
   CURRENT_USER_INFORMATION: 'CURRENT_USER_INFORMATION',
   EMAIL_BLOCKLIST: 'EMAIL_BLOCKLIST',
-  EMAIL_BLOCKLIST_DETAIL: 'EMAIL_BLOCKLIST_DETAIL'
+  EMAIL_BLOCKLIST_DETAIL: 'EMAIL_BLOCKLIST_DETAIL',
+  EMAIL_LOG: 'EMAIL_LOG',
+  EMAIL_LOG_DETAIL: 'EMAIL_LOG_DETAIL'
 }
 
 export const providingTags = {
@@ -86,6 +89,7 @@ export const providingTags = {
   ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.WORKFLOW, elementType, id)],
   PROPERTY_DETAIL: (id: string) => [{ type: tagNames.PROPERTIES, id }],
   GLOBAL_PROPERTIES: () => [tagNames.PROPERTIES],
+  WEBSITE_SETTINGS: () => [tagNames.WEBSITE_SETTINGS],
   ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.PROPERTIES, elementType, id)],
   SCHEDULE_DETAIL: (id: number) => [{ type: tagNames.SCHEDULES, id }, tagNames.SCHEDULES],
   ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.SCHEDULES, elementType, id)],
@@ -101,7 +105,9 @@ export const providingTags = {
   PREDEFINED_ASSET_METADATA: () => [tagNames.PREDEFINED_ASSET_METADATA],
   CURRENT_USER_INFORMATION: () => [tagNames.CURRENT_USER_INFORMATION],
   EMAIL_BLOCKLIST: () => [tagNames.EMAIL_BLOCKLIST],
-  EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }]
+  EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }],
+  EMAIL_LOG: () => [tagNames.EMAIL_LOG],
+  EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }]
 }
 
 export const invalidatingTags = {
@@ -133,6 +139,7 @@ export const invalidatingTags = {
   PROPERTY_DETAIL: (id: string) => [{ type: tagNames.PROPERTIES, id }],
   ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.PROPERTIES, elementType, id)],
   GLOBAL_PROPERTIES: () => [tagNames.PROPERTIES],
+  WEBSITE_SETTINGS: () => [tagNames.WEBSITE_SETTINGS],
   SCHEDULE_DETAIL: (id: number) => [{ type: tagNames.SCHEDULES, id }],
   ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.SCHEDULES, elementType, id)],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
@@ -147,7 +154,9 @@ export const invalidatingTags = {
   PREDEFINED_ASSET_METADATA: () => [tagNames.PREDEFINED_ASSET_METADATA],
   ELEMENT_DETAIL: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
   EMAIL_BLOCKLIST: () => [tagNames.EMAIL_BLOCKLIST],
-  EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }]
+  EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }],
+  EMAIL_LOG: () => [tagNames.EMAIL_LOG],
+  EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }]
 }
 
 const elementUnspecificDataTag = tagNames.AVAILABLE_TAGS

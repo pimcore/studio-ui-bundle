@@ -38,6 +38,10 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'websiteSettingsGetCollection',
+      type: 'query'
+    },
+    {
       pattern: 'notificationGetCollection',
       type: 'query'
     },
@@ -54,10 +58,6 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
-      pattern: 'notificationGetCollection',
-      type: 'query'
-    },
-    {
       pattern: 'translationGetList',
       type: 'query'
     }
@@ -71,6 +71,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/document/document-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/document?/i)
+    },
+    '../../js/src/core/modules/website-settings/website-settings-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/api\/website-settings?/i)
     },
     '../../js/src/core/modules/app/translations/translations-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/translation/i)
@@ -140,6 +143,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/data-object/classification-store/classification-store-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/classification-store\/?/i)
+    },
+    '../../js/src/core/modules/reports/custom-reports-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/api\/bundle\/custom-reports\/?/i)
     },
     '../../js/src/core/modules/element/export-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/export\/?/i)

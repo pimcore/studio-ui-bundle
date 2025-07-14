@@ -8,9 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isNil } from 'lodash'
 import { useState, useEffect, type RefObject } from 'react'
 
-const useElementVisible = (ref: RefObject<HTMLElement>, continueObserving: boolean = false, disable: boolean = false): boolean => {
+const useElementVisible = (ref: RefObject<HTMLElement> | null | undefined, continueObserving: boolean = false, disable: boolean = false): boolean => {
   const [isVisible, setIsVisible] = useState(disable)
 
   useEffect(() => {
@@ -31,12 +32,12 @@ const useElementVisible = (ref: RefObject<HTMLElement>, continueObserving: boole
       { threshold: 0.1 }
     )
 
-    if (ref.current !== null) {
+    if (!isNil(ref) && ref.current !== null) {
       observer.observe(ref.current)
     }
 
     return () => {
-      if (ref.current !== null) {
+      if (!isNil(ref) && ref.current !== null) {
         observer.unobserve(ref.current)
         observer.disconnect()
       }

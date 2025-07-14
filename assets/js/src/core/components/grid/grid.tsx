@@ -52,6 +52,8 @@ import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 
 export interface ColumnMetaType {
   editable?: boolean
+  clearable?: boolean
+  showPublishedState?: boolean
   autoWidth?: boolean
   type?: string
   columnKey?: string

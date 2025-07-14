@@ -132,6 +132,7 @@ const defaultTheme = {
     Tabs: {
       colorBgSelectedTab: '#ffffff',
       itemColor: 'rgba(0, 0, 0, 0.65)',
+      itemActiveColor: '#531dab',
       itemHoverColor: 'rgba(215, 199, 236, 0.6)',
       itemUnselectedIconColor: '#4d4169',
       colorBorderActiveTab: '#00bab3',
