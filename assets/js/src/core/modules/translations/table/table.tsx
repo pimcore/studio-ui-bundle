@@ -79,6 +79,15 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
     )
   }, [languages, columnHelper, visibleLocales])
 
+  const typeOptions = [{
+value: "simple", 
+label: t('translations.type-options.simple')
+  },
+  {
+value: "custom", 
+label: t('translations.type-options.custom')
+  }]
+
   const tableColumns = useMemo(() => [
     columnHelper.accessor('key', {
       header: t('translations.columns.key'),
@@ -87,7 +96,7 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
     }),
     columnHelper.accessor('type', {
       header: t('translations.columns.type'),
-      meta: { editable: true },
+      meta: { type: 'select', editable: true, config: {options: typeOptions }},
       size: 100
     }),
     ...languageColumns,

@@ -303,6 +303,7 @@ translations.select-languages: Select languages
 translations.select-domain: Select domain
 translations.show-all-languages: Show all
 translations.show-minimal-languages: Show minimal
+translations.new: Add
 properties.columns.type: Type
 properties.columns.key: Key
 properties.columns.name: Name

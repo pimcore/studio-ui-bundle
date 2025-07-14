@@ -175,15 +175,10 @@ export const TranslationsContainer = (): React.JSX.Element => {
   // Extract available locales from the translation data
   const availableLocales = getAvailableLocales(data?.items || [])
   
-  // State for managing visible locales
-  const [visibleLocales, setVisibleLocales] = useState<string[]>([])
+  // State for managing visible locales - null means show all (default state)
+  const [visibleLocales, setVisibleLocales] = useState<string[] | null>(null)
   
-  // Initialize visible locales when available locales change
-  useEffect(() => {
-    if (availableLocales.length > 0 && visibleLocales.length === 0) {
-      setVisibleLocales(availableLocales)
-    }
-  }, [availableLocales, visibleLocales.length])
+  // Don't auto-initialize visible locales - let them be null by default to show all
 
   console.log("availableLocales", availableLocales)
   console.log("visibleLocales", visibleLocales)
@@ -255,6 +250,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
           theme='secondary'
         >
           <Flex gap={ 'small' }>
+            <Title>{t('translations.new-translation')}</Title>
             <Form
               form={ form }
               layout="inline"
@@ -280,7 +276,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
               </Flex>
             </Form>
             <Select
-              placeholder={t('translations.show-hide-locale')}
+              placeholder={t('translations.select-domain')}
               style={{ minWidth: 120 }}
               value={selectedDomain}
               loading={domainsLoading}
@@ -295,26 +291,16 @@ export const TranslationsContainer = (): React.JSX.Element => {
             />
           </Flex>
           <Flex gap="small">
-            <SearchInput
-              loading={ translationsLoading }
-              onSearch={ (value) => {
-                handleSearch(value)
-              } }
-              placeholder="Search"
-              withPrefix={ false }
-              withoutAddon={ false }
-            />
             <Select
               mode="multiple"
-              placeholder={t('translations.select-languages')}
+              placeholder={t('translations.show-hide-locale')}
               style={{ minWidth: 220 }}
-              value={ visibleLocales }
+              value={ visibleLocales || [] }
               disabled={ !settings || availableLocales.length === 0 }
               onChange={ (selectedLocales: string[]) => {
-                // Ensure at least one locale is always selected
-                if (selectedLocales.length > 0) {
-                  setVisibleLocales(selectedLocales)
-                }
+                // When user selects locales, use the selection
+                // When user clears all, go back to showing all (null state)
+                setVisibleLocales(selectedLocales.length > 0 ? selectedLocales : null)
               } }
               options={ availableLocales.map(locale => {
                 // Find the display name for this locale
@@ -330,31 +316,21 @@ export const TranslationsContainer = (): React.JSX.Element => {
                 return label.toLowerCase().includes(input.toLowerCase())
               }}
               maxTagCount="responsive"
-              allowClear={false}
+              allowClear={true}
               dropdownMatchSelectWidth={false}
               dropdownStyle={{ minWidth: 250 }}
             />
-            <Button
-              size="small"
-              onClick={ () => setVisibleLocales(availableLocales) }
-              disabled={ !settings || visibleLocales.length === availableLocales.length || availableLocales.length === 0 }
-              type="link"
-            >
-              {t('translations.show-all-languages')}
-            </Button>
-            <Button
-              size="small"
-              onClick={ () => {
-                // Keep at least one language selected (first available)
-                if (availableLocales.length > 0) {
-                  setVisibleLocales([availableLocales[0]])
-                }
+                        <SearchInput
+              loading={ translationsLoading }
+              onSearch={ (value) => {
+                handleSearch(value)
               } }
-              disabled={ !settings || visibleLocales.length <= 1 || availableLocales.length === 0 }
-              type="link"
-            >
-              {t('translations.show-minimal-languages')}
-            </Button>
+              placeholder="Search"
+              withPrefix={ false }
+              withoutAddon={ false }
+            />
+
+  
           </Flex>
         </Toolbar>
         }
@@ -376,7 +352,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
           <Table
             translationRows={ sortedRows }
             setTranslationRows={ setTranslationRows }
-            visibleLocales={ visibleLocales }
+            visibleLocales={ visibleLocales || availableLocales }
           />
           {errorModals}
         </Box>
