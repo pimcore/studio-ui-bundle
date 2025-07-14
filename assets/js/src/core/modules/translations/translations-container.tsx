@@ -16,7 +16,7 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
-import { Box, Button, Form, IconTextButton, Input, ModalFooter, SearchInput, useModal, Select } from '@sdk/components'
+import { Box, Button, Form, IconTextButton, Input, ModalFooter, SearchInput, useModal, Select, Pagination } from '@sdk/components'
 import trackError, { ApiError } from '../app/error-handler'
 import { useTranslationGetListQuery, useTranslationGetDomainsQuery, api } from '../app/translations/translations-api-slice-enhanced'
 import { useTranslation } from './hooks/use-translation'
@@ -38,31 +38,22 @@ interface FormValues {
 
 export const TranslationsContainer = (): React.JSX.Element => {
   const [form] = Form.useForm<FormValues>()
+  const dispatch = useAppDispatch()
+  const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
+    type: 'error'
+  })
   const { createNewTranslation, createLoading } = useTranslation()
   const settings = useSettings()
 
   const [selectedDomain, setSelectedDomain] = useState<string>('messages')
+  const [visibleLocales, setVisibleLocales] = useState<string[] | null>(null)
+  const [translationRows, setTranslationRows] = useState<TranslationRow[]>([])
+  const [searchTerm, setSearchTerm] = useState<string>('')
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(20)
 
   const { data: domainsData, isLoading: domainsLoading, error: domainError } = useTranslationGetDomainsQuery()
   const availableDomains = domainsData?.domains ?? []
-
-  useEffect(() => {
-    if (!isUndefined(domainError)) {
-      trackError(new ApiError(domainError))
-    }
-  }, [domainError])
-
-  useEffect(() => {
-    if (availableDomains.length > 0 && !availableDomains.includes(selectedDomain)) {
-      setSelectedDomain(availableDomains[0])
-    }
-  }, [availableDomains, selectedDomain])
-
-  const [searchTerm, setSearchTerm] = useState<string>('')
-  const [currentPage, setCurrentPage] = useState<number>(1)
-  const [pageSize] = useState<number>(50)
-
-  console.log('searchTerm', searchTerm)
 
   const queryArgs = useMemo(() => ({
     domain: selectedDomain,
@@ -89,22 +80,11 @@ export const TranslationsContainer = (): React.JSX.Element => {
     refetchOnMountOrArgChange: true
   })
 
-  console.log('translationsLoading', translationsLoading)
-  console.log('translationsFetching', translationsFetching)
-
-  const dispatch = useAppDispatch()
-
-  const reload = (): void => {
-    dispatch(api.util.invalidateTags(invalidatingTags.DOMAIN_TRANSLATIONS()))
-  }
-
   useEffect(() => {
-    if (!isUndefined(translationListError)) {
-      trackError(new ApiError(translationListError))
+    if (availableDomains.length > 0 && !availableDomains.includes(selectedDomain)) {
+      setSelectedDomain(availableDomains[0])
     }
-  }, [translationListError])
-
-  const [translationRows, setTranslationRows] = useState<TranslationRow[]>([])
+  }, [availableDomains, selectedDomain])
 
   useEffect(() => {
     if (data !== undefined) {
@@ -113,9 +93,23 @@ export const TranslationsContainer = (): React.JSX.Element => {
     }
   }, [data])
 
-  const availableLocales = getAvailableLocales(data?.items ?? [])
+  useEffect(() => {
+    if (!isUndefined(domainError)) {
+      trackError(new ApiError(domainError))
+    }
+  }, [domainError])
 
-  const [visibleLocales, setVisibleLocales] = useState<string[] | null>(null)
+  useEffect(() => {
+    if (!isUndefined(translationListError)) {
+      trackError(new ApiError(translationListError))
+    }
+  }, [translationListError])
+
+  const reload = (): void => {
+    dispatch(api.util.invalidateTags(invalidatingTags.DOMAIN_TRANSLATIONS()))
+  }
+
+  const availableLocales = getAvailableLocales(data?.items ?? [])
 
   const onCreateTranslation = async (translationKey: string): Promise<void> => {
     const isValidKeyInput = translationKey !== '' && translationKey !== undefined
@@ -141,10 +135,6 @@ export const TranslationsContainer = (): React.JSX.Element => {
     setCurrentPage(1)
   }
 
-  const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
-    type: 'error'
-  })
-
   const errorModals = (
     <MandatoryModal
       footer={ <ModalFooter>
@@ -167,6 +157,16 @@ export const TranslationsContainer = (): React.JSX.Element => {
             disabled={ translationsLoading }
             icon={ { value: 'refresh' } }
             onClick={ reload }
+          />
+          <Pagination
+            current={ currentPage }
+            onChange={ (page, pageSize) => {
+              setCurrentPage(page)
+              setPageSize(pageSize)
+            } }
+            showSizeChanger
+            showTotal={ (total) => t('pagination.show-total', { total }) }
+            total={ data?.totalItems ?? 0 }
           />
         </Toolbar> }
       renderTopBar={

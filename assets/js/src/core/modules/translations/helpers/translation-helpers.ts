@@ -36,9 +36,6 @@ export const getAvailableLocales = (translations: Translations[]): string[] => {
   return Array.from(localeSet).sort()
 }
 
-/**
- * Converts API response to TranslationRow format for the current API structure
- */
 export const translationsToRows = (translations: Translations[]): TranslationRow[] => {
   return translations.map(translation => {
     const row: TranslationRow = {
@@ -47,7 +44,6 @@ export const translationsToRows = (translations: Translations[]): TranslationRow
       rowId: uuid()
     }
 
-    // Convert the translations object to locale-specific properties
     if (translation.translations !== null && typeof translation.translations === 'object') {
       Object.entries(translation.translations).forEach(([locale, value]) => {
         row[`_${locale}`] = String(value ?? '')
@@ -58,10 +54,6 @@ export const translationsToRows = (translations: Translations[]): TranslationRow
   })
 }
 
-/**
- * Converts a single TranslationDataItem to TranslationRow format
- * Used when creating new translations
- */
 export const translationDataToRow = (data: TranslationDataItem): TranslationRow => {
   return {
     ...data,
