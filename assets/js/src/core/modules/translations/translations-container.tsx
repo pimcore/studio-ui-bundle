@@ -31,6 +31,7 @@ import {
 import { isUndefined } from 'lodash'
 import { useAppDispatch } from '@sdk/app'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+// import { EditModal } from './edit-modal/edit-modal'
 
 interface FormValues {
   translationKey: string
@@ -281,6 +282,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
             visibleLocales={ visibleLocales ?? availableLocales }
           />
           {errorModals}
+          {/* <EditModal translationRow={} locale={} open={} setOpen={}/> */}
         </Box>
       </Content>
     </ContentLayout>

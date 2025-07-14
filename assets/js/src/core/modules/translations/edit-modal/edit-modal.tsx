@@ -51,13 +51,11 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
 
     setIsLoading(true)
 
-    // Create updated row with the new translation value
     const updatedRow: TranslationRow = {
       ...translationRow,
       [`_${locale}`]: values.translation
     }
 
-    // Update the translation using the existing API call
     await updateTranslationByKey(`_${locale}`, updatedRow)
 
     props.setOpen(false)
