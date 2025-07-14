@@ -11,6 +11,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isEmpty, isUndefined } from 'lodash'
+import cn from 'classnames'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
@@ -65,10 +66,14 @@ export const ReportsView = (): React.JSX.Element => {
   const isCurrentReportSelected = !isEmptyValue(currentReport)
   const reportsTreeOptions: ReportsTreeOptions | undefined = useMemo(() => {
     if (!isUndefined(reportsTreeData?.items)) {
-      const groupedReports: Record<string, IReportsTreeOptionGroup> = reportsTreeData.items.reduce((acc, item) => {
+      const groupedReports: Record<string, IReportsTreeOptionGroup> = reportsTreeData.items.reduce((acc, item, index) => {
         if (isUndefined(acc[item.group])) {
           acc[item.group] = {
-            label: <div className={ styles.selectReportGroupLabel }>{item.group}</div>,
+            label: (
+              <div className={ cn(styles.selectReportGroupLabel, { [styles.selectGroupDivider]: index > 0 }) }>
+                {item.group}
+              </div>
+            ),
             title: item.group,
             options: []
           }

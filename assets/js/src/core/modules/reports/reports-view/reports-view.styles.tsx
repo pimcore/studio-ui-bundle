@@ -21,6 +21,17 @@ export const useStyles = createStyles(({ css, token }) => {
       color: ${token.colorTextDescription};
       font-size: ${token.fontSize}px;
       text-transform: uppercase;
+    `,
+
+    selectGroupDivider: css`
+      &:before {
+        content: '';
+        display: block;
+        margin-bottom: 10px;
+        width: 100%;
+        height: 1px;
+        background-color: ${token.colorBorderSecondary};
+      }
     `
   }
 })
