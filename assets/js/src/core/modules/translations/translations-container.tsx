@@ -19,7 +19,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { Box, Button, Form, IconTextButton, Input, ModalFooter, SearchInput, useModal, Select } from '@sdk/components'
 import trackError, { GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
-import { Translations, useTranslationGetListQuery, type Translation } from '../app/translations/translations-api-slice.gen'
+import { Translations, useTranslationGetListQuery, useTranslationGetDomainsQuery, type Translation } from '../app/translations/translations-api-slice.gen'
 import { useTranslation } from './hooks/use-translation'
 import { Table } from './table/table'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
@@ -123,13 +123,27 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const { createNewTranslation, createLoading } = useTranslation()
   const settings = useSettings()
 
+  // Domain state
+  const [selectedDomain, setSelectedDomain] = useState<string>('admin')
+  
+  // Fetch available domains
+  const { data: domainsData, isLoading: domainsLoading } = useTranslationGetDomainsQuery()
+  const availableDomains = domainsData?.domains || []
+
+  // Set default domain when domains are loaded
+  useEffect(() => {
+    if (availableDomains.length > 0 && !availableDomains.includes(selectedDomain)) {
+      setSelectedDomain(availableDomains[0])
+    }
+  }, [availableDomains, selectedDomain])
+
   // const [filter, setFilter] = useState<string>('')
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize] = useState<number>(50)
 
   const { data, isLoading: translationsLoading, refetch } = useTranslationGetListQuery({
-    domain: 'admin',
+    domain: selectedDomain,
     body: {
       filters: {
         page: currentPage,
@@ -156,7 +170,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
 
     useEffect(() => {
     refetch()
-  }, [currentPage, searchTerm, refetch])
+  }, [currentPage, searchTerm, selectedDomain, refetch])
 
   // Extract available locales from the translation data
   const availableLocales = getAvailableLocales(data?.items || [])
@@ -241,7 +255,6 @@ export const TranslationsContainer = (): React.JSX.Element => {
           theme='secondary'
         >
           <Flex gap={ 'small' }>
-            <Title>{t('widget.translations')}</Title>
             <Form
               form={ form }
               layout="inline"
@@ -261,11 +274,25 @@ export const TranslationsContainer = (): React.JSX.Element => {
                     icon={ { value: 'new' } }
                     loading={ createLoading }
                   >
-                    {t('translation.new')}
+                    {t('translations.new')}
                   </IconTextButton>
                 </Form.Item>
               </Flex>
             </Form>
+            <Select
+              placeholder={t('translations.show-hide-locale')}
+              style={{ minWidth: 120 }}
+              value={selectedDomain}
+              loading={domainsLoading}
+              onChange={(value: string) => {
+                setSelectedDomain(value)
+                setCurrentPage(1) // Reset pagination when domain changes
+              }}
+              options={availableDomains.map(domain => ({
+                value: domain,
+                label: domain
+              }))}
+            />
           </Flex>
           <Flex gap="small">
             <SearchInput

@@ -300,6 +300,7 @@ translations.columns.type: Type
 translations.columns.key: Key
 translations.columns.actions: Actions
 translations.select-languages: Select languages
+translations.select-domain: Select domain
 translations.show-all-languages: Show all
 translations.show-minimal-languages: Show minimal
 properties.columns.type: Type
