@@ -45,7 +45,10 @@ export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): R
   if (isBorderNode) {
     return (
       <BorderTitleView
+        elementType={ config.elementType }
         icon={ icon }
+        nodeId={ node.getId() }
+        nodeName={ node.getName() }
         title={ t(`${node.getName()}`) }
       />
     )

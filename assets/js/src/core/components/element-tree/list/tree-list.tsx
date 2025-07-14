@@ -42,6 +42,7 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
       {RenderFilter !== undefined && (
         <div
           className={ ['tree-list__search', styles['tree-list__search']].join(' ') }
+          data-testid={`tree-list-search-level-${node.level + 1}`}
           style={ { paddingLeft: token.paddingSM + (node.level + 1) * 24 } }
         >
           <RenderFilter
@@ -52,7 +53,10 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
         </div>
       )}
 
-      <div className='tree-list'>
+      <div 
+        className='tree-list'
+        data-testid={`tree-list-level-${node.level + 1}`}
+      >
         {childrenIds.map((childId) => (
           <TreeListNode
             key={ childId }
@@ -65,6 +69,7 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
       {RenderPager !== undefined && (
         <div
           className={ ['tree-list__pager', styles['tree-list__pager']].join(' ') }
+          data-testid={`tree-list-pager-level-${node.level + 1}`}
           style={ { paddingLeft: token.paddingSM + (node.level + 1) * 24 } }
         >
           <RenderPager

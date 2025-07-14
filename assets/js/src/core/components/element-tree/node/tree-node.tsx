@@ -21,6 +21,14 @@ import { isNil } from 'lodash'
 import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/utils/widget-content-scroll'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
+// Helper function to create safe test IDs from node data
+const createNodeTestId = (id: string, label: string, elementType?: ElementType): string => {
+  const safeId = id.replace(/[^a-z0-9]/gi, '-')
+  const safeLabel = label.toLowerCase().replace(/[^a-z0-9]/gi, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')
+  const prefix = elementType ? `${elementType}-` : ''
+  return `${prefix}node-${safeId}-${safeLabel}`.replace(/-+/g, '-').replace(/^-|-$/g, '')
+}
+
 export type TreeNodeWrapper = (children: React.ReactNode) => React.ReactNode
 export interface TreeNodeProps {
   id: string
@@ -244,6 +252,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   return (
     <div
       className={ getClasses() }
+      data-testid={ createNodeTestId(id, label, props.elementType) }
       ref={ forwardRef }
     >
       <div className="tree-node__content">

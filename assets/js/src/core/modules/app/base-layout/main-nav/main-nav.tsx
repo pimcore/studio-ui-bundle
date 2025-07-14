@@ -22,6 +22,11 @@ import { isAllowedInPerspective } from '@Pimcore/modules/perspectives/permission
 import { isUndefined } from 'lodash'
 import { PerspectiveSwitch } from './perspective-switch'
 
+// Helper function to create safe test IDs from navigation paths
+const createTestId = (path: string): string => {
+  return path.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')
+}
+
 export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStlyes()
@@ -55,6 +60,7 @@ export const MainNav = (): React.JSX.Element => {
     return (
       <li
         className={ `main-nav__list-item ${openKeys.includes(index) ? 'is-active' : ''} ${item.className ?? ''}` }
+        data-testid={ `nav-item-${createTestId(item.path)}` }
         key={ item.path }
       >
         {!isUndefined(item.button)
@@ -66,6 +72,7 @@ export const MainNav = (): React.JSX.Element => {
           : (
             <button
               className={ 'main-nav__list-btn' }
+              data-testid={ `nav-button-${createTestId(item.path)}` }
               onClick={ () => {
                 if (item.children !== undefined && item.children.length > 0) {
                   handleOpenState(index)
@@ -94,11 +101,15 @@ export const MainNav = (): React.JSX.Element => {
 
         {item.children !== undefined && item.children.length > 0
           ? (
-            <div className={ 'main-nav__list-detail' }>
+            <div 
+              className={ 'main-nav__list-detail' }
+              data-testid={ `nav-submenu-${createTestId(item.path)}` }
+            >
               <div className={ 'main-nav__list-detail-scroll-container' }>
                 <div className={ 'main-nav__list-detail-scroll' }>
                   <ul
                     className={ `main-nav__list main-nav__list--level-${level + 1}` }
+                    data-testid={ `nav-list-level-${level + 1}` }
                   >
                     {item.children?.map((child: IMainNavItem, childIndex) => renderNavItem(child, `${index}-${childIndex}`, level))}
                   </ul>
@@ -138,6 +149,7 @@ export const MainNav = (): React.JSX.Element => {
   return (
     <div ref={ elRef }>
       <IconButton
+        data-testid="main-nav-trigger"
         icon={ { value: 'menu' } }
         onClick={ () => {
           setIsOpen(!isOpen)
@@ -156,10 +168,12 @@ export const MainNav = (): React.JSX.Element => {
             ? (
               <div
                 className={ ['main-nav', styles.mainNav].join(' ') }
+                data-testid="main-nav-menu"
               >
 
                 <ul
                   className={ 'main-nav__list main-nav__list--level-0' }
+                  data-testid="nav-list-main"
                   ref={ navRef }
                 >
                   {navItems.map((item, index) => (
