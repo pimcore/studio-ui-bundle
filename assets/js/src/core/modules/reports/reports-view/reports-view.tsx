@@ -24,6 +24,7 @@ import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
 import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
 import { ReportToolbar } from '@Pimcore/modules/reports/reports-view/components/report-toolbar/report-toolbar'
 import { ReportTopBar } from '@Pimcore/modules/reports/reports-view/components/report-top-bar/report-top-bar'
+import { useStyles } from './reports-view.styles'
 
 interface IReportsTreeOptionItem {
   label: string | JSX.Element
@@ -54,6 +55,7 @@ export const ReportsView = (): React.JSX.Element => {
     page,
     pageSize
   })
+  const { styles } = useStyles()
 
   useEffect(() => {
     setPage(PAGE_INITIAL)
@@ -63,10 +65,10 @@ export const ReportsView = (): React.JSX.Element => {
   const isCurrentReportSelected = !isEmptyValue(currentReport)
   const reportsTreeOptions: ReportsTreeOptions | undefined = useMemo(() => {
     if (!isUndefined(reportsTreeData?.items)) {
-      const grouped: Record<string, IReportsTreeOptionGroup> = reportsTreeData.items.reduce((acc, item) => {
+      const groupedReports: Record<string, IReportsTreeOptionGroup> = reportsTreeData.items.reduce((acc, item) => {
         if (isUndefined(acc[item.group])) {
           acc[item.group] = {
-            label: item.group,
+            label: <div className={ styles.selectReportGroupLabel }>{item.group}</div>,
             title: item.group,
             options: []
           }
@@ -80,7 +82,7 @@ export const ReportsView = (): React.JSX.Element => {
         return acc
       }, {})
 
-      return Object.values(grouped)
+      return Object.values(groupedReports)
     }
 
     return []

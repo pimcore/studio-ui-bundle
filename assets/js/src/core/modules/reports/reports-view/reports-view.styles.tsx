@@ -15,6 +15,12 @@ export const useStyles = createStyles(({ css, token }) => {
     selectReportLabel: css`
       color: ${token.Tabs.itemActiveColor};
       font-weight: ${token.fontWeightStrong};
+    `,
+
+    selectReportGroupLabel: css`
+      color: ${token.colorTextDescription};
+      font-size: ${token.fontSize}px;
+      text-transform: uppercase;
     `
   }
 })
