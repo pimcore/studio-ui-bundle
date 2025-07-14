@@ -85,7 +85,7 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
       <>
         <Flex gap={ 10 }>
           <Text className={ styles.label }>
-            {renderIcon('user')} {t('user-management.key-bindings.user')} | {renderIcon('shield')} {t('user-management.key-bindings.role')}
+            {renderIcon('user')} {t('user-management.user')} | {renderIcon('shield')} {t('user-management.role')}
           </Text>
           <Flex
             align="center"

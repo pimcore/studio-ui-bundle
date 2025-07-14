@@ -48,6 +48,7 @@ export const ReportTopBar = ({ currentReport, setCurrentReport, reportsTreeOptio
             onChange={ (value: string) => { setCurrentReport(value) } }
             options={ reportsTreeOptions }
             placeholder={ t('reports.select-report') }
+            showSearch
             value={ currentReport }
           />
         </Flex>
