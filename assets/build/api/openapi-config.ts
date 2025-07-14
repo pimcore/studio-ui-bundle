@@ -56,6 +56,10 @@ const config: ConfigFile = {
     {
       pattern: 'notificationGetCollection',
       type: 'query'
+    },
+    {
+      pattern: 'translationGetList',
+      type: 'query'
     }
   ],
   outputFiles: {

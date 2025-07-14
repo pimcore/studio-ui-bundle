@@ -19,17 +19,14 @@ import { Content } from '@Pimcore/components/content/content'
 import { Box, Button, Form, IconTextButton, Input, ModalFooter, SearchInput, useModal, Select } from '@sdk/components'
 import trackError, { GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
-import { useTranslationGetCollectionMutation, type Translation } from '../app/translations/translations-api-slice.gen'
+import { Translations, useTranslationGetCollectionMutation, useTranslationGetListQuery, type Translation } from '../app/translations/translations-api-slice.gen'
 import { useTranslation } from './hooks/use-translation'
 import { Table } from './table/table'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
-import { keyframes } from 'antd-style'
 
 export type TranslationDataItem = {
   key: string
   type: string
-  creationDate?: number
-  modificationDate?: number
 } & {
   [localeKey: `_${string}`]: string
 }
@@ -54,31 +51,23 @@ const getAvailableLocales = (rows: TranslationRow[]): string[] => {
   return localeKeys.map(key => key.substring(1))
 }
 
-// Helper function to convert Translation to TranslationRow(s)
-// This handles both current and future backend response formats
-const translationToRows = (translation: Translation | TranslationCollectionResponse | TranslationDataItem): TranslationRow[] => {
-  // Check if this is already a TranslationDataItem (from createNewTranslation)
-  if ('key' in translation && 'type' in translation && 'rowId' in translation) {
-    // It's already a TranslationRow, just return it as an array
-    return [translation as TranslationRow]
+// Helper function to convert new API response to TranslationRow format
+const translationsToRows = (translationObj: any): TranslationRow[] => {
+  // Handle array of translation objects (new expected backend format)
+  if (Array.isArray(translationObj)) {
+    return translationObj.map(item => ({
+      ...item,
+      rowId: uuid()
+    }))
   }
   
-  // Check if this is a TranslationDataItem (from createNewTranslation)
-  if ('key' in translation && 'type' in translation && !('locale' in translation)) {
-    // Convert TranslationDataItem to TranslationRow
+  // Handle single TranslationDataItem (from createNewTranslation)
+  if ('key' in translationObj && 'type' in translationObj && !('locale' in translationObj)) {
     return [{
-      ...translation as TranslationDataItem,
+      ...translationObj as TranslationDataItem,
       rowId: uuid()
     }]
   }
-  
-  // Check if this is the new collection response format
-  if ('totalItems' in translation) {
-    console.log("new data shape");
-  }
-  
-  // Cast to Translation for the remaining checks
-  const translationObj = translation as Translation
   
   // Current API response structure: { locale: "en", keys: { "key1": "value1", "key2": "value2", ... } }
   if ('locale' in translationObj && 'keys' in translationObj && typeof translationObj.keys === 'object' && !Array.isArray(translationObj.keys)) {
@@ -93,8 +82,14 @@ const translationToRows = (translation: Translation | TranslationCollectionRespo
     }))
   }
   
-  // Fallback for unexpected structure
   return []
+}
+
+const translationDataToRow = (data: TranslationDataItem): TranslationRow => {
+  return {
+    ...data,
+    rowId: uuid()
+  }
 }
 
 interface FormValues {
@@ -102,35 +97,44 @@ interface FormValues {
 }
 
 export const TranslationsContainer = (): React.JSX.Element => {
-    const [form] = Form.useForm<FormValues>()
-
+  const [form] = Form.useForm<FormValues>()
   const { createNewTranslation, createLoading } = useTranslation()
   const settings = useSettings()
 
   // const [filter, setFilter] = useState<string>('')
+  const [searchTerm, setSearchTerm] = useState<string>('')
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [pageSize] = useState<number>(50)
 
-  const [fetchTranslations, { isLoading: translationsLoading }] = useTranslationGetCollectionMutation()
-  const [translationRows, setTranslationRows] = useState<TranslationRow[]>([])
-
-  const loadTranslations = async (): Promise<void> => {
-    try {
-      const response = await fetchTranslations({ 
-        translation: { locale: "en", keys: ["actions", "bla", 'blub'], useFallback: true } 
-      }).unwrap()
-
-      if (response) {
-        const rows = translationToRows(response)
-        setTranslationRows(rows)
+  const { data, isLoading: translationsLoading, refetch } = useTranslationGetListQuery({
+    domain: 'admin',
+    body: {
+      filters: {
+        page: currentPage,
+        pageSize: pageSize,
+        columnFilters: [],
+        sortFilter: {
+          key: 'de',
+          direction: 'ASC'
+        }
       }
-    } catch (error) {
-      console.error('Error loading translations', error)
-      trackError(new GeneralError('Error loading translations'))
     }
-  }
+  })
+  
+  const [translationRows, setTranslationRows] = useState<TranslationRow[]>([])
+  const [totalItems, setTotalItems] = useState<number>(0)
 
   useEffect(() => {
-    loadTranslations()
-  }, [])
+    if (data) {
+      const rows = translationsToRows(data.items)
+      setTranslationRows(rows)
+      setTotalItems(data.totalItems)
+    }
+  }, [data])
+
+    useEffect(() => {
+    refetch()
+  }, [currentPage, searchTerm, refetch])
 
   // Extract available locales from the translation data
   const availableLocales = getAvailableLocales(translationRows)
@@ -145,15 +149,14 @@ export const TranslationsContainer = (): React.JSX.Element => {
     }
   }, [availableLocales, visibleLocales.length])
 
-  console.log("availableLocales", availableLocales);
-  console.log("visibleLocales", visibleLocales);
-  
+  console.log("availableLocales", availableLocales)
+  console.log("visibleLocales", visibleLocales)
   console.log("translationRows", translationRows)
+  console.log("totalItems", totalItems)
   
   const sortedRows = [...translationRows].sort((a, b) => a.key.localeCompare(b.key, "en", { sensitivity: 'base' }))
 
   const onCreateTranslation = async (translationKey: string): Promise<void> => {
-
     const isValidKeyInput = translationKey !== '' && translationKey !== undefined
 
     if (!isValidKeyInput) {
@@ -168,14 +171,20 @@ export const TranslationsContainer = (): React.JSX.Element => {
         ...newRows,
         ...prev
       ])
-    form.resetFields()
+      setTotalItems(prev => prev + 1)
+      form.resetFields()
     }
+  }
+
+    const handleSearch = (value: string): void => {
+    setSearchTerm(value)
+    setCurrentPage(1) // Reset to first page when searching
   }
 
     const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
     type: 'error'
   })
-  
+
   const errorModals = (
       <MandatoryModal
         footer={ <ModalFooter>
@@ -197,7 +206,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
           <IconButton
             disabled={ translationsLoading }
             icon={ { value: 'refresh' } }
-            onClick={ loadTranslations }
+            onClick={ () => refetch() }
           />
         </Toolbar> }
       renderTopBar={
@@ -240,7 +249,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
             <SearchInput
               loading={ translationsLoading }
               onSearch={ (value) => {
-                console.log({value})
+                handleSearch(value)
               } }
               placeholder="Search"
               withPrefix={ false }
