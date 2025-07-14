@@ -140,6 +140,9 @@ const config: ConfigFile = {
     '../../js/src/core/modules/data-object/classification-store/classification-store-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/classification-store\/?/i)
     },
+    '../../js/src/core/modules/reports/custom-reports-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/api\/bundle\/custom-reports\/?/i)
+    },
     '../../js/src/core/modules/element/export-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/export\/?/i)
     },
