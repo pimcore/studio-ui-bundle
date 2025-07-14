@@ -10,7 +10,10 @@
 
 import React from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { Text } from '@Pimcore/components/text/text'
 import { type IChartDataItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
+import { useStyles } from './chart-legend.styles'
+import cn from 'classnames'
 
 interface IChartLegendProps {
   data: IChartDataItem[]
@@ -20,6 +23,8 @@ interface IChartLegendProps {
 }
 
 export const ChartLegend = ({ data, disabledItems, handleLegendItemClick, colorList }: IChartLegendProps): React.JSX.Element => {
+  const { styles } = useStyles()
+
   return (
     <Flex
       gap="mini"
@@ -31,31 +36,20 @@ export const ChartLegend = ({ data, disabledItems, handleLegendItemClick, colorL
 
         return (
           <Flex
+            align="center"
+            className={ cn(styles.legendItem, { [styles.legendItemDisabled]: isDisabled }) }
             key={ index }
-            onClick={ () => { handleLegendItemClick(item.type) } }
-            style={ {
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              border: `1px solid ${colorList[index]}`,
-              borderRadius: 4,
-              padding: '0 4px',
-              background: isDisabled ? '#f0f0ff' : '#fff',
-              cursor: 'pointer',
-              opacity: isDisabled ? 0.5 : 1
+            onClick={ () => {
+              handleLegendItemClick(item.type)
             } }
           >
-            <div style={ {
-              width: 12,
-              height: 12,
-              borderRadius: '50%',
-              background: colorList[index],
-              marginRight: 8
-            } }
+            <div
+              className={ styles.circle }
+              style={ { background: colorList[index] } }
             />
             <Flex gap="small">
-              <div>{item.value}</div>
-              <div style={ { marginLeft: 'auto' } }>{item.type}</div>
+              <Text type="secondary">{item.type}</Text>
+              <Text>{item.value}</Text>
             </Flex>
           </Flex>
         )
