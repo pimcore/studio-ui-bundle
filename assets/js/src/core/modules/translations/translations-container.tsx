@@ -18,7 +18,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Box, Button, Form, IconTextButton, Input, ModalFooter, SearchInput, useModal, Select } from '@sdk/components'
 import trackError, { ApiError } from '../app/error-handler'
-import { useTranslationGetListQuery, useTranslationGetDomainsQuery } from '../app/translations/translations-api-slice.gen'
+import { useTranslationGetListQuery, useTranslationGetDomainsQuery, api } from '../app/translations/translations-api-slice-enhanced'
 import { useTranslation } from './hooks/use-translation'
 import { Table } from './table/table'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
@@ -30,6 +30,7 @@ import {
 } from './helpers/translation-helpers'
 import { isUndefined } from 'lodash'
 import { useAppDispatch } from '@sdk/app'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 
 interface FormValues {
   translationKey: string
@@ -85,8 +86,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
 
   const reload = (): void => {
-    // dispatch(api.util.invalidateTags(invalidatingTags.WEBSITE_SETTINGS()))
-    console.log('refetching')
+    dispatch(api.util.invalidateTags(invalidatingTags.DOMAIN_TRANSLATIONS()))
   }
 
   useEffect(() => {
