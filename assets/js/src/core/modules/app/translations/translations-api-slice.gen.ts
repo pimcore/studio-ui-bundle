@@ -27,7 +27,9 @@ const injectedRtkApi = api
                     url: `/pimcore-studio/api/translations/list`,
                     method: "POST",
                     body: queryArg.body,
-                    params: { domain: queryArg.domain },
+                    params: {
+                        domain: queryArg.domain,
+                    },
                 }),
                 providesTags: ["Translation"],
             }),
@@ -54,11 +56,11 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type TranslationCreateApiResponse = /** status 200 Successfully created translations */ void;
+export type TranslationCreateApiResponse = unknown;
 export type TranslationCreateApiArg = {
     createTranslation: TranslationCreate;
 };
-export type TranslationDeleteByKeyApiResponse = /** status 200 translation_delete_by_key_success_description */ void;
+export type TranslationDeleteByKeyApiResponse = unknown;
 export type TranslationDeleteByKeyApiArg = {
     /** Delete translations by matching key */
     key: string;
@@ -84,7 +86,7 @@ export type TranslationGetListApiArg = {
         };
     };
 };
-export type TranslationUpdateApiResponse = /** status 200 Successfully updated translations */ void;
+export type TranslationUpdateApiResponse = unknown;
 export type TranslationUpdateApiArg = {
     updateTranslation: TranslationUpdate;
 };
