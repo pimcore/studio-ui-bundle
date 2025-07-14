@@ -299,6 +299,9 @@ properties.new-custom-property: New custom property
 translations.columns.type: Type
 translations.columns.key: Key
 translations.columns.actions: Actions
+translations.select-languages: Select languages
+translations.show-all-languages: Show all
+translations.show-minimal-languages: Show minimal
 properties.columns.type: Type
 properties.columns.key: Key
 properties.columns.name: Name

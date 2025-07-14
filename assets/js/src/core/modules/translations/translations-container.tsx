@@ -19,7 +19,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { Box, Button, Form, IconTextButton, Input, ModalFooter, SearchInput, useModal, Select } from '@sdk/components'
 import trackError, { GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
-import { Translations, useTranslationGetCollectionMutation, useTranslationGetListQuery, type Translation } from '../app/translations/translations-api-slice.gen'
+import { Translations, useTranslationGetListQuery, type Translation } from '../app/translations/translations-api-slice.gen'
 import { useTranslation } from './hooks/use-translation'
 import { Table } from './table/table'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
@@ -35,24 +35,46 @@ export type TranslationRow = TranslationDataItem & {
   rowId: string
 }
 
-export type TranslationCollectionResponse = {
-  data: TranslationDataItem[]
-  success: boolean
-  total: number
+const getAvailableLocales = (translations: Translations[]): string[] => {
+  if (translations.length === 0) return []
+  
+  const localeSet = new Set<string>()
+  
+  // Extract all unique locales from the translations object
+  translations.forEach(translation => {
+    if (translation.translations && typeof translation.translations === 'object') {
+      // translations is now an object with locale keys as properties
+      Object.keys(translation.translations).forEach(locale => {
+        localeSet.add(locale)
+      })
+    }
+  })
+  
+  return Array.from(localeSet).sort()
 }
 
-const getAvailableLocales = (rows: TranslationRow[]): string[] => {
-  if (rows.length === 0) return []
-  
-  // Get all keys from the first row that start with underscore (locale keys)
-  const localeKeys = Object.keys(rows[0]).filter(key => key.startsWith('_'))
-  
-  // Remove the underscore prefix to get clean locale codes
-  return localeKeys.map(key => key.substring(1))
+// Helper function to convert API response to TranslationRow format
+const translationsToRows = (translations: Translations[]): TranslationRow[] => {
+  return translations.map(translation => {
+    const row: TranslationRow = {
+      key: translation.key,
+      type: translation.type,
+      rowId: uuid()
+    }
+    
+    // Convert the translations object to locale-specific properties
+    if (translation.translations && typeof translation.translations === 'object') {
+      Object.entries(translation.translations).forEach(([locale, value]) => {
+        row[`_${locale}`] = String(value || '')
+      })
+    }
+    
+    return row
+  })
 }
 
-// Helper function to convert new API response to TranslationRow format
-const translationsToRows = (translationObj: any): TranslationRow[] => {
+// Helper function to convert new API response to TranslationRow format (legacy support)
+const translationToRows = (translationObj: any): TranslationRow[] => {
   // Handle array of translation objects (new expected backend format)
   if (Array.isArray(translationObj)) {
     return translationObj.map(item => ({
@@ -137,7 +159,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
   }, [currentPage, searchTerm, refetch])
 
   // Extract available locales from the translation data
-  const availableLocales = getAvailableLocales(translationRows)
+  const availableLocales = getAvailableLocales(data?.items || [])
   
   // State for managing visible locales
   const [visibleLocales, setVisibleLocales] = useState<string[]>([])
@@ -257,7 +279,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
             />
             <Select
               mode="multiple"
-              placeholder="Select languages"
+              placeholder={t('translations.select-languages')}
               style={{ minWidth: 220 }}
               value={ visibleLocales }
               disabled={ !settings || availableLocales.length === 0 }
@@ -272,16 +294,39 @@ export const TranslationsContainer = (): React.JSX.Element => {
                 const languageInfo = settings?.availableAdminLanguages?.find(lang => lang.language === locale)
                 return {
                   value: locale,
-                  label: languageInfo?.display || locale.toUpperCase()
+                  label: languageInfo?.display ? `${languageInfo.display} (${locale})` : locale.toUpperCase()
                 }
               }) }
+              showSearch={true}
+              filterOption={(input, option) => {
+                const label = option?.label?.toString() || ''
+                return label.toLowerCase().includes(input.toLowerCase())
+              }}
+              maxTagCount="responsive"
+              allowClear={false}
+              dropdownMatchSelectWidth={false}
+              dropdownStyle={{ minWidth: 250 }}
             />
             <Button
               size="small"
               onClick={ () => setVisibleLocales(availableLocales) }
               disabled={ !settings || visibleLocales.length === availableLocales.length || availableLocales.length === 0 }
+              type="link"
             >
               {t('translations.show-all-languages')}
+            </Button>
+            <Button
+              size="small"
+              onClick={ () => {
+                // Keep at least one language selected (first available)
+                if (availableLocales.length > 0) {
+                  setVisibleLocales([availableLocales[0]])
+                }
+              } }
+              disabled={ !settings || visibleLocales.length <= 1 || availableLocales.length === 0 }
+              type="link"
+            >
+              {t('translations.show-minimal-languages')}
             </Button>
           </Flex>
         </Toolbar>
