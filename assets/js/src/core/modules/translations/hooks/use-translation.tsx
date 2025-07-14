@@ -9,8 +9,8 @@
  */
 
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { Translation, type TranslationCreate, type TranslationData, useTranslationCreateMutation, useTranslationDeleteByKeyMutation, useTranslationUpdateMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
-import { type TranslationRow, type TranslationDataItem } from '../translations-container'
+import { type TranslationCreate, type TranslationData, useTranslationCreateMutation, useTranslationDeleteByKeyMutation, useTranslationUpdateMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
+import { type TranslationRow, type TranslationDataItem } from '../helpers/translation-helpers'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 interface UseTranslationReturn {
@@ -39,13 +39,11 @@ export const useTranslation = (): UseTranslationReturn => {
         const createdTranslation: TranslationDataItem = {
           key: translationData.translationData[0].key,
           type: translationData.translationData[0].type,
-          creationDate: Date.now(),
-          modificationDate: Date.now(),
           // Add default empty values for all valid languages from settings
           ...settings.validLanguages.reduce((acc, lang) => {
             acc[`_${lang}`] = ''
             return acc
-          }, {} as Record<string, string>)
+          }, {} satisfies Record<string, string>)
         }
         return { success: true, data: createdTranslation }
       }
@@ -70,7 +68,7 @@ export const useTranslation = (): UseTranslationReturn => {
     const localeKey = `_${locale}`
     return {
       key: row.key,
-      translation: row[localeKey] || '',
+      translation: (row[localeKey] ?? '') as string,
       type: row.type
     }
   }

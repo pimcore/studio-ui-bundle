@@ -12,7 +12,7 @@ import React from 'react'
 import { type CellContext } from '@tanstack/react-table'
 import { Flex, IconButton } from '@sdk/components'
 import { useTranslation } from '../hooks/use-translation'
-import { type TranslationRow } from '../translations-container'
+import { type TranslationRow } from '../helpers/translation-helpers'
 
 type TranslationRowWithActions = TranslationRow & { actions: React.ReactNode }
 

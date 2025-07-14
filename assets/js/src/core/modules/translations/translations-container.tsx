@@ -23,73 +23,13 @@ import { type Translations, useTranslationGetListQuery, useTranslationGetDomains
 import { useTranslation } from './hooks/use-translation'
 import { Table } from './table/table'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
-
-export type TranslationDataItem = {
-  key: string
-  type: string
-} & Record<`_${string}`, string>
-
-export type TranslationRow = TranslationDataItem & {
-  rowId: string
-}
-
-const getAvailableLocales = (translations: Translations[]): string[] => {
-  if (translations.length === 0) return []
-
-  const localeSet = new Set<string>()
-
-  translations.forEach(translation => {
-    if (translation.translations && typeof translation.translations === 'object') {
-      Object.keys(translation.translations).forEach(locale => {
-        localeSet.add(locale)
-      })
-    }
-  })
-
-  return Array.from(localeSet).sort()
-}
-
-const translationsToRows = (translations: Translations[]): TranslationRow[] => {
-  return translations.map(translation => {
-    const row: TranslationRow = {
-      key: translation.key,
-      type: translation.type,
-      rowId: uuid()
-    }
-
-    if (translation.translations && typeof translation.translations === 'object') {
-      Object.entries(translation.translations).forEach(([locale, value]) => {
-        row[`_${locale}`] = String(value || '')
-      })
-    }
-
-    return row
-  })
-}
-
-const translationToRows = (translationObj: any): TranslationRow[] => {
-  if (Array.isArray(translationObj)) {
-    return translationObj.map(item => ({
-      ...item,
-      rowId: uuid()
-    }))
-  }
-
-  if ('locale' in translationObj && 'keys' in translationObj && typeof translationObj.keys === 'object' && !Array.isArray(translationObj.keys)) {
-    const locale = translationObj.locale
-    const translationType = translationObj.type
-    const keysObject = translationObj.keys as Record<string, string>
-
-    return Object.entries(keysObject).map(([key, value]) => ({
-      key,
-      type: translationType,
-      [`_${locale}`]: value || '',
-      rowId: uuid()
-    }))
-  }
-
-  return []
-}
+import {
+  getAvailableLocales,
+  translationsToRows,
+  translationDataToRow,
+  type TranslationDataItem,
+  type TranslationRow
+} from './helpers/translation-helpers'
 
 interface FormValues {
   translationKey: string
@@ -161,9 +101,9 @@ export const TranslationsContainer = (): React.JSX.Element => {
 
     const { success, data } = await createNewTranslation(translationKey)
     if (success && data !== undefined) {
-      const newRows = translationToRows(data)
+      const newRow = translationDataToRow(data)
       setTranslationRows(prev => [
-        ...newRows,
+        newRow,
         ...prev
       ])
       setTotalItems(prev => prev + 1)

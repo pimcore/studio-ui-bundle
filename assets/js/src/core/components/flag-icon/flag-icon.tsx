@@ -20,7 +20,7 @@ interface IFlagIconProps {
 const importFlag = async (countryCode: string): Promise<React.ReactElement | null> => {
   try {
     const module = await import(`@Pimcore/assets/images/flags/${countryCode}.inline.svg?react`)
-    return module.default || module
+    return module.default !== undefined ? module.default : module
   } catch {
     return null
   }
@@ -41,22 +41,30 @@ export const FlagIcon = ({ value, width = 21, height = 15 }: IFlagIconProps): Re
       return
     }
 
-    importFlag(countryCode).then(component => {
-      flagCache[countryCode] = component
-      setFlag(component)
-      setLoading(false)
-    })
+    const loadFlag = async (): Promise<void> => {
+      try {
+        const component = await importFlag(countryCode)
+        flagCache[countryCode] = component
+        setFlag(component)
+      } catch (error) {
+        console.error(`Failed to import flag for ${countryCode}:`, error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    void loadFlag()
   }, [value])
 
   if (loading) return <div style={ { width, height, background: '#f0f0f0' } } />
 
-  if (!flag || !React.isValidElement(flag)) {
+  if (flag === null || !React.isValidElement(flag)) {
     return <UnknownFlag style={ { width, height } } />
   }
 
-  return React.cloneElement(flag, {
+  return React.cloneElement(flag as React.ReactElement<any>, {
     style: { width, height },
     width: width.toString(),
     height: height.toString()
-  } as any)
+  })
 }

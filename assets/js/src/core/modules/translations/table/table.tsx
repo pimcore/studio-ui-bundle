@@ -14,7 +14,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation as useI18n } from 'react-i18next'
 import { type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
-import { type TranslationRow } from '../translations-container'
+import { type TranslationRow } from '../helpers/translation-helpers'
 import { useTranslation } from '../hooks/use-translation'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
@@ -41,8 +41,8 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
 
   const settings = useSettings()
 
-  const availableLanguages = settings?.availableAdminLanguages || []
-  const validLanguages: string[] = settings?.validLanguages || []
+  const availableLanguages = settings?.availableAdminLanguages ?? []
+  const validLanguages: string[] = settings?.validLanguages ?? []
 
   const languages: Language[] = validLanguages
     .filter(validLang => visibleLocales.includes(validLang))
