@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Card } from '@Pimcore/components/card/card'
 import {
   VideoFooter
@@ -72,17 +72,18 @@ export interface VideoProps {
 }
 
 export const Video = (props: VideoProps): React.JSX.Element => {
-  const [value, setValue] = React.useState<VideoValue | null>(props.value ?? null)
+  const videoValue = props.value ?? null
+
   const { t } = useTranslation()
   const { styles } = useStyles()
 
-  const emptyValue = (): void => {
-    setValue(null)
+  const handleChange = (value: VideoValue | null): void => {
+    props.onChange?.(value)
   }
 
-  useEffect(() => {
-    props.onChange?.(value)
-  }, [value])
+  const clearValue = (): void => {
+    props?.onChange?.(null)
+  }
 
   const width = toCssDimension(props.width, 300)
   const height = toCssDimension(props.height, 245)
@@ -90,20 +91,22 @@ export const Video = (props: VideoProps): React.JSX.Element => {
     <Card
       className={ cn('max-w-full', styles.video, props.className) }
       fitContent
-      footer={ <VideoFooter
-        allowedVideoTypes={ props.allowedVideoTypes }
-        disabled={ props.disabled }
-        emptyValue={ emptyValue }
-        key="video-footer"
-        onSave={ setValue }
-        value={ value }
-               /> }
+      footer={ (
+        <VideoFooter
+          allowedVideoTypes={ props.allowedVideoTypes }
+          disabled={ props.disabled }
+          emptyValue={ clearValue }
+          key="video-footer"
+          onSave={ handleChange }
+          value={ videoValue }
+        />)
+     }
     >
       <Droppable
         isValidContext={ (info: DragAndDropInfo) => props.disabled !== true }
         isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'video' }
         onDrop={ (info: DragAndDropInfo) => {
-          setValue({
+          handleChange({
             type: 'asset',
             data: {
               type: 'asset',
@@ -117,11 +120,11 @@ export const Video = (props: VideoProps): React.JSX.Element => {
       >
 
         { /* eslint-disable-next-line @typescript-eslint/prefer-optional-chain */
-          value !== null && value?.data !== null
+          videoValue !== null && videoValue?.data !== null
             ? (
               <VideoPreview
                 height={ height! }
-                value={ value }
+                value={ videoValue }
                 width={ width! }
               />
               )

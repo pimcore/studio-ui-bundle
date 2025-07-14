@@ -9,12 +9,12 @@
  */
 
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { type SaveTaskType } from '@Pimcore/modules/data-object/actions/save/use-save'
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 import { useDocumentHelper } from '@Pimcore/modules/document/hooks/use-document-helper'
 import { mapToElementType as mapType } from '@Pimcore/modules/element/utils/element-type'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 
 interface OpenElementWidgetProps {
   id: number
@@ -28,31 +28,12 @@ interface UseElementReturn {
 }
 
 export const useElementHelper = (): UseElementReturn => {
-  const { openAsset } = useAssetHelper()
-  const { openDataObject, executeDataObjectTask } = useDataObjectHelper()
-  const { openDocument, executeDocumentTask } = useDocumentHelper()
+  const { executeDataObjectTask } = useDataObjectHelper()
+  const { executeDocumentTask } = useDocumentHelper()
 
   async function openElement (props: OpenElementWidgetProps): Promise<void> {
-    const elementType = mapToElementType(props.type)
-    if (elementType === 'asset') {
-      openAsset({
-        config: {
-          id: props.id
-        }
-      })
-    } else if (elementType === 'data-object') {
-      void openDataObject({
-        config: {
-          id: props.id
-        }
-      })
-    } else if (elementType === 'document') {
-      void openDocument({
-        config: {
-          id: props.id
-        }
-      })
-    }
+    const { element } = getPimcoreStudioApi()
+    await element.openElement(props.id, props.type)
   }
 
   function mapToElementType (elementType: string, silent?: boolean): ElementType | undefined {

@@ -8,84 +8,76 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type AbstractDocumentEditableDefinition, type DynamicTypeDocumentEditableAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
-
-import { RenderEditable } from './render-editable'
-import React, { type RefObject } from 'react'
+import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
+import React, { useRef, useEffect, createRef } from 'react'
 import ReactDOM from 'react-dom'
-import { serviceIds, useInjection } from '@sdk/app'
+import { RenderEditable } from './render-editable'
+import { isNull, isUndefined } from 'lodash'
+import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
-import { isNull } from 'lodash'
-import { useDocumentEditor } from '../../provider/use-document-editor'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { useDocumentEditor } from '../../hooks/use-document-editor'
 
-export interface EditableRendererProps {
-  iframeRef: RefObject<HTMLIFrameElement>
-  styleSheet: CSSStyleSheet
+export interface EditablesRendererProps {
+  editableDefinitions: AbstractDocumentEditableDefinition[]
 }
 
-const getTargetContainer = (
-  targetElement: HTMLElement | null,
-  editableType: DynamicTypeDocumentEditableAbstract | undefined,
-  styleSheet: CSSStyleSheet
-): HTMLElement | null => {
-  if (isNull(targetElement)) {
-    return null
-  }
+export const EditablesRenderer = ({ editableDefinitions }: EditablesRendererProps): React.JSX.Element => {
+  const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
+  const apiInitialized = useRef(false)
+  const { initializeData, notifyReady } = useDocumentEditor()
+  const editableContainerRefs = useRef<Record<string, React.RefObject<HTMLDivElement>>>({})
 
-  if (editableType?.useShadowDom === false) {
-    return targetElement
-  }
-
-  const shadowRoot = targetElement.shadowRoot ?? targetElement.attachShadow({ mode: 'open' })
-
-  shadowRoot.adoptedStyleSheets = [styleSheet]
-
-  const shadowContainer = shadowRoot.querySelector('div') ?? document.createElement('div')
-  if (isNull(shadowContainer.parentElement)) {
-    shadowRoot.appendChild(shadowContainer)
-  }
-
-  return shadowContainer
-}
-
-const getInitialData = (editableDefinitions: AbstractDocumentEditableDefinition[]): Record<string, { type: string, data: any }> => {
-  const initialData: Record<string, any> = {}
-  editableDefinitions.forEach((editable) => {
-    initialData[editable.name] = {
-      type: editable.type,
-      data: editable.data ?? null
+  // Create refs for each editable if they don't exist
+  editableDefinitions.forEach(editable => {
+    if (isUndefined(editableContainerRefs.current[editable.id])) {
+      editableContainerRefs.current[editable.id] = createRef<HTMLDivElement>()
     }
   })
-  return initialData
-}
 
-interface DocumentEditorIframeWindow extends Window {
-  editableDefinitions?: AbstractDocumentEditableDefinition[]
-  clipboardData?: any
-}
+  const getInitialData = (editableDefinitions: AbstractDocumentEditableDefinition[]): Record<string, { type: string, data: any }> => {
+    const initialData: Record<string, any> = {}
+    editableDefinitions.forEach((editable) => {
+      const editableType = documentEditableRegistry.hasDynamicType(editable.type) ? documentEditableRegistry.getDynamicType(editable.type) : undefined
 
-export const EditablesRenderer = (props: EditableRendererProps): React.JSX.Element => {
-  const editableDefinitions: AbstractDocumentEditableDefinition[] = (props.iframeRef.current?.contentWindow as DocumentEditorIframeWindow | null)?.editableDefinitions ?? []
-  const iframeDocument = props.iframeRef.current?.contentDocument
-  const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
-  const { initializeData } = useDocumentEditor()
+      initialData[editable.name] = {
+        type: editable.type,
+        data: isUndefined(editableType) ? (editable.data ?? null) : editableType.transformValue(editable.data, editable)
+      }
+    })
+    return initialData
+  }
 
-  initializeData(getInitialData(editableDefinitions))
+  if (!apiInitialized.current) {
+    initializeData(getInitialData(editableDefinitions))
+    apiInitialized.current = true
+  }
+
+  // Notify parent that the iframe is ready after initialization
+  useEffect(() => {
+    if (apiInitialized.current) {
+      notifyReady()
+    }
+  }, [notifyReady])
 
   return (
     <>
-      {editableDefinitions.map((editable) => {
-        const targetElement = iframeDocument?.getElementById(editable.id) ?? null
-        const editableType = documentEditableRegistry.hasDynamicType(editable.type) ? documentEditableRegistry.getDynamicType(editable.type) : undefined
-        const targetContainer = getTargetContainer(targetElement, editableType, props.styleSheet)
+      {editableDefinitions.map(editable => {
+        const targetElement = document.getElementById(editable.id)
+        if (!isNull(targetElement)) {
+          // Assign the DOM element to the ref's current property
+          if (!isNull(editableContainerRefs.current[editable.id]) && isNull(editableContainerRefs.current[editable.id].current)) {
+            (editableContainerRefs.current[editable.id] as React.MutableRefObject<HTMLDivElement>).current = targetElement as HTMLDivElement
+          }
 
-        if (!isNull(targetContainer)) {
           return ReactDOM.createPortal(
-            <RenderEditable editableDefinition={ editable } />,
-            targetContainer
+            <RenderEditable
+              containerRef={ editableContainerRefs.current[editable.id] }
+              editableDefinition={ editable }
+            />,
+            targetElement
           )
         }
-
         return null
       })}
     </>

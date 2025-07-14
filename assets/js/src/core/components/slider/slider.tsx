@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React from 'react'
 import { Slider as OriginalSlider, type SliderSingleProps, Tooltip } from 'antd'
 import { formatNumber } from '@Pimcore/utils/number'
 import { Box } from '@Pimcore/components/box/box'
@@ -26,10 +26,9 @@ export type SliderProps = SliderSingleProps & {
 }
 
 export const Slider = (props: SliderProps): React.JSX.Element => {
-  const [value, setValue] = useState<SliderValue | null>(props.value ?? null)
+  const value = props.value ?? null
 
-  const onChange = (value: SliderValue): void => {
-    setValue(value)
+  const handleChange = (value: SliderValue): void => {
     if (props.onChange !== undefined) {
       props.onChange(value)
     }
@@ -50,7 +49,7 @@ export const Slider = (props: SliderProps): React.JSX.Element => {
         <OriginalSlider
           { ...props }
           className={ 'w-full' }
-          onChange={ onChange }
+          onChange={ handleChange }
           value={ value ?? undefined }
         />
 
@@ -59,7 +58,7 @@ export const Slider = (props: SliderProps): React.JSX.Element => {
           <Tooltip title={ t('set-to-null') }>
             <IconButton
               icon={ { value: 'trash' } }
-              onClick={ () => { setValue(null) } }
+              onClick={ () => { props.onChange?.(null) } }
               type={ 'default' }
               variant={ 'static' }
             />

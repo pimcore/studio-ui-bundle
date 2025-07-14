@@ -74,6 +74,7 @@ import deleteColumn from '@Pimcore/assets/icons/delete-column.inline.svg?react'
 import deleteRow from '@Pimcore/assets/icons/delete-row.inline.svg?react'
 import dependencies from '@Pimcore/assets/icons/dependencies.inline.svg?react'
 import details from '@Pimcore/assets/icons/details.inline.svg?react'
+import documentTypes from '@Pimcore/assets/icons/document-types.inline.svg?react'
 import document from '@Pimcore/assets/icons/document.inline.svg?react'
 import doubleArrowDown from '@Pimcore/assets/icons/double-arrow-down.inline.svg?react'
 import doubleArrowLeft from '@Pimcore/assets/icons/double-arrow-left.inline.svg?react'
@@ -184,6 +185,7 @@ import save from '@Pimcore/assets/icons/save.inline.svg?react'
 import schedule from '@Pimcore/assets/icons/schedule.inline.svg?react'
 import search from '@Pimcore/assets/icons/search.inline.svg?react'
 import segmentTagging from '@Pimcore/assets/icons/segment-tagging.inline.svg?react'
+import send03 from '@Pimcore/assets/icons/send-03.inline.svg?react'
 import seo from '@Pimcore/assets/icons/seo.inline.svg?react'
 import settings from '@Pimcore/assets/icons/settings.inline.svg?react'
 import share from '@Pimcore/assets/icons/share.inline.svg?react'
@@ -210,9 +212,11 @@ import uploadZip from '@Pimcore/assets/icons/upload-zip.inline.svg?react'
 import userSelect from '@Pimcore/assets/icons/user-select.inline.svg?react'
 import user from '@Pimcore/assets/icons/user.inline.svg?react'
 import usersX from '@Pimcore/assets/icons/users-x.inline.svg?react'
+import vector from '@Pimcore/assets/icons/vector.inline.svg?react'
 import video from '@Pimcore/assets/icons/video.inline.svg?react'
 import view from '@Pimcore/assets/icons/view.inline.svg?react'
 import warningCircle from '@Pimcore/assets/icons/warning-circle.inline.svg?react'
+import webSettings from '@Pimcore/assets/icons/web-settings.inline.svg?react'
 import webhook from '@Pimcore/assets/icons/webhook.inline.svg?react'
 import widget from '@Pimcore/assets/icons/widget.inline.svg?react'
 import workflow from '@Pimcore/assets/icons/workflow.inline.svg?react'
@@ -458,6 +462,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'details',
       component: details
+    })
+    iconLibrary.register({
+      name: 'document-types',
+      component: documentTypes
     })
     iconLibrary.register({
       name: 'document',
@@ -900,6 +908,10 @@ moduleSystem.registerModule({
       component: segmentTagging
     })
     iconLibrary.register({
+      name: 'send-03',
+      component: send03
+    })
+    iconLibrary.register({
       name: 'seo',
       component: seo
     })
@@ -1004,6 +1016,10 @@ moduleSystem.registerModule({
       component: usersX
     })
     iconLibrary.register({
+      name: 'vector',
+      component: vector
+    })
+    iconLibrary.register({
       name: 'video',
       component: video
     })
@@ -1014,6 +1030,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'warning-circle',
       component: warningCircle
+    })
+    iconLibrary.register({
+      name: 'web-settings',
+      component: webSettings
     })
     iconLibrary.register({
       name: 'webhook',

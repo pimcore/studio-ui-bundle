@@ -9,7 +9,7 @@
  */
 
 import { type Form, type FormItemProps } from 'antd'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { KeyedFormItemControl } from './keyed-form-item-control'
 
 export interface KeyedFormItemProps {
@@ -21,13 +21,13 @@ const KeyedFormItem = ({ Component, componentProps }: KeyedFormItemProps): React
   const { children, ...baseProps } = componentProps
   const currentChildren = children as unknown as React.ReactNode
 
-  return (
-  <Component { ...baseProps } >
-    <KeyedFormItemControl>
-      { currentChildren }
-    </KeyedFormItemControl>
-  </Component>
-  )
+  return useMemo(() => (
+    <Component { ...baseProps } >
+      <KeyedFormItemControl getValueFromEvent={ baseProps.getValueFromEvent }>
+        { currentChildren }
+      </KeyedFormItemControl>
+    </Component>
+  ), [baseProps.name])
 }
 
 const memoedKeyedFormItem = React.memo(KeyedFormItem);

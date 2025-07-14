@@ -32,6 +32,7 @@ export const tagNames = {
   DOCUMENT: 'DOCUMENT',
   DOCUMENT_DETAIL: 'DOCUMENT_DETAIL',
   DOCUMENT_TREE: 'DOCUMENT_TREE',
+  DOCUMENT_TYPES: 'DOCUMENT_TYPES',
   WORKFLOW: 'WORKFLOW',
   VERSIONS: 'VERSION',
   PROPERTIES: 'PROPERTIES',
@@ -41,12 +42,15 @@ export const tagNames = {
   NOTIFICATIONS: 'NOTIFICATIONS',
   NOTIFICATION_DETAILS: 'NOTIFICATION_DETAILS',
   AVAILABLE_TAGS: 'AVAILABLE_TAGS',
+  WEBSITE_SETTINGS: 'WEBSITE_SETTINGS',
   ELEMENT_TAGS: 'TAGS',
   ROLE: 'ROLE',
   PREDEFINED_ASSET_METADATA: 'PREDEFINED_ASSET_METADATA',
   CURRENT_USER_INFORMATION: 'CURRENT_USER_INFORMATION',
   EMAIL_BLOCKLIST: 'EMAIL_BLOCKLIST',
-  EMAIL_BLOCKLIST_DETAIL: 'EMAIL_BLOCKLIST_DETAIL'
+  EMAIL_BLOCKLIST_DETAIL: 'EMAIL_BLOCKLIST_DETAIL',
+  EMAIL_LOG: 'EMAIL_LOG',
+  EMAIL_LOG_DETAIL: 'EMAIL_LOG_DETAIL'
 }
 
 export const providingTags = {
@@ -76,12 +80,14 @@ export const providingTags = {
   DATA_OBJECT_GRID_ID: (id: number) => [tagNames.DATA_OBJECT, { type: tagNames.DATA_OBJECT_GRID, id }],
   DOCUMENT_DETAIL: () => [tagNames.DOCUMENT, tagNames.DOCUMENT_DETAIL],
   DOCUMENT_DETAIL_ID: (id: number) => [tagNames.DOCUMENT, { type: tagNames.DOCUMENT_DETAIL, id }],
+  DOCUMENT_TYPES: () => [tagNames.DOCUMENT_TYPES],
   DOCUMENT_TREE: () => [tagNames.DOCUMENT, tagNames.DOCUMENT_TREE],
   DOCUMENT_TREE_ID: (id: number) => [tagNames.DOCUMENT, { type: tagNames.DOCUMENT_TREE, id }],
   ELEMENT_DEPENDENCIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.DEPENDENCIES, elementType, id)],
   ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.WORKFLOW, elementType, id)],
   PROPERTY_DETAIL: (id: string) => [{ type: tagNames.PROPERTIES, id }],
   GLOBAL_PROPERTIES: () => [tagNames.PROPERTIES],
+  WEBSITE_SETTINGS: () => [tagNames.WEBSITE_SETTINGS],
   ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.PROPERTIES, elementType, id)],
   SCHEDULE_DETAIL: (id: number) => [{ type: tagNames.SCHEDULES, id }, tagNames.SCHEDULES],
   ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.SCHEDULES, elementType, id)],
@@ -97,7 +103,9 @@ export const providingTags = {
   PREDEFINED_ASSET_METADATA: () => [tagNames.PREDEFINED_ASSET_METADATA],
   CURRENT_USER_INFORMATION: () => [tagNames.CURRENT_USER_INFORMATION],
   EMAIL_BLOCKLIST: () => [tagNames.EMAIL_BLOCKLIST],
-  EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }]
+  EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }],
+  EMAIL_LOG: () => [tagNames.EMAIL_LOG],
+  EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }]
 }
 
 export const invalidatingTags = {
@@ -120,6 +128,7 @@ export const invalidatingTags = {
   DOCUMENT: () => [tagNames.DOCUMENT],
   DOCUMENT_DETAIL: () => [tagNames.DOCUMENT_DETAIL],
   DOCUMENT_DETAIL_ID: (id: number) => [{ type: tagNames.DOCUMENT_DETAIL, id }, elementUnspecificDataTag],
+  DOCUMENT_TYPES: () => [tagNames.DOCUMENT_TYPES],
   DOCUMENT_TREE: () => [tagNames.DOCUMENT_TREE],
   DOCUMENT_TREE_ID: (id: number) => [{ type: tagNames.DOCUMENT_TREE, id }],
   ELEMENT_DEPENDENCIES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.DEPENDENCIES, elementType, id)],
@@ -127,6 +136,7 @@ export const invalidatingTags = {
   PROPERTY_DETAIL: (id: string) => [{ type: tagNames.PROPERTIES, id }],
   ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.PROPERTIES, elementType, id)],
   GLOBAL_PROPERTIES: () => [tagNames.PROPERTIES],
+  WEBSITE_SETTINGS: () => [tagNames.WEBSITE_SETTINGS],
   SCHEDULE_DETAIL: (id: number) => [{ type: tagNames.SCHEDULES, id }],
   ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.SCHEDULES, elementType, id)],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
@@ -141,7 +151,9 @@ export const invalidatingTags = {
   PREDEFINED_ASSET_METADATA: () => [tagNames.PREDEFINED_ASSET_METADATA],
   ELEMENT_DETAIL: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
   EMAIL_BLOCKLIST: () => [tagNames.EMAIL_BLOCKLIST],
-  EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }]
+  EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }],
+  EMAIL_LOG: () => [tagNames.EMAIL_LOG],
+  EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }]
 }
 
 const elementUnspecificDataTag = tagNames.AVAILABLE_TAGS

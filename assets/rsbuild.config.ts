@@ -21,7 +21,7 @@ let env: 'development' | 'production' = 'production';
 const isDevServer = nodeEnv === 'dev-server';
 if (nodeEnv !== env) {
   env = 'development';
-  process.env.NODE_ENV = 'development'; 
+  process.env.NODE_ENV = 'development';
 }
 
 export default defineConfig({
@@ -36,11 +36,12 @@ export default defineConfig({
   source: {
     entry: {
       main: './js/src/core/main.ts',
+      documentEditorIframe: './js/src/core/modules/document/editor/shared-tab-manager/tabs/edit/iframe-app/main.ts'
     },
     decorators: {
       version: 'legacy'
     }
-  }, 
+  },
   output: {
     manifest: true,
     assetPrefix: '/bundles/pimcorestudioui/build/' + buildId,

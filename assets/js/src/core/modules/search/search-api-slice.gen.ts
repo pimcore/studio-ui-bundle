@@ -136,6 +136,48 @@ export type Column = {
     /** Group of the Column */
     group: string;
 };
+export type RelationFieldConfig = {
+    /** Relation Getter */
+    relation: string;
+    /** Field getter */
+    field: string;
+};
+export type SimpleFieldConfig = {
+    /** Field getter */
+    field: string;
+};
+export type StaticTextConfig = {
+    /** Static Text */
+    text: string;
+};
+export type Transformer = {
+    /** Key of the Transformer */
+    key: string;
+    /** Configuration for the transformer */
+    config?: object;
+};
+export type AdvancedColumnConfig = {
+    /** advancedColumns */
+    advancedColumns: {
+        /** Type of the column, e.g. "simpleField", "relationField", "staticText" */
+        key: string;
+        config: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
+    }[];
+    /** List if Transformers that should be applied */
+    transformers?: Transformer[];
+};
+export type GridColumnRequest = {
+    /** Key */
+    key?: string;
+    /** Locale */
+    locale?: string | null;
+    /** Type */
+    type: string;
+    /** Group */
+    group?: string | null;
+    /** Config */
+    config?: (string | AdvancedColumnConfig)[];
+};
 export type GridFilter = {
     /** Page */
     page: number;
@@ -168,7 +210,7 @@ export type GridDetailedConfiguration = {
     /** sharedRoles */
     sharedRoles: object;
     /** columns */
-    columns: Column[];
+    columns: (Column | GridColumnRequest)[];
     /** filter */
     filter: GridFilter[];
     /** Page Size */
@@ -226,44 +268,6 @@ export type Permissions = {
     /** Properties */
     properties: boolean;
 };
-export type RelationFieldConfig = {
-    /** Relation Getter */
-    relation: string;
-    /** Field getter */
-    field: string;
-};
-export type SimpleFieldConfig = {
-    /** Field getter */
-    field: string;
-};
-export type StaticTextConfig = {
-    /** Static Text */
-    text: string;
-};
-export type Transformer = {
-    /** Key of the Transformer */
-    key: string;
-    /** Configuration for the transformer */
-    config?: object;
-};
-export type AdvancedColumnConfig = {
-    /** advancedColumns */
-    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
-    /** List if Transformers that should be applied */
-    transformers?: Transformer[];
-};
-export type GridColumnRequest = {
-    /** Key */
-    key: string;
-    /** Locale */
-    locale?: string | null;
-    /** Type */
-    type: string;
-    /** Group */
-    group?: string | null;
-    /** Config */
-    config: (string | AdvancedColumnConfig)[];
-};
 export type SimpleSearchDetail = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -308,7 +312,7 @@ export type SimpleSearchPageDetail = {
     /** Navigation name */
     name: string | null;
     /** Has Preview image */
-    hasPreviewImage?: boolean;
+    hasPreviewImage: boolean;
 };
 export type SimpleSearchDocumentDetail = SimpleSearchDetail & {
     /** Document Language */

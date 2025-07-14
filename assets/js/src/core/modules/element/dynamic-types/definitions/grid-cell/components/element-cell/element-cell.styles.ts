@@ -17,19 +17,23 @@ export const useStyle = createStyles(({ css, token }) => {
     `,
     link: css`
       display: flex;
+      justify-content: space-between;
       gap: 8px;
       width: 100%;
       
       .ant-tag {
+        display: flex;
+        align-items: center;
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 100%;
         cursor: pointer;
       }
     `,
-    dropTargetIcon: css`
-      margin-left: auto;
-      margin-top: 4px
+    elementOptionsIcon: css`
+      margin-left: 4px;
+      margin-top: 4px;
+      margin-right: 2px;
     `
   }
 })

@@ -8,22 +8,20 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import cn from 'classnames'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
-import {
-  LinkModal
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/modal'
-import _ from 'lodash'
+import { isEmpty } from 'lodash'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import {
   convertType
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/utils/link-value-converter'
 import { useStyles } from './link.styles'
 import { LinkPreview } from './components/link-preview/link-preview'
+import { useLinkModal } from './hooks/use-link-modal'
 
 export interface LinkValue {
   text: string
@@ -52,35 +50,30 @@ export interface LinkProps {
   allowedTargets: string[]
   disabledFields: string[]
   className?: string
+  textPrefix?: string
+  textSuffix?: string
 }
 
 export const Link = (props: LinkProps): React.JSX.Element => {
-  const [value, setValue] = useState<LinkValue | null>(props.value ?? null)
-  const [isModalVisible, setIsModalVisible] = useState(false)
-
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { openElement } = useElementHelper()
 
-  useEffect(() => {
-    if (props.onChange !== undefined) {
-      props.onChange(value)
-    }
-  }, [value])
+  const value = props.value ?? null
 
-  const showModal = (): void => {
-    setIsModalVisible(true)
-  }
-
-  const hideModal = (): void => {
-    setIsModalVisible(false)
-  }
+  const { openModal } = useLinkModal({
+    disabled: props.disabled,
+    allowedTypes: props.allowedTypes,
+    allowedTargets: props.allowedTargets,
+    disabledFields: props.disabledFields,
+    onSave: props.onChange
+  })
 
   const openLink = (): void => {
     if (value === null) {
       return
     }
-    if (value.linktype === 'direct' && value.direct !== null && !_.isEmpty(value.direct)) {
+    if (value.linktype === 'direct' && value.direct !== null && !isEmpty(value.direct)) {
       window.open(value.direct, '_blank')
     }
 
@@ -97,6 +90,10 @@ export const Link = (props: LinkProps): React.JSX.Element => {
     }
   }
 
+  const showModal = (): void => {
+    openModal(value)
+  }
+
   return (
     <Flex
       align="center"
@@ -106,6 +103,8 @@ export const Link = (props: LinkProps): React.JSX.Element => {
       <LinkPreview
         className="studio-inherited-overlay"
         inherited={ props.inherited }
+        textPrefix={ props.textPrefix }
+        textSuffix={ props.textSuffix }
         value={ value }
       />
 
@@ -114,7 +113,7 @@ export const Link = (props: LinkProps): React.JSX.Element => {
         title={ t('open') }
       >
         <IconButton
-          disabled={ value === null || _.isEmpty(value.fullPath) }
+          disabled={ value === null || isEmpty(value.fullPath) }
           icon={ { value: 'open-folder' } }
           onClick={ openLink }
           type="default"
@@ -146,17 +145,6 @@ export const Link = (props: LinkProps): React.JSX.Element => {
             />
           </Tooltip>
           ) }
-
-      <LinkModal
-        allowedTargets={ props.allowedTargets }
-        allowedTypes={ props.allowedTypes }
-        disabled={ props.disabled }
-        disabledFields={ props.disabledFields }
-        onClose={ hideModal }
-        onSave={ setValue }
-        open={ isModalVisible }
-        value={ value }
-      />
 
     </Flex>
   )

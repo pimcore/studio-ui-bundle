@@ -9,11 +9,13 @@ error.error_invalid_argument: Invalid argument
 error.error_widget_name_missing: Widget name have to be provided
 error.error_widget_name_invalid: Widget name is invalid (only alphanumeric characters, underscores and spaces are allowed, must be at least 3 characters long and less than 80 long)
 error.error_validation_failed: Validation failed
+error.error_validation.email_failed: Please enter a valid email address
 error.error_element_not_found: Element not found
 sidebar.selected_elements: Selected Elements
 sidebar.grid_config: Grid config
 sidebar.tag_filters: Tag Filters
 sidebar.search_filter: Search & Filter
+site-domain.main_site: Main Site
 modal-search.field.mimeType: MIME-Type
 modal-search.field.thumbnail: Thumbnail
 modal-search.field.id: ID
@@ -280,6 +282,27 @@ notes-and-events.columns.details: Details
 notes-and-events.columns.user: User
 notes-and-events.columns.date: Date
 notes-and-events.columns.actions: Actions
+website-settings.columns.type: Type
+website-settings.columns.name: Name
+website-settings.columns.language: Language
+website-settings.columns.value: Value
+website-settings.columns.site: Site
+website-settings.columns.actions: Actions
+website-settings.website-settings-already-exist.title: Website Setting already exists
+website-settings.website-settings-already-exist.error: Name is already in use, please choose a different one
+website-settings.website-settings.add-entry-mandatory-fields-missing.title: Mandatory fields missing
+website-settings.website-settings.add-entry-mandatory-fields-missing.error: Name and type are mandatory fields and need to be filled out.
+document-types.new: New
+document-types.columns.name: Name
+document-types.columns.group: Group
+document-types.columns.controller: Controller
+document-types.columns.template: Template
+document-types.columns.type: Type
+document-types.columns.static: Static
+document-types.columns.priority: Priority
+document-types.columns.creation-date: Creation Date
+document-types.columns.modification-date: Modification Date
+document-types.columns.actions: Actions
 properties.label: Properties
 properties.editable-properties: Editable Properties
 properties.all-properties: All Properties
@@ -567,48 +590,48 @@ user-management.tree.all: All Users
 user-management.settings.title: Settings
 user-management.workspaces.title: Workspaces
 user-management.key-bindings.title: Key Bindings
-user-management.key-bindings.info: Please don’t forget to reload Pimcore after your modification!
-user-management.key-bindings.reset: Reset to default
-user-management.key-bindings.general: General
-user-management.key-bindings.save: Save
-user-management.key-bindings.publish: Publish
-user-management.key-bindings.unpublish: Unpublish
-user-management.key-bindings.rename: Rename
-user-management.key-bindings.refresh: Refresh
-user-management.key-bindings.navigation: Navigation
-user-management.key-bindings.openDocument: Open Document
-user-management.key-bindings.openAsset: Open Asset
-user-management.key-bindings.openObject: Open Object
-user-management.key-bindings.openClassEditor: Open Class Editor
-user-management.key-bindings.openInTree: Open in Tree
-user-management.key-bindings.closeAllTabs: Close All Tabs
-user-management.key-bindings.searchDocument: Search Document
-user-management.key-bindings.searchAsset: Search Asset
-user-management.key-bindings.searchObject: Search Object
-user-management.key-bindings.searchAndReplaceAssignments: Search and Replace Assignments
-user-management.key-bindings.quickSearch: Quick Search
-user-management.key-bindings.system: System
-user-management.key-bindings.showMetaInfo: Show Meta Info
-user-management.key-bindings.showElementHistory: Show Element History
-user-management.key-bindings.sharedTranslations: Shared Translations
-user-management.key-bindings.recycleBin: Recycle Bin
-user-management.key-bindings.notesEvents: Notes & Events
-user-management.key-bindings.tagManager: Tag Manager
-user-management.key-bindings.tagConfiguration: Tag Configuration
-user-management.key-bindings.user: User
-user-management.key-bindings.users: Users
-user-management.key-bindings.role: Role
-user-management.key-bindings.roles: Roles
-user-management.key-bindings.clearAllCaches: Clear All Caches
-user-management.key-bindings.clearDataCache: Clear Data Cache
-user-management.key-bindings.customReports: Custom Reports
-user-management.key-bindings.reports: Reports
-user-management.key-bindings.applicationLogger: Application Logger
-user-management.key-bindings.glossary: Glossary
-user-management.key-bindings.seoDocumentEditor: SEO Document Editor
-user-management.key-bindings.robots: Robots
-user-management.key-bindings.httpErrorLog: HTTP Error Log
-user-management.key-bindings.redirects: redirects
+key-bindings.info: Please don’t forget to reload Pimcore after your modification!
+key-bindings.reset: Reset to default
+key-bindings.general: General
+key-bindings.save: Save
+key-bindings.publish: Publish
+key-bindings.unpublish: Unpublish
+key-bindings.rename: Rename
+key-bindings.refresh: Refresh
+key-bindings.navigation: Navigation
+key-bindings.openDocument: Open Document
+key-bindings.openAsset: Open Asset
+key-bindings.openObject: Open Object
+key-bindings.openClassEditor: Open Class Editor
+key-bindings.openInTree: Open in Tree
+key-bindings.closeAllTabs: Close All Tabs
+key-bindings.searchDocument: Search Document
+key-bindings.searchAsset: Search Asset
+key-bindings.searchObject: Search Object
+key-bindings.searchAndReplaceAssignments: Search and Replace Assignments
+key-bindings.quickSearch: Quick Search
+key-bindings.system: System
+key-bindings.showMetaInfo: Show Meta Info
+key-bindings.showElementHistory: Show Element History
+key-bindings.sharedTranslations: Shared Translations
+key-bindings.recycleBin: Recycle Bin
+key-bindings.notesEvents: Notes & Events
+key-bindings.tagManager: Tag Manager
+key-bindings.tagConfiguration: Tag Configuration
+key-bindings.user: User
+key-bindings.users: Users
+key-bindings.role: Role
+key-bindings.roles: Roles
+key-bindings.clearAllCaches: Clear All Caches
+key-bindings.clearDataCache: Clear Data Cache
+key-bindings.customReports: Custom Reports
+key-bindings.reports: Reports
+key-bindings.applicationLogger: Application Logger
+key-bindings.glossary: Glossary
+key-bindings.seoDocumentEditor: SEO Document Editor
+key-bindings.robots: Robots
+key-bindings.httpErrorLog: HTTP Error Log
+key-bindings.redirects: redirects
 user-management.references.title: References
 user-management.references.documents: Documents
 user-management.references.columns.id: ID
@@ -681,8 +704,11 @@ roles.remove-folder.success: Folder removed successfully
 roles.remove-item.success: Role removed successfully
 roles.add-item.success: Role added successfully
 roles.add-folder.success: Folder added successfully
+navigation.website-settings: Website Settings
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
+navigation.marketing: Marketing
+navigation.reports: Reports
 navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
 navigation.customise: Customise
@@ -699,6 +725,7 @@ navigation.file: File
 navigation.settings: Settings
 navigation.tools: Tools
 predefined-properties.new: New
+website-settings.new: Add
 predefined-properties.type: Type
 predefined-properties.name: Name
 perspective.default: Default
@@ -707,6 +734,8 @@ perspective.switching.description: Currently switching to the following perspect
 widget.notes-and-events: Notes & Events
 widget.tag-configuration: Tag Configuration
 widget.predefined-properties: Predefined Properties
+widget.document-types: Document Types
+widget.website-settings: Website Settings
 widget.role-management: Roles
 widget.user-management: Users
 external-image.preview-placeholder: Add an external image
@@ -822,7 +851,11 @@ user-menu.notification.modal.add-an-attachment: Add an attachment
 user-menu.notification.modal.form.validation.provide-recipient: Please provide a recipient
 user-menu.notification.modal.form.validation.provide-title: Please provide a title
 user-menu.notification.modal.form.validation.provide-message: Please provide a message
+reports.report-name: Name of the report
+reports.select-report-name: Select the name of the report
+reports.select-report: Select report
 loading: Loading...
+please-wait: Please wait...
 navigation.email: Email
 navigation.email-blocklist: Email Blocklist
 widget.email-blocklist: Email Blocklist
@@ -832,3 +865,46 @@ email-blocklist.add.label: Add Email Address
 email-blocklist.add.email-address.label: Email Address
 email-blocklist.add.email.success: Email address has been added successfully
 aria.email-blocklist.remove.email: Remove email address
+navigation.email-log: Sent Emails
+widget.email-log: Sent Emails
+widget.email-log.from: From
+widget.email-log.to: To
+widget.email-log.cc: CC
+widget.email-log.bcc: BCC
+widget.email-log.tab.text: Text
+widget.email-log.tab.html: HTML
+widget.email-log.tab.parameters: Parameters
+widget.email-log.grid.name: Name
+widget.email-log.grid.value: Value
+email-log.subject: Subject
+email-log.resend.email.success: Email has been resent successfully
+email-log.resend.confirmation.title: Resend Email
+email-log.resend.confirmation.text: Please confirm that you want to send the email again to all recipients.
+email-log.resend.confirmation.ok: Resend Email
+email-log.forward.email.success: Email has been forwarded successfully
+email-log.forward.label: Forward Email
+email-log.send.label: Send
+email-log.forward.email-address.label: Email Address
+email-log.delete.email.success: Email has been deleted successfully
+aria.email-log.html.preview: HTML Preview
+user-profile.label: My Profile
+user-profile.general: General Data
+user-profile.change-password: Change Password
+user-profile.password-old: Old Password
+user-profile.password-new: New Password
+user-profile.password-repeat: Repeat Password
+user-profile.password-repeat-error: Passwords do not match
+creatable-select.add-custom-option: Add custom option
+creatable-select.add: Add
+creatable-select.option-already-exists: Option already exists
+embed.url-modal.title: Edit Embed URL
+embed.url-modal.label: URL (eg. https://www.youtube.com/watch?v=nPntDiARQYw)
+embed.url-modal.required-message: Please enter a valid URL
+embed.url-modal.ok-text: OK
+embed.url-modal.cancel-text: Cancel
+embed.placeholder: No URL set - Click to add an embed URL
+embed.add-url: Add URL
+embed.edit-url: Edit URL
+embed.clear: Clear
+embed.loading: Loading...
+embed.iframe-title: Embedded content

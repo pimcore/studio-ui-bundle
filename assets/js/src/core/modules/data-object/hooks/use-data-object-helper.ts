@@ -8,22 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { store, useAppDispatch } from '@Pimcore/app/store'
+import { store } from '@Pimcore/app/store'
+import { type EditorContainerProps } from '../editor/editor-container'
 import { setNodeLoadingInAllTree, setNodePublished } from '@Pimcore/components/element-tree/element-tree-slice'
-import { type IconProps } from '@Pimcore/components/icon/icon'
-import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
-import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { api } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
-import { getElementIcon } from '@Pimcore/modules/element/element-helper'
-import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
-import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 import { SaveTaskType } from '../actions/save/use-save'
 import { useDataObjectUpdateByIdMutation } from '../data-object-api-slice.gen'
 import { publishDraft, unpublishDraft } from '../data-object-draft-slice'
-import { type EditorContainerProps } from '../editor/editor-container'
-import { useDataObjectDraftFetcher } from './use-data-object-draft-fetcher'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 
 interface OpenDataObjectWidgetProps {
   config: EditorContainerProps
@@ -35,43 +27,13 @@ interface UseDataObjectReturn {
 }
 
 export const useDataObjectHelper = (): UseDataObjectReturn => {
-  const { openMainWidget, isMainWidgetOpen } = useWidgetManager()
-  const dispatch = useAppDispatch()
+  const dispatch = store.dispatch
   const [update] = useDataObjectUpdateByIdMutation()
-  const { updateDataObjectDraft } = useDataObjectDraftFetcher()
 
   async function openDataObject (props: OpenDataObjectWidgetProps): Promise<void> {
     const { config } = props
-    const widgetId = getWidgetId('data-object', config.id)
-
-    if (!isMainWidgetOpen(widgetId)) {
-      dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_DETAIL_ID(config.id)))
-      void updateDataObjectDraft(config.id, true)
-    }
-
-    const { data } = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id: config.id }))
-
-    if (
-      data === undefined ||
-      !checkElementPermission(data.permissions, 'view')) {
-      return
-    }
-
-    const icon = getElementIcon(data, { value: 'widget', type: 'name' })
-    const iconConfig: IconProps & ElementIcon = {
-      type: icon.type,
-      value: icon.value
-    }
-
-    openMainWidget({
-      name: data?.key,
-      id: widgetId,
-      component: 'data-object-editor',
-      config: {
-        ...config,
-        icon: iconConfig
-      }
-    })
+    const { element } = getPimcoreStudioApi()
+    await element.openDataObject(config.id)
   }
 
   const executeDataObjectTask = async (id: number, task: SaveTaskType, onFinish?: () => void): Promise<void> => {

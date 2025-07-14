@@ -33,6 +33,20 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/notifications/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Notifications"],
             }),
+            notificationGetUnreadCount: build.query<
+                NotificationGetUnreadCountApiResponse,
+                NotificationGetUnreadCountApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/notifications/unread-count` }),
+                providesTags: ["Notifications"],
+            }),
+            notificationGetRecipients: build.query<
+                NotificationGetRecipientsApiResponse,
+                NotificationGetRecipientsApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/notifications/recipients` }),
+                providesTags: ["Notifications"],
+            }),
             notificationSend: build.mutation<NotificationSendApiResponse, NotificationSendApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/notifications/send`,
@@ -76,6 +90,15 @@ export type NotificationDeleteByIdApiArg = {
     /** Id of the notification */
     id: number;
 };
+export type NotificationGetUnreadCountApiResponse =
+    /** status 200 Count of unread notifications for the current user */ UnreadCount;
+export type NotificationGetUnreadCountApiArg = void;
+export type NotificationGetRecipientsApiResponse =
+    /** status 200 List of notification recipients for the current user */ {
+        totalItems: number;
+        items: Recipient[];
+    };
+export type NotificationGetRecipientsApiArg = void;
 export type NotificationSendApiResponse = unknown;
 export type NotificationSendApiArg = {
     sendNotificationParameters: SendEmailParameters;
@@ -122,6 +145,20 @@ export type Notification = NotificationListItem & {
     /** linked attachment fullPath */
     attachmentFullPath: string | null;
 };
+export type UnreadCount = {
+    /** Count of unread notifications */
+    unreadNotificationsCount: number;
+};
+export type Recipient = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID of the Recipient */
+    id: number;
+    /** User name or Group Name of the Recipient */
+    recipientName: string;
+};
 export type SendEmailParameters = {
     /** recipient ID */
     recipientId: number;
@@ -140,5 +177,7 @@ export const {
     useNotificationGetByIdQuery,
     useNotificationReadByIdMutation,
     useNotificationDeleteByIdMutation,
+    useNotificationGetUnreadCountQuery,
+    useNotificationGetRecipientsQuery,
     useNotificationSendMutation,
 } = injectedRtkApi;

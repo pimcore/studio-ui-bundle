@@ -79,7 +79,7 @@ const injectedRtkApi = api
                 AssetDeleteGridConfigurationByConfigurationIdApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/grid/configuration/${queryArg.configurationId}`,
+                    url: `/pimcore-studio/api/assets/grid/configuration/${queryArg.configurationId}/delete`,
                     method: "DELETE",
                 }),
                 invalidatesTags: ["Asset Grid"],
@@ -457,8 +457,6 @@ export type AssetGetSavedGridConfigurationsApiArg = void;
 export type AssetSaveGridConfigurationApiResponse =
     /** status 200 Asset grid configuration saved successfully */ GridConfiguration;
 export type AssetSaveGridConfigurationApiArg = {
-    /** FolderId of the folder */
-    folderId: number;
     body: {
         folderId: number;
         pageSize: number;
@@ -510,7 +508,7 @@ export type AssetGetGridApiResponse = /** status 200 Asset grid data */ {
 export type AssetGetGridApiArg = {
     body: {
         folderId: number;
-        columns: GridColumnRequest[];
+        columns?: GridColumnRequest[];
         filters?: GridFilter;
     };
 };
@@ -554,7 +552,7 @@ export type AssetImageStreamCustomApiArg = {
     frame?: boolean;
     /** Cover */
     cover?: boolean;
-    /** ForceResize */
+    /** Force resize */
     forceResize?: boolean;
     cropPercent?: boolean;
     /** CropWidth of downloaded image */
@@ -923,9 +921,9 @@ export type UpdateDataProperty = {
     inheritable: boolean;
 };
 export type FocalPoint = {
-    /** x */
+    /** x Coordinate of FocalPoint */
     x: number;
-    /** y */
+    /** y Coordinate of FocalPoint */
     y: number;
 };
 export type ImageData = {
@@ -939,6 +937,48 @@ export type Column = {
     locale: string | null;
     /** Group of the Column */
     group: string;
+};
+export type RelationFieldConfig = {
+    /** Relation Getter */
+    relation: string;
+    /** Field getter */
+    field: string;
+};
+export type SimpleFieldConfig = {
+    /** Field getter */
+    field: string;
+};
+export type StaticTextConfig = {
+    /** Static Text */
+    text: string;
+};
+export type Transformer = {
+    /** Key of the Transformer */
+    key: string;
+    /** Configuration for the transformer */
+    config?: object;
+};
+export type AdvancedColumnConfig = {
+    /** advancedColumns */
+    advancedColumns: {
+        /** Type of the column, e.g. "simpleField", "relationField", "staticText" */
+        key: string;
+        config: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
+    }[];
+    /** List if Transformers that should be applied */
+    transformers?: Transformer[];
+};
+export type GridColumnRequest = {
+    /** Key */
+    key?: string;
+    /** Locale */
+    locale?: string | null;
+    /** Type */
+    type: string;
+    /** Group */
+    group?: string | null;
+    /** Config */
+    config?: (string | AdvancedColumnConfig)[];
 };
 export type GridDetailedConfiguration = {
     /** AdditionalAttributes */
@@ -960,7 +1000,7 @@ export type GridDetailedConfiguration = {
     /** sharedRoles */
     sharedRoles: object;
     /** columns */
-    columns: Column[];
+    columns: (Column | GridColumnRequest)[];
     /** filter */
     filter: GridFilter[];
     /** Page Size */
@@ -1027,44 +1067,6 @@ export type GridColumnData = {
     value?: any | null;
     /** inheritance */
     inheritance?: object | null;
-};
-export type RelationFieldConfig = {
-    /** Relation Getter */
-    relation: string;
-    /** Field getter */
-    field: string;
-};
-export type SimpleFieldConfig = {
-    /** Field getter */
-    field: string;
-};
-export type StaticTextConfig = {
-    /** Static Text */
-    text: string;
-};
-export type Transformer = {
-    /** Key of the Transformer */
-    key: string;
-    /** Configuration for the transformer */
-    config?: object;
-};
-export type AdvancedColumnConfig = {
-    /** advancedColumns */
-    advancedColumn?: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
-    /** List if Transformers that should be applied */
-    transformers?: Transformer[];
-};
-export type GridColumnRequest = {
-    /** Key */
-    key: string;
-    /** Locale */
-    locale?: string | null;
-    /** Type */
-    type: string;
-    /** Group */
-    group?: string | null;
-    /** Config */
-    config: (string | AdvancedColumnConfig)[];
 };
 export type PatchCustomMetadata = {
     /** Name */

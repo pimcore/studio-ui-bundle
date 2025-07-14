@@ -49,9 +49,9 @@ export const DataObjectAdapterCell = (props: DataObjectAdapterCellProps): React.
 
   const fieldDefinition = config?.fieldDefinition ?? {}
   const column = decodeColumnIdentifier(props.column.id)
-  const apiColumns = props.row.original['__api-data']
+  const apiColumns = props?.row?.original?.['__api-data']
 
-  const currentApiColumn = apiColumns.columns.find((apiColumn) => {
+  const currentApiColumn = apiColumns?.columns?.find((apiColumn) => {
     return apiColumn.key === column?.key
   })
 

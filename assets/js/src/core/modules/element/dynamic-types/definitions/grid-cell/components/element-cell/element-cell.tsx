@@ -35,6 +35,8 @@ export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
   const styles = useStyle().styles
   const { column } = props
   const editable = Boolean(props.column.columnDef.meta?.editable ?? true)
+  const clearable = Boolean(props.column.columnDef.meta?.clearable ?? true)
+  const showPublishedState = Boolean(props.column.columnDef.meta?.showPublishedState ?? true)
   const config = column.columnDef.meta?.config as ElementCellConfig | null ?? {
     allowedTypes: ['asset', 'data-object', 'document']
   }
@@ -50,7 +52,7 @@ export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
       props.table.options.meta?.onUpdateCellData({
         rowIndex: props.row.index,
         columnId: props.column.id,
-        value: convertDragAndDropInfoToElementReference(info),
+        value: convertDragAndDropInfoToElementReference(info, showPublishedState),
         rowData: props.row.original
       })
     }
@@ -67,6 +69,7 @@ export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
     >
       <ElementCellContent
         { ...props }
+        clearDisabled={ !clearable }
         dropDisabled={ dropDisabled }
         getElementInfo={ config.getElementInfo }
       />

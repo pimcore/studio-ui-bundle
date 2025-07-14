@@ -12,6 +12,7 @@ import React, { Children, isValidElement, useEffect, useMemo } from 'react'
 import { useNumberedList } from '../provider/numbered-list/use-numbered-list'
 import { useItem } from '../../item/provider/item/use-item'
 import { type FormItemProps } from 'antd'
+import { isUndefined } from 'lodash'
 
 export interface NumberedFormItemControlProps {
   children: React.ReactNode
@@ -22,8 +23,11 @@ export interface NumberedFormItemControlProps {
 }
 
 export const NumberedFormItemControl = ({ children, onChange: baseOnChange, value: baseValue, ...props }: NumberedFormItemControlProps): React.JSX.Element => {
+  const { getValueFromEvent } = props
+
   const { operations, getAdditionalComponentProps } = useNumberedList()
   const { name } = useItem()
+
   const Child = Children.only(children)
   const value = operations.getValue(name)
 
@@ -32,12 +36,11 @@ export const NumberedFormItemControl = ({ children, onChange: baseOnChange, valu
   }, [])
 
   const onChange: NumberedFormItemControlProps['onChange'] = (value: any) => {
-    if (value?.target !== undefined && typeof value.target === 'object') {
-      operations.update(name, value.target.value, false)
-      return
-    }
+    const changedValue = !isUndefined(getValueFromEvent)
+      ? getValueFromEvent(value)
+      : value?.target?.value ?? value
 
-    operations.update(name, value, false)
+    operations.update(name, changedValue, false)
   }
 
   if (!isValidElement(Child)) {

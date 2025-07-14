@@ -27,6 +27,7 @@ interface UseValueReturn {
   onDrop: (info: DragAndDropInfo) => void
   deleteItem: (rowIndex: number) => void
   onSearch: (searchTerm: string) => void
+  onOrderChange: (data: ManyToManyRelationValue) => void
   addItems: (items: ManyToManyRelationValueItem[]) => void
   addAssets: (assets: Asset[]) => Promise<void>
   maxRemainingItems?: number
@@ -96,6 +97,14 @@ export const useValue = (
         isPublished: null,
         fullPath: info.data.fullPath
       }
+    } else if (info.type === 'document') {
+      newValue = {
+        id: info.data.id,
+        type: info.type,
+        subtype: info.data.type,
+        isPublished: info.data.published,
+        fullPath: info.data.fullPath
+      }
     }
 
     if (newValue === undefined) {
@@ -143,12 +152,18 @@ export const useValue = (
     addItems(items)
   }
 
+  const onOrderChange = (data: ManyToManyRelationValue): void => {
+    setValue(data)
+    setDisplayedValue(data)
+  }
+
   const maxRemainingItems = maxItems === null ? undefined : Math.max(maxItems - (value?.length ?? 0), 0)
 
   return {
     onDrop,
     deleteItem,
     onSearch,
+    onOrderChange,
     addItems,
     addAssets,
     maxRemainingItems

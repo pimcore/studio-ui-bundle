@@ -1,5 +1,8 @@
 * -text
 
+# Mark as generated files
+/public/build/** linguist-generated=true linguist-vendored=true
+
 # Exclude build/test files from archive to reduce ZIP size for composer dist download
 /.github export-ignore
 /tests export-ignore

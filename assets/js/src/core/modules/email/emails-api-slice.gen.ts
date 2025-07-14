@@ -232,13 +232,15 @@ export type EmailLogDetail = EmailLog & {
 };
 export type EmailLogObjectParameterData = {
     /** id */
-    id?: number;
+    id: number;
+    /** elementType */
+    elementType?: string;
     /** type */
-    type?: string;
+    type: string;
     /** class */
-    class?: string;
+    class: string;
     /** path */
-    path?: string;
+    path: string;
 };
 export type EmailLogParameters = {
     /** AdditionalAttributes */

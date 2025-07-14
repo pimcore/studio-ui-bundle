@@ -11,10 +11,12 @@
 export enum UserPermission {
   NotesAndEvents = 'notes_events',
   Documents = 'documents',
+  DocumentTypes = 'document_types',
   Objects = 'objects',
   Assets = 'assets',
   TagsConfiguration = 'tags_configuration',
   PredefinedProperties = 'predefined_properties',
+  WebsiteSettings = 'website_settings',
   Users = 'users',
   Notifications = 'notifications',
   SendNotifications = 'notifications_send',

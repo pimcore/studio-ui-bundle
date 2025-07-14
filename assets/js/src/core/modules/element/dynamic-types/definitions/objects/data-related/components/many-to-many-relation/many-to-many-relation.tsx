@@ -9,30 +9,18 @@
  */
 
 import React, { useEffect, useState } from 'react'
+import type { ColumnDef } from '@tanstack/react-table'
+import { isEqual, isNil } from 'lodash'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
-
-import {
-  ManyToManyRelationGrid
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/grid'
-import {
-  type ManyToManyRelationValue, type ManyToManyRelationValueItem,
-  useValue
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
+import { ManyToManyRelationGrid } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/grid'
+import { type ManyToManyRelationValue, type ManyToManyRelationValueItem, useValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
 import type { DragAndDropInfo } from '@sdk/components'
 import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
-import {
-  ManyToManyRelationToolbar
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/components/toolbar/toolbar'
-
-import {
-  dndIsValidData,
-  type IRelationAllowedTypesDataComponent
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
+import { ManyToManyRelationToolbar } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/components/toolbar/toolbar'
+import { dndIsValidData, type IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Content } from '@Pimcore/components/content/content'
-import type { ColumnDef } from '@tanstack/react-table'
 import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
-import { isEqual } from 'lodash'
 
 export interface ManyToManyRelationClassDefinitionProps {
   assetUploadPath?: string | null
@@ -56,12 +44,17 @@ export interface ManyToManyRelationProps extends IRelationAllowedTypesDataCompon
   hint?: React.ReactNode | null
   allowMultipleAssignments?: boolean
   className?: string
+  disableInlineUpload?: boolean
+  enableRowDrag?: boolean
 }
 
-export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.Element => {
+export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToManyRelationProps): React.JSX.Element => {
   const [value, setValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
   const [displayedValue, setDisplayedValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
-  const { onDrop, deleteItem, onSearch, addAssets, addItems, maxRemainingItems } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments)
+
+  const { onDrop, deleteItem, onSearch, onOrderChange, addAssets, addItems, maxRemainingItems } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments)
+
+  const allowDragAndDrop = !isNil(displayedValue) && displayedValue?.length > 1
 
   useEffect(() => {
     if (!isEqual(value, props.value ?? null)) {
@@ -70,11 +63,11 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
   }, [value])
 
   useEffect(() => {
-    if (value !== props.value) {
+    if (!isEqual(value, props.value)) {
       setValue(props.value ?? null)
       setDisplayedValue(props.value ?? null)
     }
-  }, [JSON.stringify(props.value)])
+  }, [props.value])
 
   if (props.isLoading === true) {
     return (
@@ -91,6 +84,7 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
   return (
     <>
       <Droppable
+        disableDndActiveIndicator
         isValidContext={ (info: DragAndDropInfo) => props.disabled !== true && isValidElementType(info.type) }
         isValidData={ (info: DragAndDropInfo) => dndIsValidData(info, props) }
         onDrop={ onDrop }
@@ -102,7 +96,9 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
           columnDefinition={ props.columnDefinition }
           deleteItem={ deleteItem }
           disabled={ props.disabled }
+          enableRowDrag={ enableRowDrag && allowDragAndDrop }
           enrichRowData={ props.enrichRowData }
+          handleOrderChange={ onOrderChange }
           height={ props.height }
           hint={ props.hint }
           inherited={ props.inherited }
@@ -127,7 +123,7 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
             setDisplayedValue(null)
             setValue(null)
           } }
-          enableUpload={ props.assetsAllowed === true && props.disabled !== true }
+          enableUpload={ props.assetsAllowed === true && props.disabled !== true && props.disableInlineUpload !== true }
           onSearch={ onSearch }
           uploadMaxItems={ maxRemainingItems !== undefined && maxRemainingItems > 0 ? maxRemainingItems : (props.maxItems ?? undefined) }
           uploadShowMaxItemsError={ maxRemainingItems !== undefined && maxRemainingItems <= 0 }

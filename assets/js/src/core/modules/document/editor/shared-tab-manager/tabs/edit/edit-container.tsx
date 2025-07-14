@@ -10,70 +10,51 @@
 
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useRef, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { EditablesRenderer } from './components/editables-renderer/editables-renderer'
+import { Iframe, type IframeRef } from '../../../../../../components/iframe/iframe'
+import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import { isNil } from 'lodash'
-import { Iframe } from '../../../../../../components/iframe/iframe'
 
 export const EditContainer = (): React.JSX.Element => {
   const { id } = useContext(DocumentContext)
   const { document: documentDraft } = useDocumentDraft(id)
   const { t } = useTranslation()
-  const iframeRef = useRef<HTMLIFrameElement>(null)
-  const styleSheetRef = useRef<CSSStyleSheet | null>(null)
-  const [stylesInjected, setStylesInjected] = useState<boolean | undefined>(undefined)
+  const iframeRef = useRef<IframeRef>(null)
 
-  const onLoad = (): void => {
-    const iframeDoc = iframeRef.current?.contentDocument
-    if (isNil(iframeDoc?.body)) return
+  const handleIframeLoad = useCallback(() => {
+    const iframeElement = iframeRef.current?.getIframeElement()
 
-    const iframeWin = iframeRef.current?.contentWindow
-
-    if (!isNil(iframeWin)) {
-      const sheet = new (iframeWin as any).CSSStyleSheet()
-      styleSheetRef.current = sheet
+    if (!isNil(iframeElement)) {
+      try {
+        const { document: documentApi } = getPimcoreStudioApi()
+        documentApi.registerIframe(id, iframeElement, iframeRef)
+      } catch (error) {
+        console.warn('Could not register iframe:', error)
+      }
     }
+  }, [id])
 
-    setStylesInjected(false)
-  }
-
-  useEffect(() => {
-    if (stylesInjected === true) return
-
-    const timeout = setTimeout(() => {
-      const iframeWin = iframeRef.current?.contentWindow
-      const iframeDoc = iframeRef.current?.contentDocument
-      if (isNil(iframeWin) || isNil(iframeDoc)) return
-
-      const styleTags = Array.from(
-        document.head.querySelectorAll('style')
-      )
-      const combinedCSS = styleTags.map(tag => tag.textContent ?? '').join('\n')
-
-      if (isNil(styleSheetRef.current)) return
-      styleSheetRef.current.replaceSync(combinedCSS)
-
-      setStylesInjected(true)
-    }, 0)
-
-    return () => { clearTimeout(timeout) }
-  }, [stylesInjected])
+  // Cleanup on unmount
+  React.useEffect(() => {
+    return () => {
+      try {
+        const { document: documentApi } = getPimcoreStudioApi()
+        documentApi.unregisterIframe(id)
+      } catch (error) {
+        console.warn('Could not unregister iframe:', error)
+      }
+    }
+  }, [id])
 
   return (
-    <>
-      <Iframe
-        onLoad={ onLoad }
-        ref={ iframeRef }
-        src={ `${documentDraft?.fullPath}?pimcore_editmode=true&pimcore_studio=true` }
-        title={ `${t('edit.label')}-${id}` }
-      />
-      {!isNil(styleSheetRef.current) && (
-        <EditablesRenderer
-          iframeRef={ iframeRef }
-          styleSheet={ styleSheetRef.current }
-        />
-      )}
-    </>
+    <Iframe
+      onLoad={ handleIframeLoad }
+      preserveScrollOnReload
+      ref={ iframeRef }
+      src={ `${documentDraft?.fullPath}?pimcore_editmode=true&pimcore_studio=true&documentId=${id}` }
+      title={ `${t('edit.label')}-${id}` }
+      useExternalReadyState
+    />
   )
 }

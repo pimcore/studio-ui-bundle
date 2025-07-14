@@ -12,13 +12,13 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Table } from '@Pimcore/modules/user/management/detail/tabs/references/components/table/table'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
-import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
-import { useUserContext } from '@Pimcore/modules/user/hooks/use-user-context'
+import { useUserManagementDraft } from '@Pimcore/modules/user/hooks/use-user-management-draft'
+import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-management-context'
 
 const ReferenceContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
-  const { id } = useUserContext()
-  const { user } = useUserDraft(id)
+  const { id } = useUserManagementContext()
+  const { user } = useUserManagementDraft(id)
 
   const accordionContent = [
     {
