@@ -34,7 +34,7 @@ export const FlagIcon = ({ value, width = 21, height = 15 }: IFlagIconProps): Re
 
   React.useEffect(() => {
     const countryCode = value ?? '_unknown'
-    
+
     if (flagCache[countryCode] !== undefined) {
       setFlag(flagCache[countryCode])
       setLoading(false)
@@ -48,15 +48,15 @@ export const FlagIcon = ({ value, width = 21, height = 15 }: IFlagIconProps): Re
     })
   }, [value])
 
-  if (loading) return <div style={{ width, height, background: '#f0f0f0' }} />
-  
+  if (loading) return <div style={ { width, height, background: '#f0f0f0' } } />
+
   if (!flag || !React.isValidElement(flag)) {
-    return <UnknownFlag style={{ width, height }} />
+    return <UnknownFlag style={ { width, height } } />
   }
 
-  return React.cloneElement(flag, { 
+  return React.cloneElement(flag, {
     style: { width, height },
-    width: width.toString(), 
-    height: height.toString() 
+    width: width.toString(),
+    height: height.toString()
   } as any)
 }

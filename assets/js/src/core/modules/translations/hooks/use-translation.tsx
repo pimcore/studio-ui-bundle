@@ -9,8 +9,8 @@
  */
 
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { Translation, TranslationCreate, TranslationData, useTranslationCreateMutation, useTranslationDeleteByKeyMutation, useTranslationUpdateMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
-import { TranslationRow, TranslationDataItem } from '../translations-container'
+import { Translation, type TranslationCreate, type TranslationData, useTranslationCreateMutation, useTranslationDeleteByKeyMutation, useTranslationUpdateMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
+import { type TranslationRow, type TranslationDataItem } from '../translations-container'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 interface UseTranslationReturn {
@@ -30,9 +30,9 @@ export const useTranslation = (): UseTranslationReturn => {
 
   const createNewTranslation = async (key: string): Promise<{ success: boolean, data?: TranslationDataItem }> => {
     try {
-      const translationData: TranslationCreate = {translationData: [{key, type: "simple"}]}
-      const result = await createTranslation({createTranslation: translationData})
-      
+      const translationData: TranslationCreate = { translationData: [{ key, type: 'simple' }] }
+      const result = await createTranslation({ createTranslation: translationData })
+
       if ('data' in result) {
         // Since the API returns void, we construct the TranslationDataItem object from what we sent
         // This matches the new expected backend format with dynamic locale fields
@@ -43,7 +43,7 @@ export const useTranslation = (): UseTranslationReturn => {
           modificationDate: Date.now(),
           // Add default empty values for all valid languages from settings
           ...settings.validLanguages.reduce((acc, lang) => {
-            acc[`_${lang}`] = ""
+            acc[`_${lang}`] = ''
             return acc
           }, {} as Record<string, string>)
         }
@@ -86,7 +86,7 @@ export const useTranslation = (): UseTranslationReturn => {
 
       const locale = columnId.substring(1) // Remove the underscore prefix to get locale (e.g., "en", "de", "fr")
       const translationData = [toApiTranslation(row, locale)]
-      
+
       const result = await updateTranslation({
         updateTranslation: {
           locale,

@@ -1,8 +1,5 @@
 /**
- * This source file is availabexport const Table = ({ translationRows, setTranslationRows }: TableProps): React.JSX.Element => {
-  const { t } = useI18n()
-  const { updateTranslationByKey } = useTranslation()
-  const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])nder the terms of the
+ * This source file is available under the terms of the
  * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
@@ -17,14 +14,14 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation as useI18n } from 'react-i18next'
 import { type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
-import { TranslationRow } from '../translations-container'
+import { type TranslationRow } from '../translations-container'
 import { useTranslation } from '../hooks/use-translation'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
 import { isUndefined } from 'lodash'
 import { GeneralError, trackError } from '@sdk/modules/app'
 
-type Language = {
+interface Language {
   language: string
   display: string
 }
@@ -43,7 +40,7 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
 
   const settings = useSettings()
-  
+
   const availableLanguages = settings?.availableAdminLanguages || []
   const validLanguages: string[] = settings?.validLanguages || []
 
@@ -53,24 +50,24 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
       const match = availableLanguages.find(lang => lang.language === validLang)
       if (isUndefined(match)) {
         trackError(new GeneralError(`Language "${validLang}" not found in availableLanguages`))
-        return { language: validLang, display: validLang } 
+        return { language: validLang, display: validLang }
       }
       return match
     }).filter(Boolean)
-  
+
   const columnHelper = createColumnHelper<TranslationWithActions>()
 
   const languageColumns = useMemo(() => {
-    return languages.map(lang => 
+    return languages.map(lang =>
       columnHelper.accessor(`_${lang.language}` as keyof TranslationWithActions, {
         id: `_${lang.language}`,
         header: () => (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={ { display: 'flex', alignItems: 'center', gap: '8px' } }>
             <FlagIcon value={ lang.language } />
             <span>{lang.display}</span>
           </div>
         ),
-        meta: { 
+        meta: {
           editable: true,
           type: 'text'
         },
@@ -80,12 +77,12 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
   }, [languages, columnHelper, visibleLocales])
 
   const typeOptions = [{
-value: "simple", 
-label: t('translations.type-options.simple')
+    value: 'simple',
+    label: t('translations.type-options.simple')
   },
   {
-value: "custom", 
-label: t('translations.type-options.custom')
+    value: 'custom',
+    label: t('translations.type-options.custom')
   }]
 
   const tableColumns = useMemo(() => [
@@ -96,7 +93,7 @@ label: t('translations.type-options.custom')
     }),
     columnHelper.accessor('type', {
       header: t('translations.columns.type'),
-      meta: { type: 'select', editable: true, config: {options: typeOptions }},
+      meta: { type: 'select', editable: true, config: { options: typeOptions } },
       size: 100
     }),
     ...languageColumns,

@@ -12,7 +12,7 @@ import React from 'react'
 import { type CellContext } from '@tanstack/react-table'
 import { Flex, IconButton } from '@sdk/components'
 import { useTranslation } from '../hooks/use-translation'
-import { TranslationRow } from '../translations-container'
+import { type TranslationRow } from '../translations-container'
 
 type TranslationRowWithActions = TranslationRow & { actions: React.ReactNode }
 
@@ -33,7 +33,11 @@ export const ActionsCell = ({ info, setTranslationRows }: ActionsCellProps): JSX
   }
 
   return (
-    <Flex align="center" justify="center" className="translations-table--actions-column">
+    <Flex
+      align="center"
+      className="translations-table--actions-column"
+      justify="center"
+    >
       <IconButton
         icon={ { value: 'trash' } }
         loading={ deleteLoading }

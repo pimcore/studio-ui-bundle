@@ -303,7 +303,10 @@ translations.select-languages: Select languages
 translations.select-domain: Select domain
 translations.show-all-languages: Show all
 translations.show-minimal-languages: Show minimal
+translations.new-translation: New Translation
 translations.new: Add
+translations.type-options.custom: ICU Format
+translations.type-options.simple: Simple Text
 properties.columns.type: Type
 properties.columns.key: Key
 properties.columns.name: Name
@@ -720,7 +723,6 @@ navigation.notes-and-events: Notes & Events
 navigation.file: File
 navigation.settings: Settings
 navigation.tools: Tools
-translations.new: New
 predefined-properties.new: New
 predefined-properties.type: Type
 predefined-properties.name: Name

@@ -19,7 +19,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { Box, Button, Form, IconTextButton, Input, ModalFooter, SearchInput, useModal, Select } from '@sdk/components'
 import trackError, { GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
-import { Translations, useTranslationGetListQuery, useTranslationGetDomainsQuery, type Translation } from '../app/translations/translations-api-slice.gen'
+import { type Translations, useTranslationGetListQuery, useTranslationGetDomainsQuery, type Translation } from '../app/translations/translations-api-slice.gen'
 import { useTranslation } from './hooks/use-translation'
 import { Table } from './table/table'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
@@ -27,33 +27,28 @@ import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 export type TranslationDataItem = {
   key: string
   type: string
-} & {
-  [localeKey: `_${string}`]: string
-}
+} & Record<`_${string}`, string>
 
-export type TranslationRow = TranslationDataItem & { 
+export type TranslationRow = TranslationDataItem & {
   rowId: string
 }
 
 const getAvailableLocales = (translations: Translations[]): string[] => {
   if (translations.length === 0) return []
-  
+
   const localeSet = new Set<string>()
-  
-  // Extract all unique locales from the translations object
+
   translations.forEach(translation => {
     if (translation.translations && typeof translation.translations === 'object') {
-      // translations is now an object with locale keys as properties
       Object.keys(translation.translations).forEach(locale => {
         localeSet.add(locale)
       })
     }
   })
-  
+
   return Array.from(localeSet).sort()
 }
 
-// Helper function to convert API response to TranslationRow format
 const translationsToRows = (translations: Translations[]): TranslationRow[] => {
   return translations.map(translation => {
     const row: TranslationRow = {
@@ -61,57 +56,39 @@ const translationsToRows = (translations: Translations[]): TranslationRow[] => {
       type: translation.type,
       rowId: uuid()
     }
-    
-    // Convert the translations object to locale-specific properties
+
     if (translation.translations && typeof translation.translations === 'object') {
       Object.entries(translation.translations).forEach(([locale, value]) => {
         row[`_${locale}`] = String(value || '')
       })
     }
-    
+
     return row
   })
 }
 
-// Helper function to convert new API response to TranslationRow format (legacy support)
 const translationToRows = (translationObj: any): TranslationRow[] => {
-  // Handle array of translation objects (new expected backend format)
   if (Array.isArray(translationObj)) {
     return translationObj.map(item => ({
       ...item,
       rowId: uuid()
     }))
   }
-  
-  // Handle single TranslationDataItem (from createNewTranslation)
-  if ('key' in translationObj && 'type' in translationObj && !('locale' in translationObj)) {
-    return [{
-      ...translationObj as TranslationDataItem,
-      rowId: uuid()
-    }]
-  }
-  
-  // Current API response structure: { locale: "en", keys: { "key1": "value1", "key2": "value2", ... } }
+
   if ('locale' in translationObj && 'keys' in translationObj && typeof translationObj.keys === 'object' && !Array.isArray(translationObj.keys)) {
     const locale = translationObj.locale
+    const translationType = translationObj.type
     const keysObject = translationObj.keys as Record<string, string>
-    
+
     return Object.entries(keysObject).map(([key, value]) => ({
       key,
-      type: 'simple', // Default type
-      [`_${locale}`]: value || '', // Use the locale from the response
+      type: translationType,
+      [`_${locale}`]: value || '',
       rowId: uuid()
     }))
   }
-  
-  return []
-}
 
-const translationDataToRow = (data: TranslationDataItem): TranslationRow => {
-  return {
-    ...data,
-    rowId: uuid()
-  }
+  return []
 }
 
 interface FormValues {
@@ -123,21 +100,17 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const { createNewTranslation, createLoading } = useTranslation()
   const settings = useSettings()
 
-  // Domain state
   const [selectedDomain, setSelectedDomain] = useState<string>('admin')
-  
-  // Fetch available domains
+
   const { data: domainsData, isLoading: domainsLoading } = useTranslationGetDomainsQuery()
   const availableDomains = domainsData?.domains || []
 
-  // Set default domain when domains are loaded
   useEffect(() => {
     if (availableDomains.length > 0 && !availableDomains.includes(selectedDomain)) {
       setSelectedDomain(availableDomains[0])
     }
   }, [availableDomains, selectedDomain])
 
-  // const [filter, setFilter] = useState<string>('')
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize] = useState<number>(50)
@@ -147,7 +120,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
     body: {
       filters: {
         page: currentPage,
-        pageSize: pageSize,
+        pageSize,
         columnFilters: [],
         sortFilter: {
           key: 'de',
@@ -156,7 +129,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
       }
     }
   })
-  
+
   const [translationRows, setTranslationRows] = useState<TranslationRow[]>([])
   const [totalItems, setTotalItems] = useState<number>(0)
 
@@ -168,24 +141,15 @@ export const TranslationsContainer = (): React.JSX.Element => {
     }
   }, [data])
 
-    useEffect(() => {
+  useEffect(() => {
     refetch()
   }, [currentPage, searchTerm, selectedDomain, refetch])
 
-  // Extract available locales from the translation data
   const availableLocales = getAvailableLocales(data?.items || [])
-  
-  // State for managing visible locales - null means show all (default state)
-  const [visibleLocales, setVisibleLocales] = useState<string[] | null>(null)
-  
-  // Don't auto-initialize visible locales - let them be null by default to show all
 
-  console.log("availableLocales", availableLocales)
-  console.log("visibleLocales", visibleLocales)
-  console.log("translationRows", translationRows)
-  console.log("totalItems", totalItems)
-  
-  const sortedRows = [...translationRows].sort((a, b) => a.key.localeCompare(b.key, "en", { sensitivity: 'base' }))
+  const [visibleLocales, setVisibleLocales] = useState<string[] | null>(null)
+
+  const sortedRows = [...translationRows].sort((a, b) => a.key.localeCompare(b.key, 'en', { sensitivity: 'base' }))
 
   const onCreateTranslation = async (translationKey: string): Promise<void> => {
     const isValidKeyInput = translationKey !== '' && translationKey !== undefined
@@ -207,27 +171,27 @@ export const TranslationsContainer = (): React.JSX.Element => {
     }
   }
 
-    const handleSearch = (value: string): void => {
+  const handleSearch = (value: string): void => {
     setSearchTerm(value)
-    setCurrentPage(1) // Reset to first page when searching
+    setCurrentPage(1)
   }
 
-    const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
+  const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
     type: 'error'
   })
 
   const errorModals = (
-      <MandatoryModal
-        footer={ <ModalFooter>
-          <Button
-            onClick={ closeMandatoryModal }
-            type='primary'
-          >{t('button.ok')}</Button>
-        </ModalFooter> }
-        title={ t('translations.add-translation-mandatory-field-missing.title') }
-      >
-        {t('translations.add-translation-mandatory-field-missing.error')}
-      </MandatoryModal>
+    <MandatoryModal
+      footer={ <ModalFooter>
+        <Button
+          onClick={ closeMandatoryModal }
+          type='primary'
+        >{t('button.ok')}</Button>
+      </ModalFooter> }
+      title={ t('translations.add-translation-mandatory-field-missing.title') }
+    >
+      {t('translations.add-translation-mandatory-field-missing.error')}
+    </MandatoryModal>
   )
 
   return (
@@ -237,7 +201,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
           <IconButton
             disabled={ translationsLoading }
             icon={ { value: 'refresh' } }
-            onClick={ () => refetch() }
+            onClick={ async () => await refetch() }
           />
         </Toolbar> }
       renderTopBar={
@@ -276,51 +240,48 @@ export const TranslationsContainer = (): React.JSX.Element => {
               </Flex>
             </Form>
             <Select
-              placeholder={t('translations.select-domain')}
-              style={{ minWidth: 120 }}
-              value={selectedDomain}
-              loading={domainsLoading}
-              onChange={(value: string) => {
+              loading={ domainsLoading }
+              onChange={ (value: string) => {
                 setSelectedDomain(value)
-                setCurrentPage(1) // Reset pagination when domain changes
-              }}
-              options={availableDomains.map(domain => ({
+                setCurrentPage(1)
+              } }
+              options={ availableDomains.map(domain => ({
                 value: domain,
                 label: domain
-              }))}
+              })) }
+              placeholder={ t('translations.select-domain') }
+              style={ { minWidth: 120 } }
+              value={ selectedDomain }
             />
           </Flex>
           <Flex gap="small">
             <Select
-              mode="multiple"
-              placeholder={t('translations.show-hide-locale')}
-              style={{ minWidth: 220 }}
-              value={ visibleLocales || [] }
+              allowClear
               disabled={ !settings || availableLocales.length === 0 }
+              dropdownMatchSelectWidth={ false }
+              dropdownStyle={ { minWidth: 250 } }
+              filterOption={ (input, option) => {
+                const label = option?.label?.toString() || ''
+                return label.toLowerCase().includes(input.toLowerCase())
+              } }
+              maxTagCount="responsive"
+              mode="multiple"
               onChange={ (selectedLocales: string[]) => {
-                // When user selects locales, use the selection
-                // When user clears all, go back to showing all (null state)
                 setVisibleLocales(selectedLocales.length > 0 ? selectedLocales : null)
               } }
               options={ availableLocales.map(locale => {
-                // Find the display name for this locale
                 const languageInfo = settings?.availableAdminLanguages?.find(lang => lang.language === locale)
                 return {
                   value: locale,
                   label: languageInfo?.display ? `${languageInfo.display} (${locale})` : locale.toUpperCase()
                 }
               }) }
-              showSearch={true}
-              filterOption={(input, option) => {
-                const label = option?.label?.toString() || ''
-                return label.toLowerCase().includes(input.toLowerCase())
-              }}
-              maxTagCount="responsive"
-              allowClear={true}
-              dropdownMatchSelectWidth={false}
-              dropdownStyle={{ minWidth: 250 }}
+              placeholder={ t('translations.show-hide-locale') }
+              showSearch
+              style={ { minWidth: 220 } }
+              value={ visibleLocales || [] }
             />
-                        <SearchInput
+            <SearchInput
               loading={ translationsLoading }
               onSearch={ (value) => {
                 handleSearch(value)
@@ -330,7 +291,6 @@ export const TranslationsContainer = (): React.JSX.Element => {
               withoutAddon={ false }
             />
 
-  
           </Flex>
         </Toolbar>
         }
@@ -350,8 +310,8 @@ export const TranslationsContainer = (): React.JSX.Element => {
           } }
         >
           <Table
-            translationRows={ sortedRows }
             setTranslationRows={ setTranslationRows }
+            translationRows={ sortedRows }
             visibleLocales={ visibleLocales || availableLocales }
           />
           {errorModals}
