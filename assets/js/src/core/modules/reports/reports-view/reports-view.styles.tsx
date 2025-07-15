@@ -15,6 +15,23 @@ export const useStyles = createStyles(({ css, token }) => {
     selectReportLabel: css`
       color: ${token.Tabs.itemActiveColor};
       font-weight: ${token.fontWeightStrong};
+    `,
+
+    selectReportGroupLabel: css`
+      color: ${token.colorTextDescription};
+      font-size: ${token.fontSize}px;
+      text-transform: uppercase;
+    `,
+
+    withDivider: css`
+      &:before {
+        content: '';
+        display: block;
+        margin-bottom: 10px;
+        width: 100%;
+        height: 1px;
+        background-color: ${token.colorSplit};
+      }
     `
   }
 })
