@@ -13,11 +13,11 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ css, token }) => {
   return {
     tooltipTitle: css`
-      color: rgba(0, 0, 0, 0.5);
+       color: ${token.colorTextTertiary};
     `,
 
     tooltipItemValue: css`
-      color: #000000;
+      color: ${token.colorText};
     `,
 
     circle: css`
