@@ -15,7 +15,28 @@ const injectedRtkApi = api
                 invalidatesTags: ["Translation"],
             }),
             translationDeleteByKey: build.mutation<TranslationDeleteByKeyApiResponse, TranslationDeleteByKeyApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/translations/${queryArg.key}`, method: "DELETE" }),
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/translations/${queryArg.key}`,
+                    method: "DELETE",
+                    params: {
+                        domain: queryArg.domain,
+                    },
+                }),
+                invalidatesTags: ["Translation"],
+            }),
+            translationGetDomains: build.query<TranslationGetDomainsApiResponse, TranslationGetDomainsApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/translations/domains` }),
+                providesTags: ["Translation"],
+            }),
+            translationGetList: build.mutation<TranslationGetListApiResponse, TranslationGetListApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/translations/list`,
+                    method: "POST",
+                    body: queryArg.body,
+                    params: {
+                        domain: queryArg.domain,
+                    },
+                }),
                 invalidatesTags: ["Translation"],
             }),
             translationUpdate: build.mutation<TranslationUpdateApiResponse, TranslationUpdateApiArg>({
@@ -49,6 +70,29 @@ export type TranslationDeleteByKeyApiResponse = unknown;
 export type TranslationDeleteByKeyApiArg = {
     /** Delete translations by matching key */
     key: string;
+    /** Domain of the translation, defaults to "studio" */
+    domain?: string;
+};
+export type TranslationGetDomainsApiResponse = /** status 200 List of available translation domains */ {
+    /** List if all available domains in the system for translations. */
+    domains: string[];
+};
+export type TranslationGetDomainsApiArg = void;
+export type TranslationGetListApiResponse = /** status 200 translation_get_list_success_response */ {
+    totalItems: number;
+    items: Translations[];
+};
+export type TranslationGetListApiArg = {
+    /** Domain to filter translations by */
+    domain?: string;
+    body: {
+        filters?: {
+            page?: number;
+            pageSize?: number;
+            columnFilters?: object;
+            sortFilter?: object;
+        };
+    };
 };
 export type TranslationUpdateApiResponse = unknown;
 export type TranslationUpdateApiArg = {
@@ -74,10 +118,24 @@ export type TranslationDataForCreate = {
     key: string;
     /** Type */
     type: string;
+    /** Domain */
+    domain?: string;
 };
 export type TranslationCreate = {
     /** Translation Data */
     translationData: TranslationDataForCreate[];
+};
+export type Translations = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Key of the translation */
+    key: string;
+    /** List of translations for the given key */
+    translations: object[];
+    /** Type simple or custom */
+    type: string;
 };
 export type TranslationData = {
     /** Key */
@@ -86,6 +144,8 @@ export type TranslationData = {
     translation: string;
     /** Type */
     type: string;
+    /** Domain */
+    domain?: any;
 };
 export type TranslationUpdate = {
     /** Locale */
@@ -104,6 +164,8 @@ export type Translation = {
 export const {
     useTranslationCreateMutation,
     useTranslationDeleteByKeyMutation,
+    useTranslationGetDomainsQuery,
+    useTranslationGetListMutation,
     useTranslationUpdateMutation,
     useTranslationGetCollectionMutation,
 } = injectedRtkApi;
