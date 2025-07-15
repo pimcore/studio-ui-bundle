@@ -11,7 +11,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isEmpty, isUndefined } from 'lodash'
-import cn from 'classnames'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
@@ -26,6 +25,7 @@ import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useRe
 import { ReportToolbar } from '@Pimcore/modules/reports/reports-view/components/report-toolbar/report-toolbar'
 import { ReportTopBar } from '@Pimcore/modules/reports/reports-view/components/report-top-bar/report-top-bar'
 import { useStyles } from './reports-view.styles'
+import cn from 'classnames'
 
 interface IReportsTreeOptionItem {
   label: string | JSX.Element
@@ -66,28 +66,47 @@ export const ReportsView = (): React.JSX.Element => {
   const isCurrentReportSelected = !isEmptyValue(currentReport)
   const reportsTreeOptions: ReportsTreeOptions | undefined = useMemo(() => {
     if (!isUndefined(reportsTreeData?.items)) {
-      const groupedReports: Record<string, IReportsTreeOptionGroup> = reportsTreeData.items.reduce((acc, item, index) => {
-        if (isUndefined(acc[item.group])) {
-          acc[item.group] = {
-            label: (
-              <div className={ cn(styles.selectReportGroupLabel, { [styles.selectGroupDivider]: index > 0 }) }>
-                {item.group}
-              </div>
-            ),
+      const groupedOptions: Record<string, IReportsTreeOptionGroup> = {}
+      const ungroupedOptions: any[] = []
+
+      reportsTreeData.items.forEach(item => {
+        if (isEmptyValue(item.group)) {
+          ungroupedOptions.push({
+            label: item.niceName,
+            value: item.name
+          })
+
+          return
+        }
+
+        if (isUndefined(groupedOptions[item.group])) {
+          groupedOptions[item.group] = {
+            label: item.group,
             title: item.group,
             options: []
           }
         }
 
-        acc[item.group].options.push({
+        groupedOptions[item.group].options.push({
           label: item.niceName,
           value: item.name
         })
+      })
 
-        return acc
-      }, {})
+      const hasUngrouped = ungroupedOptions.length > 0
 
-      return Object.values(groupedReports)
+      Object.keys(groupedOptions).forEach((groupKey, index) => {
+        const title = groupedOptions[groupKey].title
+        const withDivider = hasUngrouped || index > 0
+
+        groupedOptions[groupKey].label = (
+          <div className={ cn(styles.selectReportGroupLabel, { [styles.withDivider]: withDivider }) }>
+            {title}
+          </div>
+        )
+      })
+
+      return [...ungroupedOptions, ...Object.values(groupedOptions)]
     }
 
     return []

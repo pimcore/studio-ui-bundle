@@ -23,7 +23,7 @@ export const useStyles = createStyles(({ css, token }) => {
       text-transform: uppercase;
     `,
 
-    selectGroupDivider: css`
+    withDivider: css`
       &:before {
         content: '';
         display: block;
