@@ -17,7 +17,8 @@ import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { type IChartDetailData, type IReportDetailData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
-import { FilterDrilldown } from '@Pimcore/modules/reports/reports-view/types'
+import { FilterDrillDown } from '@Pimcore/modules/reports/reports-view/types'
+import { DrillDownSelectList } from '@Pimcore/modules/reports/reports-view/components/report-detail/components/drill-down-select-list/drill-down-select-list'
 
 interface IReportDetailProps {
   isLoading: boolean
@@ -32,7 +33,7 @@ export const ReportDetail = ({ isLoading, reportDetailData, chartDetailData }: I
 
   const getColumns = (): Array<AccessorKeyColumnDef<unknown, never>> | undefined => (
     reportDetailData?.columnConfigurations?.map((item, index) => {
-      const isShowColumn = item.display === true && item.filterDrilldown !== FilterDrilldown.ONLY_FILTER
+      const isShowColumn = item.display === true && item.filterDrilldown !== FilterDrillDown.ONLY_FILTER
 
       if (isShowColumn) {
         return columnHelper.accessor(item?.name ?? `id-${index}`, {
@@ -43,12 +44,19 @@ export const ReportDetail = ({ isLoading, reportDetailData, chartDetailData }: I
       return undefined
     }).filter((item => !isUndefined(item)))
   )
+  const getDrillDownSelectList = (): string[] | undefined => (
+    reportDetailData?.columnConfigurations
+      ?.filter((item) => item.filterDrilldown !== null)
+      .map((item) => item.name ?? '')
+  )
 
   const columnHelper = createColumnHelper()
   const columns = getColumns() ?? []
+  const drillDownFields = getDrillDownSelectList()
 
   const isShowChart = !isEmptyValue(reportDetailData?.chartType)
   const chartData = chartDetailData?.items?.map((item) => item.data)
+  const reportName = reportDetailData?.name ?? ''
 
   return (
     <Flex
@@ -57,6 +65,10 @@ export const ReportDetail = ({ isLoading, reportDetailData, chartDetailData }: I
     >
       {!isUndefined(chartData) && (
         <>
+          <DrillDownSelectList
+            drillDownFields={ drillDownFields }
+            reportName={ reportName }
+          />
           {isShowChart && (
             <ReportChart
               chartData={ chartData }

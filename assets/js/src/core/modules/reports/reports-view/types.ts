@@ -8,9 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-export enum FilterDrilldown {
+export enum FilterDrillDown {
   ONLY_FILTER = 'only_filter',
   FILTER_AND_SHOW = 'filter_and_show',
 }
 
-export type FilterDrilldownType = FilterDrilldown | null
+export type FilterDrillDownType = FilterDrillDown | undefined
