@@ -250,7 +250,7 @@ export type BundleCustomReportsDetails = {
     /** Label of data column for pie chart */
     pieLabelColumn: string | null;
     /** X axis column names */
-    xAxis: string[] | null;
+    xAxis: string | null;
     /** Y axis column information */
     yAxis: string[] | null;
 };
