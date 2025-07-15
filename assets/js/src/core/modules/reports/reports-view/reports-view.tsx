@@ -38,7 +38,8 @@ interface IReportsTreeOptionGroup {
   options: IReportsTreeOptionItem[]
 }
 
-export type ReportsTreeOptions = IReportsTreeOptionGroup[]
+export type ReportsTreeOption = IReportsTreeOptionItem | IReportsTreeOptionGroup
+export type ReportsTreeOptions = ReportsTreeOption[]
 
 const PAGE_INITIAL = 1
 const PAGE_SIZE_INITIAL = 10
@@ -67,9 +68,9 @@ export const ReportsView = (): React.JSX.Element => {
   const reportsTreeOptions: ReportsTreeOptions | undefined = useMemo(() => {
     if (!isUndefined(reportsTreeData?.items)) {
       const groupedOptions: Record<string, IReportsTreeOptionGroup> = {}
-      const ungroupedOptions: any[] = []
+      const ungroupedOptions: IReportsTreeOptionItem[] = []
 
-      reportsTreeData.items.forEach(item => {
+      reportsTreeData.items?.forEach(item => {
         if (isEmptyValue(item.group)) {
           ungroupedOptions.push({
             label: item.niceName,
@@ -93,11 +94,11 @@ export const ReportsView = (): React.JSX.Element => {
         })
       })
 
-      const hasUngrouped = ungroupedOptions.length > 0
+      const hasUngroupedOptions = ungroupedOptions.length > 0
 
       Object.keys(groupedOptions).forEach((groupKey, index) => {
         const title = groupedOptions[groupKey].title
-        const withDivider = hasUngrouped || index > 0
+        const withDivider = hasUngroupedOptions || index > 0
 
         groupedOptions[groupKey].label = (
           <div className={ cn(styles.selectReportGroupLabel, { [styles.withDivider]: withDivider }) }>

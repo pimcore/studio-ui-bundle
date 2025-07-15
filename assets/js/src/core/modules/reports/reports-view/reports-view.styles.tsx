@@ -30,7 +30,7 @@ export const useStyles = createStyles(({ css, token }) => {
         margin-bottom: 10px;
         width: 100%;
         height: 1px;
-        background-color: ${token.colorBorderSecondary};
+        background-color: ${token.colorSplit};
       }
     `
   }
