@@ -17,6 +17,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { type IChartDetailData, type IReportDetailData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
+import { FilterDrilldown } from '@Pimcore/modules/reports/reports-view/types'
 
 interface IReportDetailProps {
   isLoading: boolean
@@ -31,7 +32,9 @@ export const ReportDetail = ({ isLoading, reportDetailData, chartDetailData }: I
 
   const getColumns = (): Array<AccessorKeyColumnDef<unknown, never>> | undefined => (
     reportDetailData?.columnConfigurations?.map((item, index) => {
-      if (item.display === true) {
+      const isShowColumn = item.display === true && item.filterDrilldown !== FilterDrilldown.ONLY_FILTER
+
+      if (isShowColumn) {
         return columnHelper.accessor(item?.name ?? `id-${index}`, {
           header: !isEmptyValue(item.label) ? item.label : item.name
         })
