@@ -21,9 +21,7 @@ const CHART_FIELD_VALUE_KEY = 'value'
 export const BarChart = ({ chartData, reportData, chartLabelMap }: IChartProps): React.JSX.Element => {
   const { styles } = useStyles()
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  const xAxis: string = reportData?.xAxis ?? ''
+  const xAxis = reportData?.xAxis ?? ''
   const formattedChartData = chartData.flatMap((item: object) => {
     return Object.entries(item)
       .filter(([key]) => key !== xAxis)
