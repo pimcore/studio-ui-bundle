@@ -30,12 +30,16 @@ export const ReportDetail = ({ isLoading, reportDetailData, chartDetailData }: I
   }
 
   const getColumns = (): Array<AccessorKeyColumnDef<unknown, never>> | undefined => (
-    reportDetailData?.columnConfigurations?.map((item, index) => (
-      columnHelper.accessor(item?.name ?? `id-${index}`, {
-        header: !isEmptyValue(item.label) ? item.label : item.name
-      })
-    )
-    ))
+    reportDetailData?.columnConfigurations?.map((item, index) => {
+      if (item.display === true) {
+        return columnHelper.accessor(item?.name ?? `id-${index}`, {
+          header: !isEmptyValue(item.label) ? item.label : item.name
+        })
+      }
+
+      return undefined
+    }).filter((item => !isUndefined(item)))
+  )
 
   const columnHelper = createColumnHelper()
   const columns = getColumns() ?? []
