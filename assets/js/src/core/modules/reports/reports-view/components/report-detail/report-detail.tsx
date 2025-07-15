@@ -48,12 +48,14 @@ export const ReportDetail = ({ isLoading, reportDetailData, chartDetailData }: I
       gap="large"
       vertical
     >
-      {isShowChart && !isUndefined(chartData) && (
+      {!isUndefined(chartData) && (
         <>
-          <ReportChart
-            chartData={ chartData }
-            reportData={ reportDetailData }
-          />
+          {isShowChart && (
+            <ReportChart
+              chartData={ chartData }
+              reportData={ reportDetailData }
+            />
+          )}
           <Grid
             autoWidth
             columns={ columns }
