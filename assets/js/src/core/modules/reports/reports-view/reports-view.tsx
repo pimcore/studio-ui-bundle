@@ -10,7 +10,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
@@ -24,6 +24,22 @@ import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
 import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
 import { ReportToolbar } from '@Pimcore/modules/reports/reports-view/components/report-toolbar/report-toolbar'
 import { ReportTopBar } from '@Pimcore/modules/reports/reports-view/components/report-top-bar/report-top-bar'
+import { useStyles } from './reports-view.styles'
+import cn from 'classnames'
+
+interface IReportsTreeOptionItem {
+  label: string | JSX.Element
+  value: string
+}
+
+interface IReportsTreeOptionGroup {
+  label: string | JSX.Element
+  title: string
+  options: IReportsTreeOptionItem[]
+}
+
+export type ReportsTreeOption = IReportsTreeOptionItem | IReportsTreeOptionGroup
+export type ReportsTreeOptions = ReportsTreeOption[]
 
 const PAGE_INITIAL = 1
 const PAGE_SIZE_INITIAL = 10
@@ -41,6 +57,7 @@ export const ReportsView = (): React.JSX.Element => {
     page,
     pageSize
   })
+  const { styles } = useStyles()
 
   useEffect(() => {
     setPage(PAGE_INITIAL)
@@ -48,12 +65,49 @@ export const ReportsView = (): React.JSX.Element => {
   }, [currentReport])
 
   const isCurrentReportSelected = !isEmptyValue(currentReport)
-  const reportsTreeOptions = useMemo(() => {
-    if (!isEmpty(reportsTreeData)) {
-      return reportsTreeData?.items?.map((item) => ({
-        label: item.niceName,
-        value: item.name
-      }))
+  const reportsTreeOptions: ReportsTreeOptions | undefined = useMemo(() => {
+    if (!isUndefined(reportsTreeData?.items)) {
+      const groupedOptions: Record<string, IReportsTreeOptionGroup> = {}
+      const ungroupedOptions: IReportsTreeOptionItem[] = []
+
+      reportsTreeData.items?.forEach(item => {
+        if (isEmptyValue(item.group)) {
+          ungroupedOptions.push({
+            label: item.niceName,
+            value: item.name
+          })
+
+          return
+        }
+
+        if (isUndefined(groupedOptions[item.group])) {
+          groupedOptions[item.group] = {
+            label: item.group,
+            title: item.group,
+            options: []
+          }
+        }
+
+        groupedOptions[item.group].options.push({
+          label: item.niceName,
+          value: item.name
+        })
+      })
+
+      const hasUngroupedOptions = ungroupedOptions.length > 0
+
+      Object.keys(groupedOptions).forEach((groupKey, index) => {
+        const title = groupedOptions[groupKey].title
+        const withDivider = hasUngroupedOptions || index > 0
+
+        groupedOptions[groupKey].label = (
+          <div className={ cn(styles.selectReportGroupLabel, { [styles.withDivider]: withDivider }) }>
+            {title}
+          </div>
+        )
+      })
+
+      return [...ungroupedOptions, ...Object.values(groupedOptions)]
     }
 
     return []

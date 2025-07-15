@@ -15,12 +15,13 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Select } from '@Pimcore/components/select/select'
 import { Content } from '@Pimcore/components/content/content'
+import { type ReportsTreeOptions } from '@Pimcore/modules/reports/reports-view/reports-view'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 
 interface IReportTopBarProps {
   currentReport: string | null
   setCurrentReport: (reportName: string) => void
-  reportsTreeOptions?: Array<{ label: string, value: string }>
+  reportsTreeOptions?: ReportsTreeOptions
 }
 
 export const ReportTopBar = ({ currentReport, setCurrentReport, reportsTreeOptions }: IReportTopBarProps): React.JSX.Element | null => {
@@ -48,6 +49,7 @@ export const ReportTopBar = ({ currentReport, setCurrentReport, reportsTreeOptio
             onChange={ (value: string) => { setCurrentReport(value) } }
             options={ reportsTreeOptions }
             placeholder={ t('reports.select-report') }
+            showSearch
             value={ currentReport }
           />
         </Flex>
