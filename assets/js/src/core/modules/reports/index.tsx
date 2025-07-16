@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import React from 'react'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { ReportsView } from '@Pimcore/modules/reports/reports-view/reports-view'
 import { CustomReportsView } from '@Pimcore/modules/reports/custom-reports-view/custom-reports-view'
@@ -16,6 +17,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
+import { GridProvider } from '@Pimcore/modules/reports/reports-view/context/grid-context'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -62,7 +64,11 @@ moduleSystem.registerModule({
 
     widgetRegistryService.registerWidget({
       name: 'reports',
-      component: ReportsView
+      component: () => (
+        <GridProvider>
+          <ReportsView />
+        </GridProvider>
+      )
     })
 
     widgetRegistryService.registerWidget({

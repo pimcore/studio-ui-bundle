@@ -16,9 +16,11 @@ import {
   useCustomReportsReportQuery
 } from '@Pimcore/modules/reports/custom-reports-api-slice-inhanced'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { type IFilterValue } from '@Pimcore/modules/reports/reports-view/context/grid-context'
 
 interface UseReportDataProps {
   name: string
+  filters?: IFilterValue
   page: number
   pageSize: number
 }
@@ -34,7 +36,7 @@ interface UseReportDataReturn {
   refetchAll: () => void
 }
 
-export const useReportData = ({ name, page, pageSize }: UseReportDataProps): UseReportDataReturn => {
+export const useReportData = ({ name, filters, page, pageSize }: UseReportDataProps): UseReportDataReturn => {
   const {
     isLoading: isReportDetailLoading,
     data: reportDetailData,
@@ -48,14 +50,14 @@ export const useReportData = ({ name, page, pageSize }: UseReportDataProps): Use
   }] = useCustomReportsChartMutation()
 
   const fetchChartDetailData = (): void => {
-    fetchChartDetail({ body: { name, page, pageSize } }).catch(e => { console.error(e) })
+    fetchChartDetail({ body: { name, filters, page, pageSize } }).catch(e => { console.error(e) })
   }
 
   useEffect(() => {
     if (!isEmptyValue(name)) {
       fetchChartDetailData()
     }
-  }, [name, page, pageSize, fetchChartDetail])
+  }, [name, filters, page, pageSize, fetchChartDetail])
 
   const isLoading: boolean = isReportDetailLoading || isChartDetailLoading
   const isFetching: boolean = isReportDetailFetching || isChartDetailLoading

@@ -16,6 +16,7 @@ import { Text } from '@Pimcore/components/text/text'
 import { useCustomReportsListDrillDownOptionsMutation } from '@Pimcore/modules/reports/custom-reports-api-slice-inhanced'
 import { useGridContext } from '@Pimcore/modules/reports/reports-view/context/grid-context'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
+import { clone, findIndex } from 'lodash'
 
 interface IDrillDownSelectListProps {
   reportName: string
@@ -39,7 +40,19 @@ export const DrillDownSelect = ({ reportName, field, ...props }: IDrillDownSelec
   const handleSelectChange = (value: string | null): void => {
     setCurrentValue(value)
 
-    setFilters({ ...filters, [field.name]: value })
+    const columnFilters = clone(filters?.columnFilters) ?? []
+    const fieldIndex = findIndex(columnFilters, { property: field.name })
+
+    if (fieldIndex > -1) {
+      columnFilters[fieldIndex].value = value
+    } else {
+      columnFilters.push({ property: field.name, value })
+    }
+
+    setFilters({
+      ...filters,
+      columnFilters
+    })
   }
 
   useEffect(() => {

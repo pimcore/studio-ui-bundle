@@ -25,7 +25,7 @@ import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
 import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
 import { ReportToolbar } from '@Pimcore/modules/reports/reports-view/components/report-toolbar/report-toolbar'
 import { ReportTopBar } from '@Pimcore/modules/reports/reports-view/components/report-top-bar/report-top-bar'
-import { GridProvider } from '@Pimcore/modules/reports/reports-view/context/grid-context'
+import { useGridContext } from '@Pimcore/modules/reports/reports-view/context/grid-context'
 import { useStyles } from './reports-view.styles'
 
 interface IReportsTreeOptionItem {
@@ -52,12 +52,15 @@ export const ReportsView = (): React.JSX.Element => {
   const [page, setPage] = useState(PAGE_INITIAL)
   const [pageSize, setPageSize] = useState(PAGE_SIZE_INITIAL)
 
+  const { filters } = useGridContext()
   const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page: 1, pageSize: 9999 })
   const { refetchAll, isFetching, isLoading, chartDetailData, reportDetailData } = useReportData({
     name: currentReport ?? '',
+    filters,
     page,
     pageSize
   })
+
   const { styles } = useStyles()
 
   useEffect(() => {
@@ -167,20 +170,18 @@ export const ReportsView = (): React.JSX.Element => {
   )
 
   return (
-    <GridProvider>
-      <Content loading={ isLoadingReportsTree }>
-        <TabsToolbarView
-          renderTabbar={ renderContent() }
-          renderToolbar={ (
-            <Toolbar>
-              <Refetch
-                isFetching={ isLoadingReportsData }
-                refetch={ refetchAll }
-              />
-            </Toolbar>
-          ) }
-        />
-      </Content>
-    </GridProvider>
+    <Content loading={ isLoadingReportsTree }>
+      <TabsToolbarView
+        renderTabbar={ renderContent() }
+        renderToolbar={ (
+          <Toolbar>
+            <Refetch
+              isFetching={ isLoadingReportsData }
+              refetch={ refetchAll }
+            />
+          </Toolbar>
+        ) }
+      />
+    </Content>
   )
 }

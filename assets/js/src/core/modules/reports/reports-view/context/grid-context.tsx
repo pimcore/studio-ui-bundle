@@ -12,11 +12,16 @@ import React, { createContext, useContext, useState, type ReactNode, useMemo } f
 import { type AccessorKeyColumnDef } from '@tanstack/react-table'
 import { isUndefined } from 'lodash'
 
+export interface IFilterValue {
+  columnFilters?: Array<{ property: string, value: any }>
+  drillDownFilters?: Record<string, any>
+}
+
 interface IGridContext {
   columns: Array<AccessorKeyColumnDef<unknown, any>>
   setColumns: (columns: Array<AccessorKeyColumnDef<unknown, any>>) => void
-  filters: Record<string, any>
-  setFilters: (filters: Record<string, any>) => void
+  filters?: IFilterValue
+  setFilters: (filters: IFilterValue) => void
 }
 
 const GridContext = createContext<IGridContext | undefined>(undefined)
@@ -25,9 +30,14 @@ interface IGridProviderProps {
   children: ReactNode
 }
 
+const INITIAL_FILTER_VALUE: IFilterValue = {
+  columnFilters: undefined,
+  drillDownFilters: undefined
+}
+
 export const GridProvider = ({ children }: IGridProviderProps): React.JSX.Element => {
   const [columns, setColumns] = useState<Array<AccessorKeyColumnDef<unknown, any>>>([])
-  const [filters, setFilters] = useState<Record<string, any>>({})
+  const [filters, setFilters] = useState<IFilterValue>(INITIAL_FILTER_VALUE)
 
   const contextValue = useMemo(() => ({
     columns,
