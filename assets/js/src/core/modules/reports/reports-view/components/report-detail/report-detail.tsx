@@ -44,10 +44,13 @@ export const ReportDetail = ({ isLoading, reportDetailData, chartDetailData }: I
       return undefined
     }).filter((item => !isUndefined(item)))
   )
-  const getDrillDownSelectList = (): string[] | undefined => (
+  const getDrillDownSelectList = (): Array<{ label: string, name: string }> | undefined => (
     reportDetailData?.columnConfigurations
       ?.filter((item) => item.filterDrilldown !== null)
-      .map((item) => item.name ?? '')
+      .map((item) => ({
+        label: item.label ?? '',
+        name: item.name ?? ''
+      }))
   )
 
   const columnHelper = createColumnHelper()
@@ -65,13 +68,20 @@ export const ReportDetail = ({ isLoading, reportDetailData, chartDetailData }: I
     >
       {!isUndefined(chartData) && (
         <>
-          {drillDownFields?.map(item => (
-            <DrillDownSelect
-              field={ item }
-              key={ item }
-              reportName={ reportName }
-            />
-          ))}
+          {!isUndefined(drillDownFields) && (
+            <Flex
+              gap="small"
+              wrap
+            >
+              {drillDownFields?.map(item => (
+                <DrillDownSelect
+                  field={ item }
+                  key={ item.name }
+                  reportName={ reportName }
+                />
+              ))}
+            </Flex>
+          )}
           {isShowChart && (
             <ReportChart
               chartData={ chartData }

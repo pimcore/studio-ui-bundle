@@ -11,22 +11,30 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Select } from '@Pimcore/components/select/select'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Text } from '@Pimcore/components/text/text'
 import { useCustomReportsListDrillDownOptionsMutation } from '@Pimcore/modules/reports/custom-reports-api-slice-inhanced'
+import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 
 interface IDrillDownSelectListProps {
   reportName: string
-  field: string
+  field: { label: string, name: string }
 }
 
-export const DrillDownSelect = ({ reportName, field }: IDrillDownSelectListProps): React.JSX.Element => {
+export const DrillDownSelect = ({ reportName, field, ...props }: IDrillDownSelectListProps): React.JSX.Element => {
   const [fetchDrillDownOptions, { data, isLoading }] = useCustomReportsListDrillDownOptionsMutation()
   const { t } = useTranslation()
+  const { styles } = useStyles()
 
   const [currentValue, setCurrentValue] = useState<string | null>(null)
 
   const fetchOptions = (): void => {
-    fetchDrillDownOptions({ body: { name: reportName, field } })
+    fetchDrillDownOptions({ body: { name: reportName, field: field.name } })
       .catch(error => { console.log('Error while fetching drill down options:', error) })
+  }
+
+  const handleSelectChange = (value: string | null): void => {
+    setCurrentValue(value)
   }
 
   useEffect(() => {
@@ -34,13 +42,22 @@ export const DrillDownSelect = ({ reportName, field }: IDrillDownSelectListProps
   }, [reportName, field])
 
   return (
-    <Select
-      className='min-w-200'
-      loading={ isLoading }
-      onChange={ (value: string) => { setCurrentValue(value) } }
-      options={ data?.items }
-      placeholder={ t('select') }
-      value={ currentValue }
-    />
+    <Flex
+      align="center"
+      gap="extra-small"
+    >
+      <Text className={ styles.drillDownSelectLabel }>{field.label}</Text>
+      <Select
+        className='min-w-200'
+        loading={ isLoading }
+        onSelect={ handleSelectChange }
+        options={ data?.items?.map((item) => ({
+          label: item.name,
+          value: item.value
+        })) }
+        placeholder={ t('select') }
+        value={ currentValue }
+      />
+    </Flex>
   )
 }
