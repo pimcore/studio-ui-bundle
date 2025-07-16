@@ -14,7 +14,7 @@ import {
   type CustomReportsChartApiResponse,
   useCustomReportsChartMutation,
   useCustomReportsReportQuery
-} from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+} from '@Pimcore/modules/reports/custom-reports-api-slice-inhanced'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 interface UseReportDataProps {

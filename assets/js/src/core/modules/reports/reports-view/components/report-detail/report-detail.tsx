@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { isUndefined } from 'lodash'
 import { type AccessorKeyColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
@@ -18,7 +18,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { type IChartDetailData, type IReportDetailData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
 import { FilterDrillDown } from '@Pimcore/modules/reports/reports-view/types'
-import { DrillDownSelectList } from '@Pimcore/modules/reports/reports-view/components/report-detail/components/drill-down-select-list/drill-down-select-list'
+import { DrillDownSelect } from '@Pimcore/modules/reports/reports-view/components/report-detail/components/drill-down-select/drill-down-select'
 
 interface IReportDetailProps {
   isLoading: boolean
@@ -52,7 +52,7 @@ export const ReportDetail = ({ isLoading, reportDetailData, chartDetailData }: I
 
   const columnHelper = createColumnHelper()
   const columns = getColumns() ?? []
-  const drillDownFields = getDrillDownSelectList()
+  const drillDownFields = useMemo(() => getDrillDownSelectList(), [reportDetailData])
 
   const isShowChart = !isEmptyValue(reportDetailData?.chartType)
   const chartData = chartDetailData?.items?.map((item) => item.data)
@@ -65,10 +65,13 @@ export const ReportDetail = ({ isLoading, reportDetailData, chartDetailData }: I
     >
       {!isUndefined(chartData) && (
         <>
-          <DrillDownSelectList
-            drillDownFields={ drillDownFields }
-            reportName={ reportName }
-          />
+          {drillDownFields?.map(item => (
+            <DrillDownSelect
+              field={ item }
+              key={ item }
+              reportName={ reportName }
+            />
+          ))}
           {isShowChart && (
             <ReportChart
               chartData={ chartData }
