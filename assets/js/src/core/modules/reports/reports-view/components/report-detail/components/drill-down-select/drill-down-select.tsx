@@ -14,6 +14,7 @@ import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { useCustomReportsListDrillDownOptionsMutation } from '@Pimcore/modules/reports/custom-reports-api-slice-inhanced'
+import { useGridContext } from '@Pimcore/modules/reports/reports-view/context/grid-context'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 
 interface IDrillDownSelectListProps {
@@ -22,6 +23,8 @@ interface IDrillDownSelectListProps {
 }
 
 export const DrillDownSelect = ({ reportName, field, ...props }: IDrillDownSelectListProps): React.JSX.Element => {
+  const { filters, setFilters } = useGridContext()
+
   const [fetchDrillDownOptions, { data, isLoading }] = useCustomReportsListDrillDownOptionsMutation()
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -35,6 +38,8 @@ export const DrillDownSelect = ({ reportName, field, ...props }: IDrillDownSelec
 
   const handleSelectChange = (value: string | null): void => {
     setCurrentValue(value)
+
+    setFilters({ ...filters, [field.name]: value })
   }
 
   useEffect(() => {

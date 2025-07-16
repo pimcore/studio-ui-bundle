@@ -11,6 +11,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isEmpty, isUndefined } from 'lodash'
+import cn from 'classnames'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
@@ -24,8 +25,8 @@ import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
 import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
 import { ReportToolbar } from '@Pimcore/modules/reports/reports-view/components/report-toolbar/report-toolbar'
 import { ReportTopBar } from '@Pimcore/modules/reports/reports-view/components/report-top-bar/report-top-bar'
+import { GridProvider } from '@Pimcore/modules/reports/reports-view/context/grid-context'
 import { useStyles } from './reports-view.styles'
-import cn from 'classnames'
 
 interface IReportsTreeOptionItem {
   label: string | JSX.Element
@@ -166,18 +167,20 @@ export const ReportsView = (): React.JSX.Element => {
   )
 
   return (
-    <Content loading={ isLoadingReportsTree }>
-      <TabsToolbarView
-        renderTabbar={ renderContent() }
-        renderToolbar={ (
-          <Toolbar>
-            <Refetch
-              isFetching={ isLoadingReportsData }
-              refetch={ refetchAll }
-            />
-          </Toolbar>
-        ) }
-      />
-    </Content>
+    <GridProvider>
+      <Content loading={ isLoadingReportsTree }>
+        <TabsToolbarView
+          renderTabbar={ renderContent() }
+          renderToolbar={ (
+            <Toolbar>
+              <Refetch
+                isFetching={ isLoadingReportsData }
+                refetch={ refetchAll }
+              />
+            </Toolbar>
+          ) }
+        />
+      </Content>
+    </GridProvider>
   )
 }

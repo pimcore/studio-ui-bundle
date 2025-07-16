@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { isUndefined } from 'lodash'
 import { type AccessorKeyColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
@@ -19,6 +19,7 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { type IChartDetailData, type IReportDetailData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
 import { FilterDrillDown } from '@Pimcore/modules/reports/reports-view/types'
 import { DrillDownSelect } from '@Pimcore/modules/reports/reports-view/components/report-detail/components/drill-down-select/drill-down-select'
+import { useGridContext } from '@Pimcore/modules/reports/reports-view/context/grid-context'
 
 interface IReportDetailProps {
   isLoading: boolean
@@ -26,24 +27,33 @@ interface IReportDetailProps {
   chartDetailData: IChartDetailData
 }
 
+const columnHelper = createColumnHelper()
+
 export const ReportDetail = ({ isLoading, reportDetailData, chartDetailData }: IReportDetailProps): React.JSX.Element => {
   if (isLoading) {
     return <Content loading />
   }
 
-  const getColumns = (): Array<AccessorKeyColumnDef<unknown, never>> | undefined => (
-    reportDetailData?.columnConfigurations?.map((item, index) => {
-      const isShowColumn = item.display === true && item.filterDrilldown !== FilterDrillDown.ONLY_FILTER
+  const { columns, setColumns } = useGridContext()
 
-      if (isShowColumn) {
-        return columnHelper.accessor(item?.name ?? `id-${index}`, {
-          header: !isEmptyValue(item.label) ? item.label : item.name
-        })
-      }
+  useEffect(() => {
+    const getColumns = (): Array<AccessorKeyColumnDef<unknown, never>> | undefined => (
+      reportDetailData?.columnConfigurations?.map((item, index) => {
+        const isShowColumn = item.display === true && item.filterDrilldown !== FilterDrillDown.ONLY_FILTER
 
-      return undefined
-    }).filter((item => !isUndefined(item)))
-  )
+        if (isShowColumn) {
+          return columnHelper.accessor(item?.name ?? `id-${index}`, {
+            header: !isEmptyValue(item.label) ? item.label : item.name
+          })
+        }
+
+        return undefined
+      }).filter((item => !isUndefined(item)))
+    )
+
+    setColumns(getColumns() ?? [])
+  }, [reportDetailData, setColumns])
+
   const getDrillDownSelectList = (): Array<{ label: string, name: string }> | undefined => (
     reportDetailData?.columnConfigurations
       ?.filter((item) => item.filterDrilldown !== null)
@@ -53,8 +63,6 @@ export const ReportDetail = ({ isLoading, reportDetailData, chartDetailData }: I
       }))
   )
 
-  const columnHelper = createColumnHelper()
-  const columns = getColumns() ?? []
   const drillDownFields = useMemo(() => getDrillDownSelectList(), [reportDetailData])
 
   const isShowChart = !isEmptyValue(reportDetailData?.chartType)
