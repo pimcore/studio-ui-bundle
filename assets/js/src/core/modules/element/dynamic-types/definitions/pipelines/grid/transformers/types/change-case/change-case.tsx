@@ -5,7 +5,7 @@ import { injectable } from "inversify";
 
 @injectable()
 export class DynamicTypePipelineGridTransformersChangeCase extends DynamicTypePipelineAbstract {
-  readonly id = 'changeCase';
+  readonly id = 'caseChange';
 
   getComponent(): ReactElement {
     return (

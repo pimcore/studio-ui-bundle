@@ -5,7 +5,7 @@ import { injectable } from "inversify";
 
 @injectable()
 export class DynamicTypePipelineGridSourceFieldsText extends DynamicTypePipelineAbstract {
-  readonly id = 'text';
+  readonly id = 'staticText';
 
   getComponent(): ReactElement {
     return (

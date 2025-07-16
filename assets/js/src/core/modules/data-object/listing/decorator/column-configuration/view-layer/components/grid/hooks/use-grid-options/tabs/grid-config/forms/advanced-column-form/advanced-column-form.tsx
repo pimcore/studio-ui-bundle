@@ -6,6 +6,7 @@ import React, { useEffect } from "react";
 import { AvailableColumn } from "@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider";
 import { isEqual } from "lodash";
 import { PipelineConfigProvider } from "@Pimcore/components/pipeline/provider/pipeline-config/pipeline-config-provider";
+import { Preview } from "./preview";
 
 export interface AdvancedColumnFormProps {
   column: AvailableColumn
@@ -14,6 +15,8 @@ export interface AdvancedColumnFormProps {
 
 export const AdvancedColumnForm = ({column, onChange }: AdvancedColumnFormProps): React.JSX.Element => {
   const [form] = Form.useForm();
+
+  console.log({column})
 
   useEffect(() => {
     form.setFieldValue('value', column?.__meta?.advancedColumnConfig ?? {});
@@ -37,11 +40,9 @@ export const AdvancedColumnForm = ({column, onChange }: AdvancedColumnFormProps)
     }
   }
 
-  console.log(column?.__meta?.advancedColumnConfig)
-
   return (
     <Form form={form} layout='vertical' onValuesChange={onValuesChange} initialValues={column?.__meta?.advancedColumnConfig}>
-      <PipelineConfigProvider initialConfig={column?.config[0]}>
+      <PipelineConfigProvider initialConfig={column?.config}>
         <Form.Item name="value">
           <Pipeline
             items={[
@@ -56,19 +57,17 @@ export const AdvancedColumnForm = ({column, onChange }: AdvancedColumnFormProps)
 
               {
                 id: 'source-field',
-                component: <Pipeline.DynamicGroupItem id='source-field' dynamicTypeRegistryId={serviceIds['DynamicTypes/Grid/SourceFieldsRegistry']} />
+                component: <Pipeline.DynamicGroupItem id='advancedColumns' dynamicTypeRegistryId={serviceIds['DynamicTypes/Grid/SourceFieldsRegistry']} />
               },
 
               {
                 id: 'transformation',
-                component: <Pipeline.DynamicGroupItem id='transformation' dynamicTypeRegistryId={serviceIds['DynamicTypes/Grid/TransformersRegistry']} />
+                component: <Pipeline.DynamicGroupItem id='transformers' dynamicTypeRegistryId={serviceIds['DynamicTypes/Grid/TransformersRegistry']} />
               },
 
               {
                 id: 'Preview',
-                component: <Pipeline.CustomItem>
-                  preview
-                </Pipeline.CustomItem>
+                component: <Preview column={column} />
               },
             ]}
           />

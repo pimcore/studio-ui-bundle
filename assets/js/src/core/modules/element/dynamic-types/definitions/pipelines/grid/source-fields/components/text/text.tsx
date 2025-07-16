@@ -5,7 +5,7 @@ import React from "react";
 export const DynamicTypePipelineGridSourceFieldsTextComponent = (): React.JSX.Element => {
   return (
     <Form.Item
-      name={'value'}
+      name={'text'}
       label={'Text'}
     >
       <Input />

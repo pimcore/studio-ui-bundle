@@ -1,6 +1,7 @@
 import { Flex } from "@Pimcore/components/flex/flex";
 import { Form } from "@Pimcore/components/form/form";
 import { useItem } from "@Pimcore/components/form/item/provider/item/use-item";
+import { useKeyedList } from "@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list";
 import { Input } from "@Pimcore/components/input/input";
 import { usePipelineConfig } from "@Pimcore/components/pipeline/provider/pipeline-config/use-pipeline-config";
 import { SelectProps } from "@Pimcore/components/select/select";
@@ -11,14 +12,14 @@ import React from "react";
 export const DynamicTypePipelineGridSourceFieldsRelationFieldComponent = (): React.JSX.Element => {
   const { config } = usePipelineConfig();
   const sourceFieldConfig = config?.relationField;
-  const form = Form.useFormInstance();
   const { name } = useItem()
-  const currentRelation = Form.useWatch([...name, 'relation'], form);
+  const { operations, getValueByKey } = useKeyedList();
+  const currentRelation = getValueByKey('relation');
   const prevRelation = usePrevious(currentRelation);
 
   if (prevRelation !== currentRelation) {
     // check how to reset the select. Value is changed but not reflected in the UI
-    form.setFieldValue([...name, 'test'], 123);
+    operations.update([...name, 'field'], undefined, false)
   }
 
   if (!sourceFieldConfig) {
@@ -50,14 +51,6 @@ export const DynamicTypePipelineGridSourceFieldsRelationFieldComponent = (): Rea
 
   return (
     <Flex className="w-full" gap="small">
-      <Form.Item
-        className="w-full"
-        name={'test'}
-        label={'test'}
-      >
-        <Input value={'123'} />
-      </Form.Item>
-
       <Form.Item
         className="w-full"
         name={'relation'}

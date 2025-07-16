@@ -56,6 +56,10 @@ const config: ConfigFile = {
     {
       pattern: 'metadataGetCollection',
       type: 'query'
+    },
+    {
+      pattern: 'dataObjectGetGridPreview',
+      type: 'query'
     }
   ],
   outputFiles: {

@@ -117,19 +117,30 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   }
 
   async function getDownloadAction (delimiter: CSVFormValues['delimiter'], header: CSVFormValues['header']): Promise<number> {
+    const argColumns = getArgs().body.columns ?? []
+    const extractedColumnsFromColumnArg = selectedColumns.map(column => {
+      let currentColumn = argColumns.find(argColumn => argColumn.key === column.key && argColumn.locale === column.locale);
+
+      if (currentColumn.type === 'dataobject.advanced') {
+        currentColumn = argColumns.find(argColumn => column.originalApiDefinition?.__meta?.advancedColumnConfig?.title === argColumn?.config?.title);
+      }
+      
+      currentColumn = currentColumn ?? column;
+
+      return {
+        key: currentColumn.key,
+        type: currentColumn.type,
+        locale: currentColumn.locale,
+        config: currentColumn.config
+      }
+    });
+
     if (numberedSelectedRows.length === 0) {
       const promise = fetchCreateFolderCsv({
         body: {
           folders: [id],
           elementType,
-          columns: selectedColumns.map((column) => {
-            return {
-              key: column.key,
-              type: column.type,
-              group: column.group,
-              config: [] // @todo add config after schema update
-            }
-          }),
+          columns: extractedColumnsFromColumnArg,
           config: {
             delimiter,
             header
@@ -151,14 +162,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
         body: {
           elements: numberedSelectedRows,
           elementType,
-          columns: selectedColumns.map((column) => {
-            return {
-              key: column.key,
-              type: column.type,
-              group: column.group,
-              config: [] // @todo add config after schema update
-            }
-          }),
+          columns: extractedColumnsFromColumnArg,
           config: {
             delimiter,
             header

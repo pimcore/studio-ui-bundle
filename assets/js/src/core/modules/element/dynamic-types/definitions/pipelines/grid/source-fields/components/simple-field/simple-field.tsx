@@ -1,5 +1,4 @@
 import { Form } from "@Pimcore/components/form/form";
-import { Input } from "@Pimcore/components/input/input";
 import { usePipelineConfig } from "@Pimcore/components/pipeline/provider/pipeline-config/use-pipeline-config";
 import { Select } from "@Pimcore/components/select/select";
 import React from "react";

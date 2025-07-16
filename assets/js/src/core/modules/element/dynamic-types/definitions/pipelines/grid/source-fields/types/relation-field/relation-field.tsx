@@ -5,7 +5,7 @@ import { DynamicTypePipelineGridSourceFieldsRelationFieldComponent } from "../..
 
 @injectable()
 export class DynamicTypePipelineGridSourceFieldsRelationField extends DynamicTypePipelineAbstract {
-  readonly id = 'relation-field';
+  readonly id = 'relationField';
 
   getComponent(): ReactElement {
     return (

@@ -5,7 +5,7 @@ import { DynamicTypePipelineGridSourceFieldsSimpleFieldComponent } from "../../c
 
 @injectable()
 export class DynamicTypePipelineGridSourceFieldsSimpleField extends DynamicTypePipelineAbstract {
-  readonly id = 'simple-field';
+  readonly id = 'simpleField';
 
   getComponent(): ReactElement {
     return (
