@@ -34,7 +34,7 @@ export const ReportTopBar = ({ currentReport, setCurrentReport, reportsTreeOptio
       padding={ { top: 'extra-small', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
     >
       <Toolbar
-        padding={ { top: 'extra-small', bottom: 'extra-small', left: 'extra-small', right: 'extra-small' } }
+        padding={ { top: 'extra-small', bottom: 'extra-small', left: 'none', right: 'none' } }
         position='top'
         size='auto'
         theme='secondary'

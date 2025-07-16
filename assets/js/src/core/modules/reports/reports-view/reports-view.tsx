@@ -121,7 +121,7 @@ export const ReportsView = (): React.JSX.Element => {
     <Content
       centered={ !isCurrentReportSelected }
       padded
-      padding={ { top: 'extra-small', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
+      padding={ { top: 'none', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
     >
       {isCurrentReportSelected
         ? (
