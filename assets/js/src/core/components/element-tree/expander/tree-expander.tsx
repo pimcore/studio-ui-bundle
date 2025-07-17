@@ -43,7 +43,7 @@ export const TreeExpander = ({ node, state }: TreeExpanderProps): React.JSX.Elem
   return (
     <div
       className='tree-expander'
-      data-testid={`tree-expander-node-${node.id}`}
+      data-testid={ `tree-node-expander-${node.id}` }
       style={ { minWidth: 16, width: 16, height: 16 } }
     >
       {isLoading === true && (

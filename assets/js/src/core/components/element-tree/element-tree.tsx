@@ -124,11 +124,11 @@ const ElementTree = (
   const items: string[] = getChildren()
 
   const TreeNode = renderNode
-  const treeTestId = treeId ? `element-tree-${treeId}` : 'element-tree'
+  const treeTestId = (treeId != null && treeId !== '') ? `element-tree-${treeId}` : 'element-tree'
   const treeContent = (
-    <div 
+    <div
       className={ ['tree', styles.tree].join(' ') }
-      data-testid={treeTestId}
+      data-testid={ treeTestId }
     >
       <TreeContext.Provider value={ treeContextValue }>
 

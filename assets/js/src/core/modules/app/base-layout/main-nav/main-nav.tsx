@@ -97,7 +97,7 @@ export const MainNav = (): React.JSX.Element => {
 
         {item.children !== undefined && item.children.length > 0
           ? (
-            <div 
+            <div
               className={ 'main-nav__list-detail' }
               data-testid={ `nav-submenu-${createSafeTestIdString(item.path)}` }
             >
