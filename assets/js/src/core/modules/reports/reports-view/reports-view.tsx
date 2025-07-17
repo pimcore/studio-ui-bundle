@@ -10,7 +10,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty, isUndefined } from 'lodash'
+import { isEmpty, isNull, isUndefined } from 'lodash'
 import cn from 'classnames'
 import { type DefaultOptionType } from 'antd/es/select'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
@@ -37,6 +37,8 @@ export const ReportsView = (): React.JSX.Element => {
   const { t } = useTranslation()
 
   const [currentReport, setCurrentReport] = useState<string | null>(null)
+  const [nextReportAfterReset, setNextReportAfterReset] = useState<string | null>(null)
+
   const [page, setPage] = useState(PAGE_INITIAL)
   const [pageSize, setPageSize] = useState(PAGE_SIZE_INITIAL)
 
@@ -53,11 +55,15 @@ export const ReportsView = (): React.JSX.Element => {
   const { styles } = useStyles()
 
   useEffect(() => {
-    setPage(PAGE_INITIAL)
-    setPageSize(PAGE_SIZE_INITIAL)
+    if (!isNull(nextReportAfterReset)) {
+      setPage(PAGE_INITIAL)
+      setPageSize(PAGE_SIZE_INITIAL)
+      resetFilters()
 
-    resetFilters()
-  }, [currentReport])
+      setCurrentReport(nextReportAfterReset)
+      setNextReportAfterReset(null)
+    }
+  }, [nextReportAfterReset])
 
   const renderOptionLabel = (iconClass: string, value: any): React.JSX.Element => (
     <Flex
@@ -163,7 +169,7 @@ export const ReportsView = (): React.JSX.Element => {
         <ReportTopBar
           currentReport={ currentReport }
           reportsTreeOptions={ reportsTreeOptions }
-          setCurrentReport={ setCurrentReport }
+          setCurrentReport={ setNextReportAfterReset }
         />
       ) }
     >
