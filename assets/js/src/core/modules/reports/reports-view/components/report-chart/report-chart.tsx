@@ -9,71 +9,46 @@
  */
 
 import React from 'react'
-import { Pie } from '@ant-design/plots'
+import { fromPairs, isUndefined, map } from 'lodash'
 import { type BundleCustomReportsDetails } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import { Content } from '@Pimcore/components/content/content'
+import { PieChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/pie-chart/pie-chart'
+import { LineChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/line-chart/line-chart'
+import { BarChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/bar-chart/bar-chart'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 interface IReportsChartProps {
   chartData?: object[]
   reportData?: BundleCustomReportsDetails
 }
 
-const CHART_FIELD_TYPE_KEY = 'type'
-const CHART_FIELD_VALUE_KEY = 'value'
-
 export const ReportChart = ({ chartData, reportData }: IReportsChartProps): React.JSX.Element => {
-  const pieLabelColumn = reportData?.pieLabelColumn ?? ''
-  const pieColumn = reportData?.pieColumn ?? ''
-
-  const totalCount = chartData?.reduce((sum, item) => sum + item?.[pieColumn], 0)
-  const reportChartData = chartData?.map(item => ({
-    [CHART_FIELD_TYPE_KEY]: item?.[pieLabelColumn],
-    [CHART_FIELD_VALUE_KEY]: item?.[pieColumn]
-  }))
-
-  const config = {
-    data: reportChartData,
-    colorField: CHART_FIELD_TYPE_KEY,
-    angleField: CHART_FIELD_VALUE_KEY,
-    innerRadius: 0.6,
-    autoFit: true,
-    height: 350,
-    legend: {
-      color: {
-        position: 'right',
-        layout: {
-          justifyContent: 'center'
-        },
-        rowPadding: 10,
-        itemLabelFontSize: 14
-      }
-    },
-    tooltip: {
-      items: [
-        (datum) => ({
-          name: `${datum.type}:`,
-          value: `${datum.value} (${Math.round((datum.value * 100) / totalCount)}%)`
-        })
-      ]
-    },
-    annotations: [
-      {
-        type: 'text',
-        data: [],
-        style: {
-          text: totalCount.toString(),
-          x: '50%',
-          y: '50%',
-          textAlign: 'center',
-          fontSize: 40,
-          fontStyle: 'bold'
-        }
-      }
-    ]
+  if (isUndefined(reportData) || isUndefined(chartData)) {
+    return <Content loading />
   }
 
-  return (
-    <div>
-      <Pie { ...config } />
-    </div>
+  const chartType = reportData?.chartType ?? 'default'
+  const chartLabelMap = fromPairs(
+    map(reportData?.columnConfigurations, item => [
+      item.name,
+      !isEmptyValue(item.label) ? item.label : item.name
+    ])
   )
+
+  const commonProps = {
+    reportData,
+    chartData,
+    chartLabelMap
+  }
+
+  switch (chartType) {
+    case 'pie':
+      return <PieChart { ...commonProps } />
+    case 'line':
+      return <LineChart { ...commonProps } />
+    case 'bar':
+      return <BarChart { ...commonProps } />
+    default:
+      return <PieChart { ...commonProps } />
+  }
 }
