@@ -10,14 +10,12 @@
 
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cloneDeep, findIndex } from 'lodash'
 import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { useCustomReportsListDrillDownOptionsQuery, type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { useGridContext } from '@Pimcore/modules/reports/reports-view/context/grid-context'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
-import { OPERATOR_LIST } from '@Pimcore/modules/reports/reports-view/types'
 
 interface IDrillDownSelectListProps {
   reportName: string
@@ -36,23 +34,13 @@ export const DrillDownSelect = ({ reportName, field }: IDrillDownSelectListProps
   const handleSelectChange = (value: string | null): void => {
     setCurrentValue(value)
 
-    const columnFilters = cloneDeep(filters?.columnFilters) ?? []
-    const fieldIndex = findIndex(columnFilters, { property: field.name })
+    const drillDownFilters = { ...(filters?.drillDownFilters ?? {}) }
 
-    if (fieldIndex > -1) {
-      columnFilters[fieldIndex].value = value
-    } else {
-      columnFilters.push({
-        property: field.name!,
-        type: field.filterType!,
-        operator: OPERATOR_LIST.OPERATOR_EQ,
-        value: String(value)
-      })
-    }
+    drillDownFilters[field.name!] = value
 
     setFilters({
       ...filters,
-      columnFilters
+      drillDownFilters
     })
   }
 
