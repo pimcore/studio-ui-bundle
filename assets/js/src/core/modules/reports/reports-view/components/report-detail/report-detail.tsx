@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { isNil, isUndefined } from 'lodash'
 import { type AccessorKeyColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
@@ -23,6 +23,7 @@ import { useGridContext } from '@Pimcore/modules/reports/reports-view/context/gr
 import { type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 
 interface IReportDetailProps {
+  currentReport: string | null
   isLoading: boolean
   reportDetailData: IReportDetailData
   chartDetailData: IChartDetailData
@@ -30,10 +31,25 @@ interface IReportDetailProps {
 
 const columnHelper = createColumnHelper()
 
-export const ReportDetail = ({ isLoading, reportDetailData, chartDetailData }: IReportDetailProps): React.JSX.Element => {
-  if (isLoading) {
-    return <Content loading />
-  }
+export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chartDetailData }: IReportDetailProps): React.JSX.Element => {
+  const [showLoading, setIsShowLoading] = useState(false)
+  const prevReportRef = useRef<string | null>(null)
+
+  useEffect(() => {
+    if (currentReport !== prevReportRef.current) {
+      prevReportRef.current = currentReport
+
+      if (!isUndefined(currentReport) && !isNil(currentReport) && isLoading) {
+        setIsShowLoading(true)
+      }
+    }
+  }, [currentReport, isLoading])
+
+  useEffect(() => {
+    if (!isLoading) {
+      setIsShowLoading(false)
+    }
+  }, [isLoading])
 
   const { columns, setColumns } = useGridContext()
 
@@ -67,39 +83,41 @@ export const ReportDetail = ({ isLoading, reportDetailData, chartDetailData }: I
   const chartData = chartDetailData?.items?.map((item) => item.data)
   const reportName = reportDetailData?.name ?? ''
 
+  if (isLoading && showLoading) {
+    return <Content loading />
+  }
+
   return (
     <Flex
       gap="large"
       vertical
     >
-      {!isUndefined(chartData) && (
-        <>
-          {!isUndefined(drillDownFields) && (
-            <Flex
-              gap="small"
-              wrap
-            >
-              {drillDownFields?.map(item => (
-                <DrillDownSelect
-                  field={ item }
-                  key={ item.name }
-                  reportName={ reportName }
-                />
-              ))}
-            </Flex>
-          )}
-          {isShowChart && (
-            <ReportChart
-              chartData={ chartData }
-              reportData={ reportDetailData }
+      {!isUndefined(drillDownFields) && (
+        <Flex
+          gap="small"
+          wrap
+        >
+          {drillDownFields?.map(item => (
+            <DrillDownSelect
+              field={ item }
+              key={ item.name }
+              reportName={ reportName }
             />
-          )}
-          <Grid
-            autoWidth
-            columns={ columns }
-            data={ chartData }
-          />
-        </>
+          ))}
+        </Flex>
+      )}
+      {isShowChart && (
+        <ReportChart
+          chartData={ chartData }
+          reportData={ reportDetailData }
+        />
+      )}
+      {!isUndefined(chartData) && (
+        <Grid
+          autoWidth
+          columns={ columns }
+          data={ chartData }
+        />
       )}
     </Flex>
   )

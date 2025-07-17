@@ -22,6 +22,7 @@ interface IGridContext {
   setColumns: (columns: Array<AccessorKeyColumnDef<unknown, any>>) => void
   filters?: IFilterValue
   setFilters: (filters: IFilterValue) => void
+  resetFilters: () => void
 }
 
 const GridContext = createContext<IGridContext | undefined>(undefined)
@@ -39,11 +40,16 @@ export const GridProvider = ({ children }: IGridProviderProps): React.JSX.Elemen
   const [columns, setColumns] = useState<Array<AccessorKeyColumnDef<unknown, any>>>([])
   const [filters, setFilters] = useState<IFilterValue>(INITIAL_FILTER_VALUE)
 
+  const resetFilters = (): void => {
+    setFilters(INITIAL_FILTER_VALUE)
+  }
+
   const contextValue = useMemo(() => ({
     columns,
     setColumns,
     filters,
-    setFilters
+    setFilters,
+    resetFilters
   }), [columns, setColumns, filters, setFilters])
 
   return (

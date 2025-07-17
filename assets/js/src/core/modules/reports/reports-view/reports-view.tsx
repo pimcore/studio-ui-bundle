@@ -40,7 +40,8 @@ export const ReportsView = (): React.JSX.Element => {
   const [page, setPage] = useState(PAGE_INITIAL)
   const [pageSize, setPageSize] = useState(PAGE_SIZE_INITIAL)
 
-  const { filters } = useGridContext()
+  const { filters, resetFilters } = useGridContext()
+
   const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page: 1, pageSize: 9999 })
   const { refetchAll, isFetching, isLoading, chartDetailData, reportDetailData } = useReportData({
     name: currentReport ?? '',
@@ -54,6 +55,8 @@ export const ReportsView = (): React.JSX.Element => {
   useEffect(() => {
     setPage(PAGE_INITIAL)
     setPageSize(PAGE_SIZE_INITIAL)
+
+    resetFilters()
   }, [currentReport])
 
   const renderOptionLabel = (iconClass: string, value: any): React.JSX.Element => (
@@ -128,6 +131,7 @@ export const ReportsView = (): React.JSX.Element => {
         ? (
           <ReportDetail
             chartDetailData={ chartDetailData }
+            currentReport={ currentReport }
             isLoading={ isLoadingReportsData }
             reportDetailData={ reportDetailData }
           />
