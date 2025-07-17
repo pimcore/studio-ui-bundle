@@ -15,7 +15,7 @@ import { type ElementType } from '@Pimcore/types/enums/element/element-type'
  * and normalizing the format.
  */
 export const createSafeTestIdString = (input: string | number): string => {
-  return String(input).toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')
+  return String(input).toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/(^-|-$)/g, '')
 }
 
 /**
@@ -55,7 +55,7 @@ export const createGenericTestId = (
   options: {
     prefix?: string
     suffix?: string
-    elementType?: ElementType | string
+    elementType?: ElementType
     separator?: string
   } = {}
 ): string => {
@@ -108,18 +108,15 @@ export const createNodeTestId = (id: number, elementType?: ElementType): string 
  */
 export const createBorderTestId = (nodeId?: string, nodeName?: string, elementType?: string): string => {
   if (nodeId != null && nodeId !== '') {
-    return createGenericTestId(nodeId, { prefix: 'border-button' })
+    return buildTestId(['border-button', nodeId])
   }
 
   if (nodeName != null && nodeName !== '' && elementType != null && elementType !== '') {
-    return createGenericTestId(nodeName, {
-      prefix: 'border-button',
-      elementType
-    })
+    return buildTestId(['border-button', elementType, nodeName])
   }
 
   if (nodeName != null && nodeName !== '') {
-    return createGenericTestId(nodeName, { prefix: 'border-button' })
+    return buildTestId(['border-button', nodeName])
   }
 
   return 'border-button'
