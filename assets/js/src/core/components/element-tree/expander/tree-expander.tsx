@@ -43,7 +43,7 @@ export const TreeExpander = ({ node, state }: TreeExpanderProps): React.JSX.Elem
   return (
     <div
       className='tree-expander'
-      data-testid={`tree-expander-${node.id}`}
+      data-testid={`tree-expander-node-${node.id}`}
       style={ { minWidth: 16, width: 16, height: 16 } }
     >
       {isLoading === true && (
@@ -55,7 +55,6 @@ export const TreeExpander = ({ node, state }: TreeExpanderProps): React.JSX.Elem
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events
         <span
           aria-label={ t('tree.aria.expand-and-collapse') }
-          data-testid={`tree-expander-button-${node.id}`}
           onClick={ onClick }
           role='button'
           tabIndex={ -1 }
