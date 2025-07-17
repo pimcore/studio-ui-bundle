@@ -13,14 +13,14 @@ import { useTranslation } from 'react-i18next'
 import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
-import { useCustomReportsListDrillDownOptionsMutation } from '@Pimcore/modules/reports/custom-reports-api-slice-inhanced'
+import { useCustomReportsListDrillDownOptionsMutation, type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice-inhanced'
 import { useGridContext } from '@Pimcore/modules/reports/reports-view/context/grid-context'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 import { clone, findIndex } from 'lodash'
 
 interface IDrillDownSelectListProps {
   reportName: string
-  field: { label: string, name: string }
+  field: BundleCustomReportsColumnConfiguration
 }
 
 export const DrillDownSelect = ({ reportName, field }: IDrillDownSelectListProps): React.JSX.Element => {
@@ -33,7 +33,7 @@ export const DrillDownSelect = ({ reportName, field }: IDrillDownSelectListProps
   const [currentValue, setCurrentValue] = useState<string | null>(null)
 
   const fetchOptions = (): void => {
-    fetchDrillDownOptions({ body: { name: reportName, field: field.name } })
+    fetchDrillDownOptions({ body: { name: reportName, field: field.name ?? null } })
       .catch(error => { console.log('Error while fetching drill down options:', error) })
   }
 
@@ -47,7 +47,7 @@ export const DrillDownSelect = ({ reportName, field }: IDrillDownSelectListProps
       columnFilters[fieldIndex].value = value
     } else {
       // delete temp mock data
-      columnFilters.push({ property: field.name, value, type: 'text', operator: 'lt' })
+      columnFilters.push({ property: field.name!, value, type: 'text', operator: 'lt' })
     }
 
     setFilters({

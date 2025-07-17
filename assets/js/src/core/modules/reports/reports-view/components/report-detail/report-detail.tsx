@@ -20,6 +20,7 @@ import { type IChartDetailData, type IReportDetailData } from '@Pimcore/modules/
 import { FilterDrillDown } from '@Pimcore/modules/reports/reports-view/types'
 import { DrillDownSelect } from '@Pimcore/modules/reports/reports-view/components/report-detail/components/drill-down-select/drill-down-select'
 import { useGridContext } from '@Pimcore/modules/reports/reports-view/context/grid-context'
+import { type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice-inhanced'
 
 interface IReportDetailProps {
   isLoading: boolean
@@ -54,13 +55,10 @@ export const ReportDetail = ({ isLoading, reportDetailData, chartDetailData }: I
     setColumns(getColumns() ?? [])
   }, [reportDetailData, setColumns])
 
-  const getDrillDownSelectList = (): Array<{ label: string, name: string }> | undefined => (
+  const getDrillDownSelectList = (): BundleCustomReportsColumnConfiguration[] | undefined => (
     reportDetailData?.columnConfigurations
       ?.filter((item) => item.filterDrilldown !== null)
-      .map((item) => ({
-        label: item.label ?? '',
-        name: item.name ?? ''
-      }))
+      .map(item => item)
   )
 
   const drillDownFields = useMemo(() => getDrillDownSelectList(), [reportDetailData])
