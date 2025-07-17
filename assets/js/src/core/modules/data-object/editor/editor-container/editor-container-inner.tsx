@@ -84,7 +84,7 @@ const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Eleme
           <InheritanceStateProvider>
             <LanguageSelectionProvider>
               <TabsToolbarView
-                dataTestId={`data-object-editor-${createSafeTestIdString(id.toString())}`}
+                dataTestId={ `data-object-editor-${createSafeTestIdString(id.toString())}` }
                 renderTabbar={
                   <TabsContainer
                     elementEditorType={ editorType }

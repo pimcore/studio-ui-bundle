@@ -21,9 +21,9 @@ const TabsToolbarView = (props: TabbarToolbarViewProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   return (
-    <div 
+    <div
       className={ ['tabs-toolbar-layout', styles.tabbarToolbar].join(' ') }
-      data-testid={props.dataTestId}
+      data-testid={ props.dataTestId }
     >
       <div className='tabs-toolbar-layout__tabbar'>
         {props.renderTabbar}

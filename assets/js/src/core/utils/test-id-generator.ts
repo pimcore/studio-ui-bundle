@@ -139,7 +139,7 @@ export const createBorderTestId = (nodeId?: string, nodeName?: string, elementTy
  * // Returns: 'tab-title-my-widget'
  */
 export const createTabTitleTestId = (title: string, elementId?: number | string, elementType?: string): string => {
-  if (elementType && elementId) {
+  if (elementType != null && elementType !== '' && elementId != null && elementId !== '') {
     return createGenericTestId(elementId, {
       prefix: 'tab-title',
       elementType: elementType as ElementType
