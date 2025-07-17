@@ -21,11 +21,7 @@ import { type IMainNavItem } from './services/main-nav-registry'
 import { isAllowedInPerspective } from '@Pimcore/modules/perspectives/permission-checker'
 import { isUndefined } from 'lodash'
 import { PerspectiveSwitch } from './perspective-switch'
-
-// Helper function to create safe test IDs from navigation paths
-const createTestId = (path: string): string => {
-  return path.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')
-}
+import { createNavTestId } from '@Pimcore/utils/test-id-generator'
 
 export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -60,7 +56,7 @@ export const MainNav = (): React.JSX.Element => {
     return (
       <li
         className={ `main-nav__list-item ${openKeys.includes(index) ? 'is-active' : ''} ${item.className ?? ''}` }
-        data-testid={ `nav-item-${createTestId(item.path)}` }
+        data-testid={ `nav-item-${createNavTestId(item.path)}` }
         key={ item.path }
       >
         {!isUndefined(item.button)
@@ -72,7 +68,7 @@ export const MainNav = (): React.JSX.Element => {
           : (
             <button
               className={ 'main-nav__list-btn' }
-              data-testid={ `nav-button-${createTestId(item.path)}` }
+              data-testid={ `nav-button-${createNavTestId(item.path)}` }
               onClick={ () => {
                 if (item.children !== undefined && item.children.length > 0) {
                   handleOpenState(index)
@@ -103,7 +99,7 @@ export const MainNav = (): React.JSX.Element => {
           ? (
             <div 
               className={ 'main-nav__list-detail' }
-              data-testid={ `nav-submenu-${createTestId(item.path)}` }
+              data-testid={ `nav-submenu-${createNavTestId(item.path)}` }
             >
               <div className={ 'main-nav__list-detail-scroll-container' }>
                 <div className={ 'main-nav__list-detail-scroll' }>
