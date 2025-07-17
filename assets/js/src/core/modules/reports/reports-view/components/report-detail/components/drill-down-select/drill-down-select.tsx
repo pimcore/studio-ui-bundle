@@ -8,12 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
-import { useCustomReportsListDrillDownOptionsMutation, type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice-inhanced'
+import { useCustomReportsListDrillDownOptionsQuery, type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { useGridContext } from '@Pimcore/modules/reports/reports-view/context/grid-context'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 import { clone, findIndex } from 'lodash'
@@ -26,16 +26,11 @@ interface IDrillDownSelectListProps {
 export const DrillDownSelect = ({ reportName, field }: IDrillDownSelectListProps): React.JSX.Element => {
   const { filters, setFilters } = useGridContext()
 
-  const [fetchDrillDownOptions, { data, isLoading }] = useCustomReportsListDrillDownOptionsMutation()
+  const { data, isLoading } = useCustomReportsListDrillDownOptionsQuery({ body: { name: reportName, field: field.name ?? null } })
   const { t } = useTranslation()
   const { styles } = useStyles()
 
   const [currentValue, setCurrentValue] = useState<string | null>(null)
-
-  const fetchOptions = (): void => {
-    fetchDrillDownOptions({ body: { name: reportName, field: field.name ?? null } })
-      .catch(error => { console.log('Error while fetching drill down options:', error) })
-  }
 
   const handleSelectChange = (value: string | null): void => {
     setCurrentValue(value)
@@ -55,10 +50,6 @@ export const DrillDownSelect = ({ reportName, field }: IDrillDownSelectListProps
       columnFilters
     })
   }
-
-  useEffect(() => {
-    fetchOptions()
-  }, [reportName, field])
 
   return (
     <Flex

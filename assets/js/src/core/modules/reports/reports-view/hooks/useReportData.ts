@@ -13,7 +13,7 @@ import {
   type CustomReportsChartApiResponse,
   useCustomReportsChartQuery,
   useCustomReportsReportQuery
-} from '@Pimcore/modules/reports/custom-reports-api-slice-inhanced'
+} from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type IFilterValue } from '@Pimcore/modules/reports/reports-view/context/grid-context'
 

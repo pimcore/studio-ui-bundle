@@ -60,6 +60,10 @@ const config: ConfigFile = {
     {
       pattern: 'customReportsChart',
       type: 'query'
+    },
+    {
+      pattern: 'customReportsListDrillDownOptions',
+      type: 'query'
     }
   ],
   outputFiles: {

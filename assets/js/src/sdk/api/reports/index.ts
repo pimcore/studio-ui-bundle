@@ -12,4 +12,4 @@ if (module.hot !== undefined) {
   module.hot.accept()
 }
 
-export * from '@Pimcore/modules/reports/custom-reports-api-slice-inhanced'
+export * from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
