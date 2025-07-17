@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useMemo } from 'react'
-import { isUndefined } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import { type AccessorKeyColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { ReportChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/report-chart'
@@ -57,7 +57,7 @@ export const ReportDetail = ({ isLoading, reportDetailData, chartDetailData }: I
 
   const getDrillDownSelectList = (): BundleCustomReportsColumnConfiguration[] | undefined => (
     reportDetailData?.columnConfigurations
-      ?.filter((item) => item.filterDrilldown !== null)
+      ?.filter((item) => !isNil(item.filterDrilldown) && !isNil(item.filterType))
       .map(item => item)
   )
 

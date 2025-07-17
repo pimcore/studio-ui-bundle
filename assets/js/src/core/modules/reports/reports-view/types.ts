@@ -14,3 +14,9 @@ export enum FilterDrillDown {
 }
 
 export type FilterDrillDownType = FilterDrillDown | undefined
+
+export enum OPERATOR_LIST {
+  OPERATOR_LT = 'lt',
+  OPERATOR_GT = 'gt',
+  OPERATOR_EQ = 'eq',
+}
