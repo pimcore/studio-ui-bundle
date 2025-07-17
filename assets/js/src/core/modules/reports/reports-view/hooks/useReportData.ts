@@ -8,11 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useEffect } from 'react'
 import {
   type BundleCustomReportsDetails,
   type CustomReportsChartApiResponse,
-  useCustomReportsChartMutation,
+  useCustomReportsChartQuery,
   useCustomReportsReportQuery
 } from '@Pimcore/modules/reports/custom-reports-api-slice-inhanced'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
@@ -44,27 +43,19 @@ export const useReportData = ({ name, filters, page, pageSize }: UseReportDataPr
     isFetching: isReportDetailFetching
   } = useCustomReportsReportQuery({ name }, { skip: isEmptyValue(name) })
 
-  const [fetchChartDetail, {
+  const {
     isLoading: isChartDetailLoading,
-    data: chartDetailData
-  }] = useCustomReportsChartMutation()
-
-  const fetchChartDetailData = (): void => {
-    fetchChartDetail({ body: { name, filters, page, pageSize } }).catch(e => { console.error(e) })
-  }
-
-  useEffect(() => {
-    if (!isEmptyValue(name)) {
-      fetchChartDetailData()
-    }
-  }, [name, filters, page, pageSize, fetchChartDetail])
+    data: chartDetailData,
+    refetch: chartDetailRefetch,
+    isFetching: isChartDetailFetching
+  } = useCustomReportsChartQuery({ body: { name, filters, page, pageSize } }, { skip: isEmptyValue(name) })
 
   const isLoading: boolean = isReportDetailLoading || isChartDetailLoading
-  const isFetching: boolean = isReportDetailFetching || isChartDetailLoading
+  const isFetching: boolean = isReportDetailFetching || isChartDetailFetching
 
   const refetchAll = (): void => {
     reportDetailRefetch().catch(e => { console.error(e) })
-    fetchChartDetailData()
+    chartDetailRefetch().catch(e => { console.error(e) })
   }
 
   return {

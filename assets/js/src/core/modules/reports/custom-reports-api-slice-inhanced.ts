@@ -22,7 +22,7 @@ export type * from './custom-reports-api-slice.gen'
 
 export const {
   useCustomReportsListDrillDownOptionsMutation,
-  useCustomReportsChartMutation,
+  useCustomReportsChartQuery,
   useCustomReportsConfigGetTreeQuery,
   useCustomReportExportCsvMutation,
   useCustomReportsReportQuery,
