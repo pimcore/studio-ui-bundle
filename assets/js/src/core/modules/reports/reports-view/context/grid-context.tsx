@@ -13,7 +13,7 @@ import { type AccessorKeyColumnDef } from '@tanstack/react-table'
 import { isUndefined } from 'lodash'
 
 export interface IFilterValue {
-  columnFilters?: Array<{ property: string, value: any }>
+  columnFilters?: Array<{ property: string, value: any, type: string, operator: string }>
   drillDownFilters?: Record<string, any>
 }
 

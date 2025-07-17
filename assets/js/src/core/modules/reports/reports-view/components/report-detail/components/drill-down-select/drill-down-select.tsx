@@ -23,7 +23,7 @@ interface IDrillDownSelectListProps {
   field: { label: string, name: string }
 }
 
-export const DrillDownSelect = ({ reportName, field, ...props }: IDrillDownSelectListProps): React.JSX.Element => {
+export const DrillDownSelect = ({ reportName, field }: IDrillDownSelectListProps): React.JSX.Element => {
   const { filters, setFilters } = useGridContext()
 
   const [fetchDrillDownOptions, { data, isLoading }] = useCustomReportsListDrillDownOptionsMutation()
@@ -46,7 +46,8 @@ export const DrillDownSelect = ({ reportName, field, ...props }: IDrillDownSelec
     if (fieldIndex > -1) {
       columnFilters[fieldIndex].value = value
     } else {
-      columnFilters.push({ property: field.name, value })
+      // delete temp mock data
+      columnFilters.push({ property: field.name, value, type: 'text', operator: 'lt' })
     }
 
     setFilters({

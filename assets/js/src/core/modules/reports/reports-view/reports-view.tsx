@@ -12,11 +12,13 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isEmpty, isUndefined } from 'lodash'
 import cn from 'classnames'
+import { type DefaultOptionType } from 'antd/es/select'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
-import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice-inhanced'
 import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { Icon } from '@Pimcore/components/icon/icon'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ReportDetail } from '@Pimcore/modules/reports/reports-view/components/report-detail/report-detail'
 import { Text } from '@Pimcore/components/text/text'
@@ -27,20 +29,6 @@ import { ReportToolbar } from '@Pimcore/modules/reports/reports-view/components/
 import { ReportTopBar } from '@Pimcore/modules/reports/reports-view/components/report-top-bar/report-top-bar'
 import { useGridContext } from '@Pimcore/modules/reports/reports-view/context/grid-context'
 import { useStyles } from './reports-view.styles'
-
-interface IReportsTreeOptionItem {
-  label: string | JSX.Element
-  value: string
-}
-
-interface IReportsTreeOptionGroup {
-  label: string | JSX.Element
-  title: string
-  options: IReportsTreeOptionItem[]
-}
-
-export type ReportsTreeOption = IReportsTreeOptionItem | IReportsTreeOptionGroup
-export type ReportsTreeOptions = ReportsTreeOption[]
 
 const PAGE_INITIAL = 1
 const PAGE_SIZE_INITIAL = 10
@@ -68,16 +56,26 @@ export const ReportsView = (): React.JSX.Element => {
     setPageSize(PAGE_SIZE_INITIAL)
   }, [currentReport])
 
+  const renderOptionLabel = (iconClass: string, value: any): React.JSX.Element => (
+    <Flex
+      align="center"
+      gap="mini"
+    >
+      {!isEmptyValue(iconClass) && <Icon value={ iconClass } />}
+      {value}
+    </Flex>
+  )
+
   const isCurrentReportSelected = !isEmptyValue(currentReport)
-  const reportsTreeOptions: ReportsTreeOptions | undefined = useMemo(() => {
+  const reportsTreeOptions: DefaultOptionType[] | undefined = useMemo(() => {
     if (!isUndefined(reportsTreeData?.items)) {
-      const groupedOptions: Record<string, IReportsTreeOptionGroup> = {}
-      const ungroupedOptions: IReportsTreeOptionItem[] = []
+      const groupedOptions: Record<string, DefaultOptionType> = {}
+      const ungroupedOptions: DefaultOptionType[] = []
 
       reportsTreeData.items?.forEach(item => {
         if (isEmptyValue(item.group)) {
           ungroupedOptions.push({
-            label: item.niceName,
+            label: renderOptionLabel(item.iconClass, item.niceName),
             value: item.name
           })
 
@@ -86,14 +84,14 @@ export const ReportsView = (): React.JSX.Element => {
 
         if (isUndefined(groupedOptions[item.group])) {
           groupedOptions[item.group] = {
-            label: item.group,
+            label: renderOptionLabel(item.groupIconClass, item.group),
             title: item.group,
             options: []
           }
         }
 
         groupedOptions[item.group].options.push({
-          label: item.niceName,
+          label: renderOptionLabel(item.iconClass, item.niceName),
           value: item.name
         })
       })
@@ -101,7 +99,7 @@ export const ReportsView = (): React.JSX.Element => {
       const hasUngroupedOptions = ungroupedOptions.length > 0
 
       Object.keys(groupedOptions).forEach((groupKey, index) => {
-        const title = groupedOptions[groupKey].title
+        const title = groupedOptions[groupKey].label
         const withDivider = hasUngroupedOptions || index > 0
 
         groupedOptions[groupKey].label = (
