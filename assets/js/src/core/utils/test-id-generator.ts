@@ -14,8 +14,61 @@ import { type ElementType } from '@Pimcore/types/enums/element/element-type'
  * Creates a safe string for use in test IDs by removing special characters
  * and normalizing the format.
  */
-export const createSafeTestIdString = (input: string): string => {
-  return input.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')
+export const createSafeTestIdString = (input: string | number): string => {
+  return String(input).toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')
+}
+
+/**
+ * Generic test ID builder that combines parts with separators.
+ * 
+ * @param parts - Array of string/number parts to combine
+ * @param separator - Separator to use between parts (default: '-')
+ * @returns Formatted test ID string
+ * 
+ * @example
+ * buildTestId(['tree', 'node', 123, 'asset'])
+ * // Returns: 'tree-node-123-asset'
+ */
+export const buildTestId = (parts: Array<string | number | undefined>, separator: string = '-'): string => {
+  return parts
+    .filter(Boolean)
+    .map(createSafeTestIdString)
+    .join(separator)
+    .replace(new RegExp(`${separator}+`, 'g'), separator)
+    .replace(new RegExp(`^${separator}|${separator}$`, 'g'), '')
+}
+
+/**
+ * Creates a test ID with optional prefix and suffix.
+ * More flexible version that can be used as base for specific generators.
+ * 
+ * @param base - The base identifier
+ * @param options - Configuration options
+ * @returns Formatted test ID string
+ * 
+ * @example
+ * createGenericTestId('123', { prefix: 'tree-node', elementType: 'asset' })
+ * // Returns: 'tree-node-asset-123'
+ */
+export const createGenericTestId = (
+  base: string | number,
+  options: {
+    prefix?: string
+    suffix?: string
+    elementType?: ElementType | string
+    separator?: string
+  } = {}
+): string => {
+  const { prefix, suffix, elementType, separator = '-' } = options
+  
+  const parts = [
+    prefix,
+    elementType,
+    base,
+    suffix
+  ]
+  
+  return buildTestId(parts, separator)
 }
 
 /**
@@ -28,12 +81,13 @@ export const createSafeTestIdString = (input: string): string => {
  * 
  * @example
  * createNodeTestId(123, 'document') 
- * // Returns: 'document-node-123'
+ * // Returns: 'tree-node-document-123'
  */
 export const createNodeTestId = (id: number, elementType?: ElementType): string => {
-  const safeId = id.toString()
-  const prefix = elementType ? `${elementType}-` : ''
-  return `tree-node-${prefix}${safeId}`.replace(/-+/g, '-')
+  return createGenericTestId(id, {
+    prefix: 'tree-node',
+    elementType
+  })
 }
 
 /**
@@ -54,56 +108,19 @@ export const createNodeTestId = (id: number, elementType?: ElementType): string 
  */
 export const createBorderTestId = (nodeId?: string, nodeName?: string, elementType?: string): string => {
   if (nodeId) {
-    return `border-button-${createSafeTestIdString(nodeId)}`
+    return createGenericTestId(nodeId, { prefix: 'border-button' })
   }
   
   if (nodeName && elementType) {
-    const safeName = createSafeTestIdString(nodeName)
-    const safeType = createSafeTestIdString(elementType)
-    return `border-button-${safeType}-${safeName}`
+    return createGenericTestId(nodeName, {
+      prefix: 'border-button',
+      elementType
+    })
   }
   
   if (nodeName) {
-    const safeName = createSafeTestIdString(nodeName)
-    return `border-button-${safeName}`
+    return createGenericTestId(nodeName, { prefix: 'border-button' })
   }
   
   return 'border-button'
-}
-
-/**
- * Creates a test ID for navigation items based on their path.
- * Used for main navigation menu items.
- * 
- * @param path - The navigation path (e.g., 'File/Assets')
- * @returns Formatted test ID string
- * 
- * @example
- * createNavTestId('File/Assets')
- * // Returns: 'file-assets'
- * 
- * createNavTestId('Settings/Users & Groups')
- * // Returns: 'settings-users-groups'
- */
-export const createNavTestId = (path: string): string => {
-  return createSafeTestIdString(path)
-}
-
-/**
- * Creates a test ID for general UI components with optional prefix and suffix.
- * Provides a consistent way to generate test IDs across the application.
- * 
- * @param base - The base identifier
- * @param prefix - Optional prefix
- * @param suffix - Optional suffix
- * @returns Formatted test ID string
- * 
- * @example
- * createTestId('user-profile', 'modal', 'close-btn')
- * // Returns: 'modal-user-profile-close-btn'
- */
-export const createTestId = (base: string, prefix?: string, suffix?: string): string => {
-  const safeBase = createSafeTestIdString(base)
-  const parts = [prefix, safeBase, suffix].filter(Boolean).map(createSafeTestIdString)
-  return parts.join('-')
 }
