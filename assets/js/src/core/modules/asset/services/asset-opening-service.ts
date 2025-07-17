@@ -92,6 +92,7 @@ export class AssetOpeningService {
       component: 'asset-editor',
       config: {
         id,
+        elementType: 'asset',
         icon: getElementIcon(data, { value: 'widget', type: 'name' })
       }
     }))

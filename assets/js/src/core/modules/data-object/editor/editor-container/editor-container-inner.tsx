@@ -28,6 +28,7 @@ import {
   SaveProvider
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/save-provider'
 import { Alert } from '@Pimcore/components/alert/alert'
+import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
 
 export interface EditorContainerInnerProps {
   id: number
@@ -83,6 +84,7 @@ const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Eleme
           <InheritanceStateProvider>
             <LanguageSelectionProvider>
               <TabsToolbarView
+                dataTestId={`data-object-editor-${createSafeTestIdString(id.toString())}`}
                 renderTabbar={
                   <TabsContainer
                     elementEditorType={ editorType }

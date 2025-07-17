@@ -121,3 +121,32 @@ export const createBorderTestId = (nodeId?: string, nodeName?: string, elementTy
 
   return 'border-button'
 }
+
+/**
+ * Creates a test ID for tab titles with element information when available.
+ * Prioritizes element type and ID for specificity, falls back to title.
+ *
+ * @param title - The tab title text
+ * @param elementId - Optional element ID
+ * @param elementType - Optional element type string
+ * @returns Formatted test ID string
+ *
+ * @example
+ * createTabTitleTestId('My Asset', 123, 'asset')
+ * // Returns: 'tab-title-asset-123'
+ *
+ * createTabTitleTestId('My Widget')
+ * // Returns: 'tab-title-my-widget'
+ */
+export const createTabTitleTestId = (title: string, elementId?: number | string, elementType?: string): string => {
+  if (elementType && elementId) {
+    return createGenericTestId(elementId, {
+      prefix: 'tab-title',
+      elementType: elementType as ElementType
+    })
+  }
+
+  return createGenericTestId(title, {
+    prefix: 'tab-title'
+  })
+}

@@ -56,6 +56,8 @@ export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): R
 
   return (
     <TabTitleView
+      elementId={ config.id }
+      elementType={ config.elementType }
       icon={ icon }
       onClose={ isCloseable ? onClose : undefined }
       onConfirm={ modified === true ? onConfirm : undefined }
