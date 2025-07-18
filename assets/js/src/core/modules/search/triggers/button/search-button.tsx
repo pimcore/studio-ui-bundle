@@ -11,9 +11,12 @@
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import React from 'react'
 import { useSearch } from '../../provider/use-search'
+import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
 
 export const SearchButton = (): React.JSX.Element => {
   const { open } = useSearch()
+
+  useHandleKeyBindings(() => { open() }, 'quickSearch')
 
   return (
     <IconButton

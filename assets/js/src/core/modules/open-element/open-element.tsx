@@ -18,6 +18,30 @@ interface OpenDocumentProp {
   elementType: ElementType
 }
 
+export const modalTexts = {
+  'data-object': {
+    title: 'open-data-object-modal.title',
+    label: 'open-data-object-modal.label',
+    requiredMessage: 'open-data-object-modal.required-message',
+    okText: 'open-data-object-modal.ok-button',
+    cancelText: 'open-data-object-modal.cancel-button'
+  },
+  asset: {
+    title: 'open-asset-modal.title',
+    label: 'open-asset-modal.label',
+    requiredMessage: 'open-asset-modal.required-message',
+    okText: 'open-asset-modal.ok-button',
+    cancelText: 'open-asset-modal.cancel-button'
+  },
+  document: {
+    title: 'open-document-modal.title',
+    label: 'open-document-modal.label',
+    requiredMessage: 'open-document-modal.required-message',
+    okText: 'open-document-modal.ok-button',
+    cancelText: 'open-document-modal.cancel-button'
+  }
+}
+
 export const OpenElement = ({ elementType }: OpenDocumentProp): React.JSX.Element => {
   const { openElementByPathOrId } = openElementHelper()
   const { t } = useTranslation()
@@ -29,41 +53,17 @@ export const OpenElement = ({ elementType }: OpenDocumentProp): React.JSX.Elemen
     document: t('open-document.button')
   }
 
-  const modalTexts = {
-    'data-object': {
-      title: t('open-data-object-modal.title'),
-      label: t('open-data-object-modal.label'),
-      requiredMessage: t('open-data-object-modal.required-message'),
-      okText: t('open-data-object-modal.ok-button'),
-      cancelText: t('open-data-object-modal.cancel-button')
-    },
-    asset: {
-      title: t('open-asset-modal.title'),
-      label: t('open-asset-modal.label'),
-      requiredMessage: t('open-asset-modal.required-message'),
-      okText: t('open-asset-modal.ok-button'),
-      cancelText: t('open-asset-modal.cancel-button')
-    },
-    document: {
-      title: t('open-document-modal.title'),
-      label: t('open-document-modal.label'),
-      requiredMessage: t('open-document-modal.required-message'),
-      okText: t('open-document-modal.ok-button'),
-      cancelText: t('open-document-modal.cancel-button')
-    }
-  }
-
   const texts = modalTexts[elementType]
   const handleClick = (): void => {
     input({
-      title: texts.title,
-      label: texts.label,
+      title: t(texts.title),
+      label: t(texts.label),
       rule: {
         required: true,
-        message: texts.requiredMessage
+        message: t(texts.requiredMessage)
       },
-      okText: texts.okText,
-      cancelText: texts.cancelText,
+      okText: t(texts.okText),
+      cancelText: t(texts.cancelText),
       onOk: async (value: string) => {
         await openElementByPathOrId(value, elementType)
       }

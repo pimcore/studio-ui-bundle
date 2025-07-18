@@ -21,6 +21,10 @@ import { type IMainNavItem } from './services/main-nav-registry'
 import { isAllowedInPerspective } from '@Pimcore/modules/perspectives/permission-checker'
 import { isUndefined } from 'lodash'
 import { PerspectiveSwitch } from './perspective-switch'
+import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { openElementHelper } from '@Pimcore/modules/open-element/hooks/open-element-helper'
+import { modalTexts } from '@Pimcore/modules/open-element/open-element'
 
 export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -28,6 +32,8 @@ export const MainNav = (): React.JSX.Element => {
   const { navItems } = useMainNav()
   const { openMainWidget } = useWidgetManager()
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
+  const { input } = useFormModal()
+  const { openElementByPathOrId } = openElementHelper()
 
   const [openKeys, setOpenKeys] = React.useState<string[]>([])
   const handleOpenState = (key: string): void => {
@@ -134,6 +140,26 @@ export const MainNav = (): React.JSX.Element => {
       document.removeEventListener('click', handleClickOutside)
     }
   }, [isOpen])
+
+  const handleOpen = (type) => {
+    input({
+      title: t(modalTexts[type].title),
+      label: t(modalTexts[type].label),
+      rule: {
+        required: true,
+        message: t(modalTexts[type].requiredMessage)
+      },
+      okText: t(modalTexts[type].okText),
+      cancelText: t(modalTexts[type].cancelText),
+      onOk: async (value: string) => {
+        await openElementByPathOrId(value, type)
+      }
+    })
+  }
+
+  useHandleKeyBindings(() => { handleOpen('data-object') }, 'openObject')
+  useHandleKeyBindings(() => { handleOpen('document') }, 'openDocument')
+  useHandleKeyBindings(() => { handleOpen('asset') }, 'openAsset')
 
   return (
     <div ref={ elRef }>
