@@ -32,7 +32,7 @@ interface IReportDetailProps {
 const columnHelper = createColumnHelper()
 
 export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chartDetailData }: IReportDetailProps): React.JSX.Element => {
-  const [showLoading, setIsShowLoading] = useState(false)
+  const [isShowLoading, setIsShowLoading] = useState(false)
   const prevReportRef = useRef<string | null>(null)
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
   const chartData = chartDetailData?.items?.map((item) => item.data)
   const reportName = reportDetailData?.name ?? ''
 
-  if (isLoading && showLoading) {
+  if (isLoading && isShowLoading) {
     return <Content loading />
   }
 
