@@ -1,9 +1,11 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import { Form } from '../form/form'
 import { Divider } from '../divider/divider'
 import { PipelineItemCustom } from './item/custom'
 import { PipelineDynamicGroup } from './item/dynamic-group'
 import { ConfigProvider } from 'antd'
+import { isEqual } from 'lodash'
+import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
 
 export interface PipelineItem {
   id: string,

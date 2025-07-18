@@ -37,7 +37,8 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
       key: column.key,
       type: column.type,
       locale: column.locale,
-      config: advancedColumnConfig ?? column.config
+      group: column.group,
+      config: advancedColumnConfig ?? column.config,
     })
   })
 

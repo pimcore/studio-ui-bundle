@@ -5,6 +5,8 @@ import { AdvancedColumnConfig, useDataObjectGetGridPreviewQuery } from "@Pimcore
 import { AvailableColumn } from "@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider";
 import { transform } from "lodash";
 import React from "react";
+import { PreviewValue } from "./preview-value";
+import { Box } from "@Pimcore/components/box/box";
 
 export interface PreviewProps {
   column: AvailableColumn
@@ -12,29 +14,30 @@ export interface PreviewProps {
 
 export const Preview = (props : PreviewProps): React.JSX.Element => {
   const { column } = props;
-  const advancedColumnConfig = column?.__meta?.advancedColumnConfig ?? {};
+  const advancedColumnConfig = (column?.__meta?.advancedColumnConfig ?? column.config) as unknown as AdvancedColumnConfig[] | undefined;
 
   const { data } = useDataObjectGetGridPreviewQuery({
     body: {
       column: {
         type: column.type,
         key: column.key,
-        config: {
-          advancedColumns: advancedColumnConfig.advancedColumns ?? [],
-          transformers: advancedColumnConfig.transformers ?? [],
-        }
+        config: advancedColumnConfig
       },
       // @todo check how to get the current objectId
       objectId: 9
     }
   })
 
-  const value = data?.value?.[0]?.value
-
   return (
-    <Flex gap={'small'}>
-      <Text>Preview:</Text>
-      <Text type="secondary">{value}</Text>
-    </Flex>
+    <Box padding={'small'}>
+      <Flex gap={'small'}>
+        <Text style={{ wordBreak: 'keep-all' }}>Preview:</Text>
+        {data?.value === undefined || data?.value.length === 0 ? (
+          <Text>No data available</Text>
+        ) : (
+          <PreviewValue value={data?.value} />
+        )}
+      </Flex>
+    </Box>
   )
 }

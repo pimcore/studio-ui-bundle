@@ -37,29 +37,26 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   }
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (!isEqual(value, initialValue)) {
-        onChange(value)
-      }
-    }, 300)
-
-    return () => { clearTimeout(timeoutId) }
-  }, [value])
-
-  useEffect(() => {
     if (!isEqual(value, initialValue)) {
       setValue(initialValue)
     }
   }, [baseValue])
 
+  const triggerChange = (value: any): void => {
+    if (!isEqual(value, initialValue)) {
+      onChange(value)
+    }
+  }
+
   const add: KeyedListData['operations']['add'] = (key, newValue = {}) => {
     setValue((currentValue) => {
       if (isObject(currentValue) && currentValue[key] !== undefined) {
-        return currentValue
+        triggerChange(currentValue)
       }
 
       const _newValue = cloneDeep(currentValue)
       _newValue[key] = newValue
+      triggerChange(_newValue)
       return _newValue
     })
   }
@@ -69,7 +66,10 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete newValue[key]
 
-    setValue(() => newValue)
+    setValue(() => {
+      triggerChange(newValue)
+      return newValue
+    })
   }
 
   const update: KeyedListData['operations']['update'] = (subFieldname, newSubValue, isInitialValue) => {
@@ -99,6 +99,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     setValue((currentValue) => {
       const newValue = cloneDeep(currentValue)
       setWith(newValue, nameDifference, newSubValue, setAsObject)
+      triggerChange(newValue)
       return newValue
     })
   }

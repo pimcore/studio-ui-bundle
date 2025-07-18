@@ -16,8 +16,6 @@ export interface AdvancedColumnFormProps {
 export const AdvancedColumnForm = ({column, onChange }: AdvancedColumnFormProps): React.JSX.Element => {
   const [form] = Form.useForm();
 
-  console.log({column})
-
   useEffect(() => {
     form.setFieldValue('value', column?.__meta?.advancedColumnConfig ?? {});
   }, [column]);

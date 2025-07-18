@@ -42,6 +42,8 @@ export class DynamicTypeObjectDataImage extends DynamicTypeObjectDataAbstract {
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
     const value = props.cellProps.getValue()
 
+    console.log({value});
+
     return (
       <GridCellPreviewWrapper>
         <Flex

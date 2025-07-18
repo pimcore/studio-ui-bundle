@@ -46,7 +46,7 @@ export const DynamicGroupContent = ({ dynamicTypeRegistryId, id }: DynamicGroupC
       updatedItems.splice(newIndex, 0, active.id);
 
       operations.move(oldIndex, newIndex);
-      setItems(() => updatedItems);
+      setItems(updatedItems);
     }
   };
 
@@ -75,10 +75,9 @@ export const DynamicGroupContent = ({ dynamicTypeRegistryId, id }: DynamicGroupC
                   const isLastItem = index === values.length - 1;
 
                   return (
-                    <Fragment key={index}>
+                    <Fragment key={value.vId}>
                       <DynamicGroupItem
                         dynamicTypeRegistryId={dynamicTypeRegistryId}
-                        key={index + 1}
                         id={index}
                       />
 
