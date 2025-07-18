@@ -158,6 +158,8 @@ export const ReportsView = (): React.JSX.Element => {
     <ContentLayout
       renderToolbar={ !isEmpty(chartDetailData?.items) && !isFetching && (
         <ReportToolbar
+          currentReport={ currentReport }
+          filters={ filters }
           page={ page }
           pageSize={ pageSize }
           setPage={ setPage }

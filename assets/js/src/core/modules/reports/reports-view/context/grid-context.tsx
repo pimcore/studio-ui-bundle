@@ -20,7 +20,7 @@ export interface IFilterValue {
 interface IGridContext {
   columns: Array<AccessorKeyColumnDef<unknown, any>>
   setColumns: (columns: Array<AccessorKeyColumnDef<unknown, any>>) => void
-  filters?: IFilterValue
+  filters: IFilterValue
   setFilters: (filters: IFilterValue) => void
   resetFilters: () => void
 }

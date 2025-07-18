@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Pagination } from '@Pimcore/modules/reports/components/pagination/pagination'
@@ -16,9 +16,17 @@ import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { useCustomReportExportCsvMutation } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
+import { type IFilterValue } from '@Pimcore/modules/reports/reports-view/context/grid-context'
+import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
+import { createJob as createDownloadCSVJob } from '@Pimcore/modules/execution-engine/jobs/download/factory'
+import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 
 interface IReportToolbarProps {
+  currentReport: string | null
+  filters: IFilterValue
   page: number
   setPage: (page: number) => void
   pageSize: number
@@ -26,9 +34,31 @@ interface IReportToolbarProps {
   totalItems: number
 }
 
-export const ReportToolbar = ({ page, setPage, pageSize, setPageSize, totalItems }: IReportToolbarProps): React.JSX.Element | null => {
+export const ReportToolbar = ({ currentReport, filters, page, setPage, pageSize, setPageSize, totalItems }: IReportToolbarProps): React.JSX.Element | null => {
+  const [fetchExportCSV, { isError, error }] = useCustomReportExportCsvMutation()
+  const { addJob } = useJobs()
+
   const { t } = useTranslation()
   const { styles } = useStyles()
+
+  const handleExportCSV = ({ includeHeaders }: { includeHeaders: boolean }): void => {
+    addJob(createDownloadCSVJob({
+      title: t('jobs.csv-job.title', { title: currentReport }),
+      topics: [topics['csv-download-ready'], ...defaultTopics],
+      downloadUrl: '/pimcore-studio/api/export/download/csv/{jobRunId}',
+      action: async (): Promise<number> => {
+        const response = await fetchExportCSV({ body: { name: currentReport, filters, includeHeaders } }).unwrap()
+
+        return response as unknown as number
+      }
+    }))
+  }
+
+  useEffect(() => {
+    if (isError) {
+      trackError(new ApiError(error))
+    }
+  }, [isError])
 
   const renderDropdownLabel = (translationKey: string): React.JSX.Element => (
     <Flex
@@ -45,9 +75,7 @@ export const ReportToolbar = ({ page, setPage, pageSize, setPageSize, totalItems
     {
       key: 'csv-export-with-headers',
       label: renderDropdownLabel('reports.csv-export-with-headers'),
-      onClick: () => {
-        console.log('Item 1 clicked')
-      }
+      onClick: () => { handleExportCSV({ includeHeaders: true }) }
     }
   ]
 
@@ -57,7 +85,7 @@ export const ReportToolbar = ({ page, setPage, pageSize, setPageSize, totalItems
       theme="secondary"
     >
       <Dropdown menu={ { items: dropdownItems } }>
-        <DropdownButton>
+        <DropdownButton onClick={ () => { handleExportCSV({ includeHeaders: false }) } }>
           {renderDropdownLabel('reports.csv-export')}
         </DropdownButton>
       </Dropdown>
