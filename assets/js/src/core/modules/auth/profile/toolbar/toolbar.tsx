@@ -20,6 +20,8 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
+import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
+import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 
 interface IToolbarProps {
   id: number
@@ -31,6 +33,7 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
   const { t } = useTranslation()
   const { user, isLoading, removeTrackedChanges } = useUserDraft()
   const { updateUserProfile } = useUserHelper()
+  const isWidgetActive = useIsAcitveMainWidget()
 
   const hasChanges = user?.modified === true
 
@@ -72,6 +75,8 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
       onClick: onRemoveUser
     }
   ]
+
+  useHandleKeyBindings(async () => { await updateUserProfile(user) }, 'save', isWidgetActive)
 
   return (
     <ToolbarView>

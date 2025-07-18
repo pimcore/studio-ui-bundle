@@ -12,9 +12,8 @@ import { useCallback, useEffect } from 'react'
 import { useUserDraft } from '@Pimcore/modules/auth/hooks/use-user-draft'
 import { type KeyBindingForAUser } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 
-export const useHandleKeyBindings = (callback, actionName): void => {
+export const useHandleKeyBindings = (callback, actionName, enabled = true): void => {
   const { user } = useUserDraft()
-  console.log(user?.keyBindings)
 
   const getConfigByactionName = (actionName: string): KeyBindingForAUser | undefined => {
     if (!user?.keyBindings) {
@@ -23,9 +22,6 @@ export const useHandleKeyBindings = (callback, actionName): void => {
 
     return user.keyBindings.find((binding: KeyBindingForAUser) => binding.action === actionName) || undefined
   }
-
-  // const targetElement = config.shortcutTarget || document
-  const targetElement = document
 
   const eventHandler = useCallback((evt: KeyboardEvent) => {
     const config = getConfigByactionName(actionName)
@@ -37,12 +33,17 @@ export const useHandleKeyBindings = (callback, actionName): void => {
     }
   }, [callback, actionName])
 
-  useEffect(() => {
-    targetElement.addEventListener('keydown', eventHandler)
-    return () => { targetElement.removeEventListener('keydown', eventHandler) }
-  }, [targetElement, eventHandler])
+  // useEffect(() => {
+  //   document.addEventListener('keydown', eventHandler)
+  //   return () => { document.removeEventListener('keydown', eventHandler) }
+  // })
 
-  // const location = useLocation()
-  //
-  // console.log('location', location)
+  useEffect(() => {
+    if (!enabled) return
+    document.addEventListener('keydown', eventHandler)
+
+    return () => {
+      document.removeEventListener('keydown', eventHandler)
+    }
+  }, [enabled, eventHandler])
 }
