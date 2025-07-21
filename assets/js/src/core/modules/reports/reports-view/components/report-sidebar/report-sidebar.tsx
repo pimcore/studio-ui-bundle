@@ -12,6 +12,9 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { Icon } from '@Pimcore/components/icon/icon'
+import {
+  ColumnsConfiguration
+} from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-configuration/columns-configuration'
 
 export const ReportSidebar = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -19,7 +22,7 @@ export const ReportSidebar = (): React.JSX.Element => {
   const sidebarProps = {
     entries: [
       {
-        component: <div>Column Configuration</div>,
+        component: <ColumnsConfiguration />,
         key: 'column-configuration',
         icon: <Icon value="settings" />,
         tooltip: t('sidebar.grid_config')
