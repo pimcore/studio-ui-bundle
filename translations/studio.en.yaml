@@ -860,6 +860,7 @@ reports.select-report: Select report
 reports.csv-export: CSV Export
 reports.csv-export-with-headers: CSV Export with headers
 reports.grid-config.title-columns: Columns
+reports.grid-config.restore-to-default: Restore to default
 loading: Loading...
 please-wait: Please wait...
 navigation.email: Email
