@@ -17,6 +17,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
+import { ReportsDataProvider } from '@Pimcore/modules/reports/reports-view/context/reports-data-context'
 import { GridProvider } from '@Pimcore/modules/reports/reports-view/context/grid-context'
 
 moduleSystem.registerModule({
@@ -65,9 +66,11 @@ moduleSystem.registerModule({
     widgetRegistryService.registerWidget({
       name: 'reports',
       component: () => (
-        <GridProvider>
-          <ReportsView />
-        </GridProvider>
+        <ReportsDataProvider>
+          <GridProvider>
+            <ReportsView />
+          </GridProvider>
+        </ReportsDataProvider>
       )
     })
 

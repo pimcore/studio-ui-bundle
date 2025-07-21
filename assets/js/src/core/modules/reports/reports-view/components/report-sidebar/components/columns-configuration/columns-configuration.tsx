@@ -8,10 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type AccessorKeyColumnDef } from '@tanstack/react-table'
 import { Empty } from 'antd'
+import { isEmpty } from 'lodash'
 import { useGridContext } from '@Pimcore/modules/reports/reports-view/context/grid-context'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
@@ -25,9 +26,14 @@ import { StackList, type StackListProps } from '@Pimcore/components/stack-list/s
 import type { StackListItemProps } from '@Pimcore/components/stack-list/stack-list-item'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Button } from '@Pimcore/components/button/button'
+import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { useReportsDataContext } from '@Pimcore/modules/reports/reports-view/context/reports-data-context'
+
+type Column = AccessorKeyColumnDef<unknown, any>
 
 interface ColumnStackListItemProps extends StackListItemProps {
-  meta: AccessorKeyColumnDef<unknown, any>
+  meta: Column
 }
 
 interface ColumnStackListProps extends Omit<StackListProps, 'items'> {
@@ -36,10 +42,29 @@ interface ColumnStackListProps extends Omit<StackListProps, 'items'> {
 
 export const ColumnsConfiguration = (): React.JSX.Element => {
   const { columns, setColumns } = useGridContext()
+  const { currentReport } = useReportsDataContext()
 
-  const [initialColumns] = useState(columns)
+  const [initialColumns, setInitialColumns] = useState<Column[]>([])
+  const [addColumnMenu, setAddColumnMenu] = useState<DropdownMenuProps['items']>([])
 
   const { t } = useTranslation()
+
+  useEffect(() => {
+    setInitialColumns(columns)
+  }, [currentReport])
+
+  useEffect(() => {
+    if (!isEmpty(columns)) {
+      const newAddColumnMenu = initialColumns
+        .filter((initialColumn) => !columns.some((column) => initialColumn.accessorKey === column.accessorKey))
+        .map((column) => ({
+          key: column.accessorKey,
+          label: column.header as string
+        }))
+
+      setAddColumnMenu(newAddColumnMenu)
+    }
+  }, [columns])
 
   const handleItemsChange = (items: ColumnStackListProps['items']): void => {
     const newColumns = items.map((item) => item.meta)
@@ -111,6 +136,16 @@ export const ColumnsConfiguration = (): React.JSX.Element => {
             />
           ) }
         </Flex>
+        {!isEmpty(addColumnMenu) && (
+          <Dropdown menu={ { items: addColumnMenu } }>
+            <IconTextButton
+              icon={ { value: 'new' } }
+              type='link'
+            >
+              { t('listing.add-column') }
+            </IconTextButton>
+          </Dropdown>
+        )}
       </Content>
     </ContentLayout>
   )
