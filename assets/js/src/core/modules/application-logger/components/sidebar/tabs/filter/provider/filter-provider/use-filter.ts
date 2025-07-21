@@ -9,7 +9,7 @@
  */
 
 import { useContext } from 'react'
-import { FilterProviderContext, FilterProviderData } from './filter-provider'
+import { FilterProviderContext, type FilterProviderData } from './filter-provider'
 
 export interface UseFilterReturn extends FilterProviderData { }
 

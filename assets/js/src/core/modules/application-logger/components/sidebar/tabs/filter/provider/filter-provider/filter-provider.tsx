@@ -1,36 +1,46 @@
-import { FilterProviderProps } from "@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/sidebar/tabs/filters/provider/filter-provider/filter-provider";
-import { isNil } from "lodash";
-import React, { createContext, useMemo } from "react";
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { type FilterProviderProps } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/sidebar/tabs/filters/provider/filter-provider/filter-provider'
+import { isNil } from 'lodash'
+import React, { createContext, useMemo } from 'react'
 
 export interface FilterProviderData {
-  dateFrom: string | null;
-  setDateFrom: (date: string | null) => void;
-  dateTo: string | null;
-  setDateTo: (date: string | null) => void;
-  logLevel: string | null;
-  setLogLevel: (logLevel: string | null) => void;
-  component: string | null;
-  setComponent: (component: string | null) => void;
-  relatedObjectId: number | null;
-  setRelatedObjectId: (relatedObjectId: number | null) => void;
-  message: string | null;
-  setMessage: (message: string | null) => void;
-  pid: number | null;
-  setPid: (pid: number | null) => void;
-  columnFilters: ColumnFilters;
-  updateFilters: () => void;
-  resetFilters: () => void;
+  dateFrom: string | null
+  setDateFrom: (date: string | null) => void
+  dateTo: string | null
+  setDateTo: (date: string | null) => void
+  logLevel: string | null
+  setLogLevel: (logLevel: string | null) => void
+  component: string | null
+  setComponent: (component: string | null) => void
+  relatedObjectId: number | null
+  setRelatedObjectId: (relatedObjectId: number | null) => void
+  message: string | null
+  setMessage: (message: string | null) => void
+  pid: number | null
+  setPid: (pid: number | null) => void
+  columnFilters: ColumnFilters
+  updateFilters: () => void
+  resetFilters: () => void
 }
 export type FilterContextProps = FilterProviderData | undefined
 
 export const FilterProviderContext = createContext<FilterContextProps>(undefined)
 
 export interface DateFromFilter {
-  key: string;
-  type: string;
+  key: string
+  type: string
   filterValue: {
-    operator: string;
-    value: string | null;
+    operator: string
+    value: string | null
   } | string | number
 }
 
@@ -133,7 +143,7 @@ export const FilterProvider = (props: FilterProviderProps): React.JSX.Element =>
   }
 
   return useMemo(() => (
-    <FilterProviderContext.Provider value={{
+    <FilterProviderContext.Provider value={ {
       dateFrom,
       setDateFrom,
       dateTo,
@@ -151,7 +161,7 @@ export const FilterProvider = (props: FilterProviderProps): React.JSX.Element =>
       columnFilters,
       updateFilters,
       resetFilters
-    }}
+    } }
     >
       {props.children}
     </FilterProviderContext.Provider>

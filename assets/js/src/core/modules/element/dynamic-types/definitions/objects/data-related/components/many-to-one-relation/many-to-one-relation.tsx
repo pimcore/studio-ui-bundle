@@ -101,28 +101,28 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
 
   return (
     <Flex
-      className={cn(styles.container, props.className)}
+      className={ cn(styles.container, props.className) }
       gap="extra-small"
-      style={{
+      style={ {
         maxWidth: toCssDimension(props.width, fieldWidth.large)
-      }}
+      } }
     >
-      <div className={styles.droppableWrapper}>
+      <div className={ styles.droppableWrapper }>
         <Droppable
-          isValidContext={(info: DragAndDropInfo) => isEnabled && isValidElementType(info.type)}
-          isValidData={(info: DragAndDropInfo) => dndIsValidData(info, props)}
-          onDrop={(info: DragAndDropInfo) => {
+          isValidContext={ (info: DragAndDropInfo) => isEnabled && isValidElementType(info.type) }
+          isValidData={ (info: DragAndDropInfo) => dndIsValidData(info, props) }
+          onDrop={ (info: DragAndDropInfo) => {
             const newValue: ManyToOneRelationValue | undefined = convertDragAndDropInfoToElementReference(info)
 
             setValue(newValue ?? null)
-          }}
+          } }
         >
           <PathTarget
-            allowPathTextInput={props.allowPathTextInput}
-            disabled={props.disabled}
-            inherited={props.inherited}
-            onChange={setValue}
-            value={value}
+            allowPathTextInput={ props.allowPathTextInput }
+            disabled={ props.disabled }
+            inherited={ props.inherited }
+            onChange={ setValue }
+            value={ value }
           />
         </Droppable>
       </div>
@@ -130,13 +130,13 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
         {props.allowPathTextInput !== true && (
           <Tooltip
             key="open"
-            title={t('open')}
+            title={ t('open') }
           >
             <IconButton
-              disabled={value === null}
-              icon={{ value: 'open-folder' }}
-              onClick={clickOpenElement}
-              style={{ flex: '0 0 auto' }}
+              disabled={ value === null }
+              icon={ { value: 'open-folder' } }
+              onClick={ clickOpenElement }
+              style={ { flex: '0 0 auto' } }
               type="default"
             />
           </Tooltip>
@@ -145,16 +145,16 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
         {props.assetInlineDownloadAllowed === true && value?.textInput !== true && (
           <Tooltip
             key="download"
-            title={t('download')}
+            title={ t('download') }
           >
             <IconButton
-              disabled={value?.type !== 'asset' || value?.subtype === 'folder'}
-              icon={{ value: 'download' }}
-              onClick={() => {
+              disabled={ value?.type !== 'asset' || value?.subtype === 'folder' }
+              icon={ { value: 'download' } }
+              onClick={ () => {
                 download(
                   String(value?.id)
                 )
-              }}
+              } }
               type="default"
             />
           </Tooltip>
@@ -163,14 +163,14 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
         {props.allowToClearRelation === true && (
           <Tooltip
             key="empty"
-            title={t('empty')}
+            title={ t('empty') }
           >
             <IconButton
-              disabled={value === null || props.disabled === true}
-              icon={{ value: 'trash' }}
-              onClick={() => {
+              disabled={ value === null || props.disabled === true }
+              icon={ { value: 'trash' } }
+              onClick={ () => {
                 setValue(null)
-              }}
+              } }
               type="default"
             />
           </Tooltip>
@@ -178,7 +178,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
 
         {isEnabled && (
           <ElementSelectorButton
-            elementSelectorConfig={{
+            elementSelectorConfig={ {
               selectionType: SelectionType.Single,
               areas: createElementSelectorAreas(props),
               config: {
@@ -202,7 +202,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
                   })
                 }
               }
-            }}
+            } }
             type="default"
           />
         )}

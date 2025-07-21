@@ -83,31 +83,31 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
 
   return (
     <div
-      className={styles.toolbar}
-      ref={elementRef}
+      className={ styles.toolbar }
+      ref={ elementRef }
     >
 
       <Breadcrumb
-        editorTabsWidth={editorTabsWidth}
-        elementType={elementType}
-        pageSize={editorTabsBlockSize}
-        path={element.fullPath!}
+        editorTabsWidth={ editorTabsWidth }
+        elementType={ elementType }
+        pageSize={ editorTabsBlockSize }
+        path={ element.fullPath! }
       />
 
-      <div className={'element-toolbar__info-dropdown'}>
-        <Dropdown menu={{ items: menuItems }}>
+      <div className={ 'element-toolbar__info-dropdown' }>
+        <Dropdown menu={ { items: menuItems } }>
           <Button
             icon={
               <Icon
-                value={'chevron-down'}
+                value={ 'chevron-down' }
               />
             }
             iconPosition="end"
-            onClick={() => {
+            onClick={ () => {
               void navigator.clipboard.writeText(
                 element.id.toString()
               )
-            }}
+            } }
             size="small"
           >
             <Space>
@@ -118,12 +118,12 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
       </div>
 
       <IconButton
-        icon={{ value: 'target' }}
-        loading={locateInTreeLoading}
-        onClick={() => {
+        icon={ { value: 'target' } }
+        loading={ locateInTreeLoading }
+        onClick={ () => {
           setLocateInTreeLoading(true)
           locateInTree(element.id, () => { setLocateInTreeLoading(false) })
-        }}
+        } }
       />
     </div>
   )

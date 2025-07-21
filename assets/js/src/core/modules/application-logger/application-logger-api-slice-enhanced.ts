@@ -32,5 +32,5 @@ export type * from './application-logger-api-slice.gen'
 export const {
   useBundleApplicationLoggerGetCollectionQuery,
   useBundleApplicationLoggerListComponentsQuery,
-  useBundleApplicationLoggerListPrioritiesQuery,
+  useBundleApplicationLoggerListPrioritiesQuery
 } = api
