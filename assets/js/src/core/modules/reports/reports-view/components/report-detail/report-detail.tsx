@@ -51,7 +51,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
     }
   }, [isLoading])
 
-  const { columns, setColumns } = useGridContext()
+  const { columns, setColumns, setInitialColumns } = useGridContext()
 
   useEffect(() => {
     const getColumns = (): Array<AccessorKeyColumnDef<unknown, never>> | undefined => (
@@ -69,6 +69,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
     )
 
     setColumns(getColumns() ?? [])
+    setInitialColumns(getColumns() ?? [])
   }, [reportDetailData, setColumns])
 
   const getDrillDownSelectList = (): BundleCustomReportsColumnConfiguration[] | undefined => (

@@ -28,7 +28,6 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Button } from '@Pimcore/components/button/button'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import { useReportsDataContext } from '@Pimcore/modules/reports/reports-view/context/reports-data-context'
 
 type Column = AccessorKeyColumnDef<unknown, any>
 
@@ -41,30 +40,11 @@ interface ColumnStackListProps extends Omit<StackListProps, 'items'> {
 }
 
 export const ColumnsConfiguration = (): React.JSX.Element => {
-  const { columns, setColumns } = useGridContext()
-  const { currentReport } = useReportsDataContext()
+  const { columns, setColumns, initialColumns, addColumn, resetColumnsToInitial } = useGridContext()
 
-  const [initialColumns, setInitialColumns] = useState<Column[]>([])
   const [addColumnMenu, setAddColumnMenu] = useState<DropdownMenuProps['items']>([])
 
   const { t } = useTranslation()
-
-  useEffect(() => {
-    setInitialColumns(columns)
-  }, [currentReport])
-
-  useEffect(() => {
-    if (!isEmpty(columns)) {
-      const newAddColumnMenu = initialColumns
-        .filter((initialColumn) => !columns.some((column) => initialColumn.accessorKey === column.accessorKey))
-        .map((column) => ({
-          key: column.accessorKey,
-          label: column.header as string
-        }))
-
-      setAddColumnMenu(newAddColumnMenu)
-    }
-  }, [columns])
 
   const handleItemsChange = (items: ColumnStackListProps['items']): void => {
     const newColumns = items.map((item) => item.meta)
@@ -79,9 +59,21 @@ export const ColumnsConfiguration = (): React.JSX.Element => {
     setColumns(newColumns)
   }
 
-  const handleRestoreToDefault = (): void => {
-    setColumns(initialColumns)
+  const handleColumnClick = (column: Column): void => {
+    addColumn(column)
   }
+
+  useEffect(() => {
+    const newAddColumnMenu = initialColumns
+      ?.filter((initialColumn) => !columns.some((column) => initialColumn.accessorKey === column.accessorKey))
+      ?.map((column) => ({
+        key: column.accessorKey,
+        label: column.header as string,
+        onClick: () => { handleColumnClick(column) }
+      }))
+
+    setAddColumnMenu(newAddColumnMenu)
+  }, [columns])
 
   const stackListItems: ColumnStackListProps['items'] = columns.map(column => {
     const uniqueId = uuid()
@@ -113,7 +105,7 @@ export const ColumnsConfiguration = (): React.JSX.Element => {
           theme='secondary'
         >
           <Button
-            onClick={ handleRestoreToDefault }
+            onClick={ resetColumnsToInitial }
             type="link"
           >
             { t('reports.grid-config.restore-to-default') }
