@@ -55,7 +55,7 @@ export interface ManyToOneRelationClassDefinitionProps {
   allowPathTextInput?: boolean
   width?: number | string | null
   inherited?: boolean
-  readonly?: boolean
+  readOnly?: boolean
 }
 
 export interface ManyToOneRelationProps extends IRelationAllowedTypesDataComponent, ManyToOneRelationClassDefinitionProps {
@@ -97,6 +97,8 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
     }
   }
 
+  const isEnabled = props.disabled !== true && props.readOnly !== true
+
   return (
     <Flex
       className={cn(styles.container, props.className)}
@@ -107,7 +109,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
     >
       <div className={styles.droppableWrapper}>
         <Droppable
-          isValidContext={(info: DragAndDropInfo) => props.disabled !== true && isValidElementType(info.type)}
+          isValidContext={(info: DragAndDropInfo) => isEnabled && isValidElementType(info.type)}
           isValidData={(info: DragAndDropInfo) => dndIsValidData(info, props)}
           onDrop={(info: DragAndDropInfo) => {
             const newValue: ManyToOneRelationValue | undefined = convertDragAndDropInfoToElementReference(info)
@@ -159,7 +161,6 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
         )}
 
         {props.allowToClearRelation === true && (
-
           <Tooltip
             key="empty"
             title={t('empty')}
@@ -175,7 +176,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           </Tooltip>
         )}
 
-        {props.disabled !== true && (
+        {isEnabled && (
           <ElementSelectorButton
             elementSelectorConfig={{
               selectionType: SelectionType.Single,

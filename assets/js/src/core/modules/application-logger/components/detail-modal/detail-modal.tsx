@@ -13,7 +13,7 @@ import { Input } from '@Pimcore/components/input/input'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
-import { ManyToOneRelation, type ManyToOneRelationValueType } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
+import { ManyToOneRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
 import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 import { isNil } from 'lodash'
 import React from 'react'
@@ -49,52 +49,52 @@ export const DetailModal = (props: DetailModalProps): React.JSX.Element => {
 
   return (
     <Modal
-      onCancel={ closeModel }
-      onClose={ closeModel }
-      onOk={ closeModel }
-      open={ props.open }
-      title={ (
+      onCancel={closeModel}
+      onClose={closeModel}
+      onOk={closeModel}
+      open={props.open}
+      title={(
         <ModalTitle>
           {t('application-logger.detail-modal.title')}
         </ModalTitle>
-      ) }
+      )}
     >
       <FieldWidthProvider>
         <Form
-          form={ form }
-          initialValues={ formData }
+          form={form}
+          initialValues={formData}
           layout="vertical"
         >
           <Form.Item
-            label={ t('application-logger.columns.timestamp') }
+            label={t('application-logger.columns.timestamp')}
             name="date"
           >
             <Input readOnly />
           </Form.Item>
 
           <Form.Item
-            label={ t('application-logger.columns.message') }
+            label={t('application-logger.columns.message')}
             name="message"
           >
             <TextArea readOnly />
           </Form.Item>
 
           <Form.Item
-            label={ t('application-logger.columns.type') }
+            label={t('application-logger.columns.type')}
             name="priority"
           >
             <Input readOnly />
           </Form.Item>
 
           <Form.Item
-            label={ t('application-logger.columns.component') }
+            label={t('application-logger.columns.component')}
             name="component"
           >
             <Input readOnly />
           </Form.Item>
 
           <Form.Item
-            label={ t('application-logger.columns.source') }
+            label={t('application-logger.columns.source')}
             name="source"
           >
             <Input readOnly />
@@ -102,13 +102,14 @@ export const DetailModal = (props: DetailModalProps): React.JSX.Element => {
 
           {props.data.fileObject !== null && (
             <Form.Item
-              label={ t('application-logger.columns.related-object') }
-              name={ 'fileObject' }
+              label={t('application-logger.columns.related-object')}
+              name={'fileObject'}
             >
               <ManyToOneRelation
                 assetsAllowed
                 dataObjectsAllowed
                 documentsAllowed
+                readOnly
               />
             </Form.Item>
           )}
