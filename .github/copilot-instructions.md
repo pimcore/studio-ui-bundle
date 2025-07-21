@@ -129,6 +129,13 @@ documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEd
   - Can import and compose multiple components to create complex features
   - Examples: asset editor, document editor, user management, settings
 
+### Dynamic Types Component Extraction
+For complex dynamic types (document editables, object data types), extract UI components into separate files:
+- Create `/components/{name}/{name}.tsx` alongside the main dynamic type file
+- Keep dynamic type registration logic separate from UI implementation
+- Follow the same organizational pattern as data object components (like link, video, etc.)
+- Extract when components have substantial UI logic, state management, or could be reused
+
 ### React Component Patterns
 - Use functional components with hooks
 - Prefer explicit function declarations with return type annotations: `export const ComponentName = (props: Props): React.JSX.Element => {}`
@@ -225,6 +232,7 @@ describe('ComponentName', () => {
   - `isEmpty(array)` instead of `array.length === 0`
   - `isArray(value)` instead of `Array.isArray(value)`
   - `isString(value)`, `isNumber(value)`, `isBoolean(value)` for type checking
+- **Use nullish coalescing operator (`??`) instead of logical OR (`||`)** - Prefer `value ?? defaultValue` over `value || defaultValue` for null/undefined checks to avoid unexpected behavior with falsy values like `0`, `false`, or empty strings
 
 ### ESLint Configuration
 - Extends `standard-with-typescript`
@@ -281,5 +289,27 @@ export class MyService {
 - Define proper TypeScript types for API responses
 - Handle loading and error states
 - Implement proper caching strategies
+
+## IconButton & Icon System Guidelines
+
+- **Use `IconButton` for any button that has an icon.** Use a regular `Button` only for text-only buttons.
+- **The `icon` prop format is strict:** Always use `icon={{ value: 'icon-name' }}`.
+
+  ```typescript
+  // Correct usage with text:
+  <IconButton icon={{ value: 'edit' }} onClick={handleEdit}>
+    {t('edit')}
+  </IconButton>
+
+  // Correct usage for icon-only (ensure `title` for accessibility):
+  <IconButton icon={{ value: 'trash' }} onClick={handleDelete} title={t('delete')} />
+  ```
+
+- **How Icons Work (Folder -> Name):**
+    - Icons are stored as `.inline.svg` files in the `assets/icons/` directory.
+    - The system makes these icons available by their filename (without the `.inline.svg` extension).
+    - **Example:** An icon file named `edit-user.inline.svg` is used in a component like this: `icon={{ value: 'edit-user' }}`.
+    - **To add a new icon:** Add a new `.inline.svg` file to the `assets/icons/` folder, then run `npm run generate-icons`. The icon will then be available for use.
+    - **To find existing icons:** Look at the filenames in the `assets/icons/` directory.
 
 Remember: This is a complex enterprise application with strict architectural patterns. Always follow the established conventions for consistency and maintainability.

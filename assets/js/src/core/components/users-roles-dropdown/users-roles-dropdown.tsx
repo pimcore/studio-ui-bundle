@@ -128,12 +128,12 @@ export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRo
   const tabItems: ITabsProps['items'] = [
     {
       key: 'users',
-      label: t('user-management.key-bindings.users'),
+      label: t('user-management.users'),
       children: renderUsers()
     },
     {
       key: 'roles',
-      label: t('user-management.key-bindings.roles'),
+      label: t('user-management.roles'),
       children: renderRoles()
     }
   ]
