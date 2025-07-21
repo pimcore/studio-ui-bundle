@@ -60,6 +60,18 @@ export type BundleApplicationLoggerListPrioritiesApiResponse = /** status 200 Li
     priorities: number[];
 };
 export type BundleApplicationLoggerListPrioritiesApiArg = void;
+export type RelatedElementData = {
+    /** ID */
+    id: number;
+    /** Type of the element */
+    type: string;
+    /** Subtype of the element */
+    subtype: string;
+    /** Full path of the element */
+    fullPath: string;
+    /** Is the element published */
+    isPublished: boolean | null;
+};
 export type BundleApplicationLoggerLogEntry = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -77,10 +89,8 @@ export type BundleApplicationLoggerLogEntry = {
     message: string | null;
     /** File object path */
     fileObject: string | null;
-    /** ID of related object */
-    relatedObjectId: number | null;
-    /** Type of related object */
-    relatedObjectType: string | null;
+    /** Data of related element */
+    relatedElementData?: RelatedElementData | null;
     /** Component */
     component: string | null;
     /** Source */

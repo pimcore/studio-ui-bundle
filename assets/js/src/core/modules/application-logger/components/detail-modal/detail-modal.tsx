@@ -44,13 +44,7 @@ export const DetailModal = (props: DetailModalProps): React.JSX.Element => {
     priority: props.data.priority ?? '',
     component: props.data.component ?? '',
     source: props.data.source ?? '',
-    fileObject: {
-      fullPath: '/Product Data/Body-Styles/2-door roadster',
-      id: 6,
-      isPublished: true,
-      subtype: 'object',
-      type: 'object'
-    } as ManyToOneRelationValueType
+    fileObject: props.data.relatedElementData ?? null
   }
 
   return (
