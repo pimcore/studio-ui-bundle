@@ -33,11 +33,6 @@ export const useHandleKeyBindings = (callback, actionName, enabled = true): void
     }
   }, [callback, actionName])
 
-  // useEffect(() => {
-  //   document.addEventListener('keydown', eventHandler)
-  //   return () => { document.removeEventListener('keydown', eventHandler) }
-  // })
-
   useEffect(() => {
     if (!enabled) return
     document.addEventListener('keydown', eventHandler)
