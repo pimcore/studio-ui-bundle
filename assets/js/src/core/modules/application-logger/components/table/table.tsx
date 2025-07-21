@@ -79,7 +79,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
 
         return (
           <Button
-            href={fileObjectBasePath + column.fileObject}
+            href={ fileObjectBasePath + column.fileObject }
             target="_blank"
             type="link"
           >
@@ -89,26 +89,28 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
       },
       size: 60
     }),
-    columnHelper.accessor('relatedObjectId', {
+    columnHelper.accessor('relatedElementData', {
       header: t('application-logger.columns.related-object'),
       cell: ({ row }): React.JSX.Element => {
         const column = row.original
 
-        if (isNil(column.relatedObjectId) || isNil(column.relatedObjectType)) {
+        if (isNil(column.relatedElementData)) {
           return <></>
         }
 
+        const element = column.relatedElementData
+
         return (
           <Button
-            onClick={() => {
+            onClick={ () => {
               openElement({
-                id: column.relatedObjectId!,
-                type: column.relatedObjectType as ElementType
+                id: element.id,
+                type: (element.type === 'object' ? 'data-object' : element.type) as ElementType
               }).catch(() => { })
-            }}
+            } }
             type="link"
           >
-            {`${column.relatedObjectType} ${column.relatedObjectId}`}
+            {`${element.type} ${element.id}`}
           </Button >
         )
       },
@@ -132,10 +134,10 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
             className='w-full'
           >
             <IconButton
-              icon={{ value: 'expand-01' }}
-              onClick={async () => {
+              icon={ { value: 'expand-01' } }
+              onClick={ async () => {
                 openModal(column)
-              }}
+              } }
               type="link"
             />
           </Flex>
@@ -149,17 +151,17 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     <>
       <Grid
         autoWidth
-        columns={columns}
-        data={tableItems}
+        columns={ columns }
+        data={ tableItems }
         // isLoading={notesAndEventsFetching}
-        modifiedCells={[]}
+        modifiedCells={ [] }
         resizable
       />
 
       <DetailModal
-        data={modelData}
-        open={open}
-        setOpen={setOpen}
+        data={ modelData }
+        open={ open }
+        setOpen={ setOpen }
       />
     </>
   )
