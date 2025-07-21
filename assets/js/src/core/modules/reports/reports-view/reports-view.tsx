@@ -27,6 +27,7 @@ import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
 import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
 import { ReportToolbar } from '@Pimcore/modules/reports/reports-view/components/report-toolbar/report-toolbar'
 import { ReportTopBar } from '@Pimcore/modules/reports/reports-view/components/report-top-bar/report-top-bar'
+import { ReportSidebar } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/report-sidebar'
 import { useGridContext } from '@Pimcore/modules/reports/reports-view/context/grid-context'
 import { useStyles } from './reports-view.styles'
 
@@ -156,6 +157,7 @@ export const ReportsView = (): React.JSX.Element => {
 
   const renderContent = (): React.JSX.Element => (
     <ContentLayout
+      renderSidebar={ isCurrentReportSelected && !isEmpty(chartDetailData?.items) && <ReportSidebar /> }
       renderToolbar={ !isEmpty(chartDetailData?.items) && !isFetching && (
         <ReportToolbar
           currentReport={ currentReport }
