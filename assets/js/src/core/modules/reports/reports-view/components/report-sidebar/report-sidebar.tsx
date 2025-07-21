@@ -23,13 +23,13 @@ export const ReportSidebar = (): React.JSX.Element => {
     entries: [
       {
         component: <ColumnsConfiguration />,
-        key: 'column-configuration',
-        icon: <Icon value="settings" />,
+        key: 'reports-columns-configuration',
+        icon: <Icon value="columns" />,
         tooltip: t('sidebar.grid_config')
       },
       {
         component: <div>Search & Filter</div>,
-        key: 'search-filter',
+        key: 'reports-search-filter',
         icon: <Icon value="filter" />,
         tooltip: t('sidebar.search_filter')
       }
