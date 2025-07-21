@@ -15,28 +15,36 @@ import { isPimcoreStudioApiAvailable, getPimcoreStudioApi } from '@Pimcore/app/p
 
 type ModalStaticFunctions = ReturnType<typeof App.useApp>['modal']
 
+export interface StudioModalResponse {
+  modal: ModalStaticFunctions
+  localModal: ModalStaticFunctions
+}
+
 /**
  * Hook that provides modal functionality that works seamlessly across iframe boundaries.
  * When in an iframe, it uses the parent window's modal instance.
  * When not in an iframe, it uses the current window's modal instance.
  */
-export function useStudioModal (): ModalStaticFunctions {
+export function useStudioModal (): StudioModalResponse {
   const { modal: localModal } = App.useApp()
 
-  return useMemo<ModalStaticFunctions>(() => {
+  return useMemo<StudioModalResponse>(() => {
+    let studioModal = localModal
+
     // Check if we're in an iframe and parent API is available
     if (isInIframe() && isPimcoreStudioApiAvailable()) {
       try {
         // Get the parent window's modal instance through the studio API
         const { modal } = getPimcoreStudioApi()
-
-        return modal
+        studioModal = modal
       } catch (error) {
         console.warn('Failed to access parent window modal, falling back to local modal:', error)
       }
     }
 
-    // Use local modal as fallback
-    return localModal
+    return {
+      modal: studioModal,
+      localModal
+    }
   }, [localModal])
 }

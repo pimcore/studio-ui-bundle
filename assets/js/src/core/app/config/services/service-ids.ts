@@ -106,6 +106,7 @@ export const serviceIds = {
   'DynamicTypes/GridCell/AssetCustomMetadataValue': 'DynamicTypes/GridCell/AssetCustomMetadataValue',
   'DynamicTypes/GridCell/PropertyIcon': 'DynamicTypes/GridCell/PropertyIcon',
   'DynamicTypes/GridCell/PropertyValue': 'DynamicTypes/GridCell/PropertyValue',
+  'DynamicTypes/GridCell/WebsiteSettingsValue': 'DynamicTypes/GridCell/WebsiteSettingsValue',
   'DynamicTypes/GridCell/ScheduleActionsSelect': 'DynamicTypes/GridCell/ScheduleActionsSelect',
   'DynamicTypes/GridCell/VersionsIdSelect': 'DynamicTypes/GridCell/VersionsIdSelect',
   'DynamicTypes/GridCell/AssetVersionPreviewFieldLabel': 'DynamicTypes/GridCell/AssetVersionPreviewFieldLabel',

@@ -12,6 +12,7 @@ import type React from 'react'
 import { useEffect } from 'react'
 import { useElementSelectorHelper } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector-helper'
 import { useUploadModalContext } from '@Pimcore/components/modal-upload/provider/upload-modal-provider/use-upload-modal-context'
+import { useLinkModalContext } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/provider/use-link-modal-context'
 import { getApiGatewayHandler } from './registry/handler-registry'
 import { initializeHandlers } from './handlers'
 import { API_GATEWAY_EVENT, ApiGatewayEvent, type ApiGatewayEventDetail } from './api-gateway-event'
@@ -24,6 +25,7 @@ import { isUndefined } from 'lodash'
 export const ApiGateway = (): React.JSX.Element | null => {
   const elementSelectorHelper = useElementSelectorHelper()
   const uploadModalContext = useUploadModalContext()
+  const linkModalContext = useLinkModalContext()
 
   // Initialize handlers on component mount
   useEffect(() => {
@@ -48,7 +50,8 @@ export const ApiGateway = (): React.JSX.Element | null => {
         if (!isUndefined(handler)) {
           handler(payload, {
             elementSelectorHelper,
-            uploadModalContext
+            uploadModalContext,
+            linkModalContext
             // Add other context dependencies here as needed
           })
         } else {
@@ -64,7 +67,7 @@ export const ApiGateway = (): React.JSX.Element | null => {
     return () => {
       window.removeEventListener(API_GATEWAY_EVENT, handleApiEvent)
     }
-  }, [elementSelectorHelper, uploadModalContext])
+  }, [elementSelectorHelper, uploadModalContext, linkModalContext])
 
   return null
 }

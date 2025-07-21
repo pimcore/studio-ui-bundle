@@ -31,6 +31,7 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { ConfigProvider } from 'antd'
 
 export interface LinkModalProps {
   open: boolean
@@ -235,49 +236,51 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
   }
 
   return (
-    <WindowModal
-      footer={ props.disabled === true
-        ? <span></span>
-        : (_, { OkBtn, CancelBtn }) => (
-          <Flex
-            className="w-100"
-            justify="flex-end"
-          >
-            <ButtonGroup items={ [
-              <IconTextButton
-                icon={ { value: 'trash' } }
-                key="empty"
-                onClick={ () => confirm({
-                  title: t('empty'),
-                  content: t('empty.confirm'),
-                  onOk: emptyValue
-                }) }
-              >
-                {t('empty')}
-              </IconTextButton>,
-              <CancelBtn key="cancel" />,
-              <OkBtn key="ok" />
-            ] }
-            />
-          </Flex>
-          ) }
-      okText={ t('save') }
-      onCancel={ handleCancel }
-      onOk={ handleOk }
-      open={ props.open }
-      size="M"
-      title={ t('link.edit-title') }
-    >
-      <Form
-        form={ form }
-        layout="vertical"
+    <ConfigProvider theme={ { components: { Form: { itemMarginBottom: 0 } } } }>
+      <WindowModal
+        footer={ props.disabled === true
+          ? <span></span>
+          : (_, { OkBtn, CancelBtn }) => (
+            <Flex
+              className="w-100"
+              justify="flex-end"
+            >
+              <ButtonGroup items={ [
+                <IconTextButton
+                  icon={ { value: 'trash' } }
+                  key="empty"
+                  onClick={ () => confirm({
+                    title: t('empty'),
+                    content: t('empty.confirm'),
+                    onOk: emptyValue
+                  }) }
+                >
+                  {t('empty')}
+                </IconTextButton>,
+                <CancelBtn key="cancel" />,
+                <OkBtn key="ok" />
+              ] }
+              />
+            </Flex>
+            ) }
+        okText={ t('save') }
+        onCancel={ handleCancel }
+        onOk={ handleOk }
+        open={ props.open }
+        size="M"
+        title={ t('link.edit-title') }
       >
-        <Tabs
-          items={ tabItems }
-          noPadding
-          size='small'
-        />
-      </Form>
-    </WindowModal>
+        <Form
+          form={ form }
+          layout="vertical"
+        >
+          <Tabs
+            items={ tabItems }
+            noPadding
+            size='small'
+          />
+        </Form>
+      </WindowModal>
+    </ConfigProvider>
   )
 }
