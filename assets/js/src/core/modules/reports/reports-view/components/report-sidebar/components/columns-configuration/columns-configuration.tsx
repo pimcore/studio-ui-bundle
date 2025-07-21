@@ -118,17 +118,21 @@ export const ColumnsConfiguration = (): React.JSX.Element => {
           fullWidth
           title={ t('reports.grid-config.title-columns') }
         />
-        <Flex vertical>
-          { stackListItems.length === 0 && <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } /> }
-          { stackListItems.length > 0 && (
+        <Space
+          direction='vertical'
+          style={ { width: '100%' } }
+        >
+          <Flex vertical>
+            { stackListItems.length === 0 && <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } /> }
+            { stackListItems.length > 0 && (
             <StackList
               items={ stackListItems }
               onItemsChange={ handleItemsChange }
               sortable
             />
-          ) }
-        </Flex>
-        {!isEmpty(addColumnMenu) && (
+            ) }
+          </Flex>
+          {!isEmpty(addColumnMenu) && (
           <Dropdown menu={ { items: addColumnMenu } }>
             <IconTextButton
               icon={ { value: 'new' } }
@@ -137,7 +141,8 @@ export const ColumnsConfiguration = (): React.JSX.Element => {
               { t('listing.add-column') }
             </IconTextButton>
           </Dropdown>
-        )}
+          )}
+        </Space>
       </Content>
     </ContentLayout>
   )
