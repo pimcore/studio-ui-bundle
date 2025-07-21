@@ -59,17 +59,13 @@ export const ColumnsConfiguration = (): React.JSX.Element => {
     setColumns(newColumns)
   }
 
-  const handleColumnClick = (column: Column): void => {
-    addColumn(column)
-  }
-
   useEffect(() => {
     const newAddColumnMenu = initialColumns
       ?.filter((initialColumn) => !columns.some((column) => initialColumn.accessorKey === column.accessorKey))
       ?.map((column) => ({
         key: column.accessorKey,
         label: column.header as string,
-        onClick: () => { handleColumnClick(column) }
+        onClick: () => { addColumn(column) }
       }))
 
     setAddColumnMenu(newAddColumnMenu)
@@ -138,7 +134,7 @@ export const ColumnsConfiguration = (): React.JSX.Element => {
               icon={ { value: 'new' } }
               type='link'
             >
-              { t('listing.add-column') }
+              { t('reports.grid-config.add-column') }
             </IconTextButton>
           </Dropdown>
           )}

@@ -17,7 +17,8 @@ import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-but
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useCustomReportExportCsvMutation } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
-import { type IFilterValue } from '@Pimcore/modules/reports/reports-view/context/grid-context'
+import { useReportsDataContext } from '@Pimcore/modules/reports/reports-view/context/reports-data-context'
+import { useGridContext } from '@Pimcore/modules/reports/reports-view/context/grid-context'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob as createDownloadCSVJob } from '@Pimcore/modules/execution-engine/jobs/download/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
@@ -25,18 +26,15 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 
 interface IReportToolbarProps {
-  currentReport: string | null
-  filters: IFilterValue
-  page: number
-  setPage: (page: number) => void
-  pageSize: number
-  setPageSize: (pageSize: number) => void
   totalItems: number
 }
 
-export const ReportToolbar = ({ currentReport, filters, page, setPage, pageSize, setPageSize, totalItems }: IReportToolbarProps): React.JSX.Element | null => {
+export const ReportToolbar = ({ totalItems }: IReportToolbarProps): React.JSX.Element | null => {
   const [fetchExportCSV, { isError, error }] = useCustomReportExportCsvMutation()
+
   const { addJob } = useJobs()
+  const { currentReport, page, setPage, pageSize, setPageSize } = useReportsDataContext()
+  const { filters } = useGridContext()
 
   const { t } = useTranslation()
   const { styles } = useStyles()

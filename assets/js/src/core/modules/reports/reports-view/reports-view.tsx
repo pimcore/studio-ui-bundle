@@ -32,17 +32,11 @@ import { ReportTopBar } from '@Pimcore/modules/reports/reports-view/components/r
 import { ReportSidebar } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/report-sidebar'
 import { useStyles } from './reports-view.styles'
 
-const PAGE_INITIAL = 1
-const PAGE_SIZE_INITIAL = 10
-
 export const ReportsView = (): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const { currentReport, setCurrentReport } = useReportsDataContext()
+  const { currentReport, setCurrentReport, page, pageSize, resetPagination } = useReportsDataContext()
   const [nextReportAfterReset, setNextReportAfterReset] = useState<string | null>(null)
-
-  const [page, setPage] = useState(PAGE_INITIAL)
-  const [pageSize, setPageSize] = useState(PAGE_SIZE_INITIAL)
 
   const { filters, resetFilters } = useGridContext()
 
@@ -58,8 +52,7 @@ export const ReportsView = (): React.JSX.Element => {
 
   useEffect(() => {
     if (!isNull(nextReportAfterReset)) {
-      setPage(PAGE_INITIAL)
-      setPageSize(PAGE_SIZE_INITIAL)
+      resetPagination()
       resetFilters()
 
       setCurrentReport(nextReportAfterReset)
@@ -160,15 +153,7 @@ export const ReportsView = (): React.JSX.Element => {
     <ContentLayout
       renderSidebar={ isCurrentReportSelected && !isEmpty(chartDetailData?.items) && <ReportSidebar /> }
       renderToolbar={ !isEmpty(chartDetailData?.items) && !isFetching && (
-        <ReportToolbar
-          currentReport={ currentReport }
-          filters={ filters }
-          page={ page }
-          pageSize={ pageSize }
-          setPage={ setPage }
-          setPageSize={ setPageSize }
-          totalItems={ chartDetailData?.totalItems ?? 0 }
-        />
+        <ReportToolbar totalItems={ chartDetailData?.totalItems ?? 0 } />
       ) }
       renderTopBar={ (
         <ReportTopBar
