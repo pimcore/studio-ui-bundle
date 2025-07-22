@@ -56,6 +56,14 @@ const config: ConfigFile = {
     {
       pattern: 'metadataGetCollection',
       type: 'query'
+    },
+    {
+      pattern: 'customReportsChart',
+      type: 'query'
+    },
+    {
+      pattern: 'customReportsListDrillDownOptions',
+      type: 'query'
     }
   ],
   outputFiles: {

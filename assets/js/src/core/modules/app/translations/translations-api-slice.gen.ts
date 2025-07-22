@@ -78,10 +78,11 @@ export type TranslationGetDomainsApiResponse = /** status 200 List of available 
     domains: string[];
 };
 export type TranslationGetDomainsApiArg = void;
-export type TranslationGetListApiResponse = /** status 200 translation_get_list_success_response */ {
-    totalItems: number;
-    items: Translations[];
-};
+export type TranslationGetListApiResponse =
+    /** status 200 List of translations for the given domain including all languages */ {
+        totalItems: number;
+        items: Translations[];
+    };
 export type TranslationGetListApiArg = {
     /** Domain to filter translations by */
     domain?: string;

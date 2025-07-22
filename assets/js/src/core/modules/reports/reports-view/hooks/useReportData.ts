@@ -8,17 +8,18 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useEffect } from 'react'
 import {
   type BundleCustomReportsDetails,
   type CustomReportsChartApiResponse,
-  useCustomReportsChartMutation,
+  useCustomReportsChartQuery,
   useCustomReportsReportQuery
 } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { type IGridFilter } from '@Pimcore/modules/reports/reports-view/types'
 
 interface UseReportDataProps {
   name: string
+  filters?: IGridFilter
   page: number
   pageSize: number
 }
@@ -34,7 +35,7 @@ interface UseReportDataReturn {
   refetchAll: () => void
 }
 
-export const useReportData = ({ name, page, pageSize }: UseReportDataProps): UseReportDataReturn => {
+export const useReportData = ({ name, filters, page, pageSize }: UseReportDataProps): UseReportDataReturn => {
   const {
     isLoading: isReportDetailLoading,
     data: reportDetailData,
@@ -42,27 +43,19 @@ export const useReportData = ({ name, page, pageSize }: UseReportDataProps): Use
     isFetching: isReportDetailFetching
   } = useCustomReportsReportQuery({ name }, { skip: isEmptyValue(name) })
 
-  const [fetchChartDetail, {
+  const {
     isLoading: isChartDetailLoading,
-    data: chartDetailData
-  }] = useCustomReportsChartMutation()
-
-  const fetchChartDetailData = (): void => {
-    fetchChartDetail({ body: { name, page, pageSize } }).catch(e => { console.error(e) })
-  }
-
-  useEffect(() => {
-    if (!isEmptyValue(name)) {
-      fetchChartDetailData()
-    }
-  }, [name, page, pageSize, fetchChartDetail])
+    data: chartDetailData,
+    refetch: chartDetailRefetch,
+    isFetching: isChartDetailFetching
+  } = useCustomReportsChartQuery({ body: { name, filters, page, pageSize } }, { skip: isEmptyValue(name) })
 
   const isLoading: boolean = isReportDetailLoading || isChartDetailLoading
-  const isFetching: boolean = isReportDetailFetching || isChartDetailLoading
+  const isFetching: boolean = isReportDetailFetching || isChartDetailFetching
 
   const refetchAll = (): void => {
     reportDetailRefetch().catch(e => { console.error(e) })
-    fetchChartDetailData()
+    chartDetailRefetch().catch(e => { console.error(e) })
   }
 
   return {
