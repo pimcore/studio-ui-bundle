@@ -12,9 +12,8 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { Icon } from '@Pimcore/components/icon/icon'
-import {
-  ColumnsConfiguration
-} from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-configuration/columns-configuration'
+import { ColumnsConfiguration } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-configuration/columns-configuration'
+import { SearchFilter } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/search-filter/search-filter'
 
 export const ReportSidebar = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -28,7 +27,7 @@ export const ReportSidebar = (): React.JSX.Element => {
         tooltip: t('sidebar.grid_config')
       },
       {
-        component: <div>Search & Filter</div>,
+        component: <SearchFilter />,
         key: 'reports-search-filter',
         icon: <Icon value="filter" />,
         tooltip: t('sidebar.search_filter')
