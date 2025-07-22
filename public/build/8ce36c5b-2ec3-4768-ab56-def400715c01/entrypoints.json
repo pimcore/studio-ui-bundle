@@ -15,7 +15,11 @@
     },
     "exposeRemote": {
       "js": [
+<<<<<<<< HEAD:public/build/ff3dff9c-41e4-4908-bafa-901c0db69b51/entrypoints.json
         "/bundles/pimcorestudioui/build/ff3dff9c-41e4-4908-bafa-901c0db69b51/exposeRemote.js"
+========
+        "/bundles/pimcorestudioui/build/8ce36c5b-2ec3-4768-ab56-def400715c01/exposeRemote.js"
+>>>>>>>> origin/855-reports-export:public/build/8ce36c5b-2ec3-4768-ab56-def400715c01/entrypoints.json
       ],
       "css": []
     }
