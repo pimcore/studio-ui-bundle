@@ -17,16 +17,16 @@ import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-but
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useCustomReportExportCsvMutation } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
-import { type IFilterValue } from '@Pimcore/modules/reports/reports-view/context/grid-context'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob as createDownloadCSVJob } from '@Pimcore/modules/execution-engine/jobs/download/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { type IGridFilter } from '@Pimcore/modules/reports/reports-view/types'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 
 interface IReportToolbarProps {
   currentReport: string | null
-  filters: IFilterValue
+  filters: IGridFilter
   page: number
   setPage: (page: number) => void
   pageSize: number
