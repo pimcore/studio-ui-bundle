@@ -50,7 +50,9 @@ export const tagNames = {
   EMAIL_BLOCKLIST: 'EMAIL_BLOCKLIST',
   EMAIL_BLOCKLIST_DETAIL: 'EMAIL_BLOCKLIST_DETAIL',
   EMAIL_LOG: 'EMAIL_LOG',
-  EMAIL_LOG_DETAIL: 'EMAIL_LOG_DETAIL'
+  EMAIL_LOG_DETAIL: 'EMAIL_LOG_DETAIL',
+  RECYCLE_BIN: 'RECYCLE_BIN',
+  RECYCLE_BIN_DETAIL: 'RECYCLE_BIN_DETAIL'
 }
 
 export const providingTags = {
@@ -105,7 +107,9 @@ export const providingTags = {
   EMAIL_BLOCKLIST: () => [tagNames.EMAIL_BLOCKLIST],
   EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }],
   EMAIL_LOG: () => [tagNames.EMAIL_LOG],
-  EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }]
+  EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }],
+  RECYCLING_BIN: () => [tagNames.RECYCLE_BIN],
+  RECYCLING_BIN_DETAIL: (id: number) => [{ type: tagNames.RECYCLE_BIN_DETAIL, id }]
 }
 
 export const invalidatingTags = {

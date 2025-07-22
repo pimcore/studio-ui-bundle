@@ -56,6 +56,10 @@ const config: ConfigFile = {
     {
       pattern: 'metadataGetCollection',
       type: 'query'
+    },
+    {
+      pattern: 'recycleBinGetCollection',
+      type: 'query'
     }
   ],
   outputFiles: {
@@ -148,9 +152,10 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/email/emails-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/emails\/?/i)
+    },
+    '../../js/src/core/modules/recycle-bin/recycle-bin-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/recycle-bin\/?/i)
     }
-
-
   },
   exportName: 'api',
   hooks: true,
