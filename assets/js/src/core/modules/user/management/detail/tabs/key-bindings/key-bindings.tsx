@@ -34,24 +34,19 @@ const KeyBindings = ({ values, modified, onChange, onResetKeyBindings, ...props 
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const { getDefaultKeyBindings } = useUserManagementHelper()
-  const getKeyName = (key: number): string => {
-    let name = ''
-    if (key >= 112 && key <= 123) {
-      name = 'F' + (key - 111)
-    } else if (key === 32) {
-      name = 'Space'
-    } else {
-      name = String.fromCharCode(key)
+  const getKeyName = (key: string): string => {
+    if (key === "CONTROL" || key === "SHIFT" || key === "ALT" || key === "META") {
+      return '';
     }
-    return name
+
+    return key
   }
 
   const renderKeyCombination = (keyBinding: any): string => {
-    return `${keyBinding.ctrl !== false ? 'Ctrl + ' : ''}${keyBinding.alt !== false ? 'Alt + ' : ''}${keyBinding.shift !== false ? 'Shift + ' : ''}${getKeyName(keyBinding.key as number)}`
+    return `${keyBinding.ctrl !== false ? 'Ctrl + ' : ''}${keyBinding.alt !== false ? 'Alt + ' : ''}${keyBinding.shift !== false ? 'Shift + ' : ''}${getKeyName(keyBinding.key)}`
   }
 
   const handleInputChange = (evt: any, name: string): object | boolean => {
-    const key = evt.keyCode
     evt.preventDefault()
 
     const code = {
@@ -59,12 +54,13 @@ const KeyBindings = ({ values, modified, onChange, onResetKeyBindings, ...props 
       ctrl: false,
       alt: false,
       shift: false,
-      key
+      key: evt.key.toUpperCase()
     }
 
-    if (key === 9 || key === 8 || key === 27 || key === 46) {
+    if (evt.key === 'Tab' || evt.key === 'Backspace' || evt.key === 'Escape' || evt.key === 'Delete') {
       return false
     }
+
     code.ctrl = evt.ctrlKey
     code.alt = evt.altKey
     code.shift = evt.shiftKey
