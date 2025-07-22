@@ -24,7 +24,6 @@ import { ReportDetail } from '@Pimcore/modules/reports/reports-view/components/r
 import { Text } from '@Pimcore/components/text/text'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
-import { useReportsDataContext } from '@Pimcore/modules/reports/reports-view/context/reports-data-context'
 import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
 import { ReportToolbar } from '@Pimcore/modules/reports/reports-view/components/report-toolbar/report-toolbar'
 import { ReportTopBar } from '@Pimcore/modules/reports/reports-view/components/report-top-bar/report-top-bar'
@@ -32,11 +31,17 @@ import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/cont
 import { ReportSidebar } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/report-sidebar'
 import { useStyles } from './reports-view.styles'
 
+const PAGE_INITIAL = 1
+const PAGE_SIZE_INITIAL = 10
+
 export const ReportsView = (): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const { currentReport, setCurrentReport, page, pageSize, resetPagination } = useReportsDataContext()
+  const [currentReport, setCurrentReport] = useState<string | null>(null)
   const [nextReportAfterReset, setNextReportAfterReset] = useState<string | null>(null)
+
+  const [page, setPage] = useState(PAGE_INITIAL)
+  const [pageSize, setPageSize] = useState(PAGE_SIZE_INITIAL)
 
   const { filters, resetFilters } = useGridFilterContext()
 
@@ -52,7 +57,8 @@ export const ReportsView = (): React.JSX.Element => {
 
   useEffect(() => {
     if (!isNull(nextReportAfterReset)) {
-      resetPagination()
+      setPage(PAGE_INITIAL)
+      setPageSize(PAGE_SIZE_INITIAL)
       resetFilters()
 
       setCurrentReport(nextReportAfterReset)
@@ -153,7 +159,14 @@ export const ReportsView = (): React.JSX.Element => {
     <ContentLayout
       renderSidebar={ isCurrentReportSelected && !isEmpty(chartDetailData?.items) && <ReportSidebar /> }
       renderToolbar={ !isEmpty(chartDetailData?.items) && !isFetching && (
-        <ReportToolbar totalItems={ chartDetailData?.totalItems ?? 0 } />
+      <ReportToolbar
+        currentReport={ currentReport }
+        page={ page }
+        pageSize={ pageSize }
+        setPage={ setPage }
+        setPageSize={ setPageSize }
+        totalItems={ chartDetailData?.totalItems ?? 0 }
+      />
       ) }
       renderTopBar={ (
         <ReportTopBar

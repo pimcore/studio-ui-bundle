@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { type AccessorKeyColumnDef } from '@tanstack/react-table'
 import { Empty } from 'antd'
 import { isEmpty } from 'lodash'
-import { useGridContext } from '@Pimcore/modules/reports/reports-view/context/grid-context'
+import { useColumnsContext } from '@Pimcore/components/grid/contexts/columns-context'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Header } from '@Pimcore/components/header/header'
@@ -40,7 +40,7 @@ interface ColumnStackListProps extends Omit<StackListProps, 'items'> {
 }
 
 export const ColumnsConfiguration = (): React.JSX.Element => {
-  const { columns, setColumns, initialColumns, addColumn, resetColumnsToInitial } = useGridContext()
+  const { columns, setColumns, initialColumns, addColumn, resetColumnsToInitial } = useColumnsContext()
 
   const [addColumnMenu, setAddColumnMenu] = useState<DropdownMenuProps['items']>([])
 
