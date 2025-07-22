@@ -13,7 +13,7 @@ import { api as baseApi } from '@Pimcore/modules/reports/custom-reports-api-slic
 const api = baseApi.enhanceEndpoints({
   endpoints: {
     customReportExportCsv: {
-      invalidatesTags: []
+      invalidatesTags: () => []
     }
   }
 })
