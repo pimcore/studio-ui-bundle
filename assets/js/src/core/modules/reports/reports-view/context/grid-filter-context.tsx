@@ -8,14 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-export interface IGridFilter {
-  columnFilters?: Array<{ property: string, value: any, type: string, operator: string }>
-  drillDownFilters?: Record<string, any>
-}
+import { createFilterContext } from '@Pimcore/components/grid/contexts/filter-context'
+import { type IGridFilter } from '@Pimcore/modules/reports/reports-view/types'
 
-export enum FilterDrillDown {
-  ONLY_FILTER = 'only_filter',
-  FILTER_AND_SHOW = 'filter_and_show',
-}
-
-export type FilterDrillDownType = FilterDrillDown | undefined
+export const {
+  FilterProvider: GridFilterProvider,
+  useFilterContext: useGridFilterContext
+} = createFilterContext<IGridFilter>()
