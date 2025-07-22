@@ -34,7 +34,7 @@ export const useHandleKeyBindings = (callback: (evt: KeyboardEvent) => void, act
     const config = getConfigByactionName(actionName)
     const { key, ctrlKey, altKey, shiftKey } = evt
 
-    if (config?.key !== undefined && config.key === key && config.ctrl === ctrlKey && config.shift === shiftKey && config.alt === altKey) {
+    if (config?.key !== undefined && String(config.key) === key && config.ctrl === ctrlKey && config.shift === shiftKey && config.alt === altKey) {
       evt.preventDefault()
       callback(evt)
     }
