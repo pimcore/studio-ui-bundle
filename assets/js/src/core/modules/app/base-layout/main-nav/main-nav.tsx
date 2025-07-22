@@ -25,6 +25,7 @@ import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybi
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { openElementHelper } from '@Pimcore/modules/open-element/hooks/open-element-helper'
 import { modalTexts } from '@Pimcore/modules/open-element/open-element'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -141,16 +142,16 @@ export const MainNav = (): React.JSX.Element => {
     }
   }, [isOpen])
 
-  const handleOpen = (type) => {
+  const handleOpen = (type: ElementType): void => {
     input({
-      title: t(modalTexts[type].title),
-      label: t(modalTexts[type].label),
+      title: t(`${modalTexts[type].title}`),
+      label: t(`${modalTexts[type].label}`),
       rule: {
         required: true,
-        message: t(modalTexts[type].requiredMessage)
+        message: t(`${modalTexts[type].requiredMessage}`)
       },
-      okText: t(modalTexts[type].okText),
-      cancelText: t(modalTexts[type].cancelText),
+      okText: t(`${modalTexts[type].okText}`),
+      cancelText: t(`${modalTexts[type].cancelText}`),
       onOk: async (value: string) => {
         await openElementByPathOrId(value, type)
       }

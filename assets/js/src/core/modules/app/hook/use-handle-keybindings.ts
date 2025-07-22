@@ -11,28 +11,28 @@
 import { useCallback, useEffect } from 'react'
 import { useUserDraft } from '@Pimcore/modules/auth/hooks/use-user-draft'
 import { type KeyBindingForAUser } from '@Pimcore/modules/auth/user/user-api-slice.gen'
-import {useWidgetManager} from "@Pimcore/modules/widget-manager/hooks/use-widget-manager";
+import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 
-export const useHandleKeyBindings = (callback, actionName, enabled = true): void => {
+export const useHandleKeyBindings = (callback: (evt: KeyboardEvent) => void, actionName: string, enabled = true): void => {
   const { user } = useUserDraft()
   const { getOpenedMainWidget } = useWidgetManager()
 
   const getConfigByactionName = (actionName: string): KeyBindingForAUser | undefined => {
-    if (!user?.keyBindings) {
+    if (user?.keyBindings === undefined) {
       return undefined
     }
 
-    return user.keyBindings.find((binding: KeyBindingForAUser) => binding.action === actionName) || undefined
+    return user.keyBindings.find((binding: KeyBindingForAUser) => binding.action === actionName) ?? undefined
   }
 
   const eventHandler = useCallback((evt: KeyboardEvent) => {
-    //skip shortcuts in user profile and user-management
+    // skip shortcuts in user profile and user-management
     if (evt.target instanceof HTMLInputElement && (getOpenedMainWidget()?.getComponent() === 'user-profile' || getOpenedMainWidget()?.getComponent() === 'user-management')) {
       return
     }
 
     const config = getConfigByactionName(actionName)
-    const { key, ctrlKey, altKey, shiftKey } = evt;
+    const { key, ctrlKey, altKey, shiftKey } = evt
 
     if (config?.key !== undefined && config.key === key && config.ctrl === ctrlKey && config.shift === shiftKey && config.alt === altKey) {
       evt.preventDefault()

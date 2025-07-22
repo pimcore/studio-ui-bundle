@@ -35,15 +35,15 @@ const KeyBindings = ({ values, modified, onChange, onResetKeyBindings, ...props 
   const [form] = Form.useForm()
   const { getDefaultKeyBindings } = useUserManagementHelper()
   const getKeyName = (key: string): string => {
-    if (key === "CONTROL" || key === "SHIFT" || key === "ALT" || key === "META") {
-      return '';
+    if (key === 'CONTROL' || key === 'SHIFT' || key === 'ALT' || key === 'META') {
+      return ''
     }
 
     return key
   }
 
   const renderKeyCombination = (keyBinding: any): string => {
-    return `${keyBinding.ctrl !== false ? 'Ctrl + ' : ''}${keyBinding.alt !== false ? 'Alt + ' : ''}${keyBinding.shift !== false ? 'Shift + ' : ''}${getKeyName(keyBinding.key)}`
+    return `${keyBinding.ctrl !== false ? 'Ctrl + ' : ''}${keyBinding.alt !== false ? 'Alt + ' : ''}${keyBinding.shift !== false ? 'Shift + ' : ''}${getKeyName(keyBinding.key as string)}`
   }
 
   const handleInputChange = (evt: any, name: string): object | boolean => {
