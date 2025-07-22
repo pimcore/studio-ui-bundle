@@ -19,7 +19,7 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { type IChartDetailData, type IReportDetailData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
 import { FilterDrillDown } from '@Pimcore/modules/reports/reports-view/types'
 import { DrillDownSelect } from '@Pimcore/modules/reports/reports-view/components/report-detail/components/drill-down-select/drill-down-select'
-import { useGridContext } from '@Pimcore/modules/reports/reports-view/context/grid-context'
+import { useColumnsContext } from '@Pimcore/components/grid/contexts/columns-context'
 import { type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 
 interface IReportDetailProps {
@@ -51,7 +51,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
     }
   }, [isLoading])
 
-  const { columns, setColumns, setInitialColumns } = useGridContext()
+  const { columns, setColumns, setInitialColumns } = useColumnsContext()
 
   useEffect(() => {
     const getColumns = (): Array<AccessorKeyColumnDef<unknown, never>> | undefined => (

@@ -25,10 +25,10 @@ import { Text } from '@Pimcore/components/text/text'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
 import { useReportsDataContext } from '@Pimcore/modules/reports/reports-view/context/reports-data-context'
-import { useGridContext } from '@Pimcore/modules/reports/reports-view/context/grid-context'
 import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
 import { ReportToolbar } from '@Pimcore/modules/reports/reports-view/components/report-toolbar/report-toolbar'
 import { ReportTopBar } from '@Pimcore/modules/reports/reports-view/components/report-top-bar/report-top-bar'
+import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
 import { ReportSidebar } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/report-sidebar'
 import { useStyles } from './reports-view.styles'
 
@@ -38,7 +38,7 @@ export const ReportsView = (): React.JSX.Element => {
   const { currentReport, setCurrentReport, page, pageSize, resetPagination } = useReportsDataContext()
   const [nextReportAfterReset, setNextReportAfterReset] = useState<string | null>(null)
 
-  const { filters, resetFilters } = useGridContext()
+  const { filters, resetFilters } = useGridFilterContext()
 
   const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page: 1, pageSize: 9999 })
   const { refetchAll, isFetching, isLoading, chartDetailData, reportDetailData } = useReportData({

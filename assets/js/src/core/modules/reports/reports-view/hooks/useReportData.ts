@@ -15,11 +15,11 @@ import {
   useCustomReportsReportQuery
 } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
-import { type IFilterValue } from '@Pimcore/modules/reports/reports-view/context/grid-context'
+import { type IGridFilter } from '@Pimcore/modules/reports/reports-view/types'
 
 interface UseReportDataProps {
   name: string
-  filters?: IFilterValue
+  filters?: IGridFilter
   page: number
   pageSize: number
 }
