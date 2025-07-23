@@ -1,17 +1,16 @@
 import { Flex } from "@Pimcore/components/flex/flex"
+import { DefaultCellProps } from "@Pimcore/components/grid/columns/default-cell"
 import { Grid } from "@Pimcore/components/grid/grid"
 import { IconButton } from "@Pimcore/components/icon-button/icon-button"
-import { formatDateTime } from "@sdk/utils"
-import { createColumnHelper } from "@tanstack/react-table"
-import React from "react"
-import { useTranslation } from "react-i18next"
-import { RecycleBin } from "../../recycle-bin-api-slice.gen"
-import { useRecycleBin } from "../../hooks/use-recycle-bin"
 import { Icon } from "@Pimcore/components/icon/icon"
-import { useStyles } from "./table.styles"
-import { DefaultCellProps } from "@Pimcore/components/grid/columns/default-cell"
 import { ElementInfo } from "@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/element-cell/element-cell"
-import { useElementHelper } from "@Pimcore/modules/element/hooks/use-element-helper"
+import { formatDateTime } from "@sdk/utils"
+import { createColumnHelper, RowSelectionState } from "@tanstack/react-table"
+import React, { useState } from "react"
+import { useTranslation } from "react-i18next"
+import { useRecycleBin } from "../../hooks/use-recycle-bin"
+import { RecycleBin } from "../../recycle-bin-api-slice.gen"
+import { useStyles } from "./table.styles"
 
 interface TableProps {
   items: RecycleBin[]
@@ -25,7 +24,9 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { restoreItems, removeItems } = useRecycleBin()
-  const { mapToElementType } = useElementHelper()
+  const [restoreLoading, setRestoreLoading] = useState<boolean>(false)
+  const [removeLoading, setRemoveLoading] = useState<boolean>(false)
+  const [selectedItems, setSelectedItems] = useState<RowSelectionState | undefined>(undefined)
 
   const tableItems = items.map((item) => {
     return {
@@ -108,21 +109,25 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
           >
             <IconButton
               icon={{ value: 'restore' }}
-              onClick={async () => {
+              onClick={() => {
+                setRestoreLoading(true)
                 restoreItems([row.original.id], () => {
-                  //TODO: add cache clear or refetch logic
+                  setRestoreLoading(false)
                 })
               }}
+              loading={restoreLoading}
               type="link"
             />
 
             <IconButton
               icon={{ value: 'trash' }}
-              onClick={async () => {
+              onClick={() => {
+                setRemoveLoading(true)
                 removeItems([row.original.id], () => {
-                  //TODO: add cache clear or refetch logic
+                  setRemoveLoading(false)
                 })
               }}
+              loading={removeLoading}
               type="link"
             />
           </Flex>
@@ -140,6 +145,9 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
       data={tableItems}
       modifiedCells={[]}
       resizable
+      enableMultipleRowSelection
+      onSelectedRowsChange={(row: RowSelectionState) => { setSelectedItems(row) }}
+      selectedRows={selectedItems}
     />
   )
 }
