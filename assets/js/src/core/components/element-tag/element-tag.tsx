@@ -9,7 +9,7 @@
  */
 
 import React, { useRef } from 'react'
-import { Tag } from '@Pimcore/components/tag/tag'
+import { Tag, type TagProps } from '@Pimcore/components/tag/tag'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useStyles } from './element-tag.styles'
@@ -18,7 +18,7 @@ import cn from 'classnames'
 import { Tooltip } from '../tooltip/tooltip'
 import useElementOverflow from '../../utils/use-element-overflow'
 
-export interface ElementTagProps {
+export interface ElementTagProps extends Omit<TagProps, 'id' | 'children'> {
   path: string
   elementType?: ElementType
   id?: number
@@ -27,7 +27,7 @@ export interface ElementTagProps {
   onClose?: () => void
 }
 
-export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, published, disabled, onClose }) => {
+export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, published, disabled, onClose, ...props }) => {
   const { openElement } = useElementHelper()
   const { styles } = useStyles()
   const textRef = useRef<HTMLSpanElement>(null)
@@ -57,6 +57,7 @@ export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, p
         onClick={ isClickable ? onClick : undefined }
         onClose={ onClose }
         ref={ textRef }
+        { ...props }
       >
         {path}
       </Tag>
