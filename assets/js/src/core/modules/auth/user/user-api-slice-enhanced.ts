@@ -16,6 +16,27 @@ const enhancedUserApi = userApi.enhanceEndpoints({
   endpoints: {
     userGetCurrentInformation: {
       providesTags: (result, error, args) => providingTags.CURRENT_USER_INFORMATION()
+    },
+    userGetImage: (endpoint) => {
+      const originalQuery = endpoint.query
+
+      if (originalQuery !== undefined) {
+        endpoint.query = (queryArg) => {
+          const baseResult = originalQuery(queryArg)
+
+          if (baseResult === null || typeof baseResult !== 'object') {
+            return baseResult
+          }
+
+          return {
+            ...baseResult,
+            responseHandler: async (response) => {
+              const data = await response.blob()
+              return data
+            }
+          }
+        }
+      }
     }
   }
 })

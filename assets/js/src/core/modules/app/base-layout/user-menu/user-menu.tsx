@@ -18,12 +18,14 @@ import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { NOTIFICATIONS } from '@Pimcore/modules/notifications'
 import { SendNotificationModal } from '@Pimcore/modules/notifications/send-notification/send-notification-modal'
 import { useWidgetManager } from '@sdk/modules/widget-manager'
-import { Avatar } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStyle } from './user-menu.styles'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { USERPROFILE } from '@Pimcore/modules/auth/profile/profile-container'
+import { useUserDraft } from '@Pimcore/modules/auth/hooks/use-user-draft'
+import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
+import { Avatar } from 'antd'
 
 interface IUserMenuProps {
   className?: string
@@ -34,6 +36,21 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   const [sendModal, setSendModal] = useState<boolean>(false)
   const [logout] = useLogoutMutation()
   const { openMainWidget } = useWidgetManager()
+  const { user } = useUserDraft()
+  const { getUserImageById } = useUserHelper()
+
+  const [userImageUrl, setUserImageUrl] = useState<string | null>(null)
+  useEffect(() => {
+    let objectUrl: string | null = null
+    getUserImageById(user.id).then((response) => {
+      if (response !== undefined) {
+        objectUrl = URL.createObjectURL(response)
+        setUserImageUrl(objectUrl)
+      }
+    }).catch((error) => {
+      console.log('Error fetching user image:', error)
+    })
+  }, [])
 
   const handleLogout = (): void => {
     const logoutTask = logout()
@@ -93,11 +110,13 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
         menu={ { items } }
         overlayClassName={ [styles.userMenu].join(' ') }
         overlayStyle={ { minWidth: 275 } }
+        trigger={ ['click'] }
       >
         <Avatar
           icon={ <Icon value='user' /> }
           size={ 26 }
-        />
+          src={ userImageUrl }
+        ></Avatar>
       </Dropdown>
 
       <SendNotificationModal

@@ -11,7 +11,7 @@
 import { useAppDispatch } from '@sdk/app'
 import {
   api,
-  type Error, type UserUpdateProfileApiResponse
+  type Error, type UserGetImageApiResponse, type UserUpdateProfileApiResponse
 } from '@Pimcore/modules/auth/user/user-api-slice-enhanced'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
@@ -20,6 +20,7 @@ import { type KeyBindingForAUser } from '@Pimcore/modules/auth/user/user-api-sli
 
 interface UseUserReturn {
   updateUserProfile: (user) => Promise<{ data: UserUpdateProfileApiResponse, error: any }>
+  getUserImageById: (id: number) => Promise<UserGetImageApiResponse | undefined>
 }
 
 export const useUserHelper = (): UseUserReturn => {
@@ -77,7 +78,12 @@ export const useUserHelper = (): UseUserReturn => {
     return data
   }
 
+  async function getUserImageById (id: number): Promise<UserGetImageApiResponse | undefined> {
+    const { data } = await dispatch(api.endpoints.userGetImage.initiate({ id }))
+    return data
+  }
+
   return {
-    updateUserProfile
+    updateUserProfile, getUserImageById
   }
 }
