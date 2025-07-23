@@ -36,6 +36,10 @@ export const useStyles = createStyles(({ css, token }) => {
 
     drillDownSelectLabel: css`
       color: ${token.colorPrimary};
+    `,
+
+    dropdownLabel: css`
+      color: ${token.colorPrimary};
     `
   }
 })
