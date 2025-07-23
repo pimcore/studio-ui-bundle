@@ -13,10 +13,21 @@ import { useRecycleBinGetCollectionQuery } from "./recycle-bin-api-slice.gen"
 import { useAppDispatch } from "@sdk/app"
 import { Pagination } from "@Pimcore/components/pagination/pagination"
 import { Table } from "./components/table/table"
+import { api } from "./recycle-bin-api-slice-enhanced"
+import { invalidatingTags } from "@Pimcore/app/api/pimcore/tags"
+
+interface ColumnFilters {
+  path: {
+    key: string,
+    type: string,
+    filterValue: string
+  }
+}
 
 export const RecycleBinContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
+  const [columnFilters, setColumnFilters] = useState<ColumnFilters | undefined>(undefined)
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -24,7 +35,8 @@ export const RecycleBinContainer = (): React.JSX.Element => {
     body: {
       filters: {
         page: currentPage,
-        pageSize
+        pageSize,
+        columnFilters
       }
     }
   })
@@ -51,7 +63,7 @@ export const RecycleBinContainer = (): React.JSX.Element => {
             onClick={() => {
               dispatch(
                 api.util.invalidateTags(
-                  invalidatingTags.EMAIL_LOG()
+                  invalidatingTags.RECYCLING_BIN()
                 )
               )
             }}
@@ -78,9 +90,22 @@ export const RecycleBinContainer = (): React.JSX.Element => {
             <Title>{t('widget.recycle-bin')}</Title>
           </Flex>
           <SearchInput
-            loading={isFetching}
+            loading={isFetching || isLoading}
             onSearch={(value) => {
-              setFilter(value)
+              const pathFilter: ColumnFilters['path'] = {
+                key: 'path',
+                type: 'like',
+                filterValue: ''
+              }
+
+              if (value !== '') {
+                pathFilter.filterValue = value
+              }
+
+              setColumnFilters({
+                ...columnFilters,
+                path: pathFilter
+              })
             }}
             placeholder="Search"
             withPrefix={false}
@@ -90,7 +115,7 @@ export const RecycleBinContainer = (): React.JSX.Element => {
       }
     >
       <Content
-        loading={isRTKLoading || isFetching}
+        loading={isLoading || isRTKLoading}
         margin={{
           x: 'extra-small',
           y: 'none'

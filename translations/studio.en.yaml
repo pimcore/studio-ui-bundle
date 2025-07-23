@@ -911,3 +911,11 @@ embed.edit-url: Edit URL
 embed.clear: Clear
 embed.loading: Loading...
 embed.iframe-title: Embedded content
+navigation.recycle-bin: Recycle Bin
+widget.recycle-bin: Recycle Bin
+recycle-bin.columns.type: Type
+recycle-bin.columns.path: Path
+recycle-bin.columns.amount: Amount
+recycle-bin.columns.deleted-by: Deleted By
+recycle-bin.columns.date: Date
+recycle-bin.columns.actions: Actions
