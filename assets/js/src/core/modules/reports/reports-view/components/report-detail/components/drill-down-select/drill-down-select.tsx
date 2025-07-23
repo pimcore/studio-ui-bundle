@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
-import { useCustomReportsListDrillDownOptionsQuery, type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import { useCustomReportsListDrillDownOptionsQuery, type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 

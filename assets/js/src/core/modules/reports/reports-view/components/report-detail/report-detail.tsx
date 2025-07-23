@@ -20,7 +20,7 @@ import { type IChartDetailData, type IReportDetailData } from '@Pimcore/modules/
 import { FilterDrillDown } from '@Pimcore/modules/reports/reports-view/types'
 import { DrillDownSelect } from '@Pimcore/modules/reports/reports-view/components/report-detail/components/drill-down-select/drill-down-select'
 import { useColumnsContext } from '@Pimcore/components/grid/contexts/columns-context'
-import { type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import { type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 
 interface IReportDetailProps {
   currentReport: string | null
@@ -51,7 +51,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
     }
   }, [isLoading])
 
-  const { columns, setColumns } = useColumnsContext()
+  const { columns, setColumns, setInitialColumns } = useColumnsContext()
 
   useEffect(() => {
     const getColumns = (): Array<AccessorKeyColumnDef<unknown, never>> | undefined => (
@@ -69,6 +69,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
     )
 
     setColumns(getColumns() ?? [])
+    setInitialColumns(getColumns() ?? [])
   }, [reportDetailData, setColumns])
 
   const getDrillDownSelectList = (): BundleCustomReportsColumnConfiguration[] | undefined => (
