@@ -47,17 +47,17 @@ export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, p
   }
 
   return (
-    <Tooltip title={ isOverflow ? path : '' }>
+    <Tooltip title={isOverflow ? path : ''}>
       <Tag
-        bordered={ false }
-        className={ cn(styles.tag, { [styles.tagClickable]: isClickable, [styles.tagDisabled]: disabled }) }
-        closeIcon={ !isUndefined(onClose) }
-        color={ isUnpublished ? 'gold' : 'geekblue' }
-        iconName={ isUnpublished ? 'eye-off' : undefined }
-        onClick={ isClickable ? onClick : undefined }
-        onClose={ onClose }
-        ref={ textRef }
-        { ...props }
+        bordered={false}
+        className={cn(styles.tag, { [styles.tagClickable]: isClickable, [styles.tagDisabled]: disabled })}
+        closeIcon={!isUndefined(onClose)}
+        color={isUnpublished ? 'gold' : 'geekblue'}
+        iconName={isUnpublished ? 'eye-off' : undefined}
+        onClick={isClickable ? onClick : undefined}
+        onClose={onClose}
+        ref={textRef}
+        {...props}
       >
         {path}
       </Tag>
