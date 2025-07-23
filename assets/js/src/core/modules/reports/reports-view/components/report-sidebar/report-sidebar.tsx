@@ -13,9 +13,10 @@ import { useTranslation } from 'react-i18next'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { ColumnsConfiguration } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-configuration/columns-configuration'
-import { FieldFilters } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/field-filters/field-filters'
+import { ColumnsFilters } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/columns-filters'
+import { type BundleCustomReportsDetails } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 
-export const ReportSidebar = (): React.JSX.Element => {
+export const ReportSidebar = ({ reportData }: { reportData: BundleCustomReportsDetails }): React.JSX.Element => {
   const { t } = useTranslation()
 
   const sidebarProps = {
@@ -27,7 +28,7 @@ export const ReportSidebar = (): React.JSX.Element => {
         tooltip: t('sidebar.grid_config')
       },
       {
-        component: <FieldFilters />,
+        component: <ColumnsFilters reportData={ reportData } />,
         key: 'reports-field-filters',
         icon: <Icon value="filter" />,
         tooltip: t('reports.field-filters')

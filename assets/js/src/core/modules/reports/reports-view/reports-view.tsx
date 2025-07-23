@@ -157,7 +157,9 @@ export const ReportsView = (): React.JSX.Element => {
 
   const renderContent = (): React.JSX.Element => (
     <ContentLayout
-      renderSidebar={ isCurrentReportSelected && !isEmpty(chartDetailData?.items) && <ReportSidebar /> }
+      renderSidebar={ isCurrentReportSelected && !isEmpty(chartDetailData?.items) && !isEmpty(reportDetailData) && (
+        <ReportSidebar reportData={ reportDetailData } />
+      ) }
       renderToolbar={ !isEmpty(chartDetailData?.items) && !isFetching && (
       <ReportToolbar
         currentReport={ currentReport }

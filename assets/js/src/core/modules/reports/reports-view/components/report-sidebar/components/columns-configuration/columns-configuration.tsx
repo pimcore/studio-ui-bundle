@@ -16,7 +16,6 @@ import { isEmpty } from 'lodash'
 import { useColumnsContext } from '@Pimcore/components/grid/contexts/columns-context'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
-import { Header } from '@Pimcore/components/header/header'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Tag } from '@Pimcore/components/tag/tag'
 import { Space } from '@Pimcore/components/space/space'
@@ -28,6 +27,7 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Button } from '@Pimcore/components/button/button'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { Title } from '@Pimcore/components/title/title'
 
 type Column = AccessorKeyColumnDef<unknown, any>
 
@@ -110,10 +110,7 @@ export const ColumnsConfiguration = (): React.JSX.Element => {
       }
     >
       <Content padded>
-        <Header
-          fullWidth
-          title={ t('reports.grid-config.title-columns') }
-        />
+        <Title>{t('reports.grid-config.title-columns')}</Title>
         <Space
           direction='vertical'
           style={ { width: '100%' } }
