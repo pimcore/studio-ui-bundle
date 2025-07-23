@@ -9,6 +9,9 @@ import { RecycleBin } from "../../recycle-bin-api-slice.gen"
 import { useRecycleBin } from "../../hooks/use-recycle-bin"
 import { Icon } from "@Pimcore/components/icon/icon"
 import { useStyles } from "./table.styles"
+import { DefaultCellProps } from "@Pimcore/components/grid/columns/default-cell"
+import { ElementInfo } from "@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/element-cell/element-cell"
+import { useElementHelper } from "@Pimcore/modules/element/hooks/use-element-helper"
 
 interface TableProps {
   items: RecycleBin[]
@@ -22,6 +25,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { restoreItems, removeItems } = useRecycleBin()
+  const { mapToElementType } = useElementHelper()
 
   const tableItems = items.map((item) => {
     return {
@@ -68,10 +72,23 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     }),
     columnHelper.accessor('path', {
       header: t('recycle-bin.columns.path'),
+      meta: {
+        editable: false,
+        clearable: false,
+        type: 'element',
+        config: {
+          getElementInfo: (cellProps: DefaultCellProps): ElementInfo => {
+            const row = cellProps.row.original
+            return {
+              fullPath: row.path,
+            }
+          }
+        }
+      }
     }),
     columnHelper.accessor('amount', {
       header: t('recycle-bin.columns.amount'),
-      size: 40
+      size: 20
     }),
     columnHelper.accessor('deletedBy', {
       header: t('recycle-bin.columns.deleted-by'),
@@ -79,7 +96,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     }),
     columnHelper.accessor('date', {
       header: t('recycle-bin.columns.date'),
-      size: 60
+      size: 40
     }),
     columnHelper.accessor('actions', {
       header: t('recycle-bin.columns.actions'),
@@ -111,7 +128,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
           </Flex>
         )
       },
-      size: 30
+      size: 20
     })
   ]
 
