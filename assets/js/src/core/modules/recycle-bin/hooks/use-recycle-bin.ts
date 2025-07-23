@@ -1,16 +1,20 @@
 import trackError from "@Pimcore/modules/app/error-handler/error-handler"
-import { RecycleBin, useRecycleBinDeleteItemsMutation, useRecycleBinFlushMutation } from "../recycle-bin-api-slice-enhanced"
+import { api, RecycleBin, useRecycleBinDeleteItemsMutation, useRecycleBinFlushMutation } from "../recycle-bin-api-slice-enhanced"
 import ApiError from "@Pimcore/modules/app/error-handler/classes/api-error"
 import GeneralError from "@Pimcore/modules/app/error-handler/classes/general-error"
 import { useRecycleBinRestoreItemsMutation } from "../recycle-bin-api-slice.gen"
+import { invalidatingTags } from "@Pimcore/app/api/pimcore/tags"
+import { useAppDispatch } from "@Pimcore/app/store"
 
 interface UseRecycleBinHookReturn {
   restoreItems: (ids: Array<RecycleBin['id']>, onFinish?: () => void) => Promise<void>
   removeItems: (ids: Array<RecycleBin['id']>, onFinish?: () => void) => Promise<void>
   flush: (onFinish?: () => void) => Promise<void>
+  refreshRecycleBin: () => void
 }
 
 export const useRecycleBin = (): UseRecycleBinHookReturn => {
+  const dispatch = useAppDispatch()
   const [recycleBinRestoreMutation] = useRecycleBinRestoreItemsMutation()
   const [recycleBindDelteMutation] = useRecycleBinDeleteItemsMutation()
   const [recycleBinFlushMutation] = useRecycleBinFlushMutation()
@@ -71,9 +75,18 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
     }
   }
 
+  const refreshRecycleBin = (): void => {
+    dispatch(
+      api.util.invalidateTags(
+        invalidatingTags.RECYCLING_BIN()
+      )
+    )
+  }
+
   return {
     restoreItems,
     removeItems,
-    flush
+    flush,
+    refreshRecycleBin
   }
 }

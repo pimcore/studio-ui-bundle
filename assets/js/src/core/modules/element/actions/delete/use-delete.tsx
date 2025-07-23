@@ -35,6 +35,7 @@ import { ContextMenuActionName } from '..'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { useRefreshTree } from '../refresh-tree/use-refresh-tree'
+import { useRecycleBin } from '@Pimcore/modules/recycle-bin/hooks/use-recycle-bin'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
@@ -51,6 +52,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   const { refreshGrid } = useRefreshGrid(elementType)
   const { getElementById } = useElementApi(elementType)
   const { refreshTree } = useRefreshTree(elementType)
+  const { refreshRecycleBin } = useRecycleBin()
   const { isMainWidgetOpen, closeWidget } = useWidgetManager()
   const [elementDelete, { isError, error }] = useElementDeleteMutation({ fixedCacheKey: cacheKey })
   const { isTreeActionAllowed } = useTreePermission()
@@ -86,7 +88,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
     return {
       label: t('element.delete'),
       key: ContextMenuActionName.delete,
-      icon: <Icon value={ 'trash' } />,
+      icon: <Icon value={'trash'} />,
       hidden: !isTreeActionAllowed(TreePermission.Delete) || !checkElementPermission(node.permissions, 'delete') || node.isLocked,
       onClick: () => {
         const id = parseInt(node.id)
@@ -101,7 +103,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
       label: t('element.delete'),
       key: ContextMenuActionName.delete,
       isLoading,
-      icon: <Icon value={ 'trash' } />,
+      icon: <Icon value={'trash'} />,
       hidden: !checkElementPermission(node.permissions, 'delete') || node.isLocked,
       onClick: () => {
         const id = node.id
@@ -120,7 +122,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
     return {
       label: t('element.delete'),
       key: ContextMenuActionName.delete,
-      icon: <Icon value={ 'trash' } />,
+      icon: <Icon value={'trash'} />,
       hidden: !checkElementPermission(data.permissions, 'delete') || data.isLocked,
       onClick: async () => {
         await stagedLoading(data.id)
@@ -172,6 +174,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
       }))
     } else if (parentId !== undefined) {
       refreshTree(parentId)
+      refreshRecycleBin()
     }
 
     const widgetId = getWidgetId(elementType, id)

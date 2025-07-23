@@ -1,6 +1,5 @@
-import { providingTags, tagNames } from '@sdk/api'
+import { providingTags, tagNames, Tag, invalidatingTags } from '@sdk/api'
 import { api as baseApi } from './recycle-bin-api-slice.gen'
-import { Tag } from '@sdk/api/tags'
 
 export const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.RECYCLE_BIN],
@@ -13,7 +12,22 @@ export const api = baseApi.enhanceEndpoints({
           tagCollection.push(...providingTags.RECYCLING_BIN_DETAIL(item.id))
         })
 
-        return [...tagCollection, ...providingTags.EMAIL_BLOCKLIST()]
+        return [...tagCollection, ...providingTags.RECYCLING_BIN()]
+      }
+    },
+    recycleBinDeleteItems: {
+      invalidatesTags: (result, error, args) => {
+        return invalidatingTags.RECYCLING_BIN()
+      }
+    },
+    recycleBinFlush: {
+      invalidatesTags: () => {
+        return invalidatingTags.RECYCLING_BIN()
+      }
+    },
+    recycleBinRestoreItems: {
+      invalidatesTags: (result, error, args) => {
+        return invalidatingTags.RECYCLING_BIN()
       }
     }
   }

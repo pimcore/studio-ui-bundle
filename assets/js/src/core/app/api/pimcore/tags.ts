@@ -157,7 +157,8 @@ export const invalidatingTags = {
   EMAIL_BLOCKLIST: () => [tagNames.EMAIL_BLOCKLIST],
   EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }],
   EMAIL_LOG: () => [tagNames.EMAIL_LOG],
-  EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }]
+  EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }],
+  RECYCLING_BIN: () => [tagNames.RECYCLE_BIN]
 }
 
 const elementUnspecificDataTag = tagNames.AVAILABLE_TAGS
