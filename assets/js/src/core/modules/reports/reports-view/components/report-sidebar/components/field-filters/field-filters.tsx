@@ -16,10 +16,8 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Button } from '@Pimcore/components/button/button'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
-import { Flex } from '@Pimcore/components/flex/flex'
-import { Search } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/search-filter/components/search/search'
 
-export const SearchFilter = (): React.JSX.Element => {
+export const FieldFilters = (): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
@@ -44,10 +42,7 @@ export const SearchFilter = (): React.JSX.Element => {
         }
     >
       <Content padded>
-        <Title>{t('reports.grid-config.title-search-filter')}</Title>
-        <Flex vertical>
-          <Search />
-        </Flex>
+        <Title>{t('reports.field-filters')}</Title>
       </Content>
     </ContentLayout>
   )

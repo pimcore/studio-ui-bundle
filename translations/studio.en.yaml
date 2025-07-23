@@ -861,9 +861,9 @@ reports.select-report: Select report
 reports.csv-export: CSV Export
 reports.csv-export-with-headers: CSV Export with headers
 reports.grid-config.title-columns: Columns
-reports.grid-config.title-search-filter: Search & Filter
 reports.grid-config.restore-to-default: Restore to default
 reports.grid-config.add-column: Add a column
+reports.field-filters: Field Filters
 loading: Loading...
 please-wait: Please wait...
 navigation.email: Email
