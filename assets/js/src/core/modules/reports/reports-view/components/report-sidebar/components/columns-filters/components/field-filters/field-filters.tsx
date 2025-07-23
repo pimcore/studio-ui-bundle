@@ -11,11 +11,10 @@
 import React, { type Key, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Empty, Space } from 'antd'
-import { isEmpty } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { useColumnsContext } from '@Pimcore/components/grid/contexts/columns-context'
 import type {
   BundleCustomReportsColumnConfiguration,
   BundleCustomReportsDetails
@@ -24,30 +23,20 @@ import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/d
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import type { FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
 import { FieldFilters as FieldFiltersComponent } from '@Pimcore/components/field-filters/field-filters'
+import {
+  GET_FIELD_DATA_BY_TYPE,
+  GET_ORIGINAL_TYPE_BY_FRONTEND_TYPE
+} from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/components/field-filters/utils/helpers'
+import type { IGridFilter } from '@Pimcore/modules/reports/reports-view/types'
 
-const MAPPER = {
-  string: {
-    frontendType: 'input',
-    type: 'system.string'
-  },
-  numeric: {
-    frontendType: 'id',
-    type: 'system.id'
-  },
-  boolean: {
-    frontendType: 'checkbox',
-    type: 'system.string'
-  },
-  date: {
-    frontendType: 'datetime',
-    type: 'system.datetime'
-  }
+interface IFieldFiltersProps {
+  reportData: BundleCustomReportsDetails
+  columnFilters: IGridFilter['columnFilters']
+  setColumnFilters: (filters: IGridFilter['columnFilters']) => void
 }
 
-export const FieldFilters = ({ reportData }: { reportData: BundleCustomReportsDetails }): React.JSX.Element => {
+export const FieldFilters = ({ reportData, columnFilters, setColumnFilters }: IFieldFiltersProps): React.JSX.Element => {
   const { t } = useTranslation()
-
-  const { columns } = useColumnsContext()
 
   const [addColumnMenu, setAddColumnMenu] = useState<DropdownMenuProps['items']>([])
   const [filters, setFilters] = useState<FieldFiltersProps['data']>([])
@@ -55,8 +44,8 @@ export const FieldFilters = ({ reportData }: { reportData: BundleCustomReportsDe
   const handleColumnClick = (column: BundleCustomReportsColumnConfiguration): void => {
     const filterType: string = column.filterType ?? 'string'
 
-    const frontendType: string = MAPPER[filterType].frontendType
-    const type: string = MAPPER[filterType].type
+    const frontendType: string = GET_FIELD_DATA_BY_TYPE[filterType].frontendType
+    const type: string = GET_FIELD_DATA_BY_TYPE[filterType].type
 
     setFilters((prevFilters) => [
       ...prevFilters,
@@ -73,17 +62,34 @@ export const FieldFilters = ({ reportData }: { reportData: BundleCustomReportsDe
 
   const onFilterChange: FieldFiltersProps['onChange'] = (data) => {
     setFilters(data)
+
+    const updatedColumnFilters = data
+      .filter(item => !isUndefined(item.data))
+      .map(item => ({
+        property: item.name!,
+        type: GET_ORIGINAL_TYPE_BY_FRONTEND_TYPE[item.frontendType!],
+        operator: 'eq',
+        value: String(item.data)
+      }))
+
+    !isUndefined(updatedColumnFilters) && setColumnFilters(updatedColumnFilters)
   }
 
   useEffect(() => {
-    const newAddColumnMenu = reportData?.columnConfigurations?.map((column) => ({
-      key: column.id as Key,
-      label: !isEmptyValue(column.label) ? column.label : column.name,
-      onClick: () => { handleColumnClick(column) }
-    }))
+    setFilters([])
+  }, [reportData])
+
+  useEffect(() => {
+    const newAddColumnMenu = reportData?.columnConfigurations
+      ?.filter((initialColumn) => !filters.some((column) => initialColumn.name === column.name))
+      ?.map((column) => ({
+        key: column.id as Key,
+        label: !isEmptyValue(column.label) ? column.label : column.name,
+        onClick: () => { handleColumnClick(column) }
+      }))
 
     setAddColumnMenu(newAddColumnMenu)
-  }, [columns])
+  }, [reportData, filters])
 
   return (
     <>

@@ -8,36 +8,52 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Button } from '@Pimcore/components/button/button'
-import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import type { BundleCustomReportsDetails } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { FieldFilters } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/components/field-filters/field-filters'
+import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
+import { type IGridFilter } from '@Pimcore/modules/reports/reports-view/types'
 
 export const ColumnsFilters = ({ reportData }: { reportData: BundleCustomReportsDetails }): React.JSX.Element => {
   const { t } = useTranslation()
 
+  const { filters, setFilters } = useGridFilterContext()
+
+  const [columnFilters, setColumnFilters] = useState<IGridFilter['columnFilters']>([])
+
+  const handleApplyFilters = (): void => {
+    setFilters({
+      ...filters,
+      columnFilters
+    })
+  }
+
+  const handleClearFilters = (): void => {
+    setColumnFilters([])
+    setFilters({
+      ...filters,
+      columnFilters: []
+    })
+  }
+
   return (
     <ContentLayout
       renderToolbar={
-        <Toolbar
-          padding={ { x: 'none' } }
-          theme='secondary'
-        >
-          <IconTextButton
-            icon={ { value: 'close' } }
-            onClick={ () => {} }
+        <Toolbar theme='secondary'>
+          <Button
+            onClick={ handleClearFilters }
             type='link'
           >
             {t('sidebar.clear-all-filters')}
-          </IconTextButton>
+          </Button>
 
           <Button
-            onClick={ () => {} }
+            onClick={ handleApplyFilters }
             type='primary'
           >
             {t('button.apply')}
@@ -46,7 +62,11 @@ export const ColumnsFilters = ({ reportData }: { reportData: BundleCustomReports
       }
     >
       <Content padded>
-        <FieldFilters reportData={ reportData } />
+        <FieldFilters
+          columnFilters={ columnFilters }
+          reportData={ reportData }
+          setColumnFilters={ setColumnFilters }
+        />
       </Content>
     </ContentLayout>
   )
