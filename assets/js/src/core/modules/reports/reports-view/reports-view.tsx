@@ -14,7 +14,7 @@ import { isEmpty, isNull, isUndefined } from 'lodash'
 import cn from 'classnames'
 import { type DefaultOptionType } from 'antd/es/select'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
-import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -28,6 +28,7 @@ import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useRe
 import { ReportToolbar } from '@Pimcore/modules/reports/reports-view/components/report-toolbar/report-toolbar'
 import { ReportTopBar } from '@Pimcore/modules/reports/reports-view/components/report-top-bar/report-top-bar'
 import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
+import { ReportSidebar } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/report-sidebar'
 import { useStyles } from './reports-view.styles'
 
 const PAGE_INITIAL = 1
@@ -156,16 +157,16 @@ export const ReportsView = (): React.JSX.Element => {
 
   const renderContent = (): React.JSX.Element => (
     <ContentLayout
+      renderSidebar={ isCurrentReportSelected && !isEmpty(chartDetailData?.items) && <ReportSidebar /> }
       renderToolbar={ !isEmpty(chartDetailData?.items) && !isFetching && (
-        <ReportToolbar
-          currentReport={ currentReport }
-          filters={ filters }
-          page={ page }
-          pageSize={ pageSize }
-          setPage={ setPage }
-          setPageSize={ setPageSize }
-          totalItems={ chartDetailData?.totalItems ?? 0 }
-        />
+      <ReportToolbar
+        currentReport={ currentReport }
+        page={ page }
+        pageSize={ pageSize }
+        setPage={ setPage }
+        setPageSize={ setPageSize }
+        totalItems={ chartDetailData?.totalItems ?? 0 }
+      />
       ) }
       renderTopBar={ (
         <ReportTopBar

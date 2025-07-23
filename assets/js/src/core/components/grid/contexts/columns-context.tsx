@@ -15,6 +15,10 @@ import { isUndefined } from 'lodash'
 interface IColumnsContext {
   columns: Array<AccessorKeyColumnDef<unknown, any>>
   setColumns: (columns: Array<AccessorKeyColumnDef<unknown, any>>) => void
+  initialColumns: Array<AccessorKeyColumnDef<unknown, any>>
+  setInitialColumns: (columns: Array<AccessorKeyColumnDef<unknown, any>>) => void
+  resetColumnsToInitial: () => void
+  addColumn: (column: AccessorKeyColumnDef<unknown, any>) => void
 }
 
 const ColumnsContext = createContext<IColumnsContext | undefined>(undefined)
@@ -25,11 +29,24 @@ interface IColumnsProviderProps {
 
 export const ColumnsProvider = ({ children }: IColumnsProviderProps): React.JSX.Element => {
   const [columns, setColumns] = useState<Array<AccessorKeyColumnDef<unknown, any>>>([])
+  const [initialColumns, setInitialColumns] = useState<Array<AccessorKeyColumnDef<unknown, any>>>([])
+
+  const resetColumnsToInitial = (): void => {
+    setColumns(initialColumns)
+  }
+
+  const addColumn = (column: AccessorKeyColumnDef<unknown, any>): void => {
+    setColumns([...columns, column])
+  }
 
   const contextValue = useMemo(() => ({
     columns,
-    setColumns
-  }), [columns, setColumns])
+    setColumns,
+    initialColumns,
+    setInitialColumns,
+    resetColumnsToInitial,
+    addColumn
+  }), [columns, setColumns, initialColumns, setInitialColumns])
 
   return (
     <ColumnsContext.Provider value={ contextValue }>
