@@ -104,8 +104,7 @@ export const RecycleBinContainer = (): React.JSX.Element => {
           }}
         >
           <Table
-            predefinedPropertyRows={sortedRows}
-            setPredefinedPropertyRows={setPredefinedPropertyRows}
+            items={data?.items ?? []}
           />
         </Box>
       </Content>
