@@ -1,11 +1,9 @@
-import React, { ReactNode, useEffect, useRef, useState } from 'react'
+import React, { ReactNode} from 'react'
 import { Form } from '../form/form'
 import { Divider } from '../divider/divider'
 import { PipelineItemCustom } from './item/custom'
 import { PipelineDynamicGroup } from './item/dynamic-group'
 import { ConfigProvider } from 'antd'
-import { isEqual } from 'lodash'
-import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
 
 export interface PipelineItem {
   id: string,
@@ -19,6 +17,10 @@ export interface PipelineProps {
 }
 
 const Pipeline = ({items, value, onChange}: PipelineProps): React.JSX.Element => {
+  if (value === undefined) {
+    return <></>
+  }
+
   return (
     <ConfigProvider theme={ { components: { Form: { itemMarginBottom: 0 } } } }>
       <Form.KeyedList value={value} onChange={onChange}>

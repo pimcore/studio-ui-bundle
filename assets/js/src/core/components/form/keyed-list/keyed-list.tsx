@@ -10,7 +10,7 @@
 
 import { type NamePath } from 'antd/es/form/interface'
 import { Form } from '../form'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { type KeyedListData, KeyedListProvider } from './provider/keyed-list/keyed-list-provider'
 import { KeyedListIterator } from './iterator/keyed-list-iterator'
 import { cloneDeep, isArray, isEqual, isObject, get, isUndefined, setWith } from 'lodash'
@@ -28,17 +28,32 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   const initialValue = isArray(baseValue) ? {} : baseValue ?? {}
   const [value, setValue] = useState(cloneDeep(initialValue))
   const { name: tempItemName } = useItem()
-
   const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
   const name = useMemo(() => itemName[itemName.length - 1], [itemName])
+  const timer = useRef<NodeJS.Timeout | null>(null);
 
   const onChange: KeyedListData['onChange'] = (newValue) => {
-    baseOnChange !== undefined && baseOnChange(newValue)
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
+    
+    if (baseOnChange) {
+      setValue(() => newValue);
+      baseOnChange(newValue);
+    }
   }
 
   useEffect(() => {
-    if (!isEqual(value, initialValue)) {
-      setValue(initialValue)
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
+
+    if (!isEqual(value, initialValue)) { 
+      timer.current = setTimeout(() => {
+        if (!isEqual(value, initialValue)) {
+          setValue(() => initialValue)
+        }
+      }, 100);
     }
   }, [baseValue])
 

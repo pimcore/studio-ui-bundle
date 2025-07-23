@@ -1,9 +1,7 @@
 import { Flex } from "@Pimcore/components/flex/flex";
-import { Form } from "@Pimcore/components/form/form";
 import { Text } from "@Pimcore/components/text/text";
 import { AdvancedColumnConfig, useDataObjectGetGridPreviewQuery } from "@Pimcore/modules/data-object/data-object-api-slice.gen";
 import { AvailableColumn } from "@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider";
-import { transform } from "lodash";
 import React from "react";
 import { PreviewValue } from "./preview-value";
 import { Box } from "@Pimcore/components/box/box";
@@ -30,10 +28,10 @@ export const Preview = (props : PreviewProps): React.JSX.Element => {
 
   return (
     <Box padding={'small'}>
-      <Flex gap={'small'}>
+      <Flex gap={'small'} align="center">
         <Text style={{ wordBreak: 'keep-all' }}>Preview:</Text>
         {data?.value === undefined || data?.value.length === 0 ? (
-          <Text>No data available</Text>
+          <Text>No preview available</Text>
         ) : (
           <PreviewValue value={data?.value} />
         )}

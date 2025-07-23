@@ -11,6 +11,7 @@ export const useStyles = createStyles(({ token, css}) => ({
       .ant-table {
         margin-block: 0 !important;
         margin-inline: 0 !important;
+        margin: 2px -4px !important;
       }
 
       .ant-table-thead {
@@ -19,6 +20,7 @@ export const useStyles = createStyles(({ token, css}) => ({
 
       .ant-table-row {
         display: flex;
+        flex-wrap: wrap;
         height: auto;
       }
 
@@ -26,16 +28,35 @@ export const useStyles = createStyles(({ token, css}) => ({
         width: auto !important;
         min-width: 0 !important;
         max-width: 100% !important; 
+        padding: 2px 8px !important;
         border: none;
 
-        &:nth-child(n + 2) {
-          border-left: 2px solid ${token.Table.colorBorderSecondary};
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          margin: auto;
+          height: 16px;
+          width: 2px;
+          background-color: ${token.Table.colorBorderSecondary};
+        }
+
+        &:last-child {
+          &::after {
+            content: none;
+          }
         }
       }
 
       .default-cell__content {
         padding: 0;
-        margin: 0 5px;
+        margin: 0;
+      }
+
+      .grid-cell-preview-wrapper {
+        padding: 2px 4px;
       }
     }
   `

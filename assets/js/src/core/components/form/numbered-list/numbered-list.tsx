@@ -10,7 +10,7 @@
 
 import { type NamePath } from 'antd/es/form/interface'
 import { Form } from '../form'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { type NumberedListData, NumberedListProvider } from './provider/numbered-list/numbered-list-provider'
 import { NumberedListIterator } from './iterator/numbered-list-iterator'
 import { cloneDeep, isEqual, set, get, isArray } from 'lodash'
@@ -32,7 +32,8 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
   const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
   const name = useMemo(() => itemName[itemName.length - 1], [itemName])
 
-  const onChange: NumberedListData['onChange'] = (newValue) => {
+  const onChange: NumberedListData['onChange'] = (newValue) => {    
+    setValue(() => newValue);
     baseOnChange !== undefined && baseOnChange(newValue)
   }
 
@@ -44,7 +45,7 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
 
   useEffect(() => {
     if (!isEqual(value, initialValue)) {
-      setValue(initialValue)
+      setValue(() => initialValue)
     }
   }, [baseValue])
 

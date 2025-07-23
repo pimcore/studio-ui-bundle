@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { Children, isValidElement, useEffect, useMemo } from 'react'
+import React, { Children, isValidElement, useCallback, useEffect, useMemo } from 'react'
 import { useKeyedList } from '../provider/keyed-list/use-keyed-list'
 import { useItem } from '../../item/provider/item/use-item'
 import { type FormItemProps } from 'antd'
@@ -26,22 +26,22 @@ export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: 
   const { getValueFromEvent } = props
 
   const { operations, getAdditionalComponentProps } = useKeyedList()
-  const { name } = useItem()
+  const { name, initialValue } = useItem()
 
   const Child = Children.only(children)
   const value = operations.getValue(name)
 
   useEffect(() => {
-    operations.update(name, value ?? null, true)
+    operations.update(name, value ?? initialValue ?? null, true)
   }, [])
 
-  const onChange: KeyedFormItemControlProps['onChange'] = (value: any) => {
+  const onChange: KeyedFormItemControlProps['onChange'] = useCallback((value: any) => {
     const changedValue = !isUndefined(getValueFromEvent)
       ? getValueFromEvent(value)
       : value?.target?.value ?? value
 
     operations.update(name, changedValue, false)
-  }
+  }, [getValueFromEvent, name, operations]);
 
   if (!isValidElement(Child)) {
     throw new Error('KeyedFormItemControl only accepts a single child')

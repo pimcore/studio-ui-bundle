@@ -16,6 +16,7 @@ import { Input } from '../input/input'
 import { Text } from '../text/text'
 import { Flex } from '../flex/flex'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { Tabs } from '../tabs/tabs'
 
 const config: Meta = {
   title: 'Components/Controls/Pipeline',
@@ -42,20 +43,37 @@ const config: Meta = {
               {
                 id: 'title',
                 component: <Pipeline.CustomItem>
-                  <Form.Item name="title" label="Title">
-                    <Input />
-                  </Form.Item>
+                  <Tabs items={[
+                    {
+                      key: 'title',
+                      label: 'Title',
+                      forceRender: true,
+                      children: (
+                        <Form.Item name="title" label="Title">
+                          <Input />
+                        </Form.Item>
+                      )
+                    },
+
+                    {
+                      key: 'source-field',
+                      label: 'Source Field',
+                      forceRender: true,
+                      children: (
+                        <Pipeline.DynamicGroupItem id='source-field' dynamicTypeRegistryId={serviceIds['DynamicTypes/Grid/SourceFieldsRegistry']} />
+                      )
+                    },
+
+                    {
+                      key: 'transformation',
+                      label: 'Transformation',
+                      forceRender: true,
+                      children: (
+                        <Pipeline.DynamicGroupItem id='transformation' dynamicTypeRegistryId={serviceIds['DynamicTypes/Grid/TransformersRegistry']} />
+                      )
+                    },
+                  ]} />
                 </Pipeline.CustomItem>
-              },
-
-              {
-                id: 'source-field',
-                component: <Pipeline.DynamicGroupItem id='source-field' dynamicTypeRegistryId={serviceIds['DynamicTypes/Grid/SourceFieldsRegistry']} />
-              },
-
-              {
-                id: 'transformation',
-                component: <Pipeline.DynamicGroupItem id='transformation' dynamicTypeRegistryId={serviceIds['DynamicTypes/Grid/TransformersRegistry']} />
               },
 
               {

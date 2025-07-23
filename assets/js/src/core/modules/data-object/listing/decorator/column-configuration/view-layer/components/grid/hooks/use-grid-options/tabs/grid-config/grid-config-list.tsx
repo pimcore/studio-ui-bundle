@@ -21,6 +21,7 @@ import { uuid } from '@Pimcore/utils/uuid'
 import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-list-item'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { AdvancedColumnForm } from './forms/advanced-column-form/advanced-column-form'
+import { Text } from '@Pimcore/components/text/text'
 
 interface GridConfigListProps {
   columns: AvailableColumn[]
@@ -44,7 +45,8 @@ export const GridConfigList = (): React.JSX.Element => {
     const uniqueId = column.__meta?.uniqueId ?? uuid()
     let translationKey = `${column.key}`
     const isAdvancedColumn = column.key === 'advanced'
-    const advancedColumnName = column?.__meta?.advancedColumnConfig?.title
+    // @todo translation
+    const advancedColumnName = column?.__meta?.advancedColumnConfig?.title ?? 'Add a title'
 
     if ('fieldDefinition' in column.config) {
       const fieldDefinition = column.config.fieldDefinition as Record<string, any>
@@ -57,7 +59,7 @@ export const GridConfigList = (): React.JSX.Element => {
       meta: column,
 
       type: isAdvancedColumn ? 'collapse' : 'default',
-      children: isAdvancedColumn ? <Tag>{advancedColumnName}</Tag> : <Tag>{t(`${translationKey}`)}</Tag>,
+      children: isAdvancedColumn ? <Tag >{advancedColumnName}</Tag> : <Tag>{t(`${translationKey}`)}</Tag>,
 
       ...(column.key === 'advanced' ? {
         body: (

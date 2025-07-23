@@ -7,7 +7,7 @@ import { usePipelineConfig } from "@Pimcore/components/pipeline/provider/pipelin
 import { SelectProps } from "@Pimcore/components/select/select";
 import { usePrevious } from "@Pimcore/utils/hooks/use-previous";
 import { Select } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 
 export const DynamicTypePipelineGridSourceFieldsRelationFieldComponent = (): React.JSX.Element => {
   const { config } = usePipelineConfig();
@@ -17,10 +17,11 @@ export const DynamicTypePipelineGridSourceFieldsRelationFieldComponent = (): Rea
   const currentRelation = getValueByKey('relation');
   const prevRelation = usePrevious(currentRelation);
 
-  if (prevRelation !== currentRelation) {
-    // check how to reset the select. Value is changed but not reflected in the UI
-    operations.update([...name, 'field'], undefined, false)
-  }
+  useEffect(() => {
+    if (prevRelation !== currentRelation && prevRelation !== undefined) {
+      operations.update([...name, 'field'], null, false)
+    }
+  }, [currentRelation, name, operations, prevRelation])
 
   if (!sourceFieldConfig) {
     throw new Error("Source field configuration is missing");
