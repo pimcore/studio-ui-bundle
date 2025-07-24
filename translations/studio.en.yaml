@@ -857,6 +857,11 @@ user-menu.notification.modal.form.validation.provide-message: Please provide a m
 reports.report-name: Name of the report
 reports.select-report-name: Select the name of the report
 reports.select-report: Select report
+reports.csv-export: CSV Export
+reports.csv-export-with-headers: CSV Export with headers
+reports.grid-config.title-columns: Columns
+reports.grid-config.restore-to-default: Restore to default
+reports.grid-config.add-column: Add a column
 loading: Loading...
 please-wait: Please wait...
 navigation.email: Email

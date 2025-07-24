@@ -8,14 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+export interface IGridFilter {
+  columnFilters?: Array<{ property: string, value: any, type: string, operator: string }>
+  drillDownFilters?: Record<string, any>
+}
 
-export const useStyle = createStyles(({ token, css }) => {
-  return {
-    dropdownButton: css`
-      &.ant-dropdown-trigger.ant-dropdown-open .pimcore-icon.pimcore-icon-chevron-down {
-        transform: scaleY(-1);
-      }
-    `
-  }
-})
+export enum FilterDrillDown {
+  ONLY_FILTER = 'only_filter',
+  FILTER_AND_SHOW = 'filter_and_show',
+}
+
+export type FilterDrillDownType = FilterDrillDown | undefined

@@ -10,12 +10,15 @@
 
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty, isUndefined } from 'lodash'
+import { isEmpty, isNull, isUndefined } from 'lodash'
+import cn from 'classnames'
+import { type DefaultOptionType } from 'antd/es/select'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
-import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { Icon } from '@Pimcore/components/icon/icon'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ReportDetail } from '@Pimcore/modules/reports/reports-view/components/report-detail/report-detail'
 import { Text } from '@Pimcore/components/text/text'
@@ -24,22 +27,9 @@ import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
 import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
 import { ReportToolbar } from '@Pimcore/modules/reports/reports-view/components/report-toolbar/report-toolbar'
 import { ReportTopBar } from '@Pimcore/modules/reports/reports-view/components/report-top-bar/report-top-bar'
+import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
+import { ReportSidebar } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/report-sidebar'
 import { useStyles } from './reports-view.styles'
-import cn from 'classnames'
-
-interface IReportsTreeOptionItem {
-  label: string | JSX.Element
-  value: string
-}
-
-interface IReportsTreeOptionGroup {
-  label: string | JSX.Element
-  title: string
-  options: IReportsTreeOptionItem[]
-}
-
-export type ReportsTreeOption = IReportsTreeOptionItem | IReportsTreeOptionGroup
-export type ReportsTreeOptions = ReportsTreeOption[]
 
 const PAGE_INITIAL = 1
 const PAGE_SIZE_INITIAL = 10
@@ -48,32 +38,54 @@ export const ReportsView = (): React.JSX.Element => {
   const { t } = useTranslation()
 
   const [currentReport, setCurrentReport] = useState<string | null>(null)
+  const [nextReportAfterReset, setNextReportAfterReset] = useState<string | null>(null)
+
   const [page, setPage] = useState(PAGE_INITIAL)
   const [pageSize, setPageSize] = useState(PAGE_SIZE_INITIAL)
+
+  const { filters, resetFilters } = useGridFilterContext()
 
   const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page: 1, pageSize: 9999 })
   const { refetchAll, isFetching, isLoading, chartDetailData, reportDetailData } = useReportData({
     name: currentReport ?? '',
+    filters,
     page,
     pageSize
   })
+
   const { styles } = useStyles()
 
   useEffect(() => {
-    setPage(PAGE_INITIAL)
-    setPageSize(PAGE_SIZE_INITIAL)
-  }, [currentReport])
+    if (!isNull(nextReportAfterReset)) {
+      setPage(PAGE_INITIAL)
+      setPageSize(PAGE_SIZE_INITIAL)
+      resetFilters()
+
+      setCurrentReport(nextReportAfterReset)
+      setNextReportAfterReset(null)
+    }
+  }, [nextReportAfterReset])
+
+  const renderOptionLabel = (iconClass: string, value: any): React.JSX.Element => (
+    <Flex
+      align="center"
+      gap="mini"
+    >
+      {!isEmptyValue(iconClass) && <Icon value={ iconClass } />}
+      {value}
+    </Flex>
+  )
 
   const isCurrentReportSelected = !isEmptyValue(currentReport)
-  const reportsTreeOptions: ReportsTreeOptions | undefined = useMemo(() => {
+  const reportsTreeOptions: DefaultOptionType[] | undefined = useMemo(() => {
     if (!isUndefined(reportsTreeData?.items)) {
-      const groupedOptions: Record<string, IReportsTreeOptionGroup> = {}
-      const ungroupedOptions: IReportsTreeOptionItem[] = []
+      const groupedOptions: Record<string, DefaultOptionType> = {}
+      const ungroupedOptions: DefaultOptionType[] = []
 
       reportsTreeData.items?.forEach(item => {
         if (isEmptyValue(item.group)) {
           ungroupedOptions.push({
-            label: item.niceName,
+            label: renderOptionLabel(item.iconClass, item.niceName),
             value: item.name
           })
 
@@ -82,14 +94,14 @@ export const ReportsView = (): React.JSX.Element => {
 
         if (isUndefined(groupedOptions[item.group])) {
           groupedOptions[item.group] = {
-            label: item.group,
+            label: renderOptionLabel(item.groupIconClass, item.group),
             title: item.group,
             options: []
           }
         }
 
         groupedOptions[item.group].options.push({
-          label: item.niceName,
+          label: renderOptionLabel(item.iconClass, item.niceName),
           value: item.name
         })
       })
@@ -97,7 +109,7 @@ export const ReportsView = (): React.JSX.Element => {
       const hasUngroupedOptions = ungroupedOptions.length > 0
 
       Object.keys(groupedOptions).forEach((groupKey, index) => {
-        const title = groupedOptions[groupKey].title
+        const title = groupedOptions[groupKey].label
         const withDivider = hasUngroupedOptions || index > 0
 
         groupedOptions[groupKey].label = (
@@ -120,12 +132,13 @@ export const ReportsView = (): React.JSX.Element => {
     <Content
       centered={ !isCurrentReportSelected }
       padded
-      padding={ { top: 'extra-small', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
+      padding={ { top: 'none', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
     >
       {isCurrentReportSelected
         ? (
           <ReportDetail
             chartDetailData={ chartDetailData }
+            currentReport={ currentReport }
             isLoading={ isLoadingReportsData }
             reportDetailData={ reportDetailData }
           />
@@ -144,20 +157,22 @@ export const ReportsView = (): React.JSX.Element => {
 
   const renderContent = (): React.JSX.Element => (
     <ContentLayout
+      renderSidebar={ isCurrentReportSelected && !isEmpty(chartDetailData?.items) && <ReportSidebar /> }
       renderToolbar={ !isEmpty(chartDetailData?.items) && !isFetching && (
-        <ReportToolbar
-          page={ page }
-          pageSize={ pageSize }
-          setPage={ setPage }
-          setPageSize={ setPageSize }
-          totalItems={ chartDetailData?.totalItems ?? 0 }
-        />
+      <ReportToolbar
+        currentReport={ currentReport }
+        page={ page }
+        pageSize={ pageSize }
+        setPage={ setPage }
+        setPageSize={ setPageSize }
+        totalItems={ chartDetailData?.totalItems ?? 0 }
+      />
       ) }
       renderTopBar={ (
         <ReportTopBar
           currentReport={ currentReport }
           reportsTreeOptions={ reportsTreeOptions }
-          setCurrentReport={ setCurrentReport }
+          setCurrentReport={ setNextReportAfterReset }
         />
       ) }
     >
