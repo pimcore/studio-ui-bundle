@@ -25,7 +25,7 @@ export const ColumnsFilters = ({ reportData }: { reportData: BundleCustomReports
   const { t } = useTranslation()
 
   const { filters, setFilters } = useGridFilterContext()
-  const { columnsFilters, setColumnsFilters } = useColumnsFiltersContext()
+  const { columnsFilters, setColumnsFilters, setFieldFilters } = useColumnsFiltersContext()
 
   const handleApplyFilters = (): void => {
     setFilters({
@@ -36,6 +36,7 @@ export const ColumnsFilters = ({ reportData }: { reportData: BundleCustomReports
 
   const handleClearFilters = (): void => {
     setColumnsFilters([])
+    setFieldFilters([])
     setFilters({
       ...filters,
       columnFilters: []
