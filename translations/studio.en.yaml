@@ -924,3 +924,4 @@ recycle-bin.columns.amount: Amount
 recycle-bin.columns.deleted-by: Deleted By
 recycle-bin.columns.date: Date
 recycle-bin.columns.actions: Actions
+recycle-bin.actions.cleanup: Clean up

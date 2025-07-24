@@ -19,6 +19,7 @@ import { useRecycleBin } from "./hooks/use-recycle-bin"
 import { api } from "./recycle-bin-api-slice-enhanced"
 import { useRecycleBinGetCollectionQuery } from "./recycle-bin-api-slice.gen"
 import { useSelectedRowsContext } from "./context/selected-items-context"
+import { RowSelectionTotal } from "./components/table/row-selection-total/row-selection-total"
 
 interface ColumnFilters {
   path: {
@@ -64,7 +65,7 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme="secondary">
           {selectedRows && Object.keys(selectedRows).length > 0 ? (
-            <p>here</p>
+            <RowSelectionTotal />
           ) : (
             <IconTextButton
               disabled={isRTKLoading || isLoading}
