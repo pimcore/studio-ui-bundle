@@ -23,22 +23,18 @@ import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/d
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import type { FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
 import { FieldFilters as FieldFiltersComponent } from '@Pimcore/components/field-filters/field-filters'
-import {
-  FIELD_TYPE_MAP,
-  FRONTEND_TO_ORIGINAL_TYPE
-} from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/components/field-filters/utils/helpers'
-import type { IGridFilter } from '@Pimcore/modules/reports/reports-view/types'
+import { FIELD_TYPE_MAP, FRONTEND_TO_ORIGINAL_TYPE } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/components/field-filters/utils/helpers'
+import { useColumnsFiltersContext } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/context/columns-filters-context'
 
 interface IFieldFiltersProps {
   reportData: BundleCustomReportsDetails
-  setColumnFilters: (filters: IGridFilter['columnFilters']) => void
 }
 
-export const FieldFilters = ({ reportData, setColumnFilters }: IFieldFiltersProps): React.JSX.Element => {
+export const FieldFilters = ({ reportData }: IFieldFiltersProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const [addColumnMenu, setAddColumnMenu] = useState<DropdownMenuProps['items']>([])
-  const [filters, setFilters] = useState<FieldFiltersProps['data']>([])
+  const { setColumnsFilters, fieldFilters, setFieldFilters } = useColumnsFiltersContext()
 
   const handleColumnClick = (column: BundleCustomReportsColumnConfiguration): void => {
     const filterType: string = column.filterType ?? 'string'
@@ -47,8 +43,8 @@ export const FieldFilters = ({ reportData, setColumnFilters }: IFieldFiltersProp
     const type: string = FIELD_TYPE_MAP[filterType].type
     const id = (!isEmptyValue(column.label) ? column.label : column.name)!
 
-    setFilters((prevFilters) => [
-      ...prevFilters,
+    setFieldFilters([
+      ...fieldFilters,
       {
         data: undefined,
         id,
@@ -61,7 +57,7 @@ export const FieldFilters = ({ reportData, setColumnFilters }: IFieldFiltersProp
   }
 
   const onFilterChange: FieldFiltersProps['onChange'] = (data) => {
-    setFilters(data)
+    setFieldFilters(data)
 
     const updatedColumnFilters = data
       .filter(item => !isUndefined(item.data))
@@ -72,16 +68,17 @@ export const FieldFilters = ({ reportData, setColumnFilters }: IFieldFiltersProp
         value: String(item.data)
       }))
 
-    !isUndefined(updatedColumnFilters) && setColumnFilters(updatedColumnFilters)
+    !isUndefined(updatedColumnFilters) && setColumnsFilters(updatedColumnFilters)
   }
 
   useEffect(() => {
-    setFilters([])
+    setFieldFilters([])
+    setColumnsFilters([])
   }, [reportData])
 
   useEffect(() => {
     const newAddColumnMenu = reportData?.columnConfigurations
-      ?.filter((initialColumn) => !filters.some((column) => initialColumn.name === column.name))
+      ?.filter((initialColumn) => !fieldFilters.some((column) => initialColumn.name === column.name))
       ?.map((column) => ({
         key: column.id as Key,
         label: !isEmptyValue(column.label) ? column.label : column.name,
@@ -89,7 +86,7 @@ export const FieldFilters = ({ reportData, setColumnFilters }: IFieldFiltersProp
       }))
 
     setAddColumnMenu(newAddColumnMenu)
-  }, [reportData, filters])
+  }, [reportData, fieldFilters])
 
   return (
     <>
@@ -99,10 +96,10 @@ export const FieldFilters = ({ reportData, setColumnFilters }: IFieldFiltersProp
         style={ { width: '100%' } }
       >
         <Flex vertical>
-          { filters.length === 0 && <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } /> }
-          { filters.length > 0 && (
+          { fieldFilters.length === 0 && <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } /> }
+          { fieldFilters.length > 0 && (
             <FieldFiltersComponent
-              data={ filters }
+              data={ fieldFilters }
               onChange={ onFilterChange }
             />
           )}
