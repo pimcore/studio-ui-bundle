@@ -14,10 +14,12 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation as useI18n } from 'react-i18next'
 import { type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
+import { LanguageCell } from './language-cell'
+import { LanguageColumnHeader } from './language-column-header'
 import { type TranslationRow } from '../helpers/translation-helpers'
 import { useTranslation } from '../hooks/use-translation'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
-import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
+import { EditModal } from '../edit-modal/edit-modal'
 import { isUndefined } from 'lodash'
 import { GeneralError, trackError } from '@sdk/modules/app'
 
@@ -37,9 +39,20 @@ interface TableProps {
 export const Table = ({ translationRows, setTranslationRows, visibleLocales }: TableProps): React.JSX.Element => {
   const { t } = useI18n()
   const { updateTranslationByKey } = useTranslation()
-  const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
+  const [modifiedCells, setModifiedCells] = useState<ModifiedCells>([])
+
+  // Edit modal state
+  const [editModalOpen, setEditModalOpen] = useState(false)
+  const [editingTranslation, setEditingTranslation] = useState<TranslationRow | null>(null)
+  const [editingLocale, setEditingLocale] = useState<string>('')
 
   const settings = useSettings()
+
+  const handleEditClick = (translationRow: TranslationRow, locale: string): void => {
+    setEditingTranslation(translationRow)
+    setEditingLocale(locale)
+    setEditModalOpen(true)
+  }
 
   const availableLanguages = settings?.availableAdminLanguages ?? []
   const validLanguages: string[] = settings?.validLanguages ?? []
@@ -57,18 +70,6 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
 
   const columnHelper = createColumnHelper<TranslationWithActions>()
 
-  interface LanguageColumnHeaderProps {
-    language: string
-    display: string
-  }
-
-  const LanguageColumnHeader: React.FC<LanguageColumnHeaderProps> = ({ language, display }) => (
-    <div style={ { display: 'flex', alignItems: 'center', gap: '8px' } }>
-      <FlagIcon value={ language } />
-      <span>{display}</span>
-    </div>
-  )
-
   const languageColumns = useMemo(() => {
     return languages.map(lang =>
       columnHelper.accessor(`_${lang.language}` as keyof TranslationWithActions, {
@@ -77,6 +78,13 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
           <LanguageColumnHeader
             display={ lang.display }
             language={ lang.language }
+          />
+        ),
+        cell: (info) => (
+          <LanguageCell
+            info={ info }
+            language={ lang.language }
+            onEdit={ handleEditClick }
           />
         ),
         meta: {
@@ -164,6 +172,13 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
         onUpdateCellData={ onUpdateCellData }
         resizable
         setRowId={ (row: TranslationRow) => row.rowId }
+      />
+
+      <EditModal
+        locale={ editingLocale }
+        open={ editModalOpen }
+        setOpen={ setEditModalOpen }
+        translationRow={ editingTranslation }
       />
     </div>
   )

@@ -21,7 +21,7 @@ interface ActionsCellProps {
   setTranslationRows: React.Dispatch<React.SetStateAction<TranslationRow[]>>
 }
 
-export const ActionsCell = ({ info, setTranslationRows }: ActionsCellProps): JSX.Element => {
+export const ActionsCell = ({ info, setTranslationRows }: ActionsCellProps): React.JSX.Element => {
   const key = info.row.original.key
   const { deleteTranslationByKey, deleteLoading } = useTranslation()
 
