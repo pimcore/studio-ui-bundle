@@ -42,8 +42,6 @@ export const ReportsView = (): React.JSX.Element => {
       setPage(PAGE_INITIAL)
       setPageSize(PAGE_SIZE_INITIAL)
       resetFilters()
-
-      setCurrentReport(currentReport)
     }
   }, [currentReport])
 
