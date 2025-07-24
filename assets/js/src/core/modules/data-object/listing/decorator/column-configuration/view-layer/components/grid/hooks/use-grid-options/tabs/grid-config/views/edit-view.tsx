@@ -15,7 +15,7 @@ import { Header } from '@Pimcore/components/header/header'
 import { Space } from '@Pimcore/components/space/space'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from 'antd'
 import { isEmpty } from 'lodash'
@@ -28,6 +28,7 @@ import { type GridConfigData } from '@Pimcore/modules/element/listing/decorators
 import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { GridConfigModal } from '../grid-config-modal'
 
 export interface EditViewProps {
   onCancelClick: () => void
@@ -47,6 +48,7 @@ export interface EditViewProps {
 }
 
 export const EditView = (props: EditViewProps): React.JSX.Element => {
+  const [open, setOpen] = useState(false);
   const {
     onCancelClick,
     onApplyClick,
@@ -58,7 +60,6 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
     savedGridConfigurations,
     isUpdating,
     isLoading,
-    columns,
     currentUserId,
     currentLanguage,
     setCurrentLanguage
@@ -72,93 +73,104 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
   const isGridTemplateOwner = currentUserId === gridConfig?.ownerId
 
   return (
-    <ContentLayout
-      renderToolbar={
-        <Toolbar theme='secondary'>
-          <Button
-            onClick={ onCancelClick }
-            type='default'
-          >
-            { t('button.cancel') }
-          </Button>
-
-          <Space size="extra-small">
-            { renderSaveButton() }
-
+    <>
+      <GridConfigModal {...props} open={open} onOpenChange={setOpen} />
+      
+      <ContentLayout
+        renderToolbar={
+          <Toolbar theme='secondary'>
             <Button
-              onClick={ onApplyClick }
-              type='primary'
+              onClick={ onCancelClick }
+              type='default'
             >
-              { t('button.apply') }
+              { t('button.cancel') }
             </Button>
-          </Space>
-        </Toolbar>
-      }
-    >
-      <Content padded>
-        <Header
-          fullWidth
-          title={ t('listing.grid-config.title') }
-        >
-          <Flex
-            className='w-full'
-            justify='space-between'
-          >
-            <Dropdown
-              disabled={ savedGridConfigurations?.length === 0 && !isLoading }
-              menu={ { items: savedGridConfigurations } }
-            >
-              <Tooltip title={ savedGridConfigurations?.length === 0 && !isLoading ? t('grid.configuration.no-saved-templates') : '' }>
-                <IconTextButton
-                  disabled={ savedGridConfigurations?.length === 0 && !isLoading }
-                  icon={ { value: 'style' } }
-                  loading={ isLoading }
-                  style={ { minHeight: '32px', minWidth: '100px' } }
-                >
-                  { isSavedConfiguration
-                    ? (
-                      <>
-                        { gridConfig.name}
-                      </>
-                      )
-                    : (
-                      <>
-                        {t('grid.configuration.template')}
-                      </>
-                      ) }
-                </IconTextButton>
-              </Tooltip>
-            </Dropdown>
 
-            <LanguageSelection
-              languages={ settings.requiredLanguages.map((value: string) => {
-                return value
-              }) }
-              onSelectLanguage={ setCurrentLanguage }
-              selectedLanguage={ currentLanguage }
-            />
-          </Flex>
-        </Header>
+            <Space size="extra-small">
+              { renderSaveButton() }
 
-        <Space
-          direction='vertical'
-          style={ { width: '100%' } }
-        >
-          <GridConfigList />
-
-          {!isEmpty(addColumnMenu) && (
-            <Dropdown menu={ { items: addColumnMenu } }>
-              <IconTextButton
-                icon={ { value: 'new' } }
-                type='link'
+              <Button
+                onClick={ onApplyClick }
+                type='primary'
               >
-                { t('listing.add-column') }
-              </IconTextButton>
-            </Dropdown>
-          )}
-        </Space>
-      </Content>
-    </ContentLayout>
+                { t('button.apply') }
+              </Button>
+            </Space>
+          </Toolbar>
+        }
+      >
+        <Content padded>
+          <Header
+            fullWidth
+            title={ t('listing.grid-config.title') }
+          >
+            <Flex
+              className='w-full'
+              justify='space-between'
+            >
+              <Dropdown
+                disabled={ savedGridConfigurations?.length === 0 && !isLoading }
+                menu={ { items: savedGridConfigurations } }
+              >
+                <Tooltip title={ savedGridConfigurations?.length === 0 && !isLoading ? t('grid.configuration.no-saved-templates') : '' }>
+                  <IconTextButton
+                    disabled={ savedGridConfigurations?.length === 0 && !isLoading }
+                    icon={ { value: 'style' } }
+                    loading={ isLoading }
+                    style={ { minHeight: '32px', minWidth: '100px' } }
+                  >
+                    { isSavedConfiguration
+                      ? (
+                        <>
+                          { gridConfig.name}
+                        </>
+                        )
+                      : (
+                        <>
+                          {t('grid.configuration.template')}
+                        </>
+                        ) }
+                  </IconTextButton>
+                </Tooltip>
+              </Dropdown>
+            
+              <Flex gap={ 'mini' }>
+                <LanguageSelection
+                  languages={ settings.requiredLanguages.map((value: string) => {
+                    return value
+                  }) }
+                  onSelectLanguage={ setCurrentLanguage }
+                  selectedLanguage={ currentLanguage }
+                />
+
+                <IconButton
+                  icon={ { value: 'show-details' } }
+                  onClick={ () => { setOpen(true) } }
+                />
+              </Flex>
+            </Flex>
+          </Header>
+
+          <Space
+            direction='vertical'
+            style={ { width: '100%' } }
+          >
+            <GridConfigList />
+
+            {!isEmpty(addColumnMenu) && (
+              <Dropdown menu={ { items: addColumnMenu } }>
+                <IconTextButton
+                  icon={ { value: 'new' } }
+                  type='link'
+                >
+                  { t('listing.add-column') }
+                </IconTextButton>
+              </Dropdown>
+            )}
+          </Space>
+        </Content>
+      </ContentLayout>
+    </>
   )
 
   function renderSaveButton (): React.JSX.Element {

@@ -17,6 +17,10 @@ import { DataObjectAdvancedCell } from '../../components/data-object-advanced/da
 export class DynamicTypeGridCellDataObjectAdvanced extends DynamicTypeGridCellAbstract {
   readonly id = 'dataobject.advanced'
 
+  getDefaultGridColumnWidth (): number | undefined {
+    return 300
+  }
+
   getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
     return <DataObjectAdvancedCell { ...props } />
   }

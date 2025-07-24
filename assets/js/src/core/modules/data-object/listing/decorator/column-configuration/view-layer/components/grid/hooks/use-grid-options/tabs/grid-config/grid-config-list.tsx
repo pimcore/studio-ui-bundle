@@ -21,11 +21,6 @@ import { uuid } from '@Pimcore/utils/uuid'
 import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-list-item'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { AdvancedColumnForm } from './forms/advanced-column-form/advanced-column-form'
-import { Text } from '@Pimcore/components/text/text'
-
-interface GridConfigListProps {
-  columns: AvailableColumn[]
-}
 
 interface ColumnStackListItemProps extends StackListItemProps {
   meta: AvailableColumn

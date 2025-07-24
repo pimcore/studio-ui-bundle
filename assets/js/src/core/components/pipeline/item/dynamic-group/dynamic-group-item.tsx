@@ -9,6 +9,7 @@ import { useNumberedList } from "@Pimcore/components/form/numbered-list/provider
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from "@dnd-kit/sortable";
 import { Box } from "@Pimcore/components/box/box";
+import { useStyles } from "./dynamic-group-item.styles";
 
 export interface DynamicGroupItemProps {
   id: number
@@ -17,6 +18,7 @@ export interface DynamicGroupItemProps {
 
 const DynamicGroupItem = ({ id, dynamicTypeRegistryId }: DynamicGroupItemProps): React.JSX.Element => {
   const { operations, getValueByKey } = useNumberedList();
+  const { styles } = useStyles();
   const { listeners, setNodeRef, setActivatorNodeRef, transform, transition } = useSortable({ id: id + 1 })
 
   const style = {
@@ -33,7 +35,7 @@ const DynamicGroupItem = ({ id, dynamicTypeRegistryId }: DynamicGroupItemProps):
       ref={setNodeRef}
       style={style}
     >
-      <Box padding={{ top: 'mini', bottom: 'small' }}>
+      <Box padding={{ x: 'extra-small', top: 'mini', bottom: 'small' }} className={styles.dynamicGroupItem}>
         <Flex justify="space-between" align="center" gap="small">
           <Flex align="center" gap="mini">
             <IconButton 

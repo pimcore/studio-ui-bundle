@@ -31,7 +31,7 @@ const Pipeline = ({items, value, onChange}: PipelineProps): React.JSX.Element =>
             <div key={item.id}>
               {item.component}
 
-              {!isLastItem && <Divider style={{margin: 0}} />}
+              {!isLastItem && <Divider theme='secondary' style={{margin: 0}} />}
             </div>
           )
         })}  

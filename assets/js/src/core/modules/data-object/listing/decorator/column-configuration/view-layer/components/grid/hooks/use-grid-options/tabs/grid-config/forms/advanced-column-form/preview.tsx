@@ -5,35 +5,26 @@ import { AvailableColumn } from "@Pimcore/modules/element/listing/decorators/uti
 import React from "react";
 import { PreviewValue } from "./preview-value";
 import { Box } from "@Pimcore/components/box/box";
+import { useData } from "@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data";
+import { PreviewLoader } from "./preview-loader";
 
 export interface PreviewProps {
   column: AvailableColumn
 }
 
 export const Preview = (props : PreviewProps): React.JSX.Element => {
-  const { column } = props;
-  const advancedColumnConfig = (column?.__meta?.advancedColumnConfig ?? column.config) as unknown as AdvancedColumnConfig[] | undefined;
-
-  const { data } = useDataObjectGetGridPreviewQuery({
-    body: {
-      column: {
-        type: column.type,
-        key: column.key,
-        config: advancedColumnConfig
-      },
-      // @todo check how to get the current objectId
-      objectId: 9
-    }
-  })
+  const { data: gridData } = useData();
+  const hasFirstItem = gridData?.items.length > 0 && gridData?.items?.[0] !== undefined;
 
   return (
-    <Box padding={'small'}>
+    <Box padding={{ top: 'small', bottom: 'none', x: 'small' }} >
       <Flex gap={'small'} align="center">
         <Text style={{ wordBreak: 'keep-all' }}>Preview:</Text>
-        {data?.value === undefined || data?.value.length === 0 ? (
-          <Text>No preview available</Text>
+        
+        {hasFirstItem ? (
+          <PreviewLoader column={props.column} />
         ) : (
-          <PreviewValue value={data?.value} />
+          <Text type="secondary">No preview item available</Text>
         )}
       </Flex>
     </Box>

@@ -10,8 +10,6 @@ import { DynamicGroupItem } from "./dynamic-group-item";
 import { Space } from "@Pimcore/components/space/space";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
-import { Divider } from "antd";
-
 export interface DynamicGroupContentProps {
   id: DynamicGroupProps['id'];
   dynamicTypeRegistryId: DynamicGroupProps['dynamicTypeRegistryId'];
@@ -52,45 +50,43 @@ export const DynamicGroupContent = ({ dynamicTypeRegistryId, id, showTitle = fal
   };
 
   return (
-    <Box padding={'mini'}>
-      {showTitle === false || isEmpty === true ? (
-        <DynamicGroupDropdown dynamicTypeRegistryId={dynamicTypeRegistryId}>
-          <IconTextButton type="link" icon={{value: 'new'}}>Add a {id}</IconTextButton>
-        </DynamicGroupDropdown>
-      ) : <></>}
+    <Box padding={{ bottom: 'mini' }}>
+      <Space size="extra-small" className="w-full" direction="vertical">
+        {showTitle === false ? (
+          <DynamicGroupDropdown dynamicTypeRegistryId={dynamicTypeRegistryId}>
+            <IconTextButton type="link" icon={{value: 'new'}}>Add a {id}</IconTextButton>
+          </DynamicGroupDropdown>
+        ) : <></>}
 
-      {showTitle === true && isEmpty === false ? (
-        <Flex align="center">
-          <Header title={id}>
-            <DynamicGroupDropdown dynamicTypeRegistryId={dynamicTypeRegistryId}>
-              <IconTextButton type="link" icon={{value: 'new'}}>Add</IconTextButton>
-            </DynamicGroupDropdown>
-          </Header>
-        </Flex>
-      ) : <></>}
+        {showTitle === true ? (
+          <Flex align="center">
+            <Header title={id}>
+              <DynamicGroupDropdown dynamicTypeRegistryId={dynamicTypeRegistryId}>
+                <IconTextButton icon={{value: 'new'}}>Add</IconTextButton>
+              </DynamicGroupDropdown>
+            </Header>
+          </Flex>
+        ) : <></>}
 
-      {isEmpty === false ? (      
-        <Space size="mini" className="w-full" direction="vertical">
+        {isEmpty === false ? (      
           <DndContext onDragEnd={onDragEnd} sensors={sensors}>
             <SortableContext items={items} strategy={verticalListSortingStrategy}>
-              {values.map((value, index) => {
-                const isLastItem = index === values.length - 1;
-
-                return (
-                  <Fragment key={value.vId}>
-                    <DynamicGroupItem
-                      dynamicTypeRegistryId={dynamicTypeRegistryId}
-                      id={index}
-                    />
-
-                    {!isLastItem && <Divider style={{margin: 0}} />}
-                  </Fragment>
-                )
-              })}
+              <Space size="extra-small" className="w-full" direction="vertical">
+                {values.map((value, index) => {
+                  return (
+                    <Fragment key={value.vId}>
+                      <DynamicGroupItem
+                        dynamicTypeRegistryId={dynamicTypeRegistryId}
+                        id={index}
+                      />
+                    </Fragment>
+                  )
+                })}
+              </Space>
             </SortableContext>
           </DndContext>
-        </Space>
-      ): <></>}
+        ): <></>}
+      </Space>
     </Box>
   );
 }

@@ -8,6 +8,9 @@ import { isEqual } from "lodash";
 import { PipelineConfigProvider } from "@Pimcore/components/pipeline/provider/pipeline-config/pipeline-config-provider";
 import { Preview } from "./preview";
 import { Tabs } from "@Pimcore/components/tabs/tabs";
+import { Box } from "@Pimcore/components/box/box";
+import { usePipelineLayoutContext } from "./pipeline-layout-provider";
+import { SplitLayout } from "@Pimcore/components/split-layout/split-layout";
 
 export interface AdvancedColumnFormProps {
   column: AvailableColumn
@@ -16,6 +19,7 @@ export interface AdvancedColumnFormProps {
 
 export const AdvancedColumnForm = ({column, onChange }: AdvancedColumnFormProps): React.JSX.Element => {
   const [form] = Form.useForm();
+  const { pipelineLayout } = usePipelineLayoutContext();
 
   useEffect(() => {
     form.setFieldValue('value', column?.__meta?.advancedColumnConfig ?? {});
@@ -49,9 +53,11 @@ export const AdvancedColumnForm = ({column, onChange }: AdvancedColumnFormProps)
                 id: 'title',
                 component: (
                   <Pipeline.CustomItem>
-                    <Form.Item name="title" label="">
-                      <Input placeholder="Add a title" />
-                    </Form.Item>
+                    <Box padding={{ top: 'mini', bottom: 'mini', x: 'none' }} >
+                      <Form.Item name="title" label="">
+                        <Input placeholder="Add a title" />
+                      </Form.Item>
+                    </Box>
                   </Pipeline.CustomItem>
                 )
               },
@@ -59,25 +65,47 @@ export const AdvancedColumnForm = ({column, onChange }: AdvancedColumnFormProps)
               {
                 id: 'fields',
                 component: <Pipeline.CustomItem>
-                  <Tabs items={[
-                    {
-                      key: 'advancedColumns',
-                      label: 'Advanced Columns',
-                      forceRender: true,
-                      children: (
-                        <Pipeline.DynamicGroupItem id='advancedColumns' dynamicTypeRegistryId={serviceIds['DynamicTypes/Grid/SourceFieldsRegistry']} />
-                      )
-                    },
+                  {pipelineLayout === 'default' && (
+                    <Tabs items={[
+                      {
+                        key: 'advancedColumns',
+                        label: 'Advanced Columns',
+                        forceRender: true,
+                        children: (
+                          <Pipeline.DynamicGroupItem id='advancedColumns' dynamicTypeRegistryId={serviceIds['DynamicTypes/Grid/SourceFieldsRegistry']} />
+                        )
+                      },
 
-                    {
-                      key: 'transformers',
-                      label: 'Transformers',
-                      forceRender: true,
-                      children: (
-                        <Pipeline.DynamicGroupItem id='transformers' dynamicTypeRegistryId={serviceIds['DynamicTypes/Grid/TransformersRegistry']} />
-                      )
-                    },
-                  ]} />
+                      {
+                        key: 'transformers',
+                        label: 'Transformers',
+                        forceRender: true,
+                        children: (
+                          <Pipeline.DynamicGroupItem id='transformers' dynamicTypeRegistryId={serviceIds['DynamicTypes/Grid/TransformersRegistry']} />
+                        )
+                      },
+                    ]} />
+                  )}
+                  
+                  {pipelineLayout === 'verbose' && (
+                    <SplitLayout 
+                      withDivider
+
+                      leftItem={{
+                        children: (
+                          <Pipeline.DynamicGroupItem id='advancedColumns' dynamicTypeRegistryId={serviceIds['DynamicTypes/Grid/SourceFieldsRegistry']} showTitle />
+                        ),
+                        size: 50
+                      }}
+
+                      rightItem={{
+                        children: (
+                          <Pipeline.DynamicGroupItem id='transformers' dynamicTypeRegistryId={serviceIds['DynamicTypes/Grid/TransformersRegistry']} showTitle />
+                        ),
+                        size: 50
+                      }}
+                    />
+                  )}
                 </Pipeline.CustomItem>
               },
 

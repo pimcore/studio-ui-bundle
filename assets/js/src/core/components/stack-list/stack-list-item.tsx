@@ -100,7 +100,7 @@ export const StackListItem = (props: StackListItemProps): React.JSX.Element => {
 
       return (
         <div
-          className={ ['stack-list-item'].join(' ') }
+          className={ ['stack-list-item', styles.stackListItem].join(' ') }
           ref={ setNodeRef }
           style={ style }
         >
