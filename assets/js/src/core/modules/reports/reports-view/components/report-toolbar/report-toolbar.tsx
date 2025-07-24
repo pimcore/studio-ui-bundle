@@ -61,18 +61,23 @@ export const ReportToolbar = ({ currentReport, page, setPage, pageSize, setPageS
     }
   }, [isError])
 
-  const renderDropdownLabel = (translationKey: string): React.JSX.Element => (
+  const renderDropdownLabel = (translationKey: string, isShowIcon = true): React.JSX.Element => (
     <Flex
       align={ 'center' }
       className={ styles.dropdownLabel }
       gap="extra-small"
     >
-      <Icon value={ 'export' } />
+      {isShowIcon && <Icon value={ 'export' } />}
       {t(translationKey)}
     </Flex>
   )
 
   const dropdownItems = [
+    {
+      key: 'csv-export',
+      label: renderDropdownLabel('reports.csv-export'),
+      onClick: () => { handleExportCSV({ includeHeaders: false }) }
+    },
     {
       key: 'csv-export-with-headers',
       label: renderDropdownLabel('reports.csv-export-with-headers'),
@@ -86,8 +91,8 @@ export const ReportToolbar = ({ currentReport, page, setPage, pageSize, setPageS
       theme="secondary"
     >
       <Dropdown menu={ { items: dropdownItems } }>
-        <DropdownButton onClick={ () => { handleExportCSV({ includeHeaders: false }) } }>
-          {renderDropdownLabel('reports.csv-export')}
+        <DropdownButton>
+          {renderDropdownLabel('reports.export', false)}
         </DropdownButton>
       </Dropdown>
       <Pagination
