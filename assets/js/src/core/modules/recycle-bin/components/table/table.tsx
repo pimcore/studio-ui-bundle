@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next"
 import { useRecycleBin } from "../../hooks/use-recycle-bin"
 import { RecycleBin } from "../../recycle-bin-api-slice.gen"
 import { useStyles } from "./table.styles"
+import { useSelectedRowsContext } from "../../context/selected-items-context"
 
 interface TableProps {
   items: RecycleBin[]
@@ -23,10 +24,10 @@ interface RecycleBinWithActions extends RecycleBin {
 export const Table = ({ items }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const { restoreItems, removeItems } = useRecycleBin()
   const [restoreLoading, setRestoreLoading] = useState<boolean>(false)
   const [removeLoading, setRemoveLoading] = useState<boolean>(false)
-  const [selectedItems, setSelectedItems] = useState<RowSelectionState | undefined>(undefined)
+  const { restoreItems, removeItems } = useRecycleBin()
+  const { selectedRows, setSelectedRows } = useSelectedRowsContext()
 
   const tableItems = items.map((item) => {
     return {
@@ -137,7 +138,6 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     })
   ]
 
-
   return (
     <Grid
       autoWidth
@@ -146,8 +146,9 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
       modifiedCells={[]}
       resizable
       enableMultipleRowSelection
-      onSelectedRowsChange={(row: RowSelectionState) => { setSelectedItems(row) }}
-      selectedRows={selectedItems}
+      onSelectedRowsChange={(row: RowSelectionState) => { setSelectedRows(row) }}
+      selectedRows={selectedRows}
+      setRowId={(row) => String(row.id)}
     />
   )
 }

@@ -1,10 +1,10 @@
-import trackError from "@Pimcore/modules/app/error-handler/error-handler"
-import { api, RecycleBin, useRecycleBinDeleteItemsMutation, useRecycleBinFlushMutation } from "../recycle-bin-api-slice-enhanced"
-import ApiError from "@Pimcore/modules/app/error-handler/classes/api-error"
-import GeneralError from "@Pimcore/modules/app/error-handler/classes/general-error"
-import { useRecycleBinRestoreItemsMutation } from "../recycle-bin-api-slice.gen"
 import { invalidatingTags } from "@Pimcore/app/api/pimcore/tags"
 import { useAppDispatch } from "@Pimcore/app/store"
+import ApiError from "@Pimcore/modules/app/error-handler/classes/api-error"
+import GeneralError from "@Pimcore/modules/app/error-handler/classes/general-error"
+import trackError from "@Pimcore/modules/app/error-handler/error-handler"
+import { api, RecycleBin, useRecycleBinDeleteItemsMutation, useRecycleBinFlushMutation } from "../recycle-bin-api-slice-enhanced"
+import { useRecycleBinRestoreItemsMutation } from "../recycle-bin-api-slice.gen"
 
 interface UseRecycleBinHookReturn {
   restoreItems: (ids: Array<RecycleBin['id']>, onFinish?: () => void) => Promise<void>
