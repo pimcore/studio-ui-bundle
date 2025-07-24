@@ -58,8 +58,12 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
-      pattern: 'bundleApplicationLoggerGetCollection',
-      type: 'query',
+      pattern: 'customReportsChart',
+      type: 'query'
+    },
+    {
+      pattern: 'customReportsListDrillDownOptions',
+      type: 'query'
     }
   ],
   outputFiles: {
@@ -152,10 +156,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/email/emails-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/emails\/?/i)
-    },
-    '../../js/src/core/modules/application-logger/application-logger-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/api\/bundle\/application-logger\/?/i)
     }
+
+
   },
   exportName: 'api',
   hooks: true,

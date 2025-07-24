@@ -8,14 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createFilterContext } from '@Pimcore/components/grid/contexts/filter-context'
+import { type IGridFilter } from '@Pimcore/modules/reports/reports-view/types'
 
-export const useStyle = createStyles(({ token, css }) => {
-  return {
-    dropdownButton: css`
-      &.ant-dropdown-trigger.ant-dropdown-open .pimcore-icon.pimcore-icon-chevron-down {
-        transform: scaleY(-1);
-      }
-    `
-  }
-})
+export const {
+  FilterProvider: GridFilterProvider,
+  useFilterContext: useGridFilterContext
+} = createFilterContext<IGridFilter>()

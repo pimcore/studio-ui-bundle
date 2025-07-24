@@ -8,14 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+if (module.hot !== undefined) {
+  module.hot.accept()
+}
 
-export const useStyle = createStyles(({ token, css }) => {
-  return {
-    dropdownButton: css`
-      &.ant-dropdown-trigger.ant-dropdown-open .pimcore-icon.pimcore-icon-chevron-down {
-        transform: scaleY(-1);
-      }
-    `
-  }
-})
+export * from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
