@@ -9,62 +9,43 @@
  */
 
 import React, { useEffect, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { isEmpty, isNull, isUndefined } from 'lodash'
 import cn from 'classnames'
 import { type DefaultOptionType } from 'antd/es/select'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { Content } from '@Pimcore/components/content/content'
-import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { ReportDetail } from '@Pimcore/modules/reports/reports-view/components/report-detail/report-detail'
-import { Text } from '@Pimcore/components/text/text'
-import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
-import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
-import { useReportData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
-import { ReportToolbar } from '@Pimcore/modules/reports/reports-view/components/report-toolbar/report-toolbar'
-import { ReportTopBar } from '@Pimcore/modules/reports/reports-view/components/report-top-bar/report-top-bar'
 import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
-import { ReportSidebar } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/report-sidebar'
+import { ReportDataProvider } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
+import { ReportViewContent } from '@Pimcore/modules/reports/reports-view/components/report-view-content/report-view-content'
 import { useStyles } from './reports-view.styles'
 
 const PAGE_INITIAL = 1
 const PAGE_SIZE_INITIAL = 10
 
 export const ReportsView = (): React.JSX.Element => {
-  const { t } = useTranslation()
-
   const [currentReport, setCurrentReport] = useState<string | null>(null)
-  const [nextReportAfterReset, setNextReportAfterReset] = useState<string | null>(null)
 
   const [page, setPage] = useState(PAGE_INITIAL)
   const [pageSize, setPageSize] = useState(PAGE_SIZE_INITIAL)
 
-  const { filters, resetFilters } = useGridFilterContext()
+  const { resetFilters } = useGridFilterContext()
 
   const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page: 1, pageSize: 9999 })
-  const { refetchAll, isFetching, isLoading, chartDetailData, reportDetailData } = useReportData({
-    name: currentReport ?? '',
-    filters,
-    page,
-    pageSize
-  })
 
   const { styles } = useStyles()
 
   useEffect(() => {
-    if (!isNull(nextReportAfterReset)) {
+    if (!isNull(currentReport)) {
       setPage(PAGE_INITIAL)
       setPageSize(PAGE_SIZE_INITIAL)
       resetFilters()
 
-      setCurrentReport(nextReportAfterReset)
-      setNextReportAfterReset(null)
+      setCurrentReport(currentReport)
     }
-  }, [nextReportAfterReset])
+  }, [currentReport])
 
   const renderOptionLabel = (iconClass: string, value: any): React.JSX.Element => (
     <Flex
@@ -76,7 +57,6 @@ export const ReportsView = (): React.JSX.Element => {
     </Flex>
   )
 
-  const isCurrentReportSelected = !isEmptyValue(currentReport)
   const reportsTreeOptions: DefaultOptionType[] | undefined = useMemo(() => {
     if (!isUndefined(reportsTreeData?.items)) {
       const groupedOptions: Record<string, DefaultOptionType> = {}
@@ -126,75 +106,24 @@ export const ReportsView = (): React.JSX.Element => {
   }, [reportsTreeData])
 
   const isLoadingReportsTree = isReportsTreeLoading && isEmpty(reportsTreeOptions)
-  const isLoadingReportsData = isLoading || isFetching
-
-  const renderMainContent = (): React.JSX.Element => (
-    <Content
-      centered={ !isCurrentReportSelected }
-      padded
-      padding={ { top: 'none', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
-    >
-      {isCurrentReportSelected
-        ? (
-          <ReportDetail
-            chartDetailData={ chartDetailData }
-            currentReport={ currentReport }
-            isLoading={ isLoadingReportsData }
-            reportDetailData={ reportDetailData }
-          />
-          )
-        : (
-          <Flex
-            align="center"
-            justify="center"
-          >
-            <Text>{t('reports.select-report-name')}</Text>
-          </Flex>
-          )
-        }
-    </Content>
-  )
-
-  const renderContent = (): React.JSX.Element => (
-    <ContentLayout
-      renderSidebar={ isCurrentReportSelected && !isEmpty(chartDetailData?.items) && !isEmpty(reportDetailData) && (
-        <ReportSidebar reportData={ reportDetailData } />
-      ) }
-      renderToolbar={ !isEmpty(chartDetailData?.items) && !isFetching && (
-      <ReportToolbar
-        currentReport={ currentReport }
-        page={ page }
-        pageSize={ pageSize }
-        setPage={ setPage }
-        setPageSize={ setPageSize }
-        totalItems={ chartDetailData?.totalItems ?? 0 }
-      />
-      ) }
-      renderTopBar={ (
-        <ReportTopBar
-          currentReport={ currentReport }
-          reportsTreeOptions={ reportsTreeOptions }
-          setCurrentReport={ setNextReportAfterReset }
-        />
-      ) }
-    >
-      {renderMainContent()}
-    </ContentLayout>
-  )
 
   return (
     <Content loading={ isLoadingReportsTree }>
-      <TabsToolbarView
-        renderTabbar={ renderContent() }
-        renderToolbar={ (
-          <Toolbar>
-            <Refetch
-              isFetching={ isLoadingReportsData }
-              refetch={ refetchAll }
-            />
-          </Toolbar>
-        ) }
-      />
+      <ReportDataProvider
+        name={ currentReport ?? '' }
+        page={ page }
+        pageSize={ pageSize }
+      >
+        <ReportViewContent
+          currentReport={ currentReport }
+          page={ page }
+          pageSize={ pageSize }
+          reportsTreeOptions={ reportsTreeOptions }
+          setCurrentReport={ setCurrentReport }
+          setPage={ setPage }
+          setPageSize={ setPageSize }
+        />
+      </ReportDataProvider>
     </Content>
   )
 }
