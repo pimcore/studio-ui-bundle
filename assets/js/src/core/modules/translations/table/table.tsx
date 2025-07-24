@@ -79,13 +79,6 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
             language={ lang.language }
           />
         ),
-        cell: (info) => (
-          <LanguageCell
-            info={ info }
-            language={ lang.language }
-            onEdit={ handleEditClick }
-          />
-        ),
         meta: {
           editable: true,
           type: 'text'

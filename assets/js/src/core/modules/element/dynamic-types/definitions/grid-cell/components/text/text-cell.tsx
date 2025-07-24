@@ -21,6 +21,8 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
   const { styles } = useStyle()
   const element = useRef<InputRef>(null)
 
+  console.log('inHEERE')
+
   useEffect(() => {
     if (isInEditMode) {
       element.current?.focus()
