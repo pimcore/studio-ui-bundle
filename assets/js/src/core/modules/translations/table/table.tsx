@@ -41,7 +41,6 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
   const { updateTranslationByKey } = useTranslation()
   const [modifiedCells, setModifiedCells] = useState<ModifiedCells>([])
 
-  // Edit modal state
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [editingTranslation, setEditingTranslation] = useState<TranslationRow | null>(null)
   const [editingLocale, setEditingLocale] = useState<string>('')

@@ -11,12 +11,12 @@
 import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
-import { TextArea } from '@Pimcore/components/textarea/textarea'
-import { Form } from '@sdk/components'
+import { Form, TextArea } from '@sdk/components'
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useTranslation as useTranslationHook } from '../hooks/use-translation'
 import type { TranslationRow } from '../helpers/translation-helpers'
+import { TranslationHtmlPreview } from '../components/translation-text-preview/translation-html-preview'
 
 interface EditModalProps {
   translationRow: TranslationRow | null
@@ -33,7 +33,6 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
   const { t } = useTranslation()
   const [form] = Form.useForm<EditFormValues>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [activeTab, setActiveTab] = useState<string>('plain-text')
   const { updateTranslationByKey } = useTranslationHook()
 
   const currentValue = translationRow?.[`_${locale}`] ?? ''
@@ -65,25 +64,23 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
 
   const tabItems = [
     {
-      key: 'plain-text',
       label: t('translations.edit-modal.tab.plain-text'),
+      key: 'plain-text',
       children: (
         <Form.Item name="translation">
           <TextArea
-            placeholder={ t('translations.edit-modal.tab.plain-text') }
-            rows={ 8 }
+            value={ '' }
           />
         </Form.Item>
       )
     },
     {
-      key: 'html',
       label: t('translations.edit-modal.tab.html'),
+      key: 'html',
       children: (
         <Form.Item name="translation">
-          <TextArea
-            placeholder={ t('translations.edit-modal.tab.html') }
-            rows={ 8 }
+          <TranslationHtmlPreview
+            value={ '' }
           />
         </Form.Item>
       )
@@ -112,9 +109,9 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
         onFinish={ onFinish }
       >
         <Tabs
-          activeKey={ activeTab }
+          destroyInactiveTabPane
           items={ tabItems }
-          onChange={ setActiveTab }
+          noPadding
         />
       </Form>
     </Modal>

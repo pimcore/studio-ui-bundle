@@ -319,6 +319,8 @@ translations.new-translation: New Translation
 translations.new: Add
 translations.type-options.custom: ICU Format
 translations.type-options.simple: Simple Text
+translations.edit-modal.tab.plain-text: Plain Text
+translations.edit-modal.tab.html: HTML
 properties.columns.type: Type
 properties.columns.key: Key
 properties.columns.name: Name
