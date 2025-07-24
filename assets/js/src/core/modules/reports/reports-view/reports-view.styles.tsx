@@ -13,8 +13,33 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ css, token }) => {
   return {
     selectReportLabel: css`
-      color: ${token.Tabs.itemActiveColor};
+      color: ${token.itemActiveColor};
       font-weight: ${token.fontWeightStrong};
+    `,
+
+    selectReportGroupLabel: css`
+      color: ${token.colorTextDescription};
+      font-size: ${token.fontSize}px;
+      text-transform: uppercase;
+    `,
+
+    withDivider: css`
+      &:before {
+        content: '';
+        display: block;
+        margin-bottom: 10px;
+        width: 100%;
+        height: 1px;
+        background-color: ${token.colorSplit};
+      }
+    `,
+
+    drillDownSelectLabel: css`
+      color: ${token.colorPrimary};
+    `,
+
+    dropdownLabel: css`
+      color: ${token.colorPrimary};
     `
   }
 })

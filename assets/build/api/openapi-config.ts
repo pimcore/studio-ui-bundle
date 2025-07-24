@@ -58,6 +58,14 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'customReportsChart',
+      type: 'query'
+    },
+    {
+      pattern: 'customReportsListDrillDownOptions',
+      type: 'query'
+    },
+    {
       pattern: 'translationGetList',
       type: 'query'
     }

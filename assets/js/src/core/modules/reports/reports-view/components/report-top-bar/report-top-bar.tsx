@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { type DefaultOptionType } from 'antd/es/select'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
@@ -20,7 +21,7 @@ import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.st
 interface IReportTopBarProps {
   currentReport: string | null
   setCurrentReport: (reportName: string) => void
-  reportsTreeOptions?: Array<{ label: string, value: string }>
+  reportsTreeOptions?: DefaultOptionType[]
 }
 
 export const ReportTopBar = ({ currentReport, setCurrentReport, reportsTreeOptions }: IReportTopBarProps): React.JSX.Element | null => {
@@ -33,7 +34,7 @@ export const ReportTopBar = ({ currentReport, setCurrentReport, reportsTreeOptio
       padding={ { top: 'extra-small', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
     >
       <Toolbar
-        padding={ { top: 'extra-small', bottom: 'extra-small', left: 'extra-small', right: 'extra-small' } }
+        padding={ { top: 'extra-small', bottom: 'extra-small', left: 'none', right: 'none' } }
         position='top'
         size='auto'
         theme='secondary'
@@ -48,6 +49,7 @@ export const ReportTopBar = ({ currentReport, setCurrentReport, reportsTreeOptio
             onChange={ (value: string) => { setCurrentReport(value) } }
             options={ reportsTreeOptions }
             placeholder={ t('reports.select-report') }
+            showSearch
             value={ currentReport }
           />
         </Flex>

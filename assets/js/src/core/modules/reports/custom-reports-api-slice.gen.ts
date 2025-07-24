@@ -6,7 +6,7 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            customReportsListDrillDownOptions: build.mutation<
+            customReportsListDrillDownOptions: build.query<
                 CustomReportsListDrillDownOptionsApiResponse,
                 CustomReportsListDrillDownOptionsApiArg
             >({
@@ -15,15 +15,15 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Bundle Custom Reports"],
+                providesTags: ["Bundle Custom Reports"],
             }),
-            customReportsChart: build.mutation<CustomReportsChartApiResponse, CustomReportsChartApiArg>({
+            customReportsChart: build.query<CustomReportsChartApiResponse, CustomReportsChartApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/bundle/custom-reports/chart`,
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Bundle Custom Reports"],
+                providesTags: ["Bundle Custom Reports"],
             }),
             customReportsConfigGetTree: build.query<
                 CustomReportsConfigGetTreeApiResponse,
@@ -195,7 +195,7 @@ export type BundleCustomReportsConfigurationTreeNode = {
 export type BundleCustomReportsColumnConfiguration = {
     /** Name */
     name?: string;
-    /** Display name of column */
+    /** Display column */
     display?: boolean;
     /** Whether the column should be included in exports */
     export?: boolean;
@@ -205,6 +205,10 @@ export type BundleCustomReportsColumnConfiguration = {
     label?: string;
     /** Id */
     id?: string;
+    /** Display type of the column */
+    displayType?: string | null;
+    /** Type of the filter */
+    filterType?: string | null;
     /** Drilldown filter */
     filterDrilldown?: string | null;
 };
@@ -250,7 +254,7 @@ export type BundleCustomReportsDetails = {
     /** Label of data column for pie chart */
     pieLabelColumn: string | null;
     /** X axis column names */
-    xAxis: string[] | null;
+    xAxis: string | null;
     /** Y axis column information */
     yAxis: string[] | null;
 };
@@ -275,8 +279,8 @@ export type BundleCustomReportsTreeNode = {
     reportClass: string;
 };
 export const {
-    useCustomReportsListDrillDownOptionsMutation,
-    useCustomReportsChartMutation,
+    useCustomReportsListDrillDownOptionsQuery,
+    useCustomReportsChartQuery,
     useCustomReportsConfigGetTreeQuery,
     useCustomReportExportCsvMutation,
     useCustomReportsReportQuery,

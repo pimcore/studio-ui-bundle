@@ -711,6 +711,9 @@ user-management.add-user.success: User added successfully
 user-management.remove-user.success: User removed successfully
 user-management.perspectives: Perspectives
 user-management.roles: Roles
+user-management.role: Role
+user-management.users: Users
+user-management.user: User
 roles.tree.all: All Roles
 roles.save-item.success: Role saved successfully
 roles.clone-item.success: Role cloned successfully
@@ -869,6 +872,11 @@ user-menu.notification.modal.form.validation.provide-message: Please provide a m
 reports.report-name: Name of the report
 reports.select-report-name: Select the name of the report
 reports.select-report: Select report
+reports.csv-export: CSV Export
+reports.csv-export-with-headers: CSV Export with headers
+reports.grid-config.title-columns: Columns
+reports.grid-config.restore-to-default: Restore to default
+reports.grid-config.add-column: Add a column
 loading: Loading...
 please-wait: Please wait...
 navigation.email: Email
