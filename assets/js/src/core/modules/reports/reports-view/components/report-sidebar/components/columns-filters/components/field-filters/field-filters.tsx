@@ -24,18 +24,17 @@ import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import type { FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
 import { FieldFilters as FieldFiltersComponent } from '@Pimcore/components/field-filters/field-filters'
 import {
-  GET_FIELD_DATA_BY_TYPE,
-  GET_ORIGINAL_TYPE_BY_FRONTEND_TYPE
+  FIELD_TYPE_MAP,
+  FRONTEND_TO_ORIGINAL_TYPE
 } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/components/field-filters/utils/helpers'
 import type { IGridFilter } from '@Pimcore/modules/reports/reports-view/types'
 
 interface IFieldFiltersProps {
   reportData: BundleCustomReportsDetails
-  columnFilters: IGridFilter['columnFilters']
   setColumnFilters: (filters: IGridFilter['columnFilters']) => void
 }
 
-export const FieldFilters = ({ reportData, columnFilters, setColumnFilters }: IFieldFiltersProps): React.JSX.Element => {
+export const FieldFilters = ({ reportData, setColumnFilters }: IFieldFiltersProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const [addColumnMenu, setAddColumnMenu] = useState<DropdownMenuProps['items']>([])
@@ -44,14 +43,15 @@ export const FieldFilters = ({ reportData, columnFilters, setColumnFilters }: IF
   const handleColumnClick = (column: BundleCustomReportsColumnConfiguration): void => {
     const filterType: string = column.filterType ?? 'string'
 
-    const frontendType: string = GET_FIELD_DATA_BY_TYPE[filterType].frontendType
-    const type: string = GET_FIELD_DATA_BY_TYPE[filterType].type
+    const frontendType: string = FIELD_TYPE_MAP[filterType].frontendType
+    const type: string = FIELD_TYPE_MAP[filterType].type
+    const id = (!isEmptyValue(column.label) ? column.label : column.name)!
 
     setFilters((prevFilters) => [
       ...prevFilters,
       {
         data: undefined,
-        id: column.label!,
+        id,
         name: column.name,
         type,
         frontendType,
@@ -67,7 +67,7 @@ export const FieldFilters = ({ reportData, columnFilters, setColumnFilters }: IF
       .filter(item => !isUndefined(item.data))
       .map(item => ({
         property: item.name!,
-        type: GET_ORIGINAL_TYPE_BY_FRONTEND_TYPE[item.frontendType!],
+        type: FRONTEND_TO_ORIGINAL_TYPE[item.frontendType!],
         operator: 'eq',
         value: String(item.data)
       }))

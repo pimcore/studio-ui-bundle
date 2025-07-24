@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-export const GET_FIELD_DATA_BY_TYPE = {
+export const FIELD_TYPE_MAP = {
   string: {
     frontendType: 'input',
     type: 'system.string'
@@ -27,9 +27,9 @@ export const GET_FIELD_DATA_BY_TYPE = {
   }
 }
 
-export const GET_ORIGINAL_TYPE_BY_FRONTEND_TYPE = {
-  input: 'string',
-  id: 'numeric',
-  checkbox: 'boolean',
-  datetime: 'date'
-}
+export const FRONTEND_TO_ORIGINAL_TYPE = Object.fromEntries(
+  Object.entries(FIELD_TYPE_MAP).map(([originalType, config]) => [
+    config.frontendType,
+    originalType
+  ])
+)

@@ -63,7 +63,6 @@ export const ColumnsFilters = ({ reportData }: { reportData: BundleCustomReports
     >
       <Content padded>
         <FieldFilters
-          columnFilters={ columnFilters }
           reportData={ reportData }
           setColumnFilters={ setColumnFilters }
         />
