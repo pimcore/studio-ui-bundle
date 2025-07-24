@@ -19,12 +19,14 @@ import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/cont
 import {
   useColumnsFiltersContext
 } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/context/columns-filters-context'
+import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 
 export const ColumnsFilters = (): React.JSX.Element => {
-  const { t } = useTranslation()
-
   const { filters, setFilters } = useGridFilterContext()
   const { columnsFilters, setColumnsFilters, setFieldFilters } = useColumnsFiltersContext()
+
+  const { t } = useTranslation()
+  const { styles } = useStyles()
 
   const handleApplyFilters = (): void => {
     setFilters({
@@ -47,6 +49,7 @@ export const ColumnsFilters = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme='secondary'>
           <Button
+            className={ styles.btnLink }
             onClick={ handleClearFilters }
             type='link'
           >
