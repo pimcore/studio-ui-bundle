@@ -6,7 +6,7 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            customReportsListDrillDownOptions: build.query<
+            customReportsListDrillDownOptions: build.mutation<
                 CustomReportsListDrillDownOptionsApiResponse,
                 CustomReportsListDrillDownOptionsApiArg
             >({
@@ -15,15 +15,15 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                providesTags: ["Bundle Custom Reports"],
+                invalidatesTags: ["Bundle Custom Reports"],
             }),
-            customReportsChart: build.query<CustomReportsChartApiResponse, CustomReportsChartApiArg>({
+            customReportsChart: build.mutation<CustomReportsChartApiResponse, CustomReportsChartApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/bundle/custom-reports/chart`,
                     method: "POST",
                     body: queryArg.body,
                 }),
-                providesTags: ["Bundle Custom Reports"],
+                invalidatesTags: ["Bundle Custom Reports"],
             }),
             customReportsConfigGetTree: build.query<
                 CustomReportsConfigGetTreeApiResponse,
@@ -279,8 +279,8 @@ export type BundleCustomReportsTreeNode = {
     reportClass: string;
 };
 export const {
-    useCustomReportsListDrillDownOptionsQuery,
-    useCustomReportsChartQuery,
+    useCustomReportsListDrillDownOptionsMutation,
+    useCustomReportsChartMutation,
     useCustomReportsConfigGetTreeQuery,
     useCustomReportExportCsvMutation,
     useCustomReportsReportQuery,
