@@ -25,7 +25,7 @@ export const ReportSidebar = (): React.JSX.Element => {
         component: <ColumnsConfiguration />,
         key: 'reports-columns-configuration',
         icon: <Icon value="columns" />,
-        tooltip: t('sidebar.grid_config')
+        tooltip: t('reports.grid-config.title-columns')
       },
       {
         component: (

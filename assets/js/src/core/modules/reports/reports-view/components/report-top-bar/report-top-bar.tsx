@@ -43,7 +43,7 @@ export const ReportTopBar = ({ currentReport, setCurrentReport, reportsTreeOptio
           align="center"
           gap="extra-small"
         >
-          <Text className={ styles.selectReportLabel }>{t('reports.report-name')}</Text>
+          <Text className={ styles.selectReportLabel }>{t('reports.reports-title')}</Text>
           <Select
             className='min-w-200'
             onChange={ (value: string) => { setCurrentReport(value) } }
