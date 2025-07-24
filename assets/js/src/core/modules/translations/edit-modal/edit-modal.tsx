@@ -39,7 +39,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
   const currentValue = translationRow?.[`_${locale}`] ?? ''
 
   useEffect(() => {
-    if (translationRow && props.open) {
+    if (translationRow !== null && props.open) {
       form.setFieldsValue({
         translation: currentValue
       })
@@ -47,7 +47,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
   }, [translationRow, locale, props.open, form, currentValue])
 
   const onFinish = async (values: EditFormValues): Promise<void> => {
-    if (!translationRow) return
+    if (translationRow === null) return
 
     setIsLoading(true)
 
@@ -98,7 +98,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
         props.setOpen(false)
         form.resetFields()
       } }
-      onOk={ () => { void form.submit() } }
+      onOk={ () => { form.submit() } }
       open={ props.open }
       size="L"
       title={ (
