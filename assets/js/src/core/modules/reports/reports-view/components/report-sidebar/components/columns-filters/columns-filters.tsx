@@ -14,14 +14,13 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { Content } from '@Pimcore/components/content/content'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Button } from '@Pimcore/components/button/button'
-import type { BundleCustomReportsDetails } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { FieldFilters } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/components/field-filters/field-filters'
 import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
 import {
   useColumnsFiltersContext
 } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/context/columns-filters-context'
 
-export const ColumnsFilters = ({ reportData }: { reportData: BundleCustomReportsDetails }): React.JSX.Element => {
+export const ColumnsFilters = (): React.JSX.Element => {
   const { t } = useTranslation()
 
   const { filters, setFilters } = useGridFilterContext()
@@ -64,7 +63,7 @@ export const ColumnsFilters = ({ reportData }: { reportData: BundleCustomReports
       }
     >
       <Content padded>
-        <FieldFilters reportData={ reportData } />
+        <FieldFilters />
       </Content>
     </ContentLayout>
   )

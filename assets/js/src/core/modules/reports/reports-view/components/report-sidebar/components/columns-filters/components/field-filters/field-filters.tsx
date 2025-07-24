@@ -15,25 +15,21 @@ import { isEmpty, isUndefined } from 'lodash'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
 import { Flex } from '@Pimcore/components/flex/flex'
-import type {
-  BundleCustomReportsColumnConfiguration,
-  BundleCustomReportsDetails
-} from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
+import type { BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import type { FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
 import { FieldFilters as FieldFiltersComponent } from '@Pimcore/components/field-filters/field-filters'
 import { FIELD_TYPE_MAP, FRONTEND_TO_ORIGINAL_TYPE } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/components/field-filters/utils/helpers'
 import { useColumnsFiltersContext } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/context/columns-filters-context'
+import { useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
 
-interface IFieldFiltersProps {
-  reportData: BundleCustomReportsDetails
-}
-
-export const FieldFilters = ({ reportData }: IFieldFiltersProps): React.JSX.Element => {
+export const FieldFilters = (): React.JSX.Element => {
   const { t } = useTranslation()
 
   const [addColumnMenu, setAddColumnMenu] = useState<DropdownMenuProps['items']>([])
+
+  const { reportDetailData } = useReportDataContext()
   const { setColumnsFilters, fieldFilters, setFieldFilters } = useColumnsFiltersContext()
 
   const handleColumnClick = (column: BundleCustomReportsColumnConfiguration): void => {
@@ -74,10 +70,10 @@ export const FieldFilters = ({ reportData }: IFieldFiltersProps): React.JSX.Elem
   useEffect(() => {
     setFieldFilters([])
     setColumnsFilters([])
-  }, [reportData])
+  }, [reportDetailData])
 
   useEffect(() => {
-    const newAddColumnMenu = reportData?.columnConfigurations
+    const newAddColumnMenu = reportDetailData?.columnConfigurations
       ?.filter((initialColumn) => !fieldFilters.some((column) => initialColumn.name === column.name))
       ?.map((column) => ({
         key: column.id as Key,
@@ -86,7 +82,7 @@ export const FieldFilters = ({ reportData }: IFieldFiltersProps): React.JSX.Elem
       }))
 
     setAddColumnMenu(newAddColumnMenu)
-  }, [reportData, fieldFilters])
+  }, [reportDetailData, fieldFilters])
 
   return (
     <>
