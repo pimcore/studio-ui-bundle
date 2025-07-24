@@ -33,7 +33,7 @@ export const getAvailableLocales = (translations: Translations[]): string[] => {
     }
   })
 
-  return Array.from(localeSet).sort()
+  return Array.from(localeSet).sort((a, b) => a.localeCompare(b))
 }
 
 export const translationsToRows = (translations: Translations[]): TranslationRow[] => {

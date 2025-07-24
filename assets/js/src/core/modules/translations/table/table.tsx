@@ -57,15 +57,27 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
 
   const columnHelper = createColumnHelper<TranslationWithActions>()
 
+  interface LanguageColumnHeaderProps {
+    language: string
+    display: string
+  }
+
+  const LanguageColumnHeader: React.FC<LanguageColumnHeaderProps> = ({ language, display }) => (
+    <div style={ { display: 'flex', alignItems: 'center', gap: '8px' } }>
+      <FlagIcon value={ language } />
+      <span>{display}</span>
+    </div>
+  )
+
   const languageColumns = useMemo(() => {
     return languages.map(lang =>
       columnHelper.accessor(`_${lang.language}` as keyof TranslationWithActions, {
         id: `_${lang.language}`,
         header: () => (
-          <div style={ { display: 'flex', alignItems: 'center', gap: '8px' } }>
-            <FlagIcon value={ lang.language } />
-            <span>{lang.display}</span>
-          </div>
+          <LanguageColumnHeader
+            display={ lang.display }
+            language={ lang.language }
+          />
         ),
         meta: {
           editable: true,
