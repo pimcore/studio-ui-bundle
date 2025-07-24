@@ -81,7 +81,8 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
         ),
         meta: {
           editable: true,
-          type: 'text'
+          type: 'text',
+          callback: true
         },
         size: 200
       })

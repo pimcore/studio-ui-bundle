@@ -9,10 +9,11 @@
  */
 
 import React, { useEffect, useRef } from 'react'
-import { Input, type InputRef } from 'antd'
 import { useStyle } from './text-cell.styles'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
+import { IconButton, Input } from '@sdk/components'
+import { InputRef } from 'antd'
 
 export interface TextCellProps extends DefaultCellProps {}
 
@@ -20,9 +21,9 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
   const { styles } = useStyle()
   const element = useRef<InputRef>(null)
-
-  console.log('inHEERE')
-
+  const callback = Boolean(props.column.columnDef.meta?.callback ?? false)
+    
+  
   useEffect(() => {
     if (isInEditMode) {
       element.current?.focus()
@@ -60,6 +61,7 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
         onKeyDown={ onKeyDown }
         ref={ element }
         type="text"
+        suffix={callback ? <IconButton icon={{ value: 'edit' }} /> : null}
       />
     )
   }
