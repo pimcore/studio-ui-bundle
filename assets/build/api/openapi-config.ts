@@ -64,6 +64,10 @@ const config: ConfigFile = {
     {
       pattern: 'customReportsListDrillDownOptions',
       type: 'query'
+    },
+    {
+      pattern: 'translationGetList',
+      type: 'query'
     }
   ],
   outputFiles: {
