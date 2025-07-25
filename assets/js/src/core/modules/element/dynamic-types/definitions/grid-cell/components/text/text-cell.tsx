@@ -22,6 +22,7 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
   const { styles } = useStyle()
   const element = useRef<InputRef>(null)
   const callback = Boolean(props.column.columnDef.meta?.callback ?? false)
+  const editCallback = (props.column.columnDef.meta as any)?.editCallback
     
   
   useEffect(() => {
@@ -54,6 +55,19 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
       )
     }
 
+    const openEditMode = async () => {
+      if (editCallback && typeof editCallback === 'function') {
+        try {
+          const newValue = await editCallback(props.row.original, props.column.id)
+          fireOnUpdateCellDataEvent(newValue)
+        } catch (error) {
+          console.error('Edit callback failed:', error)
+        }
+      } else {
+        console.log("No edit callback available")
+      }
+    }
+
     return (
       <Input
         defaultValue={ props.getValue() }
@@ -61,7 +75,13 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
         onKeyDown={ onKeyDown }
         ref={ element }
         type="text"
-        suffix={callback ? <IconButton icon={{ value: 'edit' }} /> : null}
+        suffix={callback ? (
+          <IconButton 
+            onClick={() => openEditMode()} 
+            onMouseDown={(e) => e.preventDefault()}
+            icon={{ value: 'edit' }} 
+          />
+        ) : null}
       />
     )
   }

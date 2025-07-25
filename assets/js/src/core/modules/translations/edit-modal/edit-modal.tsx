@@ -23,6 +23,7 @@ interface EditModalProps {
   locale: string
   open: boolean
   setOpen: (open: boolean) => void
+  onSave?: (newValue: string) => void
 }
 
 interface EditFormValues {
@@ -50,12 +51,15 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
 
     setIsLoading(true)
 
-    const updatedRow: TranslationRow = {
-      ...translationRow,
-      [`_${locale}`]: values.translation
+    if (props.onSave) {
+      props.onSave(values.translation)
+    } else {
+      const updatedRow: TranslationRow = {
+        ...translationRow,
+        [`_${locale}`]: values.translation
+      }
+      await updateTranslationByKey(`_${locale}`, updatedRow)
     }
-
-    await updateTranslationByKey(`_${locale}`, updatedRow)
 
     props.setOpen(false)
     form.resetFields()
@@ -69,7 +73,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
       children: (
         <Form.Item name="translation">
           <TextArea
-            value={ '' }
+            rows={10}
           />
         </Form.Item>
       )
@@ -78,11 +82,9 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
       label: t('translations.edit-modal.tab.html'),
       key: 'html',
       children: (
-        <Form.Item name="translation">
-          <TranslationHtmlPreview
-            value={ '' }
-          />
-        </Form.Item>
+        <TranslationHtmlPreview
+          value={form.getFieldValue('translation') || currentValue}
+        />
       )
     }
   ]

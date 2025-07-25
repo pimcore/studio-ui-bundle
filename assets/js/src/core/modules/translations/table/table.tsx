@@ -68,6 +68,17 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
 
   const columnHelper = createColumnHelper<TranslationWithActions>()
 
+  const [editResolveFunction, setEditResolveFunction] = useState<((value: string) => void) | null>(null)
+
+  const handleEditCallback = async (rowData: TranslationRow, columnId: string): Promise<string> => {
+    return new Promise((resolve) => {
+      setEditingTranslation(rowData)
+      setEditingLocale(columnId.replace('_', ''))
+      setEditResolveFunction(() => resolve)
+      setEditModalOpen(true)
+    })
+  }
+
   const languageColumns = useMemo(() => {
     return languages.map(lang =>
       columnHelper.accessor(`_${lang.language}` as keyof TranslationWithActions, {
@@ -81,12 +92,13 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
         meta: {
           editable: true,
           type: 'text',
-          callback: true
-        },
+          callback: true,
+          editCallback: handleEditCallback
+        } as any,
         size: 200
       })
     )
-  }, [languages, columnHelper, visibleLocales])
+  }, [languages, columnHelper, visibleLocales, handleEditCallback])
 
   const typeOptions = [{
     value: 'simple',
@@ -168,8 +180,20 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
 
       <EditModal
         locale={ editingLocale }
+        onSave={ (newValue: string) => {
+          if (editResolveFunction) {
+            editResolveFunction(newValue)
+            setEditResolveFunction(null)
+          }
+        } }
         open={ editModalOpen }
-        setOpen={ setEditModalOpen }
+        setOpen={ (open: boolean) => {
+          setEditModalOpen(open)
+          if (!open && editResolveFunction) {
+            editResolveFunction(editingTranslation?.[`_${editingLocale}`] ?? '')
+            setEditResolveFunction(null)
+          }
+        } }
         translationRow={ editingTranslation }
       />
     </div>
