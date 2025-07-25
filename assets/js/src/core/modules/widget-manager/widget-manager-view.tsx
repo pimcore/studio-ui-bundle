@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { Layout, type ILayoutProps } from 'flexlayout-react'
+import cn from 'classnames'
 import { useStyles } from './widget-manager-view.styles'
 import { type CreateContextMenuItemsProps, useContextMenu } from '@Pimcore/modules/widget-manager/hooks/use-context-menu'
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
@@ -24,7 +25,7 @@ export const WidgetManagerView = ({ className, createContextMenuItems, ...props 
   const { showContextMenu, dropdown } = useContextMenu(props.model, createContextMenuItems)
 
   return (
-    <div className={ ['widget-manager', className, styles.widgetManager].join(' ') }>
+    <div className={ cn('widget-manager', className, styles.widgetManager) }>
       <Layout
         { ...props }
         onContextMenu={ showContextMenu }
