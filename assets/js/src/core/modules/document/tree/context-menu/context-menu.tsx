@@ -22,6 +22,7 @@ import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helpe
 import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
 import { usePublish } from '@Pimcore/modules/element/actions/publish/use-publish'
 import { type IMenuProps, Menu } from '@Pimcore/components/menu/menu'
+import { useOpenInNewWindow } from '@Pimcore/modules/document/actions/open-in-new-window/use-open-in-new-window'
 
 export interface DocumentTreeContextMenuProps {
   node: TreeNodeProps
@@ -38,6 +39,7 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
   const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem, isLockMenuHidden } = useLock('document')
   const { unpublishTreeContextMenuItem } = useUnpublish('document')
   const { publishTreeContextMenuItem } = usePublish('document')
+  const { openInNewWindowTreeContextMenuItem } = useOpenInNewWindow()
 
   const items: IMenuProps['items'] = [
     addFolderTreeContextMenuItem(node),
@@ -48,6 +50,7 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
     unpublishTreeContextMenuItem(node),
     pasteCutContextMenuItem(parseInt(node.id)),
     deleteTreeContextMenuItem(node),
+    openInNewWindowTreeContextMenuItem(node),
     {
       label: t('element.tree.context-menu.advanced'),
       key: 'advanced',
