@@ -45,18 +45,15 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
   const settings = useSettings()
 
   const availableLanguages = settings?.availableAdminLanguages ?? []
-  const validLanguages: string[] = settings?.validLanguages ?? []
 
-  const languages: Language[] = validLanguages
-    .filter(validLang => visibleLocales.includes(validLang))
-    .map(validLang => {
-      const match = availableLanguages.find(lang => lang.language === validLang)
-      if (isUndefined(match)) {
-        trackError(new GeneralError(`Language "${validLang}" not found in availableLanguages`))
-        return { language: validLang, display: validLang }
-      }
-      return match
-    }).filter(Boolean)
+  const languages: Language[] = visibleLocales.map(validLang => {
+    const match = availableLanguages.find(lang => lang.language === validLang)
+    if (isUndefined(match)) {
+      trackError(new GeneralError(`Language "${validLang}" not found in availableLanguages`))
+      return { language: validLang, display: validLang }
+    }
+    return match
+  }).filter(Boolean)
 
   const columnHelper = createColumnHelper<TranslationWithActions>()
   const [editResolveFunction, setEditResolveFunction] = useState<((value: string) => void) | null>(null)
