@@ -315,13 +315,15 @@ translations.select-languages: Select languages
 translations.select-domain: Select domain
 translations.show-all-languages: Show all
 translations.show-minimal-languages: Show minimal
+translations.show-hide-locale: Show/ Hide Locale
 translations.new-translation: New Translation
 translations.new: Add
 translations.type-options.custom: ICU Format
 translations.type-options.simple: Simple Text
 translations.edit-modal.tab.plain-text: Plain Text
 translations.edit-modal.tab.html: HTML
-translations.edit-modal.save: Save
+translations.edit-modal.save: 
+translations.edit-modal.title: Edit translation
 properties.columns.type: Type
 properties.columns.key: Key
 properties.columns.name: Name

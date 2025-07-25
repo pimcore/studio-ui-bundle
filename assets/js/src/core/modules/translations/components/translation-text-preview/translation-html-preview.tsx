@@ -11,32 +11,34 @@
 import { Content } from '@Pimcore/components/content/content'
 import { getLanguageExtensions } from '@Pimcore/components/text-editor/detect-language'
 import ReactCodeMirror from '@uiw/react-codemirror'
-import { isUndefined } from 'lodash'
 import React from 'react'
 import { useStyles } from './translation-html-preview.styles'
 
-interface TranslationHtmlPreviewProps {
-  value: string
+interface TranslationHtmlEditorProps {
+  value?: string
+  onChange?: (value: string) => void
 }
 
-export const TranslationHtmlPreview = ({
-  value
-}: TranslationHtmlPreviewProps): React.JSX.Element => {
+export const TranslationHtmlPreview = ({ 
+  value = '', 
+  onChange
+}: TranslationHtmlEditorProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   return (
     <Content
-      none={ isUndefined(value) || value.length === 0 }
+      none={false} 
     >
       <ReactCodeMirror
-        basicSetup={ {
+        basicSetup={{
           lineNumbers: true,
           syntaxHighlighting: true,
           searchKeymap: true
-        } }
-        className={ styles.codeEditor }
-        extensions={ getLanguageExtensions(null) }
-        value={ value ?? '' }
+        }}
+        className={styles.codeEditor}
+        extensions={getLanguageExtensions('html')}
+        onChange={onChange}
+        value={value}
       />
     </Content>
   )

@@ -73,7 +73,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
       children: (
         <Form.Item name="translation">
           <TextArea
-            rows={10}
+            rows={3}
           />
         </Form.Item>
       )
@@ -82,9 +82,9 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
       label: t('translations.edit-modal.tab.html'),
       key: 'html',
       children: (
-        <TranslationHtmlPreview
-          value={form.getFieldValue('translation') || currentValue}
-        />
+        <Form.Item name="translation">
+          <TranslationHtmlPreview />
+        </Form.Item>
       )
     }
   ]
