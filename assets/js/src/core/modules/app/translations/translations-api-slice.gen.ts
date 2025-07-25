@@ -28,7 +28,7 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/translations/domains` }),
                 providesTags: ["Translation"],
             }),
-            translationGetList: build.mutation<TranslationGetListApiResponse, TranslationGetListApiArg>({
+            translationGetList: build.query<TranslationGetListApiResponse, TranslationGetListApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/translations/list`,
                     method: "POST",
@@ -37,7 +37,7 @@ const injectedRtkApi = api
                         domain: queryArg.domain,
                     },
                 }),
-                invalidatesTags: ["Translation"],
+                providesTags: ["Translation"],
             }),
             translationUpdate: build.mutation<TranslationUpdateApiResponse, TranslationUpdateApiArg>({
                 query: (queryArg) => ({
@@ -166,7 +166,7 @@ export const {
     useTranslationCreateMutation,
     useTranslationDeleteByKeyMutation,
     useTranslationGetDomainsQuery,
-    useTranslationGetListMutation,
+    useTranslationGetListQuery,
     useTranslationUpdateMutation,
     useTranslationGetCollectionMutation,
 } = injectedRtkApi;
