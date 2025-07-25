@@ -32,12 +32,16 @@ export const FieldFilters = (): React.JSX.Element => {
   const { reportDetailData } = useReportDataContext()
   const { setColumnsFilters, fieldFilters, setFieldFilters } = useColumnsFiltersContext()
 
+  const getLabelValue = (column: BundleCustomReportsColumnConfiguration): string => (
+    (!isEmptyValue(column.label) ? column.label : column.name)!
+  )
+
   const handleColumnClick = (column: BundleCustomReportsColumnConfiguration): void => {
     const filterType: string = column.filterType ?? 'string'
 
     const frontendType: string = FIELD_TYPE_MAP[filterType].frontendType
     const type: string = FIELD_TYPE_MAP[filterType].type
-    const id = (!isEmptyValue(column.label) ? column.label : column.name)!
+    const id = getLabelValue(column)
 
     setFieldFilters([
       ...fieldFilters,
@@ -73,11 +77,13 @@ export const FieldFilters = (): React.JSX.Element => {
   }, [reportDetailData])
 
   useEffect(() => {
-    const newAddColumnMenu = reportDetailData?.columnConfigurations
+    const columnConfigurationsList = reportDetailData?.columnConfigurations.filter(item => item.display === true)
+
+    const newAddColumnMenu = columnConfigurationsList
       ?.filter((initialColumn) => !fieldFilters.some((column) => initialColumn.name === column.name))
       ?.map((column) => ({
         key: column.id as Key,
-        label: !isEmptyValue(column.label) ? column.label : column.name,
+        label: getLabelValue(column),
         onClick: () => { handleColumnClick(column) }
       }))
 
