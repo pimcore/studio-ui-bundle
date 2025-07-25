@@ -44,7 +44,6 @@ export const TranslationsContainer = (): React.JSX.Element => {
   })
   const { createNewTranslation, createLoading, domain, setDomain } = useTranslation()
   const settings = useSettings()
-
   const [visibleLocales, setVisibleLocales] = useState<string[] | null>(null)
   const [translationRows, setTranslationRows] = useState<TranslationRow[]>([])
   const [searchTerm, setSearchTerm] = useState<string>('')
