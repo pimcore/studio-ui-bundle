@@ -195,7 +195,7 @@ export type BundleCustomReportsConfigurationTreeNode = {
 export type BundleCustomReportsColumnConfiguration = {
     /** Name */
     name?: string;
-    /** Display name of column */
+    /** Display column */
     display?: boolean;
     /** Whether the column should be included in exports */
     export?: boolean;
@@ -205,6 +205,10 @@ export type BundleCustomReportsColumnConfiguration = {
     label?: string;
     /** Id */
     id?: string;
+    /** Display type of the column */
+    displayType?: string | null;
+    /** Type of the filter */
+    filterType?: string | null;
     /** Drilldown filter */
     filterDrilldown?: string | null;
 };
@@ -250,7 +254,7 @@ export type BundleCustomReportsDetails = {
     /** Label of data column for pie chart */
     pieLabelColumn: string | null;
     /** X axis column names */
-    xAxis: string[] | null;
+    xAxis: string | null;
     /** Y axis column information */
     yAxis: string[] | null;
 };
