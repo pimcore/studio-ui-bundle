@@ -46,7 +46,8 @@ export const translationsToRows = (translations: Translations[]): TranslationRow
 
     if (translation.translations !== null && typeof translation.translations === 'object') {
       Object.entries(translation.translations).forEach(([locale, value]) => {
-        row[`_${locale}`] = String(value ?? '')
+        row[`_${locale}`] =
+      typeof value === 'string' ? value : ''
       })
     }
 

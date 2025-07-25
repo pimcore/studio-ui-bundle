@@ -46,12 +46,6 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
 
   const settings = useSettings()
 
-  const handleEditClick = (translationRow: TranslationRow, locale: string): void => {
-    setEditingTranslation(translationRow)
-    setEditingLocale(locale)
-    setEditModalOpen(true)
-  }
-
   const availableLanguages = settings?.availableAdminLanguages ?? []
   const validLanguages: string[] = settings?.validLanguages ?? []
 
@@ -181,7 +175,7 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
       <EditModal
         locale={ editingLocale }
         onSave={ (newValue: string) => {
-          if (editResolveFunction) {
+          if (editResolveFunction !== null) {
             editResolveFunction(newValue)
             setEditResolveFunction(null)
           }
@@ -189,7 +183,7 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
         open={ editModalOpen }
         setOpen={ (open: boolean) => {
           setEditModalOpen(open)
-          if (!open && editResolveFunction) {
+          if (!open && editResolveFunction !== null) {
             editResolveFunction(editingTranslation?.[`_${editingLocale}`] ?? '')
             setEditResolveFunction(null)
           }

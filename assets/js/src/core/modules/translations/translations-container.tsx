@@ -61,7 +61,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
         page: currentPage,
         pageSize,
         columnFilters:
-          searchTerm
+          searchTerm.length >= 0
             ? [{
                 type: 'search',
                 filterValue: searchTerm

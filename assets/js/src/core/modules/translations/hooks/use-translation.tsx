@@ -48,7 +48,7 @@ export const useTranslation = (): UseTranslationReturn => {
         }
         return { success: true, data: createdTranslation }
       }
-    } catch (e) {
+    } catch {
       trackError(new GeneralError('Was not able to create Translation'))
     }
     return { success: false }
@@ -58,7 +58,7 @@ export const useTranslation = (): UseTranslationReturn => {
     try {
       const result = await deleteTranslation({ key, domain })
       return { success: 'data' in result }
-    } catch (e) {
+    } catch {
       trackError(new GeneralError('Was not able to delete Translation'))
       return { success: false }
     }
@@ -91,7 +91,7 @@ export const useTranslation = (): UseTranslationReturn => {
       })
 
       return { success: 'data' in result }
-    } catch (e) {
+    } catch {
       trackError(new GeneralError('Was not able to update Translation'))
       return { success: false }
     }

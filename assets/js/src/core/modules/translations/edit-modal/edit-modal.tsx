@@ -51,7 +51,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
 
     setIsLoading(true)
 
-    if (props.onSave) {
+    if (props.onSave !== undefined) {
       props.onSave(values.translation)
     } else {
       const updatedRow: TranslationRow = {

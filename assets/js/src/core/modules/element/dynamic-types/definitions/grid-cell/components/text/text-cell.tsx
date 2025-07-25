@@ -22,7 +22,7 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
   const { styles } = useStyle()
   const element = useRef<InputRef>(null)
   const callback = Boolean(props.column.columnDef.meta?.callback ?? false)
-  const editCallback = (props.column.columnDef.meta as any)?.editCallback
+  const editCallback = props.column.columnDef.meta?.editCallback
 
   useEffect(() => {
     if (isInEditMode) {
@@ -54,8 +54,8 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
       )
     }
 
-    const openEditMode = async () => {
-      if (editCallback && typeof editCallback === 'function') {
+    const openEditMode = async (): Promise<void> => {
+      if (editCallback !== undefined && typeof editCallback === 'function') {
         try {
           const newValue = await editCallback(props.row.original, props.column.id)
           fireOnUpdateCellDataEvent(newValue)
