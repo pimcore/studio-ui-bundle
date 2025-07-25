@@ -15,6 +15,8 @@ import { GridConfigList } from "./grid-config-list"
 import { isEmpty } from "lodash"
 import { PipelineLayoutProvider } from "./forms/advanced-column-form/pipeline-layout-provider"
 import { ModalTitle } from "@Pimcore/components/modal/modal-title/modal-title"
+import { PreviewItemProvider } from "./forms/advanced-column-form/preview/preview-item-provider"
+import { PreviewItemSelection } from "./forms/advanced-column-form/preview/preview-item-selection"
 
 export interface GridConfigModalProps extends EditViewProps {
   open?: boolean
@@ -43,66 +45,66 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
   return (
     <>
       {open === true && (
-        <PipelineLayoutProvider pipelineLayout="verbose">
-          <Modal open={open} onClose={() => onOpenChange?.(false)} onCancel={() => onOpenChange?.(false)} size="XL" title={(
-            <ModalTitle iconName="settings">
-              Grid Config
-            </ModalTitle>
-          )} footer={null} >
-              <ContentLayout>
-                <Toolbar position="content" theme="secondary" padding={{ x: 'none' }}>
-                  <Button>
-                    Preview Item
-                  </Button>
+        <PreviewItemProvider>
+          <PipelineLayoutProvider pipelineLayout="verbose">
+            <Modal open={open} onClose={() => onOpenChange?.(false)} onCancel={() => onOpenChange?.(false)} size="XL" title={(
+              <ModalTitle iconName="settings">
+                Grid Config
+              </ModalTitle>
+            )} footer={null} >
+                <ContentLayout>
+                  <Toolbar position="content" theme="secondary" padding={{ x: 'none' }}>
+                    <PreviewItemSelection />
 
-                  <LanguageSelection
-                    languages={ settings.requiredLanguages.map((value: string) => {
-                      return value
-                    }) }
-                    onSelectLanguage={ setCurrentLanguage }
-                    selectedLanguage={ currentLanguage }
-                  />
-                </Toolbar>
-
-                  <Content style={{ height: 'calc(80vh - 200px)' }}>
-                    <Space
-                      direction='vertical'
-                      style={ { width: '100%' } }
-                    >
-                      <GridConfigList />
-                    </Space>
-                  </Content>
-
-                  <Toolbar padding={{ x: 'none', y: 'small' }} theme="secondary">
-                    {!isEmpty(addColumnMenu) && (
-                      <Dropdown menu={ { items: addColumnMenu } }>
-                        <IconTextButton
-                          icon={ { value: 'new' } }
-                        >
-                          { t('listing.add-column') }
-                        </IconTextButton>
-                      </Dropdown>
-                    )}
-
-                    <Space size="extra-small">
-                      <Button
-                        onClick={ onCancelClick }
-                        type='default'
-                      >
-                        { t('button.cancel') }
-                      </Button>
-
-                      <Button
-                        onClick={ onApplyClick }
-                        type='primary'
-                      >
-                        { t('button.apply') }
-                      </Button>
-                    </Space>
+                    <LanguageSelection
+                      languages={ settings.requiredLanguages.map((value: string) => {
+                        return value
+                      }) }
+                      onSelectLanguage={ setCurrentLanguage }
+                      selectedLanguage={ currentLanguage }
+                    />
                   </Toolbar>
-                </ContentLayout>
-            </Modal>
-        </PipelineLayoutProvider>
+
+                    <Content style={{ height: 'calc(80vh - 200px)' }}>
+                      <Space
+                        direction='vertical'
+                        style={ { width: '100%' } }
+                      >
+                        <GridConfigList />
+                      </Space>
+                    </Content>
+
+                    <Toolbar padding={{ x: 'none', y: 'small' }} theme="secondary">
+                      {!isEmpty(addColumnMenu) && (
+                        <Dropdown menu={ { items: addColumnMenu } }>
+                          <IconTextButton
+                            icon={ { value: 'new' } }
+                          >
+                            { t('listing.add-column') }
+                          </IconTextButton>
+                        </Dropdown>
+                      )}
+
+                      <Space size="extra-small">
+                        <Button
+                          onClick={ onCancelClick }
+                          type='default'
+                        >
+                          { t('button.cancel') }
+                        </Button>
+
+                        <Button
+                          onClick={ onApplyClick }
+                          type='primary'
+                        >
+                          { t('button.apply') }
+                        </Button>
+                      </Space>
+                    </Toolbar>
+                  </ContentLayout>
+              </Modal>
+          </PipelineLayoutProvider>
+        </PreviewItemProvider>
       )}
     </>
   )

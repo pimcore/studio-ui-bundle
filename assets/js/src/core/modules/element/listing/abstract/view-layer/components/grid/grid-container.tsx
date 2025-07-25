@@ -81,8 +81,6 @@ export const GridContainer = (): React.JSX.Element => {
     return memoizedData
   }, [data, selectedColumns])
 
-  console.log({ gridColumnDefinition, gridData })
-
   return useMemo(() => (
     <Grid
       columns={ gridColumnDefinition }

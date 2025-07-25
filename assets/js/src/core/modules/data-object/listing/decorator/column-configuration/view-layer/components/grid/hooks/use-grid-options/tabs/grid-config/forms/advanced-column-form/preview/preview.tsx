@@ -2,11 +2,12 @@ import { Flex } from "@Pimcore/components/flex/flex";
 import { Text } from "@Pimcore/components/text/text";
 import { AdvancedColumnConfig, useDataObjectGetGridPreviewQuery } from "@Pimcore/modules/data-object/data-object-api-slice.gen";
 import { AvailableColumn } from "@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider";
-import React from "react";
+import React, { useMemo } from "react";
 import { PreviewValue } from "./preview-value";
 import { Box } from "@Pimcore/components/box/box";
 import { useData } from "@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data";
 import { PreviewLoader } from "./preview-loader";
+import { useDebounce } from "@Pimcore/utils/hooks/use-debounce";
 
 export interface PreviewProps {
   column: AvailableColumn
@@ -15,8 +16,9 @@ export interface PreviewProps {
 export const Preview = (props : PreviewProps): React.JSX.Element => {
   const { data: gridData } = useData();
   const hasFirstItem = gridData?.items.length > 0 && gridData?.items?.[0] !== undefined;
+  const bufferedColumn = useDebounce(props.column, 300);
 
-  return (
+  return useMemo(() => (
     <Box padding={{ top: 'small', bottom: 'none', x: 'small' }} >
       <Flex gap={'small'} align="center">
         <Text style={{ wordBreak: 'keep-all' }}>Preview:</Text>
@@ -28,5 +30,5 @@ export const Preview = (props : PreviewProps): React.JSX.Element => {
         )}
       </Flex>
     </Box>
-  )
+  ), [bufferedColumn]);
 }

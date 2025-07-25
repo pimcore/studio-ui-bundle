@@ -6,7 +6,7 @@ import React, { useEffect } from "react";
 import { AvailableColumn } from "@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider";
 import { isEqual } from "lodash";
 import { PipelineConfigProvider } from "@Pimcore/components/pipeline/provider/pipeline-config/pipeline-config-provider";
-import { Preview } from "./preview";
+import { Preview } from "./preview/preview";
 import { Tabs } from "@Pimcore/components/tabs/tabs";
 import { Box } from "@Pimcore/components/box/box";
 import { usePipelineLayoutContext } from "./pipeline-layout-provider";

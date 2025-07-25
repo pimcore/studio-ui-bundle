@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import { PreviewValue } from '@Pimcore/modules/data-object/listing/decorator/column-configuration/view-layer/components/grid/hooks/use-grid-options/tabs/grid-config/forms/advanced-column-form/preview-value';
+import { PreviewValue } from '@Pimcore/modules/data-object/listing/decorator/column-configuration/view-layer/components/grid/hooks/use-grid-options/tabs/grid-config/forms/advanced-column-form/preview/preview-value';
 
 export const DataObjectAdvancedCell = (props: DefaultCellProps): React.JSX.Element => {
   const { getValue } = props;

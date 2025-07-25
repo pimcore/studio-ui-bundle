@@ -5,6 +5,7 @@ import { AvailableColumn } from "@Pimcore/modules/element/listing/decorators/uti
 import { PreviewValue } from "./preview-value";
 import React from "react";
 import { Text } from "@Pimcore/components/text/text";
+import { usePreviewItem } from "./preview-item-provider";
 
 export interface PreviewProps {
   column: AvailableColumn
@@ -13,6 +14,7 @@ export interface PreviewProps {
 export const PreviewLoader = (props: PreviewProps): React.JSX.Element => {
   const { column } = props;
   const {data: gridData} = useData();
+  const { item } = usePreviewItem();
   const firstItem = gridData.items[0];
   const advancedColumnConfig = (column?.__meta?.advancedColumnConfig ?? column.config) as unknown as AdvancedColumnConfig[] | undefined;
 
@@ -23,11 +25,9 @@ export const PreviewLoader = (props: PreviewProps): React.JSX.Element => {
         key: column.key,
         config: advancedColumnConfig
       },
-      objectId: firstItem?.id // Assuming the first item has an id that can be used as objectId
+      objectId: item?.data?.id ?? firstItem?.id 
     }
   });
-
-  console.log({error})
 
   return (
     <>
