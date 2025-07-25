@@ -16,6 +16,7 @@ import { UserOutlined } from '@ant-design/icons'
 import { Button } from '@Pimcore/components/button/button'
 import { useStyle } from '@Pimcore/modules/user/management/detail/tabs/settings/components/user-avatar.styles'
 import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 interface IUserAvatar {
   user: any
@@ -72,7 +73,7 @@ const UserAvatar = ({ user, ...props }: IUserAvatar): React.JSX.Element => {
             />
             )}
 
-        <div>
+        <Flex gap={ 'small' }>
           <Upload
             customRequest={ async ({ file }) => {
               await uploadUserAvatar({ id: user?.id, file: file as File })
@@ -86,7 +87,19 @@ const UserAvatar = ({ user, ...props }: IUserAvatar): React.JSX.Element => {
           >
             <Button type={ 'default' }>{t('user-management.settings.upload-avatar')}</Button>
           </Upload>
-        </div>
+
+          {user?.hasImage === true
+            ? (
+              <IconButton
+                icon={ { value: 'trash' } }
+                onClick={ () => {
+                  console.log('todo delete user image')
+                } }
+                type={ 'default' }
+              />
+              )
+            : null}
+        </Flex>
       </Flex>
     </Card>
   )
