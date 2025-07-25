@@ -12,14 +12,23 @@ import { api as baseApi } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
   endpoints: {
-    userUploadImage: {
-      query: (queryArg) => {
-        const formData = new FormData()
-        formData.append('userImage', queryArg.body.userImage)
-        return {
-          url: `/pimcore-studio/api/user/upload-image/${queryArg.id}`,
-          method: 'POST',
-          body: formData
+    userUploadImage: (endpoint): void => {
+      const originalQuery = endpoint.query
+
+      if (originalQuery !== undefined) {
+        endpoint.query = (queryArg) => {
+          const baseResult = originalQuery(queryArg)
+          const formData = new FormData()
+          formData.append('userImage', queryArg.body.userImage)
+
+          if (baseResult === null || typeof baseResult !== 'object') {
+            return baseResult
+          }
+
+          return {
+            ...baseResult,
+            body: formData
+          }
         }
       }
     }
