@@ -67,7 +67,6 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
     }).filter(Boolean)
 
   const columnHelper = createColumnHelper<TranslationWithActions>()
-
   const [editResolveFunction, setEditResolveFunction] = useState<((value: string) => void) | null>(null)
 
   const handleEditCallback = async (rowData: TranslationRow, columnId: string): Promise<string> => {
