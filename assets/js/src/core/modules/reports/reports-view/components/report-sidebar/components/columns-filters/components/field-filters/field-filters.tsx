@@ -24,6 +24,8 @@ import { FIELD_TYPE_MAP, FRONTEND_TO_ORIGINAL_TYPE } from '@Pimcore/modules/repo
 import { useColumnsFiltersContext } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/context/columns-filters-context'
 import { useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
 
+const EQUAL_OPERATOR = 'eq'
+
 export const FieldFilters = (): React.JSX.Element => {
   const { t } = useTranslation()
 
@@ -64,7 +66,7 @@ export const FieldFilters = (): React.JSX.Element => {
       .map(item => ({
         property: item.name!,
         type: FRONTEND_TO_ORIGINAL_TYPE[item.frontendType!],
-        operator: 'eq',
+        operator: EQUAL_OPERATOR,
         value: String(item.data)
       }))
 
