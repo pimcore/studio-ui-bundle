@@ -48,7 +48,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   }
 
   const getUserName = (): string => {
-    if (user.firstname && user.lastname) {
+    if (user.firstname !== undefined && user.lastname !== undefined) {
       return `${user.firstname} ${user.lastname}`
     }
 
