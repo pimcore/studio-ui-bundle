@@ -77,6 +77,12 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
     }, 300),
     [changeUserInState]
   )
+
+  const formatLastLogin = (timestamp: number): string => {
+    const date = new Date(timestamp * 1000)
+    return date.toLocaleString()
+  }
+
   if (isLoading) {
     return <Content loading></Content>
   }
@@ -113,7 +119,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
 
                     { openedUser?.lastLogin !== undefined && openedUser?.lastLogin !== null
                       ? (
-                        <Text disabled>{ t('user-management.last-login') }: { openedUser.lastLogin }</Text>
+                        <Text disabled>{ t('user-management.last-login') }: { formatLastLogin(openedUser.lastLogin as number) }</Text>
                         )
                       : null}
                   </Flex>
