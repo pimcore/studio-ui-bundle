@@ -858,14 +858,16 @@ user-menu.notification.modal.add-an-attachment: Add an attachment
 user-menu.notification.modal.form.validation.provide-recipient: Please provide a recipient
 user-menu.notification.modal.form.validation.provide-title: Please provide a title
 user-menu.notification.modal.form.validation.provide-message: Please provide a message
-reports.report-name: Name of the report
+reports.reports-title: Reports
 reports.select-report-name: Select the name of the report
 reports.select-report: Select report
+reports.export: Export
 reports.csv-export: CSV Export
 reports.csv-export-with-headers: CSV Export with headers
 reports.grid-config.title-columns: Columns
 reports.grid-config.restore-to-default: Restore to default
 reports.grid-config.add-column: Add a column
+reports.field-filters: Field Filters
 loading: Loading...
 please-wait: Please wait...
 navigation.email: Email

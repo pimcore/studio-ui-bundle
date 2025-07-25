@@ -40,6 +40,10 @@ export const useStyles = createStyles(({ css, token }) => {
 
     dropdownLabel: css`
       color: ${token.colorPrimary};
+    `,
+
+    btnLink: css`
+      padding: 0;
     `
   }
 })
