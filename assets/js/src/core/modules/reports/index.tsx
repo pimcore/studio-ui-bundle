@@ -9,7 +9,7 @@
  */
 
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
-import { ReportsView } from '@Pimcore/modules/reports/reports-view/reports-view'
+import { ReportsViewWrapper } from '@Pimcore/modules/reports/reports-view/reports-view-wrapper'
 import { CustomReportsView } from '@Pimcore/modules/reports/custom-reports-view/custom-reports-view'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
@@ -25,8 +25,7 @@ moduleSystem.registerModule({
       path: 'Marketing/Reports',
       label: 'navigation.reports',
       className: 'item-style-modifier',
-      // TODO: Update once this task is completed: https://github.com/pimcore/studio-backend-bundle/issues/1211
-      perspectivePermission: NavPermission.CustomReports,
+      perspectivePermission: NavPermission.Reports,
       widgetConfig: {
         name: 'Reports',
         id: 'reports',
@@ -44,8 +43,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'Marketing/Custom Reports',
       label: 'navigation.custom-reports',
-      // TODO: Update once this task is completed: https://github.com/pimcore/studio-backend-bundle/issues/1211
-      perspectivePermission: NavPermission.CustomReports,
+      perspectivePermission: NavPermission.Reports,
       widgetConfig: {
         name: 'Custom Reports',
         id: 'custom-reports',
@@ -64,7 +62,7 @@ moduleSystem.registerModule({
 
     widgetRegistryService.registerWidget({
       name: 'reports',
-      component: ReportsView
+      component: ReportsViewWrapper
     })
 
     widgetRegistryService.registerWidget({

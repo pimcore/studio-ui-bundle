@@ -12,6 +12,7 @@ export enum NavPermission {
   ToolsHidden = 'extras.hidden',
   NotesAndEvents = 'extras.notesEvents',
   Mails = 'extras.emails',
+  ApplicationLogger = 'extras.applicationlog',
 
   FileHidden = 'file.hidden',
   OpenDocument = 'file.open_document',
@@ -26,8 +27,7 @@ export enum NavPermission {
   UsersHidden = 'settings.users_hidden',
   Users = 'settings.users_users',
   Roles = 'settings.users_roles',
-  // TODO: Update once this task is completed: https://github.com/pimcore/studio-backend-bundle/issues/1211
-  CustomReports = 'settings.customReports',
 
   MarketingHidden = 'marketing.hidden',
+  Reports = 'marketing.reports',
 }
