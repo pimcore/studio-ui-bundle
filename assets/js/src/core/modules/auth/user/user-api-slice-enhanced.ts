@@ -17,7 +17,7 @@ const enhancedUserApi = userApi.enhanceEndpoints({
     userGetCurrentInformation: {
       providesTags: (result, error, args) => providingTags.CURRENT_USER_INFORMATION()
     },
-    userGetImage: (endpoint) => {
+    userGetImage: (endpoint): void => {
       const originalQuery = endpoint.query
 
       if (originalQuery !== undefined) {
@@ -30,9 +30,11 @@ const enhancedUserApi = userApi.enhanceEndpoints({
 
           return {
             ...baseResult,
-            responseHandler: async (response) => {
+            responseHandler: async (response): Promise<{ data: string }> => {
               const data = await response.blob()
-              return data
+              return {
+                data: URL.createObjectURL(data)
+              }
             }
           }
         }

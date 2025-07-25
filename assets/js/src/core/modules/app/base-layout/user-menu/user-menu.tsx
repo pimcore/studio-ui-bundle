@@ -24,8 +24,8 @@ import { useStyle } from './user-menu.styles'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { USERPROFILE } from '@Pimcore/modules/auth/profile/profile-container'
 import { useUserDraft } from '@Pimcore/modules/auth/hooks/use-user-draft'
-import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
 import { Avatar } from 'antd'
+import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
 
 interface IUserMenuProps {
   className?: string
@@ -39,16 +39,12 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   const { user } = useUserDraft()
   const { getUserImageById } = useUserHelper()
 
-  const [userImageUrl, setUserImageUrl] = useState<string | null>(null)
+  const [userImageUrl, setUserImageUrl] = useState<string | undefined>(undefined)
   useEffect(() => {
-    let objectUrl: string | null = null
-    getUserImageById(user.id).then((response) => {
-      if (response !== undefined) {
-        objectUrl = URL.createObjectURL(response)
-        setUserImageUrl(objectUrl)
-      }
-    }).catch((error) => {
-      console.log('Error fetching user image:', error)
+    getUserImageById(user.id).then((imageUrl) => {
+      setUserImageUrl(imageUrl)
+    }).catch((error: Error) => {
+      console.error('Error fetching user image:', error)
     })
   }, [])
 

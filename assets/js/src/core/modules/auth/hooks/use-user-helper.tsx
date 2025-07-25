@@ -11,7 +11,7 @@
 import { useAppDispatch } from '@sdk/app'
 import {
   api,
-  type Error, type UserGetImageApiResponse, type UserUpdateProfileApiResponse
+  type Error, type UserUpdateProfileApiResponse
 } from '@Pimcore/modules/auth/user/user-api-slice-enhanced'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
@@ -20,7 +20,7 @@ import { type KeyBindingForAUser } from '@Pimcore/modules/auth/user/user-api-sli
 
 interface UseUserReturn {
   updateUserProfile: (user) => Promise<{ data: UserUpdateProfileApiResponse, error: any }>
-  getUserImageById: (id: number) => Promise<UserGetImageApiResponse | undefined>
+  getUserImageById: (id: number) => Promise<string | undefined>
 }
 
 export const useUserHelper = (): UseUserReturn => {
@@ -78,9 +78,13 @@ export const useUserHelper = (): UseUserReturn => {
     return data
   }
 
-  async function getUserImageById (id: number): Promise<UserGetImageApiResponse | undefined> {
+  async function getUserImageById (id: number): Promise<string | undefined> {
     const { data } = await dispatch(api.endpoints.userGetImage.initiate({ id }))
-    return data
+    if (data !== undefined) {
+      // @ts-expect-error is needed because the api returns a blob but in redux we want a JSON
+      return data.data
+    }
+    return undefined
   }
 
   return {
