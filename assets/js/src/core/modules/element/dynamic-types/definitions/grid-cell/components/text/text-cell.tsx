@@ -13,7 +13,7 @@ import { useStyle } from './text-cell.styles'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { IconButton, Input } from '@sdk/components'
-import { InputRef } from 'antd'
+import { type InputRef } from 'antd'
 
 export interface TextCellProps extends DefaultCellProps {}
 
@@ -23,8 +23,7 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
   const element = useRef<InputRef>(null)
   const callback = Boolean(props.column.columnDef.meta?.callback ?? false)
   const editCallback = (props.column.columnDef.meta as any)?.editCallback
-    
-  
+
   useEffect(() => {
     if (isInEditMode) {
       element.current?.focus()
@@ -64,7 +63,7 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
           console.error('Edit callback failed:', error)
         }
       } else {
-        console.log("No edit callback available")
+        console.log('No edit callback available')
       }
     }
 
@@ -74,14 +73,16 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
         onBlur={ onBlur }
         onKeyDown={ onKeyDown }
         ref={ element }
+        suffix={ callback
+          ? (
+            <IconButton
+              icon={ { value: 'edit' } }
+              onClick={ async () => { await openEditMode() } }
+              onMouseDown={ (e) => { e.preventDefault() } }
+            />
+            )
+          : null }
         type="text"
-        suffix={callback ? (
-          <IconButton 
-            onClick={() => openEditMode()} 
-            onMouseDown={(e) => e.preventDefault()}
-            icon={{ value: 'edit' }} 
-          />
-        ) : null}
       />
     )
   }

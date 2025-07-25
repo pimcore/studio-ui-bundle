@@ -37,7 +37,7 @@ interface TableProps {
 
 export const Table = ({ translationRows, setTranslationRows, visibleLocales }: TableProps): React.JSX.Element => {
   const { t } = useI18n()
-  const { updateTranslationByKey } = useTranslation()
+  const { updateTranslationByKey, domain } = useTranslation()
   const [modifiedCells, setModifiedCells] = useState<ModifiedCells>([])
 
   const [editModalOpen, setEditModalOpen] = useState(false)
@@ -71,7 +71,7 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
   const [editResolveFunction, setEditResolveFunction] = useState<((value: string) => void) | null>(null)
 
   const handleEditCallback = async (rowData: TranslationRow, columnId: string): Promise<string> => {
-    return new Promise((resolve) => {
+    return await new Promise((resolve) => {
       setEditingTranslation(rowData)
       setEditingLocale(columnId.replace('_', ''))
       setEditResolveFunction(() => resolve)
@@ -153,7 +153,7 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
 
     setModifiedCells([{ columnId, rowIndex: rowId }])
 
-    const { success } = await updateTranslationByKey(columnId, updatedRow)
+    const { success } = await updateTranslationByKey(columnId, updatedRow, domain)
 
     if (success) setModifiedCells([])
     else {

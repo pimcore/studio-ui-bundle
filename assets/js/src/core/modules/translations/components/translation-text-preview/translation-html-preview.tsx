@@ -19,26 +19,26 @@ interface TranslationHtmlEditorProps {
   onChange?: (value: string) => void
 }
 
-export const TranslationHtmlPreview = ({ 
-  value = '', 
+export const TranslationHtmlPreview = ({
+  value = '',
   onChange
 }: TranslationHtmlEditorProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   return (
     <Content
-      none={false} 
+      none={ false }
     >
       <ReactCodeMirror
-        basicSetup={{
+        basicSetup={ {
           lineNumbers: true,
           syntaxHighlighting: true,
           searchKeymap: true
-        }}
-        className={styles.codeEditor}
-        extensions={getLanguageExtensions('html')}
-        onChange={onChange}
-        value={value}
+        } }
+        className={ styles.codeEditor }
+        extensions={ getLanguageExtensions('html') }
+        onChange={ onChange }
+        value={ value }
       />
     </Content>
   )

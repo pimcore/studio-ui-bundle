@@ -12,34 +12,35 @@ import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type TranslationCreate, type TranslationData, useTranslationCreateMutation, useTranslationDeleteByKeyMutation, useTranslationUpdateMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { type TranslationRow, type TranslationDataItem } from '../helpers/translation-helpers'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { type Dispatch, type SetStateAction, useState } from 'react'
 
 interface UseTranslationReturn {
   createNewTranslation: (key: string) => Promise<{ success: boolean, data?: TranslationDataItem }>
   createLoading: boolean
   deleteTranslationByKey: (key: string) => Promise<{ success: boolean }>
   deleteLoading: boolean
-  updateTranslationByKey: (columnId: string, row: TranslationRow) => Promise<{ success: boolean }>
+  updateTranslationByKey: (columnId: string, row: TranslationRow, domain: string) => Promise<{ success: boolean }>
   updateLoading: boolean
+  domain: string
+  setDomain: Dispatch<SetStateAction<string>>
 }
 
 export const useTranslation = (): UseTranslationReturn => {
   const settings = useSettings()
+  const [domain, setDomain] = useState('messages')
   const [createTranslation, { isLoading: createLoading }] = useTranslationCreateMutation()
   const [deleteTranslation, { isLoading: deleteLoading }] = useTranslationDeleteByKeyMutation()
   const [updateTranslation, { isLoading: updateLoading }] = useTranslationUpdateMutation()
 
   const createNewTranslation = async (key: string): Promise<{ success: boolean, data?: TranslationDataItem }> => {
     try {
-      const translationData: TranslationCreate = { translationData: [{ key, type: 'simple' }] }
+      const translationData: TranslationCreate = { translationData: [{ key, type: 'simple', domain }] }
       const result = await createTranslation({ createTranslation: translationData })
 
       if ('data' in result) {
-        // Since the API returns void, we construct the TranslationDataItem object from what we sent
-        // This matches the new expected backend format with dynamic locale fields
         const createdTranslation: TranslationDataItem = {
           key: translationData.translationData[0].key,
           type: translationData.translationData[0].type,
-          // Add default empty values for all valid languages from settings
           ...settings.validLanguages.reduce((acc, lang) => {
             acc[`_${lang}`] = ''
             return acc
@@ -55,7 +56,7 @@ export const useTranslation = (): UseTranslationReturn => {
 
   const deleteTranslationByKey = async (key: string): Promise<{ success: boolean }> => {
     try {
-      const result = await deleteTranslation({ key })
+      const result = await deleteTranslation({ key, domain })
       return { success: 'data' in result }
     } catch (e) {
       trackError(new GeneralError('Was not able to delete Translation'))
@@ -63,27 +64,24 @@ export const useTranslation = (): UseTranslationReturn => {
     }
   }
 
-  // Helper function to convert TranslationRow to API format for updates
-  const toApiTranslation = (row: TranslationRow, locale: string): TranslationData => {
+  const toApiTranslation = (row: TranslationRow, locale: string, domain: string): TranslationData => {
     const localeKey = `_${locale}`
     return {
       key: row.key,
       translation: (row[localeKey] ?? '') as string,
-      type: row.type
+      type: row.type,
+      domain
     }
   }
 
   const updateTranslationByKey = async (columnId: string, row: TranslationRow): Promise<{ success: boolean }> => {
     try {
-      // columnId is the field that was edited (e.g., "_en", "_de", "_fr")
-      // We only update the specific locale that was changed
       if (!columnId.startsWith('_')) {
-        // If it's not a locale field (e.g., "key" or "type"), we don't need to call the translation API
         return { success: true }
       }
 
-      const locale = columnId.substring(1) // Remove the underscore prefix to get locale (e.g., "en", "de", "fr")
-      const translationData = [toApiTranslation(row, locale)]
+      const locale = columnId.substring(1)
+      const translationData = [toApiTranslation(row, locale, domain)]
 
       const result = await updateTranslation({
         updateTranslation: {
@@ -105,6 +103,8 @@ export const useTranslation = (): UseTranslationReturn => {
     deleteTranslationByKey,
     deleteLoading,
     updateTranslationByKey,
-    updateLoading
+    updateLoading,
+    domain,
+    setDomain
   }
 }

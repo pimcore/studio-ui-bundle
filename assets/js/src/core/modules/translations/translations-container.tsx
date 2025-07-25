@@ -31,7 +31,6 @@ import {
 import { isUndefined } from 'lodash'
 import { useAppDispatch } from '@sdk/app'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-// import { EditModal } from './edit-modal/edit-modal'
 
 interface FormValues {
   translationKey: string
@@ -43,10 +42,9 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
     type: 'error'
   })
-  const { createNewTranslation, createLoading } = useTranslation()
+  const { createNewTranslation, createLoading, domain, setDomain } = useTranslation()
   const settings = useSettings()
 
-  const [selectedDomain, setSelectedDomain] = useState<string>('messages')
   const [visibleLocales, setVisibleLocales] = useState<string[] | null>(null)
   const [translationRows, setTranslationRows] = useState<TranslationRow[]>([])
   const [searchTerm, setSearchTerm] = useState<string>('')
@@ -57,20 +55,25 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const availableDomains = domainsData?.domains ?? []
 
   const queryArgs = useMemo(() => ({
-    domain: selectedDomain,
+    domain,
     body: {
       filters: {
         page: currentPage,
         pageSize,
-        columnFilters: [],
+        columnFilters:
+          searchTerm
+            ? [{
+                type: 'search',
+                filterValue: searchTerm
+              }]
+            : [],
         sortFilter: {
           key: 'de',
           direction: 'ASC'
-        },
-        filter: searchTerm
+        }
       }
     }
-  }), [selectedDomain, currentPage, pageSize])
+  }), [domain, currentPage, pageSize, searchTerm])
 
   const {
     data,
@@ -82,10 +85,10 @@ export const TranslationsContainer = (): React.JSX.Element => {
   })
 
   useEffect(() => {
-    if (availableDomains.length > 0 && !availableDomains.includes(selectedDomain)) {
-      setSelectedDomain(availableDomains[0])
+    if (availableDomains.length > 0 && !availableDomains.includes(domain)) {
+      setDomain(availableDomains[0])
     }
-  }, [availableDomains, selectedDomain])
+  }, [availableDomains, domain])
 
   useEffect(() => {
     if (data !== undefined) {
@@ -208,7 +211,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
             <Select
               loading={ domainsLoading }
               onChange={ (value: string) => {
-                setSelectedDomain(value)
+                setDomain(value)
                 setCurrentPage(1)
               } }
               options={ availableDomains.map(domain => ({
@@ -217,7 +220,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
               })) }
               placeholder={ t('translations.select-domain') }
               style={ { minWidth: 120 } }
-              value={ selectedDomain }
+              value={ domain }
             />
           </Flex>
           <Flex gap="small">
@@ -282,7 +285,6 @@ export const TranslationsContainer = (): React.JSX.Element => {
             visibleLocales={ visibleLocales ?? availableLocales }
           />
           {errorModals}
-          {/* <EditModal translationRow={} locale={} open={} setOpen={}/> */}
         </Box>
       </Content>
     </ContentLayout>

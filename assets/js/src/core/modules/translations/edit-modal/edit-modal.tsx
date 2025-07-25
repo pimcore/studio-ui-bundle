@@ -34,7 +34,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
   const { t } = useTranslation()
   const [form] = Form.useForm<EditFormValues>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { updateTranslationByKey } = useTranslationHook()
+  const { updateTranslationByKey, domain } = useTranslationHook()
 
   const currentValue = translationRow?.[`_${locale}`] ?? ''
 
@@ -58,7 +58,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
         ...translationRow,
         [`_${locale}`]: values.translation
       }
-      await updateTranslationByKey(`_${locale}`, updatedRow)
+      await updateTranslationByKey(`_${locale}`, updatedRow, domain)
     }
 
     props.setOpen(false)
@@ -73,7 +73,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
       children: (
         <Form.Item name="translation">
           <TextArea
-            rows={3}
+            rows={ 3 }
           />
         </Form.Item>
       )

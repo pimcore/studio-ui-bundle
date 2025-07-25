@@ -322,7 +322,7 @@ translations.type-options.custom: ICU Format
 translations.type-options.simple: Simple Text
 translations.edit-modal.tab.plain-text: Plain Text
 translations.edit-modal.tab.html: HTML
-translations.edit-modal.save: 
+translations.edit-modal.save: Save
 translations.edit-modal.title: Edit translation
 properties.columns.type: Type
 properties.columns.key: Key
@@ -734,6 +734,7 @@ navigation.reports: Reports
 navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
 navigation.customise: Customise
+navigation.translations: Translations
 navigation.tag-configuration: Tag Configuration
 navigation.predefined-properties: Predefined Properties
 navigation.user-and-roles: User & Roles
