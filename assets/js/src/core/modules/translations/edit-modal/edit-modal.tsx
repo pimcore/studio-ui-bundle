@@ -35,7 +35,6 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
   const [form] = Form.useForm<EditFormValues>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { updateTranslationByKey, domain } = useTranslationHook()
-
   const currentValue = translationRow?.[`_${locale}`] ?? ''
 
   useEffect(() => {
