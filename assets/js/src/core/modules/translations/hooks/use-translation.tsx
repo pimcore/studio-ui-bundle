@@ -12,7 +12,7 @@ import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type TranslationCreate, type TranslationData, useTranslationCreateMutation, useTranslationDeleteByKeyMutation, useTranslationUpdateMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { type TranslationRow, type TranslationDataItem } from '../helpers/translation-helpers'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
-import { type Dispatch, type SetStateAction, useState } from 'react'
+import { useTranslationDomain } from './translation-domain-provider'
 
 interface UseTranslationReturn {
   createNewTranslation: (key: string) => Promise<{ success: boolean, data?: TranslationDataItem }>
@@ -21,13 +21,11 @@ interface UseTranslationReturn {
   deleteLoading: boolean
   updateTranslationByKey: (columnId: string, row: TranslationRow, domain: string) => Promise<{ success: boolean }>
   updateLoading: boolean
-  domain: string
-  setDomain: Dispatch<SetStateAction<string>>
 }
 
 export const useTranslation = (): UseTranslationReturn => {
   const settings = useSettings()
-  const [domain, setDomain] = useState('messages')
+  const { domain } = useTranslationDomain()
   const [createTranslation, { isLoading: createLoading }] = useTranslationCreateMutation()
   const [deleteTranslation, { isLoading: deleteLoading }] = useTranslationDeleteByKeyMutation()
   const [updateTranslation, { isLoading: updateLoading }] = useTranslationUpdateMutation()
@@ -103,8 +101,6 @@ export const useTranslation = (): UseTranslationReturn => {
     deleteTranslationByKey,
     deleteLoading,
     updateTranslationByKey,
-    updateLoading,
-    domain,
-    setDomain
+    updateLoading
   }
 }

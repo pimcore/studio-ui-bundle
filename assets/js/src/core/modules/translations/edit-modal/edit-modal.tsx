@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { useTranslation as useTranslationHook } from '../hooks/use-translation'
 import type { TranslationRow } from '../helpers/translation-helpers'
 import { TranslationHtmlPreview } from '../components/translation-text-preview/translation-html-preview'
+import { useTranslationDomain } from '../hooks/translation-domain-provider'
 
 interface EditModalProps {
   translationRow: TranslationRow | null
@@ -34,7 +35,8 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
   const { t } = useTranslation()
   const [form] = Form.useForm<EditFormValues>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { updateTranslationByKey, domain } = useTranslationHook()
+  const { updateTranslationByKey } = useTranslationHook()
+  const { domain } = useTranslationDomain()
   const currentValue = translationRow?.[`_${locale}`] ?? ''
 
   useEffect(() => {

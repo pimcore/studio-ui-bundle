@@ -21,6 +21,7 @@ import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { EditModal } from '../edit-modal/edit-modal'
 import { isUndefined } from 'lodash'
 import { GeneralError, trackError } from '@sdk/modules/app'
+import { useTranslationDomain } from '../hooks/translation-domain-provider'
 
 interface Language {
   language: string
@@ -37,7 +38,8 @@ interface TableProps {
 
 export const Table = ({ translationRows, setTranslationRows, visibleLocales }: TableProps): React.JSX.Element => {
   const { t } = useI18n()
-  const { updateTranslationByKey, domain } = useTranslation()
+  const { updateTranslationByKey } = useTranslation()
+  const { domain } = useTranslationDomain()
   const [modifiedCells, setModifiedCells] = useState<ModifiedCells>([])
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [editingTranslation, setEditingTranslation] = useState<TranslationRow | null>(null)
