@@ -137,6 +137,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                         form.setFieldValue('password', newPassword); changeUserInState({ password: newPassword })
                       } }
                       title={ t('user-management.generate-password') }
+                      variant={ 'minimal' }
                                     /> }
                     />
                   </Form.Item>
