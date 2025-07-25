@@ -44,13 +44,11 @@ export const TranslationsContainer = (): React.JSX.Element => {
   })
   const { createNewTranslation, createLoading, domain, setDomain } = useTranslation()
   const settings = useSettings()
-
   const [visibleLocales, setVisibleLocales] = useState<string[] | null>(null)
   const [translationRows, setTranslationRows] = useState<TranslationRow[]>([])
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
-
   const { data: domainsData, isLoading: domainsLoading, error: domainError } = useTranslationGetDomainsQuery()
   const availableDomains = domainsData?.domains ?? []
 

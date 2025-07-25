@@ -24,7 +24,6 @@ interface ActionsCellProps {
 export const ActionsCell = ({ info, setTranslationRows }: ActionsCellProps): React.JSX.Element => {
   const key = info.row.original.key
   const { deleteTranslationByKey, deleteLoading } = useTranslation()
-
   const handleDelete = async (): Promise<void> => {
     const { success } = await deleteTranslationByKey(key)
     if (success) {

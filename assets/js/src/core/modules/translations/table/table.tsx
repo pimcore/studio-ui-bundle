@@ -39,11 +39,9 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
   const { t } = useI18n()
   const { updateTranslationByKey, domain } = useTranslation()
   const [modifiedCells, setModifiedCells] = useState<ModifiedCells>([])
-
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [editingTranslation, setEditingTranslation] = useState<TranslationRow | null>(null)
   const [editingLocale, setEditingLocale] = useState<string>('')
-
   const settings = useSettings()
 
   const availableLanguages = settings?.availableAdminLanguages ?? []
@@ -61,7 +59,6 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
     }).filter(Boolean)
 
   const columnHelper = createColumnHelper<TranslationWithActions>()
-
   const [editResolveFunction, setEditResolveFunction] = useState<((value: string) => void) | null>(null)
 
   const handleEditCallback = async (rowData: TranslationRow, columnId: string): Promise<string> => {
