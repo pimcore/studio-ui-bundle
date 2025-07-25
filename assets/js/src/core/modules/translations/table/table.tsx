@@ -39,7 +39,6 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
   const { t } = useI18n()
   const { updateTranslationByKey, domain } = useTranslation()
   const [modifiedCells, setModifiedCells] = useState<ModifiedCells>([])
-
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [editingTranslation, setEditingTranslation] = useState<TranslationRow | null>(null)
   const [editingLocale, setEditingLocale] = useState<string>('')
