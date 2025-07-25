@@ -13,7 +13,7 @@ import { Form } from '../form'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { type KeyedListData, KeyedListProvider } from './provider/keyed-list/keyed-list-provider'
 import { KeyedListIterator } from './iterator/keyed-list-iterator'
-import { cloneDeep, isArray, isEqual, isObject, get, isUndefined, setWith } from 'lodash'
+import { cloneDeep, isArray, isEqual, isObject, get, isUndefined, setWith, isEmpty } from 'lodash'
 import { useItem } from '../item/provider/item/use-item'
 
 export interface KeyedListProps {
@@ -30,35 +30,33 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   const { name: tempItemName } = useItem()
   const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
   const name = useMemo(() => itemName[itemName.length - 1], [itemName])
-  const timer = useRef<NodeJS.Timeout | null>(null);
+  const timer = useRef<NodeJS.Timeout | null>(null)
 
   const onChange: KeyedListData['onChange'] = (newValue) => {
-    if (timer.current) {
-      clearTimeout(timer.current);
+    if (!isEmpty(timer.current)) {
+      clearTimeout(timer.current)
     }
-    
-    if (baseOnChange) {
-      setValue(() => newValue);
-      baseOnChange(newValue);
+
+    if (baseOnChange !== undefined) {
+      setValue(() => newValue)
+      baseOnChange(newValue)
     }
   }
 
   useEffect(() => {
-    if (timer.current) {
-      clearTimeout(timer.current);
+    if (!isEmpty(timer.current)) {
+      clearTimeout(timer.current)
     }
 
-    if (!isEqual(value, initialValue)) { 
+    if (!isEqual(value, initialValue)) {
       timer.current = setTimeout(() => {
-        if (!isEqual(value, initialValue)) {
-          setValue(() => initialValue)
-        }
-      }, 100);
+        setValue(() => initialValue)
+      }, 100)
     }
   }, [baseValue])
 
-  const triggerChange = (value: any): void => {
-    if (!isEqual(value, initialValue)) {
+  const triggerChange = (value: KeyedListProps['value']): void => {
+    if (!isEqual(value, initialValue) && !isEmpty(value)) {
       onChange(value)
     }
   }

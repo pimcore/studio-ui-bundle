@@ -38,7 +38,7 @@ export interface KeyedListProviderProps {
 
 export const KeyedListProvider = ({ children, ...props }: KeyedListProviderProps): React.JSX.Element => {
   return useMemo(() => (
-    <NumberedListContext.Provider value={undefined}>
+    <NumberedListContext.Provider value={ undefined }>
       <KeyedListContext.Provider value={ { ...props } }>
         {children}
       </KeyedListContext.Provider>

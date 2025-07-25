@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { AdvancedColumnConfig, type DataObjectGetGridApiArg } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { type AdvancedColumnConfig, type DataObjectGetGridApiArg } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { type SettingsProviderProps } from '@Pimcore/modules/element/listing/abstract/settings/settings-provider'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
@@ -25,9 +25,9 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
   const { dataLoadingState, setDataLoadingState } = useData()
 
   const columnsArg: DataObjectGetGridApiArg['body']['columns'] = []
-  
+
   selectedColumns.forEach(column => {
-    let advancedColumnConfig: AdvancedColumnConfig | undefined = undefined
+    let advancedColumnConfig: AdvancedColumnConfig | undefined
 
     if (column.type === 'dataobject.advanced') {
       advancedColumnConfig = column.originalApiDefinition?.__meta?.advancedColumnConfig as unknown as AdvancedColumnConfig
@@ -38,7 +38,7 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
       type: column.type,
       locale: column.locale,
       group: column.group,
-      config: advancedColumnConfig ?? column.config,
+      config: advancedColumnConfig ?? column.config
     })
   })
 

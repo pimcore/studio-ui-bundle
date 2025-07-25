@@ -164,16 +164,16 @@ import { type DynamicTypeDocumentEditableLink } from './definitions/document/edi
 import { type DynamicTypeDocumentEditableWysiwyg } from './definitions/document/editable/types/dynamic-type-document-editable-wysiwyg'
 import { type DynamicTypeFieldFilterCheckbox } from './definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
 import { type DynamicTypeDocumentEditableTextarea } from './definitions/document/editable/types/dynamic-type-document-editable-textarea'
-import { DynamicTypePipelineRegistry } from './definitions/pipelines/dynamic-type-pipeline-registry'
-import { DynamicTypePipelineGridSourceFieldsText } from './definitions/pipelines/grid/source-fields/types/text/text'
-import { DynamicTypePipelineGridTransformersChangeCase } from './definitions/pipelines/grid/transformers/types/change-case/change-case'
-import { DynamicTypePipelineGridTransformersCombine } from './definitions/pipelines/grid/transformers/types/combine/combine'
-import { DynamicTypePipelineGridSourceFieldsSimpleField } from './definitions/pipelines/grid/source-fields/types/simple-field/simple-field'
-import { DynamicTypePipelineGridSourceFieldsRelationField } from './definitions/pipelines/grid/source-fields/types/relation-field/relation-field'
+import { type DynamicTypePipelineRegistry } from './definitions/pipelines/dynamic-type-pipeline-registry'
+import { type DynamicTypePipelineGridSourceFieldsText } from './definitions/pipelines/grid/source-fields/types/text/text'
+import { type DynamicTypePipelineGridTransformersChangeCase } from './definitions/pipelines/grid/transformers/types/change-case/change-case'
+import { type DynamicTypePipelineGridTransformersCombine } from './definitions/pipelines/grid/transformers/types/combine/combine'
+import { type DynamicTypePipelineGridSourceFieldsSimpleField } from './definitions/pipelines/grid/source-fields/types/simple-field/simple-field'
+import { type DynamicTypePipelineGridSourceFieldsRelationField } from './definitions/pipelines/grid/source-fields/types/relation-field/relation-field'
 import { type DynamicTypeDocumentEditableMultiSelect } from './definitions/document/editable/types/dynamic-type-document-editable-multiselect'
 import { type DynamicTypeDocumentEditableSelect } from './definitions/document/editable/types/dynamic-type-document-editable-select'
 import { type DynamicTypeDocumentEditableTable } from './definitions/document/editable/types/dynamic-type-document-editable-table'
-import { DynamicTypeGridCellDataObjectAdvanced } from './definitions/grid-cell/types/data-object-advanced/dynamic-type-grid-cell-data-object-advanced'
+import { type DynamicTypeGridCellDataObjectAdvanced } from './definitions/grid-cell/types/data-object-advanced/dynamic-type-grid-cell-data-object-advanced'
 
 moduleSystem.registerModule({
   onInit () {
@@ -353,14 +353,14 @@ moduleSystem.registerModule({
     objectRegistry.registerDynamicType(container.get<DynamicTypeObjectObject>(serviceIds['DynamicTypes/Object/Object']))
     objectRegistry.registerDynamicType(container.get<DynamicTypeObjectVariant>(serviceIds['DynamicTypes/Object/Variant']))
 
-    const sourceFieldsRegistry = container.get<DynamicTypePipelineRegistry>(serviceIds['DynamicTypes/Grid/SourceFieldsRegistry']);
-    
+    const sourceFieldsRegistry = container.get<DynamicTypePipelineRegistry>(serviceIds['DynamicTypes/Grid/SourceFieldsRegistry'])
+
     sourceFieldsRegistry.registerDynamicType(container.get<DynamicTypePipelineGridSourceFieldsText>(serviceIds['DynamicTypes/Grid/SourceFields/Text']))
     sourceFieldsRegistry.registerDynamicType(container.get<DynamicTypePipelineGridSourceFieldsSimpleField>(serviceIds['DynamicTypes/Grid/SourceFields/SimpleField']))
     sourceFieldsRegistry.registerDynamicType(container.get<DynamicTypePipelineGridSourceFieldsRelationField>(serviceIds['DynamicTypes/Grid/SourceFields/RelationField']))
 
-    const transformersRegistry = container.get<DynamicTypePipelineRegistry>(serviceIds['DynamicTypes/Grid/TransformersRegistry']);
-    
+    const transformersRegistry = container.get<DynamicTypePipelineRegistry>(serviceIds['DynamicTypes/Grid/TransformersRegistry'])
+
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersChangeCase>(serviceIds['DynamicTypes/Grid/Transformers/ChangeCase']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersCombine>(serviceIds['DynamicTypes/Grid/Transformers/Combine']))
   }

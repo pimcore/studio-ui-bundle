@@ -9,8 +9,8 @@
  */
 
 import { injectable } from 'inversify'
-import { DynamicTypePipelineAbstract } from './dynamic-type-pipeline-abstract';
-import { DynamicTypeRegistryAbstract } from '../../registry/dynamic-type-registry-abstract';
+import { type DynamicTypePipelineAbstract } from './dynamic-type-pipeline-abstract'
+import { DynamicTypeRegistryAbstract } from '../../registry/dynamic-type-registry-abstract'
 
 @injectable()
 export class DynamicTypePipelineRegistry extends DynamicTypeRegistryAbstract<DynamicTypePipelineAbstract> {}

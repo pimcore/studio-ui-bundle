@@ -31,6 +31,6 @@ const NumberedFormItem = ({ Component, componentProps }: NumberedFormItemProps):
   )
 }
 
-const memoedNumberedFormItem = React.memo(NumberedFormItem);
+const memoedNumberedFormItem = React.memo(NumberedFormItem)
 
 export { memoedNumberedFormItem as NumberedFormItem }

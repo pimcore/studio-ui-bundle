@@ -41,7 +41,7 @@ export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: 
       : value?.target?.value ?? value
 
     operations.update(name, changedValue, false)
-  }, [getValueFromEvent, name, operations]);
+  }, [getValueFromEvent, name, operations])
 
   if (!isValidElement(Child)) {
     throw new Error('KeyedFormItemControl only accepts a single child')

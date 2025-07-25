@@ -10,10 +10,10 @@
 
 import { type NamePath } from 'antd/es/form/interface'
 import { Form } from '../form'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { type NumberedListData, NumberedListProvider } from './provider/numbered-list/numbered-list-provider'
 import { NumberedListIterator } from './iterator/numbered-list-iterator'
-import { cloneDeep, isEqual, set, get, isArray } from 'lodash'
+import { cloneDeep, isEqual, set, get, isArray, isUndefined } from 'lodash'
 import { useItem } from '../item/provider/item/use-item'
 
 export interface NumberedListProps {
@@ -32,13 +32,13 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
   const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
   const name = useMemo(() => itemName[itemName.length - 1], [itemName])
 
-  const onChange: NumberedListData['onChange'] = (newValue) => {    
-    setValue(() => newValue);
+  const onChange: NumberedListData['onChange'] = (newValue) => {
+    setValue(() => newValue)
     baseOnChange !== undefined && baseOnChange(newValue)
   }
 
-  const triggerChange = (value: any): void => {
-    if (!isEqual(value, initialValue)) {
+  const triggerChange = (value: NumberedListProps['value']): void => {
+    if (!isEqual(value, initialValue) && !isUndefined(value)) {
       onChange(value)
     }
   }

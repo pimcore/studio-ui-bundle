@@ -39,7 +39,7 @@ export interface NumberedListProviderProps {
 
 export const NumberedListProvider = ({ children, ...props }: NumberedListProviderProps): React.JSX.Element => {
   return useMemo(() => (
-    <KeyedListContext.Provider value={undefined}>
+    <KeyedListContext.Provider value={ undefined }>
       <NumberedListContext.Provider value={ { ...props } }>
         {children}
       </NumberedListContext.Provider>

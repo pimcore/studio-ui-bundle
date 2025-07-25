@@ -20,7 +20,7 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/AssetRegistry': 'DynamicTypes/AssetRegistry',
   'DynamicTypes/ObjectRegistry': 'DynamicTypes/ObjectRegistry',
   'DynamicTypes/Grid/SourceFieldsRegistry': 'DynamicTypes/Grid/SourceFieldsRegistry',
-  'DynamicTypes/Grid/TransformersRegistry': 'DynamicTypes/Grid/TransformersRegistry',
+  'DynamicTypes/Grid/TransformersRegistry': 'DynamicTypes/Grid/TransformersRegistry'
 }
 
 export const serviceIds = {

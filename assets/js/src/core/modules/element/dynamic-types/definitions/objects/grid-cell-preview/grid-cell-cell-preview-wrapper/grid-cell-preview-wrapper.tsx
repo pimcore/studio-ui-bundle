@@ -22,7 +22,7 @@ export const GridCellPreviewWrapper = React.forwardRef<HTMLDivElement, GridPrevi
 
     return (
       <div
-        className={ [ styles.wrapper, 'grid-cell-preview-wrapper' ].join(' ') }
+        className={ [styles.wrapper, 'grid-cell-preview-wrapper'].join(' ') }
         ref={ ref }
         style={ { overflow } }
       >

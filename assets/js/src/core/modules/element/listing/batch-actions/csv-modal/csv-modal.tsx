@@ -119,13 +119,13 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   async function getDownloadAction (delimiter: CSVFormValues['delimiter'], header: CSVFormValues['header']): Promise<number> {
     const argColumns = getArgs().body.columns ?? []
     const extractedColumnsFromColumnArg = selectedColumns.map(column => {
-      let currentColumn = argColumns.find(argColumn => argColumn.key === column.key && argColumn.locale === column.locale);
+      let currentColumn = argColumns.find(argColumn => argColumn.key === column.key && argColumn.locale === column.locale)
 
       if (currentColumn.type === 'dataobject.advanced') {
-        currentColumn = argColumns.find(argColumn => column.originalApiDefinition?.__meta?.advancedColumnConfig?.title === argColumn?.config?.title);
+        currentColumn = argColumns.find(argColumn => column.originalApiDefinition?.__meta?.advancedColumnConfig?.title === argColumn?.config?.title)
       }
-      
-      currentColumn = currentColumn ?? column;
+
+      currentColumn = currentColumn ?? column
 
       return {
         key: currentColumn.key,
@@ -133,7 +133,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
         locale: currentColumn.locale,
         config: currentColumn.config
       }
-    });
+    })
 
     if (numberedSelectedRows.length === 0) {
       const promise = fetchCreateFolderCsv({

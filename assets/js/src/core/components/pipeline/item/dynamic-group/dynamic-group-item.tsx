@@ -1,15 +1,25 @@
-import { Form } from "@Pimcore/components/form/form";
-import { Input } from "@Pimcore/components/input/input";
-import React from "react";
-import { DynamicGroupItemContent } from "./dynamic-group-item-content";
-import { IconButton } from "@Pimcore/components/icon-button/icon-button";
-import { Flex } from "@Pimcore/components/flex/flex";
-import { Text } from "@Pimcore/components/text/text";
-import { useNumberedList } from "@Pimcore/components/form/numbered-list/provider/numbered-list/use-numbered-list";
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { Form } from '@Pimcore/components/form/form'
+import { Input } from '@Pimcore/components/input/input'
+import React from 'react'
+import { DynamicGroupItemContent } from './dynamic-group-item-content'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Text } from '@Pimcore/components/text/text'
+import { useNumberedList } from '@Pimcore/components/form/numbered-list/provider/numbered-list/use-numbered-list'
 import { CSS } from '@dnd-kit/utilities'
-import { useSortable } from "@dnd-kit/sortable";
-import { Box } from "@Pimcore/components/box/box";
-import { useStyles } from "./dynamic-group-item.styles";
+import { useSortable } from '@dnd-kit/sortable'
+import { Box } from '@Pimcore/components/box/box'
+import { useStyles } from './dynamic-group-item.styles'
 
 export interface DynamicGroupItemProps {
   id: number
@@ -17,8 +27,8 @@ export interface DynamicGroupItemProps {
 }
 
 const DynamicGroupItem = ({ id, dynamicTypeRegistryId }: DynamicGroupItemProps): React.JSX.Element => {
-  const { operations, getValueByKey } = useNumberedList();
-  const { styles } = useStyles();
+  const { operations, getValueByKey } = useNumberedList()
+  const { styles } = useStyles()
   const { listeners, setNodeRef, setActivatorNodeRef, transform, transition } = useSortable({ id: id + 1 })
 
   const style = {
@@ -26,38 +36,57 @@ const DynamicGroupItem = ({ id, dynamicTypeRegistryId }: DynamicGroupItemProps):
     transition: transition ?? undefined
   }
 
-  const onDelete = () => {
-    operations.remove(id);
+  const onDelete = (): void => {
+    operations.remove(id)
   }
 
   return (
     <div
-      ref={setNodeRef}
-      style={style}
+      ref={ setNodeRef }
+      style={ style }
     >
-      <Box padding={{ x: 'extra-small', top: 'mini', bottom: 'small' }} className={styles.dynamicGroupItem}>
-        <Flex justify="space-between" align="center" gap="small">
-          <Flex align="center" gap="mini">
-            <IconButton 
-              variant="minimal" theme="secondary" icon={{value: 'drag-option'}}  
-              ref={setActivatorNodeRef} 
-              {...listeners}
+      <Box
+        className={ styles.dynamicGroupItem }
+        padding={ { x: 'extra-small', top: 'mini', bottom: 'small' } }
+      >
+        <Flex
+          align="center"
+          gap="small"
+          justify="space-between"
+        >
+          <Flex
+            align="center"
+            gap="mini"
+          >
+            <IconButton
+              icon={ { value: 'drag-option' } }
+              ref={ setActivatorNodeRef }
+              theme="secondary"
+              variant="minimal"
+              { ...listeners }
             />
             <Text strong>{getValueByKey(id.toString()).key}</Text>
           </Flex>
 
-          <IconButton icon={{value: 'trash'}} onClick={onDelete} />
+          <IconButton
+            icon={ { value: 'trash' } }
+            onClick={ onDelete }
+          />
         </Flex>
 
         <Form.Item
-          name={id}
+          name={ id }
         >
           <Form.KeyedList>
-            <Form.Item hidden className="d-none" name="key">
+            <Form.Item
+              className="d-none"
+              hidden
+              name="key"
+            >
               <Input />
             </Form.Item>
 
-            <DynamicGroupItemContent dynamicTypeRegistryId={dynamicTypeRegistryId} />
+            <DynamicGroupItemContent dynamicTypeRegistryId={ dynamicTypeRegistryId } />
           </Form.KeyedList>
         </Form.Item>
       </Box>
@@ -65,5 +94,5 @@ const DynamicGroupItem = ({ id, dynamicTypeRegistryId }: DynamicGroupItemProps):
   )
 }
 
-const memoedDynamicGroupItem = React.memo(DynamicGroupItem);
-export { memoedDynamicGroupItem as DynamicGroupItem };
+const memoedDynamicGroupItem = React.memo(DynamicGroupItem)
+export { memoedDynamicGroupItem as DynamicGroupItem }

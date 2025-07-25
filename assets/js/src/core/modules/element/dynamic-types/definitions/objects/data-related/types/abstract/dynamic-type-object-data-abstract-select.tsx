@@ -70,7 +70,7 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
 
   getGridCellColumnMeta (props: GetGridCellDefinitionProps): GridCellColumnMeta {
     const isEditable = props.objectProps.noteditable !== true
-    const hasOptions = props.objectProps.options && Array.isArray(props.objectProps.options) && props.objectProps.options.length > 0
+    const hasOptions = props.objectProps.options !== undefined && Array.isArray(props.objectProps.options) && props.objectProps.options.length > 0
 
     return {
       type: 'select',

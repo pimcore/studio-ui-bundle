@@ -22,34 +22,41 @@ const config: Meta = {
   title: 'Components/Controls/Pipeline',
   component: (): React.JSX.Element => {
     const initialValues = {
-      "pipeline1": {
-        "title": "Pipeline title 2",
-        "source-field": [
+      pipeline1: {
+        title: 'Pipeline title 2',
+        'source-field': [
           {
-            "key": "text",
+            key: 'text',
             config: {
-              value: 'Text 2',
+              value: 'Text 2'
             }
-          },
+          }
         ]
       }
     }
 
     return (
-      <Form initialValues={initialValues} layout='vertical' onValuesChange={(changedValues, allValues) => console.log({ changedValues, allValues })}>
+      <Form
+        initialValues={ initialValues }
+        layout='vertical'
+        onValuesChange={ (changedValues, allValues) => { console.log({ changedValues, allValues }) } }
+      >
         <Form.Item name="pipeline1">
-          <Pipeline 
-            items={[
+          <Pipeline
+            items={ [
               {
                 id: 'title',
                 component: <Pipeline.CustomItem>
-                  <Tabs items={[
+                  <Tabs items={ [
                     {
                       key: 'title',
                       label: 'Title',
                       forceRender: true,
                       children: (
-                        <Form.Item name="title" label="Title">
+                        <Form.Item
+                          label="Title"
+                          name="title"
+                        >
                           <Input />
                         </Form.Item>
                       )
@@ -60,7 +67,10 @@ const config: Meta = {
                       label: 'Source Field',
                       forceRender: true,
                       children: (
-                        <Pipeline.DynamicGroupItem id='source-field' dynamicTypeRegistryId={serviceIds['DynamicTypes/Grid/SourceFieldsRegistry']} />
+                        <Pipeline.DynamicGroupItem
+                          dynamicTypeRegistryId={ serviceIds['DynamicTypes/Grid/SourceFieldsRegistry'] }
+                          id='source-field'
+                        />
                       )
                     },
 
@@ -69,23 +79,27 @@ const config: Meta = {
                       label: 'Transformation',
                       forceRender: true,
                       children: (
-                        <Pipeline.DynamicGroupItem id='transformation' dynamicTypeRegistryId={serviceIds['DynamicTypes/Grid/TransformersRegistry']} />
+                        <Pipeline.DynamicGroupItem
+                          dynamicTypeRegistryId={ serviceIds['DynamicTypes/Grid/TransformersRegistry'] }
+                          id='transformation'
+                        />
                       )
-                    },
-                  ]} />
+                    }
+                  ] }
+                  />
                 </Pipeline.CustomItem>
               },
 
               {
                 id: 'preview',
                 component: <Pipeline.CustomItem>
-                  <Flex gap={'extra-small'}>
+                  <Flex gap={ 'extra-small' }>
                     <Text>Preview</Text>
-                    <Text type='secondary'>Example preview value</Text> 
+                    <Text type='secondary'>Example preview value</Text>
                   </Flex>
                 </Pipeline.CustomItem>
               }
-            ]}
+            ] }
           />
         </Form.Item>
       </Form>

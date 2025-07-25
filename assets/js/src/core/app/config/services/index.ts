@@ -408,13 +408,13 @@ container.bind(serviceIds['DynamicTypes/Object/Object']).to(DynamicTypeObjectObj
 container.bind(serviceIds['DynamicTypes/Object/Variant']).to(DynamicTypeObjectVariant).inSingletonScope()
 
 // Advanced columns source fields
-container.bind(serviceIds['DynamicTypes/Grid/SourceFieldsRegistry']).to(DynamicTypePipelineRegistry).inSingletonScope();
+container.bind(serviceIds['DynamicTypes/Grid/SourceFieldsRegistry']).to(DynamicTypePipelineRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/SourceFields/Text']).to(DynamicTypePipelineGridSourceFieldsText).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/SourceFields/SimpleField']).to(DynamicTypePipelineGridSourceFieldsSimpleField).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/SourceFields/RelationField']).to(DynamicTypePipelineGridSourceFieldsRelationField).inSingletonScope()
 
 // Advanced columns transformers
-container.bind(serviceIds['DynamicTypes/Grid/TransformersRegistry']).to(DynamicTypePipelineRegistry).inSingletonScope();
+container.bind(serviceIds['DynamicTypes/Grid/TransformersRegistry']).to(DynamicTypePipelineRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/ChangeCase']).to(DynamicTypePipelineGridTransformersChangeCase).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Grid/Transformers/Combine']).to(DynamicTypePipelineGridTransformersCombine).inSingletonScope()
 

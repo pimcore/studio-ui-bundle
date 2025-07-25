@@ -118,13 +118,13 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
   async function getDownloadAction (header: XLSXFormValues['header']): Promise<number> {
     const argColumns = getArgs().body.columns ?? []
     const extractedColumnsFromColumnArg = selectedColumns.map(column => {
-      let currentColumn = argColumns.find(argColumn => argColumn.key === column.key && argColumn.locale === column.locale);
+      let currentColumn = argColumns.find(argColumn => argColumn.key === column.key && argColumn.locale === column.locale)
 
       if (currentColumn.type === 'dataobject.advanced') {
-        currentColumn = argColumns.find(argColumn => column.originalApiDefinition?.__meta?.advancedColumnConfig?.title === argColumn?.config?.title);
+        currentColumn = argColumns.find(argColumn => column.originalApiDefinition?.__meta?.advancedColumnConfig?.title === argColumn?.config?.title)
       }
-      
-      currentColumn = currentColumn ?? column;
+
+      currentColumn = currentColumn ?? column
 
       return {
         key: currentColumn.key,
@@ -132,8 +132,8 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
         locale: currentColumn.locale,
         config: currentColumn.config
       }
-    });
-    
+    })
+
     if (numberedSelectedRows.length === 0) {
       const promise = fetchCreateFolderXlsx({
         body: {

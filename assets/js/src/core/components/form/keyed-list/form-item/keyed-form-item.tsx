@@ -30,5 +30,5 @@ const KeyedFormItem = ({ Component, componentProps }: KeyedFormItemProps): React
   ), [baseProps.name])
 }
 
-const memoedKeyedFormItem = React.memo(KeyedFormItem);
+const memoedKeyedFormItem = React.memo(KeyedFormItem)
 export { memoedKeyedFormItem as KeyedFormItem }

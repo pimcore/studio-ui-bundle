@@ -14,11 +14,11 @@ import { type UniqueIdentifier } from '@dnd-kit/core'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { IconButton } from '../icon-button/icon-button'
-import { Collapse, CollapseItem } from '../collapse/collapse'
+import { CollapseItem } from '../collapse/collapse'
 
 export const StackListItemTypes = {
   DEFAULT: 'default',
-  COLLAPSE: 'collapse',
+  COLLAPSE: 'collapse'
 } as const
 
 export type StackListItemType = (typeof StackListItemTypes)[keyof typeof StackListItemTypes]
@@ -95,8 +95,8 @@ export const StackListItem = (props: StackListItemProps): React.JSX.Element => {
           {renderLeftToolbar !== undefined && <div className="stack-list-item__left-toolbar">{renderLeftToolbar}</div>}
 
           <div className="stack-list-item__content">{children}</div>
-        </div> 
-      )      
+        </div>
+      )
 
       return (
         <div
@@ -104,13 +104,20 @@ export const StackListItem = (props: StackListItemProps): React.JSX.Element => {
           ref={ setNodeRef }
           style={ style }
         >
-          <CollapseItem contentPadding={'none'} label={<>{leftSidebarContent}</>} size='small' extra={renderRightToolbar} extraPosition='end' className={styles.stackListItem}>
+          <CollapseItem
+            className={ styles.stackListItem }
+            contentPadding={ 'none' }
+            extra={ renderRightToolbar }
+            extraPosition='end'
+            label={ <>{leftSidebarContent}</> }
+            size='small'
+          >
             {body !== undefined ? <div className='stack-list-item__body'>{body}</div> : undefined}
           </CollapseItem>
         </div>
       )
     }
 
-    throw new Error(`Unknown StackListItem type: ${type}`)
+    throw new Error(`Unknown StackListItem type: ${type as string}`)
   }, [props, transform])
 }

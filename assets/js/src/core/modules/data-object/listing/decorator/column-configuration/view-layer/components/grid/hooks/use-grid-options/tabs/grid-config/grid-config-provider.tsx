@@ -39,8 +39,8 @@ export const GridConfigProvider = ({ children }: GridConfigProviderProps): React
     }
 
     // update columns with the same __meta.uniqueId if it exists else give it a new uuid
-    const updatedColumns = (newColumns as AvailableColumn[]).map((column) => {
-      if (column.__meta?.uniqueId) {
+    const updatedColumns = (newColumns).map((column) => {
+      if (column.__meta?.uniqueId !== undefined) {
         return {
           ...column,
           __meta: {

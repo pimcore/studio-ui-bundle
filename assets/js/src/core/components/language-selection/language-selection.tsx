@@ -9,7 +9,7 @@
  */
 
 import { Button } from '@Pimcore/components/button/button'
-import React, { MouseEvent, useEffect, useState } from 'react'
+import React, { type MouseEvent, useEffect, useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './langguage-selection.styles'
 import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
@@ -60,14 +60,14 @@ export const LanguageSelection = ({ languages, selectedLanguage, onSelectLanguag
   )
 
   function goToNextLanguage (e: MouseEvent): void {
-    e.stopPropagation();
+    e.stopPropagation()
     const currentIndex = languages.indexOf(language)
     const nextIndex = currentIndex === languages.length - 1 ? 0 : currentIndex + 1
     handleLanguageChange(languages[nextIndex])
   }
 
   function goToPreviousLanguage (e: MouseEvent): void {
-    e.stopPropagation();
+    e.stopPropagation()
     const currentIndex = languages.indexOf(language)
     const previousIndex = currentIndex === 0 ? languages.length - 1 : currentIndex - 1
     handleLanguageChange(languages[previousIndex])

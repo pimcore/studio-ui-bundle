@@ -56,11 +56,16 @@ export const GridConfigList = (): React.JSX.Element => {
       type: isAdvancedColumn ? 'collapse' : 'default',
       children: isAdvancedColumn ? <Tag >{advancedColumnName}</Tag> : <Tag>{t(`${translationKey}`)}</Tag>,
 
-      ...(column.key === 'advanced' ? {
-        body: (
-          <AdvancedColumnForm column={column} onChange={(newColumn) => onAdvancedColumnChange(newColumn, uniqueId)} />
-        )
-      } : {}),
+      ...(column.key === 'advanced'
+        ? {
+            body: (
+              <AdvancedColumnForm
+                column={ column }
+                onChange={ (newColumn) => { onAdvancedColumnChange(newColumn, uniqueId) } }
+              />
+            )
+          }
+        : {}),
 
       renderRightToolbar: (
         <Space size='mini'>
@@ -73,8 +78,8 @@ export const GridConfigList = (): React.JSX.Element => {
         </Space>
       )
     }
-  }), [columns]);
-    
+  }), [columns])
+
   return (
     <>
       { stackListItems.length === 0 && <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } /> }
@@ -107,7 +112,7 @@ export const GridConfigList = (): React.JSX.Element => {
     )
   }
 
-  function onAdvancedColumnChange(column: AvailableColumn, id: string): void {
+  function onAdvancedColumnChange (column: AvailableColumn, id: string): void {
     const itemList = stackListItems.map((item) => {
       if (item.id === id) {
         return {
@@ -127,7 +132,6 @@ export const GridConfigList = (): React.JSX.Element => {
     const newColumns = itemList.map((item) => item.meta)
     setColumns(newColumns)
   }
-
 
   function onRemoveColumn (uniqueId: string): void {
     const itemList = stackListItems.filter((item) => item.id !== uniqueId)

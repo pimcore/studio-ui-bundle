@@ -1,27 +1,37 @@
-import { Form } from "@Pimcore/components/form/form";
-import { usePipelineConfig } from "@Pimcore/components/pipeline/provider/pipeline-config/use-pipeline-config";
-import { Select } from "@Pimcore/components/select/select";
-import React from "react";
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { Form } from '@Pimcore/components/form/form'
+import { usePipelineConfig } from '@Pimcore/components/pipeline/provider/pipeline-config/use-pipeline-config'
+import { Select } from '@Pimcore/components/select/select'
+import React from 'react'
 
 export const DynamicTypePipelineGridTransformersChangeCaseComponent = (): React.JSX.Element => {
-  const { config } = usePipelineConfig();
-  const transformerConfig = config?.transformers?.caseChange;
+  const { config } = usePipelineConfig()
+  const transformerConfig = config?.transformers?.caseChange
 
-  if (!transformerConfig) {
-    throw new Error("Transformer configuration for case change is missing");
+  if (transformerConfig === undefined) {
+    throw new Error('Transformer configuration for case change is missing')
   }
 
-  const modeOptions = transformerConfig.configOptions.mode.options;
+  const modeOptions = transformerConfig.configOptions.mode.options
 
   return (
     <Form.Item
-      name={'mode'}
-      label={'Mode'}
-      initialValue={modeOptions[0].value}
+      initialValue={ modeOptions[0].value }
+      label={ 'Mode' }
+      name={ 'mode' }
     >
-      <Select 
-        options={modeOptions}
+      <Select
+        options={ modeOptions }
       />
     </Form.Item>
-  );
+  )
 }

@@ -1,16 +1,26 @@
-import { GridContentRenderer } from "@Pimcore/components/grid-content-renderer/grid-content-renderer"
-import { Grid } from "@Pimcore/components/grid/grid"
-import { createColumnHelper } from "@tanstack/react-table"
-import React from "react"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { GridContentRenderer } from '@Pimcore/components/grid-content-renderer/grid-content-renderer'
+import { Grid } from '@Pimcore/components/grid/grid'
+import { createColumnHelper } from '@tanstack/react-table'
+import React from 'react'
 
 export interface PreviewValueProps {
-  value: {
+  value: Array<{
     type: string
     value: any
-  }[]
+  }>
 }
 
-const columnHelper = createColumnHelper();
+const columnHelper = createColumnHelper()
 
 export const PreviewValue = (props: PreviewValueProps): React.JSX.Element => {
   const { value } = props
@@ -29,19 +39,23 @@ export const PreviewValue = (props: PreviewValueProps): React.JSX.Element => {
     })
   })
 
-  const data = [] as Record<string, any>[]
-  const row = {} as Record<string, any>
+  const data: Array<Record<string, any>> = []
+  const row: Record<string, any> = {}
 
   // Create a row with the values from the value array
   value.forEach((item, index) => {
     row[`${item.type}-${index}`] = item.value
   })
 
-  data.push(row);
+  data.push(row)
 
   return (
     <GridContentRenderer>
-      <Grid columns={columns} data={data} autoWidth />
+      <Grid
+        autoWidth
+        columns={ columns }
+        data={ data }
+      />
     </GridContentRenderer>
   )
 }

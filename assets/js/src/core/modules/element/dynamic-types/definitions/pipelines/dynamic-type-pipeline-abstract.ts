@@ -10,11 +10,11 @@
 
 import { injectable } from 'inversify'
 import { type DynamicTypeAbstract } from '../../registry/dynamic-type-registry-abstract'
-import { ReactElement } from 'react'
+import { type ReactElement } from 'react'
 
 @injectable()
 export abstract class DynamicTypePipelineAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
 
-  abstract getComponent(): ReactElement
+  abstract getComponent (): ReactElement
 }

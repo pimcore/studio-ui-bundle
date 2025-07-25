@@ -1,21 +1,30 @@
-import { Flex } from "@Pimcore/components/flex/flex";
-import { Form } from "@Pimcore/components/form/form";
-import { useItem } from "@Pimcore/components/form/item/provider/item/use-item";
-import { useKeyedList } from "@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list";
-import { Input } from "@Pimcore/components/input/input";
-import { usePipelineConfig } from "@Pimcore/components/pipeline/provider/pipeline-config/use-pipeline-config";
-import { SelectProps } from "@Pimcore/components/select/select";
-import { usePrevious } from "@Pimcore/utils/hooks/use-previous";
-import { Select } from "antd";
-import React, { useEffect } from "react";
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Form } from '@Pimcore/components/form/form'
+import { useItem } from '@Pimcore/components/form/item/provider/item/use-item'
+import { useKeyedList } from '@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list'
+import { usePipelineConfig } from '@Pimcore/components/pipeline/provider/pipeline-config/use-pipeline-config'
+import { type SelectProps } from '@Pimcore/components/select/select'
+import { usePrevious } from '@Pimcore/utils/hooks/use-previous'
+import { Select } from 'antd'
+import React, { useEffect } from 'react'
 
 export const DynamicTypePipelineGridSourceFieldsRelationFieldComponent = (): React.JSX.Element => {
-  const { config } = usePipelineConfig();
-  const sourceFieldConfig = config?.relationField;
+  const { config } = usePipelineConfig()
+  const sourceFieldConfig = config?.relationField
   const { name } = useItem()
-  const { operations, getValueByKey } = useKeyedList();
-  const currentRelation = getValueByKey('relation');
-  const prevRelation = usePrevious(currentRelation);
+  const { operations, getValueByKey } = useKeyedList()
+  const currentRelation = getValueByKey('relation')
+  const prevRelation = usePrevious(currentRelation)
 
   useEffect(() => {
     if (prevRelation !== currentRelation && prevRelation !== undefined) {
@@ -23,50 +32,56 @@ export const DynamicTypePipelineGridSourceFieldsRelationFieldComponent = (): Rea
     }
   }, [currentRelation, name, operations, prevRelation])
 
-  if (!sourceFieldConfig) {
-    throw new Error("Source field configuration is missing");
+  if (sourceFieldConfig === undefined) {
+    throw new Error('Source field configuration is missing')
   }
 
   const sourceFieldOptions = sourceFieldConfig.map(configOption => ({
     label: configOption.name,
     value: configOption.key
-  }));
+  }))
 
-  const relationFieldOptions: SelectProps['options'] = []; 
+  const relationFieldOptions: SelectProps['options'] = []
   sourceFieldConfig.forEach(configOption => {
-    const options: SelectProps['options'] = [];
+    const options: SelectProps['options'] = []
 
     if (configOption.key === currentRelation) {
       configOption.fields.forEach(field => {
         options.push({
           label: field.name,
           value: field.key
-        });
-      });
+        })
+      })
     }
 
     if (options.length > 0) {
-      relationFieldOptions.push(...options);
+      relationFieldOptions.push(...options)
     }
   })
 
   return (
-    <Flex className="w-full" gap="small">
+    <Flex
+      className="w-full"
+      gap="small"
+    >
       <Form.Item
         className="w-full"
-        name={'relation'}
-        label={'Relation'}
+        label={ 'Relation' }
+        name={ 'relation' }
       >
-        <Select options={sourceFieldOptions} />
+        <Select options={ sourceFieldOptions } />
       </Form.Item>
 
       <Form.Item
         className="w-full"
-        name={'field'}
-        label={'Field'}
+        label={ 'Field' }
+        name={ 'field' }
       >
-        <Select options={relationFieldOptions} disabled={relationFieldOptions.length === 0} />
+        <Select
+          disabled={ relationFieldOptions.length === 0 }
+          options={ relationFieldOptions }
+        />
       </Form.Item>
     </Flex>
-  );
+  )
 }

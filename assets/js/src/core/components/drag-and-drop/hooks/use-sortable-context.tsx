@@ -10,7 +10,7 @@
 
 import { closestCenter, DndContext, type DragEndEvent, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { SortableContext, sortableKeyboardCoordinates, type SortingStrategy, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import React, { memo, useMemo, type ComponentType, type ReactNode } from 'react'
+import React, { useMemo, type ComponentType, type ReactNode } from 'react'
 
 export interface IUseSortableContextProps {
   onDragEnd: (event: DragEndEvent) => void
@@ -34,7 +34,7 @@ export const useSortableContext = ({ onDragEnd, items, sortingStrategy = vertica
     })
   )
 
-  const ContextHolder = memo(({ children }: ContextHolderProps): React.JSX.Element => {
+  const ContextHolder = function BaseContextHolder ({ children }: ContextHolderProps): React.JSX.Element {
     return useMemo(() => (
       <DndContext
         collisionDetection={ closestCenter }
@@ -48,8 +48,8 @@ export const useSortableContext = ({ onDragEnd, items, sortingStrategy = vertica
           {children}
         </SortableContext>
       </DndContext>
-    ), []);
-  })
+    ), [])
+  }
 
   return { ContextHolder }
 }

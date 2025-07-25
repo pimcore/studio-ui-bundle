@@ -48,7 +48,7 @@ export interface EditViewProps {
 }
 
 export const EditView = (props: EditViewProps): React.JSX.Element => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
   const {
     onCancelClick,
     onApplyClick,
@@ -74,8 +74,12 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
 
   return (
     <>
-      <GridConfigModal {...props} open={open} onOpenChange={setOpen} />
-      
+      <GridConfigModal
+        { ...props }
+        onOpenChange={ setOpen }
+        open={ open }
+      />
+
       <ContentLayout
         renderToolbar={
           <Toolbar theme='secondary'>
@@ -133,7 +137,7 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
                   </IconTextButton>
                 </Tooltip>
               </Dropdown>
-            
+
               <Flex gap={ 'mini' }>
                 <LanguageSelection
                   languages={ settings.requiredLanguages.map((value: string) => {

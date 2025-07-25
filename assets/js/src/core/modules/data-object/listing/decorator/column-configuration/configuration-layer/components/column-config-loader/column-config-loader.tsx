@@ -49,7 +49,7 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
         continue
       }
       const availableColumn = data.columns!.find(availableColumn => availableColumn.key === column.key)
-      const currentColumn = column as AvailableColumn;
+      const currentColumn = column as AvailableColumn
       const apiColumn = {
         ...availableColumn,
         __meta: {
