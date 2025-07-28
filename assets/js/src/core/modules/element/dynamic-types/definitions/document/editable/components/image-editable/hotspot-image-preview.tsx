@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, type MutableRefObject, useMemo } from 'react'
+import React, { type MutableRefObject, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 import { type Hotspot, type Marker } from '../../../../objects/data-related/helpers/hotspot-image/types/hotspot-types'
@@ -38,9 +38,8 @@ interface DocumentHotspotImagePreviewProps {
   disabled?: boolean
 }
 
-export const DocumentHotspotImagePreview = forwardRef(function DocumentHotspotImagePreview (
-  { assetId, height, width, value, onChange, setMarkerModalOpen, setCropModalOpen, handleSearch, handleLocateInTree, emptyValue, disabled }: DocumentHotspotImagePreviewProps,
-  ref: MutableRefObject<HTMLDivElement>
+export const DocumentHotspotImagePreview = function DocumentHotspotImagePreview (
+  { assetId, height, width, value, onChange, setMarkerModalOpen, setCropModalOpen, handleSearch, handleLocateInTree, emptyValue, disabled }: DocumentHotspotImagePreviewProps
 ): React.JSX.Element {
   const { t } = useTranslation()
 
@@ -83,14 +82,12 @@ export const DocumentHotspotImagePreview = forwardRef(function DocumentHotspotIm
   ], [disabled, assetId, handleSearch, handleLocateInTree, setMarkerModalOpen, setCropModalOpen, emptyValue, t])
 
   return (
-    <div ref={ ref }>
-      <ImagePreview
-        assetId={ assetId }
-        dropdownItems={ dropdownItems }
-        height={ height }
-        thumbnailSettings={ value.crop ?? undefined }
-        width={ width }
-      />
-    </div>
+    <ImagePreview
+      assetId={ assetId }
+      dropdownItems={ dropdownItems }
+      height={ height }
+      thumbnailSettings={ {...value.crop, frame: false, contain: true} }
+      width={ width }
+    />
   )
-})
+}

@@ -20,7 +20,6 @@ import { useHotspotMarkersModal } from '@Pimcore/modules/element/components/hots
 import { type CropSettings } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
 import { toIHotspots, fromIHotspots } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/utils/hotspot-converter'
 import { type Hotspot, type Marker } from '../../../../objects/data-related/helpers/hotspot-image/types/hotspot-types'
-import { useStyles } from './image-editable.styles'
 import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
@@ -57,7 +56,6 @@ interface DocumentImageEditableProps {
 
 export const DocumentImageEditable = (props: DocumentImageEditableProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { styles } = useStyles()
 
   const imageValue = props.value
   const width = isNumber(props.config?.width) ? String(props.config.width) : '200'
@@ -220,10 +218,6 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
       } }
       variant="outline"
     >
-      <div
-        className={ styles.container }
-        style={ { width, height } }
-      >
         {!isNil(imageValue?.id)
           ? (
             <DocumentHotspotImagePreview
@@ -248,7 +242,6 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
               width={ Number(width) }
             />
             )}
-      </div>
     </Droppable>
   )
 }
