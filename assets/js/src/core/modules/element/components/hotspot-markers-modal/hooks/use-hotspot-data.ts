@@ -17,8 +17,9 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import {
   HotspotContext
-} from '@Pimcore/modules/element/components/hotspot-markers-modal/provider/hotspot-data-provider'
+} from '../provider/hotspot-data-provider'
 import { type FormInstance } from 'antd'
+
 interface UseHotspotDataHookReturn {
   fields: ExpandedHotspotMarkerData[]
   setFields: React.Dispatch<React.SetStateAction<ExpandedHotspotMarkerData[]>>
@@ -148,8 +149,6 @@ const useHotspotData = (hotspot: IHotspot | undefined, form: FormInstance): UseH
   const handleRemoveField = (index: number): void => {
     const currentFields = getFieldsData()
     const newFields = currentFields.filter((_, i) => i !== index)
-
-    console.log('new fields', newFields)
 
     setFields(newFields)
   }

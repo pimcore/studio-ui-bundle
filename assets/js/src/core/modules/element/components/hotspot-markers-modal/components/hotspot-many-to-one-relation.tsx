@@ -9,8 +9,8 @@
  */
 
 import React from 'react'
-import { ManyToOneRelation, type ManyToOneRelationProps, type ManyToOneRelationValueType } from '../../../../components/many-to-one-relation/many-to-one-relation'
-import { type HotspotObjectType } from '../../types/hotspot-types'
+import { ManyToOneRelation, type ManyToOneRelationProps, type ManyToOneRelationValueType } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
+import { type HotspotObjectType } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import { isNil, isNull } from 'lodash'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 

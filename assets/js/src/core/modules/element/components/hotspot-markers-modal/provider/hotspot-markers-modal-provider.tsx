@@ -11,7 +11,7 @@
 import React, { createContext, useMemo, useState } from 'react'
 import { isNull } from 'lodash'
 import { HotspotMarkersModal } from '../hotspot-markers-modal'
-import { HotspotDataProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-data-provider'
+import { HotspotDataProvider } from './hotspot-data-provider'
 import type { IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import type { CropSettings } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
 

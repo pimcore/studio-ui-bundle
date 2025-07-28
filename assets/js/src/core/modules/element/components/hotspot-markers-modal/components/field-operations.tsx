@@ -13,11 +13,11 @@ import { useTranslation } from 'react-i18next'
 import { isUndefined } from 'lodash'
 import { Space } from '@Pimcore/components/space/space'
 import { Form } from '@Pimcore/components/form/form'
-import { Input } from '../../../../../../../../components/input/input'
+import { Input } from '@Pimcore/components/input/input'
 import { Card } from '@Pimcore/components/card/card'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
+import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import {
   type HotspotValueMap,
   type ExpandedHotspotMarkerData
@@ -25,9 +25,9 @@ import {
 import {
   Checkbox
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/checkbox/checkbox'
-import useHotspotData from '@Pimcore/modules/element/components/hotspot-markers-modal/hooks/use-hotspot-data'
+import useHotspotData from '../hooks/use-hotspot-data'
 import { type FormInstance } from 'antd'
-import { HotspotManyToOneRelation } from './components/hotspot-many-to-one-relation/hotspot-many-to-one-relation'
+import { HotspotManyToOneRelation } from './hotspot-many-to-one-relation'
 
 interface FieldOperationsProps {
   hotspot: IHotspot | undefined
@@ -130,9 +130,8 @@ const FieldOperations = ({
             onClick={ () => {
               handleRemoveField(index)
             } }
-          >
-            Edit
-          </IconButton>
+            title={ t('remove') }
+          />
                 }
         key={ index + field.type }
         title={ getTypeLabel(field.type as keyof HotspotValueMap) }
