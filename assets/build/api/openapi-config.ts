@@ -38,6 +38,10 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'bundleSeoRedirectsGetCollection',
+      type: 'query'
+    },
+    {
       pattern: 'websiteSettingsGetCollection',
       type: 'query'
     },

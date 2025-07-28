@@ -21,7 +21,7 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/bundle/seo/redirects/cleanup`, method: "DELETE" }),
                 invalidatesTags: ["Bundle Seo"],
             }),
-            bundleSeoRedirectsGetCollection: build.mutation<
+            bundleSeoRedirectsGetCollection: build.query<
                 BundleSeoRedirectsGetCollectionApiResponse,
                 BundleSeoRedirectsGetCollectionApiArg
             >({
@@ -30,7 +30,7 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Bundle Seo"],
+                providesTags: ["Bundle Seo"],
             }),
             bundleSeoRedirectUpdateById: build.mutation<
                 BundleSeoRedirectUpdateByIdApiResponse,
@@ -258,7 +258,7 @@ export type BundleSeoRedirectStatus = {
 export const {
     useBundleSeoRedirectAddMutation,
     useBundleSeoRedirectCleanupMutation,
-    useBundleSeoRedirectsGetCollectionMutation,
+    useBundleSeoRedirectsGetCollectionQuery,
     useBundleSeoRedirectUpdateByIdMutation,
     useBundleSeoRedirectDeleteMutation,
     useBundleSeoRedirectsExportQuery,
