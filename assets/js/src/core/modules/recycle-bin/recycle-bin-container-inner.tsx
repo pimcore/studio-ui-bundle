@@ -154,7 +154,7 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
                 path: pathFilter
               })
             }}
-            placeholder="Search"
+            placeholder={t('component.search.pleaceholder')}
             withPrefix={false}
             withoutAddon={false}
           />

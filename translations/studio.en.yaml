@@ -929,3 +929,4 @@ recycle-bin.actions.delete: Delete
 recycle-bin.actions.delete.title: Deleting Items
 recycle-bin.actions.restore: Restore
 recycle-bin.actions.restore.title: Restoring Items
+component.search.pleaceholder: Search
