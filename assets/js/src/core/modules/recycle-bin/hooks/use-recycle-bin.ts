@@ -3,13 +3,12 @@ import { useAppDispatch } from "@Pimcore/app/store"
 import ApiError from "@Pimcore/modules/app/error-handler/classes/api-error"
 import GeneralError from "@Pimcore/modules/app/error-handler/classes/general-error"
 import trackError from "@Pimcore/modules/app/error-handler/error-handler"
-import { api, RecycleBin, useRecycleBinDeleteItemsMutation, useRecycleBinFlushMutation } from "../recycle-bin-api-slice-enhanced"
-import { RecycleBinFlushApiResponse, RecycleBinRestoreItemsApiResponse, useRecycleBinRestoreItemsMutation } from "../recycle-bin-api-slice.gen"
-import { createJob as createRestoreJob } from "@Pimcore/modules/execution-engine/jobs/recycle-bin/restore/factory"
-import { createJob as createDeleteJob } from "@Pimcore/modules/execution-engine/jobs/recycle-bin/delete/factory"
 import { useJobs } from "@Pimcore/modules/execution-engine/hooks/useJobs"
-import { useTranslation } from "react-i18next"
+import { createJob as createRestoreJob } from "@Pimcore/modules/execution-engine/jobs/recycle-bin/restore/factory"
 import { defaultTopics, topics } from "@Pimcore/modules/execution-engine/topics"
+import { useTranslation } from "react-i18next"
+import { api, RecycleBin, useRecycleBinDeleteItemsMutation, useRecycleBinFlushMutation } from "../recycle-bin-api-slice-enhanced"
+import { RecycleBinRestoreItemsApiResponse, useRecycleBinRestoreItemsMutation } from "../recycle-bin-api-slice.gen"
 
 interface UseRecycleBinHookReturn {
   restoreItems: (ids: Array<RecycleBin['id']>, onFinish?: () => void) => Promise<void>
