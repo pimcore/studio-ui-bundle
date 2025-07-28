@@ -90,7 +90,7 @@ class DocumentEditableApiImpl implements DocumentEditableApi {
     }
   }
 
-  private getDynamicTypeForEditable (editableType: string): any | null {
+  private getDynamicTypeForEditable (editableType: string): any {
     try {
       const documentEditableRegistry = container.get<DynamicTypeDocumentEditableRegistry>(
         serviceIds['DynamicTypes/DocumentEditableRegistry']
