@@ -23,6 +23,10 @@ interface UseUserReturn {
   getUserImageById: (id: number) => Promise<string | undefined>
 }
 
+interface IBlobResponse {
+  data: string
+}
+
 export const useUserHelper = (): UseUserReturn => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
@@ -79,12 +83,11 @@ export const useUserHelper = (): UseUserReturn => {
   }
 
   async function getUserImageById (id: number): Promise<string | undefined> {
-    const { data } = await dispatch(api.endpoints.userGetImage.initiate({ id }))
-    if (data !== undefined) {
-      // @ts-expect-error is needed because the api returns a blob but in redux we want a JSON
-      return data.data
-    }
-    return undefined
+    const result = await dispatch(api.endpoints.userGetImage.initiate({ id }))
+
+    const blobResponse = result.data as IBlobResponse | undefined
+
+    return blobResponse?.data
   }
 
   return {
