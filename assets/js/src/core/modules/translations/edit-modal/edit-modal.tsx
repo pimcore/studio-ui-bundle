@@ -114,7 +114,6 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
         <Tabs
           destroyInactiveTabPane
           items={ tabItems }
-          noPadding
         />
       </Form>
     </Modal>
