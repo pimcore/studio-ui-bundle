@@ -94,10 +94,8 @@ class ElementApiImpl implements ElementApi {
       const { element: elementApi } = getPimcoreStudioApi()
 
       if (isInIframe()) {
-        // We're in an iframe, call the parent's API
         elementApi.openElementSelector(config)
       } else {
-        // We're in the parent window, dispatch the event directly
         this.openElementSelectorDirectly(config)
       }
     } catch (error) {
@@ -113,11 +111,9 @@ class ElementApiImpl implements ElementApi {
   openUploadModal (props: ModalUploadProps): void {
     try {
       if (isInIframe()) {
-        // We're in an iframe, call the parent's API
         const { element: elementApi } = getPimcoreStudioApi()
         elementApi.openUploadModal(props)
       } else {
-        // We're in the parent window, dispatch the event directly
         this.openUploadModalDirectly(props)
       }
     } catch (error) {
@@ -133,11 +129,9 @@ class ElementApiImpl implements ElementApi {
   openLinkModal (props: LinkModalProps): void {
     try {
       if (isInIframe()) {
-        // We're in an iframe, call the parent's API
         const { element: elementApi } = getPimcoreStudioApi()
         elementApi.openLinkModal(props)
       } else {
-        // We're in the parent window, dispatch the event directly
         this.openLinkModalDirectly(props)
       }
     } catch (error) {
@@ -155,10 +149,8 @@ class ElementApiImpl implements ElementApi {
       const { element: elementApi } = getPimcoreStudioApi()
 
       if (isInIframe()) {
-        // We're in an iframe, call the parent's API
         elementApi.locateInTree(id, elementType)
       } else {
-        // We're in the parent window, dispatch the event directly
         this.locateInTreeDirectly(id, elementType)
       }
     } catch (error) {

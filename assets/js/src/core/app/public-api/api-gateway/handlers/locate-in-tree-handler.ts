@@ -20,7 +20,6 @@ import { isNull, isNil, isString } from 'lodash'
 export const locateInTreeHandler: ApiGatewayHandler<ApiGatewayEventType.locateInTree> = (payload) => {
   const { id, elementType } = payload
 
-  // Get the active perspective
   const activePerspective = selectActivePerspective(store.getState())
 
   if (isNull(activePerspective)) {
@@ -28,7 +27,6 @@ export const locateInTreeHandler: ApiGatewayHandler<ApiGatewayEventType.locateIn
     return
   }
 
-  // Dispatch the tree location API call
   store.dispatch(api.endpoints.elementGetTreeLocation.initiate({
     id,
     elementType,
@@ -38,10 +36,8 @@ export const locateInTreeHandler: ApiGatewayHandler<ApiGatewayEventType.locateIn
       if (!isNil(result.data) && !isNil(result.data.treeLevelData)) {
         const treeId = String(result.data.widgetId)
 
-        // Switch to the widget
         store.dispatch(setActiveWidgetById(treeId))
 
-        // Locate in tree
         store.dispatch(locateInTreeAction({
           treeId,
           nodeId: isString(id) ? id : String(id),

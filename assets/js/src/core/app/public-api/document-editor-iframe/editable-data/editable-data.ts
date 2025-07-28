@@ -26,19 +26,19 @@ export interface DocumentEditableApi {
 class DocumentEditableApiImpl implements DocumentEditableApi {
   private values: Record<string, ValueType> = {}
 
-  getValues (forApi?: boolean): Record<string, ValueType> {
+  getValues (forApi: boolean = false): Record<string, ValueType> {
     if (!forApi) {
       return { ...this.values }
     }
 
     try {
       const transformedValues: Record<string, ValueType> = {}
-      
+
       for (const [editableName, editableValue] of Object.entries(this.values)) {
         const transformedValue = this.transformEditableValue(editableName, editableValue)
         transformedValues[editableName] = transformedValue
       }
-      
+
       return transformedValues
     } catch (error) {
       console.warn('Could not apply transformValueForApi transformations:', error)
@@ -71,19 +71,19 @@ class DocumentEditableApiImpl implements DocumentEditableApi {
   private transformEditableValue (editableName: string, editableValue: ValueType): ValueType {
     const editableDefinitions = this.getEditableDefinitions()
     const editableDefinition = editableDefinitions.find(def => def.name === editableName)
-    
+
     if (isNil(editableDefinition)) {
       return editableValue
     }
-    
+
     const dynamicType = this.getDynamicTypeForEditable(editableDefinition.type)
-    
+
     if (isNil(dynamicType)) {
       return editableValue
     }
-    
+
     const apiValue = dynamicType.transformValueForApi(editableValue.data, editableDefinition)
-    
+
     return {
       type: editableValue.type,
       data: apiValue
@@ -95,11 +95,11 @@ class DocumentEditableApiImpl implements DocumentEditableApi {
       const documentEditableRegistry = container.get<DynamicTypeDocumentEditableRegistry>(
         serviceIds['DynamicTypes/DocumentEditableRegistry']
       )
-      
+
       if (!documentEditableRegistry.hasDynamicType(editableType)) {
         return null
       }
-      
+
       return documentEditableRegistry.getDynamicType(editableType)
     } catch (error) {
       console.warn(`Could not get dynamic type for editable type "${editableType}":`, error)

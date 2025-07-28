@@ -46,10 +46,8 @@ export const SnippetContent = ({
   const defaultHeight = config?.defaultHeight ?? 100
   const hasContent = !isNil(value?.path) && !isEmpty(value?.path)
 
-  // Element helper for opening documents
   const { openElement } = useElementHelper()
 
-  // Setup element selector for snippet selection
   const { open: openElementSelector } = useElementSelector({
     selectionType: SelectionType.Single,
     areas: {
@@ -74,17 +72,14 @@ export const SnippetContent = ({
     }
   })
 
-  // Fetch snippet content when value changes
   useEffect(() => {
     if (hasContent && !isNil(value?.path)) {
       setIsLoading(true)
 
-      // Construct URL with required GET parameters for Pimcore admin context
       const url = new URL(value.path, window.location.origin)
       url.searchParams.set('pimcore_admin', 'true')
       url.searchParams.set('_dc', Date.now().toString())
 
-      // Fetch snippet HTML content
       fetch(url.toString(), {
         method: 'GET',
         headers: {
