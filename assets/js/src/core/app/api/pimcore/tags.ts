@@ -114,7 +114,6 @@ export const providingTags = {
   EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }],
   RECYCLING_BIN: () => [tagNames.RECYCLE_BIN],
   RECYCLING_BIN_DETAIL: (id: number) => [{ type: tagNames.RECYCLE_BIN_DETAIL, id }],
-  EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }],
   APPLICATION_LOGGER: () => [tagNames.APPLICATION_LOGGER],
   APPLICATION_LOGGER_DETAIL: (id: number) => [{ type: tagNames.APPLICATION_LOGGER_DETAIL, id }]
 }
