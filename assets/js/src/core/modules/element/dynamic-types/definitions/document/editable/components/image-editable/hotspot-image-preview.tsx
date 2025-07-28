@@ -8,10 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, type MutableRefObject } from 'react'
+import React, { forwardRef, type MutableRefObject, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 import { type Hotspot, type Marker } from '../../../../objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import { type CropSettings } from '../../../../objects/data-related/helpers/hotspot-image/types/crop-types'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
+import { isNil } from 'lodash'
 
 interface DocumentHotspotImageValue {
   image: { type: 'asset', id: number } | null
@@ -26,24 +30,67 @@ interface DocumentHotspotImagePreviewProps {
   width: number | string
   value: DocumentHotspotImageValue
   onChange?: (value: DocumentHotspotImageValue) => void
-  setMarkerModalOpen: (open: boolean) => void
+  setMarkerModalOpen: () => void
+  setCropModalOpen: () => void
+  handleSearch: () => void
+  handleLocateInTree: () => void
+  emptyValue: () => void
   disabled?: boolean
 }
 
 export const DocumentHotspotImagePreview = forwardRef(function DocumentHotspotImagePreview (
-  { assetId, height, width, value, onChange, setMarkerModalOpen, disabled }: DocumentHotspotImagePreviewProps,
+  { assetId, height, width, value, onChange, setMarkerModalOpen, setCropModalOpen, handleSearch, handleLocateInTree, emptyValue, disabled }: DocumentHotspotImagePreviewProps,
   ref: MutableRefObject<HTMLDivElement>
 ): React.JSX.Element {
+  const { t } = useTranslation()
+
+  const dropdownItems: DropdownProps['menu']['items'] = useMemo(() => [
+    {
+      key: 'search',
+      icon: <Icon value="search" />,
+      label: t('search'),
+      disabled: disabled,
+      onClick: handleSearch
+    },
+    {
+      key: 'locate-in-tree',
+      icon: <Icon value="target" />,
+      label: t('element.locate-in-tree'),
+      disabled: disabled === true || isNil(assetId),
+      onClick: handleLocateInTree
+    },
+    {
+      key: 'hotspots-markers',
+      icon: <Icon value="location-marker" />,
+      label: t('hotspots-markers'),
+      disabled: disabled === true || isNil(assetId),
+      onClick: () => { setMarkerModalOpen() }
+    },
+    {
+      key: 'crop',
+      icon: <Icon value="crop" />,
+      label: t('crop'),
+      disabled: disabled === true || isNil(assetId),
+      onClick: () => { setCropModalOpen() }
+    },
+    {
+      key: 'empty',
+      icon: <Icon value="trash" />,
+      label: t('empty'),
+      disabled: disabled === true || isNil(assetId),
+      onClick: emptyValue
+    }
+  ], [disabled, assetId, handleSearch, handleLocateInTree, setMarkerModalOpen, setCropModalOpen, emptyValue, t])
+
   return (
     <div ref={ ref }>
       <ImagePreview
         assetId={ assetId }
+        dropdownItems={ dropdownItems }
         height={ height }
         thumbnailSettings={ value.crop ?? undefined }
         width={ width }
       />
-
-      {/* No need for local modal management - using centralized modal system */}
     </div>
   )
 })
