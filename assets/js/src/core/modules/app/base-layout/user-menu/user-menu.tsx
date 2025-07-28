@@ -26,6 +26,7 @@ import { USERPROFILE } from '@Pimcore/modules/auth/profile/profile-container'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { Avatar } from 'antd'
 import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
+import { isNil } from 'lodash'
 
 interface IUserMenuProps {
   className?: string
@@ -59,7 +60,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   }
 
   const getUserName = (): string => {
-    if (user.firstname !== undefined && user.lastname !== undefined) {
+    if (!isNil(user.firstname) && !isNil(user.lastname)) {
       return `${user.firstname} ${user.lastname}`
     }
 
