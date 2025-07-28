@@ -137,12 +137,13 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                     rules={ [{ min: 10 }] }
                   >
                     <Input suffix={ <IconButton
-                      icon={ { value: 'lightning-01' } }
+                      icon={ { value: 'locked' } }
                       onClick={ () => {
                         const newPassword = generatePassword()
                         form.setFieldValue('password', newPassword); changeUserInState({ password: newPassword })
                       } }
                       title={ t('user-management.generate-password') }
+                      variant={ 'minimal' }
                                     /> }
                     />
                   </Form.Item>
