@@ -14,6 +14,7 @@ import { type Document } from '@Pimcore/modules/document/document-api-slice.gen'
 import type { ElementType } from '../../types/enums/element/element-type'
 import { type DragAndDropInfo } from '@sdk/components'
 import { isBoolean } from 'lodash'
+import { baseUrl } from '@Pimcore/app/router/router'
 
 export type Element = Asset | DataObject | Document
 
@@ -90,4 +91,8 @@ export const convertDragAndDropInfoToElementReference = (info: DragAndDropInfo, 
     isPublished: (showPublishedState && isBoolean(published)) ? published : null,
     subtype: getSubType(info)
   }
+}
+
+export const getElementDeeplink = (elementType: ElementType, id: Element['id']): string => {
+  return `${window.location.origin}${baseUrl}${elementType}/${id}`
 }

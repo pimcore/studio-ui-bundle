@@ -35,6 +35,20 @@ export const useStyles = createStyles(({ token, css }) => {
       .stack-list-item__content {
         flex: 1;
       }
+
+      &.stack-list-item {
+        .ant-collapse.ant-collapse-small>.ant-collapse-item>.ant-collapse-header {
+          padding: 0;
+        }
+
+        .ant-collapse.collapse-item--theme-card-with-highlight.collapse-item--bordered, .ant-collapse.collapse-item--theme-default.collapse-item--bordered {
+          border: none;
+        }
+
+        .ant-collapse .ant-collapse-item:last-child {
+          border: none;
+        }
+      }
     `
   }
 })

@@ -57,13 +57,10 @@ export const ElementSelectorContent = (): React.JSX.Element => {
   }
 
   useEffect(() => {
-    console.log({ activeArea, tabItems })
     if (tabItems.length > 0 && activeArea === undefined) {
       setActiveArea(tabItems[0].key as unknown as ElementType)
     }
   }, [])
-
-  console.log({ activeArea, tabItems })
 
   // @todo translations
   return useMemo(() => (

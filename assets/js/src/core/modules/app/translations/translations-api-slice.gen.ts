@@ -28,7 +28,7 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/translations/domains` }),
                 providesTags: ["Translation"],
             }),
-            translationGetList: build.mutation<TranslationGetListApiResponse, TranslationGetListApiArg>({
+            translationGetList: build.query<TranslationGetListApiResponse, TranslationGetListApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/translations/list`,
                     method: "POST",
@@ -37,7 +37,7 @@ const injectedRtkApi = api
                         domain: queryArg.domain,
                     },
                 }),
-                invalidatesTags: ["Translation"],
+                providesTags: ["Translation"],
             }),
             translationUpdate: build.mutation<TranslationUpdateApiResponse, TranslationUpdateApiArg>({
                 query: (queryArg) => ({
@@ -78,10 +78,11 @@ export type TranslationGetDomainsApiResponse = /** status 200 List of available 
     domains: string[];
 };
 export type TranslationGetDomainsApiArg = void;
-export type TranslationGetListApiResponse = /** status 200 translation_get_list_success_response */ {
-    totalItems: number;
-    items: Translations[];
-};
+export type TranslationGetListApiResponse =
+    /** status 200 List of translations for the given domain including all languages */ {
+        totalItems: number;
+        items: Translations[];
+    };
 export type TranslationGetListApiArg = {
     /** Domain to filter translations by */
     domain?: string;
@@ -165,7 +166,7 @@ export const {
     useTranslationCreateMutation,
     useTranslationDeleteByKeyMutation,
     useTranslationGetDomainsQuery,
-    useTranslationGetListMutation,
+    useTranslationGetListQuery,
     useTranslationUpdateMutation,
     useTranslationGetCollectionMutation,
 } = injectedRtkApi;

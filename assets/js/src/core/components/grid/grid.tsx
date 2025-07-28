@@ -58,6 +58,8 @@ export interface ColumnMetaType {
   type?: string
   columnKey?: string
   config?: any
+  callback?: boolean
+  editCallback?: (row: any, columnId: string) => Promise<string>
 }
 
 declare module '@tanstack/react-table' {

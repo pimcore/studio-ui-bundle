@@ -13,7 +13,7 @@ import { Form } from '../form'
 import React, { useEffect, useMemo, useState } from 'react'
 import { type NumberedListData, NumberedListProvider } from './provider/numbered-list/numbered-list-provider'
 import { NumberedListIterator } from './iterator/numbered-list-iterator'
-import { cloneDeep, isEqual, set, get, isArray } from 'lodash'
+import { cloneDeep, isEqual, set, get, isArray, isUndefined } from 'lodash'
 import { useItem } from '../item/provider/item/use-item'
 
 export interface NumberedListProps {
@@ -33,35 +33,30 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
   const name = useMemo(() => itemName[itemName.length - 1], [itemName])
 
   const onChange: NumberedListData['onChange'] = (newValue) => {
+    setValue(() => newValue)
     baseOnChange !== undefined && baseOnChange(newValue)
   }
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (!isEqual(value, initialValue)) {
-        onChange(value)
-      }
-    }, 300)
-
-    return () => { clearTimeout(timeoutId) }
-  }, [value])
+  const triggerChange = (value: NumberedListProps['value']): void => {
+    if (!isEqual(value, initialValue) && !isUndefined(value)) {
+      onChange(value)
+    }
+  }
 
   useEffect(() => {
     if (!isEqual(value, initialValue)) {
-      setValue(initialValue)
+      setValue(() => initialValue)
     }
   }, [baseValue])
 
   const add: NumberedListData['operations']['add'] = (newValue, key) => {
     let currentKey = key
-
-    if (currentKey === undefined) {
-      currentKey = value.length
-    }
+    currentKey ??= value.length
 
     setValue((currentValue) => {
       const _newValue = cloneDeep(currentValue)
       _newValue.splice(currentKey, 0, newValue)
+      triggerChange(_newValue)
       return _newValue
     })
   }
@@ -70,7 +65,10 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     const newValue = cloneDeep(value)
     newValue.splice(key, 1)
 
-    setValue(() => newValue)
+    setValue(() => {
+      triggerChange(newValue)
+      return newValue
+    })
   }
 
   const update: NumberedListData['operations']['update'] = (subFieldname, newSubValue, isInitialValue) => {
@@ -91,6 +89,7 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     setValue((currentValue) => {
       const newValue = cloneDeep(currentValue)
       set(newValue, nameDifference, newSubValue)
+      triggerChange(newValue)
       return newValue
     })
   }
@@ -100,6 +99,7 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
       const newValue = cloneDeep(currentValue)
       const [removed] = newValue.splice(from, 1)
       newValue.splice(to, 0, removed)
+      triggerChange(newValue)
       return newValue
     })
   }

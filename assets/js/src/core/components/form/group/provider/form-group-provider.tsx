@@ -32,6 +32,7 @@ export const FormGroupProvider = ({ name, children }: FormGroupProviderProps): R
 
   if (groupContext !== undefined) {
     const { name: parentName } = groupContext
+
     groupName = [
       ...(isArray(parentName) ? parentName : [parentName]),
       ...(isArray(name) ? name : [name])
