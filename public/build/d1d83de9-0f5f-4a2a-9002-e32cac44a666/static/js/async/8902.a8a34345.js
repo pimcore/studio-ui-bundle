@@ -1,0 +1,2 @@
+/*! For license information please see 8902.a8a34345.js.LICENSE.txt */
+"use strict";(self.webpackChunkpimcore_studio_ui_bundle=self.webpackChunkpimcore_studio_ui_bundle||[]).push([["8902"],{44274:function(e,u,s){s.r(u),s.d(u,{PimcoreDocumentEditor:()=>t});let t={documentEditable:new class{getValues(){return{...this.values}}getValue(e){return this.values[e]}updateValue(e,u){this.values[e]=u}initializeValues(e){Object.assign(this.values,e)}constructor(){this.values={}}}}}}]);
