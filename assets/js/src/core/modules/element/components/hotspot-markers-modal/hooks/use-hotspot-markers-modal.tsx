@@ -8,11 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import type { IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import type { CropSettings } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
 import { isPimcoreStudioApiAvailable, getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import { isInIframe } from '@Pimcore/utils/iframe'
+import { uuid } from '@Pimcore/utils/uuid'
 import { useHotspotMarkersModalContext } from '../provider/use-hotspot-markers-modal-context'
 
 export interface UseHotspotMarkersModalOptions {
@@ -24,13 +25,17 @@ export interface UseHotspotMarkersModalReturn {
   openModal: (imageId: number, hotspots?: IHotspot[] | null, crop?: CropSettings | null) => void
   closeModal: () => void
   isOpen: boolean
+  modalId: string
 }
 
 export const useHotspotMarkersModal = (options: UseHotspotMarkersModalOptions = {}): UseHotspotMarkersModalReturn => {
-  const hotspotMarkersModalContext = useHotspotMarkersModalContext()
+  const modalId = useMemo(() => {
+    return `hotspot-markers-modal-${uuid()}`
+  }, [])
+
+  const context = useHotspotMarkersModalContext()
 
   const openModal = useCallback((imageId: number, hotspots?: IHotspot[] | null, crop?: CropSettings | null) => {
-    // Check if we're in an iframe and parent API is available
     if (isInIframe() && isPimcoreStudioApiAvailable()) {
       const { element } = getPimcoreStudioApi()
       element.openHotspotMarkersModal({
@@ -42,17 +47,23 @@ export const useHotspotMarkersModal = (options: UseHotspotMarkersModalOptions = 
       return
     }
 
-    // Fallback to local context
-    hotspotMarkersModalContext.openModal(imageId, hotspots, crop, options)
-  }, [hotspotMarkersModalContext, options])
+    context.openModal(modalId, imageId, hotspots, crop, options)
+  }, [modalId, context, options])
 
   const closeModal = useCallback(() => {
-    hotspotMarkersModalContext.closeModal()
-  }, [hotspotMarkersModalContext])
+    if (isInIframe() && isPimcoreStudioApiAvailable()) {
+      return
+    }
+
+    context.closeModal(modalId)
+  }, [modalId, context])
+
+  const isOpen = context.isModalOpen(modalId)
 
   return {
     openModal,
     closeModal,
-    isOpen: hotspotMarkersModalContext.isOpen
+    isOpen,
+    modalId
   }
 }

@@ -10,9 +10,11 @@
 
 import { type ApiGatewayHandler } from '../registry/handler-registry'
 import { type ApiGatewayEventType } from '../types/event-types'
+import { uuid } from '@Pimcore/utils/uuid'
 
 export const openHotspotMarkersModalHandler: ApiGatewayHandler<ApiGatewayEventType.openHotspotMarkersModal> = (payload, context) => {
   const { hotspotMarkersModalContext } = context
-
-  hotspotMarkersModalContext.openModal(payload.imageId, payload.hotspots, payload.crop, payload.options)
+  const modalId = `iframe-hotspot-modal-${uuid()}`
+  
+  hotspotMarkersModalContext.openModal(modalId, payload.imageId, payload.hotspots, payload.crop, payload.options)
 }

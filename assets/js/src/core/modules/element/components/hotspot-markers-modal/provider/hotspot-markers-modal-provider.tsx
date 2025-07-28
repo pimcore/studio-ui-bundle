@@ -9,16 +9,15 @@
  */
 
 import React, { createContext, useMemo, useState } from 'react'
-import { isNull } from 'lodash'
 import { HotspotMarkersModal } from '../hotspot-markers-modal'
 import { HotspotDataProvider } from './hotspot-data-provider'
 import type { IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import type { CropSettings } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
 
 export interface HotspotMarkersModalContextProps {
-  openModal: (imageId: number, hotspots?: IHotspot[] | null, crop?: CropSettings | null, options?: HotspotMarkersModalOptions) => void
-  closeModal: () => void
-  isOpen: boolean
+  openModal: (modalId: string, imageId: number, hotspots?: IHotspot[] | null, crop?: CropSettings | null, options?: HotspotMarkersModalOptions) => void
+  closeModal: (modalId: string) => void
+  isModalOpen: (modalId: string) => boolean
 }
 
 export interface HotspotMarkersModalOptions {
@@ -30,57 +29,78 @@ export interface HotspotMarkersModalProviderProps {
   children: React.ReactNode
 }
 
+interface ModalInstance {
+  modalId: string
+  imageId: number
+  hotspots: IHotspot[] | null
+  crop: CropSettings | null
+  options: HotspotMarkersModalOptions
+}
+
 export const HotspotMarkersModalContext = createContext<HotspotMarkersModalContextProps | undefined>(undefined)
 
 export const HotspotMarkersModalProvider: React.FC<HotspotMarkersModalProviderProps> = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [currentImageId, setCurrentImageId] = useState<number | null>(null)
-  const [currentHotspots, setCurrentHotspots] = useState<IHotspot[] | null>(null)
-  const [currentCrop, setCurrentCrop] = useState<CropSettings | null>(null)
-  const [modalOptions, setModalOptions] = useState<HotspotMarkersModalOptions>({})
+  const [openModals, setOpenModals] = useState<Map<string, ModalInstance>>(new Map())
 
-  const openModal = (imageId: number, hotspots?: IHotspot[] | null, crop?: CropSettings | null, options?: HotspotMarkersModalOptions): void => {
-    setCurrentImageId(imageId)
-    setCurrentHotspots(hotspots ?? null)
-    setCurrentCrop(crop ?? null)
-    setModalOptions(options ?? {})
-    setIsOpen(true)
+  const openModal = (modalId: string, imageId: number, hotspots?: IHotspot[] | null, crop?: CropSettings | null, options?: HotspotMarkersModalOptions): void => {
+    setOpenModals(prev => {
+      const newMap = new Map(prev)
+      newMap.set(modalId, {
+        modalId,
+        imageId,
+        hotspots: hotspots ?? null,
+        crop: crop ?? null,
+        options: options ?? {}
+      })
+      return newMap
+    })
   }
 
-  const closeModal = (): void => {
-    setIsOpen(false)
-    setCurrentImageId(null)
-    setCurrentHotspots(null)
-    setCurrentCrop(null)
-    setModalOptions({})
+  const closeModal = (modalId: string): void => {
+    setOpenModals(prev => {
+      const newMap = new Map(prev)
+      newMap.delete(modalId)
+      return newMap
+    })
   }
 
-  const handleChange = (hotspots: IHotspot[]): void => {
-    modalOptions.onChange?.(hotspots)
-    closeModal()
+  const isModalOpen = (modalId: string): boolean => {
+    return openModals.has(modalId)
+  }
+
+  const handleModalChange = (modalId: string, hotspots: IHotspot[]): void => {
+    const modalInstance = openModals.get(modalId)
+    if (modalInstance) {
+      modalInstance.options.onChange?.(hotspots)
+      closeModal(modalId)
+    }
+  }
+
+  const handleModalClose = (modalId: string): void => {
+    closeModal(modalId)
   }
 
   const contextValue = useMemo(() => ({
     openModal,
     closeModal,
-    isOpen
-  }), [isOpen])
+    isModalOpen
+  }), [])
 
   return (
     <HotspotMarkersModalContext.Provider value={ contextValue }>
-      {isOpen && !isNull(currentImageId) && (
-        <HotspotDataProvider>
+      {Array.from(openModals.values()).map((modalInstance) => (
+        <HotspotDataProvider key={ modalInstance.modalId }>
           <HotspotMarkersModal
-            crop={ currentCrop ?? undefined }
-            disabled={ modalOptions.disabled }
-            hotspots={ currentHotspots }
-            imageId={ currentImageId }
-            onChange={ handleChange }
-            onClose={ closeModal }
-            open={ isOpen }
+            crop={ modalInstance.crop ?? undefined }
+            disabled={ modalInstance.options.disabled }
+            hotspots={ modalInstance.hotspots }
+            imageId={ modalInstance.imageId }
+            onChange={ (hotspots) => handleModalChange(modalInstance.modalId, hotspots) }
+            onClose={ () => handleModalClose(modalInstance.modalId) }
+            open={ true }
           />
         </HotspotDataProvider>
-      )}
+      ))}
       {children}
     </HotspotMarkersModalContext.Provider>
   )
