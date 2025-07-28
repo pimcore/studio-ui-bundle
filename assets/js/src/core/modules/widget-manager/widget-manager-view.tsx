@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import cn from 'classnames'
 import { Layout, type ILayoutProps } from 'flexlayout-react'
 import cn from 'classnames'
 import { useStyles } from './widget-manager-view.styles'

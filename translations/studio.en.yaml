@@ -309,6 +309,22 @@ properties.editable-properties: Editable Properties
 properties.all-properties: All Properties
 properties.predefined-properties: Predefined Properties
 properties.new-custom-property: New custom property
+translations.columns.type: Type
+translations.columns.key: Key
+translations.columns.actions: Actions
+translations.select-languages: Select languages
+translations.select-domain: Select domain
+translations.show-all-languages: Show all
+translations.show-minimal-languages: Show minimal
+translations.show-hide-locale: Show/ Hide Locale
+translations.new-translation: New Translation
+translations.new: Add
+translations.type-options.custom: ICU Format
+translations.type-options.simple: Simple Text
+translations.edit-modal.tab.plain-text: Plain Text
+translations.edit-modal.tab.html: HTML
+translations.edit-modal.save: Save
+translations.edit-modal.title: Edit translation
 properties.columns.type: Type
 properties.columns.key: Key
 properties.columns.name: Name
@@ -321,12 +337,15 @@ properties.columns.actions: Actions
 properties.inherited.properties: Inherited Properties
 properties.add-custom-property.cancel: Cancel
 properties.add-custom-property.key: Key
+translations.add-translation.key: Key
 properties.add-custom-property.create: Create
 properties.add-custom-property.type: Type
 properties.property-already-exist.title: Property already exists
 properties.property-already-exist.error: Name is already in use, please choose a different one
 properties.add-property-mandatory-fields-missing.title: Mandatory fields missing
 properties.add-property-mandatory-fields-missing.error: Key and type are mandatory fields and need to be filled out.
+translations.add-translation-mandatory-field-missing.title: Mandatory field missing
+translations.add-translation-mandatory-field-missing.error: Key is a mandatory field and needs to be filled out.
 button.ok: Ok
 button.apply: Apply
 button.cancel: Cancel
@@ -719,6 +738,7 @@ navigation.reports: Reports
 navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
 navigation.customise: Customise
+navigation.translations: Translations
 navigation.tag-configuration: Tag Configuration
 navigation.predefined-properties: Predefined Properties
 navigation.user-and-roles: User & Roles
@@ -738,6 +758,7 @@ predefined-properties.name: Name
 perspective.default: Default
 perspective.switching.title: Switching perspective
 perspective.switching.description: Currently switching to the following perspective
+widget.translations: Translations
 widget.notes-and-events: Notes & Events
 widget.tag-configuration: Tag Configuration
 widget.predefined-properties: Predefined Properties
@@ -911,6 +932,8 @@ user-profile.password-repeat-error: Passwords do not match
 creatable-select.add-custom-option: Add custom option
 creatable-select.add: Add
 creatable-select.option-already-exists: Option already exists
+drag-snippet-here: Drag a snippet here
+snippet: Snippet
 navigation.application-logger: Application Logger
 widget.application-logger: Application Logger
 application-logger.label: Application Logger

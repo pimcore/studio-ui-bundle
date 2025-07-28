@@ -28,11 +28,14 @@ export abstract class DynamicTypeObjectDataAbstractMultiSelect extends DynamicTy
   }
 
   getGridCellColumnMeta (props: GetGridCellDefinitionProps): GridCellColumnMeta {
+    const isEditable = props.objectProps.noteditable !== true
+    const hasOptions = props.objectProps.options !== undefined && Array.isArray(props.objectProps.options) && props.objectProps.options.length > 0
+
     return {
       type: 'multi-select',
-      editable: props.objectProps.noteditable !== true,
+      editable: isEditable,
       config: {
-        options: this.convertOptions(props.objectProps.options as Array<{ key: string, value: string | number }> | null),
+        options: isEditable && hasOptions ? this.convertOptions(props.objectProps.options as Array<{ key: string, value: string | number }> | null) : [],
         [META_SUPPORTS_BATCH_APPEND_MODE]: this.supportsBatchAppendModes
       }
     }

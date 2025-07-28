@@ -17,27 +17,54 @@ interface IFlagIconProps {
   height?: number
 }
 
-// Create a context for all SVGs in the given directory
-const flagsContext = require.context('@Pimcore/assets/images/flags', false, /\.svg$/)
+const importFlag = async (countryCode: string): Promise<React.ReactElement | null> => {
+  try {
+    const module = await import(`@Pimcore/assets/images/flags/${countryCode}.inline.svg?react`)
+    return module.default !== undefined ? module.default : module
+  } catch {
+    return null
+  }
+}
 
-// Create a mapping from file names to imported SVG modules
-const flagComponents = flagsContext.keys().reduce((acc, key) => {
-  const countryCode = key.replace('./', '').replace('.inline.svg', '')
-  acc[countryCode] = flagsContext(key).default
-  return acc
-}, {})
+const flagCache: Record<string, React.ReactElement | null> = {}
 
 export const FlagIcon = ({ value, width = 21, height = 15 }: IFlagIconProps): React.JSX.Element => {
-  const FlagComponent = flagComponents[value ?? '_unknown']
+  const [flag, setFlag] = React.useState<React.ReactElement | null>(null)
+  const [loading, setLoading] = React.useState(true)
 
-  if (FlagComponent === undefined || FlagComponent === null) {
-    return <UnknownFlag style={ { width: '100%', height: '100%' } } />
+  React.useEffect(() => {
+    const countryCode = value ?? '_unknown'
+
+    if (flagCache[countryCode] !== undefined) {
+      setFlag(flagCache[countryCode])
+      setLoading(false)
+      return
+    }
+
+    const loadFlag = async (): Promise<void> => {
+      try {
+        const component = await importFlag(countryCode)
+        flagCache[countryCode] = component
+        setFlag(component)
+      } catch (error) {
+        console.error(`Failed to import flag for ${countryCode}:`, error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    void loadFlag()
+  }, [value])
+
+  if (loading) return <div style={ { width, height, background: '#f0f0f0' } } />
+
+  if (flag === null || !React.isValidElement(flag)) {
+    return <UnknownFlag style={ { width, height } } />
   }
 
-  return (
-    <FlagComponent
-      height={ height }
-      width={ width }
-    />
-  )
+  return React.cloneElement(flag as React.ReactElement<any>, {
+    style: { width, height },
+    width: width.toString(),
+    height: height.toString()
+  })
 }
