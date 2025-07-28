@@ -25,7 +25,7 @@ export interface TranslationDomainProviderProps {
 }
 
 export const TranslationDomainProvider = ({ children }: TranslationDomainProviderProps): React.JSX.Element => {
-  const [domain, setDomain] = useState<string>('message')
+  const [domain, setDomain] = useState<string>('messages')
 
   return useMemo(() => (
     <TranslationDomainContext.Provider value={ { domain, setDomain } }>
