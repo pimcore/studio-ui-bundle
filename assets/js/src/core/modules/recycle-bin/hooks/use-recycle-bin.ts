@@ -4,7 +4,12 @@ import ApiError from "@Pimcore/modules/app/error-handler/classes/api-error"
 import GeneralError from "@Pimcore/modules/app/error-handler/classes/general-error"
 import trackError from "@Pimcore/modules/app/error-handler/error-handler"
 import { api, RecycleBin, useRecycleBinDeleteItemsMutation, useRecycleBinFlushMutation } from "../recycle-bin-api-slice-enhanced"
-import { useRecycleBinRestoreItemsMutation } from "../recycle-bin-api-slice.gen"
+import { RecycleBinFlushApiResponse, RecycleBinRestoreItemsApiResponse, useRecycleBinRestoreItemsMutation } from "../recycle-bin-api-slice.gen"
+import { createJob as createRestoreJob } from "@Pimcore/modules/execution-engine/jobs/recycle-bin/restore/factory"
+import { createJob as createDeleteJob } from "@Pimcore/modules/execution-engine/jobs/recycle-bin/delete/factory"
+import { useJobs } from "@Pimcore/modules/execution-engine/hooks/useJobs"
+import { useTranslation } from "react-i18next"
+import { defaultTopics, topics } from "@Pimcore/modules/execution-engine/topics"
 
 interface UseRecycleBinHookReturn {
   restoreItems: (ids: Array<RecycleBin['id']>, onFinish?: () => void) => Promise<void>
@@ -15,6 +20,8 @@ interface UseRecycleBinHookReturn {
 
 export const useRecycleBin = (): UseRecycleBinHookReturn => {
   const dispatch = useAppDispatch()
+  const { addJob } = useJobs()
+  const { t } = useTranslation()
   const [recycleBinRestoreMutation] = useRecycleBinRestoreItemsMutation()
   const [recycleBindDelteMutation] = useRecycleBinDeleteItemsMutation()
   const [recycleBinFlushMutation] = useRecycleBinFlushMutation()
@@ -31,6 +38,23 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
 
       if (response.error !== undefined) {
         trackError(new ApiError(response.error))
+      }
+
+      let jobRunId: any = null
+      if ((response.data ?? false) !== false) {
+        const data = response.data as RecycleBinRestoreItemsApiResponse
+        jobRunId = data.jobRunId ?? null
+      }
+
+      if (jobRunId !== null) {
+        addJob(createRestoreJob({
+          title: t('recycle-bin.actions.restore.title'),
+          topics: [topics['recycle-bin-restore-finished'], ...defaultTopics],
+          action: async () => {
+            return jobRunId
+          },
+          elementIds: ids
+        }))
       }
 
       onFinish?.()
@@ -53,6 +77,23 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
         trackError(new ApiError(response.error))
       }
 
+      let jobRunId: any = null
+      if ((response.data ?? false) !== false) {
+        const data = response.data as RecycleBinRestoreItemsApiResponse
+        jobRunId = data.jobRunId ?? null
+      }
+
+      if (jobRunId !== null) {
+        addJob(createRestoreJob({
+          title: t('recycle-bin.actions.delete.title'),
+          topics: [topics['recycle-bin-delete-finished'], ...defaultTopics],
+          action: async () => {
+            return jobRunId
+          },
+          elementIds: ids
+        }))
+      }
+
       onFinish?.()
     } catch (error) {
       trackError(new GeneralError('Failed to remove item(s) from recycle bin'))
@@ -68,6 +109,12 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
       if (response.error !== undefined) {
         trackError(new ApiError(response.error))
       }
+
+      /*let jobRunId: any = null
+      if ((response.data ?? false) !== false) {
+        const data = response.data as RecycleBinFlushApiResponse
+        jobRunId = data.jobRunId ?? null
+      }*/
 
       onFinish?.()
     } catch (error) {

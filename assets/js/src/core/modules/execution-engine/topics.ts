@@ -21,7 +21,9 @@ export const topics: Record<string, string> = {
   'deletion-finished': 'deletion-finished',
   'cloning-finished': 'cloning-finished',
   'tag-assignment-finished': 'tag-assignment-finished',
-  'tag-replacement-finished': 'tag-replacement-finished'
+  'tag-replacement-finished': 'tag-replacement-finished',
+  'recycle-bin-restore-finished': 'recycle-bin-restore-finished',
+  'recycle-bin-delete-finished': 'recycle-bin-delete-finished'
 }
 
 export const defaultTopics: string[] = [

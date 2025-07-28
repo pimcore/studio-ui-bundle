@@ -1,0 +1,112 @@
+import { useJobs } from "@Pimcore/modules/execution-engine/hooks/useJobs"
+import { JobProps } from "@Pimcore/modules/execution-engine/notification/job/job"
+import { JobView } from "@Pimcore/modules/execution-engine/notification/job/job-view"
+import { useServerSideEvent } from "@Pimcore/utils/hooks/use-server-side-event"
+import React, { useEffect, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
+import { JobStatus } from "../../abstact-job"
+import { DeleteJob } from "./factory"
+
+export interface DeleteJobProps extends JobProps {
+  config: DeleteJob['config']
+}
+
+export const NotificationJobContainer = (props: DeleteJobProps): React.JSX.Element => {
+  const { id, topics, status, action } = props
+  const { open: openSEEvent, close: closeSEEvent } = useServerSideEvent({ topics, messageHandler, openHandler })
+  const [progress, setProgress] = useState<number>(0)
+  const { updateJob, removeJob } = useJobs()
+  const jobId = useRef<number>()
+  const { t } = useTranslation()
+
+  useEffect(() => {
+    if (JobStatus.QUEUED === status) {
+      updateJob(id, {
+        status: JobStatus.RUNNING
+      })
+
+      openSEEvent()
+    }
+  }, [props.status])
+
+  return (
+    <JobView
+      failureButtonActions={[
+        {
+          label: t('jobs.job.button-hide'),
+          handler: () => { removeJob(id) }
+        }
+      ]}
+
+      finishedWithErrorsButtonActions={[
+        {
+          label: t('jobs.job.button-hide'),
+          handler: () => {
+            removeJob(id)
+          }
+        }
+      ]}
+
+      successButtonActions={[
+        {
+          label: t('jobs.job.button-hide'),
+          handler: () => {
+            removeJob(id)
+          }
+        }
+      ]}
+
+      {...props}
+      progress={progress}
+    />
+  )
+
+  function openHandler(): void {
+    action().then(actionJobId => {
+      jobId.current = actionJobId
+    }).catch(console.error)
+  }
+
+  function messageHandler(event: MessageEvent): void {
+    const data: any = JSON.parse(event.data as string)
+
+    if (data.jobRunId !== jobId.current) {
+      return
+    }
+
+    if (data.progress !== undefined) {
+      setProgress(data.progress as number)
+    }
+
+    if (data.status !== undefined) {
+      if (data.status === 'finished' || data.status === 'finished_with_errors' || data.status === 'failed') {
+        //TODO: reload tree and recycle bin
+        //dispatch(refreshNodeChildren({ nodeId: props.config.parentFolder, elementType: props.config.elementType }))
+      }
+
+      if (data.status === 'finished') {
+        updateJob(id, {
+          status: JobStatus.SUCCESS
+        })
+
+        closeSEEvent()
+      }
+
+      if (data.status === 'finished_with_errors') {
+        updateJob(id, {
+          status: JobStatus.FINISHED_WITH_ERRORS
+        })
+
+        closeSEEvent()
+      }
+
+      if (data.status === 'failed') {
+        updateJob(id, {
+          status: JobStatus.FAILED
+        })
+
+        closeSEEvent()
+      }
+    }
+  }
+}
