@@ -47,7 +47,7 @@ export const FlagIcon = ({ value, width = 21, height = 15 }: IFlagIconProps): Re
         const component = await importFlag(countryCode)
         flagCache[countryCode] = component
         setFlag(component)
-      } catch (error) {
+      } catch {
         trackError(new GeneralError(`Failed to import flag for ${countryCode}`))
       } finally {
         setLoading(false)

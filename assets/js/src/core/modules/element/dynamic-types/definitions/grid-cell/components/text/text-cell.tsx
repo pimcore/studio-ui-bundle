@@ -60,7 +60,7 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
         try {
           const newValue = await editCallback(props.row.original, props.column.id)
           fireOnUpdateCellDataEvent(newValue)
-        } catch (error) {
+        } catch {
           trackError(new GeneralError('Edit callback failed'))
         }
       } else {
