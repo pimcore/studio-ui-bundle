@@ -103,6 +103,20 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     columnHelper.accessor('actions', {
       header: t('recycle-bin.columns.actions'),
       cell: ({ row }): React.JSX.Element => {
+        const restoreOnClick = () => {
+          setRestoreLoading((prev) => [...prev, row.original.id])
+          restoreItems([row.original.id], () => {
+            setRestoreLoading((prev) => prev.filter(id => id !== row.original.id))
+          })
+        }
+
+        const removeOnClick = () => {
+          setRemoveLoading(prev => [...prev, row.original.id])
+          removeItems([row.original.id], () => {
+            setRemoveLoading(prev => prev.filter(id => id !== row.original.id))
+          })
+        }
+
         return (
           <Flex
             align='center'
@@ -110,24 +124,14 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
           >
             <IconButton
               icon={{ value: 'restore' }}
-              onClick={() => {
-                setRestoreLoading((prev) => [...prev, row.original.id])
-                restoreItems([row.original.id], () => {
-                  setRestoreLoading((prev) => prev.filter(id => id !== row.original.id))
-                })
-              }}
+              onClick={restoreOnClick}
               loading={restoreLoading.includes(row.original.id)}
               type="link"
             />
 
             <IconButton
               icon={{ value: 'trash' }}
-              onClick={() => {
-                setRemoveLoading(prev => [...prev, row.original.id])
-                removeItems([row.original.id], () => {
-                  setRemoveLoading(prev => prev.filter(id => id !== row.original.id))
-                })
-              }}
+              onClick={removeOnClick}
               loading={removeLoading.includes(row.original.id)}
               type="link"
             />
