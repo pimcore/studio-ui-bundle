@@ -10,7 +10,7 @@
 
 import React, { forwardRef, type MutableRefObject } from 'react'
 import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
-import { HotspotMarkersModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-markers-modal'
+import { HotspotMarkersModal } from '@Pimcore/modules/element/components/hotspot-markers-modal/hotspot-markers-modal'
 import { fromIHotspots, toIHotspots } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/utils/hotspot-converter'
 import type { IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import type { HotspotImageValue } from './hotspot-image'

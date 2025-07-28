@@ -23,7 +23,7 @@ import {
 import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import {
   type HotspotMarkersModalContainerRef
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-markers-modal-container'
+} from '@Pimcore/modules/element/components/hotspot-markers-modal/hotspot-markers-modal-container'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import {
   type ImageValue

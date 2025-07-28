@@ -19,7 +19,9 @@ import { DocumentImageEditableFooter } from './footer/footer'
 import { isNil, isNumber } from 'lodash'
 import { createStyles } from 'antd-style'
 import { useCropModal } from '@Pimcore/modules/element/components/crop-modal/hooks/use-crop-modal'
+import { useHotspotMarkersModal } from '@Pimcore/modules/element/components/hotspot-markers-modal/hooks/use-hotspot-markers-modal'
 import { type CropSettings } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
+import { toIHotspots, fromIHotspots } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/utils/hotspot-converter'
 
 // Create styles hook inline since we had import issues
 const useStyles = createStyles(({ token, css }) => {
@@ -69,7 +71,6 @@ interface DocumentImageEditableProps {
 export const DocumentImageEditable = (props: DocumentImageEditableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const [markerModalOpen, setMarkerModalOpen] = useState(false)
 
   const imageValue = props.value
   const width = isNumber(props.config?.width) ? String(props.config.width) : '200'
@@ -86,6 +87,24 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
           hotspots: imageValue?.hotspots ?? [],
           marker: imageValue?.marker ?? [],
           crop: crop ?? {}
+        }
+        props.onChange?.(newValue)
+      }
+    }
+  })
+
+  const { openModal: openHotspotMarkersModal } = useHotspotMarkersModal({
+    disabled: props.disabled,
+    onChange: (hotspots) => {
+      if (!isNil(imageValue?.id)) {
+        const { hotspots: newHotspots, marker: newMarkers } = fromIHotspots(hotspots)
+        const newValue: ImageEditableValue = {
+          id: imageValue.id,
+          alt: imageValue?.alt ?? '',
+          title: imageValue?.title ?? '',
+          hotspots: newHotspots,
+          marker: newMarkers,
+          crop: imageValue?.crop ?? {}
         }
         props.onChange?.(newValue)
       }
@@ -163,6 +182,14 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
     }
   }, [imageValue, openCropModal])
 
+  const handleOpenHotspotMarkersModal = useCallback(() => {
+    if (!isNil(imageValue?.id)) {
+      const hotspots = toIHotspots(imageValue.hotspots ?? [], imageValue.marker ?? [])
+      const cropSettings: CropSettings | null = imageValue.crop as CropSettings ?? null
+      openHotspotMarkersModal(imageValue.id, hotspots, cropSettings)
+    }
+  }, [imageValue, openHotspotMarkersModal])
+
   return (
     <Card
       bodyStyle={ { padding: 0 } }
@@ -186,9 +213,8 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
                 assetId={ imageValue.id }
                 disabled={ props.disabled }
                 height={ Number(height) }
-                markerModalOpen={ markerModalOpen }
                 onChange={ handleHotspotImageChange }
-                setMarkerModalOpen={ setMarkerModalOpen }
+                setMarkerModalOpen={ handleOpenHotspotMarkersModal }
                 value={ convertToHotspotImageValue() }
                 width={ Number(width) }
               />
@@ -212,7 +238,7 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
         emptyValue={ emptyValue }
         replaceImage={ replaceImage }
         setCropModalOpen={ handleOpenCropModal }
-        setMarkerModalOpen={ setMarkerModalOpen }
+        setMarkerModalOpen={ handleOpenHotspotMarkersModal }
         setValue={ props.onChange ?? (() => {}) }
         value={ props.value }
       />

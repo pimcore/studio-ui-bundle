@@ -10,7 +10,7 @@
 
 import { type ElementSelectorConfig } from '@sdk/modules/element'
 import { type ModalUploadProps } from '@Pimcore/components/modal-upload/modal-upload'
-import { type LinkModalProps, type CropModalProps } from '@Pimcore/app/public-api/element/element-api'
+import { type LinkModalProps, type CropModalProps, type HotspotMarkersModalProps } from '@Pimcore/app/public-api/element/element-api'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 export enum ApiGatewayEventType {
@@ -18,6 +18,7 @@ export enum ApiGatewayEventType {
   openUploadModal = 'openUploadModal',
   openLinkModal = 'openLinkModal',
   openCropModal = 'openCropModal',
+  openHotspotMarkersModal = 'openHotspotMarkersModal',
   locateInTree = 'locateInTree',
 }
 
@@ -29,6 +30,7 @@ export interface ApiGatewayEventPayloadMap {
   [ApiGatewayEventType.openUploadModal]: ModalUploadProps
   [ApiGatewayEventType.openLinkModal]: LinkModalProps
   [ApiGatewayEventType.openCropModal]: CropModalProps
+  [ApiGatewayEventType.openHotspotMarkersModal]: HotspotMarkersModalProps
   [ApiGatewayEventType.locateInTree]: { id: number, elementType: ElementType }
 }
 
