@@ -192,6 +192,7 @@ import { DynamicTypePipelineGridSourceFieldsRelationField } from '@Pimcore/modul
 import { DynamicTypeDocumentEditableMultiSelect } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-multiselect'
 import { DynamicTypeDocumentEditableSelect } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-select'
 import { DynamicTypeDocumentEditableTable } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-table'
+import { DynamicTypeDocumentEditableSnippet } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-snippet'
 import { BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
 import { DynamicTypeGridCellDataObjectAdvanced } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/data-object-advanced/dynamic-type-grid-cell-data-object-advanced'
 
@@ -387,6 +388,7 @@ container.bind(serviceIds['DynamicTypes/DocumentEditable/Numeric']).to(DynamicTy
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Relation']).to(DynamicTypeDocumentEditableRelation).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Relations']).to(DynamicTypeDocumentEditableRelations).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Select']).to(DynamicTypeDocumentEditableSelect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Snippet']).to(DynamicTypeDocumentEditableSnippet).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Table']).to(DynamicTypeDocumentEditableTable).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Textarea']).to(DynamicTypeDocumentEditableTextarea).inSingletonScope()
 
