@@ -10,7 +10,7 @@ import { Split } from "@Pimcore/components/split/split"
 import { Title } from "@Pimcore/components/title/title"
 import { Toolbar } from "@Pimcore/components/toolbar/toolbar"
 import { useAppDispatch } from "@sdk/app"
-import { IconTextButton } from "@sdk/components"
+import { Divider, IconTextButton, Space } from "@sdk/components"
 import { isUndefined } from "lodash"
 import React, { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -92,8 +92,7 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
             </IconTextButton>
           )}
 
-
-          <Split size='extra-small'>
+          <Flex align="center">
             <IconButton
               disabled={isRTKLoading || isLoading}
               icon={{ value: 'refresh' }}
@@ -105,15 +104,25 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
                 )
               }}
             />
-            <Pagination
-              current={currentPage}
-              defaultPageSize={pageSize}
-              onChange={onPagerChange}
-              showSizeChanger
-              showTotal={(total) => t('pagination.show-total', { total })}
-              total={total}
-            />
-          </Split>
+
+            {total > 0 && (
+              <>
+                <Divider
+                  type="vertical"
+                  size="small"
+                />
+
+                <Pagination
+                  current={currentPage}
+                  defaultPageSize={pageSize}
+                  onChange={onPagerChange}
+                  showSizeChanger
+                  showTotal={(total) => t('pagination.show-total', { total })}
+                  total={total}
+                />
+              </>
+            )}
+          </Flex>
         </Toolbar>}
       renderTopBar={
         <Toolbar
