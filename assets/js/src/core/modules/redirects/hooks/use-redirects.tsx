@@ -16,7 +16,7 @@ import {
   useBundleSeoRedirectAddMutation,
   useBundleSeoRedirectDeleteMutation,
   useBundleSeoRedirectUpdateByIdMutation
-} from '../seo-api-slice.gen'
+} from '../seo-api-slice-enhanced'
 
 export type RedirectRow = BundleSeoRedirect & { rowId: string }
 

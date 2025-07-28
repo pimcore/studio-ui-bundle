@@ -19,7 +19,7 @@ import {
   useBundleSeoRedirectListTypesQuery,
   useBundleSeoRedirectListStatusesQuery,
   useBundleSeoRedirectListPrioritiesQuery
-} from '../seo-api-slice.gen'
+} from '../seo-api-slice-enhanced'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { Site } from '@Pimcore/modules/document/sites-slice.gen'
 
