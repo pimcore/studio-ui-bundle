@@ -13,11 +13,9 @@ import { store } from '@Pimcore/app/store'
 import { ThemeProvider } from '@Pimcore/modules/app/theme/theme-provider'
 import React from 'react'
 import { Provider } from 'react-redux'
-import { ElementSelectorProvider } from '@sdk/modules/element'
-import { UploadModalProvider } from '@Pimcore/components/modal-upload/provider/upload-modal-provider/upload-modal-provider'
 import { ApiGateway } from '@Pimcore/app/public-api/api-gateway'
 import { isInIframe } from '@Pimcore/utils/iframe'
-import { LinkModalProvider } from '../element/dynamic-types/definitions/objects/data-related/components/link/provider/link-modal-provider'
+import { ModalsProvider } from './modals-provider'
 
 export interface GlobalProviderProps {
   children: React.ReactNode
@@ -28,14 +26,10 @@ export const GlobalProvider = ({ children }: GlobalProviderProps): React.JSX.Ele
     <ContainerProvider>
       <ThemeProvider>
         <Provider store={ store }>
-          <ElementSelectorProvider>
-            <UploadModalProvider>
-              <LinkModalProvider>
-                { !isInIframe() && <ApiGateway /> }
-                {children}
-              </LinkModalProvider>
-            </UploadModalProvider>
-          </ElementSelectorProvider>
+          <ModalsProvider>
+            { !isInIframe() && <ApiGateway /> }
+            {children}
+          </ModalsProvider>
         </Provider>
       </ThemeProvider>
     </ContainerProvider>

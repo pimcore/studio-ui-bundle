@@ -32,7 +32,7 @@ interface HotspotImageFooterProps {
   disabled?: boolean
   value?: HotspotImageValue | null
   setValue: (value: HotspotImageValue | null) => void
-  setCropModalOpen: (open: boolean) => void
+  setCropModalOpen: () => void
   setMarkerModalOpen: (open: boolean) => void
   replaceImage: (newImage: ImageValue) => void
 }
@@ -121,7 +121,7 @@ export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.El
               key: 'crop',
               icon: <Icon value={ 'crop' } />,
               onClick: async () => {
-                props.setCropModalOpen(true)
+                props.setCropModalOpen()
               }
             },
             {

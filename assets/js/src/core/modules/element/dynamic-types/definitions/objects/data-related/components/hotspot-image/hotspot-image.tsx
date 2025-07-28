@@ -35,9 +35,10 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import {
   hasValueData
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/hotspot-image/utils/value-data'
-import _ from 'lodash'
+import _, { isNil } from 'lodash'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { useStyles } from './hotspot-image.styles'
+import { useCropModal } from '@Pimcore/modules/element/components/crop-modal/hooks/use-crop-modal'
 
 export interface HotspotImageValue {
   image: ImageValue | null
@@ -59,11 +60,23 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
   const imageValue = props.value ?? null
 
   const [markerModalOpen, setMarkerModalOpen] = useState(false)
-  const [cropModalOpen, setCropModalOpen] = useState(false)
 
   const { confirm } = useFormModal()
   const { t } = useTranslation()
   const { styles } = useStyles()
+
+  const { openModal: openCropModal } = useCropModal({
+    disabled: props.disabled,
+    onChange: (crop) => {
+      if (!isNil(imageValue?.image?.id)) {
+        const newValue: HotspotImageValue = {
+          ...imageValue,
+          crop: crop ?? {}
+        }
+        handleChange(newValue)
+      }
+    }
+  })
 
   const handleChange = (newValue: HotspotImageValue | null): void => {
     if (!_.isEqual(newValue, imageValue)) {
@@ -109,6 +122,12 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
     handleChange(newValue)
   }
 
+  const handleOpenCropModal = (): void => {
+    if (!isNil(imageValue?.image?.id)) {
+      openCropModal(imageValue.image.id, imageValue.crop)
+    }
+  }
+
   return (
     <Card
       className={ cn('max-w-full', styles.image, props.className) }
@@ -119,7 +138,7 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
           emptyValue={ clearValue }
           key="image-footer"
           replaceImage={ replaceImage }
-          setCropModalOpen={ setCropModalOpen }
+          setCropModalOpen={ handleOpenCropModal }
           setMarkerModalOpen={ setMarkerModalOpen }
           setValue={ handleChange }
           value={ imageValue }
@@ -140,12 +159,10 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
             ? (
               <HotspotImagePreview
                 assetId={ imageValue.image.id }
-                cropModalOpen={ cropModalOpen }
                 disabled={ props.disabled }
                 height={ height! }
                 markerModalOpen={ markerModalOpen }
                 onChange={ handleChange }
-                setCropModalOpen={ setCropModalOpen }
                 setMarkerModalOpen={ setMarkerModalOpen }
                 value={ imageValue }
                 width={ width! }

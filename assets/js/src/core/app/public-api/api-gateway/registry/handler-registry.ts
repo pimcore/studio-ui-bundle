@@ -12,12 +12,14 @@ import { type UseElementSelectorHelperReturn } from '@Pimcore/modules/element/el
 import { type UploadContextProps } from '@Pimcore/components/modal-upload/provider/upload-modal-provider/upload-modal-provider'
 import { type LinkModalContextProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/provider/link-modal-provider'
 import { type ApiGatewayEventType, type ApiGatewayEventPayload } from '../types/event-types'
+import { CropModalContextProps } from '@Pimcore/modules/element/components/crop-modal/provider/crop-modal-provider'
 
 // Define a context object that can be passed to handlers
 export interface ApiGatewayHandlerContext {
   elementSelectorHelper: UseElementSelectorHelperReturn
   uploadModalContext: UploadContextProps
   linkModalContext: LinkModalContextProps
+  cropModalContext: CropModalContextProps
   // Add other helpers here as needed
 }
 

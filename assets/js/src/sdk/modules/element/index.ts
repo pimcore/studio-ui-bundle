@@ -132,6 +132,7 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/document/edita
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-checkbox'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-date'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-image'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-input'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-link'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-multiselect'
