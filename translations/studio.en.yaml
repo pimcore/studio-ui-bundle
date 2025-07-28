@@ -15,6 +15,7 @@ sidebar.selected_elements: Selected Elements
 sidebar.grid_config: Grid config
 sidebar.tag_filters: Tag Filters
 sidebar.search_filter: Search & Filter
+sidebar.clear-all-filters: Clear all filters
 site-domain.main_site: Main Site
 modal-search.field.mimeType: MIME-Type
 modal-search.field.thumbnail: Thumbnail
@@ -308,6 +309,22 @@ properties.editable-properties: Editable Properties
 properties.all-properties: All Properties
 properties.predefined-properties: Predefined Properties
 properties.new-custom-property: New custom property
+translations.columns.type: Type
+translations.columns.key: Key
+translations.columns.actions: Actions
+translations.select-languages: Select languages
+translations.select-domain: Select domain
+translations.show-all-languages: Show all
+translations.show-minimal-languages: Show minimal
+translations.show-hide-locale: Show/ Hide Locale
+translations.new-translation: New Translation
+translations.new: Add
+translations.type-options.custom: ICU Format
+translations.type-options.simple: Simple Text
+translations.edit-modal.tab.plain-text: Plain Text
+translations.edit-modal.tab.html: HTML
+translations.edit-modal.save: Save
+translations.edit-modal.title: Edit translation
 properties.columns.type: Type
 properties.columns.key: Key
 properties.columns.name: Name
@@ -320,18 +337,22 @@ properties.columns.actions: Actions
 properties.inherited.properties: Inherited Properties
 properties.add-custom-property.cancel: Cancel
 properties.add-custom-property.key: Key
+translations.add-translation.key: Key
 properties.add-custom-property.create: Create
 properties.add-custom-property.type: Type
 properties.property-already-exist.title: Property already exists
 properties.property-already-exist.error: Name is already in use, please choose a different one
 properties.add-property-mandatory-fields-missing.title: Mandatory fields missing
 properties.add-property-mandatory-fields-missing.error: Key and type are mandatory fields and need to be filled out.
+translations.add-translation-mandatory-field-missing.title: Mandatory field missing
+translations.add-translation-mandatory-field-missing.error: Key is a mandatory field and needs to be filled out.
 button.ok: Ok
 button.apply: Apply
 button.cancel: Cancel
 button.save-apply: Save & Apply
 button.add-edit: Add & Edit
 button.cancel-edits: Cancel edits
+toggle.advanced-mode: Advanced Mode
 actions.open: Open
 open: Open
 edit: Edit
@@ -497,6 +518,8 @@ element.toolbar.copy-className: Class {{className}} - Copy
 element.unpublish: Unpublish
 element.publish: Publish
 element.locate-in-tree: Locate in Tree
+element.sidebar.filter.only-direct-children: only direct children
+element.sidebar.field-filters: Field Filters
 male: Male
 female: Female
 other: Other
@@ -697,6 +720,9 @@ user-management.add-user.success: User added successfully
 user-management.remove-user.success: User removed successfully
 user-management.perspectives: Perspectives
 user-management.roles: Roles
+user-management.role: Role
+user-management.users: Users
+user-management.user: User
 roles.tree.all: All Roles
 roles.save-item.success: Role saved successfully
 roles.clone-item.success: Role cloned successfully
@@ -707,9 +733,12 @@ roles.add-folder.success: Folder added successfully
 navigation.website-settings: Website Settings
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
+navigation.marketing: Marketing
+navigation.reports: Reports
 navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
 navigation.customise: Customise
+navigation.translations: Translations
 navigation.tag-configuration: Tag Configuration
 navigation.predefined-properties: Predefined Properties
 navigation.user-and-roles: User & Roles
@@ -729,6 +758,7 @@ predefined-properties.name: Name
 perspective.default: Default
 perspective.switching.title: Switching perspective
 perspective.switching.description: Currently switching to the following perspective
+widget.translations: Translations
 widget.notes-and-events: Notes & Events
 widget.tag-configuration: Tag Configuration
 widget.predefined-properties: Predefined Properties
@@ -849,6 +879,16 @@ user-menu.notification.modal.add-an-attachment: Add an attachment
 user-menu.notification.modal.form.validation.provide-recipient: Please provide a recipient
 user-menu.notification.modal.form.validation.provide-title: Please provide a title
 user-menu.notification.modal.form.validation.provide-message: Please provide a message
+reports.reports-title: Reports
+reports.select-report-name: Select the name of the report
+reports.select-report: Select report
+reports.export: Export
+reports.csv-export: CSV Export
+reports.csv-export-with-headers: CSV Export with headers
+reports.grid-config.title-columns: Columns
+reports.grid-config.restore-to-default: Restore to default
+reports.grid-config.add-column: Add a column
+reports.field-filters: Field Filters
 loading: Loading...
 please-wait: Please wait...
 navigation.email: Email
@@ -894,6 +934,35 @@ creatable-select.add: Add
 creatable-select.option-already-exists: Option already exists
 drag-snippet-here: Drag a snippet here
 snippet: Snippet
+navigation.application-logger: Application Logger
+widget.application-logger: Application Logger
+application-logger.label: Application Logger
+application-logger.columns.timestamp: Timestamp
+application-logger.columns.pid: PID
+application-logger.columns.message: Message
+application-logger.columns.file-object: File Object
+application-logger.columns.related-object: Related Object
+application-logger.columns.component: Component
+application-logger.columns.source: Source
+application-logger.columns.details: Details
+application-logger.columns.type: Type
+application-logger.sidebar.search-parameter: Search Parameter
+application-logger.detail-modal.title: Detail information
+application-logger.filter.date-from: From
+application-logger.filter.date-to: To
+application-logger.filter.priority: Log Level
+application-logger.filter.component: Component
+application-logger.filter.related-object-id: Related Object ID
+application-logger.filter.message: Message
+application-logger.filter.pid: Pid
+application-logger.filter.priority-level.1: Emergency
+application-logger.filter.priority-level.2: Alert
+application-logger.filter.priority-level.3: Critical
+application-logger.filter.priority-level.4: Error
+application-logger.filter.priority-level.5: Warning
+application-logger.filter.priority-level.6: Notice
+application-logger.filter.priority-level.7: Info
+application-logger.filter.priority-level.8: Debug
 embed.url-modal.title: Edit Embed URL
 embed.url-modal.label: URL (eg. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Please enter a valid URL

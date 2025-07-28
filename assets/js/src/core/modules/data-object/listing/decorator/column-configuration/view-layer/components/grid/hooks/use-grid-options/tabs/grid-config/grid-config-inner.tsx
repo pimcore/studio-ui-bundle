@@ -135,17 +135,18 @@ export const GridConfigInner = (): React.JSX.Element => {
     })
   }
 
-  function prepareColumns (columns: AvailableColumn[]): Array<{ key: string, locale: string | null, group: string }> {
+  function prepareColumns (columns: AvailableColumn[]): Array<{ key: string, locale: string | null, group: string, type: string }> {
     return columns.map((column) => ({
       key: column.key,
       locale: column.locale ?? null,
-      group: column.group
+      group: column.group,
+      type: column.type,
+      config: column.__meta?.advancedColumnConfig ?? column.config
     }))
   }
 
   function onFormFinish (values: any): void {
     const columnsToSave = prepareColumns(columns)
-
     const isShareGlobally = values.shareGlobally === true
 
     // for global sharing the sharedUsers and sharedRoles need to be cleared

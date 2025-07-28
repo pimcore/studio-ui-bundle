@@ -34,16 +34,13 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
-            dataObjectGetGridPreview: build.mutation<
-                DataObjectGetGridPreviewApiResponse,
-                DataObjectGetGridPreviewApiArg
-            >({
+            dataObjectGetGridPreview: build.query<DataObjectGetGridPreviewApiResponse, DataObjectGetGridPreviewApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/data-objects/grid/preview`,
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Data Object Grid"],
+                providesTags: ["Data Object Grid"],
             }),
             dataObjectDeleteGridConfigurationByConfigurationId: build.mutation<
                 DataObjectDeleteGridConfigurationByConfigurationIdApiResponse,
@@ -329,7 +326,7 @@ export type DataObjectSaveGridConfigurationApiArg = {
         saveFilter?: boolean;
         sharedUsers?: object;
         sharedRoles?: object;
-        columns: Column[];
+        columns: GridColumnRequest[];
         filter?: GridFilter | null;
     };
 };
@@ -354,7 +351,7 @@ export type DataObjectUpdateGridConfigurationApiArg = {
         saveFilter?: boolean;
         sharedUsers?: object;
         sharedRoles?: object;
-        columns: Column[];
+        columns: GridColumnRequest[];
         filter?: GridFilter | null;
     };
 };
@@ -768,7 +765,7 @@ export type GridDetailedConfiguration = {
     /** sharedRoles */
     sharedRoles: object;
     /** columns */
-    columns: Column[];
+    columns: (Column | GridColumnRequest)[];
     /** filter */
     filter: GridFilter[];
     /** Page Size */
@@ -889,7 +886,7 @@ export const {
     useDataObjectCloneMutation,
     useDataObjectGetByIdQuery,
     useDataObjectUpdateByIdMutation,
-    useDataObjectGetGridPreviewMutation,
+    useDataObjectGetGridPreviewQuery,
     useDataObjectDeleteGridConfigurationByConfigurationIdMutation,
     useDataObjectGetGridConfigurationQuery,
     useDataObjectListSavedGridConfigurationsQuery,

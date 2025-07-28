@@ -56,6 +56,22 @@ const config: ConfigFile = {
     {
       pattern: 'metadataGetCollection',
       type: 'query'
+    },
+    {
+      pattern: 'dataObjectGetGridPreview',
+      type: 'query',
+    },
+    {
+      pattern: 'customReportsChart',
+      type: 'query'
+    },
+    {
+      pattern: 'customReportsListDrillDownOptions',
+      type: 'query'
+    },
+    {
+      pattern: 'translationGetList',
+      type: 'query'
     }
   ],
   outputFiles: {
@@ -139,6 +155,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/data-object/classification-store/classification-store-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/classification-store\/?/i)
+    },
+    '../../js/src/core/modules/reports/custom-reports-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/api\/bundle\/custom-reports\/?/i)
     },
     '../../js/src/core/modules/element/export-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/export\/?/i)

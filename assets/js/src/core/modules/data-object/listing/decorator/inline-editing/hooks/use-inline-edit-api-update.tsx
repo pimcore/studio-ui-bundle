@@ -51,7 +51,7 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
     let columnKey = update.column.key
 
     if (update.column.localizable && update.column.locale !== undefined && update.column.locale !== null) {
-      const splittedColumnKey = columnKey.split('.')
+      const splittedColumnKey = (columnKey ?? '').split('.')
       const columnId = splittedColumnKey[splittedColumnKey.length - 1]
       splittedColumnKey.pop()
       const hasPrepath = splittedColumnKey.length > 0 && splittedColumnKey[0] !== ''
@@ -69,7 +69,7 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
           {
             id: update.id,
             editableData: {
-              ...set({}, columnKey, value)
+              ...set({}, columnKey ?? '', value)
             }
           }
         ]

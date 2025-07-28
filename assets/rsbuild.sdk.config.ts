@@ -113,6 +113,7 @@ export default defineConfig({
       './api/user': './js/src/sdk/api/user/index.ts',
       './api/version': './js/src/sdk/api/version/index.ts',
       './api/workflow': './js/src/sdk/api/workflow/index.ts',
+      './api/reports': './js/src/sdk/api/reports/index.ts',
       './modules/app': './js/src/sdk/modules/app/index.ts',
       './modules/asset': './js/src/sdk/modules/asset/index.ts',
       './modules/class-definitions': './js/src/sdk/modules/class-definitions/index.ts',
