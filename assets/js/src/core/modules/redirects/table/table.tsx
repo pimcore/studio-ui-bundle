@@ -38,7 +38,7 @@ export const Table = ({ redirectRows, setRedirectRows }: TableProps): React.JSX.
   const { data: prioritiesData } = useBundleSeoRedirectListPrioritiesQuery()
 
   const typeOptions = useMemo(() => 
-    typesData?.types?.map(type => ({ label: type, value: type })) ?? [], 
+    typesData?.types?.map(type => ({ label: t(type), value: type })) ?? [], 
     [typesData]
   )
 

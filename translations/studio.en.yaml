@@ -755,6 +755,24 @@ predefined-properties.new: New
 website-settings.new: Add
 predefined-properties.type: Type
 predefined-properties.name: Name
+redirects.new: Beginner
+redirects.type: Type
+redirects.source-site: Source Site
+redirects.source: Source
+redirects.target-site: Target Site
+redirects.target: Target
+redirects.status: Status
+redirects.priority: Priority
+redirects.regex: RegEx
+redirects.pass-through: Pass Through
+redirects.active: Active
+redirects.actions: Actions
+path: Path
+entire_uri: Entire URI
+path_query: Path and Query
+auto_create: Auto Create
+widget.redirects: Redirects
+navigation.redirects: Redirects
 perspective.default: Default
 perspective.switching.title: Switching perspective
 perspective.switching.description: Currently switching to the following perspective
