@@ -20,6 +20,8 @@ import {
   useBundleSeoRedirectListStatusesQuery,
   useBundleSeoRedirectListPrioritiesQuery
 } from '../seo-api-slice.gen'
+import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
+import { Site } from '@Pimcore/modules/document/sites-slice.gen'
 
 type RedirectWithActions = RedirectRow & { actions: React.ReactNode }
 
@@ -36,7 +38,14 @@ export const Table = ({ redirectRows, setRedirectRows }: TableProps): React.JSX.
   const { data: typesData } = useBundleSeoRedirectListTypesQuery()
   const { data: statusesData } = useBundleSeoRedirectListStatusesQuery()
   const { data: prioritiesData } = useBundleSeoRedirectListPrioritiesQuery()
+  const { getAllSites } = useSites()
 
+    const availableSites: Site[] = getAllSites()
+    const siteOptions = availableSites.map(site => ({
+      value: site.id,
+      label: t(site.domain)
+    }))
+    
   const typeOptions = useMemo(() => 
     typesData?.types?.map(type => ({ label: t(type), value: type })) ?? [], 
     [typesData]
@@ -72,7 +81,11 @@ export const Table = ({ redirectRows, setRedirectRows }: TableProps): React.JSX.
     }),
     columnHelper.accessor('sourceSite', {
       header: t('redirects.source-site'),
-      meta: { editable: true },
+     meta: { 
+        type: 'select', 
+        editable: true, 
+        config: { options: siteOptions } 
+      },
       size: 100
     }),
     columnHelper.accessor('source', {
@@ -82,12 +95,16 @@ export const Table = ({ redirectRows, setRedirectRows }: TableProps): React.JSX.
     }),
     columnHelper.accessor('targetSite', {
       header: t('redirects.target-site'),
-      meta: { editable: true },
-      size: 100
+      meta: { 
+        type: 'select', 
+        editable: true, 
+        config: { options: siteOptions } 
+      },
+            size: 100
     }),
     columnHelper.accessor('target', {
       header: t('redirects.target'),
-      meta: { editable: true },
+      meta: { editable: true, type: 'element' },
       size: 200
     }),
     columnHelper.accessor('statusCode', {
@@ -102,8 +119,9 @@ export const Table = ({ redirectRows, setRedirectRows }: TableProps): React.JSX.
     columnHelper.accessor('priority', {
       header: t('redirects.priority'),
       meta: { 
-        type: 'number', 
-        editable: true 
+        type: 'select', 
+        editable: true, 
+        config: { options: priorityOptions } 
       },
       size: 80
     }),

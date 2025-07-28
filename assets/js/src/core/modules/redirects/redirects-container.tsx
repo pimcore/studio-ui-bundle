@@ -132,11 +132,15 @@ export const RedirectsContainer = (): React.JSX.Element => {
           <Flex gap={ 'small' }>
             <Title>{t('widget.redirects')}</Title>
             <IconTextButton
+              icon={ { value: 'new' } }
+              onClick={ () => console.log("beginner implement now") }
+            >{t('redirects.beginner')}</IconTextButton>
+            <IconTextButton
               disabled={ redirectsLoading || createLoading }
               icon={ { value: 'new' } }
               loading={ createLoading }
               onClick={ onCreateRedirect }
-            >{t('redirects.new')}</IconTextButton>
+            >{t('redirects.expert')}</IconTextButton>
           </Flex>
           <SearchInput
             loading={ redirectsFetching }
