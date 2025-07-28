@@ -21,5 +21,6 @@ export enum UserPermission {
   Users = 'users',
   Notifications = 'notifications',
   SendNotifications = 'notifications_send',
-  Emails = 'emails'
+  Emails = 'emails',
+  ApplicationLogger = 'application_logging'
 }

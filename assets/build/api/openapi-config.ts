@@ -58,6 +58,10 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'dataObjectGetGridPreview',
+      type: 'query',
+    },
+    {
       pattern: 'customReportsChart',
       type: 'query'
     },

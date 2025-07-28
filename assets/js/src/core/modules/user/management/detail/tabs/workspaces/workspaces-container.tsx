@@ -44,7 +44,8 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
 
   const documentsAccordion = [
     {
-      key: '1',
+      key: 'documents',
+      id: 'documents',
       title: <>{ t('user-management.workspaces.documents') }</>,
       info: <> <IconTextButton
         icon={ { value: 'add-find' } }
@@ -78,7 +79,8 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
 
   const assetsAccordion = [
     {
-      key: '1',
+      key: 'assets',
+      id: 'assets',
       title: <>{ t('user-management.workspaces.assets') }</>,
       info: <> <IconTextButton
         icon={ { value: 'add-find' } }
@@ -112,7 +114,8 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
 
   const objectsAccordion = [
     {
-      key: '1',
+      key: 'objects',
+      id: 'objects',
       title: <>{ t('user-management.workspaces.objects') }</>,
       info: <> <IconTextButton
         icon={ { value: 'add-find' } }
@@ -150,7 +153,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       vertical
     >
       <Accordion
-        activeKey={ '1' }
+        activeKey={ 'documents' }
         bordered
         collapsible="icon"
         items={ documentsAccordion }
@@ -159,7 +162,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       />
 
       <Accordion
-        activeKey={ '1' }
+        activeKey={ 'assets' }
         bordered
         collapsible="icon"
         items={ assetsAccordion }
@@ -168,7 +171,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       />
 
       <Accordion
-        activeKey={ '1' }
+        activeKey={ 'objects' }
         bordered
         collapsible="icon"
         items={ objectsAccordion }
