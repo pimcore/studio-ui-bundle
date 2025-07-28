@@ -173,6 +173,7 @@ import preview from '@Pimcore/assets/icons/preview.inline.svg?react'
 import properties from '@Pimcore/assets/icons/properties.inline.svg?react'
 import published from '@Pimcore/assets/icons/published.inline.svg?react'
 import questionmark from '@Pimcore/assets/icons/questionmark.inline.svg?react'
+import redirect from '@Pimcore/assets/icons/redirect.inline.svg?react'
 import refresh from '@Pimcore/assets/icons/refresh.inline.svg?react'
 import removeImageThumbnail from '@Pimcore/assets/icons/remove-image-thumbnail.inline.svg?react'
 import removeMarker from '@Pimcore/assets/icons/remove-marker.inline.svg?react'
@@ -860,6 +861,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'questionmark',
       component: questionmark
+    })
+    iconLibrary.register({
+      name: 'redirect',
+      component: redirect
     })
     iconLibrary.register({
       name: 'refresh',
