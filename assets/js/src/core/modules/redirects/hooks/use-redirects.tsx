@@ -41,7 +41,7 @@ export const useRedirects = (): UseRedirectsReturn => {
         source: null,
         target: null
       }
-      
+
       const result = await createRedirect({ bundleSeoRedirectAdd: defaultRedirect })
       if ('data' in result) {
         return { success: true, data: result.data }

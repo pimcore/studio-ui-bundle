@@ -34,7 +34,11 @@ export const ActionsCell = ({ info, setRedirectRows }: ActionsCellProps): React.
   }
 
   return (
-    <Flex align="center" justify= "center" className="redirects-table--actions-column">
+    <Flex
+      align="center"
+      className="redirects-table--actions-column"
+      justify="center"
+    >
       <IconButton
         icon={ { value: 'trash' } }
         loading={ deleteLoading }

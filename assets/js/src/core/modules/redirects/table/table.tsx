@@ -21,7 +21,7 @@ import {
   useBundleSeoRedirectListPrioritiesQuery
 } from '../seo-api-slice-enhanced'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
-import { Site } from '@Pimcore/modules/document/sites-slice.gen'
+import { type Site } from '@Pimcore/modules/document/sites-slice.gen'
 
 type RedirectWithActions = RedirectRow & { actions: React.ReactNode }
 
@@ -40,31 +40,31 @@ export const Table = ({ redirectRows, setRedirectRows }: TableProps): React.JSX.
   const { data: prioritiesData } = useBundleSeoRedirectListPrioritiesQuery()
   const { getAllSites } = useSites()
 
-    const availableSites: Site[] = getAllSites()
-    const siteOptions = availableSites.map(site => ({
-      value: site.id,
-      label: t(site.domain)
-    }))
-    
-  const typeOptions = useMemo(() => 
-    typesData?.types?.map(type => ({ label: t(type), value: type })) ?? [], 
-    [typesData]
+  const availableSites: Site[] = getAllSites()
+  const siteOptions = availableSites.map(site => ({
+    value: site.id,
+    label: t(site.domain)
+  }))
+
+  const typeOptions = useMemo(() =>
+    typesData?.types?.map(type => ({ label: t(type), value: type })) ?? [],
+  [typesData]
   )
 
-  const statusOptions = useMemo(() => 
-    statusesData?.statuses?.map(status => ({ 
-      label: `${status.code} - ${status.label}`, 
-      value: status.code 
-    })) ?? [], 
-    [statusesData]
+  const statusOptions = useMemo(() =>
+    statusesData?.statuses?.map(status => ({
+      label: `${status.code} - ${status.label}`,
+      value: status.code
+    })) ?? [],
+  [statusesData]
   )
 
-  const priorityOptions = useMemo(() => 
-    prioritiesData?.priorities?.map(priority => ({ 
-      label: priority.toString(), 
-      value: priority 
-    })) ?? [], 
-    [prioritiesData]
+  const priorityOptions = useMemo(() =>
+    prioritiesData?.priorities?.map(priority => ({
+      label: priority.toString(),
+      value: priority
+    })) ?? [],
+  [prioritiesData]
   )
 
   const columnHelper = createColumnHelper<RedirectWithActions>()
@@ -72,19 +72,19 @@ export const Table = ({ redirectRows, setRedirectRows }: TableProps): React.JSX.
   const tableColumns = [
     columnHelper.accessor('type', {
       header: t('redirects.type'),
-      meta: { 
-        type: 'select', 
-        editable: true, 
-        config: { options: typeOptions } 
+      meta: {
+        type: 'select',
+        editable: true,
+        config: { options: typeOptions }
       },
       size: 120
     }),
     columnHelper.accessor('sourceSite', {
       header: t('redirects.source-site'),
-     meta: { 
-        type: 'select', 
-        editable: true, 
-        config: { options: siteOptions } 
+      meta: {
+        type: 'select',
+        editable: true,
+        config: { options: siteOptions }
       },
       size: 100
     }),
@@ -95,12 +95,12 @@ export const Table = ({ redirectRows, setRedirectRows }: TableProps): React.JSX.
     }),
     columnHelper.accessor('targetSite', {
       header: t('redirects.target-site'),
-      meta: { 
-        type: 'select', 
-        editable: true, 
-        config: { options: siteOptions } 
+      meta: {
+        type: 'select',
+        editable: true,
+        config: { options: siteOptions }
       },
-            size: 100
+      size: 100
     }),
     columnHelper.accessor('target', {
       header: t('redirects.target'),
@@ -109,19 +109,19 @@ export const Table = ({ redirectRows, setRedirectRows }: TableProps): React.JSX.
     }),
     columnHelper.accessor('statusCode', {
       header: t('redirects.status'),
-      meta: { 
-        type: 'select', 
-        editable: true, 
-        config: { options: statusOptions } 
+      meta: {
+        type: 'select',
+        editable: true,
+        config: { options: statusOptions }
       },
       size: 100
     }),
     columnHelper.accessor('priority', {
       header: t('redirects.priority'),
-      meta: { 
-        type: 'select', 
-        editable: true, 
-        config: { options: priorityOptions } 
+      meta: {
+        type: 'select',
+        editable: true,
+        config: { options: priorityOptions }
       },
       size: 80
     }),
