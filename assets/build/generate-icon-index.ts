@@ -63,7 +63,7 @@ const generateIconEntry = (fileName: string): string => {
 const modifySvgAttributes = (filePath: string): void => {
     let svgContent: string = fs.readFileSync(filePath, 'utf-8');
 
-    svgContent = svgContent.replace(/\s+id=(["'])[a-zA-Z0-9_-]{1,100}\1/g, '');
+    svgContent = svgContent.replace(/\s+id=(["'])((?=[\w-]{1,100})[\w-]+)\1/g, '');
 
     const hasStroke = /stroke="[^"]*"/.test(svgContent);
 
