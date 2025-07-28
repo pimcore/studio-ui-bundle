@@ -11,7 +11,6 @@
 import React from 'react'
 import cn from 'classnames'
 import { Layout, type ILayoutProps } from 'flexlayout-react'
-import cn from 'classnames'
 import { useStyles } from './widget-manager-view.styles'
 import { type CreateContextMenuItemsProps, useContextMenu } from '@Pimcore/modules/widget-manager/hooks/use-context-menu'
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
