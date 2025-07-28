@@ -8,20 +8,31 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-export const generateRandomColors = (count: number): string[] => {
-  const colors: string[] = []
+import { presetPalettes } from '@ant-design/colors'
+import { isUndefined } from 'lodash'
 
-  for (let i = 0; i < count; i++) {
-    const r = 50 + Math.floor(Math.random() * 150)
-    const g = 50 + Math.floor(Math.random() * 150)
-    const b = 50 + Math.floor(Math.random() * 150)
+export const generateColorMap = (): string[] => {
+  const result: string[] = []
 
-    const color = '#' + [r, g, b]
-      .map(x => x.toString(16).padStart(2, '0'))
-      .join('')
+  const palettes = Object.values(presetPalettes)
 
-    colors.push(color)
+  const maxIndex = Math.max(...palettes.map(p => p.length))
+
+  for (let i = 4; i < maxIndex; i++) {
+    for (const palette of palettes) {
+      if (!isUndefined(palette[i])) {
+        result.push(palette[i])
+      }
+    }
   }
 
-  return colors
+  for (let i = 0; i <= 3; i++) {
+    for (const palette of palettes) {
+      if (!isUndefined(palette[i])) {
+        result.push(palette[i])
+      }
+    }
+  }
+
+  return result
 }
