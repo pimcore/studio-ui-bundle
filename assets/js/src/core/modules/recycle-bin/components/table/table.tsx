@@ -24,8 +24,8 @@ interface RecycleBinWithActions extends RecycleBin {
 export const Table = ({ items }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const [restoreLoading, setRestoreLoading] = useState<boolean>(false)
-  const [removeLoading, setRemoveLoading] = useState<boolean>(false)
+  const [restoreLoading, setRestoreLoading] = useState<number[]>([])
+  const [removeLoading, setRemoveLoading] = useState<number[]>([])
   const { restoreItems, removeItems } = useRecycleBin()
   const { selectedRows, setSelectedRows } = useSelectedRowsContext()
 
@@ -111,24 +111,24 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
             <IconButton
               icon={{ value: 'restore' }}
               onClick={() => {
-                setRestoreLoading(true)
+                setRestoreLoading((prev) => [...prev, row.original.id])
                 restoreItems([row.original.id], () => {
-                  setRestoreLoading(false)
+                  setRestoreLoading((prev) => prev.filter(id => id !== row.original.id))
                 })
               }}
-              loading={restoreLoading}
+              loading={restoreLoading.includes(row.original.id)}
               type="link"
             />
 
             <IconButton
               icon={{ value: 'trash' }}
               onClick={() => {
-                setRemoveLoading(true)
+                setRemoveLoading(prev => [...prev, row.original.id])
                 removeItems([row.original.id], () => {
-                  setRemoveLoading(false)
+                  setRemoveLoading(prev => prev.filter(id => id !== row.original.id))
                 })
               }}
-              loading={removeLoading}
+              loading={removeLoading.includes(row.original.id)}
               type="link"
             />
           </Flex>
