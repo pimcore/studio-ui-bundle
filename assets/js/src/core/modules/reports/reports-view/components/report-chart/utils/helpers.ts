@@ -8,13 +8,19 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { presetPalettes } from '@ant-design/colors'
+import { orange, purple, blue, red, lime, cyan, magenta, geekblue, green, yellow, volcano, gold } from '@ant-design/colors'
 import { isUndefined } from 'lodash'
+
+const PALETTES = [
+  magenta, purple, geekblue, cyan, blue,
+  green, yellow, lime, gold, volcano,
+  orange, red
+]
 
 export const generateColorMap = (): string[] => {
   const result: string[] = []
 
-  const palettes = Object.values(presetPalettes)
+  const palettes = Object.values(PALETTES)
 
   const maxIndex = Math.max(...palettes.map(p => p.length))
 
