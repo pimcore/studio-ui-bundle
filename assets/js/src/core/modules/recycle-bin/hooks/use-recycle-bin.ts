@@ -1,14 +1,24 @@
-import { invalidatingTags } from "@Pimcore/app/api/pimcore/tags"
-import { useAppDispatch } from "@Pimcore/app/store"
-import ApiError from "@Pimcore/modules/app/error-handler/classes/api-error"
-import GeneralError from "@Pimcore/modules/app/error-handler/classes/general-error"
-import trackError from "@Pimcore/modules/app/error-handler/error-handler"
-import { useJobs } from "@Pimcore/modules/execution-engine/hooks/useJobs"
-import { createJob as createRestoreJob } from "@Pimcore/modules/execution-engine/jobs/recycle-bin/restore/factory"
-import { defaultTopics, topics } from "@Pimcore/modules/execution-engine/topics"
-import { useTranslation } from "react-i18next"
-import { api, RecycleBin, useRecycleBinDeleteItemsMutation, useRecycleBinFlushMutation } from "../recycle-bin-api-slice-enhanced"
-import { RecycleBinRestoreItemsApiResponse, useRecycleBinRestoreItemsMutation } from "../recycle-bin-api-slice.gen"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { useAppDispatch } from '@Pimcore/app/store'
+import ApiError from '@Pimcore/modules/app/error-handler/classes/api-error'
+import GeneralError from '@Pimcore/modules/app/error-handler/classes/general-error'
+import trackError from '@Pimcore/modules/app/error-handler/error-handler'
+import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
+import { createJob as createRestoreJob } from '@Pimcore/modules/execution-engine/jobs/recycle-bin/restore/factory'
+import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
+import { useTranslation } from 'react-i18next'
+import { api, type RecycleBin, useRecycleBinDeleteItemsMutation, useRecycleBinFlushMutation } from '../recycle-bin-api-slice-enhanced'
+import { type RecycleBinRestoreItemsApiResponse, useRecycleBinRestoreItemsMutation } from '../recycle-bin-api-slice.gen'
 
 interface UseRecycleBinHookReturn {
   restoreItems: (ids: Array<RecycleBin['id']>, onFinish?: () => void) => Promise<void>
@@ -41,7 +51,7 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
 
       let jobRunId: any = null
       if ((response.data ?? false) !== false) {
-        const data = response.data as RecycleBinRestoreItemsApiResponse
+        const data = response.data!
         jobRunId = data.jobRunId ?? null
       }
 

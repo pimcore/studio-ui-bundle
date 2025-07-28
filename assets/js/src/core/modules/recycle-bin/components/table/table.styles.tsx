@@ -16,6 +16,6 @@ export const useStyles = createStyles(({ token, css }) => {
       .pimcore-icon {
         color: ${token.Button.defaultColor};
       }
-    `,
+    `
   }
 })

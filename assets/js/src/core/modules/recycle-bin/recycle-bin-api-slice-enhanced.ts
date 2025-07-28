@@ -1,4 +1,14 @@
-import { providingTags, tagNames, Tag, invalidatingTags } from '@sdk/api'
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { providingTags, tagNames, type Tag, invalidatingTags } from '@sdk/api'
 import { api as baseApi } from './recycle-bin-api-slice.gen'
 
 export const api = baseApi.enhanceEndpoints({

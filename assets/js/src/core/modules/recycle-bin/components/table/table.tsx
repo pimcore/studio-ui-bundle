@@ -1,17 +1,27 @@
-import { Flex } from "@Pimcore/components/flex/flex"
-import { DefaultCellProps } from "@Pimcore/components/grid/columns/default-cell"
-import { Grid } from "@Pimcore/components/grid/grid"
-import { IconButton } from "@Pimcore/components/icon-button/icon-button"
-import { Icon } from "@Pimcore/components/icon/icon"
-import { ElementInfo } from "@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/element-cell/element-cell"
-import { formatDateTime } from "@sdk/utils"
-import { createColumnHelper, RowSelectionState } from "@tanstack/react-table"
-import React, { useState } from "react"
-import { useTranslation } from "react-i18next"
-import { useRecycleBin } from "../../hooks/use-recycle-bin"
-import { RecycleBin } from "../../recycle-bin-api-slice.gen"
-import { useStyles } from "./table.styles"
-import { useSelectedRowsContext } from "../../context/selected-items-context"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { Flex } from '@Pimcore/components/flex/flex'
+import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
+import { Grid } from '@Pimcore/components/grid/grid'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { type ElementInfo } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/element-cell/element-cell'
+import { formatDateTime } from '@sdk/utils'
+import { createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useRecycleBin } from '../../hooks/use-recycle-bin'
+import { type RecycleBin } from '../../recycle-bin-api-slice.gen'
+import { useStyles } from './table.styles'
+import { useSelectedRowsContext } from '../../context/selected-items-context'
 
 interface TableProps {
   items: RecycleBin[]
@@ -36,7 +46,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
         timestamp: item.date,
         dateStyle: 'short',
         timeStyle: 'short'
-      }),
+      })
     }
   })
 
@@ -47,7 +57,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
       cell: ({ row }) => {
         const type = row.original.type
 
-        const getElementTypeIcon = () => {
+        const getElementTypeIcon = (): React.JSX.Element => {
           switch (type) {
             case 'document':
               return <Icon value="document" />
@@ -63,14 +73,14 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
         return (
           <Flex
             align='center'
+            className={ styles.icons }
             justify='center'
-            className={styles.icons}
           >
             {getElementTypeIcon()}
           </Flex>
         )
       },
-      size: 20,
+      size: 20
     }),
     columnHelper.accessor('path', {
       header: t('recycle-bin.columns.path'),
@@ -82,7 +92,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
           getElementInfo: (cellProps: DefaultCellProps): ElementInfo => {
             const row = cellProps.row.original
             return {
-              fullPath: row.path,
+              fullPath: row.path
             }
           }
         }
@@ -103,36 +113,32 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     columnHelper.accessor('actions', {
       header: t('recycle-bin.columns.actions'),
       cell: ({ row }): React.JSX.Element => {
-        const restoreOnClick = () => {
-          setRestoreLoading((prev) => [...prev, row.original.id])
-          restoreItems([row.original.id], () => {
-            setRestoreLoading((prev) => prev.filter(id => id !== row.original.id))
-          })
-        }
-
-        const removeOnClick = () => {
-          setRemoveLoading(prev => [...prev, row.original.id])
-          removeItems([row.original.id], () => {
-            setRemoveLoading(prev => prev.filter(id => id !== row.original.id))
-          })
-        }
-
         return (
           <Flex
             align='center'
             justify='center'
           >
             <IconButton
-              icon={{ value: 'restore' }}
-              onClick={restoreOnClick}
-              loading={restoreLoading.includes(row.original.id)}
+              icon={ { value: 'restore' } }
+              loading={ restoreLoading.includes(row.original.id) }
+              onClick={ () => {
+                setRestoreLoading((prev) => [...prev, row.original.id])
+                void restoreItems([row.original.id], () => {
+                  setRestoreLoading((prev) => prev.filter(id => id !== row.original.id))
+                })
+              } }
               type="link"
             />
 
             <IconButton
-              icon={{ value: 'trash' }}
-              onClick={removeOnClick}
-              loading={removeLoading.includes(row.original.id)}
+              icon={ { value: 'trash' } }
+              loading={ removeLoading.includes(row.original.id) }
+              onClick={ () => {
+                setRemoveLoading(prev => [...prev, row.original.id])
+                void removeItems([row.original.id], () => {
+                  setRemoveLoading(prev => prev.filter(id => id !== row.original.id))
+                })
+              } }
               type="link"
             />
           </Flex>
@@ -145,14 +151,14 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
   return (
     <Grid
       autoWidth
-      columns={columns}
-      data={tableItems}
-      modifiedCells={[]}
-      resizable
+      columns={ columns }
+      data={ tableItems }
       enableMultipleRowSelection
-      onSelectedRowsChange={(row: RowSelectionState) => { setSelectedRows(row) }}
-      selectedRows={selectedRows}
-      setRowId={(row) => String(row.id)}
+      modifiedCells={ [] }
+      onSelectedRowsChange={ (row: RowSelectionState) => { setSelectedRows(row) } }
+      resizable
+      selectedRows={ selectedRows }
+      setRowId={ (row) => String(row.id) }
     />
   )
 }
