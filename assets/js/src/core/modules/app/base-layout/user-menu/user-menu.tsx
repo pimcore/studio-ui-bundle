@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next'
 import { useStyle } from './user-menu.styles'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { USERPROFILE } from '@Pimcore/modules/auth/profile/profile-container'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 
 interface IUserMenuProps {
   className?: string
@@ -34,6 +35,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   const [sendModal, setSendModal] = useState<boolean>(false)
   const [logout] = useLogoutMutation()
   const { openMainWidget } = useWidgetManager()
+  const user = useUser()
 
   const handleLogout = (): void => {
     const logoutTask = logout()
@@ -43,6 +45,14 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     }).catch((error: Error) => {
       trackError(new ApiError(error))
     })
+  }
+
+  const getUserName = (): string => {
+    if (user.firstname !== undefined && user.lastname !== undefined) {
+      return `${user.firstname} ${user.lastname}`
+    }
+
+    return t('user-menu.my-profile')
   }
 
   const items: DropdownMenuProps['items'] = [
@@ -74,7 +84,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     },
     {
       key: 'myprofile',
-      label: t('user-menu.my-profile'),
+      label: getUserName(),
       icon: <Icon value={ 'user' } />,
       onClick: () => { openMainWidget(USERPROFILE) }
     },
