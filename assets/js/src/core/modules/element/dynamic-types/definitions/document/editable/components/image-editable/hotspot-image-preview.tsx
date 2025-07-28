@@ -10,7 +10,7 @@
 
 import React, { type MutableRefObject, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
+import { ResponsiveImagePreview } from '@Pimcore/components/image-preview/responsive-image-preview'
 import { type Hotspot, type Marker } from '../../../../objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import { type CropSettings } from '../../../../objects/data-related/helpers/hotspot-image/types/crop-types'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -82,11 +82,11 @@ export const DocumentHotspotImagePreview = function DocumentHotspotImagePreview 
   ], [disabled, assetId, handleSearch, handleLocateInTree, setMarkerModalOpen, setCropModalOpen, emptyValue, t])
 
   return (
-    <ImagePreview
+    <ResponsiveImagePreview
       assetId={ assetId }
       dropdownItems={ dropdownItems }
       height={ height }
-      thumbnailSettings={ {...value.crop, frame: false, contain: true} }
+      thumbnailSettings={ value.crop }
       width={ width }
     />
   )

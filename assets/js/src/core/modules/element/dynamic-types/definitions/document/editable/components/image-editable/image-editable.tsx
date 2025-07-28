@@ -58,8 +58,8 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
   const { t } = useTranslation()
 
   const imageValue = props.value
-  const width = isNumber(props.config?.width) ? String(props.config.width) : '200'
-  const height = isNumber(props.config?.height) ? String(props.config.height) : '200'
+  const width = props.config?.width
+  const height = props.config?.height
 
   const { open: openElementSelector } = useElementSelector({
     selectionType: SelectionType.Single,
@@ -221,25 +221,26 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
         {!isNil(imageValue?.id)
           ? (
             <DocumentHotspotImagePreview
+              key={ imageValue.id }
               assetId={ imageValue.id }
               disabled={ props.disabled }
               emptyValue={ emptyValue }
               handleSearch={ handleSearch }
               handleLocateInTree={ handleLocateInTree }
-              height={ Number(height) }
+              height={ height }
               onChange={ handleHotspotImageChange }
               setCropModalOpen={ handleOpenCropModal }
               setMarkerModalOpen={ handleOpenHotspotMarkersModal }
               value={ convertToHotspotImageValue() }
-              width={ Number(width) }
+              width={ width }
             />
             )
           : (
             <AssetTarget
-              height={ Number(height) }
+              height={ height }
               onSearch={ handleSearch }
               title={ props.config?.title ?? t('document.editable.image.drop-message') }
-              width={ Number(width) }
+              width={ width }
             />
             )}
     </Droppable>

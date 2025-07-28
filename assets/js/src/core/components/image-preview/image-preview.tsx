@@ -13,7 +13,6 @@ import { useStyle } from './image-preview.styles'
 import cn from 'classnames'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Image } from 'antd'
-import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -23,7 +22,8 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Button } from '@Pimcore/components/button/button'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
-import { createImageThumbnailUrl, type ImageThumbnailSettings } from './utils/custom-image-thumbnail'
+import { type ImageThumbnailSettings } from './utils/custom-image-thumbnail'
+import { getAssetPreviewUrl } from './utils/get-asset-preview-url'
 import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 
 interface ImagePreviewProps {
@@ -48,32 +48,18 @@ export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, as
   const wrapperRef = React.useRef<HTMLDivElement>(null)
   const { t } = useTranslation()
 
-  const getAssetPreviewUrl = (): string | undefined => {
-    const { width, height } = thumbnailDimensions
-
-    if (width === 0 || height === 0) {
-      return undefined
-    }
-
-    if (assetType === 'video') {
-      return `${getPrefix()}/assets/${assetId}/video/stream/image-thumbnail?width=${width}&height=${height}&frame=true&aspectRatio=true`
-    }
-
-    const defaultSettings: ImageThumbnailSettings = {
-      width,
-      height,
-      mimeType: 'JPEG',
-      frame: true
-    }
-
-    return createImageThumbnailUrl(assetId!, {
-      ...defaultSettings,
-      ...thumbnailSettings
-    })
-  }
-
   const imageSrc = useMemo(() => {
-    return assetId !== undefined ? getAssetPreviewUrl() : src
+    if (assetId === undefined) {
+      return src
+    }
+
+    return getAssetPreviewUrl({
+      assetId,
+      assetType,
+      width: thumbnailDimensions.width,
+      height: thumbnailDimensions.height,
+      thumbnailSettings
+    })
   }, [assetId, src, thumbnailDimensions, assetType, thumbnailSettings])
 
   const isVisible = useElementVisible(wrapperRef)
