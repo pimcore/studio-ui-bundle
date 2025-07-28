@@ -33,7 +33,7 @@ interface HotspotImageFooterProps {
   value?: HotspotImageValue | null
   setValue: (value: HotspotImageValue | null) => void
   setCropModalOpen: () => void
-  setMarkerModalOpen: (open: boolean) => void
+  setMarkerModalOpen: () => void
   replaceImage: (newImage: ImageValue) => void
 }
 
@@ -129,7 +129,7 @@ export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.El
               key: 'hotspots-edit',
               icon: <Icon value={ 'new-marker' } />,
               onClick: async () => {
-                props.setMarkerModalOpen(true)
+                props.setMarkerModalOpen()
               }
             },
             {

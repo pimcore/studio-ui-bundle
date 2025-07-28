@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Card } from '@Pimcore/components/card/card'
 import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
@@ -22,6 +22,7 @@ import { useCropModal } from '@Pimcore/modules/element/components/crop-modal/hoo
 import { useHotspotMarkersModal } from '@Pimcore/modules/element/components/hotspot-markers-modal/hooks/use-hotspot-markers-modal'
 import { type CropSettings } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
 import { toIHotspots, fromIHotspots } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/utils/hotspot-converter'
+import { type Hotspot, type Marker } from '../../../../objects/data-related/helpers/hotspot-image/types/hotspot-types'
 
 // Create styles hook inline since we had import issues
 const useStyles = createStyles(({ token, css }) => {
@@ -42,9 +43,9 @@ export interface ImageEditableValue {
   id?: number
   alt?: string
   title?: string
-  hotspots?: any[]
-  marker?: any[]
-  crop?: any
+  hotspots?: Hotspot[]
+  marker?: Marker[]
+  crop?: CropSettings
 }
 
 export interface ImageEditableConfig {
@@ -177,7 +178,7 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
 
   const handleOpenCropModal = useCallback(() => {
     if (!isNil(imageValue?.id)) {
-      const cropSettings: CropSettings | null = imageValue.crop as CropSettings ?? null
+      const cropSettings: CropSettings | null = imageValue.crop! ?? null
       openCropModal(imageValue.id, cropSettings)
     }
   }, [imageValue, openCropModal])
@@ -185,7 +186,7 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
   const handleOpenHotspotMarkersModal = useCallback(() => {
     if (!isNil(imageValue?.id)) {
       const hotspots = toIHotspots(imageValue.hotspots ?? [], imageValue.marker ?? [])
-      const cropSettings: CropSettings | null = imageValue.crop as CropSettings ?? null
+      const cropSettings: CropSettings | null = imageValue.crop! ?? null
       openHotspotMarkersModal(imageValue.id, hotspots, cropSettings)
     }
   }, [imageValue, openHotspotMarkersModal])

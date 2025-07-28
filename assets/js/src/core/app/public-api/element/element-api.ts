@@ -20,9 +20,9 @@ import { type ModalUploadProps } from '@Pimcore/components/modal-upload/modal-up
 import { type LinkModalOptions } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/provider/link-modal-provider'
 import { type LinkValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/link'
 import type { CropSettings } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
-import { CropModalOptions } from '@Pimcore/modules/element/components/crop-modal/provider/crop-modal-provider'
+import { type CropModalOptions } from '@Pimcore/modules/element/components/crop-modal/provider/crop-modal-provider'
 import type { IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
-import { HotspotMarkersModalOptions } from '@Pimcore/modules/element/components/hotspot-markers-modal/provider/hotspot-markers-modal-provider'
+import { type HotspotMarkersModalOptions } from '@Pimcore/modules/element/components/hotspot-markers-modal/provider/hotspot-markers-modal-provider'
 
 class ElementOpeningService {
   async openAsset (config: { id: number }): Promise<void> {

@@ -60,7 +60,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
   const onEdit = (hotspot: IHotspot): void => {
     setEditModeHotspot(hotspots.find(h => h.id === hotspot.id))
   }
-  
+
   const onUpdate = (item: IHotspot): void => {
     setHotspots(hotspots.map(h => h.id === item.id ? item : h))
   }

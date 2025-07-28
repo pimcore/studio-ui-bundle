@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React from 'react'
 import cn from 'classnames'
 import { Card } from '@Pimcore/components/card/card'
 import {
@@ -39,6 +39,8 @@ import _, { isNil } from 'lodash'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { useStyles } from './hotspot-image.styles'
 import { useCropModal } from '@Pimcore/modules/element/components/crop-modal/hooks/use-crop-modal'
+import { useHotspotMarkersModal } from '@Pimcore/modules/element/components/hotspot-markers-modal/hooks/use-hotspot-markers-modal'
+import { fromIHotspots, toIHotspots } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/utils/hotspot-converter'
 
 export interface HotspotImageValue {
   image: ImageValue | null
@@ -59,8 +61,6 @@ export interface HotspotImageProps {
 export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
   const imageValue = props.value ?? null
 
-  const [markerModalOpen, setMarkerModalOpen] = useState(false)
-
   const { confirm } = useFormModal()
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -72,6 +72,21 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
         const newValue: HotspotImageValue = {
           ...imageValue,
           crop: crop ?? {}
+        }
+        handleChange(newValue)
+      }
+    }
+  })
+
+  const { openModal: openHotspotMarkersModal } = useHotspotMarkersModal({
+    disabled: props.disabled,
+    onChange: (hotspots) => {
+      if (!isNil(imageValue?.image?.id)) {
+        const { hotspots: newHotspots, marker: newMarkers } = fromIHotspots(hotspots)
+        const newValue: HotspotImageValue = {
+          ...imageValue,
+          hotspots: newHotspots,
+          marker: newMarkers
         }
         handleChange(newValue)
       }
@@ -128,6 +143,13 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
     }
   }
 
+  const handleOpenHotspotMarkersModal = (): void => {
+    if (!isNil(imageValue?.image?.id)) {
+      const hotspots = toIHotspots(imageValue.hotspots ?? [], imageValue.marker ?? [])
+      openHotspotMarkersModal(imageValue.image.id, hotspots, imageValue.crop)
+    }
+  }
+
   return (
     <Card
       className={ cn('max-w-full', styles.image, props.className) }
@@ -139,7 +161,7 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
           key="image-footer"
           replaceImage={ replaceImage }
           setCropModalOpen={ handleOpenCropModal }
-          setMarkerModalOpen={ setMarkerModalOpen }
+          setMarkerModalOpen={ handleOpenHotspotMarkersModal }
           setValue={ handleChange }
           value={ imageValue }
         />)
@@ -161,9 +183,9 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
                 assetId={ imageValue.image.id }
                 disabled={ props.disabled }
                 height={ height! }
-                markerModalOpen={ markerModalOpen }
+                markerModalOpen={ false }
                 onChange={ handleChange }
-                setMarkerModalOpen={ setMarkerModalOpen }
+                setMarkerModalOpen={ openHotspotMarkersModal }
                 value={ imageValue }
                 width={ width! }
               />

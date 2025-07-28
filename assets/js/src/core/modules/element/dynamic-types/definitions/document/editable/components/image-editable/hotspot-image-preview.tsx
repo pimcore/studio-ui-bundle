@@ -10,11 +10,6 @@
 
 import React, { forwardRef, type MutableRefObject } from 'react'
 import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
-import { fromIHotspots, toIHotspots } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/utils/hotspot-converter'
-import type { IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
-import {
-  HotspotDataProvider
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-data-provider'
 import { type Hotspot, type Marker } from '../../../../objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import { type CropSettings } from '../../../../objects/data-related/helpers/hotspot-image/types/crop-types'
 
@@ -39,12 +34,6 @@ export const DocumentHotspotImagePreview = forwardRef(function DocumentHotspotIm
   { assetId, height, width, value, onChange, setMarkerModalOpen, disabled }: DocumentHotspotImagePreviewProps,
   ref: MutableRefObject<HTMLDivElement>
 ): React.JSX.Element {
-  const handleHotspotsChange = (iHotspots: IHotspot[]): void => {
-    const { hotspots, marker } = fromIHotspots(iHotspots)
-    const newValue: DocumentHotspotImageValue = { ...value, hotspots, marker }
-    onChange?.(newValue)
-  }
-
   return (
     <div ref={ ref }>
       <ImagePreview
