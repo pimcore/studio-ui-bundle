@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { IconButton } from '@sdk/components'
+import { Flex, IconButton } from '@sdk/components'
 import { type CellContext } from '@tanstack/react-table'
 import { type RedirectRow, useRedirects } from '../hooks/use-redirects'
 
@@ -34,13 +34,13 @@ export const ActionsCell = ({ info, setRedirectRows }: ActionsCellProps): React.
   }
 
   return (
-    <div className="redirects-table--actions-column">
+    <Flex align="center" justify= "center" className="redirects-table--actions-column">
       <IconButton
         icon={ { value: 'trash' } }
         loading={ deleteLoading }
         onClick={ handleDelete }
         type="link"
       />
-    </div>
+    </Flex>
   )
 }
