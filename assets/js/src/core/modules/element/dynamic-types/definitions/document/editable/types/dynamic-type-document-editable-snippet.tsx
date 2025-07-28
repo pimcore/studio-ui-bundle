@@ -46,6 +46,14 @@ export class DynamicTypeDocumentEditableSnippet extends DynamicTypeDocumentEdita
     return null
   }
 
+  /**
+   * Transform the internal snippet value to the format expected by the backend API
+   * Backend expects only the snippet ID as a number, not the full object with path
+   */
+  transformValueForApi (value: SnippetValue | null): number | null {
+    return value?.id ?? null
+  }
+
   reloadOnChange (props: SnippetEditableDefinition): boolean {
     return Boolean(props.config?.reload)
   }

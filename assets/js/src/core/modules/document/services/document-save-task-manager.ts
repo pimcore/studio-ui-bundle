@@ -18,6 +18,9 @@ import type {
   DataProperty as DataPropertyApi
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
 import { isNil, isUndefined } from 'lodash'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
 
 export enum SaveTaskType {
   Version = 'version',
@@ -173,7 +176,7 @@ export class DocumentSaveTaskManager {
     try {
       const { document: documentApi } = getPimcoreStudioApi()
       const iframeApi = documentApi.getIframeApi(this.documentId)
-      return iframeApi.documentEditable.getValues()
+      return iframeApi.documentEditable.getValues(true) // Pass true to apply API transformations
     } catch (error) {
       console.warn(`Could not get editable data for document ${this.documentId}:`, error)
       return {}

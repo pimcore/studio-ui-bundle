@@ -237,6 +237,12 @@ describe('ComponentName', () => {
   - `isString(value)`, `isNumber(value)`, `isBoolean(value)` for type checking
 - **Use nullish coalescing operator (`??`) instead of logical OR (`||`)** - Prefer `value ?? defaultValue` over `value || defaultValue` for null/undefined checks to avoid unexpected behavior with falsy values like `0`, `false`, or empty strings
 
+### Code Comments
+- **Avoid redundant comments** - Only add comments when they provide real benefit and clarify non-obvious business logic, complex algorithms, or important context
+- Do not add comments that simply restate what the code does (e.g., `// Set the value` above `setValue(newValue)`)
+- Focus on explaining "why" rather than "what" when comments are necessary
+- Prefer self-documenting code with clear variable and function names over explanatory comments
+
 ### ESLint Configuration
 - Extends `standard-with-typescript`
 - React and JSX a11y rules enabled

@@ -56,6 +56,7 @@ export const SnippetEditable = ({
 
   return (
     <Droppable
+      disableDndActiveIndicator
       isValidContext={ (info: DragAndDropInfo) => info.type === 'document' }
       isValidData={ (info: DragAndDropInfo) => {
         const allowedTypes = config?.documentTypes ?? ['snippet']

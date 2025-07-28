@@ -35,28 +35,32 @@ export const useSnippetEditableStyles = createStyles(({ token }) => ({
     },
 
     '&.dnd--drag-valid': {
-      // For empty/loading states: change border color
+      // For empty/loading states: change border color only, no background
       '&.snippet-content--empty, &.snippet-content--loading': {
-        borderColor: token.colorSuccess
+        borderColor: `${token.colorSuccess} !important`,
+        backgroundColor: 'transparent !important' // Override global DnD background
       },
 
-      // For content states: change outline color
+      // For content states: change outline color only
       '&.snippet-content--has-content': {
         outline: `2px dashed ${token.colorSuccess}`,
-        outlineOffset: '5px'
+        outlineOffset: '5px',
+        backgroundColor: 'transparent !important' // Ensure no background for content state
       }
     },
 
     '&.dnd--drag-error': {
-      // For empty/loading states: change border color
+      // For empty/loading states: change border color only, no background
       '&.snippet-content--empty, &.snippet-content--loading': {
-        borderColor: token.colorError
+        borderColor: `${token.colorError} !important`,
+        backgroundColor: 'transparent !important' // Override global DnD background
       },
 
-      // For content states: change outline color
+      // For content states: change outline color only
       '&.snippet-content--has-content': {
         outline: `2px dashed ${token.colorError}`,
-        outlineOffset: '5px'
+        outlineOffset: '5px',
+        backgroundColor: 'transparent !important' // Ensure no background for content state
       }
     }
   },
