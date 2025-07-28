@@ -18,13 +18,16 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Table } from './table/table'
 import { Box, IconTextButton, SearchInput, Pagination } from '@sdk/components'
-import { useBundleSeoRedirectsGetCollectionQuery } from './seo-api-slice-enhanced'
-import trackError, { ApiError, GeneralError } from '../app/error-handler'
+import { api, useBundleSeoRedirectsGetCollectionQuery } from './seo-api-slice-enhanced'
+import trackError, { ApiError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { type RedirectRow, useRedirects } from './hooks/use-redirects'
 import { isUndefined } from 'lodash'
+import { useAppDispatch } from '@sdk/app'
+import { invalidatingTags } from '@sdk/api'
 
 export const RedirectsContainer = (): React.JSX.Element => {
+  const dispatch = useAppDispatch()
   const { createNewRedirect, createLoading } = useRedirects()
 
   const [currentPage, setCurrentPage] = useState<number>(1)
@@ -45,19 +48,8 @@ export const RedirectsContainer = (): React.JSX.Element => {
     data, 
     isLoading: redirectsLoading, 
     isFetching: redirectsFetching, 
-    error, 
-    refetch 
-  } = useBundleSeoRedirectsGetCollectionQuery(queryArgs)
-
-  const handleRefetch = (): void => {
-    void refetch().catch(() => {
-      trackError(new GeneralError('Error while reloading'))
-    })
-  }
-
-  useEffect(() => {
-    handleRefetch()
-  }, [])
+    error
+    } = useBundleSeoRedirectsGetCollectionQuery(queryArgs)
 
   const [redirectRows, setRedirectRows] = useState<RedirectRow[]>([])
 
@@ -68,6 +60,10 @@ export const RedirectsContainer = (): React.JSX.Element => {
     const bDate = b.creationDate ?? 0
     return bDate - aDate
   })
+
+    const reload = (): void => {
+    dispatch(api.util.invalidateTags(invalidatingTags.REDIRECTS()))
+  }
 
   useEffect(() => {
     if (!isUndefined(redirects)) {
@@ -107,7 +103,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
           <IconButton
             disabled={ redirectsFetching }
             icon={ { value: 'refresh' } }
-            onClick={ handleRefetch }
+            onClick={ reload }
           />
           <Pagination
             current={ currentPage }

@@ -755,7 +755,8 @@ predefined-properties.new: New
 website-settings.new: Add
 predefined-properties.type: Type
 predefined-properties.name: Name
-redirects.new: Beginner
+redirects.beginner: Beginner
+redirects.expert: Expert Mode
 redirects.type: Type
 redirects.source-site: Source Site
 redirects.source: Source
