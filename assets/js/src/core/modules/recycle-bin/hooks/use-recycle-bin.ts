@@ -109,12 +109,6 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
         trackError(new ApiError(response.error))
       }
 
-      /*let jobRunId: any = null
-      if ((response.data ?? false) !== false) {
-        const data = response.data as RecycleBinFlushApiResponse
-        jobRunId = data.jobRunId ?? null
-      }*/
-
       onFinish?.()
     } catch (error) {
       trackError(new GeneralError('Failed to flush recycle bin'))
