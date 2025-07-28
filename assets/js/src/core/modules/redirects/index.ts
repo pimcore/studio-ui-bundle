@@ -25,8 +25,8 @@ moduleSystem.registerModule({
       path: 'Settings/Redirects',
       label: 'navigation.redirects',
       className: 'item-style-modifier',
-      permission: UserPermission.Translations,
-      perspectivePermission: NavPermission.PredefinedProperties,
+      permission: UserPermission.Redirects,
+      perspectivePermission: NavPermission.Redirects,
       widgetConfig: {
         name: 'Redirects',
         id: 'redirects',
