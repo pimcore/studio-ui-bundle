@@ -17,7 +17,7 @@ import {
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type IGridFilter } from '@Pimcore/modules/reports/reports-view/types'
 
-interface UseReportDataProps {
+interface IUseReportDataProps {
   name: string
   filters?: IGridFilter
   page: number
@@ -27,7 +27,7 @@ interface UseReportDataProps {
 export type IReportDetailData = BundleCustomReportsDetails | undefined
 export type IChartDetailData = CustomReportsChartApiResponse | undefined
 
-interface UseReportDataReturn {
+export interface IUseReportDataReturn {
   reportDetailData: IReportDetailData
   chartDetailData: IChartDetailData
   isLoading: boolean
@@ -35,7 +35,7 @@ interface UseReportDataReturn {
   refetchAll: () => void
 }
 
-export const useReportData = ({ name, filters, page, pageSize }: UseReportDataProps): UseReportDataReturn => {
+export const useReportData = ({ name, filters, page, pageSize }: IUseReportDataProps): IUseReportDataReturn => {
   const {
     isLoading: isReportDetailLoading,
     data: reportDetailData,

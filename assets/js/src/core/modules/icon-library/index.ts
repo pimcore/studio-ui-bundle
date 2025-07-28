@@ -26,6 +26,7 @@ import addPackage from '@Pimcore/assets/icons/add-package.inline.svg?react'
 import addSomething from '@Pimcore/assets/icons/add-something.inline.svg?react'
 import addUser from '@Pimcore/assets/icons/add-user.inline.svg?react'
 import alert from '@Pimcore/assets/icons/alert.inline.svg?react'
+import applicationLogger from '@Pimcore/assets/icons/application-logger.inline.svg?react'
 import arrowNarrowRight from '@Pimcore/assets/icons/arrow-narrow-right.inline.svg?react'
 import asset from '@Pimcore/assets/icons/asset.inline.svg?react'
 import attachment from '@Pimcore/assets/icons/attachment.inline.svg?react'
@@ -94,6 +95,7 @@ import edit from '@Pimcore/assets/icons/edit.inline.svg?react'
 import embeddedMetadata from '@Pimcore/assets/icons/embedded-metadata.inline.svg?react'
 import event from '@Pimcore/assets/icons/event.inline.svg?react'
 import excludedFromNav from '@Pimcore/assets/icons/excluded-from-nav.inline.svg?react'
+import expand01 from '@Pimcore/assets/icons/expand-01.inline.svg?react'
 import expand from '@Pimcore/assets/icons/expand.inline.svg?react'
 import exportIcon from '@Pimcore/assets/icons/export.inline.svg?react'
 import eyeOff from '@Pimcore/assets/icons/eye-off.inline.svg?react'
@@ -262,6 +264,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'alert',
       component: alert
+    })
+    iconLibrary.register({
+      name: 'application-logger',
+      component: applicationLogger
     })
     iconLibrary.register({
       name: 'arrow-narrow-right',
@@ -534,6 +540,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'excluded-from-nav',
       component: excludedFromNav
+    })
+    iconLibrary.register({
+      name: 'expand-01',
+      component: expand01
     })
     iconLibrary.register({
       name: 'expand',

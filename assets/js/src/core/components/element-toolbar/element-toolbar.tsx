@@ -8,25 +8,25 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useLayoutEffect, useRef, useState } from 'react'
-import { useStyle } from '@Pimcore/components/element-toolbar/element-toolbar.styles'
-import { Button, Space } from 'antd'
-import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
+import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import { useStyle } from '@Pimcore/components/element-toolbar/element-toolbar.styles'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { useLocateInTree } from '@Pimcore/modules/element/actions/locate-in-tree/use-locate-in-tree'
+import { getElementDeeplink } from '@Pimcore/modules/element/element-helper'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
-import { baseUrl } from '@Pimcore/app/router/router'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { Button, Space } from 'antd'
+import React, { useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '../icon-button/icon-button'
-import { useLocateInTree } from '@Pimcore/modules/element/actions/locate-in-tree/use-locate-in-tree'
 
 export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: number, elementType: ElementType, editorTabsWidth?: number }): React.JSX.Element => {
   const { t } = useTranslation()
   const elementRef = useRef<HTMLDivElement>(null)
   const { styles } = useStyle()
   const { element } = useElementDraft(id, elementType)
-  const deeplinkUrl = `${window.location.origin}${baseUrl}${elementType}/${id}`
+  const deeplinkUrl = getElementDeeplink(elementType, id)
   const [editorTabsBlockSize, setEditorTabsBlockSize] = useState<'S' | 'L' | null>(null)
   const [locateInTreeLoading, setLocateInTreeLoading] = useState<boolean>(false)
   const { locateInTree } = useLocateInTree(elementType)
@@ -111,7 +111,7 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
             size="small"
           >
             <Space>
-              ID: { element.id }
+              ID: {element.id}
             </Space>
           </Button>
         </Dropdown>

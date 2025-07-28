@@ -17,7 +17,7 @@ export interface KeyedFormItemProps {
   componentProps: FormItemProps
 }
 
-export const KeyedFormItem = ({ Component, componentProps }: KeyedFormItemProps): React.JSX.Element => {
+const KeyedFormItem = ({ Component, componentProps }: KeyedFormItemProps): React.JSX.Element => {
   const { children, ...baseProps } = componentProps
   const currentChildren = children as unknown as React.ReactNode
 
@@ -29,3 +29,6 @@ export const KeyedFormItem = ({ Component, componentProps }: KeyedFormItemProps)
     </Component>
   ), [baseProps.name])
 }
+
+const memoedKeyedFormItem = React.memo(KeyedFormItem)
+export { memoedKeyedFormItem as KeyedFormItem }

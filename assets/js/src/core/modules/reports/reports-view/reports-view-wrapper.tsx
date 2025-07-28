@@ -12,12 +12,15 @@ import React from 'react'
 import { GridFilterProvider } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
 import { ColumnsProvider } from '@Pimcore/components/grid/contexts/columns-context'
 import { ReportsView } from '@Pimcore/modules/reports/reports-view/reports-view'
+import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 
 export const ReportsViewWrapper = (): React.JSX.Element => {
   return (
     <GridFilterProvider initialValue={ { columnFilters: [], drillDownFilters: {} } }>
       <ColumnsProvider>
-        <ReportsView />
+        <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/FieldFilterRegistry'] }>
+          <ReportsView />
+        </DynamicTypeRegistryProvider>
       </ColumnsProvider>
     </GridFilterProvider>
   )

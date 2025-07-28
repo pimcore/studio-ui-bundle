@@ -72,7 +72,6 @@ const config: StorybookConfig = {
       },
       output: {
         ...config.output,
-        sourceMap: false,
         assetPrefix: '/storybook/',
       },
       plugins: [

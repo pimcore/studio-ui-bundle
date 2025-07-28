@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Card } from '@Pimcore/components/card/card'
 import { Avatar, Flex, Upload, Skeleton } from 'antd'
@@ -16,6 +16,7 @@ import { UserOutlined } from '@ant-design/icons'
 import { Button } from '@Pimcore/components/button/button'
 import { useStyle } from '@Pimcore/modules/user/management/detail/tabs/settings/components/user-avatar.styles'
 import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
+import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
 
 interface IUserAvatar {
   user: any
@@ -25,28 +26,28 @@ const UserAvatar = ({ user, ...props }: IUserAvatar): React.JSX.Element => {
   const { styles } = useStyle()
   const classNames = ['avatar--default', styles.avatar]
 
-  const { uploadUserAvatar, fetchUserImageById } = useUserManagementHelper()
+  const { uploadUserAvatar } = useUserManagementHelper()
+  const { getUserImageById } = useUserHelper()
 
-  const [userImage, setUserImage] = React.useState<any>(user?.image ?? null)
-  const [userImageLoading, setUserImageLoading] = React.useState<boolean>(user?.hasImage === true && userImage === null)
+  const [userImageUrl, setUserImageUrl] = useState<string | undefined>(user?.image as string ?? undefined)
+  const [userImageLoading, setUserImageLoading] = React.useState<boolean>(user?.hasImage === true && userImageUrl === null)
 
   const getUserImage = (): void => {
     setUserImageLoading(true)
 
-    fetchUserImageById({ id: user.id }).then(response => {
-      setUserImage(response.data)
+    getUserImageById(user.id as number).then((imageUrl) => {
+      setUserImageUrl(imageUrl)
       setUserImageLoading(false)
-    }).catch(error => {
-      setUserImageLoading(false)
-      console.log(error)
+    }).catch((error: Error) => {
+      console.error('Error fetching user image:', error)
     })
   }
 
   useEffect(() => {
-    if (user?.hasImage === true && userImage === null) {
+    if (user?.hasImage === true && userImageUrl === undefined) {
       getUserImage()
     } else {
-      setUserImage(null)
+      setUserImageUrl(undefined)
     }
   }, [user.id])
 
@@ -68,7 +69,7 @@ const UserAvatar = ({ user, ...props }: IUserAvatar): React.JSX.Element => {
               className={ classNames.join(' ') }
               icon={ <UserOutlined /> }
               size={ 64 }
-              src={ userImage }
+              src={ userImageUrl }
             />
             )}
 

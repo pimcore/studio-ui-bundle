@@ -47,6 +47,13 @@ export interface SelectedColumnsProviderProps {
 export const SelectedColumnsProvider = ({ children }: SelectedColumnsProviderProps): React.JSX.Element => {
   const [selectedColumns, setSelectedColumns] = useState<SelectedColumn[]>([])
 
+  const formattedSelectedColumns: SelectedColumn[] = useMemo(() => {
+    return selectedColumns.map(column => ({
+      ...column,
+      key: column.originalApiDefinition?.__meta?.advancedColumnConfig?.title ?? column.key
+    })) ?? []
+  }, [selectedColumns])
+
   const encodeColumnIdentifier = (column: SelectedColumn): string => {
     return JSON.stringify({
       uuid: uuid(),
@@ -65,12 +72,12 @@ export const SelectedColumnsProvider = ({ children }: SelectedColumnsProviderPro
     const { key, locale } = JSON.parse(columnIdentifier)
     const formattedKey = key.replaceAll('**', '.')
 
-    return selectedColumns.find(column => column.key === formattedKey && column.locale === locale)!
+    return formattedSelectedColumns.find(column => column.key === formattedKey && column.locale === locale)!
   }
 
   return useMemo(() => (
-    <SelectedColumnsContext.Provider value={ { selectedColumns, setSelectedColumns, encodeColumnIdentifier, decodeColumnIdentifier } }>
+    <SelectedColumnsContext.Provider value={ { selectedColumns: formattedSelectedColumns, setSelectedColumns, encodeColumnIdentifier, decodeColumnIdentifier } }>
       {children}
     </SelectedColumnsContext.Provider>
-  ), [selectedColumns])
+  ), [formattedSelectedColumns])
 }
