@@ -60,6 +60,10 @@ const config: ConfigFile = {
     {
       pattern: 'recycleBinGetCollection',
       type: 'query'
+    },
+    {
+      pattern: 'customReportsChart',
+      type: 'query'
     }
   ],
   outputFiles: {
