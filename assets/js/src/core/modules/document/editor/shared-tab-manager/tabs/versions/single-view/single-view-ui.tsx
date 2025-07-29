@@ -11,53 +11,30 @@
 import React from 'react'
 import { Flex } from 'antd'
 import { type VersionIdentifiers } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { DocumentVersionsView } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/versions/components/document-versions-view/document-versions-view'
 
 interface SingleVersionViewUiProps {
   versionId: VersionIdentifiers
-  data: any[]
-  firstVersion: boolean
-  lastVersion?: boolean
-  onClickPrevious: () => void
-  onClickNext: () => void
+  versionUrl: string | null
 }
 
 export const SingleViewUi = ({
   versionId,
-  data,
-  firstVersion,
-  lastVersion,
-  onClickPrevious,
-  onClickNext
+  versionUrl
 }: SingleVersionViewUiProps): React.JSX.Element => {
+  const versionsIdList: number[] = [versionId.count]
+
   return (
     <Flex
       gap="small"
       style={ { minWidth: '100%' } }
       vertical
     >
-      <Flex
-        align="center"
-        gap="small"
-        justify="center"
-        style={ { minHeight: 100 } }
-      >
-        <IconButton
-          disabled={ firstVersion }
-          icon={ { value: 'chevron-left' } }
-          onClick={ onClickPrevious }
-          type={ 'text' }
-        />
 
-        <IconButton
-          disabled={ lastVersion }
-          icon={ { value: 'chevron-right' } }
-          onClick={ onClickNext }
-          type={ 'text' }
-        />
-      </Flex>
-
-      Content
+      <DocumentVersionsView
+        versionUrl={ versionUrl }
+        versionsIdList={ versionsIdList }
+      />
     </Flex>
   )
 }

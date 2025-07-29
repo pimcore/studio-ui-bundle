@@ -9,40 +9,29 @@
  */
 
 import React, { useEffect, useState } from 'react'
+import { isEmpty } from 'lodash'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { currentDomain } from '@Pimcore/app/config/app-config'
 import { SingleViewUi } from './single-view-ui'
 import { Content } from '@Pimcore/components/content/content'
-import {
-  type SingleVersionViewProps
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
+import { type SingleVersionViewProps } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
+import { useDocumentGetByIdQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 
-export const SingleView = ({
-  versions,
-  versionId,
-  setDetailedVersions
-}: SingleVersionViewProps): React.JSX.Element => {
-  const [vId, setVId] = useState(versionId)
-  const [versionData, setVersionData] = useState([] as object[])
+export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Element => {
+  const { id } = useElementContext()
+  const { data, isLoading } = useDocumentGetByIdQuery({ id })
+
+  const [versionUrl, setVersionUrl] = useState<string | null>(null)
 
   useEffect(() => {
-    if (versionId.id !== vId.id) {
-      setVersionData([])
-      setVId(versionId)
+    if (!isEmpty(data)) {
+      const url = `${currentDomain}${data?.fullPath}?pimcore_version=${versionId.id}`
+
+      setVersionUrl(url)
     }
-  }, [versionId])
+  }, [versionId, data])
 
-  useEffect(() => {
-    console.log('----->>>> vId: ', vId)
-  }, [vId])
-
-  function onClickNext (): void {
-    setVersionData([])
-  }
-
-  function onClickPrevious (): void {
-    setVersionData([])
-  }
-
-  if (versionData.length === 0) {
+  if (isLoading) {
     return (
       <Content
         fullPage
@@ -53,11 +42,8 @@ export const SingleView = ({
 
   return (
     <SingleViewUi
-      data={ versionData }
-      firstVersion={ versions[0].id === vId.id }
-      onClickNext={ onClickNext }
-      onClickPrevious={ onClickPrevious }
-      versionId={ vId }
+      versionId={ versionId }
+      versionUrl={ versionUrl }
     />
   )
 }
