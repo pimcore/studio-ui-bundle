@@ -1,5 +1,15 @@
-import { isUndefined } from "lodash"
-import React, { createContext, ReactNode, useContext, useMemo, useState } from "react"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { isUndefined } from 'lodash'
+import React, { createContext, type ReactNode, useContext, useMemo, useState } from 'react'
 
 export interface SelectedRowsContext<T> {
   selectedRows: T
@@ -12,7 +22,7 @@ export interface SelectedRowsProviderProps<T> {
   initialValue: T
 }
 
-export function createSelectedRowsContext<T>(): {
+export function createSelectedRowsContext<T> (): {
   SelectedRowsProvider: React.FC<SelectedRowsProviderProps<T>>
   useSelectedRowsContext: () => SelectedRowsContext<T>
 } {
@@ -36,13 +46,13 @@ export function createSelectedRowsContext<T>(): {
     }), [selectedRows, initialValue])
 
     return (
-      <SelectedRowsContext.Provider value={contextValue}>
+      <SelectedRowsContext.Provider value={ contextValue }>
         {children}
       </SelectedRowsContext.Provider>
     )
   }
 
-  function useSelectedRowsContext() {
+  function useSelectedRowsContext (): SelectedRowsContext<T> {
     const context = useContext(SelectedRowsContext)
 
     if (isUndefined(context)) {
