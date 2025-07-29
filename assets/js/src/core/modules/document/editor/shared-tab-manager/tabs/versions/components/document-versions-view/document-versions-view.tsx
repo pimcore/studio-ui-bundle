@@ -38,7 +38,7 @@ export const DocumentVersionsView = ({ versionsIdList, versionUrl }: IDocumentVe
 
   return (
     <Flex
-      style={ { height } }
+      style={ { height, minWidth: '100%' } }
       vertical
     >
       <Flex

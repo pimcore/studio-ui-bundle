@@ -42,11 +42,9 @@ export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Ele
   }
 
   return (
-    <Flex style={ { minWidth: '100%' } }>
-      <DocumentVersionsView
-        versionUrl={ versionUrl }
-        versionsIdList={ [versionId.count] }
-      />
-    </Flex>
+    <DocumentVersionsView
+      versionUrl={ versionUrl }
+      versionsIdList={ [versionId.count] }
+    />
   )
 }
