@@ -12,10 +12,11 @@ import React, { useEffect, useState } from 'react'
 import { isEmpty } from 'lodash'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { currentDomain } from '@Pimcore/app/config/app-config'
-import { SingleViewUi } from './single-view-ui'
 import { Content } from '@Pimcore/components/content/content'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { type SingleVersionViewProps } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 import { useDocumentGetByIdQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { DocumentVersionsView } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/versions/components/document-versions-view/document-versions-view'
 
 export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Element => {
   const { id } = useElementContext()
@@ -41,9 +42,11 @@ export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Ele
   }
 
   return (
-    <SingleViewUi
-      versionId={ versionId }
-      versionUrl={ versionUrl }
-    />
+    <Flex style={ { minWidth: '100%' } }>
+      <DocumentVersionsView
+        versionUrl={ versionUrl }
+        versionsIdList={ [versionId.count] }
+      />
+    </Flex>
   )
 }
