@@ -49,12 +49,12 @@ export const RedirectsContainer = (): React.JSX.Element => {
     }
   }), [currentPage, pageSize, filter])
 
-  const { 
-    data, 
-    isLoading: redirectsLoading, 
-    isFetching: redirectsFetching, 
+  const {
+    data,
+    isLoading: redirectsLoading,
+    isFetching: redirectsFetching,
     error
-    } = useBundleSeoRedirectsGetCollectionQuery(queryArgs)
+  } = useBundleSeoRedirectsGetCollectionQuery(queryArgs)
 
   const [redirectRows, setRedirectRows] = useState<RedirectRow[]>([])
 
@@ -66,7 +66,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
     return bDate - aDate
   })
 
-    const reload = (): void => {
+  const reload = (): void => {
     dispatch(api.util.invalidateTags(invalidatingTags.REDIRECTS()))
   }
 
@@ -142,7 +142,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
             showTotal={ (total) => t('pagination.show-total', { total }) }
             total={ data?.totalItems ?? 0 }
           />
-        </Toolbar> } 
+        </Toolbar> }
       renderTopBar={
         <Toolbar
           justify='space-between'

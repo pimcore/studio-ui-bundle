@@ -42,7 +42,7 @@ export const useRedirects = (): UseRedirectsReturn => {
         source: redirectData?.source ?? null,
         target: redirectData?.target ?? null
       }
-      
+
       const result = await createRedirect({ bundleSeoRedirectAdd: defaultRedirect })
 
       if (!isUndefined(result.error)) {

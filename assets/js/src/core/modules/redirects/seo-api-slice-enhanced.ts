@@ -37,15 +37,15 @@ export type * from './seo-api-slice.gen'
 
 export const {
   useBundleSeoRedirectAddMutation,
-    useBundleSeoRedirectCleanupMutation,
-    useBundleSeoRedirectsGetCollectionQuery,
-    useBundleSeoRedirectUpdateByIdMutation,
-    useBundleSeoRedirectDeleteMutation,
-    useBundleSeoRedirectsExportQuery,
-    useBundleSeoRedirectsImportMutation,
-    useBundleSeoRedirectListPrioritiesQuery,
-    useBundleSeoRedirectListStatusesQuery,
-    useBundleSeoRedirectListTypesQuery,
+  useBundleSeoRedirectCleanupMutation,
+  useBundleSeoRedirectsGetCollectionQuery,
+  useBundleSeoRedirectUpdateByIdMutation,
+  useBundleSeoRedirectDeleteMutation,
+  useBundleSeoRedirectsExportQuery,
+  useBundleSeoRedirectsImportMutation,
+  useBundleSeoRedirectListPrioritiesQuery,
+  useBundleSeoRedirectListStatusesQuery,
+  useBundleSeoRedirectListTypesQuery
 } = api
 
 export { api }
