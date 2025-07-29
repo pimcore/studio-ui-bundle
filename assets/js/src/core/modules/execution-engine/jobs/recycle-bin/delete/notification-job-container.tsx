@@ -1,11 +1,21 @@
-import { useJobs } from "@Pimcore/modules/execution-engine/hooks/useJobs"
-import { JobProps } from "@Pimcore/modules/execution-engine/notification/job/job"
-import { JobView } from "@Pimcore/modules/execution-engine/notification/job/job-view"
-import { useServerSideEvent } from "@Pimcore/utils/hooks/use-server-side-event"
-import React, { useEffect, useRef, useState } from "react"
-import { useTranslation } from "react-i18next"
-import { JobStatus } from "../../abstact-job"
-import { DeleteJob } from "./factory"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
+import { type JobProps } from '@Pimcore/modules/execution-engine/notification/job/job'
+import { JobView } from '@Pimcore/modules/execution-engine/notification/job/job-view'
+import { useServerSideEvent } from '@Pimcore/utils/hooks/use-server-side-event'
+import React, { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { JobStatus } from '../../abstact-job'
+import { type DeleteJob } from './factory'
 
 export interface DeleteJobProps extends JobProps {
   config: DeleteJob['config']
@@ -31,43 +41,43 @@ export const NotificationJobContainer = (props: DeleteJobProps): React.JSX.Eleme
 
   return (
     <JobView
-      failureButtonActions={[
+      failureButtonActions={ [
         {
           label: t('jobs.job.button-hide'),
           handler: () => { removeJob(id) }
         }
-      ]}
+      ] }
 
-      finishedWithErrorsButtonActions={[
+      finishedWithErrorsButtonActions={ [
         {
           label: t('jobs.job.button-hide'),
           handler: () => {
             removeJob(id)
           }
         }
-      ]}
+      ] }
 
-      successButtonActions={[
+      successButtonActions={ [
         {
           label: t('jobs.job.button-hide'),
           handler: () => {
             removeJob(id)
           }
         }
-      ]}
+      ] }
 
-      {...props}
-      progress={progress}
+      { ...props }
+      progress={ progress }
     />
   )
 
-  function openHandler(): void {
+  function openHandler (): void {
     action().then(actionJobId => {
       jobId.current = actionJobId
     }).catch(console.error)
   }
 
-  function messageHandler(event: MessageEvent): void {
+  function messageHandler (event: MessageEvent): void {
     const data: any = JSON.parse(event.data as string)
 
     if (data.jobRunId !== jobId.current) {
@@ -80,8 +90,8 @@ export const NotificationJobContainer = (props: DeleteJobProps): React.JSX.Eleme
 
     if (data.status !== undefined) {
       if (data.status === 'finished' || data.status === 'finished_with_errors' || data.status === 'failed') {
-        //TODO: reload tree and recycle bin
-        //dispatch(refreshNodeChildren({ nodeId: props.config.parentFolder, elementType: props.config.elementType }))
+        // TODO: reload tree and recycle bin
+        // dispatch(refreshNodeChildren({ nodeId: props.config.parentFolder, elementType: props.config.elementType }))
       }
 
       if (data.status === 'finished') {

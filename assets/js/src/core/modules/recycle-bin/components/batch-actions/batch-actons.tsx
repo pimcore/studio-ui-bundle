@@ -26,7 +26,7 @@ export const BatchActions = (): React.JSX.Element => {
       {
         key: '1',
         label: t('recycle-bin.actions.delete'),
-        icon: <Icon value={'trash'} />,
+        icon: <Icon value={ 'trash' } />,
         onClick: () => {
           void removeItems(
             Object.keys(selectedRows).map(Number),
@@ -39,7 +39,7 @@ export const BatchActions = (): React.JSX.Element => {
       {
         key: '2',
         label: t('recycle-bin.actions.restore'),
-        icon: <Icon value={'restore'} />,
+        icon: <Icon value={ 'restore' } />,
         onClick: () => {
           void restoreItems(
             Object.keys(selectedRows).map(Number),
@@ -54,9 +54,9 @@ export const BatchActions = (): React.JSX.Element => {
 
   return (
     <Dropdown
-      menu={menu}
+      menu={ menu }
     >
-      <DropdownButton key={'dropdown-button'}>{t('listing.actions')}</DropdownButton>
+      <DropdownButton key={ 'dropdown-button' }>{t('listing.actions')}</DropdownButton>
     </Dropdown>
   )
 }

@@ -110,12 +110,12 @@ export const Pagination = ({
       renderPageNumberItems.push(
         <li
           className='ant-pagination-item'
-          key={'page-jumper'}
+          key={ 'page-jumper' }
         >
           <InlineTextfield
-            onKeyDown={onKeyDownJumpToPage}
-            showDotsValues={[...pageNumberRangeLeft.map(String), ...pageNumberRangeRight.map(String)]}
-            value={currentPage?.toString()}
+            onKeyDown={ onKeyDownJumpToPage }
+            showDotsValues={ [...pageNumberRangeLeft.map(String), ...pageNumberRangeRight.map(String)] }
+            value={ currentPage?.toString() }
           />
         </li>
       )
@@ -138,39 +138,39 @@ export const Pagination = ({
   }
 
   return (
-    <div className={styles.pagination}>
-      <ul className={'ant-pagination ' + hashId}>
+    <div className={ styles.pagination }>
+      <ul className={ 'ant-pagination ' + hashId }>
         {isSet(showTotal) && (
           <TotalField
-            showTotal={showTotal}
-            total={total}
+            showTotal={ showTotal }
+            total={ total }
           />
         )}
 
         <PreviousButton
-          currentPage={currentPage}
-          onClickPrev={onClickPrev}
+          currentPage={ currentPage }
+          onClickPrev={ onClickPrev }
         />
 
         {renderPageNumberItems}
 
         <NextButton
-          currentPage={currentPage}
-          onClickNext={onClickNext}
-          pages={pages}
+          currentPage={ currentPage }
+          onClickNext={ onClickNext }
+          pages={ pages }
         />
 
         {showSizeChanger &&
           (
             <li
               className='ant-pagination-options'
-              key={'page-jumper'}
+              key={ 'page-jumper' }
             >
               <SizeChanger
-                defaultSize={defaultPageSize}
-                handleChange={changePageSize}
-                label={i18n.t('pagination.page')}
-                sizeOptions={pageSizeOptions}
+                defaultSize={ defaultPageSize }
+                handleChange={ changePageSize }
+                label={ i18n.t('pagination.page') }
+                sizeOptions={ pageSizeOptions }
               />
             </li>
           )
@@ -180,45 +180,45 @@ export const Pagination = ({
   )
 }
 
-function PreviousButton(prop): React.JSX.Element {
+function PreviousButton (prop): React.JSX.Element {
   const { currentPage, onClickPrev } = prop
   return (
-    <li className={`ant-pagination-prev ${currentPage === 1 ? 'ant-pagination-disabled' : ''}`}>
+    <li className={ `ant-pagination-prev ${currentPage === 1 ? 'ant-pagination-disabled' : ''}` }>
       <Button
-        className={'ant-pagination-item-link'}
-        disabled={currentPage === 1}
-        icon={<Icon
-          options={{ width: 18, height: 18 }}
+        className={ 'ant-pagination-item-link' }
+        disabled={ currentPage === 1 }
+        icon={ <Icon
+          options={ { width: 18, height: 18 } }
           value='chevron-left'
-        />}
-        onClick={onClickPrev}
-        size={'small'}
-        type={'text'}
+               /> }
+        onClick={ onClickPrev }
+        size={ 'small' }
+        type={ 'text' }
       />
     </li>
   )
 }
 
-function NextButton(prop): React.JSX.Element {
+function NextButton (prop): React.JSX.Element {
   const { currentPage, pages, onClickNext } = prop
   return (
-    <li className={`ant-pagination-next ${currentPage === pages ? 'ant-pagination-disabled' : ''}`}>
+    <li className={ `ant-pagination-next ${currentPage === pages ? 'ant-pagination-disabled' : ''}` }>
       <Button
-        className={'ant-pagination-item-link'}
-        disabled={currentPage === pages}
-        icon={<Icon
-          options={{ width: 18, height: 18 }}
+        className={ 'ant-pagination-item-link' }
+        disabled={ currentPage === pages }
+        icon={ <Icon
+          options={ { width: 18, height: 18 } }
           value='chevron-right'
-        />}
-        onClick={onClickNext}
-        size={'small'}
-        type={'text'}
+               /> }
+        onClick={ onClickNext }
+        size={ 'small' }
+        type={ 'text' }
       />
     </li>
   )
 }
 
-function TotalField(prop): React.JSX.Element {
+function TotalField (prop): React.JSX.Element {
   const { total, showTotal } = prop
   return (
     <li className="ant-pagination-total-text">
@@ -227,7 +227,7 @@ function TotalField(prop): React.JSX.Element {
   )
 }
 
-function getLeftPageNumberRange(
+function getLeftPageNumberRange (
   showPageJumperAtOnce: number
 ): number[] {
   if (showPageJumperAtOnce <= 0) {
@@ -238,7 +238,7 @@ function getLeftPageNumberRange(
   return [...Array(lastJumper).keys()].map(number => number + 1)
 }
 
-function getRightPageNumberRange(
+function getRightPageNumberRange (
   showPageJumperAtOnce: number,
   pages: number
 ): number[] {
@@ -254,25 +254,25 @@ function getRightPageNumberRange(
   return [...Array(middleJumper).keys()].map(number => number + firstJumper)
 }
 
-function PageNumberNode(
+function PageNumberNode (
   pageNumber: number,
   className: string,
   onClick: (e) => void
 ): React.JSX.Element {
   return (
     <li
-      className={`ant-pagination-item ant-pagination-item-${pageNumber.toString()} ${className}`}
-      key={pageNumber}
-      title={pageNumber.toString()}
+      className={ `ant-pagination-item ant-pagination-item-${pageNumber.toString()} ${className}` }
+      key={ pageNumber }
+      title={ pageNumber.toString() }
     >
       <Button
-        className={'page-number-node'}
-        onClick={onClick}
+        className={ 'page-number-node' }
+        onClick={ onClick }
       >{pageNumber}</Button>
     </li>
   )
 }
 
-function getClassNameForPageNumber(pageNumber: number, current: number): string {
+function getClassNameForPageNumber (pageNumber: number, current: number): string {
   return pageNumber === current ? 'ant-pagination-item-active' : ''
 }
