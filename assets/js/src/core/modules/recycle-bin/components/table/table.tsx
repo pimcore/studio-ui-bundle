@@ -73,14 +73,14 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
         return (
           <Flex
             align='center'
-            className={ styles.icons }
+            className={styles.icons}
             justify='center'
           >
             {getElementTypeIcon()}
           </Flex>
         )
       },
-      size: 20
+      size: 50
     }),
     columnHelper.accessor('path', {
       header: t('recycle-bin.columns.path'),
@@ -95,20 +95,21 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
               fullPath: row.path
             }
           }
-        }
-      }
+        },
+        autoWidth: true
+      },
     }),
     columnHelper.accessor('amount', {
       header: t('recycle-bin.columns.amount'),
-      size: 20
+      size: 100
     }),
     columnHelper.accessor('deletedBy', {
       header: t('recycle-bin.columns.deleted-by'),
-      size: 60
+      size: 100
     }),
     columnHelper.accessor('date', {
       header: t('recycle-bin.columns.date'),
-      size: 40
+      size: 150
     }),
     columnHelper.accessor('actions', {
       header: t('recycle-bin.columns.actions'),
@@ -119,46 +120,46 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
             justify='center'
           >
             <IconButton
-              icon={ { value: 'restore' } }
-              loading={ restoreLoading.includes(row.original.id) }
-              onClick={ () => {
+              icon={{ value: 'restore' }}
+              loading={restoreLoading.includes(row.original.id)}
+              onClick={() => {
                 setRestoreLoading((prev) => [...prev, row.original.id])
                 void restoreItems([row.original.id], () => {
                   setRestoreLoading((prev) => prev.filter(id => id !== row.original.id))
                 })
-              } }
+              }}
               type="link"
             />
 
             <IconButton
-              icon={ { value: 'trash' } }
-              loading={ removeLoading.includes(row.original.id) }
-              onClick={ () => {
+              icon={{ value: 'trash' }}
+              loading={removeLoading.includes(row.original.id)}
+              onClick={() => {
                 setRemoveLoading(prev => [...prev, row.original.id])
                 void removeItems([row.original.id], () => {
                   setRemoveLoading(prev => prev.filter(id => id !== row.original.id))
                 })
-              } }
+              }}
               type="link"
             />
           </Flex>
         )
       },
-      size: 20
+      size: 100
     })
   ]
 
   return (
     <Grid
       autoWidth
-      columns={ columns }
-      data={ tableItems }
+      columns={columns}
+      data={tableItems}
       enableMultipleRowSelection
-      modifiedCells={ [] }
-      onSelectedRowsChange={ (row: RowSelectionState) => { setSelectedRows(row) } }
+      modifiedCells={[]}
+      onSelectedRowsChange={(row: RowSelectionState) => { setSelectedRows(row) }}
       resizable
-      selectedRows={ selectedRows }
-      setRowId={ (row) => String(row.id) }
+      selectedRows={selectedRows}
+      setRowId={(row) => String(row.id)}
     />
   )
 }
