@@ -768,6 +768,12 @@ redirects.regex: RegEx
 redirects.pass-through: Pass Through
 redirects.active: Active
 redirects.actions: Actions
+redirects.beginner-modal.title: New Beginner Redirect
+redirects.beginner-modal.type: Type
+redirects.beginner-modal.path: Path
+redirects.beginner-modal.target: Target
+redirects.beginner-modal.create: Create
+redirects.beginner-modal.cancel: Cancel
 path: Path
 entire_uri: Entire URI
 path_query: Path and Query

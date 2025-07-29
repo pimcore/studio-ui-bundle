@@ -19,12 +19,14 @@ import { Content } from '@Pimcore/components/content/content'
 import { Table } from './table/table'
 import { Box, IconTextButton, SearchInput, Pagination } from '@sdk/components'
 import { api, useBundleSeoRedirectsGetCollectionQuery } from './seo-api-slice-enhanced'
+import { type BundleSeoRedirect } from './seo-api-slice.gen'
 import trackError, { ApiError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { type RedirectRow, useRedirects } from './hooks/use-redirects'
 import { isUndefined } from 'lodash'
 import { useAppDispatch } from '@sdk/app'
 import { invalidatingTags } from '@sdk/api'
+import { BeginnerRedirectModal } from './components/beginner-redirect-modal/beginner-redirect-modal'
 
 export const RedirectsContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
@@ -33,6 +35,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(50)
   const [filter, setFilter] = useState<string>('')
+  const [isBeginnerModalOpen, setIsBeginnerModalOpen] = useState<boolean>(false)
 
   const queryArgs = useMemo(() => ({
     body: {
@@ -91,6 +94,15 @@ export const RedirectsContainer = (): React.JSX.Element => {
     }
   }
 
+  const onBeginnerRedirectSuccess = (redirect: BundleSeoRedirect): void => {
+    setRedirectRows(prev =>
+      [
+        { ...redirect, rowId: uuid() },
+        ...prev
+      ]
+    )
+  }
+
   const handleSearch = (value: string): void => {
     setFilter(value)
     setCurrentPage(1)
@@ -129,7 +141,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
             <Title>{t('widget.redirects')}</Title>
             <IconTextButton
               icon={ { value: 'new' } }
-              onClick={ () => console.log("beginner implement now") }
+              onClick={ () => { setIsBeginnerModalOpen(true) } }
             >{t('redirects.beginner')}</IconTextButton>
             <IconTextButton
               disabled={ redirectsLoading || createLoading }
@@ -168,6 +180,12 @@ export const RedirectsContainer = (): React.JSX.Element => {
           />
         </Box>
       </Content>
+
+      <BeginnerRedirectModal
+        open={ isBeginnerModalOpen }
+        setOpen={ setIsBeginnerModalOpen }
+        onSuccess={ onBeginnerRedirectSuccess }
+      />
     </ContentLayout>
   )
 }
