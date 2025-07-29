@@ -6,7 +6,7 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            customReportsListDrillDownOptions: build.mutation<
+            customReportsListDrillDownOptions: build.query<
                 CustomReportsListDrillDownOptionsApiResponse,
                 CustomReportsListDrillDownOptionsApiArg
             >({
@@ -15,7 +15,7 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Bundle Custom Reports"],
+                providesTags: ["Bundle Custom Reports"],
             }),
             customReportsChart: build.query<CustomReportsChartApiResponse, CustomReportsChartApiArg>({
                 query: (queryArg) => ({
@@ -279,7 +279,7 @@ export type BundleCustomReportsTreeNode = {
     reportClass: string;
 };
 export const {
-    useCustomReportsListDrillDownOptionsMutation,
+    useCustomReportsListDrillDownOptionsQuery,
     useCustomReportsChartQuery,
     useCustomReportsConfigGetTreeQuery,
     useCustomReportExportCsvMutation,
