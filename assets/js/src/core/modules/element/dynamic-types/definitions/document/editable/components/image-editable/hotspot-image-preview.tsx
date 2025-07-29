@@ -16,6 +16,7 @@ import { type CropSettings } from '../../../../objects/data-related/helpers/hots
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { isNil } from 'lodash'
+import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 
 interface DocumentHotspotImageValue {
   image: { type: 'asset', id: number } | null
@@ -26,8 +27,8 @@ interface DocumentHotspotImageValue {
 
 interface DocumentHotspotImagePreviewProps {
   assetId: number
-  height: number | string
-  width: number | string
+  height?: number | string
+  width?: number | string
   value: DocumentHotspotImageValue
   onChange?: (value: DocumentHotspotImageValue) => void
   setMarkerModalOpen: () => void
@@ -42,14 +43,45 @@ export const DocumentHotspotImagePreview = function DocumentHotspotImagePreview 
   { assetId, height, width, value, onChange, setMarkerModalOpen, setCropModalOpen, handleSearch, handleLocateInTree, emptyValue, disabled }: DocumentHotspotImagePreviewProps
 ): React.JSX.Element {
   const { t } = useTranslation()
+  const { openElement } = useElementHelper()
+
+  const handleOpen = (): void => {
+    if (!isNil(assetId)) {
+      void openElement({
+        id: assetId,
+        type: 'asset'
+      })
+    }
+  }
 
   const dropdownItems: DropdownProps['menu']['items'] = useMemo(() => [
     {
-      key: 'search',
-      icon: <Icon value="search" />,
-      label: t('search'),
-      disabled: disabled,
-      onClick: handleSearch
+      key: 'crop',
+      icon: <Icon value="crop" />,
+      label: t('crop'),
+      disabled: disabled === true || isNil(assetId),
+      onClick: () => { setCropModalOpen() }
+    },
+    {
+      key: 'hotspots-markers',
+      icon: <Icon value="location-marker" />,
+      label: t('hotspots.edit'),
+      disabled: disabled === true || isNil(assetId),
+      onClick: () => { setMarkerModalOpen() }
+    },
+    {
+      key: 'empty',
+      icon: <Icon value="trash" />,
+      label: t('empty'),
+      disabled: disabled === true || isNil(assetId),
+      onClick: emptyValue
+    },
+    {
+      key: 'open',
+      icon: <Icon value="open-folder" />,
+      label: t('open'),
+      disabled: disabled === true || isNil(assetId),
+      onClick: handleOpen
     },
     {
       key: 'locate-in-tree',
@@ -59,27 +91,13 @@ export const DocumentHotspotImagePreview = function DocumentHotspotImagePreview 
       onClick: handleLocateInTree
     },
     {
-      key: 'hotspots-markers',
-      icon: <Icon value="location-marker" />,
-      label: t('hotspots-markers'),
-      disabled: disabled === true || isNil(assetId),
-      onClick: () => { setMarkerModalOpen() }
-    },
-    {
-      key: 'crop',
-      icon: <Icon value="crop" />,
-      label: t('crop'),
-      disabled: disabled === true || isNil(assetId),
-      onClick: () => { setCropModalOpen() }
-    },
-    {
-      key: 'empty',
-      icon: <Icon value="trash" />,
-      label: t('empty'),
-      disabled: disabled === true || isNil(assetId),
-      onClick: emptyValue
+      key: 'search',
+      icon: <Icon value="search" />,
+      label: t('search'),
+      disabled: disabled,
+      onClick: handleSearch
     }
-  ], [disabled, assetId, handleSearch, handleLocateInTree, setMarkerModalOpen, setCropModalOpen, emptyValue, t])
+  ], [disabled, assetId, setCropModalOpen, setMarkerModalOpen, emptyValue, handleOpen, handleLocateInTree, handleSearch, t])
 
   return (
     <ResponsiveImagePreview

@@ -18,6 +18,7 @@ import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppa
 import { useTranslation } from 'react-i18next'
 import { ImagePreviewDropdown } from '../image-preview/components/dropdown/dropdown'
 import { type DropdownProps } from '../dropdown/dropdown'
+import { Text } from '@sdk/components'
 
 interface AssetTargetProps {
   onRemove?: () => void
@@ -93,7 +94,9 @@ export const AssetTarget = forwardRef(function AssetTarget ({ title, className, 
           </Flex>
         </div>
         )}
-        <div className="image-target-title">{ title }</div>
+        <div className="image-target-title">
+          <Text>{ title }</Text>
+        </div>
       </Flex>
 
       <ImagePreviewDropdown dropdownItems={ dropdownItems } />

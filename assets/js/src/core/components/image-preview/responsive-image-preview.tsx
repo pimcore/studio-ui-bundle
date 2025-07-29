@@ -9,29 +9,31 @@
  */
 
 import React, { type CSSProperties, useEffect, useMemo, useState } from 'react'
-import { useStyle } from './responsive-image-preview.styles.tsx'
+import { useStyle } from './responsive-image-preview.styles'
 import cn from 'classnames'
 import { toCssDimension } from '@Pimcore/utils/css'
-import { Image } from 'antd'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
+import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
+import { Image } from 'antd'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { ImagePreviewDropdown } from '@Pimcore/components/image-preview/components/dropdown/dropdown'
 import { type ImageThumbnailSettings } from './utils/custom-image-thumbnail'
 import { getAssetPreviewUrl } from './utils/get-asset-preview-url'
 import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
+import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
+import { isNil } from 'lodash'
 
 interface ResponsiveImagePreviewProps {
   src?: string
   assetId?: number
   assetType?: 'image' | 'video'
-  className?: string
   width?: number | string
   height?: number | string
+  className?: string
   style?: CSSProperties
-  bordered?: boolean
   dropdownItems?: DropdownProps['menu']['items']
+  bordered?: boolean
   thumbnailSettings?: ImageThumbnailSettings
 }
 
@@ -47,12 +49,12 @@ export const ResponsiveImagePreview = ({
   bordered = false, 
   thumbnailSettings 
 }: ResponsiveImagePreviewProps): React.JSX.Element => {
-  const [key, setKey] = useState(0)
-  const [thumbnailDimensions, setThumbnailDimensions] = useState({ width: 0, height: 0 })
-  const [actualImageDimensions, setActualImageDimensions] = useState<{ width: number; height: number } | null>(null)
-  const [isImageLoaded, setIsImageLoaded] = useState(false)
   const { getStateClasses } = useDroppable()
   const { styles } = useStyle()
+  const [key, setKey] = useState(0)
+  const [thumbnailDimensions, setThumbnailDimensions] = useState({ width: 0, height: 0 })
+  const [isImageLoaded, setIsImageLoaded] = useState(false)
+  const [actualImageDimensions, setActualImageDimensions] = useState<{ width: number, height: number } | null>(null)
   const wrapperRef = React.useRef<HTMLDivElement>(null)
 
   const imageSrc = useMemo(() => {
@@ -106,7 +108,7 @@ export const ResponsiveImagePreview = ({
     setIsImageLoaded(false)
   }, [imageSrc])
 
-  const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
+  const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>): void => {
     const img = event.target as HTMLImageElement
     setActualImageDimensions({
       width: img.naturalWidth,
@@ -114,24 +116,6 @@ export const ResponsiveImagePreview = ({
     })
     setIsImageLoaded(true)
   }
-
-  const containerStyle: CSSProperties = useMemo(() => {
-    if (actualImageDimensions !== null) {
-      return {
-        ...style,
-        width: actualImageDimensions.width,
-        height: actualImageDimensions.height
-      }
-      
-    }
-
-    return {
-      ...style,
-      width: toCssDimension(width),
-      height: toCssDimension(height, 200)
-    }
-  }, [actualImageDimensions, style, width, height])
-
 
   const loadingSpinner = (
     <Flex
@@ -143,26 +127,48 @@ export const ResponsiveImagePreview = ({
     </Flex>
   )
 
-  return (
-    <div
-      className={ cn(className, styles.responsiveImagePreviewContainer, bordered ? 'image-preview-bordered' : undefined, ...getStateClasses()) }
-      ref={ wrapperRef }
-      style={ containerStyle }
-    >
-      { imageSrc !== undefined && (
-        <Image
-          className={ styles.imageComponent }
-          fallback="/bundles/pimcorestudioui/img/fallback-image.svg"
-          key={ key }
-          onLoad={ handleImageLoad }
-          placeholder={ loadingSpinner }
-          preview={ false }
-          src={ imageSrc }
-        />
-      ) }
+  const containerStyle: CSSProperties = useMemo(() => {
+    if (actualImageDimensions !== null) {
+      return {
+        ...style,
+        width: actualImageDimensions.width,
+        height: actualImageDimensions.height
+      }
+    }
 
-      { isImageLoaded && <ImagePreviewDropdown dropdownItems={ dropdownItems } /> }
-    </div>
+    return {
+      ...style,
+      width: toCssDimension(width),
+      height: toCssDimension(height, 200)
+    }
+  }, [actualImageDimensions, style, width, height])
+
+  return (
+    <Dropdown
+      disabled={ isNil(dropdownItems) || dropdownItems.length === 0 }
+      menu={ { items: dropdownItems } }
+      trigger={ ['contextMenu'] }
+    >
+      <div
+        className={ cn(className, styles.responsiveImagePreviewContainer, bordered ? 'image-preview-bordered' : undefined, ...getStateClasses()) }
+        ref={ wrapperRef }
+        style={ containerStyle }
+      >
+        { imageSrc !== undefined && (
+          <Image
+            className={ styles.imageComponent }
+            fallback="/bundles/pimcorestudioui/img/fallback-image.svg"
+            key={ key }
+            onLoad={ handleImageLoad }
+            placeholder={ loadingSpinner }
+            preview={ false }
+            src={ imageSrc }
+          />
+        ) }
+
+        { isImageLoaded && <ImagePreviewDropdown dropdownItems={ dropdownItems } /> }
+      </div>
+    </Dropdown>
   )
 }
 

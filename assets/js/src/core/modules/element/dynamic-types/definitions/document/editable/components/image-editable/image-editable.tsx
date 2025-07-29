@@ -239,7 +239,8 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
             <AssetTarget
               height={ height }
               onSearch={ handleSearch }
-              title={ props.config?.title ?? t('document.editable.image.drop-message') }
+              dndIcon
+              title={ props.config?.title ?? t('drag-and-drop-asset') }
               width={ width }
             />
             )}
