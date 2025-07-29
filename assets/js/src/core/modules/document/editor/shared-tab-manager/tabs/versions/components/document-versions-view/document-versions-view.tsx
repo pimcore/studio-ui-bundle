@@ -10,20 +10,30 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { isNull } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
+import { Iframe } from '@Pimcore/components/iframe/iframe'
+import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/versions-fields-list.styles'
+import { VERSIONS_CONTENT_VIEW_ID } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-view'
 
 interface IDocumentVersionsViewProps {
   versionsIdList: number[]
   versionUrl: string | null
 }
-export const DocumentVersionsView = ({ versionsIdList }: IDocumentVersionsViewProps): React.JSX.Element => {
+
+export const DocumentVersionsView = ({ versionsIdList, versionUrl }: IDocumentVersionsViewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
 
+  const { height } = useElementResize(VERSIONS_CONTENT_VIEW_ID)
+
   return (
-    <Flex vertical>
+    <Flex
+      style={ { height } }
+      vertical
+    >
       <Flex
         className={ styles.headerContainer }
         wrap="wrap"
@@ -39,9 +49,9 @@ export const DocumentVersionsView = ({ versionsIdList }: IDocumentVersionsViewPr
       </Flex>
       <Flex
         className={ styles.content }
-        vertical
+        flex={ 1 }
       >
-        Content
+        {!isNull(versionUrl) && <Iframe src={ versionUrl } />}
       </Flex>
     </Flex>
   )
