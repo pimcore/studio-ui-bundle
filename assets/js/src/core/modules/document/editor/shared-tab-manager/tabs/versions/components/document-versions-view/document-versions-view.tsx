@@ -8,12 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isNull } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
-import { Iframe } from '@Pimcore/components/iframe/iframe'
+import { Iframe, type IframeRef } from '@Pimcore/components/iframe/iframe'
 import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/versions-fields-list.styles'
 import { VERSIONS_CONTENT_VIEW_ID } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-view'
@@ -28,6 +28,13 @@ export const DocumentVersionsView = ({ versionsIdList, versionUrl }: IDocumentVe
   const { styles } = useStyles()
 
   const { height } = useElementResize(VERSIONS_CONTENT_VIEW_ID)
+  const iframeRef = useRef<IframeRef>(null)
+
+  useEffect(() => {
+    if (!isNull(versionUrl) && !isNull(iframeRef.current)) {
+      iframeRef.current.reload()
+    }
+  }, [versionUrl])
 
   return (
     <Flex
@@ -51,7 +58,12 @@ export const DocumentVersionsView = ({ versionsIdList, versionUrl }: IDocumentVe
         className={ styles.content }
         flex={ 1 }
       >
-        {!isNull(versionUrl) && <Iframe src={ versionUrl } />}
+        {!isNull(versionUrl) && (
+          <Iframe
+            ref={ iframeRef }
+            src={ versionUrl }
+          />
+        )}
       </Flex>
     </Flex>
   )
