@@ -80,12 +80,12 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
                 <RowSelectionTotal />
                 <BatchActions />
               </Flex>
-              )
+            )
             : (
               <IconTextButton
-                disabled={ isRTKLoading || isLoading }
-                icon={ { value: 'trash' } }
-                onClick={ () => {
+                disabled={isRTKLoading || isLoading || data?.items.length === 0}
+                icon={{ value: 'trash' }}
+                onClick={() => {
                   setIsLoading(true)
                   void flush(() => {
                     dispatch(
@@ -96,24 +96,24 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
 
                     setIsLoading(false)
                   })
-                } }
-                type={ 'link' }
+                }}
+                type={'link'}
               >
                 {t('recycle-bin.actions.cleanup')}
               </IconTextButton>
-              )}
+            )}
 
           <Flex align="center">
             <IconButton
-              disabled={ isRTKLoading || isLoading }
-              icon={ { value: 'refresh' } }
-              onClick={ () => {
+              disabled={isRTKLoading || isLoading}
+              icon={{ value: 'refresh' }}
+              onClick={() => {
                 dispatch(
                   api.util.invalidateTags(
                     invalidatingTags.RECYCLING_BIN()
                   )
                 )
-              } }
+              }}
             />
 
             {total > 0 && (
@@ -124,32 +124,32 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
                 />
 
                 <Pagination
-                  current={ currentPage }
-                  defaultPageSize={ pageSize }
-                  onChange={ onPagerChange }
+                  current={currentPage}
+                  defaultPageSize={pageSize}
+                  onChange={onPagerChange}
                   showSizeChanger
-                  showTotal={ (total) => t('pagination.show-total', { total }) }
-                  total={ total }
+                  showTotal={(total) => t('pagination.show-total', { total })}
+                  total={total}
                 />
               </>
             )}
           </Flex>
-        </Toolbar> }
+        </Toolbar>}
       renderTopBar={
         <Toolbar
           justify='space-between'
-          margin={ {
+          margin={{
             x: 'mini',
             y: 'none'
-          } }
+          }}
           theme='secondary'
         >
-          <Flex gap={ 'small' }>
+          <Flex gap={'small'}>
             <Title>{t('widget.recycle-bin')}</Title>
           </Flex>
           <SearchInput
-            loading={ isFetching || isLoading }
-            onSearch={ (value) => {
+            loading={isFetching || isLoading}
+            onSearch={(value) => {
               const pathFilter: ColumnFilters['path'] = {
                 key: 'path',
                 type: 'like',
@@ -164,30 +164,30 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
                 ...columnFilters,
                 path: pathFilter
               })
-            } }
-            placeholder={ t('component.search.pleaceholder') }
-            withPrefix={ false }
-            withoutAddon={ false }
+            }}
+            placeholder={t('component.search.pleaceholder')}
+            withPrefix={false}
+            withoutAddon={false}
           />
         </Toolbar>
       }
     >
       <Content
-        loading={ isLoading || isRTKLoading }
-        margin={ {
+        loading={isLoading || isRTKLoading}
+        margin={{
           x: 'extra-small',
           y: 'none'
-        } }
-        none={ isUndefined(data?.items) || data.items.length === 0 }
+        }}
+        none={isUndefined(data?.items) || data.items.length === 0}
       >
         <Box
-          margin={ {
+          margin={{
             x: 'extra-small',
             y: 'none'
-          } }
+          }}
         >
           <Table
-            items={ data?.items ?? [] }
+            items={data?.items ?? []}
           />
         </Box>
       </Content>
