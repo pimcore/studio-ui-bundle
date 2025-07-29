@@ -8,29 +8,20 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useAppDispatch } from '@Pimcore/app/store'
-import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { Select } from '@Pimcore/components/select/select'
-import { api } from '@Pimcore/modules/redirects/seo-api-slice-enhanced'
 import { useForm } from 'antd/es/form/Form'
 import React, { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useBundleSeoRedirectListTypesQuery, useBundleSeoRedirectAddMutation } from '../seo-api-slice-enhanced'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { type BundleSeoRedirect } from '../seo-api-slice.gen'
-import { isUndefined } from 'lodash'
+import { useBundleSeoRedirectListTypesQuery } from '../seo-api-slice-enhanced'
 
 interface BeginnerRedirectModalProps {
   open: boolean
   setOpen: (open: boolean) => void
-  onCreate: (formValues: { type: string, path: string, target: string }) => string
-  onSuccess: (redirect: BundleSeoRedirect, tempRowId: string) => void
-  onError: (tempRowId: string) => void
+  createRedirect: (redirectData?: { type: string, source: string, target: string }) => Promise<boolean>
 }
 
 interface BeginnerRedirectFormValues {
@@ -39,12 +30,10 @@ interface BeginnerRedirectFormValues {
   target: string
 }
 
-export const BeginnerRedirectModal = ({ open, setOpen, onCreate, onSuccess, onError }: BeginnerRedirectModalProps): React.JSX.Element => {
+export const BeginnerRedirectModal = ({ open, setOpen, createRedirect }: BeginnerRedirectModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = useForm()
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const dispatch = useAppDispatch()
-  const [createRedirect] = useBundleSeoRedirectAddMutation()
   const { data: typesData } = useBundleSeoRedirectListTypesQuery()
 
   const typeOptions = useMemo(() => 
@@ -55,30 +44,18 @@ export const BeginnerRedirectModal = ({ open, setOpen, onCreate, onSuccess, onEr
   const onFinish = async (values: BeginnerRedirectFormValues): Promise<void> => {
     setIsLoading(true)
     
-    const tempRowId = onCreate(values)
+    const success = await createRedirect({
+      type: values.type,
+      source: values.path,
+      target: values.target
+    })
     
-    try {
-      const redirectData = {
-        type: values.type,
-        source: values.path,
-        target: values.target
-      }
-      
-      const result = await createRedirect({ bundleSeoRedirectAdd: redirectData })
-      
-      if ('data' in result && !isUndefined(result.data)) {
-        onSuccess(result.data, tempRowId)
-        setOpen(false)
-        form.resetFields()
-      } else {
-        onError(tempRowId)
-      }
-    } catch (error) {
-      trackError(new GeneralError('Was not able to create redirect'))
-      onError(tempRowId)
-    } finally {
-      setIsLoading(false)
+    if (success) {
+      setOpen(false)
+      form.resetFields()
     }
+  
+    setIsLoading(false)
   }
 
   const handleCancel = (): void => {

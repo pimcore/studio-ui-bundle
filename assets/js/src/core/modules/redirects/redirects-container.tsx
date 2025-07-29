@@ -19,7 +19,6 @@ import { Content } from '@Pimcore/components/content/content'
 import { Table } from './table/table'
 import { Box, IconTextButton, SearchInput, Pagination } from '@sdk/components'
 import { api, useBundleSeoRedirectsGetCollectionQuery } from './seo-api-slice-enhanced'
-import { type BundleSeoRedirect } from './seo-api-slice.gen'
 import trackError, { ApiError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { type RedirectRow, useRedirects } from './hooks/use-redirects'
@@ -30,7 +29,10 @@ import { BeginnerRedirectModal } from './beginner-redirect-modal/beginner-redire
 
 export const RedirectsContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
-  const { createNewRedirect, createLoading } = useRedirects()
+  const { 
+    createNewRedirect, 
+    createLoading
+  } = useRedirects()
 
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(50)
@@ -82,25 +84,13 @@ export const RedirectsContainer = (): React.JSX.Element => {
     }
   }, [error])
 
-  const onCreateRedirect = async (): Promise<void> => {
-    const { success, data } = await createNewRedirect()
-    if (success && data !== undefined) {
-      setRedirectRows(prev =>
-        [
-          { ...data, rowId: uuid() },
-          ...prev
-        ]
-      )
-    }
-  }
-
-  const onBeginnerRedirectCreate = (formValues: { type: string, path: string, target: string }): string => {
+  const handleCreateRedirect = async (redirectData?: { type: string, source: string, target: string }): Promise<boolean> => {
     const tempId = uuid()
     const optimisticRedirect: RedirectRow = {
-      id: Date.now(),
-      type: formValues.type,
-      source: formValues.path,
-      target: formValues.target,
+      id: Date.now(), 
+      type: redirectData?.type ?? 'entire_uri',
+      source: redirectData?.source ?? null,
+      target: redirectData?.target ?? null,
       sourceSite: null,
       targetSite: null,
       statusCode: 301,
@@ -116,23 +106,16 @@ export const RedirectsContainer = (): React.JSX.Element => {
       additionalAttributes: undefined,
       rowId: tempId
     }
-    
+
     setRedirectRows(prev => [optimisticRedirect, ...prev])
-    return tempId
-  }
 
-  const onBeginnerRedirectSuccess = (redirect: BundleSeoRedirect, tempRowId: string): void => {
-    setRedirectRows(prev =>
-      prev.map(row => 
-        row.rowId === tempRowId 
-          ? { ...redirect, rowId: uuid() }
-          : row
-      )
-    )
-  }
-
-  const onBeginnerRedirectError = (tempRowId: string): void => {
-    setRedirectRows(prev => prev.filter(row => row.rowId !== tempRowId))
+    const { success } = await createNewRedirect(redirectData)
+    
+    if (!success) {
+      setRedirectRows(prev => prev.filter(row => row.rowId !== tempId))
+    }
+    
+    return success
   }
 
   const handleSearch = (value: string): void => {
@@ -179,7 +162,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
               disabled={ redirectsLoading || createLoading }
               icon={ { value: 'new' } }
               loading={ createLoading }
-              onClick={ onCreateRedirect }
+              onClick={ () => { handleCreateRedirect() } }
             >{t('redirects.expert')}</IconTextButton>
           </Flex>
           <SearchInput
@@ -216,9 +199,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
       <BeginnerRedirectModal
         open={ isBeginnerModalOpen }
         setOpen={ setIsBeginnerModalOpen }
-        onCreate={ onBeginnerRedirectCreate }
-        onSuccess={ onBeginnerRedirectSuccess }
-        onError={ onBeginnerRedirectError }
+        createRedirect={ handleCreateRedirect }
       />
     </ContentLayout>
   )

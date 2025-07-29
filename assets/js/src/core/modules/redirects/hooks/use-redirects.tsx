@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import {
   type BundleSeoRedirect,
   type BundleSeoRedirectAdd,
@@ -17,11 +17,12 @@ import {
   useBundleSeoRedirectDeleteMutation,
   useBundleSeoRedirectUpdateByIdMutation
 } from '../seo-api-slice-enhanced'
+import { isUndefined } from 'lodash'
 
 export type RedirectRow = BundleSeoRedirect & { rowId: string }
 
 interface UseRedirectsReturn {
-  createNewRedirect: () => Promise<{ success: boolean, data?: BundleSeoRedirect }>
+  createNewRedirect: (redirectData?: Partial<BundleSeoRedirectAdd>) => Promise<{ success: boolean, data?: BundleSeoRedirect }>
   createLoading: boolean
   deleteRedirectById: (id: number) => Promise<{ success: boolean }>
   deleteLoading: boolean
@@ -34,19 +35,23 @@ export const useRedirects = (): UseRedirectsReturn => {
   const [deleteRedirect, { isLoading: deleteLoading }] = useBundleSeoRedirectDeleteMutation()
   const [updateRedirect, { isLoading: updateLoading }] = useBundleSeoRedirectUpdateByIdMutation()
 
-  const createNewRedirect = async (): Promise<{ success: boolean, data?: BundleSeoRedirect }> => {
+  const createNewRedirect = async (redirectData?: Partial<BundleSeoRedirectAdd>): Promise<{ success: boolean, data?: BundleSeoRedirect }> => {
     try {
       const defaultRedirect: BundleSeoRedirectAdd = {
-        type: 'entire_uri',
-        source: null,
-        target: null
+        type: redirectData?.type ?? 'entire_uri',
+        source: redirectData?.source ?? null,
+        target: redirectData?.target ?? null
       }
       
       const result = await createRedirect({ bundleSeoRedirectAdd: defaultRedirect })
+
+      if (!isUndefined(result.error)) {
+      trackError(new ApiError(result.error))}
+
       if ('data' in result) {
         return { success: true, data: result.data }
       }
-    } catch {
+    } catch {      
       trackError(new GeneralError('Was not able to create Redirect'))
     }
     return { success: false }
@@ -93,5 +98,5 @@ export const useRedirects = (): UseRedirectsReturn => {
     deleteLoading,
     updateRedirectById,
     updateLoading
-  }
+    }
 }
