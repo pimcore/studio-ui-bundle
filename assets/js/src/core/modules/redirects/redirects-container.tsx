@@ -26,7 +26,7 @@ import { type RedirectRow, useRedirects } from './hooks/use-redirects'
 import { isUndefined } from 'lodash'
 import { useAppDispatch } from '@sdk/app'
 import { invalidatingTags } from '@sdk/api'
-import { BeginnerRedirectModal } from './components/beginner-redirect-modal/beginner-redirect-modal'
+import { BeginnerRedirectModal } from './beginner-redirect-modal/beginner-redirect-modal'
 
 export const RedirectsContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
@@ -94,13 +94,45 @@ export const RedirectsContainer = (): React.JSX.Element => {
     }
   }
 
-  const onBeginnerRedirectSuccess = (redirect: BundleSeoRedirect): void => {
+  const onBeginnerRedirectCreate = (formValues: { type: string, path: string, target: string }): string => {
+    const tempId = uuid()
+    const optimisticRedirect: RedirectRow = {
+      id: Date.now(),
+      type: formValues.type,
+      source: formValues.path,
+      target: formValues.target,
+      sourceSite: null,
+      targetSite: null,
+      statusCode: 301,
+      priority: 1,
+      regex: false,
+      active: true,
+      passThroughParameters: false,
+      expiry: null,
+      creationDate: Date.now(),
+      modificationDate: Date.now(),
+      userOwner: null,
+      userModification: null,
+      additionalAttributes: undefined,
+      rowId: tempId
+    }
+    
+    setRedirectRows(prev => [optimisticRedirect, ...prev])
+    return tempId
+  }
+
+  const onBeginnerRedirectSuccess = (redirect: BundleSeoRedirect, tempRowId: string): void => {
     setRedirectRows(prev =>
-      [
-        { ...redirect, rowId: uuid() },
-        ...prev
-      ]
+      prev.map(row => 
+        row.rowId === tempRowId 
+          ? { ...redirect, rowId: uuid() }
+          : row
+      )
     )
+  }
+
+  const onBeginnerRedirectError = (tempRowId: string): void => {
+    setRedirectRows(prev => prev.filter(row => row.rowId !== tempRowId))
   }
 
   const handleSearch = (value: string): void => {
@@ -184,7 +216,9 @@ export const RedirectsContainer = (): React.JSX.Element => {
       <BeginnerRedirectModal
         open={ isBeginnerModalOpen }
         setOpen={ setIsBeginnerModalOpen }
+        onCreate={ onBeginnerRedirectCreate }
         onSuccess={ onBeginnerRedirectSuccess }
+        onError={ onBeginnerRedirectError }
       />
     </ContentLayout>
   )

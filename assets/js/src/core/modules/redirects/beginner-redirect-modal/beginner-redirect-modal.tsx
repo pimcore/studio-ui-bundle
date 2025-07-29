@@ -20,15 +20,17 @@ import { api } from '@Pimcore/modules/redirects/seo-api-slice-enhanced'
 import { useForm } from 'antd/es/form/Form'
 import React, { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useBundleSeoRedirectListTypesQuery, useBundleSeoRedirectAddMutation } from '../../seo-api-slice-enhanced'
+import { useBundleSeoRedirectListTypesQuery, useBundleSeoRedirectAddMutation } from '../seo-api-slice-enhanced'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { type BundleSeoRedirect } from '../../seo-api-slice.gen'
+import { type BundleSeoRedirect } from '../seo-api-slice.gen'
 import { isUndefined } from 'lodash'
 
 interface BeginnerRedirectModalProps {
   open: boolean
   setOpen: (open: boolean) => void
-  onSuccess?: (redirect: BundleSeoRedirect) => void
+  onCreate: (formValues: { type: string, path: string, target: string }) => string
+  onSuccess: (redirect: BundleSeoRedirect, tempRowId: string) => void
+  onError: (tempRowId: string) => void
 }
 
 interface BeginnerRedirectFormValues {
@@ -37,7 +39,7 @@ interface BeginnerRedirectFormValues {
   target: string
 }
 
-export const BeginnerRedirectModal = ({ open, setOpen, onSuccess }: BeginnerRedirectModalProps): React.JSX.Element => {
+export const BeginnerRedirectModal = ({ open, setOpen, onCreate, onSuccess, onError }: BeginnerRedirectModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = useForm()
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -53,6 +55,8 @@ export const BeginnerRedirectModal = ({ open, setOpen, onSuccess }: BeginnerRedi
   const onFinish = async (values: BeginnerRedirectFormValues): Promise<void> => {
     setIsLoading(true)
     
+    const tempRowId = onCreate(values)
+    
     try {
       const redirectData = {
         type: values.type,
@@ -62,22 +66,16 @@ export const BeginnerRedirectModal = ({ open, setOpen, onSuccess }: BeginnerRedi
       
       const result = await createRedirect({ bundleSeoRedirectAdd: redirectData })
       
-      if ('data' in result) {
-        dispatch(
-          api.util.invalidateTags(
-            invalidatingTags.REDIRECTS()
-          )
-        )
-        
-        if (!isUndefined(onSuccess) && !isUndefined(result.data)) {
-          onSuccess(result.data)
-        }
-        
+      if ('data' in result && !isUndefined(result.data)) {
+        onSuccess(result.data, tempRowId)
         setOpen(false)
         form.resetFields()
+      } else {
+        onError(tempRowId)
       }
     } catch (error) {
       trackError(new GeneralError('Was not able to create redirect'))
+      onError(tempRowId)
     } finally {
       setIsLoading(false)
     }
