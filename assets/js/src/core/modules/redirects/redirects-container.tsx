@@ -156,7 +156,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
         
         console.log('Download triggered successfully')
       } else {
-        throw new Error('Export failed: No blob data received')
+        trackError(new GeneralError('Export failed: No blob data received'))
       }
     } catch (error) {
       trackError(new GeneralError('Failed to export redirects'))
