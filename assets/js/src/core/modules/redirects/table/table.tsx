@@ -140,6 +140,11 @@ export const Table = ({ redirectRows, setRedirectRows }: TableProps): React.JSX.
       size: 80,
       meta: { type: 'checkbox', editable: true, config: { align: 'center' } }
     }),
+    columnHelper.accessor('expiry', {
+      header: t('redirects.expiry'),
+      size: 80,
+      meta: { type: 'date', editable: true }
+    }),
     columnHelper.accessor('actions', {
       header: t('redirects.actions'),
       size: 80,
