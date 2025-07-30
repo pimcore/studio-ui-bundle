@@ -21,6 +21,7 @@ import { isNil } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { api, type RecycleBin, useRecycleBinDeleteItemsMutation, useRecycleBinFlushMutation } from '../recycle-bin-api-slice-enhanced'
 import { RecycleBinDeleteItemsApiResponse, type RecycleBinRestoreItemsApiResponse, useRecycleBinRestoreItemsMutation } from '../recycle-bin-api-slice.gen'
+import { refreshTreeByElementType } from '@Pimcore/components/element-tree/element-tree-slice'
 
 interface UseRecycleBinHookReturn {
   restoreItems: (items: RecycleBin[], onFinish?: () => void) => Promise<void>
@@ -69,6 +70,13 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
         }))
       }
 
+      if (jobRunId === null) {
+        dispatch(refreshTreeByElementType({
+          elementTypes: [mapToElementType(items[0].type)!]
+        }))
+        refreshRecycleBin()
+      }
+
       onFinish?.()
     } catch (error) {
       trackError(new GeneralError('Failed to restore item(s) from recycle bin'))
@@ -105,6 +113,13 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
           },
           elementTypes: items.map(item => mapToElementType(item.type)!),
         }))
+      }
+
+      if (jobRunId === null) {
+        dispatch(refreshTreeByElementType({
+          elementTypes: [mapToElementType(items[0].type)!]
+        }))
+        refreshRecycleBin()
       }
 
       onFinish?.()
