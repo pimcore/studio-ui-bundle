@@ -13,16 +13,18 @@ import { useAppDispatch } from '@Pimcore/app/store'
 import ApiError from '@Pimcore/modules/app/error-handler/classes/api-error'
 import GeneralError from '@Pimcore/modules/app/error-handler/classes/general-error'
 import trackError from '@Pimcore/modules/app/error-handler/error-handler'
+import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob as createRestoreJob } from '@Pimcore/modules/execution-engine/jobs/recycle-bin/restore/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
+import { isNil } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { api, type RecycleBin, useRecycleBinDeleteItemsMutation, useRecycleBinFlushMutation } from '../recycle-bin-api-slice-enhanced'
-import { type RecycleBinRestoreItemsApiResponse, useRecycleBinRestoreItemsMutation } from '../recycle-bin-api-slice.gen'
+import { RecycleBinDeleteItemsApiResponse, type RecycleBinRestoreItemsApiResponse, useRecycleBinRestoreItemsMutation } from '../recycle-bin-api-slice.gen'
 
 interface UseRecycleBinHookReturn {
-  restoreItems: (ids: Array<RecycleBin['id']>, onFinish?: () => void) => Promise<void>
-  removeItems: (ids: Array<RecycleBin['id']>, onFinish?: () => void) => Promise<void>
+  restoreItems: (items: RecycleBin[], onFinish?: () => void) => Promise<void>
+  removeItems: (items: RecycleBin[], onFinish?: () => void) => Promise<void>
   flush: (onFinish?: () => void) => Promise<void>
   refreshRecycleBin: () => void
 }
@@ -35,10 +37,10 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
   const [recycleBindDelteMutation] = useRecycleBinDeleteItemsMutation()
   const [recycleBinFlushMutation] = useRecycleBinFlushMutation()
 
-  const restoreItems = async (ids: Array<RecycleBin['id']>, onFinish?: () => void): Promise<void> => {
+  const restoreItems = async (items: RecycleBin[], onFinish?: () => void): Promise<void> => {
     const restoreTask = recycleBinRestoreMutation({
       body: {
-        items: ids
+        items: items.map(item => item.id)
       }
     })
 
@@ -47,11 +49,12 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
 
       if (response.error !== undefined) {
         trackError(new ApiError(response.error))
+        return
       }
 
       let jobRunId: any = null
-      if ((response.data ?? false) !== false) {
-        const data = response.data!
+      if (!isNil(response.data)) {
+        const data = response.data as RecycleBinRestoreItemsApiResponse
         jobRunId = data.jobRunId ?? null
       }
 
@@ -62,7 +65,7 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
           action: async () => {
             return jobRunId
           },
-          elementIds: ids
+          elementTypes: items.map(item => mapToElementType(item.type)!),
         }))
       }
 
@@ -72,10 +75,10 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
     }
   }
 
-  const removeItems = async (ids: Array<RecycleBin['id']>, onFinish?: () => void): Promise<void> => {
+  const removeItems = async (items: RecycleBin[], onFinish?: () => void): Promise<void> => {
     const deleteTask = recycleBindDelteMutation({
       body: {
-        items: ids
+        items: items.map(item => item.id)
       }
     })
 
@@ -84,11 +87,12 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
 
       if (response.error !== undefined) {
         trackError(new ApiError(response.error))
+        return
       }
 
       let jobRunId: any = null
-      if ((response.data ?? false) !== false) {
-        const data = response.data as RecycleBinRestoreItemsApiResponse
+      if (!isNil(response.data)) {
+        const data = response.data as RecycleBinDeleteItemsApiResponse
         jobRunId = data.jobRunId ?? null
       }
 
@@ -99,7 +103,7 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
           action: async () => {
             return jobRunId
           },
-          elementIds: ids
+          elementTypes: items.map(item => mapToElementType(item.type)!),
         }))
       }
 

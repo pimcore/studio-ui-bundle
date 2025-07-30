@@ -8,18 +8,21 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type AbstractJob, JobStatus } from '../../abstact-job'
-import { getUniqueId } from '../../factory-helper'
+import { AbstractJob, JobStatus } from "../../abstact-job"
+import { getUniqueId } from "../../factory-helper"
 
 export interface RestoreJob extends AbstractJob {
   type: 'restore'
+  config: {
+    elementTypes: ElementType[]
+  }
 }
 
 export interface RestoreFactoryArgs {
   action: AbstractJob['action']
   title: AbstractJob['title']
   topics: AbstractJob['topics']
-  elementIds: number[]
+  elementTypes: ElementType[]
 }
 
 export const createJob = (job: RestoreFactoryArgs): RestoreJob => {
@@ -30,6 +33,8 @@ export const createJob = (job: RestoreFactoryArgs): RestoreJob => {
     title: job.title,
     status: JobStatus.QUEUED,
     topics: job.topics,
-    config: {}
+    config: {
+      elementTypes: job.elementTypes
+    }
   }
 }

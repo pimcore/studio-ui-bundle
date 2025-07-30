@@ -124,7 +124,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
               loading={ restoreLoading.includes(row.original.id) }
               onClick={ () => {
                 setRestoreLoading((prev) => [...prev, row.original.id])
-                void restoreItems([row.original.id], () => {
+                void restoreItems([row.original], () => {
                   setRestoreLoading((prev) => prev.filter(id => id !== row.original.id))
                 })
               } }
@@ -136,7 +136,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
               loading={ removeLoading.includes(row.original.id) }
               onClick={ () => {
                 setRemoveLoading(prev => [...prev, row.original.id])
-                void removeItems([row.original.id], () => {
+                void removeItems([row.original], () => {
                   setRemoveLoading(prev => prev.filter(id => id !== row.original.id))
                 })
               } }

@@ -8,18 +8,22 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { ElementType } from '@Pimcore/types/enums/element/element-type'
 import { type AbstractJob, JobStatus } from '../../abstact-job'
 import { getUniqueId } from '../../factory-helper'
 
 export interface DeleteJob extends AbstractJob {
   type: 'delete'
+  config: {
+    elementTypes: ElementType[]
+  }
 }
 
 export interface DeleteFactoryArgs {
   action: AbstractJob['action']
   title: AbstractJob['title']
   topics: AbstractJob['topics']
-  elementIds: number[]
+  elementTypes: ElementType[]
 }
 
 export const createJob = (job: DeleteFactoryArgs): DeleteJob => {
@@ -30,6 +34,8 @@ export const createJob = (job: DeleteFactoryArgs): DeleteJob => {
     title: job.title,
     status: JobStatus.QUEUED,
     topics: job.topics,
-    config: {}
+    config: {
+      elementTypes: job.elementTypes
+    }
   }
 }

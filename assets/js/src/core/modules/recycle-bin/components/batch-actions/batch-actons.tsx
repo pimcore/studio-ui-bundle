@@ -15,11 +15,28 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelectedRowsContext } from '../../context/selected-items-context'
 import { useRecycleBin } from '../../hooks/use-recycle-bin'
+import { RecycleBin } from '../../recycle-bin-api-slice.gen'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { refreshTreeByElementType } from '@Pimcore/components/element-tree/element-tree-slice'
+import { mapToElementType } from '@sdk/modules/element'
 
-export const BatchActions = (): React.JSX.Element => {
+interface BatchActionsProps {
+  items: RecycleBin[]
+}
+
+export const BatchActions = ({ items }: BatchActionsProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
   const { selectedRows } = useSelectedRowsContext()
-  const { removeItems, restoreItems } = useRecycleBin()
+  const { removeItems, restoreItems, refreshRecycleBin } = useRecycleBin()
+
+  const getItemToSelectedRowsId = (): RecycleBin[] => {
+    return Object.keys(selectedRows)
+      .map((key) => {
+        return items.find((item) => item.id === parseInt(key, 10))
+      })
+      .filter((item): item is RecycleBin => item !== undefined)
+  }
 
   const menu: DropdownMenuProps = {
     items: [
@@ -28,10 +45,15 @@ export const BatchActions = (): React.JSX.Element => {
         label: t('recycle-bin.actions.delete'),
         icon: <Icon value={ 'trash' } />,
         onClick: () => {
+          const itemsToDelete = getItemToSelectedRowsId()
+
           void removeItems(
-            Object.keys(selectedRows).map(Number),
+            itemsToDelete,
             () => {
-              console.log('Items removed from recycle bin')
+              refreshRecycleBin()
+              dispatch(refreshTreeByElementType({
+                elementTypes: itemsToDelete.map(item => mapToElementType(item.type)!)
+              }))
             }
           )
         }
@@ -41,10 +63,15 @@ export const BatchActions = (): React.JSX.Element => {
         label: t('recycle-bin.actions.restore'),
         icon: <Icon value={ 'restore' } />,
         onClick: () => {
+          const itemsToDelete = getItemToSelectedRowsId()
+
           void restoreItems(
-            Object.keys(selectedRows).map(Number),
+            itemsToDelete,
             () => {
-              console.log('Items restored from recycle bin')
+              refreshRecycleBin()
+              dispatch(refreshTreeByElementType({
+                elementTypes: itemsToDelete.map(item => mapToElementType(item.type)!)
+              }))
             }
           )
         }
