@@ -141,14 +141,10 @@ export const RedirectsContainer = (): React.JSX.Element => {
     try {
       setExportLoading(true)
       
-      const result = await dispatch(api.endpoints.bundleSeoRedirectsExport.initiate()).unwrap()
-      
-      console.log('Export result received:', result instanceof Blob ? 'Blob' : typeof result)
-      
-      if (result instanceof Blob) {
-        console.log('Blob size:', result.size, 'bytes')
-        
-        const url = window.URL.createObjectURL(result)
+      const result = await dispatch(api.endpoints.bundleSeoRedirectsExport.initiate())
+            
+      if ('data' in result && result.data instanceof Blob) {        
+        const url = window.URL.createObjectURL(result.data)
         const link = document.createElement('a')
         link.href = url
         link.download = `redirects-export-${new Date().toISOString().split('T')[0]}.csv`
