@@ -15,7 +15,10 @@ import {
   type BundleSeoRedirectUpdate,
   useBundleSeoRedirectAddMutation,
   useBundleSeoRedirectDeleteMutation,
-  useBundleSeoRedirectUpdateByIdMutation
+  useBundleSeoRedirectUpdateByIdMutation,
+  useBundleSeoRedirectCleanupMutation,
+  useBundleSeoRedirectsExportQuery,
+  useBundleSeoRedirectsImportMutation
 } from '../seo-api-slice-enhanced'
 import { isUndefined } from 'lodash'
 
@@ -28,12 +31,15 @@ interface UseRedirectsReturn {
   deleteLoading: boolean
   updateRedirectById: (id: number, row: RedirectRow) => Promise<{ success: boolean }>
   updateLoading: boolean
+  cleanupRedirects: () => Promise<{ success: boolean }>
+  cleanupLoading: boolean
 }
 
 export const useRedirects = (): UseRedirectsReturn => {
   const [createRedirect, { isLoading: createLoading }] = useBundleSeoRedirectAddMutation()
   const [deleteRedirect, { isLoading: deleteLoading }] = useBundleSeoRedirectDeleteMutation()
   const [updateRedirect, { isLoading: updateLoading }] = useBundleSeoRedirectUpdateByIdMutation()
+  const [cleanupRedirectsMutation, { isLoading: cleanupLoading }] = useBundleSeoRedirectCleanupMutation()
 
   const createNewRedirect = async (redirectData?: Partial<BundleSeoRedirectAdd>): Promise<{ success: boolean, data?: BundleSeoRedirect }> => {
     try {
@@ -42,7 +48,7 @@ export const useRedirects = (): UseRedirectsReturn => {
         source: redirectData?.source ?? null,
         target: redirectData?.target ?? null
       }
-
+      
       const result = await createRedirect({ bundleSeoRedirectAdd: defaultRedirect })
 
       if (!isUndefined(result.error)) {
@@ -91,12 +97,24 @@ export const useRedirects = (): UseRedirectsReturn => {
     }
   }
 
+  const cleanupRedirects = async (): Promise<{ success: boolean }> => {
+    try {
+      const result = await cleanupRedirectsMutation().unwrap()
+      return { success: true }
+    } catch {
+      trackError(new GeneralError('Was not able to cleanup redirects'))
+      return { success: false }
+    }
+  }
+
   return {
     createNewRedirect,
     createLoading,
     deleteRedirectById,
     deleteLoading,
     updateRedirectById,
-    updateLoading
+    updateLoading,
+    cleanupRedirects,
+    cleanupLoading
     }
 }

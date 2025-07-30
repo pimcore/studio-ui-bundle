@@ -58,19 +58,15 @@ export const BeginnerRedirectModal = ({ open, setOpen, createRedirect }: Beginne
     setIsLoading(false)
   }
 
-  const handleCancel = (): void => {
-    setOpen(false)
-    form.resetFields()
-  }
-
   return (
     <Modal
       okButtonProps={{ loading: isLoading }}
       okText={t('redirects.beginner-modal.create')}
-      onCancel={handleCancel}
+      onCancel={() => { setOpen(false) }}
       onOk={() => { form.submit() }}
       open={open}
       size="M"
+      cancelButtonProps={{ style: { display: 'none' } }}
       title={(
         <ModalTitle iconName="new">
           {t('redirects.beginner-modal.title')}

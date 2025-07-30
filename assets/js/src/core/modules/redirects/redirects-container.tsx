@@ -17,9 +17,10 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Table } from './table/table'
-import { Box, IconTextButton, SearchInput, Pagination } from '@sdk/components'
-import { api, useBundleSeoRedirectsGetCollectionQuery } from './seo-api-slice-enhanced'
-import trackError, { ApiError } from '../app/error-handler'
+import { Box, IconTextButton, SearchInput, Pagination, Modal } from '@sdk/components'
+import { Upload, Button } from 'antd'
+import { api, useBundleSeoRedirectsGetCollectionQuery, useBundleSeoRedirectsExportQuery, useBundleSeoRedirectsImportMutation } from './seo-api-slice-enhanced'
+import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { type RedirectRow, useRedirects } from './hooks/use-redirects'
 import { isUndefined } from 'lodash'
@@ -31,13 +32,19 @@ export const RedirectsContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
   const { 
     createNewRedirect, 
-    createLoading
+    createLoading,
+    cleanupRedirects,
+    cleanupLoading
   } = useRedirects()
+
+  const [importRedirects, { isLoading: importLoading }] = useBundleSeoRedirectsImportMutation()
+  const { refetch: exportRedirects, isFetching: exportLoading } = useBundleSeoRedirectsExportQuery(undefined, { skip: true })
 
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(50)
   const [filter, setFilter] = useState<string>('')
   const [isBeginnerModalOpen, setIsBeginnerModalOpen] = useState<boolean>(false)
+  const [isImportModalOpen, setIsImportModalOpen] = useState<boolean>(false)
 
   const queryArgs = useMemo(() => ({
     body: {
@@ -123,15 +130,73 @@ export const RedirectsContainer = (): React.JSX.Element => {
     setCurrentPage(1)
   }
 
+  const handleCleanup = async (): Promise<void> => {
+    const { success } = await cleanupRedirects()
+    if (success) {
+      reload()
+    }
+  }
+
+  const handleExport = async (): Promise<void> => {
+    try {
+      const result = await exportRedirects().unwrap()
+      const blob = new Blob([result], { type: 'text/csv' })
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `redirects-export-${new Date().toISOString().split('T')[0]}.csv`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      trackError(new GeneralError('Failed to export redirects'))
+    }
+  }
+
+  const handleImport = async (file: File): Promise<void> => {
+    try {
+      await importRedirects({ body: { file } }).unwrap()
+      setIsImportModalOpen(false)
+      reload()
+    } catch (error) {
+      trackError(new GeneralError('Failed to import redirects'))
+    }
+  }
+
   return (
     <ContentLayout
       renderToolbar={
         <Toolbar theme="secondary">
+          <Flex justify='space-between'>
+          <div><IconTextButton
+            disabled={ redirectRows.length < 1 || cleanupLoading }
+            icon={ { value: 'trash' } }
+            loading={ cleanupLoading }
+            onClick={ handleCleanup }
+            type={'link'}
+          >{t('redirects.clean-up')}</IconTextButton>
+          <IconTextButton
+            disabled={ redirectsFetching || exportLoading }
+            icon={ { value: 'download' } }
+            loading={ exportLoading }
+            onClick={ handleExport }
+            type={'link'}
+          >{t('redirects.csv-export')}</IconTextButton>
+          <IconTextButton
+            disabled={ redirectsFetching || importLoading }
+            icon={ { value: 'upload' } }
+            loading={ importLoading }
+            onClick={ () => { setIsImportModalOpen(true) } }
+            type={'link'}
+          >{t('redirects.csv-import')}</IconTextButton>
+          </div>
           <IconButton
             disabled={ redirectsFetching }
             icon={ { value: 'refresh' } }
             onClick={ reload }
           />
+          </Flex>
           <Pagination
             current={ currentPage }
             onChange={ (page, pageSize) => {
@@ -201,6 +266,27 @@ export const RedirectsContainer = (): React.JSX.Element => {
         setOpen={ setIsBeginnerModalOpen }
         createRedirect={ handleCreateRedirect }
       />
+
+      <Modal
+        title={t('redirects.csv-import')}
+        open={isImportModalOpen}
+        onCancel={() => { setIsImportModalOpen(false) }}
+        footer={null}
+        size="M"
+      >
+        <Upload.Dragger
+          accept=".csv"
+          beforeUpload={(file) => {
+            handleImport(file)
+            return false // Prevent default upload
+          }}
+          multiple={false}
+          showUploadList={false}
+        >
+          <p>{t('redirects.import-drag-drop')}</p>
+          <Button>{t('redirects.import-select-file')}</Button>
+        </Upload.Dragger>
+      </Modal>
     </ContentLayout>
   )
 }
