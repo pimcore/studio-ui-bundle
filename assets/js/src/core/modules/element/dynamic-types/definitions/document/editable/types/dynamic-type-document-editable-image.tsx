@@ -86,26 +86,8 @@ export class DynamicTypeDocumentEditableImage extends DynamicTypeDocumentEditabl
       return null
     }
 
-    // Handle legacy format or direct image assignment
-    if (typeof value === 'number') {
-      return {
-        id: value,
-        hotspots: [],
-        marker: [],
-        crop: {}
-      }
-    }
-
     if (typeof value === 'object') {
-      return {
-        id: value.id ?? null,
-        path: value.path ?? null,
-        alt: value.alt ?? '',
-        title: value.title ?? '',
-        hotspots: value.hotspots ?? [],
-        marker: value.marker ?? [],
-        crop: value.crop ?? {}
-      }
+      return value
     }
 
     return null
@@ -116,15 +98,7 @@ export class DynamicTypeDocumentEditableImage extends DynamicTypeDocumentEditabl
       return null
     }
 
-    // Transform for backend API - send complete object structure
-    return {
-      id: value.id ?? null,
-      alt: value.alt ?? '',
-      title: value.title ?? '',
-      hotspots: value.hotspots ?? [],
-      marker: value.marker ?? [],
-      crop: value.crop ?? {}
-    }
+    return value
   }
 
   reloadOnChange (props: ImageEditableDefinition): boolean {
