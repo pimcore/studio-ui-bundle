@@ -18,6 +18,9 @@ import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppa
 import { useTranslation } from 'react-i18next'
 import { ImagePreviewDropdown } from '../image-preview/components/dropdown/dropdown'
 import { type DropdownProps } from '../dropdown/dropdown'
+import { Text } from '@sdk/components'
+import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
+import { isNil } from 'lodash'
 
 interface AssetTargetProps {
   onRemove?: () => void
@@ -56,48 +59,56 @@ export const AssetTarget = forwardRef(function AssetTarget ({ title, className, 
   }
 
   return (
-    <div
-      className={ cn(className, styles.assetTargetContainer, ...getStateClasses()) }
-      ref={ ref }
-      style={ {
-        height: toCssDimension(height),
-        width: toCssDimension(width)
-      } }
+    <Dropdown
+      disabled={ isNil(dropdownItems) || dropdownItems.length === 0 }
+      menu={ { items: dropdownItems } }
+      trigger={ ['contextMenu'] }
     >
-      <Flex
-        align="center"
-        gap="mini"
-        justify="center"
-        style={ { height: '100%' } }
-        vertical
+      <div
+        className={ cn(className, styles.assetTargetContainer, ...getStateClasses()) }
+        ref={ ref }
+        style={ {
+          height: toCssDimension(height),
+          width: toCssDimension(width)
+        } }
       >
-        { (dndIcon === true || uploadIcon === true) && (
-        <div className="icon-container">
-          <Flex
-            align="center"
-            gap="mini"
-            justify="center"
-          >
-            { dndIcon === true && (
-              <Icon
-                options={ { height: 30, width: 30 } }
-                value={ 'drop-target' }
-              />
-            )}
-            { uploadIcon === true && (
-              <Icon
-                options={ { height: 30, width: 30 } }
-                value={ 'upload-cloud' }
-              />
-            )}
-          </Flex>
-        </div>
-        )}
-        <div className="image-target-title">{ title }</div>
-      </Flex>
+        <Flex
+          align="center"
+          gap="mini"
+          justify="center"
+          style={ { height: '100%' } }
+          vertical
+        >
+          { (dndIcon === true || uploadIcon === true) && (
+          <div className="icon-container">
+            <Flex
+              align="center"
+              gap="mini"
+              justify="center"
+            >
+              { dndIcon === true && (
+                <Icon
+                  options={ { height: 30, width: 30 } }
+                  value={ 'drop-target' }
+                />
+              )}
+              { uploadIcon === true && (
+                <Icon
+                  options={ { height: 30, width: 30 } }
+                  value={ 'upload-cloud' }
+                />
+              )}
+            </Flex>
+          </div>
+          )}
+          <div className="image-target-title">
+            <Text>{ title }</Text>
+          </div>
+        </Flex>
 
-      <ImagePreviewDropdown dropdownItems={ dropdownItems } />
+        <ImagePreviewDropdown dropdownItems={ dropdownItems } />
 
-    </div>
+      </div>
+    </Dropdown>
   )
 })
