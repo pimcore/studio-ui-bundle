@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { Flex, Modal } from '@sdk/components'
+import { Flex, Modal, ModalFooter } from '@sdk/components'
 import { Button } from 'antd'
 import { t } from 'i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -42,16 +42,18 @@ export const CsvImportResultsModal = ({
       open={open}
       onCancel={onClose}
       footer={
+        <ModalFooter divider>
         <Button type="primary" onClick={onClose}>
           {t('redirects.csv-import-results.close')}
         </Button>
+        </ModalFooter>
       }
       size="M"
     >
       <div className={styles.statisticsContainer}>
         <div className="statistics-list">
           <Flex gap={5}>
-            <div className="statistic-label">{t('redirects.csv-import-results.total')}</div>
+            <div className="extra-padding">{t('redirects.csv-import-results.total')}</div>
             <div className="statistic-value">{results.total}</div>
           </Flex>
           
@@ -65,10 +67,10 @@ export const CsvImportResultsModal = ({
             <div className="statistic-bold">{results.updated}</div>
           </Flex>
           
-          <Flex gap={5} className={cn('statistic-item', 'errored')}>
+          {results.errored > 0 && (<Flex gap={5} className={cn('statistic-item', 'errored')}>
             <div className="statistic-bold">{t('redirects.csv-import-results.errored')}</div>
             <div className="statistic-bold">{results.errored}</div>
-          </Flex>
+          </Flex>)}
         </div>
       </div>
 

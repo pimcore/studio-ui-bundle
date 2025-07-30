@@ -103,7 +103,7 @@ export const CsvImportModal = ({
       footer={
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <IconTextButton
-            icon={{ value: 'open-folder' }}
+            icon={{ value: 'upload-import' }}
             onClick={handleBrowseClick}
             disabled={loading}
           >

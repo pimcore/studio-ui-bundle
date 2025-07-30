@@ -14,11 +14,16 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     statisticsContainer: css`
       .statistics-list {
+      padding-top: 20px
       }
         
+        .extra-padding {
+            padding-right: 25px}
+
         .statistic-bold {
           font-weight: ${token.fontWeightStrong};
           color: ${token.colorText};
+          padding-right: 8px
         }
         
         &.errored {
