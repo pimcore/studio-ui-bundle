@@ -152,6 +152,11 @@ export default defineConfig({
           eager: true,
           requiredVersion: packages.dependencies.antd
         },
+        '@ant-design/colors': {
+          singleton: true,
+          eager: true,
+          requiredVersion: packages.dependencies['@ant-design/colors']
+        },
         'reflect-metadata': {
           singleton: true,
           eager: true,
