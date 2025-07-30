@@ -8,29 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
-import { isEmpty } from 'lodash'
-import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { currentDomain } from '@Pimcore/app/config/app-config'
+import React from 'react'
 import { Content } from '@Pimcore/components/content/content'
-import { Flex } from '@Pimcore/components/flex/flex'
 import { type SingleVersionViewProps } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
-import { useDocumentGetByIdQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { DocumentVersionsView } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/versions/components/document-versions-view/document-versions-view'
+import { useVersionUrl } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/versions/hooks/useVersionUrl'
 
 export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Element => {
-  const { id } = useElementContext()
-  const { data, isLoading } = useDocumentGetByIdQuery({ id })
-
-  const [versionUrl, setVersionUrl] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (!isEmpty(data)) {
-      const url = `${currentDomain}${data?.fullPath}?pimcore_version=${versionId.id}`
-
-      setVersionUrl(url)
-    }
-  }, [versionId, data])
+  const { isLoading, url } = useVersionUrl({ versionId: versionId.id })
 
   if (isLoading) {
     return (
@@ -43,7 +28,7 @@ export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Ele
 
   return (
     <DocumentVersionsView
-      versionUrl={ versionUrl }
+      versionUrl={ url }
       versionsIdList={ [versionId.count] }
     />
   )
