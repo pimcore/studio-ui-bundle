@@ -8,8 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { AbstractJob, JobStatus } from "../../abstact-job"
-import { getUniqueId } from "../../factory-helper"
+import { type AbstractJob, JobStatus } from '../../abstact-job'
+import { getUniqueId } from '../../factory-helper'
 
 export interface RestoreJob extends AbstractJob {
   type: 'restore'

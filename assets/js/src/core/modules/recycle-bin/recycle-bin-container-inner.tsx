@@ -78,7 +78,7 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
             ? (
               <Flex>
                 <RowSelectionTotal />
-                <BatchActions items={data?.items ?? []} />
+                <BatchActions items={ data?.items ?? [] } />
               </Flex>
               )
             : (

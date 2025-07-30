@@ -8,14 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useJobs } from "@Pimcore/modules/execution-engine/hooks/useJobs"
-import { JobProps } from "@Pimcore/modules/execution-engine/notification/job/job"
-import { JobView } from "@Pimcore/modules/execution-engine/notification/job/job-view"
-import { useServerSideEvent } from "@Pimcore/utils/hooks/use-server-side-event"
-import React, { useEffect, useRef, useState } from "react"
-import { useTranslation } from "react-i18next"
-import { JobStatus } from "../../abstact-job"
-import { RestoreJob } from "./factory"
+import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
+import { type JobProps } from '@Pimcore/modules/execution-engine/notification/job/job'
+import { JobView } from '@Pimcore/modules/execution-engine/notification/job/job-view'
+import { useServerSideEvent } from '@Pimcore/utils/hooks/use-server-side-event'
+import React, { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { JobStatus } from '../../abstact-job'
+import { type RestoreJob } from './factory'
 
 export interface RestoreJobProps extends JobProps {
   config: RestoreJob['config']
@@ -92,7 +92,7 @@ export const NotificationJobContainer = (props: RestoreJobProps): React.JSX.Elem
 
     if (data.status !== undefined) {
       if (data.status === 'finished' || data.status === 'finished_with_errors' || data.status === 'failed') {
-         dispatch(refreshTreeByElementType({ elementTypes: props.config.elementTypes }))
+        dispatch(refreshTreeByElementType({ elementTypes: props.config.elementTypes }))
         refreshRecycleBin()
       }
 
