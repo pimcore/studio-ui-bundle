@@ -212,6 +212,7 @@ import txtDocs from '@Pimcore/assets/icons/txt-docs.inline.svg?react'
 import unknown from '@Pimcore/assets/icons/unknown.inline.svg?react'
 import unlocked from '@Pimcore/assets/icons/unlocked.inline.svg?react'
 import uploadCloud from '@Pimcore/assets/icons/upload-cloud.inline.svg?react'
+import uploadImport from '@Pimcore/assets/icons/upload-import.inline.svg?react'
 import uploadZip from '@Pimcore/assets/icons/upload-zip.inline.svg?react'
 import userSelect from '@Pimcore/assets/icons/user-select.inline.svg?react'
 import user from '@Pimcore/assets/icons/user.inline.svg?react'
@@ -1018,6 +1019,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'upload-cloud',
       component: uploadCloud
+    })
+    iconLibrary.register({
+      name: 'upload-import',
+      component: uploadImport
     })
     iconLibrary.register({
       name: 'upload-zip',
