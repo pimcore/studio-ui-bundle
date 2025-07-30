@@ -53,11 +53,6 @@ export const useStyle = createStyles(({ token, css }) => {
       }
     `,
     uploadedFile: css`
-      border-radius: ${token.borderRadiusLG}px;
-      border: 1px solid ${token.colorBorder};
-      background: ${token.colorBgContainer};
-      padding: ${token.paddingMD}px;
-      
       .file-info {
         display: flex;
         align-items: center;

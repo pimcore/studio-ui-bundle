@@ -97,7 +97,7 @@ export const CsvImportModal = ({
 
   return (
     <Modal
-      title={t('redirects.csv-import')}
+      title={t('redirects.csv-import-modal.redirects-import')}
       open={open}
       onCancel={handleCancel}
       footer={

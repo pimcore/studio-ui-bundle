@@ -27,6 +27,8 @@ import { useAppDispatch } from '@sdk/app'
 import { invalidatingTags } from '@sdk/api'
 import { BeginnerRedirectModal } from './beginner-redirect-modal/beginner-redirect-modal'
 import { CsvImportModal } from './csv-import-modal/csv-import-modal'
+import { CsvImportResultsModal } from './csv-import-results-modal/csv-import-results-modal'
+import { type BundleSeoRedirectsImportStatistics } from './seo-api-slice.gen'
 
 export const RedirectsContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
@@ -44,6 +46,8 @@ export const RedirectsContainer = (): React.JSX.Element => {
   const [filter, setFilter] = useState<string>('')
   const [isBeginnerModalOpen, setIsBeginnerModalOpen] = useState<boolean>(false)
   const [isImportModalOpen, setIsImportModalOpen] = useState<boolean>(false)
+  const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false)
+  const [importResults, setImportResults] = useState<BundleSeoRedirectsImportStatistics | null>(null)
   const [exportLoading, setExportLoading] = useState<boolean>(false)
 
   const queryArgs = useMemo(() => ({
@@ -169,7 +173,9 @@ export const RedirectsContainer = (): React.JSX.Element => {
     try {
       const result = await importRedirects({ body: { file } }).unwrap()
       console.log('Import successful:', result)
+      setImportResults(result)
       setIsImportModalOpen(false)
+      setIsResultsModalOpen(true)
       reload()
     } catch (error) {
       console.error('Import error:', error)
@@ -285,6 +291,12 @@ export const RedirectsContainer = (): React.JSX.Element => {
         onCancel={() => { setIsImportModalOpen(false) }}
         onImport={handleImport}
         loading={importLoading}
+      />
+
+      <CsvImportResultsModal
+        open={isResultsModalOpen}
+        onClose={() => { setIsResultsModalOpen(false) }}
+        results={importResults}
       />
     </ContentLayout>
   )
