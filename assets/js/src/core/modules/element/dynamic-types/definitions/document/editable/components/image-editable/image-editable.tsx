@@ -8,13 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback } from 'react'
+import React, { useCallback, useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import { DocumentHotspotImagePreview } from './hotspot-image-preview'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/droppable'
-import { isNil, isNumber } from 'lodash'
+import { isNil } from 'lodash'
 import { useCropModal } from '@Pimcore/modules/element/components/crop-modal/hooks/use-crop-modal'
 import { useHotspotMarkersModal } from '@Pimcore/modules/element/components/hotspot-markers-modal/hooks/use-hotspot-markers-modal'
 import { type CropSettings } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
@@ -23,6 +23,7 @@ import { type Hotspot, type Marker } from '../../../../objects/data-related/help
 import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
+import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 
 export interface ImageEditableValue {
   id?: number
@@ -38,6 +39,8 @@ export interface ImageEditableConfig {
   height?: number
   title?: string
   reload?: boolean
+  imgAttributes?: Record<string, string>
+  focal_point_context_menu_item?: boolean
 }
 
 interface HotspotImageValue {
@@ -52,6 +55,7 @@ interface DocumentImageEditableProps {
   config?: ImageEditableConfig
   onChange?: (value: ImageEditableValue) => void
   disabled?: boolean
+  containerRef?: React.RefObject<HTMLDivElement>
 }
 
 export const DocumentImageEditable = (props: DocumentImageEditableProps): React.JSX.Element => {
@@ -60,6 +64,24 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
   const imageValue = props.value
   const width = props.config?.width
   const height = props.config?.height
+  
+  // Track the last displayed image dimensions for preserving size when emptied
+  const lastImageDimensionsRef = useRef<{ width: number | string, height: number | string } | null>(null)
+
+  // Only use resize observer when both width and height are undefined
+  const needsContainerWidth = isNil(width) && isNil(height)
+  const containerWidth = useElementResize(needsContainerWidth ? props.containerRef ?? { current: null } : { current: null })
+
+  // Handle image resize event to capture dimensions
+  const handleImageResize = useCallback((dimensions: { width: number, height: number }) => {
+    // Only preserve dimensions if they are reasonably sized (minimum 100x100)
+    console.log('set last image dimensions', dimensions)
+    if (dimensions.width >= 100 && dimensions.height >= 100) {
+      lastImageDimensionsRef.current = { width: dimensions.width, height: dimensions.height }
+    } else {
+      lastImageDimensionsRef.current = { width: 100, height: 100 }
+    }
+  }, [])
 
   const { open: openElementSelector } = useElementSelector({
     selectionType: SelectionType.Single,
@@ -130,7 +152,20 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
     }
   })
 
+  const emptyValue = useCallback(() => {
+    // Don't clear preserved dimensions when emptying - keep the last image size for the asset target
+    props.onChange?.({
+      id: undefined,
+      alt: '',
+      title: '',
+      hotspots: [],
+      marker: [],
+      crop: {}
+    })
+  }, [props])
+
   const replaceImage = useCallback((assetId: number) => {
+    
     let newValue: ImageEditableValue = imageValue ?? {
       id: undefined,
       alt: '',
@@ -183,17 +218,6 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
     }
   }
 
-  const emptyValue = useCallback(() => {
-    props.onChange?.({
-      id: undefined,
-      alt: '',
-      title: '',
-      hotspots: [],
-      marker: [],
-      crop: {}
-    })
-  }, [props])
-
   const handleOpenCropModal = useCallback(() => {
     if (!isNil(imageValue?.id)) {
       const cropSettings: CropSettings | null = imageValue.crop! ?? null
@@ -225,23 +249,28 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
               assetId={ imageValue.id }
               disabled={ props.disabled }
               emptyValue={ emptyValue }
+              focalPointContextMenuItem={ props.config?.focal_point_context_menu_item }
               handleSearch={ handleSearch }
               handleLocateInTree={ handleLocateInTree }
               height={ height }
+              imgAttributes={ props.config?.imgAttributes }
               onChange={ handleHotspotImageChange }
               setCropModalOpen={ handleOpenCropModal }
               setMarkerModalOpen={ handleOpenHotspotMarkersModal }
               value={ convertToHotspotImageValue() }
               width={ width }
+              containerWidth={ containerWidth }
+              onImageResize={handleImageResize}
+              lastImageDimensions={lastImageDimensionsRef.current}
             />
             )
           : (
             <AssetTarget
-              height={ height }
+              height={ lastImageDimensionsRef.current?.height ?? height ?? 200 }
               onSearch={ handleSearch }
               dndIcon
-              title={ props.config?.title ?? t('drag-and-drop-asset') }
-              width={ width }
+              title={ props.config?.title ?? t('image.dnd-target') }
+              width={ lastImageDimensionsRef.current?.width ?? width ?? '100%' }
             />
             )}
     </Droppable>

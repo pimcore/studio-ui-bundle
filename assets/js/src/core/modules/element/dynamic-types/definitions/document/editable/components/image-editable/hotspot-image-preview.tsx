@@ -8,9 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type MutableRefObject, useMemo } from 'react'
+import React, { type MutableRefObject, useMemo, forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ResponsiveImagePreview } from '@Pimcore/components/image-preview/responsive-image-preview'
+import { ImageEditablePreview } from './image-editable-preview'
 import { type Hotspot, type Marker } from '../../../../objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import { type CropSettings } from '../../../../objects/data-related/helpers/hotspot-image/types/crop-types'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -29,6 +29,7 @@ interface DocumentHotspotImagePreviewProps {
   assetId: number
   height?: number | string
   width?: number | string
+  containerWidth: number
   value: DocumentHotspotImageValue
   onChange?: (value: DocumentHotspotImageValue) => void
   setMarkerModalOpen: () => void
@@ -37,10 +38,15 @@ interface DocumentHotspotImagePreviewProps {
   handleLocateInTree: () => void
   emptyValue: () => void
   disabled?: boolean
+  imgAttributes?: Record<string, string>
+  focalPointContextMenuItem?: boolean
+  onImageResize?: (dimensions: { width: number, height: number }) => void
+  lastImageDimensions?: { width: number | string, height: number | string } | null
 }
 
-export const DocumentHotspotImagePreview = function DocumentHotspotImagePreview (
-  { assetId, height, width, value, onChange, setMarkerModalOpen, setCropModalOpen, handleSearch, handleLocateInTree, emptyValue, disabled }: DocumentHotspotImagePreviewProps
+export const DocumentHotspotImagePreview = forwardRef<HTMLDivElement, DocumentHotspotImagePreviewProps>(function DocumentHotspotImagePreview (
+  { assetId, height, width, containerWidth, value, onChange, setMarkerModalOpen, setCropModalOpen, handleSearch, handleLocateInTree, emptyValue, disabled, imgAttributes, focalPointContextMenuItem, onImageResize, lastImageDimensions }: DocumentHotspotImagePreviewProps,
+  ref: MutableRefObject<HTMLDivElement | null>
 ): React.JSX.Element {
   const { t } = useTranslation()
   const { openElement } = useElementHelper()
@@ -54,58 +60,87 @@ export const DocumentHotspotImagePreview = function DocumentHotspotImagePreview 
     }
   }
 
-  const dropdownItems: DropdownProps['menu']['items'] = useMemo(() => [
-    {
-      key: 'crop',
-      icon: <Icon value="crop" />,
-      label: t('crop'),
-      disabled: disabled === true || isNil(assetId),
-      onClick: () => { setCropModalOpen() }
-    },
-    {
-      key: 'hotspots-markers',
-      icon: <Icon value="location-marker" />,
-      label: t('hotspots.edit'),
-      disabled: disabled === true || isNil(assetId),
-      onClick: () => { setMarkerModalOpen() }
-    },
-    {
-      key: 'empty',
-      icon: <Icon value="trash" />,
-      label: t('empty'),
-      disabled: disabled === true || isNil(assetId),
-      onClick: emptyValue
-    },
-    {
-      key: 'open',
-      icon: <Icon value="open-folder" />,
-      label: t('open'),
-      disabled: disabled === true || isNil(assetId),
-      onClick: handleOpen
-    },
-    {
-      key: 'locate-in-tree',
-      icon: <Icon value="target" />,
-      label: t('element.locate-in-tree'),
-      disabled: disabled === true || isNil(assetId),
-      onClick: handleLocateInTree
-    },
-    {
-      key: 'search',
-      icon: <Icon value="search" />,
-      label: t('search'),
-      disabled: disabled,
-      onClick: handleSearch
+  const handleSetFocalPoint = (): void => {
+    // Same as open - open the asset in the editor where focal point can be set
+    handleOpen()
+  }
+
+  const dropdownItems: DropdownProps['menu']['items'] = useMemo(() => {
+    const items = []
+
+    // Add focal point menu item at the beginning if config is enabled
+    if (focalPointContextMenuItem === true) {
+      items.push({
+        key: 'set-focal-point',
+        icon: <Icon value="target" />,
+        label: t('focal-point.set'),
+        disabled: disabled === true || isNil(assetId),
+        onClick: handleSetFocalPoint
+      })
     }
-  ], [disabled, assetId, setCropModalOpen, setMarkerModalOpen, emptyValue, handleOpen, handleLocateInTree, handleSearch, t])
+
+    // Add the rest of the menu items
+    items.push(
+      {
+        key: 'crop',
+        icon: <Icon value="crop" />,
+        label: t('crop'),
+        disabled: disabled === true || isNil(assetId),
+        onClick: () => { setCropModalOpen() }
+      },
+      {
+        key: 'hotspots-markers',
+        icon: <Icon value="location-marker" />,
+        label: t('hotspots.edit'),
+        disabled: disabled === true || isNil(assetId),
+        onClick: () => { setMarkerModalOpen() }
+      },
+      {
+        key: 'empty',
+        icon: <Icon value="trash" />,
+        label: t('empty'),
+        disabled: disabled === true || isNil(assetId),
+        onClick: emptyValue
+      },
+      {
+        key: 'open',
+        icon: <Icon value="open-folder" />,
+        label: t('open'),
+        disabled: disabled === true || isNil(assetId),
+        onClick: handleOpen
+      },
+      {
+        key: 'locate-in-tree',
+        icon: <Icon value="target" />,
+        label: t('element.locate-in-tree'),
+        disabled: disabled === true || isNil(assetId),
+        onClick: handleLocateInTree
+      },
+      {
+        key: 'search',
+        icon: <Icon value="search" />,
+        label: t('search'),
+        disabled: disabled,
+        onClick: handleSearch
+      }
+    )
+
+    return items
+  }, [disabled, assetId, focalPointContextMenuItem, handleSetFocalPoint, setCropModalOpen, setMarkerModalOpen, emptyValue, handleOpen, handleLocateInTree, handleSearch, t])
 
   return (
-    <ResponsiveImagePreview
-      assetId={ assetId }
-      dropdownItems={ dropdownItems }
-      height={ height }
-      thumbnailSettings={ value.crop }
-      width={ width }
-    />
+    <div ref={ref}>
+      <ImageEditablePreview
+        assetId={ assetId }
+        dropdownItems={ dropdownItems }
+        height={ height }
+        imgAttributes={ imgAttributes }
+        thumbnailSettings={ value.crop }
+        width={ width }
+        containerWidth={ containerWidth }
+        onImageResize={onImageResize}
+        lastImageDimensions={lastImageDimensions}
+      />
+    </div>
   )
-}
+})

@@ -12,22 +12,18 @@ import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
-    responsiveImagePreviewContainer: css`
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    imageEditablePreviewContainer: css`
       position: relative;
-      transition: width 0.2s ease, height 0.2s ease;
-      min-width: 80px;
-      min-height: 50px;
+      display: inline-flex; /* Use inline-flex instead of inline-block */
+      max-width: 100%;
       
       .ant-image {
-        height: 100%;
-        width: 100%;
-
+        display: block;
+        
         .ant-image-img {
-          width: 100%;
-          height: 100%;
+          display: block;
+          max-width: 100%;
+          height: auto;
           object-fit: contain;
         }
       }
@@ -35,18 +31,37 @@ export const useStyle = createStyles(({ token, css }) => {
       &.image-preview-bordered {
         outline: 1px solid ${token.colorBorderSecondary};
         border-radius: ${token.borderRadius}px;
+        
         .ant-image-img {
-           border-radius: ${token.borderRadius}px;
+          border-radius: ${token.borderRadius}px;
         }
       }
     `,
+    
     imageComponent: css`
-      width: 100%;
+      display: block;
+      max-width: 100%;
+      height: auto;
     `,
+    
     loadingContainer: css`
+      min-height: 100px;
+      min-width: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    `,
+    
+    loadingSpinner: css`
       width: 100%;
       height: 100%;
-      min-height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: ${token.borderRadiusLG}px;
+      outline: 1px dashed ${token.colorBorder};
+      background: ${token.controlItemBgHover};
+      padding: ${token.paddingSM}px;
     `
   }
 })

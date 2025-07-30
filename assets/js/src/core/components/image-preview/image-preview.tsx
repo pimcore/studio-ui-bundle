@@ -40,6 +40,7 @@ interface ImagePreviewProps {
   bordered?: boolean
   onHotspotsDataButtonClick?: () => void
   thumbnailSettings?: ImageThumbnailSettings
+  imgAttributes?: Record<string, string>
 }
 
 export const ImagePreview = forwardRef(function ImagePreview ({ 
@@ -53,7 +54,8 @@ export const ImagePreview = forwardRef(function ImagePreview ({
   dropdownItems, 
   bordered = false, 
   onHotspotsDataButtonClick, 
-  thumbnailSettings 
+  thumbnailSettings,
+  imgAttributes
 }: ImagePreviewProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { getStateClasses } = useDroppable()
   const { styles } = useStyle()
@@ -130,6 +132,7 @@ export const ImagePreview = forwardRef(function ImagePreview ({
               placeholder={ loadingSpinner }
               preview={ false }
               src={ imageSrc }
+              {...imgAttributes}
             />
           ) }
 

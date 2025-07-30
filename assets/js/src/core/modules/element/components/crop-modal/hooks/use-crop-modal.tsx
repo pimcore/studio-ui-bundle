@@ -13,6 +13,7 @@ import type { CropSettings } from '@Pimcore/modules/element/dynamic-types/defini
 import { isPimcoreStudioApiAvailable, getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import { isInIframe } from '@Pimcore/utils/iframe'
 import { useCropModalContext } from '../provider/use-crop-modal-context'
+import { useTranslation} from '@sdk/app'
 
 export interface UseCropModalOptions {
   disabled?: boolean
@@ -27,7 +28,7 @@ export interface UseCropModalReturn {
 
 export const useCropModal = (options: UseCropModalOptions = {}): UseCropModalReturn => {
   const cropModalContext = useCropModalContext()
-
+ const { t } = useTranslation()
   const openModal = useCallback((imageId: number, crop?: CropSettings | null) => {
     // Check if we're in an iframe and parent API is available
     if (isInIframe() && isPimcoreStudioApiAvailable()) {

@@ -974,5 +974,4 @@ embed.edit-url: Edit URL
 embed.clear: Clear
 embed.loading: Loading...
 embed.iframe-title: Embedded content
-document.editable.image.drop-message: Drop an image here or click to select one
-hotspots-markers: Hotspots & Markers
+focal-point.set: Set Focal Point
