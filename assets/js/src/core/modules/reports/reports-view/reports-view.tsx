@@ -23,7 +23,7 @@ import { ReportViewContent } from '@Pimcore/modules/reports/reports-view/compone
 import { useStyles } from './reports-view.styles'
 
 const PAGE_INITIAL = 1
-const PAGE_SIZE_INITIAL = 10
+const PAGE_SIZE_INITIAL = 50
 
 export const ReportsView = (): React.JSX.Element => {
   const [currentReport, setCurrentReport] = useState<string | null>(null)
