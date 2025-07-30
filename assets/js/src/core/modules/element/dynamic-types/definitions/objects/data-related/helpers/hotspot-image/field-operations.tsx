@@ -27,7 +27,7 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/checkbox/checkbox'
 import useHotspotData from '@Pimcore/modules/element/components/hotspot-markers-modal/hooks/use-hotspot-data'
 import { type FormInstance } from 'antd'
-import { HotspotManyToOneRelation } from './components/hotspot-many-to-one-relation/hotspot-many-to-one-relation'
+import { HotspotManyToOneRelation } from '@Pimcore/modules/element/components/hotspot-markers-modal/components/hotspot-many-to-one-relation'
 
 interface FieldOperationsProps {
   hotspot: IHotspot | undefined

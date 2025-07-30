@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type MutableRefObject, useMemo, forwardRef } from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ImageEditablePreview } from './image-editable-preview'
 import { type Hotspot, type Marker } from '../../../../objects/data-related/helpers/hotspot-image/types/hotspot-types'
@@ -44,10 +44,7 @@ interface DocumentHotspotImagePreviewProps {
   lastImageDimensions?: { width: number | string, height: number | string } | null
 }
 
-export const DocumentHotspotImagePreview = forwardRef<HTMLDivElement, DocumentHotspotImagePreviewProps>(function DocumentHotspotImagePreview (
-  { assetId, height, width, containerWidth, value, onChange, setMarkerModalOpen, setCropModalOpen, handleSearch, handleLocateInTree, emptyValue, disabled, imgAttributes, focalPointContextMenuItem, onImageResize, lastImageDimensions }: DocumentHotspotImagePreviewProps,
-  ref: MutableRefObject<HTMLDivElement | null>
-): React.JSX.Element {
+export const DocumentHotspotImagePreview = ({ assetId, height, width, containerWidth, value, onChange, setMarkerModalOpen, setCropModalOpen, handleSearch, handleLocateInTree, emptyValue, disabled, imgAttributes, focalPointContextMenuItem, onImageResize, lastImageDimensions }: DocumentHotspotImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openElement } = useElementHelper()
 
@@ -66,7 +63,7 @@ export const DocumentHotspotImagePreview = forwardRef<HTMLDivElement, DocumentHo
   }
 
   const dropdownItems: DropdownProps['menu']['items'] = useMemo(() => {
-    const items = []
+    const items: DropdownProps['menu']['items'] = []
 
     // Add focal point menu item at the beginning if config is enabled
     if (focalPointContextMenuItem === true) {
@@ -120,7 +117,7 @@ export const DocumentHotspotImagePreview = forwardRef<HTMLDivElement, DocumentHo
         key: 'search',
         icon: <Icon value="search" />,
         label: t('search'),
-        disabled: disabled,
+        disabled,
         onClick: handleSearch
       }
     )
@@ -129,18 +126,18 @@ export const DocumentHotspotImagePreview = forwardRef<HTMLDivElement, DocumentHo
   }, [disabled, assetId, focalPointContextMenuItem, handleSetFocalPoint, setCropModalOpen, setMarkerModalOpen, emptyValue, handleOpen, handleLocateInTree, handleSearch, t])
 
   return (
-    <div ref={ref}>
+    <div>
       <ImageEditablePreview
         assetId={ assetId }
+        containerWidth={ containerWidth }
         dropdownItems={ dropdownItems }
         height={ height }
         imgAttributes={ imgAttributes }
+        lastImageDimensions={ lastImageDimensions }
+        onImageResize={ onImageResize }
         thumbnailSettings={ value.crop }
         width={ width }
-        containerWidth={ containerWidth }
-        onImageResize={onImageResize}
-        lastImageDimensions={lastImageDimensions}
       />
     </div>
   )
-})
+}

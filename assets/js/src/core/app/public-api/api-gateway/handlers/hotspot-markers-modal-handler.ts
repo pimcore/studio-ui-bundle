@@ -15,6 +15,6 @@ import { uuid } from '@Pimcore/utils/uuid'
 export const openHotspotMarkersModalHandler: ApiGatewayHandler<ApiGatewayEventType.openHotspotMarkersModal> = (payload, context) => {
   const { hotspotMarkersModalContext } = context
   const modalId = `iframe-hotspot-modal-${uuid()}`
-  
+
   hotspotMarkersModalContext.openModal(modalId, payload.imageId, payload.hotspots, payload.crop, payload.options)
 }

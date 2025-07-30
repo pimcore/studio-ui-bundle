@@ -72,8 +72,8 @@ export class DynamicTypeDocumentEditableImage extends DynamicTypeDocumentEditabl
   getEditableDataComponent (props: ImageEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
       <DocumentImageEditable
-        containerRef={ props.containerRef }
         config={ props.config }
+        containerRef={ props.containerRef }
         disabled={ props.inherited }
         onChange={ (newValue) => props.onChange?.(newValue) }
         value={ props.value }

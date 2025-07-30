@@ -43,17 +43,17 @@ interface ImagePreviewProps {
   imgAttributes?: Record<string, string>
 }
 
-export const ImagePreview = forwardRef(function ImagePreview ({ 
-  src, 
-  assetId, 
-  assetType, 
-  width, 
-  height, 
-  className, 
-  style, 
-  dropdownItems, 
-  bordered = false, 
-  onHotspotsDataButtonClick, 
+export const ImagePreview = forwardRef(function ImagePreview ({
+  src,
+  assetId,
+  assetType,
+  width,
+  height,
+  className,
+  style,
+  dropdownItems,
+  bordered = false,
+  onHotspotsDataButtonClick,
   thumbnailSettings,
   imgAttributes
 }: ImagePreviewProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
@@ -101,7 +101,6 @@ export const ImagePreview = forwardRef(function ImagePreview ({
   const loadingSpinner = (
     <Flex
       align="center"
-      className={ styles.loadingContainer }
       justify="center"
     >
       <Spin size="small" />
@@ -132,7 +131,7 @@ export const ImagePreview = forwardRef(function ImagePreview ({
               placeholder={ loadingSpinner }
               preview={ false }
               src={ imageSrc }
-              {...imgAttributes}
+              { ...imgAttributes }
             />
           ) }
 

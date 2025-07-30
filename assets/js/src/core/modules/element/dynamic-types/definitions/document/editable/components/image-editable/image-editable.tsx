@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback, useState, useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import { DocumentHotspotImagePreview } from './hotspot-image-preview'
@@ -24,6 +24,11 @@ import { useElementSelector } from '@Pimcore/modules/element/element-selector/pr
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+
+// Constants
+const MIN_IMAGE_DIMENSION = 100
+const DEFAULT_HEIGHT = 200
 
 export interface ImageEditableValue {
   id?: number
@@ -45,9 +50,9 @@ export interface ImageEditableConfig {
 
 interface HotspotImageValue {
   image: { type: 'asset', id: number } | null
-  hotspots: any[]
-  marker: any[]
-  crop: any
+  hotspots: Hotspot[]
+  marker: Marker[]
+  crop: CropSettings
 }
 
 interface DocumentImageEditableProps {
@@ -64,22 +69,17 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
   const imageValue = props.value
   const width = props.config?.width
   const height = props.config?.height
-  
-  // Track the last displayed image dimensions for preserving size when emptied
+
   const lastImageDimensionsRef = useRef<{ width: number | string, height: number | string } | null>(null)
 
-  // Only use resize observer when both width and height are undefined
   const needsContainerWidth = isNil(width) && isNil(height)
   const containerWidth = useElementResize(needsContainerWidth ? props.containerRef ?? { current: null } : { current: null })
 
-  // Handle image resize event to capture dimensions
   const handleImageResize = useCallback((dimensions: { width: number, height: number }) => {
-    // Only preserve dimensions if they are reasonably sized (minimum 100x100)
-    console.log('set last image dimensions', dimensions)
-    if (dimensions.width >= 100 && dimensions.height >= 100) {
+    if (dimensions.width >= MIN_IMAGE_DIMENSION && dimensions.height >= MIN_IMAGE_DIMENSION) {
       lastImageDimensionsRef.current = { width: dimensions.width, height: dimensions.height }
     } else {
-      lastImageDimensionsRef.current = { width: 100, height: 100 }
+      lastImageDimensionsRef.current = { width: MIN_IMAGE_DIMENSION, height: MIN_IMAGE_DIMENSION }
     }
   }, [])
 
@@ -112,7 +112,7 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
         const studioApi = getPimcoreStudioApi()
         studioApi.element.locateInTree(imageValue.id, 'asset')
       } catch (error) {
-        console.warn('Could not locate asset in tree:', error)
+        trackError(new GeneralError('Could not locate asset in tree'))
       }
     }
   }, [imageValue?.id])
@@ -165,7 +165,6 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
   }, [props])
 
   const replaceImage = useCallback((assetId: number) => {
-    
     let newValue: ImageEditableValue = imageValue ?? {
       id: undefined,
       alt: '',
@@ -242,37 +241,37 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
       } }
       variant="outline"
     >
-        {!isNil(imageValue?.id)
-          ? (
-            <DocumentHotspotImagePreview
-              key={ imageValue.id }
-              assetId={ imageValue.id }
-              disabled={ props.disabled }
-              emptyValue={ emptyValue }
-              focalPointContextMenuItem={ props.config?.focal_point_context_menu_item }
-              handleSearch={ handleSearch }
-              handleLocateInTree={ handleLocateInTree }
-              height={ height }
-              imgAttributes={ props.config?.imgAttributes }
-              onChange={ handleHotspotImageChange }
-              setCropModalOpen={ handleOpenCropModal }
-              setMarkerModalOpen={ handleOpenHotspotMarkersModal }
-              value={ convertToHotspotImageValue() }
-              width={ width }
-              containerWidth={ containerWidth }
-              onImageResize={handleImageResize}
-              lastImageDimensions={lastImageDimensionsRef.current}
-            />
-            )
-          : (
-            <AssetTarget
-              height={ lastImageDimensionsRef.current?.height ?? height ?? 200 }
-              onSearch={ handleSearch }
-              dndIcon
-              title={ props.config?.title ?? t('image.dnd-target') }
-              width={ lastImageDimensionsRef.current?.width ?? width ?? '100%' }
-            />
-            )}
+      {!isNil(imageValue?.id)
+        ? (
+          <DocumentHotspotImagePreview
+            assetId={ imageValue.id }
+            containerWidth={ containerWidth }
+            disabled={ props.disabled }
+            emptyValue={ emptyValue }
+            focalPointContextMenuItem={ props.config?.focal_point_context_menu_item }
+            handleLocateInTree={ handleLocateInTree }
+            handleSearch={ handleSearch }
+            height={ height }
+            imgAttributes={ props.config?.imgAttributes }
+            key={ imageValue.id }
+            lastImageDimensions={ lastImageDimensionsRef.current }
+            onChange={ handleHotspotImageChange }
+            onImageResize={ handleImageResize }
+            setCropModalOpen={ handleOpenCropModal }
+            setMarkerModalOpen={ handleOpenHotspotMarkersModal }
+            value={ convertToHotspotImageValue() }
+            width={ width }
+          />
+          )
+        : (
+          <AssetTarget
+            dndIcon
+            height={ lastImageDimensionsRef.current?.height ?? height ?? DEFAULT_HEIGHT }
+            onSearch={ handleSearch }
+            title={ props.config?.title ?? t('image.dnd-target') }
+            width={ lastImageDimensionsRef.current?.width ?? width ?? '100%' }
+          />
+          )}
     </Droppable>
   )
 }

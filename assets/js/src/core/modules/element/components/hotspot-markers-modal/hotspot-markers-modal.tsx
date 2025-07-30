@@ -32,7 +32,7 @@ export interface HotspotMarkersModalProps {
 
 export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.Element => {
   const { t } = useTranslation()
-  
+
   const [hotspots, setHotspots] = useState<IHotspot[]>(props.hotspots ?? [])
   const [modalOpened, setModalOpened] = useState(false)
   const [editModeHotspot, setEditModeHotspot] = useState<IHotspot | undefined>(undefined)

@@ -37,13 +37,13 @@ export const useStyle = createStyles(({ token, css }) => {
         }
       }
     `,
-    
+
     imageComponent: css`
       display: block;
       max-width: 100%;
       height: auto;
     `,
-    
+
     loadingContainer: css`
       min-height: 100px;
       min-width: 100px;
@@ -51,7 +51,7 @@ export const useStyle = createStyles(({ token, css }) => {
       align-items: center;
       justify-content: center;
     `,
-    
+
     loadingSpinner: css`
       width: 100%;
       height: 100%;

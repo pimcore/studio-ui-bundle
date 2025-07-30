@@ -13,6 +13,7 @@ import { HotspotMarkersModal } from '../hotspot-markers-modal'
 import { HotspotDataProvider } from './hotspot-data-provider'
 import type { IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import type { CropSettings } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
+import { isNil } from 'lodash'
 
 export interface HotspotMarkersModalContextProps {
   openModal: (modalId: string, imageId: number, hotspots?: IHotspot[] | null, crop?: CropSettings | null, options?: HotspotMarkersModalOptions) => void
@@ -70,7 +71,7 @@ export const HotspotMarkersModalProvider: React.FC<HotspotMarkersModalProviderPr
 
   const handleModalChange = (modalId: string, hotspots: IHotspot[]): void => {
     const modalInstance = openModals.get(modalId)
-    if (modalInstance) {
+    if (!isNil(modalInstance)) {
       modalInstance.options.onChange?.(hotspots)
       closeModal(modalId)
     }
@@ -95,9 +96,9 @@ export const HotspotMarkersModalProvider: React.FC<HotspotMarkersModalProviderPr
             disabled={ modalInstance.options.disabled }
             hotspots={ modalInstance.hotspots }
             imageId={ modalInstance.imageId }
-            onChange={ (hotspots) => handleModalChange(modalInstance.modalId, hotspots) }
-            onClose={ () => handleModalClose(modalInstance.modalId) }
-            open={ true }
+            onChange={ (hotspots) => { handleModalChange(modalInstance.modalId, hotspots) } }
+            onClose={ () => { handleModalClose(modalInstance.modalId) } }
+            open
           />
         </HotspotDataProvider>
       ))}

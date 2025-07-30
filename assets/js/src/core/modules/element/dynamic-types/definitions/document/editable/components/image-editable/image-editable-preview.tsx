@@ -8,21 +8,19 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type CSSProperties, useEffect, useMemo, useState, useRef } from 'react'
+import React, { useEffect, useMemo, useState, useRef } from 'react'
 import { useStyle } from './image-editable-preview.styles'
 import cn from 'classnames'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { Image } from 'antd'
 import { Spin } from '@Pimcore/components/spin/spin'
-import { Flex } from '@Pimcore/components/flex/flex'
 import { ImagePreviewDropdown } from '@Pimcore/components/image-preview/components/dropdown/dropdown'
 import { type ImageThumbnailSettings } from '@Pimcore/components/image-preview/utils/custom-image-thumbnail'
-import { getAssetPreviewUrl } from '@Pimcore/components/image-preview/utils/get-asset-preview-url'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { isNil } from 'lodash'
-import { Card } from '@sdk/components'
 import useElementResizeDimensions from '@Pimcore/utils/hooks/use-element-resize-dimensions'
+import { generateThumbnailUrl } from './utils/thumbnail-sizing'
 
 interface ImageEditablePreviewProps {
   src?: string
@@ -40,15 +38,15 @@ interface ImageEditablePreviewProps {
   lastImageDimensions?: { width: number | string, height: number | string } | null
 }
 
-export const ImageEditablePreview = ({ 
-  src, 
-  assetId, 
-  assetType, 
-  width, 
-  height, 
+export const ImageEditablePreview = ({
+  src,
+  assetId,
+  assetType,
+  width,
+  height,
   containerWidth,
-  className, 
-  dropdownItems, 
+  className,
+  dropdownItems,
   thumbnailSettings,
   imgAttributes,
   onImageLoad,
@@ -59,12 +57,10 @@ export const ImageEditablePreview = ({
   const { styles } = useStyle()
   const [key, setKey] = useState(0)
   const [isImageLoaded, setIsImageLoaded] = useState(false)
-  
-  // Create ref for the image container to track resize
+
   const imageContainerRef = useRef<HTMLDivElement>(null)
   const currentImageDimensions = useElementResizeDimensions(imageContainerRef)
 
-  // Execute code when image container resizes
   useEffect(() => {
     if (currentImageDimensions.width > 0 && currentImageDimensions.height > 0 && onImageResize !== undefined) {
       onImageResize(currentImageDimensions)
@@ -76,56 +72,15 @@ export const ImageEditablePreview = ({
       return src
     }
 
-    let thumbnailWidth: number | undefined
-    let thumbnailHeight: number | undefined
-    let resizeMode: 'resize' | 'none' | 'scaleByHeight' | 'scaleByWidth' | undefined
-
-    // Apply thumbnail sizing rules:
-    // - no width and height given: use containerWidth
-    // - width given: use scaleByWidth with width
-    // - no width given but height given: use scaleByHeight with height
-    if (width === undefined && height === undefined) {
-      thumbnailWidth = containerWidth
-      resizeMode = 'scaleByWidth'
-    } else if (width !== undefined) {
-      thumbnailWidth = typeof width === 'string' ? parseInt(width) : width
-      resizeMode = 'scaleByWidth'
-    } else if (height !== undefined) {
-      thumbnailHeight = typeof height === 'string' ? parseInt(height) : height
-      resizeMode = 'scaleByHeight'
-    }
-
-    // Only generate URL if we have valid dimensions
-    if (thumbnailWidth === undefined && thumbnailHeight === undefined) {
-      return src
-    }
-
-    const defaultThumbnailSettings: ImageThumbnailSettings = {
-      frame: false,
-      resizeMode,
-      ...thumbnailSettings
-    }
-
-    // Ensure we pass valid parameters to getAssetPreviewUrl
-    if (thumbnailWidth !== undefined) {
-      return getAssetPreviewUrl({
-        assetId,
-        assetType,
-        width: thumbnailWidth,
-        height: thumbnailHeight,
-        thumbnailSettings: defaultThumbnailSettings
-      })
-    } else if (thumbnailHeight !== undefined) {
-      return getAssetPreviewUrl({
-        assetId,
-        assetType,
-        width: 0, // Use 0 for width when only height is specified
-        height: thumbnailHeight,
-        thumbnailSettings: defaultThumbnailSettings
-      })
-    }
-
-    return src
+    return generateThumbnailUrl({
+      assetId,
+      assetType,
+      width,
+      height,
+      containerWidth,
+      thumbnailSettings,
+      fallbackSrc: src
+    })
   }, [assetId, src, width, height, assetType, thumbnailSettings, containerWidth])
 
   useEffect(() => {
@@ -140,7 +95,7 @@ export const ImageEditablePreview = ({
 
   const loadingSpinner = (
     <div
-      className={styles.loadingSpinner}
+      className={ styles.loadingSpinner }
     >
       <Spin size="small" />
     </div>
@@ -153,27 +108,27 @@ export const ImageEditablePreview = ({
       trigger={ ['contextMenu'] }
     >
       <div
-        ref={imageContainerRef}
         className={ cn(className, styles.imageEditablePreviewContainer, ...getStateClasses()) }
+        ref={ imageContainerRef }
       >
 
         { imageSrc !== undefined && (
 
-            <Image
-              className={ styles.imageComponent }
-              fallback="/bundles/pimcorestudioui/img/fallback-image.svg"
-              key={ key }
-              onLoad={ handleImageLoad }
-              placeholder={ loadingSpinner }
-              preview={ false }
-              src={ imageSrc }
+        <Image
+          className={ styles.imageComponent }
+          fallback="/bundles/pimcorestudioui/img/fallback-image.svg"
+          key={ key }
+          onLoad={ handleImageLoad }
+          placeholder={ loadingSpinner }
+          preview={ false }
+          src={ imageSrc }
 
-      style={{
-        width: isImageLoaded ? undefined : lastImageDimensions?.width,
-        height: isImageLoaded ? undefined : lastImageDimensions?.height
-      }}
-              {...imgAttributes}
-            />
+          style={ {
+            width: isImageLoaded ? undefined : lastImageDimensions?.width,
+            height: isImageLoaded ? undefined : lastImageDimensions?.height
+          } }
+          { ...imgAttributes }
+        />
         ) }
 
         { isImageLoaded && <ImagePreviewDropdown dropdownItems={ dropdownItems } /> }
