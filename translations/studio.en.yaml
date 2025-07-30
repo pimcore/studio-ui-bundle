@@ -769,6 +769,9 @@ redirects.pass-through: Pass Through
 redirects.active: Active
 redirects.actions: Actions
 redirects.expiry: Expiry
+redirects.csv-import: Import CSV
+redirects.csv-export: CSV Export
+redirects.clean-up: Clean up expired redirects
 redirects.beginner-modal.title: New Beginner Redirect
 redirects.beginner-modal.type: Type
 redirects.beginner-modal.path: Path

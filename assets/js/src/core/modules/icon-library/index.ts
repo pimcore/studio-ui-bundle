@@ -116,6 +116,7 @@ import helpCircle from '@Pimcore/assets/icons/help-circle.inline.svg?react'
 import history from '@Pimcore/assets/icons/history.inline.svg?react'
 import homeRootFolder from '@Pimcore/assets/icons/home-root-folder.inline.svg?react'
 import image from '@Pimcore/assets/icons/image.inline.svg?react'
+import importCsv from '@Pimcore/assets/icons/import-csv.inline.svg?react'
 import infoCircle from '@Pimcore/assets/icons/info-circle.inline.svg?react'
 import info from '@Pimcore/assets/icons/info.inline.svg?react'
 import inheritanceActive from '@Pimcore/assets/icons/inheritance-active.inline.svg?react'
@@ -633,6 +634,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'image',
       component: image
+    })
+    iconLibrary.register({
+      name: 'import-csv',
+      component: importCsv
     })
     iconLibrary.register({
       name: 'info-circle',

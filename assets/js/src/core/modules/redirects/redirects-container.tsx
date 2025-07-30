@@ -179,7 +179,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
     <ContentLayout
       renderToolbar={
         <Toolbar theme="secondary">
-          <Flex justify='space-between'>
+          <Flex justify='space-between' style={{width: "100%"}}>
           <div><IconTextButton
             disabled={ redirectRows.length < 1 || cleanupLoading }
             icon={ { value: 'trash' } }
@@ -196,7 +196,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
           >{t('redirects.csv-export')}</IconTextButton>
           <IconTextButton
             disabled={ redirectsFetching || importLoading }
-            icon={ { value: 'upload' } }
+            icon={ { value: 'import-csv' } }
             loading={ importLoading }
             onClick={ () => { setIsImportModalOpen(true) } }
             type={'link'}
