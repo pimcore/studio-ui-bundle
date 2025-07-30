@@ -10,6 +10,7 @@
 
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
+import { refreshTreeByElementType } from '@Pimcore/components/element-tree/element-tree-slice'
 import ApiError from '@Pimcore/modules/app/error-handler/classes/api-error'
 import GeneralError from '@Pimcore/modules/app/error-handler/classes/general-error'
 import trackError from '@Pimcore/modules/app/error-handler/error-handler'
@@ -20,8 +21,7 @@ import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { isNil } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { api, type RecycleBin, useRecycleBinDeleteItemsMutation, useRecycleBinFlushMutation } from '../recycle-bin-api-slice-enhanced'
-import { RecycleBinDeleteItemsApiResponse, type RecycleBinRestoreItemsApiResponse, useRecycleBinRestoreItemsMutation } from '../recycle-bin-api-slice.gen'
-import { refreshTreeByElementType } from '@Pimcore/components/element-tree/element-tree-slice'
+import { useRecycleBinRestoreItemsMutation } from '../recycle-bin-api-slice.gen'
 
 interface UseRecycleBinHookReturn {
   restoreItems: (items: RecycleBin[], onFinish?: () => void) => Promise<void>
@@ -55,7 +55,7 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
 
       let jobRunId: any = null
       if (!isNil(response.data)) {
-        const data = response.data as RecycleBinRestoreItemsApiResponse
+        const data = response.data
         jobRunId = data.jobRunId ?? null
       }
 
@@ -66,7 +66,7 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
           action: async () => {
             return jobRunId
           },
-          elementTypes: items.map(item => mapToElementType(item.type)!),
+          elementTypes: items.map(item => mapToElementType(item.type)!)
         }))
       }
 
@@ -100,7 +100,7 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
 
       let jobRunId: any = null
       if (!isNil(response.data)) {
-        const data = response.data as RecycleBinDeleteItemsApiResponse
+        const data = response.data
         jobRunId = data.jobRunId ?? null
       }
 
@@ -111,7 +111,7 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
           action: async () => {
             return jobRunId
           },
-          elementTypes: items.map(item => mapToElementType(item.type)!),
+          elementTypes: items.map(item => mapToElementType(item.type)!)
         }))
       }
 

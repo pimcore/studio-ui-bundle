@@ -9,15 +9,15 @@
  */
 
 /* eslint-disable max-lines */
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { injectSliceWithState, type RootState } from '@sdk/app'
-import { first, isEqual, isUndefined } from 'lodash'
-import { createSelector } from 'reselect'
-import { type TreeLevelData } from '@Pimcore/modules/element/element-api-slice.gen'
-import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
-import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { LockType } from '@Pimcore/modules/element/actions/lock/use-lock'
+import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
+import { type TreeLevelData } from '@Pimcore/modules/element/element-api-slice.gen'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import { injectSliceWithState, type RootState } from '@sdk/app'
+import { isEqual, isUndefined } from 'lodash'
+import { createSelector } from 'reselect'
 
 export interface TreeNode {
   id: string
@@ -255,9 +255,9 @@ const slice = createSlice({
         ...node,
         treeNodeProps: !isUndefined(node.treeNodeProps)
           ? {
-            ...node.treeNodeProps,
-            hasChildren: payload.hasChildren
-          }
+              ...node.treeNodeProps,
+              hasChildren: payload.hasChildren
+            }
           : undefined
       }))
     },
@@ -422,9 +422,9 @@ const slice = createSlice({
             ...node,
             treeNodeProps: !isUndefined(node.treeNodeProps)
               ? {
-                ...node.treeNodeProps,
-                label: payload.newLabel
-              }
+                  ...node.treeNodeProps,
+                  label: payload.newLabel
+                }
               : undefined
           }))
         }
@@ -443,9 +443,9 @@ const slice = createSlice({
             isFetchTriggered: false,
             treeNodeProps: !isUndefined(node.treeNodeProps)
               ? {
-                ...node.treeNodeProps,
-                hasChildren: true
-              }
+                  ...node.treeNodeProps,
+                  hasChildren: true
+                }
               : undefined
           }))
 
@@ -468,16 +468,16 @@ const slice = createSlice({
     },
     refreshTreeByElementType: (
       state,
-      { payload }: PayloadAction<{ elementTypes: Array<ElementType> }>
+      { payload }: PayloadAction<{ elementTypes: ElementType[] }>
     ) => {
       Object.keys(state).forEach(treeId => {
         if (Object.keys(state[treeId].nodes).length > 0) {
           const firstNode = Object.values(state[treeId].nodes)[0]
           if (
-            firstNode.treeNodeProps?.elementType &&
+            firstNode.treeNodeProps?.elementType !== undefined &&
             payload.elementTypes.includes(firstNode.treeNodeProps.elementType)
           ) {
-            state[treeId]['nodes'] = {}
+            state[treeId].nodes = {}
           }
         }
       })
@@ -505,9 +505,9 @@ const slice = createSlice({
             ...node,
             treeNodeProps: !isUndefined(node.treeNodeProps)
               ? {
-                ...node.treeNodeProps,
-                isPublished: payload.isPublished
-              }
+                  ...node.treeNodeProps,
+                  isPublished: payload.isPublished
+                }
               : undefined
           }))
         }
@@ -549,10 +549,10 @@ const slice = createSlice({
             isFetchTriggered: refreshChildren ? false : node.isFetchTriggered,
             treeNodeProps: !isUndefined(node.treeNodeProps)
               ? {
-                ...node.treeNodeProps,
-                locked: locked(),
-                isLocked: payload.isLocked
-              }
+                  ...node.treeNodeProps,
+                  locked: locked(),
+                  isLocked: payload.isLocked
+                }
               : undefined
           }))
 
@@ -589,9 +589,9 @@ const slice = createSlice({
                   isFetchTriggered: isFetchTriggered(node),
                   treeNodeProps: !isUndefined(node.treeNodeProps)
                     ? {
-                      ...node.treeNodeProps,
-                      isLocked: isUnlock ? node.treeNodeProps.isLocked : payload.isLocked
-                    }
+                        ...node.treeNodeProps,
+                        isLocked: isUnlock ? node.treeNodeProps.isLocked : payload.isLocked
+                      }
                     : undefined
                 }
               }
@@ -612,9 +612,9 @@ const slice = createSlice({
                   ...node,
                   treeNodeProps: !isUndefined(node.treeNodeProps)
                     ? {
-                      ...node.treeNodeProps,
-                      isLocked: payload.isLocked
-                    }
+                        ...node.treeNodeProps,
+                        isLocked: payload.isLocked
+                      }
                     : undefined
                 }
               }
