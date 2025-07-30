@@ -102,6 +102,7 @@ export const ImagePreview = forwardRef(function ImagePreview ({
     <Flex
       align="center"
       justify="center"
+      className="w-full h-full"
     >
       <Spin size="small" />
     </Flex>
