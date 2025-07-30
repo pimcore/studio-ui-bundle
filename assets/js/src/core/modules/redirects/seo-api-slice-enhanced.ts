@@ -38,6 +38,20 @@ const api = baseApi.enhanceEndpoints({
           return await response.blob()
         }
       })
+    },
+
+    bundleSeoRedirectsImport: {
+      query: (args) => {
+        const formData = new FormData()
+        formData.append('file', args.body.file)
+        
+        return {
+          url: `/pimcore-studio/api/bundle/seo/redirects/import`,
+          method: 'POST',
+          body: formData
+        }
+      },
+      invalidatesTags: () => [tagNames.REDIRECTS]
     }
   }
 })

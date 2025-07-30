@@ -17,8 +17,7 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Table } from './table/table'
-import { Box, IconTextButton, SearchInput, Pagination, Modal } from '@sdk/components'
-import { Upload, Button } from 'antd'
+import { Box, IconTextButton, SearchInput, Pagination } from '@sdk/components'
 import { api, useBundleSeoRedirectsGetCollectionQuery, useBundleSeoRedirectsExportQuery, useBundleSeoRedirectsImportMutation } from './seo-api-slice-enhanced'
 import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
@@ -27,6 +26,7 @@ import { isUndefined } from 'lodash'
 import { useAppDispatch } from '@sdk/app'
 import { invalidatingTags } from '@sdk/api'
 import { BeginnerRedirectModal } from './beginner-redirect-modal/beginner-redirect-modal'
+import { CsvImportModal } from './csv-import-modal/csv-import-modal'
 
 export const RedirectsContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
@@ -167,10 +167,12 @@ export const RedirectsContainer = (): React.JSX.Element => {
 
   const handleImport = async (file: File): Promise<void> => {
     try {
-      await importRedirects({ body: { file } }).unwrap()
+      const result = await importRedirects({ body: { file } }).unwrap()
+      console.log('Import successful:', result)
       setIsImportModalOpen(false)
       reload()
     } catch (error) {
+      console.error('Import error:', error)
       trackError(new GeneralError('Failed to import redirects'))
     }
   }
@@ -278,26 +280,12 @@ export const RedirectsContainer = (): React.JSX.Element => {
         createRedirect={ handleCreateRedirect }
       />
 
-      <Modal
-        title={t('redirects.csv-import')}
+      <CsvImportModal
         open={isImportModalOpen}
         onCancel={() => { setIsImportModalOpen(false) }}
-        footer={null}
-        size="M"
-      >
-        <Upload.Dragger
-          accept=".csv"
-          beforeUpload={(file) => {
-            handleImport(file)
-            return false // Prevent default upload
-          }}
-          multiple={false}
-          showUploadList={false}
-        >
-          <p>{t('redirects.import-drag-drop')}</p>
-          <Button>{t('redirects.import-select-file')}</Button>
-        </Upload.Dragger>
-      </Modal>
+        onImport={handleImport}
+        loading={importLoading}
+      />
     </ContentLayout>
   )
 }
