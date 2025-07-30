@@ -11,7 +11,7 @@
 import React, { useEffect, useState } from 'react'
 import { Pie } from '@ant-design/plots'
 import { isEmpty } from 'lodash'
-import { generateRandomColors } from '@Pimcore/modules/reports/reports-view/components/report-chart/utils/helpers'
+import { generateColorMap } from '@Pimcore/modules/reports/reports-view/components/report-chart/utils/helpers'
 import type { IChartProps, IChartDataItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
 import { ChartLegend } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/pie-chart/components/chart-legend/chart-legend'
 
@@ -27,7 +27,7 @@ export const PieChart = ({ reportData, chartData }: IChartProps): React.JSX.Elem
   const pieLabelColumn = reportData?.pieLabelColumn ?? ''
   const pieColumn = reportData?.pieColumn ?? ''
 
-  const [colorList] = useState<string[]>(generateRandomColors(chartData?.length))
+  const [colorList] = useState<string[]>(generateColorMap())
   const reportChartData: IChartPieDataItem[] = chartData.map(((item, index) => ({
     [CHART_FIELD_TYPE_KEY]: item?.[pieLabelColumn],
     [CHART_FIELD_VALUE_KEY]: item?.[pieColumn],
