@@ -29,6 +29,15 @@ const api = baseApi.enhanceEndpoints({
 
     bundleSeoRedirectUpdateById: {
       invalidatesTags: () => []
+    },
+
+    bundleSeoRedirectsExport: {
+      query: () => ({ 
+        url: `/pimcore-studio/api/bundle/seo/redirects/export`,
+        responseHandler: async (response): Promise<Blob> => {
+          return await response.blob()
+        }
+      })
     }
   }
 })

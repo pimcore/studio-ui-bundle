@@ -38,13 +38,13 @@ export const RedirectsContainer = (): React.JSX.Element => {
   } = useRedirects()
 
   const [importRedirects, { isLoading: importLoading }] = useBundleSeoRedirectsImportMutation()
-  const { refetch: exportRedirects, isFetching: exportLoading } = useBundleSeoRedirectsExportQuery(undefined, { skip: true })
 
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(50)
   const [filter, setFilter] = useState<string>('')
   const [isBeginnerModalOpen, setIsBeginnerModalOpen] = useState<boolean>(false)
   const [isImportModalOpen, setIsImportModalOpen] = useState<boolean>(false)
+  const [exportLoading, setExportLoading] = useState<boolean>(false)
 
   const queryArgs = useMemo(() => ({
     body: {
@@ -139,18 +139,33 @@ export const RedirectsContainer = (): React.JSX.Element => {
 
   const handleExport = async (): Promise<void> => {
     try {
-      const result = await exportRedirects().unwrap()
-      const blob = new Blob([result], { type: 'text/csv' })
-      const url = window.URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = `redirects-export-${new Date().toISOString().split('T')[0]}.csv`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      window.URL.revokeObjectURL(url)
+      setExportLoading(true)
+      
+      const result = await dispatch(api.endpoints.bundleSeoRedirectsExport.initiate()).unwrap()
+      
+      console.log('Export result received:', result instanceof Blob ? 'Blob' : typeof result)
+      
+      if (result instanceof Blob) {
+        console.log('Blob size:', result.size, 'bytes')
+        
+        const url = window.URL.createObjectURL(result)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = `redirects-export-${new Date().toISOString().split('T')[0]}.csv`
+        link.style.display = 'none'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(url)
+        
+        console.log('Download triggered successfully')
+      } else {
+        throw new Error('Export failed: No blob data received')
+      }
     } catch (error) {
       trackError(new GeneralError('Failed to export redirects'))
+    } finally {
+      setExportLoading(false)
     }
   }
 
