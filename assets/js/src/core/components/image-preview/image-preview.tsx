@@ -101,8 +101,8 @@ export const ImagePreview = forwardRef(function ImagePreview ({
   const loadingSpinner = (
     <Flex
       align="center"
-      justify="center"
       className="w-full h-full"
+      justify="center"
     >
       <Spin size="small" />
     </Flex>
