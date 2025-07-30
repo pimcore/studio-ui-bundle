@@ -24,7 +24,6 @@ import { useElementSelector } from '@Pimcore/modules/element/element-selector/pr
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 // Constants
 const MIN_IMAGE_DIMENSION = 100
@@ -108,12 +107,8 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
 
   const handleLocateInTree = useCallback(() => {
     if (!isNil(imageValue?.id)) {
-      try {
-        const studioApi = getPimcoreStudioApi()
-        studioApi.element.locateInTree(imageValue.id, 'asset')
-      } catch (error) {
-        trackError(new GeneralError('Could not locate asset in tree'))
-      }
+      const studioApi = getPimcoreStudioApi()
+      studioApi.element.locateInTree(imageValue.id, 'asset')
     }
   }, [imageValue?.id])
 
