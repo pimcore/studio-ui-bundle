@@ -21,6 +21,11 @@ import { isUndefined } from 'lodash'
 import { useAppDispatch } from '@sdk/app'
 import { invalidatingTags } from '@sdk/api'
 import { type BundleSeoRedirectsImportStatistics } from './seo-api-slice.gen'
+import { RedirectsToolbar } from './components/redirects-toolbar'
+import { RedirectsTopBar } from './components/redirects-top-bar'
+import { BeginnerRedirectModal } from './components/beginner-redirect-modal'
+import { CsvImportModal } from './components/csv-import-modal/csv-import-modal'
+import { CsvImportResultsModal } from './components/csv-import-results-modal/csv-import-results-modal'
 
 export const RedirectsContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
