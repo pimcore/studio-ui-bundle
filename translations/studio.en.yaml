@@ -974,4 +974,18 @@ embed.edit-url: Edit URL
 embed.clear: Clear
 embed.loading: Loading...
 embed.iframe-title: Embedded content
+navigation.recycle-bin: Recycle Bin
+widget.recycle-bin: Recycle Bin
+recycle-bin.columns.type: Type
+recycle-bin.columns.path: Path
+recycle-bin.columns.amount: Amount
+recycle-bin.columns.deleted-by: Deleted By
+recycle-bin.columns.date: Date
+recycle-bin.columns.actions: Actions
+recycle-bin.actions.cleanup: Clean up
+recycle-bin.actions.delete: Delete
+recycle-bin.actions.delete.title: Deleting Items
+recycle-bin.actions.restore: Restore
+recycle-bin.actions.restore.title: Restoring Items
+component.search.pleaceholder: Search
 focal-point.set: Set Focal Point

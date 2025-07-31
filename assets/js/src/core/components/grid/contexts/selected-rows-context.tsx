@@ -1,0 +1,69 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { isUndefined } from 'lodash'
+import React, { createContext, type ReactNode, useContext, useMemo, useState } from 'react'
+
+export interface SelectedRowsContext<T> {
+  selectedRows: T
+  setSelectedRows: (rows: T) => void
+  resetSelectedRows: () => void
+}
+
+export interface SelectedRowsProviderProps<T> {
+  children: ReactNode
+  initialValue: T
+}
+
+export function createSelectedRowsContext<T> (): {
+  SelectedRowsProvider: React.FC<SelectedRowsProviderProps<T>>
+  useSelectedRowsContext: () => SelectedRowsContext<T>
+} {
+  const SelectedRowsContext = createContext<{
+    selectedRows: T
+    setSelectedRows: (rows: T) => void
+    resetSelectedRows: () => void
+  } | undefined>(undefined)
+
+  const SelectedRowsProvider = ({ children, initialValue }: SelectedRowsProviderProps<T>): JSX.Element => {
+    const [selectedRows, setSelectedRows] = useState<T>(initialValue)
+
+    const resetSelectedRows = (): void => {
+      setSelectedRows(initialValue)
+    }
+
+    const contextValue = useMemo(() => ({
+      selectedRows,
+      setSelectedRows,
+      resetSelectedRows
+    }), [selectedRows, initialValue])
+
+    return (
+      <SelectedRowsContext.Provider value={ contextValue }>
+        {children}
+      </SelectedRowsContext.Provider>
+    )
+  }
+
+  function useSelectedRowsContext (): SelectedRowsContext<T> {
+    const context = useContext(SelectedRowsContext)
+
+    if (isUndefined(context)) {
+      throw new Error('useSelectedRowsContext must be used within a SelectedRowsProvider')
+    }
+
+    return context
+  }
+
+  return {
+    SelectedRowsProvider,
+    useSelectedRowsContext
+  }
+}

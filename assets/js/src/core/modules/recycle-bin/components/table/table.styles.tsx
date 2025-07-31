@@ -12,29 +12,9 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    tag: css`
-      display: block;
-      max-width: 100%;
-      text-overflow: ellipsis;
-      overflow: hidden;
-
-      &.ant-tag {
-        cursor: default;
-      }
-    `,
-    tagClickable: css`
-      &.ant-tag {
-        cursor: pointer;
-      }
-    `,
-    tagDisabled: css`
-      position: relative;
-      &::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.07);
-        pointer-events: none;
+    icons: css`
+      .pimcore-icon {
+        color: ${token.Button.defaultColor};
       }
     `
   }
