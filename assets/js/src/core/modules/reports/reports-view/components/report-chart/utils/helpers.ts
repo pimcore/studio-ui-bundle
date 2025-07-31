@@ -12,7 +12,7 @@ import { orange, purple, blue, red, lime, cyan, magenta, geekblue, green, yellow
 import { isUndefined } from 'lodash'
 
 const PALETTES = [
-  magenta, purple, geekblue, cyan, blue,
+  purple, magenta, geekblue, cyan, blue,
   green, yellow, lime, gold, volcano,
   orange, red
 ]
