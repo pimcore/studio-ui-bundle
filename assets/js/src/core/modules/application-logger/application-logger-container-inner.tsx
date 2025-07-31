@@ -56,9 +56,9 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
           theme='secondary'
         >
           <IconButton
-            disabled={ isLoading || isRTKLoading }
-            icon={ { value: 'refresh' } }
-            onClick={ () => {
+            disabled={isLoading || isRTKLoading}
+            icon={{ value: 'refresh' }}
+            onClick={() => {
               setIsLoading(true)
               dispatch(
                 api.util.invalidateTags(
@@ -66,22 +66,22 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
                 )
               )
               setIsLoading(false)
-            } }
+            }}
           />
           <Pagination
-            current={ currentPage }
-            defaultPageSize={ pageSize }
-            onChange={ onPagerChange }
+            current={currentPage}
+            defaultPageSize={pageSize}
+            onChange={onPagerChange}
             showSizeChanger
-            showTotal={ (total) => t('pagination.show-total', { total }) }
-            total={ total }
+            showTotal={(total) => t('pagination.show-total', { total })}
+            total={total}
           />
         </Toolbar>
       }
       renderTopBar={
         <Toolbar
           justify='space-between'
-          margin={ {
+          margin={{
             x: 'mini',
             y: 'none'
           }
@@ -93,15 +93,16 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
       }
     >
       <Content
-        loading={ isLoading }
+        loading={isLoading}
       >
         <Box
-          margin={ {
+          className='h-full'
+          margin={{
             x: 'extra-small',
             y: 'none'
-          } }
+          }}
         >
-          <ApplicationLogger items={ data?.items ?? [] } />
+          <ApplicationLogger items={data?.items ?? []} />
         </Box>
       </Content>
     </ContentLayout>
