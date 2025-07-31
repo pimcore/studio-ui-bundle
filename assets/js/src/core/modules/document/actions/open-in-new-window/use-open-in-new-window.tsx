@@ -17,10 +17,11 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { api } from '@Pimcore/modules/document/document-api-slice.gen'
+import { type Element } from '@Pimcore/modules/element/element-helper'
 export interface UseOpenInNewWindowHookReturn {
-  openInNewWindow: (node: TreeNodeProps) => Promise<void>
+  openInNewWindow: (documentId: number, onFinish?: () => void) => Promise<void>
   openInNewWindowTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  openInNewWindowContextMenuItem: (node: TreeNodeProps, onFinish?: () => void) => ItemType
+  openInNewWindowContextMenuItem: (document: Element, onFinish?: () => void) => ItemType
 }
 
 export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
@@ -29,11 +30,11 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
   const dispatch = useAppDispatch()
 
   const openInNewWindow = async (
-    node: TreeNodeProps,
+    documentId: number,
     onFinish?: () => void
   ): Promise<void> => {
     setIsLoading(true)
-    const { data } = await dispatch(api.endpoints.documentGetById.initiate({ id: parseInt(node.id) }))
+    const { data } = await dispatch(api.endpoints.documentGetById.initiate({ id: documentId }))
 
     if (data?.settingsData != null && typeof data.settingsData.url === 'string') {
       window.open(data.settingsData.url as string)
@@ -45,13 +46,13 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
     setIsLoading(false)
   }
 
-  const isContextMenuEntryHidden = (node: TreeNodeProps): boolean => {
+  const isContextMenuEntryHidden = (node: Element | TreeNodeProps): boolean => {
     return node.type !== 'page' ||
         !checkElementPermission(node.permissions, 'view')
   }
 
   const openInNewWindowContextMenuItem = (
-    node: TreeNodeProps,
+    document: Element,
     onFinish?: () => void
   ): ItemType => {
     return {
@@ -59,9 +60,9 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
       key: ContextMenuActionName.openInNewWindow,
       isLoading,
       icon: <Icon value={ 'share' } />,
-      hidden: isContextMenuEntryHidden(node),
+      hidden: isContextMenuEntryHidden(document),
       onClick: async () => {
-        await openInNewWindow(node, onFinish)
+        await openInNewWindow(document.id, onFinish)
       }
     }
   }
@@ -73,7 +74,7 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
       icon: <Icon value={ 'share' } />,
       hidden: isContextMenuEntryHidden(node),
       onClick: async () => {
-        await openInNewWindow(node)
+        await openInNewWindow(parseInt(node.id))
       }
     }
   }
