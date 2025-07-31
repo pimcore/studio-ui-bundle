@@ -18,7 +18,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Table } from './table/table'
 import { Box, IconTextButton, SearchInput, Pagination } from '@sdk/components'
-import { api, useBundleSeoRedirectsGetCollectionQuery, useBundleSeoRedirectsExportQuery, useBundleSeoRedirectsImportMutation } from './seo-api-slice-enhanced'
+import { api, useBundleSeoRedirectsGetCollectionQuery, useBundleSeoRedirectsImportMutation } from './seo-api-slice-enhanced'
 import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { type RedirectRow, useRedirects } from './hooks/use-redirects'
@@ -32,8 +32,8 @@ import { type BundleSeoRedirectsImportStatistics } from './seo-api-slice.gen'
 
 export const RedirectsContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
-  const { 
-    createNewRedirect, 
+  const {
+    createNewRedirect,
     createLoading,
     cleanupRedirects,
     cleanupLoading
@@ -98,7 +98,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
   const handleCreateRedirect = async (redirectData?: { type: string, source: string, target: string }): Promise<boolean> => {
     const tempId = uuid()
     const optimisticRedirect: RedirectRow = {
-      id: Date.now(), 
+      id: Date.now(),
       type: redirectData?.type ?? 'entire_uri',
       source: redirectData?.source ?? null,
       target: redirectData?.target ?? null,
@@ -121,11 +121,11 @@ export const RedirectsContainer = (): React.JSX.Element => {
     setRedirectRows(prev => [optimisticRedirect, ...prev])
 
     const { success } = await createNewRedirect(redirectData)
-    
+
     if (!success) {
       setRedirectRows(prev => prev.filter(row => row.rowId !== tempId))
     }
-    
+
     return success
   }
 
@@ -144,10 +144,10 @@ export const RedirectsContainer = (): React.JSX.Element => {
   const handleExport = async (): Promise<void> => {
     try {
       setExportLoading(true)
-      
+
       const result = await dispatch(api.endpoints.bundleSeoRedirectsExport.initiate())
-            
-      if ('data' in result && result.data instanceof Blob) {        
+
+      if ('data' in result && result.data instanceof Blob) {
         const url = window.URL.createObjectURL(result.data)
         const link = document.createElement('a')
         link.href = url
@@ -157,7 +157,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
         link.click()
         document.body.removeChild(link)
         window.URL.revokeObjectURL(url)
-        
+
         console.log('Download triggered successfully')
       } else {
         trackError(new GeneralError('Export failed: No blob data received'))
@@ -187,34 +187,37 @@ export const RedirectsContainer = (): React.JSX.Element => {
     <ContentLayout
       renderToolbar={
         <Toolbar theme="secondary">
-          <Flex justify='space-between' style={{width: "100%"}}>
-          <div><IconTextButton
-            disabled={ redirectRows.length < 1 || cleanupLoading }
-            icon={ { value: 'trash' } }
-            loading={ cleanupLoading }
-            onClick={ handleCleanup }
-            type={'link'}
-          >{t('redirects.clean-up')}</IconTextButton>
-          <IconTextButton
-            disabled={ redirectsFetching || exportLoading }
-            icon={ { value: 'download' } }
-            loading={ exportLoading }
-            onClick={ handleExport }
-            type={'link'}
-          >{t('redirects.csv-export')}</IconTextButton>
-          <IconTextButton
-            disabled={ redirectsFetching || importLoading }
-            icon={ { value: 'import-csv' } }
-            loading={ importLoading }
-            onClick={ () => { setIsImportModalOpen(true) } }
-            type={'link'}
-          >{t('redirects.csv-import')}</IconTextButton>
-          </div>
-          <IconButton
-            disabled={ redirectsFetching }
-            icon={ { value: 'refresh' } }
-            onClick={ reload }
-          />
+          <Flex
+            justify='space-between'
+            style={ { width: '100%' } }
+          >
+            <div><IconTextButton
+              disabled={ redirectRows.length < 1 || cleanupLoading }
+              icon={ { value: 'trash' } }
+              loading={ cleanupLoading }
+              onClick={ handleCleanup }
+              type={ 'link' }
+                 >{t('redirects.clean-up')}</IconTextButton>
+              <IconTextButton
+                disabled={ redirectsFetching || exportLoading }
+                icon={ { value: 'download' } }
+                loading={ exportLoading }
+                onClick={ handleExport }
+                type={ 'link' }
+              >{t('redirects.csv-export')}</IconTextButton>
+              <IconTextButton
+                disabled={ redirectsFetching || importLoading }
+                icon={ { value: 'import-csv' } }
+                loading={ importLoading }
+                onClick={ () => { setIsImportModalOpen(true) } }
+                type={ 'link' }
+              >{t('redirects.csv-import')}</IconTextButton>
+            </div>
+            <IconButton
+              disabled={ redirectsFetching }
+              icon={ { value: 'refresh' } }
+              onClick={ reload }
+            />
           </Flex>
           <Pagination
             current={ currentPage }
@@ -246,8 +249,11 @@ export const RedirectsContainer = (): React.JSX.Element => {
               disabled={ redirectsLoading || createLoading }
               icon={ { value: 'new' } }
               loading={ createLoading }
-              onClick={ () => { handleCreateRedirect() } }
-            >{t('redirects.expert')}</IconTextButton>
+              onClick={ async () => {
+                await handleCreateRedirect()
+              } }
+            >
+              {t('redirects.expert')}</IconTextButton>
           </Flex>
           <SearchInput
             loading={ redirectsFetching }
@@ -281,22 +287,22 @@ export const RedirectsContainer = (): React.JSX.Element => {
       </Content>
 
       <BeginnerRedirectModal
+        createRedirect={ handleCreateRedirect }
         open={ isBeginnerModalOpen }
         setOpen={ setIsBeginnerModalOpen }
-        createRedirect={ handleCreateRedirect }
       />
 
       <CsvImportModal
-        open={isImportModalOpen}
-        onCancel={() => { setIsImportModalOpen(false) }}
-        onImport={handleImport}
-        loading={importLoading}
+        loading={ importLoading }
+        onCancel={ () => { setIsImportModalOpen(false) } }
+        onImport={ handleImport }
+        open={ isImportModalOpen }
       />
 
       <CsvImportResultsModal
-        open={isResultsModalOpen}
-        onClose={() => { setIsResultsModalOpen(false) }}
-        results={importResults}
+        onClose={ () => { setIsResultsModalOpen(false) } }
+        open={ isResultsModalOpen }
+        results={ importResults }
       />
     </ContentLayout>
   )

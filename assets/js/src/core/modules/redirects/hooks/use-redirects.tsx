@@ -16,9 +16,7 @@ import {
   useBundleSeoRedirectAddMutation,
   useBundleSeoRedirectDeleteMutation,
   useBundleSeoRedirectUpdateByIdMutation,
-  useBundleSeoRedirectCleanupMutation,
-  useBundleSeoRedirectsExportQuery,
-  useBundleSeoRedirectsImportMutation
+  useBundleSeoRedirectCleanupMutation
 } from '../seo-api-slice-enhanced'
 import { isUndefined } from 'lodash'
 
@@ -48,16 +46,17 @@ export const useRedirects = (): UseRedirectsReturn => {
         source: redirectData?.source ?? null,
         target: redirectData?.target ?? null
       }
-      
+
       const result = await createRedirect({ bundleSeoRedirectAdd: defaultRedirect })
 
       if (!isUndefined(result.error)) {
-      trackError(new ApiError(result.error))}
+        trackError(new ApiError(result.error))
+      }
 
       if ('data' in result) {
         return { success: true, data: result.data }
       }
-    } catch {      
+    } catch {
       trackError(new GeneralError('Was not able to create Redirect'))
     }
     return { success: false }
@@ -99,7 +98,7 @@ export const useRedirects = (): UseRedirectsReturn => {
 
   const cleanupRedirects = async (): Promise<{ success: boolean }> => {
     try {
-      const result = await cleanupRedirectsMutation().unwrap()
+      await cleanupRedirectsMutation()
       return { success: true }
     } catch {
       trackError(new GeneralError('Was not able to cleanup redirects'))
@@ -116,5 +115,5 @@ export const useRedirects = (): UseRedirectsReturn => {
     updateLoading,
     cleanupRedirects,
     cleanupLoading
-    }
+  }
 }

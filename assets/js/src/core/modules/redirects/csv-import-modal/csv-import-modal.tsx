@@ -17,7 +17,6 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyle } from './csv-import-modal.styles'
 import type { UploadProps } from 'antd'
 import { GeneralError, trackError } from '@sdk/modules/app'
-import { log } from '@module-federation/runtime-core/dist/src/utils'
 
 const { Dragger } = Upload
 
@@ -28,11 +27,11 @@ interface CsvImportModalProps {
   loading?: boolean
 }
 
-export const CsvImportModal = ({ 
-  open, 
-  onCancel, 
-  onImport, 
-  loading = false 
+export const CsvImportModal = ({
+  open,
+  onCancel,
+  onImport,
+  loading = false
 }: CsvImportModalProps): React.JSX.Element => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const { styles } = useStyle()
@@ -41,14 +40,14 @@ export const CsvImportModal = ({
   useEffect(() => {
     if (open) {
       setSelectedFile(null)
-      if (fileInputRef.current) {
+      if (fileInputRef.current !== null) {
         fileInputRef.current.value = ''
       }
     }
   }, [open])
 
   const handleUpload = (): void => {
-    if (selectedFile) {
+    if (selectedFile !== null) {
       onImport(selectedFile)
     }
   }
@@ -62,7 +61,7 @@ export const CsvImportModal = ({
     if (file.type === 'text/csv' || file.type === 'application/csv' || file.name.endsWith('.csv')) {
       setSelectedFile(file)
     } else {
-      trackError( new GeneralError('File rejected - not a CSV'))
+      trackError(new GeneralError('File rejected - not a CSV'))
     }
   }
 
@@ -72,7 +71,7 @@ export const CsvImportModal = ({
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const file = event.target.files?.[0]
-    if (file) {
+    if (file !== undefined) {
       handleFileSelect(file)
     }
   }
@@ -92,7 +91,7 @@ export const CsvImportModal = ({
     beforeUpload: (file) => {
       console.log('File dropped/selected:', file)
       handleFileSelect(file as File)
-      return false 
+      return false
     },
     showUploadList: false,
     disabled: loading
@@ -100,97 +99,105 @@ export const CsvImportModal = ({
 
   return (
     <Modal
-      title={t('redirects.csv-import-modal.redirects-import')}
-      open={open}
-      onCancel={handleCancel}
       footer={
-                <ModalFooter divider justify={!selectedFile ? 'space-between': 'end'}>
-          {!selectedFile && (
-            <IconTextButton
-              icon={{ value: 'upload-import' }}
-              onClick={handleBrowseClick}
-              disabled={loading}
-            >
-              {t('redirects.browse-files')}
-            </IconTextButton>
+        <ModalFooter
+          divider
+          justify={ selectedFile !== null ? 'space-between' : 'end' }
+        >
+          {selectedFile !== null && (
+          <IconTextButton
+            disabled={ loading }
+            icon={ { value: 'upload-import' } }
+            onClick={ handleBrowseClick }
+          >
+            {t('redirects.browse-files')}
+          </IconTextButton>
           )}
-          <Button 
-            type="primary" 
-            onClick={handleUpload}
-            disabled={!selectedFile || loading}
-            loading={loading}
+          <Button
+            disabled={ selectedFile !== null || loading }
+            loading={ loading }
+            onClick={ handleUpload }
+            type="primary"
           >
             {t('redirects.upload')}
           </Button>
-             </ModalFooter>
+        </ModalFooter>
       }
+      onCancel={ handleCancel }
+      open={ open }
       size="M"
+      title={ t('redirects.csv-import-modal.redirects-import') }
     >
       <input
-        ref={fileInputRef}
-        type="file"
         accept=".csv"
-        onChange={handleInputChange}
-        style={{ display: 'none' }}
-        disabled={loading}
+        disabled={ loading }
+        onChange={ handleInputChange }
+        ref={ fileInputRef }
+        style={ { display: 'none' } }
+        type="file"
       />
-      
-      {!selectedFile ? (
-        <Dragger {...uploadProps}>
-          <Flex
-            align="center"
-            gap="mini"
-            justify="center"
-            style={{ padding: '20px' }}
-            vertical
-          >
-            <div className="icon-container">
-              <Flex
-                align="center"
-                gap="mini"
-                justify="center"
-              >
-                <Icon
-                  options={{ height: 20, width: 20 }}
-                  value="new"
-                />
-                <Icon
-                  options={{ height: 20, width: 20 }}
-                  value="drop-target"
-                />
-              </Flex>
-            </div>
-            <div className="csv-target-title">
-              {t('redirects.import-drag-drop')}
-            </div>
-          </Flex>
-        </Dragger>
-      ) : (
-        <div className={styles.uploadedFile}>
-          <Flex gap={10} align='start'>
-            <Flex>
-              <div>
-                <div className="file-name">{selectedFile.name}</div>
-                <div className="file-size">{formatFileSize(selectedFile.size)}</div>
+
+      {selectedFile === null
+        ? (
+          <Dragger { ...uploadProps }>
+            <Flex
+              align="center"
+              gap="mini"
+              justify="center"
+              style={ { padding: '20px' } }
+              vertical
+            >
+              <div className="icon-container">
+                <Flex
+                  align="center"
+                  gap="mini"
+                  justify="center"
+                >
+                  <Icon
+                    options={ { height: 20, width: 20 } }
+                    value="new"
+                  />
+                  <Icon
+                    options={ { height: 20, width: 20 } }
+                    value="drop-target"
+                  />
+                </Flex>
+              </div>
+              <div className="csv-target-title">
+                {t('redirects.import-drag-drop')}
               </div>
             </Flex>
-            {!loading && (
+          </Dragger>
+          )
+        : (
+          <div className={ styles.uploadedFile }>
+            <Flex
+              align='start'
+              gap={ 10 }
+            >
+              <Flex>
+                <div>
+                  <div className="file-name">{selectedFile.name}</div>
+                  <div className="file-size">{formatFileSize(selectedFile.size)}</div>
+                </div>
+              </Flex>
+              {!loading && (
               <IconButton
-              variant='minimal'
-              iconPosition='start'
-                icon={{ value: 'close' }}
-                type="link"
-                onClick={() => {
+                icon={ { value: 'close' } }
+                iconPosition='start'
+                onClick={ () => {
                   setSelectedFile(null)
-                  if (fileInputRef.current) {
+                  if (fileInputRef.current !== null) {
                     fileInputRef.current.value = ''
                   }
-                }}
+                } }
+                type="link"
+                variant='minimal'
               />
-            )}
-          </Flex>
-        </div>
-      )}
+              )}
+            </Flex>
+          </div>
+          )}
     </Modal>
   )
 }

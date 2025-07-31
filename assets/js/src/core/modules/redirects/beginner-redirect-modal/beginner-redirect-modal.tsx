@@ -36,73 +36,73 @@ export const BeginnerRedirectModal = ({ open, setOpen, createRedirect }: Beginne
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { data: typesData } = useBundleSeoRedirectListTypesQuery()
 
-  const typeOptions = useMemo(() => 
-    typesData?.types?.map(type => ({ label: t(type), value: type })) ?? [], 
-    [typesData, t]
+  const typeOptions = useMemo(() =>
+    typesData?.types?.map(type => ({ label: t(type), value: type })) ?? [],
+  [typesData, t]
   )
 
   const onFinish = async (values: BeginnerRedirectFormValues): Promise<void> => {
     setIsLoading(true)
-    
+
     const success = await createRedirect({
       type: values.type,
       source: values.path,
       target: values.target
     })
-    
+
     if (success) {
       setOpen(false)
       form.resetFields()
     }
-  
+
     setIsLoading(false)
   }
 
   return (
     <Modal
-      okButtonProps={{ loading: isLoading }}
-      okText={t('redirects.beginner-modal.create')}
-      onCancel={() => { setOpen(false) }}
-      onOk={() => { form.submit() }}
-      open={open}
+      cancelButtonProps={ { style: { display: 'none' } } }
+      okButtonProps={ { loading: isLoading } }
+      okText={ t('redirects.beginner-modal.create') }
+      onCancel={ () => { setOpen(false) } }
+      onOk={ () => { form.submit() } }
+      open={ open }
       size="M"
-      cancelButtonProps={{ style: { display: 'none' } }}
-      title={(
+      title={ (
         <ModalTitle iconName="new">
           {t('redirects.beginner-modal.title')}
         </ModalTitle>
-      )}
+      ) }
     >
       <Form
-        form={form}
+        form={ form }
         layout="vertical"
-        onFinish={onFinish}
+        onFinish={ onFinish }
       >
         <Form.Item
-          label={t('redirects.beginner-modal.type')}
+          label={ t('redirects.beginner-modal.type') }
           name="type"
-          rules={[{ required: true, message: t('redirects.beginner-modal.type') }]}
+          rules={ [{ required: true, message: t('redirects.beginner-modal.type') }] }
         >
           <Select
-            options={typeOptions}
-            placeholder={t('redirects.beginner-modal.type')}
+            options={ typeOptions }
+            placeholder={ t('redirects.beginner-modal.type') }
           />
         </Form.Item>
 
         <Form.Item
-          label={t('redirects.beginner-modal.path')}
+          label={ t('redirects.beginner-modal.path') }
           name="path"
-          rules={[{ required: true, message: t('redirects.beginner-modal.path') }]}
+          rules={ [{ required: true, message: t('redirects.beginner-modal.path') }] }
         >
-          <Input placeholder={t('redirects.beginner-modal.path')} />
+          <Input placeholder={ t('redirects.beginner-modal.path') } />
         </Form.Item>
 
         <Form.Item
-          label={t('redirects.beginner-modal.target')}
+          label={ t('redirects.beginner-modal.target') }
           name="target"
-          rules={[{ required: true, message: t('redirects.beginner-modal.target') }]}
+          rules={ [{ required: true, message: t('redirects.beginner-modal.target') }] }
         >
-          <Input placeholder={t('redirects.beginner-modal.target')} />
+          <Input placeholder={ t('redirects.beginner-modal.target') } />
         </Form.Item>
       </Form>
     </Modal>

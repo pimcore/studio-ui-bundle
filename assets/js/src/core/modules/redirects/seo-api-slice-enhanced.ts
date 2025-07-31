@@ -32,8 +32,8 @@ const api = baseApi.enhanceEndpoints({
     },
 
     bundleSeoRedirectsExport: {
-      query: () => ({ 
-        url: `/pimcore-studio/api/bundle/seo/redirects/export`,
+      query: () => ({
+        url: '/pimcore-studio/api/bundle/seo/redirects/export',
         responseHandler: async (response): Promise<Blob> => {
           return await response.blob()
         }
@@ -44,9 +44,9 @@ const api = baseApi.enhanceEndpoints({
       query: (args) => {
         const formData = new FormData()
         formData.append('file', args.body.file)
-        
+
         return {
-          url: `/pimcore-studio/api/bundle/seo/redirects/import`,
+          url: '/pimcore-studio/api/bundle/seo/redirects/import',
           method: 'POST',
           body: formData
         }
