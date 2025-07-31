@@ -13,26 +13,22 @@ import React from 'react'
 import { Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { createBorderTestId } from '@Pimcore/utils/test-id-generator'
 
 interface BorderTitleViewProps {
   icon: ElementIcon
   title: string
-  nodeId?: string
-  nodeName?: string
-  elementType?: string
+  dataTestId?: string
 }
 
-export const BorderTitleView = ({ icon, title, nodeId, nodeName, elementType }: BorderTitleViewProps): React.JSX.Element => {
+export const BorderTitleView = ({ icon, title, dataTestId }: BorderTitleViewProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const testId = createBorderTestId(nodeId, nodeName, elementType)
 
   return (
     <Tooltip
       placement={ 'right' }
       title={ t(title) }
     >
-      <div data-testid={ testId }>
+      <div data-testid={ dataTestId }>
         <Icon
           options={ { width: 16, height: 16 } }
           { ...icon }

@@ -17,18 +17,16 @@ import { useTranslation } from 'react-i18next'
 import { Space } from '@Pimcore/components/space/space'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { Filename } from '@Pimcore/components/filename/filename'
-import { createTabTitleTestId } from '@Pimcore/utils/test-id-generator'
 
 interface TabTitleViewProps {
   icon: ElementIcon
   title: string
   onClose?: () => void
   onConfirm?: () => void
-  elementId?: number | string
-  elementType?: string
+  dataTestId?: string
 }
 
-export const TabTitleView = ({ icon, title, onClose, onConfirm, elementId, elementType }: TabTitleViewProps): React.JSX.Element => {
+export const TabTitleView = ({ icon, title, onClose, onConfirm, dataTestId }: TabTitleViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
 
@@ -43,7 +41,7 @@ export const TabTitleView = ({ icon, title, onClose, onConfirm, elementId, eleme
   return (
     <Space
       className={ ['widget-manager-tab-title', styles.title].join(' ') }
-      data-testid={ createTabTitleTestId(title, elementId, elementType) }
+      data-testid={ dataTestId }
       onMouseDown={ (evt: MouseEvent) => {
         if (evt.button === 1) {
           triggerClose()
