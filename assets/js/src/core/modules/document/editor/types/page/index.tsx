@@ -20,8 +20,7 @@ import {
   TAB_TAGS,
   TAB_WORKFLOW
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
-import { TAB_VERSIONS } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tab-definitions'
-import { TAB_EDIT } from '../../shared-tab-manager/tab-definitions'
+import { TAB_EDIT, TAB_VERSIONS } from '../../shared-tab-manager/tab-definitions'
 
 moduleSystem.registerModule({
   onInit: () => {

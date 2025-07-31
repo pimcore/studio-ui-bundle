@@ -10,7 +10,7 @@
 
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isNil } from 'lodash'
+import { isNil, isNull } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Tag } from '@Pimcore/components/tag/tag'
 import { Text } from '@Pimcore/components/text/text'
@@ -26,7 +26,9 @@ import {
   useVersionPublishByIdMutation,
   useVersionUpdateByIdMutation
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
+import { useVersionUrl } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/versions/hooks/useVersionUrl'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { useStyles } from './version-item.style'
 
 export const VersionItem = ({ version, setDetailedVersions }: { version: Version, setDetailedVersions: any }): React.JSX.Element => {
@@ -40,6 +42,7 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
   const { styles } = useStyles()
 
   const published = version.published ?? false
+  const isDocumentType = version.ctype === elementTypes.document
   const scheduledDate = !isNil(version.scheduled)
     ? formatDateTime({
       timestamp: version.scheduled,
@@ -47,6 +50,8 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
       timeStyle: 'short'
     })
     : undefined
+
+  const { isLoading, url } = useVersionUrl({ versionId: version.id, isSkip: !isDocumentType })
 
   const handlePublishVersion = async (): Promise<void> => {
     await publishVersion({ id: version.id })
@@ -103,6 +108,15 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
             >
               {t('version.publish')}
             </IconTextButton>
+          )}
+          {isDocumentType && (
+            <IconButton
+              aria-label={ t('aria.version.delete') }
+              icon={ { value: 'open-folder' } }
+              loading={ isLoading }
+              onClick={ () => { !isNull(url) && window.open(url, '_blank') } }
+              type={ 'default' }
+            />
           )}
           <IconButton
             aria-label={ t('aria.version.delete') }
