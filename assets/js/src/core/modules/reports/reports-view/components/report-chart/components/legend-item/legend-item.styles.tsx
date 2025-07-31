@@ -13,7 +13,7 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ css, token }) => {
   return {
     legendItem: css`
-      padding: 2px ${token.paddingXS}px;
+      padding: 1px ${token.paddingXS}px;
       border: 1px solid ${token.colorBorderTertiary};
       border-radius: ${token.borderRadiusSM}px;
       cursor: pointer;
