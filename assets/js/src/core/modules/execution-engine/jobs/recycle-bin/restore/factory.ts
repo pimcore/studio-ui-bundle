@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { ElementType } from '@Pimcore/types/enums/element/element-type'
 import { type AbstractJob, JobStatus } from '../../abstact-job'
 import { getUniqueId } from '../../factory-helper'
 

@@ -16,6 +16,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { JobStatus } from '../../abstact-job'
 import { type DeleteJob } from './factory'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { useRecycleBin } from '@Pimcore/modules/recycle-bin/hooks/use-recycle-bin'
+import { refreshTreeByElementType } from '@Pimcore/components/element-tree/element-tree-slice'
 
 export interface DeleteJobProps extends JobProps {
   config: DeleteJob['config']
@@ -43,43 +46,43 @@ export const NotificationJobContainer = (props: DeleteJobProps): React.JSX.Eleme
 
   return (
     <JobView
-      failureButtonActions={ [
+      failureButtonActions={[
         {
           label: t('jobs.job.button-hide'),
           handler: () => { removeJob(id) }
         }
-      ] }
+      ]}
 
-      finishedWithErrorsButtonActions={ [
+      finishedWithErrorsButtonActions={[
         {
           label: t('jobs.job.button-hide'),
           handler: () => {
             removeJob(id)
           }
         }
-      ] }
+      ]}
 
-      successButtonActions={ [
+      successButtonActions={[
         {
           label: t('jobs.job.button-hide'),
           handler: () => {
             removeJob(id)
           }
         }
-      ] }
+      ]}
 
-      { ...props }
-      progress={ progress }
+      {...props}
+      progress={progress}
     />
   )
 
-  function openHandler (): void {
+  function openHandler(): void {
     action().then(actionJobId => {
       jobId.current = actionJobId
     }).catch(console.error)
   }
 
-  function messageHandler (event: MessageEvent): void {
+  function messageHandler(event: MessageEvent): void {
     const data: any = JSON.parse(event.data as string)
 
     if (data.jobRunId !== jobId.current) {
