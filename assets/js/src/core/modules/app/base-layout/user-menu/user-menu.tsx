@@ -95,6 +95,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
         overlayStyle={ { minWidth: 275 } }
       >
         <Avatar
+          data-testid="user-menu-avatar"
           icon={ <Icon value='user' /> }
           size={ 26 }
         />
