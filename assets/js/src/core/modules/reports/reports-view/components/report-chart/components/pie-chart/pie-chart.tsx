@@ -118,7 +118,7 @@ export const PieChart = ({ reportData, chartData }: IChartProps): React.JSX.Elem
           return (
             <LegendItem
               disabled={ isDisabled }
-              handleClick={ handleLegendItemClick }
+              handleClick={ () => { handleLegendItemClick(item.type) } }
               key={ `${index}-${item.type}` }
               label={ item.type }
               markerColor={ item.color }
