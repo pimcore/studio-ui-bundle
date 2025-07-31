@@ -75,7 +75,7 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
   const lastImageDimensionsRef = useRef<{ width: number, height: number } | null>(null)
 
   const needsContainerWidth = isNil(width) && isNil(height)
-  const containerWidth = useElementResize(needsContainerWidth ? props.containerRef ?? { current: null } : { current: null })
+  const { width: containerWidth } = useElementResize(needsContainerWidth ? props.containerRef ?? { current: null } : { current: null })
 
   const { triggerUpload } = useUploadModal({})
   const {
