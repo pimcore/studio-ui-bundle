@@ -12,27 +12,18 @@ import { orange, purple, blue, red, lime, cyan, magenta, geekblue, green, yellow
 import { isUndefined } from 'lodash'
 
 const PALETTES = [
-  magenta, purple, geekblue, cyan, blue,
+  purple, magenta, geekblue, cyan, blue,
   green, yellow, lime, gold, volcano,
   orange, red
 ]
+const TONES_ORDER = [4, 6, 8, 2, 5, 3, 7, 1, 9, 0]
 
 export const generateColorMap = (): string[] => {
   const result: string[] = []
 
   const palettes = Object.values(PALETTES)
 
-  const maxIndex = Math.max(...palettes.map(p => p.length))
-
-  for (let i = 4; i < maxIndex; i++) {
-    for (const palette of palettes) {
-      if (!isUndefined(palette[i])) {
-        result.push(palette[i])
-      }
-    }
-  }
-
-  for (let i = 0; i <= 3; i++) {
+  for (const i of TONES_ORDER) {
     for (const palette of palettes) {
       if (!isUndefined(palette[i])) {
         result.push(palette[i])
