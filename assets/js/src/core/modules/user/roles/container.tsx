@@ -44,6 +44,7 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
       key: item.id,
       selectable: item.type === 'role',
       allowDrop: item.type !== 'role',
+      allowDrag: item.type === 'role',
       icon: item.type === 'role' ? <Icon value={ 'user' } /> : <Icon value={ 'folder' } />,
       actions: item.type === 'role'
         ? [
