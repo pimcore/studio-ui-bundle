@@ -10,13 +10,20 @@
 
 import type { ElementType } from '@Pimcore/types/enums/element/element-type'
 
-export const getTypeByActionType = (actionType?: string): ElementType => {
+export enum ReportActionType {
+  OPEN_OBJECT = 'openObject',
+  OPEN_DOCUMENT = 'openDocument',
+  OPEN_ASSET = 'openAsset',
+  OPEN_URL = 'openUrl'
+}
+
+export const getTypeByActionType = (actionType?: ReportActionType): ElementType => {
   switch (actionType) {
-    case 'openObject':
+    case ReportActionType.OPEN_OBJECT:
       return 'data-object'
-    case 'openDocument':
+    case ReportActionType.OPEN_DOCUMENT:
       return 'document'
-    case 'openAsset':
+    case ReportActionType.OPEN_ASSET:
       return 'asset'
 
     default:

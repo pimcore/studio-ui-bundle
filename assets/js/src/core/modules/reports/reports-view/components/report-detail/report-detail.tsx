@@ -24,7 +24,8 @@ import { useColumnsContext } from '@Pimcore/components/grid/contexts/columns-con
 import { type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
-import { getTypeByActionType } from '@Pimcore/modules/reports/reports-view/helpers'
+import { getTypeByActionType, ReportActionType } from '@Pimcore/modules/reports/reports-view/helpers'
+import { currentDomain } from '@Pimcore/app/config/app-config'
 
 interface IReportDetailProps {
   currentReport: string | null
@@ -59,10 +60,14 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
   const { openElement } = useElementHelper()
   const { t } = useTranslation()
 
-  const handleElementOpen = ({ id, actionType }: { id: number, actionType?: string }): void => {
-    const type = getTypeByActionType(actionType)
+  const handleElementOpen = ({ id, actionType }: { id: number, actionType?: ReportActionType }): void => {
+    if (actionType === ReportActionType.OPEN_URL) {
+      window.open(`${currentDomain}/pimcore-studio/${id}`, '_blank')
+    } else {
+      const type = getTypeByActionType(actionType)
 
-    void openElement({ id: Number(id), type })
+      void openElement({ id: Number(id), type })
+    }
   }
 
   useEffect(() => {
@@ -98,7 +103,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
                     >
                       <IconButton
                         icon={ { value: 'open-folder' } }
-                        onClick={ () => { handleElementOpen({ id: Number(id), actionType: item.action }) } }
+                        onClick={ () => { handleElementOpen({ id: Number(id), actionType: item.action as ReportActionType | undefined }) } }
                         type="link"
                       />
                     </Flex>
