@@ -34,7 +34,7 @@ export const CsvImportResultsModal = ({
     return <></>
   }
 
-  const hasErrors = results.errored > 0 && results.errors.length > 0
+  const hasErrors = results.errored > 0 && results.errors && typeof results.errors === 'object' && Object.keys(results.errors).length > 0
 
   return (
     <Modal
@@ -42,7 +42,7 @@ export const CsvImportResultsModal = ({
       open={open}
       onCancel={onClose}
       footer={
-        <ModalFooter divider>
+        <ModalFooter divider justify='space-between'>
         <Button type="primary" onClick={onClose}>
           {t('redirects.csv-import-results.close')}
         </Button>
@@ -77,20 +77,16 @@ export const CsvImportResultsModal = ({
       {hasErrors && (
         <div className={styles.errorSection}>
           <div className="error-title">
-            <Icon 
-              options={{ height: 16, width: 16 }}
-              value="warning"
-            />
-            {t('redirects.csv-import-results.errors-details')}
+            {t('redirects.csv-import-results.error')}
           </div>
           <div className="error-list">
-            {results.errors.map((error: any, index: number) => (
-              <div key={index} className="error-item">
+            {Object.entries(results.errors).map(([lineNumber, errorMessage]) => (
+              <div key={lineNumber} className="error-item">
                 <span className="error-line">
-                  {t('redirects.csv-import-results.line', { line: index + 1 })}:
+                  {t('redirects.csv-import-results.line', { line: lineNumber })}:
                 </span>
                 <span className="error-message">
-                  {typeof error === 'object' ? JSON.stringify(error) : String(error)}
+                  {String(errorMessage)}
                 </span>
               </div>
             ))}

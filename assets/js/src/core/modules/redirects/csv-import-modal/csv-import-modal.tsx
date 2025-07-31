@@ -8,14 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
-import { Modal, IconTextButton, IconButton } from '@sdk/components'
+import React, { useState, useRef, useEffect } from 'react'
+import { Modal, IconTextButton, IconButton, ModalFooter } from '@sdk/components'
 import { Button, Upload } from 'antd'
 import { t } from 'i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyle } from './csv-import-modal.styles'
-import type { UploadFile, UploadProps } from 'antd'
+import type { UploadProps } from 'antd'
 
 const { Dragger } = Upload
 
@@ -33,21 +33,46 @@ export const CsvImportModal = ({
   loading = false 
 }: CsvImportModalProps): React.JSX.Element => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [fileList, setFileList] = useState<UploadFile[]>([])
   const { styles } = useStyle()
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // Clear selected file when modal opens
+  useEffect(() => {
+    if (open) {
+      setSelectedFile(null)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+    }
+  }, [open])
 
   const handleUpload = (): void => {
     if (selectedFile) {
       onImport(selectedFile)
-      setSelectedFile(null)
-      setFileList([])
+      // Don't clear selectedFile here - let parent component manage state
     }
   }
 
   const handleCancel = (): void => {
     setSelectedFile(null)
-    setFileList([])
     onCancel()
+  }
+
+  const handleFileSelect = (file: File): void => {
+    if (file.type === 'text/csv' || file.name.endsWith('.csv')) {
+      setSelectedFile(file)
+    }
+  }
+
+  const handleBrowseClick = (): void => {
+    fileInputRef.current?.click()
+  }
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const file = event.target.files?.[0]
+    if (file) {
+      handleFileSelect(file)
+    }
   }
 
   const formatFileSize = (bytes: number): string => {
@@ -62,14 +87,11 @@ export const CsvImportModal = ({
     name: 'file',
     multiple: false,
     accept: '.csv',
-    fileList: [], 
     beforeUpload: (file) => {
-      if (file.type === 'text/csv' || file.name.endsWith('.csv')) {
-        setSelectedFile(file)
-      }
+      handleFileSelect(file)
       return false 
     },
-    showUploadList: false, 
+    showUploadList: false,
     disabled: loading
   }
 
@@ -79,17 +101,16 @@ export const CsvImportModal = ({
       open={open}
       onCancel={handleCancel}
       footer={
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <IconTextButton
-            icon={{ value: 'upload-import' }}
-            onClick={() => {
-              const uploadElement = document.querySelector('.ant-upload input[type="file"]') as HTMLInputElement
-              uploadElement?.click()
-            }}
-            disabled={loading}
-          >
-            {t('redirects.browse-files')}
-          </IconTextButton>
+                <ModalFooter divider>
+          {!selectedFile && (
+            <IconTextButton
+              icon={{ value: 'upload-import' }}
+              onClick={handleBrowseClick}
+              disabled={loading}
+            >
+              {t('redirects.browse-files')}
+            </IconTextButton>
+          )}
           <Button 
             type="primary" 
             onClick={handleUpload}
@@ -98,10 +119,19 @@ export const CsvImportModal = ({
           >
             {t('redirects.upload')}
           </Button>
-        </div>
+             </ModalFooter>
       }
       size="M"
     >
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".csv"
+        onChange={handleInputChange}
+        style={{ display: 'none' }}
+        disabled={loading}
+      />
+      
       {!selectedFile ? (
         <Dragger {...uploadProps}>
           <Flex
@@ -141,13 +171,18 @@ export const CsvImportModal = ({
                 <div className="file-size">{formatFileSize(selectedFile.size)}</div>
               </div>
             </div>
-            <IconButton
-              icon={{ value: 'close' }}
-              type="text"
-              onClick={() => {
-                setSelectedFile(null)
-              }}
-            />
+            {!loading && (
+              <IconButton
+                icon={{ value: 'close' }}
+                type="text"
+                onClick={() => {
+                  setSelectedFile(null)
+                  if (fileInputRef.current) {
+                    fileInputRef.current.value = ''
+                  }
+                }}
+              />
+            )}
           </div>
         </div>
       )}

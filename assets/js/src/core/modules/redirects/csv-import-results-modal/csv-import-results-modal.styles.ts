@@ -39,7 +39,7 @@ export const useStyle = createStyles(({ token, css }) => {
       .error-title {
         font-weight: ${token.fontWeightStrong};
         color: ${token.colorError};
-        margin-bottom: ${token.marginMD}px;
+        margin-bottom: ${token.marginXS}px;
         display: flex;
         align-items: center;
         gap: ${token.marginXS}px;
@@ -49,7 +49,7 @@ export const useStyle = createStyles(({ token, css }) => {
         background: ${token.colorErrorBg};
         border: 1px solid ${token.colorErrorBorder};
         border-radius: ${token.borderRadius}px;
-        padding: ${token.paddingMD}px;
+        padding: ${token.paddingXS}px;
         max-height: 200px;
         overflow-y: auto;
         
