@@ -123,6 +123,28 @@ export const createBorderTestId = (nodeId?: string, nodeName?: string, elementTy
 }
 
 /**
+ * Creates a test ID for element trees with underscore to dash replacement.
+ * Falls back to 'element-tree' when treeId is empty.
+ *
+ * @param treeId - The tree identifier (may contain underscores)
+ * @returns Formatted test ID string
+ *
+ * @example
+ * createTreeTestId('data_object')
+ * // Returns: 'element-tree-data-object'
+ *
+ * createTreeTestId('')
+ * // Returns: 'element-tree'
+ */
+export const createTreeTestId = (treeId: string): string => {
+  if (treeId != null && treeId !== '') {
+    const sanitizedTreeId = treeId.replace(/_/g, '-')
+    return buildTestId(['element-tree', sanitizedTreeId])
+  }
+  return 'element-tree'
+}
+
+/**
  * Creates a test ID for tab titles with element information when available.
  * Prioritizes element type and ID for specificity, falls back to title.
  *
