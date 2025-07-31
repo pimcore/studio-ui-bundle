@@ -295,6 +295,7 @@ export const Grid = ({
           <div className='ant-table-content'>
             <table
               className={ cn({ withoutHeader: hideColumnHeaders }) }
+              data-testid={ props.dataTestId }
               ref={ tableElement }
               style={ { width: tableAutoWidth ? '100%' : calculateTableWidth(), minWidth: table.getCenterTotalSize() } }
             >

@@ -183,6 +183,7 @@ import removeVideoThumbnail from '@Pimcore/assets/icons/remove-video-thumbnail.i
 import rename from '@Pimcore/assets/icons/rename.inline.svg?react'
 import requiredBy from '@Pimcore/assets/icons/required-by.inline.svg?react'
 import requires from '@Pimcore/assets/icons/requires.inline.svg?react'
+import restore from '@Pimcore/assets/icons/restore.inline.svg?react'
 import reverse from '@Pimcore/assets/icons/reverse.inline.svg?react'
 import run from '@Pimcore/assets/icons/run.inline.svg?react'
 import save from '@Pimcore/assets/icons/save.inline.svg?react'
@@ -903,6 +904,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'requires',
       component: requires
+    })
+    iconLibrary.register({
+      name: 'restore',
+      component: restore
     })
     iconLibrary.register({
       name: 'reverse',

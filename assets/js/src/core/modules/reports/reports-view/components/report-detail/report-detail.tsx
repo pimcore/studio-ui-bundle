@@ -90,7 +90,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
   return (
     <Flex
-      gap="large"
+      gap="small"
       vertical
     >
       {!isUndefined(drillDownFields) && (
@@ -107,20 +107,25 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
           ))}
         </Flex>
       )}
-      {isShowChart && (
-        <ReportChart
-          chartData={ chartData }
-          reportData={ reportDetailData }
-        />
-      )}
-      {!isUndefined(chartData) && (
-        <Grid
-          autoWidth
-          columns={ columns }
-          data={ chartData }
-          isLoading={ isLoading }
-        />
-      )}
+      <Flex
+        gap="extra-small"
+        vertical
+      >
+        {isShowChart && (
+          <ReportChart
+            chartData={ chartData }
+            reportData={ reportDetailData }
+          />
+        )}
+        {!isUndefined(chartData) && (
+          <Grid
+            autoWidth
+            columns={ columns }
+            data={ chartData }
+            isLoading={ isLoading }
+          />
+        )}
+      </Flex>
     </Flex>
   )
 }

@@ -18,6 +18,7 @@ import { useStyles } from './tree-element.styles'
 export interface TreeDataItem extends TreeDataNode {
   actions?: Array<{ key: string, icon: string }>
   allowDrop?: boolean
+  'data-testid'?: string
 }
 
 interface ITreeElementProps extends TreeProps {

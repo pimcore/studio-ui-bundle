@@ -17,9 +17,15 @@ export const useStyles = createStyles(({ token, css }) => {
       max-width: 100%;
       text-overflow: ellipsis;
       overflow: hidden;
+
+      &.ant-tag {
+        cursor: default;
+      }
     `,
     tagClickable: css`
-      cursor: pointer;
+      &.ant-tag {
+        cursor: pointer;
+      }
     `,
     tagDisabled: css`
       position: relative;
