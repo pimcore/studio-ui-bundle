@@ -43,7 +43,7 @@ interface DocumentHotspotImagePreviewProps {
   imgAttributes?: Record<string, string>
   focalPointContextMenuItem?: boolean
   onImageResize?: (dimensions: { width: number, height: number }) => void
-  lastImageDimensions?: { width: number | string, height: number | string } | null
+  lastImageDimensions?: { width: number, height: number } | null
 }
 
 export const DocumentHotspotImagePreview = ({ assetId, height, width, containerWidth, value, onChange, setMarkerModalOpen, setCropModalOpen, handleSearch, handleLocateInTree, handleUpload, emptyValue, disabled, disableInlineUpload, imgAttributes, focalPointContextMenuItem, onImageResize, lastImageDimensions }: DocumentHotspotImagePreviewProps): React.JSX.Element => {

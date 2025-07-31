@@ -27,8 +27,8 @@ import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 import { useUploadModal } from '@Pimcore/components/modal-upload/hooks/use-upload-modal'
 import { InlineUpload } from '@Pimcore/components/inline-upload'
 
-// Constants
-const MIN_IMAGE_DIMENSION = 100
+const MIN_IMAGE_WIDTH = 150
+const MIN_IMAGE_HEIGHT = 100
 const DEFAULT_HEIGHT = 200
 
 export interface ImageEditableValue {
@@ -73,20 +73,18 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
   const width = props.config?.width
   const height = props.config?.height
 
-  const lastImageDimensionsRef = useRef<{ width: number | string, height: number | string } | null>(null)
+  const lastImageDimensionsRef = useRef<{ width: number, height: number } | null>(null)
 
   const needsContainerWidth = isNil(width) && isNil(height)
   const containerWidth = useElementResize(needsContainerWidth ? props.containerRef ?? { current: null } : { current: null })
 
-  // Upload modal hook for inline upload
   const { triggerUpload } = useUploadModal({})
 
   const handleImageResize = useCallback((dimensions: { width: number, height: number }) => {
-    if (dimensions.width >= MIN_IMAGE_DIMENSION && dimensions.height >= MIN_IMAGE_DIMENSION) {
-      lastImageDimensionsRef.current = { width: dimensions.width, height: dimensions.height }
-    } else {
-      lastImageDimensionsRef.current = { width: MIN_IMAGE_DIMENSION, height: MIN_IMAGE_DIMENSION }
-    }
+    const minWidth = Math.max(dimensions.width, MIN_IMAGE_WIDTH)
+    const minHeight = Math.max(dimensions.height, MIN_IMAGE_HEIGHT)
+    console.log(`Image resized to: ${minWidth}x${minHeight}`)
+    lastImageDimensionsRef.current = { width: minWidth, height: minHeight }
   }, [])
 
   const { open: openElementSelector } = useElementSelector({
@@ -255,6 +253,9 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
   }, [replaceImage])
 
   const renderDroppableContent = useCallback((children: React.ReactNode) => {
+    // Determine the shape based on whether an image is selected
+    const droppableShape = !isNil(imageValue?.id) ? "angular" : "round"
+    
     // Don't enable file system drag and drop if inline upload is disabled
     if (props.config?.disableInlineUpload === true || props.disabled === true) {
       return (
@@ -265,6 +266,7 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
             replaceImage(info.data.id as number)
           }}
           variant="outline"
+          shape={droppableShape}
         >
           {children}
         </Droppable>
@@ -285,12 +287,13 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
             replaceImage(info.data.id as number)
           }}
           variant="outline"
+          shape={droppableShape}
         >
           {children}
         </Droppable>
       </InlineUpload>
     )
-  }, [props.config?.disableInlineUpload, props.config?.uploadPath, props.disabled, handleFileSystemUpload, replaceImage])
+  }, [props.config?.disableInlineUpload, props.config?.uploadPath, props.disabled, handleFileSystemUpload, replaceImage, imageValue?.id])
 
   return renderDroppableContent(
     !isNil(imageValue?.id)

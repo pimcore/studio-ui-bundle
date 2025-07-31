@@ -15,6 +15,8 @@ export const useStyle = createStyles(({ token, css }) => {
     imageEditablePreviewContainer: css`
       position: relative;
       display: inline-flex; /* Use inline-flex instead of inline-block */
+      align-items: center;
+      justify-content: center;
       max-width: 100%;
       
       .ant-image {
@@ -36,6 +38,12 @@ export const useStyle = createStyles(({ token, css }) => {
           border-radius: ${token.borderRadius}px;
         }
       }
+    `,
+
+    imageEditablePreviewContainerMinSize: css`
+      min-width: 150px;
+      min-height: 100px;
+      background-color: white;
     `,
 
     imageComponent: css`
