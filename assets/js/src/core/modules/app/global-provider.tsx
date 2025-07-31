@@ -26,7 +26,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps): React.JSX.Ele
         <Provider store={ store }>
           <ElementSelectorProvider>
             {children}
-          </ElementSelectorProvider>          
+          </ElementSelectorProvider>
         </Provider>
       </ThemeProvider>
     </ContainerProvider>
