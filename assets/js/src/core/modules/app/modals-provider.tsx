@@ -9,7 +9,6 @@
  */
 
 import React from 'react'
-import { ElementSelectorProvider } from '@sdk/modules/element'
 import { UploadModalProvider } from '@Pimcore/components/modal-upload/provider/upload-modal-provider/upload-modal-provider'
 import { LinkModalProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/provider/link-modal-provider'
 import { CropModalProvider } from '../element/components/crop-modal/provider/crop-modal-provider'
@@ -25,16 +24,14 @@ export interface ModalsProviderProps {
  */
 export const ModalsProvider = ({ children }: ModalsProviderProps): React.JSX.Element => {
   return (
-    <ElementSelectorProvider>
-      <UploadModalProvider>
-        <LinkModalProvider>
-          <CropModalProvider>
-            <HotspotMarkersModalProvider>
-              {children}
-            </HotspotMarkersModalProvider>
-          </CropModalProvider>
-        </LinkModalProvider>
-      </UploadModalProvider>
-    </ElementSelectorProvider>
+    <UploadModalProvider>
+      <LinkModalProvider>
+        <CropModalProvider>
+          <HotspotMarkersModalProvider>
+            {children}
+          </HotspotMarkersModalProvider>
+        </CropModalProvider>
+      </LinkModalProvider>
+    </UploadModalProvider>
   )
 }
