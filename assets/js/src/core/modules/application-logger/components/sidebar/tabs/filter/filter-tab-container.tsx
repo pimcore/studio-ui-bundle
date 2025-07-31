@@ -9,7 +9,7 @@
  */
 
 import { Button, Content, ContentLayout, DatePicker, Form, IconTextButton, Input, Space, Title, Toolbar } from '@sdk/components'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ComponentSelect } from './components/component-select/component-select'
 import { PrioritySelect } from './components/priority-select/priority-select'
@@ -32,7 +32,8 @@ export const FilterTabContainer = (): React.JSX.Element => {
     pid,
     setPid,
     resetFilters,
-    updateFilters
+    updateFilters,
+    isLoading
   } = useFilter()
 
   const handleResetFilters = (): void => {
@@ -45,16 +46,19 @@ export const FilterTabContainer = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme='secondary'>
           <IconTextButton
-            icon={ { value: 'close' } }
-            onClick={ handleResetFilters }
+            icon={{ value: 'close' }}
+            onClick={handleResetFilters}
             type='link'
+            disabled={isLoading}
           >
             {t('sidebar.clear-all-filters')}
           </IconTextButton>
 
           <Button
-            onClick={ updateFilters }
+            onClick={updateFilters}
             type='primary'
+            disabled={isLoading}
+            loading={isLoading}
           >
             {t('button.apply')}
           </Button>
@@ -63,104 +67,104 @@ export const FilterTabContainer = (): React.JSX.Element => {
     >
       <Content padded>
         <Form
-          form={ form }
+          form={form}
           layout="vertical"
         >
           <Space
             direction='vertical'
             size="none"
-            style={ { width: '100%' } }
+            style={{ width: '100%' }}
           >
             <Title>{t('application-logger.sidebar.search-parameter')}</Title>
 
             <Form.Item
-              label={ t('application-logger.filter.date-from') }
+              label={t('application-logger.filter.date-from')}
               name="dateFrom"
             >
               <DatePicker
                 className="w-full"
-                format={ DATE_FORMAT }
-                onChange={ (value: string) => {
+                format={DATE_FORMAT}
+                onChange={(value: string) => {
                   setDateFrom(value)
-                } }
+                }}
                 outputType="dateString"
-                showTime={ { format: 'HH:mm' } }
-                value={ dateFrom }
+                showTime={{ format: 'HH:mm' }}
+                value={dateFrom}
               />
             </Form.Item>
 
             <Form.Item
-              label={ t('application-logger.filter.date-to') }
+              label={t('application-logger.filter.date-to')}
               name="dateTo"
             >
               <DatePicker
                 className="w-full"
-                format={ DATE_FORMAT }
-                onChange={ (value: string) => {
+                format={DATE_FORMAT}
+                onChange={(value: string) => {
                   setDateTo(value)
-                } }
+                }}
                 outputType="dateString"
-                showTime={ { format: 'HH:mm' } }
-                value={ dateTo }
+                showTime={{ format: 'HH:mm' }}
+                value={dateTo}
               />
             </Form.Item>
 
             <Form.Item
-              label={ t('application-logger.filter.priority') }
+              label={t('application-logger.filter.priority')}
               name="priority"
             >
               <PrioritySelect />
             </Form.Item>
 
             <Form.Item
-              label={ t('application-logger.filter.component') }
+              label={t('application-logger.filter.component')}
               name="component"
             >
               <ComponentSelect />
             </Form.Item>
 
             <Form.Item
-              label={ t('application-logger.filter.related-object-id') }
+              label={t('application-logger.filter.related-object-id')}
               name="relatedObjectId"
             >
               <Input
                 min="0"
-                onChange={ (e) => {
+                onChange={(e) => {
                   const value = e.target.value
                   setRelatedObjectId(value !== '' ? parseInt(value) : null)
-                } }
+                }}
                 step="1"
                 type="number"
-                value={ relatedObjectId ?? undefined }
+                value={relatedObjectId ?? undefined}
               />
             </Form.Item>
 
             <Form.Item
-              label={ t('application-logger.filter.message') }
+              label={t('application-logger.filter.message')}
               name="message"
             >
               <Input
-                onChange={ (e) => {
+                onChange={(e) => {
                   const value = e.target.value
                   setMessage(value ?? null)
-                } }
-                value={ message ?? undefined }
+                }}
+                value={message ?? undefined}
               />
             </Form.Item>
 
             <Form.Item
-              label={ t('application-logger.filter.pid') }
+              label={t('application-logger.filter.pid')}
               name="pid"
             >
               <Input
                 min="0"
-                onChange={ (e) => {
+                onChange={(e) => {
                   const value = e.target.value
                   setPid(value !== '' ? parseInt(value) : null)
-                } }
+                }}
                 step="1"
                 type="number"
-                value={ pid ?? undefined }
+                value={pid ?? undefined}
               />
             </Form.Item>
           </Space>
