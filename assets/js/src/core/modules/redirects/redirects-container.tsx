@@ -9,15 +9,10 @@
  */
 
 import React, { useEffect, useMemo, useState } from 'react'
-import { Title } from '@Pimcore/components/title/title'
-import { t } from 'i18next'
-import { Flex } from '@Pimcore/components/flex/flex'
-import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Table } from './table/table'
-import { Box, IconTextButton, SearchInput, Pagination } from '@sdk/components'
+import { Box } from '@sdk/components'
 import { api, useBundleSeoRedirectsGetCollectionQuery, useBundleSeoRedirectsImportMutation } from './seo-api-slice-enhanced'
 import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
@@ -29,6 +24,8 @@ import { BeginnerRedirectModal } from './beginner-redirect-modal/beginner-redire
 import { CsvImportModal } from './csv-import-modal/csv-import-modal'
 import { CsvImportResultsModal } from './csv-import-results-modal/csv-import-results-modal'
 import { type BundleSeoRedirectsImportStatistics } from './seo-api-slice.gen'
+import { RedirectsToolbar } from './components/redirects-toolbar/redirects-toolbar'
+import { RedirectsTopBar } from './components/redirects-top-bar/redirects-top-bar'
 
 export const RedirectsContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
@@ -186,84 +183,36 @@ export const RedirectsContainer = (): React.JSX.Element => {
   return (
     <ContentLayout
       renderToolbar={
-        <Toolbar theme="secondary">
-          <Flex
-            justify='space-between'
-            style={ { width: '100%' } }
-          >
-            <div><IconTextButton
-              disabled={ redirectRows.length < 1 || cleanupLoading }
-              icon={ { value: 'trash' } }
-              loading={ cleanupLoading }
-              onClick={ handleCleanup }
-              type={ 'link' }
-                 >{t('redirects.clean-up')}</IconTextButton>
-              <IconTextButton
-                disabled={ redirectsFetching || exportLoading }
-                icon={ { value: 'download' } }
-                loading={ exportLoading }
-                onClick={ handleExport }
-                type={ 'link' }
-              >{t('redirects.csv-export')}</IconTextButton>
-              <IconTextButton
-                disabled={ redirectsFetching || importLoading }
-                icon={ { value: 'import-csv' } }
-                loading={ importLoading }
-                onClick={ () => { setIsImportModalOpen(true) } }
-                type={ 'link' }
-              >{t('redirects.csv-import')}</IconTextButton>
-            </div>
-            <IconButton
-              disabled={ redirectsFetching }
-              icon={ { value: 'refresh' } }
-              onClick={ reload }
-            />
-          </Flex>
-          <Pagination
-            current={ currentPage }
-            onChange={ (page, pageSize) => {
-              setCurrentPage(page)
-              setPageSize(pageSize)
-            } }
-            showSizeChanger
-            showTotal={ (total) => t('pagination.show-total', { total }) }
-            total={ data?.totalItems ?? 0 }
-          />
-        </Toolbar> }
-      renderTopBar={
-        <Toolbar
-          justify='space-between'
-          margin={ {
-            x: 'mini',
-            y: 'none'
+        <RedirectsToolbar
+          cleanupLoading={ cleanupLoading }
+          currentPage={ currentPage }
+          exportLoading={ exportLoading }
+          importLoading={ importLoading }
+          onCleanup={ handleCleanup }
+          onExport={ handleExport }
+          onImport={ () => { setIsImportModalOpen(true) } }
+          onPageChange={ (page, pageSize) => {
+            setCurrentPage(page)
+            setPageSize(pageSize)
           } }
-          theme='secondary'
-        >
-          <Flex gap={ 'small' }>
-            <Title>{t('widget.redirects')}</Title>
-            <IconTextButton
-              icon={ { value: 'new' } }
-              onClick={ () => { setIsBeginnerModalOpen(true) } }
-            >{t('redirects.beginner')}</IconTextButton>
-            <IconTextButton
-              disabled={ redirectsLoading || createLoading }
-              icon={ { value: 'new' } }
-              loading={ createLoading }
-              onClick={ async () => {
-                await handleCreateRedirect()
-              } }
-            >
-              {t('redirects.expert')}</IconTextButton>
-          </Flex>
-          <SearchInput
-            loading={ redirectsFetching }
-            onSearch={ handleSearch }
-            placeholder="Search"
-            withPrefix={ false }
-            withoutAddon={ false }
-          />
-        </Toolbar>
-        }
+          onRefresh={ reload }
+          redirectRowsLength={ redirectRows.length }
+          redirectsFetching={ redirectsFetching }
+          totalItems={ data?.totalItems ?? 0 }
+        />
+      }
+      renderTopBar={
+        <RedirectsTopBar
+          createLoading={ createLoading }
+          onBeginnerClick={ () => { setIsBeginnerModalOpen(true) } }
+          onExpertClick={ async () => {
+            await handleCreateRedirect()
+          } }
+          onSearch={ handleSearch }
+          redirectsFetching={ redirectsFetching }
+          redirectsLoading={ redirectsLoading }
+        />
+      }
     >
       <Content
         loading={ redirectsLoading || redirectsFetching }

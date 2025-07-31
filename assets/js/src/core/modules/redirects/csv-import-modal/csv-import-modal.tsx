@@ -102,9 +102,9 @@ export const CsvImportModal = ({
       footer={
         <ModalFooter
           divider
-          justify={ selectedFile !== null ? 'space-between' : 'end' }
+          justify={ selectedFile === null ? 'space-between' : 'end' }
         >
-          {selectedFile !== null && (
+          {selectedFile === null && (
           <IconTextButton
             disabled={ loading }
             icon={ { value: 'upload-import' } }
@@ -114,7 +114,7 @@ export const CsvImportModal = ({
           </IconTextButton>
           )}
           <Button
-            disabled={ selectedFile !== null || loading }
+            disabled={ selectedFile === null || loading }
             loading={ loading }
             onClick={ handleUpload }
             type="primary"
