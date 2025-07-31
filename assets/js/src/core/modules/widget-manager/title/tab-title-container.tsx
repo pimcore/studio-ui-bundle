@@ -45,17 +45,18 @@ export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): R
 
   // Type-safe config extraction
   const nodeId = typeof config.id === 'string' || typeof config.id === 'number' ? String(config.id) : undefined
-  const elementType = typeof config.elementType === 'string' ? config.elementType : undefined
-  const nodeName = typeof node.getName() === 'string' ? node.getName() : undefined
+  const elementType = typeof config.elementType === 'string' ? config.elementType as string : undefined
+  const rawNodeName = node.getName()
+  const nodeName = typeof rawNodeName === 'string' ? rawNodeName : undefined
 
   if (isBorderNode) {
     const dataTestId = createBorderTestId(nodeId, nodeName, elementType)
-    
+
     return (
       <BorderTitleView
         dataTestId={ dataTestId }
         icon={ icon }
-        title={ t(`${node.getName()}`) }
+        title={ t(`${nodeName}`) }
       />
     )
   }
