@@ -21,7 +21,7 @@ import { type DropdownProps } from '../dropdown/dropdown'
 import { Text } from '@sdk/components'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { isNil } from 'lodash'
-import useElementResizeDimensions from '@Pimcore/utils/hooks/use-element-resize-dimensions'
+import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 
 interface AssetTargetProps {
   onRemove?: () => void
@@ -52,7 +52,7 @@ export const AssetTarget = ({
   const { styles } = useStyle()
   const { t } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
-  const currentDimensions = useElementResizeDimensions(containerRef)
+  const currentDimensions = useElementResize(containerRef)
 
   useEffect(() => {
     if (currentDimensions.width > 0 && currentDimensions.height > 0 && onResize !== undefined) {
