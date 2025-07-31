@@ -11,6 +11,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { isNil, isUndefined } from 'lodash'
 import { type AccessorKeyColumnDef, createColumnHelper } from '@tanstack/react-table'
+import { useTranslation } from 'react-i18next'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { ReportChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/report-chart'
 import { Content } from '@Pimcore/components/content/content'
@@ -21,6 +22,9 @@ import { FilterDrillDown } from '@Pimcore/modules/reports/reports-view/types'
 import { DrillDownSelect } from '@Pimcore/modules/reports/reports-view/components/report-detail/components/drill-down-select/drill-down-select'
 import { useColumnsContext } from '@Pimcore/components/grid/contexts/columns-context'
 import { type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
+import { getTypeByActionType } from '@Pimcore/modules/reports/reports-view/helpers'
 
 interface IReportDetailProps {
   currentReport: string | null
@@ -52,21 +56,64 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
   }, [isLoading])
 
   const { columns, setColumns, setInitialColumns } = useColumnsContext()
+  const { openElement } = useElementHelper()
+  const { t } = useTranslation()
+
+  const handleElementOpen = ({ id, actionType }: { id: number, actionType?: string }): void => {
+    const type = getTypeByActionType(actionType)
+
+    void openElement({ id: Number(id), type })
+  }
 
   useEffect(() => {
-    const getColumns = (): Array<AccessorKeyColumnDef<unknown, never>> | undefined => (
-      reportDetailData?.columnConfigurations?.map((item, index) => {
+    const getColumns = (): Array<AccessorKeyColumnDef<unknown, never>> | undefined => {
+      const list: Array<AccessorKeyColumnDef<unknown, never>> = []
+
+      reportDetailData?.columnConfigurations?.forEach((item, index) => {
         const isShowColumn = item.display === true && item.filterDrilldown !== FilterDrillDown.ONLY_FILTER
 
         if (isShowColumn) {
-          return columnHelper.accessor(item?.name ?? `id-${index}`, {
-            header: !isEmptyValue(item.label) ? item.label : item.name
-          })
+          const columnId = item?.name ?? `id-${index}`
+
+          list.push(
+            columnHelper.accessor(columnId, {
+              header: !isEmptyValue(item.label) ? item.label : item.name
+            })
+          )
+
+          if (!isEmptyValue(item.action)) {
+            list.push(
+              columnHelper.accessor(`${columnId}-action`, {
+                header: t('actions.open'),
+                enableSorting: false,
+                size: 50,
+                cell: (info) => {
+                  const rowData = info.row.original as object
+                  const id = rowData[columnId]
+
+                  return (
+                    <Flex
+                      align='center'
+                      justify='center'
+                    >
+                      <IconButton
+                        icon={ { value: 'open-folder' } }
+                        onClick={ () => { handleElementOpen({ id: Number(id), actionType: item.action }) } }
+                        type="link"
+                      />
+                    </Flex>
+                  )
+                }
+              })
+            )
+          }
         }
 
         return undefined
-      }).filter((item => !isUndefined(item)))
-    )
+      })
+
+      return list.filter(item => !isUndefined(item))
+    }
 
     setColumns(getColumns() ?? [])
     setInitialColumns(getColumns() ?? [])
