@@ -46,43 +46,43 @@ export const NotificationJobContainer = (props: RestoreJobProps): React.JSX.Elem
 
   return (
     <JobView
-      failureButtonActions={[
+      failureButtonActions={ [
         {
           label: t('jobs.job.button-hide'),
           handler: () => { removeJob(id) }
         }
-      ]}
+      ] }
 
-      finishedWithErrorsButtonActions={[
+      finishedWithErrorsButtonActions={ [
         {
           label: t('jobs.job.button-hide'),
           handler: () => {
             removeJob(id)
           }
         }
-      ]}
+      ] }
 
-      successButtonActions={[
+      successButtonActions={ [
         {
           label: t('jobs.job.button-hide'),
           handler: () => {
             removeJob(id)
           }
         }
-      ]}
+      ] }
 
-      {...props}
-      progress={progress}
+      { ...props }
+      progress={ progress }
     />
   )
 
-  function openHandler(): void {
+  function openHandler (): void {
     action().then(actionJobId => {
       jobId.current = actionJobId
     }).catch(console.error)
   }
 
-  function messageHandler(event: MessageEvent): void {
+  function messageHandler (event: MessageEvent): void {
     const data: any = JSON.parse(event.data as string)
 
     if (data.jobRunId !== jobId.current) {
