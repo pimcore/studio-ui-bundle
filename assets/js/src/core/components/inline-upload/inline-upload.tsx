@@ -46,11 +46,11 @@ export const InlineUpload = (props: InlineUploadProps): React.JSX.Element => {
   })
 
   const beforeUpload = useCallback((file: RcFile): boolean => {
-    if (file.size > settings.upload_max_filesize) {
-      message.error(t('upload.error.file-too-large'))
+    if (file.size > (settings.upload_max_filesize ?? 0)) {
+      void message.error(t('upload.error.file-too-large'))
       return false
     }
-    
+
     return true
   }, [settings.upload_max_filesize, t])
 
@@ -61,7 +61,7 @@ export const InlineUpload = (props: InlineUploadProps): React.JSX.Element => {
     accept: props.accept,
     multiple: false,
     showUploadList: false,
-    disabled: props.disabled || uploading,
+    disabled: (props.disabled ?? false) || uploading,
     openFileDialogOnClick: false,
     onChange: async (info) => {
       if (info.file.status === 'uploading') {
@@ -69,15 +69,15 @@ export const InlineUpload = (props: InlineUploadProps): React.JSX.Element => {
         setProgress(info.file.percent ?? 0)
       } else if (info.file.status === 'done') {
         setProgress(100)
-        
+
         try {
           const result = info.file.response
           const { data: asset } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id: result.id }))
-          
+
           if (!isNil(asset)) {
             await props.onSuccess?.(asset)
           }
-          
+
           setUploading(false)
           setProgress(0)
         } catch (error) {
@@ -85,29 +85,29 @@ export const InlineUpload = (props: InlineUploadProps): React.JSX.Element => {
           setUploading(false)
           setProgress(0)
           props.onError?.(error as Error)
-          message.error(t('upload.error.failed-to-fetch-asset-details'))
+          void message.error(t('upload.error.failed-to-fetch-asset-details'))
         }
       } else if (info.file.status === 'error') {
         setUploading(false)
         setProgress(0)
-        message.error(t('upload.error.upload-failed'))
+        void message.error(t('upload.error.upload-failed'))
         props.onError?.(new Error('Upload failed'))
       }
     }
   }
 
   return (
-    <div className={cn(styles.container, { [styles.containerFullWidth]: props.fullWidth })}>
-      <Upload {...uploadProps}>
-        <div className={styles.uploadArea}>
+    <div className={ cn(styles.container, { [styles.containerFullWidth]: props.fullWidth }) }>
+      <Upload { ...uploadProps }>
+        <div className={ styles.uploadArea }>
           {props.children}
           {uploading && (
-            <div className={styles.progressOverlay}>
-                <Progress
-                    type="circle"
-                    percent={progress}
-                    size={60}
-                />
+            <div className={ styles.progressOverlay }>
+              <Progress
+                percent={ progress }
+                size={ 60 }
+                type="circle"
+              />
             </div>
           )}
         </div>

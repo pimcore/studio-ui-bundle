@@ -36,17 +36,17 @@ interface AssetTargetProps {
   uploadIcon?: boolean
 }
 
-export const AssetTarget = ({ 
-  title, 
-  className, 
-  width = 200, 
-  height = 200, 
-  dndIcon, 
-  uploadIcon, 
-  onRemove, 
-  onSearch, 
+export const AssetTarget = ({
+  title,
+  className,
+  width = 200,
+  height = 200,
+  dndIcon,
+  uploadIcon,
+  onRemove,
+  onSearch,
   onUpload,
-  onResize 
+  onResize
 }: AssetTargetProps): React.JSX.Element => {
   const { getStateClasses } = useDroppable()
   const { styles } = useStyle()

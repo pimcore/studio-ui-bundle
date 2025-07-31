@@ -27,15 +27,15 @@ export const useSettings = (): SystemSettingsGetApiResponse => {
       try {
         const { settings } = getPimcoreStudioApi()
         const parentSettings = settings.getSettings()
-        
-        if (parentSettings && Object.keys(parentSettings).length > 0) {
+
+        if (parentSettings != null && Object.keys(parentSettings).length > 0) {
           return parentSettings
         }
       } catch (error) {
         console.warn('[useSettings] Failed to get parent settings:', error)
       }
     }
-    
+
     return localSettings
   }, [isIframe, localSettings])
 

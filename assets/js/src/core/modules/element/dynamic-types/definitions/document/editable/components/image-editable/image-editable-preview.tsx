@@ -94,47 +94,47 @@ export const ImageEditablePreview = ({
   }
 
   const loadingSpinner = (
-    <div className={styles.loadingSpinner}>
+    <div className={ styles.loadingSpinner }>
       <Spin size="small" />
     </div>
   )
 
   return (
     <Dropdown
-      disabled={isNil(dropdownItems) || dropdownItems.length === 0}
-      menu={{ items: dropdownItems }}
-      trigger={['contextMenu']}
+      disabled={ isNil(dropdownItems) || dropdownItems.length === 0 }
+      menu={ { items: dropdownItems } }
+      trigger={ ['contextMenu'] }
     >
       <div
-        className={cn(className, styles.imageEditablePreviewContainer, styles.imageEditablePreviewContainerMinSize, ...getStateClasses())}
-        ref={imageContainerRef}
+        className={ cn(className, styles.imageEditablePreviewContainer, styles.imageEditablePreviewContainerMinSize, ...getStateClasses()) }
+        ref={ imageContainerRef }
       >
         {imageSrc !== undefined && (
           <Image
-            className={styles.imageComponent}
+            className={ styles.imageComponent }
             fallback="/bundles/pimcorestudioui/img/fallback-image.svg"
-            key={key}
-            onLoad={handleImageLoad}
-            placeholder={loadingSpinner}
-            preview={false}
-            src={imageSrc}
-            style={{
-              width: isImageLoaded 
-                ? undefined 
-                : lastImageDimensions?.width 
-                  ? Math.max(lastImageDimensions.width, 150)
-                  : 150,
-              height: isImageLoaded 
-                ? undefined 
-                : lastImageDimensions?.height 
-                  ? Math.max(lastImageDimensions.height, 100)
-                  : 100
-            }}
-            {...imgAttributes}
+            key={ key }
+            onLoad={ handleImageLoad }
+            placeholder={ loadingSpinner }
+            preview={ false }
+            src={ imageSrc }
+            style={ {
+              width: isImageLoaded
+                ? undefined
+                : !isNil(lastImageDimensions?.width)
+                    ? Math.max(lastImageDimensions.width, 150)
+                    : 150,
+              height: isImageLoaded
+                ? undefined
+                : !isNil(lastImageDimensions?.height)
+                    ? Math.max(lastImageDimensions.height, 100)
+                    : 100
+            } }
+            { ...imgAttributes }
           />
         )}
 
-        {isImageLoaded && <ImagePreviewDropdown dropdownItems={dropdownItems} />}
+        {isImageLoaded && <ImagePreviewDropdown dropdownItems={ dropdownItems } />}
       </div>
     </Dropdown>
   )

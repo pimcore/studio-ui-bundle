@@ -47,7 +47,7 @@ export const useTargetFolderId = ({
 
     if (!isNil(targetFolderPath) && !isEmpty(targetFolderPath) && targetFolderPath !== '/') {
       setIsResolving(true)
-      
+
       dispatch(elementApi.endpoints.elementGetIdByPath.initiate({
         elementType: 'asset',
         elementPath: targetFolderPath

@@ -46,25 +46,25 @@ interface DocumentHotspotImagePreviewProps {
   lastImageDimensions?: { width: number, height: number } | null
 }
 
-export const DocumentHotspotImagePreview = ({ 
-  assetId, 
-  height, 
-  width, 
-  containerWidth, 
-  value, 
-  onChange, 
-  setMarkerModalOpen, 
-  setCropModalOpen, 
-  handleSearch, 
-  handleLocateInTree, 
-  handleUpload, 
-  emptyValue, 
-  disabled, 
-  disableInlineUpload, 
-  imgAttributes, 
+export const DocumentHotspotImagePreview = ({
+  assetId,
+  height,
+  width,
+  containerWidth,
+  value,
+  onChange,
+  setMarkerModalOpen,
+  setCropModalOpen,
+  handleSearch,
+  handleLocateInTree,
+  handleUpload,
+  emptyValue,
+  disabled,
+  disableInlineUpload,
+  imgAttributes,
   focalPointContextMenuItem,
   onResize,
-  lastImageDimensions 
+  lastImageDimensions
 }: DocumentHotspotImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openElement } = useElementHelper()

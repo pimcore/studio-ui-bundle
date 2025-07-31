@@ -26,6 +26,8 @@ import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 import { useUploadModal } from '@Pimcore/components/modal-upload/hooks/use-upload-modal'
 import { InlineUpload } from '@Pimcore/components/inline-upload'
+import { useImageValueUpdates } from './hooks/use-image-value-updates'
+import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 
 const MIN_IMAGE_WIDTH = 150
 const MIN_IMAGE_HEIGHT = 100
@@ -79,6 +81,12 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
   const containerWidth = useElementResize(needsContainerWidth ? props.containerRef ?? { current: null } : { current: null })
 
   const { triggerUpload } = useUploadModal({})
+  const {
+    handleCropChange,
+    handleHotspotsChange,
+    handleReplaceImage,
+    handleEmptyValue
+  } = useImageValueUpdates({ value: imageValue, onChange: props.onChange })
 
   const handleImageResize = useCallback((dimensions: { width: number, height: number }) => {
     const minWidth = Math.max(dimensions.width, MIN_IMAGE_WIDTH)
@@ -101,7 +109,7 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
     },
     onFinish: (event) => {
       if (event.items.length > 0) {
-        replaceImage(event.items[0].data.id)
+        handleReplaceImage(event.items[0].data.id)
       }
     }
   })
@@ -119,19 +127,7 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
 
   const { openModal: openCropModal } = useCropModal({
     disabled: props.disabled,
-    onChange: (crop) => {
-      if (!isNil(imageValue?.id)) {
-        const newValue: ImageEditableValue = {
-          id: imageValue.id,
-          alt: imageValue?.alt ?? '',
-          title: imageValue?.title ?? '',
-          hotspots: imageValue?.hotspots ?? [],
-          marker: imageValue?.marker ?? [],
-          crop: crop ?? {}
-        }
-        props.onChange?.(newValue)
-      }
-    }
+    onChange: handleCropChange
   })
 
   const { openModal: openHotspotMarkersModal } = useHotspotMarkersModal({
@@ -139,62 +135,10 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
     onChange: (hotspots) => {
       if (!isNil(imageValue?.id)) {
         const { hotspots: newHotspots, marker: newMarkers } = fromIHotspots(hotspots)
-        const newValue: ImageEditableValue = {
-          id: imageValue.id,
-          alt: imageValue?.alt ?? '',
-          title: imageValue?.title ?? '',
-          hotspots: newHotspots,
-          marker: newMarkers,
-          crop: imageValue?.crop ?? {}
-        }
-        props.onChange?.(newValue)
+        handleHotspotsChange(newHotspots, newMarkers)
       }
     }
   })
-
-  const emptyValue = useCallback(() => {
-    // Don't clear preserved dimensions when emptying - keep the last image size for the asset target
-    props.onChange?.({
-      id: undefined,
-      alt: '',
-      title: '',
-      hotspots: [],
-      marker: [],
-      crop: {}
-    })
-  }, [props])
-
-  const replaceImage = useCallback((assetId: number) => {
-    let newValue: ImageEditableValue = imageValue ?? {
-      id: undefined,
-      alt: '',
-      title: '',
-      hotspots: [],
-      marker: [],
-      crop: {}
-    }
-
-    newValue = {
-      ...newValue,
-      id: assetId
-    }
-
-    props.onChange?.(newValue)
-  }, [imageValue, props])
-
-  const handleHotspotImageChange = useCallback((value: HotspotImageValue) => {
-    if (!isNil(imageValue?.id)) {
-      const newValue: ImageEditableValue = {
-        id: imageValue.id,
-        alt: imageValue?.alt ?? '',
-        title: imageValue?.title ?? '',
-        hotspots: value.hotspots,
-        marker: value.marker,
-        crop: value.crop
-      }
-      props.onChange?.(newValue)
-    }
-  }, [imageValue, props])
 
   const convertToHotspotImageValue = (): HotspotImageValue => {
     if (isNil(imageValue?.id)) {
@@ -242,31 +186,31 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
       maxItems: 1,
       onSuccess: async (assets) => {
         if (assets.length > 0) {
-          replaceImage(assets[0].id)
+          handleReplaceImage(Number(assets[0].id))
         }
       }
     })
-  }, [props.config?.disableInlineUpload, props.config?.uploadPath, triggerUpload, replaceImage])
+  }, [props.config?.disableInlineUpload, props.config?.uploadPath, triggerUpload, handleReplaceImage])
 
   const handleFileSystemUpload = useCallback(async (asset: any) => {
-    replaceImage(asset.id)
-  }, [replaceImage])
+    handleReplaceImage(Number(asset.id))
+  }, [handleReplaceImage])
 
   const renderDroppableContent = useCallback((children: React.ReactNode) => {
     // Determine the shape based on whether an image is selected
-    const droppableShape = !isNil(imageValue?.id) ? "angular" : "round"
-    
+    const droppableShape = !isNil(imageValue?.id) ? 'angular' : 'round'
+
     // Don't enable file system drag and drop if inline upload is disabled
     if (props.config?.disableInlineUpload === true || props.disabled === true) {
       return (
         <Droppable
-          isValidContext={() => props.disabled !== true}
-          isValidData={(info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image'}
-          onDrop={(info: DragAndDropInfo) => {
-            replaceImage(info.data.id as number)
-          }}
+          isValidContext={ () => props.disabled !== true }
+          isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
+          onDrop={ (info: DragAndDropInfo) => {
+            handleReplaceImage(info.data.id as number)
+          } }
+          shape={ droppableShape }
           variant="outline"
-          shape={droppableShape}
         >
           {children}
         </Droppable>
@@ -275,26 +219,31 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
 
     return (
       <InlineUpload
-        targetFolderPath={props.config?.uploadPath}
         accept="image/*"
-        onSuccess={handleFileSystemUpload}
-        disabled={props.disabled}
-        fullWidth={isNil(lastImageDimensionsRef.current?.width ?? width)}
+        disabled={ props.disabled }
+        fullWidth={ isNil(lastImageDimensionsRef.current?.width ?? width) }
+        onSuccess={ handleFileSystemUpload }
+        targetFolderPath={ props.config?.uploadPath }
       >
         <Droppable
-          isValidContext={() => props.disabled !== true}
-          isValidData={(info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image'}
-          onDrop={(info: DragAndDropInfo) => {
-            replaceImage(info.data.id as number)
-          }}
+          isValidContext={ () => props.disabled !== true }
+          isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
+          onDrop={ (info: DragAndDropInfo) => {
+            handleReplaceImage(info.data.id as number)
+          } }
+          shape={ droppableShape }
           variant="outline"
-          shape={droppableShape}
         >
           {children}
         </Droppable>
       </InlineUpload>
     )
-  }, [props.config?.disableInlineUpload, props.config?.uploadPath, props.disabled, handleFileSystemUpload, replaceImage, imageValue?.id])
+  }, [props.config?.disableInlineUpload, props.config?.uploadPath, props.disabled, handleFileSystemUpload, handleReplaceImage, imageValue?.id])
+
+  const handleHotspotImageChange = useCallback((value: HotspotImageValue) => {
+    const { hotspots, marker } = fromIHotspots(value.hotspots as unknown as IHotspot[])
+    handleHotspotsChange(hotspots, marker)
+  }, [handleHotspotsChange])
 
   return renderDroppableContent(
     !isNil(imageValue?.id)
@@ -302,9 +251,9 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
         <DocumentHotspotImagePreview
           assetId={ imageValue.id }
           containerWidth={ containerWidth }
-          disabled={ props.disabled }
           disableInlineUpload={ props.config?.disableInlineUpload }
-          emptyValue={ emptyValue }
+          disabled={ props.disabled }
+          emptyValue={ handleEmptyValue }
           focalPointContextMenuItem={ props.config?.focal_point_context_menu_item }
           handleLocateInTree={ handleLocateInTree }
           handleSearch={ handleSearch }
@@ -325,8 +274,8 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
         <AssetTarget
           dndIcon
           height={ lastImageDimensionsRef.current?.height ?? height ?? DEFAULT_HEIGHT }
-          onSearch={ handleSearch }
           onResize={ handleImageResize }
+          onSearch={ handleSearch }
           onUpload={ props.config?.disableInlineUpload === true ? undefined : handleUpload }
           title={ props.config?.title ?? t('image.dnd-target') }
           width={ lastImageDimensionsRef.current?.width ?? width ?? '100%' }

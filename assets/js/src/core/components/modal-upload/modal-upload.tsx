@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Upload as AntUpload, type UploadProps as AntUploadProps } from 'antd'
 import { api as assetApi, type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import type { RcFile, UploadFile } from 'antd/es/upload/interface'
