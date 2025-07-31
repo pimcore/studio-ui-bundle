@@ -20,6 +20,7 @@ import { Flex } from 'antd'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
+import { createTabContentTestId } from '@Pimcore/utils/test-id-generator'
 
 const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -149,6 +150,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
 
   return (
     <Flex
+      data-testid={ createTabContentTestId(id.toString(), { prefix: 'user-detail-tab', tabKey: 'workspaces' }) }
       gap={ 'middle' }
       vertical
     >

@@ -27,32 +27,40 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
   return (
     <Flex
       className={ styles.container }
+      data-testid={ `tree-node-content-${props.node.id}` }
       gap={ 'mini' }
       justify='space-between'
     >
       <Flex
         align='center'
         className={ styles.containerChild }
+        data-testid={ `tree-node-content-main-${props.node.id}` }
         gap={ 'small' }
         ref={ ref }
       >
         <Icon
           { ...icon }
           className={ cn({ [styles.unpublishedIcon]: isPublished === false && icon.type === 'name', [styles.unpublishedIconPath]: isPublished === false && icon.type === 'path' }) }
+          data-testid={ `tree-node-icon-${props.node.id}` }
           options={ { width: 16, height: 16 } }
           subIconName={ isPublished === false ? 'eye-off' : undefined }
         />
-        <span className="tree-node-content__label">{label}</span>
+        <span
+          className="tree-node-content__label"
+          data-testid={ `tree-node-label-${props.node.id}` }
+        >{label}</span>
       </Flex>
 
       <Flex
         align='center'
+        data-testid={ `tree-node-content-meta-${props.node.id}` }
         gap={ 'mini' }
         ref={ ref }
       >
         {isLocked && (
           <Icon
             className={ !isNil(locked) && !isEmpty(locked) ? '' : styles.indirectLockedIcon }
+            data-testid={ `tree-node-lock-icon-${props.node.id}` }
             options={ { width: 14, height: 14 } }
             value='lock'
           />

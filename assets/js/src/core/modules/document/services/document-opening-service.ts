@@ -89,6 +89,7 @@ export class DocumentOpeningService {
       component: 'document-editor',
       config: {
         id,
+        elementType: 'document',
         icon: {
           type: icon.type,
           value: icon.value

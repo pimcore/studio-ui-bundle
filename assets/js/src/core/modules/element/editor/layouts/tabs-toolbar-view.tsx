@@ -14,13 +14,17 @@ import { useStyles } from './tabs-toolbar-view.styles'
 export interface TabbarToolbarViewProps {
   renderTabbar: ReactNode
   renderToolbar: ReactNode
+  dataTestId?: string
 }
 
 const TabsToolbarView = (props: TabbarToolbarViewProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   return (
-    <div className={ ['tabs-toolbar-layout', styles.tabbarToolbar].join(' ') }>
+    <div
+      className={ ['tabs-toolbar-layout', styles.tabbarToolbar].join(' ') }
+      data-testid={ props.dataTestId }
+    >
       <div className='tabs-toolbar-layout__tabbar'>
         {props.renderTabbar}
       </div>

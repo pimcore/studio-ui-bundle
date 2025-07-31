@@ -90,6 +90,7 @@ export class DataObjectOpeningService {
       component: 'data-object-editor',
       config: {
         id,
+        elementType: 'data-object',
         icon: {
           type: icon.type,
           value: icon.value
