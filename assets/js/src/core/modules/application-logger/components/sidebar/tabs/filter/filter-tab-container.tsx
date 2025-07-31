@@ -46,18 +46,18 @@ export const FilterTabContainer = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme='secondary'>
           <IconTextButton
-            disabled={isLoading}
-            icon={{ value: 'close' }}
-            onClick={handleResetFilters}
+            disabled={ isLoading }
+            icon={ { value: 'close' } }
+            onClick={ handleResetFilters }
             type='link'
           >
             {t('sidebar.clear-all-filters')}
           </IconTextButton>
 
           <Button
-            disabled={isLoading}
-            loading={isLoading}
-            onClick={updateFilters}
+            disabled={ isLoading }
+            loading={ isLoading }
+            onClick={ updateFilters }
             type='primary'
           >
             {t('button.apply')}
@@ -67,104 +67,104 @@ export const FilterTabContainer = (): React.JSX.Element => {
     >
       <Content padded>
         <Form
-          form={form}
+          form={ form }
           layout="vertical"
         >
           <Space
             direction='vertical'
             size="none"
-            style={{ width: '100%' }}
+            style={ { width: '100%' } }
           >
             <Title>{t('application-logger.sidebar.search-parameter')}</Title>
 
             <Form.Item
-              label={t('application-logger.filter.date-from')}
+              label={ t('application-logger.filter.date-from') }
               name="dateFrom"
             >
               <DatePicker
                 className="w-full"
-                format={DATE_FORMAT}
-                onChange={(value: string) => {
+                format={ DATE_FORMAT }
+                onChange={ (value: string) => {
                   setDateFrom(value)
-                }}
+                } }
                 outputType="dateString"
-                showTime={{ format: 'HH:mm' }}
-                value={dateFrom}
+                showTime={ { format: 'HH:mm' } }
+                value={ dateFrom }
               />
             </Form.Item>
 
             <Form.Item
-              label={t('application-logger.filter.date-to')}
+              label={ t('application-logger.filter.date-to') }
               name="dateTo"
             >
               <DatePicker
                 className="w-full"
-                format={DATE_FORMAT}
-                onChange={(value: string) => {
+                format={ DATE_FORMAT }
+                onChange={ (value: string) => {
                   setDateTo(value)
-                }}
+                } }
                 outputType="dateString"
-                showTime={{ format: 'HH:mm' }}
-                value={dateTo}
+                showTime={ { format: 'HH:mm' } }
+                value={ dateTo }
               />
             </Form.Item>
 
             <Form.Item
-              label={t('application-logger.filter.priority')}
+              label={ t('application-logger.filter.priority') }
               name="priority"
             >
               <PrioritySelect />
             </Form.Item>
 
             <Form.Item
-              label={t('application-logger.filter.component')}
+              label={ t('application-logger.filter.component') }
               name="component"
             >
               <ComponentSelect />
             </Form.Item>
 
             <Form.Item
-              label={t('application-logger.filter.related-object-id')}
+              label={ t('application-logger.filter.related-object-id') }
               name="relatedObjectId"
             >
               <Input
                 min="0"
-                onChange={(e) => {
+                onChange={ (e) => {
                   const value = e.target.value
                   setRelatedObjectId(value !== '' ? parseInt(value) : null)
-                }}
+                } }
                 step="1"
                 type="number"
-                value={relatedObjectId ?? undefined}
+                value={ relatedObjectId ?? undefined }
               />
             </Form.Item>
 
             <Form.Item
-              label={t('application-logger.filter.message')}
+              label={ t('application-logger.filter.message') }
               name="message"
             >
               <Input
-                onChange={(e) => {
+                onChange={ (e) => {
                   const value = e.target.value
                   setMessage(value ?? null)
-                }}
-                value={message ?? undefined}
+                } }
+                value={ message ?? undefined }
               />
             </Form.Item>
 
             <Form.Item
-              label={t('application-logger.filter.pid')}
+              label={ t('application-logger.filter.pid') }
               name="pid"
             >
               <Input
                 min="0"
-                onChange={(e) => {
+                onChange={ (e) => {
                   const value = e.target.value
                   setPid(value !== '' ? parseInt(value) : null)
-                }}
+                } }
                 step="1"
                 type="number"
-                value={pid ?? undefined}
+                value={ pid ?? undefined }
               />
             </Form.Item>
           </Space>

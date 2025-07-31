@@ -144,7 +144,7 @@ export const FilterProvider = (props: FilterProviderProps): React.JSX.Element =>
   }
 
   return useMemo(() => (
-    <FilterProviderContext.Provider value={{
+    <FilterProviderContext.Provider value={ {
       dateFrom,
       setDateFrom,
       dateTo,
@@ -164,7 +164,7 @@ export const FilterProvider = (props: FilterProviderProps): React.JSX.Element =>
       resetFilters,
       isLoading,
       setIsLoading
-    }}
+    } }
     >
       {props.children}
     </FilterProviderContext.Provider>

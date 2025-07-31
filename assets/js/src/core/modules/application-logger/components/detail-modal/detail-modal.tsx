@@ -52,52 +52,52 @@ export const DetailModal = (props: DetailModalProps): React.JSX.Element => {
 
   return (
     <Modal
-      onCancel={closeModel}
-      onClose={closeModel}
-      onOk={closeModel}
-      open={props.open}
-      title={(
+      onCancel={ closeModel }
+      onClose={ closeModel }
+      onOk={ closeModel }
+      open={ props.open }
+      title={ (
         <ModalTitle>
           {t('application-logger.detail-modal.title')}
         </ModalTitle>
-      )}
+      ) }
     >
       <FieldWidthProvider>
         <Form
-          form={form}
-          initialValues={formData}
+          form={ form }
+          initialValues={ formData }
           layout="vertical"
         >
           <Form.Item
-            label={t('application-logger.columns.timestamp')}
+            label={ t('application-logger.columns.timestamp') }
             name="date"
           >
             <Input readOnly />
           </Form.Item>
 
           <Form.Item
-            label={t('application-logger.columns.message')}
+            label={ t('application-logger.columns.message') }
             name="message"
           >
             <TextArea readOnly />
           </Form.Item>
 
           <Form.Item
-            label={t('application-logger.columns.type')}
+            label={ t('application-logger.columns.type') }
             name="priority"
           >
             <Input readOnly />
           </Form.Item>
 
           <Form.Item
-            label={t('application-logger.columns.component')}
+            label={ t('application-logger.columns.component') }
             name="component"
           >
             <Input readOnly />
           </Form.Item>
 
           <Form.Item
-            label={t('application-logger.columns.source')}
+            label={ t('application-logger.columns.source') }
             name="source"
           >
             <Input readOnly />
@@ -105,8 +105,8 @@ export const DetailModal = (props: DetailModalProps): React.JSX.Element => {
 
           {props.data?.fileObject !== null && (
             <Form.Item
-              label={t('application-logger.columns.related-object')}
-              name={'fileObject'}
+              label={ t('application-logger.columns.related-object') }
+              name={ 'fileObject' }
             >
               <ManyToOneRelation
                 assetsAllowed
