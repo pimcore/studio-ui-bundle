@@ -25,6 +25,7 @@ import { isNil } from 'lodash'
 interface AssetTargetProps {
   onRemove?: () => void
   onSearch?: () => void
+  onUpload?: () => void
   title: string
   className?: string
   width?: number | string
@@ -33,7 +34,7 @@ interface AssetTargetProps {
   uploadIcon?: boolean
 }
 
-export const AssetTarget = forwardRef(function AssetTarget ({ title, className, width = 200, height = 200, dndIcon, uploadIcon, onRemove, onSearch }: AssetTargetProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
+export const AssetTarget = forwardRef(function AssetTarget ({ title, className, width = 200, height = 200, dndIcon, uploadIcon, onRemove, onSearch, onUpload }: AssetTargetProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { getStateClasses } = useDroppable()
   const { styles } = useStyle()
   const { t } = useTranslation()
@@ -58,6 +59,15 @@ export const AssetTarget = forwardRef(function AssetTarget ({ title, className, 
     })
   }
 
+  if (onUpload !== undefined) {
+    dropdownItems.push({
+      icon: <Icon value="upload-cloud" />,
+      key: 'upload',
+      label: t('upload'),
+      onClick: onUpload
+    })
+  }
+
   return (
     <Dropdown
       disabled={ isNil(dropdownItems) || dropdownItems.length === 0 }
@@ -79,7 +89,7 @@ export const AssetTarget = forwardRef(function AssetTarget ({ title, className, 
           style={ { height: '100%' } }
           vertical
         >
-          { (dndIcon === true || uploadIcon === true) && (
+          { (dndIcon === true || uploadIcon === true || onUpload !== undefined) && (
           <div className="icon-container">
             <Flex
               align="center"
@@ -92,7 +102,7 @@ export const AssetTarget = forwardRef(function AssetTarget ({ title, className, 
                   value={ 'drop-target' }
                 />
               )}
-              { uploadIcon === true && (
+              { (uploadIcon === true || onUpload !== undefined) && (
                 <Icon
                   options={ { height: 30, width: 30 } }
                   value={ 'upload-cloud' }

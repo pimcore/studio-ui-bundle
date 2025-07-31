@@ -24,6 +24,8 @@ import { useElementSelector } from '@Pimcore/modules/element/element-selector/pr
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
+import { useUploadModal } from '@Pimcore/components/modal-upload/hooks/use-upload-modal'
+import { InlineUpload } from '@Pimcore/components/inline-upload'
 
 // Constants
 const MIN_IMAGE_DIMENSION = 100
@@ -45,6 +47,8 @@ export interface ImageEditableConfig {
   reload?: boolean
   imgAttributes?: Record<string, string>
   focal_point_context_menu_item?: boolean
+  uploadPath?: string
+  disableInlineUpload?: boolean
 }
 
 interface HotspotImageValue {
@@ -73,6 +77,9 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
 
   const needsContainerWidth = isNil(width) && isNil(height)
   const containerWidth = useElementResize(needsContainerWidth ? props.containerRef ?? { current: null } : { current: null })
+
+  // Upload modal hook for inline upload
+  const { triggerUpload } = useUploadModal({})
 
   const handleImageResize = useCallback((dimensions: { width: number, height: number }) => {
     if (dimensions.width >= MIN_IMAGE_DIMENSION && dimensions.height >= MIN_IMAGE_DIMENSION) {
@@ -227,46 +234,98 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
     }
   }, [imageValue, openHotspotMarkersModal])
 
-  return (
-    <Droppable
-      isValidContext={ () => props.disabled !== true }
-      isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
-      onDrop={ (info: DragAndDropInfo) => {
-        replaceImage(info.data.id as number)
-      } }
-      variant="outline"
-    >
-      {!isNil(imageValue?.id)
-        ? (
-          <DocumentHotspotImagePreview
-            assetId={ imageValue.id }
-            containerWidth={ containerWidth }
-            disabled={ props.disabled }
-            emptyValue={ emptyValue }
-            focalPointContextMenuItem={ props.config?.focal_point_context_menu_item }
-            handleLocateInTree={ handleLocateInTree }
-            handleSearch={ handleSearch }
-            height={ height }
-            imgAttributes={ props.config?.imgAttributes }
-            key={ imageValue.id }
-            lastImageDimensions={ lastImageDimensionsRef.current }
-            onChange={ handleHotspotImageChange }
-            onImageResize={ handleImageResize }
-            setCropModalOpen={ handleOpenCropModal }
-            setMarkerModalOpen={ handleOpenHotspotMarkersModal }
-            value={ convertToHotspotImageValue() }
-            width={ width }
-          />
-          )
-        : (
-          <AssetTarget
-            dndIcon
-            height={ lastImageDimensionsRef.current?.height ?? height ?? DEFAULT_HEIGHT }
-            onSearch={ handleSearch }
-            title={ props.config?.title ?? t('image.dnd-target') }
-            width={ lastImageDimensionsRef.current?.width ?? width ?? '100%' }
-          />
-          )}
-    </Droppable>
+  const handleUpload = useCallback(() => {
+    if (props.config?.disableInlineUpload === true) return
+
+    triggerUpload({
+      targetFolderPath: props.config?.uploadPath,
+      accept: 'image/*',
+      multiple: false,
+      maxItems: 1,
+      onSuccess: async (assets) => {
+        if (assets.length > 0) {
+          replaceImage(assets[0].id)
+        }
+      }
+    })
+  }, [props.config?.disableInlineUpload, props.config?.uploadPath, triggerUpload, replaceImage])
+
+  const handleFileSystemUpload = useCallback(async (asset: any) => {
+    replaceImage(asset.id)
+  }, [replaceImage])
+
+  const renderDroppableContent = useCallback((children: React.ReactNode) => {
+    // Don't enable file system drag and drop if inline upload is disabled
+    if (props.config?.disableInlineUpload === true || props.disabled === true) {
+      return (
+        <Droppable
+          isValidContext={() => props.disabled !== true}
+          isValidData={(info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image'}
+          onDrop={(info: DragAndDropInfo) => {
+            replaceImage(info.data.id as number)
+          }}
+          variant="outline"
+        >
+          {children}
+        </Droppable>
+      )
+    }
+
+    return (
+      <InlineUpload
+        targetFolderPath={props.config?.uploadPath}
+        accept="image/*"
+        onSuccess={handleFileSystemUpload}
+        disabled={props.disabled}
+      >
+        <Droppable
+          isValidContext={() => props.disabled !== true}
+          isValidData={(info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image'}
+          onDrop={(info: DragAndDropInfo) => {
+            replaceImage(info.data.id as number)
+          }}
+          variant="outline"
+        >
+          {children}
+        </Droppable>
+      </InlineUpload>
+    )
+  }, [props.config?.disableInlineUpload, props.config?.uploadPath, props.disabled, handleFileSystemUpload, replaceImage])
+
+  return renderDroppableContent(
+    !isNil(imageValue?.id)
+      ? (
+        <DocumentHotspotImagePreview
+          assetId={ imageValue.id }
+          containerWidth={ containerWidth }
+          disabled={ props.disabled }
+          disableInlineUpload={ props.config?.disableInlineUpload }
+          emptyValue={ emptyValue }
+          focalPointContextMenuItem={ props.config?.focal_point_context_menu_item }
+          handleLocateInTree={ handleLocateInTree }
+          handleSearch={ handleSearch }
+          handleUpload={ handleUpload }
+          height={ height }
+          imgAttributes={ props.config?.imgAttributes }
+          key={ imageValue.id }
+          lastImageDimensions={ lastImageDimensionsRef.current }
+          onChange={ handleHotspotImageChange }
+          onImageResize={ handleImageResize }
+          setCropModalOpen={ handleOpenCropModal }
+          setMarkerModalOpen={ handleOpenHotspotMarkersModal }
+          value={ convertToHotspotImageValue() }
+          width={ width }
+        />
+        )
+      : (
+        <AssetTarget
+          dndIcon
+          height={ lastImageDimensionsRef.current?.height ?? height ?? DEFAULT_HEIGHT }
+          onSearch={ handleSearch }
+          onUpload={ props.config?.disableInlineUpload === true ? undefined : handleUpload }
+          title={ props.config?.title ?? t('image.dnd-target') }
+          width={ lastImageDimensionsRef.current?.width ?? width ?? '100%' }
+        />
+        )
   )
 }
