@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useMemo } from 'react'
 import { useStyle } from './image-editable-preview.styles'
 import cn from 'classnames'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
@@ -21,6 +21,7 @@ import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { isNil } from 'lodash'
 import useElementResizeDimensions from '@Pimcore/utils/hooks/use-element-resize-dimensions'
 import { generateThumbnailUrl } from './utils/thumbnail-sizing'
+import { getImageDimensions } from './utils/image-dimensions'
 
 interface ImageEditablePreviewProps {
   src?: string
@@ -34,8 +35,8 @@ interface ImageEditablePreviewProps {
   thumbnailSettings?: ImageThumbnailSettings
   imgAttributes?: Record<string, string>
   onImageLoad?: (event: React.SyntheticEvent<HTMLImageElement>) => void
-  onImageResize?: (dimensions: { width: number, height: number }) => void
-  lastImageDimensions?: { width: number | string, height: number | string } | null
+  onResize?: (dimensions: { width: number, height: number }) => void
+  lastImageDimensions?: { width: number, height: number } | null
 }
 
 export const ImageEditablePreview = ({
@@ -50,7 +51,7 @@ export const ImageEditablePreview = ({
   thumbnailSettings,
   imgAttributes,
   onImageLoad,
-  onImageResize,
+  onResize,
   lastImageDimensions
 }: ImageEditablePreviewProps): React.JSX.Element => {
   const { getStateClasses } = useDroppable()
@@ -62,10 +63,10 @@ export const ImageEditablePreview = ({
   const currentImageDimensions = useElementResizeDimensions(imageContainerRef)
 
   useEffect(() => {
-    if (currentImageDimensions.width > 0 && currentImageDimensions.height > 0 && onImageResize !== undefined) {
-      onImageResize(currentImageDimensions)
+    if (currentImageDimensions.width > 0 && currentImageDimensions.height > 0 && onResize !== undefined) {
+      onResize(currentImageDimensions)
     }
-  }, [currentImageDimensions, onImageResize])
+  }, [currentImageDimensions, onResize])
 
   const imageSrc = useMemo(() => {
     if (assetId === undefined) {
@@ -94,9 +95,7 @@ export const ImageEditablePreview = ({
   }
 
   const loadingSpinner = (
-    <div
-      className={ styles.loadingSpinner }
-    >
+    <div className={ styles.loadingSpinner }>
       <Spin size="small" />
     </div>
   )
@@ -108,30 +107,24 @@ export const ImageEditablePreview = ({
       trigger={ ['contextMenu'] }
     >
       <div
-        className={ cn(className, styles.imageEditablePreviewContainer, ...getStateClasses()) }
+        className={ cn(className, styles.imageEditablePreviewContainer, styles.imageEditablePreviewContainerMinSize, ...getStateClasses()) }
         ref={ imageContainerRef }
       >
+        {imageSrc !== undefined && (
+          <Image
+            className={ styles.imageComponent }
+            fallback="/bundles/pimcorestudioui/img/fallback-image.svg"
+            key={ key }
+            onLoad={ handleImageLoad }
+            placeholder={ loadingSpinner }
+            preview={ false }
+            src={ imageSrc }
+            style={ getImageDimensions(isImageLoaded, lastImageDimensions) }
+            { ...imgAttributes }
+          />
+        )}
 
-        { imageSrc !== undefined && (
-
-        <Image
-          className={ styles.imageComponent }
-          fallback="/bundles/pimcorestudioui/img/fallback-image.svg"
-          key={ key }
-          onLoad={ handleImageLoad }
-          placeholder={ loadingSpinner }
-          preview={ false }
-          src={ imageSrc }
-
-          style={ {
-            width: isImageLoaded ? undefined : lastImageDimensions?.width,
-            height: isImageLoaded ? undefined : lastImageDimensions?.height
-          } }
-          { ...imgAttributes }
-        />
-        ) }
-
-        { isImageLoaded && <ImagePreviewDropdown dropdownItems={ dropdownItems } /> }
+        {isImageLoaded && <ImagePreviewDropdown dropdownItems={ dropdownItems } />}
       </div>
     </Dropdown>
   )

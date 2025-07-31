@@ -24,10 +24,11 @@ import { useElementSelector } from '@Pimcore/modules/element/element-selector/pr
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
-
-// Constants
-const MIN_IMAGE_DIMENSION = 100
-const DEFAULT_HEIGHT = 200
+import { useUploadModal } from '@Pimcore/components/modal-upload/hooks/use-upload-modal'
+import { InlineUpload } from '@Pimcore/components/inline-upload'
+import { useImageValueUpdates } from './hooks/use-image-value-updates'
+import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
+import { MIN_WIDTH, MIN_HEIGHT, DEFAULT_HEIGHT } from './utils/image-dimensions'
 
 export interface ImageEditableValue {
   id?: number
@@ -45,6 +46,8 @@ export interface ImageEditableConfig {
   reload?: boolean
   imgAttributes?: Record<string, string>
   focal_point_context_menu_item?: boolean
+  uploadPath?: string
+  disableInlineUpload?: boolean
 }
 
 interface HotspotImageValue {
@@ -69,17 +72,24 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
   const width = props.config?.width
   const height = props.config?.height
 
-  const lastImageDimensionsRef = useRef<{ width: number | string, height: number | string } | null>(null)
+  const lastImageDimensionsRef = useRef<{ width: number, height: number } | null>(null)
 
   const needsContainerWidth = isNil(width) && isNil(height)
   const containerWidth = useElementResize(needsContainerWidth ? props.containerRef ?? { current: null } : { current: null })
 
+  const { triggerUpload } = useUploadModal({})
+  const {
+    handleCropChange,
+    handleHotspotsChange,
+    handleReplaceImage,
+    handleEmptyValue
+  } = useImageValueUpdates({ value: imageValue, onChange: props.onChange })
+
   const handleImageResize = useCallback((dimensions: { width: number, height: number }) => {
-    if (dimensions.width >= MIN_IMAGE_DIMENSION && dimensions.height >= MIN_IMAGE_DIMENSION) {
-      lastImageDimensionsRef.current = { width: dimensions.width, height: dimensions.height }
-    } else {
-      lastImageDimensionsRef.current = { width: MIN_IMAGE_DIMENSION, height: MIN_IMAGE_DIMENSION }
-    }
+    const minWidth = Math.max(dimensions.width, MIN_WIDTH)
+    const minHeight = Math.max(dimensions.height, MIN_HEIGHT)
+    console.log(`Image resized to: ${minWidth}x${minHeight}`)
+    lastImageDimensionsRef.current = { width: minWidth, height: minHeight }
   }, [])
 
   const { open: openElementSelector } = useElementSelector({
@@ -96,7 +106,7 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
     },
     onFinish: (event) => {
       if (event.items.length > 0) {
-        replaceImage(event.items[0].data.id)
+        handleReplaceImage(event.items[0].data.id)
       }
     }
   })
@@ -114,19 +124,7 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
 
   const { openModal: openCropModal } = useCropModal({
     disabled: props.disabled,
-    onChange: (crop) => {
-      if (!isNil(imageValue?.id)) {
-        const newValue: ImageEditableValue = {
-          id: imageValue.id,
-          alt: imageValue?.alt ?? '',
-          title: imageValue?.title ?? '',
-          hotspots: imageValue?.hotspots ?? [],
-          marker: imageValue?.marker ?? [],
-          crop: crop ?? {}
-        }
-        props.onChange?.(newValue)
-      }
-    }
+    onChange: handleCropChange
   })
 
   const { openModal: openHotspotMarkersModal } = useHotspotMarkersModal({
@@ -134,62 +132,10 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
     onChange: (hotspots) => {
       if (!isNil(imageValue?.id)) {
         const { hotspots: newHotspots, marker: newMarkers } = fromIHotspots(hotspots)
-        const newValue: ImageEditableValue = {
-          id: imageValue.id,
-          alt: imageValue?.alt ?? '',
-          title: imageValue?.title ?? '',
-          hotspots: newHotspots,
-          marker: newMarkers,
-          crop: imageValue?.crop ?? {}
-        }
-        props.onChange?.(newValue)
+        handleHotspotsChange(newHotspots, newMarkers)
       }
     }
   })
-
-  const emptyValue = useCallback(() => {
-    // Don't clear preserved dimensions when emptying - keep the last image size for the asset target
-    props.onChange?.({
-      id: undefined,
-      alt: '',
-      title: '',
-      hotspots: [],
-      marker: [],
-      crop: {}
-    })
-  }, [props])
-
-  const replaceImage = useCallback((assetId: number) => {
-    let newValue: ImageEditableValue = imageValue ?? {
-      id: undefined,
-      alt: '',
-      title: '',
-      hotspots: [],
-      marker: [],
-      crop: {}
-    }
-
-    newValue = {
-      ...newValue,
-      id: assetId
-    }
-
-    props.onChange?.(newValue)
-  }, [imageValue, props])
-
-  const handleHotspotImageChange = useCallback((value: HotspotImageValue) => {
-    if (!isNil(imageValue?.id)) {
-      const newValue: ImageEditableValue = {
-        id: imageValue.id,
-        alt: imageValue?.alt ?? '',
-        title: imageValue?.title ?? '',
-        hotspots: value.hotspots,
-        marker: value.marker,
-        crop: value.crop
-      }
-      props.onChange?.(newValue)
-    }
-  }, [imageValue, props])
 
   const convertToHotspotImageValue = (): HotspotImageValue => {
     if (isNil(imageValue?.id)) {
@@ -227,46 +173,110 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
     }
   }, [imageValue, openHotspotMarkersModal])
 
-  return (
-    <Droppable
-      isValidContext={ () => props.disabled !== true }
-      isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
-      onDrop={ (info: DragAndDropInfo) => {
-        replaceImage(info.data.id as number)
-      } }
-      variant="outline"
-    >
-      {!isNil(imageValue?.id)
-        ? (
-          <DocumentHotspotImagePreview
-            assetId={ imageValue.id }
-            containerWidth={ containerWidth }
-            disabled={ props.disabled }
-            emptyValue={ emptyValue }
-            focalPointContextMenuItem={ props.config?.focal_point_context_menu_item }
-            handleLocateInTree={ handleLocateInTree }
-            handleSearch={ handleSearch }
-            height={ height }
-            imgAttributes={ props.config?.imgAttributes }
-            key={ imageValue.id }
-            lastImageDimensions={ lastImageDimensionsRef.current }
-            onChange={ handleHotspotImageChange }
-            onImageResize={ handleImageResize }
-            setCropModalOpen={ handleOpenCropModal }
-            setMarkerModalOpen={ handleOpenHotspotMarkersModal }
-            value={ convertToHotspotImageValue() }
-            width={ width }
-          />
-          )
-        : (
-          <AssetTarget
-            dndIcon
-            height={ lastImageDimensionsRef.current?.height ?? height ?? DEFAULT_HEIGHT }
-            onSearch={ handleSearch }
-            title={ props.config?.title ?? t('image.dnd-target') }
-            width={ lastImageDimensionsRef.current?.width ?? width ?? '100%' }
-          />
-          )}
-    </Droppable>
+  const handleUpload = useCallback(() => {
+    if (props.config?.disableInlineUpload === true) return
+
+    triggerUpload({
+      targetFolderPath: props.config?.uploadPath,
+      accept: 'image/*',
+      multiple: false,
+      maxItems: 1,
+      onSuccess: async (assets) => {
+        if (assets.length > 0) {
+          handleReplaceImage(Number(assets[0].id))
+        }
+      }
+    })
+  }, [props.config?.disableInlineUpload, props.config?.uploadPath, triggerUpload, handleReplaceImage])
+
+  const handleFileSystemUpload = useCallback(async (asset: any) => {
+    handleReplaceImage(Number(asset.id))
+  }, [handleReplaceImage])
+
+  const renderDroppableContent = useCallback((children: React.ReactNode) => {
+    // Determine the shape based on whether an image is selected
+    const droppableShape = !isNil(imageValue?.id) ? 'angular' : 'round'
+
+    // Don't enable file system drag and drop if inline upload is disabled
+    if (props.config?.disableInlineUpload === true || props.disabled === true) {
+      return (
+        <Droppable
+          isValidContext={ () => props.disabled !== true }
+          isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
+          onDrop={ (info: DragAndDropInfo) => {
+            handleReplaceImage(info.data.id as number)
+          } }
+          shape={ droppableShape }
+          variant="outline"
+        >
+          {children}
+        </Droppable>
+      )
+    }
+
+    return (
+      <InlineUpload
+        accept="image/*"
+        disabled={ props.disabled }
+        fullWidth={ isNil(lastImageDimensionsRef.current?.width ?? width) }
+        onSuccess={ handleFileSystemUpload }
+        targetFolderPath={ props.config?.uploadPath }
+      >
+        <Droppable
+          isValidContext={ () => props.disabled !== true }
+          isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
+          onDrop={ (info: DragAndDropInfo) => {
+            handleReplaceImage(info.data.id as number)
+          } }
+          shape={ droppableShape }
+          variant="outline"
+        >
+          {children}
+        </Droppable>
+      </InlineUpload>
+    )
+  }, [props.config?.disableInlineUpload, props.config?.uploadPath, props.disabled, handleFileSystemUpload, handleReplaceImage, imageValue?.id])
+
+  const handleHotspotImageChange = useCallback((value: HotspotImageValue) => {
+    const { hotspots, marker } = fromIHotspots(value.hotspots as unknown as IHotspot[])
+    handleHotspotsChange(hotspots, marker)
+  }, [handleHotspotsChange])
+
+  return renderDroppableContent(
+    !isNil(imageValue?.id)
+      ? (
+        <DocumentHotspotImagePreview
+          assetId={ imageValue.id }
+          containerWidth={ containerWidth }
+          disableInlineUpload={ props.config?.disableInlineUpload }
+          disabled={ props.disabled }
+          emptyValue={ handleEmptyValue }
+          focalPointContextMenuItem={ props.config?.focal_point_context_menu_item }
+          handleLocateInTree={ handleLocateInTree }
+          handleSearch={ handleSearch }
+          handleUpload={ handleUpload }
+          height={ height }
+          imgAttributes={ props.config?.imgAttributes }
+          key={ imageValue.id }
+          lastImageDimensions={ lastImageDimensionsRef.current }
+          onChange={ handleHotspotImageChange }
+          onResize={ handleImageResize }
+          setCropModalOpen={ handleOpenCropModal }
+          setMarkerModalOpen={ handleOpenHotspotMarkersModal }
+          value={ convertToHotspotImageValue() }
+          width={ width }
+        />
+        )
+      : (
+        <AssetTarget
+          dndIcon
+          height={ lastImageDimensionsRef.current?.height ?? height ?? DEFAULT_HEIGHT }
+          onResize={ handleImageResize }
+          onSearch={ handleSearch }
+          onUpload={ props.config?.disableInlineUpload === true ? undefined : handleUpload }
+          title={ props.config?.title ?? t('image.dnd-target') }
+          width={ lastImageDimensionsRef.current?.width ?? width ?? '100%' }
+        />
+        )
   )
 }
