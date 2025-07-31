@@ -53,15 +53,15 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
           setDocumentWorkspaces([...user.documentWorkspaces, {
             cid: new Date().getTime(), // after path update is set to document id
             cpath: '',
-            list: false,
-            view: false,
-            publish: false,
-            delete: false,
-            rename: false,
             create: false,
+            delete: false,
+            list: false,
+            properties: false,
+            publish: false,
+            rename: false,
             settings: false,
             versions: false,
-            properties: false
+            view: false
           }])
         } }
                >{ t('user-management.workspaces.add') }</IconTextButton></>,
@@ -88,15 +88,15 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
           setAssetWorkspaces([...user.assetWorkspaces, {
             cid: new Date().getTime(), // after path update is set to document id
             cpath: '',
-            list: false,
-            view: false,
-            publish: false,
-            delete: false,
-            rename: false,
             create: false,
+            delete: false,
+            list: false,
+            properties: false,
+            publish: false,
+            rename: false,
             settings: false,
             versions: false,
-            properties: false
+            view: false
           }])
         } }
                >{ t('user-management.workspaces.add') }</IconTextButton></>,
@@ -123,15 +123,16 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
           setObjectWorkspaces([...user.dataObjectWorkspaces, {
             cid: new Date().getTime(), // after path update is set to document id
             cpath: '',
-            list: false,
-            view: false,
-            publish: false,
-            delete: false,
-            rename: false,
             create: false,
+            delete: false,
+            list: false,
+            properties: false,
+            publish: false,
+            rename: false,
             settings: false,
             versions: false,
-            properties: false
+            view: false,
+            save: false
           }])
         } }
                >{ t('user-management.workspaces.add') }</IconTextButton></>,
@@ -142,6 +143,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
+        specialSettings
         type={ 'object' }
                 />
     }

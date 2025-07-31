@@ -20,15 +20,12 @@ interface ITableProps {
   data: UserWorkspace[]
   isLoading: boolean
   type?: string
+  specialSettings?: boolean
   showDuplicatePropertyModal: () => void
   onUpdateData: (data: UserWorkspace[]) => void
 }
 
-export const Table = ({
-  showDuplicatePropertyModal,
-  data, type,
-  isLoading, onUpdateData
-}: ITableProps): React.JSX.Element => {
+export const Table = ({ showDuplicatePropertyModal, data, type, specialSettings = false, isLoading, onUpdateData }: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [gridData, setGridData] = React.useState<UserWorkspace[]>(data)
 
@@ -69,17 +66,19 @@ export const Table = ({
         }
       }
     }),
-    columnHelper.accessor('save', {
-      header: t('user-management.workspaces.columns.save'),
-      size: 76,
-      meta: {
-        type: 'checkbox',
-        editable: true,
-        config: {
-          align: 'center'
-        }
-      }
-    }),
+    ...(Object.prototype.hasOwnProperty.call(data[0] ?? {}, 'save') === true)
+      ? [columnHelper.accessor('save', {
+          header: t('user-management.workspaces.columns.save'),
+          size: 76,
+          meta: {
+            type: 'checkbox',
+            editable: true,
+            config: {
+              align: 'center'
+            }
+          }
+        })]
+      : [],
     columnHelper.accessor('publish', {
       header: t('user-management.workspaces.columns.publish'),
       size: 76,
@@ -91,17 +90,19 @@ export const Table = ({
         }
       }
     }),
-    columnHelper.accessor('unpublish', {
-      header: t('user-management.workspaces.columns.unpublish'),
-      size: 76,
-      meta: {
-        type: 'checkbox',
-        editable: true,
-        config: {
-          align: 'center'
-        }
-      }
-    }),
+    ...(Object.prototype.hasOwnProperty.call(data[0] ?? {}, 'unpublish') === true)
+      ? [columnHelper.accessor('unpublish', {
+          header: t('user-management.workspaces.columns.unpublish'),
+          size: 76,
+          meta: {
+            type: 'checkbox',
+            editable: true,
+            config: {
+              align: 'center'
+            }
+          }
+        })]
+      : [],
     columnHelper.accessor('delete', {
       header: t('user-management.workspaces.columns.delete'),
       size: 76,
@@ -151,6 +152,7 @@ export const Table = ({
       size: 76,
       meta: {
         type: 'checkbox',
+
         editable: true,
         config: {
           align: 'center'
@@ -168,6 +170,23 @@ export const Table = ({
         }
       }
     }),
+    ...(specialSettings)
+      ? [columnHelper.accessor('specialSettings', {
+          header: t('user-management.workspaces.columns.special-settings'),
+          size: 40,
+          cell: (context) => {
+            return (
+              <Flex
+                align='center'
+                className='w-full h-full'
+                justify='center'
+              >
+                {context.row.id}
+              </Flex>
+            )
+          }
+        })]
+      : [],
     columnHelper.accessor('actions', {
       header: '',
       size: 40,
