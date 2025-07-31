@@ -20,12 +20,7 @@ import { type RedirectRow, useRedirects } from './hooks/use-redirects'
 import { isUndefined } from 'lodash'
 import { useAppDispatch } from '@sdk/app'
 import { invalidatingTags } from '@sdk/api'
-import { BeginnerRedirectModal } from './beginner-redirect-modal/beginner-redirect-modal'
-import { CsvImportModal } from './csv-import-modal/csv-import-modal'
-import { CsvImportResultsModal } from './csv-import-results-modal/csv-import-results-modal'
 import { type BundleSeoRedirectsImportStatistics } from './seo-api-slice.gen'
-import { RedirectsToolbar } from './components/redirects-toolbar/redirects-toolbar'
-import { RedirectsTopBar } from './components/redirects-top-bar/redirects-top-bar'
 
 export const RedirectsContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
