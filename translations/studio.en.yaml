@@ -57,6 +57,8 @@ asset.upload.files.completed-actions: Completed actions
 asset.upload.validation: 'Please add a file'
 upload.error.file-too-large: 'The file is bigger than the actual upload limit of the server.'
 upload.error.generic: 'The file could not be uploaded.'
+upload.error.upload-failed: 'Upload failed'
+upload.error.failed-to-fetch-asset-details: 'Failed to fetch asset details'
 asset.select.type.nullable: 'All types'
 document.document-tree.title: Document Tree
 document.document-tree.search: Search in {{folderName}}
