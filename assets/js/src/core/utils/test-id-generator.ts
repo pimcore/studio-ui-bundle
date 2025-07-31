@@ -31,7 +31,7 @@ export const createSafeTestIdString = (input: string | number): string => {
  */
 export const buildTestId = (parts: Array<string | number | undefined>, separator: string = '-'): string => {
   return parts
-    .filter(Boolean)
+    .filter(part => part !== undefined && part !== null && part !== '')
     .map(createSafeTestIdString)
     .join(separator)
     .replace(new RegExp(`${separator}+`, 'g'), separator)
@@ -171,4 +171,119 @@ export const createTabTitleTestId = (title: string, elementId?: number | string,
   return createGenericTestId(title, {
     prefix: 'tab-title'
   })
+}
+
+/**
+ * Creates a test ID for tree nodes with ID and type.
+ * Generic function that can be used for user management, tag management, and other tree components.
+ *
+ * @param id - The node ID (user, role, tag, etc.)
+ * @param type - The node type ('user', 'role', 'folder', 'tag', etc.)
+ * @returns Formatted test ID string
+ *
+ * @example
+ * createTreeNodeTestId(123, 'user')
+ * // Returns: 'tree-node-user-123'
+ *
+ * createTreeNodeTestId(456, 'role')
+ * // Returns: 'tree-node-role-456'
+ *
+ * createTreeNodeTestId(789, 'tag')
+ * // Returns: 'tree-node-tag-789'
+ */
+export const createTreeNodeTestId = (id: number | string, type: string): string => {
+  return createGenericTestId(id, {
+    prefix: 'tree-node',
+    elementType: type as ElementType
+  })
+}
+
+/**
+ * Creates a test ID for tab content areas.
+ * Generic function that can be used for any tab panel content.
+ *
+ * @param context - The context identifier (user-id, asset-id, etc.)
+ * @param options - Configuration options
+ * @param options.prefix - Prefix for the test ID (default: 'tab-content')
+ * @param options.tabKey - Optional tab key for specific tab content identification
+ * @returns Formatted test ID string
+ *
+ * @example
+ * createTabContentTestId(123, { prefix: 'user-tab' })
+ * // Returns: 'user-tab-content-123'
+ *
+ * createTabContentTestId(456, { prefix: 'asset-detail', tabKey: 'properties' })
+ * // Returns: 'asset-detail-content-properties-456'
+ *
+ * createTabContentTestId('settings', { prefix: 'user-detail', tabKey: 'workspaces' })
+ * // Returns: 'user-detail-content-workspaces-settings'
+ */
+export const createTabContentTestId = (
+  context: number | string,
+  options: {
+    prefix?: string
+    tabKey?: string
+  } = {}
+): string => {
+  const { prefix = 'tab', tabKey } = options
+
+  if (tabKey !== undefined) {
+    return buildTestId([prefix, 'content', tabKey, context])
+  }
+  return buildTestId([prefix, 'content', context])
+}
+
+/**
+ * Creates a test ID for table containers.
+ * Used to identify different types of tables.
+ *
+ * @param tableType - The type of table (documents, assets, data-objects, etc.)
+ * @returns Formatted test ID string
+ *
+ * @example
+ * createTableTestId('documents')
+ * // Returns: 'table-documents'
+ *
+ * createTableTestId('user-workspaces-assets')
+ * // Returns: 'table-user-workspaces-assets'
+ */
+export const createTableTestId = (tableType: string): string => {
+  return buildTestId(['table', tableType])
+}
+
+/**
+ * Creates a test ID for table rows.
+ * Uses just the row index for identification.
+ *
+ * @param rowIdentifier - Row index (number) or row ID (string)
+ * @returns Formatted test ID string
+ *
+ * @example
+ * createTableRowTestId(0)
+ * // Returns: 'row-0'
+ *
+ * createTableRowTestId('asset-123')
+ * // Returns: 'row-asset-123'
+ */
+export const createTableRowTestId = (rowIdentifier: number | string): string => {
+  return buildTestId(['row', rowIdentifier])
+}
+
+/**
+ * Creates a test ID for table cells.
+ * Combines row identifier and column ID.
+ *
+ * @param rowIdentifier - Row index (number) or row ID (string)
+ * @param columnId - Column identifier
+ * @returns Formatted test ID string
+ *
+ * @example
+ * createTableCellTestId(0, 'cpath')
+ * // Returns: 'cell-0-cpath'
+ *
+ * createTableCellTestId('asset-123', 'permissions')
+ * // Returns: 'cell-asset-123-permissions'
+ */
+export const createTableCellTestId = (rowIdentifier: number | string, columnId: string): string => {
+  return buildTestId(['cell', rowIdentifier, columnId])
 }
