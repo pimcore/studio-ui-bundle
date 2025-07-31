@@ -21,6 +21,7 @@ import {
 import { useStyles } from './link.styles'
 import { LinkPreview } from './components/link-preview/link-preview'
 import { useLinkModal } from './hooks/use-link-modal'
+import cn from 'classnames'
 
 export interface LinkValue {
   text: string
@@ -108,7 +109,7 @@ export const Link = (props: LinkProps): React.JSX.Element => {
       gap="extra-small"
     >
       <PreviewComponent
-        className={ props.className }
+        className={ cn('studio-inherited-overlay', props.className) }
         inherited={ props.inherited }
         textPrefix={ props.textPrefix }
         textSuffix={ props.textSuffix }
