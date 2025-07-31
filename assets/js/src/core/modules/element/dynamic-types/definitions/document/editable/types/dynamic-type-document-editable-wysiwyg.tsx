@@ -18,7 +18,7 @@ export class DynamicTypeDocumentEditableWysiwyg extends DynamicTypeDocumentEdita
 
   getEditableDataComponent (props: AbstractDocumentEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <Wysiwyg context={WysiwygContext.DOCUMENT} />
+      <Wysiwyg context={ WysiwygContext.DOCUMENT } />
     )
   }
 }
