@@ -9,7 +9,7 @@
  */
 
 import { Button, Content, ContentLayout, DatePicker, Form, IconTextButton, Input, Space, Title, Toolbar } from '@sdk/components'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ComponentSelect } from './components/component-select/component-select'
 import { PrioritySelect } from './components/priority-select/priority-select'
@@ -46,19 +46,19 @@ export const FilterTabContainer = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme='secondary'>
           <IconTextButton
+            disabled={isLoading}
             icon={{ value: 'close' }}
             onClick={handleResetFilters}
             type='link'
-            disabled={isLoading}
           >
             {t('sidebar.clear-all-filters')}
           </IconTextButton>
 
           <Button
-            onClick={updateFilters}
-            type='primary'
             disabled={isLoading}
             loading={isLoading}
+            onClick={updateFilters}
+            type='primary'
           >
             {t('button.apply')}
           </Button>
