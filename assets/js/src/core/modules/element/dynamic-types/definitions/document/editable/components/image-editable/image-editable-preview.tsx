@@ -21,6 +21,7 @@ import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { isNil } from 'lodash'
 import useElementResizeDimensions from '@Pimcore/utils/hooks/use-element-resize-dimensions'
 import { generateThumbnailUrl } from './utils/thumbnail-sizing'
+import { getImageDimensions } from './utils/image-dimensions'
 
 interface ImageEditablePreviewProps {
   src?: string
@@ -118,18 +119,7 @@ export const ImageEditablePreview = ({
             placeholder={ loadingSpinner }
             preview={ false }
             src={ imageSrc }
-            style={ {
-              width: isImageLoaded
-                ? undefined
-                : !isNil(lastImageDimensions?.width)
-                    ? Math.max(lastImageDimensions.width, 150)
-                    : 150,
-              height: isImageLoaded
-                ? undefined
-                : !isNil(lastImageDimensions?.height)
-                    ? Math.max(lastImageDimensions.height, 100)
-                    : 100
-            } }
+            style={ getImageDimensions(isImageLoaded, lastImageDimensions) }
             { ...imgAttributes }
           />
         )}

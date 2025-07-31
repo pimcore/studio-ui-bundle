@@ -28,10 +28,7 @@ import { useUploadModal } from '@Pimcore/components/modal-upload/hooks/use-uploa
 import { InlineUpload } from '@Pimcore/components/inline-upload'
 import { useImageValueUpdates } from './hooks/use-image-value-updates'
 import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
-
-const MIN_IMAGE_WIDTH = 150
-const MIN_IMAGE_HEIGHT = 100
-const DEFAULT_HEIGHT = 100
+import { MIN_WIDTH, MIN_HEIGHT, DEFAULT_HEIGHT } from './utils/image-dimensions'
 
 export interface ImageEditableValue {
   id?: number
@@ -89,8 +86,8 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
   } = useImageValueUpdates({ value: imageValue, onChange: props.onChange })
 
   const handleImageResize = useCallback((dimensions: { width: number, height: number }) => {
-    const minWidth = Math.max(dimensions.width, MIN_IMAGE_WIDTH)
-    const minHeight = Math.max(dimensions.height, MIN_IMAGE_HEIGHT)
+    const minWidth = Math.max(dimensions.width, MIN_WIDTH)
+    const minHeight = Math.max(dimensions.height, MIN_HEIGHT)
     console.log(`Image resized to: ${minWidth}x${minHeight}`)
     lastImageDimensionsRef.current = { width: minWidth, height: minHeight }
   }, [])
