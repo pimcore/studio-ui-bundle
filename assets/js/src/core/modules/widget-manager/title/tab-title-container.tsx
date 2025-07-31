@@ -43,8 +43,13 @@ export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): R
     closeWidget(node.getId())
   }
 
+  // Type-safe config extraction
+  const nodeId = typeof config.id === 'string' || typeof config.id === 'number' ? String(config.id) : undefined
+  const elementType = typeof config.elementType === 'string' ? config.elementType : undefined
+
   if (isBorderNode) {
-    const dataTestId = createBorderTestId(config.id, node.getName(), config.elementType)
+    const nodeName = node.getName()
+    const dataTestId = createBorderTestId(nodeId, nodeName, elementType)
     
     return (
       <BorderTitleView
@@ -57,7 +62,7 @@ export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): R
 
   return (
     <TabTitleView
-      dataTestId={ createTabTitleTestId(getTitle(), config.id, config.elementType) }
+      dataTestId={ createTabTitleTestId(getTitle(), nodeId, elementType) }
       icon={ icon }
       onClose={ isCloseable ? onClose : undefined }
       onConfirm={ modified === true ? onConfirm : undefined }
