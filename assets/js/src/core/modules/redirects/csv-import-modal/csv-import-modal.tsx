@@ -8,15 +8,16 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import { Modal, IconTextButton, IconButton } from '@sdk/components'
-import { Button } from 'antd'
+import { Button, Upload } from 'antd'
 import { t } from 'i18next'
-import { Flex } from '@Pimcore/components/flex/flex'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyle } from './csv-import-modal.styles'
-import cn from 'classnames'
+import type { UploadFile, UploadProps } from 'antd'
+
+const { Dragger } = Upload
 
 interface CsvImportModalProps {
   open: boolean
@@ -32,47 +33,21 @@ export const CsvImportModal = ({
   loading = false 
 }: CsvImportModalProps): React.JSX.Element => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [fileList, setFileList] = useState<UploadFile[]>([])
   const { styles } = useStyle()
-  const { getStateClasses } = useDroppable()
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const dropZoneRef = useRef<HTMLDivElement>(null)
-
-  const handleFileSelect = (file: File): void => {
-    if (file.type === 'text/csv' || file.name.endsWith('.csv')) {
-      setSelectedFile(file)
-    }
-  }
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const file = event.target.files?.[0]
-    if (file) {
-      handleFileSelect(file)
-    }
-  }
 
   const handleUpload = (): void => {
     if (selectedFile) {
       onImport(selectedFile)
+      setSelectedFile(null)
+      setFileList([])
     }
   }
 
   const handleCancel = (): void => {
     setSelectedFile(null)
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ''
-    }
+    setFileList([])
     onCancel()
-  }
-
-  const handleDropZoneClick = (): void => {
-    if (!loading && !selectedFile) {
-      fileInputRef.current?.click()
-    }
-  }
-
-  const handleBrowseClick = (event: React.MouseEvent): void => {
-    event.stopPropagation()
-    fileInputRef.current?.click()
   }
 
   const formatFileSize = (bytes: number): string => {
@@ -83,16 +58,19 @@ export const CsvImportModal = ({
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
   }
 
-  const handleDragOver = (event: React.DragEvent): void => {
-    event.preventDefault()
-  }
-
-  const handleDrop = (event: React.DragEvent): void => {
-    event.preventDefault()
-    const files = event.dataTransfer.files
-    if (files.length > 0) {
-      handleFileSelect(files[0])
-    }
+  const uploadProps: UploadProps = {
+    name: 'file',
+    multiple: false,
+    accept: '.csv',
+    fileList: [], 
+    beforeUpload: (file) => {
+      if (file.type === 'text/csv' || file.name.endsWith('.csv')) {
+        setSelectedFile(file)
+      }
+      return false 
+    },
+    showUploadList: false, 
+    disabled: loading
   }
 
   return (
@@ -104,7 +82,10 @@ export const CsvImportModal = ({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <IconTextButton
             icon={{ value: 'upload-import' }}
-            onClick={handleBrowseClick}
+            onClick={() => {
+              const uploadElement = document.querySelector('.ant-upload input[type="file"]') as HTMLInputElement
+              uploadElement?.click()
+            }}
             disabled={loading}
           >
             {t('redirects.browse-files')}
@@ -122,26 +103,12 @@ export const CsvImportModal = ({
       size="M"
     >
       {!selectedFile ? (
-        <div
-        ref={dropZoneRef}
-        className={cn(styles.csvTargetContainer, ...getStateClasses())}
-        onClick={handleDropZoneClick}
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
-      >
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".csv"
-          onChange={handleInputChange}
-          className={styles.hiddenInput}
-          disabled={loading}
-        />
+        <Dragger {...uploadProps}>
           <Flex
             align="center"
             gap="mini"
             justify="center"
-            style={{ height: '100%' }}
+            style={{ padding: '20px' }}
             vertical
           >
             <div className="icon-container">
@@ -164,31 +131,26 @@ export const CsvImportModal = ({
               {t('redirects.import-drag-drop')}
             </div>
           </Flex>
-        </div>
-        )
-        : (
-          <div className={styles.uploadedFile}>
-            <div className="file-info">
-              <div className="file-details">
-                <div>
-                  <div className="file-name">{selectedFile.name}</div>
-                  <div className="file-size">{formatFileSize(selectedFile.size)}</div>
-                </div>
+        </Dragger>
+      ) : (
+        <div className={styles.uploadedFile}>
+          <div className="file-info">
+            <div className="file-details">
+              <div>
+                <div className="file-name">{selectedFile.name}</div>
+                <div className="file-size">{formatFileSize(selectedFile.size)}</div>
               </div>
-              <IconButton
-                icon={{ value: 'close' }}
-                type="text"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setSelectedFile(null)
-                  if (fileInputRef.current) {
-                    fileInputRef.current.value = ''
-                  }
-                }}
-              />
             </div>
+            <IconButton
+              icon={{ value: 'close' }}
+              type="text"
+              onClick={() => {
+                setSelectedFile(null)
+              }}
+            />
           </div>
-        )}
+        </div>
+      )}
     </Modal>
   )
 }
