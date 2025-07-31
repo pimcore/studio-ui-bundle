@@ -19,6 +19,7 @@ import { isNil } from 'lodash'
 import { useStyles } from './inline-upload.styles'
 import { useTargetFolderId } from '@Pimcore/components/hooks/use-target-folder-id'
 import { useTranslation } from 'react-i18next'
+import cn from 'classnames'
 
 export interface InlineUploadProps {
   accept?: string
@@ -28,6 +29,7 @@ export interface InlineUploadProps {
   onError?: (error: Error) => void
   children: React.ReactNode
   disabled?: boolean
+  fullWidth?: boolean
 }
 
 export const InlineUpload = (props: InlineUploadProps): React.JSX.Element => {
@@ -95,7 +97,7 @@ export const InlineUpload = (props: InlineUploadProps): React.JSX.Element => {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={cn(styles.container, { [styles.containerFullWidth]: props.fullWidth })}>
       <Upload {...uploadProps}>
         <div className={styles.uploadArea}>
           {props.children}

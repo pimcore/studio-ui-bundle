@@ -10,30 +10,31 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ token }) => ({
-  container: {
-    position: 'relative',
-    width: '100%',
-    height: '100%'
-  },
+export const useStyles = createStyles(({ token, css }) => ({
+  container: css``,
+  containerFullWidth: css`
+    .ant-upload-select {
+      display: initial;
+    }
+  `,
 
-  uploadArea: {
-    position: 'relative',
-    width: '100%',
-    height: '100%'
-  },
+  uploadArea: css`
+    position: relative;
+    width: 100%;
+    height: 100%;
+  `,
 
-  progressOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 10,
-    borderRadius: token.borderRadius
-  },
+  progressOverlay: css`
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    border-radius: ${token.borderRadius};
+  `
 }))

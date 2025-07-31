@@ -29,7 +29,7 @@ import { InlineUpload } from '@Pimcore/components/inline-upload'
 
 const MIN_IMAGE_WIDTH = 150
 const MIN_IMAGE_HEIGHT = 100
-const DEFAULT_HEIGHT = 200
+const DEFAULT_HEIGHT = 100
 
 export interface ImageEditableValue {
   id?: number
@@ -279,6 +279,7 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
         accept="image/*"
         onSuccess={handleFileSystemUpload}
         disabled={props.disabled}
+        fullWidth={isNil(lastImageDimensionsRef.current?.width ?? width)}
       >
         <Droppable
           isValidContext={() => props.disabled !== true}
