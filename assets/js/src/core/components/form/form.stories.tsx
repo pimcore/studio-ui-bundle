@@ -90,6 +90,27 @@ const config: Meta = {
         </Form.Item>
 
         <Form.Item
+          name="name"
+          rules={ [{ required: true, message: 'Please input your name!' }] }
+        >
+          <Form.Item
+            label="First Name"
+            name={ ['name', 'firstName'] }
+            rules={ [{ required: true, message: 'Please input your first name!' }] }
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            label="Last Name"
+            name={ ['name', 'lastName'] }
+            rules={ [{ required: true, message: 'Please input your last name!' }] }
+          >
+            <Input />
+          </Form.Item>
+        </Form.Item>
+
+        <Form.Item
           label="TextArea"
           name="TextArea"
           rules={ [{ required: true, message: 'Please input!' }] }

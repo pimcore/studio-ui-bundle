@@ -41,6 +41,17 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
     return value
   }
 
+  /**
+   * Transform the internal editable value to the format expected by the backend API
+   * This is the reverse of transformValue - used when sending data to update endpoints
+   * @param value The internal editable value
+   * @param props The editable props
+   * @returns The value formatted for the backend API
+   */
+  transformValueForApi (value: any, props: AbstractDocumentEditableDefinition): any {
+    return value
+  }
+
   getLabel (props: AbstractDocumentEditableDefinition): React.ReactElement | undefined {
     return undefined
   }

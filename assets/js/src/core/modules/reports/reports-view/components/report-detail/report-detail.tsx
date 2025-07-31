@@ -118,6 +118,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
           autoWidth
           columns={ columns }
           data={ chartData }
+          isLoading={ isLoading }
         />
       )}
     </Flex>

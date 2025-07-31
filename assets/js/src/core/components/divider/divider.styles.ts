@@ -15,6 +15,16 @@ export const useStyles = createStyles(({ css, token }, prefixCls: string) => {
   return {
     divider: css`
       ${generateAllMarginSizingCSS(prefixCls, 'size', token, ['y'])}
+
+      &.divider--theme-default {}
+
+      &.divider--theme-primary {
+        border-color: ${token.colorPrimary};
+      }
+
+      &.divider--theme-secondary {
+        border-color: ${token.colorFillAdditional};
+      }
     `
   }
 })

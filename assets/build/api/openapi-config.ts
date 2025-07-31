@@ -58,11 +58,23 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'recycleBinGetCollection',
+      type: 'query'
+    },
+    {
+      pattern: 'dataObjectGetGridPreview',
+      type: 'query',
+    },
+    {
       pattern: 'customReportsChart',
       type: 'query'
     },
     {
       pattern: 'customReportsListDrillDownOptions',
+      type: 'query'
+    },
+    {
+      pattern: 'translationGetList',
       type: 'query'
     }
   ],
@@ -156,9 +168,10 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/email/emails-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/emails\/?/i)
+    },
+    '../../js/src/core/modules/recycle-bin/recycle-bin-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/recycle-bin\/?/i)
     }
-
-
   },
   exportName: 'api',
   hooks: true,
