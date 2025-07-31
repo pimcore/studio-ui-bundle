@@ -13,8 +13,8 @@ import { Flex, Modal } from '@sdk/components'
 import { t } from 'i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyle } from './csv-import-results-modal.styles'
-import { type BundleSeoRedirectsImportStatistics } from '../seo-api-slice.gen'
 import cn from 'classnames'
+import { BundleSeoRedirectsImportStatistics } from '../../seo-api-slice.gen'
 
 interface CsvImportResultsModalProps {
   open: boolean
