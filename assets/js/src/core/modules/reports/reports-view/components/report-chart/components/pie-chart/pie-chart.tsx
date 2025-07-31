@@ -13,7 +13,8 @@ import { Pie } from '@ant-design/plots'
 import { isEmpty } from 'lodash'
 import { generateColorMap } from '@Pimcore/modules/reports/reports-view/components/report-chart/utils/helpers'
 import type { IChartProps, IChartDataItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
-import { ChartLegend } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/pie-chart/components/chart-legend/chart-legend'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { LegendItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/legend-item/legend-item'
 
 export interface IChartPieDataItem extends IChartDataItem {
   color: string
@@ -106,11 +107,26 @@ export const PieChart = ({ reportData, chartData }: IChartProps): React.JSX.Elem
   return (
     <div>
       <Pie { ...config } />
-      <ChartLegend
-        data={ reportChartData }
-        disabledItems={ disabledItems }
-        handleLegendItemClick={ handleLegendItemClick }
-      />
+      <Flex
+        gap="mini"
+        justify="center"
+        wrap="wrap"
+      >
+        {reportChartData?.map((item, index) => {
+          const isDisabled = disabledItems.includes(item.type)
+
+          return (
+            <LegendItem
+              disabled={ isDisabled }
+              handleClick={ handleLegendItemClick }
+              key={ `${index}-${item.type}` }
+              label={ item.type }
+              markerColor={ item.color }
+              value={ item.value }
+            />
+          )
+        })}
+      </Flex>
     </div>
   )
 }
