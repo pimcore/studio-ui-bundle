@@ -164,6 +164,7 @@ import { type DynamicTypeDocumentEditableLink } from './definitions/document/edi
 import { type DynamicTypeDocumentEditableWysiwyg } from './definitions/document/editable/types/dynamic-type-document-editable-wysiwyg'
 import { type DynamicTypeFieldFilterCheckbox } from './definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
 import { type DynamicTypeDocumentEditableTextarea } from './definitions/document/editable/types/dynamic-type-document-editable-textarea'
+import { type DynamicTypeDocumentEditableImage } from './definitions/document/editable/types/dynamic-type-document-editable-image'
 import { type DynamicTypePipelineRegistry } from './definitions/pipelines/dynamic-type-pipeline-registry'
 import { type DynamicTypePipelineGridSourceFieldsText } from './definitions/pipelines/grid/source-fields/types/text/text'
 import { type DynamicTypePipelineGridTransformersChangeCase } from './definitions/pipelines/grid/transformers/types/change-case/change-case'
@@ -337,6 +338,7 @@ moduleSystem.registerModule({
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableTextarea>(serviceIds['DynamicTypes/DocumentEditable/Textarea']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableWysiwyg>(serviceIds['DynamicTypes/DocumentEditable/Wysiwyg']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableMultiSelect>(serviceIds['DynamicTypes/DocumentEditable/MultiSelect']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableImage>(serviceIds['DynamicTypes/DocumentEditable/Image']))
 
     const assetRegistry = container.get<DynamicTypeAssetRegistry>(serviceIds['DynamicTypes/AssetRegistry'])
 

@@ -183,6 +183,7 @@ import { DynamicTypeDocumentEditableDate } from '@Pimcore/modules/element/dynami
 import { DynamicTypeDocumentEditableLink } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-link'
 import { DynamicTypeDocumentEditableEmbed } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-embed'
 import { DynamicTypeDocumentEditableTextarea } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-textarea'
+import { DynamicTypeDocumentEditableImage } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-image'
 import { DynamicTypePipelineRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-registry'
 import { DynamicTypePipelineGridSourceFieldsText } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/types/text/text'
 import { DynamicTypePipelineGridTransformersChangeCase } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/change-case/change-case'
@@ -380,6 +381,7 @@ container.bind(serviceIds['DynamicTypes/DocumentEditableRegistry']).to(DynamicTy
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Checkbox']).to(DynamicTypeDocumentEditableCheckbox).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Date']).to(DynamicTypeDocumentEditableDate).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Embed']).to(DynamicTypeDocumentEditableEmbed).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Image']).to(DynamicTypeDocumentEditableImage).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Input']).to(DynamicTypeDocumentEditableInput).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Wysiwyg']).to(DynamicTypeDocumentEditableWysiwyg).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Link']).to(DynamicTypeDocumentEditableLink).inSingletonScope()
