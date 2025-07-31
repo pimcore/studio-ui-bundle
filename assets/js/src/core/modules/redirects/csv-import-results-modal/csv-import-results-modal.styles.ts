@@ -14,63 +14,65 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     statisticsContainer: css`
       .statistics-list {
-      padding-top: 20px
+        padding-top: 10px;
+        padding-left: 5px;
       }
         
-        .extra-padding {
-            padding-right: 25px}
+      .statistic-normal {
+        padding-right: 28px;
+        width: 60px;
+      }
 
-        .statistic-bold {
-          font-weight: ${token.fontWeightStrong};
-          color: ${token.colorText};
-          padding-right: 8px
-        }
+      .statistic-bold {
+        font-weight: ${token.fontWeightStrong};
+        color: ${token.colorText};
+        padding-right: 12px;
+        width: 60px;
+      }
+      
+      .statistic-item.errored {
+        color: ${token.colorError};
         
-        &.errored {
-          .statistic-value {
-            color: ${token.colorError};
-          }
+        .statistic-bold {
+          color: ${token.colorError};
         }
       }
     `,
     errorSection: css`
-      margin-top: ${token.marginLG}px;
-      
-      .error-title {
-        font-weight: ${token.fontWeightStrong};
-        color: ${token.colorError};
-        margin-bottom: ${token.marginXS}px;
-        display: flex;
-        align-items: center;
-        gap: ${token.marginXS}px;
-      }
+      margin-top: ${token.marginXS}px;
       
       .error-list {
         background: ${token.colorErrorBg};
         border: 1px solid ${token.colorErrorBorder};
         border-radius: ${token.borderRadius}px;
-        padding: ${token.paddingXS}px;
         max-height: 200px;
         overflow-y: auto;
-        
-        .error-item {
-          padding: ${token.paddingXS}px 0;
-          border-bottom: 1px solid ${token.colorErrorBorder};
-          font-family: ${token.fontFamilyCode};
-          font-size: ${token.fontSizeSM}px;
+    
+
+    .error-item {
+        padding: ${token.paddingXS}px 0;
+        border-bottom: 1px solid ${token.colorErrorBorder};
           
+        .pimcore-icon.pimcore-icon-alert.anticon.error-icon {
+        margin: 3px;
+        margin-left: 10px;
+        margin-right: 5px;
+        color: ${token.colorError};
+
+        }
+
           &:last-child {
             border-bottom: none;
           }
           
           .error-line {
             font-weight: ${token.fontWeightStrong};
-            color: ${token.colorError};
+            width: 50px;
           }
           
           .error-message {
-            color: ${token.colorErrorText};
             margin-left: ${token.marginXS}px;
+            margin-right: 8px;
           }
         }
       }

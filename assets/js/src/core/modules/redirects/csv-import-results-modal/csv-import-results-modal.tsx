@@ -9,8 +9,7 @@
  */
 
 import React from 'react'
-import { Flex, Modal, ModalFooter } from '@sdk/components'
-import { Button } from 'antd'
+import { Flex, Modal } from '@sdk/components'
 import { t } from 'i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyle } from './csv-import-results-modal.styles'
@@ -38,36 +37,30 @@ export const CsvImportResultsModal = ({
 
   return (
     <Modal
-      title={t('redirects.csv-import-results.title')}
+      title={t('redirects.csv-import-modal.redirects-import')}
       open={open}
       onCancel={onClose}
-      footer={
-        <ModalFooter divider justify='space-between'>
-        <Button type="primary" onClick={onClose}>
-          {t('redirects.csv-import-results.close')}
-        </Button>
-        </ModalFooter>
-      }
-      size="M"
+      footer={null}
+      size={"M"}
     >
       <div className={styles.statisticsContainer}>
         <div className="statistics-list">
-          <Flex gap={5}>
-            <div className="extra-padding">{t('redirects.csv-import-results.total')}</div>
-            <div className="statistic-value">{results.total}</div>
+          <Flex>
+            <div className="statistic-normal">{t('redirects.csv-import-results.total')}</div>
+            <div>{results.total}</div>
           </Flex>
           
-          <Flex gap={5}>
+          <Flex>
             <div className="statistic-bold">{t('redirects.csv-import-results.created')}</div>
             <div className="statistic-bold">{results.created}</div>
           </Flex>
           
-          <Flex gap={5}>
+          <Flex >
             <div className="statistic-bold">{t('redirects.csv-import-results.updated')}</div>
             <div className="statistic-bold">{results.updated}</div>
           </Flex>
           
-          {results.errored > 0 && (<Flex gap={5} className={cn('statistic-item', 'errored')}>
+          {results.errored > 0 && (<Flex className={cn('statistic-item', 'errored')}>
             <div className="statistic-bold">{t('redirects.csv-import-results.errored')}</div>
             <div className="statistic-bold">{results.errored}</div>
           </Flex>)}
@@ -76,20 +69,22 @@ export const CsvImportResultsModal = ({
 
       {hasErrors && (
         <div className={styles.errorSection}>
-          <div className="error-title">
-            {t('redirects.csv-import-results.error')}
-          </div>
+
+
           <div className="error-list">
-            {Object.entries(results.errors).map(([lineNumber, errorMessage]) => (
-              <div key={lineNumber} className="error-item">
-                <span className="error-line">
+                          <Flex gap={8} className="error-item" justify='space-between'>
+                <Icon value='alert' className="error-icon" options={ { width: 20, height: 20} }/>
+            <Flex vertical>{Object.entries(results.errors).map(([lineNumber, errorMessage]) => (
+                <Flex><span className="error-line">
                   {t('redirects.csv-import-results.line', { line: lineNumber })}:
                 </span>
                 <span className="error-message">
                   {String(errorMessage)}
                 </span>
-              </div>
+                </Flex>
             ))}
+                            </Flex>
+                          </Flex>
           </div>
         </div>
       )}

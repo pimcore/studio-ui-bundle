@@ -53,17 +53,7 @@ export const useStyle = createStyles(({ token, css }) => {
       }
     `,
     uploadedFile: css`
-      .file-info {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
       
-      .file-details {
-        display: flex;
-        align-items: center;
-        gap: ${token.marginXS}px;
-        
         .file-name {
           font-weight: ${token.fontWeightStrong};
         }
@@ -72,16 +62,10 @@ export const useStyle = createStyles(({ token, css }) => {
           color: ${token.colorTextSecondary};
           font-size: ${token.fontSizeSM}px;
         }
-      }
-    `,
-    hiddenInput: css`
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      cursor: pointer;
+
+        .icon-button--theme-primary {
+          margin-top: 3px;
+        }
     `
   }
 })

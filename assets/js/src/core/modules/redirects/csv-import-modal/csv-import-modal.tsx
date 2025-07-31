@@ -16,6 +16,8 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyle } from './csv-import-modal.styles'
 import type { UploadProps } from 'antd'
+import { GeneralError, trackError } from '@sdk/modules/app'
+import { log } from '@module-federation/runtime-core/dist/src/utils'
 
 const { Dragger } = Upload
 
@@ -36,7 +38,6 @@ export const CsvImportModal = ({
   const { styles } = useStyle()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // Clear selected file when modal opens
   useEffect(() => {
     if (open) {
       setSelectedFile(null)
@@ -49,7 +50,6 @@ export const CsvImportModal = ({
   const handleUpload = (): void => {
     if (selectedFile) {
       onImport(selectedFile)
-      // Don't clear selectedFile here - let parent component manage state
     }
   }
 
@@ -59,8 +59,10 @@ export const CsvImportModal = ({
   }
 
   const handleFileSelect = (file: File): void => {
-    if (file.type === 'text/csv' || file.name.endsWith('.csv')) {
+    if (file.type === 'text/csv' || file.type === 'application/csv' || file.name.endsWith('.csv')) {
       setSelectedFile(file)
+    } else {
+      trackError( new GeneralError('File rejected - not a CSV'))
     }
   }
 
@@ -86,9 +88,10 @@ export const CsvImportModal = ({
   const uploadProps: UploadProps = {
     name: 'file',
     multiple: false,
-    accept: '.csv',
+    accept: '.csv,text/csv,application/csv',
     beforeUpload: (file) => {
-      handleFileSelect(file)
+      console.log('File dropped/selected:', file)
+      handleFileSelect(file as File)
       return false 
     },
     showUploadList: false,
@@ -101,7 +104,7 @@ export const CsvImportModal = ({
       open={open}
       onCancel={handleCancel}
       footer={
-                <ModalFooter divider>
+                <ModalFooter divider justify={!selectedFile ? 'space-between': 'end'}>
           {!selectedFile && (
             <IconTextButton
               icon={{ value: 'upload-import' }}
@@ -164,17 +167,19 @@ export const CsvImportModal = ({
         </Dragger>
       ) : (
         <div className={styles.uploadedFile}>
-          <div className="file-info">
-            <div className="file-details">
+          <Flex gap={10} align='start'>
+            <Flex>
               <div>
                 <div className="file-name">{selectedFile.name}</div>
                 <div className="file-size">{formatFileSize(selectedFile.size)}</div>
               </div>
-            </div>
+            </Flex>
             {!loading && (
               <IconButton
+              variant='minimal'
+              iconPosition='start'
                 icon={{ value: 'close' }}
-                type="text"
+                type="link"
                 onClick={() => {
                   setSelectedFile(null)
                   if (fileInputRef.current) {
@@ -183,7 +188,7 @@ export const CsvImportModal = ({
                 }}
               />
             )}
-          </div>
+          </Flex>
         </div>
       )}
     </Modal>
