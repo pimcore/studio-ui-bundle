@@ -46,9 +46,9 @@ export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): R
   // Type-safe config extraction
   const nodeId = typeof config.id === 'string' || typeof config.id === 'number' ? String(config.id) : undefined
   const elementType = typeof config.elementType === 'string' ? config.elementType : undefined
+  const nodeName = typeof node.getName() === 'string' ? node.getName() : undefined
 
   if (isBorderNode) {
-    const nodeName = node.getName()
     const dataTestId = createBorderTestId(nodeId, nodeName, elementType)
     
     return (
