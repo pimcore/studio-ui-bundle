@@ -22,25 +22,27 @@
     "globalName": "pimcore_studio_ui_bundle",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
-<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
     "publicPath": "/bundles/pimcorestudioui/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/"
 ========
     "publicPath": "/bundles/pimcorestudioui/build/a62c1e12-441d-4223-b27d-260536a8ea82/"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
 ========
     "publicPath": "/bundles/pimcorestudioui/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/"
->>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-stats.json
+>>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+========
+    "publicPath": "/bundles/pimcorestudioui/build/29929915-ea11-4edf-9ff9-bc13ea5e0f4b/"
+>>>>>>>> a2a80e9b8ad8452be4bf9b3743efc27ace84f971:public/build/29929915-ea11-4edf-9ff9-bc13ea5e0f4b/mf-manifest.json
   },
   "shared": [
     {
+      "id": "pimcore_studio_ui_bundle:inversify",
+      "name": "inversify",
+      "version": "6.1.x",
       "singleton": true,
       "requiredVersion": "^undefined",
-      "shareScope": "default",
-      "eager": true,
-      "version": "6.1.x",
-      "name": "inversify",
-      "id": "pimcore_studio_ui_bundle:inversify",
       "assets": {
         "js": {
           "async": [],
@@ -53,21 +55,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": [
-        "./app",
-        "./modules/data-object"
-      ]
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^14.1.3",
-      "shareScope": "default",
-      "import": "react-i18next",
+      "id": "pimcore_studio_ui_bundle:react-i18next",
       "name": "react-i18next",
       "version": "14.1.3",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:react-i18next",
+      "singleton": true,
+      "requiredVersion": "^14.1.3",
       "assets": {
         "js": {
           "async": [],
@@ -79,21 +74,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": [
-        "./app",
-        "./components",
-        "./modules/element"
-      ]
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "18.3.x",
-      "shareScope": "default",
-      "eager": true,
+      "id": "pimcore_studio_ui_bundle:react",
       "name": "react",
       "version": "18.3.x",
-      "id": "pimcore_studio_ui_bundle:react",
+      "singleton": true,
+      "requiredVersion": "18.3.x",
       "assets": {
         "js": {
           "async": [],
@@ -106,21 +94,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": [
-        "./components",
-        "./modules/data-object",
-        "./modules/element"
-      ]
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^*",
-      "shareScope": "default",
-      "eager": true,
+      "id": "pimcore_studio_ui_bundle:reflect-metadata",
       "name": "reflect-metadata",
       "version": "*",
-      "id": "pimcore_studio_ui_bundle:reflect-metadata",
+      "singleton": true,
+      "requiredVersion": "^*",
       "assets": {
         "js": {
           "async": [],
@@ -133,17 +114,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^2.5.1",
-      "shareScope": "default",
-      "eager": true,
+      "id": "pimcore_studio_ui_bundle:classnames",
       "name": "classnames",
       "version": "2.5.1",
-      "id": "pimcore_studio_ui_bundle:classnames",
+      "singleton": true,
+      "requiredVersion": "^2.5.1",
       "assets": {
         "js": {
           "async": [],
@@ -156,20 +134,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": [
-        "./modules/element"
-      ]
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^6.4.9",
-      "shareScope": "default",
-      "import": "@codemirror/lang-html",
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-html",
       "name": "@codemirror/lang-html",
       "version": "^6.4.9",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:@codemirror/lang-html",
+      "singleton": true,
+      "requiredVersion": "^6.4.9",
       "assets": {
         "js": {
           "async": [],
@@ -181,18 +153,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^6.1.0",
-      "shareScope": "default",
-      "import": "@dnd-kit/core",
+      "id": "pimcore_studio_ui_bundle:@dnd-kit/core",
       "name": "@dnd-kit/core",
       "version": "^6.1.0",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:@dnd-kit/core",
+      "singleton": true,
+      "requiredVersion": "^6.1.0",
       "assets": {
         "js": {
           "async": [],
@@ -204,18 +172,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^6.3.0",
-      "shareScope": "default",
-      "import": "@codemirror/lang-css",
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-css",
       "name": "@codemirror/lang-css",
       "version": "^6.3.0",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:@codemirror/lang-css",
+      "singleton": true,
+      "requiredVersion": "^6.3.0",
       "assets": {
         "js": {
           "async": [],
@@ -227,18 +191,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^6.2.2",
-      "shareScope": "default",
-      "import": "@codemirror/lang-javascript",
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-javascript",
       "name": "@codemirror/lang-javascript",
       "version": "^6.2.2",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:@codemirror/lang-javascript",
+      "singleton": true,
+      "requiredVersion": "^6.2.2",
       "assets": {
         "js": {
           "async": [],
@@ -250,17 +210,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "5.22.x",
-      "shareScope": "default",
-      "eager": true,
+      "id": "pimcore_studio_ui_bundle:antd",
       "name": "antd",
       "version": "5.22.x",
-      "id": "pimcore_studio_ui_bundle:antd",
+      "singleton": true,
+      "requiredVersion": "5.22.x",
       "assets": {
         "js": {
           "async": [],
@@ -273,20 +230,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": [
-        "./components"
-      ]
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^4.17.21",
-      "shareScope": "default",
-      "import": "lodash",
+      "id": "pimcore_studio_ui_bundle:lodash",
       "name": "lodash",
       "version": "4.17.21",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:lodash",
+      "singleton": true,
+      "requiredVersion": "^4.17.21",
       "assets": {
         "js": {
           "async": [],
@@ -298,18 +249,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "3.7.x",
-      "shareScope": "default",
-      "import": "antd-style",
+      "id": "pimcore_studio_ui_bundle:antd-style",
       "name": "antd-style",
       "version": "3.7.x",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:antd-style",
+      "singleton": true,
+      "requiredVersion": "3.7.x",
       "assets": {
         "js": {
           "async": [],
@@ -321,20 +268,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": [
-        "./components"
-      ]
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^23.16.8",
-      "shareScope": "default",
-      "import": "i18next",
+      "id": "pimcore_studio_ui_bundle:i18next",
       "name": "i18next",
       "version": "23.16.8",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:i18next",
+      "singleton": true,
+      "requiredVersion": "^23.16.8",
       "assets": {
         "js": {
           "async": [],
@@ -346,20 +287,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": [
-        "./utils"
-      ]
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^11.11.17",
-      "shareScope": "default",
-      "import": "framer-motion",
+      "id": "pimcore_studio_ui_bundle:framer-motion",
       "name": "framer-motion",
       "version": "11.11.17",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:framer-motion",
+      "singleton": true,
+      "requiredVersion": "^11.11.17",
       "assets": {
         "js": {
           "async": [],
@@ -371,18 +306,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^2.3.0",
-      "shareScope": "default",
-      "import": "@reduxjs/toolkit",
+      "id": "pimcore_studio_ui_bundle:@reduxjs/toolkit",
       "name": "@reduxjs/toolkit",
       "version": "^2.3.0",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:@reduxjs/toolkit",
+      "singleton": true,
+      "requiredVersion": "^2.3.0",
       "assets": {
         "js": {
           "async": [],
@@ -394,18 +325,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^9.1.2",
-      "shareScope": "default",
-      "import": "react-redux",
+      "id": "pimcore_studio_ui_bundle:react-redux",
       "name": "react-redux",
       "version": "9.1.2",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:react-redux",
+      "singleton": true,
+      "requiredVersion": "^9.1.2",
       "assets": {
         "js": {
           "async": [],
@@ -417,18 +344,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^6.28.0",
-      "shareScope": "default",
-      "import": "react-router-dom",
+      "id": "pimcore_studio_ui_bundle:react-router-dom",
       "name": "react-router-dom",
       "version": "6.28.0",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:react-router-dom",
+      "singleton": true,
+      "requiredVersion": "^6.28.0",
       "assets": {
         "js": {
           "async": [],
@@ -440,18 +363,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^10.0.0",
-      "shareScope": "default",
-      "import": "uuid",
+      "id": "pimcore_studio_ui_bundle:uuid",
       "name": "uuid",
       "version": "10.0.0",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:uuid",
+      "singleton": true,
+      "requiredVersion": "^10.0.0",
       "assets": {
         "js": {
           "async": [],
@@ -463,18 +382,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^0.7.15",
-      "shareScope": "default",
-      "import": "flexlayout-react",
+      "id": "pimcore_studio_ui_bundle:flexlayout-react",
       "name": "flexlayout-react",
       "version": "0.7.15",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:flexlayout-react",
+      "singleton": true,
+      "requiredVersion": "^0.7.15",
       "assets": {
         "js": {
           "async": [],
@@ -486,18 +401,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^4.4.6",
-      "shareScope": "default",
-      "import": "react-draggable",
+      "id": "pimcore_studio_ui_bundle:react-draggable",
       "name": "react-draggable",
       "version": "4.4.6",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:react-draggable",
+      "singleton": true,
+      "requiredVersion": "^4.4.6",
       "assets": {
         "js": {
           "async": [],
@@ -509,18 +420,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^8.20.5",
-      "shareScope": "default",
-      "import": "@tanstack/react-table",
+      "id": "pimcore_studio_ui_bundle:@tanstack/react-table",
       "name": "@tanstack/react-table",
       "version": "^8.20.5",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:@tanstack/react-table",
+      "singleton": true,
+      "requiredVersion": "^8.20.5",
       "assets": {
         "js": {
           "async": [],
@@ -532,18 +439,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^8.0.0",
-      "shareScope": "default",
-      "import": "@dnd-kit/sortable",
+      "id": "pimcore_studio_ui_bundle:@dnd-kit/sortable",
       "name": "@dnd-kit/sortable",
       "version": "^8.0.0",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:@dnd-kit/sortable",
+      "singleton": true,
+      "requiredVersion": "^8.0.0",
       "assets": {
         "js": {
           "async": [],
@@ -555,18 +458,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^7.0.0",
-      "shareScope": "default",
-      "import": "@dnd-kit/modifiers",
+      "id": "pimcore_studio_ui_bundle:@dnd-kit/modifiers",
       "name": "@dnd-kit/modifiers",
       "version": "^7.0.0",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:@dnd-kit/modifiers",
+      "singleton": true,
+      "requiredVersion": "^7.0.0",
       "assets": {
         "js": {
           "async": [],
@@ -579,18 +478,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^3.2.1",
-      "shareScope": "default",
-      "import": "dompurify",
+      "id": "pimcore_studio_ui_bundle:dompurify",
       "name": "dompurify",
       "version": "3.2.1",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:dompurify",
+      "singleton": true,
+      "requiredVersion": "^3.2.1",
       "assets": {
         "js": {
           "async": [],
@@ -602,18 +497,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^1.9.4",
-      "shareScope": "default",
-      "import": "leaflet",
+      "id": "pimcore_studio_ui_bundle:leaflet",
       "name": "leaflet",
       "version": "1.9.4",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:leaflet",
+      "singleton": true,
+      "requiredVersion": "^1.9.4",
       "assets": {
         "js": {
           "async": [],
@@ -625,18 +516,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^1.0.4",
-      "shareScope": "default",
-      "import": "leaflet-draw",
+      "id": "pimcore_studio_ui_bundle:leaflet-draw",
       "name": "leaflet-draw",
       "version": "1.0.4",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:leaflet-draw",
+      "singleton": true,
+      "requiredVersion": "^1.0.4",
       "assets": {
         "js": {
           "async": [],
@@ -648,17 +535,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
+      "id": "pimcore_studio_ui_bundle:@uiw/react-codemirror",
+      "name": "@uiw/react-codemirror",
+      "version": "^4.23.6",
       "singleton": true,
       "requiredVersion": "^4.23.6",
-      "shareScope": "default",
-      "eager": true,
-      "version": "^4.23.6",
-      "name": "@uiw/react-codemirror",
-      "id": "pimcore_studio_ui_bundle:@uiw/react-codemirror",
       "assets": {
         "js": {
           "async": [],
@@ -671,18 +555,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^6.0.1",
-      "shareScope": "default",
-      "import": "@codemirror/lang-json",
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-json",
       "name": "@codemirror/lang-json",
       "version": "^6.0.1",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:@codemirror/lang-json",
+      "singleton": true,
+      "requiredVersion": "^6.0.1",
       "assets": {
         "js": {
           "async": [],
@@ -694,18 +574,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^6.1.0",
-      "shareScope": "default",
-      "import": "@codemirror/lang-xml",
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-xml",
       "name": "@codemirror/lang-xml",
       "version": "^6.1.0",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:@codemirror/lang-xml",
+      "singleton": true,
+      "requiredVersion": "^6.1.0",
       "assets": {
         "js": {
           "async": [],
@@ -717,18 +593,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^6.8.0",
-      "shareScope": "default",
-      "import": "@codemirror/lang-sql",
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-sql",
       "name": "@codemirror/lang-sql",
       "version": "^6.8.0",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:@codemirror/lang-sql",
+      "singleton": true,
+      "requiredVersion": "^6.8.0",
       "assets": {
         "js": {
           "async": [],
@@ -740,18 +612,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^6.3.1",
-      "shareScope": "default",
-      "import": "@codemirror/lang-markdown",
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-markdown",
       "name": "@codemirror/lang-markdown",
       "version": "^6.3.1",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:@codemirror/lang-markdown",
+      "singleton": true,
+      "requiredVersion": "^6.3.1",
       "assets": {
         "js": {
           "async": [],
@@ -763,17 +631,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "18.3.x",
-      "shareScope": "default",
-      "eager": true,
+      "id": "pimcore_studio_ui_bundle:react-dom",
       "name": "react-dom",
       "version": "18.3.x",
-      "id": "pimcore_studio_ui_bundle:react-dom",
+      "singleton": true,
+      "requiredVersion": "18.3.x",
       "assets": {
         "js": {
           "async": [],
@@ -786,18 +651,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^10.1.1",
-      "shareScope": "default",
-      "import": "immer",
+      "id": "pimcore_studio_ui_bundle:immer",
       "name": "immer",
       "version": "10.1.1",
-      "eager": false,
-      "id": "pimcore_studio_ui_bundle:immer",
+      "singleton": true,
+      "requiredVersion": "^10.1.1",
       "assets": {
         "js": {
           "async": [],
@@ -809,17 +670,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     },
     {
-      "singleton": true,
-      "requiredVersion": "^7.2.1",
-      "shareScope": "default",
-      "eager": true,
+      "id": "pimcore_studio_ui_bundle:@ant-design/colors",
       "name": "@ant-design/colors",
       "version": "^7.2.1",
-      "id": "pimcore_studio_ui_bundle:@ant-design/colors",
+      "singleton": true,
+      "requiredVersion": "^7.2.1",
       "assets": {
         "js": {
           "async": [],
@@ -832,18 +690,14 @@
           "async": [],
           "sync": []
         }
-      },
-      "usedIn": []
+      }
     }
   ],
   "remotes": [],
   "exposes": [
     {
-      "path": ".",
       "id": "pimcore_studio_ui_bundle:.",
       "name": ".",
-      "requires": [],
-      "file": "js/src/sdk/main.ts",
       "assets": {
         "js": {
           "sync": [
@@ -855,14 +709,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "."
     },
     {
-      "path": "./_internal_/mf-bootstrap",
       "id": "pimcore_studio_ui_bundle:_internal_/mf-bootstrap",
       "name": "_internal_/mf-bootstrap",
-      "requires": [],
-      "file": "js/src/sdk/_internal_/mf-bootstrap.ts",
       "assets": {
         "js": {
           "sync": [
@@ -870,7 +722,7 @@
             "static/js/async/1047.2bb3fd91.js",
             "static/js/async/6534.3ecdad71.js",
             "static/js/async/4819.c23fd1b3.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/1869.bf2c8fc0.js",
             "static/js/async/__federation_expose_utils.0bef6084.js",
             "static/js/async/__federation_expose_app.76c4e447.js",
@@ -878,21 +730,27 @@
             "static/js/async/__federation_expose_modules__asset.9f0de360.js",
             "static/js/async/6071.b4c5ecc4.js",
             "static/js/async/161.58425728.js",
-<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
             "static/js/async/__federation_expose__internal___mf_bootstrap.7c0a99ba.js"
 ========
             "static/js/async/1869.aaa73965.js",
             "static/js/async/__federation_expose_utils.baabdbb5.js",
-            "static/js/async/__federation_expose_app.d072357e.js",
+            "static/js/async/__federation_expose_app.0e94a09a.js",
             "static/js/async/__federation_expose_modules__data_object.f749777e.js",
             "static/js/async/__federation_expose_modules__asset.7e418b78.js",
+<<<<<<<< HEAD:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
             "static/js/async/7544.94f2b90f.js",
             "static/js/async/161.a6571324.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.7ae6d482.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
 ========
             "static/js/async/__federation_expose__internal___mf_bootstrap.96e41546.js"
->>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-stats.json
+>>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+========
+            "static/js/async/1673.70dcbd96.js",
+            "static/js/async/161.86991b6f.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.81391cf7.js"
+>>>>>>>> a2a80e9b8ad8452be4bf9b3743efc27ace84f971:public/build/29929915-ea11-4edf-9ff9-bc13ea5e0f4b/mf-manifest.json
           ],
           "async": [
             "static/js/async/7599.f501b0a1.js",
@@ -1155,29 +1013,32 @@
         },
         "css": {
           "sync": [
-<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/css/async/6534.04432dd5.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.86a98490.css"
 ========
             "static/css/async/6534.de1a0d45.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.646bc071.css"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
 ========
             "static/css/async/6534.b57cae7e.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.112f37c0.css"
->>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-stats.json
+>>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+========
+            "static/css/async/6534.9ee045da.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.82611818.css"
+>>>>>>>> a2a80e9b8ad8452be4bf9b3743efc27ace84f971:public/build/29929915-ea11-4edf-9ff9-bc13ea5e0f4b/mf-manifest.json
           ],
           "async": []
         }
-      }
+      },
+      "path": "./_internal_/mf-bootstrap"
     },
     {
-      "path": "./_internal_/mf-bootstrap-document-editor-iframe",
       "id": "pimcore_studio_ui_bundle:_internal_/mf-bootstrap-document-editor-iframe",
       "name": "_internal_/mf-bootstrap-document-editor-iframe",
-      "requires": [],
-      "file": "js/src/sdk/_internal_/mf-bootstrap-document-editor-iframe.ts",
       "assets": {
         "js": {
           "sync": [
@@ -1185,28 +1046,33 @@
             "static/js/async/1047.2bb3fd91.js",
             "static/js/async/6534.3ecdad71.js",
             "static/js/async/4819.c23fd1b3.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/1869.bf2c8fc0.js",
             "static/js/async/__federation_expose_utils.0bef6084.js",
             "static/js/async/__federation_expose_app.76c4e447.js",
             "static/js/async/__federation_expose_modules__data_object.def587a4.js",
             "static/js/async/__federation_expose_modules__asset.9f0de360.js",
-<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
             "static/js/async/1561.27b6f821.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.0f90611e.js"
 ========
             "static/js/async/1869.aaa73965.js",
             "static/js/async/__federation_expose_utils.baabdbb5.js",
-            "static/js/async/__federation_expose_app.d072357e.js",
+            "static/js/async/__federation_expose_app.0e94a09a.js",
             "static/js/async/__federation_expose_modules__data_object.f749777e.js",
             "static/js/async/__federation_expose_modules__asset.7e418b78.js",
+<<<<<<<< HEAD:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
             "static/js/async/7544.94f2b90f.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.2574b447.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
 ========
             "static/js/async/6071.b4c5ecc4.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.61b90fd4.js"
->>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-stats.json
+>>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+========
+            "static/js/async/1673.70dcbd96.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.cf5c1691.js"
+>>>>>>>> a2a80e9b8ad8452be4bf9b3743efc27ace84f971:public/build/29929915-ea11-4edf-9ff9-bc13ea5e0f4b/mf-manifest.json
           ],
           "async": [
             "static/js/async/7599.f501b0a1.js",
@@ -1465,40 +1331,46 @@
             "static/js/async/5475.9ba026e3.js",
             "static/js/async/9040.3e6e9c17.js",
             "static/js/async/2423.f4aac960.js",
-            "static/js/async/161.a6571324.js",
+            "static/js/async/161.86991b6f.js",
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
             "static/js/async/6534.3ecdad71.js",
             "static/js/async/4819.c23fd1b3.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/1869.bf2c8fc0.js",
             "static/js/async/__federation_expose_utils.0bef6084.js",
             "static/js/async/__federation_expose_app.76c4e447.js",
             "static/js/async/__federation_expose_modules__data_object.def587a4.js",
             "static/js/async/__federation_expose_modules__asset.9f0de360.js",
-<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
             "static/js/async/1561.27b6f821.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.7c0a99ba.js",
 ========
             "static/js/async/1869.aaa73965.js",
             "static/js/async/__federation_expose_utils.baabdbb5.js",
-            "static/js/async/__federation_expose_app.d072357e.js",
+            "static/js/async/__federation_expose_app.0e94a09a.js",
             "static/js/async/__federation_expose_modules__data_object.f749777e.js",
             "static/js/async/__federation_expose_modules__asset.7e418b78.js",
+<<<<<<<< HEAD:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
             "static/js/async/7544.94f2b90f.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.7ae6d482.js",
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
 ========
             "static/js/async/6071.b4c5ecc4.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.96e41546.js",
->>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-stats.json
+>>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+========
+            "static/js/async/1673.70dcbd96.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.81391cf7.js",
+>>>>>>>> a2a80e9b8ad8452be4bf9b3743efc27ace84f971:public/build/29929915-ea11-4edf-9ff9-bc13ea5e0f4b/mf-manifest.json
             "static/js/async/8902.05801688.js"
           ]
         },
         "css": {
           "sync": [
-<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/css/async/6534.04432dd5.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.86a98490.css"
           ],
@@ -1512,7 +1384,7 @@
           "async": [
             "static/css/async/6534.de1a0d45.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.646bc071.css"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
 ========
             "static/css/async/6534.b57cae7e.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.112f37c0.css"
@@ -1520,22 +1392,23 @@
           "async": [
             "static/css/async/6534.b57cae7e.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.112f37c0.css"
->>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-stats.json
+>>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+========
+            "static/css/async/6534.9ee045da.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.82611818.css"
+          ],
+          "async": [
+            "static/css/async/6534.9ee045da.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.82611818.css"
+>>>>>>>> a2a80e9b8ad8452be4bf9b3743efc27ace84f971:public/build/29929915-ea11-4edf-9ff9-bc13ea5e0f4b/mf-manifest.json
           ]
         }
-      }
+      },
+      "path": "./_internal_/mf-bootstrap-document-editor-iframe"
     },
     {
-      "path": "./components",
       "id": "pimcore_studio_ui_bundle:components",
       "name": "components",
-      "requires": [
-        "react-i18next",
-        "react",
-        "antd",
-        "antd-style"
-      ],
-      "file": "js/src/sdk/components/index.ts",
       "assets": {
         "js": {
           "sync": [],
@@ -1545,17 +1418,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./components"
     },
     {
-      "path": "./app",
       "id": "pimcore_studio_ui_bundle:app",
       "name": "app",
-      "requires": [
-        "inversify",
-        "react-i18next"
-      ],
-      "file": "js/src/sdk/app/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -1563,7 +1431,7 @@
             "static/js/async/1047.2bb3fd91.js",
             "static/js/async/6534.3ecdad71.js",
             "static/js/async/4819.c23fd1b3.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/1869.bf2c8fc0.js",
             "static/js/async/__federation_expose_utils.0bef6084.js",
             "static/js/async/__federation_expose_app.76c4e447.js",
@@ -1577,15 +1445,15 @@
 ========
             "static/js/async/1869.aaa73965.js",
             "static/js/async/__federation_expose_utils.baabdbb5.js",
-            "static/js/async/__federation_expose_app.d072357e.js",
+            "static/js/async/__federation_expose_app.0e94a09a.js",
             "static/js/async/__federation_expose_modules__data_object.f749777e.js",
             "static/js/async/__federation_expose_modules__asset.7e418b78.js",
-            "static/js/async/7544.94f2b90f.js",
-            "static/js/async/161.a6571324.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap.7ae6d482.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.2574b447.js",
+            "static/js/async/1673.70dcbd96.js",
+            "static/js/async/161.86991b6f.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.81391cf7.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.cf5c1691.js",
             "static/js/async/__federation_expose_modules__user.c116b0de.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": [
             "static/js/async/7599.f501b0a1.js",
@@ -1844,40 +1712,46 @@
             "static/js/async/5475.9ba026e3.js",
             "static/js/async/9040.3e6e9c17.js",
             "static/js/async/2423.f4aac960.js",
-            "static/js/async/161.a6571324.js",
+            "static/js/async/161.86991b6f.js",
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
             "static/js/async/6534.3ecdad71.js",
             "static/js/async/4819.c23fd1b3.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/1869.bf2c8fc0.js",
             "static/js/async/__federation_expose_utils.0bef6084.js",
             "static/js/async/__federation_expose_app.76c4e447.js",
             "static/js/async/__federation_expose_modules__data_object.def587a4.js",
             "static/js/async/__federation_expose_modules__asset.9f0de360.js",
-<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
             "static/js/async/1561.27b6f821.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.7c0a99ba.js",
 ========
             "static/js/async/1869.aaa73965.js",
             "static/js/async/__federation_expose_utils.baabdbb5.js",
-            "static/js/async/__federation_expose_app.d072357e.js",
+            "static/js/async/__federation_expose_app.0e94a09a.js",
             "static/js/async/__federation_expose_modules__data_object.f749777e.js",
             "static/js/async/__federation_expose_modules__asset.7e418b78.js",
+<<<<<<<< HEAD:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
             "static/js/async/7544.94f2b90f.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.7ae6d482.js",
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
 ========
             "static/js/async/6071.b4c5ecc4.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.96e41546.js",
->>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-stats.json
+>>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+========
+            "static/js/async/1673.70dcbd96.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.81391cf7.js",
+>>>>>>>> a2a80e9b8ad8452be4bf9b3743efc27ace84f971:public/build/29929915-ea11-4edf-9ff9-bc13ea5e0f4b/mf-manifest.json
             "static/js/async/8902.05801688.js"
           ]
         },
         "css": {
           "sync": [
-<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/css/async/6534.04432dd5.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.86a98490.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.86a98490.css"
@@ -1893,7 +1767,7 @@
           "async": [
             "static/css/async/6534.de1a0d45.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.646bc071.css"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
 ========
             "static/css/async/6534.b57cae7e.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.112f37c0.css",
@@ -1902,27 +1776,34 @@
           "async": [
             "static/css/async/6534.b57cae7e.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.112f37c0.css"
->>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-stats.json
+>>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+========
+            "static/css/async/6534.9ee045da.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.82611818.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.82611818.css"
+          ],
+          "async": [
+            "static/css/async/6534.9ee045da.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.82611818.css"
+>>>>>>>> a2a80e9b8ad8452be4bf9b3743efc27ace84f971:public/build/29929915-ea11-4edf-9ff9-bc13ea5e0f4b/mf-manifest.json
           ]
         }
-      }
+      },
+      "path": "./app"
     },
     {
-      "path": "./api/role",
       "id": "pimcore_studio_ui_bundle:api/role",
       "name": "api/role",
-      "requires": [],
-      "file": "js/src/sdk/api/asset/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/1869.bf2c8fc0.js",
 ========
             "static/js/async/1869.aaa73965.js",
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
             "static/js/async/__federation_expose_api__role.1226ef66.js"
           ],
           "async": []
@@ -1931,24 +1812,22 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/role"
     },
     {
-      "path": "./api",
       "id": "pimcore_studio_ui_bundle:api",
       "name": "api",
-      "requires": [],
-      "file": "js/src/sdk/api/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/__federation_expose_api.2ae5ea21.js"
 ========
             "static/js/async/__federation_expose_api.1f47eca7.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": []
         },
@@ -1956,24 +1835,22 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api"
     },
     {
-      "path": "./api/custom-metadata",
       "id": "pimcore_studio_ui_bundle:api/custom-metadata",
       "name": "api/custom-metadata",
-      "requires": [],
-      "file": "js/src/sdk/api/custom-metadata/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/__federation_expose_api__custom_metadata.0387980f.js"
 ========
             "static/js/async/__federation_expose_api__custom_metadata.2058d325.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": []
         },
@@ -1981,24 +1858,22 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/custom-metadata"
     },
     {
-      "path": "./api/data-object",
       "id": "pimcore_studio_ui_bundle:api/data-object",
       "name": "api/data-object",
-      "requires": [],
-      "file": "js/src/sdk/api/data-object/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/__federation_expose_api__data_object.6387483f.js"
 ========
             "static/js/async/__federation_expose_api__data_object.194288b6.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": []
         },
@@ -2006,24 +1881,22 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/data-object"
     },
     {
-      "path": "./api/dependencies",
       "id": "pimcore_studio_ui_bundle:api/dependencies",
       "name": "api/dependencies",
-      "requires": [],
-      "file": "js/src/sdk/api/dependencies/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/__federation_expose_api__dependencies.847972d8.js"
 ========
             "static/js/async/__federation_expose_api__dependencies.4a2916d2.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": []
         },
@@ -2031,24 +1904,22 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/dependencies"
     },
     {
-      "path": "./api/documents",
       "id": "pimcore_studio_ui_bundle:api/documents",
       "name": "api/documents",
-      "requires": [],
-      "file": "js/src/sdk/api/documents/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/__federation_expose_api__documents.32bf93f4.js"
 ========
             "static/js/async/__federation_expose_api__documents.458a298c.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": []
         },
@@ -2056,24 +1927,22 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/documents"
     },
     {
-      "path": "./api/elements",
       "id": "pimcore_studio_ui_bundle:api/elements",
       "name": "api/elements",
-      "requires": [],
-      "file": "js/src/sdk/api/elements/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/__federation_expose_api__elements.0785d87e.js"
 ========
             "static/js/async/__federation_expose_api__elements.b59d6cc7.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": []
         },
@@ -2081,24 +1950,22 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/elements"
     },
     {
-      "path": "./api/metadata",
       "id": "pimcore_studio_ui_bundle:api/metadata",
       "name": "api/metadata",
-      "requires": [],
-      "file": "js/src/sdk/api/metadata/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/__federation_expose_api__metadata.c4889ab4.js"
 ========
             "static/js/async/__federation_expose_api__metadata.a13530f6.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": []
         },
@@ -2106,24 +1973,22 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/metadata"
     },
     {
-      "path": "./api/perspectives",
       "id": "pimcore_studio_ui_bundle:api/perspectives",
       "name": "api/perspectives",
-      "requires": [],
-      "file": "js/src/sdk/api/perspectives/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/__federation_expose_api__perspectives.ae859123.js"
 ========
             "static/js/async/__federation_expose_api__perspectives.3c5610d4.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": []
         },
@@ -2131,24 +1996,22 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/perspectives"
     },
     {
-      "path": "./api/properties",
       "id": "pimcore_studio_ui_bundle:api/properties",
       "name": "api/properties",
-      "requires": [],
-      "file": "js/src/sdk/api/properties/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/__federation_expose_api__properties.61029ee0.js"
 ========
             "static/js/async/__federation_expose_api__properties.cce5fe6e.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": []
         },
@@ -2156,24 +2019,22 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/properties"
     },
     {
-      "path": "./api/schedule",
       "id": "pimcore_studio_ui_bundle:api/schedule",
       "name": "api/schedule",
-      "requires": [],
-      "file": "js/src/sdk/api/schedule/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/__federation_expose_api__schedule.e3c05907.js"
 ========
             "static/js/async/__federation_expose_api__schedule.a00f1211.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": []
         },
@@ -2181,24 +2042,22 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/schedule"
     },
     {
-      "path": "./api/settings",
       "id": "pimcore_studio_ui_bundle:api/settings",
       "name": "api/settings",
-      "requires": [],
-      "file": "js/src/sdk/api/settings/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/__federation_expose_api__settings.fb1829d8.js"
 ========
             "static/js/async/__federation_expose_api__settings.e0f30bed.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": []
         },
@@ -2206,24 +2065,22 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/settings"
     },
     {
-      "path": "./api/tags",
       "id": "pimcore_studio_ui_bundle:api/tags",
       "name": "api/tags",
-      "requires": [],
-      "file": "js/src/sdk/api/tags/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/__federation_expose_api__tags.5ad5f8a4.js"
 ========
             "static/js/async/__federation_expose_api__tags.e653b5ae.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": []
         },
@@ -2231,24 +2088,22 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/tags"
     },
     {
-      "path": "./api/thumbnails",
       "id": "pimcore_studio_ui_bundle:api/thumbnails",
       "name": "api/thumbnails",
-      "requires": [],
-      "file": "js/src/sdk/api/thumbnails/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/__federation_expose_api__thumbnails.728f4f2a.js"
 ========
             "static/js/async/__federation_expose_api__thumbnails.50ce1381.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": []
         },
@@ -2256,24 +2111,22 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/thumbnails"
     },
     {
-      "path": "./api/translations",
       "id": "pimcore_studio_ui_bundle:api/translations",
       "name": "api/translations",
-      "requires": [],
-      "file": "js/src/sdk/api/translations/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/__federation_expose_api__translations.0949d659.js"
 ========
             "static/js/async/__federation_expose_api__translations.72ad9e7a.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": []
         },
@@ -2281,24 +2134,22 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/translations"
     },
     {
-      "path": "./api/user",
       "id": "pimcore_studio_ui_bundle:api/user",
       "name": "api/user",
-      "requires": [],
-      "file": "js/src/sdk/api/user/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/__federation_expose_api__user.1cf1d9d1.js"
 ========
             "static/js/async/__federation_expose_api__user.7e83bf07.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": []
         },
@@ -2306,24 +2157,22 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/user"
     },
     {
-      "path": "./api/version",
       "id": "pimcore_studio_ui_bundle:api/version",
       "name": "api/version",
-      "requires": [],
-      "file": "js/src/sdk/api/version/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/__federation_expose_api__version.0d95a97b.js"
 ========
             "static/js/async/__federation_expose_api__version.099c42b0.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": []
         },
@@ -2331,24 +2180,22 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/version"
     },
     {
-      "path": "./api/workflow",
       "id": "pimcore_studio_ui_bundle:api/workflow",
       "name": "api/workflow",
-      "requires": [],
-      "file": "js/src/sdk/api/workflow/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/__federation_expose_api__workflow.77ac65e2.js"
 ========
             "static/js/async/__federation_expose_api__workflow.1a01cd66.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": []
         },
@@ -2356,24 +2203,22 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/workflow"
     },
     {
-      "path": "./api/reports",
       "id": "pimcore_studio_ui_bundle:api/reports",
       "name": "api/reports",
-      "requires": [],
-      "file": "js/src/sdk/api/reports/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/__federation_expose_api__reports.caa18ef5.js"
 ========
             "static/js/async/__federation_expose_api__reports.088321a3.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": []
         },
@@ -2381,14 +2226,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./api/reports"
     },
     {
-      "path": "./modules/app",
       "id": "pimcore_studio_ui_bundle:modules/app",
       "name": "modules/app",
-      "requires": [],
-      "file": "js/src/sdk/modules/app/index.ts",
       "assets": {
         "js": {
           "sync": [],
@@ -2398,14 +2241,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./modules/app"
     },
     {
-      "path": "./modules/asset",
       "id": "pimcore_studio_ui_bundle:modules/asset",
       "name": "modules/asset",
-      "requires": [],
-      "file": "js/src/sdk/modules/asset/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -2413,7 +2254,7 @@
             "static/js/async/1047.2bb3fd91.js",
             "static/js/async/6534.3ecdad71.js",
             "static/js/async/4819.c23fd1b3.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/1869.bf2c8fc0.js",
             "static/js/async/__federation_expose_utils.0bef6084.js",
             "static/js/async/__federation_expose_app.76c4e447.js",
@@ -2421,24 +2262,31 @@
             "static/js/async/__federation_expose_modules__asset.9f0de360.js",
             "static/js/async/6071.b4c5ecc4.js",
             "static/js/async/161.58425728.js",
-<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
             "static/js/async/__federation_expose__internal___mf_bootstrap.7c0a99ba.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.0f90611e.js"
 ========
             "static/js/async/1869.aaa73965.js",
             "static/js/async/__federation_expose_utils.baabdbb5.js",
-            "static/js/async/__federation_expose_app.d072357e.js",
+            "static/js/async/__federation_expose_app.0e94a09a.js",
             "static/js/async/__federation_expose_modules__data_object.f749777e.js",
             "static/js/async/__federation_expose_modules__asset.7e418b78.js",
+<<<<<<<< HEAD:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
             "static/js/async/7544.94f2b90f.js",
             "static/js/async/161.a6571324.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.7ae6d482.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.2574b447.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
 ========
             "static/js/async/__federation_expose__internal___mf_bootstrap.96e41546.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.61b90fd4.js"
->>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-stats.json
+>>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+========
+            "static/js/async/1673.70dcbd96.js",
+            "static/js/async/161.86991b6f.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.81391cf7.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.cf5c1691.js"
+>>>>>>>> a2a80e9b8ad8452be4bf9b3743efc27ace84f971:public/build/29929915-ea11-4edf-9ff9-bc13ea5e0f4b/mf-manifest.json
           ],
           "async": [
             "static/js/async/7599.f501b0a1.js",
@@ -2697,40 +2545,46 @@
             "static/js/async/5475.9ba026e3.js",
             "static/js/async/9040.3e6e9c17.js",
             "static/js/async/2423.f4aac960.js",
-            "static/js/async/161.a6571324.js",
+            "static/js/async/161.86991b6f.js",
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
             "static/js/async/6534.3ecdad71.js",
             "static/js/async/4819.c23fd1b3.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/1869.bf2c8fc0.js",
             "static/js/async/__federation_expose_utils.0bef6084.js",
             "static/js/async/__federation_expose_app.76c4e447.js",
             "static/js/async/__federation_expose_modules__data_object.def587a4.js",
             "static/js/async/__federation_expose_modules__asset.9f0de360.js",
-<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
             "static/js/async/1561.27b6f821.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.7c0a99ba.js",
 ========
             "static/js/async/1869.aaa73965.js",
             "static/js/async/__federation_expose_utils.baabdbb5.js",
-            "static/js/async/__federation_expose_app.d072357e.js",
+            "static/js/async/__federation_expose_app.0e94a09a.js",
             "static/js/async/__federation_expose_modules__data_object.f749777e.js",
             "static/js/async/__federation_expose_modules__asset.7e418b78.js",
+<<<<<<<< HEAD:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
             "static/js/async/7544.94f2b90f.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.7ae6d482.js",
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
 ========
             "static/js/async/6071.b4c5ecc4.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.96e41546.js",
->>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-stats.json
+>>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+========
+            "static/js/async/1673.70dcbd96.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.81391cf7.js",
+>>>>>>>> a2a80e9b8ad8452be4bf9b3743efc27ace84f971:public/build/29929915-ea11-4edf-9ff9-bc13ea5e0f4b/mf-manifest.json
             "static/js/async/8902.05801688.js"
           ]
         },
         "css": {
           "sync": [
-<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/css/async/6534.04432dd5.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.86a98490.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.86a98490.css"
@@ -2746,7 +2600,7 @@
           "async": [
             "static/css/async/6534.de1a0d45.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.646bc071.css"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
 ========
             "static/css/async/6534.b57cae7e.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.112f37c0.css",
@@ -2755,27 +2609,34 @@
           "async": [
             "static/css/async/6534.b57cae7e.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.112f37c0.css"
->>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-stats.json
+>>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+========
+            "static/css/async/6534.9ee045da.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.82611818.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.82611818.css"
+          ],
+          "async": [
+            "static/css/async/6534.9ee045da.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.82611818.css"
+>>>>>>>> a2a80e9b8ad8452be4bf9b3743efc27ace84f971:public/build/29929915-ea11-4edf-9ff9-bc13ea5e0f4b/mf-manifest.json
           ]
         }
-      }
+      },
+      "path": "./modules/asset"
     },
     {
-      "path": "./modules/class-definitions",
       "id": "pimcore_studio_ui_bundle:modules/class-definitions",
       "name": "modules/class-definitions",
-      "requires": [],
-      "file": "js/src/sdk/modules/class-definitions/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/__federation_expose_modules__class_definitions.a9b89efa.js"
 ========
             "static/js/async/__federation_expose_modules__class_definitions.15112a9e.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": []
         },
@@ -2783,17 +2644,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./modules/class-definitions"
     },
     {
-      "path": "./modules/data-object",
       "id": "pimcore_studio_ui_bundle:modules/data-object",
       "name": "modules/data-object",
-      "requires": [
-        "inversify",
-        "react"
-      ],
-      "file": "js/src/sdk/modules/data-object/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -2801,7 +2657,7 @@
             "static/js/async/1047.2bb3fd91.js",
             "static/js/async/6534.3ecdad71.js",
             "static/js/async/4819.c23fd1b3.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/1869.bf2c8fc0.js",
             "static/js/async/__federation_expose_utils.0bef6084.js",
             "static/js/async/__federation_expose_app.76c4e447.js",
@@ -2809,24 +2665,31 @@
             "static/js/async/__federation_expose_modules__asset.9f0de360.js",
             "static/js/async/6071.b4c5ecc4.js",
             "static/js/async/161.58425728.js",
-<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
             "static/js/async/__federation_expose__internal___mf_bootstrap.7c0a99ba.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.0f90611e.js"
 ========
             "static/js/async/1869.aaa73965.js",
             "static/js/async/__federation_expose_utils.baabdbb5.js",
-            "static/js/async/__federation_expose_app.d072357e.js",
+            "static/js/async/__federation_expose_app.0e94a09a.js",
             "static/js/async/__federation_expose_modules__data_object.f749777e.js",
             "static/js/async/__federation_expose_modules__asset.7e418b78.js",
+<<<<<<<< HEAD:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
             "static/js/async/7544.94f2b90f.js",
             "static/js/async/161.a6571324.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.7ae6d482.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.2574b447.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
 ========
             "static/js/async/__federation_expose__internal___mf_bootstrap.96e41546.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.61b90fd4.js"
->>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-stats.json
+>>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+========
+            "static/js/async/1673.70dcbd96.js",
+            "static/js/async/161.86991b6f.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.81391cf7.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.cf5c1691.js"
+>>>>>>>> a2a80e9b8ad8452be4bf9b3743efc27ace84f971:public/build/29929915-ea11-4edf-9ff9-bc13ea5e0f4b/mf-manifest.json
           ],
           "async": [
             "static/js/async/7599.f501b0a1.js",
@@ -3085,40 +2948,46 @@
             "static/js/async/5475.9ba026e3.js",
             "static/js/async/9040.3e6e9c17.js",
             "static/js/async/2423.f4aac960.js",
-            "static/js/async/161.a6571324.js",
+            "static/js/async/161.86991b6f.js",
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
             "static/js/async/6534.3ecdad71.js",
             "static/js/async/4819.c23fd1b3.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/1869.bf2c8fc0.js",
             "static/js/async/__federation_expose_utils.0bef6084.js",
             "static/js/async/__federation_expose_app.76c4e447.js",
             "static/js/async/__federation_expose_modules__data_object.def587a4.js",
             "static/js/async/__federation_expose_modules__asset.9f0de360.js",
-<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
             "static/js/async/1561.27b6f821.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.7c0a99ba.js",
 ========
             "static/js/async/1869.aaa73965.js",
             "static/js/async/__federation_expose_utils.baabdbb5.js",
-            "static/js/async/__federation_expose_app.d072357e.js",
+            "static/js/async/__federation_expose_app.0e94a09a.js",
             "static/js/async/__federation_expose_modules__data_object.f749777e.js",
             "static/js/async/__federation_expose_modules__asset.7e418b78.js",
+<<<<<<<< HEAD:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
             "static/js/async/7544.94f2b90f.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.7ae6d482.js",
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
 ========
             "static/js/async/6071.b4c5ecc4.js",
             "static/js/async/__federation_expose__internal___mf_bootstrap.96e41546.js",
->>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-stats.json
+>>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+========
+            "static/js/async/1673.70dcbd96.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.81391cf7.js",
+>>>>>>>> a2a80e9b8ad8452be4bf9b3743efc27ace84f971:public/build/29929915-ea11-4edf-9ff9-bc13ea5e0f4b/mf-manifest.json
             "static/js/async/8902.05801688.js"
           ]
         },
         "css": {
           "sync": [
-<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/css/async/6534.04432dd5.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.86a98490.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.86a98490.css"
@@ -3134,7 +3003,7 @@
           "async": [
             "static/css/async/6534.de1a0d45.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.646bc071.css"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
 ========
             "static/css/async/6534.b57cae7e.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.112f37c0.css",
@@ -3143,21 +3012,24 @@
           "async": [
             "static/css/async/6534.b57cae7e.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.112f37c0.css"
->>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-stats.json
+>>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+========
+            "static/css/async/6534.9ee045da.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.82611818.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.82611818.css"
+          ],
+          "async": [
+            "static/css/async/6534.9ee045da.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.82611818.css"
+>>>>>>>> a2a80e9b8ad8452be4bf9b3743efc27ace84f971:public/build/29929915-ea11-4edf-9ff9-bc13ea5e0f4b/mf-manifest.json
           ]
         }
-      }
+      },
+      "path": "./modules/data-object"
     },
     {
-      "path": "./modules/element",
       "id": "pimcore_studio_ui_bundle:modules/element",
       "name": "modules/element",
-      "requires": [
-        "react-i18next",
-        "react",
-        "classnames"
-      ],
-      "file": "js/src/sdk/modules/element/index.ts",
       "assets": {
         "js": {
           "sync": [],
@@ -3167,14 +3039,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./modules/element"
     },
     {
-      "path": "./modules/icon-library",
       "id": "pimcore_studio_ui_bundle:modules/icon-library",
       "name": "modules/icon-library",
-      "requires": [],
-      "file": "js/src/sdk/modules/icon-library/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -3186,21 +3056,19 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./modules/icon-library"
     },
     {
-      "path": "./modules/user",
       "id": "pimcore_studio_ui_bundle:modules/user",
       "name": "modules/user",
-      "requires": [],
-      "file": "js/src/sdk/modules/user/index.ts",
       "assets": {
         "js": {
           "sync": [
             "static/js/async/8526.3a758371.js",
             "static/js/async/1047.2bb3fd91.js",
             "static/js/async/6534.3ecdad71.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/1869.bf2c8fc0.js",
             "static/js/async/__federation_expose_utils.0bef6084.js",
             "static/js/async/__federation_expose_app.76c4e447.js",
@@ -3208,9 +3076,9 @@
 ========
             "static/js/async/1869.aaa73965.js",
             "static/js/async/__federation_expose_utils.baabdbb5.js",
-            "static/js/async/__federation_expose_app.d072357e.js",
+            "static/js/async/__federation_expose_app.0e94a09a.js",
             "static/js/async/__federation_expose_modules__user.c116b0de.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": [
             "static/js/async/7599.f501b0a1.js",
@@ -3473,26 +3341,28 @@
         },
         "css": {
           "sync": [
-<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/css/async/6534.04432dd5.css"
 ========
             "static/css/async/6534.de1a0d45.css"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
 ========
             "static/css/async/6534.b57cae7e.css"
->>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-stats.json
+>>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+========
+            "static/css/async/6534.9ee045da.css"
+>>>>>>>> a2a80e9b8ad8452be4bf9b3743efc27ace84f971:public/build/29929915-ea11-4edf-9ff9-bc13ea5e0f4b/mf-manifest.json
           ],
           "async": []
         }
-      }
+      },
+      "path": "./modules/user"
     },
     {
-      "path": "./modules/widget-manager",
       "id": "pimcore_studio_ui_bundle:modules/widget-manager",
       "name": "modules/widget-manager",
-      "requires": [],
-      "file": "js/src/sdk/modules/widget-manager/index.ts",
       "assets": {
         "js": {
           "sync": [],
@@ -3502,14 +3372,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./modules/widget-manager"
     },
     {
-      "path": "./modules/wysiwyg",
       "id": "pimcore_studio_ui_bundle:modules/wysiwyg",
       "name": "modules/wysiwyg",
-      "requires": [],
-      "file": "js/src/sdk/modules/wysiwyg/index.ts",
       "assets": {
         "js": {
           "sync": [],
@@ -3519,16 +3387,12 @@
           "sync": [],
           "async": []
         }
-      }
+      },
+      "path": "./modules/wysiwyg"
     },
     {
-      "path": "./utils",
       "id": "pimcore_studio_ui_bundle:utils",
       "name": "utils",
-      "requires": [
-        "i18next"
-      ],
-      "file": "js/src/sdk/utils/index.ts",
       "assets": {
         "js": {
           "sync": [
@@ -3536,7 +3400,7 @@
             "static/js/async/1047.2bb3fd91.js",
             "static/js/async/6534.3ecdad71.js",
             "static/js/async/4819.c23fd1b3.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/1869.bf2c8fc0.js",
             "static/js/async/__federation_expose_utils.0bef6084.js",
             "static/js/async/__federation_expose_app.76c4e447.js",
@@ -3550,15 +3414,15 @@
 ========
             "static/js/async/1869.aaa73965.js",
             "static/js/async/__federation_expose_utils.baabdbb5.js",
-            "static/js/async/__federation_expose_app.d072357e.js",
+            "static/js/async/__federation_expose_app.0e94a09a.js",
             "static/js/async/__federation_expose_modules__data_object.f749777e.js",
             "static/js/async/__federation_expose_modules__asset.7e418b78.js",
-            "static/js/async/7544.94f2b90f.js",
-            "static/js/async/161.a6571324.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap.7ae6d482.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.2574b447.js",
+            "static/js/async/1673.70dcbd96.js",
+            "static/js/async/161.86991b6f.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.81391cf7.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.cf5c1691.js",
             "static/js/async/__federation_expose_modules__user.c116b0de.js"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
           ],
           "async": [
             "static/js/async/7599.f501b0a1.js",
@@ -3566,7 +3430,7 @@
             "static/js/async/1047.2bb3fd91.js",
             "static/js/async/6534.3ecdad71.js",
             "static/js/async/4819.c23fd1b3.js",
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/js/async/1869.bf2c8fc0.js",
             "static/js/async/__federation_expose_utils.0bef6084.js",
             "static/js/async/__federation_expose_app.76c4e447.js",
@@ -3580,15 +3444,15 @@
 ========
             "static/js/async/1869.aaa73965.js",
             "static/js/async/__federation_expose_utils.baabdbb5.js",
-            "static/js/async/__federation_expose_app.d072357e.js",
+            "static/js/async/__federation_expose_app.0e94a09a.js",
             "static/js/async/__federation_expose_modules__data_object.f749777e.js",
             "static/js/async/__federation_expose_modules__asset.7e418b78.js",
-            "static/js/async/7544.94f2b90f.js",
-            "static/js/async/161.a6571324.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap.7ae6d482.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.2574b447.js",
+            "static/js/async/1673.70dcbd96.js",
+            "static/js/async/161.86991b6f.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.81391cf7.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.cf5c1691.js",
             "static/js/async/__federation_expose_modules__user.c116b0de.js",
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
             "static/js/async/9310.58a29e72.js",
             "static/js/async/9578.612e3878.js",
             "static/js/async/8881.3a925a87.js",
@@ -3849,8 +3713,9 @@
         },
         "css": {
           "sync": [
-<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
-<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-stats.json
+<<<<<<<< HEAD:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+<<<<<<<< HEAD:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
+<<<<<<<< HEAD:public/build/5f73870f-0e3b-48ee-bc19-47022bf6831f/mf-manifest.json
             "static/css/async/6534.04432dd5.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.86a98490.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.86a98490.css"
@@ -3868,7 +3733,7 @@
             "static/css/async/6534.de1a0d45.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.646bc071.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.646bc071.css"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-stats.json
+>>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/a62c1e12-441d-4223-b27d-260536a8ea82/mf-manifest.json
 ========
             "static/css/async/6534.b57cae7e.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.112f37c0.css",
@@ -3878,10 +3743,21 @@
             "static/css/async/6534.b57cae7e.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.112f37c0.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.112f37c0.css"
->>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-stats.json
+>>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/2c4592d7-e0e7-4f67-95b7-bc4265b8ee42/mf-manifest.json
+========
+            "static/css/async/6534.9ee045da.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.82611818.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.82611818.css"
+          ],
+          "async": [
+            "static/css/async/6534.9ee045da.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.82611818.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.82611818.css"
+>>>>>>>> a2a80e9b8ad8452be4bf9b3743efc27ace84f971:public/build/29929915-ea11-4edf-9ff9-bc13ea5e0f4b/mf-manifest.json
           ]
         }
-      }
+      },
+      "path": "./utils"
     }
   ]
 }

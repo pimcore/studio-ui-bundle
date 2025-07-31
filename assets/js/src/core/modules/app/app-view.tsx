@@ -16,6 +16,8 @@ import { router } from '@Pimcore/app/router/router'
 import { AppLoader } from '@Pimcore/modules/app/app-loader/app-loader'
 import { DateTimeConfig } from '@Pimcore/app/config/date-time'
 import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
+import { ModalsProvider } from './modals-provider'
+import { ApiGateway } from '@Pimcore/app/public-api/api-gateway'
 
 export const AppView = (): React.JSX.Element => {
   return (
@@ -23,11 +25,14 @@ export const AppView = (): React.JSX.Element => {
       <ErrorBoundary>
         <GlobalProvider>
           <AntApp>
-            <DateTimeConfig>
-              <AppLoader>
-                <RouterProvider router={ router } />
-              </AppLoader>
-            </DateTimeConfig>
+            <ModalsProvider>
+              { <ApiGateway /> }
+              <DateTimeConfig>
+                <AppLoader>
+                  <RouterProvider router={ router } />
+                </AppLoader>
+              </DateTimeConfig>
+            </ModalsProvider>
           </AntApp>
         </GlobalProvider>
       </ErrorBoundary>

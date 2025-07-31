@@ -22,6 +22,7 @@
     "globalName": "pimcore_studio_ui_bundle_core",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
+<<<<<<<< HEAD:public/build/3265a3df-3119-47ed-afa5-91dacf58d0b4/mf-manifest.json
 <<<<<<<< HEAD:public/build/9fc4fcb7-7c75-46b8-bd19-6391dbc2c8f9/mf-manifest.json
 <<<<<<<< HEAD:public/build/12fe904c-4780-4d91-bf53-18e3b52cf15e/mf-manifest.json
     "publicPath": "/bundles/pimcorestudioui/build/12fe904c-4780-4d91-bf53-18e3b52cf15e/"
@@ -31,6 +32,9 @@
 ========
     "publicPath": "/bundles/pimcorestudioui/build/3265a3df-3119-47ed-afa5-91dacf58d0b4/"
 >>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/3265a3df-3119-47ed-afa5-91dacf58d0b4/mf-manifest.json
+========
+    "publicPath": "/bundles/pimcorestudioui/build/8cf6d0c0-034e-4ad7-95ee-d8b7a7117b79/"
+>>>>>>>> a2a80e9b8ad8452be4bf9b3743efc27ace84f971:public/build/8cf6d0c0-034e-4ad7-95ee-d8b7a7117b79/mf-manifest.json
   },
   "shared": [],
   "remotes": [
