@@ -34,7 +34,7 @@ interface ImageEditablePreviewProps {
   thumbnailSettings?: ImageThumbnailSettings
   imgAttributes?: Record<string, string>
   onImageLoad?: (event: React.SyntheticEvent<HTMLImageElement>) => void
-  onImageResize?: (dimensions: { width: number, height: number }) => void
+  onResize?: (dimensions: { width: number, height: number }) => void
   lastImageDimensions?: { width: number, height: number } | null
 }
 
@@ -50,7 +50,7 @@ export const ImageEditablePreview = ({
   thumbnailSettings,
   imgAttributes,
   onImageLoad,
-  onImageResize,
+  onResize,
   lastImageDimensions
 }: ImageEditablePreviewProps): React.JSX.Element => {
   const { getStateClasses } = useDroppable()
@@ -62,10 +62,10 @@ export const ImageEditablePreview = ({
   const currentImageDimensions = useElementResizeDimensions(imageContainerRef)
 
   useEffect(() => {
-    if (currentImageDimensions.width > 0 && currentImageDimensions.height > 0 && onImageResize !== undefined) {
-      onImageResize(currentImageDimensions)
+    if (currentImageDimensions.width > 0 && currentImageDimensions.height > 0 && onResize !== undefined) {
+      onResize(currentImageDimensions)
     }
-  }, [currentImageDimensions, onImageResize])
+  }, [currentImageDimensions, onResize])
 
   const imageSrc = useMemo(() => {
     if (assetId === undefined) {

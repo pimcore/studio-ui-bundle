@@ -42,11 +42,30 @@ interface DocumentHotspotImagePreviewProps {
   disableInlineUpload?: boolean
   imgAttributes?: Record<string, string>
   focalPointContextMenuItem?: boolean
-  onImageResize?: (dimensions: { width: number, height: number }) => void
+  onResize?: (dimensions: { width: number, height: number }) => void
   lastImageDimensions?: { width: number, height: number } | null
 }
 
-export const DocumentHotspotImagePreview = ({ assetId, height, width, containerWidth, value, onChange, setMarkerModalOpen, setCropModalOpen, handleSearch, handleLocateInTree, handleUpload, emptyValue, disabled, disableInlineUpload, imgAttributes, focalPointContextMenuItem, onImageResize, lastImageDimensions }: DocumentHotspotImagePreviewProps): React.JSX.Element => {
+export const DocumentHotspotImagePreview = ({ 
+  assetId, 
+  height, 
+  width, 
+  containerWidth, 
+  value, 
+  onChange, 
+  setMarkerModalOpen, 
+  setCropModalOpen, 
+  handleSearch, 
+  handleLocateInTree, 
+  handleUpload, 
+  emptyValue, 
+  disabled, 
+  disableInlineUpload, 
+  imgAttributes, 
+  focalPointContextMenuItem,
+  onResize,
+  lastImageDimensions 
+}: DocumentHotspotImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openElement } = useElementHelper()
 
@@ -144,7 +163,7 @@ export const DocumentHotspotImagePreview = ({ assetId, height, width, containerW
         height={ height }
         imgAttributes={ imgAttributes }
         lastImageDimensions={ lastImageDimensions }
-        onImageResize={ onImageResize }
+        onResize={ onResize }
         thumbnailSettings={ value.crop }
         width={ width }
       />

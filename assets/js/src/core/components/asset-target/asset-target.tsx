@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, type MutableRefObject } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyle } from './asset-target.styles'
 import cn from 'classnames'
@@ -21,11 +21,13 @@ import { type DropdownProps } from '../dropdown/dropdown'
 import { Text } from '@sdk/components'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { isNil } from 'lodash'
+import useElementResizeDimensions from '@Pimcore/utils/hooks/use-element-resize-dimensions'
 
 interface AssetTargetProps {
   onRemove?: () => void
   onSearch?: () => void
   onUpload?: () => void
+  onResize?: (dimensions: { width: number, height: number }) => void
   title: string
   className?: string
   width?: number | string
@@ -34,10 +36,29 @@ interface AssetTargetProps {
   uploadIcon?: boolean
 }
 
-export const AssetTarget = forwardRef(function AssetTarget ({ title, className, width = 200, height = 200, dndIcon, uploadIcon, onRemove, onSearch, onUpload }: AssetTargetProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
+export const AssetTarget = ({ 
+  title, 
+  className, 
+  width = 200, 
+  height = 200, 
+  dndIcon, 
+  uploadIcon, 
+  onRemove, 
+  onSearch, 
+  onUpload,
+  onResize 
+}: AssetTargetProps): React.JSX.Element => {
   const { getStateClasses } = useDroppable()
   const { styles } = useStyle()
   const { t } = useTranslation()
+  const containerRef = useRef<HTMLDivElement>(null)
+  const currentDimensions = useElementResizeDimensions(containerRef)
+
+  useEffect(() => {
+    if (currentDimensions.width > 0 && currentDimensions.height > 0 && onResize !== undefined) {
+      onResize(currentDimensions)
+    }
+  }, [currentDimensions, onResize])
 
   const dropdownItems: DropdownProps['menu']['items'] = []
 
@@ -76,7 +97,7 @@ export const AssetTarget = forwardRef(function AssetTarget ({ title, className, 
     >
       <div
         className={ cn(className, styles.assetTargetContainer, ...getStateClasses()) }
-        ref={ ref }
+        ref={ containerRef }
         style={ {
           height: toCssDimension(height),
           width: toCssDimension(width)
@@ -121,4 +142,4 @@ export const AssetTarget = forwardRef(function AssetTarget ({ title, className, 
       </div>
     </Dropdown>
   )
-})
+}

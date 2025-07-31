@@ -314,7 +314,7 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
           key={ imageValue.id }
           lastImageDimensions={ lastImageDimensionsRef.current }
           onChange={ handleHotspotImageChange }
-          onImageResize={ handleImageResize }
+          onResize={ handleImageResize }
           setCropModalOpen={ handleOpenCropModal }
           setMarkerModalOpen={ handleOpenHotspotMarkersModal }
           value={ convertToHotspotImageValue() }
@@ -326,6 +326,7 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
           dndIcon
           height={ lastImageDimensionsRef.current?.height ?? height ?? DEFAULT_HEIGHT }
           onSearch={ handleSearch }
+          onResize={ handleImageResize }
           onUpload={ props.config?.disableInlineUpload === true ? undefined : handleUpload }
           title={ props.config?.title ?? t('image.dnd-target') }
           width={ lastImageDimensionsRef.current?.width ?? width ?? '100%' }
