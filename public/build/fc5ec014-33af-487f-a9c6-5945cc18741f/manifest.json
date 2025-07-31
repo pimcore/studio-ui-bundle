@@ -1,5 +1,7 @@
 {
   "allFiles": [
+    "http://localhost:3030/static/js/async/js_src_core_modules_user_hooks_use-global-user-management-context_ts-js_src_core_modules_user-252f41.js",
+    "http://localhost:3030/static/js/async/js_src_core_app_plugin-system_plugin-system_ts-js_src_core_bootstrap_ts-js_src_core_modules_a-cda863.js",
     "http://localhost:3030/static/js/async/js_src_core_assets_images_flags_ar_inline_svg_react.js",
     "http://localhost:3030/static/js/async/js_src_core_assets_images_flags_mc_inline_svg_react.js",
     "http://localhost:3030/static/js/async/js_src_core_assets_images_flags_si_inline_svg_react.js",
@@ -331,8 +333,6 @@
     "http://localhost:3030/static/js/async/vendors-node_modules_codemirror_lang-html_dist_index_js.js",
     "http://localhost:3030/static/js/async/js_src_core_modules_asset_asset-api-slice-enhanced_ts.js",
     "http://localhost:3030/static/js/async/js_src_core_modules_data-object_data-object-api-slice-enhanced_ts.js",
-    "http://localhost:3030/static/js/async/js_src_core_modules_user_hooks_use-global-user-management-context_ts-js_src_core_modules_user-252f41.js",
-    "http://localhost:3030/static/js/async/js_src_core_app_plugin-system_plugin-system_ts-js_src_core_bootstrap_ts-js_src_core_modules_a-cda863.js",
     "http://localhost:3030/static/font/Lato-Light.bec6f0ae.ttf",
     "http://localhost:3030/static/font/Lato-Regular.4291f48c.ttf",
     "http://localhost:3030/static/font/Lato-Bold.2c00c297.ttf",
@@ -340,6 +340,9 @@
     "http://localhost:3030/mf-manifest.json",
     "http://localhost:3030/mf-stats.json",
     "http://localhost:3030/index.html",
+    "http://localhost:3030/static/js/async/js_src_core_modules_user_hooks_use-global-user-management-context_ts-js_src_core_modules_user-252f41.js.map",
+    "http://localhost:3030/static/js/async/js_src_core_app_plugin-system_plugin-system_ts-js_src_core_bootstrap_ts-js_src_core_modules_a-cda863.js.map",
+    "http://localhost:3030/js_src_core_app_plugin-system_plugin-system_ts-js_src_core_bootstrap_ts-js_src_core_modules_a-cda863.d704beca13c0db0e.hot-update.js.map",
     "http://localhost:3030/static/js/async/js_src_core_assets_images_flags_ar_inline_svg_react.js.map",
     "http://localhost:3030/static/js/async/js_src_core_assets_images_flags_mc_inline_svg_react.js.map",
     "http://localhost:3030/static/js/async/js_src_core_assets_images_flags_si_inline_svg_react.js.map",
@@ -644,11 +647,11 @@
     "http://localhost:3030/static/js/async/__federation_expose_modules__icon_library.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_api__custom_metadata.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_api__tags.js.map",
+    "http://localhost:3030/pimcore_studio_ui_bundle.d704beca13c0db0e.hot-update.js.map",
     "http://localhost:3030/static/js/remoteEntry.js.map",
-    "http://localhost:3030/pimcore_studio_ui_bundle.0a8d9307d87c2e18.hot-update.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_api__translations.js.map",
     "http://localhost:3030/static/js/index.js.map",
-    "http://localhost:3030/index.0a8d9307d87c2e18.hot-update.js.map",
+    "http://localhost:3030/index.d704beca13c0db0e.hot-update.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_api__metadata.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_api__data_object.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_api__workflow.js.map",
@@ -668,20 +671,11 @@
     "http://localhost:3030/static/js/async/vendors-node_modules_antd-style_es_index_js.js.map",
     "http://localhost:3030/static/js/async/vendors-node_modules_codemirror_lang-html_dist_index_js.js.map",
     "http://localhost:3030/static/js/async/js_src_core_modules_asset_asset-api-slice-enhanced_ts.js.map",
-    "http://localhost:3030/static/js/async/js_src_core_modules_data-object_data-object-api-slice-enhanced_ts.js.map",
-    "http://localhost:3030/static/js/async/js_src_core_modules_user_hooks_use-global-user-management-context_ts-js_src_core_modules_user-252f41.js.map",
-    "http://localhost:3030/js_src_core_app_plugin-system_plugin-system_ts-js_src_core_bootstrap_ts-js_src_core_modules_a-cda863.0a8d9307d87c2e18.hot-update.js.map",
-    "http://localhost:3030/static/js/async/js_src_core_app_plugin-system_plugin-system_ts-js_src_core_bootstrap_ts-js_src_core_modules_a-cda863.js.map"
+    "http://localhost:3030/static/js/async/js_src_core_modules_data-object_data-object-api-slice-enhanced_ts.js.map"
   ],
   "entries": {
     "pimcore_studio_ui_bundle": {
       "assets": [
-        "js_src_core_app_plugin-system_plugin-system_ts-js_src_core_bootstrap_ts-js_src_core_modules_a-cda863.0a8d9307d87c2e18.hot-update.js.map",
-        "static/js/async/js_src_core_app_plugin-system_plugin-system_ts-js_src_core_bootstrap_ts-js_src_core_modules_a-cda863.js.map",
-        "static/font/Lato-Light.bec6f0ae.ttf",
-        "static/font/Lato-Bold.2c00c297.ttf",
-        "static/font/Lato-Regular.4291f48c.ttf",
-        "static/js/async/js_src_core_modules_user_hooks_use-global-user-management-context_ts-js_src_core_modules_user-252f41.js.map",
         "static/js/async/js_src_core_modules_data-object_data-object-api-slice-enhanced_ts.js.map",
         "static/js/async/js_src_core_modules_asset_asset-api-slice-enhanced_ts.js.map",
         "static/js/async/vendors-node_modules_codemirror_lang-html_dist_index_js.js.map",
@@ -703,8 +697,8 @@
         "static/js/async/__federation_expose_api__data_object.js.map",
         "static/js/async/__federation_expose_api__metadata.js.map",
         "static/js/async/__federation_expose_api__translations.js.map",
+        "pimcore_studio_ui_bundle.d704beca13c0db0e.hot-update.js.map",
         "static/js/remoteEntry.js.map",
-        "pimcore_studio_ui_bundle.0a8d9307d87c2e18.hot-update.js.map",
         "static/js/async/__federation_expose_api__tags.js.map",
         "static/js/async/__federation_expose_api__custom_metadata.js.map",
         "static/js/async/__federation_expose_modules__icon_library.js.map",
@@ -1008,7 +1002,13 @@
         "static/js/async/js_src_core_assets_images_flags_ng_inline_svg_react.js.map",
         "static/js/async/js_src_core_assets_images_flags_si_inline_svg_react.js.map",
         "static/js/async/js_src_core_assets_images_flags_mc_inline_svg_react.js.map",
-        "static/js/async/js_src_core_assets_images_flags_ar_inline_svg_react.js.map"
+        "static/js/async/js_src_core_assets_images_flags_ar_inline_svg_react.js.map",
+        "static/js/async/js_src_core_app_plugin-system_plugin-system_ts-js_src_core_bootstrap_ts-js_src_core_modules_a-cda863.js.map",
+        "js_src_core_app_plugin-system_plugin-system_ts-js_src_core_bootstrap_ts-js_src_core_modules_a-cda863.d704beca13c0db0e.hot-update.js.map",
+        "static/font/Lato-Light.bec6f0ae.ttf",
+        "static/font/Lato-Bold.2c00c297.ttf",
+        "static/font/Lato-Regular.4291f48c.ttf",
+        "static/js/async/js_src_core_modules_user_hooks_use-global-user-management-context_ts-js_src_core_modules_user-252f41.js.map"
       ],
       "initial": {
         "js": [
@@ -1017,8 +1017,6 @@
       },
       "async": {
         "js": [
-          "http://localhost:3030/static/js/async/js_src_core_app_plugin-system_plugin-system_ts-js_src_core_bootstrap_ts-js_src_core_modules_a-cda863.js",
-          "http://localhost:3030/static/js/async/js_src_core_modules_user_hooks_use-global-user-management-context_ts-js_src_core_modules_user-252f41.js",
           "http://localhost:3030/static/js/async/js_src_core_modules_data-object_data-object-api-slice-enhanced_ts.js",
           "http://localhost:3030/static/js/async/js_src_core_modules_asset_asset-api-slice-enhanced_ts.js",
           "http://localhost:3030/static/js/async/vendors-node_modules_codemirror_lang-html_dist_index_js.js",
@@ -1342,7 +1340,9 @@
           "http://localhost:3030/static/js/async/js_src_core_assets_images_flags_ng_inline_svg_react.js",
           "http://localhost:3030/static/js/async/js_src_core_assets_images_flags_si_inline_svg_react.js",
           "http://localhost:3030/static/js/async/js_src_core_assets_images_flags_mc_inline_svg_react.js",
-          "http://localhost:3030/static/js/async/js_src_core_assets_images_flags_ar_inline_svg_react.js"
+          "http://localhost:3030/static/js/async/js_src_core_assets_images_flags_ar_inline_svg_react.js",
+          "http://localhost:3030/static/js/async/js_src_core_app_plugin-system_plugin-system_ts-js_src_core_bootstrap_ts-js_src_core_modules_a-cda863.js",
+          "http://localhost:3030/static/js/async/js_src_core_modules_user_hooks_use-global-user-management-context_ts-js_src_core_modules_user-252f41.js"
         ],
         "css": [
           "http://localhost:3030/static/css/async/vendors-node_modules_ant-design_plots_es_components_column_index_js-node_modules_ant-design_p-82fe5c.css",
@@ -1360,7 +1360,7 @@
         "static/js/async/vendors-node_modules_lezer_lr_dist_index_js.js.map",
         "static/js/async/vendors-node_modules_reselect_dist_reselect_mjs.js.map",
         "static/js/index.js.map",
-        "index.0a8d9307d87c2e18.hot-update.js.map",
+        "index.d704beca13c0db0e.hot-update.js.map",
         "static/js/async/vendors-node_modules_react-router-dom_dist_index_js.js.map",
         "static/js/async/vendors-node_modules_immer_dist_immer_mjs.js.map",
         "static/js/async/vendors-node_modules_dnd-kit_sortable_dist_sortable_esm_js.js.map",

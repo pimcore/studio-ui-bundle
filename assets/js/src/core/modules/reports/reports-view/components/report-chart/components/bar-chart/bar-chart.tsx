@@ -113,7 +113,7 @@ export const BarChart = ({ chartData, reportData, chartLabelMap }: IChartProps):
   }
 
   return (
-    <div>
+    <div className="m-t-mini">
       <Column { ...config } />
 
       <Flex
@@ -127,7 +127,9 @@ export const BarChart = ({ chartData, reportData, chartLabelMap }: IChartProps):
           return (
             <LegendItem
               disabled={ !isActive }
-              handleClick={ () => { handleLegendItemClick(key) } }
+              handleClick={ () => {
+                handleLegendItemClick(key)
+              } }
               key={ `${index}-${key}` }
               label={ chartLabelMap[key] ?? key }
               markerColor={ colorMap[key] }

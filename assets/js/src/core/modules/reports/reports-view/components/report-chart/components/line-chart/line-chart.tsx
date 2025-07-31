@@ -112,7 +112,7 @@ export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps)
   }
 
   return (
-    <div>
+    <div className="m-t-mini">
       <Line { ...config } />
 
       <Flex
