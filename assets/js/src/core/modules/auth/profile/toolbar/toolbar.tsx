@@ -22,7 +22,7 @@ interface IToolbarProps {
   id: number
 }
 
-export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarProps): React.JSX.Element => {
+export const Toolbar = ({ id, ...props }: IToolbarProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { user, isLoading, removeTrackedChanges } = useUserDraft()
   const { updateUserProfile } = useUserHelper()
