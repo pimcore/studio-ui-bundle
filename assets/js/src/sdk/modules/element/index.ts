@@ -143,6 +143,7 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/document/edita
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-snippet'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-table'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-textarea'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-video'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-wysiwyg'
 
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'

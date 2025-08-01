@@ -13,6 +13,7 @@ import { UploadModalProvider } from '@Pimcore/components/modal-upload/provider/u
 import { LinkModalProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/provider/link-modal-provider'
 import { CropModalProvider } from '../element/components/crop-modal/provider/crop-modal-provider'
 import { HotspotMarkersModalProvider } from '../element/components/hotspot-markers-modal/provider/hotspot-markers-modal-provider'
+import { VideoModalProvider } from '../element/components/video-modal/provider/video-modal-provider'
 
 export interface ModalsProviderProps {
   children: React.ReactNode
@@ -28,7 +29,9 @@ export const ModalsProvider = ({ children }: ModalsProviderProps): React.JSX.Ele
       <LinkModalProvider>
         <CropModalProvider>
           <HotspotMarkersModalProvider>
-            {children}
+            <VideoModalProvider>
+              {children}
+            </VideoModalProvider>
           </HotspotMarkersModalProvider>
         </CropModalProvider>
       </LinkModalProvider>

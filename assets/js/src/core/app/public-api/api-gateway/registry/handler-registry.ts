@@ -14,6 +14,7 @@ import { type LinkModalContextProps } from '@Pimcore/modules/element/dynamic-typ
 import { type ApiGatewayEventType, type ApiGatewayEventPayload } from '../types/event-types'
 import { type CropModalContextProps } from '@Pimcore/modules/element/components/crop-modal/provider/crop-modal-provider'
 import { type HotspotMarkersModalContextProps } from '@Pimcore/modules/element/components/hotspot-markers-modal/provider/hotspot-markers-modal-provider'
+import { type VideoModalContextProps } from '@Pimcore/modules/element/components/video-modal/provider/video-modal-provider'
 
 // Define a context object that can be passed to handlers
 export interface ApiGatewayHandlerContext {
@@ -22,6 +23,7 @@ export interface ApiGatewayHandlerContext {
   linkModalContext: LinkModalContextProps
   cropModalContext: CropModalContextProps
   hotspotMarkersModalContext: HotspotMarkersModalContextProps
+  videoModalContext: VideoModalContextProps
   // Add other helpers here as needed
 }
 
