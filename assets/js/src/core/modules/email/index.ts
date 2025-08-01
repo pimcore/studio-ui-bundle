@@ -80,5 +80,16 @@ moduleSystem.registerModule({
         }
       }
     })
+
+    mainNavRegistryService.registerMainNavItem({
+      path: 'Tools/Email/Send Test-Email',
+      label: 'navigation.test-email',
+      className: 'item-style-modifier',
+      permission: UserPermission.Emails,
+      perspectivePermission: NavPermission.Mails,
+      onClick: () => {
+        console.log('opend!')
+      }
+    })
   }
 })
