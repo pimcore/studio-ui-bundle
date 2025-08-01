@@ -23,10 +23,10 @@ import { useTranslation } from 'react-i18next'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { type DocType, useDocumentDocTypeListQuery, useDocumentAddMutation } from '../../document-api-slice.gen'
 import { App } from 'antd'
-import { Flex } from '@Pimcore/components/flex/flex'
-import { Spin } from '@Pimcore/components/spin/spin'
-import { Box } from '@Pimcore/components/box/box'
-import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { Form } from '@Pimcore/components/form/form'
+import { Input } from '@Pimcore/components/input/input'
+import { type InputRef } from 'antd'
+import { useDocumentHelper } from '../../hooks/use-document-helper'
 
 interface UseAddPageHookReturn {
   addPageTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -34,13 +34,13 @@ interface UseAddPageHookReturn {
 
 export const useAddPage = (): UseAddPageHookReturn => {
   const { t } = useTranslation()
-  const { modal } = App.useApp()
-  // const [addDataObjectMutation] = useDataObjectAddMutation()
+  const { openDocument } = useDocumentHelper()
   const [addDocumentMutation] = useDocumentAddMutation()
   const dispatch = useAppDispatch()
-  // const { openDataObject } = useDataObjectHelper()
   const { isTreeActionAllowed } = useTreePermission()
-  // const { getClassDefinitionsForCurrentUser } = useClassDefinitions()
+  const { modal } = App.useApp()
+  const [form] = Form.useForm()
+  const firstInputRef = React.useRef<InputRef>(null)
 
   const getDocumentEntries = (node: TreeNodeProps): ItemType[] => {
     let documentHierarchy: ItemType[] = []
@@ -82,31 +82,6 @@ export const useAddPage = (): UseAddPageHookReturn => {
     return documentHierarchy
   }
 
-  // const getDataObjectEntry = (classDefinition: ClassDefinitionListItem, node: TreeNodeProps): ItemType => {
-  //   return {
-  //     label: t(classDefinition.name),
-  //     key: classDefinition.id,
-  //     icon: classDefinition.icon.value === 'class'
-  //       ? (
-  //         <Icon
-  //           subIconName='new'
-  //           subIconVariant={ 'green' }
-  //           value='data-object'
-  //         />
-  //         )
-  //       : (
-  //         <Icon
-  //           subIconName='new'
-  //           subIconVariant={ 'green' }
-  //           { ...classDefinition.icon }
-  //         />
-  //         ),
-  //     onClick: () => {
-  //       const parentId = parseInt(node.id)
-  //       createDataObject(classDefinition, parentId)
-  //     }
-  //   }
-  // }
   const getDocumentEntry = (docType: DocType, node: TreeNodeProps): ItemType => {
     return {
       label: t(docType.name),
@@ -119,90 +94,82 @@ export const useAddPage = (): UseAddPageHookReturn => {
     }
   }
 
-  // const createDataObject = (
-  //   classDefinition: ClassDefinitionListItem,
-  //   parentId: number,
-  //   onFinish?: (newName: string) => void
-  // ): void => {
-  //   modal.input({
-  //     title: t('document.create-page', { className: classDefinition.name }),
-  //     label: t('form.label.new-item'),
-  //     rule: {
-  //       required: true,
-  //       message: t('form.validation.required')
-  //     },
-  //     onOk: async (value: string) => {
-  //       await createDataObjectMutation(classDefinition.id, value, parentId)
-  //       onFinish?.(value)
-  //     }
-  //   })
-  // }
-
   const createDocument = (docType: DocType, parentId: number): void => {
-    const switchModal = modal.confirm({
-      title: <Flex
-        align="center"
-        gap="small"
-             >
-        {t('document.add-page')}
-      </Flex>,
-      content: <div>
-        <Box margin={ { bottom: 'small' } }>
-          {t('perspective.switching.description')}:
-        </Box>
-      </div>
+    modal.confirm({
+      icon: null,
+      title: t('document.add-page', { docTypeName: docType.name }),
+      content: (
+        <Form
+          form={ form }
+          initialValues={ { title: '', navigationName: '', key: '' } }
+          layout="vertical"
+        >
+          <Form.Item
+            label={ t('title') }
+            name="title"
+          >
+            <Input
+              onChange={ e => {
+                const value = e.target.value
+                form.setFieldsValue({
+                  title: value,
+                  navigationName: value,
+                  key: value
+                })
+              } }
+              placeholder={ t('title') }
+              ref={ firstInputRef }
+            />
+          </Form.Item>
+          <Form.Item
+            label={ t('navigation') }
+            name="navigationName"
+          >
+            <Input placeholder={ t('navigation') } />
+          </Form.Item>
+          <Form.Item
+            label={ t('key') }
+            name="key"
+            rules={ [{ required: true, message: t('form.validation.required') }] }
+          >
+            <Input placeholder={ t('key') } />
+          </Form.Item>
+        </Form>
+      ),
+      modalRender: (node) => {
+        if (firstInputRef.current !== null) {
+          firstInputRef.current.focus()
+        }
+        return node
+      },
+      onOk: async () => {
+        await form.validateFields()
+          .then(async values => {
+            const { title, navigationName, key } = values
+            await createDocumentMutation(docType.id, title, navigationName, key, parentId)
+          })
+      }
     })
-
-    // modal.input({
-    //   title: t('document.add-page', { docTypeName: docType.name }),
-    //   label: t('form.label.new-item'),
-    //   rule: {
-    //     required: true,
-    //     message: t('form.validation.required'),
-    //   },
-    //   onOk: async (value: string) => {
-    //     await createDocumentMutation(docType.id, value, parentId);
-    //   },
-    // });
   }
 
-  // const createDataObjectMutation = async (
-  //   classId: string,
-  //   name: string,
-  //   parentId: number
-  // ): Promise<void> => {
-  //   const createDataObjectTask = addDataObjectMutation({
-  //     parentId,
-  //     dataObjectAddParameters: {
-  //       key: name,
-  //       classId,
-  //       type: 'object'
-  //     }
-  //   })
-  //
-  //   try {
-  //     const response = await createDataObjectTask
-  //
-  //     if (response.error !== undefined) {
-  //       trackError(new ApiError(response.error))
-  //       return
-  //     }
-  //
-  //     const { id } = response.data
-  //     void openDataObject({ config: { id } })
-  //     dispatch(refreshNodeChildren({ nodeId: String(parentId), elementType: 'data-object' }))
-  //   } catch (error) {
-  //     trackError(new GeneralError('Error creating data object'))
-  //   }
-  // }
-
-  const createDocumentMutation = async (docTypeId: string, name: string, parentId: number): Promise<void> => {
+  const createDocumentMutation = async (
+    docTypeId: string,
+    key: string,
+    title: string,
+    navigationName: string,
+    parentId: number
+  ): Promise<void> => {
     const createDocumentTask = addDocumentMutation({
       parentId,
       documentAddParameters: {
-        key: name,
+        key,
         type: 'page',
-        docTypeId
+        title,
+        navigationName,
+        docTypeId,
+        language: 'en', // todo: Default language, can be changed as needed
+        translationsSourceId: parentId,
+        inheritanceSourceId: parentId
       }
     })
 
@@ -215,6 +182,7 @@ export const useAddPage = (): UseAddPageHookReturn => {
       }
 
       const { id } = response.data
+      void openDocument({ config: { id } })
       dispatch(refreshNodeChildren({ nodeId: String(parentId), elementType: 'document' }))
     } catch (error) {
       trackError(new GeneralError('Error creating document'))
