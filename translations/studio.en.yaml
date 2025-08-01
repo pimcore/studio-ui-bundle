@@ -725,6 +725,11 @@ user-management.roles: Roles
 user-management.role: Role
 user-management.users: Users
 user-management.user: User
+user-management.add-folder: Add new Folder
+user-management.add-folder.label: Enter the name of the new folder
+user-management.add-user: Add new User
+user-management.add-user.label: Enter the name of the new user
+user-management.last-login: Last Login
 roles.tree.all: All Roles
 roles.save-item.success: Role saved successfully
 roles.clone-item.success: Role cloned successfully
@@ -732,6 +737,12 @@ roles.remove-folder.success: Folder removed successfully
 roles.remove-item.success: Role removed successfully
 roles.add-item.success: Role added successfully
 roles.add-folder.success: Folder added successfully
+roles.settings.title: Settings
+roles.workspaces.title: Workspaces
+roles.add-folder: Add new Folder
+roles.add-folder.label: Enter the name of the new folder
+roles.add-role: Add new Role
+roles.add-role.label: Enter the name of the new role
 navigation.website-settings: Website Settings
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
