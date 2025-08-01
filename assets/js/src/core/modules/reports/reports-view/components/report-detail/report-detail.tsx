@@ -70,56 +70,56 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
     }
   }
 
-  useEffect(() => {
-    const getColumns = (): Array<AccessorKeyColumnDef<unknown, never>> | undefined => {
-      const list: Array<AccessorKeyColumnDef<unknown, never>> = []
+  const getColumns = (): Array<AccessorKeyColumnDef<unknown, never>> | undefined => {
+    const list: Array<AccessorKeyColumnDef<unknown, never>> = []
 
-      reportDetailData?.columnConfigurations?.forEach((item, index) => {
-        const isShowColumn = item.display === true && item.filterDrilldown !== FilterDrillDown.ONLY_FILTER
+    reportDetailData?.columnConfigurations?.forEach((item, index) => {
+      const isShowColumn = item.display === true && item.filterDrilldown !== FilterDrillDown.ONLY_FILTER
 
-        if (isShowColumn) {
-          const columnId = item?.name ?? `id-${index}`
+      if (isShowColumn) {
+        const columnId = item?.name ?? `id-${index}`
 
+        list.push(
+          columnHelper.accessor(columnId, {
+            header: !isEmptyValue(item.label) ? item.label : item.name
+          })
+        )
+
+        if (!isEmptyValue(item.action)) {
           list.push(
-            columnHelper.accessor(columnId, {
-              header: !isEmptyValue(item.label) ? item.label : item.name
+            columnHelper.accessor(`${columnId}-action`, {
+              header: t('actions.open'),
+              enableSorting: false,
+              size: 50,
+              cell: (info) => {
+                const rowData = info.row.original as object
+                const id = rowData[columnId]
+
+                return (
+                  <Flex
+                    align='center'
+                    justify='center'
+                  >
+                    <IconButton
+                      icon={ { value: 'open-folder' } }
+                      onClick={ () => { handleElementOpen({ id: Number(id), actionType: item.action as ReportActionType | undefined }) } }
+                      type="link"
+                    />
+                  </Flex>
+                )
+              }
             })
           )
-
-          if (!isEmptyValue(item.action)) {
-            list.push(
-              columnHelper.accessor(`${columnId}-action`, {
-                header: t('actions.open'),
-                enableSorting: false,
-                size: 50,
-                cell: (info) => {
-                  const rowData = info.row.original as object
-                  const id = rowData[columnId]
-
-                  return (
-                    <Flex
-                      align='center'
-                      justify='center'
-                    >
-                      <IconButton
-                        icon={ { value: 'open-folder' } }
-                        onClick={ () => { handleElementOpen({ id: Number(id), actionType: item.action as ReportActionType | undefined }) } }
-                        type="link"
-                      />
-                    </Flex>
-                  )
-                }
-              })
-            )
-          }
         }
+      }
 
-        return undefined
-      })
+      return undefined
+    })
 
-      return list.filter(item => !isUndefined(item))
-    }
+    return list.filter(item => !isUndefined(item))
+  }
 
+  useEffect(() => {
     setColumns(getColumns() ?? [])
     setInitialColumns(getColumns() ?? [])
   }, [reportDetailData, setColumns])
