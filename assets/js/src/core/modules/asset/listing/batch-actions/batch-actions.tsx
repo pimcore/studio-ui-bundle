@@ -97,6 +97,14 @@ export const BatchActions = (): React.JSX.Element => {
         onClick: () => {
           createZip()
         }
+      },
+      {
+        key: '4',
+        label: t('listing.actions.delete'),
+        icon: <Icon value={ 'trash' } />,
+        onClick: () => {
+          console.log('CLICK DELETE')
+        }
       }
     ]
   }

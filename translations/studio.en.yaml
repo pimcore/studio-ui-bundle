@@ -245,6 +245,7 @@ listing.add-column: Add a column
 listing.actions: Apply to selection
 listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download
+listing.actions.delete: Delete
 listing.actions.export: Export
 listing.actions.csv-export: CSV Export
 listing.actions.xlsx-export: Excel Export
