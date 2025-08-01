@@ -17,7 +17,7 @@ import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { api } from '@Pimcore/modules/application-logger/application-logger-api-slice-enhanced'
 import { useAppDispatch } from '@sdk/app'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ApplicationLogger } from './application-logger'
 import { useBundleApplicationLoggerGetCollectionQuery } from './application-logger-api-slice.gen'
@@ -30,9 +30,9 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { columnFilters } = useFilter()
+  const { columnFilters, setIsLoading: setFilterLoading } = useFilter()
 
-  const { data, isLoading: isRTKLoading } = useBundleApplicationLoggerGetCollectionQuery({
+  const { data, isFetching: isRTKFetching } = useBundleApplicationLoggerGetCollectionQuery({
     body: {
       filters: {
         page: currentPage,
@@ -48,6 +48,10 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
     setPageSize(pageSize)
   }
 
+  useEffect(() => {
+    setFilterLoading(isRTKFetching)
+  }, [isRTKFetching])
+
   return (
     <ContentLayout
       renderToolbar={
@@ -56,7 +60,7 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
           theme='secondary'
         >
           <IconButton
-            disabled={ isLoading || isRTKLoading }
+            disabled={ isLoading || isRTKFetching }
             icon={ { value: 'refresh' } }
             onClick={ () => {
               setIsLoading(true)
@@ -96,6 +100,7 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
         loading={ isLoading }
       >
         <Box
+          className='h-full'
           margin={ {
             x: 'extra-small',
             y: 'none'
