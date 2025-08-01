@@ -10,6 +10,7 @@
 
 import { Button, Card, type MenuRef } from 'antd'
 import React, { useRef } from 'react'
+import cn from 'classnames'
 import { useStyle } from './preview-card.styles'
 import Meta from 'antd/es/card/Meta'
 import { Icon } from '../icon/icon'
@@ -53,7 +54,7 @@ export const PreviewCard = (props: PreviewCardProps): React.JSX.Element => {
       title={ props.name }
     >
       <Card
-        className={ [styles.card, classCard].join(' ') }
+        className={ cn(styles.card, classCard) }
         cover={
           <div className={ classImgDiv }>
             <IconOrImage

@@ -66,9 +66,10 @@ const PreviewContainer = (): React.JSX.Element => {
             gap={ 'extra-small' }
             wrap
           >
-            {data.items.map((asset) => (
+            {data.items.map((asset, index) => (
               <PreviewCardContainer
                 asset={ asset }
+                key={ `${asset.id}-${index}` }
               />
             ))}
           </Flex>
