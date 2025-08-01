@@ -14,8 +14,13 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     card: css`
       &.ant-card {
+        text-align: center;
         height: 103px;
         cursor: pointer;
+
+        &.ant-card-bordered .ant-card-cover {
+          margin-top: 0;
+        }
 
         .ant-card-body {
           padding: ${token.paddingXXS}px ${token.paddingXS}px;
@@ -36,12 +41,10 @@ export const useStyle = createStyles(({ token, css }) => {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 64px;
-      width: 170px !important;
       
       .ant-image {
-        width: 100%;
-        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
         text-align: center;
       }
 
@@ -60,8 +63,6 @@ export const useStyle = createStyles(({ token, css }) => {
     `,
 
     img: css`
-      border-top-left-radius: ${token.borderRadiusLG}px;
-      border-top-right-radius: ${token.borderRadiusLG}px;
       max-height: 72px;
       max-width: 168px;
     `,
