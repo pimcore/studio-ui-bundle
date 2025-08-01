@@ -62,7 +62,7 @@ export const VideoComponent = ({
   useEffect(() => {
     if (!isNull(containerRef?.current)) {
       // Look for the empty video element
-      const emptyVideoElement = containerRef.current.querySelector('.pimcore_editable_video_empty')
+      const emptyVideoElement = containerRef.current.querySelector('.pimcore_editable_video_empty') as HTMLDivElement | null
       if (!isNull(emptyVideoElement)) {
         setEmptyElement(emptyVideoElement)
       }
