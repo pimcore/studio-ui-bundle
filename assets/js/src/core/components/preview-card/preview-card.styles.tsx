@@ -67,7 +67,7 @@ export const useStyle = createStyles(({ token, css }) => {
     `,
 
     imgMedium: css`
-      max-height: 106px !important;
+      max-height: 118px !important;
       max-width: 234px;
     `,
 

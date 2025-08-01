@@ -48,7 +48,7 @@ export const PreviewCard = (props: PreviewCardProps): React.JSX.Element => {
       <Card
         className={ cn(styles.card, { [styles.cardMedium]: size === SizeTypes.MEDIUM }) }
         cover={
-          <div className={ cn(styles.imgContainer, { [styles.imgContainerMedium]: SizeTypes.MEDIUM }) }>
+          <div className={ cn(styles.imgContainer, { [styles.imgContainerMedium]: size === SizeTypes.MEDIUM }) }>
             <IconOrImage
               alt={ props.name }
               className={ cn(styles.img, { [styles.imgMedium]: size === SizeTypes.MEDIUM }) }
