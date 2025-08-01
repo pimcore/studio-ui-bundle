@@ -70,6 +70,19 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
     }
   }
 
+  const renderColumnActionCell = ({ id, actionType }: { id: string, actionType: ReportActionType | undefined }): React.JSX.Element => (
+    <Flex
+      align='center'
+      justify='center'
+    >
+      <IconButton
+        icon={ { value: 'open-folder' } }
+        onClick={ () => { handleElementOpen({ id: Number(id), actionType }) } }
+        type="link"
+      />
+    </Flex>
+  )
+
   const getColumns = (): Array<AccessorKeyColumnDef<unknown, never>> | undefined => {
     const list: Array<AccessorKeyColumnDef<unknown, never>> = []
 
@@ -95,18 +108,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
                 const rowData = info.row.original as object
                 const id = rowData[columnId]
 
-                return (
-                  <Flex
-                    align='center'
-                    justify='center'
-                  >
-                    <IconButton
-                      icon={ { value: 'open-folder' } }
-                      onClick={ () => { handleElementOpen({ id: Number(id), actionType: item.action as ReportActionType | undefined }) } }
-                      type="link"
-                    />
-                  </Flex>
-                )
+                return renderColumnActionCell({ id, actionType: item.action as ReportActionType | undefined })
               }
             })
           )
