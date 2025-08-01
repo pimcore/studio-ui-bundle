@@ -12,20 +12,21 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
-    wrapper: css`
-      position: relative;
-      display: inline-block;
+    placeholder: css`
+      width: 100%;
+      border: 2px dashed ${token.colorBorder};
+      border-radius: ${token.borderRadius}px;
+      background-color: ${token.colorBgContainer};
+      padding: ${token.paddingLG}px;
+      text-align: center;
     `,
 
-    editButton: css`
-      position: absolute !important;
-      top: ${token.paddingXS}px;
-      right: ${token.paddingXS}px;
-      z-index: 10;
-      background-color: ${token.colorBgContainer};
-      border: 1px solid ${token.colorBorder};
-      border-radius: ${token.borderRadius}px;
-      box-shadow: ${token.boxShadow};
+    placeholderFullHeight: css`
+      height: 100%;
+    `,
+
+    placeholderText: css`
+      color: ${token.colorTextDescription};
     `
   }
 })

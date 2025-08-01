@@ -10,7 +10,7 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ css, token }) => {
+export const useStyles = createStyles(({ token, css }) => {
   return {
     wrapper: css`
       position: relative;
@@ -18,14 +18,10 @@ export const useStyles = createStyles(({ css, token }) => {
     `,
 
     editButton: css`
-      position: absolute !important;
+      position: absolute;
       top: ${token.paddingXS}px;
       right: ${token.paddingXS}px;
       z-index: 10;
-      background-color: ${token.colorBgContainer};
-      border: 1px solid ${token.colorBorder};
-      border-radius: ${token.borderRadius}px;
-      box-shadow: ${token.boxShadow};
     `
   }
 })
