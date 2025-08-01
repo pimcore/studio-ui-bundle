@@ -29,8 +29,6 @@ export interface AbstractDocumentEditableDefinition {
   containerRef?: React.RefObject<HTMLDivElement>
 }
 
-export type GridCellColumnMeta = ColumnMetaType & { type: string }
-
 @injectable()
 export abstract class DynamicTypeDocumentEditableAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
