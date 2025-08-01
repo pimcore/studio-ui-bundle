@@ -14,102 +14,79 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     card: css`
       &.ant-card {
-          height: 103px;
-          cursor: pointer;
-      }
+        height: 103px;
+        cursor: pointer;
 
-      &.card-medium {
+        .ant-card-body {
+          padding: ${token.paddingXXS}px ${token.paddingXS}px;
+          margin-top: 7px;
+          margin-bottom: 7px;
+          width: 166px;
+        }
+     }
+    `,
+
+    cardMedium: css`
+      &.ant-card {
         height: 150px;
       }
+    `,
+
+    imgContainer: css`
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 64px;
+      width: 170px !important;
       
-      &.ant-card .ant-card-body {
-        padding: ${token.paddingXXS}px ${token.paddingXS}px;
-        margin-top: 7px;
-        margin-bottom: 7px;
-        width: 166px;
-      }
-        
-      &.ant-card .ant-card-meta-title {
-        font-weight: normal;
+      .ant-image {
+        width: 100%;
+        height: 100%;
+        text-align: center;
       }
 
-      .checkbox, .checkbox-medium {
-        position: absolute;
-        top: ${token.paddingXXS}px;
-        left: ${token.paddingXXS}px;
-      }
+      .pimcore-icon {
+        color: ${token.Colors.Neutral.Icon.colorIcon};
 
-      .checkbox-medium {
-        left: ${token.paddingXS}px;
-      }
-
-      .dots-button, .dots-button-medium {
-        position: absolute;
-        top: ${token.paddingXXS}px;
-        right: ${token.paddingXXS}px;
-      }
-
-      .dots-button-medium {
-        right: ${token.paddingXS}px;
-      }
-    
-      .dropdown-menu__icon {
-        vertical-align: text-bottom;
-      }
-
-      .dots-button-open-dropdown:not(:disabled):not(.ant-btn-disabled):hover {
-        background-color: ${token.Button.defaultColor};
-        color: white;
-      }
-
-      .ant-card-cover .img-container, .ant-card-cover .img-container-medium {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      
-      .ant-card-cover .img-container {
-        height: 64px;
-        width: 170px;
-          
-        .pimcore-icon {
-          color: ${token.Colors.Neutral.Icon.colorIcon};
-
-          svg * {
-            vector-effect: non-scaling-stroke;
-          }
+        svg * {
+          vector-effect: non-scaling-stroke;
         }
       }
+    `,
 
-      .ant-image .ant-image-img.img, .ant-image .ant-image-img.img-medium {
-        border-radius: unset;
-        margin-top: 3px;
-      }
+    imgContainerMedium: css`
+      height: 109px;
+      width: 236px !important;
+    `,
+
+    img: css`
+      border-top-left-radius: ${token.borderRadiusLG}px;
+      border-top-right-radius: ${token.borderRadiusLG}px;
+      max-height: 72px;
+      max-width: 168px;
+    `,
+
+    imgMedium: css`
+      max-height: 106px !important;
+      max-width: 234px;
+    `,
+
+    dropdownButton: css`
+      position: absolute !important;
+      top: ${token.paddingXXS}px;
+      right: ${token.paddingXXS}px;
+      width: 24px;
+    `,
+
+    metaBlock: css`
+      position: absolute;
+      left: ${token.paddingXS}px;
+      right: ${token.paddingXS}px;
+      bottom: ${token.paddingXS}px;
       
-      .ant-image .ant-image-img.img {
-        max-height: 61px;
-        max-width: 168px;
+      .ant-card-meta-title {
+        font-weight: normal !important;
       }
-
-      .ant-card-cover .img-container-medium {
-        height: 109px;
-        width: 236px;
-      }
-
-      .ant-image .ant-image-img.img-medium {
-        max-height: 106px;
-        max-width: 234px;
-      }
-
-      .menu-icon {
-        margin-right: ${token.marginXS}px;
-      }
-
-      .flexbox-start-end {
-        display: flex;
-        justify-content: space-between;
-      }
-    }
     `
   }
 }, { hashPriority: 'low' })
