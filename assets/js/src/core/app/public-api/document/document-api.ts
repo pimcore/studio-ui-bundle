@@ -118,23 +118,6 @@ class DocumentApiImpl implements DocumentApi {
       }
     }
   }
-
-  private async performReload (documentId: number): Promise<void> {
-    try {
-      const iframeRef = iframeDocumentEditorRegistry.getIframeRef(documentId)
-      if (!isNil(iframeRef?.current)) {
-        iframeRef.current.setReloading(true)
-        iframeRef.current.reload()
-      }
-    } catch (error) {
-      console.error(`Reload failed for document ${documentId}:`, error)
-      // Reset loading state on error
-      const iframeRef = iframeDocumentEditorRegistry.getIframeRef(documentId)
-      if (!isNil(iframeRef?.current)) {
-        iframeRef.current.setReloading(false)
-      }
-    }
-  }
 }
 
 export const documentApi = new DocumentApiImpl()

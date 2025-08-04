@@ -14,7 +14,7 @@ import { isNil } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@sdk/components'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
-import { type AreaEditableConfig, type AreaEditableValue } from '../../dynamic-type-document-editable-area'
+import { type AreaEditableConfig } from '../../dynamic-type-document-editable-area'
 import { EditableDialog } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-dialog/editable-dialog'
 import { useDocumentEditor } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/hooks/use-document-editor'
 import { useStyles } from './area-editable.styles'
@@ -24,8 +24,6 @@ export interface AreaEditableProps {
   containerRef?: React.RefObject<HTMLDivElement>
   disabled?: boolean
   editableName: string
-  onChange?: (value: AreaEditableValue) => void
-  value?: AreaEditableValue
 }
 
 interface DialogConfig {
@@ -41,8 +39,6 @@ export const AreaEditable = ({
   containerRef,
   disabled,
   editableName,
-  onChange,
-  value
 }: AreaEditableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
