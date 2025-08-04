@@ -65,7 +65,7 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
    * @param props The editable props
    * @returns true if should reload on change, false for normal debounced auto-save
    */
-  reloadOnChange (props: AbstractDocumentEditableDefinition): boolean {
+  reloadOnChange (props: AbstractDocumentEditableDefinition, oldValue: any, newValue: any): boolean {
     return this.hasReloadConfig(props)
   }
 }
