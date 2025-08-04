@@ -42,16 +42,18 @@ export const RenderEditable = ({ editableDefinition, containerRef }: RenderEdita
       return <></>
     }
 
-    const shouldReload = editableType.reloadOnChange(editableProps)
-
     return React.cloneElement(
       editableType.getEditableDataComponent(editableProps),
       {
         key: editableDefinition.name,
         value: localValue,
         onChange: (newValue) => {
+          const oldValue = localValue
           setLocalValue(newValue)
 
+          // Use the enhanced reloadOnChange method with old and new values
+          const shouldReload = editableType.reloadOnChange(editableProps, oldValue, newValue)
+          
           if (shouldReload) {
             updateValueWithReload(editableDefinition.name, { type: editableDefinition.type, data: newValue })
           } else {

@@ -38,13 +38,6 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
     return value
   }
 
-  /**
-   * Transform the internal editable value to the format expected by the backend API
-   * This is the reverse of transformValue - used when sending data to update endpoints
-   * @param value The internal editable value
-   * @param props The editable props
-   * @returns The value formatted for the backend API
-   */
   transformValueForApi (value: any, props: AbstractDocumentEditableDefinition): any {
     return value
   }
@@ -53,19 +46,11 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
     return undefined
   }
 
-  /**
-   * Helper method to check if the editable has reload config enabled
-   */
   protected hasReloadConfig (props: AbstractDocumentEditableDefinition): boolean {
     return Boolean(props.config?.reload)
   }
 
-  /**
-   * Determines if the editable should trigger immediate auto-save and reload on change
-   * @param props The editable props
-   * @returns true if should reload on change, false for normal debounced auto-save
-   */
-  reloadOnChange (props: AbstractDocumentEditableDefinition): boolean {
+  reloadOnChange (props: AbstractDocumentEditableDefinition, oldValue?: any, newValue?: any): boolean {
     return this.hasReloadConfig(props)
   }
 }
