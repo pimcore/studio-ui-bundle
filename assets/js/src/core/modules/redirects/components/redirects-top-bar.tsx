@@ -14,12 +14,12 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { IconTextButton, SearchInput } from '@sdk/components'
 import { useTranslation } from 'react-i18next'
-import { useRedirectsContext } from '../hooks/redirects-provider'
 
 interface RedirectsTopBarProps {
   redirectsLoading: boolean
   createLoading: boolean
   redirectsFetching: boolean
+  onBeginnerClick: () => void
   onExpertClick: () => Promise<void>
   onSearch: (value: string) => void
 }
@@ -28,11 +28,11 @@ export const RedirectsTopBar = ({
   redirectsLoading,
   createLoading,
   redirectsFetching,
+  onBeginnerClick,
   onExpertClick,
   onSearch
 }: RedirectsTopBarProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { setIsBeginnerModalOpen } = useRedirectsContext()
   return (
     <Toolbar
       justify='space-between'
@@ -45,14 +45,14 @@ export const RedirectsTopBar = ({
       <Flex gap={ 'small' }>
         <Title>{t('widget.redirects')}</Title>
         <IconTextButton
-          disabled={ redirectsLoading || createLoading }
+          disabled={ redirectsLoading || createLoading || redirectsFetching }
           icon={ { value: 'new' } }
-          onClick={ () => { setIsBeginnerModalOpen(true) } }
+          onClick={ onBeginnerClick }
         >
           {t('redirects.beginner')}
         </IconTextButton>
         <IconTextButton
-          disabled={ redirectsLoading || createLoading }
+          disabled={ redirectsLoading || createLoading || redirectsFetching }
           icon={ { value: 'new' } }
           loading={ createLoading }
           onClick={ onExpertClick }
@@ -61,7 +61,7 @@ export const RedirectsTopBar = ({
         </IconTextButton>
       </Flex>
       <SearchInput
-        loading={ redirectsFetching }
+        loading={ redirectsFetching || redirectsLoading }
         onSearch={ onSearch }
         placeholder={ t('redirects.search') }
         withPrefix={ false }

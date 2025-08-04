@@ -15,7 +15,7 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
 import { UserPermission } from '../auth/enums/user-permission'
-import { RedirectsWrapper } from './redirects-wrapper'
+import { RedirectsContainer } from './redirects-container'
 moduleSystem.registerModule({
   onInit: () => {
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
@@ -44,7 +44,7 @@ moduleSystem.registerModule({
 
     widgetRegistryService.registerWidget({
       name: 'redirects',
-      component: RedirectsWrapper
+      component: RedirectsContainer
     })
   }
 })

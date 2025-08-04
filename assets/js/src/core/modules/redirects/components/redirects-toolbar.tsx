@@ -8,49 +8,44 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { IconTextButton, Pagination, Split } from '@sdk/components'
 import { useTranslation } from 'react-i18next'
-import { useRedirectsContext } from '../hooks/redirects-provider'
 import { useRedirects } from '../hooks/use-redirects'
 import { api, useBundleSeoRedirectsImportMutation } from '../seo-api-slice-enhanced'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useAppDispatch } from '@sdk/app'
 import { CsvImportModal } from './csv-import-modal/csv-import-modal'
 import { CsvImportResultsModal } from './csv-import-results-modal/csv-import-results-modal'
+import { type BundleSeoRedirectsImportStatistics } from '../seo-api-slice.gen'
 
 interface RedirectsToolbarProps {
+  currentPage: number
   redirectRowsLength: number
   redirectsFetching: boolean
   totalItems: number
+  onPageChange: (page: number, pageSize: number) => void
   onRefresh: () => void
 }
 
 export const RedirectsToolbar = ({
+  currentPage,
   redirectRowsLength,
   redirectsFetching,
   totalItems,
+  onPageChange,
   onRefresh
 }: RedirectsToolbarProps): React.JSX.Element => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const {
-    currentPage,
-    setCurrentPage,
-    pageSize,
-    setPageSize,
-    isImportModalOpen,
-    setIsImportModalOpen,
-    isResultsModalOpen,
-    setIsResultsModalOpen,
-    importResults,
-    setImportResults,
-    exportLoading,
-    setExportLoading
-  } = useRedirectsContext()
+
+  const [isImportModalOpen, setIsImportModalOpen] = useState<boolean>(false)
+  const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false)
+  const [importResults, setImportResults] = useState<BundleSeoRedirectsImportStatistics | null>(null)
+  const [exportLoading, setExportLoading] = useState<boolean>(false)
 
   const { cleanupRedirects, cleanupLoading } = useRedirects()
   const [importRedirects, { isLoading: importLoading }] = useBundleSeoRedirectsImportMutation()
@@ -102,8 +97,7 @@ export const RedirectsToolbar = ({
   }
 
   const handlePageChange = (page: number, newPageSize: number): void => {
-    setCurrentPage(page)
-    setPageSize(newPageSize)
+    onPageChange(page, newPageSize)
   }
 
   return (

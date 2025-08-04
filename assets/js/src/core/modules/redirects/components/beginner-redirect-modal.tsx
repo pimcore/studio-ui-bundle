@@ -17,9 +17,10 @@ import { useForm } from 'antd/es/form/Form'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useBundleSeoRedirectListTypesQuery } from '../seo-api-slice-enhanced'
-import { useRedirectsContext } from '../hooks/redirects-provider'
 
 interface BeginnerRedirectModalProps {
+  open: boolean
+  setOpen: (open: boolean) => void
   createRedirect: (redirectData?: { type: string, source: string, target: string }) => Promise<boolean>
 }
 
@@ -29,12 +30,11 @@ interface BeginnerRedirectFormValues {
   target: string
 }
 
-export const BeginnerRedirectModal = ({ createRedirect }: BeginnerRedirectModalProps): React.JSX.Element => {
+export const BeginnerRedirectModal = ({ open, setOpen, createRedirect }: BeginnerRedirectModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = useForm()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { data: typesData } = useBundleSeoRedirectListTypesQuery()
-  const { isBeginnerModalOpen, setIsBeginnerModalOpen } = useRedirectsContext()
 
   const typeOptions = typesData?.types?.map(type => ({ label: t(type), value: type })) ?? []
 
@@ -48,7 +48,7 @@ export const BeginnerRedirectModal = ({ createRedirect }: BeginnerRedirectModalP
     })
 
     if (success) {
-      setIsBeginnerModalOpen(false)
+      setOpen(false)
       form.resetFields()
     }
 
@@ -56,7 +56,7 @@ export const BeginnerRedirectModal = ({ createRedirect }: BeginnerRedirectModalP
   }
 
   const onCancel = (): void => {
-    setIsBeginnerModalOpen(false)
+    setOpen(false)
     form.resetFields()
   }
 
@@ -67,7 +67,7 @@ export const BeginnerRedirectModal = ({ createRedirect }: BeginnerRedirectModalP
       okText={ t('redirects.beginner-modal.create') }
       onCancel={ onCancel }
       onOk={ () => { form.submit() } }
-      open={ isBeginnerModalOpen }
+      open={ open }
       size="M"
       title={ (
         <ModalTitle iconName="new">

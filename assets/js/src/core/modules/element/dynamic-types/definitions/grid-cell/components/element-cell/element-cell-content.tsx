@@ -16,7 +16,7 @@ import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppa
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
 import { type ElementInfo } from './element-cell'
-import { isPlainObject, isUndefined } from 'lodash'
+import { isPlainObject, isUndefined, isEmpty } from 'lodash'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 import { type ElementReference } from '@Pimcore/modules/element/element-helper'
 import { useEditMode, Input } from '@sdk/components'
@@ -101,7 +101,7 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
   })
 
   const elementInfo = getElementInfo(props)
-  const showClearIcon = props.clearDisabled !== true && (!isUndefined(elementInfo.fullPath) && elementInfo.fullPath !== '')
+  const showClearIcon = props.clearDisabled !== true && (!isUndefined(elementInfo.fullPath) && !isEmpty(elementInfo.fullPath))
 
   return (
     <div

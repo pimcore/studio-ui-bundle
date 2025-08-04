@@ -23,17 +23,14 @@ import { invalidatingTags } from '@sdk/api'
 import { RedirectsToolbar } from './components/redirects-toolbar'
 import { RedirectsTopBar } from './components/redirects-top-bar'
 import { BeginnerRedirectModal } from './components/beginner-redirect-modal'
-import { useRedirectsContext } from './hooks/redirects-provider'
 
 export const RedirectsContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
-  const {
-    currentPage,
-    setCurrentPage,
-    pageSize,
-    filter,
-    setFilter
-  } = useRedirectsContext()
+
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(50)
+  const [filter, setFilter] = useState<string>('')
+  const [isBeginnerModalOpen, setIsBeginnerModalOpen] = useState<boolean>(false)
 
   const {
     createNewRedirect,
@@ -123,10 +120,17 @@ export const RedirectsContainer = (): React.JSX.Element => {
     setCurrentPage(1)
   }
 
+  const handlePageChange = (page: number, newPageSize: number): void => {
+    setCurrentPage(page)
+    setPageSize(newPageSize)
+  }
+
   return (
     <ContentLayout
       renderToolbar={
         <RedirectsToolbar
+          currentPage={ currentPage }
+          onPageChange={ handlePageChange }
           onRefresh={ reload }
           redirectRowsLength={ redirectRows.length }
           redirectsFetching={ redirectsFetching }
@@ -136,6 +140,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
       renderTopBar={
         <RedirectsTopBar
           createLoading={ createLoading }
+          onBeginnerClick={ () => { setIsBeginnerModalOpen(true) } }
           onExpertClick={ async () => {
             await handleCreateRedirect()
           } }
@@ -168,6 +173,8 @@ export const RedirectsContainer = (): React.JSX.Element => {
 
       <BeginnerRedirectModal
         createRedirect={ handleCreateRedirect }
+        open={ isBeginnerModalOpen }
+        setOpen={ setIsBeginnerModalOpen }
       />
     </ContentLayout>
   )
