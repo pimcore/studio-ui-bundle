@@ -12,7 +12,7 @@ import React from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { IconTextButton, Pagination } from '@sdk/components'
+import { IconTextButton, Pagination, Split } from '@sdk/components'
 import { t } from 'i18next'
 
 interface RedirectsToolbarProps {
@@ -46,6 +46,7 @@ export const RedirectsToolbar = ({
 }: RedirectsToolbarProps): React.JSX.Element => {
   return (
     <Toolbar theme="secondary">
+      <Split>
       <Flex
         justify='space-between'
         style={ { width: '100%' } }
@@ -92,6 +93,7 @@ export const RedirectsToolbar = ({
         showTotal={ (total) => t('pagination.show-total', { total }) }
         total={ totalItems }
       />
+      </Split>
     </Toolbar>
   )
 }

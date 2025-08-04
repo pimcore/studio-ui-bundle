@@ -119,7 +119,6 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
           onBlur={ onBlur }
           onKeyDown={ onKeyDown }
           ref={ inputRef }
-          placeholder="Enter element path..."
         />
       ) : (
         <>
