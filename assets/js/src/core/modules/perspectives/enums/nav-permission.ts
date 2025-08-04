@@ -14,6 +14,7 @@ export enum NavPermission {
   Mails = 'extras.emails',
   RecycleBin = 'extras.recycle_bin',
   ApplicationLogger = 'extras.applicationlog',
+  Redirects = 'extras.redirects',
 
   FileHidden = 'file.hidden',
   OpenDocument = 'file.open_document',
@@ -28,7 +29,6 @@ export enum NavPermission {
   UsersHidden = 'settings.users_hidden',
   Users = 'settings.users_users',
   Roles = 'settings.users_roles',
-  Redirects = 'settings.redirects',
 
   MarketingHidden = 'marketing.hidden',
   Reports = 'marketing.reports',
