@@ -14,13 +14,12 @@ import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { Select } from '@Pimcore/components/select/select'
 import { useForm } from 'antd/es/form/Form'
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useBundleSeoRedirectListTypesQuery } from '../seo-api-slice-enhanced'
+import { useRedirectsContext } from '../hooks/redirects-provider'
 
 interface BeginnerRedirectModalProps {
-  open: boolean
-  setOpen: (open: boolean) => void
   createRedirect: (redirectData?: { type: string, source: string, target: string }) => Promise<boolean>
 }
 
@@ -30,11 +29,12 @@ interface BeginnerRedirectFormValues {
   target: string
 }
 
-export const BeginnerRedirectModal = ({ open, setOpen, createRedirect }: BeginnerRedirectModalProps): React.JSX.Element => {
+export const BeginnerRedirectModal = ({ createRedirect }: BeginnerRedirectModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = useForm()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { data: typesData } = useBundleSeoRedirectListTypesQuery()
+  const { isBeginnerModalOpen, setIsBeginnerModalOpen } = useRedirectsContext()
 
   const typeOptions = typesData?.types?.map(type => ({ label: t(type), value: type })) ?? []
 
@@ -48,11 +48,16 @@ export const BeginnerRedirectModal = ({ open, setOpen, createRedirect }: Beginne
     })
 
     if (success) {
-      setOpen(false)
+      setIsBeginnerModalOpen(false)
       form.resetFields()
     }
 
     setIsLoading(false)
+  }
+
+  const onCancel = (): void => {
+    setIsBeginnerModalOpen(false)
+    form.resetFields()
   }
 
   return (
@@ -60,9 +65,9 @@ export const BeginnerRedirectModal = ({ open, setOpen, createRedirect }: Beginne
       cancelButtonProps={ { style: { display: 'none' } } }
       okButtonProps={ { loading: isLoading } }
       okText={ t('redirects.beginner-modal.create') }
-      onCancel={ () => { setOpen(false) } }
+      onCancel={ onCancel }
       onOk={ () => { form.submit() } }
-      open={ open }
+      open={ isBeginnerModalOpen }
       size="M"
       title={ (
         <ModalTitle iconName="new">

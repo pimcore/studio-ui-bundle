@@ -19,8 +19,7 @@ import { type ElementInfo } from './element-cell'
 import { isPlainObject, isUndefined } from 'lodash'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 import { type ElementReference } from '@Pimcore/modules/element/element-helper'
-import { useEditMode } from '@sdk/components'
-import { Input } from '@sdk/components'
+import { useEditMode, Input } from '@sdk/components'
 import { type InputRef } from 'antd'
 
 export interface ElementCellContentProps extends DefaultCellProps {
@@ -35,7 +34,7 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
   const { getStateClasses } = useDroppable()
   const { fireOnUpdateCellDataEvent, isInEditMode, disableEditMode } = useEditMode(props)
   const inputRef = useRef<InputRef>(null)
-  
+
   const expectsStringValue = Boolean(props.column.columnDef.meta?.config?.expectsStringValue)
   const allowTextInput = Boolean(props.column.columnDef.meta?.config?.allowTextInput)
 
@@ -109,20 +108,22 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
       className={ [styles.link, ...getStateClasses()].join(' ') }
       ref={ ref }
     >
-      {isInEditMode && allowTextInput ? (
-        <Input
-          defaultValue={ 
-            expectsStringValue 
-              ? (props.getValue() as string || '') 
+      {isInEditMode && allowTextInput
+        ? (
+          <Input
+            defaultValue={
+            expectsStringValue
+              ? (props.getValue() as string || '')
               : (elementInfo.fullPath || '')
           }
-          onBlur={ onBlur }
-          onKeyDown={ onKeyDown }
-          ref={ inputRef }
-        />
-      ) : (
-        <>
-          {elementInfo.fullPath !== false && (
+            onBlur={ onBlur }
+            onKeyDown={ onKeyDown }
+            ref={ inputRef }
+          />
+          )
+        : (
+          <>
+            {elementInfo.fullPath !== false && (
             <ElementTag
               closeIcon={ showClearIcon }
               disabled={ elementInfo.disabled }
@@ -132,18 +133,18 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
               path={ elementInfo.fullPath }
               published={ elementInfo.published }
             />
-          )}
-          
-          <div>
-            { props.dropDisabled !== true && (
-            <Icon
-              className={ styles.elementOptionsIcon }
-              value={ 'drop-target' }
-            />
             )}
-          </div>
-        </>
-      )}
+
+            <div>
+              { props.dropDisabled !== true && (
+              <Icon
+                className={ styles.elementOptionsIcon }
+                value={ 'drop-target' }
+              />
+              )}
+            </div>
+          </>
+          )}
     </div>
   )
 })

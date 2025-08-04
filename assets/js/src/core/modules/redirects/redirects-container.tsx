@@ -13,39 +13,33 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { Content } from '@Pimcore/components/content/content'
 import { Table } from './table/table'
 import { Box } from '@sdk/components'
-import { api, useBundleSeoRedirectsGetCollectionQuery, useBundleSeoRedirectsImportMutation } from './seo-api-slice-enhanced'
-import trackError, { ApiError, GeneralError } from '../app/error-handler'
+import { api, useBundleSeoRedirectsGetCollectionQuery } from './seo-api-slice-enhanced'
+import trackError, { ApiError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { type RedirectRow, useRedirects } from './hooks/use-redirects'
 import { isUndefined } from 'lodash'
 import { useAppDispatch } from '@sdk/app'
 import { invalidatingTags } from '@sdk/api'
-import { type BundleSeoRedirectsImportStatistics } from './seo-api-slice.gen'
 import { RedirectsToolbar } from './components/redirects-toolbar'
 import { RedirectsTopBar } from './components/redirects-top-bar'
 import { BeginnerRedirectModal } from './components/beginner-redirect-modal'
-import { CsvImportModal } from './components/csv-import-modal/csv-import-modal'
-import { CsvImportResultsModal } from './components/csv-import-results-modal/csv-import-results-modal'
+import { useRedirectsContext } from './hooks/redirects-provider'
 
 export const RedirectsContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
   const {
+    currentPage,
+    setCurrentPage,
+    pageSize,
+    filter,
+    setFilter
+  } = useRedirectsContext()
+
+  const {
     createNewRedirect,
-    createLoading,
-    cleanupRedirects,
-    cleanupLoading
+    createLoading
   } = useRedirects()
 
-  const [importRedirects, { isLoading: importLoading }] = useBundleSeoRedirectsImportMutation()
-
-  const [currentPage, setCurrentPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(50)
-  const [filter, setFilter] = useState<string>('')
-  const [isBeginnerModalOpen, setIsBeginnerModalOpen] = useState<boolean>(false)
-  const [isImportModalOpen, setIsImportModalOpen] = useState<boolean>(false)
-  const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false)
-  const [importResults, setImportResults] = useState<BundleSeoRedirectsImportStatistics | null>(null)
-  const [exportLoading, setExportLoading] = useState<boolean>(false)
   const [redirectRows, setRedirectRows] = useState<RedirectRow[]>([])
 
   const queryArgs = useMemo(() => ({
@@ -75,20 +69,6 @@ export const RedirectsContainer = (): React.JSX.Element => {
   const reload = (): void => {
     dispatch(api.util.invalidateTags(invalidatingTags.REDIRECTS()))
   }
-
-  useEffect(() => {
-    if (!isUndefined(redirects)) {
-      setRedirectRows(
-        redirects.map(item => ({ ...item, rowId: uuid() }))
-      )
-    }
-  }, [redirects])
-
-  useEffect(() => {
-    if (!isUndefined(error)) {
-      trackError(new ApiError(error))
-    }
-  }, [error])
 
   const handleCreateRedirect = async (redirectData?: { type: string, source: string, target: string }): Promise<boolean> => {
     const tempId = uuid()
@@ -124,72 +104,29 @@ export const RedirectsContainer = (): React.JSX.Element => {
     return success
   }
 
+  useEffect(() => {
+    if (!isUndefined(redirects)) {
+      setRedirectRows(
+        redirects.map(item => ({ ...item, rowId: uuid() }))
+      )
+    }
+  }, [redirects])
+
+  useEffect(() => {
+    if (!isUndefined(error)) {
+      trackError(new ApiError(error))
+    }
+  }, [error])
+
   const handleSearch = (value: string): void => {
     setFilter(value)
     setCurrentPage(1)
-  }
-
-  const handleCleanup = async (): Promise<void> => {
-    const { success } = await cleanupRedirects()
-    if (success) {
-      reload()
-    }
-  }
-
-  const handleExport = async (): Promise<void> => {
-    try {
-      setExportLoading(true)
-
-      const result = await dispatch(api.endpoints.bundleSeoRedirectsExport.initiate())
-
-      if ('data' in result && result.data instanceof Blob) {
-        const url = window.URL.createObjectURL(result.data)
-        const link = document.createElement('a')
-        link.href = url
-        link.download = `redirects-export-${new Date().toISOString().split('T')[0]}.csv`
-        link.style.display = 'none'
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-        window.URL.revokeObjectURL(url)
-      } else {
-        trackError(new GeneralError('Export failed: No blob data received'))
-      }
-    } catch (error) {
-      trackError(new GeneralError('Failed to export redirects'))
-    } finally {
-      setExportLoading(false)
-    }
-  }
-
-  const handleImport = async (file: File): Promise<void> => {
-    try {
-      const result = await importRedirects({ body: { file } }).unwrap()
-      setImportResults(result)
-      setIsImportModalOpen(false)
-      setIsResultsModalOpen(true)
-      reload()
-    } catch (error) {
-      console.error('Import error:', error)
-      trackError(new GeneralError('Failed to import redirects'))
-    }
   }
 
   return (
     <ContentLayout
       renderToolbar={
         <RedirectsToolbar
-          cleanupLoading={ cleanupLoading }
-          currentPage={ currentPage }
-          exportLoading={ exportLoading }
-          importLoading={ importLoading }
-          onCleanup={ handleCleanup }
-          onExport={ handleExport }
-          onImport={ () => { setIsImportModalOpen(true) } }
-          onPageChange={ (page, pageSize) => {
-            setCurrentPage(page)
-            setPageSize(pageSize)
-          } }
           onRefresh={ reload }
           redirectRowsLength={ redirectRows.length }
           redirectsFetching={ redirectsFetching }
@@ -199,7 +136,6 @@ export const RedirectsContainer = (): React.JSX.Element => {
       renderTopBar={
         <RedirectsTopBar
           createLoading={ createLoading }
-          onBeginnerClick={ () => { setIsBeginnerModalOpen(true) } }
           onExpertClick={ async () => {
             await handleCreateRedirect()
           } }
@@ -232,21 +168,6 @@ export const RedirectsContainer = (): React.JSX.Element => {
 
       <BeginnerRedirectModal
         createRedirect={ handleCreateRedirect }
-        open={ isBeginnerModalOpen }
-        setOpen={ setIsBeginnerModalOpen }
-      />
-
-      <CsvImportModal
-        loading={ importLoading }
-        onCancel={ () => { setIsImportModalOpen(false) } }
-        onImport={ handleImport }
-        open={ isImportModalOpen }
-      />
-
-      <CsvImportResultsModal
-        onClose={ () => { setIsResultsModalOpen(false) } }
-        open={ isResultsModalOpen }
-        results={ importResults }
       />
     </ContentLayout>
   )

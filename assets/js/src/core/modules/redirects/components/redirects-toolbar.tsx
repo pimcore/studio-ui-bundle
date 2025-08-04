@@ -13,87 +13,164 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { IconTextButton, Pagination, Split } from '@sdk/components'
-import { t } from 'i18next'
+import { useTranslation } from 'react-i18next'
+import { useRedirectsContext } from '../hooks/redirects-provider'
+import { useRedirects } from '../hooks/use-redirects'
+import { api, useBundleSeoRedirectsImportMutation } from '../seo-api-slice-enhanced'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { useAppDispatch } from '@sdk/app'
+import { CsvImportModal } from './csv-import-modal/csv-import-modal'
+import { CsvImportResultsModal } from './csv-import-results-modal/csv-import-results-modal'
 
 interface RedirectsToolbarProps {
   redirectRowsLength: number
-  cleanupLoading: boolean
   redirectsFetching: boolean
-  exportLoading: boolean
-  importLoading: boolean
-  currentPage: number
   totalItems: number
-  onCleanup: () => Promise<void>
-  onExport: () => Promise<void>
-  onImport: () => void
   onRefresh: () => void
-  onPageChange: (page: number, pageSize: number) => void
 }
 
 export const RedirectsToolbar = ({
   redirectRowsLength,
-  cleanupLoading,
   redirectsFetching,
-  exportLoading,
-  importLoading,
-  currentPage,
   totalItems,
-  onCleanup,
-  onExport,
-  onImport,
-  onRefresh,
-  onPageChange
+  onRefresh
 }: RedirectsToolbarProps): React.JSX.Element => {
+  const { t } = useTranslation()
+  const dispatch = useAppDispatch()
+  const {
+    currentPage,
+    setCurrentPage,
+    pageSize,
+    setPageSize,
+    isImportModalOpen,
+    setIsImportModalOpen,
+    isResultsModalOpen,
+    setIsResultsModalOpen,
+    importResults,
+    setImportResults,
+    exportLoading,
+    setExportLoading
+  } = useRedirectsContext()
+
+  const { cleanupRedirects, cleanupLoading } = useRedirects()
+  const [importRedirects, { isLoading: importLoading }] = useBundleSeoRedirectsImportMutation()
+
+  const handleCleanup = async (): Promise<void> => {
+    const { success } = await cleanupRedirects()
+    if (success) {
+      onRefresh()
+    }
+  }
+
+  const handleExport = async (): Promise<void> => {
+    try {
+      setExportLoading(true)
+
+      const result = await dispatch(api.endpoints.bundleSeoRedirectsExport.initiate())
+
+      if ('data' in result && result.data instanceof Blob) {
+        const url = window.URL.createObjectURL(result.data)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = `redirects-export-${new Date().toISOString().split('T')[0]}.csv`
+        link.style.display = 'none'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(url)
+      } else {
+        trackError(new GeneralError('Export failed: No blob data received'))
+      }
+    } catch (error) {
+      trackError(new GeneralError('Failed to export redirects'))
+    } finally {
+      setExportLoading(false)
+    }
+  }
+
+  const handleImport = async (file: File): Promise<void> => {
+    try {
+      const result = await importRedirects({ body: { file } }).unwrap()
+      setImportResults(result)
+      setIsImportModalOpen(false)
+      setIsResultsModalOpen(true)
+      onRefresh()
+    } catch (error) {
+      console.error('Import error:', error)
+      trackError(new GeneralError('Failed to import redirects'))
+    }
+  }
+
+  const handlePageChange = (page: number, newPageSize: number): void => {
+    setCurrentPage(page)
+    setPageSize(newPageSize)
+  }
+
   return (
-    <Toolbar theme="secondary">
-      <Split>
-      <Flex
-        justify='space-between'
-        style={ { width: '100%' } }
-      >
-        <div>
-          <IconTextButton
-            disabled={ redirectRowsLength < 1 || cleanupLoading || redirectsFetching }
-            icon={ { value: 'trash' } }
-            loading={ cleanupLoading }
-            onClick={ onCleanup }
-            type={ 'link' }
+    <>
+      <Toolbar theme="secondary">
+        <Split>
+          <Flex
+            justify='space-between'
+            style={ { width: '100%' } }
           >
-            {t('redirects.clean-up')}
-          </IconTextButton>
-          <IconTextButton
-            disabled={ redirectsFetching || exportLoading }
-            icon={ { value: 'download' } }
-            loading={ exportLoading }
-            onClick={ onExport }
-            type={ 'link' }
-          >
-            {t('redirects.csv-export')}
-          </IconTextButton>
-          <IconTextButton
-            disabled={ redirectsFetching || importLoading }
-            icon={ { value: 'import-csv' } }
-            loading={ importLoading }
-            onClick={ onImport }
-            type={ 'link' }
-          >
-            {t('redirects.csv-import')}
-          </IconTextButton>
-        </div>
-        <IconButton
-          disabled={ redirectsFetching }
-          icon={ { value: 'refresh' } }
-          onClick={ onRefresh }
-        />
-      </Flex>
-      <Pagination
-        current={ currentPage }
-        onChange={ onPageChange }
-        showSizeChanger
-        showTotal={ (total) => t('pagination.show-total', { total }) }
-        total={ totalItems }
+            <div>
+              <IconTextButton
+                disabled={ redirectRowsLength < 1 || cleanupLoading || redirectsFetching }
+                icon={ { value: 'trash' } }
+                loading={ cleanupLoading }
+                onClick={ handleCleanup }
+                type={ 'link' }
+              >
+                {t('redirects.clean-up')}
+              </IconTextButton>
+              <IconTextButton
+                disabled={ redirectsFetching || exportLoading }
+                icon={ { value: 'download' } }
+                loading={ exportLoading }
+                onClick={ handleExport }
+                type={ 'link' }
+              >
+                {t('redirects.csv-export')}
+              </IconTextButton>
+              <IconTextButton
+                disabled={ redirectsFetching || importLoading }
+                icon={ { value: 'import-csv' } }
+                loading={ importLoading }
+                onClick={ () => { setIsImportModalOpen(true) } }
+                type={ 'link' }
+              >
+                {t('redirects.csv-import')}
+              </IconTextButton>
+            </div>
+            <IconButton
+              disabled={ redirectsFetching }
+              icon={ { value: 'refresh' } }
+              onClick={ onRefresh }
+            />
+          </Flex>
+          <Pagination
+            current={ currentPage }
+            onChange={ handlePageChange }
+            showSizeChanger
+            showTotal={ (total) => t('pagination.show-total', { total }) }
+            total={ totalItems }
+          />
+        </Split>
+      </Toolbar>
+
+      <CsvImportModal
+        loading={ importLoading }
+        onCancel={ () => { setIsImportModalOpen(false) } }
+        onImport={ handleImport }
+        open={ isImportModalOpen }
       />
-      </Split>
-    </Toolbar>
+
+      <CsvImportResultsModal
+        onClose={ () => { setIsResultsModalOpen(false) } }
+        open={ isResultsModalOpen }
+        results={ importResults }
+      />
+    </>
   )
 }

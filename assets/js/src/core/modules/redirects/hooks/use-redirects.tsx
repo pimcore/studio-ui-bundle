@@ -51,7 +51,7 @@ export const useRedirects = (): UseRedirectsReturn => {
 
       if (!isUndefined(result.error)) {
         trackError(new ApiError(result.error))
-        return { success: false };
+        return { success: false }
       }
 
       if ('data' in result) {
@@ -60,7 +60,7 @@ export const useRedirects = (): UseRedirectsReturn => {
     } catch {
       trackError(new GeneralError('Was not able to create Redirect'))
     }
-    
+
     return { success: false }
   }
 
