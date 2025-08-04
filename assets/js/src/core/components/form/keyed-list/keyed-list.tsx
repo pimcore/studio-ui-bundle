@@ -30,13 +30,8 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   const { name: tempItemName } = useItem()
   const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
   const name = useMemo(() => itemName[itemName.length - 1], [itemName])
-  const timer = useRef<NodeJS.Timeout | null>(null)
 
   const onChange: KeyedListData['onChange'] = useCallback((newValue) => {
-    if (!isEmpty(timer.current)) {
-      clearTimeout(timer.current)
-    }
-
     if (baseOnChange !== undefined) {
       setValue(() => newValue)
       baseOnChange(newValue)
@@ -44,46 +39,33 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   }, [baseOnChange])
 
   useEffect(() => {
-    if (!isEmpty(timer.current)) {
-      clearTimeout(timer.current)
-    }
-
+    console.log({initialValue, baseValue, isEqual: isEqual(value, initialValue)})
     if (!isEqual(value, initialValue)) {
-      timer.current = setTimeout(() => {
-        setValue(() => initialValue)
-      }, 100)
+      console.log({initialValue})
+      setValue(() => initialValue)
     }
-  }, [baseValue])
-
-  const triggerChange = useCallback((value: KeyedListProps['value']): void => {
-    if (!isEqual(value, initialValue) && !isEmpty(value)) {
-      onChange(value)
-    }
-  }, [onChange, initialValue])
+  }, [initialValue])
 
   const add: KeyedListData['operations']['add'] = useCallback((key, newValue = {}) => {
     setValue((currentValue) => {
       if (isObject(currentValue) && currentValue[key] !== undefined) {
-        triggerChange(currentValue)
+        return currentValue
       }
 
       const _newValue = cloneDeep(currentValue)
       _newValue[key] = newValue
-      triggerChange(_newValue)
       return _newValue
     })
-  }, [triggerChange])
+  }, [])
 
   const remove: KeyedListData['operations']['remove'] = useCallback((key) => {
-    const newValue = cloneDeep(value)
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    delete newValue[key]
-
-    setValue(() => {
-      triggerChange(newValue)
+    setValue((currentValue) => {
+      const newValue = cloneDeep(currentValue)
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete newValue[key]
       return newValue
     })
-  }, [value, triggerChange])
+  }, [])
 
   const update: KeyedListData['operations']['update'] = useCallback((subFieldname, newSubValue, isInitialValue) => {
     const currentName: string[] = isArray(itemName) ? itemName : [itemName]
@@ -112,10 +94,16 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     setValue((currentValue) => {
       const newValue = cloneDeep(currentValue)
       setWith(newValue, nameDifference, newSubValue, setAsObject)
-      triggerChange(newValue)
       return newValue
     })
-  }, [itemName, onFieldChange, triggerChange])
+  }, [itemName, onFieldChange])
+
+  // Trigger onChange when value changes, but outside of setState
+  useEffect(() => {
+    if (!isEqual(value, initialValue) && !isEmpty(value)) {
+      onChange(value)
+    }
+  }, [value, onChange, initialValue])
 
   const getValue = useCallback((subFieldNames: string[]): any => {
     const currentName: string[] = isArray(itemName) ? itemName : [itemName]
@@ -135,7 +123,6 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   return (
     <KeyedListProvider
       getAdditionalComponentProps={ getAdditionalComponentProps }
-      onChange={ onChange }
       operations={ operations }
       values={ value ?? {} }
     >

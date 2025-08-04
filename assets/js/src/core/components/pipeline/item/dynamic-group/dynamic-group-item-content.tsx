@@ -24,15 +24,28 @@ export const DynamicGroupItemContent = ({ dynamicTypeRegistryId }: DynamicGroupI
   const type: string = useMemo(() => value, [value])
   const registry = useInjection<DynamicTypePipelineRegistry>(dynamicTypeRegistryId)
 
-  const dynType = registry.getDynamicType(type)
+  const dynType = useMemo(() => {
+    return registry.getDynamicType(type)
+  }, [registry, type])
+
+  const component = useMemo(() => {
+    if (!dynType) {
+      return null
+    }
+    return dynType.getComponent()
+  }, [dynType])
 
   return useMemo(() => {
+    if (!component) {
+      return <div>Unknown type: {type}</div>
+    }
+
     return (
       <Form.Item name={ 'config' }>
         <Form.KeyedList>
-          {dynType.getComponent()}
+          {component}
         </Form.KeyedList>
       </Form.Item>
     )
-  }, [type])
+  }, [component, type])
 }

@@ -29,16 +29,21 @@ export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: 
   const { operations, getAdditionalComponentProps } = useKeyedList()
   const { name, initialValue } = useItem()
 
-  const Child = Children.only(children)
+  const Child = useMemo(() =>  Children.only(children), [children])
   const value = operations.getValue(name)
   const previousValue = usePrevious(value);
 
   const cachedValue = useMemo(() => {
-    return value
-  }, [!isEqual(value, previousValue)]);
+    if (!isEqual(value, previousValue)) {
+      return value
+    }
+
+    return previousValue
+  }, [value]);
 
   useEffect(() => {
-    operations.update(name, value ?? initialValue ?? null, true)
+    console.log({value, initialValue, isEqual: isEqual(value, initialValue)}) // Debugging line, can be removed
+    operations.update(name, value ?? initialValue ?? null, false)
   }, [])
 
   const onChange: KeyedFormItemControlProps['onChange'] = useCallback((value: any) => {
@@ -63,5 +68,5 @@ export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: 
       onChange={ onChange }
       value={ cachedValue }
     />
-  ), [Child.props, props, cachedValue, onChange, getAdditionalComponentProps, name])
+  ), [Child, props, cachedValue, onChange, getAdditionalComponentProps, name])
 }

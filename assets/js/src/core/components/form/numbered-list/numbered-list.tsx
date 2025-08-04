@@ -37,12 +37,6 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     baseOnChange !== undefined && baseOnChange(newValue)
   }, [baseOnChange])
 
-  const triggerChange = useCallback((value: NumberedListProps['value']): void => {
-    if (!isEqual(value, initialValue) && !isUndefined(value)) {
-      onChange(value)
-    }
-  }, [onChange, initialValue])
-
   useEffect(() => {
     if (!isEqual(value, initialValue)) {
       setValue(() => initialValue)
@@ -56,20 +50,17 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     setValue((currentValue) => {
       const _newValue = cloneDeep(currentValue)
       _newValue.splice(currentKey, 0, newValue)
-      triggerChange(_newValue)
       return _newValue
     })
-  }, [value.length, triggerChange])
+  }, [value.length])
 
   const remove: NumberedListData['operations']['remove'] = useCallback((key) => {
-    const newValue = cloneDeep(value)
-    newValue.splice(key, 1)
-
-    setValue(() => {
-      triggerChange(newValue)
+    setValue((currentValue) => {
+      const newValue = cloneDeep(currentValue)
+      newValue.splice(key, 1)
       return newValue
     })
-  }, [value, triggerChange])
+  }, [])
 
   const update: NumberedListData['operations']['update'] = useCallback((subFieldname, newSubValue, isInitialValue) => {
     const currentName: string[] = itemName
@@ -89,20 +80,25 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     setValue((currentValue) => {
       const newValue = cloneDeep(currentValue)
       set(newValue, nameDifference, newSubValue)
-      triggerChange(newValue)
       return newValue
     })
-  }, [itemName, onFieldChange, triggerChange])
+  }, [itemName, onFieldChange])
 
   const move: NumberedListData['operations']['move'] = useCallback((from, to) => {
     setValue((currentValue) => {
       const newValue = cloneDeep(currentValue)
       const [removed] = newValue.splice(from, 1)
       newValue.splice(to, 0, removed)
-      triggerChange(newValue)
       return newValue
     })
-  }, [triggerChange])
+  }, [])
+
+  // Trigger onChange when value changes, but outside of setState
+  useEffect(() => {
+    if (!isEqual(value, initialValue) && !isUndefined(value)) {
+      onChange(value)
+    }
+  }, [value, onChange, initialValue])
 
   const getValue = useCallback((subFieldNames: string[]): any => {
     const currentName: string[] = itemName

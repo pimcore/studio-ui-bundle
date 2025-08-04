@@ -32,17 +32,15 @@ export interface KeyedListProviderProps {
   children: React.ReactNode
   values: KeyedListData['values']
   operations: KeyedListData['operations']
-  onChange?: (value: KeyedListData['values']) => void
   getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
 }
 
-export const KeyedListProvider = ({ children, values, operations, onChange, getAdditionalComponentProps }: KeyedListProviderProps): React.JSX.Element => {
+export const KeyedListProvider = ({ children, values, operations, getAdditionalComponentProps }: KeyedListProviderProps): React.JSX.Element => {
   const contextValue = useMemo(() => ({
     values,
     operations,
-    onChange,
     getAdditionalComponentProps
-  }), [values, operations, onChange, getAdditionalComponentProps])
+  }), [values, operations, getAdditionalComponentProps])
 
   return (
     <NumberedListContext.Provider value={ undefined }>

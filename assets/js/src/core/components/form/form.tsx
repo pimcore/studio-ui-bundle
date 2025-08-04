@@ -55,9 +55,9 @@ const Form = (({ ...props }: FormProps) => {
 
 const newFormItem = compose(
   withGroupName,
+  withLocalizedFieldsLocale,
   withKeyedItemContext,
   withNumberedItemContext,
-  withLocalizedFieldsLocale,
   withItemProvider
 )(AntForm.Item)
 

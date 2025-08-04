@@ -10,7 +10,7 @@
 
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { DynamicGroupItemContent } from './dynamic-group-item-content'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -31,14 +31,18 @@ const DynamicGroupItem = ({ id, dynamicTypeRegistryId }: DynamicGroupItemProps):
   const { styles } = useStyles()
   const { listeners, setNodeRef, setActivatorNodeRef, transform, transition } = useSortable({ id: id + 1 })
 
-  const style = {
+  const style = useMemo(() => ({
     transform: CSS.Transform.toString(transform),
     transition: transition ?? undefined
-  }
+  }), [transform, transition])
 
-  const onDelete = (): void => {
+  const onDelete = React.useCallback((): void => {
     operations.remove(id)
-  }
+  }, [operations, id])
+
+  const keyValue = useMemo(() => {
+    return getValueByKey(id.toString()).key
+  }, [getValueByKey, id])
 
   return (
     <div
@@ -65,7 +69,7 @@ const DynamicGroupItem = ({ id, dynamicTypeRegistryId }: DynamicGroupItemProps):
               variant="minimal"
               { ...listeners }
             />
-            <Text strong>{getValueByKey(id.toString()).key}</Text>
+            <Text strong>{keyValue}</Text>
           </Flex>
 
           <IconButton

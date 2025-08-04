@@ -91,7 +91,7 @@ const config: Meta = {
               }
             },
 
-            // add 100 more fields for testing
+            /* // add 100 more fields for testing
             ...Array.from({ length: 100 }, (_, i) => ({
               name: `Item ${i + 3}`,
               value: {
@@ -99,7 +99,7 @@ const config: Meta = {
                   testInput: `Value ${i + 3}`
                 }
               }
-            }))
+            })) */
           ]
         } }
         layout='vertical'

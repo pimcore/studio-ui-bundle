@@ -8,12 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo, type ReactNode } from 'react'
+import React, { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Form } from '../form/form'
 import { Divider } from '../divider/divider'
 import { PipelineItemCustom } from './item/custom'
 import { PipelineDynamicGroup } from './item/dynamic-group'
 import { ConfigProvider } from 'antd'
+import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
+import { isEqual } from 'lodash'
 
 export interface PipelineItem {
   id: string
@@ -26,14 +28,30 @@ export interface PipelineProps {
   onChange?: (value: any) => void
 }
 
-const Pipeline = ({ items, value, onChange }: PipelineProps): React.JSX.Element => {
+const Pipeline = ({ items, value: baseValue, onChange }: PipelineProps): React.JSX.Element => {
+  const [value, setValue] = useState(baseValue);
+  const bufferedValue = useDebounce(value, 300);
+
   const theme = useMemo(() => ({
     components: {
       Form: {
         itemMarginBottom: 0
       }
     }
-  }), []);
+  }), [])
+
+  useEffect(() => {
+    if (baseValue !== undefined && !isEqual(baseValue, value)) {
+      setValue(baseValue);
+    }
+  }, [baseValue]);
+
+  useEffect(() => {
+    console.log({bufferedValue})
+    onChange?.(bufferedValue);
+  }, [bufferedValue]);
+
+  const memoizedItems = useMemo(() => items, [items]);
 
   if (value === undefined) {
     return <></>
@@ -42,11 +60,11 @@ const Pipeline = ({ items, value, onChange }: PipelineProps): React.JSX.Element 
   return (
     <ConfigProvider theme={ theme }>
       <Form.KeyedList
-        onChange={ onChange }
+        onChange={ setValue }
         value={ value }
       >
-        {items.map((item) => {
-          const isLastItem = items.indexOf(item) === items.length - 1
+        {memoizedItems.map((item, index) => {
+          const isLastItem = index === memoizedItems.length - 1
 
           return (
             <div key={ item.id }>
