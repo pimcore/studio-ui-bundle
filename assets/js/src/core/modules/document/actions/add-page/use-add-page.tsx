@@ -86,7 +86,11 @@ export const useAddPage = (): UseAddPageHookReturn => {
     return {
       label: t(docType.name),
       key: docType.id,
-      icon: <Icon value={ 'document' } />,
+      icon: <Icon
+        subIconName='new'
+        subIconVariant={ 'green' }
+        value={ 'document' }
+            />,
       onClick: () => {
         const parentId = parseInt(node.id)
         createDocument(docType, parentId)
