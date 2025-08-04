@@ -177,6 +177,7 @@ import { type DynamicTypeDocumentEditableSelect } from './definitions/document/e
 import { type DynamicTypeDocumentEditableTable } from './definitions/document/editable/types/dynamic-type-document-editable-table'
 import { type DynamicTypeDocumentEditableSnippet } from './definitions/document/editable/types/dynamic-type-document-editable-snippet'
 import { type DynamicTypeGridCellDataObjectAdvanced } from './definitions/grid-cell/types/data-object-advanced/dynamic-type-grid-cell-data-object-advanced'
+import { type DynamicTypeDocumentEditableArea } from './definitions/document/editable/types/dynamic-type-document-editable-area'
 
 moduleSystem.registerModule({
   onInit () {
@@ -341,6 +342,7 @@ moduleSystem.registerModule({
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableMultiSelect>(serviceIds['DynamicTypes/DocumentEditable/MultiSelect']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableImage>(serviceIds['DynamicTypes/DocumentEditable/Image']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableVideo>(serviceIds['DynamicTypes/DocumentEditable/Video']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableArea>(serviceIds['DynamicTypes/DocumentEditable/Area']))
 
     const assetRegistry = container.get<DynamicTypeAssetRegistry>(serviceIds['DynamicTypes/AssetRegistry'])
 

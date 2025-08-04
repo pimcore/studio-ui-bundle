@@ -185,6 +185,7 @@ import { DynamicTypeDocumentEditableEmbed } from '@Pimcore/modules/element/dynam
 import { DynamicTypeDocumentEditableTextarea } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-textarea'
 import { DynamicTypeDocumentEditableImage } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-image'
 import { DynamicTypeDocumentEditableVideo } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-video'
+import { DynamicTypeDocumentEditableArea } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-area'
 import { DynamicTypePipelineRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-registry'
 import { DynamicTypePipelineGridSourceFieldsText } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/types/text/text'
 import { DynamicTypePipelineGridTransformersChangeCase } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/change-case/change-case'
@@ -395,6 +396,7 @@ container.bind(serviceIds['DynamicTypes/DocumentEditable/Snippet']).to(DynamicTy
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Table']).to(DynamicTypeDocumentEditableTable).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Textarea']).to(DynamicTypeDocumentEditableTextarea).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Video']).to(DynamicTypeDocumentEditableVideo).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Area']).to(DynamicTypeDocumentEditableArea).inSingletonScope()
 
 // Asset Types
 container.bind(serviceIds['DynamicTypes/AssetRegistry']).to(DynamicTypeAssetRegistry).inSingletonScope()

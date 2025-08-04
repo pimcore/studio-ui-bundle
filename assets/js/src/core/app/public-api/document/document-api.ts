@@ -24,6 +24,7 @@ export interface DocumentApi {
   unregisterIframe: (documentId: number) => void
   triggerValueChange: (documentId: number, key: string, value: any) => void
   triggerValueChangeWithReload: (documentId: number, key: string, value: any) => void
+  triggerSaveAndReload: (documentId: number) => void
   notifyIframeReady: (documentId: number) => void
   isIframeReady: (documentId: number) => boolean
 }
@@ -75,6 +76,11 @@ class DocumentApiImpl implements DocumentApi {
     void this.performAutoSaveAndReload(documentId)
   }
 
+  triggerSaveAndReload (documentId: number): void {
+    // Perform save and reload
+    void this.performAutoSaveAndReload(documentId)
+  }
+
   notifyIframeReady (documentId: number): void {
     iframeDocumentEditorRegistry.markAsReady(documentId)
   }
@@ -105,6 +111,23 @@ class DocumentApiImpl implements DocumentApi {
       }
     } catch (error) {
       console.error(`Auto-save and reload failed for document ${documentId}:`, error)
+      // Reset loading state on error
+      const iframeRef = iframeDocumentEditorRegistry.getIframeRef(documentId)
+      if (!isNil(iframeRef?.current)) {
+        iframeRef.current.setReloading(false)
+      }
+    }
+  }
+
+  private async performReload (documentId: number): Promise<void> {
+    try {
+      const iframeRef = iframeDocumentEditorRegistry.getIframeRef(documentId)
+      if (!isNil(iframeRef?.current)) {
+        iframeRef.current.setReloading(true)
+        iframeRef.current.reload()
+      }
+    } catch (error) {
+      console.error(`Reload failed for document ${documentId}:`, error)
       // Reset loading state on error
       const iframeRef = iframeDocumentEditorRegistry.getIframeRef(documentId)
       if (!isNil(iframeRef?.current)) {
