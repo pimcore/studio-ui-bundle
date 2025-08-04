@@ -171,9 +171,9 @@ export const useAddPage = (): UseAddPageHookReturn => {
         title,
         navigationName,
         docTypeId,
-        language: 'en', // todo: Default language, can be changed as needed
-        translationsSourceId: parentId,
-        inheritanceSourceId: parentId
+        language: null,
+        translationsSourceId: null,
+        inheritanceSourceId: null
       }
     })
 
