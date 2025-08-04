@@ -101,7 +101,7 @@ export class DynamicTypeDocumentEditableImage extends DynamicTypeDocumentEditabl
     return value
   }
 
-  private getImageId(value: ImageEditableValue | null | undefined): number | undefined {
+  private getImageId (value: ImageEditableValue | null | undefined): number | undefined {
     if (isNil(value) || typeof value !== 'object') {
       return undefined
     }
@@ -109,16 +109,16 @@ export class DynamicTypeDocumentEditableImage extends DynamicTypeDocumentEditabl
   }
 
   reloadOnChange (props: ImageEditableDefinition, oldValue?: any, newValue?: any): boolean {
-    if (!Boolean(props.config?.reload)) {
+    if (props.config?.reload !== true) {
       return false
     }
 
     if (isNil(oldValue) || isNil(newValue)) {
-      return Boolean(props.config?.reload)
+      return props.config.reload
     }
 
-    const oldImageId = this.getImageId(oldValue)
-    const newImageId = this.getImageId(newValue)
+    const oldImageId = this.getImageId(oldValue as ImageEditableValue)
+    const newImageId = this.getImageId(newValue as ImageEditableValue)
 
     return oldImageId !== newImageId
   }
