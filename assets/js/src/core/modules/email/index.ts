@@ -17,6 +17,8 @@ import { EmailLogContainer } from './log/email-log-container'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { UserPermission } from '../auth/enums/user-permission'
 import { NavPermission } from '../perspectives/enums/nav-permission'
+import React from 'react'
+import { SendTestEmailButton } from './test-mail/send-test-email-button'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -87,9 +89,7 @@ moduleSystem.registerModule({
       className: 'item-style-modifier',
       permission: UserPermission.Emails,
       perspectivePermission: NavPermission.Mails,
-      onClick: () => {
-        console.log('opend!')
-      }
+      button: () => React.createElement(SendTestEmailButton)
     })
   }
 })
