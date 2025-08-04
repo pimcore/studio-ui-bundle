@@ -11,7 +11,6 @@
 import { injectable } from 'inversify'
 import { type DynamicTypeAbstract } from '../../../registry/dynamic-type-registry-abstract'
 import { type ReactElement } from 'react'
-import { type ColumnMetaType } from '@Pimcore/components/grid/grid'
 import { type IFieldWidthContext } from '@sdk/modules/element'
 
 export interface AbstractDocumentEditableDefinition {
@@ -28,8 +27,6 @@ export interface AbstractDocumentEditableDefinition {
   defaultFieldWidth: IFieldWidthContext
   containerRef?: React.RefObject<HTMLDivElement>
 }
-
-export type GridCellColumnMeta = ColumnMetaType & { type: string }
 
 @injectable()
 export abstract class DynamicTypeDocumentEditableAbstract implements DynamicTypeAbstract {
@@ -68,7 +65,7 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
    * @param props The editable props
    * @returns true if should reload on change, false for normal debounced auto-save
    */
-  reloadOnChange (props: AbstractDocumentEditableDefinition): boolean {
+  reloadOnChange (props: AbstractDocumentEditableDefinition, oldValue: any, newValue: any): boolean {
     return this.hasReloadConfig(props)
   }
 }

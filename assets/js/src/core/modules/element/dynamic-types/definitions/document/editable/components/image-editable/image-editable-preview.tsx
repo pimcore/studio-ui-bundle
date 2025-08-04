@@ -19,9 +19,9 @@ import { ImagePreviewDropdown } from '@Pimcore/components/image-preview/componen
 import { type ImageThumbnailSettings } from '@Pimcore/components/image-preview/utils/custom-image-thumbnail'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { isNil } from 'lodash'
-import useElementResizeDimensions from '@Pimcore/utils/hooks/use-element-resize-dimensions'
 import { generateThumbnailUrl } from './utils/thumbnail-sizing'
 import { getImageDimensions } from './utils/image-dimensions'
+import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 
 interface ImageEditablePreviewProps {
   src?: string
@@ -60,7 +60,7 @@ export const ImageEditablePreview = ({
   const [isImageLoaded, setIsImageLoaded] = useState(false)
 
   const imageContainerRef = useRef<HTMLDivElement>(null)
-  const currentImageDimensions = useElementResizeDimensions(imageContainerRef)
+  const currentImageDimensions = useElementResize(imageContainerRef)
 
   useEffect(() => {
     if (currentImageDimensions.width > 0 && currentImageDimensions.height > 0 && onResize !== undefined) {

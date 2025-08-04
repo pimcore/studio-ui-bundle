@@ -16,7 +16,7 @@ import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { ManyToOneRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
 import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 import { isNil } from 'lodash'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type BundleApplicationLoggerLogEntryWithActions } from '../table/table'
 
@@ -30,22 +30,25 @@ export const DetailModal = (props: DetailModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
 
-  if (isNil(props.data)) {
-    return <></>
-  }
-
   const closeModel = (): void => {
     props.setOpen(false)
   }
 
   const formData = {
-    date: props.data.date ?? '',
-    message: props.data.message ?? '',
-    priority: props.data.priority ?? '',
-    component: props.data.component ?? '',
-    source: props.data.source ?? '',
-    fileObject: props.data.relatedElementData ?? null
+    date: props.data?.date ?? '',
+    message: props.data?.message ?? '',
+    priority: props.data?.priority ?? '',
+    component: props.data?.component ?? '',
+    source: props.data?.source ?? '',
+    fileObject: props.data?.relatedElementData ?? null
   }
+
+  // Reset form fields when data changes or modal opens
+  useEffect(() => {
+    if (props.open && !isNil(props.data)) {
+      form.setFieldsValue(formData)
+    }
+  }, [props.open, props.data, form])
 
   return (
     <Modal
@@ -100,7 +103,7 @@ export const DetailModal = (props: DetailModalProps): React.JSX.Element => {
             <Input readOnly />
           </Form.Item>
 
-          {props.data.fileObject !== null && (
+          {props.data?.fileObject !== null && (
             <Form.Item
               label={ t('application-logger.columns.related-object') }
               name={ 'fileObject' }

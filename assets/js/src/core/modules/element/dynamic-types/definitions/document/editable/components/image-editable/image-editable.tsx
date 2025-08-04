@@ -44,6 +44,7 @@ export interface ImageEditableConfig {
   height?: number
   title?: string
   reload?: boolean
+  hidetext?: boolean
   imgAttributes?: Record<string, string>
   focal_point_context_menu_item?: boolean
   uploadPath?: string
@@ -75,14 +76,15 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
   const lastImageDimensionsRef = useRef<{ width: number, height: number } | null>(null)
 
   const needsContainerWidth = isNil(width) && isNil(height)
-  const containerWidth = useElementResize(needsContainerWidth ? props.containerRef ?? { current: null } : { current: null })
+  const { width: containerWidth } = useElementResize(needsContainerWidth ? props.containerRef ?? { current: null } : { current: null })
 
   const { triggerUpload } = useUploadModal({})
   const {
     handleCropChange,
     handleHotspotsChange,
     handleReplaceImage,
-    handleEmptyValue
+    handleEmptyValue,
+    handleAltTextChange
   } = useImageValueUpdates({ value: imageValue, onChange: props.onChange })
 
   const handleImageResize = useCallback((dimensions: { width: number, height: number }) => {
@@ -246,6 +248,7 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
     !isNil(imageValue?.id)
       ? (
         <DocumentHotspotImagePreview
+          altText={ imageValue.alt }
           assetId={ imageValue.id }
           containerWidth={ containerWidth }
           disableInlineUpload={ props.config?.disableInlineUpload }
@@ -256,9 +259,11 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
           handleSearch={ handleSearch }
           handleUpload={ handleUpload }
           height={ height }
+          hideAltTextInput={ props.config?.hidetext }
           imgAttributes={ props.config?.imgAttributes }
           key={ imageValue.id }
           lastImageDimensions={ lastImageDimensionsRef.current }
+          onAltTextChange={ handleAltTextChange }
           onChange={ handleHotspotImageChange }
           onResize={ handleImageResize }
           setCropModalOpen={ handleOpenCropModal }
