@@ -157,7 +157,7 @@ export const useAddPage = (): UseAddPageHookReturn => {
         })
     }
 
-    void modal.confirm({
+    modal.confirm({
       icon: null,
       title: t('document.add-page', { docTypeName: docType.name }),
       content: <ModalFormContent
