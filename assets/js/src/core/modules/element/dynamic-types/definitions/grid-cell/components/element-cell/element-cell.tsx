@@ -49,7 +49,7 @@ export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
 
   function onDrop (info: DragAndDropInfo): void {
     if (props.column.columnDef.meta?.editable !== undefined && props.table.options.meta?.onUpdateCellData !== undefined) {
-          const expectsStringValue = Boolean(props.column.columnDef.meta?.config?.expectsStringValue)
+      const expectsStringValue = Boolean(props.column.columnDef.meta?.config?.expectsStringValue)
 
       const value = expectsStringValue 
         ? info.data.fullPath 
