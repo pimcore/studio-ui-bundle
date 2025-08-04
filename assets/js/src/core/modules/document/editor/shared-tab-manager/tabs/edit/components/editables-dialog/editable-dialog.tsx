@@ -108,7 +108,6 @@ export const EditableDialog = ({ config, visible, onClose, editableDefinitions }
       onOk={ onClose }
       open={ visible }
       size="L"
-      style={ { minHeight: config.height ?? 400 } }
       title={ t('area-settings') }
       zIndex={ 10001 }
     >
