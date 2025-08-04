@@ -17,6 +17,8 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { isNil } from 'lodash'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
+import { Input } from '@Pimcore/components/input/input'
+import { useStyles } from './hotspot-image-preview.styles'
 
 interface DocumentHotspotImageValue {
   image: { type: 'asset', id: number } | null
@@ -44,6 +46,10 @@ interface DocumentHotspotImagePreviewProps {
   focalPointContextMenuItem?: boolean
   onResize?: (dimensions: { width: number, height: number }) => void
   lastImageDimensions?: { width: number, height: number } | null
+  // Alt text overlay props
+  altText?: string
+  onAltTextChange?: (alt: string) => void
+  hideAltTextInput?: boolean
 }
 
 export const DocumentHotspotImagePreview = ({
@@ -64,10 +70,14 @@ export const DocumentHotspotImagePreview = ({
   imgAttributes,
   focalPointContextMenuItem,
   onResize,
-  lastImageDimensions
+  lastImageDimensions,
+  altText,
+  onAltTextChange,
+  hideAltTextInput
 }: DocumentHotspotImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openElement } = useElementHelper()
+  const { styles } = useStyles()
 
   const handleOpen = (): void => {
     if (!isNil(assetId)) {
@@ -155,7 +165,7 @@ export const DocumentHotspotImagePreview = ({
   }, [disabled, assetId, focalPointContextMenuItem, disableInlineUpload, handleSetFocalPoint, setCropModalOpen, setMarkerModalOpen, handleUpload, emptyValue, handleOpen, handleLocateInTree, handleSearch, t])
 
   return (
-    <div>
+    <div className={ styles.root }>
       <ImageEditablePreview
         assetId={ assetId }
         containerWidth={ containerWidth }
@@ -167,6 +177,15 @@ export const DocumentHotspotImagePreview = ({
         thumbnailSettings={ value.crop }
         width={ width }
       />
+      {hideAltTextInput !== true && (
+        <Input
+          className={ styles.altTextOverlay }
+          disabled={ disabled }
+          onChange={ (e) => onAltTextChange?.(e.target.value) }
+          placeholder={ t('image.alt-text-placeholder') }
+          value={ altText ?? '' }
+        />
+      )}
     </div>
   )
 }
