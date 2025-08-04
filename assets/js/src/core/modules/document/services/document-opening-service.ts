@@ -21,6 +21,7 @@ import { Model } from 'flexlayout-react'
 import { documentReceived } from '../document-draft-slice'
 import { initialTabsStateValue } from '@Pimcore/modules/element/draft/hooks/use-tabs'
 import { isNil } from 'lodash'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface DocumentConfig {
   id: number
@@ -72,7 +73,11 @@ export class DocumentOpeningService {
     }
 
     store.dispatch(api.util.invalidateTags(invalidatingTags.DOCUMENT_DETAIL_ID(id)))
-    const { data } = await store.dispatch(api.endpoints.documentGetById.initiate({ id }))
+    const { data, isError, error } = await store.dispatch(api.endpoints.documentGetById.initiate({ id }))
+
+    if (isError) {
+      trackError(new ApiError(error))
+    }
 
     if (isNil(data) || !checkElementPermission(data.permissions, 'view')) {
       return
