@@ -88,22 +88,6 @@ export const AreaEditable = ({
           console.warn(`Failed to parse dialog config for ${dialogId}:`, error)
         }
       }
-    } else {
-      const fallbackDialogBoxDiv: HTMLElement | null = document.querySelector(`.pimcore_area_dialog[data-name="${editableName}"]`)
-
-      if (!isNil(fallbackDialogBoxDiv)) {
-        const configElement = document.getElementById(`dialogBoxConfig-${editableName}`)
-
-        if (!isNil(configElement)) {
-          try {
-            const configData: DialogConfig = JSON.parse(configElement.innerHTML.trim())
-            setDialogConfig(configData)
-            createEditButtonContainer(fallbackDialogBoxDiv)
-          } catch (error) {
-            console.warn(`Failed to parse dialog config for ${editableName}:`, error)
-          }
-        }
-      }
     }
   }
 
@@ -139,7 +123,6 @@ export const AreaEditable = ({
 
   return (
     <>
-
       {!isNil(editButtonContainer) && !isNil(dialogConfig) && createPortal(
         <Tooltip title={ t('area-settings') }>
           <IconButton
