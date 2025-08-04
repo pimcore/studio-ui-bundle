@@ -108,7 +108,7 @@ export class DynamicTypeDocumentEditableImage extends DynamicTypeDocumentEditabl
     return value.id
   }
 
-  reloadOnChange (props: ImageEditableDefinition, oldValue?: any, newValue?: any): boolean {
+  reloadOnChange (props: ImageEditableDefinition, oldValue: any, newValue: any): boolean {
     if (props.config?.reload !== true) {
       return false
     }
