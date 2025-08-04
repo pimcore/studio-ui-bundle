@@ -17,7 +17,7 @@ export interface DialogConfig {
 }
 
 export interface DialogConfigItem {
-  type: 'tabpanel' | 'panel' | string
+  type: string
   title?: string
   items?: DialogConfigItem[]
   label?: string
