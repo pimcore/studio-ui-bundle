@@ -34,6 +34,7 @@ interface UseAddPageHookReturn {
 
 export const useAddPage = (): UseAddPageHookReturn => {
   const { t } = useTranslation()
+  const { data: documentTypes, isLoading, error } = useDocumentDocTypeListQuery({})
   const { openDocument } = useDocumentHelper()
   const [addDocumentMutation] = useDocumentAddMutation()
   const dispatch = useAppDispatch()
@@ -44,7 +45,6 @@ export const useAddPage = (): UseAddPageHookReturn => {
 
   const getDocumentEntries = (node: TreeNodeProps): ItemType[] => {
     let documentHierarchy: ItemType[] = []
-    const { data: documentTypes, isLoading, error } = useDocumentDocTypeListQuery({})
 
     if (isLoading || error || !documentTypes?.items) {
       return documentHierarchy // Return empty if loading or error occurs
@@ -99,6 +99,15 @@ export const useAddPage = (): UseAddPageHookReturn => {
   }
 
   const createDocument = (docType: DocType, parentId: number): void => {
+    const submitForm = async (): Promise<void> => {
+      await form.validateFields()
+        .then(async () => {
+          const values = form.getFieldsValue()
+          const { title, navigationName, key } = values
+          await createDocumentMutation(docType.id, key, title, navigationName, parentId)
+        })
+    }
+
     modal.confirm({
       icon: null,
       title: t('document.add-page', { docTypeName: docType.name }),
@@ -141,17 +150,15 @@ export const useAddPage = (): UseAddPageHookReturn => {
         </Form>
       ),
       modalRender: (node) => {
+        form.resetFields()
+
         if (firstInputRef.current !== null) {
           firstInputRef.current.focus()
         }
         return node
       },
       onOk: async () => {
-        await form.validateFields()
-          .then(async values => {
-            const { title, navigationName, key } = values
-            await createDocumentMutation(docType.id, title, navigationName, key, parentId)
-          })
+        await submitForm()
       }
     })
   }
