@@ -760,6 +760,7 @@ predefined-properties.name: Name
 redirects.beginner: Beginner
 redirects.expert: Expert Mode
 redirects.type: Type
+redirects.search: Search
 redirects.source-site: Source Site
 redirects.source: Source
 redirects.target-site: Target Site

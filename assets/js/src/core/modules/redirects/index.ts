@@ -13,8 +13,8 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
-// import { NavPermission } from '../perspectives/enums/nav-permission'
-// import { UserPermission } from '../auth/enums/user-permission'
+import { NavPermission } from '../perspectives/enums/nav-permission'
+import { UserPermission } from '../auth/enums/user-permission'
 import { RedirectsContainer } from './redirects-container'
 
 moduleSystem.registerModule({
@@ -25,8 +25,8 @@ moduleSystem.registerModule({
       path: 'Settings/Redirects',
       label: 'navigation.redirects',
       className: 'item-style-modifier',
-      // permission: UserPermission.Redirects,
-      // perspectivePermission: NavPermission.Redirects,
+      permission: UserPermission.Redirects,
+      perspectivePermission: NavPermission.Redirects,
       widgetConfig: {
         name: 'Redirects',
         id: 'redirects',

@@ -46,6 +46,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
   const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false)
   const [importResults, setImportResults] = useState<BundleSeoRedirectsImportStatistics | null>(null)
   const [exportLoading, setExportLoading] = useState<boolean>(false)
+  const [redirectRows, setRedirectRows] = useState<RedirectRow[]>([])
 
   const queryArgs = useMemo(() => ({
     body: {
@@ -63,11 +64,8 @@ export const RedirectsContainer = (): React.JSX.Element => {
     isFetching: redirectsFetching,
     error
   } = useBundleSeoRedirectsGetCollectionQuery(queryArgs)
-
-  const [redirectRows, setRedirectRows] = useState<RedirectRow[]>([])
-
   const redirects = data?.items
-
+  
   const sortedRows = [...redirectRows].sort((a, b) => {
     const aDate = a.creationDate ?? 0
     const bDate = b.creationDate ?? 0

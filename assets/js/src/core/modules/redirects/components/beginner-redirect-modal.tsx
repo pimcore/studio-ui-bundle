@@ -36,10 +36,7 @@ export const BeginnerRedirectModal = ({ open, setOpen, createRedirect }: Beginne
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { data: typesData } = useBundleSeoRedirectListTypesQuery()
 
-  const typeOptions = useMemo(() =>
-    typesData?.types?.map(type => ({ label: t(type), value: type })) ?? [],
-  [typesData, t]
-  )
+  const typeOptions = typesData?.types?.map(type => ({ label: t(type), value: type })) ?? []
 
   const onFinish = async (values: BeginnerRedirectFormValues): Promise<void> => {
     setIsLoading(true)

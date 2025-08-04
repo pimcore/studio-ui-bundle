@@ -32,13 +32,14 @@ interface TableProps {
 
 export const Table = ({ redirectRows, setRedirectRows }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { updateRedirectById } = useRedirects()
-  const [modifiedCells, setModifiedCells] = useState<ModifiedCells>([])
 
+  const { updateRedirectById } = useRedirects()
   const { data: typesData } = useBundleSeoRedirectListTypesQuery()
   const { data: statusesData } = useBundleSeoRedirectListStatusesQuery()
   const { data: prioritiesData } = useBundleSeoRedirectListPrioritiesQuery()
   const { getAllSites } = useSites()
+
+  const [modifiedCells, setModifiedCells] = useState<ModifiedCells>([])
 
   const availableSites: Site[] = getAllSites()
   const siteOptions = availableSites.map(site => ({

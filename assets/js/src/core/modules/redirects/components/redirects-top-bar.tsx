@@ -44,6 +44,7 @@ export const RedirectsTopBar = ({
       <Flex gap={ 'small' }>
         <Title>{t('widget.redirects')}</Title>
         <IconTextButton
+          disabled={ redirectsLoading || createLoading }
           icon={ { value: 'new' } }
           onClick={ onBeginnerClick }
         >
@@ -61,7 +62,7 @@ export const RedirectsTopBar = ({
       <SearchInput
         loading={ redirectsFetching }
         onSearch={ onSearch }
-        placeholder="Search"
+        placeholder={t('redirects.search')}
         withPrefix={ false }
         withoutAddon={ false }
       />
