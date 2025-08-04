@@ -18,14 +18,14 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import { isEmpty, isNil } from 'lodash'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { type DocType, useDocumentDocTypeListQuery, useDocumentAddMutation } from '../../document-api-slice.gen'
 import { App } from 'antd'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
-import { type InputRef } from 'antd'
+import { type InputRef, type FormInstance } from 'antd'
 import { useDocumentHelper } from '../../hooks/use-document-helper'
 
 interface UseAddPageHookReturn {
@@ -41,16 +41,16 @@ export const useAddPage = (): UseAddPageHookReturn => {
   const { isTreeActionAllowed } = useTreePermission()
   const { modal } = App.useApp()
   const [form] = Form.useForm()
-  const firstInputRef = React.useRef<InputRef>(null)
+  const firstInputRef = useRef<InputRef>(null)
 
   const getDocumentEntries = (node: TreeNodeProps): ItemType[] => {
     let documentHierarchy: ItemType[] = []
 
-    if (isLoading || error || !documentTypes?.items) {
+    if (isLoading || error !== null || !documentTypes?.items || isEmpty(documentTypes?.items)) {
       return documentHierarchy // Return empty if loading or error occurs
     }
 
-    const structuredDocumentTypes = [...documentTypes.items]
+    const structuredDocumentTypes = [...(documentTypes.items as DocType[])]
       .sort((a, b) => a.name.localeCompare(b.name))
       .reduce<Record<string, DocType[]>>((acc, docType) => {
       const groupName = isNil(docType.group) || isEmpty(docType.group) ? 'undefined' : docType.group
@@ -98,65 +98,73 @@ export const useAddPage = (): UseAddPageHookReturn => {
     }
   }
 
+  // Modal form content component for document creation
+  const ModalFormContent: React.FC<{ form: FormInstance<any>, firstInputRef: React.RefObject<InputRef>, t: any }> = ({ form, firstInputRef, t }) => {
+    useEffect(() => {
+      if (firstInputRef.current !== null) {
+        firstInputRef.current.focus()
+      }
+    }, [firstInputRef])
+
+    return (
+      <Form
+        form={ form }
+        initialValues={ { title: '', navigationName: '', key: '' } }
+        layout="vertical"
+      >
+        <Form.Item
+          label={ t('title') }
+          name="title"
+        >
+          <Input
+            onChange={ e => {
+              const value = e.target.value
+              form.setFieldsValue({
+                title: value,
+                navigationName: value,
+                key: value
+              })
+            } }
+            placeholder={ t('title') }
+            ref={ firstInputRef }
+          />
+        </Form.Item>
+        <Form.Item
+          label={ t('navigation') }
+          name="navigationName"
+        >
+          <Input placeholder={ t('navigation') } />
+        </Form.Item>
+        <Form.Item
+          label={ t('key') }
+          name="key"
+          rules={ [{ required: true, message: t('form.validation.required') }] }
+        >
+          <Input placeholder={ t('key') } />
+        </Form.Item>
+      </Form>
+    )
+  }
+
   const createDocument = (docType: DocType, parentId: number): void => {
+    form.resetFields() // Always reset before opening
     const submitForm = async (): Promise<void> => {
       await form.validateFields()
         .then(async () => {
           const values = form.getFieldsValue()
           const { title, navigationName, key } = values
-          await createDocumentMutation(docType.id, key, title, navigationName, parentId)
+          await createDocumentMutation(docType.id, key as string, title as string, navigationName as string, parentId)
         })
     }
 
-    modal.confirm({
+    void modal.confirm({
       icon: null,
       title: t('document.add-page', { docTypeName: docType.name }),
-      content: (
-        <Form
-          form={ form }
-          initialValues={ { title: '', navigationName: '', key: '' } }
-          layout="vertical"
-        >
-          <Form.Item
-            label={ t('title') }
-            name="title"
-          >
-            <Input
-              onChange={ e => {
-                const value = e.target.value
-                form.setFieldsValue({
-                  title: value,
-                  navigationName: value,
-                  key: value
-                })
-              } }
-              placeholder={ t('title') }
-              ref={ firstInputRef }
-            />
-          </Form.Item>
-          <Form.Item
-            label={ t('navigation') }
-            name="navigationName"
-          >
-            <Input placeholder={ t('navigation') } />
-          </Form.Item>
-          <Form.Item
-            label={ t('key') }
-            name="key"
-            rules={ [{ required: true, message: t('form.validation.required') }] }
-          >
-            <Input placeholder={ t('key') } />
-          </Form.Item>
-        </Form>
-      ),
-      modalRender: (node) => {
-        form.resetFields()
-
-        if (firstInputRef.current !== null) {
-          firstInputRef.current.focus()
-        }
-        return node
-      },
+      content: <ModalFormContent
+        firstInputRef={ firstInputRef }
+        form={ form }
+        t={ t }
+               />,
       onOk: async () => {
         await submitForm()
       }
