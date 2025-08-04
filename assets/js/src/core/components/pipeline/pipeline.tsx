@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactNode } from 'react'
+import React, { useMemo, type ReactNode } from 'react'
 import { Form } from '../form/form'
 import { Divider } from '../divider/divider'
 import { PipelineItemCustom } from './item/custom'
@@ -27,12 +27,20 @@ export interface PipelineProps {
 }
 
 const Pipeline = ({ items, value, onChange }: PipelineProps): React.JSX.Element => {
+  const theme = useMemo(() => ({
+    components: {
+      Form: {
+        itemMarginBottom: 0
+      }
+    }
+  }), []);
+
   if (value === undefined) {
     return <></>
   }
 
   return (
-    <ConfigProvider theme={ { components: { Form: { itemMarginBottom: 0 } } } }>
+    <ConfigProvider theme={ theme }>
       <Form.KeyedList
         onChange={ onChange }
         value={ value }

@@ -55,7 +55,7 @@ const config: Meta = {
             },
             key2: {
               KeyedInput: 'Key 2'
-            }
+            },
           },
           myNumberedList: [
             {
@@ -65,13 +65,48 @@ const config: Meta = {
             {
               NumberedInput: 'Key 3',
               NumberedInput2: 'Key 4'
-            }
+            },
+            /* // add 100 more fields for testing
+            ...Array.from({ length: 100 }, (_, i) => ({
+              NumberedInput: `Key ${i + 5}`,
+              NumberedInput2: `Key ${i + 6}`
+            })) */
+          ],
+          someNestedList: [
+            {
+              name: 'Item 1',
+              value: {
+                subField1: {
+                  testInput: 'Value 1'
+                }
+              }
+            },
+
+            {
+              name: 'Item 2',
+              value: {
+                subField1: {
+                  testInput: 'Value 2'
+                }
+              }
+            },
+
+            // add 100 more fields for testing
+            ...Array.from({ length: 100 }, (_, i) => ({
+              name: `Item ${i + 3}`,
+              value: {
+                subField1: {
+                  testInput: `Value ${i + 3}`
+                }
+              }
+            }))
           ]
         } }
         layout='vertical'
         onFieldsChange={ onFieldsChange }
         onFinish={ (values) => { console.log(values) } }
         onValuesChange={ onValuesChange }
+        validateTrigger='onSubmit'
       >
         <Form.Item
           label="Input"
@@ -94,11 +129,24 @@ const config: Meta = {
           rules={ [{ required: true, message: 'Please input your name!' }] }
         >
           <Form.Item
-            label="First Name"
             name={ ['name', 'firstName'] }
             rules={ [{ required: true, message: 'Please input your first name!' }] }
           >
-            <Input />
+            <Form.Item
+              label="First Name"
+              name={ ['name', 'firstName', 'first1'] }
+              rules={ [{ required: true, message: 'Please input your first name!' }] }
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="second Name"
+              name={ ['name', 'firstName', 'first2'] }
+              rules={ [{ required: true, message: 'Please input your first name!' }] }
+            >
+              <Input />
+            </Form.Item>
           </Form.Item>
 
           <Form.Item
@@ -108,6 +156,44 @@ const config: Meta = {
           >
             <Input />
           </Form.Item>
+        </Form.Item>
+
+        <Form.Item
+          name="name2"
+          rules={ [{ required: true, message: 'Please input your name!' }] }
+        >
+          <Form.Group name={ 'name2' }>
+            <Form.Item
+              name={ 'firstName' }
+              rules={ [{ required: true, message: 'Please input your first name!' }] }
+            >
+              <Form.Group name={ 'firstName' }>
+                <Form.Item
+                  label="First Name"
+                  name={ 'first1' }
+                  rules={ [{ required: true, message: 'Please input your first name!' }] }
+                >
+                  <Input />
+                </Form.Item>
+
+                <Form.Item
+                  label="second Name"
+                  name={ 'first2' }
+                  rules={ [{ required: true, message: 'Please input your last name!' }] }
+                >
+                  <Input />
+                </Form.Item>
+              </Form.Group>
+            </Form.Item>
+
+            <Form.Item
+              label="Last Name"
+              name={ 'lastName' }
+              rules={ [{ required: true, message: 'Please input your last name!' }] }
+            >
+              <Input />
+            </Form.Item>
+          </Form.Group>
         </Form.Item>
 
         <Form.Item
@@ -161,14 +247,6 @@ const config: Meta = {
             <Form.Item
               label="Sub Group Input 1"
               name="SubGroupInput1"
-              rules={ [{ required: true, message: 'Please input!' }] }
-            >
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="Sub Group Input 2"
-              name="SubGroupInput2"
               rules={ [{ required: true, message: 'Please input!' }] }
             >
               <Input />
@@ -232,6 +310,35 @@ const config: Meta = {
                 rules={ [{ required: true, message: 'Please input!' }] }
               >
                 <Input />
+              </Form.Item>
+            </Form.NumberedList.Iterator>
+          </Form.NumberedList>
+        </Form.Item>
+
+        <Form.Item name={ 'someNestedList' } >
+          <Form.NumberedList>
+            <Form.NumberedList.Iterator>
+              <Form.Item
+                label="Nested Item Name"
+                name="name"
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                label="Nested Item Value"
+                name="value"
+              >
+                <Form.KeyedList>
+                  <Form.KeyedList.Iterator>
+                    <Form.Item
+                      label="Sub Field 1"
+                      name={ ['testInput'] }
+                    >
+                      <Input />
+                    </Form.Item>
+                  </Form.KeyedList.Iterator>
+                </Form.KeyedList>
               </Form.Item>
             </Form.NumberedList.Iterator>
           </Form.NumberedList>

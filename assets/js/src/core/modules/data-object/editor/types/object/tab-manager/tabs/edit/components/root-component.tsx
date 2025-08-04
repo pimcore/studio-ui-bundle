@@ -41,6 +41,7 @@ export const RootComponent = ({ layout, data, className }: RootComponentProps): 
     updateModifiedDataObjectAttributes(changedValues)
 
     const fieldName = getChangedFieldName(changedValues)
+    console.log({fieldName, changedValues});
     if (fieldName !== null && inheritanceState?.getInheritanceState(fieldName)?.inherited === true) {
       inheritanceState?.breakInheritance(fieldName)
     }

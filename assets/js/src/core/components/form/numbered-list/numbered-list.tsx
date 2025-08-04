@@ -10,7 +10,7 @@
 
 import { type NamePath } from 'antd/es/form/interface'
 import { Form } from '../form'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { type NumberedListData, NumberedListProvider } from './provider/numbered-list/numbered-list-provider'
 import { NumberedListIterator } from './iterator/numbered-list-iterator'
 import { cloneDeep, isEqual, set, get, isArray, isUndefined } from 'lodash'
@@ -32,16 +32,16 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
   const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
   const name = useMemo(() => itemName[itemName.length - 1], [itemName])
 
-  const onChange: NumberedListData['onChange'] = (newValue) => {
+  const onChange: NumberedListData['onChange'] = useCallback((newValue) => {
     setValue(() => newValue)
     baseOnChange !== undefined && baseOnChange(newValue)
-  }
+  }, [baseOnChange])
 
-  const triggerChange = (value: NumberedListProps['value']): void => {
+  const triggerChange = useCallback((value: NumberedListProps['value']): void => {
     if (!isEqual(value, initialValue) && !isUndefined(value)) {
       onChange(value)
     }
-  }
+  }, [onChange, initialValue])
 
   useEffect(() => {
     if (!isEqual(value, initialValue)) {
@@ -49,7 +49,7 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     }
   }, [baseValue])
 
-  const add: NumberedListData['operations']['add'] = (newValue, key) => {
+  const add: NumberedListData['operations']['add'] = useCallback((newValue, key) => {
     let currentKey = key
     currentKey ??= value.length
 
@@ -59,9 +59,9 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
       triggerChange(_newValue)
       return _newValue
     })
-  }
+  }, [value.length, triggerChange])
 
-  const remove: NumberedListData['operations']['remove'] = (key) => {
+  const remove: NumberedListData['operations']['remove'] = useCallback((key) => {
     const newValue = cloneDeep(value)
     newValue.splice(key, 1)
 
@@ -69,9 +69,9 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
       triggerChange(newValue)
       return newValue
     })
-  }
+  }, [value, triggerChange])
 
-  const update: NumberedListData['operations']['update'] = (subFieldname, newSubValue, isInitialValue) => {
+  const update: NumberedListData['operations']['update'] = useCallback((subFieldname, newSubValue, isInitialValue) => {
     const currentName: string[] = itemName
     const currentSubFieldname: string[] = subFieldname
     const nameDifference: string[] = []
@@ -92,9 +92,9 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
       triggerChange(newValue)
       return newValue
     })
-  }
+  }, [itemName, onFieldChange, triggerChange])
 
-  const move: NumberedListData['operations']['move'] = (from, to) => {
+  const move: NumberedListData['operations']['move'] = useCallback((from, to) => {
     setValue((currentValue) => {
       const newValue = cloneDeep(currentValue)
       const [removed] = newValue.splice(from, 1)
@@ -102,9 +102,9 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
       triggerChange(newValue)
       return newValue
     })
-  }
+  }, [triggerChange])
 
-  const getValue = (subFieldNames: string[]): any => {
+  const getValue = useCallback((subFieldNames: string[]): any => {
     const currentName: string[] = itemName
     const nameDifference: string[] = []
 
@@ -115,22 +115,27 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     }
 
     return get(value, nameDifference)
-  }
+  }, [itemName, value])
 
-  return useMemo(() => (
+  const operations = useMemo(() => ({ add, remove, update, move, getValue }), [add, remove, update, move, getValue])
+
+  return (
     <NumberedListProvider
       getAdditionalComponentProps={ getAdditionalComponentProps }
       onChange={ onChange }
-      operations={ { add, remove, update, move, getValue } }
+      operations={ operations }
       values={ value ?? {} }
     >
       <Form.Group name={ name }>
         {children}
       </Form.Group>
     </NumberedListProvider>
-  ), [name, value, children, onChange, add, remove, update, getValue])
+  )
 }
 
-NumberedList.Iterator = NumberedListIterator
+const memoedNumberedList = React.memo(NumberedList) as unknown as typeof NumberedList & {
+  Iterator: typeof NumberedListIterator
+}
+memoedNumberedList.Iterator = NumberedListIterator
 
-export { NumberedList }
+export { memoedNumberedList as NumberedList }

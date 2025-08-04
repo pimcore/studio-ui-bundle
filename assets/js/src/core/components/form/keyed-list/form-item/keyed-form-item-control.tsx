@@ -12,7 +12,8 @@ import React, { Children, isValidElement, useCallback, useEffect, useMemo } from
 import { useKeyedList } from '../provider/keyed-list/use-keyed-list'
 import { useItem } from '../../item/provider/item/use-item'
 import { type FormItemProps } from 'antd'
-import { isUndefined } from 'lodash'
+import { isEqual, isUndefined } from 'lodash'
+import { usePrevious } from '@Pimcore/utils/hooks/use-previous'
 
 export interface KeyedFormItemControlProps {
   children: React.ReactNode
@@ -30,6 +31,11 @@ export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: 
 
   const Child = Children.only(children)
   const value = operations.getValue(name)
+  const previousValue = usePrevious(value);
+
+  const cachedValue = useMemo(() => {
+    return value
+  }, [!isEqual(value, previousValue)]);
 
   useEffect(() => {
     operations.update(name, value ?? initialValue ?? null, true)
@@ -41,7 +47,7 @@ export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: 
       : value?.target?.value ?? value
 
     operations.update(name, changedValue, false)
-  }, [getValueFromEvent, name, operations])
+  }, [])
 
   if (!isValidElement(Child)) {
     throw new Error('KeyedFormItemControl only accepts a single child')
@@ -55,7 +61,7 @@ export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: 
       { ...props }
       { ...getAdditionalComponentProps?.(name) }
       onChange={ onChange }
-      value={ value }
+      value={ cachedValue }
     />
-  ), [Child.props, props, value])
+  ), [Child.props, props, cachedValue, onChange, getAdditionalComponentProps, name])
 }

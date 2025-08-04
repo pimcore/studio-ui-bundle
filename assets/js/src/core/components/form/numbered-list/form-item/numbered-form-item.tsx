@@ -11,6 +11,7 @@
 import React from 'react'
 import { type Form, type FormItemProps } from 'antd'
 import { NumberedFormItemControl } from './numbered-form-item-control'
+import { ItemProvider } from '../../item/provider/item/item-provider'
 
 export interface NumberedFormItemProps {
   Component: typeof Form.Item
@@ -23,11 +24,11 @@ const NumberedFormItem = ({ Component, componentProps }: NumberedFormItemProps):
   const currentChildren = children as unknown as React.ReactNode
 
   return (
-    <Component { ...baseProps } >
+    <ItemProvider item={{...componentProps}}>
       <NumberedFormItemControl getValueFromEvent={ baseProps.getValueFromEvent }>
         { currentChildren }
       </NumberedFormItemControl>
-    </Component>
+    </ItemProvider>
   )
 }
 
