@@ -113,8 +113,8 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
           <Input
             defaultValue={
             expectsStringValue
-              ? (props.getValue() as string || '')
-              : (elementInfo.fullPath || '')
+              ? String(props.getValue() ?? '')
+              : String(elementInfo.fullPath ?? '')
           }
             onBlur={ onBlur }
             onKeyDown={ onKeyDown }
