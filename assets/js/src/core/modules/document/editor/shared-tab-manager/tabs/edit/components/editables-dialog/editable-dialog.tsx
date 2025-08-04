@@ -9,17 +9,17 @@
  */
 
 import React from 'react'
-import { WindowModal, Tabs, Space, Card } from '@sdk/components'
+import { WindowModal, Card } from '@sdk/components'
 import { type DialogConfig, type DialogConfigItem } from './types'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
+import { type DynamicTypeEditableDialogLayoutRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/editable-dialog-layout/dynamic-type-editable-dialog-layout-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useDocumentEditor } from '../../hooks/use-document-editor'
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
-import { isNil, isArray } from 'lodash'
-import { RenderEditable } from '../editables-renderer/render-editable'
-import { useTranslation } from 'react-i18next'
+import { isNil } from 'lodash'
 import { TemplateAwareEditable } from './template-aware-editable'
+import { useTranslation } from 'react-i18next'
 
 export interface EditableDialogProps {
   config: DialogConfig
@@ -30,6 +30,7 @@ export interface EditableDialogProps {
 
 export const EditableDialog = ({ config, visible, onClose, editableDefinitions }: EditableDialogProps): React.JSX.Element => {
   const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
+  const editableDialogLayoutRegistry = useInjection<DynamicTypeEditableDialogLayoutRegistry>(serviceIds['DynamicTypes/EditableDialogLayoutRegistry'])
   const { getValue } = useDocumentEditor()
   const { t } = useTranslation()
 
@@ -64,38 +65,16 @@ export const EditableDialog = ({ config, visible, onClose, editableDefinitions }
   }
 
   const renderDialogContent = (configItem: DialogConfigItem): React.JSX.Element => {
-    if (configItem.type === 'tabpanel' && isArray(configItem.items)) {
-      const tabItems = configItem.items.map((item, index) => ({
-        key: `tab-${index}`,
-        label: item.title ?? `Tab ${index + 1}`,
-        children: renderDialogContent(item)
-      }))
-
-      return (
-        <Tabs
-          items={ tabItems }
-          type="card"
-        />
-      )
+    // Check if this is an editable dialog layout type (tabpanel or panel)
+    if (!isNil(configItem.type) && editableDialogLayoutRegistry.hasDynamicType(configItem.type)) {
+      return editableDialogLayoutRegistry.getComponent(configItem.type, {
+        configItem,
+        onRenderNestedContent: renderDialogContent
+      })
     }
 
-    if (configItem.type === 'panel' && isArray(configItem.items)) {
-      return (
-        <Space
-          direction="vertical"
-          size="medium"
-          style={ { width: '100%' } }
-        >
-          {configItem.items.map((item, index) => (
-            <div key={ `panel-item-${index}` }>
-              {renderDialogContent(item)}
-            </div>
-          ))}
-        </Space>
-      )
-    }
-
-    if (!isNil(configItem.name) && !isNil(configItem.type) && configItem.type !== 'tabpanel' && configItem.type !== 'panel') {
+    // Handle editable types
+    if (!isNil(configItem.name) && !isNil(configItem.type)) {
       const editableType = documentEditableRegistry.hasDynamicType(configItem.type)
         ? documentEditableRegistry.getDynamicType(configItem.type)
         : undefined
@@ -106,8 +85,8 @@ export const EditableDialog = ({ config, visible, onClose, editableDefinitions }
         if (!isNil(editableDefinition)) {
           return (
             <Card
-              key={ configItem.name }
-              title={ configItem.label }
+              key={configItem.name}
+              title={configItem.label}
             >
               <TemplateAwareEditable editableDefinition={editableDefinition} />
             </Card>
@@ -122,14 +101,14 @@ export const EditableDialog = ({ config, visible, onClose, editableDefinitions }
   return (
     <WindowModal
       destroyOnClose
-      onCancel={ onClose }
-      onOk={ onClose }
-      okText={ t('save') }
-      cancelButtonProps={ { style: { display: 'none' } } }
-      open={ visible }
+      onCancel={onClose}
+      onOk={onClose}
+      okText={t('save')}
+      cancelButtonProps={{ style: { display: 'none' } }}
+      open={visible}
       size="L"
-      style={ { minHeight: config.height ?? 400 } }
-      title={ t('area-settings') }
+      style={{ minHeight: config.height ?? 400 }}
+      title={t('area-settings')}
     >
       {!isNil(config.items) && renderDialogContent(config.items)}
     </WindowModal>
