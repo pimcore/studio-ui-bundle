@@ -33,7 +33,7 @@ export class DynamicTypeEditableDialogLayoutTabpanel extends DynamicTypeEditable
 
     return (
       <Tabs
-        items={tabItems}
+        items={ tabItems }
         type="card"
       />
     )

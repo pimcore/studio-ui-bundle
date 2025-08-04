@@ -11,10 +11,13 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { isNil } from 'lodash'
+import { useTranslation } from 'react-i18next'
 import { IconButton } from '@sdk/components'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { type AreaEditableConfig, type AreaEditableValue } from '../../dynamic-type-document-editable-area'
 import { EditableDialog } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-dialog/editable-dialog'
 import { useDocumentEditor } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/hooks/use-document-editor'
+import { useStyles } from './area-editable.styles'
 
 export interface AreaEditableProps {
   config?: AreaEditableConfig
@@ -41,6 +44,8 @@ export const AreaEditable = ({
   onChange,
   value
 }: AreaEditableProps): React.JSX.Element => {
+  const { t } = useTranslation()
+  const { styles } = useStyles()
   const [dialogVisible, setDialogVisible] = useState(false)
   const [dialogConfig, setDialogConfig] = useState<DialogConfig | null>(null)
   const [editButtonContainer, setEditButtonContainer] = useState<HTMLElement | null>(null)
@@ -72,7 +77,7 @@ export const AreaEditable = ({
     if (isNil(containerRef?.current)) return
 
     const containerElement = containerRef.current
-    const dialogBoxDiv: HTMLElement | null = containerElement.querySelector(`.pimcore_area_dialog[data-name="${editableName}"]`)!
+    const dialogBoxDiv: HTMLElement | null = containerElement.querySelector(`.pimcore_area_dialog[data-name="${editableName}"]`)
 
     if (!isNil(dialogBoxDiv)) {
       const dialogId = dialogBoxDiv.getAttribute('data-dialog-id') ?? editableName
@@ -88,7 +93,7 @@ export const AreaEditable = ({
         }
       }
     } else {
-      const fallbackDialogBoxDiv: HTMLElement | null = document.querySelector(`.pimcore_area_dialog[data-name="${editableName}"]`)!
+      const fallbackDialogBoxDiv: HTMLElement | null = document.querySelector(`.pimcore_area_dialog[data-name="${editableName}"]`)
 
       if (!isNil(fallbackDialogBoxDiv)) {
         const configElement = document.getElementById(`dialogBoxConfig-${editableName}`)
@@ -118,11 +123,7 @@ export const AreaEditable = ({
 
     const buttonContainer = document.createElement('div')
     buttonContainer.setAttribute('data-pimcore-edit-button', 'true')
-    buttonContainer.style.cssText = `
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 8px;
-    `
+    buttonContainer.className = styles.editButtonContainer
 
     dialogElement.insertBefore(buttonContainer, dialogElement.firstChild)
     setEditButtonContainer(buttonContainer)
@@ -142,24 +143,18 @@ export const AreaEditable = ({
 
   return (
     <>
-      {/* Area editable renders nothing visible - content is managed by DOM templates */}
-      <div style={ { display: 'none' } }>
-        Area editable: {editableName}
-      </div>
 
-      {/* Render edit button via portal when container is available */}
       {!isNil(editButtonContainer) && !isNil(dialogConfig) && createPortal(
-        <IconButton
-          icon={ { value: 'edit' } }
-          onClick={ openDialog }
-          size="small"
-          title="Edit Content"
-          type="primary"
-        />,
+        <Tooltip title={ t('area-settings') }>
+          <IconButton
+            icon={ { value: 'edit' } }
+            onClick={ openDialog }
+            type="default"
+          />
+        </Tooltip>,
         editButtonContainer
       )}
 
-      {/* Render dialog when visible */}
       {dialogVisible && !isNil(dialogConfig) && (
         <EditableDialog
           config={ dialogConfig }

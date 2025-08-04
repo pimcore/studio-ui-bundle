@@ -85,10 +85,10 @@ export const EditableDialog = ({ config, visible, onClose, editableDefinitions }
         if (!isNil(editableDefinition)) {
           return (
             <Card
-              key={configItem.name}
-              title={configItem.label}
+              key={ configItem.name }
+              title={ configItem.label }
             >
-              <TemplateAwareEditable editableDefinition={editableDefinition} />
+              <TemplateAwareEditable editableDefinition={ editableDefinition } />
             </Card>
           )
         }
@@ -100,15 +100,15 @@ export const EditableDialog = ({ config, visible, onClose, editableDefinitions }
 
   return (
     <WindowModal
+      cancelButtonProps={ { style: { display: 'none' } } }
       destroyOnClose
-      onCancel={onClose}
-      onOk={onClose}
-      okText={t('save')}
-      cancelButtonProps={{ style: { display: 'none' } }}
-      open={visible}
+      okText={ t('save') }
+      onCancel={ onClose }
+      onOk={ onClose }
+      open={ visible }
       size="L"
-      style={{ minHeight: config.height ?? 400 }}
-      title={t('area-settings')}
+      style={ { minHeight: config.height ?? 400 } }
+      title={ t('area-settings') }
     >
       {!isNil(config.items) && renderDialogContent(config.items)}
     </WindowModal>

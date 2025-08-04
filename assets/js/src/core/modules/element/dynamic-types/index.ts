@@ -347,7 +347,6 @@ moduleSystem.registerModule({
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableVideo>(serviceIds['DynamicTypes/DocumentEditable/Video']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableArea>(serviceIds['DynamicTypes/DocumentEditable/Area']))
 
-
     const editableDialogLayoutRegistry = container.get<DynamicTypeEditableDialogLayoutRegistry>(serviceIds['DynamicTypes/EditableDialogLayoutRegistry'])
 
     editableDialogLayoutRegistry.registerDynamicType(container.get<DynamicTypeEditableDialogLayoutTabpanel>(serviceIds['DynamicTypes/EditableDialogLayout/Tabpanel']))
@@ -380,6 +379,5 @@ moduleSystem.registerModule({
 
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersChangeCase>(serviceIds['DynamicTypes/Grid/Transformers/ChangeCase']))
     transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersCombine>(serviceIds['DynamicTypes/Grid/Transformers/Combine']))
-
   }
 })

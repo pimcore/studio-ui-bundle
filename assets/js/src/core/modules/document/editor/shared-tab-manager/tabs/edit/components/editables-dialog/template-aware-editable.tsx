@@ -10,7 +10,7 @@
 
 import React, { useRef, useEffect, useState } from 'react'
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
-import { isNil } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 import { RenderEditable } from '../editables-renderer/render-editable'
 
 interface TemplateAwareEditableProps {
@@ -28,7 +28,7 @@ export const TemplateAwareEditable = ({ editableDefinition }: TemplateAwareEdita
 
     const templateId = `template__${editableDefinition.id}`
     const templateElement = document.getElementById(templateId)
-    
+
     if (isNil(templateElement) || templateElement.tagName.toLowerCase() !== 'template') {
       setTemplateApplied(true)
       return
@@ -36,36 +36,36 @@ export const TemplateAwareEditable = ({ editableDefinition }: TemplateAwareEdita
 
     const template = templateElement as HTMLTemplateElement
     const templateContent = template.content.cloneNode(true) as DocumentFragment
-    
+
     if (templateContent.children.length > 0) {
       const templateDiv = templateContent.firstElementChild as HTMLDivElement
-      
+
       if (!isNil(templateDiv)) {
         Array.from(templateDiv.attributes).forEach(attr => {
           if (attr.name !== 'id') {
             containerRef.current?.setAttribute(attr.name, attr.value)
           }
         })
-        
+
         if (templateDiv.innerHTML.trim() !== '') {
-          containerRef.current!.innerHTML = templateDiv.innerHTML
+          containerRef.current.innerHTML = templateDiv.innerHTML
         }
-        
-        if (templateDiv.className) {
-          containerRef.current!.className = templateDiv.className
+
+        if (!isEmpty(templateDiv.className)) {
+          containerRef.current.className = templateDiv.className
         }
       }
     }
-    
+
     setTemplateApplied(true)
   }, [editableDefinition.id])
 
   return (
-    <div ref={containerRef}>
+    <div ref={ containerRef }>
       {templateApplied && (
         <RenderEditable
-          editableDefinition={editableDefinition}
-          containerRef={containerRef}
+          containerRef={ containerRef }
+          editableDefinition={ editableDefinition }
         />
       )}
     </div>

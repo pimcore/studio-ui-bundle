@@ -29,10 +29,10 @@ export class DynamicTypeEditableDialogLayoutPanel extends DynamicTypeEditableDia
       <Space
         direction="vertical"
         size="medium"
-        style={{ width: '100%' }}
+        style={ { width: '100%' } }
       >
         {configItem.items.map((item, index) => (
-          <div key={`panel-item-${index}`}>
+          <div key={ `panel-item-${index}` }>
             {onRenderNestedContent(item)}
           </div>
         ))}
