@@ -29,6 +29,8 @@ export interface ElementInfo {
 export interface ElementCellConfig {
   allowedTypes?: ElementType[] | ((props: DefaultCellProps) => ElementType[])
   getElementInfo?: (props: DefaultCellProps) => ElementInfo
+  expectsStringValue?: boolean
+  allowTextInput?: boolean
 }
 
 export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {

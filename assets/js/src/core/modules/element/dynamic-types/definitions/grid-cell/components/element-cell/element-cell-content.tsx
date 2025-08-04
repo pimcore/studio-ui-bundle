@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, type MutableRefObject } from 'react'
+import React, { forwardRef, type MutableRefObject, useRef, useEffect } from 'react'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyle } from './element-cell.styles'
@@ -20,6 +20,8 @@ import { isPlainObject, isUndefined } from 'lodash'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 import { type ElementReference } from '@Pimcore/modules/element/element-helper'
 import { useEditMode } from '@sdk/components'
+import { Input } from '@sdk/components'
+import { type InputRef } from 'antd'
 
 export interface ElementCellContentProps extends DefaultCellProps {
   dropDisabled?: boolean
@@ -31,7 +33,33 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
   const { styles } = useStyle()
   const propertyData = props.row.original
   const { getStateClasses } = useDroppable()
-  const { fireOnUpdateCellDataEvent } = useEditMode(props)
+  const { fireOnUpdateCellDataEvent, isInEditMode, disableEditMode } = useEditMode(props)
+  const inputRef = useRef<InputRef>(null)
+  
+  const expectsStringValue = Boolean(props.column.columnDef.meta?.config?.expectsStringValue)
+  const allowTextInput = Boolean(props.column.columnDef.meta?.config?.allowTextInput)
+
+  useEffect(() => {
+    if (isInEditMode && allowTextInput) {
+      inputRef.current?.focus()
+    }
+  }, [isInEditMode, allowTextInput])
+
+  const saveTextValue = (): void => {
+    const inputValue = inputRef.current?.input?.value ?? ''
+    fireOnUpdateCellDataEvent(inputValue)
+    disableEditMode()
+  }
+
+  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (event.key === 'Enter') {
+      saveTextValue()
+    }
+  }
+
+  const onBlur = (): void => {
+    saveTextValue()
+  }
 
   const getElementInfo = props.getElementInfo ?? ((): ElementInfo => {
     // @todo check hardcoded type
@@ -75,34 +103,48 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
 
   const elementInfo = getElementInfo(props)
   const showClearIcon = props.clearDisabled !== true && (!isUndefined(elementInfo.fullPath) && elementInfo.fullPath !== '')
-  
-  const expectsStringValue = Boolean(props.column.columnDef.meta?.config?.expectsStringValue)
 
   return (
     <div
       className={ [styles.link, ...getStateClasses()].join(' ') }
       ref={ ref }
     >
-      {elementInfo.fullPath !== false && (
-        <ElementTag
-          closeIcon={ showClearIcon }
-          disabled={ elementInfo.disabled }
-          elementType={ elementInfo.elementType }
-          id={ elementInfo.id }
-          onClose={ () => { fireOnUpdateCellDataEvent(expectsStringValue ? '' : null) } }
-          path={ elementInfo.fullPath }
-          published={ elementInfo.published }
+      {isInEditMode && allowTextInput ? (
+        <Input
+          defaultValue={ 
+            expectsStringValue 
+              ? (props.getValue() as string || '') 
+              : (elementInfo.fullPath || '')
+          }
+          onBlur={ onBlur }
+          onKeyDown={ onKeyDown }
+          ref={ inputRef }
+          placeholder="Enter element path..."
         />
+      ) : (
+        <>
+          {elementInfo.fullPath !== false && (
+            <ElementTag
+              closeIcon={ showClearIcon }
+              disabled={ elementInfo.disabled }
+              elementType={ elementInfo.elementType }
+              id={ allowTextInput ? undefined : elementInfo.id }
+              onClose={ () => { fireOnUpdateCellDataEvent(expectsStringValue ? '' : null) } }
+              path={ elementInfo.fullPath }
+              published={ elementInfo.published }
+            />
+          )}
+          
+          <div>
+            { props.dropDisabled !== true && (
+            <Icon
+              className={ styles.elementOptionsIcon }
+              value={ 'drop-target' }
+            />
+            )}
+          </div>
+        </>
       )}
-      <div>
-        { props.dropDisabled !== true && (
-        <Icon
-          className={ styles.elementOptionsIcon }
-          value={ 'drop-target' }
-        />
-        )}
-      </div>
-
     </div>
   )
 })
