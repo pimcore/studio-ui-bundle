@@ -75,6 +75,8 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
 
   const elementInfo = getElementInfo(props)
   const showClearIcon = props.clearDisabled !== true && (!isUndefined(elementInfo.fullPath) && elementInfo.fullPath !== '')
+  
+  const expectsStringValue = Boolean(props.column.columnDef.meta?.config?.expectsStringValue)
 
   return (
     <div
@@ -87,7 +89,7 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
           disabled={ elementInfo.disabled }
           elementType={ elementInfo.elementType }
           id={ elementInfo.id }
-          onClose={ () => { fireOnUpdateCellDataEvent(null) } }
+          onClose={ () => { fireOnUpdateCellDataEvent(expectsStringValue ? '' : null) } }
           path={ elementInfo.fullPath }
           published={ elementInfo.published }
         />

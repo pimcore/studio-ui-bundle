@@ -105,7 +105,7 @@ export const Table = ({ redirectRows, setRedirectRows }: TableProps): React.JSX.
     }),
     columnHelper.accessor('target', {
       header: t('redirects.target'),
-      meta: { editable: true, type: 'element' },
+      meta: { editable: true, type: 'element', config: {allowedTypes: ["asset", "document"], showPublishedState: false, expectsStringValue: true} },
       size: 200
     }),
     columnHelper.accessor('statusCode', {
