@@ -52,7 +52,7 @@ export const RedirectsToolbar = ({
       >
         <div>
           <IconTextButton
-            disabled={ redirectRowsLength < 1 || cleanupLoading }
+            disabled={ redirectRowsLength < 1 || cleanupLoading || redirectsFetching }
             icon={ { value: 'trash' } }
             loading={ cleanupLoading }
             onClick={ onCleanup }

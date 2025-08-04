@@ -65,7 +65,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
     error
   } = useBundleSeoRedirectsGetCollectionQuery(queryArgs)
   const redirects = data?.items
-  
+
   const sortedRows = [...redirectRows].sort((a, b) => {
     const aDate = a.creationDate ?? 0
     const bDate = b.creationDate ?? 0
@@ -152,8 +152,6 @@ export const RedirectsContainer = (): React.JSX.Element => {
         link.click()
         document.body.removeChild(link)
         window.URL.revokeObjectURL(url)
-
-        console.log('Download triggered successfully')
       } else {
         trackError(new GeneralError('Export failed: No blob data received'))
       }
@@ -167,7 +165,6 @@ export const RedirectsContainer = (): React.JSX.Element => {
   const handleImport = async (file: File): Promise<void> => {
     try {
       const result = await importRedirects({ body: { file } }).unwrap()
-      console.log('Import successful:', result)
       setImportResults(result)
       setIsImportModalOpen(false)
       setIsResultsModalOpen(true)
