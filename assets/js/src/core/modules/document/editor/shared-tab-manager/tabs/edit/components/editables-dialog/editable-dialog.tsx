@@ -102,6 +102,7 @@ export const EditableDialog = ({ config, visible, onClose, editableDefinitions }
     <WindowModal
       cancelButtonProps={ { style: { display: 'none' } } }
       destroyOnClose
+      getContainer={ () => document.body }
       okText={ t('save') }
       onCancel={ onClose }
       onOk={ onClose }
@@ -109,6 +110,7 @@ export const EditableDialog = ({ config, visible, onClose, editableDefinitions }
       size="L"
       style={ { minHeight: config.height ?? 400 } }
       title={ t('area-settings') }
+      zIndex={ 10001 }
     >
       {!isNil(config.items) && renderDialogContent(config.items)}
     </WindowModal>
