@@ -24,6 +24,7 @@ interface UseImageValueUpdatesReturn {
   handleHotspotsChange: (hotspots: Hotspot[], marker: Marker[]) => void
   handleReplaceImage: (assetId: number) => void
   handleEmptyValue: () => void
+  handleAltTextChange: (alt: string) => void
 }
 
 export const useImageValueUpdates = ({ value: imageValue, onChange }: UseImageValueUpdatesProps): UseImageValueUpdatesReturn => {
@@ -64,10 +65,17 @@ export const useImageValueUpdates = ({ value: imageValue, onChange }: UseImageVa
     })
   }, [onChange])
 
+  const handleAltTextChange = useCallback((alt: string) => {
+    if (!isNil(imageValue?.id)) {
+      onChange?.(createNewValue({ alt }))
+    }
+  }, [imageValue?.id, createNewValue, onChange])
+
   return {
     handleCropChange,
     handleHotspotsChange,
     handleReplaceImage,
-    handleEmptyValue
+    handleEmptyValue,
+    handleAltTextChange
   }
 }
