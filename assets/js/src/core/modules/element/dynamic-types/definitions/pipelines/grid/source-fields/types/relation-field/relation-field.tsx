@@ -17,6 +17,10 @@ import { DynamicTypePipelineGridSourceFieldsRelationFieldComponent } from '../..
 export class DynamicTypePipelineGridSourceFieldsRelationField extends DynamicTypePipelineAbstract {
   readonly id = 'relationField'
 
+  isAvailableForSelection (config: Record<string, any>): boolean {
+    return Array.isArray(config.relationField) && config.relationField.length > 0
+  }
+
   getComponent (): ReactElement {
     return (
       <DynamicTypePipelineGridSourceFieldsRelationFieldComponent />

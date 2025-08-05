@@ -21,6 +21,7 @@ import { Tabs } from '@Pimcore/components/tabs/tabs'
 import { Box } from '@Pimcore/components/box/box'
 import { usePipelineLayoutContext } from './pipeline-layout-provider'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
+import { useTranslation } from 'react-i18next'
 
 export interface AdvancedColumnFormProps {
   column: AvailableColumn
@@ -30,6 +31,7 @@ export interface AdvancedColumnFormProps {
 export const AdvancedColumnForm = ({ column, onChange }: AdvancedColumnFormProps): React.JSX.Element => {
   const [form] = Form.useForm()
   const { pipelineLayout } = usePipelineLayoutContext()
+  const { t } = useTranslation()
 
   useEffect(() => {
     form.setFieldValue('value', column?.__meta?.advancedColumnConfig ?? {})
@@ -70,10 +72,9 @@ export const AdvancedColumnForm = ({ column, onChange }: AdvancedColumnFormProps
                   <Pipeline.CustomItem>
                     <Box padding={ { top: 'mini', bottom: 'mini', x: 'none' } } >
                       <Form.Item
-                        label=""
                         name="title"
                       >
-                        <Input placeholder="Add a title" />
+                        <Input placeholder={ t('grid.advanced-column.title.placeholder') } />
                       </Form.Item>
                     </Box>
                   </Pipeline.CustomItem>
@@ -87,7 +88,7 @@ export const AdvancedColumnForm = ({ column, onChange }: AdvancedColumnFormProps
                     <Tabs items={ [
                       {
                         key: 'advancedColumns',
-                        label: 'Advanced Columns',
+                        label: t('grid.advanced-column.advancedColumns'),
                         forceRender: true,
                         children: (
                           <Pipeline.DynamicGroupItem
@@ -99,7 +100,7 @@ export const AdvancedColumnForm = ({ column, onChange }: AdvancedColumnFormProps
 
                       {
                         key: 'transformers',
-                        label: 'Transformers',
+                        label: t('grid.advanced-column.transformers'),
                         forceRender: true,
                         children: (
                           <Pipeline.DynamicGroupItem

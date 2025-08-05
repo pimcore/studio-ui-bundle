@@ -20,6 +20,7 @@ import { DynamicGroupItem } from './dynamic-group-item'
 import { Space } from '@Pimcore/components/space/space'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
+import { useTranslation } from 'react-i18next'
 export interface DynamicGroupContentProps {
   id: DynamicGroupProps['id']
   dynamicTypeRegistryId: DynamicGroupProps['dynamicTypeRegistryId']
@@ -30,6 +31,7 @@ export const DynamicGroupContent = ({ dynamicTypeRegistryId, id, showTitle = fal
   const { values, operations } = useNumberedList()
   const [items, setItems] = React.useState(() => values.map((_, index) => index + 1))
   const isEmpty = values.length === 0
+  const { t } = useTranslation()
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -77,15 +79,15 @@ export const DynamicGroupContent = ({ dynamicTypeRegistryId, id, showTitle = fal
       <IconTextButton
         icon={ { value: 'new' } }
         type="link"
-      >Add a {id}</IconTextButton>
+      >{ t(`grid.advanced-column.${id}.add`) }</IconTextButton>
     </DynamicGroupDropdown>
   ), [dynamicTypeRegistryId, id])
 
   const headerElement = useMemo(() => (
     <Flex align="center">
-      <Header title={ id }>
+      <Header title={ t(`grid.advanced-column.${id}`) }>
         <DynamicGroupDropdown dynamicTypeRegistryId={ dynamicTypeRegistryId }>
-          <IconTextButton icon={ { value: 'new' } }>Add</IconTextButton>
+          <IconTextButton icon={ { value: 'new' } }>{t('add')}</IconTextButton>
         </DynamicGroupDropdown>
       </Header>
     </Flex>

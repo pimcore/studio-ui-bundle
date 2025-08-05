@@ -12,10 +12,12 @@ import { Form } from '@Pimcore/components/form/form'
 import { usePipelineConfig } from '@Pimcore/components/pipeline/provider/pipeline-config/use-pipeline-config'
 import { Select } from '@Pimcore/components/select/select'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const DynamicTypePipelineGridTransformersChangeCaseComponent = (): React.JSX.Element => {
   const { config } = usePipelineConfig()
   const transformerConfig = config?.transformers?.caseChange
+  const { t } = useTranslation()
 
   if (transformerConfig === undefined) {
     throw new Error('Transformer configuration for case change is missing')
@@ -26,7 +28,7 @@ export const DynamicTypePipelineGridTransformersChangeCaseComponent = (): React.
   return (
     <Form.Item
       initialValue={ modeOptions[0].value }
-      label={ 'Mode' }
+      label={ t('mode') }
       name={ 'mode' }
     >
       <Select
