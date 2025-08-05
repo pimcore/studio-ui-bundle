@@ -187,6 +187,9 @@ const resolveLanguageFlag = async (languageCode: string): Promise<{ flagCode: st
   if (languageOnly !== normalizedCode && await checkLanguageFlagExists(languageOnly)) {
     return { flagCode: languageOnly, isLanguageFlag: true }
   }
+  if (await checkFlagExists(normalizedCode)) {
+    return { flagCode: normalizedCode, isLanguageFlag: false }
+  }
 
   return { flagCode: '_unknown', isLanguageFlag: false }
 }
