@@ -31,6 +31,7 @@ import {
 import { isUndefined } from 'lodash'
 import { useAppDispatch } from '@sdk/app'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { useTranslationDomain } from './hooks/translation-domain-provider'
 
 interface FormValues {
   translationKey: string
@@ -42,7 +43,8 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
     type: 'error'
   })
-  const { createNewTranslation, createLoading, domain, setDomain } = useTranslation()
+  const { createNewTranslation, createLoading } = useTranslation()
+  const { domain, setDomain } = useTranslationDomain()
   const settings = useSettings()
   const [visibleLocales, setVisibleLocales] = useState<string[] | null>(null)
   const [translationRows, setTranslationRows] = useState<TranslationRow[]>([])
