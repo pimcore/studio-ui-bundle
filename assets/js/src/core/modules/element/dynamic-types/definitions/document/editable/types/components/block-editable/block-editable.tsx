@@ -64,7 +64,11 @@ export const BlockEditable = ({
     config,
     editableName,
     containerRef,
-    disabled
+    disabled,
+    onOperationComplete: (elements, limitReached) => {
+      // Update controls for all elements after any operation
+      elements.forEach(element => updateControls(element, limitReached))
+    }
   })
 
   // Simplified controls hook for UI manipulation

@@ -28,6 +28,7 @@ export interface UseBlockEditableParams {
   editableName: string
   containerRef?: React.RefObject<HTMLDivElement>
   disabled?: boolean
+  onOperationComplete?: (elements: HTMLElement[], limitReached: boolean) => void
 }
 
 export const useBlockEditable = ({
@@ -36,7 +37,8 @@ export const useBlockEditable = ({
   config,
   editableName,
   containerRef,
-  disabled = false
+  disabled = false,
+  onOperationComplete
 }: UseBlockEditableParams) => {
   const { initializeData, getValues, removeValues } = useDocumentEditor()
   const [dynamicEditables, setDynamicEditables] = useState<AbstractDocumentEditableDefinition[]>([])
@@ -77,21 +79,25 @@ export const useBlockEditable = ({
     return blockValueUtils.filterEditableNames(Object.keys(currentValues), editableName, elementKey)
   }, [editableName, getValues])
 
-  const handleReloadMode = useCallback(
-    operationUtils.createReloadModeHandler(elementsRef, onChange),
-    [onChange]
-  )
+  const handleReloadMode = useCallback((elementsUpdater: (elements: HTMLElement[]) => HTMLElement[]) => {
+    const newElements = elementsUpdater([...elementsRef.current])
+    elementsRef.current = newElements
+    const newValue = blockValueUtils.fromElements(newElements)
+    onChange?.(newValue)
+  }, [onChange])
 
-  const finalizeNonReloadMode = useCallback((updateControlsFn?: (element: HTMLElement, limitReached: boolean) => void) => {
-    operationUtils.finalizeNonReloadOperation(
-      refreshElements,
-      onChange,
-      config,
-      updateControlsFn
-    )
-  }, [refreshElements, onChange, config])
+  const handlePostOperation = useCallback(() => {
+    const elements = refreshElements()
+    const newValue = blockValueUtils.fromElements(elements)
+    onChange?.(newValue)
+    
+    if (onOperationComplete) {
+      const limitReached = configUtils.isLimitReached(elements.length, config?.limit)
+      onOperationComplete(elements, limitReached)
+    }
+  }, [refreshElements, onChange, onOperationComplete, config?.limit])
 
-  const addBlock = useCallback((element: HTMLElement | null, amount = 1, updateControlsFn?: (element: HTMLElement, limitReached: boolean) => void) => {
+  const addBlock = useCallback((element: HTMLElement | null, amount = 1) => {
     if (disabled) return
     
     const limit = configUtils.getEffectiveLimit(config)
@@ -125,11 +131,11 @@ export const useBlockEditable = ({
     })
 
     if (newBlockEntry) {
-      finalizeNonReloadMode(updateControlsFn)
+      handlePostOperation()
     }
-  }, [disabled, config, handleReloadMode, editableName, initializeData, finalizeNonReloadMode])
+  }, [disabled, config, handleReloadMode, editableName, initializeData, handlePostOperation])
 
-  const removeBlock = useCallback((element: HTMLElement, updateControlsFn?: (element: HTMLElement, limitReached: boolean) => void) => {
+  const removeBlock = useCallback((element: HTMLElement) => {
     if (disabled) return
     
     if (configUtils.isReloadMode(config)) {
@@ -157,13 +163,12 @@ export const useBlockEditable = ({
       removeValues(editableNamesToRemove)
     }
     
-    finalizeNonReloadMode(updateControlsFn)
-  }, [disabled, config, handleReloadMode, getBlockEditableNames, removeValues, finalizeNonReloadMode])
+    handlePostOperation()
+  }, [disabled, config, handleReloadMode, getBlockEditableNames, removeValues, handlePostOperation])
 
   const moveBlock = useCallback((
     element: HTMLElement,
-    direction: 'up' | 'down',
-    updateControlsFn?: (element: HTMLElement, limitReached: boolean) => void
+    direction: 'up' | 'down'
   ) => {
     if (disabled) return
     
@@ -182,17 +187,17 @@ export const useBlockEditable = ({
     if (targetElement) {
       const insertTarget = direction === 'up' ? targetElement : targetElement.nextSibling
       targetElement.parentNode?.insertBefore(element, insertTarget)
-      finalizeNonReloadMode(updateControlsFn)
+      handlePostOperation()
     }
-  }, [disabled, config, handleReloadMode, finalizeNonReloadMode])
+  }, [disabled, config, handleReloadMode, handlePostOperation])
 
   // Simple wrapper functions - no useCallback needed
-  const moveBlockUp = (element: HTMLElement, updateControlsFn?: (element: HTMLElement, limitReached: boolean) => void) => {
-    moveBlock(element, 'up', updateControlsFn)
+  const moveBlockUp = (element: HTMLElement) => {
+    moveBlock(element, 'up')
   }
 
-  const moveBlockDown = (element: HTMLElement, updateControlsFn?: (element: HTMLElement, limitReached: boolean) => void) => {
-    moveBlock(element, 'down', updateControlsFn)
+  const moveBlockDown = (element: HTMLElement) => {
+    moveBlock(element, 'down')
   }
 
   const refresh = useCallback((initializeControlsFn?: () => void, updateControlsFn?: (element: HTMLElement, limitReached: boolean) => void) => {

@@ -143,34 +143,6 @@ export const operationUtils = {
     }, {} as Record<string, { type: string, data: unknown }>)
   },
   
-  createReloadModeHandler: (
-    elementsRef: React.MutableRefObject<HTMLElement[]>,
-    onChange?: (value: BlockValue) => void
-  ) => {
-    return (elementsUpdater: (elements: HTMLElement[]) => HTMLElement[]) => {
-      const newElements = elementsUpdater([...elementsRef.current])
-      elementsRef.current = newElements
-      const newValue = blockValueUtils.fromElements(newElements)
-      onChange?.(newValue)
-    }
-  },
-  
-  finalizeNonReloadOperation: (
-    refreshElements: () => HTMLElement[],
-    onChange: ((value: BlockValue) => void) | undefined,
-    config: BlockEditableConfig | undefined,
-    updateControlsFn?: (element: HTMLElement, limitReached: boolean) => void
-  ): void => {
-    const elements = refreshElements()
-    const newValue = blockValueUtils.fromElements(elements)
-    onChange?.(newValue)
-    
-    if (updateControlsFn) {
-      const limitReached = configUtils.isLimitReached(elements.length, config?.limit)
-      elements.forEach(element => updateControlsFn(element, limitReached))
-    }
-  },
-
   processNonReloadBlockAddition: ({
     container,
     index,

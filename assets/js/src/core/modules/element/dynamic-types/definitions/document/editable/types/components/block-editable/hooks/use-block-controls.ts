@@ -13,10 +13,10 @@ import { useBlockEditableStyles } from '../block-editable.styles'
 
 export interface UseBlockControlsParams {
   editableName: string
-  onAddBlock: (element: HTMLElement | null, amount?: number, updateControlsFn?: (element: HTMLElement, limitReached: boolean) => void) => void
-  onRemoveBlock: (element: HTMLElement, updateControlsFn?: (element: HTMLElement, limitReached: boolean) => void) => void
-  onMoveBlockUp: (element: HTMLElement, updateControlsFn?: (element: HTMLElement, limitReached: boolean) => void) => void
-  onMoveBlockDown: (element: HTMLElement, updateControlsFn?: (element: HTMLElement, limitReached: boolean) => void) => void
+  onAddBlock: (element: HTMLElement | null, amount?: number) => void
+  onRemoveBlock: (element: HTMLElement) => void
+  onMoveBlockUp: (element: HTMLElement) => void
+  onMoveBlockDown: (element: HTMLElement) => void
 }
 
 export const useBlockControls = ({
@@ -45,13 +45,13 @@ export const useBlockControls = ({
     container.className = `${container.className} ${styles.buttonsContainer}`
   }, [styles.buttonsContainer])
 
-  const applyAmountDisplayStyles = useCallback((element: HTMLElement) => {
-    element.className = styles.amountDisplay
-  }, [styles.amountDisplay])
-
   const applyPlusElementStyles = useCallback((element: HTMLElement) => {
     element.className = styles.plusElement
   }, [styles.plusElement])
+
+  const applyAmountDisplayStyles = useCallback((element: HTMLElement) => {
+    element.className = styles.amountDisplay
+  }, [styles.amountDisplay])
 
   const updateControls = useCallback((element: HTMLElement, limitReached: boolean) => {
     // Look for existing buttons container or create one
@@ -85,11 +85,11 @@ export const useBlockControls = ({
     const currentAmountDisplay = buttonsContainer.querySelector('.pimcore_block_amount')
     
     if (!limitReached) {
-      const plusButton = createButton('+', 'Add block entry', () => onAddBlock(element, 1, updateControls))
+      const plusButton = createButton('+', 'Add block entry', () => onAddBlock(element, 1))
       buttonsContainer.insertBefore(plusButton, currentAmountDisplay)
     }
     
-    const minusButton = createButton('−', 'Remove block entry', () => onRemoveBlock(element, updateControls))
+    const minusButton = createButton('−', 'Remove block entry', () => onRemoveBlock(element))
     buttonsContainer.insertBefore(minusButton, currentAmountDisplay)
     
     // Get element index and total elements for button state
@@ -97,11 +97,11 @@ export const useBlockControls = ({
     const elementIndex = elements.indexOf(element)
     
     const isFirst = elementIndex === 0
-    const upButton = createButton('↑', isFirst ? 'Cannot move up' : 'Move up', () => onMoveBlockUp(element, updateControls), isFirst)
+    const upButton = createButton('↑', isFirst ? 'Cannot move up' : 'Move up', () => onMoveBlockUp(element), isFirst)
     buttonsContainer.insertBefore(upButton, currentAmountDisplay)
     
     const isLast = elementIndex === elements.length - 1
-    const downButton = createButton('↓', isLast ? 'Cannot move down' : 'Move down', () => onMoveBlockDown(element, updateControls), isLast)
+    const downButton = createButton('↓', isLast ? 'Cannot move down' : 'Move down', () => onMoveBlockDown(element), isLast)
     buttonsContainer.insertBefore(downButton, currentAmountDisplay)
     
     // Update the amount display text
@@ -135,10 +135,10 @@ export const useBlockControls = ({
     
     applyPlusElementStyles(plusEl)
     
-    plusEl.addEventListener('click', () => onAddBlock(null, 1, updateControls))
+    plusEl.addEventListener('click', () => onAddBlock(null, 1))
     
     container.className += ' pimcore_block_limitnotreached pimcore_block_buttons'
-  }, [editableName, onAddBlock, applyPlusElementStyles, updateControls])
+  }, [editableName, onAddBlock, applyPlusElementStyles])
 
   return {
     updateControls,
