@@ -116,6 +116,7 @@ import helpCircle from '@Pimcore/assets/icons/help-circle.inline.svg?react'
 import history from '@Pimcore/assets/icons/history.inline.svg?react'
 import homeRootFolder from '@Pimcore/assets/icons/home-root-folder.inline.svg?react'
 import image from '@Pimcore/assets/icons/image.inline.svg?react'
+import importCsv from '@Pimcore/assets/icons/import-csv.inline.svg?react'
 import infoCircle from '@Pimcore/assets/icons/info-circle.inline.svg?react'
 import info from '@Pimcore/assets/icons/info.inline.svg?react'
 import inheritanceActive from '@Pimcore/assets/icons/inheritance-active.inline.svg?react'
@@ -173,6 +174,7 @@ import preview from '@Pimcore/assets/icons/preview.inline.svg?react'
 import properties from '@Pimcore/assets/icons/properties.inline.svg?react'
 import published from '@Pimcore/assets/icons/published.inline.svg?react'
 import questionmark from '@Pimcore/assets/icons/questionmark.inline.svg?react'
+import redirect from '@Pimcore/assets/icons/redirect.inline.svg?react'
 import refresh from '@Pimcore/assets/icons/refresh.inline.svg?react'
 import removeImageThumbnail from '@Pimcore/assets/icons/remove-image-thumbnail.inline.svg?react'
 import removeMarker from '@Pimcore/assets/icons/remove-marker.inline.svg?react'
@@ -211,6 +213,7 @@ import txtDocs from '@Pimcore/assets/icons/txt-docs.inline.svg?react'
 import unknown from '@Pimcore/assets/icons/unknown.inline.svg?react'
 import unlocked from '@Pimcore/assets/icons/unlocked.inline.svg?react'
 import uploadCloud from '@Pimcore/assets/icons/upload-cloud.inline.svg?react'
+import uploadImport from '@Pimcore/assets/icons/upload-import.inline.svg?react'
 import uploadZip from '@Pimcore/assets/icons/upload-zip.inline.svg?react'
 import userSelect from '@Pimcore/assets/icons/user-select.inline.svg?react'
 import user from '@Pimcore/assets/icons/user.inline.svg?react'
@@ -635,6 +638,10 @@ moduleSystem.registerModule({
       component: image
     })
     iconLibrary.register({
+      name: 'import-csv',
+      component: importCsv
+    })
+    iconLibrary.register({
       name: 'info-circle',
       component: infoCircle
     })
@@ -863,6 +870,10 @@ moduleSystem.registerModule({
       component: questionmark
     })
     iconLibrary.register({
+      name: 'redirect',
+      component: redirect
+    })
+    iconLibrary.register({
       name: 'refresh',
       component: refresh
     })
@@ -1013,6 +1024,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'upload-cloud',
       component: uploadCloud
+    })
+    iconLibrary.register({
+      name: 'upload-import',
+      component: uploadImport
     })
     iconLibrary.register({
       name: 'upload-zip',

@@ -768,6 +768,48 @@ predefined-properties.new: New
 website-settings.new: Add
 predefined-properties.type: Type
 predefined-properties.name: Name
+redirects.beginner: Beginner
+redirects.expert: Expert Mode
+redirects.type: Type
+redirects.search: Search
+redirects.source-site: Source Site
+redirects.source: Source
+redirects.target-site: Target Site
+redirects.target: Target
+redirects.status: Status
+redirects.priority: Priority
+redirects.regex: RegEx
+redirects.pass-through: Pass Through
+redirects.active: Active
+redirects.actions: Actions
+redirects.expiry: Expiry
+redirects.csv-import: Import CSV
+redirects.csv-import-modal.redirects-import: Redirects CSV Import
+redirects.csv-export: CSV Export
+redirects.clean-up: Clean up expired redirects
+redirects.import-drag-drop: Browse your files or drop a CSV directly here
+redirects.browse-files: Browse Files
+redirects.upload: Upload
+redirects.beginner-modal.title: New Beginner Redirect
+redirects.beginner-modal.type: Type
+redirects.beginner-modal.path: Path
+redirects.beginner-modal.target: Target
+redirects.beginner-modal.create: Create
+redirects.beginner-modal.cancel: Cancel
+redirects.csv-import-results.title: Redirects CSV Import Results
+redirects.csv-import-results.total: Total
+redirects.csv-import-results.created: Created
+redirects.csv-import-results.updated: Updated
+redirects.csv-import-results.errored: Errored
+redirects.csv-import-results.close: Close
+redirects.csv-import-results.errors-details: Error Details
+redirects.csv-import-results.line: Line {{line}}
+path: Path
+entire_uri: Entire URI
+path_query: Path and Query
+auto_create: Auto Create
+widget.redirects: Redirects
+navigation.redirects: Redirects
 perspective.default: Default
 perspective.switching.title: Switching perspective
 perspective.switching.description: Currently switching to the following perspective
