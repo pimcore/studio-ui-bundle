@@ -22,31 +22,7 @@
     "globalName": "pimcore_studio_ui_bundle_core",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
-<<<<<<<< HEAD:public/build/d739ed23-43bb-4d56-894b-58ea2e241d19/mf-stats.json
-<<<<<<< HEAD:public/build/8cf6d0c0-034e-4ad7-95ee-d8b7a7117b79/mf-stats.json
-<<<<<<<< HEAD:public/build/8cf6d0c0-034e-4ad7-95ee-d8b7a7117b79/mf-stats.json
-<<<<<<<< HEAD:public/build/3265a3df-3119-47ed-afa5-91dacf58d0b4/mf-stats.json
-<<<<<<<< HEAD:public/build/9fc4fcb7-7c75-46b8-bd19-6391dbc2c8f9/mf-stats.json
-<<<<<<<< HEAD:public/build/12fe904c-4780-4d91-bf53-18e3b52cf15e/mf-stats.json
-    "publicPath": "/bundles/pimcorestudioui/build/12fe904c-4780-4d91-bf53-18e3b52cf15e/"
-========
-    "publicPath": "/bundles/pimcorestudioui/build/9fc4fcb7-7c75-46b8-bd19-6391dbc2c8f9/"
->>>>>>>> 0bd748c7705dff0f09b06769849e6a093b68d6b6:public/build/9fc4fcb7-7c75-46b8-bd19-6391dbc2c8f9/mf-stats.json
-========
-    "publicPath": "/bundles/pimcorestudioui/build/3265a3df-3119-47ed-afa5-91dacf58d0b4/"
->>>>>>>> e67ebebfa14623af5ddd7e0adb909cbb0676fe48:public/build/3265a3df-3119-47ed-afa5-91dacf58d0b4/mf-stats.json
-========
-    "publicPath": "/bundles/pimcorestudioui/build/8cf6d0c0-034e-4ad7-95ee-d8b7a7117b79/"
->>>>>>>> a2a80e9b8ad8452be4bf9b3743efc27ace84f971:public/build/8cf6d0c0-034e-4ad7-95ee-d8b7a7117b79/mf-stats.json
-========
-    "publicPath": "/bundles/pimcorestudioui/build/f46358b5-6437-4bf5-b896-4ab4229fcc5c/"
->>>>>>>> 0d88c81a026582810cabf769e7e313ffeb51a5cc:public/build/f46358b5-6437-4bf5-b896-4ab4229fcc5c/mf-stats.json
-=======
-    "publicPath": "/bundles/pimcorestudioui/build/d739ed23-43bb-4d56-894b-58ea2e241d19/"
->>>>>>> 3db88708b59ed125fbacc76105cba5e783d89d69:public/build/d739ed23-43bb-4d56-894b-58ea2e241d19/mf-stats.json
-========
-    "publicPath": "/bundles/pimcorestudioui/build/a226a619-6995-421f-b735-a5f635b0e245/"
->>>>>>>> 283ab20807757312ad128987ce5c97bd4ee37341:public/build/a226a619-6995-421f-b735-a5f635b0e245/mf-stats.json
+    "publicPath": "/bundles/pimcorestudioui/build/90d1e0a6-15ed-48af-a554-e12f5beae478/"
   },
   "shared": [],
   "remotes": [
