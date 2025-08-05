@@ -177,6 +177,10 @@ import { type DynamicTypeDocumentEditableSelect } from './definitions/document/e
 import { type DynamicTypeDocumentEditableTable } from './definitions/document/editable/types/dynamic-type-document-editable-table'
 import { type DynamicTypeDocumentEditableSnippet } from './definitions/document/editable/types/dynamic-type-document-editable-snippet'
 import { type DynamicTypeGridCellDataObjectAdvanced } from './definitions/grid-cell/types/data-object-advanced/dynamic-type-grid-cell-data-object-advanced'
+import { type DynamicTypeDocumentEditableArea } from './definitions/document/editable/types/dynamic-type-document-editable-area'
+import { type DynamicTypeEditableDialogLayoutRegistry } from './definitions/editable-dialog-layout/dynamic-type-editable-dialog-layout-registry'
+import { type DynamicTypeEditableDialogLayoutTabpanel } from './definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-tabpanel'
+import { type DynamicTypeEditableDialogLayoutPanel } from './definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-panel'
 
 moduleSystem.registerModule({
   onInit () {
@@ -341,6 +345,12 @@ moduleSystem.registerModule({
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableMultiSelect>(serviceIds['DynamicTypes/DocumentEditable/MultiSelect']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableImage>(serviceIds['DynamicTypes/DocumentEditable/Image']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableVideo>(serviceIds['DynamicTypes/DocumentEditable/Video']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableArea>(serviceIds['DynamicTypes/DocumentEditable/Area']))
+
+    const editableDialogLayoutRegistry = container.get<DynamicTypeEditableDialogLayoutRegistry>(serviceIds['DynamicTypes/EditableDialogLayoutRegistry'])
+
+    editableDialogLayoutRegistry.registerDynamicType(container.get<DynamicTypeEditableDialogLayoutTabpanel>(serviceIds['DynamicTypes/EditableDialogLayout/Tabpanel']))
+    editableDialogLayoutRegistry.registerDynamicType(container.get<DynamicTypeEditableDialogLayoutPanel>(serviceIds['DynamicTypes/EditableDialogLayout/Panel']))
 
     const assetRegistry = container.get<DynamicTypeAssetRegistry>(serviceIds['DynamicTypes/AssetRegistry'])
 

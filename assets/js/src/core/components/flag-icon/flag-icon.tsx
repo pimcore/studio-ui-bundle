@@ -10,6 +10,7 @@
 
 import React from 'react'
 import UnknownFlag from '@Pimcore/assets/images/flags/_unknown.inline.svg?react'
+import { GeneralError, trackError } from '@sdk/modules/app'
 
 interface IFlagIconProps {
   value: string | null
@@ -46,8 +47,8 @@ export const FlagIcon = ({ value, width = 21, height = 15 }: IFlagIconProps): Re
         const component = await importFlag(countryCode)
         flagCache[countryCode] = component
         setFlag(component)
-      } catch (error) {
-        console.error(`Failed to import flag for ${countryCode}:`, error)
+      } catch {
+        trackError(new GeneralError(`Failed to import flag for ${countryCode}`))
       } finally {
         setLoading(false)
       }

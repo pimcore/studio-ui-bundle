@@ -15,7 +15,7 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
 import { UserPermission } from '../auth/enums/user-permission'
-import { TranslationsContainer } from './translations-container'
+import { TranslationsWrapper } from './translations-wrapper'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -45,7 +45,7 @@ moduleSystem.registerModule({
 
     widgetRegistryService.registerWidget({
       name: 'translations',
-      component: TranslationsContainer
+      component: TranslationsWrapper
     })
   }
 })
