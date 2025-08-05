@@ -176,6 +176,7 @@ import { type DynamicTypeDocumentEditableMultiSelect } from './definitions/docum
 import { type DynamicTypeDocumentEditableSelect } from './definitions/document/editable/types/dynamic-type-document-editable-select'
 import { type DynamicTypeDocumentEditableTable } from './definitions/document/editable/types/dynamic-type-document-editable-table'
 import { type DynamicTypeDocumentEditableSnippet } from './definitions/document/editable/types/dynamic-type-document-editable-snippet'
+import { type DynamicTypeDocumentEditableBlock } from './definitions/document/editable/types/dynamic-type-document-editable-block'
 import { type DynamicTypeGridCellDataObjectAdvanced } from './definitions/grid-cell/types/data-object-advanced/dynamic-type-grid-cell-data-object-advanced'
 import { type DynamicTypeDocumentEditableArea } from './definitions/document/editable/types/dynamic-type-document-editable-area'
 import { type DynamicTypeEditableDialogLayoutRegistry } from './definitions/editable-dialog-layout/dynamic-type-editable-dialog-layout-registry'
@@ -329,6 +330,7 @@ moduleSystem.registerModule({
 
     const documentEditableRegistry = container.get<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
 
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableBlock>(serviceIds['DynamicTypes/DocumentEditable/Block']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableCheckbox>(serviceIds['DynamicTypes/DocumentEditable/Checkbox']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableDate>(serviceIds['DynamicTypes/DocumentEditable/Date']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableEmbed>(serviceIds['DynamicTypes/DocumentEditable/Embed']))

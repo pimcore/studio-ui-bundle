@@ -20,6 +20,7 @@ export interface DocumentEditorContextProps {
   getValues: () => Record<string, ValueType>
   getValue: (key: string) => ValueType
   initializeData: (data: Record<string, ValueType>) => void
+  removeValues: (keysToRemove: string[]) => void
   notifyReady: () => void
 }
 
@@ -85,6 +86,11 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
     api.initializeValues(data)
   }, [getDocumentEditableApi])
 
+  const removeValues = useCallback((keysToRemove: string[]): void => {
+    const api = getDocumentEditableApi()
+    api.removeValues(keysToRemove)
+  }, [getDocumentEditableApi])
+
   const notifyReady = useCallback((): void => {
     if (!readyNotified.current) {
       try {
@@ -104,6 +110,7 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
     getValues,
     getValue,
     initializeData,
+    removeValues,
     notifyReady
   }
 }
