@@ -38,7 +38,7 @@ export const AreaEditable = ({
   config,
   containerRef,
   disabled,
-  editableName,
+  editableName
 }: AreaEditableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
