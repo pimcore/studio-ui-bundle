@@ -23,6 +23,7 @@ import { invalidatingTags } from '@sdk/api'
 import { RedirectsToolbar } from './components/redirects-toolbar'
 import { RedirectsTopBar } from './components/redirects-top-bar'
 import { BeginnerRedirectModal } from './components/beginner-redirect-modal'
+import { redirect } from 'react-router-dom'
 
 export const RedirectsContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
@@ -56,12 +57,6 @@ export const RedirectsContainer = (): React.JSX.Element => {
     error
   } = useBundleSeoRedirectsGetCollectionQuery(queryArgs)
   const redirects = data?.items
-
-  const sortedRows = [...redirectRows].sort((a, b) => {
-    const aDate = a.creationDate ?? 0
-    const bDate = b.creationDate ?? 0
-    return bDate - aDate
-  })
 
   const reload = (): void => {
     dispatch(api.util.invalidateTags(invalidatingTags.REDIRECTS()))
@@ -165,7 +160,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
           } }
         >
           <Table
-            redirectRows={ sortedRows }
+            redirectRows={ redirectRows }
             setRedirectRows={ setRedirectRows }
           />
         </Box>
