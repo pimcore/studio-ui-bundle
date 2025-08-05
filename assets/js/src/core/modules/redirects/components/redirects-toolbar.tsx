@@ -90,7 +90,7 @@ export const RedirectsToolbar = ({
       setIsImportModalOpen(false)
       setIsResultsModalOpen(true)
       onRefresh()
-    } catch (error) {
+    } catch {
       trackError(new GeneralError('Failed to import redirects'))
     }
   }
