@@ -17,6 +17,7 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/ObjectLayoutRegistry': 'DynamicTypes/ObjectLayoutRegistry',
   'DynamicTypes/ObjectDataRegistry': 'DynamicTypes/ObjectDataRegistry',
   'DynamicTypes/DocumentEditableRegistry': 'DynamicTypes/DocumentEditableRegistry',
+  'DynamicTypes/EditableDialogLayoutRegistry': 'DynamicTypes/EditableDialogLayoutRegistry',
   'DynamicTypes/AssetRegistry': 'DynamicTypes/AssetRegistry',
   'DynamicTypes/ObjectRegistry': 'DynamicTypes/ObjectRegistry',
   'DynamicTypes/Grid/SourceFieldsRegistry': 'DynamicTypes/Grid/SourceFieldsRegistry',
@@ -221,6 +222,10 @@ export const serviceIds = {
   'DynamicTypes/DocumentEditable/Textarea': 'DynamicTypes/DocumentEditable/Textarea',
   'DynamicTypes/DocumentEditable/Video': 'DynamicTypes/DocumentEditable/Video',
   'DynamicTypes/DocumentEditable/Wysiwyg': 'DynamicTypes/DocumentEditable/Wysiwyg',
+
+  // Document editable dialog layout
+  'DynamicTypes/EditableDialogLayout/Tabpanel': 'DynamicTypes/EditableDialogLayout/Tabpanel',
+  'DynamicTypes/EditableDialogLayout/Panel': 'DynamicTypes/EditableDialogLayout/Panel',
 
   // Asset types
   'DynamicTypes/Asset/Video': 'DynamicTypes/Asset/Video',

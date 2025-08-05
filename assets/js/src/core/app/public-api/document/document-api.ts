@@ -24,6 +24,7 @@ export interface DocumentApi {
   unregisterIframe: (documentId: number) => void
   triggerValueChange: (documentId: number, key: string, value: any) => void
   triggerValueChangeWithReload: (documentId: number, key: string, value: any) => void
+  triggerSaveAndReload: (documentId: number) => void
   notifyIframeReady: (documentId: number) => void
   isIframeReady: (documentId: number) => boolean
 }
@@ -72,6 +73,10 @@ class DocumentApiImpl implements DocumentApi {
     this.markDraftAsModified(documentId)
 
     // Perform immediate auto-save without debounce, then reload
+    void this.performAutoSaveAndReload(documentId)
+  }
+
+  triggerSaveAndReload (documentId: number): void {
     void this.performAutoSaveAndReload(documentId)
   }
 
