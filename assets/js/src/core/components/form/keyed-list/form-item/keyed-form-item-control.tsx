@@ -26,12 +26,12 @@ export interface KeyedFormItemControlProps {
 export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: baseValue, ...props }: KeyedFormItemControlProps): React.JSX.Element => {
   const { getValueFromEvent } = props
 
-  const { operations, getAdditionalComponentProps, values } = useKeyedList()
+  const { operations, getAdditionalComponentProps } = useKeyedList()
   const { name, initialValue } = useItem()
 
-  const Child = useMemo(() =>  Children.only(children), [children])
+  const Child = useMemo(() => Children.only(children), [children])
   const value = operations.getValue(name)
-  const previousValue = usePrevious(value);
+  const previousValue = usePrevious(value)
 
   const cachedValue = useMemo(() => {
     if (!isEqual(value, previousValue)) {
@@ -39,7 +39,7 @@ export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: 
     }
 
     return previousValue
-  }, [value]);
+  }, [value])
 
   useEffect(() => {
     if (value === undefined) {

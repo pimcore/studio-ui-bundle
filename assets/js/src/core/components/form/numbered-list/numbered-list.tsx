@@ -29,12 +29,12 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
   const initialValue = baseValue ?? []
   const [value, setValue] = useState(cloneDeep(initialValue))
   const { name: tempItemName } = useItem()
-  const bufferedValue = useDebounce(value, 10);
+  const bufferedValue = useDebounce(value, 10)
 
   const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
   const name = useMemo(() => itemName[itemName.length - 1], [itemName])
 
-  const onChange: NumberedListData['onChange'] = useCallback((newValue) => {
+  const onChange: NumberedListData['onChange'] = useCallback((newValue: NumberedListData['values']) => {
     setValue(() => newValue)
     baseOnChange !== undefined && baseOnChange(newValue)
   }, [baseOnChange])

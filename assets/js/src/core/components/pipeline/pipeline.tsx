@@ -29,8 +29,8 @@ export interface PipelineProps {
 }
 
 const Pipeline = ({ items, value: baseValue, onChange }: PipelineProps): React.JSX.Element => {
-  const [value, setValue] = useState(baseValue);
-  const bufferedValue = useDebounce(value, 300);
+  const [value, setValue] = useState(baseValue)
+  const bufferedValue = useDebounce(value, 300)
 
   const theme = useMemo(() => ({
     components: {
@@ -42,15 +42,15 @@ const Pipeline = ({ items, value: baseValue, onChange }: PipelineProps): React.J
 
   useEffect(() => {
     if (baseValue !== undefined && !isEqual(baseValue, value)) {
-      setValue(baseValue);
+      setValue(baseValue)
     }
-  }, [baseValue]);
+  }, [baseValue])
 
   useEffect(() => {
-    onChange?.(bufferedValue);
-  }, [bufferedValue]);
+    onChange?.(bufferedValue)
+  }, [bufferedValue])
 
-  const memoizedItems = useMemo(() => items, [items]);
+  const memoizedItems = useMemo(() => items, [items])
 
   if (value === undefined) {
     return <></>

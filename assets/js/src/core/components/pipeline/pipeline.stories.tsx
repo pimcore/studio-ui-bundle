@@ -33,7 +33,7 @@ const config: Meta = {
           },
           // add 100 more fields for testing
           ...Array.from({ length: 3 }, (_, i) => ({
-            key: `staticText`,
+            key: 'staticText',
             config: {
               text: `Dynamic Text ${i + 1}`
             }
@@ -48,7 +48,10 @@ const config: Meta = {
         layout='vertical'
         onValuesChange={ (changedValues, allValues) => { console.log({ changedValues, allValues }) } }
       >
-        <Form.Item name="pipeline1" noStyle>
+        <Form.Item
+          name="pipeline1"
+          noStyle
+        >
           <Pipeline
             items={ [
               {

@@ -33,7 +33,7 @@ const Form = (({ ...props }: FormProps) => {
     return (
       <Space size='mini'>
         {label}
-        {required && '*'}
+        {required === true && '*'}
       </Space>
     )
   }, [])

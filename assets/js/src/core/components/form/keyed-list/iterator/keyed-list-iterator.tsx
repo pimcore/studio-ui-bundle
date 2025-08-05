@@ -30,8 +30,8 @@ export const KeyedListIterator = ({ children }: KeyedListIteratorProps): React.J
     <>
       {valuesIterator.map(({ key }) => (
         <KeyedListIteratorItem
-          key={ key }
           itemKey={ key }
+          key={ key }
         >
           {children}
         </KeyedListIteratorItem>

@@ -30,8 +30,8 @@ export const NumberedListIterator = ({ children }: NumberedListIteratorProps): R
     <>
       {valuesIterator.map(({ key }) => (
         <NumberedListIteratorItem
-          key={ key }
           itemKey={ key }
+          key={ key }
         >
           {children}
         </NumberedListIteratorItem>

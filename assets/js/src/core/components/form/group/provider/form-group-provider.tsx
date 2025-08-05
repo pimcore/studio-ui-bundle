@@ -28,7 +28,7 @@ export interface FormGroupProviderProps {
 
 export const FormGroupProvider = ({ name, children }: FormGroupProviderProps): React.JSX.Element => {
   const groupContext = useFormGroupOptional()
-  
+
   const groupName = useMemo(() => {
     if (groupContext !== undefined) {
       const { name: parentName } = groupContext

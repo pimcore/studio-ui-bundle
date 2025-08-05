@@ -9,7 +9,7 @@
  */
 
 import { useNumberedList } from '@Pimcore/components/form/numbered-list/provider/numbered-list/use-numbered-list'
-import React, { Fragment, useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { type DynamicGroupProps } from '../dynamic-group'
 import { Box } from '@Pimcore/components/box/box'
 import { DynamicGroupDropdown } from './dynamic-group-dropdown'
@@ -30,7 +30,7 @@ export const DynamicGroupContent = ({ dynamicTypeRegistryId, id, showTitle = fal
   const { values, operations } = useNumberedList()
   const [items, setItems] = React.useState(() => values.map((_, index) => index + 1))
   const isEmpty = values.length === 0
-  
+
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -45,7 +45,7 @@ export const DynamicGroupContent = ({ dynamicTypeRegistryId, id, showTitle = fal
     const newItems = values.map((_, index) => index + 1)
     setItems(prevItems => {
       // Only update if the items actually changed
-      if (prevItems.length !== newItems.length || 
+      if (prevItems.length !== newItems.length ||
           !prevItems.every((item, index) => item === newItems[index])) {
         return newItems
       }

@@ -29,7 +29,7 @@ export const DynamicGroupItemContent = ({ dynamicTypeRegistryId }: DynamicGroupI
   }, [registry, type])
 
   return useMemo(() => {
-    if (!dynType) {
+    if (dynType === undefined) {
       return <div>Unknown type: {type}</div>
     }
 

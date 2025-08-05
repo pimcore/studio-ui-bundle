@@ -31,9 +31,9 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   const { name: tempItemName } = useItem()
   const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
   const name = useMemo(() => itemName[itemName.length - 1], [itemName])
-  const bufferedValue = useDebounce(value, 10);
+  const bufferedValue = useDebounce(value, 10)
 
-  const onChange: KeyedListData['onChange'] = useCallback((newValue) => {
+  const onChange: KeyedListData['onChange'] = useCallback((newValue: KeyedListData['values']) => {
     if (baseOnChange !== undefined) {
       setValue(() => newValue)
       baseOnChange(newValue)
@@ -135,7 +135,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
 
 const memoedKeyedList = React.memo(KeyedList) as unknown as typeof KeyedList & {
   Iterator: typeof KeyedListIterator
-};
+}
 memoedKeyedList.Iterator = KeyedListIterator
 
 export { memoedKeyedList as KeyedList }

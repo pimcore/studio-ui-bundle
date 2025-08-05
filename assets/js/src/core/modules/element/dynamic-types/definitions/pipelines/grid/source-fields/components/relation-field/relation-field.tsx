@@ -23,8 +23,8 @@ export const DynamicTypePipelineGridSourceFieldsRelationFieldComponent = (): Rea
   const sourceFieldConfig = config?.relationField
   const { name } = useItem()
   const { operations } = useKeyedList()
-  const currentRelation = Form.useWatch([...name, 'relation']);
-  const prevRelation = usePrevious(currentRelation);
+  const currentRelation = Form.useWatch([...name, 'relation'])
+  const prevRelation = usePrevious(currentRelation)
 
   useEffect(() => {
     if (prevRelation !== currentRelation && prevRelation !== undefined) {

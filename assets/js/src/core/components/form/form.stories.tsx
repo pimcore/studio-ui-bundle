@@ -55,7 +55,7 @@ const config: Meta = {
             },
             key2: {
               KeyedInput: 'Key 2'
-            },
+            }
           },
           myNumberedList: [
             {
@@ -65,7 +65,7 @@ const config: Meta = {
             {
               NumberedInput: 'Key 3',
               NumberedInput2: 'Key 4'
-            },
+            }
             /* // add 100 more fields for testing
             ...Array.from({ length: 100 }, (_, i) => ({
               NumberedInput: `Key ${i + 5}`,
@@ -89,7 +89,7 @@ const config: Meta = {
                   testInput: 'Value 2'
                 }
               }
-            },
+            }
 
             /* // add 100 more fields for testing
             ...Array.from({ length: 100 }, (_, i) => ({

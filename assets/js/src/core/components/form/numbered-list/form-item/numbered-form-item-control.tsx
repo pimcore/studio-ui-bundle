@@ -29,9 +29,9 @@ export const NumberedFormItemControl = ({ children, onChange: baseOnChange, valu
   const { operations, getAdditionalComponentProps } = useNumberedList()
   const { name, initialValue } = useItem()
 
-  const Child = useMemo(() =>  Children.only(children), [children])
+  const Child = useMemo(() => Children.only(children), [children])
   const value = operations.getValue(name)
-  const previousValue = usePrevious(value);
+  const previousValue = usePrevious(value)
 
   const cachedValue = useMemo(() => {
     if (!isEqual(value, previousValue)) {
@@ -39,7 +39,7 @@ export const NumberedFormItemControl = ({ children, onChange: baseOnChange, valu
     }
 
     return previousValue
-  }, [value]);
+  }, [value])
 
   useEffect(() => {
     if (value === undefined) {

@@ -11,7 +11,6 @@
 import { type Form, type FormItemProps } from 'antd'
 import React, { useMemo } from 'react'
 import { KeyedFormItemControl } from './keyed-form-item-control'
-import { ItemProvider } from '../../item/provider/item/item-provider'
 import { VirtualItem } from '../../item/virtual-item'
 
 export interface KeyedFormItemProps {
@@ -24,7 +23,7 @@ const KeyedFormItem = ({ Component, componentProps }: KeyedFormItemProps): React
   const currentChildren = children as unknown as React.ReactNode
 
   return useMemo(() => (
-    <VirtualItem {...baseProps}>
+    <VirtualItem { ...baseProps }>
       <KeyedFormItemControl getValueFromEvent={ baseProps.getValueFromEvent }>
         { currentChildren }
       </KeyedFormItemControl>
