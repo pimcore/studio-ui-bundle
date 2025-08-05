@@ -60,7 +60,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
   const reload = (): void => {
     dispatch(api.util.invalidateTags(invalidatingTags.REDIRECTS()))
   }
-
+  console.log('redirects', redirectRows)
   const handleCreateRedirect = async (redirectData?: { type: string, source: string, target: string }): Promise<boolean> => {
     const tempId = uuid()
     const optimisticRedirect: RedirectRow = {
@@ -86,9 +86,15 @@ export const RedirectsContainer = (): React.JSX.Element => {
 
     setRedirectRows(prev => [optimisticRedirect, ...prev])
 
-    const { success } = await createNewRedirect(redirectData)
+    const { success, data } = await createNewRedirect(redirectData)
 
-    if (!success) {
+    if (success && !isUndefined(data)) {
+      setRedirectRows(prev => prev.map(row =>
+        row.rowId === tempId
+          ? { ...data, rowId: uuid() }
+          : row
+      ))
+    } else {
       setRedirectRows(prev => prev.filter(row => row.rowId !== tempId))
     }
 
