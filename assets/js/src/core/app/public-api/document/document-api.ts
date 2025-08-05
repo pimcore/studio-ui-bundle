@@ -77,7 +77,6 @@ class DocumentApiImpl implements DocumentApi {
   }
 
   triggerSaveAndReload (documentId: number): void {
-    // Perform save and reload
     void this.performAutoSaveAndReload(documentId)
   }
 
