@@ -172,7 +172,7 @@ const resolveLanguageFlag = async (languageCode: string): Promise<{ flagCode: st
   const languageOnly = parts[0]
   const countryCode = parts.length > 1 ? parts[parts.length - 1] : null
 
-  if (languageCountryMapping[normalizedCode]) {
+  if (languageCountryMapping[normalizedCode] !== undefined) {
     return { flagCode: languageCountryMapping[normalizedCode], isLanguageFlag: false }
   }
 
@@ -180,7 +180,7 @@ const resolveLanguageFlag = async (languageCode: string): Promise<{ flagCode: st
     return { flagCode: normalizedCode, isLanguageFlag: true }
   }
 
-  if (countryCode && countryCode !== languageOnly && await checkFlagExists(countryCode)) {
+  if (countryCode !== null && countryCode !== languageOnly && await checkFlagExists(countryCode)) {
     return { flagCode: countryCode, isLanguageFlag: false }
   }
 
@@ -198,7 +198,7 @@ export const FlagIcon = ({ value, width = 21, height = 15 }: IFlagIconProps): Re
   const [loading, setLoading] = React.useState(true)
 
   React.useEffect(() => {
-    if (!value) {
+    if (value === null || value === '') {
       setFlag(null)
       setLoading(false)
       return
