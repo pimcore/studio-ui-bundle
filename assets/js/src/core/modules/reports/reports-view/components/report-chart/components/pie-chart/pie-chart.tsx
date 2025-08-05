@@ -40,9 +40,15 @@ export const PieChart = ({ reportData, chartData }: IChartProps): React.JSX.Elem
   const [totalCount, setTotalCount] = useState<number>(0)
 
   useEffect(() => {
-    const totalCountValue: number = chartData?.reduce((sum, item) => sum + item?.[pieColumn], 0)
+    if (chartRef !== null) {
+      chartRef.chart.changeData(reportChartData)
 
-    setTotalCount(totalCountValue ?? 0)
+      const totalValue =
+          reportChartData
+            .filter(item => !disabledItems.includes(item[CHART_FIELD_TYPE_KEY]))
+            .reduce((sum, item) => sum + item[CHART_FIELD_VALUE_KEY], 0)
+      setTotalCount(totalValue)
+    }
   }, [chartData])
 
   const handleLegendItemClick = (itemKey: string): void => {

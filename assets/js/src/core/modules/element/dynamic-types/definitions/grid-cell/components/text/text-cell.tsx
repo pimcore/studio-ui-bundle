@@ -14,6 +14,7 @@ import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { IconButton, Input } from '@sdk/components'
 import { type InputRef } from 'antd'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface TextCellProps extends DefaultCellProps {}
 
@@ -59,8 +60,8 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
         try {
           const newValue = await editCallback(props.row.original, props.column.id)
           fireOnUpdateCellDataEvent(newValue)
-        } catch (error) {
-          console.error('Edit callback failed:', error)
+        } catch {
+          trackError(new GeneralError('Edit callback failed'))
         }
       } else {
         console.log('No edit callback available')

@@ -725,6 +725,11 @@ user-management.roles: Roles
 user-management.role: Role
 user-management.users: Users
 user-management.user: User
+user-management.add-folder: Add new Folder
+user-management.add-folder.label: Enter the name of the new folder
+user-management.add-user: Add new User
+user-management.add-user.label: Enter the name of the new user
+user-management.last-login: Last Login
 roles.tree.all: All Roles
 roles.save-item.success: Role saved successfully
 roles.clone-item.success: Role cloned successfully
@@ -732,6 +737,12 @@ roles.remove-folder.success: Folder removed successfully
 roles.remove-item.success: Role removed successfully
 roles.add-item.success: Role added successfully
 roles.add-folder.success: Folder added successfully
+roles.settings.title: Settings
+roles.workspaces.title: Workspaces
+roles.add-folder: Add new Folder
+roles.add-folder.label: Enter the name of the new folder
+roles.add-role: Add new Role
+roles.add-role.label: Enter the name of the new role
 navigation.website-settings: Website Settings
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
@@ -757,6 +768,48 @@ predefined-properties.new: New
 website-settings.new: Add
 predefined-properties.type: Type
 predefined-properties.name: Name
+redirects.beginner: Beginner
+redirects.expert: Expert Mode
+redirects.type: Type
+redirects.search: Search
+redirects.source-site: Source Site
+redirects.source: Source
+redirects.target-site: Target Site
+redirects.target: Target
+redirects.status: Status
+redirects.priority: Priority
+redirects.regex: RegEx
+redirects.pass-through: Pass Through
+redirects.active: Active
+redirects.actions: Actions
+redirects.expiry: Expiry
+redirects.csv-import: Import CSV
+redirects.csv-import-modal.redirects-import: Redirects CSV Import
+redirects.csv-export: CSV Export
+redirects.clean-up: Clean up expired redirects
+redirects.import-drag-drop: Browse your files or drop a CSV directly here
+redirects.browse-files: Browse Files
+redirects.upload: Upload
+redirects.beginner-modal.title: New Beginner Redirect
+redirects.beginner-modal.type: Type
+redirects.beginner-modal.path: Path
+redirects.beginner-modal.target: Target
+redirects.beginner-modal.create: Create
+redirects.beginner-modal.cancel: Cancel
+redirects.csv-import-results.title: Redirects CSV Import Results
+redirects.csv-import-results.total: Total
+redirects.csv-import-results.created: Created
+redirects.csv-import-results.updated: Updated
+redirects.csv-import-results.errored: Errored
+redirects.csv-import-results.close: Close
+redirects.csv-import-results.errors-details: Error Details
+redirects.csv-import-results.line: Line {{line}}
+path: Path
+entire_uri: Entire URI
+path_query: Path and Query
+auto_create: Auto Create
+widget.redirects: Redirects
+navigation.redirects: Redirects
 perspective.default: Default
 perspective.switching.title: Switching perspective
 perspective.switching.description: Currently switching to the following perspective
@@ -993,3 +1046,5 @@ component.search.pleaceholder: Search
 focal-point.set: Set Focal Point
 video.placeholder: No video selected - Click to add a video
 video.add-video: Add Video
+image.alt-text-placeholder: Enter alt text
+area-settings: Area Settings

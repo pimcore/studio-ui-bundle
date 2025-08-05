@@ -38,6 +38,10 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'bundleSeoRedirectsGetCollection',
+      type: 'query'
+    },
+    {
       pattern: 'websiteSettingsGetCollection',
       type: 'query'
     },
@@ -162,6 +166,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/reports/custom-reports-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/bundle\/custom-reports\/?/i)
+    },
+    '../../js/src/core/modules/redirects/seo-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/api\/bundle\/seo\/?/i)
     },
     '../../js/src/core/modules/element/export-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/export\/?/i)
