@@ -11,6 +11,10 @@
 export interface IGridFilter {
   columnFilters?: Array<{ property: string, value: any, type: string, operator: string }>
   drillDownFilters?: Record<string, any>
+  page: number
+  setPage: (page: number) => void
+  pageSize: number
+  setPageSize: (pageSize: number) => void
 }
 
 export enum FilterDrillDown {
