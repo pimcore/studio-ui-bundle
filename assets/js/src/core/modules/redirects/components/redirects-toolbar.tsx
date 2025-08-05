@@ -91,7 +91,6 @@ export const RedirectsToolbar = ({
       setIsResultsModalOpen(true)
       onRefresh()
     } catch (error) {
-      console.error('Import error:', error)
       trackError(new GeneralError('Failed to import redirects'))
     }
   }

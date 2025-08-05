@@ -194,17 +194,15 @@ export const Table = ({ redirectRows, setRedirectRows }: TableProps): React.JSX.
   }
 
   return (
-    <div>
-      <Grid
-        autoWidth
-        columns={ tableColumns }
-        data={ redirectRows }
-        enableSorting
-        modifiedCells={ modifiedCells }
-        onUpdateCellData={ onUpdateCellData }
-        resizable
-        setRowId={ (row: RedirectRow) => row.rowId }
-      />
-    </div>
+    <Grid
+      autoWidth
+      columns={ tableColumns }
+      data={ redirectRows }
+      enableSorting
+      modifiedCells={ modifiedCells }
+      onUpdateCellData={ onUpdateCellData }
+      resizable
+      setRowId={ (row: RedirectRow) => row.rowId }
+    />
   )
 }

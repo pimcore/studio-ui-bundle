@@ -23,7 +23,6 @@ import { invalidatingTags } from '@sdk/api'
 import { RedirectsToolbar } from './components/redirects-toolbar'
 import { RedirectsTopBar } from './components/redirects-top-bar'
 import { BeginnerRedirectModal } from './components/beginner-redirect-modal'
-import { redirect } from 'react-router-dom'
 
 export const RedirectsContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
