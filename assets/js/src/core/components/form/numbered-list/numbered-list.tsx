@@ -15,6 +15,7 @@ import { type NumberedListData, NumberedListProvider } from './provider/numbered
 import { NumberedListIterator } from './iterator/numbered-list-iterator'
 import { cloneDeep, isEqual, set, get, isArray, isUndefined } from 'lodash'
 import { useItem } from '../item/provider/item/use-item'
+import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
 
 export interface NumberedListProps {
   children: React.ReactNode
@@ -28,6 +29,7 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
   const initialValue = baseValue ?? []
   const [value, setValue] = useState(cloneDeep(initialValue))
   const { name: tempItemName } = useItem()
+  const bufferedValue = useDebounce(value, 10);
 
   const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
   const name = useMemo(() => itemName[itemName.length - 1], [itemName])
@@ -98,7 +100,7 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     if (!isEqual(value, initialValue) && !isUndefined(value)) {
       onChange(value)
     }
-  }, [value, onChange, initialValue])
+  }, [bufferedValue])
 
   const getValue = useCallback((subFieldNames: string[]): any => {
     const currentName: string[] = itemName

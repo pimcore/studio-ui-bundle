@@ -42,8 +42,10 @@ export const NumberedFormItemControl = ({ children, onChange: baseOnChange, valu
   }, [value]);
 
   useEffect(() => {
-    operations.update(name, value ?? initialValue ?? null, true)
-  }, [])
+    if (value === undefined) {
+      operations.update(name, initialValue ?? null, true)
+    }
+  }, [value])
 
   const onChange: NumberedFormItemControlProps['onChange'] = useCallback((value: any) => {
     const changedValue = !isUndefined(getValueFromEvent)

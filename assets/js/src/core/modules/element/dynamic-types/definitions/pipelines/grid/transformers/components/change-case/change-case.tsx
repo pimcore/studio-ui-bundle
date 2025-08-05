@@ -16,6 +16,7 @@ import React from 'react'
 export const DynamicTypePipelineGridTransformersChangeCaseComponent = (): React.JSX.Element => {
   const { config } = usePipelineConfig()
   const transformerConfig = config?.transformers?.caseChange
+  console.log('rendered');
 
   if (transformerConfig === undefined) {
     throw new Error('Transformer configuration for case change is missing')

@@ -10,11 +10,12 @@
 
 import { type NamePath } from 'antd/es/form/interface'
 import { Form } from '../form'
-import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { type KeyedListData, KeyedListProvider } from './provider/keyed-list/keyed-list-provider'
 import { KeyedListIterator } from './iterator/keyed-list-iterator'
 import { cloneDeep, isArray, isEqual, isObject, get, isUndefined, setWith, isEmpty } from 'lodash'
 import { useItem } from '../item/provider/item/use-item'
+import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
 
 export interface KeyedListProps {
   children: React.ReactNode
@@ -25,11 +26,12 @@ export interface KeyedListProps {
 }
 
 const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: KeyedListProps): React.JSX.Element => {
-  const initialValue = isArray(baseValue) ? {} : baseValue ?? {}
+  const initialValue = useMemo(() => isArray(baseValue) ? {} : baseValue ?? {}, [baseValue])
   const [value, setValue] = useState(cloneDeep(initialValue))
   const { name: tempItemName } = useItem()
   const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
   const name = useMemo(() => itemName[itemName.length - 1], [itemName])
+  const bufferedValue = useDebounce(value, 10);
 
   const onChange: KeyedListData['onChange'] = useCallback((newValue) => {
     if (baseOnChange !== undefined) {
@@ -39,9 +41,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   }, [baseOnChange])
 
   useEffect(() => {
-    console.log({initialValue, baseValue, isEqual: isEqual(value, initialValue)})
     if (!isEqual(value, initialValue)) {
-      console.log({initialValue})
       setValue(() => initialValue)
     }
   }, [initialValue])
@@ -103,7 +103,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     if (!isEqual(value, initialValue) && !isEmpty(value)) {
       onChange(value)
     }
-  }, [value, onChange, initialValue])
+  }, [bufferedValue])
 
   const getValue = useCallback((subFieldNames: string[]): any => {
     const currentName: string[] = isArray(itemName) ? itemName : [itemName]

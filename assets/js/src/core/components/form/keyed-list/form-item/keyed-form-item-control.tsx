@@ -26,7 +26,7 @@ export interface KeyedFormItemControlProps {
 export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: baseValue, ...props }: KeyedFormItemControlProps): React.JSX.Element => {
   const { getValueFromEvent } = props
 
-  const { operations, getAdditionalComponentProps } = useKeyedList()
+  const { operations, getAdditionalComponentProps, values } = useKeyedList()
   const { name, initialValue } = useItem()
 
   const Child = useMemo(() =>  Children.only(children), [children])
@@ -42,9 +42,10 @@ export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: 
   }, [value]);
 
   useEffect(() => {
-    console.log({value, initialValue, isEqual: isEqual(value, initialValue)}) // Debugging line, can be removed
-    operations.update(name, value ?? initialValue ?? null, false)
-  }, [])
+    if (value === undefined) {
+      operations.update(name, initialValue ?? null, true)
+    }
+  }, [value])
 
   const onChange: KeyedFormItemControlProps['onChange'] = useCallback((value: any) => {
     const changedValue = !isUndefined(getValueFromEvent)

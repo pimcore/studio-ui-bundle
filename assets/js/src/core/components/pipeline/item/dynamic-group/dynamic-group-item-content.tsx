@@ -28,24 +28,17 @@ export const DynamicGroupItemContent = ({ dynamicTypeRegistryId }: DynamicGroupI
     return registry.getDynamicType(type)
   }, [registry, type])
 
-  const component = useMemo(() => {
-    if (!dynType) {
-      return null
-    }
-    return dynType.getComponent()
-  }, [dynType])
-
   return useMemo(() => {
-    if (!component) {
+    if (!dynType) {
       return <div>Unknown type: {type}</div>
     }
 
     return (
       <Form.Item name={ 'config' }>
         <Form.KeyedList>
-          {component}
+          {dynType.getComponent()}
         </Form.KeyedList>
       </Form.Item>
     )
-  }, [component, type])
+  }, [dynType, type])
 }

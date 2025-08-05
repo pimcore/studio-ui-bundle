@@ -47,7 +47,6 @@ const Pipeline = ({ items, value: baseValue, onChange }: PipelineProps): React.J
   }, [baseValue]);
 
   useEffect(() => {
-    console.log({bufferedValue})
     onChange?.(bufferedValue);
   }, [bufferedValue]);
 
