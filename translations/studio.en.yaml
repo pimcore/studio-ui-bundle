@@ -990,3 +990,18 @@ recycle-bin.actions.restore.title: Restoring Items
 component.search.pleaceholder: Search
 focal-point.set: Set Focal Point
 navigation.test-email: Send Test-Email
+test-email.form.from: From
+test-email.form.to: To
+test-email.form.type: Type
+test-email.form.title: Title
+test-email.form.message: Message
+test-email.form.parameters.document: Document
+test-email.form.parameters.parameters: Parameters
+test-email.modal.title: Send a Test-Email
+test-email.modal.send: Send
+test-email.type.document: Document
+test-email.type.html: HTML
+test-email.type.text: Text
+test-email.parameters.columns.key: Key
+test-email.parameters.columns.value: Value
+test-email.parameters.add: Add Parameter
