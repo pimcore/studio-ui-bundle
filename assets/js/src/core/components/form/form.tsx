@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactNode } from 'react'
+import React, { type ReactNode, useCallback, useMemo } from 'react'
 import { Form as AntForm, type FormProps as AntFormProps, type FormItemProps } from 'antd'
 import { Space } from '../space/space'
 import { withGroupName } from './item/with-group-name'
@@ -29,21 +29,22 @@ export interface FormProps extends Omit<AntFormProps, 'children'> {
 const Form = (({ ...props }: FormProps) => {
   const { styles } = useStyles()
 
-  const requiredMark: FormProps['requiredMark'] = (label, { required }): ReactNode => {
+  const requiredMark: FormProps['requiredMark'] = useCallback((label, { required }): ReactNode => {
     return (
       <Space size='mini'>
         {label}
-        {required && '*'}
+        {required === true && '*'}
       </Space>
     )
-  }
+  }, [])
 
-  props.className = `${props.className ?? ''} ${styles.container}`
+  const className = useMemo(() => `${props.className ?? ''} ${styles.container}`, [props.className, styles.container])
 
   return (
     <AntForm
       requiredMark={ requiredMark }
       { ...props }
+      className={ className }
     />
   )
 }) as typeof AntForm & {
@@ -54,9 +55,9 @@ const Form = (({ ...props }: FormProps) => {
 
 const newFormItem = compose(
   withGroupName,
+  withLocalizedFieldsLocale,
   withKeyedItemContext,
   withNumberedItemContext,
-  withLocalizedFieldsLocale,
   withItemProvider
 )(AntForm.Item)
 

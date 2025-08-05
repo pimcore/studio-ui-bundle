@@ -22,8 +22,8 @@ export const DynamicTypePipelineGridSourceFieldsRelationFieldComponent = (): Rea
   const { config } = usePipelineConfig()
   const sourceFieldConfig = config?.relationField
   const { name } = useItem()
-  const { operations, getValueByKey } = useKeyedList()
-  const currentRelation = getValueByKey('relation')
+  const { operations } = useKeyedList()
+  const currentRelation = Form.useWatch([...name, 'relation'])
   const prevRelation = usePrevious(currentRelation)
 
   useEffect(() => {

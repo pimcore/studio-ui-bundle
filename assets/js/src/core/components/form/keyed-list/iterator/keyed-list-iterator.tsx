@@ -8,9 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useKeyedList } from '../provider/keyed-list/use-keyed-list'
-import { Form } from '../../form'
+import KeyedListIteratorItem from './keyed-list-iterator-item'
 
 export interface KeyedListIteratorProps {
   children: React.ReactNode
@@ -19,27 +19,23 @@ export interface KeyedListIteratorProps {
 export const KeyedListIterator = ({ children }: KeyedListIteratorProps): React.JSX.Element => {
   const { values } = useKeyedList()
 
-  const getValuesIterator = (): Array<{ key: string, value: any }> => {
-    return Object.keys(values).map((key) => {
-      return {
-        key,
-        value: values[key]
-      }
-    })
-  }
+  const valuesIterator = useMemo(() => {
+    return Object.keys(values).map((key) => ({
+      key,
+      value: values[key]
+    }))
+  }, [values])
 
   return (
     <>
-      {getValuesIterator().map(({ key, value }) => {
-        return (
-          <Form.Group
-            key={ key }
-            name={ key }
-          >
-            {children}
-          </Form.Group>
-        )
-      })}
+      {valuesIterator.map(({ key }) => (
+        <KeyedListIteratorItem
+          itemKey={ key }
+          key={ key }
+        >
+          {children}
+        </KeyedListIteratorItem>
+      ))}
     </>
   )
 }

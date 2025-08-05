@@ -37,12 +37,19 @@ export interface NumberedListProviderProps {
   getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
 }
 
-export const NumberedListProvider = ({ children, ...props }: NumberedListProviderProps): React.JSX.Element => {
-  return useMemo(() => (
+export const NumberedListProvider = ({ children, values, operations, onChange, getAdditionalComponentProps }: NumberedListProviderProps): React.JSX.Element => {
+  const contextValue = useMemo(() => ({
+    values,
+    operations,
+    onChange,
+    getAdditionalComponentProps
+  }), [values, operations, onChange, getAdditionalComponentProps])
+
+  return (
     <KeyedListContext.Provider value={ undefined }>
-      <NumberedListContext.Provider value={ { ...props } }>
+      <NumberedListContext.Provider value={ contextValue }>
         {children}
       </NumberedListContext.Provider>
     </KeyedListContext.Provider>
-  ), [props, children])
+  )
 }
