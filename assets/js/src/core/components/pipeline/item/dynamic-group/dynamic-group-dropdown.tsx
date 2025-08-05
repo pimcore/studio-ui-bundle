@@ -15,6 +15,7 @@ import { type DynamicTypePipelineRegistry } from '@Pimcore/modules/element/dynam
 import React from 'react'
 import { usePipelineConfig } from '../../provider/pipeline-config/use-pipeline-config'
 import { type DynamicTypePipelineAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-abstract'
+import { useTranslation } from 'react-i18next'
 
 export interface DynamicGroupDropdownProps {
   children: React.ReactNode
@@ -25,6 +26,7 @@ export const DynamicGroupDropdown = ({ children, dynamicTypeRegistryId }: Dynami
   const registry = useInjection<DynamicTypePipelineRegistry>(dynamicTypeRegistryId)
   const { operations } = useNumberedList()
   const { config } = usePipelineConfig()
+  const { t } = useTranslation()
 
   const availableDynamicTypes: DynamicTypePipelineAbstract[] = registry.getDynamicTypes().filter((dynamicType) => {
     return dynamicType.isAvailableForSelection(config)
@@ -32,7 +34,7 @@ export const DynamicGroupDropdown = ({ children, dynamicTypeRegistryId }: Dynami
 
   const items: DropdownProps['menu']['items'] = availableDynamicTypes.map((dynamicType) => ({
     key: dynamicType.id,
-    label: dynamicType.id,
+    label: t(`grid.advanced-column.advancedColumns.${dynamicType.id}`),
     onClick: () => {
       operations.add({
         key: dynamicType.id
