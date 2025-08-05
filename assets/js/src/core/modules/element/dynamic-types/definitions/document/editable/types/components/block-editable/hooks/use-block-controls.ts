@@ -13,13 +13,10 @@ import { useBlockEditableStyles } from '../block-editable.styles'
 
 export interface UseBlockControlsParams {
   editableName: string
-  onAddBlock: (element: HTMLElement | null) => void
-  onRemoveBlock: (element: HTMLElement) => void
-  onMoveBlockUp: (element: HTMLElement) => void
-  onMoveBlockDown: (element: HTMLElement) => void
-  getElementIndex: (element: HTMLElement) => number
-  queryDOMElements: () => HTMLElement[]
-  getBlockContainer: () => HTMLElement | null
+  onAddBlock: (element: HTMLElement | null, amount?: number, updateControlsFn?: (element: HTMLElement, limitReached: boolean) => void) => void
+  onRemoveBlock: (element: HTMLElement, updateControlsFn?: (element: HTMLElement, limitReached: boolean) => void) => void
+  onMoveBlockUp: (element: HTMLElement, updateControlsFn?: (element: HTMLElement, limitReached: boolean) => void) => void
+  onMoveBlockDown: (element: HTMLElement, updateControlsFn?: (element: HTMLElement, limitReached: boolean) => void) => void
 }
 
 export const useBlockControls = ({
@@ -27,10 +24,7 @@ export const useBlockControls = ({
   onAddBlock,
   onRemoveBlock,
   onMoveBlockUp,
-  onMoveBlockDown,
-  getElementIndex,
-  queryDOMElements,
-  getBlockContainer
+  onMoveBlockDown
 }: UseBlockControlsParams) => {
   const { styles } = useBlockEditableStyles()
 
@@ -59,19 +53,13 @@ export const useBlockControls = ({
     element.className = styles.plusElement
   }, [styles.plusElement])
 
-  const refreshControls = useCallback((element: HTMLElement, limitReached: boolean) => {
-    const elementIndex = getElementIndex(element)
-    const elements = queryDOMElements()
-    
+  const updateControls = useCallback((element: HTMLElement, limitReached: boolean) => {
     // Look for existing buttons container or create one
     let buttonsContainer = element.querySelector('.pimcore_block_buttons') as HTMLElement
     
     if (!buttonsContainer) {
-      // Create a new buttons container and insert it at the beginning of the block entry
       buttonsContainer = document.createElement('div')
       buttonsContainer.className = 'pimcore_block_buttons'
-      
-      // Insert the buttons container as the first child of the block entry
       element.insertBefore(buttonsContainer, element.firstChild)
     }
     
@@ -83,7 +71,6 @@ export const useBlockControls = ({
     if (amountDisplay) {
       buttonsContainer.appendChild(amountDisplay)
     } else {
-      // Create new amount display if none existed
       const newAmountDisplay = document.createElement('div')
       newAmountDisplay.className = 'pimcore_block_amount'
       buttonsContainer.appendChild(newAmountDisplay)
@@ -98,19 +85,23 @@ export const useBlockControls = ({
     const currentAmountDisplay = buttonsContainer.querySelector('.pimcore_block_amount')
     
     if (!limitReached) {
-      const plusButton = createButton('+', 'Add block entry', () => onAddBlock(element))
+      const plusButton = createButton('+', 'Add block entry', () => onAddBlock(element, 1, updateControls))
       buttonsContainer.insertBefore(plusButton, currentAmountDisplay)
     }
     
-    const minusButton = createButton('−', 'Remove block entry', () => onRemoveBlock(element))
+    const minusButton = createButton('−', 'Remove block entry', () => onRemoveBlock(element, updateControls))
     buttonsContainer.insertBefore(minusButton, currentAmountDisplay)
     
+    // Get element index and total elements for button state
+    const elements = Array.from(element.parentElement?.querySelectorAll('.pimcore_block_entry[data-name="' + editableName + '"][key]') ?? [])
+    const elementIndex = elements.indexOf(element)
+    
     const isFirst = elementIndex === 0
-    const upButton = createButton('↑', isFirst ? 'Cannot move up' : 'Move up', () => onMoveBlockUp(element), isFirst)
+    const upButton = createButton('↑', isFirst ? 'Cannot move up' : 'Move up', () => onMoveBlockUp(element, updateControls), isFirst)
     buttonsContainer.insertBefore(upButton, currentAmountDisplay)
     
     const isLast = elementIndex === elements.length - 1
-    const downButton = createButton('↓', isLast ? 'Cannot move down' : 'Move down', () => onMoveBlockDown(element), isLast)
+    const downButton = createButton('↓', isLast ? 'Cannot move down' : 'Move down', () => onMoveBlockDown(element, updateControls), isLast)
     buttonsContainer.insertBefore(downButton, currentAmountDisplay)
     
     // Update the amount display text
@@ -119,9 +110,9 @@ export const useBlockControls = ({
       htmlAmountDisplay.textContent = `${elementIndex + 1}/${elements.length}`
       applyAmountDisplayStyles(htmlAmountDisplay)
     }
-  }, [getElementIndex, queryDOMElements, onAddBlock, onRemoveBlock, onMoveBlockUp, onMoveBlockDown, applyButtonsContainerStyles, createButton, applyAmountDisplayStyles, styles.buttonsContainer])
+  }, [editableName, onAddBlock, onRemoveBlock, onMoveBlockUp, onMoveBlockDown, applyButtonsContainerStyles, createButton, applyAmountDisplayStyles, styles.buttonsContainer])
 
-  const createInitialControls = useCallback(() => {
+  const initializeControls = useCallback((getBlockContainer: () => HTMLElement | null) => {
     const container = getBlockContainer()
     if (!container) return
     
@@ -144,13 +135,13 @@ export const useBlockControls = ({
     
     applyPlusElementStyles(plusEl)
     
-    plusEl.addEventListener('click', () => onAddBlock(null))
+    plusEl.addEventListener('click', () => onAddBlock(null, 1, updateControls))
     
     container.className += ' pimcore_block_limitnotreached pimcore_block_buttons'
-  }, [getBlockContainer, editableName, onAddBlock, applyPlusElementStyles])
+  }, [editableName, onAddBlock, applyPlusElementStyles, updateControls])
 
   return {
-    refreshControls,
-    createInitialControls
+    updateControls,
+    initializeControls
   }
 }

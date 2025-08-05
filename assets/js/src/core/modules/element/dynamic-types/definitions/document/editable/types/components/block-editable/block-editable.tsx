@@ -8,13 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useCallback, useRef } from 'react'
+import React, { useEffect } from 'react'
 import { isArray } from 'lodash'
 import { DynamicEditablesRenderer } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-renderer/dynamic-editables-renderer'
 import { useBlockEditableStyles } from './block-editable.styles'
-import { useBlockDOM } from './hooks/use-block-dom'
+import { useBlockEditable } from './hooks/use-block-editable'
 import { useBlockControls } from './hooks/use-block-controls'
-import { useBlockOperations } from './hooks/use-block-operations'
 
 export interface BlockEditableConfig {
   limit?: number
@@ -49,95 +48,38 @@ export const BlockEditable = ({
 }: BlockEditableProps): React.JSX.Element => {
   const { styles } = useBlockEditableStyles()
   const currentValue = isArray(value) ? value : []
-  const refreshRef = useRef<() => void>()
 
-  // DOM manipulation hook
-  const {
-    elementsRef,
-    getBlockContainer,
-    queryDOMElements,
-    refreshElements,
-    getElementIndex,
-    getNextKey,
-    getValue
-  } = useBlockDOM({ editableName, containerRef })
-
-  // Block operations hook
+  // Central hook for all block logic
   const {
     dynamicEditables,
+    refresh,
     addBlock,
     removeBlock,
     moveBlockUp,
-    moveBlockDown
-  } = useBlockOperations({
+    moveBlockDown,
+    getBlockContainer
+  } = useBlockEditable({
+    value: currentValue,
+    onChange,
     config,
     editableName,
-    disabled,
-    onChange,
-    getBlockContainer,
-    queryDOMElements,
-    getElementIndex,
-    getNextKey,
-    getValue,
-    refreshElements,
-    elementsRef,
-    refreshRef
+    containerRef,
+    disabled
   })
 
-  // Block controls hook
-  const {
-    refreshControls,
-    createInitialControls
-  } = useBlockControls({
+  // Simplified controls hook for UI manipulation
+  const { initializeControls, updateControls } = useBlockControls({
     editableName,
     onAddBlock: addBlock,
     onRemoveBlock: removeBlock,
     onMoveBlockUp: moveBlockUp,
-    onMoveBlockDown: moveBlockDown,
-    getElementIndex,
-    queryDOMElements,
-    getBlockContainer
+    onMoveBlockDown: moveBlockDown
   })
-
-  const refresh = useCallback(() => {
-    const elements = queryDOMElements()
-    const container = getBlockContainer()
-    if (!container) return
-    
-    let limitReached = false
-    if (config?.limit && elements.length >= config.limit) {
-      limitReached = true
-    }
-    
-    if (elements.length < 1) {
-      createInitialControls()
-    } else {
-      container.classList.remove('pimcore_block_buttons')
-      
-      for (let i = 0; i < elements.length; i++) {
-        const element = elements[i]
-        if (!element.getAttribute('key')) {
-          element.setAttribute('key', element.getAttribute('key') ?? '0')
-        }
-        refreshControls(element, limitReached)
-      }
-    }
-  }, [queryDOMElements, getBlockContainer, config?.limit, createInitialControls, refreshControls])
-
-  // Set the refresh function reference
-  refreshRef.current = refresh
 
   // Initialize and refresh on value changes
   useEffect(() => {
-    // Initialize value array from DOM on first load
-    refreshElements()
-    
-    const timer = setTimeout(() => {
-      refresh()
-    }, 100)
-    
-    return () => clearTimeout(timer)
-  }, [currentValue, refreshElements, refresh])
+    refresh(() => initializeControls(getBlockContainer), updateControls)
+  }, [currentValue, refresh, initializeControls, updateControls, getBlockContainer])
 
   return (
     <div className={`${styles.blockContainer} ${className ?? ''}`}>
