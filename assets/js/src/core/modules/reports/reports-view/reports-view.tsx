@@ -8,8 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useState } from 'react'
-import { isEmpty, isNull, isUndefined } from 'lodash'
+import React, { useMemo, useState } from 'react'
+import { isEmpty, isUndefined } from 'lodash'
 import cn from 'classnames'
 import { type DefaultOptionType } from 'antd/es/select'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
@@ -17,33 +17,16 @@ import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-re
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
 import { ReportDataProvider } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
 import { ReportViewContent } from '@Pimcore/modules/reports/reports-view/components/report-view-content/report-view-content'
 import { useStyles } from './reports-view.styles'
 
-const PAGE_INITIAL = 1
-const PAGE_SIZE_INITIAL = 50
-
 export const ReportsView = (): React.JSX.Element => {
   const [currentReport, setCurrentReport] = useState<string | null>(null)
-
-  const [page, setPage] = useState(PAGE_INITIAL)
-  const [pageSize, setPageSize] = useState(PAGE_SIZE_INITIAL)
-
-  const { resetFilters } = useGridFilterContext()
 
   const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page: 1, pageSize: 9999 })
 
   const { styles } = useStyles()
-
-  useEffect(() => {
-    if (!isNull(currentReport)) {
-      setPage(PAGE_INITIAL)
-      setPageSize(PAGE_SIZE_INITIAL)
-      resetFilters()
-    }
-  }, [currentReport])
 
   const renderOptionLabel = (iconClass: string, value: any): React.JSX.Element => (
     <Flex
@@ -107,19 +90,11 @@ export const ReportsView = (): React.JSX.Element => {
 
   return (
     <Content loading={ isLoadingReportsTree }>
-      <ReportDataProvider
-        name={ currentReport ?? '' }
-        page={ page }
-        pageSize={ pageSize }
-      >
+      <ReportDataProvider name={ currentReport ?? '' }>
         <ReportViewContent
           currentReport={ currentReport }
-          page={ page }
-          pageSize={ pageSize }
           reportsTreeOptions={ reportsTreeOptions }
           setCurrentReport={ setCurrentReport }
-          setPage={ setPage }
-          setPageSize={ setPageSize }
         />
       </ReportDataProvider>
     </Content>
