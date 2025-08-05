@@ -13,6 +13,8 @@ import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropd
 import { useNumberedList } from '@Pimcore/components/form/numbered-list/provider/numbered-list/use-numbered-list'
 import { type DynamicTypePipelineRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-registry'
 import React from 'react'
+import { usePipelineConfig } from '../../provider/pipeline-config/use-pipeline-config'
+import { type DynamicTypePipelineAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-abstract'
 
 export interface DynamicGroupDropdownProps {
   children: React.ReactNode
@@ -22,8 +24,13 @@ export interface DynamicGroupDropdownProps {
 export const DynamicGroupDropdown = ({ children, dynamicTypeRegistryId }: DynamicGroupDropdownProps): React.JSX.Element => {
   const registry = useInjection<DynamicTypePipelineRegistry>(dynamicTypeRegistryId)
   const { operations } = useNumberedList()
+  const { config } = usePipelineConfig()
 
-  const items: DropdownProps['menu']['items'] = registry.getDynamicTypes().map((dynamicType) => ({
+  const availableDynamicTypes: DynamicTypePipelineAbstract[] = registry.getDynamicTypes().filter((dynamicType) => {
+    return dynamicType.isAvailableForSelection(config)
+  })
+
+  const items: DropdownProps['menu']['items'] = availableDynamicTypes.map((dynamicType) => ({
     key: dynamicType.id,
     label: dynamicType.id,
     onClick: () => {

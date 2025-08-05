@@ -126,6 +126,19 @@ grid.configuration.delete-template-confirmation: Are you sure that you want to d
 grid.configuration.save-template-configuration: Save configuration as template
 grid.configuration.set-default-template: Set as default template
 grid.configuration.shared: Shared
+grid.advanced-column.title.placeholder: Add a title
+grid.advanced-column.advancedColumns: Source field
+grid.advanced-column.advancedColumns.add: Add a Source field
+grid.advanced-column.transformers: Transformers
+grid.advanced-column.transformers.add: Add a Transformer
+grid.advanced-column.preview: Preview
+grid.advanced-column.no-preview: No preview item available
+grid.advanced-column.no-preview-data: No preview data available
+grid.advanced-column.advancedColumns.simpleField: Simple Field
+grid.advanced-column.advancedColumns.relationField: Relation Field
+grid.advanced-column.advancedColumns.staticText: Static text
+grid.advanced-column.advancedColumns.caseChange: Case Change
+grid.advanced-column.advancedColumns.combine: Combine
 component.workflow-card.action-btn: Workflow Actions
 component.pql.description: Pimcore Query Language (PQL) is a simple yet powerful query language that lets you search data using various criteria, including filtering values in related elements, to enable precise and comprehensive data retrieval. For details see <anchorPQL>PQL Documentation</anchorPQL>
 asset.asset-editor-tabs.embedded-metadata.headline: Meta Info

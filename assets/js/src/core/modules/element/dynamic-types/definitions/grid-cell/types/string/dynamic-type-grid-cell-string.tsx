@@ -9,16 +9,9 @@
  */
 
 import { injectable } from 'inversify'
-import { type DynamicTypeAbstract } from '../../registry/dynamic-type-registry-abstract'
-import { type ReactElement } from 'react'
+import { DynamicTypeGridCellText } from '../text/dynamic-type-grid-cell-text'
 
 @injectable()
-export abstract class DynamicTypePipelineAbstract implements DynamicTypeAbstract {
-  abstract readonly id: string
-
-  abstract getComponent (): ReactElement
-
-  isAvailableForSelection (config: Record<string, any>): boolean {
-    return true
-  }
+export class DynamicTypeGridCellString extends DynamicTypeGridCellText {
+  readonly id = 'string'
 }
