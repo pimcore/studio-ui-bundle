@@ -37,7 +37,6 @@ const languageCountryMapping: Record<string, string> = {
   br: 'fr',
   brx: 'in',
   bs: 'ba',
-  ca: 'es',
   cs: 'cz',
   da: 'dk',
   de: 'de',
@@ -135,30 +134,66 @@ const importFlag = async (flagCode: string): Promise<React.ReactElement | null> 
   }
 }
 
-const resolveLanguageFlag = async (languageCode: string): Promise<string> => {
-  const normalizedCode = languageCode.toLowerCase().replace('_', '-')
+const importLanguageFlag = async (flagCode: string): Promise<React.ReactElement | null> => {
+  try {
+    const module = await import(`@Pimcore/assets/images/flags/languages/${flagCode}.inline.svg?react`)
+    return module.default !== undefined ? module.default : module
+  } catch {
+    return null
+  }
+}
 
+const flagExistenceCache: Record<string, boolean> = {}
+const languageFlagExistenceCache: Record<string, boolean> = {}
+
+const checkFlagExists = async (flagCode: string): Promise<boolean> => {
+  if (flagExistenceCache[flagCode] !== undefined) {
+    return flagExistenceCache[flagCode]
+  }
+
+  const exists = await importFlag(flagCode) !== null
+  flagExistenceCache[flagCode] = exists
+  return exists
+}
+
+const checkLanguageFlagExists = async (flagCode: string): Promise<boolean> => {
+  if (languageFlagExistenceCache[flagCode] !== undefined) {
+    return languageFlagExistenceCache[flagCode]
+  }
+
+  const exists = await importLanguageFlag(flagCode) !== null
+  languageFlagExistenceCache[flagCode] = exists
+  return exists
+}
+
+const resolveLanguageFlag = async (languageCode: string): Promise<{ flagCode: string, isLanguageFlag: boolean }> => {
+  const normalizedCode = languageCode.toLowerCase().replace('_', '-')
   const parts = normalizedCode.split('-')
   const languageOnly = parts[0]
   const countryCode = parts.length > 1 ? parts[parts.length - 1] : null
 
   if (languageCountryMapping[normalizedCode]) {
-    return languageCountryMapping[normalizedCode]
+    return { flagCode: languageCountryMapping[normalizedCode], isLanguageFlag: false }
   }
 
-  if (languageCountryMapping[languageOnly]) {
-    return languageCountryMapping[languageOnly]
+  if (await checkLanguageFlagExists(normalizedCode)) {
+    return { flagCode: normalizedCode, isLanguageFlag: true }
   }
 
-  if (countryCode && countryCode !== languageOnly) {
-    try {
-      await importFlag(countryCode)
-      return countryCode
-    } catch {
+  if (countryCode && countryCode !== languageOnly && await checkFlagExists(countryCode)) {
+    return { flagCode: countryCode, isLanguageFlag: false }
+  }
+
+  if (languageOnly !== normalizedCode) {
+    if (languageCountryMapping[languageOnly]) {
+      return { flagCode: languageCountryMapping[languageOnly], isLanguageFlag: false }
+    }
+    if (await checkLanguageFlagExists(languageOnly)) {
+      return { flagCode: languageOnly, isLanguageFlag: true }
     }
   }
 
-  return '_unknown'
+  return { flagCode: '_unknown', isLanguageFlag: false }
 }
 
 const flagCache: Record<string, React.ReactElement | null> = {}
@@ -182,8 +217,10 @@ export const FlagIcon = ({ value, width = 21, height = 15 }: IFlagIconProps): Re
 
     const loadFlag = async (): Promise<void> => {
       try {
-        const flagCode = await resolveLanguageFlag(value)
-        const component = await importFlag(flagCode)
+        const { flagCode, isLanguageFlag } = await resolveLanguageFlag(value)
+        const component = isLanguageFlag
+          ? await importLanguageFlag(flagCode)
+          : await importFlag(flagCode)
 
         flagCache[value] = component
         setFlag(component)
