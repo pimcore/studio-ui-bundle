@@ -203,12 +203,8 @@ export type BundleCustomReportsColumnConfiguration = {
     order?: boolean;
     /** Label/display name of column */
     label?: string;
-    /** Action of the column */
-    action?: string;
     /** Id */
     id?: string;
-    /** Width of the column */
-    width?: number | null;
     /** Display type of the column */
     displayType?: string | null;
     /** Type of the filter */
