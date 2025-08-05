@@ -76,7 +76,7 @@ export const RedirectsToolbar = ({
       } else {
         trackError(new GeneralError('Export failed: No blob data received'))
       }
-    } catch (error) {
+    } catch {
       trackError(new GeneralError('Failed to export redirects'))
     } finally {
       setExportLoading(false)

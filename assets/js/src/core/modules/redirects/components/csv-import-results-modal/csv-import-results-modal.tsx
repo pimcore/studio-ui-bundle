@@ -88,7 +88,7 @@ export const CsvImportResultsModal = ({
                   {t('redirects.csv-import-results.line', { line: lineNumber })}:
                 </span>
                   <span className="error-message">
-                    {String(errorMessage)}
+                    {typeof errorMessage === 'string' ? errorMessage : JSON.stringify(errorMessage)}
                   </span>
                 </Flex>
               ))}
