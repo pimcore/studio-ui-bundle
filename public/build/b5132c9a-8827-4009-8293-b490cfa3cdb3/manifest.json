@@ -1,0 +1,35 @@
+{
+  "allFiles": [
+    "/bundles/pimcorestudioui/build/b5132c9a-8827-4009-8293-b490cfa3cdb3/static/js/documentEditorIframe.209209ed.js",
+    "/bundles/pimcorestudioui/build/b5132c9a-8827-4009-8293-b490cfa3cdb3/static/js/main.4a162fb1.js",
+    "/bundles/pimcorestudioui/build/b5132c9a-8827-4009-8293-b490cfa3cdb3/static/js/772.a5df2f14.js",
+    "/bundles/pimcorestudioui/build/b5132c9a-8827-4009-8293-b490cfa3cdb3/mf-stats.json",
+    "/bundles/pimcorestudioui/build/b5132c9a-8827-4009-8293-b490cfa3cdb3/mf-manifest.json",
+    "/bundles/pimcorestudioui/build/b5132c9a-8827-4009-8293-b490cfa3cdb3/documentEditorIframe.html",
+    "/bundles/pimcorestudioui/build/b5132c9a-8827-4009-8293-b490cfa3cdb3/main.html"
+  ],
+  "entries": {
+    "documentEditorIframe": {
+      "html": [
+        "/bundles/pimcorestudioui/build/b5132c9a-8827-4009-8293-b490cfa3cdb3/documentEditorIframe.html"
+      ],
+      "initial": {
+        "js": [
+          "/bundles/pimcorestudioui/build/b5132c9a-8827-4009-8293-b490cfa3cdb3/static/js/772.a5df2f14.js",
+          "/bundles/pimcorestudioui/build/b5132c9a-8827-4009-8293-b490cfa3cdb3/static/js/documentEditorIframe.209209ed.js"
+        ]
+      }
+    },
+    "main": {
+      "html": [
+        "/bundles/pimcorestudioui/build/b5132c9a-8827-4009-8293-b490cfa3cdb3/main.html"
+      ],
+      "initial": {
+        "js": [
+          "/bundles/pimcorestudioui/build/b5132c9a-8827-4009-8293-b490cfa3cdb3/static/js/772.a5df2f14.js",
+          "/bundles/pimcorestudioui/build/b5132c9a-8827-4009-8293-b490cfa3cdb3/static/js/main.4a162fb1.js"
+        ]
+      }
+    }
+  }
+}
