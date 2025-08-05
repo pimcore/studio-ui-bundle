@@ -60,7 +60,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
   const reload = (): void => {
     dispatch(api.util.invalidateTags(invalidatingTags.REDIRECTS()))
   }
-  console.log('redirects', redirectRows)
+
   const handleCreateRedirect = async (redirectData?: { type: string, source: string, target: string }): Promise<boolean> => {
     const tempId = uuid()
     const optimisticRedirect: RedirectRow = {
