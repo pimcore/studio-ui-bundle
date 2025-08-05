@@ -21,7 +21,7 @@ import { isEmpty, isNil } from 'lodash'
 import React, { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
-import { type DocType, useDocumentDocTypeListQuery, useDocumentAddMutation } from '../../document-api-slice.gen'
+import { type DocType, type DocumentDocTypeListApiResponse, useDocumentDocTypeListQuery, useDocumentAddMutation } from '../../document-api-slice.gen'
 import { App } from 'antd'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
@@ -34,7 +34,11 @@ interface UseAddPageHookReturn {
 
 export const useAddPage = (): UseAddPageHookReturn => {
   const { t } = useTranslation()
-  const { data: documentTypes, isLoading, error } = useDocumentDocTypeListQuery({})
+  const { data: documentTypes, isLoading, error } = useDocumentDocTypeListQuery({}) as {
+    data: DocumentDocTypeListApiResponse | undefined
+    isLoading: boolean
+    error: any
+  }
   const { openDocument } = useDocumentHelper()
   const [addDocumentMutation] = useDocumentAddMutation()
   const dispatch = useAppDispatch()
@@ -46,11 +50,11 @@ export const useAddPage = (): UseAddPageHookReturn => {
   const getDocumentEntries = (node: TreeNodeProps): ItemType[] => {
     let documentHierarchy: ItemType[] = []
 
-    if (isLoading || error !== null || !documentTypes?.items || isEmpty(documentTypes?.items)) {
+    if (isLoading || error !== null || documentTypes === undefined || documentTypes === null || isEmpty(documentTypes?.items)) {
       return documentHierarchy // Return empty if loading or error occurs
     }
 
-    const structuredDocumentTypes = [...(documentTypes.items as DocType[])]
+    const structuredDocumentTypes = [...(documentTypes.items)]
       .sort((a, b) => a.name.localeCompare(b.name))
       .reduce<Record<string, DocType[]>>((acc, docType) => {
       const groupName = isNil(docType.group) || isEmpty(docType.group) ? 'undefined' : docType.group
@@ -157,6 +161,7 @@ export const useAddPage = (): UseAddPageHookReturn => {
         })
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     modal.confirm({
       icon: null,
       title: t('document.add-page', { docTypeName: docType.name }),
