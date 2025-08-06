@@ -19,6 +19,9 @@ import { useAppDispatch } from '@Pimcore/app/store'
 import { api } from '@Pimcore/modules/document/document-api-slice.gen'
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { isNil } from 'lodash'
+import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
+import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
+
 export interface UseOpenInNewWindowHookReturn {
   openInNewWindow: (documentId: number, onFinish?: () => void) => Promise<void>
   openInNewWindowTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -29,6 +32,7 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
   const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const dispatch = useAppDispatch()
+  const { isTreeActionAllowed } = useTreePermission()
 
   const openInNewWindow = async (
     documentId: number,
@@ -78,7 +82,7 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
       label: t('document.open-in-new-window'),
       key: ContextMenuActionName.openInNewWindow,
       icon: <Icon value={ 'share' } />,
-      hidden: isContextMenuEntryHidden(node),
+      hidden: isContextMenuEntryHidden(node) || !isTreeActionAllowed(TreePermission.Open),
       onClick: async () => {
         await openInNewWindow(parseInt(node.id))
       }
