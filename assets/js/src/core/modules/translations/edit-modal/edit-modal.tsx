@@ -99,12 +99,12 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
   const handleRestore = (): void => {
     console.log('Restore clicked - before:', { isRestored, showOnlyHtmlTab })
     setIsRestored(true)
-    
+
     // Create a temporary DOM element to properly decode HTML entities and strip tags
     const tempDiv = document.createElement('div')
     tempDiv.innerHTML = currentFormValue
-    const plainTextValue = tempDiv.textContent || tempDiv.innerText || ''
-    
+    const plainTextValue = tempDiv.textContent ?? tempDiv.innerText ?? ''
+
     form.setFieldsValue({
       translation: plainTextValue.trim()
     })
@@ -145,7 +145,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
 
   return (
     <Modal
-      footer={ 
+      footer={
         <ModalFooter>
           <Flex
             justify="space-between"
@@ -195,7 +195,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
           activeKey={ defaultActiveKey }
           destroyInactiveTabPane
           items={ visibleTabItems }
-          onChange={ (key) => setActiveTabKey(key) }
+          onChange={ (key) => { setActiveTabKey(key) } }
         />
       </Form>
     </Modal>

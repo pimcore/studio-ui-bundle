@@ -50,15 +50,16 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
 
   function getCellContent (): React.JSX.Element {
     const cellValue = props.getValue()
-    const shouldRenderHtml = htmlDetection === true && isHtmlContent(cellValue)
+    const cellValueString = typeof cellValue === 'string' ? cellValue : String(cellValue ?? '')
+    const shouldRenderHtml = htmlDetection && isHtmlContent(cellValueString)
 
     if (!isInEditMode) {
       if (shouldRenderHtml) {
         return (
-          <div dangerouslySetInnerHTML={{ __html: cellValue }} />
+          <div dangerouslySetInnerHTML={ { __html: cellValueString } } />
         )
       }
-      
+
       return (
         <>
           { cellValue }
