@@ -44,18 +44,25 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
   const currentValue = translationRow?.[`_${locale}`] ?? ''
   const [isRestored, setIsRestored] = useState<boolean>(false)
   const [activeTabKey, setActiveTabKey] = useState<string>('plain-text')
+  const [currentFormValue, setCurrentFormValue] = useState<string>('')
 
   const originalContentIsHtml = useMemo(() => {
     return isHtmlContent(currentValue)
   }, [currentValue])
 
+  const currentFormValueIsHtml = useMemo(() => {
+    return isHtmlContent(currentFormValue)
+  }, [currentFormValue])
+
   const showOnlyHtmlTab = originalContentIsHtml && !isRestored
+  const showRestoreButton = originalContentIsHtml || currentFormValueIsHtml
 
   useEffect(() => {
     if (translationRow !== null && props.open) {
       form.setFieldsValue({
         translation: currentValue
       })
+      setCurrentFormValue(currentValue)
       setIsRestored(false)
       setActiveTabKey(showOnlyHtmlTab ? 'html' : 'plain-text')
     }
@@ -92,10 +99,16 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
   const handleRestore = (): void => {
     console.log('Restore clicked - before:', { isRestored, showOnlyHtmlTab })
     setIsRestored(true)
-    const plainTextValue = currentValue.replace(/<[^>]*>/g, '').trim()
+    
+    // Create a temporary DOM element to properly decode HTML entities and strip tags
+    const tempDiv = document.createElement('div')
+    tempDiv.innerHTML = currentFormValue
+    const plainTextValue = tempDiv.textContent || tempDiv.innerText || ''
+    
     form.setFieldsValue({
-      translation: plainTextValue
+      translation: plainTextValue.trim()
     })
+    setCurrentFormValue(plainTextValue.trim())
     // Switch to plain text tab after restore
     setActiveTabKey('plain-text')
     console.log('Restore clicked - after setIsRestored(true)')
@@ -139,7 +152,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
             style={ { width: '100%' } }
           >
             <div>
-              {showOnlyHtmlTab && (
+              {showRestoreButton && (
                 <Button
                   onClick={ handleRestore }
                   type="default"
@@ -174,6 +187,9 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
       <Form
         form={ form }
         onFinish={ onFinish }
+        onValuesChange={ (_, allValues) => {
+          setCurrentFormValue(allValues.translation ?? '')
+        } }
       >
         <Tabs
           activeKey={ defaultActiveKey }
