@@ -18,6 +18,7 @@ import { useTranslation as useTranslationHook } from '../hooks/use-translation'
 import type { TranslationRow } from '../helpers/translation-helpers'
 import { TranslationHtmlPreview } from '../components/translation-text-preview/translation-html-preview'
 import { useTranslationDomain } from '../hooks/translation-domain-provider'
+import { isHtmlContent } from '@Pimcore/utils/html-detection'
 
 interface EditModalProps {
   translationRow: TranslationRow | null
@@ -38,6 +39,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
   const { updateTranslationByKey } = useTranslationHook()
   const { domain } = useTranslationDomain()
   const currentValue = translationRow?.[`_${locale}`] ?? ''
+  const isHtml = isHtmlContent(currentValue)
 
   useEffect(() => {
     if (translationRow !== null && props.open) {
@@ -67,28 +69,41 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
     setIsLoading(false)
   }
 
-  const tabItems = [
-    {
-      label: t('translations.edit-modal.tab.plain-text'),
-      key: 'plain-text',
-      children: (
-        <Form.Item name="translation">
-          <TextArea
-            rows={ 3 }
-          />
-        </Form.Item>
-      )
-    },
-    {
-      label: t('translations.edit-modal.tab.html'),
-      key: 'html',
-      children: (
-        <Form.Item name="translation">
-          <TranslationHtmlPreview />
-        </Form.Item>
-      )
-    }
-  ]
+  // If content contains HTML, only show HTML editor tab
+  const tabItems = isHtml
+    ? [
+        {
+          label: t('translations.edit-modal.tab.html'),
+          key: 'html',
+          children: (
+            <Form.Item name="translation">
+              <TranslationHtmlPreview />
+            </Form.Item>
+          )
+        }
+      ]
+    : [
+        {
+          label: t('translations.edit-modal.tab.plain-text'),
+          key: 'plain-text',
+          children: (
+            <Form.Item name="translation">
+              <TextArea
+                rows={ 3 }
+              />
+            </Form.Item>
+          )
+        },
+        {
+          label: t('translations.edit-modal.tab.html'),
+          key: 'html',
+          children: (
+            <Form.Item name="translation">
+              <TranslationHtmlPreview />
+            </Form.Item>
+          )
+        }
+      ]
 
   return (
     <Modal
