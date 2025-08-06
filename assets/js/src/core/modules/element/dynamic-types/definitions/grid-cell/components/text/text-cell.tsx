@@ -16,6 +16,7 @@ import { IconButton, Input } from '@sdk/components'
 import { type InputRef } from 'antd'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { isHtmlContent } from '@Pimcore/utils/html-detection'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 
 export interface TextCellProps extends DefaultCellProps {}
 
@@ -56,7 +57,7 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
     if (!isInEditMode) {
       if (shouldRenderHtml) {
         return (
-          <div dangerouslySetInnerHTML={ { __html: cellValueString } } />
+          <SanitizeHtml html={ cellValueString } />
         )
       }
 

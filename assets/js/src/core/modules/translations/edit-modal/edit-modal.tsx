@@ -50,12 +50,10 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
     return isHtmlContent(currentValue)
   }, [currentValue])
 
-  const currentFormValueIsHtml = useMemo(() => {
-    return isHtmlContent(currentFormValue)
-  }, [currentFormValue])
+  const currentFormValueIsHtml = isHtmlContent(currentFormValue)
 
   const showOnlyHtmlTab = originalContentIsHtml && !isRestored
-  const showRestoreButton = originalContentIsHtml || currentFormValueIsHtml
+  const showRestoreButton = currentFormValueIsHtml
 
   useEffect(() => {
     if (translationRow !== null && props.open) {
@@ -100,7 +98,6 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
     console.log('Restore clicked - before:', { isRestored, showOnlyHtmlTab })
     setIsRestored(true)
 
-    // Create a temporary DOM element to properly decode HTML entities and strip tags
     const tempDiv = document.createElement('div')
     tempDiv.innerHTML = currentFormValue
     const plainTextValue = tempDiv.textContent ?? tempDiv.innerText ?? ''
@@ -109,7 +106,6 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
       translation: plainTextValue.trim()
     })
     setCurrentFormValue(plainTextValue.trim())
-    // Switch to plain text tab after restore
     setActiveTabKey('plain-text')
     console.log('Restore clicked - after setIsRestored(true)')
   }
