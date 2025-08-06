@@ -84,7 +84,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
     setIsLoading(false)
   }
 
-  const handleRestore = (): void => {
+  const handleRestore = async (): Promise<void> => {
     setIsRestored(true)
     const plainTextValue = currentValue.replace(/<[^>]*>/g, '').trim()
     form.setFieldsValue({
@@ -92,6 +92,25 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
     })
     // Switch to plain text tab after restore
     setActiveTabKey('plain-text')
+    
+    // Automatically save the restored value
+    if (translationRow !== null) {
+      setIsLoading(true)
+      
+      if (props.onSave !== undefined) {
+        props.onSave(plainTextValue)
+      } else {
+        const updatedRow: TranslationRow = {
+          ...translationRow,
+          [`_${locale}`]: plainTextValue
+        }
+        await updateTranslationByKey(`_${locale}`, updatedRow, domain)
+      }
+      
+      props.setOpen(false)
+      form.resetFields()
+      setIsLoading(false)
+    }
   }
 
   const tabItems = [
@@ -127,13 +146,29 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
     <Modal
       footer={ 
         <ModalFooter>
-          <Button
-            loading={ isLoading }
-            onClick={ () => { form.submit() } }
-            type="primary"
+          <Flex
+            justify="space-between"
+            style={ { width: '100%' } }
           >
-            {t('translations.edit-modal.save')}
-          </Button>
+            <div>
+              {shouldShowOnlyHtmlTab && (
+                <Button
+                  loading={ isLoading }
+                  onClick={ async () => { await handleRestore() } }
+                  type="default"
+                >
+                  {t('translations.edit-modal.restore')}
+                </Button>
+              )}
+            </div>
+            <Button
+              loading={ isLoading }
+              onClick={ () => { form.submit() } }
+              type="primary"
+            >
+              {t('translations.edit-modal.save')}
+            </Button>
+          </Flex>
         </ModalFooter>
       }
       onCancel={ () => {
@@ -160,20 +195,6 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
           onChange={ (key) => setActiveTabKey(key) }
         />
       </Form>
-
-      {isHtml && (
-        <Flex
-          justify="flex-start"
-          style={ { marginTop: 16 } }
-        >
-          <Button
-            onClick={ handleRestore }
-            type="default"
-          >
-            {t('translations.edit-modal.restore')}
-          </Button>
-        </Flex>
-      )}
     </Modal>
   )
 }
