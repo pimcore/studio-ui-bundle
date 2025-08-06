@@ -42,7 +42,6 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
   const { updateTranslationByKey } = useTranslationHook()
   const { domain } = useTranslationDomain()
   const currentValue = translationRow?.[`_${locale}`] ?? ''
-  const [isRestored, setIsRestored] = useState<boolean>(false)
   const [activeTabKey, setActiveTabKey] = useState<string>('plain-text')
   const [currentFormValue, setCurrentFormValue] = useState<string>('')
 
@@ -52,7 +51,7 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
 
   const currentFormValueIsHtml = isHtmlContent(currentFormValue)
 
-  const showOnlyHtmlTab = originalContentIsHtml && !isRestored
+  const showOnlyHtmlTab = originalContentIsHtml && currentFormValueIsHtml
   const showRestoreButton = currentFormValueIsHtml
 
   useEffect(() => {
@@ -61,18 +60,9 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
         translation: currentValue
       })
       setCurrentFormValue(currentValue)
-      setIsRestored(false)
       setActiveTabKey(showOnlyHtmlTab ? 'html' : 'plain-text')
     }
   }, [translationRow, locale, props.open, form, currentValue])
-
-  useEffect(() => {
-    if (showOnlyHtmlTab) {
-      setActiveTabKey('html')
-    } else if (isRestored) {
-      setActiveTabKey('plain-text')
-    }
-  }, [showOnlyHtmlTab, isRestored])
 
   const onFinish = async (values: EditFormValues): Promise<void> => {
     if (translationRow === null) return
@@ -95,9 +85,6 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
   }
 
   const handleRestore = (): void => {
-    console.log('Restore clicked - before:', { isRestored, showOnlyHtmlTab })
-    setIsRestored(true)
-
     const tempDiv = document.createElement('div')
     tempDiv.innerHTML = currentFormValue
     const plainTextValue = tempDiv.textContent ?? tempDiv.innerText ?? ''
@@ -107,7 +94,6 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
     })
     setCurrentFormValue(plainTextValue.trim())
     setActiveTabKey('plain-text')
-    console.log('Restore clicked - after setIsRestored(true)')
   }
 
   const tabItems = [
@@ -170,7 +156,6 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
       onCancel={ () => {
         props.setOpen(false)
         form.resetFields()
-        setIsRestored(false)
       } }
       open={ props.open }
       size="L"
