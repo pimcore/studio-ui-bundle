@@ -18,6 +18,7 @@ import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { api } from '@Pimcore/modules/document/document-api-slice.gen'
 import { type Element } from '@Pimcore/modules/element/element-helper'
+import { isNil } from 'lodash'
 export interface UseOpenInNewWindowHookReturn {
   openInNewWindow: (documentId: number, onFinish?: () => void) => Promise<void>
   openInNewWindowTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -36,8 +37,13 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
     setIsLoading(true)
     const { data } = await dispatch(api.endpoints.documentGetById.initiate({ id: documentId }))
 
-    if (data?.settingsData != null && typeof data.settingsData.url === 'string') {
-      window.open(data.settingsData.url as string)
+    // temporary type guard to check if settingsData has a url property - until the API is updated
+    function hasUrl (obj: unknown): obj is { url: string } {
+      return typeof obj === 'object' && obj !== null && 'url' in obj && typeof (obj as any).url === 'string'
+    }
+
+    if (!isNil(data?.settingsData) && hasUrl(data?.settingsData)) {
+      window.open(data.settingsData.url)
       onFinish?.()
     } else {
       console.error('Failed to fetch document data')
