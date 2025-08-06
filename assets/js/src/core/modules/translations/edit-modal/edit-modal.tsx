@@ -10,13 +10,16 @@
 
 import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
+import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
-import { Form, TextArea } from '@sdk/components'
-import React, { useState, useEffect } from 'react'
+import { Form, TextArea, Button } from '@sdk/components'
+import { Flex } from '@Pimcore/components/flex/flex'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useTranslation as useTranslationHook } from '../hooks/use-translation'
 import type { TranslationRow } from '../helpers/translation-helpers'
-import { TranslationHtmlPreview } from '../components/translation-text-preview/translation-html-preview'
+import { Wysiwyg } from '@Pimcore/modules/wysiwyg/wysiwyg'
+import { WysiwygContext } from '@Pimcore/modules/wysiwyg/interface/wysiwyg'
 import { useTranslationDomain } from '../hooks/translation-domain-provider'
 import { isHtmlContent } from '@Pimcore/utils/html-detection'
 
@@ -39,15 +42,27 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
   const { updateTranslationByKey } = useTranslationHook()
   const { domain } = useTranslationDomain()
   const currentValue = translationRow?.[`_${locale}`] ?? ''
-  const isHtml = isHtmlContent(currentValue)
+  const [isRestored, setIsRestored] = useState<boolean>(false)
+  const [activeTabKey, setActiveTabKey] = useState<string>('plain-text')
+
+  const isHtml = useMemo(() => {
+    return isHtmlContent(currentValue)
+  }, [currentValue])
+
+  const shouldShowOnlyHtmlTab = useMemo(() => {
+    return isHtml && !isRestored
+  }, [isHtml, isRestored])
 
   useEffect(() => {
     if (translationRow !== null && props.open) {
       form.setFieldsValue({
         translation: currentValue
       })
+      setIsRestored(false)
+      // Set active tab based on content when modal opens
+      setActiveTabKey(shouldShowOnlyHtmlTab ? 'html' : 'plain-text')
     }
-  }, [translationRow, locale, props.open, form, currentValue])
+  }, [translationRow, locale, props.open, form, currentValue, shouldShowOnlyHtmlTab])
 
   const onFinish = async (values: EditFormValues): Promise<void> => {
     if (translationRow === null) return
@@ -69,51 +84,63 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
     setIsLoading(false)
   }
 
-  // If content contains HTML, only show HTML editor tab
-  const tabItems = isHtml
-    ? [
-        {
-          label: t('translations.edit-modal.tab.html'),
-          key: 'html',
-          children: (
-            <Form.Item name="translation">
-              <TranslationHtmlPreview />
-            </Form.Item>
-          )
-        }
-      ]
-    : [
-        {
-          label: t('translations.edit-modal.tab.plain-text'),
-          key: 'plain-text',
-          children: (
-            <Form.Item name="translation">
-              <TextArea
-                rows={ 3 }
-              />
-            </Form.Item>
-          )
-        },
-        {
-          label: t('translations.edit-modal.tab.html'),
-          key: 'html',
-          children: (
-            <Form.Item name="translation">
-              <TranslationHtmlPreview />
-            </Form.Item>
-          )
-        }
-      ]
+  const handleRestore = (): void => {
+    setIsRestored(true)
+    const plainTextValue = currentValue.replace(/<[^>]*>/g, '').trim()
+    form.setFieldsValue({
+      translation: plainTextValue
+    })
+    // Switch to plain text tab after restore
+    setActiveTabKey('plain-text')
+  }
+
+  const tabItems = [
+    {
+      label: t('translations.edit-modal.tab.plain-text'),
+      key: 'plain-text',
+      children: (
+        <Form.Item name="translation">
+          <TextArea
+            rows={ 3 }
+          />
+        </Form.Item>
+      )
+    },
+    {
+      label: t('translations.edit-modal.tab.html'),
+      key: 'html',
+      children: (
+        <Form.Item name="translation">
+          <Wysiwyg
+            context={ WysiwygContext.TRANSLATION }
+            height={ 300 }
+          />
+        </Form.Item>
+      )
+    }
+  ]
+
+  const visibleTabItems = shouldShowOnlyHtmlTab ? [tabItems[1]] : tabItems
+  const defaultActiveKey = shouldShowOnlyHtmlTab ? 'html' : activeTabKey
 
   return (
     <Modal
-      okButtonProps={ { loading: isLoading } }
-      okText={ t('translations.edit-modal.save') }
+      footer={ 
+        <ModalFooter>
+          <Button
+            loading={ isLoading }
+            onClick={ () => { form.submit() } }
+            type="primary"
+          >
+            {t('translations.edit-modal.save')}
+          </Button>
+        </ModalFooter>
+      }
       onCancel={ () => {
         props.setOpen(false)
         form.resetFields()
+        setIsRestored(false)
       } }
-      onOk={ () => { form.submit() } }
       open={ props.open }
       size="L"
       title={ (
@@ -127,10 +154,26 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
         onFinish={ onFinish }
       >
         <Tabs
+          activeKey={ defaultActiveKey }
           destroyInactiveTabPane
-          items={ tabItems }
+          items={ visibleTabItems }
+          onChange={ (key) => setActiveTabKey(key) }
         />
       </Form>
+
+      {isHtml && (
+        <Flex
+          justify="flex-start"
+          style={ { marginTop: 16 } }
+        >
+          <Button
+            onClick={ handleRestore }
+            type="default"
+          >
+            {t('translations.edit-modal.restore')}
+          </Button>
+        </Flex>
+      )}
     </Modal>
   )
 }
