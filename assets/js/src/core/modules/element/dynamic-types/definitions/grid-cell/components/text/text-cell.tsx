@@ -15,7 +15,7 @@ import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { IconButton, Input } from '@sdk/components'
 import { type InputRef } from 'antd'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { isHtmlContent } from '@Pimcore/utils/html-detection'
+import { isHtmlContent } from '@Pimcore/utils/html'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 
 export interface TextCellProps extends DefaultCellProps {}
