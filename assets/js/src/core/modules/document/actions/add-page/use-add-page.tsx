@@ -17,8 +17,8 @@ import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-h
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
-import { isEmpty, isNil } from 'lodash'
-import React, { useEffect, useRef } from 'react'
+import { isEmpty, isNil, isUndefined } from 'lodash'
+import React, { type ReactNode, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { type DocType, type DocumentDocTypeListApiResponse, useDocumentDocTypeListQuery, useDocumentAddMutation } from '../../document-api-slice.gen'
@@ -27,6 +27,7 @@ import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
 import { type InputRef, type FormInstance } from 'antd'
 import { useDocumentHelper } from '../../hooks/use-document-helper'
+import { Spin } from '@Pimcore/components/spin/spin'
 
 interface UseAddPageHookReturn {
   addPageTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -34,11 +35,7 @@ interface UseAddPageHookReturn {
 
 export const useAddPage = (): UseAddPageHookReturn => {
   const { t } = useTranslation()
-  const { data: documentTypes, isLoading, error } = useDocumentDocTypeListQuery({}) as {
-    data: DocumentDocTypeListApiResponse | undefined
-    isLoading: boolean
-    error: any
-  }
+  const { data: documentTypes, isLoading, error } = useDocumentDocTypeListQuery({ })
   const { openDocument } = useDocumentHelper()
   const [addDocumentMutation] = useDocumentAddMutation()
   const dispatch = useAppDispatch()
@@ -50,7 +47,13 @@ export const useAddPage = (): UseAddPageHookReturn => {
   const getDocumentEntries = (node: TreeNodeProps): ItemType[] => {
     let documentHierarchy: ItemType[] = []
 
-    if (isLoading || error !== null || documentTypes === undefined || documentTypes === null || isEmpty(documentTypes?.items)) {
+    if (isLoading) {
+      return [{
+        key: 'add-page-loading',
+        type: 'custom',
+        component: (<Spin type="classic" />)
+      }]
+    } else if (!isUndefined(error) || isNil(documentTypes) || isEmpty(documentTypes.items)) {
       return documentHierarchy // Return empty if loading or error occurs
     }
 
