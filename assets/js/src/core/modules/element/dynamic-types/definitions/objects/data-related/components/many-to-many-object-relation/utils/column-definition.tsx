@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import React from 'react'
 import {
   type VisibleFieldDefinition
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/many-to-many-object-relation'
@@ -18,10 +19,25 @@ import type {
 import {
   getElementCellConfig
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/utils/helpers'
+import { Flex } from 'antd'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
+import { LoadingOutlined } from '@ant-design/icons'
 
-export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: Record<string, VisibleFieldDefinition>, disabled?: boolean): Array<ColumnDef<any>> => {
+export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: Record<string, VisibleFieldDefinition>, disabled: boolean, pathFormatterClass: string): Array<ColumnDef<any>> => {
   const columnDefinition: Array<ColumnDef<any>> = []
   const columnHelper = createColumnHelper()
+
+  const renderFullPathCell = (info: any): React.JSX.Element => {
+    return (
+      <Flex
+        align={ 'center' }
+        className={ 'p-mini' }
+      >
+        <SanitizeHtml html={ info.getValue() ?? '' } />
+        {info.row.original.loading !== false ? (<LoadingOutlined style={ { marginLeft: 8 } } />) : null}
+      </Flex>
+    )
+  }
 
   for (const key in visibleFieldDefinitions) {
     const field = visibleFieldDefinitions[key]
@@ -36,7 +52,8 @@ export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: Record
               config: getElementCellConfig(disabled)
             }
           : undefined,
-        size: getColumnWidth(key)
+        size: getColumnWidth(key),
+        ...(pathFormatterClass !== '' ? { cell: renderFullPathCell } : {})
       })
     )
   }

@@ -1,0 +1,2 @@
+/*! For license information please see __federation_expose_default_export.b3f494c2.js.LICENSE.txt */
+"use strict";(self.webpackChunkpimcore_studio_ui_bundle=self.webpackChunkpimcore_studio_ui_bundle||[]).push([["1249"],{94778:function(e,i,o){o.r(i),o.d(i,{Pimcore:()=>c,container:()=>n}),void 0!==(e=o.hmd(e)).hot&&e.hot.accept();let c=window.Pimcore,n=window.Pimcore.container}}]);
