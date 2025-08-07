@@ -1,9 +1,9 @@
 import { useStudioModal } from "@Pimcore/components/modal/hooks/use-studio-modal"
 import React from "react"
 import { SendTestMailForm, TestEmailFormValues } from "../component/send-test-mail-form/send-test-mail-form"
-import { ConfigUpdate } from "@Pimcore/components/modal/form-modal/hooks/use-form-modal"
 import { Form } from "@Pimcore/components/form/form"
 import { FormInstance, ModalFuncProps } from "antd"
+import { ConfigUpdate } from "@Pimcore/components/modal/form-modal/hooks/use-form-modal"
 
 let form: FormInstance<any> | null = null
 
@@ -46,8 +46,8 @@ const withSendTestMailForm = (props: SendTestMailModal): ModalFuncProps => {
           resolve(values)
         })
         .catch(() => {
+          console.log('error - invalid form')
           reject(new Error('Invalid form'))
-          //onSetModalLoading?.(false)
         })
     })
   }
@@ -64,11 +64,8 @@ const withSendTestMailForm = (props: SendTestMailModal): ModalFuncProps => {
       await submit()
     },
     modalRender: (node) => {
-      /*if (textareaRef.current !== null) {
-        textareaRef.current.focus()
-      }*/
       return node
     },
-    content: <SendTestMailForm initalValues={formValues} />
+    content: <SendTestMailForm initalValues={formValues} form={form!} />
   }
 }

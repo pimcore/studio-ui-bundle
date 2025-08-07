@@ -18,7 +18,7 @@ import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal
 
 let form: FormInstance<any> | null = null
 
-type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)
+export type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)
 
 export type InputFormModalProps = Omit<ModalFuncProps, 'content'> & {
   label?: string
@@ -43,7 +43,7 @@ export interface UseFormModalHookResponse {
   upload: (props: UploadFormProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
 }
 
-export function useFormModal (): UseFormModalHookResponse {
+export function useFormModal(): UseFormModalHookResponse {
   const { modal, localModal } = useStudioModal()
 
   const [tmpForm] = Form.useForm()
@@ -76,7 +76,7 @@ interface InputFormProps {
   fieldName: string
 }
 
-export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetModalLoading): ModalFuncProps {
+export function withInput(props: InputFormModalProps, onKeyBoardSubmit, onSetModalLoading): ModalFuncProps {
   const inputRef = React.createRef<InputRef>()
   const uuid = pimcoreUUid()
   const fieldName = `input-${uuid}`
@@ -109,20 +109,20 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetMo
     })
   }
 
-  const InputForm = forwardRef(function InputForm (props: InputFormProps, ref: RefObject<InputRef>): React.JSX.Element {
+  const InputForm = forwardRef(function InputForm(props: InputFormProps, ref: RefObject<InputRef>): React.JSX.Element {
     return (
       <Form
-        form={ props.form }
-        initialValues={ props.initialValues }
-        layout={ 'vertical' }
-        onSubmitCapture={ async () => { await submit(props.fieldName) } }
+        form={props.form}
+        initialValues={props.initialValues}
+        layout={'vertical'}
+        onSubmitCapture={async () => { await submit(props.fieldName) }}
       >
         <Form.Item
-          label={ label }
-          name={ props.fieldName }
-          rules={ formattedRule }
+          label={label}
+          name={props.fieldName}
+          rules={formattedRule}
         >
-          <Input ref={ ref } />
+          <Input ref={ref} />
         </Form.Item>
       </Form>
     )
@@ -142,12 +142,12 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetMo
       return node
     },
     content: <InputForm
-      fieldName={ fieldName }
-      form={ form! }
-      initialValues={ { [fieldName]: initialValue } }
-      key={ 'input-form' }
-      ref={ inputRef }
-             />
+      fieldName={fieldName}
+      form={form!}
+      initialValues={{ [fieldName]: initialValue }}
+      key={'input-form'}
+      ref={inputRef}
+    />
   }
 }
 
@@ -158,7 +158,7 @@ interface TextareaFormProps {
   placeholder?: string
 }
 
-export function withTextarea (props: TextareaFormModalProps): ModalFuncProps {
+export function withTextarea(props: TextareaFormModalProps): ModalFuncProps {
   const textareaRef = React.createRef<InputRef>()
   const uuid = pimcoreUUid()
   const fieldName = `textarea-${uuid}`
@@ -168,21 +168,21 @@ export function withTextarea (props: TextareaFormModalProps): ModalFuncProps {
     ...modalProps
   } = props
 
-  const TextareaForm = forwardRef(function InputForm (props: TextareaFormProps, ref: RefObject<InputRef>): React.JSX.Element {
+  const TextareaForm = forwardRef(function InputForm(props: TextareaFormProps, ref: RefObject<InputRef>): React.JSX.Element {
     return (
       <Form
-        form={ props.form }
-        initialValues={ props.initialValues }
-        layout={ 'vertical' }
+        form={props.form}
+        initialValues={props.initialValues}
+        layout={'vertical'}
       >
         <Form.Item
-          label={ label }
-          name={ props.fieldName }
+          label={label}
+          name={props.fieldName}
         >
           <Input.TextArea
-            autoSize={ { minRows: 10, maxRows: 20 } }
-            placeholder={ props.placeholder }
-            ref={ ref }
+            autoSize={{ minRows: 10, maxRows: 20 }}
+            placeholder={props.placeholder}
+            ref={ref}
           />
         </Form.Item>
       </Form>
@@ -205,17 +205,17 @@ export function withTextarea (props: TextareaFormModalProps): ModalFuncProps {
       return node
     },
     content: <TextareaForm
-      fieldName={ fieldName }
-      form={ form! }
-      initialValues={ { [fieldName]: initialValue } }
-      key={ 'textarea-form' }
-      placeholder={ props.placeholder }
-      ref={ textareaRef }
-             />
+      fieldName={fieldName}
+      form={form!}
+      initialValues={{ [fieldName]: initialValue }}
+      key={'textarea-form'}
+      placeholder={props.placeholder}
+      ref={textareaRef}
+    />
   }
 }
 
-export function withConfirm (props: ModalFuncProps): ModalFuncProps {
+export function withConfirm(props: ModalFuncProps): ModalFuncProps {
   return {
     ...props,
     type: props.type ?? 'confirm',
@@ -224,7 +224,7 @@ export function withConfirm (props: ModalFuncProps): ModalFuncProps {
   }
 }
 
-export function withUpload (props: UploadFormProps): ModalFuncProps {
+export function withUpload(props: UploadFormProps): ModalFuncProps {
   const inputRef = React.createRef<InputRef>()
   const uuid = pimcoreUUid()
   const fieldName = `upload-${uuid}`
@@ -240,21 +240,21 @@ export function withUpload (props: UploadFormProps): ModalFuncProps {
     formattedRule = [rule]
   }
 
-  const UploadForm = forwardRef(function InputForm (props: InputFormProps, ref: RefObject<InputRef>): React.JSX.Element {
+  const UploadForm = forwardRef(function InputForm(props: InputFormProps, ref: RefObject<InputRef>): React.JSX.Element {
     return (
       <Form
-        form={ props.form }
-        initialValues={ props.initialValues }
-        layout={ 'vertical' }
+        form={props.form}
+        initialValues={props.initialValues}
+        layout={'vertical'}
       >
         <Form.Item
-          label={ label }
-          name={ props.fieldName }
-          rules={ formattedRule }
+          label={label}
+          name={props.fieldName}
+          rules={formattedRule}
         >
           <Input
-            accept={ accept }
-            ref={ ref }
+            accept={accept}
+            ref={ref}
             type="file"
           />
         </Form.Item>
@@ -281,11 +281,11 @@ export function withUpload (props: UploadFormProps): ModalFuncProps {
       })
     },
     content: <UploadForm
-      fieldName={ fieldName }
-      form={ form! }
-      initialValues={ {} }
-      key={ 'upload-form' }
-      ref={ inputRef }
-             />
+      fieldName={fieldName}
+      form={form!}
+      initialValues={{}}
+      key={'upload-form'}
+      ref={inputRef}
+    />
   }
 }

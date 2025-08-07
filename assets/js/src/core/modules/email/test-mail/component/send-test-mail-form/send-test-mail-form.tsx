@@ -10,19 +10,13 @@
 
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
-import { Modal } from '@Pimcore/components/modal/modal'
-import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { Select } from '@Pimcore/components/select/select'
-import { TextArea } from '@Pimcore/components/textarea/textarea'
-import { useMessage } from '@Pimcore/components/message/useMessage'
-import { useEmailSendTestMutation } from '@Pimcore/modules/email/emails-api-slice.gen'
-import { useForm } from 'antd/es/form/Form'
+import { ManyToOneRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
+import { getLanguageExtensions } from '@sdk/components'
+import ReactCodeMirror from '@uiw/react-codemirror'
+import { FormInstance } from 'antd/lib'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { App } from 'antd'
-import { getLanguageExtensions, useStudioModal } from '@sdk/components'
-import ReactCodeMirror from '@uiw/react-codemirror'
-import { ManyToOneRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
 import { ParametersTable } from '../parameters-table/parameters-table'
 
 export interface TestEmailFormValues {
@@ -35,6 +29,7 @@ export interface TestEmailFormValues {
 
 export interface TestEmailModalProps {
   initalValues?: TestEmailFormValues
+  form: FormInstance<TestEmailFormValues>
   onFinish?: (values: TestEmailFormValues) => Promise<void>
 }
 
@@ -44,9 +39,8 @@ enum TestEmilType {
   Text = 'text'
 }
 
-export const SendTestMailForm = ({ initalValues }: TestEmailModalProps): React.JSX.Element => {
+export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const [form] = useForm()
 
   const handleFormFinish = async (values: TestEmailFormValues): Promise<void> => {
     console.log(values)
