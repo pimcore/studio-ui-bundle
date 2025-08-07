@@ -28,7 +28,8 @@ export const PieChart = ({ reportData, chartData }: IChartProps): React.JSX.Elem
   const pieLabelColumn = reportData?.pieLabelColumn ?? ''
   const pieColumn = reportData?.pieColumn ?? ''
 
-  const [colorList] = useState<string[]>(generateColorMap())
+  const [colorList] = useState<string[]>(generateColorMap(chartData.length))
+
   const reportChartData: IChartPieDataItem[] = chartData.map(((item, index) => ({
     [CHART_FIELD_TYPE_KEY]: item?.[pieLabelColumn],
     [CHART_FIELD_VALUE_KEY]: item?.[pieColumn],
