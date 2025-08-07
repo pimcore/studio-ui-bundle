@@ -9,7 +9,7 @@
  */
 
 import DOMPurify from 'dompurify'
-import { isNil } from 'lodash'
+import { isNil, isString } from 'lodash'
 
 export const stripTags = (input: string, allowedTags: string[] = []): string => {
   return DOMPurify.sanitize(input, { ALLOWED_TAGS: allowedTags })
@@ -19,6 +19,22 @@ export const escapeHtml = (input: string): string => {
   const div = document.createElement('div')
   div.textContent = input
   return div.innerHTML
+}
+
+export const isHtmlContent = (value?: string | null): boolean => {
+  if (isNil(value) || !isString(value) || value.trim() === '') {
+    return false
+  }
+
+  return /<\/?[a-z][\s\S]*>/i.test(value)
+}
+
+export const hasLineBreaks = (value?: string | null): boolean => {
+  if (isNil(value) || !isString(value)) {
+    return false
+  }
+
+  return /\n/gm.test(value)
 }
 
 export const pasteHtmlAtCaret = (html: string, currentWindow: Window = window): void => {
