@@ -15,7 +15,7 @@ import { DatePicker, Input, InputNumber, Select } from 'antd'
 import { Button } from '../button/button'
 
 const config: Meta = {
-  title: 'Components/Controls/Form',
+  title: 'Components/Data Entry/Form',
   component: () => {
     const [form] = Form.useForm()
 

@@ -18,7 +18,7 @@ const SAMPLE_SELECT_OPTIONS = [
 ]
 
 const config: Meta = {
-  title: 'Components/Controls/CreatableSelect',
+  title: 'Components/Data Entry/CreatableSelect',
   component: CreatableSelect,
   parameters: {
     docs: {
