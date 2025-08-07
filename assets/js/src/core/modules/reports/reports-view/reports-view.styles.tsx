@@ -44,6 +44,11 @@ export const useStyles = createStyles(({ css, token }) => {
 
     btnLink: css`
       padding: 0;
+    `,
+
+    gridTable: css`
+      height: 300px;
+      overflow: scroll;
     `
   }
 })
