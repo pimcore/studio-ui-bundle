@@ -19,6 +19,7 @@ import type { TreeDataNode } from 'antd'
 import { findNodeByKey } from '@Pimcore/modules/user/management/tree/tree-helper'
 import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helper'
 import { Spin } from '@Pimcore/components/spin/spin'
+import { createTreeNodeTestId } from '@Pimcore/utils/test-id-generator'
 
 const RoleContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -30,6 +31,7 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
     title: t('roles.tree.all'),
     key: 0,
     icon: <Icon value={ 'folder' } />,
+    'data-testid': createTreeNodeTestId(0, 'folder'),
     children: [],
     actions: [
       { key: 'add-folder', icon: 'folder-plus' },
@@ -38,7 +40,7 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
   }
   const [treeData, setTreeData] = useState<TreeDataItem[]>([treeParentItem])
 
-  const createNodeByResponse = (items: any): TreeDataNode[] => {
+  const createNodeByResponse = (items: any): TreeDataItem[] => {
     return items.map((item: any) => ({
       title: item.name,
       key: item.id,
@@ -46,6 +48,7 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
       allowDrop: item.type !== 'role',
       allowDrag: item.type === 'role',
       icon: item.type === 'role' ? <Icon value={ 'user' } /> : <Icon value={ 'folder' } />,
+      'data-testid': createTreeNodeTestId(item.id as string | number, item.type as string),
       actions: item.type === 'role'
         ? [
             { key: 'clone-role', icon: 'copy' },
@@ -64,7 +67,7 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
   const updateTreeData = (key, items): void => {
     setNodeLoading(key, false)
 
-    setTreeData((data: TreeDataNode[]): TreeDataNode[] => {
+    setTreeData((data: TreeDataItem[]): TreeDataItem[] => {
       const parentNode = findNodeByKey(data, key)
       if (parentNode !== undefined) {
         parentNode.children = parentNode.children ?? []

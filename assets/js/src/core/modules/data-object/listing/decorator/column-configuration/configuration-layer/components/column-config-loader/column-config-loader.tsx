@@ -45,10 +45,17 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
     const availableColumns: AvailableColumn[] = data.columns!.map(column => column)
 
     for (const column of initialConfigurationData.columns) {
-      if (column.key === 'advanced' || column.key === 'filename') {
+      if (column.key === 'filename') {
         continue
       }
       const availableColumn = data.columns!.find(availableColumn => availableColumn.key === column.key)
+      const currentColumn = column as AvailableColumn
+      const apiColumn = {
+        ...availableColumn,
+        __meta: {
+          advancedColumnConfig: currentColumn.config ?? {}
+        }
+      }
 
       if (availableColumn !== undefined) {
         selectedColumns.push({
@@ -62,7 +69,7 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
           exportable: availableColumn.exportable,
           frontendType: availableColumn.frontendType,
           group: availableColumn.group,
-          originalApiDefinition: availableColumn
+          originalApiDefinition: apiColumn
         })
       }
     }

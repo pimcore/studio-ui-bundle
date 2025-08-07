@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { type UserWorkspace } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from 'antd'
+import { createTableTestId } from '@Pimcore/utils/test-id-generator'
 
 interface ITableProps {
   data: UserWorkspace[]
@@ -231,6 +232,7 @@ export const Table = ({
       autoWidth
       columns={ ownTableColumns }
       data={ gridData }
+      dataTestId={ createTableTestId(`user-workspaces-${type ?? 'unknown'}`) }
       isLoading={ isLoading }
       onUpdateCellData={ onUpdateCellData }
       resizable

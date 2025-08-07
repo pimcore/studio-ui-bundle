@@ -8,9 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useNumberedList } from '../provider/numbered-list/use-numbered-list'
-import { Form } from '../../form'
+import NumberedListIteratorItem from './numbered-list-iterator-item'
 
 export interface NumberedListIteratorProps {
   children: React.ReactNode
@@ -19,27 +19,23 @@ export interface NumberedListIteratorProps {
 export const NumberedListIterator = ({ children }: NumberedListIteratorProps): React.JSX.Element => {
   const { values } = useNumberedList()
 
-  const getValuesIterator = (): Array<{ key: string, value: any }> => {
-    return Object.keys(values).map((key) => {
-      return {
-        key,
-        value: values[key]
-      }
-    })
-  }
+  const valuesIterator = useMemo(() => {
+    return Object.keys(values).map((key) => ({
+      key,
+      value: values[key]
+    }))
+  }, [values])
 
   return (
     <>
-      {getValuesIterator().map(({ key, value }) => {
-        return (
-          <Form.Group
-            key={ key }
-            name={ key }
-          >
-            {children}
-          </Form.Group>
-        )
-      })}
+      {valuesIterator.map(({ key }) => (
+        <NumberedListIteratorItem
+          itemKey={ key }
+          key={ key }
+        >
+          {children}
+        </NumberedListIteratorItem>
+      ))}
     </>
   )
 }

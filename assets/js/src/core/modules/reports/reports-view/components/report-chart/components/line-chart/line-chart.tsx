@@ -8,11 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import { Line } from '@ant-design/plots'
 import { toNumber } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import type { IChartProps } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
+import { LegendItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/legend-item/legend-item'
+import { generateColorMap } from '@Pimcore/modules/reports/reports-view/components/report-chart/utils/helpers'
 import { useStyles } from './line-chart.styles'
 
 const CHART_FIELD_NAME_KEY = 'name'
@@ -21,8 +23,10 @@ const CHART_FIELD_VALUE_KEY = 'value'
 export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps): React.JSX.Element => {
   const { styles } = useStyles()
 
+  const [colorList] = useState<string[]>(generateColorMap(chartData.length))
+
   const xAxis = reportData?.xAxis ?? ''
-  const formattedChartData = chartData.flatMap((item: object) => {
+  const formattedChartData = chartData.flatMap((item: object, index) => {
     return Object.entries(item)
       .filter(([key]) => key !== xAxis)
       .map(([key, value]) => ({
@@ -32,23 +36,46 @@ export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps)
       }))
   })
 
+  const seriesKeys = [...new Set(formattedChartData.map(item => item.name))]
+
+  const [activeSeries, setActiveSeries] = useState<string[]>(seriesKeys)
+
+  const handleLegendItemClick = (key: string): void => {
+    setActiveSeries(prev =>
+      prev.includes(key)
+        ? prev.filter(k => k !== key)
+        : [...prev, key]
+    )
+  }
+
+  const colorMap: Record<string, string> = {
+    ...Object.fromEntries(
+      seriesKeys.map((key, index) => [key, colorList[index]])
+    )
+  }
+
+  const filteredData = useMemo(() => {
+    return formattedChartData.filter((item) =>
+      activeSeries.includes(item.name)
+    )
+  }, [formattedChartData, activeSeries])
+
   const config = {
-    data: formattedChartData,
+    data: filteredData,
     xField: xAxis,
     yField: CHART_FIELD_VALUE_KEY,
-    seriesField: CHART_FIELD_NAME_KEY,
     colorField: CHART_FIELD_NAME_KEY,
+    scale: {
+      color: {
+        range: colorList
+      }
+    },
     height: 380,
     point: {
       shapeField: 'circle',
       sizeField: 4
     },
-    legend: {
-      color: {
-        position: 'bottom',
-        labelFormatter: (text: any) => chartLabelMap[text] ?? text
-      }
-    },
+    legend: false,
     interaction: {
       tooltip: {
         render: (event, { title, items }) => (
@@ -85,8 +112,28 @@ export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps)
   }
 
   return (
-    <div>
+    <div className="m-t-mini">
       <Line { ...config } />
+
+      <Flex
+        gap="mini"
+        justify="center"
+        wrap="wrap"
+      >
+        {seriesKeys.map((key, index) => {
+          const isActive = activeSeries.includes(key)
+
+          return (
+            <LegendItem
+              disabled={ !isActive }
+              handleClick={ () => { handleLegendItemClick(key) } }
+              key={ `${index}-${key}` }
+              label={ chartLabelMap[key] ?? key }
+              markerColor={ colorMap[key] }
+            />
+          )
+        })}
+      </Flex>
     </div>
   )
 }

@@ -57,6 +57,8 @@ asset.upload.files.completed-actions: Completed actions
 asset.upload.validation: 'Please add a file'
 upload.error.file-too-large: 'The file is bigger than the actual upload limit of the server.'
 upload.error.generic: 'The file could not be uploaded.'
+upload.error.upload-failed: 'Upload failed'
+upload.error.failed-to-fetch-asset-details: 'Failed to fetch asset details'
 asset.select.type.nullable: 'All types'
 document.document-tree.title: Document Tree
 document.document-tree.search: Search in {{folderName}}
@@ -124,6 +126,19 @@ grid.configuration.delete-template-confirmation: Are you sure that you want to d
 grid.configuration.save-template-configuration: Save configuration as template
 grid.configuration.set-default-template: Set as default template
 grid.configuration.shared: Shared
+grid.advanced-column.title.placeholder: Add a title
+grid.advanced-column.advancedColumns: Source field
+grid.advanced-column.advancedColumns.add: Add a Source field
+grid.advanced-column.transformers: Transformers
+grid.advanced-column.transformers.add: Add a Transformer
+grid.advanced-column.preview: Preview
+grid.advanced-column.no-preview: No preview item available
+grid.advanced-column.no-preview-data: No preview data available
+grid.advanced-column.advancedColumns.simpleField: Simple Field
+grid.advanced-column.advancedColumns.relationField: Relation Field
+grid.advanced-column.advancedColumns.staticText: Static text
+grid.advanced-column.advancedColumns.caseChange: Case Change
+grid.advanced-column.advancedColumns.combine: Combine
 component.workflow-card.action-btn: Workflow Actions
 component.pql.description: Pimcore Query Language (PQL) is a simple yet powerful query language that lets you search data using various criteria, including filtering values in related elements, to enable precise and comprehensive data retrieval. For details see <anchorPQL>PQL Documentation</anchorPQL>
 asset.asset-editor-tabs.embedded-metadata.headline: Meta Info
@@ -309,6 +324,23 @@ properties.editable-properties: Editable Properties
 properties.all-properties: All Properties
 properties.predefined-properties: Predefined Properties
 properties.new-custom-property: New custom property
+translations.columns.type: Type
+translations.columns.key: Key
+translations.columns.actions: Actions
+translations.select-languages: Select languages
+translations.select-domain: Select domain
+translations.show-all-languages: Show all
+translations.show-minimal-languages: Show minimal
+translations.show-hide-locale: Show/ Hide Locale
+translations.new-translation: New Translation
+translations.new: Add
+translations.type-options.custom: ICU Format
+translations.type-options.simple: Simple Text
+translations.edit-modal.tab.plain-text: Plain Text
+translations.edit-modal.tab.html: HTML
+translations.edit-modal.save: Save
+translations.edit-modal.title: Edit translation
+translations.edit-modal.restore: Restore plain text
 properties.columns.type: Type
 properties.columns.key: Key
 properties.columns.name: Name
@@ -321,12 +353,15 @@ properties.columns.actions: Actions
 properties.inherited.properties: Inherited Properties
 properties.add-custom-property.cancel: Cancel
 properties.add-custom-property.key: Key
+translations.add-translation.key: Key
 properties.add-custom-property.create: Create
 properties.add-custom-property.type: Type
 properties.property-already-exist.title: Property already exists
 properties.property-already-exist.error: Name is already in use, please choose a different one
 properties.add-property-mandatory-fields-missing.title: Mandatory fields missing
 properties.add-property-mandatory-fields-missing.error: Key and type are mandatory fields and need to be filled out.
+translations.add-translation-mandatory-field-missing.title: Mandatory field missing
+translations.add-translation-mandatory-field-missing.error: Key is a mandatory field and needs to be filled out.
 button.ok: Ok
 button.apply: Apply
 button.cancel: Cancel
@@ -704,6 +739,11 @@ user-management.roles: Roles
 user-management.role: Role
 user-management.users: Users
 user-management.user: User
+user-management.add-folder: Add new Folder
+user-management.add-folder.label: Enter the name of the new folder
+user-management.add-user: Add new User
+user-management.add-user.label: Enter the name of the new user
+user-management.last-login: Last Login
 roles.tree.all: All Roles
 roles.save-item.success: Role saved successfully
 roles.clone-item.success: Role cloned successfully
@@ -711,6 +751,12 @@ roles.remove-folder.success: Folder removed successfully
 roles.remove-item.success: Role removed successfully
 roles.add-item.success: Role added successfully
 roles.add-folder.success: Folder added successfully
+roles.settings.title: Settings
+roles.workspaces.title: Workspaces
+roles.add-folder: Add new Folder
+roles.add-folder.label: Enter the name of the new folder
+roles.add-role: Add new Role
+roles.add-role.label: Enter the name of the new role
 navigation.website-settings: Website Settings
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
@@ -719,6 +765,7 @@ navigation.reports: Reports
 navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
 navigation.customise: Customise
+navigation.translations: Translations
 navigation.tag-configuration: Tag Configuration
 navigation.predefined-properties: Predefined Properties
 navigation.user-and-roles: User & Roles
@@ -735,9 +782,52 @@ predefined-properties.new: New
 website-settings.new: Add
 predefined-properties.type: Type
 predefined-properties.name: Name
+redirects.beginner: Beginner
+redirects.expert: Expert Mode
+redirects.type: Type
+redirects.search: Search
+redirects.source-site: Source Site
+redirects.source: Source
+redirects.target-site: Target Site
+redirects.target: Target
+redirects.status: Status
+redirects.priority: Priority
+redirects.regex: RegEx
+redirects.pass-through: Pass Through
+redirects.active: Active
+redirects.actions: Actions
+redirects.expiry: Expiry
+redirects.csv-import: Import CSV
+redirects.csv-import-modal.redirects-import: Redirects CSV Import
+redirects.csv-export: CSV Export
+redirects.clean-up: Clean up expired redirects
+redirects.import-drag-drop: Browse your files or drop a CSV directly here
+redirects.browse-files: Browse Files
+redirects.upload: Upload
+redirects.beginner-modal.title: New Beginner Redirect
+redirects.beginner-modal.type: Type
+redirects.beginner-modal.path: Path
+redirects.beginner-modal.target: Target
+redirects.beginner-modal.create: Create
+redirects.beginner-modal.cancel: Cancel
+redirects.csv-import-results.title: Redirects CSV Import Results
+redirects.csv-import-results.total: Total
+redirects.csv-import-results.created: Created
+redirects.csv-import-results.updated: Updated
+redirects.csv-import-results.errored: Errored
+redirects.csv-import-results.close: Close
+redirects.csv-import-results.errors-details: Error Details
+redirects.csv-import-results.line: Line {{line}}
+path: Path
+entire_uri: Entire URI
+path_query: Path and Query
+auto_create: Auto Create
+widget.redirects: Redirects
+navigation.redirects: Redirects
 perspective.default: Default
 perspective.switching.title: Switching perspective
 perspective.switching.description: Currently switching to the following perspective
+widget.translations: Translations
 widget.notes-and-events: Notes & Events
 widget.tag-configuration: Tag Configuration
 widget.predefined-properties: Predefined Properties
@@ -911,6 +1001,8 @@ user-profile.password-repeat-error: Passwords do not match
 creatable-select.add-custom-option: Add custom option
 creatable-select.add: Add
 creatable-select.option-already-exists: Option already exists
+drag-snippet-here: Drag a snippet here
+snippet: Snippet
 navigation.application-logger: Application Logger
 widget.application-logger: Application Logger
 application-logger.label: Application Logger
@@ -951,3 +1043,22 @@ embed.edit-url: Edit URL
 embed.clear: Clear
 embed.loading: Loading...
 embed.iframe-title: Embedded content
+navigation.recycle-bin: Recycle Bin
+widget.recycle-bin: Recycle Bin
+recycle-bin.columns.type: Type
+recycle-bin.columns.path: Path
+recycle-bin.columns.amount: Amount
+recycle-bin.columns.deleted-by: Deleted By
+recycle-bin.columns.date: Date
+recycle-bin.columns.actions: Actions
+recycle-bin.actions.cleanup: Clean up
+recycle-bin.actions.delete: Delete
+recycle-bin.actions.delete.title: Deleting Items
+recycle-bin.actions.restore: Restore
+recycle-bin.actions.restore.title: Restoring Items
+component.search.pleaceholder: Search
+focal-point.set: Set Focal Point
+video.placeholder: No video selected - Click to add a video
+video.add-video: Add Video
+image.alt-text-placeholder: Enter alt text
+area-settings: Area Settings

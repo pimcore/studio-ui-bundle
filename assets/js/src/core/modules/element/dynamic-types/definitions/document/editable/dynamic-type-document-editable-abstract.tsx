@@ -11,7 +11,6 @@
 import { injectable } from 'inversify'
 import { type DynamicTypeAbstract } from '../../../registry/dynamic-type-registry-abstract'
 import { type ReactElement } from 'react'
-import { type ColumnMetaType } from '@Pimcore/components/grid/grid'
 import { type IFieldWidthContext } from '@sdk/modules/element'
 
 export interface AbstractDocumentEditableDefinition {
@@ -29,8 +28,6 @@ export interface AbstractDocumentEditableDefinition {
   containerRef?: React.RefObject<HTMLDivElement>
 }
 
-export type GridCellColumnMeta = ColumnMetaType & { type: string }
-
 @injectable()
 export abstract class DynamicTypeDocumentEditableAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
@@ -38,6 +35,17 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
   abstract getEditableDataComponent (props: AbstractDocumentEditableDefinition): ReactElement<AbstractDocumentEditableDefinition>
 
   transformValue (value: any, props: AbstractDocumentEditableDefinition): any {
+    return value
+  }
+
+  /**
+   * Transform the internal editable value to the format expected by the backend API
+   * This is the reverse of transformValue - used when sending data to update endpoints
+   * @param value The internal editable value
+   * @param props The editable props
+   * @returns The value formatted for the backend API
+   */
+  transformValueForApi (value: any, props: AbstractDocumentEditableDefinition): any {
     return value
   }
 
@@ -57,7 +65,7 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
    * @param props The editable props
    * @returns true if should reload on change, false for normal debounced auto-save
    */
-  reloadOnChange (props: AbstractDocumentEditableDefinition): boolean {
+  reloadOnChange (props: AbstractDocumentEditableDefinition, oldValue: any, newValue: any): boolean {
     return this.hasReloadConfig(props)
   }
 }

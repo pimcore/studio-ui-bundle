@@ -22,7 +22,8 @@ export interface IWindowModalProps extends Omit<IModalProps, 'mask' | 'maskClosa
 }
 
 export const WindowModal = (props: IWindowModalProps): React.JSX.Element => {
-  const { styles } = useStyle()
+  const { zIndex, ...restProps } = props
+  const { styles } = useStyle({ zIndex })
 
   const [disabled, setDisabled] = useState(true)
   const [bounds, setBounds] = useState({ left: 0, top: 0, bottom: 0, right: 0 })
@@ -44,7 +45,7 @@ export const WindowModal = (props: IWindowModalProps): React.JSX.Element => {
 
   return (
     <Modal
-      { ...props }
+      { ...restProps }
       className={ cn(styles.modal, props.className) }
       mask={ false }
       maskClosable={ false }

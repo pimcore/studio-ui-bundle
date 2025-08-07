@@ -199,6 +199,7 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
                         form.setFieldValue('password', newPassword)
                       } }
                       title={ t('user-management.generate-password') }
+                      variant={ 'minimal' }
                                     /> }
                     />
                   </Form.Item>

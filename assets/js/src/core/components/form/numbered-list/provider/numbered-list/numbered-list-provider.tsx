@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { KeyedListContext } from '@Pimcore/components/form/keyed-list/provider/keyed-list/keyed-list-provider'
 import { type NamePath } from 'antd/es/form/interface'
 import React, { createContext, useMemo } from 'react'
 
@@ -36,10 +37,19 @@ export interface NumberedListProviderProps {
   getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
 }
 
-export const NumberedListProvider = ({ children, ...props }: NumberedListProviderProps): React.JSX.Element => {
-  return useMemo(() => (
-    <NumberedListContext.Provider value={ { ...props } }>
-      {children}
-    </NumberedListContext.Provider>
-  ), [props, children])
+export const NumberedListProvider = ({ children, values, operations, onChange, getAdditionalComponentProps }: NumberedListProviderProps): React.JSX.Element => {
+  const contextValue = useMemo(() => ({
+    values,
+    operations,
+    onChange,
+    getAdditionalComponentProps
+  }), [values, operations, onChange, getAdditionalComponentProps])
+
+  return (
+    <KeyedListContext.Provider value={ undefined }>
+      <NumberedListContext.Provider value={ contextValue }>
+        {children}
+      </NumberedListContext.Provider>
+    </KeyedListContext.Provider>
+  )
 }

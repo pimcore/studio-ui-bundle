@@ -29,7 +29,6 @@ import {
   type UserFolderDeleteByIdApiArg,
   type User2,
   type User,
-  type UserGetImageApiResponse,
   type UserGetAvailablePermissionsApiResponse
 } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import {
@@ -37,14 +36,13 @@ import {
   userClosed,
   userUpdated,
   changeUser,
-  userImageLoaded,
   userAvailablePermissionsFetched,
   type UserDraft
 } from '@Pimcore/modules/user/user-management-slice'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
 import type { UseTrackableChangesDraftReturn } from '@Pimcore/modules/user/hooks/use-user-management-trackable-changes'
-import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface AddItemArgs {
   parentId: number
@@ -67,7 +65,6 @@ interface UseUserReturn extends
   searchUserByText: (query: string) => Promise<PimcoreStudioApiUserSearchApiResponse>
   resetUserKeyBindings: (id: number) => Promise<UserDefaultKeyBindingsApiResponse>
   uploadUserAvatar: (props: { id: number, file: File }) => Promise<{ data: UserUploadImageApiResponse, error: any }>
-  fetchUserImageById: (props: { id: number }) => Promise<{ data: UserGetImageApiResponse | undefined, error?: any }>
   activeId: number
   getAllIds: number[]
   getAvailablePermissions: () => any[]
@@ -227,23 +224,6 @@ export const useUserManagementHelper = (): UseUserReturn => {
     return data
   }
 
-  async function fetchUserImageById (props): Promise<{ data: UserGetImageApiResponse | undefined, error?: Error }> {
-    const { id } = props
-    let data
-    await fetch(`/pimcore-studio/api/user/image/${id}`)
-      .then(async (response) => await response.blob())
-      .then((imageBlob) => {
-        data = URL.createObjectURL(imageBlob)
-        dispatch(userImageLoaded({ id, image: data }))
-      }).catch((error) => {
-        const apiError = error instanceof Error
-          ? new ApiError(error)
-          : new GeneralError('An error occurred while loading the image')
-        trackError(apiError)
-      })
-    return { data }
-  }
-
   async function fetchUserAvailablePermissions (): Promise<UserGetAvailablePermissionsApiResponse> {
     const { data, isError: isFetchUserAvailablePermissionsError, error } = await dispatch(api.endpoints.userGetAvailablePermissions.initiate())
     if (data !== undefined) {
@@ -289,7 +269,6 @@ export const useUserManagementHelper = (): UseUserReturn => {
     resetUserKeyBindings,
     getDefaultKeyBindings,
     uploadUserAvatar,
-    fetchUserImageById,
     getAvailablePermissions,
     activeId,
     getAllIds

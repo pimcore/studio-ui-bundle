@@ -9,15 +9,15 @@
  */
 
 /* eslint-disable max-lines */
+import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { LockType } from '@Pimcore/modules/element/actions/lock/use-lock'
+import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
+import { type TreeLevelData } from '@Pimcore/modules/element/element-api-slice.gen'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@sdk/app'
 import { isEqual, isUndefined } from 'lodash'
 import { createSelector } from 'reselect'
-import { type TreeLevelData } from '@Pimcore/modules/element/element-api-slice.gen'
-import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
-import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { LockType } from '@Pimcore/modules/element/actions/lock/use-lock'
 
 export interface TreeNode {
   id: string
@@ -466,6 +466,22 @@ const slice = createSlice({
         }
       })
     },
+    refreshTreeByElementType: (
+      state,
+      { payload }: PayloadAction<{ elementTypes: ElementType[] }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (Object.keys(state[treeId].nodes).length > 0) {
+          const firstNode = Object.values(state[treeId].nodes)[0]
+          if (
+            firstNode.treeNodeProps?.elementType !== undefined &&
+            payload.elementTypes.includes(firstNode.treeNodeProps.elementType)
+          ) {
+            state[treeId].nodes = {}
+          }
+        }
+      })
+    },
     markNodeDeleting: (
       state,
       { payload }: PayloadAction<{ nodeId: string, elementType: ElementType, isDeleting: boolean }>
@@ -614,7 +630,7 @@ export const treeSliceName = slice.name
 
 injectSliceWithState(slice)
 
-export const { setNodeLoading, setNodeLoadingInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, setNodePublished, setRootNode, setNodeLocked } = slice.actions
+export const { setNodeLoading, setNodeLoadingInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, setNodePublished, setRootNode, setNodeLocked, refreshTreeByElementType } = slice.actions
 
 export const selectNodeState = createSelector(
   (state: RootState) => state.trees,

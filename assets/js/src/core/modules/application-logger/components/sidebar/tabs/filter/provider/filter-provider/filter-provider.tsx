@@ -30,6 +30,8 @@ export interface FilterProviderData {
   columnFilters: ColumnFilters
   updateFilters: () => void
   resetFilters: () => void
+  isLoading: boolean
+  setIsLoading: (loading: boolean) => void
 }
 export type FilterContextProps = FilterProviderData | undefined
 
@@ -55,6 +57,7 @@ export const FilterProvider = (props: FilterProviderProps): React.JSX.Element =>
   const [relatedObjectId, setRelatedObjectId] = React.useState<number | null>(null)
   const [message, setMessage] = React.useState<string | null>(null)
   const [pid, setPid] = React.useState<number | null>(null)
+  const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
   const updateFilters = (): void => {
     setColumnFilters(getColumnFilters())
@@ -137,8 +140,6 @@ export const FilterProvider = (props: FilterProviderProps): React.JSX.Element =>
       })
     }
 
-    console.log('filters -inside', filters)
-
     return filters
   }
 
@@ -160,10 +161,12 @@ export const FilterProvider = (props: FilterProviderProps): React.JSX.Element =>
       setPid,
       columnFilters,
       updateFilters,
-      resetFilters
+      resetFilters,
+      isLoading,
+      setIsLoading
     } }
     >
       {props.children}
     </FilterProviderContext.Provider>
-  ), [dateFrom, dateTo, columnFilters, logLevel, component, relatedObjectId, message, pid])
+  ), [dateFrom, dateTo, columnFilters, logLevel, component, relatedObjectId, message, pid, isLoading])
 }

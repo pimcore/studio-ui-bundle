@@ -164,9 +164,24 @@ import { type DynamicTypeDocumentEditableLink } from './definitions/document/edi
 import { type DynamicTypeDocumentEditableWysiwyg } from './definitions/document/editable/types/dynamic-type-document-editable-wysiwyg'
 import { type DynamicTypeFieldFilterCheckbox } from './definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
 import { type DynamicTypeDocumentEditableTextarea } from './definitions/document/editable/types/dynamic-type-document-editable-textarea'
+import { type DynamicTypeDocumentEditableImage } from './definitions/document/editable/types/dynamic-type-document-editable-image'
+import { type DynamicTypeDocumentEditableVideo } from './definitions/document/editable/types/dynamic-type-document-editable-video'
+import { type DynamicTypePipelineRegistry } from './definitions/pipelines/dynamic-type-pipeline-registry'
+import { type DynamicTypePipelineGridSourceFieldsText } from './definitions/pipelines/grid/source-fields/types/text/text'
+import { type DynamicTypePipelineGridTransformersChangeCase } from './definitions/pipelines/grid/transformers/types/change-case/change-case'
+import { type DynamicTypePipelineGridTransformersCombine } from './definitions/pipelines/grid/transformers/types/combine/combine'
+import { type DynamicTypePipelineGridSourceFieldsSimpleField } from './definitions/pipelines/grid/source-fields/types/simple-field/simple-field'
+import { type DynamicTypePipelineGridSourceFieldsRelationField } from './definitions/pipelines/grid/source-fields/types/relation-field/relation-field'
 import { type DynamicTypeDocumentEditableMultiSelect } from './definitions/document/editable/types/dynamic-type-document-editable-multiselect'
 import { type DynamicTypeDocumentEditableSelect } from './definitions/document/editable/types/dynamic-type-document-editable-select'
 import { type DynamicTypeDocumentEditableTable } from './definitions/document/editable/types/dynamic-type-document-editable-table'
+import { type DynamicTypeDocumentEditableSnippet } from './definitions/document/editable/types/dynamic-type-document-editable-snippet'
+import { type DynamicTypeGridCellDataObjectAdvanced } from './definitions/grid-cell/types/data-object-advanced/dynamic-type-grid-cell-data-object-advanced'
+import { type DynamicTypeDocumentEditableArea } from './definitions/document/editable/types/dynamic-type-document-editable-area'
+import { type DynamicTypeEditableDialogLayoutRegistry } from './definitions/editable-dialog-layout/dynamic-type-editable-dialog-layout-registry'
+import { type DynamicTypeEditableDialogLayoutTabpanel } from './definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-tabpanel'
+import { type DynamicTypeEditableDialogLayoutPanel } from './definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-panel'
+import { type DynamicTypeGridCellString } from './definitions/grid-cell/types/string/dynamic-type-grid-cell-string'
 
 moduleSystem.registerModule({
   onInit () {
@@ -199,6 +214,7 @@ moduleSystem.registerModule({
     const GridCellRegistry = container.get<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/GridCellRegistry'])
 
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellText>(serviceIds['DynamicTypes/GridCell/Text']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellString>(serviceIds['DynamicTypes/GridCell/String']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellTextarea>(serviceIds['DynamicTypes/GridCell/Textarea']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellNumber>(serviceIds['DynamicTypes/GridCell/Number']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellSelect>(serviceIds['DynamicTypes/GridCell/Select']))
@@ -231,7 +247,12 @@ moduleSystem.registerModule({
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellLanguageSelect>(serviceIds['DynamicTypes/GridCell/LanguageSelect']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellTranslate>(serviceIds['DynamicTypes/GridCell/Translate']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectAdapter>(serviceIds['DynamicTypes/GridCell/DataObjectAdapter']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectAdvanced>(serviceIds['DynamicTypes/GridCell/DataObjectAdvanced']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectObjectBrick>(serviceIds['DynamicTypes/GridCell/DataObjectObjectBrick']))
+
+    const advancedGridCellRegistry = container.get<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/AdvancedGridCellRegistry'])
+
+    advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellString>(serviceIds['DynamicTypes/GridCell/String']))
 
     const metadataRegistry = container.get<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
 
@@ -323,10 +344,19 @@ moduleSystem.registerModule({
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableRelation>(serviceIds['DynamicTypes/DocumentEditable/Relation']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableRelations>(serviceIds['DynamicTypes/DocumentEditable/Relations']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableSelect>(serviceIds['DynamicTypes/DocumentEditable/Select']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableSnippet>(serviceIds['DynamicTypes/DocumentEditable/Snippet']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableTable>(serviceIds['DynamicTypes/DocumentEditable/Table']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableTextarea>(serviceIds['DynamicTypes/DocumentEditable/Textarea']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableWysiwyg>(serviceIds['DynamicTypes/DocumentEditable/Wysiwyg']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableMultiSelect>(serviceIds['DynamicTypes/DocumentEditable/MultiSelect']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableImage>(serviceIds['DynamicTypes/DocumentEditable/Image']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableVideo>(serviceIds['DynamicTypes/DocumentEditable/Video']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableArea>(serviceIds['DynamicTypes/DocumentEditable/Area']))
+
+    const editableDialogLayoutRegistry = container.get<DynamicTypeEditableDialogLayoutRegistry>(serviceIds['DynamicTypes/EditableDialogLayoutRegistry'])
+
+    editableDialogLayoutRegistry.registerDynamicType(container.get<DynamicTypeEditableDialogLayoutTabpanel>(serviceIds['DynamicTypes/EditableDialogLayout/Tabpanel']))
+    editableDialogLayoutRegistry.registerDynamicType(container.get<DynamicTypeEditableDialogLayoutPanel>(serviceIds['DynamicTypes/EditableDialogLayout/Panel']))
 
     const assetRegistry = container.get<DynamicTypeAssetRegistry>(serviceIds['DynamicTypes/AssetRegistry'])
 
@@ -344,5 +374,16 @@ moduleSystem.registerModule({
     objectRegistry.registerDynamicType(container.get<DynamicTypeObjectFolder>(serviceIds['DynamicTypes/Object/Folder']))
     objectRegistry.registerDynamicType(container.get<DynamicTypeObjectObject>(serviceIds['DynamicTypes/Object/Object']))
     objectRegistry.registerDynamicType(container.get<DynamicTypeObjectVariant>(serviceIds['DynamicTypes/Object/Variant']))
+
+    const sourceFieldsRegistry = container.get<DynamicTypePipelineRegistry>(serviceIds['DynamicTypes/Grid/SourceFieldsRegistry'])
+
+    sourceFieldsRegistry.registerDynamicType(container.get<DynamicTypePipelineGridSourceFieldsText>(serviceIds['DynamicTypes/Grid/SourceFields/Text']))
+    sourceFieldsRegistry.registerDynamicType(container.get<DynamicTypePipelineGridSourceFieldsSimpleField>(serviceIds['DynamicTypes/Grid/SourceFields/SimpleField']))
+    sourceFieldsRegistry.registerDynamicType(container.get<DynamicTypePipelineGridSourceFieldsRelationField>(serviceIds['DynamicTypes/Grid/SourceFields/RelationField']))
+
+    const transformersRegistry = container.get<DynamicTypePipelineRegistry>(serviceIds['DynamicTypes/Grid/TransformersRegistry'])
+
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersChangeCase>(serviceIds['DynamicTypes/Grid/Transformers/ChangeCase']))
+    transformersRegistry.registerDynamicType(container.get<DynamicTypePipelineGridTransformersCombine>(serviceIds['DynamicTypes/Grid/Transformers/Combine']))
   }
 })

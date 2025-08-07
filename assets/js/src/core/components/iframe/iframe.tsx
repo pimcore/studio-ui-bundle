@@ -25,7 +25,7 @@ export interface IframeRef {
 
 interface IframeProps {
   src: string
-  title: string
+  title?: string
   loadingTip?: string
   reloadingTip?: string
   onLoad?: () => void

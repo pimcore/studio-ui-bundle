@@ -12,6 +12,7 @@ import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import { Link, type LinkValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/link'
 import { isNil, isArray } from 'lodash'
+import { DocumentLinkPreview } from '../components/link-preview/document-link-preview'
 
 export type LinkEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
@@ -54,12 +55,16 @@ export class DynamicTypeDocumentEditableLink extends DynamicTypeDocumentEditable
 
     return (
       <Link
+        PreviewComponent={ DocumentLinkPreview }
         allowedTargets={ allowedTargets }
         allowedTypes={ allowedTypes }
         className={ props.config?.class }
         disabledFields={ disabledFields }
+        inherited={ props.inherited }
+        onChange={ props.onChange }
         textPrefix={ props.config?.textPrefix }
         textSuffix={ props.config?.textSuffix }
+        value={ props.value }
       />
     )
   }

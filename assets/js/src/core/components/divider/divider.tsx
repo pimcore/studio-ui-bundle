@@ -16,9 +16,10 @@ import type { Sizings } from '@Pimcore/utils/sizing'
 
 export interface IDividerProps extends DividerProps {
   size?: Sizings
+  theme?: 'default' | 'primary' | 'secondary'
 }
 
-export const Divider = ({ size = 'normal', className, ...props }: IDividerProps): JSX.Element => {
+export const Divider = ({ size = 'normal', className, theme = 'default', ...props }: IDividerProps): JSX.Element => {
   const { getPrefixCls } = React.useContext(ConfigProvider.ConfigContext)
   const prefixCls = getPrefixCls('divider')
   const { styles } = useStyles(prefixCls)
@@ -26,6 +27,7 @@ export const Divider = ({ size = 'normal', className, ...props }: IDividerProps)
   const classes = cn(
     styles.divider,
     `${prefixCls}--size-${size}`,
+    `divider--theme-${theme}`,
     className
   )
 
