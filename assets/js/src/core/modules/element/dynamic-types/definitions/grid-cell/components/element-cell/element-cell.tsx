@@ -29,12 +29,16 @@ export interface ElementInfo {
 export interface ElementCellConfig {
   allowedTypes?: ElementType[] | ((props: DefaultCellProps) => ElementType[])
   getElementInfo?: (props: DefaultCellProps) => ElementInfo
+  expectsStringValue?: boolean
+  allowTextInput?: boolean
 }
 
 export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
   const styles = useStyle().styles
   const { column } = props
   const editable = Boolean(props.column.columnDef.meta?.editable ?? true)
+  const clearable = Boolean(props.column.columnDef.meta?.clearable ?? true)
+  const showPublishedState = Boolean(props.column.columnDef.meta?.showPublishedState ?? true)
   const config = column.columnDef.meta?.config as ElementCellConfig | null ?? {
     allowedTypes: ['asset', 'data-object', 'document']
   }
@@ -47,10 +51,16 @@ export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
 
   function onDrop (info: DragAndDropInfo): void {
     if (props.column.columnDef.meta?.editable !== undefined && props.table.options.meta?.onUpdateCellData !== undefined) {
+      const expectsStringValue = Boolean(props.column.columnDef.meta?.config?.expectsStringValue)
+
+      const value = expectsStringValue
+        ? info.data.fullPath
+        : convertDragAndDropInfoToElementReference(info, showPublishedState)
+
       props.table.options.meta?.onUpdateCellData({
         rowIndex: props.row.index,
         columnId: props.column.id,
-        value: convertDragAndDropInfoToElementReference(info),
+        value,
         rowData: props.row.original
       })
     }
@@ -67,6 +77,7 @@ export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
     >
       <ElementCellContent
         { ...props }
+        clearDisabled={ !clearable }
         dropDisabled={ dropDisabled }
         getElementInfo={ config.getElementInfo }
       />

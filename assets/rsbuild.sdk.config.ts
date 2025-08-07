@@ -1,5 +1,6 @@
 import { defineConfig, rspack } from '@rsbuild/core'
 import { pluginReact } from '@rsbuild/plugin-react'
+import { pluginBabel } from '@rsbuild/plugin-babel'
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { pluginGenerateEntrypoints } from './bundler/plugins/entrypoints-generate';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
@@ -79,6 +80,18 @@ export default defineConfig({
   plugins: [
     pluginGenerateEntrypoints(),
     pluginReact(),
+    pluginBabel({
+      include: /\.(?:jsx|tsx)$/,
+      babelLoaderOptions(opts) {
+        opts.plugins?.unshift([
+          'babel-plugin-react-compiler',
+          {
+            compilationMode: 'annotation',
+            target: '18'
+          },
+        ]);
+      },
+    }),
     pluginSvgr({
       svgrOptions: {
         icon: true,
@@ -91,6 +104,7 @@ export default defineConfig({
       exposes: {
       '.': './js/src/sdk/main.ts',
       './_internal_/mf-bootstrap': './js/src/sdk/_internal_/mf-bootstrap.ts',
+      './_internal_/mf-bootstrap-document-editor-iframe': './js/src/sdk/_internal_/mf-bootstrap-document-editor-iframe.ts',
       './components': './js/src/sdk/components/index.ts',
       './app': './js/src/sdk/app/index.ts',
       './api/asset': './js/src/sdk/api/asset/index.ts',
@@ -112,6 +126,7 @@ export default defineConfig({
       './api/user': './js/src/sdk/api/user/index.ts',
       './api/version': './js/src/sdk/api/version/index.ts',
       './api/workflow': './js/src/sdk/api/workflow/index.ts',
+      './api/reports': './js/src/sdk/api/reports/index.ts',
       './modules/app': './js/src/sdk/modules/app/index.ts',
       './modules/asset': './js/src/sdk/modules/asset/index.ts',
       './modules/class-definitions': './js/src/sdk/modules/class-definitions/index.ts',
@@ -149,6 +164,11 @@ export default defineConfig({
           singleton: true,
           eager: true,
           requiredVersion: packages.dependencies.antd
+        },
+        '@ant-design/colors': {
+          singleton: true,
+          eager: true,
+          requiredVersion: packages.dependencies['@ant-design/colors']
         },
         'reflect-metadata': {
           singleton: true,

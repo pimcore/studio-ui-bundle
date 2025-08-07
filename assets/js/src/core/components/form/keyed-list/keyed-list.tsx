@@ -10,11 +10,12 @@
 
 import { type NamePath } from 'antd/es/form/interface'
 import { Form } from '../form'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { type KeyedListData, KeyedListProvider } from './provider/keyed-list/keyed-list-provider'
 import { KeyedListIterator } from './iterator/keyed-list-iterator'
-import { cloneDeep, isArray, isEqual, isObject, get, isUndefined, setWith } from 'lodash'
+import { cloneDeep, isArray, isEqual, isObject, get, isUndefined, setWith, isEmpty } from 'lodash'
 import { useItem } from '../item/provider/item/use-item'
+import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
 
 export interface KeyedListProps {
   children: React.ReactNode
@@ -25,31 +26,27 @@ export interface KeyedListProps {
 }
 
 const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: KeyedListProps): React.JSX.Element => {
-  const initialValue = isArray(baseValue) ? {} : baseValue ?? {}
+  const initialValue = useMemo(() => isArray(baseValue) ? {} : baseValue ?? {}, [baseValue])
   const [value, setValue] = useState(cloneDeep(initialValue))
-  const { name } = useItem()
+  const { name: tempItemName } = useItem()
+  const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
+  const name = useMemo(() => itemName[itemName.length - 1], [itemName])
+  const bufferedValue = useDebounce(value, 10)
 
-  const onChange: KeyedListData['onChange'] = (newValue) => {
-    baseOnChange !== undefined && baseOnChange(newValue)
-  }
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (!isEqual(value, initialValue)) {
-        onChange(value)
-      }
-    }, 300)
-
-    return () => { clearTimeout(timeoutId) }
-  }, [value])
+  const onChange: KeyedListData['onChange'] = useCallback((newValue: KeyedListData['values']) => {
+    if (baseOnChange !== undefined) {
+      setValue(() => newValue)
+      baseOnChange(newValue)
+    }
+  }, [baseOnChange])
 
   useEffect(() => {
     if (!isEqual(value, initialValue)) {
-      setValue(initialValue)
+      setValue(() => initialValue)
     }
-  }, [baseValue])
+  }, [initialValue])
 
-  const add: KeyedListData['operations']['add'] = (key, newValue = {}) => {
+  const add: KeyedListData['operations']['add'] = useCallback((key, newValue = {}) => {
     setValue((currentValue) => {
       if (isObject(currentValue) && currentValue[key] !== undefined) {
         return currentValue
@@ -59,18 +56,19 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
       _newValue[key] = newValue
       return _newValue
     })
-  }
+  }, [])
 
-  const remove: KeyedListData['operations']['remove'] = (key) => {
-    const newValue = cloneDeep(value)
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    delete newValue[key]
+  const remove: KeyedListData['operations']['remove'] = useCallback((key) => {
+    setValue((currentValue) => {
+      const newValue = cloneDeep(currentValue)
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete newValue[key]
+      return newValue
+    })
+  }, [])
 
-    setValue(() => newValue)
-  }
-
-  const update: KeyedListData['operations']['update'] = (subFieldname, newSubValue, isInitialValue) => {
-    const currentName: string[] = isArray(name) ? name : [name]
+  const update: KeyedListData['operations']['update'] = useCallback((subFieldname, newSubValue, isInitialValue) => {
+    const currentName: string[] = isArray(itemName) ? itemName : [itemName]
     const currentSubFieldname: string[] = isArray(subFieldname) ? subFieldname : [subFieldname]
 
     const nameDifference: string[] = []
@@ -98,10 +96,17 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
       setWith(newValue, nameDifference, newSubValue, setAsObject)
       return newValue
     })
-  }
+  }, [itemName, onFieldChange])
 
-  const getValue = (subFieldNames: string[]): any => {
-    const currentName: string[] = isArray(name) ? name : [name]
+  // Trigger onChange when value changes, but outside of setState
+  useEffect(() => {
+    if (!isEqual(value, initialValue) && !isEmpty(value)) {
+      onChange(value)
+    }
+  }, [bufferedValue])
+
+  const getValue = useCallback((subFieldNames: string[]): any => {
+    const currentName: string[] = isArray(itemName) ? itemName : [itemName]
     const nameDifference: string[] = []
 
     for (let i = 0; i < subFieldNames.length; i++) {
@@ -111,22 +116,26 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     }
 
     return get(value, nameDifference)
-  }
+  }, [itemName, value])
 
-  return useMemo(() => (
+  const operations = useMemo(() => ({ add, remove, update, getValue }), [add, remove, update, getValue])
+
+  return (
     <KeyedListProvider
       getAdditionalComponentProps={ getAdditionalComponentProps }
-      onChange={ onChange }
-      operations={ { add, remove, update, getValue } }
+      operations={ operations }
       values={ value ?? {} }
     >
       <Form.Group name={ name }>
         {children}
       </Form.Group>
     </KeyedListProvider>
-  ), [name, value, children, onChange, add, remove, update, getValue])
+  )
 }
 
-KeyedList.Iterator = KeyedListIterator
+const memoedKeyedList = React.memo(KeyedList) as unknown as typeof KeyedList & {
+  Iterator: typeof KeyedListIterator
+}
+memoedKeyedList.Iterator = KeyedListIterator
 
-export { KeyedList }
+export { memoedKeyedList as KeyedList }

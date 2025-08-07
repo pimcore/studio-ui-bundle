@@ -17,9 +17,10 @@ import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 interface BorderTitleViewProps {
   icon: ElementIcon
   title: string
+  dataTestId?: string
 }
 
-export const BorderTitleView = ({ icon, title }: BorderTitleViewProps): React.JSX.Element => {
+export const BorderTitleView = ({ icon, title, dataTestId }: BorderTitleViewProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
@@ -27,7 +28,7 @@ export const BorderTitleView = ({ icon, title }: BorderTitleViewProps): React.JS
       placement={ 'right' }
       title={ t(title) }
     >
-      <div>
+      <div data-testid={ dataTestId }>
         <Icon
           options={ { width: 16, height: 16 } }
           { ...icon }

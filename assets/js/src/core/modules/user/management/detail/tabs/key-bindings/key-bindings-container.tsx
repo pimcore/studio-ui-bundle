@@ -15,6 +15,7 @@ import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-m
 import { Content } from '@Pimcore/components/content/content'
 import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
 import { KeyBindings } from '@Pimcore/modules/user/management/detail/tabs/key-bindings/key-bindings'
+import { createTabContentTestId } from '@Pimcore/utils/test-id-generator'
 
 const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
   const [form] = Form.useForm()
@@ -42,6 +43,7 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
 
   return (
     <Form
+      data-testid={ createTabContentTestId(id.toString(), { prefix: 'user-detail-tab', tabKey: 'key-bindings' }) }
       form={ form }
       layout="vertical"
     >

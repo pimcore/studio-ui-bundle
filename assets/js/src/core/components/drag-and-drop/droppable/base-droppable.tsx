@@ -72,13 +72,14 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
 
   useEffect(() => {
     if (isVisible) {
-      window.addEventListener('studioui:draggable:change-drag-info', handleChangeDragInfo)
+      const targetWindow = window.parent
+      targetWindow.addEventListener('studioui:draggable:change-drag-info', handleChangeDragInfo)
 
       return () => {
-        window.removeEventListener('studioui:draggable:change-drag-info', handleChangeDragInfo)
+        targetWindow.removeEventListener('studioui:draggable:change-drag-info', handleChangeDragInfo)
       }
     }
-  }, [isVisible])
+  }, [isVisible, isInIframe])
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault()

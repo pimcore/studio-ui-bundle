@@ -11,7 +11,6 @@
 import { injectable } from 'inversify'
 import { type DynamicTypeAbstract } from '../../../registry/dynamic-type-registry-abstract'
 import { type ReactElement } from 'react'
-import { type ColumnMetaType } from '@Pimcore/components/grid/grid'
 import { type IFieldWidthContext } from '@sdk/modules/element'
 
 export interface AbstractDocumentEditableDefinition {
@@ -26,15 +25,12 @@ export interface AbstractDocumentEditableDefinition {
   value?: any
   onChange?: (value: any) => void
   defaultFieldWidth: IFieldWidthContext
+  containerRef?: React.RefObject<HTMLDivElement>
 }
-
-export type GridCellColumnMeta = ColumnMetaType & { type: string }
 
 @injectable()
 export abstract class DynamicTypeDocumentEditableAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
-  // if true, the editable will be rendered inside a shadow DOM with embedded styles. if false, it will be rendered in the normal DOM and styles need to be applied individually
-  useShadowDom: boolean = true
 
   abstract getEditableDataComponent (props: AbstractDocumentEditableDefinition): ReactElement<AbstractDocumentEditableDefinition>
 
@@ -42,7 +38,34 @@ export abstract class DynamicTypeDocumentEditableAbstract implements DynamicType
     return value
   }
 
+  /**
+   * Transform the internal editable value to the format expected by the backend API
+   * This is the reverse of transformValue - used when sending data to update endpoints
+   * @param value The internal editable value
+   * @param props The editable props
+   * @returns The value formatted for the backend API
+   */
+  transformValueForApi (value: any, props: AbstractDocumentEditableDefinition): any {
+    return value
+  }
+
   getLabel (props: AbstractDocumentEditableDefinition): React.ReactElement | undefined {
     return undefined
+  }
+
+  /**
+   * Helper method to check if the editable has reload config enabled
+   */
+  protected hasReloadConfig (props: AbstractDocumentEditableDefinition): boolean {
+    return Boolean(props.config?.reload)
+  }
+
+  /**
+   * Determines if the editable should trigger immediate auto-save and reload on change
+   * @param props The editable props
+   * @returns true if should reload on change, false for normal debounced auto-save
+   */
+  reloadOnChange (props: AbstractDocumentEditableDefinition, oldValue: any, newValue: any): boolean {
+    return this.hasReloadConfig(props)
   }
 }

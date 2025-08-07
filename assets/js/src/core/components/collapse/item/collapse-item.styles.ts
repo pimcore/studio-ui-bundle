@@ -109,6 +109,12 @@ export const useStyles = createStyles(({ css, token }) => {
           }
         }
 
+        &.collapse-item--theme-error {
+          &.collapse-item--bordered {
+            border: 1px solid ${themeToken.Tag.colorErrorBorder};
+          }
+        }
+
         &.collapse-item--theme-primary {
           background-color: ${themeToken.colorFillAlter};
 

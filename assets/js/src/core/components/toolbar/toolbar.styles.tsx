@@ -31,7 +31,12 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       &.toolbar--position-bottom {
-        border-top: 1px solid ${token.colorBorderTertiary}
+        border-top: 1px solid ${token.colorBorderTertiary};
+      }
+
+      &.toolbar--position-content {
+        border-top: 1px solid ${token.colorBorderTertiary};
+        border-bottom: 1px solid ${token.colorBorderTertiary};
       }
 
       &.toolbar--border-default {

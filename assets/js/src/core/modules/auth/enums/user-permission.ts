@@ -10,14 +10,19 @@
 
 export enum UserPermission {
   NotesAndEvents = 'notes_events',
+  Translations = 'translations',
   Documents = 'documents',
   DocumentTypes = 'document_types',
   Objects = 'objects',
   Assets = 'assets',
   TagsConfiguration = 'tags_configuration',
   PredefinedProperties = 'predefined_properties',
+  WebsiteSettings = 'website_settings',
   Users = 'users',
   Notifications = 'notifications',
   SendNotifications = 'notifications_send',
-  Emails = 'emails'
+  Emails = 'emails',
+  RecycleBin = 'recyclebin',
+  Redirects = 'redirects',
+  ApplicationLogger = 'application_logging'
 }

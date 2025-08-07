@@ -10,11 +10,12 @@
 
 import { type NamePath } from 'antd/es/form/interface'
 import { Form } from '../form'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { type NumberedListData, NumberedListProvider } from './provider/numbered-list/numbered-list-provider'
 import { NumberedListIterator } from './iterator/numbered-list-iterator'
-import { cloneDeep, isEqual, set, get, isArray } from 'lodash'
+import { cloneDeep, isEqual, set, get, isArray, isUndefined } from 'lodash'
 import { useItem } from '../item/provider/item/use-item'
+import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
 
 export interface NumberedListProps {
   children: React.ReactNode
@@ -28,52 +29,42 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
   const initialValue = baseValue ?? []
   const [value, setValue] = useState(cloneDeep(initialValue))
   const { name: tempItemName } = useItem()
+  const bufferedValue = useDebounce(value, 10)
 
   const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
   const name = useMemo(() => itemName[itemName.length - 1], [itemName])
 
-  const onChange: NumberedListData['onChange'] = (newValue) => {
+  const onChange: NumberedListData['onChange'] = useCallback((newValue: NumberedListData['values']) => {
+    setValue(() => newValue)
     baseOnChange !== undefined && baseOnChange(newValue)
-  }
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (!isEqual(value, initialValue)) {
-        onChange(value)
-      }
-    }, 300)
-
-    return () => { clearTimeout(timeoutId) }
-  }, [value])
+  }, [baseOnChange])
 
   useEffect(() => {
     if (!isEqual(value, initialValue)) {
-      setValue(initialValue)
+      setValue(() => initialValue)
     }
   }, [baseValue])
 
-  const add: NumberedListData['operations']['add'] = (newValue, key) => {
+  const add: NumberedListData['operations']['add'] = useCallback((newValue, key) => {
     let currentKey = key
-
-    if (currentKey === undefined) {
-      currentKey = value.length
-    }
+    currentKey ??= value.length
 
     setValue((currentValue) => {
       const _newValue = cloneDeep(currentValue)
       _newValue.splice(currentKey, 0, newValue)
       return _newValue
     })
-  }
+  }, [value.length])
 
-  const remove: NumberedListData['operations']['remove'] = (key) => {
-    const newValue = cloneDeep(value)
-    newValue.splice(key, 1)
+  const remove: NumberedListData['operations']['remove'] = useCallback((key) => {
+    setValue((currentValue) => {
+      const newValue = cloneDeep(currentValue)
+      newValue.splice(key, 1)
+      return newValue
+    })
+  }, [])
 
-    setValue(() => newValue)
-  }
-
-  const update: NumberedListData['operations']['update'] = (subFieldname, newSubValue, isInitialValue) => {
+  const update: NumberedListData['operations']['update'] = useCallback((subFieldname, newSubValue, isInitialValue) => {
     const currentName: string[] = itemName
     const currentSubFieldname: string[] = subFieldname
     const nameDifference: string[] = []
@@ -93,18 +84,25 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
       set(newValue, nameDifference, newSubValue)
       return newValue
     })
-  }
+  }, [itemName, onFieldChange])
 
-  const move: NumberedListData['operations']['move'] = (from, to) => {
+  const move: NumberedListData['operations']['move'] = useCallback((from, to) => {
     setValue((currentValue) => {
       const newValue = cloneDeep(currentValue)
       const [removed] = newValue.splice(from, 1)
       newValue.splice(to, 0, removed)
       return newValue
     })
-  }
+  }, [])
 
-  const getValue = (subFieldNames: string[]): any => {
+  // Trigger onChange when value changes, but outside of setState
+  useEffect(() => {
+    if (!isEqual(value, initialValue) && !isUndefined(value)) {
+      onChange(value)
+    }
+  }, [bufferedValue])
+
+  const getValue = useCallback((subFieldNames: string[]): any => {
     const currentName: string[] = itemName
     const nameDifference: string[] = []
 
@@ -115,22 +113,27 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     }
 
     return get(value, nameDifference)
-  }
+  }, [itemName, value])
 
-  return useMemo(() => (
+  const operations = useMemo(() => ({ add, remove, update, move, getValue }), [add, remove, update, move, getValue])
+
+  return (
     <NumberedListProvider
       getAdditionalComponentProps={ getAdditionalComponentProps }
       onChange={ onChange }
-      operations={ { add, remove, update, move, getValue } }
+      operations={ operations }
       values={ value ?? {} }
     >
       <Form.Group name={ name }>
         {children}
       </Form.Group>
     </NumberedListProvider>
-  ), [name, value, children, onChange, add, remove, update, getValue])
+  )
 }
 
-NumberedList.Iterator = NumberedListIterator
+const memoedNumberedList = React.memo(NumberedList) as unknown as typeof NumberedList & {
+  Iterator: typeof NumberedListIterator
+}
+memoedNumberedList.Iterator = NumberedListIterator
 
-export { NumberedList }
+export { memoedNumberedList as NumberedList }

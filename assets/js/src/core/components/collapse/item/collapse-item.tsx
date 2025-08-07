@@ -10,7 +10,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { Collapse, type CollapseProps } from 'antd'
-import { CollapseHeader } from './header/collapse-header'
+import { CollapseHeader, type CollapseHeaderProps } from './header/collapse-header'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './collapse-item.styles'
 import cn from 'classnames'
@@ -24,7 +24,7 @@ export interface CollapseStyleProps {
   expandIcon?: CollapseProps['expandIcon']
   expandIconPosition?: CollapseProps['expandIconPosition']
   extraPosition?: 'start' | 'end'
-  theme?: 'success' | 'primary' | 'simple' | 'default' | 'card-with-highlight' | 'fieldset' | 'border-highlight'
+  theme?: 'success' | 'error' | 'primary' | 'simple' | 'default' | 'card-with-highlight' | 'fieldset' | 'border-highlight'
   contentPadding?: BoxProps['padding']
   hasContentSeparator?: boolean
 }
@@ -34,6 +34,7 @@ export interface CollapseItemProps extends Omit<AntdCollapsePropsItem, 'key' | '
   defaultActive?: boolean
   onChange?: CollapseProps['onChange']
   subLabel?: React.ReactNode
+  subLabelPosition?: CollapseHeaderProps['subLabelPosition']
 }
 
 export const ExpandIcon = ({ isActive }: { isActive: boolean }): React.ReactElement => {
@@ -48,6 +49,7 @@ export const CollapseItem = ({
   expandIconPosition = 'end',
   expandIcon = ExpandIcon,
   subLabel,
+  subLabelPosition,
   onChange,
   extraPosition = 'end',
   theme = 'default',
@@ -104,6 +106,7 @@ export const CollapseItem = ({
         extraPosition={ extraPosition }
         label={ props.label }
         subLabel={ subLabel }
+        subLabelPosition={ subLabelPosition }
       />
     ),
     children: (

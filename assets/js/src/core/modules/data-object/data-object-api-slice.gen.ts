@@ -34,16 +34,13 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
-            dataObjectGetGridPreview: build.mutation<
-                DataObjectGetGridPreviewApiResponse,
-                DataObjectGetGridPreviewApiArg
-            >({
+            dataObjectGetGridPreview: build.query<DataObjectGetGridPreviewApiResponse, DataObjectGetGridPreviewApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/data-objects/grid/preview`,
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Data Object Grid"],
+                providesTags: ["Data Object Grid"],
             }),
             dataObjectDeleteGridConfigurationByConfigurationId: build.mutation<
                 DataObjectDeleteGridConfigurationByConfigurationIdApiResponse,
@@ -117,6 +114,19 @@ const injectedRtkApi = api
                     params: {
                         classId: queryArg.classId,
                         folderId: queryArg.folderId,
+                    },
+                }),
+                providesTags: ["Data Object Grid"],
+            }),
+            dataObjectGetAvailableGridColumnsForRelation: build.query<
+                DataObjectGetAvailableGridColumnsForRelationApiResponse,
+                DataObjectGetAvailableGridColumnsForRelationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/available-columns-for-relation`,
+                    params: {
+                        classId: queryArg.classId,
+                        relationField: queryArg.relationField,
                     },
                 }),
                 providesTags: ["Data Object Grid"],
@@ -316,7 +326,7 @@ export type DataObjectSaveGridConfigurationApiArg = {
         saveFilter?: boolean;
         sharedUsers?: object;
         sharedRoles?: object;
-        columns: Column[];
+        columns: GridColumnRequest[];
         filter?: GridFilter | null;
     };
 };
@@ -341,7 +351,7 @@ export type DataObjectUpdateGridConfigurationApiArg = {
         saveFilter?: boolean;
         sharedUsers?: object;
         sharedRoles?: object;
-        columns: Column[];
+        columns: GridColumnRequest[];
         filter?: GridFilter | null;
     };
 };
@@ -354,6 +364,16 @@ export type DataObjectGetAvailableGridColumnsApiArg = {
     classId?: string;
     /** folderId */
     folderId?: number;
+};
+export type DataObjectGetAvailableGridColumnsForRelationApiResponse =
+    /** status 200 List of available grid columns for data objects Many to many relation field */ {
+        columns?: GridColumnConfiguration[];
+    };
+export type DataObjectGetAvailableGridColumnsForRelationApiArg = {
+    /** Identifies the class name for which the columns should be retrieved. */
+    classId?: string;
+    /** relationField */
+    relationField?: string;
 };
 export type DataObjectGetGridApiResponse = /** status 200 Data object grid data */ {
     totalItems: number;
@@ -369,7 +389,7 @@ export type DataObjectGetGridApiArg = {
     classId: string;
     body: {
         folderId: number;
-        columns: GridColumnRequest[];
+        columns?: GridColumnRequest[];
         filters?: GridFilter;
     };
 };
@@ -685,13 +705,17 @@ export type Transformer = {
 };
 export type AdvancedColumnConfig = {
     /** advancedColumns */
-    advancedColumns: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
+    advancedColumns: {
+        /** Type of the column, e.g. "simpleField", "relationField", "staticText" */
+        key: string;
+        config: (RelationFieldConfig | SimpleFieldConfig | StaticTextConfig)[];
+    }[];
     /** List if Transformers that should be applied */
     transformers?: Transformer[];
 };
 export type GridColumnRequest = {
     /** Key */
-    key: string;
+    key?: string;
     /** Locale */
     locale?: string | null;
     /** Type */
@@ -699,7 +723,7 @@ export type GridColumnRequest = {
     /** Group */
     group?: string | null;
     /** Config */
-    config: (string | AdvancedColumnConfig)[];
+    config?: (string | AdvancedColumnConfig)[];
 };
 export type Column = {
     /** Key of the Column */
@@ -741,7 +765,7 @@ export type GridDetailedConfiguration = {
     /** sharedRoles */
     sharedRoles: object;
     /** columns */
-    columns: Column[];
+    columns: (Column | GridColumnRequest)[];
     /** filter */
     filter: GridFilter[];
     /** Page Size */
@@ -862,7 +886,7 @@ export const {
     useDataObjectCloneMutation,
     useDataObjectGetByIdQuery,
     useDataObjectUpdateByIdMutation,
-    useDataObjectGetGridPreviewMutation,
+    useDataObjectGetGridPreviewQuery,
     useDataObjectDeleteGridConfigurationByConfigurationIdMutation,
     useDataObjectGetGridConfigurationQuery,
     useDataObjectListSavedGridConfigurationsQuery,
@@ -870,6 +894,7 @@ export const {
     useDataObjectSetGridConfigurationAsFavoriteMutation,
     useDataObjectUpdateGridConfigurationMutation,
     useDataObjectGetAvailableGridColumnsQuery,
+    useDataObjectGetAvailableGridColumnsForRelationQuery,
     useDataObjectGetGridQuery,
     useDataObjectGetLayoutByIdQuery,
     useDataObjectPatchByIdMutation,

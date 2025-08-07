@@ -15,7 +15,7 @@ import { injectable } from 'inversify'
 
 @injectable()
 export class DynamicTypeGridCellText extends DynamicTypeGridCellAbstract {
-  readonly id = 'input'
+  readonly id: string = 'input'
 
   getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
     return <TextCell { ...props } />

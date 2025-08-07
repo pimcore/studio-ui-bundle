@@ -14,7 +14,6 @@ import ContentEditable from '../components/content-editable/content-editable'
 
 export class DynamicTypeDocumentEditableInput extends DynamicTypeDocumentEditableAbstract {
   id: string = 'input'
-  useShadowDom: boolean = false
 
   getEditableDataComponent (props: AbstractDocumentEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (

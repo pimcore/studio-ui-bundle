@@ -30,9 +30,11 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { DynamicTypeFieldFilterObjectAdapter } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/data-object-adapter/dynamic-type-field-filter-data-object-adapter'
 import { DynamicTypeFieldFilterDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/data-object-brick/dynamic-type-field-filter-data-object-object-brick'
 import { DynamicTypeFieldFilterText } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/text/dynamic-type-field-filter-text'
+import { DynamicTypeFieldFilterTextArea } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/text-area/dynamic-type-field-filter-text-area'
 import { DynamicTypeFieldFilterNumber } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/number/dynamic-type-field-filter-number'
 import { DynamicTypeFieldFilterSelect } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/select/dynamic-type-field-filter-select'
 import { DynamicTypeFieldFilterDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
+import { DynamicTypeFieldFilterCheckbox } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
 import { DynamicTypeGridCellText } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/text/dynamic-type-grid-cell-text'
 import { DynamicTypeGridCellRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/dynamic-type-grid-cell-registry'
 import { DynamicTypeGridCellTextarea } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/textarea/dynamic-type-grid-cell-text'
@@ -54,6 +56,7 @@ import { DynamicTypeGridCellAssetCustomMetadataIcon } from '@Pimcore/modules/ele
 import { DynamicTypeGridCellAssetCustomMetadataValue } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_meta-data/dynamic-type-grid-cell-asset-custom-metadata-value'
 import { DynamicTypeGridCellPropertyIcon } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_properties/dynamic-type-grid-cell-property-icon'
 import { DynamicTypeGridCellPropertyValue } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_properties/dynamic-type-grid-cell-property-value'
+import { DynamicTypeGridCellWebsiteSettingsValue } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_website-settings/dynamic-type-grid-cell-website-settings-value'
 import { DynamicTypeGridCellScheduleActionsSelect } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_schedule/dynamic-type-grid-cell-schedule-actions-select'
 import { DynamicTypeGridCellVersionIdSelect } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_schedule/dynamic-type-grid-cell-version-id-select'
 import { DynamicTypeGridCellAssetVersionPreviewFieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_versions/dynamic-type-grid-cell-asset-version-preview-field-label'
@@ -174,11 +177,31 @@ import { DynamicTypeDocumentEditableNumeric } from '@Pimcore/modules/element/dyn
 import { DynamicTypeDocumentEditableRelation } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-relation'
 import { DynamicTypeDocumentEditableRelations } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-relations'
 import { DynamicTypeDocumentEditableInput } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-input'
+import { DynamicTypeDocumentEditableCheckbox } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-checkbox'
 import { DynamicTypeDocumentEditableWysiwyg } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-wysiwyg'
-import { DynamicTypeFieldFilterCheckbox } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
-import { DynamicTypeFieldFilterTextArea } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/text-area/dynamic-type-field-filter-text-area'
-import { BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
+import { DynamicTypeDocumentEditableDate } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-date'
+import { DynamicTypeDocumentEditableLink } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-link'
+import { DynamicTypeDocumentEditableEmbed } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-embed'
 import { DynamicTypeDocumentEditableTextarea } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-textarea'
+import { DynamicTypeDocumentEditableImage } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-image'
+import { DynamicTypeDocumentEditableVideo } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-video'
+import { DynamicTypeDocumentEditableArea } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-area'
+import { DynamicTypePipelineRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-registry'
+import { DynamicTypePipelineGridSourceFieldsText } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/types/text/text'
+import { DynamicTypePipelineGridTransformersChangeCase } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/change-case/change-case'
+import { DynamicTypePipelineGridTransformersCombine } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/combine/combine'
+import { DynamicTypePipelineGridSourceFieldsSimpleField } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/types/simple-field/simple-field'
+import { DynamicTypePipelineGridSourceFieldsRelationField } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/types/relation-field/relation-field'
+import { DynamicTypeDocumentEditableMultiSelect } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-multiselect'
+import { DynamicTypeDocumentEditableSelect } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-select'
+import { DynamicTypeDocumentEditableTable } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-table'
+import { DynamicTypeDocumentEditableSnippet } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-snippet'
+import { BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
+import { DynamicTypeGridCellDataObjectAdvanced } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/data-object-advanced/dynamic-type-grid-cell-data-object-advanced'
+import { DynamicTypeEditableDialogLayoutRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/editable-dialog-layout/dynamic-type-editable-dialog-layout-registry'
+import { DynamicTypeEditableDialogLayoutTabpanel } from '@Pimcore/modules/element/dynamic-types/definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-tabpanel'
+import { DynamicTypeEditableDialogLayoutPanel } from '@Pimcore/modules/element/dynamic-types/definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-panel'
+import { DynamicTypeGridCellString } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/string/dynamic-type-grid-cell-string'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -263,6 +286,7 @@ container.bind(serviceIds['DynamicTypes/GridCell/AssetCustomMetadataIcon']).to(D
 container.bind(serviceIds['DynamicTypes/GridCell/AssetCustomMetadataValue']).to(DynamicTypeGridCellAssetCustomMetadataValue).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/PropertyIcon']).to(DynamicTypeGridCellPropertyIcon).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/PropertyValue']).to(DynamicTypeGridCellPropertyValue).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/WebsiteSettingsValue']).to(DynamicTypeGridCellWebsiteSettingsValue).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/ScheduleActionsSelect']).to(DynamicTypeGridCellScheduleActionsSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/VersionsIdSelect']).to(DynamicTypeGridCellVersionIdSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/AssetVersionPreviewFieldLabel']).to(DynamicTypeGridCellAssetVersionPreviewFieldLabel).inSingletonScope()
@@ -274,6 +298,11 @@ container.bind(serviceIds['DynamicTypes/GridCell/LanguageSelect']).to(DynamicTyp
 container.bind(serviceIds['DynamicTypes/GridCell/Translate']).to(DynamicTypeGridCellTranslate).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/DataObjectAdapter']).to(DynamicTypeGridCellDataObjectAdapter).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/DataObjectObjectBrick']).to(DynamicTypeGridCellDataObjectObjectBrick).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/DataObjectAdvanced']).to(DynamicTypeGridCellDataObjectAdvanced).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/String']).to(DynamicTypeGridCellString).inSingletonScope()
+
+// Advanced grid cell registry
+container.bind(serviceIds['DynamicTypes/AdvancedGridCellRegistry']).to(DynamicTypeGridCellRegistry).inSingletonScope()
 
 // dynamic types listing
 container.bind(serviceIds['DynamicTypes/ListingRegistry']).to(DynamicTypeListingRegistry).inSingletonScope()
@@ -359,12 +388,28 @@ container.bind(serviceIds['DynamicTypes/ObjectData/ClassificationStore']).to(Dyn
 
 // Document editables
 container.bind(serviceIds['DynamicTypes/DocumentEditableRegistry']).to(DynamicTypeDocumentEditableRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Checkbox']).to(DynamicTypeDocumentEditableCheckbox).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Date']).to(DynamicTypeDocumentEditableDate).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Embed']).to(DynamicTypeDocumentEditableEmbed).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Image']).to(DynamicTypeDocumentEditableImage).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Input']).to(DynamicTypeDocumentEditableInput).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Wysiwyg']).to(DynamicTypeDocumentEditableWysiwyg).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Link']).to(DynamicTypeDocumentEditableLink).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/MultiSelect']).to(DynamicTypeDocumentEditableMultiSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Numeric']).to(DynamicTypeDocumentEditableNumeric).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Relation']).to(DynamicTypeDocumentEditableRelation).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Relations']).to(DynamicTypeDocumentEditableRelations).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Select']).to(DynamicTypeDocumentEditableSelect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Snippet']).to(DynamicTypeDocumentEditableSnippet).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Table']).to(DynamicTypeDocumentEditableTable).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Textarea']).to(DynamicTypeDocumentEditableTextarea).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/DocumentEditable/Wysiwyg']).to(DynamicTypeDocumentEditableWysiwyg).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Video']).to(DynamicTypeDocumentEditableVideo).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Area']).to(DynamicTypeDocumentEditableArea).inSingletonScope()
+
+// Editable dialog layout components
+container.bind(serviceIds['DynamicTypes/EditableDialogLayoutRegistry']).to(DynamicTypeEditableDialogLayoutRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/EditableDialogLayout/Tabpanel']).to(DynamicTypeEditableDialogLayoutTabpanel).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/EditableDialogLayout/Panel']).to(DynamicTypeEditableDialogLayoutPanel).inSingletonScope()
 
 // Asset Types
 container.bind(serviceIds['DynamicTypes/AssetRegistry']).to(DynamicTypeAssetRegistry).inSingletonScope()
@@ -382,6 +427,17 @@ container.bind(serviceIds['DynamicTypes/ObjectRegistry']).to(DynamicTypeObjectRe
 container.bind(serviceIds['DynamicTypes/Object/Folder']).to(DynamicTypeObjectFolder).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Object/Object']).to(DynamicTypeObjectObject).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Object/Variant']).to(DynamicTypeObjectVariant).inSingletonScope()
+
+// Advanced columns source fields
+container.bind(serviceIds['DynamicTypes/Grid/SourceFieldsRegistry']).to(DynamicTypePipelineRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/SourceFields/Text']).to(DynamicTypePipelineGridSourceFieldsText).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/SourceFields/SimpleField']).to(DynamicTypePipelineGridSourceFieldsSimpleField).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/SourceFields/RelationField']).to(DynamicTypePipelineGridSourceFieldsRelationField).inSingletonScope()
+
+// Advanced columns transformers
+container.bind(serviceIds['DynamicTypes/Grid/TransformersRegistry']).to(DynamicTypePipelineRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/ChangeCase']).to(DynamicTypePipelineGridTransformersChangeCase).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Grid/Transformers/Combine']).to(DynamicTypePipelineGridTransformersCombine).inSingletonScope()
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()

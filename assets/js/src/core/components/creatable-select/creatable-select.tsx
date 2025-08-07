@@ -1,0 +1,150 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React, { useState, useCallback, useEffect } from 'react'
+import { Select, Input, Button, Divider, Flex, Box, Text } from '@sdk/components'
+import { type SelectProps } from '@sdk/components'
+import { type SelectOptionType } from '@sdk/modules/element'
+import { useTranslation } from 'react-i18next'
+
+export interface CreatableSelectProps extends Omit<SelectProps, 'options'> {
+  options: SelectOptionType[]
+  onCreateOption?: (value: string) => void
+  creatable?: boolean
+  createOptionLabel?: string
+  allowDuplicates?: boolean
+}
+
+const Component = ({
+  options,
+  onCreateOption,
+  creatable = true,
+  createOptionLabel,
+  allowDuplicates = false,
+  value,
+  onChange,
+  ...selectProps
+}: CreatableSelectProps): React.JSX.Element => {
+  const { t } = useTranslation()
+  const [customOptions, setCustomOptions] = useState<SelectOptionType[]>([])
+  const [newOptionText, setNewOptionText] = useState('')
+
+  const allOptions = [...options, ...customOptions]
+
+  // Auto-add value or defaultValue if it's not in the options list
+  useEffect(() => {
+    const valueToCheck = value ?? selectProps.defaultValue
+    if (valueToCheck !== null && valueToCheck !== undefined && typeof valueToCheck === 'string' && valueToCheck.trim() !== '') {
+      const valueExists = allOptions.some(opt => opt.value === valueToCheck)
+      if (!valueExists) {
+        const autoOption: SelectOptionType = {
+          value: valueToCheck,
+          label: valueToCheck
+        }
+        setCustomOptions(prev => {
+          // Check if already added to avoid duplicates
+          const alreadyAdded = prev.some(opt => opt.value === valueToCheck)
+          if (alreadyAdded) return prev
+          return [...prev, autoOption]
+        })
+        onCreateOption?.(valueToCheck)
+      }
+    }
+  }, [value, selectProps.defaultValue, allOptions, onCreateOption])
+
+  const handleAddOption = useCallback(() => {
+    const trimmedValue = newOptionText.trim()
+
+    if (trimmedValue === '') return
+
+    // Check if option already exists in all options
+    const optionExists = allOptions.some(opt => opt.value === trimmedValue)
+    if (optionExists && !allowDuplicates) {
+      setNewOptionText('')
+      return
+    }
+
+    const newOption: SelectOptionType = {
+      value: trimmedValue,
+      label: trimmedValue
+    }
+
+    // Add to custom options
+    setCustomOptions(prev => [...prev, newOption])
+    onCreateOption?.(trimmedValue)
+    setNewOptionText('')
+
+    // Auto-select the newly created option
+    if (onChange !== null && onChange !== undefined) {
+      onChange(trimmedValue, newOption)
+    }
+  }, [newOptionText, allOptions, allowDuplicates, onCreateOption, onChange])
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent): void => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      handleAddOption()
+    }
+  }, [handleAddOption])
+
+  const customDropdownRender = (menu: React.ReactElement): React.JSX.Element => {
+    if (!creatable) return menu
+
+    return (
+      <>
+        {menu}
+        <Divider size="normal" />
+        <Box padding={ { x: 'small', top: 'extra-small', bottom: 'small' } }>
+
+          <Flex
+            gap="extra-small"
+            vertical
+          >
+            <Flex gap="small">
+              <Input
+                onChange={ (e) => { setNewOptionText(e.target.value) } }
+                onKeyDown={ handleKeyDown }
+                placeholder={ t(createOptionLabel ?? 'creatable-select.add-custom-option') }
+                size="small"
+                style={ { flex: 1 } }
+                value={ newOptionText }
+              />
+              <Button
+                disabled={ newOptionText.trim() === '' || (!allowDuplicates && allOptions.some(opt => opt.value === newOptionText.trim())) }
+                onClick={ handleAddOption }
+                size="small"
+                type="primary"
+              >
+                {t('creatable-select.add')}
+              </Button>
+            </Flex>
+            {!allowDuplicates && newOptionText.trim() !== '' && allOptions.some(opt => opt.value === newOptionText.trim()) && (
+              <Text type="danger">
+                {t('creatable-select.option-already-exists')}
+              </Text>
+            )}
+          </Flex>
+        </Box>
+      </>
+    )
+  }
+
+  return (
+    <Select
+      { ...selectProps }
+      dropdownRender={ customDropdownRender }
+      onChange={ onChange }
+      options={ allOptions }
+      value={ value }
+    />
+  )
+}
+
+export const CreatableSelect = Component

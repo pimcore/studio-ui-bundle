@@ -52,10 +52,14 @@ import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 
 export interface ColumnMetaType {
   editable?: boolean
+  clearable?: boolean
+  showPublishedState?: boolean
   autoWidth?: boolean
   type?: string
   columnKey?: string
   config?: any
+  callback?: boolean
+  editCallback?: (row: any, columnId: string) => Promise<string>
 }
 
 declare module '@tanstack/react-table' {
@@ -291,6 +295,7 @@ export const Grid = ({
           <div className='ant-table-content'>
             <table
               className={ cn({ withoutHeader: hideColumnHeaders }) }
+              data-testid={ props.dataTestId }
               ref={ tableElement }
               style={ { width: tableAutoWidth ? '100%' : calculateTableWidth(), minWidth: table.getCenterTotalSize() } }
             >

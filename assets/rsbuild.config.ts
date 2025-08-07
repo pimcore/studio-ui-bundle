@@ -1,5 +1,6 @@
 import { defineConfig, rspack } from '@rsbuild/core'
 import { pluginReact } from '@rsbuild/plugin-react'
+import { pluginBabel } from '@rsbuild/plugin-babel';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { pluginGenerateEntrypoints } from './bundler/plugins/entrypoints-generate';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
@@ -21,7 +22,7 @@ let env: 'development' | 'production' = 'production';
 const isDevServer = nodeEnv === 'dev-server';
 if (nodeEnv !== env) {
   env = 'development';
-  process.env.NODE_ENV = 'development'; 
+  process.env.NODE_ENV = 'development';
 }
 
 export default defineConfig({
@@ -36,11 +37,12 @@ export default defineConfig({
   source: {
     entry: {
       main: './js/src/core/main.ts',
+      documentEditorIframe: './js/src/core/modules/document/editor/shared-tab-manager/tabs/edit/iframe-app/main.ts'
     },
     decorators: {
       version: 'legacy'
     }
-  }, 
+  },
   output: {
     manifest: true,
     assetPrefix: '/bundles/pimcorestudioui/build/' + buildId,
@@ -73,6 +75,17 @@ export default defineConfig({
   plugins: [
     pluginGenerateEntrypoints(),
     pluginReact(),
+    pluginBabel({
+      include: /\.(?:jsx|tsx)$/,
+      babelLoaderOptions(opts) {
+        opts.plugins?.unshift([
+          'babel-plugin-react-compiler',
+          {
+            compilationMode: 'annotation'
+          },
+        ]);
+      },
+    }),
     pluginSvgr({
       svgrOptions: {
         icon: true,
@@ -129,6 +142,11 @@ export default defineConfig({
           singleton: true,
           eager: true,
           requiredVersion: packages.dependencies.antd
+        },
+        '@ant-design/colors': {
+          singleton: true,
+          eager: true,
+          requiredVersion: packages.dependencies['@ant-design/colors']
         },
         'reflect-metadata': {
           singleton: true,

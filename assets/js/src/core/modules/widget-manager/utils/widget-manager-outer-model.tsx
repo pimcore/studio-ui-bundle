@@ -29,7 +29,8 @@ export const getInitialModelJson = (): IJsonModel => {
     global: {
       tabEnableRename: false,
       tabSetEnableMaximize: false,
-      rootOrientationVertical: true
+      rootOrientationVertical: true,
+      enableUseVisibility: true
     },
 
     layout: {

@@ -17,9 +17,8 @@ import { Content } from '@Pimcore/components/content/content'
 import { TabsContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs-container'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import { Alert } from '@Pimcore/components/alert/alert'
-import { SaveProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/save-provider'
-import { DocumentEditorProvider } from './shared-tab-manager/tabs/edit/provider/document-editor-provider'
 import { Toolbar } from './toolbar/toolbar'
+import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
 
 export interface EditorContainerProps {
   id: number
@@ -70,21 +69,18 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
 
   return (
     <DocumentProvider id={ id }>
-      <SaveProvider>
-        <DocumentEditorProvider>
-          <TabsToolbarView
-            renderTabbar={
-              <TabsContainer
-                elementEditorType={ editorType }
-              />
-              }
-
-            renderToolbar={
-              <Toolbar />
-              }
+      <TabsToolbarView
+        dataTestId={ `document-editor-${createSafeTestIdString(id)}` }
+        renderTabbar={
+          <TabsContainer
+            elementEditorType={ editorType }
           />
-        </DocumentEditorProvider>
-      </SaveProvider>
+          }
+
+        renderToolbar={
+          <Toolbar />
+          }
+      />
     </DocumentProvider>
   )
 }

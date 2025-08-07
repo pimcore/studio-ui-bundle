@@ -9,12 +9,32 @@
  */
 
 import React from 'react'
-import { Divider as AntDivider, type DividerProps } from 'antd'
+import { Divider as AntDivider, type DividerProps, ConfigProvider } from 'antd'
+import { useStyles } from './divider.styles'
+import cn from 'classnames'
+import type { Sizings } from '@Pimcore/utils/sizing'
 
-export interface IDividerProps extends DividerProps {}
+export interface IDividerProps extends DividerProps {
+  size?: Sizings
+  theme?: 'default' | 'primary' | 'secondary'
+}
 
-export const Divider = (props: IDividerProps): JSX.Element => {
+export const Divider = ({ size = 'normal', className, theme = 'default', ...props }: IDividerProps): JSX.Element => {
+  const { getPrefixCls } = React.useContext(ConfigProvider.ConfigContext)
+  const prefixCls = getPrefixCls('divider')
+  const { styles } = useStyles(prefixCls)
+
+  const classes = cn(
+    styles.divider,
+    `${prefixCls}--size-${size}`,
+    `divider--theme-${theme}`,
+    className
+  )
+
   return (
-    <AntDivider { ...props } />
+    <AntDivider
+      className={ classes }
+      { ...props }
+    />
   )
 }

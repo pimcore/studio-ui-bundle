@@ -158,12 +158,18 @@ export const useStyles = createStyles(({ token, css }) => {
         }
   
         .flexlayout__tab {
+          position: relative;
           overflow: visible;
           background: ${token.colorBgContainer};
           box-shadow: 0px 8px 24px 0px rgba(0, 0, 0, 0.07), 2px 2px 0px 0px rgba(79, 78, 183, 0.05);
           border-bottom: 1px solid ${token.Tabs.colorBorderContainer}66;
           border-left: 1px solid ${token.Tabs.colorBorderContainer}66;
           border-radius: 0 8px 8px 8px;
+          z-index: 1;
+        }
+
+        .flexlayout__tab[style*='visibility: hidden'] {
+          z-index: -1;
         }
 
         .flexlayout__tab:not(.widget-manager-inner-container) {

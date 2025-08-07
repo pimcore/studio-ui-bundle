@@ -23,6 +23,7 @@ import addPackage from '@Pimcore/assets/icons/add-package.inline.svg?react'
 import addSomething from '@Pimcore/assets/icons/add-something.inline.svg?react'
 import addUser from '@Pimcore/assets/icons/add-user.inline.svg?react'
 import alert from '@Pimcore/assets/icons/alert.inline.svg?react'
+import applicationLogger from '@Pimcore/assets/icons/application-logger.inline.svg?react'
 import arrowNarrowRight from '@Pimcore/assets/icons/arrow-narrow-right.inline.svg?react'
 import asset from '@Pimcore/assets/icons/asset.inline.svg?react'
 import attachment from '@Pimcore/assets/icons/attachment.inline.svg?react'
@@ -74,6 +75,7 @@ import deleteColumn from '@Pimcore/assets/icons/delete-column.inline.svg?react'
 import deleteRow from '@Pimcore/assets/icons/delete-row.inline.svg?react'
 import dependencies from '@Pimcore/assets/icons/dependencies.inline.svg?react'
 import details from '@Pimcore/assets/icons/details.inline.svg?react'
+import documentLink from '@Pimcore/assets/icons/document-link.inline.svg?react'
 import documentTypes from '@Pimcore/assets/icons/document-types.inline.svg?react'
 import document from '@Pimcore/assets/icons/document.inline.svg?react'
 import doubleArrowDown from '@Pimcore/assets/icons/double-arrow-down.inline.svg?react'
@@ -88,9 +90,11 @@ import dragOption from '@Pimcore/assets/icons/drag-option.inline.svg?react'
 import dropTarget from '@Pimcore/assets/icons/drop-target.inline.svg?react'
 import editPen from '@Pimcore/assets/icons/edit-pen.inline.svg?react'
 import edit from '@Pimcore/assets/icons/edit.inline.svg?react'
+import email from '@Pimcore/assets/icons/email.inline.svg?react'
 import embeddedMetadata from '@Pimcore/assets/icons/embedded-metadata.inline.svg?react'
 import event from '@Pimcore/assets/icons/event.inline.svg?react'
 import excludedFromNav from '@Pimcore/assets/icons/excluded-from-nav.inline.svg?react'
+import expand01 from '@Pimcore/assets/icons/expand-01.inline.svg?react'
 import expand from '@Pimcore/assets/icons/expand.inline.svg?react'
 import exportIcon from '@Pimcore/assets/icons/export.inline.svg?react'
 import eyeOff from '@Pimcore/assets/icons/eye-off.inline.svg?react'
@@ -109,11 +113,13 @@ import folder from '@Pimcore/assets/icons/folder.inline.svg?react'
 import graph from '@Pimcore/assets/icons/graph.inline.svg?react'
 import groupByKeys from '@Pimcore/assets/icons/group-by-keys.inline.svg?react'
 import group from '@Pimcore/assets/icons/group.inline.svg?react'
+import hardlink from '@Pimcore/assets/icons/hardlink.inline.svg?react'
 import heading from '@Pimcore/assets/icons/heading.inline.svg?react'
 import helpCircle from '@Pimcore/assets/icons/help-circle.inline.svg?react'
 import history from '@Pimcore/assets/icons/history.inline.svg?react'
 import homeRootFolder from '@Pimcore/assets/icons/home-root-folder.inline.svg?react'
 import image from '@Pimcore/assets/icons/image.inline.svg?react'
+import importCsv from '@Pimcore/assets/icons/import-csv.inline.svg?react'
 import infoCircle from '@Pimcore/assets/icons/info-circle.inline.svg?react'
 import info from '@Pimcore/assets/icons/info.inline.svg?react'
 import inheritanceActive from '@Pimcore/assets/icons/inheritance-active.inline.svg?react'
@@ -171,6 +177,7 @@ import preview from '@Pimcore/assets/icons/preview.inline.svg?react'
 import properties from '@Pimcore/assets/icons/properties.inline.svg?react'
 import published from '@Pimcore/assets/icons/published.inline.svg?react'
 import questionmark from '@Pimcore/assets/icons/questionmark.inline.svg?react'
+import redirect from '@Pimcore/assets/icons/redirect.inline.svg?react'
 import refresh from '@Pimcore/assets/icons/refresh.inline.svg?react'
 import removeImageThumbnail from '@Pimcore/assets/icons/remove-image-thumbnail.inline.svg?react'
 import removeMarker from '@Pimcore/assets/icons/remove-marker.inline.svg?react'
@@ -179,18 +186,21 @@ import removeVideoThumbnail from '@Pimcore/assets/icons/remove-video-thumbnail.i
 import rename from '@Pimcore/assets/icons/rename.inline.svg?react'
 import requiredBy from '@Pimcore/assets/icons/required-by.inline.svg?react'
 import requires from '@Pimcore/assets/icons/requires.inline.svg?react'
+import restore from '@Pimcore/assets/icons/restore.inline.svg?react'
 import reverse from '@Pimcore/assets/icons/reverse.inline.svg?react'
 import run from '@Pimcore/assets/icons/run.inline.svg?react'
 import save from '@Pimcore/assets/icons/save.inline.svg?react'
 import schedule from '@Pimcore/assets/icons/schedule.inline.svg?react'
 import search from '@Pimcore/assets/icons/search.inline.svg?react'
 import segmentTagging from '@Pimcore/assets/icons/segment-tagging.inline.svg?react'
+import send03 from '@Pimcore/assets/icons/send-03.inline.svg?react'
 import seo from '@Pimcore/assets/icons/seo.inline.svg?react'
 import settings from '@Pimcore/assets/icons/settings.inline.svg?react'
 import share from '@Pimcore/assets/icons/share.inline.svg?react'
 import sharedUsers from '@Pimcore/assets/icons/shared-users.inline.svg?react'
 import shield from '@Pimcore/assets/icons/shield.inline.svg?react'
 import showDetails from '@Pimcore/assets/icons/show-details.inline.svg?react'
+import snippet from '@Pimcore/assets/icons/snippet.inline.svg?react'
 import spinner from '@Pimcore/assets/icons/spinner.inline.svg?react'
 import splitView from '@Pimcore/assets/icons/split-view.inline.svg?react'
 import style from '@Pimcore/assets/icons/style.inline.svg?react'
@@ -207,13 +217,16 @@ import txtDocs from '@Pimcore/assets/icons/txt-docs.inline.svg?react'
 import unknown from '@Pimcore/assets/icons/unknown.inline.svg?react'
 import unlocked from '@Pimcore/assets/icons/unlocked.inline.svg?react'
 import uploadCloud from '@Pimcore/assets/icons/upload-cloud.inline.svg?react'
+import uploadImport from '@Pimcore/assets/icons/upload-import.inline.svg?react'
 import uploadZip from '@Pimcore/assets/icons/upload-zip.inline.svg?react'
 import userSelect from '@Pimcore/assets/icons/user-select.inline.svg?react'
 import user from '@Pimcore/assets/icons/user.inline.svg?react'
 import usersX from '@Pimcore/assets/icons/users-x.inline.svg?react'
+import vector from '@Pimcore/assets/icons/vector.inline.svg?react'
 import video from '@Pimcore/assets/icons/video.inline.svg?react'
 import view from '@Pimcore/assets/icons/view.inline.svg?react'
 import warningCircle from '@Pimcore/assets/icons/warning-circle.inline.svg?react'
+import webSettings from '@Pimcore/assets/icons/web-settings.inline.svg?react'
 import webhook from '@Pimcore/assets/icons/webhook.inline.svg?react'
 import widget from '@Pimcore/assets/icons/widget.inline.svg?react'
 import workflow from '@Pimcore/assets/icons/workflow.inline.svg?react'
@@ -255,6 +268,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'alert',
       component: alert
+    })
+    iconLibrary.register({
+      name: 'application-logger',
+      component: applicationLogger
     })
     iconLibrary.register({
       name: 'arrow-narrow-right',
@@ -461,6 +478,10 @@ moduleSystem.registerModule({
       component: details
     })
     iconLibrary.register({
+      name: 'document-link',
+      component: documentLink
+    })
+    iconLibrary.register({
       name: 'document-types',
       component: documentTypes
     })
@@ -517,6 +538,10 @@ moduleSystem.registerModule({
       component: edit
     })
     iconLibrary.register({
+      name: 'email',
+      component: email
+    })
+    iconLibrary.register({
       name: 'embedded-metadata',
       component: embeddedMetadata
     })
@@ -527,6 +552,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'excluded-from-nav',
       component: excludedFromNav
+    })
+    iconLibrary.register({
+      name: 'expand-01',
+      component: expand01
     })
     iconLibrary.register({
       name: 'expand',
@@ -601,6 +630,10 @@ moduleSystem.registerModule({
       component: group
     })
     iconLibrary.register({
+      name: 'hardlink',
+      component: hardlink
+    })
+    iconLibrary.register({
       name: 'heading',
       component: heading
     })
@@ -619,6 +652,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'image',
       component: image
+    })
+    iconLibrary.register({
+      name: 'import-csv',
+      component: importCsv
     })
     iconLibrary.register({
       name: 'info-circle',
@@ -849,6 +886,10 @@ moduleSystem.registerModule({
       component: questionmark
     })
     iconLibrary.register({
+      name: 'redirect',
+      component: redirect
+    })
+    iconLibrary.register({
       name: 'refresh',
       component: refresh
     })
@@ -881,6 +922,10 @@ moduleSystem.registerModule({
       component: requires
     })
     iconLibrary.register({
+      name: 'restore',
+      component: restore
+    })
+    iconLibrary.register({
       name: 'reverse',
       component: reverse
     })
@@ -905,6 +950,10 @@ moduleSystem.registerModule({
       component: segmentTagging
     })
     iconLibrary.register({
+      name: 'send-03',
+      component: send03
+    })
+    iconLibrary.register({
       name: 'seo',
       component: seo
     })
@@ -927,6 +976,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'show-details',
       component: showDetails
+    })
+    iconLibrary.register({
+      name: 'snippet',
+      component: snippet
     })
     iconLibrary.register({
       name: 'spinner',
@@ -993,6 +1046,10 @@ moduleSystem.registerModule({
       component: uploadCloud
     })
     iconLibrary.register({
+      name: 'upload-import',
+      component: uploadImport
+    })
+    iconLibrary.register({
       name: 'upload-zip',
       component: uploadZip
     })
@@ -1009,6 +1066,10 @@ moduleSystem.registerModule({
       component: usersX
     })
     iconLibrary.register({
+      name: 'vector',
+      component: vector
+    })
+    iconLibrary.register({
       name: 'video',
       component: video
     })
@@ -1019,6 +1080,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'warning-circle',
       component: warningCircle
+    })
+    iconLibrary.register({
+      name: 'web-settings',
+      component: webSettings
     })
     iconLibrary.register({
       name: 'webhook',

@@ -12,13 +12,17 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/FieldFilterRegistry': 'DynamicTypes/FieldFilterRegistry',
   'DynamicTypes/BatchEditRegistry': 'DynamicTypes/BatchEditRegistry',
   'DynamicTypes/GridCellRegistry': 'DynamicTypes/GridCellRegistry',
+  'DynamicTypes/AdvancedGridCellRegistry': 'DynamicTypes/AdvancedGridCellRegistry',
   'DynamicTypes/ListingRegistry': 'DynamicTypes/ListingRegistry',
   'DynamicTypes/MetadataRegistry': 'DynamicTypes/MetadataRegistry',
   'DynamicTypes/ObjectLayoutRegistry': 'DynamicTypes/ObjectLayoutRegistry',
   'DynamicTypes/ObjectDataRegistry': 'DynamicTypes/ObjectDataRegistry',
   'DynamicTypes/DocumentEditableRegistry': 'DynamicTypes/DocumentEditableRegistry',
+  'DynamicTypes/EditableDialogLayoutRegistry': 'DynamicTypes/EditableDialogLayoutRegistry',
   'DynamicTypes/AssetRegistry': 'DynamicTypes/AssetRegistry',
-  'DynamicTypes/ObjectRegistry': 'DynamicTypes/ObjectRegistry'
+  'DynamicTypes/ObjectRegistry': 'DynamicTypes/ObjectRegistry',
+  'DynamicTypes/Grid/SourceFieldsRegistry': 'DynamicTypes/Grid/SourceFieldsRegistry',
+  'DynamicTypes/Grid/TransformersRegistry': 'DynamicTypes/Grid/TransformersRegistry'
 }
 
 export const serviceIds = {
@@ -85,6 +89,7 @@ export const serviceIds = {
   'DynamicTypes/BatchEdit/DataObjectObjectBrick': 'DynamicTypes/BatchEdit/DataObjectObjectBrick',
 
   'DynamicTypes/GridCell/Text': 'DynamicTypes/GridCell/Text',
+  'DynamicTypes/GridCell/String': 'DynamicTypes/GridCell/String',
   'DynamicTypes/GridCell/Textarea': 'DynamicTypes/GridCell/Textarea',
   'DynamicTypes/GridCell/Number': 'DynamicTypes/GridCell/Number',
   'DynamicTypes/GridCell/Select': 'DynamicTypes/GridCell/Select',
@@ -106,6 +111,7 @@ export const serviceIds = {
   'DynamicTypes/GridCell/AssetCustomMetadataValue': 'DynamicTypes/GridCell/AssetCustomMetadataValue',
   'DynamicTypes/GridCell/PropertyIcon': 'DynamicTypes/GridCell/PropertyIcon',
   'DynamicTypes/GridCell/PropertyValue': 'DynamicTypes/GridCell/PropertyValue',
+  'DynamicTypes/GridCell/WebsiteSettingsValue': 'DynamicTypes/GridCell/WebsiteSettingsValue',
   'DynamicTypes/GridCell/ScheduleActionsSelect': 'DynamicTypes/GridCell/ScheduleActionsSelect',
   'DynamicTypes/GridCell/VersionsIdSelect': 'DynamicTypes/GridCell/VersionsIdSelect',
   'DynamicTypes/GridCell/AssetVersionPreviewFieldLabel': 'DynamicTypes/GridCell/AssetVersionPreviewFieldLabel',
@@ -116,6 +122,7 @@ export const serviceIds = {
   'DynamicTypes/GridCell/LanguageSelect': 'DynamicTypes/GridCell/LanguageSelect',
   'DynamicTypes/GridCell/Translate': 'DynamicTypes/GridCell/Translate',
   'DynamicTypes/GridCell/DataObjectAdapter': 'DynamicTypes/GridCell/DataObjectAdapter',
+  'DynamicTypes/GridCell/DataObjectAdvanced': 'DynamicTypes/GridCell/DataObjectAdvanced',
   'DynamicTypes/GridCell/DataObjectObjectBrick': 'DynamicTypes/GridCell/DataObjectObjectBrick',
 
   'DynamicTypes/Listing/Text': 'DynamicTypes/Listing/Text',
@@ -205,7 +212,7 @@ export const serviceIds = {
   'DynamicTypes/DocumentEditable/Image': 'DynamicTypes/DocumentEditable/Image',
   'DynamicTypes/DocumentEditable/Input': 'DynamicTypes/DocumentEditable/Input',
   'DynamicTypes/DocumentEditable/Link': 'DynamicTypes/DocumentEditable/Link',
-  'DynamicTypes/DocumentEditable/Multiselect': 'DynamicTypes/DocumentEditable/Multiselect',
+  'DynamicTypes/DocumentEditable/MultiSelect': 'DynamicTypes/DocumentEditable/MultiSelect',
   'DynamicTypes/DocumentEditable/Numeric': 'DynamicTypes/DocumentEditable/Numeric',
   'DynamicTypes/DocumentEditable/Pdf': 'DynamicTypes/DocumentEditable/Pdf',
   'DynamicTypes/DocumentEditable/Relation': 'DynamicTypes/DocumentEditable/Relation',
@@ -217,6 +224,10 @@ export const serviceIds = {
   'DynamicTypes/DocumentEditable/Textarea': 'DynamicTypes/DocumentEditable/Textarea',
   'DynamicTypes/DocumentEditable/Video': 'DynamicTypes/DocumentEditable/Video',
   'DynamicTypes/DocumentEditable/Wysiwyg': 'DynamicTypes/DocumentEditable/Wysiwyg',
+
+  // Document editable dialog layout
+  'DynamicTypes/EditableDialogLayout/Tabpanel': 'DynamicTypes/EditableDialogLayout/Tabpanel',
+  'DynamicTypes/EditableDialogLayout/Panel': 'DynamicTypes/EditableDialogLayout/Panel',
 
   // Asset types
   'DynamicTypes/Asset/Video': 'DynamicTypes/Asset/Video',
@@ -232,6 +243,15 @@ export const serviceIds = {
   'DynamicTypes/Object/Folder': 'DynamicTypes/Object/Folder',
   'DynamicTypes/Object/Object': 'DynamicTypes/Object/Object',
   'DynamicTypes/Object/Variant': 'DynamicTypes/Object/Variant',
+
+  // Advanced Columns source fields
+  'DynamicTypes/Grid/SourceFields/Text': 'DynamicTypes/Grid/SourceFields/Text',
+  'DynamicTypes/Grid/SourceFields/SimpleField': 'DynamicTypes/Grid/SourceFields/SimpleField',
+  'DynamicTypes/Grid/SourceFields/RelationField': 'DynamicTypes/Grid/SourceFields/RelationField',
+
+  // Advanced Columns transformers
+  'DynamicTypes/Grid/Transformers/ChangeCase': 'DynamicTypes/Grid/SourceFields/ChangeCase',
+  'DynamicTypes/Grid/Transformers/Combine': 'DynamicTypes/Grid/SourceFields/Combine',
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',
