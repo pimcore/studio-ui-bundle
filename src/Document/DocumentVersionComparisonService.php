@@ -27,7 +27,6 @@ use Pimcore\Bundle\StudioUiBundle\Document\Exception\DocumentVersionNotFoundExce
 use Pimcore\Config;
 use Pimcore\Document\Renderer\DocumentRendererInterface;
 use Pimcore\Image\HtmlToImage;
-use Pimcore\Model\Document;
 use Pimcore\Model\Document\PageSnippet;
 use Pimcore\Model\Version;
 use function sprintf;
