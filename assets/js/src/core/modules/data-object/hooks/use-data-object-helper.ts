@@ -115,8 +115,6 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
       trackError(new ApiError(error as unknown as ApiErrorData))
     }
 
-    // formatPathCache.current.set(cacheKey, data)
-
     return data
   }
 
