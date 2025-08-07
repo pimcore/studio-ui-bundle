@@ -808,6 +808,9 @@ redirects.beginner-modal.title: New Beginner Redirect
 redirects.beginner-modal.type: Type
 redirects.beginner-modal.path: Path
 redirects.beginner-modal.target: Target
+redirects.beginner-modal.type.required: Please add a type
+redirects.beginner-modal.path.required: Please add a path
+redirects.beginner-modal.target.required: Please add a target
 redirects.beginner-modal.create: Create
 redirects.beginner-modal.cancel: Cancel
 redirects.csv-import-results.title: Redirects CSV Import Results
