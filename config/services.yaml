@@ -13,9 +13,14 @@ services:
         arguments:
             $staticResourcesResolver: '@pimcore_studio.static_resources_resolver.default'
 
-    Pimcore\Bundle\StudioUiBundle\Controller\ImageEditorController:
+    Pimcore\Bundle\StudioUiBundle\Controller\Backend\:
+        resource: '../src/Controller/Backend'
         public: true
         tags: [ 'controller.service_arguments' ]
+
+    # Document version comparison service
+    Pimcore\Bundle\StudioUiBundle\Document\DocumentVersionComparisonService:
+        autowire: true
 
     pimcore_studio.static_resources_resolver.default:
         class: Pimcore\Bundle\StudioUiBundle\Service\StaticResourcesResolver

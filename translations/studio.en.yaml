@@ -1062,3 +1062,6 @@ video.placeholder: No video selected - Click to add a video
 video.add-video: Add Video
 image.alt-text-placeholder: Enter alt text
 area-settings: Area Settings
+unsupported_feature: Unsupported feature - please check system requirements!
+document.version.comparison.error.title: Version Comparison Error
+document.version.comparison.unsupported.requirements: Chromium binary and PHP extension Imagick are required.
