@@ -90,9 +90,7 @@ final class DocumentVersionsController extends AbstractController
     {
         $file = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/' . basename($request->get('id'));
         if (file_exists($file)) {
-            $response = new BinaryFileResponse($file);
-
-            return $response;
+            return new BinaryFileResponse($file);
         }
 
         throw $this->createNotFoundException('Version diff file not found');

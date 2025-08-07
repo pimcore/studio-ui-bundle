@@ -28,6 +28,7 @@ use Pimcore\Config;
 use Pimcore\Document\Renderer\DocumentRendererInterface;
 use Pimcore\Image\HtmlToImage;
 use Pimcore\Model\Document;
+use Pimcore\Model\Document\PageSnippet;
 use Pimcore\Model\Version;
 use function sprintf;
 use Symfony\Component\Routing\RouterInterface;
@@ -72,19 +73,19 @@ final class DocumentVersionComparisonService
         }
     }
 
-    private function loadAndValidateDocument(int $versionId): Document
+    private function loadAndValidateDocument(int $versionId): PageSnippet
     {
         $version = Version::getById($versionId);
         $document = $version?->loadData();
 
-        if (!$document) {
+        if (!$document instanceof PageSnippet) {
             throw new DocumentVersionNotFoundException($versionId);
         }
 
         return $document;
     }
 
-    private function generateHtmlFiles(Document $docFrom, Document $docTo, string $fromHtmlFile, string $toHtmlFile): void
+    private function generateHtmlFiles(PageSnippet $docFrom, PageSnippet $docTo, string $fromHtmlFile, string $toHtmlFile): void
     {
         try {
             $docContentFrom = $this->documentRenderer->render($docFrom);
