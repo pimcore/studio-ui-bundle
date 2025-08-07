@@ -6,6 +6,9 @@ import { FormInstance, ModalFuncProps } from "antd"
 import { ConfigUpdate } from "@Pimcore/components/modal/form-modal/hooks/use-form-modal"
 import { SendEmailParameters } from "../../emails-api-slice-enhanced"
 
+// TODO: delete file
+
+
 let form: FormInstance<any> | null = null
 
 interface SendTestMailModal extends Omit<ModalFuncProps, 'content'> {
