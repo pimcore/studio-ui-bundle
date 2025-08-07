@@ -20,6 +20,7 @@ import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-ma
 import { findNodeByKey } from '@Pimcore/modules/user/management/tree/tree-helper'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { createTreeNodeTestId } from '@Pimcore/utils/test-id-generator'
+import { ConfigLayout } from '@Pimcore/components/predefined-layouts/config/config-layout'
 
 const ManagementContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -122,7 +123,6 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
 
   const sidebar = {
     id: 'user-tree',
-    size: 20,
     minSize: 170,
     children: [
       <TreeContainer
@@ -146,7 +146,6 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
 
   const main = {
     id: 'user-detail',
-    size: 80,
     minSize: 600,
     children: [
       <ManagementDetail
@@ -164,11 +163,9 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
   }
 
   return (
-    <SplitLayout
+    <ConfigLayout
       leftItem={ sidebar }
       rightItem={ main }
-      withDivider
-      withToolbar
     />
   )
 }
