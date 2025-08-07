@@ -18,7 +18,7 @@ import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { api } from '@Pimcore/modules/document/document-api-slice.gen'
 import { type Element } from '@Pimcore/modules/element/element-helper'
-import { isNil, isUndefined } from 'lodash'
+import { has, isNil, isString, isUndefined } from 'lodash'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
@@ -47,12 +47,7 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
       setIsLoading(false)
     }
 
-    // type guard to check if settingsData has a url property, since the settingsData object in the API response can vary
-    function hasUrl (obj: unknown): obj is { url: string } {
-      return typeof obj === 'object' && obj !== null && 'url' in obj && typeof (obj as any).url === 'string'
-    }
-
-    if (!isNil(data?.settingsData) && hasUrl(data?.settingsData)) {
+    if (!isNil(data?.settingsData) && has(data?.settingsData, 'url') && isString(data?.settingsData.url)) {
       window.open(data.settingsData.url)
       onFinish?.()
     } else {
