@@ -132,6 +132,7 @@ import key from '@Pimcore/assets/icons/key.inline.svg?react'
 import keyboard from '@Pimcore/assets/icons/keyboard.inline.svg?react'
 import keys from '@Pimcore/assets/icons/keys.inline.svg?react'
 import languageSelect from '@Pimcore/assets/icons/language-select.inline.svg?react'
+import layoutTop from '@Pimcore/assets/icons/layout-top.inline.svg?react'
 import layout from '@Pimcore/assets/icons/layout.inline.svg?react'
 import list from '@Pimcore/assets/icons/list.inline.svg?react'
 import loading from '@Pimcore/assets/icons/loading.inline.svg?react'
@@ -708,6 +709,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'language-select',
       component: languageSelect
+    })
+    iconLibrary.register({
+      name: 'layout-top',
+      component: layoutTop
     })
     iconLibrary.register({
       name: 'layout',
