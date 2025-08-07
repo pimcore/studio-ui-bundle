@@ -22,7 +22,7 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Tools/Notes & Events',
+      path: 'DataManagement/Notes & Events',
       label: 'navigation.notes-and-events',
       className: 'item-style-modifier',
       permission: UserPermission.NotesAndEvents,

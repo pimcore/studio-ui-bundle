@@ -24,14 +24,14 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Settings/User & Roles',
+      path: 'System/User & Roles',
       label: 'navigation.user-and-roles',
       permission: UserPermission.Users,
       perspectivePermissionHide: NavPermission.UsersHidden
     })
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Settings/User & Roles/Users',
+      path: 'System/User & Roles/Users',
       label: 'navigation.users',
       className: 'item-style-modifier',
       permission: UserPermission.Users,
@@ -51,7 +51,7 @@ moduleSystem.registerModule({
     })
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Settings/User & Roles/Roles',
+      path: 'System/User & Roles/Roles',
       label: 'navigation.roles',
       permission: UserPermission.Users,
       perspectivePermission: NavPermission.Roles,

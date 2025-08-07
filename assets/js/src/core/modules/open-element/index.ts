@@ -22,7 +22,7 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'File/Open Asset',
+      path: 'QuickAccess/Open Asset',
       label: 'navigation.open-asset',
       permission: UserPermission.Assets,
       perspectivePermission: NavPermission.OpenAsset,
@@ -30,7 +30,7 @@ moduleSystem.registerModule({
     })
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'File/Open Document',
+      path: 'QuickAccess/Open Document',
       label: 'navigation.open-document',
       permission: UserPermission.Documents,
       perspectivePermission: NavPermission.OpenDocument,
@@ -38,7 +38,7 @@ moduleSystem.registerModule({
     })
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'File/Open Data Object',
+      path: 'QuickAccess/Open Data Object',
       label: 'navigation.open-data-object',
       permission: UserPermission.Objects,
       perspectivePermission: NavPermission.OpenObject,

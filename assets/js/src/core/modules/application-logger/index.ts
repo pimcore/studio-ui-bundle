@@ -22,7 +22,7 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Tools/Application Logger',
+      path: 'System/Application Logger',
       label: 'navigation.application-logger',
       permission: UserPermission.ApplicationLogger,
       perspectivePermission: NavPermission.ApplicationLogger,

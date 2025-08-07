@@ -22,7 +22,7 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Marketing/Reports',
+      path: 'Reporting/Reports',
       label: 'navigation.reports',
       className: 'item-style-modifier',
       perspectivePermission: NavPermission.Reports,
@@ -41,7 +41,7 @@ moduleSystem.registerModule({
     })
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Marketing/Custom Reports',
+      path: 'Reporting/Custom Reports',
       label: 'navigation.custom-reports',
       perspectivePermission: NavPermission.Reports,
       widgetConfig: {

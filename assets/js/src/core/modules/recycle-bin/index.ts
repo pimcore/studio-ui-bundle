@@ -29,7 +29,7 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Tools/Recycle Bin',
+      path: 'QuickAccess/Recycle Bin',
       label: 'navigation.recycle-bin',
       permission: UserPermission.RecycleBin,
       perspectivePermission: NavPermission.RecycleBin,

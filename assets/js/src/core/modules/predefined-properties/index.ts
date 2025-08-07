@@ -22,7 +22,7 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Settings/Predefined Properties',
+      path: 'DataManagement/Predefined Properties',
       label: 'navigation.predefined-properties',
       className: 'item-style-modifier',
       permission: UserPermission.PredefinedProperties,

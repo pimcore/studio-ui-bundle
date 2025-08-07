@@ -22,7 +22,7 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Settings/Document Types',
+      path: 'ExperienceEcommerce/Document Types',
       label: 'navigation.document-types',
       className: 'item-style-modifier',
       permission: UserPermission.DocumentTypes,

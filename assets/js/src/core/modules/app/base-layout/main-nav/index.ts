@@ -11,7 +11,6 @@
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { NavPermission } from '@Pimcore/modules/perspectives/enums/nav-permission'
 import { type MainNavRegistry } from './services/main-nav-registry'
 
 moduleSystem.registerModule({
@@ -19,31 +18,51 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'File',
-      label: 'navigation.file',
-      icon: 'document',
-      perspectivePermissionHide: NavPermission.FileHidden
+      path: 'QuickAccess',
+      label: 'navigation.quick-access',
+      icon: 'layout-top'
     })
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Settings',
-      label: 'navigation.settings',
-      icon: 'menu',
-      perspectivePermissionHide: NavPermission.SettingsHidden
+      path: 'DataManagement',
+      label: 'navigation.data-management',
+      icon: 'data-object'
     })
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Tools',
-      label: 'navigation.tools',
-      icon: 'accessory',
-      perspectivePermissionHide: NavPermission.ToolsHidden
+      path: 'ExperienceEcommerce',
+      label: 'navigation.experience-ecommerce',
+      icon: 'monitor-03'
     })
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Marketing',
-      label: 'navigation.marketing',
-      icon: 'marketing',
-      perspectivePermissionHide: NavPermission.MarketingHidden
+      path: 'AssetManagement',
+      label: 'navigation.asset-management',
+      icon: 'asset'
+    })
+
+    mainNavRegistryService.registerMainNavItem({
+      path: 'AutomationIntegration',
+      label: 'navigation.automation-integration',
+      icon: 'integration'
+    })
+
+    mainNavRegistryService.registerMainNavItem({
+      path: 'Translations',
+      label: 'navigation.translations',
+      icon: 'translate'
+    })
+
+    mainNavRegistryService.registerMainNavItem({
+      path: 'Reporting',
+      label: 'navigation.reporting',
+      icon: 'bar-chart-square-03'
+    })
+
+    mainNavRegistryService.registerMainNavItem({
+      path: 'System',
+      label: 'navigation.system',
+      icon: 'shield'
     })
   }
 })

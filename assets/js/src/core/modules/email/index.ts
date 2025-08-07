@@ -35,14 +35,14 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Tools/Email',
+      path: 'ExperienceEcommerce/Email',
       label: 'navigation.email',
       permission: UserPermission.Emails,
       perspectivePermission: NavPermission.Mails
     })
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Tools/Email/Sent-Emails',
+      path: 'ExperienceEcommerce/Email/Sent-Emails',
       label: 'navigation.email-log',
       className: 'item-style-modifier',
       permission: UserPermission.Emails,
@@ -62,7 +62,7 @@ moduleSystem.registerModule({
     })
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Tools/Email/Email-Blocklist',
+      path: 'ExperienceEcommerce/Email/Email-Blocklist',
       label: 'navigation.email-blocklist',
       className: 'item-style-modifier',
       permission: UserPermission.Emails,
