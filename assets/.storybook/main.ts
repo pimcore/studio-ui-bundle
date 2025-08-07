@@ -72,8 +72,15 @@ const config: StorybookConfig = {
       },
       output: {
         ...config.output,
-        sourceMap: false,
         assetPrefix: '/storybook/',
+      },
+      resolve: {
+        ...config.resolve,
+        alias: {
+          ...config.resolve?.alias,
+          // Add React Compiler runtime alias for Storybook
+          'react/compiler-runtime': require.resolve('react-compiler-runtime')
+        }
       },
       plugins: [
         ...plugins

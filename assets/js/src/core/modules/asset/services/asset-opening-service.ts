@@ -19,6 +19,7 @@ import { Model } from 'flexlayout-react'
 import { assetReceived } from '../asset-draft-slice'
 import { initialTabsStateValue } from '@Pimcore/modules/element/draft/hooks/use-tabs'
 import { isNil } from 'lodash'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface AssetConfig {
   id: number
@@ -76,7 +77,11 @@ export class AssetOpeningService {
 
     // Invalidate cache and fetch fresh data
     store.dispatch(api.util.invalidateTags(invalidatingTags.ASSET_DETAIL_ID(id)))
-    const { data } = await store.dispatch(api.endpoints.assetGetById.initiate({ id }))
+    const { data, isError, error } = await store.dispatch(api.endpoints.assetGetById.initiate({ id }))
+
+    if (isError) {
+      trackError(new ApiError(error))
+    }
 
     if (isNil(data) || !checkElementPermission(data.permissions, 'view')) {
       return
@@ -92,6 +97,7 @@ export class AssetOpeningService {
       component: 'asset-editor',
       config: {
         id,
+        elementType: 'asset',
         icon: getElementIcon(data, { value: 'widget', type: 'name' })
       }
     }))

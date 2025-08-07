@@ -18,6 +18,7 @@ import { type GridProps, type ListGridContextMenuComponents, type ListGridContex
 import { type GridCellReference } from '@Pimcore/components/grid/grid'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { createTableRowTestId } from '@Pimcore/utils/test-id-generator'
 
 export interface GridRowProps {
   row: Row<any>
@@ -86,6 +87,7 @@ const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, ...props }: Gr
         row.getIsSelected() ? 'ant-table-row-selected' : '',
         props.onRowDoubleClick !== undefined ? 'hover' : ''
       ].join(' ') }
+      data-testid={ createTableRowTestId(row.index) }
       onDoubleClick={ onRowDoubleClick }
       ref={ setNodeRef }
       style={ style }
@@ -113,6 +115,7 @@ const GridRow = ({ row, isSelected, modifiedCells, enableRowDrag, ...props }: Gr
                 isActive={ props.activeColumId === cell.column.id }
                 isModified={ isModifiedCell(cell.column.id) }
                 onFocusCell={ props.onFocusCell }
+                rowIndex={ row.index }
                 tableElement={ props.tableElement }
               />
               )}

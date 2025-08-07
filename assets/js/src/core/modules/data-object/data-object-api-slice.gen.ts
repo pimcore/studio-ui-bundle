@@ -34,16 +34,13 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
-            dataObjectGetGridPreview: build.mutation<
-                DataObjectGetGridPreviewApiResponse,
-                DataObjectGetGridPreviewApiArg
-            >({
+            dataObjectGetGridPreview: build.query<DataObjectGetGridPreviewApiResponse, DataObjectGetGridPreviewApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/data-objects/grid/preview`,
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Data Object Grid"],
+                providesTags: ["Data Object Grid"],
             }),
             dataObjectDeleteGridConfigurationByConfigurationId: build.mutation<
                 DataObjectDeleteGridConfigurationByConfigurationIdApiResponse,
@@ -889,7 +886,7 @@ export const {
     useDataObjectCloneMutation,
     useDataObjectGetByIdQuery,
     useDataObjectUpdateByIdMutation,
-    useDataObjectGetGridPreviewMutation,
+    useDataObjectGetGridPreviewQuery,
     useDataObjectDeleteGridConfigurationByConfigurationIdMutation,
     useDataObjectGetGridConfigurationQuery,
     useDataObjectListSavedGridConfigurationsQuery,

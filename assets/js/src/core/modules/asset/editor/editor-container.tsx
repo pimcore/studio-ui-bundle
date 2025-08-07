@@ -18,6 +18,7 @@ import { TabsContainer } from '@Pimcore/modules/element/editor/shared-tab-manage
 import { Toolbar } from '@Pimcore/modules/asset/editor/toolbar/toolbar'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import { Alert } from '@Pimcore/components/alert/alert'
+import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
 
 export interface EditorContainerProps {
   id: number
@@ -69,6 +70,7 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   return (
     <AssetProvider id={ id }>
       <TabsToolbarView
+        dataTestId={ `asset-editor-${createSafeTestIdString(id)}` }
         renderTabbar={
           <TabsContainer
             elementEditorType={ editorType }

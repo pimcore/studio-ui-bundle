@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { fromPairs, isUndefined, map } from 'lodash'
+import { Empty } from 'antd'
 import { type BundleCustomReportsDetails } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { Content } from '@Pimcore/components/content/content'
 import { PieChart } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/pie-chart/pie-chart'
@@ -39,6 +40,12 @@ export const ReportChart = ({ chartData, reportData }: IReportsChartProps): Reac
     reportData,
     chartData,
     chartLabelMap
+  }
+
+  if (isEmptyValue(chartData)) {
+    return (
+      <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } />
+    )
   }
 
   switch (chartType) {

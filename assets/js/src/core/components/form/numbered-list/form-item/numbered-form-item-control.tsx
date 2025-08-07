@@ -8,11 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { Children, isValidElement, useEffect, useMemo } from 'react'
+import React, { Children, isValidElement, useCallback, useEffect, useMemo } from 'react'
 import { useNumberedList } from '../provider/numbered-list/use-numbered-list'
 import { useItem } from '../../item/provider/item/use-item'
 import { type FormItemProps } from 'antd'
-import { isUndefined } from 'lodash'
+import { isEqual, isUndefined } from 'lodash'
+import { usePrevious } from '@Pimcore/utils/hooks/use-previous'
 
 export interface NumberedFormItemControlProps {
   children: React.ReactNode
@@ -26,22 +27,33 @@ export const NumberedFormItemControl = ({ children, onChange: baseOnChange, valu
   const { getValueFromEvent } = props
 
   const { operations, getAdditionalComponentProps } = useNumberedList()
-  const { name } = useItem()
+  const { name, initialValue } = useItem()
 
-  const Child = Children.only(children)
+  const Child = useMemo(() => Children.only(children), [children])
   const value = operations.getValue(name)
+  const previousValue = usePrevious(value)
+
+  const cachedValue = useMemo(() => {
+    if (!isEqual(value, previousValue)) {
+      return value
+    }
+
+    return previousValue
+  }, [value])
 
   useEffect(() => {
-    operations.update(name, value ?? null, true)
-  }, [])
+    if (value === undefined) {
+      operations.update(name, initialValue ?? null, true)
+    }
+  }, [value])
 
-  const onChange: NumberedFormItemControlProps['onChange'] = (value: any) => {
+  const onChange: NumberedFormItemControlProps['onChange'] = useCallback((value: any) => {
     const changedValue = !isUndefined(getValueFromEvent)
       ? getValueFromEvent(value)
       : value?.target?.value ?? value
 
     operations.update(name, changedValue, false)
-  }
+  }, [])
 
   if (!isValidElement(Child)) {
     throw new Error('NumberedFormItemControl only accepts a single child')
@@ -55,7 +67,7 @@ export const NumberedFormItemControl = ({ children, onChange: baseOnChange, valu
       { ...props }
       { ...getAdditionalComponentProps?.(name) }
       onChange={ onChange }
-      value={ value }
+      value={ cachedValue }
     />
-  ), [Child.props, props, value])
+  ), [Child, props, cachedValue])
 }

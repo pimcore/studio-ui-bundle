@@ -10,6 +10,13 @@
 
 import { type DragAndDropInfo } from '@sdk/components'
 
+export enum WysiwygContext {
+  DOCUMENT = 'document',
+  DATA_OBJECT = 'dataObject',
+  ASSET = 'asset',
+  TRANSLATION = 'translation'
+}
+
 export interface WysiwygProps {
   value?: string | null
   onChange?: (value: string | null) => void
@@ -20,6 +27,7 @@ export interface WysiwygProps {
   placeholder?: string
   editorConfig?: Record<string, any>
   ref?: React.Ref<WysiwygEditorRef>
+  context?: WysiwygContext
 }
 
 export interface WysiwygEditorRef {

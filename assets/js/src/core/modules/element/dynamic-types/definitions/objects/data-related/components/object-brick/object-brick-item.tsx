@@ -16,10 +16,13 @@ import { Box } from '@Pimcore/components/box/box'
 import {
   type AbstractObjectDataDefinition
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
+import { type FormItemProps } from '@sdk/components'
+import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/combined-field-name-provider/combined-field-name-provider'
 
 export interface ObjectBrickItemProps {
   type: string
   noteditable?: AbstractObjectDataDefinition['noteditable']
+  name: FormItemProps['name']
 }
 
 export const ObjectBrickItem = (props: ObjectBrickItemProps): React.JSX.Element => {
@@ -47,11 +50,15 @@ export const ObjectBrickItem = (props: ObjectBrickItemProps): React.JSX.Element 
     <Box padding={ { x: 'small', y: 'small', top: 'none' } }>
       {layoutDefinition.children.map((child, index) => {
         return (
-          <ObjectComponent
+          <CombinedFieldNameProvider
+            combinedFieldNameParent={ [...(Array.isArray(props.name) ? props.name : [props.name]), type] }
             key={ index }
-            { ...child }
-            noteditable={ props.noteditable }
-          />
+          >
+            <ObjectComponent
+              { ...child }
+              noteditable={ props.noteditable }
+            />
+          </CombinedFieldNameProvider>
         )
       })}
     </Box>

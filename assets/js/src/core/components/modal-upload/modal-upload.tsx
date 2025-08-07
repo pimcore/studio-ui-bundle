@@ -8,18 +8,18 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Upload as AntUpload, type UploadProps as AntUploadProps } from 'antd'
 import { api as assetApi, type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import type { RcFile, UploadFile } from 'antd/es/upload/interface'
 import { useAppDispatch } from '@sdk/app'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
-import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
-import { isEmpty, isString, isUndefined } from 'lodash'
+import { isString } from 'lodash'
 import { type UploadChangeParam } from 'antd/lib/upload'
 import { type UploadRef } from 'antd/es/upload/Upload'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { useUploadModalContext } from './provider/upload-modal-provider/use-upload-modal-context'
+import { useTargetFolderId } from '@Pimcore/components/hooks/use-target-folder-id'
 
 export interface ModalUploadPropsBase {
   accept?: AntUploadProps['accept']
@@ -58,37 +58,22 @@ export type ModalUploadProps = ModalUploadPropsWithAction | ModalUploadPropsWith
 
 export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
   const { setIsModalOpen, setShowProcessing, setShowUploadError, setFileList, fileList } = useUploadModalContext()
-  const [targetFolderId, setTargetFolderId] = useState<number | undefined>(props.targetFolderId)
   const dispatch = useAppDispatch()
   const settings = useSettings()
 
-  useEffect(() => {
-    if (targetFolderId !== props.targetFolderId) {
-      setTargetFolderId(props.targetFolderId)
-    }
-  }, [props.targetFolderId])
+  // Use shared hook to resolve targetFolderId
+  const { targetFolderId } = useTargetFolderId({
+    targetFolderId: props.targetFolderId,
+    targetFolderPath: props.targetFolderPath
+  })
 
   const uploadProps: AntUploadProps = {
-    action: async (): Promise<string> => {
+    action: (): string => {
       if (isString(props.action)) {
         return props.action
       }
       const baseUrl = `${getPrefix()}/assets/add/`
-      if (isUndefined(targetFolderId)) {
-        if (isUndefined(props.targetFolderPath) || isEmpty(props.targetFolderPath) || props.targetFolderPath === '/') {
-          setTargetFolderId(1)
-          return baseUrl + 1
-        }
-        const { data } = await dispatch(elementApi.endpoints.elementGetIdByPath.initiate({
-          elementType: 'asset',
-          elementPath: props.targetFolderPath
-        }))
-        if (data !== undefined) {
-          setTargetFolderId(data.id)
-          return baseUrl + data.id
-        }
-      }
-      return baseUrl + targetFolderId
+      return baseUrl + (targetFolderId ?? 1)
     },
     name: props.name ?? 'file',
     multiple: props.multiple ?? true,
@@ -137,7 +122,6 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
         if (allFilesDone) {
           closeModal()
         } else {
-          console.log('allFilesDone -> setShowUploadError')
           setShowUploadError(true)
         }
       }

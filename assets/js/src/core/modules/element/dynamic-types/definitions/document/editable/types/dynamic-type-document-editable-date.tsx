@@ -11,6 +11,8 @@
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import { DatePicker } from '@sdk/components'
+import { isNull } from 'lodash'
+import dayjs from 'dayjs'
 
 export type DateEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
@@ -29,5 +31,14 @@ export class DynamicTypeDocumentEditableDate extends DynamicTypeDocumentEditable
         outputType="dateString"
       />
     )
+  }
+
+  transformValue (value: number | null, props: DateEditableDefinition): string | null {
+    if (isNull(value)) {
+      return null
+    }
+
+    // Convert unix timestamp (seconds) to dayjs object and format with local timezone
+    return dayjs.unix(value).format()
   }
 }
