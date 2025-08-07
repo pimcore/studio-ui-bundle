@@ -6,13 +6,19 @@ import { createColumnHelper } from '@tanstack/react-table'
 import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useStyles } from './parameters-table.styles'
+import { FormInstance } from "antd"
+import { SendEmailParameters } from "@Pimcore/modules/email/emails-api-slice-enhanced"
 
 interface TestEmailParametersTableProps {
   key: string
   value: string
 }
 
-export const ParametersTable = (): React.JSX.Element => {
+interface ParametersTableProps {
+  form: FormInstance<SendEmailParameters>
+}
+
+export const ParametersTable = ({ form }: ParametersTableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const [data, setData] = useState<TestEmailParametersTableProps[]>([
@@ -44,6 +50,7 @@ export const ParametersTable = (): React.JSX.Element => {
     }
 
     setData(updatedData)
+    form.setFieldValue('documentParameters', updatedData)
   }
 
   return (

@@ -115,12 +115,12 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
               </Form.Item>
 
               <Form.Item
-                name="content"
+                name="documentParameters"
                 rules={[
                   { required: true, message: t('email.test.validation.content.required') }
                 ]}
               >
-                <ParametersTable />
+                <ParametersTable form={form} />
               </Form.Item>
             </>
           ) : (
