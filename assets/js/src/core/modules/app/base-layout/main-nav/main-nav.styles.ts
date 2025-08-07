@@ -71,7 +71,7 @@ export const useStlyes = createStyles(({
       }
 
       .main-nav__list--level-0 {
-        width: 25%;
+        width: 32%;
         padding: 0;
         background: rgba(0, 0, 0, 0.02);
         
@@ -137,6 +137,10 @@ export const useStlyes = createStyles(({
         gap: ${token.marginXXS}px;
         min-height: 46px;
         
+      .pimcore-icon {
+        margin-right: ${token.marginXS}px;
+      }
+
         &:hover {
           background: ${token.controlItemBgActiveHover};
           color: ${token.colorPrimary};

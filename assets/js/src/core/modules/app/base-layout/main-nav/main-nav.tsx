@@ -84,7 +84,7 @@ export const MainNav = (): React.JSX.Element => {
               {item.icon !== undefined ? (<Icon value={ item.icon } />) : null}
               {t(`${item.label}`)}
 
-              {item.children !== undefined && item.children.length > 0
+              {item.children !== undefined && item.children.length > 0 && (openKeys.includes(index) || index.includes('-'))
                 ? (
                   <Icon
                     className={ 'main-nav__list-btn-icon' }
