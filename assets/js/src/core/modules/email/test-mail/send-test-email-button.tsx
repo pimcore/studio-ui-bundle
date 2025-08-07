@@ -13,7 +13,7 @@ import { useEmailSendTestMutation } from '@Pimcore/modules/email/emails-api-slic
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { TestEmailFormValues } from './component/send-test-mail-form/send-test-mail-form'
-import { useSendTestMail } from './hooks/use-send-test-mail'
+import { useSendTestMail } from './hooks/use-send-test-mail-modal'
 
 export const SendTestEmailButton = (): React.JSX.Element => {
   const { t } = useTranslation()

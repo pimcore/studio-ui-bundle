@@ -16,7 +16,7 @@ interface UseSendTestMailHookReturn {
 }
 
 export const useSendTestMail = (): UseSendTestMailHookReturn => {
-  const { modal, localModal } = useStudioModal()
+  const { localModal } = useStudioModal()
   const [tmpForm] = Form.useForm()
   form = tmpForm
 
@@ -36,13 +36,11 @@ const withSendTestMailForm = (props: SendTestMailModal): ModalFuncProps => {
   const { formValues, ...modalProps } = props
 
   const submit = async (): Promise<any> => {
-    //onSetModalLoading?.(true)
     return await new Promise((resolve, reject) => {
       form!.validateFields()
         .then(async () => {
           const values = form!.getFieldsValue()
           await props.onOk?.(values)
-          //onKeyBoardSubmit?.(values)
           resolve(values)
         })
         .catch(() => {
