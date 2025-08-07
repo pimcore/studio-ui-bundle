@@ -10,7 +10,7 @@
 
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { Form } from '@Pimcore/components/form/form'
-import { useKeyedList } from '@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list'
+import { useKeyedList } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list'
 import { type DynamicTypePipelineRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-registry'
 import React, { useMemo } from 'react'
 

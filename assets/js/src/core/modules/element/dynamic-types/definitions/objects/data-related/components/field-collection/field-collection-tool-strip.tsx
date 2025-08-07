@@ -15,7 +15,7 @@ import React from 'react'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Space } from '@Pimcore/components/space/space'
 import { type FieldCollectionProps } from './field-collection'
-import { useNumberedList } from '@Pimcore/components/form/numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
 
 export interface FieldCollectionToolStripProps {
   field: number
