@@ -1,26 +1,28 @@
 import { useStudioModal } from "@Pimcore/components/modal/hooks/use-studio-modal"
 import React from "react"
-import { SendTestMailForm, TestEmailFormValues } from "../component/send-test-mail-form/send-test-mail-form"
+import { SendTestMailForm } from "../component/send-test-mail-form/send-test-mail-form"
 import { Form } from "@Pimcore/components/form/form"
 import { FormInstance, ModalFuncProps } from "antd"
 import { ConfigUpdate } from "@Pimcore/components/modal/form-modal/hooks/use-form-modal"
+import { SendEmailParameters } from "../../emails-api-slice-enhanced"
 
 let form: FormInstance<any> | null = null
 
 interface SendTestMailModal extends Omit<ModalFuncProps, 'content'> {
-  formValues?: TestEmailFormValues
+  formValues?: Partial<SendEmailParameters>
+  onOk?: (formData: SendEmailParameters) => Promise<void>
 }
 
-interface UseSendTestMailHookReturn {
+interface UseSendTestMailModalHookReturn {
   sendTestMailModal: (props: SendTestMailModal) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
 }
 
-export const useSendTestMail = (): UseSendTestMailHookReturn => {
+export const useSendTestMailModal = (): UseSendTestMailModalHookReturn => {
   const { localModal } = useStudioModal()
   const [tmpForm] = Form.useForm()
   form = tmpForm
 
-  return React.useMemo<UseSendTestMailHookReturn>(
+  return React.useMemo<UseSendTestMailModalHookReturn>(
     () => ({
       sendTestMailModal: (props: SendTestMailModal) => {
         const modalResult = localModal.confirm(withSendTestMailForm(props))

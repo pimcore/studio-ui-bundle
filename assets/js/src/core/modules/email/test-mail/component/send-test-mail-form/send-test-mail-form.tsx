@@ -18,19 +18,12 @@ import { FormInstance } from 'antd/lib'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ParametersTable } from '../parameters-table/parameters-table'
-
-export interface TestEmailFormValues {
-  from: string
-  to: string
-  subject: string
-  contentType: 'text' | 'html'
-  content: string
-}
+import { SendEmailParameters } from '@Pimcore/modules/email/emails-api-slice-enhanced'
 
 export interface TestEmailModalProps {
-  initalValues?: TestEmailFormValues
-  form: FormInstance<TestEmailFormValues>
-  onFinish?: (values: TestEmailFormValues) => Promise<void>
+  initalValues?: Partial<SendEmailParameters>
+  form: FormInstance<SendEmailParameters>
+  onFinish?: (values: SendEmailParameters) => Promise<void>
 }
 
 enum TestEmilType {
@@ -42,15 +35,10 @@ enum TestEmilType {
 export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const handleFormFinish = async (values: TestEmailFormValues): Promise<void> => {
-    console.log(values)
-  }
-
   return (
     <Form
       form={form}
       layout="vertical"
-      onFinish={handleFormFinish}
       initialValues={initalValues}
     >
       <Form.Item
@@ -76,22 +64,32 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
       </Form.Item>
 
       <Form.Item
-        label={t('test-email.form.type')}
-        name="type"
+        label={t('test-email.form.subject')}
+        name="subject"
+        rules={[
+          { required: true, message: t('email.test.validation.subject.required') },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label={t('test-email.form.contentType')}
+        name="contentType"
         initialValue={TestEmilType.Text}
       >
         <Select
           options={[
             {
-              label: t(`test-email.type.${TestEmilType.Document}`),
+              label: t(`test-email.contentType.${TestEmilType.Document}`),
               value: TestEmilType.Document
             },
             {
-              label: t(`test-email.type.${TestEmilType.HTML}`),
+              label: t(`test-email.contentType.${TestEmilType.HTML}`),
               value: TestEmilType.HTML
             },
             {
-              label: t(`test-email.type.${TestEmilType.Text}`),
+              label: t(`test-email.contentType.${TestEmilType.Text}`),
               value: TestEmilType.Text
             }
           ]}

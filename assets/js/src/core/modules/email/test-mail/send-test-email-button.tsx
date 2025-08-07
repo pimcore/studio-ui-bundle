@@ -8,27 +8,29 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useMessage } from '@Pimcore/components/message/useMessage'
-import { useEmailSendTestMutation } from '@Pimcore/modules/email/emails-api-slice.gen'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { TestEmailFormValues } from './component/send-test-mail-form/send-test-mail-form'
-import { useSendTestMail } from './hooks/use-send-test-mail-modal'
+import { useSendTestMailModal } from './hooks/use-send-test-mail-modal'
+import { useSendTestMail } from './hooks/use-send-test-mail'
 
 export const SendTestEmailButton = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const [sendTestEmail] = useEmailSendTestMutation()
-  const { success } = useMessage()
-  const { sendTestMailModal } = useSendTestMail()
-
-  const onFinish = async (values: TestEmailFormValues): Promise<void> => {
-    console.log(values)
-  }
+  const { sendTestMailModal } = useSendTestMailModal()
+  const { send } = useSendTestMail()
 
   const handleClick = (): void => {
     sendTestMailModal({
       title: t('test-email.modal.title'),
       okText: t('test-email.modal.send'),
+      formValues: {
+        from: 'from@doe.com',
+        to: 'to@doe.com',
+        subject: 'Something Subject'
+      },
+      onOk: async (formData) => {
+        console.log('submitted data (handleClick):', formData)
+        send(formData)
+      }
     })
   }
 
