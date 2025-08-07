@@ -32,7 +32,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'ExperienceEcommerce',
       label: 'navigation.experience-ecommerce',
-      icon: 'monitor-03'
+      icon: 'monitor'
     })
 
     mainNavRegistryService.registerMainNavItem({
@@ -56,7 +56,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'Reporting',
       label: 'navigation.reporting',
-      icon: 'bar-chart-square-03'
+      icon: 'bar-chart-square'
     })
 
     mainNavRegistryService.registerMainNavItem({
