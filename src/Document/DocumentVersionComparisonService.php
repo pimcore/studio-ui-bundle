@@ -13,6 +13,13 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\StudioUiBundle\Document;
 
+use function base64_encode;
+use function basename;
+use function class_exists;
+use function date;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
 use Imagick;
 use ImagickException;
 use Pimcore\Bundle\StudioUiBundle\Document\Exception\DocumentVersionComparisonException;
@@ -22,15 +29,8 @@ use Pimcore\Document\Renderer\DocumentRendererInterface;
 use Pimcore\Image\HtmlToImage;
 use Pimcore\Model\Document;
 use Pimcore\Model\Version;
-use Symfony\Component\Routing\RouterInterface;
-use function base64_encode;
-use function basename;
-use function class_exists;
-use function date;
-use function file_exists;
-use function file_get_contents;
-use function file_put_contents;
 use function sprintf;
+use Symfony\Component\Routing\RouterInterface;
 use function uniqid;
 use function unlink;
 
@@ -65,7 +65,7 @@ final class DocumentVersionComparisonService
         try {
             $this->generateHtmlFiles($docFrom, $docTo, $fromHtmlFile, $toHtmlFile);
             $this->convertHtmlToImages($fromHtmlFile, $toHtmlFile, $fromImageFile, $toImageFile, $baseUrl);
-            
+
             return $this->compareImages($fromImageFile, $toImageFile);
         } finally {
             $this->cleanupFiles([$fromImageFile, $toImageFile]);
@@ -101,6 +101,7 @@ final class DocumentVersionComparisonService
             if ($e instanceof DocumentVersionComparisonException) {
                 throw $e;
             }
+
             throw new DocumentVersionComparisonException('Failed to generate HTML files: ' . $e->getMessage(), 0, $e);
         }
     }
@@ -132,6 +133,7 @@ final class DocumentVersionComparisonService
             if ($e instanceof DocumentVersionComparisonException) {
                 throw $e;
             }
+
             throw new DocumentVersionComparisonException('HTML to image conversion failed: ' . $e->getMessage(), 0, $e);
         } finally {
             // Clean up HTML files regardless of success/failure

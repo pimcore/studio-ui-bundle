@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\StudioUiBundle\Controller\Backend;
 
+use function basename;
+use function file_exists;
 use Pimcore\Bundle\StudioUiBundle\Document\DocumentVersionComparisonService;
 use Pimcore\Bundle\StudioUiBundle\Document\Exception\DocumentVersionComparisonException;
 use Pimcore\Bundle\StudioUiBundle\Document\Exception\DocumentVersionNotFoundException;
@@ -21,8 +23,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use function basename;
-use function file_exists;
 
 /**
  * @internal
@@ -46,7 +46,7 @@ final class DocumentVersionsController extends AbstractController
         int $from,
         int $to,
     ): Response {
-    
+
         if (!$this->versionComparisonService->isComparisonSupported()) {
             return $this->render('@PimcoreStudioUi/backend/document-versions/diff_versions_unsupported.html.twig');
         }
@@ -69,11 +69,11 @@ final class DocumentVersionsController extends AbstractController
             return $this->render('@PimcoreStudioUi/backend/document-versions/diff_versions.html.twig', $viewParams);
         } catch (DocumentVersionNotFoundException $e) {
             return $this->render('@PimcoreStudioUi/backend/document-versions/error.html.twig', [
-                'error_message' => $e->getMessage()
+                'error_message' => $e->getMessage(),
             ]);
         } catch (DocumentVersionComparisonException $e) {
             return $this->render('@PimcoreStudioUi/backend/document-versions/error.html.twig', [
-                'error_message' => 'The version comparison could not be completed. ' . $e->getMessage()
+                'error_message' => 'The version comparison could not be completed. ' . $e->getMessage(),
             ]);
         }
     }
