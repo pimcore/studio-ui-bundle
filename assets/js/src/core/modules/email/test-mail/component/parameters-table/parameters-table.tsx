@@ -1,9 +1,11 @@
 import { Flex } from "@Pimcore/components/flex/flex"
 import { Grid } from "@Pimcore/components/grid/grid"
-import { DefaultCell, IconButton, IconTextButton } from "@sdk/components"
-import { createColumnHelper } from "@tanstack/react-table"
+import { OnUpdateCellDataEvent } from "@Pimcore/types/components/types"
+import { addColumnMeta, DefaultCell, IconTextButton } from "@sdk/components"
+import { createColumnHelper } from '@tanstack/react-table'
 import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
+import { useStyles } from './parameters-table.styles'
 
 interface TestEmailParametersTableProps {
   key: string
@@ -12,6 +14,7 @@ interface TestEmailParametersTableProps {
 
 export const ParametersTable = (): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
   const [data, setData] = useState<TestEmailParametersTableProps[]>([
     { key: '', value: '' }
   ])
@@ -20,21 +23,35 @@ export const ParametersTable = (): React.JSX.Element => {
   const columns = [
     columnHelper.accessor('key', {
       header: t('test-email.parameters.columns.key'),
-      cell: info => <b><DefaultCell {...info} /></b>
+      meta: {
+        editable: true
+      }
     }),
     columnHelper.accessor('value', {
       header: t('test-email.parameters.columns.value'),
       meta: {
         autoWidth: true,
         editable: true
-      },
-      cell: info => <b><DefaultCell {...info} /></b>
+      }
     })
   ]
 
+  const onUpdateCellData = async ({ rowIndex, value, columnId }: OnUpdateCellDataEvent): Promise<void> => {
+    const updatedData = [...data]
+    updatedData[rowIndex] = {
+      ...updatedData[rowIndex],
+      [columnId]: value
+    }
+
+    setData(updatedData)
+  }
+
   return (
     <Flex vertical gap={4}>
-      <Flex justify="end">
+      <Flex justify="space-between" align="center">
+        <p className={styles.formLabel}>
+          {t('test-email.form.parameters')}
+        </p>
         <IconTextButton
           title="Add Parameter"
           icon={{ value: 'new' }}
@@ -50,6 +67,7 @@ export const ParametersTable = (): React.JSX.Element => {
         columns={columns}
         data={data}
         resizable
+        onUpdateCellData={onUpdateCellData}
       />
     </Flex>
   )

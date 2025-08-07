@@ -96,9 +96,9 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
         />
       </Form.Item>
 
-      <Form.Item dependencies={['type']} noStyle>
+      <Form.Item dependencies={['contentType']} noStyle>
         {({ getFieldValue }) => {
-          const typeValue = getFieldValue('type')
+          const typeValue = getFieldValue('contentType')
           return typeValue === TestEmilType.Document ? (
             <>
               <Form.Item
@@ -115,7 +115,6 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
               </Form.Item>
 
               <Form.Item
-                label={t('test-email.form.parameters')}
                 name="content"
                 rules={[
                   { required: true, message: t('email.test.validation.content.required') }
