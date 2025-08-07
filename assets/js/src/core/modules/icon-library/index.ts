@@ -40,6 +40,7 @@ import catalog from '@Pimcore/assets/icons/catalog.inline.svg?react'
 import category from '@Pimcore/assets/icons/category.inline.svg?react'
 import cdp from '@Pimcore/assets/icons/cdp.inline.svg?react'
 import channels from '@Pimcore/assets/icons/channels.inline.svg?react'
+import chartScatter from '@Pimcore/assets/icons/chart-scatter.inline.svg?react'
 import checkCircle from '@Pimcore/assets/icons/check-circle.inline.svg?react'
 import checkbox from '@Pimcore/assets/icons/checkbox.inline.svg?react'
 import checkmark from '@Pimcore/assets/icons/checkmark.inline.svg?react'
@@ -336,6 +337,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'channels',
       component: channels
+    })
+    iconLibrary.register({
+      name: 'chart-scatter',
+      component: chartScatter
     })
     iconLibrary.register({
       name: 'check-circle',
