@@ -16,17 +16,20 @@ export const useStyle = createStyles(({ token, css }) => {
       &.ant-card {
         text-align: center;
         height: 103px;
+        overflow: hidden;
         cursor: pointer;
 
         &.ant-card-bordered .ant-card-cover {
-          margin-top: 0;
+          margin: 0 auto;
+          height: 70%;
+          display: flex;
+          align-items: center;
         }
 
         .ant-card-body {
           padding: ${token.paddingXXS}px ${token.paddingXS}px;
-          margin-top: 7px;
-          margin-bottom: 7px;
           width: 166px;
+          height: 30%;
         }
      }
     `,
@@ -38,7 +41,7 @@ export const useStyle = createStyles(({ token, css }) => {
     `,
 
     imgContainer: css`
-      display: flex;
+      display: flex !important;
       justify-content: center;
       align-items: center;
       

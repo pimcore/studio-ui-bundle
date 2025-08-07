@@ -65,6 +65,10 @@ export const PreviewCard = (props: PreviewCardProps): React.JSX.Element => {
           }
         } }
       >
+        <Meta
+          className={ styles.metaBlock }
+          title={ props.name }
+        />
         <Dropdown
           menu={ {
             items: props.dropdownItems
@@ -81,10 +85,6 @@ export const PreviewCard = (props: PreviewCardProps): React.JSX.Element => {
             size="small"
           />
         </Dropdown>
-        <Meta
-          className={ styles.metaBlock }
-          title={ props.name }
-        />
       </Card>
     </Tooltip>
   )
