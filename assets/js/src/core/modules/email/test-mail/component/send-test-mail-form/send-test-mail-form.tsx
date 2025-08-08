@@ -11,7 +11,7 @@
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
 import { Select } from '@Pimcore/components/select/select'
-import { ManyToOneRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
+import { ManyToOneRelation, ManyToOneRelationValueType } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
 import { getLanguageExtensions } from '@sdk/components'
 import ReactCodeMirror from '@uiw/react-codemirror'
 import { FormInstance } from 'antd/lib'
@@ -19,6 +19,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ParametersTable } from '../parameters-table/parameters-table'
 import { SendEmailParameters } from '@Pimcore/modules/email/emails-api-slice-enhanced'
+import { isNil } from 'lodash'
 
 export interface TestEmailModalProps {
   initalValues?: Partial<SendEmailParameters>
@@ -103,7 +104,7 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
             <>
               <Form.Item
                 label={t('test-email.form.document')}
-                name="content"
+                name="documentPath"
                 rules={[
                   { required: true, message: t('email.test.validation.content.required') }
                 ]}
@@ -111,6 +112,14 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
                 <ManyToOneRelation
                   allowToClearRelation
                   documentsAllowed
+                  onChange={(value: ManyToOneRelationValueType) => {
+                    if (isNil(value)) {
+                      form.setFieldValue('documentPath', null)
+                      return
+                    }
+
+                    form.setFieldValue('documentPath', value.fullPath)
+                  }}
                 />
               </Form.Item>
 

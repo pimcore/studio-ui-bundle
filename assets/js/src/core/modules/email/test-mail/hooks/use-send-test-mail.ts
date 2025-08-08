@@ -29,7 +29,7 @@ export const useSendTestMail = (): UseSendTestMailHookReturn => {
       }
 
       onFinish?.()
-      void success(t('test-email.send.success'))
+      //void success(t('test-email.send.success'))
     } catch (error) {
       trackError(new GeneralError(t('test-email.send.error')))
     }

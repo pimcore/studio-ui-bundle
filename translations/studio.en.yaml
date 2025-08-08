@@ -998,8 +998,6 @@ test-email.form.title: Title
 test-email.form.message: Message
 test-email.form.document: Document
 test-email.form.parameters: Parameters
-test-email.form.parameters.document: Document
-test-email.form.parameters.parameters: Parameters
 test-email.modal.title: Send a Test-Email
 test-email.modal.send: Send
 test-email.contentType.document: Document
