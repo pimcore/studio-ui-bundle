@@ -17,7 +17,7 @@ import {
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import cn from 'classnames'
 import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
-import { isNil, isString, isEmpty } from 'lodash'
+import { isNil, isEmpty } from 'lodash'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { Flex } from 'antd'
 import { useDataObjectHelper, type IFormatPathItem } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
