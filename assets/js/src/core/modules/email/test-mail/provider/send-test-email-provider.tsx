@@ -35,8 +35,6 @@ export const SendTestEmailProvider: React.FC<SendTestEmailProviderProps> = ({ ch
         .then(async () => {
           const values = tmpForm!.getFieldsValue()
 
-          console.log('submitted values: ', values)
-
           resolve(values)
           send(values, () => {
             closeModal()

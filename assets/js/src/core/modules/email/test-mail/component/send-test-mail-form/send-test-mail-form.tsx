@@ -8,18 +8,18 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { CodeEditor } from '@Pimcore/components/code-editor/code-editor'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
 import { Select } from '@Pimcore/components/select/select'
 import { ManyToOneRelation, ManyToOneRelationValueType } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
-import { getLanguageExtensions } from '@sdk/components'
-import ReactCodeMirror from '@uiw/react-codemirror'
+import { SendEmailParameters } from '@Pimcore/modules/email/emails-api-slice-enhanced'
+import { getLanguageExtensions, TextArea } from '@sdk/components'
 import { FormInstance } from 'antd/lib'
+import { isNil } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ParametersTable } from '../parameters-table/parameters-table'
-import { SendEmailParameters } from '@Pimcore/modules/email/emails-api-slice-enhanced'
-import { isNil } from 'lodash'
 
 export interface TestEmailModalProps {
   initalValues?: Partial<SendEmailParameters>
@@ -35,6 +35,79 @@ enum TestEmilType {
 
 export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): React.JSX.Element => {
   const { t } = useTranslation()
+
+  const getVariableFormFields = (type: TestEmilType): React.JSX.Element => {
+    switch (type) {
+      case TestEmilType.Document:
+        return (
+          <>
+            <Form.Item
+              label={t('test-email.form.document')}
+              name="documentPath"
+              rules={[
+                { required: true, message: t('email.test.validation.content.required') }
+              ]}
+            >
+              <ManyToOneRelation
+                allowToClearRelation
+                documentsAllowed
+                onChange={(value: ManyToOneRelationValueType) => {
+                  if (isNil(value)) {
+                    form.setFieldValue('documentPath', null)
+                    return
+                  }
+
+                  form.setFieldValue('documentPath', value.fullPath)
+                }}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="documentParameters"
+              rules={[
+                { required: true, message: t('email.test.validation.content.required') }
+              ]}
+            >
+              <ParametersTable form={form} />
+            </Form.Item>
+          </>
+        )
+      case TestEmilType.HTML:
+        return (
+          <Form.Item
+            label={t('test-email.form.message')}
+            name="content"
+            rules={[
+              { required: true, message: t('email.test.validation.content.required') }
+            ]}
+          >
+            <CodeEditor
+              minHeight='200px'
+              basicSetup={{
+                lineNumbers: true,
+                syntaxHighlighting: true,
+                searchKeymap: true
+              }}
+              extensions={getLanguageExtensions('html')}
+            />
+          </Form.Item>
+        )
+      case TestEmilType.Text:
+        return (
+          <Form.Item
+            label={t('test-email.form.message')}
+            name="content"
+            rules={[
+              { required: true, message: t('email.test.validation.content.required') }
+            ]}
+          >
+            <TextArea
+              autoSize={{ minRows: 10 }}
+            />
+          </Form.Item>
+        )
+    }
+  }
 
   return (
     <Form
@@ -100,57 +173,8 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
       <Form.Item dependencies={['contentType']} noStyle>
         {({ getFieldValue }) => {
           const typeValue = getFieldValue('contentType')
-          return typeValue === TestEmilType.Document ? (
-            <>
-              <Form.Item
-                label={t('test-email.form.document')}
-                name="documentPath"
-                rules={[
-                  { required: true, message: t('email.test.validation.content.required') }
-                ]}
-              >
-                <ManyToOneRelation
-                  allowToClearRelation
-                  documentsAllowed
-                  onChange={(value: ManyToOneRelationValueType) => {
-                    if (isNil(value)) {
-                      form.setFieldValue('documentPath', null)
-                      return
-                    }
 
-                    form.setFieldValue('documentPath', value.fullPath)
-                  }}
-                />
-              </Form.Item>
-
-              <Form.Item
-                name="documentParameters"
-                rules={[
-                  { required: true, message: t('email.test.validation.content.required') }
-                ]}
-              >
-                <ParametersTable form={form} />
-              </Form.Item>
-            </>
-          ) : (
-            <Form.Item
-              label={t('test-email.form.message')}
-              name="content"
-              rules={[
-                { required: true, message: t('email.test.validation.content.required') }
-              ]}
-            >
-              <ReactCodeMirror
-                minHeight='200px'
-                basicSetup={{
-                  lineNumbers: true,
-                  syntaxHighlighting: true,
-                  searchKeymap: true
-                }}
-                extensions={getLanguageExtensions('html')}
-              />
-            </Form.Item>
-          )
+          return getVariableFormFields(typeValue)
         }}
       </Form.Item>
     </Form>
