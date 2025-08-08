@@ -9,6 +9,7 @@
  */
 
 import React, { useMemo, useState } from 'react'
+import { isUndefined } from 'lodash'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Text } from '@Pimcore/components/text/text'
@@ -43,10 +44,16 @@ export const ReportsEditor = (): React.JSX.Element => {
   }
 
   const handleCloseTab = (key: string): void => {
+    const targetIndex = openedReports.findIndex((tab) => tab.id === key)
     const updatedOpenedReports = openedReports.filter((report) => report.id !== key)
 
+    if (key === activeTabKey) {
+      const prevTab = openedReports[targetIndex - 1]
+
+      setActiveTabKey(!isUndefined(prevTab) ? prevTab.id : undefined)
+    }
+
     setOpenedReports(updatedOpenedReports)
-    setActiveTabKey(openedReports.length > 0 ? updatedOpenedReports[0].id : undefined)
   }
 
   const handleChangeTab = (key: string): void => {
