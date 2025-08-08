@@ -5,6 +5,9 @@ import { isUndefined } from "lodash"
 import { useTranslation } from "react-i18next"
 import { SendEmailParameters, useEmailSendTestMutation } from "../../emails-api-slice-enhanced"
 import { useMessage } from '@Pimcore/components/message/useMessage'
+import { modalApi } from "@Pimcore/app/public-api/modal/modal-api"
+import { useFormModal } from "@sdk/components"
+import { useSendTestEmailContext } from "../provider/use-send-test-email-context"
 
 interface UseSendTestMailHookReturn {
   send: (parameters: SendEmailParameters, onFinish?: () => void) => void
@@ -14,6 +17,7 @@ export const useSendTestMail = (): UseSendTestMailHookReturn => {
   const [sendTestMailMutation] = useEmailSendTestMutation()
   const { success } = useMessage()
   const { t } = useTranslation()
+  const modal = useFormModal()
 
   const send = async (parameters: SendEmailParameters, onFinish?: () => void): Promise<void> => {
     const sendTestMailTask = sendTestMailMutation({
@@ -28,8 +32,15 @@ export const useSendTestMail = (): UseSendTestMailHookReturn => {
         return
       }
 
-      onFinish?.()
       //void success(t('test-email.send.success'))
+      modal.confirm({
+        title: 'Send Test-Email',
+        content: 'text bla bla',
+        onOk: () => {
+          console.log('whatever')
+          onFinish?.()
+        }
+      })
     } catch (error) {
       trackError(new GeneralError(t('test-email.send.error')))
     }

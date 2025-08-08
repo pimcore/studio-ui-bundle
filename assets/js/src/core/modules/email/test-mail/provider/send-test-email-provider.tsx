@@ -1,12 +1,10 @@
-import { WindowModal } from "@Pimcore/components/modal/window-modal/window-modal"
-import { createContext, useMemo, useState } from "react"
-import { SendTestMailForm } from "../component/send-test-mail-form/send-test-mail-form"
-import React from "react"
 import { Form } from "@Pimcore/components/form/form"
-import { FormInstance } from "antd"
+import { WindowModal } from "@Pimcore/components/modal/window-modal/window-modal"
+import { App, FormInstance } from "antd"
+import React, { createContext, useMemo, useState } from "react"
 import { SendEmailParameters } from "../../emails-api-slice-enhanced"
+import { SendTestMailForm } from "../component/send-test-mail-form/send-test-mail-form"
 import { useSendTestMail } from "../hooks/use-send-test-mail"
-import { useMessage } from "@Pimcore/components/message/useMessage"
 
 interface SendTestEmailProviderProps {
   children: React.ReactNode
@@ -36,7 +34,6 @@ export const SendTestEmailProvider: React.FC<SendTestEmailProviderProps> = ({ ch
       tmpForm!.validateFields()
         .then(async () => {
           const values = tmpForm!.getFieldsValue()
-
 
           console.log('submitted values: ', values)
 

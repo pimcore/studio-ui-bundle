@@ -1,13 +1,13 @@
 import { Flex } from "@Pimcore/components/flex/flex"
 import { Grid } from "@Pimcore/components/grid/grid"
+import { SendEmailParameters } from "@Pimcore/modules/email/emails-api-slice-enhanced"
 import { OnUpdateCellDataEvent } from "@Pimcore/types/components/types"
-import { addColumnMeta, DefaultCell, IconTextButton } from "@sdk/components"
+import { IconTextButton } from "@sdk/components"
 import { createColumnHelper } from '@tanstack/react-table'
+import { FormInstance } from "antd"
 import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useStyles } from './parameters-table.styles'
-import { FormInstance } from "antd"
-import { SendEmailParameters } from "@Pimcore/modules/email/emails-api-slice-enhanced"
 
 interface TestEmailParametersTableProps {
   key: string
