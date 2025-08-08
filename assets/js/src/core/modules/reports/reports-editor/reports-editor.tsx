@@ -12,11 +12,11 @@ import React, { useMemo, useState } from 'react'
 import { isUndefined } from 'lodash'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { Content } from '@Pimcore/components/content/content'
-import { Text } from '@Pimcore/components/text/text'
 import { useReportEditorData } from '@Pimcore/modules/reports/reports-editor/hooks/useReportEditorData'
 import { type BundleCustomReportsConfigurationTreeNode } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import { ReportsSidebar } from '@Pimcore/modules/reports/reports-editor/components/reports-sidebar/reports-sidebar'
+import { ReportConfiguration } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/report-configuration'
 
 export const ReportsEditor = (): React.JSX.Element => {
   const { isReportsConfigTreeLoading, reportsConfigTreeData } = useReportEditorData()
@@ -24,11 +24,11 @@ export const ReportsEditor = (): React.JSX.Element => {
   const [openedReports, setOpenedReports] = useState<BundleCustomReportsConfigurationTreeNode[]>([])
   const [activeTabKey, setActiveTabKey] = useState<string | undefined>(undefined)
 
-  const items = useMemo(() =>
+  const tabItems = useMemo(() =>
     openedReports.map((report) => ({
       key: report.id,
       label: report.text,
-      children: <Text>{report.text}</Text>
+      children: <ReportConfiguration report={ report } />
     })),
   [openedReports]
   )
@@ -85,7 +85,7 @@ export const ReportsEditor = (): React.JSX.Element => {
         children: (
           <Tabs
             activeKey={ activeTabKey }
-            items={ items }
+            items={ tabItems }
             onChange={ handleChangeTab }
             onClose={ handleCloseTab }
           />
