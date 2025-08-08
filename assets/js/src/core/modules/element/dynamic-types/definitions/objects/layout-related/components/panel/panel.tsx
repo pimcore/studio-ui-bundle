@@ -8,12 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactNode } from 'react'
+import React from 'react'
 import { type AbstractObjectLayoutDefinition } from '../../dynamic-type-object-layout-abstract'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
-import { BaseView } from '../../views/base-view'
-import { Space } from '@Pimcore/components/space/space'
-import { Box } from '@Pimcore/components/box/box'
+import { Panel as CorePanel } from '@Pimcore/components/panel/panel'
 
 export interface PanelProps extends AbstractObjectLayoutDefinition {
   title?: string
@@ -26,49 +24,28 @@ export interface PanelProps extends AbstractObjectLayoutDefinition {
 
 export const Panel = ({ children, name, border, collapsed, collapsible, title, theme = 'card-with-highlight', noteditable }: PanelProps): React.JSX.Element => {
   const isMainPanel = name === 'pimcore_root'
-  const hasTabPanel = children.find((child) => child.fieldType === 'tabpanel' || child.fieldtype === 'tabpanel') !== undefined
-
-  if (isMainPanel && !hasTabPanel) {
-    return (
-      <Box padding={ 'small' }>
-        { getContent() }
-      </Box>
-    )
-  }
 
   return (
-    <>
-      { getContent() }
-    </>
+    <CorePanel
+      border={border}
+      collapsed={collapsed}
+      collapsible={collapsible}
+      name={name}
+      noteditable={noteditable ?? undefined}
+      theme={theme}
+      title={title}
+    >
+      {children.map((child, index) => (
+        <ObjectComponent
+          {...getChildProperties(child, isMainPanel)}
+          key={index}
+          noteditable={noteditable}
+        />
+      ))}
+    </CorePanel>
   )
 
-  function getContent (): ReactNode {
-    return (
-      <BaseView
-        border={ border }
-        collapsed={ collapsed }
-        collapsible={ collapsible }
-        theme={ theme }
-        title={ title }
-      >
-        <Space
-          className='w-full'
-          direction='vertical'
-          size='small'
-        >
-          {children.map((child, index) => (
-            <ObjectComponent
-              { ...getChildProperties(child) }
-              key={ index }
-              noteditable={ noteditable }
-            />
-          ))}
-        </Space>
-      </BaseView>
-    )
-  }
-
-  function getChildProperties (child: AbstractObjectLayoutDefinition): AbstractObjectLayoutDefinition {
+  function getChildProperties(child: AbstractObjectLayoutDefinition, isMainPanel: boolean): AbstractObjectLayoutDefinition {
     const isTabpanelChild = child.fieldType === 'tabpanel' || child.fieldtype === 'tabpanel'
 
     const newChildProps = { ...child }

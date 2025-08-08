@@ -14,7 +14,7 @@ import { Segmented } from '@Pimcore/components/segmented/segmented'
 import { Form } from '../../form'
 
 const config: Meta = {
-  title: 'Components/Data Entry/Form/Controls/Basic/Segmented',
+  title: 'Components/Data Entry/Form/Controls/Segmented',
   component: Segmented
 }
 

@@ -14,7 +14,7 @@ import { ColorPicker } from '@Pimcore/components/color-picker/color-picker'
 import { Form } from '../../form'
 
 const config: Meta = {
-  title: 'Components/Data Entry/Form/Controls/Basic/ColorPicker',
+  title: 'Components/Data Entry/Form/Controls/ColorPicker',
   component: ColorPicker
 }
 
