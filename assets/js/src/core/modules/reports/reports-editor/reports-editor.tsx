@@ -9,15 +9,56 @@
  */
 
 import React from 'react'
+import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { Content } from '@Pimcore/components/content/content'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { Text } from '@Pimcore/components/text/text'
+import { useReportEditorData } from '@Pimcore/modules/reports/reports-editor/hooks/useReportEditorData'
 
 export const ReportsEditor = (): React.JSX.Element => {
+  const { isReportsConfigTreeLoading, reportsConfigTreeData } = useReportEditorData()
+
   return (
-    <Content
-      padded
-      padding={ { top: 'extra-small', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
-    >
-      <div>Reports Editor</div>
-    </Content>
+    <SplitLayout
+      leftItem={ {
+        minSize: 170,
+        size: 25,
+        children: (
+          <Content
+            loading={ isReportsConfigTreeLoading }
+            padded
+          >
+            <Flex
+              gap="mini"
+              vertical
+            >
+              {reportsConfigTreeData?.items?.map((item) => (
+                <Flex
+                  align="center"
+                  gap="mini"
+                  key={ item.id }
+                >
+                  <Icon value={ 'chart-scatter' } />
+                  <Text>{item.text}</Text>
+                </Flex>
+              ))}
+            </Flex>
+          </Content>
+        )
+      } }
+      resizeAble
+
+      rightItem={ {
+        minSize: 300,
+        size: 75,
+        children: (
+          <Content padded>
+            Content of the report editor
+          </Content>
+        )
+      } }
+      withDivider
+    />
   )
 }
