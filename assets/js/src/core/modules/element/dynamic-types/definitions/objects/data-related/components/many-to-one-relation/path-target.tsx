@@ -45,7 +45,7 @@ export const PathTarget = forwardRef(function PathTarget (
   const { mapToElementType } = useElementHelper()
   const { formatPath } = useDataObjectHelper()
   const { id: dataObjectId } = useDataObject()
-  const [displayPath, setDisplayPath] = useState<string>('')
+  const [displayPath, setDisplayPath] = useState<string>(String(props.value?.fullPath ?? ''))
   const [isLoading, setIsLoading] = useState(false)
 
   const hasPathFormatterClass = !isNil(props.pathFormatterClass) && !isEmpty(props.pathFormatterClass)
