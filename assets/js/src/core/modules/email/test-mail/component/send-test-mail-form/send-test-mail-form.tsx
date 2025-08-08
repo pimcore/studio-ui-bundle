@@ -12,10 +12,10 @@ import { CodeEditor } from '@Pimcore/components/code-editor/code-editor'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
 import { Select } from '@Pimcore/components/select/select'
-import { ManyToOneRelation, ManyToOneRelationValueType } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
-import { SendEmailParameters } from '@Pimcore/modules/email/emails-api-slice-enhanced'
+import { ManyToOneRelation, type ManyToOneRelationValueType } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
+import { type SendEmailParameters } from '@Pimcore/modules/email/emails-api-slice-enhanced'
 import { getLanguageExtensions, TextArea } from '@sdk/components'
-import { FormInstance } from 'antd/lib'
+import { type FormInstance } from 'antd/lib'
 import { isNil } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -42,67 +42,67 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
         return (
           <>
             <Form.Item
-              label={t('test-email.form.document')}
+              label={ t('test-email.form.document') }
               name="documentPath"
-              rules={[
+              rules={ [
                 { required: true, message: t('email.test.validation.content.required') }
-              ]}
+              ] }
             >
               <ManyToOneRelation
                 allowToClearRelation
                 documentsAllowed
-                onChange={(value: ManyToOneRelationValueType) => {
+                onChange={ (value: ManyToOneRelationValueType) => {
                   if (isNil(value)) {
                     form.setFieldValue('documentPath', null)
                     return
                   }
 
                   form.setFieldValue('documentPath', value.fullPath)
-                }}
+                } }
               />
             </Form.Item>
 
             <Form.Item
               name="documentParameters"
-              rules={[
+              rules={ [
                 { required: true, message: t('email.test.validation.content.required') }
-              ]}
+              ] }
             >
-              <ParametersTable form={form} />
+              <ParametersTable form={ form } />
             </Form.Item>
           </>
         )
       case TestEmilType.HTML:
         return (
           <Form.Item
-            label={t('test-email.form.message')}
+            label={ t('test-email.form.message') }
             name="content"
-            rules={[
+            rules={ [
               { required: true, message: t('email.test.validation.content.required') }
-            ]}
+            ] }
           >
             <CodeEditor
-              minHeight='200px'
-              basicSetup={{
+              basicSetup={ {
                 lineNumbers: true,
                 syntaxHighlighting: true,
                 searchKeymap: true
-              }}
-              extensions={getLanguageExtensions('html')}
+              } }
+              extensions={ getLanguageExtensions('html') }
+              minHeight='200px'
             />
           </Form.Item>
         )
       case TestEmilType.Text:
         return (
           <Form.Item
-            label={t('test-email.form.message')}
+            label={ t('test-email.form.message') }
             name="content"
-            rules={[
+            rules={ [
               { required: true, message: t('email.test.validation.content.required') }
-            ]}
+            ] }
           >
             <TextArea
-              autoSize={{ minRows: 10 }}
+              autoSize={ { minRows: 10 } }
             />
           </Form.Item>
         )
@@ -111,49 +111,49 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
 
   return (
     <Form
-      form={form}
+      form={ form }
+      initialValues={ initalValues }
       layout="vertical"
-      initialValues={initalValues}
     >
       <Form.Item
-        label={t('test-email.form.from')}
+        label={ t('test-email.form.from') }
         name="from"
-        rules={[
+        rules={ [
           { required: true, message: t('email.test.validation.from.required') },
           { type: 'email', message: t('email.test.validation.from.email') }
-        ]}
+        ] }
       >
         <Input type="email" />
       </Form.Item>
 
       <Form.Item
-        label={t('test-email.form.to')}
+        label={ t('test-email.form.to') }
         name="to"
-        rules={[
+        rules={ [
           { required: true, message: t('email.test.validation.to.required') },
           { type: 'email', message: t('email.test.validation.to.email') }
-        ]}
+        ] }
       >
         <Input type="email" />
       </Form.Item>
 
       <Form.Item
-        label={t('test-email.form.subject')}
+        label={ t('test-email.form.subject') }
         name="subject"
-        rules={[
-          { required: true, message: t('email.test.validation.subject.required') },
-        ]}
+        rules={ [
+          { required: true, message: t('email.test.validation.subject.required') }
+        ] }
       >
         <Input />
       </Form.Item>
 
       <Form.Item
-        label={t('test-email.form.contentType')}
+        initialValue={ TestEmilType.Text }
+        label={ t('test-email.form.contentType') }
         name="contentType"
-        initialValue={TestEmilType.Text}
       >
         <Select
-          options={[
+          options={ [
             {
               label: t(`test-email.contentType.${TestEmilType.Document}`),
               value: TestEmilType.Document
@@ -166,15 +166,18 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
               label: t(`test-email.contentType.${TestEmilType.Text}`),
               value: TestEmilType.Text
             }
-          ]}
+          ] }
         />
       </Form.Item>
 
-      <Form.Item dependencies={['contentType']} noStyle>
+      <Form.Item
+        dependencies={ ['contentType'] }
+        noStyle
+      >
         {({ getFieldValue }) => {
-          const typeValue = getFieldValue('contentType')
+          const typeValue = getFieldValue('contentType') as TestEmilType
 
-          return getVariableFormFields(typeValue)
+          return getVariableFormFields(typeValue ?? TestEmilType.Text)
         }}
       </Form.Item>
     </Form>

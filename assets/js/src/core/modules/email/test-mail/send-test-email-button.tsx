@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Form } from "@Pimcore/components/form/form"
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSendTestEmailContext } from './provider/use-send-test-email-context'
@@ -20,7 +19,7 @@ export const SendTestEmailButton = (): React.JSX.Element => {
   return (
     <button
       className="main-nav__list-btn"
-      onClick={() => setIsOpen(true)}
+      onClick={ () => { setIsOpen(true) } }
     >
       {t('navigation.test-email')}
     </button>

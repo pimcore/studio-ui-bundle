@@ -1,10 +1,20 @@
-import { Form } from "@Pimcore/components/form/form"
-import { WindowModal } from "@Pimcore/components/modal/window-modal/window-modal"
-import { App, FormInstance } from "antd"
-import React, { createContext, useMemo, useState } from "react"
-import { SendEmailParameters } from "../../emails-api-slice-enhanced"
-import { SendTestMailForm } from "../component/send-test-mail-form/send-test-mail-form"
-import { useSendTestMail } from "../hooks/use-send-test-mail"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { Form } from '@Pimcore/components/form/form'
+import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
+import { type FormInstance } from 'antd'
+import React, { createContext, useMemo, useState } from 'react'
+import { type SendEmailParameters } from '../../emails-api-slice-enhanced'
+import { SendTestMailForm } from '../component/send-test-mail-form/send-test-mail-form'
+import { useSendTestMail } from '../hooks/use-send-test-mail'
 
 interface SendTestEmailProviderProps {
   children: React.ReactNode
@@ -31,9 +41,9 @@ export const SendTestEmailProvider: React.FC<SendTestEmailProviderProps> = ({ ch
 
   const submit = async (): Promise<any> => {
     return await new Promise((resolve, reject) => {
-      tmpForm!.validateFields()
+      tmpForm.validateFields()
         .then(async () => {
-          const values = tmpForm!.getFieldsValue()
+          const values = tmpForm.getFieldsValue() as SendEmailParameters
 
           resolve(values)
           send(values, () => {
@@ -54,22 +64,22 @@ export const SendTestEmailProvider: React.FC<SendTestEmailProviderProps> = ({ ch
   }), [isOpen, tmpForm])
 
   return (
-    <SendTestEmailContext.Provider value={contextValue}>
+    <SendTestEmailContext.Provider value={ contextValue }>
       <WindowModal
-        size="L"
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        onOk={async () => {
+        onClose={ () => { setIsOpen(false) } }
+        onOk={ async () => {
           await submit()
-        }}
+        } }
+        open={ isOpen }
+        size="L"
       >
         <SendTestMailForm
-          form={tmpForm}
-          initalValues={{
+          form={ tmpForm }
+          initalValues={ {
             from: 'from@doe.com',
             to: 'to@doe.com',
-            subject: 'Test Email Subject',
-          }}
+            subject: 'Test Email Subject'
+          } }
         />
       </WindowModal>
 

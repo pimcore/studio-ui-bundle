@@ -1,12 +1,22 @@
-import { Flex } from "@Pimcore/components/flex/flex"
-import { Grid } from "@Pimcore/components/grid/grid"
-import { SendEmailParameters } from "@Pimcore/modules/email/emails-api-slice-enhanced"
-import { OnUpdateCellDataEvent } from "@Pimcore/types/components/types"
-import { IconTextButton } from "@sdk/components"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Grid } from '@Pimcore/components/grid/grid'
+import { type SendEmailParameters } from '@Pimcore/modules/email/emails-api-slice-enhanced'
+import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
+import { IconTextButton } from '@sdk/components'
 import { createColumnHelper } from '@tanstack/react-table'
-import { FormInstance } from "antd"
-import React, { useState } from "react"
-import { useTranslation } from "react-i18next"
+import { type FormInstance } from 'antd'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useStyles } from './parameters-table.styles'
 
 interface TestEmailParametersTableProps {
@@ -54,27 +64,33 @@ export const ParametersTable = ({ form }: ParametersTableProps): React.JSX.Eleme
   }
 
   return (
-    <Flex vertical gap={4}>
-      <Flex justify="space-between" align="center">
-        <p className={styles.formLabel}>
+    <Flex
+      gap={ 4 }
+      vertical
+    >
+      <Flex
+        align="center"
+        justify="space-between"
+      >
+        <p className={ styles.formLabel }>
           {t('test-email.form.parameters')}
         </p>
         <IconTextButton
-          title="Add Parameter"
-          icon={{ value: 'new' }}
-          onClick={() => {
+          icon={ { value: 'new' } }
+          onClick={ () => {
             setData([...data, { key: '', value: '' }])
-          }}
+          } }
+          title="Add Parameter"
         >
           {t('test-email.parameters.add')}
         </IconTextButton>
       </Flex>
       <Grid
         autoWidth
-        columns={columns}
-        data={data}
+        columns={ columns }
+        data={ data }
+        onUpdateCellData={ onUpdateCellData }
         resizable
-        onUpdateCellData={onUpdateCellData}
       />
     </Flex>
   )

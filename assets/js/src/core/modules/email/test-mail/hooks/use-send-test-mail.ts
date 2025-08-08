@@ -1,13 +1,20 @@
-import ApiError from "@Pimcore/modules/app/error-handler/classes/api-error"
-import GeneralError from "@Pimcore/modules/app/error-handler/classes/general-error"
-import trackError from "@Pimcore/modules/app/error-handler/error-handler"
-import { isUndefined } from "lodash"
-import { useTranslation } from "react-i18next"
-import { SendEmailParameters, useEmailSendTestMutation } from "../../emails-api-slice-enhanced"
-import { useMessage } from '@Pimcore/components/message/useMessage'
-import { modalApi } from "@Pimcore/app/public-api/modal/modal-api"
-import { useFormModal } from "@sdk/components"
-import { useSendTestEmailContext } from "../provider/use-send-test-email-context"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import ApiError from '@Pimcore/modules/app/error-handler/classes/api-error'
+import GeneralError from '@Pimcore/modules/app/error-handler/classes/general-error'
+import trackError from '@Pimcore/modules/app/error-handler/error-handler'
+import { useFormModal } from '@sdk/components'
+import { isUndefined } from 'lodash'
+import { useTranslation } from 'react-i18next'
+import { type SendEmailParameters, useEmailSendTestMutation } from '../../emails-api-slice-enhanced'
 
 interface UseSendTestMailHookReturn {
   send: (parameters: SendEmailParameters, onFinish?: () => void) => void
