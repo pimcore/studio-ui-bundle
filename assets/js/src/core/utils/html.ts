@@ -15,6 +15,12 @@ export const stripTags = (input: string, allowedTags: string[] = []): string => 
   return DOMPurify.sanitize(input, { ALLOWED_TAGS: allowedTags })
 }
 
+export const decodeHtmlEntities = (input: string): string => {
+  const div = document.createElement('div')
+  div.innerHTML = input
+  return div.textContent ?? div.innerText ?? ''
+}
+
 export const escapeHtml = (input: string): string => {
   const div = document.createElement('div')
   div.textContent = input

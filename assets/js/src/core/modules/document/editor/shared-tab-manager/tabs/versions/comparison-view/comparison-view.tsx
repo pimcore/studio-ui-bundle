@@ -26,7 +26,7 @@ export const ComparisonView = ({ versionIds }: VersionComparisonViewProps): Reac
 
   useEffect(() => {
     if (!isEmptyValue(comparedVersionId)) {
-      const comparisonVersionUrl = `${currentDomain}/admin/document/diff-versions/from/${mainVersionId}/to/${comparedVersionId}`
+      const comparisonVersionUrl = `${currentDomain}/pimcore-studio/api/documents/diff-versions/from/${mainVersionId}/to/${comparedVersionId}`
 
       setVersionUrl(comparisonVersionUrl)
     } else {

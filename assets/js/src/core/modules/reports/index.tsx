@@ -52,7 +52,7 @@ moduleSystem.registerModule({
           translationKey: 'navigation.custom-reports',
           icon: {
             type: 'name',
-            value: 'pie-chart'
+            value: 'chart-scatter'
           }
         }
       }
