@@ -11,7 +11,7 @@ declare(strict_types=1);
  *  @license    Pimcore Open Core License (POCL)
  */
 
-namespace Pimcore\Bundle\StudioUiBundle\Controller;
+namespace Pimcore\Bundle\StudioUiBundle\Controller\Backend;
 
 use Pimcore\Bundle\StudioBackendBundle\Security\Service\SecurityServiceInterface;
 use Pimcore\Bundle\StudioBackendBundle\Util\Constant\ElementPermissions;
@@ -43,7 +43,7 @@ final class ImageEditorController extends AbstractController
             ElementPermissions::VIEW_PERMISSION
         );
 
-        return $this->render('@PimcoreStudioUi/image-editor/editor.html.twig', [
+        return $this->render('@PimcoreStudioUi/backend/image-editor/editor.html.twig', [
             'asset' => $asset,
         ]);
     }
