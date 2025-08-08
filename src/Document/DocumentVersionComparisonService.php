@@ -50,8 +50,11 @@ final class DocumentVersionComparisonService
         return HtmlToImage::isSupported() && class_exists('Imagick');
     }
 
-    public function generateVersionComparison(int $fromVersionId, int $toVersionId, string $baseUrl): DocumentVersionComparisonResult
-    {
+    public function generateVersionComparison(
+        int $fromVersionId,
+        int $toVersionId,
+        string $baseUrl
+    ): DocumentVersionComparisonResult {
         $docFrom = $this->loadAndValidateDocument($fromVersionId);
         $docTo = $this->loadAndValidateDocument($toVersionId);
 
@@ -84,8 +87,12 @@ final class DocumentVersionComparisonService
         return $document;
     }
 
-    private function generateHtmlFiles(PageSnippet $docFrom, PageSnippet $docTo, string $fromHtmlFile, string $toHtmlFile): void
-    {
+    private function generateHtmlFiles(
+        PageSnippet $docFrom,
+        PageSnippet $docTo,
+        string $fromHtmlFile,
+        string $toHtmlFile
+    ): void {
         try {
             $docContentFrom = $this->documentRenderer->render($docFrom);
             $docContentTo = $this->documentRenderer->render($docTo);
@@ -102,7 +109,11 @@ final class DocumentVersionComparisonService
                 throw $e;
             }
 
-            throw new DocumentVersionComparisonException('Failed to generate HTML files: ' . $e->getMessage(), 0, $e);
+            throw new DocumentVersionComparisonException(
+                'Failed to generate HTML files: ' . $e->getMessage(),
+                0,
+                $e
+            );
         }
     }
 
@@ -118,8 +129,8 @@ final class DocumentVersionComparisonService
             $prefix = $baseUrl;
         }
 
-        $fromUrl = $prefix . $this->router->generate('pimcore_studio_ui_document_diffversions_html', ['id' => basename($fromHtmlFile)]);
-        $toUrl = $prefix . $this->router->generate('pimcore_studio_ui_document_diffversions_html', ['id' => basename($toHtmlFile)]);
+        $fromUrl = $this->generatePreviewUrl($prefix, $fromHtmlFile);
+        $toUrl = $this->generatePreviewUrl($prefix, $toHtmlFile);
 
         try {
             if (!HtmlToImage::convert($fromUrl, $fromImageFile)) {
@@ -134,7 +145,11 @@ final class DocumentVersionComparisonService
                 throw $e;
             }
 
-            throw new DocumentVersionComparisonException('HTML to image conversion failed: ' . $e->getMessage(), 0, $e);
+            throw new DocumentVersionComparisonException(
+                'HTML to image conversion failed: ' . $e->getMessage(),
+                0,
+                $e
+            );
         } finally {
             // Clean up HTML files regardless of success/failure
             if (file_exists($fromHtmlFile)) {
@@ -164,7 +179,10 @@ final class DocumentVersionComparisonService
         }
 
         try {
-            if ($image1->getImageWidth() == $image2->getImageWidth() && $image1->getImageHeight() == $image2->getImageHeight()) {
+            if (
+                $image1->getImageWidth() == $image2->getImageWidth() &&
+                $image1->getImageHeight() == $image2->getImageHeight()
+            ) {
                 $result = $image1->compareImages($image2, Imagick::METRIC_MEANSQUAREERROR);
                 $result[0]->setImageFormat('png');
 
@@ -199,6 +217,14 @@ final class DocumentVersionComparisonService
             $image2->clear();
             $image2->destroy();
         }
+    }
+
+    private function generatePreviewUrl(string $prefix, string $htmlFile): string
+    {
+        return $prefix . $this->router->generate(
+            'pimcore_studio_ui_document_diffversions_html',
+            ['id' => basename($htmlFile)]
+        );
     }
 
     private function cleanupFiles(array $files): void
