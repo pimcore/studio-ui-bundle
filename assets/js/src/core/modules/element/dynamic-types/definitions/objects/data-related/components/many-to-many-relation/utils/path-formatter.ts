@@ -13,6 +13,6 @@ import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 /**
  * Checks if a pathFormatterConfig object is valid (has both non-empty class and name)
  */
-export const isValidPathFormatterConfig = (config: { name?: string | undefined, class?: string | undefined } | undefined): config is { name: string, class: string } => {
+export const isValidPathFormatterConfig = (config: { name?: string, class?: string } | undefined): config is { name: string, class: string } => {
   return config !== undefined && isNonEmptyString(config.class) && isNonEmptyString(config.name)
 }
