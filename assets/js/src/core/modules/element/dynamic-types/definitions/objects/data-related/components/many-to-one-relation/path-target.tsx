@@ -17,13 +17,14 @@ import {
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import cn from 'classnames'
 import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
-import { isNil, isEmpty } from 'lodash'
+import { isNil } from 'lodash'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { Flex } from 'antd'
-import { useDataObjectHelper, type IFormatPathItem } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
+import { useFormatPath, type IFormatPathItem } from '@Pimcore/modules/data-object/hooks/use-format-path'
 import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-object'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { LoadingOutlined } from '@ant-design/icons'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 
 export interface PathTargetProps {
   value: ManyToOneRelationValueType
@@ -43,17 +44,17 @@ export const PathTarget = forwardRef(function PathTarget (
   const [value, setValue] = React.useState<ManyToOneRelationValueType>(props.value ?? null)
   const { getStateClasses } = useDroppable()
   const { mapToElementType } = useElementHelper()
-  const { formatPath } = useDataObjectHelper()
+  const { formatPath } = useFormatPath()
   const { id: dataObjectId } = useDataObject()
   const [displayPath, setDisplayPath] = useState<string>(String(props.value?.fullPath ?? ''))
   const [isLoading, setIsLoading] = useState(false)
 
-  const hasPathFormatterClass = !isNil(props.pathFormatterClass) && !isEmpty(props.pathFormatterClass)
+  const hasPathFormatterClass = isNonEmptyString(props.pathFormatterClass)
 
   function mapNewValue (value: IFormatPathItem[], data: { items: Array<{ objectReference: string, formatedPath: string }> }): IFormatPathItem[] {
     return value.map((item) => ({
       ...item,
-      fullPath: data.items.find(i => i.objectReference === `object_${item.id}`)?.formatedPath ?? item.fullPath
+      fullPath: data.items.find(i => i.objectReference === `${item.type}_${item.id}`)?.formatedPath ?? item.fullPath
     }))
   }
 

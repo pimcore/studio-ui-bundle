@@ -12,27 +12,19 @@ import { store } from '@Pimcore/app/store'
 import { type EditorContainerProps } from '../editor/editor-container'
 import { setNodeLoadingInAllTree, setNodePublished } from '@Pimcore/components/element-tree/element-tree-slice'
 import { SaveTaskType } from '../actions/save/use-save'
-import { useDataObjectUpdateByIdMutation, type DataObjectFormatPathApiResponse } from '../data-object-api-slice.gen'
+import { useDataObjectUpdateByIdMutation } from '../data-object-api-slice.gen'
 import { publishDraft, unpublishDraft } from '../data-object-draft-slice'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
-import type { ApiErrorData } from '@Pimcore/modules/app/error-handler/classes/api-error'
-import { api, type Error } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { type Error } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 
 interface OpenDataObjectWidgetProps {
   config: EditorContainerProps
 }
 
-export interface IFormatPathItem {
-  id: number
-  type: string
-  fullPath: string
-}
-
 interface UseDataObjectReturn {
   openDataObject: (props: OpenDataObjectWidgetProps) => Promise<void>
   executeDataObjectTask: (id: number, task: SaveTaskType, onFinish?: () => void) => Promise<void>
-  formatPath: (items: IFormatPathItem[], fieldName: string, dataObjectId: number) => Promise<DataObjectFormatPathApiResponse | undefined>
 }
 
 export const useDataObjectHelper = (): UseDataObjectReturn => {
@@ -89,36 +81,5 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
     }
   }
 
-  const formatPath = async (items: IFormatPathItem[], fieldName: string, dataObjectId: number): Promise<DataObjectFormatPathApiResponse | undefined> => {
-    const targets = items.reduce((acc, item) => {
-      acc[`object_${item.id}`] = {
-        id: item.id,
-        type: item.type,
-        label: item.fullPath,
-        path: item.fullPath,
-        nicePathKey: `object_${item.id}`
-      }
-      return acc
-    }, {})
-
-    if (Object.keys(targets).length === 0) {
-      return undefined
-    }
-
-    const { data, error } = await store.dispatch(api.endpoints.dataObjectFormatPath.initiate({
-      body: {
-        objectId: dataObjectId,
-        targets,
-        fieldName
-      }
-    }))
-
-    if (data === undefined) {
-      trackError(new ApiError(error as unknown as ApiErrorData))
-    }
-
-    return data
-  }
-
-  return { openDataObject, executeDataObjectTask, formatPath }
+  return { openDataObject, executeDataObjectTask }
 }

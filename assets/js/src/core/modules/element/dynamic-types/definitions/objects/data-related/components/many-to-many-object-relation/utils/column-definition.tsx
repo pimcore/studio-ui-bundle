@@ -22,6 +22,7 @@ import {
 import { Flex } from 'antd'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { LoadingOutlined } from '@ant-design/icons'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 
 export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: Record<string, VisibleFieldDefinition>, disabled: boolean, pathFormatterClass: string): Array<ColumnDef<any>> => {
   const columnDefinition: Array<ColumnDef<any>> = []
@@ -53,7 +54,7 @@ export const visibleFieldsToColumnDefinitions = (visibleFieldDefinitions: Record
             }
           : undefined,
         size: getColumnWidth(key),
-        ...(pathFormatterClass !== '' ? { cell: renderFullPathCell } : {})
+        ...(isNonEmptyString(pathFormatterClass) ? { cell: renderFullPathCell } : {})
       })
     )
   }
