@@ -8,8 +8,23 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactElement } from 'react'
+import React, { type ReactElement, useState, createContext, useContext } from 'react'
 import { Dropdown } from 'antd'
+
+interface ContextMenuContextType {
+  closeMenu: () => void
+}
+
+const ContextMenuContext = createContext<ContextMenuContextType | undefined>(undefined)
+
+export const useContextMenu = (): ContextMenuContextType | undefined => {
+  return useContext(ContextMenuContext)
+}
+
+export const useCloseContextMenu = (): (() => void) | undefined => {
+  const context = useContextMenu()
+  return context?.closeMenu
+}
 
 export interface ContextMenuWrapperProps {
   children: React.ReactNode
@@ -17,9 +32,25 @@ export interface ContextMenuWrapperProps {
 }
 
 const ContextMenuWrapper = ({ children, renderMenu }: ContextMenuWrapperProps): React.JSX.Element => {
+  const [open, setOpen] = useState(false)
+
+  const closeMenu = (): void => {
+    setOpen(false)
+  }
+
+  const contextValue: ContextMenuContextType = {
+    closeMenu
+  }
+
   return (
     <Dropdown
-      dropdownRender={ () => renderMenu() }
+      dropdownRender={ () => (
+        <ContextMenuContext.Provider value={ contextValue }>
+          {renderMenu()}
+        </ContextMenuContext.Provider>
+      ) }
+      onOpenChange={ setOpen }
+      open={ open }
       trigger={ ['contextMenu'] }
     >
       <span>{children}</span>
