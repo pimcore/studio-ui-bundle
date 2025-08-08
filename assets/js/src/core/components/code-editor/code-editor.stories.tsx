@@ -1,6 +1,5 @@
 import { Meta } from "@storybook/react/*";
 import { CodeEditor } from "./code-editor";
-import { getLanguageExtensions } from '@sdk/components'
 
 const config: Meta = {
   title: 'Components/Others/CodeEditor',

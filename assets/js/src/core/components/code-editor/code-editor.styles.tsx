@@ -16,6 +16,12 @@ export const useStyles = createStyles(({ token, css }) => {
       .cm-editor {
         border: 1px solid #d9d9d9;
         border-radius: ${token.borderRadius}px;
+        outline: none;
+        overflow: auto;
+
+        &.cm-focused {
+          border-color: ${token.colorPrimary};
+        }
       }
     `
   }
