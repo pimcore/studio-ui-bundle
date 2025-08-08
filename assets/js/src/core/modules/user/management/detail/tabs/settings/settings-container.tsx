@@ -43,6 +43,8 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const { getAvailablePermissions } = useUserManagementHelper()
   const permissions = getGroupedPermissions(getAvailablePermissions())
 
+  const [ passwordType, setPasswordType ] = React.useState<'text' | 'password'>('password');
+
   useEffect(() => {
     if (!isLoading) {
       form.setFieldsValue({
@@ -138,11 +140,12 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                     name={ 'password' }
                     rules={ [{ min: 10 }] }
                   >
-                    <Input suffix={ <IconButton
+                    <Input type={passwordType} suffix={ <IconButton
                       icon={ { value: 'locked' } }
                       onClick={ () => {
                         const newPassword = generatePassword()
                         form.setFieldValue('password', newPassword); changeUserInState({ password: newPassword })
+                        setPasswordType('text');
                       } }
                       title={ t('user-management.generate-password') }
                       variant={ 'minimal' }

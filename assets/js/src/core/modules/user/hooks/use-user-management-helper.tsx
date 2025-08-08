@@ -195,7 +195,8 @@ export const useUserManagementHelper = (): UseUserReturn => {
         assetWorkspaces: user.assetWorkspaces,
         dataObjectWorkspaces: user.dataObjectWorkspaces,
         documentWorkspaces: user.documentWorkspaces,
-        perspectives: user.perspectives
+        perspectives: user.perspectives,
+        ...user.password ? { password: user.password } : {}
       }
     }))
     handleNotification(t('user-management.save-user.success'), error)
