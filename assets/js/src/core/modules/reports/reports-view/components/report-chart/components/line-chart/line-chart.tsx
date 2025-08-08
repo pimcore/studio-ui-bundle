@@ -70,7 +70,7 @@ export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps)
         range: colorList
       }
     },
-    height: 380,
+    height: 250,
     point: {
       shapeField: 'circle',
       sizeField: 4
