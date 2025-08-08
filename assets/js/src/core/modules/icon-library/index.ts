@@ -40,6 +40,7 @@ import catalog from '@Pimcore/assets/icons/catalog.inline.svg?react'
 import category from '@Pimcore/assets/icons/category.inline.svg?react'
 import cdp from '@Pimcore/assets/icons/cdp.inline.svg?react'
 import channels from '@Pimcore/assets/icons/channels.inline.svg?react'
+import chartScatter from '@Pimcore/assets/icons/chart-scatter.inline.svg?react'
 import checkCircle from '@Pimcore/assets/icons/check-circle.inline.svg?react'
 import checkbox from '@Pimcore/assets/icons/checkbox.inline.svg?react'
 import checkmark from '@Pimcore/assets/icons/checkmark.inline.svg?react'
@@ -75,6 +76,7 @@ import deleteColumn from '@Pimcore/assets/icons/delete-column.inline.svg?react'
 import deleteRow from '@Pimcore/assets/icons/delete-row.inline.svg?react'
 import dependencies from '@Pimcore/assets/icons/dependencies.inline.svg?react'
 import details from '@Pimcore/assets/icons/details.inline.svg?react'
+import documentLink from '@Pimcore/assets/icons/document-link.inline.svg?react'
 import documentTypes from '@Pimcore/assets/icons/document-types.inline.svg?react'
 import document from '@Pimcore/assets/icons/document.inline.svg?react'
 import doubleArrowDown from '@Pimcore/assets/icons/double-arrow-down.inline.svg?react'
@@ -89,6 +91,7 @@ import dragOption from '@Pimcore/assets/icons/drag-option.inline.svg?react'
 import dropTarget from '@Pimcore/assets/icons/drop-target.inline.svg?react'
 import editPen from '@Pimcore/assets/icons/edit-pen.inline.svg?react'
 import edit from '@Pimcore/assets/icons/edit.inline.svg?react'
+import email from '@Pimcore/assets/icons/email.inline.svg?react'
 import embeddedMetadata from '@Pimcore/assets/icons/embedded-metadata.inline.svg?react'
 import event from '@Pimcore/assets/icons/event.inline.svg?react'
 import excludedFromNav from '@Pimcore/assets/icons/excluded-from-nav.inline.svg?react'
@@ -111,11 +114,13 @@ import folder from '@Pimcore/assets/icons/folder.inline.svg?react'
 import graph from '@Pimcore/assets/icons/graph.inline.svg?react'
 import groupByKeys from '@Pimcore/assets/icons/group-by-keys.inline.svg?react'
 import group from '@Pimcore/assets/icons/group.inline.svg?react'
+import hardlink from '@Pimcore/assets/icons/hardlink.inline.svg?react'
 import heading from '@Pimcore/assets/icons/heading.inline.svg?react'
 import helpCircle from '@Pimcore/assets/icons/help-circle.inline.svg?react'
 import history from '@Pimcore/assets/icons/history.inline.svg?react'
 import homeRootFolder from '@Pimcore/assets/icons/home-root-folder.inline.svg?react'
 import image from '@Pimcore/assets/icons/image.inline.svg?react'
+import importCsv from '@Pimcore/assets/icons/import-csv.inline.svg?react'
 import infoCircle from '@Pimcore/assets/icons/info-circle.inline.svg?react'
 import info from '@Pimcore/assets/icons/info.inline.svg?react'
 import inheritanceActive from '@Pimcore/assets/icons/inheritance-active.inline.svg?react'
@@ -173,6 +178,7 @@ import preview from '@Pimcore/assets/icons/preview.inline.svg?react'
 import properties from '@Pimcore/assets/icons/properties.inline.svg?react'
 import published from '@Pimcore/assets/icons/published.inline.svg?react'
 import questionmark from '@Pimcore/assets/icons/questionmark.inline.svg?react'
+import redirect from '@Pimcore/assets/icons/redirect.inline.svg?react'
 import refresh from '@Pimcore/assets/icons/refresh.inline.svg?react'
 import removeImageThumbnail from '@Pimcore/assets/icons/remove-image-thumbnail.inline.svg?react'
 import removeMarker from '@Pimcore/assets/icons/remove-marker.inline.svg?react'
@@ -195,6 +201,7 @@ import share from '@Pimcore/assets/icons/share.inline.svg?react'
 import sharedUsers from '@Pimcore/assets/icons/shared-users.inline.svg?react'
 import shield from '@Pimcore/assets/icons/shield.inline.svg?react'
 import showDetails from '@Pimcore/assets/icons/show-details.inline.svg?react'
+import snippet from '@Pimcore/assets/icons/snippet.inline.svg?react'
 import spinner from '@Pimcore/assets/icons/spinner.inline.svg?react'
 import splitView from '@Pimcore/assets/icons/split-view.inline.svg?react'
 import style from '@Pimcore/assets/icons/style.inline.svg?react'
@@ -211,6 +218,7 @@ import txtDocs from '@Pimcore/assets/icons/txt-docs.inline.svg?react'
 import unknown from '@Pimcore/assets/icons/unknown.inline.svg?react'
 import unlocked from '@Pimcore/assets/icons/unlocked.inline.svg?react'
 import uploadCloud from '@Pimcore/assets/icons/upload-cloud.inline.svg?react'
+import uploadImport from '@Pimcore/assets/icons/upload-import.inline.svg?react'
 import uploadZip from '@Pimcore/assets/icons/upload-zip.inline.svg?react'
 import userSelect from '@Pimcore/assets/icons/user-select.inline.svg?react'
 import user from '@Pimcore/assets/icons/user.inline.svg?react'
@@ -329,6 +337,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'channels',
       component: channels
+    })
+    iconLibrary.register({
+      name: 'chart-scatter',
+      component: chartScatter
     })
     iconLibrary.register({
       name: 'check-circle',
@@ -471,6 +483,10 @@ moduleSystem.registerModule({
       component: details
     })
     iconLibrary.register({
+      name: 'document-link',
+      component: documentLink
+    })
+    iconLibrary.register({
       name: 'document-types',
       component: documentTypes
     })
@@ -525,6 +541,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'edit',
       component: edit
+    })
+    iconLibrary.register({
+      name: 'email',
+      component: email
     })
     iconLibrary.register({
       name: 'embedded-metadata',
@@ -615,6 +635,10 @@ moduleSystem.registerModule({
       component: group
     })
     iconLibrary.register({
+      name: 'hardlink',
+      component: hardlink
+    })
+    iconLibrary.register({
       name: 'heading',
       component: heading
     })
@@ -633,6 +657,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'image',
       component: image
+    })
+    iconLibrary.register({
+      name: 'import-csv',
+      component: importCsv
     })
     iconLibrary.register({
       name: 'info-circle',
@@ -863,6 +891,10 @@ moduleSystem.registerModule({
       component: questionmark
     })
     iconLibrary.register({
+      name: 'redirect',
+      component: redirect
+    })
+    iconLibrary.register({
       name: 'refresh',
       component: refresh
     })
@@ -951,6 +983,10 @@ moduleSystem.registerModule({
       component: showDetails
     })
     iconLibrary.register({
+      name: 'snippet',
+      component: snippet
+    })
+    iconLibrary.register({
       name: 'spinner',
       component: spinner
     })
@@ -1013,6 +1049,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'upload-cloud',
       component: uploadCloud
+    })
+    iconLibrary.register({
+      name: 'upload-import',
+      component: uploadImport
     })
     iconLibrary.register({
       name: 'upload-zip',

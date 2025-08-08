@@ -12,9 +12,11 @@ import { Form } from '@Pimcore/components/form/form'
 import { usePipelineConfig } from '@Pimcore/components/pipeline/provider/pipeline-config/use-pipeline-config'
 import { Select } from '@Pimcore/components/select/select'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const DynamicTypePipelineGridSourceFieldsSimpleFieldComponent = (): React.JSX.Element => {
   const { config } = usePipelineConfig()
+  const { t } = useTranslation()
 
   const sourceFieldConfig = config?.simpleField
   if (sourceFieldConfig === undefined) {
@@ -28,7 +30,8 @@ export const DynamicTypePipelineGridSourceFieldsSimpleFieldComponent = (): React
 
   return (
     <Form.Item
-      label={ 'Field' }
+      initialValue={ sourceFieldConfig[0]?.key }
+      label={ t('field') }
       name={ 'field' }
     >
       <Select options={ sourceFieldOptions } />

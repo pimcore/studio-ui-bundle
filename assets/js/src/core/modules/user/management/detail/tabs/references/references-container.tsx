@@ -14,6 +14,7 @@ import { Table } from '@Pimcore/modules/user/management/detail/tabs/references/c
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useUserManagementDraft } from '@Pimcore/modules/user/hooks/use-user-management-draft'
 import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-management-context'
+import { createTabContentTestId } from '@Pimcore/utils/test-id-generator'
 
 const ReferenceContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -36,6 +37,7 @@ const ReferenceContainer = ({ ...props }): React.JSX.Element => {
       activeKey={ '1' }
       bordered
       collapsible="icon"
+      data-testid={ createTabContentTestId(id.toString(), { prefix: 'user-detail-tab', tabKey: 'user-references' }) }
       items={ accordionContent }
       size={ 'small' }
       table

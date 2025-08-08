@@ -14,6 +14,9 @@ import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { IconButton, Input } from '@sdk/components'
 import { type InputRef } from 'antd'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { isHtmlContent } from '@Pimcore/utils/html'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 
 export interface TextCellProps extends DefaultCellProps {}
 
@@ -23,6 +26,7 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
   const element = useRef<InputRef>(null)
   const callback = Boolean(props.column.columnDef.meta?.callback ?? false)
   const editCallback = props.column.columnDef.meta?.editCallback
+  const htmlDetection = Boolean((props.column.columnDef.meta as any)?.htmlDetection ?? false)
 
   useEffect(() => {
     if (isInEditMode) {
@@ -46,10 +50,20 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
   }
 
   function getCellContent (): React.JSX.Element {
+    const cellValue = props.getValue()
+    const cellValueString = typeof cellValue === 'string' ? cellValue : String(cellValue ?? '')
+    const shouldRenderHtml = htmlDetection && isHtmlContent(cellValueString)
+
     if (!isInEditMode) {
+      if (shouldRenderHtml) {
+        return (
+          <SanitizeHtml html={ cellValueString } />
+        )
+      }
+
       return (
         <>
-          { props.getValue() }
+          { cellValue }
         </>
       )
     }
@@ -59,8 +73,8 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
         try {
           const newValue = await editCallback(props.row.original, props.column.id)
           fireOnUpdateCellDataEvent(newValue)
-        } catch (error) {
-          console.error('Edit callback failed:', error)
+        } catch {
+          trackError(new GeneralError('Edit callback failed'))
         }
       } else {
         console.log('No edit callback available')

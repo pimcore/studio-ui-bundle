@@ -61,6 +61,7 @@ export interface GridProps {
   contextMenu?: ListGridContextMenuComponents
   disabled?: boolean
   className?: string
+  dataTestId?: string
   onRowDoubleClick?: (row: any) => void
   enableRowDrag?: boolean
   handleDragEnd?: (event: DragEndEvent) => void

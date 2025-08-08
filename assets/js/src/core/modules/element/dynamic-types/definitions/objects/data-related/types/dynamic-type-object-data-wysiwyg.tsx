@@ -26,6 +26,7 @@ import { FieldLabel } from '../helpers/label/field-label'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { GridCellPreviewWrapper } from '../../grid-cell-preview/grid-cell-cell-preview-wrapper/grid-cell-preview-wrapper'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
+import { WysiwygContext } from '@Pimcore/modules/wysiwyg/interface/wysiwyg'
 
 export type WysiwygObjectDataDefinition = AbstractObjectDataDefinition & {
   value?: string | null
@@ -70,6 +71,7 @@ export class DynamicTypeObjectDataWysiwyg extends DynamicTypeObjectDataAbstract 
     return (
       <Wysiwyg
         { ...props }
+        context={ WysiwygContext.DATA_OBJECT }
         disabled={ props.noteditable === true }
         editorConfig={ editorConfig }
         height={ props.height ?? undefined }

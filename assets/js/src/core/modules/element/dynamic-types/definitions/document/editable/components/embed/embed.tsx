@@ -10,8 +10,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { Text } from '@Pimcore/components/text/text'
-import { Flex } from '@Pimcore/components/flex/flex'
+import { EditableEmptyPlaceholder } from '@Pimcore/components/editable-empty-placeholder'
 import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { isEmpty, isNull } from 'lodash'
@@ -89,26 +88,12 @@ export const EmbedComponent = ({ value, onChange, disabled, className, container
 
   if (!hasUrl) {
     return (
-      <Flex
-        align="center"
-        className={ styles.placeholder }
-        gap="small"
-        justify="center"
+      <EditableEmptyPlaceholder
+        buttonText={ t('embed.add-url') }
+        disabled={ disabled }
         onClick={ handleEditUrl }
-        style={ { cursor: disabled === true ? 'not-allowed' : 'pointer' } }
-        vertical
-      >
-        <Text className={ styles.placeholderText }>
-          {t('embed.placeholder')}
-        </Text>
-        <IconButton
-          disabled={ disabled }
-          icon={ { value: 'edit' } }
-          type="default"
-        >
-          {t('embed.add-url')}
-        </IconButton>
-      </Flex>
+        text={ t('embed.placeholder') }
+      />
     )
   }
 

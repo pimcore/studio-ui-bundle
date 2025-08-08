@@ -17,6 +17,8 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { isNil } from 'lodash'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
+import { Input } from '@Pimcore/components/input/input'
+import { useStyles } from './hotspot-image-preview.styles'
 
 interface DocumentHotspotImageValue {
   image: { type: 'asset', id: number } | null
@@ -36,17 +38,46 @@ interface DocumentHotspotImagePreviewProps {
   setCropModalOpen: () => void
   handleSearch: () => void
   handleLocateInTree: () => void
+  handleUpload: () => void
   emptyValue: () => void
   disabled?: boolean
+  disableInlineUpload?: boolean
   imgAttributes?: Record<string, string>
   focalPointContextMenuItem?: boolean
-  onImageResize?: (dimensions: { width: number, height: number }) => void
-  lastImageDimensions?: { width: number | string, height: number | string } | null
+  onResize?: (dimensions: { width: number, height: number }) => void
+  lastImageDimensions?: { width: number, height: number } | null
+  // Alt text overlay props
+  altText?: string
+  onAltTextChange?: (alt: string) => void
+  hideAltTextInput?: boolean
 }
 
-export const DocumentHotspotImagePreview = ({ assetId, height, width, containerWidth, value, onChange, setMarkerModalOpen, setCropModalOpen, handleSearch, handleLocateInTree, emptyValue, disabled, imgAttributes, focalPointContextMenuItem, onImageResize, lastImageDimensions }: DocumentHotspotImagePreviewProps): React.JSX.Element => {
+export const DocumentHotspotImagePreview = ({
+  assetId,
+  height,
+  width,
+  containerWidth,
+  value,
+  onChange,
+  setMarkerModalOpen,
+  setCropModalOpen,
+  handleSearch,
+  handleLocateInTree,
+  handleUpload,
+  emptyValue,
+  disabled,
+  disableInlineUpload,
+  imgAttributes,
+  focalPointContextMenuItem,
+  onResize,
+  lastImageDimensions,
+  altText,
+  onAltTextChange,
+  hideAltTextInput
+}: DocumentHotspotImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openElement } = useElementHelper()
+  const { styles } = useStyles()
 
   const handleOpen = (): void => {
     if (!isNil(assetId)) {
@@ -65,7 +96,6 @@ export const DocumentHotspotImagePreview = ({ assetId, height, width, containerW
   const dropdownItems: DropdownProps['menu']['items'] = useMemo(() => {
     const items: DropdownProps['menu']['items'] = []
 
-    // Add focal point menu item at the beginning if config is enabled
     if (focalPointContextMenuItem === true) {
       items.push({
         key: 'set-focal-point',
@@ -76,7 +106,6 @@ export const DocumentHotspotImagePreview = ({ assetId, height, width, containerW
       })
     }
 
-    // Add the rest of the menu items
     items.push(
       {
         key: 'crop',
@@ -122,11 +151,21 @@ export const DocumentHotspotImagePreview = ({ assetId, height, width, containerW
       }
     )
 
+    if (disableInlineUpload !== true) {
+      items.push({
+        key: 'upload',
+        icon: <Icon value="upload-cloud" />,
+        label: t('upload'),
+        disabled: disabled === true,
+        onClick: handleUpload
+      })
+    }
+
     return items
-  }, [disabled, assetId, focalPointContextMenuItem, handleSetFocalPoint, setCropModalOpen, setMarkerModalOpen, emptyValue, handleOpen, handleLocateInTree, handleSearch, t])
+  }, [disabled, assetId, focalPointContextMenuItem, disableInlineUpload, handleSetFocalPoint, setCropModalOpen, setMarkerModalOpen, handleUpload, emptyValue, handleOpen, handleLocateInTree, handleSearch, t])
 
   return (
-    <div>
+    <div className={ styles.root }>
       <ImageEditablePreview
         assetId={ assetId }
         containerWidth={ containerWidth }
@@ -134,10 +173,19 @@ export const DocumentHotspotImagePreview = ({ assetId, height, width, containerW
         height={ height }
         imgAttributes={ imgAttributes }
         lastImageDimensions={ lastImageDimensions }
-        onImageResize={ onImageResize }
+        onResize={ onResize }
         thumbnailSettings={ value.crop }
         width={ width }
       />
+      {hideAltTextInput !== true && (
+        <Input
+          className={ styles.altTextOverlay }
+          disabled={ disabled }
+          onChange={ (e) => onAltTextChange?.(e.target.value) }
+          placeholder={ t('image.alt-text-placeholder') }
+          value={ altText ?? '' }
+        />
+      )}
     </div>
   )
 }

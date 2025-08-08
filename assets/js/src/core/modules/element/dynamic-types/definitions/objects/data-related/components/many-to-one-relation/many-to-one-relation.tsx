@@ -64,6 +64,8 @@ export interface ManyToOneRelationProps extends IRelationAllowedTypesDataCompone
   onChange?: (value: ManyToOneRelationValueType) => void
   onOpenElement?: () => void
   className?: string
+  combinedFieldName?: string
+  pathFormatterClass?: string
 }
 
 export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Element => {
@@ -119,9 +121,11 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
         >
           <PathTarget
             allowPathTextInput={ props.allowPathTextInput }
+            combinedFieldName={ props.combinedFieldName }
             disabled={ props.disabled }
             inherited={ props.inherited }
             onChange={ setValue }
+            pathFormatterClass={ props.pathFormatterClass }
             value={ value }
           />
         </Droppable>

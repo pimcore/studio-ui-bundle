@@ -23,7 +23,7 @@ const CHART_FIELD_VALUE_KEY = 'value'
 export const BarChart = ({ chartData, reportData, chartLabelMap }: IChartProps): React.JSX.Element => {
   const { styles } = useStyles()
 
-  const [colorList] = useState<string[]>(generateColorMap())
+  const [colorList] = useState<string[]>(generateColorMap(chartData.length))
 
   const xAxis = reportData?.xAxis ?? ''
   const formattedChartData = chartData.flatMap((item: object) => {

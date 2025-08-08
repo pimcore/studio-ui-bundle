@@ -19,6 +19,7 @@ import { App as AntApp } from 'antd'
 import { DateTimeConfig } from '@Pimcore/app/config/date-time'
 import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 import { useIframeI18nSetup } from '@Pimcore/app/i18n/hooks/use-iframe-i18n-setup'
+import { ModalsProvider } from '@Pimcore/modules/app/modals-provider'
 
 export interface DocumentEditorIframeWindow extends Window {
   editableDefinitions?: AbstractDocumentEditableDefinition[]
@@ -59,11 +60,13 @@ export const DocumentEditorIframeAppView = (): React.JSX.Element => {
       <ErrorBoundary>
         <GlobalProvider>
           <AntApp>
-            <DateTimeConfig>
-              <DocumentProvider id={ documentId }>
-                <EditablesRenderer editableDefinitions={ editableDefinitions } />
-              </DocumentProvider>
-            </DateTimeConfig>
+            <ModalsProvider>
+              <DateTimeConfig>
+                <DocumentProvider id={ documentId }>
+                  <EditablesRenderer editableDefinitions={ editableDefinitions } />
+                </DocumentProvider>
+              </DateTimeConfig>
+            </ModalsProvider>
           </AntApp>
         </GlobalProvider>
       </ErrorBoundary>

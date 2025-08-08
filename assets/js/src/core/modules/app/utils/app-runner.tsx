@@ -12,8 +12,13 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { AppView } from '../app-view'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { store } from '@Pimcore/app/store'
+import { settingsApi } from '@Pimcore/app/public-api/settings/settings-api'
 
 export function runApp (): void {
+  // Initialize the settings API with the Redux store for iframe communication
+  settingsApi.initialize(store)
+
   const domElement = document.getElementById('app')
 
   if (domElement === null) {

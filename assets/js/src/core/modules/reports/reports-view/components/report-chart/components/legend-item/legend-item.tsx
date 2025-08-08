@@ -16,7 +16,6 @@ import { Text } from '@Pimcore/components/text/text'
 import { useStyles } from './legend-item.styles'
 
 interface ILegendItemProps {
-  key: string
   handleClick: (data: any) => void
   disabled: boolean
   markerColor: string
@@ -24,14 +23,13 @@ interface ILegendItemProps {
   value?: number | string
 }
 
-export const LegendItem = ({ key, label, value, disabled, markerColor, handleClick }: ILegendItemProps): React.JSX.Element => {
+export const LegendItem = ({ label, value, disabled, markerColor, handleClick }: ILegendItemProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   return (
     <Flex
       align="center"
       className={ cn(styles.legendItem, { [styles.legendItemDisabled]: disabled }) }
-      key={ key }
       onClick={ handleClick }
     >
       <div

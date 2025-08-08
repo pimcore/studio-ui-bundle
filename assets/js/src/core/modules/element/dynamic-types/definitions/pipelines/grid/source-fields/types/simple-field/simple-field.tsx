@@ -17,6 +17,10 @@ import { DynamicTypePipelineGridSourceFieldsSimpleFieldComponent } from '../../c
 export class DynamicTypePipelineGridSourceFieldsSimpleField extends DynamicTypePipelineAbstract {
   readonly id = 'simpleField'
 
+  isAvailableForSelection (config: Record<string, any>): boolean {
+    return Array.isArray(config.simpleField) && config.simpleField.length > 0
+  }
+
   getComponent (): ReactElement {
     return (
       <DynamicTypePipelineGridSourceFieldsSimpleFieldComponent />

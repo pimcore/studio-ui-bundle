@@ -19,6 +19,7 @@ import { useUserManagementDraft } from '@Pimcore/modules/user/hooks/use-user-man
 import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-management-context'
 import { Content } from '@Pimcore/components/content/content'
 import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
+import { createTabContentTestId } from '@Pimcore/utils/test-id-generator'
 import { UserAvatar } from '@Pimcore/modules/user/management/detail/tabs/settings/components/user-avatar'
 import { generatePassword, getGroupedPermissions } from '@Pimcore/modules/user/management/detail/tabs/settings/settings-helper'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -88,6 +89,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
   }
   return (
     <Form
+      data-testid={ createTabContentTestId(id.toString(), { prefix: 'user-detail-tab', tabKey: 'settings' }) }
       form={ form }
       layout="vertical"
       onValuesChange={ onValuesChange }

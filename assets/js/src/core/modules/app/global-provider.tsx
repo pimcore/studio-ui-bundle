@@ -13,9 +13,7 @@ import { store } from '@Pimcore/app/store'
 import { ThemeProvider } from '@Pimcore/modules/app/theme/theme-provider'
 import React from 'react'
 import { Provider } from 'react-redux'
-import { ApiGateway } from '@Pimcore/app/public-api/api-gateway'
-import { isInIframe } from '@Pimcore/utils/iframe'
-import { ModalsProvider } from './modals-provider'
+import { ElementSelectorProvider } from '../element/element-selector/provider/element-selector/element-selector-provider'
 
 export interface GlobalProviderProps {
   children: React.ReactNode
@@ -26,10 +24,9 @@ export const GlobalProvider = ({ children }: GlobalProviderProps): React.JSX.Ele
     <ContainerProvider>
       <ThemeProvider>
         <Provider store={ store }>
-          <ModalsProvider>
-            { !isInIframe() && <ApiGateway /> }
+          <ElementSelectorProvider>
             {children}
-          </ModalsProvider>
+          </ElementSelectorProvider>
         </Provider>
       </ThemeProvider>
     </ContainerProvider>

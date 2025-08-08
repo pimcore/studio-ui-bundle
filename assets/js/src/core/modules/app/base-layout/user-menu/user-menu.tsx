@@ -118,6 +118,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
         trigger={ ['click'] }
       >
         <Avatar
+          data-testid="user-menu-avatar"
           icon={ <Icon value='user' /> }
           size={ 26 }
           src={ userImageUrl }

@@ -4,7 +4,7 @@ pimcore_studio_ui:
     prefix:   '%pimcore_studio_ui.url_path%'
 
 pimcore_studio_ui_backend:
-    resource: "@PimcoreStudioUiBundle/src/Controller/ImageEditorController.php"
+    resource: "@PimcoreStudioUiBundle/src/Controller/Backend/"
     type:     attribute
     prefix:   '%pimcore_studio_backend.url_prefix%'
 
