@@ -1086,5 +1086,6 @@ test-email.contentType.text: Text
 test-email.parameters.columns.key: Key
 test-email.parameters.columns.value: Value
 test-email.parameters.add: Add Parameter
-test-email.send.success: Test email has been sent successfully
 test-email.send.error: An error occurred while sending the test email
+test-email.success.modal.title: Sent Test-Email
+test-email.success.modal.text: Your test-email has been sent. Would you like to keep this window open to send the email again?

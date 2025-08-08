@@ -15,7 +15,6 @@ interface UseSendTestMailHookReturn {
 
 export const useSendTestMail = (): UseSendTestMailHookReturn => {
   const [sendTestMailMutation] = useEmailSendTestMutation()
-  const { success } = useMessage()
   const { t } = useTranslation()
   const modal = useFormModal()
 
@@ -32,12 +31,12 @@ export const useSendTestMail = (): UseSendTestMailHookReturn => {
         return
       }
 
-      //void success(t('test-email.send.success'))
       modal.confirm({
-        title: 'Send Test-Email',
-        content: 'text bla bla',
+        title: t('test-email.success.modal.title'),
+        content: t('test-email.success.modal.text'),
+        okText: t('yes'),
+        cancelText: t('no'),
         onOk: () => {
-          console.log('whatever')
           onFinish?.()
         }
       })

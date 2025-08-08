@@ -38,8 +38,9 @@ export const SendTestEmailProvider: React.FC<SendTestEmailProviderProps> = ({ ch
           console.log('submitted values: ', values)
 
           resolve(values)
-          send(values)
-          closeModal()
+          send(values, () => {
+            closeModal()
+          })
         })
         .catch(() => {
           reject(new Error('Invalid form data'))
