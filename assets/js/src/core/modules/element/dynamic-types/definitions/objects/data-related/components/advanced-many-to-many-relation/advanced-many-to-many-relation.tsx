@@ -33,6 +33,7 @@ import {
 import { Flex } from 'antd'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { LoadingOutlined } from '@ant-design/icons'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 
 export interface AdvancedManyToManyRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -103,7 +104,7 @@ export const AdvancedManyToManyRelation = (props: AdvancedManyToManyRelationProp
           config: getElementCellConfig(props.inherited === true || props.disabled === true)
         },
         size: 200,
-        ...(props.pathFormatterClass != null ? { cell: renderFullPathCell } : {})
+        ...(isNonEmptyString(props.pathFormatterClass) ? { cell: renderFullPathCell } : {})
       }),
       ...columnDefinition,
       columnHelper.accessor('type', {
