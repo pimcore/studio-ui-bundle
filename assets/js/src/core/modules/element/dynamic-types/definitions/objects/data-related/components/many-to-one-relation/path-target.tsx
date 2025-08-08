@@ -17,7 +17,7 @@ import {
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import cn from 'classnames'
 import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
-import { isNil } from 'lodash'
+import { isNil, isEmpty } from 'lodash'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { Flex } from 'antd'
 import { useDataObjectHelper, type IFormatPathItem } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
@@ -45,8 +45,10 @@ export const PathTarget = forwardRef(function PathTarget (
   const { mapToElementType } = useElementHelper()
   const { formatPath } = useDataObjectHelper()
   const { id: dataObjectId } = useDataObject()
-  const [displayPath, setDisplayPath] = useState(String(value?.fullPath ?? ''))
+  const [displayPath, setDisplayPath] = useState<string>(String(props.value?.fullPath ?? ''))
   const [isLoading, setIsLoading] = useState(false)
+
+  const hasPathFormatterClass = !isNil(props.pathFormatterClass) && !isEmpty(props.pathFormatterClass)
 
   function mapNewValue (value: IFormatPathItem[], data: { items: Array<{ objectReference: string, formatedPath: string }> }): IFormatPathItem[] {
     return value.map((item) => ({
@@ -58,18 +60,25 @@ export const PathTarget = forwardRef(function PathTarget (
   useEffect(() => {
     setValue(props.value ?? null)
 
-    if (props.pathFormatterClass != null && props.pathFormatterClass !== '' && props.value !== null && props.combinedFieldName !== undefined && dataObjectId != null) {
+    const actualPath = props.value?.fullPath ?? ''
+    setDisplayPath(actualPath)
+
+    if (hasPathFormatterClass && props.value !== null && props.combinedFieldName !== undefined && dataObjectId != null) {
       setIsLoading(true)
 
       formatPath([props.value as IFormatPathItem], props.combinedFieldName, dataObjectId).then((data) => {
         if (data === undefined) {
+          setIsLoading(false)
           return
         }
 
         const newValue = mapNewValue([props.value as IFormatPathItem], data)
-        setDisplayPath(String(newValue[0]?.fullPath))
+        setDisplayPath(String(newValue[0]?.fullPath ?? actualPath))
         setIsLoading(false)
-      }).catch(error => { console.error(error) })
+      }).catch(error => {
+        console.error(error)
+        setIsLoading(false)
+      })
     }
   }, [props.value])
 
@@ -91,19 +100,25 @@ export const PathTarget = forwardRef(function PathTarget (
   const showElementTagPrefix = props.allowPathTextInput !== true && hasElementTag
   const showElementTag = props.allowPathTextInput === true && hasElementTag
 
+  const elementTagPath = (hasPathFormatterClass)
+    ? displayPath
+    : String(value?.fullPath ?? '')
+
   let inputPrefix: React.ReactNode
-  if (props.pathFormatterClass != null && props.pathFormatterClass !== '') {
-    inputPrefix = isLoading ? <LoadingOutlined /> : <SanitizeHtml html={ displayPath ?? '' } />
-  } else if (showElementTagPrefix) {
-    inputPrefix = (
-      <ElementTag
-        disabled={ props.disabled === true || props.inherited === true }
-        elementType={ props.allowPathTextInput === true ? undefined : mapToElementType(value.type) }
-        id={ props.allowPathTextInput === true ? undefined : value.id }
-        path={ displayPath }
-        published={ value.isPublished ?? undefined }
-      />
-    )
+  if (showElementTagPrefix) {
+    if (hasPathFormatterClass) {
+      inputPrefix = isLoading ? <LoadingOutlined /> : <SanitizeHtml html={ displayPath } />
+    } else {
+      inputPrefix = (
+        <ElementTag
+          disabled={ props.disabled === true || props.inherited === true }
+          elementType={ mapToElementType(value.type) }
+          id={ value.id }
+          path={ elementTagPath }
+          published={ value.isPublished ?? undefined }
+        />
+      )
+    }
   }
 
   return (
@@ -111,37 +126,30 @@ export const PathTarget = forwardRef(function PathTarget (
       ref={ ref }
       style={ { flexGrow: 1 } }
     >
-      { showElementTag
+      {showElementTag
         ? (
           <Flex
             align="center"
             className={ cn(...getStateClasses()) }
           >
-
             <Input
               disabled={ props.disabled }
               inherited={ props.inherited }
-              prefix={ props.pathFormatterClass != null && props.pathFormatterClass !== ''
-                ? (
-                  <SanitizeHtml html={ displayPath ?? '' } />
-                  )
-                : (
-                  <ElementTag
-                    disabled={ props.disabled === true || props.inherited === true }
-                    elementType={ mapToElementType(value.type) }
-                    id={ value.id }
-                    onClose={ () => {
-                      setValue(null)
-                      props.onChange?.(null)
-                    } }
-                    path={ displayPath }
-                    published={ value.isPublished ?? undefined }
-                  />
-                  )
+              prefix={
+                <ElementTag
+                  disabled={ props.disabled === true || props.inherited === true }
+                  elementType={ mapToElementType(value.type) }
+                  id={ value.id }
+                  onClose={ () => {
+                    setValue(null)
+                    props.onChange?.(null)
+                  } }
+                  path={ elementTagPath }
+                  published={ value.isPublished ?? undefined }
+                />
               }
               readOnly
             />
-
           </Flex>
           )
         : (
