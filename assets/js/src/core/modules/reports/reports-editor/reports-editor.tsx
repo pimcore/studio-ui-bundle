@@ -63,7 +63,7 @@ export const ReportsEditor = (): React.JSX.Element => {
   return (
     <SplitLayout
       leftItem={ {
-        minSize: 170,
+        minSize: 150,
         size: 25,
         children: (
           <Content
@@ -78,7 +78,6 @@ export const ReportsEditor = (): React.JSX.Element => {
         )
       } }
       resizeAble
-
       rightItem={ {
         minSize: 300,
         size: 75,

@@ -16,6 +16,7 @@ import {
   type BundleCustomReportsConfigurationTreeNode,
   type CustomReportsConfigGetTreeApiResponse
 } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import { useStyles } from '@Pimcore/modules/reports/reports-editor/reports-editor.styles'
 
 interface IReportsSidebarProps {
   reportsList?: CustomReportsConfigGetTreeApiResponse
@@ -23,6 +24,8 @@ interface IReportsSidebarProps {
 }
 
 export const ReportsSidebar = ({ reportsList, handleOpenReport }: IReportsSidebarProps): React.JSX.Element => {
+  const { styles } = useStyles()
+
   return (
     <Flex
       gap="mini"
@@ -31,12 +34,16 @@ export const ReportsSidebar = ({ reportsList, handleOpenReport }: IReportsSideba
       {reportsList?.items?.map((item) => (
         <Flex
           align="center"
+          className={ styles.sidebarReportItem }
           gap="mini"
           key={ item.id }
           onClick={ () => { handleOpenReport(item) } }
         >
-          <Icon value={ 'chart-scatter' } />
-          <Text>{item.text}</Text>
+          <Icon
+            className={ styles.sidebarReportItemIcon }
+            value={ 'chart-scatter' }
+          />
+          <Text className={ styles.sidebarReportItemTitle }>{item.text}</Text>
         </Flex>
       ))}
     </Flex>
