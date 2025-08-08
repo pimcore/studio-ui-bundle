@@ -16,6 +16,7 @@ import { InputNumber } from '../input-number/input-number'
 import { TextArea } from '../textarea/textarea'
 import { Button } from '../button/button'
 import { Space } from '../space/space'
+import { FormKit } from './form-kit'
 
 const config: Meta<typeof Form> = {
   title: 'Components/Data Entry/Form',
@@ -36,7 +37,7 @@ type Story = StoryObj<typeof config>
 
 // Basic Form Example
 const BasicFormComponent = (): React.JSX.Element => {
-  const [form] = Form.useForm()
+  const [form] = FormKit.useForm()
   const [formValues, setFormValues] = useState({
     firstName: '',
     lastName: '',
@@ -55,30 +56,32 @@ const BasicFormComponent = (): React.JSX.Element => {
 
   return (
     <div style={{ maxWidth: '600px' }}>
-      <Form
-        form={form}
-        layout="vertical"
-        initialValues={formValues}
-        onFinish={onFinish}
-        onValuesChange={onValuesChange}
+      <FormKit
+        formProps={{
+          layout: "vertical",
+          initialValues: formValues,
+          onFinish: onFinish,
+          onValuesChange: onValuesChange,
+          form: form
+        }}
       >
-        <Form.Item
+        <FormKit.Item
           label="First Name"
           name="firstName"
           rules={[{ required: true, message: 'Please enter your first name' }]}
         >
           <Input placeholder="Enter first name" />
-        </Form.Item>
+        </FormKit.Item>
 
-        <Form.Item
+        <FormKit.Item
           label="Last Name"
           name="lastName"
           rules={[{ required: true, message: 'Please enter your last name' }]}
         >
           <Input placeholder="Enter last name" />
-        </Form.Item>
+        </FormKit.Item>
 
-        <Form.Item
+        <FormKit.Item
           label="Email"
           name="email"
           rules={[
@@ -87,23 +90,23 @@ const BasicFormComponent = (): React.JSX.Element => {
           ]}
         >
           <Input placeholder="Enter email address" />
-        </Form.Item>
+        </FormKit.Item>
 
-        <Form.Item
+        <FormKit.Item
           label="Age"
           name="age"
         >
           <InputNumber min={18} max={120} placeholder="Enter age" style={{ width: '100%' }} />
-        </Form.Item>
+        </FormKit.Item>
 
-        <Form.Item
+        <FormKit.Item
           label="Description"
           name="description"
         >
           <TextArea rows={4} placeholder="Enter description..." />
-        </Form.Item>
+        </FormKit.Item>
 
-        <Form.Item>
+        <FormKit.Item>
           <Space>
             <Button type="primary" htmlType="submit">
               Submit
@@ -112,8 +115,8 @@ const BasicFormComponent = (): React.JSX.Element => {
               Reset
             </Button>
           </Space>
-        </Form.Item>
-      </Form>
+        </FormKit.Item>
+      </FormKit>
     </div>
   )
 }

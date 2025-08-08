@@ -12,7 +12,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 import { Region } from '@Pimcore/components/region/region'
 import { Panel } from '@Pimcore/components/panel/panel'
-import { Form } from '../../form'
+import { FormKit } from '../../form-kit'
 import { Input } from '@Pimcore/components/input/input'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
@@ -53,12 +53,12 @@ type Story = StoryObj<typeof meta>
 
 // Two-Column Form Layout
 const TwoColumnFormComponent = (): React.JSX.Element => {
-  const [form] = Form.useForm()
+  const [form] = FormKit.useForm()
 
   return (
     <FormLayoutContainer>
       <div style={{ maxWidth: '1000px' }}>
-        <Form form={form} layout="vertical">
+        <FormKit formProps={{ form, layout: "vertical" }}>
           <Region
             layoutDefinition={[
               'left right'
@@ -68,21 +68,21 @@ const TwoColumnFormComponent = (): React.JSX.Element => {
                 region: 'left',
                 component: (
                   <Panel title="Personal Information" theme="card-with-highlight">
-                    <Form.Item label="First Name" name="firstName">
+                    <FormKit.Item label="First Name" name="firstName">
                       <Input placeholder="Enter first name" />
-                    </Form.Item>
+                    </FormKit.Item>
                     
-                    <Form.Item label="Last Name" name="lastName">
+                    <FormKit.Item label="Last Name" name="lastName">
                       <Input placeholder="Enter last name" />
-                    </Form.Item>
+                    </FormKit.Item>
                     
-                    <Form.Item label="Email" name="email">
+                    <FormKit.Item label="Email" name="email">
                       <Input placeholder="Enter email address" />
-                    </Form.Item>
+                    </FormKit.Item>
                     
-                    <Form.Item label="Phone" name="phone">
+                    <FormKit.Item label="Phone" name="phone">
                       <Input placeholder="Enter phone number" />
-                    </Form.Item>
+                    </FormKit.Item>
                   </Panel>
                 )
               },
@@ -90,19 +90,19 @@ const TwoColumnFormComponent = (): React.JSX.Element => {
                 region: 'right',
                 component: (
                   <Panel title="Address Information" theme="card-with-highlight">
-                    <Form.Item label="Street Address" name="address">
+                    <FormKit.Item label="Street Address" name="address">
                       <TextArea rows={2} placeholder="Enter street address" />
-                    </Form.Item>
+                    </FormKit.Item>
                     
-                    <Form.Item label="City" name="city">
+                    <FormKit.Item label="City" name="city">
                       <Input placeholder="Enter city" />
-                    </Form.Item>
+                    </FormKit.Item>
                     
-                    <Form.Item label="Postal Code" name="postalCode">
+                    <FormKit.Item label="Postal Code" name="postalCode">
                       <Input placeholder="Enter postal code" />
-                    </Form.Item>
+                    </FormKit.Item>
                     
-                    <Form.Item label="Country" name="country">
+                    <FormKit.Item label="Country" name="country">
                       <Select
                         placeholder="Select country"
                         options={[
@@ -112,19 +112,19 @@ const TwoColumnFormComponent = (): React.JSX.Element => {
                           { value: 'fr', label: 'France' }
                         ]}
                       />
-                    </Form.Item>
+                    </FormKit.Item>
                   </Panel>
                 )
               }
             ]}
           />
           
-          <Form.Item style={{ marginTop: '24px' }}>
+          <FormKit.Item style={{ marginTop: '24px' }}>
             <Button type="primary" htmlType="submit">
               Save Information
             </Button>
-          </Form.Item>
-        </Form>
+          </FormKit.Item>
+        </FormKit>
       </div>
     </FormLayoutContainer>
   )
@@ -136,12 +136,12 @@ export const TwoColumnForm: Story = {
 
 // Three-Section Layout
 const ThreeSectionFormComponent = (): React.JSX.Element => {
-  const [form] = Form.useForm()
+  const [form] = FormKit.useForm()
 
   return (
     <FormLayoutContainer>
       <div style={{ maxWidth: '1200px' }}>
-        <Form form={form} layout="vertical">
+        <FormKit formProps={{ form, layout: "vertical" }}>
           <Region
             layoutDefinition={[
               'header header header',
@@ -153,7 +153,7 @@ const ThreeSectionFormComponent = (): React.JSX.Element => {
                 component: (
                   <Panel title="Basic Information" theme="fieldset" border>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
-                      <Form.Item label="Title" name="title">
+                      <FormKit.Item label="Title" name="title">
                         <Select
                           placeholder="Select title"
                           options={[
@@ -163,15 +163,15 @@ const ThreeSectionFormComponent = (): React.JSX.Element => {
                             { value: 'dr', label: 'Dr.' }
                           ]}
                         />
-                      </Form.Item>
+                      </FormKit.Item>
                       
-                      <Form.Item label="First Name" name="firstName">
+                      <FormKit.Item label="First Name" name="firstName">
                         <Input placeholder="Enter first name" />
-                      </Form.Item>
+                      </FormKit.Item>
                       
-                      <Form.Item label="Last Name" name="lastName">
+                      <FormKit.Item label="Last Name" name="lastName">
                         <Input placeholder="Enter last name" />
-                      </Form.Item>
+                      </FormKit.Item>
                     </div>
                   </Panel>
                 )
@@ -180,25 +180,25 @@ const ThreeSectionFormComponent = (): React.JSX.Element => {
                 region: 'main',
                 component: (
                   <Panel title="Contact Details" theme="card-with-highlight">
-                    <Form.Item label="Email Address" name="email">
+                    <FormKit.Item label="Email Address" name="email">
                       <Input placeholder="Enter email address" />
-                    </Form.Item>
+                    </FormKit.Item>
                     
-                    <Form.Item label="Phone Number" name="phone">
+                    <FormKit.Item label="Phone Number" name="phone">
                       <Input placeholder="Enter phone number" />
-                    </Form.Item>
+                    </FormKit.Item>
                     
-                    <Form.Item label="Company" name="company">
+                    <FormKit.Item label="Company" name="company">
                       <Input placeholder="Enter company name" />
-                    </Form.Item>
+                    </FormKit.Item>
                     
-                    <Form.Item label="Job Title" name="jobTitle">
+                    <FormKit.Item label="Job Title" name="jobTitle">
                       <Input placeholder="Enter job title" />
-                    </Form.Item>
+                    </FormKit.Item>
                     
-                    <Form.Item label="Bio" name="bio">
+                    <FormKit.Item label="Bio" name="bio">
                       <TextArea rows={4} placeholder="Tell us about yourself..." />
-                    </Form.Item>
+                    </FormKit.Item>
                   </Panel>
                 )
               },
@@ -206,7 +206,7 @@ const ThreeSectionFormComponent = (): React.JSX.Element => {
                 region: 'sidebar',
                 component: (
                   <Panel title="Preferences" theme="card-with-highlight" collapsible>
-                    <Form.Item label="Preferred Language" name="language">
+                    <FormKit.Item label="Preferred Language" name="language">
                       <Select
                         placeholder="Select language"
                         options={[
@@ -216,19 +216,19 @@ const ThreeSectionFormComponent = (): React.JSX.Element => {
                           { value: 'es', label: 'Spanish' }
                         ]}
                       />
-                    </Form.Item>
+                    </FormKit.Item>
                     
-                    <Form.Item label="Newsletter" name="newsletter" valuePropName="checked">
+                    <FormKit.Item label="Newsletter" name="newsletter" valuePropName="checked">
                       <Switch />
-                    </Form.Item>
+                    </FormKit.Item>
                     
-                    <Form.Item label="Marketing Emails" name="marketing" valuePropName="checked">
+                    <FormKit.Item label="Marketing Emails" name="marketing" valuePropName="checked">
                       <Switch />
-                    </Form.Item>
+                    </FormKit.Item>
                     
-                    <Form.Item label="SMS Notifications" name="sms" valuePropName="checked">
+                    <FormKit.Item label="SMS Notifications" name="sms" valuePropName="checked">
                       <Switch />
-                    </Form.Item>
+                    </FormKit.Item>
                   </Panel>
                 )
               }
@@ -244,7 +244,7 @@ const ThreeSectionFormComponent = (): React.JSX.Element => {
               </Button>
             </Space>
           </div>
-        </Form>
+        </FormKit>
       </div>
     </FormLayoutContainer>
   )
@@ -256,12 +256,12 @@ export const ThreeSectionForm: Story = {
 
 // Sidebar Layout
 const SidebarFormComponent = (): React.JSX.Element => {
-  const [form] = Form.useForm()
+  const [form] = FormKit.useForm()
 
   return (
     <FormLayoutContainer>
       <div style={{ maxWidth: '1000px' }}>
-        <Form form={form} layout="vertical">
+        <FormKit formProps={{ form, layout: "vertical" }}>
           <Region
             layoutDefinition={[
               'content sidebar'
@@ -273,36 +273,36 @@ const SidebarFormComponent = (): React.JSX.Element => {
                 component: (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   <Panel title="Project Details" theme="card-with-highlight">
-                    <Form.Item label="Project Name" name="projectName">
+                    <FormKit.Item label="Project Name" name="projectName">
                       <Input placeholder="Enter project name" />
-                    </Form.Item>
+                    </FormKit.Item>
                     
-                    <Form.Item label="Description" name="description">
+                    <FormKit.Item label="Description" name="description">
                       <TextArea rows={4} placeholder="Describe your project..." />
-                    </Form.Item>
+                    </FormKit.Item>
                     
-                    <Form.Item label="Budget" name="budget">
+                    <FormKit.Item label="Budget" name="budget">
                       <InputNumber
                         style={{ width: '100%' }}
                         placeholder="Enter budget"
                         formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                         parser={(value) => value?.replace(/\$\s?|(,*)/g, '') ?? ''}
                       />
-                    </Form.Item>
+                    </FormKit.Item>
                   </Panel>
                   
                   <Panel title="Timeline" theme="card-with-highlight">
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                      <Form.Item label="Start Date" name="startDate">
+                      <FormKit.Item label="Start Date" name="startDate">
                         <Input placeholder="Select start date" />
-                      </Form.Item>
+                      </FormKit.Item>
                       
-                      <Form.Item label="End Date" name="endDate">
+                      <FormKit.Item label="End Date" name="endDate">
                         <Input placeholder="Select end date" />
-                      </Form.Item>
+                      </FormKit.Item>
                     </div>
                     
-                    <Form.Item label="Priority" name="priority">
+                    <FormKit.Item label="Priority" name="priority">
                       <Select
                         placeholder="Select priority"
                         options={[
@@ -312,7 +312,7 @@ const SidebarFormComponent = (): React.JSX.Element => {
                           { value: 'urgent', label: 'Urgent' }
                         ]}
                       />
-                    </Form.Item>
+                    </FormKit.Item>
                   </Panel>
                 </div>
               )
@@ -323,21 +323,21 @@ const SidebarFormComponent = (): React.JSX.Element => {
               component: (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   <Panel title="Settings" theme="fieldset" border>
-                    <Form.Item label="Public Project" name="isPublic" valuePropName="checked">
+                    <FormKit.Item label="Public Project" name="isPublic" valuePropName="checked">
                       <Switch />
-                    </Form.Item>
+                    </FormKit.Item>
                     
-                    <Form.Item label="Allow Comments" name="allowComments" valuePropName="checked">
+                    <FormKit.Item label="Allow Comments" name="allowComments" valuePropName="checked">
                       <Switch />
-                    </Form.Item>
+                    </FormKit.Item>
                     
-                    <Form.Item label="Send Updates" name="sendUpdates" valuePropName="checked">
+                    <FormKit.Item label="Send Updates" name="sendUpdates" valuePropName="checked">
                       <Switch />
-                    </Form.Item>
+                    </FormKit.Item>
                   </Panel>
                   
                   <Panel title="Team" theme="fieldset" border collapsible collapsed>
-                    <Form.Item label="Team Lead" name="teamLead">
+                    <FormKit.Item label="Team Lead" name="teamLead">
                       <Select
                         placeholder="Select team lead"
                         options={[
@@ -346,11 +346,11 @@ const SidebarFormComponent = (): React.JSX.Element => {
                           { value: 'bob', label: 'Bob Johnson' }
                         ]}
                       />
-                    </Form.Item>
+                    </FormKit.Item>
                     
-                    <Form.Item label="Team Size" name="teamSize">
+                    <FormKit.Item label="Team Size" name="teamSize">
                       <InputNumber min={1} max={50} style={{ width: '100%' }} placeholder="5" />
-                    </Form.Item>
+                    </FormKit.Item>
                   </Panel>
                 </div>
               )
@@ -363,7 +363,7 @@ const SidebarFormComponent = (): React.JSX.Element => {
             Create Project
           </Button>
         </div>
-      </Form>
+      </FormKit>
     </div>
   </FormLayoutContainer>
   )

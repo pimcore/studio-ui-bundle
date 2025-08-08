@@ -1,7 +1,7 @@
 /**
  * This source file is available under the terms of the
  * Pimcore Open Core License (POCL)
- * Full copyright and license information is available in
+ * Full copyright and license inFormKitation is available in
  * LICENSE.md which is distributed with this source code.
  *
  *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
@@ -11,7 +11,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 import { Panel } from '@Pimcore/components/panel/panel'
-import { Form } from '../../form'
+import { FormKit } from '../../form-kit'
 import { Input } from '@Pimcore/components/input/input'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import { Select } from '@Pimcore/components/select/select'
@@ -24,7 +24,7 @@ const meta: Meta<typeof Panel> = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'Use Panel components to organize form fields into logical sections. Supports collapsible behavior and different themes.'
+        component: 'Use Panel components to organize FormKit fields into logical sections. Supports collapsible behavior and different themes.'
       }
     }
   },
@@ -57,31 +57,34 @@ const meta: Meta<typeof Panel> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-// Simple Panel with Form Fields
-const SimpleFormPanelComponent = (): React.JSX.Element => {
-  const [form] = Form.useForm()
+// Simple Panel with FormKit Fields
+const SimpleFormKitPanelComponent = (): React.JSX.Element => {
+  const [form] = FormKit.useForm()
 
   return (
     <div style={{ maxWidth: '600px' }}>
-      <Form form={form} layout="vertical">
+      <FormKit formProps={{
+        form: form,
+        layout: 'vertical',
+      }}>
         <Panel title="Personal Information">
-          <Form.Item
+          <FormKit.Item
             label="First Name"
             name="firstName" 
             rules={[{ required: true, message: 'Please enter your first name' }]}
           >
             <Input placeholder="Enter first name" />
-          </Form.Item>
+          </FormKit.Item>
           
-          <Form.Item
+          <FormKit.Item
             label="Last Name"
             name="lastName"
             rules={[{ required: true, message: 'Please enter your last name' }]}
           >
             <Input placeholder="Enter last name" />
-          </Form.Item>
+          </FormKit.Item>
           
-          <Form.Item
+          <FormKit.Item
             label="Email"
             name="email"
             rules={[
@@ -90,44 +93,47 @@ const SimpleFormPanelComponent = (): React.JSX.Element => {
             ]}
           >
             <Input placeholder="Enter email address" />
-          </Form.Item>
+          </FormKit.Item>
         </Panel>
-      </Form>
+      </FormKit>
     </div>
   )
 }
 
-export const SimpleFormPanel: Story = {
-  render: () => <SimpleFormPanelComponent />
+export const SimpleFormKitPanel: Story = {
+  render: () => <SimpleFormKitPanelComponent />
 }
 
 // Collapsible Panel Example
 const CollapsiblePanelComponent = (): React.JSX.Element => {
-  const [form] = Form.useForm()
+  const [form] = FormKit.useForm()
 
   return (
     <div style={{ maxWidth: '600px' }}>
-      <Form form={form} layout="vertical">
+      <FormKit formProps={{
+        form: form,
+        layout: 'vertical',
+      }}>
         <Panel title="Basic Information" theme="card-with-highlight">
-          <Form.Item label="Company Name" name="company">
+          <FormKit.Item label="Company Name" name="company">
             <Input placeholder="Enter company name" />
-          </Form.Item>
+          </FormKit.Item>
         </Panel>
         
         <Panel title="Advanced Settings" collapsible collapsed theme="card-with-highlight">
-          <Form.Item label="API Key" name="apiKey">
+          <FormKit.Item label="API Key" name="apiKey">
             <Input placeholder="Enter API key" />
-          </Form.Item>
+          </FormKit.Item>
           
-          <Form.Item label="Webhook URL" name="webhookUrl">
+          <FormKit.Item label="Webhook URL" name="webhookUrl">
             <Input placeholder="Enter webhook URL" />
-          </Form.Item>
+          </FormKit.Item>
           
-          <Form.Item label="Timeout (seconds)" name="timeout">
+          <FormKit.Item label="Timeout (seconds)" name="timeout">
             <InputNumber min={1} max={300} placeholder="30" style={{ width: '100%' }} />
-          </Form.Item>
+          </FormKit.Item>
         </Panel>
-      </Form>
+      </FormKit>
     </div>
   )
 }
@@ -138,23 +144,26 @@ export const CollapsiblePanel: Story = {
 
 // Multiple Panels with Different Themes
 const MultipleThemePanelsComponent = (): React.JSX.Element => {
-  const [form] = Form.useForm()
+  const [form] = FormKit.useForm()
 
   return (
     <div style={{ maxWidth: '600px' }}>
-      <Form form={form} layout="vertical">
+      <FormKit formProps={{
+        form: form,
+        layout: 'vertical',
+      }}>
         <Panel title="User Details" theme="fieldset" border>
-          <Form.Item label="Username" name="username">
+          <FormKit.Item label="Username" name="username">
             <Input placeholder="Enter username" />
-          </Form.Item>
+          </FormKit.Item>
           
-          <Form.Item label="Display Name" name="displayName">
+          <FormKit.Item label="Display Name" name="displayName">
             <Input placeholder="Enter display name" />
-          </Form.Item>
+          </FormKit.Item>
         </Panel>
         
         <Panel title="Account Settings" theme="card-with-highlight">
-          <Form.Item label="Account Type" name="accountType">
+          <FormKit.Item label="Account Type" name="accountType">
             <Select
               placeholder="Select account type"
               options={[
@@ -163,13 +172,13 @@ const MultipleThemePanelsComponent = (): React.JSX.Element => {
                 { value: 'enterprise', label: 'Enterprise' }
               ]}
             />
-          </Form.Item>
+          </FormKit.Item>
           
-          <Form.Item label="Enable Notifications" name="notifications" valuePropName="checked">
+          <FormKit.Item label="Enable Notifications" name="notifications" valuePropName="checked">
             <Switch />
-          </Form.Item>
+          </FormKit.Item>
         </Panel>
-      </Form>
+      </FormKit>
     </div>
   )
 }
