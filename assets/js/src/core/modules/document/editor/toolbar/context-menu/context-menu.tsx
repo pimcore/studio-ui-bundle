@@ -31,7 +31,7 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { unpublishContextMenuItem } = useUnpublish('document')
   const { renameContextMenuItem } = useRename('document')
   const { deleteContextMenuItem } = useDelete('document')
-  const { openInNewWindowContextMenuItem } = useOpenInNewWindow()
+  const { openInNewWindowContextMenuItem, openPreviewInNewWindowContextMenuItem } = useOpenInNewWindow()
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined)
 
   const items: DropdownMenuProps['items'] = [
@@ -40,7 +40,8 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
     }),
     deleteContextMenuItem(document as Document),
     renameContextMenuItem(document as Document),
-    openInNewWindowContextMenuItem(document as Document)
+    openInNewWindowContextMenuItem(document as Document),
+    openPreviewInNewWindowContextMenuItem(document as Document)
   ]
 
   const visibleItems = items.filter(item => (item !== null && 'hidden' in item) ? item?.hidden === false : false)

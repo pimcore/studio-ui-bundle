@@ -1047,6 +1047,7 @@ embed.clear: Clear
 embed.loading: Loading...
 embed.iframe-title: Embedded content
 document.open-in-new-window: Open in new window
+document.open-preview-in-new-window: Open Preview in new window
 navigation.recycle-bin: Recycle Bin
 widget.recycle-bin: Recycle Bin
 recycle-bin.columns.type: Type

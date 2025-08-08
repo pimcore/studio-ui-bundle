@@ -24,9 +24,10 @@ import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-p
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export interface UseOpenInNewWindowHookReturn {
-  openInNewWindow: (documentId: number, onFinish?: () => void) => Promise<void>
+  openInNewWindow: (documentId: number, onFinish?: () => void, options?: { preview?: boolean }) => Promise<void>
   openInNewWindowTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   openInNewWindowContextMenuItem: (document: Element, onFinish?: () => void) => ItemType
+  openPreviewInNewWindowContextMenuItem: (document: Element, onFinish?: () => void) => ItemType
 }
 
 export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
@@ -37,7 +38,8 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
 
   const openInNewWindow = async (
     documentId: number,
-    onFinish?: () => void
+    onFinish?: () => void,
+    options?: { preview?: boolean }
   ): Promise<void> => {
     setIsLoading(true)
     const { data, error } = await dispatch(api.endpoints.documentGetById.initiate({ id: documentId }))
@@ -48,7 +50,14 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
     }
 
     if (!isNil(data?.settingsData) && has(data?.settingsData, 'url') && isString(data?.settingsData.url)) {
-      window.open(data.settingsData.url)
+      let url: string = data.settingsData.url
+      if (!isNil(options?.preview) && options.preview) {
+        const urlObj = new URL(url, window.location.origin)
+        urlObj.searchParams.set('pimcore_preview', 'true')
+        urlObj.searchParams.set('_dc', Date.now().toString())
+        url = urlObj.toString()
+      }
+      window.open(url)
       onFinish?.()
     } else {
       console.error('Failed to fetch document data')
@@ -90,9 +99,26 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
     }
   }
 
+  const openPreviewInNewWindowContextMenuItem = (
+    document: Element,
+    onFinish?: () => void
+  ): ItemType => {
+    return {
+      label: t('document.open-preview-in-new-window'),
+      key: ContextMenuActionName.openPreviewInNewWindow,
+      isLoading,
+      icon: <Icon value={ 'eye' } />,
+      hidden: isContextMenuEntryHidden(document),
+      onClick: async () => {
+        await openInNewWindow(document.id, onFinish, { preview: true })
+      }
+    }
+  }
+
   return {
     openInNewWindow,
     openInNewWindowTreeContextMenuItem,
-    openInNewWindowContextMenuItem
+    openInNewWindowContextMenuItem,
+    openPreviewInNewWindowContextMenuItem
   }
 }
