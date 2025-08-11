@@ -63,7 +63,8 @@ export const useStlyes = createStyles(({
       .main-nav__list {
         margin: 0;
         list-style: none;
-        width: 100%;
+        width: 250px;
+        height: fit-content;
         padding: 0 ${token.paddingXS}px;
         font-size: ${token.fontSize}px;
         position: relative;
@@ -71,7 +72,6 @@ export const useStlyes = createStyles(({
       }
 
       .main-nav__list--level-0 {
-        width: 32%;
         padding: 0;
         background: rgba(0, 0, 0, 0.02);
         
@@ -134,12 +134,13 @@ export const useStlyes = createStyles(({
         text-align: left;
         display: flex;
         align-items: center;
-        gap: ${token.marginXXS}px;
+        gap: ${token.marginXS}px;
         min-height: 46px;
         font-family:  ${token.fontFamily};
         
-      .pimcore-icon {
-        margin-right: ${token.marginXS}px;
+      .ant-avatar {
+       background-color: ${token.colorFillAlter};
+       color: ${token.colorPrimary}
       }
 
         &:hover {

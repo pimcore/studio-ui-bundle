@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Divider } from 'antd'
+import { Avatar, Divider } from 'antd'
 import React, { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useStlyes } from './main-nav.styles'
@@ -27,6 +27,8 @@ export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStlyes()
   const { navItems } = useMainNav()
+  console.log("navItems", navItems);
+  
   const { openMainWidget } = useWidgetManager()
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
 
@@ -81,7 +83,7 @@ export const MainNav = (): React.JSX.Element => {
                 }
               } }
             >
-              {item.icon !== undefined ? (<Icon value={ item.icon } />) : null}
+              {item.icon !== undefined ? (<Avatar size={24} icon={<Icon value={ item.icon } />}/>) : null}
               {t(`${item.label}`)}
 
               {item.children !== undefined && item.children.length > 0 && (openKeys.includes(index) || index.includes('-'))
