@@ -87,7 +87,14 @@ export const blockValueUtils = {
       .filter(key => key !== null)
       .map(key => parseInt(key!, 10))
   },
-  
+
+  getBlockValueFromDom: (editableName: string, containerRef?: React.RefObject<HTMLDivElement>): BlockValue => {
+    const container = domUtils.findContainer(editableName, containerRef)
+    if (!container) return []
+    const elements = domUtils.queryElements(container, editableName)
+    return blockValueUtils.fromElements(elements)
+  },
+
   swapElements: <T>(array: T[], index1: number, index2: number): T[] => {
     const newArray = [...array]
     const temp = newArray[index1]
@@ -95,7 +102,7 @@ export const blockValueUtils = {
     newArray[index2] = temp
     return newArray
   },
-  
+
   filterEditableNames: (
     allEditableNames: string[],
     editableName: string,
