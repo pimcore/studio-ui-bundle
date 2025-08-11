@@ -15,6 +15,7 @@ import React, { createContext, useMemo, useState } from 'react'
 import { type SendEmailParameters } from '../../emails-api-slice-enhanced'
 import { SendTestMailForm } from '../component/send-test-mail-form/send-test-mail-form'
 import { useSendTestMail } from '../hooks/use-send-test-mail'
+import { useTranslation } from 'react-i18next'
 
 interface SendTestEmailProviderProps {
   children: React.ReactNode
@@ -30,6 +31,7 @@ export interface SendTestEmailContextProps {
 export const SendTestEmailContext = createContext<SendTestEmailContextProps | undefined>(undefined)
 
 export const SendTestEmailProvider: React.FC<SendTestEmailProviderProps> = ({ children }) => {
+  const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const { send } = useSendTestMail()
   const [tmpForm] = Form.useForm()
@@ -80,6 +82,7 @@ export const SendTestEmailProvider: React.FC<SendTestEmailProviderProps> = ({ ch
         onOk={async () => {
           await submit()
         }}
+        title={t('test-email.modal.title')}
         open={isOpen}
         okButtonProps={{
           loading: isOkButtonLoading
