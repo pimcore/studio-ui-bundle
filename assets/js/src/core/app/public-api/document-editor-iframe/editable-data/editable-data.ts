@@ -61,6 +61,7 @@ class DocumentEditableApiImpl implements DocumentEditableApi {
 
   removeValues (keysToRemove: string[]): void {
     for (const key of keysToRemove) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete this.values[key]
     }
   }

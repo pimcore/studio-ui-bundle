@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isNil } from 'lodash'
 import { type AbstractDocumentEditableDefinition } from '../../../../dynamic-type-document-editable-abstract'
 
 export interface ProcessTemplateParams {
@@ -25,7 +26,7 @@ export const processBlockTemplate = (
   { templateHtml, editableName, nextKey }: ProcessTemplateParams,
   templateEditables: any[]
 ): ProcessedTemplate => {
-  const realName = editableName.split(':').pop() || editableName
+  const realName = editableName.split(':').pop() ?? editableName
   const fullName = editableName
   const escapedName = fullName.replace(/(:|\.)/g, '_')
 
@@ -33,11 +34,11 @@ export const processBlockTemplate = (
 
   // Replace placeholder patterns with actual values
   processedHtml = processedHtml.replace(
-    new RegExp(`"([^"]+):1000000\\.${realName}("|:)`, 'g'), 
+    new RegExp(`"([^"]+):1000000\\.${realName}("|:)`, 'g'),
     `"${fullName}$2`
   )
   processedHtml = processedHtml.replace(
-    new RegExp(`"pimcore_editable_([^"]+)_1000000_${realName}_`, 'g'), 
+    new RegExp(`"pimcore_editable_([^"]+)_1000000_${realName}_`, 'g'),
     `"pimcore_editable_${escapedName}_`
   )
   processedHtml = processedHtml.replace(/:1000000\./g, `:${nextKey}.`)
@@ -51,27 +52,27 @@ export const processBlockTemplate = (
   templateEditables.forEach(editableDef => {
     const newEditableDef = { ...editableDef }
 
-    if (newEditableDef.id) {
+    if (!isNil(newEditableDef.id) && newEditableDef.id !== '') {
       newEditableDef.id = newEditableDef.id.replace(
-        new RegExp(`pimcore_editable_([^"]+)_1000000_${realName}_`, 'g'), 
+        new RegExp(`pimcore_editable_([^"]+)_1000000_${realName}_`, 'g'),
         `pimcore_editable_${escapedName}_`
       )
       newEditableDef.id = newEditableDef.id.replace(/_1000000_/g, `_${nextKey}_`)
     }
 
-    if (newEditableDef.name) {
+    if (!isNil(newEditableDef.name) && newEditableDef.name !== '') {
       newEditableDef.name = newEditableDef.name.replace(
-        new RegExp(`^([^"]+):1000000\\.${realName}:`), 
+        new RegExp(`^([^"]+):1000000\\.${realName}:`),
         `${fullName}:`
       )
       newEditableDef.name = newEditableDef.name.replace(/:1000000\./g, `:${nextKey}.`)
     }
 
-    if (newEditableDef.config?.blockStateStack) {
+    if (!isNil(newEditableDef.config?.blockStateStack) && newEditableDef.config.blockStateStack !== '') {
       try {
-        const blockStateStack = JSON.parse(newEditableDef.config.blockStateStack)
+        const blockStateStack = JSON.parse(newEditableDef.config.blockStateStack as string)
         for (let i = 0; i < blockStateStack.length; i++) {
-          if (blockStateStack[i].indexes) {
+          if (!isNil(blockStateStack[i].indexes)) {
             for (let j = 0; j < blockStateStack[i].indexes.length; j++) {
               if (blockStateStack[i].indexes[j] === 1000000) {
                 blockStateStack[i].indexes[j] = nextKey
@@ -88,7 +89,7 @@ export const processBlockTemplate = (
     const dynamicEditableDefinition: AbstractDocumentEditableDefinition = {
       id: newEditableDef.id,
       name: newEditableDef.name,
-      realName: newEditableDef.name.split(':').pop() || newEditableDef.name,
+      realName: newEditableDef.name.split(':').pop() ?? newEditableDef.name,
       data: newEditableDef.data ?? null,
       config: newEditableDef.config ?? {},
       type: newEditableDef.type,
@@ -118,9 +119,9 @@ export const ensurePortalTargets = (
   editableDefinitions: AbstractDocumentEditableDefinition[]
 ): void => {
   editableDefinitions.forEach(definition => {
-    if (definition.id) {
+    if (!isNil(definition.id) && definition.id !== '') {
       const targetElement = document.getElementById(definition.id)
-      if (!targetElement) {
+      if (isNil(targetElement)) {
         const targetDiv = document.createElement('div')
         targetDiv.id = definition.id
         targetDiv.setAttribute('data-name', definition.name)

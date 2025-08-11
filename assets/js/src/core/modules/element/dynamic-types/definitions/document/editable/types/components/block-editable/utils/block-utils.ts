@@ -15,38 +15,41 @@ import { processBlockTemplate, ensurePortalTargets } from './template-processor'
 
 // Element Key Management
 export const elementKeyUtils = {
-  get: (element: HTMLElement): string | null => 
+  get: (element: HTMLElement): string | null =>
     element.getAttribute('key'),
-  
-  set: (element: HTMLElement, key: string): void => 
-    element.setAttribute('key', key),
-  
+
+  set: (element: HTMLElement, key: string): void => { element.setAttribute('key', key) },
+
   ensure: (element: HTMLElement): void => {
-    if (!elementKeyUtils.get(element)) {
+    const key = elementKeyUtils.get(element)
+    if (isNil(key) || key === '') {
       elementKeyUtils.set(element, '0')
     }
   },
-  
+
   ensureAll: (elements: HTMLElement[]): HTMLElement[] => {
     elements.forEach(elementKeyUtils.ensure)
     return elements
   },
-  
+
   parse: (element: HTMLElement): number => {
     const key = element.getAttribute('key')
     return parseInt(key ?? '0', 10)
   },
-  
-  calculateNext: (elements: HTMLElement[]): number => {
+
+  calculateNext: (editableName: string, containerRef?: React.RefObject<HTMLDivElement>): number => {
+    const elements = domUtils.queryElements(editableName, containerRef)
+    if (elements.length === 0) return 1
+
     let nextKey = 0
-    
+
     for (const element of elements) {
       const currentKey = elementKeyUtils.parse(element)
       if (currentKey > nextKey) {
         nextKey = currentKey
       }
     }
-    
+
     return nextKey + 1
   }
 }
@@ -57,23 +60,29 @@ export const domUtils = {
     editableName: string,
     containerRef?: React.RefObject<HTMLDivElement>
   ): HTMLElement | null => {
-    if (containerRef?.current) {
+    if (!isNil(containerRef?.current)) {
       return containerRef.current
     }
-    
+
     const element = document.querySelector(`[data-name="${editableName}"][data-type="block"]`)
     return element as HTMLElement
   },
-  
+
   queryElements: (
-    container: HTMLElement,
-    editableName: string
+    editableName: string,
+    containerRef?: React.RefObject<HTMLDivElement>
   ): HTMLElement[] => {
+    const container = domUtils.findContainer(editableName, containerRef)
+    if (isNil(container)) return []
+
     const selector = `.pimcore_block_entry[data-name="${editableName}"][key]`
-    return Array.from(container.querySelectorAll(selector)) as HTMLElement[]
+    return Array.from(container.querySelectorAll(selector))
   },
-  
-  findElementIndex: (elements: HTMLElement[], targetElement: HTMLElement): number => {
+
+  findElementIndex: (editableName: string, targetElement: HTMLElement, containerRef?: React.RefObject<HTMLDivElement>): number => {
+    const elements = domUtils.queryElements(editableName, containerRef)
+    if (elements.length === 0) return -1
+
     const targetKey = targetElement.getAttribute('key')
     return elements.findIndex(element => element.getAttribute('key') === targetKey)
   }
@@ -85,13 +94,11 @@ export const blockValueUtils = {
     return elements
       .map(element => element.getAttribute('key'))
       .filter(key => key !== null)
-      .map(key => parseInt(key!, 10))
+      .map(key => parseInt(key, 10))
   },
 
   getBlockValueFromDom: (editableName: string, containerRef?: React.RefObject<HTMLDivElement>): BlockValue => {
-    const container = domUtils.findContainer(editableName, containerRef)
-    if (!container) return []
-    const elements = domUtils.queryElements(container, editableName)
+    const elements = domUtils.queryElements(editableName, containerRef)
     return blockValueUtils.fromElements(elements)
   },
 
@@ -118,19 +125,19 @@ export const configUtils = {
   isLimitReached: (currentCount: number, limit?: number): boolean => {
     return !isNil(limit) && currentCount >= limit
   },
-  
+
   isReloadMode: (config?: BlockEditableConfig): boolean => {
     return config?.reload === true
   },
-  
+
   getEffectiveLimit: (config?: BlockEditableConfig): number => {
     return config?.limit ?? 1000000
   },
-  
+
   canMoveUp: (index: number): boolean => {
     return index > 0
   },
-  
+
   canMoveDown: (index: number, totalElements: number): boolean => {
     return index < totalElements - 1
   }
@@ -139,23 +146,22 @@ export const configUtils = {
 // Block Operations
 export const operationUtils = {
   createEditableData: (
-    editableDefinitions: Array<{ name: string; type: string; data?: unknown }>
-  ): Record<string, { type: string; data: unknown }> => {
-    return editableDefinitions.reduce((acc, definition) => {
+    editableDefinitions: Array<{ name: string, type: string, data?: unknown }>
+  ): Record<string, { type: string, data: unknown }> => {
+    return editableDefinitions.reduce<Record<string, { type: string, data: unknown }>>((acc, definition) => {
       acc[definition.name] = {
         type: definition.type,
         data: definition.data ?? null
       }
       return acc
-    }, {} as Record<string, { type: string, data: unknown }>)
+    }, {})
   },
-  
+
   processNonReloadBlockAddition: ({
     container,
     index,
     config,
     editableName,
-    elementsRef,
     initializeData,
     setDynamicEditables
   }: ProcessNonReloadBlockAdditionParams): HTMLElement | null => {
@@ -163,33 +169,33 @@ export const operationUtils = {
       return null
     }
 
-    const nextKey = elementKeyUtils.calculateNext(elementsRef.current)
+    const nextKey = elementKeyUtils.calculateNext(editableName)
 
     const { html: processedHtml, editableDefinitions } = processBlockTemplate(
       { templateHtml: config.template.html, editableName, nextKey },
       config.template.editables
     )
 
-    // Insert HTML at the correct position based on current managed state
-    if (elementsRef.current.length === 0) {
+    // Get current elements to determine insertion point
+    const currentElements = domUtils.queryElements(editableName)
+
+    // Insert HTML at the correct position
+    if (currentElements.length === 0) {
       container.innerHTML = processedHtml
-    } else if (elementsRef.current[index - 1]) {
-      elementsRef.current[index - 1].insertAdjacentHTML('afterend', processedHtml)
+    } else if (!isNil(currentElements[index - 1])) {
+      currentElements[index - 1].insertAdjacentHTML('afterend', processedHtml)
     } else {
       container.insertAdjacentHTML('beforeend', processedHtml)
     }
 
-    // Update managed state with fresh DOM query
-    const newElements = domUtils.queryElements(container, editableName)
-    const newBlockEntry = newElements.find(el => !elementsRef.current.includes(el)) ?? null
-    
-    if (newBlockEntry) {
+    // Query fresh elements after insertion
+    const newElements = domUtils.queryElements(editableName)
+    const newBlockEntry = newElements.find(el => !currentElements.includes(el)) ?? null
+
+    if (!isNil(newBlockEntry)) {
       elementKeyUtils.set(newBlockEntry, nextKey.toString())
       ensurePortalTargets(newBlockEntry, editableDefinitions)
     }
-
-    // Update the managed state to include the new element
-    elementsRef.current = elementKeyUtils.ensureAll(newElements)
 
     // Initialize editable data
     const editableData = operationUtils.createEditableData(editableDefinitions)
@@ -208,7 +214,6 @@ export interface ProcessNonReloadBlockAdditionParams {
   index: number
   config: BlockEditableConfig
   editableName: string
-  elementsRef: React.MutableRefObject<HTMLElement[]>
-  initializeData: (data: Record<string, { type: string; data: unknown }>) => void
+  initializeData: (data: Record<string, { type: string, data: unknown }>) => void
   setDynamicEditables: React.Dispatch<React.SetStateAction<AbstractDocumentEditableDefinition[]>>
 }

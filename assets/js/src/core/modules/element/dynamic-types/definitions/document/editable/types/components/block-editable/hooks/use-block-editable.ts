@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useState, useRef } from 'react'
 import { isNil } from 'lodash'
 import { useDocumentEditor } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/hooks/use-document-editor'
 import { type AbstractDocumentEditableDefinition } from '../../../../dynamic-type-document-editable-abstract'
@@ -31,6 +31,16 @@ export interface UseBlockEditableParams {
   onOperationComplete?: (elements: HTMLElement[], limitReached: boolean) => void
 }
 
+export interface UseBlockEditableReturn {
+  dynamicEditables: AbstractDocumentEditableDefinition[]
+  refresh: (initializeControlsFn?: () => void, updateControlsFn?: (element: HTMLElement, limitReached: boolean) => void) => void
+  getBlockContainer: () => HTMLElement | null
+  addBlock: (element: HTMLElement | null, amount?: number) => void
+  removeBlock: (element: HTMLElement) => void
+  moveBlockUp: (element: HTMLElement) => void
+  moveBlockDown: (element: HTMLElement) => void
+}
+
 export const useBlockEditable = ({
   value = [],
   onChange,
@@ -39,10 +49,10 @@ export const useBlockEditable = ({
   containerRef,
   disabled = false,
   onOperationComplete
-}: UseBlockEditableParams) => {
+}: UseBlockEditableParams): UseBlockEditableReturn => {
   const { initializeData, getValues, removeValues } = useDocumentEditor()
   const [dynamicEditables, setDynamicEditables] = useState<AbstractDocumentEditableDefinition[]>([])
-  const elementsRef = useRef<HTMLElement[]>([])
+  const reloadModeElementsRef = useRef<HTMLElement[]>([])
 
   // Simple utility functions - no useCallback needed
   const getBlockContainer = (): HTMLElement | null => {
@@ -50,62 +60,55 @@ export const useBlockEditable = ({
   }
 
   const getElementIndex = (element: HTMLElement): number => {
-    return domUtils.findElementIndex(elementsRef.current, element)
+    return domUtils.findElementIndex(editableName, element, containerRef)
   }
 
   const getNextKey = (): number => {
-    return elementKeyUtils.calculateNext(elementsRef.current)
+    return elementKeyUtils.calculateNext(editableName, containerRef)
   }
 
   // Functions with dependencies or passed as props - keep useCallback
-  const queryDOMElements = useCallback((): HTMLElement[] => {
-    const container = getBlockContainer()
-    if (!container) return []
-    return domUtils.queryElements(container, editableName)
-  }, [editableName])
+  const queryDOMElements = (): HTMLElement[] => {
+    return domUtils.queryElements(editableName, containerRef)
+  }
 
-  const refreshElements = useCallback(() => {
-    const domElements = queryDOMElements()
-    const elementsWithKeys = elementKeyUtils.ensureAll(domElements)
-    elementsRef.current = elementsWithKeys
-    return elementsWithKeys
-  }, [queryDOMElements])
-
-  const getBlockEditableNames = useCallback((element: HTMLElement): string[] => {
+  const getBlockEditableNames = (element: HTMLElement): string[] => {
     const elementKey = elementKeyUtils.get(element)
     if (isNil(elementKey)) return []
-    
+
     const currentValues = getValues()
     return blockValueUtils.filterEditableNames(Object.keys(currentValues), editableName, elementKey)
-  }, [editableName, getValues])
+  }
 
   const handleReloadMode = useCallback((elementsUpdater: (elements: HTMLElement[]) => HTMLElement[]) => {
-    const newElements = elementsUpdater([...elementsRef.current])
-    elementsRef.current = newElements
+    const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : queryDOMElements()
+    const newElements = elementsUpdater([...currentElements])
+    reloadModeElementsRef.current = newElements
     const newValue = blockValueUtils.fromElements(newElements)
     onChange?.(newValue)
-  }, [onChange])
+  }, [onChange, config])
 
   const handlePostOperation = useCallback(() => {
-    const elements = refreshElements()
+    const elements = elementKeyUtils.ensureAll(queryDOMElements())
     const newValue = blockValueUtils.fromElements(elements)
     onChange?.(newValue)
-    
-    if (onOperationComplete) {
+
+    if (!isNil(onOperationComplete)) {
       const limitReached = configUtils.isLimitReached(elements.length, config?.limit)
       onOperationComplete(elements, limitReached)
     }
-  }, [refreshElements, onChange, onOperationComplete, config?.limit])
+  }, [onChange, onOperationComplete, config?.limit])
 
   const addBlock = useCallback((element: HTMLElement | null, amount = 1) => {
     if (disabled) return
-    
+
     const limit = configUtils.getEffectiveLimit(config)
-    if (configUtils.isLimitReached(elementsRef.current.length, limit)) return
-    
-    const index = element ? getElementIndex(element) + 1 : 0
+    const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : queryDOMElements()
+    if (configUtils.isLimitReached(currentElements.length, limit)) return
+
+    const index = !isNil(element) ? getElementIndex(element) + 1 : 0
     const nextKey = getNextKey()
-    
+
     if (configUtils.isReloadMode(config)) {
       handleReloadMode((elements) => {
         const placeholderElement = document.createElement('div')
@@ -125,19 +128,18 @@ export const useBlockEditable = ({
       index,
       config,
       editableName,
-      elementsRef,
       initializeData,
       setDynamicEditables
     })
 
-    if (newBlockEntry) {
+    if (!isNil(newBlockEntry)) {
       handlePostOperation()
     }
   }, [disabled, config, handleReloadMode, editableName, initializeData, handlePostOperation])
 
   const removeBlock = useCallback((element: HTMLElement) => {
     if (disabled) return
-    
+
     if (configUtils.isReloadMode(config)) {
       const index = getElementIndex(element)
       handleReloadMode((elements) => {
@@ -147,83 +149,81 @@ export const useBlockEditable = ({
       })
       return
     }
-    
+
     const editableNamesToRemove = getBlockEditableNames(element)
-    
+
     const elementId = element.getAttribute('id')
-    if (elementId) {
-      setDynamicEditables(prev => 
+    if (!isNil(elementId) && elementId !== '') {
+      setDynamicEditables(prev =>
         prev.filter(editable => !editable.id.includes(elementId))
       )
     }
-    
+
     element.remove()
-    
+
     if (editableNamesToRemove.length > 0) {
       removeValues(editableNamesToRemove)
     }
-    
-    handlePostOperation()
-  }, [disabled, config, handleReloadMode, getBlockEditableNames, removeValues, handlePostOperation])
 
-  const moveBlock = useCallback((
+    handlePostOperation()
+  }, [disabled, config, handleReloadMode, removeValues, handlePostOperation])
+
+  const moveBlock = (
     element: HTMLElement,
     direction: 'up' | 'down'
-  ) => {
+  ): void => {
     if (disabled) return
-    
+
     const index = getElementIndex(element)
-    
+    const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : queryDOMElements()
+
     if (direction === 'up' && !configUtils.canMoveUp(index)) return
-    if (direction === 'down' && !configUtils.canMoveDown(index, elementsRef.current.length)) return
-    
+    if (direction === 'down' && !configUtils.canMoveDown(index, currentElements.length)) return
+
     if (configUtils.isReloadMode(config)) {
       const targetIndex = direction === 'up' ? index - 1 : index + 1
       handleReloadMode((elements) => blockValueUtils.swapElements(elements, index, targetIndex))
       return
     }
-    
-    const targetElement = direction === 'up' ? elementsRef.current[index - 1] : elementsRef.current[index + 1]
-    if (targetElement) {
+
+    const targetElement = direction === 'up' ? currentElements[index - 1] : currentElements[index + 1]
+    if (!isNil(targetElement)) {
       const insertTarget = direction === 'up' ? targetElement : targetElement.nextSibling
       targetElement.parentNode?.insertBefore(element, insertTarget)
       handlePostOperation()
     }
-  }, [disabled, config, handleReloadMode, handlePostOperation])
+  }
 
   // Simple wrapper functions - no useCallback needed
-  const moveBlockUp = (element: HTMLElement) => {
+  const moveBlockUp = (element: HTMLElement): void => {
     moveBlock(element, 'up')
   }
 
-  const moveBlockDown = (element: HTMLElement) => {
+  const moveBlockDown = (element: HTMLElement): void => {
     moveBlock(element, 'down')
   }
 
   const refresh = useCallback((initializeControlsFn?: () => void, updateControlsFn?: (element: HTMLElement, limitReached: boolean) => void) => {
-    const elements = refreshElements()
+    const elements = elementKeyUtils.ensureAll(queryDOMElements())
     const container = getBlockContainer()
-    if (!container) return
-    
+    if (isNil(container)) return
+
     const limitReached = configUtils.isLimitReached(elements.length, config?.limit)
-    
+
     if (elements.length < 1) {
       initializeControlsFn?.()
     } else {
       container.classList.remove('pimcore_block_buttons')
-      
+
       elements.forEach(element => {
         updateControlsFn?.(element, limitReached)
       })
     }
-  }, [refreshElements, config?.limit])
+  }, [config?.limit])
 
   return {
     dynamicEditables,
     refresh,
-    refreshElements,
-    getElementIndex,
-    queryDOMElements,
     getBlockContainer,
     addBlock,
     removeBlock,

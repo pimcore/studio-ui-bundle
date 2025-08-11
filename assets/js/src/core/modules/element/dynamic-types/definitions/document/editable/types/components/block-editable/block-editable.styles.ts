@@ -13,14 +13,14 @@ import { createStyles } from 'antd-style'
 export const useBlockEditableStyles = createStyles(({ token }) => ({
   blockContainer: {
     position: 'relative',
-    
+
     '&.pimcore_block_buttons': {
       border: `1px dashed ${token.colorBorder}`,
       borderRadius: token.borderRadius,
       padding: token.padding,
       backgroundColor: token.colorBgContainer
     },
-    
+
     '& .pimcore_block_entry': {
       position: 'relative',
       border: `1px solid ${token.colorBorder}`,
@@ -28,7 +28,7 @@ export const useBlockEditableStyles = createStyles(({ token }) => ({
       marginBottom: token.marginSM,
       backgroundColor: token.colorBgContainer
     },
-    
+
     '& .pimcore_block_buttons': {
       display: 'flex',
       gap: token.paddingXS,
@@ -38,7 +38,7 @@ export const useBlockEditableStyles = createStyles(({ token }) => ({
       borderBottom: `1px solid ${token.colorBorder}`,
       opacity: 0.8,
       transition: 'opacity 0.2s ease',
-      
+
       '&:hover': {
         opacity: 1
       }

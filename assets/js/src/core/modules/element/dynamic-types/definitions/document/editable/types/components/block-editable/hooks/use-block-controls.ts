@@ -9,6 +9,7 @@
  */
 
 import { useCallback } from 'react'
+import { isNull } from 'lodash'
 import { useBlockEditableStyles } from '../block-editable.styles'
 
 export interface UseBlockControlsParams {
@@ -19,25 +20,30 @@ export interface UseBlockControlsParams {
   onMoveBlockDown: (element: HTMLElement) => void
 }
 
+export interface UseBlockControlsReturn {
+  updateControls: (element: HTMLElement, limitReached: boolean) => void
+  initializeControls: (getBlockContainer: () => HTMLElement | null) => void
+}
+
 export const useBlockControls = ({
   editableName,
   onAddBlock,
   onRemoveBlock,
   onMoveBlockUp,
   onMoveBlockDown
-}: UseBlockControlsParams) => {
+}: UseBlockControlsParams): UseBlockControlsReturn => {
   const { styles } = useBlockEditableStyles()
 
-  const createButton = useCallback((text: string, title: string, clickHandler: () => void, isDisabled = false) => {
+  const createButton = useCallback((text: string, title: string, clickHandler: () => void, isDisabled = false): HTMLButtonElement => {
     const button = document.createElement('button')
     button.textContent = text
     button.title = title
     button.className = `${styles.button} ${isDisabled ? styles.buttonDisabled : ''} ${text === '−' ? 'danger' : ''}`
-    
+
     if (!isDisabled) {
       button.addEventListener('click', clickHandler)
     }
-    
+
     return button
   }, [styles.button, styles.buttonDisabled])
 
@@ -55,57 +61,57 @@ export const useBlockControls = ({
 
   const updateControls = useCallback((element: HTMLElement, limitReached: boolean) => {
     // Look for existing buttons container or create one
-    let buttonsContainer = element.querySelector('.pimcore_block_buttons') as HTMLElement
-    
-    if (!buttonsContainer) {
+    let buttonsContainer = element.querySelector('.pimcore_block_buttons')
+
+    if (isNull(buttonsContainer)) {
       buttonsContainer = document.createElement('div')
       buttonsContainer.className = 'pimcore_block_buttons'
       element.insertBefore(buttonsContainer, element.firstChild)
     }
-    
+
     // Clear existing content but preserve amount display if it exists
     const amountDisplay = buttonsContainer.querySelector('.pimcore_block_amount')
     buttonsContainer.innerHTML = ''
-    
+
     // Re-add the amount display if it existed
-    if (amountDisplay) {
+    if (!isNull(amountDisplay)) {
       buttonsContainer.appendChild(amountDisplay)
     } else {
       const newAmountDisplay = document.createElement('div')
       newAmountDisplay.className = 'pimcore_block_amount'
       buttonsContainer.appendChild(newAmountDisplay)
     }
-    
+
     // Apply styles only if not already applied to prevent accumulation
     if (!buttonsContainer.className.includes(styles.buttonsContainer)) {
-      applyButtonsContainerStyles(buttonsContainer)
+      applyButtonsContainerStyles(buttonsContainer as HTMLElement)
     }
-    
+
     // Add control buttons in the correct order
     const currentAmountDisplay = buttonsContainer.querySelector('.pimcore_block_amount')
-    
+
     if (!limitReached) {
-      const plusButton = createButton('+', 'Add block entry', () => onAddBlock(element, 1))
+      const plusButton = createButton('+', 'Add block entry', () => { onAddBlock(element, 1) })
       buttonsContainer.insertBefore(plusButton, currentAmountDisplay)
     }
-    
-    const minusButton = createButton('−', 'Remove block entry', () => onRemoveBlock(element))
+
+    const minusButton = createButton('−', 'Remove block entry', () => { onRemoveBlock(element) })
     buttonsContainer.insertBefore(minusButton, currentAmountDisplay)
-    
+
     // Get element index and total elements for button state
     const elements = Array.from(element.parentElement?.querySelectorAll('.pimcore_block_entry[data-name="' + editableName + '"][key]') ?? [])
     const elementIndex = elements.indexOf(element)
-    
+
     const isFirst = elementIndex === 0
-    const upButton = createButton('↑', isFirst ? 'Cannot move up' : 'Move up', () => onMoveBlockUp(element), isFirst)
+    const upButton = createButton('↑', isFirst ? 'Cannot move up' : 'Move up', () => { onMoveBlockUp(element) }, isFirst)
     buttonsContainer.insertBefore(upButton, currentAmountDisplay)
-    
+
     const isLast = elementIndex === elements.length - 1
-    const downButton = createButton('↓', isLast ? 'Cannot move down' : 'Move down', () => onMoveBlockDown(element), isLast)
+    const downButton = createButton('↓', isLast ? 'Cannot move down' : 'Move down', () => { onMoveBlockDown(element) }, isLast)
     buttonsContainer.insertBefore(downButton, currentAmountDisplay)
-    
+
     // Update the amount display text
-    if (currentAmountDisplay) {
+    if (!isNull(currentAmountDisplay)) {
       const htmlAmountDisplay = currentAmountDisplay as HTMLElement
       htmlAmountDisplay.textContent = `${elementIndex + 1}/${elements.length}`
       applyAmountDisplayStyles(htmlAmountDisplay)
@@ -114,29 +120,29 @@ export const useBlockControls = ({
 
   const initializeControls = useCallback((getBlockContainer: () => HTMLElement | null) => {
     const container = getBlockContainer()
-    if (!container) return
-    
+    if (isNull(container)) return
+
     const amountEl = document.createElement('div')
     amountEl.className = 'pimcore_block_amount'
     amountEl.setAttribute('data-name', editableName)
-    
+
     const plusEl = document.createElement('div')
     plusEl.className = 'pimcore_block_plus'
     plusEl.setAttribute('data-name', editableName)
     plusEl.textContent = '+ Add Block Entry'
-    
+
     const clearEl = document.createElement('div')
     clearEl.className = 'pimcore_block_clear'
     clearEl.setAttribute('data-name', editableName)
-    
+
     container.appendChild(amountEl)
     container.appendChild(plusEl)
     container.appendChild(clearEl)
-    
+
     applyPlusElementStyles(plusEl)
-    
-    plusEl.addEventListener('click', () => onAddBlock(null, 1))
-    
+
+    plusEl.addEventListener('click', () => { onAddBlock(null, 1) })
+
     container.className += ' pimcore_block_limitnotreached pimcore_block_buttons'
   }, [editableName, onAddBlock, applyPlusElementStyles])
 

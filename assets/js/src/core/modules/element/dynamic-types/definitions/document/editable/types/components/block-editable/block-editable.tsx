@@ -67,7 +67,7 @@ export const BlockEditable = ({
     disabled,
     onOperationComplete: (elements, limitReached) => {
       // Update controls for all elements after any operation
-      elements.forEach(element => updateControls(element, limitReached))
+      elements.forEach(element => { updateControls(element, limitReached) })
     }
   })
 
@@ -82,12 +82,12 @@ export const BlockEditable = ({
 
   // Initialize and refresh on value changes
   useEffect(() => {
-    refresh(() => initializeControls(getBlockContainer), updateControls)
+    refresh(() => { initializeControls(getBlockContainer) }, updateControls)
   }, [currentValue, refresh, initializeControls, updateControls, getBlockContainer])
 
   return (
-    <div className={`${styles.blockContainer} ${className ?? ''}`}>
-      <DynamicEditablesRenderer editableDefinitions={dynamicEditables} />
+    <div className={ `${styles.blockContainer} ${className ?? ''}` }>
+      <DynamicEditablesRenderer editableDefinitions={ dynamicEditables } />
     </div>
   )
 }

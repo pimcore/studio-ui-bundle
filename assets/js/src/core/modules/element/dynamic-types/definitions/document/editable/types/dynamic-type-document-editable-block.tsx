@@ -23,13 +23,13 @@ export class DynamicTypeDocumentEditableBlock extends DynamicTypeDocumentEditabl
   getEditableDataComponent (props: BlockEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
       <BlockEditable
-        className={props.config?.class}
-        config={props.config}
-        editableName={props.name}
-        containerRef={props.containerRef}
-        disabled={props.inherited}
-        onChange={(newValue) => props.onChange?.(newValue)}
-        value={props.value}
+        className={ props.config?.class }
+        config={ props.config }
+        containerRef={ props.containerRef }
+        disabled={ props.inherited }
+        editableName={ props.name }
+        onChange={ (newValue) => props.onChange?.(newValue) }
+        value={ props.value }
       />
     )
   }
