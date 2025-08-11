@@ -91,11 +91,6 @@ export const SendTestEmailProvider: React.FC<SendTestEmailProviderProps> = ({ ch
       >
         <SendTestMailForm
           form={tmpForm}
-          initalValues={{
-            from: 'from@doe.com',
-            to: 'to@doe.com',
-            subject: 'Test Email Subject'
-          }}
         />
       </WindowModal>
 
