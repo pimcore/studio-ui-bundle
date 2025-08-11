@@ -43,6 +43,8 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const { getAvailablePermissions } = useUserManagementHelper()
   const permissions = getGroupedPermissions(getAvailablePermissions())
 
+  const [passwordType, setPasswordType] = React.useState<'text' | 'password'>('password')
+
   useEffect(() => {
     if (!isLoading) {
       form.setFieldsValue({
@@ -138,15 +140,19 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                     name={ 'password' }
                     rules={ [{ min: 10 }] }
                   >
-                    <Input suffix={ <IconButton
-                      icon={ { value: 'locked' } }
-                      onClick={ () => {
-                        const newPassword = generatePassword()
-                        form.setFieldValue('password', newPassword); changeUserInState({ password: newPassword })
-                      } }
-                      title={ t('user-management.generate-password') }
-                      variant={ 'minimal' }
-                                    /> }
+                    <Input
+                      autoComplete="new-password"
+                      suffix={ <IconButton
+                        icon={ { value: 'locked' } }
+                        onClick={ () => {
+                          const newPassword = generatePassword()
+                          form.setFieldValue('password', newPassword); changeUserInState({ password: newPassword })
+                          setPasswordType('text')
+                        } }
+                        title={ t('user-management.generate-password') }
+                        variant={ 'minimal' }
+                               /> }
+                      type={ passwordType }
                     />
                   </Form.Item>
                   <Form.Item name={ 'twoFactorAuthenticationEnabled' }>
