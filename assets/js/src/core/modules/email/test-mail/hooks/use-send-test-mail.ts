@@ -43,7 +43,7 @@ export const useSendTestMail = (): UseSendTestMailHookReturn => {
         content: t('test-email.success.modal.text'),
         okText: t('yes'),
         cancelText: t('no'),
-        onOk: () => {
+        onCancel: () => {
           onFinish?.()
         }
       })
