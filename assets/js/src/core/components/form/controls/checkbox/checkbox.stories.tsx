@@ -11,7 +11,6 @@
 import { type Meta } from '@storybook/react'
 import React, { useState } from 'react'
 import { Checkbox } from '@Pimcore/components/checkbox/checkbox'
-import { Checkbox as AntCheckbox } from 'antd'
 import { Form } from '../../form'
 
 const config: Meta = {
@@ -91,7 +90,7 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Permissions"
               name="permissions"
             >
-              <AntCheckbox.Group
+              <Checkbox.Group
                 options={[
                   { label: 'Read', value: 'read' },
                   { label: 'Write', value: 'write' },
