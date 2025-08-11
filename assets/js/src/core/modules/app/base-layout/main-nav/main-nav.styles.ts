@@ -23,7 +23,7 @@ export const useStlyes = createStyles(({
       padding: ${token.paddingMD}px;
       box-shadow: ${token.boxShadowSecondary};
       border-radius: ${token.borderRadius}px;
-      width: 818px;
+      width: 920px;
       max-width: 90vw;
       min-width: 530px;
       text-align: left;
@@ -63,7 +63,7 @@ export const useStlyes = createStyles(({
       .main-nav__list {
         margin: 0;
         list-style: none;
-        width: 250px;
+        width: 200px;
         height: fit-content;
         padding: 0 ${token.paddingXS}px;
         font-size: ${token.fontSize}px;
@@ -72,6 +72,7 @@ export const useStlyes = createStyles(({
       }
 
       .main-nav__list--level-0 {
+        width: 250px;
         padding: 0;
         background: rgba(0, 0, 0, 0.02);
         
@@ -93,7 +94,6 @@ export const useStlyes = createStyles(({
       .main-nav__list-detail {
         position: absolute;
         left: 100%;
-        width: 100%;
         top: 0;
         bottom: 0;
         transform: translateX(-15px);
