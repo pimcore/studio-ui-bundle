@@ -33,6 +33,7 @@ export const SendTestEmailProvider: React.FC<SendTestEmailProviderProps> = ({ ch
   const [isOpen, setIsOpen] = useState(false)
   const { send } = useSendTestMail()
   const [tmpForm] = Form.useForm()
+  const [isOkButtonLoading, setIsOkButtonLoading] = useState<boolean>(false)
 
   const closeModal = (): void => {
     tmpForm.resetFields()
@@ -43,14 +44,23 @@ export const SendTestEmailProvider: React.FC<SendTestEmailProviderProps> = ({ ch
     return await new Promise((resolve, reject) => {
       tmpForm.validateFields()
         .then(async () => {
+          setIsOkButtonLoading(true)
           const values = tmpForm.getFieldsValue() as SendEmailParameters
 
           resolve(values)
-          void send(values, () => {
-            closeModal()
-          })
+          void send(
+            values,
+            () => {
+              closeModal()
+              setIsOkButtonLoading(false)
+            },
+            () => {
+              setIsOkButtonLoading(false)
+            }
+          )
         })
         .catch(() => {
+          setIsOkButtonLoading(false)
           reject(new Error('Invalid form data'))
         })
     })
@@ -64,22 +74,25 @@ export const SendTestEmailProvider: React.FC<SendTestEmailProviderProps> = ({ ch
   }), [isOpen, tmpForm])
 
   return (
-    <SendTestEmailContext.Provider value={ contextValue }>
+    <SendTestEmailContext.Provider value={contextValue}>
       <WindowModal
-        onClose={ () => { setIsOpen(false) } }
-        onOk={ async () => {
+        onClose={() => { setIsOpen(false) }}
+        onOk={async () => {
           await submit()
-        } }
-        open={ isOpen }
+        }}
+        open={isOpen}
+        okButtonProps={{
+          loading: isOkButtonLoading
+        }}
         size="L"
       >
         <SendTestMailForm
-          form={ tmpForm }
-          initalValues={ {
+          form={tmpForm}
+          initalValues={{
             from: 'from@doe.com',
             to: 'to@doe.com',
             subject: 'Test Email Subject'
-          } }
+          }}
         />
       </WindowModal>
 

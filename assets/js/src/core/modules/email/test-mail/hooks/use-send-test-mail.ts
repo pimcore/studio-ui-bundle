@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { type SendEmailParameters, useEmailSendTestMutation } from '../../emails-api-slice-enhanced'
 
 interface UseSendTestMailHookReturn {
-  send: (parameters: SendEmailParameters, onFinish?: () => void) => Promise<void>
+  send: (parameters: SendEmailParameters, onFinish?: () => void, onContinue?: () => void) => Promise<void>
 }
 
 export const useSendTestMail = (): UseSendTestMailHookReturn => {
@@ -25,7 +25,7 @@ export const useSendTestMail = (): UseSendTestMailHookReturn => {
   const { t } = useTranslation()
   const modal = useFormModal()
 
-  const send = async (parameters: SendEmailParameters, onFinish?: () => void): Promise<void> => {
+  const send = async (parameters: SendEmailParameters, onFinish?: () => void, onContinue?: () => void): Promise<void> => {
     const sendTestMailTask = sendTestMailMutation({
       sendEmailParameters: parameters
     })
@@ -45,6 +45,9 @@ export const useSendTestMail = (): UseSendTestMailHookReturn => {
         cancelText: t('no'),
         onCancel: () => {
           onFinish?.()
+        },
+        onOk: () => {
+          onContinue?.()
         }
       })
     } catch {
