@@ -41,6 +41,10 @@ const meta: Meta<typeof Panel> = {
     },
     noteditable: {
       control: 'boolean'
+    },
+    extraPosition: {
+      control: 'radio',
+      options: ['start', 'end']
     }
   }
 }
@@ -125,5 +129,35 @@ export const ComplexContent: Story = {
         <button type="button">Interactive Elements</button>
       </div>
     )
+  }
+}
+
+export const WithExtraContent: Story = {
+  args: {
+    title: 'Panel with Extra Content',
+    theme: 'card-with-highlight',
+    border: true,
+    extra: (
+      <div style={{ display: 'flex', gap: '8px' }}>
+        <button type="button">Action</button>
+        <button type="button">Settings</button>
+      </div>
+    ),
+    children: 'This panel has extra content (buttons) displayed in the header area alongside the title.'
+  }
+}
+
+export const CollapsibleWithExtraContent: Story = {
+  args: {
+    title: 'Collapsible Panel with Extra Content',
+    theme: 'card-with-highlight',
+    collapsible: true,
+    extra: (
+      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+        <span style={{ fontSize: '12px', color: '#666' }}>3 items</span>
+        <button type="button">Edit</button>
+      </div>
+    ),
+    children: 'This collapsible panel has extra content (item count and edit button) in the header. The extra content remains visible even when collapsed.'
   }
 }

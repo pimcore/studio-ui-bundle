@@ -77,9 +77,21 @@ export const useStyles = createStyles(({ token, css }) => {
         font-weight: 600;
         text-shadow: none !important;
       }
+
+      &.ant-tabs-line .ant-tabs-nav .ant-tabs-tab-remove {
+        transition: all ${token.motionDurationSlow};
+        width: 0;
+        opacity: 0;
+      }
+
+      &.ant-tabs-line .ant-tabs-nav .ant-tabs-tab:hover .ant-tabs-tab-remove {
+        transition-delay: ${token.motionDurationSlow};
+      }
       
+      &.ant-tabs-line .ant-tabs-nav .ant-tabs-tab:hover .ant-tabs-tab-remove,
       &.ant-tabs-line .ant-tabs-nav .ant-tabs-tab-active .ant-tabs-tab-remove {
         opacity: 1;
+        width: 16px;
       }
       
       &.ant-tabs-line > .ant-tabs-nav .ant-tabs-ink-bar {

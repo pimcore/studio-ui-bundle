@@ -13,6 +13,7 @@ import React from 'react'
 import { Panel } from '@Pimcore/components/panel/panel'
 import { FormKit } from '../../form-kit'
 import { Input } from '@Pimcore/components/input/input'
+import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import { Select } from '@Pimcore/components/select/select'
 import { Switch } from '@Pimcore/components/switch/switch'
@@ -185,4 +186,74 @@ const MultipleThemePanelsComponent = (): React.JSX.Element => {
 
 export const MultipleThemePanels: Story = {
   render: () => <MultipleThemePanelsComponent />
+}
+
+// Panel with Extra Content
+const PanelWithExtraContentComponent = (): React.JSX.Element => {
+  const [form] = FormKit.useForm()
+  const [isEditMode, setIsEditMode] = React.useState(false)
+
+  return (
+    <div style={{ maxWidth: '600px' }}>
+      <FormKit formProps={{
+        form: form,
+        layout: 'vertical',
+      }}>
+        <Panel 
+          title="Project Configuration" 
+          theme="card-with-highlight"
+          extra={
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <span style={{ fontSize: '12px', color: '#666' }}>
+                {isEditMode ? 'Editing' : 'Read Only'}
+              </span>
+              <button 
+                type="button" 
+                onClick={() => setIsEditMode(!isEditMode)}
+                style={{ 
+                  padding: '4px 8px', 
+                  fontSize: '12px',
+                  border: '1px solid #d9d9d9',
+                  borderRadius: '4px',
+                  background: isEditMode ? '#1890ff' : 'white',
+                  color: isEditMode ? 'white' : 'black',
+                  cursor: 'pointer'
+                }}
+              >
+                {isEditMode ? 'Save' : 'Edit'}
+              </button>
+            </div>
+          }
+        >
+          <FormKit.Item label="Project Name" name="projectName">
+            <Input placeholder="Enter project name" disabled={!isEditMode} />
+          </FormKit.Item>
+          
+          <FormKit.Item label="Description" name="description">
+            <TextArea 
+              placeholder="Enter project description" 
+              disabled={!isEditMode}
+              rows={3}
+            />
+          </FormKit.Item>
+          
+          <FormKit.Item label="Status" name="status">
+            <Select
+              placeholder="Select status"
+              disabled={!isEditMode}
+              options={[
+                { value: 'draft', label: 'Draft' },
+                { value: 'active', label: 'Active' },
+                { value: 'completed', label: 'Completed' }
+              ]}
+            />
+          </FormKit.Item>
+        </Panel>
+      </FormKit>
+    </div>
+  )
+}
+
+export const PanelWithExtraContent: Story = {
+  render: () => <PanelWithExtraContentComponent />
 }
