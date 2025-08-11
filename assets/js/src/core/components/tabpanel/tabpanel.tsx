@@ -20,6 +20,7 @@ export interface TabpanelProps {
   collapsed?: boolean
   children: Array<{
     title?: string
+    closable?: boolean
     [key: string]: any
   }>
   tabPosition?: ITabsProps['tabPosition']
@@ -28,6 +29,7 @@ export interface TabpanelProps {
   renderChild?: (child: any, noteditable?: boolean) => React.ReactNode
   extra?: React.ReactNode
   extraPosition?: 'start' | 'end'
+  onClose?: (tabKey: string) => void
 }
 
 export const Tabpanel = ({ 
@@ -41,6 +43,7 @@ export const Tabpanel = ({
   renderChild,
   extra,
   extraPosition,
+  onClose,
   ...props 
 }: TabpanelProps): React.JSX.Element => {
   const renderTabChild = (child: any): React.ReactNode => {
@@ -63,13 +66,15 @@ export const Tabpanel = ({
   const items: ITabsProps['items'] = children.map((child, index) => {
     const tabPanelChild = {
       ...child,
-      title: undefined
+      title: undefined,
+      closable: undefined
     }
 
     return {
       key: index.toString(),
       label: typeof child.title === 'string' ? child.title : `Tab ${index + 1}`,
       forceRender: true,
+      closable: child.closable,
       children: (
         <Box padding='small'>
           {renderTabChild(tabPanelChild)}
@@ -77,6 +82,12 @@ export const Tabpanel = ({
       )
     }
   })
+
+  const handleClose = (tabKey: string): void => {
+    if (onClose !== undefined) {
+      onClose(tabKey)
+    }
+  }
 
   return (
     <BaseView
@@ -91,8 +102,10 @@ export const Tabpanel = ({
       <Tabs
         hasStickyHeader={hasStickyHeader}
         items={items}
+        onClose={onClose !== undefined ? handleClose : undefined}
         size='small'
         tabPosition={props.tabPosition}
+        noTabBarMargin
       />
     </BaseView>
   )

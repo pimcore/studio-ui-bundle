@@ -22,6 +22,11 @@ export const useStyles = createStyles(({ token, css }) => {
         }
       }
 
+      &.ant-tabs-card.ant-tabs-small > .ant-tabs-nav .ant-tabs-tab {
+        padding-left: ${token.paddingXXS}px;
+        padding-right: ${token.paddingXXS}px;
+      }
+
       &.tabs--has-sticky-header > .ant-tabs-nav {
         position: sticky;
         top: 0;

@@ -22,6 +22,7 @@ export interface ITabsProps extends TabsProps {
 
 const Component = ({ items, className, activeKey, onClose, onChange, hasStickyHeader = false, ...props }: ITabsProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
   const { styles } = useStyles()
+  
   const classNames = cn(
     'ant-tabs-line',
     styles.tabs,
@@ -43,15 +44,42 @@ const Component = ({ items, className, activeKey, onClose, onChange, hasStickyHe
     }
   }
 
+  // Check if any tabs are explicitly closable to determine the tab type
+  const hasClosableTabs = items?.some(item => item.closable !== false) ?? false
+  const tabType = onClose !== undefined && hasClosableTabs ? 'editable-card' : 'line'
+
+  const handleMiddleClick = (tabKey: string) => (event: React.MouseEvent): void => {
+    if (event.button === 1 && onClose !== undefined) {
+      // Check if this specific tab item is closable
+      const tabItem = items?.find(item => item.key === tabKey)
+      const isTabClosable = tabItem?.closable !== false
+      
+      if (isTabClosable) {
+        event.preventDefault()
+        onClose(tabKey)
+      }
+    }
+  }
+
+  // Add mouse down handler to each tab item
+  const enhancedItems = items?.map(item => ({
+    ...item,
+    label: (
+      <div onMouseDown={handleMiddleClick(item.key)}>
+        {item.label}
+      </div>
+    )
+  }))
+
   return (
     <AntdTabs
       activeKey={ activeKey }
       className={ classNames }
       hideAdd
-      items={ items }
+      items={ enhancedItems }
       onChange={ onChange }
       onEdit={ onEdit }
-      type={ onClose !== undefined ? 'editable-card' : 'line' }
+      type={ tabType }
       { ...props }
     />
   )

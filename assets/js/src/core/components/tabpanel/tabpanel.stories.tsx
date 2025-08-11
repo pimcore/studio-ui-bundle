@@ -252,3 +252,110 @@ const CollapsibleTabpanelWithExtraContentComponent = (): React.JSX.Element => {
 export const CollapsibleWithExtraContent: Story = {
   render: () => <CollapsibleTabpanelWithExtraContentComponent />
 }
+
+// Closable Tabs Story
+const ClosableTabsComponent = (): React.JSX.Element => {
+  const [tabs, setTabs] = React.useState([
+    {
+      title: 'Tab 1 (Closable)',
+      content: 'This tab can be closed by clicking the X button or middle-clicking on the tab.'
+      // closable by default when onClose is provided
+    },
+    {
+      title: 'Tab 2 (Fixed)',
+      content: 'This tab cannot be closed - it has no close button.',
+      closable: false // explicitly non-closable
+    },
+    {
+      title: 'Tab 3 (Closable)',
+      content: 'Another closable tab. Try middle-clicking on the tab to close it.'
+      // closable by default when onClose is provided
+    },
+    {
+      title: 'Tab 4 (Closable)',
+      content: 'This tab is also closable.'
+      // closable by default when onClose is provided
+    }
+  ])
+
+  const handleTabClose = (tabKey: string): void => {
+    const tabIndex = parseInt(tabKey, 10)
+    setTabs(prevTabs => prevTabs.filter((_, index) => index !== tabIndex))
+  }
+
+  const renderTabContent = (child: any): React.ReactNode => (
+    <div>
+      <p>{child.content}</p>
+      {child.closable && (
+        <p style={{ fontSize: '12px', color: '#666', marginTop: '16px' }}>
+          💡 <strong>Tip:</strong> You can close this tab by clicking the X button or middle-clicking on the tab header.
+        </p>
+      )}
+    </div>
+  )
+
+  const addNewTab = (): void => {
+    const newTabIndex = tabs.length + 1
+    setTabs(prevTabs => [
+      ...prevTabs,
+      {
+        title: `New Tab ${newTabIndex}`,
+        content: `This is dynamically added tab ${newTabIndex}. It's closable by default.`
+        // closable by default when onClose is provided
+      }
+    ])
+  }
+
+  return (
+    <div>
+      <div style={{ marginBottom: '16px' }}>
+        <button 
+          type="button" 
+          onClick={addNewTab}
+          style={{ 
+            padding: '6px 12px', 
+            fontSize: '14px',
+            border: '1px solid #1890ff',
+            borderRadius: '6px',
+            background: '#1890ff',
+            color: 'white',
+            cursor: 'pointer'
+          }}
+        >
+          Add New Tab
+        </button>
+        <span style={{ marginLeft: '12px', fontSize: '12px', color: '#666' }}>
+          Current tabs: {tabs.length}
+        </span>
+      </div>
+      
+      <Tabpanel 
+        title="Closable Tabs Example"
+        border={true}
+        children={tabs}
+        renderChild={renderTabContent}
+        onClose={handleTabClose}
+      />
+    </div>
+  )
+}
+
+export const ClosableTabs: Story = {
+  render: () => <ClosableTabsComponent />,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+This story demonstrates closable tabs functionality:
+
+- **Tabs are closable by default** when an \`onClose\` handler is provided
+- **Fixed tabs** can be created by setting \`closable: false\` to prevent closing
+- **Middle-click support** allows closing tabs by middle-clicking on the tab header
+- **Dynamic tab management** allows adding and removing tabs programmatically
+
+Provide an \`onClose\` handler to enable closable tabs, and set \`closable: false\` on individual tabs that should not be closable.
+        `
+      }
+    }
+  }
+}

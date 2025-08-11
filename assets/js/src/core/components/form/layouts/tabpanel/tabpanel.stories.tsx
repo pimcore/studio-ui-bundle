@@ -17,6 +17,7 @@ import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import { Select } from '@Pimcore/components/select/select'
 import { Switch } from '@Pimcore/components/switch/switch'
+import { Panel } from '@Pimcore/components/panel/panel'
 
 const meta: Meta<typeof Tabpanel> = {
   title: 'Components/Data Entry/Form/Layouts/Tabpanel',
@@ -90,7 +91,7 @@ const SimpleFormKitTabpanelComponent = (): React.JSX.Element => {
     switch (tab.type) {
       case 'general':
         return (
-          <>
+          <Panel>
             <FormKit.Item
               label="Company Name"
               name="companyName"
@@ -105,11 +106,11 @@ const SimpleFormKitTabpanelComponent = (): React.JSX.Element => {
             >
               <TextArea placeholder="Enter description" rows={3} />
             </FormKit.Item>
-          </>
+          </Panel>
         )
       case 'contact':
         return (
-          <>
+          <Panel>
             <FormKit.Item
               label="Email"
               name="email"
@@ -134,11 +135,11 @@ const SimpleFormKitTabpanelComponent = (): React.JSX.Element => {
             >
               <Input placeholder="Enter website URL" />
             </FormKit.Item>
-          </>
+          </Panel>
         )
       case 'settings':
         return (
-          <>
+          <Panel>
             <FormKit.Item
               label="Priority"
               name="priority"
@@ -167,10 +168,10 @@ const SimpleFormKitTabpanelComponent = (): React.JSX.Element => {
             >
               <Switch />
             </FormKit.Item>
-          </>
+          </Panel>
         )
       default:
-        return <div>No content</div>
+        return <Panel><div>No content</div></Panel>
     }
   }
 
@@ -213,7 +214,7 @@ const CollapsibleTabpanelComponent = (): React.JSX.Element => {
     switch (tab.type) {
       case 'basic':
         return (
-          <>
+          <Panel>
             <FormKit.Item label="Name" name="name">
               <Input placeholder="Enter name" />
             </FormKit.Item>
@@ -227,11 +228,11 @@ const CollapsibleTabpanelComponent = (): React.JSX.Element => {
                 ]}
               />
             </FormKit.Item>
-          </>
+          </Panel>
         )
       case 'advanced':
         return (
-          <>
+          <Panel>
             <FormKit.Item label="API Endpoint" name="apiEndpoint">
               <Input placeholder="Enter API endpoint" />
             </FormKit.Item>
@@ -243,10 +244,10 @@ const CollapsibleTabpanelComponent = (): React.JSX.Element => {
             <FormKit.Item label="Debug Mode" name="debug" valuePropName="checked">
               <Switch />
             </FormKit.Item>
-          </>
+          </Panel>
         )
       default:
-        return <div>No content</div>
+        return <Panel><div>No content</div></Panel>
     }
   }
 
@@ -295,7 +296,7 @@ const VerticalTabpanelComponent = (): React.JSX.Element => {
     switch (tab.type) {
       case 'profile':
         return (
-          <>
+          <Panel>
             <FormKit.Item label="First Name" name="firstName">
               <Input placeholder="Enter first name" />
             </FormKit.Item>
@@ -307,11 +308,11 @@ const VerticalTabpanelComponent = (): React.JSX.Element => {
             <FormKit.Item label="Bio" name="bio">
               <TextArea placeholder="Enter bio" rows={4} />
             </FormKit.Item>
-          </>
+          </Panel>
         )
       case 'security':
         return (
-          <>
+          <Panel>
             <FormKit.Item label="Current Password" name="currentPassword">
               <Input type="password" placeholder="Enter current password" />
             </FormKit.Item>
@@ -323,11 +324,11 @@ const VerticalTabpanelComponent = (): React.JSX.Element => {
             <FormKit.Item label="Two-Factor Auth" name="twoFactor" valuePropName="checked">
               <Switch />
             </FormKit.Item>
-          </>
+          </Panel>
         )
       case 'preferences':
         return (
-          <>
+          <Panel>
             <FormKit.Item label="Language" name="language">
               <Select
                 placeholder="Select language"
@@ -353,10 +354,10 @@ const VerticalTabpanelComponent = (): React.JSX.Element => {
             <FormKit.Item label="Email Notifications" name="emailNotifications" valuePropName="checked">
               <Switch />
             </FormKit.Item>
-          </>
+          </Panel>
         )
       default:
-        return <div>No content</div>
+        return <Panel><div>No content</div></Panel>
     }
   }
 
@@ -402,7 +403,7 @@ const TabpanelWithExtraContentComponent = (): React.JSX.Element => {
     switch (tab.type) {
       case 'system':
         return (
-          <>
+          <Panel>
             <FormKit.Item label="System Name" name="systemName">
               <Input placeholder="Enter system name" disabled={!isEnabled} />
             </FormKit.Item>
@@ -414,11 +415,11 @@ const TabpanelWithExtraContentComponent = (): React.JSX.Element => {
             <FormKit.Item label="Maintenance Mode" name="maintenanceMode" valuePropName="checked">
               <Switch disabled={!isEnabled} />
             </FormKit.Item>
-          </>
+          </Panel>
         )
       case 'preferences':
         return (
-          <>
+          <Panel>
             <FormKit.Item label="Default Language" name="defaultLanguage">
               <Select
                 placeholder="Select language"
@@ -434,10 +435,10 @@ const TabpanelWithExtraContentComponent = (): React.JSX.Element => {
             <FormKit.Item label="Session Timeout (minutes)" name="sessionTimeout">
               <InputNumber min={5} max={480} placeholder="30" disabled={!isEnabled} style={{ width: '100%' }} />
             </FormKit.Item>
-          </>
+          </Panel>
         )
       default:
-        return <div>No content</div>
+        return <Panel><div>No content</div></Panel>
     }
   }
 
@@ -491,4 +492,387 @@ const TabpanelWithExtraContentComponent = (): React.JSX.Element => {
 
 export const TabpanelWithExtraContent: Story = {
   render: () => <TabpanelWithExtraContentComponent />
+}
+
+// Simple Tabpanel without Title
+const NoTitleFormKitTabpanelComponent = (): React.JSX.Element => {
+  const [form] = FormKit.useForm()
+
+  const tabData = [
+    {
+      title: 'Basic',
+      type: 'basic'
+    },
+    {
+      title: 'Advanced',
+      type: 'advanced'  
+    },
+    {
+      title: 'Security',
+      type: 'security'
+    }
+  ]
+
+  const renderTabContent = (tab: any): React.ReactNode => {
+    switch (tab.type) {
+      case 'basic':
+        return (
+          <Panel>
+            <FormKit.Item label="Application Name" name="appName" rules={[{ required: true }]}>
+              <Input placeholder="Enter application name" />
+            </FormKit.Item>
+            
+            <FormKit.Item label="Version" name="version">
+              <Input placeholder="1.0.0" />
+            </FormKit.Item>
+            
+            <FormKit.Item label="Environment" name="environment">
+              <Select
+                placeholder="Select environment"
+                options={[
+                  { value: 'development', label: 'Development' },
+                  { value: 'staging', label: 'Staging' },
+                  { value: 'production', label: 'Production' }
+                ]}
+              />
+            </FormKit.Item>
+          </Panel>
+        )
+      case 'advanced':
+        return (
+          <Panel>
+            <FormKit.Item label="Database URL" name="databaseUrl">
+              <Input placeholder="Enter database URL" />
+            </FormKit.Item>
+            
+            <FormKit.Item label="Cache TTL (seconds)" name="cacheTtl">
+              <InputNumber min={1} max={86400} placeholder="3600" style={{ width: '100%' }} />
+            </FormKit.Item>
+            
+            <FormKit.Item label="Enable Logging" name="enableLogging" valuePropName="checked">
+              <Switch />
+            </FormKit.Item>
+          </Panel>
+        )
+      case 'security':
+        return (
+          <Panel>
+            <FormKit.Item label="Secret Key" name="secretKey" rules={[{ required: true }]}>
+              <Input type="password" placeholder="Enter secret key" />
+            </FormKit.Item>
+            
+            <FormKit.Item label="JWT Expiration (hours)" name="jwtExpiration">
+              <InputNumber min={1} max={168} placeholder="24" style={{ width: '100%' }} />
+            </FormKit.Item>
+            
+            <FormKit.Item label="Enable CORS" name="enableCors" valuePropName="checked">
+              <Switch />
+            </FormKit.Item>
+          </Panel>
+        )
+      default:
+        return <Panel><div>No content</div></Panel>
+    }
+  }
+
+  return (
+    <div style={{ maxWidth: '600px' }}>
+      <FormKit formProps={{
+        form: form,
+        layout: 'vertical',
+      }}>
+        <Tabpanel
+          border
+          children={tabData}
+          renderChild={renderTabContent}
+        />
+      </FormKit>
+    </div>
+  )
+}
+
+export const NoTitleFormKitTabpanel: Story = {
+  render: () => <NoTitleFormKitTabpanelComponent />,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+This story demonstrates a FormKit tabpanel without a title:
+
+**Key Features:**
+- **No title prop** - The tabpanel renders without a header title
+- **Border styling** - Uses border to provide visual separation
+- **Clean layout** - Tabs are the primary navigation without additional header text
+- **Full width usage** - Perfect for cases where the tabpanel is the main content area
+
+**Use Cases:**
+- Modal dialogs where the modal title serves as the main heading
+- Sections where tabs are self-explanatory and don't need additional context
+- Full-width content areas where a title would be redundant
+- Embedded tabpanels within larger forms or interfaces
+        `
+      }
+    }
+  }
+}
+
+// Closable Tabs with FormKit
+const ClosableTabsFormKitComponent = (): React.JSX.Element => {
+  const [form] = FormKit.useForm()
+  const [tabs, setTabs] = React.useState([
+    {
+      title: 'User Details',
+      type: 'user'
+      // closable by default when onClose is provided
+    },
+    {
+      title: 'System Config (Fixed)',
+      type: 'system',
+      closable: false // explicitly non-closable
+    },
+    {
+      title: 'API Settings',
+      type: 'api'
+      // closable by default when onClose is provided
+    },
+    {
+      title: 'Notifications',
+      type: 'notifications'
+      // closable by default when onClose is provided
+    }
+  ])
+
+  const handleTabClose = (tabKey: string): void => {
+    const tabIndex = parseInt(tabKey, 10)
+    setTabs(prevTabs => prevTabs.filter((_, index) => index !== tabIndex))
+  }
+
+  const addNewConfigTab = (): void => {
+    const newTabIndex = tabs.length + 1
+    setTabs(prevTabs => [
+      ...prevTabs,
+      {
+        title: `Config ${newTabIndex}`,
+        type: 'dynamic'
+        // closable by default when onClose is provided
+      }
+    ])
+  }
+
+  const renderTabContent = (tab: any): React.ReactNode => {
+    switch (tab.type) {
+      case 'user':
+        return (
+          <Panel>
+            <FormKit.Item label="Username" name="username" rules={[{ required: true }]}>
+              <Input placeholder="Enter username" />
+            </FormKit.Item>
+            
+            <FormKit.Item label="Email" name="email" rules={[{ type: 'email' }]}>
+              <Input placeholder="Enter email address" />
+            </FormKit.Item>
+            
+            <FormKit.Item label="Role" name="role">
+              <Select
+                placeholder="Select role"
+                options={[
+                  { value: 'user', label: 'User' },
+                  { value: 'admin', label: 'Administrator' },
+                  { value: 'moderator', label: 'Moderator' }
+                ]}
+              />
+            </FormKit.Item>
+
+            {tab.closable && (
+              <div style={{ 
+                marginTop: '16px', 
+                padding: '12px', 
+                backgroundColor: '#f6ffed', 
+                border: '1px solid #b7eb8f',
+                borderRadius: '6px'
+              }}>
+                <p style={{ margin: 0, fontSize: '12px', color: '#52c41a' }}>
+                  ✨ This tab is closable - click the X button to close it.
+                </p>
+              </div>
+            )}
+          </Panel>
+        )
+      case 'system':
+        return (
+          <Panel>
+            <FormKit.Item label="System Name" name="systemName">
+              <Input placeholder="Enter system name" />
+            </FormKit.Item>
+            
+            <FormKit.Item label="Max Connections" name="maxConnections">
+              <InputNumber min={1} max={1000} placeholder="100" style={{ width: '100%' }} />
+            </FormKit.Item>
+            
+            <FormKit.Item label="Debug Mode" name="debugMode" valuePropName="checked">
+              <Switch />
+            </FormKit.Item>
+
+            <div style={{ 
+              marginTop: '16px', 
+              padding: '12px', 
+              backgroundColor: '#fff2e8', 
+              border: '1px solid #ffbb96',
+              borderRadius: '6px'
+            }}>
+              <p style={{ margin: 0, fontSize: '12px', color: '#fa541c' }}>
+                🔒 This tab is fixed and cannot be closed (system configuration).
+              </p>
+            </div>
+          </Panel>
+        )
+      case 'api':
+        return (
+          <Panel>
+            <FormKit.Item label="API Endpoint" name="apiEndpoint" rules={[{ required: true }]}>
+              <Input placeholder="Enter API endpoint URL" />
+            </FormKit.Item>
+            
+            <FormKit.Item label="API Key" name="apiKey">
+              <Input type="password" placeholder="Enter API key" />
+            </FormKit.Item>
+            
+            <FormKit.Item label="Timeout (seconds)" name="timeout">
+              <InputNumber min={1} max={300} placeholder="30" style={{ width: '100%' }} />
+            </FormKit.Item>
+
+            <FormKit.Item label="Enable SSL" name="enableSsl" valuePropName="checked">
+              <Switch />
+            </FormKit.Item>
+          </Panel>
+        )
+      case 'notifications':
+        return (
+          <Panel>
+            <FormKit.Item label="Email Notifications" name="emailNotifications" valuePropName="checked">
+              <Switch />
+            </FormKit.Item>
+            
+            <FormKit.Item label="Push Notifications" name="pushNotifications" valuePropName="checked">
+              <Switch />
+            </FormKit.Item>
+            
+            <FormKit.Item label="Notification Email" name="notificationEmail">
+              <Input placeholder="Enter notification email" />
+            </FormKit.Item>
+
+            <FormKit.Item label="Frequency" name="frequency">
+              <Select
+                placeholder="Select frequency"
+                options={[
+                  { value: 'immediate', label: 'Immediate' },
+                  { value: 'hourly', label: 'Hourly' },
+                  { value: 'daily', label: 'Daily' }
+                ]}
+              />
+            </FormKit.Item>
+          </Panel>
+        )
+      case 'dynamic':
+        return (
+          <Panel>
+            <FormKit.Item label="Config Key" name="configKey">
+              <Input placeholder="Enter configuration key" />
+            </FormKit.Item>
+            
+            <FormKit.Item label="Config Value" name="configValue">
+              <TextArea placeholder="Enter configuration value" rows={3} />
+            </FormKit.Item>
+            
+            <FormKit.Item label="Active" name="active" valuePropName="checked">
+              <Switch />
+            </FormKit.Item>
+
+            <div style={{ 
+              marginTop: '16px', 
+              padding: '12px', 
+              backgroundColor: '#f0f5ff', 
+              border: '1px solid #adc6ff',
+              borderRadius: '6px'
+            }}>
+              <p style={{ margin: 0, fontSize: '12px', color: '#1890ff' }}>
+                🔧 This is a dynamically added configuration tab.
+              </p>
+            </div>
+          </Panel>
+        )
+      default:
+        return <Panel><div>No content available</div></Panel>
+    }
+  }
+
+  return (
+    <div style={{ maxWidth: '700px' }}>
+      <div style={{ marginBottom: '16px', display: 'flex', gap: '12px', alignItems: 'center' }}>
+        <button 
+          type="button" 
+          onClick={addNewConfigTab}
+          style={{ 
+            padding: '6px 12px', 
+            fontSize: '14px',
+            border: '1px solid #1890ff',
+            borderRadius: '6px',
+            background: '#1890ff',
+            color: 'white',
+            cursor: 'pointer'
+          }}
+        >
+          Add Config Tab
+        </button>
+        <span style={{ fontSize: '12px', color: '#666' }}>
+          Active tabs: {tabs.length} | Closable: {tabs.filter(t => t.closable).length}
+        </span>
+      </div>
+      
+      <FormKit formProps={{
+        form: form,
+        layout: 'vertical',
+      }}>
+        <Tabpanel
+          title="Application Configuration"
+          border
+          children={tabs}
+          renderChild={renderTabContent}
+          onClose={handleTabClose}
+        />
+      </FormKit>
+    </div>
+  )
+}
+
+export const ClosableTabsWithFormKit: Story = {
+  render: () => <ClosableTabsFormKitComponent />,
+  parameters: {
+    docs: {
+      description: {
+        story: `
+This story demonstrates closable tabs functionality integrated with FormKit:
+
+**Features:**
+- **Mixed tab types**: Some tabs are closable, others are fixed (like system configuration)
+- **FormKit integration**: Each tab contains FormKit form fields with validation
+- **Dynamic tab management**: Add new configuration tabs dynamically
+- **Visual indicators**: Different styling to indicate closable vs fixed tabs
+- **Form validation**: Proper form validation across all tabs
+
+**Usage in Forms:**
+- **Tabs are closable by default** when an \`onClose\` handler is provided
+- Set \`closable: false\` on tabs that should NOT be removable (essential tabs)
+- Omit the \`closable\` property to use the default closable behavior
+- Handle the \`onClose\` callback to update your form tabs state
+- Perfect for configuration sections, multi-step forms, or dynamic content areas
+
+**Best Practices:**
+- Keep essential configuration tabs fixed by setting \`closable: false\`
+- Allow most tabs to be closable by default for better user control
+- Provide clear visual feedback about which tabs can be closed
+        `
+      }
+    }
+  }
 }
