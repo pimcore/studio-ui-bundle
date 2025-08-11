@@ -136,6 +136,7 @@ export const useStlyes = createStyles(({
         align-items: center;
         gap: ${token.marginXXS}px;
         min-height: 46px;
+        font-family:  ${token.fontFamily};
         
       .pimcore-icon {
         margin-right: ${token.marginXS}px;
