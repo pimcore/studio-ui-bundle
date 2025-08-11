@@ -125,6 +125,21 @@ export const useStlyes = createStyles(({
         scroll-snap-type: x mandatory;
       }
 
+      .main-nav__list-detail-sub-header {
+      width: 100%;
+      height: 42px;
+      text-align: left;
+      color: ${token.colorTextTreeElement};
+      font-size: ${token.fontSize}px;
+      font-family:  ${token.fontFamily};
+      padding: ${token.paddingXS}px ${token.paddingXS}px ${token.paddingXS}px ${token.paddingXXS}px;
+
+      &.main-nav__list-detail-divider {
+        border-bottom: 1px solid ${token.colorFillSecondary};
+      }
+      }
+
+
       .main-nav__list-btn {
         background: none;
         border: 0;
@@ -135,6 +150,7 @@ export const useStlyes = createStyles(({
         display: flex;
         align-items: center;
         gap: ${token.marginXS}px;
+        font-size: ${token.fontSize}px;
         min-height: 46px;
         font-family:  ${token.fontFamily};
         

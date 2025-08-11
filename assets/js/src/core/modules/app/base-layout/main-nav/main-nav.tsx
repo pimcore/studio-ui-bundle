@@ -109,6 +109,7 @@ export const MainNav = (): React.JSX.Element => {
                     className={ `main-nav__list main-nav__list--level-${level + 1}` }
                     data-testid={ `nav-list-level-${level + 1}` }
                   >
+                  {item.path === 'QuickAccess' && <div className={ ['main-nav__list-detail-sub-header','main-nav__list-detail-divider'].join(' ') }>{t('navigation.power-shortcuts')}</div>}
                     {item.children?.map((child: IMainNavItem, childIndex) => renderNavItem(child, `${index}-${childIndex}`, level))}
                   </ul>
                 </div>
