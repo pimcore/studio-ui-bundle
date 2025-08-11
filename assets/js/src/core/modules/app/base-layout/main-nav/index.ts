@@ -20,7 +20,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'QuickAccess',
       label: 'navigation.quick-access',
-      icon: 'layout-top'
+      icon: 'quick-access'
     })
 
     mainNavRegistryService.registerMainNavItem({
@@ -32,7 +32,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'ExperienceEcommerce',
       label: 'navigation.experience-ecommerce',
-      icon: 'monitor'
+      icon: 'experience-commerce'
     })
 
     mainNavRegistryService.registerMainNavItem({
@@ -56,7 +56,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'Reporting',
       label: 'navigation.reporting',
-      icon: 'bar-chart-square'
+      icon: 'reporting'
     })
 
     mainNavRegistryService.registerMainNavItem({
