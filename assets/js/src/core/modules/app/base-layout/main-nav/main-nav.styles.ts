@@ -125,6 +125,10 @@ export const useStlyes = createStyles(({
         scroll-snap-type: x mandatory;
       }
 
+      .main-nav__list-item-divider {
+        border-bottom: 1px solid ${token.colorFillSecondary};
+        }
+
       .main-nav__list-detail-sub-header {
       width: 100%;
       height: 42px;

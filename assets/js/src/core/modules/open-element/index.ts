@@ -30,19 +30,19 @@ moduleSystem.registerModule({
     })
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'QuickAccess/Open Document',
-      label: 'navigation.open-document',
-      permission: UserPermission.Documents,
-      perspectivePermission: NavPermission.OpenDocument,
-      button: () => React.createElement(OpenElement, { elementType: 'document' })
-    })
-
-    mainNavRegistryService.registerMainNavItem({
       path: 'QuickAccess/Open Data Object',
       label: 'navigation.open-data-object',
       permission: UserPermission.Objects,
       perspectivePermission: NavPermission.OpenObject,
       button: () => React.createElement(OpenElement, { elementType: 'data-object' })
+    })
+
+    mainNavRegistryService.registerMainNavItem({
+      path: 'QuickAccess/Open Document',
+      label: 'navigation.open-document',
+      permission: UserPermission.Documents,
+      perspectivePermission: NavPermission.OpenDocument,
+      button: () => React.createElement(OpenElement, { elementType: 'document' })
     })
   }
 })

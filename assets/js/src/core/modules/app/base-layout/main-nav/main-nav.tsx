@@ -55,6 +55,8 @@ export const MainNav = (): React.JSX.Element => {
       return <></>
     }
 
+    console.log("item.divider", item.divider);
+    
     return (
       <li
         className={ `main-nav__list-item ${openKeys.includes(index) ? 'is-active' : ''} ${item.className ?? ''}` }
@@ -63,13 +65,13 @@ export const MainNav = (): React.JSX.Element => {
       >
         {!isUndefined(item.button)
           ? (
-            <div>
+            <div className={item.divider !== undefined && item.divider === true ? 'main-nav__list-item-divider' : ''}>
               {item.button()}
             </div>
             )
           : (
             <button
-              className={ 'main-nav__list-btn' }
+              className={ ['main-nav__list-btn', item.divider !== undefined && item.divider === true ? 'main-nav__list-item-divider' : ''].join(' ') }
               data-testid={ `nav-button-${createSafeTestIdString(item.path)}` }
               onClick={ () => {
                 if (item.children !== undefined && item.children.length > 0) {
