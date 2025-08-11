@@ -64,22 +64,22 @@ export const SendTestEmailProvider: React.FC<SendTestEmailProviderProps> = ({ ch
   }), [isOpen, tmpForm])
 
   return (
-    <SendTestEmailContext.Provider value={contextValue}>
+    <SendTestEmailContext.Provider value={ contextValue }>
       <WindowModal
-        onClose={() => { setIsOpen(false) }}
-        onOk={async () => {
+        onClose={ () => { setIsOpen(false) } }
+        onOk={ async () => {
           await submit()
-        }}
-        open={isOpen}
+        } }
+        open={ isOpen }
         size="L"
       >
         <SendTestMailForm
-          form={tmpForm}
-          initalValues={{
+          form={ tmpForm }
+          initalValues={ {
             from: 'from@doe.com',
             to: 'to@doe.com',
             subject: 'Test Email Subject'
-          }}
+          } }
         />
       </WindowModal>
 
