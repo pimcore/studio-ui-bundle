@@ -11,7 +11,7 @@
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import { BlockEditable, type BlockEditableConfig, type BlockValue } from './components/block-editable/block-editable'
-import { blockValueUtils } from './components/block-editable/utils/block-utils'
+import { BlockManager } from './components/block-editable/utils/block-manager'
 
 export interface BlockEditableDefinition extends Omit<AbstractDocumentEditableDefinition, 'config'> {
   config?: BlockEditableConfig
@@ -35,7 +35,8 @@ export class DynamicTypeDocumentEditableBlock extends DynamicTypeDocumentEditabl
   }
 
   transformValue (value: any, props: BlockEditableDefinition): BlockValue {
-    return blockValueUtils.getBlockValueFromDom(props.name, props.containerRef)
+    const blockManager = new BlockManager(props.name, props.containerRef)
+    return blockManager.getBlockValue()
   }
 
   reloadOnChange (props: BlockEditableDefinition): boolean {

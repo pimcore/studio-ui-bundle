@@ -11,6 +11,7 @@
 import { useCallback } from 'react'
 import { isNull } from 'lodash'
 import { useBlockEditableStyles } from '../block-editable.styles'
+import { type BlockManager } from '../utils/block-manager'
 
 export interface UseBlockControlsParams {
   editableName: string
@@ -22,7 +23,7 @@ export interface UseBlockControlsParams {
 
 export interface UseBlockControlsReturn {
   updateControls: (element: HTMLElement, limitReached: boolean) => void
-  initializeControls: (getBlockContainer: () => HTMLElement | null) => void
+  initializeControls: (blockManager: BlockManager) => void
 }
 
 export const useBlockControls = ({
@@ -118,8 +119,8 @@ export const useBlockControls = ({
     }
   }, [editableName, onAddBlock, onRemoveBlock, onMoveBlockUp, onMoveBlockDown, applyButtonsContainerStyles, createButton, applyAmountDisplayStyles, styles.buttonsContainer])
 
-  const initializeControls = useCallback((getBlockContainer: () => HTMLElement | null) => {
-    const container = getBlockContainer()
+  const initializeControls = useCallback((blockManager: BlockManager) => {
+    const container = blockManager.getContainer()
     if (isNull(container)) return
 
     const amountEl = document.createElement('div')

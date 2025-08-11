@@ -9,99 +9,13 @@
  */
 
 import { isNil } from 'lodash'
-import { type BlockEditableConfig, type BlockValue } from '../block-editable'
+import { type BlockEditableConfig } from '../block-editable'
 import { type AbstractDocumentEditableDefinition } from '../../../../dynamic-type-document-editable-abstract'
 import { processBlockTemplate, ensurePortalTargets } from './template-processor'
-
-// Element Key Management
-export const elementKeyUtils = {
-  get: (element: HTMLElement): string | null =>
-    element.getAttribute('key'),
-
-  set: (element: HTMLElement, key: string): void => { element.setAttribute('key', key) },
-
-  ensure: (element: HTMLElement): void => {
-    const key = elementKeyUtils.get(element)
-    if (isNil(key) || key === '') {
-      elementKeyUtils.set(element, '0')
-    }
-  },
-
-  ensureAll: (elements: HTMLElement[]): HTMLElement[] => {
-    elements.forEach(elementKeyUtils.ensure)
-    return elements
-  },
-
-  parse: (element: HTMLElement): number => {
-    const key = element.getAttribute('key')
-    return parseInt(key ?? '0', 10)
-  },
-
-  calculateNext: (editableName: string, containerRef?: React.RefObject<HTMLDivElement>): number => {
-    const elements = domUtils.queryElements(editableName, containerRef)
-    if (elements.length === 0) return 1
-
-    let nextKey = 0
-
-    for (const element of elements) {
-      const currentKey = elementKeyUtils.parse(element)
-      if (currentKey > nextKey) {
-        nextKey = currentKey
-      }
-    }
-
-    return nextKey + 1
-  }
-}
-
-// DOM Operations
-export const domUtils = {
-  findContainer: (
-    editableName: string,
-    containerRef?: React.RefObject<HTMLDivElement>
-  ): HTMLElement | null => {
-    if (!isNil(containerRef?.current)) {
-      return containerRef.current
-    }
-
-    const element = document.querySelector(`[data-name="${editableName}"][data-type="block"]`)
-    return element as HTMLElement
-  },
-
-  queryElements: (
-    editableName: string,
-    containerRef?: React.RefObject<HTMLDivElement>
-  ): HTMLElement[] => {
-    const container = domUtils.findContainer(editableName, containerRef)
-    if (isNil(container)) return []
-
-    const selector = `.pimcore_block_entry[data-name="${editableName}"][key]`
-    return Array.from(container.querySelectorAll(selector))
-  },
-
-  findElementIndex: (editableName: string, targetElement: HTMLElement, containerRef?: React.RefObject<HTMLDivElement>): number => {
-    const elements = domUtils.queryElements(editableName, containerRef)
-    if (elements.length === 0) return -1
-
-    const targetKey = targetElement.getAttribute('key')
-    return elements.findIndex(element => element.getAttribute('key') === targetKey)
-  }
-}
+import { type BlockManager } from './block-manager'
 
 // Block Value Operations
 export const blockValueUtils = {
-  fromElements: (elements: HTMLElement[]): BlockValue => {
-    return elements
-      .map(element => element.getAttribute('key'))
-      .filter(key => key !== null)
-      .map(key => parseInt(key, 10))
-  },
-
-  getBlockValueFromDom: (editableName: string, containerRef?: React.RefObject<HTMLDivElement>): BlockValue => {
-    const elements = domUtils.queryElements(editableName, containerRef)
-    return blockValueUtils.fromElements(elements)
-  },
-
   swapElements: <T>(array: T[], index1: number, index2: number): T[] => {
     const newArray = [...array]
     const temp = newArray[index1]
@@ -158,18 +72,19 @@ export const operationUtils = {
   },
 
   processNonReloadBlockAddition: ({
-    container,
+    blockManager,
     index,
     config,
-    editableName,
     initializeData,
     setDynamicEditables
   }: ProcessNonReloadBlockAdditionParams): HTMLElement | null => {
-    if (isNil(config?.template?.html) || isNil(config?.template?.editables)) {
+    const container = blockManager.getContainer()
+    if (isNil(container) || isNil(config?.template?.html) || isNil(config?.template?.editables)) {
       return null
     }
 
-    const nextKey = elementKeyUtils.calculateNext(editableName)
+    const nextKey = blockManager.calculateNextKey()
+    const editableName = blockManager.getEditableName()
 
     const { html: processedHtml, editableDefinitions } = processBlockTemplate(
       { templateHtml: config.template.html, editableName, nextKey },
@@ -177,7 +92,7 @@ export const operationUtils = {
     )
 
     // Get current elements to determine insertion point
-    const currentElements = domUtils.queryElements(editableName)
+    const currentElements = blockManager.queryElements()
 
     // Insert HTML at the correct position
     if (currentElements.length === 0) {
@@ -189,11 +104,11 @@ export const operationUtils = {
     }
 
     // Query fresh elements after insertion
-    const newElements = domUtils.queryElements(editableName)
+    const newElements = blockManager.queryElements()
     const newBlockEntry = newElements.find(el => !currentElements.includes(el)) ?? null
 
     if (!isNil(newBlockEntry)) {
-      elementKeyUtils.set(newBlockEntry, nextKey.toString())
+      blockManager.setElementKey(newBlockEntry, nextKey.toString())
       ensurePortalTargets(newBlockEntry, editableDefinitions)
     }
 
@@ -210,10 +125,12 @@ export const operationUtils = {
 
 // Interface for block addition parameters
 export interface ProcessNonReloadBlockAdditionParams {
-  container: HTMLElement
+  blockManager: BlockManager
   index: number
   config: BlockEditableConfig
-  editableName: string
   initializeData: (data: Record<string, { type: string, data: unknown }>) => void
   setDynamicEditables: React.Dispatch<React.SetStateAction<AbstractDocumentEditableDefinition[]>>
 }
+
+// Re-export BlockManager for convenience
+export { BlockManager } from './block-manager'

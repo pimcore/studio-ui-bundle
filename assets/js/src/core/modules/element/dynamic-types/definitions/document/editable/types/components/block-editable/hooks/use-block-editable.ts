@@ -13,28 +13,24 @@ import { isNil } from 'lodash'
 import { useDocumentEditor } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/hooks/use-document-editor'
 import { type AbstractDocumentEditableDefinition } from '../../../../dynamic-type-document-editable-abstract'
 import { type BlockEditableConfig, type BlockValue } from '../block-editable'
+import { type BlockManager } from '../utils/block-manager'
 import {
-  elementKeyUtils,
-  domUtils,
   blockValueUtils,
   configUtils,
   operationUtils
 } from '../utils/block-utils'
 
 export interface UseBlockEditableParams {
+  blockManager: BlockManager
   value?: BlockValue
   onChange?: (value: BlockValue) => void
   config?: BlockEditableConfig
-  editableName: string
-  containerRef?: React.RefObject<HTMLDivElement>
   disabled?: boolean
-  onOperationComplete?: (elements: HTMLElement[], limitReached: boolean) => void
+  onOperationComplete?: (limitReached: boolean) => void
 }
 
 export interface UseBlockEditableReturn {
   dynamicEditables: AbstractDocumentEditableDefinition[]
-  refresh: (initializeControlsFn?: () => void, updateControlsFn?: (element: HTMLElement, limitReached: boolean) => void) => void
-  getBlockContainer: () => HTMLElement | null
   addBlock: (element: HTMLElement | null, amount?: number) => void
   removeBlock: (element: HTMLElement) => void
   moveBlockUp: (element: HTMLElement) => void
@@ -42,11 +38,10 @@ export interface UseBlockEditableReturn {
 }
 
 export const useBlockEditable = ({
+  blockManager,
   value = [],
   onChange,
   config,
-  editableName,
-  containerRef,
   disabled = false,
   onOperationComplete
 }: UseBlockEditableParams): UseBlockEditableReturn => {
@@ -54,65 +49,47 @@ export const useBlockEditable = ({
   const [dynamicEditables, setDynamicEditables] = useState<AbstractDocumentEditableDefinition[]>([])
   const reloadModeElementsRef = useRef<HTMLElement[]>([])
 
-  // Simple utility functions - no useCallback needed
-  const getBlockContainer = (): HTMLElement | null => {
-    return domUtils.findContainer(editableName, containerRef)
-  }
-
-  const getElementIndex = (element: HTMLElement): number => {
-    return domUtils.findElementIndex(editableName, element, containerRef)
-  }
-
-  const getNextKey = (): number => {
-    return elementKeyUtils.calculateNext(editableName, containerRef)
-  }
-
-  // Functions with dependencies or passed as props - keep useCallback
-  const queryDOMElements = (): HTMLElement[] => {
-    return domUtils.queryElements(editableName, containerRef)
-  }
-
   const getBlockEditableNames = (element: HTMLElement): string[] => {
-    const elementKey = elementKeyUtils.get(element)
+    const elementKey = blockManager.getElementKey(element)
     if (isNil(elementKey)) return []
 
     const currentValues = getValues()
-    return blockValueUtils.filterEditableNames(Object.keys(currentValues), editableName, elementKey)
+    return blockValueUtils.filterEditableNames(Object.keys(currentValues), blockManager.getEditableName(), elementKey)
   }
 
   const handleReloadMode = useCallback((elementsUpdater: (elements: HTMLElement[]) => HTMLElement[]) => {
-    const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : queryDOMElements()
+    const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : blockManager.queryElements()
     const newElements = elementsUpdater([...currentElements])
     reloadModeElementsRef.current = newElements
-    const newValue = blockValueUtils.fromElements(newElements)
+    const newValue = blockManager.getBlockValue()
     onChange?.(newValue)
-  }, [onChange, config])
+  }, [onChange, config, blockManager])
 
   const handlePostOperation = useCallback(() => {
-    const elements = elementKeyUtils.ensureAll(queryDOMElements())
-    const newValue = blockValueUtils.fromElements(elements)
+    const elements = blockManager.ensureAllElementKeys()
+    const newValue = blockManager.getBlockValue()
     onChange?.(newValue)
 
     if (!isNil(onOperationComplete)) {
       const limitReached = configUtils.isLimitReached(elements.length, config?.limit)
-      onOperationComplete(elements, limitReached)
+      onOperationComplete(limitReached)
     }
-  }, [onChange, onOperationComplete, config?.limit])
+  }, [onChange, onOperationComplete, config?.limit, blockManager])
 
   const addBlock = useCallback((element: HTMLElement | null, amount = 1) => {
     if (disabled) return
 
     const limit = configUtils.getEffectiveLimit(config)
-    const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : queryDOMElements()
+    const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : blockManager.queryElements()
     if (configUtils.isLimitReached(currentElements.length, limit)) return
 
-    const index = !isNil(element) ? getElementIndex(element) + 1 : 0
-    const nextKey = getNextKey()
+    const index = !isNil(element) ? blockManager.findElementIndex(element) + 1 : 0
+    const nextKey = blockManager.calculateNextKey()
 
     if (configUtils.isReloadMode(config)) {
       handleReloadMode((elements) => {
         const placeholderElement = document.createElement('div')
-        elementKeyUtils.set(placeholderElement, nextKey.toString())
+        blockManager.setElementKey(placeholderElement, nextKey.toString())
         const newElements = [...elements]
         newElements.splice(index, 0, placeholderElement)
         return newElements
@@ -120,14 +97,13 @@ export const useBlockEditable = ({
       return
     }
 
-    const container = getBlockContainer()
+    const container = blockManager.getContainer()
     if (isNil(container) || isNil(config)) return
 
     const newBlockEntry = operationUtils.processNonReloadBlockAddition({
-      container,
+      blockManager,
       index,
       config,
-      editableName,
       initializeData,
       setDynamicEditables
     })
@@ -135,13 +111,13 @@ export const useBlockEditable = ({
     if (!isNil(newBlockEntry)) {
       handlePostOperation()
     }
-  }, [disabled, config, handleReloadMode, editableName, initializeData, handlePostOperation])
+  }, [disabled, config, handleReloadMode, initializeData, handlePostOperation, blockManager])
 
   const removeBlock = useCallback((element: HTMLElement) => {
     if (disabled) return
 
     if (configUtils.isReloadMode(config)) {
-      const index = getElementIndex(element)
+      const index = blockManager.findElementIndex(element)
       handleReloadMode((elements) => {
         const newElements = [...elements]
         newElements.splice(index, 1)
@@ -166,7 +142,7 @@ export const useBlockEditable = ({
     }
 
     handlePostOperation()
-  }, [disabled, config, handleReloadMode, removeValues, handlePostOperation])
+  }, [disabled, config, handleReloadMode, removeValues, handlePostOperation, blockManager])
 
   const moveBlock = (
     element: HTMLElement,
@@ -174,8 +150,8 @@ export const useBlockEditable = ({
   ): void => {
     if (disabled) return
 
-    const index = getElementIndex(element)
-    const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : queryDOMElements()
+    const index = blockManager.findElementIndex(element)
+    const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : blockManager.queryElements()
 
     if (direction === 'up' && !configUtils.canMoveUp(index)) return
     if (direction === 'down' && !configUtils.canMoveDown(index, currentElements.length)) return
@@ -203,28 +179,8 @@ export const useBlockEditable = ({
     moveBlock(element, 'down')
   }
 
-  const refresh = useCallback((initializeControlsFn?: () => void, updateControlsFn?: (element: HTMLElement, limitReached: boolean) => void) => {
-    const elements = elementKeyUtils.ensureAll(queryDOMElements())
-    const container = getBlockContainer()
-    if (isNil(container)) return
-
-    const limitReached = configUtils.isLimitReached(elements.length, config?.limit)
-
-    if (elements.length < 1) {
-      initializeControlsFn?.()
-    } else {
-      container.classList.remove('pimcore_block_buttons')
-
-      elements.forEach(element => {
-        updateControlsFn?.(element, limitReached)
-      })
-    }
-  }, [config?.limit])
-
   return {
     dynamicEditables,
-    refresh,
-    getBlockContainer,
     addBlock,
     removeBlock,
     moveBlockUp,

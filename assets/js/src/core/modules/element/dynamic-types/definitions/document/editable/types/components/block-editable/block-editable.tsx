@@ -8,12 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
-import { isArray } from 'lodash'
+import React, { useEffect, useMemo, useCallback } from 'react'
+import { isArray, isNil } from 'lodash'
 import { DynamicEditablesRenderer } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-renderer/dynamic-editables-renderer'
 import { useBlockEditableStyles } from './block-editable.styles'
 import { useBlockEditable } from './hooks/use-block-editable'
 import { useBlockControls } from './hooks/use-block-controls'
+import { BlockManager } from './utils/block-manager'
+import { configUtils } from './utils/block-utils'
 
 export interface BlockEditableConfig {
   limit?: number
@@ -49,24 +51,25 @@ export const BlockEditable = ({
   const { styles } = useBlockEditableStyles()
   const currentValue = isArray(value) ? value : []
 
+  // Create BlockManager instance - memoized to avoid recreation on every render
+  const blockManager = useMemo(() => new BlockManager(editableName, containerRef), [editableName, containerRef])
+
   // Central hook for all block logic
   const {
     dynamicEditables,
-    refresh,
     addBlock,
     removeBlock,
     moveBlockUp,
-    moveBlockDown,
-    getBlockContainer
+    moveBlockDown
   } = useBlockEditable({
+    blockManager,
     value: currentValue,
     onChange,
     config,
-    editableName,
-    containerRef,
     disabled,
-    onOperationComplete: (elements, limitReached) => {
+    onOperationComplete: (limitReached) => {
       // Update controls for all elements after any operation
+      const elements = blockManager.queryElements()
       elements.forEach(element => { updateControls(element, limitReached) })
     }
   })
@@ -80,10 +83,30 @@ export const BlockEditable = ({
     onMoveBlockDown: moveBlockDown
   })
 
+  // Refresh logic moved to component level where it belongs
+  const refreshControls = useCallback(() => {
+    const elements = blockManager.ensureAllElementKeys()
+    const container = blockManager.getContainer()
+    if (isNil(container)) return
+
+    const limitReached = configUtils.isLimitReached(elements.length, config?.limit)
+
+    if (elements.length < 1) {
+      // No elements: Initialize empty state with "Add Block Entry" button
+      initializeControls(blockManager)
+    } else {
+      // Has elements: Remove empty state class and update controls for each element
+      container.classList.remove('pimcore_block_buttons')
+      elements.forEach(element => {
+        updateControls(element, limitReached)
+      })
+    }
+  }, [blockManager, config?.limit, initializeControls, updateControls])
+
   // Initialize and refresh on value changes
   useEffect(() => {
-    refresh(() => { initializeControls(getBlockContainer) }, updateControls)
-  }, [currentValue, refresh, initializeControls, updateControls, getBlockContainer])
+    refreshControls()
+  }, [currentValue, refreshControls])
 
   return (
     <div className={ `${styles.blockContainer} ${className ?? ''}` }>
