@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { type SendEmailParameters, useEmailSendTestMutation } from '../../emails-api-slice-enhanced'
 
 interface UseSendTestMailHookReturn {
-  send: (parameters: SendEmailParameters, onFinish?: () => void) => void
+  send: (parameters: SendEmailParameters, onFinish?: () => void) => Promise<void>
 }
 
 export const useSendTestMail = (): UseSendTestMailHookReturn => {
