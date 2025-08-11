@@ -47,7 +47,7 @@ export const useSendTestMail = (): UseSendTestMailHookReturn => {
           onFinish?.()
         }
       })
-    } catch (error) {
+    } catch () {
       trackError(new GeneralError(t('test-email.send.error')))
     }
   }

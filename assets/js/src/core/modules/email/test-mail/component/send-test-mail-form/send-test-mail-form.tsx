@@ -24,7 +24,6 @@ import { ParametersTable } from '../parameters-table/parameters-table'
 export interface TestEmailModalProps {
   initalValues?: Partial<SendEmailParameters>
   form: FormInstance<SendEmailParameters>
-  onFinish?: (values: SendEmailParameters) => Promise<void>
 }
 
 enum TestEmilType {
@@ -42,52 +41,52 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
         return (
           <>
             <Form.Item
-              label={ t('test-email.form.document') }
+              label={t('test-email.form.document')}
               name="documentPath"
-              rules={ [
+              rules={[
                 { required: true, message: t('email.test.validation.content.required') }
-              ] }
+              ]}
             >
               <ManyToOneRelation
                 allowToClearRelation
                 documentsAllowed
-                onChange={ (value: ManyToOneRelationValueType) => {
+                onChange={(value: ManyToOneRelationValueType) => {
                   if (isNil(value)) {
                     form.setFieldValue('documentPath', null)
                     return
                   }
 
                   form.setFieldValue('documentPath', value.fullPath)
-                } }
+                }}
               />
             </Form.Item>
 
             <Form.Item
               name="documentParameters"
-              rules={ [
+              rules={[
                 { required: true, message: t('email.test.validation.content.required') }
-              ] }
+              ]}
             >
-              <ParametersTable form={ form } />
+              <ParametersTable form={form} />
             </Form.Item>
           </>
         )
       case TestEmilType.HTML:
         return (
           <Form.Item
-            label={ t('test-email.form.message') }
+            label={t('test-email.form.message')}
             name="content"
-            rules={ [
+            rules={[
               { required: true, message: t('email.test.validation.content.required') }
-            ] }
+            ]}
           >
             <CodeEditor
-              basicSetup={ {
+              basicSetup={{
                 lineNumbers: true,
                 syntaxHighlighting: true,
                 searchKeymap: true
-              } }
-              extensions={ getLanguageExtensions('html') }
+              }}
+              extensions={getLanguageExtensions('html')}
               minHeight='200px'
             />
           </Form.Item>
@@ -95,14 +94,14 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
       case TestEmilType.Text:
         return (
           <Form.Item
-            label={ t('test-email.form.message') }
+            label={t('test-email.form.message')}
             name="content"
-            rules={ [
+            rules={[
               { required: true, message: t('email.test.validation.content.required') }
-            ] }
+            ]}
           >
             <TextArea
-              autoSize={ { minRows: 10 } }
+              autoSize={{ minRows: 10 }}
             />
           </Form.Item>
         )
@@ -111,49 +110,49 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
 
   return (
     <Form
-      form={ form }
-      initialValues={ initalValues }
+      form={form}
+      initialValues={initalValues}
       layout="vertical"
     >
       <Form.Item
-        label={ t('test-email.form.from') }
+        label={t('test-email.form.from')}
         name="from"
-        rules={ [
+        rules={[
           { required: true, message: t('email.test.validation.from.required') },
           { type: 'email', message: t('email.test.validation.from.email') }
-        ] }
+        ]}
       >
         <Input type="email" />
       </Form.Item>
 
       <Form.Item
-        label={ t('test-email.form.to') }
+        label={t('test-email.form.to')}
         name="to"
-        rules={ [
+        rules={[
           { required: true, message: t('email.test.validation.to.required') },
           { type: 'email', message: t('email.test.validation.to.email') }
-        ] }
+        ]}
       >
         <Input type="email" />
       </Form.Item>
 
       <Form.Item
-        label={ t('test-email.form.subject') }
+        label={t('test-email.form.subject')}
         name="subject"
-        rules={ [
+        rules={[
           { required: true, message: t('email.test.validation.subject.required') }
-        ] }
+        ]}
       >
         <Input />
       </Form.Item>
 
       <Form.Item
-        initialValue={ TestEmilType.Text }
-        label={ t('test-email.form.contentType') }
+        initialValue={TestEmilType.Text}
+        label={t('test-email.form.contentType')}
         name="contentType"
       >
         <Select
-          options={ [
+          options={[
             {
               label: t(`test-email.contentType.${TestEmilType.Document}`),
               value: TestEmilType.Document
@@ -166,12 +165,12 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
               label: t(`test-email.contentType.${TestEmilType.Text}`),
               value: TestEmilType.Text
             }
-          ] }
+          ]}
         />
       </Form.Item>
 
       <Form.Item
-        dependencies={ ['contentType'] }
+        dependencies={['contentType']}
         noStyle
       >
         {({ getFieldValue }) => {
