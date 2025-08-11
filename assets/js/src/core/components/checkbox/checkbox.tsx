@@ -12,12 +12,13 @@ import React from 'react'
 import { Checkbox as AntCheckbox, type CheckboxProps } from 'antd'
 import cn from 'classnames'
 import { useStyles } from './checkbox.styles'
+import { CheckboxGroupProps } from 'antd/es/checkbox'
 
 export interface ICheckboxProps extends CheckboxProps {
   inherited?: boolean
 }
 
-export const Checkbox = ({ inherited, className, ...restProps }: ICheckboxProps): JSX.Element => {
+const Checkbox = ({ inherited, className, ...restProps }: ICheckboxProps): JSX.Element => {
   const { styles } = useStyles()
 
   return (
@@ -27,3 +28,15 @@ export const Checkbox = ({ inherited, className, ...restProps }: ICheckboxProps)
     />
   )
 }
+
+export interface ICheckboxGroupProps extends CheckboxGroupProps {}
+
+const Group = (props: ICheckboxGroupProps): React.JSX.Element => {
+  return (
+    <AntCheckbox.Group { ...props } />
+  )
+}
+
+Checkbox.Group = Group
+
+export { Checkbox }
