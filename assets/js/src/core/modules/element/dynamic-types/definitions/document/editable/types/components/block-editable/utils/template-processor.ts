@@ -22,14 +22,13 @@ export interface ProcessedTemplate {
   editableDefinitions: AbstractDocumentEditableDefinition[]
 }
 
-export const processBlockTemplate = (
-  { templateHtml, editableName, nextKey }: ProcessTemplateParams,
-  templateEditables: any[]
-): ProcessedTemplate => {
-  const realName = editableName.split(':').pop() ?? editableName
-  const fullName = editableName
-  const escapedName = fullName.replace(/(:|\.)/g, '_')
-
+const processHtmlTemplate = (
+  templateHtml: string,
+  realName: string,
+  fullName: string,
+  escapedName: string,
+  nextKey: number
+): string => {
   let processedHtml = templateHtml
 
   processedHtml = processedHtml.replace(
@@ -44,6 +43,19 @@ export const processBlockTemplate = (
   processedHtml = processedHtml.replace(/_1000000_/g, `_${nextKey}_`)
   processedHtml = processedHtml.replace(/="1000000"/g, `="${nextKey}"`)
   processedHtml = processedHtml.replace(/, 1000000"/g, `, ${nextKey}"`)
+
+  return processedHtml
+}
+
+export const processBlockTemplate = (
+  { templateHtml, editableName, nextKey }: ProcessTemplateParams,
+  templateEditables: any[]
+): ProcessedTemplate => {
+  const realName = editableName.split(':').pop() ?? editableName
+  const fullName = editableName
+  const escapedName = fullName.replace(/[:.]/g, '_')
+
+  const processedHtml = processHtmlTemplate(templateHtml, realName, fullName, escapedName, nextKey)
 
   const editableDefinitions: AbstractDocumentEditableDefinition[] = []
 

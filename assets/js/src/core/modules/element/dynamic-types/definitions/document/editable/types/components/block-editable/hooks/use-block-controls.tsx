@@ -60,7 +60,6 @@ export const useBlockControls = ({
 }: UseBlockControlsParams): UseBlockControlsReturn => {
   const { styles } = useBlockEditableStyles()
   const { t } = useTranslation()
-  const portalContainersRef = useRef<Map<HTMLElement, HTMLElement>>(new Map())
   const limitReachedRef = useRef<boolean>(false)
   const [activeId, setActiveId] = useState<string | null>(null)
   const [emptyStatePortal, setEmptyStatePortal] = useState<React.ReactPortal | null>(null)
@@ -164,24 +163,10 @@ export const useBlockControls = ({
     const portals: React.ReactPortal[] = []
 
     const currentBlockEntries = blockManager.queryElements()
-    const validContainerIds = new Set<string>()
 
     if (currentBlockEntries.length === 0 && emptyStatePortal !== null) {
       portals.push(emptyStatePortal)
     }
-
-    currentBlockEntries.forEach(blockEntry => {
-      const buttonsContainer = blockEntry.querySelector('.pimcore_block_buttons')
-      if (buttonsContainer !== null) {
-        const containerId = (buttonsContainer as HTMLElement).dataset.containerId ?? Math.random().toString()
-        if ((buttonsContainer as HTMLElement).dataset.containerId === undefined) {
-          (buttonsContainer as HTMLElement).dataset.containerId = containerId
-        }
-        validContainerIds.add(containerId)
-      }
-    })
-
-    portalContainersRef.current.clear()
 
     const blockKeys = currentBlockEntries
       .map(entry => blockManager.getElementKey(entry))
@@ -190,7 +175,6 @@ export const useBlockControls = ({
     currentBlockEntries.forEach(blockEntry => {
       const buttonsContainer = blockEntry.querySelector('.pimcore_block_buttons')
       if (buttonsContainer !== null) {
-        portalContainersRef.current.set(buttonsContainer as HTMLElement, blockEntry)
         const blockKey = blockManager.getElementKey(blockEntry)
 
         if (blockKey !== null) {
@@ -237,7 +221,6 @@ export const useBlockControls = ({
   }, [blockManager, sensors, handleDragStart, handleDragOver, handleDragEnd, onAddBlock, onRemoveBlock, onMoveBlockUp, onMoveBlockDown, t, activeId, emptyStatePortal])
 
   const cleanupControls = useCallback(() => {
-    portalContainersRef.current.clear()
     setEmptyStatePortal(null)
   }, [])
 
