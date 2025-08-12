@@ -75,27 +75,27 @@ export const SendTestEmailProvider: React.FC<SendTestEmailProviderProps> = ({ ch
     closeModal
   }), [isOpen, tmpForm])
 
-  return (
-    <SendTestEmailContext.Provider value={contextValue}>
-      <WindowModal
-        onClose={() => { closeModal() }}
-        onCancel={() => { closeModal() }}
-        onOk={async () => {
-          await submit()
-        }}
-        title={t('test-email-modal-title')}
-        open={isOpen}
-        okButtonProps={{
-          loading: isOkButtonLoading
-        }}
-        size="L"
-      >
-        <SendTestMailForm
-          form={tmpForm}
-        />
-      </WindowModal>
+    return (
+        <SendTestEmailContext.Provider value={contextValue}>
+            <WindowModal
+                onClose={() => { closeModal() }}
+                onCancel={() => { closeModal() }}
+                onOk={async () => {
+                    await submit()
+                }}
+                title={t('test-email-modal-title')}
+                open={isOpen}
+                okButtonProps={{
+                    loading: isOkButtonLoading
+                }}
+                size="L"
+            >
+                <SendTestMailForm
+                    form={tmpForm}
+                />
+            </WindowModal>
 
-      {children}
-    </SendTestEmailContext.Provider>
-  )
+            {children}
+        </SendTestEmailContext.Provider>
+    )
 }
