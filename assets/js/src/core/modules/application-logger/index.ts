@@ -25,7 +25,7 @@ moduleSystem.registerModule({
       path: 'System/Application Logger',
       label: 'navigation.application-logger',
       dividerBottom: true,
-      order: 5,
+      order: 500,
       permission: UserPermission.ApplicationLogger,
       perspectivePermission: NavPermission.ApplicationLogger,
       widgetConfig: {

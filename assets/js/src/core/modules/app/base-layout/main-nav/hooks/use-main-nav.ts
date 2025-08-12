@@ -37,7 +37,7 @@ const addNavItemToItemList = (items: IMainNavItem[], item: IMainNavItem): void =
 
     if (existingItem === undefined) {
       existingItem = {
-        order: isCurrentItem ? item.order : 100,
+        order: isCurrentItem ? item.order : 1000,
         id: level,
         label: item.label ?? level,
         path: levels.slice(0, index + 1).join('/'),
@@ -55,16 +55,16 @@ const addNavItemToItemList = (items: IMainNavItem[], item: IMainNavItem): void =
     } else if (index === levels.length - 1) {
       Object.assign(existingItem, {
         icon: item.icon,
-        order: item.order ?? 100,
+        order: item.order ?? 1000,
         className: item.className
       })
     }
 
-    currentLevel.sort((a, b) => (a.order ?? 100) - (b.order ?? 100))
+    currentLevel.sort((a, b) => (a.order ?? 1000) - (b.order ?? 1000))
     currentLevel = existingItem.children ?? []
   })
 
-  items.sort((a, b) => (a.order ?? 100) - (b.order ?? 100))
+  items.sort((a, b) => (a.order ?? 1000) - (b.order ?? 1000))
 }
 
 export const useMainNav = (): IUseMainNavReturn => {

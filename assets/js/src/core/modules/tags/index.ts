@@ -25,7 +25,7 @@ moduleSystem.registerModule({
       path: 'DataManagement/Tag Configuration',
       label: 'navigation.tag-configuration',
       className: 'item-style-modifier',
-      order: 10,
+      order: 100,
       permission: UserPermission.TagsConfiguration,
       perspectivePermission: NavPermission.TagConfiguration,
       widgetConfig: {

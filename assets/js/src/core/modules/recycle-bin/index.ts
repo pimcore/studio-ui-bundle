@@ -32,7 +32,7 @@ moduleSystem.registerModule({
       path: 'QuickAccess/Recycle Bin',
       label: 'navigation.recycle-bin',
       permission: UserPermission.RecycleBin,
-      order: 4,
+      order: 400,
       perspectivePermission: NavPermission.RecycleBin,
       widgetConfig: {
         name: 'recycleBin',

@@ -25,7 +25,7 @@ moduleSystem.registerModule({
       path: 'Reporting/Reports',
       label: 'navigation.reports',
       className: 'item-style-modifier',
-      order: 1,
+      order: 100,
       perspectivePermission: NavPermission.Reports,
       widgetConfig: {
         name: 'Reports',
@@ -44,6 +44,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'Reporting/Custom Reports',
       label: 'navigation.custom-reports',
+      order: 200,
       perspectivePermission: NavPermission.Reports,
       widgetConfig: {
         name: 'Custom Reports',

@@ -25,7 +25,7 @@ moduleSystem.registerModule({
       path: 'ExperienceEcommerce/Document Types',
       label: 'navigation.document-types',
       className: 'item-style-modifier',
-      order: 9,
+      order: 900,
       permission: UserPermission.DocumentTypes,
       perspectivePermission: NavPermission.DocumentTypes,
       widgetConfig: {

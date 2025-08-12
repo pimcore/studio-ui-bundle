@@ -26,7 +26,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'System/User & Roles',
       label: 'navigation.user-and-roles',
-      order: 1,
+      order: 100,
       dividerBottom: true,
       permission: UserPermission.Users,
       perspectivePermissionHide: NavPermission.UsersHidden
@@ -35,6 +35,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'System/User & Roles/Users',
       label: 'navigation.users',
+      order: 100,
       className: 'item-style-modifier',
       permission: UserPermission.Users,
       perspectivePermission: NavPermission.Users,
@@ -55,6 +56,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'System/User & Roles/Roles',
       label: 'navigation.roles',
+      order: 200,
       permission: UserPermission.Users,
       perspectivePermission: NavPermission.Roles,
       widgetConfig: {
