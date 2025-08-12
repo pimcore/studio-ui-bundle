@@ -11,14 +11,13 @@
 import React, { useMemo, useState } from 'react'
 import { isUndefined } from 'lodash'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
-import { useReportEditorData } from '@Pimcore/modules/reports/reports-editor/hooks/useReportEditorData'
-import { type BundleCustomReportsConfigurationTreeNode } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import { ReportsSidebar } from '@Pimcore/modules/reports/reports-editor/components/reports-sidebar/reports-sidebar'
 import { ReportConfiguration } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/report-configuration'
+import { type BundleCustomReportsConfigurationTreeNode, useCustomReportsConfigGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 
 export const ReportsEditor = (): React.JSX.Element => {
-  const { isReportsConfigTreeLoading, isReportsConfigTreeFetching, refetchReportsConfigTree, reportsConfigTreeData } = useReportEditorData()
+  const { data: reportsConfigTreeData, isLoading, isFetching, refetch } = useCustomReportsConfigGetTreeQuery({ page: 1, pageSize: 9999 })
 
   const [openedReports, setOpenedReports] = useState<BundleCustomReportsConfigurationTreeNode[]>([])
   const [activeTabKey, setActiveTabKey] = useState<string | undefined>(undefined)
@@ -66,9 +65,8 @@ export const ReportsEditor = (): React.JSX.Element => {
     children: (
       <ReportsSidebar
         handleOpenReport={ handleOpenReport }
-        isFetching={ isReportsConfigTreeFetching }
-        isLoading={ isReportsConfigTreeLoading }
-        refetch={ refetchReportsConfigTree }
+        isLoading={ isLoading || isFetching }
+        refetch={ refetch }
         reportsList={ reportsConfigTreeData }
       />
     )

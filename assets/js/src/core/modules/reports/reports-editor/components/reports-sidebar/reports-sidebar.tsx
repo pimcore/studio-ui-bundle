@@ -23,19 +23,18 @@ import { useStyles } from '@Pimcore/modules/reports/reports-editor/reports-edito
 
 interface IReportsSidebarProps {
   isLoading: boolean
-  isFetching: boolean
   refetch: () => void
   reportsList?: CustomReportsConfigGetTreeApiResponse
   handleOpenReport: (report: BundleCustomReportsConfigurationTreeNode) => void
 }
 
-export const ReportsSidebar = ({ isLoading, isFetching, refetch, reportsList, handleOpenReport }: IReportsSidebarProps): React.JSX.Element => {
+export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenReport }: IReportsSidebarProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   return (
     <ContentLayout renderToolbar={ (
       <Toolbar
-        isFetching={ isFetching }
+        isFetching={ isLoading }
         refetch={ refetch }
       />
     ) }
