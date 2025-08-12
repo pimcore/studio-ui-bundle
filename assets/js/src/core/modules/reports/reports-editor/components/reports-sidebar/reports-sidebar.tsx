@@ -78,7 +78,7 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
         loading={ isLoading }
         padded
       >
-        {/* ToDo: Need to implement search functionality here */}
+        {/* Need to implement search functionality here */}
 
         <Flex
           gap="mini"
