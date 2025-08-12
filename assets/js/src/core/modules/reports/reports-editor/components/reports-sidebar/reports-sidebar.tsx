@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { isNil } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
@@ -35,25 +35,40 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
   const { styles } = useStyles()
   const { t } = useTranslation()
 
+  const [contextItem, setContextItem] = useState<any | null>(null)
+
   const reportsListData = reportsList?.items ?? []
+
+  const handleReportAdd = (): void => {
+    console.log('----- Add new report')
+  }
+
+  const handleReportClone = (): void => {
+    console.log('----- Clone report: ', contextItem)
+  }
+
+  const handleReportDelete = (): void => {
+    console.log('----- Delete report: ', contextItem)
+  }
 
   const dropdownItems: DropdownProps['menu']['items'] = [
     {
       icon: <Icon value="copy-03" />,
       key: 'copy',
       label: t('clone'),
-      onClick: () => { console.log('----- Clone: ') }
+      onClick: handleReportClone
     },
     {
       icon: <Icon value="trash" />,
       key: 'delete',
       label: t('delete'),
-      onClick: () => { console.log('----- Delete: ') }
+      onClick: handleReportDelete
     }]
 
   return (
     <ContentLayout renderToolbar={ (
       <Toolbar
+        handleReportAdd={ handleReportAdd }
         isFetching={ isLoading }
         refetch={ refetch }
       />
@@ -65,21 +80,24 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
       >
         {/* ToDo: Need to implement search functionality here */}
 
-        <Dropdown
-          disabled={ isNil(reportsListData) }
-          menu={ { items: dropdownItems } }
-          trigger={ ['contextMenu'] }
+        <Flex
+          gap="mini"
+          vertical
         >
-          <Flex
-            gap="mini"
-            vertical
-          >
-            {reportsListData.map((item) => (
+          {reportsListData.map((item) => (
+            <Dropdown
+              disabled={ isNil(reportsListData) }
+              key={ item.id }
+              menu={ { items: dropdownItems } }
+              onOpenChange={ (open) => {
+                if (open) setContextItem(item)
+              } }
+              trigger={ ['contextMenu'] }
+            >
               <Flex
                 align="center"
                 className={ styles.sidebarReportItem }
                 gap="mini"
-                key={ item.id }
                 onClick={ () => { handleOpenReport(item) } }
               >
                 <Icon
@@ -88,9 +106,9 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
                 />
                 <Text className={ styles.sidebarReportItemTitle }>{item.text}</Text>
               </Flex>
-            ))}
-          </Flex>
-        </Dropdown>
+            </Dropdown>
+          ))}
+        </Flex>
       </Content>
     </ContentLayout>
   )

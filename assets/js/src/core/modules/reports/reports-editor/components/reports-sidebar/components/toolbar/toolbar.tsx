@@ -17,9 +17,10 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 interface IToolbarProps {
   isFetching: boolean
   refetch: () => void
+  handleReportAdd: () => void
 }
 
-export const Toolbar = ({ isFetching, refetch }: IToolbarProps): React.JSX.Element => {
+export const Toolbar = ({ isFetching, refetch, handleReportAdd }: IToolbarProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
@@ -31,7 +32,7 @@ export const Toolbar = ({ isFetching, refetch }: IToolbarProps): React.JSX.Eleme
 
       <IconTextButton
         icon={ { value: 'new' } }
-        onClick={ () => { /* ToDo: Implement create new report functionality */ } }
+        onClick={ handleReportAdd }
         type="link"
       >
         {t('new')}
