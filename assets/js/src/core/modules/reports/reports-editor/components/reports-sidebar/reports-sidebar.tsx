@@ -9,11 +9,14 @@
  */
 
 import React from 'react'
+import { isNil } from 'lodash'
+import { useTranslation } from 'react-i18next'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Text } from '@Pimcore/components/text/text'
+import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { Toolbar } from '@Pimcore/modules/reports/reports-editor/components/reports-sidebar/components/toolbar/toolbar'
 import {
   type BundleCustomReportsConfigurationTreeNode,
@@ -30,6 +33,23 @@ interface IReportsSidebarProps {
 
 export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenReport }: IReportsSidebarProps): React.JSX.Element => {
   const { styles } = useStyles()
+  const { t } = useTranslation()
+
+  const reportsListData = reportsList?.items ?? []
+
+  const dropdownItems: DropdownProps['menu']['items'] = [
+    {
+      icon: <Icon value="copy-03" />,
+      key: 'copy',
+      label: t('clone'),
+      onClick: () => { console.log('----- Clone: ') }
+    },
+    {
+      icon: <Icon value="trash" />,
+      key: 'delete',
+      label: t('delete'),
+      onClick: () => { console.log('----- Delete: ') }
+    }]
 
   return (
     <ContentLayout renderToolbar={ (
@@ -45,26 +65,32 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
       >
         {/* ToDo: Need to implement search functionality here */}
 
-        <Flex
-          gap="mini"
-          vertical
+        <Dropdown
+          disabled={ isNil(reportsListData) }
+          menu={ { items: dropdownItems } }
+          trigger={ ['contextMenu'] }
         >
-          {reportsList?.items?.map((item) => (
-            <Flex
-              align="center"
-              className={ styles.sidebarReportItem }
-              gap="mini"
-              key={ item.id }
-              onClick={ () => { handleOpenReport(item) } }
-            >
-              <Icon
-                className={ styles.sidebarReportItemIcon }
-                value={ 'chart-scatter' }
-              />
-              <Text className={ styles.sidebarReportItemTitle }>{item.text}</Text>
-            </Flex>
-          ))}
-        </Flex>
+          <Flex
+            gap="mini"
+            vertical
+          >
+            {reportsListData.map((item) => (
+              <Flex
+                align="center"
+                className={ styles.sidebarReportItem }
+                gap="mini"
+                key={ item.id }
+                onClick={ () => { handleOpenReport(item) } }
+              >
+                <Icon
+                  className={ styles.sidebarReportItemIcon }
+                  value={ 'chart-scatter' }
+                />
+                <Text className={ styles.sidebarReportItemTitle }>{item.text}</Text>
+              </Flex>
+            ))}
+          </Flex>
+        </Dropdown>
       </Content>
     </ContentLayout>
   )
