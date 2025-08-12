@@ -17,12 +17,14 @@ export const useBlockEditableStyles = createStyles(({ token }) => ({
 
   blockToolstrip: {
     display: 'inline-block',
-    width: 'fit-content'
+    width: 'fit-content',
+    marginTop: token.marginXS,
+    marginBottom: token.marginXS
   },
 
   // Drag and drop states
   dragDropTarget: {
-    outline: `2px dashed ${token.colorPrimary} !important`,
+    outline: `1px dashed ${token.colorPrimaryBorder} !important`,
     outlineOffset: '5px !important',
   },
 

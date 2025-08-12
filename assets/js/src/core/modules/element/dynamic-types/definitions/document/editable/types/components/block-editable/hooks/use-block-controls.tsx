@@ -16,6 +16,7 @@ import ReactDOM from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { BlockDragOverlay } from '../components/block-drag-overlay/block-drag-overlay'
 import { SortableBlockToolbar } from '../components/sortable-block-toolbar'
+import { EmptyStateBlockToolbar } from '../components/empty-state-block-toolbar'
 import {
   DndContext,
   closestCenter,
@@ -45,6 +46,7 @@ export interface UseBlockControlsParams {
 export interface UseBlockControlsReturn {
   updateControls: (element: HTMLElement, limitReached: boolean) => void
   initializeControls: () => void
+  clearEmptyState: () => void
   renderBlockToolbar: () => React.JSX.Element
 }
 
@@ -61,6 +63,7 @@ export const useBlockControls = ({
   const portalContainersRef = useRef<Map<HTMLElement, HTMLElement>>(new Map())
   const limitReachedRef = useRef<boolean>(false)
   const [activeId, setActiveId] = useState<string | null>(null)
+  const [emptyStatePortal, setEmptyStatePortal] = useState<React.ReactPortal | null>(null)
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -133,27 +136,45 @@ export const useBlockControls = ({
 
   const initializeControls = useCallback((): void => {
     const container = blockManager.getContainer()
+    console.log('Initializing block controls!', container)
     if (isNull(container)) return
 
-    const plusEl = container.querySelector('.pimcore_block_plus')
-    if (!isNull(plusEl)) {
-      (plusEl as HTMLElement).style.display = 'none'
+    // Don't recreate if already initialized (portal exists)
+    if (emptyStatePortal !== null) return
 
-      const handleContainerClick = (e: Event): void => {
-        const target = e.target as HTMLElement
-        if (target.closest('.pimcore_block_plus') !== null) {
-          onAddBlock(null, 1)
-        }
-      }
-      container.addEventListener('click', handleContainerClick)
-    }
-  }, [blockManager, onAddBlock])
+    // Create EmptyStateBlockToolbar component
+    const emptyStateToolbar = (
+      <EmptyStateBlockToolbar
+        onClick={ () => {
+          // Clear state immediately to prevent re-renders during DOM changes
+          setEmptyStatePortal(null)
+          
+          // Use setTimeout to ensure cleanup happens before onAddBlock
+          setTimeout(() => {
+            onAddBlock(null, 1)
+          }, 0)
+        } }
+      />
+    )
+    
+    const portal = ReactDOM.createPortal(emptyStateToolbar, container)
+    setEmptyStatePortal(portal)
+  }, [blockManager, onAddBlock, emptyStatePortal])
+
+  const clearEmptyState = useCallback((): void => {
+    setEmptyStatePortal(null)
+  }, [])
 
   const renderBlockToolbar = useCallback((): React.JSX.Element => {
     const portals: React.ReactPortal[] = []
 
     const currentBlockEntries = blockManager.queryElements()
     const validContainerIds = new Set<string>()
+
+    // Add empty state portal if we have no blocks
+    if (currentBlockEntries.length === 0 && emptyStatePortal !== null) {
+      portals.push(emptyStatePortal)
+    }
 
     currentBlockEntries.forEach(blockEntry => {
       const buttonsContainer = blockEntry.querySelector('.pimcore_block_buttons')
@@ -219,10 +240,11 @@ export const useBlockControls = ({
         />
       </DndContext>
     )
-  }, [blockManager, sensors, handleDragStart, handleDragOver, handleDragEnd, onAddBlock, onRemoveBlock, onMoveBlockUp, onMoveBlockDown, t, activeId])
+  }, [blockManager, sensors, handleDragStart, handleDragOver, handleDragEnd, onAddBlock, onRemoveBlock, onMoveBlockUp, onMoveBlockDown, t, activeId, emptyStatePortal])
 
   const cleanupControls = useCallback(() => {
     portalContainersRef.current.clear()
+    setEmptyStatePortal(null)
   }, [])
 
   useEffect(() => {
@@ -234,6 +256,7 @@ export const useBlockControls = ({
   return {
     updateControls,
     initializeControls,
+    clearEmptyState,
     renderBlockToolbar
   }
 }
