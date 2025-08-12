@@ -24,6 +24,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'QuickAccess/Open Asset',
       label: 'navigation.open-asset',
+      order: 1,
       permission: UserPermission.Assets,
       perspectivePermission: NavPermission.OpenAsset,
       button: () => React.createElement(OpenElement, { elementType: 'asset' })
@@ -32,6 +33,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'QuickAccess/Open Data Object',
       label: 'navigation.open-data-object',
+      order: 2,
       permission: UserPermission.Objects,
       perspectivePermission: NavPermission.OpenObject,
       button: () => React.createElement(OpenElement, { elementType: 'data-object' })
@@ -40,6 +42,8 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'QuickAccess/Open Document',
       label: 'navigation.open-document',
+      dividerBottom: true,
+      order: 3,
       permission: UserPermission.Documents,
       perspectivePermission: NavPermission.OpenDocument,
       button: () => React.createElement(OpenElement, { elementType: 'document' })

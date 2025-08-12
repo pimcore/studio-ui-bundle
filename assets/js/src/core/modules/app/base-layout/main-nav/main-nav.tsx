@@ -27,7 +27,6 @@ export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStlyes()
   const { navItems } = useMainNav()
-  console.log("navItems", navItems);
   
   const { openMainWidget } = useWidgetManager()
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
@@ -54,8 +53,6 @@ export const MainNav = (): React.JSX.Element => {
     if (!isVisible || isHiddenInPerspective) {
       return <></>
     }
-
-    console.log("item.divider", item.divider);
     
     return (
       <li
@@ -65,13 +62,14 @@ export const MainNav = (): React.JSX.Element => {
       >
         {!isUndefined(item.button)
           ? (
-            <div className={item.divider !== undefined && item.divider === true ? 'main-nav__list-item-divider' : ''}>
+            <div>
               {item.button()}
+            <div className={item.dividerBottom !== undefined && item.dividerBottom === true ? 'main-nav__list-item-divider' : ''}/>
             </div>
             )
           : (
-            <button
-              className={ ['main-nav__list-btn', item.divider !== undefined && item.divider === true ? 'main-nav__list-item-divider' : ''].join(' ') }
+            <><button
+              className={ 'main-nav__list-btn' }
               data-testid={ `nav-button-${createSafeTestIdString(item.path)}` }
               onClick={ () => {
                 if (item.children !== undefined && item.children.length > 0) {
@@ -97,6 +95,8 @@ export const MainNav = (): React.JSX.Element => {
                   )
                 : null}
             </button>
+                        <div className={item.dividerBottom !== undefined && item.dividerBottom === true ? 'main-nav__list-item-divider' : ''}/>
+            </>
             )}
 
         {item.children !== undefined && item.children.length > 0

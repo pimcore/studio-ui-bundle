@@ -127,7 +127,8 @@ export const useStlyes = createStyles(({
 
       .main-nav__list-item-divider {
         border-bottom: 1px solid ${token.colorFillSecondary};
-        }
+        padding: 3px 0px 3px 0px;
+      }
 
       .main-nav__list-detail-sub-header {
       width: 100%;

@@ -24,6 +24,8 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'System/Application Logger',
       label: 'navigation.application-logger',
+      dividerBottom: true,
+      order: 5,
       permission: UserPermission.ApplicationLogger,
       perspectivePermission: NavPermission.ApplicationLogger,
       widgetConfig: {

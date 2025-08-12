@@ -25,6 +25,7 @@ moduleSystem.registerModule({
       path: 'Translations/Translations',
       label: 'navigation.translations',
       className: 'item-style-modifier',
+      order: 1,
       permission: UserPermission.Translations,
       perspectivePermission: NavPermission.PredefinedProperties,
       widgetConfig: {

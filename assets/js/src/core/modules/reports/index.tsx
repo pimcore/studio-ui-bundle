@@ -25,6 +25,7 @@ moduleSystem.registerModule({
       path: 'Reporting/Reports',
       label: 'navigation.reports',
       className: 'item-style-modifier',
+      order: 1,
       perspectivePermission: NavPermission.Reports,
       widgetConfig: {
         name: 'Reports',

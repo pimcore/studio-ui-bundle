@@ -41,6 +41,7 @@ const addNavItemToItemList = (items: IMainNavItem[], item: IMainNavItem): void =
         id: level,
         label: item.label ?? level,
         path: levels.slice(0, index + 1).join('/'),
+        dividerBottom: item.dividerBottom ?? undefined,
         children: [],
         icon: isCurrentItem ? item.icon : undefined,
         widgetConfig: isCurrentItem ? item.widgetConfig : undefined,
@@ -59,8 +60,8 @@ const addNavItemToItemList = (items: IMainNavItem[], item: IMainNavItem): void =
       })
     }
 
-    currentLevel = existingItem.children ?? []
     currentLevel.sort((a, b) => (a.order ?? 100) - (b.order ?? 100))
+    currentLevel = existingItem.children ?? []
   })
 
   items.sort((a, b) => (a.order ?? 100) - (b.order ?? 100))

@@ -26,6 +26,8 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'System/User & Roles',
       label: 'navigation.user-and-roles',
+      order: 1, 
+      dividerBottom: true,
       permission: UserPermission.Users,
       perspectivePermissionHide: NavPermission.UsersHidden
     })
