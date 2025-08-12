@@ -51,14 +51,6 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
                 allowToClearRelation
                 documentsAllowed
                 allowedDocumentTypes={['email']}
-                onChange={(value: ManyToOneRelationValueType) => {
-                  if (isNil(value)) {
-                    form.setFieldValue('documentPath', null)
-                    return
-                  }
-
-                  form.setFieldValue('documentPath', value.fullPath)
-                }}
               />
             </Form.Item>
 
