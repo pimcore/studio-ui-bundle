@@ -35,6 +35,7 @@ export interface UseBlockEditableReturn {
   removeBlock: (element: HTMLElement) => void
   moveBlockUp: (element: HTMLElement) => void
   moveBlockDown: (element: HTMLElement) => void
+  moveBlock: (fromIndex: number, toIndex: number) => void
 }
 
 export const useBlockEditable = ({
@@ -127,15 +128,13 @@ export const useBlockEditable = ({
     }
 
     const editableNamesToRemove = getBlockEditableNames(element)
-    
-    // Get the block key to properly filter dynamic editables
+
     const elementKey = blockManager.getElementKey(element)
-    
-    // Remove editables from state using the proper pattern
+
     if (!isNil(elementKey)) {
       const editableName = blockManager.getEditableName()
       const namePattern = `${editableName}:${elementKey}.`
-      
+
       setDynamicEditables(prev =>
         prev.filter(editable => !editable.name.startsWith(namePattern))
       )
@@ -150,10 +149,7 @@ export const useBlockEditable = ({
     handlePostOperation()
   }, [disabled, config, handleReloadMode, removeValues, handlePostOperation, blockManager])
 
-  const moveBlock = (
-    element: HTMLElement,
-    direction: 'up' | 'down'
-  ): void => {
+  const moveBlockByDirection = (element: HTMLElement, direction: 'up' | 'down'): void => {
     if (disabled) return
 
     const index = blockManager.findElementIndex(element)
@@ -176,20 +172,60 @@ export const useBlockEditable = ({
     }
   }
 
-  // Simple wrapper functions - no useCallback needed
   const moveBlockUp = (element: HTMLElement): void => {
-    moveBlock(element, 'up')
+    moveBlockByDirection(element, 'up')
   }
 
   const moveBlockDown = (element: HTMLElement): void => {
-    moveBlock(element, 'down')
+    moveBlockByDirection(element, 'down')
   }
+
+  const moveBlock = useCallback((fromIndex: number, toIndex: number): void => {
+    if (disabled) return
+
+    const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : blockManager.queryElements()
+
+    if (fromIndex < 0 || fromIndex >= currentElements.length || toIndex < 0 || toIndex >= currentElements.length) {
+      return
+    }
+
+    if (configUtils.isReloadMode(config)) {
+      handleReloadMode((elements) => {
+        const newElements = [...elements]
+        const [movedElement] = newElements.splice(fromIndex, 1)
+        newElements.splice(toIndex, 0, movedElement)
+        return newElements
+      })
+      return
+    }
+
+    const scrollX = window.scrollX
+    const scrollY = window.scrollY
+
+    const fromElement = currentElements[fromIndex]
+    const toElement = currentElements[toIndex]
+
+    if (!isNil(fromElement) && !isNil(toElement)) {
+      const insertTarget = toIndex > fromIndex
+        ? toElement.nextSibling
+        : toElement
+
+      toElement.parentNode?.insertBefore(fromElement, insertTarget)
+
+      requestAnimationFrame(() => {
+        window.scrollTo(scrollX, scrollY)
+      })
+
+      handlePostOperation()
+    }
+  }, [disabled, config, handleReloadMode, handlePostOperation, blockManager])
 
   return {
     dynamicEditables,
     addBlock,
     removeBlock,
     moveBlockUp,
-    moveBlockDown
+    moveBlockDown,
+    moveBlock
   }
 }

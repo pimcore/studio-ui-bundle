@@ -51,16 +51,15 @@ export const BlockEditable = ({
   const { styles } = useBlockEditableStyles()
   const currentValue = isArray(value) ? value : []
 
-  // Create BlockManager instance - memoized to avoid recreation on every render
   const blockManager = useMemo(() => new BlockManager(editableName, containerRef), [editableName, containerRef])
 
-  // Central hook for all block logic
   const {
     dynamicEditables,
     addBlock,
     removeBlock,
     moveBlockUp,
-    moveBlockDown
+    moveBlockDown,
+    moveBlock
   } = useBlockEditable({
     blockManager,
     value: currentValue,
@@ -68,22 +67,20 @@ export const BlockEditable = ({
     config,
     disabled,
     onOperationComplete: (limitReached) => {
-      // Update controls for all elements after any operation
       const elements = blockManager.queryElements()
       elements.forEach(element => { updateControls(element, limitReached) })
     }
   })
 
-  // Simplified controls hook for UI manipulation
   const { initializeControls, updateControls, renderBlockToolbar } = useBlockControls({
     editableName,
     onAddBlock: addBlock,
     onRemoveBlock: removeBlock,
     onMoveBlockUp: moveBlockUp,
-    onMoveBlockDown: moveBlockDown
+    onMoveBlockDown: moveBlockDown,
+    onMoveBlock: moveBlock
   })
 
-  // Refresh logic moved to component level where it belongs
   const refreshControls = useCallback(() => {
     const elements = blockManager.ensureAllElementKeys()
     const container = blockManager.getContainer()
@@ -92,10 +89,8 @@ export const BlockEditable = ({
     const limitReached = configUtils.isLimitReached(elements.length, config?.limit)
 
     if (elements.length < 1) {
-      // No elements: Initialize empty state with "Add Block Entry" button
       initializeControls(blockManager)
     } else {
-      // Has elements: Remove empty state class and update controls for each element
       container.classList.remove('pimcore_block_buttons')
       elements.forEach(element => {
         updateControls(element, limitReached)
@@ -103,7 +98,6 @@ export const BlockEditable = ({
     }
   }, [blockManager, config?.limit, initializeControls, updateControls])
 
-  // Initialize and refresh on value changes
   useEffect(() => {
     refreshControls()
   }, [currentValue, refreshControls])

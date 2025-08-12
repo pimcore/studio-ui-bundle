@@ -119,5 +119,16 @@ export const useBlockEditableStyles = createStyles(({ token }) => ({
   blockToolstrip: {
     display: 'inline-block',
     width: 'fit-content'
+  },
+
+  // Drag and drop states
+  dragDropTarget: {
+    borderTop: `2px solid ${token.colorPrimary} !important`,
+    backgroundColor: `${token.colorPrimaryBg} !important`
+  },
+
+  dragActive: {
+    opacity: '0.3 !important',
+    backgroundColor: 'rgba(114, 46, 209, 0.06) !important'
   }
 }))

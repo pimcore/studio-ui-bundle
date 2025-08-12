@@ -96,12 +96,9 @@ export const processBlockTemplate = (
       inherited: false,
       inDialogBox: null,
       defaultFieldWidth: {
-        xs: 24,
-        sm: 24,
-        md: 24,
-        lg: 24,
-        xl: 24,
-        xxl: 24
+        small: 200,
+        medium: 300,
+        large: 900
       }
     }
 

@@ -91,10 +91,8 @@ export const operationUtils = {
       config.template.editables
     )
 
-    // Get current elements to determine insertion point
     const currentElements = blockManager.queryElements()
 
-    // Insert HTML at the correct position
     if (currentElements.length === 0) {
       container.innerHTML = processedHtml
     } else if (!isNil(currentElements[index - 1])) {
@@ -103,7 +101,6 @@ export const operationUtils = {
       container.insertAdjacentHTML('beforeend', processedHtml)
     }
 
-    // Query fresh elements after insertion
     const newElements = blockManager.queryElements()
     const newBlockEntry = newElements.find(el => !currentElements.includes(el)) ?? null
 
@@ -112,11 +109,9 @@ export const operationUtils = {
       ensurePortalTargets(newBlockEntry, editableDefinitions)
     }
 
-    // Initialize editable data
     const editableData = operationUtils.createEditableData(editableDefinitions)
     initializeData(editableData)
 
-    // Update dynamic editables state
     setDynamicEditables(prev => [...prev, ...editableDefinitions])
 
     return newBlockEntry
