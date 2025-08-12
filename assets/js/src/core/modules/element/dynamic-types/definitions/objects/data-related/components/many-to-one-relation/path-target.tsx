@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, type MutableRefObject, useEffect } from 'react'
+import React, { forwardRef, type MutableRefObject, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Input } from '@Pimcore/components/input/input'
 import {
@@ -20,6 +20,11 @@ import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
 import { isNil } from 'lodash'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { Flex } from 'antd'
+import { useFormatPath, type IFormatPathItem } from '@Pimcore/modules/data-object/hooks/use-format-path'
+import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-object'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
+import { LoadingOutlined } from '@ant-design/icons'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 
 export interface PathTargetProps {
   value: ManyToOneRelationValueType
@@ -27,6 +32,8 @@ export interface PathTargetProps {
   allowPathTextInput?: boolean
   onChange?: (value: ManyToOneRelationValueType) => void
   inherited?: boolean
+  combinedFieldName?: string
+  pathFormatterClass?: string
 }
 
 export const PathTarget = forwardRef(function PathTarget (
@@ -37,9 +44,43 @@ export const PathTarget = forwardRef(function PathTarget (
   const [value, setValue] = React.useState<ManyToOneRelationValueType>(props.value ?? null)
   const { getStateClasses } = useDroppable()
   const { mapToElementType } = useElementHelper()
+  const { formatPath } = useFormatPath()
+  const { id: dataObjectId } = useDataObject()
+  const [displayPath, setDisplayPath] = useState<string>(String(props.value?.fullPath ?? ''))
+  const [isLoading, setIsLoading] = useState(false)
+
+  const hasPathFormatterClass = isNonEmptyString(props.pathFormatterClass)
+
+  function mapNewValue (value: IFormatPathItem[], data: { items: Array<{ objectReference: string, formatedPath: string }> }): IFormatPathItem[] {
+    return value.map((item) => ({
+      ...item,
+      fullPath: data.items.find(i => i.objectReference === `${item.type}_${item.id}`)?.formatedPath ?? item.fullPath
+    }))
+  }
 
   useEffect(() => {
     setValue(props.value ?? null)
+
+    const actualPath = props.value?.fullPath ?? ''
+    setDisplayPath(actualPath)
+
+    if (hasPathFormatterClass && props.value !== null && props.combinedFieldName !== undefined && dataObjectId != null) {
+      setIsLoading(true)
+
+      formatPath([props.value as IFormatPathItem], props.combinedFieldName, dataObjectId).then((data) => {
+        if (data === undefined) {
+          setIsLoading(false)
+          return
+        }
+
+        const newValue = mapNewValue([props.value as IFormatPathItem], data)
+        setDisplayPath(String(newValue[0]?.fullPath ?? actualPath))
+        setIsLoading(false)
+      }).catch(error => {
+        console.error(error)
+        setIsLoading(false)
+      })
+    }
   }, [props.value])
 
   const getDisplayText: () => string | undefined = () => {
@@ -60,24 +101,42 @@ export const PathTarget = forwardRef(function PathTarget (
   const showElementTagPrefix = props.allowPathTextInput !== true && hasElementTag
   const showElementTag = props.allowPathTextInput === true && hasElementTag
 
+  const elementTagPath = (hasPathFormatterClass)
+    ? displayPath
+    : String(value?.fullPath ?? '')
+
+  let inputPrefix: React.ReactNode
+  if (showElementTagPrefix) {
+    if (hasPathFormatterClass) {
+      inputPrefix = isLoading ? <LoadingOutlined /> : <SanitizeHtml html={ displayPath } />
+    } else {
+      inputPrefix = (
+        <ElementTag
+          disabled={ props.disabled === true || props.inherited === true }
+          elementType={ mapToElementType(value.type) }
+          id={ value.id }
+          path={ elementTagPath }
+          published={ value.isPublished ?? undefined }
+        />
+      )
+    }
+  }
+
   return (
     <div
       ref={ ref }
-
       style={ { flexGrow: 1 } }
     >
-      { showElementTag
+      {showElementTag
         ? (
           <Flex
             align="center"
             className={ cn(...getStateClasses()) }
           >
-
             <Input
               disabled={ props.disabled }
               inherited={ props.inherited }
               prefix={
-
                 <ElementTag
                   disabled={ props.disabled === true || props.inherited === true }
                   elementType={ mapToElementType(value.type) }
@@ -86,13 +145,12 @@ export const PathTarget = forwardRef(function PathTarget (
                     setValue(null)
                     props.onChange?.(null)
                   } }
-                  path={ String(value?.fullPath) }
+                  path={ elementTagPath }
                   published={ value.isPublished ?? undefined }
                 />
               }
               readOnly
             />
-
           </Flex>
           )
         : (
@@ -110,17 +168,7 @@ export const PathTarget = forwardRef(function PathTarget (
               props.onChange?.(newValue)
             } }
             placeholder={ showElementTagPrefix ? undefined : t(props.allowPathTextInput === true ? 'many-to-one-relation.drop-placeholder-text-input' : 'many-to-one-relation.drop-placeholder') }
-            prefix={ showElementTagPrefix
-              ? (
-                <ElementTag
-                  disabled={ props.disabled === true || props.inherited === true }
-                  elementType={ props.allowPathTextInput === true ? undefined : mapToElementType(value.type) }
-                  id={ props.allowPathTextInput === true ? undefined : value.id }
-                  path={ String(value?.fullPath) }
-                  published={ value.isPublished ?? undefined }
-                />
-                )
-              : undefined }
+            prefix={ inputPrefix }
             readOnly={ props.allowPathTextInput !== true }
             value={ showElementTagPrefix ? undefined : displayText }
           />

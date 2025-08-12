@@ -81,4 +81,30 @@ export class DynamicTypeDocumentEditableLink extends DynamicTypeDocumentEditable
       direct: value.path ?? null
     }
   }
+
+  transformValueForApi (value: LinkValue | null, props: LinkEditableDefinition): DocumentLinkEditableValue | null {
+    if (isNil(value)) {
+      return null
+    }
+
+    if (value.linktype === 'internal') {
+      return {
+        ...value,
+        path: value.fullPath ?? '',
+        fullPath: value.fullPath ?? '',
+        internalId: value.internal ?? null,
+        internal: true,
+        internalType: value.internalType ?? undefined
+      }
+    }
+
+    return {
+      ...value,
+      path: value.direct ?? '',
+      fullPath: value.fullPath ?? '',
+      internalId: null,
+      internal: false,
+      internalType: value.internalType ?? undefined
+    }
+  }
 }

@@ -11,11 +11,15 @@
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const DynamicTypePipelineGridTransformersCombineComponent = (): React.JSX.Element => {
+  const { t } = useTranslation()
+
   return (
     <Form.Item
-      label={ 'Glue' }
+      initialValue={ ' ' }
+      label={ t('glue') }
       name={ 'glue' }
     >
       <Input />

@@ -18,7 +18,25 @@ const PALETTES = [
 ]
 const TONES_ORDER = [4, 6, 8, 2, 5, 3, 7, 1, 9, 0]
 
-export const generateColorMap = (): string[] => {
+const generateRandomColors = (count: number): string[] => {
+  const colors: string[] = []
+
+  for (let i = 0; i < count; i++) {
+    const r = 50 + Math.floor(Math.random() * 150)
+    const g = 50 + Math.floor(Math.random() * 150)
+    const b = 50 + Math.floor(Math.random() * 150)
+
+    const color = '#' + [r, g, b]
+      .map(x => x.toString(16).padStart(2, '0'))
+      .join('')
+
+    colors.push(color)
+  }
+
+  return colors
+}
+
+export const generateColorMap = (colorCount: number): string[] => {
   const result: string[] = []
 
   const palettes = Object.values(PALETTES)
@@ -29,6 +47,14 @@ export const generateColorMap = (): string[] => {
         result.push(palette[i])
       }
     }
+  }
+
+  // Fallback: generate extra colors if needed
+  const neededExtras = colorCount - result.length
+
+  if (neededExtras > 0) {
+    const fallbackColors = generateRandomColors(neededExtras)
+    result.push(...fallbackColors)
   }
 
   return result

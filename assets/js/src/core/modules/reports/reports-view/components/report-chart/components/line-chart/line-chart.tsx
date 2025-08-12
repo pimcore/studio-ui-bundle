@@ -23,7 +23,7 @@ const CHART_FIELD_VALUE_KEY = 'value'
 export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps): React.JSX.Element => {
   const { styles } = useStyles()
 
-  const [colorList] = useState<string[]>(generateColorMap())
+  const [colorList] = useState<string[]>(generateColorMap(chartData.length))
 
   const xAxis = reportData?.xAxis ?? ''
   const formattedChartData = chartData.flatMap((item: object, index) => {
@@ -70,7 +70,7 @@ export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps)
         range: colorList
       }
     },
-    height: 380,
+    height: 250,
     point: {
       shapeField: 'circle',
       sizeField: 4

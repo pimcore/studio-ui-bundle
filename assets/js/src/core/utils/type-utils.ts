@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isString, isEmpty, trim } from 'lodash'
+
 // Difference from Lodash: primitive values like booleans and numbers are NOT considered empty
 export const isEmptyValue = (value: unknown): boolean => {
   if (value === null || value === undefined) {
@@ -27,4 +29,11 @@ export const isEmptyValue = (value: unknown): boolean => {
   }
 
   return false
+}
+
+/**
+ * Checks if a value is a non-empty string (after trimming whitespace)
+ */
+export const isNonEmptyString = (value: unknown): value is string => {
+  return isString(value) && !isEmpty(trim(value))
 }

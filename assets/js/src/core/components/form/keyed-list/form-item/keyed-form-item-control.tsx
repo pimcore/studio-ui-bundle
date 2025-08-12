@@ -12,7 +12,8 @@ import React, { Children, isValidElement, useCallback, useEffect, useMemo } from
 import { useKeyedList } from '../provider/keyed-list/use-keyed-list'
 import { useItem } from '../../item/provider/item/use-item'
 import { type FormItemProps } from 'antd'
-import { isUndefined } from 'lodash'
+import { isEqual, isUndefined } from 'lodash'
+import { usePrevious } from '@Pimcore/utils/hooks/use-previous'
 
 export interface KeyedFormItemControlProps {
   children: React.ReactNode
@@ -28,12 +29,23 @@ export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: 
   const { operations, getAdditionalComponentProps } = useKeyedList()
   const { name, initialValue } = useItem()
 
-  const Child = Children.only(children)
+  const Child = useMemo(() => Children.only(children), [children])
   const value = operations.getValue(name)
+  const previousValue = usePrevious(value)
+
+  const cachedValue = useMemo(() => {
+    if (!isEqual(value, previousValue)) {
+      return value
+    }
+
+    return previousValue
+  }, [value])
 
   useEffect(() => {
-    operations.update(name, value ?? initialValue ?? null, true)
-  }, [])
+    if (value === undefined) {
+      operations.update(name, initialValue ?? null, true)
+    }
+  }, [value])
 
   const onChange: KeyedFormItemControlProps['onChange'] = useCallback((value: any) => {
     const changedValue = !isUndefined(getValueFromEvent)
@@ -41,7 +53,7 @@ export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: 
       : value?.target?.value ?? value
 
     operations.update(name, changedValue, false)
-  }, [getValueFromEvent, name, operations])
+  }, [])
 
   if (!isValidElement(Child)) {
     throw new Error('KeyedFormItemControl only accepts a single child')
@@ -55,7 +67,7 @@ export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: 
       { ...props }
       { ...getAdditionalComponentProps?.(name) }
       onChange={ onChange }
-      value={ value }
+      value={ cachedValue }
     />
-  ), [Child.props, props, value])
+  ), [Child, props, cachedValue, onChange, getAdditionalComponentProps, name])
 }

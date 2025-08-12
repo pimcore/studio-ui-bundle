@@ -17,14 +17,16 @@ import { type SelectProps } from '@Pimcore/components/select/select'
 import { usePrevious } from '@Pimcore/utils/hooks/use-previous'
 import { Select } from 'antd'
 import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const DynamicTypePipelineGridSourceFieldsRelationFieldComponent = (): React.JSX.Element => {
   const { config } = usePipelineConfig()
   const sourceFieldConfig = config?.relationField
   const { name } = useItem()
-  const { operations, getValueByKey } = useKeyedList()
-  const currentRelation = getValueByKey('relation')
+  const { operations } = useKeyedList()
+  const currentRelation = Form.useWatch([...name, 'relation'])
   const prevRelation = usePrevious(currentRelation)
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (prevRelation !== currentRelation && prevRelation !== undefined) {
@@ -66,7 +68,7 @@ export const DynamicTypePipelineGridSourceFieldsRelationFieldComponent = (): Rea
     >
       <Form.Item
         className="w-full"
-        label={ 'Relation' }
+        label={ t('relation') }
         name={ 'relation' }
       >
         <Select options={ sourceFieldOptions } />
@@ -74,7 +76,7 @@ export const DynamicTypePipelineGridSourceFieldsRelationFieldComponent = (): Rea
 
       <Form.Item
         className="w-full"
-        label={ 'Field' }
+        label={ t('field') }
         name={ 'field' }
       >
         <Select

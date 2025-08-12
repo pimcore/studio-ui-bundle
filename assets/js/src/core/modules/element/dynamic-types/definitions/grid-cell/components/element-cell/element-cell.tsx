@@ -37,7 +37,7 @@ export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
   const styles = useStyle().styles
   const { column } = props
   const editable = Boolean(props.column.columnDef.meta?.editable ?? true)
-  const clearable = Boolean(props.column.columnDef.meta?.clearable ?? true)
+  const clearable = Boolean(props.column.columnDef.meta?.clearable ?? false)
   const showPublishedState = Boolean(props.column.columnDef.meta?.showPublishedState ?? true)
   const config = column.columnDef.meta?.config as ElementCellConfig | null ?? {
     allowedTypes: ['asset', 'data-object', 'document']

@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { Image, type ImageProps } from 'antd'
+import cn from 'classnames'
 import { useStyle } from '@Pimcore/components/pimcore-image/pimcore-image.styles'
 
 export const PimcoreImage = (props: ImageProps): React.JSX.Element => {
@@ -17,7 +18,7 @@ export const PimcoreImage = (props: ImageProps): React.JSX.Element => {
 
   return (
     <Image
-      className={ styles.image }
+      className={ cn(styles.image, props.className) }
       preview={ false }
       { ...props }
     />

@@ -12,6 +12,7 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/FieldFilterRegistry': 'DynamicTypes/FieldFilterRegistry',
   'DynamicTypes/BatchEditRegistry': 'DynamicTypes/BatchEditRegistry',
   'DynamicTypes/GridCellRegistry': 'DynamicTypes/GridCellRegistry',
+  'DynamicTypes/AdvancedGridCellRegistry': 'DynamicTypes/AdvancedGridCellRegistry',
   'DynamicTypes/ListingRegistry': 'DynamicTypes/ListingRegistry',
   'DynamicTypes/MetadataRegistry': 'DynamicTypes/MetadataRegistry',
   'DynamicTypes/ObjectLayoutRegistry': 'DynamicTypes/ObjectLayoutRegistry',
@@ -88,6 +89,7 @@ export const serviceIds = {
   'DynamicTypes/BatchEdit/DataObjectObjectBrick': 'DynamicTypes/BatchEdit/DataObjectObjectBrick',
 
   'DynamicTypes/GridCell/Text': 'DynamicTypes/GridCell/Text',
+  'DynamicTypes/GridCell/String': 'DynamicTypes/GridCell/String',
   'DynamicTypes/GridCell/Textarea': 'DynamicTypes/GridCell/Textarea',
   'DynamicTypes/GridCell/Number': 'DynamicTypes/GridCell/Number',
   'DynamicTypes/GridCell/Select': 'DynamicTypes/GridCell/Select',

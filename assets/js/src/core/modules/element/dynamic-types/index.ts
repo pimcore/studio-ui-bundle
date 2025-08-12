@@ -182,6 +182,7 @@ import { type DynamicTypeDocumentEditableArea } from './definitions/document/edi
 import { type DynamicTypeEditableDialogLayoutRegistry } from './definitions/editable-dialog-layout/dynamic-type-editable-dialog-layout-registry'
 import { type DynamicTypeEditableDialogLayoutTabpanel } from './definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-tabpanel'
 import { type DynamicTypeEditableDialogLayoutPanel } from './definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-panel'
+import { type DynamicTypeGridCellString } from './definitions/grid-cell/types/string/dynamic-type-grid-cell-string'
 
 moduleSystem.registerModule({
   onInit () {
@@ -214,6 +215,7 @@ moduleSystem.registerModule({
     const GridCellRegistry = container.get<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/GridCellRegistry'])
 
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellText>(serviceIds['DynamicTypes/GridCell/Text']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellString>(serviceIds['DynamicTypes/GridCell/String']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellTextarea>(serviceIds['DynamicTypes/GridCell/Textarea']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellNumber>(serviceIds['DynamicTypes/GridCell/Number']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellSelect>(serviceIds['DynamicTypes/GridCell/Select']))
@@ -248,6 +250,10 @@ moduleSystem.registerModule({
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectAdapter>(serviceIds['DynamicTypes/GridCell/DataObjectAdapter']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectAdvanced>(serviceIds['DynamicTypes/GridCell/DataObjectAdvanced']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectObjectBrick>(serviceIds['DynamicTypes/GridCell/DataObjectObjectBrick']))
+
+    const advancedGridCellRegistry = container.get<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/AdvancedGridCellRegistry'])
+
+    advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellString>(serviceIds['DynamicTypes/GridCell/String']))
 
     const metadataRegistry = container.get<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
 

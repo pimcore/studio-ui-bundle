@@ -18,6 +18,7 @@ import { DateTimeConfig } from '@Pimcore/app/config/date-time'
 import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 import { ModalsProvider } from './modals-provider'
 import { ApiGateway } from '@Pimcore/app/public-api/api-gateway'
+import { TreeCopyPasteProvider } from '../element/actions/copy-paste/tree-copy-paste-context'
 
 export const AppView = (): React.JSX.Element => {
   return (
@@ -25,14 +26,16 @@ export const AppView = (): React.JSX.Element => {
       <ErrorBoundary>
         <GlobalProvider>
           <AntApp>
-            <ModalsProvider>
-              { <ApiGateway /> }
-              <DateTimeConfig>
-                <AppLoader>
-                  <RouterProvider router={ router } />
-                </AppLoader>
-              </DateTimeConfig>
-            </ModalsProvider>
+            <TreeCopyPasteProvider>
+              <ModalsProvider>
+                { <ApiGateway /> }
+                <DateTimeConfig>
+                  <AppLoader>
+                    <RouterProvider router={ router } />
+                  </AppLoader>
+                </DateTimeConfig>
+              </ModalsProvider>
+            </TreeCopyPasteProvider>
           </AntApp>
         </GlobalProvider>
       </ErrorBoundary>

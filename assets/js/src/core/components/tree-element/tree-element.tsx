@@ -18,7 +18,7 @@ import { useStyles } from './tree-element.styles'
 export interface TreeDataItem extends TreeDataNode {
   actions?: Array<{ key: string, icon: string }>
   allowDrop?: boolean
-  'data-testid'?: string
+  allowDrag?: boolean
 }
 
 interface ITreeElementProps extends TreeProps {
@@ -90,6 +90,11 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
       expandedKeys={ expandedKeys }
       loadData={ onLoadData !== null ? onLoadData : undefined }
       onCheck={ (checkedKeys, event): void => onCheck?.(checkedKeys, event) }
+      onDragStart={ (evt): void => {
+        if (evt.node.allowDrag === false) {
+          evt.event.preventDefault()
+        }
+      } }
       onDrop={ (evt): void => {
         onDragAndDrop?.({
           node: evt.node as TreeDataItem,

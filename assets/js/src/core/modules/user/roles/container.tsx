@@ -46,6 +46,7 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
       key: item.id,
       selectable: item.type === 'role',
       allowDrop: item.type !== 'role',
+      allowDrag: item.type === 'role',
       icon: item.type === 'role' ? <Icon value={ 'user' } /> : <Icon value={ 'folder' } />,
       'data-testid': createTreeNodeTestId(item.id as string | number, item.type as string),
       actions: item.type === 'role'

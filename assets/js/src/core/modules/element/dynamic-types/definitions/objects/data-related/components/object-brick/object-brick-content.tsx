@@ -47,6 +47,7 @@ export const ObjectBrickContent = (props: ObjectBrickContentProps): React.JSX.El
           name={ key }
         >
           <ObjectBrickItem
+            name={ props.name }
             noteditable={ props.noteditable }
             type={ key }
           />

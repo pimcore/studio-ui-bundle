@@ -83,7 +83,8 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
           editable: true,
           type: 'text',
           callback: true,
-          editCallback: handleEditCallback
+          editCallback: handleEditCallback,
+          htmlDetection: true
         } as any,
         size: 200
       })

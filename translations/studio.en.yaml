@@ -126,6 +126,19 @@ grid.configuration.delete-template-confirmation: Are you sure that you want to d
 grid.configuration.save-template-configuration: Save configuration as template
 grid.configuration.set-default-template: Set as default template
 grid.configuration.shared: Shared
+grid.advanced-column.title.placeholder: Add a title
+grid.advanced-column.advancedColumns: Source field
+grid.advanced-column.advancedColumns.add: Add a Source field
+grid.advanced-column.transformers: Transformers
+grid.advanced-column.transformers.add: Add a Transformer
+grid.advanced-column.preview: Preview
+grid.advanced-column.no-preview: No preview item available
+grid.advanced-column.no-preview-data: No preview data available
+grid.advanced-column.advancedColumns.simpleField: Simple Field
+grid.advanced-column.advancedColumns.relationField: Relation Field
+grid.advanced-column.advancedColumns.staticText: Static text
+grid.advanced-column.advancedColumns.caseChange: Case Change
+grid.advanced-column.advancedColumns.combine: Combine
 component.workflow-card.action-btn: Workflow Actions
 component.pql.description: Pimcore Query Language (PQL) is a simple yet powerful query language that lets you search data using various criteria, including filtering values in related elements, to enable precise and comprehensive data retrieval. For details see <anchorPQL>PQL Documentation</anchorPQL>
 asset.asset-editor-tabs.embedded-metadata.headline: Meta Info
@@ -327,6 +340,7 @@ translations.edit-modal.tab.plain-text: Plain Text
 translations.edit-modal.tab.html: HTML
 translations.edit-modal.save: Save
 translations.edit-modal.title: Edit translation
+translations.edit-modal.restore: Restore plain text
 properties.columns.type: Type
 properties.columns.key: Key
 properties.columns.name: Name
@@ -491,12 +505,14 @@ element.tree.context-menu.search-and-move: Search & Move
 element.tree.context-menu.expand-children: Expand Children
 asset.tree.context-menu.clear-thumbnails: Clear Thumbnails
 element.tree.copy: Copy
+element.tree.copy-success-description: "{{elementType}} \"{{name}}\" has been copied and is ready to paste"
 element.tree.paste: Paste
 element.tree.paste-as-child: Paste as child
 element.tree.paste-as-child-recursive: Paste as child (recursive)
 element.tree.paste-recursive-updating-references: Paste recursive, updating references
 element.tree.paste-only-contents: Paste only contents here
 element.tree.cut: Cut
+element.tree.cut-success-description: "{{elementType}} \"{{name}}\" has been cut and is ready to paste"
 element.tree.paste-cut: Paste cut-out element
 element.lock: Lock
 element.lock-and-propagate-to-children: Lock and propagate to children
@@ -794,6 +810,9 @@ redirects.beginner-modal.title: New Beginner Redirect
 redirects.beginner-modal.type: Type
 redirects.beginner-modal.path: Path
 redirects.beginner-modal.target: Target
+redirects.beginner-modal.type.required: Please add a type
+redirects.beginner-modal.path.required: Please add a path
+redirects.beginner-modal.target.required: Please add a target
 redirects.beginner-modal.create: Create
 redirects.beginner-modal.cancel: Cancel
 redirects.csv-import-results.title: Redirects CSV Import Results
@@ -1029,6 +1048,7 @@ embed.edit-url: Edit URL
 embed.clear: Clear
 embed.loading: Loading...
 embed.iframe-title: Embedded content
+document.open-in-new-window: Open in new window
 navigation.recycle-bin: Recycle Bin
 widget.recycle-bin: Recycle Bin
 recycle-bin.columns.type: Type
@@ -1049,3 +1069,6 @@ video.add-video: Add Video
 image.alt-text-placeholder: Enter alt text
 area-settings: Area Settings
 moving-block: Moving block...
+unsupported_feature: Unsupported feature - please check system requirements!
+document.version.comparison.error.title: Version Comparison Error
+document.version.comparison.unsupported.requirements: Chromium binary and PHP extension Imagick are required.

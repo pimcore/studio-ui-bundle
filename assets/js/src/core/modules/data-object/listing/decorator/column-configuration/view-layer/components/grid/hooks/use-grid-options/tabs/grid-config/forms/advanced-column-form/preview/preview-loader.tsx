@@ -16,6 +16,7 @@ import { PreviewValue } from './preview-value'
 import React from 'react'
 import { Text } from '@Pimcore/components/text/text'
 import { usePreviewItem } from './preview-item-provider'
+import { useTranslation } from 'react-i18next'
 
 export interface PreviewProps {
   column: AvailableColumn
@@ -27,6 +28,7 @@ export const PreviewLoader = (props: PreviewProps): React.JSX.Element => {
   const { item } = usePreviewItem()
   const firstItem = gridData.items[0]
   const advancedColumnConfig = (column?.__meta?.advancedColumnConfig ?? column.config) as unknown as AdvancedColumnConfig[] | undefined
+  const { t } = useTranslation()
 
   const { data, error } = useDataObjectGetGridPreviewQuery({
     body: {
@@ -51,7 +53,7 @@ export const PreviewLoader = (props: PreviewProps): React.JSX.Element => {
                 <PreviewValue value={ data?.value } />
                 )
               : (
-                <div>No preview data available</div>
+                <div>{t('grid.advanced-column.no-preview-data')}</div>
                 )}
           </>
           )
