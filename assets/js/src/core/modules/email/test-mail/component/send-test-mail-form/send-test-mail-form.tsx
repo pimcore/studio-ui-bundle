@@ -44,7 +44,7 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
               label={t('test-email.form.document')}
               name="documentPath"
               rules={[
-                { required: true, message: t('email.test.validation.content.required') }
+                { required: true, message: t('test-email.validation.documentPath.required') }
               ]}
             >
               <ManyToOneRelation
@@ -56,9 +56,6 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
 
             <Form.Item
               name="documentParameters"
-              rules={[
-                { required: true, message: t('email.test.validation.content.required') }
-              ]}
             >
               <ParametersTable form={form} />
             </Form.Item>
@@ -70,7 +67,7 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
             label={t('test-email.form.message')}
             name="content"
             rules={[
-              { required: true, message: t('email.test.validation.content.required') }
+              { required: true, message: t('test-email.validation.content.required') }
             ]}
           >
             <CodeEditor
@@ -90,7 +87,7 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
             label={t('test-email.form.message')}
             name="content"
             rules={[
-              { required: true, message: t('email.test.validation.content.required') }
+              { required: true, message: t('test-email.validation.content.required') }
             ]}
           >
             <TextArea
@@ -111,8 +108,8 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
         label={t('test-email.form.from')}
         name="from"
         rules={[
-          { required: true, message: t('email.test.validation.from.required') },
-          { type: 'email', message: t('email.test.validation.from.email') }
+          { required: true, message: t('test-email.validation.from.required') },
+          { type: 'email', message: t('test-email.validation.from.email.type') }
         ]}
       >
         <Input type="email" />
@@ -122,8 +119,8 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
         label={t('test-email.form.to')}
         name="to"
         rules={[
-          { required: true, message: t('email.test.validation.to.required') },
-          { type: 'email', message: t('email.test.validation.to.email') }
+          { required: true, message: t('test-email.validation.to.required') },
+          { type: 'email', message: t('test-email.validation.to.email.type') }
         ]}
       >
         <Input type="email" />
@@ -133,7 +130,7 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
         label={t('test-email.form.subject')}
         name="subject"
         rules={[
-          { required: true, message: t('email.test.validation.subject.required') }
+          { required: true, message: t('test-email.validation.subject.required') }
         ]}
       >
         <Input />

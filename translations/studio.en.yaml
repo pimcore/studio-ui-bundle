@@ -1089,3 +1089,11 @@ test-email.parameters.add: Add Parameter
 test-email.send.error: An error occurred while sending the test email
 test-email.success.modal.title: Sent Test-Email
 test-email.success.modal.text: Your test-email has been sent. Would you like to keep this window open to send the email again?
+test-email.validation.documentPath.required: Please provide a document path
+test-email.validation.documentParameters.required: Please provide at least one parameter
+test-email.validation.content.required: Please provide a message
+test-email.validation.from.required: Please provide a sender email address
+test-email.validation.from.email.type: Please provide a valid sender email address
+test-email.validation.to.required: Please provide a recipient email address
+test-email.validation.to.email.type: Please provide a valid recipient email address
+test-email.validation.subject.required: Please provide a subject
