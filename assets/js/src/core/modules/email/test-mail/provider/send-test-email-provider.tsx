@@ -47,11 +47,15 @@ export const SendTestEmailProvider: React.FC<SendTestEmailProviderProps> = ({ ch
       tmpForm.validateFields()
         .then(async () => {
           setIsOkButtonLoading(true)
-          const values = tmpForm.getFieldsValue() as SendEmailParameters
+          const values = tmpForm.getFieldsValue()
+          const formattedValues: SendEmailParameters = {
+            ...values,
+            documentPath: values.documentPath?.fullPath ?? null,
+          }
 
           resolve(values)
           void send(
-            values,
+            formattedValues,
             () => {
               closeModal()
               setIsOkButtonLoading(false)
@@ -75,27 +79,27 @@ export const SendTestEmailProvider: React.FC<SendTestEmailProviderProps> = ({ ch
     closeModal
   }), [isOpen, tmpForm])
 
-    return (
-        <SendTestEmailContext.Provider value={contextValue}>
-            <WindowModal
-                onClose={() => { closeModal() }}
-                onCancel={() => { closeModal() }}
-                onOk={async () => {
-                    await submit()
-                }}
-                title={t('test-email-modal-title')}
-                open={isOpen}
-                okButtonProps={{
-                    loading: isOkButtonLoading
-                }}
-                size="L"
-            >
-                <SendTestMailForm
-                    form={tmpForm}
-                />
-            </WindowModal>
+  return (
+    <SendTestEmailContext.Provider value={contextValue}>
+      <WindowModal
+        onClose={() => { closeModal() }}
+        onCancel={() => { closeModal() }}
+        onOk={async () => {
+          await submit()
+        }}
+        title={t('test-email-modal-title')}
+        open={isOpen}
+        okButtonProps={{
+          loading: isOkButtonLoading
+        }}
+        size="L"
+      >
+        <SendTestMailForm
+          form={tmpForm}
+        />
+      </WindowModal>
 
-            {children}
-        </SendTestEmailContext.Provider>
-    )
+      {children}
+    </SendTestEmailContext.Provider>
+  )
 }

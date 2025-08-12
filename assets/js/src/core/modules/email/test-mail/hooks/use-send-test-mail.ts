@@ -34,6 +34,7 @@ export const useSendTestMail = (): UseSendTestMailHookReturn => {
       const response = await sendTestMailTask
 
       if (!isUndefined(response.error)) {
+        onContinue?.()
         trackError(new ApiError(response.error))
         return
       }
@@ -51,6 +52,7 @@ export const useSendTestMail = (): UseSendTestMailHookReturn => {
         }
       })
     } catch {
+      onContinue?.()
       trackError(new GeneralError(t('test-email.send.error')))
     }
   }
