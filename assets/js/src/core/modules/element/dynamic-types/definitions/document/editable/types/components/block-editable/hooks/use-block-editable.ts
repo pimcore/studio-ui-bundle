@@ -127,11 +127,17 @@ export const useBlockEditable = ({
     }
 
     const editableNamesToRemove = getBlockEditableNames(element)
-
-    const elementId = element.getAttribute('id')
-    if (!isNil(elementId) && elementId !== '') {
+    
+    // Get the block key to properly filter dynamic editables
+    const elementKey = blockManager.getElementKey(element)
+    
+    // Remove editables from state using the proper pattern
+    if (!isNil(elementKey)) {
+      const editableName = blockManager.getEditableName()
+      const namePattern = `${editableName}:${elementKey}.`
+      
       setDynamicEditables(prev =>
-        prev.filter(editable => !editable.id.includes(elementId))
+        prev.filter(editable => !editable.name.startsWith(namePattern))
       )
     }
 

@@ -75,7 +75,7 @@ export const BlockEditable = ({
   })
 
   // Simplified controls hook for UI manipulation
-  const { initializeControls, updateControls } = useBlockControls({
+  const { initializeControls, updateControls, renderBlockToolbar } = useBlockControls({
     editableName,
     onAddBlock: addBlock,
     onRemoveBlock: removeBlock,
@@ -111,6 +111,7 @@ export const BlockEditable = ({
   return (
     <div className={ `${styles.blockContainer} ${className ?? ''}` }>
       <DynamicEditablesRenderer editableDefinitions={ dynamicEditables } />
+      {renderBlockToolbar()}
     </div>
   )
 }

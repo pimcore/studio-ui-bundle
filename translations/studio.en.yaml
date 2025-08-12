@@ -1048,3 +1048,11 @@ video.placeholder: No video selected - Click to add a video
 video.add-video: Add Video
 image.alt-text-placeholder: Enter alt text
 area-settings: Area Settings
+
+# Block editable controls
+add-block-entry: Add block entry
+remove-block-entry: Remove block entry
+move-up: Move up
+move-down: Move down
+cannot-move-up: Cannot move up
+cannot-move-down: Cannot move down

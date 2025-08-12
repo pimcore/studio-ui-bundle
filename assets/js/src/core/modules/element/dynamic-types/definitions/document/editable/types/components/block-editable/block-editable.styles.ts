@@ -114,5 +114,10 @@ export const useBlockEditableStyles = createStyles(({ token }) => ({
       borderColor: token.colorPrimary,
       color: token.colorPrimary
     }
+  },
+
+  blockToolstrip: {
+    display: 'inline-block',
+    width: 'fit-content'
   }
 }))
