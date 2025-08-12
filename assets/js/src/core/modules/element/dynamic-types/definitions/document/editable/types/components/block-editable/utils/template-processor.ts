@@ -32,7 +32,6 @@ export const processBlockTemplate = (
 
   let processedHtml = templateHtml
 
-  // Replace placeholder patterns with actual values
   processedHtml = processedHtml.replace(
     new RegExp(`"([^"]+):1000000\\.${realName}("|:)`, 'g'),
     `"${fullName}$2`
@@ -46,7 +45,6 @@ export const processBlockTemplate = (
   processedHtml = processedHtml.replace(/="1000000"/g, `="${nextKey}"`)
   processedHtml = processedHtml.replace(/, 1000000"/g, `, ${nextKey}"`)
 
-  // Process editable definitions
   const editableDefinitions: AbstractDocumentEditableDefinition[] = []
 
   templateEditables.forEach(editableDef => {

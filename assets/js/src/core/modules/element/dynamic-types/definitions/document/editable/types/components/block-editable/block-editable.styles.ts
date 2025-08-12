@@ -25,7 +25,7 @@ export const useBlockEditableStyles = createStyles(({ token }) => ({
   // Drag and drop states
   dragDropTarget: {
     outline: `1px dashed ${token.colorPrimaryBorder} !important`,
-    outlineOffset: '5px !important',
+    outlineOffset: '5px !important'
   },
 
   dragActive: {

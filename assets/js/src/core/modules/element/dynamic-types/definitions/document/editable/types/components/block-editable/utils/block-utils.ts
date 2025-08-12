@@ -14,7 +14,6 @@ import { type AbstractDocumentEditableDefinition } from '../../../../dynamic-typ
 import { processBlockTemplate, ensurePortalTargets } from './template-processor'
 import { type BlockManager } from './block-manager'
 
-// Block Value Operations
 export const blockValueUtils = {
   swapElements: <T>(array: T[], index1: number, index2: number): T[] => {
     const newArray = [...array]
@@ -34,7 +33,6 @@ export const blockValueUtils = {
   }
 }
 
-// Configuration & Validation
 export const configUtils = {
   isLimitReached: (currentCount: number, limit?: number): boolean => {
     return !isNil(limit) && currentCount >= limit
@@ -57,7 +55,6 @@ export const configUtils = {
   }
 }
 
-// Block Operations
 export const operationUtils = {
   createEditableData: (
     editableDefinitions: Array<{ name: string, type: string, data?: unknown }>
@@ -118,7 +115,6 @@ export const operationUtils = {
   }
 }
 
-// Interface for block addition parameters
 export interface ProcessNonReloadBlockAdditionParams {
   blockManager: BlockManager
   index: number
@@ -127,5 +123,4 @@ export interface ProcessNonReloadBlockAdditionParams {
   setDynamicEditables: React.Dispatch<React.SetStateAction<AbstractDocumentEditableDefinition[]>>
 }
 
-// Re-export BlockManager for convenience
 export { BlockManager } from './block-manager'

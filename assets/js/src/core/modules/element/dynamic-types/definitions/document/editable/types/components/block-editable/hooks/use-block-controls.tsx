@@ -136,27 +136,22 @@ export const useBlockControls = ({
 
   const initializeControls = useCallback((): void => {
     const container = blockManager.getContainer()
-    console.log('Initializing block controls!', container)
     if (isNull(container)) return
 
-    // Don't recreate if already initialized (portal exists)
     if (emptyStatePortal !== null) return
 
-    // Create EmptyStateBlockToolbar component
     const emptyStateToolbar = (
       <EmptyStateBlockToolbar
         onClick={ () => {
-          // Clear state immediately to prevent re-renders during DOM changes
           setEmptyStatePortal(null)
-          
-          // Use setTimeout to ensure cleanup happens before onAddBlock
+
           setTimeout(() => {
             onAddBlock(null, 1)
           }, 0)
         } }
       />
     )
-    
+
     const portal = ReactDOM.createPortal(emptyStateToolbar, container)
     setEmptyStatePortal(portal)
   }, [blockManager, onAddBlock, emptyStatePortal])
@@ -171,7 +166,6 @@ export const useBlockControls = ({
     const currentBlockEntries = blockManager.queryElements()
     const validContainerIds = new Set<string>()
 
-    // Add empty state portal if we have no blocks
     if (currentBlockEntries.length === 0 && emptyStatePortal !== null) {
       portals.push(emptyStatePortal)
     }

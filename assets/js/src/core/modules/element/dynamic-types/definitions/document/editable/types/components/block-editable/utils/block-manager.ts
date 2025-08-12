@@ -34,7 +34,6 @@ export class BlockManager {
     return element as HTMLElement
   }
 
-  // DOM Operations
   queryElements (): HTMLElement[] {
     if (isNil(this.container)) return []
 
@@ -50,7 +49,6 @@ export class BlockManager {
     return elements.findIndex(element => element.getAttribute('key') === targetKey)
   }
 
-  // Element Key Management
   getElementKey (element: HTMLElement): string | null {
     return element.getAttribute('key')
   }
@@ -93,7 +91,6 @@ export class BlockManager {
     return nextKey + 1
   }
 
-  // Block Value Operations
   getBlockValue (): BlockValue {
     const elements = this.queryElements()
     return elements
@@ -102,7 +99,6 @@ export class BlockManager {
       .map(key => parseInt(key, 10))
   }
 
-  // Utility methods
   getContainer (): HTMLElement | null {
     return this.container
   }
