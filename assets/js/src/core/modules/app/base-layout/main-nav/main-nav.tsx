@@ -105,7 +105,7 @@ export const MainNav = (): React.JSX.Element => {
 
               {shouldShowChevron(item, index) && (
                 <Icon
-                  className={ 'main-nav__list-btn-icon' }
+                  className={ 'main-nav__list-chevron-btn-icon' }
                   value={ 'chevron-right' }
                 />
               )}

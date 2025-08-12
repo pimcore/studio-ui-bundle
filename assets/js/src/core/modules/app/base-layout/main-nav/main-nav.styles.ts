@@ -158,11 +158,11 @@ export const useStlyes = createStyles(({
         font-size: ${token.fontSize}px;
         min-height: 46px;
         font-family:  ${token.fontFamily};
-        
-      .ant-avatar {
-       background-color: ${token.colorFillAlter};
-       color: ${token.colorPrimary}
-      }
+
+        .ant-avatar {
+          background-color: ${token.colorFillAlter};
+          color: ${token.colorPrimary};
+        }
 
         &:hover {
           background: ${token.controlItemBgActiveHover};
@@ -173,12 +173,14 @@ export const useStlyes = createStyles(({
       .is-active > .main-nav__list-btn {
         background: ${token.controlItemBgActive};
         color: ${token.colorPrimary};
+        padding: 11px 11px 11px 6px ;
+        gap: 4px;
       }
       
-      .main-nav__list-btn-icon {
+      .main-nav__list-chevron-btn-icon {
         margin-left: auto;
       }
-      
+
       .main-nav__divider {
         margin: ${token.marginSM}px 0;
       }
