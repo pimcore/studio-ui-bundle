@@ -44,7 +44,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'AutomationIntegration',
       label: 'navigation.automation-integration',
-      icon: 'integration'
+      icon: 'automation-integration'
     })
 
     mainNavRegistryService.registerMainNavItem({

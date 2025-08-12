@@ -29,6 +29,7 @@ import asset from '@Pimcore/assets/icons/asset.inline.svg?react'
 import attachment from '@Pimcore/assets/icons/attachment.inline.svg?react'
 import audio from '@Pimcore/assets/icons/audio.inline.svg?react'
 import autoSave from '@Pimcore/assets/icons/auto-save.inline.svg?react'
+import automationIntegration from '@Pimcore/assets/icons/automation-integration.inline.svg?react'
 import batchSelection from '@Pimcore/assets/icons/batch-selection.inline.svg?react'
 import bodyStyle from '@Pimcore/assets/icons/body-style.inline.svg?react'
 import bookmark from '@Pimcore/assets/icons/bookmark.inline.svg?react'
@@ -126,7 +127,6 @@ import infoCircle from '@Pimcore/assets/icons/info-circle.inline.svg?react'
 import info from '@Pimcore/assets/icons/info.inline.svg?react'
 import inheritanceActive from '@Pimcore/assets/icons/inheritance-active.inline.svg?react'
 import inheritanceBroken from '@Pimcore/assets/icons/inheritance-broken.inline.svg?react'
-import integration from '@Pimcore/assets/icons/integration.inline.svg?react'
 import json from '@Pimcore/assets/icons/json.inline.svg?react'
 import key from '@Pimcore/assets/icons/key.inline.svg?react'
 import keyboard from '@Pimcore/assets/icons/keyboard.inline.svg?react'
@@ -297,6 +297,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'auto-save',
       component: autoSave
+    })
+    iconLibrary.register({
+      name: 'automation-integration',
+      component: automationIntegration
     })
     iconLibrary.register({
       name: 'batch-selection',
@@ -685,10 +689,6 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'inheritance-broken',
       component: inheritanceBroken
-    })
-    iconLibrary.register({
-      name: 'integration',
-      component: integration
     })
     iconLibrary.register({
       name: 'json',
