@@ -167,13 +167,13 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
-            dataObjectFormatPath: build.mutation<DataObjectFormatPathApiResponse, DataObjectFormatPathApiArg>({
+            dataObjectFormatPath: build.query<DataObjectFormatPathApiResponse, DataObjectFormatPathApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/data-objects/format-path`,
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Data Objects"],
+                providesTags: ["Data Objects"],
             }),
             dataObjectPreviewById: build.query<DataObjectPreviewByIdApiResponse, DataObjectPreviewByIdApiArg>({
                 query: (queryArg) => ({
@@ -899,7 +899,7 @@ export const {
     useDataObjectGetLayoutByIdQuery,
     useDataObjectPatchByIdMutation,
     useDataObjectPatchFolderByIdMutation,
-    useDataObjectFormatPathMutation,
+    useDataObjectFormatPathQuery,
     useDataObjectPreviewByIdQuery,
     useDataObjectReplaceContentMutation,
     useDataObjectGetSelectOptionsMutation,

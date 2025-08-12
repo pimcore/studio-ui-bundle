@@ -27,7 +27,6 @@ import {
   type UserGetTreeApiArg,
   type UserDeleteByIdApiArg,
   type UserFolderDeleteByIdApiArg,
-  type User2,
   type User,
   type UserGetAvailablePermissionsApiResponse
 } from '@Pimcore/modules/user/user-api-slice-enhanced'
@@ -49,6 +48,10 @@ interface AddItemArgs {
   name: string
 }
 
+interface IUser extends User {
+  password?: string
+}
+
 interface UseUserReturn extends
   UseTrackableChangesDraftReturn {
   openUser: (id: number) => void
@@ -58,7 +61,7 @@ interface UseUserReturn extends
   removeUser: (props: UserDeleteByIdApiArg) => Promise<{ data: UserDeleteByIdApiResponse, error: any }>
   removeFolder: (props: UserFolderDeleteByIdApiArg) => Promise<{ data: UserFolderDeleteByIdApiResponse, error: any }>
   cloneUser: (props: { id: number, name: string }) => Promise<{ data: UserCloneByIdApiResponse, error: any }>
-  updateUserById: (props: { id: number, user: User2 | User }) => Promise<{ data: UserUpdateByIdApiResponse, error: any }>
+  updateUserById: (props: { id: number, user: IUser }) => Promise<{ data: UserUpdateByIdApiResponse, error: any }>
   moveUserById: (props: { id: number, parentId: number }) => Promise<{ data: UserUpdateByIdApiResponse, error: any }>
   addNewFolder: (props: AddItemArgs) => Promise<{ data: UserFolderCreateApiResponse, error: any }>
   fetchUserList: () => Promise<UserGetCollectionApiResponse>
@@ -168,7 +171,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
     return data
   }
 
-  async function updateUserById (props: { id: number, user: User2 | User }): Promise<{ data: UserUpdateByIdApiResponse, error: Error }> {
+  async function updateUserById (props: { id: number, user: IUser }): Promise<{ data: UserUpdateByIdApiResponse, error: Error }> {
     const { id, user } = props
     const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({
       id,
@@ -195,7 +198,8 @@ export const useUserManagementHelper = (): UseUserReturn => {
         assetWorkspaces: user.assetWorkspaces,
         dataObjectWorkspaces: user.dataObjectWorkspaces,
         documentWorkspaces: user.documentWorkspaces,
-        perspectives: user.perspectives
+        perspectives: user.perspectives,
+        ...user.password !== undefined ? { password: user.password } : {}
       }
     }))
     handleNotification(t('user-management.save-user.success'), error)

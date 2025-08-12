@@ -46,9 +46,9 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
     renameTreeContextMenuItem(node),
     copyTreeContextMenuItem(node),
     cutTreeContextMenuItem(node),
+    pasteCutContextMenuItem(node),
     publishTreeContextMenuItem(node),
     unpublishTreeContextMenuItem(node),
-    pasteCutContextMenuItem(parseInt(node.id)),
     deleteTreeContextMenuItem(node),
     openInNewWindowTreeContextMenuItem(node),
     {

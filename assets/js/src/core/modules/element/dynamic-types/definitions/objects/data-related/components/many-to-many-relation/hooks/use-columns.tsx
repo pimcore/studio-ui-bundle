@@ -25,6 +25,7 @@ import { getElementCellConfig } from '../utils/helpers'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { LoadingOutlined } from '@ant-design/icons'
+import { isValidPathFormatterConfig } from '../utils/path-formatter'
 
 interface UseColumnsReturn {
   columns: Array<ColumnDef<any>>
@@ -65,7 +66,7 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
         config: getElementCellConfig(props.inherited === true || props.disabled === true)
       },
       size: 200,
-      ...(props.pathFormatterConfig != null ? { cell: renderFullPathCell } : {})
+      ...(isValidPathFormatterConfig(props.pathFormatterConfig) ? { cell: renderFullPathCell } : {})
     }),
     columnHelper.accessor('type', {
       header: t('relations.type'),
