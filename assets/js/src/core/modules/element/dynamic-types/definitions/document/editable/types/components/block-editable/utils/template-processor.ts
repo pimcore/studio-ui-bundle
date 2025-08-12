@@ -10,6 +10,7 @@
 
 import { isNil } from 'lodash'
 import { type AbstractDocumentEditableDefinition } from '../../../../dynamic-type-document-editable-abstract'
+import { EDITABLE_DEFAULT_FIELD_WIDTHS } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-renderer/render-editable'
 
 export interface ProcessTemplateParams {
   templateHtml: string
@@ -104,12 +105,8 @@ export const processBlockTemplate = (
       config: newEditableDef.config ?? {},
       type: newEditableDef.type,
       inherited: false,
-      inDialogBox: null,
-      defaultFieldWidth: {
-        small: 200,
-        medium: 300,
-        large: 900
-      }
+      inDialogBox: newEditableDef.inDialogBox ?? false,
+      defaultFieldWidth: EDITABLE_DEFAULT_FIELD_WIDTHS
     }
 
     editableDefinitions.push(dynamicEditableDefinition)
