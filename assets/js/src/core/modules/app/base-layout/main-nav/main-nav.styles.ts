@@ -163,11 +163,6 @@ export const useStlyes = createStyles(({
         margin: 4px;
         }
 
-        .ant-avatar {
-          background-color: ${token.colorFillAlter};
-          color: ${token.colorPrimary};
-        }
-
         &:hover {
           background: ${token.controlItemBgActiveHover};
           color: ${token.colorPrimary};

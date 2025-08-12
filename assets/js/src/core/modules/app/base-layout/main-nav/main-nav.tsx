@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Avatar, Divider } from 'antd'
+import { Divider } from 'antd'
 import React, { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useStlyes } from './main-nav.styles'
@@ -62,6 +62,13 @@ export const MainNav = (): React.JSX.Element => {
       return <></>
     }
 
+    const isNestedItem = index.includes('-')
+
+    const handleAvatarClick = (e: React.MouseEvent<HTMLSpanElement>) => {
+      e.stopPropagation()
+      // your logic...
+    }
+
     return (
       <li
         className={ `main-nav__list-item ${openKeys.includes(index) ? 'is-active' : ''} ${item.className ?? ''}` }
@@ -94,9 +101,10 @@ export const MainNav = (): React.JSX.Element => {
               {item.icon !== undefined && (
                 openKeys.includes(index)
                   ? (
-                    <Avatar
-                      icon={ <Icon value={ item.icon } /> }
-                      size={ 24 }
+                    <Icon
+                      options={ { width: 16, height: 16 } }
+                      sphere
+                      value={ item.icon }
                     />
                     )
                   : (
