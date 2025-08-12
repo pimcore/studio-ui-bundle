@@ -84,11 +84,14 @@ export const MainNav = (): React.JSX.Element => {
               } }
               >
               {item.icon !== undefined
-                ? (
-                  <Avatar
-                    icon={ <Icon value={ item.icon } /> }
-                    size={ 24 }
-                  />
+                ? (openKeys.includes(index)
+                    ? (
+                      <Avatar
+                        icon={ <Icon value={ item.icon } /> }
+                        size={ 24 }
+                      />
+                      )
+                    : <Icon value={ item.icon } />
                   )
                 : null}
               {t(`${item.label}`)}
