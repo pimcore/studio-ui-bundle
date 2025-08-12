@@ -11,7 +11,6 @@
 import React, { useMemo, useState } from 'react'
 import { isUndefined } from 'lodash'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
-import { Content } from '@Pimcore/components/content/content'
 import { useReportEditorData } from '@Pimcore/modules/reports/reports-editor/hooks/useReportEditorData'
 import { type BundleCustomReportsConfigurationTreeNode } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
@@ -65,15 +64,11 @@ export const ReportsEditor = (): React.JSX.Element => {
     size: 25,
     minSize: 150,
     children: (
-      <Content
-        loading={ isReportsConfigTreeLoading }
-        padded
-      >
-        <ReportsSidebar
-          handleOpenReport={ handleOpenReport }
-          reportsList={ reportsConfigTreeData }
-        />
-      </Content>
+      <ReportsSidebar
+        handleOpenReport={ handleOpenReport }
+        isLoading={ isReportsConfigTreeLoading }
+        reportsList={ reportsConfigTreeData }
+      />
     )
   }
 
