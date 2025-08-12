@@ -18,7 +18,7 @@ import { ReportsSidebar } from '@Pimcore/modules/reports/reports-editor/componen
 import { ReportConfiguration } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/report-configuration'
 
 export const ReportsEditor = (): React.JSX.Element => {
-  const { isReportsConfigTreeLoading, reportsConfigTreeData } = useReportEditorData()
+  const { isReportsConfigTreeLoading, isReportsConfigTreeFetching, refetchReportsConfigTree, reportsConfigTreeData } = useReportEditorData()
 
   const [openedReports, setOpenedReports] = useState<BundleCustomReportsConfigurationTreeNode[]>([])
   const [activeTabKey, setActiveTabKey] = useState<string | undefined>(undefined)
@@ -66,7 +66,9 @@ export const ReportsEditor = (): React.JSX.Element => {
     children: (
       <ReportsSidebar
         handleOpenReport={ handleOpenReport }
+        isFetching={ isReportsConfigTreeFetching }
         isLoading={ isReportsConfigTreeLoading }
+        refetch={ refetchReportsConfigTree }
         reportsList={ reportsConfigTreeData }
       />
     )

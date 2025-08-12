@@ -16,16 +16,22 @@ import {
 export interface IUseReportDataReturn {
   reportsConfigTreeData: CustomReportsConfigGetTreeApiResponse | undefined
   isReportsConfigTreeLoading: boolean
+  isReportsConfigTreeFetching: boolean
+  refetchReportsConfigTree: () => void
 }
 
 export const useReportEditorData = (): IUseReportDataReturn => {
   const {
     data: reportsConfigTreeData,
-    isLoading: isReportsConfigTreeLoading
+    isLoading: isReportsConfigTreeLoading,
+    isFetching: isReportsConfigTreeFetching,
+    refetch: refetchReportsConfigTree
   } = useCustomReportsConfigGetTreeQuery({ page: 1, pageSize: 9999 })
 
   return {
     reportsConfigTreeData,
-    isReportsConfigTreeLoading
+    isReportsConfigTreeLoading,
+    isReportsConfigTreeFetching,
+    refetchReportsConfigTree
   }
 }

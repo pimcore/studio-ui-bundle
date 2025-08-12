@@ -14,6 +14,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Text } from '@Pimcore/components/text/text'
+import { Toolbar } from '@Pimcore/modules/reports/reports-editor/components/reports-sidebar/components/toolbar/toolbar'
 import {
   type BundleCustomReportsConfigurationTreeNode,
   type CustomReportsConfigGetTreeApiResponse
@@ -22,15 +23,23 @@ import { useStyles } from '@Pimcore/modules/reports/reports-editor/reports-edito
 
 interface IReportsSidebarProps {
   isLoading: boolean
+  isFetching: boolean
+  refetch: () => void
   reportsList?: CustomReportsConfigGetTreeApiResponse
   handleOpenReport: (report: BundleCustomReportsConfigurationTreeNode) => void
 }
 
-export const ReportsSidebar = ({ isLoading, reportsList, handleOpenReport }: IReportsSidebarProps): React.JSX.Element => {
+export const ReportsSidebar = ({ isLoading, isFetching, refetch, reportsList, handleOpenReport }: IReportsSidebarProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   return (
-    <ContentLayout renderToolbar={ <div>Test</div> }>
+    <ContentLayout renderToolbar={ (
+      <Toolbar
+        isFetching={ isFetching }
+        refetch={ refetch }
+      />
+    ) }
+    >
       <Content
         loading={ isLoading }
         padded
