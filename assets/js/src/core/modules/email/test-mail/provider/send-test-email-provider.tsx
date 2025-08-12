@@ -50,7 +50,7 @@ export const SendTestEmailProvider: React.FC<SendTestEmailProviderProps> = ({ ch
           const values = tmpForm.getFieldsValue()
           const formattedValues: SendEmailParameters = {
             ...values,
-            documentPath: values.documentPath?.fullPath ?? null,
+            documentPath: values.documentPath?.fullPath ?? null
           }
 
           resolve(values)
@@ -80,22 +80,22 @@ export const SendTestEmailProvider: React.FC<SendTestEmailProviderProps> = ({ ch
   }), [isOpen, tmpForm])
 
   return (
-    <SendTestEmailContext.Provider value={contextValue}>
+    <SendTestEmailContext.Provider value={ contextValue }>
       <WindowModal
-        onClose={() => { closeModal() }}
-        onCancel={() => { closeModal() }}
-        onOk={async () => {
-          await submit()
-        }}
-        title={t('test-email-modal-title')}
-        open={isOpen}
-        okButtonProps={{
+        okButtonProps={ {
           loading: isOkButtonLoading
-        }}
+        } }
+        onCancel={ () => { closeModal() } }
+        onClose={ () => { closeModal() } }
+        onOk={ async () => {
+          await submit()
+        } }
+        open={ isOpen }
         size="L"
+        title={ t('test-email-modal-title') }
       >
         <SendTestMailForm
-          form={tmpForm}
+          form={ tmpForm }
         />
       </WindowModal>
 
