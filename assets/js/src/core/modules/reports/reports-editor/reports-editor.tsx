@@ -60,36 +60,42 @@ export const ReportsEditor = (): React.JSX.Element => {
     setActiveTabKey(key)
   }
 
+  const sidebarContent = {
+    id: 'reports-sidebar',
+    size: 25,
+    minSize: 150,
+    children: (
+      <Content
+        loading={ isReportsConfigTreeLoading }
+        padded
+      >
+        <ReportsSidebar
+          handleOpenReport={ handleOpenReport }
+          reportsList={ reportsConfigTreeData }
+        />
+      </Content>
+    )
+  }
+
+  const mainContent = {
+    id: 'reports-main-content',
+    size: 75,
+    minSize: 300,
+    children: (
+      <Tabs
+        activeKey={ activeTabKey }
+        items={ tabItems }
+        onChange={ handleChangeTab }
+        onClose={ handleCloseTab }
+      />
+    )
+  }
+
   return (
     <SplitLayout
-      leftItem={ {
-        minSize: 150,
-        size: 25,
-        children: (
-          <Content
-            loading={ isReportsConfigTreeLoading }
-            padded
-          >
-            <ReportsSidebar
-              handleOpenReport={ handleOpenReport }
-              reportsList={ reportsConfigTreeData }
-            />
-          </Content>
-        )
-      } }
+      leftItem={ sidebarContent }
       resizeAble
-      rightItem={ {
-        minSize: 300,
-        size: 75,
-        children: (
-          <Tabs
-            activeKey={ activeTabKey }
-            items={ tabItems }
-            onChange={ handleChangeTab }
-            onClose={ handleCloseTab }
-          />
-        )
-      } }
+      rightItem={ mainContent }
       withDivider
     />
   )
