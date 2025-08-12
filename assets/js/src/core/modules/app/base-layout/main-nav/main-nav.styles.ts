@@ -149,15 +149,19 @@ export const useStlyes = createStyles(({
         background: none;
         border: 0;
         width: 100%;
-        padding: ${token.paddingSM}px;
+        padding: ${token.paddingSM}px ${token.paddingSM}px ${token.paddingSM}px ${token.paddingXS}px ;
+        gap: 4px;
         cursor: pointer;
         text-align: left;
         display: flex;
         align-items: center;
-        gap: ${token.marginXS}px;
         font-size: ${token.fontSize}px;
         min-height: 46px;
         font-family:  ${token.fontFamily};
+
+        .plain-icon {
+        margin: 4px;
+        }
 
         .ant-avatar {
           background-color: ${token.colorFillAlter};
@@ -173,8 +177,7 @@ export const useStlyes = createStyles(({
       .is-active > .main-nav__list-btn {
         background: ${token.controlItemBgActive};
         color: ${token.colorPrimary};
-        padding: 11px 11px 11px 6px ;
-        gap: 4px;
+        padding-left: 6px;
       }
       
       .main-nav__list-chevron-btn-icon {
