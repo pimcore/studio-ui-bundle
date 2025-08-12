@@ -34,7 +34,7 @@ import {
 } from '@dnd-kit/sortable'
 
 export interface UseBlockControlsParams {
-  editableName: string
+  blockManager: BlockManager
   onAddBlock: (element: HTMLElement | null, amount?: number) => void
   onRemoveBlock: (element: HTMLElement) => void
   onMoveBlockUp: (element: HTMLElement) => void
@@ -44,13 +44,12 @@ export interface UseBlockControlsParams {
 
 export interface UseBlockControlsReturn {
   updateControls: (element: HTMLElement, limitReached: boolean) => void
-  initializeControls: (blockManager: BlockManager) => void
+  initializeControls: () => void
   renderBlockToolbar: () => React.JSX.Element
-  cleanupControls: () => void
 }
 
 export const useBlockControls = ({
-  editableName,
+  blockManager,
   onAddBlock,
   onRemoveBlock,
   onMoveBlockUp,
@@ -75,17 +74,15 @@ export const useBlockControls = ({
   )
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
-    console.log('Drag start:', event.active.id)
     setActiveId(event.active.id as string)
   }, [])
 
   const handleDragOver = useCallback((event: DragOverEvent) => {
     const { over } = event
 
-    const allBlockEntries = document.querySelectorAll('.pimcore_block_entry[data-name="' + editableName + '"][key]')
-    allBlockEntries.forEach(entry => {
-      const element = entry as HTMLElement
-      const key = element.getAttribute('key')
+    const allBlockEntries = blockManager.queryElements()
+    allBlockEntries.forEach(element => {
+      const key = blockManager.getElementKey(element)
 
       if (key === over?.id) {
         element.classList.add(styles.dragDropTarget)
@@ -93,53 +90,38 @@ export const useBlockControls = ({
         element.classList.remove(styles.dragDropTarget)
       }
     })
-  }, [editableName, styles])
+  }, [blockManager, styles])
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event
 
-    console.log('Drag end event:', { active: active.id, over: over?.id })
-
     setActiveId(null)
 
-    const allBlockEntries = document.querySelectorAll('.pimcore_block_entry[data-name="' + editableName + '"][key]')
-    allBlockEntries.forEach(entry => {
-      const element = entry as HTMLElement
+    const allBlockEntries = blockManager.queryElements()
+    allBlockEntries.forEach(element => {
       element.style.transform = ''
       element.style.transition = ''
       element.classList.remove(styles.dragActive, styles.dragDropTarget)
     })
 
     if (over !== null && active.id !== over.id) {
-      const currentBlockEntries = Array.from(
-        document.querySelectorAll('.pimcore_block_entry[data-name="' + editableName + '"][key]')
-      )
+      const currentBlockEntries = blockManager.queryElements()
 
-      console.log('Current block entries:', currentBlockEntries.map(el => el.getAttribute('key')))
-
-      const originalActiveIndex = currentBlockEntries.findIndex(el => el.getAttribute('key') === active.id)
-      const originalOverIndex = currentBlockEntries.findIndex(el => el.getAttribute('key') === over.id)
-
-      console.log('Original indices:', { from: originalActiveIndex, to: originalOverIndex })
+      const originalActiveIndex = currentBlockEntries.findIndex(el => blockManager.getElementKey(el) === active.id)
+      const originalOverIndex = currentBlockEntries.findIndex(el => blockManager.getElementKey(el) === over.id)
 
       if (originalActiveIndex !== -1 && originalOverIndex !== -1 && originalActiveIndex !== originalOverIndex) {
-        console.log('Calling onMoveBlock with indices:', originalActiveIndex, originalOverIndex)
         onMoveBlock(originalActiveIndex, originalOverIndex)
       }
     }
-  }, [editableName, onMoveBlock, styles])
+  }, [blockManager, onMoveBlock, styles])
 
   const updateControls = useCallback((element: HTMLElement, limitReached: boolean) => {
-    console.log('updateControls called for element:', element)
-
     const buttonsContainer = element.querySelector('.pimcore_block_buttons')
 
     if (isNull(buttonsContainer)) {
-      console.log('No buttons container found')
       return
     }
-
-    console.log('Found buttons container:', buttonsContainer)
 
     limitReachedRef.current = limitReached
 
@@ -149,7 +131,7 @@ export const useBlockControls = ({
     })
   }, [])
 
-  const initializeControls = useCallback((blockManager: BlockManager): void => {
+  const initializeControls = useCallback((): void => {
     const container = blockManager.getContainer()
     if (isNull(container)) return
 
@@ -165,14 +147,12 @@ export const useBlockControls = ({
       }
       container.addEventListener('click', handleContainerClick)
     }
-  }, [onAddBlock])
+  }, [blockManager, onAddBlock])
 
   const renderBlockToolbar = useCallback((): React.JSX.Element => {
     const portals: React.ReactPortal[] = []
 
-    console.log('renderBlockToolbar called, current containers:', portalContainersRef.current.size)
-
-    const currentBlockEntries = document.querySelectorAll('.pimcore_block_entry[data-name="' + editableName + '"][key]')
+    const currentBlockEntries = blockManager.queryElements()
     const validContainerIds = new Set<string>()
 
     currentBlockEntries.forEach(blockEntry => {
@@ -186,45 +166,38 @@ export const useBlockControls = ({
       }
     })
 
-    console.log('Valid container IDs from DOM:', validContainerIds)
-
     portalContainersRef.current.clear()
 
-    const blockKeys = Array.from(currentBlockEntries)
-      .map(entry => entry.getAttribute('key'))
+    const blockKeys = currentBlockEntries
+      .map(entry => blockManager.getElementKey(entry))
       .filter((key): key is string => Boolean(key))
 
     currentBlockEntries.forEach(blockEntry => {
       const buttonsContainer = blockEntry.querySelector('.pimcore_block_buttons')
       if (buttonsContainer !== null) {
-        portalContainersRef.current.set(buttonsContainer as HTMLElement, blockEntry as HTMLElement)
-        const blockKey = blockEntry.getAttribute('key')
+        portalContainersRef.current.set(buttonsContainer as HTMLElement, blockEntry)
+        const blockKey = blockManager.getElementKey(blockEntry)
 
         if (blockKey !== null) {
           const sortableToolbar = (
             <SortableBlockToolbar
               activeId={ activeId }
+              blockManager={ blockManager }
               buttonsContainer={ buttonsContainer as HTMLElement }
-              editableName={ editableName }
-              element={ blockEntry as HTMLElement }
+              element={ blockEntry }
               id={ blockKey }
               limitReached={ limitReachedRef.current }
               onAddBlock={ onAddBlock }
               onMoveBlockDown={ onMoveBlockDown }
               onMoveBlockUp={ onMoveBlockUp }
               onRemoveBlock={ onRemoveBlock }
-              styles={ styles }
-              t={ t }
             />
           )
           const portal = ReactDOM.createPortal(sortableToolbar, buttonsContainer)
           portals.push(portal)
-          console.log('Created sortable portal for container')
         }
       }
     })
-
-    console.log('Rebuilt containers, total:', portalContainersRef.current.size)
 
     return (
       <DndContext
@@ -246,7 +219,7 @@ export const useBlockControls = ({
         />
       </DndContext>
     )
-  }, [editableName, sensors, handleDragStart, handleDragOver, handleDragEnd, onAddBlock, onRemoveBlock, onMoveBlockUp, onMoveBlockDown, t, styles, activeId])
+  }, [blockManager, sensors, handleDragStart, handleDragOver, handleDragEnd, onAddBlock, onRemoveBlock, onMoveBlockUp, onMoveBlockDown, t, activeId])
 
   const cleanupControls = useCallback(() => {
     portalContainersRef.current.clear()
@@ -261,7 +234,6 @@ export const useBlockControls = ({
   return {
     updateControls,
     initializeControls,
-    renderBlockToolbar,
-    cleanupControls
+    renderBlockToolbar
   }
 }

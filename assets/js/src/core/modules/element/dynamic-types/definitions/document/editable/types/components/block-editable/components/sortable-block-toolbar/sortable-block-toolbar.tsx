@@ -15,20 +15,19 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Split } from '@Pimcore/components/split/split'
 import { Space } from 'antd'
 import { useSortable } from '@dnd-kit/sortable'
-import { type useBlockEditableStyles } from '../../block-editable.styles'
+import { useBlockEditableStyles } from '../../block-editable.styles'
+import { type BlockManager } from '../../utils/block-manager'
 
 export interface SortableBlockToolbarProps {
   id: string
   buttonsContainer: HTMLElement
   element: HTMLElement
   limitReached: boolean
-  editableName: string
+  blockManager: BlockManager
   onAddBlock: (element: HTMLElement | null, amount?: number) => void
   onRemoveBlock: (element: HTMLElement) => void
   onMoveBlockUp: (element: HTMLElement) => void
   onMoveBlockDown: (element: HTMLElement) => void
-  t: (key: string) => string
-  styles: ReturnType<typeof useBlockEditableStyles>['styles']
   activeId: string | null
 }
 
@@ -37,15 +36,14 @@ export const SortableBlockToolbar = ({
   buttonsContainer,
   element,
   limitReached,
-  editableName,
+  blockManager,
   onAddBlock,
   onRemoveBlock,
   onMoveBlockUp,
   onMoveBlockDown,
-  t,
-  styles,
   activeId
 }: SortableBlockToolbarProps): React.JSX.Element => {
+  const { styles } = useBlockEditableStyles()
   const {
     attributes,
     listeners,
@@ -76,8 +74,8 @@ export const SortableBlockToolbar = ({
     }
   }, [isDragging, isOver, element, activeId, id, styles])
 
-  const elements = Array.from(element.parentElement?.querySelectorAll('.pimcore_block_entry[data-name="' + editableName + '"][key]') ?? [])
-  const elementIndex = elements.indexOf(element)
+  const elements = blockManager.queryElements()
+  const elementIndex = blockManager.findElementIndex(element)
   const isFirst = elementIndex === 0
   const isLast = elementIndex === elements.length - 1
 
@@ -95,7 +93,6 @@ export const SortableBlockToolbar = ({
       icon={ { value: 'drag-option' } }
       key="drag"
       style={ { cursor: 'grab' } }
-      title={ t('drag-to-reorder') }
       { ...listeners }
     />
   )
@@ -106,7 +103,6 @@ export const SortableBlockToolbar = ({
         icon={ { value: 'new' } }
         key="plus"
         onClick={ () => { onAddBlock(element, 1) } }
-        title={ t('add-block-entry') }
       />
     )
   }
@@ -118,7 +114,6 @@ export const SortableBlockToolbar = ({
         icon={ { value: 'move-up' } }
         key="up"
         onClick={ () => { onMoveBlockUp(element) } }
-        title={ isFirst ? t('cannot-move-up') : t('move-up') }
       />
     )
   }
@@ -130,7 +125,6 @@ export const SortableBlockToolbar = ({
         icon={ { value: 'move-down' } }
         key="down"
         onClick={ () => { onMoveBlockDown(element) } }
-        title={ isLast ? t('cannot-move-down') : t('move-down') }
       />
     )
   }
@@ -141,7 +135,6 @@ export const SortableBlockToolbar = ({
         icon={ { value: 'trash' } }
         key="minus"
         onClick={ () => { onRemoveBlock(element) } }
-        title={ t('remove-block-entry') }
       />
     )
   }

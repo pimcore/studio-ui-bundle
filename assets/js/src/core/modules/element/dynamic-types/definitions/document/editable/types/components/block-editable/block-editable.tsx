@@ -73,7 +73,7 @@ export const BlockEditable = ({
   })
 
   const { initializeControls, updateControls, renderBlockToolbar } = useBlockControls({
-    editableName,
+    blockManager,
     onAddBlock: addBlock,
     onRemoveBlock: removeBlock,
     onMoveBlockUp: moveBlockUp,
@@ -89,7 +89,7 @@ export const BlockEditable = ({
     const limitReached = configUtils.isLimitReached(elements.length, config?.limit)
 
     if (elements.length < 1) {
-      initializeControls(blockManager)
+      initializeControls()
     } else {
       container.classList.remove('pimcore_block_buttons')
       elements.forEach(element => {
