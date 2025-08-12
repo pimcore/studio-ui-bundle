@@ -44,6 +44,14 @@ export const MainNav = (): React.JSX.Element => {
     }
   }
 
+  const shouldShowChevron = (item: IMainNavItem, index: string): boolean => {
+    const hasChildren = item.children !== undefined && item.children.length > 0
+    const isOpen = openKeys.includes(index)
+    const isNestedItem = index.includes('-')
+
+    return hasChildren && (isOpen || isNestedItem)
+  }
+
   const renderNavItem = (item: IMainNavItem, index: string, level = 0): React.JSX.Element => {
     const isVisible = (item.children !== undefined && item.children.length > 0) ||
             (item.widgetConfig !== undefined) || (item.onClick !== undefined) || (item.button !== undefined)
@@ -83,27 +91,24 @@ export const MainNav = (): React.JSX.Element => {
                 }
               } }
               >
-              {item.icon !== undefined
-                ? (openKeys.includes(index)
-                    ? (
-                      <Avatar
-                        icon={ <Icon value={ item.icon } /> }
-                        size={ 24 }
-                      />
-                      )
-                    : <Icon value={ item.icon } />
-                  )
-                : null}
+              {item.icon && (
+                openKeys.includes(index)
+                  ? (
+                    <Avatar
+                      icon={ <Icon value={ item.icon } /> }
+                      size={ 24 }
+                    />
+                    )
+                  : <Icon value={ item.icon } />
+              )}
               {t(`${item.label}`)}
 
-              {item.children !== undefined && item.children.length > 0 && (openKeys.includes(index) || index.includes('-'))
-                ? (
-                  <Icon
-                    className={ 'main-nav__list-btn-icon' }
-                    value={ 'chevron-right' }
-                  />
-                  )
-                : null}
+              {shouldShowChevron(item, index) && (
+                <Icon
+                  className={ 'main-nav__list-btn-icon' }
+                  value={ 'chevron-right' }
+                />
+              )}
             </button>
               <div className={ item.dividerBottom !== undefined && item.dividerBottom ? 'main-nav__list-item-divider' : '' } />
             </>
