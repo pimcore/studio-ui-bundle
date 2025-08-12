@@ -62,13 +62,6 @@ export const MainNav = (): React.JSX.Element => {
       return <></>
     }
 
-    const isNestedItem = index.includes('-')
-
-    const handleAvatarClick = (e: React.MouseEvent<HTMLSpanElement>) => {
-      e.stopPropagation()
-      // your logic...
-    }
-
     return (
       <li
         className={ `main-nav__list-item ${openKeys.includes(index) ? 'is-active' : ''} ${item.className ?? ''}` }
