@@ -91,9 +91,9 @@ export const ReportsEditor = (): React.JSX.Element => {
   return (
     <SplitLayout
       leftItem={ sidebarContent }
-      resizeAble
       rightItem={ mainContent }
       withDivider
+      withToolbar
     />
   )
 }
