@@ -1079,7 +1079,7 @@ test-email.form.message: Message
 test-email.form.document: Document
 test-email.form.parameters: Parameters
 test-email-modal-title: Send a Test-Email
-test-email.modal.send: Send
+test-email-modal-send: Send
 test-email.contentType.document: Document
 test-email.contentType.html: HTML
 test-email.contentType.text: Text
