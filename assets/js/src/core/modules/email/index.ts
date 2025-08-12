@@ -46,6 +46,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'Tools/Email/Sent-Emails',
       label: 'navigation.email-log',
+      order: 100,
       className: 'item-style-modifier',
       permission: UserPermission.Emails,
       perspectivePermission: NavPermission.Mails,
@@ -66,6 +67,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'Tools/Email/Email-Blocklist',
       label: 'navigation.email-blocklist',
+      order: 200,
       className: 'item-style-modifier',
       permission: UserPermission.Emails,
       perspectivePermission: NavPermission.Mails,
@@ -86,6 +88,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'Tools/Email/Send Test-Email',
       label: 'navigation.test-email',
+      order: 300,
       className: 'item-style-modifier',
       permission: UserPermission.Emails,
       perspectivePermission: NavPermission.Mails,
