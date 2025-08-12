@@ -27,7 +27,7 @@ export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStlyes()
   const { navItems } = useMainNav()
-  
+
   const { openMainWidget } = useWidgetManager()
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
 
@@ -53,7 +53,7 @@ export const MainNav = (): React.JSX.Element => {
     if (!isVisible || isHiddenInPerspective) {
       return <></>
     }
-    
+
     return (
       <li
         className={ `main-nav__list-item ${openKeys.includes(index) ? 'is-active' : ''} ${item.className ?? ''}` }
@@ -64,7 +64,7 @@ export const MainNav = (): React.JSX.Element => {
           ? (
             <div>
               {item.button()}
-            <div className={item.dividerBottom !== undefined && item.dividerBottom === true ? 'main-nav__list-item-divider' : ''}/>
+              <div className={ item.dividerBottom !== undefined && item.dividerBottom ? 'main-nav__list-item-divider' : '' } />
             </div>
             )
           : (
@@ -82,8 +82,15 @@ export const MainNav = (): React.JSX.Element => {
                   setIsOpen(false)
                 }
               } }
-            >
-              {item.icon !== undefined ? (<Avatar size={24} icon={<Icon value={ item.icon } />}/>) : null}
+              >
+              {item.icon !== undefined
+                ? (
+                  <Avatar
+                    icon={ <Icon value={ item.icon } /> }
+                    size={ 24 }
+                  />
+                  )
+                : null}
               {t(`${item.label}`)}
 
               {item.children !== undefined && item.children.length > 0 && (openKeys.includes(index) || index.includes('-'))
@@ -95,7 +102,7 @@ export const MainNav = (): React.JSX.Element => {
                   )
                 : null}
             </button>
-                        <div className={item.dividerBottom !== undefined && item.dividerBottom === true ? 'main-nav__list-item-divider' : ''}/>
+              <div className={ item.dividerBottom !== undefined && item.dividerBottom ? 'main-nav__list-item-divider' : '' } />
             </>
             )}
 
@@ -111,7 +118,7 @@ export const MainNav = (): React.JSX.Element => {
                     className={ `main-nav__list main-nav__list--level-${level + 1}` }
                     data-testid={ `nav-list-level-${level + 1}` }
                   >
-                  {item.path === 'QuickAccess' && <div className={ ['main-nav__list-detail-sub-header','main-nav__list-detail-divider'].join(' ') }>{t('navigation.power-shortcuts')}</div>}
+                    {item.path === 'QuickAccess' && <div className={ ['main-nav__list-detail-sub-header', 'main-nav__list-detail-divider'].join(' ') }>{t('navigation.power-shortcuts')}</div>}
                     {item.children?.map((child: IMainNavItem, childIndex) => renderNavItem(child, `${index}-${childIndex}`, level))}
                   </ul>
                 </div>

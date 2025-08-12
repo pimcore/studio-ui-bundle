@@ -24,7 +24,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'DataManagement/Notes & Events',
       label: 'navigation.notes-and-events',
-      dividerBottom: true, 
+      dividerBottom: true,
       order: 4,
       className: 'item-style-modifier',
       permission: UserPermission.NotesAndEvents,
