@@ -48,7 +48,7 @@ export const useStyles = createStyles(({ css, token }) => {
 
     gridTable: css`
       height: 300px;
-      overflow: scroll;
+      overflow: auto;
     `
   }
 })
