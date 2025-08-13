@@ -65,33 +65,33 @@ export const ParametersTable = ({ form }: ParametersTableProps): React.JSX.Eleme
 
   return (
     <Flex
-      gap={ 4 }
+      gap={4}
       vertical
     >
       <Flex
         align="center"
         justify="space-between"
       >
-        <p className={ styles.formLabel }>
+        <p className={styles.formLabel}>
           {t('test-email.form.parameters')}
         </p>
         <IconTextButton
-          icon={ { value: 'new' } }
-          onClick={ () => {
+          icon={{ value: 'new' }}
+          onClick={() => {
             setData([...data, { key: '', value: '' }])
-          } }
-          title="Add Parameter"
+          }}
+          title={t('test-email.form.parameters.add-parameter')}
         >
           {t('test-email.parameters.add')}
         </IconTextButton>
       </Flex>
       <Grid
         autoWidth
-        columns={ columns }
-        data={ data }
-        onUpdateCellData={ onUpdateCellData }
+        columns={columns}
+        data={data}
+        onUpdateCellData={onUpdateCellData}
         resizable
       />
-    </Flex>
+    </Flex >
   )
 }
