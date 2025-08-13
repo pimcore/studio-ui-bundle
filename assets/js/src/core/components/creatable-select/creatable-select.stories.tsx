@@ -118,4 +118,12 @@ export const WithError = {
   }
 }
 
+export const NumberInput = {
+  args: {
+    placeholder: 'Select or create an option...',
+    creatable: true,
+    inputType: 'number'
+  }
+}
+
 export default config

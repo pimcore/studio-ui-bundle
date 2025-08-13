@@ -9,10 +9,11 @@
  */
 
 import React, { useState, useCallback, useEffect } from 'react'
-import { Select, Input, Button, Divider, Flex, Box, Text } from '@sdk/components'
+import { Select, Input, Button, Divider, Flex, Box, Text, InputNumber } from '@sdk/components'
 import { type SelectProps } from '@sdk/components'
 import { type SelectOptionType } from '@sdk/modules/element'
 import { useTranslation } from 'react-i18next'
+import { isNil } from 'lodash'
 
 export interface CreatableSelectProps extends Omit<SelectProps, 'options'> {
   options: SelectOptionType[]
@@ -20,6 +21,7 @@ export interface CreatableSelectProps extends Omit<SelectProps, 'options'> {
   creatable?: boolean
   createOptionLabel?: string
   allowDuplicates?: boolean
+  inputType?: 'string' | 'number'
 }
 
 const Component = ({
@@ -30,6 +32,7 @@ const Component = ({
   allowDuplicates = false,
   value,
   onChange,
+  inputType = 'string',
   ...selectProps
 }: CreatableSelectProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -94,6 +97,38 @@ const Component = ({
     }
   }, [handleAddOption])
 
+  const getInputDependantField = () => {
+    switch (inputType) {
+      case 'number':
+        return (
+          <InputNumber
+            onChange={(e) => {
+              if (!isNil(e)) {
+                setNewOptionText(e.toString())
+              }
+            }}
+            onKeyDown={handleKeyDown}
+            placeholder={t(createOptionLabel ?? 'creatable-select.add-custom-option')}
+            size="small"
+            style={{ flex: 1 }}
+            value={newOptionText}
+          />
+        )
+      case 'string':
+      default:
+        return (
+          <Input
+            onChange={(e) => { setNewOptionText(e.target.value) }}
+            onKeyDown={handleKeyDown}
+            placeholder={t(createOptionLabel ?? 'creatable-select.add-custom-option')}
+            size="small"
+            style={{ flex: 1 }}
+            value={newOptionText}
+          />
+        )
+    }
+  }
+
   const customDropdownRender = (menu: React.ReactElement): React.JSX.Element => {
     if (!creatable) return menu
 
@@ -101,24 +136,17 @@ const Component = ({
       <>
         {menu}
         <Divider size="normal" />
-        <Box padding={ { x: 'small', top: 'extra-small', bottom: 'small' } }>
+        <Box padding={{ x: 'small', top: 'extra-small', bottom: 'small' }}>
 
           <Flex
             gap="extra-small"
             vertical
           >
             <Flex gap="small">
-              <Input
-                onChange={ (e) => { setNewOptionText(e.target.value) } }
-                onKeyDown={ handleKeyDown }
-                placeholder={ t(createOptionLabel ?? 'creatable-select.add-custom-option') }
-                size="small"
-                style={ { flex: 1 } }
-                value={ newOptionText }
-              />
+              {getInputDependantField()}
               <Button
-                disabled={ newOptionText.trim() === '' || (!allowDuplicates && allOptions.some(opt => opt.value === newOptionText.trim())) }
-                onClick={ handleAddOption }
+                disabled={newOptionText.trim() === '' || (!allowDuplicates && allOptions.some(opt => opt.value === newOptionText.trim()))}
+                onClick={handleAddOption}
                 size="small"
                 type="primary"
               >
@@ -138,11 +166,11 @@ const Component = ({
 
   return (
     <Select
-      { ...selectProps }
-      dropdownRender={ customDropdownRender }
-      onChange={ onChange }
-      options={ allOptions }
-      value={ value }
+      {...selectProps}
+      dropdownRender={customDropdownRender}
+      onChange={onChange}
+      options={allOptions}
+      value={value}
     />
   )
 }
