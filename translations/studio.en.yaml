@@ -1024,7 +1024,7 @@ application-logger.sidebar.search-parameter: Search Parameter
 application-logger.detail-modal.title: Detail information
 application-logger.filter.date-from: From
 application-logger.filter.date-to: To
-application-logger.filter.priority: Log Level
+application-logger.filter.priority: Type
 application-logger.filter.component: Component
 application-logger.filter.related-object-id: Related Object ID
 application-logger.filter.message: Message
