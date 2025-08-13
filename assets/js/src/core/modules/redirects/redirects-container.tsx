@@ -125,7 +125,6 @@ export const RedirectsContainer = (): React.JSX.Element => {
     setPageSize(newPageSize)
   }
 
-  // Consider loading until data is synchronized with local state
   const isDataLoading = redirectsLoading || redirectsFetching || 
     (!isUndefined(redirects) && redirectRows.length === 0 && redirects.length > 0)
 
