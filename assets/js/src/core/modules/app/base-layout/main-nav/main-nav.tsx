@@ -27,7 +27,6 @@ export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStlyes()
   const { navItems } = useMainNav()
-
   const { openMainWidget } = useWidgetManager()
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
 
