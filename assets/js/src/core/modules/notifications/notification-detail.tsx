@@ -112,7 +112,7 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     {notificationRead
       ? (
         <Icon
-          className={ styles.margin }
+          className={ [styles.margin, styles.readNotificationIcon].join(' ') }
           value={ 'notification-read' }
         />
         )

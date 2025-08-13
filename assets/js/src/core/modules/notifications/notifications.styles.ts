@@ -19,6 +19,10 @@ export const useStyles = createStyles(({ token, css }) => {
     margin: css`
         margin: 5px;
     `,
+    readNotificationIcon: css`
+        color: ${token.colorIcon}
+    `
+    ,
     elementTag: css`
         width: fit-content;
     `,
