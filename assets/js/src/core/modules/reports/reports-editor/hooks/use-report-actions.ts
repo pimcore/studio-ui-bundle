@@ -9,6 +9,7 @@
  */
 
 import { useEffect } from 'react'
+import { isUndefined } from 'lodash'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/classes/api-error'
 import {
@@ -28,8 +29,8 @@ interface IUseReportActionsReturn {
 
 const useTrackMutationError = (isError: boolean, error: ApiErrorData | undefined): void => {
   useEffect(() => {
-    if (isError) {
-      trackError(new ApiError(error!))
+    if (isError && !isUndefined(error)) {
+      trackError(new ApiError(error))
     }
   }, [isError, error])
 }
