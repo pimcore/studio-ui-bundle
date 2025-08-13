@@ -15,6 +15,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { isNil, isUndefined } from 'lodash'
 import { useStyles } from './icon.styles'
+import { theme } from 'antd'
 
 type SubIconVariant = 'default' | 'green'
 
@@ -24,13 +25,18 @@ export interface IconProps extends Omit<ElementIcon, 'type'> {
   className?: string
   subIconName?: string
   subIconVariant?: SubIconVariant
+  sphere?: boolean
 }
 
-export const Icon = ({ value, type = 'name', options, className, subIconName, subIconVariant = 'default', ...props }: IconProps): React.JSX.Element => {
+export const Icon = ({ value, type = 'name', options, className, subIconName, subIconVariant = 'default', sphere = false, ...props }: IconProps): React.JSX.Element => {
   const iconLibrary = useInjection<IconLibrary>(serviceIds.iconLibrary)
   const width = options?.width ?? 16
   const height = options?.height ?? 16
   const { styles } = useStyles()
+  const { token } = theme.useToken()
+
+  const containerSize = sphere ? 24 : width
+  const containerHeight = sphere ? 24 : height
 
   const renderIcon = (): React.JSX.Element => {
     if (type === 'path') {
@@ -61,10 +67,23 @@ export const Icon = ({ value, type = 'name', options, className, subIconName, su
 
   const SubIcon = isUndefined(subIconName) ? undefined : iconLibrary.get(subIconName)
 
+  const containerStyle = sphere
+    ? {
+        width: containerSize,
+        height: containerHeight,
+        position: 'relative' as const,
+        backgroundColor: token.colorFillAlter,
+        borderRadius: '50%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }
+    : { width, height, position: 'relative' as const }
+
   return (
     <div
       className={ `pimcore-icon pimcore-icon-${value} anticon ${className}` }
-      style={ { width, height, position: 'relative' } }
+      style={ containerStyle }
       { ...props }
     >
       {!isNil(SubIcon) && (
