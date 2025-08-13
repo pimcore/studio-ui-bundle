@@ -16,5 +16,5 @@ interface IReportConfigurationProps {
 }
 
 export const ReportConfiguration = ({ report }: IReportConfigurationProps): React.JSX.Element => {
-  return <div>{report.text}</div>
+  return <div className="m-l-small">{report.text}</div>
 }

@@ -15,12 +15,15 @@ import { Tabs } from '@Pimcore/components/tabs/tabs'
 import { ReportsSidebar } from '@Pimcore/modules/reports/reports-editor/components/reports-sidebar/reports-sidebar'
 import { ReportConfiguration } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/report-configuration'
 import { type BundleCustomReportsConfigurationTreeNode, useCustomReportsConfigGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
+import { useStyles } from './reports-editor.styles'
 
 export const ReportsEditor = (): React.JSX.Element => {
   const { data: reportsConfigTreeData, isLoading, isFetching, refetch } = useCustomReportsConfigGetTreeQuery({ page: 1, pageSize: 9999 })
 
   const [openedReports, setOpenedReports] = useState<BundleCustomReportsConfigurationTreeNode[]>([])
   const [activeTabKey, setActiveTabKey] = useState<string | undefined>(undefined)
+
+  const { styles } = useStyles()
 
   const tabItems = useMemo(() => {
     const existingReportIds = new Set(reportsConfigTreeData?.items?.map(report => report.id))
@@ -83,6 +86,7 @@ export const ReportsEditor = (): React.JSX.Element => {
     children: (
       <Tabs
         activeKey={ activeTabKey }
+        className={ styles.tabs }
         items={ tabItems }
         onChange={ handleChangeTab }
         onClose={ handleCloseTab }

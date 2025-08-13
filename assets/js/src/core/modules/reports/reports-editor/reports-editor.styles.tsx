@@ -27,6 +27,12 @@ export const useStyles = createStyles(({ css, token }) => {
 
     sidebarReportItemTitle: css`
       color: ${token.colorTextTreeElement};
+    `,
+
+    tabs: css`
+      .ant-tabs-tab {
+        padding: ${token.paddingSM}px ${token.paddingXXS}px !important;
+      }
     `
   }
 })
