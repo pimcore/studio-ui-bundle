@@ -130,7 +130,7 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
       theme="secondary"
     >
       {notification.title !== '' && (<Text strong>{notification.title}</Text>)}
-      {notification.sender !== '' && notification.sender !== null && (<Text type='secondary'>{notification.sender}</Text>)}
+      {notification.sender !== '' && notification.sender !== null && (<Text>{notification.sender}</Text>)}
     </Split>
   </Flex>,
     extra: extra(),
