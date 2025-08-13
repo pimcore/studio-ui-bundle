@@ -44,7 +44,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
       filters: {
         page: currentPage,
         pageSize,
-        columnFilters: filter !== '' ? { search: filter } : undefined
+        columnFilters: filter !== '' ? [{ type: 'search', filterValue: filter }] : []
       }
     }
   }), [currentPage, pageSize, filter])
