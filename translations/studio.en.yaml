@@ -1105,4 +1105,3 @@ test-email.validation.from.email.type: Please provide a valid sender email addre
 test-email.validation.to.required: Please provide a recipient email address
 test-email.validation.to.email.type: Please provide a valid recipient email address
 test-email.validation.subject.required: Please provide a subject
-document.version.comparison.unsupported.requirements: Chromium binary and PHP extension Imagick are required.
