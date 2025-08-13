@@ -138,7 +138,7 @@ export const WithExtraContent: Story = {
     theme: 'card-with-highlight',
     border: true,
     extra: (
-      <div style={{ display: 'flex', gap: '8px' }}>
+      <div style={ { display: 'flex', gap: '8px' } }>
         <button type="button">Action</button>
         <button type="button">Settings</button>
       </div>
@@ -153,8 +153,8 @@ export const CollapsibleWithExtraContent: Story = {
     theme: 'card-with-highlight',
     collapsible: true,
     extra: (
-      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-        <span style={{ fontSize: '12px', color: '#666' }}>3 items</span>
+      <div style={ { display: 'flex', gap: '8px', alignItems: 'center' } }>
+        <span style={ { fontSize: '12px', color: '#666' } }>3 items</span>
         <button type="button">Edit</button>
       </div>
     ),

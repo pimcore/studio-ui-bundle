@@ -32,44 +32,44 @@ const FormExampleComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '700px', padding: '20px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+    <div style={ { maxWidth: '700px', padding: '20px' } }>
+      <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' } }>
         <div>
           <Form
-            initialValues={formValues}
+            initialValues={ formValues }
             layout="vertical"
-            onValuesChange={onValuesChange}
+            onValuesChange={ onValuesChange }
           >
             <Form.Item
               label="Password"
               name="password"
-              rules={[
+              rules={ [
                 { required: true, message: 'Please input your password!' },
                 { min: 6, message: 'Password must be at least 6 characters!' }
-              ]}
+              ] }
             >
-              <InputPassword 
+              <InputPassword
                 placeholder="Enter password"
               />
             </Form.Item>
 
             <Form.Item
+              dependencies={ ['password'] }
               label="Confirm Password"
               name="confirmPassword"
-              dependencies={['password']}
-              rules={[
+              rules={ [
                 { required: true, message: 'Please confirm your password!' },
                 ({ getFieldValue }) => ({
-                  validator(_, value) {
+                  async validator (_, value) {
                     if (!value || getFieldValue('password') === value) {
-                      return Promise.resolve()
+                      await Promise.resolve(); return
                     }
-                    return Promise.reject(new Error('The passwords do not match!'))
+                    return await Promise.reject(new Error('The passwords do not match!'))
                   }
                 })
-              ]}
+              ] }
             >
-              <InputPassword 
+              <InputPassword
                 placeholder="Confirm password"
               />
             </Form.Item>
@@ -78,7 +78,7 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Admin Password (Large)"
               name="adminPassword"
             >
-              <InputPassword 
+              <InputPassword
                 placeholder="Enter admin password"
                 size="large"
               />
@@ -88,7 +88,7 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="API Key (Small)"
               name="apiKey"
             >
-              <InputPassword 
+              <InputPassword
                 placeholder="Enter API key"
                 size="small"
               />
@@ -98,14 +98,15 @@ const FormExampleComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Values</h4>
-          <div style={{ 
-            background: '#f5f5f5', 
-            padding: '16px', 
+          <div style={ {
+            background: '#f5f5f5',
+            padding: '16px',
             borderRadius: '6px',
             fontFamily: 'monospace',
             fontSize: '12px',
             whiteSpace: 'pre-wrap'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
         </div>

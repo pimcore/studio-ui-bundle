@@ -36,27 +36,27 @@ const FormExampleComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '700px', padding: '20px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+    <div style={ { maxWidth: '700px', padding: '20px' } }>
+      <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' } }>
         <div>
           <Form
-            initialValues={formValues}
+            initialValues={ formValues }
             layout="vertical"
-            onValuesChange={onValuesChange}
+            onValuesChange={ onValuesChange }
           >
             <Form.Item
               label="View Mode"
               name="viewMode"
-              rules={[
+              rules={ [
                 { required: true, message: 'Please select a view mode!' }
-              ]}
+              ] }
             >
-              <Segmented 
-                options={[
+              <Segmented
+                options={ [
                   { label: 'Grid', value: 'grid' },
                   { label: 'List', value: 'list' },
                   { label: 'Card', value: 'card' }
-                ]}
+                ] }
               />
             </Form.Item>
 
@@ -64,12 +64,12 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="User Role"
               name="userRole"
             >
-              <Segmented 
-                options={[
+              <Segmented
+                options={ [
                   'Admin',
                   'Editor',
                   'Viewer'
-                ]}
+                ] }
               />
             </Form.Item>
 
@@ -77,12 +77,12 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Publish Status"
               name="publishStatus"
             >
-              <Segmented 
-                options={[
+              <Segmented
+                options={ [
                   { label: 'Draft', value: 'draft' },
                   { label: 'Published', value: 'published' },
                   { label: 'Archived', value: 'archived' }
-                ]}
+                ] }
               />
             </Form.Item>
 
@@ -90,11 +90,11 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Sort Order"
               name="sortOrder"
             >
-              <Segmented 
-                options={[
+              <Segmented
+                options={ [
                   { label: 'Ascending', value: 'asc' },
                   { label: 'Descending', value: 'desc' }
-                ]}
+                ] }
                 size="small"
               />
             </Form.Item>
@@ -103,12 +103,12 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Theme Preference"
               name="theme"
             >
-              <Segmented 
-                options={[
+              <Segmented
+                options={ [
                   { label: 'Light', value: 'light' },
                   { label: 'Dark', value: 'dark' },
                   { label: 'Auto', value: 'auto' }
-                ]}
+                ] }
                 size="large"
               />
             </Form.Item>
@@ -117,14 +117,14 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Language"
               name="language"
             >
-              <Segmented 
-                options={[
+              <Segmented
+                disabled={ false }
+                options={ [
                   { label: 'English', value: 'en' },
                   { label: 'German', value: 'de' },
                   { label: 'French', value: 'fr' },
                   { label: 'Spanish', value: 'es' }
-                ]}
-                disabled={false}
+                ] }
               />
             </Form.Item>
           </Form>
@@ -132,14 +132,15 @@ const FormExampleComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Values</h4>
-          <div style={{ 
-            background: '#f5f5f5', 
-            padding: '16px', 
+          <div style={ {
+            background: '#f5f5f5',
+            padding: '16px',
             borderRadius: '6px',
             fontFamily: 'monospace',
             fontSize: '12px',
             whiteSpace: 'pre-wrap'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
         </div>

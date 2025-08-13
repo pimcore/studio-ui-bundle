@@ -96,7 +96,7 @@ const ManagementDetail = ({ onCloneUser, onRemoveItem, ...props }: IManagementDe
     return <Content none></Content>
   }
 
-  console.log({getAllIds})
+  console.log({ getAllIds })
 
   return (
     <ContentLayout

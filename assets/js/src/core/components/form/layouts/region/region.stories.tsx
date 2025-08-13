@@ -22,13 +22,17 @@ import { Button } from '@Pimcore/components/button/button'
 import { Space } from '@Pimcore/components/space/space'
 import { useCssContainer } from '@Pimcore/utils/hooks/use-css-container/use-css-container'
 import { cssContainerWidget } from '@Pimcore/modules/widget-manager/widget/widget-view'
+import { Form } from '../../form'
 
 // Container wrapper to provide CSS container context for Region responsive behavior
 const FormLayoutContainer = ({ children }: { children: React.ReactNode }): React.JSX.Element => {
   const { styleDefinition } = useCssContainer(cssContainerWidget)
-  
+
   return (
-    <div className={styleDefinition.styles.container} style={{ width: '100%' }}>
+    <div
+      className={ styleDefinition.styles.container }
+      style={ { width: '100%' } }
+    >
       {children}
     </div>
   )
@@ -53,77 +57,113 @@ type Story = StoryObj<typeof meta>
 
 // Two-Column Form Layout
 const TwoColumnFormComponent = (): React.JSX.Element => {
-  const [form] = FormKit.useForm()
+  const [form] = Form.useForm()
 
   return (
     <FormLayoutContainer>
-      <div style={{ maxWidth: '1000px' }}>
-        <FormKit formProps={{ form, layout: "vertical" }}>
+      <div style={ { maxWidth: '1000px' } }>
+        <FormKit formProps={ { form, layout: 'vertical' } }>
           <Region
-            layoutDefinition={[
-              'left right'
-            ]}
-            items={[
+            items={ [
               {
                 region: 'left',
                 component: (
-                  <Panel title="Personal Information" theme="card-with-highlight">
-                    <FormKit.Item label="First Name" name="firstName">
+                  <Panel
+                    theme="card-with-highlight"
+                    title="Personal Information"
+                  >
+                    <Form.Item
+                      label="First Name"
+                      name="firstName"
+                    >
                       <Input placeholder="Enter first name" />
-                    </FormKit.Item>
-                    
-                    <FormKit.Item label="Last Name" name="lastName">
+                    </Form.Item>
+
+                    <Form.Item
+                      label="Last Name"
+                      name="lastName"
+                    >
                       <Input placeholder="Enter last name" />
-                    </FormKit.Item>
-                    
-                    <FormKit.Item label="Email" name="email">
+                    </Form.Item>
+
+                    <Form.Item
+                      label="Email"
+                      name="email"
+                    >
                       <Input placeholder="Enter email address" />
-                    </FormKit.Item>
-                    
-                    <FormKit.Item label="Phone" name="phone">
+                    </Form.Item>
+
+                    <Form.Item
+                      label="Phone"
+                      name="phone"
+                    >
                       <Input placeholder="Enter phone number" />
-                    </FormKit.Item>
+                    </Form.Item>
                   </Panel>
                 )
               },
               {
                 region: 'right',
                 component: (
-                  <Panel title="Address Information" theme="card-with-highlight">
-                    <FormKit.Item label="Street Address" name="address">
-                      <TextArea rows={2} placeholder="Enter street address" />
-                    </FormKit.Item>
-                    
-                    <FormKit.Item label="City" name="city">
+                  <Panel
+                    theme="card-with-highlight"
+                    title="Address Information"
+                  >
+                    <Form.Item
+                      label="Street Address"
+                      name="address"
+                    >
+                      <TextArea
+                        placeholder="Enter street address"
+                        rows={ 2 }
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      label="City"
+                      name="city"
+                    >
                       <Input placeholder="Enter city" />
-                    </FormKit.Item>
-                    
-                    <FormKit.Item label="Postal Code" name="postalCode">
+                    </Form.Item>
+
+                    <Form.Item
+                      label="Postal Code"
+                      name="postalCode"
+                    >
                       <Input placeholder="Enter postal code" />
-                    </FormKit.Item>
-                    
-                    <FormKit.Item label="Country" name="country">
+                    </Form.Item>
+
+                    <Form.Item
+                      label="Country"
+                      name="country"
+                    >
                       <Select
-                        placeholder="Select country"
-                        options={[
+                        options={ [
                           { value: 'us', label: 'United States' },
                           { value: 'de', label: 'Germany' },
                           { value: 'uk', label: 'United Kingdom' },
                           { value: 'fr', label: 'France' }
-                        ]}
+                        ] }
+                        placeholder="Select country"
                       />
-                    </FormKit.Item>
+                    </Form.Item>
                   </Panel>
                 )
               }
-            ]}
+            ] }
+            layoutDefinition={ [
+              'left right'
+            ] }
           />
-          
-          <FormKit.Item style={{ marginTop: '24px' }}>
-            <Button type="primary" htmlType="submit">
+
+          <Form.Item style={ { marginTop: '24px' } }>
+            <Button
+              htmlType="submit"
+              type="primary"
+            >
               Save Information
             </Button>
-          </FormKit.Item>
+          </Form.Item>
         </FormKit>
       </div>
     </FormLayoutContainer>
@@ -136,42 +176,51 @@ export const TwoColumnForm: Story = {
 
 // Three-Section Layout
 const ThreeSectionFormComponent = (): React.JSX.Element => {
-  const [form] = FormKit.useForm()
+  const [form] = Form.useForm()
 
   return (
     <FormLayoutContainer>
-      <div style={{ maxWidth: '1200px' }}>
-        <FormKit formProps={{ form, layout: "vertical" }}>
+      <div style={ { maxWidth: '1200px' } }>
+        <FormKit formProps={ { form, layout: 'vertical' } }>
           <Region
-            layoutDefinition={[
-              'header header header',
-              'main sidebar sidebar'
-            ]}
-            items={[
+            items={ [
               {
                 region: 'header',
                 component: (
-                  <Panel title="Basic Information" theme="fieldset" border>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
-                      <FormKit.Item label="Title" name="title">
+                  <Panel
+                    border
+                    theme="fieldset"
+                    title="Basic Information"
+                  >
+                    <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' } }>
+                      <Form.Item
+                        label="Title"
+                        name="title"
+                      >
                         <Select
-                          placeholder="Select title"
-                          options={[
+                          options={ [
                             { value: 'mr', label: 'Mr.' },
                             { value: 'mrs', label: 'Mrs.' },
                             { value: 'ms', label: 'Ms.' },
                             { value: 'dr', label: 'Dr.' }
-                          ]}
+                          ] }
+                          placeholder="Select title"
                         />
-                      </FormKit.Item>
-                      
-                      <FormKit.Item label="First Name" name="firstName">
+                      </Form.Item>
+
+                      <Form.Item
+                        label="First Name"
+                        name="firstName"
+                      >
                         <Input placeholder="Enter first name" />
-                      </FormKit.Item>
-                      
-                      <FormKit.Item label="Last Name" name="lastName">
+                      </Form.Item>
+
+                      <Form.Item
+                        label="Last Name"
+                        name="lastName"
+                      >
                         <Input placeholder="Enter last name" />
-                      </FormKit.Item>
+                      </Form.Item>
                     </div>
                   </Panel>
                 )
@@ -179,67 +228,114 @@ const ThreeSectionFormComponent = (): React.JSX.Element => {
               {
                 region: 'main',
                 component: (
-                  <Panel title="Contact Details" theme="card-with-highlight">
-                    <FormKit.Item label="Email Address" name="email">
+                  <Panel
+                    theme="card-with-highlight"
+                    title="Contact Details"
+                  >
+                    <Form.Item
+                      label="Email Address"
+                      name="email"
+                    >
                       <Input placeholder="Enter email address" />
-                    </FormKit.Item>
-                    
-                    <FormKit.Item label="Phone Number" name="phone">
+                    </Form.Item>
+
+                    <Form.Item
+                      label="Phone Number"
+                      name="phone"
+                    >
                       <Input placeholder="Enter phone number" />
-                    </FormKit.Item>
-                    
-                    <FormKit.Item label="Company" name="company">
+                    </Form.Item>
+
+                    <Form.Item
+                      label="Company"
+                      name="company"
+                    >
                       <Input placeholder="Enter company name" />
-                    </FormKit.Item>
-                    
-                    <FormKit.Item label="Job Title" name="jobTitle">
+                    </Form.Item>
+
+                    <Form.Item
+                      label="Job Title"
+                      name="jobTitle"
+                    >
                       <Input placeholder="Enter job title" />
-                    </FormKit.Item>
-                    
-                    <FormKit.Item label="Bio" name="bio">
-                      <TextArea rows={4} placeholder="Tell us about yourself..." />
-                    </FormKit.Item>
+                    </Form.Item>
+
+                    <Form.Item
+                      label="Bio"
+                      name="bio"
+                    >
+                      <TextArea
+                        placeholder="Tell us about yourself..."
+                        rows={ 4 }
+                      />
+                    </Form.Item>
                   </Panel>
                 )
               },
               {
                 region: 'sidebar',
                 component: (
-                  <Panel title="Preferences" theme="card-with-highlight" collapsible>
-                    <FormKit.Item label="Preferred Language" name="language">
+                  <Panel
+                    collapsible
+                    theme="card-with-highlight"
+                    title="Preferences"
+                  >
+                    <Form.Item
+                      label="Preferred Language"
+                      name="language"
+                    >
                       <Select
-                        placeholder="Select language"
-                        options={[
+                        options={ [
                           { value: 'en', label: 'English' },
                           { value: 'de', label: 'German' },
                           { value: 'fr', label: 'French' },
                           { value: 'es', label: 'Spanish' }
-                        ]}
+                        ] }
+                        placeholder="Select language"
                       />
-                    </FormKit.Item>
-                    
-                    <FormKit.Item label="Newsletter" name="newsletter" valuePropName="checked">
+                    </Form.Item>
+
+                    <Form.Item
+                      label="Newsletter"
+                      name="newsletter"
+                      valuePropName="checked"
+                    >
                       <Switch />
-                    </FormKit.Item>
-                    
-                    <FormKit.Item label="Marketing Emails" name="marketing" valuePropName="checked">
+                    </Form.Item>
+
+                    <Form.Item
+                      label="Marketing Emails"
+                      name="marketing"
+                      valuePropName="checked"
+                    >
                       <Switch />
-                    </FormKit.Item>
-                    
-                    <FormKit.Item label="SMS Notifications" name="sms" valuePropName="checked">
+                    </Form.Item>
+
+                    <Form.Item
+                      label="SMS Notifications"
+                      name="sms"
+                      valuePropName="checked"
+                    >
                       <Switch />
-                    </FormKit.Item>
+                    </Form.Item>
                   </Panel>
                 )
               }
-            ]}
+            ] }
+            layoutDefinition={ [
+              'header header header',
+              'main sidebar sidebar'
+            ] }
           />
-          
-          <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'space-between' }}>
+
+          <div style={ { marginTop: '24px', display: 'flex', justifyContent: 'space-between' } }>
             <Button htmlType="reset">Reset Form</Button>
             <Space>
               <Button>Save as Draft</Button>
-              <Button type="primary" htmlType="submit">
+              <Button
+                htmlType="submit"
+                type="primary"
+              >
                 Submit Application
               </Button>
             </Space>
@@ -256,116 +352,179 @@ export const ThreeSectionForm: Story = {
 
 // Sidebar Layout
 const SidebarFormComponent = (): React.JSX.Element => {
-  const [form] = FormKit.useForm()
+  const [form] = Form.useForm()
 
   return (
     <FormLayoutContainer>
-      <div style={{ maxWidth: '1000px' }}>
-        <FormKit formProps={{ form, layout: "vertical" }}>
+      <div style={ { maxWidth: '1000px' } }>
+        <FormKit formProps={ { form, layout: 'vertical' } }>
           <Region
-            layoutDefinition={[
-              'content sidebar'
-            ]}
-            items={[
+            items={ [
               {
                 region: 'content',
                 maxWidth: '600px',
                 component: (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  <Panel title="Project Details" theme="card-with-highlight">
-                    <FormKit.Item label="Project Name" name="projectName">
-                      <Input placeholder="Enter project name" />
-                    </FormKit.Item>
-                    
-                    <FormKit.Item label="Description" name="description">
-                      <TextArea rows={4} placeholder="Describe your project..." />
-                    </FormKit.Item>
-                    
-                    <FormKit.Item label="Budget" name="budget">
-                      <InputNumber
-                        style={{ width: '100%' }}
-                        placeholder="Enter budget"
-                        formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                        parser={(value) => value?.replace(/\$\s?|(,*)/g, '') ?? ''}
-                      />
-                    </FormKit.Item>
-                  </Panel>
-                  
-                  <Panel title="Timeline" theme="card-with-highlight">
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                      <FormKit.Item label="Start Date" name="startDate">
-                        <Input placeholder="Select start date" />
-                      </FormKit.Item>
-                      
-                      <FormKit.Item label="End Date" name="endDate">
-                        <Input placeholder="Select end date" />
-                      </FormKit.Item>
-                    </div>
-                    
-                    <FormKit.Item label="Priority" name="priority">
-                      <Select
-                        placeholder="Select priority"
-                        options={[
-                          { value: 'low', label: 'Low' },
-                          { value: 'medium', label: 'Medium' },
-                          { value: 'high', label: 'High' },
-                          { value: 'urgent', label: 'Urgent' }
-                        ]}
-                      />
-                    </FormKit.Item>
-                  </Panel>
-                </div>
-              )
-            },
-            {
-              region: 'sidebar',
-              maxWidth: '300px',
-              component: (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  <Panel title="Settings" theme="fieldset" border>
-                    <FormKit.Item label="Public Project" name="isPublic" valuePropName="checked">
-                      <Switch />
-                    </FormKit.Item>
-                    
-                    <FormKit.Item label="Allow Comments" name="allowComments" valuePropName="checked">
-                      <Switch />
-                    </FormKit.Item>
-                    
-                    <FormKit.Item label="Send Updates" name="sendUpdates" valuePropName="checked">
-                      <Switch />
-                    </FormKit.Item>
-                  </Panel>
-                  
-                  <Panel title="Team" theme="fieldset" border collapsible collapsed>
-                    <FormKit.Item label="Team Lead" name="teamLead">
-                      <Select
-                        placeholder="Select team lead"
-                        options={[
-                          { value: 'john', label: 'John Doe' },
-                          { value: 'jane', label: 'Jane Smith' },
-                          { value: 'bob', label: 'Bob Johnson' }
-                        ]}
-                      />
-                    </FormKit.Item>
-                    
-                    <FormKit.Item label="Team Size" name="teamSize">
-                      <InputNumber min={1} max={50} style={{ width: '100%' }} placeholder="5" />
-                    </FormKit.Item>
-                  </Panel>
-                </div>
-              )
-            }
-          ]}
-        />
-        
-        <div style={{ marginTop: '24px' }}>
-          <Button type="primary" htmlType="submit">
-            Create Project
-          </Button>
-        </div>
-      </FormKit>
-    </div>
-  </FormLayoutContainer>
+                  <div style={ { display: 'flex', flexDirection: 'column', gap: '16px' } }>
+                    <Panel
+                      theme="card-with-highlight"
+                      title="Project Details"
+                    >
+                      <Form.Item
+                        label="Project Name"
+                        name="projectName"
+                      >
+                        <Input placeholder="Enter project name" />
+                      </Form.Item>
+
+                      <Form.Item
+                        label="Description"
+                        name="description"
+                      >
+                        <TextArea
+                          placeholder="Describe your project..."
+                          rows={ 4 }
+                        />
+                      </Form.Item>
+
+                      <Form.Item
+                        label="Budget"
+                        name="budget"
+                      >
+                        <InputNumber
+                          formatter={ (value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
+                          parser={ (value) => value?.replace(/\$\s?|(,*)/g, '') ?? '' }
+                          placeholder="Enter budget"
+                          style={ { width: '100%' } }
+                        />
+                      </Form.Item>
+                    </Panel>
+
+                    <Panel
+                      theme="card-with-highlight"
+                      title="Timeline"
+                    >
+                      <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' } }>
+                        <Form.Item
+                          label="Start Date"
+                          name="startDate"
+                        >
+                          <Input placeholder="Select start date" />
+                        </Form.Item>
+
+                        <Form.Item
+                          label="End Date"
+                          name="endDate"
+                        >
+                          <Input placeholder="Select end date" />
+                        </Form.Item>
+                      </div>
+
+                      <Form.Item
+                        label="Priority"
+                        name="priority"
+                      >
+                        <Select
+                          options={ [
+                            { value: 'low', label: 'Low' },
+                            { value: 'medium', label: 'Medium' },
+                            { value: 'high', label: 'High' },
+                            { value: 'urgent', label: 'Urgent' }
+                          ] }
+                          placeholder="Select priority"
+                        />
+                      </Form.Item>
+                    </Panel>
+                  </div>
+                )
+              },
+              {
+                region: 'sidebar',
+                maxWidth: '300px',
+                component: (
+                  <div style={ { display: 'flex', flexDirection: 'column', gap: '16px' } }>
+                    <Panel
+                      border
+                      theme="fieldset"
+                      title="Settings"
+                    >
+                      <Form.Item
+                        label="Public Project"
+                        name="isPublic"
+                        valuePropName="checked"
+                      >
+                        <Switch />
+                      </Form.Item>
+
+                      <Form.Item
+                        label="Allow Comments"
+                        name="allowComments"
+                        valuePropName="checked"
+                      >
+                        <Switch />
+                      </Form.Item>
+
+                      <Form.Item
+                        label="Send Updates"
+                        name="sendUpdates"
+                        valuePropName="checked"
+                      >
+                        <Switch />
+                      </Form.Item>
+                    </Panel>
+
+                    <Panel
+                      border
+                      collapsed
+                      collapsible
+                      theme="fieldset"
+                      title="Team"
+                    >
+                      <Form.Item
+                        label="Team Lead"
+                        name="teamLead"
+                      >
+                        <Select
+                          options={ [
+                            { value: 'john', label: 'John Doe' },
+                            { value: 'jane', label: 'Jane Smith' },
+                            { value: 'bob', label: 'Bob Johnson' }
+                          ] }
+                          placeholder="Select team lead"
+                        />
+                      </Form.Item>
+
+                      <Form.Item
+                        label="Team Size"
+                        name="teamSize"
+                      >
+                        <InputNumber
+                          max={ 50 }
+                          min={ 1 }
+                          placeholder="5"
+                          style={ { width: '100%' } }
+                        />
+                      </Form.Item>
+                    </Panel>
+                  </div>
+                )
+              }
+            ] }
+            layoutDefinition={ [
+              'content sidebar'
+            ] }
+          />
+
+          <div style={ { marginTop: '24px' } }>
+            <Button
+              htmlType="submit"
+              type="primary"
+            >
+              Create Project
+            </Button>
+          </div>
+        </FormKit>
+      </div>
+    </FormLayoutContainer>
   )
 }
 

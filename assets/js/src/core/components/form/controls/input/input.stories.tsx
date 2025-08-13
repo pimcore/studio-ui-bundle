@@ -32,13 +32,13 @@ const FormExampleComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '600px', padding: '20px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+    <div style={ { maxWidth: '600px', padding: '20px' } }>
+      <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' } }>
         <div>
           <Form
-            initialValues={formValues}
+            initialValues={ formValues }
             layout="vertical"
-            onValuesChange={onValuesChange}
+            onValuesChange={ onValuesChange }
           >
             <Form.Item
               label="Title"
@@ -58,14 +58,15 @@ const FormExampleComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Values</h4>
-          <div style={{ 
-            background: '#f5f5f5', 
-            padding: '16px', 
+          <div style={ {
+            background: '#f5f5f5',
+            padding: '16px',
             borderRadius: '6px',
             fontFamily: 'monospace',
             fontSize: '12px',
             whiteSpace: 'pre-wrap'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
         </div>

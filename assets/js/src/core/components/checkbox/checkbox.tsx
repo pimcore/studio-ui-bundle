@@ -12,7 +12,7 @@ import React from 'react'
 import { Checkbox as AntCheckbox, type CheckboxProps } from 'antd'
 import cn from 'classnames'
 import { useStyles } from './checkbox.styles'
-import { CheckboxGroupProps } from 'antd/es/checkbox'
+import { type CheckboxGroupProps } from 'antd/es/checkbox'
 
 export interface ICheckboxProps extends CheckboxProps {
   inherited?: boolean

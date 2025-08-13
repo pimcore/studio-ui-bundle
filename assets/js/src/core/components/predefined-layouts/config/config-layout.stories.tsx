@@ -34,41 +34,41 @@ export default config
 const ConfigTree = (): React.JSX.Element => (
   <Content padded>
     <TreeElement
-      treeData={[
+      onSelected={ (key) => {
+        console.log('selected:', key)
+      } }
+      treeData={ [
         {
           title: 'User 1',
           key: '0-0',
-          icon: <Icon value={'user'} />,
+          icon: <Icon value={ 'user' } />
         },
         {
           title: 'User 2',
           key: '0-1',
-          icon: <Icon value={'user'} />,
+          icon: <Icon value={ 'user' } />
         },
         {
           title: 'grouped users',
           key: '0-1-1',
-          icon: <Icon value={'folder'} />,
+          icon: <Icon value={ 'folder' } />,
           children: [
             {
               title: 'User 3',
               key: '0-1-1-0',
-              icon: <Icon value={'user'} />,
+              icon: <Icon value={ 'user' } />
             },
             {
               title: 'User 4',
               key: '0-1-1-1',
-              icon: <Icon value={'user'} />,
+              icon: <Icon value={ 'user' } />
             }
           ]
         }
-      ]}
-      onSelected={(key) => {
-        console.log('selected:', key)
-      }}
+      ] }
     />
   </Content>
-  
+
 )
 
 export const _default = {
@@ -77,7 +77,11 @@ export const _default = {
       children: <ConfigTree />
     },
     rightItem: {
-      children: <Content padded none noneOptions={{ text: 'Select a user from the tree' }} />
+      children: <Content
+        none
+        noneOptions={ { text: 'Select a user from the tree' } }
+        padded
+                />
     }
   }
 }

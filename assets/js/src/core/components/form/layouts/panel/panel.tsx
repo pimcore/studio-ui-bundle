@@ -21,7 +21,7 @@ export interface FormPanelProps extends Omit<CorePanelProps, 'name'> {
 /**
  * Panel component specifically designed for form layouts.
  * Provides structured sections within forms with consistent styling and behavior.
- * 
+ *
  * @example
  * ```tsx
  * <Form.Panel title="Personal Information" collapsible>
@@ -37,8 +37,8 @@ export interface FormPanelProps extends Omit<CorePanelProps, 'name'> {
 export const Panel = ({ formOptimized = true, ...props }: FormPanelProps): React.JSX.Element => {
   return (
     <CorePanel
-      {...props}
-      theme={props.theme ?? 'card-with-highlight'}
+      { ...props }
+      theme={ props.theme ?? 'card-with-highlight' }
     />
   )
 }

@@ -37,22 +37,22 @@ const FormExampleComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '700px', padding: '20px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+    <div style={ { maxWidth: '700px', padding: '20px' } }>
+      <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' } }>
         <div>
           <Form
-            initialValues={formValues}
+            initialValues={ formValues }
             layout="vertical"
-            onValuesChange={onValuesChange}
+            onValuesChange={ onValuesChange }
           >
             <Form.Item
               label="Birth Date"
               name="birthDate"
             >
-              <DatePicker 
-                placeholder="Select birth date"
-                outputType="dateString"
+              <DatePicker
                 outputFormat="YYYY-MM-DD"
+                outputType="dateString"
+                placeholder="Select birth date"
               />
             </Form.Item>
 
@@ -60,11 +60,11 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Appointment Date"
               name="appointmentDate"
             >
-              <DatePicker 
-                placeholder="Select appointment date"
-                outputType="dateString"
-                outputFormat="YYYY-MM-DD"
+              <DatePicker
                 allowClear
+                outputFormat="YYYY-MM-DD"
+                outputType="dateString"
+                placeholder="Select appointment date"
               />
             </Form.Item>
 
@@ -72,11 +72,11 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Event Date & Time"
               name="eventDateTime"
             >
-              <DatePicker 
+              <DatePicker
+                outputFormat="YYYY-MM-DD HH:mm:ss"
+                outputType="dateString"
                 placeholder="Select event date and time"
                 showTime
-                outputType="dateString"
-                outputFormat="YYYY-MM-DD HH:mm:ss"
               />
             </Form.Item>
 
@@ -84,10 +84,10 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Project Deadline"
               name="deadline"
             >
-              <DatePicker 
-                placeholder="Select deadline"
-                outputType="dateString"
+              <DatePicker
                 outputFormat="YYYY-MM-DD"
+                outputType="dateString"
+                placeholder="Select deadline"
                 size="small"
               />
             </Form.Item>
@@ -96,10 +96,10 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Meeting Time"
               name="meetingTime"
             >
-              <DatePicker.TimePicker 
-                placeholder="Select meeting time"
-                outputType="dateString"
+              <DatePicker.TimePicker
                 outputFormat="HH:mm:ss"
+                outputType="dateString"
+                placeholder="Select meeting time"
               />
             </Form.Item>
 
@@ -107,10 +107,10 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Lunch Time"
               name="lunchTime"
             >
-              <DatePicker.TimePicker 
-                placeholder="Select lunch time"
-                outputType="dateString"
+              <DatePicker.TimePicker
                 outputFormat="HH:mm"
+                outputType="dateString"
+                placeholder="Select lunch time"
               />
             </Form.Item>
 
@@ -118,11 +118,11 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Work Start Time"
               name="workStartTime"
             >
-              <DatePicker.TimePicker 
-                placeholder="Select work start time"
-                outputType="dateString"
-                outputFormat="HH:mm:ss"
+              <DatePicker.TimePicker
                 allowClear
+                outputFormat="HH:mm:ss"
+                outputType="dateString"
+                placeholder="Select work start time"
                 size="small"
               />
             </Form.Item>
@@ -131,14 +131,15 @@ const FormExampleComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Values</h4>
-          <div style={{ 
-            background: '#f5f5f5', 
-            padding: '16px', 
+          <div style={ {
+            background: '#f5f5f5',
+            padding: '16px',
             borderRadius: '6px',
             fontFamily: 'monospace',
             fontSize: '12px',
             whiteSpace: 'pre-wrap'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
         </div>

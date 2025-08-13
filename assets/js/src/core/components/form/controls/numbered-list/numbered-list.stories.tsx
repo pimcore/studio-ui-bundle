@@ -65,16 +65,16 @@ const BasicExampleComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '800px', padding: '20px' }}>
+    <div style={ { maxWidth: '800px', padding: '20px' } }>
       <h3>Basic NumberedList Example</h3>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+      <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' } }>
         <div>
           <Form
-            form={form}
-            initialValues={formValues}
+            form={ form }
+            initialValues={ formValues }
             layout="vertical"
-            onFinish={onFinish}
-            onValuesChange={onValuesChange}
+            onFinish={ onFinish }
+            onValuesChange={ onValuesChange }
           >
             <Form.Item
               label="Items List"
@@ -93,14 +93,21 @@ const BasicExampleComponent = (): React.JSX.Element => {
                     label="Quantity"
                     name="quantity"
                   >
-                    <InputNumber min={1} style={{ width: '100%' }} placeholder="Enter quantity" />
+                    <InputNumber
+                      min={ 1 }
+                      placeholder="Enter quantity"
+                      style={ { width: '100%' } }
+                    />
                   </Form.Item>
                 </NumberedList.Iterator>
               </NumberedList>
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button
+                htmlType="submit"
+                type="primary"
+              >
                 Submit Form
               </Button>
             </Form.Item>
@@ -109,14 +116,15 @@ const BasicExampleComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Form Values:</h4>
-          <div style={{ 
-            background: '#f5f5f5', 
-            padding: '16px', 
+          <div style={ {
+            background: '#f5f5f5',
+            padding: '16px',
             borderRadius: '6px',
             fontFamily: 'monospace',
             fontSize: '12px',
             whiteSpace: 'pre-wrap'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
         </div>
@@ -159,16 +167,16 @@ const AdvancedExampleComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '1000px', padding: '20px' }}>
+    <div style={ { maxWidth: '1000px', padding: '20px' } }>
       <h3>Advanced NumberedList with Nested Fields</h3>
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
+      <div style={ { display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' } }>
         <div>
           <Form
-            form={form}
-            initialValues={formValues}
+            form={ form }
+            initialValues={ formValues }
             layout="vertical"
-            onFinish={(values) => console.log('Advanced form values:', values)}
-            onValuesChange={onValuesChange}
+            onFinish={ (values) => { console.log('Advanced form values:', values) } }
+            onValuesChange={ onValuesChange }
           >
             <Form.Item
               label="Product Catalog"
@@ -188,36 +196,36 @@ const AdvancedExampleComponent = (): React.JSX.Element => {
                     name="category"
                   >
                     <Select
-                      placeholder="Select category"
-                      options={[
+                      options={ [
                         { label: 'Electronics', value: 'electronics' },
                         { label: 'Books', value: 'books' },
                         { label: 'Clothing', value: 'clothing' },
                         { label: 'Home & Garden', value: 'home' },
                         { label: 'Sports', value: 'sports' }
-                      ]}
+                      ] }
+                      placeholder="Select category"
                     />
                   </Form.Item>
 
                   <Form.Item
                     label="Price ($)"
-                    name={['details', 'price']}
+                    name={ ['details', 'price'] }
                   >
                     <InputNumber
-                      min={0}
-                      precision={2}
-                      style={{ width: '100%' }}
+                      min={ 0 }
                       placeholder="0.00"
+                      precision={ 2 }
+                      style={ { width: '100%' } }
                     />
                   </Form.Item>
 
                   <Form.Item
                     label="Description"
-                    name={['details', 'description']}
+                    name={ ['details', 'description'] }
                   >
                     <Input.TextArea
-                      rows={2}
                       placeholder="Enter product description..."
+                      rows={ 2 }
                     />
                   </Form.Item>
                 </NumberedList.Iterator>
@@ -225,7 +233,10 @@ const AdvancedExampleComponent = (): React.JSX.Element => {
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button
+                htmlType="submit"
+                type="primary"
+              >
                 Save Product Catalog
               </Button>
             </Form.Item>
@@ -234,16 +245,17 @@ const AdvancedExampleComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Form Values:</h4>
-          <div style={{ 
-            background: '#f5f5f5', 
-            padding: '16px', 
+          <div style={ {
+            background: '#f5f5f5',
+            padding: '16px',
             borderRadius: '6px',
             fontFamily: 'monospace',
             fontSize: '11px',
             whiteSpace: 'pre-wrap',
             maxHeight: '500px',
             overflowY: 'auto'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
         </div>
@@ -283,27 +295,27 @@ const FieldChangeHandlingComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '1000px', padding: '20px' }}>
+    <div style={ { maxWidth: '1000px', padding: '20px' } }>
       <h3>NumberedList with Field Change Tracking</h3>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px' }}>
+      <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px' } }>
         <div>
           <h4>Form</h4>
           <Form
-            form={form}
-            initialValues={formValues}
+            form={ form }
+            initialValues={ formValues }
             layout="vertical"
-            onValuesChange={onValuesChange}
+            onValuesChange={ onValuesChange }
           >
             <Form.Item
               label="Task List"
               name="tasks"
             >
-              <NumberedList onFieldChange={handleFieldChange}>
+              <NumberedList onFieldChange={ handleFieldChange }>
                 <NumberedList.Iterator>
                   <Form.Item
                     label="Task Title"
                     name="title"
-                    style={{ marginBottom: '12px' }}
+                    style={ { marginBottom: '12px' } }
                   >
                     <Input placeholder="Enter task title" />
                   </Form.Item>
@@ -311,27 +323,27 @@ const FieldChangeHandlingComponent = (): React.JSX.Element => {
                   <Form.Item
                     label="Priority"
                     name="priority"
-                    style={{ marginBottom: '12px' }}
+                    style={ { marginBottom: '12px' } }
                   >
                     <Select
-                      options={[
+                      options={ [
                         { label: 'Low', value: 'low' },
                         { label: 'Medium', value: 'medium' },
                         { label: 'High', value: 'high' }
-                      ]}
+                      ] }
                     />
                   </Form.Item>
 
                   <Form.Item
                     label="Completed"
                     name="completed"
-                    style={{ marginBottom: '16px' }}
+                    style={ { marginBottom: '16px' } }
                   >
                     <Select
-                      options={[
+                      options={ [
                         { label: 'Not completed', value: false },
                         { label: 'Completed', value: true }
-                      ]}
+                      ] }
                     />
                   </Form.Item>
                 </NumberedList.Iterator>
@@ -342,46 +354,53 @@ const FieldChangeHandlingComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Form Values:</h4>
-          <div style={{ 
-            background: '#f5f5f5', 
-            padding: '12px', 
+          <div style={ {
+            background: '#f5f5f5',
+            padding: '12px',
             borderRadius: '6px',
             fontFamily: 'monospace',
             fontSize: '11px',
             whiteSpace: 'pre-wrap',
             maxHeight: '400px',
             overflowY: 'auto'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
         </div>
 
         <div>
           <h4>Recent Field Changes:</h4>
-          <div style={{ 
-            background: '#f9f9f9', 
-            padding: '12px', 
+          <div style={ {
+            background: '#f9f9f9',
+            padding: '12px',
             borderRadius: '6px',
             maxHeight: '400px',
             overflowY: 'auto'
-          }}>
-            {fieldChanges.length === 0 ? (
-              <p style={{ color: '#666', margin: 0, fontSize: '12px' }}>No changes yet. Start editing the form!</p>
-            ) : (
-              fieldChanges.map((change) => (
-                <div key={change.timestamp} style={{ 
-                  marginBottom: '8px', 
-                  padding: '8px',
-                  background: 'white',
-                  borderRadius: '4px',
-                  fontSize: '11px'
-                }}>
-                  <strong>Field:</strong> {JSON.stringify(change.field)}<br/>
-                  <strong>Value:</strong> {JSON.stringify(change.value)}<br/>
-                  <strong>Time:</strong> {new Date(change.timestamp).toLocaleTimeString()}
-                </div>
-              ))
-            )}
+          } }
+          >
+            {fieldChanges.length === 0
+              ? (
+                <p style={ { color: '#666', margin: 0, fontSize: '12px' } }>No changes yet. Start editing the form!</p>
+                )
+              : (
+                  fieldChanges.map((change) => (
+                    <div
+                      key={ change.timestamp }
+                      style={ {
+                        marginBottom: '8px',
+                        padding: '8px',
+                        background: 'white',
+                        borderRadius: '4px',
+                        fontSize: '11px'
+                      } }
+                    >
+                      <strong>Field:</strong> {JSON.stringify(change.field)}<br />
+                      <strong>Value:</strong> {JSON.stringify(change.value)}<br />
+                      <strong>Time:</strong> {new Date(change.timestamp).toLocaleTimeString()}
+                    </div>
+                  ))
+                )}
           </div>
         </div>
       </div>
@@ -402,42 +421,42 @@ interface ItemsWithControlsProps {
 
 const ItemsWithControls = ({ formValues, form, setFormValues }: ItemsWithControlsProps): React.JSX.Element => {
   return (
-    <NumberedList 
-      value={formValues.items}
-      onChange={(newValue) => {
+    <NumberedList
+      onChange={ (newValue) => {
         const updatedValues = { ...formValues, items: newValue }
         setFormValues(updatedValues)
         form.setFieldsValue(updatedValues)
-      }}
+      } }
+      value={ formValues.items }
     >
-      <div style={{ marginBottom: '16px' }}>
-        <Button 
-          onClick={() => {
+      <div style={ { marginBottom: '16px' } }>
+        <Button
+          onClick={ () => {
             const newValues = [...formValues.items, { name: 'New Item', value: 'new' }]
             const updatedValues = { ...formValues, items: newValues }
             form.setFieldsValue(updatedValues)
             setFormValues(updatedValues)
-          }}
+          } }
+          style={ { marginRight: '8px' } }
           type="dashed"
-          style={{ marginRight: '8px' }}
         >
           Add Item
         </Button>
-        <Button 
-          onClick={() => {
+        <Button
+          disabled={ formValues.items.length === 0 }
+          onClick={ () => {
             if (formValues.items.length > 0) {
               const newValues = formValues.items.slice(0, -1)
               const updatedValues = { ...formValues, items: newValues }
               form.setFieldsValue(updatedValues)
               setFormValues(updatedValues)
             }
-          }}
-          disabled={formValues.items.length === 0}
+          } }
         >
           Remove Last Item
         </Button>
       </div>
-      
+
       <NumberedList.Iterator>
         <Form.Item
           label="Name"
@@ -472,34 +491,37 @@ const SimpleOperationsComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '800px', padding: '20px' }}>
+    <div style={ { maxWidth: '800px', padding: '20px' } }>
       <h3>Simple Operations Example</h3>
-      <p style={{ marginBottom: '20px', color: '#666' }}>
-        This example shows how to add/remove items programmatically. 
+      <p style={ { marginBottom: '20px', color: '#666' } }>
+        This example shows how to add/remove items programmatically.
         Use the buttons above the list to add or remove items.
       </p>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+      <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' } }>
         <div>
           <Form
-            form={form}
-            initialValues={formValues}
+            form={ form }
+            initialValues={ formValues }
             layout="vertical"
-            onFinish={(values) => console.log('Form submitted:', values)}
-            onValuesChange={onValuesChange}
+            onFinish={ (values) => { console.log('Form submitted:', values) } }
+            onValuesChange={ onValuesChange }
           >
             <Form.Item
               label="Items List"
               name="items"
             >
-              <ItemsWithControls 
-                formValues={formValues}
-                form={form}
-                setFormValues={setFormValues}
+              <ItemsWithControls
+                form={ form }
+                formValues={ formValues }
+                setFormValues={ setFormValues }
               />
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button
+                htmlType="submit"
+                type="primary"
+              >
                 Save Changes
               </Button>
             </Form.Item>
@@ -508,17 +530,18 @@ const SimpleOperationsComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Form Values:</h4>
-          <div style={{ 
-            background: '#f5f5f5', 
-            padding: '16px', 
+          <div style={ {
+            background: '#f5f5f5',
+            padding: '16px',
             borderRadius: '6px',
             fontFamily: 'monospace',
             fontSize: '12px',
             whiteSpace: 'pre-wrap'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
-          <p style={{ fontSize: '12px', color: '#666', marginTop: '8px' }}>
+          <p style={ { fontSize: '12px', color: '#666', marginTop: '8px' } }>
             Items: {formValues.items.length}
           </p>
         </div>

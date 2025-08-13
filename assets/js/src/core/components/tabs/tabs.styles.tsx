@@ -78,6 +78,20 @@ export const useStyles = createStyles(({ token, css }) => {
         }
       }
 
+      .ant-tabs-tab-btn {
+        display: flex;
+        align-items: center;
+
+        & > * {
+          display: flex;
+          height: 100%;
+        }
+      }
+
+      &.ant-tabs .ant-tabs-tab-btn .ant-tabs-tab-icon:not(:last-child) {
+        margin-inline-end: ${token.marginXS}px;
+      }
+
       .ant-tabs-tab-active .ant-tabs-tab-btn {
         font-weight: 600;
         text-shadow: none !important;

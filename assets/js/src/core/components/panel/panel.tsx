@@ -26,17 +26,17 @@ export interface PanelProps {
   extraPosition?: 'start' | 'end'
 }
 
-export const Panel = ({ 
-  children, 
-  name, 
-  border, 
-  collapsed, 
-  collapsible, 
-  title, 
-  theme = 'card-with-highlight', 
+export const Panel = ({
+  children,
+  name,
+  border,
+  collapsed,
+  collapsible,
+  title,
+  theme = 'card-with-highlight',
   noteditable,
   extra,
-  extraPosition 
+  extraPosition
 }: PanelProps): React.JSX.Element => {
   const isMainPanel = name === 'pimcore_root'
 
@@ -54,16 +54,16 @@ export const Panel = ({
     </>
   )
 
-  function getContent(): ReactNode {
+  function getContent (): ReactNode {
     return (
       <BaseView
-        border={border}
-        collapsed={collapsed}
-        collapsible={collapsible}
-        extra={extra}
-        extraPosition={extraPosition}
-        theme={theme}
-        title={title}
+        border={ border }
+        collapsed={ collapsed }
+        collapsible={ collapsible }
+        extra={ extra }
+        extraPosition={ extraPosition }
+        theme={ theme }
+        title={ title }
       >
         <Space
           className='w-full'

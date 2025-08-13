@@ -34,22 +34,22 @@ const FormExampleComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '700px', padding: '20px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+    <div style={ { maxWidth: '700px', padding: '20px' } }>
+      <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' } }>
         <div>
           <Form
-            initialValues={formValues}
+            initialValues={ formValues }
             layout="vertical"
-            onValuesChange={onValuesChange}
+            onValuesChange={ onValuesChange }
           >
             <Form.Item
               label="Quantity"
               name="quantity"
             >
-              <InputNumber 
+              <InputNumber
+                max={ 100 }
+                min={ 0 }
                 placeholder="Enter quantity"
-                min={0}
-                max={100}
               />
             </Form.Item>
 
@@ -57,13 +57,13 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Price"
               name="price"
             >
-              <InputNumber 
+              <InputNumber
+                formatter={ (value) => `$ ${value}` }
+                min={ 0 }
+                parser={ (value) => value?.replace(/\$\s?|(,*)/g, '') ?? '' }
                 placeholder="Enter price"
-                formatter={(value) => `$ ${value}`}
-                parser={(value) => value?.replace(/\$\s?|(,*)/g, '') ?? ''}
-                step={0.01}
-                precision={2}
-                min={0}
+                precision={ 2 }
+                step={ 0.01 }
               />
             </Form.Item>
 
@@ -71,13 +71,13 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Percentage"
               name="percentage"
             >
-              <InputNumber 
+              <InputNumber
+                formatter={ (value) => `${value}%` }
+                max={ 100 }
+                min={ 0 }
+                parser={ (value) => value?.replace('%', '') ?? '' }
                 placeholder="Enter percentage"
-                formatter={(value) => `${value}%`}
-                parser={(value) => value?.replace('%', '') ?? ''}
-                min={0}
-                max={100}
-                step={5}
+                step={ 5 }
               />
             </Form.Item>
 
@@ -85,13 +85,13 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Temperature (°C)"
               name="temperature"
             >
-              <InputNumber 
+              <InputNumber
+                formatter={ (value) => `${value}°C` }
+                max={ 50 }
+                min={ -50 }
+                parser={ (value) => value?.replace('°C', '') ?? '' }
                 placeholder="Enter temperature"
-                formatter={(value) => `${value}°C`}
-                parser={(value) => value?.replace('°C', '') ?? ''}
-                min={-50}
-                max={50}
-                step={1}
+                step={ 1 }
               />
             </Form.Item>
           </Form>
@@ -99,14 +99,15 @@ const FormExampleComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Values</h4>
-          <div style={{ 
-            background: '#f5f5f5', 
-            padding: '16px', 
+          <div style={ {
+            background: '#f5f5f5',
+            padding: '16px',
             borderRadius: '6px',
             fontFamily: 'monospace',
             fontSize: '12px',
             whiteSpace: 'pre-wrap'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
         </div>

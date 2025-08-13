@@ -22,7 +22,7 @@ export interface ITabsProps extends TabsProps {
 
 const Component = ({ items, className, activeKey, onClose, onChange, hasStickyHeader = false, ...props }: ITabsProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
   const { styles } = useStyles()
-  
+
   const classNames = cn(
     'ant-tabs-line',
     styles.tabs,
@@ -53,7 +53,7 @@ const Component = ({ items, className, activeKey, onClose, onChange, hasStickyHe
       // Check if this specific tab item is closable
       const tabItem = items?.find(item => item.key === tabKey)
       const isTabClosable = tabItem?.closable !== false
-      
+
       if (isTabClosable) {
         event.preventDefault()
         onClose(tabKey)
@@ -65,7 +65,7 @@ const Component = ({ items, className, activeKey, onClose, onChange, hasStickyHe
   const enhancedItems = items?.map(item => ({
     ...item,
     label: (
-      <div onMouseDown={handleMiddleClick(item.key)}>
+      <div onMouseDown={ handleMiddleClick(item.key) }>
         {item.label}
       </div>
     )

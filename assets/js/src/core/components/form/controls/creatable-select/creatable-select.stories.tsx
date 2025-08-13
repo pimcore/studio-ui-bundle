@@ -60,23 +60,23 @@ const FormExampleComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '700px', padding: '20px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+    <div style={ { maxWidth: '700px', padding: '20px' } }>
+      <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' } }>
         <div>
           <Form
-            initialValues={formValues}
+            initialValues={ formValues }
             layout="vertical"
-            onValuesChange={onValuesChange}
+            onValuesChange={ onValuesChange }
           >
             <Form.Item
               label="Primary Skill"
               name="skills"
             >
-              <CreatableSelect 
-                placeholder="Select or create a skill"
-                options={skillsOptions}
-                onCreateOption={(value) => handleCreateOption(value, 'skill')}
+              <CreatableSelect
                 allowClear
+                onCreateOption={ (value) => { handleCreateOption(value, 'skill') } }
+                options={ skillsOptions }
+                placeholder="Select or create a skill"
               />
             </Form.Item>
 
@@ -84,13 +84,13 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Tags"
               name="tags"
             >
-              <CreatableSelect 
+              <CreatableSelect
+                allowDuplicates={ false }
                 mode="multiple"
+                onCreateOption={ (value) => { handleCreateOption(value, 'tag') } }
+                options={ tagsOptions }
                 placeholder="Select or create tags"
-                options={tagsOptions}
-                onCreateOption={(value) => handleCreateOption(value, 'tag')}
                 showSearch
-                allowDuplicates={false}
               />
             </Form.Item>
 
@@ -98,11 +98,11 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Department"
               name="departments"
             >
-              <CreatableSelect 
-                placeholder="Select or create department"
-                options={departmentOptions}
-                onCreateOption={(value) => handleCreateOption(value, 'department')}
+              <CreatableSelect
                 createOptionLabel="Add custom department"
+                onCreateOption={ (value) => { handleCreateOption(value, 'department') } }
+                options={ departmentOptions }
+                placeholder="Select or create department"
                 size="large"
               />
             </Form.Item>
@@ -111,23 +111,24 @@ const FormExampleComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Values</h4>
-          <div style={{ 
-            background: '#f5f5f5', 
-            padding: '16px', 
+          <div style={ {
+            background: '#f5f5f5',
+            padding: '16px',
             borderRadius: '6px',
             fontFamily: 'monospace',
             fontSize: '12px',
             whiteSpace: 'pre-wrap'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
 
-          <h4 style={{ marginTop: '20px' }}>Features</h4>
-          <div style={{ fontSize: '12px', color: '#666' }}>
+          <h4 style={ { marginTop: '20px' } }>Features</h4>
+          <div style={ { fontSize: '12px', color: '#666' } }>
             <div>• <strong>Primary Skill</strong>: Single selection with clear option</div>
             <div>• <strong>Tags</strong>: Multiple selection, no duplicates</div>
             <div>• <strong>Department</strong>: Custom create label, large size</div>
-            <div style={{ marginTop: '8px', fontStyle: 'italic' }}>
+            <div style={ { marginTop: '8px', fontStyle: 'italic' } }>
               Try typing new values that don't exist in the dropdown!
             </div>
           </div>

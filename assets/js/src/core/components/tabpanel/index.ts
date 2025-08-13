@@ -8,10 +8,4 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
-
-export const useStyles = createStyles(() => {
-  return {
-    tabpanel: {}
-  }
-})
+export { Tabpanel, type TabpanelProps, type TabpanelItem } from './tabpanel'

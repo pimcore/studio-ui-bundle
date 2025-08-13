@@ -56,7 +56,7 @@ export const Default: Story = {
     defaultValue: ['option1']
   },
   render: (args) => (
-    <Checkbox.Group {...args} />
+    <Checkbox.Group { ...args } />
   )
 }
 
@@ -71,7 +71,7 @@ export const WithDisabledOptions: Story = {
     defaultValue: ['available']
   },
   render: (args) => (
-    <Checkbox.Group {...args} />
+    <Checkbox.Group { ...args } />
   )
 }
 
@@ -81,7 +81,7 @@ export const StringArrayOptions: Story = {
     defaultValue: ['Red', 'Blue']
   },
   render: (args) => (
-    <Checkbox.Group {...args} />
+    <Checkbox.Group { ...args } />
   )
 }
 
@@ -96,6 +96,6 @@ export const AllDisabled: Story = {
     disabled: true
   },
   render: (args) => (
-    <Checkbox.Group {...args} />
+    <Checkbox.Group { ...args } />
   )
 }

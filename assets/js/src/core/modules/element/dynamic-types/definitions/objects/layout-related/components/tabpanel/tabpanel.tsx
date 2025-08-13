@@ -10,8 +10,7 @@
 
 import React from 'react'
 import { type AbstractObjectLayoutDefinition } from '../../dynamic-type-object-layout-abstract'
-import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
-import { Tabpanel as TabpanelComponent } from '@Pimcore/components/tabpanel/tabpanel'
+import { ObjectTabpanel } from './object-tabpanel'
 import { type ITabsProps } from '@Pimcore/components/tabs/tabs'
 
 export interface TabpanelProps extends AbstractObjectLayoutDefinition {
@@ -24,20 +23,6 @@ export interface TabpanelProps extends AbstractObjectLayoutDefinition {
   hasStickyHeader?: boolean
 }
 
-export const Tabpanel = ({ children, noteditable, ...props }: TabpanelProps): React.JSX.Element => {
-  const renderChild = (child: AbstractObjectLayoutDefinition, noteditable?: boolean): React.ReactNode => (
-    <ObjectComponent
-      {...child}
-      noteditable={noteditable}
-    />
-  )
-
-  return (
-    <TabpanelComponent
-      {...props}
-      children={children}
-      noteditable={noteditable ?? undefined}
-      renderChild={renderChild}
-    />
-  )
+export const Tabpanel = (props: TabpanelProps): React.JSX.Element => {
+  return <ObjectTabpanel { ...props } />
 }

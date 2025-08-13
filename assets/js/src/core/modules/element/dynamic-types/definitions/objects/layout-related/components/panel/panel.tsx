@@ -27,25 +27,25 @@ export const Panel = ({ children, name, border, collapsed, collapsible, title, t
 
   return (
     <CorePanel
-      border={border}
-      collapsed={collapsed}
-      collapsible={collapsible}
-      name={name}
-      noteditable={noteditable ?? undefined}
-      theme={theme}
-      title={title}
+      border={ border }
+      collapsed={ collapsed }
+      collapsible={ collapsible }
+      name={ name }
+      noteditable={ noteditable ?? undefined }
+      theme={ theme }
+      title={ title }
     >
       {children.map((child, index) => (
         <ObjectComponent
-          {...getChildProperties(child, isMainPanel)}
-          key={index}
-          noteditable={noteditable}
+          { ...getChildProperties(child, isMainPanel) }
+          key={ index }
+          noteditable={ noteditable }
         />
       ))}
     </CorePanel>
   )
 
-  function getChildProperties(child: AbstractObjectLayoutDefinition, isMainPanel: boolean): AbstractObjectLayoutDefinition {
+  function getChildProperties (child: AbstractObjectLayoutDefinition, isMainPanel: boolean): AbstractObjectLayoutDefinition {
     const isTabpanelChild = child.fieldType === 'tabpanel' || child.fieldtype === 'tabpanel'
 
     const newChildProps = { ...child }

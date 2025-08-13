@@ -33,13 +33,13 @@ const FormExampleComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '600px', padding: '20px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+    <div style={ { maxWidth: '600px', padding: '20px' } }>
+      <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' } }>
         <div>
           <Form
-            initialValues={formValues}
+            initialValues={ formValues }
             layout="vertical"
-            onValuesChange={onValuesChange}
+            onValuesChange={ onValuesChange }
           >
             <Form.Item
               label="Enable Feature"
@@ -54,7 +54,7 @@ const FormExampleComponent = (): React.JSX.Element => {
               name="isPublic"
               valuePropName="checked"
             >
-              <Switch 
+              <Switch
                 labelLeft="Private"
                 labelRight="Public"
               />
@@ -65,7 +65,7 @@ const FormExampleComponent = (): React.JSX.Element => {
               name="notifications"
               valuePropName="checked"
             >
-              <Switch 
+              <Switch
                 labelRight="Receive notifications"
               />
             </Form.Item>
@@ -74,14 +74,15 @@ const FormExampleComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Values</h4>
-          <div style={{ 
-            background: '#f5f5f5', 
-            padding: '16px', 
+          <div style={ {
+            background: '#f5f5f5',
+            padding: '16px',
             borderRadius: '6px',
             fontFamily: 'monospace',
             fontSize: '12px',
             whiteSpace: 'pre-wrap'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
         </div>

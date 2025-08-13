@@ -48,22 +48,22 @@ const FormExampleComponent = (): React.JSX.Element => {
   ]
 
   return (
-    <div style={{ maxWidth: '700px', padding: '20px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+    <div style={ { maxWidth: '700px', padding: '20px' } }>
+      <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' } }>
         <div>
           <Form
-            initialValues={formValues}
+            initialValues={ formValues }
             layout="vertical"
-            onValuesChange={onValuesChange}
+            onValuesChange={ onValuesChange }
           >
             <Form.Item
               label="Category"
               name="category"
             >
-              <Select 
-                placeholder="Select a category"
-                options={categoryOptions}
+              <Select
                 allowClear
+                options={ categoryOptions }
+                placeholder="Select a category"
               />
             </Form.Item>
 
@@ -71,14 +71,14 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Tags"
               name="tags"
             >
-              <Select 
-                mode="multiple"
-                placeholder="Select tags"
-                options={tagOptions}
-                showSearch
-                filterOption={(input, option) =>
+              <Select
+                filterOption={ (input, option) =>
                   String(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                 }
+                mode="multiple"
+                options={ tagOptions }
+                placeholder="Select tags"
+                showSearch
               />
             </Form.Item>
           </Form>
@@ -86,14 +86,15 @@ const FormExampleComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Values</h4>
-          <div style={{ 
-            background: '#f5f5f5', 
-            padding: '16px', 
+          <div style={ {
+            background: '#f5f5f5',
+            padding: '16px',
             borderRadius: '6px',
             fontFamily: 'monospace',
             fontSize: '12px',
             whiteSpace: 'pre-wrap'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
         </div>

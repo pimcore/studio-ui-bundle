@@ -35,25 +35,25 @@ const FormExampleComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '700px', padding: '20px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+    <div style={ { maxWidth: '700px', padding: '20px' } }>
+      <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' } }>
         <div>
           <Form
-            initialValues={formValues}
+            initialValues={ formValues }
             layout="vertical"
-            onValuesChange={onValuesChange}
+            onValuesChange={ onValuesChange }
           >
             <Form.Item
               label="Project Duration"
               name="projectDuration"
-              rules={[
+              rules={ [
                 { required: true, message: 'Please select project duration!' }
-              ]}
+              ] }
             >
-              <DateRangePicker 
-                placeholder={['Start date', 'End date']}
-                outputType="dateString"
+              <DateRangePicker
                 outputFormat="YYYY-MM-DD"
+                outputType="dateString"
+                placeholder={ ['Start date', 'End date'] }
               />
             </Form.Item>
 
@@ -61,11 +61,11 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Vacation Period"
               name="vacationPeriod"
             >
-              <DateRangePicker 
-                placeholder={['Vacation start', 'Vacation end']}
-                outputType="dateString"
-                outputFormat="YYYY-MM-DD"
+              <DateRangePicker
                 allowClear
+                outputFormat="YYYY-MM-DD"
+                outputType="dateString"
+                placeholder={ ['Vacation start', 'Vacation end'] }
               />
             </Form.Item>
 
@@ -73,11 +73,11 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Event Period (with time)"
               name="eventPeriod"
             >
-              <DateRangePicker 
-                placeholder={['Event start', 'Event end']}
-                showTime
-                outputType="dateString"
+              <DateRangePicker
                 outputFormat="YYYY-MM-DD HH:mm:ss"
+                outputType="dateString"
+                placeholder={ ['Event start', 'Event end'] }
+                showTime
               />
             </Form.Item>
 
@@ -85,10 +85,10 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Campaign Duration (Small)"
               name="campaignDuration"
             >
-              <DateRangePicker 
-                placeholder={['Campaign start', 'Campaign end']}
-                outputType="dateString"
+              <DateRangePicker
                 outputFormat="YYYY-MM-DD"
+                outputType="dateString"
+                placeholder={ ['Campaign start', 'Campaign end'] }
                 size="small"
               />
             </Form.Item>
@@ -97,12 +97,12 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Reporting Period (Large)"
               name="reportingPeriod"
             >
-              <DateRangePicker 
-                placeholder={['Report start', 'Report end']}
-                outputType="dateString"
-                outputFormat="YYYY-MM-DD"
-                size="large"
+              <DateRangePicker
                 allowClear
+                outputFormat="YYYY-MM-DD"
+                outputType="dateString"
+                placeholder={ ['Report start', 'Report end'] }
+                size="large"
               />
             </Form.Item>
           </Form>
@@ -110,14 +110,15 @@ const FormExampleComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Values</h4>
-          <div style={{ 
-            background: '#f5f5f5', 
-            padding: '16px', 
+          <div style={ {
+            background: '#f5f5f5',
+            padding: '16px',
             borderRadius: '6px',
             fontFamily: 'monospace',
             fontSize: '12px',
             whiteSpace: 'pre-wrap'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
         </div>

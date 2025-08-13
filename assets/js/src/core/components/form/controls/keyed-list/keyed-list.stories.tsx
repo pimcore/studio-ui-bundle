@@ -67,16 +67,16 @@ const BasicExampleComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '800px', padding: '20px' }}>
+    <div style={ { maxWidth: '800px', padding: '20px' } }>
       <h3>Basic KeyedList Example</h3>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+      <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' } }>
         <div>
           <Form
-            form={form}
-            initialValues={formValues}
+            form={ form }
+            initialValues={ formValues }
             layout="vertical"
-            onFinish={onFinish}
-            onValuesChange={onValuesChange}
+            onFinish={ onFinish }
+            onValuesChange={ onValuesChange }
           >
             <Form.Item
               label="Settings"
@@ -102,7 +102,10 @@ const BasicExampleComponent = (): React.JSX.Element => {
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button
+                htmlType="submit"
+                type="primary"
+              >
                 Submit Form
               </Button>
             </Form.Item>
@@ -111,14 +114,15 @@ const BasicExampleComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Form Values:</h4>
-          <div style={{ 
-            background: '#f5f5f5', 
-            padding: '16px', 
+          <div style={ {
+            background: '#f5f5f5',
+            padding: '16px',
             borderRadius: '6px',
             fontFamily: 'monospace',
             fontSize: '12px',
             whiteSpace: 'pre-wrap'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
         </div>
@@ -161,16 +165,16 @@ const AdvancedExampleComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '1000px', padding: '20px' }}>
+    <div style={ { maxWidth: '1000px', padding: '20px' } }>
       <h3>Advanced KeyedList with Nested Fields</h3>
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
+      <div style={ { display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' } }>
         <div>
           <Form
-            form={form}
-            initialValues={formValues}
+            form={ form }
+            initialValues={ formValues }
             layout="vertical"
-            onFinish={(values) => console.log('Advanced form values:', values)}
-            onValuesChange={onValuesChange}
+            onFinish={ (values) => { console.log('Advanced form values:', values) } }
+            onValuesChange={ onValuesChange }
           >
             <Form.Item
               label="System Configuration"
@@ -190,10 +194,10 @@ const AdvancedExampleComponent = (): React.JSX.Element => {
                     name="port"
                   >
                     <InputNumber
-                      min={1}
-                      max={65535}
-                      style={{ width: '100%' }}
+                      max={ 65535 }
+                      min={ 1 }
                       placeholder="Enter port"
+                      style={ { width: '100%' } }
                     />
                   </Form.Item>
 
@@ -202,10 +206,10 @@ const AdvancedExampleComponent = (): React.JSX.Element => {
                     name="enabled"
                   >
                     <Select
-                      options={[
+                      options={ [
                         { label: 'Yes', value: true },
                         { label: 'No', value: false }
-                      ]}
+                      ] }
                     />
                   </Form.Item>
 
@@ -214,22 +218,22 @@ const AdvancedExampleComponent = (): React.JSX.Element => {
                     name="ttl"
                   >
                     <InputNumber
-                      min={0}
-                      style={{ width: '100%' }}
+                      min={ 0 }
                       placeholder="Time to live"
+                      style={ { width: '100%' } }
                     />
                   </Form.Item>
 
                   <Form.Item
                     label="Username"
-                    name={['credentials', 'username']}
+                    name={ ['credentials', 'username'] }
                   >
                     <Input placeholder="Enter username" />
                   </Form.Item>
 
                   <Form.Item
                     label="Password"
-                    name={['credentials', 'password']}
+                    name={ ['credentials', 'password'] }
                   >
                     <Input.Password placeholder="Enter password" />
                   </Form.Item>
@@ -238,7 +242,10 @@ const AdvancedExampleComponent = (): React.JSX.Element => {
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button
+                htmlType="submit"
+                type="primary"
+              >
                 Save Configuration
               </Button>
             </Form.Item>
@@ -247,16 +254,17 @@ const AdvancedExampleComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Form Values:</h4>
-          <div style={{ 
-            background: '#f5f5f5', 
-            padding: '16px', 
+          <div style={ {
+            background: '#f5f5f5',
+            padding: '16px',
             borderRadius: '6px',
             fontFamily: 'monospace',
             fontSize: '11px',
             whiteSpace: 'pre-wrap',
             maxHeight: '500px',
             overflowY: 'auto'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
         </div>
@@ -297,27 +305,27 @@ const FieldChangeHandlingComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '1000px', padding: '20px' }}>
+    <div style={ { maxWidth: '1000px', padding: '20px' } }>
       <h3>KeyedList with Field Change Tracking</h3>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px' }}>
+      <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px' } }>
         <div>
           <h4>Form</h4>
           <Form
-            form={form}
-            initialValues={formValues}
+            form={ form }
+            initialValues={ formValues }
             layout="vertical"
-            onValuesChange={onValuesChange}
+            onValuesChange={ onValuesChange }
           >
             <Form.Item
               label="Page Metadata"
               name="metadata"
             >
-              <KeyedList onFieldChange={handleFieldChange}>
+              <KeyedList onFieldChange={ handleFieldChange }>
                 <KeyedList.Iterator>
                   <Form.Item
                     label="Content"
                     name="content"
-                    style={{ marginBottom: '12px' }}
+                    style={ { marginBottom: '12px' } }
                   >
                     <Input placeholder="Enter content" />
                   </Form.Item>
@@ -325,13 +333,13 @@ const FieldChangeHandlingComponent = (): React.JSX.Element => {
                   <Form.Item
                     label="Required"
                     name="required"
-                    style={{ marginBottom: '16px' }}
+                    style={ { marginBottom: '16px' } }
                   >
                     <Select
-                      options={[
+                      options={ [
                         { label: 'Yes', value: true },
                         { label: 'No', value: false }
-                      ]}
+                      ] }
                     />
                   </Form.Item>
                 </KeyedList.Iterator>
@@ -342,46 +350,53 @@ const FieldChangeHandlingComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Form Values:</h4>
-          <div style={{ 
-            background: '#f5f5f5', 
-            padding: '12px', 
+          <div style={ {
+            background: '#f5f5f5',
+            padding: '12px',
             borderRadius: '6px',
             fontFamily: 'monospace',
             fontSize: '11px',
             whiteSpace: 'pre-wrap',
             maxHeight: '400px',
             overflowY: 'auto'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
         </div>
 
         <div>
           <h4>Recent Field Changes:</h4>
-          <div style={{ 
-            background: '#f9f9f9', 
-            padding: '12px', 
+          <div style={ {
+            background: '#f9f9f9',
+            padding: '12px',
             borderRadius: '6px',
             maxHeight: '400px',
             overflowY: 'auto'
-          }}>
-            {fieldChanges.length === 0 ? (
-              <p style={{ color: '#666', margin: 0, fontSize: '12px' }}>No changes yet. Start editing the form!</p>
-            ) : (
-              fieldChanges.map((change) => (
-                <div key={change.timestamp} style={{ 
-                  marginBottom: '8px', 
-                  padding: '8px',
-                  background: 'white',
-                  borderRadius: '4px',
-                  fontSize: '11px'
-                }}>
-                  <strong>Field:</strong> {JSON.stringify(change.field)}<br/>
-                  <strong>Value:</strong> {JSON.stringify(change.value)}<br/>
-                  <strong>Time:</strong> {new Date(change.timestamp).toLocaleTimeString()}
-                </div>
-              ))
-            )}
+          } }
+          >
+            {fieldChanges.length === 0
+              ? (
+                <p style={ { color: '#666', margin: 0, fontSize: '12px' } }>No changes yet. Start editing the form!</p>
+                )
+              : (
+                  fieldChanges.map((change) => (
+                    <div
+                      key={ change.timestamp }
+                      style={ {
+                        marginBottom: '8px',
+                        padding: '8px',
+                        background: 'white',
+                        borderRadius: '4px',
+                        fontSize: '11px'
+                      } }
+                    >
+                      <strong>Field:</strong> {JSON.stringify(change.field)}<br />
+                      <strong>Value:</strong> {JSON.stringify(change.value)}<br />
+                      <strong>Time:</strong> {new Date(change.timestamp).toLocaleTimeString()}
+                    </div>
+                  ))
+                )}
           </div>
         </div>
       </div>
@@ -427,30 +442,30 @@ const SettingsWithControls = ({ formValues, form, setFormValues }: SettingsWithC
   }
 
   return (
-    <KeyedList 
-      value={formValues.settings}
-      onChange={(newValue) => {
+    <KeyedList
+      onChange={ (newValue) => {
         const updatedValues = { ...formValues, settings: newValue }
         setFormValues(updatedValues)
         form.setFieldsValue(updatedValues)
-      }}
+      } }
+      value={ formValues.settings }
     >
-      <div style={{ marginBottom: '16px' }}>
-        <Button 
-          onClick={addNewSetting}
+      <div style={ { marginBottom: '16px' } }>
+        <Button
+          onClick={ addNewSetting }
+          style={ { marginRight: '8px' } }
           type="dashed"
-          style={{ marginRight: '8px' }}
         >
           Add Setting
         </Button>
-        <Button 
-          onClick={removeLastSetting}
-          disabled={Object.keys(formValues.settings).length === 0}
+        <Button
+          disabled={ Object.keys(formValues.settings).length === 0 }
+          onClick={ removeLastSetting }
         >
           Remove Last Setting
         </Button>
       </div>
-      
+
       <KeyedList.Iterator>
         <Form.Item
           label="Value"
@@ -485,34 +500,37 @@ const SimpleOperationsComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '800px', padding: '20px' }}>
+    <div style={ { maxWidth: '800px', padding: '20px' } }>
       <h3>Simple Operations Example</h3>
-      <p style={{ marginBottom: '20px', color: '#666' }}>
-        This example shows how to add/remove key-value pairs programmatically. 
+      <p style={ { marginBottom: '20px', color: '#666' } }>
+        This example shows how to add/remove key-value pairs programmatically.
         Use the buttons above the list to add or remove settings.
       </p>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+      <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' } }>
         <div>
           <Form
-            form={form}
-            initialValues={formValues}
+            form={ form }
+            initialValues={ formValues }
             layout="vertical"
-            onFinish={(values) => console.log('Form submitted:', values)}
-            onValuesChange={onValuesChange}
+            onFinish={ (values) => { console.log('Form submitted:', values) } }
+            onValuesChange={ onValuesChange }
           >
             <Form.Item
               label="Settings"
               name="settings"
             >
-              <SettingsWithControls 
-                formValues={formValues}
-                form={form}
-                setFormValues={setFormValues}
+              <SettingsWithControls
+                form={ form }
+                formValues={ formValues }
+                setFormValues={ setFormValues }
               />
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button
+                htmlType="submit"
+                type="primary"
+              >
                 Save Settings
               </Button>
             </Form.Item>
@@ -521,17 +539,18 @@ const SimpleOperationsComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Form Values:</h4>
-          <div style={{ 
-            background: '#f5f5f5', 
-            padding: '16px', 
+          <div style={ {
+            background: '#f5f5f5',
+            padding: '16px',
             borderRadius: '6px',
             fontFamily: 'monospace',
             fontSize: '12px',
             whiteSpace: 'pre-wrap'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
-          <p style={{ fontSize: '12px', color: '#666', marginTop: '8px' }}>
+          <p style={ { fontSize: '12px', color: '#666', marginTop: '8px' } }>
             Settings: {Object.keys(formValues.settings).length}
           </p>
         </div>

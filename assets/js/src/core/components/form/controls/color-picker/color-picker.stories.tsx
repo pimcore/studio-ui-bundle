@@ -45,22 +45,22 @@ const FormExampleComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '700px', padding: '20px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+    <div style={ { maxWidth: '700px', padding: '20px' } }>
+      <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' } }>
         <div>
           <Form
-            initialValues={formValues}
+            initialValues={ formValues }
             layout="vertical"
-            onValuesChange={onValuesChange}
+            onValuesChange={ onValuesChange }
           >
             <Form.Item
               label="Primary Color"
               name="primaryColor"
             >
-              <ColorPicker 
-                showText
-                format="hex"
+              <ColorPicker
                 allowClear
+                format="hex"
+                showText
               />
             </Form.Item>
 
@@ -68,9 +68,9 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Background Color"
               name="backgroundColor"
             >
-              <ColorPicker 
-                showText
+              <ColorPicker
                 format="hex"
+                showText
                 size="small"
               />
             </Form.Item>
@@ -79,9 +79,9 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Accent Color"
               name="accentColor"
             >
-              <ColorPicker 
-                showText={(color) => `Custom: ${color.toHexString()}`}
+              <ColorPicker
                 format="hex"
+                showText={ (color) => `Custom: ${color.toHexString()}` }
               />
             </Form.Item>
 
@@ -89,10 +89,9 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Text Color"
               name="textColor"
             >
-              <ColorPicker 
-                showText
+              <ColorPicker
                 format="hex"
-                presets={[
+                presets={ [
                   {
                     label: 'Text Colors',
                     colors: [
@@ -104,7 +103,8 @@ const FormExampleComponent = (): React.JSX.Element => {
                       '#FFFFFF'
                     ]
                   }
-                ]}
+                ] }
+                showText
               />
             </Form.Item>
 
@@ -112,10 +112,10 @@ const FormExampleComponent = (): React.JSX.Element => {
               label="Border Color"
               name="borderColor"
             >
-              <ColorPicker 
-                trigger="hover"
+              <ColorPicker
                 format="hex"
                 size="small"
+                trigger="hover"
               />
             </Form.Item>
           </Form>
@@ -123,47 +123,49 @@ const FormExampleComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Values</h4>
-          <div style={{ 
-            background: '#f5f5f5', 
-            padding: '16px', 
+          <div style={ {
+            background: '#f5f5f5',
+            padding: '16px',
             borderRadius: '6px',
             fontFamily: 'monospace',
             fontSize: '12px',
             whiteSpace: 'pre-wrap'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
-          
-          <div style={{ marginTop: '20px' }}>
+
+          <div style={ { marginTop: '20px' } }>
             <h4>Color Preview</h4>
-            <div style={{
+            <div style={ {
               display: 'grid',
               gridTemplateColumns: '1fr 1fr',
               gap: '8px',
               marginTop: '10px'
-            }}>
+            } }
+            >
               {Object.entries(formValues).map(([key, value]) => {
                 const colorValue = typeof value === 'string' ? value : '#CCCCCC'
                 const displayValue = value ?? 'null'
-                
+
                 return (
-                  <div 
-                    key={key}
-                    style={{
+                  <div
+                    key={ key }
+                    style={ {
                       display: 'flex',
                       alignItems: 'center',
                       gap: '8px',
                       fontSize: '12px'
-                    }}
+                    } }
                   >
                     <div
-                      style={{
+                      style={ {
                         width: '20px',
                         height: '20px',
                         backgroundColor: colorValue,
                         border: '1px solid #ccc',
                         borderRadius: '4px'
-                      }}
+                      } }
                     />
                     <span>{key}: {displayValue}</span>
                   </div>
