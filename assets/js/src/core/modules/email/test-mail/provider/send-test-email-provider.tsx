@@ -13,7 +13,7 @@ import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal
 import { type FormInstance } from 'antd'
 import React, { createContext, useMemo, useState } from 'react'
 import { type SendEmailParameters } from '../../emails-api-slice-enhanced'
-import { SendTestMailForm } from '../component/send-test-mail-form/send-test-mail-form'
+import { SendTestMailForm, TestEmailType } from '../component/send-test-mail-form/send-test-mail-form'
 import { useSendTestMail } from '../hooks/use-send-test-mail'
 import { useTranslation } from 'react-i18next'
 
@@ -43,33 +43,26 @@ export const SendTestEmailProvider: React.FC<SendTestEmailProviderProps> = ({ ch
   }
 
   const submit = async (): Promise<any> => {
-    return await new Promise((resolve, reject) => {
-      tmpForm.validateFields()
-        .then(async () => {
-          setIsOkButtonLoading(true)
-          const values = tmpForm.getFieldsValue()
-          const formattedValues: SendEmailParameters = {
-            ...values,
-            documentPath: values.documentPath?.fullPath ?? null
-          }
+    setIsOkButtonLoading(true)
 
-          resolve(values)
-          void send(
-            formattedValues,
-            () => {
-              closeModal()
-              setIsOkButtonLoading(false)
-            },
-            () => {
-              setIsOkButtonLoading(false)
-            }
-          )
-        })
-        .catch(() => {
-          setIsOkButtonLoading(false)
-          reject(new Error('Invalid form data'))
-        })
-    })
+    await tmpForm.validateFields()
+      .then(async () => {
+        const values = tmpForm.getFieldsValue()
+        const formattedValues: SendEmailParameters = {
+          ...values,
+          documentPath: values.documentPath?.fullPath ?? null
+        }
+
+        await send(
+          formattedValues,
+          () => {
+            closeModal()
+          }
+        )
+      })
+      .finally(() => {
+        setIsOkButtonLoading(false)
+      })
   }
 
   const contextValue = useMemo(() => ({
@@ -80,23 +73,23 @@ export const SendTestEmailProvider: React.FC<SendTestEmailProviderProps> = ({ ch
   }), [isOpen, tmpForm])
 
   return (
-    <SendTestEmailContext.Provider value={ contextValue }>
+    <SendTestEmailContext.Provider value={contextValue}>
       <WindowModal
-        okButtonProps={ {
+        okButtonProps={{
           loading: isOkButtonLoading
-        } }
-        okText={ t('test-email-modal-send') }
-        onCancel={ () => { closeModal() } }
-        onClose={ () => { closeModal() } }
-        onOk={ async () => {
+        }}
+        okText={t('test-email-modal-send')}
+        onCancel={() => { closeModal() }}
+        onClose={() => { closeModal() }}
+        onOk={async () => {
           await submit()
-        } }
-        open={ isOpen }
+        }}
+        open={isOpen}
         size="L"
-        title={ t('test-email-modal-title') }
+        title={t('test-email-modal-title')}
       >
         <SendTestMailForm
-          form={ tmpForm }
+          form={tmpForm}
         />
       </WindowModal>
 
