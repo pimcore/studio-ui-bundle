@@ -19,7 +19,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './parameters-table.styles'
 
-interface TestEmailParametersTableProps {
+interface ParameterRow {
   key: string
   value: string
 }
@@ -31,11 +31,11 @@ interface ParametersTableProps {
 export const ParametersTable = ({ form }: ParametersTableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const [data, setData] = useState<TestEmailParametersTableProps[]>([
+  const [data, setData] = useState<ParameterRow[]>([
     { key: '', value: '' }
   ])
 
-  const columnHelper = createColumnHelper<TestEmailParametersTableProps>()
+  const columnHelper = createColumnHelper<ParameterRow>()
   const columns = [
     columnHelper.accessor('key', {
       header: t('test-email.parameters.columns.key'),
