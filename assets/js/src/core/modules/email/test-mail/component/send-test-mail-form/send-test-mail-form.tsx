@@ -21,7 +21,7 @@ import { useTranslation } from 'react-i18next'
 import { ParametersTable } from '../parameters-table/parameters-table'
 
 export interface TestEmailModalProps {
-  initalValues?: Partial<SendEmailParameters>
+  initialValues?: Partial<SendEmailParameters>
   form: FormInstance<SendEmailParameters>
 }
 
@@ -31,7 +31,7 @@ enum TestEmailType {
   Text = 'text'
 }
 
-export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): React.JSX.Element => {
+export const SendTestMailForm = ({ initialValues, form }: TestEmailModalProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const getVariableFormFields = (type: TestEmailType): React.JSX.Element => {
@@ -100,7 +100,7 @@ export const SendTestMailForm = ({ initalValues, form }: TestEmailModalProps): R
   return (
     <Form
       form={form}
-      initialValues={initalValues}
+      initialValues={initialValues}
       layout="vertical"
     >
       <Form.Item
