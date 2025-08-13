@@ -963,6 +963,7 @@ reports.grid-config.title-columns: Columns
 reports.grid-config.restore-to-default: Restore to default
 reports.grid-config.add-column: Add a column
 reports.field-filters: Field Filters
+reports.editor.delete.content: Do you really want to delete Custom Report "{{reportName}}"?
 loading: Loading...
 please-wait: Please wait...
 navigation.email: Email

@@ -22,14 +22,17 @@ export const ReportsEditor = (): React.JSX.Element => {
   const [openedReports, setOpenedReports] = useState<BundleCustomReportsConfigurationTreeNode[]>([])
   const [activeTabKey, setActiveTabKey] = useState<string | undefined>(undefined)
 
-  const tabItems = useMemo(() =>
-    openedReports.map((report) => ({
-      key: report.id,
-      label: report.text,
-      children: <ReportConfiguration report={ report } />
-    })),
-  [openedReports]
-  )
+  const tabItems = useMemo(() => {
+    const existingReportIds = new Set(reportsConfigTreeData?.items?.map(report => report.id))
+
+    return openedReports
+      .filter(report => existingReportIds.has(report.id))
+      .map((report) => ({
+        key: report.id,
+        label: report.text,
+        children: <ReportConfiguration report={ report } />
+      }))
+  }, [reportsConfigTreeData, openedReports])
 
   const handleOpenReport = (report: BundleCustomReportsConfigurationTreeNode): void => {
     const isAlreadyOpened = openedReports.some(item => item.id === report.id)

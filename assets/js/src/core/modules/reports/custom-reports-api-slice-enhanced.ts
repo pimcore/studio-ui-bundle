@@ -26,5 +26,6 @@ export const {
   useCustomReportsConfigGetTreeQuery,
   useCustomReportExportCsvMutation,
   useCustomReportsReportQuery,
-  useCustomReportsGetTreeQuery
+  useCustomReportsGetTreeQuery,
+  useCustomReportsConfigDeleteMutation
 } = api

@@ -21,7 +21,9 @@ import { Toolbar } from '@Pimcore/modules/reports/reports-editor/components/repo
 import {
   type BundleCustomReportsConfigurationTreeNode,
   type CustomReportsConfigGetTreeApiResponse
-} from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+} from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { useReportActions } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-actions'
 import { useStyles } from '@Pimcore/modules/reports/reports-editor/reports-editor.styles'
 
 interface IReportsSidebarProps {
@@ -32,10 +34,13 @@ interface IReportsSidebarProps {
 }
 
 export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenReport }: IReportsSidebarProps): React.JSX.Element => {
+  const [contextItem, setContextItem] = useState<BundleCustomReportsConfigurationTreeNode | null>(null)
+
   const { styles } = useStyles()
   const { t } = useTranslation()
 
-  const [contextItem, setContextItem] = useState<any | null>(null)
+  const modal = useFormModal()
+  const { deleteReport } = useReportActions()
 
   const reportsListData = reportsList?.items ?? []
 
@@ -48,7 +53,13 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
   }
 
   const handleReportDelete = (): void => {
-    console.log('----- Delete report: ', contextItem)
+    modal.confirm({
+      title: t('delete'),
+      content: t('reports.editor.delete.content', { reportName: contextItem?.text }),
+      onOk: async () => {
+        void deleteReport({ name: contextItem!.id })
+      }
+    })
   }
 
   const dropdownItems: DropdownProps['menu']['items'] = [
