@@ -28,7 +28,7 @@ import { useStyles } from '@Pimcore/modules/reports/reports-editor/reports-edito
 
 interface IReportsSidebarProps {
   isLoading: boolean
-  refetch: () => Promise<any>
+  refetch: () => Promise<{ data?: CustomReportsConfigGetTreeApiResponse }>
   reportsList?: CustomReportsConfigGetTreeApiResponse
   handleOpenReport: (report: BundleCustomReportsConfigurationTreeNode) => void
 }
@@ -56,7 +56,7 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
 
         const { data: updatedData } = await refetch()
 
-        const addedReport: BundleCustomReportsConfigurationTreeNode | undefined = updatedData?.items?.find((item) => item.id === value)
+        const addedReport = updatedData?.items?.find((item) => item.id === value)
 
         !isUndefined(addedReport) && handleOpenReport(addedReport)
       }
@@ -71,11 +71,13 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
         message: t('reports.editor.content.validation.message')
       },
       onOk: async (value: string) => {
-        await cloneReport({ name: contextItem!.id, bundleCustomReportClone: { newName: value } })
+        if (isNil(contextItem)) return
+
+        await cloneReport({ name: contextItem.id, bundleCustomReportClone: { newName: value } })
 
         const { data: updatedData } = await refetch()
 
-        const clonedReport: BundleCustomReportsConfigurationTreeNode | undefined = updatedData?.items?.find((item) => item.id === value)
+        const clonedReport = updatedData?.items?.find((item) => item.id === value)
 
         !isUndefined(clonedReport) && handleOpenReport(clonedReport)
       }
@@ -87,7 +89,9 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
       title: t('delete'),
       content: t('reports.editor.delete.content', { reportName: contextItem?.text }),
       onOk: async () => {
-        void deleteReport({ name: contextItem!.id })
+        if (isNil(contextItem)) return
+
+        void deleteReport({ name: contextItem.id })
       }
     })
   }
@@ -104,7 +108,8 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
       key: 'delete',
       label: t('delete'),
       onClick: handleReportDelete
-    }]
+    }
+  ]
 
   return (
     <ContentLayout renderToolbar={ (
@@ -127,7 +132,7 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
         >
           {reportsListData.map((item) => (
             <Dropdown
-              disabled={ isNil(reportsListData) }
+              disabled={ reportsListData.length === 0 }
               key={ item.id }
               menu={ { items: dropdownItems } }
               onOpenChange={ (open) => {
