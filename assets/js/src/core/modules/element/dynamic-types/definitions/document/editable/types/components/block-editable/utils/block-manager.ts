@@ -104,4 +104,8 @@ export class BlockManager {
   getEditableName (): string {
     return this.editableName
   }
+
+  getRealEditableName (): string {
+    return this.container?.getAttribute('data-real-name') ?? this.editableName
+  }
 }

@@ -11,10 +11,11 @@
 import { isNil } from 'lodash'
 import { type AbstractDocumentEditableDefinition } from '../../../../dynamic-type-document-editable-abstract'
 import { EDITABLE_DEFAULT_FIELD_WIDTHS } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-renderer/render-editable'
+import { type BlockManager } from './block-manager'
 
 export interface ProcessTemplateParams {
   templateHtml: string
-  editableName: string
+  blockManager: BlockManager
   nextKey: number
 }
 
@@ -25,11 +26,14 @@ export interface ProcessedTemplate {
 
 const processHtmlTemplate = (
   templateHtml: string,
-  realName: string,
-  fullName: string,
-  escapedName: string,
+  blockManager: BlockManager,
   nextKey: number
 ): string => {
+  const editableName = blockManager.getEditableName()
+  const realName = blockManager.getRealEditableName()
+  const fullName = editableName
+  const escapedName = fullName.replace(/[:.]/g, '_')
+  
   let processedHtml = templateHtml
 
   processedHtml = processedHtml.replace(
@@ -49,14 +53,15 @@ const processHtmlTemplate = (
 }
 
 export const processBlockTemplate = (
-  { templateHtml, editableName, nextKey }: ProcessTemplateParams,
+  { templateHtml, blockManager, nextKey }: ProcessTemplateParams,
   templateEditables: any[]
 ): ProcessedTemplate => {
-  const realName = editableName.split(':').pop() ?? editableName
+  const editableName = blockManager.getEditableName()
+  const realName = (editableName.split(':').pop() ?? editableName).replace(/^\d+\./, '')
   const fullName = editableName
   const escapedName = fullName.replace(/[:.]/g, '_')
 
-  const processedHtml = processHtmlTemplate(templateHtml, realName, fullName, escapedName, nextKey)
+  const processedHtml = processHtmlTemplate(templateHtml, blockManager, nextKey)
 
   const editableDefinitions: AbstractDocumentEditableDefinition[] = []
 
