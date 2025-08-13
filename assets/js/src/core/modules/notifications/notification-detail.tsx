@@ -64,6 +64,7 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
         {notification.creationDate !== undefined && <span>{formatDateTime({ timestamp: notification.creationDate, dateStyle: 'short', timeStyle: 'medium' })}</span>}
         <IconButton
           icon={ { value: 'trash' } }
+          variant='minimal'
           loading={ deleteLoading }
           onClick={ async (e) => {
             e.stopPropagation()
@@ -112,7 +113,7 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     {notificationRead
       ? (
         <Icon
-          className={ [styles.margin, styles.readNotificationIcon].join(' ') }
+          className={ [styles.margin, styles.grey].join(' ') }
           value={ 'notification-read' }
         />
         )
@@ -129,7 +130,7 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
       theme="secondary"
     >
       {notification.title !== '' && (<Text strong>{notification.title}</Text>)}
-      <Text type='secondary'>{notification.sender}</Text>
+      {notification.sender !== '' && notification.sender !== null && (<Text type='secondary'>{notification.sender}</Text>)}
     </Split>
   </Flex>,
     extra: extra(),
@@ -138,6 +139,7 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
 
   return (
     <Collapse
+    size='small'
       activeKeys={
         isExpanded
           ? [notification.id.toString()]

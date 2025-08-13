@@ -19,7 +19,7 @@ export const useStyles = createStyles(({ token, css }) => {
     margin: css`
         margin: 5px;
     `,
-    readNotificationIcon: css`
+    grey: css`
         color: ${token.colorIcon}
     `
     ,

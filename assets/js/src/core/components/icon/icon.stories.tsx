@@ -10,7 +10,6 @@
 
 import { type Meta } from '@storybook/react'
 import { Icon } from './icon'
-import { theme } from 'antd'
 
 const config: Meta = {
   title: 'Components/General/Icon',
