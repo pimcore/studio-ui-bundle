@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { isNil, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
@@ -33,11 +33,18 @@ interface IReportsSidebarProps {
   refetch: () => Promise<{ data?: CustomReportsConfigGetTreeApiResponse }>
   reportsList?: CustomReportsConfigGetTreeApiResponse
   handleOpenReport: (report: BundleCustomReportsConfigurationTreeNode) => void
+  handleCloseReport: (id: BundleCustomReportsConfigurationTreeNode['id']) => void
 }
 
-export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenReport }: IReportsSidebarProps): React.JSX.Element => {
-  const [reportsListData, setReportsListData] = useState(reportsList?.items ?? [])
+export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenReport, handleCloseReport }: IReportsSidebarProps): React.JSX.Element => {
+  const [reportsListData, setReportsListData] = useState<BundleCustomReportsConfigurationTreeNode[]>([])
   const [contextItem, setContextItem] = useState<BundleCustomReportsConfigurationTreeNode | null>(null)
+
+  useEffect(() => {
+    if (!isNil(reportsList?.items)) {
+      setReportsListData(reportsList.items)
+    }
+  }, [reportsList])
 
   const { styles } = useStyles()
   const { t } = useTranslation()
@@ -92,7 +99,9 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
       onOk: async () => {
         if (isNil(contextItem)) return
 
-        void deleteReport({ name: contextItem.id })
+        void deleteReport({ name: contextItem.id }).then(() => {
+          handleCloseReport(contextItem.id)
+        })
       }
     })
   }

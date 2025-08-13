@@ -67,6 +67,7 @@ export const ReportsEditor = (): React.JSX.Element => {
     minSize: 150,
     children: (
       <ReportsSidebar
+        handleCloseReport={ handleCloseTab }
         handleOpenReport={ handleOpenReport }
         isLoading={ isLoading || isFetching }
         refetch={ refetch }
