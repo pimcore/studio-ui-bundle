@@ -33,7 +33,9 @@ const initialState: UserInformation = {
   memorizeTabs: false,
   hasImage: false,
   contentLanguages: [],
-  keyBindings: []
+  keyBindings: [],
+  allowedLanguagesForEditingWebsiteTranslations: {},
+  allowedLanguagesForViewingWebsiteTranslations: {}
 }
 
 const slice = createSlice({

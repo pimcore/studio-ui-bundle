@@ -25,6 +25,57 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Bundle Custom Reports"],
             }),
+            customReportsConfigAdd: build.mutation<CustomReportsConfigAddApiResponse, CustomReportsConfigAddApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/bundle/custom-reports/config/add`,
+                    method: "POST",
+                    body: queryArg.bundleCustomReportAdd,
+                }),
+                invalidatesTags: ["Bundle Custom Reports"],
+            }),
+            customReportsConfigClone: build.mutation<
+                CustomReportsConfigCloneApiResponse,
+                CustomReportsConfigCloneApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/bundle/custom-reports/config/clone/${queryArg.name}`,
+                    method: "POST",
+                    body: queryArg.bundleCustomReportClone,
+                }),
+                invalidatesTags: ["Bundle Custom Reports"],
+            }),
+            customReportsColumnConfigList: build.mutation<
+                CustomReportsColumnConfigListApiResponse,
+                CustomReportsColumnConfigListApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/bundle/custom-reports/column-config/${queryArg.name}`,
+                    method: "POST",
+                    body: queryArg.bundleCustomReportsDataSourceConfig,
+                }),
+                invalidatesTags: ["Bundle Custom Reports"],
+            }),
+            customReportsConfigUpdate: build.mutation<
+                CustomReportsConfigUpdateApiResponse,
+                CustomReportsConfigUpdateApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/bundle/custom-reports/config/${queryArg.name}`,
+                    method: "PUT",
+                    body: queryArg.bundleCustomReportUpdate,
+                }),
+                invalidatesTags: ["Bundle Custom Reports"],
+            }),
+            customReportsConfigDelete: build.mutation<
+                CustomReportsConfigDeleteApiResponse,
+                CustomReportsConfigDeleteApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/bundle/custom-reports/config/${queryArg.name}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Bundle Custom Reports"],
+            }),
             customReportsReport: build.query<CustomReportsReportApiResponse, CustomReportsReportApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/bundle/custom-reports/report/${queryArg.name}` }),
                 providesTags: ["Bundle Custom Reports"],
@@ -100,6 +151,39 @@ export type CustomReportsChartApiArg = {
         /** Fields to be included in the chart data. If not provided, all fields will be included. */
         fields?: string[];
     };
+};
+export type CustomReportsConfigAddApiResponse =
+    /** status 200 Successfully added custom report configuration */ BundleCustomReportsDetails;
+export type CustomReportsConfigAddApiArg = {
+    bundleCustomReportAdd: BundleCustomReportAdd;
+};
+export type CustomReportsConfigCloneApiResponse =
+    /** status 200 Successfully cloned custom report configuration */ BundleCustomReportsDetails;
+export type CustomReportsConfigCloneApiArg = {
+    /** Name of the report to clone */
+    name: string;
+    bundleCustomReportClone: BundleCustomReportClone;
+};
+export type CustomReportsColumnConfigListApiResponse =
+    /** status 200 List of column configurations for the custom report */ {
+        items: BundleCustomReportsColumnInformation[];
+    };
+export type CustomReportsColumnConfigListApiArg = {
+    /** Name of the report */
+    name: string;
+    bundleCustomReportsDataSourceConfig: BundleCustomReportsDataSourceConfig;
+};
+export type CustomReportsConfigUpdateApiResponse =
+    /** status 200 Successfully updated custom report configuration */ BundleCustomReportsDetails;
+export type CustomReportsConfigUpdateApiArg = {
+    /** Name of the report */
+    name: string;
+    bundleCustomReportUpdate: BundleCustomReportUpdate;
+};
+export type CustomReportsConfigDeleteApiResponse = unknown;
+export type CustomReportsConfigDeleteApiArg = {
+    /** Name of the custom report to delete */
+    name: string;
 };
 export type CustomReportsReportApiResponse = /** status 200 Report data as JSON */ BundleCustomReportsDetails;
 export type CustomReportsReportApiArg = {
@@ -250,6 +334,70 @@ export type BundleCustomReportsDetails = {
     /** Y axis column information */
     yAxis: string[] | null;
 };
+export type BundleCustomReportAdd = {
+    /** Name of the new custom report */
+    name: string;
+};
+export type BundleCustomReportClone = {
+    /** New name the cloned custom report */
+    newName: string;
+};
+export type BundleCustomReportsColumnInformation = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Name */
+    name: string;
+    /** Disable order by */
+    disableOrderBy: boolean;
+    /** Disable filterable */
+    disableFilterable: boolean;
+    /** Disable dropdown filterable */
+    disableDropdownFilterable: boolean;
+    /** Disable label */
+    disableLabel: boolean;
+};
+export type BundleCustomReportsDataSourceConfig = {
+    /** Configuration for data source. Content of array depends on selected adapter/data source */
+    configuration: object;
+};
+export type BundleCustomReportUpdate = {
+    /** Sql */
+    sql: string;
+    /** Configuration for columns to be displayed in report */
+    columnConfigurations: BundleCustomReportsColumnConfiguration[];
+    /** Label/nice name of report */
+    niceName: string;
+    /** Group of the report */
+    group: string;
+    /** Group icon class */
+    groupIconClass: string;
+    /** Icon class */
+    iconClass: string;
+    /** Whether the report has a shortcut in the menu */
+    menuShortcut: boolean;
+    /** Report class of custom report implementation */
+    reportClass: string;
+    /** Chart type */
+    chartType: string;
+    /** Array with user names the report is shared with */
+    sharedUserNames: string[];
+    /** Array with roles the report is shared with */
+    sharedRoleNames: string[];
+    /** Whether the report is shared globally */
+    sharedGlobally: boolean;
+    /** Configuration for data source. Content of array depends on selected adapter/data source */
+    dataSourceConfig: object;
+    /** Data column for pie chart */
+    pieColumn: string | null;
+    /** Label of data column for pie chart */
+    pieLabelColumn: string | null;
+    /** X axis column names */
+    xAxis: string | null;
+    /** Y axis column information */
+    yAxis: string[] | null;
+};
 export type BundleCustomReportsConfigurationTreeNode = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -287,6 +435,11 @@ export type BundleCustomReportsTreeNode = {
 export const {
     useCustomReportsListDrillDownOptionsQuery,
     useCustomReportsChartQuery,
+    useCustomReportsConfigAddMutation,
+    useCustomReportsConfigCloneMutation,
+    useCustomReportsColumnConfigListMutation,
+    useCustomReportsConfigUpdateMutation,
+    useCustomReportsConfigDeleteMutation,
     useCustomReportsReportQuery,
     useCustomReportsConfigGetTreeQuery,
     useCustomReportExportCsvMutation,
