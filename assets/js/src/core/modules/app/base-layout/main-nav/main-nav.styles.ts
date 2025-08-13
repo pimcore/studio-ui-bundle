@@ -160,7 +160,7 @@ export const useStlyes = createStyles(({
         font-family:  ${token.fontFamily};
 
         .plain-icon {
-        margin: 4px;
+          margin: 4px;
         }
 
         &:hover {
