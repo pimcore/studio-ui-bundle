@@ -40,12 +40,27 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
   const { t } = useTranslation()
 
   const modal = useFormModal()
-  const { cloneReport, deleteReport } = useReportActions()
+  const { addReport, cloneReport, deleteReport } = useReportActions()
 
   const reportsListData = reportsList?.items ?? []
 
   const handleReportAdd = (): void => {
-    console.log('----- Add new report')
+    modal.input({
+      label: t('reports.editor.add.content'),
+      rule: {
+        pattern: /^[a-zA-Z0-9_-]+$/,
+        message: t('reports.editor.content.validation.message')
+      },
+      onOk: async (value: string) => {
+        await addReport({ bundleCustomReportAdd: { name: value } })
+
+        const { data: updatedData } = await refetch()
+
+        const addedReport: BundleCustomReportsConfigurationTreeNode | undefined = updatedData?.items?.find((item) => item.id === value)
+
+        !isUndefined(addedReport) && handleOpenReport(addedReport)
+      }
+    })
   }
 
   const handleReportClone = (): void => {
@@ -53,7 +68,7 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
       label: t('reports.editor.clone.content'),
       rule: {
         pattern: /^[a-zA-Z0-9_-]+$/,
-        message: t('reports.editor.clone.content.validation.message')
+        message: t('reports.editor.content.validation.message')
       },
       onOk: async (value: string) => {
         await cloneReport({ name: contextItem!.id, bundleCustomReportClone: { newName: value } })

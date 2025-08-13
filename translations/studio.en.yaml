@@ -965,7 +965,8 @@ reports.grid-config.add-column: Add a column
 reports.field-filters: Field Filters
 reports.editor.delete.content: Do you really want to delete Custom Report "{{reportName}}"?
 reports.editor.clone.content: Enter the name of the new item (a-zA-Z-_)
-reports.editor.clone.content.validation.message: The customer report name is invalid
+reports.editor.add.content: Enter the name of the new item. Name must be alphanumeric and at least 3 characters long (a-zA-Z0-9_-)
+reports.editor.content.validation.message: The customer report name is invalid
 loading: Loading...
 please-wait: Please wait...
 navigation.email: Email
