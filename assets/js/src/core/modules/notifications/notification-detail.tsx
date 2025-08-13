@@ -140,19 +140,19 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
   return (
     <Collapse
     size='small'
-      activeKeys={
-        isExpanded
-          ? [notification.id.toString()]
-          : []
-      }
-      items={ [item] }
-      onChange={ (expandedKeys) => {
-        if (expandedKeys.length > 0) {
-          setIsExpanded(true)
-        } else {
-          setIsExpanded(false)
-        }
-      } }
+    activeKeys={
+      isExpanded
+      ? [notification.id.toString()]
+      : []
+    }
+    items={ [item] }
+    onChange={ (expandedKeys) => {
+    if (expandedKeys.length > 0) {
+      setIsExpanded(true)
+    } else {
+      setIsExpanded(false)
+    }
+  }}
     />
   )
 }

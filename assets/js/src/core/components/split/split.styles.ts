@@ -25,7 +25,7 @@ export const useStyles = createStyles(({ css, token }) => {
 
       &.split--theme-secondary {
         .ant-divider {
-          border-color: ${token.colorTextSecondary};
+          border-color: ${token.colorIcon};
         }
       }
 
