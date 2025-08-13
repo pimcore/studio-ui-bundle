@@ -125,7 +125,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
     setPageSize(newPageSize)
   }
 
-  const isDataLoading = redirectsLoading || redirectsFetching || 
+  const isDataLoading = redirectsLoading || redirectsFetching ||
     (!isUndefined(redirects) && redirectRows.length === 0 && redirects.length > 0)
 
   return (
