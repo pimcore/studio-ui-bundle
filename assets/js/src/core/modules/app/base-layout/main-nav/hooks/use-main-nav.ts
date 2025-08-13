@@ -41,15 +41,17 @@ const addNavItemToItemList = (items: IMainNavItem[], item: IMainNavItem): void =
         id: level,
         label: item.label ?? level,
         path: levels.slice(0, index + 1).join('/'),
-        dividerBottom: item.dividerBottom ?? undefined,
         children: [],
-        icon: isCurrentItem ? item.icon : undefined,
-        widgetConfig: isCurrentItem ? item.widgetConfig : undefined,
-        onClick: isCurrentItem ? item.onClick : undefined,
-        button: isCurrentItem ? item.button : undefined,
-        className: isCurrentItem ? item.className : undefined,
-        perspectivePermission: isCurrentItem ? item.perspectivePermission : undefined,
-        perspectivePermissionHide: isCurrentItem ? item.perspectivePermissionHide : undefined
+        ...(isCurrentItem && {
+          dividerBottom: item.dividerBottom,
+          icon: item.icon,
+          widgetConfig: item.widgetConfig,
+          onClick: item.onClick,
+          button: item.button,
+          className: item.className,
+          perspectivePermission: item.perspectivePermission,
+          perspectivePermissionHide: item.perspectivePermissionHide
+        })
       }
       currentLevel.push(existingItem)
     } else if (index === levels.length - 1) {
