@@ -8,11 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-export interface PimcoreThemeConfig {
-  token: Record<string, unknown>
-  components: Record<string, unknown>
-}
-
+import { DynamicTypeThemeAbstract, type PimcoreThemeConfig } from '../dynamic-type-theme-abstract'
+import { studioThemeIds } from '../../../constants/theme-ids'
 const staticTokens = {
   token: {
     fontFamily: 'Lato, sans-serif'
@@ -26,7 +23,7 @@ const staticTokens = {
   }
 }
 
-const defaultTheme = {
+export const studioDefaultLightThemeConfig = {
   token: {
     ...staticTokens.token,
     colorLink: '#722ed1',
@@ -212,9 +209,10 @@ const defaultTheme = {
   }
 }
 
-export type tokens = typeof defaultTheme.token
-export type components = typeof defaultTheme.components
+export class DynamicTypeThemeStudioDefaultLight extends DynamicTypeThemeAbstract {
+  id: string = studioThemeIds.light
 
-const PimcoreDefaultTheme: PimcoreThemeConfig = defaultTheme
-
-export { PimcoreDefaultTheme }
+  getThemeConfig (): PimcoreThemeConfig {
+    return studioDefaultLightThemeConfig
+  }
+}
