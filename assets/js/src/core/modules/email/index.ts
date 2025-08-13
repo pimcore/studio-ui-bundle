@@ -17,6 +17,8 @@ import { EmailLogContainer } from './log/email-log-container'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { UserPermission } from '../auth/enums/user-permission'
 import { NavPermission } from '../perspectives/enums/nav-permission'
+import React from 'react'
+import { SendTestEmailButton } from './test-mail/send-test-email-button'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -35,15 +37,17 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Tools/Email',
+      path: 'ExperienceEcommerce/Email',
       label: 'navigation.email',
+      order: 300,
       permission: UserPermission.Emails,
       perspectivePermission: NavPermission.Mails
     })
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Tools/Email/Sent-Emails',
+      path: 'ExperienceEcommerce/Email/Sent-Emails',
       label: 'navigation.email-log',
+      order: 100,
       className: 'item-style-modifier',
       permission: UserPermission.Emails,
       perspectivePermission: NavPermission.Mails,
@@ -62,8 +66,9 @@ moduleSystem.registerModule({
     })
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Tools/Email/Email-Blocklist',
+      path: 'ExperienceEcommerce/Email/Email-Blocklist',
       label: 'navigation.email-blocklist',
+      order: 200,
       className: 'item-style-modifier',
       permission: UserPermission.Emails,
       perspectivePermission: NavPermission.Mails,
@@ -79,6 +84,16 @@ moduleSystem.registerModule({
           }
         }
       }
+    })
+
+    mainNavRegistryService.registerMainNavItem({
+      path: 'Tools/Email/Send Test-Email',
+      label: 'navigation.test-email',
+      order: 300,
+      className: 'item-style-modifier',
+      permission: UserPermission.Emails,
+      perspectivePermission: NavPermission.Mails,
+      button: () => React.createElement(SendTestEmailButton)
     })
   }
 })
