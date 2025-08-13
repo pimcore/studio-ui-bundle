@@ -10,6 +10,7 @@
 
 import { isNil } from 'lodash'
 import { type BlockValue } from '../block-editable'
+import { blockValueUtils } from './block-utils'
 
 /**
  * BlockManager class handles all DOM operations and element key management
@@ -93,10 +94,7 @@ export class BlockManager {
 
   getBlockValue (): BlockValue {
     const elements = this.queryElements()
-    return elements
-      .map(element => element.getAttribute('key'))
-      .filter(key => key !== null)
-      .map(key => parseInt(key, 10))
+    return blockValueUtils.elementsToBlockValue(elements)
   }
 
   getContainer (): HTMLElement | null {

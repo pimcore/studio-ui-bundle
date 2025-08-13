@@ -9,7 +9,7 @@
  */
 
 import { isNil } from 'lodash'
-import { type BlockEditableConfig } from '../block-editable'
+import { type BlockEditableConfig, type BlockValue } from '../block-editable'
 import { type AbstractDocumentEditableDefinition } from '../../../../dynamic-type-document-editable-abstract'
 import { processBlockTemplate, ensurePortalTargets } from './template-processor'
 import { type BlockManager } from './block-manager'
@@ -30,6 +30,13 @@ export const blockValueUtils = {
   ): string[] => {
     const pattern = `${editableName}:${elementKey}.`
     return allEditableNames.filter(key => key.startsWith(pattern))
+  },
+
+  elementsToBlockValue: (elements: HTMLElement[]): BlockValue => {
+    return elements
+      .map(element => element.getAttribute('key'))
+      .filter(key => key !== null)
+      .map(key => parseInt(key, 10))
   }
 }
 

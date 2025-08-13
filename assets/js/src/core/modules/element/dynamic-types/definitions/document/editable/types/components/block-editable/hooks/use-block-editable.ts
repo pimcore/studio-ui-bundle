@@ -48,7 +48,7 @@ export const useBlockEditable = ({
 }: UseBlockEditableParams): UseBlockEditableReturn => {
   const { initializeData, getValues, removeValues } = useDocumentEditor()
   const [dynamicEditables, setDynamicEditables] = useState<AbstractDocumentEditableDefinition[]>([])
-  const reloadModeElementsRef = useRef<HTMLElement[]>([])
+  const reloadModeElementsRef = useRef<HTMLElement[]>(blockManager.queryElements())
 
   const getBlockEditableNames = (element: HTMLElement): string[] => {
     const elementKey = blockManager.getElementKey(element)
@@ -59,10 +59,10 @@ export const useBlockEditable = ({
   }
 
   const handleReloadMode = useCallback((elementsUpdater: (elements: HTMLElement[]) => HTMLElement[]) => {
-    const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : blockManager.queryElements()
+    const currentElements = reloadModeElementsRef.current
     const newElements = elementsUpdater([...currentElements])
     reloadModeElementsRef.current = newElements
-    const newValue = blockManager.getBlockValue()
+    const newValue = blockValueUtils.elementsToBlockValue(newElements)
     onChange?.(newValue)
   }, [onChange, config, blockManager])
 
