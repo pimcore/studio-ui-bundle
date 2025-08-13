@@ -44,6 +44,10 @@ const api = baseApi.enhanceEndpoints({
       providesTags: (result, error, args) => providingTags.DATA_OBJECT_DETAIL_ID(args.id)
     },
 
+    dataObjectFormatPath: {
+      providesTags: (result, error, args) => providingTags.DATA_OBJECT_DETAIL_ID(args.body.objectId)
+    },
+
     dataObjectPatchById: {
       invalidatesTags: (result, error, args) => {
         const invalidatingTagsForPatch: Tag[] = []

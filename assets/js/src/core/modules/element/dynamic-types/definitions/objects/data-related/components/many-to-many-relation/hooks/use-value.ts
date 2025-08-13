@@ -13,8 +13,9 @@ import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-a
 import { useTranslation } from 'react-i18next'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useEffect } from 'react'
-import { type IFormatPathItem, useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
+import { type IFormatPathItem, useFormatPath } from '@Pimcore/modules/data-object/hooks/use-format-path'
 import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-object'
+import { isValidPathFormatterConfig } from '../utils/path-formatter'
 
 export interface ManyToManyRelationValueItem {
   id: number
@@ -47,7 +48,7 @@ export const useValue = (
   pathFormatterConfig?: { name: string | undefined, class: string | undefined }
 ): UseValueReturn => {
   const { id: dataObjectId } = useDataObject()
-  const { formatPath } = useDataObjectHelper()
+  const { formatPath } = useFormatPath()
   const modal = useAlertModal()
 
   const { t } = useTranslation()
@@ -58,7 +59,7 @@ export const useValue = (
   function mapNewValues (value: ManyToManyRelationValue, data: { items: Array<{ objectReference: string, formatedPath: string }> }): ManyToManyRelationValue {
     return value.map((item) => ({
       ...item,
-      fullPath: data.items.find(i => i.objectReference === `object_${item.id}`)?.formatedPath ?? item.fullPath
+      fullPath: data.items.find(i => i.objectReference === `${item.type}_${item.id}`)?.formatedPath ?? item.fullPath
     }))
   }
 
@@ -78,7 +79,8 @@ export const useValue = (
   }
 
   const handleFormatPath = async (items, newItems?): Promise<ManyToManyRelationValue | undefined> => {
-    if (pathFormatterConfig?.name == null || value === null || dataObjectId === undefined) {
+    console.log('handleFormatPath', pathFormatterConfig, isValidPathFormatterConfig(pathFormatterConfig))
+    if (!isValidPathFormatterConfig(pathFormatterConfig) || value === null || dataObjectId === undefined) {
       return items
     }
 
@@ -95,7 +97,7 @@ export const useValue = (
   }
 
   useEffect(() => {
-    if (pathFormatterConfig?.name == null || value === null || dataObjectId === undefined) {
+    if (!isValidPathFormatterConfig(pathFormatterConfig) || value === null || dataObjectId === undefined) {
       return
     }
 

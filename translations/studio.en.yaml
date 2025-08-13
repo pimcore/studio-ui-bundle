@@ -505,12 +505,14 @@ element.tree.context-menu.search-and-move: Search & Move
 element.tree.context-menu.expand-children: Expand Children
 asset.tree.context-menu.clear-thumbnails: Clear Thumbnails
 element.tree.copy: Copy
+element.tree.copy-success-description: "{{elementType}} \"{{name}}\" has been copied and is ready to paste"
 element.tree.paste: Paste
 element.tree.paste-as-child: Paste as child
 element.tree.paste-as-child-recursive: Paste as child (recursive)
 element.tree.paste-recursive-updating-references: Paste recursive, updating references
 element.tree.paste-only-contents: Paste only contents here
 element.tree.cut: Cut
+element.tree.cut-success-description: "{{elementType}} \"{{name}}\" has been cut and is ready to paste"
 element.tree.paste-cut: Paste cut-out element
 element.lock: Lock
 element.lock-and-propagate-to-children: Lock and propagate to children
@@ -757,27 +759,31 @@ roles.add-folder: Add new Folder
 roles.add-folder.label: Enter the name of the new folder
 roles.add-role: Add new Role
 roles.add-role.label: Enter the name of the new role
+navigation.quick-access: Quick Access
+navigation.data-management: Data Management
+navigation.experience-ecommerce: Experience & E-commerce
+navigation.asset-management: Asset Management
+navigation.automation-integration: Automation & Integration
+navigation.translations: Translations
+navigation.reporting: Reporting
+navigation.system: System
 navigation.website-settings: Website Settings
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
-navigation.marketing: Marketing
 navigation.reports: Reports
 navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
 navigation.customise: Customise
-navigation.translations: Translations
 navigation.tag-configuration: Tag Configuration
 navigation.predefined-properties: Predefined Properties
 navigation.user-and-roles: User & Roles
 navigation.users: Users
+navigation.power-shortcuts: Power Shortcuts
 navigation.roles: Roles
 navigation.open-asset: Open Asset
 navigation.open-document: Open Document
 navigation.open-data-object: Open Data Object
 navigation.notes-and-events: Notes & Events
-navigation.file: File
-navigation.settings: Settings
-navigation.tools: Tools
 predefined-properties.new: New
 website-settings.new: Add
 predefined-properties.type: Type
@@ -1022,7 +1028,7 @@ application-logger.sidebar.search-parameter: Search Parameter
 application-logger.detail-modal.title: Detail information
 application-logger.filter.date-from: From
 application-logger.filter.date-to: To
-application-logger.filter.priority: Log Level
+application-logger.filter.priority: Type
 application-logger.filter.component: Component
 application-logger.filter.related-object-id: Related Object ID
 application-logger.filter.message: Message
@@ -1066,6 +1072,7 @@ video.placeholder: No video selected - Click to add a video
 video.add-video: Add Video
 image.alt-text-placeholder: Enter alt text
 area-settings: Area Settings
+moving-block: Moving block...
 unsupported_feature: Unsupported feature - please check system requirements!
 document.version.comparison.error.title: Version Comparison Error
 document.version.comparison.unsupported.requirements: Chromium binary and PHP extension Imagick are required.
@@ -1098,3 +1105,4 @@ test-email.validation.from.email.type: Please provide a valid sender email addre
 test-email.validation.to.required: Please provide a recipient email address
 test-email.validation.to.email.type: Please provide a valid recipient email address
 test-email.validation.subject.required: Please provide a subject
+document.version.comparison.unsupported.requirements: Chromium binary and PHP extension Imagick are required.

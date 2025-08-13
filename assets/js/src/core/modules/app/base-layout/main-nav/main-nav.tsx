@@ -43,6 +43,14 @@ export const MainNav = (): React.JSX.Element => {
     }
   }
 
+  const shouldShowChevron = (item: IMainNavItem, index: string): boolean => {
+    const hasChildren = item.children !== undefined && item.children.length > 0
+    const isOpen = openKeys.includes(index)
+    const isNestedItem = index.includes('-')
+
+    return hasChildren && (isOpen || isNestedItem)
+  }
+
   const renderNavItem = (item: IMainNavItem, index: string, level = 0): React.JSX.Element => {
     const isVisible = (item.children !== undefined && item.children.length > 0) ||
             (item.widgetConfig !== undefined) || (item.onClick !== undefined) || (item.button !== undefined)
@@ -63,10 +71,11 @@ export const MainNav = (): React.JSX.Element => {
           ? (
             <div>
               {item.button()}
+              <div className={ item.dividerBottom !== undefined && item.dividerBottom ? 'main-nav__list-item-divider' : '' } />
             </div>
             )
           : (
-            <button
+            <><button
               className={ 'main-nav__list-btn' }
               data-testid={ `nav-button-${createSafeTestIdString(item.path)}` }
               onClick={ () => {
@@ -80,19 +89,34 @@ export const MainNav = (): React.JSX.Element => {
                   setIsOpen(false)
                 }
               } }
-            >
-              {item.icon !== undefined ? (<Icon value={ item.icon } />) : null}
+              >
+              {item.icon !== undefined && (
+                openKeys.includes(index)
+                  ? (
+                    <Icon
+                      options={ { width: 16, height: 16 } }
+                      sphere
+                      value={ item.icon }
+                    />
+                    )
+                  : (
+                    <Icon
+                      className={ 'plain-icon' }
+                      value={ item.icon }
+                    />
+                    )
+              )}
               {t(`${item.label}`)}
 
-              {item.children !== undefined && item.children.length > 0
-                ? (
-                  <Icon
-                    className={ 'main-nav__list-btn-icon' }
-                    value={ 'chevron-right' }
-                  />
-                  )
-                : null}
+              {shouldShowChevron(item, index) && (
+                <Icon
+                  className={ 'main-nav__list-chevron-btn-icon' }
+                  value={ 'chevron-right' }
+                />
+              )}
             </button>
+              <div className={ item.dividerBottom !== undefined && item.dividerBottom ? 'main-nav__list-item-divider' : '' } />
+            </>
             )}
 
         {item.children !== undefined && item.children.length > 0
@@ -107,6 +131,7 @@ export const MainNav = (): React.JSX.Element => {
                     className={ `main-nav__list main-nav__list--level-${level + 1}` }
                     data-testid={ `nav-list-level-${level + 1}` }
                   >
+                    {item.path === 'QuickAccess' && <div className={ ['main-nav__list-detail-sub-header', 'main-nav__list-detail-divider'].join(' ') }>{t('navigation.power-shortcuts')}</div>}
                     {item.children?.map((child: IMainNavItem, childIndex) => renderNavItem(child, `${index}-${childIndex}`, level))}
                   </ul>
                 </div>

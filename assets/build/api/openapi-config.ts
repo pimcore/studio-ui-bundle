@@ -34,6 +34,10 @@ const config: ConfigFile = {
       type: 'query',
     },
     {
+      pattern: 'dataObjectFormatPath',
+      type: 'query',
+    },
+    {
       pattern: 'noteGetCollection',
       type: 'query'
     },
