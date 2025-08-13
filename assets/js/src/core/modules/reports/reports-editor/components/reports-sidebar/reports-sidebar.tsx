@@ -9,7 +9,7 @@
  */
 
 import React, { useState } from 'react'
-import { isNil } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
@@ -28,7 +28,7 @@ import { useStyles } from '@Pimcore/modules/reports/reports-editor/reports-edito
 
 interface IReportsSidebarProps {
   isLoading: boolean
-  refetch: () => void
+  refetch: () => Promise<any>
   reportsList?: CustomReportsConfigGetTreeApiResponse
   handleOpenReport: (report: BundleCustomReportsConfigurationTreeNode) => void
 }
@@ -56,7 +56,13 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
         message: t('reports.editor.clone.content.validation.message')
       },
       onOk: async (value: string) => {
-        void cloneReport({ name: contextItem!.id, bundleCustomReportClone: { newName: value } })
+        await cloneReport({ name: contextItem!.id, bundleCustomReportClone: { newName: value } })
+
+        const { data: updatedData } = await refetch()
+
+        const clonedReport: BundleCustomReportsConfigurationTreeNode | undefined = updatedData?.items?.find((item) => item.id === value)
+
+        !isUndefined(clonedReport) && handleOpenReport(clonedReport)
       }
     })
   }
