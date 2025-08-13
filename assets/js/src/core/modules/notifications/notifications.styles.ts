@@ -21,8 +21,7 @@ export const useStyles = createStyles(({ token, css }) => {
     `,
     grey: css`
         color: ${token.colorIcon}
-    `
-    ,
+    `,
     elementTag: css`
         width: fit-content;
     `,

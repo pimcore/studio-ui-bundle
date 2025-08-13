@@ -64,13 +64,13 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
         {notification.creationDate !== undefined && <span>{formatDateTime({ timestamp: notification.creationDate, dateStyle: 'short', timeStyle: 'medium' })}</span>}
         <IconButton
           icon={ { value: 'trash' } }
-          variant='minimal'
           loading={ deleteLoading }
           onClick={ async (e) => {
             e.stopPropagation()
             await deleteNotification()
           } }
           theme='primary'
+          variant='minimal'
         />
       </Space>
     )
@@ -139,20 +139,20 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
 
   return (
     <Collapse
-    size='small'
-    activeKeys={
+      activeKeys={
       isExpanded
-      ? [notification.id.toString()]
-      : []
+        ? [notification.id.toString()]
+        : []
     }
-    items={ [item] }
-    onChange={ (expandedKeys) => {
-    if (expandedKeys.length > 0) {
-      setIsExpanded(true)
-    } else {
-      setIsExpanded(false)
-    }
-  }}
+      items={ [item] }
+      onChange={ (expandedKeys) => {
+        if (expandedKeys.length > 0) {
+          setIsExpanded(true)
+        } else {
+          setIsExpanded(false)
+        }
+      } }
+      size='small'
     />
   )
 }
