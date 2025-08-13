@@ -61,6 +61,7 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
         display: flex;
         align-items: center;
         justify-content: center;
+        margin-right: 0px;
         
         &:hover {
           background-color: transparent !important;
