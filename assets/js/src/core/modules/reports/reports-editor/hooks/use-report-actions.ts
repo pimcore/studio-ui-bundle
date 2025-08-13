@@ -10,16 +10,33 @@
 
 import { useEffect } from 'react'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { useCustomReportsConfigDeleteMutation } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
+import {
+  type CustomReportsConfigCloneApiArg,
+  type CustomReportsConfigDeleteApiArg,
+  useCustomReportsConfigCloneMutation,
+  useCustomReportsConfigDeleteMutation
+} from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 
 interface IUseReportActionsReturn {
-  deleteReport: (arg: { name: string }) => Promise<void>
+  cloneReport: (arg: CustomReportsConfigCloneApiArg) => Promise<void>
+  deleteReport: (arg: CustomReportsConfigDeleteApiArg) => Promise<void>
 }
 
 export const useReportActions = (): IUseReportActionsReturn => {
   const [deleteReportMutation, { isError: isDeleteReportError, error: deleteReportError }] = useCustomReportsConfigDeleteMutation()
+  const [cloneReportMutation, { isError: isCloneReportError, error: cloneReportError }] = useCustomReportsConfigCloneMutation()
 
-  const deleteReport = async (arg: { name: string }): Promise<void> => {
+  const cloneReport = async (arg: CustomReportsConfigCloneApiArg): Promise<void> => {
+    await cloneReportMutation(arg)
+  }
+
+  useEffect(() => {
+    if (isCloneReportError) {
+      trackError(new ApiError(cloneReportError))
+    }
+  }, [isCloneReportError])
+
+  const deleteReport = async (arg: CustomReportsConfigDeleteApiArg): Promise<void> => {
     await deleteReportMutation(arg)
   }
 
@@ -30,6 +47,7 @@ export const useReportActions = (): IUseReportActionsReturn => {
   }, [isDeleteReportError])
 
   return {
+    cloneReport,
     deleteReport
   }
 }

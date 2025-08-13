@@ -40,7 +40,7 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
   const { t } = useTranslation()
 
   const modal = useFormModal()
-  const { deleteReport } = useReportActions()
+  const { cloneReport, deleteReport } = useReportActions()
 
   const reportsListData = reportsList?.items ?? []
 
@@ -49,7 +49,16 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
   }
 
   const handleReportClone = (): void => {
-    console.log('----- Clone report: ', contextItem)
+    modal.input({
+      label: t('reports.editor.clone.content'),
+      rule: {
+        pattern: /^[a-zA-Z0-9_-]+$/,
+        message: t('reports.editor.clone.content.validation.message')
+      },
+      onOk: async (value: string) => {
+        void cloneReport({ name: contextItem!.id, bundleCustomReportClone: { newName: value } })
+      }
+    })
   }
 
   const handleReportDelete = (): void => {
