@@ -100,7 +100,10 @@ export const SendTestMailForm = ({ initialValues, form }: TestEmailModalProps): 
   return (
     <Form
       form={form}
-      initialValues={initialValues}
+      initialValues={{
+        contentType: TestEmailType.Text,
+        ...initialValues
+      }}
       layout="vertical"
     >
       <Form.Item
@@ -136,7 +139,6 @@ export const SendTestMailForm = ({ initialValues, form }: TestEmailModalProps): 
       </Form.Item>
 
       <Form.Item
-        initialValue={TestEmailType.Text}
         label={t('test-email.form.contentType')}
         name="contentType"
       >
