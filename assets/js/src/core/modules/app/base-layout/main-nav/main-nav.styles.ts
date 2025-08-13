@@ -131,17 +131,17 @@ export const useStlyes = createStyles(({
       }
 
       .main-nav__list-detail-sub-header {
-      width: 100%;
-      height: 42px;
-      text-align: left;
-      color: ${token.colorTextTreeElement};
-      font-size: ${token.fontSize}px;
-      font-family:  ${token.fontFamily};
-      padding: ${token.paddingXS}px ${token.paddingXS}px ${token.paddingXS}px ${token.paddingXXS}px;
+        width: 100%;
+        height: 42px;
+        text-align: left;
+        color: ${token.colorTextTreeElement};
+        font-size: ${token.fontSize}px;
+        font-family:  ${token.fontFamily};
+        padding: ${token.paddingXS}px ${token.paddingXS}px ${token.paddingXS}px ${token.paddingXXS}px;
 
-      &.main-nav__list-detail-divider {
-        border-bottom: 1px solid ${token.colorFillSecondary};
-      }
+        &.main-nav__list-detail-divider {
+          border-bottom: 1px solid ${token.colorFillSecondary};
+        }
       }
 
 
@@ -160,7 +160,7 @@ export const useStlyes = createStyles(({
         font-family:  ${token.fontFamily};
 
         .plain-icon {
-        margin: 4px;
+          margin: 4px;
         }
 
         &:hover {
