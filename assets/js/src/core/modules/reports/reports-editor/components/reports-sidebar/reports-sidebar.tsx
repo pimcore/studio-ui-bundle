@@ -17,6 +17,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Text } from '@Pimcore/components/text/text'
 import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
+import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Toolbar } from '@Pimcore/modules/reports/reports-editor/components/reports-sidebar/components/toolbar/toolbar'
 import {
   type BundleCustomReportsConfigurationTreeNode,
@@ -25,6 +26,7 @@ import {
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { useReportActions } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-actions'
 import { useStyles } from '@Pimcore/modules/reports/reports-editor/reports-editor.styles'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 interface IReportsSidebarProps {
   isLoading: boolean
@@ -34,6 +36,7 @@ interface IReportsSidebarProps {
 }
 
 export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenReport }: IReportsSidebarProps): React.JSX.Element => {
+  const [reportsListData, setReportsListData] = useState(reportsList?.items ?? [])
   const [contextItem, setContextItem] = useState<BundleCustomReportsConfigurationTreeNode | null>(null)
 
   const { styles } = useStyles()
@@ -41,8 +44,6 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
 
   const modal = useFormModal()
   const { addReport, cloneReport, deleteReport } = useReportActions()
-
-  const reportsListData = reportsList?.items ?? []
 
   const handleReportAdd = (): void => {
     modal.input({
@@ -96,6 +97,19 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
     })
   }
 
+  const handleSearch = (value: string): void => {
+    if (isEmptyValue(value)) {
+      setReportsListData(reportsList?.items ?? [])
+      return
+    }
+
+    const filteredReportsList = reportsList?.items?.filter((item) =>
+      item.text.toLowerCase().includes(value.toLowerCase())
+    ) ?? []
+
+    setReportsListData(filteredReportsList)
+  }
+
   const dropdownItems: DropdownProps['menu']['items'] = [
     {
       icon: <Icon value="copy-03" />,
@@ -124,7 +138,11 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
         loading={ isLoading }
         padded
       >
-        {/* Need to implement search functionality here */}
+        <SearchInput
+          onChange={ (e) => { handleSearch(e.target.value) } }
+          placeholder={ t('search') }
+          withoutAddon
+        />
 
         <Flex
           gap="mini"
