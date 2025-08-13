@@ -33,7 +33,7 @@ const processHtmlTemplate = (
   const realName = blockManager.getRealEditableName()
   const fullName = editableName
   const escapedName = fullName.replace(/[:.]/g, '_')
-  
+
   let processedHtml = templateHtml
 
   processedHtml = processedHtml.replace(

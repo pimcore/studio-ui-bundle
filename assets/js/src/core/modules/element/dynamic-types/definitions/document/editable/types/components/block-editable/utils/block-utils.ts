@@ -88,7 +88,7 @@ export const operationUtils = {
     }
 
     const nextKey = blockManager.calculateNextKey()
-    
+
     const { html: processedHtml, editableDefinitions } = processBlockTemplate(
       { templateHtml: config.template.html, blockManager, nextKey },
       config.template.editables
