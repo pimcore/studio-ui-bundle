@@ -17,12 +17,13 @@ import { ElementSelectorProvider } from '../element/element-selector/provider/el
 
 export interface GlobalProviderProps {
   children: React.ReactNode
+  themeId?: string
 }
 
-export const GlobalProvider = ({ children }: GlobalProviderProps): React.JSX.Element => {
+export const GlobalProvider = ({ children, themeId }: GlobalProviderProps): React.JSX.Element => {
   return (
     <ContainerProvider>
-      <ThemeProvider>
+      <ThemeProvider id={ themeId }>
         <Provider store={ store }>
           <ElementSelectorProvider>
             {children}
