@@ -759,27 +759,31 @@ roles.add-folder: Add new Folder
 roles.add-folder.label: Enter the name of the new folder
 roles.add-role: Add new Role
 roles.add-role.label: Enter the name of the new role
+navigation.quick-access: Quick Access
+navigation.data-management: Data Management
+navigation.experience-ecommerce: Experience & E-commerce
+navigation.asset-management: Asset Management
+navigation.automation-integration: Automation & Integration
+navigation.translations: Translations
+navigation.reporting: Reporting
+navigation.system: System
 navigation.website-settings: Website Settings
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
-navigation.marketing: Marketing
 navigation.reports: Reports
 navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
 navigation.customise: Customise
-navigation.translations: Translations
 navigation.tag-configuration: Tag Configuration
 navigation.predefined-properties: Predefined Properties
 navigation.user-and-roles: User & Roles
 navigation.users: Users
+navigation.power-shortcuts: Power Shortcuts
 navigation.roles: Roles
 navigation.open-asset: Open Asset
 navigation.open-document: Open Document
 navigation.open-data-object: Open Data Object
 navigation.notes-and-events: Notes & Events
-navigation.file: File
-navigation.settings: Settings
-navigation.tools: Tools
 predefined-properties.new: New
 website-settings.new: Add
 predefined-properties.type: Type
