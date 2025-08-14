@@ -71,7 +71,9 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
     const openEditMode = async (): Promise<void> => {
       if (editCallback !== undefined && typeof editCallback === 'function') {
         try {
-          const newValue = await editCallback(props.row.original, props.column.id)
+          const currentInputValue = element.current?.input?.value ?? props.getValue()
+          const newValue = await editCallback(props.row.original, props.column.id, currentInputValue.toString())
+
           fireOnUpdateCellDataEvent(newValue)
         } catch {
           trackError(new GeneralError('Edit callback failed'))

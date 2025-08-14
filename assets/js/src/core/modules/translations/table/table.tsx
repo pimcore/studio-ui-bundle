@@ -62,9 +62,13 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales, sor
   const columnHelper = createColumnHelper<TranslationWithActions>()
   const [editResolveFunction, setEditResolveFunction] = useState<((value: string) => void) | null>(null)
 
-  const handleEditCallback = async (rowData: TranslationRow, columnId: string): Promise<string> => {
+  const handleEditCallback = async (rowData: TranslationRow, columnId: string, currentValue?: string): Promise<string> => {
     return await new Promise((resolve) => {
-      setEditingTranslation(rowData)
+      const updatedRowData = currentValue !== undefined
+        ? { ...rowData, [columnId]: currentValue }
+        : rowData
+
+      setEditingTranslation(updatedRowData)
       setEditingLocale(columnId.replace('_', ''))
       setEditResolveFunction(() => resolve)
       setEditModalOpen(true)
