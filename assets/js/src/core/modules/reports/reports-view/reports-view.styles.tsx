@@ -48,6 +48,7 @@ export const useStyles = createStyles(({ css, token }) => {
 
     gridTable: css`
       max-height: 300px;
+      min-height: 280px;
       overflow: auto;
     `
   }
