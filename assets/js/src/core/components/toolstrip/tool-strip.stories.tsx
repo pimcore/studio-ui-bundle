@@ -263,3 +263,73 @@ export const WithDraggerAndDeleteButton: StoryObj<ToolStripProps> = {
     )
   }
 }
+
+export const WithActivateOnHover: StoryObj<ToolStripProps> = {
+  parameters: {
+    layout: 'padded'
+  },
+  render: (args) => (
+    <div style={{ width: 'fit-content' }}>
+      <ToolStrip {...args} />
+    </div>
+  ),
+  args: {
+    theme: 'default',
+    dragger: true,
+    title: 'Hover to Activate',
+    activateOnHover: true,
+    children: (
+      <Space size='mini'>
+        <IconButton
+          icon={ { value: 'new' } }
+          size="small"
+        />
+        <IconButton
+          icon={ { value: 'chevron-down' } }
+          size="small"
+        />
+        <IconButton
+          icon={ { value: 'chevron-up' } }
+          size="small"
+        />
+        <IconButton
+          icon={ { value: 'trash' } }
+          size="small"
+        />
+      </Space>
+    )
+  }
+}
+
+export const WithActivateOnHoverInverse: StoryObj<ToolStripProps> = {
+  parameters: {
+    layout: 'padded'
+  },
+  render: (args) => (
+    <div style={{ width: 'fit-content' }}>
+      <ToolStrip {...args} />
+    </div>
+  ),
+  args: {
+    theme: 'inverse',
+    dragger: true,
+    title: 'Hover Inverse',
+    activateOnHover: true,
+    children: (
+      <Space size='mini'>
+        <IconButton
+          icon={ { value: 'new' } }
+          size="small"
+        />
+        <IconButton
+          icon={ { value: 'edit' } }
+          size="small"
+        />
+        <IconButton
+          icon={ { value: 'trash' } }
+          size="small"
+        />
+      </Space>
+    )
+  }
+}

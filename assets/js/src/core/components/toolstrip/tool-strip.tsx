@@ -28,6 +28,7 @@ export interface ToolStripProps {
   theme?: 'default' | 'inverse'
   dragger?: boolean | DragHandleProps
   title?: string
+  activateOnHover?: boolean
 }
 
 export const ToolStrip = ({
@@ -35,35 +36,61 @@ export const ToolStrip = ({
   className,
   theme: toolStripTheme = 'default',
   dragger = false,
-  title
+  title,
+  activateOnHover = false
 }: ToolStripProps): React.JSX.Element => {
   const { styles, theme: token } = useStyles()
+  const [isHovered, setIsHovered] = React.useState(false)
 
   const classNames = cn(
     'tool-strip',
     styles['tool-strip'],
     `tool-strip--theme-${toolStripTheme}`,
+    {
+      'tool-strip--activate-on-hover': activateOnHover,
+      'tool-strip--activated': activateOnHover ? isHovered : true
+    },
     className
   )
 
-  const themeConfig = toolStripTheme === 'inverse'
-    ? {
+  const themeConfig = React.useMemo(() => {
+    const isActivated = activateOnHover ? isHovered : true
+    
+    const createColorMapping = (buttonColor: string | undefined, textColor: string | undefined) => ({
+      Button: {
+        colorLink: buttonColor,
+        colorLinkHover: buttonColor,
+        colorLinkActive: buttonColor
+      },
+      Typography: {
+        colorText: textColor
+      }
+    })
+    
+    if (toolStripTheme === 'inverse') {
+      const buttonColor = isActivated ? token.colorButtonInverse : token.colorInactiveInverse
+      const textColor = isActivated ? token.colorTextInverse : token.colorInactiveInverse
+      
+      return {
         components: {
+          ...createColorMapping(buttonColor, textColor),
           Button: {
-            colorLink: token.colorButtonInverse,
-            colorLinkHover: token.colorButtonInverse,
-            colorLinkActive: token.colorButtonInverse,
+            ...createColorMapping(buttonColor, textColor).Button,
             colorTextDisabled: token.colorInactiveInverse
-          },
-          Typography: {
-            colorText: token.colorTextInverse
           },
           Split: {
             colorFillSecondary: token.colorDividerInverse
           }
         }
       }
-    : {}
+    } else {
+      const disabledColor = isActivated ? undefined : token.colorTextDisabled
+      
+      return {
+        components: createColorMapping(disabledColor, disabledColor)
+      }
+    }
+  }, [toolStripTheme, activateOnHover, isHovered, token])
 
   // Handle dragger props
   const dragHandleProps = React.useMemo(() => {
@@ -77,11 +104,13 @@ export const ToolStrip = ({
   const renderDragger = (): React.ReactNode => {
     if (dragger === false) return null
 
+    const isActivated = activateOnHover ? isHovered : true
+    const draggerColor = toolStripTheme === 'inverse' 
+      ? (isActivated ? token.colorButtonInverse : token.colorInactiveInverse)
+      : (isActivated ? token.colorText : token.colorTextDisabled)
+
     return (
-      <div
-        className={ styles.dragger }
-        { ...dragHandleProps.listeners }
-      >
+      <div className={ styles.dragger } style={{ color: draggerColor }}>
         <Icon
           options={ { width: 16, height: 17 } }
           value="drag-option"
@@ -92,13 +121,65 @@ export const ToolStrip = ({
 
   // Wrap children with Split if dragger is present
   const renderContent = (): React.ReactNode => {
+    // For activateOnHover mode, show different content based on hover state
+    if (activateOnHover) {
+      const leftContent = (
+        <Flex 
+          align="center" 
+          style={{ height: '100%' }}
+          className={ dragger !== false ? styles['draggable-area'] : undefined }
+          { ...(dragger !== false ? dragHandleProps.listeners : {}) }
+        >
+          {renderDragger()}
+          {title !== undefined && (
+            <Box margin={ { right: 'mini' } }>
+              <Text>{title}</Text>
+            </Box>
+          )}
+        </Flex>
+      )
+
+      // Always render Split layout, but wrap children in animated container
+      return (
+        <Flex 
+          align="center" 
+          style={{ height: '100%' }}
+          className={ dragger !== false ? styles['draggable-area'] : undefined }
+          { ...(dragger !== false ? dragHandleProps.listeners : {}) }
+        >
+          {renderDragger()}
+          {title !== undefined && (
+            <Box margin={ { right: 'mini' } }>
+              <Text>{title}</Text>
+            </Box>
+          )}
+          <div className="tool-strip__children-container">
+            <Split
+              dividerSize="small"
+              size="mini"
+              theme="secondary"
+            >
+              <div></div>
+              {children}
+            </Split>
+          </div>
+        </Flex>
+      )
+    }
+
+    // Normal mode (not activateOnHover)
     if (dragger === false && title === undefined) {
       return children
     }
 
     // Create the left side content (dragger + title grouped together)
     const leftContent = (
-      <Flex align="center">
+      <Flex 
+        align="center" 
+        style={{ height: '100%' }}
+        className={ dragger !== false ? styles['draggable-area'] : undefined }
+        { ...(dragger !== false ? dragHandleProps.listeners : {}) }
+      >
         {renderDragger()}
         {title !== undefined && (
           <Box margin={ { right: 'mini' } }>
@@ -125,6 +206,8 @@ export const ToolStrip = ({
     <ThemeProvider theme={ themeConfig }>
       <Box
         className={ classNames }
+        onMouseEnter={ activateOnHover ? () => { setIsHovered(true) } : undefined }
+        onMouseLeave={ activateOnHover ? () => { setIsHovered(false) } : undefined }
         padding={ title !== undefined && dragger === false ? { x: 'mini', y: 'mini', left: 'extra-small' } : 'mini' }
       >
         {renderContent()}

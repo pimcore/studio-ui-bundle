@@ -17,6 +17,7 @@ import { Space } from 'antd'
 import { useSortable } from '@dnd-kit/sortable'
 import { useBlockEditableStyles } from '../../block-editable.styles'
 import { type BlockManager } from '../../utils/block-manager'
+import { useTranslation } from 'react-i18next'
 
 export interface SortableBlockToolbarProps {
   id: string
@@ -44,6 +45,7 @@ export const SortableBlockToolbar = ({
   activeId
 }: SortableBlockToolbarProps): React.JSX.Element => {
   const { styles } = useBlockEditableStyles()
+  const { t } = useTranslation()
   const {
     attributes,
     listeners,
@@ -135,10 +137,12 @@ export const SortableBlockToolbar = ({
 
   return (
     <ToolStrip
+      activateOnHover
       className={ styles.blockToolstrip }
       dragger={ { listeners } }
       key={ `toolbar-${element.getAttribute('key')}` }
       theme="inverse"
+      title={t('block')}
     >
       <Split
         dividerSize="small"
