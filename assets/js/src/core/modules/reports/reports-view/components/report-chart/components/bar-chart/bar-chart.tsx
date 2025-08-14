@@ -15,6 +15,8 @@ import type { IChartProps } from '@Pimcore/modules/reports/reports-view/componen
 import { Flex } from '@Pimcore/components/flex/flex'
 import { generateColorMap } from '@Pimcore/modules/reports/reports-view/components/report-chart/utils/helpers'
 import { LegendItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/legend-item/legend-item'
+import { useShowMore } from '@Pimcore/modules/reports/reports-view/components/report-chart/hooks/use-show-more'
+import { ShowMoreBtn } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/show-more-btn/show-more-btn'
 import { useStyles } from './bar-chart.styles'
 
 const CHART_FIELD_NAME_KEY = 'name'
@@ -37,6 +39,7 @@ export const BarChart = ({ chartData, reportData, chartLabelMap }: IChartProps):
   })
 
   const seriesKeys = [...new Set(formattedChartData.map(item => item.name))]
+  const { isExpanded, visibleItems, toggle, initialVisibleCount } = useShowMore(seriesKeys)
 
   const [activeSeries, setActiveSeries] = useState<string[]>(seriesKeys)
 
@@ -121,7 +124,7 @@ export const BarChart = ({ chartData, reportData, chartLabelMap }: IChartProps):
         justify="center"
         wrap="wrap"
       >
-        {seriesKeys.map((key, index) => {
+        {visibleItems.map((key, index) => {
           const isActive = activeSeries.includes(key)
 
           return (
@@ -137,6 +140,13 @@ export const BarChart = ({ chartData, reportData, chartLabelMap }: IChartProps):
           )
         })}
       </Flex>
+
+      {seriesKeys?.length > initialVisibleCount && (
+        <ShowMoreBtn
+          isExpanded={ isExpanded }
+          toggle={ toggle }
+        />
+      )}
     </div>
   )
 }

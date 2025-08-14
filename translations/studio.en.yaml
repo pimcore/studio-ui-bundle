@@ -963,6 +963,8 @@ reports.select-report: Select report
 reports.export: Export
 reports.csv-export: CSV Export
 reports.csv-export-with-headers: CSV Export with headers
+reports.show-all-labels: Show all labels
+reports.show-fewer-labels: Show fewer labels
 reports.grid-config.title-columns: Columns
 reports.grid-config.restore-to-default: Restore to default
 reports.grid-config.add-column: Add a column
