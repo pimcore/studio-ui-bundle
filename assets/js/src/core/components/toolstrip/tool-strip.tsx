@@ -55,8 +55,17 @@ export const ToolStrip = ({
 
   const themeConfig = React.useMemo(() => {
     const isActivated = activateOnHover ? isHovered : true
-    
-    const createColorMapping = (buttonColor: string | undefined, textColor: string | undefined) => ({
+
+    const createColorMapping = (buttonColor: string | undefined, textColor: string | undefined): {
+      Button: {
+        colorLink: string | undefined
+        colorLinkHover: string | undefined
+        colorLinkActive: string | undefined
+      }
+      Typography: {
+        colorText: string | undefined
+      }
+    } => ({
       Button: {
         colorLink: buttonColor,
         colorLinkHover: buttonColor,
@@ -66,11 +75,11 @@ export const ToolStrip = ({
         colorText: textColor
       }
     })
-    
+
     if (toolStripTheme === 'inverse') {
       const buttonColor = isActivated ? token.colorButtonInverse : token.colorInactiveInverse
       const textColor = isActivated ? token.colorTextInverse : token.colorInactiveInverse
-      
+
       return {
         components: {
           ...createColorMapping(buttonColor, textColor),
@@ -85,7 +94,7 @@ export const ToolStrip = ({
       }
     } else {
       const disabledColor = isActivated ? undefined : token.colorTextDisabled
-      
+
       return {
         components: createColorMapping(disabledColor, disabledColor)
       }
@@ -105,12 +114,15 @@ export const ToolStrip = ({
     if (dragger === false) return null
 
     const isActivated = activateOnHover ? isHovered : true
-    const draggerColor = toolStripTheme === 'inverse' 
+    const draggerColor = toolStripTheme === 'inverse'
       ? (isActivated ? token.colorButtonInverse : token.colorInactiveInverse)
       : (isActivated ? token.colorText : token.colorTextDisabled)
 
     return (
-      <div className={ styles.dragger } style={{ color: draggerColor }}>
+      <div
+        className={ styles.dragger }
+        style={ { color: draggerColor } }
+      >
         <Icon
           options={ { width: 16, height: 17 } }
           value="drag-option"
@@ -123,28 +135,12 @@ export const ToolStrip = ({
   const renderContent = (): React.ReactNode => {
     // For activateOnHover mode, show different content based on hover state
     if (activateOnHover) {
-      const leftContent = (
-        <Flex 
-          align="center" 
-          style={{ height: '100%' }}
-          className={ dragger !== false ? styles['draggable-area'] : undefined }
-          { ...(dragger !== false ? dragHandleProps.listeners : {}) }
-        >
-          {renderDragger()}
-          {title !== undefined && (
-            <Box margin={ { right: 'mini' } }>
-              <Text>{title}</Text>
-            </Box>
-          )}
-        </Flex>
-      )
-
       // Always render Split layout, but wrap children in animated container
       return (
-        <Flex 
-          align="center" 
-          style={{ height: '100%' }}
+        <Flex
+          align="center"
           className={ dragger !== false ? styles['draggable-area'] : undefined }
+          style={ { height: '100%' } }
           { ...(dragger !== false ? dragHandleProps.listeners : {}) }
         >
           {renderDragger()}
@@ -174,10 +170,10 @@ export const ToolStrip = ({
 
     // Create the left side content (dragger + title grouped together)
     const leftContent = (
-      <Flex 
-        align="center" 
-        style={{ height: '100%' }}
+      <Flex
+        align="center"
         className={ dragger !== false ? styles['draggable-area'] : undefined }
+        style={ { height: '100%' } }
         { ...(dragger !== false ? dragHandleProps.listeners : {}) }
       >
         {renderDragger()}

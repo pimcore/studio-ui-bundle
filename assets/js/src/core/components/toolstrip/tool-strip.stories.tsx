@@ -269,8 +269,8 @@ export const WithActivateOnHover: StoryObj<ToolStripProps> = {
     layout: 'padded'
   },
   render: (args) => (
-    <div style={{ width: 'fit-content' }}>
-      <ToolStrip {...args} />
+    <div style={ { width: 'fit-content' } }>
+      <ToolStrip { ...args } />
     </div>
   ),
   args: {
@@ -306,8 +306,8 @@ export const WithActivateOnHoverInverse: StoryObj<ToolStripProps> = {
     layout: 'padded'
   },
   render: (args) => (
-    <div style={{ width: 'fit-content' }}>
-      <ToolStrip {...args} />
+    <div style={ { width: 'fit-content' } }>
+      <ToolStrip { ...args } />
     </div>
   ),
   args: {

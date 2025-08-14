@@ -123,23 +123,35 @@ export const WithActivateOnHover: StoryObj<ToolStripBoxProps> = {
   args: {
     renderToolStripStart: (
       <ToolStrip
-        dragger={true}
+        activateOnHover
+        dragger
         title="Hover to Activate"
-        activateOnHover={true}
       >
         <Space size='mini'>
-          <IconButton icon={ { value: 'new' } } size="small" />
-          <IconButton icon={ { value: 'chevron-down' } } size="small" />
-          <IconButton icon={ { value: 'chevron-up' } } size="small" />
-          <IconButton icon={ { value: 'trash' } } size="small" />
+          <IconButton
+            icon={ { value: 'new' } }
+            size="small"
+          />
+          <IconButton
+            icon={ { value: 'chevron-down' } }
+            size="small"
+          />
+          <IconButton
+            icon={ { value: 'chevron-up' } }
+            size="small"
+          />
+          <IconButton
+            icon={ { value: 'trash' } }
+            size="small"
+          />
         </Space>
       </ToolStrip>
     ),
     children: (
       <div style={ { padding: '20px', background: '#f9f9f9', minHeight: '120px', border: '1px solid #e0e0e0' } }>
-        <h3 style={{ margin: '0 0 12px 0', color: '#333' }}>Content Area</h3>
-        <p style={{ margin: '0 0 8px 0', color: '#666' }}>This demonstrates the activateOnHover functionality:</p>
-        <ul style={{ margin: '0', paddingLeft: '20px', color: '#666' }}>
+        <h3 style={ { margin: '0 0 12px 0', color: '#333' } }>Content Area</h3>
+        <p style={ { margin: '0 0 8px 0', color: '#666' } }>This demonstrates the activateOnHover functionality:</p>
+        <ul style={ { margin: '0', paddingLeft: '20px', color: '#666' } }>
           <li>Initially shows only dragger and title</li>
           <li>Hover over the toolbar to reveal all action buttons</li>
           <li>Smooth transitions provide polished UX</li>

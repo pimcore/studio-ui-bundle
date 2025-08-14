@@ -142,7 +142,7 @@ export const SortableBlockToolbar = ({
       dragger={ { listeners } }
       key={ `toolbar-${element.getAttribute('key')}` }
       theme="inverse"
-      title={t('block')}
+      title={ t('block') }
     >
       <Split
         dividerSize="small"
