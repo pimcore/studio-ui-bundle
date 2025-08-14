@@ -9,7 +9,6 @@
  */
 
 import React from 'react'
-import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { TreeContainer } from '@Pimcore/modules/user/management/tree/tree-container'
 import { ManagementDetail } from '@Pimcore/modules/user/management/detail/management-detail'
 import type { TreeDataItem } from '@Pimcore/components/tree-element/tree-element'

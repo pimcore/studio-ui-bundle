@@ -21,14 +21,20 @@ const config: Meta = {
 export default config
 
 // Form example
+interface FormValues {
+  skills: string
+  tags: string[]
+  departments: string
+}
+
 const FormExampleComponent = (): React.JSX.Element => {
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<FormValues>({
     skills: 'javascript',
     tags: ['web-development', 'frontend'],
     departments: 'engineering'
   })
 
-  const onValuesChange = (changedValues: any, allValues: any): void => {
+  const onValuesChange = (changedValues: Partial<FormValues>, allValues: FormValues): void => {
     setFormValues(allValues)
   }
 
@@ -129,7 +135,7 @@ const FormExampleComponent = (): React.JSX.Element => {
             <div>• <strong>Tags</strong>: Multiple selection, no duplicates</div>
             <div>• <strong>Department</strong>: Custom create label, large size</div>
             <div style={ { marginTop: '8px', fontStyle: 'italic' } }>
-              Try typing new values that don't exist in the dropdown!
+              Try typing new values that don&apos;t exist in the dropdown!
             </div>
           </div>
         </div>

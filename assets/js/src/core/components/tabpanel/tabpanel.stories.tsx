@@ -142,15 +142,15 @@ const complexItems: TabpanelItem[] = [
       <div>
         <h4>Application Settings</h4>
         <div style={ { marginBottom: '16px' } }>
-          <label style={ { display: 'block', marginBottom: '4px' } }>Enable notifications</label>
+          <div style={ { display: 'block', marginBottom: '4px' } }>Enable notifications</div>
           <Switch size="small" />
         </div>
         <div style={ { marginBottom: '16px' } }>
-          <label style={ { display: 'block', marginBottom: '4px' } }>Dark mode</label>
+          <div style={ { display: 'block', marginBottom: '4px' } }>Dark mode</div>
           <Switch size="small" />
         </div>
         <div>
-          <label style={ { display: 'block', marginBottom: '4px' } }>Auto save</label>
+          <div style={ { display: 'block', marginBottom: '4px' } }>Auto save</div>
           <Switch size="small" />
         </div>
       </div>

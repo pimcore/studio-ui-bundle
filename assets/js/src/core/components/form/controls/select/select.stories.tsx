@@ -21,13 +21,18 @@ const config: Meta = {
 export default config
 
 // Form example
+interface FormValues {
+  category: string
+  tags: string[]
+}
+
 const FormExampleComponent = (): React.JSX.Element => {
-  const [formValues, setFormValues] = useState({
-    category: 'technology',
-    tags: ['react', 'typescript']
+  const [formValues, setFormValues] = useState<FormValues>({
+    category: 'electronics',
+    tags: ['popular', 'featured']
   })
 
-  const onValuesChange = (changedValues: any, allValues: any): void => {
+  const onValuesChange = (changedValues: Partial<FormValues>, allValues: FormValues): void => {
     setFormValues(allValues)
   }
 

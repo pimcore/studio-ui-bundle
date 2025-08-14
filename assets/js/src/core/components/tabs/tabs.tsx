@@ -65,9 +65,13 @@ const Component = ({ items, className, activeKey, onClose, onChange, hasStickyHe
   const enhancedItems = items?.map(item => ({
     ...item,
     label: (
-      <div onMouseDown={ handleMiddleClick(item.key) }>
+      <button
+        onMouseDown={ handleMiddleClick(item.key) }
+        style={ { border: 'none', background: 'none', padding: 0, font: 'inherit', cursor: 'inherit' } }
+        type="button"
+      >
         {item.label}
-      </div>
+      </button>
     )
   }))
 

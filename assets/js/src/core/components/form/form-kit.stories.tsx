@@ -92,7 +92,7 @@ const treeData: TreeDataItem[] = [
   }
 ]
 
-const LeftItem = () => {
+const LeftItem = (): React.JSX.Element => {
   return (
     <ContentLayout
       renderToolbar={ (
@@ -116,7 +116,7 @@ const LeftItem = () => {
   )
 }
 
-const GeneralTab = ({ formData, setFormData }: { formData: FormData, setFormData: (data: FormData) => void }) => (
+const GeneralTab = ({ formData, setFormData }: { formData: FormData, setFormData: (data: FormData) => void }): React.JSX.Element => (
   <FormKit.Panel>
     <Form.Item
       label="Title"
@@ -162,7 +162,7 @@ const GeneralTab = ({ formData, setFormData }: { formData: FormData, setFormData
   </FormKit.Panel>
 )
 
-const SEOTab = ({ formData, setFormData }: { formData: FormData, setFormData: (data: FormData) => void }) => (
+const SEOTab = ({ formData, setFormData }: { formData: FormData, setFormData: (data: FormData) => void }): React.JSX.Element => (
   <FormKit.Panel>
     <Form.Item label="Meta Title">
       <Input
@@ -199,7 +199,7 @@ const SEOTab = ({ formData, setFormData }: { formData: FormData, setFormData: (d
   </FormKit.Panel>
 )
 
-const AdvancedTab = ({ formData, setFormData }: { formData: FormData, setFormData: (data: FormData) => void }) => (
+const AdvancedTab = ({ formData, setFormData }: { formData: FormData, setFormData: (data: FormData) => void }): React.JSX.Element => (
   <FormKit.Panel>
     <Form.Item label="Template">
       <Select
@@ -241,7 +241,7 @@ const AdvancedTab = ({ formData, setFormData }: { formData: FormData, setFormDat
   </FormKit.Panel>
 )
 
-const RightItem = () => {
+const RightItem = (): React.JSX.Element => {
   const [formData, setFormData] = useState<FormData>({
     title: '',
     description: '',
@@ -257,12 +257,12 @@ const RightItem = () => {
     hideInNavigation: false
   })
 
-  const handleSave = () => {
+  const handleSave = (): void => {
     console.log('📝 Form Values:', formData)
     console.table(formData)
   }
 
-  const handlePreview = () => {
+  const handlePreview = (): void => {
     console.log('👁️ Preview with current data:', formData)
   }
 
@@ -332,7 +332,7 @@ const RightItem = () => {
   )
 }
 
-const Example = () => (
+const Example = (): React.JSX.Element => (
   <ContentLayout>
     <ConfigLayout
       leftItem={ {

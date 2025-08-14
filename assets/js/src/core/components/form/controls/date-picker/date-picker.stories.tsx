@@ -21,8 +21,18 @@ const config: Meta = {
 export default config
 
 // Form example
+interface FormValues {
+  birthDate: string
+  appointmentDate: string
+  eventDateTime: string
+  deadline: string
+  meetingTime: string
+  lunchTime: string
+  workStartTime: string
+}
+
 const FormExampleComponent = (): React.JSX.Element => {
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<FormValues>({
     birthDate: '1990-05-15',
     appointmentDate: '2024-12-25',
     eventDateTime: '2024-06-01 14:30:00',
@@ -32,7 +42,7 @@ const FormExampleComponent = (): React.JSX.Element => {
     workStartTime: '08:15:00'
   })
 
-  const onValuesChange = (changedValues: any, allValues: any): void => {
+  const onValuesChange = (changedValues: Partial<FormValues>, allValues: FormValues): void => {
     setFormValues(allValues)
   }
 

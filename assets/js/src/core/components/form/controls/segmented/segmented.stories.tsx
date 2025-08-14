@@ -21,17 +21,26 @@ const config: Meta = {
 export default config
 
 // Form example
+interface FormValues {
+  viewMode: string
+  userRole: string
+  publishStatus: string
+  sortOrder: string
+  theme: string
+  language: string
+}
+
 const FormExampleComponent = (): React.JSX.Element => {
-  const [formValues, setFormValues] = useState({
-    viewMode: 'grid',
+  const [formValues, setFormValues] = useState<FormValues>({
+    viewMode: 'card',
     userRole: 'editor',
     publishStatus: 'published',
-    sortOrder: 'asc',
+    sortOrder: 'newest',
     theme: 'light',
     language: 'en'
   })
 
-  const onValuesChange = (changedValues: any, allValues: any): void => {
+  const onValuesChange = (changedValues: Partial<FormValues>, allValues: FormValues): void => {
     setFormValues(allValues)
   }
 

@@ -21,8 +21,19 @@ const config: Meta = {
 export default config
 
 // Form example
+interface FormValues {
+  acceptTerms: boolean
+  newsletter: boolean
+  notifications: {
+    email: boolean
+    sms: boolean
+    push: boolean
+  }
+  permissions: string[]
+}
+
 const FormExampleComponent = (): React.JSX.Element => {
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<FormValues>({
     acceptTerms: true,
     newsletter: false,
     notifications: {
@@ -33,7 +44,7 @@ const FormExampleComponent = (): React.JSX.Element => {
     permissions: ['read', 'write']
   })
 
-  const onValuesChange = (changedValues: any, allValues: any): void => {
+  const onValuesChange = (changedValues: Partial<FormValues>, allValues: FormValues): void => {
     setFormValues(allValues)
   }
 

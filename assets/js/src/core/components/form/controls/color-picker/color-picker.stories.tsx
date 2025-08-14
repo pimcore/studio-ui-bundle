@@ -21,8 +21,21 @@ const config: Meta = {
 export default config
 
 // Form example
+interface ColorValue {
+  toHexString?: () => string
+  cleared?: boolean
+}
+
+interface FormValues {
+  primaryColor: string | null
+  backgroundColor: string | null
+  accentColor: string | null
+  textColor: string | null
+  borderColor: string | null
+}
+
 const FormExampleComponent = (): React.JSX.Element => {
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<FormValues>({
     primaryColor: '#1677FF',
     backgroundColor: '#FFFFFF',
     accentColor: '#52C41A',
@@ -30,18 +43,22 @@ const FormExampleComponent = (): React.JSX.Element => {
     borderColor: '#D9D9D9'
   })
 
-  const onValuesChange = (changedValues: any, allValues: any): void => {
+  const onValuesChange = (changedValues: Partial<FormValues | Record<string, ColorValue>>, allValues: Record<string, string | ColorValue | null>): void => {
     // Transform color objects to hex strings
-    const transformedValues = { ...allValues }
-    Object.keys(transformedValues).forEach(key => {
-      const value = transformedValues[key]
-      if (value && typeof value === 'object' && value.toHexString) {
+    const transformedValues: Record<string, string | null> = {}
+    Object.keys(allValues).forEach(key => {
+      const value = allValues[key]
+      if (value !== null && value !== undefined && typeof value === 'object' && 'toHexString' in value && typeof value.toHexString === 'function') {
         transformedValues[key] = value.toHexString()
-      } else if (value && typeof value === 'object' && value.cleared) {
+      } else if (value !== null && value !== undefined && typeof value === 'object' && 'cleared' in value && Boolean(value.cleared)) {
+        transformedValues[key] = null
+      } else if (typeof value === 'string') {
+        transformedValues[key] = value
+      } else {
         transformedValues[key] = null
       }
     })
-    setFormValues(transformedValues)
+    setFormValues(transformedValues as unknown as FormValues)
   }
 
   return (

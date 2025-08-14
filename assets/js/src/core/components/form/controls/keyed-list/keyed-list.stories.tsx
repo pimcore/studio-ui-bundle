@@ -48,20 +48,27 @@ export default config
 type Story = StoryObj<typeof config>
 
 // Basic keyed list example
+interface BasicFormValues {
+  settings: {
+    theme: { value: string, description: string }
+    language: { value: string, description: string }
+  }
+}
+
 const BasicExampleComponent = (): React.JSX.Element => {
   const [form] = Form.useForm()
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<BasicFormValues>({
     settings: {
       theme: { value: 'dark', description: 'UI theme preference' },
       language: { value: 'en', description: 'Default language' }
     }
   })
 
-  const onFinish = (values: any): void => {
+  const onFinish = (values: BasicFormValues): void => {
     console.log('Form values:', values)
   }
 
-  const onValuesChange = (changedValues: any, allValues: any): void => {
+  const onValuesChange = (changedValues: Partial<BasicFormValues>, allValues: BasicFormValues): void => {
     console.log('Values changed:', { changedValues, allValues })
     setFormValues(allValues)
   }
@@ -136,9 +143,31 @@ export const BasicExample: Story = {
 }
 
 // Advanced example with nested fields
+// Advanced nested example
+interface AdvancedFormValues {
+  configuration: {
+    database: {
+      host: string
+      port: number
+      credentials: {
+        username: string
+        password: string
+      }
+    }
+    cache: {
+      enabled: boolean
+      ttl: number
+      credentials: {
+        username: string
+        password: string
+      }
+    }
+  }
+}
+
 const AdvancedExampleComponent = (): React.JSX.Element => {
   const [form] = Form.useForm()
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<AdvancedFormValues>({
     configuration: {
       database: {
         host: 'localhost',
@@ -159,7 +188,7 @@ const AdvancedExampleComponent = (): React.JSX.Element => {
     }
   })
 
-  const onValuesChange = (changedValues: any, allValues: any): void => {
+  const onValuesChange = (changedValues: Partial<AdvancedFormValues>, allValues: AdvancedFormValues): void => {
     console.log('Advanced values changed:', { changedValues, allValues })
     setFormValues(allValues)
   }
@@ -284,10 +313,18 @@ interface FieldChange {
   timestamp: string
 }
 
+interface FieldChangeFormValues {
+  metadata: {
+    title: { content: string, required: boolean }
+    description: { content: string, required: boolean }
+    keywords: { content: string, required: boolean }
+  }
+}
+
 const FieldChangeHandlingComponent = (): React.JSX.Element => {
   const [form] = Form.useForm()
   const [fieldChanges, setFieldChanges] = useState<FieldChange[]>([])
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<FieldChangeFormValues>({
     metadata: {
       title: { content: 'Page Title', required: true },
       description: { content: 'Page description', required: false },
@@ -300,7 +337,7 @@ const FieldChangeHandlingComponent = (): React.JSX.Element => {
     setFieldChanges(prev => [change, ...prev].slice(0, 10)) // Keep last 10 changes
   }
 
-  const onValuesChange = (changedValues: any, allValues: any): void => {
+  const onValuesChange = (changedValues: Partial<FieldChangeFormValues>, allValues: FieldChangeFormValues): void => {
     setFormValues(allValues)
   }
 
@@ -320,7 +357,7 @@ const FieldChangeHandlingComponent = (): React.JSX.Element => {
               label="Page Metadata"
               name="metadata"
             >
-              <KeyedList onFieldChange={ handleFieldChange }>
+              <KeyedList onFieldChange={ handleFieldChange as (field: unknown, value: unknown) => void }>
                 <KeyedList.Iterator>
                   <Form.Item
                     label="Content"
@@ -409,10 +446,14 @@ export const FieldChangeHandling: Story = {
 }
 
 // Components for SimpleOperations example
+interface DynamicFormValues {
+  settings: Record<string, { value: string, description: string }>
+}
+
 interface SettingsWithControlsProps {
-  formValues: any
+  formValues: DynamicFormValues
   form: any
-  setFormValues: (values: any) => void
+  setFormValues: (values: DynamicFormValues) => void
 }
 
 const SettingsWithControls = ({ formValues, form, setFormValues }: SettingsWithControlsProps): React.JSX.Element => {
@@ -423,8 +464,8 @@ const SettingsWithControls = ({ formValues, form, setFormValues }: SettingsWithC
       ...formValues.settings,
       [newKey]: { value: '', description: '' }
     }
-    const updatedValues = { ...formValues, settings: newSettings }
-    form.setFieldsValue(updatedValues)
+    const updatedValues: DynamicFormValues = { ...formValues, settings: newSettings }
+    form.setFieldsValue(updatedValues as any)
     setFormValues(updatedValues)
   }
 
@@ -435,18 +476,18 @@ const SettingsWithControls = ({ formValues, form, setFormValues }: SettingsWithC
       const newSettings = { ...formValues.settings }
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete newSettings[lastKey]
-      const updatedValues = { ...formValues, settings: newSettings }
-      form.setFieldsValue(updatedValues)
+      const updatedValues: DynamicFormValues = { ...formValues, settings: newSettings }
+      form.setFieldsValue(updatedValues as any)
       setFormValues(updatedValues)
     }
   }
 
   return (
     <KeyedList
-      onChange={ (newValue) => {
-        const updatedValues = { ...formValues, settings: newValue }
+      onChange={ (newValue: Record<string, { value: string, description: string }>) => {
+        const updatedValues: DynamicFormValues = { ...formValues, settings: newValue }
         setFormValues(updatedValues)
-        form.setFieldsValue(updatedValues)
+        form.setFieldsValue(updatedValues as any)
       } }
       value={ formValues.settings }
     >
@@ -488,14 +529,14 @@ const SettingsWithControls = ({ formValues, form, setFormValues }: SettingsWithC
 // Simple Operations Example for KeyedList
 const SimpleOperationsComponent = (): React.JSX.Element => {
   const [form] = Form.useForm()
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<DynamicFormValues>({
     settings: {
       theme: { value: 'dark', description: 'UI theme preference' },
       language: { value: 'en', description: 'Default language' }
     }
   })
 
-  const onValuesChange = (changedValues: any, allValues: any): void => {
+  const onValuesChange = (changedValues: Partial<DynamicFormValues>, allValues: DynamicFormValues): void => {
     setFormValues(allValues)
   }
 

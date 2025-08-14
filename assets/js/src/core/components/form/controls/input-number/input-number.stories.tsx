@@ -21,15 +21,22 @@ const config: Meta = {
 export default config
 
 // Form example
+interface FormValues {
+  quantity: number
+  price: number
+  percentage: number
+  temperature: number
+}
+
 const FormExampleComponent = (): React.JSX.Element => {
-  const [formValues, setFormValues] = useState({
-    quantity: 10,
-    price: 99.99,
-    percentage: 75,
-    temperature: -5
+  const [formValues, setFormValues] = useState<FormValues>({
+    quantity: 5,
+    price: 29.99,
+    percentage: 85.5,
+    temperature: 22.5
   })
 
-  const onValuesChange = (changedValues: any, allValues: any): void => {
+  const onValuesChange = (changedValues: Partial<FormValues>, allValues: FormValues): void => {
     setFormValues(allValues)
   }
 

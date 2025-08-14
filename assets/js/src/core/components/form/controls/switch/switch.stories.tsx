@@ -21,14 +21,20 @@ const config: Meta = {
 export default config
 
 // Form example
+interface FormValues {
+  isEnabled: boolean
+  isPublic: boolean
+  notifications: boolean
+}
+
 const FormExampleComponent = (): React.JSX.Element => {
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<FormValues>({
     isEnabled: true,
     isPublic: false,
     notifications: true
   })
 
-  const onValuesChange = (changedValues: any, allValues: any): void => {
+  const onValuesChange = (changedValues: Partial<FormValues>, allValues: FormValues): void => {
     setFormValues(allValues)
   }
 

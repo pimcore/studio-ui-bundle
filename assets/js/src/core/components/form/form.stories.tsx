@@ -35,10 +35,18 @@ const config: Meta<typeof Form> = {
 export default config
 type Story = StoryObj<typeof config>
 
-// Basic Form Example
-const BasicFormComponent = (): React.JSX.Element => {
+// Form example using FormKit
+interface FormValues {
+  firstName: string
+  lastName: string
+  email: string
+  age: number | undefined
+  description: string
+}
+
+const FormExampleComponent = (): React.JSX.Element => {
   const [form] = Form.useForm()
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<FormValues>({
     firstName: '',
     lastName: '',
     email: '',
@@ -46,11 +54,11 @@ const BasicFormComponent = (): React.JSX.Element => {
     description: ''
   })
 
-  const onFinish = (values: any): void => {
+  const onFinish = (values: FormValues): void => {
     console.log('Form submitted:', values)
   }
 
-  const onValuesChange = (changedValues: any, allValues: any): void => {
+  const onValuesChange = (changedValues: Partial<FormValues>, allValues: FormValues): void => {
     setFormValues(allValues)
   }
 
@@ -68,28 +76,28 @@ const BasicFormComponent = (): React.JSX.Element => {
         <Form.Item
           label="First Name"
           name="firstName"
-          rules={ [{ required: true, message: 'Please enter your first name' }] }
+          rules={ [{ required: true, message: 'Please input your first name!' }] }
         >
-          <Input placeholder="Enter first name" />
+          <Input placeholder="Enter your first name" />
         </Form.Item>
 
         <Form.Item
           label="Last Name"
           name="lastName"
-          rules={ [{ required: true, message: 'Please enter your last name' }] }
+          rules={ [{ required: true, message: 'Please input your last name!' }] }
         >
-          <Input placeholder="Enter last name" />
+          <Input placeholder="Enter your last name" />
         </Form.Item>
 
         <Form.Item
           label="Email"
           name="email"
           rules={ [
-            { required: true, message: 'Please enter your email' },
-            { type: 'email', message: 'Please enter a valid email address' }
+            { required: true, message: 'Please input your email!' },
+            { type: 'email', message: 'Please enter a valid email!' }
           ] }
         >
-          <Input placeholder="Enter email address" />
+          <Input placeholder="Enter your email" />
         </Form.Item>
 
         <Form.Item
@@ -98,8 +106,8 @@ const BasicFormComponent = (): React.JSX.Element => {
         >
           <InputNumber
             max={ 120 }
-            min={ 18 }
-            placeholder="Enter age"
+            min={ 0 }
+            placeholder="Enter your age"
             style={ { width: '100%' } }
           />
         </Form.Item>
@@ -109,7 +117,7 @@ const BasicFormComponent = (): React.JSX.Element => {
           name="description"
         >
           <TextArea
-            placeholder="Enter description..."
+            placeholder="Tell us about yourself..."
             rows={ 4 }
           />
         </Form.Item>
@@ -122,16 +130,25 @@ const BasicFormComponent = (): React.JSX.Element => {
             >
               Submit
             </Button>
-            <Button htmlType="reset">
+            <Button
+              onClick={ () => { form.resetFields() } }
+            >
               Reset
             </Button>
           </Space>
         </Form.Item>
       </FormKit>
+
+      <div style={ { marginTop: '20px', padding: '16px', backgroundColor: '#f5f5f5', borderRadius: '6px' } }>
+        <h4>Current Form Values:</h4>
+        <pre style={ { fontSize: '12px', margin: 0 } }>
+          {JSON.stringify(formValues, null, 2)}
+        </pre>
+      </div>
     </div>
   )
 }
 
 export const BasicForm: Story = {
-  render: () => <BasicFormComponent />
+  render: () => <FormExampleComponent />
 }

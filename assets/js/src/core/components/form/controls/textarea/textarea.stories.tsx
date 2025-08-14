@@ -21,13 +21,18 @@ const config: Meta = {
 export default config
 
 // Form example
+interface FormValues {
+  description: string
+  content: string
+}
+
 const FormExampleComponent = (): React.JSX.Element => {
-  const [formValues, setFormValues] = useState({
-    description: 'This is a sample description text that spans multiple lines...',
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+  const [formValues, setFormValues] = useState<FormValues>({
+    description: '',
+    content: ''
   })
 
-  const onValuesChange = (changedValues: any, allValues: any): void => {
+  const onValuesChange = (changedValues: Partial<FormValues>, allValues: FormValues): void => {
     setFormValues(allValues)
   }
 

@@ -46,20 +46,29 @@ export default config
 type Story = StoryObj<typeof config>
 
 // Basic numbered list example
+interface BasicItem {
+  name: string
+  quantity: number
+}
+
+interface BasicFormValues {
+  items: BasicItem[]
+}
+
 const BasicExampleComponent = (): React.JSX.Element => {
   const [form] = Form.useForm()
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<BasicFormValues>({
     items: [
       { name: 'Item 1', quantity: 5 },
       { name: 'Item 2', quantity: 10 }
     ]
   })
 
-  const onFinish = (values: any): void => {
+  const onFinish = (values: BasicFormValues): void => {
     console.log('Form values:', values)
   }
 
-  const onValuesChange = (changedValues: any, allValues: any): void => {
+  const onValuesChange = (changedValues: Partial<BasicFormValues>, allValues: BasicFormValues): void => {
     console.log('Values changed:', { changedValues, allValues })
     setFormValues(allValues)
   }
@@ -138,9 +147,22 @@ export const BasicExample: Story = {
 }
 
 // Advanced example with nested fields
+interface AdvancedProduct {
+  product: string
+  category: string
+  details: {
+    price: number
+    description: string
+  }
+}
+
+interface AdvancedFormValues {
+  products: AdvancedProduct[]
+}
+
 const AdvancedExampleComponent = (): React.JSX.Element => {
   const [form] = Form.useForm()
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<AdvancedFormValues>({
     products: [
       {
         product: 'Laptop',
@@ -161,7 +183,7 @@ const AdvancedExampleComponent = (): React.JSX.Element => {
     ]
   })
 
-  const onValuesChange = (changedValues: any, allValues: any): void => {
+  const onValuesChange = (changedValues: Partial<AdvancedFormValues>, allValues: AdvancedFormValues): void => {
     console.log('Advanced values changed:', { changedValues, allValues })
     setFormValues(allValues)
   }
@@ -275,10 +297,20 @@ interface FieldChange {
   timestamp: string
 }
 
+interface Task {
+  title: string
+  priority: string
+  completed: boolean
+}
+
+interface TaskFormValues {
+  tasks: Task[]
+}
+
 const FieldChangeHandlingComponent = (): React.JSX.Element => {
   const [form] = Form.useForm()
   const [fieldChanges, setFieldChanges] = useState<FieldChange[]>([])
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<TaskFormValues>({
     tasks: [
       { title: 'Review code', priority: 'high', completed: false },
       { title: 'Write tests', priority: 'medium', completed: true }
@@ -290,7 +322,7 @@ const FieldChangeHandlingComponent = (): React.JSX.Element => {
     setFieldChanges(prev => [change, ...prev].slice(0, 10)) // Keep last 10 changes
   }
 
-  const onValuesChange = (changedValues: any, allValues: any): void => {
+  const onValuesChange = (changedValues: Partial<TaskFormValues>, allValues: TaskFormValues): void => {
     setFormValues(allValues)
   }
 
@@ -477,16 +509,25 @@ const ItemsWithControls = ({ formValues, form, setFormValues }: ItemsWithControl
 }
 
 // Simple Operations Example
+interface SimpleItem {
+  name: string
+  value: string
+}
+
+interface SimpleFormValues {
+  items: SimpleItem[]
+}
+
 const SimpleOperationsComponent = (): React.JSX.Element => {
   const [form] = Form.useForm()
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<SimpleFormValues>({
     items: [
       { name: 'First Item', value: 'item1' },
       { name: 'Second Item', value: 'item2' }
     ]
   })
 
-  const onValuesChange = (changedValues: any, allValues: any): void => {
+  const onValuesChange = (changedValues: Partial<SimpleFormValues>, allValues: SimpleFormValues): void => {
     setFormValues(allValues)
   }
 

@@ -14,6 +14,7 @@ import { Panel } from '../panel'
 import { ConfigProvider } from 'antd'
 import { Tabpanel } from '../tabpanel/tabpanel'
 import { Region } from '../region/region'
+import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 
 export interface FormKitProps {
   formProps?: Omit<FormProps, 'children'>
@@ -30,13 +31,15 @@ const FormKit = (props: FormKitProps): React.JSX.Element => {
   }
 
   return (
-    <ConfigProvider theme={ { components: { Form: { itemMarginBottom: 0 } } } }>
-      <Form { ...finalProps.formProps }>
-        <Panel>
-          {props.children}
-        </Panel>
-      </Form>
-    </ConfigProvider>
+    <FieldWidthProvider fieldWidthValues={ { small: 200, medium: 300, large: 900 } }>
+      <ConfigProvider theme={ { components: { Form: { itemMarginBottom: 0 } } } }>
+        <Form { ...finalProps.formProps }>
+          <Panel>
+            {props.children}
+          </Panel>
+        </Form>
+      </ConfigProvider>
+    </FieldWidthProvider>
   )
 }
 

@@ -21,13 +21,18 @@ const config: Meta = {
 export default config
 
 // Form example
+interface FormValues {
+  password: string
+  confirmPassword: string
+}
+
 const FormExampleComponent = (): React.JSX.Element => {
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<FormValues>({
     password: '',
     confirmPassword: ''
   })
 
-  const onValuesChange = (changedValues: any, allValues: any): void => {
+  const onValuesChange = (changedValues: Partial<FormValues>, allValues: FormValues): void => {
     setFormValues(allValues)
   }
 
@@ -61,7 +66,7 @@ const FormExampleComponent = (): React.JSX.Element => {
                 { required: true, message: 'Please confirm your password!' },
                 ({ getFieldValue }) => ({
                   async validator (_, value) {
-                    if (!value || getFieldValue('password') === value) {
+                    if (value === undefined || value === null || value === '' || getFieldValue('password') === value) {
                       await Promise.resolve(); return
                     }
                     return await Promise.reject(new Error('The passwords do not match!'))

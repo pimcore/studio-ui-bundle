@@ -21,16 +21,24 @@ const config: Meta = {
 export default config
 
 // Form example
+interface FormValues {
+  projectDuration: string[]
+  vacationPeriod: string[]
+  eventPeriod: string[]
+  campaignDuration: string[]
+  reportingPeriod: null
+}
+
 const FormExampleComponent = (): React.JSX.Element => {
-  const [formValues, setFormValues] = useState({
-    projectDuration: ['2024-01-15', '2024-06-30'],
-    vacationPeriod: ['2024-07-01', '2024-07-14'],
-    eventPeriod: ['2024-03-10 09:00:00', '2024-03-12 17:00:00'],
+  const [formValues, setFormValues] = useState<FormValues>({
+    projectDuration: ['2024-01-01', '2024-03-31'],
+    vacationPeriod: ['2024-07-01', '2024-07-15'],
+    eventPeriod: ['2024-09-10', '2024-09-12'],
     campaignDuration: ['2024-05-01', '2024-05-31'],
     reportingPeriod: null
   })
 
-  const onValuesChange = (changedValues: any, allValues: any): void => {
+  const onValuesChange = (changedValues: Partial<FormValues>, allValues: FormValues): void => {
     setFormValues(allValues)
   }
 

@@ -64,7 +64,7 @@ export const Closeable: StoryObj<ITabsProps> = {
   }
 }
 
-export const customCloseIcon: StoryObj<ITabsProps> = {
+export const CustomCloseIcon: StoryObj<ITabsProps> = {
   args: {
     ..._default.args,
     onClose: (key) => { console.log('click close button', key) },
