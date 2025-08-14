@@ -26,7 +26,7 @@ import { Switch } from '../switch/switch'
 import { IconButton } from '../icon-button/icon-button'
 
 const config: Meta<typeof FormKit> = {
-  title: 'Components/Data Entry/FormKit',
+  title: 'Components/Data Entry/Form/Examples',
   component: FormKit,
   tags: ['autodocs']
 }
