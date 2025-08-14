@@ -13,7 +13,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { FlagViewer } from './flag-viewer'
 
 const meta: Meta<typeof FlagViewer> = {
-  title: 'Components/FlagViewer',
+  title: 'Tools/FlagViewer',
   component: FlagViewer,
   parameters: {
     layout: 'fullscreen'

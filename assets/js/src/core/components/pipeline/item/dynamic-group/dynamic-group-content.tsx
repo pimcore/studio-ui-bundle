@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useNumberedList } from '@Pimcore/components/form/numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
 import React, { useEffect, useMemo } from 'react'
 import { type DynamicGroupProps } from '../dynamic-group'
 import { Box } from '@Pimcore/components/box/box'

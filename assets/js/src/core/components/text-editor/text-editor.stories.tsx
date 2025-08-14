@@ -12,7 +12,7 @@ import { type Meta } from '@storybook/react'
 import { TextEditor as TextEditorComponent } from './text-editor'
 
 const config: Meta = {
-  title: 'Components/Controls/TextEditor',
+  title: 'Components/Data Entry/TextEditor',
   component: TextEditorComponent,
   parameters: {
     layout: 'fullscreen'
