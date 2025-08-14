@@ -26,6 +26,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { getTypeByActionType, ReportActionType } from '@Pimcore/modules/reports/reports-view/helpers'
 import { currentDomain } from '@Pimcore/app/config/app-config'
+import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 
 interface IReportDetailProps {
   currentReport: string | null
@@ -58,7 +59,9 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
   const { columns, setColumns, setInitialColumns } = useColumnsContext()
   const { openElement } = useElementHelper()
+
   const { t } = useTranslation()
+  const { styles } = useStyles()
 
   const handleElementOpen = ({ id, actionType }: { id: number, actionType?: ReportActionType }): void => {
     if (actionType === ReportActionType.OPEN_URL) {
@@ -174,6 +177,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
         {!isUndefined(chartData) && (
           <Grid
             autoWidth
+            className={ styles.gridTable }
             columns={ columns }
             data={ chartData }
             isLoading={ isLoading }

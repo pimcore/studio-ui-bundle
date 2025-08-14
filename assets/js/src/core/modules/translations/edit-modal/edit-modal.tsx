@@ -21,7 +21,7 @@ import type { TranslationRow } from '../helpers/translation-helpers'
 import { Wysiwyg } from '@Pimcore/modules/wysiwyg/wysiwyg'
 import { WysiwygContext } from '@Pimcore/modules/wysiwyg/interface/wysiwyg'
 import { useTranslationDomain } from '../hooks/translation-domain-provider'
-import { isHtmlContent, stripTags } from '@Pimcore/utils/html'
+import { isHtmlContent, stripTags, decodeHtmlEntities } from '@Pimcore/utils/html'
 
 interface EditModalProps {
   translationRow: TranslationRow | null
@@ -85,7 +85,8 @@ export const EditModal = ({ translationRow, locale, ...props }: EditModalProps):
   }
 
   const handleRestore = (): void => {
-    const plainTextValue = stripTags(currentFormValue, [])
+    const withoutTags = stripTags(currentFormValue, [])
+    const plainTextValue = decodeHtmlEntities(withoutTags)
 
     form.setFieldsValue({
       translation: plainTextValue.trim()

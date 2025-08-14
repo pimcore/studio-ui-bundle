@@ -36,7 +36,7 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
   const { renameTreeContextMenuItem } = useRename('data-object', getElementActionCacheKey('data-object', 'rename', parseInt(node.id)))
   const { deleteTreeContextMenuItem } = useDelete('data-object', getElementActionCacheKey('data-object', 'delete', parseInt(node.id)))
   const { refreshTreeContextMenuItem } = useRefreshTree('data-object')
-  const { copyTreeContextMenuItem, cutTreeContextMenuItem, pasteCutContextMenuItem, nodeTask, storedNode } = useCopyPaste('data-object')
+  const { copyTreeContextMenuItem, cutTreeContextMenuItem, pasteCutContextMenuItem } = useCopyPaste('data-object')
   const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem, isLockMenuHidden } = useLock('data-object')
   const { unpublishTreeContextMenuItem } = useUnpublish('data-object')
   const {
@@ -45,13 +45,15 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
     pasteAsChildTreeContextMenuItem,
     pasteOnlyContentsTreeContextMenuItem,
     isPasteMenuHidden
-  } = usePaste({ storedNode, nodeTask })
+  } = usePaste()
   const { addObjectTreeContextMenuItem } = useAddObject()
   const { publishTreeContextMenuItem } = usePublish('data-object')
 
   const items: IMenuProps['items'] = [
     addObjectTreeContextMenuItem(node),
     addFolderTreeContextMenuItem(node),
+    renameTreeContextMenuItem(node),
+    copyTreeContextMenuItem(node),
     {
       label: t('element.tree.paste'),
       key: 'paste',
@@ -64,12 +66,10 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
         pasteOnlyContentsTreeContextMenuItem(node)
       ]
     },
-    renameTreeContextMenuItem(node),
-    copyTreeContextMenuItem(node),
     cutTreeContextMenuItem(node),
+    pasteCutContextMenuItem(node),
     publishTreeContextMenuItem(node),
     unpublishTreeContextMenuItem(node),
-    pasteCutContextMenuItem(parseInt(node.id)),
     deleteTreeContextMenuItem(node),
     {
       label: t('element.tree.context-menu.advanced'),

@@ -21,6 +21,7 @@ export interface DocumentEditableApi {
   getValue: (key: string) => ValueType
   updateValue: (key: string, value: ValueType) => void
   initializeValues: (initialValues: Record<string, ValueType>) => void
+  removeValues: (keysToRemove: string[]) => void
 }
 
 class DocumentEditableApiImpl implements DocumentEditableApi {
@@ -56,6 +57,13 @@ class DocumentEditableApiImpl implements DocumentEditableApi {
 
   initializeValues (initialValues: Record<string, ValueType>): void {
     Object.assign(this.values, initialValues)
+  }
+
+  removeValues (keysToRemove: string[]): void {
+    for (const key of keysToRemove) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete this.values[key]
+    }
   }
 
   private getEditableDefinitions (): AbstractDocumentEditableDefinition[] {

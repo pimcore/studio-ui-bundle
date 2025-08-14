@@ -29,6 +29,7 @@ import asset from '@Pimcore/assets/icons/asset.inline.svg?react'
 import attachment from '@Pimcore/assets/icons/attachment.inline.svg?react'
 import audio from '@Pimcore/assets/icons/audio.inline.svg?react'
 import autoSave from '@Pimcore/assets/icons/auto-save.inline.svg?react'
+import automationIntegration from '@Pimcore/assets/icons/automation-integration.inline.svg?react'
 import batchSelection from '@Pimcore/assets/icons/batch-selection.inline.svg?react'
 import bodyStyle from '@Pimcore/assets/icons/body-style.inline.svg?react'
 import bookmark from '@Pimcore/assets/icons/bookmark.inline.svg?react'
@@ -40,6 +41,7 @@ import catalog from '@Pimcore/assets/icons/catalog.inline.svg?react'
 import category from '@Pimcore/assets/icons/category.inline.svg?react'
 import cdp from '@Pimcore/assets/icons/cdp.inline.svg?react'
 import channels from '@Pimcore/assets/icons/channels.inline.svg?react'
+import chartScatter from '@Pimcore/assets/icons/chart-scatter.inline.svg?react'
 import checkCircle from '@Pimcore/assets/icons/check-circle.inline.svg?react'
 import checkbox from '@Pimcore/assets/icons/checkbox.inline.svg?react'
 import checkmark from '@Pimcore/assets/icons/checkmark.inline.svg?react'
@@ -96,6 +98,7 @@ import event from '@Pimcore/assets/icons/event.inline.svg?react'
 import excludedFromNav from '@Pimcore/assets/icons/excluded-from-nav.inline.svg?react'
 import expand01 from '@Pimcore/assets/icons/expand-01.inline.svg?react'
 import expand from '@Pimcore/assets/icons/expand.inline.svg?react'
+import experienceCommerce from '@Pimcore/assets/icons/experience-commerce.inline.svg?react'
 import exportIcon from '@Pimcore/assets/icons/export.inline.svg?react'
 import eyeOff from '@Pimcore/assets/icons/eye-off.inline.svg?react'
 import eye from '@Pimcore/assets/icons/eye.inline.svg?react'
@@ -177,6 +180,7 @@ import preview from '@Pimcore/assets/icons/preview.inline.svg?react'
 import properties from '@Pimcore/assets/icons/properties.inline.svg?react'
 import published from '@Pimcore/assets/icons/published.inline.svg?react'
 import questionmark from '@Pimcore/assets/icons/questionmark.inline.svg?react'
+import quickAccess from '@Pimcore/assets/icons/quick-access.inline.svg?react'
 import redirect from '@Pimcore/assets/icons/redirect.inline.svg?react'
 import refresh from '@Pimcore/assets/icons/refresh.inline.svg?react'
 import removeImageThumbnail from '@Pimcore/assets/icons/remove-image-thumbnail.inline.svg?react'
@@ -184,6 +188,7 @@ import removeMarker from '@Pimcore/assets/icons/remove-marker.inline.svg?react'
 import removePdfThumbnail from '@Pimcore/assets/icons/remove-pdf-thumbnail.inline.svg?react'
 import removeVideoThumbnail from '@Pimcore/assets/icons/remove-video-thumbnail.inline.svg?react'
 import rename from '@Pimcore/assets/icons/rename.inline.svg?react'
+import reporting from '@Pimcore/assets/icons/reporting.inline.svg?react'
 import requiredBy from '@Pimcore/assets/icons/required-by.inline.svg?react'
 import requires from '@Pimcore/assets/icons/requires.inline.svg?react'
 import restore from '@Pimcore/assets/icons/restore.inline.svg?react'
@@ -294,6 +299,10 @@ moduleSystem.registerModule({
       component: autoSave
     })
     iconLibrary.register({
+      name: 'automation-integration',
+      component: automationIntegration
+    })
+    iconLibrary.register({
       name: 'batch-selection',
       component: batchSelection
     })
@@ -336,6 +345,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'channels',
       component: channels
+    })
+    iconLibrary.register({
+      name: 'chart-scatter',
+      component: chartScatter
     })
     iconLibrary.register({
       name: 'check-circle',
@@ -560,6 +573,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'expand',
       component: expand
+    })
+    iconLibrary.register({
+      name: 'experience-commerce',
+      component: experienceCommerce
     })
     iconLibrary.register({
       name: 'export',
@@ -886,6 +903,10 @@ moduleSystem.registerModule({
       component: questionmark
     })
     iconLibrary.register({
+      name: 'quick-access',
+      component: quickAccess
+    })
+    iconLibrary.register({
       name: 'redirect',
       component: redirect
     })
@@ -912,6 +933,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'rename',
       component: rename
+    })
+    iconLibrary.register({
+      name: 'reporting',
+      component: reporting
     })
     iconLibrary.register({
       name: 'required-by',

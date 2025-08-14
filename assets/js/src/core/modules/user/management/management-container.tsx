@@ -46,6 +46,7 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
       key: item.id,
       selectable: item.type === 'user',
       allowDrop: item.type !== 'user',
+      allowDrag: item.type === 'user',
       icon: item.type === 'user' ? <Icon value={ 'user' } /> : <Icon value={ 'folder' } />,
       'data-testid': createTreeNodeTestId(item.id as string | number, item.type as string),
       actions: item.type === 'user'

@@ -65,7 +65,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): ReactElement 
     copyTreeContextMenuItem(node),
     pasteTreeContextMenuItem(node),
     cutTreeContextMenuItem(node),
-    pasteCutContextMenuItem(parseInt(node.id)),
+    pasteCutContextMenuItem(node),
     deleteTreeContextMenuItem(node),
     createZipDownloadTreeContextMenuItem(node),
     uploadNewVersionTreeContextMenuItem(node),
