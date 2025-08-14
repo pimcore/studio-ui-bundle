@@ -88,7 +88,7 @@ export const useStlyes = createStyles(({
       }
 
       .main-nav__list--level-1 {
-        padding: ${token.paddingXS}px;
+        padding: 0px 10px 0px 10px;
       }
 
       .main-nav__list-detail {
@@ -126,18 +126,17 @@ export const useStlyes = createStyles(({
       }
 
       .main-nav__list-item-divider {
-        border-bottom: 1px solid ${token.colorFillSecondary};
-        padding: 3px 0px 3px 0px;
+        border-block-start-color: ${token.colorFillSecondary};
       }
 
       .main-nav__list-detail-sub-header {
         width: 100%;
-        height: 42px;
         text-align: left;
-        color: ${token.colorTextTreeElement};
+        color: ${token.colorTextHeading};
         font-size: ${token.fontSize}px;
+        font-weight: bold;
         font-family:  ${token.fontFamily};
-        padding: ${token.paddingXS}px ${token.paddingXS}px ${token.paddingXS}px ${token.paddingXXS}px;
+        padding: ${token.paddingSM}px ${token.paddingXS}px ${token.paddingXS}px 0px ;
 
         &.main-nav__list-detail-divider {
           border-bottom: 1px solid ${token.colorFillSecondary};
@@ -149,8 +148,8 @@ export const useStlyes = createStyles(({
         background: none;
         border: 0;
         width: 100%;
-        padding: ${token.paddingSM}px ${token.paddingSM}px ${token.paddingSM}px ${token.paddingXS}px ;
-        gap: 4px;
+        padding: ${token.paddingSM}px;
+        gap: 8px;
         cursor: pointer;
         text-align: left;
         display: flex;
@@ -172,7 +171,7 @@ export const useStlyes = createStyles(({
       .is-active > .main-nav__list-btn {
         background: ${token.controlItemBgActive};
         color: ${token.colorPrimary};
-        padding-left: 6px;
+        padding-left: 10px;
       }
       
       .main-nav__list-chevron-btn-icon {
@@ -181,6 +180,7 @@ export const useStlyes = createStyles(({
 
       .main-nav__divider {
         margin: ${token.marginSM}px 0;
+        border-block-start-color: ${token.colorFillSecondary};
       }
       
       .main-nav__list--level-1 .main-nav__list-btn {
