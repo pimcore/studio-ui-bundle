@@ -71,7 +71,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
             : [],
         sortFilter: sorting.length > 0
           ? {
-              key: sorting[0].id,
+              key: sorting[0].id.startsWith('_') ? sorting[0].id.substring(1) : sorting[0].id,
               direction: sorting[0].desc ? 'DESC' : 'ASC'
             }
           : []
@@ -144,7 +144,6 @@ export const TranslationsContainer = (): React.JSX.Element => {
   }
 
   const handleSortingChange = (newSorting: SortingState): void => {
-    console.log('newSorting', newSorting)
     setSorting(newSorting)
     setCurrentPage(1)
   }
