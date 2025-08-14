@@ -37,7 +37,7 @@ export const _default: StoryObj<ToolStripProps> = {
         theme='secondary'
       >
         <Space size='mini'>
-          <IconButton icon={ { value: 'drag-option' } } />
+          <IconButton icon={ { value: 'drag-option' } } size="small" />
           <Text>Title</Text>
           <Dropdown menu={ {
             items: [
@@ -52,13 +52,13 @@ export const _default: StoryObj<ToolStripProps> = {
             ]
           } }
           >
-            <IconButton icon={ { value: 'new' } } />
+            <IconButton icon={ { value: 'new' } } size="small" />
           </Dropdown>
-          <IconButton icon={ { value: 'move-down' } } />
-          <IconButton icon={ { value: 'move-up' } } />
+          <IconButton icon={ { value: 'chevron-down' } } size="small" />
+          <IconButton icon={ { value: 'chevron-up' } } size="small" />
         </Space>
 
-        <IconButton icon={ { value: 'trash' } } />
+        <IconButton icon={ { value: 'trash' } } size="small" />
       </Split>
     )
   }

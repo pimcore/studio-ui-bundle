@@ -53,24 +53,21 @@ export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, dis
         >
           <IconButton
             icon={ { value: 'new' } }
-            style={ { padding: 4 } }
-            variant='minimal'
+            size='small'
           />
         </Dropdown>
 
         <IconButton
           disabled={ disallowReorder }
-          icon={ { value: 'move-down' } }
+          icon={ { value: 'chevron-down' } }
           onClick={ () => { operations.move(field, field + 1) } }
-          style={ { padding: 4 } }
-          variant='minimal'
+          size='small'
         />
         <IconButton
           disabled={ disallowReorder }
-          icon={ { value: 'move-up' } }
+          icon={ { value: 'chevron-up' } }
           onClick={ () => { operations.move(field, field - 1) } }
-          style={ { padding: 4 } }
-          variant='minimal'
+          size='small'
         />
       </Space>
 
@@ -78,8 +75,7 @@ export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, dis
         disabled={ disallowDelete }
         icon={ { value: 'trash' } }
         onClick={ () => { operations.remove(field) } }
-        style={ { padding: 4 } }
-        variant='minimal'
+        size='small'
       />
     </Split>
   )
