@@ -15,6 +15,8 @@ import { generateColorMap } from '@Pimcore/modules/reports/reports-view/componen
 import type { IChartProps, IChartDataItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { LegendItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/legend-item/legend-item'
+import { useShowMore } from '@Pimcore/modules/reports/reports-view/components/report-chart/hooks/use-show-more'
+import { ShowMoreBtn } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/show-more-btn/show-more-btn'
 
 export interface IChartPieDataItem extends IChartDataItem {
   color: string
@@ -35,6 +37,7 @@ export const PieChart = ({ reportData, chartData }: IChartProps): React.JSX.Elem
     [CHART_FIELD_VALUE_KEY]: item?.[pieColumn],
     [CHART_FIELD_COLOR_KEY]: colorList[index]
   })))
+  const { isExpanded, visibleItems, toggle, initialVisibleCount } = useShowMore(reportChartData)
 
   const [disabledItems, setDisabledItems] = useState<string[]>([])
   const [chartRef, setChartRef] = useState<any>(null)
@@ -119,7 +122,7 @@ export const PieChart = ({ reportData, chartData }: IChartProps): React.JSX.Elem
         justify="center"
         wrap="wrap"
       >
-        {reportChartData?.map((item, index) => {
+        {visibleItems?.map((item, index) => {
           const isDisabled = disabledItems.includes(item.type)
 
           return (
@@ -134,6 +137,13 @@ export const PieChart = ({ reportData, chartData }: IChartProps): React.JSX.Elem
           )
         })}
       </Flex>
+
+      {reportChartData?.length > initialVisibleCount && (
+        <ShowMoreBtn
+          isExpanded={ isExpanded }
+          toggle={ toggle }
+        />
+      )}
     </div>
   )
 }
