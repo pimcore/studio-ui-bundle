@@ -21,8 +21,12 @@ import { ReportDataProvider } from '@Pimcore/modules/reports/reports-view/contex
 import { ReportViewContent } from '@Pimcore/modules/reports/reports-view/components/report-view-content/report-view-content'
 import { useStyles } from './reports-view.styles'
 
-export const ReportsView = (): React.JSX.Element => {
-  const [currentReport, setCurrentReport] = useState<string | null>(null)
+interface IReportsViewProps {
+  reportId?: string
+}
+
+export const ReportsView = ({ reportId }: IReportsViewProps): React.JSX.Element => {
+  const [currentReport, setCurrentReport] = useState<string | null>(reportId ?? null)
 
   const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page: 1, pageSize: 9999 })
 

@@ -8,6 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isUndefined } from 'lodash'
+import { store } from '@Pimcore/app/store'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { ReportsViewWrapper } from '@Pimcore/modules/reports/reports-view/reports-view-wrapper'
 import { CustomReportsView } from '@Pimcore/modules/reports/custom-reports-view/custom-reports-view'
@@ -16,9 +19,10 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
+import { api } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 
 moduleSystem.registerModule({
-  onInit: () => {
+  onInit: async () => {
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
@@ -71,5 +75,47 @@ moduleSystem.registerModule({
       name: 'custom-reports',
       component: CustomReportsView
     })
+
+    try {
+      const reportsData = await store.dispatch(
+        api.endpoints.customReportsGetTree.initiate({ page: 1, pageSize: 999999 })
+      ).unwrap()
+
+      if (!isUndefined(reportsData?.items)) {
+        reportsData.items.forEach((report, index) => {
+          if (report.menuShortcut) {
+            const reportName = !isEmptyValue(report.niceName) ? report.niceName : report.name
+            const path = !isEmptyValue(report.group)
+              ? `Reporting/${report.group}/${reportName}`
+              : `Reporting/${reportName}`
+
+            mainNavRegistryService.registerMainNavItem({
+              path,
+              label: reportName,
+              order: 300 + index,
+              perspectivePermission: NavPermission.Reports,
+              widgetConfig: {
+                component: 'dynamic-report',
+                config: {
+                  translationKey: 'navigation.reports',
+                  icon: {
+                    type: 'name',
+                    value: 'pie-chart'
+                  },
+                  reportId: report.name
+                }
+              }
+            })
+          }
+        })
+
+        widgetRegistryService.registerWidget({
+          name: 'dynamic-report',
+          component: ReportsViewWrapper
+        })
+      }
+    } catch (error) {
+      console.error('Failed to load reports for menu:', error)
+    }
   }
 })
