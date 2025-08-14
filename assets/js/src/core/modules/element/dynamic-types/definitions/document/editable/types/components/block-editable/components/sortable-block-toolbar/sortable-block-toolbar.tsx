@@ -93,6 +93,7 @@ export const SortableBlockToolbar = ({
       icon={ { value: 'drag-option' } }
       key="drag"
       style={ { cursor: 'grab' } }
+      size="small"
       { ...listeners }
     />
   )
@@ -103,6 +104,7 @@ export const SortableBlockToolbar = ({
         icon={ { value: 'new' } }
         key="plus"
         onClick={ () => { onAddBlock(element, 1) } }
+        size="small"
       />
     )
   }
@@ -111,9 +113,10 @@ export const SortableBlockToolbar = ({
     buttons.push(
       <IconButton
         disabled={ isFirst }
-        icon={ { value: 'move-up' } }
+        icon={ { value: 'chevron-up' } }
         key="up"
         onClick={ () => { onMoveBlockUp(element) } }
+        size="small"
       />
     )
   }
@@ -122,9 +125,10 @@ export const SortableBlockToolbar = ({
     buttons.push(
       <IconButton
         disabled={ isLast }
-        icon={ { value: 'move-down' } }
+        icon={ { value: 'chevron-down' } }
         key="down"
         onClick={ () => { onMoveBlockDown(element) } }
+        size="small"
       />
     )
   }
@@ -135,6 +139,7 @@ export const SortableBlockToolbar = ({
         icon={ { value: 'trash' } }
         key="minus"
         onClick={ () => { onRemoveBlock(element) } }
+        size="small"
       />
     )
   }
@@ -149,6 +154,7 @@ export const SortableBlockToolbar = ({
     <ToolStrip
       className={ styles.blockToolstrip }
       key={ `toolbar-${element.getAttribute('key')}` }
+      theme="inverse"
     >
       <Split
         dividerSize="small"

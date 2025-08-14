@@ -11,6 +11,9 @@
 import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css, token }) => {
+
+  const dividerColor = token.Split?.colorFillSecondary || token.colorFillSecondary
+
   return {
     split: css`
       align-items: center;
@@ -25,7 +28,7 @@ export const useStyles = createStyles(({ css, token }) => {
 
       &.split--theme-secondary {
         .ant-divider {
-          border-color: #D9D9D9D9;
+          border-color: ${dividerColor};
         }
       }
 

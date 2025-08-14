@@ -16,6 +16,10 @@ export const useStyles = createStyles(({ css, token }) => {
       background: #f5f5f5;
       border-top-left-radius: ${token.borderRadius}px;
       border-top-right-radius: ${token.borderRadius}px;
+
+      &.tool-strip--theme-inverse {
+        background: ${token.colorFillInverse};
+      }
     `
   }
 })

@@ -19,9 +19,10 @@ export interface ToolStripBoxProps extends BoxProps {
   renderToolStripStart?: React.ReactNode
   renderToolStripEnd?: React.ReactNode
   docked?: boolean
+  theme?: 'default' | 'inverse'
 }
 
-export const ToolStripBox = ({ className, docked = false, children, renderToolStripEnd, renderToolStripStart, padding = { x: 'extra-small', y: 'small' }, ...props }: ToolStripBoxProps): React.JSX.Element => {
+export const ToolStripBox = ({ className, docked = false, children, renderToolStripEnd, renderToolStripStart, padding = { x: 'extra-small', y: 'small' }, theme = 'default', ...props }: ToolStripBoxProps): React.JSX.Element => {
   const { styles } = useStyles()
   const classNames = cn(
     className,
@@ -40,8 +41,8 @@ export const ToolStripBox = ({ className, docked = false, children, renderToolSt
         align="flex-end"
         justify="space-between"
       >
-        {renderToolStripStart !== undefined ? <ToolStrip className="tool-strip-box__strip--start">{renderToolStripStart}</ToolStrip> : <div />}
-        {renderToolStripEnd !== undefined ? <ToolStrip className="tool-strip-box__strip--end">{renderToolStripEnd}</ToolStrip> : <div />}
+        {renderToolStripStart !== undefined ? <ToolStrip className="tool-strip-box__strip--start" theme={theme}>{renderToolStripStart}</ToolStrip> : <div />}
+        {renderToolStripEnd !== undefined ? <ToolStrip className="tool-strip-box__strip--end" theme={theme}>{renderToolStripEnd}</ToolStrip> : <div />}
       </Flex>
 
       <Box
