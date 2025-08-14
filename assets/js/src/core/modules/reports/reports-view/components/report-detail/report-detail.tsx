@@ -168,7 +168,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
       <Flex
         className="h-full"
         gap="small"
-        justify="space-between"
+        justify="flex-start"
         vertical
       >
         {isShowChart && (
