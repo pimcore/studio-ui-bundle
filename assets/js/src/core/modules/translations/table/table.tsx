@@ -117,6 +117,7 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales, sor
     columnHelper.accessor('actions', {
       header: t('translations.columns.actions'),
       size: 80,
+      enableSorting: false,
       cell: (info) => (
         <ActionsCell
           info={ info }
