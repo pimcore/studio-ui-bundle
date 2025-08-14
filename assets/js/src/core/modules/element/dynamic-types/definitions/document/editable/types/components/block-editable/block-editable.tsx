@@ -101,7 +101,28 @@ export const BlockEditable = ({
 
   useEffect(() => {
     refreshControls()
-  }, [currentValue, refreshControls])
+    
+    // Add CSS classes to DOM elements for styling
+    const container = blockManager.getContainer()
+    if (!isNil(container)) {
+      container.classList.add(styles.enhancedContainer)
+    }
+
+    // Cleanup function to remove classes when component unmounts
+    return () => {
+      if (!isNil(container)) {
+        container.classList.remove(styles.enhancedContainer)
+        
+        const elements = blockManager.queryElements()
+        elements.forEach(element => {
+          const buttonsContainer = element.querySelector('.pimcore_block_buttons')
+          if (buttonsContainer) {
+            buttonsContainer.classList.remove('is-dragging')
+          }
+        })
+      }
+    }
+  }, [currentValue, refreshControls, blockManager, styles.enhancedContainer])
 
   return (
     <div className={ `${styles.blockContainer} ${className ?? ''}` }>

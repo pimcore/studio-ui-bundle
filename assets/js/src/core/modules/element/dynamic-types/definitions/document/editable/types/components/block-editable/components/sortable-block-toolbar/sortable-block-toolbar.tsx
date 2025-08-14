@@ -13,10 +13,12 @@ import { isNull } from 'lodash'
 import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Split } from '@Pimcore/components/split/split'
+import { Text } from '@Pimcore/components/text/text'
 import { Space } from 'antd'
 import { useSortable } from '@dnd-kit/sortable'
 import { useBlockEditableStyles } from '../../block-editable.styles'
 import { type BlockManager } from '../../utils/block-manager'
+import { useTranslation } from 'react-i18next'
 
 export interface SortableBlockToolbarProps {
   id: string
@@ -44,6 +46,7 @@ export const SortableBlockToolbar = ({
   activeId
 }: SortableBlockToolbarProps): React.JSX.Element => {
   const { styles } = useBlockEditableStyles()
+  const { t } = useTranslation()
   const {
     attributes,
     listeners,
@@ -97,6 +100,12 @@ export const SortableBlockToolbar = ({
     />
   )
 
+  buttons.push(
+    <Text key="title">
+      {t('document.editable.block.title')}
+    </Text>
+  )
+
   if (hasPlus && !limitReached) {
     buttons.push(
       <IconButton
@@ -147,7 +156,7 @@ export const SortableBlockToolbar = ({
 
   return (
     <ToolStrip
-      className={ styles.blockToolstrip }
+      className={ `${styles.blockToolstrip} pimcore-hide-on-drag` }
       key={ `toolbar-${element.getAttribute('key')}` }
     >
       <Split

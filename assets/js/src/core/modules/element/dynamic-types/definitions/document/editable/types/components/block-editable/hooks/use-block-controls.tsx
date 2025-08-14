@@ -77,7 +77,16 @@ export const useBlockControls = ({
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
     setActiveId(event.active.id as string)
-  }, [])
+    
+    // Add dragging state class to the main container during drag
+    const container = blockManager.getContainer()
+    if (container) {
+      container.classList.add(styles.draggingState)
+    }
+ 
+    // Add dragging state to body to globally hide all toolbars
+    document.body.classList.add(styles.globalDraggingState)
+  }, [blockManager, styles])
 
   const handleDragOver = useCallback((event: DragOverEvent) => {
     const { over } = event
@@ -105,6 +114,15 @@ export const useBlockControls = ({
       element.style.transition = ''
       element.classList.remove(styles.dragActive, styles.dragDropTarget)
     })
+
+    // Remove dragging state class from the main container
+    const container = blockManager.getContainer()
+    if (container) {
+      container.classList.remove(styles.draggingState)
+    }
+
+    // Remove dragging state from body
+    document.body.classList.remove(styles.globalDraggingState)
 
     if (over !== null && active.id !== over.id) {
       const currentBlockEntries = blockManager.queryElements()
@@ -222,7 +240,9 @@ export const useBlockControls = ({
 
   const cleanupControls = useCallback(() => {
     setEmptyStatePortal(null)
-  }, [])
+    // Ensure body class is cleaned up
+    document.body.classList.remove(styles.globalDraggingState)
+  }, [styles.globalDraggingState])
 
   useEffect(() => {
     return () => {
