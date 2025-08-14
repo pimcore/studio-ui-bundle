@@ -9,18 +9,10 @@
  */
 
 import React from 'react'
-import { Input as AntInput } from 'antd'
-import cn from 'classnames'
-import { useStyles } from './input-password.styles'
-import { type PasswordProps } from 'antd/es/input'
+import { InputPassword as BaseInputPassword, type IInputPasswordProps } from '@Pimcore/components/input-password/input-password'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
-export interface IInputPasswordProps extends PasswordProps {
-  inherited?: boolean
-}
-
-export const InputPassword = ({ inherited, className, style, ...restProps }: IInputPasswordProps): JSX.Element => {
-  const { styles } = useStyles()
+export const InputPassword = ({ style, ...props }: IInputPasswordProps): JSX.Element => {
   const fieldWidths = useFieldWidth()
 
   // Apply medium width as default for password inputs
@@ -29,11 +21,7 @@ export const InputPassword = ({ inherited, className, style, ...restProps }: IIn
     ...style
   }
 
-  return (
-    <AntInput.Password
-      className={ cn(styles.input, className, { [styles.inherited]: inherited }) }
-      style={ computedStyle }
-      { ...restProps }
-    />
-  )
+  return <BaseInputPassword style={computedStyle} {...props} />
 }
+
+export type { IInputPasswordProps }

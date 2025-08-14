@@ -9,34 +9,21 @@
  */
 
 import React from 'react'
-import { Input as AntInput, type InputProps, type InputRef } from 'antd'
-import cn from 'classnames'
-import { useStyles } from './input.styles'
+import { Input as BaseInput, type IInputProps } from '@Pimcore/components/input/input'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
-export interface IInputProps extends InputProps {
-  inherited?: boolean
-}
-
-export const Input = React.forwardRef<InputRef, IInputProps>(function Input (
-  { inherited, className, style, ...restProps }: IInputProps,
-  ref
-): JSX.Element {
-  const { styles } = useStyles()
+export const Input = React.forwardRef<any, IInputProps>(({ style, ...props }, ref): JSX.Element => {
   const fieldWidths = useFieldWidth()
 
   // Apply medium width as default for input fields
   const computedStyle = {
-    width: fieldWidths.large,
+    width: fieldWidths.medium,
     ...style
   }
 
-  return (
-    <AntInput
-      className={ cn(styles.input, className, { [styles.inherited]: inherited }) }
-      ref={ ref }
-      style={ computedStyle }
-      { ...restProps }
-    />
-  )
+  return <BaseInput ref={ref} style={computedStyle} {...props} />
 })
+
+Input.displayName = 'FormInput'
+
+export type { IInputProps }

@@ -9,31 +9,19 @@
  */
 
 import React from 'react'
-import { type TextAreaProps } from 'antd/es/input/TextArea'
-import { Input } from 'antd'
-import cn from 'classnames'
-import { useStyles } from './textarea.styles'
+import { DateRangePicker as BaseDateRangePicker, type DateRangePickerProps } from '@Pimcore/components/date-picker/date-range-picker'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
-export interface ITextAreaProps extends TextAreaProps {
-  inherited?: boolean
-}
-
-export const TextArea = ({ inherited, className, style, ...restProps }: ITextAreaProps): JSX.Element => {
-  const { styles } = useStyles()
+export const DateRangePicker = ({ style, ...props }: DateRangePickerProps): JSX.Element => {
   const fieldWidths = useFieldWidth()
 
-  // Apply large width as default for textareas
+  // Apply large width as default for date range pickers
   const computedStyle = {
     width: fieldWidths.large,
     ...style
   }
 
-  return (
-    <Input.TextArea
-      className={ cn(styles.textarea, className, { [styles.inherited]: inherited }) }
-      style={ computedStyle }
-      { ...restProps }
-    />
-  )
+  return <BaseDateRangePicker style={computedStyle} {...props} />
 }
+
+export type { DateRangePickerProps }

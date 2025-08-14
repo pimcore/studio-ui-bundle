@@ -17,6 +17,7 @@ import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './select.styles'
 import { useTranslation } from 'react-i18next'
+import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export const sizeOptions = {
   normal: 150
@@ -26,13 +27,13 @@ export interface SelectProps extends AntdSelectProps {
   customArrowIcon?: string
   customIcon?: string
   inherited?: boolean
-  width?: number
   minWidth?: number | keyof typeof sizeOptions
 }
 
-export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, width, allowClear, inherited, value, minWidth, ...antdSelectProps }, ref): React.JSX.Element => {
+export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, allowClear, inherited, value, minWidth, ...antdSelectProps }, ref): React.JSX.Element => {
   const { t } = useTranslation()
   const selectRef = useRef<RefSelectProps>(null)
+  const fieldWidths = useFieldWidth()
 
   const [isActive, setIsActive] = useState(false)
   const [isFocus, setIsFocus] = useState(false)
@@ -48,7 +49,10 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
     }
   }, [value])
 
-  const { styles } = useStyles({ width })
+  // Apply medium width as default for select components
+  const computedWidth = fieldWidths.medium
+
+  const { styles } = useStyles({ width: computedWidth })
 
   const withCustomIcon = !isEmptyValue(customIcon)
   const isStatusWarning = status === 'warning'

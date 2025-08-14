@@ -10,7 +10,7 @@
 
 import { type Meta } from '@storybook/react'
 import React, { useState } from 'react'
-import { Input } from '@Pimcore/components/input/input'
+import { Input } from './input'
 import { Form } from '../../form'
 
 const config: Meta = {

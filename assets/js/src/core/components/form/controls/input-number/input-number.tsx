@@ -9,30 +9,19 @@
  */
 
 import React from 'react'
-import { type ColorPickerProps, ColorPicker as AntColorPicker } from 'antd'
-import cn from 'classnames'
-import { useStyles } from './color-picker.styles'
+import { InputNumber as BaseInputNumber, type IInputNumberProps } from '@Pimcore/components/input-number/input-number'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
-export interface IColorPickerProps extends ColorPickerProps {
-  inherited?: boolean
-}
-
-export const ColorPicker = ({ inherited, className, style, ...restProps }: IColorPickerProps): JSX.Element => {
-  const { styles } = useStyles()
+export const InputNumber = ({ style, ...props }: IInputNumberProps): JSX.Element => {
   const fieldWidths = useFieldWidth()
 
-  // Apply small width as default for color pickers
+  // Apply small width as default for number inputs
   const computedStyle = {
     width: fieldWidths.small,
     ...style
   }
 
-  return (
-    <AntColorPicker
-      className={ cn(styles.colorPicker, className, { [styles.inherited]: inherited }) }
-      style={ computedStyle }
-      { ...restProps }
-    />
-  )
+  return <BaseInputNumber style={computedStyle} {...props} />
 }
+
+export type { IInputNumberProps }
