@@ -32,6 +32,7 @@ import { isUndefined } from 'lodash'
 import { useAppDispatch } from '@sdk/app'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useTranslationDomain } from './hooks/translation-domain-provider'
+import { type SortingState } from '@tanstack/react-table'
 
 interface FormValues {
   translationKey: string
@@ -51,6 +52,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
+  const [sorting, setSorting] = useState<SortingState>([{ id: 'key', desc: false }])
   const { data: domainsData, isLoading: domainsLoading, error: domainError } = useTranslationGetDomainsQuery()
   const availableDomains = domainsData?.domains ?? []
 
@@ -67,13 +69,15 @@ export const TranslationsContainer = (): React.JSX.Element => {
                 filterValue: searchTerm
               }]
             : [],
-        sortFilter: {
-          key: 'de',
-          direction: 'ASC'
-        }
+        sortFilter: sorting.length > 0
+          ? {
+              key: sorting[0].id,
+              direction: sorting[0].desc ? 'DESC' : 'ASC'
+            }
+          : []
       }
     }
-  }), [domain, currentPage, pageSize, searchTerm])
+  }), [domain, currentPage, pageSize, searchTerm, sorting])
 
   const {
     data,
@@ -136,6 +140,12 @@ export const TranslationsContainer = (): React.JSX.Element => {
 
   const handleSearch = (value: string): void => {
     setSearchTerm(value)
+    setCurrentPage(1)
+  }
+
+  const handleSortingChange = (newSorting: SortingState): void => {
+    console.log('newSorting', newSorting)
+    setSorting(newSorting)
     setCurrentPage(1)
   }
 
@@ -280,7 +290,9 @@ export const TranslationsContainer = (): React.JSX.Element => {
           } }
         >
           <Table
+            onSortingChange={ handleSortingChange }
             setTranslationRows={ setTranslationRows }
+            sorting={ sorting }
             translationRows={ translationRows }
             visibleLocales={ visibleLocales ?? availableLocales }
           />

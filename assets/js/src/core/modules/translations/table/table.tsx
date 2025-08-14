@@ -10,7 +10,7 @@
 
 import React, { useState, useMemo } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { createColumnHelper } from '@tanstack/react-table'
+import { createColumnHelper, type SortingState } from '@tanstack/react-table'
 import { useTranslation as useI18n } from 'react-i18next'
 import { type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
@@ -34,9 +34,11 @@ interface TableProps {
   translationRows: TranslationRow[]
   setTranslationRows: React.Dispatch<React.SetStateAction<TranslationRow[]>>
   visibleLocales: string[]
+  sorting?: SortingState
+  onSortingChange?: (sorting: SortingState) => void
 }
 
-export const Table = ({ translationRows, setTranslationRows, visibleLocales }: TableProps): React.JSX.Element => {
+export const Table = ({ translationRows, setTranslationRows, visibleLocales, sorting, onSortingChange }: TableProps): React.JSX.Element => {
   const { t } = useI18n()
   const { updateTranslationByKey } = useTranslation()
   const { domain } = useTranslationDomain()
@@ -163,10 +165,13 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales }: T
         columns={ tableColumns }
         data={ translationRows }
         enableSorting
+        manualSorting
         modifiedCells={ modifiedCells }
+        onSortingChange={ onSortingChange }
         onUpdateCellData={ onUpdateCellData }
         resizable
         setRowId={ (row: TranslationRow) => row.rowId }
+        sorting={ sorting }
       />
 
       <EditModal
