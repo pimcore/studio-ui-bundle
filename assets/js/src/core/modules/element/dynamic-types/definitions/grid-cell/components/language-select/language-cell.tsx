@@ -19,7 +19,7 @@ import { useUserGetCurrentInformationQuery } from '@Pimcore/modules/user/user-ap
 
 export const LanguageCell = (props: DefaultCellProps): React.JSX.Element => {
   const settings = useSettings()
-  const { data: userInfo, error, } = useUserGetCurrentInformationQuery()
+  const { data: userInfo, error } = useUserGetCurrentInformationQuery()
 
   useEffect(() => {
     if (!isUndefined(error)) {
@@ -27,10 +27,9 @@ export const LanguageCell = (props: DefaultCellProps): React.JSX.Element => {
     }
   }, [error])
 
-
   const availableLanguages = settings.availableAdminLanguages
-  const allowedLanguagesForViewingTranslations = userInfo?.allowedLanguagesForViewingWebsiteTranslations as Array<{ language: string; display: string }> | undefined
-    const languageSelectionOptions = (isArray(allowedLanguagesForViewingTranslations) ? allowedLanguagesForViewingTranslations : [])?.map(lang => {
+  const allowedLanguagesForViewingTranslations = userInfo?.allowedLanguagesForViewingWebsiteTranslations as Array<{ language: string, display: string }> | undefined
+  const languageSelectionOptions = (isArray(allowedLanguagesForViewingTranslations) ? allowedLanguagesForViewingTranslations : [])?.map(lang => {
     const match = availableLanguages.find(availableLang => availableLang.language === lang.language)
     if (isUndefined(match)) {
       trackError(new GeneralError(`Language "${lang.language}" not found in availableLanguages`))
@@ -42,7 +41,6 @@ export const LanguageCell = (props: DefaultCellProps): React.JSX.Element => {
     })
   }) ?? []
 
-  
   const columnConfig: SelectCellConfig = {
     options: languageSelectionOptions
   }
