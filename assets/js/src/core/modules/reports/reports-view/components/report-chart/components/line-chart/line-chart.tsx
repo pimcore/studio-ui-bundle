@@ -28,9 +28,11 @@ export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps)
   const [colorList] = useState<string[]>(generateColorMap(chartData.length))
 
   const xAxis = reportData?.xAxis ?? ''
+  const yAxis = reportData?.yAxis
+
   const formattedChartData = chartData.flatMap((item: object, index) => {
     return Object.entries(item)
-      .filter(([key]) => key !== xAxis)
+      .filter(([key]) => key !== xAxis && yAxis?.includes(key))
       .map(([key, value]) => ({
         [xAxis]: item?.[xAxis],
         [CHART_FIELD_NAME_KEY]: key,
