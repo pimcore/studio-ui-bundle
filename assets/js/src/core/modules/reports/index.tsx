@@ -91,7 +91,6 @@ moduleSystem.registerModule({
 
             mainNavRegistryService.registerMainNavItem({
               path,
-              label: reportName,
               order: 300 + index,
               perspectivePermission: NavPermission.Reports,
               widgetConfig: {

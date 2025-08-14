@@ -48,9 +48,11 @@ export const ReportsView = ({ reportId }: IReportsViewProps): React.JSX.Element 
       const ungroupedOptions: DefaultOptionType[] = []
 
       reportsTreeData.items?.forEach(item => {
+        const reportLabel = !isEmptyValue(item.niceName) ? item.niceName : item.name
+
         if (isEmptyValue(item.group)) {
           ungroupedOptions.push({
-            label: renderOptionLabel(item.iconClass, item.niceName),
+            label: renderOptionLabel(item.iconClass, reportLabel),
             value: item.name
           })
 
@@ -66,7 +68,7 @@ export const ReportsView = ({ reportId }: IReportsViewProps): React.JSX.Element 
         }
 
         groupedOptions[item.group].options.push({
-          label: renderOptionLabel(item.iconClass, item.niceName),
+          label: renderOptionLabel(item.iconClass, reportLabel),
           value: item.name
         })
       })
