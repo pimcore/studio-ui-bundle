@@ -83,20 +83,9 @@ export const SortableBlockToolbar = ({
   const hasMinus = !isNull(buttonsContainer.querySelector('.pimcore_block_minus'))
   const hasUp = !isNull(buttonsContainer.querySelector('.pimcore_block_up'))
   const hasDown = !isNull(buttonsContainer.querySelector('.pimcore_block_down'))
-  const amountDisplay = buttonsContainer.querySelector('.pimcore_block_amount')
 
   const buttons: React.ReactNode[] = []
   let deleteButton: React.ReactNode = null
-
-  buttons.push(
-    <IconButton
-      icon={ { value: 'drag-option' } }
-      key="drag"
-      style={ { cursor: 'grab' } }
-      size="small"
-      { ...listeners }
-    />
-  )
 
   if (hasPlus && !limitReached) {
     buttons.push(
@@ -144,15 +133,10 @@ export const SortableBlockToolbar = ({
     )
   }
 
-  if (!isNull(amountDisplay)) {
-    const htmlAmountDisplay = amountDisplay as HTMLElement
-    htmlAmountDisplay.textContent = `${elementIndex + 1}/${elements.length}`
-    htmlAmountDisplay.style.display = 'none'
-  }
-
   return (
     <ToolStrip
       className={ styles.blockToolstrip }
+      dragger={ { listeners } }
       key={ `toolbar-${element.getAttribute('key')}` }
       theme="inverse"
     >

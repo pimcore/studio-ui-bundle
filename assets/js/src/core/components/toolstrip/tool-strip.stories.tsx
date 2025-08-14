@@ -13,7 +13,6 @@ import { type StoryObj, type Meta } from '@storybook/react'
 import { ToolStrip, type ToolStripProps } from './tool-strip'
 import { IconButton } from '../icon-button/icon-button'
 import { Space } from '../space/space'
-import { Text } from '../text/text'
 import { Split } from '../split/split'
 import { Dropdown } from '../dropdown/dropdown'
 
@@ -28,6 +27,9 @@ const config: Meta = {
     theme: {
       control: { type: 'select' },
       options: ['default', 'inverse']
+    },
+    title: {
+      control: { type: 'text' }
     }
   }
 }
@@ -44,8 +46,6 @@ export const _default: StoryObj<ToolStripProps> = {
         theme='secondary'
       >
         <Space size='mini'>
-          <IconButton icon={ { value: 'drag-option' } } size="small" />
-          <Text>Title</Text>
           <Dropdown menu={ {
             items: [
               {
@@ -59,19 +59,31 @@ export const _default: StoryObj<ToolStripProps> = {
             ]
           } }
           >
-            <IconButton icon={ { value: 'new' } } size="small" />
+            <IconButton
+              icon={ { value: 'new' } }
+              size="small"
+            />
           </Dropdown>
-          <IconButton icon={ { value: 'chevron-down' } } size="small" />
-          <IconButton icon={ { value: 'chevron-up' } } size="small" />
+          <IconButton
+            icon={ { value: 'chevron-down' } }
+            size="small"
+          />
+          <IconButton
+            icon={ { value: 'chevron-up' } }
+            size="small"
+          />
         </Space>
 
-        <IconButton icon={ { value: 'trash' } } size="small" />
+        <IconButton
+          icon={ { value: 'trash' } }
+          size="small"
+        />
       </Split>
     )
   }
 }
 
-export const inverse: StoryObj<ToolStripProps> = {
+export const Inverse: StoryObj<ToolStripProps> = {
   args: {
     theme: 'inverse',
     children: (
@@ -81,8 +93,6 @@ export const inverse: StoryObj<ToolStripProps> = {
         theme='secondary'
       >
         <Space size='mini'>
-          <IconButton icon={ { value: 'drag-option' } } size="small" />
-          <Text>Title</Text>
           <Dropdown menu={ {
             items: [
               {
@@ -96,13 +106,159 @@ export const inverse: StoryObj<ToolStripProps> = {
             ]
           } }
           >
-            <IconButton icon={ { value: 'new' } } size="small" />
+            <IconButton
+              icon={ { value: 'new' } }
+              size="small"
+            />
           </Dropdown>
-          <IconButton icon={ { value: 'chevron-down' } } size="small" />
-          <IconButton icon={ { value: 'chevron-up' } } size="small" />
+          <IconButton
+            icon={ { value: 'chevron-down' } }
+            size="small"
+          />
+          <IconButton
+            icon={ { value: 'chevron-up' } }
+            size="small"
+          />
         </Space>
 
-        <IconButton icon={ { value: 'trash' } } size="small" />
+        <IconButton
+          icon={ { value: 'trash' } }
+          size="small"
+        />
+      </Split>
+    )
+  }
+}
+
+export const WithDragger: StoryObj<ToolStripProps> = {
+  args: {
+    theme: 'default',
+    dragger: true,
+    children: (
+      <Space size='mini'>
+        <IconButton
+          icon={ { value: 'new' } }
+          size="small"
+        />
+        <IconButton
+          icon={ { value: 'chevron-down' } }
+          size="small"
+        />
+        <IconButton
+          icon={ { value: 'chevron-up' } }
+          size="small"
+        />
+      </Space>
+    )
+  }
+}
+
+export const WithTitle: StoryObj<ToolStripProps> = {
+  args: {
+    theme: 'default',
+    title: 'Block Title',
+    children: (
+      <Space size='mini'>
+        <IconButton
+          icon={ { value: 'new' } }
+          size="small"
+        />
+        <IconButton
+          icon={ { value: 'chevron-down' } }
+          size="small"
+        />
+        <IconButton
+          icon={ { value: 'chevron-up' } }
+          size="small"
+        />
+      </Space>
+    )
+  }
+}
+
+export const WithDraggerAndTitle: StoryObj<ToolStripProps> = {
+  args: {
+    theme: 'default',
+    dragger: true,
+    title: 'Draggable Block',
+    children: (
+      <Space size='mini'>
+        <IconButton
+          icon={ { value: 'new' } }
+          size="small"
+        />
+        <IconButton
+          icon={ { value: 'chevron-down' } }
+          size="small"
+        />
+        <IconButton
+          icon={ { value: 'chevron-up' } }
+          size="small"
+        />
+      </Space>
+    )
+  }
+}
+
+export const WithDraggerInverse: StoryObj<ToolStripProps> = {
+  args: {
+    theme: 'inverse',
+    dragger: true,
+    title: 'Inverse Theme',
+    children: (
+      <Space size='mini'>
+        <IconButton
+          icon={ { value: 'new' } }
+          size="small"
+        />
+        <IconButton
+          icon={ { value: 'chevron-down' } }
+          size="small"
+        />
+        <IconButton
+          icon={ { value: 'chevron-up' } }
+          size="small"
+        />
+      </Space>
+    )
+  }
+}
+
+export const WithDraggerAndDeleteButton: StoryObj<ToolStripProps> = {
+  args: {
+    theme: 'inverse',
+    dragger: {
+      listeners: {
+        onMouseDown: () => { console.log('Drag started') },
+        onTouchStart: () => { console.log('Touch drag started') }
+      }
+    },
+    title: 'Complex Layout',
+    children: (
+      <Split
+        dividerSize='small'
+        size='mini'
+        theme='secondary'
+      >
+        <Space size='mini'>
+          <IconButton
+            icon={ { value: 'new' } }
+            size="small"
+          />
+          <IconButton
+            icon={ { value: 'chevron-down' } }
+            size="small"
+          />
+          <IconButton
+            icon={ { value: 'chevron-up' } }
+            size="small"
+          />
+        </Space>
+
+        <IconButton
+          icon={ { value: 'trash' } }
+          size="small"
+        />
       </Split>
     )
   }

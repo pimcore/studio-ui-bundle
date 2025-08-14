@@ -23,7 +23,10 @@ export const EmptyStateBlockToolbar = ({
   const { styles } = useBlockEditableStyles()
 
   return (
-    <ToolStrip className={ styles.blockToolstrip } theme="inverse">
+    <ToolStrip
+      className={ styles.blockToolstrip }
+      theme="inverse"
+    >
       <IconButton
         icon={ { value: 'new' } }
         onClick={ onClick }

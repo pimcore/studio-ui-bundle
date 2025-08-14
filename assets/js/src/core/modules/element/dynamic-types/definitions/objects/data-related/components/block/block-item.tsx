@@ -9,6 +9,7 @@
  */
 
 import { ToolStripBox } from '@Pimcore/components/toolstrip/box/tool-strip-box'
+import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import React, { useMemo } from 'react'
 import { type BlockProps } from './block'
@@ -36,12 +37,14 @@ export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
       key={ field }
       renderToolStripStart={
         noteditable === false && (
-        <BlockToolStrip
-          disallowAdd={ props.disallowAdd }
-          disallowDelete={ props.disallowDelete }
-          disallowReorder={ props.disallowReorder }
-          field={ field }
-        />
+        <ToolStrip>
+          <BlockToolStrip
+            disallowAdd={ props.disallowAdd }
+            disallowDelete={ props.disallowDelete }
+            disallowReorder={ props.disallowReorder }
+            field={ field }
+          />
+        </ToolStrip>
         ) }
     >
       {

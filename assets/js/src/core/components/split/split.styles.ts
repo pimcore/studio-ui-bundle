@@ -11,8 +11,7 @@
 import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css, token }) => {
-
-  const dividerColor = token.Split?.colorFillSecondary || token.colorFillSecondary
+  const dividerColor = token.Split?.colorFillSecondary ?? token.colorFillSecondary
 
   return {
     split: css`
