@@ -35,7 +35,7 @@ export const FieldFilters = (): React.JSX.Element => {
   const { setColumnsFilters, fieldFilters, setFieldFilters } = useColumnsFiltersContext()
 
   const getLabelValue = (column: BundleCustomReportsColumnConfiguration): string => (
-    (!isEmptyValue(column.label) ? column.label : column.name)!
+    (!isEmptyValue(column.label) ? column.label : column.name)
   )
 
   const handleColumnClick = (column: BundleCustomReportsColumnConfiguration): void => {
@@ -79,7 +79,7 @@ export const FieldFilters = (): React.JSX.Element => {
   }, [reportDetailData])
 
   useEffect(() => {
-    const columnConfigurationsList = reportDetailData?.columnConfigurations.filter(item => item.display === true)
+    const columnConfigurationsList = reportDetailData?.columnConfigurations.filter(item => item.display)
 
     const newAddColumnMenu = columnConfigurationsList
       ?.filter((initialColumn) => !fieldFilters.some((column) => initialColumn.name === column.name))
