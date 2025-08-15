@@ -24,7 +24,7 @@ export const ColorPicker = ({ inherited, className, style, ...restProps }: IColo
 
   // Apply small width as default for color pickers
   const computedStyle = {
-    width: fieldWidths.small,
+    maxWidth: fieldWidths.small,
     ...style
   }
 

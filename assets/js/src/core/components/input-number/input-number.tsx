@@ -24,7 +24,7 @@ export const InputNumber = ({ inherited, className, style, ...restProps }: IInpu
 
   // Apply small width as default for number inputs
   const computedStyle = {
-    width: fieldWidths.small,
+    maxWidth: fieldWidths.small,
     ...style
   }
 

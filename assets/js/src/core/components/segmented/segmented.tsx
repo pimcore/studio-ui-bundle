@@ -27,7 +27,7 @@ const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(({
 
   // Apply medium width as default for segmented controls
   const computedStyle = {
-    width: fieldWidths.medium,
+    maxWidth: fieldWidths.medium,
     ...style
   }
 

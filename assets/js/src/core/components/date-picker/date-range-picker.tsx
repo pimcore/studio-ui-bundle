@@ -64,7 +64,7 @@ export const DateRangePicker = (props: DateRangePickerProps): React.JSX.Element 
 
   // Apply large width as default for date range pickers
   const computedStyle = {
-    width: fieldWidths.large,
+    maxWidth: fieldWidths.large,
     ...props.style
   }
 

@@ -13,8 +13,8 @@ import React, { useState } from 'react'
 import { Conditional } from './conditional'
 import { Form } from '../form'
 import { FormKit } from '../form-kit'
-import { Input } from '../controls/input/input'
-import { Select } from '../controls/select/select'
+import { Input } from '@Pimcore/components/input/input'
+import { Select } from '@Pimcore/components/select/select'
 import { Switch } from '@Pimcore/components/switch/switch'
 
 const config: Meta<typeof Conditional> = {

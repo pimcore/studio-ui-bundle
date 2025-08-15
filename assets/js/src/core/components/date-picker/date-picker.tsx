@@ -41,7 +41,7 @@ const DatePickerComponent = (props: DatePickerProps): React.JSX.Element => {
 
   // Apply medium width as default for date pickers
   const computedStyle = {
-    width: fieldWidths.medium,
+    maxWidth: fieldWidths.medium,
     ...props.style
   }
 

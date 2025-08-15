@@ -25,7 +25,7 @@ export const TextArea = ({ inherited, className, style, ...restProps }: ITextAre
 
   // Apply large width as default for textareas
   const computedStyle = {
-    width: fieldWidths.large,
+    maxWidth: fieldWidths.large,
     ...style
   }
 

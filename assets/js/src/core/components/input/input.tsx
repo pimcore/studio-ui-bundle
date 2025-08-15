@@ -27,7 +27,7 @@ export const Input = React.forwardRef<InputRef, IInputProps>(function Input (
 
   // Apply medium width as default for input fields
   const computedStyle = {
-    width: fieldWidths.large,
+    maxWidth: fieldWidths.large,
     ...style
   }
 

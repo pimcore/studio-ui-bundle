@@ -25,7 +25,7 @@ export const InputPassword = ({ inherited, className, style, ...restProps }: IIn
 
   // Apply medium width as default for password inputs
   const computedStyle = {
-    width: fieldWidths.medium,
+    maxWidth: fieldWidths.medium,
     ...style
   }
 
