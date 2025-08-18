@@ -16,6 +16,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -26,6 +27,7 @@ moduleSystem.registerModule({
       label: 'navigation.reports',
       className: 'item-style-modifier',
       order: 100,
+      permission: UserPermission.Reports,
       perspectivePermission: NavPermission.Reports,
       widgetConfig: {
         name: 'Reports',
@@ -45,6 +47,7 @@ moduleSystem.registerModule({
       path: 'Reporting/Custom Reports',
       label: 'navigation.custom-reports',
       order: 200,
+      permission: UserPermission.ReportsConfig,
       perspectivePermission: NavPermission.Reports,
       widgetConfig: {
         name: 'Custom Reports',
