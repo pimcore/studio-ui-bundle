@@ -72,7 +72,8 @@ export const ReportsEditor = (): React.JSX.Element => {
       <ReportsSidebar
         handleCloseReport={ handleCloseTab }
         handleOpenReport={ handleOpenReport }
-        isLoading={ isLoading || isFetching }
+        isFetching={ isFetching }
+        isLoading={ isLoading }
         refetch={ refetch }
         reportsList={ reportsConfigTreeData }
       />

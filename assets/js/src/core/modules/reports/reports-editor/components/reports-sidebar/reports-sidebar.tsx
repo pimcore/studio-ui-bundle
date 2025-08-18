@@ -27,16 +27,18 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import { useReportActions } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-actions'
 import { useStyles } from '@Pimcore/modules/reports/reports-editor/reports-editor.styles'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { Spin } from '@Pimcore/components/spin/spin'
 
 interface IReportsSidebarProps {
   isLoading: boolean
+  isFetching: boolean
   refetch: () => Promise<{ data?: CustomReportsConfigGetTreeApiResponse }>
   reportsList?: CustomReportsConfigGetTreeApiResponse
   handleOpenReport: (report: BundleCustomReportsConfigurationTreeNode) => void
   handleCloseReport: (id: BundleCustomReportsConfigurationTreeNode['id']) => void
 }
 
-export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenReport, handleCloseReport }: IReportsSidebarProps): React.JSX.Element => {
+export const ReportsSidebar = ({ isLoading, refetch, isFetching, reportsList, handleOpenReport, handleCloseReport }: IReportsSidebarProps): React.JSX.Element => {
   const [reportsListData, setReportsListData] = useState<BundleCustomReportsConfigurationTreeNode[]>([])
   const [contextItem, setContextItem] = useState<BundleCustomReportsConfigurationTreeNode | null>(null)
 
@@ -134,11 +136,41 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
     }
   ]
 
+  const renderReportsList = (): React.JSX.Element => (
+    <>
+      {reportsListData.map((item) => (
+        <Dropdown
+          key={ item.id }
+          menu={ { items: dropdownItems } }
+          onOpenChange={ (open) => {
+            if (open) setContextItem(item)
+          } }
+          trigger={ ['contextMenu'] }
+        >
+          <Flex
+            align="center"
+            className={ styles.sidebarReportItem }
+            gap="mini"
+            onClick={ () => { handleOpenReport(item) } }
+          >
+            <Icon
+              className={ styles.sidebarReportItemIcon }
+              value="chart-scatter"
+            />
+            <Text className={ styles.sidebarReportItemTitle }>
+              {item.text}
+            </Text>
+          </Flex>
+        </Dropdown>
+      ))}
+    </>
+  )
+
   return (
     <ContentLayout renderToolbar={ (
       <Toolbar
         handleReportAdd={ handleReportAdd }
-        isFetching={ isLoading }
+        isFetching={ isFetching }
         refetch={ refetch }
       />
     ) }
@@ -154,33 +186,24 @@ export const ReportsSidebar = ({ isLoading, refetch, reportsList, handleOpenRepo
         />
 
         <Flex
+          className="h-full"
           gap="mini"
+          justify={ isFetching ? 'center' : 'start' }
           vertical
         >
-          {reportsListData.map((item) => (
-            <Dropdown
-              disabled={ reportsListData.length === 0 }
-              key={ item.id }
-              menu={ { items: dropdownItems } }
-              onOpenChange={ (open) => {
-                if (open) setContextItem(item)
-              } }
-              trigger={ ['contextMenu'] }
-            >
+          {isFetching
+            ? (
               <Flex
                 align="center"
-                className={ styles.sidebarReportItem }
-                gap="mini"
-                onClick={ () => { handleOpenReport(item) } }
+                justify="center"
               >
-                <Icon
-                  className={ styles.sidebarReportItemIcon }
-                  value={ 'chart-scatter' }
+                <Spin
+                  asContainer
+                  tip='Loading'
                 />
-                <Text className={ styles.sidebarReportItemTitle }>{item.text}</Text>
               </Flex>
-            </Dropdown>
-          ))}
+              )
+            : renderReportsList()}
         </Flex>
       </Content>
     </ContentLayout>
