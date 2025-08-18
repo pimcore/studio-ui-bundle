@@ -54,7 +54,10 @@ export const RedirectsContainer = (): React.JSX.Element => {
     isLoading: redirectsLoading,
     isFetching: redirectsFetching,
     error
-  } = useBundleSeoRedirectsGetCollectionQuery(queryArgs)
+  } = useBundleSeoRedirectsGetCollectionQuery(queryArgs, {
+    refetchOnMountOrArgChange: true
+  })
+
   const redirects = data?.items
 
   const reload = (): void => {
