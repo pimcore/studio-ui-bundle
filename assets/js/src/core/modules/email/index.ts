@@ -87,7 +87,7 @@ moduleSystem.registerModule({
     })
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Tools/Email/Send Test-Email',
+      path: 'ExperienceEcommerce/Email/Send Test-Email',
       label: 'navigation.test-email',
       order: 300,
       className: 'item-style-modifier',
