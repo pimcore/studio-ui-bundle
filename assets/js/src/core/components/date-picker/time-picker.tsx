@@ -20,6 +20,7 @@ import { DatePicker } from 'antd'
 import { type GenericTimePickerProps } from 'antd/es/date-picker/generatePicker/interface'
 import cn from 'classnames'
 import { useStyles } from '@Pimcore/components/date-picker/date-picker.styles'
+import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export type TimePickerProps = GenericTimePickerProps & {
   value?: DatePickerValueType
@@ -32,8 +33,15 @@ export type TimePickerProps = GenericTimePickerProps & {
 export const TimePicker = (props: TimePickerProps): React.JSX.Element => {
   const outputFormat = props?.outputFormat ?? 'HH:mm:ss'
   const value = toDayJs(props.value, outputFormat)
+  const fieldWidths = useFieldWidth()
 
   const { styles } = useStyles()
+
+  // Apply small width as default for time pickers (consistent with date picker)
+  const computedStyle = {
+    maxWidth: fieldWidths.small,
+    ...props.style
+  }
 
   const handleChange = (date: Dayjs | null): void => {
     props.onChange?.(fromDayJs(date, props.outputType, outputFormat))
@@ -47,6 +55,7 @@ export const TimePicker = (props: TimePickerProps): React.JSX.Element => {
       onChange={ handleChange }
       popupClassName={ styles.datePickerDropdown }
       rootClassName={ cn(styles.datePicker, props.className, { [styles.inherited]: props.inherited }) }
+      style={ computedStyle }
       value={ value }
     />
   )

@@ -50,7 +50,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
   }, [value])
 
   // Apply medium width as default for select components
-  const computedWidth = fieldWidths.medium
+  const computedWidth = mode === 'multiple' ? fieldWidths.large : fieldWidths.medium
 
   const { styles } = useStyles({ width: computedWidth })
 
@@ -107,6 +107,13 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
     computedMinWidth = sizeOptions[minWidth as keyof typeof sizeOptions]
   }
 
+  // Apply field width as default maxWidth, with optional explicit minWidth
+  const computedStyle = {
+    maxWidth: computedWidth,
+    minWidth: computedMinWidth,
+    ...antdSelectProps.style
+  }
+
   return (
     <div className={ selectContainerClassNames }>
       {withCustomIcon && (
@@ -133,7 +140,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
         onFocus={ () => { setIsFocus(true) } }
         ref={ selectRef }
         status={ status }
-        style={ { minWidth: computedMinWidth } }
+        style={ computedStyle }
         suffixIcon={ getSuffixIcon() }
         value={ value }
         { ...antdSelectProps }

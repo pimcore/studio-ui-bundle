@@ -12,7 +12,6 @@ import React from 'react'
 import { type ColorPickerProps, ColorPicker as AntColorPicker } from 'antd'
 import cn from 'classnames'
 import { useStyles } from './color-picker.styles'
-import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export interface IColorPickerProps extends ColorPickerProps {
   inherited?: boolean
@@ -20,11 +19,9 @@ export interface IColorPickerProps extends ColorPickerProps {
 
 export const ColorPicker = ({ inherited, className, style, ...restProps }: IColorPickerProps): JSX.Element => {
   const { styles } = useStyles()
-  const fieldWidths = useFieldWidth()
 
   // Apply small width as default for color pickers
   const computedStyle = {
-    maxWidth: fieldWidths.small,
     ...style
   }
 
