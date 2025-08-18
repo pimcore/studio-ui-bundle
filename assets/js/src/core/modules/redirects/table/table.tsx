@@ -10,7 +10,7 @@
 
 import React, { useState, useMemo } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { createColumnHelper } from '@tanstack/react-table'
+import { createColumnHelper, type SortingState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { type RedirectRow, useRedirects } from '../hooks/use-redirects'
 import { type ModifiedCells } from '@sdk/modules/element'
@@ -26,11 +26,13 @@ import { type Site } from '@Pimcore/modules/document/sites-slice.gen'
 type RedirectWithActions = RedirectRow & { actions: React.ReactNode }
 
 interface TableProps {
+  onSortingChange?: (sorting: SortingState) => void
+  sorting?: SortingState
   redirectRows: RedirectRow[]
   setRedirectRows: React.Dispatch<React.SetStateAction<RedirectRow[]>>
 }
 
-export const Table = ({ redirectRows, setRedirectRows }: TableProps): React.JSX.Element => {
+export const Table = ({ onSortingChange, sorting, redirectRows, setRedirectRows }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const { updateRedirectById } = useRedirects()
@@ -149,6 +151,7 @@ export const Table = ({ redirectRows, setRedirectRows }: TableProps): React.JSX.
     columnHelper.accessor('actions', {
       header: t('redirects.actions'),
       size: 80,
+      enableSorting: false,
       cell: (info) => (
         <ActionsCell
           info={ info }
@@ -199,10 +202,13 @@ export const Table = ({ redirectRows, setRedirectRows }: TableProps): React.JSX.
       columns={ tableColumns }
       data={ redirectRows }
       enableSorting
+      manualSorting
       modifiedCells={ modifiedCells }
+      onSortingChange={ onSortingChange }
       onUpdateCellData={ onUpdateCellData }
       resizable
       setRowId={ (row: RedirectRow) => row.rowId }
+      sorting={ sorting }
     />
   )
 }
