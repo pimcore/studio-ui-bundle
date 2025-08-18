@@ -102,28 +102,28 @@ const Component = ({
       case 'number':
         return (
           <InputNumber
-            onChange={(e) => {
+            onChange={ (e) => {
               if (!isNil(e)) {
                 setNewOptionText(e.toString())
               }
-            }}
-            onKeyDown={handleKeyDown}
-            placeholder={t(createOptionLabel ?? 'creatable-select.add-custom-option')}
+            } }
+            onKeyDown={ handleKeyDown }
+            placeholder={ t(createOptionLabel ?? 'creatable-select.add-custom-option') }
             size="small"
-            style={{ flex: 1 }}
-            value={newOptionText}
+            style={ { flex: 1 } }
+            value={ newOptionText }
           />
         )
       case 'string':
       default:
         return (
           <Input
-            onChange={(e) => { setNewOptionText(e.target.value) }}
-            onKeyDown={handleKeyDown}
-            placeholder={t(createOptionLabel ?? 'creatable-select.add-custom-option')}
+            onChange={ (e) => { setNewOptionText(e.target.value) } }
+            onKeyDown={ handleKeyDown }
+            placeholder={ t(createOptionLabel ?? 'creatable-select.add-custom-option') }
             size="small"
-            style={{ flex: 1 }}
-            value={newOptionText}
+            style={ { flex: 1 } }
+            value={ newOptionText }
           />
         )
     }
@@ -136,7 +136,7 @@ const Component = ({
       <>
         {menu}
         <Divider size="normal" />
-        <Box padding={{ x: 'small', top: 'extra-small', bottom: 'small' }}>
+        <Box padding={ { x: 'small', top: 'extra-small', bottom: 'small' } }>
 
           <Flex
             gap="extra-small"
@@ -145,8 +145,8 @@ const Component = ({
             <Flex gap="small">
               {getInputDependantField()}
               <Button
-                disabled={newOptionText.trim() === '' || (!allowDuplicates && allOptions.some(opt => opt.value === newOptionText.trim()))}
-                onClick={handleAddOption}
+                disabled={ newOptionText.trim() === '' || (!allowDuplicates && allOptions.some(opt => opt.value === newOptionText.trim())) }
+                onClick={ handleAddOption }
                 size="small"
                 type="primary"
               >
@@ -166,11 +166,11 @@ const Component = ({
 
   return (
     <Select
-      {...selectProps}
-      dropdownRender={customDropdownRender}
-      onChange={onChange}
-      options={allOptions}
-      value={value}
+      { ...selectProps }
+      dropdownRender={ customDropdownRender }
+      onChange={ onChange }
+      options={ allOptions }
+      value={ value }
     />
   )
 }
