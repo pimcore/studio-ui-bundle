@@ -94,6 +94,7 @@ moduleSystem.registerModule({
               mainNavRegistryService.registerMainNavItem({
                 path,
                 order: 300 + index,
+                permission: UserPermission.Reports,
                 perspectivePermission: NavPermission.Reports,
                 widgetConfig: {
                   component: 'dynamic-report',
