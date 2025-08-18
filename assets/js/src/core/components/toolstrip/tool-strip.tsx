@@ -114,9 +114,11 @@ export const ToolStrip = ({
     if (dragger === false) return null
 
     const isActivated = activateOnHover ? isHovered : true
-    const draggerColor = toolStripTheme === 'inverse'
-      ? (isActivated ? token.colorButtonInverse : token.colorInactiveInverse)
-      : (isActivated ? token.colorText : token.colorTextDisabled)
+    const isInverseTheme = toolStripTheme === 'inverse'
+    
+    const activeColor = isInverseTheme ? token.colorButtonInverse : token.colorText
+    const inactiveColor = isInverseTheme ? token.colorInactiveInverse : token.colorTextDisabled
+    const draggerColor = isActivated ? activeColor : inactiveColor
 
     return (
       <div
