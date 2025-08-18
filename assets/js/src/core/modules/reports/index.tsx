@@ -23,6 +23,7 @@ import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { api } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 
 const REPORTS_SECTION_NAME = 'Reporting'
+const LAST_ORDER_VALUE = 999999999
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -52,7 +53,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: `${REPORTS_SECTION_NAME}/Custom Reports`,
       label: 'navigation.custom-reports',
-      order: 200,
+      order: LAST_ORDER_VALUE,
       permission: UserPermission.ReportsConfig,
       perspectivePermission: NavPermission.Reports,
       widgetConfig: {
@@ -93,7 +94,7 @@ moduleSystem.registerModule({
 
               mainNavRegistryService.registerMainNavItem({
                 path,
-                order: 300 + index,
+                order: 200 + index,
                 permission: UserPermission.Reports,
                 perspectivePermission: NavPermission.Reports,
                 widgetConfig: {

@@ -771,8 +771,8 @@ navigation.system: System
 navigation.website-settings: Website Settings
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
-navigation.reports: Reports
-navigation.custom-reports: Custom Reports
+navigation.reports: All Reports
+navigation.custom-reports: Custom Reports Configuration
 navigation.perspectives: Perspectives
 navigation.customise: Customise
 navigation.tag-configuration: Tag Configuration
