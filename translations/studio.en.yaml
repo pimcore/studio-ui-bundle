@@ -1035,8 +1035,7 @@ application-logger.filter.message: Message
 application-logger.filter.pid: Pid
 application-logger.refresh-interval: Refresh interval
 application-logger.refresh-interval.select: Select the refresh frequency
-application-logger.refresh-interval.10-seconds: 10 Seconds
-application-logger.refresh-interval.1-minute: 1 Minute
+application-logger.refresh-interval.seconds: "{{seconds}} seconds"
 application-logger.filter.priority-level.1: Emergency
 application-logger.filter.priority-level.2: Alert
 application-logger.filter.priority-level.3: Critical

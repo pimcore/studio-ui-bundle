@@ -36,7 +36,6 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
   const [pageSize, setPageSize] = useState<number>(20)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [refreshInterval, setRefreshInterval] = useState<string | undefined>(undefined)
-  const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const { columnFilters, setIsLoading: setFilterLoading } = useFilter()
 
   const { data, isFetching: isRTKFetching } = useBundleApplicationLoggerGetCollectionQuery({
@@ -69,26 +68,17 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
 
   // Set up periodic refresh based on selected interval
   useEffect(() => {
-    // Clear existing interval
-    if (intervalRef.current !== null) {
-      clearInterval(intervalRef.current)
-      intervalRef.current = null
+    if (isNil(refreshInterval)) {
+      return
     }
 
-    // Set up new interval if value is selected and not disabled
-    if (!isNil(refreshInterval) && refreshInterval !== 'disabled') {
-      const intervalMs = parseInt(refreshInterval, 10) * 1000
-      intervalRef.current = setInterval(() => {
-        refreshData()
-      }, intervalMs)
-    }
+    const intervalMs = parseInt(refreshInterval) * 1000
+    const intervalId = setInterval(() => {
+      refreshData()
+    }, intervalMs)
 
-    // Cleanup function
     return () => {
-      if (intervalRef.current !== null) {
-        clearInterval(intervalRef.current)
-        intervalRef.current = null
-      }
+      clearInterval(intervalId)
     }
   }, [refreshInterval, refreshData])
 
@@ -109,13 +99,17 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
             )}
             <CreatableSelect
               allowClear
+              minWidth={150}
               onChange={handleRefreshIntervalChange}
               placeholder={t('application-logger.refresh-interval.select')}
               value={refreshInterval}
+              inputType='number'
               options={[
-                { value: '5', label: t('application-logger.refresh-interval.5-seconds') },
-                { value: '10', label: t('application-logger.refresh-interval.10-seconds') },
-                { value: '60', label: t('application-logger.refresh-interval.1-minute') }
+                { value: '3', label: t('application-logger.refresh-interval.seconds', { seconds: '3' }) },
+                { value: '5', label: t('application-logger.refresh-interval.seconds', { seconds: '5' }) },
+                { value: '10', label: t('application-logger.refresh-interval.seconds', { seconds: '10' }) },
+                { value: '30', label: t('application-logger.refresh-interval.seconds', { seconds: '30' }) },
+                { value: '60', label: t('application-logger.refresh-interval.seconds', { seconds: '60' }) }
               ]}
             />
           </Flex>
