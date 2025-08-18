@@ -16,7 +16,6 @@ import { InputNumber } from '../input-number/input-number'
 import { TextArea } from '../textarea/textarea'
 import { Button } from '../button/button'
 import { Space } from '../space/space'
-import { FormKit } from './form-kit'
 
 const config: Meta<typeof Form> = {
   title: 'Components/Data Entry/Form',
