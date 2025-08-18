@@ -101,7 +101,6 @@ export const ToolStrip = ({
     }
   }, [toolStripTheme, activateOnHover, isHovered, token])
 
-  // Handle dragger props
   const dragHandleProps = React.useMemo(() => {
     if (typeof dragger === 'object') {
       return dragger
@@ -109,7 +108,6 @@ export const ToolStrip = ({
     return {}
   }, [dragger])
 
-  // Render dragger if needed
   const renderDragger = (): React.ReactNode => {
     if (dragger === false) return null
 
@@ -133,11 +131,8 @@ export const ToolStrip = ({
     )
   }
 
-  // Wrap children with Split if dragger is present
   const renderContent = (): React.ReactNode => {
-    // For activateOnHover mode, show different content based on hover state
     if (activateOnHover) {
-      // Always render Split layout, but wrap children in animated container
       return (
         <Flex
           align="center"
@@ -165,12 +160,10 @@ export const ToolStrip = ({
       )
     }
 
-    // Normal mode (not activateOnHover)
     if (dragger === false && title === undefined) {
       return children
     }
 
-    // Create the left side content (dragger + title grouped together)
     const leftContent = (
       <Flex
         align="center"
@@ -187,7 +180,6 @@ export const ToolStrip = ({
       </Flex>
     )
 
-    // Use Split layout when there's a dragger (with or without title)
     return (
       <Split
         dividerSize="small"
