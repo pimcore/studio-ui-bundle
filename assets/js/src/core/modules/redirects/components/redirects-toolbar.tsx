@@ -101,45 +101,51 @@ export const RedirectsToolbar = ({
 
   return (
     <>
-      <Toolbar theme="secondary">
+      <Toolbar
+        theme="secondary"
+      >
+        <Flex
+          align='center'
+          justify='start'
+          style={ { width: '100%', height: '100%' } }
+        >
+          <div>
+            <IconTextButton
+              disabled={ redirectRowsLength < 1 || cleanupLoading || redirectsFetching }
+              icon={ { value: 'trash' } }
+              loading={ cleanupLoading }
+              onClick={ handleCleanup }
+              type={ 'link' }
+            >
+              {t('redirects.clean-up')}
+            </IconTextButton>
+            <IconTextButton
+              disabled={ redirectsFetching || exportLoading }
+              icon={ { value: 'download' } }
+              loading={ exportLoading }
+              onClick={ handleExport }
+              type={ 'link' }
+            >
+              {t('redirects.csv-export')}
+            </IconTextButton>
+            <IconTextButton
+              disabled={ redirectsFetching || importLoading }
+              icon={ { value: 'import-csv' } }
+              loading={ importLoading }
+              onClick={ () => { setIsImportModalOpen(true) } }
+              type={ 'link' }
+            >
+              {t('redirects.csv-import')}
+            </IconTextButton>
+          </div>
+        </Flex>
         <Split>
-          <Flex
-            justify='space-between'
-            style={ { width: '100%' } }
-          >
-            <div>
-              <IconTextButton
-                disabled={ redirectRowsLength < 1 || cleanupLoading || redirectsFetching }
-                icon={ { value: 'trash' } }
-                loading={ cleanupLoading }
-                onClick={ handleCleanup }
-                type={ 'link' }
-              >
-                {t('redirects.clean-up')}
-              </IconTextButton>
-              <IconTextButton
-                disabled={ redirectsFetching || exportLoading }
-                icon={ { value: 'download' } }
-                loading={ exportLoading }
-                onClick={ handleExport }
-                type={ 'link' }
-              >
-                {t('redirects.csv-export')}
-              </IconTextButton>
-              <IconTextButton
-                disabled={ redirectsFetching || importLoading }
-                icon={ { value: 'import-csv' } }
-                loading={ importLoading }
-                onClick={ () => { setIsImportModalOpen(true) } }
-                type={ 'link' }
-              >
-                {t('redirects.csv-import')}
-              </IconTextButton>
-            </div>
+          <Flex align='center'>
             <IconButton
               disabled={ redirectsFetching }
               icon={ { value: 'refresh' } }
               onClick={ onRefresh }
+              variant='minimal'
             />
           </Flex>
           <Pagination

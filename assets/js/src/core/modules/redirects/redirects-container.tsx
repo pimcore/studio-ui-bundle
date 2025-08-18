@@ -23,12 +23,14 @@ import { invalidatingTags } from '@sdk/api'
 import { RedirectsToolbar } from './components/redirects-toolbar'
 import { RedirectsTopBar } from './components/redirects-top-bar'
 import { BeginnerRedirectModal } from './components/beginner-redirect-modal'
+import { type SortingState } from '@tanstack/react-table'
 
 export const RedirectsContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
 
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(50)
+  const [sorting, setSorting] = useState<SortingState>([{ id: 'source', desc: false }])
   const [filter, setFilter] = useState<string>('')
   const [isBeginnerModalOpen, setIsBeginnerModalOpen] = useState<boolean>(false)
 
@@ -45,9 +47,15 @@ export const RedirectsContainer = (): React.JSX.Element => {
         page: currentPage,
         pageSize,
         columnFilters: filter !== '' ? [{ type: 'search', filterValue: filter }] : []
-      }
+      },
+      sortFilter: sorting.length > 0
+        ? {
+            key: sorting[0].id.startsWith('_') ? sorting[0].id.substring(1) : sorting[0].id,
+            direction: sorting[0].desc ? 'DESC' : 'ASC'
+          }
+        : []
     }
-  }), [currentPage, pageSize, filter])
+  }), [currentPage, pageSize, filter, sorting])
 
   const {
     data,
@@ -131,6 +139,11 @@ export const RedirectsContainer = (): React.JSX.Element => {
   const isDataLoading = redirectsLoading || redirectsFetching ||
     (!isUndefined(redirects) && redirectRows.length === 0 && redirects.length > 0)
 
+  const handleSortingChange = (newSorting: SortingState): void => {
+    setSorting(newSorting)
+    setCurrentPage(1)
+  }
+
   return (
     <ContentLayout
       renderToolbar={
@@ -171,8 +184,10 @@ export const RedirectsContainer = (): React.JSX.Element => {
           } }
         >
           <Table
+            onSortingChange={ handleSortingChange }
             redirectRows={ redirectRows }
             setRedirectRows={ setRedirectRows }
+            sorting={ sorting }
           />
         </Box>
       </Content>
