@@ -209,6 +209,15 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
+            assetImageStreamByThumbnail: build.query<
+                AssetImageStreamByThumbnailApiResponse,
+                AssetImageStreamByThumbnailApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/image/stream/thumbnail/${queryArg.thumbnailName}`,
+                }),
+                providesTags: ["Assets"],
+            }),
             assetPatchById: build.mutation<AssetPatchByIdApiResponse, AssetPatchByIdApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets`, method: "PATCH", body: queryArg.body }),
                 invalidatesTags: ["Assets"],
@@ -589,6 +598,14 @@ export type AssetImageDownloadByThumbnailApiArg = {
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
 };
+export type AssetImageStreamByThumbnailApiResponse =
+    /** status 200 Stream of image asset based on thumbnail name */ Blob;
+export type AssetImageStreamByThumbnailApiArg = {
+    /** Id of the image */
+    id: number;
+    /** Find asset by matching thumbnail name. */
+    thumbnailName: string;
+};
 export type AssetPatchByIdApiResponse = /** status 201 Successfully created jobRun for patching multiple assets */ {
     /** ID of created jobRun */
     jobRunId: number;
@@ -662,6 +679,8 @@ export type AssetAddApiArg = {
     body: {
         /** File to upload */
         file: Blob;
+        /** Type of the asset to create */
+        assetType?: string | null;
     };
 };
 export type AssetUploadInfoApiResponse =
@@ -1118,6 +1137,7 @@ export const {
     useAssetImageStreamPreviewQuery,
     useAssetImageStreamQuery,
     useAssetImageDownloadByThumbnailQuery,
+    useAssetImageStreamByThumbnailQuery,
     useAssetPatchByIdMutation,
     useAssetPatchFolderByIdMutation,
     useAssetClearThumbnailMutation,

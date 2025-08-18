@@ -64,6 +64,16 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/users` }),
                 providesTags: ["User Management"],
             }),
+            userListWithPermission: build.query<UserListWithPermissionApiResponse, UserListWithPermissionApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/users/with-permission`,
+                    params: {
+                        permission: queryArg.permission,
+                        includeCurrentUser: queryArg.includeCurrentUser,
+                    },
+                }),
+                providesTags: ["User Management"],
+            }),
             userResetPassword: build.mutation<UserResetPasswordApiResponse, UserResetPasswordApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/user/reset-password`,
@@ -195,6 +205,16 @@ export type UserGetCollectionApiResponse = /** status 200 List of users */ {
     items: SimpleUser[];
 };
 export type UserGetCollectionApiArg = void;
+export type UserListWithPermissionApiResponse = /** status 200 List of users with the given permission */ {
+    totalItems: number;
+    items: SimpleUser[];
+};
+export type UserListWithPermissionApiArg = {
+    /** List users with this permission */
+    permission: string;
+    /** Include current user in the list */
+    includeCurrentUser?: boolean;
+};
 export type UserResetPasswordApiResponse = unknown;
 export type UserResetPasswordApiArg = {
     resetPassword: ResetPassword;
@@ -348,6 +368,10 @@ export type UserInformation = {
     hasImage: boolean;
     /** List of available content Language already sorted. */
     contentLanguages: object;
+    /** List of valid website Languages to edit. */
+    allowedLanguagesForEditingWebsiteTranslations: object;
+    /** List of valid website Languages to view. */
+    allowedLanguagesForViewingWebsiteTranslations: object;
     /** Key Bindings */
     keyBindings: KeyBindingForAUser[];
     /** Two Factor Authentication */
@@ -561,6 +585,7 @@ export const {
     useUserDefaultKeyBindingsQuery,
     useUserGetAvailablePermissionsQuery,
     useUserGetCollectionQuery,
+    useUserListWithPermissionQuery,
     useUserResetPasswordMutation,
     usePimcoreStudioApiUserSearchQuery,
     useUserUpdateActivePerspectiveMutation,
