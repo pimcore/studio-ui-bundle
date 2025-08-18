@@ -22,21 +22,29 @@
     "globalName": "pimcore_studio_ui_bundle_core",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
-    "publicPath": "/bundles/pimcorestudioui/build/4953b26b-a272-4ee8-8f51-7a7a5f8476c0/"
+    "publicPath": "/bundles/pimcorestudioui/build/8b80108b-5c80-4256-ae79-51ff6a322cc2/"
   },
   "shared": [],
   "remotes": [
     {
+      "alias": "@sdk",
+      "consumingFederationContainerName": "pimcore_studio_ui_bundle_core",
       "federationContainerName": "promise new Promise(resolve => {\n          const studioUIBundleRemoteUrl = window.StudioUIBundleRemoteUrl\n          const script = document.createElement('script')\n          script.src = studioUIBundleRemoteUrl\n          script.onload = () => {\n            const proxy = {\n              get: (request) => window['pimcore_studio_ui_bundle'].get(request),\n              init: (...arg) => {\n                try {\n                  return window['pimcore_studio_ui_bundle'].init(...arg)\n                } catch(e) {\n                  console.log('remote container already initialized')\n                }\n              }\n            }\n            resolve(proxy)\n          }\n          document.head.appendChild(script);\n        })\n        ",
       "moduleName": "_internal_/mf-bootstrap",
-      "alias": "@sdk",
-      "entry": "*"
+      "usedIn": [
+        "js/src/core/main.ts"
+      ],
+      "version": "*"
     },
     {
+      "alias": "@sdk",
+      "consumingFederationContainerName": "pimcore_studio_ui_bundle_core",
       "federationContainerName": "promise new Promise(resolve => {\n          const studioUIBundleRemoteUrl = window.StudioUIBundleRemoteUrl\n          const script = document.createElement('script')\n          script.src = studioUIBundleRemoteUrl\n          script.onload = () => {\n            const proxy = {\n              get: (request) => window['pimcore_studio_ui_bundle'].get(request),\n              init: (...arg) => {\n                try {\n                  return window['pimcore_studio_ui_bundle'].init(...arg)\n                } catch(e) {\n                  console.log('remote container already initialized')\n                }\n              }\n            }\n            resolve(proxy)\n          }\n          document.head.appendChild(script);\n        })\n        ",
       "moduleName": "_internal_/mf-bootstrap-document-editor-iframe",
-      "alias": "@sdk",
-      "entry": "*"
+      "usedIn": [
+        "js/src/core/modules/document/editor/shared-tab-manager/tabs/edit/iframe-app/main.ts"
+      ],
+      "version": "*"
     }
   ],
   "exposes": []
