@@ -57,7 +57,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
   } = useBundleSeoRedirectsGetCollectionQuery(queryArgs, {
     refetchOnMountOrArgChange: true
   })
-  
+
   const redirects = data?.items
 
   const reload = (): void => {
