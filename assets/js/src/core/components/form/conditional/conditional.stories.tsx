@@ -67,9 +67,9 @@ const SimpleConditionalComponent = (): React.JSX.Element => {
 
         <Conditional condition={ (values) => values.showPanel === true }>
           <FormKit.Panel
-            title="User Information"
+            border
             theme="fieldset"
-            border={ true }
+            title="User Information"
           >
             <Form.Item
               label="First Name"
@@ -144,21 +144,21 @@ const SelectConditionalComponent = (): React.JSX.Element => {
           name="userType"
         >
           <Select
-            placeholder="Select user type"
             options={ [
               { value: '', label: 'None' },
               { value: 'student', label: 'Student' },
               { value: 'professional', label: 'Professional' },
               { value: 'business', label: 'Business Owner' }
             ] }
+            placeholder="Select user type"
           />
         </Form.Item>
 
         <Conditional condition={ (values) => values.userType === 'student' }>
           <FormKit.Panel
-            title="Student Information"
+            border
             theme="fieldset"
-            border={ true }
+            title="Student Information"
           >
             <Form.Item
               label="School Name"
@@ -171,9 +171,9 @@ const SelectConditionalComponent = (): React.JSX.Element => {
 
         <Conditional condition={ (values) => values.userType === 'professional' }>
           <FormKit.Panel
-            title="Professional Information"
+            border
             theme="fieldset"
-            border={ true }
+            title="Professional Information"
           >
             <Form.Item
               label="Job Title"
@@ -186,9 +186,9 @@ const SelectConditionalComponent = (): React.JSX.Element => {
 
         <Conditional condition={ (values) => values.userType === 'business' }>
           <FormKit.Panel
-            title="Business Information"
+            border
             theme="fieldset"
-            border={ true }
+            title="Business Information"
           >
             <Form.Item
               label="Company Name"
@@ -200,7 +200,7 @@ const SelectConditionalComponent = (): React.JSX.Element => {
         </Conditional>
 
         <div style={ { marginTop: '20px', fontSize: '14px', color: '#666' } }>
-          <strong>Selected user type:</strong> {formValues.userType || 'None'}
+          <strong>Selected user type:</strong> {formValues.userType ?? 'None'}
           <br />
           <strong>Active panel:</strong> {getActivePanelName()}
         </div>

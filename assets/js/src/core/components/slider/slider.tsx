@@ -43,7 +43,7 @@ export const Slider = (props: SliderProps): React.JSX.Element => {
   }
 
   return (
-    <div 
+    <div
       className={ props.className }
       style={ computedStyle }
     >

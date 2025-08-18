@@ -27,10 +27,11 @@ export interface SelectProps extends AntdSelectProps {
   customArrowIcon?: string
   customIcon?: string
   inherited?: boolean
+  width?: number | keyof typeof sizeOptions
   minWidth?: number | keyof typeof sizeOptions
 }
 
-export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, allowClear, inherited, value, minWidth, ...antdSelectProps }, ref): React.JSX.Element => {
+export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, allowClear, inherited, value, width, minWidth, ...antdSelectProps }, ref): React.JSX.Element => {
   const { t } = useTranslation()
   const selectRef = useRef<RefSelectProps>(null)
   const fieldWidths = useFieldWidth()
@@ -49,8 +50,23 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
     }
   }, [value])
 
-  // Apply medium width as default for select components
-  const computedWidth = mode === 'multiple' ? fieldWidths.large : fieldWidths.medium
+  // Calculate width: explicit width prop takes precedence over fieldWidths
+  const getComputedWidth = (): number => {
+    if (width !== undefined) {
+      // Handle explicit width prop
+      if (typeof width === 'number') {
+        return width
+      }
+      if (typeof width === 'string' && width in sizeOptions) {
+        return sizeOptions[width as keyof typeof sizeOptions]
+      }
+    }
+
+    // Fall back to fieldWidths
+    return mode === 'multiple' ? fieldWidths.large : fieldWidths.medium
+  }
+
+  const computedWidth = getComputedWidth()
 
   const { styles } = useStyles({ width: computedWidth })
 

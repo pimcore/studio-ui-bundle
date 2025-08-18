@@ -13,7 +13,7 @@ import { Checkbox as BaseCheckbox, type ICheckboxProps } from '@Pimcore/componen
 
 // Checkbox doesn't need width integration as it's a fixed-size component
 export const Checkbox = (props: ICheckboxProps): JSX.Element => {
-  return <BaseCheckbox {...props} />
+  return <BaseCheckbox { ...props } />
 }
 
 // Re-export the Group component

@@ -397,8 +397,8 @@ interface AllControlsFormData {
   // Complex List Controls
   keyedList: Record<string, any>
   numberedList: any[]
-  
-  // Range Control  
+
+  // Range Control
   slider: number
   numericRange: { minimum: number | null, maximum: number | null } | null
 }
@@ -432,7 +432,7 @@ const AllControlsExample = (): React.JSX.Element => {
     // Complex List Controls
     keyedList: {},
     numberedList: [],
-    
+
     // Range Control
     slider: 50,
     numericRange: { minimum: 10, maximum: 90 }
@@ -650,11 +650,13 @@ const AllControlsExample = (): React.JSX.Element => {
               tooltip="Date range selection with default width"
             >
               <DateRangePicker
-                onChange={ (value) => { 
-                  const dateRange = value ? [
-                    value[0]?.format('YYYY-MM-DD') ?? '',
-                    value[1]?.format('YYYY-MM-DD') ?? ''
-                  ] : []
+                onChange={ (value) => {
+                  const dateRange = value !== null && value !== undefined
+                    ? [
+                        value[0]?.format('YYYY-MM-DD') ?? '',
+                        value[1]?.format('YYYY-MM-DD') ?? ''
+                      ]
+                    : []
                   handleFormChange('dateRangePicker', dateRange)
                 } }
                 placeholder={ ['Start date', 'End date'] }
@@ -666,7 +668,7 @@ const AllControlsExample = (): React.JSX.Element => {
               tooltip="Time selection with default width"
             >
               <TimePicker
-                onChange={ (value) => { 
+                onChange={ (value) => {
                   const timeValue = typeof value === 'string' ? value : ''
                   handleFormChange('timePicker', timeValue)
                 } }
@@ -680,11 +682,11 @@ const AllControlsExample = (): React.JSX.Element => {
             >
               <ColorPicker
                 format="hex"
-                onChange={ (value) => { 
+                onChange={ (value) => {
                   let hexValue = '#1677FF'
                   if (typeof value === 'string') {
                     hexValue = value
-                  } else if (value && typeof value === 'object' && 'toHexString' in value && typeof value.toHexString === 'function') {
+                  } else if (value !== null && value !== undefined && typeof value === 'object' && 'toHexString' in value && typeof value.toHexString === 'function') {
                     hexValue = value.toHexString()
                   }
                   handleFormChange('colorPicker', hexValue)
@@ -760,14 +762,15 @@ const AllControlsExample = (): React.JSX.Element => {
           </FormKit.Panel>
         </FormKit>
 
-        <div style={ { 
-          marginTop: '24px', 
-          padding: '16px', 
-          backgroundColor: '#f5f5f5', 
+        <div style={ {
+          marginTop: '24px',
+          padding: '16px',
+          backgroundColor: '#f5f5f5',
           borderRadius: '8px',
           fontSize: '12px',
           fontFamily: 'monospace'
-        } }>
+        } }
+        >
           <h4 style={ { margin: '0 0 12px 0', fontFamily: 'inherit' } }>Current Form Values:</h4>
           <pre style={ { margin: 0, whiteSpace: 'pre-wrap' } }>
             {JSON.stringify(formData, null, 2)}
