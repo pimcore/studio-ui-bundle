@@ -64,10 +64,10 @@ export const EmailCardHeader = ({ email }: EmailCardHeaderProps): React.JSX.Elem
       </Flex>
 
       <div>
-        <Tooltip title={t('email-log.tooltip.resend')}>
+        <Tooltip title={ t('email-log.tooltip.resend') }>
           <IconButton
-            icon={{ value: 'vector' }}
-            onClick={() => {
+            icon={ { value: 'vector' } }
+            onClick={ () => {
               resendWithConfirmation(email.id, () => {
                 dispatch(
                   api.util.invalidateTags(
@@ -75,21 +75,21 @@ export const EmailCardHeader = ({ email }: EmailCardHeaderProps): React.JSX.Elem
                   )
                 )
               })
-            }}
+            } }
           />
         </Tooltip>
 
-        <Tooltip title={t('email-log.tooltip.forward')}>
+        <Tooltip title={ t('email-log.tooltip.forward') }>
           <IconButton
-            icon={{ value: 'flip-forward' }}
-            onClick={() => { setIsForwardModalOpen(true) }}
+            icon={ { value: 'flip-forward' } }
+            onClick={ () => { setIsForwardModalOpen(true) } }
           />
         </Tooltip>
 
-        <Tooltip title={t('email-log.tooltip.delete')}>
+        <Tooltip title={ t('email-log.tooltip.delete') }>
           <IconButton
-            icon={{ value: 'trash' }}
-            onClick={() => {
+            icon={ { value: 'trash' } }
+            onClick={ () => {
               removeWithConfirmation(email.id, () => {
                 dispatch(
                   api.util.invalidateTags(
@@ -97,15 +97,15 @@ export const EmailCardHeader = ({ email }: EmailCardHeaderProps): React.JSX.Elem
                   )
                 )
               })
-            }}
+            } }
           />
         </Tooltip>
       </div>
 
       <ForwardModal
-        email={email}
-        open={isForwardModalOpen}
-        setOpen={setIsForwardModalOpen}
+        email={ email }
+        open={ isForwardModalOpen }
+        setOpen={ setIsForwardModalOpen }
       />
     </Flex>
   )
