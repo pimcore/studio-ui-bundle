@@ -64,11 +64,11 @@ const FormExampleComponent = (): React.JSX.Element => {
   return (
     <div style={ { maxWidth: '600px' } }>
       <Form
+        form={ form }
+        initialValues={ formValues }
         layout='vertical'
-        initialValues={formValues}
-        form={form}
-        onFinish={onFinish}
-        onValuesChange={onValuesChange}
+        onFinish={ onFinish }
+        onValuesChange={ onValuesChange }
       >
         <Form.Item
           label="First Name"
