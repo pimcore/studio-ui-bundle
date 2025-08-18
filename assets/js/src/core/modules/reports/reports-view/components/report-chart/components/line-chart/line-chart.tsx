@@ -27,8 +27,8 @@ const CHART_HEIGHT = 250
 export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps): React.JSX.Element => {
   const { styles } = useStyles()
 
-  const containerRef = useRef<HTMLDivElement>(null)
-  const { width: containerWidth } = useElementResize(containerRef)
+  const chartRef = useRef<HTMLDivElement>(null)
+  const { width: chartWidth } = useElementResize(chartRef)
 
   const [colorList] = useState<string[]>(generateColorMap(chartData.length))
 
@@ -92,7 +92,7 @@ export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps)
           x: 20,
           y: 20,
           height: CHART_HEIGHT,
-          width: containerWidth
+          width: chartWidth
         },
         render: (event, { title, items }) => (
           <Flex
@@ -125,12 +125,12 @@ export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps)
         )
       }
     }
-  }), [containerWidth])
+  }), [chartWidth])
 
   return (
     <div className="m-t-mini">
       <div
-        ref={ containerRef }
+        ref={ chartRef }
         style={ { overflowX: 'hidden' } }
       >
         <Line { ...config } />
