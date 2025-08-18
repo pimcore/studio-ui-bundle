@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { Line } from '@ant-design/plots'
 import { toNumber } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -17,13 +17,18 @@ import { LegendItem } from '@Pimcore/modules/reports/reports-view/components/rep
 import { generateColorMap } from '@Pimcore/modules/reports/reports-view/components/report-chart/utils/helpers'
 import { useShowMore } from '@Pimcore/modules/reports/reports-view/components/report-chart/hooks/use-show-more'
 import { ShowMoreBtn } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/show-more-btn/show-more-btn'
+import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 import { useStyles } from './line-chart.styles'
 
 const CHART_FIELD_NAME_KEY = 'name'
 const CHART_FIELD_VALUE_KEY = 'value'
+const CHART_HEIGHT = 250
 
 export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps): React.JSX.Element => {
   const { styles } = useStyles()
+
+  const containerRef = useRef<HTMLDivElement>(null)
+  const { width: containerWidth } = useElementResize(containerRef)
 
   const [colorList] = useState<string[]>(generateColorMap(chartData.length))
 
@@ -65,7 +70,7 @@ export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps)
     )
   }, [formattedChartData, activeSeries])
 
-  const config = {
+  const config = useMemo(() => ({
     data: filteredData,
     xField: xAxis,
     yField: CHART_FIELD_VALUE_KEY,
@@ -75,7 +80,7 @@ export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps)
         range: colorList
       }
     },
-    height: 250,
+    height: CHART_HEIGHT,
     point: {
       shapeField: 'circle',
       sizeField: 4
@@ -83,6 +88,12 @@ export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps)
     legend: false,
     interaction: {
       tooltip: {
+        bounding: {
+          x: 20,
+          y: 20,
+          height: CHART_HEIGHT,
+          width: containerWidth
+        },
         render: (event, { title, items }) => (
           <Flex
             gap="mini"
@@ -97,7 +108,7 @@ export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps)
                   key={ item.name }
                 >
                   <Flex
-                    align={ 'center' }
+                    align="center"
                     gap="mini"
                   >
                     <div
@@ -114,11 +125,16 @@ export const LineChart = ({ chartData, reportData, chartLabelMap }: IChartProps)
         )
       }
     }
-  }
+  }), [containerWidth])
 
   return (
     <div className="m-t-mini">
-      <Line { ...config } />
+      <div
+        ref={ containerRef }
+        style={ { overflowX: 'hidden' } }
+      >
+        <Line { ...config } />
+      </div>
 
       <Flex
         gap="mini"
