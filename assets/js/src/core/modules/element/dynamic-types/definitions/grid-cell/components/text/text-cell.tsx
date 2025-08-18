@@ -17,6 +17,7 @@ import { type InputRef } from 'antd'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { isHtmlContent } from '@Pimcore/utils/html'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
+import { isString } from 'lodash'
 
 export interface TextCellProps extends DefaultCellProps {}
 
@@ -51,7 +52,7 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
 
   function getCellContent (): React.JSX.Element {
     const cellValue = props.getValue()
-    const cellValueString = typeof cellValue === 'string' ? cellValue : String(cellValue ?? '')
+    const cellValueString = isString(cellValue) ? cellValue : String(cellValue ?? '')
     const shouldRenderHtml = htmlDetection && isHtmlContent(cellValueString)
 
     if (!isInEditMode) {
@@ -72,7 +73,8 @@ export const TextCell = (props: TextCellProps): React.JSX.Element => {
       if (editCallback !== undefined && typeof editCallback === 'function') {
         try {
           const currentInputValue = element.current?.input?.value ?? props.getValue()
-          const newValue = await editCallback(props.row.original, props.column.id, currentInputValue.toString())
+          const currentInputValueString = isString(currentInputValue) ? currentInputValue : String(currentInputValue ?? '')
+          const newValue = await editCallback(props.row.original, props.column.id, currentInputValueString)
 
           fireOnUpdateCellDataEvent(newValue)
         } catch {
