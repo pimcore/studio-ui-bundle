@@ -10,7 +10,7 @@
 
 import React, { useMemo, useState } from 'react'
 import { isUndefined } from 'lodash'
-import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
+import { ConfigLayout } from '@Pimcore/components/predefined-layouts/config/config-layout'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import { ReportsSidebar } from '@Pimcore/modules/reports/reports-editor/components/reports-sidebar/reports-sidebar'
 import { ReportConfiguration } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/report-configuration'
@@ -95,11 +95,9 @@ export const ReportsEditor = (): React.JSX.Element => {
   }
 
   return (
-    <SplitLayout
+    <ConfigLayout
       leftItem={ sidebarContent }
       rightItem={ mainContent }
-      withDivider
-      withToolbar
     />
   )
 }
