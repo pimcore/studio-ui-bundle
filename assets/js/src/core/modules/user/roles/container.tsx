@@ -9,7 +9,6 @@
  */
 
 import React, { useState } from 'react'
-import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { TreeContainer } from '@Pimcore/modules/user/roles/tree/tree-container'
 import { Detail } from '@Pimcore/modules/user/roles/detail/detail'
 import type { TreeDataItem } from '@Pimcore/components/tree-element/tree-element'
@@ -20,6 +19,7 @@ import { findNodeByKey } from '@Pimcore/modules/user/management/tree/tree-helper
 import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helper'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { createTreeNodeTestId } from '@Pimcore/utils/test-id-generator'
+import { ConfigLayout } from '@Pimcore/components/predefined-layouts/config/config-layout'
 
 const RoleContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -165,11 +165,9 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
   }
 
   return (
-    <SplitLayout
+    <ConfigLayout
       leftItem={ sidebar }
       rightItem={ main }
-      withDivider
-      withToolbar
     />
   )
 }

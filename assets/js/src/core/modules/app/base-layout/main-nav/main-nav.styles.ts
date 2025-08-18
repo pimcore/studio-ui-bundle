@@ -23,7 +23,7 @@ export const useStlyes = createStyles(({
       padding: ${token.paddingMD}px;
       box-shadow: ${token.boxShadowSecondary};
       border-radius: ${token.borderRadius}px;
-      width: 818px;
+      width: 920px;
       max-width: 90vw;
       min-width: 530px;
       text-align: left;
@@ -63,7 +63,8 @@ export const useStlyes = createStyles(({
       .main-nav__list {
         margin: 0;
         list-style: none;
-        width: 100%;
+        width: 200px;
+        height: fit-content;
         padding: 0 ${token.paddingXS}px;
         font-size: ${token.fontSize}px;
         position: relative;
@@ -71,7 +72,7 @@ export const useStlyes = createStyles(({
       }
 
       .main-nav__list--level-0 {
-        width: 25%;
+        width: 250px;
         padding: 0;
         background: rgba(0, 0, 0, 0.02);
         
@@ -87,13 +88,12 @@ export const useStlyes = createStyles(({
       }
 
       .main-nav__list--level-1 {
-        padding: ${token.paddingXS}px;
+        padding: 0px 10px 0px 10px;
       }
 
       .main-nav__list-detail {
         position: absolute;
         left: 100%;
-        width: 100%;
         top: 0;
         bottom: 0;
         transform: translateX(-15px);
@@ -125,18 +125,43 @@ export const useStlyes = createStyles(({
         scroll-snap-type: x mandatory;
       }
 
+      .main-nav__list-item-divider {
+        border-block-start-color: ${token.colorFillSecondary};
+      }
+
+      .main-nav__list-detail-sub-header {
+        width: 100%;
+        text-align: left;
+        color: ${token.colorTextHeading};
+        font-size: ${token.fontSize}px;
+        font-weight: bold;
+        font-family:  ${token.fontFamily};
+        padding: ${token.paddingSM}px ${token.paddingXS}px ${token.paddingXS}px 0px ;
+
+        &.main-nav__list-detail-divider {
+          border-bottom: 1px solid ${token.colorFillSecondary};
+        }
+      }
+
+
       .main-nav__list-btn {
         background: none;
         border: 0;
         width: 100%;
         padding: ${token.paddingSM}px;
+        gap: 8px;
         cursor: pointer;
         text-align: left;
         display: flex;
         align-items: center;
-        gap: ${token.marginXXS}px;
+        font-size: ${token.fontSize}px;
         min-height: 46px;
-        
+        font-family:  ${token.fontFamily};
+
+        .plain-icon {
+          margin: 4px;
+        }
+
         &:hover {
           background: ${token.controlItemBgActiveHover};
           color: ${token.colorPrimary};
@@ -146,14 +171,16 @@ export const useStlyes = createStyles(({
       .is-active > .main-nav__list-btn {
         background: ${token.controlItemBgActive};
         color: ${token.colorPrimary};
+        padding-left: 10px;
       }
       
-      .main-nav__list-btn-icon {
+      .main-nav__list-chevron-btn-icon {
         margin-left: auto;
       }
-      
+
       .main-nav__divider {
         margin: ${token.marginSM}px 0;
+        border-block-start-color: ${token.colorFillSecondary};
       }
       
       .main-nav__list--level-1 .main-nav__list-btn {

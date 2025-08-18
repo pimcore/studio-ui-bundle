@@ -22,7 +22,8 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/AssetRegistry': 'DynamicTypes/AssetRegistry',
   'DynamicTypes/ObjectRegistry': 'DynamicTypes/ObjectRegistry',
   'DynamicTypes/Grid/SourceFieldsRegistry': 'DynamicTypes/Grid/SourceFieldsRegistry',
-  'DynamicTypes/Grid/TransformersRegistry': 'DynamicTypes/Grid/TransformersRegistry'
+  'DynamicTypes/Grid/TransformersRegistry': 'DynamicTypes/Grid/TransformersRegistry',
+  'DynamicTypes/ThemeRegistry': 'DynamicTypes/ThemeRegistry'
 }
 
 export const serviceIds = {
@@ -34,6 +35,10 @@ export const serviceIds = {
 
   // Background processor
   backgroundProcessor: 'BackgroundProcessorService',
+
+  // Dynamic Type Theme instances
+  'DynamicTypes/Theme/StudioDefaultLight': 'DynamicTypes/Theme/StudioDefaultLight',
+  'DynamicTypes/Theme/StudioDefaultDark': 'DynamicTypes/Theme/StudioDefaultDark',
 
   // Assets
   'Asset/Editor/TypeRegistry': 'Asset/Editor/TypeRegistry',
@@ -206,6 +211,7 @@ export const serviceIds = {
 
   // Document editables
   'DynamicTypes/DocumentEditable/Area': 'DynamicTypes/DocumentEditable/Area',
+  'DynamicTypes/DocumentEditable/Block': 'DynamicTypes/DocumentEditable/Block',
   'DynamicTypes/DocumentEditable/Checkbox': 'DynamicTypes/DocumentEditable/Checkbox',
   'DynamicTypes/DocumentEditable/Date': 'DynamicTypes/DocumentEditable/Date',
   'DynamicTypes/DocumentEditable/Embed': 'DynamicTypes/DocumentEditable/Embed',

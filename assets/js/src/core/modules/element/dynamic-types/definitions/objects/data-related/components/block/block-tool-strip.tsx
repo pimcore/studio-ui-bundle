@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useNumberedList } from '@Pimcore/components/form/numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Space } from '@Pimcore/components/space/space'
 import { Split } from '@Pimcore/components/split/split'
@@ -35,24 +35,21 @@ export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReo
           disabled={ disallowAdd }
           icon={ { value: 'new' } }
           onClick={ () => { operations.add({}, field + 1) } }
-          style={ { padding: 4 } }
-          variant='minimal'
+          size='small'
         />
 
         <IconButton
           disabled={ disallowReorder }
-          icon={ { value: 'move-down' } }
+          icon={ { value: 'chevron-down' } }
           onClick={ () => { operations.move(field, field + 1) } }
-          style={ { padding: 4 } }
-          variant='minimal'
+          size='small'
         />
 
         <IconButton
           disabled={ disallowReorder }
-          icon={ { value: 'move-up' } }
+          icon={ { value: 'chevron-up' } }
           onClick={ () => { operations.move(field, field - 1) } }
-          style={ { padding: 4 } }
-          variant='minimal'
+          size='small'
         />
       </Space>
 
@@ -60,8 +57,7 @@ export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReo
         disabled={ disallowDelete }
         icon={ { value: 'trash' } }
         onClick={ () => { operations.remove(field) } }
-        style={ { padding: 4 } }
-        variant='minimal'
+        size='small'
       />
     </Split>
   )

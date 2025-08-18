@@ -62,8 +62,8 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
     return (
       <Icon
         options={ {
-          width: 12,
-          height: 12
+          width: 16,
+          height: 16
         } }
         value="chevron-down"
       />

@@ -44,7 +44,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
       filters: {
         page: currentPage,
         pageSize,
-        columnFilters: filter !== '' ? { search: filter } : undefined
+        columnFilters: filter !== '' ? [{ type: 'search', filterValue: filter }] : []
       }
     }
   }), [currentPage, pageSize, filter])
@@ -125,6 +125,9 @@ export const RedirectsContainer = (): React.JSX.Element => {
     setPageSize(newPageSize)
   }
 
+  const isDataLoading = redirectsLoading || redirectsFetching ||
+    (!isUndefined(redirects) && redirectRows.length === 0 && redirects.length > 0)
+
   return (
     <ContentLayout
       renderToolbar={
@@ -133,7 +136,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
           onPageChange={ handlePageChange }
           onRefresh={ reload }
           redirectRowsLength={ redirectRows.length }
-          redirectsFetching={ redirectsFetching }
+          redirectsFetching={ isDataLoading }
           totalItems={ data?.totalItems ?? 0 }
         />
       }
@@ -145,18 +148,18 @@ export const RedirectsContainer = (): React.JSX.Element => {
             await handleCreateRedirect()
           } }
           onSearch={ handleSearch }
-          redirectsFetching={ redirectsFetching }
+          redirectsFetching={ isDataLoading }
           redirectsLoading={ redirectsLoading }
         />
       }
     >
       <Content
-        loading={ redirectsLoading || redirectsFetching }
+        loading={ isDataLoading }
         margin={ {
           x: 'extra-small',
           y: 'none'
         } }
-        none={ isUndefined(redirects) || redirects.length === 0 }
+        none={ !isDataLoading && (isUndefined(redirects) || redirects.length === 0) }
       >
         <Box
           margin={ {

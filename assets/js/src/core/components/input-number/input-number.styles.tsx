@@ -13,6 +13,8 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     inputNumber: css`
+      width: 100%;
+
       &.versionFieldItemHighlight {
         background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
       }

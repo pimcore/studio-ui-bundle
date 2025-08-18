@@ -171,9 +171,6 @@ export * from '@Pimcore/components/modal/file-list/file-list'
 // @todo check if this should really located under the components folder
 export * from '@Pimcore/components/login-form/login-form'
 
-// @todo Is this still needed since we have a completed adapted form with it's own form.item
-export * from '@Pimcore/components/form-item-wrapper/form-item-wrapper'
-
 // @todo move those to another folder or make it a more generic iframe component
 export * from '@Pimcore/components/data-object-preview/data-object-preview'
 export * from '@Pimcore/components/creatable-select/creatable-select'

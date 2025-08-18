@@ -22,16 +22,18 @@ interface RenderEditableProps {
   containerRef: React.RefObject<HTMLDivElement>
 }
 
+export const EDITABLE_DEFAULT_FIELD_WIDTHS = {
+  ...defaultFieldWidthValues,
+  large: 9999
+}
+
 export const RenderEditable = ({ editableDefinition, containerRef }: RenderEditableProps): React.JSX.Element => {
   const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
   const editableType = documentEditableRegistry.hasDynamicType(editableDefinition.type) ? documentEditableRegistry.getDynamicType(editableDefinition.type) : undefined
   const { updateValue, updateValueWithReload, getValue } = useDocumentEditor()
   const editableProps: AbstractDocumentEditableDefinition = {
     ...editableDefinition,
-    defaultFieldWidth: {
-      ...defaultFieldWidthValues,
-      large: 9999
-    },
+    defaultFieldWidth: EDITABLE_DEFAULT_FIELD_WIDTHS,
     containerRef
   }
 

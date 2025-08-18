@@ -12,14 +12,14 @@ import React, { forwardRef } from 'react'
 import { useStyles } from './split-layout-item.styles'
 
 export interface SplitLayoutItemProps {
-  size: number
+  size?: number
   children: React.ReactNode
   minSize?: number
   maxSize?: number
 }
 
 const SplitLayoutItem = (props: SplitLayoutItemProps, ref): React.JSX.Element => {
-  const { children, size, minSize, maxSize } = props
+  const { children, size = 50, minSize, maxSize } = props
   const { styles } = useStyles()
 
   return (

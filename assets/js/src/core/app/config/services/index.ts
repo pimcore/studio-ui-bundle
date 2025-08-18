@@ -196,7 +196,11 @@ import { DynamicTypeDocumentEditableMultiSelect } from '@Pimcore/modules/element
 import { DynamicTypeDocumentEditableSelect } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-select'
 import { DynamicTypeDocumentEditableTable } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-table'
 import { DynamicTypeDocumentEditableSnippet } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-snippet'
+import { DynamicTypeDocumentEditableBlock } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-block'
 import { BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
+import { DynamicTypeThemeRegistry } from '@Pimcore/modules/app/theme/dynamic-types/registry/dynamic-type-theme-registry'
+import { DynamicTypeThemeStudioDefaultLight } from '@Pimcore/modules/app/theme/dynamic-types/definitions/studio-default-light/dynamic-type-theme-studio-default-light'
+import { DynamicTypeThemeStudioDefaultDark } from '@Pimcore/modules/app/theme/dynamic-types/definitions/studio-default-dark/dynamic-type-theme-studio-default-dark'
 import { DynamicTypeGridCellDataObjectAdvanced } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/data-object-advanced/dynamic-type-grid-cell-data-object-advanced'
 import { DynamicTypeEditableDialogLayoutRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/editable-dialog-layout/dynamic-type-editable-dialog-layout-registry'
 import { DynamicTypeEditableDialogLayoutTabpanel } from '@Pimcore/modules/element/dynamic-types/definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-tabpanel'
@@ -388,12 +392,13 @@ container.bind(serviceIds['DynamicTypes/ObjectData/ClassificationStore']).to(Dyn
 
 // Document editables
 container.bind(serviceIds['DynamicTypes/DocumentEditableRegistry']).to(DynamicTypeDocumentEditableRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Block']).to(DynamicTypeDocumentEditableBlock).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Checkbox']).to(DynamicTypeDocumentEditableCheckbox).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Wysiwyg']).to(DynamicTypeDocumentEditableWysiwyg).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Date']).to(DynamicTypeDocumentEditableDate).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Embed']).to(DynamicTypeDocumentEditableEmbed).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Image']).to(DynamicTypeDocumentEditableImage).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Input']).to(DynamicTypeDocumentEditableInput).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/DocumentEditable/Wysiwyg']).to(DynamicTypeDocumentEditableWysiwyg).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Link']).to(DynamicTypeDocumentEditableLink).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/MultiSelect']).to(DynamicTypeDocumentEditableMultiSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Numeric']).to(DynamicTypeDocumentEditableNumeric).inSingletonScope()
@@ -444,3 +449,8 @@ container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobCompone
 
 // Background processor
 container.bind(serviceIds.backgroundProcessor).to(BackgroundProcessor).inSingletonScope()
+
+// Theme system
+container.bind(serviceIds['DynamicTypes/ThemeRegistry']).to(DynamicTypeThemeRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Theme/StudioDefaultLight']).to(DynamicTypeThemeStudioDefaultLight).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Theme/StudioDefaultDark']).to(DynamicTypeThemeStudioDefaultDark).inSingletonScope()

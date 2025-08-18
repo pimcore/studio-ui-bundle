@@ -11,7 +11,7 @@
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { useItem } from '@Pimcore/components/form/item/provider/item/use-item'
-import { useKeyedList } from '@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list'
+import { useKeyedList } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list'
 import { usePipelineConfig } from '@Pimcore/components/pipeline/provider/pipeline-config/use-pipeline-config'
 import { type SelectProps } from '@Pimcore/components/select/select'
 import { usePrevious } from '@Pimcore/utils/hooks/use-previous'

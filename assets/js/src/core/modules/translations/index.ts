@@ -22,9 +22,10 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Settings/Translations',
+      path: 'Translations/Translations',
       label: 'navigation.translations',
       className: 'item-style-modifier',
+      order: 100,
       permission: UserPermission.Translations,
       perspectivePermission: NavPermission.PredefinedProperties,
       widgetConfig: {
