@@ -101,19 +101,6 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/documents/get-available-templates` }),
                 providesTags: ["Documents"],
             }),
-            documentRenderletRender: build.query<DocumentRenderletRenderApiResponse, DocumentRenderletRenderApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/documents/renderlet/render`,
-                    params: {
-                        id: queryArg.id,
-                        type: queryArg["type"],
-                        controller: queryArg.controller,
-                        parentDocumentId: queryArg.parentDocumentId,
-                        template: queryArg.template,
-                    },
-                }),
-                providesTags: ["Documents"],
-            }),
             documentReplaceContent: build.mutation<DocumentReplaceContentApiResponse, DocumentReplaceContentApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/documents/${queryArg.sourceId}/replace/${queryArg.targetId}`,
@@ -290,19 +277,6 @@ export type DocumentAvailableTemplatesListApiResponse =
         items: DocumentTemplate[];
     };
 export type DocumentAvailableTemplatesListApiArg = void;
-export type DocumentRenderletRenderApiResponse = /** status 200 Rendered renderlet */ Blob;
-export type DocumentRenderletRenderApiArg = {
-    /** ElementId of the renderlet element */
-    id: number;
-    /** Type of the renderlet element. */
-    type: string;
-    /** Renderlet controller action */
-    controller: string;
-    /** Parent document id of the renderlet */
-    parentDocumentId?: number;
-    /** Renderlet template */
-    template?: string;
-};
 export type DocumentReplaceContentApiResponse = unknown;
 export type DocumentReplaceContentApiArg = {
     /** SourceId of the document */
@@ -697,7 +671,6 @@ export const {
     useDocumentPageStreamPreviewQuery,
     useDocumentAvailableControllersListQuery,
     useDocumentAvailableTemplatesListQuery,
-    useDocumentRenderletRenderQuery,
     useDocumentReplaceContentMutation,
     useDocumentsListAvailableSitesQuery,
     useDocumentUpdateSiteMutation,
