@@ -496,305 +496,268 @@ const AllControlsExample = (): React.JSX.Element => {
         padding={ { x: 'small', y: 'none' } }
       >
         <FormKit>
-          <FormKit.TabPanel
-            hasStickyHeader
-            items={ [
-              {
-                key: 'text-controls',
-                label: 'Text Controls',
-                icon: <Icon value="edit" />,
-                children: (
-                  <FormKit.Panel>
-                    <Form.Item
-                      label="Basic Input"
-                      tooltip="Standard text input with default width"
-                    >
-                      <Input
-                        onChange={ (e) => { handleFormChange('basicInput', e.target.value) } }
-                        placeholder="Enter text..."
-                        value={ formData.basicInput }
-                      />
-                    </Form.Item>
+          <FormKit.Panel title="Text Controls">
+            <Form.Item
+              label="Basic Input"
+              tooltip="Standard text input with default width"
+            >
+              <Input
+                onChange={ (e) => { handleFormChange('basicInput', e.target.value) } }
+                placeholder="Enter text..."
+                value={ formData.basicInput }
+              />
+            </Form.Item>
 
-                    <Form.Item
-                      label="Password Input"
-                      tooltip="Password input with default width"
-                    >
-                      <InputPassword
-                        onChange={ (e) => { handleFormChange('inputPassword', e.target.value) } }
-                        placeholder="Enter password..."
-                        value={ formData.inputPassword }
-                      />
-                    </Form.Item>
+            <Form.Item
+              label="Password Input"
+              tooltip="Password input with default width"
+            >
+              <InputPassword
+                onChange={ (e) => { handleFormChange('inputPassword', e.target.value) } }
+                placeholder="Enter password..."
+                value={ formData.inputPassword }
+              />
+            </Form.Item>
 
-                    <Form.Item
-                      label="Text Area"
-                      tooltip="Multi-line text input with default width"
-                    >
-                      <TextArea
-                        onChange={ (e) => { handleFormChange('textArea', e.target.value) } }
-                        placeholder="Enter multi-line text..."
-                        rows={ 3 }
-                        value={ formData.textArea }
-                      />
-                    </Form.Item>
+            <Form.Item
+              label="Text Area"
+              tooltip="Multi-line text input with default width"
+            >
+              <TextArea
+                onChange={ (e) => { handleFormChange('textArea', e.target.value) } }
+                placeholder="Enter multi-line text..."
+                rows={ 3 }
+                value={ formData.textArea }
+              />
+            </Form.Item>
 
-                    <Form.Item
-                      label="Input Number"
-                      tooltip="Numeric input with default width"
-                    >
-                      <InputNumber
-                        onChange={ (value) => { handleFormChange('inputNumber', value ?? 0) } }
-                        placeholder="Enter number..."
-                        value={ formData.inputNumber }
-                      />
-                    </Form.Item>
-                  </FormKit.Panel>
-                )
-              },
-              {
-                key: 'selection-controls',
-                label: 'Selection Controls',
-                icon: <Icon value="select" />,
-                children: (
-                  <FormKit.Panel>
-                    <Form.Item
-                      label="Basic Select"
-                      tooltip="Standard dropdown select with default width"
-                    >
-                      <Select
-                        onChange={ (value) => { handleFormChange('basicSelect', value) } }
-                        options={ [
-                          { value: 'option1', label: 'Option 1' },
-                          { value: 'option2', label: 'Option 2' },
-                          { value: 'option3', label: 'Option 3' }
-                        ] }
-                        placeholder="Select an option..."
-                        value={ formData.basicSelect }
-                      />
-                    </Form.Item>
+            <Form.Item
+              label="Input Number"
+              tooltip="Numeric input with default width"
+            >
+              <InputNumber
+                onChange={ (value) => { handleFormChange('inputNumber', value ?? 0) } }
+                placeholder="Enter number..."
+                value={ formData.inputNumber }
+              />
+            </Form.Item>
+          </FormKit.Panel>
 
-                    <Form.Item
-                      label="Multi Select"
-                      tooltip="Multiple selection dropdown with default width"
-                    >
-                      <Select
-                        mode="multiple"
-                        onChange={ (value) => { handleFormChange('multiSelect', value) } }
-                        options={ [
-                          { value: 'multi1', label: 'Multi Option 1' },
-                          { value: 'multi2', label: 'Multi Option 2' },
-                          { value: 'multi3', label: 'Multi Option 3' },
-                          { value: 'multi4', label: 'Multi Option 4' }
-                        ] }
-                        placeholder="Select multiple options..."
-                        value={ formData.multiSelect }
-                      />
-                    </Form.Item>
+          <FormKit.Panel title="Selection Controls">
+            <Form.Item
+              label="Basic Select"
+              tooltip="Standard dropdown select with default width"
+            >
+              <Select
+                onChange={ (value) => { handleFormChange('basicSelect', value) } }
+                options={ [
+                  { value: 'option1', label: 'Option 1' },
+                  { value: 'option2', label: 'Option 2' },
+                  { value: 'option3', label: 'Option 3' }
+                ] }
+                placeholder="Select an option..."
+                value={ formData.basicSelect }
+              />
+            </Form.Item>
 
-                    <Form.Item
-                      label="Creatable Select"
-                      tooltip="Select that allows creating new options with default width"
-                    >
-                      <CreatableSelect
-                        onChange={ (value) => { handleFormChange('creatableSelect', value) } }
-                        options={ [
-                          { value: 'existing1', label: 'Existing Option 1' },
-                          { value: 'existing2', label: 'Existing Option 2' }
-                        ] }
-                        placeholder="Select or create new option..."
-                        value={ formData.creatableSelect }
-                      />
-                    </Form.Item>
+            <Form.Item
+              label="Multi Select"
+              tooltip="Multiple selection dropdown with default width"
+            >
+              <Select
+                mode="multiple"
+                onChange={ (value) => { handleFormChange('multiSelect', value) } }
+                options={ [
+                  { value: 'multi1', label: 'Multi Option 1' },
+                  { value: 'multi2', label: 'Multi Option 2' },
+                  { value: 'multi3', label: 'Multi Option 3' },
+                  { value: 'multi4', label: 'Multi Option 4' }
+                ] }
+                placeholder="Select multiple options..."
+                value={ formData.multiSelect }
+              />
+            </Form.Item>
 
-                    <Form.Item
-                      label="Segmented Control"
-                      tooltip="Segmented button control with default width"
-                    >
-                      <Segmented
-                        onChange={ (value) => { handleFormChange('segmented', value) } }
-                        options={ [
-                          { label: 'Option 1', value: 'option1' },
-                          { label: 'Option 2', value: 'option2' },
-                          { label: 'Option 3', value: 'option3' }
-                        ] }
-                        value={ formData.segmented }
-                      />
-                    </Form.Item>
-                  </FormKit.Panel>
-                )
-              },
-              {
-                key: 'boolean-controls',
-                label: 'Boolean Controls',
-                icon: <Icon value="switch" />,
-                children: (
-                  <FormKit.Panel>
-                    <Form.Item
-                      label="Switch Control"
-                      tooltip="Toggle switch with fixed width"
-                    >
-                      <Switch
-                        checked={ formData.switch }
-                        labelRight="Enable this feature"
-                        onChange={ (checked) => { handleFormChange('switch', checked) } }
-                      />
-                    </Form.Item>
+            <Form.Item
+              label="Creatable Select"
+              tooltip="Select that allows creating new options with default width"
+            >
+              <CreatableSelect
+                onChange={ (value) => { handleFormChange('creatableSelect', value) } }
+                options={ [
+                  { value: 'existing1', label: 'Existing Option 1' },
+                  { value: 'existing2', label: 'Existing Option 2' }
+                ] }
+                placeholder="Select or create new option..."
+                value={ formData.creatableSelect }
+              />
+            </Form.Item>
 
-                    <Form.Item
-                      label="Checkbox Control"
-                      tooltip="Single checkbox with fixed width"
-                    >
-                      <Checkbox
-                        checked={ formData.checkbox }
-                        onChange={ (e) => { handleFormChange('checkbox', e.target.checked) } }
-                      >
-                        Check this option
-                      </Checkbox>
-                    </Form.Item>
-                  </FormKit.Panel>
-                )
-              },
-              {
-                key: 'date-time-color-controls',
-                label: 'Date, Time & Color',
-                icon: <Icon value="calendar" />,
-                children: (
-                  <FormKit.Panel>
-                    <Form.Item
-                      label="Date Picker"
-                      tooltip="Date selection with default width"
-                    >
-                      <DatePicker
-                        onChange={ (value) => { handleFormChange('datePicker', value?.format('YYYY-MM-DD') ?? '') } }
-                        placeholder="Select date..."
-                      />
-                    </Form.Item>
+            <Form.Item
+              label="Segmented Control"
+              tooltip="Segmented button control with default width"
+            >
+              <Segmented
+                onChange={ (value) => { handleFormChange('segmented', value) } }
+                options={ [
+                  { label: 'Option 1', value: 'option1' },
+                  { label: 'Option 2', value: 'option2' },
+                  { label: 'Option 3', value: 'option3' }
+                ] }
+                value={ formData.segmented }
+              />
+            </Form.Item>
+          </FormKit.Panel>
 
-                    <Form.Item
-                      label="Date Range Picker"
-                      tooltip="Date range selection with default width"
-                    >
-                      <DateRangePicker
-                        onChange={ (value) => { 
-                          const dateRange = value ? [
-                            value[0]?.format('YYYY-MM-DD') ?? '',
-                            value[1]?.format('YYYY-MM-DD') ?? ''
-                          ] : []
-                          handleFormChange('dateRangePicker', dateRange)
-                        } }
-                        placeholder={ ['Start date', 'End date'] }
-                      />
-                    </Form.Item>
+          <FormKit.Panel title="Boolean Controls">
+            <Form.Item
+              label="Switch Control"
+              tooltip="Toggle switch with fixed width"
+            >
+              <Switch
+                checked={ formData.switch }
+                labelRight="Enable this feature"
+                onChange={ (checked) => { handleFormChange('switch', checked) } }
+              />
+            </Form.Item>
 
-                    <Form.Item
-                      label="Time Picker"
-                      tooltip="Time selection with default width"
-                    >
-                      <TimePicker
-                        onChange={ (value) => { 
-                          const timeValue = typeof value === 'string' ? value : ''
-                          handleFormChange('timePicker', timeValue)
-                        } }
-                        placeholder="Select time..."
-                      />
-                    </Form.Item>
+            <Form.Item
+              label="Checkbox Control"
+              tooltip="Single checkbox with fixed width"
+            >
+              <Checkbox
+                checked={ formData.checkbox }
+                onChange={ (e) => { handleFormChange('checkbox', e.target.checked) } }
+              >
+                Check this option
+              </Checkbox>
+            </Form.Item>
+          </FormKit.Panel>
 
-                    <Form.Item
-                      label="Color Picker"
-                      tooltip="Color selection with default width"
-                    >
-                      <ColorPicker
-                        format="hex"
-                        onChange={ (value) => { 
-                          let hexValue = '#1677FF'
-                          if (typeof value === 'string') {
-                            hexValue = value
-                          } else if (value && typeof value === 'object' && 'toHexString' in value && typeof value.toHexString === 'function') {
-                            hexValue = value.toHexString()
-                          }
-                          handleFormChange('colorPicker', hexValue)
-                        } }
-                        showText
-                        value={ formData.colorPicker }
-                      />
-                    </Form.Item>
-                  </FormKit.Panel>
-                )
-              },
-              {
-                key: 'complex-controls',
-                label: 'Lists & Range',
-                icon: <Icon value="list" />,
-                children: (
-                  <FormKit.Panel>
-                    <Form.Item
-                      label="Keyed List"
-                      tooltip="Dynamic key-value list with default width"
-                    >
-                      <KeyedList
-                        onChange={ (value) => { handleFormChange('keyedList', value) } }
-                        value={ formData.keyedList }
-                      >
-                        <KeyedList.Iterator>
-                          <Form.Item
-                            label="Value"
-                            name="value"
-                          >
-                            <Input placeholder="Enter value" />
-                          </Form.Item>
-                        </KeyedList.Iterator>
-                      </KeyedList>
-                    </Form.Item>
+          <FormKit.Panel title="Date, Time & Color Controls">
+            <Form.Item
+              label="Date Picker"
+              tooltip="Date selection with default width"
+            >
+              <DatePicker
+                onChange={ (value) => { handleFormChange('datePicker', value?.format('YYYY-MM-DD') ?? '') } }
+                placeholder="Select date..."
+              />
+            </Form.Item>
 
-                    <Form.Item
-                      label="Numbered List"
-                      tooltip="Dynamic numbered list with default width"
-                    >
-                      <NumberedList
-                        onChange={ (value) => { handleFormChange('numberedList', value) } }
-                        value={ formData.numberedList }
-                      >
-                        <NumberedList.Iterator>
-                          <Form.Item
-                            label="Item Name"
-                            name="name"
-                          >
-                            <Input placeholder="Enter item name" />
-                          </Form.Item>
-                        </NumberedList.Iterator>
-                      </NumberedList>
-                    </Form.Item>
+            <Form.Item
+              label="Date Range Picker"
+              tooltip="Date range selection with default width"
+            >
+              <DateRangePicker
+                onChange={ (value) => { 
+                  const dateRange = value ? [
+                    value[0]?.format('YYYY-MM-DD') ?? '',
+                    value[1]?.format('YYYY-MM-DD') ?? ''
+                  ] : []
+                  handleFormChange('dateRangePicker', dateRange)
+                } }
+                placeholder={ ['Start date', 'End date'] }
+              />
+            </Form.Item>
 
-                    <Form.Item
-                      label="Slider"
-                      tooltip="Range slider with default width"
-                    >
-                      <Slider
-                        max={ 100 }
-                        min={ 0 }
-                        onChange={ (value) => { handleFormChange('slider', value ?? 0) } }
-                        showValue
-                        value={ formData.slider }
-                      />
-                    </Form.Item>
+            <Form.Item
+              label="Time Picker"
+              tooltip="Time selection with default width"
+            >
+              <TimePicker
+                onChange={ (value) => { 
+                  const timeValue = typeof value === 'string' ? value : ''
+                  handleFormChange('timePicker', timeValue)
+                } }
+                placeholder="Select time..."
+              />
+            </Form.Item>
 
-                    <Form.Item
-                      label="Numeric Range"
-                      tooltip="Min-Max numeric range input with default width"
-                    >
-                      <NumericRange
-                        onChange={ (value) => { handleFormChange('numericRange', value) } }
-                        placeholder="Enter range..."
-                        value={ formData.numericRange as any }
-                      />
-                    </Form.Item>
-                  </FormKit.Panel>
-                )
-              }
-            ] }
-            size="middle"
-          />
+            <Form.Item
+              label="Color Picker"
+              tooltip="Color selection with default width"
+            >
+              <ColorPicker
+                format="hex"
+                onChange={ (value) => { 
+                  let hexValue = '#1677FF'
+                  if (typeof value === 'string') {
+                    hexValue = value
+                  } else if (value && typeof value === 'object' && 'toHexString' in value && typeof value.toHexString === 'function') {
+                    hexValue = value.toHexString()
+                  }
+                  handleFormChange('colorPicker', hexValue)
+                } }
+                showText
+                value={ formData.colorPicker }
+              />
+            </Form.Item>
+          </FormKit.Panel>
+
+          <FormKit.Panel title="Lists & Range Controls">
+            <Form.Item
+              label="Keyed List"
+              tooltip="Dynamic key-value list with default width"
+            >
+              <KeyedList
+                onChange={ (value) => { handleFormChange('keyedList', value) } }
+                value={ formData.keyedList }
+              >
+                <KeyedList.Iterator>
+                  <Form.Item
+                    label="Value"
+                    name="value"
+                  >
+                    <Input placeholder="Enter value" />
+                  </Form.Item>
+                </KeyedList.Iterator>
+              </KeyedList>
+            </Form.Item>
+
+            <Form.Item
+              label="Numbered List"
+              tooltip="Dynamic numbered list with default width"
+            >
+              <NumberedList
+                onChange={ (value) => { handleFormChange('numberedList', value) } }
+                value={ formData.numberedList }
+              >
+                <NumberedList.Iterator>
+                  <Form.Item
+                    label="Item Name"
+                    name="name"
+                  >
+                    <Input placeholder="Enter item name" />
+                  </Form.Item>
+                </NumberedList.Iterator>
+              </NumberedList>
+            </Form.Item>
+
+            <Form.Item
+              label="Slider"
+              tooltip="Range slider with default width"
+            >
+              <Slider
+                max={ 100 }
+                min={ 0 }
+                onChange={ (value) => { handleFormChange('slider', value ?? 0) } }
+                showValue
+                value={ formData.slider }
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="Numeric Range"
+              tooltip="Min-Max numeric range input with default width"
+            >
+              <NumericRange
+                onChange={ (value) => { handleFormChange('numericRange', value) } }
+                placeholder="Enter range..."
+                value={ formData.numericRange as any }
+              />
+            </Form.Item>
+          </FormKit.Panel>
         </FormKit>
 
         <div style={ { 
