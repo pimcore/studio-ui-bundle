@@ -21,6 +21,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useEmailLog } from '../../hooks/use-email-log'
 import { ForwardModal } from '../forward-modal/forward-modal'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 
 interface EmailCardHeaderProps {
   email: EmailLog
@@ -63,36 +64,42 @@ export const EmailCardHeader = ({ email }: EmailCardHeaderProps): React.JSX.Elem
       </Flex>
 
       <div>
-        <IconButton
-          icon={ { value: 'vector' } }
-          onClick={ () => {
-            resendWithConfirmation(email.id, () => {
-              dispatch(
-                api.util.invalidateTags(
-                  invalidatingTags.EMAIL_LOG()
+        <Tooltip title={ t('email-log.tooltip.resend') }>
+          <IconButton
+            icon={ { value: 'vector' } }
+            onClick={ () => {
+              resendWithConfirmation(email.id, () => {
+                dispatch(
+                  api.util.invalidateTags(
+                    invalidatingTags.EMAIL_LOG()
+                  )
                 )
-              )
-            })
-          } }
-        />
+              })
+            } }
+          />
+        </Tooltip>
 
-        <IconButton
-          icon={ { value: 'flip-forward' } }
-          onClick={ () => { setIsForwardModalOpen(true) } }
-        />
+        <Tooltip title={ t('email-log.tooltip.forward') }>
+          <IconButton
+            icon={ { value: 'flip-forward' } }
+            onClick={ () => { setIsForwardModalOpen(true) } }
+          />
+        </Tooltip>
 
-        <IconButton
-          icon={ { value: 'trash' } }
-          onClick={ () => {
-            removeWithConfirmation(email.id, () => {
-              dispatch(
-                api.util.invalidateTags(
-                  invalidatingTags.EMAIL_LOG()
+        <Tooltip title={ t('email-log.tooltip.delete') }>
+          <IconButton
+            icon={ { value: 'trash' } }
+            onClick={ () => {
+              removeWithConfirmation(email.id, () => {
+                dispatch(
+                  api.util.invalidateTags(
+                    invalidatingTags.EMAIL_LOG()
+                  )
                 )
-              )
-            })
-          } }
-        />
+              })
+            } }
+          />
+        </Tooltip>
       </div>
 
       <ForwardModal

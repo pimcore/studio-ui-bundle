@@ -16,7 +16,6 @@ import { InputNumber } from '../input-number/input-number'
 import { TextArea } from '../textarea/textarea'
 import { Button } from '../button/button'
 import { Space } from '../space/space'
-import { FormKit } from './form-kit'
 
 const config: Meta<typeof Form> = {
   title: 'Components/Data Entry/Form',
@@ -64,14 +63,12 @@ const FormExampleComponent = (): React.JSX.Element => {
 
   return (
     <div style={ { maxWidth: '600px' } }>
-      <FormKit
-        formProps={ {
-          layout: 'vertical',
-          initialValues: formValues,
-          onFinish,
-          onValuesChange,
-          form
-        } }
+      <Form
+        form={ form }
+        initialValues={ formValues }
+        layout='vertical'
+        onFinish={ onFinish }
+        onValuesChange={ onValuesChange }
       >
         <Form.Item
           label="First Name"
@@ -137,7 +134,7 @@ const FormExampleComponent = (): React.JSX.Element => {
             </Button>
           </Space>
         </Form.Item>
-      </FormKit>
+      </Form>
 
       <div style={ { marginTop: '20px', padding: '16px', backgroundColor: '#f5f5f5', borderRadius: '6px' } }>
         <h4>Current Form Values:</h4>

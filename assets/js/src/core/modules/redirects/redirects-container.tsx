@@ -23,12 +23,14 @@ import { invalidatingTags } from '@sdk/api'
 import { RedirectsToolbar } from './components/redirects-toolbar'
 import { RedirectsTopBar } from './components/redirects-top-bar'
 import { BeginnerRedirectModal } from './components/beginner-redirect-modal'
+import { type SortingState } from '@tanstack/react-table'
 
 export const RedirectsContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
 
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(50)
+  const [sorting, setSorting] = useState<SortingState>([{ id: 'source', desc: false }])
   const [filter, setFilter] = useState<string>('')
   const [isBeginnerModalOpen, setIsBeginnerModalOpen] = useState<boolean>(false)
 
@@ -44,17 +46,26 @@ export const RedirectsContainer = (): React.JSX.Element => {
       filters: {
         page: currentPage,
         pageSize,
-        columnFilters: filter !== '' ? { search: filter } : undefined
-      }
+        columnFilters: filter !== '' ? [{ type: 'search', filterValue: filter }] : []
+      },
+      sortFilter: sorting.length > 0
+        ? {
+            key: sorting[0].id.startsWith('_') ? sorting[0].id.substring(1) : sorting[0].id,
+            direction: sorting[0].desc ? 'DESC' : 'ASC'
+          }
+        : []
     }
-  }), [currentPage, pageSize, filter])
+  }), [currentPage, pageSize, filter, sorting])
 
   const {
     data,
     isLoading: redirectsLoading,
     isFetching: redirectsFetching,
     error
-  } = useBundleSeoRedirectsGetCollectionQuery(queryArgs)
+  } = useBundleSeoRedirectsGetCollectionQuery(queryArgs, {
+    refetchOnMountOrArgChange: true
+  })
+
   const redirects = data?.items
 
   const reload = (): void => {
@@ -125,6 +136,14 @@ export const RedirectsContainer = (): React.JSX.Element => {
     setPageSize(newPageSize)
   }
 
+  const isDataLoading = redirectsLoading || redirectsFetching ||
+    (!isUndefined(redirects) && redirectRows.length === 0 && redirects.length > 0)
+
+  const handleSortingChange = (newSorting: SortingState): void => {
+    setSorting(newSorting)
+    setCurrentPage(1)
+  }
+
   return (
     <ContentLayout
       renderToolbar={
@@ -133,7 +152,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
           onPageChange={ handlePageChange }
           onRefresh={ reload }
           redirectRowsLength={ redirectRows.length }
-          redirectsFetching={ redirectsFetching }
+          redirectsFetching={ isDataLoading }
           totalItems={ data?.totalItems ?? 0 }
         />
       }
@@ -145,18 +164,18 @@ export const RedirectsContainer = (): React.JSX.Element => {
             await handleCreateRedirect()
           } }
           onSearch={ handleSearch }
-          redirectsFetching={ redirectsFetching }
+          redirectsFetching={ isDataLoading }
           redirectsLoading={ redirectsLoading }
         />
       }
     >
       <Content
-        loading={ redirectsLoading || redirectsFetching }
+        loading={ isDataLoading }
         margin={ {
           x: 'extra-small',
           y: 'none'
         } }
-        none={ isUndefined(redirects) || redirects.length === 0 }
+        none={ !isDataLoading && (isUndefined(redirects) || redirects.length === 0) }
       >
         <Box
           margin={ {
@@ -165,8 +184,10 @@ export const RedirectsContainer = (): React.JSX.Element => {
           } }
         >
           <Table
+            onSortingChange={ handleSortingChange }
             redirectRows={ redirectRows }
             setRedirectRows={ setRedirectRows }
+            sorting={ sorting }
           />
         </Box>
       </Content>

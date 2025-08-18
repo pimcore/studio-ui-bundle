@@ -10,7 +10,7 @@
 
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Split } from '@Pimcore/components/split/split'
-import { Text } from '@Pimcore/components/text/text'
+import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import React from 'react'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Space } from '@Pimcore/components/space/space'
@@ -39,48 +39,44 @@ export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, dis
   })
 
   return (
-    <Split
-      dividerSize='small'
-      size='mini'
-      theme='secondary'
-    >
-      <Space size="mini">
-        <Text type='secondary'>{ type }</Text>
+    <ToolStrip title={ type }>
+      <Split
+        dividerSize='small'
+        size='mini'
+        theme='secondary'
+      >
+        <Space size="mini">
+          <Dropdown
+            disabled={ disallowAdd }
+            menu={ { items: dropDownItems } }
+          >
+            <IconButton
+              icon={ { value: 'new' } }
+              size='small'
+            />
+          </Dropdown>
 
-        <Dropdown
-          disabled={ disallowAdd }
-          menu={ { items: dropDownItems } }
-        >
           <IconButton
-            icon={ { value: 'new' } }
-            style={ { padding: 4 } }
-            variant='minimal'
+            disabled={ disallowReorder }
+            icon={ { value: 'chevron-down' } }
+            onClick={ () => { operations.move(field, field + 1) } }
+            size='small'
           />
-        </Dropdown>
+          <IconButton
+            disabled={ disallowReorder }
+            icon={ { value: 'chevron-up' } }
+            onClick={ () => { operations.move(field, field - 1) } }
+            size='small'
+          />
+        </Space>
 
         <IconButton
-          disabled={ disallowReorder }
-          icon={ { value: 'move-down' } }
-          onClick={ () => { operations.move(field, field + 1) } }
-          style={ { padding: 4 } }
-          variant='minimal'
+          disabled={ disallowDelete }
+          icon={ { value: 'trash' } }
+          onClick={ () => { operations.remove(field) } }
+          size='small'
         />
-        <IconButton
-          disabled={ disallowReorder }
-          icon={ { value: 'move-up' } }
-          onClick={ () => { operations.move(field, field - 1) } }
-          style={ { padding: 4 } }
-          variant='minimal'
-        />
-      </Space>
-
-      <IconButton
-        disabled={ disallowDelete }
-        icon={ { value: 'trash' } }
-        onClick={ () => { operations.remove(field) } }
-        style={ { padding: 4 } }
-        variant='minimal'
-      />
-    </Split>
+      </Split>
+    </ToolStrip>
   )
 }

@@ -2,6 +2,7 @@ common.owner: Owner
 common.modification-date: Modification date
 common.globally: Globally
 common.apply-selection: Apply selection
+block: Block
 error.error_something_generic_went_wrong: Element not found
 error.error_element_exists: Element already exists
 error.error_folder_exists: Folder already exists
@@ -969,6 +970,10 @@ reports.grid-config.title-columns: Columns
 reports.grid-config.restore-to-default: Restore to default
 reports.grid-config.add-column: Add a column
 reports.field-filters: Field Filters
+reports.editor.delete.content: Do you really want to delete Custom Report "{{reportName}}"?
+reports.editor.clone.content: Enter the name of the new item (a-zA-Z-_)
+reports.editor.add.content: Enter the name of the new item. Name must be alphanumeric and at least 3 characters long (a-zA-Z0-9_-)
+reports.editor.content.validation.message: The customer report name is invalid
 loading: Loading...
 please-wait: Please wait...
 navigation.email: Email
@@ -992,6 +997,9 @@ widget.email-log.tab.parameters: Parameters
 widget.email-log.grid.name: Name
 widget.email-log.grid.value: Value
 email-log.subject: Subject
+email-log.tooltip.resend: Resend Email
+email-log.tooltip.forward: Forward Email
+email-log.tooltip.delete: Delete Email
 email-log.resend.email.success: Email has been resent successfully
 email-log.resend.confirmation.title: Resend Email
 email-log.resend.confirmation.text: Please confirm that you want to send the email again to all recipients.

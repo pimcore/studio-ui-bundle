@@ -35,24 +35,21 @@ export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReo
           disabled={ disallowAdd }
           icon={ { value: 'new' } }
           onClick={ () => { operations.add({}, field + 1) } }
-          style={ { padding: 4 } }
-          variant='minimal'
+          size='small'
         />
 
         <IconButton
           disabled={ disallowReorder }
-          icon={ { value: 'move-down' } }
+          icon={ { value: 'chevron-down' } }
           onClick={ () => { operations.move(field, field + 1) } }
-          style={ { padding: 4 } }
-          variant='minimal'
+          size='small'
         />
 
         <IconButton
           disabled={ disallowReorder }
-          icon={ { value: 'move-up' } }
+          icon={ { value: 'chevron-up' } }
           onClick={ () => { operations.move(field, field - 1) } }
-          style={ { padding: 4 } }
-          variant='minimal'
+          size='small'
         />
       </Space>
 
@@ -60,8 +57,7 @@ export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReo
         disabled={ disallowDelete }
         icon={ { value: 'trash' } }
         onClick={ () => { operations.remove(field) } }
-        style={ { padding: 4 } }
-        variant='minimal'
+        size='small'
       />
     </Split>
   )

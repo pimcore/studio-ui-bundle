@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { Column } from '@ant-design/plots'
 import { toNumber } from 'lodash'
 import type { IChartProps } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
@@ -17,20 +17,27 @@ import { generateColorMap } from '@Pimcore/modules/reports/reports-view/componen
 import { LegendItem } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/legend-item/legend-item'
 import { useShowMore } from '@Pimcore/modules/reports/reports-view/components/report-chart/hooks/use-show-more'
 import { ShowMoreBtn } from '@Pimcore/modules/reports/reports-view/components/report-chart/components/show-more-btn/show-more-btn'
+import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 import { useStyles } from './bar-chart.styles'
 
 const CHART_FIELD_NAME_KEY = 'name'
 const CHART_FIELD_VALUE_KEY = 'value'
+const CHART_HEIGHT = 250
 
 export const BarChart = ({ chartData, reportData, chartLabelMap }: IChartProps): React.JSX.Element => {
   const { styles } = useStyles()
 
+  const chartRef = useRef<HTMLDivElement>(null)
+  const { width: chartWidth } = useElementResize(chartRef)
+
   const [colorList] = useState<string[]>(generateColorMap(chartData.length))
 
   const xAxis = reportData?.xAxis ?? ''
+  const yAxis = reportData?.yAxis
+
   const formattedChartData = chartData.flatMap((item: object) => {
     return Object.entries(item)
-      .filter(([key]) => key !== xAxis)
+      .filter(([key]) => key !== xAxis && yAxis?.includes(key))
       .map(([key, value]) => ({
         [xAxis]: item?.[xAxis],
         [CHART_FIELD_NAME_KEY]: key,
@@ -63,7 +70,7 @@ export const BarChart = ({ chartData, reportData, chartLabelMap }: IChartProps):
     )
   }, [formattedChartData, activeSeries])
 
-  const config = {
+  const config = useMemo(() => ({
     data: filteredData,
     xField: xAxis,
     yField: CHART_FIELD_VALUE_KEY,
@@ -74,7 +81,7 @@ export const BarChart = ({ chartData, reportData, chartLabelMap }: IChartProps):
         range: colorList
       }
     },
-    height: 250,
+    height: CHART_HEIGHT,
     point: {
       shapeField: 'circle',
       sizeField: 4
@@ -82,6 +89,12 @@ export const BarChart = ({ chartData, reportData, chartLabelMap }: IChartProps):
     legend: false,
     interaction: {
       tooltip: {
+        bounding: {
+          x: 20,
+          y: 20,
+          height: CHART_HEIGHT,
+          width: chartWidth
+        },
         render: (event, { title, items }) => (
           <Flex
             gap="mini"
@@ -113,11 +126,16 @@ export const BarChart = ({ chartData, reportData, chartLabelMap }: IChartProps):
         )
       }
     }
-  }
+  }), [chartWidth])
 
   return (
     <div className="m-t-mini">
-      <Column { ...config } />
+      <div
+        ref={ chartRef }
+        style={ { overflowX: 'hidden' } }
+      >
+        <Column { ...config } />
+      </div>
 
       <Flex
         gap="mini"

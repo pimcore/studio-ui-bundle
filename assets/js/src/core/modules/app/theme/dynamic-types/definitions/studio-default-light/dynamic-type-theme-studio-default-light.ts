@@ -70,7 +70,13 @@ export const studioDefaultLightThemeConfig = {
     colorTextDescription: 'rgba(0, 0, 0, 0.6)',
     colorBgUnselectedTab: 'rgba(215, 199, 236, 0.4)',
     colorBgHoverUnselectedTab: 'rgba(215, 199, 236, 0.6)',
-    colorAccentSecondary: '#08979c'
+    colorAccentSecondary: '#08979c',
+    colorButtonInverse: '#f5f5f5',
+    colorFillInverse: '#151515',
+    colorTextInverse: 'rgba(255, 255, 255, 0.88)',
+    colorBorderInverse: '#424242',
+    colorDividerInverse: 'rgba(217, 217, 217, 0.34)',
+    colorInactiveInverse: 'rgba(255, 255, 255, 0.5)'
   },
   components: {
     ...staticTokens.components,
@@ -205,6 +211,9 @@ export const studioDefaultLightThemeConfig = {
       fontSizeSM: 12,
       defaultBg: '#fafafa',
       defaultColor: 'rgba(0, 0, 0, 0.88)'
+    },
+    Split: {
+      colorFillSecondary: undefined
     }
   }
 }
