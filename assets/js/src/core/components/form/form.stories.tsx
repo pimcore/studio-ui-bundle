@@ -68,6 +68,8 @@ const FormExampleComponent = (): React.JSX.Element => {
         layout='vertical'
         initialValues={formValues}
         form={form}
+        onFinish={onFinish}
+        onValuesChange={onValuesChange}
       >
         <Form.Item
           label="First Name"
