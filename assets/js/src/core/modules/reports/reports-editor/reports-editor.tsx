@@ -64,41 +64,31 @@ export const ReportsEditor = (): React.JSX.Element => {
     setActiveTabKey(key)
   }
 
-  const sidebarContent = {
-    id: 'reports-sidebar',
-    size: 25,
-    minSize: 150,
-    children: (
-      <ReportsSidebar
-        handleCloseReport={ handleCloseTab }
-        handleOpenReport={ handleOpenReport }
-        isFetching={ isFetching }
-        isLoading={ isLoading }
-        refetch={ refetch }
-        reportsList={ reportsConfigTreeData }
-      />
-    )
-  }
-
-  const mainContent = {
-    id: 'reports-main-content',
-    size: 75,
-    minSize: 300,
-    children: (
-      <Tabs
-        activeKey={ activeTabKey }
-        className={ styles.tabs }
-        items={ tabItems }
-        onChange={ handleChangeTab }
-        onClose={ handleCloseTab }
-      />
-    )
-  }
-
   return (
     <ConfigLayout
-      leftItem={ sidebarContent }
-      rightItem={ mainContent }
+      leftItem={ {
+        children: (
+          <ReportsSidebar
+            handleCloseReport={ handleCloseTab }
+            handleOpenReport={ handleOpenReport }
+            isFetching={ isFetching }
+            isLoading={ isLoading }
+            refetch={ refetch }
+            reportsList={ reportsConfigTreeData }
+          />
+        )
+      } }
+      rightItem={ {
+        children: (
+          <Tabs
+            activeKey={ activeTabKey }
+            className={ styles.tabs }
+            items={ tabItems }
+            onChange={ handleChangeTab }
+            onClose={ handleCloseTab }
+          />
+        )
+      } }
     />
   )
 }
