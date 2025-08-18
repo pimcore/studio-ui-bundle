@@ -201,7 +201,6 @@ export const Table = ({ onSortingChange, sorting, redirectRows, setRedirectRows 
       autoWidth
       columns={ tableColumns }
       data={ redirectRows }
-      enableSorting
       manualSorting
       modifiedCells={ modifiedCells }
       onSortingChange={ onSortingChange }
