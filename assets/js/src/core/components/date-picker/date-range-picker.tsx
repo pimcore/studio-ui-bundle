@@ -21,7 +21,7 @@ import {
 import { useStyles } from '@Pimcore/components/date-picker/date-picker.styles'
 import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
+import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export type DateRange = [start: Dayjs | null, end: Dayjs | null]
 export type DateRangeTargetValue = [start: DatePickerValueType, end: DatePickerValueType]
@@ -58,13 +58,13 @@ const valueFromDayJs = (value: DateRange | null, outputType?: OutputType, output
 
 export const DateRangePicker = (props: DateRangePickerProps): React.JSX.Element => {
   const value = valueToDayJs(props.value)
-  const fieldWidths = useFieldWidth()
+  const fieldWidths = useFieldWidthOptional()
 
   const { styles } = useStyles()
 
   // Apply large width as default for date range pickers
   const computedStyle = {
-    maxWidth: fieldWidths.medium,
+    maxWidth: fieldWidths?.medium,
     ...props.style
   }
 

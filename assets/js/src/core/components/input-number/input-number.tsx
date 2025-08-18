@@ -12,7 +12,7 @@ import React from 'react'
 import { InputNumber as AntInputNumber, type InputNumberProps } from 'antd'
 import cn from 'classnames'
 import { useStyles } from './input-number.styles'
-import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
+import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export interface IInputNumberProps extends InputNumberProps {
   inherited?: boolean
@@ -20,11 +20,11 @@ export interface IInputNumberProps extends InputNumberProps {
 
 export const InputNumber = ({ inherited, className, style, ...restProps }: IInputNumberProps): JSX.Element => {
   const { styles } = useStyles()
-  const fieldWidths = useFieldWidth()
+  const fieldWidths = useFieldWidthOptional()
 
   // Apply small width as default for number inputs
   const computedStyle = {
-    maxWidth: fieldWidths.small,
+    maxWidth: fieldWidths?.small,
     ...style
   }
 

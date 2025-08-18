@@ -12,7 +12,7 @@ import React from 'react'
 import { Input as AntInput, type InputProps, type InputRef } from 'antd'
 import cn from 'classnames'
 import { useStyles } from './input.styles'
-import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
+import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export interface IInputProps extends InputProps {
   inherited?: boolean
@@ -23,11 +23,11 @@ export const Input = React.forwardRef<InputRef, IInputProps>(function Input (
   ref
 ): JSX.Element {
   const { styles } = useStyles()
-  const fieldWidths = useFieldWidth()
+  const fieldWidths = useFieldWidthOptional()
 
   // Apply medium width as default for input fields
   const computedStyle = {
-    maxWidth: fieldWidths.large,
+    maxWidth: fieldWidths?.large,
     ...style
   }
 

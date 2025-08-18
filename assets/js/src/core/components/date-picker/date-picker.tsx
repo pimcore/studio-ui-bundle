@@ -22,7 +22,7 @@ import { DateRangePicker, type DateRangePickerProps } from '@Pimcore/components/
 import { TimePicker, type TimePickerProps } from '@Pimcore/components/date-picker/time-picker'
 import { useStyles } from './date-picker.styles'
 import cn from 'classnames'
-import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
+import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export type DatePickerProps = PickerProps & {
   value?: DatePickerValueType
@@ -35,13 +35,13 @@ export type DatePickerProps = PickerProps & {
 
 const DatePickerComponent = (props: DatePickerProps): React.JSX.Element => {
   const value = toDayJs(props.value)
-  const fieldWidths = useFieldWidth()
+  const fieldWidths = useFieldWidthOptional()
 
   const { styles } = useStyles()
 
   // Apply medium width as default for date pickers
   const computedStyle = {
-    maxWidth: fieldWidths.small,
+    maxWidth: fieldWidths?.small,
     ...props.style
   }
 

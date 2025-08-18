@@ -15,7 +15,7 @@ import { Box } from '@Pimcore/components/box/box'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { t } from 'i18next'
-import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
+import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export type SliderValue = number
 
@@ -28,7 +28,7 @@ export type SliderProps = SliderSingleProps & {
 
 export const Slider = (props: SliderProps): React.JSX.Element => {
   const value = props.value ?? null
-  const fieldWidths = useFieldWidth()
+  const fieldWidths = useFieldWidthOptional()
 
   const handleChange = (value: SliderValue): void => {
     if (props.onChange !== undefined) {
@@ -38,7 +38,7 @@ export const Slider = (props: SliderProps): React.JSX.Element => {
 
   // Apply large width as default for sliders (since they typically need more space)
   const computedStyle = {
-    maxWidth: fieldWidths.large,
+    maxWidth: fieldWidths?.large,
     ...props.style
   }
 
