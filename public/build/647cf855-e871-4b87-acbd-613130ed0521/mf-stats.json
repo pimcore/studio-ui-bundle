@@ -1,0 +1,3546 @@
+{
+  "id": "pimcore_studio_ui_bundle",
+  "name": "pimcore_studio_ui_bundle",
+  "metaData": {
+    "name": "pimcore_studio_ui_bundle",
+    "type": "app",
+    "buildInfo": {
+      "buildVersion": "0.0.1",
+      "buildName": "@pimcore/studio-ui-bundle"
+    },
+    "remoteEntry": {
+      "name": "static/js/remoteEntry.js",
+      "path": "",
+      "type": "global"
+    },
+    "types": {
+      "path": "",
+      "name": "",
+      "zip": "",
+      "api": ""
+    },
+    "globalName": "pimcore_studio_ui_bundle",
+    "pluginVersion": "0.13.1",
+    "prefetchInterface": false,
+    "publicPath": "/bundles/pimcorestudioui/build/647cf855-e871-4b87-acbd-613130ed0521/"
+  },
+  "shared": [
+    {
+      "singleton": true,
+      "requiredVersion": "^undefined",
+      "shareScope": "default",
+      "eager": true,
+      "version": "6.1.x",
+      "name": "inversify",
+      "id": "pimcore_studio_ui_bundle:inversify",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/remoteEntry.js",
+            "static/js/6450.1847178b.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": [
+        "./app",
+        "./modules/data-object"
+      ]
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^14.1.3",
+      "shareScope": "default",
+      "import": "react-i18next",
+      "name": "react-i18next",
+      "version": "14.1.3",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:react-i18next",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/4650.14b4e4d5.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": [
+        "./app",
+        "./components",
+        "./modules/element"
+      ]
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "18.3.x",
+      "shareScope": "default",
+      "eager": true,
+      "name": "react",
+      "version": "18.3.x",
+      "id": "pimcore_studio_ui_bundle:react",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/remoteEntry.js",
+            "static/js/6450.1847178b.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": [
+        "./components",
+        "./modules/element"
+      ]
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^*",
+      "shareScope": "default",
+      "eager": true,
+      "name": "reflect-metadata",
+      "version": "*",
+      "id": "pimcore_studio_ui_bundle:reflect-metadata",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/remoteEntry.js",
+            "static/js/6450.1847178b.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^2.5.1",
+      "shareScope": "default",
+      "eager": true,
+      "name": "classnames",
+      "version": "2.5.1",
+      "id": "pimcore_studio_ui_bundle:classnames",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/remoteEntry.js",
+            "static/js/6450.1847178b.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": [
+        "./modules/element"
+      ]
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^6.4.9",
+      "shareScope": "default",
+      "import": "@codemirror/lang-html",
+      "name": "@codemirror/lang-html",
+      "version": "^6.4.9",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-html",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/7577.a926bedf.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^6.1.0",
+      "shareScope": "default",
+      "import": "@dnd-kit/core",
+      "name": "@dnd-kit/core",
+      "version": "^6.1.0",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@dnd-kit/core",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/4854.4e190585.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^6.3.0",
+      "shareScope": "default",
+      "import": "@codemirror/lang-css",
+      "name": "@codemirror/lang-css",
+      "version": "^6.3.0",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-css",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/8360.54b8db04.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^6.2.2",
+      "shareScope": "default",
+      "import": "@codemirror/lang-javascript",
+      "name": "@codemirror/lang-javascript",
+      "version": "^6.2.2",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-javascript",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/7700.56fbbd81.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "5.22.x",
+      "shareScope": "default",
+      "eager": true,
+      "name": "antd",
+      "version": "5.22.x",
+      "id": "pimcore_studio_ui_bundle:antd",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/remoteEntry.js",
+            "static/js/6450.1847178b.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": [
+        "./components"
+      ]
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^4.17.21",
+      "shareScope": "default",
+      "import": "lodash",
+      "name": "lodash",
+      "version": "4.17.21",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:lodash",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/3948.ca4bddea.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "3.7.x",
+      "shareScope": "default",
+      "import": "antd-style",
+      "name": "antd-style",
+      "version": "3.7.x",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:antd-style",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/7448.892a4f4c.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": [
+        "./components"
+      ]
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^23.16.8",
+      "shareScope": "default",
+      "import": "i18next",
+      "name": "i18next",
+      "version": "23.16.8",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:i18next",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/1567.1b498cf5.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": [
+        "./utils"
+      ]
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^11.11.17",
+      "shareScope": "default",
+      "import": "framer-motion",
+      "name": "framer-motion",
+      "version": "11.11.17",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:framer-motion",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/3956.43790616.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^2.3.0",
+      "shareScope": "default",
+      "import": "@reduxjs/toolkit",
+      "name": "@reduxjs/toolkit",
+      "version": "^2.3.0",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@reduxjs/toolkit",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/448.ff033188.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^9.1.2",
+      "shareScope": "default",
+      "import": "react-redux",
+      "name": "react-redux",
+      "version": "9.1.2",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:react-redux",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/7981.970f7b9e.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^6.28.0",
+      "shareScope": "default",
+      "import": "react-router-dom",
+      "name": "react-router-dom",
+      "version": "6.28.0",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:react-router-dom",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/5853.b21bc216.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^10.0.0",
+      "shareScope": "default",
+      "import": "uuid",
+      "name": "uuid",
+      "version": "10.0.0",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:uuid",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/1888.980ce494.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^0.7.15",
+      "shareScope": "default",
+      "import": "flexlayout-react",
+      "name": "flexlayout-react",
+      "version": "0.7.15",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:flexlayout-react",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/5435.19dc6838.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^4.4.6",
+      "shareScope": "default",
+      "import": "react-draggable",
+      "name": "react-draggable",
+      "version": "4.4.6",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:react-draggable",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/1778.f279d1cd.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^8.20.5",
+      "shareScope": "default",
+      "import": "@tanstack/react-table",
+      "name": "@tanstack/react-table",
+      "version": "^8.20.5",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@tanstack/react-table",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/281.8dfb4b16.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^8.0.0",
+      "shareScope": "default",
+      "import": "@dnd-kit/sortable",
+      "name": "@dnd-kit/sortable",
+      "version": "^8.0.0",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@dnd-kit/sortable",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/1595.3793e4f4.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^7.0.0",
+      "shareScope": "default",
+      "import": "@dnd-kit/modifiers",
+      "name": "@dnd-kit/modifiers",
+      "version": "^7.0.0",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@dnd-kit/modifiers",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/6060.f5aecc63.js",
+            "static/js/async/8642.8b0a997f.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^3.2.1",
+      "shareScope": "default",
+      "import": "dompurify",
+      "name": "dompurify",
+      "version": "3.2.1",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:dompurify",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/7830.a6bff57b.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^1.9.4",
+      "shareScope": "default",
+      "import": "leaflet",
+      "name": "leaflet",
+      "version": "1.9.4",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:leaflet",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/4876.f79595ca.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^1.0.4",
+      "shareScope": "default",
+      "import": "leaflet-draw",
+      "name": "leaflet-draw",
+      "version": "1.0.4",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:leaflet-draw",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/6565.565c63bb.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^4.23.6",
+      "shareScope": "default",
+      "eager": true,
+      "version": "^4.23.6",
+      "name": "@uiw/react-codemirror",
+      "id": "pimcore_studio_ui_bundle:@uiw/react-codemirror",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/remoteEntry.js",
+            "static/js/6450.1847178b.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^6.0.1",
+      "shareScope": "default",
+      "import": "@codemirror/lang-json",
+      "name": "@codemirror/lang-json",
+      "version": "^6.0.1",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-json",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/5639.f1f63e2c.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^6.1.0",
+      "shareScope": "default",
+      "import": "@codemirror/lang-xml",
+      "name": "@codemirror/lang-xml",
+      "version": "^6.1.0",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-xml",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/8385.16a46dc2.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^6.8.0",
+      "shareScope": "default",
+      "import": "@codemirror/lang-sql",
+      "name": "@codemirror/lang-sql",
+      "version": "^6.8.0",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-sql",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/3969.2cf8ec77.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^6.3.1",
+      "shareScope": "default",
+      "import": "@codemirror/lang-markdown",
+      "name": "@codemirror/lang-markdown",
+      "version": "^6.3.1",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:@codemirror/lang-markdown",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/1447.23221551.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "18.3.x",
+      "shareScope": "default",
+      "eager": true,
+      "name": "react-dom",
+      "version": "18.3.x",
+      "id": "pimcore_studio_ui_bundle:react-dom",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/remoteEntry.js",
+            "static/js/6450.1847178b.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^10.1.1",
+      "shareScope": "default",
+      "import": "immer",
+      "name": "immer",
+      "version": "10.1.1",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:immer",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/4374.c99deb71.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^19.1.0-rc.2",
+      "shareScope": "default",
+      "import": "react-compiler-runtime",
+      "name": "react-compiler-runtime",
+      "version": "19.1.0-rc.2",
+      "eager": false,
+      "id": "pimcore_studio_ui_bundle:react-compiler-runtime",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/1752.b8d97cb5.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    },
+    {
+      "singleton": true,
+      "requiredVersion": "^7.2.1",
+      "shareScope": "default",
+      "eager": true,
+      "name": "@ant-design/colors",
+      "version": "^7.2.1",
+      "id": "pimcore_studio_ui_bundle:@ant-design/colors",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/remoteEntry.js",
+            "static/js/6450.1847178b.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      },
+      "usedIn": []
+    }
+  ],
+  "remotes": [],
+  "exposes": [
+    {
+      "path": ".",
+      "id": "pimcore_studio_ui_bundle:.",
+      "name": ".",
+      "requires": [],
+      "file": "js/src/sdk/main.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/__federation_expose_default_export.b3f494c2.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./_internal_/mf-bootstrap",
+      "id": "pimcore_studio_ui_bundle:_internal_/mf-bootstrap",
+      "name": "_internal_/mf-bootstrap",
+      "requires": [],
+      "file": "js/src/sdk/_internal_/mf-bootstrap.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/6534.3ecdad71.js",
+            "static/js/async/4819.c23fd1b3.js",
+            "static/js/async/1869.55492adc.js",
+            "static/js/async/__federation_expose_utils.a884f4b3.js",
+            "static/js/async/__federation_expose_app.0875db99.js",
+            "static/js/async/__federation_expose_modules__data_object.75bab444.js",
+            "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+            "static/js/async/2682.ffe0313a.js",
+            "static/js/async/161.7a7572e8.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.446cc4f3.js"
+          ],
+          "async": [
+            "static/js/async/7599.f501b0a1.js",
+            "static/js/async/7642.9c387651.js",
+            "static/js/async/4898.dcac9ca5.js",
+            "static/js/async/3037.df1119a5.js",
+            "static/js/async/6210.0866341b.js",
+            "static/js/async/5032.bf3d9c93.js",
+            "static/js/async/4611.cad23c63.js",
+            "static/js/async/2080.73ea7df5.js",
+            "static/js/async/9530.85e2cc52.js",
+            "static/js/async/8791.c8a6f64e.js",
+            "static/js/async/2468.acc189ed.js",
+            "static/js/async/2011.cfb5b180.js",
+            "static/js/async/4487.6d152c7f.js",
+            "static/js/async/372.3f29f28f.js",
+            "static/js/async/2423.cb31495e.js",
+            "static/js/async/9100.3a9e0477.js",
+            "static/js/async/6807.43933893.js",
+            "static/js/async/8006.5c3fb0f6.js",
+            "static/js/async/1334.676803d0.js",
+            "static/js/async/7121.a3f1cdbc.js",
+            "static/js/async/6177.c04a6699.js",
+            "static/js/async/7392.61615569.js",
+            "static/js/async/8096.8918e684.js",
+            "static/js/async/3107.a2e539dc.js",
+            "static/js/async/3350.35853242.js",
+            "static/js/async/4590.ffd38ea0.js",
+            "static/js/async/7502.8f68529a.js",
+            "static/js/async/6269.17488d08.js",
+            "static/js/async/3866.1193117e.js",
+            "static/js/async/4621.ec5e4711.js",
+            "static/js/async/8511.d1d99ec3.js",
+            "static/js/async/6153.d6711a99.js",
+            "static/js/async/3410.7a951fb2.js",
+            "static/js/async/753.f617a5fd.js",
+            "static/js/async/7468.eeba76a0.js",
+            "static/js/async/7800.b8d10431.js",
+            "static/js/async/5933.0a25011f.js",
+            "static/js/async/6520.40be04a5.js",
+            "static/js/async/6686.526f417d.js",
+            "static/js/async/9706.f33e713d.js",
+            "static/js/async/4857.30a58545.js",
+            "static/js/async/2496.b4d4039a.js",
+            "static/js/async/6274.913bbdc8.js",
+            "static/js/async/5221.5e6b1bc4.js",
+            "static/js/async/531.727a2b70.js",
+            "static/js/async/4549.74ab684b.js",
+            "static/js/async/7467.95d94a75.js",
+            "static/js/async/7374.352137d7.js",
+            "static/js/async/9214.f2fc22c6.js",
+            "static/js/async/8625.2a5d3e9a.js",
+            "static/js/async/8226.765afaed.js",
+            "static/js/async/1882.f07f0a1d.js",
+            "static/js/async/6040.016dd42b.js",
+            "static/js/async/833.94eee6df.js",
+            "static/js/async/5978.246f8ba2.js",
+            "static/js/async/8961.2b24b15b.js",
+            "static/js/async/1657.1d133530.js",
+            "static/js/async/6421.7c99f384.js",
+            "static/js/async/1851.50e72f7c.js",
+            "static/js/async/3770.007f6481.js",
+            "static/js/async/5705.f6f1946a.js",
+            "static/js/async/99.d0983e15.js",
+            "static/js/async/1224.4353a5f1.js",
+            "static/js/async/8723.2f1df9d5.js",
+            "static/js/async/9368.b04ae990.js",
+            "static/js/async/7337.a17f68de.js",
+            "static/js/async/8476.a2da556e.js",
+            "static/js/async/105.b3ed03a6.js",
+            "static/js/async/6789.3dc3b52a.js",
+            "static/js/async/3118.44d9247d.js",
+            "static/js/async/7046.648a6262.js",
+            "static/js/async/5277.b1fb56c1.js",
+            "static/js/async/9036.8b6cac41.js",
+            "static/js/async/4515.16482028.js",
+            "static/js/async/7675.8fe0706f.js",
+            "static/js/async/9638.a46cb712.js",
+            "static/js/async/8819.e80def20.js",
+            "static/js/async/4864.192b3c9c.js",
+            "static/js/async/9086.69a661be.js",
+            "static/js/async/9662.79263c53.js",
+            "static/js/async/5559.18aa4708.js",
+            "static/js/async/2009.ca309c35.js",
+            "static/js/async/6132.faee4341.js",
+            "static/js/async/9879.fdd218f8.js",
+            "static/js/async/526.3100dd15.js",
+            "static/js/async/5263.e342215d.js",
+            "static/js/async/5182.cdd2efd8.js",
+            "static/js/async/8308.6ff2a32b.js",
+            "static/js/async/6024.4826005c.js",
+            "static/js/async/7809.b208df94.js",
+            "static/js/async/5153.16512cb0.js",
+            "static/js/async/9563.ff6db423.js",
+            "static/js/async/6497.e801df72.js",
+            "static/js/async/9906.16d2a9a6.js",
+            "static/js/async/5868.2a3bb0e0.js",
+            "static/js/async/1597.8c0076ee.js",
+            "static/js/async/2455.f6530cc5.js",
+            "static/js/async/6134.a5153d0d.js",
+            "static/js/async/1690.b2b98aaf.js",
+            "static/js/async/8868.7f37a2ab.js",
+            "static/js/async/7138.f2408353.js",
+            "static/js/async/7071.bc68c184.js",
+            "static/js/async/3852.98b45d65.js",
+            "static/js/async/5022.a2a1d487.js",
+            "static/js/async/4238.20c56b2d.js",
+            "static/js/async/4190.892ea34a.js",
+            "static/js/async/4093.6ecd4f21.js",
+            "static/js/async/9708.fe9ac705.js",
+            "static/js/async/4778.612171c0.js",
+            "static/js/async/1489.c79950dd.js",
+            "static/js/async/6938.45560ce7.js",
+            "static/js/async/2172.3cb9bf31.js",
+            "static/js/async/3636.874609a2.js",
+            "static/js/async/1910.88cf73f4.js",
+            "static/js/async/3075.f80a7faa.js",
+            "static/js/async/420.c386c9c2.js",
+            "static/js/async/9566.23d76ee1.js",
+            "static/js/async/1069.c751acfe.js",
+            "static/js/async/1698.da67ca2a.js",
+            "static/js/async/9983.2287eb9d.js",
+            "static/js/async/7998.52fcf760.js",
+            "static/js/async/2490.44bedd93.js",
+            "static/js/async/7775.942e75ea.js",
+            "static/js/async/8165.0098ecbf.js",
+            "static/js/async/2227.0c29417c.js",
+            "static/js/async/4234.8a693543.js",
+            "static/js/async/46.29b9e7fb.js",
+            "static/js/async/5791.e28d60a8.js",
+            "static/js/async/4370.e2476933.js",
+            "static/js/async/7658.2d37af52.js",
+            "static/js/async/3716.f732acfb.js",
+            "static/js/async/1333.00749a1d.js",
+            "static/js/async/1064.a444e516.js",
+            "static/js/async/6344.c189db04.js",
+            "static/js/async/5239.8451c759.js",
+            "static/js/async/207.dc534702.js",
+            "static/js/async/3941.f61f80cc.js",
+            "static/js/async/1498.bb8a7cad.js",
+            "static/js/async/4353.4487c361.js",
+            "static/js/async/1245.7092be8b.js",
+            "static/js/async/7219.8c91f726.js",
+            "static/js/async/2880.c4ae9e92.js",
+            "static/js/async/8888.387774c0.js",
+            "static/js/async/7311.2ab0eccd.js",
+            "static/js/async/8690.64b37ae9.js",
+            "static/js/async/7404.12da9f5b.js",
+            "static/js/async/6547.266123c1.js",
+            "static/js/async/7698.c996ed42.js",
+            "static/js/async/7085.68695551.js",
+            "static/js/async/3105.91f2f020.js",
+            "static/js/async/4804.c516461b.js",
+            "static/js/async/5539.3643c747.js",
+            "static/js/async/8336.063332be.js",
+            "static/js/async/5627.5412f3ad.js",
+            "static/js/async/5012.c23d7f40.js",
+            "static/js/async/8420.a6c9c55e.js",
+            "static/js/async/3648.7f4751c2.js",
+            "static/js/async/5887.5599eda1.js",
+            "static/js/async/4099.1db429ed.js",
+            "static/js/async/5647.9b011d98.js",
+            "static/js/async/8559.0bb884a7.js",
+            "static/js/async/9430.35458b7e.js",
+            "static/js/async/5694.3d4e7cd2.js",
+            "static/js/async/9972.24cbd462.js",
+            "static/js/async/902.868bc783.js",
+            "static/js/async/1519.b0a37b46.js",
+            "static/js/async/8500.f6813f14.js",
+            "static/js/async/516.0e2f23ae.js",
+            "static/js/async/8843.a2b58ed4.js",
+            "static/js/async/5540.fb4920b4.js",
+            "static/js/async/1758.7d46b820.js",
+            "static/js/async/7696.a959d2b1.js",
+            "static/js/async/1296.93efc03d.js",
+            "static/js/async/6144.88fc1f36.js",
+            "static/js/async/9488.b9085241.js",
+            "static/js/async/862.d21f7451.js",
+            "static/js/async/7551.d1469cb7.js",
+            "static/js/async/3618.97f3baf4.js",
+            "static/js/async/346.6816c503.js",
+            "static/js/async/7516.8977ec47.js",
+            "static/js/async/2076.640559f7.js",
+            "static/js/async/148.e9ac8d64.js",
+            "static/js/async/4397.da3d320a.js",
+            "static/js/async/6743.b12f6c26.js",
+            "static/js/async/7386.bb50ee06.js",
+            "static/js/async/5854.b6a22ba5.js",
+            "static/js/async/2027.42242eaa.js",
+            "static/js/async/3395.fc64b4c1.js",
+            "static/js/async/9345.afd5c749.js",
+            "static/js/async/9440.e652cdcc.js",
+            "static/js/async/6816.8f55482c.js",
+            "static/js/async/4855.4f5863cc.js",
+            "static/js/async/5267.2c16866e.js",
+            "static/js/async/4434.bce523e9.js",
+            "static/js/async/4513.90c6869b.js",
+            "static/js/async/5818.bab2860a.js",
+            "static/js/async/6564.02a274f5.js",
+            "static/js/async/8636.61f15509.js",
+            "static/js/async/5765.53f199f6.js",
+            "static/js/async/7050.7467db7e.js",
+            "static/js/async/3111.05f4b107.js",
+            "static/js/async/3016.0f65694f.js",
+            "static/js/async/9815.0e900f0f.js",
+            "static/js/async/6913.dae2685b.js",
+            "static/js/async/2202.482aa090.js",
+            "static/js/async/1528.5353f329.js",
+            "static/js/async/960.79eb8316.js",
+            "static/js/async/8097.5c9986a9.js",
+            "static/js/async/2252.8ba16355.js",
+            "static/js/async/3858.002ff261.js",
+            "static/js/async/528.336a27ba.js",
+            "static/js/async/2993.0685d6bc.js",
+            "static/js/async/9503.931d6960.js",
+            "static/js/async/2967.50db3862.js",
+            "static/js/async/8192.32789ded.js",
+            "static/js/async/1267.a35fa847.js",
+            "static/js/async/6175.47ee7301.js",
+            "static/js/async/8434.fcc60125.js",
+            "static/js/async/8935.aa3c069a.js",
+            "static/js/async/2612.10fbf2cb.js",
+            "static/js/async/3449.8c724520.js",
+            "static/js/async/6526.2f880946.js",
+            "static/js/async/1746.20f0870c.js",
+            "static/js/async/5428.44819fb0.js",
+            "static/js/async/3386.115905f2.js",
+            "static/js/async/7472.9a55331e.js",
+            "static/js/async/9882.d5988f6d.js",
+            "static/js/async/2181.8892c01c.js",
+            "static/js/async/6974.5f2c957b.js",
+            "static/js/async/707.5d05993a.js",
+            "static/js/async/4149.02bec4c1.js",
+            "static/js/async/7602.3f85988f.js",
+            "static/js/async/6301.5c2999cb.js",
+            "static/js/async/6458.3374e02c.js",
+            "static/js/async/5704.3a9a4a6c.js",
+            "static/js/async/8275.7d57d2b4.js",
+            "static/js/async/2447.f3c20c06.js",
+            "static/js/async/6693.cf072c5b.js",
+            "static/js/async/3513.3b8ff637.js",
+            "static/js/async/7065.b8fc6306.js",
+            "static/js/async/2301.3e1c8906.js",
+            "static/js/async/5362.71548a48.js",
+            "static/js/async/2557.417a2fa2.js",
+            "static/js/async/9714.030e0c2c.js",
+            "static/js/async/438.b6d0170e.js",
+            "static/js/async/2111.1b5f8480.js",
+            "static/js/async/1623.a127f6ac.js",
+            "static/js/async/4301.cb8866ae.js",
+            "static/js/async/5424.af1b8211.js",
+            "static/js/async/8554.e76562c3.js",
+            "static/js/async/9242.1f1a62c9.js",
+            "static/js/async/1472.10b13d60.js",
+            "static/js/async/5232.c6d51e6e.js",
+            "static/js/async/7553.3b83762f.js",
+            "static/js/async/6648.51d04568.js",
+            "static/js/async/5976.3732d0b9.js",
+            "static/js/async/2092.fae343e8.js",
+            "static/js/async/1151.1de88f3a.js"
+          ]
+        },
+        "css": {
+          "sync": [
+            "static/css/async/6534.36e1bbd1.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.b642ae4b.css"
+          ],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./_internal_/mf-bootstrap-document-editor-iframe",
+      "id": "pimcore_studio_ui_bundle:_internal_/mf-bootstrap-document-editor-iframe",
+      "name": "_internal_/mf-bootstrap-document-editor-iframe",
+      "requires": [],
+      "file": "js/src/sdk/_internal_/mf-bootstrap-document-editor-iframe.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/6534.3ecdad71.js",
+            "static/js/async/4819.c23fd1b3.js",
+            "static/js/async/1869.55492adc.js",
+            "static/js/async/__federation_expose_utils.a884f4b3.js",
+            "static/js/async/__federation_expose_app.0875db99.js",
+            "static/js/async/__federation_expose_modules__data_object.75bab444.js",
+            "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+            "static/js/async/2682.ffe0313a.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.d9edf6d3.js"
+          ],
+          "async": [
+            "static/js/async/7599.f501b0a1.js",
+            "static/js/async/7642.9c387651.js",
+            "static/js/async/4898.dcac9ca5.js",
+            "static/js/async/3037.df1119a5.js",
+            "static/js/async/6210.0866341b.js",
+            "static/js/async/5032.bf3d9c93.js",
+            "static/js/async/4611.cad23c63.js",
+            "static/js/async/2080.73ea7df5.js",
+            "static/js/async/9530.85e2cc52.js",
+            "static/js/async/8791.c8a6f64e.js",
+            "static/js/async/2468.acc189ed.js",
+            "static/js/async/2011.cfb5b180.js",
+            "static/js/async/4487.6d152c7f.js",
+            "static/js/async/372.3f29f28f.js",
+            "static/js/async/2423.cb31495e.js",
+            "static/js/async/9100.3a9e0477.js",
+            "static/js/async/6807.43933893.js",
+            "static/js/async/8006.5c3fb0f6.js",
+            "static/js/async/1334.676803d0.js",
+            "static/js/async/7121.a3f1cdbc.js",
+            "static/js/async/6177.c04a6699.js",
+            "static/js/async/7392.61615569.js",
+            "static/js/async/8096.8918e684.js",
+            "static/js/async/3107.a2e539dc.js",
+            "static/js/async/3350.35853242.js",
+            "static/js/async/4590.ffd38ea0.js",
+            "static/js/async/7502.8f68529a.js",
+            "static/js/async/6269.17488d08.js",
+            "static/js/async/3866.1193117e.js",
+            "static/js/async/4621.ec5e4711.js",
+            "static/js/async/8511.d1d99ec3.js",
+            "static/js/async/6153.d6711a99.js",
+            "static/js/async/3410.7a951fb2.js",
+            "static/js/async/753.f617a5fd.js",
+            "static/js/async/7468.eeba76a0.js",
+            "static/js/async/7800.b8d10431.js",
+            "static/js/async/5933.0a25011f.js",
+            "static/js/async/6520.40be04a5.js",
+            "static/js/async/6686.526f417d.js",
+            "static/js/async/9706.f33e713d.js",
+            "static/js/async/4857.30a58545.js",
+            "static/js/async/2496.b4d4039a.js",
+            "static/js/async/6274.913bbdc8.js",
+            "static/js/async/5221.5e6b1bc4.js",
+            "static/js/async/531.727a2b70.js",
+            "static/js/async/4549.74ab684b.js",
+            "static/js/async/7467.95d94a75.js",
+            "static/js/async/7374.352137d7.js",
+            "static/js/async/9214.f2fc22c6.js",
+            "static/js/async/8625.2a5d3e9a.js",
+            "static/js/async/8226.765afaed.js",
+            "static/js/async/1882.f07f0a1d.js",
+            "static/js/async/6040.016dd42b.js",
+            "static/js/async/833.94eee6df.js",
+            "static/js/async/5978.246f8ba2.js",
+            "static/js/async/8961.2b24b15b.js",
+            "static/js/async/1657.1d133530.js",
+            "static/js/async/6421.7c99f384.js",
+            "static/js/async/1851.50e72f7c.js",
+            "static/js/async/3770.007f6481.js",
+            "static/js/async/5705.f6f1946a.js",
+            "static/js/async/99.d0983e15.js",
+            "static/js/async/1224.4353a5f1.js",
+            "static/js/async/8723.2f1df9d5.js",
+            "static/js/async/9368.b04ae990.js",
+            "static/js/async/7337.a17f68de.js",
+            "static/js/async/8476.a2da556e.js",
+            "static/js/async/105.b3ed03a6.js",
+            "static/js/async/6789.3dc3b52a.js",
+            "static/js/async/3118.44d9247d.js",
+            "static/js/async/7046.648a6262.js",
+            "static/js/async/5277.b1fb56c1.js",
+            "static/js/async/9036.8b6cac41.js",
+            "static/js/async/4515.16482028.js",
+            "static/js/async/7675.8fe0706f.js",
+            "static/js/async/9638.a46cb712.js",
+            "static/js/async/8819.e80def20.js",
+            "static/js/async/4864.192b3c9c.js",
+            "static/js/async/9086.69a661be.js",
+            "static/js/async/9662.79263c53.js",
+            "static/js/async/5559.18aa4708.js",
+            "static/js/async/2009.ca309c35.js",
+            "static/js/async/6132.faee4341.js",
+            "static/js/async/9879.fdd218f8.js",
+            "static/js/async/526.3100dd15.js",
+            "static/js/async/5263.e342215d.js",
+            "static/js/async/5182.cdd2efd8.js",
+            "static/js/async/8308.6ff2a32b.js",
+            "static/js/async/6024.4826005c.js",
+            "static/js/async/7809.b208df94.js",
+            "static/js/async/5153.16512cb0.js",
+            "static/js/async/9563.ff6db423.js",
+            "static/js/async/6497.e801df72.js",
+            "static/js/async/9906.16d2a9a6.js",
+            "static/js/async/5868.2a3bb0e0.js",
+            "static/js/async/1597.8c0076ee.js",
+            "static/js/async/2455.f6530cc5.js",
+            "static/js/async/6134.a5153d0d.js",
+            "static/js/async/1690.b2b98aaf.js",
+            "static/js/async/8868.7f37a2ab.js",
+            "static/js/async/7138.f2408353.js",
+            "static/js/async/7071.bc68c184.js",
+            "static/js/async/3852.98b45d65.js",
+            "static/js/async/5022.a2a1d487.js",
+            "static/js/async/4238.20c56b2d.js",
+            "static/js/async/4190.892ea34a.js",
+            "static/js/async/4093.6ecd4f21.js",
+            "static/js/async/9708.fe9ac705.js",
+            "static/js/async/4778.612171c0.js",
+            "static/js/async/1489.c79950dd.js",
+            "static/js/async/6938.45560ce7.js",
+            "static/js/async/2172.3cb9bf31.js",
+            "static/js/async/3636.874609a2.js",
+            "static/js/async/1910.88cf73f4.js",
+            "static/js/async/3075.f80a7faa.js",
+            "static/js/async/420.c386c9c2.js",
+            "static/js/async/9566.23d76ee1.js",
+            "static/js/async/1069.c751acfe.js",
+            "static/js/async/1698.da67ca2a.js",
+            "static/js/async/9983.2287eb9d.js",
+            "static/js/async/7998.52fcf760.js",
+            "static/js/async/2490.44bedd93.js",
+            "static/js/async/7775.942e75ea.js",
+            "static/js/async/8165.0098ecbf.js",
+            "static/js/async/2227.0c29417c.js",
+            "static/js/async/4234.8a693543.js",
+            "static/js/async/46.29b9e7fb.js",
+            "static/js/async/5791.e28d60a8.js",
+            "static/js/async/4370.e2476933.js",
+            "static/js/async/7658.2d37af52.js",
+            "static/js/async/3716.f732acfb.js",
+            "static/js/async/1333.00749a1d.js",
+            "static/js/async/1064.a444e516.js",
+            "static/js/async/6344.c189db04.js",
+            "static/js/async/5239.8451c759.js",
+            "static/js/async/207.dc534702.js",
+            "static/js/async/3941.f61f80cc.js",
+            "static/js/async/1498.bb8a7cad.js",
+            "static/js/async/4353.4487c361.js",
+            "static/js/async/1245.7092be8b.js",
+            "static/js/async/7219.8c91f726.js",
+            "static/js/async/2880.c4ae9e92.js",
+            "static/js/async/8888.387774c0.js",
+            "static/js/async/7311.2ab0eccd.js",
+            "static/js/async/8690.64b37ae9.js",
+            "static/js/async/7404.12da9f5b.js",
+            "static/js/async/6547.266123c1.js",
+            "static/js/async/7698.c996ed42.js",
+            "static/js/async/7085.68695551.js",
+            "static/js/async/3105.91f2f020.js",
+            "static/js/async/4804.c516461b.js",
+            "static/js/async/5539.3643c747.js",
+            "static/js/async/8336.063332be.js",
+            "static/js/async/5627.5412f3ad.js",
+            "static/js/async/5012.c23d7f40.js",
+            "static/js/async/8420.a6c9c55e.js",
+            "static/js/async/3648.7f4751c2.js",
+            "static/js/async/5887.5599eda1.js",
+            "static/js/async/4099.1db429ed.js",
+            "static/js/async/5647.9b011d98.js",
+            "static/js/async/8559.0bb884a7.js",
+            "static/js/async/9430.35458b7e.js",
+            "static/js/async/5694.3d4e7cd2.js",
+            "static/js/async/9972.24cbd462.js",
+            "static/js/async/902.868bc783.js",
+            "static/js/async/1519.b0a37b46.js",
+            "static/js/async/8500.f6813f14.js",
+            "static/js/async/516.0e2f23ae.js",
+            "static/js/async/8843.a2b58ed4.js",
+            "static/js/async/5540.fb4920b4.js",
+            "static/js/async/1758.7d46b820.js",
+            "static/js/async/7696.a959d2b1.js",
+            "static/js/async/1296.93efc03d.js",
+            "static/js/async/6144.88fc1f36.js",
+            "static/js/async/9488.b9085241.js",
+            "static/js/async/862.d21f7451.js",
+            "static/js/async/7551.d1469cb7.js",
+            "static/js/async/3618.97f3baf4.js",
+            "static/js/async/346.6816c503.js",
+            "static/js/async/7516.8977ec47.js",
+            "static/js/async/2076.640559f7.js",
+            "static/js/async/148.e9ac8d64.js",
+            "static/js/async/4397.da3d320a.js",
+            "static/js/async/6743.b12f6c26.js",
+            "static/js/async/7386.bb50ee06.js",
+            "static/js/async/5854.b6a22ba5.js",
+            "static/js/async/2027.42242eaa.js",
+            "static/js/async/3395.fc64b4c1.js",
+            "static/js/async/9345.afd5c749.js",
+            "static/js/async/9440.e652cdcc.js",
+            "static/js/async/6816.8f55482c.js",
+            "static/js/async/4855.4f5863cc.js",
+            "static/js/async/5267.2c16866e.js",
+            "static/js/async/4434.bce523e9.js",
+            "static/js/async/4513.90c6869b.js",
+            "static/js/async/5818.bab2860a.js",
+            "static/js/async/6564.02a274f5.js",
+            "static/js/async/8636.61f15509.js",
+            "static/js/async/5765.53f199f6.js",
+            "static/js/async/7050.7467db7e.js",
+            "static/js/async/3111.05f4b107.js",
+            "static/js/async/3016.0f65694f.js",
+            "static/js/async/9815.0e900f0f.js",
+            "static/js/async/6913.dae2685b.js",
+            "static/js/async/2202.482aa090.js",
+            "static/js/async/1528.5353f329.js",
+            "static/js/async/960.79eb8316.js",
+            "static/js/async/8097.5c9986a9.js",
+            "static/js/async/2252.8ba16355.js",
+            "static/js/async/3858.002ff261.js",
+            "static/js/async/528.336a27ba.js",
+            "static/js/async/2993.0685d6bc.js",
+            "static/js/async/9503.931d6960.js",
+            "static/js/async/2967.50db3862.js",
+            "static/js/async/8192.32789ded.js",
+            "static/js/async/1267.a35fa847.js",
+            "static/js/async/6175.47ee7301.js",
+            "static/js/async/8434.fcc60125.js",
+            "static/js/async/8935.aa3c069a.js",
+            "static/js/async/2612.10fbf2cb.js",
+            "static/js/async/3449.8c724520.js",
+            "static/js/async/6526.2f880946.js",
+            "static/js/async/1746.20f0870c.js",
+            "static/js/async/5428.44819fb0.js",
+            "static/js/async/3386.115905f2.js",
+            "static/js/async/7472.9a55331e.js",
+            "static/js/async/9882.d5988f6d.js",
+            "static/js/async/2181.8892c01c.js",
+            "static/js/async/6974.5f2c957b.js",
+            "static/js/async/707.5d05993a.js",
+            "static/js/async/4149.02bec4c1.js",
+            "static/js/async/7602.3f85988f.js",
+            "static/js/async/6301.5c2999cb.js",
+            "static/js/async/6458.3374e02c.js",
+            "static/js/async/5704.3a9a4a6c.js",
+            "static/js/async/8275.7d57d2b4.js",
+            "static/js/async/2447.f3c20c06.js",
+            "static/js/async/6693.cf072c5b.js",
+            "static/js/async/3513.3b8ff637.js",
+            "static/js/async/7065.b8fc6306.js",
+            "static/js/async/2301.3e1c8906.js",
+            "static/js/async/5362.71548a48.js",
+            "static/js/async/2557.417a2fa2.js",
+            "static/js/async/9714.030e0c2c.js",
+            "static/js/async/438.b6d0170e.js",
+            "static/js/async/2111.1b5f8480.js",
+            "static/js/async/1623.a127f6ac.js",
+            "static/js/async/4301.cb8866ae.js",
+            "static/js/async/5424.af1b8211.js",
+            "static/js/async/8554.e76562c3.js",
+            "static/js/async/9242.1f1a62c9.js",
+            "static/js/async/1472.10b13d60.js",
+            "static/js/async/5232.c6d51e6e.js",
+            "static/js/async/7553.3b83762f.js",
+            "static/js/async/6648.51d04568.js",
+            "static/js/async/5976.3732d0b9.js",
+            "static/js/async/2092.fae343e8.js",
+            "static/js/async/1151.1de88f3a.js",
+            "static/js/async/161.7a7572e8.js",
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/6534.3ecdad71.js",
+            "static/js/async/4819.c23fd1b3.js",
+            "static/js/async/1869.55492adc.js",
+            "static/js/async/__federation_expose_utils.a884f4b3.js",
+            "static/js/async/__federation_expose_app.0875db99.js",
+            "static/js/async/__federation_expose_modules__data_object.75bab444.js",
+            "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+            "static/js/async/2682.ffe0313a.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.446cc4f3.js",
+            "static/js/async/8902.d970bb95.js"
+          ]
+        },
+        "css": {
+          "sync": [
+            "static/css/async/6534.36e1bbd1.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.b642ae4b.css"
+          ],
+          "async": [
+            "static/css/async/6534.36e1bbd1.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.b642ae4b.css"
+          ]
+        }
+      }
+    },
+    {
+      "path": "./components",
+      "id": "pimcore_studio_ui_bundle:components",
+      "name": "components",
+      "requires": [
+        "react-i18next",
+        "react",
+        "antd",
+        "antd-style"
+      ],
+      "file": "js/src/sdk/components/index.ts",
+      "assets": {
+        "js": {
+          "sync": [],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./app",
+      "id": "pimcore_studio_ui_bundle:app",
+      "name": "app",
+      "requires": [
+        "inversify",
+        "react-i18next"
+      ],
+      "file": "js/src/sdk/app/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/6534.3ecdad71.js",
+            "static/js/async/4819.c23fd1b3.js",
+            "static/js/async/1869.55492adc.js",
+            "static/js/async/__federation_expose_utils.a884f4b3.js",
+            "static/js/async/__federation_expose_app.0875db99.js",
+            "static/js/async/__federation_expose_modules__data_object.75bab444.js",
+            "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+            "static/js/async/2682.ffe0313a.js",
+            "static/js/async/161.7a7572e8.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.446cc4f3.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.d9edf6d3.js",
+            "static/js/async/__federation_expose_modules__user.9649b588.js"
+          ],
+          "async": [
+            "static/js/async/7599.f501b0a1.js",
+            "static/js/async/7642.9c387651.js",
+            "static/js/async/4898.dcac9ca5.js",
+            "static/js/async/3037.df1119a5.js",
+            "static/js/async/6210.0866341b.js",
+            "static/js/async/5032.bf3d9c93.js",
+            "static/js/async/4611.cad23c63.js",
+            "static/js/async/2080.73ea7df5.js",
+            "static/js/async/9530.85e2cc52.js",
+            "static/js/async/8791.c8a6f64e.js",
+            "static/js/async/2468.acc189ed.js",
+            "static/js/async/2011.cfb5b180.js",
+            "static/js/async/4487.6d152c7f.js",
+            "static/js/async/372.3f29f28f.js",
+            "static/js/async/2423.cb31495e.js",
+            "static/js/async/9100.3a9e0477.js",
+            "static/js/async/6807.43933893.js",
+            "static/js/async/8006.5c3fb0f6.js",
+            "static/js/async/1334.676803d0.js",
+            "static/js/async/7121.a3f1cdbc.js",
+            "static/js/async/6177.c04a6699.js",
+            "static/js/async/7392.61615569.js",
+            "static/js/async/8096.8918e684.js",
+            "static/js/async/3107.a2e539dc.js",
+            "static/js/async/3350.35853242.js",
+            "static/js/async/4590.ffd38ea0.js",
+            "static/js/async/7502.8f68529a.js",
+            "static/js/async/6269.17488d08.js",
+            "static/js/async/3866.1193117e.js",
+            "static/js/async/4621.ec5e4711.js",
+            "static/js/async/8511.d1d99ec3.js",
+            "static/js/async/6153.d6711a99.js",
+            "static/js/async/3410.7a951fb2.js",
+            "static/js/async/753.f617a5fd.js",
+            "static/js/async/7468.eeba76a0.js",
+            "static/js/async/7800.b8d10431.js",
+            "static/js/async/5933.0a25011f.js",
+            "static/js/async/6520.40be04a5.js",
+            "static/js/async/6686.526f417d.js",
+            "static/js/async/9706.f33e713d.js",
+            "static/js/async/4857.30a58545.js",
+            "static/js/async/2496.b4d4039a.js",
+            "static/js/async/6274.913bbdc8.js",
+            "static/js/async/5221.5e6b1bc4.js",
+            "static/js/async/531.727a2b70.js",
+            "static/js/async/4549.74ab684b.js",
+            "static/js/async/7467.95d94a75.js",
+            "static/js/async/7374.352137d7.js",
+            "static/js/async/9214.f2fc22c6.js",
+            "static/js/async/8625.2a5d3e9a.js",
+            "static/js/async/8226.765afaed.js",
+            "static/js/async/1882.f07f0a1d.js",
+            "static/js/async/6040.016dd42b.js",
+            "static/js/async/833.94eee6df.js",
+            "static/js/async/5978.246f8ba2.js",
+            "static/js/async/8961.2b24b15b.js",
+            "static/js/async/1657.1d133530.js",
+            "static/js/async/6421.7c99f384.js",
+            "static/js/async/1851.50e72f7c.js",
+            "static/js/async/3770.007f6481.js",
+            "static/js/async/5705.f6f1946a.js",
+            "static/js/async/99.d0983e15.js",
+            "static/js/async/1224.4353a5f1.js",
+            "static/js/async/8723.2f1df9d5.js",
+            "static/js/async/9368.b04ae990.js",
+            "static/js/async/7337.a17f68de.js",
+            "static/js/async/8476.a2da556e.js",
+            "static/js/async/105.b3ed03a6.js",
+            "static/js/async/6789.3dc3b52a.js",
+            "static/js/async/3118.44d9247d.js",
+            "static/js/async/7046.648a6262.js",
+            "static/js/async/5277.b1fb56c1.js",
+            "static/js/async/9036.8b6cac41.js",
+            "static/js/async/4515.16482028.js",
+            "static/js/async/7675.8fe0706f.js",
+            "static/js/async/9638.a46cb712.js",
+            "static/js/async/8819.e80def20.js",
+            "static/js/async/4864.192b3c9c.js",
+            "static/js/async/9086.69a661be.js",
+            "static/js/async/9662.79263c53.js",
+            "static/js/async/5559.18aa4708.js",
+            "static/js/async/2009.ca309c35.js",
+            "static/js/async/6132.faee4341.js",
+            "static/js/async/9879.fdd218f8.js",
+            "static/js/async/526.3100dd15.js",
+            "static/js/async/5263.e342215d.js",
+            "static/js/async/5182.cdd2efd8.js",
+            "static/js/async/8308.6ff2a32b.js",
+            "static/js/async/6024.4826005c.js",
+            "static/js/async/7809.b208df94.js",
+            "static/js/async/5153.16512cb0.js",
+            "static/js/async/9563.ff6db423.js",
+            "static/js/async/6497.e801df72.js",
+            "static/js/async/9906.16d2a9a6.js",
+            "static/js/async/5868.2a3bb0e0.js",
+            "static/js/async/1597.8c0076ee.js",
+            "static/js/async/2455.f6530cc5.js",
+            "static/js/async/6134.a5153d0d.js",
+            "static/js/async/1690.b2b98aaf.js",
+            "static/js/async/8868.7f37a2ab.js",
+            "static/js/async/7138.f2408353.js",
+            "static/js/async/7071.bc68c184.js",
+            "static/js/async/3852.98b45d65.js",
+            "static/js/async/5022.a2a1d487.js",
+            "static/js/async/4238.20c56b2d.js",
+            "static/js/async/4190.892ea34a.js",
+            "static/js/async/4093.6ecd4f21.js",
+            "static/js/async/9708.fe9ac705.js",
+            "static/js/async/4778.612171c0.js",
+            "static/js/async/1489.c79950dd.js",
+            "static/js/async/6938.45560ce7.js",
+            "static/js/async/2172.3cb9bf31.js",
+            "static/js/async/3636.874609a2.js",
+            "static/js/async/1910.88cf73f4.js",
+            "static/js/async/3075.f80a7faa.js",
+            "static/js/async/420.c386c9c2.js",
+            "static/js/async/9566.23d76ee1.js",
+            "static/js/async/1069.c751acfe.js",
+            "static/js/async/1698.da67ca2a.js",
+            "static/js/async/9983.2287eb9d.js",
+            "static/js/async/7998.52fcf760.js",
+            "static/js/async/2490.44bedd93.js",
+            "static/js/async/7775.942e75ea.js",
+            "static/js/async/8165.0098ecbf.js",
+            "static/js/async/2227.0c29417c.js",
+            "static/js/async/4234.8a693543.js",
+            "static/js/async/46.29b9e7fb.js",
+            "static/js/async/5791.e28d60a8.js",
+            "static/js/async/4370.e2476933.js",
+            "static/js/async/7658.2d37af52.js",
+            "static/js/async/3716.f732acfb.js",
+            "static/js/async/1333.00749a1d.js",
+            "static/js/async/1064.a444e516.js",
+            "static/js/async/6344.c189db04.js",
+            "static/js/async/5239.8451c759.js",
+            "static/js/async/207.dc534702.js",
+            "static/js/async/3941.f61f80cc.js",
+            "static/js/async/1498.bb8a7cad.js",
+            "static/js/async/4353.4487c361.js",
+            "static/js/async/1245.7092be8b.js",
+            "static/js/async/7219.8c91f726.js",
+            "static/js/async/2880.c4ae9e92.js",
+            "static/js/async/8888.387774c0.js",
+            "static/js/async/7311.2ab0eccd.js",
+            "static/js/async/8690.64b37ae9.js",
+            "static/js/async/7404.12da9f5b.js",
+            "static/js/async/6547.266123c1.js",
+            "static/js/async/7698.c996ed42.js",
+            "static/js/async/7085.68695551.js",
+            "static/js/async/3105.91f2f020.js",
+            "static/js/async/4804.c516461b.js",
+            "static/js/async/5539.3643c747.js",
+            "static/js/async/8336.063332be.js",
+            "static/js/async/5627.5412f3ad.js",
+            "static/js/async/5012.c23d7f40.js",
+            "static/js/async/8420.a6c9c55e.js",
+            "static/js/async/3648.7f4751c2.js",
+            "static/js/async/5887.5599eda1.js",
+            "static/js/async/4099.1db429ed.js",
+            "static/js/async/5647.9b011d98.js",
+            "static/js/async/8559.0bb884a7.js",
+            "static/js/async/9430.35458b7e.js",
+            "static/js/async/5694.3d4e7cd2.js",
+            "static/js/async/9972.24cbd462.js",
+            "static/js/async/902.868bc783.js",
+            "static/js/async/1519.b0a37b46.js",
+            "static/js/async/8500.f6813f14.js",
+            "static/js/async/516.0e2f23ae.js",
+            "static/js/async/8843.a2b58ed4.js",
+            "static/js/async/5540.fb4920b4.js",
+            "static/js/async/1758.7d46b820.js",
+            "static/js/async/7696.a959d2b1.js",
+            "static/js/async/1296.93efc03d.js",
+            "static/js/async/6144.88fc1f36.js",
+            "static/js/async/9488.b9085241.js",
+            "static/js/async/862.d21f7451.js",
+            "static/js/async/7551.d1469cb7.js",
+            "static/js/async/3618.97f3baf4.js",
+            "static/js/async/346.6816c503.js",
+            "static/js/async/7516.8977ec47.js",
+            "static/js/async/2076.640559f7.js",
+            "static/js/async/148.e9ac8d64.js",
+            "static/js/async/4397.da3d320a.js",
+            "static/js/async/6743.b12f6c26.js",
+            "static/js/async/7386.bb50ee06.js",
+            "static/js/async/5854.b6a22ba5.js",
+            "static/js/async/2027.42242eaa.js",
+            "static/js/async/3395.fc64b4c1.js",
+            "static/js/async/9345.afd5c749.js",
+            "static/js/async/9440.e652cdcc.js",
+            "static/js/async/6816.8f55482c.js",
+            "static/js/async/4855.4f5863cc.js",
+            "static/js/async/5267.2c16866e.js",
+            "static/js/async/4434.bce523e9.js",
+            "static/js/async/4513.90c6869b.js",
+            "static/js/async/5818.bab2860a.js",
+            "static/js/async/6564.02a274f5.js",
+            "static/js/async/8636.61f15509.js",
+            "static/js/async/5765.53f199f6.js",
+            "static/js/async/7050.7467db7e.js",
+            "static/js/async/3111.05f4b107.js",
+            "static/js/async/3016.0f65694f.js",
+            "static/js/async/9815.0e900f0f.js",
+            "static/js/async/6913.dae2685b.js",
+            "static/js/async/2202.482aa090.js",
+            "static/js/async/1528.5353f329.js",
+            "static/js/async/960.79eb8316.js",
+            "static/js/async/8097.5c9986a9.js",
+            "static/js/async/2252.8ba16355.js",
+            "static/js/async/3858.002ff261.js",
+            "static/js/async/528.336a27ba.js",
+            "static/js/async/2993.0685d6bc.js",
+            "static/js/async/9503.931d6960.js",
+            "static/js/async/2967.50db3862.js",
+            "static/js/async/8192.32789ded.js",
+            "static/js/async/1267.a35fa847.js",
+            "static/js/async/6175.47ee7301.js",
+            "static/js/async/8434.fcc60125.js",
+            "static/js/async/8935.aa3c069a.js",
+            "static/js/async/2612.10fbf2cb.js",
+            "static/js/async/3449.8c724520.js",
+            "static/js/async/6526.2f880946.js",
+            "static/js/async/1746.20f0870c.js",
+            "static/js/async/5428.44819fb0.js",
+            "static/js/async/3386.115905f2.js",
+            "static/js/async/7472.9a55331e.js",
+            "static/js/async/9882.d5988f6d.js",
+            "static/js/async/2181.8892c01c.js",
+            "static/js/async/6974.5f2c957b.js",
+            "static/js/async/707.5d05993a.js",
+            "static/js/async/4149.02bec4c1.js",
+            "static/js/async/7602.3f85988f.js",
+            "static/js/async/6301.5c2999cb.js",
+            "static/js/async/6458.3374e02c.js",
+            "static/js/async/5704.3a9a4a6c.js",
+            "static/js/async/8275.7d57d2b4.js",
+            "static/js/async/2447.f3c20c06.js",
+            "static/js/async/6693.cf072c5b.js",
+            "static/js/async/3513.3b8ff637.js",
+            "static/js/async/7065.b8fc6306.js",
+            "static/js/async/2301.3e1c8906.js",
+            "static/js/async/5362.71548a48.js",
+            "static/js/async/2557.417a2fa2.js",
+            "static/js/async/9714.030e0c2c.js",
+            "static/js/async/438.b6d0170e.js",
+            "static/js/async/2111.1b5f8480.js",
+            "static/js/async/1623.a127f6ac.js",
+            "static/js/async/4301.cb8866ae.js",
+            "static/js/async/5424.af1b8211.js",
+            "static/js/async/8554.e76562c3.js",
+            "static/js/async/9242.1f1a62c9.js",
+            "static/js/async/1472.10b13d60.js",
+            "static/js/async/5232.c6d51e6e.js",
+            "static/js/async/7553.3b83762f.js",
+            "static/js/async/6648.51d04568.js",
+            "static/js/async/5976.3732d0b9.js",
+            "static/js/async/2092.fae343e8.js",
+            "static/js/async/1151.1de88f3a.js",
+            "static/js/async/161.7a7572e8.js",
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/6534.3ecdad71.js",
+            "static/js/async/4819.c23fd1b3.js",
+            "static/js/async/1869.55492adc.js",
+            "static/js/async/__federation_expose_utils.a884f4b3.js",
+            "static/js/async/__federation_expose_app.0875db99.js",
+            "static/js/async/__federation_expose_modules__data_object.75bab444.js",
+            "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+            "static/js/async/2682.ffe0313a.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.446cc4f3.js",
+            "static/js/async/8902.d970bb95.js"
+          ]
+        },
+        "css": {
+          "sync": [
+            "static/css/async/6534.36e1bbd1.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.b642ae4b.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.b642ae4b.css"
+          ],
+          "async": [
+            "static/css/async/6534.36e1bbd1.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.b642ae4b.css"
+          ]
+        }
+      }
+    },
+    {
+      "path": "./api/role",
+      "id": "pimcore_studio_ui_bundle:api/role",
+      "name": "api/role",
+      "requires": [],
+      "file": "js/src/sdk/api/asset/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/1869.55492adc.js",
+            "static/js/async/__federation_expose_api__role.1226ef66.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api",
+      "id": "pimcore_studio_ui_bundle:api",
+      "name": "api",
+      "requires": [],
+      "file": "js/src/sdk/api/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/__federation_expose_api.bedf5424.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/custom-metadata",
+      "id": "pimcore_studio_ui_bundle:api/custom-metadata",
+      "name": "api/custom-metadata",
+      "requires": [],
+      "file": "js/src/sdk/api/custom-metadata/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/__federation_expose_api__custom_metadata.03f03102.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/data-object",
+      "id": "pimcore_studio_ui_bundle:api/data-object",
+      "name": "api/data-object",
+      "requires": [],
+      "file": "js/src/sdk/api/data-object/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/__federation_expose_api__data_object.c397ee38.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/dependencies",
+      "id": "pimcore_studio_ui_bundle:api/dependencies",
+      "name": "api/dependencies",
+      "requires": [],
+      "file": "js/src/sdk/api/dependencies/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/__federation_expose_api__dependencies.0fb1bdfe.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/documents",
+      "id": "pimcore_studio_ui_bundle:api/documents",
+      "name": "api/documents",
+      "requires": [],
+      "file": "js/src/sdk/api/documents/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/__federation_expose_api__documents.eb4bba52.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/elements",
+      "id": "pimcore_studio_ui_bundle:api/elements",
+      "name": "api/elements",
+      "requires": [],
+      "file": "js/src/sdk/api/elements/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/__federation_expose_api__elements.0551b446.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/metadata",
+      "id": "pimcore_studio_ui_bundle:api/metadata",
+      "name": "api/metadata",
+      "requires": [],
+      "file": "js/src/sdk/api/metadata/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/__federation_expose_api__metadata.c2db6210.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/perspectives",
+      "id": "pimcore_studio_ui_bundle:api/perspectives",
+      "name": "api/perspectives",
+      "requires": [],
+      "file": "js/src/sdk/api/perspectives/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/__federation_expose_api__perspectives.4c9f6f08.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/properties",
+      "id": "pimcore_studio_ui_bundle:api/properties",
+      "name": "api/properties",
+      "requires": [],
+      "file": "js/src/sdk/api/properties/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/__federation_expose_api__properties.c95df356.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/schedule",
+      "id": "pimcore_studio_ui_bundle:api/schedule",
+      "name": "api/schedule",
+      "requires": [],
+      "file": "js/src/sdk/api/schedule/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/__federation_expose_api__schedule.24b50f27.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/settings",
+      "id": "pimcore_studio_ui_bundle:api/settings",
+      "name": "api/settings",
+      "requires": [],
+      "file": "js/src/sdk/api/settings/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/__federation_expose_api__settings.c5a99127.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/tags",
+      "id": "pimcore_studio_ui_bundle:api/tags",
+      "name": "api/tags",
+      "requires": [],
+      "file": "js/src/sdk/api/tags/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/__federation_expose_api__tags.0a0d6fce.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/thumbnails",
+      "id": "pimcore_studio_ui_bundle:api/thumbnails",
+      "name": "api/thumbnails",
+      "requires": [],
+      "file": "js/src/sdk/api/thumbnails/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/__federation_expose_api__thumbnails.0df4efae.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/translations",
+      "id": "pimcore_studio_ui_bundle:api/translations",
+      "name": "api/translations",
+      "requires": [],
+      "file": "js/src/sdk/api/translations/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/__federation_expose_api__translations.931bbdbc.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/user",
+      "id": "pimcore_studio_ui_bundle:api/user",
+      "name": "api/user",
+      "requires": [],
+      "file": "js/src/sdk/api/user/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/__federation_expose_api__user.038deb89.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/version",
+      "id": "pimcore_studio_ui_bundle:api/version",
+      "name": "api/version",
+      "requires": [],
+      "file": "js/src/sdk/api/version/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/__federation_expose_api__version.054ef38e.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/workflow",
+      "id": "pimcore_studio_ui_bundle:api/workflow",
+      "name": "api/workflow",
+      "requires": [],
+      "file": "js/src/sdk/api/workflow/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/__federation_expose_api__workflow.3a820f93.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./api/reports",
+      "id": "pimcore_studio_ui_bundle:api/reports",
+      "name": "api/reports",
+      "requires": [],
+      "file": "js/src/sdk/api/reports/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/__federation_expose_api__reports.becbb036.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./modules/app",
+      "id": "pimcore_studio_ui_bundle:modules/app",
+      "name": "modules/app",
+      "requires": [],
+      "file": "js/src/sdk/modules/app/index.ts",
+      "assets": {
+        "js": {
+          "sync": [],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./modules/asset",
+      "id": "pimcore_studio_ui_bundle:modules/asset",
+      "name": "modules/asset",
+      "requires": [],
+      "file": "js/src/sdk/modules/asset/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/6534.3ecdad71.js",
+            "static/js/async/4819.c23fd1b3.js",
+            "static/js/async/1869.55492adc.js",
+            "static/js/async/__federation_expose_utils.a884f4b3.js",
+            "static/js/async/__federation_expose_app.0875db99.js",
+            "static/js/async/__federation_expose_modules__data_object.75bab444.js",
+            "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+            "static/js/async/2682.ffe0313a.js",
+            "static/js/async/161.7a7572e8.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.446cc4f3.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.d9edf6d3.js"
+          ],
+          "async": [
+            "static/js/async/7599.f501b0a1.js",
+            "static/js/async/7642.9c387651.js",
+            "static/js/async/4898.dcac9ca5.js",
+            "static/js/async/3037.df1119a5.js",
+            "static/js/async/6210.0866341b.js",
+            "static/js/async/5032.bf3d9c93.js",
+            "static/js/async/4611.cad23c63.js",
+            "static/js/async/2080.73ea7df5.js",
+            "static/js/async/9530.85e2cc52.js",
+            "static/js/async/8791.c8a6f64e.js",
+            "static/js/async/2468.acc189ed.js",
+            "static/js/async/2011.cfb5b180.js",
+            "static/js/async/4487.6d152c7f.js",
+            "static/js/async/372.3f29f28f.js",
+            "static/js/async/2423.cb31495e.js",
+            "static/js/async/9100.3a9e0477.js",
+            "static/js/async/6807.43933893.js",
+            "static/js/async/8006.5c3fb0f6.js",
+            "static/js/async/1334.676803d0.js",
+            "static/js/async/7121.a3f1cdbc.js",
+            "static/js/async/6177.c04a6699.js",
+            "static/js/async/7392.61615569.js",
+            "static/js/async/8096.8918e684.js",
+            "static/js/async/3107.a2e539dc.js",
+            "static/js/async/3350.35853242.js",
+            "static/js/async/4590.ffd38ea0.js",
+            "static/js/async/7502.8f68529a.js",
+            "static/js/async/6269.17488d08.js",
+            "static/js/async/3866.1193117e.js",
+            "static/js/async/4621.ec5e4711.js",
+            "static/js/async/8511.d1d99ec3.js",
+            "static/js/async/6153.d6711a99.js",
+            "static/js/async/3410.7a951fb2.js",
+            "static/js/async/753.f617a5fd.js",
+            "static/js/async/7468.eeba76a0.js",
+            "static/js/async/7800.b8d10431.js",
+            "static/js/async/5933.0a25011f.js",
+            "static/js/async/6520.40be04a5.js",
+            "static/js/async/6686.526f417d.js",
+            "static/js/async/9706.f33e713d.js",
+            "static/js/async/4857.30a58545.js",
+            "static/js/async/2496.b4d4039a.js",
+            "static/js/async/6274.913bbdc8.js",
+            "static/js/async/5221.5e6b1bc4.js",
+            "static/js/async/531.727a2b70.js",
+            "static/js/async/4549.74ab684b.js",
+            "static/js/async/7467.95d94a75.js",
+            "static/js/async/7374.352137d7.js",
+            "static/js/async/9214.f2fc22c6.js",
+            "static/js/async/8625.2a5d3e9a.js",
+            "static/js/async/8226.765afaed.js",
+            "static/js/async/1882.f07f0a1d.js",
+            "static/js/async/6040.016dd42b.js",
+            "static/js/async/833.94eee6df.js",
+            "static/js/async/5978.246f8ba2.js",
+            "static/js/async/8961.2b24b15b.js",
+            "static/js/async/1657.1d133530.js",
+            "static/js/async/6421.7c99f384.js",
+            "static/js/async/1851.50e72f7c.js",
+            "static/js/async/3770.007f6481.js",
+            "static/js/async/5705.f6f1946a.js",
+            "static/js/async/99.d0983e15.js",
+            "static/js/async/1224.4353a5f1.js",
+            "static/js/async/8723.2f1df9d5.js",
+            "static/js/async/9368.b04ae990.js",
+            "static/js/async/7337.a17f68de.js",
+            "static/js/async/8476.a2da556e.js",
+            "static/js/async/105.b3ed03a6.js",
+            "static/js/async/6789.3dc3b52a.js",
+            "static/js/async/3118.44d9247d.js",
+            "static/js/async/7046.648a6262.js",
+            "static/js/async/5277.b1fb56c1.js",
+            "static/js/async/9036.8b6cac41.js",
+            "static/js/async/4515.16482028.js",
+            "static/js/async/7675.8fe0706f.js",
+            "static/js/async/9638.a46cb712.js",
+            "static/js/async/8819.e80def20.js",
+            "static/js/async/4864.192b3c9c.js",
+            "static/js/async/9086.69a661be.js",
+            "static/js/async/9662.79263c53.js",
+            "static/js/async/5559.18aa4708.js",
+            "static/js/async/2009.ca309c35.js",
+            "static/js/async/6132.faee4341.js",
+            "static/js/async/9879.fdd218f8.js",
+            "static/js/async/526.3100dd15.js",
+            "static/js/async/5263.e342215d.js",
+            "static/js/async/5182.cdd2efd8.js",
+            "static/js/async/8308.6ff2a32b.js",
+            "static/js/async/6024.4826005c.js",
+            "static/js/async/7809.b208df94.js",
+            "static/js/async/5153.16512cb0.js",
+            "static/js/async/9563.ff6db423.js",
+            "static/js/async/6497.e801df72.js",
+            "static/js/async/9906.16d2a9a6.js",
+            "static/js/async/5868.2a3bb0e0.js",
+            "static/js/async/1597.8c0076ee.js",
+            "static/js/async/2455.f6530cc5.js",
+            "static/js/async/6134.a5153d0d.js",
+            "static/js/async/1690.b2b98aaf.js",
+            "static/js/async/8868.7f37a2ab.js",
+            "static/js/async/7138.f2408353.js",
+            "static/js/async/7071.bc68c184.js",
+            "static/js/async/3852.98b45d65.js",
+            "static/js/async/5022.a2a1d487.js",
+            "static/js/async/4238.20c56b2d.js",
+            "static/js/async/4190.892ea34a.js",
+            "static/js/async/4093.6ecd4f21.js",
+            "static/js/async/9708.fe9ac705.js",
+            "static/js/async/4778.612171c0.js",
+            "static/js/async/1489.c79950dd.js",
+            "static/js/async/6938.45560ce7.js",
+            "static/js/async/2172.3cb9bf31.js",
+            "static/js/async/3636.874609a2.js",
+            "static/js/async/1910.88cf73f4.js",
+            "static/js/async/3075.f80a7faa.js",
+            "static/js/async/420.c386c9c2.js",
+            "static/js/async/9566.23d76ee1.js",
+            "static/js/async/1069.c751acfe.js",
+            "static/js/async/1698.da67ca2a.js",
+            "static/js/async/9983.2287eb9d.js",
+            "static/js/async/7998.52fcf760.js",
+            "static/js/async/2490.44bedd93.js",
+            "static/js/async/7775.942e75ea.js",
+            "static/js/async/8165.0098ecbf.js",
+            "static/js/async/2227.0c29417c.js",
+            "static/js/async/4234.8a693543.js",
+            "static/js/async/46.29b9e7fb.js",
+            "static/js/async/5791.e28d60a8.js",
+            "static/js/async/4370.e2476933.js",
+            "static/js/async/7658.2d37af52.js",
+            "static/js/async/3716.f732acfb.js",
+            "static/js/async/1333.00749a1d.js",
+            "static/js/async/1064.a444e516.js",
+            "static/js/async/6344.c189db04.js",
+            "static/js/async/5239.8451c759.js",
+            "static/js/async/207.dc534702.js",
+            "static/js/async/3941.f61f80cc.js",
+            "static/js/async/1498.bb8a7cad.js",
+            "static/js/async/4353.4487c361.js",
+            "static/js/async/1245.7092be8b.js",
+            "static/js/async/7219.8c91f726.js",
+            "static/js/async/2880.c4ae9e92.js",
+            "static/js/async/8888.387774c0.js",
+            "static/js/async/7311.2ab0eccd.js",
+            "static/js/async/8690.64b37ae9.js",
+            "static/js/async/7404.12da9f5b.js",
+            "static/js/async/6547.266123c1.js",
+            "static/js/async/7698.c996ed42.js",
+            "static/js/async/7085.68695551.js",
+            "static/js/async/3105.91f2f020.js",
+            "static/js/async/4804.c516461b.js",
+            "static/js/async/5539.3643c747.js",
+            "static/js/async/8336.063332be.js",
+            "static/js/async/5627.5412f3ad.js",
+            "static/js/async/5012.c23d7f40.js",
+            "static/js/async/8420.a6c9c55e.js",
+            "static/js/async/3648.7f4751c2.js",
+            "static/js/async/5887.5599eda1.js",
+            "static/js/async/4099.1db429ed.js",
+            "static/js/async/5647.9b011d98.js",
+            "static/js/async/8559.0bb884a7.js",
+            "static/js/async/9430.35458b7e.js",
+            "static/js/async/5694.3d4e7cd2.js",
+            "static/js/async/9972.24cbd462.js",
+            "static/js/async/902.868bc783.js",
+            "static/js/async/1519.b0a37b46.js",
+            "static/js/async/8500.f6813f14.js",
+            "static/js/async/516.0e2f23ae.js",
+            "static/js/async/8843.a2b58ed4.js",
+            "static/js/async/5540.fb4920b4.js",
+            "static/js/async/1758.7d46b820.js",
+            "static/js/async/7696.a959d2b1.js",
+            "static/js/async/1296.93efc03d.js",
+            "static/js/async/6144.88fc1f36.js",
+            "static/js/async/9488.b9085241.js",
+            "static/js/async/862.d21f7451.js",
+            "static/js/async/7551.d1469cb7.js",
+            "static/js/async/3618.97f3baf4.js",
+            "static/js/async/346.6816c503.js",
+            "static/js/async/7516.8977ec47.js",
+            "static/js/async/2076.640559f7.js",
+            "static/js/async/148.e9ac8d64.js",
+            "static/js/async/4397.da3d320a.js",
+            "static/js/async/6743.b12f6c26.js",
+            "static/js/async/7386.bb50ee06.js",
+            "static/js/async/5854.b6a22ba5.js",
+            "static/js/async/2027.42242eaa.js",
+            "static/js/async/3395.fc64b4c1.js",
+            "static/js/async/9345.afd5c749.js",
+            "static/js/async/9440.e652cdcc.js",
+            "static/js/async/6816.8f55482c.js",
+            "static/js/async/4855.4f5863cc.js",
+            "static/js/async/5267.2c16866e.js",
+            "static/js/async/4434.bce523e9.js",
+            "static/js/async/4513.90c6869b.js",
+            "static/js/async/5818.bab2860a.js",
+            "static/js/async/6564.02a274f5.js",
+            "static/js/async/8636.61f15509.js",
+            "static/js/async/5765.53f199f6.js",
+            "static/js/async/7050.7467db7e.js",
+            "static/js/async/3111.05f4b107.js",
+            "static/js/async/3016.0f65694f.js",
+            "static/js/async/9815.0e900f0f.js",
+            "static/js/async/6913.dae2685b.js",
+            "static/js/async/2202.482aa090.js",
+            "static/js/async/1528.5353f329.js",
+            "static/js/async/960.79eb8316.js",
+            "static/js/async/8097.5c9986a9.js",
+            "static/js/async/2252.8ba16355.js",
+            "static/js/async/3858.002ff261.js",
+            "static/js/async/528.336a27ba.js",
+            "static/js/async/2993.0685d6bc.js",
+            "static/js/async/9503.931d6960.js",
+            "static/js/async/2967.50db3862.js",
+            "static/js/async/8192.32789ded.js",
+            "static/js/async/1267.a35fa847.js",
+            "static/js/async/6175.47ee7301.js",
+            "static/js/async/8434.fcc60125.js",
+            "static/js/async/8935.aa3c069a.js",
+            "static/js/async/2612.10fbf2cb.js",
+            "static/js/async/3449.8c724520.js",
+            "static/js/async/6526.2f880946.js",
+            "static/js/async/1746.20f0870c.js",
+            "static/js/async/5428.44819fb0.js",
+            "static/js/async/3386.115905f2.js",
+            "static/js/async/7472.9a55331e.js",
+            "static/js/async/9882.d5988f6d.js",
+            "static/js/async/2181.8892c01c.js",
+            "static/js/async/6974.5f2c957b.js",
+            "static/js/async/707.5d05993a.js",
+            "static/js/async/4149.02bec4c1.js",
+            "static/js/async/7602.3f85988f.js",
+            "static/js/async/6301.5c2999cb.js",
+            "static/js/async/6458.3374e02c.js",
+            "static/js/async/5704.3a9a4a6c.js",
+            "static/js/async/8275.7d57d2b4.js",
+            "static/js/async/2447.f3c20c06.js",
+            "static/js/async/6693.cf072c5b.js",
+            "static/js/async/3513.3b8ff637.js",
+            "static/js/async/7065.b8fc6306.js",
+            "static/js/async/2301.3e1c8906.js",
+            "static/js/async/5362.71548a48.js",
+            "static/js/async/2557.417a2fa2.js",
+            "static/js/async/9714.030e0c2c.js",
+            "static/js/async/438.b6d0170e.js",
+            "static/js/async/2111.1b5f8480.js",
+            "static/js/async/1623.a127f6ac.js",
+            "static/js/async/4301.cb8866ae.js",
+            "static/js/async/5424.af1b8211.js",
+            "static/js/async/8554.e76562c3.js",
+            "static/js/async/9242.1f1a62c9.js",
+            "static/js/async/1472.10b13d60.js",
+            "static/js/async/5232.c6d51e6e.js",
+            "static/js/async/7553.3b83762f.js",
+            "static/js/async/6648.51d04568.js",
+            "static/js/async/5976.3732d0b9.js",
+            "static/js/async/2092.fae343e8.js",
+            "static/js/async/1151.1de88f3a.js",
+            "static/js/async/161.7a7572e8.js",
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/6534.3ecdad71.js",
+            "static/js/async/4819.c23fd1b3.js",
+            "static/js/async/1869.55492adc.js",
+            "static/js/async/__federation_expose_utils.a884f4b3.js",
+            "static/js/async/__federation_expose_app.0875db99.js",
+            "static/js/async/__federation_expose_modules__data_object.75bab444.js",
+            "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+            "static/js/async/2682.ffe0313a.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.446cc4f3.js",
+            "static/js/async/8902.d970bb95.js"
+          ]
+        },
+        "css": {
+          "sync": [
+            "static/css/async/6534.36e1bbd1.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.b642ae4b.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.b642ae4b.css"
+          ],
+          "async": [
+            "static/css/async/6534.36e1bbd1.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.b642ae4b.css"
+          ]
+        }
+      }
+    },
+    {
+      "path": "./modules/class-definitions",
+      "id": "pimcore_studio_ui_bundle:modules/class-definitions",
+      "name": "modules/class-definitions",
+      "requires": [],
+      "file": "js/src/sdk/modules/class-definitions/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/__federation_expose_modules__class_definitions.648901bb.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./modules/data-object",
+      "id": "pimcore_studio_ui_bundle:modules/data-object",
+      "name": "modules/data-object",
+      "requires": [
+        "inversify"
+      ],
+      "file": "js/src/sdk/modules/data-object/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/6534.3ecdad71.js",
+            "static/js/async/4819.c23fd1b3.js",
+            "static/js/async/1869.55492adc.js",
+            "static/js/async/__federation_expose_utils.a884f4b3.js",
+            "static/js/async/__federation_expose_app.0875db99.js",
+            "static/js/async/__federation_expose_modules__data_object.75bab444.js",
+            "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+            "static/js/async/2682.ffe0313a.js",
+            "static/js/async/161.7a7572e8.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.446cc4f3.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.d9edf6d3.js"
+          ],
+          "async": [
+            "static/js/async/7599.f501b0a1.js",
+            "static/js/async/7642.9c387651.js",
+            "static/js/async/4898.dcac9ca5.js",
+            "static/js/async/3037.df1119a5.js",
+            "static/js/async/6210.0866341b.js",
+            "static/js/async/5032.bf3d9c93.js",
+            "static/js/async/4611.cad23c63.js",
+            "static/js/async/2080.73ea7df5.js",
+            "static/js/async/9530.85e2cc52.js",
+            "static/js/async/8791.c8a6f64e.js",
+            "static/js/async/2468.acc189ed.js",
+            "static/js/async/2011.cfb5b180.js",
+            "static/js/async/4487.6d152c7f.js",
+            "static/js/async/372.3f29f28f.js",
+            "static/js/async/2423.cb31495e.js",
+            "static/js/async/9100.3a9e0477.js",
+            "static/js/async/6807.43933893.js",
+            "static/js/async/8006.5c3fb0f6.js",
+            "static/js/async/1334.676803d0.js",
+            "static/js/async/7121.a3f1cdbc.js",
+            "static/js/async/6177.c04a6699.js",
+            "static/js/async/7392.61615569.js",
+            "static/js/async/8096.8918e684.js",
+            "static/js/async/3107.a2e539dc.js",
+            "static/js/async/3350.35853242.js",
+            "static/js/async/4590.ffd38ea0.js",
+            "static/js/async/7502.8f68529a.js",
+            "static/js/async/6269.17488d08.js",
+            "static/js/async/3866.1193117e.js",
+            "static/js/async/4621.ec5e4711.js",
+            "static/js/async/8511.d1d99ec3.js",
+            "static/js/async/6153.d6711a99.js",
+            "static/js/async/3410.7a951fb2.js",
+            "static/js/async/753.f617a5fd.js",
+            "static/js/async/7468.eeba76a0.js",
+            "static/js/async/7800.b8d10431.js",
+            "static/js/async/5933.0a25011f.js",
+            "static/js/async/6520.40be04a5.js",
+            "static/js/async/6686.526f417d.js",
+            "static/js/async/9706.f33e713d.js",
+            "static/js/async/4857.30a58545.js",
+            "static/js/async/2496.b4d4039a.js",
+            "static/js/async/6274.913bbdc8.js",
+            "static/js/async/5221.5e6b1bc4.js",
+            "static/js/async/531.727a2b70.js",
+            "static/js/async/4549.74ab684b.js",
+            "static/js/async/7467.95d94a75.js",
+            "static/js/async/7374.352137d7.js",
+            "static/js/async/9214.f2fc22c6.js",
+            "static/js/async/8625.2a5d3e9a.js",
+            "static/js/async/8226.765afaed.js",
+            "static/js/async/1882.f07f0a1d.js",
+            "static/js/async/6040.016dd42b.js",
+            "static/js/async/833.94eee6df.js",
+            "static/js/async/5978.246f8ba2.js",
+            "static/js/async/8961.2b24b15b.js",
+            "static/js/async/1657.1d133530.js",
+            "static/js/async/6421.7c99f384.js",
+            "static/js/async/1851.50e72f7c.js",
+            "static/js/async/3770.007f6481.js",
+            "static/js/async/5705.f6f1946a.js",
+            "static/js/async/99.d0983e15.js",
+            "static/js/async/1224.4353a5f1.js",
+            "static/js/async/8723.2f1df9d5.js",
+            "static/js/async/9368.b04ae990.js",
+            "static/js/async/7337.a17f68de.js",
+            "static/js/async/8476.a2da556e.js",
+            "static/js/async/105.b3ed03a6.js",
+            "static/js/async/6789.3dc3b52a.js",
+            "static/js/async/3118.44d9247d.js",
+            "static/js/async/7046.648a6262.js",
+            "static/js/async/5277.b1fb56c1.js",
+            "static/js/async/9036.8b6cac41.js",
+            "static/js/async/4515.16482028.js",
+            "static/js/async/7675.8fe0706f.js",
+            "static/js/async/9638.a46cb712.js",
+            "static/js/async/8819.e80def20.js",
+            "static/js/async/4864.192b3c9c.js",
+            "static/js/async/9086.69a661be.js",
+            "static/js/async/9662.79263c53.js",
+            "static/js/async/5559.18aa4708.js",
+            "static/js/async/2009.ca309c35.js",
+            "static/js/async/6132.faee4341.js",
+            "static/js/async/9879.fdd218f8.js",
+            "static/js/async/526.3100dd15.js",
+            "static/js/async/5263.e342215d.js",
+            "static/js/async/5182.cdd2efd8.js",
+            "static/js/async/8308.6ff2a32b.js",
+            "static/js/async/6024.4826005c.js",
+            "static/js/async/7809.b208df94.js",
+            "static/js/async/5153.16512cb0.js",
+            "static/js/async/9563.ff6db423.js",
+            "static/js/async/6497.e801df72.js",
+            "static/js/async/9906.16d2a9a6.js",
+            "static/js/async/5868.2a3bb0e0.js",
+            "static/js/async/1597.8c0076ee.js",
+            "static/js/async/2455.f6530cc5.js",
+            "static/js/async/6134.a5153d0d.js",
+            "static/js/async/1690.b2b98aaf.js",
+            "static/js/async/8868.7f37a2ab.js",
+            "static/js/async/7138.f2408353.js",
+            "static/js/async/7071.bc68c184.js",
+            "static/js/async/3852.98b45d65.js",
+            "static/js/async/5022.a2a1d487.js",
+            "static/js/async/4238.20c56b2d.js",
+            "static/js/async/4190.892ea34a.js",
+            "static/js/async/4093.6ecd4f21.js",
+            "static/js/async/9708.fe9ac705.js",
+            "static/js/async/4778.612171c0.js",
+            "static/js/async/1489.c79950dd.js",
+            "static/js/async/6938.45560ce7.js",
+            "static/js/async/2172.3cb9bf31.js",
+            "static/js/async/3636.874609a2.js",
+            "static/js/async/1910.88cf73f4.js",
+            "static/js/async/3075.f80a7faa.js",
+            "static/js/async/420.c386c9c2.js",
+            "static/js/async/9566.23d76ee1.js",
+            "static/js/async/1069.c751acfe.js",
+            "static/js/async/1698.da67ca2a.js",
+            "static/js/async/9983.2287eb9d.js",
+            "static/js/async/7998.52fcf760.js",
+            "static/js/async/2490.44bedd93.js",
+            "static/js/async/7775.942e75ea.js",
+            "static/js/async/8165.0098ecbf.js",
+            "static/js/async/2227.0c29417c.js",
+            "static/js/async/4234.8a693543.js",
+            "static/js/async/46.29b9e7fb.js",
+            "static/js/async/5791.e28d60a8.js",
+            "static/js/async/4370.e2476933.js",
+            "static/js/async/7658.2d37af52.js",
+            "static/js/async/3716.f732acfb.js",
+            "static/js/async/1333.00749a1d.js",
+            "static/js/async/1064.a444e516.js",
+            "static/js/async/6344.c189db04.js",
+            "static/js/async/5239.8451c759.js",
+            "static/js/async/207.dc534702.js",
+            "static/js/async/3941.f61f80cc.js",
+            "static/js/async/1498.bb8a7cad.js",
+            "static/js/async/4353.4487c361.js",
+            "static/js/async/1245.7092be8b.js",
+            "static/js/async/7219.8c91f726.js",
+            "static/js/async/2880.c4ae9e92.js",
+            "static/js/async/8888.387774c0.js",
+            "static/js/async/7311.2ab0eccd.js",
+            "static/js/async/8690.64b37ae9.js",
+            "static/js/async/7404.12da9f5b.js",
+            "static/js/async/6547.266123c1.js",
+            "static/js/async/7698.c996ed42.js",
+            "static/js/async/7085.68695551.js",
+            "static/js/async/3105.91f2f020.js",
+            "static/js/async/4804.c516461b.js",
+            "static/js/async/5539.3643c747.js",
+            "static/js/async/8336.063332be.js",
+            "static/js/async/5627.5412f3ad.js",
+            "static/js/async/5012.c23d7f40.js",
+            "static/js/async/8420.a6c9c55e.js",
+            "static/js/async/3648.7f4751c2.js",
+            "static/js/async/5887.5599eda1.js",
+            "static/js/async/4099.1db429ed.js",
+            "static/js/async/5647.9b011d98.js",
+            "static/js/async/8559.0bb884a7.js",
+            "static/js/async/9430.35458b7e.js",
+            "static/js/async/5694.3d4e7cd2.js",
+            "static/js/async/9972.24cbd462.js",
+            "static/js/async/902.868bc783.js",
+            "static/js/async/1519.b0a37b46.js",
+            "static/js/async/8500.f6813f14.js",
+            "static/js/async/516.0e2f23ae.js",
+            "static/js/async/8843.a2b58ed4.js",
+            "static/js/async/5540.fb4920b4.js",
+            "static/js/async/1758.7d46b820.js",
+            "static/js/async/7696.a959d2b1.js",
+            "static/js/async/1296.93efc03d.js",
+            "static/js/async/6144.88fc1f36.js",
+            "static/js/async/9488.b9085241.js",
+            "static/js/async/862.d21f7451.js",
+            "static/js/async/7551.d1469cb7.js",
+            "static/js/async/3618.97f3baf4.js",
+            "static/js/async/346.6816c503.js",
+            "static/js/async/7516.8977ec47.js",
+            "static/js/async/2076.640559f7.js",
+            "static/js/async/148.e9ac8d64.js",
+            "static/js/async/4397.da3d320a.js",
+            "static/js/async/6743.b12f6c26.js",
+            "static/js/async/7386.bb50ee06.js",
+            "static/js/async/5854.b6a22ba5.js",
+            "static/js/async/2027.42242eaa.js",
+            "static/js/async/3395.fc64b4c1.js",
+            "static/js/async/9345.afd5c749.js",
+            "static/js/async/9440.e652cdcc.js",
+            "static/js/async/6816.8f55482c.js",
+            "static/js/async/4855.4f5863cc.js",
+            "static/js/async/5267.2c16866e.js",
+            "static/js/async/4434.bce523e9.js",
+            "static/js/async/4513.90c6869b.js",
+            "static/js/async/5818.bab2860a.js",
+            "static/js/async/6564.02a274f5.js",
+            "static/js/async/8636.61f15509.js",
+            "static/js/async/5765.53f199f6.js",
+            "static/js/async/7050.7467db7e.js",
+            "static/js/async/3111.05f4b107.js",
+            "static/js/async/3016.0f65694f.js",
+            "static/js/async/9815.0e900f0f.js",
+            "static/js/async/6913.dae2685b.js",
+            "static/js/async/2202.482aa090.js",
+            "static/js/async/1528.5353f329.js",
+            "static/js/async/960.79eb8316.js",
+            "static/js/async/8097.5c9986a9.js",
+            "static/js/async/2252.8ba16355.js",
+            "static/js/async/3858.002ff261.js",
+            "static/js/async/528.336a27ba.js",
+            "static/js/async/2993.0685d6bc.js",
+            "static/js/async/9503.931d6960.js",
+            "static/js/async/2967.50db3862.js",
+            "static/js/async/8192.32789ded.js",
+            "static/js/async/1267.a35fa847.js",
+            "static/js/async/6175.47ee7301.js",
+            "static/js/async/8434.fcc60125.js",
+            "static/js/async/8935.aa3c069a.js",
+            "static/js/async/2612.10fbf2cb.js",
+            "static/js/async/3449.8c724520.js",
+            "static/js/async/6526.2f880946.js",
+            "static/js/async/1746.20f0870c.js",
+            "static/js/async/5428.44819fb0.js",
+            "static/js/async/3386.115905f2.js",
+            "static/js/async/7472.9a55331e.js",
+            "static/js/async/9882.d5988f6d.js",
+            "static/js/async/2181.8892c01c.js",
+            "static/js/async/6974.5f2c957b.js",
+            "static/js/async/707.5d05993a.js",
+            "static/js/async/4149.02bec4c1.js",
+            "static/js/async/7602.3f85988f.js",
+            "static/js/async/6301.5c2999cb.js",
+            "static/js/async/6458.3374e02c.js",
+            "static/js/async/5704.3a9a4a6c.js",
+            "static/js/async/8275.7d57d2b4.js",
+            "static/js/async/2447.f3c20c06.js",
+            "static/js/async/6693.cf072c5b.js",
+            "static/js/async/3513.3b8ff637.js",
+            "static/js/async/7065.b8fc6306.js",
+            "static/js/async/2301.3e1c8906.js",
+            "static/js/async/5362.71548a48.js",
+            "static/js/async/2557.417a2fa2.js",
+            "static/js/async/9714.030e0c2c.js",
+            "static/js/async/438.b6d0170e.js",
+            "static/js/async/2111.1b5f8480.js",
+            "static/js/async/1623.a127f6ac.js",
+            "static/js/async/4301.cb8866ae.js",
+            "static/js/async/5424.af1b8211.js",
+            "static/js/async/8554.e76562c3.js",
+            "static/js/async/9242.1f1a62c9.js",
+            "static/js/async/1472.10b13d60.js",
+            "static/js/async/5232.c6d51e6e.js",
+            "static/js/async/7553.3b83762f.js",
+            "static/js/async/6648.51d04568.js",
+            "static/js/async/5976.3732d0b9.js",
+            "static/js/async/2092.fae343e8.js",
+            "static/js/async/1151.1de88f3a.js",
+            "static/js/async/161.7a7572e8.js",
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/6534.3ecdad71.js",
+            "static/js/async/4819.c23fd1b3.js",
+            "static/js/async/1869.55492adc.js",
+            "static/js/async/__federation_expose_utils.a884f4b3.js",
+            "static/js/async/__federation_expose_app.0875db99.js",
+            "static/js/async/__federation_expose_modules__data_object.75bab444.js",
+            "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+            "static/js/async/2682.ffe0313a.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.446cc4f3.js",
+            "static/js/async/8902.d970bb95.js"
+          ]
+        },
+        "css": {
+          "sync": [
+            "static/css/async/6534.36e1bbd1.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.b642ae4b.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.b642ae4b.css"
+          ],
+          "async": [
+            "static/css/async/6534.36e1bbd1.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.b642ae4b.css"
+          ]
+        }
+      }
+    },
+    {
+      "path": "./modules/element",
+      "id": "pimcore_studio_ui_bundle:modules/element",
+      "name": "modules/element",
+      "requires": [
+        "react-i18next",
+        "react",
+        "classnames"
+      ],
+      "file": "js/src/sdk/modules/element/index.ts",
+      "assets": {
+        "js": {
+          "sync": [],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./modules/icon-library",
+      "id": "pimcore_studio_ui_bundle:modules/icon-library",
+      "name": "modules/icon-library",
+      "requires": [],
+      "file": "js/src/sdk/modules/icon-library/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/__federation_expose_modules__icon_library.bf39ebbf.js"
+          ],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./modules/user",
+      "id": "pimcore_studio_ui_bundle:modules/user",
+      "name": "modules/user",
+      "requires": [],
+      "file": "js/src/sdk/modules/user/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/6534.3ecdad71.js",
+            "static/js/async/1869.55492adc.js",
+            "static/js/async/__federation_expose_utils.a884f4b3.js",
+            "static/js/async/__federation_expose_app.0875db99.js",
+            "static/js/async/__federation_expose_modules__user.9649b588.js"
+          ],
+          "async": [
+            "static/js/async/7599.f501b0a1.js",
+            "static/js/async/7642.9c387651.js",
+            "static/js/async/4898.dcac9ca5.js",
+            "static/js/async/3037.df1119a5.js",
+            "static/js/async/6210.0866341b.js",
+            "static/js/async/5032.bf3d9c93.js",
+            "static/js/async/4611.cad23c63.js",
+            "static/js/async/2080.73ea7df5.js",
+            "static/js/async/9530.85e2cc52.js",
+            "static/js/async/8791.c8a6f64e.js",
+            "static/js/async/2468.acc189ed.js",
+            "static/js/async/2011.cfb5b180.js",
+            "static/js/async/4487.6d152c7f.js",
+            "static/js/async/372.3f29f28f.js",
+            "static/js/async/2423.cb31495e.js",
+            "static/js/async/9100.3a9e0477.js",
+            "static/js/async/6807.43933893.js",
+            "static/js/async/8006.5c3fb0f6.js",
+            "static/js/async/1334.676803d0.js",
+            "static/js/async/7121.a3f1cdbc.js",
+            "static/js/async/6177.c04a6699.js",
+            "static/js/async/7392.61615569.js",
+            "static/js/async/8096.8918e684.js",
+            "static/js/async/3107.a2e539dc.js",
+            "static/js/async/3350.35853242.js",
+            "static/js/async/4590.ffd38ea0.js",
+            "static/js/async/7502.8f68529a.js",
+            "static/js/async/6269.17488d08.js",
+            "static/js/async/3866.1193117e.js",
+            "static/js/async/4621.ec5e4711.js",
+            "static/js/async/8511.d1d99ec3.js",
+            "static/js/async/6153.d6711a99.js",
+            "static/js/async/3410.7a951fb2.js",
+            "static/js/async/753.f617a5fd.js",
+            "static/js/async/7468.eeba76a0.js",
+            "static/js/async/7800.b8d10431.js",
+            "static/js/async/5933.0a25011f.js",
+            "static/js/async/6520.40be04a5.js",
+            "static/js/async/6686.526f417d.js",
+            "static/js/async/9706.f33e713d.js",
+            "static/js/async/4857.30a58545.js",
+            "static/js/async/2496.b4d4039a.js",
+            "static/js/async/6274.913bbdc8.js",
+            "static/js/async/5221.5e6b1bc4.js",
+            "static/js/async/531.727a2b70.js",
+            "static/js/async/4549.74ab684b.js",
+            "static/js/async/7467.95d94a75.js",
+            "static/js/async/7374.352137d7.js",
+            "static/js/async/9214.f2fc22c6.js",
+            "static/js/async/8625.2a5d3e9a.js",
+            "static/js/async/8226.765afaed.js",
+            "static/js/async/1882.f07f0a1d.js",
+            "static/js/async/6040.016dd42b.js",
+            "static/js/async/833.94eee6df.js",
+            "static/js/async/5978.246f8ba2.js",
+            "static/js/async/8961.2b24b15b.js",
+            "static/js/async/1657.1d133530.js",
+            "static/js/async/6421.7c99f384.js",
+            "static/js/async/1851.50e72f7c.js",
+            "static/js/async/3770.007f6481.js",
+            "static/js/async/5705.f6f1946a.js",
+            "static/js/async/99.d0983e15.js",
+            "static/js/async/1224.4353a5f1.js",
+            "static/js/async/8723.2f1df9d5.js",
+            "static/js/async/9368.b04ae990.js",
+            "static/js/async/7337.a17f68de.js",
+            "static/js/async/8476.a2da556e.js",
+            "static/js/async/105.b3ed03a6.js",
+            "static/js/async/6789.3dc3b52a.js",
+            "static/js/async/3118.44d9247d.js",
+            "static/js/async/7046.648a6262.js",
+            "static/js/async/5277.b1fb56c1.js",
+            "static/js/async/9036.8b6cac41.js",
+            "static/js/async/4515.16482028.js",
+            "static/js/async/7675.8fe0706f.js",
+            "static/js/async/9638.a46cb712.js",
+            "static/js/async/8819.e80def20.js",
+            "static/js/async/4864.192b3c9c.js",
+            "static/js/async/9086.69a661be.js",
+            "static/js/async/9662.79263c53.js",
+            "static/js/async/5559.18aa4708.js",
+            "static/js/async/2009.ca309c35.js",
+            "static/js/async/6132.faee4341.js",
+            "static/js/async/9879.fdd218f8.js",
+            "static/js/async/526.3100dd15.js",
+            "static/js/async/5263.e342215d.js",
+            "static/js/async/5182.cdd2efd8.js",
+            "static/js/async/8308.6ff2a32b.js",
+            "static/js/async/6024.4826005c.js",
+            "static/js/async/7809.b208df94.js",
+            "static/js/async/5153.16512cb0.js",
+            "static/js/async/9563.ff6db423.js",
+            "static/js/async/6497.e801df72.js",
+            "static/js/async/9906.16d2a9a6.js",
+            "static/js/async/5868.2a3bb0e0.js",
+            "static/js/async/1597.8c0076ee.js",
+            "static/js/async/2455.f6530cc5.js",
+            "static/js/async/6134.a5153d0d.js",
+            "static/js/async/1690.b2b98aaf.js",
+            "static/js/async/8868.7f37a2ab.js",
+            "static/js/async/7138.f2408353.js",
+            "static/js/async/7071.bc68c184.js",
+            "static/js/async/3852.98b45d65.js",
+            "static/js/async/5022.a2a1d487.js",
+            "static/js/async/4238.20c56b2d.js",
+            "static/js/async/4190.892ea34a.js",
+            "static/js/async/4093.6ecd4f21.js",
+            "static/js/async/9708.fe9ac705.js",
+            "static/js/async/4778.612171c0.js",
+            "static/js/async/1489.c79950dd.js",
+            "static/js/async/6938.45560ce7.js",
+            "static/js/async/2172.3cb9bf31.js",
+            "static/js/async/3636.874609a2.js",
+            "static/js/async/1910.88cf73f4.js",
+            "static/js/async/3075.f80a7faa.js",
+            "static/js/async/420.c386c9c2.js",
+            "static/js/async/9566.23d76ee1.js",
+            "static/js/async/1069.c751acfe.js",
+            "static/js/async/1698.da67ca2a.js",
+            "static/js/async/9983.2287eb9d.js",
+            "static/js/async/7998.52fcf760.js",
+            "static/js/async/2490.44bedd93.js",
+            "static/js/async/7775.942e75ea.js",
+            "static/js/async/8165.0098ecbf.js",
+            "static/js/async/2227.0c29417c.js",
+            "static/js/async/4234.8a693543.js",
+            "static/js/async/46.29b9e7fb.js",
+            "static/js/async/5791.e28d60a8.js",
+            "static/js/async/4370.e2476933.js",
+            "static/js/async/7658.2d37af52.js",
+            "static/js/async/3716.f732acfb.js",
+            "static/js/async/1333.00749a1d.js",
+            "static/js/async/1064.a444e516.js",
+            "static/js/async/6344.c189db04.js",
+            "static/js/async/5239.8451c759.js",
+            "static/js/async/207.dc534702.js",
+            "static/js/async/3941.f61f80cc.js",
+            "static/js/async/1498.bb8a7cad.js",
+            "static/js/async/4353.4487c361.js",
+            "static/js/async/1245.7092be8b.js",
+            "static/js/async/7219.8c91f726.js",
+            "static/js/async/2880.c4ae9e92.js",
+            "static/js/async/8888.387774c0.js",
+            "static/js/async/7311.2ab0eccd.js",
+            "static/js/async/8690.64b37ae9.js",
+            "static/js/async/7404.12da9f5b.js",
+            "static/js/async/6547.266123c1.js",
+            "static/js/async/7698.c996ed42.js",
+            "static/js/async/7085.68695551.js",
+            "static/js/async/3105.91f2f020.js",
+            "static/js/async/4804.c516461b.js",
+            "static/js/async/5539.3643c747.js",
+            "static/js/async/8336.063332be.js",
+            "static/js/async/5627.5412f3ad.js",
+            "static/js/async/5012.c23d7f40.js",
+            "static/js/async/8420.a6c9c55e.js",
+            "static/js/async/3648.7f4751c2.js",
+            "static/js/async/5887.5599eda1.js",
+            "static/js/async/4099.1db429ed.js",
+            "static/js/async/5647.9b011d98.js",
+            "static/js/async/8559.0bb884a7.js",
+            "static/js/async/9430.35458b7e.js",
+            "static/js/async/5694.3d4e7cd2.js",
+            "static/js/async/9972.24cbd462.js",
+            "static/js/async/902.868bc783.js",
+            "static/js/async/1519.b0a37b46.js",
+            "static/js/async/8500.f6813f14.js",
+            "static/js/async/516.0e2f23ae.js",
+            "static/js/async/8843.a2b58ed4.js",
+            "static/js/async/5540.fb4920b4.js",
+            "static/js/async/1758.7d46b820.js",
+            "static/js/async/7696.a959d2b1.js",
+            "static/js/async/1296.93efc03d.js",
+            "static/js/async/6144.88fc1f36.js",
+            "static/js/async/9488.b9085241.js",
+            "static/js/async/862.d21f7451.js",
+            "static/js/async/7551.d1469cb7.js",
+            "static/js/async/3618.97f3baf4.js",
+            "static/js/async/346.6816c503.js",
+            "static/js/async/7516.8977ec47.js",
+            "static/js/async/2076.640559f7.js",
+            "static/js/async/148.e9ac8d64.js",
+            "static/js/async/4397.da3d320a.js",
+            "static/js/async/6743.b12f6c26.js",
+            "static/js/async/7386.bb50ee06.js",
+            "static/js/async/5854.b6a22ba5.js",
+            "static/js/async/2027.42242eaa.js",
+            "static/js/async/3395.fc64b4c1.js",
+            "static/js/async/9345.afd5c749.js",
+            "static/js/async/9440.e652cdcc.js",
+            "static/js/async/6816.8f55482c.js",
+            "static/js/async/4855.4f5863cc.js",
+            "static/js/async/5267.2c16866e.js",
+            "static/js/async/4434.bce523e9.js",
+            "static/js/async/4513.90c6869b.js",
+            "static/js/async/5818.bab2860a.js",
+            "static/js/async/6564.02a274f5.js",
+            "static/js/async/8636.61f15509.js",
+            "static/js/async/5765.53f199f6.js",
+            "static/js/async/7050.7467db7e.js",
+            "static/js/async/3111.05f4b107.js",
+            "static/js/async/3016.0f65694f.js",
+            "static/js/async/9815.0e900f0f.js",
+            "static/js/async/6913.dae2685b.js",
+            "static/js/async/2202.482aa090.js",
+            "static/js/async/1528.5353f329.js",
+            "static/js/async/960.79eb8316.js",
+            "static/js/async/8097.5c9986a9.js",
+            "static/js/async/2252.8ba16355.js",
+            "static/js/async/3858.002ff261.js",
+            "static/js/async/528.336a27ba.js",
+            "static/js/async/2993.0685d6bc.js",
+            "static/js/async/9503.931d6960.js",
+            "static/js/async/2967.50db3862.js",
+            "static/js/async/8192.32789ded.js",
+            "static/js/async/1267.a35fa847.js",
+            "static/js/async/6175.47ee7301.js",
+            "static/js/async/8434.fcc60125.js",
+            "static/js/async/8935.aa3c069a.js",
+            "static/js/async/2612.10fbf2cb.js",
+            "static/js/async/3449.8c724520.js",
+            "static/js/async/6526.2f880946.js",
+            "static/js/async/1746.20f0870c.js",
+            "static/js/async/5428.44819fb0.js",
+            "static/js/async/3386.115905f2.js",
+            "static/js/async/7472.9a55331e.js",
+            "static/js/async/9882.d5988f6d.js",
+            "static/js/async/2181.8892c01c.js",
+            "static/js/async/6974.5f2c957b.js",
+            "static/js/async/707.5d05993a.js",
+            "static/js/async/4149.02bec4c1.js",
+            "static/js/async/7602.3f85988f.js",
+            "static/js/async/6301.5c2999cb.js",
+            "static/js/async/6458.3374e02c.js",
+            "static/js/async/5704.3a9a4a6c.js",
+            "static/js/async/8275.7d57d2b4.js",
+            "static/js/async/2447.f3c20c06.js",
+            "static/js/async/6693.cf072c5b.js",
+            "static/js/async/3513.3b8ff637.js",
+            "static/js/async/7065.b8fc6306.js",
+            "static/js/async/2301.3e1c8906.js",
+            "static/js/async/5362.71548a48.js",
+            "static/js/async/2557.417a2fa2.js",
+            "static/js/async/9714.030e0c2c.js",
+            "static/js/async/438.b6d0170e.js",
+            "static/js/async/2111.1b5f8480.js",
+            "static/js/async/1623.a127f6ac.js",
+            "static/js/async/4301.cb8866ae.js",
+            "static/js/async/5424.af1b8211.js",
+            "static/js/async/8554.e76562c3.js",
+            "static/js/async/9242.1f1a62c9.js",
+            "static/js/async/1472.10b13d60.js",
+            "static/js/async/5232.c6d51e6e.js",
+            "static/js/async/7553.3b83762f.js",
+            "static/js/async/6648.51d04568.js",
+            "static/js/async/5976.3732d0b9.js",
+            "static/js/async/2092.fae343e8.js",
+            "static/js/async/1151.1de88f3a.js"
+          ]
+        },
+        "css": {
+          "sync": [
+            "static/css/async/6534.36e1bbd1.css"
+          ],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./modules/widget-manager",
+      "id": "pimcore_studio_ui_bundle:modules/widget-manager",
+      "name": "modules/widget-manager",
+      "requires": [],
+      "file": "js/src/sdk/modules/widget-manager/index.ts",
+      "assets": {
+        "js": {
+          "sync": [],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./modules/wysiwyg",
+      "id": "pimcore_studio_ui_bundle:modules/wysiwyg",
+      "name": "modules/wysiwyg",
+      "requires": [],
+      "file": "js/src/sdk/modules/wysiwyg/index.ts",
+      "assets": {
+        "js": {
+          "sync": [],
+          "async": []
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      }
+    },
+    {
+      "path": "./utils",
+      "id": "pimcore_studio_ui_bundle:utils",
+      "name": "utils",
+      "requires": [
+        "i18next"
+      ],
+      "file": "js/src/sdk/utils/index.ts",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/6534.3ecdad71.js",
+            "static/js/async/4819.c23fd1b3.js",
+            "static/js/async/1869.55492adc.js",
+            "static/js/async/__federation_expose_utils.a884f4b3.js",
+            "static/js/async/__federation_expose_app.0875db99.js",
+            "static/js/async/__federation_expose_modules__data_object.75bab444.js",
+            "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+            "static/js/async/2682.ffe0313a.js",
+            "static/js/async/161.7a7572e8.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.446cc4f3.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.d9edf6d3.js",
+            "static/js/async/__federation_expose_modules__user.9649b588.js"
+          ],
+          "async": [
+            "static/js/async/7599.f501b0a1.js",
+            "static/js/async/8526.3a758371.js",
+            "static/js/async/1047.2bb3fd91.js",
+            "static/js/async/6534.3ecdad71.js",
+            "static/js/async/4819.c23fd1b3.js",
+            "static/js/async/1869.55492adc.js",
+            "static/js/async/__federation_expose_utils.a884f4b3.js",
+            "static/js/async/__federation_expose_app.0875db99.js",
+            "static/js/async/__federation_expose_modules__data_object.75bab444.js",
+            "static/js/async/__federation_expose_modules__asset.1f9979db.js",
+            "static/js/async/2682.ffe0313a.js",
+            "static/js/async/161.7a7572e8.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.446cc4f3.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.d9edf6d3.js",
+            "static/js/async/__federation_expose_modules__user.9649b588.js",
+            "static/js/async/7642.9c387651.js",
+            "static/js/async/4898.dcac9ca5.js",
+            "static/js/async/3037.df1119a5.js",
+            "static/js/async/6210.0866341b.js",
+            "static/js/async/5032.bf3d9c93.js",
+            "static/js/async/4611.cad23c63.js",
+            "static/js/async/2080.73ea7df5.js",
+            "static/js/async/9530.85e2cc52.js",
+            "static/js/async/8791.c8a6f64e.js",
+            "static/js/async/2468.acc189ed.js",
+            "static/js/async/2011.cfb5b180.js",
+            "static/js/async/4487.6d152c7f.js",
+            "static/js/async/372.3f29f28f.js",
+            "static/js/async/2423.cb31495e.js",
+            "static/js/async/9100.3a9e0477.js",
+            "static/js/async/6807.43933893.js",
+            "static/js/async/8006.5c3fb0f6.js",
+            "static/js/async/1334.676803d0.js",
+            "static/js/async/7121.a3f1cdbc.js",
+            "static/js/async/6177.c04a6699.js",
+            "static/js/async/7392.61615569.js",
+            "static/js/async/8096.8918e684.js",
+            "static/js/async/3107.a2e539dc.js",
+            "static/js/async/3350.35853242.js",
+            "static/js/async/4590.ffd38ea0.js",
+            "static/js/async/7502.8f68529a.js",
+            "static/js/async/6269.17488d08.js",
+            "static/js/async/3866.1193117e.js",
+            "static/js/async/4621.ec5e4711.js",
+            "static/js/async/8511.d1d99ec3.js",
+            "static/js/async/6153.d6711a99.js",
+            "static/js/async/3410.7a951fb2.js",
+            "static/js/async/753.f617a5fd.js",
+            "static/js/async/7468.eeba76a0.js",
+            "static/js/async/7800.b8d10431.js",
+            "static/js/async/5933.0a25011f.js",
+            "static/js/async/6520.40be04a5.js",
+            "static/js/async/6686.526f417d.js",
+            "static/js/async/9706.f33e713d.js",
+            "static/js/async/4857.30a58545.js",
+            "static/js/async/2496.b4d4039a.js",
+            "static/js/async/6274.913bbdc8.js",
+            "static/js/async/5221.5e6b1bc4.js",
+            "static/js/async/531.727a2b70.js",
+            "static/js/async/4549.74ab684b.js",
+            "static/js/async/7467.95d94a75.js",
+            "static/js/async/7374.352137d7.js",
+            "static/js/async/9214.f2fc22c6.js",
+            "static/js/async/8625.2a5d3e9a.js",
+            "static/js/async/8226.765afaed.js",
+            "static/js/async/1882.f07f0a1d.js",
+            "static/js/async/6040.016dd42b.js",
+            "static/js/async/833.94eee6df.js",
+            "static/js/async/5978.246f8ba2.js",
+            "static/js/async/8961.2b24b15b.js",
+            "static/js/async/1657.1d133530.js",
+            "static/js/async/6421.7c99f384.js",
+            "static/js/async/1851.50e72f7c.js",
+            "static/js/async/3770.007f6481.js",
+            "static/js/async/5705.f6f1946a.js",
+            "static/js/async/99.d0983e15.js",
+            "static/js/async/1224.4353a5f1.js",
+            "static/js/async/8723.2f1df9d5.js",
+            "static/js/async/9368.b04ae990.js",
+            "static/js/async/7337.a17f68de.js",
+            "static/js/async/8476.a2da556e.js",
+            "static/js/async/105.b3ed03a6.js",
+            "static/js/async/6789.3dc3b52a.js",
+            "static/js/async/3118.44d9247d.js",
+            "static/js/async/7046.648a6262.js",
+            "static/js/async/5277.b1fb56c1.js",
+            "static/js/async/9036.8b6cac41.js",
+            "static/js/async/4515.16482028.js",
+            "static/js/async/7675.8fe0706f.js",
+            "static/js/async/9638.a46cb712.js",
+            "static/js/async/8819.e80def20.js",
+            "static/js/async/4864.192b3c9c.js",
+            "static/js/async/9086.69a661be.js",
+            "static/js/async/9662.79263c53.js",
+            "static/js/async/5559.18aa4708.js",
+            "static/js/async/2009.ca309c35.js",
+            "static/js/async/6132.faee4341.js",
+            "static/js/async/9879.fdd218f8.js",
+            "static/js/async/526.3100dd15.js",
+            "static/js/async/5263.e342215d.js",
+            "static/js/async/5182.cdd2efd8.js",
+            "static/js/async/8308.6ff2a32b.js",
+            "static/js/async/6024.4826005c.js",
+            "static/js/async/7809.b208df94.js",
+            "static/js/async/5153.16512cb0.js",
+            "static/js/async/9563.ff6db423.js",
+            "static/js/async/6497.e801df72.js",
+            "static/js/async/9906.16d2a9a6.js",
+            "static/js/async/5868.2a3bb0e0.js",
+            "static/js/async/1597.8c0076ee.js",
+            "static/js/async/2455.f6530cc5.js",
+            "static/js/async/6134.a5153d0d.js",
+            "static/js/async/1690.b2b98aaf.js",
+            "static/js/async/8868.7f37a2ab.js",
+            "static/js/async/7138.f2408353.js",
+            "static/js/async/7071.bc68c184.js",
+            "static/js/async/3852.98b45d65.js",
+            "static/js/async/5022.a2a1d487.js",
+            "static/js/async/4238.20c56b2d.js",
+            "static/js/async/4190.892ea34a.js",
+            "static/js/async/4093.6ecd4f21.js",
+            "static/js/async/9708.fe9ac705.js",
+            "static/js/async/4778.612171c0.js",
+            "static/js/async/1489.c79950dd.js",
+            "static/js/async/6938.45560ce7.js",
+            "static/js/async/2172.3cb9bf31.js",
+            "static/js/async/3636.874609a2.js",
+            "static/js/async/1910.88cf73f4.js",
+            "static/js/async/3075.f80a7faa.js",
+            "static/js/async/420.c386c9c2.js",
+            "static/js/async/9566.23d76ee1.js",
+            "static/js/async/1069.c751acfe.js",
+            "static/js/async/1698.da67ca2a.js",
+            "static/js/async/9983.2287eb9d.js",
+            "static/js/async/7998.52fcf760.js",
+            "static/js/async/2490.44bedd93.js",
+            "static/js/async/7775.942e75ea.js",
+            "static/js/async/8165.0098ecbf.js",
+            "static/js/async/2227.0c29417c.js",
+            "static/js/async/4234.8a693543.js",
+            "static/js/async/46.29b9e7fb.js",
+            "static/js/async/5791.e28d60a8.js",
+            "static/js/async/4370.e2476933.js",
+            "static/js/async/7658.2d37af52.js",
+            "static/js/async/3716.f732acfb.js",
+            "static/js/async/1333.00749a1d.js",
+            "static/js/async/1064.a444e516.js",
+            "static/js/async/6344.c189db04.js",
+            "static/js/async/5239.8451c759.js",
+            "static/js/async/207.dc534702.js",
+            "static/js/async/3941.f61f80cc.js",
+            "static/js/async/1498.bb8a7cad.js",
+            "static/js/async/4353.4487c361.js",
+            "static/js/async/1245.7092be8b.js",
+            "static/js/async/7219.8c91f726.js",
+            "static/js/async/2880.c4ae9e92.js",
+            "static/js/async/8888.387774c0.js",
+            "static/js/async/7311.2ab0eccd.js",
+            "static/js/async/8690.64b37ae9.js",
+            "static/js/async/7404.12da9f5b.js",
+            "static/js/async/6547.266123c1.js",
+            "static/js/async/7698.c996ed42.js",
+            "static/js/async/7085.68695551.js",
+            "static/js/async/3105.91f2f020.js",
+            "static/js/async/4804.c516461b.js",
+            "static/js/async/5539.3643c747.js",
+            "static/js/async/8336.063332be.js",
+            "static/js/async/5627.5412f3ad.js",
+            "static/js/async/5012.c23d7f40.js",
+            "static/js/async/8420.a6c9c55e.js",
+            "static/js/async/3648.7f4751c2.js",
+            "static/js/async/5887.5599eda1.js",
+            "static/js/async/4099.1db429ed.js",
+            "static/js/async/5647.9b011d98.js",
+            "static/js/async/8559.0bb884a7.js",
+            "static/js/async/9430.35458b7e.js",
+            "static/js/async/5694.3d4e7cd2.js",
+            "static/js/async/9972.24cbd462.js",
+            "static/js/async/902.868bc783.js",
+            "static/js/async/1519.b0a37b46.js",
+            "static/js/async/8500.f6813f14.js",
+            "static/js/async/516.0e2f23ae.js",
+            "static/js/async/8843.a2b58ed4.js",
+            "static/js/async/5540.fb4920b4.js",
+            "static/js/async/1758.7d46b820.js",
+            "static/js/async/7696.a959d2b1.js",
+            "static/js/async/1296.93efc03d.js",
+            "static/js/async/6144.88fc1f36.js",
+            "static/js/async/9488.b9085241.js",
+            "static/js/async/862.d21f7451.js",
+            "static/js/async/7551.d1469cb7.js",
+            "static/js/async/3618.97f3baf4.js",
+            "static/js/async/346.6816c503.js",
+            "static/js/async/7516.8977ec47.js",
+            "static/js/async/2076.640559f7.js",
+            "static/js/async/148.e9ac8d64.js",
+            "static/js/async/4397.da3d320a.js",
+            "static/js/async/6743.b12f6c26.js",
+            "static/js/async/7386.bb50ee06.js",
+            "static/js/async/5854.b6a22ba5.js",
+            "static/js/async/2027.42242eaa.js",
+            "static/js/async/3395.fc64b4c1.js",
+            "static/js/async/9345.afd5c749.js",
+            "static/js/async/9440.e652cdcc.js",
+            "static/js/async/6816.8f55482c.js",
+            "static/js/async/4855.4f5863cc.js",
+            "static/js/async/5267.2c16866e.js",
+            "static/js/async/4434.bce523e9.js",
+            "static/js/async/4513.90c6869b.js",
+            "static/js/async/5818.bab2860a.js",
+            "static/js/async/6564.02a274f5.js",
+            "static/js/async/8636.61f15509.js",
+            "static/js/async/5765.53f199f6.js",
+            "static/js/async/7050.7467db7e.js",
+            "static/js/async/3111.05f4b107.js",
+            "static/js/async/3016.0f65694f.js",
+            "static/js/async/9815.0e900f0f.js",
+            "static/js/async/6913.dae2685b.js",
+            "static/js/async/2202.482aa090.js",
+            "static/js/async/1528.5353f329.js",
+            "static/js/async/960.79eb8316.js",
+            "static/js/async/8097.5c9986a9.js",
+            "static/js/async/2252.8ba16355.js",
+            "static/js/async/3858.002ff261.js",
+            "static/js/async/528.336a27ba.js",
+            "static/js/async/2993.0685d6bc.js",
+            "static/js/async/9503.931d6960.js",
+            "static/js/async/2967.50db3862.js",
+            "static/js/async/8192.32789ded.js",
+            "static/js/async/1267.a35fa847.js",
+            "static/js/async/6175.47ee7301.js",
+            "static/js/async/8434.fcc60125.js",
+            "static/js/async/8935.aa3c069a.js",
+            "static/js/async/2612.10fbf2cb.js",
+            "static/js/async/3449.8c724520.js",
+            "static/js/async/6526.2f880946.js",
+            "static/js/async/1746.20f0870c.js",
+            "static/js/async/5428.44819fb0.js",
+            "static/js/async/3386.115905f2.js",
+            "static/js/async/7472.9a55331e.js",
+            "static/js/async/9882.d5988f6d.js",
+            "static/js/async/2181.8892c01c.js",
+            "static/js/async/6974.5f2c957b.js",
+            "static/js/async/707.5d05993a.js",
+            "static/js/async/4149.02bec4c1.js",
+            "static/js/async/7602.3f85988f.js",
+            "static/js/async/6301.5c2999cb.js",
+            "static/js/async/6458.3374e02c.js",
+            "static/js/async/5704.3a9a4a6c.js",
+            "static/js/async/8275.7d57d2b4.js",
+            "static/js/async/2447.f3c20c06.js",
+            "static/js/async/6693.cf072c5b.js",
+            "static/js/async/3513.3b8ff637.js",
+            "static/js/async/7065.b8fc6306.js",
+            "static/js/async/2301.3e1c8906.js",
+            "static/js/async/5362.71548a48.js",
+            "static/js/async/2557.417a2fa2.js",
+            "static/js/async/9714.030e0c2c.js",
+            "static/js/async/438.b6d0170e.js",
+            "static/js/async/2111.1b5f8480.js",
+            "static/js/async/1623.a127f6ac.js",
+            "static/js/async/4301.cb8866ae.js",
+            "static/js/async/5424.af1b8211.js",
+            "static/js/async/8554.e76562c3.js",
+            "static/js/async/9242.1f1a62c9.js",
+            "static/js/async/1472.10b13d60.js",
+            "static/js/async/5232.c6d51e6e.js",
+            "static/js/async/7553.3b83762f.js",
+            "static/js/async/6648.51d04568.js",
+            "static/js/async/5976.3732d0b9.js",
+            "static/js/async/2092.fae343e8.js",
+            "static/js/async/1151.1de88f3a.js",
+            "static/js/async/8902.d970bb95.js"
+          ]
+        },
+        "css": {
+          "sync": [
+            "static/css/async/6534.36e1bbd1.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.b642ae4b.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.b642ae4b.css"
+          ],
+          "async": [
+            "static/css/async/6534.36e1bbd1.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.b642ae4b.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.b642ae4b.css"
+          ]
+        }
+      }
+    }
+  ]
+}
