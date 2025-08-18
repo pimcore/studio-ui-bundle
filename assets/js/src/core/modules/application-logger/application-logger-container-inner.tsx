@@ -9,25 +9,24 @@
  */
 
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { Box } from '@Pimcore/components/box/box'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
+import { Divider } from '@Pimcore/components/divider/divider'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { api } from '@Pimcore/modules/application-logger/application-logger-api-slice-enhanced'
 import { useAppDispatch } from '@sdk/app'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { CreatableSelect } from '@sdk/components'
+import { isNil } from 'lodash'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ApplicationLogger } from './application-logger'
 import { useBundleApplicationLoggerGetCollectionQuery } from './application-logger-api-slice.gen'
 import { useFilter } from './components/sidebar/tabs/filter/provider/filter-provider/use-filter'
-import { Box } from '@Pimcore/components/box/box'
-import { Flex } from '@Pimcore/components/flex/flex'
-import { Select } from '@Pimcore/components/select/select'
-import { Divider } from '@Pimcore/components/divider/divider'
-import { isNil } from 'lodash'
-import { CreatableSelect } from '@sdk/components'
 
 export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
   const { t } = useTranslation()
