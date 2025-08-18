@@ -39,8 +39,18 @@ import { Slider } from '../slider/slider'
 import { NumericRange } from '../numeric-range/numeric-range'
 
 const config: Meta<typeof FormKit> = {
-  title: 'Components/Data Entry/Form/Examples',
+  title: 'Components/Data Entry/Form/FormKit',
   component: FormKit,
+  parameters: {
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        component: `FormKit is an advanced form layout system that provides structured panels, tabs, and enhanced form controls. It's designed for complex forms with multiple sections and advanced layouts.
+
+**📊 Compare with Standard Form:** [Form vs FormKit Comparison](?path=/docs/components-data-entry-form-comparison--docs) - See side-by-side comparisons and decide which approach fits your use case.`
+      }
+    }
+  },
   tags: ['autodocs']
 }
 
@@ -362,10 +372,82 @@ const Example = (): React.JSX.Element => (
 export default config
 type Story = StoryObj<typeof config>
 
-export const _default: Story = {
+// Simple FormKit Panel Example
+const SimpleFormKitExample = (): React.JSX.Element => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  })
+
+  return (
+    <div style={{ maxWidth: '600px' }}>
+      <FormKit>
+        <FormKit.Panel title="Contact Form">
+          <Form.Item
+            label="Name"
+            required
+          >
+            <Input
+              onChange={(e) => { setFormData({ ...formData, name: e.target.value }) }}
+              placeholder="Enter your name"
+              value={formData.name}
+            />
+          </Form.Item>
+
+          <Form.Item
+            label="Email"
+            required
+          >
+            <Input
+              onChange={(e) => { setFormData({ ...formData, email: e.target.value }) }}
+              placeholder="Enter your email"
+              type="email"
+              value={formData.email}
+            />
+          </Form.Item>
+
+          <Form.Item label="Message">
+            <TextArea
+              onChange={(e) => { setFormData({ ...formData, message: e.target.value }) }}
+              placeholder="Enter your message"
+              rows={4}
+              value={formData.message}
+            />
+          </Form.Item>
+        </FormKit.Panel>
+      </FormKit>
+
+      <div style={{ marginTop: '16px', padding: '12px', backgroundColor: '#f5f5f5', borderRadius: '6px' }}>
+        <strong>Current Values:</strong>
+        <pre style={{ fontSize: '12px', margin: '8px 0 0 0' }}>
+          {JSON.stringify(formData, null, 2)}
+        </pre>
+      </div>
+    </div>
+  )
+}
+
+export const BasicFormKit: Story = {
+  render: () => <SimpleFormKitExample />,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Basic FormKit usage with a single panel. Shows the structured approach and consistent styling that FormKit provides.'
+      }
+    }
+  }
+}
+
+export const ComplexFormLayout: Story = {
   render: () => <Example />,
   parameters: {
-    layout: 'fullscreen'
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        story: 'A complex form layout example showing FormKit with TabPanel, integrated navigation tree, and multiple form sections. This demonstrates the advanced capabilities of FormKit for creating structured admin interfaces.'
+      }
+    }
   }
 }
 
@@ -784,6 +866,11 @@ const AllControlsExample = (): React.JSX.Element => {
 export const AllControlsShowcase: Story = {
   render: () => <AllControlsExample />,
   parameters: {
-    layout: 'fullscreen'
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        story: 'Comprehensive showcase of all available form controls within FormKit panels. This example demonstrates consistent styling and behavior of input components when used within the FormKit system.'
+      }
+    }
   }
 }

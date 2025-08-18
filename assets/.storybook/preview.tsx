@@ -56,6 +56,9 @@ const preview: Preview = {
             [
               'Form',
               [
+                'Basic Form',
+                'FormKit',
+                'Comparison',
                 'Controls',
                 [
                   'Basic',
