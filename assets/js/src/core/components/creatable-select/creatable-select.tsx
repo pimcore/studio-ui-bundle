@@ -97,7 +97,7 @@ const Component = ({
     }
   }, [handleAddOption])
 
-  const getInputDependantField = () => {
+  const getInputDependantField = (): React.JSX.Element => {
     switch (inputType) {
       case 'number':
         return (
