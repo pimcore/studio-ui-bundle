@@ -33,6 +33,7 @@ import { useAppDispatch } from '@sdk/app'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useTranslationDomain } from './hooks/translation-domain-provider'
 import { type SortingState } from '@tanstack/react-table'
+import { TranslationErrorModals } from './components/translation-error-modals'
 
 interface FormValues {
   translationKey: string
@@ -147,20 +148,6 @@ export const TranslationsContainer = (): React.JSX.Element => {
     setSorting(newSorting)
     setCurrentPage(1)
   }
-
-  const errorModals = (
-    <MandatoryModal
-      footer={ <ModalFooter>
-        <Button
-          onClick={ closeMandatoryModal }
-          type='primary'
-        >{t('button.ok')}</Button>
-      </ModalFooter> }
-      title={ t('translations.add-translation-mandatory-field-missing.title') }
-    >
-      {t('translations.add-translation-mandatory-field-missing.error')}
-    </MandatoryModal>
-  )
 
   return (
     <ContentLayout
@@ -295,7 +282,10 @@ export const TranslationsContainer = (): React.JSX.Element => {
             translationRows={ translationRows }
             visibleLocales={ visibleLocales ?? availableLocales }
           />
-          {errorModals}
+          <TranslationErrorModals
+            MandatoryModal={ MandatoryModal }
+            closeMandatoryModal={ closeMandatoryModal }
+          />
         </Box>
       </Content>
     </ContentLayout>
