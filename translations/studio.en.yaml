@@ -863,6 +863,7 @@ video.settings: Video Settings
 video.poster: Poster-Image
 video.path: Path
 video.dnd-target: Drop a video here
+pdf-editable.dnd-target: Drop a document asset here
 many-to-one-relation.drop-placeholder: Drop an item here
 many-to-one-relation.drop-placeholder-text-input: Drop an item here or enter a value
 reverse-object-relation.owner-hint: The current object is not the owner of these relations, making changes here might make saving the object slow.
@@ -1022,6 +1023,7 @@ creatable-select.add: Add
 creatable-select.option-already-exists: Option already exists
 drag-snippet-here: Drag a snippet here
 drag-document-here: Drag a document here
+drag-document-asset-here: Drag a document asset here
 drag-asset-here: Drag an asset here
 drag-object-here: Drag an object here
 drag-element-here: Drag an element here

@@ -10,57 +10,46 @@
 
 import React, { useMemo } from 'react'
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
-import { type ImageThumbnailSettings } from '@Pimcore/components/image-preview/utils/custom-image-thumbnail'
 import { ResponsiveAssetPreview } from '../../helpers/responsive-asset-preview/responsive-asset-preview'
-import { generateThumbnailUrl } from './utils/thumbnail-sizing'
+import { generatePdfThumbnailUrl } from './utils/pdf-thumbnail-sizing'
 
-interface ImageEditablePreviewProps {
-  src?: string
+interface PdfEditablePreviewProps {
   assetId?: number
-  assetType?: 'image' | 'video'
   width?: number | string
   height?: number | string
   containerWidth: number
   className?: string
   dropdownItems?: DropdownProps['menu']['items']
-  thumbnailSettings?: ImageThumbnailSettings
-  imgAttributes?: Record<string, string>
   onImageLoad?: (event: React.SyntheticEvent<HTMLImageElement>) => void
   onResize?: (dimensions: { width: number, height: number }) => void
   lastImageDimensions?: { width: number, height: number } | null
 }
 
-export const ImageEditablePreview = ({
-  src,
+export const PdfEditablePreview = ({
   assetId,
-  assetType,
   width,
   height,
   containerWidth,
-  thumbnailSettings,
   ...props
-}: ImageEditablePreviewProps): React.JSX.Element => {
+}: PdfEditablePreviewProps): React.JSX.Element => {
   const thumbnailUrl = useMemo(() => {
     if (assetId === undefined) {
       return undefined
     }
 
-    return generateThumbnailUrl({
+    return generatePdfThumbnailUrl({
       assetId,
-      assetType,
       width,
       height,
       containerWidth,
-      thumbnailSettings,
-      fallbackSrc: src
+      fallbackSrc: undefined
     })
-  }, [assetId, src, width, height, assetType, thumbnailSettings, containerWidth])
+  }, [assetId, width, height, containerWidth])
 
   return (
     <ResponsiveAssetPreview
       { ...props }
       assetId={ assetId }
-      src={ src }
       thumbnailUrl={ thumbnailUrl }
     />
   )
