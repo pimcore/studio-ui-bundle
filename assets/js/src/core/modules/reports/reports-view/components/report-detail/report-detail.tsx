@@ -183,6 +183,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
             className={ styles.gridTable }
             columns={ columns }
             data={ chartData }
+            enableSorting
             isLoading={ isLoading }
           />
         )}
