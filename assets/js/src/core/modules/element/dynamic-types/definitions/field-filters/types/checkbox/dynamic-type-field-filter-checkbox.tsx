@@ -12,13 +12,14 @@ import { injectable } from 'inversify'
 import React, { type ReactElement } from 'react'
 import { DynamicTypeFieldFilterCheckboxComponent, type DynamicTypeFieldFilterCheckboxProps } from '../../components/dynamic-type-field-filter-checkbox-component'
 import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
+import { FieldFilterFrontendType } from '../../frontendTypes'
 
 @injectable()
 export class DynamicTypeFieldFilterCheckbox extends DynamicTypeFieldFilterAbstract {
   id = 'checkbox'
 
   getFieldFilterType (): string {
-    return 'system.string'
+    return FieldFilterFrontendType.String
   }
 
   getFieldFilterComponent (props: DynamicTypeFieldFilterCheckboxProps): ReactElement<DynamicTypeFieldFilterCheckboxProps> {
