@@ -102,7 +102,7 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
             <CreatableSelect
               allowClear
               inputType='number'
-              minWidth={150}
+              minWidth={200}
               onChange={handleRefreshIntervalChange}
               options={[
                 { value: '3', label: t('application-logger.refresh-interval.seconds', { seconds: 3 }) },

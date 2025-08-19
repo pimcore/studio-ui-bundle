@@ -8,12 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState, useCallback, useEffect } from 'react'
-import { Select, Input, Button, Divider, Flex, Box, Text, InputNumber } from '@sdk/components'
-import { type SelectProps } from '@sdk/components'
+import { Box, Button, Divider, Flex, Input, InputNumber, Select, Text, type SelectProps } from '@sdk/components'
 import { type SelectOptionType } from '@sdk/modules/element'
-import { useTranslation } from 'react-i18next'
 import { isNil } from 'lodash'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export interface CreatableSelectProps extends Omit<SelectProps, 'options'> {
   options: SelectOptionType[]
@@ -42,8 +41,16 @@ const Component = ({
   const { t } = useTranslation()
   const [customOptions, setCustomOptions] = useState<SelectOptionType[]>([])
   const [newOptionText, setNewOptionText] = useState('')
-
+  const [pendingSelection, setPendingSelection] = useState<SelectOptionType | null>(null)
   const allOptions = [...options, ...customOptions]
+
+  // Handle pending selection after state update
+  useEffect(() => {
+    if (pendingSelection !== null && onChange !== undefined) {
+      onChange(pendingSelection.value, pendingSelection)
+      setPendingSelection(null)
+    }
+  }, [customOptions, pendingSelection, onChange])
 
   const createNewOption = (value: string): SelectOptionType => {
     let newOption = onCreateOption?.(value)
@@ -58,31 +65,20 @@ const Component = ({
     return newOption as SelectOptionType
   }
 
-  // Auto-add value or defaultValue if it's not in the options list
-  useEffect(() => {
-    const valueToCheck = value ?? selectProps.defaultValue
-    if (valueToCheck !== null && valueToCheck !== undefined && typeof valueToCheck === 'string' && valueToCheck.trim() !== '') {
-      const valueExists = allOptions.some(opt => opt.value === valueToCheck)
-      if (!valueExists) {
-        setCustomOptions(prev => [...prev, createNewOption(valueToCheck)])
-      }
-    }
-  }, [value, selectProps.defaultValue, allOptions, onCreateOption])
-
   const handleAddOption = useCallback(() => {
     const trimmedValue = newOptionText.trim()
 
     if (trimmedValue === '') return
 
-    // Validate the input value
-    if (validate !== undefined && !validate(trimmedValue)) {
-      return
-    }
-
     // Check if option already exists in all options
     const optionExists = allOptions.some(opt => opt.value === trimmedValue)
     if (optionExists && !allowDuplicates) {
       setNewOptionText('')
+      return
+    }
+
+    // Validate the input value
+    if (validate !== undefined && !validate(trimmedValue)) {
       return
     }
 
@@ -92,11 +88,9 @@ const Component = ({
     setCustomOptions(prev => [...prev, newOption])
     setNewOptionText('')
 
-    // Auto-select the newly created option
-    if (onChange !== undefined) {
-      onChange(trimmedValue, newOption)
-    }
-  }, [newOptionText, allOptions, allowDuplicates, onCreateOption, onChange, validate])
+    // Set pending selection to trigger after state update
+    setPendingSelection(newOption)
+  }, [newOptionText, allOptions, allowDuplicates, onCreateOption, validate])
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent): void => {
     if (e.key === 'Enter') {
