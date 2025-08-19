@@ -1020,6 +1020,7 @@ user-profile.password-repeat-error: Passwords do not match
 creatable-select.add-custom-option: Add custom option
 creatable-select.add: Add
 creatable-select.option-already-exists: Option already exists
+creatable-select.invalid-option: Invalid option
 drag-snippet-here: Drag a snippet here
 snippet: Snippet
 navigation.application-logger: Application Logger

@@ -116,8 +116,11 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
               numberInputProps={{
                 min: 1
               }}
-              generateLabel={(seconds) => {
-                return t('application-logger.refresh-interval.seconds', { seconds })
+              onCreateOption={(value) => {
+                return {
+                  value: value,
+                  label: t('application-logger.refresh-interval.seconds', { seconds: value })
+                }
               }}
               validate={(value) => !isNaN(parseInt(value)) && parseInt(value) > 0}
             />

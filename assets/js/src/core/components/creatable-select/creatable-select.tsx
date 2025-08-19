@@ -17,14 +17,13 @@ import { isNil } from 'lodash'
 
 export interface CreatableSelectProps extends Omit<SelectProps, 'options'> {
   options: SelectOptionType[]
-  onCreateOption?: (value: string) => void
+  onCreateOption?: (value: string) => SelectOptionType | void
   creatable?: boolean
   createOptionLabel?: string
   allowDuplicates?: boolean
   inputType?: 'string' | 'number'
   validate?: (value: string) => boolean
   numberInputProps?: React.ComponentProps<typeof InputNumber>
-  generateLabel?: (value: string) => string
 }
 
 const Component = ({
@@ -38,7 +37,6 @@ const Component = ({
   inputType = 'string',
   validate,
   numberInputProps = {},
-  generateLabel,
   ...selectProps
 }: CreatableSelectProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -47,26 +45,29 @@ const Component = ({
 
   const allOptions = [...options, ...customOptions]
 
+  const createNewOption = (value: string): SelectOptionType => {
+    let newOption = onCreateOption?.(value)
+
+    if (isNil(newOption)) {
+      newOption = {
+        value: value,
+        label: value
+      }
+    }
+
+    return newOption as SelectOptionType
+  }
+
   // Auto-add value or defaultValue if it's not in the options list
   useEffect(() => {
     const valueToCheck = value ?? selectProps.defaultValue
     if (valueToCheck !== null && valueToCheck !== undefined && typeof valueToCheck === 'string' && valueToCheck.trim() !== '') {
       const valueExists = allOptions.some(opt => opt.value === valueToCheck)
       if (!valueExists) {
-        const autoOption: SelectOptionType = {
-          value: valueToCheck,
-          label: generateLabel !== undefined ? generateLabel(valueToCheck) : valueToCheck
-        }
-        setCustomOptions(prev => {
-          // Check if already added to avoid duplicates
-          const alreadyAdded = prev.some(opt => opt.value === valueToCheck)
-          if (alreadyAdded) return prev
-          return [...prev, autoOption]
-        })
-        onCreateOption?.(valueToCheck)
+        setCustomOptions(prev => [...prev, createNewOption(valueToCheck)])
       }
     }
-  }, [value, selectProps.defaultValue, allOptions, onCreateOption, generateLabel])
+  }, [value, selectProps.defaultValue, allOptions, onCreateOption])
 
   const handleAddOption = useCallback(() => {
     const trimmedValue = newOptionText.trim()
@@ -85,21 +86,17 @@ const Component = ({
       return
     }
 
-    const newOption: SelectOptionType = {
-      value: trimmedValue,
-      label: generateLabel !== undefined ? generateLabel(trimmedValue) : trimmedValue
-    }
+    const newOption = createNewOption(trimmedValue)
 
     // Add to custom options
     setCustomOptions(prev => [...prev, newOption])
-    onCreateOption?.(trimmedValue)
     setNewOptionText('')
 
     // Auto-select the newly created option
-    if (onChange !== null && onChange !== undefined) {
+    if (onChange !== undefined) {
       onChange(trimmedValue, newOption)
     }
-  }, [newOptionText, allOptions, allowDuplicates, onCreateOption, onChange, validate, generateLabel])
+  }, [newOptionText, allOptions, allowDuplicates, onCreateOption, onChange, validate])
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent): void => {
     if (e.key === 'Enter') {
