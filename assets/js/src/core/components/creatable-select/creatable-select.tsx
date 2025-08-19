@@ -22,6 +22,8 @@ export interface CreatableSelectProps extends Omit<SelectProps, 'options'> {
   createOptionLabel?: string
   allowDuplicates?: boolean
   inputType?: 'string' | 'number'
+  validate?: (value: string) => boolean
+  numberInputProps?: React.ComponentProps<typeof InputNumber>
 }
 
 const Component = ({
@@ -33,6 +35,8 @@ const Component = ({
   value,
   onChange,
   inputType = 'string',
+  validate,
+  numberInputProps = {},
   ...selectProps
 }: CreatableSelectProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -67,6 +71,11 @@ const Component = ({
 
     if (trimmedValue === '') return
 
+    // Validate the input value
+    if (validate !== undefined && !validate(trimmedValue)) {
+      return
+    }
+
     // Check if option already exists in all options
     const optionExists = allOptions.some(opt => opt.value === trimmedValue)
     if (optionExists && !allowDuplicates) {
@@ -88,7 +97,7 @@ const Component = ({
     if (onChange !== null && onChange !== undefined) {
       onChange(trimmedValue, newOption)
     }
-  }, [newOptionText, allOptions, allowDuplicates, onCreateOption, onChange])
+  }, [newOptionText, allOptions, allowDuplicates, onCreateOption, onChange, validate])
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent): void => {
     if (e.key === 'Enter') {
@@ -102,28 +111,29 @@ const Component = ({
       case 'number':
         return (
           <InputNumber
-            onChange={ (e) => {
+            {...numberInputProps}
+            onChange={(e) => {
               if (!isNil(e)) {
                 setNewOptionText(e.toString())
               }
-            } }
-            onKeyDown={ handleKeyDown }
-            placeholder={ t(createOptionLabel ?? 'creatable-select.add-custom-option') }
+            }}
+            onKeyDown={handleKeyDown}
+            placeholder={t(createOptionLabel ?? 'creatable-select.add-custom-option')}
             size="small"
-            style={ { flex: 1 } }
-            value={ newOptionText }
+            style={{ flex: 1 }}
+            value={newOptionText}
           />
         )
       case 'string':
       default:
         return (
           <Input
-            onChange={ (e) => { setNewOptionText(e.target.value) } }
-            onKeyDown={ handleKeyDown }
-            placeholder={ t(createOptionLabel ?? 'creatable-select.add-custom-option') }
+            onChange={(e) => { setNewOptionText(e.target.value) }}
+            onKeyDown={handleKeyDown}
+            placeholder={t(createOptionLabel ?? 'creatable-select.add-custom-option')}
             size="small"
-            style={ { flex: 1 } }
-            value={ newOptionText }
+            style={{ flex: 1 }}
+            value={newOptionText}
           />
         )
     }
@@ -136,8 +146,7 @@ const Component = ({
       <>
         {menu}
         <Divider size="normal" />
-        <Box padding={ { x: 'small', top: 'extra-small', bottom: 'small' } }>
-
+        <Box padding={{ x: 'small', top: 'extra-small', bottom: 'small' }}>
           <Flex
             gap="extra-small"
             vertical
@@ -145,8 +154,8 @@ const Component = ({
             <Flex gap="small">
               {getInputDependantField()}
               <Button
-                disabled={ newOptionText.trim() === '' || (!allowDuplicates && allOptions.some(opt => opt.value === newOptionText.trim())) }
-                onClick={ handleAddOption }
+                disabled={newOptionText.trim() === '' || (validate !== undefined && !validate(newOptionText.trim())) || (!allowDuplicates && allOptions.some(opt => opt.value === newOptionText.trim()))}
+                onClick={handleAddOption}
                 size="small"
                 type="primary"
               >
@@ -158,6 +167,11 @@ const Component = ({
                 {t('creatable-select.option-already-exists')}
               </Text>
             )}
+            {newOptionText.trim() !== '' && validate !== undefined && !validate(newOptionText.trim()) && (
+              <Text type="danger">
+                {t('creatable-select.invalid-option')}
+              </Text>
+            )}
           </Flex>
         </Box>
       </>
@@ -166,11 +180,11 @@ const Component = ({
 
   return (
     <Select
-      { ...selectProps }
-      dropdownRender={ customDropdownRender }
-      onChange={ onChange }
-      options={ allOptions }
-      value={ value }
+      {...selectProps}
+      dropdownRender={customDropdownRender}
+      onChange={onChange}
+      options={allOptions}
+      value={value}
     />
   )
 }

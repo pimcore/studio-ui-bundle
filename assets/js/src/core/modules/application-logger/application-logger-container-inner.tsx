@@ -94,7 +94,7 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
         >
           <Flex
             align="center"
-            gap={ 8 }
+            gap={8}
           >
             {!isNil(refreshInterval) && (
               <span>{t('application-logger.refresh-interval')}</span>
@@ -102,28 +102,32 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
             <CreatableSelect
               allowClear
               inputType='number'
-              minWidth={ 150 }
-              onChange={ handleRefreshIntervalChange }
-              options={ [
+              minWidth={150}
+              onChange={handleRefreshIntervalChange}
+              options={[
                 { value: '3', label: t('application-logger.refresh-interval.seconds', { seconds: '3' }) },
                 { value: '5', label: t('application-logger.refresh-interval.seconds', { seconds: '5' }) },
                 { value: '10', label: t('application-logger.refresh-interval.seconds', { seconds: '10' }) },
                 { value: '30', label: t('application-logger.refresh-interval.seconds', { seconds: '30' }) },
                 { value: '60', label: t('application-logger.refresh-interval.seconds', { seconds: '60' }) }
-              ] }
-              placeholder={ t('application-logger.refresh-interval.select') }
-              value={ refreshInterval }
+              ]}
+              placeholder={t('application-logger.refresh-interval.select')}
+              value={refreshInterval}
+              numberInputProps={{
+                min: 1
+              }}
+              validate={(value) => !isNaN(parseInt(value)) && parseInt(value) > 0}
             />
           </Flex>
           <Flex>
             <IconButton
-              disabled={ isLoading || isRTKFetching }
-              icon={ { value: 'refresh' } }
-              onClick={ () => {
+              disabled={isLoading || isRTKFetching}
+              icon={{ value: 'refresh' }}
+              onClick={() => {
                 setIsLoading(true)
                 refreshData()
                 setIsLoading(false)
-              } }
+              }}
             />
             {total > 0 && (
               <>
@@ -132,12 +136,12 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
                   type="vertical"
                 />
                 <Pagination
-                  current={ currentPage }
-                  defaultPageSize={ pageSize }
-                  onChange={ onPagerChange }
+                  current={currentPage}
+                  defaultPageSize={pageSize}
+                  onChange={onPagerChange}
                   showSizeChanger
-                  showTotal={ (total) => t('pagination.show-total', { total }) }
-                  total={ total }
+                  showTotal={(total) => t('pagination.show-total', { total })}
+                  total={total}
                 />
               </>
             )}
@@ -147,7 +151,7 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
       renderTopBar={
         <Toolbar
           justify='space-between'
-          margin={ {
+          margin={{
             x: 'mini',
             y: 'none'
           }
@@ -159,16 +163,16 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
       }
     >
       <Content
-        loading={ isLoading }
+        loading={isLoading}
       >
         <Box
           className='h-full'
-          margin={ {
+          margin={{
             x: 'extra-small',
             y: 'none'
-          } }
+          }}
         >
-          <ApplicationLogger items={ data?.items ?? [] } />
+          <ApplicationLogger items={data?.items ?? []} />
         </Box>
       </Content>
     </ContentLayout>
