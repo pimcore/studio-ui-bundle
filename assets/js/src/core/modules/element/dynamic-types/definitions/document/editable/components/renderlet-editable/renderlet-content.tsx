@@ -84,8 +84,8 @@ export const RenderletContent = ({
           return errorData.message
         }
       }
-    } catch (e) {
-      // Fallback to no description
+    } catch {
+      // JSON parsing failed - return undefined to fall back to no description
     }
 
     return undefined
@@ -158,7 +158,7 @@ export const RenderletContent = ({
         const elementType: ElementType = value.type === 'object' ? 'data-object' : value.type as ElementType
         studioApi.element.locateInTree(value.id, elementType)
       } catch (error) {
-        // Silently fail if element cannot be located
+        console.error('Failed to locate element in tree:', error)
       }
     }
   }

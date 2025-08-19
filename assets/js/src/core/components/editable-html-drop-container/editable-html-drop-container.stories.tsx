@@ -110,7 +110,7 @@ export const Loading: Story = {
 }
 
 // Error state
-export const Error: Story = {
+export const WithError: Story = {
   args: {
     hasContent: false,
     isLoading: false,
