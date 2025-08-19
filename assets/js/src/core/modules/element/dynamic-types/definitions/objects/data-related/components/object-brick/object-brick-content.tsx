@@ -17,7 +17,7 @@ import { type ObjectBrickProps } from './object-brick'
 import { Form } from '@Pimcore/components/form/form'
 import { ObjectBrickAddButton } from './object-brick-add-button'
 import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
-import { useKeyedList } from '@Pimcore/components/form/keyed-list/provider/keyed-list/use-keyed-list'
+import { useKeyedList } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list'
 import { ObjectBrickItem } from './object-brick-item'
 
 export interface ObjectBrickContentProps extends ObjectBrickProps {}

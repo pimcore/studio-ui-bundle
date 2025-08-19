@@ -101,6 +101,10 @@ export type UserInformation = {
     hasImage: boolean;
     /** List of available content Language already sorted. */
     contentLanguages: object;
+    /** List of valid website Languages to edit. */
+    allowedLanguagesForEditingWebsiteTranslations: object;
+    /** List of valid website Languages to view. */
+    allowedLanguagesForViewingWebsiteTranslations: object;
     /** Key Bindings */
     keyBindings: KeyBindingForAUser[];
     /** Two Factor Authentication */

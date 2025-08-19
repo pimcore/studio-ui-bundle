@@ -72,14 +72,33 @@ export const useTranslation = (): UseTranslationReturn => {
     }
   }
 
-  const updateTranslationByKey = async (columnId: string, row: TranslationRow): Promise<{ success: boolean }> => {
+  const updateTranslationByKey = async (columnId: string, row: TranslationRow, domainParam: string): Promise<{ success: boolean }> => {
     try {
-      if (!columnId.startsWith('_')) {
-        return { success: true }
+      if (columnId === 'type') {
+        const rowLocales = Object.keys(row)
+          .filter(key => key.startsWith('_'))
+          .map(key => key.substring(1))
+
+        if (rowLocales.length > 0) {
+          const firstLocale = rowLocales[0]
+          const translationData = [toApiTranslation(row, firstLocale, domainParam)]
+
+          const result = await updateTranslation({
+            updateTranslation: {
+              locale: firstLocale,
+              translationData
+            }
+          })
+
+          return { success: 'data' in result }
+        }
+
+        trackError(new GeneralError('No locales found in translation row data'))
+        return { success: false }
       }
 
       const locale = columnId.substring(1)
-      const translationData = [toApiTranslation(row, locale, domain)]
+      const translationData = [toApiTranslation(row, locale, domainParam)]
 
       const result = await updateTranslation({
         updateTranslation: {

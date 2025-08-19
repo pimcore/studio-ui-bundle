@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Divider } from 'antd'
 import React, { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useStlyes } from './main-nav.styles'
@@ -22,6 +21,7 @@ import { isAllowedInPerspective } from '@Pimcore/modules/perspectives/permission
 import { isUndefined } from 'lodash'
 import { PerspectiveSwitch } from './perspective-switch'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
+import { Divider } from '@sdk/components'
 
 export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -71,7 +71,12 @@ export const MainNav = (): React.JSX.Element => {
           ? (
             <div>
               {item.button()}
-              <div className={ item.dividerBottom !== undefined && item.dividerBottom ? 'main-nav__list-item-divider' : '' } />
+              { item.dividerBottom !== undefined && item.dividerBottom && (
+              <Divider
+                className={ 'main-nav__list-item-divider' }
+                size={ 'mini' }
+              />
+              )}
             </div>
             )
           : (
@@ -111,11 +116,17 @@ export const MainNav = (): React.JSX.Element => {
               {shouldShowChevron(item, index) && (
                 <Icon
                   className={ 'main-nav__list-chevron-btn-icon' }
+                  options={ { height: 18, width: 18 } }
                   value={ 'chevron-right' }
                 />
               )}
             </button>
-              <div className={ item.dividerBottom !== undefined && item.dividerBottom ? 'main-nav__list-item-divider' : '' } />
+              { item.dividerBottom !== undefined && item.dividerBottom && (
+              <Divider
+                className={ 'main-nav__list-item-divider' }
+                size={ 'mini' }
+              />
+              )}
             </>
             )}
 

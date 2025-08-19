@@ -17,6 +17,7 @@ import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './select.styles'
 import { useTranslation } from 'react-i18next'
+import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export const sizeOptions = {
   normal: 150
@@ -26,13 +27,14 @@ export interface SelectProps extends AntdSelectProps {
   customArrowIcon?: string
   customIcon?: string
   inherited?: boolean
-  width?: number
+  width?: number | keyof typeof sizeOptions
   minWidth?: number | keyof typeof sizeOptions
 }
 
-export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, width, allowClear, inherited, value, minWidth, ...antdSelectProps }, ref): React.JSX.Element => {
+export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, allowClear, inherited, value, width, minWidth, ...antdSelectProps }, ref): React.JSX.Element => {
   const { t } = useTranslation()
   const selectRef = useRef<RefSelectProps>(null)
+  const fieldWidths = useFieldWidthOptional()
 
   const [isActive, setIsActive] = useState(false)
   const [isFocus, setIsFocus] = useState(false)
@@ -48,7 +50,25 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
     }
   }, [value])
 
-  const { styles } = useStyles({ width })
+  // Calculate width: explicit width prop takes precedence over fieldWidths
+  const getComputedWidth = (): number | undefined => {
+    if (width !== undefined) {
+      // Handle explicit width prop
+      if (typeof width === 'number') {
+        return width
+      }
+      if (typeof width === 'string' && width in sizeOptions) {
+        return sizeOptions[width as keyof typeof sizeOptions]
+      }
+    }
+
+    // Fall back to fieldWidths
+    return mode === 'multiple' ? fieldWidths?.large : fieldWidths?.medium
+  }
+
+  const computedWidth = getComputedWidth()
+
+  const { styles } = useStyles({ width: computedWidth })
 
   const withCustomIcon = !isEmptyValue(customIcon)
   const isStatusWarning = status === 'warning'
@@ -103,6 +123,13 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
     computedMinWidth = sizeOptions[minWidth as keyof typeof sizeOptions]
   }
 
+  // Apply field width as default maxWidth, with optional explicit minWidth
+  const computedStyle = {
+    maxWidth: computedWidth,
+    minWidth: computedMinWidth,
+    ...antdSelectProps.style
+  }
+
   return (
     <div className={ selectContainerClassNames }>
       {withCustomIcon && (
@@ -129,7 +156,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
         onFocus={ () => { setIsFocus(true) } }
         ref={ selectRef }
         status={ status }
-        style={ { minWidth: computedMinWidth } }
+        style={ computedStyle }
         suffixIcon={ getSuffixIcon() }
         value={ value }
         { ...antdSelectProps }

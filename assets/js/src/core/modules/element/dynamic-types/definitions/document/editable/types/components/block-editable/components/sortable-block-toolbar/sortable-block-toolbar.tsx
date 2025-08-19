@@ -17,6 +17,7 @@ import { Space } from 'antd'
 import { useSortable } from '@dnd-kit/sortable'
 import { useBlockEditableStyles } from '../../block-editable.styles'
 import { type BlockManager } from '../../utils/block-manager'
+import { useTranslation } from 'react-i18next'
 
 export interface SortableBlockToolbarProps {
   id: string
@@ -44,6 +45,7 @@ export const SortableBlockToolbar = ({
   activeId
 }: SortableBlockToolbarProps): React.JSX.Element => {
   const { styles } = useBlockEditableStyles()
+  const { t } = useTranslation()
   const {
     attributes,
     listeners,
@@ -83,19 +85,9 @@ export const SortableBlockToolbar = ({
   const hasMinus = !isNull(buttonsContainer.querySelector('.pimcore_block_minus'))
   const hasUp = !isNull(buttonsContainer.querySelector('.pimcore_block_up'))
   const hasDown = !isNull(buttonsContainer.querySelector('.pimcore_block_down'))
-  const amountDisplay = buttonsContainer.querySelector('.pimcore_block_amount')
 
   const buttons: React.ReactNode[] = []
   let deleteButton: React.ReactNode = null
-
-  buttons.push(
-    <IconButton
-      icon={ { value: 'drag-option' } }
-      key="drag"
-      style={ { cursor: 'grab' } }
-      { ...listeners }
-    />
-  )
 
   if (hasPlus && !limitReached) {
     buttons.push(
@@ -103,6 +95,7 @@ export const SortableBlockToolbar = ({
         icon={ { value: 'new' } }
         key="plus"
         onClick={ () => { onAddBlock(element, 1) } }
+        size="small"
       />
     )
   }
@@ -111,9 +104,10 @@ export const SortableBlockToolbar = ({
     buttons.push(
       <IconButton
         disabled={ isFirst }
-        icon={ { value: 'move-up' } }
+        icon={ { value: 'chevron-up' } }
         key="up"
         onClick={ () => { onMoveBlockUp(element) } }
+        size="small"
       />
     )
   }
@@ -122,9 +116,10 @@ export const SortableBlockToolbar = ({
     buttons.push(
       <IconButton
         disabled={ isLast }
-        icon={ { value: 'move-down' } }
+        icon={ { value: 'chevron-down' } }
         key="down"
         onClick={ () => { onMoveBlockDown(element) } }
+        size="small"
       />
     )
   }
@@ -135,20 +130,19 @@ export const SortableBlockToolbar = ({
         icon={ { value: 'trash' } }
         key="minus"
         onClick={ () => { onRemoveBlock(element) } }
+        size="small"
       />
     )
   }
 
-  if (!isNull(amountDisplay)) {
-    const htmlAmountDisplay = amountDisplay as HTMLElement
-    htmlAmountDisplay.textContent = `${elementIndex + 1}/${elements.length}`
-    htmlAmountDisplay.style.display = 'none'
-  }
-
   return (
     <ToolStrip
+      activateOnHover
       className={ styles.blockToolstrip }
+      dragger={ { listeners } }
       key={ `toolbar-${element.getAttribute('key')}` }
+      theme="inverse"
+      title={ t('block') }
     >
       <Split
         dividerSize="small"

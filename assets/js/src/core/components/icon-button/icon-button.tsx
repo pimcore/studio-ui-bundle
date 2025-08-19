@@ -13,11 +13,13 @@ import cn from 'classnames'
 import { Button, type ButtonProps } from '../button/button'
 import { Icon, type IconProps } from '../icon/icon'
 import { useStyles } from './icon-button.styles'
+import { type SizeType } from 'antd/es/config-provider/SizeContext'
 
 export interface IconButtonProps extends Omit<ButtonProps, 'icon' | 'variant'> {
   icon: IconProps
   theme?: 'primary' | 'secondary'
   variant?: 'minimal' | 'static'
+  size?: SizeType
   hideShadow?: boolean
 }
 
@@ -29,6 +31,7 @@ const Component = (props: IconButtonProps, ref): React.JSX.Element => {
     theme = 'primary',
     hideShadow = false,
     variant,
+    size,
     className,
     ...buttonProps
   } = props
@@ -40,10 +43,21 @@ const Component = (props: IconButtonProps, ref): React.JSX.Element => {
     `icon-button--theme-${theme}`,
     `icon-button--variant-${variant}`,
     {
-      'icon-button--hide-shadow': hideShadow
+      'icon-button--hide-shadow': hideShadow,
+      [`icon-button--size-${size}`]: size
     },
     className
   )
+
+  const iconSize = size === 'small' ? 14 : undefined
+  const iconWithSize = {
+    ...icon,
+    options: {
+      width: iconSize,
+      height: iconSize,
+      ...icon.options
+    }
+  }
 
   return (
     <Button
@@ -52,7 +66,7 @@ const Component = (props: IconButtonProps, ref): React.JSX.Element => {
       className={ iconButtonClassNames }
       ref={ ref }
     >
-      <Icon { ...icon } />
+      <Icon { ...iconWithSize } />
     </Button>
   )
 }

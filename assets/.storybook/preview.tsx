@@ -52,6 +52,20 @@ const preview: Preview = {
             'Layout',
             'Controls',
             'Data Display',
+            'Data Entry',
+            [
+              'Form',
+              [
+                'Controls',
+                [
+                  'Basic',
+                  'Composite',
+                  '*'
+                ],
+                '*'
+              ],
+              '*'
+            ],
             'Feedback',
             'Visuals',
             'Others',

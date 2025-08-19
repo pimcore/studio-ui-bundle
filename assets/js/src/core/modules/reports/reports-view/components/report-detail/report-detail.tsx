@@ -90,7 +90,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
     const list: Array<AccessorKeyColumnDef<unknown, never>> = []
 
     reportDetailData?.columnConfigurations?.forEach((item, index) => {
-      const isShowColumn = item.display === true && item.filterDrilldown !== FilterDrillDown.ONLY_FILTER
+      const isShowColumn = item.display && item.filterDrilldown !== FilterDrillDown.ONLY_FILTER
 
       if (isShowColumn) {
         const columnId = item?.name ?? `id-${index}`
@@ -147,6 +147,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
   return (
     <Flex
+      className="h-full"
       gap="small"
       vertical
     >
@@ -165,7 +166,9 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
         </Flex>
       )}
       <Flex
-        gap="extra-small"
+        className="h-full"
+        gap="small"
+        justify="flex-start"
         vertical
       >
         {isShowChart && (

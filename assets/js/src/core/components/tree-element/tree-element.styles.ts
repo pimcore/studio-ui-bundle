@@ -57,14 +57,21 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
         }
       }
       
-      .ant-tree-switcher {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        
-        &:hover {
-          background-color: transparent !important;
+      .ant-tree-treenode.ant-tree-treenode-draggable {
+        .ant-tree-switcher {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 0px;
+          
+          &:hover {
+            background-color: transparent !important;
+          }
         }
+
+        .ant-tree-switcher:not(.ant-tree-switcher-noop):hover:before {
+        background-color: transparent !important;
+      }
       }
 
       .ant-tree-switcher-noop {

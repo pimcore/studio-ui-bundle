@@ -14,7 +14,7 @@ import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-dat
 import { useFieldCollection } from './providers/use-field-collection'
 import { isEmpty } from 'lodash'
 import { Content } from '@Pimcore/components/content/content'
-import { useNumberedList } from '@Pimcore/components/form/numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
 import { type FieldCollectionProps } from './field-collection'
 import { Form } from '@Pimcore/components/form/form'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'

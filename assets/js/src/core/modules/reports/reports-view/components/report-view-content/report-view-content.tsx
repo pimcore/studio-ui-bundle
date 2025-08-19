@@ -58,6 +58,7 @@ export const ReportViewContent = ({ currentReport, setCurrentReport, reportsTree
   const renderMainContent = (): React.JSX.Element => (
     <Content
       centered={ !isCurrentReportSelected }
+      className="h-full"
       padded
       padding={ { top: 'none', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
     >

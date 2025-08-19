@@ -12,7 +12,7 @@ import { type Meta } from '@storybook/react'
 import { Checkbox } from './checkbox'
 
 const config: Meta = {
-  title: 'Components/Controls/Checkbox',
+  title: 'Components/Data Entry/Checkbox',
   component: Checkbox
 }
 

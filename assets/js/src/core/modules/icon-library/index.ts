@@ -59,6 +59,7 @@ import columns from '@Pimcore/assets/icons/columns.inline.svg?react'
 import contentDuplicate from '@Pimcore/assets/icons/content-duplicate.inline.svg?react'
 import content from '@Pimcore/assets/icons/content.inline.svg?react'
 import copilot from '@Pimcore/assets/icons/copilot.inline.svg?react'
+import copy03 from '@Pimcore/assets/icons/copy-03.inline.svg?react'
 import copy from '@Pimcore/assets/icons/copy.inline.svg?react'
 import countrySelect from '@Pimcore/assets/icons/country-select.inline.svg?react'
 import crop from '@Pimcore/assets/icons/crop.inline.svg?react'
@@ -417,6 +418,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'copilot',
       component: copilot
+    })
+    iconLibrary.register({
+      name: 'copy-03',
+      component: copy03
     })
     iconLibrary.register({
       name: 'copy',

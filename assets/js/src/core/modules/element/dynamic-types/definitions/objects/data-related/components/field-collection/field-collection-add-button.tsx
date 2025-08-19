@@ -13,7 +13,7 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import React from 'react'
 import { type FieldCollectionProps } from './field-collection'
 import { useTranslation } from 'react-i18next'
-import { useNumberedList } from '@Pimcore/components/form/numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
 
 export interface FieldCollectionAddButtonProps {
   allowedTypes: FieldCollectionProps['allowedTypes']
