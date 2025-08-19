@@ -31,7 +31,7 @@ export const FieldFilters = (): React.JSX.Element => {
 
   const [addColumnMenu, setAddColumnMenu] = useState<DropdownMenuProps['items']>([])
 
-  const { reportDetailData } = useReportDataContext()
+  const { reportDetailData, chartDetailData } = useReportDataContext()
   const { setColumnsFilters, fieldFilters, setFieldFilters } = useColumnsFiltersContext()
 
   const getLabelValue = (column: BundleCustomReportsColumnConfiguration): string => (
@@ -40,20 +40,24 @@ export const FieldFilters = (): React.JSX.Element => {
 
   const handleColumnClick = (column: BundleCustomReportsColumnConfiguration): void => {
     const filterType: string = column.filterType ?? 'string'
-
     const frontendType: string = FIELD_TYPE_MAP[filterType].frontendType
     const type: string = FIELD_TYPE_MAP[filterType].type
+
     const id = getLabelValue(column)
+    const fieldName = column.name
+    const fieldOptions = chartDetailData?.items.map(item => item.data[fieldName])
 
     setFieldFilters([
       ...fieldFilters,
       {
         data: undefined,
         id,
-        name: column.name,
+        name: fieldName,
         type,
         frontendType,
-        config: []
+        config: {
+          options: fieldOptions
+        }
       }
     ])
   }
