@@ -58,8 +58,4 @@ export class DynamicTypeDocumentEditableRenderlet extends DynamicTypeDocumentEdi
       subtype: value.subtype ?? null
     }
   }
-
-  reloadOnChange (props: RenderletEditableDefinition): boolean {
-    return Boolean(props.config?.reload)
-  }
 }
