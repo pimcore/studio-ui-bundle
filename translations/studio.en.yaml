@@ -1021,12 +1021,12 @@ user-profile.password-repeat-error: Passwords do not match
 creatable-select.add-custom-option: Add custom option
 creatable-select.add: Add
 creatable-select.option-already-exists: Option already exists
-drag-snippet-here: Drag a snippet here
-drag-document-here: Drag a document here
-drag-document-asset-here: Drag a document asset here
-drag-asset-here: Drag an asset here
-drag-object-here: Drag an object here
-drag-element-here: Drag an element here
+drop-snippet-here: Drop a snippet here
+drop-document-here: Drop a document here
+drop-document-asset-here: Drop a document asset here
+drop-asset-here: Drop an asset here
+drop-object-here: Drop an object here
+drop-element-here: Drop an element here
 error-loading-renderlet: Error loading renderlet
 snippet: Snippet
 navigation.application-logger: Application Logger

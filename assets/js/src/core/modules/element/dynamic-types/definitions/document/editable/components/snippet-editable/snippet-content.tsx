@@ -17,7 +17,7 @@ import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
-import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
+import { locateElementInTree } from '@Pimcore/modules/element/utils/tree-utils'
 import { EditableHtmlDropContainer } from '@Pimcore/components/editable-html-drop-container'
 import { type SnippetValue, type SnippetEditableConfig } from './snippet-editable'
 
@@ -125,14 +125,7 @@ export const SnippetContent = ({
   }
 
   const handleLocateInTree = (): void => {
-    if (!isNil(value?.id)) {
-      try {
-        const studioApi = getPimcoreStudioApi()
-        studioApi.element.locateInTree(value.id, 'document')
-      } catch (error) {
-        console.warn('Could not locate snippet in tree:', error)
-      }
-    }
+    locateElementInTree('document', value?.id)
   }
 
   const contextMenuItems: MenuProps['items'] = []
@@ -172,7 +165,7 @@ export const SnippetContent = ({
       className={ className }
       contextMenuItems={ contextMenuItems }
       defaultHeight={ defaultHeight }
-      dropZoneText={ t('drag-snippet-here') }
+      dropZoneText={ t('drop-snippet-here') }
       hasContent={ hasContent }
       height={ config?.height }
       isLoading={ isLoading }
