@@ -1021,6 +1021,11 @@ creatable-select.add-custom-option: Add custom option
 creatable-select.add: Add
 creatable-select.option-already-exists: Option already exists
 drag-snippet-here: Drag a snippet here
+drag-document-here: Drag a document here
+drag-asset-here: Drag an asset here
+drag-object-here: Drag an object here
+drag-element-here: Drag an element here
+error-loading-renderlet: Error loading renderlet
 snippet: Snippet
 navigation.application-logger: Application Logger
 widget.application-logger: Application Logger

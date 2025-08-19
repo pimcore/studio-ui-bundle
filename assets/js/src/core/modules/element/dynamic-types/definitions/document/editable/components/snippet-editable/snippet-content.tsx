@@ -8,19 +8,17 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState, useRef } from 'react'
-import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
-import { Dropdown, type MenuProps } from 'antd'
+import React, { useEffect, useState, useRef, useLayoutEffect } from 'react'
+import { type MenuProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { isNil, isEmpty } from 'lodash'
-import { toCssDimension } from '@sdk/utils'
 import { Icon } from '@Pimcore/components/icon/icon'
-import cn from 'classnames'
-import { useSnippetEditableStyles } from './snippet-editable.styles'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
+import { EditableHtmlDropContainer } from '@Pimcore/components/editable-html-drop-container'
 import { type SnippetValue, type SnippetEditableConfig } from './snippet-editable'
 
 export interface SnippetContentProps {
@@ -37,14 +35,12 @@ export const SnippetContent = ({
   className
 }: SnippetContentProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { styles } = useSnippetEditableStyles()
-  const { getStateClasses } = useDroppable()
   const [htmlContent, setHtmlContent] = useState<string>('')
   const [isLoading, setIsLoading] = useState(false)
-  const contentRef = useRef<HTMLDivElement>(null)
+  const prevPathRef = useRef<string | undefined>()
 
   const defaultHeight = config?.defaultHeight ?? 100
-  const hasContent = !isNil(value?.path) && !isEmpty(value?.path)
+  const hasContent = !isLoading && !isNil(value?.path) && !isEmpty(value?.path)
 
   const { openElement } = useElementHelper()
 
@@ -57,7 +53,7 @@ export const SnippetContent = ({
     },
     config: {
       documents: {
-        allowedTypes: config?.documentTypes ?? ['snippet']
+        allowedTypes: ['snippet']
       }
     },
     onFinish: (event) => {
@@ -72,10 +68,22 @@ export const SnippetContent = ({
     }
   })
 
-  useEffect(() => {
-    if (hasContent && !isNil(value?.path)) {
-      setIsLoading(true)
+  // Synchronously set loading state before render if path changes
+  useLayoutEffect(() => {
+    if (value?.path !== prevPathRef.current) {
+      if (!isNil(value?.path) && !isEmpty(value?.path)) {
+        setIsLoading(true)
+        setHtmlContent('')
+      } else {
+        setIsLoading(false)
+        setHtmlContent('')
+      }
+      prevPathRef.current = value?.path
+    }
+  }, [value?.path])
 
+  useEffect(() => {
+    if (!isNil(value?.path) && !isEmpty(value?.path)) {
       const url = new URL(value.path, window.location.origin)
       url.searchParams.set('pimcore_admin', 'true')
       url.searchParams.set('_dc', Date.now().toString())
@@ -95,11 +103,8 @@ export const SnippetContent = ({
           setHtmlContent('')
           setIsLoading(false)
         })
-    } else {
-      setHtmlContent('')
-      setIsLoading(false)
     }
-  }, [value?.path, hasContent])
+  }, [value?.path])
 
   const handleEmpty = (): void => {
     onChange(null)
@@ -162,55 +167,17 @@ export const SnippetContent = ({
     onClick: handleSearch
   })
 
-  const containerStyle: React.CSSProperties = {
-    width: toCssDimension(config?.width),
-    height: hasContent ? 'auto' : toCssDimension(config?.height ?? defaultHeight),
-    minHeight: hasContent ? 'auto' : toCssDimension(40)
-  }
-
-  const contentClasses = cn(
-    styles.snippetContent,
-    {
-      'snippet-content--empty': !hasContent && !isLoading,
-      'snippet-content--loading': isLoading,
-      'snippet-content--has-content': hasContent && !isLoading
-    },
-    ...getStateClasses(),
-    className
-  )
-
   return (
-    <Dropdown
-      disabled={ contextMenuItems.length === 0 }
-      menu={ { items: contextMenuItems } }
-      trigger={ ['contextMenu'] }
-    >
-      <div
-        className={ contentClasses }
-        ref={ contentRef }
-        style={ containerStyle }
-      >
-        {isLoading && (
-          <div className={ styles.loading }>
-            <Icon value="loading" />
-            <span>{t('loading')}</span>
-          </div>
-        )}
-
-        {!hasContent && !isLoading && (
-          <div className={ styles.dropZone }>
-            <Icon value="snippet" />
-            <span>{t('drag-snippet-here')}</span>
-          </div>
-        )}
-
-        {hasContent && !isLoading && (
-          <div
-            className={ styles.renderedContent }
-            dangerouslySetInnerHTML={ { __html: htmlContent } }
-          />
-        )}
-      </div>
-    </Dropdown>
+    <EditableHtmlDropContainer
+      className={ className }
+      contextMenuItems={ contextMenuItems }
+      defaultHeight={ defaultHeight }
+      dropZoneText={ t('drag-snippet-here') }
+      hasContent={ hasContent }
+      height={ config?.height }
+      isLoading={ isLoading }
+      renderedContent={ htmlContent.length > 0 ? <SanitizeHtml html={ htmlContent } /> : undefined }
+      width={ config?.width }
+    />
   )
 }
