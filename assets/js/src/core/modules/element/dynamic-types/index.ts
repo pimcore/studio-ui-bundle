@@ -16,6 +16,8 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type DynamicTypeFieldFilterObjectAdapter } from './definitions/field-filters/types/data-object-adapter/dynamic-type-field-filter-data-object-adapter'
 import { type DynamicTypeFieldFilterDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/data-object-brick/dynamic-type-field-filter-data-object-object-brick'
 import { type DynamicTypeFieldFilterText } from './definitions/field-filters/types/text/dynamic-type-field-filter-text'
+import { type DynamicTypeFieldFilterTextArea } from './definitions/field-filters/types/text-area/dynamic-type-field-filter-text-area'
+import { type DynamicTypeFieldFilterWysiwyg } from './definitions/field-filters/types/wysiwyg/dynamic-type-field-filter-wysiwyg'
 import { type DynamicTypeFieldFilterNumber } from './definitions/field-filters/types/number/dynamic-type-field-filter-number'
 import { type DynamicTypeFieldFilterSelect } from './definitions/field-filters/types/select/dynamic-type-field-filter-select'
 import { type DynamicTypeFieldFilterDatetime } from './definitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
@@ -191,7 +193,8 @@ moduleSystem.registerModule({
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterObjectAdapter>(serviceIds['DynamicTypes/FieldFilter/DataObjectAdapter']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterDataObjectObjectBrick>(serviceIds['DynamicTypes/FieldFilter/DataObjectObjectBrick']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterText>(serviceIds['DynamicTypes/FieldFilter/Text']))
-    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterText>(serviceIds['DynamicTypes/FieldFilter/Textarea']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterTextArea>(serviceIds['DynamicTypes/FieldFilter/Textarea']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterWysiwyg>(serviceIds['DynamicTypes/FieldFilter/Wysiwyg']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterNumber>(serviceIds['DynamicTypes/FieldFilter/Number']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterSelect>(serviceIds['DynamicTypes/FieldFilter/Select']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterDatetime>(serviceIds['DynamicTypes/FieldFilter/Datetime']))
