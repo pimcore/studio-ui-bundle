@@ -10,7 +10,6 @@
 
 import type { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
-import { Panel } from '@Pimcore/components/panel/panel'
 import { FormKit } from '../../form-kit'
 import { Input } from '@Pimcore/components/input/input'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
@@ -19,14 +18,13 @@ import { Select } from '@Pimcore/components/select/select'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { Form } from '../../form'
 
-const meta: Meta<typeof Panel> = {
+const meta: Meta = {
   title: 'Components/Data Entry/Form/Layouts/Panel',
-  component: Panel,
   parameters: {
     layout: 'padded',
     docs: {
       description: {
-        component: 'Use Panel components to organize FormKit fields into logical sections. Supports collapsible behavior and different themes.'
+        component: 'Use Panel components within FormKit to organize fields into logical sections. Supports collapsible behavior and different themes.'
       }
     }
   },
@@ -34,24 +32,29 @@ const meta: Meta<typeof Panel> = {
   argTypes: {
     title: {
       control: 'text',
-      description: 'Panel title displayed at the top'
+      description: 'Panel title displayed at the top',
+      defaultValue: 'Panel Title'
     },
     theme: {
       control: 'radio',
       options: ['fieldset', 'card-with-highlight'],
-      description: 'Visual theme for the panel'
+      description: 'Visual theme for the panel',
+      defaultValue: 'card-with-highlight'
     },
     border: {
       control: 'boolean',
-      description: 'Whether to show a border around the panel'
+      description: 'Whether to show a border around the panel',
+      defaultValue: false
     },
     collapsible: {
       control: 'boolean',
-      description: 'Whether the panel can be collapsed'
+      description: 'Whether the panel can be collapsed',
+      defaultValue: false
     },
     collapsed: {
       control: 'boolean',
-      description: 'Whether the panel starts collapsed (only works if collapsible is true)'
+      description: 'Whether the panel starts collapsed (only works if collapsible is true)',
+      defaultValue: false
     }
   }
 }
@@ -59,22 +62,21 @@ const meta: Meta<typeof Panel> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-// Simple Panel with FormKit Fields
-const SimpleFormKitPanelComponent = (): React.JSX.Element => {
+// Base component for reusable panel content
+const PanelStoryComponent = (args: any): React.JSX.Element => {
   const [form] = Form.useForm()
 
   return (
-    <div style={ { maxWidth: '600px' } }>
-      <FormKit formProps={ {
+    <div style={{ maxWidth: '600px' }}>
+      <FormKit formProps={{
         form,
         layout: 'vertical'
-      } }
-      >
-        <Panel title="Personal Information">
+      }}>
+        <FormKit.Panel {...args}>
           <Form.Item
             label="First Name"
             name="firstName"
-            rules={ [{ required: true, message: 'Please enter your first name' }] }
+            rules={[{ required: true, message: 'Please enter your first name' }]}
           >
             <Input placeholder="Enter first name" />
           </Form.Item>
@@ -82,7 +84,7 @@ const SimpleFormKitPanelComponent = (): React.JSX.Element => {
           <Form.Item
             label="Last Name"
             name="lastName"
-            rules={ [{ required: true, message: 'Please enter your last name' }] }
+            rules={[{ required: true, message: 'Please enter your last name' }]}
           >
             <Input placeholder="Enter last name" />
           </Form.Item>
@@ -90,37 +92,71 @@ const SimpleFormKitPanelComponent = (): React.JSX.Element => {
           <Form.Item
             label="Email"
             name="email"
-            rules={ [
+            rules={[
               { required: true, message: 'Please enter your email' },
               { type: 'email', message: 'Please enter a valid email' }
-            ] }
+            ]}
           >
             <Input placeholder="Enter email address" />
           </Form.Item>
-        </Panel>
+        </FormKit.Panel>
       </FormKit>
     </div>
   )
 }
 
-export const SimpleFormKitPanel: Story = {
-  render: () => <SimpleFormKitPanelComponent />
+// Default story
+export const Default: Story = {
+  args: {
+    title: 'Personal Information'
+  },
+  render: (args) => <PanelStoryComponent {...args} />
 }
 
-// Collapsible Panel Example
-const CollapsiblePanelComponent = (): React.JSX.Element => {
+// Collapsible panel
+export const Collapsible: Story = {
+  args: {
+    title: 'Advanced Settings',
+    collapsible: true,
+    collapsed: true,
+    theme: 'card-with-highlight'
+  },
+  render: (args) => <PanelStoryComponent {...args} />
+}
+
+// Fieldset theme with border
+export const FieldsetTheme: Story = {
+  args: {
+    title: 'User Details',
+    theme: 'fieldset',
+    border: true
+  },
+  render: (args) => <PanelStoryComponent {...args} />
+}
+
+// Card theme
+export const CardTheme: Story = {
+  args: {
+    title: 'Account Settings',
+    theme: 'card-with-highlight'
+  },
+  render: (args) => <PanelStoryComponent {...args} />
+}
+
+// Multiple panels example
+const MultiplePanelsComponent = (): React.JSX.Element => {
   const [form] = Form.useForm()
 
   return (
-    <div style={ { maxWidth: '600px' } }>
-      <FormKit formProps={ {
+    <div style={{ maxWidth: '600px' }}>
+      <FormKit formProps={{
         form,
         layout: 'vertical'
-      } }
-      >
-        <Panel
-          theme="card-with-highlight"
+      }}>
+        <FormKit.Panel
           title="Basic Information"
+          theme="fieldset"
+          border
         >
           <Form.Item
             label="Company Name"
@@ -128,13 +164,20 @@ const CollapsiblePanelComponent = (): React.JSX.Element => {
           >
             <Input placeholder="Enter company name" />
           </Form.Item>
-        </Panel>
 
-        <Panel
-          collapsed
-          collapsible
-          theme="card-with-highlight"
+          <Form.Item
+            label="Username"
+            name="username"
+          >
+            <Input placeholder="Enter username" />
+          </Form.Item>
+        </FormKit.Panel>
+
+        <FormKit.Panel
           title="Advanced Settings"
+          theme="card-with-highlight"
+          collapsible
+          collapsed
         >
           <Form.Item
             label="API Key"
@@ -144,79 +187,33 @@ const CollapsiblePanelComponent = (): React.JSX.Element => {
           </Form.Item>
 
           <Form.Item
-            label="Webhook URL"
-            name="webhookUrl"
-          >
-            <Input placeholder="Enter webhook URL" />
-          </Form.Item>
-
-          <Form.Item
             label="Timeout (seconds)"
             name="timeout"
           >
             <InputNumber
-              max={ 300 }
-              min={ 1 }
+              min={1}
+              max={300}
               placeholder="30"
-              style={ { width: '100%' } }
+              style={{ width: '100%' }}
             />
           </Form.Item>
-        </Panel>
-      </FormKit>
-    </div>
-  )
-}
+        </FormKit.Panel>
 
-export const CollapsiblePanel: Story = {
-  render: () => <CollapsiblePanelComponent />
-}
-
-// Multiple Panels with Different Themes
-const MultipleThemePanelsComponent = (): React.JSX.Element => {
-  const [form] = Form.useForm()
-
-  return (
-    <div style={ { maxWidth: '600px' } }>
-      <FormKit formProps={ {
-        form,
-        layout: 'vertical'
-      } }
-      >
-        <Panel
-          border
-          theme="fieldset"
-          title="User Details"
-        >
-          <Form.Item
-            label="Username"
-            name="username"
-          >
-            <Input placeholder="Enter username" />
-          </Form.Item>
-
-          <Form.Item
-            label="Display Name"
-            name="displayName"
-          >
-            <Input placeholder="Enter display name" />
-          </Form.Item>
-        </Panel>
-
-        <Panel
-          theme="card-with-highlight"
+        <FormKit.Panel
           title="Account Settings"
+          theme="card-with-highlight"
         >
           <Form.Item
             label="Account Type"
             name="accountType"
           >
             <Select
-              options={ [
+              placeholder="Select account type"
+              options={[
                 { value: 'standard', label: 'Standard' },
                 { value: 'premium', label: 'Premium' },
                 { value: 'enterprise', label: 'Enterprise' }
-              ] }
-              placeholder="Select account type"
+              ]}
             />
           </Form.Item>
 
@@ -227,37 +224,39 @@ const MultipleThemePanelsComponent = (): React.JSX.Element => {
           >
             <Switch />
           </Form.Item>
-        </Panel>
+        </FormKit.Panel>
       </FormKit>
     </div>
   )
 }
 
-export const MultipleThemePanels: Story = {
-  render: () => <MultipleThemePanelsComponent />
+export const MultiplePanels: Story = {
+  render: () => <MultiplePanelsComponent />
 }
 
-// Panel with Extra Content
-const PanelWithExtraContentComponent = (): React.JSX.Element => {
+// Panel with extra content
+const WithExtraContentComponent = (): React.JSX.Element => {
   const [form] = Form.useForm()
   const [isEditMode, setIsEditMode] = React.useState(false)
 
   return (
-    <div style={ { maxWidth: '600px' } }>
-      <FormKit formProps={ {
+    <div style={{ maxWidth: '600px' }}>
+      <FormKit formProps={{
         form,
         layout: 'vertical'
-      } }
-      >
-        <Panel
+      }}>
+        <FormKit.Panel
+          title="Project Configuration"
+          theme="card-with-highlight"
           extra={
-            <div style={ { display: 'flex', gap: '8px', alignItems: 'center' } }>
-              <span style={ { fontSize: '12px', color: '#666' } }>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <span style={{ fontSize: '12px', color: '#666' }}>
                 {isEditMode ? 'Editing' : 'Read Only'}
               </span>
               <button
-                onClick={ () => { setIsEditMode(!isEditMode) } }
-                style={ {
+                type="button"
+                onClick={() => { setIsEditMode(!isEditMode) }}
+                style={{
                   padding: '4px 8px',
                   fontSize: '12px',
                   border: '1px solid #d9d9d9',
@@ -265,23 +264,20 @@ const PanelWithExtraContentComponent = (): React.JSX.Element => {
                   background: isEditMode ? '#1890ff' : 'white',
                   color: isEditMode ? 'white' : 'black',
                   cursor: 'pointer'
-                } }
-                type="button"
+                }}
               >
                 {isEditMode ? 'Save' : 'Edit'}
               </button>
             </div>
           }
-          theme="card-with-highlight"
-          title="Project Configuration"
         >
           <Form.Item
             label="Project Name"
             name="projectName"
           >
             <Input
-              disabled={ !isEditMode }
               placeholder="Enter project name"
+              disabled={!isEditMode}
             />
           </Form.Item>
 
@@ -290,9 +286,9 @@ const PanelWithExtraContentComponent = (): React.JSX.Element => {
             name="description"
           >
             <TextArea
-              disabled={ !isEditMode }
               placeholder="Enter project description"
-              rows={ 3 }
+              rows={3}
+              disabled={!isEditMode}
             />
           </Form.Item>
 
@@ -301,21 +297,21 @@ const PanelWithExtraContentComponent = (): React.JSX.Element => {
             name="status"
           >
             <Select
-              disabled={ !isEditMode }
-              options={ [
+              placeholder="Select status"
+              disabled={!isEditMode}
+              options={[
                 { value: 'draft', label: 'Draft' },
                 { value: 'active', label: 'Active' },
                 { value: 'completed', label: 'Completed' }
-              ] }
-              placeholder="Select status"
+              ]}
             />
           </Form.Item>
-        </Panel>
+        </FormKit.Panel>
       </FormKit>
     </div>
   )
 }
 
-export const PanelWithExtraContent: Story = {
-  render: () => <PanelWithExtraContentComponent />
+export const WithExtraContent: Story = {
+  render: () => <WithExtraContentComponent />
 }

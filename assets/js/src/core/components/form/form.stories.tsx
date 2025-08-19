@@ -43,7 +43,7 @@ const config: Meta<typeof Form> = {
       description: {
         component: `Standard Form component built on top of Ant Design with Pimcore-specific enhancements. This is the basic form implementation suitable for simple form layouts.
 
-**📊 Compare with FormKit:** [Form vs FormKit Comparison](?path=/docs/components-data-entry-form-comparison--docs) - See side-by-side comparisons and decide which approach fits your use case.`
+**📊 Compare with FormKit:** [Form vs FormKit Comparison](?path=/docs/components-data-entry-form-form-vs-formkit--docs) - See side-by-side comparisons and decide which approach fits your use case.`
       }
     }
   },
@@ -457,8 +457,6 @@ const AllControlsFormExample = (): React.JSX.Element => {
         >
           {/* Text Controls Section */}
           <div style={ { marginBottom: '32px' } }>
-            <h3 style={ { marginBottom: '16px', fontSize: '16px', fontWeight: 600 } }>Text Controls</h3>
-            
             <Form.Item
               label="Basic Input"
               name="basicInput"
@@ -508,8 +506,6 @@ const AllControlsFormExample = (): React.JSX.Element => {
 
           {/* Selection Controls Section */}
           <div style={ { marginBottom: '32px' } }>
-            <h3 style={ { marginBottom: '16px', fontSize: '16px', fontWeight: 600 } }>Selection Controls</h3>
-            
             <Form.Item
               label="Basic Select"
               name="basicSelect"
@@ -577,8 +573,6 @@ const AllControlsFormExample = (): React.JSX.Element => {
 
           {/* Boolean Controls Section */}
           <div style={ { marginBottom: '32px' } }>
-            <h3 style={ { marginBottom: '16px', fontSize: '16px', fontWeight: 600 } }>Boolean Controls</h3>
-            
             <Form.Item
               label="Switch Control"
               name="switch"
@@ -606,8 +600,6 @@ const AllControlsFormExample = (): React.JSX.Element => {
 
           {/* Date, Time & Color Controls Section */}
           <div style={ { marginBottom: '32px' } }>
-            <h3 style={ { marginBottom: '16px', fontSize: '16px', fontWeight: 600 } }>Date, Time & Color Controls</h3>
-            
             <Form.Item
               label="Date Picker"
               name="datePicker"
@@ -678,8 +670,6 @@ const AllControlsFormExample = (): React.JSX.Element => {
 
           {/* Lists & Range Controls Section */}
           <div style={ { marginBottom: '32px' } }>
-            <h3 style={ { marginBottom: '16px', fontSize: '16px', fontWeight: 600 } }>Lists & Range Controls</h3>
-            
             <Form.Item
               label="Keyed List"
               name="keyedList"

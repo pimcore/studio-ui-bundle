@@ -29,46 +29,50 @@ export interface BaseViewProps {
 
 export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewProps): React.JSX.Element => {
   const isPaddedLayout = props.border === true || props.collapsible === true || !isEmpty(props.title)
+  const finalProps = { 
+    ...props, 
+    bordered: props.border,
+  }
 
   return useMemo(() => {
     if (!isPaddedLayout) {
       return (
         <>
-          {props.children}
+          {finalProps.children}
         </>
       )
     }
 
-    if (props.collapsible === true) {
+    if (finalProps.collapsible === true) {
       return (
         <CollapseItem
-          bordered={ props.bordered }
-          contentPadding={ props.contentPadding }
-          defaultActive={ !(props.collapsed ?? true) }
-          extra={ props.extra }
-          extraPosition={ props.extraPosition }
+          bordered={ finalProps.bordered }
+          contentPadding={ finalProps.contentPadding }
+          defaultActive={ !(finalProps.collapsed ?? true) }
+          extra={ finalProps.extra }
+          extraPosition={ finalProps.extraPosition }
           forceRender
           hasContentSeparator={ theme !== 'fieldset' }
-          label={ (<>{props.title}</>) }
+          label={ (<>{finalProps.title}</>) }
           size='small'
           theme={ theme }
         >
-          {props.children}
+          {finalProps.children}
         </CollapseItem>
       )
     }
 
     return (
       <Card
-        bordered={ props.bordered === true }
-        contentPadding={ props.contentPadding }
-        extra={ props.extra }
-        extraPosition={ props.extraPosition }
+        bordered={ finalProps.bordered === true }
+        contentPadding={ finalProps.contentPadding }
+        extra={ finalProps.extra }
+        extraPosition={ finalProps.extraPosition }
         theme={ theme }
-        title={ isEmpty(props.title) ? undefined : props.title }
+        title={ isEmpty(finalProps.title) ? undefined : finalProps.title }
       >
-        {props.children}
+        {finalProps.children}
       </Card>
     )
-  }, [props, isPaddedLayout, theme])
+  }, [finalProps, isPaddedLayout, theme])
 }
