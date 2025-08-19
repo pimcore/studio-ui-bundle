@@ -176,6 +176,7 @@ import { type DynamicTypeDocumentEditableMultiSelect } from './definitions/docum
 import { type DynamicTypeDocumentEditableSelect } from './definitions/document/editable/types/dynamic-type-document-editable-select'
 import { type DynamicTypeDocumentEditableTable } from './definitions/document/editable/types/dynamic-type-document-editable-table'
 import { type DynamicTypeDocumentEditableSnippet } from './definitions/document/editable/types/dynamic-type-document-editable-snippet'
+import { type DynamicTypeDocumentEditableRenderlet } from './definitions/document/editable/types/dynamic-type-document-editable-renderlet'
 import { type DynamicTypeDocumentEditableBlock } from './definitions/document/editable/types/dynamic-type-document-editable-block'
 import { type DynamicTypeGridCellDataObjectAdvanced } from './definitions/grid-cell/types/data-object-advanced/dynamic-type-grid-cell-data-object-advanced'
 import { type DynamicTypeDocumentEditableArea } from './definitions/document/editable/types/dynamic-type-document-editable-area'
@@ -345,6 +346,7 @@ moduleSystem.registerModule({
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableNumeric>(serviceIds['DynamicTypes/DocumentEditable/Numeric']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableRelation>(serviceIds['DynamicTypes/DocumentEditable/Relation']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableRelations>(serviceIds['DynamicTypes/DocumentEditable/Relations']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableRenderlet>(serviceIds['DynamicTypes/DocumentEditable/Renderlet']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableSelect>(serviceIds['DynamicTypes/DocumentEditable/Select']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableSnippet>(serviceIds['DynamicTypes/DocumentEditable/Snippet']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableTable>(serviceIds['DynamicTypes/DocumentEditable/Table']))

@@ -8,4 +8,4 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-export * from './snippet-editable'
+export * from './renderlet-editable'

@@ -8,4 +8,5 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-export * from './snippet-editable'
+export * from './drop-element-empty-placeholder'
+export * from './drop-element-empty-placeholder.styles'
