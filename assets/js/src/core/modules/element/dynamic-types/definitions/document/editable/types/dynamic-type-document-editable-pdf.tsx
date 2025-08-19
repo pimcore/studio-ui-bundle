@@ -11,7 +11,6 @@
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import { DocumentPdfEditable } from '../components/pdf-editable/pdf-editable'
-import { isNil } from 'lodash'
 import { injectable } from 'inversify'
 
 export interface PdfEditableConfig {
@@ -38,34 +37,7 @@ export class DynamicTypeDocumentEditablePdf extends DynamicTypeDocumentEditableA
         config={ props.config }
         containerRef={ props.containerRef }
         disabled={ props.inherited }
-        onChange={ (newValue) => props.onChange?.(newValue) }
-        value={ props.value }
       />
     )
-  }
-
-  transformValue (value: any, props: PdfEditableDefinition): PdfEditableValue | null {
-    if (isNil(value)) {
-      return null
-    }
-
-    if (typeof value === 'object') {
-      return value
-    }
-
-    return null
-  }
-
-  transformValueForApi (value: PdfEditableValue | null, props: PdfEditableDefinition): any {
-    if (isNil(value)) {
-      return null
-    }
-
-    return value
-  }
-
-  reloadOnChange (props: PdfEditableDefinition, oldValue: any, newValue: any): boolean {
-    // PDF editables don't support reload configuration, so never reload
-    return false
   }
 }
