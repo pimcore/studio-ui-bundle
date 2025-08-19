@@ -24,6 +24,7 @@ export interface CreatableSelectProps extends Omit<SelectProps, 'options'> {
   inputType?: 'string' | 'number'
   validate?: (value: string) => boolean
   numberInputProps?: React.ComponentProps<typeof InputNumber>
+  generateLabel?: (value: string) => string
 }
 
 const Component = ({
@@ -37,6 +38,7 @@ const Component = ({
   inputType = 'string',
   validate,
   numberInputProps = {},
+  generateLabel,
   ...selectProps
 }: CreatableSelectProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -53,7 +55,7 @@ const Component = ({
       if (!valueExists) {
         const autoOption: SelectOptionType = {
           value: valueToCheck,
-          label: valueToCheck
+          label: generateLabel !== undefined ? generateLabel(valueToCheck) : valueToCheck
         }
         setCustomOptions(prev => {
           // Check if already added to avoid duplicates
@@ -64,7 +66,7 @@ const Component = ({
         onCreateOption?.(valueToCheck)
       }
     }
-  }, [value, selectProps.defaultValue, allOptions, onCreateOption])
+  }, [value, selectProps.defaultValue, allOptions, onCreateOption, generateLabel])
 
   const handleAddOption = useCallback(() => {
     const trimmedValue = newOptionText.trim()
@@ -85,7 +87,7 @@ const Component = ({
 
     const newOption: SelectOptionType = {
       value: trimmedValue,
-      label: trimmedValue
+      label: generateLabel !== undefined ? generateLabel(trimmedValue) : trimmedValue
     }
 
     // Add to custom options
@@ -97,7 +99,7 @@ const Component = ({
     if (onChange !== null && onChange !== undefined) {
       onChange(trimmedValue, newOption)
     }
-  }, [newOptionText, allOptions, allowDuplicates, onCreateOption, onChange, validate])
+  }, [newOptionText, allOptions, allowDuplicates, onCreateOption, onChange, validate, generateLabel])
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent): void => {
     if (e.key === 'Enter') {

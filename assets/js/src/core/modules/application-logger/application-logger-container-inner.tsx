@@ -105,16 +105,19 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
               minWidth={150}
               onChange={handleRefreshIntervalChange}
               options={[
-                { value: '3', label: t('application-logger.refresh-interval.seconds', { seconds: '3' }) },
-                { value: '5', label: t('application-logger.refresh-interval.seconds', { seconds: '5' }) },
-                { value: '10', label: t('application-logger.refresh-interval.seconds', { seconds: '10' }) },
-                { value: '30', label: t('application-logger.refresh-interval.seconds', { seconds: '30' }) },
-                { value: '60', label: t('application-logger.refresh-interval.seconds', { seconds: '60' }) }
+                { value: '3', label: t('application-logger.refresh-interval.seconds', { seconds: 3 }) },
+                { value: '5', label: t('application-logger.refresh-interval.seconds', { seconds: 5 }) },
+                { value: '10', label: t('application-logger.refresh-interval.seconds', { seconds: 10 }) },
+                { value: '30', label: t('application-logger.refresh-interval.seconds', { seconds: 30 }) },
+                { value: '60', label: t('application-logger.refresh-interval.seconds', { seconds: 60 }) }
               ]}
               placeholder={t('application-logger.refresh-interval.select')}
               value={refreshInterval}
               numberInputProps={{
                 min: 1
+              }}
+              generateLabel={(seconds) => {
+                return t('application-logger.refresh-interval.seconds', { seconds })
               }}
               validate={(value) => !isNaN(parseInt(value)) && parseInt(value) > 0}
             />
