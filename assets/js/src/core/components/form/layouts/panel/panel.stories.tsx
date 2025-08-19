@@ -67,16 +67,17 @@ const PanelStoryComponent = (args: any): React.JSX.Element => {
   const [form] = Form.useForm()
 
   return (
-    <div style={{ maxWidth: '600px' }}>
-      <FormKit formProps={{
+    <div style={ { maxWidth: '600px' } }>
+      <FormKit formProps={ {
         form,
         layout: 'vertical'
-      }}>
-        <FormKit.Panel {...args}>
+      } }
+      >
+        <FormKit.Panel { ...args }>
           <Form.Item
             label="First Name"
             name="firstName"
-            rules={[{ required: true, message: 'Please enter your first name' }]}
+            rules={ [{ required: true, message: 'Please enter your first name' }] }
           >
             <Input placeholder="Enter first name" />
           </Form.Item>
@@ -84,7 +85,7 @@ const PanelStoryComponent = (args: any): React.JSX.Element => {
           <Form.Item
             label="Last Name"
             name="lastName"
-            rules={[{ required: true, message: 'Please enter your last name' }]}
+            rules={ [{ required: true, message: 'Please enter your last name' }] }
           >
             <Input placeholder="Enter last name" />
           </Form.Item>
@@ -92,10 +93,10 @@ const PanelStoryComponent = (args: any): React.JSX.Element => {
           <Form.Item
             label="Email"
             name="email"
-            rules={[
+            rules={ [
               { required: true, message: 'Please enter your email' },
               { type: 'email', message: 'Please enter a valid email' }
-            ]}
+            ] }
           >
             <Input placeholder="Enter email address" />
           </Form.Item>
@@ -110,7 +111,7 @@ export const Default: Story = {
   args: {
     title: 'Personal Information'
   },
-  render: (args) => <PanelStoryComponent {...args} />
+  render: (args) => <PanelStoryComponent { ...args } />
 }
 
 // Collapsible panel
@@ -121,7 +122,7 @@ export const Collapsible: Story = {
     collapsed: true,
     theme: 'card-with-highlight'
   },
-  render: (args) => <PanelStoryComponent {...args} />
+  render: (args) => <PanelStoryComponent { ...args } />
 }
 
 // Fieldset theme with border
@@ -131,7 +132,7 @@ export const FieldsetTheme: Story = {
     theme: 'fieldset',
     border: true
   },
-  render: (args) => <PanelStoryComponent {...args} />
+  render: (args) => <PanelStoryComponent { ...args } />
 }
 
 // Card theme
@@ -140,7 +141,7 @@ export const CardTheme: Story = {
     title: 'Account Settings',
     theme: 'card-with-highlight'
   },
-  render: (args) => <PanelStoryComponent {...args} />
+  render: (args) => <PanelStoryComponent { ...args } />
 }
 
 // Multiple panels example
@@ -148,15 +149,16 @@ const MultiplePanelsComponent = (): React.JSX.Element => {
   const [form] = Form.useForm()
 
   return (
-    <div style={{ maxWidth: '600px' }}>
-      <FormKit formProps={{
+    <div style={ { maxWidth: '600px' } }>
+      <FormKit formProps={ {
         form,
         layout: 'vertical'
-      }}>
+      } }
+      >
         <FormKit.Panel
-          title="Basic Information"
-          theme="fieldset"
           border
+          theme="fieldset"
+          title="Basic Information"
         >
           <Form.Item
             label="Company Name"
@@ -174,10 +176,10 @@ const MultiplePanelsComponent = (): React.JSX.Element => {
         </FormKit.Panel>
 
         <FormKit.Panel
-          title="Advanced Settings"
-          theme="card-with-highlight"
-          collapsible
           collapsed
+          collapsible
+          theme="card-with-highlight"
+          title="Advanced Settings"
         >
           <Form.Item
             label="API Key"
@@ -191,29 +193,29 @@ const MultiplePanelsComponent = (): React.JSX.Element => {
             name="timeout"
           >
             <InputNumber
-              min={1}
-              max={300}
+              max={ 300 }
+              min={ 1 }
               placeholder="30"
-              style={{ width: '100%' }}
+              style={ { width: '100%' } }
             />
           </Form.Item>
         </FormKit.Panel>
 
         <FormKit.Panel
-          title="Account Settings"
           theme="card-with-highlight"
+          title="Account Settings"
         >
           <Form.Item
             label="Account Type"
             name="accountType"
           >
             <Select
-              placeholder="Select account type"
-              options={[
+              options={ [
                 { value: 'standard', label: 'Standard' },
                 { value: 'premium', label: 'Premium' },
                 { value: 'enterprise', label: 'Enterprise' }
-              ]}
+              ] }
+              placeholder="Select account type"
             />
           </Form.Item>
 
@@ -240,23 +242,21 @@ const WithExtraContentComponent = (): React.JSX.Element => {
   const [isEditMode, setIsEditMode] = React.useState(false)
 
   return (
-    <div style={{ maxWidth: '600px' }}>
-      <FormKit formProps={{
+    <div style={ { maxWidth: '600px' } }>
+      <FormKit formProps={ {
         form,
         layout: 'vertical'
-      }}>
+      } }
+      >
         <FormKit.Panel
-          title="Project Configuration"
-          theme="card-with-highlight"
           extra={
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-              <span style={{ fontSize: '12px', color: '#666' }}>
+            <div style={ { display: 'flex', gap: '8px', alignItems: 'center' } }>
+              <span style={ { fontSize: '12px', color: '#666' } }>
                 {isEditMode ? 'Editing' : 'Read Only'}
               </span>
               <button
-                type="button"
-                onClick={() => { setIsEditMode(!isEditMode) }}
-                style={{
+                onClick={ () => { setIsEditMode(!isEditMode) } }
+                style={ {
                   padding: '4px 8px',
                   fontSize: '12px',
                   border: '1px solid #d9d9d9',
@@ -264,20 +264,23 @@ const WithExtraContentComponent = (): React.JSX.Element => {
                   background: isEditMode ? '#1890ff' : 'white',
                   color: isEditMode ? 'white' : 'black',
                   cursor: 'pointer'
-                }}
+                } }
+                type="button"
               >
                 {isEditMode ? 'Save' : 'Edit'}
               </button>
             </div>
           }
+          theme="card-with-highlight"
+          title="Project Configuration"
         >
           <Form.Item
             label="Project Name"
             name="projectName"
           >
             <Input
+              disabled={ !isEditMode }
               placeholder="Enter project name"
-              disabled={!isEditMode}
             />
           </Form.Item>
 
@@ -286,9 +289,9 @@ const WithExtraContentComponent = (): React.JSX.Element => {
             name="description"
           >
             <TextArea
+              disabled={ !isEditMode }
               placeholder="Enter project description"
-              rows={3}
-              disabled={!isEditMode}
+              rows={ 3 }
             />
           </Form.Item>
 
@@ -297,13 +300,13 @@ const WithExtraContentComponent = (): React.JSX.Element => {
             name="status"
           >
             <Select
-              placeholder="Select status"
-              disabled={!isEditMode}
-              options={[
+              disabled={ !isEditMode }
+              options={ [
                 { value: 'draft', label: 'Draft' },
                 { value: 'active', label: 'Active' },
                 { value: 'completed', label: 'Completed' }
-              ]}
+              ] }
+              placeholder="Select status"
             />
           </Form.Item>
         </FormKit.Panel>

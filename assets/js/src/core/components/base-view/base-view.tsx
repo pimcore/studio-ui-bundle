@@ -29,9 +29,9 @@ export interface BaseViewProps {
 
 export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewProps): React.JSX.Element => {
   const isPaddedLayout = props.border === true || props.collapsible === true || !isEmpty(props.title)
-  const finalProps = { 
-    ...props, 
-    bordered: props.border,
+  const finalProps = {
+    ...props,
+    bordered: props.border
   }
 
   return useMemo(() => {

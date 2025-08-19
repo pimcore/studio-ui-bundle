@@ -1,35 +1,14 @@
 /**
  * This source file is available under the terms of the
  * Pimcore Open Core License (POCL)
- * Full copyright and license information is availab  return (
-    <FormLayoutContainer>
-      <ContentLayout
-        renderToolbar={(
-          <Toolbar justify="space-between">
-            <div style={{ fontSize: '14px', fontWeight: 600 }}>
-              FormKit Advanced Features: Panels • TabPanels • Regions • Auto Field Widths
-            </div>
-            <Button type="primary">
-              Save Configuration
-            </Button>
-          </Toolbar>
-        )}
-      >
-        <Content
-          padded
-          padding={{ x: 'small', y: 'none' }}
-        >ontent
-          padded
-          padding={{ x: 'small', y: 'none' }}
-        >
-          <div style={{ maxWidth: '1200px' }}>
-            <FormKit>SE.md which is distributed with this source code.
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
  *
  *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj, StoryContext } from '@storybook/react'
 import React, { useState } from 'react'
 import { Button } from '../button/button'
 import { Space } from '../space/space'
@@ -92,28 +71,52 @@ const ComparisonToggleExample = (): React.JSX.Element => {
 
   return (
     <div>
-      <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+      <div style={ { textAlign: 'center', marginBottom: '24px' } }>
         <Space size="large">
           <Button
-            onClick={() => { setShowFormKit(false) }}
-            type={!showFormKit ? 'primary' : 'default'}
+            onClick={ () => { setShowFormKit(false) } }
+            type={ !showFormKit ? 'primary' : 'default' }
           >
             Standard Form
           </Button>
           <Button
-            onClick={() => { setShowFormKit(true) }}
-            type={showFormKit ? 'primary' : 'default'}
+            onClick={ () => { setShowFormKit(true) } }
+            type={ showFormKit ? 'primary' : 'default' }
           >
             FormKit
           </Button>
         </Space>
       </div>
 
-      {showFormKit ? (
-        FormKitAllControlsStory.render?.({}, {} as any) as React.ReactElement
-      ) : (
-        FormAllControlsStory.render?.({}, {} as any) as React.ReactElement
-      )}
+      {showFormKit
+        ? (
+            FormKitAllControlsStory.render?.({}, {
+              args: {},
+              parameters: {},
+              globals: {},
+              hooks: {},
+              loaded: {},
+              step: '',
+              viewMode: 'story' as const,
+              id: '',
+              name: '',
+              title: ''
+            } as unknown as StoryContext) as React.ReactElement
+          )
+        : (
+            FormAllControlsStory.render?.({}, {
+              args: {},
+              parameters: {},
+              globals: {},
+              hooks: {},
+              loaded: {},
+              step: '',
+              viewMode: 'story' as const,
+              id: '',
+              name: '',
+              title: ''
+            } as unknown as StoryContext) as React.ReactElement
+          )}
     </div>
   )
 }
@@ -159,258 +162,258 @@ const FormKitAdvancedFeaturesExample = (): React.JSX.Element => {
   return (
     <FormLayoutContainer>
       <ContentLayout
-        renderToolbar={(
+        renderToolbar={ (
           <Toolbar justify="space-between">
-            <div style={{ fontSize: '14px', fontWeight: 600 }}>
+            <div style={ { fontSize: '14px', fontWeight: 600 } }>
               FormKit Advanced Features: Panels • TabPanels • Regions • Auto Field Widths
             </div>
             <Button type="primary">
               Save Configuration
             </Button>
           </Toolbar>
-        )}
+        ) }
       >
         <Content
           padded
-          padding={{ x: 'small', y: 'none' }}
+          padding={ { x: 'small', y: 'none' } }
         >
-        <FormKit>
-          {/* TabPanel: Multi-section navigation */}
-          <FormKit.TabPanel
-            items={[
-              {
-                key: 'general',
-                label: 'General',
-                children: (
-                  <div>
-                    {/* Panel: Structured content organization */}
-                    <FormKit.Panel title="Basic Configuration">
-                      {/* Notice: All fields automatically get proper widths without style={{ width: '100%' }} */}
+          <FormKit>
+            {/* TabPanel: Multi-section navigation */}
+            <FormKit.TabPanel
+              items={ [
+                {
+                  key: 'general',
+                  label: 'General',
+                  children: (
+                    <div>
+                      {/* Panel: Structured content organization */}
+                      <FormKit.Panel title="Basic Configuration">
+                        {/* Notice: All fields automatically get proper widths without style={{ width: '100%' }} */}
+                        <Form.Item
+                          label="Name"
+                          required
+                          tooltip="Display name for this item"
+                        >
+                          <Input
+                            onChange={ (e) => { setFormData({ ...formData, name: e.target.value }) } }
+                            placeholder="Enter item name"
+                            value={ formData.name }
+                          />
+                        </Form.Item>
+
+                        <Form.Item label="Description">
+                          <TextArea
+                            onChange={ (e) => { setFormData({ ...formData, description: e.target.value }) } }
+                            placeholder="Enter detailed description"
+                            rows={ 4 }
+                            value={ formData.description }
+                          />
+                        </Form.Item>
+
+                        <Form.Item label="Type">
+                          <Select
+                            onChange={ (value) => { setFormData({ ...formData, type: value }) } }
+                            options={ [
+                              { value: 'document', label: 'Document' },
+                              { value: 'asset', label: 'Asset' },
+                              { value: 'object', label: 'Data Object' },
+                              { value: 'snippet', label: 'Snippet' }
+                            ] }
+                            placeholder="Select item type"
+                            value={ formData.type }
+                          />
+                        </Form.Item>
+                      </FormKit.Panel>
+
+                      {/* Multiple Panels in same tab for better organization */}
+                      <FormKit.Panel title="Classification">
+                        <Form.Item label="Tags">
+                          <Select
+                            mode="multiple"
+                            onChange={ (value) => { setFormData({ ...formData, tags: value }) } }
+                            options={ [
+                              { value: 'system', label: 'System' },
+                              { value: 'user', label: 'User' },
+                              { value: 'admin', label: 'Admin' },
+                              { value: 'temp', label: 'Temporary' }
+                            ] }
+                            placeholder="Select classification tags"
+                            value={ formData.tags }
+                          />
+                        </Form.Item>
+
+                        <Form.Item label="Template">
+                          <Input
+                            onChange={ (e) => { setFormData({ ...formData, template: e.target.value }) } }
+                            placeholder="template-name"
+                            value={ formData.template }
+                          />
+                        </Form.Item>
+
+                        <Form.Item label="Status">
+                          <Select
+                            onChange={ (value) => { setFormData({ ...formData, status: value }) } }
+                            options={ [
+                              { value: 'draft', label: 'Draft' },
+                              { value: 'review', label: 'Under Review' },
+                              { value: 'published', label: 'Published' },
+                              { value: 'archived', label: 'Archived' }
+                            ] }
+                            value={ formData.status }
+                          />
+                        </Form.Item>
+                      </FormKit.Panel>
+                    </div>
+                  )
+                },
+                {
+                  key: 'settings',
+                  label: 'Settings',
+                  children: (
+                    <div>
+                      {/* Region: Left-Right split layout */}
+                      <FormKit.Region
+                        items={ [
+                          {
+                            region: 'left',
+                            component: (
+                              <FormKit.Panel title="Display Options">
+                                <Form.Item label="Priority Level">
+                                  <InputNumber
+                                    max={ 10 }
+                                    min={ 1 }
+                                    onChange={ (value) => {
+                                      let numValue = 1
+                                      if (typeof value === 'number') {
+                                        numValue = value
+                                      } else if (typeof value === 'string') {
+                                        numValue = parseInt(value, 10)
+                                      }
+                                      setFormData({ ...formData, priority: numValue })
+                                    } }
+                                    value={ formData.priority }
+                                  />
+                                </Form.Item>
+
+                                <Form.Item label="Enabled">
+                                  <Switch
+                                    checked={ formData.enabled }
+                                    labelRight="Enable this configuration"
+                                    onChange={ (checked) => { setFormData({ ...formData, enabled: checked }) } }
+                                  />
+                                </Form.Item>
+
+                                <Form.Item label="Featured">
+                                  <Switch
+                                    checked={ formData.featured }
+                                    labelRight="Show as featured item"
+                                    onChange={ (checked) => { setFormData({ ...formData, featured: checked }) } }
+                                  />
+                                </Form.Item>
+                              </FormKit.Panel>
+                            )
+                          },
+                          {
+                            region: 'right',
+                            component: (
+                              <FormKit.Panel title="System Options">
+                                <Form.Item label="Notifications">
+                                  <Switch
+                                    checked={ formData.notifications }
+                                    labelRight="Send system notifications"
+                                    onChange={ (checked) => { setFormData({ ...formData, notifications: checked }) } }
+                                  />
+                                </Form.Item>
+
+                                <Form.Item
+                                  label="Cache Time"
+                                  tooltip="Cache duration in seconds"
+                                >
+                                  <Input
+                                    onChange={ (e) => { setFormData({ ...formData, cacheTime: e.target.value }) } }
+                                    placeholder="3600"
+                                    value={ formData.cacheTime }
+                                  />
+                                </Form.Item>
+                              </FormKit.Panel>
+                            )
+                          }
+                        ] }
+                        layoutDefinition={ ['left right'] }
+                      />
+                    </div>
+                  )
+                },
+                {
+                  key: 'metadata',
+                  label: 'Metadata',
+                  children: (
+                    <FormKit.Panel title="Meta Information">
                       <Form.Item
-                        label="Name"
-                        required
-                        tooltip="Display name for this item"
+                        label="Meta Title"
+                        tooltip="Title for search engines and browsers"
                       >
                         <Input
-                          onChange={(e) => { setFormData({ ...formData, name: e.target.value }) }}
-                          placeholder="Enter item name"
-                          value={formData.name}
+                          onChange={ (e) => { setFormData({ ...formData, metaTitle: e.target.value }) } }
+                          placeholder="Enter meta title (50-60 characters)"
+                          value={ formData.metaTitle }
                         />
                       </Form.Item>
 
-                      <Form.Item label="Description">
+                      <Form.Item
+                        label="Meta Description"
+                        tooltip="Description for search engines"
+                      >
                         <TextArea
-                          onChange={(e) => { setFormData({ ...formData, description: e.target.value }) }}
-                          placeholder="Enter detailed description"
-                          rows={4}
-                          value={formData.description}
+                          onChange={ (e) => { setFormData({ ...formData, metaDescription: e.target.value }) } }
+                          placeholder="Enter meta description (150-160 characters)"
+                          rows={ 3 }
+                          value={ formData.metaDescription }
                         />
                       </Form.Item>
 
-                      <Form.Item label="Type">
-                        <Select
-                          onChange={(value) => { setFormData({ ...formData, type: value }) }}
-                          options={[
-                            { value: 'document', label: 'Document' },
-                            { value: 'asset', label: 'Asset' },
-                            { value: 'object', label: 'Data Object' },
-                            { value: 'snippet', label: 'Snippet' }
-                          ]}
-                          placeholder="Select item type"
-                          value={formData.type}
-                        />
-                      </Form.Item>
-                    </FormKit.Panel>
-
-                    {/* Multiple Panels in same tab for better organization */}
-                    <FormKit.Panel title="Classification">
-                      <Form.Item label="Tags">
-                        <Select
-                          mode="multiple"
-                          onChange={(value) => { setFormData({ ...formData, tags: value }) }}
-                          options={[
-                            { value: 'system', label: 'System' },
-                            { value: 'user', label: 'User' },
-                            { value: 'admin', label: 'Admin' },
-                            { value: 'temp', label: 'Temporary' }
-                          ]}
-                          placeholder="Select classification tags"
-                          value={formData.tags}
-                        />
-                      </Form.Item>
-
-                      <Form.Item label="Template">
+                      <Form.Item label="URL Slug">
                         <Input
-                          onChange={(e) => { setFormData({ ...formData, template: e.target.value }) }}
-                          placeholder="template-name"
-                          value={formData.template}
+                          onChange={ (e) => { setFormData({ ...formData, slug: e.target.value }) } }
+                          placeholder="url-friendly-slug"
+                          value={ formData.slug }
                         />
                       </Form.Item>
 
-                      <Form.Item label="Status">
-                        <Select
-                          onChange={(value) => { setFormData({ ...formData, status: value }) }}
-                          options={[
-                            { value: 'draft', label: 'Draft' },
-                            { value: 'review', label: 'Under Review' },
-                            { value: 'published', label: 'Published' },
-                            { value: 'archived', label: 'Archived' }
-                          ]}
-                          value={formData.status}
+                      <Form.Item label="Keywords">
+                        <Input
+                          onChange={ (e) => { setFormData({ ...formData, keywords: e.target.value }) } }
+                          placeholder="keyword1, keyword2, keyword3"
+                          value={ formData.keywords }
                         />
                       </Form.Item>
                     </FormKit.Panel>
-                  </div>
-                )
-              },
-              {
-                key: 'settings',
-                label: 'Settings',
-                children: (
-                  <div>
-                    {/* Region: Left-Right split layout */}
-                    <FormKit.Region
-                      items={[
-                        {
-                          region: 'left',
-                          component: (
-                            <FormKit.Panel title="Display Options">
-                              <Form.Item label="Priority Level">
-                                <InputNumber
-                                  max={10}
-                                  min={1}
-                                  onChange={(value) => { 
-                                    let numValue = 1
-                                    if (typeof value === 'number') {
-                                      numValue = value
-                                    } else if (typeof value === 'string') {
-                                      numValue = parseInt(value, 10)
-                                    }
-                                    setFormData({ ...formData, priority: numValue }) 
-                                  }}
-                                  value={formData.priority}
-                                />
-                              </Form.Item>
+                  )
+                }
+              ] }
+            />
+          </FormKit>
 
-                              <Form.Item label="Enabled">
-                                <Switch
-                                  checked={formData.enabled}
-                                  labelRight="Enable this configuration"
-                                  onChange={(checked) => { setFormData({ ...formData, enabled: checked }) }}
-                                />
-                              </Form.Item>
-
-                              <Form.Item label="Featured">
-                                <Switch
-                                  checked={formData.featured}
-                                  labelRight="Show as featured item"
-                                  onChange={(checked) => { setFormData({ ...formData, featured: checked }) }}
-                                />
-                              </Form.Item>
-                            </FormKit.Panel>
-                          )
-                        },
-                        {
-                          region: 'right',
-                          component: (
-                            <FormKit.Panel title="System Options">
-                              <Form.Item label="Notifications">
-                                <Switch
-                                  checked={formData.notifications}
-                                  labelRight="Send system notifications"
-                                  onChange={(checked) => { setFormData({ ...formData, notifications: checked }) }}
-                                />
-                              </Form.Item>
-
-                              <Form.Item 
-                                label="Cache Time"
-                                tooltip="Cache duration in seconds"
-                              >
-                                <Input
-                                  onChange={(e) => { setFormData({ ...formData, cacheTime: e.target.value }) }}
-                                  placeholder="3600"
-                                  value={formData.cacheTime}
-                                />
-                              </Form.Item>
-                            </FormKit.Panel>
-                          )
-                        }
-                      ]}
-                      layoutDefinition={['left right']}
-                    />
-                  </div>
-                )
-              },
-              {
-                key: 'metadata',
-                label: 'Metadata',
-                children: (
-                  <FormKit.Panel title="Meta Information">
-                    <Form.Item 
-                      label="Meta Title"
-                      tooltip="Title for search engines and browsers"
-                    >
-                      <Input
-                        onChange={(e) => { setFormData({ ...formData, metaTitle: e.target.value }) }}
-                        placeholder="Enter meta title (50-60 characters)"
-                        value={formData.metaTitle}
-                      />
-                    </Form.Item>
-
-                    <Form.Item 
-                      label="Meta Description"
-                      tooltip="Description for search engines"
-                    >
-                      <TextArea
-                        onChange={(e) => { setFormData({ ...formData, metaDescription: e.target.value }) }}
-                        placeholder="Enter meta description (150-160 characters)"
-                        rows={3}
-                        value={formData.metaDescription}
-                      />
-                    </Form.Item>
-
-                    <Form.Item label="URL Slug">
-                      <Input
-                        onChange={(e) => { setFormData({ ...formData, slug: e.target.value }) }}
-                        placeholder="url-friendly-slug"
-                        value={formData.slug}
-                      />
-                    </Form.Item>
-
-                    <Form.Item label="Keywords">
-                      <Input
-                        onChange={(e) => { setFormData({ ...formData, keywords: e.target.value }) }}
-                        placeholder="keyword1, keyword2, keyword3"
-                        value={formData.keywords}
-                      />
-                    </Form.Item>
-                  </FormKit.Panel>
-                )
-              }
-            ]}
-          />
-        </FormKit>
-
-        <div style={{
-          marginTop: '32px',
-          padding: '20px',
-          backgroundColor: '#f0f8ff',
-          border: '1px solid #d6f7ff',
-          borderRadius: '8px'
-        }}
-        >
-          <h4 style={{ margin: '0 0 16px 0', color: '#1677ff', fontSize: '14px', fontWeight: 600 }}>
-            🎯 FormKit Advantages Demonstrated Above:
-          </h4>
-          <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '13px', lineHeight: '1.6' }}>
-            <li><strong>Panels:</strong> Structured content organization with titles and consistent spacing</li>
-            <li><strong>TabPanels:</strong> Multi-section navigation for complex forms (General, Settings, Metadata)</li>
-            <li><strong>Regions:</strong> Left-right split layouts for related field groupings</li>
-            <li><strong>Automated Field Widths:</strong> All inputs automatically sized - no <code>style={`{{ width: '100%' }}`}</code> needed</li>
-          </ul>
-        </div>
-      </Content>
-    </ContentLayout>
+          <div style={ {
+            marginTop: '32px',
+            padding: '20px',
+            backgroundColor: '#f0f8ff',
+            border: '1px solid #d6f7ff',
+            borderRadius: '8px'
+          } }
+          >
+            <h4 style={ { margin: '0 0 16px 0', color: '#1677ff', fontSize: '14px', fontWeight: 600 } }>
+              🎯 FormKit Advantages Demonstrated Above:
+            </h4>
+            <ul style={ { margin: 0, paddingLeft: '20px', fontSize: '13px', lineHeight: '1.6' } }>
+              <li><strong>Panels:</strong> Structured content organization with titles and consistent spacing</li>
+              <li><strong>TabPanels:</strong> Multi-section navigation for complex forms (General, Settings, Metadata)</li>
+              <li><strong>Regions:</strong> Left-right split layouts for related field groupings</li>
+              <li><strong>Automated Field Widths:</strong> All inputs automatically sized - no <code>style={'{{ width: \'100%\' }}'}</code> needed</li>
+            </ul>
+          </div>
+        </Content>
+      </ContentLayout>
     </FormLayoutContainer>
   )
 }

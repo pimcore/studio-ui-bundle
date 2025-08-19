@@ -186,13 +186,13 @@ const InlineFormExample = (): React.JSX.Element => {
 
   return (
     <Form
-      form={form}
+      form={ form }
       layout="inline"
-      onFinish={onFinish}
+      onFinish={ onFinish }
     >
       <Form.Item
         name="search"
-        rules={[{ required: true, message: 'Please input search term!' }]}
+        rules={ [{ required: true, message: 'Please input search term!' }] }
       >
         <Input placeholder="Search..." />
       </Form.Item>
@@ -201,13 +201,13 @@ const InlineFormExample = (): React.JSX.Element => {
         name="category"
       >
         <Select
-          options={[
+          options={ [
             { value: 'all', label: 'All Categories' },
             { value: 'news', label: 'News' },
             { value: 'blog', label: 'Blog' }
-          ]}
+          ] }
           placeholder="Category"
-          style={{ width: 120 }}
+          style={ { width: 120 } }
         />
       </Form.Item>
 
@@ -244,16 +244,16 @@ const HorizontalFormExample = (): React.JSX.Element => {
 
   return (
     <Form
-      form={form}
-      labelCol={{ span: 6 }}
+      form={ form }
+      labelCol={ { span: 6 } }
       layout="horizontal"
-      onFinish={onFinish}
-      wrapperCol={{ span: 16 }}
+      onFinish={ onFinish }
+      wrapperCol={ { span: 16 } }
     >
       <Form.Item
         label="Username"
         name="username"
-        rules={[{ required: true, message: 'Please input your username!' }]}
+        rules={ [{ required: true, message: 'Please input your username!' }] }
       >
         <Input />
       </Form.Item>
@@ -261,10 +261,10 @@ const HorizontalFormExample = (): React.JSX.Element => {
       <Form.Item
         label="Email"
         name="email"
-        rules={[
+        rules={ [
           { required: true, message: 'Please input your email!' },
           { type: 'email', message: 'Please enter a valid email!' }
-        ]}
+        ] }
       >
         <Input />
       </Form.Item>
@@ -274,11 +274,11 @@ const HorizontalFormExample = (): React.JSX.Element => {
         name="role"
       >
         <Select
-          options={[
+          options={ [
             { value: 'admin', label: 'Administrator' },
             { value: 'editor', label: 'Editor' },
             { value: 'viewer', label: 'Viewer' }
-          ]}
+          ] }
           placeholder="Select role"
         />
       </Form.Item>
@@ -291,7 +291,7 @@ const HorizontalFormExample = (): React.JSX.Element => {
         <Switch />
       </Form.Item>
 
-      <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
+      <Form.Item wrapperCol={ { offset: 6, span: 16 } }>
         <Button
           htmlType="submit"
           type="primary"
@@ -437,7 +437,7 @@ const AllControlsFormExample = (): React.JSX.Element => {
           </div>
           <div>
             <Button
-              onClick={ () => { form.validateFields().then(onFinish) } }
+              onClick={ () => { void form.validateFields().then(onFinish) } }
               type="primary"
             >Save All Controls</Button>
           </div>

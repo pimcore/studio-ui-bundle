@@ -163,7 +163,10 @@ const GeneralTab = ({ formData, setFormData }: { formData: FormData, setFormData
       </Form.Item>
     </FormKit.Panel>
 
-    <FormKit.Panel theme="card-with-highlight" title="Publishing Settings">
+    <FormKit.Panel
+      theme="card-with-highlight"
+      title="Publishing Settings"
+    >
       <Form.Item label="Status">
         <Select
           onChange={ (value) => { setFormData({ ...formData, status: value }) } }
@@ -191,7 +194,10 @@ const GeneralTab = ({ formData, setFormData }: { formData: FormData, setFormData
 
 const SEOTab = ({ formData, setFormData }: { formData: FormData, setFormData: (data: FormData) => void }): React.JSX.Element => (
   <div>
-    <FormKit.Panel theme="card-with-highlight" title="Meta Information">
+    <FormKit.Panel
+      theme="card-with-highlight"
+      title="Meta Information"
+    >
       <Form.Item label="Meta Title">
         <Input
           onChange={ (e) => { setFormData({ ...formData, metaTitle: e.target.value }) } }
@@ -210,7 +216,10 @@ const SEOTab = ({ formData, setFormData }: { formData: FormData, setFormData: (d
       </Form.Item>
     </FormKit.Panel>
 
-    <FormKit.Panel theme="fieldset" title="Search Optimization">
+    <FormKit.Panel
+      theme="fieldset"
+      title="Search Optimization"
+    >
       <Form.Item label="Keywords">
         <Input
           onChange={ (e) => { setFormData({ ...formData, keywords: e.target.value }) } }
@@ -256,7 +265,10 @@ const AdvancedTab = ({ formData, setFormData }: { formData: FormData, setFormDat
       </Form.Item>
     </FormKit.Panel>
 
-    <FormKit.Panel theme="fieldset" title="System Settings">
+    <FormKit.Panel
+      theme="fieldset"
+      title="System Settings"
+    >
       <Form.Item label="Cache Lifetime (seconds)">
         <Input
           onChange={ (e) => { setFormData({ ...formData, cacheLifetime: e.target.value }) } }
@@ -395,7 +407,7 @@ const SimpleFormKitExample = (): React.JSX.Element => {
   })
 
   return (
-    <div style={{ maxWidth: '600px' }}>
+    <div style={ { maxWidth: '600px' } }>
       <FormKit>
         {/* Basic panel without title for seamless content */}
         <FormKit.Panel>
@@ -404,9 +416,9 @@ const SimpleFormKitExample = (): React.JSX.Element => {
             required
           >
             <Input
-              onChange={(e) => { setFormData({ ...formData, name: e.target.value }) }}
+              onChange={ (e) => { setFormData({ ...formData, name: e.target.value }) } }
               placeholder="Enter your name"
-              value={formData.name}
+              value={ formData.name }
             />
           </Form.Item>
 
@@ -415,61 +427,61 @@ const SimpleFormKitExample = (): React.JSX.Element => {
             required
           >
             <Input
-              onChange={(e) => { setFormData({ ...formData, email: e.target.value }) }}
+              onChange={ (e) => { setFormData({ ...formData, email: e.target.value }) } }
               placeholder="Enter your email"
               type="email"
-              value={formData.email}
+              value={ formData.email }
             />
           </Form.Item>
         </FormKit.Panel>
 
         {/* Panel with title and extra content */}
-        <FormKit.Panel 
-          title="Message Details"
-          theme="card-with-highlight"
+        <FormKit.Panel
           extra={
             <Select
-              onChange={(value) => { setFormData({ ...formData, priority: value }) }}
-              options={[
+              onChange={ (value) => { setFormData({ ...formData, priority: value }) } }
+              options={ [
                 { value: 'low', label: 'Low Priority' },
                 { value: 'normal', label: 'Normal' },
                 { value: 'high', label: 'High Priority' }
-              ]}
+              ] }
               size="small"
-              value={formData.priority}
+              value={ formData.priority }
             />
           }
+          theme="card-with-highlight"
+          title="Message Details"
         >
           <Form.Item label="Message">
             <TextArea
-              onChange={(e) => { setFormData({ ...formData, message: e.target.value }) }}
+              onChange={ (e) => { setFormData({ ...formData, message: e.target.value }) } }
               placeholder="Enter your message"
-              rows={4}
-              value={formData.message}
+              rows={ 4 }
+              value={ formData.message }
             />
           </Form.Item>
         </FormKit.Panel>
 
         {/* Collapsible panel for optional settings */}
-        <FormKit.Panel 
+        <FormKit.Panel
+          collapsed
           collapsible
-          collapsed={true}
-          title="Optional Settings"
           theme="fieldset"
+          title="Optional Settings"
         >
           <Form.Item label="Newsletter">
             <Switch
-              checked={formData.subscribe}
+              checked={ formData.subscribe }
               labelRight="Subscribe to our newsletter"
-              onChange={(checked) => { setFormData({ ...formData, subscribe: checked }) }}
+              onChange={ (checked) => { setFormData({ ...formData, subscribe: checked }) } }
             />
           </Form.Item>
         </FormKit.Panel>
       </FormKit>
 
-      <div style={{ marginTop: '16px', padding: '12px', backgroundColor: '#f5f5f5', borderRadius: '6px' }}>
+      <div style={ { marginTop: '16px', padding: '12px', backgroundColor: '#f5f5f5', borderRadius: '6px' } }>
         <strong>Current Values:</strong>
-        <pre style={{ fontSize: '12px', margin: '8px 0 0 0' }}>
+        <pre style={ { fontSize: '12px', margin: '8px 0 0 0' } }>
           {JSON.stringify(formData, null, 2)}
         </pre>
       </div>
@@ -627,7 +639,10 @@ const AllControlsExample = (): React.JSX.Element => {
         padding={ { x: 'small', y: 'none' } }
       >
         <FormKit>
-          <FormKit.Panel theme="card-with-highlight" title="Text Controls">
+          <FormKit.Panel
+            theme="card-with-highlight"
+            title="Text Controls"
+          >
             <Form.Item
               label="Basic Input"
               tooltip="Standard text input with default width"
@@ -674,7 +689,10 @@ const AllControlsExample = (): React.JSX.Element => {
             </Form.Item>
           </FormKit.Panel>
 
-          <FormKit.Panel theme="card-with-highlight" title="Selection Controls">
+          <FormKit.Panel
+            theme="card-with-highlight"
+            title="Selection Controls"
+          >
             <Form.Item
               label="Basic Select"
               tooltip="Standard dropdown select with default width"
@@ -765,7 +783,10 @@ const AllControlsExample = (): React.JSX.Element => {
             </Form.Item>
           </FormKit.Panel>
 
-          <FormKit.Panel theme="fieldset" title="Date, Time & Color Controls">
+          <FormKit.Panel
+            theme="fieldset"
+            title="Date, Time & Color Controls"
+          >
             <Form.Item
               label="Date Picker"
               tooltip="Date selection with default width"
@@ -828,7 +849,10 @@ const AllControlsExample = (): React.JSX.Element => {
             </Form.Item>
           </FormKit.Panel>
 
-          <FormKit.Panel theme="fieldset" title="Lists & Range Controls">
+          <FormKit.Panel
+            theme="fieldset"
+            title="Lists & Range Controls"
+          >
             <Form.Item
               label="Keyed List"
               tooltip="Dynamic key-value list with default width"
@@ -980,7 +1004,7 @@ const PanelThemesExample = (): React.JSX.Element => {
         padding={ { x: 'small', y: 'none' } }
       >
         <FormKit>
-          <FormKit.Panel 
+          <FormKit.Panel
             title="Default Theme (Card with Highlight)"
           >
             <Form.Item
@@ -1004,7 +1028,7 @@ const PanelThemesExample = (): React.JSX.Element => {
             </Form.Item>
           </FormKit.Panel>
 
-          <FormKit.Panel 
+          <FormKit.Panel
             theme="card-with-highlight"
             title="Card with Highlight Theme"
           >
@@ -1029,7 +1053,7 @@ const PanelThemesExample = (): React.JSX.Element => {
             </Form.Item>
           </FormKit.Panel>
 
-          <FormKit.Panel 
+          <FormKit.Panel
             theme="fieldset"
             title="Fieldset Theme - SEO Settings"
           >
@@ -1053,7 +1077,7 @@ const PanelThemesExample = (): React.JSX.Element => {
             </Form.Item>
           </FormKit.Panel>
 
-          <FormKit.Panel 
+          <FormKit.Panel
             theme="fieldset"
             title="Fieldset Theme - System Configuration"
           >
@@ -1154,7 +1178,7 @@ const AdvancedPanelOptionsExample = (): React.JSX.Element => {
 
   const handleChange = (section: string, subsection: string | null, field: string, value: any): void => {
     setFormData(prev => {
-      if (subsection) {
+      if (subsection !== null && subsection !== '') {
         return {
           ...prev,
           [section]: {
@@ -1224,10 +1248,10 @@ const AdvancedPanelOptionsExample = (): React.JSX.Element => {
           </FormKit.Panel>
 
           {/* Panel with border */}
-          <FormKit.Panel 
+          <FormKit.Panel
             border
-            title="Panel with Border"
             theme="card-with-highlight"
+            title="Panel with Border"
           >
             <Form.Item
               label="Enable Caching"
@@ -1250,11 +1274,11 @@ const AdvancedPanelOptionsExample = (): React.JSX.Element => {
           </FormKit.Panel>
 
           {/* Collapsible Panel */}
-          <FormKit.Panel 
-            collapsible
+          <FormKit.Panel
             collapsed={ false }
-            title="Collapsible Advanced Settings"
+            collapsible
             theme="fieldset"
+            title="Collapsible Advanced Settings"
           >
             <Form.Item
               label="Debug Mode"
@@ -1276,8 +1300,8 @@ const AdvancedPanelOptionsExample = (): React.JSX.Element => {
           </FormKit.Panel>
 
           {/* Panel with Extra Content */}
-          <FormKit.Panel 
-            extra={ 
+          <FormKit.Panel
+            extra={
               <div>
                 <IconButton
                   icon={ { value: 'refresh' } }
@@ -1289,8 +1313,8 @@ const AdvancedPanelOptionsExample = (): React.JSX.Element => {
                 />
               </div>
             }
-            title="Panel with Extra Actions"
             theme="card-with-highlight"
+            title="Panel with Extra Actions"
           >
             <Form.Item
               label="Theme Selection"
@@ -1321,9 +1345,9 @@ const AdvancedPanelOptionsExample = (): React.JSX.Element => {
           </FormKit.Panel>
 
           {/* Panel with Tabs Inside */}
-          <FormKit.Panel 
-            title="Panel with Nested Tabs"
+          <FormKit.Panel
             theme="fieldset"
+            title="Panel with Nested Tabs"
           >
             <FormKit.TabPanel
               items={ [
@@ -1340,7 +1364,7 @@ const AdvancedPanelOptionsExample = (): React.JSX.Element => {
                           value={ formData.nestedConfig.api.endpoint }
                         />
                       </Form.Item>
-                      
+
                       <Form.Item label="Timeout (ms)">
                         <InputNumber
                           min={ 1000 }
@@ -1365,7 +1389,7 @@ const AdvancedPanelOptionsExample = (): React.JSX.Element => {
                           value={ formData.nestedConfig.database.host }
                         />
                       </Form.Item>
-                      
+
                       <Form.Item label="Port">
                         <InputNumber
                           max={ 65535 }
@@ -1384,11 +1408,14 @@ const AdvancedPanelOptionsExample = (): React.JSX.Element => {
           </FormKit.Panel>
 
           {/* Nested Panels Structure */}
-          <FormKit.Panel 
-            title="Nested Panel Structure"
+          <FormKit.Panel
             theme="card-with-highlight"
+            title="Nested Panel Structure"
           >
-            <FormKit.Panel theme="fieldset" title="Connection Settings">
+            <FormKit.Panel
+              theme="fieldset"
+              title="Connection Settings"
+            >
               <Form.Item label="Enable SSL">
                 <Switch
                   labelRight="Use SSL/TLS encryption"
@@ -1396,11 +1423,14 @@ const AdvancedPanelOptionsExample = (): React.JSX.Element => {
               </Form.Item>
             </FormKit.Panel>
 
-            <FormKit.Panel border title="Authentication">
+            <FormKit.Panel
+              border
+              title="Authentication"
+            >
               <Form.Item label="Username">
                 <Input placeholder="Enter username..." />
               </Form.Item>
-              
+
               <Form.Item label="Password">
                 <InputPassword placeholder="Enter password..." />
               </Form.Item>
@@ -1408,8 +1438,11 @@ const AdvancedPanelOptionsExample = (): React.JSX.Element => {
           </FormKit.Panel>
 
           {/* Panel with different extra positions */}
-          <FormKit.Panel 
-            extra={ <Button size="small" type="link">Configure</Button> }
+          <FormKit.Panel
+            extra={ <Button
+              size="small"
+              type="link"
+                    >Configure</Button> }
             extraPosition="start"
             title="Panel with Extra at Start"
           >
@@ -1492,7 +1525,7 @@ const ConfigurationFormExample = (): React.JSX.Element => {
 
   const handleConfigChange = (section: string, subsection: string | null, field: string, value: any): void => {
     setConfig(prev => {
-      if (subsection) {
+      if (subsection !== null && subsection !== '') {
         return {
           ...prev,
           [section]: {
@@ -1561,7 +1594,10 @@ const ConfigurationFormExample = (): React.JSX.Element => {
           <FormKit.Panel
             extra={
               <div>
-                <Button size="small" type="link">View Stats</Button>
+                <Button
+                  size="small"
+                  type="link"
+                >View Stats</Button>
                 <IconButton
                   icon={ { value: 'refresh' } }
                   size="small"
@@ -1569,10 +1605,13 @@ const ConfigurationFormExample = (): React.JSX.Element => {
                 />
               </div>
             }
-            title="Performance Settings"
             theme="card-with-highlight"
+            title="Performance Settings"
           >
-            <FormKit.Panel theme="fieldset" title="Caching Options">
+            <FormKit.Panel
+              theme="fieldset"
+              title="Caching Options"
+            >
               <Form.Item label="Enable Caching">
                 <Switch
                   checked={ config.performance.caching }
@@ -1590,7 +1629,10 @@ const ConfigurationFormExample = (): React.JSX.Element => {
               </Form.Item>
             </FormKit.Panel>
 
-            <FormKit.Panel border title="Optimization">
+            <FormKit.Panel
+              border
+              title="Optimization"
+            >
               <Form.Item label="Enable Compression">
                 <Switch
                   checked={ config.performance.compression }
@@ -1615,7 +1657,7 @@ const ConfigurationFormExample = (): React.JSX.Element => {
             theme="fieldset"
           >
             <FormKit.TabPanel
-              items={[
+              items={ [
                 {
                   key: 'smtp',
                   label: 'SMTP Settings',
@@ -1652,11 +1694,11 @@ const ConfigurationFormExample = (): React.JSX.Element => {
                           <Form.Item label="Encryption">
                             <Select
                               onChange={ (value) => { handleConfigChange('email', 'smtp', 'encryption', value) } }
-                              options={[
+                              options={ [
                                 { value: 'none', label: 'None' },
                                 { value: 'tls', label: 'TLS' },
                                 { value: 'ssl', label: 'SSL' }
-                              ]}
+                              ] }
                               value={ config.email.smtp.encryption }
                             />
                           </Form.Item>
@@ -1682,15 +1724,15 @@ const ConfigurationFormExample = (): React.JSX.Element => {
                     </div>
                   )
                 }
-              ]}
+              ] }
               size="small"
             />
           </FormKit.Panel>
 
           {/* Collapsible security settings */}
           <FormKit.Panel
+            collapsed
             collapsible
-            collapsed={ true }
             extra={
               <IconButton
                 icon={ { value: 'shield' } }
@@ -1698,8 +1740,8 @@ const ConfigurationFormExample = (): React.JSX.Element => {
                 title="Security audit"
               />
             }
-            title="Security Settings"
             theme="card-with-highlight"
+            title="Security Settings"
           >
             <Form.Item label="Two-Factor Authentication">
               <Switch
@@ -1711,8 +1753,8 @@ const ConfigurationFormExample = (): React.JSX.Element => {
 
             <Form.Item label="Session Timeout (seconds)">
               <InputNumber
-                min={ 300 }
                 max={ 86400 }
+                min={ 300 }
                 onChange={ (value) => { handleConfigChange('security', null, 'sessionTimeout', value ?? 1800) } }
                 value={ config.security.sessionTimeout }
               />
@@ -1721,11 +1763,11 @@ const ConfigurationFormExample = (): React.JSX.Element => {
             <Form.Item label="Password Policy">
               <Select
                 onChange={ (value) => { handleConfigChange('security', null, 'passwordPolicy', value) } }
-                options={[
+                options={ [
                   { value: 'weak', label: 'Weak - No requirements' },
                   { value: 'medium', label: 'Medium - Basic requirements' },
                   { value: 'strong', label: 'Strong - Complex requirements' }
-                ]}
+                ] }
                 value={ config.security.passwordPolicy }
               />
             </Form.Item>
@@ -1739,7 +1781,8 @@ const ConfigurationFormExample = (): React.JSX.Element => {
           borderRadius: '8px',
           fontSize: '12px',
           fontFamily: 'monospace'
-        } }>
+        } }
+        >
           <h4 style={ { margin: '0 0 12px 0', fontFamily: 'inherit' } }>Real-world Panel Usage Pattern:</h4>
           <ul style={ { margin: '0', paddingLeft: '16px', fontFamily: 'inherit', fontSize: '13px' } }>
             <li><strong>Quick Settings:</strong> No title for immediate, essential settings</li>
