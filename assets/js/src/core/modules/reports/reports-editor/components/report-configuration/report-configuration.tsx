@@ -29,7 +29,6 @@ import { SAVE_BTN_PORTAL_ID } from '@Pimcore/modules/reports/reports-editor/repo
 interface IReportConfigurationProps {
   report: BundleCustomReportsConfigurationTreeNode
   isActive: boolean
-  onDirtyStateChange?: (isDirty: boolean) => void
 }
 
 export const ReportConfiguration = ({ report, isActive }: IReportConfigurationProps): React.JSX.Element => {
