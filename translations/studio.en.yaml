@@ -1122,3 +1122,8 @@ test-email.validation.from.email.type: Please provide a valid sender email addre
 test-email.validation.to.required: Please provide a recipient email address
 test-email.validation.to.email.type: Please provide a valid recipient email address
 test-email.validation.subject.required: Please provide a subject
+navigation.widget-editor: Widget Editor
+widget.widget-editor.perspective-editor: Perspective Editor
+navigation.widget-editor.perspective-editor: Perspective Editor
+widget.widget-editor.custom-view-editor: Custom View Editor
+navigation.widget-editor.custom-view-editor: Custom View Editor
