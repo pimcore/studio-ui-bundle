@@ -25,6 +25,7 @@ export * from '@Pimcore/utils/number'
 export * from '@Pimcore/utils/polling-helper'
 export * from '@Pimcore/utils/query-string'
 export * from '@Pimcore/utils/relative-time'
+export * from '@Pimcore/utils/url-cache-buster'
 export * from '@Pimcore/utils/uuid'
 
 export * from '@Pimcore/utils/hooks/use-click-outside'

@@ -13,6 +13,7 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     datePicker: css`
+      width: 100%;
       input {
        color: ${token.colorText} !important;
       }

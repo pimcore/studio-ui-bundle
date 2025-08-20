@@ -26,6 +26,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { getTypeByActionType, ReportActionType } from '@Pimcore/modules/reports/reports-view/helpers'
 import { currentDomain } from '@Pimcore/app/config/app-config'
+import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 
 interface IReportDetailProps {
   currentReport: string | null
@@ -58,7 +59,9 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
   const { columns, setColumns, setInitialColumns } = useColumnsContext()
   const { openElement } = useElementHelper()
+
   const { t } = useTranslation()
+  const { styles } = useStyles()
 
   const handleElementOpen = ({ id, actionType }: { id: number, actionType?: ReportActionType }): void => {
     if (actionType === ReportActionType.OPEN_URL) {
@@ -87,7 +90,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
     const list: Array<AccessorKeyColumnDef<unknown, never>> = []
 
     reportDetailData?.columnConfigurations?.forEach((item, index) => {
-      const isShowColumn = item.display === true && item.filterDrilldown !== FilterDrillDown.ONLY_FILTER
+      const isShowColumn = item.display && item.filterDrilldown !== FilterDrillDown.ONLY_FILTER
 
       if (isShowColumn) {
         const columnId = item?.name ?? `id-${index}`
@@ -144,6 +147,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
   return (
     <Flex
+      className="h-full"
       gap="small"
       vertical
     >
@@ -162,7 +166,9 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
         </Flex>
       )}
       <Flex
-        gap="extra-small"
+        className="h-full"
+        gap="small"
+        justify="flex-start"
         vertical
       >
         {isShowChart && (
@@ -174,8 +180,10 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
         {!isUndefined(chartData) && (
           <Grid
             autoWidth
+            className={ styles.gridTable }
             columns={ columns }
             data={ chartData }
+            enableSorting
             isLoading={ isLoading }
           />
         )}

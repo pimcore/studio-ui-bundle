@@ -10,21 +10,24 @@
 
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { ReportsViewWrapper } from '@Pimcore/modules/reports/reports-view/reports-view-wrapper'
-import { CustomReportsView } from '@Pimcore/modules/reports/custom-reports-view/custom-reports-view'
+import { ReportsEditor } from '@Pimcore/modules/reports/reports-editor/reports-editor'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 
 moduleSystem.registerModule({
   onInit: () => {
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Marketing/Reports',
+      path: 'Reporting/Reports',
       label: 'navigation.reports',
       className: 'item-style-modifier',
+      order: 100,
+      permission: UserPermission.Reports,
       perspectivePermission: NavPermission.Reports,
       widgetConfig: {
         name: 'Reports',
@@ -41,8 +44,10 @@ moduleSystem.registerModule({
     })
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Marketing/Custom Reports',
+      path: 'Reporting/Custom Reports',
       label: 'navigation.custom-reports',
+      order: 200,
+      permission: UserPermission.ReportsConfig,
       perspectivePermission: NavPermission.Reports,
       widgetConfig: {
         name: 'Custom Reports',
@@ -52,7 +57,7 @@ moduleSystem.registerModule({
           translationKey: 'navigation.custom-reports',
           icon: {
             type: 'name',
-            value: 'pie-chart'
+            value: 'chart-scatter'
           }
         }
       }
@@ -67,7 +72,7 @@ moduleSystem.registerModule({
 
     widgetRegistryService.registerWidget({
       name: 'custom-reports',
-      component: CustomReportsView
+      component: ReportsEditor
     })
   }
 })

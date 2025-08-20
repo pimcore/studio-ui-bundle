@@ -15,6 +15,7 @@ import { useUploadModalContext } from '@Pimcore/components/modal-upload/provider
 import { useLinkModalContext } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/provider/use-link-modal-context'
 import { useCropModalContext } from '@Pimcore/modules/element/components/crop-modal/provider/use-crop-modal-context'
 import { useHotspotMarkersModalContext } from '@Pimcore/modules/element/components/hotspot-markers-modal/provider/use-hotspot-markers-modal-context'
+import { useVideoModalContext } from '@Pimcore/modules/element/components/video-modal/provider/use-video-modal-context'
 import { getApiGatewayHandler } from './registry/handler-registry'
 import { initializeHandlers } from './handlers'
 import { API_GATEWAY_EVENT, ApiGatewayEvent, type ApiGatewayEventDetail } from './api-gateway-event'
@@ -30,6 +31,7 @@ export const ApiGateway = (): React.JSX.Element | null => {
   const linkModalContext = useLinkModalContext()
   const cropModalContext = useCropModalContext()
   const hotspotMarkersModalContext = useHotspotMarkersModalContext()
+  const videoModalContext = useVideoModalContext()
 
   // Initialize handlers on component mount
   useEffect(() => {
@@ -57,7 +59,8 @@ export const ApiGateway = (): React.JSX.Element | null => {
             uploadModalContext,
             linkModalContext,
             cropModalContext,
-            hotspotMarkersModalContext
+            hotspotMarkersModalContext,
+            videoModalContext
           })
         } else {
           console.warn(`No handler registered for API event type: ${type}`)
@@ -72,7 +75,7 @@ export const ApiGateway = (): React.JSX.Element | null => {
     return () => {
       window.removeEventListener(API_GATEWAY_EVENT, handleApiEvent)
     }
-  }, [elementSelectorHelper, uploadModalContext, linkModalContext, cropModalContext, hotspotMarkersModalContext])
+  }, [elementSelectorHelper, uploadModalContext, linkModalContext, cropModalContext, hotspotMarkersModalContext, videoModalContext])
 
   return null
 }

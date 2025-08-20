@@ -130,6 +130,7 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-r
 
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-area'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-checkbox'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-date'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-image'
@@ -143,6 +144,7 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/document/edita
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-snippet'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-table'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-textarea'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-video'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-wysiwyg'
 
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'

@@ -11,7 +11,7 @@
 import React, { useMemo } from 'react'
 import { BaseView } from '../../../layout-related/views/base-view'
 import { type BlockProps } from './block'
-import { useNumberedList } from '@Pimcore/components/form/numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
 import { BlockAddButton } from './block-add-button'
 import { BlockItem } from './block-item'
 import { Space } from '@Pimcore/components/space/space'
@@ -54,6 +54,7 @@ export const BlockContent = (props: BlockContentProps): React.JSX.Element => {
                 disallowDelete={ isDisallowAddRemove || isNoteditable }
                 disallowReorder={ props.disallowReorder === true || isNoteditable }
                 field={ index }
+                name={ props.name }
                 noteditable={ props.noteditable }
               >
                 {props.children}

@@ -70,6 +70,7 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
             await deleteNotification()
           } }
           theme='primary'
+          variant='minimal'
         />
       </Space>
     )
@@ -112,7 +113,7 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
     {notificationRead
       ? (
         <Icon
-          className={ styles.margin }
+          className={ [styles.margin, styles.grey].join(' ') }
           value={ 'notification-read' }
         />
         )
@@ -129,7 +130,7 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
       theme="secondary"
     >
       {notification.title !== '' && (<Text strong>{notification.title}</Text>)}
-      <Text type='secondary'>{notification.sender}</Text>
+      {notification.sender !== '' && notification.sender !== null && (<Text>{notification.sender}</Text>)}
     </Split>
   </Flex>,
     extra: extra(),
@@ -139,10 +140,10 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
   return (
     <Collapse
       activeKeys={
-        isExpanded
-          ? [notification.id.toString()]
-          : []
-      }
+      isExpanded
+        ? [notification.id.toString()]
+        : []
+    }
       items={ [item] }
       onChange={ (expandedKeys) => {
         if (expandedKeys.length > 0) {
@@ -151,6 +152,7 @@ export const NotificationDetail = ({ notification }: NotificationDetailProps): R
           setIsExpanded(false)
         }
       } }
+      size='small'
     />
   )
 }

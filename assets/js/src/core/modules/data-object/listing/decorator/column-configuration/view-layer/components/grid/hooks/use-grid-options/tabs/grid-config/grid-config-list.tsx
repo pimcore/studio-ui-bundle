@@ -54,7 +54,7 @@ export const GridConfigList = (): React.JSX.Element => {
       meta: column,
 
       type: isAdvancedColumn ? 'collapse' : 'default',
-      children: isAdvancedColumn ? <Tag >{advancedColumnName}</Tag> : <Tag>{t(`${translationKey}`)}</Tag>,
+      children: isAdvancedColumn ? <Tag color='purple'>{advancedColumnName}</Tag> : <Tag>{t(`${translationKey}`)}</Tag>,
 
       ...(column.key === 'advanced'
         ? {

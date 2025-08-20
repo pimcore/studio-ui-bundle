@@ -10,7 +10,7 @@
 
 import React, { useMemo } from 'react'
 import { BaseView } from '../../../layout-related/views/base-view'
-import { useNumberedList } from '@Pimcore/components/form/numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
 import { type FieldCollectionProps } from './field-collection'
 import { FieldCollectionItem } from './field-collection-item'
 import { FieldCollectionAddButton } from './field-collection-add-button'
@@ -56,6 +56,7 @@ export const FieldCollectionContent = (props: FieldCollectionContentProps): Reac
                 disallowReorder={ props.disallowReorder === true || isNoteditable }
                 docked={ props.border === true }
                 field={ index }
+                name={ props.name }
                 noteditable={ props.noteditable }
               />
             </div>

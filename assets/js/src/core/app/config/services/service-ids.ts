@@ -12,15 +12,18 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/FieldFilterRegistry': 'DynamicTypes/FieldFilterRegistry',
   'DynamicTypes/BatchEditRegistry': 'DynamicTypes/BatchEditRegistry',
   'DynamicTypes/GridCellRegistry': 'DynamicTypes/GridCellRegistry',
+  'DynamicTypes/AdvancedGridCellRegistry': 'DynamicTypes/AdvancedGridCellRegistry',
   'DynamicTypes/ListingRegistry': 'DynamicTypes/ListingRegistry',
   'DynamicTypes/MetadataRegistry': 'DynamicTypes/MetadataRegistry',
   'DynamicTypes/ObjectLayoutRegistry': 'DynamicTypes/ObjectLayoutRegistry',
   'DynamicTypes/ObjectDataRegistry': 'DynamicTypes/ObjectDataRegistry',
   'DynamicTypes/DocumentEditableRegistry': 'DynamicTypes/DocumentEditableRegistry',
+  'DynamicTypes/EditableDialogLayoutRegistry': 'DynamicTypes/EditableDialogLayoutRegistry',
   'DynamicTypes/AssetRegistry': 'DynamicTypes/AssetRegistry',
   'DynamicTypes/ObjectRegistry': 'DynamicTypes/ObjectRegistry',
   'DynamicTypes/Grid/SourceFieldsRegistry': 'DynamicTypes/Grid/SourceFieldsRegistry',
-  'DynamicTypes/Grid/TransformersRegistry': 'DynamicTypes/Grid/TransformersRegistry'
+  'DynamicTypes/Grid/TransformersRegistry': 'DynamicTypes/Grid/TransformersRegistry',
+  'DynamicTypes/ThemeRegistry': 'DynamicTypes/ThemeRegistry'
 }
 
 export const serviceIds = {
@@ -32,6 +35,10 @@ export const serviceIds = {
 
   // Background processor
   backgroundProcessor: 'BackgroundProcessorService',
+
+  // Dynamic Type Theme instances
+  'DynamicTypes/Theme/StudioDefaultLight': 'DynamicTypes/Theme/StudioDefaultLight',
+  'DynamicTypes/Theme/StudioDefaultDark': 'DynamicTypes/Theme/StudioDefaultDark',
 
   // Assets
   'Asset/Editor/TypeRegistry': 'Asset/Editor/TypeRegistry',
@@ -72,6 +79,7 @@ export const serviceIds = {
   'DynamicTypes/FieldFilter/DataObjectObjectBrick': 'DynamicTypes/FieldFilter/DataObjectObjectBrick',
   'DynamicTypes/FieldFilter/Text': 'DynamicTypes/FieldFilter/Text',
   'DynamicTypes/FieldFilter/Textarea': 'DynamicTypes/FieldFilter/Textarea',
+  'DynamicTypes/FieldFilter/Wysiwyg': 'DynamicTypes/FieldFilter/Wysiwyg',
   'DynamicTypes/FieldFilter/Number': 'DynamicTypes/FieldFilter/Number',
   'DynamicTypes/FieldFilter/Select': 'DynamicTypes/FieldFilter/Select',
   'DynamicTypes/FieldFilter/Datetime': 'DynamicTypes/FieldFilter/Datetime',
@@ -87,6 +95,7 @@ export const serviceIds = {
   'DynamicTypes/BatchEdit/DataObjectObjectBrick': 'DynamicTypes/BatchEdit/DataObjectObjectBrick',
 
   'DynamicTypes/GridCell/Text': 'DynamicTypes/GridCell/Text',
+  'DynamicTypes/GridCell/String': 'DynamicTypes/GridCell/String',
   'DynamicTypes/GridCell/Textarea': 'DynamicTypes/GridCell/Textarea',
   'DynamicTypes/GridCell/Number': 'DynamicTypes/GridCell/Number',
   'DynamicTypes/GridCell/Select': 'DynamicTypes/GridCell/Select',
@@ -203,6 +212,8 @@ export const serviceIds = {
 
   // Document editables
   'DynamicTypes/DocumentEditable/Area': 'DynamicTypes/DocumentEditable/Area',
+  'DynamicTypes/DocumentEditable/Areablock': 'DynamicTypes/DocumentEditable/Areablock',
+  'DynamicTypes/DocumentEditable/Block': 'DynamicTypes/DocumentEditable/Block',
   'DynamicTypes/DocumentEditable/Checkbox': 'DynamicTypes/DocumentEditable/Checkbox',
   'DynamicTypes/DocumentEditable/Date': 'DynamicTypes/DocumentEditable/Date',
   'DynamicTypes/DocumentEditable/Embed': 'DynamicTypes/DocumentEditable/Embed',
@@ -221,6 +232,10 @@ export const serviceIds = {
   'DynamicTypes/DocumentEditable/Textarea': 'DynamicTypes/DocumentEditable/Textarea',
   'DynamicTypes/DocumentEditable/Video': 'DynamicTypes/DocumentEditable/Video',
   'DynamicTypes/DocumentEditable/Wysiwyg': 'DynamicTypes/DocumentEditable/Wysiwyg',
+
+  // Document editable dialog layout
+  'DynamicTypes/EditableDialogLayout/Tabpanel': 'DynamicTypes/EditableDialogLayout/Tabpanel',
+  'DynamicTypes/EditableDialogLayout/Panel': 'DynamicTypes/EditableDialogLayout/Panel',
 
   // Asset types
   'DynamicTypes/Asset/Video': 'DynamicTypes/Asset/Video',

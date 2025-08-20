@@ -22,9 +22,10 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Settings/Tag Configuration',
+      path: 'DataManagement/Tag Configuration',
       label: 'navigation.tag-configuration',
       className: 'item-style-modifier',
+      order: 100,
       permission: UserPermission.TagsConfiguration,
       perspectivePermission: NavPermission.TagConfiguration,
       widgetConfig: {

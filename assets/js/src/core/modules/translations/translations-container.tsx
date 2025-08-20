@@ -16,7 +16,7 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
-import { Box, Button, Form, IconTextButton, Input, ModalFooter, SearchInput, useModal, Select, Pagination } from '@sdk/components'
+import { Box, Form, IconTextButton, Input, SearchInput, useModal, Select, Pagination } from '@sdk/components'
 import trackError, { ApiError } from '../app/error-handler'
 import { useTranslationGetListQuery, useTranslationGetDomainsQuery, api } from '../app/translations/translations-api-slice-enhanced'
 import { useTranslation } from './hooks/use-translation'
@@ -31,6 +31,9 @@ import {
 import { isUndefined } from 'lodash'
 import { useAppDispatch } from '@sdk/app'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { useTranslationDomain } from './hooks/translation-domain-provider'
+import { type SortingState } from '@tanstack/react-table'
+import { TranslationErrorModals } from './components/translation-error-modals'
 
 interface FormValues {
   translationKey: string
@@ -42,13 +45,15 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
     type: 'error'
   })
-  const { createNewTranslation, createLoading, domain, setDomain } = useTranslation()
+  const { createNewTranslation, createLoading } = useTranslation()
+  const { domain, setDomain } = useTranslationDomain()
   const settings = useSettings()
   const [visibleLocales, setVisibleLocales] = useState<string[] | null>(null)
   const [translationRows, setTranslationRows] = useState<TranslationRow[]>([])
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
+  const [sorting, setSorting] = useState<SortingState>([{ id: 'key', desc: false }])
   const { data: domainsData, isLoading: domainsLoading, error: domainError } = useTranslationGetDomainsQuery()
   const availableDomains = domainsData?.domains ?? []
 
@@ -65,13 +70,15 @@ export const TranslationsContainer = (): React.JSX.Element => {
                 filterValue: searchTerm
               }]
             : [],
-        sortFilter: {
-          key: 'de',
-          direction: 'ASC'
-        }
+        sortFilter: sorting.length > 0
+          ? {
+              key: sorting[0].id.startsWith('_') ? sorting[0].id.substring(1) : sorting[0].id,
+              direction: sorting[0].desc ? 'DESC' : 'ASC'
+            }
+          : []
       }
     }
-  }), [domain, currentPage, pageSize, searchTerm])
+  }), [domain, currentPage, pageSize, searchTerm, sorting])
 
   const {
     data,
@@ -137,19 +144,10 @@ export const TranslationsContainer = (): React.JSX.Element => {
     setCurrentPage(1)
   }
 
-  const errorModals = (
-    <MandatoryModal
-      footer={ <ModalFooter>
-        <Button
-          onClick={ closeMandatoryModal }
-          type='primary'
-        >{t('button.ok')}</Button>
-      </ModalFooter> }
-      title={ t('translations.add-translation-mandatory-field-missing.title') }
-    >
-      {t('translations.add-translation-mandatory-field-missing.error')}
-    </MandatoryModal>
-  )
+  const handleSortingChange = (newSorting: SortingState): void => {
+    setSorting(newSorting)
+    setCurrentPage(1)
+  }
 
   return (
     <ContentLayout
@@ -278,11 +276,16 @@ export const TranslationsContainer = (): React.JSX.Element => {
           } }
         >
           <Table
+            onSortingChange={ handleSortingChange }
             setTranslationRows={ setTranslationRows }
+            sorting={ sorting }
             translationRows={ translationRows }
             visibleLocales={ visibleLocales ?? availableLocales }
           />
-          {errorModals}
+          <TranslationErrorModals
+            MandatoryModal={ MandatoryModal }
+            closeMandatoryModal={ closeMandatoryModal }
+          />
         </Box>
       </Content>
     </ContentLayout>

@@ -12,7 +12,7 @@ import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type TranslationCreate, type TranslationData, useTranslationCreateMutation, useTranslationDeleteByKeyMutation, useTranslationUpdateMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { type TranslationRow, type TranslationDataItem } from '../helpers/translation-helpers'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
-import { type Dispatch, type SetStateAction, useState } from 'react'
+import { useTranslationDomain } from './translation-domain-provider'
 
 interface UseTranslationReturn {
   createNewTranslation: (key: string) => Promise<{ success: boolean, data?: TranslationDataItem }>
@@ -21,13 +21,11 @@ interface UseTranslationReturn {
   deleteLoading: boolean
   updateTranslationByKey: (columnId: string, row: TranslationRow, domain: string) => Promise<{ success: boolean }>
   updateLoading: boolean
-  domain: string
-  setDomain: Dispatch<SetStateAction<string>>
 }
 
 export const useTranslation = (): UseTranslationReturn => {
   const settings = useSettings()
-  const [domain, setDomain] = useState('messages')
+  const { domain } = useTranslationDomain()
   const [createTranslation, { isLoading: createLoading }] = useTranslationCreateMutation()
   const [deleteTranslation, { isLoading: deleteLoading }] = useTranslationDeleteByKeyMutation()
   const [updateTranslation, { isLoading: updateLoading }] = useTranslationUpdateMutation()
@@ -74,14 +72,33 @@ export const useTranslation = (): UseTranslationReturn => {
     }
   }
 
-  const updateTranslationByKey = async (columnId: string, row: TranslationRow): Promise<{ success: boolean }> => {
+  const updateTranslationByKey = async (columnId: string, row: TranslationRow, domainParam: string): Promise<{ success: boolean }> => {
     try {
-      if (!columnId.startsWith('_')) {
-        return { success: true }
+      if (columnId === 'type') {
+        const rowLocales = Object.keys(row)
+          .filter(key => key.startsWith('_'))
+          .map(key => key.substring(1))
+
+        if (rowLocales.length > 0) {
+          const firstLocale = rowLocales[0]
+          const translationData = [toApiTranslation(row, firstLocale, domainParam)]
+
+          const result = await updateTranslation({
+            updateTranslation: {
+              locale: firstLocale,
+              translationData
+            }
+          })
+
+          return { success: 'data' in result }
+        }
+
+        trackError(new GeneralError('No locales found in translation row data'))
+        return { success: false }
       }
 
       const locale = columnId.substring(1)
-      const translationData = [toApiTranslation(row, locale, domain)]
+      const translationData = [toApiTranslation(row, locale, domainParam)]
 
       const result = await updateTranslation({
         updateTranslation: {
@@ -103,8 +120,6 @@ export const useTranslation = (): UseTranslationReturn => {
     deleteTranslationByKey,
     deleteLoading,
     updateTranslationByKey,
-    updateLoading,
-    domain,
-    setDomain
+    updateLoading
   }
 }

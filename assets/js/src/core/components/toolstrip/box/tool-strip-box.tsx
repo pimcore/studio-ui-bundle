@@ -10,7 +10,6 @@
 
 import { Box, type BoxProps } from '@Pimcore/components/box/box'
 import React from 'react'
-import { ToolStrip } from '../tool-strip'
 import { Flex } from 'antd'
 import { useStyles } from './tool-strip-box.styles'
 import cn from 'classnames'
@@ -40,8 +39,20 @@ export const ToolStripBox = ({ className, docked = false, children, renderToolSt
         align="flex-end"
         justify="space-between"
       >
-        {renderToolStripStart !== undefined ? <ToolStrip className="tool-strip-box__strip--start">{renderToolStripStart}</ToolStrip> : <div />}
-        {renderToolStripEnd !== undefined ? <ToolStrip className="tool-strip-box__strip--end">{renderToolStripEnd}</ToolStrip> : <div />}
+        {renderToolStripStart !== undefined
+          ? (
+            <div className="tool-strip-box__strip--start">
+              {renderToolStripStart}
+            </div>
+            )
+          : <div />}
+        {renderToolStripEnd !== undefined
+          ? (
+            <div className="tool-strip-box__strip--end">
+              {renderToolStripEnd}
+            </div>
+            )
+          : <div />}
       </Flex>
 
       <Box

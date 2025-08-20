@@ -9,7 +9,6 @@
  */
 
 import React from 'react'
-import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { TreeContainer } from '@Pimcore/modules/user/management/tree/tree-container'
 import { ManagementDetail } from '@Pimcore/modules/user/management/detail/management-detail'
 import type { TreeDataItem } from '@Pimcore/components/tree-element/tree-element'
@@ -20,6 +19,7 @@ import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-ma
 import { findNodeByKey } from '@Pimcore/modules/user/management/tree/tree-helper'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { createTreeNodeTestId } from '@Pimcore/utils/test-id-generator'
+import { ConfigLayout } from '@Pimcore/components/predefined-layouts/config/config-layout'
 
 const ManagementContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -46,6 +46,7 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
       key: item.id,
       selectable: item.type === 'user',
       allowDrop: item.type !== 'user',
+      allowDrag: item.type === 'user',
       icon: item.type === 'user' ? <Icon value={ 'user' } /> : <Icon value={ 'folder' } />,
       'data-testid': createTreeNodeTestId(item.id as string | number, item.type as string),
       actions: item.type === 'user'
@@ -122,7 +123,6 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
 
   const sidebar = {
     id: 'user-tree',
-    size: 20,
     minSize: 170,
     children: [
       <TreeContainer
@@ -146,7 +146,6 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
 
   const main = {
     id: 'user-detail',
-    size: 80,
     minSize: 600,
     children: [
       <ManagementDetail
@@ -164,11 +163,9 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
   }
 
   return (
-    <SplitLayout
+    <ConfigLayout
       leftItem={ sidebar }
       rightItem={ main }
-      withDivider
-      withToolbar
     />
   )
 }

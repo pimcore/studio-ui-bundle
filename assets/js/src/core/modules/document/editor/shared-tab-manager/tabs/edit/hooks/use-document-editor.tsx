@@ -16,9 +16,11 @@ import { type ValueType } from '@Pimcore/app/public-api/document-editor-iframe/e
 export interface DocumentEditorContextProps {
   updateValue: (key: string, value: ValueType) => void
   updateValueWithReload: (key: string, value: ValueType) => void
+  triggerSaveAndReload: () => void
   getValues: () => Record<string, ValueType>
   getValue: (key: string) => ValueType
   initializeData: (data: Record<string, ValueType>) => void
+  removeValues: (keysToRemove: string[]) => void
   notifyReady: () => void
 }
 
@@ -60,6 +62,15 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
     }
   }, [getDocumentEditableApi, id])
 
+  const triggerSaveAndReload = useCallback((): void => {
+    try {
+      const { document: documentApi } = getPimcoreStudioApi()
+      documentApi.triggerSaveAndReload(id)
+    } catch (error) {
+      console.warn('Could not trigger save and reload:', error)
+    }
+  }, [id])
+
   const getValues = useCallback((): Record<string, ValueType> => {
     const api = getDocumentEditableApi()
     return api.getValues()
@@ -73,6 +84,11 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
   const initializeData = useCallback((data: Record<string, ValueType>): void => {
     const api = getDocumentEditableApi()
     api.initializeValues(data)
+  }, [getDocumentEditableApi])
+
+  const removeValues = useCallback((keysToRemove: string[]): void => {
+    const api = getDocumentEditableApi()
+    api.removeValues(keysToRemove)
   }, [getDocumentEditableApi])
 
   const notifyReady = useCallback((): void => {
@@ -90,9 +106,11 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
   return {
     updateValue,
     updateValueWithReload,
+    triggerSaveAndReload,
     getValues,
     getValue,
     initializeData,
+    removeValues,
     notifyReady
   }
 }

@@ -22,6 +22,9 @@ export enum UserPermission {
   Notifications = 'notifications',
   SendNotifications = 'notifications_send',
   Emails = 'emails',
+  Reports = 'reports',
+  ReportsConfig = 'reports_config',
   RecycleBin = 'recyclebin',
+  Redirects = 'redirects',
   ApplicationLogger = 'application_logging'
 }

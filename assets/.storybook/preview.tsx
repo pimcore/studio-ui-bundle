@@ -52,6 +52,23 @@ const preview: Preview = {
             'Layout',
             'Controls',
             'Data Display',
+            'Data Entry',
+            [
+              'Form',
+              [
+                'Form vs FormKit',
+                'Basic Form',
+                'FormKit',
+                'Controls',
+                [
+                  'Basic',
+                  'Composite',
+                  '*'
+                ],
+                '*'
+              ],
+              '*'
+            ],
             'Feedback',
             'Visuals',
             'Others',

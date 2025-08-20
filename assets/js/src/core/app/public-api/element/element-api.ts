@@ -23,6 +23,8 @@ import type { CropSettings } from '@Pimcore/modules/element/dynamic-types/defini
 import { type CropModalOptions } from '@Pimcore/modules/element/components/crop-modal/provider/crop-modal-provider'
 import type { IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import { type HotspotMarkersModalOptions } from '@Pimcore/modules/element/components/hotspot-markers-modal/provider/hotspot-markers-modal-provider'
+import { type VideoValue, type VideoType } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/video/video'
+import { type VideoModalOptions } from '@Pimcore/modules/element/components/video-modal/provider/video-modal-provider'
 
 class ElementOpeningService {
   async openAsset (config: { id: number }): Promise<void> {
@@ -77,6 +79,12 @@ export interface HotspotMarkersModalProps {
   options?: HotspotMarkersModalOptions
 }
 
+export interface VideoModalProps {
+  value?: VideoValue | null
+  type?: VideoType | null
+  options?: VideoModalOptions
+}
+
 // Public API interface and implementation
 export interface ElementApi {
   openAsset: (id: number) => Promise<void>
@@ -88,6 +96,7 @@ export interface ElementApi {
   openLinkModal: (props: LinkModalProps) => void
   openCropModal: (props: CropModalProps) => void
   openHotspotMarkersModal: (props: HotspotMarkersModalProps) => void
+  openVideoModal: (props: VideoModalProps) => void
   locateInTree: (id: number, elementType: ElementType) => void
 }
 
@@ -196,6 +205,24 @@ class ElementApiImpl implements ElementApi {
 
   private openHotspotMarkersModalDirectly (props: HotspotMarkersModalProps): void {
     const event = new ApiGatewayEvent(ApiGatewayEventType.openHotspotMarkersModal, props)
+    window.dispatchEvent(event)
+  }
+
+  openVideoModal (props: VideoModalProps): void {
+    try {
+      if (isInIframe()) {
+        const { element: elementApi } = getPimcoreStudioApi()
+        elementApi.openVideoModal(props)
+      } else {
+        this.openVideoModalDirectly(props)
+      }
+    } catch (error) {
+      console.error('Failed to open video modal:', error)
+    }
+  }
+
+  private openVideoModalDirectly (props: VideoModalProps): void {
+    const event = new ApiGatewayEvent(ApiGatewayEventType.openVideoModal, props)
     window.dispatchEvent(event)
   }
 
