@@ -212,6 +212,7 @@ export const serviceIds = {
 
   // Document editables
   'DynamicTypes/DocumentEditable/Area': 'DynamicTypes/DocumentEditable/Area',
+  'DynamicTypes/DocumentEditable/Areablock': 'DynamicTypes/DocumentEditable/Areablock',
   'DynamicTypes/DocumentEditable/Block': 'DynamicTypes/DocumentEditable/Block',
   'DynamicTypes/DocumentEditable/Checkbox': 'DynamicTypes/DocumentEditable/Checkbox',
   'DynamicTypes/DocumentEditable/Date': 'DynamicTypes/DocumentEditable/Date',

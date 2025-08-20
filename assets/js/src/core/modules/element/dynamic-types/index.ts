@@ -183,6 +183,7 @@ import { type DynamicTypeDocumentEditableRenderlet } from './definitions/documen
 import { type DynamicTypeDocumentEditableBlock } from './definitions/document/editable/types/dynamic-type-document-editable-block'
 import { type DynamicTypeGridCellDataObjectAdvanced } from './definitions/grid-cell/types/data-object-advanced/dynamic-type-grid-cell-data-object-advanced'
 import { type DynamicTypeDocumentEditableArea } from './definitions/document/editable/types/dynamic-type-document-editable-area'
+import { type DynamicTypeDocumentEditableAreablock } from './definitions/document/editable/types/dynamic-type-document-editable-areablock'
 import { type DynamicTypeEditableDialogLayoutRegistry } from './definitions/editable-dialog-layout/dynamic-type-editable-dialog-layout-registry'
 import { type DynamicTypeEditableDialogLayoutTabpanel } from './definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-tabpanel'
 import { type DynamicTypeEditableDialogLayoutPanel } from './definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-panel'
@@ -361,6 +362,7 @@ moduleSystem.registerModule({
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditablePdf>(serviceIds['DynamicTypes/DocumentEditable/Pdf']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableVideo>(serviceIds['DynamicTypes/DocumentEditable/Video']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableArea>(serviceIds['DynamicTypes/DocumentEditable/Area']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableAreablock>(serviceIds['DynamicTypes/DocumentEditable/Areablock']))
 
     const editableDialogLayoutRegistry = container.get<DynamicTypeEditableDialogLayoutRegistry>(serviceIds['DynamicTypes/EditableDialogLayoutRegistry'])
 
