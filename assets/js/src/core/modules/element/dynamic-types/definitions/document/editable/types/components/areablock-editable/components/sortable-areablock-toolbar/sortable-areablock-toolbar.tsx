@@ -85,7 +85,7 @@ export const SortableAreablockToolbar = ({
 
   const elementType = areablockManager.getElementType(element)
   const areaTypeConfig = areaTypes.find(areaType => areaType.type === elementType)
-  const toolbarTitle = (areaTypeConfig?.name != null) ? t(areaTypeConfig.name) : ((elementType != null) ? t(elementType) : t('areablock'))
+  const toolbarTitle = (areaTypeConfig?.name != null) ? t(areaTypeConfig.name) : undefined
 
   const buttons: React.ReactNode[] = []
   let deleteButton: React.ReactNode = null
