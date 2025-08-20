@@ -8,34 +8,35 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, useEffect, useImperativeHandle } from 'react'
+import React, { useEffect } from 'react'
 import { isNull, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import {
-  type BundleCustomReportsConfigurationTreeNode,
+  type BundleCustomReportsConfigurationTreeNode, type CustomReportsConfigUpdateApiArg,
+  useCustomReportsConfigUpdateMutation,
   useCustomReportsReportQuery
 } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { Content } from '@Pimcore/components/content/content'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
-import { type ReportFormData, useReportFormState } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
+import { useReportFormState } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
+import { Portal } from '@Pimcore/components/portal/portal'
+import { Button } from '@Pimcore/components/button/button'
 
 interface IReportConfigurationProps {
   report: BundleCustomReportsConfigurationTreeNode
+  isActive: boolean
   onDirtyStateChange?: (isDirty: boolean) => void
 }
 
-export interface ReportConfigurationRef {
-  save: () => Promise<boolean>
-  isDirty: boolean
-  currentData: ReportFormData | null
-}
-
-export const ReportConfiguration = forwardRef<ReportConfigurationRef, IReportConfigurationProps>(({ report, onDirtyStateChange }, ref): React.JSX.Element => {
+export const ReportConfiguration = ({ report, isActive }: IReportConfigurationProps): React.JSX.Element => {
   const { isLoading, data } = useCustomReportsReportQuery({ name: report.id })
+  const [updateReport, { isLoading: isUpdatingReport }] = useCustomReportsConfigUpdateMutation()
 
   const { initializeForm, currentData, isDirty, updateFormData, markFormSaved } = useReportFormState()
+
+  console.log('----- currentData: ', currentData)
 
   const { t } = useTranslation()
 
@@ -45,23 +46,16 @@ export const ReportConfiguration = forwardRef<ReportConfigurationRef, IReportCon
     }
   }, [data])
 
-  useEffect(() => {
-    onDirtyStateChange?.(isDirty)
-  }, [isDirty, onDirtyStateChange])
+  const handleSave = (): void => {
+    if (isNull(currentData)) return
 
-  const handleSave = async (): Promise<boolean> => {
-    if (isNull(currentData) || !isDirty) return false
-
-    markFormSaved()
-
-    return true
+    updateReport({
+      name: report.id,
+      bundleCustomReportUpdate: currentData as unknown as CustomReportsConfigUpdateApiArg['bundleCustomReportUpdate']
+    }).then(() => {
+      markFormSaved()
+    }).catch(() => {})
   }
-
-  useImperativeHandle(ref, () => ({
-    save: handleSave,
-    isDirty,
-    currentData
-  }), [handleSave, isDirty, currentData])
 
   return (
     <Content
@@ -97,10 +91,20 @@ export const ReportConfiguration = forwardRef<ReportConfigurationRef, IReportCon
         <FormKit.Panel title={ t('reports.editor.permissions.title') }>
           Content
         </FormKit.Panel>
+          {isActive && (
+          <Portal targetId="toolbar-portal-root">
+            <Button
+              disabled={ !isDirty }
+              loading={ isUpdatingReport }
+              onClick={ handleSave }
+              type="primary"
+            >
+              {t('save')}
+            </Button>
+          </Portal>
+          )}
       </FormKit>
       )}
     </Content>
   )
-})
-
-ReportConfiguration.displayName = 'ReportConfiguration'
+}
