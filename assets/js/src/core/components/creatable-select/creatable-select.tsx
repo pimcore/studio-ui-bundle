@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next'
 
 export interface CreatableSelectProps extends Omit<SelectProps, 'options'> {
   options: SelectOptionType[]
-  onCreateOption?: (value: string) => SelectOptionType | void
+  onCreateOption?: (value: string) => SelectOptionType | undefined
   creatable?: boolean
   createOptionLabel?: string
   allowDuplicates?: boolean
@@ -43,6 +43,30 @@ const Component = ({
   const [newOptionText, setNewOptionText] = useState('')
   const [pendingSelection, setPendingSelection] = useState<SelectOptionType | null>(null)
   const allOptions = [...options, ...customOptions]
+
+  // Auto-add value or defaultValue if it's not in the options list
+  useEffect(() => {
+    const valueToCheck = value ?? selectProps.defaultValue
+    if (valueToCheck !== null && valueToCheck !== undefined && typeof valueToCheck === 'string' && valueToCheck.trim() !== '') {
+      const valueExists = allOptions.some(opt => opt.value === valueToCheck)
+      if (!valueExists) {
+        let autoOption = onCreateOption?.(valueToCheck)
+
+        if (isNil(autoOption)) {
+          autoOption = {
+            value: valueToCheck,
+            label: valueToCheck
+          }
+        }
+        setCustomOptions(prev => {
+          // Check if already added to avoid duplicates
+          const alreadyAdded = prev.some(opt => opt.value === valueToCheck)
+          if (alreadyAdded) return prev
+          return [...prev, autoOption]
+        })
+      }
+    }
+  }, [value, selectProps.defaultValue, allOptions, onCreateOption])
 
   // Handle pending selection after state update
   useEffect(() => {
