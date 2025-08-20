@@ -10,11 +10,22 @@
 
 import React from 'react'
 import { type BundleCustomReportsConfigurationTreeNode } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
+import { Content } from '@Pimcore/components/content/content'
+import { FormKit } from '@Pimcore/components/form/form-kit'
 
 interface IReportConfigurationProps {
   report: BundleCustomReportsConfigurationTreeNode
 }
 
 export const ReportConfiguration = ({ report }: IReportConfigurationProps): React.JSX.Element => {
-  return <div className="m-l-small">{report.text}</div>
+  return (
+    <Content
+      padded
+      padding={ { x: 'small', y: 'small' } }
+    >
+      <FormKit>
+        {report.text}
+      </FormKit>
+    </Content>
+  )
 }
