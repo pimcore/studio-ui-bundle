@@ -12,6 +12,7 @@ import { type Meta } from '@storybook/react'
 import React, { useState } from 'react'
 import { CreatableSelect } from '@Pimcore/components/creatable-select/creatable-select'
 import { Form } from '../../form'
+import { type SelectOptionType } from '@sdk/modules/element'
 
 const config: Meta = {
   title: 'Components/Data Entry/Form/Controls/Basic/CreatableSelect',
@@ -61,8 +62,10 @@ const FormExampleComponent = (): React.JSX.Element => {
     { value: 'sales', label: 'Sales' }
   ]
 
-  const handleCreateOption = (value: string, field: string): void => {
+  const handleCreateOption = (value: string, field: string): SelectOptionType | undefined => {
     console.log(`Created new ${field} option:`, value)
+
+    return undefined
   }
 
   return (
@@ -80,7 +83,7 @@ const FormExampleComponent = (): React.JSX.Element => {
             >
               <CreatableSelect
                 allowClear
-                onCreateOption={ (value) => { handleCreateOption(value, 'skill') } }
+                onCreateOption={ (value) => handleCreateOption(value, 'skill') }
                 options={ skillsOptions }
                 placeholder="Select or create a skill"
               />
@@ -93,7 +96,7 @@ const FormExampleComponent = (): React.JSX.Element => {
               <CreatableSelect
                 allowDuplicates={ false }
                 mode="multiple"
-                onCreateOption={ (value) => { handleCreateOption(value, 'tag') } }
+                onCreateOption={ (value) => handleCreateOption(value, 'tag') }
                 options={ tagsOptions }
                 placeholder="Select or create tags"
                 showSearch
@@ -106,7 +109,7 @@ const FormExampleComponent = (): React.JSX.Element => {
             >
               <CreatableSelect
                 createOptionLabel="Add custom department"
-                onCreateOption={ (value) => { handleCreateOption(value, 'department') } }
+                onCreateOption={ (value) => handleCreateOption(value, 'department') }
                 options={ departmentOptions }
                 placeholder="Select or create department"
                 size="large"
