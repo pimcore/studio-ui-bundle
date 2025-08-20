@@ -12,25 +12,21 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { Space } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useInjection } from '@Pimcore/app/depency-injection'
-import type { DynamicTypeFieldFilterRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-registry'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { FieldFilters, type FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
 import { useFilter } from '../provider/filter-provider/use-filter'
+import { type DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
 
 const FILTER_FIELD_KEY_IGNORE_LIST = ['size']
 
 export const FieldFiltersContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { availableColumns } = useAvailableColumns()
-  const { hasType } = useDynamicTypeResolver()
+  const { getType } = useDynamicTypeResolver()
   const { fieldFilters, setFieldFilters } = useFilter()
-
-  const objectDataRegistry = useInjection<DynamicTypeFieldFilterRegistry>(serviceIds['DynamicTypes/FieldFilterRegistry'])
 
   const initialFilters: FieldFiltersProps['data'] = useMemo(() => fieldFilters.map((filter) => {
     const currentColumn = availableColumns.find((column) => column.key === filter.key)
@@ -62,15 +58,12 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
   }, [initialFilters])
 
   const handleColumnClick = (column: AvailableColumn): void => {
-    const objectDataByFrontendType = objectDataRegistry.getDynamicType(column.frontendType!)
+    const objectDataByFrontendType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.frontendType!] })
 
-    const isObjectHasDataByColumnType = objectDataRegistry.hasDynamicType(column.type)
-    let shouldOverrideFilterType = false
+    let inferedFilterType: DynamicTypeFieldFilterAbstract | null = null
 
-    if (isObjectHasDataByColumnType) {
-      const objectDataByColumnType = objectDataRegistry.getDynamicType(column.type)
-
-      shouldOverrideFilterType = objectDataByColumnType.shouldOverrideFilterType()
+    if (objectDataByFrontendType !== null && 'dynamicTypeFieldFilterType' in objectDataByFrontendType) {
+      inferedFilterType = objectDataByFrontendType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
     }
 
     setFilters((prevFilters) => [
@@ -81,16 +74,25 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
         type: column.type,
         frontendType: column.frontendType,
         config: column.config,
-        ...(shouldOverrideFilterType && { filterType: objectDataByFrontendType.getFieldFilterType() })
+        ...(inferedFilterType !== null && { filterType: inferedFilterType.getFieldFilterType() })
       }
     ])
   }
 
   const availableFilterColumns = useMemo(() => availableColumns.filter((column) => {
-    const hasDynamicType = hasType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.frontendType!] })
+    const dynamicType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.frontendType!] })
+
+    let isNoneType = false
+
+    if (dynamicType !== null && 'dynamicTypeFieldFilterType' in dynamicType) {
+      const fieldFilterType = dynamicType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
+      isNoneType = fieldFilterType.id === 'none'
+    }
+
+    const hasDynamicType = dynamicType !== null
     const isIgnoredField = FILTER_FIELD_KEY_IGNORE_LIST.includes(column.key) || column.filterable !== true
 
-    return hasDynamicType && !isIgnoredField && !filters.some((filter) => filter.id === column.key)
+    return hasDynamicType && !isIgnoredField && !isNoneType && !filters.some((filter) => filter.id === column.key)
   }), [availableColumns, filters])
 
   const getFilteredDropDownMenuItems = useMemo(() => (): DropdownProps['menu']['items'] => {

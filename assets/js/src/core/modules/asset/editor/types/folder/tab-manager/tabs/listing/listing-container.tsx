@@ -20,7 +20,8 @@ export const ListingContainer = (): React.JSX.Element => {
       'DynamicTypes/GridCellRegistry',
       'DynamicTypes/MetadataRegistry',
       'DynamicTypes/ListingRegistry',
-      'DynamicTypes/BatchEditRegistry'
+      'DynamicTypes/BatchEditRegistry',
+      'DynamicTypes/FieldFilterRegistry'
     ] }
     >
       <AssetListing />

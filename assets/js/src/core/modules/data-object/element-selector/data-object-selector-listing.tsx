@@ -92,7 +92,9 @@ export const DataObjectSelectorListing = (): React.JSX.Element => {
   return useMemo(() => (
     <DynamicTypeRegistryProvider serviceIds={ [
       'DynamicTypes/GridCellRegistry',
-      'DynamicTypes/ListingRegistry'
+      'DynamicTypes/ListingRegistry',
+      'DynamicTypes/ObjectDataRegistry',
+      'DynamicTypes/FieldFilterRegistry'
     ] }
     >
       <ListingContainer

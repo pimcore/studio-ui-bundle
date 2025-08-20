@@ -27,7 +27,7 @@ export interface typeProps {
 export interface UseDynamicTypeResolverReturnType {
   getComponentRenderer: (props: typeProps) => IComponentRenderer
   hasType: (props: typeProps) => boolean
-  getType: (dynamicTypeId: DynamicTypeAbstract['id']) => DynamicTypeAbstract | null
+  getType: (props: typeProps) => DynamicTypeAbstract | null
 }
 
 export const useDynamicTypeResolver = (): UseDynamicTypeResolverReturnType => {
@@ -80,12 +80,19 @@ export const useDynamicTypeResolver = (): UseDynamicTypeResolverReturnType => {
     return false
   }
 
-  function getType (dynamicTypeId: DynamicTypeAbstract['id']): DynamicTypeAbstract | null {
-    for (const registry of registries) {
-      if (registry.hasDynamicType(dynamicTypeId)) {
-        const dynamicType = registry.getDynamicType(dynamicTypeId)
+  function getType (props: typeProps): DynamicTypeAbstract | null {
+    const { target, dynamicTypeIds } = props
+    const dynamicTypeResolver = new DynamicTypeResolver()
 
-        return dynamicType
+    for (const dynamicTypeId of dynamicTypeIds) {
+      for (const registry of registries) {
+        if (registry.hasDynamicType(dynamicTypeId)) {
+          const dynamicType = registry.getDynamicType(dynamicTypeId)
+
+          if (dynamicTypeResolver.hasCallable(target, dynamicType)) {
+            return dynamicType
+          }
+        }
       }
     }
 

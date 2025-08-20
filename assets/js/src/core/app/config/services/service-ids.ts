@@ -80,6 +80,7 @@ export const serviceIds = {
   'DynamicTypes/FieldFilter/Text': 'DynamicTypes/FieldFilter/Text',
   'DynamicTypes/FieldFilter/Textarea': 'DynamicTypes/FieldFilter/Textarea',
   'DynamicTypes/FieldFilter/Wysiwyg': 'DynamicTypes/FieldFilter/Wysiwyg',
+  'DynamicTypes/FieldFilter/None': 'DynamicTypes/FieldFilter/None',
   'DynamicTypes/FieldFilter/Number': 'DynamicTypes/FieldFilter/Number',
   'DynamicTypes/FieldFilter/Select': 'DynamicTypes/FieldFilter/Select',
   'DynamicTypes/FieldFilter/Datetime': 'DynamicTypes/FieldFilter/Datetime',

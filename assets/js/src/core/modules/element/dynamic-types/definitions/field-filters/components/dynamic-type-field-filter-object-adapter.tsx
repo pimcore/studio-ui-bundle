@@ -12,14 +12,13 @@ import React from 'react'
 import { Alert } from 'antd'
 import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
-import { useInjection } from '@Pimcore/app/depency-injection'
-import type { DynamicTypeFieldFilterRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-registry'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { useDynamicTypeResolver } from '../../../resolver/hooks/use-dynamic-type-resolver'
 
 export interface DynamicTypeFieldFilterObjectAdapterProps extends AbstractFieldFilterDefinition {}
 
 export const DynamicTypeFieldFilterObjectAdapterComponent = (): React.JSX.Element => {
   const { config } = useDynamicFilter()
+  const { hasType, getComponentRenderer } = useDynamicTypeResolver()
 
   if (!('fieldDefinition' in config)) {
     throw new Error('Field definition is missing in config')
@@ -27,9 +26,8 @@ export const DynamicTypeFieldFilterObjectAdapterComponent = (): React.JSX.Elemen
 
   const { fieldDefinition } = config
   const currentFieldType: string = fieldDefinition?.fieldType ?? fieldDefinition?.fieldtype ?? 'unknown'
-  const objectDataRegistry = useInjection<DynamicTypeFieldFilterRegistry>(serviceIds['DynamicTypes/FieldFilterRegistry'])
 
-  if (!objectDataRegistry.hasDynamicType(currentFieldType)) {
+  if (!hasType({ target: 'FIELD_FILTER', dynamicTypeIds: [currentFieldType] })) {
     return (
       <Alert
         message={ `Unknown data type: ${currentFieldType}` }
@@ -38,7 +36,17 @@ export const DynamicTypeFieldFilterObjectAdapterComponent = (): React.JSX.Elemen
     )
   }
 
-  const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
+  console.log('currentFieldType', currentFieldType)
 
-  return objectDataType.getFieldFilterComponent(fieldDefinition as AbstractFieldFilterDefinition)
+  const { ComponentRenderer } = getComponentRenderer({ target: 'FIELD_FILTER', dynamicTypeIds: [currentFieldType] })
+
+  if (ComponentRenderer === null) {
+    return <>Dynamic Field Filter not supported</>
+  }
+
+  return (
+    <>
+      {ComponentRenderer(fieldDefinition as AbstractFieldFilterDefinition)}
+    </>
+  )
 }

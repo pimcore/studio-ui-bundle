@@ -52,7 +52,9 @@ export const ObjectSearchListing = (): React.JSX.Element => {
   return (
     <DynamicTypeRegistryProvider serviceIds={ [
       'DynamicTypes/GridCellRegistry',
-      'DynamicTypes/ListingRegistry'
+      'DynamicTypes/ListingRegistry',
+      'DynamicTypes/ObjectDataRegistry',
+      'DynamicTypes/FieldFilterRegistry'
     ] }
     >
       <ListingContainer
