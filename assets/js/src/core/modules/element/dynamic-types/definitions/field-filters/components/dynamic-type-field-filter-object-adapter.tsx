@@ -36,8 +36,6 @@ export const DynamicTypeFieldFilterObjectAdapterComponent = (): React.JSX.Elemen
     )
   }
 
-  console.log('currentFieldType', currentFieldType)
-
   const { ComponentRenderer } = getComponentRenderer({ target: 'FIELD_FILTER', dynamicTypeIds: [currentFieldType] })
 
   if (ComponentRenderer === null) {
