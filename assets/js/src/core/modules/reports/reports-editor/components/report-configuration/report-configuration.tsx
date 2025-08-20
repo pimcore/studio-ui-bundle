@@ -9,23 +9,56 @@
  */
 
 import React from 'react'
-import { type BundleCustomReportsConfigurationTreeNode } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
+import { isUndefined } from 'lodash'
+import { useTranslation } from 'react-i18next'
+import {
+  type BundleCustomReportsConfigurationTreeNode,
+  useCustomReportsReportQuery
+} from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { Content } from '@Pimcore/components/content/content'
 import { FormKit } from '@Pimcore/components/form/form-kit'
+import { Form } from '@Pimcore/components/form/form'
+import { Input } from '@Pimcore/components/input/input'
 
 interface IReportConfigurationProps {
   report: BundleCustomReportsConfigurationTreeNode
 }
 
 export const ReportConfiguration = ({ report }: IReportConfigurationProps): React.JSX.Element => {
+  const { isLoading, data } = useCustomReportsReportQuery({ name: report.id })
+
+  const { t } = useTranslation()
+
   return (
     <Content
+      loading={ isLoading }
       padded
-      padding={ { x: 'small', y: 'small' } }
+      padding={ { top: 'none', right: 'extra-small', bottom: 'none', left: 'extra-small' } }
     >
+      {!isUndefined(data) && (
       <FormKit>
-        {report.text}
+        <FormKit.Panel title={ t('reports.editor.general-settings.title') }>
+          <Form.Item label="Name">
+            <Input
+              disabled
+              value={ data.name }
+            />
+          </Form.Item>
+        </FormKit.Panel>
+        <FormKit.Panel title={ t('reports.editor.source-definition.title') }>
+          Content
+        </FormKit.Panel>
+        <FormKit.Panel title={ t('reports.editor.manage-column-configuration.title') }>
+          Content
+        </FormKit.Panel>
+        <FormKit.Panel title={ t('reports.editor.chart-settings.title') }>
+          Content
+        </FormKit.Panel>
+        <FormKit.Panel title={ t('reports.editor.permissions.title') }>
+          Content
+        </FormKit.Panel>
       </FormKit>
+      )}
     </Content>
   )
 }

@@ -974,6 +974,11 @@ reports.editor.delete.content: Do you really want to delete Custom Report "{{rep
 reports.editor.clone.content: Enter the name of the new item (a-zA-Z-_)
 reports.editor.add.content: Enter the name of the new item. Name must be alphanumeric and at least 3 characters long (a-zA-Z0-9_-)
 reports.editor.content.validation.message: The customer report name is invalid
+reports.editor.general-settings.title: General Settings
+reports.editor.source-definition.title: Source Definition
+reports.editor.manage-column-configuration.title: Manage & Share Column Configuration
+reports.editor.chart-settings.title: Chart Settings
+reports.editor.permissions.title: Permissions
 loading: Loading...
 please-wait: Please wait...
 navigation.email: Email
