@@ -32,6 +32,7 @@ import autoSave from '@Pimcore/assets/icons/auto-save.inline.svg?react'
 import automationIntegration from '@Pimcore/assets/icons/automation-integration.inline.svg?react'
 import batchSelection from '@Pimcore/assets/icons/batch-selection.inline.svg?react'
 import bodyStyle from '@Pimcore/assets/icons/body-style.inline.svg?react'
+import bookOpen01 from '@Pimcore/assets/icons/book-open-01.inline.svg?react'
 import bookmark from '@Pimcore/assets/icons/bookmark.inline.svg?react'
 import cache from '@Pimcore/assets/icons/cache.inline.svg?react'
 import calculator from '@Pimcore/assets/icons/calculator.inline.svg?react'
@@ -133,6 +134,7 @@ import key from '@Pimcore/assets/icons/key.inline.svg?react'
 import keyboard from '@Pimcore/assets/icons/keyboard.inline.svg?react'
 import keys from '@Pimcore/assets/icons/keys.inline.svg?react'
 import languageSelect from '@Pimcore/assets/icons/language-select.inline.svg?react'
+import layoutGrid02 from '@Pimcore/assets/icons/layout-grid-02.inline.svg?react'
 import layout from '@Pimcore/assets/icons/layout.inline.svg?react'
 import list from '@Pimcore/assets/icons/list.inline.svg?react'
 import loading from '@Pimcore/assets/icons/loading.inline.svg?react'
@@ -310,6 +312,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'body-style',
       component: bodyStyle
+    })
+    iconLibrary.register({
+      name: 'book-open-01',
+      component: bookOpen01
     })
     iconLibrary.register({
       name: 'bookmark',
@@ -714,6 +720,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'language-select',
       component: languageSelect
+    })
+    iconLibrary.register({
+      name: 'layout-grid-02',
+      component: layoutGrid02
     })
     iconLibrary.register({
       name: 'layout',

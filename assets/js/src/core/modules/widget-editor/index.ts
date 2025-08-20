@@ -45,7 +45,7 @@ moduleSystem.registerModule({
           translationKey: 'widget.widget-editor.perspective-editor',
           icon: {
             type: 'name',
-            value: 'layout-grid-02'
+            value: 'book-open-01'
           }
         }
       }
