@@ -86,7 +86,7 @@ const Component = ({
       }
     }
 
-    return newOption as SelectOptionType
+    return newOption
   }
 
   const handleAddOption = useCallback(() => {
