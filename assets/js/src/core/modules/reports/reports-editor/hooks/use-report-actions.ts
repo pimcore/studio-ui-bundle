@@ -16,15 +16,18 @@ import {
   type CustomReportsConfigCloneApiArg,
   type CustomReportsConfigDeleteApiArg,
   type CustomReportsConfigAddApiArg,
+  type CustomReportsConfigUpdateApiArg,
   useCustomReportsConfigAddMutation,
   useCustomReportsConfigCloneMutation,
-  useCustomReportsConfigDeleteMutation
+  useCustomReportsConfigDeleteMutation,
+  useCustomReportsConfigUpdateMutation
 } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 
 interface IUseReportActionsReturn {
   addReport: (arg: CustomReportsConfigAddApiArg) => Promise<void>
   cloneReport: (arg: CustomReportsConfigCloneApiArg) => Promise<void>
   deleteReport: (arg: CustomReportsConfigDeleteApiArg) => Promise<void>
+  updateReport: (arg: CustomReportsConfigUpdateApiArg) => Promise<void>
 }
 
 const useTrackMutationError = (isError: boolean, error: ApiErrorData | undefined): void => {
@@ -39,10 +42,12 @@ export const useReportActions = (): IUseReportActionsReturn => {
   const [addReportMutation, { isError: isAddReportError, error: addReportError }] = useCustomReportsConfigAddMutation()
   const [cloneReportMutation, { isError: isCloneReportError, error: cloneReportError }] = useCustomReportsConfigCloneMutation()
   const [deleteReportMutation, { isError: isDeleteReportError, error: deleteReportError }] = useCustomReportsConfigDeleteMutation()
+  const [updateReportMutation, { isError: isUpdateReportError, error: updateReportError }] = useCustomReportsConfigUpdateMutation()
 
   useTrackMutationError(isAddReportError, addReportError)
   useTrackMutationError(isCloneReportError, cloneReportError)
   useTrackMutationError(isDeleteReportError, deleteReportError)
+  useTrackMutationError(isUpdateReportError, updateReportError)
 
   const addReport = async (arg: CustomReportsConfigAddApiArg): Promise<void> => {
     await addReportMutation(arg)
@@ -56,9 +61,14 @@ export const useReportActions = (): IUseReportActionsReturn => {
     await deleteReportMutation(arg)
   }
 
+  const updateReport = async (arg: CustomReportsConfigUpdateApiArg): Promise<void> => {
+    await updateReportMutation(arg)
+  }
+
   return {
     addReport,
     cloneReport,
-    deleteReport
+    deleteReport,
+    updateReport
   }
 }

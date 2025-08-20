@@ -8,12 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { isNull, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import {
-  type BundleCustomReportsConfigurationTreeNode, type CustomReportsConfigUpdateApiArg,
-  useCustomReportsConfigUpdateMutation,
+  type BundleCustomReportsConfigurationTreeNode,
+  type CustomReportsConfigUpdateApiArg,
   useCustomReportsReportQuery
 } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { Content } from '@Pimcore/components/content/content'
@@ -23,6 +23,7 @@ import { Input } from '@Pimcore/components/input/input'
 import { useReportFormState } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
 import { Portal } from '@Pimcore/components/portal/portal'
 import { Button } from '@Pimcore/components/button/button'
+import { useReportActions } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-actions'
 
 interface IReportConfigurationProps {
   report: BundleCustomReportsConfigurationTreeNode
@@ -32,11 +33,11 @@ interface IReportConfigurationProps {
 
 export const ReportConfiguration = ({ report, isActive }: IReportConfigurationProps): React.JSX.Element => {
   const { isLoading, data } = useCustomReportsReportQuery({ name: report.id })
-  const [updateReport, { isLoading: isUpdatingReport }] = useCustomReportsConfigUpdateMutation()
 
   const { initializeForm, currentData, isDirty, updateFormData, markFormSaved } = useReportFormState()
+  const { updateReport } = useReportActions()
 
-  console.log('----- currentData: ', currentData)
+  const [isUpdatingReport, setIsUpdatingReport] = useState(false)
 
   const { t } = useTranslation()
 
@@ -49,12 +50,15 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
   const handleSave = (): void => {
     if (isNull(currentData)) return
 
-    updateReport({
+    setIsUpdatingReport(true)
+
+    void updateReport({
       name: report.id,
       bundleCustomReportUpdate: currentData as unknown as CustomReportsConfigUpdateApiArg['bundleCustomReportUpdate']
     }).then(() => {
       markFormSaved()
-    }).catch(() => {})
+      setIsUpdatingReport(false)
+    })
   }
 
   return (
