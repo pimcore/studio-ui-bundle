@@ -23,7 +23,10 @@ import {
   type BundleCustomReportsConfigurationTreeNode,
   useCustomReportsConfigGetTreeQuery
 } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
+import { PortalSlot } from '@Pimcore/components/portal/portal-slot'
 import { useStyles } from './reports-editor.styles'
+
+export const SAVE_BTN_PORTAL_ID = 'reports-editor-toolbar-save-btn'
 
 export const ReportsEditor = (): React.JSX.Element => {
   const { data: reportsConfigTreeData, isLoading, isFetching, refetch } = useCustomReportsConfigGetTreeQuery({ page: 1, pageSize: 9999 })
@@ -86,7 +89,7 @@ export const ReportsEditor = (): React.JSX.Element => {
       <ContentLayout
         renderToolbar={ (
           <Toolbar justify="flex-end">
-            <div id="toolbar-portal-root" />
+            <PortalSlot id={ SAVE_BTN_PORTAL_ID } />
           </Toolbar>
         ) }
       >

@@ -24,6 +24,7 @@ import { useReportFormState } from '@Pimcore/modules/reports/reports-editor/hook
 import { Portal } from '@Pimcore/components/portal/portal'
 import { Button } from '@Pimcore/components/button/button'
 import { useReportActions } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-actions'
+import { SAVE_BTN_PORTAL_ID } from '@Pimcore/modules/reports/reports-editor/reports-editor'
 
 interface IReportConfigurationProps {
   report: BundleCustomReportsConfigurationTreeNode
@@ -61,6 +62,19 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
     })
   }
 
+  const renderSaveButton = (): React.JSX.Element => (
+    <Portal targetId={ SAVE_BTN_PORTAL_ID }>
+      <Button
+        disabled={ !isDirty }
+        loading={ isUpdatingReport }
+        onClick={ handleSave }
+        type="primary"
+      >
+        {t('save')}
+      </Button>
+    </Portal>
+  )
+
   return (
     <Content
       loading={ isLoading }
@@ -95,18 +109,7 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
         <FormKit.Panel title={ t('reports.editor.permissions.title') }>
           Content
         </FormKit.Panel>
-          {isActive && (
-          <Portal targetId="toolbar-portal-root">
-            <Button
-              disabled={ !isDirty }
-              loading={ isUpdatingReport }
-              onClick={ handleSave }
-              type="primary"
-            >
-              {t('save')}
-            </Button>
-          </Portal>
-          )}
+        {isActive && renderSaveButton()}
       </FormKit>
       )}
     </Content>

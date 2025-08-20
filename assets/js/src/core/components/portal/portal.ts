@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type ReactNode } from 'react'
+import { type ReactNode, type ReactPortal } from 'react'
 import { createPortal } from 'react-dom'
 import { isNull } from 'lodash'
 
@@ -17,7 +17,7 @@ interface IPortalProps {
   targetId: string
 }
 
-export const Portal = ({ children, targetId }: IPortalProps) => {
+export const Portal = ({ children, targetId }: IPortalProps): ReactPortal | null => {
   const target = document.getElementById(targetId)
 
   if (isNull(target)) {
