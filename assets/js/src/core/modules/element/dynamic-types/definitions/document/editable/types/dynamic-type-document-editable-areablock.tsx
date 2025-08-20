@@ -10,8 +10,8 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { AreablockEditable, type AreablockEditableConfig, type AreablockValue } from './components/areablock-editable/areablock-editable'
-import { AreablockManager } from './components/areablock-editable/utils/areablock-manager'
+import { AreablockEditable, type AreablockEditableConfig, type AreablockValue } from '../components/areablock-editable/areablock-editable'
+import { AreablockManager } from '../components/areablock-editable/utils/areablock-manager'
 
 export interface AreablockEditableDefinition extends Omit<AbstractDocumentEditableDefinition, 'config'> {
   config?: AreablockEditableConfig

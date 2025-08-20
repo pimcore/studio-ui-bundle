@@ -11,7 +11,7 @@
 import { useCallback, useState, useRef } from 'react'
 import { isNil } from 'lodash'
 import { useDocumentEditor } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/hooks/use-document-editor'
-import { type AbstractDocumentEditableDefinition } from '../../../../dynamic-type-document-editable-abstract'
+import { type AbstractDocumentEditableDefinition } from '../../../dynamic-type-document-editable-abstract'
 import { type BlockEditableConfig, type BlockValue } from '../block-editable'
 import { type BlockManager } from '../utils/block-manager'
 import {

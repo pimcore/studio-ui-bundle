@@ -9,7 +9,7 @@
  */
 
 import { isNil } from 'lodash'
-import { type AbstractDocumentEditableDefinition } from '../../../../dynamic-type-document-editable-abstract'
+import { type AbstractDocumentEditableDefinition } from '../../../dynamic-type-document-editable-abstract'
 import { EDITABLE_DEFAULT_FIELD_WIDTHS } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-renderer/render-editable'
 import { type BlockManager } from './block-manager'
 

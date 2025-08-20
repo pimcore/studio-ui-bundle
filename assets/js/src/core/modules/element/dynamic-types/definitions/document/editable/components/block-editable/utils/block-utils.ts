@@ -10,7 +10,7 @@
 
 import { isNil } from 'lodash'
 import { type BlockEditableConfig, type BlockValue } from '../block-editable'
-import { type AbstractDocumentEditableDefinition } from '../../../../dynamic-type-document-editable-abstract'
+import { type AbstractDocumentEditableDefinition } from '../../../dynamic-type-document-editable-abstract'
 import { processBlockTemplate, ensurePortalTargets } from './template-processor'
 import { type BlockManager } from './block-manager'
 

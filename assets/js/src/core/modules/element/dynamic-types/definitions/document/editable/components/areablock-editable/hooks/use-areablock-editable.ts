@@ -13,7 +13,7 @@ import { isNil, isArray, isEmpty } from 'lodash'
 import { useDocumentEditor } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/hooks/use-document-editor'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { type AbstractDocumentEditableDefinition } from '../../../../dynamic-type-document-editable-abstract'
+import { type AbstractDocumentEditableDefinition } from '../../../dynamic-type-document-editable-abstract'
 import { type AreablockEditableConfig, type AreablockValue } from '../areablock-editable'
 import { type AreablockManager } from '../utils/areablock-manager'
 import {
