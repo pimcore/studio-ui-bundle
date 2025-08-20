@@ -254,7 +254,6 @@ container.bind(serviceIds['DynamicTypes/FieldFilter/DataObjectAdapter']).to(Dyna
 container.bind(serviceIds['DynamicTypes/FieldFilter/DataObjectObjectBrick']).to(DynamicTypeFieldFilterDataObjectObjectBrick).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Text']).to(DynamicTypeFieldFilterText).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Textarea']).to(DynamicTypeFieldFilterTextArea).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/FieldFilter/Wysiwyg']).to(DynamicTypeFieldFilterWysiwyg).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/None']).to(DynamicTypeFieldFilterNone).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Number']).to(DynamicTypeFieldFilterNumber).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Select']).to(DynamicTypeFieldFilterSelect).inSingletonScope()
