@@ -8,14 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { isEqual, isNull } from 'lodash'
 import { type BundleCustomReportsDetails } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
 
-interface ReportFormData extends BundleCustomReportsDetails {}
+export type ReportFormData = BundleCustomReportsDetails
 
 interface IUseReportFormStateReturn {
-  originalData: ReportFormData | null
+  initialData: ReportFormData | null
   currentData: ReportFormData | null
   isDirty: boolean
   initializeForm: (data: ReportFormData) => void
@@ -23,33 +23,31 @@ interface IUseReportFormStateReturn {
   markFormSaved: () => void
 }
 
-export const useReportFormState = (initialData?: ReportFormData): IUseReportFormStateReturn => {
-  const [originalData, setOriginalData] = useState<ReportFormData | null>(initialData ?? null)
-  const [currentData, setCurrentData] = useState<ReportFormData | null>(initialData ?? null)
+export const useReportFormState = (): IUseReportFormStateReturn => {
+  const [initialData, setInitialData] = useState<ReportFormData | null>(null)
+  const [currentData, setCurrentData] = useState<ReportFormData | null>(null)
 
-  const initializeForm = useCallback((data: ReportFormData) => {
-    setOriginalData({ ...data })
+  const initializeForm = (data: ReportFormData): void => {
+    setInitialData({ ...data })
     setCurrentData({ ...data })
-  }, [])
+  }
 
-  const updateFormData = useCallback((data: Partial<ReportFormData>) => {
+  const updateFormData = (data: Partial<ReportFormData>): void => {
     setCurrentData(prev => !isNull(prev) ? { ...prev, ...data } : null)
-  }, [])
+  }
 
-  const markFormSaved = useCallback(() => {
-    if (!isNull(currentData)) {
-      setOriginalData({ ...currentData })
-    }
-  }, [currentData])
+  const markFormSaved = (): void => {
+    !isNull(currentData) && setInitialData({ ...currentData })
+  }
 
   const isDirty = useMemo(() => {
-    if (isNull(originalData) || isNull(currentData)) return false
+    if (isNull(initialData) || isNull(currentData)) return false
 
-    return !isEqual(originalData, currentData)
-  }, [originalData, currentData])
+    return !isEqual(initialData, currentData)
+  }, [initialData, currentData])
 
   return {
-    originalData,
+    initialData,
     currentData,
     isDirty,
     initializeForm,

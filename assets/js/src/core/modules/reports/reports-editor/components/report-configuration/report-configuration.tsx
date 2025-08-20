@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React, { forwardRef, useEffect, useImperativeHandle } from 'react'
 import { isNull, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import {
@@ -19,23 +19,49 @@ import { Content } from '@Pimcore/components/content/content'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
-import { useReportFormState } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
+import { type ReportFormData, useReportFormState } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
 
 interface IReportConfigurationProps {
   report: BundleCustomReportsConfigurationTreeNode
+  onDirtyStateChange?: (isDirty: boolean) => void
 }
 
-export const ReportConfiguration = ({ report }: IReportConfigurationProps): React.JSX.Element => {
+export interface ReportConfigurationRef {
+  save: () => Promise<boolean>
+  isDirty: boolean
+  currentData: ReportFormData | null
+}
+
+export const ReportConfiguration = forwardRef<ReportConfigurationRef, IReportConfigurationProps>(({ report, onDirtyStateChange }, ref): React.JSX.Element => {
   const { isLoading, data } = useCustomReportsReportQuery({ name: report.id })
-  const { initializeForm, currentData } = useReportFormState()
+
+  const { initializeForm, currentData, isDirty, updateFormData, markFormSaved } = useReportFormState()
+
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (!isUndefined(data)) {
       initializeForm(data)
     }
-  }, [data, initializeForm])
+  }, [data])
 
-  const { t } = useTranslation()
+  useEffect(() => {
+    onDirtyStateChange?.(isDirty)
+  }, [isDirty, onDirtyStateChange])
+
+  const handleSave = async (): Promise<boolean> => {
+    if (isNull(currentData) || !isDirty) return false
+
+    markFormSaved()
+
+    return true
+  }
+
+  useImperativeHandle(ref, () => ({
+    save: handleSave,
+    isDirty,
+    currentData
+  }), [handleSave, isDirty, currentData])
 
   return (
     <Content
@@ -53,7 +79,10 @@ export const ReportConfiguration = ({ report }: IReportConfigurationProps): Reac
             />
           </Form.Item>
           <Form.Item label="Nice Name">
-            <Input value={ currentData.niceName } />
+            <Input
+              onChange={ (e) => { updateFormData({ niceName: e.target.value }) } }
+              value={ currentData.niceName }
+            />
           </Form.Item>
         </FormKit.Panel>
         <FormKit.Panel title={ t('reports.editor.source-definition.title') }>
@@ -72,4 +101,6 @@ export const ReportConfiguration = ({ report }: IReportConfigurationProps): Reac
       )}
     </Content>
   )
-}
+})
+
+ReportConfiguration.displayName = 'ReportConfiguration'
