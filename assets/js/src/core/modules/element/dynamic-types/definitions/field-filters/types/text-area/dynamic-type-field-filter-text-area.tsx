@@ -12,13 +12,14 @@ import { injectable } from 'inversify'
 import React, { type ReactElement } from 'react'
 import { DynamicTypeFieldFilterTextAreaComponent, type DynamicTypeFieldFilterTextAreaProps } from '../../components/dynamic-type-field-filter-text-area-component'
 import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
+import { FieldFilterFrontendType } from '../../frontendTypes'
 
 @injectable()
 export class DynamicTypeFieldFilterTextArea extends DynamicTypeFieldFilterAbstract {
   id = 'textarea'
 
   getFieldFilterType (): string {
-    return 'system.string'
+    return FieldFilterFrontendType.String
   }
 
   getFieldFilterComponent (props: DynamicTypeFieldFilterTextAreaProps): ReactElement<DynamicTypeFieldFilterTextAreaProps> {

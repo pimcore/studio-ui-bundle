@@ -16,6 +16,8 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type DynamicTypeFieldFilterObjectAdapter } from './definitions/field-filters/types/data-object-adapter/dynamic-type-field-filter-data-object-adapter'
 import { type DynamicTypeFieldFilterDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/data-object-brick/dynamic-type-field-filter-data-object-object-brick'
 import { type DynamicTypeFieldFilterText } from './definitions/field-filters/types/text/dynamic-type-field-filter-text'
+import { type DynamicTypeFieldFilterTextArea } from './definitions/field-filters/types/text-area/dynamic-type-field-filter-text-area'
+import { type DynamicTypeFieldFilterWysiwyg } from './definitions/field-filters/types/wysiwyg/dynamic-type-field-filter-wysiwyg'
 import { type DynamicTypeFieldFilterNumber } from './definitions/field-filters/types/number/dynamic-type-field-filter-number'
 import { type DynamicTypeFieldFilterSelect } from './definitions/field-filters/types/select/dynamic-type-field-filter-select'
 import { type DynamicTypeFieldFilterDatetime } from './definitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
@@ -165,6 +167,7 @@ import { type DynamicTypeDocumentEditableWysiwyg } from './definitions/document/
 import { type DynamicTypeFieldFilterCheckbox } from './definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
 import { type DynamicTypeDocumentEditableTextarea } from './definitions/document/editable/types/dynamic-type-document-editable-textarea'
 import { type DynamicTypeDocumentEditableImage } from './definitions/document/editable/types/dynamic-type-document-editable-image'
+import { type DynamicTypeDocumentEditablePdf } from './definitions/document/editable/types/dynamic-type-document-editable-pdf'
 import { type DynamicTypeDocumentEditableVideo } from './definitions/document/editable/types/dynamic-type-document-editable-video'
 import { type DynamicTypePipelineRegistry } from './definitions/pipelines/dynamic-type-pipeline-registry'
 import { type DynamicTypePipelineGridSourceFieldsText } from './definitions/pipelines/grid/source-fields/types/text/text'
@@ -176,6 +179,7 @@ import { type DynamicTypeDocumentEditableMultiSelect } from './definitions/docum
 import { type DynamicTypeDocumentEditableSelect } from './definitions/document/editable/types/dynamic-type-document-editable-select'
 import { type DynamicTypeDocumentEditableTable } from './definitions/document/editable/types/dynamic-type-document-editable-table'
 import { type DynamicTypeDocumentEditableSnippet } from './definitions/document/editable/types/dynamic-type-document-editable-snippet'
+import { type DynamicTypeDocumentEditableRenderlet } from './definitions/document/editable/types/dynamic-type-document-editable-renderlet'
 import { type DynamicTypeDocumentEditableBlock } from './definitions/document/editable/types/dynamic-type-document-editable-block'
 import { type DynamicTypeGridCellDataObjectAdvanced } from './definitions/grid-cell/types/data-object-advanced/dynamic-type-grid-cell-data-object-advanced'
 import { type DynamicTypeDocumentEditableArea } from './definitions/document/editable/types/dynamic-type-document-editable-area'
@@ -191,7 +195,8 @@ moduleSystem.registerModule({
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterObjectAdapter>(serviceIds['DynamicTypes/FieldFilter/DataObjectAdapter']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterDataObjectObjectBrick>(serviceIds['DynamicTypes/FieldFilter/DataObjectObjectBrick']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterText>(serviceIds['DynamicTypes/FieldFilter/Text']))
-    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterText>(serviceIds['DynamicTypes/FieldFilter/Textarea']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterTextArea>(serviceIds['DynamicTypes/FieldFilter/Textarea']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterWysiwyg>(serviceIds['DynamicTypes/FieldFilter/Wysiwyg']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterNumber>(serviceIds['DynamicTypes/FieldFilter/Number']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterSelect>(serviceIds['DynamicTypes/FieldFilter/Select']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterDatetime>(serviceIds['DynamicTypes/FieldFilter/Datetime']))
@@ -345,6 +350,7 @@ moduleSystem.registerModule({
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableNumeric>(serviceIds['DynamicTypes/DocumentEditable/Numeric']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableRelation>(serviceIds['DynamicTypes/DocumentEditable/Relation']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableRelations>(serviceIds['DynamicTypes/DocumentEditable/Relations']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableRenderlet>(serviceIds['DynamicTypes/DocumentEditable/Renderlet']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableSelect>(serviceIds['DynamicTypes/DocumentEditable/Select']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableSnippet>(serviceIds['DynamicTypes/DocumentEditable/Snippet']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableTable>(serviceIds['DynamicTypes/DocumentEditable/Table']))
@@ -352,6 +358,7 @@ moduleSystem.registerModule({
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableWysiwyg>(serviceIds['DynamicTypes/DocumentEditable/Wysiwyg']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableMultiSelect>(serviceIds['DynamicTypes/DocumentEditable/MultiSelect']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableImage>(serviceIds['DynamicTypes/DocumentEditable/Image']))
+    documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditablePdf>(serviceIds['DynamicTypes/DocumentEditable/Pdf']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableVideo>(serviceIds['DynamicTypes/DocumentEditable/Video']))
     documentEditableRegistry.registerDynamicType(container.get<DynamicTypeDocumentEditableArea>(serviceIds['DynamicTypes/DocumentEditable/Area']))
 

@@ -24,11 +24,71 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/text` }),
                 providesTags: ["Assets"],
             }),
+            assetDocumentDownloadCustom: build.query<
+                AssetDocumentDownloadCustomApiResponse,
+                AssetDocumentDownloadCustomApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/document/download/custom`,
+                    params: {
+                        mimeType: queryArg.mimeType,
+                        page: queryArg.page,
+                        resizeMode: queryArg.resizeMode,
+                        width: queryArg.width,
+                        height: queryArg.height,
+                        quality: queryArg.quality,
+                        dpi: queryArg.dpi,
+                    },
+                }),
+                providesTags: ["Assets"],
+            }),
+            assetDocumentStreamCustom: build.query<
+                AssetDocumentStreamCustomApiResponse,
+                AssetDocumentStreamCustomApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/document/stream/custom`,
+                    params: {
+                        mimeType: queryArg.mimeType,
+                        page: queryArg.page,
+                        resizeMode: queryArg.resizeMode,
+                        width: queryArg.width,
+                        height: queryArg.height,
+                        quality: queryArg.quality,
+                        dpi: queryArg.dpi,
+                    },
+                }),
+                providesTags: ["Assets"],
+            }),
             assetDocumentStreamPreview: build.query<
                 AssetDocumentStreamPreviewApiResponse,
                 AssetDocumentStreamPreviewApiArg
             >({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/document/stream/pdf-preview` }),
+                providesTags: ["Assets"],
+            }),
+            assetDocumentDownloadByThumbnail: build.query<
+                AssetDocumentDownloadByThumbnailApiResponse,
+                AssetDocumentDownloadByThumbnailApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/document/download/thumbnail/${queryArg.thumbnailName}`,
+                    params: {
+                        page: queryArg.page,
+                    },
+                }),
+                providesTags: ["Assets"],
+            }),
+            assetDocumentStreamByThumbnail: build.query<
+                AssetDocumentStreamByThumbnailApiResponse,
+                AssetDocumentStreamByThumbnailApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/document/stream/thumbnail/${queryArg.thumbnailName}`,
+                    params: {
+                        page: queryArg.page,
+                    },
+                }),
                 providesTags: ["Assets"],
             }),
             assetDownloadZip: build.query<AssetDownloadZipApiResponse, AssetDownloadZipApiArg>({
@@ -209,6 +269,15 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
+            assetImageStreamByThumbnail: build.query<
+                AssetImageStreamByThumbnailApiResponse,
+                AssetImageStreamByThumbnailApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/image/stream/thumbnail/${queryArg.thumbnailName}`,
+                }),
+                providesTags: ["Assets"],
+            }),
             assetPatchById: build.mutation<AssetPatchByIdApiResponse, AssetPatchByIdApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets`, method: "PATCH", body: queryArg.body }),
                 invalidatesTags: ["Assets"],
@@ -349,10 +418,66 @@ export type AssetGetTextDataByIdApiArg = {
     /** Id of the asset */
     id: number;
 };
+export type AssetDocumentDownloadCustomApiResponse = /** status 200 Custom document image binary file */ Blob;
+export type AssetDocumentDownloadCustomApiArg = {
+    /** Id of the document */
+    id: number;
+    /** Mime type of downloaded image. */
+    mimeType: "JPEG" | "PNG";
+    /** Page of the document */
+    page?: number;
+    /** Resize mode of downloaded image. */
+    resizeMode?: "resize" | "scaleByWidth" | "scaleByHeight";
+    /** Width of downloaded image */
+    width?: number;
+    /** Height of downloaded image */
+    height?: number;
+    /** Quality of downloaded image */
+    quality?: number;
+    /** Dpi of downloaded image */
+    dpi?: number;
+};
+export type AssetDocumentStreamCustomApiResponse = /** status 200 Custom document image stream */ Blob;
+export type AssetDocumentStreamCustomApiArg = {
+    /** Id of the document */
+    id: number;
+    /** Mime type of downloaded image. */
+    mimeType: "JPEG" | "PNG";
+    /** Page of the document */
+    page?: number;
+    /** Resize mode of downloaded image. */
+    resizeMode?: "resize" | "scaleByWidth" | "scaleByHeight";
+    /** Width of downloaded image */
+    width?: number;
+    /** Height of downloaded image */
+    height?: number;
+    /** Quality of downloaded image */
+    quality?: number;
+    /** Dpi of downloaded image */
+    dpi?: number;
+};
 export type AssetDocumentStreamPreviewApiResponse = /** status 200 Asset PDF preview stream */ Blob;
 export type AssetDocumentStreamPreviewApiArg = {
     /** Id of the document */
     id: number;
+};
+export type AssetDocumentDownloadByThumbnailApiResponse = /** status 200 Document image binary file */ Blob;
+export type AssetDocumentDownloadByThumbnailApiArg = {
+    /** Id of the document */
+    id: number;
+    /** Page of the document */
+    page?: number;
+    /** Find asset by matching thumbnail name. */
+    thumbnailName: string;
+};
+export type AssetDocumentStreamByThumbnailApiResponse = /** status 200 Stream of document image */ Blob;
+export type AssetDocumentStreamByThumbnailApiArg = {
+    /** Id of the document */
+    id: number;
+    /** Page of the document */
+    page?: number;
+    /** Find asset by matching thumbnail name. */
+    thumbnailName: string;
 };
 export type AssetDownloadZipApiResponse = /** status 200 ZIP archive as attachment */ Blob;
 export type AssetDownloadZipApiArg = {
@@ -589,6 +714,14 @@ export type AssetImageDownloadByThumbnailApiArg = {
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
 };
+export type AssetImageStreamByThumbnailApiResponse =
+    /** status 200 Stream of image asset based on thumbnail name */ Blob;
+export type AssetImageStreamByThumbnailApiArg = {
+    /** Id of the image */
+    id: number;
+    /** Find asset by matching thumbnail name. */
+    thumbnailName: string;
+};
 export type AssetPatchByIdApiResponse = /** status 201 Successfully created jobRun for patching multiple assets */ {
     /** ID of created jobRun */
     jobRunId: number;
@@ -662,6 +795,8 @@ export type AssetAddApiArg = {
     body: {
         /** File to upload */
         file: Blob;
+        /** Type of the asset to create */
+        assetType?: string | null;
     };
 };
 export type AssetUploadInfoApiResponse =
@@ -1096,7 +1231,11 @@ export const {
     useAssetCloneMutation,
     useAssetCustomSettingsGetByIdQuery,
     useAssetGetTextDataByIdQuery,
+    useAssetDocumentDownloadCustomQuery,
+    useAssetDocumentStreamCustomQuery,
     useAssetDocumentStreamPreviewQuery,
+    useAssetDocumentDownloadByThumbnailQuery,
+    useAssetDocumentStreamByThumbnailQuery,
     useAssetDownloadZipQuery,
     useAssetDeleteZipMutation,
     useAssetDownloadByIdQuery,
@@ -1118,6 +1257,7 @@ export const {
     useAssetImageStreamPreviewQuery,
     useAssetImageStreamQuery,
     useAssetImageDownloadByThumbnailQuery,
+    useAssetImageStreamByThumbnailQuery,
     useAssetPatchByIdMutation,
     useAssetPatchFolderByIdMutation,
     useAssetClearThumbnailMutation,

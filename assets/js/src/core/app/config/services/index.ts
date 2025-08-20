@@ -31,6 +31,7 @@ import { DynamicTypeFieldFilterObjectAdapter } from '@Pimcore/modules/element/dy
 import { DynamicTypeFieldFilterDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/data-object-brick/dynamic-type-field-filter-data-object-object-brick'
 import { DynamicTypeFieldFilterText } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/text/dynamic-type-field-filter-text'
 import { DynamicTypeFieldFilterTextArea } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/text-area/dynamic-type-field-filter-text-area'
+import { DynamicTypeFieldFilterWysiwyg } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/wysiwyg/dynamic-type-field-filter-wysiwyg'
 import { DynamicTypeFieldFilterNumber } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/number/dynamic-type-field-filter-number'
 import { DynamicTypeFieldFilterSelect } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/select/dynamic-type-field-filter-select'
 import { DynamicTypeFieldFilterDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
@@ -184,6 +185,7 @@ import { DynamicTypeDocumentEditableLink } from '@Pimcore/modules/element/dynami
 import { DynamicTypeDocumentEditableEmbed } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-embed'
 import { DynamicTypeDocumentEditableTextarea } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-textarea'
 import { DynamicTypeDocumentEditableImage } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-image'
+import { DynamicTypeDocumentEditablePdf } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-pdf'
 import { DynamicTypeDocumentEditableVideo } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-video'
 import { DynamicTypeDocumentEditableArea } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-area'
 import { DynamicTypePipelineRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-registry'
@@ -196,6 +198,7 @@ import { DynamicTypeDocumentEditableMultiSelect } from '@Pimcore/modules/element
 import { DynamicTypeDocumentEditableSelect } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-select'
 import { DynamicTypeDocumentEditableTable } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-table'
 import { DynamicTypeDocumentEditableSnippet } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-snippet'
+import { DynamicTypeDocumentEditableRenderlet } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-renderlet'
 import { DynamicTypeDocumentEditableBlock } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-block'
 import { BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
 import { DynamicTypeThemeRegistry } from '@Pimcore/modules/app/theme/dynamic-types/registry/dynamic-type-theme-registry'
@@ -250,6 +253,7 @@ container.bind(serviceIds['DynamicTypes/FieldFilter/DataObjectAdapter']).to(Dyna
 container.bind(serviceIds['DynamicTypes/FieldFilter/DataObjectObjectBrick']).to(DynamicTypeFieldFilterDataObjectObjectBrick).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Text']).to(DynamicTypeFieldFilterText).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Textarea']).to(DynamicTypeFieldFilterTextArea).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/Wysiwyg']).to(DynamicTypeFieldFilterWysiwyg).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Number']).to(DynamicTypeFieldFilterNumber).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Select']).to(DynamicTypeFieldFilterSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Datetime']).to(DynamicTypeFieldFilterDatetime).inSingletonScope()
@@ -402,8 +406,10 @@ container.bind(serviceIds['DynamicTypes/DocumentEditable/Input']).to(DynamicType
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Link']).to(DynamicTypeDocumentEditableLink).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/MultiSelect']).to(DynamicTypeDocumentEditableMultiSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Numeric']).to(DynamicTypeDocumentEditableNumeric).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Pdf']).to(DynamicTypeDocumentEditablePdf).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Relation']).to(DynamicTypeDocumentEditableRelation).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Relations']).to(DynamicTypeDocumentEditableRelations).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Renderlet']).to(DynamicTypeDocumentEditableRenderlet).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Select']).to(DynamicTypeDocumentEditableSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Snippet']).to(DynamicTypeDocumentEditableSnippet).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Table']).to(DynamicTypeDocumentEditableTable).inSingletonScope()

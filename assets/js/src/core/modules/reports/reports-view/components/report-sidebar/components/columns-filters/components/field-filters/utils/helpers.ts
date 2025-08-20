@@ -10,7 +10,7 @@
 
 export const FIELD_TYPE_MAP = {
   string: {
-    frontendType: 'input',
+    frontendType: 'select',
     type: 'system.string'
   },
   numeric: {
