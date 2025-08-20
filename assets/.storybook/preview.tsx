@@ -17,6 +17,7 @@ import { GlobalStyles } from "../js/src/core/styles/global.styles";
 import { App } from 'antd'
 import { Pimcore } from '../js/src/core/app/public-api'
 import { moduleSystem } from "../js/src/core/app/module-system/module-system";
+import { ModalsProvider } from "../js/src/core/modules/app/modals-provider";
 
 declare global {
   interface Window {
@@ -86,8 +87,10 @@ const preview: Preview = {
       return (
         <GlobalProvider>
           <App>
-            <GlobalStyles />
-            <Story />
+            <ModalsProvider>
+              <GlobalStyles />
+              <Story />
+            </ModalsProvider>
           </App>
         </GlobalProvider>
       )

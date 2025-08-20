@@ -8,11 +8,4 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isNonEmptyString } from '@Pimcore/utils/type-utils'
-
-/**
- * Checks if a pathFormatterConfig object is valid (has both non-empty class and name)
- */
-export const isValidPathFormatterConfig = (config: { name?: string, class?: string } | undefined): config is { name: string, class: string } => {
-  return config !== undefined && isNonEmptyString(config.class) && isNonEmptyString(config.name)
-}
+export { isValidPathFormatterConfig } from '@Pimcore/components/many-to-many-relation'
