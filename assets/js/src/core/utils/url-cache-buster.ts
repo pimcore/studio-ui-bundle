@@ -21,7 +21,7 @@ export function addCacheBusterToUrl (url: string, parameterName: string = '_cb')
     const urlObj = new URL(url, window.location.origin)
     urlObj.searchParams.set(parameterName, cacheBuster)
     return urlObj.toString()
-  } catch (error) {
+  } catch {
     // Fallback for invalid URLs - just append the parameter
     const separator = url.includes('?') ? '&' : '?'
     return `${url}${separator}${parameterName}=${cacheBuster}`
