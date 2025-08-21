@@ -10,8 +10,8 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { BlockEditable, type BlockEditableConfig, type BlockValue } from './components/block-editable/block-editable'
-import { BlockManager } from './components/block-editable/utils/block-manager'
+import { BlockEditable, type BlockEditableConfig, type BlockValue } from '../components/block-editable/block-editable'
+import { BlockManager } from '../components/block-editable/utils/block-manager'
 
 export interface BlockEditableDefinition extends Omit<AbstractDocumentEditableDefinition, 'config'> {
   config?: BlockEditableConfig

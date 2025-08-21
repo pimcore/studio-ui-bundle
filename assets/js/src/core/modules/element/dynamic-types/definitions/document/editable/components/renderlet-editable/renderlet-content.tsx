@@ -18,7 +18,7 @@ import { EditableHtmlDropContainer } from '@Pimcore/components/editable-html-dro
 import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
-import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
+import { locateElementInTree } from '@Pimcore/modules/element/utils/tree-utils'
 import { useDocumentRenderletRenderQuery } from '@Pimcore/modules/document/document-api-slice.gen'
 import { type RenderletValue, type RenderletEditableConfig } from './renderlet-editable'
 import { useParams } from 'react-router-dom'
@@ -67,6 +67,11 @@ export const RenderletContent = ({
   const hasContent = !isLoading && shouldFetchRenderlet
 
   const { openElement } = useElementHelper()
+
+  const getElementType = (): ElementType | undefined => {
+    if (isNil(value?.type)) return undefined
+    return value.type === 'object' ? 'data-object' : value.type as ElementType
+  }
 
   const isFetchError = !isNil(error) && 'status' in error
   const actualError = isFetchError && error.status !== 'PARSING_ERROR' ? error : undefined
@@ -139,11 +144,13 @@ export const RenderletContent = ({
 
   const handleOpen = (): void => {
     if (!isNil(value?.id) && !isNil(value?.type)) {
-      const elementType: ElementType = value.type === 'object' ? 'data-object' : value.type as ElementType
-      void openElement({
-        id: value.id,
-        type: elementType
-      })
+      const elementType = getElementType()
+      if (!isNil(elementType)) {
+        void openElement({
+          id: value.id,
+          type: elementType
+        })
+      }
     }
   }
 
@@ -152,15 +159,8 @@ export const RenderletContent = ({
   }
 
   const handleLocateInTree = (): void => {
-    if (!isNil(value?.id) && !isNil(value?.type)) {
-      try {
-        const studioApi = getPimcoreStudioApi()
-        const elementType: ElementType = value.type === 'object' ? 'data-object' : value.type as ElementType
-        studioApi.element.locateInTree(value.id, elementType)
-      } catch (error) {
-        console.error('Failed to locate element in tree:', error)
-      }
-    }
+    const elementType = getElementType()
+    locateElementInTree(elementType, value?.id)
   }
 
   const contextMenuItems: MenuProps['items'] = []
@@ -199,16 +199,16 @@ export const RenderletContent = ({
     if (!isNil(config?.type)) {
       switch (config.type) {
         case 'document':
-          return t('drag-document-here')
+          return t('drop-document-here')
         case 'asset':
-          return t('drag-asset-here')
+          return t('drop-asset-here')
         case 'object':
-          return t('drag-object-here')
+          return t('drop-object-here')
         default:
-          return t('drag-element-here')
+          return t('drop-element-here')
       }
     }
-    return t('drag-element-here')
+    return t('drop-element-here')
   }
 
   const errorContent = !isNil(actualError)

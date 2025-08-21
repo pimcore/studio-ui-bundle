@@ -110,6 +110,7 @@ export const {
   useAssetUpdateByIdMutation,
   useAssetCloneMutation,
   useAssetReplaceMutation,
+  useAssetBatchDeleteMutation,
   useAssetCustomMetadataGetByIdQuery,
   useAssetCustomSettingsGetByIdQuery,
   useAssetGetTextDataByIdQuery,

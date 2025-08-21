@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import { DocumentHotspotImagePreview } from './hotspot-image-preview'
@@ -22,13 +22,14 @@ import { toIHotspots, fromIHotspots } from '@Pimcore/modules/element/dynamic-typ
 import { type Hotspot, type Marker } from '../../../../objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
-import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 import { useUploadModal } from '@Pimcore/components/modal-upload/hooks/use-upload-modal'
 import { InlineUpload } from '@Pimcore/components/inline-upload'
 import { useImageValueUpdates } from './hooks/use-image-value-updates'
 import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
-import { MIN_WIDTH, MIN_HEIGHT, DEFAULT_HEIGHT } from './utils/image-dimensions'
+import { DEFAULT_HEIGHT } from '../../helpers/responsive-asset-preview/image-dimensions'
+import { locateElementInTree } from '@Pimcore/modules/element/utils/tree-utils'
+import { useAssetDimensions } from '../../helpers/responsive-asset-preview/hooks/use-asset-dimensions'
 
 export interface ImageEditableValue {
   id?: number
@@ -73,7 +74,7 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
   const width = props.config?.width
   const height = props.config?.height
 
-  const lastImageDimensionsRef = useRef<{ width: number, height: number } | null>(null)
+  const { lastDimensions, handleResize: handleImageResize } = useAssetDimensions()
 
   const needsContainerWidth = isNil(width) && isNil(height)
   const { width: containerWidth } = useElementResize(needsContainerWidth ? props.containerRef ?? { current: null } : { current: null })
@@ -86,13 +87,6 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
     handleEmptyValue,
     handleAltTextChange
   } = useImageValueUpdates({ value: imageValue, onChange: props.onChange })
-
-  const handleImageResize = useCallback((dimensions: { width: number, height: number }) => {
-    const minWidth = Math.max(dimensions.width, MIN_WIDTH)
-    const minHeight = Math.max(dimensions.height, MIN_HEIGHT)
-    console.log(`Image resized to: ${minWidth}x${minHeight}`)
-    lastImageDimensionsRef.current = { width: minWidth, height: minHeight }
-  }, [])
 
   const { open: openElementSelector } = useElementSelector({
     selectionType: SelectionType.Single,
@@ -113,16 +107,9 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
     }
   })
 
-  const handleSearch = useCallback(() => {
-    openElementSelector()
-  }, [openElementSelector])
-
-  const handleLocateInTree = useCallback(() => {
-    if (!isNil(imageValue?.id)) {
-      const studioApi = getPimcoreStudioApi()
-      studioApi.element.locateInTree(imageValue.id, 'asset')
-    }
-  }, [imageValue?.id])
+  const handleLocateInTree = (): void => {
+    locateElementInTree('asset', imageValue?.id)
+  }
 
   const { openModal: openCropModal } = useCropModal({
     disabled: props.disabled,
@@ -160,20 +147,20 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
     }
   }
 
-  const handleOpenCropModal = useCallback(() => {
+  const handleOpenCropModal = (): void => {
     if (!isNil(imageValue?.id)) {
       const cropSettings: CropSettings | null = imageValue.crop! ?? null
       openCropModal(imageValue.id, cropSettings)
     }
-  }, [imageValue, openCropModal])
+  }
 
-  const handleOpenHotspotMarkersModal = useCallback(() => {
+  const handleOpenHotspotMarkersModal = (): void => {
     if (!isNil(imageValue?.id)) {
       const hotspots = toIHotspots(imageValue.hotspots ?? [], imageValue.marker ?? [])
       const cropSettings: CropSettings | null = imageValue.crop! ?? null
       openHotspotMarkersModal(imageValue.id, hotspots, cropSettings)
     }
-  }, [imageValue, openHotspotMarkersModal])
+  }
 
   const handleUpload = useCallback(() => {
     if (props.config?.disableInlineUpload === true) return
@@ -191,11 +178,11 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
     })
   }, [props.config?.disableInlineUpload, props.config?.uploadPath, triggerUpload, handleReplaceImage])
 
-  const handleFileSystemUpload = useCallback(async (asset: any) => {
+  const handleFileSystemUpload = async (asset: any): Promise<void> => {
     handleReplaceImage(Number(asset.id))
-  }, [handleReplaceImage])
+  }
 
-  const renderDroppableContent = useCallback((children: React.ReactNode) => {
+  const renderDroppableContent = useCallback((children: React.ReactNode): React.JSX.Element => {
     // Determine the shape based on whether an image is selected
     const droppableShape = !isNil(imageValue?.id) ? 'angular' : 'round'
 
@@ -219,8 +206,9 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
     return (
       <InlineUpload
         accept="image/*"
+        assetType="image"
         disabled={ props.disabled }
-        fullWidth={ isNil(lastImageDimensionsRef.current?.width ?? width) }
+        fullWidth={ isNil(lastDimensions?.width ?? width) }
         onSuccess={ handleFileSystemUpload }
         targetFolderPath={ props.config?.uploadPath }
       >
@@ -239,10 +227,10 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
     )
   }, [props.config?.disableInlineUpload, props.config?.uploadPath, props.disabled, handleFileSystemUpload, handleReplaceImage, imageValue?.id])
 
-  const handleHotspotImageChange = useCallback((value: HotspotImageValue) => {
+  const handleHotspotImageChange = (value: HotspotImageValue): void => {
     const { hotspots, marker } = fromIHotspots(value.hotspots as unknown as IHotspot[])
     handleHotspotsChange(hotspots, marker)
-  }, [handleHotspotsChange])
+  }
 
   return renderDroppableContent(
     !isNil(imageValue?.id)
@@ -256,13 +244,13 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
           emptyValue={ handleEmptyValue }
           focalPointContextMenuItem={ props.config?.focal_point_context_menu_item }
           handleLocateInTree={ handleLocateInTree }
-          handleSearch={ handleSearch }
+          handleSearch={ openElementSelector }
           handleUpload={ handleUpload }
           height={ height }
           hideAltTextInput={ props.config?.hidetext }
           imgAttributes={ props.config?.imgAttributes }
           key={ imageValue.id }
-          lastImageDimensions={ lastImageDimensionsRef.current }
+          lastImageDimensions={ lastDimensions }
           onAltTextChange={ handleAltTextChange }
           onChange={ handleHotspotImageChange }
           onResize={ handleImageResize }
@@ -275,12 +263,12 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
       : (
         <AssetTarget
           dndIcon
-          height={ lastImageDimensionsRef.current?.height ?? height ?? DEFAULT_HEIGHT }
+          height={ lastDimensions?.height ?? height ?? DEFAULT_HEIGHT }
           onResize={ handleImageResize }
-          onSearch={ handleSearch }
+          onSearch={ openElementSelector }
           onUpload={ props.config?.disableInlineUpload === true ? undefined : handleUpload }
           title={ props.config?.title ?? t('image.dnd-target') }
-          width={ lastImageDimensionsRef.current?.width ?? width ?? '100%' }
+          width={ lastDimensions?.width ?? width ?? '100%' }
         />
         )
   )

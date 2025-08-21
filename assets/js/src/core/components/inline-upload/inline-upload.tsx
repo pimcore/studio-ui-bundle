@@ -30,6 +30,7 @@ export interface InlineUploadProps {
   children: React.ReactNode
   disabled?: boolean
   fullWidth?: boolean
+  assetType?: string
 }
 
 export const InlineUpload = (props: InlineUploadProps): React.JSX.Element => {
@@ -54,9 +55,15 @@ export const InlineUpload = (props: InlineUploadProps): React.JSX.Element => {
     return true
   }, [settings.upload_max_filesize, t])
 
+  const uploadData: Record<string, string> = {}
+  if (!isNil(props.assetType)) {
+    uploadData.assetType = props.assetType
+  }
+
   const uploadProps: UploadProps = {
     name: 'file',
     action: `${getPrefix()}/assets/add/${targetFolderId ?? 1}`,
+    data: uploadData,
     beforeUpload,
     accept: props.accept,
     multiple: false,

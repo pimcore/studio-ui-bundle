@@ -6,6 +6,14 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            assetBatchDelete: build.mutation<AssetBatchDeleteApiResponse, AssetBatchDeleteApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/batch-delete`,
+                    method: "DELETE",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Assets"],
+            }),
             assetClone: build.mutation<AssetCloneApiResponse, AssetCloneApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/assets/${queryArg.id}/clone/${queryArg.parentId}`,
@@ -392,6 +400,16 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type AssetBatchDeleteApiResponse =
+    /** status 201 Successfully created <strong>jobRun</strong> for batch delete */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type AssetBatchDeleteApiArg = {
+    body: {
+        ids?: number[];
+    };
+};
 export type AssetCloneApiResponse =
     /** status 201 Successfully copied parent asset and created <strong>jobRun</strong> for copying child assets */ {
         /** ID of created jobRun */
@@ -1228,6 +1246,7 @@ export type CustomMetadata = {
     data: any | null;
 };
 export const {
+    useAssetBatchDeleteMutation,
     useAssetCloneMutation,
     useAssetCustomSettingsGetByIdQuery,
     useAssetGetTextDataByIdQuery,

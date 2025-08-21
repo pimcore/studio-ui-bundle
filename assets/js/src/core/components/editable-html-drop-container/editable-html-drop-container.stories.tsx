@@ -76,7 +76,7 @@ export const Empty: Story = {
   args: {
     hasContent: false,
     isLoading: false,
-    dropZoneText: 'Drag a snippet here',
+    dropZoneText: 'Drop a snippet here',
     contextMenuItems: [
       {
         key: 'search',
@@ -95,7 +95,7 @@ export const Loading: Story = {
   args: {
     hasContent: false,
     isLoading: true,
-    dropZoneText: 'Drag a snippet here',
+    dropZoneText: 'Drop a snippet here',
     contextMenuItems: [
       {
         key: 'search',
@@ -120,7 +120,7 @@ export const WithError: Story = {
         <Text style={ { marginLeft: '8px' } }>Failed to load content</Text>
       </div>
     ),
-    dropZoneText: 'Drag a snippet here',
+    dropZoneText: 'Drop a snippet here',
     contextMenuItems: [
       {
         key: 'retry',
@@ -139,7 +139,7 @@ export const WithContent: Story = {
   args: {
     hasContent: true,
     isLoading: false,
-    dropZoneText: 'Drag a snippet here',
+    dropZoneText: 'Drop a snippet here',
     renderedContent: (
       <div style={ { padding: '20px', background: '#f0f0f0', borderRadius: '4px' } }>
         <h3 style={ { margin: '0 0 10px 0', color: '#333' } }>Sample Snippet Content</h3>

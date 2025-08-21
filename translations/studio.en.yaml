@@ -259,6 +259,7 @@ listing.add-column: Add a column
 listing.actions: Apply to selection
 listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download
+listing.actions.delete: Delete
 listing.actions.export: Export
 listing.actions.csv-export: CSV Export
 listing.actions.xlsx-export: Excel Export
@@ -464,6 +465,7 @@ batch-edit.modal-footer.add-a-column: Add a column
 batch-edit.append-mode.replace: Batch replace
 batch-edit.append-mode.add: Batch add
 batch-edit.append-mode.remove: Batch remove
+batch-delete.job-title: Delete
 export-csv-form.modal-title: Export CSV
 export-csv-form.export-notice: Please note that the export does not support some fields(e.g. preview, size). Press OK to continue with the export.
 export-csv-form.form-field.delimiter: Delimiter
@@ -863,6 +865,7 @@ video.settings: Video Settings
 video.poster: Poster-Image
 video.path: Path
 video.dnd-target: Drop a video here
+pdf-editable.dnd-target: Drop a document asset here
 many-to-one-relation.drop-placeholder: Drop an item here
 many-to-one-relation.drop-placeholder-text-input: Drop an item here or enter a value
 reverse-object-relation.owner-hint: The current object is not the owner of these relations, making changes here might make saving the object slow.
@@ -1025,11 +1028,12 @@ user-profile.password-repeat-error: Passwords do not match
 creatable-select.add-custom-option: Add custom option
 creatable-select.add: Add
 creatable-select.option-already-exists: Option already exists
-drag-snippet-here: Drag a snippet here
-drag-document-here: Drag a document here
-drag-asset-here: Drag an asset here
-drag-object-here: Drag an object here
-drag-element-here: Drag an element here
+drop-snippet-here: Drop a snippet here
+drop-document-here: Drop a document here
+drop-document-asset-here: Drop a document asset here
+drop-asset-here: Drop an asset here
+drop-object-here: Drop an object here
+drop-element-here: Drop an element here
 error-loading-renderlet: Error loading renderlet
 snippet: Snippet
 navigation.application-logger: Application Logger
@@ -1092,6 +1096,7 @@ video.placeholder: No video selected - Click to add a video
 video.add-video: Add Video
 image.alt-text-placeholder: Enter alt text
 area-settings: Area Settings
+moving-area: Moving area...
 moving-block: Moving block...
 unsupported_feature: Unsupported feature - please check system requirements!
 document.version.comparison.error.title: Version Comparison Error

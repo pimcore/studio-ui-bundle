@@ -185,8 +185,10 @@ import { DynamicTypeDocumentEditableLink } from '@Pimcore/modules/element/dynami
 import { DynamicTypeDocumentEditableEmbed } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-embed'
 import { DynamicTypeDocumentEditableTextarea } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-textarea'
 import { DynamicTypeDocumentEditableImage } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-image'
+import { DynamicTypeDocumentEditablePdf } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-pdf'
 import { DynamicTypeDocumentEditableVideo } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-video'
 import { DynamicTypeDocumentEditableArea } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-area'
+import { DynamicTypeDocumentEditableAreablock } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-areablock'
 import { DynamicTypePipelineRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-registry'
 import { DynamicTypePipelineGridSourceFieldsText } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/types/text/text'
 import { DynamicTypePipelineGridTransformersChangeCase } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/transformers/types/change-case/change-case'
@@ -405,6 +407,7 @@ container.bind(serviceIds['DynamicTypes/DocumentEditable/Input']).to(DynamicType
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Link']).to(DynamicTypeDocumentEditableLink).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/MultiSelect']).to(DynamicTypeDocumentEditableMultiSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Numeric']).to(DynamicTypeDocumentEditableNumeric).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Pdf']).to(DynamicTypeDocumentEditablePdf).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Relation']).to(DynamicTypeDocumentEditableRelation).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Relations']).to(DynamicTypeDocumentEditableRelations).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Renderlet']).to(DynamicTypeDocumentEditableRenderlet).inSingletonScope()
@@ -414,6 +417,7 @@ container.bind(serviceIds['DynamicTypes/DocumentEditable/Table']).to(DynamicType
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Textarea']).to(DynamicTypeDocumentEditableTextarea).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Video']).to(DynamicTypeDocumentEditableVideo).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/DocumentEditable/Area']).to(DynamicTypeDocumentEditableArea).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/DocumentEditable/Areablock']).to(DynamicTypeDocumentEditableAreablock).inSingletonScope()
 
 // Editable dialog layout components
 container.bind(serviceIds['DynamicTypes/EditableDialogLayoutRegistry']).to(DynamicTypeEditableDialogLayoutRegistry).inSingletonScope()
