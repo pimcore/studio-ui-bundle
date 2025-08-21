@@ -43,13 +43,13 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/ty
 export * from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/text/dynamic-type-batch-edit-text-area'
 
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-checkbox-component'
-export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-datetime-component'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-date-component'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-number-component'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-select-component'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-text-component'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-registry'
-export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/date/dynamic-type-field-filter-date'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/number/dynamic-type-field-filter-number'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/select/dynamic-type-field-filter-select'
 
