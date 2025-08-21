@@ -11,6 +11,7 @@
 import { isNil } from 'lodash'
 import { type BlockEditableConfig, type BlockValue } from '../block-editable'
 import { type AbstractDocumentEditableDefinition } from '../../../dynamic-type-document-editable-abstract'
+import { createEditableDataFromDefinitions } from '../../../utils/editable-utils'
 import { processBlockTemplate, ensurePortalTargets } from './template-processor'
 import { type BlockManager } from './block-manager'
 
@@ -63,18 +64,6 @@ export const configUtils = {
 }
 
 export const operationUtils = {
-  createEditableData: (
-    editableDefinitions: Array<{ name: string, type: string, data?: unknown }>
-  ): Record<string, { type: string, data: unknown }> => {
-    return editableDefinitions.reduce<Record<string, { type: string, data: unknown }>>((acc, definition) => {
-      acc[definition.name] = {
-        type: definition.type,
-        data: definition.data ?? null
-      }
-      return acc
-    }, {})
-  },
-
   processNonReloadBlockAddition: ({
     blockManager,
     index,
@@ -116,7 +105,7 @@ export const operationUtils = {
       newBlockEntry.setAttribute('data-pending-dropzone', 'true')
     }
 
-    const editableData = operationUtils.createEditableData(editableDefinitions)
+    const editableData = createEditableDataFromDefinitions(editableDefinitions)
     initializeData(editableData)
 
     setDynamicEditables(prev => [...prev, ...editableDefinitions])

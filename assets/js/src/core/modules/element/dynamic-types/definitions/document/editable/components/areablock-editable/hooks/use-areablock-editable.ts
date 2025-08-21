@@ -16,6 +16,7 @@ import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type AbstractDocumentEditableDefinition } from '../../../dynamic-type-document-editable-abstract'
 import { type AreablockEditableConfig, type AreablockValue } from '../areablock-editable'
 import { type AreablockManager } from '../utils/areablock-manager'
+import { createEditableDataFromDefinitions } from '../../../utils/editable-utils'
 import {
   areablockValueUtils,
   configUtils
@@ -168,11 +169,9 @@ export const useAreablockEditable = ({
       }
 
       if (!isNil(result.editableDefinitions) && isArray(result.editableDefinitions)) {
-        result.editableDefinitions.forEach((editableDef: AbstractDocumentEditableDefinition) => {
-          const editableData = { type: editableDef.type, data: editableDef.config }
-          initializeData({ [editableDef.name]: editableData })
-        })
+        const editablesData = createEditableDataFromDefinitions(result.editableDefinitions)
 
+        initializeData(editablesData)
         setDynamicEditables(prev => [...prev, ...result.editableDefinitions])
       }
 
