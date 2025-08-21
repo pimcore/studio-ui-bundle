@@ -65,7 +65,6 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
     setRefreshInterval(value)
   }
 
-  // Set up periodic refresh based on selected interval
   useEffect(() => {
     if (isNil(refreshInterval)) {
       return
