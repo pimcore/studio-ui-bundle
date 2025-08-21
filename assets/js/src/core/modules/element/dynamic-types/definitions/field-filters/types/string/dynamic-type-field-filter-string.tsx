@@ -10,9 +10,9 @@
 
 import { injectable } from 'inversify'
 import React, { type ReactElement } from 'react'
-import { DynamicTypeFieldFilterTextAreaComponent, type DynamicTypeFieldFilterTextAreaProps } from '../../components/dynamic-type-field-filter-text-area-component'
 import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
 import { FieldFilterFrontendType } from '../../frontendTypes'
+import { DynamicTypeFieldFilterTextComponent, DynamicTypeFieldFilterTextProps } from '../../components/dynamic-type-field-filter-text-component'
 
 @injectable()
 export class DynamicTypeFieldFilterString extends DynamicTypeFieldFilterAbstract {
@@ -22,9 +22,9 @@ export class DynamicTypeFieldFilterString extends DynamicTypeFieldFilterAbstract
     return FieldFilterFrontendType.String
   }
 
-  getFieldFilterComponent (props: DynamicTypeFieldFilterTextAreaProps): ReactElement<DynamicTypeFieldFilterTextAreaProps> {
+  getFieldFilterComponent (props: DynamicTypeFieldFilterTextProps): ReactElement<DynamicTypeFieldFilterTextProps> {
     return (
-      <DynamicTypeFieldFilterTextAreaComponent { ...props } />
+      <DynamicTypeFieldFilterTextComponent { ...props } />
     )
   }
 }

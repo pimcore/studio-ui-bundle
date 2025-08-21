@@ -29,7 +29,6 @@ import { DynamicTypeListingAssetLink } from '@Pimcore/modules/element/dynamic-ty
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { DynamicTypeFieldFilterObjectAdapter } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/data-object-adapter/dynamic-type-field-filter-data-object-adapter'
 import { DynamicTypeFieldFilterDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/data-object-brick/dynamic-type-field-filter-data-object-object-brick'
-import { DynamicTypeFieldFilterText } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/text/dynamic-type-field-filter-text'
 import { DynamicTypeFieldFilterString } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/string/dynamic-type-field-filter-string'
 import { DynamicTypeFieldFilterNumber } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/number/dynamic-type-field-filter-number'
 import { DynamicTypeFieldFilterSelect } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/select/dynamic-type-field-filter-select'
@@ -252,7 +251,6 @@ container.bind(serviceIds.iconLibrary).to(IconLibrary).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilterRegistry']).to(DynamicTypeFieldFilterRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/DataObjectAdapter']).to(DynamicTypeFieldFilterObjectAdapter).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/DataObjectObjectBrick']).to(DynamicTypeFieldFilterDataObjectObjectBrick).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/FieldFilter/Text']).to(DynamicTypeFieldFilterText).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/String']).to(DynamicTypeFieldFilterString).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Fulltext']).to(DynamicTypeFieldFilterFulltext).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/None']).to(DynamicTypeFieldFilterNone).inSingletonScope()

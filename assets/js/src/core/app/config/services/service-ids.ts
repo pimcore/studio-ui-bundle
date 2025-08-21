@@ -77,7 +77,6 @@ export const serviceIds = {
 
   'DynamicTypes/FieldFilter/DataObjectAdapter': 'DynamicTypes/FieldFilter/DataObjectAdapter',
   'DynamicTypes/FieldFilter/DataObjectObjectBrick': 'DynamicTypes/FieldFilter/DataObjectObjectBrick',
-  'DynamicTypes/FieldFilter/Text': 'DynamicTypes/FieldFilter/Text',
   'DynamicTypes/FieldFilter/String': 'DynamicTypes/FieldFilter/String',
   'DynamicTypes/FieldFilter/Fulltext': 'DynamicTypes/FieldFilter/Fulltext',
   'DynamicTypes/FieldFilter/None': 'DynamicTypes/FieldFilter/None',
