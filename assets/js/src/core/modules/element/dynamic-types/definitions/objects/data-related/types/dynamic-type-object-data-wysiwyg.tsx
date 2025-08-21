@@ -48,7 +48,7 @@ export class DynamicTypeObjectDataWysiwyg extends DynamicTypeObjectDataAbstract 
     formLayout: 'vertical'
   }
 
-  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Textarea'])
+  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Fulltext'])
 
   getObjectDataComponent (props: WysiwygObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     const parseConfig = (config?: string | null): Record<string, any> => {

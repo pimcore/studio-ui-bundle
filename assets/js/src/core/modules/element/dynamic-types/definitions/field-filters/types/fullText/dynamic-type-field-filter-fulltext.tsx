@@ -15,11 +15,11 @@ import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-
 import { FieldFilterFrontendType } from '../../frontendTypes'
 
 @injectable()
-export class DynamicTypeFieldFilterTextArea extends DynamicTypeFieldFilterAbstract {
-  id = 'textarea'
+export class DynamicTypeFieldFilterFulltext extends DynamicTypeFieldFilterAbstract {
+  id = 'wysiwyg'
 
   getFieldFilterType (): string {
-    return FieldFilterFrontendType.String
+    return FieldFilterFrontendType.Fulltext
   }
 
   getFieldFilterComponent (props: DynamicTypeFieldFilterTextAreaProps): ReactElement<DynamicTypeFieldFilterTextAreaProps> {
