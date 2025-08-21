@@ -12,6 +12,9 @@ import React from 'react'
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 export type TextareaObjectDataDefinition = AbstractObjectDataDefinition & {
   showCharCount: boolean
@@ -21,6 +24,8 @@ export type TextareaObjectDataDefinition = AbstractObjectDataDefinition & {
 
 export class DynamicTypeObjectDataTextarea extends DynamicTypeObjectDataAbstract {
   id: string = 'textarea'
+
+  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/String'])
 
   getObjectDataComponent (props: TextareaObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
