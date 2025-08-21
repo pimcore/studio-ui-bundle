@@ -16,7 +16,7 @@ import { FieldFilterFrontendType } from '../../frontendTypes'
 
 @injectable()
 export class DynamicTypeFieldFilterFulltext extends DynamicTypeFieldFilterAbstract {
-  id = 'wysiwyg'
+  id = 'fulltext'
 
   getFieldFilterType (): string {
     return FieldFilterFrontendType.Fulltext
