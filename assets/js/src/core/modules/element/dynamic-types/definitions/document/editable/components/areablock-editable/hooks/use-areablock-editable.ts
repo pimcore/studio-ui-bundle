@@ -90,7 +90,6 @@ export const useAreablockEditable = ({
     const typeToUse = areaType ?? (!isEmpty(availableTypes) ? availableTypes[0].type : 'default')
 
     if (!configUtils.isTypeAllowed(config, typeToUse)) return
-
     const index = !isNil(element) ? areablockManager.findElementIndex(element) + 1 : 0
     const nextKey = areablockManager.calculateNextKey()
 
@@ -160,6 +159,11 @@ export const useAreablockEditable = ({
 
         if (!isNil(newElement)) {
           placeholderElement.parentNode.replaceChild(newElement, placeholderElement)
+
+          // Hide newly added element until dropzones are added
+          const newAreaElement = newElement as HTMLElement
+          newAreaElement.style.display = 'none'
+          newAreaElement.setAttribute('data-pending-dropzone', 'true')
         }
       }
 
@@ -181,7 +185,6 @@ export const useAreablockEditable = ({
       handlePostOperation()
     }
   }, [disabled, config, handleReloadMode, handlePostOperation, areablockManager, documentId, initializeData])
-
   const removeArea = useCallback((element: HTMLElement) => {
     if (disabled) return
 
@@ -208,11 +211,9 @@ export const useAreablockEditable = ({
     }
 
     element.remove()
-
     if (!isEmpty(editableNamesToRemove)) {
       removeValues(editableNamesToRemove)
     }
-
     handlePostOperation()
   }, [disabled, config, handleReloadMode, removeValues, handlePostOperation, areablockManager])
 

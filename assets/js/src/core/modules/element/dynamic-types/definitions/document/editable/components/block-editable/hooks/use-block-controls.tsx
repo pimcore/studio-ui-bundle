@@ -10,29 +10,12 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { isNull } from 'lodash'
-import { useBlockEditableStyles } from '../block-editable.styles'
 import { type BlockManager } from '../utils/block-manager'
 import ReactDOM from 'react-dom'
-import { useTranslation } from 'react-i18next'
-import { BlockDragOverlay } from '../components/block-drag-overlay/block-drag-overlay'
 import { SortableBlockToolbar } from '../components/sortable-block-toolbar'
 import { EmptyStateBlockToolbar } from '../components/empty-state-block-toolbar'
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  type DragEndEvent,
-  type DragStartEvent,
-  type DragOverEvent
-} from '@dnd-kit/core'
-import {
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy
-} from '@dnd-kit/sortable'
+import { useBlockSorting } from './use-block-sorting'
+import { EditableSortContext } from '../../../helpers/editable-dropzone-sorting/editable-sort-context'
 
 export interface UseBlockControlsParams {
   blockManager: BlockManager
@@ -58,65 +41,41 @@ export const useBlockControls = ({
   onMoveBlockDown,
   onMoveBlock
 }: UseBlockControlsParams): UseBlockControlsReturn => {
-  const { styles } = useBlockEditableStyles()
-  const { t } = useTranslation()
   const limitReachedRef = useRef<boolean>(false)
-  const [activeId, setActiveId] = useState<string | null>(null)
   const [emptyStatePortal, setEmptyStatePortal] = useState<React.ReactPortal | null>(null)
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 5
-      }
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates
-    })
-  )
+  const {
+    activeId,
+    handleDragStart,
+    handleDragOver,
+    handleDragEnd,
+    dropzonePortals,
+    dragOverlayTitle,
+    refreshDropzones
+  } = useBlockSorting({
+    blockManager,
+    onMoveBlock
+  })
 
-  const handleDragStart = useCallback((event: DragStartEvent) => {
-    setActiveId(event.active.id as string)
-  }, [])
+  const handleAddBlock = useCallback((element: HTMLElement | null, amount?: number) => {
+    onAddBlock(element, amount)
+    refreshDropzones()
+  }, [onAddBlock, refreshDropzones])
 
-  const handleDragOver = useCallback((event: DragOverEvent) => {
-    const { over } = event
+  const handleRemoveBlock = useCallback((element: HTMLElement) => {
+    onRemoveBlock(element)
+    refreshDropzones()
+  }, [onRemoveBlock, refreshDropzones])
 
-    const allBlockEntries = blockManager.queryElements()
-    allBlockEntries.forEach(element => {
-      const key = blockManager.getElementKey(element)
+  const handleMoveBlockUp = useCallback((element: HTMLElement) => {
+    onMoveBlockUp(element)
+    refreshDropzones()
+  }, [onMoveBlockUp, refreshDropzones])
 
-      if (key === over?.id) {
-        element.classList.add(styles.dragDropTarget)
-      } else {
-        element.classList.remove(styles.dragDropTarget)
-      }
-    })
-  }, [blockManager, styles])
-
-  const handleDragEnd = useCallback((event: DragEndEvent) => {
-    const { active, over } = event
-
-    setActiveId(null)
-
-    const allBlockEntries = blockManager.queryElements()
-    allBlockEntries.forEach(element => {
-      element.style.transform = ''
-      element.style.transition = ''
-      element.classList.remove(styles.dragActive, styles.dragDropTarget)
-    })
-
-    if (over !== null && active.id !== over.id) {
-      const currentBlockEntries = blockManager.queryElements()
-
-      const originalActiveIndex = currentBlockEntries.findIndex(el => blockManager.getElementKey(el) === active.id)
-      const originalOverIndex = currentBlockEntries.findIndex(el => blockManager.getElementKey(el) === over.id)
-
-      if (originalActiveIndex !== -1 && originalOverIndex !== -1 && originalActiveIndex !== originalOverIndex) {
-        onMoveBlock(originalActiveIndex, originalOverIndex)
-      }
-    }
-  }, [blockManager, onMoveBlock, styles])
+  const handleMoveBlockDown = useCallback((element: HTMLElement) => {
+    onMoveBlockDown(element)
+    refreshDropzones()
+  }, [onMoveBlockDown, refreshDropzones])
 
   const updateControls = useCallback((element: HTMLElement, limitReached: boolean) => {
     const buttonsContainer = element.querySelector('.pimcore_block_buttons')
@@ -145,7 +104,7 @@ export const useBlockControls = ({
           setEmptyStatePortal(null)
 
           setTimeout(() => {
-            onAddBlock(null, 1)
+            handleAddBlock(null, 1)
           }, 0)
         } }
       />
@@ -153,7 +112,7 @@ export const useBlockControls = ({
 
     const portal = ReactDOM.createPortal(emptyStateToolbar, container)
     setEmptyStatePortal(portal)
-  }, [blockManager, onAddBlock, emptyStatePortal])
+  }, [blockManager, handleAddBlock, emptyStatePortal])
 
   const clearEmptyState = useCallback((): void => {
     setEmptyStatePortal(null)
@@ -166,6 +125,9 @@ export const useBlockControls = ({
 
     if (currentBlockEntries.length === 0 && emptyStatePortal !== null) {
       portals.push(emptyStatePortal)
+    } else {
+      // Add dropzone portals
+      portals.push(...dropzonePortals)
     }
 
     const blockKeys = currentBlockEntries
@@ -180,16 +142,16 @@ export const useBlockControls = ({
         if (blockKey !== null) {
           const sortableToolbar = (
             <SortableBlockToolbar
-              activeId={ activeId }
               blockManager={ blockManager }
               buttonsContainer={ buttonsContainer as HTMLElement }
               element={ blockEntry }
               id={ blockKey }
+              key={ blockKey }
               limitReached={ limitReachedRef.current }
-              onAddBlock={ onAddBlock }
-              onMoveBlockDown={ onMoveBlockDown }
-              onMoveBlockUp={ onMoveBlockUp }
-              onRemoveBlock={ onRemoveBlock }
+              onAddBlock={ handleAddBlock }
+              onMoveBlockDown={ handleMoveBlockDown }
+              onMoveBlockUp={ handleMoveBlockUp }
+              onRemoveBlock={ handleRemoveBlock }
             />
           )
           const portal = ReactDOM.createPortal(sortableToolbar, buttonsContainer)
@@ -199,26 +161,18 @@ export const useBlockControls = ({
     })
 
     return (
-      <DndContext
-        collisionDetection={ closestCenter }
+      <EditableSortContext
+        activeId={ activeId }
+        dragOverlayTitle={ dragOverlayTitle }
+        items={ blockKeys }
         onDragEnd={ handleDragEnd }
         onDragOver={ handleDragOver }
         onDragStart={ handleDragStart }
-        sensors={ sensors }
       >
-        <SortableContext
-          items={ blockKeys }
-          strategy={ verticalListSortingStrategy }
-        >
-          <>{portals}</>
-        </SortableContext>
-        <BlockDragOverlay
-          activeId={ activeId }
-          t={ t }
-        />
-      </DndContext>
+        <>{portals}</>
+      </EditableSortContext>
     )
-  }, [blockManager, sensors, handleDragStart, handleDragOver, handleDragEnd, onAddBlock, onRemoveBlock, onMoveBlockUp, onMoveBlockDown, t, activeId, emptyStatePortal])
+  }, [blockManager, handleDragStart, handleDragOver, handleDragEnd, handleAddBlock, handleRemoveBlock, handleMoveBlockUp, handleMoveBlockDown, activeId, emptyStatePortal, dropzonePortals, dragOverlayTitle])
 
   const cleanupControls = useCallback(() => {
     setEmptyStatePortal(null)

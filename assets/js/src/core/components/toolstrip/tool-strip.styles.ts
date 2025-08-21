@@ -25,6 +25,10 @@ export const useStyles = createStyles(({ css, token }) => {
         background: ${token.colorFillInverse};
       }
 
+      &.tool-strip--rounded {
+        border-radius: ${token.borderRadius}px;
+      }
+
       &.tool-strip--activate-on-hover {
         overflow: hidden;
         

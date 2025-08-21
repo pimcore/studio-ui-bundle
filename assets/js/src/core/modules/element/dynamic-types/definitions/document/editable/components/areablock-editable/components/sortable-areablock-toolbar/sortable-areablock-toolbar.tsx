@@ -13,11 +13,11 @@ import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Split } from '@Pimcore/components/split/split'
 import { Space, Dropdown } from 'antd'
-import { useSortable } from '@dnd-kit/sortable'
 import { useAreablockEditableStyles } from '../../areablock-editable.styles'
 import { type AreablockManager } from '../../utils/areablock-manager'
 import { type AreaType } from '../../areablock-editable'
 import { useTranslation } from 'react-i18next'
+import { useSortableElement } from '../../../../helpers/editable-dropzone-sorting/hooks/use-sortable-element'
 
 export interface SortableAreablockToolbarProps {
   id: string
@@ -30,7 +30,6 @@ export interface SortableAreablockToolbarProps {
   onRemoveArea: (element: HTMLElement) => void
   onMoveAreaUp: (element: HTMLElement) => void
   onMoveAreaDown: (element: HTMLElement) => void
-  activeId: string | null
 }
 
 export const SortableAreablockToolbar = ({
@@ -43,40 +42,11 @@ export const SortableAreablockToolbar = ({
   onAddArea,
   onRemoveArea,
   onMoveAreaUp,
-  onMoveAreaDown,
-  activeId
+  onMoveAreaDown
 }: SortableAreablockToolbarProps): React.JSX.Element => {
   const { styles } = useAreablockEditableStyles()
   const { t } = useTranslation()
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    isDragging,
-    isOver
-  } = useSortable({ id })
-
-  React.useEffect(() => {
-    if (setNodeRef !== null) {
-      setNodeRef(element)
-
-      Object.keys(attributes).forEach(key => {
-        if (attributes[key] !== undefined && key.startsWith('data-')) {
-          element.setAttribute(key, String(attributes[key]))
-        }
-      })
-    }
-  }, [setNodeRef, element, attributes])
-
-  React.useEffect(() => {
-    if (isDragging) {
-      element.classList.add(styles.dragActive)
-    } else if (isOver && activeId !== null && activeId !== id) {
-      element.classList.add(styles.dragDropTarget)
-    } else {
-      element.classList.remove(styles.dragActive, styles.dragDropTarget)
-    }
-  }, [isDragging, isOver, element, activeId, id, styles])
+  const { listeners } = useSortableElement({ id, element })
 
   const elements = areablockManager.queryElements()
   const elementIndex = areablockManager.findElementIndex(element)
