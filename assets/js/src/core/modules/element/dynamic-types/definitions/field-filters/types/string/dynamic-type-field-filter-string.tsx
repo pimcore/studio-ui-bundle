@@ -16,7 +16,7 @@ import { FieldFilterFrontendType } from '../../frontendTypes'
 
 @injectable()
 export class DynamicTypeFieldFilterString extends DynamicTypeFieldFilterAbstract {
-  id = 'textarea' //foo
+  id = 'textarea' // foo
 
   getFieldFilterType (): string {
     return FieldFilterFrontendType.String
