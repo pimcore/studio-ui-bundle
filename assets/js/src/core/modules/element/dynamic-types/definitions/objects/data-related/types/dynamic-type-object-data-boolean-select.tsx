@@ -22,7 +22,7 @@ import {
   BooleanSelect
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/boolean-select/boolean-select'
 import { toCssDimension } from '@Pimcore/utils/css'
-import { DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
+import { type DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
@@ -30,7 +30,7 @@ export class DynamicTypeObjectDataBooleanSelect extends DynamicTypeObjectDataAbs
   id: string = 'booleanSelect'
 
   protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Select'])
-  
+
   getObjectDataComponent (props: SelectProps): React.ReactElement<AbstractObjectDataDefinition> {
     const options = props.options === null ? undefined : props.options.map(option => ({ label: t(option.key), value: option.value }))
     return (

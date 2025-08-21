@@ -17,7 +17,7 @@ import {
 import { type FormInstance } from 'antd'
 import { type NamePath } from 'rc-field-form/es/interface'
 import _ from 'lodash'
-import { DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
+import { type DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
@@ -31,7 +31,7 @@ export class DynamicTypeObjectDataInput extends DynamicTypeObjectDataAbstractInp
   id: string = 'input'
 
   protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/String'])
-  
+
   getObjectDataFormItemProps (props: InputObjectDataDefinition): FormItemProps {
     return {
       ...super.getObjectDataFormItemProps(props),

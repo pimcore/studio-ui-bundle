@@ -12,7 +12,7 @@ import { injectable } from 'inversify'
 import React, { type ReactElement } from 'react'
 import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
 import { FieldFilterFrontendType } from '../../frontendTypes'
-import { DynamicTypeFieldFilterTextComponent, DynamicTypeFieldFilterTextProps } from '../../components/dynamic-type-field-filter-text-component'
+import { DynamicTypeFieldFilterTextComponent, type DynamicTypeFieldFilterTextProps } from '../../components/dynamic-type-field-filter-text-component'
 
 @injectable()
 export class DynamicTypeFieldFilterString extends DynamicTypeFieldFilterAbstract {

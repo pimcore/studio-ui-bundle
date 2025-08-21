@@ -15,7 +15,7 @@ import {
   type ConsentValue
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/consent/consent'
 import { Consent as ConsentPreview } from '../../grid-cell-preview/consent/consent'
-import { DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
+import { type DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
