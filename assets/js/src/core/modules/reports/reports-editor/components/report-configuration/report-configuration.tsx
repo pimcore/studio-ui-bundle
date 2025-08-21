@@ -18,13 +18,12 @@ import {
 } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { Content } from '@Pimcore/components/content/content'
 import { FormKit } from '@Pimcore/components/form/form-kit'
-import { Form } from '@Pimcore/components/form/form'
-import { Input } from '@Pimcore/components/input/input'
 import { useReportFormState } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
 import { Portal } from '@Pimcore/components/portal/portal'
 import { Button } from '@Pimcore/components/button/button'
 import { useReportActions } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-actions'
 import { SAVE_BTN_PORTAL_ID } from '@Pimcore/modules/reports/reports-editor/reports-editor'
+import { GeneralSettings } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/general-settings/general-settings'
 
 interface IReportConfigurationProps {
   report: BundleCustomReportsConfigurationTreeNode
@@ -82,20 +81,10 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
     >
       {!isNull(currentData) && (
       <FormKit>
-        <FormKit.Panel title={ t('reports.editor.general-settings.title') }>
-          <Form.Item label="Name">
-            <Input
-              disabled
-              value={ currentData.name }
-            />
-          </Form.Item>
-          <Form.Item label="Nice Name">
-            <Input
-              onChange={ (e) => { updateFormData({ niceName: e.target.value }) } }
-              value={ currentData.niceName }
-            />
-          </Form.Item>
-        </FormKit.Panel>
+        <GeneralSettings
+          currentData={ currentData }
+          updateFormData={ updateFormData }
+        />
         <FormKit.Panel title={ t('reports.editor.source-definition.title') }>
           Content
         </FormKit.Panel>
