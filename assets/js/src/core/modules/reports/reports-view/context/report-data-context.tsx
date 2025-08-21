@@ -30,6 +30,7 @@ interface IReportDataContext extends IUseReportDataReturn {
   setPageSize: (pageSize: number) => void
   sorting: ISorting | undefined
   setSorting: (sorting: ISorting | undefined) => void
+  resetData: () => void
 }
 
 export const PAGE_INITIAL = 1
@@ -48,6 +49,12 @@ export const ReportDataProvider = ({
 
   const { filters } = useGridFilterContext()
 
+  const resetData = (): void => {
+    setPage(PAGE_INITIAL)
+    setPageSize(PAGE_SIZE_INITIAL)
+    setSorting(SORTING_INITIAL)
+  }
+
   const reportDataValue = useReportData({ name, filters, page, pageSize, sorting })
 
   const contextValue: IReportDataContext = useMemo(() => ({
@@ -57,7 +64,8 @@ export const ReportDataProvider = ({
     pageSize,
     setPageSize,
     sorting,
-    setSorting
+    setSorting,
+    resetData
   }), [reportDataValue, page, setPage, pageSize, setPageSize, sorting, setSorting])
 
   return (
