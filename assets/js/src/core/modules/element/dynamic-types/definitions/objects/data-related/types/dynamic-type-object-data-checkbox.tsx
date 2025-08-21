@@ -18,7 +18,7 @@ import type { FormInstance } from 'antd'
 import type { NamePath } from 'rc-field-form/es/interface'
 import React from 'react'
 import { DEFAULT_CHECKBOX_COLUMN_WIDTH } from '../../../grid-cell/types/checkbox/dynamic-type-grid-cell-checkbox'
-import { DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
+import { type DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
