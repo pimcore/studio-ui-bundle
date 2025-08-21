@@ -1,4 +1,4 @@
-import { Content, ContentLayout, IconButton, Toolbar } from "@sdk/components"
+import { Content, ContentLayout, IconButton, Tabs, Toolbar } from "@sdk/components"
 import React from "react"
 
 export const WidgetDetailContainer = (): React.JSX.Element => {
@@ -13,9 +13,11 @@ export const WidgetDetailContainer = (): React.JSX.Element => {
         </Toolbar>
       )}
     >
-      <Content padded>
-        <p>Here i am :D - finally</p>
-      </Content>
+      <Tabs>
+        <Content padded>
+          <p>Here i am :D - finally</p>
+        </Content>
+      </Tabs>
     </ContentLayout>
   )
 }
