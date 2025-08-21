@@ -96,6 +96,7 @@ export const ReportsEditor = (): React.JSX.Element => {
         <Tabs
           activeKey={ activeTabKey }
           className={ styles.tabs }
+          hasStickyHeader
           items={ tabItems }
           onChange={ handleChangeTab }
           onClose={ handleCloseTab }
