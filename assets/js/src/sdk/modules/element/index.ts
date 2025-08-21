@@ -52,7 +52,6 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/number/dynamic-type-field-filter-number'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/select/dynamic-type-field-filter-select'
-export * from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/text/dynamic-type-field-filter-text'
 
 export { TypeIconCell as DependenciesTypeIconCell } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/_dependencies/type-icon-cell'
 export { TypeIconCell as MetadataTypeIconCell } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/_meta-data/type-icon-cell/type-icon-cell'
