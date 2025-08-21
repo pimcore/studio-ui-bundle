@@ -27,6 +27,7 @@ import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import {
   PAGE_INITIAL,
   PAGE_SIZE_INITIAL,
+  SORTING_INITIAL,
   useReportDataContext
 } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
 import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
@@ -41,12 +42,13 @@ export const ReportViewContent = ({ currentReport, setCurrentReport, reportsTree
   const { t } = useTranslation()
 
   const { resetFilters } = useGridFilterContext()
-  const { isLoading, isFetching, reportDetailData, chartDetailData, refetchAll, page, setPage, pageSize, setPageSize } = useReportDataContext()
+  const { isLoading, isFetching, reportDetailData, chartDetailData, refetchAll, page, setPage, pageSize, setPageSize, setSorting } = useReportDataContext()
 
   useEffect(() => {
     if (!isNull(currentReport)) {
       setPage(PAGE_INITIAL)
       setPageSize(PAGE_SIZE_INITIAL)
+      setSorting(SORTING_INITIAL)
 
       resetFilters()
     }
