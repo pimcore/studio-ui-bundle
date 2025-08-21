@@ -24,6 +24,10 @@ import { Button } from '@Pimcore/components/button/button'
 import { useReportActions } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-actions'
 import { SAVE_BTN_PORTAL_ID } from '@Pimcore/modules/reports/reports-editor/reports-editor'
 import { GeneralSettings } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/general-settings/general-settings'
+import { SourceDefinition } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/source-definition/source-definition'
+import { ColumnConfiguration } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/column-configuration/column-configuration'
+import { ChartSettings } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/chart-settings/chart-settings'
+import { Permissions } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/permissions/permissions'
 
 interface IReportConfigurationProps {
   report: BundleCustomReportsConfigurationTreeNode
@@ -85,18 +89,22 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
           currentData={ currentData }
           updateFormData={ updateFormData }
         />
-        <FormKit.Panel title={ t('reports.editor.source-definition.title') }>
-          Content
-        </FormKit.Panel>
-        <FormKit.Panel title={ t('reports.editor.manage-column-configuration.title') }>
-          Content
-        </FormKit.Panel>
-        <FormKit.Panel title={ t('reports.editor.chart-settings.title') }>
-          Content
-        </FormKit.Panel>
-        <FormKit.Panel title={ t('reports.editor.permissions.title') }>
-          Content
-        </FormKit.Panel>
+        <SourceDefinition
+          currentData={ currentData }
+          updateFormData={ updateFormData }
+        />
+        <ColumnConfiguration
+          currentData={ currentData }
+          updateFormData={ updateFormData }
+        />
+        <ChartSettings
+          currentData={ currentData }
+          updateFormData={ updateFormData }
+        />
+        <Permissions
+          currentData={ currentData }
+          updateFormData={ updateFormData }
+        />
         {isActive && renderSaveButton()}
       </FormKit>
       )}
