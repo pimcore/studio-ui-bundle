@@ -9,22 +9,14 @@
  */
 
 import { injectable } from 'inversify'
-import React, { type ReactElement } from 'react'
-import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
+import { DynamicTypeFieldFilterAbstractText } from '../../dynamic-type-field-filter-abstract-text'
 import { FieldFilterFrontendType } from '../../frontendTypes'
-import { DynamicTypeFieldFilterTextComponent, DynamicTypeFieldFilterTextProps } from '../../components/dynamic-type-field-filter-text-component'
 
 @injectable()
-export class DynamicTypeFieldFilterString extends DynamicTypeFieldFilterAbstract {
+export class DynamicTypeFieldFilterString extends DynamicTypeFieldFilterAbstractText {
   id = 'string'
 
   getFieldFilterType (): string {
     return FieldFilterFrontendType.String
-  }
-
-  getFieldFilterComponent (props: DynamicTypeFieldFilterTextProps): ReactElement<DynamicTypeFieldFilterTextProps> {
-    return (
-      <DynamicTypeFieldFilterTextComponent { ...props } />
-    )
   }
 }
