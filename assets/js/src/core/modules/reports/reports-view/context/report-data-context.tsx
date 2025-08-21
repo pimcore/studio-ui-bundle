@@ -18,15 +18,24 @@ interface IReportDataProviderProps {
   children: ReactNode
 }
 
+export interface ISorting {
+  sortBy: string
+  sortOrder: 'ASC' | 'DESC'
+}
+
 interface IReportDataContext extends IUseReportDataReturn {
   page: number
   setPage: (page: number) => void
   pageSize: number
   setPageSize: (pageSize: number) => void
+  sorting: ISorting | undefined
+  setSorting: (sorting: ISorting | undefined) => void
+  resetData: () => void
 }
 
 export const PAGE_INITIAL = 1
 export const PAGE_SIZE_INITIAL = 50
+export const SORTING_INITIAL = undefined
 
 const ReportDataContext = createContext<IReportDataContext | undefined>(undefined)
 
@@ -36,18 +45,28 @@ export const ReportDataProvider = ({
 }: IReportDataProviderProps): React.JSX.Element => {
   const [page, setPage] = useState(PAGE_INITIAL)
   const [pageSize, setPageSize] = useState(PAGE_SIZE_INITIAL)
+  const [sorting, setSorting] = useState<ISorting | undefined>(SORTING_INITIAL)
 
   const { filters } = useGridFilterContext()
 
-  const reportDataValue = useReportData({ name, filters, page, pageSize })
+  const resetData = (): void => {
+    setPage(PAGE_INITIAL)
+    setPageSize(PAGE_SIZE_INITIAL)
+    setSorting(SORTING_INITIAL)
+  }
+
+  const reportDataValue = useReportData({ name, filters, page, pageSize, sorting })
 
   const contextValue: IReportDataContext = useMemo(() => ({
     ...reportDataValue,
     page,
     setPage,
     pageSize,
-    setPageSize
-  }), [reportDataValue, page, setPage, pageSize, setPageSize])
+    setPageSize,
+    sorting,
+    setSorting,
+    resetData
+  }), [reportDataValue, page, setPage, pageSize, setPageSize, sorting, setSorting])
 
   return (
     <ReportDataContext.Provider value={ contextValue }>
