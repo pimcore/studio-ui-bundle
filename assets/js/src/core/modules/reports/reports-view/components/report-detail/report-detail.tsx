@@ -71,8 +71,6 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
   }, [sorting])
 
   const handleSortingChange = (updatedSorting: SortingState): void => {
-    console.log('handleSortingChange', updatedSorting)
-
     if (updatedSorting.length > 0) {
       const { id, desc } = updatedSorting[0]
 
