@@ -20,16 +20,5 @@ export const useBlockEditableStyles = createStyles(({ token }) => ({
     width: 'fit-content',
     marginTop: token.marginXS,
     marginBottom: token.marginXS
-  },
-
-  // Drag and drop states
-  dragDropTarget: {
-    outline: `1px dashed ${token.colorPrimaryBorder} !important`,
-    outlineOffset: '5px !important'
-  },
-
-  dragActive: {
-    opacity: '0.3 !important',
-    backgroundColor: `${token.colorPrimaryBg} !important`
   }
 }))

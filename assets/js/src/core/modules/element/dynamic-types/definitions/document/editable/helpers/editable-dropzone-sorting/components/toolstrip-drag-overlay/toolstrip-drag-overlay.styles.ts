@@ -8,5 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-export { BlockDragOverlay } from './block-drag-overlay'
-export type { BlockDragOverlayProps } from './block-drag-overlay'
+import { createStyles } from 'antd-style'
+
+export const useStyles = createStyles(({ token }) => ({
+  dragOverlay: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    cursor: 'grabbing',
+    boxShadow: token.boxShadowSecondary,
+    maxWidth: 'max-content'
+  }
+}))

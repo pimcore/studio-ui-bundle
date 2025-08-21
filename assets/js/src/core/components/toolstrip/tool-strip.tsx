@@ -24,11 +24,12 @@ export interface DragHandleProps {
 
 export interface ToolStripProps {
   className?: string
-  children: React.ReactNode
+  children?: React.ReactNode
   theme?: 'default' | 'inverse'
   dragger?: boolean | DragHandleProps
   title?: string
   activateOnHover?: boolean
+  rounded?: boolean
 }
 
 export const ToolStrip = ({
@@ -37,7 +38,8 @@ export const ToolStrip = ({
   theme: toolStripTheme = 'default',
   dragger = false,
   title,
-  activateOnHover = false
+  activateOnHover = false,
+  rounded = false
 }: ToolStripProps): React.JSX.Element => {
   const { styles, theme: token } = useStyles()
   const [isHovered, setIsHovered] = React.useState(false)
@@ -48,7 +50,8 @@ export const ToolStrip = ({
     `tool-strip--theme-${toolStripTheme}`,
     {
       'tool-strip--activate-on-hover': activateOnHover,
-      'tool-strip--activated': activateOnHover ? isHovered : true
+      'tool-strip--activated': activateOnHover ? isHovered : true,
+      'tool-strip--rounded': rounded
     },
     className
   )
@@ -146,21 +149,23 @@ export const ToolStrip = ({
               <Text>{title}</Text>
             </Box>
           )}
-          <div className="tool-strip__children-container">
-            <Split
-              dividerSize="small"
-              size="mini"
-              theme="secondary"
-            >
-              <div></div>
-              {children}
-            </Split>
-          </div>
+          {children !== undefined && (
+            <div className="tool-strip__children-container">
+              <Split
+                dividerSize="small"
+                size="mini"
+                theme="secondary"
+              >
+                <div></div>
+                {children}
+              </Split>
+            </div>
+          )}
         </Flex>
       )
     }
 
-    if (dragger === false && title === undefined) {
+    if (dragger === false && title === undefined && children !== undefined) {
       return children
     }
 
@@ -179,6 +184,10 @@ export const ToolStrip = ({
         )}
       </Flex>
     )
+
+    if (children === undefined) {
+      return leftContent
+    }
 
     return (
       <Split

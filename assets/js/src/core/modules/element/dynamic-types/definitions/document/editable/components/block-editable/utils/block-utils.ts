@@ -110,6 +110,10 @@ export const operationUtils = {
     if (!isNil(newBlockEntry)) {
       blockManager.setElementKey(newBlockEntry, nextKey.toString())
       ensurePortalTargets(newBlockEntry, editableDefinitions)
+
+      // Hide newly added element until dropzones are added
+      newBlockEntry.style.display = 'none'
+      newBlockEntry.setAttribute('data-pending-dropzone', 'true')
     }
 
     const editableData = operationUtils.createEditableData(editableDefinitions)
