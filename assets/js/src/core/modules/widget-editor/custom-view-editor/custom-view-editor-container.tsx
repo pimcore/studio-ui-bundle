@@ -1,11 +1,23 @@
 import { ConfigLayout } from "@Pimcore/components/predefined-layouts/config/config-layout"
-import React from "react"
+import React, { useEffect } from "react"
 import { TreeContainer } from "./components/tree/tree-container"
 import { WidgetDetailContainer } from "./components/widget-detail/widget-detail-container"
-import { ContentLayout } from "@sdk/components"
+import { ContentLayout, Icon, TreeDataItem } from "@sdk/components"
 
-export const CustomViewEditor = (): React.JSX.Element => {
+export const CustomViewEditorContainer = (): React.JSX.Element => {
   const [expandedKeys, setExpandedKeys] = React.useState<any[]>([0])
+  const [treeData, setTreeData] = React.useState<TreeDataItem[]>([])
+
+  useEffect(() => {
+    const treeItems: TreeDataItem[] = [{
+      title: 'All Custom Views',
+      key: '0-0',
+      icon: <Icon value={'folder'} />,
+      children: [],
+    }]
+
+    setTreeData(treeItems);
+  }, [])
 
   const sidebar = {
     id: 'widget-editor.sidebar',
@@ -17,7 +29,7 @@ export const CustomViewEditor = (): React.JSX.Element => {
         onSetExpandedKeys={(keys) => {
           setExpandedKeys(keys)
         }}
-        treeData={[]}
+        treeData={treeData}
       />
     ]
   }

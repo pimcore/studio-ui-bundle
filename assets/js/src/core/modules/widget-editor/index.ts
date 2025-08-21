@@ -2,10 +2,8 @@ import { serviceIds } from "@Pimcore/app/config/services/service-ids"
 import { container } from "@Pimcore/app/depency-injection"
 import { moduleSystem } from "@Pimcore/app/module-system/module-system"
 import { MainNavRegistry } from "../app/base-layout/main-nav/services/main-nav-registry"
-import { UserPermission } from "../auth/enums/user-permission"
-import { NavPermission } from "../perspectives/enums/nav-permission"
 import { WidgetRegistry } from "../widget-manager/services/widget-registry"
-import { CustomViewEditor } from "./custom-view-editor/custom-view-editor"
+import { CustomViewEditorContainer } from "./custom-view-editor/custom-view-editor-container"
 import { PerspectiveEditorContainer } from "./perspective-editor/perspective-editor-container"
 
 moduleSystem.registerModule({
@@ -19,7 +17,7 @@ moduleSystem.registerModule({
 
     widgetRegistryService.registerWidget({
       name: 'custom-view-editor',
-      component: CustomViewEditor
+      component: CustomViewEditorContainer
     })
 
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
@@ -71,7 +69,5 @@ moduleSystem.registerModule({
         }
       }
     })
-
-    console.log(mainNavRegistryService.getMainNavItems())
   }
 })

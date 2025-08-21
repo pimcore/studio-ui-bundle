@@ -1,11 +1,37 @@
 import { ConfigLayout } from "@Pimcore/components/predefined-layouts/config/config-layout"
-import React from "react"
+import { PerspectiveConfig, usePerspectiveGetConfigCollectionQuery } from "@sdk/api/perspectives"
+import { ContentLayout, Icon, TreeDataItem } from "@sdk/components"
+import React, { useEffect } from "react"
 import { TreeContainer } from "./components/tree/tree-container"
 import { WidgetDetailContainer } from "./components/widget-detail/widget-detail-container"
-import { ContentLayout } from "@sdk/components"
 
 export const PerspectiveEditorContainer = (): React.JSX.Element => {
   const [expandedKeys, setExpandedKeys] = React.useState<any[]>([0])
+  const { data } = usePerspectiveGetConfigCollectionQuery()
+  const [treeData, setTreeData] = React.useState<TreeDataItem[]>([])
+
+  useEffect(() => {
+    const tmpTreeData: TreeDataItem[] = [];
+    if (data?.items) {
+      data.items.forEach((item: PerspectiveConfig) => {
+        tmpTreeData.push({
+          title: item.name,
+          key: item.id,
+          icon: <Icon value={item.icon.value} />,
+        });
+      });
+    }
+
+    const treeItems: TreeDataItem[] = [{
+      title: 'All Perspectives',
+      key: '0-0',
+      icon: <Icon value={'folder'} />,
+      children: tmpTreeData,
+    }]
+
+    setTreeData(treeItems);
+  }, [data])
+
 
   const sidebar = {
     id: 'widget-editor.sidebar',
@@ -17,7 +43,7 @@ export const PerspectiveEditorContainer = (): React.JSX.Element => {
         onSetExpandedKeys={(keys) => {
           setExpandedKeys(keys)
         }}
-        treeData={[]}
+        treeData={treeData}
       />
     ]
   }
