@@ -14,54 +14,30 @@ import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
 import { Switch } from '@Pimcore/components/switch/switch'
-import { type IReportConfigurationSectionProps } from '@Pimcore/modules/reports/reports-editor/types'
 
-export const GeneralSettings = ({ currentData, updateFormData }: IReportConfigurationSectionProps): React.JSX.Element => {
+export const GeneralSettings = (): React.JSX.Element => {
   const { t } = useTranslation()
+
+  const renderInputItem = ({ label, name, disabled = false }: { label: string, name: string, disabled?: boolean }): React.JSX.Element => (
+    <Form.Item
+      label={ label }
+      name={ name }
+    >
+      <Input disabled={ disabled } />
+    </Form.Item>
+  )
 
   return (
     <FormKit.Panel title={ t('reports.editor.general-settings.title') }>
-      <Form.Item label="Name">
-        <Input
-          disabled
-          value={ currentData.name }
-        />
+      {renderInputItem({ label: 'Name', name: 'name', disabled: true })}
+      {renderInputItem({ label: 'Display Name', name: 'niceName' })}
+      {renderInputItem({ label: 'Icon Class', name: 'iconClass' })}
+      {renderInputItem({ label: 'Group', name: 'group' })}
+      {renderInputItem({ label: 'Report Class', name: 'reportClass' })}
+      {renderInputItem({ label: 'Group Icon Class', name: 'groupIconClass' })}
+      <Form.Item name="menuShortcut">
+        <Switch labelRight="Create Shortcut in Menu" />
       </Form.Item>
-      <Form.Item label="Display Name">
-        <Input
-          onChange={ (e) => { updateFormData({ niceName: e.target.value }) } }
-          value={ currentData.niceName }
-        />
-      </Form.Item>
-      <Form.Item label="Icon Class">
-        <Input
-          onChange={ (e) => { updateFormData({ iconClass: e.target.value }) } }
-          value={ currentData.iconClass }
-        />
-      </Form.Item>
-      <Form.Item label="Group">
-        <Input
-          onChange={ (e) => { updateFormData({ group: e.target.value }) } }
-          value={ currentData.group }
-        />
-      </Form.Item>
-      <Form.Item label="Report Class">
-        <Input
-          onChange={ (e) => { updateFormData({ reportClass: e.target.value }) } }
-          value={ currentData.reportClass }
-        />
-      </Form.Item>
-      <Form.Item label="Group Icon Class">
-        <Input
-          onChange={ (e) => { updateFormData({ groupIconClass: e.target.value }) } }
-          value={ currentData.groupIconClass }
-        />
-      </Form.Item>
-      <Switch
-        labelRight="Create Shortcut in Menu"
-        onChange={ (value) => { updateFormData({ menuShortcut: value }) } }
-        value={ currentData.menuShortcut }
-      />
     </FormKit.Panel>
   )
 }

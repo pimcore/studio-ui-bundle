@@ -18,7 +18,7 @@ import {
 } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { Content } from '@Pimcore/components/content/content'
 import { FormKit } from '@Pimcore/components/form/form-kit'
-import { useReportFormState } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
+import { type ReportFormData, useReportFormState } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
 import { Portal } from '@Pimcore/components/portal/portal'
 import { Button } from '@Pimcore/components/button/button'
 import { useReportActions } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-actions'
@@ -49,6 +49,10 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
       initializeForm(data)
     }
   }, [data])
+
+  const onValuesChange = (changedValues: Partial<ReportFormData>, allValues: ReportFormData): void => {
+    updateFormData({ ...currentData, ...allValues })
+  }
 
   const handleSave = (): void => {
     if (isNull(currentData)) return
@@ -84,11 +88,12 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
       padding={ { top: 'none', right: 'extra-small', bottom: 'none', left: 'extra-small' } }
     >
       {!isNull(currentData) && (
-      <FormKit>
-        <GeneralSettings
-          currentData={ currentData }
-          updateFormData={ updateFormData }
-        />
+      <FormKit formProps={ {
+        initialValues: currentData,
+        onValuesChange
+      } }
+      >
+        <GeneralSettings />
         <SourceDefinition
           currentData={ currentData }
           updateFormData={ updateFormData }
@@ -97,10 +102,7 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
           currentData={ currentData }
           updateFormData={ updateFormData }
         />
-        <ChartSettings
-          currentData={ currentData }
-          updateFormData={ updateFormData }
-        />
+        <ChartSettings />
         <Permissions
           currentData={ currentData }
           updateFormData={ updateFormData }
