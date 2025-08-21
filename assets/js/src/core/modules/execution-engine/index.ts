@@ -16,6 +16,7 @@ import { NotificationJobContainer as DefaultJobContainer } from './jobs/default/
 import { NotificationJobContainer as DownloadJobContainer } from './jobs/download/notification-job-container'
 import { NotificationJobContainer as ZipUploadJobContainer } from './jobs/zip-upload/notification-job-container'
 import { NotificationJobContainer as BatchEditJobContainer } from './jobs/batch-edit/notification-job-container'
+import { NotificationJobContainer as BatchDeleteJobContainer } from './jobs/batch-delete/notification-job-container'
 import { NotificationJobContainer as DeleteJobContainer } from './jobs/delete/notification-job-container'
 import { NotificationJobContainer as CloneJobContainer } from './jobs/clone/notification-job-container'
 import { NotificationJobContainer as TagAssignJobContainer } from './jobs/tag-assign/notification-job-container'
@@ -27,6 +28,7 @@ export const executionEngineModule: AbstractModule = {
     jobComponentRegistry.registerComponent('default', DefaultJobContainer)
     jobComponentRegistry.registerComponent('download', DownloadJobContainer)
     jobComponentRegistry.registerComponent('batch-edit', BatchEditJobContainer)
+    jobComponentRegistry.registerComponent('batch-delete', BatchDeleteJobContainer)
     jobComponentRegistry.registerComponent('zip-upload', ZipUploadJobContainer)
     jobComponentRegistry.registerComponent('delete', DeleteJobContainer)
     jobComponentRegistry.registerComponent('clone', CloneJobContainer)
