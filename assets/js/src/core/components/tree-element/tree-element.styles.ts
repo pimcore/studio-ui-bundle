@@ -12,12 +12,19 @@ import { createStyles } from 'antd-style'
 
 interface IStylesProps {
   isHideRootChecker?: boolean
+  hasRoot?: boolean
 }
 
 export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
   return {
     treeContainer: css`
       .ant-tree-list-holder-inner {
+        & > .ant-tree-treenode {
+          .ant-tree-switcher {
+            width: ${props.hasRoot ? '24px' : '0'};
+          }
+        }
+
         .ant-tree-treenode-leaf-last {
           &:first-child {
             .ant-tree-checkbox {
@@ -114,6 +121,19 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
           left: 0;
           right: 0;
           bottom: 0;
+        }
+      }
+    `,
+    noRoot: css`
+      .ant-tree {
+        background-color: red;
+
+        .ant-tree-list-holder-inner > .ant-tree-treenode {
+          background-color: red;
+
+          .ant-tree-switcher {
+            width: 0
+          }
         }
       }
     `
