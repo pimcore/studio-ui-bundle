@@ -10,20 +10,20 @@
 
 import React, { type ReactElement } from 'react'
 import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
-import { DynamicTypeFieldFilterDatetimeComponent, type DynamicTypeFieldFilterDatetimeProps } from '../../components/dynamic-type-field-filter-datetime-component'
+import { DynamicTypeFieldFilterDateComponent, type DynamicTypeFieldFilterDateProps } from '../../components/dynamic-type-field-filter-date-component'
 import { injectable } from 'inversify'
 
 @injectable()
-export class DynamicTypeFieldFilterDatetime extends DynamicTypeFieldFilterAbstract {
+export class DynamicTypeFieldFilterDate extends DynamicTypeFieldFilterAbstract {
   id = 'datetime'
 
   getFieldFilterType (): string {
     return 'system.datetime'
   }
 
-  getFieldFilterComponent (props: DynamicTypeFieldFilterDatetimeProps): ReactElement<DynamicTypeFieldFilterDatetimeProps> {
+  getFieldFilterComponent (props: DynamicTypeFieldFilterDateProps): ReactElement<DynamicTypeFieldFilterDateProps> {
     return (
-      <DynamicTypeFieldFilterDatetimeComponent { ...props } />
+      <DynamicTypeFieldFilterDateComponent { ...props } />
     )
   }
 }

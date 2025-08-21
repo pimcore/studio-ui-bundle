@@ -32,7 +32,7 @@ import { DynamicTypeFieldFilterDataObjectObjectBrick } from '@Pimcore/modules/el
 import { DynamicTypeFieldFilterString } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/string/dynamic-type-field-filter-string'
 import { DynamicTypeFieldFilterNumber } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/number/dynamic-type-field-filter-number'
 import { DynamicTypeFieldFilterSelect } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/select/dynamic-type-field-filter-select'
-import { DynamicTypeFieldFilterDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
+import { DynamicTypeFieldFilterDate } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/date/dynamic-type-field-filter-date'
 import { DynamicTypeFieldFilterCheckbox } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
 import { DynamicTypeGridCellText } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/text/dynamic-type-grid-cell-text'
 import { DynamicTypeGridCellRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/dynamic-type-grid-cell-registry'
@@ -256,7 +256,7 @@ container.bind(serviceIds['DynamicTypes/FieldFilter/Fulltext']).to(DynamicTypeFi
 container.bind(serviceIds['DynamicTypes/FieldFilter/None']).to(DynamicTypeFieldFilterNone).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Number']).to(DynamicTypeFieldFilterNumber).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Select']).to(DynamicTypeFieldFilterSelect).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/FieldFilter/Datetime']).to(DynamicTypeFieldFilterDatetime).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/Date']).to(DynamicTypeFieldFilterDate).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Checkbox']).to(DynamicTypeFieldFilterCheckbox).inSingletonScope()
 
 // dynamic types batch edit

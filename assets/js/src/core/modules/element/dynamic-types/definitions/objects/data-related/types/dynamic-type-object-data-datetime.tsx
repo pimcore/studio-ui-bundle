@@ -33,7 +33,7 @@ export class DynamicTypeObjectDataDatetime extends DynamicTypeObjectDataAbstract
   id: string = 'datetime'
   gridCellEditMode: EditMode = 'edit-modal'
 
-  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Datetime'])
+  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Date'])
 
   getObjectDataComponent (props: DatetimeObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return super.getObjectDataComponent({

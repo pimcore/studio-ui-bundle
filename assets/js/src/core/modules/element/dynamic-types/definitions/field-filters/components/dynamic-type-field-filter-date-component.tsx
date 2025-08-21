@@ -27,9 +27,9 @@ enum DatePickerSettingValue {
 
 const DATE_FORMAT = 'YYYY-MM-DD'
 
-export interface DynamicTypeFieldFilterDatetimeProps extends AbstractFieldFilterDefinition {}
+export interface DynamicTypeFieldFilterDateProps extends AbstractFieldFilterDefinition {}
 
-export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldFilterDatetimeProps): React.JSX.Element => {
+export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilterDateProps): React.JSX.Element => {
   interface DateValue {
     setting: DatePickerSettingValue
     from: string | null
