@@ -239,6 +239,7 @@ export type UserUpdatePasswordByIdApiArg = {
     body: {
         password: string;
         passwordConfirmation: string;
+        oldPassword?: string;
     };
 };
 export type UserUpdateProfileApiResponse = /** status 200 Successfully updated user profile */ UserInformation;

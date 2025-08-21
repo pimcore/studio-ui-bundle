@@ -14,6 +14,14 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
+            dataObjectBatchDelete: build.mutation<DataObjectBatchDeleteApiResponse, DataObjectBatchDeleteApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/batch-delete`,
+                    method: "DELETE",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Data Objects"],
+            }),
             dataObjectClone: build.mutation<DataObjectCloneApiResponse, DataObjectCloneApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/data-objects/${queryArg.id}/clone/${queryArg.parentId}`,
@@ -236,6 +244,16 @@ export type DataObjectAddApiArg = {
     /** ParentId of the data-object */
     parentId: number;
     dataObjectAddParameters: DataObjectAdd;
+};
+export type DataObjectBatchDeleteApiResponse =
+    /** status 201 Successfully created <strong>jobRun</strong> for batch delete */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type DataObjectBatchDeleteApiArg = {
+    body: {
+        ids?: number[];
+    };
 };
 export type DataObjectCloneApiResponse =
     /** status 201 Successfully copied parent data object and created <strong>jobRun</strong> for copying child objects */ {
@@ -883,6 +901,7 @@ export type SelectOption2 = {
 };
 export const {
     useDataObjectAddMutation,
+    useDataObjectBatchDeleteMutation,
     useDataObjectCloneMutation,
     useDataObjectGetByIdQuery,
     useDataObjectUpdateByIdMutation,
