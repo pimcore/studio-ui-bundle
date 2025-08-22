@@ -1,9 +1,12 @@
 import React, { createContext } from "react";
 import { GridProps } from "@Pimcore/types/components/types";
+import { ColumnDef } from "@tanstack/react-table";
 
 export interface IOperationalGridContext {
   value: GridProps['data'];
   onChange?: (value: GridProps['data']) => void;
+  columns: Array<ColumnDef<any>>;
+  onColumnsChange?: (columns: Array<ColumnDef<any>>) => void;
   finalGridProps: GridProps;
 }
 

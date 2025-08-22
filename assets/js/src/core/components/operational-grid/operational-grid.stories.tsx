@@ -11,7 +11,7 @@
 import React, { useState } from 'react'
 import { type Meta } from '@storybook/react'
 import { OperationalGrid, type OperationalGridProps } from './operational-grid'
-import { createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
+import { createColumnHelper, type RowSelectionState, type ColumnDef } from '@tanstack/react-table'
 import { DefaultCell } from '../grid/columns/default-cell'
 import { Button, Space } from 'antd'
 
@@ -213,5 +213,111 @@ export const Loading = {
     enableSorting: true,
     enableRowSelection: true,
     isLoading: true
+  }
+}
+
+export const WithColumnOperations = {
+  render: () => {
+    const ComponentWrapper = (): React.JSX.Element => {
+      const [data, setData] = useState(initialData)
+      const [columns, setColumns] = useState<Array<ColumnDef<Item>>>([
+        columnHelper.accessor('name', {
+          header: 'Name',
+          meta: { editable: true }
+        }),
+        columnHelper.accessor('value', {
+          header: 'Value', 
+          cell: info => <DefaultCell {...info} />,
+          meta: { editable: true }
+        })
+      ])
+      const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
+
+      const handleColumnsChange = (newColumns: Array<ColumnDef<any>>) => {
+        setColumns(newColumns as Array<ColumnDef<Item>>)
+      }
+
+      return (
+        <OperationalGrid
+          value={data}
+          columns={columns}
+          onChange={setData}
+          onColumnsChange={handleColumnsChange}
+          selectedRows={selectedRows}
+          onSelectedRowsChange={setSelectedRows}
+          enableSorting={true}
+          enableRowSelection={true}
+          enableMultipleRowSelection={true}
+        >
+          <div style={{ marginBottom: 16 }}>
+            <OperationalGrid.Operations>
+              {(operations) => {
+                const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
+                const hasSelection = selectedCount > 0
+                
+                return (
+                  <Space wrap>
+                    <Button 
+                      type="primary" 
+                      onClick={() => operations.addRow({ name: 'New Item', value: '', category: 'New' })}
+                    >
+                      Add Row
+                    </Button>
+                    <Button 
+                      onClick={() => operations.deleteSelectedRows()}
+                      disabled={!hasSelection}
+                      danger
+                    >
+                      Delete Selected ({selectedCount})
+                    </Button>
+                    <Button 
+                      onClick={() => operations.clearSelectedRows()}
+                      disabled={!hasSelection}
+                    >
+                      Clear Selection
+                    </Button>
+                    <div style={{ borderLeft: '1px solid #d9d9d9', paddingLeft: 8, marginLeft: 8 }}>
+                      <Space>
+                        <Button 
+                          onClick={() => operations.addColumn(
+                            columnHelper.accessor('category', {
+                              header: 'Category',
+                              cell: info => <DefaultCell {...info} />,
+                              meta: { editable: true }
+                            })
+                          )}
+                        >
+                          Add Category Column
+                        </Button>
+                        <Button 
+                          onClick={() => operations.removeColumn('category')}
+                          danger
+                        >
+                          Remove Category Column
+                        </Button>
+                        <Button 
+                          onClick={() => operations.updateColumn('name', 
+                            columnHelper.accessor('name', {
+                              header: 'Item Name (Updated)',
+                              meta: { editable: true }
+                            })
+                          )}
+                        >
+                          Update Name Column Header
+                        </Button>
+                      </Space>
+                    </div>
+                  </Space>
+                )
+              }}
+            </OperationalGrid.Operations>
+          </div>
+          
+          <OperationalGrid.Grid />
+        </OperationalGrid>
+      )
+    }
+
+    return <ComponentWrapper />
   }
 }

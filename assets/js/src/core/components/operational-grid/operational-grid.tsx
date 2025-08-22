@@ -3,17 +3,18 @@ import React from "react";
 import { Grid } from "../grid/grid";
 import { OperationalGridProvider, useOperationalGridContext } from "./provider/operational-grid-provider";
 import { useOperations } from "./hooks/use-operations";
-import { RowSelectionState } from "@tanstack/react-table";
+import { RowSelectionState, ColumnDef } from "@tanstack/react-table";
 
 export interface OperationalGridProps extends Omit<GridProps, 'data' | 'onUpdateCellData'> {
   value: GridProps['data'];
   onChange?: (value: GridProps['data']) => void;
+  onColumnsChange?: (columns: Array<ColumnDef<any>>) => void;
   children: React.ReactNode;
   onUpdateCellData?: GridProps['onUpdateCellData'];
 }
 
 const OperationalGrid = (props: OperationalGridProps): React.JSX.Element => {
-  const { value, onChange, children, onUpdateCellData, ...gridProps } = props;
+  const { value, onChange, onColumnsChange, children, onUpdateCellData, columns = [], ...gridProps } = props;
 
   const defaultOnUpdateCellData: GridProps['onUpdateCellData'] = (event) => {
     const { columnId, rowIndex, value: newCellValue } = event
@@ -25,6 +26,7 @@ const OperationalGrid = (props: OperationalGridProps): React.JSX.Element => {
 
   const finalGridProps: GridProps = {
     ...gridProps,
+    columns,
     data: value,
     onUpdateCellData: onUpdateCellData ?? defaultOnUpdateCellData,
   }
@@ -33,6 +35,8 @@ const OperationalGrid = (props: OperationalGridProps): React.JSX.Element => {
     <OperationalGridProvider 
       value={value} 
       onChange={onChange} 
+      columns={columns}
+      onColumnsChange={onColumnsChange}
       finalGridProps={finalGridProps}
     >
       {children}

@@ -12,7 +12,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import { Form } from '../../form'
 import { OperationalGrid } from '../../../operational-grid/operational-grid'
-import { createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
+import { createColumnHelper, type RowSelectionState, type ColumnDef } from '@tanstack/react-table'
 import { DefaultCell } from '../../../grid/columns/default-cell'
 import { Button, Space, Input, InputNumber, Select } from 'antd'
 
@@ -217,12 +217,9 @@ export const BasicFormIntegration: StoryObj = {
 
 // Advanced wrapper component with validation and complex fields
 interface AdvancedItem {
-  id: string
   name: string
   value: string | number
   type: 'text' | 'number' | 'select'
-  required: boolean
-  options?: string[]
 }
 
 interface AdvancedOperationalGridProps {
@@ -251,20 +248,6 @@ const AdvancedOperationalGrid = ({ value = [], onChange, enableMultipleRowSelect
     })
   ]
 
-  const addNewConfiguration = (): void => {
-    const newId = Date.now().toString()
-    const newItem: AdvancedItem = {
-      id: newId,
-      name: 'New setting',
-      value: '',
-      type: 'text',
-      required: false
-    }
-    
-    const newValue = [...value, newItem]
-    onChange?.(newValue)
-  }
-
   return (
     <OperationalGrid
       value={value}
@@ -286,20 +269,13 @@ const AdvancedOperationalGrid = ({ value = [], onChange, enableMultipleRowSelect
               <Space>
                 <Button 
                   type="primary"
-                  onClick={addNewConfiguration}
-                >
-                  Add Setting
-                </Button>
-                <Button 
                   onClick={() => operations.addRow({
-                    id: Date.now().toString(),
-                    name: 'From Operations',
+                    name: 'New Setting',
                     value: '',
-                    type: 'text',
-                    required: false
+                    type: 'text'
                   })}
                 >
-                  Add via Operations
+                  Add Setting
                 </Button>
                 <Button 
                   onClick={() => operations.deleteSelectedRows()}
@@ -334,8 +310,8 @@ const AdvancedFormExampleComponent = (): React.JSX.Element => {
   const [form] = Form.useForm()
   const [formValues, setFormValues] = useState<AdvancedFormValues>({
     configuration: [
-      { id: '1', name: 'API Endpoint', value: 'https://api.example.com', type: 'text', required: true },
-      { id: '2', name: 'Timeout', value: 5000, type: 'number', required: true }
+      { name: 'API Endpoint', value: 'https://api.example.com', type: 'text' },
+      { name: 'Timeout', value: 5000, type: 'number' }
     ]
   })
 
@@ -391,37 +367,264 @@ export const AdvancedFormValidation: StoryObj = {
 }
 
 export const SingleRowSelection: StoryObj = {
-  render: () => (
-    <div style={{ maxWidth: '800px', padding: '20px' }}>
-      <h3>Single Row Selection Example</h3>
-      <p>This example demonstrates single row selection mode where only one row can be selected at a time.</p>
-      <BasicOperationalGrid 
-        value={[
-          { name: 'Setting 1', value: 'Value 1', type: 'text' },
-          { name: 'Setting 2', value: '42', type: 'number' },
-          { name: 'Setting 3', value: 'Value 3', type: 'text' }
-        ]}
-        enableMultipleRowSelection={false}
-        onChange={(value) => console.log('Changed:', value)}
-      />
-    </div>
-  )
+  render: () => {
+    const SingleRowSelectionExample = (): React.JSX.Element => {
+      const [value, setValue] = useState<BasicItem[]>([
+        { name: 'Setting 1', value: 'Value 1', type: 'text' },
+        { name: 'Setting 2', value: '42', type: 'number' },
+        { name: 'Setting 3', value: 'Value 3', type: 'text' }
+      ])
+
+      return (
+        <div style={{ maxWidth: '1000px', padding: '20px' }}>
+          <h3>Single Row Selection Example</h3>
+          <p>This example demonstrates single row selection mode where only one row can be selected at a time.</p>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
+            <div>
+              <BasicOperationalGrid 
+                value={value}
+                enableMultipleRowSelection={false}
+                onChange={setValue}
+              />
+            </div>
+            
+            <div>
+              <h4>Current Form Values:</h4>
+              <div style={{
+                background: '#f5f5f5',
+                padding: '16px',
+                borderRadius: '6px',
+                fontFamily: 'monospace',
+                fontSize: '12px',
+                whiteSpace: 'pre-wrap',
+                maxHeight: '400px',
+                overflowY: 'auto'
+              }}>
+                {JSON.stringify(value, null, 2)}
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    return <SingleRowSelectionExample />
+  }
 }
 
 export const MultipleRowSelection: StoryObj = {
-  render: () => (
-    <div style={{ maxWidth: '800px', padding: '20px' }}>
-      <h3>Multiple Row Selection Example</h3>
-      <p>This example demonstrates multiple row selection mode where multiple rows can be selected simultaneously.</p>
-      <AdvancedOperationalGrid 
-        value={[
-          { id: '1', name: 'Config 1', value: 'Value 1', type: 'text', required: true },
-          { id: '2', name: 'Config 2', value: '42', type: 'number', required: false },
-          { id: '3', name: 'Config 3', value: 'Value 3', type: 'text', required: true }
-        ]}
-        enableMultipleRowSelection={true}
-        onChange={(value) => console.log('Changed:', value)}
-      />
-    </div>
-  )
+  render: () => {
+    const MultipleRowSelectionExample = (): React.JSX.Element => {
+      const [value, setValue] = useState<AdvancedItem[]>([
+        { name: 'Config 1', value: 'Value 1', type: 'text' },
+        { name: 'Config 2', value: '42', type: 'number' },
+        { name: 'Config 3', value: 'Value 3', type: 'text' }
+      ])
+
+      return (
+        <div style={{ maxWidth: '1000px', padding: '20px' }}>
+          <h3>Multiple Row Selection Example</h3>
+          <p>This example demonstrates multiple row selection mode where multiple rows can be selected simultaneously.</p>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
+            <div>
+              <AdvancedOperationalGrid 
+                value={value}
+                enableMultipleRowSelection={true}
+                onChange={setValue}
+              />
+            </div>
+            
+            <div>
+              <h4>Current Form Values:</h4>
+              <div style={{
+                background: '#f5f5f5',
+                padding: '16px',
+                borderRadius: '6px',
+                fontFamily: 'monospace',
+                fontSize: '12px',
+                whiteSpace: 'pre-wrap',
+                maxHeight: '400px',
+                overflowY: 'auto'
+              }}>
+                {JSON.stringify(value, null, 2)}
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    return <MultipleRowSelectionExample />
+  }
+}
+
+export const WithColumnOperations: StoryObj = {
+  render: () => {
+    const ColumnOperationsExample = (): React.JSX.Element => {
+      const [data, setData] = useState<BasicItem[]>([
+        { name: 'Item 1', value: 'Value 1', type: 'text' },
+        { name: 'Item 2', value: 'Value 2', type: 'number' }
+      ])
+      const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
+      const columnHelper = createColumnHelper<BasicItem>()
+      
+      const [columns, setColumns] = useState([
+        columnHelper.accessor('name', {
+          header: 'Name',
+          meta: { editable: true }
+        }),
+        columnHelper.accessor('value', {
+          header: 'Value',
+          cell: info => <DefaultCell {...info} />,
+          meta: { editable: true }
+        })
+      ])
+
+      const handleColumnsChange = (newColumns: any[]) => {
+        setColumns(newColumns)
+      }
+
+      return (
+        <div style={{ maxWidth: '1200px', padding: '20px' }}>
+          <h3>Column Operations Example</h3>
+          <p>This example demonstrates adding, removing, and updating columns dynamically.</p>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
+            <div>
+              <OperationalGrid
+                value={data}
+                columns={columns}
+                onChange={setData}
+                onColumnsChange={handleColumnsChange}
+                selectedRows={selectedRows}
+                onSelectedRowsChange={setSelectedRows}
+                enableSorting={true}
+                enableRowSelection={true}
+                enableMultipleRowSelection={true}
+              >
+                <div style={{ marginBottom: 16 }}>
+                  <OperationalGrid.Operations>
+                    {(operations) => {
+                      const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
+                      const hasSelection = selectedCount > 0
+                      
+                      return (
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
+                          <Space>
+                            <Button 
+                              type="primary" 
+                              onClick={() => operations.addRow({ name: 'New Item', value: '', type: 'text' })}
+                            >
+                              Add Row
+                            </Button>
+                            <Button 
+                              onClick={() => operations.deleteSelectedRows()}
+                              disabled={!hasSelection}
+                              danger
+                            >
+                              Delete Selected ({selectedCount})
+                            </Button>
+                          </Space>
+                          
+                          <div style={{ width: 1, height: 24, backgroundColor: '#d9d9d9', margin: '0 8px' }} />
+                          
+                          <Space>
+                            <Button 
+                              onClick={() => operations.addColumn(
+                                columnHelper.accessor('type', {
+                                  header: 'Type',
+                                  cell: info => <DefaultCell {...info} />,
+                                  meta: { editable: true }
+                                })
+                              )}
+                            >
+                              Add Type Column
+                            </Button>
+                            <Button 
+                              onClick={() => operations.addColumn(
+                                columnHelper.accessor('category' as any, {
+                                  header: 'Category (Missing)',
+                                  cell: info => <DefaultCell {...info} />,
+                                  meta: { editable: true }
+                                }),
+                                null // Default value for existing rows
+                              )}
+                            >
+                              Add Column (null)
+                            </Button>
+                            <Button 
+                              onClick={() => operations.addColumn(
+                                columnHelper.accessor('status' as any, {
+                                  header: 'Status',
+                                  cell: info => <DefaultCell {...info} />,
+                                  meta: { editable: true }
+                                }),
+                                'pending' // Default value for existing rows
+                              )}
+                            >
+                              Add Column (default)
+                            </Button>
+                            <Button 
+                              onClick={() => operations.removeColumn('type')}
+                              danger
+                            >
+                              Remove Type
+                            </Button>
+                            <Button 
+                              onClick={() => operations.removeColumn('category')}
+                              danger
+                            >
+                              Remove Category
+                            </Button>
+                            <Button 
+                              onClick={() => operations.removeColumn('status')}
+                              danger
+                            >
+                              Remove Status
+                            </Button>
+                            <Button 
+                              onClick={() => operations.updateColumn('name', 
+                                columnHelper.accessor('name', {
+                                  header: 'Item Name (Updated)',
+                                  meta: { editable: true }
+                                })
+                              )}
+                            >
+                              Update Name Header
+                            </Button>
+                          </Space>
+                        </div>
+                      )
+                    }}
+                  </OperationalGrid.Operations>
+                </div>
+                
+                <OperationalGrid.Grid />
+              </OperationalGrid>
+            </div>
+            
+            <div>
+              <h4>Current Form Values:</h4>
+              <div style={{
+                background: '#f5f5f5',
+                padding: '16px',
+                borderRadius: '6px',
+                fontFamily: 'monospace',
+                fontSize: '12px',
+                whiteSpace: 'pre-wrap',
+                maxHeight: '400px',
+                overflowY: 'auto'
+              }}>
+                {JSON.stringify(data, null, 2)}
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    return <ColumnOperationsExample />
+  }
 }
