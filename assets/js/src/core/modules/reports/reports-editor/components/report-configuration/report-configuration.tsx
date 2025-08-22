@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { isNull, isUndefined } from 'lodash'
+import { castArray, isNull, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import {
   type BundleCustomReportsConfigurationTreeNode,
@@ -42,8 +42,6 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
 
   const [isUpdatingReport, setIsUpdatingReport] = useState(false)
 
-  console.log('----->>>>> currentData', currentData)
-
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -53,7 +51,14 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
   }, [data])
 
   const onValuesChange = (changedValues: Partial<ReportFormData>, allValues: ReportFormData): void => {
-    updateFormData({ ...currentData, ...allValues })
+    // TODO: After finalizing all fields, remove currentData from updateFormData
+    updateFormData({
+      ...currentData,
+      ...allValues,
+      dataSourceConfig: castArray(
+        allValues.dataSourceConfig ?? currentData?.dataSourceConfig ?? []
+      )
+    })
   }
 
   const handleSave = (): void => {
