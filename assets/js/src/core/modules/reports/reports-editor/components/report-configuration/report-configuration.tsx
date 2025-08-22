@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { castArray, isNull, isUndefined } from 'lodash'
+import { isNull, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import {
   type BundleCustomReportsConfigurationTreeNode,
@@ -28,6 +28,7 @@ import { SourceDefinition } from '@Pimcore/modules/reports/reports-editor/compon
 import { ColumnConfiguration } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/column-configuration/column-configuration'
 import { ChartSettings } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/chart-settings/chart-settings'
 import { Permissions } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/permissions/permissions'
+import { normalizeChartData, normalizeDataSourceConfig } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/helpers'
 
 interface IReportConfigurationProps {
   report: BundleCustomReportsConfigurationTreeNode
@@ -61,10 +62,8 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
 
     const bundleCustomReportUpdateData = {
       ...currentData,
-      dataSourceConfig: castArray(
-        currentData?.dataSourceConfig ?? []
-      ),
-      ...(currentData.chartType === '' && { xAxis: '', yAxis: [] })
+      ...normalizeDataSourceConfig(currentData),
+      ...normalizeChartData(currentData)
     }
 
     void updateReport({
