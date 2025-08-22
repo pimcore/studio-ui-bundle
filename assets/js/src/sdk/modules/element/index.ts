@@ -115,7 +115,9 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-r
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/link'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/localized-fields/localized-fields'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/many-to-many-object-relation'
+// @todo mark as deprecated
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/many-to-many-relation'
+// @todo mark as deprecated
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/object-brick/object-brick'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/quantity-value/quantity-value'
