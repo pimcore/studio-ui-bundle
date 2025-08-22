@@ -42,6 +42,8 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
 
   const [isUpdatingReport, setIsUpdatingReport] = useState(false)
 
+  console.log('----->>>>> currentData', currentData)
+
   const { t } = useTranslation()
 
   useEffect(() => {

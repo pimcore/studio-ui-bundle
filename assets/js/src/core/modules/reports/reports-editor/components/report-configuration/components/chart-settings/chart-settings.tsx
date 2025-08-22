@@ -11,7 +11,7 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FormKit } from '@Pimcore/components/form/form-kit'
-import { Select } from '@Pimcore/components/select/select'
+import { Select, type SelectProps } from '@Pimcore/components/select/select'
 import { Form } from '@Pimcore/components/form/form'
 import { Conditional } from '@Pimcore/components/form/conditional/conditional'
 import { CHART_TYPE_BAR, CHART_TYPE_LINE, CHART_TYPE_PIE } from '@Pimcore/modules/reports/constants'
@@ -34,6 +34,19 @@ export const ChartSettings = ({ currentData }: IReportConfigurationSectionProps)
     }))
   }, [currentData])
 
+  const renderSelectItem = ({ label, name, mode }: { label: string, name: string, mode?: SelectProps['mode'] }): React.JSX.Element => (
+    <Form.Item
+      label={ label }
+      name={ name }
+    >
+      <Select
+        className="w-full"
+        mode={ mode }
+        options={ chartSelectOptions }
+      />
+    </Form.Item>
+  )
+
   return (
     <FormKit.Panel title={ t('reports.editor.chart-settings.title') }>
       <Form.Item
@@ -49,12 +62,8 @@ export const ChartSettings = ({ currentData }: IReportConfigurationSectionProps)
           theme="fieldset"
           title="Settings"
         >
-          <Form.Item
-            label="X-Axis"
-            name="xAxis"
-          >
-            <Select options={ chartSelectOptions } />
-          </Form.Item>
+          {renderSelectItem({ label: 'X-Axis', name: 'xAxis' })}
+          {renderSelectItem({ label: 'Y-Axis', name: 'yAxis' })}
         </FormKit.Panel>
       </Conditional>
       <Conditional condition={ (formValues) => formValues.chartType === CHART_TYPE_LINE }>
@@ -63,12 +72,8 @@ export const ChartSettings = ({ currentData }: IReportConfigurationSectionProps)
           theme="fieldset"
           title="Settings"
         >
-          <Form.Item
-            label="X-Axis"
-            name="xAxis"
-          >
-            <Select options={ chartSelectOptions } />
-          </Form.Item>
+          {renderSelectItem({ label: 'X-Axis', name: 'xAxis' })}
+          {renderSelectItem({ label: 'Y-Axis', name: 'yAxis', mode: 'multiple' })}
         </FormKit.Panel>
       </Conditional>
       <Conditional condition={ (formValues) => formValues.chartType === CHART_TYPE_BAR }>
@@ -77,12 +82,8 @@ export const ChartSettings = ({ currentData }: IReportConfigurationSectionProps)
           theme="fieldset"
           title="Settings"
         >
-          <Form.Item
-            label="X-Axis"
-            name="xAxis"
-          >
-            <Select options={ chartSelectOptions } />
-          </Form.Item>
+          {renderSelectItem({ label: 'X-Axis', name: 'xAxis' })}
+          {renderSelectItem({ label: 'Y-Axis', name: 'yAxis', mode: 'multiple' })}
         </FormKit.Panel>
       </Conditional>
     </FormKit.Panel>
