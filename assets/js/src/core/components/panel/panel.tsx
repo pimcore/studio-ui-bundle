@@ -10,7 +10,7 @@
 
 import React, { type ReactNode } from 'react'
 import { Space } from '@Pimcore/components/space/space'
-import { Box } from '@Pimcore/components/box/box'
+import { Box, type BoxProps } from '@Pimcore/components/box/box'
 import { BaseView } from '@Pimcore/components/base-view/base-view'
 
 export interface PanelProps {
@@ -24,6 +24,7 @@ export interface PanelProps {
   noteditable?: boolean
   extra?: ReactNode
   extraPosition?: 'start' | 'end'
+  contentPadding?: BoxProps['padding']
 }
 
 export const Panel = ({
@@ -36,7 +37,8 @@ export const Panel = ({
   theme = 'card-with-highlight',
   noteditable,
   extra,
-  extraPosition
+  extraPosition,
+  contentPadding
 }: PanelProps): React.JSX.Element => {
   const isMainPanel = name === 'pimcore_root'
 
@@ -60,6 +62,7 @@ export const Panel = ({
         border={ border }
         collapsed={ collapsed }
         collapsible={ collapsible }
+        contentPadding={ contentPadding }
         extra={ extra }
         extraPosition={ extraPosition }
         theme={ theme }
