@@ -65,5 +65,30 @@ export const configUtils = {
   isTypeAllowed (config: AreablockEditableConfig | undefined, type: string): boolean {
     if (isNil(config?.allowed) || config.allowed.length === 0) return true
     return config.allowed.includes(type)
+  },
+
+  getGroupedAreaTypes (config?: AreablockEditableConfig): Array<{ name: string, type: string }> | Record<string, Array<{ name: string, type: string }>> {
+    const availableTypes = config?.types ?? []
+    const groupConfig = config?.group
+
+    if (isNil(groupConfig) || Object.keys(groupConfig).length === 0) {
+      return availableTypes
+    }
+
+    const groupedTypes: Record<string, Array<{ name: string, type: string }>> = {}
+
+    Object.entries(groupConfig).forEach(([groupName, typeIds]) => {
+      const uniqueTypeIds = [...new Set(typeIds)]
+
+      const groupTypes = uniqueTypeIds
+        .map(typeId => availableTypes.find(type => type.type === typeId))
+        .filter((type): type is { name: string, type: string } => !isNil(type))
+
+      if (groupTypes.length > 0) {
+        groupedTypes[groupName] = groupTypes
+      }
+    })
+
+    return groupedTypes
   }
 }

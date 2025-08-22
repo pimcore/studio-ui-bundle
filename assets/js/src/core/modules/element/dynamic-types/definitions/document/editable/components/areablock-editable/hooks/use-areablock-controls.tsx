@@ -11,7 +11,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { isNull } from 'lodash'
 import { type AreablockManager } from '../utils/areablock-manager'
-import { type AreaType } from '../areablock-editable'
+import { type AreaType, type AreablockEditableConfig } from '../areablock-editable'
 import ReactDOM from 'react-dom'
 import { SortableAreablockToolbar } from '../components/sortable-areablock-toolbar/sortable-areablock-toolbar'
 import { EmptyStateAreablockToolbar } from '../components/empty-state-areablock-toolbar/empty-state-areablock-toolbar'
@@ -21,6 +21,7 @@ import { EditableSortContext } from '../../../helpers/editable-dropzone-sorting/
 export interface UseAreablockControlsParams {
   areablockManager: AreablockManager
   areaTypes: AreaType[]
+  config?: AreablockEditableConfig
   onAddArea: (element: HTMLElement | null, areaType?: string) => Promise<void>
   onRemoveArea: (element: HTMLElement) => void
   onMoveAreaUp: (element: HTMLElement) => void
@@ -38,6 +39,7 @@ export interface UseAreablockControlsReturn {
 export const useAreablockControls = ({
   areablockManager,
   areaTypes,
+  config,
   onAddArea,
   onRemoveArea,
   onMoveAreaUp,
@@ -105,6 +107,7 @@ export const useAreablockControls = ({
     const emptyStateToolbar = (
       <EmptyStateAreablockToolbar
         areaTypes={ areaTypes }
+        config={ config }
         onClick={ async (areaType) => {
           setEmptyStatePortal(null)
           await handleAddArea(null, areaType)
@@ -147,6 +150,7 @@ export const useAreablockControls = ({
               areaTypes={ areaTypes }
               areablockManager={ areablockManager }
               buttonsContainer={ buttonsContainer as HTMLElement }
+              config={ config }
               element={ areaEntry }
               id={ areaKey }
               limitReached={ limitReachedRef.current }

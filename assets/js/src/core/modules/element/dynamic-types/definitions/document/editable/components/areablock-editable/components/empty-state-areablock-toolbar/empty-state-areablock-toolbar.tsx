@@ -13,20 +13,26 @@ import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Dropdown } from 'antd'
 import { useAreablockEditableStyles } from '../../areablock-editable.styles'
-import { type AreaType } from '../../areablock-editable'
-import { useTranslation } from 'react-i18next'
+import { type AreaType, type AreablockEditableConfig } from '../../areablock-editable'
+import { useAreablockMenu } from '../../hooks/use-areablock-menu'
 
 export interface EmptyStateAreablockToolbarProps {
   areaTypes: AreaType[]
+  config?: AreablockEditableConfig
   onClick: (areaType?: string) => Promise<void>
 }
 
 export const EmptyStateAreablockToolbar = ({
   areaTypes,
+  config,
   onClick
 }: EmptyStateAreablockToolbarProps): React.JSX.Element => {
   const { styles } = useAreablockEditableStyles()
-  const { t } = useTranslation()
+
+  const { menuItems } = useAreablockMenu({
+    config,
+    onAddArea: (areaType: string) => { void onClick(areaType) }
+  })
 
   const renderAddButton = (): React.ReactNode => {
     if (areaTypes.length === 1) {
@@ -40,16 +46,10 @@ export const EmptyStateAreablockToolbar = ({
       )
     }
 
-    // Multiple area types - dropdown button
-    const dropdownItems = areaTypes.map(areaType => ({
-      key: areaType.type,
-      label: t(areaType.name),
-      onClick: () => { void onClick(areaType.type) }
-    }))
-
+    // Multiple area types - dropdown button with groups support
     return (
       <Dropdown
-        menu={ { items: dropdownItems } }
+        menu={ { items: menuItems } }
         placement="bottomLeft"
         trigger={ ['click'] }
       >
