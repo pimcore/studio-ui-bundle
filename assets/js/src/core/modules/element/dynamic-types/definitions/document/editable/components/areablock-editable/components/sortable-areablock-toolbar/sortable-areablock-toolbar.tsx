@@ -15,9 +15,10 @@ import { Split } from '@Pimcore/components/split/split'
 import { Space, Dropdown } from 'antd'
 import { useAreablockEditableStyles } from '../../areablock-editable.styles'
 import { type AreablockManager } from '../../utils/areablock-manager'
-import { type AreaType } from '../../areablock-editable'
+import { type AreaType, type AreablockEditableConfig } from '../../areablock-editable'
 import { useTranslation } from 'react-i18next'
 import { useSortableElement } from '../../../../helpers/editable-dropzone-sorting/hooks/use-sortable-element'
+import { useAreablockMenu } from '../../hooks/use-areablock-menu'
 
 export interface SortableAreablockToolbarProps {
   id: string
@@ -25,6 +26,7 @@ export interface SortableAreablockToolbarProps {
   element: HTMLElement
   limitReached: boolean
   areaTypes: AreaType[]
+  config?: AreablockEditableConfig
   areablockManager: AreablockManager
   onAddArea: (element: HTMLElement | null, areaType?: string) => void
   onRemoveArea: (element: HTMLElement) => void
@@ -38,6 +40,7 @@ export const SortableAreablockToolbar = ({
   element,
   limitReached,
   areaTypes,
+  config,
   areablockManager,
   onAddArea,
   onRemoveArea,
@@ -47,6 +50,11 @@ export const SortableAreablockToolbar = ({
   const { styles } = useAreablockEditableStyles()
   const { t } = useTranslation()
   const { listeners } = useSortableElement({ id, element })
+
+  const { menuItems } = useAreablockMenu({
+    config,
+    onAddArea: (areaType: string) => { onAddArea(element, areaType) }
+  })
 
   const elements = areablockManager.queryElements()
   const elementIndex = areablockManager.findElementIndex(element)
@@ -73,18 +81,10 @@ export const SortableAreablockToolbar = ({
         />
       )
     } else {
-      const dropdownItems = areaTypes.map(areaType => ({
-        key: areaType.type,
-        label: t(areaType.name),
-        onClick: () => {
-          onAddArea(element, areaType.type)
-        }
-      }))
-
       buttons.push(
         <Dropdown
           key="plus-dropdown"
-          menu={ { items: dropdownItems } }
+          menu={ { items: menuItems } }
           placement="bottomLeft"
           trigger={ ['click'] }
         >

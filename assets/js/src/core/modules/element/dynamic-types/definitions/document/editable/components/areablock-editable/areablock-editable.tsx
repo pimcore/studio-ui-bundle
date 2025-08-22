@@ -35,6 +35,7 @@ export interface AreablockEditableConfig {
   reload?: boolean
   allowed?: string[]
   types?: AreaType[]
+  group?: Record<string, string[]>
   blockStateStack?: any
 }
 
@@ -92,6 +93,7 @@ export const AreablockEditable = ({
   const { initializeControls, updateControls, clearEmptyState, renderAreablockToolbar } = useAreablockControls({
     areablockManager,
     areaTypes: configUtils.getAvailableTypes(config),
+    config,
     onAddArea: addArea,
     onRemoveArea: removeArea,
     onMoveAreaUp: moveAreaUp,
