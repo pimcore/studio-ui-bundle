@@ -9,7 +9,6 @@
  */
 
 import { useMemo } from 'react'
-import { isNil } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { type MenuProps } from 'antd'
 import { type AreablockEditableConfig } from '../areablock-editable'
