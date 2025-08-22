@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { type IReportConfigurationSectionProps } from '@Pimcore/modules/reports/reports-editor/types'
 
-export const Permissions = ({ currentData, updateFormData }: IReportConfigurationSectionProps): React.JSX.Element => {
+export const Permissions = ({ currentData }: IReportConfigurationSectionProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (

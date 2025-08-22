@@ -8,14 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Select } from '@Pimcore/components/select/select'
 import { Form } from '@Pimcore/components/form/form'
-import { Input } from '@Pimcore/components/input/input'
 import { Conditional } from '@Pimcore/components/form/conditional/conditional'
 import { CHART_TYPE_BAR, CHART_TYPE_LINE, CHART_TYPE_PIE } from '@Pimcore/modules/reports/constants'
+import type { IReportConfigurationSectionProps } from '@Pimcore/modules/reports/reports-editor/types'
 
 const CHART_OPTIONS = [
   { value: '', label: 'None' },
@@ -24,8 +24,15 @@ const CHART_OPTIONS = [
   { value: CHART_TYPE_BAR, label: 'Bar Chart' }
 ]
 
-export const ChartSettings = (): React.JSX.Element => {
+export const ChartSettings = ({ currentData }: IReportConfigurationSectionProps): React.JSX.Element => {
   const { t } = useTranslation()
+
+  const chartSelectOptions = useMemo(() => {
+    return currentData.columnConfigurations.map((column) => ({
+      value: column.name,
+      label: column.name
+    }))
+  }, [currentData])
 
   return (
     <FormKit.Panel title={ t('reports.editor.chart-settings.title') }>
@@ -46,7 +53,7 @@ export const ChartSettings = (): React.JSX.Element => {
             label="X-Axis"
             name="xAxis"
           >
-            <Input />
+            <Select options={ chartSelectOptions } />
           </Form.Item>
         </FormKit.Panel>
       </Conditional>
@@ -60,7 +67,7 @@ export const ChartSettings = (): React.JSX.Element => {
             label="X-Axis"
             name="xAxis"
           >
-            <Input />
+            <Select options={ chartSelectOptions } />
           </Form.Item>
         </FormKit.Panel>
       </Conditional>
@@ -74,7 +81,7 @@ export const ChartSettings = (): React.JSX.Element => {
             label="X-Axis"
             name="xAxis"
           >
-            <Input />
+            <Select options={ chartSelectOptions } />
           </Form.Item>
         </FormKit.Panel>
       </Conditional>

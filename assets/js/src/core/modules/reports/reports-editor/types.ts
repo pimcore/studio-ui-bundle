@@ -12,5 +12,4 @@ import type { ReportFormData } from '@Pimcore/modules/reports/reports-editor/hoo
 
 export interface IReportConfigurationSectionProps {
   currentData: ReportFormData
-  updateFormData: (data: Partial<ReportFormData>) => void
 }
