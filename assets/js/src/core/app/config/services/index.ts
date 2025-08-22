@@ -29,12 +29,10 @@ import { DynamicTypeListingAssetLink } from '@Pimcore/modules/element/dynamic-ty
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { DynamicTypeFieldFilterObjectAdapter } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/data-object-adapter/dynamic-type-field-filter-data-object-adapter'
 import { DynamicTypeFieldFilterDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/data-object-brick/dynamic-type-field-filter-data-object-object-brick'
-import { DynamicTypeFieldFilterText } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/text/dynamic-type-field-filter-text'
-import { DynamicTypeFieldFilterTextArea } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/text-area/dynamic-type-field-filter-text-area'
-import { DynamicTypeFieldFilterWysiwyg } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/wysiwyg/dynamic-type-field-filter-wysiwyg'
+import { DynamicTypeFieldFilterString } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/string/dynamic-type-field-filter-string'
 import { DynamicTypeFieldFilterNumber } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/number/dynamic-type-field-filter-number'
 import { DynamicTypeFieldFilterSelect } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/select/dynamic-type-field-filter-select'
-import { DynamicTypeFieldFilterDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
+import { DynamicTypeFieldFilterDate } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/date/dynamic-type-field-filter-date'
 import { DynamicTypeFieldFilterCheckbox } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
 import { DynamicTypeGridCellText } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/text/dynamic-type-grid-cell-text'
 import { DynamicTypeGridCellRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/dynamic-type-grid-cell-registry'
@@ -210,6 +208,8 @@ import { DynamicTypeEditableDialogLayoutRegistry } from '@Pimcore/modules/elemen
 import { DynamicTypeEditableDialogLayoutTabpanel } from '@Pimcore/modules/element/dynamic-types/definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-tabpanel'
 import { DynamicTypeEditableDialogLayoutPanel } from '@Pimcore/modules/element/dynamic-types/definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-panel'
 import { DynamicTypeGridCellString } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/string/dynamic-type-grid-cell-string'
+import { DynamicTypeFieldFilterNone } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/none/dynamic-type-field-filter-none'
+import { DynamicTypeFieldFilterFulltext } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/fullText/dynamic-type-field-filter-fulltext'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -252,12 +252,12 @@ container.bind(serviceIds.iconLibrary).to(IconLibrary).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilterRegistry']).to(DynamicTypeFieldFilterRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/DataObjectAdapter']).to(DynamicTypeFieldFilterObjectAdapter).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/DataObjectObjectBrick']).to(DynamicTypeFieldFilterDataObjectObjectBrick).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/FieldFilter/Text']).to(DynamicTypeFieldFilterText).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/FieldFilter/Textarea']).to(DynamicTypeFieldFilterTextArea).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/FieldFilter/Wysiwyg']).to(DynamicTypeFieldFilterWysiwyg).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/String']).to(DynamicTypeFieldFilterString).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/Fulltext']).to(DynamicTypeFieldFilterFulltext).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/None']).to(DynamicTypeFieldFilterNone).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Number']).to(DynamicTypeFieldFilterNumber).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Select']).to(DynamicTypeFieldFilterSelect).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/FieldFilter/Datetime']).to(DynamicTypeFieldFilterDatetime).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/Date']).to(DynamicTypeFieldFilterDate).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Checkbox']).to(DynamicTypeFieldFilterCheckbox).inSingletonScope()
 
 // dynamic types batch edit

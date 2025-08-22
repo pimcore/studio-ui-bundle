@@ -23,7 +23,7 @@ export class DynamicTypeMetaDataInput extends DynamicTypeMetadataAbstract {
   visibleInTypeSelection: boolean = true
 
   @inject(serviceIds['DynamicTypes/GridCell/Text']) protected dynamicTypeGridCellType: DynamicTypeGridCellAbstract
-  @inject(serviceIds['DynamicTypes/FieldFilter/Text']) protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract
+  @inject(serviceIds['DynamicTypes/FieldFilter/String']) protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract
 
   getVersionPreviewComponent (data: string): JSX.Element {
     return <span> { data } </span>
