@@ -15,6 +15,7 @@ import { OperationalGrid } from '../../../operational-grid/operational-grid'
 import { createColumnHelper, type RowSelectionState, type ColumnDef } from '@tanstack/react-table'
 import { DefaultCell } from '../../../grid/columns/default-cell'
 import { Button, Space, Input, InputNumber, Select } from 'antd'
+import { IconButton } from '../../../icon-button/icon-button'
 
 const config: Meta<typeof OperationalGrid> = {
   title: 'Components/Data Entry/Form/Controls/Composite/OperationalGrid',
@@ -100,7 +101,9 @@ const BasicOperationalGrid = ({ value = [], onChange, enableMultipleRowSelection
       selectedRows={selectedRows}
       onSelectedRowsChange={setSelectedRows}
     >
-      <div style={{ marginBottom: 16 }}>
+      <OperationalGrid.Grid />
+      
+      <div style={{ marginTop: 16 }}>
         <OperationalGrid.Operations>
           {(operations) => {
             const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
@@ -108,8 +111,8 @@ const BasicOperationalGrid = ({ value = [], onChange, enableMultipleRowSelection
             
             return (
               <Space>
-                <Button 
-                  type="primary" 
+                <IconButton 
+                  icon={{ value: 'new-something' }}
                   onClick={() => operations.addRow({ 
                     name: 'New Setting', 
                     value: '', 
@@ -117,27 +120,27 @@ const BasicOperationalGrid = ({ value = [], onChange, enableMultipleRowSelection
                   })}
                 >
                   Add Item
-                </Button>
-                <Button 
+                </IconButton>
+                <IconButton 
+                  icon={{ value: 'trash' }}
                   onClick={() => operations.deleteSelectedRows()}
                   disabled={!hasSelection}
                   danger
                 >
                   Delete Selected {enableMultipleRowSelection ? `(${selectedCount})` : ''}
-                </Button>
-                <Button 
+                </IconButton>
+                <IconButton 
+                  icon={{ value: 'close' }}
                   onClick={() => operations.clearSelectedRows()}
                   disabled={!hasSelection}
                 >
                   Clear Selection
-                </Button>
+                </IconButton>
               </Space>
             )
           }}
         </OperationalGrid.Operations>
       </div>
-      
-      <OperationalGrid.Grid />
     </OperationalGrid>
   )
 }
@@ -259,7 +262,9 @@ const AdvancedOperationalGrid = ({ value = [], onChange, enableMultipleRowSelect
       selectedRows={selectedRows}
       onSelectedRowsChange={setSelectedRows}
     >
-      <div style={{ marginBottom: 16 }}>
+      <OperationalGrid.Grid />
+      
+      <div style={{ marginTop: 16 }}>
         <OperationalGrid.Operations>
           {(operations) => {
             const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
@@ -267,8 +272,8 @@ const AdvancedOperationalGrid = ({ value = [], onChange, enableMultipleRowSelect
             
             return (
               <Space>
-                <Button 
-                  type="primary"
+                <IconButton 
+                  icon={{ value: 'new-something' }}
                   onClick={() => operations.addRow({
                     name: 'New Setting',
                     value: '',
@@ -276,27 +281,27 @@ const AdvancedOperationalGrid = ({ value = [], onChange, enableMultipleRowSelect
                   })}
                 >
                   Add Setting
-                </Button>
-                <Button 
+                </IconButton>
+                <IconButton 
+                  icon={{ value: 'trash' }}
                   onClick={() => operations.deleteSelectedRows()}
                   disabled={!hasSelection}
                   danger
                 >
                   Delete Selected {enableMultipleRowSelection ? `(${selectedCount})` : ''}
-                </Button>
-                <Button 
+                </IconButton>
+                <IconButton 
+                  icon={{ value: 'close' }}
                   onClick={() => operations.clearSelectedRows()}
                   disabled={!hasSelection}
                 >
                   Clear Selection
-                </Button>
+                </IconButton>
               </Space>
             )
           }}
         </OperationalGrid.Operations>
       </div>
-      
-      <OperationalGrid.Grid />
     </OperationalGrid>
   )
 }
@@ -492,120 +497,126 @@ export const WithColumnOperations: StoryObj = {
           <p>This example demonstrates adding, removing, and updating columns dynamically.</p>
           
           <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
-            <div>
-              <OperationalGrid
-                value={data}
-                columns={columns}
-                onChange={setData}
-                onColumnsChange={handleColumnsChange}
-                selectedRows={selectedRows}
-                onSelectedRowsChange={setSelectedRows}
-                enableSorting={true}
-                enableRowSelection={true}
-                enableMultipleRowSelection={true}
-              >
-                <div style={{ marginBottom: 16 }}>
-                  <OperationalGrid.Operations>
-                    {(operations) => {
-                      const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
-                      const hasSelection = selectedCount > 0
-                      
-                      return (
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
-                          <Space>
-                            <Button 
-                              type="primary" 
-                              onClick={() => operations.addRow({ name: 'New Item', value: '', type: 'text' })}
-                            >
-                              Add Row
-                            </Button>
-                            <Button 
-                              onClick={() => operations.deleteSelectedRows()}
-                              disabled={!hasSelection}
-                              danger
-                            >
-                              Delete Selected ({selectedCount})
-                            </Button>
-                          </Space>
-                          
-                          <div style={{ width: 1, height: 24, backgroundColor: '#d9d9d9', margin: '0 8px' }} />
-                          
-                          <Space>
-                            <Button 
-                              onClick={() => operations.addColumn(
-                                columnHelper.accessor('type', {
-                                  header: 'Type',
-                                  cell: info => <DefaultCell {...info} />,
-                                  meta: { editable: true }
-                                })
-                              )}
-                            >
-                              Add Type Column
-                            </Button>
-                            <Button 
-                              onClick={() => operations.addColumn(
-                                columnHelper.accessor('category' as any, {
-                                  header: 'Category (Missing)',
-                                  cell: info => <DefaultCell {...info} />,
-                                  meta: { editable: true }
-                                }),
-                                null // Default value for existing rows
-                              )}
-                            >
-                              Add Column (null)
-                            </Button>
-                            <Button 
-                              onClick={() => operations.addColumn(
-                                columnHelper.accessor('status' as any, {
-                                  header: 'Status',
-                                  cell: info => <DefaultCell {...info} />,
-                                  meta: { editable: true }
-                                }),
-                                'pending' // Default value for existing rows
-                              )}
-                            >
-                              Add Column (default)
-                            </Button>
-                            <Button 
-                              onClick={() => operations.removeColumn('type')}
-                              danger
-                            >
-                              Remove Type
-                            </Button>
-                            <Button 
-                              onClick={() => operations.removeColumn('category')}
-                              danger
-                            >
-                              Remove Category
-                            </Button>
-                            <Button 
-                              onClick={() => operations.removeColumn('status')}
-                              danger
-                            >
-                              Remove Status
-                            </Button>
-                            <Button 
-                              onClick={() => operations.updateColumn('name', 
-                                columnHelper.accessor('name', {
-                                  header: 'Item Name (Updated)',
-                                  meta: { editable: true }
-                                })
-                              )}
-                            >
-                              Update Name Header
-                            </Button>
-                          </Space>
-                        </div>
-                      )
-                    }}
-                  </OperationalGrid.Operations>
-                </div>
-                
-                <OperationalGrid.Grid />
-              </OperationalGrid>
-            </div>
+        <div>
+          <OperationalGrid
+            value={data}
+            columns={columns}
+            onChange={setData}
+            onColumnsChange={handleColumnsChange}
+            selectedRows={selectedRows}
+            onSelectedRowsChange={setSelectedRows}
+            enableSorting={true}
+            enableRowSelection={true}
+            enableMultipleRowSelection={true}
+          >
+            <OperationalGrid.Grid />
             
-            <div>
+            <div style={{ marginTop: 16 }}>
+              <OperationalGrid.Operations>
+                {(operations) => {
+                  const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
+                  const hasSelection = selectedCount > 0
+                  
+                  return (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
+                      <Space>
+                        <IconButton 
+                          icon={{ value: 'new-something' }}
+                          onClick={() => operations.addRow({ name: 'New Item', value: '', type: 'text' })}
+                        >
+                          Add Row
+                        </IconButton>
+                        <IconButton 
+                          icon={{ value: 'trash' }}
+                          onClick={() => operations.deleteSelectedRows()}
+                          disabled={!hasSelection}
+                          danger
+                        >
+                          Delete Selected ({selectedCount})
+                        </IconButton>
+                      </Space>
+                      
+                      <div style={{ width: 1, height: 24, backgroundColor: '#d9d9d9', margin: '0 8px' }} />
+                      
+                      <Space>
+                        <IconButton 
+                          icon={{ value: 'new-column' }}
+                          onClick={() => operations.addColumn(
+                            columnHelper.accessor('type', {
+                              header: 'Type',
+                              cell: info => <DefaultCell {...info} />,
+                              meta: { editable: true }
+                            })
+                          )}
+                        >
+                          Add Type Column
+                        </IconButton>
+                        <IconButton 
+                          icon={{ value: 'new-column' }}
+                          onClick={() => operations.addColumn(
+                            columnHelper.accessor('category' as any, {
+                              header: 'Category (Missing)',
+                              cell: info => <DefaultCell {...info} />,
+                              meta: { editable: true }
+                            }),
+                            null // Default value for existing rows
+                          )}
+                        >
+                          Add Column (null)
+                        </IconButton>
+                        <IconButton 
+                          icon={{ value: 'new-column' }}
+                          onClick={() => operations.addColumn(
+                            columnHelper.accessor('status' as any, {
+                              header: 'Status',
+                              cell: info => <DefaultCell {...info} />,
+                              meta: { editable: true }
+                            }),
+                            'pending' // Default value for existing rows
+                          )}
+                        >
+                          Add Column (default)
+                        </IconButton>
+                        <IconButton 
+                          icon={{ value: 'delete-column' }}
+                          onClick={() => operations.removeColumn('type')}
+                          danger
+                        >
+                          Remove Type
+                        </IconButton>
+                        <IconButton 
+                          icon={{ value: 'delete-column' }}
+                          onClick={() => operations.removeColumn('category')}
+                          danger
+                        >
+                          Remove Category
+                        </IconButton>
+                        <IconButton 
+                          icon={{ value: 'delete-column' }}
+                          onClick={() => operations.removeColumn('status')}
+                          danger
+                        >
+                          Remove Status
+                        </IconButton>
+                        <IconButton 
+                          icon={{ value: 'edit' }}
+                          onClick={() => operations.updateColumn('name', 
+                            columnHelper.accessor('name', {
+                              header: 'Item Name (Updated)',
+                              meta: { editable: true }
+                            })
+                          )}
+                        >
+                          Update Name Header
+                        </IconButton>
+                      </Space>
+                    </div>
+                  )
+                }}
+              </OperationalGrid.Operations>
+            </div>
+          </OperationalGrid>
+        </div>            <div>
               <h4>Current Form Values:</h4>
               <div style={{
                 background: '#f5f5f5',

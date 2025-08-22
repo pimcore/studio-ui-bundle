@@ -13,7 +13,8 @@ import { type Meta } from '@storybook/react'
 import { OperationalGrid, type OperationalGridProps } from './operational-grid'
 import { createColumnHelper, type RowSelectionState, type ColumnDef } from '@tanstack/react-table'
 import { DefaultCell } from '../grid/columns/default-cell'
-import { Button, Space } from 'antd'
+import { Space } from 'antd'
+import { IconButton } from '../icon-button/icon-button'
 
 const config: Meta = {
   title: 'Components/Data Entry/OperationalGrid',
@@ -44,7 +45,9 @@ const config: Meta = {
           selectedRows={selectedRows}
           onSelectedRowsChange={handleSelectedRowsChange}
         >
-          <div style={{ marginBottom: 16 }}>
+          <OperationalGrid.Grid />
+          
+          <div style={{ marginTop: 16 }}>
             <OperationalGrid.Operations>
               {(operations) => {
                 const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
@@ -53,27 +56,29 @@ const config: Meta = {
                 
                 return (
                   <Space>
-                    <Button 
-                      type="primary" 
+                    <IconButton 
+                      icon={{ value: 'new-something' }}
                       onClick={() => operations.addRow({ name: 'New Item', value: '', category: 'New' })}
                     >
                       Add Row
-                    </Button>
+                    </IconButton>
                     {args.enableRowSelection && (
                       <>
-                        <Button 
+                        <IconButton 
+                          icon={{ value: 'trash' }}
                           onClick={() => operations.deleteSelectedRows()}
                           disabled={!hasSelection}
                           danger
                         >
                           Delete Selected {isMultipleSelection ? `(${selectedCount})` : ''}
-                        </Button>
-                        <Button 
+                        </IconButton>
+                        <IconButton 
+                          icon={{ value: 'close' }}
                           onClick={() => operations.clearSelectedRows()}
                           disabled={!hasSelection}
                         >
                           Clear Selection
-                        </Button>
+                        </IconButton>
                       </>
                     )}
                   </Space>
@@ -81,8 +86,6 @@ const config: Meta = {
               }}
             </OperationalGrid.Operations>
           </div>
-          
-          <OperationalGrid.Grid />
         </OperationalGrid>
       )
     }
@@ -249,7 +252,9 @@ export const WithColumnOperations = {
           enableRowSelection={true}
           enableMultipleRowSelection={true}
         >
-          <div style={{ marginBottom: 16 }}>
+          <OperationalGrid.Grid />
+          
+          <div style={{ marginTop: 16 }}>
             <OperationalGrid.Operations>
               {(operations) => {
                 const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
@@ -257,28 +262,31 @@ export const WithColumnOperations = {
                 
                 return (
                   <Space wrap>
-                    <Button 
-                      type="primary" 
+                    <IconButton 
+                      icon={{ value: 'new-something' }}
                       onClick={() => operations.addRow({ name: 'New Item', value: '', category: 'New' })}
                     >
                       Add Row
-                    </Button>
-                    <Button 
+                    </IconButton>
+                    <IconButton 
+                      icon={{ value: 'trash' }}
                       onClick={() => operations.deleteSelectedRows()}
                       disabled={!hasSelection}
                       danger
                     >
                       Delete Selected ({selectedCount})
-                    </Button>
-                    <Button 
+                    </IconButton>
+                    <IconButton 
+                      icon={{ value: 'close' }}
                       onClick={() => operations.clearSelectedRows()}
                       disabled={!hasSelection}
                     >
                       Clear Selection
-                    </Button>
+                    </IconButton>
                     <div style={{ borderLeft: '1px solid #d9d9d9', paddingLeft: 8, marginLeft: 8 }}>
                       <Space>
-                        <Button 
+                        <IconButton 
+                          icon={{ value: 'new-column' }}
                           onClick={() => operations.addColumn(
                             columnHelper.accessor('category', {
                               header: 'Category',
@@ -288,14 +296,16 @@ export const WithColumnOperations = {
                           )}
                         >
                           Add Category Column
-                        </Button>
-                        <Button 
+                        </IconButton>
+                        <IconButton 
+                          icon={{ value: 'delete-column' }}
                           onClick={() => operations.removeColumn('category')}
                           danger
                         >
                           Remove Category Column
-                        </Button>
-                        <Button 
+                        </IconButton>
+                        <IconButton 
+                          icon={{ value: 'edit' }}
                           onClick={() => operations.updateColumn('name', 
                             columnHelper.accessor('name', {
                               header: 'Item Name (Updated)',
@@ -304,7 +314,7 @@ export const WithColumnOperations = {
                           )}
                         >
                           Update Name Column Header
-                        </Button>
+                        </IconButton>
                       </Space>
                     </div>
                   </Space>
@@ -312,8 +322,6 @@ export const WithColumnOperations = {
               }}
             </OperationalGrid.Operations>
           </div>
-          
-          <OperationalGrid.Grid />
         </OperationalGrid>
       )
     }
