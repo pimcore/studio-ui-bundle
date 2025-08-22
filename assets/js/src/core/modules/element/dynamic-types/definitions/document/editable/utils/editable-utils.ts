@@ -22,7 +22,7 @@ export interface EditableDefinition {
  */
 export const createEditableDataFromDefinitions = (
   editableDefinitions: AbstractDocumentEditableDefinition[] | EditableDefinition[]
-): Record<string, { type: string; data: any }> => {
+): Record<string, { type: string, data: any }> => {
   return Object.fromEntries(
     editableDefinitions.map(editableDef => [
       editableDef.name,

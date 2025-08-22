@@ -169,7 +169,8 @@ export const useAreablockEditable = ({
       }
 
       if (!isNil(result.editableDefinitions) && isArray(result.editableDefinitions)) {
-        const editablesData = createEditableDataFromDefinitions(result.editableDefinitions)
+        const editableDefinitions: AbstractDocumentEditableDefinition[] = result.editableDefinitions
+        const editablesData = createEditableDataFromDefinitions(editableDefinitions)
 
         initializeData(editablesData)
         setDynamicEditables(prev => [...prev, ...result.editableDefinitions])

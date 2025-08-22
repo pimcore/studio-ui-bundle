@@ -33,7 +33,6 @@ export class DynamicTypeDocumentEditableSelect extends DynamicTypeDocumentEditab
   id: string = 'select'
 
   getEditableDataComponent (props: SelectEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
-    
     const baseOptions: SelectOptionType[] = props.config?.store?.map((item: SelectStoreEntry) => {
       if (isArray(item)) {
         const [value, label] = item
