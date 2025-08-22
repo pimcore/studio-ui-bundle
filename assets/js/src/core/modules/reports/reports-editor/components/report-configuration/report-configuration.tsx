@@ -51,13 +51,16 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
   }, [data])
 
   const onValuesChange = (changedValues: Partial<ReportFormData>, allValues: ReportFormData): void => {
+    const isChartEmpty = allValues.chartType === ''
+
     // TODO: After finalizing all fields, remove currentData from updateFormData
     updateFormData({
       ...currentData,
       ...allValues,
       dataSourceConfig: castArray(
         allValues.dataSourceConfig ?? currentData?.dataSourceConfig ?? []
-      )
+      ),
+      ...(isChartEmpty && { xAxis: '', yAxis: [] })
     })
   }
 
