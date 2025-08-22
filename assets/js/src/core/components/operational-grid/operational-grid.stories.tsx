@@ -15,6 +15,7 @@ import { createColumnHelper, type RowSelectionState, type ColumnDef } from '@tan
 import { DefaultCell } from '../grid/columns/default-cell'
 import { Space } from 'antd'
 import { IconButton } from '../icon-button/icon-button'
+import { type DragEndEvent } from '@dnd-kit/core'
 
 const config: Meta = {
   title: 'Components/Data Entry/OperationalGrid',
@@ -323,6 +324,118 @@ export const WithColumnOperations = {
             </OperationalGrid.Operations>
           </div>
         </OperationalGrid>
+      )
+    }
+
+    return <ComponentWrapper />
+  }
+}
+
+export const WithDragAndDrop = {
+  render: () => {
+    const ComponentWrapper = (): React.JSX.Element => {
+      const [data, setData] = useState([
+        { name: 'Task 1', value: 'High Priority', category: 'Development' },
+        { name: 'Task 2', value: 'Medium Priority', category: 'Testing' },
+        { name: 'Task 3', value: 'Low Priority', category: 'Documentation' },
+        { name: 'Task 4', value: 'High Priority', category: 'Design' },
+        { name: 'Task 5', value: 'Medium Priority', category: 'Development' }
+      ])
+      const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
+
+      const handleDragEnd = (event: DragEndEvent) => {
+        const { active, over } = event
+
+        if (active.id !== over?.id) {
+          const oldIndex = data.findIndex((item, index) => String(index) === active.id)
+          const newIndex = data.findIndex((item, index) => String(index) === over?.id)
+
+          if (oldIndex !== -1 && newIndex !== -1) {
+            const newData = [...data]
+            const [reorderedItem] = newData.splice(oldIndex, 1)
+            newData.splice(newIndex, 0, reorderedItem)
+            setData(newData)
+          }
+        }
+      }
+
+      return (
+        <div>
+          <div style={{ marginBottom: 16, padding: 16, backgroundColor: '#f0f0f0', borderRadius: 4 }}>
+            <h4 style={{ margin: 0, marginBottom: 8 }}>Drag & Drop Grid</h4>
+            <p style={{ margin: 0, fontSize: '14px', color: '#666' }}>
+              Use the drag handle (⋮⋮) on the left to reorder rows by dragging them up or down.
+            </p>
+          </div>
+          
+          <OperationalGrid
+            value={data}
+            columns={columns}
+            onChange={setData}
+            selectedRows={selectedRows}
+            onSelectedRowsChange={setSelectedRows}
+            enableSorting={false}
+            enableRowSelection={true}
+            enableMultipleRowSelection={true}
+            enableRowDrag={true}
+            handleDragEnd={handleDragEnd}
+          >
+            <OperationalGrid.Grid />
+            
+            <div style={{ marginTop: 16 }}>
+              <OperationalGrid.Operations>
+                {(operations) => {
+                  const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
+                  const hasSelection = selectedCount > 0
+                  
+                  return (
+                    <Space>
+                      <IconButton 
+                        icon={{ value: 'new-something' }}
+                        onClick={() => operations.addRow({ 
+                          name: `Task ${data.length + 1}`, 
+                          value: 'New Priority', 
+                          category: 'New Category' 
+                        })}
+                      >
+                        Add Task
+                      </IconButton>
+                      <IconButton 
+                        icon={{ value: 'trash' }}
+                        onClick={() => operations.deleteSelectedRows()}
+                        disabled={!hasSelection}
+                        danger
+                      >
+                        Delete Selected ({selectedCount})
+                      </IconButton>
+                      <IconButton 
+                        icon={{ value: 'close' }}
+                        onClick={() => operations.clearSelectedRows()}
+                        disabled={!hasSelection}
+                      >
+                        Clear Selection
+                      </IconButton>
+                      <div style={{ borderLeft: '1px solid #d9d9d9', paddingLeft: 8, marginLeft: 8 }}>
+                        <IconButton 
+                          icon={{ value: 'refresh' }}
+                          onClick={() => setData([
+                            { name: 'Task 1', value: 'High Priority', category: 'Development' },
+                            { name: 'Task 2', value: 'Medium Priority', category: 'Testing' },
+                            { name: 'Task 3', value: 'Low Priority', category: 'Documentation' },
+                            { name: 'Task 4', value: 'High Priority', category: 'Design' },
+                            { name: 'Task 5', value: 'Medium Priority', category: 'Development' }
+                          ])}
+                        >
+                          Reset Order
+                        </IconButton>
+                      </div>
+                    </Space>
+                  )
+                }}
+              </OperationalGrid.Operations>
+            </div>
+          </OperationalGrid>
+        </div>
       )
     }
 

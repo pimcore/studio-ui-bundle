@@ -9,7 +9,7 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react'
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Form } from '../../form'
 import { OperationalGrid } from '../../../operational-grid/operational-grid'
 import { createColumnHelper, type RowSelectionState, type ColumnDef } from '@tanstack/react-table'
@@ -20,6 +20,7 @@ import { IconTextButton } from '../../../icon-text-button/icon-text-button'
 import { Panel } from '../../../panel/panel'
 import { BaseView } from '../../../base-view/base-view'
 import { FormKit } from '../../form-kit'
+import { type DragEndEvent } from '@dnd-kit/core'
 
 const config: Meta<typeof OperationalGrid> = {
   title: 'Components/Data Entry/Form/Controls/Composite/OperationalGrid',
@@ -1035,5 +1036,217 @@ export const WithPanelLayout: StoryObj = {
     }
 
     return <PanelLayoutExample />
+  }
+}
+
+export const WithDragAndDrop: StoryObj = {
+  render: () => {
+    const DragAndDropOperationalGrid = ({ value = [], onChange }: { value?: BasicItem[], onChange?: (value: BasicItem[]) => void }): React.JSX.Element => {
+      const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
+      const [isDragEnabled, setIsDragEnabled] = useState<boolean>(false)
+      const columnHelper = createColumnHelper<BasicItem>()
+
+      const columns = [
+        columnHelper.accessor('name', {
+          header: 'Task Name',
+          meta: { editable: true }
+        }),
+        columnHelper.accessor('value', {
+          header: 'Priority',
+          cell: info => <DefaultCell {...info} />,
+          meta: { editable: true }
+        }),
+        columnHelper.accessor('type', {
+          header: 'Category',
+          cell: info => <DefaultCell {...info} />,
+          meta: { editable: true }
+        })
+      ]
+
+      const handleDragEnd = useCallback((event: DragEndEvent) => {
+        const { active, over } = event
+
+        if (active.id !== over?.id && value) {
+          const oldIndex = value.findIndex((_: any, index: number) => `task-${value[index].name}-${index}` === active.id)
+          const newIndex = value.findIndex((_: any, index: number) => `task-${value[index].name}-${index}` === over?.id)
+
+          if (oldIndex !== -1 && newIndex !== -1) {
+            const newValue = [...value]
+            const [reorderedItem] = newValue.splice(oldIndex, 1)
+            newValue.splice(newIndex, 0, reorderedItem)
+            onChange?.(newValue)
+          }
+        }
+      }, [value, onChange])
+
+      const toggleDragMode = () => {
+        setIsDragEnabled(!isDragEnabled)
+        // Clear selections when switching modes
+        setSelectedRows({})
+      }
+
+      return (
+        <OperationalGrid
+          value={value}
+          onChange={onChange}
+          columns={columns}
+          enableSorting={false} // Disable sorting to avoid conflicts with drag
+          enableRowSelection={!isDragEnabled} // Disable row selection when drag is enabled
+          enableMultipleRowSelection={!isDragEnabled}
+          enableRowDrag={isDragEnabled}
+          handleDragEnd={handleDragEnd}
+          selectedRows={selectedRows}
+          onSelectedRowsChange={setSelectedRows}
+          setRowId={(row, index) => `task-${row.name}-${index}`} // Provide stable IDs for drag animation
+        >
+          <Space direction="vertical" size="small">
+            <OperationalGrid.Grid />
+            
+            <OperationalGrid.Operations>
+              {(operations) => {
+                const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
+                const hasSelection = selectedCount > 0
+                
+                return (
+                  <Space wrap>
+                    <IconButton 
+                      icon={{ value: 'new-something' }}
+                      onClick={() => operations.addRow({ 
+                        name: `Task ${value.length + 1}`, 
+                        value: 'New Priority', 
+                        type: 'new' 
+                      })}
+                    >
+                      Add Task
+                    </IconButton>
+                    
+                    <IconButton 
+                      icon={{ value: isDragEnabled ? 'drag-option' : 'transfer' }}
+                      onClick={toggleDragMode}
+                      title={isDragEnabled ? 'Switch to selection mode' : 'Switch to drag mode'}
+                    />
+                    
+                    {!isDragEnabled && (
+                      <>
+                        <IconButton 
+                          icon={{ value: 'trash' }}
+                          onClick={() => operations.deleteSelectedRows()}
+                          disabled={!hasSelection}
+                          danger
+                        >
+                          Delete Selected ({selectedCount})
+                        </IconButton>
+                        <IconButton 
+                          icon={{ value: 'close' }}
+                          onClick={() => operations.clearSelectedRows()}
+                          disabled={!hasSelection}
+                        >
+                          Clear Selection
+                        </IconButton>
+                      </>
+                    )}
+                    
+                    <div style={{ borderLeft: '1px solid #d9d9d9', paddingLeft: 8, marginLeft: 8 }}>
+                      <IconButton 
+                        icon={{ value: 'refresh' }}
+                        onClick={() => {
+                          const resetTasks = [
+                            { name: 'User Research', value: 'High Priority', type: 'development' },
+                            { name: 'UI Design', value: 'Medium Priority', type: 'design' },
+                            { name: 'Database Schema', value: 'High Priority', type: 'development' },
+                            { name: 'API Documentation', value: 'Low Priority', type: 'documentation' },
+                            { name: 'Unit Testing', value: 'Medium Priority', type: 'testing' }
+                          ]
+                          onChange?.(resetTasks)
+                          setSelectedRows({}) // Clear selections on reset
+                        }}
+                      >
+                        Reset Order
+                      </IconButton>
+                    </div>
+                  </Space>
+                )
+              }}
+            </OperationalGrid.Operations>
+          </Space>
+        </OperationalGrid>
+      )
+    }
+
+    const DragAndDropExample = (): React.JSX.Element => {
+      const [form] = Form.useForm()
+      const [formValues, setFormValues] = useState({
+        tasks: [
+          { name: 'User Research', value: 'High Priority', type: 'development' },
+          { name: 'UI Design', value: 'Medium Priority', type: 'design' },
+          { name: 'Database Schema', value: 'High Priority', type: 'development' },
+          { name: 'API Documentation', value: 'Low Priority', type: 'documentation' },
+          { name: 'Unit Testing', value: 'Medium Priority', type: 'testing' }
+        ]
+      })
+
+      const onValuesChange = (changedValues: any, allValues: any) => {
+        setFormValues(allValues)
+      }
+
+      const onFinish = (values: any) => {
+        console.log('Form submitted with reordered tasks:', values)
+      }
+
+      return (
+        <div style={{ maxWidth: '1200px', padding: '20px' }}>
+          <div style={{ marginBottom: 16, padding: 16, backgroundColor: '#f0f0f0', borderRadius: 4 }}>
+            <h4 style={{ margin: 0, marginBottom: 8 }}>Drag & Drop Form Control</h4>
+            <p style={{ margin: 0, fontSize: '14px', color: '#666' }}>
+              Use the "Drag Mode" / "Select Mode" button to switch between drag & drop reordering and row selection for batch operations. 
+              The two modes are mutually exclusive to avoid interaction conflicts.
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
+            <div>
+              <Form
+                form={form}
+                initialValues={formValues}
+                layout="vertical"
+                onFinish={onFinish}
+                onValuesChange={onValuesChange}
+              >
+                <Form.Item
+                  label="Project Tasks (Drag to Reorder by Priority)"
+                  name="tasks"
+                >
+                  <DragAndDropOperationalGrid />
+                </Form.Item>
+
+                <Form.Item>
+                  <Button htmlType="submit" type="primary">
+                    Save Project Tasks
+                  </Button>
+                </Form.Item>
+              </Form>
+            </div>
+            
+            <div>
+              <h4>Current Form Values:</h4>
+              <div style={{
+                background: '#f5f5f5',
+                padding: '16px',
+                borderRadius: '6px',
+                fontFamily: 'monospace',
+                fontSize: '12px',
+                whiteSpace: 'pre-wrap',
+                maxHeight: '400px',
+                overflowY: 'auto'
+              }}>
+                {JSON.stringify(formValues, null, 2)}
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    return <DragAndDropExample />
   }
 }
