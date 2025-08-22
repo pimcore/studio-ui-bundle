@@ -1736,6 +1736,9 @@ const ConfigurationFormExample = (): React.JSX.Element => {
             extra={
               <IconButton
                 icon={ { value: 'shield' } }
+                onClick={(e) => {
+                  e.stopPropagation()
+                }}
                 size="small"
                 title="Security audit"
               />

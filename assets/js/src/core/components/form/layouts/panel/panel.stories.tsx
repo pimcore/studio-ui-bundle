@@ -37,7 +37,7 @@ const meta: Meta = {
     },
     theme: {
       control: 'radio',
-      options: ['fieldset', 'card-with-highlight'],
+      options: ['default', 'fieldset', 'card-with-highlight', 'border-highlight'],
       description: 'Visual theme for the panel',
       defaultValue: 'card-with-highlight'
     },
@@ -142,6 +142,74 @@ export const CardTheme: Story = {
     theme: 'card-with-highlight'
   },
   render: (args) => <PanelStoryComponent { ...args } />
+}
+
+// Default theme
+export const DefaultTheme: Story = {
+  args: {
+    title: 'Contact Information',
+    theme: 'default',
+    border: true
+  },
+  render: (args) => <PanelStoryComponent { ...args } />
+}
+
+// Border highlight theme
+export const BorderHighlightTheme: Story = {
+  args: {
+    title: 'Security Settings',
+    theme: 'border-highlight',
+    border: true
+  },
+  render: (args) => <PanelStoryComponent { ...args } />
+}
+
+// All themes comparison for form panels
+export const AllFormPanelThemes: Story = {
+  render: () => {
+    const [form] = Form.useForm()
+    return (
+      <div style={ { maxWidth: '800px', display: 'grid', gap: '24px' } }>
+        <FormKit formProps={ { form, layout: 'vertical' } }>
+          <FormKit.Panel title="Card with Highlight (Default)" theme="card-with-highlight" border>
+            <Form.Item label="Name" name="name1">
+              <Input placeholder="Enter name" />
+            </Form.Item>
+            <Form.Item label="Email" name="email1">
+              <Input placeholder="Enter email" />
+            </Form.Item>
+          </FormKit.Panel>
+
+          <FormKit.Panel title="Default Theme" theme="default" border>
+            <Form.Item label="Name" name="name2">
+              <Input placeholder="Enter name" />
+            </Form.Item>
+            <Form.Item label="Email" name="email2">
+              <Input placeholder="Enter email" />
+            </Form.Item>
+          </FormKit.Panel>
+
+          <FormKit.Panel title="Fieldset Theme" theme="fieldset" border>
+            <Form.Item label="Name" name="name3">
+              <Input placeholder="Enter name" />
+            </Form.Item>
+            <Form.Item label="Email" name="email3">
+              <Input placeholder="Enter email" />
+            </Form.Item>
+          </FormKit.Panel>
+
+          <FormKit.Panel title="Border Highlight Theme" theme="border-highlight" border>
+            <Form.Item label="Name" name="name4">
+              <Input placeholder="Enter name" />
+            </Form.Item>
+            <Form.Item label="Email" name="email4">
+              <Input placeholder="Enter email" />
+            </Form.Item>
+          </FormKit.Panel>
+        </FormKit>
+      </div>
+    )
+  }
 }
 
 // Multiple panels example

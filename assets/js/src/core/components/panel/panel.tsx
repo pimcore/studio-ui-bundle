@@ -19,7 +19,7 @@ export interface PanelProps {
   collapsible?: boolean
   collapsed?: boolean
   children: React.ReactNode
-  theme?: 'fieldset' | 'card-with-highlight'
+  theme?: 'default' | 'fieldset' | 'card-with-highlight' | 'border-highlight'
   name?: string
   noteditable?: boolean
   extra?: ReactNode

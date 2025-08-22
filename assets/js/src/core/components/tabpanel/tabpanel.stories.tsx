@@ -24,6 +24,10 @@ const meta: Meta<typeof Tabpanel> = {
     title: {
       control: 'text'
     },
+    theme: {
+      control: 'radio',
+      options: ['default', 'fieldset', 'card-with-highlight', 'border-highlight']
+    },
     border: {
       control: 'boolean'
     },
@@ -132,6 +136,64 @@ export const NoTitle: Story = {
   args: {
     items: sampleItems
   }
+}
+
+export const DefaultTheme: Story = {
+  args: {
+    title: 'Default Theme Tabpanel',
+    theme: 'default',
+    border: true,
+    items: sampleItems
+  }
+}
+
+export const FieldsetTheme: Story = {
+  args: {
+    title: 'Fieldset Theme Tabpanel',
+    theme: 'fieldset',
+    border: true,
+    items: sampleItems
+  }
+}
+
+export const BorderHighlightTheme: Story = {
+  args: {
+    title: 'Border Highlight Theme Tabpanel',
+    theme: 'border-highlight',
+    border: true,
+    items: sampleItems
+  }
+}
+
+export const AllThemesComparison: Story = {
+  render: () => (
+    <div style={ { display: 'grid', gap: '16px' } }>
+      <Tabpanel 
+        title="Card with Highlight (Default)" 
+        theme="card-with-highlight" 
+        border
+        items={sampleItems}
+      />
+      <Tabpanel 
+        title="Default Theme" 
+        theme="default" 
+        border
+        items={sampleItems}
+      />
+      <Tabpanel 
+        title="Fieldset Theme" 
+        theme="fieldset" 
+        border
+        items={sampleItems}
+      />
+      <Tabpanel 
+        title="Border Highlight Theme" 
+        theme="border-highlight" 
+        border
+        items={sampleItems}
+      />
+    </div>
+  )
 }
 
 // Complex content example

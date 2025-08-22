@@ -25,7 +25,7 @@ const meta: Meta<typeof Panel> = {
     },
     theme: {
       control: 'radio',
-      options: ['fieldset', 'card-with-highlight']
+      options: ['default', 'fieldset', 'card-with-highlight', 'border-highlight']
     },
     border: {
       control: 'boolean'
@@ -95,6 +95,43 @@ export const FieldsetTheme: Story = {
     border: true,
     children: 'This panel uses the fieldset theme styling.'
   }
+}
+
+export const DefaultTheme: Story = {
+  args: {
+    title: 'Default Theme Panel',
+    theme: 'default',
+    border: true,
+    children: 'This panel uses the default theme styling.'
+  }
+}
+
+export const BorderHighlightTheme: Story = {
+  args: {
+    title: 'Border Highlight Theme Panel',
+    theme: 'border-highlight',
+    border: true,
+    children: 'This panel uses the border highlight theme styling.'
+  }
+}
+
+export const AllThemesComparison: Story = {
+  render: () => (
+    <div style={ { display: 'grid', gap: '16px' } }>
+      <Panel title="Card with Highlight (Default)" theme="card-with-highlight" border>
+        Card with highlight theme - this is the default theme for panels.
+      </Panel>
+      <Panel title="Default Theme" theme="default" border>
+        Default theme - basic styling without special highlights.
+      </Panel>
+      <Panel title="Fieldset Theme" theme="fieldset" border>
+        Fieldset theme - styled to look like a form fieldset.
+      </Panel>
+      <Panel title="Border Highlight Theme" theme="border-highlight" border>
+        Border highlight theme - emphasizes the border with highlighting.
+      </Panel>
+    </div>
+  )
 }
 
 export const NoTitle: Story = {

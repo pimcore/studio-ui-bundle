@@ -961,24 +961,33 @@ export const WithPanelLayout: StoryObj = {
                       <Space>
                         <IconTextButton 
                           icon={{ value: 'new-something' }}
-                          onClick={() => operations.addRow({ 
-                            name: 'New Config', 
-                            value: '', 
-                            type: 'text' 
-                          })}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            operations.addRow({ 
+                              name: 'New Config', 
+                              value: '', 
+                              type: 'text' 
+                            })
+                          }}
                         >
                           Add Configuration
                         </IconTextButton>
                         <IconTextButton 
                           icon={{ value: 'trash' }}
-                          onClick={() => operations.deleteSelectedRows()}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            operations.deleteSelectedRows()
+                          }}
                           disabled={!hasSelection}
                         >
                           Delete Selected ({selectedCount})
                         </IconTextButton>
                         <IconTextButton 
                           icon={{ value: 'close' }}
-                          onClick={() => operations.clearSelectedRows()}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            operations.clearSelectedRows()
+                          }}
                           disabled={!hasSelection}
                         >
                           Clear Selection
@@ -987,19 +996,18 @@ export const WithPanelLayout: StoryObj = {
                     )
 
                     return (
-                      <div style={{ marginBottom: '16px' }}>
                         <FormKit.Panel
                           title="Application Configuration"
                           extra={extraContent}
                           extraPosition="start"
                           border
                           contentPadding="none"
+                          theme='default'
                           collapsible
                           collapsed={false}
                         >
                           <OperationalGrid.Grid />
                         </FormKit.Panel>
-                      </div>
                     )
                   }}
                 </OperationalGrid.Operations>
