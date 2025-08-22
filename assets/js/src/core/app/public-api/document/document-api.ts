@@ -13,6 +13,7 @@ import { markDocumentEditablesAsModified } from '@Pimcore/modules/document/docum
 import { iframeDocumentEditorRegistry } from './iframe-registry'
 import { documentSaveService, SaveTaskType } from '@Pimcore/modules/document/services'
 import { debounce, isNil } from 'lodash'
+import { type AreablockGroupedTypes } from '@Pimcore/modules/document/document-editor-slice'
 import { type PublicApiDocumentEditorIframe } from '../document-editor-iframe'
 import { type IframeRef } from '@Pimcore/components/iframe/iframe'
 
@@ -26,7 +27,9 @@ export interface DocumentApi {
   triggerValueChangeWithReload: (documentId: number, key: string, value: any) => void
   triggerSaveAndReload: (documentId: number) => void
   notifyIframeReady: (documentId: number) => void
+  notifyAreablockTypes: (documentId: number, areablockTypes: AreablockGroupedTypes) => void
   isIframeReady: (documentId: number) => boolean
+  onReady: (documentId: number, callback: () => void) => void
 }
 
 class DocumentApiImpl implements DocumentApi {
@@ -84,8 +87,25 @@ class DocumentApiImpl implements DocumentApi {
     iframeDocumentEditorRegistry.markAsReady(documentId)
   }
 
+  notifyAreablockTypes (documentId: number, areablockTypes: AreablockGroupedTypes): void {
+    // Import Redux action and dispatch to store
+    import('@Pimcore/modules/document/document-editor-slice').then(({ setDocumentAreablockTypes }) => {
+      import('@Pimcore/app/store').then(({ store }) => {
+        store.dispatch(setDocumentAreablockTypes({ documentId, areablockTypes }))
+      }).catch(error => {
+        console.warn('Could not access store:', error)
+      })
+    }).catch(error => {
+      console.warn('Could not access Redux action:', error)
+    })
+  }
+
   isIframeReady (documentId: number): boolean {
     return iframeDocumentEditorRegistry.isIframeReady(documentId)
+  }
+
+  onReady (documentId: number, callback: () => void): void {
+    iframeDocumentEditorRegistry.onReady(documentId, callback)
   }
 
   private async performAutoSave (documentId: number): Promise<void> {

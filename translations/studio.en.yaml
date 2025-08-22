@@ -63,6 +63,8 @@ upload.error.failed-to-fetch-asset-details: 'Failed to fetch asset details'
 asset.select.type.nullable: 'All types'
 document.document-tree.title: Document Tree
 document.document-tree.search: Search in {{folderName}}
+areablock-types.title: Areablock Types
+areablock-types.no-areablocks: No areablock editables found in this document
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 data-object.tree.context-menu.add-object: Add Object

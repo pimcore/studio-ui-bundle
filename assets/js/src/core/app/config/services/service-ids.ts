@@ -65,6 +65,7 @@ export const serviceIds = {
   'Document/Editor/HardlinkTabManager': 'Document/Editor/HardlinkTabManager',
   'Document/Editor/LinkTabManager': 'Document/Editor/LinkTabManager',
   'Document/Editor/SnippetTabManager': 'Document/Editor/SnippetTabManager',
+  'Document/Editor/Edit/SidebarManager': 'Document/Editor/Edit/SidebarManager',
 
   // icon library
   iconLibrary: 'IconLibrary',

@@ -12,7 +12,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isUndefined } from 'lodash'
 import { type AreablockManager } from '../utils/areablock-manager'
-import { type AreaType } from '../areablock-editable'
+import { type AreaType, type AreablockEditableConfig } from '../areablock-editable'
 import {
   useEditableDropzoneSorting,
   type UseEditableDropzoneSortingReturn,
@@ -23,6 +23,9 @@ export interface UseAreablockSortingProps {
   areablockManager: AreablockManager
   areaTypes: AreaType[]
   onMoveArea: (fromIndex: number, toIndex: number) => void
+  // Optional props for enhanced functionality
+  onAddAreaAtIndex?: (areaType: string, index: number) => Promise<void>
+  config?: AreablockEditableConfig
 }
 
 export interface UseAreablockSortingReturn extends UseEditableDropzoneSortingReturn {
@@ -32,13 +35,17 @@ export interface UseAreablockSortingReturn extends UseEditableDropzoneSortingRet
 export const useAreablockSorting = ({
   areablockManager,
   areaTypes,
-  onMoveArea
+  onMoveArea,
+  onAddAreaAtIndex,
+  config
 }: UseAreablockSortingProps): UseAreablockSortingReturn => {
   const { t } = useTranslation()
 
   const sortingResult = useEditableDropzoneSorting({
     editableManager: areablockManager as EditableManager,
-    onMoveItem: onMoveArea
+    onMoveItem: onMoveArea,
+    onAddItemAtIndex: onAddAreaAtIndex,
+    config
   })
 
   // Calculate drag overlay title for areablocks

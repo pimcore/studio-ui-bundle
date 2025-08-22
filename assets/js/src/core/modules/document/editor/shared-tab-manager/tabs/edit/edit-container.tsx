@@ -10,18 +10,34 @@
 
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
-import React, { useContext, useRef, useCallback, useMemo } from 'react'
+import React, { useContext, useRef, useMemo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Iframe, type IframeRef } from '../../../../../../components/iframe/iframe'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import { isNil } from 'lodash'
 import { addCacheBusterToUrl } from '@Pimcore/utils/url-cache-buster'
+import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type DocumentEditorSidebarManager } from './sidebar/sidebar-manager'
+import { useDocumentEditorSidebarEntries } from './hooks/use-document-editor-sidebar-entries'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { removeDocument } from '@Pimcore/modules/document/document-editor-slice'
 
 export const EditContainer = (): React.JSX.Element => {
   const { id } = useContext(DocumentContext)
   const { document: documentDraft } = useDocumentDraft(id)
   const { t } = useTranslation()
   const iframeRef = useRef<IframeRef>(null)
+  const dispatch = useAppDispatch()
+
+  const sidebarManager = container.get<DocumentEditorSidebarManager>(serviceIds['Document/Editor/Edit/SidebarManager'])
+
+  const sidebarButtons = sidebarManager.getButtons()
+
+  // Get reactive sidebar entries - automatically re-evaluates when any relevant Redux state changes
+  const sidebarEntries = useDocumentEditorSidebarEntries()
 
   const handleIframeLoad = useCallback(() => {
     const iframeElement = iframeRef.current?.getIframeElement()
@@ -49,17 +65,28 @@ export const EditContainer = (): React.JSX.Element => {
       } catch (error) {
         console.warn('Could not unregister iframe:', error)
       }
+
+      // Clean up Redux state when document is closed
+      dispatch(removeDocument(id))
     }
-  }, [id])
+  }, [id, dispatch])
 
   return (
-    <Iframe
-      onLoad={ handleIframeLoad }
-      preserveScrollOnReload
-      ref={ iframeRef }
-      src={ iframeSrc }
-      title={ `${t('edit.label')}-${id}` }
-      useExternalReadyState
-    />
+    <ContentLayout renderSidebar={
+      <Sidebar
+        buttons={ sidebarButtons }
+        entries={ sidebarEntries }
+      />
+      }
+    >
+      <Iframe
+        onLoad={ handleIframeLoad }
+        preserveScrollOnReload
+        ref={ iframeRef }
+        src={ iframeSrc }
+        title={ `${t('edit.label')}-${id}` }
+        useExternalReadyState
+      />
+    </ContentLayout>
   )
 }
