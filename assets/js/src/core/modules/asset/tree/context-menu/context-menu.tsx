@@ -96,8 +96,8 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): ReactElement 
 
   return (
     <Menu
-      items={ items }
       dataTestId={ createContextMenuContainerTestId('asset', node.id) }
+      items={ items }
     />
   )
 }

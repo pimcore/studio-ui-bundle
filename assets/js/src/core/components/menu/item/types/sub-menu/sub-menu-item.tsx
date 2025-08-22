@@ -17,7 +17,7 @@ import { createContextMenuItemTestId } from '@Pimcore/utils/test-id-generator'
 export const WithExtendedApi = (Component: typeof Menu.SubMenu): ComponentType<SubMenuItemType> => {
   const ExtendedSubmenu = ({ children, popupOffset, label, itemKey, ...props }: SubMenuItemType): React.JSX.Element => {
     // Generate test ID from itemKey (the actual menu item key)
-    const testId = itemKey ? createContextMenuItemTestId(String(itemKey)) : undefined
+    const testId = itemKey !== undefined && itemKey !== null ? createContextMenuItemTestId(String(itemKey)) : undefined
 
     return (
       <Component

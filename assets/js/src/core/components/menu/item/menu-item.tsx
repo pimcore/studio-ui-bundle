@@ -38,7 +38,12 @@ export const MenuItem = ({ item }: MenuItemProps): React.JSX.Element => {
   }
 
   if (!('type' in item) && 'children' in item) {
-    return <SubMenuItem { ...item } itemKey={ item.key } />
+    return (
+      <SubMenuItem
+        { ...item }
+        itemKey={ item.key }
+      />
+    )
   }
 
   if (!('type' in item) && !('children' in item)) {

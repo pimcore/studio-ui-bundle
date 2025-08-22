@@ -28,7 +28,7 @@ export const WithExtendedApi = (Component: typeof Menu.Item): ComponentType<Defa
     classes.push('is-custom-item')
 
     // Generate test ID from itemKey (the actual menu item key)
-    const testId = itemKey ? createContextMenuItemTestId(String(itemKey)) : undefined
+    const testId = itemKey !== undefined && itemKey !== null ? createContextMenuItemTestId(String(itemKey)) : undefined
 
     return (
       <Component

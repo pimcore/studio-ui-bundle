@@ -97,8 +97,8 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
 
   return (
     <Menu
-      items={ items }
       dataTestId={ createContextMenuContainerTestId('data-object', node.id) }
+      items={ items }
     />
   )
 }

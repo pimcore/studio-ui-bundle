@@ -77,8 +77,8 @@ export const DocumentTreeContextMenu = (props: DocumentTreeContextMenuProps): Re
 
   return (
     <Menu
-      items={ items }
       dataTestId={ createContextMenuContainerTestId('document', node.id) }
+      items={ items }
     />
   )
 }

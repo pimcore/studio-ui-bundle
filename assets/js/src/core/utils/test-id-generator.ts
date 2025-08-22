@@ -271,72 +271,19 @@ export const createTableRowTestId = (rowIdentifier: number | string): string => 
 
 /**
  * Creates a test ID for table cells.
- * Combines row identifier and column ID.
- *
  * @param rowIdentifier - Row index (number) or row ID (string)
  * @param columnId - Column identifier
  * @returns Formatted test ID string
- *
- * @example
- * createTableCellTestId(0, 'cpath')
- * // Returns: 'cell-0-cpath'
- *
- * createTableCellTestId('asset-123', 'permissions')
- * // Returns: 'cell-asset-123-permissions'
  */
 export const createTableCellTestId = (rowIdentifier: number | string, columnId: string): string => {
   return buildTestId(['cell', rowIdentifier, columnId])
 }
 
 /**
- * Creates a test ID for context menu items.
- * Used for tree context menus and other context menu components.
- *
- * @param menuKey - The menu item key (unique identifier for the action)
- * @param elementType - Optional element type (asset, document, data-object)
- * @param nodeId - Optional node ID for context-specific menus
- * @returns Formatted test ID string
- *
- * @example
- * createContextMenuTestId('rename', 'asset', 123)
- * // Returns: 'context-menu-asset-123-rename'
- *
- * createContextMenuTestId('delete', 'data-object')
- * // Returns: 'context-menu-data-object-delete'
- *
- * createContextMenuTestId('refresh')
- * // Returns: 'context-menu-refresh'
- */
-export const createContextMenuTestId = (menuKey: string, elementType?: ElementType, nodeId?: number | string): string => {
-  const parts = ['context-menu']
-  
-  if (elementType !== undefined) {
-    parts.push(elementType)
-  }
-  
-  if (nodeId !== undefined) {
-    parts.push(String(nodeId))
-  }
-  
-  parts.push(menuKey)
-  
-  return buildTestId(parts)
-}
-
-/**
  * Creates a test ID for context menu containers.
- * Used to identify the root menu container for context menus.
- *
  * @param elementType - Element type (asset, document, data-object)
  * @param nodeId - Node ID for context-specific menus
  * @returns Formatted test ID string
- *
- * @example
- * createContextMenuContainerTestId('asset', 123)
- * // Returns: 'context-menu-asset-123'
- *
- * createContextMenuContainerTestId('data-object', 456)
- * // Returns: 'context-menu-data-object-456'
  */
 export const createContextMenuContainerTestId = (elementType: ElementType, nodeId: number | string): string => {
   return buildTestId(['context-menu', elementType, String(nodeId)])
@@ -344,16 +291,8 @@ export const createContextMenuContainerTestId = (elementType: ElementType, nodeI
 
 /**
  * Creates consistent test IDs for context menu items based on their key.
- *
  * @param key - Menu item key (action name)
  * @returns Formatted test ID string
- *
- * @example
- * createContextMenuItemTestId('addFolder')
- * // Returns: 'context-menu-item-add-folder'
- *
- * createContextMenuItemTestId('rename')
- * // Returns: 'context-menu-item-rename'
  */
 export const createContextMenuItemTestId = (key: string): string => {
   return buildTestId(['context-menu-item', key])
