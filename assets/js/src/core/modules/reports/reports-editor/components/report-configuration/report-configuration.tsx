@@ -51,17 +51,7 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
   }, [data])
 
   const onValuesChange = (changedValues: Partial<ReportFormData>, allValues: ReportFormData): void => {
-    const isChartEmpty = allValues.chartType === ''
-
-    // TODO: After finalizing all fields, remove currentData from updateFormData
-    updateFormData({
-      ...currentData,
-      ...allValues,
-      dataSourceConfig: castArray(
-        allValues.dataSourceConfig ?? currentData?.dataSourceConfig ?? []
-      ),
-      ...(isChartEmpty && { xAxis: '', yAxis: [] })
-    })
+    updateFormData({ ...currentData, ...allValues })
   }
 
   const handleSave = (): void => {
@@ -69,9 +59,17 @@ export const ReportConfiguration = ({ report, isActive }: IReportConfigurationPr
 
     setIsUpdatingReport(true)
 
+    const bundleCustomReportUpdateData = {
+      ...currentData,
+      dataSourceConfig: castArray(
+        currentData?.dataSourceConfig ?? []
+      ),
+      ...(currentData.chartType === '' && { xAxis: '', yAxis: [] })
+    }
+
     void updateReport({
       name: report.id,
-      bundleCustomReportUpdate: currentData as unknown as CustomReportsConfigUpdateApiArg['bundleCustomReportUpdate']
+      bundleCustomReportUpdate: bundleCustomReportUpdateData as unknown as CustomReportsConfigUpdateApiArg['bundleCustomReportUpdate']
     }).then(() => {
       markFormSaved()
       setIsUpdatingReport(false)
