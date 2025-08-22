@@ -1,7 +1,11 @@
 import React, { createContext } from "react";
-import { OperationalGridProps } from "../operational-grid";
+import { GridProps } from "@Pimcore/types/components/types";
 
-export interface IOperationalGridContext extends Omit<OperationalGridProps, 'children'> {}
+export interface IOperationalGridContext {
+  value: GridProps['data'];
+  onChange?: (value: GridProps['data']) => void;
+  finalGridProps: GridProps;
+}
 
 export const OperationalGridContext = createContext<IOperationalGridContext | undefined>(undefined);
 

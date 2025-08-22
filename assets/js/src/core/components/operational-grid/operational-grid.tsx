@@ -3,18 +3,19 @@ import React from "react";
 import { Grid } from "../grid/grid";
 import { OperationalGridProvider, useOperationalGridContext } from "./provider/operational-grid-provider";
 import { useOperations } from "./hooks/use-operations";
+import { RowSelectionState } from "@tanstack/react-table";
 
-export interface OperationalGridProps {
-  value: GridProps['data'],
-  onChange?: (value: GridProps['data']) => void
-  gridProps: GridProps;
+export interface OperationalGridProps extends Omit<GridProps, 'data' | 'onUpdateCellData'> {
+  value: GridProps['data'];
+  onChange?: (value: GridProps['data']) => void;
   children: React.ReactNode;
+  onUpdateCellData?: GridProps['onUpdateCellData'];
 }
 
 const OperationalGrid = (props: OperationalGridProps): React.JSX.Element => {
-  const { value, onChange, children, gridProps } = props;
+  const { value, onChange, children, onUpdateCellData, ...gridProps } = props;
 
-  const onUpdateCellData: GridProps['onUpdateCellData'] = (event) => {
+  const defaultOnUpdateCellData: GridProps['onUpdateCellData'] = (event) => {
     const { columnId, rowIndex, value: newCellValue } = event
     const newValue = [...value]
     newValue[rowIndex] = { ...newValue[rowIndex], [columnId]: newCellValue }
@@ -22,24 +23,28 @@ const OperationalGrid = (props: OperationalGridProps): React.JSX.Element => {
     onChange?.(newValue)
   }
 
-  const finalGridProps = {
+  const finalGridProps: GridProps = {
     ...gridProps,
     data: value,
-    onUpdateCellData: gridProps.onUpdateCellData ?? onUpdateCellData,
+    onUpdateCellData: onUpdateCellData ?? defaultOnUpdateCellData,
   }
 
   return (
-    <OperationalGridProvider value={value} onChange={onChange} gridProps={finalGridProps}>
+    <OperationalGridProvider 
+      value={value} 
+      onChange={onChange} 
+      finalGridProps={finalGridProps}
+    >
       {children}
     </OperationalGridProvider>
   )
 };
 
 OperationalGrid.Grid = () => {
-  const {gridProps} = useOperationalGridContext();
+  const {finalGridProps} = useOperationalGridContext();
 
   return (
-    <Grid {...gridProps} />
+    <Grid {...finalGridProps} />
   )
 }
 

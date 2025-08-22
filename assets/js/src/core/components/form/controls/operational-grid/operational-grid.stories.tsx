@@ -12,7 +12,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import { Form } from '../../form'
 import { OperationalGrid } from '../../../operational-grid/operational-grid'
-import { createColumnHelper } from '@tanstack/react-table'
+import { createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
 import { DefaultCell } from '../../../grid/columns/default-cell'
 import { Button, Space, Input, InputNumber, Select } from 'antd'
 
@@ -65,9 +65,11 @@ interface BasicItem {
 interface BasicOperationalGridProps {
   value?: BasicItem[]
   onChange?: (value: BasicItem[]) => void
+  enableMultipleRowSelection?: boolean
 }
 
-const BasicOperationalGrid = ({ value = [], onChange }: BasicOperationalGridProps): React.JSX.Element => {
+const BasicOperationalGrid = ({ value = [], onChange, enableMultipleRowSelection = true }: BasicOperationalGridProps): React.JSX.Element => {
+  const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
   const columnHelper = createColumnHelper<BasicItem>()
 
   const columns = [
@@ -87,35 +89,51 @@ const BasicOperationalGrid = ({ value = [], onChange }: BasicOperationalGridProp
     })
   ]
 
-  const gridProps = {
-    data: value,
-    columns,
-    enableSorting: true,
-    enableRowSelection: true
-  }
-
   return (
     <OperationalGrid
       value={value}
       onChange={onChange}
-      gridProps={gridProps}
+      columns={columns}
+      enableSorting={true}
+      enableRowSelection={true}
+      enableMultipleRowSelection={enableMultipleRowSelection}
+      selectedRows={selectedRows}
+      onSelectedRowsChange={setSelectedRows}
     >
       <div style={{ marginBottom: 16 }}>
         <OperationalGrid.Operations>
-          {(operations) => (
-            <Space>
-              <Button 
-                type="primary" 
-                onClick={() => operations.addRow({ 
-                  name: 'New Setting', 
-                  value: '', 
-                  type: 'text' 
-                })}
-              >
-                Add Item
-              </Button>
-            </Space>
-          )}
+          {(operations) => {
+            const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
+            const hasSelection = selectedCount > 0
+            
+            return (
+              <Space>
+                <Button 
+                  type="primary" 
+                  onClick={() => operations.addRow({ 
+                    name: 'New Setting', 
+                    value: '', 
+                    type: 'text' 
+                  })}
+                >
+                  Add Item
+                </Button>
+                <Button 
+                  onClick={() => operations.deleteSelectedRows()}
+                  disabled={!hasSelection}
+                  danger
+                >
+                  Delete Selected {enableMultipleRowSelection ? `(${selectedCount})` : ''}
+                </Button>
+                <Button 
+                  onClick={() => operations.clearSelectedRows()}
+                  disabled={!hasSelection}
+                >
+                  Clear Selection
+                </Button>
+              </Space>
+            )
+          }}
         </OperationalGrid.Operations>
       </div>
       
@@ -193,7 +211,7 @@ const BasicFormExampleComponent = (): React.JSX.Element => {
   )
 }
 
-export const BasicFormIntegration: Story = {
+export const BasicFormIntegration: StoryObj = {
   render: () => <BasicFormExampleComponent />
 }
 
@@ -210,9 +228,11 @@ interface AdvancedItem {
 interface AdvancedOperationalGridProps {
   value?: AdvancedItem[]
   onChange?: (value: AdvancedItem[]) => void
+  enableMultipleRowSelection?: boolean
 }
 
-const AdvancedOperationalGrid = ({ value = [], onChange }: AdvancedOperationalGridProps): React.JSX.Element => {
+const AdvancedOperationalGrid = ({ value = [], onChange, enableMultipleRowSelection = true }: AdvancedOperationalGridProps): React.JSX.Element => {
+  const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
   const columnHelper = createColumnHelper<AdvancedItem>()
 
   const columns = [
@@ -230,13 +250,6 @@ const AdvancedOperationalGrid = ({ value = [], onChange }: AdvancedOperationalGr
       cell: info => <DefaultCell {...info} />
     })
   ]
-
-  const gridProps = {
-    data: value,
-    columns,
-    enableSorting: true,
-    enableRowSelection: true
-  }
 
   const addNewConfiguration = (): void => {
     const newId = Date.now().toString()
@@ -256,31 +269,54 @@ const AdvancedOperationalGrid = ({ value = [], onChange }: AdvancedOperationalGr
     <OperationalGrid
       value={value}
       onChange={onChange}
-      gridProps={gridProps}
+      columns={columns}
+      enableSorting={true}
+      enableRowSelection={true}
+      enableMultipleRowSelection={enableMultipleRowSelection}
+      selectedRows={selectedRows}
+      onSelectedRowsChange={setSelectedRows}
     >
       <div style={{ marginBottom: 16 }}>
         <OperationalGrid.Operations>
-          {(operations) => (
-            <Space>
-              <Button 
-                type="primary"
-                onClick={addNewConfiguration}
-              >
-                Add Setting
-              </Button>
-              <Button 
-                onClick={() => operations.addRow({
-                  id: Date.now().toString(),
-                  name: 'From Operations',
-                  value: '',
-                  type: 'text',
-                  required: false
-                })}
-              >
-                Add via Operations
-              </Button>
-            </Space>
-          )}
+          {(operations) => {
+            const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
+            const hasSelection = selectedCount > 0
+            
+            return (
+              <Space>
+                <Button 
+                  type="primary"
+                  onClick={addNewConfiguration}
+                >
+                  Add Setting
+                </Button>
+                <Button 
+                  onClick={() => operations.addRow({
+                    id: Date.now().toString(),
+                    name: 'From Operations',
+                    value: '',
+                    type: 'text',
+                    required: false
+                  })}
+                >
+                  Add via Operations
+                </Button>
+                <Button 
+                  onClick={() => operations.deleteSelectedRows()}
+                  disabled={!hasSelection}
+                  danger
+                >
+                  Delete Selected {enableMultipleRowSelection ? `(${selectedCount})` : ''}
+                </Button>
+                <Button 
+                  onClick={() => operations.clearSelectedRows()}
+                  disabled={!hasSelection}
+                >
+                  Clear Selection
+                </Button>
+              </Space>
+            )
+          }}
         </OperationalGrid.Operations>
       </div>
       
@@ -350,6 +386,42 @@ const AdvancedFormExampleComponent = (): React.JSX.Element => {
   )
 }
 
-export const AdvancedFormValidation: Story = {
+export const AdvancedFormValidation: StoryObj = {
   render: () => <AdvancedFormExampleComponent />
+}
+
+export const SingleRowSelection: StoryObj = {
+  render: () => (
+    <div style={{ maxWidth: '800px', padding: '20px' }}>
+      <h3>Single Row Selection Example</h3>
+      <p>This example demonstrates single row selection mode where only one row can be selected at a time.</p>
+      <BasicOperationalGrid 
+        value={[
+          { name: 'Setting 1', value: 'Value 1', type: 'text' },
+          { name: 'Setting 2', value: '42', type: 'number' },
+          { name: 'Setting 3', value: 'Value 3', type: 'text' }
+        ]}
+        enableMultipleRowSelection={false}
+        onChange={(value) => console.log('Changed:', value)}
+      />
+    </div>
+  )
+}
+
+export const MultipleRowSelection: StoryObj = {
+  render: () => (
+    <div style={{ maxWidth: '800px', padding: '20px' }}>
+      <h3>Multiple Row Selection Example</h3>
+      <p>This example demonstrates multiple row selection mode where multiple rows can be selected simultaneously.</p>
+      <AdvancedOperationalGrid 
+        value={[
+          { id: '1', name: 'Config 1', value: 'Value 1', type: 'text', required: true },
+          { id: '2', name: 'Config 2', value: '42', type: 'number', required: false },
+          { id: '3', name: 'Config 3', value: 'Value 3', type: 'text', required: true }
+        ]}
+        enableMultipleRowSelection={true}
+        onChange={(value) => console.log('Changed:', value)}
+      />
+    </div>
+  )
 }

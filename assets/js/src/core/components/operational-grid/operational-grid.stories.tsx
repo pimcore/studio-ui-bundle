@@ -11,7 +11,7 @@
 import React, { useState } from 'react'
 import { type Meta } from '@storybook/react'
 import { OperationalGrid, type OperationalGridProps } from './operational-grid'
-import { createColumnHelper } from '@tanstack/react-table'
+import { createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
 import { DefaultCell } from '../grid/columns/default-cell'
 import { Button, Space } from 'antd'
 
@@ -24,10 +24,16 @@ const config: Meta = {
   render: (args: OperationalGridProps) => {
     const ComponentWrapper = (): React.JSX.Element => {
       const [data, setData] = useState(args.value)
+      const [selectedRows, setSelectedRows] = useState(args.selectedRows ?? {})
 
       const handleChange = (newValue: any[]) => {
         setData(newValue)
         args.onChange?.(newValue)
+      }
+
+      const handleSelectedRowsChange = (newSelectedRows: any) => {
+        setSelectedRows(newSelectedRows)
+        args.onSelectedRowsChange?.(newSelectedRows)
       }
 
       return (
@@ -35,19 +41,44 @@ const config: Meta = {
           {...args}
           value={data}
           onChange={handleChange}
+          selectedRows={selectedRows}
+          onSelectedRowsChange={handleSelectedRowsChange}
         >
           <div style={{ marginBottom: 16 }}>
             <OperationalGrid.Operations>
-              {(operations) => (
-                <Space>
-                  <Button 
-                    type="primary" 
-                    onClick={() => operations.addRow({ name: 'New Item', value: '', category: 'New' })}
-                  >
-                    Add Row
-                  </Button>
-                </Space>
-              )}
+              {(operations) => {
+                const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
+                const hasSelection = selectedCount > 0
+                const isMultipleSelection = args.enableMultipleRowSelection === true
+                
+                return (
+                  <Space>
+                    <Button 
+                      type="primary" 
+                      onClick={() => operations.addRow({ name: 'New Item', value: '', category: 'New' })}
+                    >
+                      Add Row
+                    </Button>
+                    {args.enableRowSelection && (
+                      <>
+                        <Button 
+                          onClick={() => operations.deleteSelectedRows()}
+                          disabled={!hasSelection}
+                          danger
+                        >
+                          Delete Selected {isMultipleSelection ? `(${selectedCount})` : ''}
+                        </Button>
+                        <Button 
+                          onClick={() => operations.clearSelectedRows()}
+                          disabled={!hasSelection}
+                        >
+                          Clear Selection
+                        </Button>
+                      </>
+                    )}
+                  </Space>
+                )
+              }}
             </OperationalGrid.Operations>
           </div>
           
@@ -99,17 +130,13 @@ const columns = [
   })
 ]
 
-const gridProps = {
-  data: initialData,
-  columns,
-  enableSorting: true,
-  enableRowSelection: true
-}
-
 export const Default = {
   args: {
     value: initialData,
-    gridProps,
+    columns,
+    enableSorting: true,
+    enableRowSelection: true,
+    enableMultipleRowSelection: true,
     onChange: (value: Item[]) => {
       console.log('Data changed:', value)
     }
@@ -119,13 +146,13 @@ export const Default = {
 export const WithModifiedCells = {
   args: {
     value: initialData,
-    gridProps: {
-      ...gridProps,
-      modifiedCells: [
-        { rowIndex: 0, columnId: 'name' },
-        { rowIndex: 1, columnId: 'value' }
-      ]
-    },
+    columns,
+    enableSorting: true,
+    enableRowSelection: true,
+    modifiedCells: [
+      { rowIndex: 0, columnId: 'name' },
+      { rowIndex: 1, columnId: 'value' }
+    ],
     onChange: (value: Item[]) => {
       console.log('Data changed:', value)
     }
@@ -135,29 +162,43 @@ export const WithModifiedCells = {
 export const ReadOnly = {
   args: {
     value: initialData,
-    gridProps: {
-      ...gridProps,
-      columns: columns.map(col => ({
-        ...col,
-        meta: {
-          ...col.meta,
-          editable: false
-        }
-      }))
-    }
+    columns: columns.map(col => ({
+      ...col,
+      meta: {
+        ...col.meta,
+        editable: false
+      }
+    })),
+    enableSorting: true,
+    enableRowSelection: true
   }
 }
 
 export const WithRowSelection = {
   args: {
     value: initialData,
-    gridProps: {
-      ...gridProps,
-      enableRowSelection: true,
-      enableMultipleRowSelection: true,
-      onSelectedRowsChange: (selectedRows) => {
-        console.log('Selected rows:', selectedRows)
-      }
+    columns,
+    enableSorting: true,
+    enableRowSelection: true,
+    enableMultipleRowSelection: true,
+    onSelectedRowsChange: (selectedRows) => {
+      console.log('Selected rows:', selectedRows)
+    },
+    onChange: (value: Item[]) => {
+      console.log('Data changed:', value)
+    }
+  }
+}
+
+export const WithSingleRowSelection = {
+  args: {
+    value: initialData,
+    columns,
+    enableSorting: true,
+    enableRowSelection: true,
+    enableMultipleRowSelection: false,
+    onSelectedRowsChange: (selectedRows) => {
+      console.log('Selected rows:', selectedRows)
     },
     onChange: (value: Item[]) => {
       console.log('Data changed:', value)
@@ -168,9 +209,9 @@ export const WithRowSelection = {
 export const Loading = {
   args: {
     value: initialData,
-    gridProps: {
-      ...gridProps,
-      isLoading: true
-    }
+    columns,
+    enableSorting: true,
+    enableRowSelection: true,
+    isLoading: true
   }
 }
