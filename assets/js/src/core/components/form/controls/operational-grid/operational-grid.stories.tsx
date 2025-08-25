@@ -944,6 +944,7 @@ export const WithPanelLayout: StoryObj = {
             <div>
               <OperationalGrid
                 value={value}
+                docked
                 onChange={setValue}
                 columns={columns}
                 enableSorting={true}
