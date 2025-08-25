@@ -33,12 +33,14 @@ export interface EditableManager {
   getElementType?: (element: HTMLElement) => string | null
 }
 
-export interface UseEditableDropzoneSortingProps<T extends EditableManager> {
+export interface UseEditableDropzonesProps<T extends EditableManager> {
   editableManager: T
   onMoveItem: (fromIndex: number, toIndex: number) => void
+  onDropItem?: (info: any, index: number) => Promise<void>
+  isValidDrop?: (info: any) => boolean
 }
 
-export interface UseEditableDropzoneSortingReturn {
+export interface UseEditableDropzonesReturn {
   activeId: string | null
   handleDragStart: (event: DragStartEvent) => void
   handleDragOver: (event: DragOverEvent) => void
@@ -47,10 +49,12 @@ export interface UseEditableDropzoneSortingReturn {
   refreshDropzones: () => void
 }
 
-export const useEditableDropzoneSorting = <T extends EditableManager>({
+export const useEditableDropzones = <T extends EditableManager>({
   editableManager,
-  onMoveItem
-}: UseEditableDropzoneSortingProps<T>): UseEditableDropzoneSortingReturn => {
+  onMoveItem,
+  onDropItem,
+  isValidDrop
+}: UseEditableDropzonesProps<T>): UseEditableDropzonesReturn => {
   const { styles } = useEditableDropzoneStyles()
   const [activeId, setActiveId] = useState<string | null>(null)
   const [dropzonePortals, setDropzonePortals] = useState<React.ReactPortal[]>([])
@@ -108,7 +112,9 @@ export const useEditableDropzoneSorting = <T extends EditableManager>({
         <EditableDropzone
           id={ dropzoneId }
           index={ index }
+          isValidDrop={ isValidDrop }
           key={ dropzoneId }
+          onDropItem={ onDropItem }
         />
       )
       const portal = ReactDOM.createPortal(dropzone, containerElement)

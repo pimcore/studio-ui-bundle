@@ -38,7 +38,7 @@ export const DraggableAreablockType = ({
   buttonContentClassName
 }: DraggableAreablockTypeProps): React.JSX.Element => {
   const iconPath = getAreablockTypeIcon(type.icon, globalIndex)
-  
+
   const dragInfo: DragAndDropInfo = {
     type: 'areablock-type',
     icon: { value: 'brick' },
@@ -50,16 +50,25 @@ export const DraggableAreablockType = ({
   }
 
   return (
-    <Draggable info={dragInfo}>
+    <Draggable info={ dragInfo }>
       <Button
-        className={className}
+        className={ className }
         type="default"
       >
-        <Flex className={buttonContentClassName} vertical align="center" justify="center">
-          <Box className={iconWrapperClassName}>
-            <img src={iconPath} alt={t(type.name)} style={{ width: '24px', height: '24px' }} />
+        <Flex
+          align="center"
+          className={ buttonContentClassName }
+          justify="center"
+          vertical
+        >
+          <Box className={ iconWrapperClassName }>
+            <img
+              alt={ t(type.name) }
+              src={ iconPath }
+              style={ { width: '24px', height: '24px' } }
+            />
           </Box>
-          <Text className={typeNameClassName}>
+          <Text className={ typeNameClassName }>
             {t(type.name)}
           </Text>
         </Flex>

@@ -12,33 +12,50 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isUndefined } from 'lodash'
 import { type AreablockManager } from '../utils/areablock-manager'
-import { type AreaType, type AreablockEditableConfig } from '../areablock-editable'
+import { type AreaType } from '../areablock-editable'
 import {
-  useEditableDropzoneSorting,
-  type UseEditableDropzoneSortingReturn,
+  useEditableDropzones,
+  type UseEditableDropzonesReturn,
   type EditableManager
-} from '../../../helpers/editable-dropzone-sorting/hooks/use-editable-dropzone-sorting'
+} from '../../../helpers/editable-dropzone-sorting/hooks/use-editable-dropzones'
 
-export interface UseAreablockSortingProps {
+export interface UseAreablockDropzonesProps {
   areablockManager: AreablockManager
   areaTypes: AreaType[]
   onMoveArea: (fromIndex: number, toIndex: number) => void
+  onDropAreablock?: (areaType: string, index: number) => Promise<void>
 }
 
-export interface UseAreablockSortingReturn extends UseEditableDropzoneSortingReturn {
+export interface UseAreablockDropzonesReturn extends UseEditableDropzonesReturn {
   dragOverlayTitle: string | undefined
 }
 
-export const useAreablockSorting = ({
+export const useAreablockDropzones = ({
   areablockManager,
   areaTypes,
-  onMoveArea
-}: UseAreablockSortingProps): UseAreablockSortingReturn => {
+  onMoveArea,
+  onDropAreablock
+}: UseAreablockDropzonesProps): UseAreablockDropzonesReturn => {
   const { t } = useTranslation()
 
-  const sortingResult = useEditableDropzoneSorting({
+  // Areablock-specific drop validation
+  const isValidAreablockDrop = (info: any): boolean => {
+    return info.type === 'areablock-type' && info.data?.areablockType != null
+  }
+
+  // Areablock-specific drop handler
+  const handleAreablockDrop = async (info: any, index: number): Promise<void> => {
+    if (onDropAreablock != null) {
+      const areaType = (info.data?.areablockType as string) ?? (info.title as string) ?? 'default'
+      await onDropAreablock(areaType, index)
+    }
+  }
+
+  const sortingResult = useEditableDropzones({
     editableManager: areablockManager as EditableManager,
-    onMoveItem: onMoveArea
+    onMoveItem: onMoveArea,
+    onDropItem: handleAreablockDrop,
+    isValidDrop: isValidAreablockDrop
   })
 
   // Calculate drag overlay title for areablocks

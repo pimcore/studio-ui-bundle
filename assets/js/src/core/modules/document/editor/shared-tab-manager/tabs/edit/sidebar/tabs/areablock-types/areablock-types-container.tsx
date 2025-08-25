@@ -32,17 +32,17 @@ export const AreablockTypesContainer = (): React.JSX.Element => {
 
   if (Object.keys(areablockGroupedTypes).length === 0) {
     return (
-      <Box className={styles.emptyStateContainer}>
+      <Box className={ styles.emptyStateContainer }>
         <Empty
-          description={t('areablock-types.no-areablocks')}
-          image={AntEmpty.PRESENTED_IMAGE_SIMPLE}
+          description={ t('areablock-types.no-areablocks') }
+          image={ AntEmpty.PRESENTED_IMAGE_SIMPLE }
         />
       </Box>
     )
   }
 
   return (
-    <Box className={styles.container}>
+    <Box className={ styles.container }>
       {Object.entries(areablockGroupedTypes).map(([groupName, types], groupIndex) => {
         // Calculate starting index for this group
         let startIndex = 0
@@ -52,25 +52,28 @@ export const AreablockTypesContainer = (): React.JSX.Element => {
         })
 
         return (
-          <Flex key={groupName} vertical>
-            {groupIndex > 0 && <Divider className={styles.groupDivider} />}
-            <Text className={styles.groupTitle}>
+          <Flex
+            key={ groupName }
+            vertical
+          >
+            {groupIndex > 0 && <Divider className={ styles.groupDivider } />}
+            <Text className={ styles.groupTitle }>
               {t(groupName)}
             </Text>
-            <Box className={styles.gridContainer}>
+            <Box className={ styles.gridContainer }>
               {types.map((type: AreablockTypeEntry, typeIndex) => {
                 const globalIndex = startIndex + typeIndex
-                
+
                 return (
                   <DraggableAreablockType
-                    key={`${type.areablockName}-${type.type}`}
-                    type={type}
-                    globalIndex={globalIndex}
-                    className={styles.typeButton}
-                    t={t}
-                    iconWrapperClassName={styles.iconWrapper}
-                    typeNameClassName={styles.typeName}
-                    buttonContentClassName={styles.buttonContent}
+                    buttonContentClassName={ styles.buttonContent }
+                    className={ styles.typeButton }
+                    globalIndex={ globalIndex }
+                    iconWrapperClassName={ styles.iconWrapper }
+                    key={ `${type.areablockName}-${type.type}` }
+                    t={ t }
+                    type={ type }
+                    typeNameClassName={ styles.typeName }
                   />
                 )
               })}

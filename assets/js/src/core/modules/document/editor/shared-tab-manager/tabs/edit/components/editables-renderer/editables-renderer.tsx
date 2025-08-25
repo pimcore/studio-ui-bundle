@@ -17,7 +17,6 @@ import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useDocumentEditor } from '../../hooks/use-document-editor'
-import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 
 export interface EditablesRendererProps {

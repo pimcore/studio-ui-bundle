@@ -15,7 +15,7 @@ import { type AreaType, type AreablockEditableConfig } from '../areablock-editab
 import ReactDOM from 'react-dom'
 import { SortableAreablockToolbar } from '../components/sortable-areablock-toolbar/sortable-areablock-toolbar'
 import { EmptyStateAreablockToolbar } from '../components/empty-state-areablock-toolbar/empty-state-areablock-toolbar'
-import { useAreablockSorting } from './use-areablock-sorting'
+import { useAreablockDropzones } from './use-areablock-dropzones'
 import { EditableSortContext } from '../../../helpers/editable-dropzone-sorting/editable-sort-context'
 
 export interface UseAreablockControlsParams {
@@ -49,6 +49,10 @@ export const useAreablockControls = ({
   const limitReachedRef = useRef<boolean>(false)
   const [emptyStatePortal, setEmptyStatePortal] = useState<React.ReactPortal | null>(null)
 
+  const handleAddArea = useCallback(async (element: HTMLElement | null, areaType?: string) => {
+    await onAddArea(element, areaType)
+  }, [onAddArea])
+
   const {
     activeId,
     handleDragStart,
@@ -57,16 +61,31 @@ export const useAreablockControls = ({
     dropzonePortals,
     dragOverlayTitle,
     refreshDropzones
-  } = useAreablockSorting({
+  } = useAreablockDropzones({
     areablockManager,
     areaTypes,
-    onMoveArea
+    onMoveArea,
+    onDropAreablock: async (areaType: string, index: number) => {
+      const elements = areablockManager.queryElements()
+
+      if (index === 0) {
+        await handleAddArea(null, areaType)
+      } else if (index >= elements.length) {
+        const lastElement = elements[elements.length - 1]
+        await handleAddArea(lastElement, areaType)
+      } else {
+        const targetElement = elements[index - 1]
+        await handleAddArea(targetElement, areaType)
+      }
+
+      refreshDropzones()
+    }
   })
 
-  const handleAddArea = useCallback(async (element: HTMLElement | null, areaType?: string) => {
-    await onAddArea(element, areaType)
+  const handleAddAreaWithRefresh = useCallback(async (element: HTMLElement | null, areaType?: string) => {
+    await handleAddArea(element, areaType)
     refreshDropzones()
-  }, [onAddArea, refreshDropzones])
+  }, [handleAddArea, refreshDropzones])
 
   const handleRemoveArea = useCallback((element: HTMLElement) => {
     onRemoveArea(element)
@@ -110,14 +129,14 @@ export const useAreablockControls = ({
         config={ config }
         onClick={ async (areaType) => {
           setEmptyStatePortal(null)
-          await handleAddArea(null, areaType)
+          await handleAddAreaWithRefresh(null, areaType)
         } }
       />
     )
 
     const portal = ReactDOM.createPortal(emptyStateToolbar, container)
     setEmptyStatePortal(portal)
-  }, [areablockManager, areaTypes, handleAddArea, emptyStatePortal])
+  }, [areablockManager, areaTypes, handleAddAreaWithRefresh, emptyStatePortal])
 
   const clearEmptyState = useCallback((): void => {
     setEmptyStatePortal(null)
@@ -154,7 +173,7 @@ export const useAreablockControls = ({
               element={ areaEntry }
               id={ areaKey }
               limitReached={ limitReachedRef.current }
-              onAddArea={ handleAddArea }
+              onAddArea={ handleAddAreaWithRefresh }
               onMoveAreaDown={ handleMoveAreaDown }
               onMoveAreaUp={ handleMoveAreaUp }
               onRemoveArea={ handleRemoveArea }
@@ -178,7 +197,7 @@ export const useAreablockControls = ({
         <>{portals}</>
       </EditableSortContext>
     )
-  }, [areablockManager, areaTypes, handleDragStart, handleDragOver, handleDragEnd, handleAddArea, handleRemoveArea, handleMoveAreaUp, handleMoveAreaDown, activeId, emptyStatePortal, dropzonePortals, dragOverlayTitle])
+  }, [areablockManager, areaTypes, handleDragStart, handleDragOver, handleDragEnd, handleAddAreaWithRefresh, handleRemoveArea, handleMoveAreaUp, handleMoveAreaDown, activeId, emptyStatePortal, dropzonePortals, dragOverlayTitle])
 
   const cleanupControls = useCallback(() => {
     setEmptyStatePortal(null)

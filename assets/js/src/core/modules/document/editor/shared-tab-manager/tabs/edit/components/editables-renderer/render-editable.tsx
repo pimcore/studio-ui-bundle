@@ -79,8 +79,8 @@ export const RenderEditable = ({ editableDefinition, containerRef }: RenderEdita
 
   return (
     <ErrorBoundary>
-    <FieldWidthProvider fieldWidthValues={ { large: 9999 } }>
-      {
+      <FieldWidthProvider fieldWidthValues={ { large: 9999 } }>
+        {
         !isUndefined(label)
           ? (
             <Form.Item
@@ -94,7 +94,7 @@ export const RenderEditable = ({ editableDefinition, containerRef }: RenderEdita
               renderEditableComponent
             )
       }
-    </FieldWidthProvider>
+      </FieldWidthProvider>
     </ErrorBoundary>
   )
 }

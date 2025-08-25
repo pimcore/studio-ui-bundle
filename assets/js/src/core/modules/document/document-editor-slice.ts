@@ -39,7 +39,8 @@ const documentEditorSlice = createSlice({
     removeDocument: (state, action: PayloadAction<number>) => {
       const documentId = action.payload
       if (state.documentAreablocks[documentId] !== undefined) {
-        delete state.documentAreablocks[documentId]
+        const { [documentId]: removed, ...remainingAreablocks } = state.documentAreablocks
+        state.documentAreablocks = remainingAreablocks
       }
     },
     clearAllDocuments: (state) => {

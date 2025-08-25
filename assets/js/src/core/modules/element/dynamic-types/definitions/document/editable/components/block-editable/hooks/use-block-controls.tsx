@@ -14,7 +14,7 @@ import { type BlockManager } from '../utils/block-manager'
 import ReactDOM from 'react-dom'
 import { SortableBlockToolbar } from '../components/sortable-block-toolbar'
 import { EmptyStateBlockToolbar } from '../components/empty-state-block-toolbar'
-import { useBlockSorting } from './use-block-sorting'
+import { useBlockDropzones } from './use-block-dropzones'
 import { EditableSortContext } from '../../../helpers/editable-dropzone-sorting/editable-sort-context'
 
 export interface UseBlockControlsParams {
@@ -52,7 +52,7 @@ export const useBlockControls = ({
     dropzonePortals,
     dragOverlayTitle,
     refreshDropzones
-  } = useBlockSorting({
+  } = useBlockDropzones({
     blockManager,
     onMoveBlock
   })

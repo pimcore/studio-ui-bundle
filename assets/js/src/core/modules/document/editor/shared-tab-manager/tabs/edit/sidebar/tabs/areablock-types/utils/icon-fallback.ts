@@ -12,19 +12,19 @@
  * Fallback icons for areablock types
  */
 const FALLBACK_ICON_STORE = [
-  "circuit", "display", "biomass", "deployment", "electrical_sensor", "dam",
-  "light_at_the_end_of_tunnel", "like", "icons8_cup", "sports_mode", "landscape", "selfie", "cable_release",
-  "bookmark", "briefcase", "graduation_cap", "in_transit", "diploma_2", "circuit", "display", "biomass", "deployment",
-  "electrical_sensor", "dam",
-  "light_at_the_end_of_tunnel", "like", "icons8_cup", "sports_mode", "landscape", "selfie", "cable_release",
-  "bookmark", "briefcase", "graduation_cap", "in_transit", "diploma_2"
+  'circuit', 'display', 'biomass', 'deployment', 'electrical_sensor', 'dam',
+  'light_at_the_end_of_tunnel', 'like', 'icons8_cup', 'sports_mode', 'landscape', 'selfie', 'cable_release',
+  'bookmark', 'briefcase', 'graduation_cap', 'in_transit', 'diploma_2', 'circuit', 'display', 'biomass', 'deployment',
+  'electrical_sensor', 'dam',
+  'light_at_the_end_of_tunnel', 'like', 'icons8_cup', 'sports_mode', 'landscape', 'selfie', 'cable_release',
+  'bookmark', 'briefcase', 'graduation_cap', 'in_transit', 'diploma_2'
 ]
 
 /**
  * Gets the icon for an areablock type, applying fallback logic if no icon is provided
  */
 export const getAreablockTypeIcon = (icon: string | undefined, index: number): string => {
-  if (icon) {
+  if (icon != null && icon !== '') {
     // If icon is provided, treat it as a full SVG path
     return icon
   }

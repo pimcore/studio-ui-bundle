@@ -15,6 +15,7 @@ import { AreablockManager } from '../components/areablock-editable/utils/areablo
 import { configUtils } from '../components/areablock-editable/utils/areablock-utils'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import { type AreablockGroupedTypes } from '@Pimcore/modules/document/document-editor-slice'
+import { isNil } from 'lodash'
 
 export interface AreablockEditableDefinition extends Omit<AbstractDocumentEditableDefinition, 'config'> {
   config?: AreablockEditableConfig
@@ -31,7 +32,6 @@ export class DynamicTypeDocumentEditableAreablock extends DynamicTypeDocumentEdi
         containerRef={ props.containerRef }
         disabled={ props.inherited }
         editableName={ props.name }
-        enableSidebarDragDrop={ true }
       />
     )
   }
@@ -70,7 +70,7 @@ export class DynamicTypeDocumentEditableAreablock extends DynamicTypeDocumentEdi
           if (Array.isArray(groupedTypes)) {
             // No grouping defined for this areablock
             const groupName = hasGroupedAreablocks ? 'Uncategorized' : editable.name
-            if (!allGroupedTypes[groupName]) {
+            if (isNil(allGroupedTypes[groupName])) {
               allGroupedTypes[groupName] = []
             }
 
@@ -86,7 +86,7 @@ export class DynamicTypeDocumentEditableAreablock extends DynamicTypeDocumentEdi
           } else {
             // Grouping is defined - merge groups across areablocks
             Object.entries(groupedTypes).forEach(([groupName, types]) => {
-              if (!allGroupedTypes[groupName]) {
+              if (isNil(allGroupedTypes[groupName])) {
                 allGroupedTypes[groupName] = []
               }
 
