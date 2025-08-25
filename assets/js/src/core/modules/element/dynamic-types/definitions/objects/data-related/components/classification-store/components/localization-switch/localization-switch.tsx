@@ -9,7 +9,7 @@
  */
 
 import { Segmented, type SegmentedProps } from '@Pimcore/components/segmented/segmented'
-import { useLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/use-language-selection'
+import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 import React, { useState } from 'react'
 
 export interface LocalizationSwitchProps {

@@ -9,9 +9,9 @@
  */
 
 import React, { useEffect } from 'react'
-import { LocalizedFieldsProvider } from '@Pimcore/components/form/localisation/localized-fields/provider/localized-fields-provider/localized-fields-provider'
-import { type AbstractObjectDataDefinition } from '../../../../../definitions/objects/data-related/dynamic-type-object-data-abstract'
-import { type AbstractObjectLayoutDefinition } from '../../../../../definitions/objects/layout-related/dynamic-type-object-layout-abstract'
+import { LocalizedFieldsProvider } from './provider/localized-fields-provider/localized-fields-provider'
+import { type AbstractObjectDataDefinition } from '../../../../modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
+import { type AbstractObjectLayoutDefinition } from '../../../../modules/element/dynamic-types/definitions/objects/layout-related/dynamic-type-object-layout-abstract'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { Space } from '@Pimcore/components/space/space'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'

@@ -10,19 +10,18 @@
 
 import React, { useEffect } from 'react'
 import { LocalizedFieldsProvider } from './provider/localized-fields-provider/localized-fields-provider'
-import { type AbstractObjectDataDefinition } from '../../../../modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
 import { Space } from '@Pimcore/components/space/space'
-import { useLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/use-language-selection'
+import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 import { Form } from '@Pimcore/components/form/form'
 import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/combined-field-name-provider/combined-field-name-provider'
 
 // Props for the React children version
-export interface LocalizedFieldsProps extends Omit<AbstractObjectDataDefinition, 'children'> {
+export interface LocalizedFieldsProps {
   children?: React.ReactNode
 }
 
 // Main LocalizedFields component - supports React children
-export const LocalizedFields = ({ children, noteditable, className }: LocalizedFieldsProps): React.JSX.Element => {
+export const LocalizedFields = ({ children }: LocalizedFieldsProps): React.JSX.Element => {
   const { currentLanguage, hasLocalizedFields, setHasLocalizedFields } = useLanguageSelection()
 
   useEffect(() => {

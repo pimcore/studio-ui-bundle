@@ -11,13 +11,15 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import { LocalizedFields, LocalizedFieldsProvider } from './localized-fields'
-import { LanguageSelectionProvider } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/language-selection-provider'
+import { LanguageSelectionProvider } from '@Pimcore/components/language-selection/provider/language-selection-provider'
+import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
+import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
+import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { Button } from '@Pimcore/components/button/button'
 import { Space } from '@Pimcore/components/space/space'
-import { Panel } from '@Pimcore/components/panel/panel'
 import { Select } from '@Pimcore/components/select/select'
 import { defaultFieldWidthValues } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 
@@ -72,6 +74,12 @@ const BasicUsageComponent = (): React.JSX.Element => {
     }
   })
 
+  // Use the language selection context
+  const { currentLanguage, setCurrentLanguage } = useLanguageSelection()
+
+  // Mock language data for the demo
+  const availableLanguages = ['EN', 'DE', 'FR', 'IT', 'ES']
+
   const onFinish = (values: any): void => {
     console.log('Localized form submitted:', values)
   }
@@ -80,26 +88,34 @@ const BasicUsageComponent = (): React.JSX.Element => {
     setFormValues(allValues)
   }
 
+  const handleLanguageChange = (language: string): void => {
+    // Update the language selection context instead of local state
+    setCurrentLanguage(language.toLowerCase()) // Convert to lowercase as expected by the provider
+    console.log('Language changed to:', language)
+  }
+
   return (
     <div style={ { maxWidth: '600px' } }>
-      <Panel
-        theme="card-with-highlight"
-        title="Localized Content Fields"
+      <FormKit
+        formProps={{
+          form,
+          initialValues: formValues,
+          onFinish,
+          onValuesChange
+        }}
       >
-        <Form
-          form={ form }
-          initialValues={ formValues }
-          layout='vertical'
-          onFinish={ onFinish }
-          onValuesChange={ onValuesChange }
+        <FormKit.Panel
+          extra={
+            <LanguageSelection
+              languages={availableLanguages}
+              selectedLanguage={currentLanguage.toUpperCase()} // Convert back to uppercase for display
+              onSelectLanguage={handleLanguageChange}
+            />
+          }
+          theme="card-with-highlight"
+          title="Localized Content Fields"
         >
-          <LocalizedFields
-            datatype="data"
-            fieldType="localizedfields"
-            name="localizedfields"
-            noteditable={false}
-            defaultFieldWidth={defaultFieldWidthValues}
-          >
+          <LocalizedFields>
             <Form.Item
               label="Title"
               name="title"
@@ -147,7 +163,8 @@ const BasicUsageComponent = (): React.JSX.Element => {
               </Button>
             </Space>
           </Form.Item>
-        </Form>
+        </FormKit.Panel>
+      </FormKit>
 
         <div style={ { 
           marginTop: '20px', 
@@ -157,9 +174,14 @@ const BasicUsageComponent = (): React.JSX.Element => {
           borderRadius: '6px',
           fontSize: '12px'
         } }>
-          <h4 style={ { margin: '0 0 10px 0', color: '#15803d' } }>React Children Pattern:</h4>
+          <h4 style={ { margin: '0 0 10px 0', color: '#15803d' } }>FormKit Integration:</h4>
           <p style={ { margin: '0 0 10px 0', fontSize: '11px', color: '#374151' } }>
-            LocalizedFields component now supports React children syntax for better flexibility and TypeScript support.
+            LocalizedFields component now supports React children syntax and integrates seamlessly with FormKit for enhanced form layout and panel management. The language selection toolbar is integrated into the panel header's extra content area and properly connected to the LocalizedFields context.
+          </p>
+          
+          <h4 style={ { margin: '10px 0 5px 0', color: '#15803d' } }>Current Language: {currentLanguage.toUpperCase()}</h4>
+          <p style={ { margin: '0 0 10px 0', fontSize: '11px', color: '#374151' } }>
+            Switching languages updates the LocalizedFields context and changes the form field namespace accordingly.
           </p>
           
           <h4 style={ { margin: '10px 0 5px 0', color: '#15803d' } }>Form Values:</h4>
@@ -167,7 +189,6 @@ const BasicUsageComponent = (): React.JSX.Element => {
             {JSON.stringify(formValues, null, 2)}
           </pre>
         </div>
-      </Panel>
     </div>
   )
 }
@@ -177,7 +198,7 @@ export const _default: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'LocalizedFields component with React children syntax. Provides localization context and integrates with the language selection system.'
+        story: 'LocalizedFields component with React children syntax using FormKit and integrated language selection. The language selection component is placed in the panel\'s extra content area, providing easy access to language switching while working with localized form fields. FormKit provides enhanced form layout with built-in panel styling and field width management.'
       }
     }
   }
