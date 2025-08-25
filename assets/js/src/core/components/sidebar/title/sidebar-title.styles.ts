@@ -13,20 +13,18 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     container: css`
-      padding: ${token.paddingSM}px;
+      padding: 0 ${token.paddingSM}px;
+      margin-left: 1px;
     `,
 
-    collapsibleContainer: css`
-      width: 100%;
+    containerWithBorder: css`
+      padding: 0 ${token.paddingSM}px;
+      margin-left: 1px;
+      border-bottom: 1px solid ${token.colorBorderSecondary};
     `,
 
-    gridContainer: css`
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: ${token.marginXS}px;
-      margin-bottom: ${token.marginXS}px;
-      width: 100%;
-      align-items: stretch;
+    title: css`
+      line-height: 20px !important;
     `
   }
 })

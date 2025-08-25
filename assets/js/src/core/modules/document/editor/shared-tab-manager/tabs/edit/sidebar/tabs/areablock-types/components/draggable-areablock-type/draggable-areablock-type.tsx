@@ -16,8 +16,9 @@ import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Box } from '@Pimcore/components/box/box'
 import { Text } from '@Pimcore/components/text/text'
+import { Icon } from '@Pimcore/components/icon/icon'
 import { type AreablockTypeEntry } from '@Pimcore/modules/document/document-editor-slice'
-import { getAreablockTypeIcon } from '../utils/icon-fallback'
+import { getAreablockTypeIcon } from '../../utils/icon-fallback'
 import { useStyles } from './draggable-areablock-type.styles'
 
 interface DraggableAreablockTypeProps {
@@ -45,28 +46,21 @@ export const DraggableAreablockType = ({
 
   return (
     <Draggable info={ dragInfo }>
-      <div className={ styles.draggableWrapper }>
         <Button
           className={ styles.typeButton }
           type="default"
         >
           <Flex
             align="center"
-            className={ styles.buttonContent }
             justify="center"
             vertical
           >
-            <img
-              alt={ t(type.name) }
-              src={ iconPath }
-              style={ { width: '24px', height: '24px' } }
-            />
+            <Icon value={iconPath} type="path" options={{ width: 24, height: 24 }} />
             <Text className={ styles.typeName }>
               {t(type.name)}
             </Text>
           </Flex>
         </Button>
-      </div>
     </Draggable>
   )
 }

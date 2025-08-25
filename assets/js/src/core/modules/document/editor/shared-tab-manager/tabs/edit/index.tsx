@@ -32,7 +32,7 @@ moduleSystem.registerModule({
         value={ 'new' }
             />,
       component: <AreablockTypesContainer />,
-      tooltip: 'Areablock Types',
+      tooltip: 'sidebar.add-areas',
       isVisible: checkAreablockTypesVisibility
     })
 

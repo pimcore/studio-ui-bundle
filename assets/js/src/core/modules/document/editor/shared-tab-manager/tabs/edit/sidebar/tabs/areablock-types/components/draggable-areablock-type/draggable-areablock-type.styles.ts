@@ -12,41 +12,33 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    draggableWrapper: css`
-      height: 100%;
-      display: flex;
-    `,
 
     typeButton: css`
       width: 100%;
       height: 100%;
       padding: ${token.paddingXS}px;
       border: 1px solid ${token.colorBorder};
-      border-radius: ${token.borderRadiusLG}px;
+      border-radius: ${token.borderRadius}px;
       background: ${token.colorBgContainer};
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      cursor: pointer;
 
       &:hover {
         border-color: ${token.colorPrimary};
       }
+
+      &:active {
+        border-color: ${token.colorPrimary};
+      }
     `,
 
-    buttonContent: css`
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: ${token.marginXXS}px;
-    `,
 
     typeName: css`
       text-align: center;
-      color: ${token.colorText};
-      word-break: break-word;
+      color: ${token.colorTextSecondary};
       white-space: normal;
+      word-wrap: break-word;
       overflow-wrap: break-word;
+      max-width: 100%;
     `
   }
 })
