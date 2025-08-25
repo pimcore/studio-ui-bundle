@@ -12,6 +12,7 @@ export interface PerspectiveEditorContext {
   setActiveTabId: (id: string | undefined) => void
   perspectives: PerspectiveConfigDetail[]
   openPerspective: (id: string) => Promise<void>
+  closePerspective: (id: string) => void
 }
 
 export const PerspectiveEditorContext = createContext<PerspectiveEditorContext | undefined>(undefined)
@@ -43,11 +44,26 @@ export const PerspectiveEditorProvider = ({ children }: PerspectiveEditorProvide
     }
   }
 
+  const closePerspective = (id: string): void => {
+    const updatedPerspectives = perspectives.filter(perspective => perspective.id !== id)
+    setPerspectives(updatedPerspectives)
+
+    if (activeTabId === id) {
+      const remainingPerspectives = updatedPerspectives
+      if (remainingPerspectives.length > 0) {
+        setActiveTabId(remainingPerspectives[0].id)
+      } else {
+        setActiveTabId(undefined)
+      }
+    }
+  }
+
   const contextValue: PerspectiveEditorContext = useMemo(() => ({
     activeTabId,
     setActiveTabId,
     perspectives,
-    openPerspective
+    openPerspective,
+    closePerspective
   }), [activeTabId, perspectives])
 
   return (

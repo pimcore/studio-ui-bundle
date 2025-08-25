@@ -11,6 +11,7 @@ export interface WidgetEditorContext {
   setActiveTabId: (id: string | undefined) => void
   widgets: WidgetConfig[]
   openWidget: (id: string, type: string) => Promise<void>
+  closeWidget: (id: string) => void
 }
 
 export const WidgetEditorContext = createContext<WidgetEditorContext | undefined>(undefined)
@@ -42,11 +43,26 @@ export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): R
     }
   }
 
+  const closeWidget = (id: string): void => {
+    const updatedWidgets = widgets.filter(widget => widget.id !== id)
+    setWidgets(updatedWidgets)
+
+    if (activeTabId === id) {
+      const remainingWidgets = updatedWidgets
+      if (remainingWidgets.length > 0) {
+        setActiveTabId(remainingWidgets[0].id)
+      } else {
+        setActiveTabId(undefined)
+      }
+    }
+  }
+
   const contextValue = useMemo(() => ({
     activeTabId,
     setActiveTabId,
     widgets,
-    openWidget
+    openWidget,
+    closeWidget
   }), [activeTabId, widgets])
 
   return (

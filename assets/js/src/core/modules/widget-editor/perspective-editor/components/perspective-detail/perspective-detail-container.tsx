@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next"
 
 export const WidgetDetailContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { perspectives, activeTabId, setActiveTabId } = usePerspectiveEditorContext()
+  const { perspectives, activeTabId, setActiveTabId, closePerspective } = usePerspectiveEditorContext()
 
   return (
     <ContentLayout
@@ -28,6 +28,9 @@ export const WidgetDetailContainer = (): React.JSX.Element => {
         }))}
         onChange={(key) => {
           setActiveTabId(key)
+        }}
+        onClose={(key) => {
+          closePerspective(key)
         }}
       />
     </ContentLayout>
