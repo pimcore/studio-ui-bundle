@@ -18,6 +18,9 @@ import {
   HelloWorldContainer
 } from './sidebar/tabs/hello-world/hello-world-container'
 import {
+  ContentSettingsSidebar
+} from './sidebar/tabs/content-settings/content-settings-sidebar'
+import {
   AreablockTypesSidebar
 } from './sidebar/tabs/areablock-types/areablock-types-sidebar'
 import { checkAreablockTypesVisibility } from './sidebar/visibility/areablock-types-visibility'
@@ -39,10 +42,10 @@ moduleSystem.registerModule({
     sidebarManager.registerEntry({
       key: 'hello-world',
       icon: <Icon
-        value={ 'edit' }
+        value={ 'content-settings' }
             />,
-      component: <HelloWorldContainer />,
-      tooltip: 'Hello World'
+      component: <ContentSettingsSidebar />,
+      tooltip: 'content-settings'
     })
   }
 })
