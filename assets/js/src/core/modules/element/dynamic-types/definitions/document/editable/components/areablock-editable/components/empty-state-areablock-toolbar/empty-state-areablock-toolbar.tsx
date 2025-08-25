@@ -15,6 +15,8 @@ import { Dropdown } from 'antd'
 import { useAreablockEditableStyles } from '../../areablock-editable.styles'
 import { type AreaType, type AreablockEditableConfig } from '../../areablock-editable'
 import { useAreablockMenu } from '../../hooks/use-areablock-menu'
+import { EditableDropzone } from '../../../../helpers/editable-dropzone-sorting/components/editable-dropzone/editable-dropzone'
+import { useTranslation } from 'react-i18next'
 
 export interface EmptyStateAreablockToolbarProps {
   areaTypes: AreaType[]
@@ -28,15 +30,25 @@ export const EmptyStateAreablockToolbar = ({
   onClick
 }: EmptyStateAreablockToolbarProps): React.JSX.Element => {
   const { styles } = useAreablockEditableStyles()
+  const { t } = useTranslation()
 
   const { menuItems } = useAreablockMenu({
     config,
     onAddArea: (areaType: string) => { void onClick(areaType) }
   })
 
+  const handleDropzoneItem = async (info: any, index: number): Promise<void> => {
+    if (info.type === 'areablock-type' && info.data?.areablockType) {
+      await onClick(info.data.areablockType)
+    }
+  }
+
+  const isValidDrop = (info: any): boolean => {
+    return info.type === 'areablock-type' && info.data?.areablockType != null
+  }
+
   const renderAddButton = (): React.ReactNode => {
     if (areaTypes.length === 1) {
-      // Single area type - direct button
       return (
         <IconButton
           icon={ { value: 'new' } }
@@ -46,7 +58,6 @@ export const EmptyStateAreablockToolbar = ({
       )
     }
 
-    // Multiple area types - dropdown button with groups support
     return (
       <Dropdown
         menu={ { items: menuItems } }
@@ -62,11 +73,19 @@ export const EmptyStateAreablockToolbar = ({
   }
 
   return (
-    <ToolStrip
-      className={ styles.areablockToolstrip }
-      theme="inverse"
-    >
-      {renderAddButton()}
-    </ToolStrip>
+    <>
+      <ToolStrip
+        className={ styles.areablockToolstrip }
+        theme="inverse"
+      >
+        {renderAddButton()}
+      </ToolStrip>
+      <EditableDropzone
+        id="empty-areablock-toolbar-dropzone"
+        index={0}
+        onDropItem={handleDropzoneItem}
+        isValidDrop={isValidDrop}
+      />
+    </>
   )
 }
