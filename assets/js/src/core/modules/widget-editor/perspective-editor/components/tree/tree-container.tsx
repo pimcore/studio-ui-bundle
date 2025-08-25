@@ -1,9 +1,9 @@
+import { PerspectiveConfig, usePerspectiveGetConfigCollectionQuery } from "@Pimcore/modules/perspectives/perspectives-slice.gen"
 import { Content, ContentLayout, Icon, IconButton, IconTextButton, SearchInput, Toolbar, TreeDataItem, TreeElement } from "@sdk/components"
-import { isNil, isString } from "lodash"
+import { isNil, isUndefined } from "lodash"
 import React, { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { usePerspectiveEditorContext } from "../../context/hooks/use-perspective-editor-context"
-import { PerspectiveConfig } from "@Pimcore/modules/perspectives/perspectives-slice.gen"
 
 interface TreeContainerProps {
   expandedKeys: any[]
@@ -14,11 +14,11 @@ export const TreeContainer = ({ expandedKeys }: TreeContainerProps): React.JSX.E
   const { t } = useTranslation()
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [treeDataFiltered, setTreeDataFiltered] = useState<TreeDataItem[]>([])
-  const { perspectives } = usePerspectiveEditorContext()
+  const { openPerspective } = usePerspectiveEditorContext()
+  const { data: perspectives } = usePerspectiveGetConfigCollectionQuery()
 
   const generateTreeStructure = (perspectives: PerspectiveConfig[]): TreeDataItem[] => {
     const tmpTreeData: TreeDataItem[] = [];
-    console.log('perspectives', perspectives)
 
     if (perspectives.length > 0) {
       perspectives.forEach((item: PerspectiveConfig) => {
@@ -30,42 +30,45 @@ export const TreeContainer = ({ expandedKeys }: TreeContainerProps): React.JSX.E
       });
     }
 
-    const treeItems: TreeDataItem[] = [{
-      title: 'All Perspectives',
-      key: '0-0',
-      icon: <Icon value={'folder'} />,
-      children: tmpTreeData,
-    }]
-
-    return treeItems;
+    return tmpTreeData;
   }
 
   useEffect(() => {
-    console.log(generateTreeStructure(perspectives))
+    if (isUndefined(perspectives)) {
+      setTreeDataFiltered([]);
+    }
 
-    setTreeDataFiltered(generateTreeStructure(perspectives));
+    if (!isUndefined(perspectives)) {
+      setTreeDataFiltered(generateTreeStructure(perspectives.items));
+    }
   }, [perspectives])
 
   const handleSearch = (value: string) => {
     if (value.length === 0) {
-      setTreeDataFiltered(generateTreeStructure(perspectives))
+      if (!isUndefined(perspectives)) {
+        setTreeDataFiltered(generateTreeStructure(perspectives.items))
+      }
       return
     }
 
-    const filteredData = perspectives.filter((item: PerspectiveConfig) => {
-      if (!isNil(item.name)) {
-        return item.name.toLowerCase().includes(value.toLowerCase())
-      }
+    if (!isUndefined(perspectives)) {
+      const filteredData = perspectives.items.filter((item: PerspectiveConfig) => {
+        if (!isNil(item.name)) {
+          return item.name.toLowerCase().includes(value.toLowerCase())
+        }
 
-      return false
-    })
+        return false
+      })
 
-    setTreeDataFiltered(generateTreeStructure(filteredData))
+      setTreeDataFiltered(generateTreeStructure(filteredData))
+    }
   }
 
   const clearSearch = () => {
     setSearchTerm('')
-    setTreeDataFiltered(generateTreeStructure(perspectives))
+    if (!isUndefined(perspectives)) {
+      setTreeDataFiltered(generateTreeStructure(perspectives.items))
+    }
   }
 
   return (
@@ -95,8 +98,9 @@ export const TreeContainer = ({ expandedKeys }: TreeContainerProps): React.JSX.E
         <TreeElement
           defaultExpandedKeys={expandedKeys}
           treeData={treeDataFiltered}
-          onActionsClick={(key: string | number, action: string) => {
-            console.log(`Action ${action} clicked for key ${key}`)
+          hasRoot={false}
+          onSelected={(key) => {
+            openPerspective(key)
           }}
         />
       </Content>

@@ -1,10 +1,8 @@
 import { ConfigLayout } from "@Pimcore/components/predefined-layouts/config/config-layout"
-import { PerspectiveConfig } from "@sdk/api/perspectives"
-import { ContentLayout, Icon, TreeDataItem } from "@sdk/components"
-import React, { useEffect } from "react"
+import { ContentLayout } from "@sdk/components"
+import React from "react"
+import { WidgetDetailContainer } from "./components/perspective-detail/perspective-detail-container"
 import { TreeContainer } from "./components/tree/tree-container"
-import { WidgetDetailContainer } from "./components/widget-detail/widget-detail-container"
-import { usePerspectiveEditorContext } from "./context/hooks/use-perspective-editor-context"
 import { PerspectiveEditorProvider } from "./context/perspective-editor-provider"
 
 export const PerspectiveEditorContainerInner = (): React.JSX.Element => {
