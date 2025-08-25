@@ -40,7 +40,7 @@ moduleSystem.registerModule({
     })
 
     sidebarManager.registerEntry({
-      key: 'hello-world',
+      key: 'content-settings',
       icon: <Icon
         value={ 'content-settings' }
             />,

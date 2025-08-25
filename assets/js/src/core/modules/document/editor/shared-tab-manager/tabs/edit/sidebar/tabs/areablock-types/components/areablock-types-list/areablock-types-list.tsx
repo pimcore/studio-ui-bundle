@@ -32,7 +32,7 @@ export const AreablockTypesList = (): React.JSX.Element => {
   if (groupEntries.length === 1 && groupEntries[0][0] === DEFAULT_AREABLOCK_GROUP) {
     const [, types] = groupEntries[0]
     return (
-      <Box className={ styles.gridContainer } padding="small">
+      <Box className={ styles.gridContainer } padding={ { x: 'small', bottom: 'small' }}>
         {types.map((type: AreablockTypeEntry, typeIndex) => (
           <DraggableAreablockType
             globalIndex={ typeIndex }

@@ -13,16 +13,17 @@ import { useTranslation } from 'react-i18next'
 import { Box } from '@Pimcore/components/box/box'
 import { SidebarTitle } from '@Pimcore/components/sidebar/title'
 import { AreablockTypesList } from './components/areablock-types-list/areablock-types-list'
+import { Content } from '@sdk/components'
 
 export const AreablockTypesSidebar = (): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
-    <Box>
+    <Content>
       <SidebarTitle withBorder>
         {t('add-areas')}
       </SidebarTitle>
       <AreablockTypesList />
-    </Box>
+    </Content>
   )
 }
