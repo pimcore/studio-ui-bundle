@@ -1,4 +1,4 @@
-import { PerspectiveConfig, PerspectiveConfigDetail, usePerspectiveGetConfigCollectionQuery } from "@Pimcore/modules/perspectives/perspectives-slice.gen"
+import { PerspectiveConfigDetail } from "@Pimcore/modules/perspectives/perspectives-slice.gen"
 import { isNil } from "lodash"
 import React, { createContext, useMemo, useState } from "react"
 import { usePerspectiveEditor } from "../hooks/use-perspective-editor"

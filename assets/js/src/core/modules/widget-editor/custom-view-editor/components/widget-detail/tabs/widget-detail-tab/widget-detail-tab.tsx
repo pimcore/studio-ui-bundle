@@ -1,4 +1,3 @@
-import { useWidgetEditorContext } from "@Pimcore/modules/widget-editor/custom-view-editor/context/hooks/use-widget-editor-context"
 import { WidgetConfig } from "@sdk/api/perspectives"
 import { Content } from "@sdk/components"
 import React from "react"
