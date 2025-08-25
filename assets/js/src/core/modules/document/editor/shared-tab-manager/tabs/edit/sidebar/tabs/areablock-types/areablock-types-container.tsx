@@ -66,13 +66,9 @@ export const AreablockTypesContainer = (): React.JSX.Element => {
 
                 return (
                   <DraggableAreablockType
-                    buttonContentClassName={ styles.buttonContent }
-                    className={ styles.typeButton }
                     globalIndex={ globalIndex }
-                    iconWrapperClassName={ styles.iconWrapper }
                     key={ `${type.areablockName}-${type.type}` }
                     type={ type }
-                    typeNameClassName={ styles.typeName }
                   />
                 )
               })}

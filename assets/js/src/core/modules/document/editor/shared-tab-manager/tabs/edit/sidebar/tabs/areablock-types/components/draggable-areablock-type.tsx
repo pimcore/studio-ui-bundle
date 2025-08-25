@@ -18,25 +18,19 @@ import { Box } from '@Pimcore/components/box/box'
 import { Text } from '@Pimcore/components/text/text'
 import { type AreablockTypeEntry } from '@Pimcore/modules/document/document-editor-slice'
 import { getAreablockTypeIcon } from '../utils/icon-fallback'
+import { useStyles } from './draggable-areablock-type.styles'
 
 interface DraggableAreablockTypeProps {
   type: AreablockTypeEntry
   globalIndex: number
-  className: string
-  iconWrapperClassName: string
-  typeNameClassName: string
-  buttonContentClassName: string
 }
 
 export const DraggableAreablockType = ({
   type,
-  globalIndex,
-  className,
-  iconWrapperClassName,
-  typeNameClassName,
-  buttonContentClassName
+  globalIndex
 }: DraggableAreablockTypeProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
   const iconPath = getAreablockTypeIcon(type.icon, globalIndex)
 
   const dragInfo: DragAndDropInfo = {
@@ -52,23 +46,23 @@ export const DraggableAreablockType = ({
   return (
     <Draggable info={ dragInfo }>
       <Button
-        className={ className }
+        className={ styles.typeButton }
         type="default"
       >
         <Flex
           align="center"
-          className={ buttonContentClassName }
+          className={ styles.buttonContent }
           justify="center"
           vertical
         >
-          <Box className={ iconWrapperClassName }>
+          <Box className={ styles.iconWrapper }>
             <img
               alt={ t(type.name) }
               src={ iconPath }
               style={ { width: '24px', height: '24px' } }
             />
           </Box>
-          <Text className={ typeNameClassName }>
+          <Text className={ styles.typeName }>
             {t(type.name)}
           </Text>
         </Flex>
