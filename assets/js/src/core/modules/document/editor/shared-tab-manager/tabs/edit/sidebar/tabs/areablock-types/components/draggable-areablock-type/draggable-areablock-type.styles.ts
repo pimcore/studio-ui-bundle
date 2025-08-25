@@ -31,6 +31,10 @@ export const useStyles = createStyles(({ token, css }) => {
       }
     `,
 
+    typeIcon: css`
+      color: ${token.colorTextSecondary};
+      margin-bottom: ${token.marginXS}px;
+    `,
 
     typeName: css`
       text-align: center;

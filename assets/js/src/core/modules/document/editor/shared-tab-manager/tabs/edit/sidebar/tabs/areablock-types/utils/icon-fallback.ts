@@ -8,28 +8,42 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
+
 /**
  * Fallback icons for areablock types
+ * Selected neutral icons that work well as generic content element representations
  */
 const FALLBACK_ICON_STORE = [
-  'circuit', 'display', 'biomass', 'deployment', 'electrical_sensor', 'dam',
-  'light_at_the_end_of_tunnel', 'like', 'icons8_cup', 'sports_mode', 'landscape', 'selfie', 'cable_release',
-  'bookmark', 'briefcase', 'graduation_cap', 'in_transit', 'diploma_2', 'circuit', 'display', 'biomass', 'deployment',
-  'electrical_sensor', 'dam',
-  'light_at_the_end_of_tunnel', 'like', 'icons8_cup', 'sports_mode', 'landscape', 'selfie', 'cable_release',
-  'bookmark', 'briefcase', 'graduation_cap', 'in_transit', 'diploma_2'
+  'accessory', 'bookmark', 'catalog', 'cms', 'content', 'custom-metadata', 'document-types',
+  'embedded-metadata', 'favorites', , 'focal-point', 'list', 'market', 'package', 'webhook',
+  'widget'
 ]
 
 /**
  * Gets the icon for an areablock type, applying fallback logic if no icon is provided
  */
-export const getAreablockTypeIcon = (icon: string | undefined, index: number): string => {
-  if (icon != null && icon !== '') {
-    // If icon is provided, treat it as a full SVG path
-    return icon
+export const getAreablockTypeIcon = (icon: string | undefined, index: number): ElementIcon => {
+  if (isNonEmptyString(icon)) {
+    // If icon contains a dot, treat it as a path, otherwise as a name
+    if (icon.includes('.')) {
+      return {
+        type: 'path',
+        value: icon
+      }
+    } else {
+      return {
+        type: 'name',
+        value: icon
+      }
+    }
   }
 
   // Apply fallback logic using the predefined icon store
   const fallbackIcon = FALLBACK_ICON_STORE[index % FALLBACK_ICON_STORE.length]
-  return `/bundles/pimcoreadmin/img/flat-color-icons/${fallbackIcon}.svg`
+  return {
+    type: 'name',
+    value: fallbackIcon
+  }
 }

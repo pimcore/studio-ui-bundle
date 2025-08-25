@@ -32,11 +32,11 @@ export const DraggableAreablockType = ({
 }: DraggableAreablockTypeProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const iconPath = getAreablockTypeIcon(type.icon, globalIndex)
+  const iconConfig = getAreablockTypeIcon(type.icon, globalIndex)
 
   const dragInfo: DragAndDropInfo = {
     type: 'areablock-type',
-    icon: { value: iconPath, type: 'path' },
+    icon: iconConfig,
     title: t(type.name),
     data: {
       areablockType: type.type,
@@ -55,7 +55,12 @@ export const DraggableAreablockType = ({
             justify="center"
             vertical
           >
-            <Icon value={iconPath} type="path" options={{ width: 24, height: 24 }} />
+            <Icon 
+              className={styles.typeIcon}
+              value={iconConfig.value} 
+              type={iconConfig.type} 
+              options={{ width: 24, height: 24 }} 
+            />
             <Text className={ styles.typeName }>
               {t(type.name)}
             </Text>
