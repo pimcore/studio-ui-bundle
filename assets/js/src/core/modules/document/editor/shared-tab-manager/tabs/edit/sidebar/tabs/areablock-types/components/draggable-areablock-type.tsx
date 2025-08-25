@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Draggable } from '@Pimcore/components/drag-and-drop/draggable'
 import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/droppable'
 import { Button } from '@Pimcore/components/button/button'
@@ -22,7 +23,6 @@ interface DraggableAreablockTypeProps {
   type: AreablockTypeEntry
   globalIndex: number
   className: string
-  t: (key: string) => string
   iconWrapperClassName: string
   typeNameClassName: string
   buttonContentClassName: string
@@ -32,16 +32,16 @@ export const DraggableAreablockType = ({
   type,
   globalIndex,
   className,
-  t,
   iconWrapperClassName,
   typeNameClassName,
   buttonContentClassName
 }: DraggableAreablockTypeProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const iconPath = getAreablockTypeIcon(type.icon, globalIndex)
 
   const dragInfo: DragAndDropInfo = {
     type: 'areablock-type',
-    icon: { value: 'brick' },
+    icon: { value: iconPath, type: 'path' },
     title: t(type.name),
     data: {
       areablockType: type.type,

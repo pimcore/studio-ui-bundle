@@ -71,7 +71,6 @@ export const AreablockTypesContainer = (): React.JSX.Element => {
                     globalIndex={ globalIndex }
                     iconWrapperClassName={ styles.iconWrapper }
                     key={ `${type.areablockName}-${type.type}` }
-                    t={ t }
                     type={ type }
                     typeNameClassName={ styles.typeName }
                   />
