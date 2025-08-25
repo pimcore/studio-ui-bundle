@@ -57,6 +57,7 @@ import cms from '@Pimcore/assets/icons/cms.inline.svg?react'
 import collection from '@Pimcore/assets/icons/collection.inline.svg?react'
 import columns from '@Pimcore/assets/icons/columns.inline.svg?react'
 import contentDuplicate from '@Pimcore/assets/icons/content-duplicate.inline.svg?react'
+import contentSettings from '@Pimcore/assets/icons/content-settings.inline.svg?react'
 import content from '@Pimcore/assets/icons/content.inline.svg?react'
 import copilot from '@Pimcore/assets/icons/copilot.inline.svg?react'
 import copy03 from '@Pimcore/assets/icons/copy-03.inline.svg?react'
@@ -410,6 +411,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'content-duplicate',
       component: contentDuplicate
+    })
+    iconLibrary.register({
+      name: 'content-settings',
+      component: contentSettings
     })
     iconLibrary.register({
       name: 'content',

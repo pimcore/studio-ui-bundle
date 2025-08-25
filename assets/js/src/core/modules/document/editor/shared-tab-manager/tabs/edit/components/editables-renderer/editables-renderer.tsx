@@ -9,7 +9,7 @@
  */
 
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
-import React, { useRef, useEffect, createRef } from 'react'
+import React, { useRef, useEffect, createRef, useContext } from 'react'
 import ReactDOM from 'react-dom'
 import { RenderEditable } from './render-editable'
 import { isNull, isUndefined } from 'lodash'
@@ -17,6 +17,7 @@ import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeDocumentEditableRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useDocumentEditor } from '../../hooks/use-document-editor'
+import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 
 export interface EditablesRendererProps {
   editableDefinitions: AbstractDocumentEditableDefinition[]
@@ -27,6 +28,7 @@ export const EditablesRenderer = ({ editableDefinitions }: EditablesRendererProp
   const apiInitialized = useRef(false)
   const { initializeData, notifyReady } = useDocumentEditor()
   const editableContainerRefs = useRef<Record<string, React.RefObject<HTMLDivElement>>>({})
+  const { id: documentId } = useContext(DocumentContext)
 
   // Create refs for each editable if they don't exist
   editableDefinitions.forEach(editable => {
@@ -57,8 +59,14 @@ export const EditablesRenderer = ({ editableDefinitions }: EditablesRendererProp
   useEffect(() => {
     if (apiInitialized.current) {
       notifyReady()
+
+      try {
+        documentEditableRegistry.notifyDocumentReady(documentId, editableDefinitions)
+      } catch (error) {
+        console.warn('Could not process document ready events:', error)
+      }
     }
-  }, [notifyReady])
+  }, [notifyReady, editableDefinitions, documentId, documentEditableRegistry])
 
   return (
     <>
