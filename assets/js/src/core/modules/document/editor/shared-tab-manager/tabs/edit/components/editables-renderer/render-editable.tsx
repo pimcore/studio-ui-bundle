@@ -16,6 +16,7 @@ import { serviceIds, useInjection } from '@sdk/app'
 import { isNil, isUndefined } from 'lodash'
 import { defaultFieldWidthValues, FieldWidthProvider } from '@sdk/modules/element'
 import { useDocumentEditor } from '../../hooks/use-document-editor'
+import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 
 interface RenderEditableProps {
   editableDefinition: AbstractDocumentEditableDefinition
@@ -77,6 +78,7 @@ export const RenderEditable = ({ editableDefinition, containerRef }: RenderEdita
   const label = editableType.getLabel(editableProps)
 
   return (
+    <ErrorBoundary>
     <FieldWidthProvider fieldWidthValues={ { large: 9999 } }>
       {
         !isUndefined(label)
@@ -93,5 +95,6 @@ export const RenderEditable = ({ editableDefinition, containerRef }: RenderEdita
             )
       }
     </FieldWidthProvider>
+    </ErrorBoundary>
   )
 }
