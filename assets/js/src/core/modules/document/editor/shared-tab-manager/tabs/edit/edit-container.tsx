@@ -76,6 +76,7 @@ export const EditContainer = (): React.JSX.Element => {
       <Sidebar
         buttons={ sidebarButtons }
         entries={ sidebarEntries }
+        translateTooltips
       />
       }
     >

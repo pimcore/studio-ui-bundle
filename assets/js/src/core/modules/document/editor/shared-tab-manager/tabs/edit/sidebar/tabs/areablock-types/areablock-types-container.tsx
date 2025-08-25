@@ -20,7 +20,7 @@ export const AreablockTypesContainer = (): React.JSX.Element => {
   return (
     <Box>
       <SidebarTitle withBorder>
-        {t('sidebar.add-areas')}
+        {t('add-areas')}
       </SidebarTitle>
       <AreablockTypesList />
     </Box>
