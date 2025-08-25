@@ -10,18 +10,18 @@
 
 import React, { useEffect } from 'react'
 import { LocalizedFieldsProvider } from './provider/localized-fields-provider/localized-fields-provider'
-import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
-import { type AbstractObjectLayoutDefinition } from '../../../layout-related/dynamic-type-object-layout-abstract'
-import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
+import { type AbstractObjectDataDefinition } from '../../../../modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
 import { Space } from '@Pimcore/components/space/space'
 import { useLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/use-language-selection'
 import { Form } from '@Pimcore/components/form/form'
 import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/combined-field-name-provider/combined-field-name-provider'
 
-export interface LocalizedFieldsProps extends AbstractObjectDataDefinition {
-  children?: AbstractObjectDataDefinition | AbstractObjectLayoutDefinition
+// Props for the React children version
+export interface LocalizedFieldsProps extends Omit<AbstractObjectDataDefinition, 'children'> {
+  children?: React.ReactNode
 }
 
+// Main LocalizedFields component - supports React children
 export const LocalizedFields = ({ children, noteditable, className }: LocalizedFieldsProps): React.JSX.Element => {
   const { currentLanguage, hasLocalizedFields, setHasLocalizedFields } = useLanguageSelection()
 
@@ -38,14 +38,7 @@ export const LocalizedFields = ({ children, noteditable, className }: LocalizedF
             direction='vertical'
             size='small'
           >
-            {children?.map((child, index) => (
-              <ObjectComponent
-                key={ index }
-                { ...child }
-                className={ className }
-                noteditable={ noteditable }
-              />
-            ))}
+            {children}
           </Space>
         </Form.Group>
       </CombinedFieldNameProvider>

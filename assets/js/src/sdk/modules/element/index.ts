@@ -113,7 +113,7 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-r
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image-gallery/image-gallery'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/input-quantity-value/input-quantity-value'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/link'
-export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/localized-fields/localized-fields'
+export * from '@Pimcore/components/form/localisation/localized-fields/localized-fields'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/many-to-many-object-relation'
 // @todo mark as deprecated
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/many-to-many-relation'
