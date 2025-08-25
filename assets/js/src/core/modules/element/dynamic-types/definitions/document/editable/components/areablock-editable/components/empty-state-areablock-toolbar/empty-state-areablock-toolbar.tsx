@@ -17,6 +17,7 @@ import { type AreaType, type AreablockEditableConfig } from '../../areablock-edi
 import { useAreablockMenu } from '../../hooks/use-areablock-menu'
 import { EditableDropzone } from '../../../../helpers/editable-dropzone-sorting/components/editable-dropzone/editable-dropzone'
 import { useTranslation } from 'react-i18next'
+import { configUtils } from '../../utils/areablock-utils'
 
 export interface EmptyStateAreablockToolbarProps {
   areaTypes: AreaType[]
@@ -44,7 +45,12 @@ export const EmptyStateAreablockToolbar = ({
   }
 
   const isValidDrop = (info: any): boolean => {
-    return info.type === 'areablock-type' && info.data?.areablockType != null
+    if (info.type !== 'areablock-type' || info.data?.areablockType == null) {
+      return false
+    }
+
+    const areablockType = info.data.areablockType
+    return configUtils.isTypeAllowed(config, areablockType)
   }
 
   const renderAddButton = (): React.ReactNode => {

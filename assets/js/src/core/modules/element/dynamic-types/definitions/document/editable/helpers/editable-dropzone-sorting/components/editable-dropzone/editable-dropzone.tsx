@@ -27,7 +27,7 @@ const DropzoneContent = ({ id, index, onDropItem, isValidDrop }: EditableDropzon
   // Original dropzone for sorting
   const { setNodeRef } = useDndKitDroppable({ id })
   // New droppable for add functionality
-  const { isDragActive, isOver } = useDroppable()
+  const { isDragActive, isOver, isValid } = useDroppable()
 
   return (
     <div
@@ -36,7 +36,8 @@ const DropzoneContent = ({ id, index, onDropItem, isValidDrop }: EditableDropzon
         'pimcore-editable-dropzone',
         {
           [styles.dropzoneDragActive]: isDragActive,
-          [styles.dropzoneHover]: isOver
+          [styles.dropzoneHover]: isOver && isValid,
+          [styles.dropzoneRejected]: isOver && !isValid
         }
       ) }
       data-pimcore-dropzone-id={ id }

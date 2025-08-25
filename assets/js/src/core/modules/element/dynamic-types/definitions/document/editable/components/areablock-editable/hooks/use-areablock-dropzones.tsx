@@ -18,6 +18,7 @@ import {
   type UseEditableDropzonesReturn,
   type EditableManager
 } from '../../../helpers/editable-dropzone-sorting/hooks/use-editable-dropzones'
+import { DragAndDropInfo } from '@sdk/components'
 
 export interface UseAreablockDropzonesProps {
   areablockManager: AreablockManager
@@ -39,12 +40,17 @@ export const useAreablockDropzones = ({
   const { t } = useTranslation()
 
   // Areablock-specific drop validation
-  const isValidAreablockDrop = (info: any): boolean => {
-    return info.type === 'areablock-type' && info.data?.areablockType != null
+  const isValidAreablockDrop = (info: DragAndDropInfo): boolean => {
+    if (info.type !== 'areablock-type' || info.data?.areablockType == null) {
+      return false
+    }
+
+    const areablockType = info.data.areablockType
+    return areaTypes.some(areaType => areaType.type === areablockType)
   }
 
   // Areablock-specific drop handler
-  const handleAreablockDrop = async (info: any, index: number): Promise<void> => {
+  const handleAreablockDrop = async (info: DragAndDropInfo, index: number): Promise<void> => {
     if (onDropAreablock != null) {
       const areaType = (info.data?.areablockType as string) ?? (info.title as string) ?? 'default'
       await onDropAreablock(areaType, index)

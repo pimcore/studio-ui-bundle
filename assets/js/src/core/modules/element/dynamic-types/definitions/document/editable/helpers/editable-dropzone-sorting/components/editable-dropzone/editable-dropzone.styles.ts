@@ -34,6 +34,11 @@ export const useEditableDropzoneStyles = createStyles(({ token }) => ({
     opacity: 0.6
   },
 
+  dropzoneRejected: {
+    opacity: 0.6,
+    backgroundColor: token.colorError
+  },
+
   // Common drag active styles for dragged elements
   dragActive: {
     opacity: '0.3 !important',
