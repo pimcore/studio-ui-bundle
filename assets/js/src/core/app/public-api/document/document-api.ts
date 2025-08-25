@@ -13,7 +13,7 @@ import { markDocumentEditablesAsModified } from '@Pimcore/modules/document/docum
 import { iframeDocumentEditorRegistry } from './iframe-registry'
 import { documentSaveService, SaveTaskType } from '@Pimcore/modules/document/services'
 import { debounce, isNil } from 'lodash'
-import { type AreablockGroupedTypes } from '@Pimcore/modules/document/document-editor-slice'
+import { type AreablockGroupedTypes, setDocumentAreablockTypes } from '@Pimcore/modules/document/document-editor-slice'
 import { type PublicApiDocumentEditorIframe } from '../document-editor-iframe'
 import { type IframeRef } from '@Pimcore/components/iframe/iframe'
 
@@ -88,16 +88,7 @@ class DocumentApiImpl implements DocumentApi {
   }
 
   notifyAreablockTypes (documentId: number, areablockTypes: AreablockGroupedTypes): void {
-    // Import Redux action and dispatch to store
-    import('@Pimcore/modules/document/document-editor-slice').then(({ setDocumentAreablockTypes }) => {
-      import('@Pimcore/app/store').then(({ store }) => {
-        store.dispatch(setDocumentAreablockTypes({ documentId, areablockTypes }))
-      }).catch(error => {
-        console.warn('Could not access store:', error)
-      })
-    }).catch(error => {
-      console.warn('Could not access Redux action:', error)
-    })
+    store.dispatch(setDocumentAreablockTypes({ documentId, areablockTypes }))
   }
 
   isIframeReady (documentId: number): boolean {
