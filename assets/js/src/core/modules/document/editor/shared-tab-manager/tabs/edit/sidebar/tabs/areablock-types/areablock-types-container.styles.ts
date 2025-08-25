@@ -24,10 +24,8 @@ export const useStyles = createStyles(({ token, css }) => {
     groupTitle: css`
       display: block;
       margin-bottom: ${token.marginMD}px;
-      font-size: ${token.fontSizeSM}px;
       font-weight: ${token.fontWeightStrong};
       text-transform: uppercase;
-      letter-spacing: 0.5px;
       color: ${token.colorTextSecondary};
     `,
 
@@ -36,11 +34,12 @@ export const useStyles = createStyles(({ token, css }) => {
     `,
 
     gridContainer: css`
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: ${token.marginXS}px;
       margin-bottom: ${token.marginXS}px;
       width: 100%;
+      align-items: stretch;
     `,
 
     areablockName: css`

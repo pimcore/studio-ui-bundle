@@ -12,14 +12,21 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
+    draggableWrapper: css`
+      height: 100%;
+      display: flex;
+    `,
+
     typeButton: css`
-      flex: 0 0 calc(50% - ${token.marginXS / 2}px);
-      height: auto;
-      padding: ${token.paddingMD}px ${token.paddingXS}px;
+      width: 100%;
+      height: 100%;
+      padding: ${token.paddingXS}px;
       border: 1px solid ${token.colorBorder};
       border-radius: ${token.borderRadiusLG}px;
       background: ${token.colorBgContainer};
-      min-width: 0; /* Prevent flex items from overflowing */
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       &:hover {
         border-color: ${token.colorPrimary};
@@ -32,22 +39,21 @@ export const useStyles = createStyles(({ token, css }) => {
       align-items: center;
       justify-content: center;
       width: 100%;
-      min-height: 60px; /* Ensure consistent button height */
+      height: 100%;
+      gap: ${token.marginXXS}px;
     `,
 
     iconWrapper: css`
-      font-size: 24px;
-      margin-bottom: ${token.marginXXS}px;
       color: ${token.colorTextSecondary};
+      display: flex;
+      align-items: center;
+      justify-content: center;
     `,
 
     typeName: css`
-      font-size: 11px;
-      line-height: 1.2;
       text-align: center;
       color: ${token.colorText};
       word-break: break-word;
-      hyphens: auto;
       white-space: normal;
       overflow-wrap: break-word;
     `

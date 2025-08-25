@@ -25,26 +25,24 @@ import { checkAreablockTypesVisibility } from './sidebar/visibility/areablock-ty
 moduleSystem.registerModule({
   onInit: () => {
     const sidebarManager = container.get<DocumentEditorSidebarManager>(serviceIds['Document/Editor/Edit/SidebarManager'])
-
-    sidebarManager.registerEntry({
-      key: 'hello-world',
-      icon: <Icon
-        options={ { width: '16px', height: '16px' } }
-        value={ 'edit' }
-            />,
-      component: <HelloWorldContainer />,
-      tooltip: 'Hello World'
-    })
-
+    
     sidebarManager.registerEntry({
       key: 'areablock-types',
       icon: <Icon
-        options={ { width: '16px', height: '16px' } }
-        value={ 'collection' }
+        value={ 'new' }
             />,
       component: <AreablockTypesContainer />,
       tooltip: 'Areablock Types',
       isVisible: checkAreablockTypesVisibility
+    })
+
+    sidebarManager.registerEntry({
+      key: 'hello-world',
+      icon: <Icon
+        value={ 'edit' }
+            />,
+      component: <HelloWorldContainer />,
+      tooltip: 'Hello World'
     })
   }
 })

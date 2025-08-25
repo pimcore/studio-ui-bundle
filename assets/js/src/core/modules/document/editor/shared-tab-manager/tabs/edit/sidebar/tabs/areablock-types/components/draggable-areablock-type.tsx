@@ -45,28 +45,30 @@ export const DraggableAreablockType = ({
 
   return (
     <Draggable info={ dragInfo }>
-      <Button
-        className={ styles.typeButton }
-        type="default"
-      >
-        <Flex
-          align="center"
-          className={ styles.buttonContent }
-          justify="center"
-          vertical
+      <div className={ styles.draggableWrapper }>
+        <Button
+          className={ styles.typeButton }
+          type="default"
         >
-          <Box className={ styles.iconWrapper }>
-            <img
-              alt={ t(type.name) }
-              src={ iconPath }
-              style={ { width: '24px', height: '24px' } }
-            />
-          </Box>
-          <Text className={ styles.typeName }>
-            {t(type.name)}
-          </Text>
-        </Flex>
-      </Button>
+          <Flex
+            align="center"
+            className={ styles.buttonContent }
+            justify="center"
+            vertical
+          >
+            <Box className={ styles.iconWrapper }>
+              <img
+                alt={ t(type.name) }
+                src={ iconPath }
+                style={ { width: '24px', height: '24px' } }
+              />
+            </Box>
+            <Text className={ styles.typeName }>
+              {t(type.name)}
+            </Text>
+          </Flex>
+        </Button>
+      </div>
     </Draggable>
   )
 }
