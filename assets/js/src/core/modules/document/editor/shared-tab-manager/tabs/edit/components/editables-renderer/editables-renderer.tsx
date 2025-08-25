@@ -60,7 +60,6 @@ export const EditablesRenderer = ({ editableDefinitions }: EditablesRendererProp
     if (apiInitialized.current) {
       notifyReady()
 
-      // Let the registry notify all dynamic types about document ready
       try {
         documentEditableRegistry.notifyDocumentReady(documentId, editableDefinitions)
       } catch (error) {

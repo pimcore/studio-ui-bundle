@@ -14,7 +14,6 @@ import { Draggable } from '@Pimcore/components/drag-and-drop/draggable'
 import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/droppable'
 import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { Box } from '@Pimcore/components/box/box'
 import { Text } from '@Pimcore/components/text/text'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type AreablockTypeEntry } from '@Pimcore/modules/document/document-editor-slice'
@@ -46,26 +45,26 @@ export const DraggableAreablockType = ({
 
   return (
     <Draggable info={ dragInfo }>
-        <Button
-          className={ styles.typeButton }
-          type="default"
+      <Button
+        className={ styles.typeButton }
+        type="default"
+      >
+        <Flex
+          align="center"
+          justify="center"
+          vertical
         >
-          <Flex
-            align="center"
-            justify="center"
-            vertical
-          >
-            <Icon 
-              className={styles.typeIcon}
-              value={iconConfig.value} 
-              type={iconConfig.type} 
-              options={{ width: 24, height: 24 }} 
-            />
-            <Text className={ styles.typeName }>
-              {t(type.name)}
-            </Text>
-          </Flex>
-        </Button>
+          <Icon
+            className={ styles.typeIcon }
+            options={ { width: 24, height: 24 } }
+            type={ iconConfig.type }
+            value={ iconConfig.value }
+          />
+          <Text className={ styles.typeName }>
+            {t(type.name)}
+          </Text>
+        </Flex>
+      </Button>
     </Draggable>
   )
 }

@@ -15,9 +15,6 @@ import { type DocumentEditorSidebarManager } from './sidebar/sidebar-manager'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import {
-  HelloWorldContainer
-} from './sidebar/tabs/hello-world/hello-world-container'
-import {
   ContentSettingsSidebar
 } from './sidebar/tabs/content-settings/content-settings-sidebar'
 import {
@@ -28,7 +25,7 @@ import { checkAreablockTypesVisibility } from './sidebar/visibility/areablock-ty
 moduleSystem.registerModule({
   onInit: () => {
     const sidebarManager = container.get<DocumentEditorSidebarManager>(serviceIds['Document/Editor/Edit/SidebarManager'])
-    
+
     sidebarManager.registerEntry({
       key: 'areablock-types',
       icon: <Icon

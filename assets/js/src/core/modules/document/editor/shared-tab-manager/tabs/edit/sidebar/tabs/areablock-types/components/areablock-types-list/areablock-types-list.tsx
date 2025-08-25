@@ -24,7 +24,6 @@ export const AreablockTypesList = (): React.JSX.Element => {
   const { id: documentId } = useContext(DocumentContext)
   const { styles } = useStyles()
 
-  // Get grouped areablock types from Redux store
   const areablockGroupedTypes = useAppSelector((state) => selectDocumentAreablockGroupedTypes(state, documentId))
   const groupEntries = Object.entries(areablockGroupedTypes)
 
@@ -32,7 +31,10 @@ export const AreablockTypesList = (): React.JSX.Element => {
   if (groupEntries.length === 1 && groupEntries[0][0] === DEFAULT_AREABLOCK_GROUP) {
     const [, types] = groupEntries[0]
     return (
-      <Box className={ styles.gridContainer } padding={ { x: 'small', bottom: 'small' }}>
+      <Box
+        className={ styles.gridContainer }
+        padding={ { x: 'small', bottom: 'small' } }
+      >
         {types.map((type: AreablockTypeEntry, typeIndex) => (
           <DraggableAreablockType
             globalIndex={ typeIndex }
@@ -48,7 +50,6 @@ export const AreablockTypesList = (): React.JSX.Element => {
   return (
     <Box className={ styles.collapsibleContainer }>
       {groupEntries.map(([groupName, types], groupIndex) => {
-        // Calculate starting index for this group
         let startIndex = 0
         const entriesBeforeThis = groupEntries.slice(0, groupIndex)
         entriesBeforeThis.forEach(([, prevTypes]) => {
@@ -57,10 +58,10 @@ export const AreablockTypesList = (): React.JSX.Element => {
 
         return (
           <Panel
-            key={ groupName }
             border={ false }
-            collapsible
             collapsed={ false }
+            collapsible
+            key={ groupName }
             theme="card-with-highlight"
             title={ t(groupName) }
           >

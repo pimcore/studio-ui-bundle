@@ -33,10 +33,7 @@ export const EditContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
 
   const sidebarManager = container.get<DocumentEditorSidebarManager>(serviceIds['Document/Editor/Edit/SidebarManager'])
-
   const sidebarButtons = sidebarManager.getButtons()
-
-  // Get reactive sidebar entries - automatically re-evaluates when any relevant Redux state changes
   const sidebarEntries = useDocumentEditorSidebarEntries()
 
   const handleIframeLoad = useCallback(() => {
@@ -66,7 +63,6 @@ export const EditContainer = (): React.JSX.Element => {
         console.warn('Could not unregister iframe:', error)
       }
 
-      // Clean up Redux state when document is closed
       dispatch(removeDocument(id))
     }
   }, [id, dispatch])

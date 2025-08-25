@@ -16,8 +16,15 @@ import { useAreablockEditableStyles } from '../../areablock-editable.styles'
 import { type AreaType, type AreablockEditableConfig } from '../../areablock-editable'
 import { useAreablockMenu } from '../../hooks/use-areablock-menu'
 import { EditableDropzone } from '../../../../helpers/editable-dropzone-sorting/components/editable-dropzone/editable-dropzone'
-import { useTranslation } from 'react-i18next'
 import { configUtils } from '../../utils/areablock-utils'
+import { isString } from 'lodash'
+
+interface DropInfo {
+  type: string
+  data?: {
+    areablockType?: string
+  }
+}
 
 export interface EmptyStateAreablockToolbarProps {
   areaTypes: AreaType[]
@@ -31,21 +38,20 @@ export const EmptyStateAreablockToolbar = ({
   onClick
 }: EmptyStateAreablockToolbarProps): React.JSX.Element => {
   const { styles } = useAreablockEditableStyles()
-  const { t } = useTranslation()
 
   const { menuItems } = useAreablockMenu({
     config,
     onAddArea: (areaType: string) => { void onClick(areaType) }
   })
 
-  const handleDropzoneItem = async (info: any, index: number): Promise<void> => {
-    if (info.type === 'areablock-type' && info.data?.areablockType) {
+  const handleDropzoneItem = async (info: DropInfo, index: number): Promise<void> => {
+    if (info.type === 'areablock-type' && isString(info.data?.areablockType)) {
       await onClick(info.data.areablockType)
     }
   }
 
-  const isValidDrop = (info: any): boolean => {
-    if (info.type !== 'areablock-type' || info.data?.areablockType == null) {
+  const isValidDrop = (info: DropInfo): boolean => {
+    if (info.type !== 'areablock-type' || !isString(info.data?.areablockType)) {
       return false
     }
 
@@ -88,9 +94,9 @@ export const EmptyStateAreablockToolbar = ({
       </ToolStrip>
       <EditableDropzone
         id="empty-areablock-toolbar-dropzone"
-        index={0}
-        onDropItem={handleDropzoneItem}
-        isValidDrop={isValidDrop}
+        index={ 0 }
+        isValidDrop={ isValidDrop }
+        onDropItem={ handleDropzoneItem }
       />
     </>
   )

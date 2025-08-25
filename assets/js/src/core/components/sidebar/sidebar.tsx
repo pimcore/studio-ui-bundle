@@ -27,7 +27,7 @@ export interface SidebarProps {
 export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights = [], translateTooltips = false }: SidebarProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { t } = useTranslation()
-  
+
   const preparedEntries = entries.map((entry) => {
     // TODO: do we need any type of translated label here?
     return {

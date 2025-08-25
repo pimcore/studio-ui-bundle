@@ -51,10 +51,8 @@ const documentEditorSlice = createSlice({
 
 export const { setDocumentAreablockTypes, removeDocument, clearAllDocuments } = documentEditorSlice.actions
 
-// Base selector to get the document editor state
 export const selectDocumentEditorState = (state: any): DocumentEditorState => state['document-editor']
 
-// Memoized selector for areablock grouped types of a specific document
 export const selectDocumentAreablockGroupedTypes = createSelector(
   [selectDocumentEditorState, (_state: any, documentId: number) => documentId],
   (documentEditorState, documentId) => {
@@ -62,7 +60,6 @@ export const selectDocumentAreablockGroupedTypes = createSelector(
   }
 )
 
-// Memoized selector for whether a document has areablocks
 export const selectDocumentHasAreablocks = createSelector(
   [selectDocumentAreablockGroupedTypes],
   (areablockGroupedTypes) => {
@@ -70,7 +67,6 @@ export const selectDocumentHasAreablocks = createSelector(
   }
 )
 
-// Memoized selector for flat areablock types (for backwards compatibility if needed)
 export const selectDocumentAreablockTypes = createSelector(
   [selectDocumentAreablockGroupedTypes],
   (areablockGroupedTypes) => {

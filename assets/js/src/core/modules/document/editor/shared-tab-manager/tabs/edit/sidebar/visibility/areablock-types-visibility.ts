@@ -19,7 +19,6 @@ import { type IDocumentContext } from '@Pimcore/modules/document/document-provid
  */
 export const checkAreablockTypesVisibility = (context: IDocumentContext): boolean => {
   try {
-    // Get the state from Redux store
     const state = store.getState()
     return selectDocumentHasAreablocks(state, context.id)
   } catch (error) {

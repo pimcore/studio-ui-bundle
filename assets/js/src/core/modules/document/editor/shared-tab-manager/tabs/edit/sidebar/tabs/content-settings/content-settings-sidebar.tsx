@@ -22,8 +22,8 @@ export const ContentSettingsSidebar = (): React.JSX.Element => {
       <SidebarTitle withBorder>
         {t('content-settings')}
       </SidebarTitle>
-      <Box padding={ { x: 'small', bottom: 'small' }}>
-      TODO
+      <Box padding={ { x: 'small', bottom: 'small' } }>
+        TODO
       </Box>
     </Content>
   )

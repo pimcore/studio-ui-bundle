@@ -22,15 +22,10 @@ import { selectDocumentEditorState } from '@Pimcore/modules/document/document-ed
  * Hook that provides reactive sidebar entries for the document editor.
  * This hook automatically subscribes to document editor state changes
  * and re-evaluates sidebar visibility when any relevant state changes.
- *
- * This approach is generic and future-proof - it will automatically handle
- * new sidebar entries with any state dependencies without requiring updates.
  */
 export const useDocumentEditorSidebarEntries = (): Array<ISidebarEntry<IDocumentContext>> => {
   const documentContext = useContext(DocumentContext)
 
-  // Subscribe to the entire document editor state to catch all possible changes
-  // that might affect sidebar entry visibility
   const documentEditorState = useAppSelector(selectDocumentEditorState)
 
   const sidebarManager = container.get<DocumentEditorSidebarManager>(serviceIds['Document/Editor/Edit/SidebarManager'])

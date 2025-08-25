@@ -19,10 +19,10 @@ export interface SidebarTitleProps {
   className?: string
 }
 
-export const SidebarTitle = ({ 
-  children, 
-  withBorder = false, 
-  className 
+export const SidebarTitle = ({
+  children,
+  withBorder = false,
+  className
 }: SidebarTitleProps): React.JSX.Element => {
   const { styles } = useStyles()
 
@@ -32,8 +32,8 @@ export const SidebarTitle = ({
   )
 
   return (
-    <div className={containerClassName}>
-      <Title titleClass={styles.title}>{children}</Title>
+    <div className={ containerClassName }>
+      <Title titleClass={ styles.title }>{children}</Title>
     </div>
   )
 }

@@ -14,7 +14,7 @@ import { AreablockEditable, type AreablockEditableConfig, type AreablockValue, t
 import { AreablockManager } from '../components/areablock-editable/utils/areablock-manager'
 import { configUtils } from '../components/areablock-editable/utils/areablock-utils'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
-import { type AreablockGroupedTypes } from '@Pimcore/modules/document/document-editor-slice'
+import { type AreablockGroupedTypes, type AreablockTypeEntry } from '@Pimcore/modules/document/document-editor-slice'
 import { isNil, isArray } from 'lodash'
 
 const DEFAULT_AREABLOCK_GROUP = 'Available Areas'
@@ -53,8 +53,8 @@ export class DynamicTypeDocumentEditableAreablock extends DynamicTypeDocumentEdi
 
       if (areablockEditables.length > 0) {
         const allGroupedTypes: AreablockGroupedTypes = {}
-        
-        const createAreaTypeEntry = (editable: AbstractDocumentEditableDefinition, type: AreaType) => ({
+
+        const createAreaTypeEntry = (editable: AbstractDocumentEditableDefinition, type: AreaType): AreablockTypeEntry => ({
           areablockName: editable.name,
           type: type.type,
           name: type.name,
@@ -62,7 +62,7 @@ export class DynamicTypeDocumentEditableAreablock extends DynamicTypeDocumentEdi
           icon: type.icon
         })
 
-        const addTypesToGroup = (groupName: string, types: AreaType[], editable: AbstractDocumentEditableDefinition) => {
+        const addTypesToGroup = (groupName: string, types: AreaType[], editable: AbstractDocumentEditableDefinition): void => {
           if (isNil(allGroupedTypes[groupName])) {
             allGroupedTypes[groupName] = []
           }

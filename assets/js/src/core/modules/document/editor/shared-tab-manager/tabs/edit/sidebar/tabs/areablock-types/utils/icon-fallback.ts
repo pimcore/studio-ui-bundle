@@ -17,7 +17,7 @@ import { isNonEmptyString } from '@Pimcore/utils/type-utils'
  */
 const FALLBACK_ICON_STORE = [
   'accessory', 'bookmark', 'catalog', 'cms', 'content', 'custom-metadata', 'document-types',
-  'embedded-metadata', 'favorites', , 'focal-point', 'list', 'market', 'package', 'webhook',
+  'embedded-metadata', 'favorites', 'focal-point', 'list', 'market', 'package', 'webhook',
   'widget'
 ]
 
@@ -41,7 +41,7 @@ export const getAreablockTypeIcon = (icon: string | undefined, index: number): E
   }
 
   // Apply fallback logic using the predefined icon store
-  const fallbackIcon = FALLBACK_ICON_STORE[index % FALLBACK_ICON_STORE.length]
+  const fallbackIcon = FALLBACK_ICON_STORE[index % FALLBACK_ICON_STORE.length] ?? 'content'
   return {
     type: 'name',
     value: fallbackIcon

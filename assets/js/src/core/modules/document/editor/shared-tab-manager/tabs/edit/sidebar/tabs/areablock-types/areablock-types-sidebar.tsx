@@ -10,7 +10,6 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Box } from '@Pimcore/components/box/box'
 import { SidebarTitle } from '@Pimcore/components/sidebar/title'
 import { AreablockTypesList } from './components/areablock-types-list/areablock-types-list'
 import { Content } from '@sdk/components'

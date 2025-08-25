@@ -10,7 +10,7 @@
 
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isUndefined } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import { type AreablockManager } from '../utils/areablock-manager'
 import { type AreaType } from '../areablock-editable'
 import {
@@ -18,7 +18,7 @@ import {
   type UseEditableDropzonesReturn,
   type EditableManager
 } from '../../../helpers/editable-dropzone-sorting/hooks/use-editable-dropzones'
-import { DragAndDropInfo } from '@sdk/components'
+import { type DragAndDropInfo } from '@sdk/components'
 
 export interface UseAreablockDropzonesProps {
   areablockManager: AreablockManager
@@ -39,7 +39,6 @@ export const useAreablockDropzones = ({
 }: UseAreablockDropzonesProps): UseAreablockDropzonesReturn => {
   const { t } = useTranslation()
 
-  // Areablock-specific drop validation
   const isValidAreablockDrop = (info: DragAndDropInfo): boolean => {
     if (info.type !== 'areablock-type' || info.data?.areablockType == null) {
       return false
@@ -49,10 +48,9 @@ export const useAreablockDropzones = ({
     return areaTypes.some(areaType => areaType.type === areablockType)
   }
 
-  // Areablock-specific drop handler
   const handleAreablockDrop = async (info: DragAndDropInfo, index: number): Promise<void> => {
-    if (onDropAreablock != null) {
-      const areaType = (info.data?.areablockType as string) ?? (info.title as string) ?? 'default'
+    if (!isNil(onDropAreablock)) {
+      const areaType = (info.data?.areablockType as string) ?? (info.title) ?? 'default'
       await onDropAreablock(areaType, index)
     }
   }
@@ -64,7 +62,6 @@ export const useAreablockDropzones = ({
     isValidDrop: isValidAreablockDrop
   })
 
-  // Calculate drag overlay title for areablocks
   const dragOverlayTitle = useMemo(() => {
     if (sortingResult.activeId === null) return undefined
 
@@ -72,7 +69,6 @@ export const useAreablockDropzones = ({
     const activeElement = currentItemEntries.find(el => areablockManager.getElementKey(el) === sortingResult.activeId)
     if (isUndefined(activeElement)) return undefined
 
-    // Try to get type-specific title if manager supports it
     if (!isUndefined(areablockManager.getElementType) && areaTypes.length > 0) {
       const elementType = areablockManager.getElementType(activeElement)
       const areaType = areaTypes.find(type => type.type === elementType)
