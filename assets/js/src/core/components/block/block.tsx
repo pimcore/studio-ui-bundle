@@ -9,22 +9,30 @@
  */
 
 import React from 'react'
-import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
-import { type AbstractObjectLayoutDefinition } from '../../../layout-related/dynamic-type-object-layout-abstract'
-import { ObjectBlock, type ObjectBlockProps } from './object-block'
+import { Form } from '@Pimcore/components/form/form'
+import { BlockContent } from './block-content'
 
-export interface BlockProps extends AbstractObjectDataDefinition {
-  children?: AbstractObjectLayoutDefinition | AbstractObjectDataDefinition | Array<AbstractObjectLayoutDefinition | AbstractObjectDataDefinition>
+export interface BlockProps {
+  children?: React.ReactNode
   collapsed?: boolean
   collapsible?: boolean
   disallowReorder?: boolean
   disallowAddRemove?: boolean
   maxItems?: number
-  inherited?: boolean
+  title?: React.ReactNode
+  border?: boolean
+  noteditable?: boolean
   onChange?: (value: any) => void
   value?: any
 }
 
 export const Block = (props: BlockProps): React.JSX.Element => {
-  return <ObjectBlock { ...props } />
+  return (
+    <Form.NumberedList
+      onChange={ props.onChange }
+      value={ props.value }
+    >
+      <BlockContent { ...props } />
+    </Form.NumberedList>
+  )
 }

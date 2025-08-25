@@ -12,24 +12,24 @@ import { ToolStripBox } from '@Pimcore/components/toolstrip/box/tool-strip-box'
 import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import React, { useMemo } from 'react'
-import { type BlockProps } from './block'
+import { type ObjectBlockProps } from './object-block'
 import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
 import { Form, type FormItemProps } from '@Pimcore/components/form/form'
-import { BlockToolStrip } from './block-tool-strip'
+import { BlockToolStrip } from '@Pimcore/components/block/block-tool-strip'
 import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/combined-field-name-provider/combined-field-name-provider'
 
-export interface BlockItemProps {
+export interface ObjectBlockItemProps {
   field: number
   noteditable: AbstractObjectDataDefinition['noteditable']
-  children: BlockProps['children']
+  children: ObjectBlockProps['children']
   disallowReorder: boolean
   disallowAdd: boolean
   disallowDelete: boolean
   name: FormItemProps['name']
 }
 
-export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
-  const { field, noteditable, children, disallowAdd } = props
+export const ObjectBlockItem = (props: ObjectBlockItemProps): React.JSX.Element => {
+  const { field, noteditable, children } = props
 
   return useMemo(() => (
     <ToolStripBox
@@ -70,5 +70,5 @@ export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
           : undefined
       }
     </ToolStripBox>
-  ), [field, disallowAdd, noteditable, children])
+  ), [field, noteditable, children, props.disallowAdd, props.disallowDelete, props.disallowReorder, props.name])
 }

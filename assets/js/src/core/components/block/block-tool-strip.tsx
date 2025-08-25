@@ -22,7 +22,27 @@ export interface BlockToolStripProps {
 }
 
 export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReorder }: BlockToolStripProps): React.JSX.Element => {
-  const { operations } = useNumberedList()
+  const { operations, values } = useNumberedList()
+
+  const handleMoveUp = (): void => {
+    console.log(`Moving item ${field} up to ${field - 1}`, 'values length:', values.length)
+    operations.move(field, field - 1)
+  }
+
+  const handleMoveDown = (): void => {
+    console.log(`Moving item ${field} down to ${field + 1}`, 'values length:', values.length)
+    operations.move(field, field + 1)
+  }
+
+  const handleAdd = (): void => {
+    console.log(`Adding item after ${field}`, 'values length:', values.length)
+    operations.add({}, field + 1)
+  }
+
+  const handleDelete = (): void => {
+    console.log(`Deleting item ${field}`, 'values length:', values.length)
+    operations.remove(field)
+  }
 
   return (
     <Split
@@ -34,21 +54,21 @@ export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReo
         <IconButton
           disabled={ disallowAdd }
           icon={ { value: 'new' } }
-          onClick={ () => { operations.add({}, field + 1) } }
+          onClick={ handleAdd }
           size='small'
         />
 
         <IconButton
           disabled={ disallowReorder }
           icon={ { value: 'chevron-down' } }
-          onClick={ () => { operations.move(field, field + 1) } }
+          onClick={ handleMoveDown }
           size='small'
         />
 
         <IconButton
           disabled={ disallowReorder }
           icon={ { value: 'chevron-up' } }
-          onClick={ () => { operations.move(field, field - 1) } }
+          onClick={ handleMoveUp }
           size='small'
         />
       </Space>
@@ -56,7 +76,7 @@ export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReo
       <IconButton
         disabled={ disallowDelete }
         icon={ { value: 'trash' } }
-        onClick={ () => { operations.remove(field) } }
+        onClick={ handleDelete }
         size='small'
       />
     </Split>

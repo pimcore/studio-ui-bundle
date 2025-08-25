@@ -11,9 +11,11 @@
 import React from 'react'
 import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
 import { type AbstractObjectLayoutDefinition } from '../../../layout-related/dynamic-type-object-layout-abstract'
-import { ObjectBlock, type ObjectBlockProps } from './object-block'
+import { Block, type BlockProps } from '@Pimcore/components/block/block'
+import { ObjectBlockContent } from './object-block-content'
+import { Form } from '@Pimcore/components/form/form'
 
-export interface BlockProps extends AbstractObjectDataDefinition {
+export interface ObjectBlockProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectLayoutDefinition | AbstractObjectDataDefinition | Array<AbstractObjectLayoutDefinition | AbstractObjectDataDefinition>
   collapsed?: boolean
   collapsible?: boolean
@@ -25,6 +27,13 @@ export interface BlockProps extends AbstractObjectDataDefinition {
   value?: any
 }
 
-export const Block = (props: BlockProps): React.JSX.Element => {
-  return <ObjectBlock { ...props } />
+export const ObjectBlock = (props: ObjectBlockProps): React.JSX.Element => {
+  return (
+    <Form.NumberedList
+      onChange={ props.onChange }
+      value={ props.value }
+    >
+      <ObjectBlockContent { ...props } />
+    </Form.NumberedList>
+  )
 }

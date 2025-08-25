@@ -8,19 +8,20 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { BaseView } from '../../../layout-related/views/base-view'
-import { type BlockProps } from './block'
+import { type ObjectBlockProps } from './object-block'
 import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
-import { BlockAddButton } from './block-add-button'
-import { BlockItem } from './block-item'
+import { BlockAddButton } from '@Pimcore/components/block/block-add-button'
+import { ObjectBlockItem } from './object-block-item'
 import { Space } from '@Pimcore/components/space/space'
 import { Box } from '@Pimcore/components/box/box'
 
-export interface BlockContentProps extends BlockProps {}
+export interface ObjectBlockContentProps extends ObjectBlockProps {}
 
-export const BlockContent = (props: BlockContentProps): React.JSX.Element => {
+export const ObjectBlockContent = (props: ObjectBlockContentProps): React.JSX.Element => {
   const { values } = useNumberedList()
+  const keyCounterRef = useRef(0)
 
   const maxItemsCount = props?.maxItems ?? 0
   const valuesKeys = Object.keys(values)
@@ -29,6 +30,11 @@ export const BlockContent = (props: BlockContentProps): React.JSX.Element => {
 
   const isItemLimitReached = maxItemsCount > 0 && valuesKeys.length === maxItemsCount
   const isHideAddButton = isNoteditable || isItemLimitReached || valuesKeys.length > 0 || isDisallowAddRemove
+
+  // Generate stable keys for items to fix deletion issue
+  const stableKeys = useMemo(() => {
+    return values.map(() => `object-block-item-${++keyCounterRef.current}`)
+  }, [values.length])
 
   return useMemo(() => (
     <BaseView
@@ -48,8 +54,8 @@ export const BlockContent = (props: BlockContentProps): React.JSX.Element => {
           size='extra-small'
         >
           {values.map((_value, index) => (
-            <div key={ index }>
-              <BlockItem
+            <div key={ stableKeys[index] ?? `object-block-item-${index}` }>
+              <ObjectBlockItem
                 disallowAdd={ isDisallowAddRemove || isItemLimitReached || isNoteditable }
                 disallowDelete={ isDisallowAddRemove || isNoteditable }
                 disallowReorder={ props.disallowReorder === true || isNoteditable }
@@ -58,11 +64,11 @@ export const BlockContent = (props: BlockContentProps): React.JSX.Element => {
                 noteditable={ props.noteditable }
               >
                 {props.children}
-              </BlockItem>
+              </ObjectBlockItem>
             </div>
           ))}
         </Space>
       </Box>
     </BaseView>
-  ), [values])
+  ), [values, props, isNoteditable, isDisallowAddRemove, isItemLimitReached, isHideAddButton])
 }
