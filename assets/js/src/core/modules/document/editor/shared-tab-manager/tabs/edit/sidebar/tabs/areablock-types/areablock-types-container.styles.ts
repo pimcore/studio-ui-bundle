@@ -16,11 +16,6 @@ export const useStyles = createStyles(({ token, css }) => {
       padding: ${token.paddingSM}px;
     `,
 
-    emptyStateContainer: css`
-      padding: ${token.paddingSM}px;
-      text-align: center;
-    `,
-
     groupTitle: css`
       display: block;
       margin-bottom: ${token.marginMD}px;

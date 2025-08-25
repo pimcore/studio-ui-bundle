@@ -9,12 +9,10 @@
  */
 
 import React, { useContext } from 'react'
-import { Empty as AntEmpty } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { type AreablockTypeEntry, selectDocumentAreablockGroupedTypes } from '@Pimcore/modules/document/document-editor-slice'
 import { useAppSelector } from '@Pimcore/app/store'
-import { Empty } from '@Pimcore/components/empty/empty'
 import { Text } from '@Pimcore/components/text/text'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Box } from '@Pimcore/components/box/box'
@@ -29,17 +27,6 @@ export const AreablockTypesContainer = (): React.JSX.Element => {
 
   // Get grouped areablock types from Redux store
   const areablockGroupedTypes = useAppSelector((state) => selectDocumentAreablockGroupedTypes(state, documentId))
-
-  if (Object.keys(areablockGroupedTypes).length === 0) {
-    return (
-      <Box className={ styles.emptyStateContainer }>
-        <Empty
-          description={ t('areablock-types.no-areablocks') }
-          image={ AntEmpty.PRESENTED_IMAGE_SIMPLE }
-        />
-      </Box>
-    )
-  }
 
   return (
     <Box className={ styles.container }>
