@@ -10,12 +10,12 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { AreablockEditable, type AreablockEditableConfig, type AreablockValue } from '../components/areablock-editable/areablock-editable'
+import { AreablockEditable, type AreablockEditableConfig, type AreablockValue, type AreaType } from '../components/areablock-editable/areablock-editable'
 import { AreablockManager } from '../components/areablock-editable/utils/areablock-manager'
 import { configUtils } from '../components/areablock-editable/utils/areablock-utils'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import { type AreablockGroupedTypes } from '@Pimcore/modules/document/document-editor-slice'
-import { isNil } from 'lodash'
+import { isNil, isArray } from 'lodash'
 
 const DEFAULT_AREABLOCK_GROUP = 'Available Areas'
 const UNCATEGORIZED_AREABLOCK_GROUP = 'Uncategorized'
@@ -48,69 +48,52 @@ export class DynamicTypeDocumentEditableAreablock extends DynamicTypeDocumentEdi
 
   onDocumentReady (documentId: number, editableDefinitions: AbstractDocumentEditableDefinition[]): void {
     try {
-      // Get all areablock editables from the definitions
       const areablockEditables = editableDefinitions.filter(editable => editable.type === this.id)
       const { document: documentApi } = getPimcoreStudioApi()
 
       if (areablockEditables.length > 0) {
-        // Collect all grouped types from all areablocks and merge them
         const allGroupedTypes: AreablockGroupedTypes = {}
-        let hasGroupedAreablocks = false
-
-        // First pass: check if any areablock has grouping defined
-        areablockEditables.forEach(editable => {
-          const config = editable.config as AreablockEditableConfig | undefined
-          const groupedTypes = configUtils.getGroupedAreaTypes(config)
-
-          if (!Array.isArray(groupedTypes)) {
-            hasGroupedAreablocks = true
-          }
+        
+        const createAreaTypeEntry = (editable: AbstractDocumentEditableDefinition, type: AreaType) => ({
+          areablockName: editable.name,
+          type: type.type,
+          name: type.name,
+          description: type.description,
+          icon: type.icon
         })
 
-        // Second pass: process all areablocks with proper categorization
+        const addTypesToGroup = (groupName: string, types: AreaType[], editable: AbstractDocumentEditableDefinition) => {
+          if (isNil(allGroupedTypes[groupName])) {
+            allGroupedTypes[groupName] = []
+          }
+          types.forEach(type => {
+            allGroupedTypes[groupName].push(createAreaTypeEntry(editable, type))
+          })
+        }
+
+        const hasGroupedAreablocks = areablockEditables.some(editable => {
+          const config = editable.config as AreablockEditableConfig | undefined
+          const groupedTypes = configUtils.getGroupedAreaTypes(config)
+          return !isArray(groupedTypes)
+        })
+
         areablockEditables.forEach(editable => {
           const config = editable.config as AreablockEditableConfig | undefined
           const groupedTypes = configUtils.getGroupedAreaTypes(config)
 
-          if (Array.isArray(groupedTypes)) {
-            // No grouping defined for this areablock - use shared group for all ungrouped areablocks
+          if (isArray(groupedTypes)) {
+            // Areablock has no custom grouping - add to default or uncategorized group
             const groupName = hasGroupedAreablocks ? UNCATEGORIZED_AREABLOCK_GROUP : DEFAULT_AREABLOCK_GROUP
-            if (isNil(allGroupedTypes[groupName])) {
-              allGroupedTypes[groupName] = []
-            }
-
-            groupedTypes.forEach(type => {
-              allGroupedTypes[groupName].push({
-                areablockName: editable.name,
-                type: type.type,
-                name: type.name,
-                description: (type as any).description,
-                icon: (type as any).icon
-              })
-            })
+            addTypesToGroup(groupName, groupedTypes, editable)
           } else {
-            // Grouping is defined - share groups across areablocks instead of separating by areablock name
             Object.entries(groupedTypes).forEach(([groupName, types]) => {
-              if (isNil(allGroupedTypes[groupName])) {
-                allGroupedTypes[groupName] = []
-              }
-
-              types.forEach(type => {
-                allGroupedTypes[groupName].push({
-                  areablockName: editable.name,
-                  type: type.type,
-                  name: type.name,
-                  description: (type as any).description,
-                  icon: (type as any).icon
-                })
-              })
+              addTypesToGroup(groupName, types, editable)
             })
           }
         })
 
         documentApi.notifyAreablockTypes(documentId, allGroupedTypes)
       } else {
-        // No areablocks found - notify with empty object
         documentApi.notifyAreablockTypes(documentId, {})
       }
     } catch (error) {
