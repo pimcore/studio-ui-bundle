@@ -10,11 +10,12 @@
 
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
-import React, { useContext, useRef, useCallback } from 'react'
+import React, { useContext, useRef, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Iframe, type IframeRef } from '../../../../../../components/iframe/iframe'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import { isNil } from 'lodash'
+import { addCacheBusterToUrl } from '@Pimcore/utils/url-cache-buster'
 
 export const EditContainer = (): React.JSX.Element => {
   const { id } = useContext(DocumentContext)
@@ -35,6 +36,10 @@ export const EditContainer = (): React.JSX.Element => {
     }
   }, [id])
 
+  const iframeSrc = useMemo(() => {
+    return addCacheBusterToUrl(`${documentDraft?.fullPath}?pimcore_editmode=true&pimcore_studio=true&documentId=${id}`)
+  }, [documentDraft?.fullPath, id])
+
   // Cleanup on unmount
   React.useEffect(() => {
     return () => {
@@ -52,7 +57,7 @@ export const EditContainer = (): React.JSX.Element => {
       onLoad={ handleIframeLoad }
       preserveScrollOnReload
       ref={ iframeRef }
-      src={ `${documentDraft?.fullPath}?pimcore_editmode=true&pimcore_studio=true&documentId=${id}` }
+      src={ iframeSrc }
       title={ `${t('edit.label')}-${id}` }
       useExternalReadyState
     />

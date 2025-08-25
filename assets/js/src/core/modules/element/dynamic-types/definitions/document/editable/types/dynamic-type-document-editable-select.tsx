@@ -11,14 +11,16 @@
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import { CreatableSelect } from '@sdk/components'
-import { isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil, isArray } from 'lodash'
 import { toCssDimension } from '@sdk/utils'
 import { type SelectOptionType } from '@sdk/modules/element'
 import i18n from '@Pimcore/app/i18n'
 
+export type SelectStoreEntry = [string | number | null, string] | string | number
+
 export type SelectEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
-    store: Array<[string | number | null, string]>
+    store: SelectStoreEntry[]
     width?: number
     class?: string
     defaultValue?: string
@@ -31,10 +33,20 @@ export class DynamicTypeDocumentEditableSelect extends DynamicTypeDocumentEditab
   id: string = 'select'
 
   getEditableDataComponent (props: SelectEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
-    const baseOptions: SelectOptionType[] = props.config?.store?.map(([value, label]) => ({
-      value: String(value),
-      label: i18n.t(label)
-    })) ?? []
+    const baseOptions: SelectOptionType[] = props.config?.store?.map((item: SelectStoreEntry) => {
+      if (isArray(item)) {
+        const [value, label] = item
+        return {
+          value: String(value),
+          label: i18n.t(label)
+        }
+      } else {
+        return {
+          value: String(item),
+          label: String(item)
+        }
+      }
+    }) ?? []
 
     const isEditable = props.config?.editable !== false
 

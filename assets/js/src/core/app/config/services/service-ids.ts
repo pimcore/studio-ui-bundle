@@ -77,12 +77,12 @@ export const serviceIds = {
 
   'DynamicTypes/FieldFilter/DataObjectAdapter': 'DynamicTypes/FieldFilter/DataObjectAdapter',
   'DynamicTypes/FieldFilter/DataObjectObjectBrick': 'DynamicTypes/FieldFilter/DataObjectObjectBrick',
-  'DynamicTypes/FieldFilter/Text': 'DynamicTypes/FieldFilter/Text',
-  'DynamicTypes/FieldFilter/Textarea': 'DynamicTypes/FieldFilter/Textarea',
-  'DynamicTypes/FieldFilter/Wysiwyg': 'DynamicTypes/FieldFilter/Wysiwyg',
+  'DynamicTypes/FieldFilter/String': 'DynamicTypes/FieldFilter/String',
+  'DynamicTypes/FieldFilter/Fulltext': 'DynamicTypes/FieldFilter/Fulltext',
+  'DynamicTypes/FieldFilter/None': 'DynamicTypes/FieldFilter/None',
   'DynamicTypes/FieldFilter/Number': 'DynamicTypes/FieldFilter/Number',
   'DynamicTypes/FieldFilter/Select': 'DynamicTypes/FieldFilter/Select',
-  'DynamicTypes/FieldFilter/Datetime': 'DynamicTypes/FieldFilter/Datetime',
+  'DynamicTypes/FieldFilter/Date': 'DynamicTypes/FieldFilter/Date',
   'DynamicTypes/FieldFilter/Checkbox': 'DynamicTypes/FieldFilter/Checkbox',
 
   'DynamicTypes/BatchEdit/Text': 'DynamicTypes/BatchEdit/Text',
@@ -212,6 +212,7 @@ export const serviceIds = {
 
   // Document editables
   'DynamicTypes/DocumentEditable/Area': 'DynamicTypes/DocumentEditable/Area',
+  'DynamicTypes/DocumentEditable/Areablock': 'DynamicTypes/DocumentEditable/Areablock',
   'DynamicTypes/DocumentEditable/Block': 'DynamicTypes/DocumentEditable/Block',
   'DynamicTypes/DocumentEditable/Checkbox': 'DynamicTypes/DocumentEditable/Checkbox',
   'DynamicTypes/DocumentEditable/Date': 'DynamicTypes/DocumentEditable/Date',

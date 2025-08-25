@@ -14,6 +14,7 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type ElementInfo } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/element-cell/element-cell'
+import { buildTestId } from '@Pimcore/utils/test-id-generator'
 import { formatDateTime } from '@sdk/utils'
 import { createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
 import React, { useState } from 'react'
@@ -120,6 +121,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
             justify='center'
           >
             <IconButton
+              data-testid={ buildTestId(['button', 'restore']) }
               icon={ { value: 'restore' } }
               loading={ restoreLoading.includes(row.original.id) }
               onClick={ () => {
@@ -132,6 +134,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
             />
 
             <IconButton
+              data-testid={ buildTestId(['button', 'delete']) }
               icon={ { value: 'trash' } }
               loading={ removeLoading.includes(row.original.id) }
               onClick={ () => {

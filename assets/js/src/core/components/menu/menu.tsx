@@ -28,6 +28,7 @@ export interface MenuItemType extends AntdMenuType {
 
 export interface SubMenuItemType extends Omit<AntdSubMenuType, 'children'> {
   children: ItemType[]
+  itemKey?: React.Key
 }
 
 export interface MenuItemGroupType extends Omit<OldMenuItemGroupType, 'children'> {
@@ -45,9 +46,12 @@ export type ItemType<T extends MenuItemType = MenuItemType> = T | MenuItemGroupT
 export interface IMenuProps extends Omit<MenuProps, 'items' > {
   items?: ItemType[]
   ref?: React.Ref<MenuRef>
+  dataTestId?: string
 }
 
 export const Menu = React.forwardRef<MenuRef, IMenuProps>((props, ref): JSX.Element => {
+  const { dataTestId, ...restProps } = props
+
   const filteredItems = props.items?.filter(function filterItems (item: ItemType) {
     // @ts-expect-error - the prop exists trust me bro ;)
     if (item?.hidden === true) {
@@ -69,11 +73,14 @@ export const Menu = React.forwardRef<MenuRef, IMenuProps>((props, ref): JSX.Elem
 
   return (
     <AntMenu
-      { ...props }
+      { ...restProps }
+      data-testid={ dataTestId }
       items={ undefined }
       ref={ ref }
     >
-      {filteredItems?.map((item: ItemType) => MenuItem({ item }))}
+      {filteredItems?.map((item: ItemType) => (
+        MenuItem({ item })
+      ))}
     </AntMenu>
   )
 })

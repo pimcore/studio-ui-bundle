@@ -74,6 +74,7 @@ export const EditablesRenderer = ({ editableDefinitions }: EditablesRendererProp
             <RenderEditable
               containerRef={ editableContainerRefs.current[editable.id] }
               editableDefinition={ editable }
+              key={ editable.id }
             />,
             targetElement
           )
