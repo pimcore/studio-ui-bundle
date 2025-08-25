@@ -4,7 +4,7 @@ import { TreeContainer } from "./components/tree/tree-container"
 import { WidgetDetailContainer } from "./components/widget-detail/widget-detail-container"
 import { ContentLayout, Icon, TreeDataItem } from "@sdk/components"
 
-export const CustomViewEditorContainer = (): React.JSX.Element => {
+export const WidgetEditorContainerInner = (): React.JSX.Element => {
   const [expandedKeys, setExpandedKeys] = React.useState<any[]>([0])
   const [treeData, setTreeData] = React.useState<TreeDataItem[]>([])
 

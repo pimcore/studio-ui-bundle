@@ -1,19 +1,37 @@
-import React, { createContext, useMemo } from "react"
+import { WidgetConfig } from "@Pimcore/modules/perspectives/perspectives-slice.gen"
+import React, { createContext, useMemo, useState } from "react"
 
-interface WidgetEditorContextProps {
-  id: number
-}
-
-interface WidgetEditorContainerProps extends WidgetEditorContextProps {
+interface WidgetEditorProviderProps {
   children?: React.ReactNode
 }
 
-export const WidgetEditorContext = createContext<WidgetEditorContextProps | undefined>(undefined)
+export interface WidgetEditorContext {
+  activeTabId: string | undefined
+  setActiveTabId: (id: string | undefined) => void
+  widgets: WidgetConfig[]
+  openWidget: (id: string) => Promise<void>
+}
 
-export const WidgetEditorContainer = ({ id, children }: WidgetEditorContainerProps): React.JSX.Element => {
-  return useMemo(() => (
-    <WidgetEditorContext.Provider value={{ id }}>
+export const WidgetEditorContext = createContext<WidgetEditorContext | undefined>(undefined)
+
+export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): React.JSX.Element => {
+  const [activeTabId, setActiveTabId] = useState<string | undefined>(undefined)
+  const [widgets, setWidgets] = useState<WidgetConfig[]>([])
+
+  const openWidget = async (id: string): Promise<void> => {
+
+  }
+
+  const contextValue = useMemo(() => ({
+    activeTabId,
+    setActiveTabId,
+    widgets,
+    openWidget
+  }), [activeTabId, widgets])
+
+  return (
+    <WidgetEditorContext.Provider value={contextValue}>
       {children}
     </WidgetEditorContext.Provider>
-  ), [id])
+  )
 }

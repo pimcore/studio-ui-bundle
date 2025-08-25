@@ -1125,5 +1125,5 @@ test-email.validation.subject.required: Please provide a subject
 navigation.widget-editor: Widget Editor
 widget.widget-editor.perspective-editor: Perspectives Editor
 navigation.widget-editor.perspective-editor: Perspectives Editor
-widget.widget-editor.custom-view-editor: Custom View Editor
-navigation.widget-editor.custom-view-editor: Custom View Editor
+widget.widget-editor.widget-editor: Widget Editor
+navigation.widget-editor.widget-editor: Widget Editor

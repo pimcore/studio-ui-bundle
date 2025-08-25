@@ -3,7 +3,7 @@ import { container } from "@Pimcore/app/depency-injection"
 import { moduleSystem } from "@Pimcore/app/module-system/module-system"
 import { MainNavRegistry } from "../app/base-layout/main-nav/services/main-nav-registry"
 import { WidgetRegistry } from "../widget-manager/services/widget-registry"
-import { CustomViewEditorContainer } from "./custom-view-editor/custom-view-editor-container"
+import { WidgetEditorContainerInner } from "./custom-view-editor/widget-editor-container-inner"
 import { PerspectiveEditorContainer } from "./perspective-editor/perspective-editor-container"
 
 moduleSystem.registerModule({
@@ -16,8 +16,8 @@ moduleSystem.registerModule({
     })
 
     widgetRegistryService.registerWidget({
-      name: 'custom-view-editor',
-      component: CustomViewEditorContainer
+      name: 'widget-editor',
+      component: WidgetEditorContainerInner
     })
 
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
@@ -50,18 +50,18 @@ moduleSystem.registerModule({
     })
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'System/Widget Editor/Custom-View-Editor',
-      label: 'navigation.widget-editor.custom-view-editor',
+      path: 'System/Widget Editor/Widget-Editor',
+      label: 'navigation.widget-editor.widget-editor',
       order: 200,
       className: 'item-style-modifier',
       //permission: UserPermission.FOO,
       //perspectivePermission: NavPermission.BAR,
       widgetConfig: {
-        name: 'customViewEditor',
-        id: 'custom-view-editor',
-        component: 'custom-view-editor',
+        name: 'widgetEditor',
+        id: 'widget-editor',
+        component: 'widget-editor',
         config: {
-          translationKey: 'widget.widget-editor.custom-view-editor',
+          translationKey: 'widget.widget-editor.widget-editor',
           icon: {
             type: 'name',
             value: 'layout-grid-02'
