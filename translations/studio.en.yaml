@@ -18,6 +18,7 @@ sidebar.tag_filters: Tag Filters
 sidebar.search_filter: Search & Filter
 sidebar.clear-all-filters: Clear all filters
 add-areas: Add areas
+content-settings: Content Settings
 site-domain.main_site: Main Site
 modal-search.field.mimeType: MIME-Type
 modal-search.field.thumbnail: Thumbnail
