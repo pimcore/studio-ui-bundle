@@ -10,12 +10,10 @@
 
 import React, { useEffect, useMemo, useCallback } from 'react'
 import { isArray, isNil } from 'lodash'
-import { DragOverlay, DndContext } from '@dnd-kit/core'
 import { DynamicEditablesRenderer } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-renderer/dynamic-editables-renderer'
 import { useAreablockEditableStyles } from './areablock-editable.styles'
 import { useAreablockEditable } from './hooks/use-areablock-editable'
 import { useAreablockControls } from './hooks/use-areablock-controls'
-import { useAreablockSorting } from './hooks/use-areablock-sorting'
 import { AreablockManager } from './utils/areablock-manager'
 import { configUtils } from './utils/areablock-utils'
 
@@ -57,7 +55,6 @@ export interface AreablockEditableProps {
   editableName: string
   containerRef?: React.RefObject<HTMLDivElement>
   disabled?: boolean
-  enableSidebarDragDrop?: boolean
 }
 
 export const AreablockEditable = ({
@@ -67,8 +64,7 @@ export const AreablockEditable = ({
   className,
   editableName,
   containerRef,
-  disabled = false,
-  enableSidebarDragDrop = false
+  disabled = false
 }: AreablockEditableProps): React.JSX.Element => {
   const { styles } = useAreablockEditableStyles()
   const currentValue = isArray(value) ? value : []
@@ -94,36 +90,7 @@ export const AreablockEditable = ({
     }
   })
 
-  // Create addAreaAtIndex function for enhanced drag and drop
-  const addAreaAtIndex = useCallback(async (areaType: string, index: number): Promise<void> => {
-    const currentElements = areablockManager.queryElements()
-    const targetElement = index > 0 ? currentElements[index - 1] : null
-    await addArea(targetElement, areaType)
-  }, [areablockManager, addArea])
-
-  // Use enhanced sorting when sidebar drag and drop is enabled
-  const {
-    activeId,
-    handleDragStart,
-    handleDragOver,
-    handleDragEnd,
-    dropzonePortals,
-    dragOverlayTitle,
-    refreshDropzones
-  } = useAreablockSorting({
-    areablockManager,
-    areaTypes: configUtils.getAvailableTypes(config),
-    onMoveArea: moveArea,
-    onAddAreaAtIndex: enableSidebarDragDrop ? addAreaAtIndex : undefined,
-    config: enableSidebarDragDrop ? config : undefined
-  })
-
-  // Standard controls
-  const {
-    updateControls,
-    initializeControls,
-    emptyStatePortal
-  } = useAreablockControls({
+  const { initializeControls, updateControls, clearEmptyState, renderAreablockToolbar } = useAreablockControls({
     areablockManager,
     areaTypes: configUtils.getAvailableTypes(config),
     config,
@@ -144,55 +111,22 @@ export const AreablockEditable = ({
     if (elements.length < 1) {
       initializeControls()
     } else {
+      clearEmptyState()
       container.classList.remove('pimcore_area_buttons')
       elements.forEach(element => {
         updateControls(element, limitReached)
       })
     }
-    
-    // Refresh dropzones after control updates
-    if (enableSidebarDragDrop) {
-      refreshDropzones()
-    }
-  }, [areablockManager, config?.limit, initializeControls, updateControls, enableSidebarDragDrop, refreshDropzones])
+  }, [areablockManager, config?.limit, initializeControls, updateControls, clearEmptyState])
 
   useEffect(() => {
     refreshControls()
   }, [currentValue, refreshControls])
 
-  const renderContent = () => (
+  return (
     <div className={ `${styles.areablockContainer} ${className ?? ''}` }>
       <DynamicEditablesRenderer editableDefinitions={ dynamicEditables } />
-      {emptyStatePortal}
-      {dropzonePortals}
+      {renderAreablockToolbar()}
     </div>
   )
-
-  // Wrap with DndContext if using enhanced controls
-  if (enableSidebarDragDrop && handleDragStart && handleDragOver && handleDragEnd) {
-    return (
-      <DndContext
-        onDragStart={handleDragStart}
-        onDragOver={handleDragOver}
-        onDragEnd={handleDragEnd}
-      >
-        {renderContent()}
-        <DragOverlay>
-          {activeId ? (
-            <div style={{ 
-              padding: '8px 16px', 
-              backgroundColor: 'white', 
-              border: '1px solid #d9d9d9', 
-              borderRadius: '6px',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
-            }}>
-              {dragOverlayTitle}
-            </div>
-          ) : null}
-        </DragOverlay>
-      </DndContext>
-    )
-  }
-
-  return renderContent()
 }

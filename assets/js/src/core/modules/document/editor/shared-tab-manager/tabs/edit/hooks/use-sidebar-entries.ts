@@ -1,0 +1,43 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { useContext, useMemo } from 'react'
+import { useAppSelector } from '@Pimcore/app/store'
+import { DocumentContext } from '@Pimcore/modules/document/document-provider'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type DocumentEditorSidebarManager } from '../sidebar/sidebar-manager'
+import { type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
+import { type IDocumentContext } from '@Pimcore/modules/document/document-provider'
+
+// Import the selector properly - there's no circular dependency issue here
+const selectDocumentEditorState = (state: any) => state['document-editor']
+
+/**
+ * Hook that provides reactive sidebar entries for the document editor.
+ * This hook automatically subscribes to document editor state changes
+ * and re-evaluates sidebar visibility when any relevant state changes.
+ * 
+ * This approach is generic and future-proof - it will automatically handle
+ * new sidebar entries with any state dependencies without requiring updates.
+ */
+export const useDocumentEditorSidebarEntries = (): ISidebarEntry<IDocumentContext>[] => {
+  const documentContext = useContext(DocumentContext)
+  
+  // Subscribe to the entire document editor state to catch all possible changes
+  // that might affect sidebar entry visibility
+  const documentEditorState = useAppSelector(selectDocumentEditorState)
+  
+  const sidebarManager = container.get<DocumentEditorSidebarManager>(serviceIds['Document/Editor/Edit/SidebarManager'])
+  
+  return useMemo(() => {
+    return sidebarManager.getVisibleEntries(documentContext)
+  }, [sidebarManager, documentContext, documentEditorState])
+}

@@ -43,9 +43,7 @@ export const useAreablockSorting = ({
 
   const sortingResult = useEditableDropzoneSorting({
     editableManager: areablockManager as EditableManager,
-    onMoveItem: onMoveArea,
-    onAddItemAtIndex: onAddAreaAtIndex,
-    config
+    onMoveItem: onMoveArea
   })
 
   // Calculate drag overlay title for areablocks

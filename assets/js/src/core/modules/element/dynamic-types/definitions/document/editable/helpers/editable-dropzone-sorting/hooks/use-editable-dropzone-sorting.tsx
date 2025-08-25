@@ -14,7 +14,6 @@ import { type DragStartEvent, type DragOverEvent, type DragEndEvent } from '@dnd
 import { isNull, isUndefined, debounce } from 'lodash'
 import { useEditableDropzoneStyles } from '../components/editable-dropzone/editable-dropzone.styles'
 import { EditableDropzone } from '../components/editable-dropzone/editable-dropzone'
-import { EnhancedEditableDropzone } from '../components/editable-dropzone/enhanced-editable-dropzone'
 import {
   DROPZONE_ATTRIBUTES,
   DROPZONE_CONFIG
@@ -37,9 +36,6 @@ export interface EditableManager {
 export interface UseEditableDropzoneSortingProps<T extends EditableManager> {
   editableManager: T
   onMoveItem: (fromIndex: number, toIndex: number) => void
-  // Optional props for enhanced functionality
-  onAddItemAtIndex?: (itemType: string, index: number) => Promise<void>
-  config?: any // Config for validation (e.g., AreablockEditableConfig)
 }
 
 export interface UseEditableDropzoneSortingReturn {
@@ -53,9 +49,7 @@ export interface UseEditableDropzoneSortingReturn {
 
 export const useEditableDropzoneSorting = <T extends EditableManager>({
   editableManager,
-  onMoveItem,
-  onAddItemAtIndex,
-  config
+  onMoveItem
 }: UseEditableDropzoneSortingProps<T>): UseEditableDropzoneSortingReturn => {
   const { styles } = useEditableDropzoneStyles()
   const [activeId, setActiveId] = useState<string | null>(null)
@@ -110,30 +104,19 @@ export const useEditableDropzoneSorting = <T extends EditableManager>({
 
     dropzoneContainers?.forEach((containerElement, index) => {
       const dropzoneId = `${DROPZONE_CONFIG.ID_PREFIX}${index}`
-      
-      // Use enhanced dropzone if we have onAddItemAtIndex callback
-      const dropzone = onAddItemAtIndex !== undefined ? (
-        <EnhancedEditableDropzone
-          id={dropzoneId}
-          index={index}
-          config={config}
-          onAddAreaAtIndex={onAddItemAtIndex}
-          key={dropzoneId}
-        />
-      ) : (
+      const dropzone = (
         <EditableDropzone
           id={ dropzoneId }
           index={ index }
           key={ dropzoneId }
         />
       )
-      
       const portal = ReactDOM.createPortal(dropzone, containerElement)
       newPortals.push(portal)
     })
 
     setDropzonePortals(newPortals)
-  }, [injectDropzones, container, editableName, currentElements.length, onAddItemAtIndex, config])
+  }, [injectDropzones, container, editableName, currentElements.length])
 
   useEffect(() => {
     updateStyles()
