@@ -14,10 +14,9 @@ import React from 'react'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
-import { Text } from '@Pimcore/components/text/text'
 
 const meta: Meta<typeof Block> = {
-  title: 'Components/Data Display/Block',
+  title: 'Components/Data Entry/Block',
   component: Block,
   parameters: {
     layout: 'centered'
