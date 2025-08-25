@@ -8,30 +8,55 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+
 import React from 'react'
-import { useDroppable } from '@dnd-kit/core'
+import { useDroppable as useDndKitDroppable } from '@dnd-kit/core'
+import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
+import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { useEditableDropzoneStyles } from './editable-dropzone.styles'
+import cn from 'classnames'
+
 
 export interface EditableDropzoneProps {
   id: string
   index: number
 }
 
-export const EditableDropzone = ({
-  id,
-  index
-}: EditableDropzoneProps): React.JSX.Element => {
+const DropzoneContent = ({ id, index }: EditableDropzoneProps): React.JSX.Element => {
   const { styles } = useEditableDropzoneStyles()
-  const { setNodeRef } = useDroppable({
-    id
-  })
+  // Original dropzone for sorting
+  const { setNodeRef } = useDndKitDroppable({ id })
+  // New droppable for add functionality  
+  const { isDragActive, isOver } = useDroppable()
+
+  console.log('isDragActive', isDragActive, isOver)
 
   return (
     <div
-      className={ `${styles.dropzone} pimcore-editable-dropzone` }
-      data-pimcore-dropzone-id={ id }
-      data-pimcore-dropzone-index={ index }
-      ref={ setNodeRef }
+      className={cn(
+        styles.dropzone, 
+        'pimcore-editable-dropzone',
+        {
+          [styles.dropzoneDragActive]: isDragActive,
+          [styles.dropzoneHover]: isOver
+        }
+      )}
+      data-pimcore-dropzone-id={id}
+      data-pimcore-dropzone-index={index}
+      ref={setNodeRef}
     />
+  )
+}
+
+export const EditableDropzone = ({ id, index }: EditableDropzoneProps): React.JSX.Element => {
+  return (
+    <Droppable
+      isValidContext={(info) => info.type === 'areablock-type'}
+      isValidData={(info) => info.type === 'areablock-type'}
+      onDrop={() => {}}
+      disableDndActiveIndicator={false}
+    >
+      <DropzoneContent id={id} index={index} />
+    </Droppable>
   )
 }
