@@ -12,6 +12,8 @@ import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Space } from '@Pimcore/components/space/space'
 import { Split } from '@Pimcore/components/split/split'
+import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
+import { Form } from '@Pimcore/components/form/form'
 import React from 'react'
 
 export interface BlockToolStripProps {
@@ -19,66 +21,78 @@ export interface BlockToolStripProps {
   disallowAdd: boolean
   disallowDelete: boolean
   disallowReorder: boolean
+  itemValue?: any
+  getItemTitle?: (itemValue: any, index: number) => React.ReactNode
 }
 
-export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReorder }: BlockToolStripProps): React.JSX.Element => {
+export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReorder, itemValue, getItemTitle }: BlockToolStripProps): React.JSX.Element => {
   const { operations, values } = useNumberedList()
+  
+  // Use Form.useWatch to get the real-time form values for this specific item
+  const watchedValue = Form.useWatch([field])
 
   const handleMoveUp = (): void => {
-    console.log(`Moving item ${field} up to ${field - 1}`, 'values length:', values.length)
     operations.move(field, field - 1)
   }
 
   const handleMoveDown = (): void => {
-    console.log(`Moving item ${field} down to ${field + 1}`, 'values length:', values.length)
     operations.move(field, field + 1)
   }
 
   const handleAdd = (): void => {
-    console.log(`Adding item after ${field}`, 'values length:', values.length)
     operations.add({}, field + 1)
   }
 
   const handleDelete = (): void => {
-    console.log(`Deleting item ${field}`, 'values length:', values.length)
     operations.remove(field)
   }
 
+  // Use the watched value for real-time updates, fallback to itemValue
+  const currentValue = watchedValue ?? itemValue
+  
+  // Generate dynamic title if callback is provided
+  const dynamicTitle = getItemTitle?.(currentValue, field)
+  
+  // Convert title to string for ToolStrip
+  const titleString = dynamicTitle ? String(dynamicTitle) : undefined
+
   return (
-    <Split
-      dividerSize='small'
-      size='mini'
-      theme='secondary'
-    >
-      <Space size="mini">
-        <IconButton
-          disabled={ disallowAdd }
-          icon={ { value: 'new' } }
-          onClick={ handleAdd }
-          size='small'
-        />
+    <ToolStrip title={ titleString }>
+      <Split
+        dividerSize='small'
+        size='mini'
+        theme='secondary'
+      >
+        <Space size="mini">
+          <IconButton
+            disabled={ disallowAdd }
+            icon={ { value: 'new' } }
+            onClick={ handleAdd }
+            size='small'
+          />
+
+          <IconButton
+            disabled={ disallowReorder }
+            icon={ { value: 'chevron-down' } }
+            onClick={ handleMoveDown }
+            size='small'
+          />
+
+          <IconButton
+            disabled={ disallowReorder }
+            icon={ { value: 'chevron-up' } }
+            onClick={ handleMoveUp }
+            size='small'
+          />
+        </Space>
 
         <IconButton
-          disabled={ disallowReorder }
-          icon={ { value: 'chevron-down' } }
-          onClick={ handleMoveDown }
+          disabled={ disallowDelete }
+          icon={ { value: 'trash' } }
+          onClick={ handleDelete }
           size='small'
         />
-
-        <IconButton
-          disabled={ disallowReorder }
-          icon={ { value: 'chevron-up' } }
-          onClick={ handleMoveUp }
-          size='small'
-        />
-      </Space>
-
-      <IconButton
-        disabled={ disallowDelete }
-        icon={ { value: 'trash' } }
-        onClick={ handleDelete }
-        size='small'
-      />
-    </Split>
+      </Split>
+    </ToolStrip>
   )
 }

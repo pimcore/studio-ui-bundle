@@ -20,12 +20,12 @@ export interface BlockItemProps {
   disallowReorder?: boolean
   disallowAdd?: boolean
   disallowDelete?: boolean
+  itemValue?: any
+  getItemTitle?: (itemValue: any, index: number) => React.ReactNode
 }
 
 export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
   const { field, noteditable = false, children } = props
-  
-  console.log('BlockItem - field from props:', field)
 
   return useMemo(() => (
     <ToolStripBox
@@ -38,6 +38,8 @@ export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
               disallowDelete={ props.disallowDelete ?? false }
               disallowReorder={ props.disallowReorder ?? false }
               field={ field }
+              itemValue={props.itemValue}
+              getItemTitle={props.getItemTitle}
             />
           </ToolStrip>
         )
@@ -45,5 +47,5 @@ export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
     >
       {children}
     </ToolStripBox>
-  ), [field, noteditable, children, props.disallowAdd, props.disallowDelete, props.disallowReorder])
+  ), [field, noteditable, children, props.disallowAdd, props.disallowDelete, props.disallowReorder, props.itemValue, props.getItemTitle])
 }

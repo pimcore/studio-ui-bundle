@@ -24,6 +24,7 @@ export interface BlockProps {
   noteditable?: boolean
   onChange?: (value: any) => void
   value?: any
+  getItemTitle?: (itemValue: any, index: number) => React.ReactNode
 }
 
 export const Block = (props: BlockProps): React.JSX.Element => {

@@ -43,10 +43,12 @@ export const BlockContent = (props: BlockContentProps): React.JSX.Element => {
       title={ props.title }
     >
       <Box padding={ { top: 'extra-small' } }>
-        {values.map((_value, index) => (
+        {values.map((value, index) => (
           <div key={`block-item-${index}`} style={{ marginBottom: '8px' }}>
             <BlockItem
               field={index}
+              itemValue={value}
+              getItemTitle={props.getItemTitle}
               disallowAdd={ isDisallowAddRemove || isItemLimitReached || isNoteditable }
               disallowDelete={ isDisallowAddRemove || isNoteditable }
               disallowReorder={ props.disallowReorder === true || isNoteditable }

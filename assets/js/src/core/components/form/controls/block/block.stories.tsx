@@ -30,6 +30,7 @@ The Block component is designed for content management scenarios where users nee
 
 - **Visual Interface**: Bordered sections with collapsible headers and titles
 - **Built-in Controls**: Toolbar with add, remove, and reorder operations
+- **Dynamic Titles**: Real-time title generation based on current form values
 - **Form Integration**: Seamless integration with Pimcore Form system
 - **Flexible Content**: Support for any form fields within each block
 - **Accessibility**: Proper ARIA support and keyboard navigation
@@ -37,15 +38,24 @@ The Block component is designed for content management scenarios where users nee
 **Key Features:**
 - Add/remove blocks with visual feedback
 - Drag-free reordering with up/down arrows  
+- Dynamic toolbar titles that update with form values
 - Collapsible sections to save screen space
 - Maximum item limits and permission controls
 - Rich form field support within each block
+
+**Dynamic Titles:**
+Use the \`getItemTitle\` callback to generate meaningful titles for each block item:
+- Titles update in real-time as users type
+- Can combine multiple field values
+- Provides fallback logic for empty fields
+- Improves user experience and content organization
 
 **Use Cases:**
 - Content management systems (page sections, articles)
 - Product catalogs (features, specifications)
 - FAQ sections (question/answer pairs)
 - Step-by-step guides (instructions, tutorials)
+- Contact directories and team management
 - Any structured, repeatable content
 
 **Built on NumberedList:** Block extends the core NumberedList functionality with enhanced UX and visual design suitable for end-user interfaces.
@@ -86,6 +96,10 @@ The Block component is designed for content management scenarios where users nee
     noteditable: {
       control: 'boolean',
       description: 'Make the entire block read-only'
+    },
+    getItemTitle: {
+      control: false,
+      description: 'Callback function to generate dynamic titles for each block item based on current form values. Receives (itemValue, index) and returns ReactNode.'
     }
   }
 }
@@ -138,6 +152,11 @@ const ContentBlocksComponent = (): React.JSX.Element => {
                 title="Content Sections"
                 border
                 collapsible
+                getItemTitle={(itemValue, index) => {
+                  const title = itemValue?.title || `Section ${index + 1}`
+                  const type = itemValue?.type ? ` (${itemValue.type})` : ''
+                  return `${title}${type}`
+                }}
               >
                 <Form.Item
                   label="Section Title"
@@ -260,6 +279,11 @@ const ProductCatalogComponent = (): React.JSX.Element => {
                 title="Feature List"
                 border
                 collapsible
+                getItemTitle={(itemValue, index) => {
+                  const name = itemValue?.name || `Feature ${index + 1}`
+                  const priority = itemValue?.priority ? ` • Priority ${itemValue.priority}` : ''
+                  return `${name}${priority}`
+                }}
               >
                 <Form.Item
                   label="Feature Name"
@@ -402,6 +426,12 @@ const ConfigurationComponent = (): React.JSX.Element => {
               maxItems={3}
               collapsible
               collapsed={false}
+              getItemTitle={(itemValue, index) => {
+                const key = itemValue?.key || `Setting ${index + 1}`
+                const type = itemValue?.type ? ` [${itemValue.type}]` : ''
+                const required = itemValue?.required ? ' *' : ''
+                return `${key}${type}${required}`
+              }}
             >
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <Form.Item
@@ -616,4 +646,181 @@ const RestrictedBlocksComponent = (): React.JSX.Element => {
 
 export const RestrictedBlocks: Story = {
   render: () => <RestrictedBlocksComponent />
+}
+
+// Dynamic Titles Example
+interface ContactInfo {
+  name: string
+  email: string
+  phone: string
+  department: string
+  role: string
+}
+
+interface ContactFormValues {
+  contacts: ContactInfo[]
+}
+
+const DynamicTitlesComponent = (): React.JSX.Element => {
+  const [form] = Form.useForm()
+  const [formValues, setFormValues] = useState<ContactFormValues>({
+    contacts: [
+      { name: 'John Doe', email: 'john.doe@company.com', phone: '+1-555-0123', department: 'Engineering', role: 'Senior Developer' },
+      { name: 'Jane Smith', email: 'jane.smith@company.com', phone: '+1-555-0124', department: 'Design', role: 'UX Designer' },
+      { name: '', email: '', phone: '', department: 'Sales', role: 'Account Manager' }
+    ]
+  })
+
+  const onValuesChange = (changedValues: Partial<ContactFormValues>, allValues: ContactFormValues): void => {
+    setFormValues(allValues)
+  }
+
+  return (
+    <div style={ { maxWidth: '1000px', padding: '20px' } }>
+      <h3>Dynamic Titles Example</h3>
+      <p style={ { marginBottom: '20px', color: '#666' } }>
+        This example shows how block titles can be dynamically generated based on the current form values. 
+        The titles in the toolbar update in real-time as you type.
+      </p>
+      <div style={ { display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' } }>
+        <div>
+          <Form
+            form={ form }
+            initialValues={ formValues }
+            layout="vertical"
+            onFinish={ (values) => { console.log('Contact form submitted:', values) } }
+            onValuesChange={ onValuesChange }
+          >
+            <Form.Item
+              label="Team Contacts"
+              name="contacts"
+            >
+              <Block 
+                title="Contact Directory"
+                border
+                collapsible
+                getItemTitle={(itemValue, index) => {
+                  // Generate dynamic title based on current form values
+                  const name = itemValue?.name?.trim()
+                  const department = itemValue?.department
+                  const role = itemValue?.role
+                  
+                  if (name) {
+                    // If name is provided, show: "John Doe • Engineering"
+                    return department ? `${name} • ${department}` : name
+                  } else if (role || department) {
+                    // If no name but has role/department: "UX Designer (Design)" or just "Sales"
+                    if (role && department) {
+                      return `${role} (${department})`
+                    }
+                    return role || department
+                  } else {
+                    // Fallback to index-based title
+                    return `Contact ${index + 1}`
+                  }
+                }}
+              >
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                  <Form.Item
+                    label="Full Name"
+                    name="name"
+                    rules={[{ required: true, message: 'Name is required' }]}
+                  >
+                    <Input placeholder="Enter full name" />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Email"
+                    name="email"
+                    rules={[
+                      { required: true, message: 'Email is required' },
+                      { type: 'email', message: 'Please enter a valid email' }
+                    ]}
+                  >
+                    <Input placeholder="Enter email address" />
+                  </Form.Item>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+                  <Form.Item
+                    label="Phone"
+                    name="phone"
+                  >
+                    <Input placeholder="Enter phone number" />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Department"
+                    name="department"
+                  >
+                    <Select
+                      options={ [
+                        { label: 'Engineering', value: 'Engineering' },
+                        { label: 'Design', value: 'Design' },
+                        { label: 'Product', value: 'Product' },
+                        { label: 'Sales', value: 'Sales' },
+                        { label: 'Marketing', value: 'Marketing' },
+                        { label: 'Support', value: 'Support' }
+                      ] }
+                      placeholder="Select department"
+                    />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Role"
+                    name="role"
+                  >
+                    <Input placeholder="Enter job title" />
+                  </Form.Item>
+                </div>
+              </Block>
+            </Form.Item>
+
+            <Form.Item>
+              <Button
+                htmlType="submit"
+                type="primary"
+              >
+                Save Contacts
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+
+        <div>
+          <h4>Live Data:</h4>
+          <div style={ {
+            background: '#f5f5f5',
+            padding: '16px',
+            borderRadius: '8px',
+            fontFamily: 'monospace',
+            fontSize: '11px',
+            whiteSpace: 'pre-wrap',
+            maxHeight: '400px',
+            overflowY: 'auto'
+          } }
+          >
+            {JSON.stringify(formValues, null, 2)}
+          </div>
+          
+          <div style={ { marginTop: '16px', padding: '12px', background: '#e8f4fd', borderRadius: '6px', border: '1px solid #91caff' } }>
+            <h5 style={ { margin: '0 0 8px 0', fontSize: '13px' } }>Dynamic Title Logic:</h5>
+            <ul style={ { fontSize: '11px', margin: '0', paddingLeft: '16px', color: '#666' } }>
+              <li><strong>Has name:</strong> "Name • Department"</li>
+              <li><strong>No name, has role & dept:</strong> "Role (Department)"</li>
+              <li><strong>No name, has role OR dept:</strong> "Role" or "Department"</li>
+              <li><strong>Empty fields:</strong> "Contact X" (fallback)</li>
+            </ul>
+            <p style={ { fontSize: '11px', margin: '8px 0 0 0', color: '#666' } }>
+              <strong>Try it:</strong> Clear a name field to see the title change, or modify departments and roles!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export const DynamicTitles: Story = {
+  render: () => <DynamicTitlesComponent />
 }
