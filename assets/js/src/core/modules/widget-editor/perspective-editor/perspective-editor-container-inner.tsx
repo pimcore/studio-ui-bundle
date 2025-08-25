@@ -9,12 +9,12 @@ export const PerspectiveEditorContainerInner = (): React.JSX.Element => {
   const [expandedKeys, setExpandedKeys] = React.useState<any[]>([0])
 
   const sidebar = {
-    id: 'widget-editor.sidebar',
+    id: 'widget-editor.perspective-editor.sidebar',
     minSize: 170,
     children: [
       <TreeContainer
         expandedKeys={expandedKeys}
-        key="widget-editor--sidebar"
+        key="widget-editor.perspective-editor.sidebar"
         onSetExpandedKeys={(keys) => {
           setExpandedKeys(keys)
         }}
@@ -23,7 +23,7 @@ export const PerspectiveEditorContainerInner = (): React.JSX.Element => {
   }
 
   const main = {
-    id: 'widget-editor--main',
+    id: 'widget-editor.perspective-editor.main',
     minSize: 600,
     children: [
       <WidgetDetailContainer />
@@ -32,12 +32,10 @@ export const PerspectiveEditorContainerInner = (): React.JSX.Element => {
 
   return (
     <ContentLayout>
-      <PerspectiveEditorProvider>
-        <ConfigLayout
-          leftItem={sidebar}
-          rightItem={main}
-        />
-      </PerspectiveEditorProvider>
+      <ConfigLayout
+        leftItem={sidebar}
+        rightItem={main}
+      />
     </ContentLayout>
   )
 }
