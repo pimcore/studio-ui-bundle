@@ -25,7 +25,7 @@ export const PerspectiveEditorContainerInner = (): React.JSX.Element => {
     id: 'widget-editor.perspective-editor.main',
     minSize: 600,
     children: [
-      <WidgetDetailContainer />
+      <WidgetDetailContainer key={'widget-editor.perspective-editor.main.detailTab'} />
     ]
   }
 

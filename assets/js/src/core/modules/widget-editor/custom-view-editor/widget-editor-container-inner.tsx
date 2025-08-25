@@ -25,7 +25,7 @@ export const WidgetEditorContainerInner = (): React.JSX.Element => {
     id: 'widget-editor.widget-editor.main',
     minSize: 600,
     children: [
-      <WidgetDetailContainer />
+      <WidgetDetailContainer key={'widget-editor.widget-editor.main.detailTab'} />
     ]
   }
 
