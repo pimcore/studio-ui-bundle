@@ -14,7 +14,7 @@ import { Box } from '@Pimcore/components/box/box'
 import { SidebarTitle } from '@Pimcore/components/sidebar/title'
 import { AreablockTypesList } from './components/areablock-types-list/areablock-types-list'
 
-export const AreablockTypesContainer = (): React.JSX.Element => {
+export const AreablockTypesSidebar = (): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (

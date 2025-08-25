@@ -18,8 +18,8 @@ import {
   HelloWorldContainer
 } from './sidebar/tabs/hello-world/hello-world-container'
 import {
-  AreablockTypesContainer
-} from './sidebar/tabs/areablock-types/areablock-types-container'
+  AreablockTypesSidebar
+} from './sidebar/tabs/areablock-types/areablock-types-sidebar'
 import { checkAreablockTypesVisibility } from './sidebar/visibility/areablock-types-visibility'
 
 moduleSystem.registerModule({
@@ -31,7 +31,7 @@ moduleSystem.registerModule({
       icon: <Icon
         value={ 'new' }
             />,
-      component: <AreablockTypesContainer />,
+      component: <AreablockTypesSidebar />,
       tooltip: 'add-areas',
       isVisible: checkAreablockTypesVisibility
     })
