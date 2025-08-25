@@ -56,13 +56,11 @@ export const DraggableAreablockType = ({
             justify="center"
             vertical
           >
-            <Box className={ styles.iconWrapper }>
-              <img
-                alt={ t(type.name) }
-                src={ iconPath }
-                style={ { width: '24px', height: '24px' } }
-              />
-            </Box>
+            <img
+              alt={ t(type.name) }
+              src={ iconPath }
+              style={ { width: '24px', height: '24px' } }
+            />
             <Text className={ styles.typeName }>
               {t(type.name)}
             </Text>

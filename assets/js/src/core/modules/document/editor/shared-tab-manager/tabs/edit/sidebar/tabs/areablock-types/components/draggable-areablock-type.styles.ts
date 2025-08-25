@@ -38,16 +38,7 @@ export const useStyles = createStyles(({ token, css }) => {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 100%;
-      height: 100%;
       gap: ${token.marginXXS}px;
-    `,
-
-    iconWrapper: css`
-      color: ${token.colorTextSecondary};
-      display: flex;
-      align-items: center;
-      justify-content: center;
     `,
 
     typeName: css`

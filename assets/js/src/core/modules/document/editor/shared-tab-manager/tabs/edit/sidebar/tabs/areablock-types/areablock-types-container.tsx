@@ -13,10 +13,8 @@ import { useTranslation } from 'react-i18next'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { type AreablockTypeEntry, selectDocumentAreablockGroupedTypes } from '@Pimcore/modules/document/document-editor-slice'
 import { useAppSelector } from '@Pimcore/app/store'
-import { Text } from '@Pimcore/components/text/text'
-import { Flex } from '@Pimcore/components/flex/flex'
 import { Box } from '@Pimcore/components/box/box'
-import { Divider } from '@Pimcore/components/divider/divider'
+import { Panel } from '@Pimcore/components/panel/panel'
 import { useStyles } from './areablock-types-container.styles'
 import { DraggableAreablockType } from './components/draggable-areablock-type'
 
@@ -27,26 +25,46 @@ export const AreablockTypesContainer = (): React.JSX.Element => {
 
   // Get grouped areablock types from Redux store
   const areablockGroupedTypes = useAppSelector((state) => selectDocumentAreablockGroupedTypes(state, documentId))
+  const groupEntries = Object.entries(areablockGroupedTypes)
 
+  // If only one group, render items directly without grouping
+  if (groupEntries.length === 1) {
+    const [, types] = groupEntries[0]
+    return (
+      <Box className={ styles.container }>
+        <Box className={ styles.gridContainer }>
+          {types.map((type: AreablockTypeEntry, typeIndex) => (
+            <DraggableAreablockType
+              globalIndex={ typeIndex }
+              key={ `${type.areablockName}-${type.type}` }
+              type={ type }
+            />
+          ))}
+        </Box>
+      </Box>
+    )
+  }
+
+  // Multiple groups - use collapsible panels
   return (
-    <Box className={ styles.container }>
-      {Object.entries(areablockGroupedTypes).map(([groupName, types], groupIndex) => {
+    <Box className={ styles.collapsibleContainer }>
+      {groupEntries.map(([groupName, types], groupIndex) => {
         // Calculate starting index for this group
         let startIndex = 0
-        const entriesBeforeThis = Object.entries(areablockGroupedTypes).slice(0, groupIndex)
+        const entriesBeforeThis = groupEntries.slice(0, groupIndex)
         entriesBeforeThis.forEach(([, prevTypes]) => {
           startIndex += prevTypes.length
         })
 
         return (
-          <Flex
+          <Panel
             key={ groupName }
-            vertical
+            border={ false }
+            collapsible
+            collapsed={ false }
+            theme="card-with-highlight"
+            title={ t(groupName) }
           >
-            {groupIndex > 0 && <Divider className={ styles.groupDivider } />}
-            <Text className={ styles.groupTitle }>
-              {t(groupName)}
-            </Text>
             <Box className={ styles.gridContainer }>
               {types.map((type: AreablockTypeEntry, typeIndex) => {
                 const globalIndex = startIndex + typeIndex
@@ -60,7 +78,7 @@ export const AreablockTypesContainer = (): React.JSX.Element => {
                 )
               })}
             </Box>
-          </Flex>
+          </Panel>
         )
       })}
     </Box>

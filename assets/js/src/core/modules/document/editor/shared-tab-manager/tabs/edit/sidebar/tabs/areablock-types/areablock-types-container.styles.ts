@@ -16,16 +16,8 @@ export const useStyles = createStyles(({ token, css }) => {
       padding: ${token.paddingSM}px;
     `,
 
-    groupTitle: css`
-      display: block;
-      margin-bottom: ${token.marginMD}px;
-      font-weight: ${token.fontWeightStrong};
-      text-transform: uppercase;
-      color: ${token.colorTextSecondary};
-    `,
-
-    groupDivider: css`
-      margin: ${token.marginLG}px 0 ${token.marginMD}px 0;
+    collapsibleContainer: css`
+      width: 100%;
     `,
 
     gridContainer: css`
@@ -35,16 +27,6 @@ export const useStyles = createStyles(({ token, css }) => {
       margin-bottom: ${token.marginXS}px;
       width: 100%;
       align-items: stretch;
-    `,
-
-    areablockName: css`
-      font-size: 9px;
-      color: ${token.colorTextTertiary};
-      margin-top: 2px;
-      word-break: break-word;
-      hyphens: auto;
-      white-space: normal;
-      overflow-wrap: break-word;
     `
   }
 })
