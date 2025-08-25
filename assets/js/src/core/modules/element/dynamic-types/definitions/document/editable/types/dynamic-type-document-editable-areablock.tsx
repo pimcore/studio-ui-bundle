@@ -17,6 +17,11 @@ import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import { type AreablockGroupedTypes } from '@Pimcore/modules/document/document-editor-slice'
 import { isNil } from 'lodash'
 
+const DEFAULT_AREABLOCK_GROUP = 'Available Areas'
+const UNCATEGORIZED_AREABLOCK_GROUP = 'Uncategorized'
+
+export { DEFAULT_AREABLOCK_GROUP, UNCATEGORIZED_AREABLOCK_GROUP }
+
 export interface AreablockEditableDefinition extends Omit<AbstractDocumentEditableDefinition, 'config'> {
   config?: AreablockEditableConfig
 }
@@ -68,8 +73,8 @@ export class DynamicTypeDocumentEditableAreablock extends DynamicTypeDocumentEdi
           const groupedTypes = configUtils.getGroupedAreaTypes(config)
 
           if (Array.isArray(groupedTypes)) {
-            // No grouping defined for this areablock
-            const groupName = hasGroupedAreablocks ? 'Uncategorized' : editable.name
+            // No grouping defined for this areablock - use shared group for all ungrouped areablocks
+            const groupName = hasGroupedAreablocks ? UNCATEGORIZED_AREABLOCK_GROUP : DEFAULT_AREABLOCK_GROUP
             if (isNil(allGroupedTypes[groupName])) {
               allGroupedTypes[groupName] = []
             }
@@ -84,7 +89,7 @@ export class DynamicTypeDocumentEditableAreablock extends DynamicTypeDocumentEdi
               })
             })
           } else {
-            // Grouping is defined - merge groups across areablocks
+            // Grouping is defined - share groups across areablocks instead of separating by areablock name
             Object.entries(groupedTypes).forEach(([groupName, types]) => {
               if (isNil(allGroupedTypes[groupName])) {
                 allGroupedTypes[groupName] = []

@@ -17,6 +17,7 @@ import { Box } from '@Pimcore/components/box/box'
 import { Panel } from '@Pimcore/components/panel/panel'
 import { useStyles } from './areablock-types-list.styles'
 import { DraggableAreablockType } from '../draggable-areablock-type/draggable-areablock-type'
+import { DEFAULT_AREABLOCK_GROUP } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/types/dynamic-type-document-editable-areablock'
 
 export const AreablockTypesList = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -27,8 +28,8 @@ export const AreablockTypesList = (): React.JSX.Element => {
   const areablockGroupedTypes = useAppSelector((state) => selectDocumentAreablockGroupedTypes(state, documentId))
   const groupEntries = Object.entries(areablockGroupedTypes)
 
-  // If only one group, render items directly without grouping
-  if (groupEntries.length === 1) {
+  // If only one group and it's the default group, render items directly without grouping
+  if (groupEntries.length === 1 && groupEntries[0][0] === DEFAULT_AREABLOCK_GROUP) {
     const [, types] = groupEntries[0]
     return (
       <Box className={ styles.gridContainer } padding="small">
