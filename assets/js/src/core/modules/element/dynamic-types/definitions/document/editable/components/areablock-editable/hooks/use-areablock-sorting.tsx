@@ -23,9 +23,6 @@ export interface UseAreablockSortingProps {
   areablockManager: AreablockManager
   areaTypes: AreaType[]
   onMoveArea: (fromIndex: number, toIndex: number) => void
-  // Optional props for enhanced functionality
-  onAddAreaAtIndex?: (areaType: string, index: number) => Promise<void>
-  config?: AreablockEditableConfig
 }
 
 export interface UseAreablockSortingReturn extends UseEditableDropzoneSortingReturn {
@@ -35,9 +32,7 @@ export interface UseAreablockSortingReturn extends UseEditableDropzoneSortingRet
 export const useAreablockSorting = ({
   areablockManager,
   areaTypes,
-  onMoveArea,
-  onAddAreaAtIndex,
-  config
+  onMoveArea
 }: UseAreablockSortingProps): UseAreablockSortingReturn => {
   const { t } = useTranslation()
 
