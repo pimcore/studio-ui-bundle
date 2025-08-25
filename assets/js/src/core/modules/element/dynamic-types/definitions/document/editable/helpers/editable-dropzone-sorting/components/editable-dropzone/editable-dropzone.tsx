@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { useDroppable as useDndKitDroppable } from '@dnd-kit/core'
+import { useDroppable as useSortDroppable } from '@dnd-kit/core'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { useEditableDropzoneStyles } from './editable-dropzone.styles'
@@ -24,9 +24,7 @@ export interface EditableDropzoneProps {
 
 const DropzoneContent = ({ id, index, onDropItem, isValidDrop }: EditableDropzoneProps): React.JSX.Element => {
   const { styles } = useEditableDropzoneStyles()
-  // Original dropzone for sorting
-  const { setNodeRef } = useDndKitDroppable({ id })
-  // New droppable for add functionality
+  const { setNodeRef } = useSortDroppable({ id })
   const { isDragActive, isOver, isValid } = useDroppable()
 
   return (
@@ -54,12 +52,7 @@ export const EditableDropzone = ({ id, index, onDropItem, isValidDrop }: Editabl
     }
   }
 
-  // Default validation if none provided
-  const defaultValidation = (info: any): boolean => {
-    return info.type === 'areablock-type' && info.data?.areablockType != null
-  }
-
-  const validateDrop = isValidDrop ?? defaultValidation
+  const validateDrop = isValidDrop ?? (() => false)
 
   return (
     <Droppable
