@@ -2,8 +2,10 @@ import { ContentLayout, IconButton, Tabs, Toolbar } from "@sdk/components"
 import React from "react"
 import { usePerspectiveEditorContext } from "../../context/hooks/use-perspective-editor-context"
 import { PerspectiveDetailTab } from "./tabs/perspective-detail-tab/perspective-detail-tab"
+import { useTranslation } from "react-i18next"
 
 export const WidgetDetailContainer = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const { perspectives, activeTabId, setActiveTabId } = usePerspectiveEditorContext()
 
   return (
@@ -12,7 +14,7 @@ export const WidgetDetailContainer = (): React.JSX.Element => {
         <Toolbar justify="space-between">
           <IconButton
             icon={{ value: 'refresh' }}
-            title="Refresh"
+            title={t('refresh')}
           />
         </Toolbar>
       )}

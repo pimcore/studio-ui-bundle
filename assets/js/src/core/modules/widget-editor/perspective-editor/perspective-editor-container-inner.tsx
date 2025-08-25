@@ -3,7 +3,6 @@ import { ContentLayout } from "@sdk/components"
 import React from "react"
 import { WidgetDetailContainer } from "./components/perspective-detail/perspective-detail-container"
 import { TreeContainer } from "./components/tree/tree-container"
-import { PerspectiveEditorProvider } from "./context/perspective-editor-provider"
 
 export const PerspectiveEditorContainerInner = (): React.JSX.Element => {
   const [expandedKeys, setExpandedKeys] = React.useState<any[]>([0])

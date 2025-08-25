@@ -3,8 +3,8 @@ import { container } from "@Pimcore/app/depency-injection"
 import { moduleSystem } from "@Pimcore/app/module-system/module-system"
 import { MainNavRegistry } from "../app/base-layout/main-nav/services/main-nav-registry"
 import { WidgetRegistry } from "../widget-manager/services/widget-registry"
-import { WidgetEditorContainerInner } from "./custom-view-editor/widget-editor-container-inner"
 import { PerspectiveEditorContainer } from "./perspective-editor/perspective-editor-container"
+import { WidgetEditorContainer } from "./custom-view-editor/widget-editor-container"
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -17,7 +17,7 @@ moduleSystem.registerModule({
 
     widgetRegistryService.registerWidget({
       name: 'widget-editor',
-      component: WidgetEditorContainerInner
+      component: WidgetEditorContainer
     })
 
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)

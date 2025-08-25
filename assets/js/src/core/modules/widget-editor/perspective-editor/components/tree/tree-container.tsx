@@ -77,7 +77,7 @@ export const TreeContainer = ({ expandedKeys }: TreeContainerProps): React.JSX.E
         <Toolbar justify="space-between">
           <IconButton
             icon={{ value: 'refresh' }}
-            title="Refresh"
+            title={t('refresh')}
           />
 
           <IconTextButton
