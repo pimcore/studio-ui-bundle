@@ -14,6 +14,10 @@ import { SidebarProvider, ProvidedSidebar, useSidebar } from '@Pimcore/component
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Button } from 'antd'
 import React from 'react'
+import { WithInlineHelp } from '@Pimcore/components/sidebar/inline-help/with-inline-help'
+import { InlineHelpTrigger } from '@Pimcore/components/sidebar/inline-help/inline-help-trigger'
+import { InlineHelpContent } from '@Pimcore/components/sidebar/inline-help/inline-help-content'
+import { useInlineHelpHelper } from '@Pimcore/components/sidebar/inline-help/use-inline-help-helper'
 
 const config: Meta = {
   title: 'Components/Layout/Sidebar',
@@ -344,6 +348,201 @@ Use the control buttons to:
 - Toggle sidebar size
 
 The \`useSidebar\` hook provides full control over sidebar state.
+        `
+      }
+    }
+  }
+}
+
+// Inline Help Demo Components
+const InlineHelpDemoContent = (): React.JSX.Element => {
+  const inlineHelpHelper = useInlineHelpHelper()
+
+  const helpContent = (
+    <InlineHelpContent
+      title={<span>Asset Details Help</span>}
+      description={
+        <div>
+          <p>This panel shows detailed information about your asset including:</p>
+          <ul>
+            <li><strong>Filename:</strong> The original filename of the asset</li>
+            <li><strong>File size:</strong> Size of the file in bytes/KB/MB</li>
+            <li><strong>Dimensions:</strong> Width and height for images</li>
+            <li><strong>MIME type:</strong> The file format identifier</li>
+            <li><strong>Created:</strong> When the asset was first uploaded</li>
+            <li><strong>Modified:</strong> Last modification date</li>
+          </ul>
+          <p>You can edit some of these properties directly in the form fields.</p>
+        </div>
+      }
+    />
+  )
+
+  const customHelpContent = (
+    <InlineHelpContent
+      title={<span>Custom Help Content</span>}
+      description={
+        <div>
+          <p>This is an example of custom help content that can be triggered programmatically.</p>
+          <p>You can include any React content here including:</p>
+          <ul>
+            <li>Rich text formatting</li>
+            <li>Lists and structured content</li>
+            <li>Links and interactive elements</li>
+            <li>Custom components</li>
+          </ul>
+        </div>
+      }
+    />
+  )
+
+  return (
+    <div style={{ padding: '16px' }}>
+      <h4 style={{ marginBottom: '16px' }}>Asset Details with Help</h4>
+      
+      <div style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <label>Asset Name:</label>
+        <input type="text" defaultValue="sample-image.jpg" style={{ padding: '4px 8px' }} />
+        <InlineHelpTrigger component={helpContent} />
+      </div>
+
+      <div style={{ marginBottom: '16px' }}>
+        <label>File Size: 1.2 MB</label>
+      </div>
+
+      <div style={{ marginBottom: '16px' }}>
+        <label>Dimensions: 1920 × 1080</label>
+      </div>
+
+      <div style={{ display: 'flex', gap: '8px', marginTop: '20px' }}>
+        <Button 
+          size="small" 
+          onClick={() => inlineHelpHelper.open(customHelpContent)}
+        >
+          Show Custom Help
+        </Button>
+        
+        <Button 
+          size="small"
+          onClick={() => inlineHelpHelper.open(helpContent)}
+        >
+          Show Asset Help
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+const PropertiesHelpContent = (): React.JSX.Element => (
+  <div style={{ padding: '16px' }}>
+    <h4>Properties with Inline Help</h4>
+    
+    <div style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <label>Alt Text:</label>
+      <input type="text" placeholder="Describe the image..." style={{ padding: '4px 8px', width: '200px' }} />
+      <InlineHelpTrigger 
+        component={
+          <InlineHelpContent
+            title={<span>Alt Text Help</span>}
+            description={
+              <div>
+                <p>Alt text (alternative text) provides a text description of images for:</p>
+                <ul>
+                  <li><strong>Accessibility:</strong> Screen readers use alt text to describe images to users with visual impairments</li>
+                  <li><strong>SEO:</strong> Search engines use alt text to understand image content</li>
+                  <li><strong>Fallback:</strong> Displayed when images fail to load</li>
+                </ul>
+                <p><strong>Best practices:</strong></p>
+                <ul>
+                  <li>Be descriptive but concise (under 125 characters)</li>
+                  <li>Focus on the purpose of the image in context</li>
+                  <li>Don't start with "Image of..." or "Picture of..."</li>
+                  <li>Leave empty for decorative images</li>
+                </ul>
+              </div>
+            }
+          />
+        }
+      />
+    </div>
+
+    <div style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <label>Copyright:</label>
+      <input type="text" placeholder="© 2024 Company Name" style={{ padding: '4px 8px', width: '200px' }} />
+      <InlineHelpTrigger 
+        component={
+          <InlineHelpContent
+            title={<span>Copyright Information</span>}
+            description={
+              <div>
+                <p>Enter copyright information to:</p>
+                <ul>
+                  <li>Protect your intellectual property</li>
+                  <li>Provide proper attribution</li>
+                  <li>Meet legal requirements</li>
+                </ul>
+                <p>Format: © [Year] [Copyright Holder Name]</p>
+              </div>
+            }
+          />
+        }
+      />
+    </div>
+  </div>
+)
+
+const SidebarProviderWithHelp = WithInlineHelp({ Component: SidebarProvider })
+
+export const WithInlineHelpExample = {
+  render: () => {
+    return (
+      <SidebarProviderWithHelp
+        initialEntries={[
+          {
+            key: 'details',
+            icon: <Icon value="details" options={{ width: '16px', height: '16px' }} />,
+            component: <InlineHelpDemoContent />,
+            tooltip: 'Details'
+          },
+          {
+            key: 'properties', 
+            icon: <Icon value="properties" options={{ width: '16px', height: '16px' }} />,
+            component: <PropertiesHelpContent />,
+            tooltip: 'Properties'
+          }
+        ]}
+        initialButtons={demoData.buttons}
+      >
+        <div style={{ display: 'flex', height: '500px' }}>
+          <ProvidedSidebar />
+        </div>
+      </SidebarProviderWithHelp>
+    )
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: `
+**Inline Help System Demo**
+
+This example demonstrates the complete inline help system:
+
+- **Help Icon Triggers**: Click the help icons (?) next to form fields to show contextual help
+- **Help Tab**: Notice the help-circle icon in the sidebar - this opens when help is triggered
+- **Programmatic Help**: Use buttons to show help content programmatically
+- **Rich Content**: Help content supports rich HTML, lists, and formatting
+
+**Components Used:**
+- \`WithInlineHelp\` - HOC that adds inline help functionality to SidebarProvider
+- \`InlineHelpTrigger\` - Button component that triggers help content
+- \`InlineHelpContent\` - Structured help content with title and description
+- \`useInlineHelpHelper\` - Hook for programmatic help control
+
+**Usage Pattern:**
+1. Wrap your SidebarProvider with \`WithInlineHelp\`
+2. Use \`InlineHelpTrigger\` components near form fields
+3. Create help content using \`InlineHelpContent\`
+4. Use \`useInlineHelpHelper\` hook for dynamic help content
         `
       }
     }
