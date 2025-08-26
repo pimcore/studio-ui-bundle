@@ -19,6 +19,7 @@ import { useTranslationLoader } from './loader/translation/loader'
 import { useUserLoader } from './loader/user/loader'
 import { useMercureCreateCookieMutation } from '../mercure-api-slice.gen'
 import { useSettingsLoader } from './loader/settings/loader'
+import { useLanguageLoader } from './loader/language/loader'
 import { selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
 import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
 import { App } from 'antd'
@@ -45,6 +46,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const { loadUser } = useUserLoader()
   const [fetchMercureCookie] = useMercureCreateCookieMutation()
   const { loadSettings } = useSettingsLoader()
+  const { loadAvailableLocales } = useLanguageLoader()
   const { loadPerspective } = usePerspectives()
 
   async function initActivePerspective (): Promise<any> {
@@ -80,6 +82,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           fetchMercureCookie(),
           loadTranslations(),
           loadSettings(),
+          loadAvailableLocales(),
           initActivePerspective()
         ])
 

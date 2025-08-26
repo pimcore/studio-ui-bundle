@@ -1,0 +1,33 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { store } from '@Pimcore/app/store'
+import { api as baseApi } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+
+export interface ILanguageLoader {
+  loadAvailableLocales: () => Promise<void>
+}
+
+export const useLanguageLoader = (): ILanguageLoader => {
+  const loadAvailableLocales = async (): Promise<void> => {
+    try {
+      await store.dispatch(
+        baseApi.endpoints.translationGetAvailableLocales.initiate()
+      ).unwrap()
+    } catch (error) {
+      trackError(new ApiError(error))
+    }
+  }
+
+  return {
+    loadAvailableLocales
+  }
+}
