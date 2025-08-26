@@ -153,11 +153,6 @@ export const useAreablockEditable = ({
 
         if (!isNil(newElement)) {
           placeholderElement.parentNode.replaceChild(newElement, placeholderElement)
-
-          // Hide newly added element until dropzones are added
-          const newAreaElement = newElement as HTMLElement
-          newAreaElement.style.display = 'none'
-          newAreaElement.setAttribute('data-pending-dropzone', 'true')
         }
       }
 

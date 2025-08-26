@@ -91,16 +91,6 @@ export const removeDropzoneContainers = (
   })
 }
 
-export const showElementsWithDropzones = (
-  elements: HTMLElement[]
-): void => {
-  elements.forEach(element => {
-    if (element.getAttribute('data-pending-dropzone') === 'true') {
-      element.style.display = ''
-      element.removeAttribute('data-pending-dropzone')
-    }
-  })
-}
 
 const hasDropzoneBefore = (element: HTMLElement, editableName: string | null): boolean => {
   const previousSibling = element.previousElementSibling as HTMLElement | null
@@ -135,5 +125,4 @@ export const injectDropzoneContainers = (
     }
   })
 
-  showElementsWithDropzones(elements)
 }

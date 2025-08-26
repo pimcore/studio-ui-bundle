@@ -16,9 +16,10 @@ import { type BlockEditableConfig, type BlockValue } from '../block-editable'
 import { type BlockManager } from '../utils/block-manager'
 import {
   blockValueUtils,
-  configUtils,
-  operationUtils
+  configUtils
 } from '../utils/block-utils'
+import { processBlockTemplate, ensurePortalTargets } from '../utils/template-processor'
+import { createEditableDataFromDefinitions } from '../../../utils/editable-utils'
 
 export interface UseBlockEditableParams {
   blockManager: BlockManager
@@ -26,7 +27,6 @@ export interface UseBlockEditableParams {
   onChange?: (value: BlockValue) => void
   config?: BlockEditableConfig
   disabled?: boolean
-  onOperationComplete?: (limitReached: boolean) => void
 }
 
 export interface UseBlockEditableReturn {
@@ -43,8 +43,7 @@ export const useBlockEditable = ({
   value = [],
   onChange,
   config,
-  disabled = false,
-  onOperationComplete
+  disabled = false
 }: UseBlockEditableParams): UseBlockEditableReturn => {
   const { initializeData, getValues, removeValues } = useDocumentEditor()
   const [dynamicEditables, setDynamicEditables] = useState<AbstractDocumentEditableDefinition[]>([])
@@ -70,12 +69,7 @@ export const useBlockEditable = ({
     const elements = blockManager.ensureAllElementKeys()
     const newValue = blockManager.getBlockValue()
     onChange?.(newValue)
-
-    if (!isNil(onOperationComplete)) {
-      const limitReached = configUtils.isLimitReached(elements.length, config?.limit)
-      onOperationComplete(limitReached)
-    }
-  }, [onChange, onOperationComplete, config?.limit, blockManager])
+  }, [onChange, blockManager])
 
   const addBlock = useCallback((element: HTMLElement | null, amount = 1) => {
     if (disabled) return
@@ -99,18 +93,46 @@ export const useBlockEditable = ({
     }
 
     const container = blockManager.getContainer()
-    if (isNil(container) || isNil(config)) return
+    if (isNil(container) || isNil(config?.template?.html) || isNil(config?.template?.editables)) return
 
-    const newBlockEntry = operationUtils.processNonReloadBlockAddition({
-      blockManager,
-      index,
-      config,
-      initializeData,
-      setDynamicEditables
-    })
+    const placeholderElement = document.createElement('div')
+    placeholderElement.className = 'pimcore-block-placeholder'
+    placeholderElement.setAttribute('data-placeholder-key', nextKey.toString())
+    placeholderElement.style.display = 'none'
 
-    if (!isNil(newBlockEntry)) {
-      handlePostOperation()
+    const existingElements = blockManager.queryElements()
+    
+    if (existingElements.length === 0) {
+      container.appendChild(placeholderElement)
+    } else if (!isNil(existingElements[index - 1])) {
+      existingElements[index - 1].insertAdjacentElement('afterend', placeholderElement)
+    } else if (!isNil(existingElements[index])) {
+      existingElements[index].insertAdjacentElement('beforebegin', placeholderElement)
+    }
+
+    const { html: processedHtml, editableDefinitions } = processBlockTemplate(
+      { templateHtml: config.template.html, blockManager, nextKey },
+      config.template.editables
+    )
+
+    if (!isNil(placeholderElement.parentNode)) {
+      const tempDiv = document.createElement('div')
+      tempDiv.innerHTML = processedHtml
+      const newElement = tempDiv.firstElementChild
+
+      if (!isNil(newElement)) {
+        placeholderElement.parentNode.replaceChild(newElement, placeholderElement)
+        
+        const newBlockEntry = newElement as HTMLElement
+        blockManager.setElementKey(newBlockEntry, nextKey.toString())
+        ensurePortalTargets(newBlockEntry, editableDefinitions)
+
+        const editableData = createEditableDataFromDefinitions(editableDefinitions)
+        initializeData(editableData)
+        setDynamicEditables(prev => [...prev, ...editableDefinitions])
+
+        handlePostOperation()
+      }
     }
   }, [disabled, config, handleReloadMode, initializeData, handlePostOperation, blockManager])
 
