@@ -1,10 +1,20 @@
-import { serviceIds } from "@Pimcore/app/config/services/service-ids"
-import { container } from "@Pimcore/app/depency-injection"
-import { moduleSystem } from "@Pimcore/app/module-system/module-system"
-import { MainNavRegistry } from "../app/base-layout/main-nav/services/main-nav-registry"
-import { WidgetRegistry } from "../widget-manager/services/widget-registry"
-import { PerspectiveEditorContainer } from "./perspective-editor/perspective-editor-container"
-import { WidgetEditorContainer } from "./custom-view-editor/widget-editor-container"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { container } from '@Pimcore/app/depency-injection'
+import { moduleSystem } from '@Pimcore/app/module-system/module-system'
+import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
+import { type WidgetRegistry } from '../widget-manager/services/widget-registry'
+import { PerspectiveEditorContainer } from './perspective-editor/perspective-editor-container'
+import { WidgetEditorContainer } from './custom-view-editor/widget-editor-container'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -33,8 +43,8 @@ moduleSystem.registerModule({
       label: 'navigation.widget-editor.perspective-editor',
       order: 100,
       className: 'item-style-modifier',
-      //permission: UserPermission.FOO,
-      //perspectivePermission: NavPermission.BAR,
+      // permission: UserPermission.FOO,
+      // perspectivePermission: NavPermission.BAR,
       widgetConfig: {
         name: 'perspectiveEditor',
         id: 'perspective-editor',
@@ -54,8 +64,8 @@ moduleSystem.registerModule({
       label: 'navigation.widget-editor.widget-editor',
       order: 200,
       className: 'item-style-modifier',
-      //permission: UserPermission.FOO,
-      //perspectivePermission: NavPermission.BAR,
+      // permission: UserPermission.FOO,
+      // perspectivePermission: NavPermission.BAR,
       widgetConfig: {
         name: 'widgetEditor',
         id: 'widget-editor',

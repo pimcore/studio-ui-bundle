@@ -1,8 +1,18 @@
-import { ConfigLayout } from "@Pimcore/components/predefined-layouts/config/config-layout"
-import { ContentLayout } from "@sdk/components"
-import React from "react"
-import { TreeContainer } from "./components/tree/tree-container"
-import { WidgetDetailContainer } from "./components/widget-detail/widget-detail-container"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { ConfigLayout } from '@Pimcore/components/predefined-layouts/config/config-layout'
+import { ContentLayout } from '@sdk/components'
+import React from 'react'
+import { TreeContainer } from './components/tree/tree-container'
+import { WidgetDetailContainer } from './components/widget-detail/widget-detail-container'
 
 export const WidgetEditorContainerInner = (): React.JSX.Element => {
   const [expandedKeys, setExpandedKeys] = React.useState<any[]>([0])
@@ -12,11 +22,11 @@ export const WidgetEditorContainerInner = (): React.JSX.Element => {
     minSize: 170,
     children: [
       <TreeContainer
-        expandedKeys={expandedKeys}
+        expandedKeys={ expandedKeys }
         key="widget-editor.widget-editor.sidebar"
-        onSetExpandedKeys={(keys) => {
+        onSetExpandedKeys={ (keys) => {
           setExpandedKeys(keys)
-        }}
+        } }
       />
     ]
   }
@@ -25,15 +35,15 @@ export const WidgetEditorContainerInner = (): React.JSX.Element => {
     id: 'widget-editor.widget-editor.main',
     minSize: 600,
     children: [
-      <WidgetDetailContainer key={'widget-editor.widget-editor.main.detailTab'} />
+      <WidgetDetailContainer key={ 'widget-editor.widget-editor.main.detailTab' } />
     ]
   }
 
   return (
     <ContentLayout>
       <ConfigLayout
-        leftItem={sidebar}
-        rightItem={main}
+        leftItem={ sidebar }
+        rightItem={ main }
       />
     </ContentLayout>
   )

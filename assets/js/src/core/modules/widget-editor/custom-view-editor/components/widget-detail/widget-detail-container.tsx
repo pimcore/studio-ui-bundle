@@ -1,9 +1,19 @@
-import { ContentLayout, IconButton, Toolbar } from "@sdk/components"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { ContentLayout, IconButton, Toolbar } from '@sdk/components'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
-import React from "react"
-import { useTranslation } from "react-i18next"
-import { useWidgetEditorContext } from "../../context/hooks/use-widget-editor-context"
-import { WidgetDetailTab } from "./tabs/widget-detail-tab/widget-detail-tab"
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useWidgetEditorContext } from '../../context/hooks/use-widget-editor-context'
+import { WidgetDetailTab } from './tabs/widget-detail-tab/widget-detail-tab'
 
 export const WidgetDetailContainer = (): React.JSX.Element => {
   const { t } = useTranslation()

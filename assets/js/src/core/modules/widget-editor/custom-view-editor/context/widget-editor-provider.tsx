@@ -1,12 +1,22 @@
-import { WidgetConfig } from "@Pimcore/modules/perspectives/perspectives-slice.gen"
-import React, { createContext, useMemo, useState } from "react"
-import { useWidgetEditor } from "../hooks/use-widget-editor"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+import React, { createContext, useMemo, useState } from 'react'
+import { useWidgetEditor } from '../hooks/use-widget-editor'
 
 interface WidgetEditorProviderProps {
   children?: React.ReactNode
 }
 
-export interface WidgetEditorContext {
+export interface WidgetEditorContextProps {
   activeTabId: string | undefined
   setActiveTabId: (id: string | undefined) => void
   widgets: WidgetConfig[]
@@ -14,7 +24,7 @@ export interface WidgetEditorContext {
   closeWidget: (id: string) => void
 }
 
-export const WidgetEditorContext = createContext<WidgetEditorContext | undefined>(undefined)
+export const WidgetEditorContext = createContext<WidgetEditorContextProps | undefined>(undefined)
 
 export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): React.JSX.Element => {
   const [activeTabId, setActiveTabId] = useState<string | undefined>(undefined)
@@ -66,7 +76,7 @@ export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): R
   }), [activeTabId, widgets])
 
   return (
-    <WidgetEditorContext.Provider value={contextValue}>
+    <WidgetEditorContext.Provider value={ contextValue }>
       {children}
     </WidgetEditorContext.Provider>
   )

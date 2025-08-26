@@ -1,13 +1,23 @@
-import { PerspectiveConfigDetail } from "@Pimcore/modules/perspectives/perspectives-slice.gen"
-import { isNil } from "lodash"
-import React, { createContext, useMemo, useState } from "react"
-import { usePerspectiveEditor } from "../hooks/use-perspective-editor"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+import { isNil } from 'lodash'
+import React, { createContext, useMemo, useState } from 'react'
+import { usePerspectiveEditor } from '../hooks/use-perspective-editor'
 
 interface PerspectiveEditorProviderProps {
   children?: React.ReactNode
 }
 
-export interface PerspectiveEditorContext {
+export interface PerspectiveEditorContextProps {
   activeTabId: string | undefined
   setActiveTabId: (id: string | undefined) => void
   perspectives: PerspectiveConfigDetail[]
@@ -15,7 +25,7 @@ export interface PerspectiveEditorContext {
   closePerspective: (id: string) => void
 }
 
-export const PerspectiveEditorContext = createContext<PerspectiveEditorContext | undefined>(undefined)
+export const PerspectiveEditorContext = createContext<PerspectiveEditorContextProps | undefined>(undefined)
 
 export const PerspectiveEditorProvider = ({ children }: PerspectiveEditorProviderProps): React.JSX.Element => {
   const [activeTabId, setActiveTabId] = useState<string | undefined>(undefined)
@@ -67,7 +77,7 @@ export const PerspectiveEditorProvider = ({ children }: PerspectiveEditorProvide
   }), [activeTabId, perspectives])
 
   return (
-    <PerspectiveEditorContext.Provider value={contextValue}>
+    <PerspectiveEditorContext.Provider value={ contextValue }>
       {children}
     </PerspectiveEditorContext.Provider>
   )
