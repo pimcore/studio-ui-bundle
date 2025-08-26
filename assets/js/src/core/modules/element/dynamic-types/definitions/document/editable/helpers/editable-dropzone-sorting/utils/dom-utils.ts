@@ -80,21 +80,6 @@ export const updateDropzoneDragStates = (
 }
 
 /**
- * Removes existing dropzones for a specific editable
- */
-export const removeExistingDropzones = (
-  container: HTMLElement | null,
-  editableName: string | null
-): void => {
-  if (isNull(container)) return
-
-  const existingDropzones = container.querySelectorAll(`[${DROPZONE_ATTRIBUTES.DATA_EDITABLE_DROPZONE}="${editableName}"]`)
-  existingDropzones.forEach(dropzone => {
-    dropzone.remove()
-  })
-}
-
-/**
  * Shows previously hidden elements when dropzones are added
  */
 export const showElementsWithDropzones = (
@@ -108,8 +93,18 @@ export const showElementsWithDropzones = (
   })
 }
 
+const hasDropzoneBefore = (element: HTMLElement, editableName: string | null): boolean => {
+  const previousSibling = element.previousElementSibling as HTMLElement | null
+  return previousSibling?.getAttribute(DROPZONE_ATTRIBUTES.DATA_EDITABLE_DROPZONE) === editableName
+}
+
+const hasDropzoneAfter = (element: HTMLElement, editableName: string | null): boolean => {
+  const existingDropzone = element.querySelector(`[${DROPZONE_ATTRIBUTES.DATA_EDITABLE_DROPZONE}="${editableName}"]`)
+  return existingDropzone !== null
+}
+
 /**
- * Injects dropzone containers before and after elements
+ * Injects dropzone containers before and after elements, skipping if they already exist
  */
 export const injectDropzoneContainers = (
   elements: HTMLElement[],
@@ -118,14 +113,18 @@ export const injectDropzoneContainers = (
   if (elements.length === 0) return
 
   const firstItem = elements[0]
-  const firstDropzone = createDropzoneContainer(editableName)
-  firstItem.parentNode?.insertBefore(firstDropzone, firstItem)
+  
+  if (!hasDropzoneBefore(firstItem, editableName)) {
+    const firstDropzone = createDropzoneContainer(editableName)
+    firstItem.parentNode?.insertBefore(firstDropzone, firstItem)
+  }
 
   elements.forEach((itemEntry) => {
-    const dropzoneContainer = createDropzoneContainer(editableName)
-    itemEntry.appendChild(dropzoneContainer)
+    if (!hasDropzoneAfter(itemEntry, editableName)) {
+      const dropzoneContainer = createDropzoneContainer(editableName)
+      itemEntry.appendChild(dropzoneContainer)
+    }
   })
 
-  // Show elements that were hidden while waiting for dropzones
   showElementsWithDropzones(elements)
 }

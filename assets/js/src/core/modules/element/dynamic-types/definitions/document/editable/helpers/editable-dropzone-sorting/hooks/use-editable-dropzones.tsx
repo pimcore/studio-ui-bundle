@@ -21,7 +21,6 @@ import {
 import {
   updateDropzoneVisibility,
   updateDropzoneDragStates,
-  removeExistingDropzones,
   injectDropzoneContainers
 } from '../utils/dom-utils'
 
@@ -91,7 +90,6 @@ export const useEditableDropzones = <T extends EditableManager>({
   const injectDropzones = useCallback(() => {
     if (isNull(container)) return
 
-    removeExistingDropzones(container, editableName)
     injectDropzoneContainers(currentElements, editableName)
   }, [container, editableName, currentElements])
 
