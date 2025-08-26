@@ -370,9 +370,9 @@ export type UserInformation = {
     /** List of available content Language already sorted. */
     contentLanguages: object;
     /** List of valid website Languages to edit. */
-    allowedLanguagesForEditingWebsiteTranslations: object;
+    allowedLanguagesForEditingWebsiteTranslations: string[];
     /** List of valid website Languages to view. */
-    allowedLanguagesForViewingWebsiteTranslations: object;
+    allowedLanguagesForViewingWebsiteTranslations: string[];
     /** Key Bindings */
     keyBindings: KeyBindingForAUser[];
     /** Two Factor Authentication */
@@ -553,6 +553,8 @@ export type SimpleUser = {
 export type ResetPassword = {
     /** Username */
     username: string;
+    /** Reset password URL */
+    resetPasswordUrl: string;
 };
 export type UserProfile = {
     /** Firstname of the User */

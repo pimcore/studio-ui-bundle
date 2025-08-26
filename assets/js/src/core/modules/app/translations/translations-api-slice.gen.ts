@@ -6,6 +6,13 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            translationGetAvailableLocales: build.query<
+                TranslationGetAvailableLocalesApiResponse,
+                TranslationGetAvailableLocalesApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/translations/available-locales` }),
+                providesTags: ["Translation"],
+            }),
             translationCleanupByDomain: build.mutation<
                 TranslationCleanupByDomainApiResponse,
                 TranslationCleanupByDomainApiArg
@@ -37,6 +44,17 @@ const injectedRtkApi = api
             translationGetDomains: build.query<TranslationGetDomainsApiResponse, TranslationGetDomainsApiArg>({
                 query: () => ({ url: `/pimcore-studio/api/translations/domains` }),
                 providesTags: ["Translation"],
+            }),
+            translationExportList: build.mutation<TranslationExportListApiResponse, TranslationExportListApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/translations/export`,
+                    method: "POST",
+                    body: queryArg.body,
+                    params: {
+                        domain: queryArg.domain,
+                    },
+                }),
+                invalidatesTags: ["Translation"],
             }),
             translationGetList: build.query<TranslationGetListApiResponse, TranslationGetListApiArg>({
                 query: (queryArg) => ({
@@ -72,6 +90,13 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type TranslationGetAvailableLocalesApiResponse = /** status 200 List of available locales in the system */ {
+    /** Locale code. */
+    local: string;
+    /** The display name of the locale. */
+    displayName: string;
+}[];
+export type TranslationGetAvailableLocalesApiArg = void;
 export type TranslationCleanupByDomainApiResponse = unknown;
 export type TranslationCleanupByDomainApiArg = {
     /** Domain of the translation, to be cleaned up */
@@ -89,10 +114,23 @@ export type TranslationDeleteByKeyApiArg = {
     domain?: string;
 };
 export type TranslationGetDomainsApiResponse = /** status 200 List of available translation domains */ {
-    /** List if all available domains in the system for translations. */
-    domains: string[];
-};
+    /** The domain name. */
+    domain: string;
+    /** If the domain is a frontend or admin domain. */
+    isFrontendDomain: boolean;
+}[];
 export type TranslationGetDomainsApiArg = void;
+export type TranslationExportListApiResponse = /** status 200 CSV export file for the given domain */ Blob;
+export type TranslationExportListApiArg = {
+    /** Domain to filter translations by */
+    domain?: string;
+    body: {
+        filters?: {
+            columnFilters?: object;
+            sortFilter?: object;
+        };
+    };
+};
 export type TranslationGetListApiResponse =
     /** status 200 List of translations for the given domain including all languages */ {
         totalItems: number;
@@ -178,10 +216,12 @@ export type Translation = {
     useFallback?: boolean;
 };
 export const {
+    useTranslationGetAvailableLocalesQuery,
     useTranslationCleanupByDomainMutation,
     useTranslationCreateMutation,
     useTranslationDeleteByKeyMutation,
     useTranslationGetDomainsQuery,
+    useTranslationExportListMutation,
     useTranslationGetListQuery,
     useTranslationUpdateMutation,
     useTranslationGetCollectionMutation,
