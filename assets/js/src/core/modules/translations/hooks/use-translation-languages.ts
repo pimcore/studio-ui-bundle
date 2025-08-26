@@ -37,7 +37,7 @@ export const useTranslationLanguages = (isFrontendDomain: boolean): UseTranslati
   const { getDisplayName, isLoading: lookupLoading } = useLanguageLookup()
 
   const languages = useMemo(() => {
-    if (isFrontendDomain) {
+    if (!isFrontendDomain) {
       // For frontend domains, use website translation languages from user
       const editableLocales = user.allowedLanguagesForEditingWebsiteTranslations ?? []
       const viewableLocales = user.allowedLanguagesForViewingWebsiteTranslations ?? []
@@ -58,15 +58,34 @@ export const useTranslationLanguages = (isFrontendDomain: boolean): UseTranslati
       // For admin domains, use available admin languages from settings
       const adminLanguages = settings?.availableAdminLanguages ?? []
       
-      return adminLanguages
-        .filter(lang => !isNil(lang?.language) && isString(lang.language))
-        .map(lang => ({
-          locale: lang.language,
-          displayName: !isNil(lang.display) ? lang.display : getDisplayName(lang.language),
+      console.log("adminLanguages", adminLanguages);
+      console.log("adminLanguages length:", adminLanguages.length);
+      
+      const filtered = adminLanguages.filter(lang => {
+        console.log(`Full lang object:`, lang);
+        console.log(`typeof lang:`, typeof lang);
+        console.log(`isString(lang):`, isString(lang));
+        
+        // adminLanguages contains strings directly, not objects
+        const hasLanguage = !isNil(lang) && isString(lang)
+        console.log(`Checking lang:`, lang, `hasLanguage:`, hasLanguage);
+        return hasLanguage
+      })
+      
+      console.log("filtered languages:", filtered);
+      
+      const foo = filtered
+        .map(langCode => ({
+          locale: langCode,
+          displayName: getDisplayName(langCode),
           canEdit: true, // Admin languages are always editable
           canView: true  // Admin languages are always viewable
         }))
         .sort((a, b) => (a.displayName ?? 'UNKNOWN').localeCompare(b.displayName ?? 'UNKNOWN'))
+
+              console.log("foo", foo);
+
+        return foo
     }
   }, [isFrontendDomain, user, settings, getDisplayName])
 

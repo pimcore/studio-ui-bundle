@@ -60,6 +60,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const currentDomainInfo = availableDomains.find(d => d.domain === domain)
   const isFrontendDomain = currentDomainInfo?.isFrontendDomain ?? false
 
+  console.log("isFrontEndDomain", isFrontendDomain)
   // Get the appropriate languages based on domain type
   const { languages: domainLanguages, isLoading: languagesLoading } = useTranslationLanguages(isFrontendDomain)
 
