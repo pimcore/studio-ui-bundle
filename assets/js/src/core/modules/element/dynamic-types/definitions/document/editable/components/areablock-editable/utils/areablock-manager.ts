@@ -40,6 +40,11 @@ export class AreablockManager {
     return elements.indexOf(element)
   }
 
+  findElementByKey (key: string): HTMLElement | null {
+    const elements = this.queryElements()
+    return elements.find(el => this.getElementKey(el) === key) ?? null
+  }
+
   getElementKey (element: HTMLElement): string | null {
     return element.getAttribute('key')
   }
