@@ -97,14 +97,10 @@ export const AreablockEditable = ({
     value: currentValue,
     onChange,
     config,
-    disabled,
-    onOperationComplete: (limitReached) => {
-      const elements = areablockManager.queryElements()
-      elements.forEach(element => { updateControls(element, limitReached) })
-    }
+    disabled
   })
 
-  const { initializeControls, updateControls, clearEmptyState, renderAreablockToolbar } = useAreablockControls({
+  const { renderAreablockToolbar } = useAreablockControls({
     areablockManager,
     areaTypes: configUtils.getAvailableTypes(config),
     config,
@@ -115,28 +111,6 @@ export const AreablockEditable = ({
     onMoveArea: moveArea,
     onOpenDialog: handleOpenDialog
   })
-
-  const refreshControls = useCallback(() => {
-    const elements = areablockManager.ensureAllElementKeys()
-    const container = areablockManager.getContainer()
-    if (isNil(container)) return
-
-    const limitReached = configUtils.isLimitReached(elements.length, config?.limit)
-
-    if (elements.length < 1) {
-      initializeControls()
-    } else {
-      clearEmptyState()
-      container.classList.remove('pimcore_area_buttons')
-      elements.forEach(element => {
-        updateControls(element, limitReached)
-      })
-    }
-  }, [areablockManager, config?.limit, initializeControls, updateControls, clearEmptyState])
-
-  useEffect(() => {
-    refreshControls()
-  }, [currentValue, refreshControls])
 
   return (
     <div className={ className }>

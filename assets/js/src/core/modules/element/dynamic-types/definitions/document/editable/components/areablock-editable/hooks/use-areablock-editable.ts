@@ -28,7 +28,6 @@ export interface UseAreablockEditableParams {
   onChange?: (value: AreablockValue) => void
   config?: AreablockEditableConfig
   disabled?: boolean
-  onOperationComplete?: (limitReached: boolean) => void
 }
 
 export interface UseAreablockEditableReturn {
@@ -45,8 +44,7 @@ export const useAreablockEditable = ({
   value = [],
   onChange,
   config,
-  disabled = false,
-  onOperationComplete
+  disabled = false
 }: UseAreablockEditableParams): UseAreablockEditableReturn => {
   const { initializeData, getValues, removeValues } = useDocumentEditor()
   const { id: documentId } = useContext(DocumentContext)
@@ -73,12 +71,7 @@ export const useAreablockEditable = ({
     const elements = areablockManager.ensureAllElementKeys()
     const newValue = areablockManager.getAreablockValue()
     onChange?.(newValue)
-
-    if (!isNil(onOperationComplete)) {
-      const limitReached = configUtils.isLimitReached(elements.length, config?.limit)
-      onOperationComplete(limitReached)
-    }
-  }, [onChange, onOperationComplete, config?.limit, areablockManager])
+  }, [onChange, areablockManager])
 
   const addArea = useCallback(async (element: HTMLElement | null, areaType?: string) => {
     if (disabled) return

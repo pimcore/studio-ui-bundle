@@ -21,7 +21,8 @@ import {
 import {
   updateDropzoneVisibility,
   updateDropzoneDragStates,
-  injectDropzoneContainers
+  injectDropzoneContainers,
+  removeDropzoneContainers
 } from '../utils/dom-utils'
 
 // Generic manager interface that both BlockManager and AreablockManager can implement
@@ -96,6 +97,7 @@ export const useEditableDropzones = <T extends EditableManager>({
   useEffect(() => {
     if (currentElements.length === 0) {
       setDropzonePortals([])
+      removeDropzoneContainers(container, editableName)
       return
     }
 

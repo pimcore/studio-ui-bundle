@@ -8,8 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { isNull } from 'lodash'
+import React, { useCallback } from 'react'
 import { type AreablockManager } from '../utils/areablock-manager'
 import { type AreaType, type AreablockEditableConfig } from '../areablock-editable'
 import ReactDOM from 'react-dom'
@@ -17,6 +16,7 @@ import { SortableAreablockToolbar } from '../components/sortable-areablock-toolb
 import { EmptyStateAreablockToolbar } from '../components/empty-state-areablock-toolbar/empty-state-areablock-toolbar'
 import { useAreablockDropzones } from './use-areablock-dropzones'
 import { EditableSortContext } from '../../../helpers/editable-dropzone-sorting/editable-sort-context'
+import { configUtils } from '../utils/areablock-utils'
 
 export interface UseAreablockControlsParams {
   areablockManager: AreablockManager
@@ -31,9 +31,6 @@ export interface UseAreablockControlsParams {
 }
 
 export interface UseAreablockControlsReturn {
-  updateControls: (element: HTMLElement, limitReached: boolean) => void
-  initializeControls: () => void
-  clearEmptyState: () => void
   renderAreablockToolbar: () => React.JSX.Element
 }
 
@@ -48,9 +45,6 @@ export const useAreablockControls = ({
   onMoveArea,
   onOpenDialog
 }: UseAreablockControlsParams): UseAreablockControlsReturn => {
-  const limitReachedRef = useRef<boolean>(false)
-  const [emptyStatePortal, setEmptyStatePortal] = useState<React.ReactPortal | null>(null)
-
   const handleAddArea = useCallback(async (element: HTMLElement | null, areaType?: string) => {
     await onAddArea(element, areaType)
   }, [onAddArea])
@@ -104,27 +98,7 @@ export const useAreablockControls = ({
     refreshDropzones()
   }, [onMoveAreaDown, refreshDropzones])
 
-  const updateControls = useCallback((element: HTMLElement, limitReached: boolean) => {
-    const buttonsContainer = element.querySelector('.pimcore_area_buttons')
-
-    if (isNull(buttonsContainer)) {
-      return
-    }
-
-    limitReachedRef.current = limitReached
-
-    const buttonElements = buttonsContainer.querySelectorAll('.pimcore_area_plus, .pimcore_area_minus, .pimcore_area_up, .pimcore_area_down, .pimcore_area_type')
-    buttonElements.forEach(button => {
-      (button as HTMLElement).style.display = 'none'
-    })
-  }, [])
-
-  const initializeControls = useCallback((): void => {
-    const container = areablockManager.getContainer()
-    if (isNull(container)) return
-
-    if (emptyStatePortal !== null) return
-
+  const createEmptyStatePortal = useCallback((container: HTMLElement): React.ReactPortal => {
     const emptyStateToolbar = (
       <EmptyStateAreablockToolbar
         areaTypes={ areaTypes }
@@ -134,24 +108,22 @@ export const useAreablockControls = ({
         } }
       />
     )
-
-    const portal = ReactDOM.createPortal(emptyStateToolbar, container)
-    setEmptyStatePortal(portal)
-  }, [areablockManager, areaTypes, handleAddAreaWithRefresh, emptyStatePortal])
-
-  const clearEmptyState = useCallback((): void => {
-    setEmptyStatePortal(null)
-  }, [])
+    return ReactDOM.createPortal(emptyStateToolbar, container)
+  }, [areaTypes, config, handleAddAreaWithRefresh])
 
   const renderAreablockToolbar = useCallback((): React.JSX.Element => {
     const portals: React.ReactPortal[] = []
 
     const currentAreaEntries = areablockManager.queryElements()
+    const limitReached = configUtils.isLimitReached(currentAreaEntries.length, config?.limit)
 
-    if (currentAreaEntries.length === 0 && emptyStatePortal !== null) {
-      portals.push(emptyStatePortal)
+    if (currentAreaEntries.length === 0) {
+      const container = areablockManager.getContainer()
+      if (container !== null) {
+        const portal = createEmptyStatePortal(container)
+        portals.push(portal)
+      }
     } else {
-      // Add stable dropzone portals
       portals.push(...dropzonePortals)
     }
 
@@ -173,7 +145,7 @@ export const useAreablockControls = ({
               config={ config }
               element={ areaEntry }
               id={ areaKey }
-              limitReached={ limitReachedRef.current }
+              limitReached={ limitReached }
               onAddArea={ handleAddAreaWithRefresh }
               onMoveAreaDown={ handleMoveAreaDown }
               onMoveAreaUp={ handleMoveAreaUp }
@@ -199,18 +171,9 @@ export const useAreablockControls = ({
         <>{portals}</>
       </EditableSortContext>
     )
-  }, [areablockManager, areaTypes, handleDragStart, handleDragOver, handleDragEnd, handleAddAreaWithRefresh, handleRemoveArea, handleMoveAreaUp, handleMoveAreaDown, activeId, emptyStatePortal, dropzonePortals, dragOverlayTitle])
-
-  useEffect(() => {
-    return () => {
-      clearEmptyState()
-    }
-  }, [clearEmptyState])
+  }, [areablockManager, areaTypes, config, handleDragStart, handleDragOver, handleDragEnd, handleAddAreaWithRefresh, handleRemoveArea, handleMoveAreaUp, handleMoveAreaDown, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal])
 
   return {
-    updateControls,
-    initializeControls,
-    clearEmptyState,
     renderAreablockToolbar
   }
 }

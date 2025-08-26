@@ -79,9 +79,18 @@ export const updateDropzoneDragStates = (
   })
 }
 
-/**
- * Shows previously hidden elements when dropzones are added
- */
+export const removeDropzoneContainers = (
+  container: HTMLElement | null,
+  editableName: string | null
+): void => {
+  if (isNull(container)) return
+
+  const existingDropzones = container.querySelectorAll(`[${DROPZONE_ATTRIBUTES.DATA_EDITABLE_DROPZONE}="${editableName}"]`)
+  existingDropzones.forEach(dropzone => {
+    dropzone.remove()
+  })
+}
+
 export const showElementsWithDropzones = (
   elements: HTMLElement[]
 ): void => {
