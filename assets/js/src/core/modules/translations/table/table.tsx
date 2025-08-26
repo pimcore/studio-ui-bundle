@@ -50,7 +50,6 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales, edi
   const [editingTranslation, setEditingTranslation] = useState<TranslationRow | null>(null)
   const [editingLocale, setEditingLocale] = useState<string>('')
 
-  // Create language info from domain languages and visible locales
   const languages: Language[] = visibleLocales.map(locale => {
     const domainLang = domainLanguages.find(lang => lang.locale === locale)
     if (isUndefined(domainLang)) {
