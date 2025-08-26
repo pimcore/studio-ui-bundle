@@ -34,26 +34,18 @@ export const useLanguageLookup = (): {
 
   const lookupMap: LanguageLookup = useMemo(() => {
     const map: LanguageLookup = {}
-    
-    console.log("availableLocales", availableLocales);
-    
-    if (availableLocales) {
-      availableLocales.forEach((localeInfo, index) => {
-        console.log(`Processing locale ${index}:`, localeInfo);
-        const locale = (localeInfo as any)?.locale
-        console.log(`  locale: "${locale}"`);
-        console.log(`  displayName: "${localeInfo?.displayName}"`);
         
+    if (availableLocales) {
+      availableLocales.forEach(localeInfo => {
+        const locale = (localeInfo as any)?.locale        
         if (locale && localeInfo?.displayName) {
           map[locale] = localeInfo.displayName
-          console.log(`  Added to map: ${locale} -> ${localeInfo.displayName}`);
         } else {
           console.log(`  Skipped - missing locale or displayName`);
         }
       })
     }
     
-    console.log("Final map:", map);
     return map
   }, [availableLocales])
 
@@ -64,7 +56,6 @@ export const useLanguageLookup = (): {
     return lookupMap[locale] ?? locale.toUpperCase()
   }
 
-  console.log("lookupMap", lookupMap);
   
   return {
     lookupMap,
