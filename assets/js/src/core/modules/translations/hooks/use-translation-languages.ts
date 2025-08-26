@@ -48,22 +48,18 @@ export const useTranslationLanguages = (isFrontendDomain: boolean): UseTranslati
         }))
         .sort((a, b) => (a.displayName ?? 'UNKNOWN').localeCompare(b.displayName ?? 'UNKNOWN'))
     } else {
-      const adminLanguages = settings?.availableAdminLanguages ?? []
-      const filtered = adminLanguages.filter(lang => {
-        const hasLanguage = !isNil(lang) && isString(lang)
-        return hasLanguage
-      })
-            
-      const foo = filtered
+
+        const adminLanguages = settings?.availableAdminLanguages ?? []
+      
+      return adminLanguages
+        .filter(lang => !isNil(lang) && isString(lang))
         .map(langCode => ({
           locale: langCode,
           displayName: getDisplayName(langCode),
-          canEdit: true, 
-          canView: true  
+          canEdit: true,
+          canView: true 
         }))
         .sort((a, b) => (a.displayName ?? 'UNKNOWN').localeCompare(b.displayName ?? 'UNKNOWN'))
-
-        return foo
     }
   }, [isFrontendDomain, user, settings, getDisplayName])
 
