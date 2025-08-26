@@ -23,7 +23,7 @@ export const useLanguageLoader = (): ILanguageLoader => {
         baseApi.endpoints.translationGetAvailableLocales.initiate()
       ).unwrap()
     } catch {
-      trackError(new GeneralError("Could not load available locales"))
+      trackError(new GeneralError('Could not load available locales'))
     }
   }
 
