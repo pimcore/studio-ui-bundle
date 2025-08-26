@@ -21,10 +21,6 @@ interface LanguageLookup {
   [locale: string]: string
 }
 
-/**
- * Hook to get a language lookup map from locale codes to display names
- * Uses the available locales API to build a cached lookup map
- */
 export const useLanguageLookup = (): {
   lookupMap: LanguageLookup
   isLoading: boolean
@@ -40,8 +36,6 @@ export const useLanguageLookup = (): {
         const locale = (localeInfo as any)?.locale        
         if (locale && localeInfo?.displayName) {
           map[locale] = localeInfo.displayName
-        } else {
-          console.log(`  Skipped - missing locale or displayName`);
         }
       })
     }
@@ -51,7 +45,7 @@ export const useLanguageLookup = (): {
 
   const getDisplayName = (locale: string): string => {
     if (isNil(locale) || !isString(locale)) {
-      return 'UNKNOWN'
+      return 'Unknown'
     }
     return lookupMap[locale] ?? locale.toUpperCase()
   }
