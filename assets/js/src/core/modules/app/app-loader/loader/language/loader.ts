@@ -10,7 +10,7 @@
 
 import { store } from '@Pimcore/app/store'
 import { api as baseApi } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface ILanguageLoader {
   loadAvailableLocales: () => Promise<void>
@@ -23,7 +23,7 @@ export const useLanguageLoader = (): ILanguageLoader => {
         baseApi.endpoints.translationGetAvailableLocales.initiate()
       ).unwrap()
     } catch (error) {
-      trackError(new ApiError(error))
+      trackError(new GeneralError(error))
     }
   }
 
