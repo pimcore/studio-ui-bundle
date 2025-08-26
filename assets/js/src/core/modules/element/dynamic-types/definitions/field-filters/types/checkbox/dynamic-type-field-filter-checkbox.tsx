@@ -19,7 +19,7 @@ export class DynamicTypeFieldFilterCheckbox extends DynamicTypeFieldFilterAbstra
   id = 'checkbox'
 
   getFieldFilterType (): string {
-    return FieldFilterFrontendType.String
+    return FieldFilterFrontendType.Boolean
   }
 
   getFieldFilterComponent (props: DynamicTypeFieldFilterCheckboxProps): ReactElement<DynamicTypeFieldFilterCheckboxProps> {
