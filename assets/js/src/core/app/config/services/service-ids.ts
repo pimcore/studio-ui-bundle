@@ -83,7 +83,7 @@ export const serviceIds = {
   'DynamicTypes/FieldFilter/Number': 'DynamicTypes/FieldFilter/Number',
   'DynamicTypes/FieldFilter/Select': 'DynamicTypes/FieldFilter/Select',
   'DynamicTypes/FieldFilter/Date': 'DynamicTypes/FieldFilter/Date',
-  'DynamicTypes/FieldFilter/Checkbox': 'DynamicTypes/FieldFilter/Checkbox',
+  'DynamicTypes/FieldFilter/Boolean': 'DynamicTypes/FieldFilter/Boolean',
 
   'DynamicTypes/BatchEdit/Text': 'DynamicTypes/BatchEdit/Text',
   'DynamicTypes/BatchEdit/TextArea': 'DynamicTypes/BatchEdit/TextArea',
@@ -167,7 +167,6 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/CountryMultiSelect': 'DynamicTypes/ObjectData/CountryMultiSelect',
   'DynamicTypes/ObjectData/User': 'DynamicTypes/ObjectData/User',
   'DynamicTypes/ObjectData/BooleanSelect': 'DynamicTypes/ObjectData/BooleanSelect',
-  'DynamicTypes/ObjectData/Boolean': 'DynamicTypes/ObjectData/Boolean',
   'DynamicTypes/ObjectData/Numeric': 'DynamicTypes/ObjectData/Numeric',
   'DynamicTypes/ObjectData/NumericRange': 'DynamicTypes/ObjectData/NumericRange',
   'DynamicTypes/ObjectData/Slider': 'DynamicTypes/ObjectData/Slider',

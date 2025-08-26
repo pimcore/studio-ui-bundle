@@ -33,7 +33,7 @@ import { DynamicTypeFieldFilterString } from '@Pimcore/modules/element/dynamic-t
 import { DynamicTypeFieldFilterNumber } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/number/dynamic-type-field-filter-number'
 import { DynamicTypeFieldFilterSelect } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/select/dynamic-type-field-filter-select'
 import { DynamicTypeFieldFilterDate } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/date/dynamic-type-field-filter-date'
-import { DynamicTypeFieldFilterCheckbox } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
+import { DynamicTypeFieldFilterBoolean } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/boolean/dynamic-type-field-filter-boolean'
 import { DynamicTypeGridCellText } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/text/dynamic-type-grid-cell-text'
 import { DynamicTypeGridCellRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/dynamic-type-grid-cell-registry'
 import { DynamicTypeGridCellTextarea } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/textarea/dynamic-type-grid-cell-text'
@@ -209,7 +209,6 @@ import { DynamicTypeEditableDialogLayoutPanel } from '@Pimcore/modules/element/d
 import { DynamicTypeGridCellString } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/string/dynamic-type-grid-cell-string'
 import { DynamicTypeFieldFilterNone } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/none/dynamic-type-field-filter-none'
 import { DynamicTypeFieldFilterFulltext } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/fullText/dynamic-type-field-filter-fulltext'
-import { DynamicTypeObjectDataBoolean } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-boolean'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -258,7 +257,7 @@ container.bind(serviceIds['DynamicTypes/FieldFilter/None']).to(DynamicTypeFieldF
 container.bind(serviceIds['DynamicTypes/FieldFilter/Number']).to(DynamicTypeFieldFilterNumber).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Select']).to(DynamicTypeFieldFilterSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Date']).to(DynamicTypeFieldFilterDate).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/FieldFilter/Checkbox']).to(DynamicTypeFieldFilterCheckbox).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/Boolean']).to(DynamicTypeFieldFilterBoolean).inSingletonScope()
 
 // dynamic types batch edit
 container.bind(serviceIds['DynamicTypes/BatchEditRegistry']).to(DynamicTypeBatchEditRegistry).inSingletonScope()
@@ -352,7 +351,6 @@ container.bind(serviceIds['DynamicTypes/ObjectData/Country']).to(DynamicTypeObje
 container.bind(serviceIds['DynamicTypes/ObjectData/CountryMultiSelect']).to(DynamicTypeObjectDataCountryMultiSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/User']).to(DynamicTypeObjectDataUser).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/BooleanSelect']).to(DynamicTypeObjectDataBooleanSelect).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/ObjectData/Boolean']).to(DynamicTypeObjectDataBoolean).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Numeric']).to(DynamicTypeObjectDataNumeric).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/NumericRange']).to(DynamicTypeObjectDataNumericRange).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Slider']).to(DynamicTypeObjectDataSlider).inSingletonScope()

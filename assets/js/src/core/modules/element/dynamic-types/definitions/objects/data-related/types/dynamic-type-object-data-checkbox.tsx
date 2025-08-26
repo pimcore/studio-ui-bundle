@@ -29,7 +29,7 @@ export type CheckboxObjectDataDefinition = AbstractObjectDataDefinition & {
 export class DynamicTypeObjectDataCheckbox extends DynamicTypeObjectDataAbstract {
   id: string = 'checkbox'
 
-  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Checkbox'])
+  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Boolean'])
 
   getObjectDataComponent (props: CheckboxObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

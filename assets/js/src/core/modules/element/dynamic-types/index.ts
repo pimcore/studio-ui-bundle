@@ -164,7 +164,7 @@ import { type DynamicTypeDocumentEditableDate } from './definitions/document/edi
 import { type DynamicTypeDocumentEditableEmbed } from './definitions/document/editable/types/dynamic-type-document-editable-embed'
 import { type DynamicTypeDocumentEditableLink } from './definitions/document/editable/types/dynamic-type-document-editable-link'
 import { type DynamicTypeDocumentEditableWysiwyg } from './definitions/document/editable/types/dynamic-type-document-editable-wysiwyg'
-import { type DynamicTypeFieldFilterCheckbox } from './definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
+import { type DynamicTypeFieldFilterBoolean } from './definitions/field-filters/types/boolean/dynamic-type-field-filter-boolean'
 import { type DynamicTypeDocumentEditableTextarea } from './definitions/document/editable/types/dynamic-type-document-editable-textarea'
 import { type DynamicTypeDocumentEditableImage } from './definitions/document/editable/types/dynamic-type-document-editable-image'
 import { type DynamicTypeDocumentEditablePdf } from './definitions/document/editable/types/dynamic-type-document-editable-pdf'
@@ -187,7 +187,6 @@ import { type DynamicTypeEditableDialogLayoutRegistry } from './definitions/edit
 import { type DynamicTypeEditableDialogLayoutTabpanel } from './definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-tabpanel'
 import { type DynamicTypeEditableDialogLayoutPanel } from './definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-panel'
 import { type DynamicTypeGridCellString } from './definitions/grid-cell/types/string/dynamic-type-grid-cell-string'
-import { DynamicTypeObjectDataBoolean } from './definitions/objects/data-related/types/dynamic-type-object-data-boolean'
 
 moduleSystem.registerModule({
   onInit () {
@@ -201,7 +200,7 @@ moduleSystem.registerModule({
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterNumber>(serviceIds['DynamicTypes/FieldFilter/Number']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterSelect>(serviceIds['DynamicTypes/FieldFilter/Select']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterDate>(serviceIds['DynamicTypes/FieldFilter/Date']))
-    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterCheckbox>(serviceIds['DynamicTypes/FieldFilter/Checkbox']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterBoolean>(serviceIds['DynamicTypes/FieldFilter/Boolean']))
 
     const batchEditRegistry = container.get<DynamicTypeBatchEditRegistry>(serviceIds['DynamicTypes/BatchEditRegistry'])
 
@@ -297,7 +296,6 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataCountryMultiSelect>(serviceIds['DynamicTypes/ObjectData/CountryMultiSelect']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataUser>(serviceIds['DynamicTypes/ObjectData/User']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataBooleanSelect>(serviceIds['DynamicTypes/ObjectData/BooleanSelect']))
-    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataBoolean>(serviceIds['DynamicTypes/ObjectData/Boolean']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataNumeric>(serviceIds['DynamicTypes/ObjectData/Numeric']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataNumericRange>(serviceIds['DynamicTypes/ObjectData/NumericRange']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataSlider>(serviceIds['DynamicTypes/ObjectData/Slider']))
