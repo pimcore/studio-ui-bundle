@@ -26,11 +26,6 @@ interface UseTranslationLanguagesReturn {
   isLoading: boolean
 }
 
-/**
- * Hook to get the appropriate languages for translation based on domain type
- * For frontend domains: uses allowedLanguagesForEditingWebsiteTranslations/allowedLanguagesForViewingWebsiteTranslations
- * For admin domains: uses availableAdminLanguages from settings
- */
 export const useTranslationLanguages = (isFrontendDomain: boolean): UseTranslationLanguagesReturn => {
   const user = useUser()
   const settings = useSettings()
@@ -38,11 +33,9 @@ export const useTranslationLanguages = (isFrontendDomain: boolean): UseTranslati
 
   const languages = useMemo(() => {
     if (!isFrontendDomain) {
-      // For frontend domains, use website translation languages from user
       const editableLocales = user.allowedLanguagesForEditingWebsiteTranslations ?? []
       const viewableLocales = user.allowedLanguagesForViewingWebsiteTranslations ?? []
       
-      // Combine all viewable locales as the base set
       const allLocales = new Set(viewableLocales)
       
       return Array.from(allLocales)
@@ -51,39 +44,24 @@ export const useTranslationLanguages = (isFrontendDomain: boolean): UseTranslati
           locale,
           displayName: getDisplayName(locale),
           canEdit: editableLocales.includes(locale),
-          canView: true // All locales in this set are viewable
+          canView: true 
         }))
         .sort((a, b) => (a.displayName ?? 'UNKNOWN').localeCompare(b.displayName ?? 'UNKNOWN'))
     } else {
-      // For admin domains, use available admin languages from settings
       const adminLanguages = settings?.availableAdminLanguages ?? []
-      
-      console.log("adminLanguages", adminLanguages);
-      console.log("adminLanguages length:", adminLanguages.length);
-      
       const filtered = adminLanguages.filter(lang => {
-        console.log(`Full lang object:`, lang);
-        console.log(`typeof lang:`, typeof lang);
-        console.log(`isString(lang):`, isString(lang));
-        
-        // adminLanguages contains strings directly, not objects
         const hasLanguage = !isNil(lang) && isString(lang)
-        console.log(`Checking lang:`, lang, `hasLanguage:`, hasLanguage);
         return hasLanguage
       })
-      
-      console.log("filtered languages:", filtered);
-      
+            
       const foo = filtered
         .map(langCode => ({
           locale: langCode,
           displayName: getDisplayName(langCode),
-          canEdit: true, // Admin languages are always editable
-          canView: true  // Admin languages are always viewable
+          canEdit: true, 
+          canView: true  
         }))
         .sort((a, b) => (a.displayName ?? 'UNKNOWN').localeCompare(b.displayName ?? 'UNKNOWN'))
-
-              console.log("foo", foo);
 
         return foo
     }
