@@ -17,6 +17,7 @@ import { type AbstractDocumentEditableDefinition } from '../../../dynamic-type-d
 import { type AreablockEditableConfig, type AreablockValue } from '../areablock-editable'
 import { type AreablockManager } from '../utils/areablock-manager'
 import { createEditableDataFromDefinitions } from '../../../utils/editable-utils'
+import { hideElementUntilDropzones } from '../../../helpers/editable-dropzone-sorting/utils/dom-utils'
 import {
   areablockValueUtils,
   configUtils
@@ -152,6 +153,11 @@ export const useAreablockEditable = ({
         const newElement = tempDiv.firstElementChild
 
         if (!isNil(newElement)) {
+          const newAreaElement = newElement as HTMLElement
+          
+          // Hide the new element until dropzones are injected
+          hideElementUntilDropzones(newAreaElement)
+          
           placeholderElement.parentNode.replaceChild(newElement, placeholderElement)
         }
       }

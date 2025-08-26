@@ -91,6 +91,21 @@ export const removeDropzoneContainers = (
   })
 }
 
+export const hideElementUntilDropzones = (element: HTMLElement): void => {
+  element.style.display = 'none'
+  element.setAttribute('data-pending-dropzone', 'true')
+}
+
+export const showElementsWithDropzones = (
+  elements: HTMLElement[]
+): void => {
+  elements.forEach(element => {
+    if (element.getAttribute('data-pending-dropzone') === 'true') {
+      element.style.display = ''
+      element.removeAttribute('data-pending-dropzone')
+    }
+  })
+}
 
 const hasDropzoneBefore = (element: HTMLElement, editableName: string | null): boolean => {
   const previousSibling = element.previousElementSibling as HTMLElement | null
@@ -109,7 +124,15 @@ export const injectDropzoneContainers = (
   elements: HTMLElement[],
   editableName: string | null
 ): void => {
-  if (elements.length === 0) return
+  if (elements.length === 0) {
+    // For empty containers, still inject a dropzone at the container level
+    const container = document.querySelector(`[data-name="${editableName}"]`) as HTMLElement | null
+    if (container && !container.querySelector(`[${DROPZONE_ATTRIBUTES.DATA_EDITABLE_DROPZONE}="${editableName}"]`)) {
+      const dropzone = createDropzoneContainer(editableName)
+      container.appendChild(dropzone)
+    }
+    return
+  }
 
   const firstItem = elements[0]
   
@@ -125,4 +148,5 @@ export const injectDropzoneContainers = (
     }
   })
 
+  showElementsWithDropzones(elements)
 }

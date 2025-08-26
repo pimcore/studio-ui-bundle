@@ -20,6 +20,7 @@ import {
 } from '../utils/block-utils'
 import { processBlockTemplate, ensurePortalTargets } from '../utils/template-processor'
 import { createEditableDataFromDefinitions } from '../../../utils/editable-utils'
+import { hideElementUntilDropzones } from '../../../helpers/editable-dropzone-sorting/utils/dom-utils'
 
 export interface UseBlockEditableParams {
   blockManager: BlockManager
@@ -121,9 +122,13 @@ export const useBlockEditable = ({
       const newElement = tempDiv.firstElementChild
 
       if (!isNil(newElement)) {
+        const newBlockEntry = newElement as HTMLElement
+        
+        // Hide the new element until dropzones are injected
+        hideElementUntilDropzones(newBlockEntry)
+        
         placeholderElement.parentNode.replaceChild(newElement, placeholderElement)
         
-        const newBlockEntry = newElement as HTMLElement
         blockManager.setElementKey(newBlockEntry, nextKey.toString())
         ensurePortalTargets(newBlockEntry, editableDefinitions)
 
