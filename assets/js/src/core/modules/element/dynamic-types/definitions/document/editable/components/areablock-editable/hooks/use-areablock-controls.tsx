@@ -27,6 +27,7 @@ export interface UseAreablockControlsParams {
   onMoveAreaUp: (element: HTMLElement) => void
   onMoveAreaDown: (element: HTMLElement) => void
   onMoveArea: (fromIndex: number, toIndex: number) => void
+  onOpenDialog?: (areaKey: string) => void
 }
 
 export interface UseAreablockControlsReturn {
@@ -44,7 +45,8 @@ export const useAreablockControls = ({
   onRemoveArea,
   onMoveAreaUp,
   onMoveAreaDown,
-  onMoveArea
+  onMoveArea,
+  onOpenDialog
 }: UseAreablockControlsParams): UseAreablockControlsReturn => {
   const limitReachedRef = useRef<boolean>(false)
   const [emptyStatePortal, setEmptyStatePortal] = useState<React.ReactPortal | null>(null)
@@ -176,6 +178,7 @@ export const useAreablockControls = ({
               onAddArea={ handleAddAreaWithRefresh }
               onMoveAreaDown={ handleMoveAreaDown }
               onMoveAreaUp={ handleMoveAreaUp }
+              onOpenDialog={ onOpenDialog }
               onRemoveArea={ handleRemoveArea }
             />
           )

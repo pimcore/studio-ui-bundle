@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useCallback } from 'react'
+import React, { useEffect, useMemo, useCallback, useState } from 'react'
 import { isArray, isNil } from 'lodash'
 import { DynamicEditablesRenderer } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-renderer/dynamic-editables-renderer'
 import { useAreablockEditableStyles } from './areablock-editable.styles'
@@ -16,6 +16,7 @@ import { useAreablockEditable } from './hooks/use-areablock-editable'
 import { useAreablockControls } from './hooks/use-areablock-controls'
 import { AreablockManager } from './utils/areablock-manager'
 import { configUtils } from './utils/areablock-utils'
+import { AreablockDialog } from './components/areablock-dialog/areablock-dialog'
 
 export interface AreaType {
   name: string
@@ -71,6 +72,20 @@ export const AreablockEditable = ({
 
   const areablockManager = useMemo(() => new AreablockManager(editableName, containerRef), [editableName, containerRef])
 
+  const [openDialogs, setOpenDialogs] = useState<Set<string>>(new Set())
+
+  const handleOpenDialog = useCallback((areaKey: string) => {
+    setOpenDialogs(prev => new Set(prev).add(areaKey))
+  }, [])
+
+  const handleCloseDialog = useCallback((areaKey: string) => {
+    setOpenDialogs(prev => {
+      const newSet = new Set(prev)
+      newSet.delete(areaKey)
+      return newSet
+    })
+  }, [])
+
   const {
     dynamicEditables,
     addArea,
@@ -98,7 +113,8 @@ export const AreablockEditable = ({
     onRemoveArea: removeArea,
     onMoveAreaUp: moveAreaUp,
     onMoveAreaDown: moveAreaDown,
-    onMoveArea: moveArea
+    onMoveArea: moveArea,
+    onOpenDialog: handleOpenDialog
   })
 
   const refreshControls = useCallback(() => {
@@ -127,6 +143,22 @@ export const AreablockEditable = ({
     <div className={ `${styles.areablockContainer} ${className ?? ''}` }>
       <DynamicEditablesRenderer editableDefinitions={ dynamicEditables } />
       {renderAreablockToolbar()}
+
+      {Array.from(openDialogs).map(areaKey => {
+        const element = areablockManager.findElementByKey(areaKey)
+        if (isNil(element)) return null
+
+        return (
+          <AreablockDialog
+            areablockName={ editableName }
+            editableDefinitions={ dynamicEditables }
+            element={ element }
+            isOpen
+            key={ `dialog-${areaKey}` }
+            onClose={ () => { handleCloseDialog(areaKey) } }
+          />
+        )
+      })}
     </div>
   )
 }

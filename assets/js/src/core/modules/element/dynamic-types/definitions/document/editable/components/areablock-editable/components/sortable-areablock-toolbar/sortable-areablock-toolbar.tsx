@@ -32,6 +32,7 @@ export interface SortableAreablockToolbarProps {
   onRemoveArea: (element: HTMLElement) => void
   onMoveAreaUp: (element: HTMLElement) => void
   onMoveAreaDown: (element: HTMLElement) => void
+  onOpenDialog?: (areaKey: string) => void
 }
 
 export const SortableAreablockToolbar = ({
@@ -45,7 +46,8 @@ export const SortableAreablockToolbar = ({
   onAddArea,
   onRemoveArea,
   onMoveAreaUp,
-  onMoveAreaDown
+  onMoveAreaDown,
+  onOpenDialog
 }: SortableAreablockToolbarProps): React.JSX.Element => {
   const { styles } = useAreablockEditableStyles()
   const { t } = useTranslation()
@@ -116,6 +118,18 @@ export const SortableAreablockToolbar = ({
       size="small"
     />
   )
+
+  // Add dialog button if area type has dialog box configuration
+  if (areaTypeConfig?.hasDialogBoxConfiguration === true) {
+    buttons.push(
+      <IconButton
+        icon={ { value: 'settings' } }
+        key="dialog"
+        onClick={ () => { onOpenDialog?.(id) } }
+        size="small"
+      />
+    )
+  }
 
   deleteButton = (
     <IconButton
