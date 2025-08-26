@@ -15,11 +15,11 @@ import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-
 import { FieldFilterFrontendType } from '../../frontendTypes'
 
 @injectable()
-export class DynamicTypeFieldFilterCheckbox extends DynamicTypeFieldFilterAbstract {
-  id = 'checkbox'
+export class DynamicTypeFieldFilterBoolean extends DynamicTypeFieldFilterAbstract {
+  id = 'boolean'
 
   getFieldFilterType (): string {
-    return FieldFilterFrontendType.String
+    return FieldFilterFrontendType.Boolean
   }
 
   getFieldFilterComponent (props: DynamicTypeFieldFilterCheckboxProps): ReactElement<DynamicTypeFieldFilterCheckboxProps> {

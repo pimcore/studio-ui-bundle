@@ -164,7 +164,7 @@ import { type DynamicTypeDocumentEditableDate } from './definitions/document/edi
 import { type DynamicTypeDocumentEditableEmbed } from './definitions/document/editable/types/dynamic-type-document-editable-embed'
 import { type DynamicTypeDocumentEditableLink } from './definitions/document/editable/types/dynamic-type-document-editable-link'
 import { type DynamicTypeDocumentEditableWysiwyg } from './definitions/document/editable/types/dynamic-type-document-editable-wysiwyg'
-import { type DynamicTypeFieldFilterCheckbox } from './definitions/field-filters/types/checkbox/dynamic-type-field-filter-checkbox'
+import { type DynamicTypeFieldFilterBoolean } from './definitions/field-filters/types/boolean/dynamic-type-field-filter-boolean'
 import { type DynamicTypeDocumentEditableTextarea } from './definitions/document/editable/types/dynamic-type-document-editable-textarea'
 import { type DynamicTypeDocumentEditableImage } from './definitions/document/editable/types/dynamic-type-document-editable-image'
 import { type DynamicTypeDocumentEditablePdf } from './definitions/document/editable/types/dynamic-type-document-editable-pdf'
@@ -201,7 +201,7 @@ moduleSystem.registerModule({
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterNumber>(serviceIds['DynamicTypes/FieldFilter/Number']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterSelect>(serviceIds['DynamicTypes/FieldFilter/Select']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterDate>(serviceIds['DynamicTypes/FieldFilter/Date']))
-    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterCheckbox>(serviceIds['DynamicTypes/FieldFilter/Checkbox']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterBoolean>(serviceIds['DynamicTypes/FieldFilter/Boolean']))
 
     const batchEditRegistry = container.get<DynamicTypeBatchEditRegistry>(serviceIds['DynamicTypes/BatchEditRegistry'])
 
