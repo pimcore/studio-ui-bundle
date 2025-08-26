@@ -28,19 +28,19 @@ export const _default = {
         title: 'All users',
         key: '0-0',
         actions: [{ key: 'add-folder', icon: 'add-folder' }, { key: 'add-user', icon: 'add-user' }],
-        icon: <Icon value={'folder'} />,
+        icon: <Icon value={ 'folder' } />,
         children: [
           {
             title: 'Admins',
             key: '0-0-0',
             actions: [{ key: 'add-folder', icon: 'add-folder' }, { key: 'add-user', icon: 'add-user' }],
-            icon: <Icon value={'folder'} />,
+            icon: <Icon value={ 'folder' } />,
             children: [
               {
                 title: 'Superuser',
                 key: '2',
                 type: 'user',
-                icon: <Icon value={'user'} />,
+                icon: <Icon value={ 'user' } />,
                 actions: [{ key: 'clone', icon: 'copy' }, { key: 'remove', icon: 'trash' }]
               }
             ]
@@ -49,24 +49,24 @@ export const _default = {
             title: 'Portal Engine',
             key: '0-0-1',
             actions: [{ key: 'add-folder', icon: 'add-folder' }, { key: 'add-user', icon: 'add-user' }],
-            icon: <Icon value={'folder'} />,
+            icon: <Icon value={ 'folder' } />,
             children: [
               {
                 title: 'All rights',
                 key: '0-0-1-0',
                 actions: [{ key: 'add-folder', icon: 'add-folder' }, { key: 'add-user', icon: 'add-user' }],
-                icon: <Icon value={'folder'} />,
+                icon: <Icon value={ 'folder' } />,
                 children: [
                   {
                     title: 'Jack',
                     key: '0-0-1-0-0',
-                    icon: <Icon value={'user'} />,
+                    icon: <Icon value={ 'user' } />,
                     actions: [{ key: 'clone', icon: 'copy-03' }, { key: 'remove', icon: 'trash' }]
                   },
                   {
                     title: 'John',
                     key: '0-0-1-0-1',
-                    icon: <Icon value={'user'} />,
+                    icon: <Icon value={ 'user' } />,
                     actions: [{ key: 'clone', icon: 'copy-03' }, { key: 'remove', icon: 'trash' }]
                   }
                 ]
@@ -107,39 +107,39 @@ export const Checkable = {
       {
         title: 'All Tags',
         key: '0',
-        icon: <Icon value={'folder'} />,
+        icon: <Icon value={ 'folder' } />,
         children: [
           {
             title: 'Countries',
             key: '0-0',
-            icon: <Icon value={'tag'} />,
+            icon: <Icon value={ 'tag' } />,
             children: [
               {
                 title: 'Australia',
                 key: '0-0-0',
-                icon: <Icon value={'tag'} />
+                icon: <Icon value={ 'tag' } />
               },
               {
                 title: 'Mongolia',
                 key: '0-0-1',
-                icon: <Icon value={'tag'} />
+                icon: <Icon value={ 'tag' } />
               },
               {
                 title: 'Kenya',
                 key: '0-0-2',
-                icon: <Icon value={'tag'} />
+                icon: <Icon value={ 'tag' } />
               }
             ]
           },
           {
             title: 'Print',
             key: '0-1',
-            icon: <Icon value={'tag'} />,
+            icon: <Icon value={ 'tag' } />,
             children: [
               {
                 title: 'A4',
                 key: '0-1-0',
-                icon: <Icon value={'tag'} />
+                icon: <Icon value={ 'tag' } />
               }
             ]
           }
@@ -165,23 +165,23 @@ export const NoRoot = {
       {
         title: 'Accessory',
         key: '0',
-        icon: <Icon value={'accessory'} />,
+        icon: <Icon value={ 'accessory' } />
       },
       {
         title: 'Asset',
         key: '1',
-        icon: <Icon value={'asset'} />,
+        icon: <Icon value={ 'asset' } />
       },
       {
         title: 'Bookmark',
         key: '2',
-        icon: <Icon value={'bookmark'} />,
+        icon: <Icon value={ 'bookmark' } />
       },
       {
         title: 'Calendar',
         key: '3',
-        icon: <Icon value={'calendar'} />,
-      },
+        icon: <Icon value={ 'calendar' } />
+      }
     ],
     hasRoot: false,
     Checkable: false,

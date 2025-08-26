@@ -21,7 +21,7 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
       .ant-tree-list-holder-inner {
         & > .ant-tree-treenode {
           .ant-tree-switcher {
-            width: ${props.hasRoot ? '24px' : '0'};
+            width: ${props.hasRoot === true ? '24px' : '0'};
           }
         }
 
