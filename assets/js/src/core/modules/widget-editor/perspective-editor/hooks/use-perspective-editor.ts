@@ -30,7 +30,7 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
       }
 
       return data!
-    } catch (error) {
+    } catch {
       trackError(new GeneralError('Failed to load perspective data of perspective "' + id + '".'))
     }
   }
