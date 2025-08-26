@@ -15,7 +15,6 @@ import { TreeContainer } from './components/tree/tree-container'
 import { WidgetDetailContainer } from './components/widget-detail/widget-detail-container'
 
 export const WidgetEditorContainerInner = (): React.JSX.Element => {
-
   const sidebar = {
     id: 'widget-editor.widget-editor.sidebar',
     minSize: 170,
@@ -30,15 +29,15 @@ export const WidgetEditorContainerInner = (): React.JSX.Element => {
     id: 'widget-editor.widget-editor.main',
     minSize: 600,
     children: [
-      <WidgetDetailContainer key={'widget-editor.widget-editor.main.detailTab'} />
+      <WidgetDetailContainer key={ 'widget-editor.widget-editor.main.detailTab' } />
     ]
   }
 
   return (
     <ContentLayout>
       <ConfigLayout
-        leftItem={sidebar}
-        rightItem={main}
+        leftItem={ sidebar }
+        rightItem={ main }
       />
     </ContentLayout>
   )

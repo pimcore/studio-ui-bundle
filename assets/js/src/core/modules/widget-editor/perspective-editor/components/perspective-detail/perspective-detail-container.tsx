@@ -40,7 +40,7 @@ export const WidgetDetailContainer = (): React.JSX.Element => {
           setActiveTabId(key)
         } }
         onClose={ (key) => {
-          closePerspective(key)
+          closePerspective(key as string)
         } }
       />
     </ContentLayout>

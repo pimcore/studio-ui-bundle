@@ -21,29 +21,29 @@ export const WidgetDetailContainer = (): React.JSX.Element => {
 
   return (
     <ContentLayout
-      renderToolbar={(
+      renderToolbar={ (
         <Toolbar justify="space-between">
           <IconButton
-            icon={{ value: 'refresh' }}
-            title={t('refresh')}
+            icon={ { value: 'refresh' } }
+            title={ t('refresh') }
           />
         </Toolbar>
-      )}
+      ) }
     >
       <Tabs
-        activeKey={activeTabId}
-        items={widgets.map((widget) => ({
+        activeKey={ activeTabId }
+        items={ widgets.map((widget) => ({
           key: widget.id,
           label: widget.name,
           closable: true,
-          children: <WidgetDetailTab widget={widget} />
-        }))}
-        onChange={(key) => {
+          children: <WidgetDetailTab widget={ widget } />
+        })) }
+        onChange={ (key) => {
           setActiveTabId(key)
-        }}
-        onClose={(key) => {
-          closeWidget(key)
-        }}
+        } }
+        onClose={ (key) => {
+          closeWidget(key as string)
+        } }
       />
     </ContentLayout>
   )

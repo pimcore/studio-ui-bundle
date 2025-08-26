@@ -68,7 +68,7 @@ export const PerspectiveEditorProvider = ({ children }: PerspectiveEditorProvide
     }
   }
 
-  const contextValue: PerspectiveEditorContext = useMemo(() => ({
+  const contextValue: PerspectiveEditorContextProps = useMemo(() => ({
     activeTabId,
     setActiveTabId,
     perspectives,

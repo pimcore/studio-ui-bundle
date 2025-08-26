@@ -67,7 +67,7 @@ export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): R
     }
   }
 
-  const contextValue = useMemo(() => ({
+  const contextValue: WidgetEditorContextProps = useMemo(() => ({
     activeTabId,
     setActiveTabId,
     widgets,
