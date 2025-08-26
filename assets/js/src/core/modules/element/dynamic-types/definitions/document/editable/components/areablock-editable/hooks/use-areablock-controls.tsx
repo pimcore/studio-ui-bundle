@@ -130,7 +130,6 @@ export const useAreablockControls = ({
         areaTypes={ areaTypes }
         config={ config }
         onClick={ async (areaType) => {
-          setEmptyStatePortal(null)
           await handleAddAreaWithRefresh(null, areaType)
         } }
       />
@@ -202,15 +201,11 @@ export const useAreablockControls = ({
     )
   }, [areablockManager, areaTypes, handleDragStart, handleDragOver, handleDragEnd, handleAddAreaWithRefresh, handleRemoveArea, handleMoveAreaUp, handleMoveAreaDown, activeId, emptyStatePortal, dropzonePortals, dragOverlayTitle])
 
-  const cleanupControls = useCallback(() => {
-    setEmptyStatePortal(null)
-  }, [])
-
   useEffect(() => {
     return () => {
-      cleanupControls()
+      clearEmptyState()
     }
-  }, [cleanupControls])
+  }, [clearEmptyState])
 
   return {
     updateControls,
