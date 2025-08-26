@@ -11,10 +11,6 @@
 import { createStyles } from 'antd-style'
 
 export const useAreablockEditableStyles = createStyles(({ token }) => ({
-  areablockContainer: {
-    position: 'relative',
-    minHeight: '20px'
-  },
 
   areablockToolstrip: {
     display: 'inline-block',

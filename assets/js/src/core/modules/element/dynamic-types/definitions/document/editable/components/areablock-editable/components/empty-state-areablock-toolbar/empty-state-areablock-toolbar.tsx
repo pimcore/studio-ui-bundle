@@ -18,6 +18,7 @@ import { useAreablockMenu } from '../../hooks/use-areablock-menu'
 import { EditableDropzone } from '../../../../helpers/editable-dropzone-sorting/components/editable-dropzone/editable-dropzone'
 import { configUtils } from '../../utils/areablock-utils'
 import { isString } from 'lodash'
+import { EditableDropzoneContent } from '../../../../helpers/editable-dropzone-sorting/components/editable-dropzone/dropzone-content'
 
 interface DropInfo {
   type: string
@@ -86,6 +87,7 @@ export const EmptyStateAreablockToolbar = ({
 
   return (
     <>
+      <EditableDropzoneContent/>
       <ToolStrip
         className={ styles.areablockToolstrip }
         theme="inverse"

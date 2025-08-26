@@ -11,9 +11,7 @@
 import React from 'react'
 import { useDroppable as useSortDroppable } from '@dnd-kit/core'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
-import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
-import { useEditableDropzoneStyles } from './editable-dropzone.styles'
-import cn from 'classnames'
+import { EditableDropzoneContent } from './dropzone-content'
 
 export interface EditableDropzoneProps {
   id: string
@@ -22,30 +20,9 @@ export interface EditableDropzoneProps {
   isValidDrop?: (info: any) => boolean
 }
 
-const DropzoneContent = ({ id, index, onDropItem, isValidDrop }: EditableDropzoneProps): React.JSX.Element => {
-  const { styles } = useEditableDropzoneStyles()
-  const { setNodeRef } = useSortDroppable({ id })
-  const { isDragActive, isOver, isValid } = useDroppable()
-
-  return (
-    <div
-      className={ cn(
-        styles.dropzone,
-        'pimcore-editable-dropzone',
-        {
-          [styles.dropzoneDragActive]: isDragActive,
-          [styles.dropzoneHover]: isOver && isValid,
-          [styles.dropzoneRejected]: isOver && !isValid
-        }
-      ) }
-      data-pimcore-dropzone-id={ id }
-      data-pimcore-dropzone-index={ index }
-      ref={ setNodeRef }
-    />
-  )
-}
-
 export const EditableDropzone = ({ id, index, onDropItem, isValidDrop }: EditableDropzoneProps): React.JSX.Element => {
+  const { setNodeRef } = useSortDroppable({ id })
+  
   const handleDrop = async (info: any): Promise<void> => {
     if (onDropItem != null) {
       await onDropItem(info, index)
@@ -61,11 +38,10 @@ export const EditableDropzone = ({ id, index, onDropItem, isValidDrop }: Editabl
       isValidData={ validateDrop }
       onDrop={ handleDrop }
     >
-      <DropzoneContent
+      <EditableDropzoneContent
         id={ id }
         index={ index }
-        isValidDrop={ isValidDrop }
-        onDropItem={ onDropItem }
+        setNodeRef={ setNodeRef }
       />
     </Droppable>
   )

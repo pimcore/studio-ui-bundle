@@ -67,7 +67,6 @@ export const AreablockEditable = ({
   containerRef,
   disabled = false
 }: AreablockEditableProps): React.JSX.Element => {
-  const { styles } = useAreablockEditableStyles()
   const currentValue = isArray(value) ? value : []
 
   const areablockManager = useMemo(() => new AreablockManager(editableName, containerRef), [editableName, containerRef])
@@ -140,7 +139,7 @@ export const AreablockEditable = ({
   }, [currentValue, refreshControls])
 
   return (
-    <div className={ `${styles.areablockContainer} ${className ?? ''}` }>
+    <div className={ className }>
       <DynamicEditablesRenderer editableDefinitions={ dynamicEditables } />
       {renderAreablockToolbar()}
 
