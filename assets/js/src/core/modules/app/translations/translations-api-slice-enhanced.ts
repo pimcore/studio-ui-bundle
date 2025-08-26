@@ -44,6 +44,7 @@ export const {
   useTranslationDeleteByKeyMutation,
   useTranslationGetDomainsQuery,
   useTranslationGetListQuery,
+  useTranslationGetAvailableLocalesQuery,
   useTranslationUpdateMutation
 } = api
 
