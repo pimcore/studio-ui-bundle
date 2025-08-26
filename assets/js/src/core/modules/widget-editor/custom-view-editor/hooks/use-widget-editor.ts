@@ -32,7 +32,7 @@ export const useWidgetEditor = (): UseWidgetEditorReturn => {
         return
       }
 
-      return data.data as unknown as WidgetConfig
+      return data?.data as unknown as WidgetConfig
     } catch {
       trackError(new GeneralError('Failed to load widget data of widget "' + widgetId + '" with type "' + widgetType + '".'))
     }
