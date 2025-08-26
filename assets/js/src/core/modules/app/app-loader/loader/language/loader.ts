@@ -22,8 +22,8 @@ export const useLanguageLoader = (): ILanguageLoader => {
       await store.dispatch(
         baseApi.endpoints.translationGetAvailableLocales.initiate()
       ).unwrap()
-    } catch (error) {
-      trackError(new GeneralError(error))
+    } catch {
+      trackError(new GeneralError("Could not load available locales"))
     }
   }
 
