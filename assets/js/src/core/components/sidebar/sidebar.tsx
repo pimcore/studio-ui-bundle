@@ -9,10 +9,11 @@
  */
 
 import { useStyle } from './sidebar.styles'
-import React, { isValidElement, useState } from 'react'
+import React, { isValidElement, useState, useContext } from 'react'
 import { type ISidebarButton, type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { SidebarContext } from './sidebar-provider'
 
 export interface SidebarProps {
   entries: ISidebarEntry[]
@@ -23,6 +24,8 @@ export interface SidebarProps {
 
 export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights = [] }: SidebarProps): React.JSX.Element => {
   const { styles } = useStyle()
+  const sidebarContext = useContext(SidebarContext)
+  
   const preparedEntries = entries.map((entry) => {
     // TODO: do we need any type of translated label here?
     return {
@@ -37,15 +40,25 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
       label: 'TRANSLATED_LABEL'
     }
   })
-  const [activeTab, setActiveTab] = useState<string>('')
+  
+  const [localActiveTab, setLocalActiveTab] = useState<string>('')
+  
+  // Use context active tab if available, otherwise use local state
+  const activeTab = sidebarContext?.activeTab ?? localActiveTab
+  const setActiveTab = sidebarContext?.toggleTab ?? setLocalActiveTab
 
   function handleSidebarClick (key: string): void {
-    if (key === activeTab) {
-      setActiveTab('')
-      return
+    if (sidebarContext) {
+      // When using context, use the toggleTab method
+      sidebarContext.toggleTab(key)
+    } else {
+      // Fallback to local state behavior
+      if (key === activeTab) {
+        setActiveTab('')
+        return
+      }
+      setActiveTab(key)
     }
-
-    setActiveTab(key)
   }
 
   return (
