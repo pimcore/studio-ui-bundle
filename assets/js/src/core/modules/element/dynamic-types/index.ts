@@ -187,6 +187,7 @@ import { type DynamicTypeEditableDialogLayoutRegistry } from './definitions/edit
 import { type DynamicTypeEditableDialogLayoutTabpanel } from './definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-tabpanel'
 import { type DynamicTypeEditableDialogLayoutPanel } from './definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-panel'
 import { type DynamicTypeGridCellString } from './definitions/grid-cell/types/string/dynamic-type-grid-cell-string'
+import { DynamicTypeObjectDataBoolean } from './definitions/objects/data-related/types/dynamic-type-object-data-boolean'
 
 moduleSystem.registerModule({
   onInit () {
@@ -296,6 +297,7 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataCountryMultiSelect>(serviceIds['DynamicTypes/ObjectData/CountryMultiSelect']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataUser>(serviceIds['DynamicTypes/ObjectData/User']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataBooleanSelect>(serviceIds['DynamicTypes/ObjectData/BooleanSelect']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataBoolean>(serviceIds['DynamicTypes/ObjectData/Boolean']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataNumeric>(serviceIds['DynamicTypes/ObjectData/Numeric']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataNumericRange>(serviceIds['DynamicTypes/ObjectData/NumericRange']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataSlider>(serviceIds['DynamicTypes/ObjectData/Slider']))

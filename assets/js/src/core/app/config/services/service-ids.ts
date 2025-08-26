@@ -167,6 +167,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/CountryMultiSelect': 'DynamicTypes/ObjectData/CountryMultiSelect',
   'DynamicTypes/ObjectData/User': 'DynamicTypes/ObjectData/User',
   'DynamicTypes/ObjectData/BooleanSelect': 'DynamicTypes/ObjectData/BooleanSelect',
+  'DynamicTypes/ObjectData/Boolean': 'DynamicTypes/ObjectData/Boolean',
   'DynamicTypes/ObjectData/Numeric': 'DynamicTypes/ObjectData/Numeric',
   'DynamicTypes/ObjectData/NumericRange': 'DynamicTypes/ObjectData/NumericRange',
   'DynamicTypes/ObjectData/Slider': 'DynamicTypes/ObjectData/Slider',
