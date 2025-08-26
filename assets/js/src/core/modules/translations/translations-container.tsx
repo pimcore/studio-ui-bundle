@@ -23,12 +23,11 @@ import { useTranslation } from './hooks/use-translation'
 import { Table } from './table/table'
 import { useTranslationLanguages } from './hooks/use-translation-languages'
 import {
-  getAvailableLocales,
   translationsToRows,
   translationDataToRow,
   type TranslationRow
 } from './helpers/translation-helpers'
-import { isUndefined, isNil } from 'lodash'
+import { isUndefined } from 'lodash'
 import { useAppDispatch } from '@sdk/app'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useTranslationDomain } from './hooks/translation-domain-provider'
@@ -123,7 +122,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
   }
 
   const viewableLanguages = domainLanguages.filter(lang => lang.canView)
-  const editableLanguages = domainLanguages.filter(lang => lang.canEdit)  
+  const editableLanguages = domainLanguages.filter(lang => lang.canEdit)
 
   const onCreateTranslation = async (translationKey: string): Promise<void> => {
     const isValidKeyInput = translationKey !== '' && translationKey !== undefined
@@ -277,13 +276,13 @@ export const TranslationsContainer = (): React.JSX.Element => {
           } }
         >
           <Table
+            domainLanguages={ domainLanguages }
+            editableLocales={ editableLanguages.map(lang => lang.locale) }
             onSortingChange={ handleSortingChange }
             setTranslationRows={ setTranslationRows }
             sorting={ sorting }
             translationRows={ translationRows }
             visibleLocales={ visibleLocales ?? viewableLanguages.map(lang => lang.locale) }
-            editableLocales={ editableLanguages.map(lang => lang.locale) }
-            domainLanguages={ domainLanguages }
           />
           <TranslationErrorModals
             MandatoryModal={ MandatoryModal }

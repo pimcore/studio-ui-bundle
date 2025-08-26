@@ -17,9 +17,7 @@ export interface LocaleInfo {
   displayName: string
 }
 
-interface LanguageLookup {
-  [locale: string]: string
-}
+type LanguageLookup = Record<string, string>
 
 export const useLanguageLookup = (): {
   lookupMap: LanguageLookup
@@ -30,16 +28,16 @@ export const useLanguageLookup = (): {
 
   const lookupMap: LanguageLookup = useMemo(() => {
     const map: LanguageLookup = {}
-        
-    if (availableLocales) {
+
+    if (availableLocales !== null && availableLocales !== undefined) {
       availableLocales.forEach(localeInfo => {
-        const locale = (localeInfo as any)?.locale        
-        if (locale && localeInfo?.displayName) {
+        const locale = (localeInfo as any)?.locale
+        if (locale !== null && locale !== undefined && locale !== '' && localeInfo?.displayName !== null && localeInfo?.displayName !== undefined && localeInfo.displayName !== '') {
           map[locale] = localeInfo.displayName
         }
       })
     }
-    
+
     return map
   }, [availableLocales])
 
@@ -50,7 +48,6 @@ export const useLanguageLookup = (): {
     return lookupMap[locale] ?? locale.toUpperCase()
   }
 
-  
   return {
     lookupMap,
     isLoading,
