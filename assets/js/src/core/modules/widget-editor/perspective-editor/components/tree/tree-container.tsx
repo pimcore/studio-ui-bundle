@@ -15,11 +15,7 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePerspectiveEditorContext } from '../../context/hooks/use-perspective-editor-context'
 
-interface TreeContainerProps {
-  expandedKeys: any[]
-}
-
-export const TreeContainer = ({ expandedKeys }: TreeContainerProps): React.JSX.Element => {
+export const TreeContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [treeDataFiltered, setTreeDataFiltered] = useState<TreeDataItem[]>([])
@@ -105,7 +101,6 @@ export const TreeContainer = ({ expandedKeys }: TreeContainerProps): React.JSX.E
           value={searchTerm}
         />
         <TreeElement
-          defaultExpandedKeys={expandedKeys}
           hasRoot={false}
           onSelected={(key) => {
             void openPerspective(key)

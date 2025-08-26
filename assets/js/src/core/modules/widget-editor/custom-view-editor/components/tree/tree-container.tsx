@@ -15,11 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { useWidgetEditorContext } from '../../context/hooks/use-widget-editor-context'
 import { usePerspectiveWidgetGetConfigCollectionQuery, type WidgetConfig } from '@sdk/api/perspectives'
 
-interface TreeContainerProps {
-  expandedKeys: any[]
-}
-
-export const TreeContainer = ({ expandedKeys }: TreeContainerProps): React.JSX.Element => {
+export const TreeContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [treeDataFiltered, setTreeDataFiltered] = useState<TreeDataItem[]>([])
@@ -105,7 +101,6 @@ export const TreeContainer = ({ expandedKeys }: TreeContainerProps): React.JSX.E
           value={searchTerm}
         />
         <TreeElement
-          defaultExpandedKeys={expandedKeys}
           hasRoot={false}
           onSelected={(key) => {
             const widget = widgets!.items.find((w) => isString(w.id) && isString(key) && w.id === key)
