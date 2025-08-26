@@ -56,12 +56,9 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const { data: domainsData, isLoading: domainsLoading, error: domainError } = useTranslationGetDomainsQuery()
   const availableDomains = domainsData ?? []
 
-  // Get the current domain info to determine if it's a frontend domain
   const currentDomainInfo = availableDomains.find(d => d.domain === domain)
   const isFrontendDomain = currentDomainInfo?.isFrontendDomain ?? false
 
-  console.log("isFrontEndDomain", isFrontendDomain)
-  // Get the appropriate languages based on domain type
   const { languages: domainLanguages, isLoading: languagesLoading } = useTranslationLanguages(isFrontendDomain)
 
   const queryArgs = useMemo(() => ({
@@ -125,19 +122,8 @@ export const TranslationsContainer = (): React.JSX.Element => {
     dispatch(api.util.invalidateTags(invalidatingTags.DOMAIN_TRANSLATIONS()))
   }
 
-  // Get available locales from the translations data or domain languages
-  const availableLocales = useMemo(() => {
-    const localesFromData = getAvailableLocales(data?.items ?? [])
-    if (localesFromData.length > 0) {
-      return localesFromData
-    }
-    // Fallback to domain languages if no data available
-    return domainLanguages.map(lang => lang.locale)
-  }, [data?.items, domainLanguages])
-
-  // Filter domain languages to only show viewable ones
   const viewableLanguages = domainLanguages.filter(lang => lang.canView)
-  const editableLanguages = domainLanguages.filter(lang => lang.canEdit)
+  const editableLanguages = domainLanguages.filter(lang => lang.canEdit)  
 
   const onCreateTranslation = async (translationKey: string): Promise<void> => {
     const isValidKeyInput = translationKey !== '' && translationKey !== undefined
@@ -241,12 +227,13 @@ export const TranslationsContainer = (): React.JSX.Element => {
           <Flex gap="small">
             <Select
               allowClear
-              disabled={ viewableLanguages.length === 0 }
+              disabled={ viewableLanguages.length === 0 || languagesLoading }
               dropdownStyle={ { minWidth: 250 } }
               filterOption={ (input, option) => {
                 const label = option?.label?.toString() ?? ''
                 return label.toLowerCase().includes(input.toLowerCase())
               } }
+              loading={ languagesLoading }
               maxTagCount="responsive"
               mode="multiple"
               onChange={ (selectedLocales: string[]) => {
@@ -276,12 +263,12 @@ export const TranslationsContainer = (): React.JSX.Element => {
         }
     >
       <Content
-        loading={ translationsLoading || translationsFetching }
+        loading={ translationsLoading || translationsFetching || languagesLoading }
         margin={ {
           x: 'extra-small',
           y: 'none'
         } }
-        none={ !translationsLoading && translationRows.length === 0 }
+        none={ !translationsLoading && !languagesLoading && translationRows.length === 0 }
       >
         <Box
           margin={ {
