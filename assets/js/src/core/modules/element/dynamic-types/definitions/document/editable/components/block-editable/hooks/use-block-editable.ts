@@ -20,7 +20,7 @@ import {
 } from '../utils/block-utils'
 import { processBlockTemplate, ensurePortalTargets } from '../utils/template-processor'
 import { createEditableDataFromDefinitions } from '../../../utils/editable-utils'
-import { hideElementUntilDropzones } from '../../../helpers/editable-dropzone-sorting/utils/dom-utils'
+import { createDropzoneContainer } from '../../../helpers/editable-dropzone-sorting/utils/dom-utils'
 
 export interface UseBlockEditableParams {
   blockManager: BlockManager
@@ -28,6 +28,7 @@ export interface UseBlockEditableParams {
   onChange?: (value: BlockValue) => void
   config?: BlockEditableConfig
   disabled?: boolean
+  addDropzonePortalRef?: React.MutableRefObject<((containerElement: HTMLElement) => void) | null>
 }
 
 export interface UseBlockEditableReturn {
@@ -44,7 +45,8 @@ export const useBlockEditable = ({
   value = [],
   onChange,
   config,
-  disabled = false
+  disabled = false,
+  addDropzonePortalRef
 }: UseBlockEditableParams): UseBlockEditableReturn => {
   const { initializeData, getValues, removeValues } = useDocumentEditor()
   const [dynamicEditables, setDynamicEditables] = useState<AbstractDocumentEditableDefinition[]>([])
@@ -124,8 +126,19 @@ export const useBlockEditable = ({
       if (!isNil(newElement)) {
         const newBlockEntry = newElement as HTMLElement
         
-        // Hide the new element until dropzones are injected
-        hideElementUntilDropzones(newBlockEntry)
+        // For the first block in an empty container, add a dropzone at the beginning
+        if (existingElements.length === 0) {
+          const initialDropzoneContainer = createDropzoneContainer(blockManager.getEditableName())
+          newBlockEntry.insertBefore(initialDropzoneContainer, newBlockEntry.firstChild)
+          // Create portal immediately for the initial dropzone
+          addDropzonePortalRef?.current?.(initialDropzoneContainer)
+        }
+        
+        // Create and add dropzone container with 16px height after the block element
+        const dropzoneContainer = createDropzoneContainer(blockManager.getEditableName())
+        newBlockEntry.appendChild(dropzoneContainer)
+        // Create portal immediately for the dropzone
+        addDropzonePortalRef?.current?.(dropzoneContainer)
         
         placeholderElement.parentNode.replaceChild(newElement, placeholderElement)
         

@@ -19,10 +19,14 @@ import {
 /**
  * Creates a dropzone container element with proper attributes
  */
-export const createDropzoneContainer = (editableName: string | null): HTMLDivElement => {
+export const createDropzoneContainer = (editableName: string | null, isFirst?: boolean): HTMLDivElement => {
   const dropzoneContainer = document.createElement('div')
   dropzoneContainer.className = DROPZONE_CLASSES.DROPZONE_CONTAINER
   dropzoneContainer.setAttribute(DROPZONE_ATTRIBUTES.DATA_EDITABLE_DROPZONE, editableName ?? '')
+  if (isFirst === true) {
+    dropzoneContainer.setAttribute(DROPZONE_ATTRIBUTES.DATA_FIRST_DROPZONE, 'true')
+  }
+  dropzoneContainer.style.height = '16px'
   return dropzoneContainer
 }
 
@@ -118,9 +122,9 @@ const hasDropzoneAfter = (element: HTMLElement, editableName: string | null): bo
 }
 
 /**
- * Injects dropzone containers before and after elements, skipping if they already exist
+ * Updates dropzone containers before and after elements, skipping if they already exist
  */
-export const injectDropzoneContainers = (
+export const updateDropzoneContainers = (
   elements: HTMLElement[],
   editableName: string | null
 ): void => {
@@ -137,7 +141,7 @@ export const injectDropzoneContainers = (
   const firstItem = elements[0]
   
   if (!hasDropzoneBefore(firstItem, editableName)) {
-    const firstDropzone = createDropzoneContainer(editableName)
+    const firstDropzone = createDropzoneContainer(editableName, true) // Mark as first dropzone
     firstItem.parentNode?.insertBefore(firstDropzone, firstItem)
   }
 
@@ -149,4 +153,21 @@ export const injectDropzoneContainers = (
   })
 
   showElementsWithDropzones(elements)
+}
+
+/**
+ * Removes the first dropzone container from the DOM
+ */
+export const removeFirstDropzoneContainer = (
+  container: HTMLElement | null,
+  editableName: string | null
+): void => {
+  if (isNull(container) || isNull(editableName)) {
+    return
+  }
+
+  const firstDropzone = container.querySelector(`[${DROPZONE_ATTRIBUTES.DATA_EDITABLE_DROPZONE}="${editableName}"][${DROPZONE_ATTRIBUTES.DATA_FIRST_DROPZONE}="true"]`)
+  if (firstDropzone !== null) {
+    firstDropzone.remove()
+  }
 }

@@ -57,7 +57,7 @@ export const useAreablockDropzones = ({
 
   const sortingResult = useEditableDropzones({
     editableManager: areablockManager as EditableManager,
-    onMoveItem: onMoveArea,
+    onMoveItem: onMoveA^a,
     onDropItem: handleAreablockDrop,
     isValidDrop: isValidAreablockDrop
   })

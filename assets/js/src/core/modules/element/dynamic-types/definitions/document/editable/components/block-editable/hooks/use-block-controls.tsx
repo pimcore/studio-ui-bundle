@@ -47,7 +47,8 @@ export const useBlockControls = ({
     handleDragEnd,
     dropzonePortals,
     dragOverlayTitle,
-    refreshDropzones
+    refreshDropzones,
+    removeFirstDropzone
   } = useBlockDropzones({
     blockManager,
     onMoveBlock
@@ -59,19 +60,15 @@ export const useBlockControls = ({
   }, [onAddBlock, refreshDropzones])
 
   const handleRemoveBlock = useCallback((element: HTMLElement) => {
+    const currentBlockEntries = blockManager.queryElements()
+    const isLastItem = currentBlockEntries.length === 1
+    
     onRemoveBlock(element)
-    refreshDropzones()
-  }, [onRemoveBlock, refreshDropzones])
-
-  const handleMoveBlockUp = useCallback((element: HTMLElement) => {
-    onMoveBlockUp(element)
-    refreshDropzones()
-  }, [onMoveBlockUp, refreshDropzones])
-
-  const handleMoveBlockDown = useCallback((element: HTMLElement) => {
-    onMoveBlockDown(element)
-    refreshDropzones()
-  }, [onMoveBlockDown, refreshDropzones])
+    
+    if (isLastItem) {
+      removeFirstDropzone() // Remove the first dropzone when removing the last item
+    }
+  }, [onRemoveBlock, blockManager, removeFirstDropzone])
 
   const createEmptyStatePortal = useCallback((container: HTMLElement): React.ReactPortal => {
     const emptyStateToolbar = (
@@ -119,8 +116,8 @@ export const useBlockControls = ({
               key={ blockKey }
               limitReached={ limitReached }
               onAddBlock={ handleAddBlock }
-              onMoveBlockDown={ handleMoveBlockDown }
-              onMoveBlockUp={ handleMoveBlockUp }
+              onMoveBlockDown={ onMoveBlockDown }
+              onMoveBlockUp={ onMoveBlockUp }
               onRemoveBlock={ handleRemoveBlock }
             />
           )
@@ -142,7 +139,7 @@ export const useBlockControls = ({
         <>{portals}</>
       </EditableSortContext>
     )
-  }, [blockManager, config, handleDragStart, handleDragOver, handleDragEnd, handleAddBlock, handleRemoveBlock, handleMoveBlockUp, handleMoveBlockDown, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal])
+  }, [blockManager, config, handleDragStart, handleDragOver, handleDragEnd, handleAddBlock, handleRemoveBlock, onMoveBlockUp, onMoveBlockDown, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal])
 
   return {
     renderBlockToolbar

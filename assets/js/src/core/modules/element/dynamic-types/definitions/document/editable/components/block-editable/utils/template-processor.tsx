@@ -62,6 +62,11 @@ export const processBlockTemplate = (
   const escapedName = fullName.replace(/[:.]/g, '_')
 
   let processedHtml = processHtmlTemplate(templateHtml, blockManager, nextKey)
+  
+  // Add dropzone container to the processed HTML
+  const dropzoneContainerId = `dropzone-container-${editableName}-${nextKey}`
+  const dropzoneContainer = `<div id="${dropzoneContainerId}" data-editable-dropzone="${editableName}" class="pimcore-editable-dropzone"></div>`
+  processedHtml = processedHtml + dropzoneContainer
 
   const editableDefinitions: AbstractDocumentEditableDefinition[] = []
 

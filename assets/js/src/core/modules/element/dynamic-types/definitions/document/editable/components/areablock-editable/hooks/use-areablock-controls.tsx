@@ -85,17 +85,17 @@ export const useAreablockControls = ({
 
   const handleRemoveArea = useCallback((element: HTMLElement) => {
     onRemoveArea(element)
-    refreshDropzones()
+    //refreshDropzones()
   }, [onRemoveArea, refreshDropzones])
 
   const handleMoveAreaUp = useCallback((element: HTMLElement) => {
     onMoveAreaUp(element)
-    refreshDropzones()
+    //refreshDropzones()
   }, [onMoveAreaUp, refreshDropzones])
 
   const handleMoveAreaDown = useCallback((element: HTMLElement) => {
     onMoveAreaDown(element)
-    refreshDropzones()
+    //refreshDropzones()
   }, [onMoveAreaDown, refreshDropzones])
 
   const createEmptyStatePortal = useCallback((container: HTMLElement): React.ReactPortal => {
