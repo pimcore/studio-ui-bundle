@@ -33,36 +33,9 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'System/Widget Editor',
-      label: 'navigation.widget-editor',
-      order: 500
-    })
-
-    mainNavRegistryService.registerMainNavItem({
-      path: 'System/Widget Editor/Perspective-Editor',
-      label: 'navigation.widget-editor.perspective-editor',
-      order: 100,
-      className: 'item-style-modifier',
-      // permission: UserPermission.FOO,
-      // perspectivePermission: NavPermission.BAR,
-      widgetConfig: {
-        name: 'perspectiveEditor',
-        id: 'perspective-editor',
-        component: 'perspective-editor',
-        config: {
-          translationKey: 'widget.widget-editor.perspective-editor',
-          icon: {
-            type: 'name',
-            value: 'book-open-01'
-          }
-        }
-      }
-    })
-
-    mainNavRegistryService.registerMainNavItem({
-      path: 'System/Widget Editor/Widget-Editor',
+      path: 'System/Widget-Editor',
       label: 'navigation.widget-editor.widget-editor',
-      order: 200,
+      order: 300,
       className: 'item-style-modifier',
       // permission: UserPermission.FOO,
       // perspectivePermission: NavPermission.BAR,
@@ -75,6 +48,28 @@ moduleSystem.registerModule({
           icon: {
             type: 'name',
             value: 'layout-grid-02'
+          }
+        }
+      }
+    })
+
+    mainNavRegistryService.registerMainNavItem({
+      path: 'System/Perspective-Editor',
+      label: 'navigation.widget-editor.perspective-editor',
+      order: 400,
+      dividerBottom: true,
+      className: 'item-style-modifier',
+      // permission: UserPermission.FOO,
+      // perspectivePermission: NavPermission.BAR,
+      widgetConfig: {
+        name: 'perspectiveEditor',
+        id: 'perspective-editor',
+        component: 'perspective-editor',
+        config: {
+          translationKey: 'widget.widget-editor.perspective-editor',
+          icon: {
+            type: 'name',
+            value: 'book-open-01'
           }
         }
       }
