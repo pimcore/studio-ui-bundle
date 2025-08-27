@@ -25,7 +25,7 @@ export const EmptyStateBlockToolbar = ({
 
   return (
     <>
-      <EditableDropzoneContent/>
+      <EditableDropzoneContent />
       <ToolStrip
         className={ styles.blockToolstrip }
         theme="inverse"

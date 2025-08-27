@@ -22,7 +22,7 @@ export interface EditableDropzoneProps {
 
 export const EditableDropzone = ({ id, index, onDropItem, isValidDrop }: EditableDropzoneProps): React.JSX.Element => {
   const { setNodeRef } = useSortDroppable({ id })
-  
+
   const handleDrop = async (info: any): Promise<void> => {
     if (onDropItem != null) {
       await onDropItem(info, index)

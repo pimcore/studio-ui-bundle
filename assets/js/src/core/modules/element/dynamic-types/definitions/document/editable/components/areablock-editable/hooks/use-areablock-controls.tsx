@@ -87,23 +87,23 @@ export const useAreablockControls = ({
   const handleRemoveArea = useCallback((element: HTMLElement) => {
     const currentAreaEntries = areablockManager.queryElements()
     const isLastItem = currentAreaEntries.length === 1
-    
+
     onRemoveArea(element)
-    
+
     if (isLastItem) {
       removeFirstDropzone() // Remove the first dropzone when removing the last item
     }
-    //refreshDropzones()
+    // refreshDropzones()
   }, [onRemoveArea, areablockManager, removeFirstDropzone])
 
   const handleMoveAreaUp = useCallback((element: HTMLElement) => {
     onMoveAreaUp(element)
-    //refreshDropzones()
+    // refreshDropzones()
   }, [onMoveAreaUp, refreshDropzones])
 
   const handleMoveAreaDown = useCallback((element: HTMLElement) => {
     onMoveAreaDown(element)
-    //refreshDropzones()
+    // refreshDropzones()
   }, [onMoveAreaDown, refreshDropzones])
 
   const createEmptyStatePortal = useCallback((container: HTMLElement): React.ReactPortal => {

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isNull } from 'lodash'
+import { isNull, isNil } from 'lodash'
 import {
   DROPZONE_CLASSES,
   DROPZONE_SELECTORS,
@@ -114,8 +114,8 @@ export const updateDropzoneContainers = (
 ): void => {
   if (elements.length === 0) {
     // For empty containers, still inject a dropzone at the container level
-    const container = document.querySelector(`[data-name="${editableName}"]`) as HTMLElement | null
-    if (container && !container.querySelector(`[${DROPZONE_ATTRIBUTES.DATA_EDITABLE_DROPZONE}="${editableName}"]`)) {
+    const container = document.querySelector(`[data-name="${editableName}"]`)
+    if (!isNil(container) && isNil(container.querySelector(`[${DROPZONE_ATTRIBUTES.DATA_EDITABLE_DROPZONE}="${editableName}"]`))) {
       const dropzone = createDropzoneContainer(editableName)
       container.appendChild(dropzone)
     }
@@ -123,7 +123,7 @@ export const updateDropzoneContainers = (
   }
 
   const firstItem = elements[0]
-  
+
   if (!hasDropzoneBefore(firstItem, editableName)) {
     const firstDropzone = createDropzoneContainer(editableName, true) // Mark as first dropzone
     firstItem.parentNode?.insertBefore(firstDropzone, firstItem)

@@ -87,7 +87,7 @@ export const EmptyStateAreablockToolbar = ({
 
   return (
     <>
-      <EditableDropzoneContent/>
+      <EditableDropzoneContent />
       <ToolStrip
         className={ styles.areablockToolstrip }
         theme="inverse"

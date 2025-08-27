@@ -75,7 +75,7 @@ export const useAreablockEditable = ({
   }, [onChange])
 
   const handlePostOperation = useCallback(() => {
-    const elements = areablockManager.ensureAllElementKeys()
+    areablockManager.ensureAllElementKeys()
     const newValue = areablockManager.getAreablockValue()
     onChange?.(newValue)
   }, [onChange, areablockManager])
@@ -147,12 +147,12 @@ export const useAreablockEditable = ({
 
         if (!isNil(newElement)) {
           const newAreaElement = newElement as HTMLElement
-          
+
           // Hide the new element until editables are rendered
           hideElementUntilRendered(newAreaElement)
-          
+
           const existingElements = areablockManager.queryElements()
-          
+
           // Insert the new element at the correct position
           if (existingElements.length === 0) {
             container.appendChild(newAreaElement)
@@ -164,7 +164,7 @@ export const useAreablockEditable = ({
           } else if (!isNil(existingElements[index])) {
             existingElements[index].insertAdjacentElement('beforebegin', newAreaElement)
           }
-          
+
           // Create and add dropzone container with 16px height after the area element
           const dropzoneContainer = createDropzoneContainer(areablockManager.getEditableName())
           newAreaElement.appendChild(dropzoneContainer)

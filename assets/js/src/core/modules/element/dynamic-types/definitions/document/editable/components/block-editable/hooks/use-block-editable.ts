@@ -73,7 +73,7 @@ export const useBlockEditable = ({
   }, [onChange, config, blockManager])
 
   const handlePostOperation = useCallback(() => {
-    const elements = blockManager.ensureAllElementKeys()
+    blockManager.ensureAllElementKeys()
     const newValue = blockManager.getBlockValue()
     onChange?.(newValue)
   }, [onChange, blockManager])
@@ -113,12 +113,12 @@ export const useBlockEditable = ({
 
     if (!isNil(newElement)) {
       const newBlockEntry = newElement as HTMLElement
-      
+
       // Hide the new element until editables are rendered
       hideElementUntilRendered(newBlockEntry)
-      
+
       const existingElements = blockManager.queryElements()
-      
+
       // Insert the new element at the correct position
       if (existingElements.length === 0) {
         container.appendChild(newBlockEntry)
@@ -130,11 +130,11 @@ export const useBlockEditable = ({
       } else if (!isNil(existingElements[index])) {
         existingElements[index].insertAdjacentElement('beforebegin', newBlockEntry)
       }
-      
+
       // Create and add dropzone container with 16px height after the block element
       const dropzoneContainer = createDropzoneContainer(blockManager.getEditableName())
       newBlockEntry.appendChild(dropzoneContainer)
-      
+
       blockManager.setElementKey(newBlockEntry, nextKey.toString())
       ensurePortalTargets(newBlockEntry, editableDefinitions)
 

@@ -95,7 +95,7 @@ export const useEditableDropzones = <T extends EditableManager>({
     // Find all existing dropzone containers to determine the index
     const dropzoneContainers = container?.querySelectorAll(`[${DROPZONE_ATTRIBUTES.DATA_EDITABLE_DROPZONE}="${editableName}"]`)
     const index = Array.from(dropzoneContainers ?? []).indexOf(containerElement)
-    
+
     if (index !== -1) {
       const dropzoneId = `${DROPZONE_CONFIG.ID_PREFIX}${index}`
       const dropzone = (
@@ -108,7 +108,7 @@ export const useEditableDropzones = <T extends EditableManager>({
         />
       )
       const portal = ReactDOM.createPortal(dropzone, containerElement)
-      
+
       setDropzonePortals(prev => [...prev, portal])
     }
   }, [container, editableName, isValidDrop, onDropItem])

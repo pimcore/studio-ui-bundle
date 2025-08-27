@@ -9,6 +9,7 @@
  */
 
 import React, { useCallback } from 'react'
+import { isNumber } from 'lodash'
 import { type BlockManager } from '../utils/block-manager'
 import ReactDOM from 'react-dom'
 import { SortableBlockToolbar } from '../components/sortable-block-toolbar'
@@ -62,9 +63,9 @@ export const useBlockControls = ({
   const handleRemoveBlock = useCallback((element: HTMLElement) => {
     const currentBlockEntries = blockManager.queryElements()
     const isLastItem = currentBlockEntries.length === 1
-    
+
     onRemoveBlock(element)
-    
+
     if (isLastItem) {
       removeFirstDropzone() // Remove the first dropzone when removing the last item
     }
@@ -85,7 +86,8 @@ export const useBlockControls = ({
     const portals: React.ReactPortal[] = []
 
     const currentBlockEntries = blockManager.queryElements()
-    const limitReached = configUtils.isLimitReached(currentBlockEntries.length, config?.limit)
+    const limit = isNumber(config?.limit) ? config.limit as number : undefined
+    const limitReached = configUtils.isLimitReached(currentBlockEntries.length, limit)
 
     if (currentBlockEntries.length === 0) {
       const container = blockManager.getContainer()

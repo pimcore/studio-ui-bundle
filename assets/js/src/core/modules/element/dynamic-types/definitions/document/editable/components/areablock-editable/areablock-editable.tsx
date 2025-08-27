@@ -11,7 +11,6 @@
 import React, { useMemo, useCallback, useState } from 'react'
 import { isArray, isNil } from 'lodash'
 import { DynamicEditablesRenderer } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-renderer/dynamic-editables-renderer'
-import { useAreablockEditableStyles } from './areablock-editable.styles'
 import { useAreablockEditable } from './hooks/use-areablock-editable'
 import { useAreablockControls } from './hooks/use-areablock-controls'
 import { AreablockManager } from './utils/areablock-manager'
