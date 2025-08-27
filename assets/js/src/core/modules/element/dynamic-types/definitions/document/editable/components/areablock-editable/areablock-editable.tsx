@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useCallback, useState } from 'react'
+import React, { useMemo, useCallback, useState } from 'react'
 import { isArray, isNil } from 'lodash'
 import { DynamicEditablesRenderer } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-renderer/dynamic-editables-renderer'
 import { useAreablockEditableStyles } from './areablock-editable.styles'

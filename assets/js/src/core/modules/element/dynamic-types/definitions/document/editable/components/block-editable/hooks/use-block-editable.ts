@@ -21,6 +21,7 @@ import {
 import { processBlockTemplate, ensurePortalTargets } from '../utils/template-processor'
 import { createEditableDataFromDefinitions } from '../../../utils/editable-utils'
 import { createDropzoneContainer } from '../../../helpers/editable-dropzone-sorting/utils/dom-utils'
+import { usePendingElementsReveal } from '../../../helpers/use-pending-elements-reveal'
 
 export interface UseBlockEditableParams {
   blockManager: BlockManager
@@ -49,6 +50,11 @@ export const useBlockEditable = ({
   const { initializeData, getValues, removeValues } = useDocumentEditor()
   const [dynamicEditables, setDynamicEditables] = useState<AbstractDocumentEditableDefinition[]>([])
   const reloadModeElementsRef = useRef<HTMLElement[]>(blockManager.queryElements())
+
+  const { hideElementUntilRendered } = usePendingElementsReveal({
+    dynamicEditables,
+    getContainer: () => blockManager.getContainer()
+  })
 
   const getBlockEditableNames = (element: HTMLElement): string[] => {
     const elementKey = blockManager.getElementKey(element)
@@ -96,55 +102,47 @@ export const useBlockEditable = ({
     const container = blockManager.getContainer()
     if (isNil(container) || isNil(config?.template?.html) || isNil(config?.template?.editables)) return
 
-    const placeholderElement = document.createElement('div')
-    placeholderElement.className = 'pimcore-block-placeholder'
-    placeholderElement.setAttribute('data-placeholder-key', nextKey.toString())
-    placeholderElement.style.display = 'none'
-
-    const existingElements = blockManager.queryElements()
-    
-    if (existingElements.length === 0) {
-      container.appendChild(placeholderElement)
-    } else if (!isNil(existingElements[index - 1])) {
-      existingElements[index - 1].insertAdjacentElement('afterend', placeholderElement)
-    } else if (!isNil(existingElements[index])) {
-      existingElements[index].insertAdjacentElement('beforebegin', placeholderElement)
-    }
-
     const { html: processedHtml, editableDefinitions } = processBlockTemplate(
       { templateHtml: config.template.html, blockManager, nextKey },
       config.template.editables
     )
 
-    if (!isNil(placeholderElement.parentNode)) {
-      const tempDiv = document.createElement('div')
-      tempDiv.innerHTML = processedHtml
-      const newElement = tempDiv.firstElementChild
+    const tempDiv = document.createElement('div')
+    tempDiv.innerHTML = processedHtml
+    const newElement = tempDiv.firstElementChild
 
-      if (!isNil(newElement)) {
-        const newBlockEntry = newElement as HTMLElement
-        
-        placeholderElement.parentNode.replaceChild(newElement, placeholderElement)
-        
+    if (!isNil(newElement)) {
+      const newBlockEntry = newElement as HTMLElement
+      
+      // Hide the new element until editables are rendered
+      hideElementUntilRendered(newBlockEntry)
+      
+      const existingElements = blockManager.queryElements()
+      
+      // Insert the new element at the correct position
+      if (existingElements.length === 0) {
+        container.appendChild(newBlockEntry)
         // For the first block in an empty container, add a dropzone before the block entry
-        if (existingElements.length === 0) {
-          const initialDropzoneContainer = createDropzoneContainer(blockManager.getEditableName(), true)
-          newBlockEntry.parentNode?.insertBefore(initialDropzoneContainer, newBlockEntry)
-        }
-        
-        // Create and add dropzone container with 16px height after the block element
-        const dropzoneContainer = createDropzoneContainer(blockManager.getEditableName())
-        newBlockEntry.appendChild(dropzoneContainer)
-        
-        blockManager.setElementKey(newBlockEntry, nextKey.toString())
-        ensurePortalTargets(newBlockEntry, editableDefinitions)
-
-        const editableData = createEditableDataFromDefinitions(editableDefinitions)
-        initializeData(editableData)
-        setDynamicEditables(prev => [...prev, ...editableDefinitions])
-
-        handlePostOperation()
+        const initialDropzoneContainer = createDropzoneContainer(blockManager.getEditableName(), true)
+        newBlockEntry.parentNode?.insertBefore(initialDropzoneContainer, newBlockEntry)
+      } else if (!isNil(existingElements[index - 1])) {
+        existingElements[index - 1].insertAdjacentElement('afterend', newBlockEntry)
+      } else if (!isNil(existingElements[index])) {
+        existingElements[index].insertAdjacentElement('beforebegin', newBlockEntry)
       }
+      
+      // Create and add dropzone container with 16px height after the block element
+      const dropzoneContainer = createDropzoneContainer(blockManager.getEditableName())
+      newBlockEntry.appendChild(dropzoneContainer)
+      
+      blockManager.setElementKey(newBlockEntry, nextKey.toString())
+      ensurePortalTargets(newBlockEntry, editableDefinitions)
+
+      const editableData = createEditableDataFromDefinitions(editableDefinitions)
+      initializeData(editableData)
+      setDynamicEditables(prev => [...prev, ...editableDefinitions])
+
+      handlePostOperation()
     }
   }, [disabled, config, handleReloadMode, initializeData, handlePostOperation, blockManager])
 

@@ -22,6 +22,7 @@ import {
   areablockValueUtils,
   configUtils
 } from '../utils/areablock-utils'
+import { usePendingElementsReveal } from '../../../helpers/use-pending-elements-reveal'
 
 export interface UseAreablockEditableParams {
   areablockManager: AreablockManager
@@ -51,6 +52,11 @@ export const useAreablockEditable = ({
   const { id: documentId } = useContext(DocumentContext)
   const [dynamicEditables, setDynamicEditables] = useState<AbstractDocumentEditableDefinition[]>([])
   const reloadModeElementsRef = useRef<HTMLElement[]>(areablockManager.queryElements())
+
+  const { hideElementUntilRendered } = usePendingElementsReveal({
+    dynamicEditables,
+    getContainer: () => areablockManager.getContainer()
+  })
 
   const getAreaEditableNames = (element: HTMLElement): string[] => {
     const elementKey = areablockManager.getElementKey(element)
@@ -102,21 +108,8 @@ export const useAreablockEditable = ({
     }
 
     try {
-      const placeholderElement = document.createElement('div')
-      placeholderElement.className = 'pimcore-areablock-placeholder'
-      placeholderElement.setAttribute('data-placeholder-key', nextKey.toString())
-      placeholderElement.style.display = 'none'
-
       const container = areablockManager.getContainer()
-      if (!isNil(container)) {
-        if (isEmpty(currentElements)) {
-          container.appendChild(placeholderElement)
-        } else if (!isNil(currentElements[index - 1])) {
-          currentElements[index - 1].insertAdjacentElement('afterend', placeholderElement)
-        } else if (!isNil(currentElements[index])) {
-          currentElements[index].insertAdjacentElement('beforebegin', placeholderElement)
-        }
-      }
+      if (isNil(container)) return
 
       const saveData = areablockManager.getAreablockValue()
       saveData.splice(index, 0, {
@@ -147,7 +140,7 @@ export const useAreablockEditable = ({
 
       const result = await response.json()
 
-      if (!isNil(result.htmlCode) && !isNil(placeholderElement.parentNode)) {
+      if (!isNil(result.htmlCode)) {
         const tempDiv = document.createElement('div')
         tempDiv.innerHTML = result.htmlCode
         const newElement = tempDiv.firstElementChild
@@ -155,14 +148,21 @@ export const useAreablockEditable = ({
         if (!isNil(newElement)) {
           const newAreaElement = newElement as HTMLElement
           
+          // Hide the new element until editables are rendered
+          hideElementUntilRendered(newAreaElement)
+          
           const existingElements = areablockManager.queryElements()
           
-          placeholderElement.parentNode.replaceChild(newElement, placeholderElement)
-          
-          // For the first area in an empty container, add a dropzone before the area element
+          // Insert the new element at the correct position
           if (existingElements.length === 0) {
+            container.appendChild(newAreaElement)
+            // For the first area in an empty container, add a dropzone before the area element
             const initialDropzoneContainer = createDropzoneContainer(areablockManager.getEditableName(), true)
             newAreaElement.parentNode?.insertBefore(initialDropzoneContainer, newAreaElement)
+          } else if (!isNil(existingElements[index - 1])) {
+            existingElements[index - 1].insertAdjacentElement('afterend', newAreaElement)
+          } else if (!isNil(existingElements[index])) {
+            existingElements[index].insertAdjacentElement('beforebegin', newAreaElement)
           }
           
           // Create and add dropzone container with 16px height after the area element
@@ -183,8 +183,6 @@ export const useAreablockEditable = ({
     } catch (error) {
       trackError(new GeneralError('Failed to add area'))
       console.error('Failed to add area:', error)
-      const placeholders = areablockManager.getContainer()?.querySelectorAll(`[data-placeholder-key="${nextKey}"]`)
-      placeholders?.forEach(placeholder => { placeholder.remove() })
       handlePostOperation()
     }
   }, [disabled, config, handleReloadMode, handlePostOperation, areablockManager, documentId, initializeData])
