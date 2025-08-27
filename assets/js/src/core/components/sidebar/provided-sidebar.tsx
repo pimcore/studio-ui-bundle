@@ -16,18 +16,18 @@ import { useSidebar } from './use-sidebar'
  * A sidebar component that automatically consumes state from the SidebarProvider.
  * This component eliminates the need to manually pass props to the Sidebar component
  * when using the provider pattern.
- * 
+ *
  * Must be used within a SidebarProvider.
  */
 export const ProvidedSidebar = (): React.JSX.Element => {
   const { entries, buttons, sizing, highlights } = useSidebar()
-  
+
   return (
     <Sidebar
-      entries={entries}
-      buttons={buttons}
-      sizing={sizing}
-      highlights={highlights}
+      buttons={ buttons }
+      entries={ entries }
+      highlights={ highlights }
+      sizing={ sizing }
     />
   )
 }

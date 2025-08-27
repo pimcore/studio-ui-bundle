@@ -45,8 +45,8 @@ const FormExampleComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '800px', padding: '20px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+    <div style={ { maxWidth: '800px', padding: '20px' } }>
+      <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' } }>
         <div>
           <FormKit>
             <FormKit.Panel title="Primary Relations">
@@ -58,13 +58,13 @@ const FormExampleComponent = (): React.JSX.Element => {
               >
                 <ManyToOneRelation
                   allowToClearRelation
-                  assetsAllowed
-                  allowedAssetTypes={['image', 'video', 'document']}
+                  allowedAssetTypes={ ['image', 'video', 'document'] }
                   assetInlineDownloadAllowed
-                  onChange={(value) => {
+                  assetsAllowed
+                  onChange={ (value) => {
                     setFormValues(prev => ({ ...prev, primaryAsset: value }))
-                  }}
-                  value={formValues.primaryAsset}
+                  } }
+                  value={ formValues.primaryAsset }
                 />
               </Form.Item>
 
@@ -75,12 +75,12 @@ const FormExampleComponent = (): React.JSX.Element => {
               >
                 <ManyToOneRelation
                   allowToClearRelation
+                  allowedDocumentTypes={ ['page', 'snippet', 'folder'] }
                   documentsAllowed
-                  allowedDocumentTypes={['page', 'snippet', 'folder']}
-                  onChange={(value) => {
+                  onChange={ (value) => {
                     setFormValues(prev => ({ ...prev, relatedDocument: value }))
-                  }}
-                  value={formValues.relatedDocument}
+                  } }
+                  value={ formValues.relatedDocument }
                 />
               </Form.Item>
 
@@ -91,19 +91,19 @@ const FormExampleComponent = (): React.JSX.Element => {
               >
                 <ManyToOneRelation
                   allowToClearRelation
+                  allowedClasses={ ['Category', 'Product', 'User'] }
                   dataObjectsAllowed
-                  allowedClasses={['Category', 'Product', 'User']}
-                  onChange={(value) => {
+                  onChange={ (value) => {
                     setFormValues(prev => ({ ...prev, parentObject: value }))
-                  }}
-                  value={formValues.parentObject}
+                  } }
+                  value={ formValues.parentObject }
                 />
               </Form.Item>
             </FormKit.Panel>
 
-            <FormKit.Panel 
-              title="Additional Relations"
+            <FormKit.Panel
               theme="fieldset"
+              title="Additional Relations"
             >
               <Form.Item
                 label="Optional Reference"
@@ -112,16 +112,16 @@ const FormExampleComponent = (): React.JSX.Element => {
               >
                 <ManyToOneRelation
                   allowToClearRelation
+                  allowedAssetTypes={ ['image', 'document'] }
+                  allowedClasses={ ['BlogPost', 'News'] }
+                  allowedDocumentTypes={ ['page'] }
                   assetsAllowed
-                  documentsAllowed
                   dataObjectsAllowed
-                  allowedAssetTypes={['image', 'document']}
-                  allowedClasses={['BlogPost', 'News']}
-                  allowedDocumentTypes={['page']}
-                  onChange={(value) => {
+                  documentsAllowed
+                  onChange={ (value) => {
                     setFormValues(prev => ({ ...prev, optionalReference: value }))
-                  }}
-                  value={formValues.optionalReference}
+                  } }
+                  value={ formValues.optionalReference }
                 />
               </Form.Item>
 
@@ -133,51 +133,53 @@ const FormExampleComponent = (): React.JSX.Element => {
                 <ManyToOneRelation
                   allowPathTextInput
                   allowToClearRelation
+                  allowedAssetTypes={ ['image'] }
+                  allowedClasses={ ['Product'] }
+                  allowedDocumentTypes={ ['page'] }
                   assetsAllowed
-                  documentsAllowed
                   dataObjectsAllowed
-                  allowedAssetTypes={['image']}
-                  allowedClasses={['Product']}
-                  allowedDocumentTypes={['page']}
-                  onChange={(value) => {
+                  documentsAllowed
+                  onChange={ (value) => {
                     setFormValues(prev => ({ ...prev, pathReference: value }))
-                  }}
-                  value={formValues.pathReference}
+                  } }
+                  value={ formValues.pathReference }
                 />
               </Form.Item>
             </FormKit.Panel>
 
             <FormKit.Panel>
-              <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+              <div style={ { display: 'flex', gap: '12px', justifyContent: 'flex-end' } }>
                 <button
-                  onClick={() => setFormValues({
-                    primaryAsset: null,
-                    relatedDocument: null,
-                    parentObject: null,
-                    optionalReference: null,
-                    pathReference: null
-                  })}
-                  style={{
+                  onClick={ () => {
+                    setFormValues({
+                      primaryAsset: null,
+                      relatedDocument: null,
+                      parentObject: null,
+                      optionalReference: null,
+                      pathReference: null
+                    })
+                  } }
+                  style={ {
                     padding: '8px 16px',
                     border: '1px solid #d9d9d9',
                     borderRadius: '6px',
                     background: 'white',
                     cursor: 'pointer'
-                  }}
+                  } }
                   type="button"
                 >
                   Reset
                 </button>
                 <button
-                  onClick={handleSubmit}
-                  style={{
+                  onClick={ handleSubmit }
+                  style={ {
                     padding: '8px 16px',
                     border: 'none',
                     borderRadius: '6px',
                     background: '#1677ff',
                     color: 'white',
                     cursor: 'pointer'
-                  }}
+                  } }
                   type="button"
                 >
                   Submit
@@ -189,7 +191,7 @@ const FormExampleComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Form Values</h4>
-          <div style={{
+          <div style={ {
             background: '#f5f5f5',
             padding: '16px',
             borderRadius: '6px',
@@ -197,13 +199,14 @@ const FormExampleComponent = (): React.JSX.Element => {
             fontSize: '12px',
             whiteSpace: 'pre-wrap',
             minHeight: '400px'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
-          
-          <div style={{ marginTop: '16px', fontSize: '14px', color: '#666' }}>
+
+          <div style={ { marginTop: '16px', fontSize: '14px', color: '#666' } }>
             <strong>Form Integration Features:</strong>
-            <ul style={{ margin: '8px 0', paddingLeft: '20px' }}>
+            <ul style={ { margin: '8px 0', paddingLeft: '20px' } }>
               <li>Seamless FormKit integration</li>
               <li>Validation support with required fields</li>
               <li>Tooltip descriptions</li>
@@ -241,25 +244,25 @@ const FieldLayoutsComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '900px', padding: '20px' }}>
+    <div style={ { maxWidth: '900px', padding: '20px' } }>
       <FormKit>
         <FormKit.Panel title="Field Width Variations">
-          <div style={{ display: 'grid', gap: '16px' }}>
-            
+          <div style={ { display: 'grid', gap: '16px' } }>
+
             <Form.Item
               label="Compact Width"
               tooltip="Small width for sidebar or compact layouts"
             >
               <ManyToOneRelation
                 allowToClearRelation
+                allowedAssetTypes={ ['image'] }
+                allowedClasses={ ['Category'] }
+                allowedDocumentTypes={ ['page'] }
                 assetsAllowed
-                documentsAllowed
                 dataObjectsAllowed
-                allowedAssetTypes={['image']}
-                allowedClasses={['Category']}
-                allowedDocumentTypes={['page']}
-                onChange={(value) => handleChange('compact', value)}
-                value={values.compact}
+                documentsAllowed
+                onChange={ (value) => { handleChange('compact', value) } }
+                value={ values.compact }
                 width="small"
               />
             </Form.Item>
@@ -270,14 +273,14 @@ const FieldLayoutsComponent = (): React.JSX.Element => {
             >
               <ManyToOneRelation
                 allowToClearRelation
+                allowedAssetTypes={ ['image', 'document'] }
+                allowedClasses={ ['Product', 'Category'] }
+                allowedDocumentTypes={ ['page', 'snippet'] }
                 assetsAllowed
-                documentsAllowed
                 dataObjectsAllowed
-                allowedAssetTypes={['image', 'document']}
-                allowedClasses={['Product', 'Category']}
-                allowedDocumentTypes={['page', 'snippet']}
-                onChange={(value) => handleChange('standard', value)}
-                value={values.standard}
+                documentsAllowed
+                onChange={ (value) => { handleChange('standard', value) } }
+                value={ values.standard }
                 width="medium"
               />
             </Form.Item>
@@ -289,15 +292,15 @@ const FieldLayoutsComponent = (): React.JSX.Element => {
               <ManyToOneRelation
                 allowPathTextInput
                 allowToClearRelation
-                assetsAllowed
-                documentsAllowed
-                dataObjectsAllowed
-                allowedAssetTypes={['image', 'document', 'video']}
-                allowedClasses={['Product', 'Category', 'BlogPost']}
-                allowedDocumentTypes={['page', 'snippet', 'folder']}
+                allowedAssetTypes={ ['image', 'document', 'video'] }
+                allowedClasses={ ['Product', 'Category', 'BlogPost'] }
+                allowedDocumentTypes={ ['page', 'snippet', 'folder'] }
                 assetInlineDownloadAllowed
-                onChange={(value) => handleChange('wide', value)}
-                value={values.wide}
+                assetsAllowed
+                dataObjectsAllowed
+                documentsAllowed
+                onChange={ (value) => { handleChange('wide', value) } }
+                value={ values.wide }
                 width="large"
               />
             </Form.Item>
@@ -305,16 +308,17 @@ const FieldLayoutsComponent = (): React.JSX.Element => {
         </FormKit.Panel>
       </FormKit>
 
-      <div style={{
+      <div style={ {
         marginTop: '24px',
         padding: '16px',
         backgroundColor: '#f5f5f5',
         borderRadius: '8px',
         fontSize: '12px',
         fontFamily: 'monospace'
-      }}>
-        <h4 style={{ margin: '0 0 12px 0', fontFamily: 'inherit' }}>Field Layout Values:</h4>
-        <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
+      } }
+      >
+        <h4 style={ { margin: '0 0 12px 0', fontFamily: 'inherit' } }>Field Layout Values:</h4>
+        <pre style={ { margin: 0, whiteSpace: 'pre-wrap' } }>
           {JSON.stringify(values, null, 2)}
         </pre>
       </div>
@@ -340,12 +344,12 @@ const ValidationExampleComponent = (): React.JSX.Element => {
 
   const handleSubmit = async (): Promise<void> => {
     try {
-      if (!formValues.requiredRelation) {
+      if (formValues.requiredRelation === null || formValues.requiredRelation === undefined) {
         console.log('❌ Form Validation Failed: Required relation is missing')
         return
       }
-      
-      if (formValues.requiredRelation.textInput === true && !formValues.requiredRelation.fullPath?.trim()) {
+
+      if (formValues.requiredRelation.textInput === true && (formValues.requiredRelation.fullPath === null || formValues.requiredRelation.fullPath === undefined || formValues.requiredRelation.fullPath.trim() === '')) {
         console.log('❌ Form Validation Failed: Path cannot be empty')
         return
       }
@@ -357,42 +361,42 @@ const ValidationExampleComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '700px', padding: '20px' }}>
+    <div style={ { maxWidth: '700px', padding: '20px' } }>
       <FormKit>
         <FormKit.Panel title="Form Validation Example">
           <Form.Item
             label="Required Relation"
             name="requiredRelation"
             required
-            rules={[
+            rules={ [
               {
                 required: true,
                 message: 'Please select a relation'
               },
               {
-                validator: (_, value) => {
-                  if (value && value.textInput === true && !value.fullPath?.trim()) {
-                    return Promise.reject(new Error('Path cannot be empty'))
+                validator: async (_, value) => {
+                  if ((value !== null && value !== undefined) && value.textInput === true && (value.fullPath === null || value.fullPath === undefined || value.fullPath.trim() === '')) {
+                    return await Promise.reject(new Error('Path cannot be empty'))
                   }
-                  return Promise.resolve()
+                  await Promise.resolve()
                 }
               }
-            ]}
+            ] }
             tooltip="This field is required and must have a valid selection"
           >
             <ManyToOneRelation
               allowPathTextInput
               allowToClearRelation
+              allowedAssetTypes={ ['image', 'document'] }
+              allowedClasses={ ['Product'] }
+              allowedDocumentTypes={ ['page'] }
               assetsAllowed
-              documentsAllowed
               dataObjectsAllowed
-              allowedAssetTypes={['image', 'document']}
-              allowedClasses={['Product']}
-              allowedDocumentTypes={['page']}
-              onChange={(value) => {
+              documentsAllowed
+              onChange={ (value) => {
                 setFormValues(prev => ({ ...prev, requiredRelation: value }))
-              }}
-              value={formValues.requiredRelation}
+              } }
+              value={ formValues.requiredRelation }
             />
           </Form.Item>
 
@@ -401,18 +405,18 @@ const ValidationExampleComponent = (): React.JSX.Element => {
             name="enableConditional"
             valuePropName="checked"
           >
-            <input 
-              type="checkbox"
-              style={{ marginRight: '8px' }}
-              checked={formValues.enableConditional}
-              onChange={(e) => {
+            <input
+              checked={ formValues.enableConditional }
+              onChange={ (e) => {
                 const checked = e.target.checked
-                setFormValues(prev => ({ 
-                  ...prev, 
+                setFormValues(prev => ({
+                  ...prev,
                   enableConditional: checked,
                   conditionalRelation: checked ? prev.conditionalRelation : null
                 }))
-              }}
+              } }
+              style={ { marginRight: '8px' } }
+              type="checkbox"
             />
             Show additional relation field
           </Form.Item>
@@ -425,49 +429,49 @@ const ValidationExampleComponent = (): React.JSX.Element => {
             >
               <ManyToOneRelation
                 allowToClearRelation
+                allowedAssetTypes={ ['image'] }
+                allowedClasses={ ['Category'] }
                 assetsAllowed
                 dataObjectsAllowed
-                allowedAssetTypes={['image']}
-                allowedClasses={['Category']}
-                onChange={(value) => {
+                onChange={ (value) => {
                   setFormValues(prev => ({ ...prev, conditionalRelation: value }))
-                }}
-                value={formValues.conditionalRelation}
+                } }
+                value={ formValues.conditionalRelation }
               />
             </Form.Item>
           )}
 
           <Form.Item>
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+            <div style={ { display: 'flex', gap: '12px', justifyContent: 'flex-end' } }>
               <button
-                onClick={() => {
+                onClick={ () => {
                   setFormValues({
                     requiredRelation: null,
                     conditionalRelation: null,
                     enableConditional: false
                   })
-                }}
-                style={{
+                } }
+                style={ {
                   padding: '8px 16px',
                   border: '1px solid #d9d9d9',
                   borderRadius: '6px',
                   background: 'white',
                   cursor: 'pointer'
-                }}
+                } }
                 type="button"
               >
                 Reset
               </button>
               <button
-                onClick={handleSubmit}
-                style={{
+                onClick={ handleSubmit }
+                style={ {
                   padding: '8px 16px',
                   border: 'none',
                   borderRadius: '6px',
                   background: '#1677ff',
                   color: 'white',
                   cursor: 'pointer'
-                }}
+                } }
                 type="button"
               >
                 Validate & Submit
@@ -477,15 +481,16 @@ const ValidationExampleComponent = (): React.JSX.Element => {
         </FormKit.Panel>
       </FormKit>
 
-      <div style={{
+      <div style={ {
         marginTop: '24px',
         padding: '16px',
         backgroundColor: '#f5f5f5',
         borderRadius: '8px',
         fontSize: '12px'
-      }}>
-        <h4 style={{ margin: '0 0 12px 0' }}>Validation Features Demonstrated:</h4>
-        <ul style={{ margin: '0', paddingLeft: '20px' }}>
+      } }
+      >
+        <h4 style={ { margin: '0 0 12px 0' } }>Validation Features Demonstrated:</h4>
+        <ul style={ { margin: '0', paddingLeft: '20px' } }>
           <li><strong>Required Fields:</strong> Form validation for mandatory relations</li>
           <li><strong>Custom Validation:</strong> Path validation for text input mode</li>
           <li><strong>Conditional Fields:</strong> Dynamic field visibility based on other inputs</li>

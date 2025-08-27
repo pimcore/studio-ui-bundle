@@ -38,7 +38,7 @@ export const CodeEditor = ({ preset, extensions, value, onChange, ...props }: Co
 
   // Combine preset extensions with custom extensions
   const combinedExtensions = React.useMemo(() => {
-    const presetExtensions = preset ? getPresetExtensions(preset) : []
+    const presetExtensions = preset !== null && preset !== undefined ? getPresetExtensions(preset) : []
     const customExtensions = extensions ?? []
     return [...presetExtensions, ...customExtensions]
   }, [preset, extensions])
@@ -50,11 +50,11 @@ export const CodeEditor = ({ preset, extensions, value, onChange, ...props }: Co
 
   return (
     <ReactCodeMirror
-      {...props}
-      value={value ?? ''}
-      onChange={handleChange}
-      extensions={combinedExtensions}
-      className={styles.editor}
+      { ...props }
+      className={ styles.editor }
+      extensions={ combinedExtensions }
+      onChange={ handleChange }
+      value={ value ?? '' }
     />
   )
 }

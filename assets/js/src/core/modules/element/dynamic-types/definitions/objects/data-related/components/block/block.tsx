@@ -11,9 +11,9 @@
 import React from 'react'
 import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
 import { type AbstractObjectLayoutDefinition } from '../../../layout-related/dynamic-type-object-layout-abstract'
-import { ObjectBlock, type ObjectBlockProps } from './object-block'
+import { ObjectBlock } from './object-block'
 
-export interface BlockProps extends AbstractObjectDataDefinition {
+interface BlockProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectLayoutDefinition | AbstractObjectDataDefinition | Array<AbstractObjectLayoutDefinition | AbstractObjectDataDefinition>
   collapsed?: boolean
   collapsible?: boolean

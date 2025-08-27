@@ -41,7 +41,7 @@ const FormExampleComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '1200px', padding: '20px' }}>
+    <div style={ { maxWidth: '1200px', padding: '20px' } }>
       <FormKit>
         <FormKit.Panel title="Multiple Relations">
           <Form.Item
@@ -52,20 +52,20 @@ const FormExampleComponent = (): React.JSX.Element => {
           >
             <ManyToManyRelation
               allowToClearRelation
-              pathFormatterClass={null}
+              allowedAssetTypes={ ['image', 'video', 'document'] }
+              allowedClasses={ ['Product', 'Category'] }
+              allowedDocumentTypes={ ['page', 'snippet'] }
+              assetInlineDownloadAllowed
               assetsAllowed
               documentsAllowed
-              allowedAssetTypes={['image', 'video', 'document']}
-              allowedClasses={['Product', 'Category']}
-              allowedDocumentTypes={['page', 'snippet']}
-              assetInlineDownloadAllowed
-              maxItems={5}
-              width="100%"
-              height={300}
-              onChange={(value) => {
+              height={ 300 }
+              maxItems={ 5 }
+              onChange={ (value) => {
                 setFormValues(prev => ({ ...prev, primaryRelations: value ?? null }))
-              }}
-              value={formValues.primaryRelations}
+              } }
+              pathFormatterClass={ null }
+              value={ formValues.primaryRelations }
+              width="100%"
             />
           </Form.Item>
 
@@ -76,16 +76,16 @@ const FormExampleComponent = (): React.JSX.Element => {
           >
             <ManyToManyRelation
               allowToClearRelation
-              pathFormatterClass={null}
+              allowedDocumentTypes={ ['page', 'folder'] }
               documentsAllowed
-              allowedDocumentTypes={['page', 'folder']}
-              maxItems={3}
-              width="100%"
-              height={200}
-              onChange={(value) => {
+              height={ 200 }
+              maxItems={ 3 }
+              onChange={ (value) => {
                 setFormValues(prev => ({ ...prev, secondaryRelations: value ?? null }))
-              }}
-              value={formValues.secondaryRelations}
+              } }
+              pathFormatterClass={ null }
+              value={ formValues.secondaryRelations }
+              width="100%"
             />
           </Form.Item>
 
@@ -96,53 +96,55 @@ const FormExampleComponent = (): React.JSX.Element => {
           >
             <ManyToManyRelation
               allowToClearRelation
-              pathFormatterClass={null}
+              allowedAssetTypes={ ['image'] }
+              allowedClasses={ ['BlogPost', 'News'] }
+              allowedDocumentTypes={ ['page'] }
               assetsAllowed
-              documentsAllowed
               dataObjectsAllowed
-              allowedAssetTypes={['image']}
-              allowedClasses={['BlogPost', 'News']}
-              allowedDocumentTypes={['page']}
-              maxItems={10}
-              width="100%"
-              height={250}
-              onChange={(value) => {
+              documentsAllowed
+              height={ 250 }
+              maxItems={ 10 }
+              onChange={ (value) => {
                 setFormValues(prev => ({ ...prev, optionalRelations: value ?? null }))
-              }}
-              value={formValues.optionalRelations}
+              } }
+              pathFormatterClass={ null }
+              value={ formValues.optionalRelations }
+              width="100%"
             />
           </Form.Item>
         </FormKit.Panel>
 
         <FormKit.Panel>
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+          <div style={ { display: 'flex', gap: '12px', justifyContent: 'flex-end' } }>
             <button
-              onClick={() => setFormValues({
-                primaryRelations: null,
-                secondaryRelations: null,
-                optionalRelations: null
-              })}
-              style={{
+              onClick={ () => {
+                setFormValues({
+                  primaryRelations: null,
+                  secondaryRelations: null,
+                  optionalRelations: null
+                })
+              } }
+              style={ {
                 padding: '8px 16px',
                 border: '1px solid #d9d9d9',
                 borderRadius: '6px',
                 background: 'white',
                 cursor: 'pointer'
-              }}
+              } }
               type="button"
             >
               Reset
             </button>
             <button
-              onClick={handleSubmit}
-              style={{
+              onClick={ handleSubmit }
+              style={ {
                 padding: '8px 16px',
                 border: 'none',
                 borderRadius: '6px',
                 background: '#1677ff',
                 color: 'white',
                 cursor: 'pointer'
-              }}
+              } }
               type="button"
             >
               Submit
@@ -151,9 +153,9 @@ const FormExampleComponent = (): React.JSX.Element => {
         </FormKit.Panel>
       </FormKit>
 
-      <div style={{ marginTop: '24px' }}>
+      <div style={ { marginTop: '24px' } }>
         <h4>Current Form Values</h4>
-        <div style={{
+        <div style={ {
           background: '#f5f5f5',
           padding: '16px',
           borderRadius: '6px',
@@ -161,13 +163,14 @@ const FormExampleComponent = (): React.JSX.Element => {
           fontSize: '12px',
           whiteSpace: 'pre-wrap',
           minHeight: '200px'
-        }}>
+        } }
+        >
           {JSON.stringify(formValues, null, 2)}
         </div>
-        
-        <div style={{ marginTop: '16px', fontSize: '14px', color: '#666' }}>
+
+        <div style={ { marginTop: '16px', fontSize: '14px', color: '#666' } }>
           <strong>Form Integration Features:</strong>
-          <ul style={{ margin: '8px 0', paddingLeft: '20px' }}>
+          <ul style={ { margin: '8px 0', paddingLeft: '20px' } }>
             <li>Multiple relation sets management</li>
             <li>Validation support with required fields</li>
             <li>Tooltip descriptions</li>

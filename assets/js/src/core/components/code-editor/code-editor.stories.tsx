@@ -9,9 +9,8 @@
  */
 
 import { type Meta, type StoryObj } from '@storybook/react'
-import { Form, Button, Space } from 'antd'
 import React, { useState } from 'react'
-import { CodeEditor, type CodeEditorProps } from './code-editor'
+import { CodeEditor } from './code-editor'
 
 const config: Meta = {
   title: 'Components/Data Entry/CodeEditor',
@@ -82,8 +81,8 @@ settings:
 export const WithOnChange: Story = {
   render: () => {
     const [value, setValue] = useState('Edit this text and see the console output...')
-    
-    const handleChange = (newValue: string) => {
+
+    const handleChange = (newValue: string): void => {
       setValue(newValue)
       console.log('CodeEditor value changed:', newValue)
     }
@@ -91,13 +90,13 @@ export const WithOnChange: Story = {
     return (
       <div>
         <CodeEditor
-          value={value}
-          onChange={handleChange}
-          preset="text"
           height="200px"
+          onChange={ handleChange }
           placeholder="Start typing..."
+          preset="text"
+          value={ value }
         />
-        <p style={{ marginTop: 16, color: '#666' }}>
+        <p style={ { marginTop: 16, color: '#666' } }>
           <strong>Current value:</strong> {value}
         </p>
       </div>

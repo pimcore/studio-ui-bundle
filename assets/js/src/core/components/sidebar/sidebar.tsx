@@ -25,7 +25,7 @@ export interface SidebarProps {
 export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights = [] }: SidebarProps): React.JSX.Element => {
   const { styles } = useStyle()
   const sidebarContext = useContext(SidebarContext)
-  
+
   const preparedEntries = entries.map((entry) => {
     // TODO: do we need any type of translated label here?
     return {
@@ -40,15 +40,15 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
       label: 'TRANSLATED_LABEL'
     }
   })
-  
+
   const [localActiveTab, setLocalActiveTab] = useState<string>('')
-  
+
   // Use context active tab if available, otherwise use local state
   const activeTab = sidebarContext?.activeTab ?? localActiveTab
   const setActiveTab = sidebarContext?.toggleTab ?? setLocalActiveTab
 
   function handleSidebarClick (key: string): void {
-    if (sidebarContext) {
+    if (sidebarContext !== null && sidebarContext !== undefined) {
       // When using context, use the toggleTab method
       sidebarContext.toggleTab(key)
     } else {

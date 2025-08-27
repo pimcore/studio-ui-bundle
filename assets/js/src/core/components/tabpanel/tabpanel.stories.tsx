@@ -168,29 +168,29 @@ export const BorderHighlightTheme: Story = {
 export const AllThemesComparison: Story = {
   render: () => (
     <div style={ { display: 'grid', gap: '16px' } }>
-      <Tabpanel 
-        title="Card with Highlight (Default)" 
-        theme="card-with-highlight" 
+      <Tabpanel
         border
-        items={sampleItems}
+        items={ sampleItems }
+        theme="card-with-highlight"
+        title="Card with Highlight (Default)"
       />
-      <Tabpanel 
-        title="Default Theme" 
-        theme="default" 
+      <Tabpanel
         border
-        items={sampleItems}
+        items={ sampleItems }
+        theme="default"
+        title="Default Theme"
       />
-      <Tabpanel 
-        title="Fieldset Theme" 
-        theme="fieldset" 
+      <Tabpanel
         border
-        items={sampleItems}
+        items={ sampleItems }
+        theme="fieldset"
+        title="Fieldset Theme"
       />
-      <Tabpanel 
-        title="Border Highlight Theme" 
-        theme="border-highlight" 
+      <Tabpanel
         border
-        items={sampleItems}
+        items={ sampleItems }
+        theme="border-highlight"
+        title="Border Highlight Theme"
       />
     </div>
   )

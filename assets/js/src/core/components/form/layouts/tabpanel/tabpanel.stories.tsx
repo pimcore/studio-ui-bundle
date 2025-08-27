@@ -352,11 +352,20 @@ export const DefaultTheme: Story = {
         label: 'General',
         children: (
           <Panel>
-            <Form.Item label="Name" name="name">
+            <Form.Item
+              label="Name"
+              name="name"
+            >
               <Input placeholder="Enter name" />
             </Form.Item>
-            <Form.Item label="Description" name="description">
-              <TextArea placeholder="Enter description" rows={3} />
+            <Form.Item
+              label="Description"
+              name="description"
+            >
+              <TextArea
+                placeholder="Enter description"
+                rows={ 3 }
+              />
             </Form.Item>
           </Panel>
         )
@@ -365,11 +374,20 @@ export const DefaultTheme: Story = {
         label: 'Advanced',
         children: (
           <Panel>
-            <Form.Item label="API Key" name="apiKey">
+            <Form.Item
+              label="API Key"
+              name="apiKey"
+            >
               <Input placeholder="Enter API key" />
             </Form.Item>
-            <Form.Item label="Timeout" name="timeout">
-              <InputNumber placeholder="5000" style={{ width: '100%' }} />
+            <Form.Item
+              label="Timeout"
+              name="timeout"
+            >
+              <InputNumber
+                placeholder="5000"
+                style={ { width: '100%' } }
+              />
             </Form.Item>
           </Panel>
         )
@@ -400,11 +418,20 @@ export const FieldsetTheme: Story = {
         label: 'General',
         children: (
           <Panel>
-            <Form.Item label="Name" name="name">
+            <Form.Item
+              label="Name"
+              name="name"
+            >
               <Input placeholder="Enter name" />
             </Form.Item>
-            <Form.Item label="Description" name="description">
-              <TextArea placeholder="Enter description" rows={3} />
+            <Form.Item
+              label="Description"
+              name="description"
+            >
+              <TextArea
+                placeholder="Enter description"
+                rows={ 3 }
+              />
             </Form.Item>
           </Panel>
         )
@@ -413,11 +440,20 @@ export const FieldsetTheme: Story = {
         label: 'Advanced',
         children: (
           <Panel>
-            <Form.Item label="API Key" name="apiKey">
+            <Form.Item
+              label="API Key"
+              name="apiKey"
+            >
               <Input placeholder="Enter API key" />
             </Form.Item>
-            <Form.Item label="Timeout" name="timeout">
-              <InputNumber placeholder="5000" style={{ width: '100%' }} />
+            <Form.Item
+              label="Timeout"
+              name="timeout"
+            >
+              <InputNumber
+                placeholder="5000"
+                style={ { width: '100%' } }
+              />
             </Form.Item>
           </Panel>
         )
@@ -448,11 +484,20 @@ export const BorderHighlightTheme: Story = {
         label: 'General',
         children: (
           <Panel>
-            <Form.Item label="Name" name="name">
+            <Form.Item
+              label="Name"
+              name="name"
+            >
               <Input placeholder="Enter name" />
             </Form.Item>
-            <Form.Item label="Description" name="description">
-              <TextArea placeholder="Enter description" rows={3} />
+            <Form.Item
+              label="Description"
+              name="description"
+            >
+              <TextArea
+                placeholder="Enter description"
+                rows={ 3 }
+              />
             </Form.Item>
           </Panel>
         )
@@ -461,11 +506,20 @@ export const BorderHighlightTheme: Story = {
         label: 'Advanced',
         children: (
           <Panel>
-            <Form.Item label="API Key" name="apiKey">
+            <Form.Item
+              label="API Key"
+              name="apiKey"
+            >
               <Input placeholder="Enter API key" />
             </Form.Item>
-            <Form.Item label="Timeout" name="timeout">
-              <InputNumber placeholder="5000" style={{ width: '100%' }} />
+            <Form.Item
+              label="Timeout"
+              name="timeout"
+            >
+              <InputNumber
+                placeholder="5000"
+                style={ { width: '100%' } }
+              />
             </Form.Item>
           </Panel>
         )
@@ -491,12 +545,15 @@ export const BorderHighlightTheme: Story = {
 export const AllFormTabpanelThemes: Story = {
   render: () => {
     const [form] = Form.useForm()
-    const createItems = (suffix: string) => [
+    const createItems = (suffix: string): any[] => [
       {
         label: 'Tab 1',
         children: (
           <Panel>
-            <Form.Item label="Field A" name={`fieldA${suffix}`}>
+            <Form.Item
+              label="Field A"
+              name={ `fieldA${suffix}` }
+            >
               <Input placeholder="Enter value" />
             </Form.Item>
           </Panel>
@@ -506,7 +563,10 @@ export const AllFormTabpanelThemes: Story = {
         label: 'Tab 2',
         children: (
           <Panel>
-            <Form.Item label="Field B" name={`fieldB${suffix}`}>
+            <Form.Item
+              label="Field B"
+              name={ `fieldB${suffix}` }
+            >
               <Input placeholder="Enter value" />
             </Form.Item>
           </Panel>

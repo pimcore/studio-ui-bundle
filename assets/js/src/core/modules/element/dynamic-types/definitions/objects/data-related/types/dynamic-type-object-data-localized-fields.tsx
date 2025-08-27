@@ -11,7 +11,7 @@
 import React from 'react'
 import { get, isEmpty } from 'lodash'
 import { DynamicTypeObjectDataAbstract, type AbstractObjectDataDefinition } from '../dynamic-type-object-data-abstract'
-import { ObjectLocalizedFields, type ObjectLocalizedFieldsProps } from '../../../../defintinitions/objects/data-related/components/localized-fields/object-localized-fields'
+import { ObjectLocalizedFields } from '../../../../defintinitions/objects/data-related/components/localized-fields/object-localized-fields'
 import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'
 import {
   type IFormattedDataStructureData,

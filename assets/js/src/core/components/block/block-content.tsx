@@ -14,7 +14,6 @@ import { type BlockProps } from './block'
 import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
 import { BlockAddButton } from './block-add-button'
 import { BlockItem } from './block-item'
-import { Space } from '@Pimcore/components/space/space'
 import { Box } from '@Pimcore/components/box/box'
 import { Form } from '@Pimcore/components/form/form'
 
@@ -44,16 +43,19 @@ export const BlockContent = (props: BlockContentProps): React.JSX.Element => {
     >
       <Box padding={ { top: 'extra-small' } }>
         {values.map((value, index) => (
-          <div key={`block-item-${index}`} style={{ marginBottom: '8px' }}>
+          <div
+            key={ `block-item-${index}` }
+            style={ { marginBottom: '8px' } }
+          >
             <BlockItem
-              field={index}
-              itemValue={value}
-              getItemTitle={props.getItemTitle}
               disallowAdd={ isDisallowAddRemove || isItemLimitReached || isNoteditable }
               disallowDelete={ isDisallowAddRemove || isNoteditable }
               disallowReorder={ props.disallowReorder === true || isNoteditable }
+              field={ index }
+              getItemTitle={ props.getItemTitle }
+              itemValue={ value }
             >
-              <Form.Group name={index}>
+              <Form.Group name={ index }>
                 {props.children}
               </Form.Group>
             </BlockItem>

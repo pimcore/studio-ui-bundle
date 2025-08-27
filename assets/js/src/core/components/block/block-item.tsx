@@ -9,7 +9,6 @@
  */
 
 import { ToolStripBox } from '@Pimcore/components/toolstrip/box/tool-strip-box'
-import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import React, { useMemo } from 'react'
 import { BlockToolStrip } from './block-tool-strip'
 
@@ -37,8 +36,8 @@ export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
             disallowDelete={ props.disallowDelete ?? false }
             disallowReorder={ props.disallowReorder ?? false }
             field={ field }
-            itemValue={props.itemValue}
-            getItemTitle={props.getItemTitle}
+            getItemTitle={ props.getItemTitle }
+            itemValue={ props.itemValue }
           />
         )
       }

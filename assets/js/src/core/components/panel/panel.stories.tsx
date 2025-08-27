@@ -118,16 +118,32 @@ export const BorderHighlightTheme: Story = {
 export const AllThemesComparison: Story = {
   render: () => (
     <div style={ { display: 'grid', gap: '16px' } }>
-      <Panel title="Card with Highlight (Default)" theme="card-with-highlight" border>
+      <Panel
+        border
+        theme="card-with-highlight"
+        title="Card with Highlight (Default)"
+      >
         Card with highlight theme - this is the default theme for panels.
       </Panel>
-      <Panel title="Default Theme" theme="default" border>
+      <Panel
+        border
+        theme="default"
+        title="Default Theme"
+      >
         Default theme - basic styling without special highlights.
       </Panel>
-      <Panel title="Fieldset Theme" theme="fieldset" border>
+      <Panel
+        border
+        theme="fieldset"
+        title="Fieldset Theme"
+      >
         Fieldset theme - styled to look like a form fieldset.
       </Panel>
-      <Panel title="Border Highlight Theme" theme="border-highlight" border>
+      <Panel
+        border
+        theme="border-highlight"
+        title="Border Highlight Theme"
+      >
         Border highlight theme - emphasizes the border with highlighting.
       </Panel>
     </div>

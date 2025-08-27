@@ -12,7 +12,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import { Form } from '../../form'
 import { Block } from '../../../block/block'
-import { Input, InputNumber, Select } from 'antd'
+import { Input, Select } from 'antd'
 import { Button } from '../../../button/button'
 import { TextArea } from '../../../textarea/textarea'
 
@@ -148,20 +148,20 @@ const ContentBlocksComponent = (): React.JSX.Element => {
               label="Page Sections"
               name="sections"
             >
-              <Block 
-                title="Content Sections"
+              <Block
                 border
                 collapsible
-                getItemTitle={(itemValue, index) => {
-                  const title = itemValue?.title || `Section ${index + 1}`
-                  const type = itemValue?.type ? ` (${itemValue.type})` : ''
+                getItemTitle={ (itemValue, index) => {
+                  const title = (itemValue?.title !== null && itemValue?.title !== undefined && itemValue?.title !== '') ? itemValue.title : `Section ${index + 1}`
+                  const type = (itemValue?.type !== null && itemValue?.type !== undefined && itemValue?.type !== '') ? ` (${itemValue.type})` : ''
                   return `${title}${type}`
-                }}
+                } }
+                title="Content Sections"
               >
                 <Form.Item
                   label="Section Title"
                   name="title"
-                  rules={[{ required: true, message: 'Title is required' }]}
+                  rules={ [{ required: true, message: 'Title is required' }] }
                 >
                   <Input placeholder="Enter section title" />
                 </Form.Item>
@@ -185,9 +185,9 @@ const ContentBlocksComponent = (): React.JSX.Element => {
                 <Form.Item
                   label="Content"
                   name="content"
-                  rules={[{ required: true, message: 'Content is required' }]}
+                  rules={ [{ required: true, message: 'Content is required' }] }
                 >
-                  <TextArea 
+                  <TextArea
                     placeholder="Enter section content..."
                     rows={ 4 }
                   />
@@ -275,25 +275,25 @@ const ProductCatalogComponent = (): React.JSX.Element => {
               label="Product Features"
               name="features"
             >
-              <Block 
-                title="Feature List"
+              <Block
                 border
                 collapsible
-                getItemTitle={(itemValue, index) => {
-                  const name = itemValue?.name || `Feature ${index + 1}`
-                  const priority = itemValue?.priority ? ` • Priority ${itemValue.priority}` : ''
+                getItemTitle={ (itemValue, index) => {
+                  const name = (itemValue?.name !== null && itemValue?.name !== undefined && itemValue?.name !== '') ? itemValue.name : `Feature ${index + 1}`
+                  const priority = (itemValue?.priority !== null && itemValue?.priority !== undefined && itemValue?.priority !== '') ? ` • Priority ${itemValue.priority}` : ''
                   return `${name}${priority}`
-                }}
+                } }
+                title="Feature List"
               >
                 <Form.Item
                   label="Feature Name"
                   name="name"
-                  rules={[{ required: true, message: 'Feature name is required' }]}
+                  rules={ [{ required: true, message: 'Feature name is required' }] }
                 >
                   <Input placeholder="Enter feature name" />
                 </Form.Item>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' } }>
                   <Form.Item
                     label="Priority"
                     name="priority"
@@ -328,9 +328,9 @@ const ProductCatalogComponent = (): React.JSX.Element => {
                 <Form.Item
                   label="Description"
                   name="description"
-                  rules={[{ required: true, message: 'Description is required' }]}
+                  rules={ [{ required: true, message: 'Description is required' }] }
                 >
-                  <TextArea 
+                  <TextArea
                     placeholder="Describe this feature in detail..."
                     rows={ 3 }
                   />
@@ -353,13 +353,16 @@ const ProductCatalogComponent = (): React.JSX.Element => {
           <h4>Feature Summary:</h4>
           <div style={ { marginBottom: '16px' } }>
             {formValues.features.map((feature, index) => (
-              <div key={index} style={ {
-                background: 'white',
-                border: '1px solid #e8e8e8',
-                borderRadius: '6px',
-                padding: '12px',
-                marginBottom: '8px'
-              } }>
+              <div
+                key={ index }
+                style={ {
+                  background: 'white',
+                  border: '1px solid #e8e8e8',
+                  borderRadius: '6px',
+                  padding: '12px',
+                  marginBottom: '8px'
+                } }
+              >
                 <strong>{feature.name}</strong>
                 <div style={ { fontSize: '12px', color: '#666', marginTop: '4px' } }>
                   Priority: {feature.priority} | Category: {feature.category}
@@ -412,7 +415,7 @@ const ConfigurationComponent = (): React.JSX.Element => {
         form={ form }
         initialValues={ formValues }
         layout="vertical"
-        onValuesChange={ (_, allValues) => { setFormValues(allValues) } }
+        onValuesChange={ (_, allValues) => { setFormValues(allValues as ConfigFormValues) } }
       >
         <div style={ { display: 'grid', gap: '20px' } }>
           {/* Limited Items Example */}
@@ -420,24 +423,24 @@ const ConfigurationComponent = (): React.JSX.Element => {
             label="Limited Settings (Max 3)"
             name="settings"
           >
-            <Block 
-              title="API Configuration"
+            <Block
               border
-              maxItems={3}
+              collapsed={ false }
               collapsible
-              collapsed={false}
-              getItemTitle={(itemValue, index) => {
-                const key = itemValue?.key || `Setting ${index + 1}`
-                const type = itemValue?.type ? ` [${itemValue.type}]` : ''
-                const required = itemValue?.required ? ' *' : ''
+              getItemTitle={ (itemValue, index) => {
+                const key = (itemValue?.key !== null && itemValue?.key !== undefined && itemValue?.key !== '') ? itemValue.key : `Setting ${index + 1}`
+                const type = (itemValue?.type !== null && itemValue?.type !== undefined && itemValue?.type !== '') ? ` [${itemValue.type}]` : ''
+                const required = (itemValue?.required !== null && itemValue?.required !== undefined && itemValue?.required !== '') ? ' *' : ''
                 return `${key}${type}${required}`
-              }}
+              } }
+              maxItems={ 3 }
+              title="API Configuration"
             >
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' } }>
                 <Form.Item
                   label="Config Key"
                   name="key"
-                  rules={[{ required: true, message: 'Key is required' }]}
+                  rules={ [{ required: true, message: 'Key is required' }] }
                 >
                   <Input placeholder="e.g. api_endpoint" />
                 </Form.Item>
@@ -462,7 +465,7 @@ const ConfigurationComponent = (): React.JSX.Element => {
               <Form.Item
                 label="Value"
                 name="value"
-                rules={[{ required: true, message: 'Value is required' }]}
+                rules={ [{ required: true, message: 'Value is required' }] }
               >
                 <Input placeholder="Enter configuration value" />
               </Form.Item>
@@ -489,7 +492,7 @@ const ConfigurationComponent = (): React.JSX.Element => {
           <li><strong>maxItems={3}</strong> - Limits the number of configuration items</li>
           <li><strong>collapsible={true}</strong> - Allows the section to be collapsed</li>
           <li><strong>border={true}</strong> - Shows a border around the block</li>
-          <li><strong>title="API Configuration"</strong> - Sets the header title</li>
+          <li><strong>title=&quot;API Configuration&quot;</strong> - Sets the header title</li>
         </ul>
       </div>
     </div>
@@ -533,7 +536,7 @@ const RestrictedBlocksComponent = (): React.JSX.Element => {
         form={ form }
         initialValues={ formValues }
         layout="vertical"
-        onValuesChange={ (_, allValues) => { setFormValues(allValues) } }
+        onValuesChange={ (_, allValues) => { setFormValues(allValues as RestrictedFormValues) } }
       >
         <div style={ { display: 'grid', gap: '24px' } }>
           {/* Read-only Block */}
@@ -541,11 +544,11 @@ const RestrictedBlocksComponent = (): React.JSX.Element => {
             label="Completed Tasks (Read-only)"
             name="completedTasks"
           >
-            <Block 
-              title="Completed Tasks"
+            <Block
               border
-              noteditable={true}
               collapsible
+              noteditable
+              title="Completed Tasks"
             >
               <Form.Item
                 label="Task Title"
@@ -554,7 +557,7 @@ const RestrictedBlocksComponent = (): React.JSX.Element => {
                 <Input disabled />
               </Form.Item>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' } }>
                 <Form.Item
                   label="Assignee"
                   name="assignee"
@@ -577,12 +580,12 @@ const RestrictedBlocksComponent = (): React.JSX.Element => {
             label="Active Tasks (Fixed Items)"
             name="activeTasks"
           >
-            <Block 
-              title="Active Tasks"
+            <Block
               border
-              disallowAddRemove={true}
-              disallowReorder={true}
               collapsible
+              disallowAddRemove
+              disallowReorder
+              title="Active Tasks"
             >
               <Form.Item
                 label="Task Title"
@@ -591,7 +594,7 @@ const RestrictedBlocksComponent = (): React.JSX.Element => {
                 <Input placeholder="Enter task title" />
               </Form.Item>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' } }>
                 <Form.Item
                   label="Status"
                   name="status"
@@ -679,7 +682,7 @@ const DynamicTitlesComponent = (): React.JSX.Element => {
     <div style={ { maxWidth: '1000px', padding: '20px' } }>
       <h3>Dynamic Titles Example</h3>
       <p style={ { marginBottom: '20px', color: '#666' } }>
-        This example shows how block titles can be dynamically generated based on the current form values. 
+        This example shows how block titles can be dynamically generated based on the current form values.
         The titles in the toolbar update in real-time as you type.
       </p>
       <div style={ { display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' } }>
@@ -695,36 +698,36 @@ const DynamicTitlesComponent = (): React.JSX.Element => {
               label="Team Contacts"
               name="contacts"
             >
-              <Block 
-                title="Contact Directory"
+              <Block
                 border
                 collapsible
-                getItemTitle={(itemValue, index) => {
+                getItemTitle={ (itemValue, index) => {
                   // Generate dynamic title based on current form values
                   const name = itemValue?.name?.trim()
                   const department = itemValue?.department
                   const role = itemValue?.role
-                  
-                  if (name) {
+
+                  if (name !== null && name !== undefined && name !== '') {
                     // If name is provided, show: "John Doe • Engineering"
-                    return department ? `${name} • ${department}` : name
-                  } else if (role || department) {
+                    return (department !== null && department !== undefined && department !== '') ? `${name} • ${department}` : name
+                  } else if ((role !== null && role !== undefined && role !== '') || (department !== null && department !== undefined && department !== '')) {
                     // If no name but has role/department: "UX Designer (Design)" or just "Sales"
-                    if (role && department) {
+                    if ((role !== null && role !== undefined && role !== '') && (department !== null && department !== undefined && department !== '')) {
                       return `${role} (${department})`
                     }
-                    return role || department
+                    return (role !== null && role !== undefined && role !== '') ? role : (department ?? '')
                   } else {
                     // Fallback to index-based title
                     return `Contact ${index + 1}`
                   }
-                }}
+                } }
+                title="Contact Directory"
               >
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' } }>
                   <Form.Item
                     label="Full Name"
                     name="name"
-                    rules={[{ required: true, message: 'Name is required' }]}
+                    rules={ [{ required: true, message: 'Name is required' }] }
                   >
                     <Input placeholder="Enter full name" />
                   </Form.Item>
@@ -732,16 +735,16 @@ const DynamicTitlesComponent = (): React.JSX.Element => {
                   <Form.Item
                     label="Email"
                     name="email"
-                    rules={[
+                    rules={ [
                       { required: true, message: 'Email is required' },
                       { type: 'email', message: 'Please enter a valid email' }
-                    ]}
+                    ] }
                   >
                     <Input placeholder="Enter email address" />
                   </Form.Item>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+                <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' } }>
                   <Form.Item
                     label="Phone"
                     name="phone"
@@ -802,14 +805,14 @@ const DynamicTitlesComponent = (): React.JSX.Element => {
           >
             {JSON.stringify(formValues, null, 2)}
           </div>
-          
+
           <div style={ { marginTop: '16px', padding: '12px', background: '#e8f4fd', borderRadius: '6px', border: '1px solid #91caff' } }>
             <h5 style={ { margin: '0 0 8px 0', fontSize: '13px' } }>Dynamic Title Logic:</h5>
             <ul style={ { fontSize: '11px', margin: '0', paddingLeft: '16px', color: '#666' } }>
-              <li><strong>Has name:</strong> "Name • Department"</li>
-              <li><strong>No name, has role & dept:</strong> "Role (Department)"</li>
-              <li><strong>No name, has role OR dept:</strong> "Role" or "Department"</li>
-              <li><strong>Empty fields:</strong> "Contact X" (fallback)</li>
+              <li><strong>Has name:</strong> &quot;Name • Department&quot;</li>
+              <li><strong>No name, has role &amp; dept:</strong> &quot;Role (Department)&quot;</li>
+              <li><strong>No name, has role OR dept:</strong> &quot;Role&quot; or &quot;Department&quot;</li>
+              <li><strong>Empty fields:</strong> &quot;Contact X&quot; (fallback)</li>
             </ul>
             <p style={ { fontSize: '11px', margin: '8px 0 0 0', color: '#666' } }>
               <strong>Try it:</strong> Clear a name field to see the title change, or modify departments and roles!

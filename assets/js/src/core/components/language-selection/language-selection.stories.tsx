@@ -128,18 +128,18 @@ export const Interactive: Story = {
   },
   render: (args) => {
     const [selectedLanguage, setSelectedLanguage] = React.useState(args.selectedLanguage)
-    
+
     return (
-      <div style={{ padding: '20px', background: '#f5f5f5', borderRadius: '8px' }}>
-        <div style={{ marginBottom: '16px', textAlign: 'center' }}>
+      <div style={ { padding: '20px', background: '#f5f5f5', borderRadius: '8px' } }>
+        <div style={ { marginBottom: '16px', textAlign: 'center' } }>
           <strong>Current Selection: {selectedLanguage}</strong>
         </div>
         <LanguageSelection
-          {...args}
-          selectedLanguage={selectedLanguage}
-          onSelectLanguage={setSelectedLanguage}
+          { ...args }
+          onSelectLanguage={ setSelectedLanguage }
+          selectedLanguage={ selectedLanguage }
         />
-        <div style={{ marginTop: '16px', fontSize: '12px', color: '#666', textAlign: 'center' }}>
+        <div style={ { marginTop: '16px', fontSize: '12px', color: '#666', textAlign: 'center' } }>
           Click the arrows to change language
         </div>
       </div>

@@ -95,10 +95,10 @@ type Story = StoryObj<typeof meta>
 // Wrapper component to provide Form context
 const BlockWrapper = (props: any): React.JSX.Element => {
   return (
-    <div style={{ width: '600px' }}>
+    <div style={ { width: '600px' } }>
       <Form>
         <Form.Item name="block">
-          <Block {...props} />
+          <Block { ...props } />
         </Form.Item>
       </Form>
     </div>
@@ -126,7 +126,7 @@ export const Default: Story = {
     ),
     value: [{ name: 'Item 1', description: 'First item' }, { name: 'Item 2', description: 'Second item' }]
   },
-  render: (args) => <BlockWrapper {...args} />
+  render: (args) => <BlockWrapper { ...args } />
 }
 
 export const WithTitle: Story = {
@@ -145,13 +145,16 @@ export const WithTitle: Story = {
           label="Content"
           name="content"
         >
-          <TextArea placeholder="Enter content" rows={3} />
+          <TextArea
+            placeholder="Enter content"
+            rows={ 3 }
+          />
         </Form.Item>
       </>
     ),
     value: [{ title: 'Sample Title', content: 'Sample content text' }]
   },
-  render: (args) => <BlockWrapper {...args} />
+  render: (args) => <BlockWrapper { ...args } />
 }
 
 export const Collapsible: Story = {
@@ -172,13 +175,16 @@ export const Collapsible: Story = {
           label="Section Content"
           name="sectionContent"
         >
-          <TextArea placeholder="Enter section content" rows={2} />
+          <TextArea
+            placeholder="Enter section content"
+            rows={ 2 }
+          />
         </Form.Item>
       </>
     ),
     value: [{ sectionTitle: 'Introduction', sectionContent: 'This is the introduction section' }]
   },
-  render: (args) => <BlockWrapper {...args} />
+  render: (args) => <BlockWrapper { ...args } />
 }
 
 export const WithMaxItems: Story = {
@@ -203,11 +209,11 @@ export const WithMaxItems: Story = {
       </>
     ),
     value: [
-      { taskName: 'Task 1', priority: 'High' }, 
+      { taskName: 'Task 1', priority: 'High' },
       { taskName: 'Task 2', priority: 'Medium' }
     ]
   },
-  render: (args) => <BlockWrapper {...args} />
+  render: (args) => <BlockWrapper { ...args } />
 }
 
 export const NotEditable: Story = {
@@ -221,22 +227,28 @@ export const NotEditable: Story = {
           label="Read-only Field"
           name="readOnlyField"
         >
-          <Input placeholder="This is read-only" disabled />
+          <Input
+            disabled
+            placeholder="This is read-only"
+          />
         </Form.Item>
         <Form.Item
           label="Another Field"
           name="anotherField"
         >
-          <Input placeholder="Also read-only" disabled />
+          <Input
+            disabled
+            placeholder="Also read-only"
+          />
         </Form.Item>
       </>
     ),
     value: [
-      { readOnlyField: 'Static content 1', anotherField: 'Value 1' }, 
+      { readOnlyField: 'Static content 1', anotherField: 'Value 1' },
       { readOnlyField: 'Static content 2', anotherField: 'Value 2' }
     ]
   },
-  render: (args) => <BlockWrapper {...args} />
+  render: (args) => <BlockWrapper { ...args } />
 }
 
 export const DisallowReorder: Story = {
@@ -261,12 +273,12 @@ export const DisallowReorder: Story = {
       </>
     ),
     value: [
-      { fixedItem: 'First item', orderNumber: '1' }, 
-      { fixedItem: 'Second item', orderNumber: '2' }, 
+      { fixedItem: 'First item', orderNumber: '1' },
+      { fixedItem: 'Second item', orderNumber: '2' },
       { fixedItem: 'Third item', orderNumber: '3' }
     ]
   },
-  render: (args) => <BlockWrapper {...args} />
+  render: (args) => <BlockWrapper { ...args } />
 }
 
 export const DisallowAddRemove: Story = {
@@ -291,9 +303,9 @@ export const DisallowAddRemove: Story = {
       </>
     ),
     value: [
-      { fixedItemName: 'Permanent Item 1', status: 'Active' }, 
+      { fixedItemName: 'Permanent Item 1', status: 'Active' },
       { fixedItemName: 'Permanent Item 2', status: 'Inactive' }
     ]
   },
-  render: (args) => <BlockWrapper {...args} />
+  render: (args) => <BlockWrapper { ...args } />
 }

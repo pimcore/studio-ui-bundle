@@ -26,8 +26,8 @@ export interface BlockToolStripProps {
 }
 
 export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReorder, itemValue, getItemTitle }: BlockToolStripProps): React.JSX.Element => {
-  const { operations, values } = useNumberedList()
-  
+  const { operations } = useNumberedList()
+
   // Use Form.useWatch to get the real-time form values for this specific item
   const watchedValue = Form.useWatch([field])
 
@@ -49,12 +49,12 @@ export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReo
 
   // Use the watched value for real-time updates, fallback to itemValue
   const currentValue = watchedValue ?? itemValue
-  
+
   // Generate dynamic title if callback is provided
   const dynamicTitle = getItemTitle?.(currentValue, field)
-  
+
   // Convert title to string for ToolStrip
-  const titleString = dynamicTitle ? String(dynamicTitle) : undefined
+  const titleString = dynamicTitle !== null && dynamicTitle !== undefined ? String(dynamicTitle) : undefined
 
   return (
     <ToolStrip title={ titleString }>

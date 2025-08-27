@@ -11,7 +11,6 @@
 import React from 'react'
 import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
 import { type AbstractObjectLayoutDefinition } from '../../../layout-related/dynamic-type-object-layout-abstract'
-import { Block, type BlockProps } from '@Pimcore/components/block/block'
 import { ObjectBlockContent } from './object-block-content'
 import { Form } from '@Pimcore/components/form/form'
 

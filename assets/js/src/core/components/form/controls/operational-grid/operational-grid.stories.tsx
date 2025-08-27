@@ -12,13 +12,11 @@ import type { Meta, StoryObj } from '@storybook/react'
 import React, { useState, useCallback } from 'react'
 import { Form } from '../../form'
 import { OperationalGrid } from '../../../operational-grid/operational-grid'
-import { createColumnHelper, type RowSelectionState, type ColumnDef } from '@tanstack/react-table'
+import { createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
 import { DefaultCell } from '../../../grid/columns/default-cell'
-import { Button, Space, Input, InputNumber, Select, Flex } from 'antd'
+import { Button, Space, Flex } from 'antd'
 import { IconButton } from '../../../icon-button/icon-button'
 import { IconTextButton } from '../../../icon-text-button/icon-text-button'
-import { Panel } from '../../../panel/panel'
-import { BaseView } from '../../../base-view/base-view'
 import { FormKit } from '../../form-kit'
 import { type DragEndEvent } from '@dnd-kit/core'
 
@@ -59,7 +57,6 @@ The component integrates seamlessly with the Pimcore Form system and provides a 
 }
 
 export default config
-type Story = StoryObj<typeof config>
 
 // Wrapper component for additional state management
 interface BasicItem {
@@ -85,58 +82,63 @@ const BasicOperationalGrid = ({ value = [], onChange, enableMultipleRowSelection
     }),
     columnHelper.accessor('value', {
       header: 'Value',
-      cell: info => <DefaultCell {...info} />,
+      cell: info => <DefaultCell { ...info } />,
       meta: { editable: true }
     }),
     columnHelper.accessor('type', {
       header: 'Type',
-      cell: info => <DefaultCell {...info} />,
+      cell: info => <DefaultCell { ...info } />,
       meta: { editable: true }
     })
   ]
 
   return (
     <OperationalGrid
-      value={value}
-      onChange={onChange}
-      columns={columns}
-      enableSorting={true}
-      enableRowSelection={true}
-      enableMultipleRowSelection={enableMultipleRowSelection}
-      selectedRows={selectedRows}
-      onSelectedRowsChange={setSelectedRows}
+      columns={ columns }
+      enableMultipleRowSelection={ enableMultipleRowSelection }
+      enableRowSelection
+      enableSorting
+      onChange={ onChange }
+      onSelectedRowsChange={ setSelectedRows }
+      selectedRows={ selectedRows }
+      value={ value }
     >
-      <Space direction="vertical" size="small">
+      <Space
+        direction="vertical"
+        size="small"
+      >
         <OperationalGrid.Grid />
-        
+
         <OperationalGrid.Operations>
           {(operations) => {
             const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
             const hasSelection = selectedCount > 0
-            
+
             return (
               <Space>
-                <IconButton 
-                  icon={{ value: 'new-something' }}
-                  onClick={() => operations.addRow({ 
-                    name: 'New Setting', 
-                    value: '', 
-                    type: 'text' 
-                  })}
+                <IconButton
+                  icon={ { value: 'new-something' } }
+                  onClick={ () => {
+                    operations.addRow({
+                      name: 'New Setting',
+                      value: '',
+                      type: 'text'
+                    })
+                  } }
                 >
                   Add Item
                 </IconButton>
-                <IconButton 
-                  icon={{ value: 'trash' }}
-                  onClick={() => operations.deleteSelectedRows()}
-                  disabled={!hasSelection}
+                <IconButton
+                  disabled={ !hasSelection }
+                  icon={ { value: 'trash' } }
+                  onClick={ () => { operations.deleteSelectedRows() } }
                 >
                   Delete Selected {enableMultipleRowSelection ? `(${selectedCount})` : ''}
                 </IconButton>
-                <IconButton 
-                  icon={{ value: 'close' }}
-                  onClick={() => operations.clearSelectedRows()}
-                  disabled={!hasSelection}
+                <IconButton
+                  disabled={ !hasSelection }
+                  icon={ { value: 'close' } }
+                  onClick={ () => { operations.clearSelectedRows() } }
                 >
                   Clear Selection
                 </IconButton>
@@ -174,15 +176,15 @@ const BasicFormExampleComponent = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ maxWidth: '1000px', padding: '20px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
+    <div style={ { maxWidth: '1000px', padding: '20px' } }>
+      <div style={ { display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' } }>
         <div>
           <Form
-            form={form}
-            initialValues={formValues}
+            form={ form }
+            initialValues={ formValues }
             layout="vertical"
-            onFinish={onFinish}
-            onValuesChange={onValuesChange}
+            onFinish={ onFinish }
+            onValuesChange={ onValuesChange }
           >
             <Form.Item
               label="Configuration Items"
@@ -192,7 +194,10 @@ const BasicFormExampleComponent = (): React.JSX.Element => {
             </Form.Item>
 
             <Form.Item>
-              <Button htmlType="submit" type="primary">
+              <Button
+                htmlType="submit"
+                type="primary"
+              >
                 Save Configuration
               </Button>
             </Form.Item>
@@ -201,14 +206,15 @@ const BasicFormExampleComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Form Values:</h4>
-          <div style={{
+          <div style={ {
             background: '#f5f5f5',
             padding: '16px',
             borderRadius: '6px',
             fontFamily: 'monospace',
             fontSize: '12px',
             whiteSpace: 'pre-wrap'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
         </div>
@@ -245,57 +251,62 @@ const AdvancedOperationalGrid = ({ value = [], onChange, enableMultipleRowSelect
     }),
     columnHelper.accessor('value', {
       header: 'Value',
-      cell: info => <DefaultCell {...info} />,
+      cell: info => <DefaultCell { ...info } />,
       meta: { editable: true }
     }),
     columnHelper.accessor('type', {
       header: 'Type',
-      cell: info => <DefaultCell {...info} />
+      cell: info => <DefaultCell { ...info } />
     })
   ]
 
   return (
     <OperationalGrid
-      value={value}
-      onChange={onChange}
-      columns={columns}
-      enableSorting={true}
-      enableRowSelection={true}
-      enableMultipleRowSelection={enableMultipleRowSelection}
-      selectedRows={selectedRows}
-      onSelectedRowsChange={setSelectedRows}
+      columns={ columns }
+      enableMultipleRowSelection={ enableMultipleRowSelection }
+      enableRowSelection
+      enableSorting
+      onChange={ onChange }
+      onSelectedRowsChange={ setSelectedRows }
+      selectedRows={ selectedRows }
+      value={ value }
     >
-      <Space direction="vertical" size="small">
+      <Space
+        direction="vertical"
+        size="small"
+      >
         <OperationalGrid.Grid />
-        
+
         <OperationalGrid.Operations>
           {(operations) => {
             const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
             const hasSelection = selectedCount > 0
-            
+
             return (
               <Space>
-                <IconButton 
-                  icon={{ value: 'new-something' }}
-                  onClick={() => operations.addRow({
-                    name: 'New Setting',
-                    value: '',
-                    type: 'text'
-                  })}
+                <IconButton
+                  icon={ { value: 'new-something' } }
+                  onClick={ () => {
+                    operations.addRow({
+                      name: 'New Setting',
+                      value: '',
+                      type: 'text'
+                    })
+                  } }
                 >
                   Add Setting
                 </IconButton>
-                <IconButton 
-                  icon={{ value: 'trash' }}
-                  onClick={() => operations.deleteSelectedRows()}
-                  disabled={!hasSelection}
+                <IconButton
+                  disabled={ !hasSelection }
+                  icon={ { value: 'trash' } }
+                  onClick={ () => { operations.deleteSelectedRows() } }
                 >
                   Delete Selected {enableMultipleRowSelection ? `(${selectedCount})` : ''}
                 </IconButton>
-                <IconButton 
-                  icon={{ value: 'close' }}
-                  onClick={() => operations.clearSelectedRows()}
-                  disabled={!hasSelection}
+                <IconButton
+                  disabled={ !hasSelection }
+                  icon={ { value: 'close' } }
+                  onClick={ () => { operations.clearSelectedRows() } }
                 >
                   Clear Selection
                 </IconButton>
@@ -323,15 +334,15 @@ const AdvancedFormExampleComponent = (): React.JSX.Element => {
   })
 
   return (
-    <div style={{ maxWidth: '1000px', padding: '20px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
+    <div style={ { maxWidth: '1000px', padding: '20px' } }>
+      <div style={ { display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' } }>
         <div>
           <Form
-            form={form}
-            initialValues={formValues}
+            form={ form }
+            initialValues={ formValues }
             layout="vertical"
-            onFinish={(values) => console.log('Form submitted:', values)}
-            onValuesChange={(_, allValues) => setFormValues(allValues)}
+            onFinish={ (values) => { console.log('Form submitted:', values) } }
+            onValuesChange={ (_, allValues) => { setFormValues(allValues as AdvancedFormValues) } }
           >
             <Form.Item
               label="Configuration Settings"
@@ -341,7 +352,10 @@ const AdvancedFormExampleComponent = (): React.JSX.Element => {
             </Form.Item>
 
             <Form.Item>
-              <Button htmlType="submit" type="primary">
+              <Button
+                htmlType="submit"
+                type="primary"
+              >
                 Save Configuration
               </Button>
             </Form.Item>
@@ -350,7 +364,7 @@ const AdvancedFormExampleComponent = (): React.JSX.Element => {
 
         <div>
           <h4>Current Form Values:</h4>
-          <div style={{
+          <div style={ {
             background: '#f5f5f5',
             padding: '12px',
             borderRadius: '6px',
@@ -359,7 +373,8 @@ const AdvancedFormExampleComponent = (): React.JSX.Element => {
             whiteSpace: 'pre-wrap',
             maxHeight: '400px',
             overflowY: 'auto'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues, null, 2)}
           </div>
         </div>
@@ -382,19 +397,19 @@ export const SingleRowSelection: StoryObj = {
       ])
 
       return (
-        <div style={{ maxWidth: '1000px', padding: '20px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
+        <div style={ { maxWidth: '1000px', padding: '20px' } }>
+          <div style={ { display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' } }>
             <div>
-              <BasicOperationalGrid 
-                value={value}
-                enableMultipleRowSelection={false}
-                onChange={setValue}
+              <BasicOperationalGrid
+                enableMultipleRowSelection={ false }
+                onChange={ setValue }
+                value={ value }
               />
             </div>
-            
+
             <div>
               <h4>Current Form Values:</h4>
-              <div style={{
+              <div style={ {
                 background: '#f5f5f5',
                 padding: '16px',
                 borderRadius: '6px',
@@ -403,7 +418,8 @@ export const SingleRowSelection: StoryObj = {
                 whiteSpace: 'pre-wrap',
                 maxHeight: '400px',
                 overflowY: 'auto'
-              }}>
+              } }
+              >
                 {JSON.stringify(value, null, 2)}
               </div>
             </div>
@@ -426,19 +442,19 @@ export const MultipleRowSelection: StoryObj = {
       ])
 
       return (
-        <div style={{ maxWidth: '1000px', padding: '20px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
+        <div style={ { maxWidth: '1000px', padding: '20px' } }>
+          <div style={ { display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' } }>
             <div>
-              <AdvancedOperationalGrid 
-                value={value}
-                enableMultipleRowSelection={true}
-                onChange={setValue}
+              <AdvancedOperationalGrid
+                enableMultipleRowSelection
+                onChange={ setValue }
+                value={ value }
               />
             </div>
-            
+
             <div>
               <h4>Current Form Values:</h4>
-              <div style={{
+              <div style={ {
                 background: '#f5f5f5',
                 padding: '16px',
                 borderRadius: '6px',
@@ -447,7 +463,8 @@ export const MultipleRowSelection: StoryObj = {
                 whiteSpace: 'pre-wrap',
                 maxHeight: '400px',
                 overflowY: 'auto'
-              }}>
+              } }
+              >
                 {JSON.stringify(value, null, 2)}
               </div>
             </div>
@@ -469,7 +486,7 @@ export const WithColumnOperations: StoryObj = {
       ])
       const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
       const columnHelper = createColumnHelper<BasicItem>()
-      
+
       const [columns, setColumns] = useState([
         columnHelper.accessor('name', {
           header: 'Name',
@@ -477,136 +494,147 @@ export const WithColumnOperations: StoryObj = {
         }),
         columnHelper.accessor('value', {
           header: 'Value',
-          cell: info => <DefaultCell {...info} />,
+          cell: info => <DefaultCell { ...info } />,
           meta: { editable: true }
         })
       ])
 
-      const handleColumnsChange = (newColumns: any[]) => {
+      const handleColumnsChange = (newColumns: any[]): void => {
         setColumns(newColumns)
       }
 
       return (
-        <div style={{ maxWidth: '1200px', padding: '20px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
-        <div>
-          <OperationalGrid
-            value={data}
-            columns={columns}
-            onChange={setData}
-            onColumnsChange={handleColumnsChange}
-            selectedRows={selectedRows}
-            onSelectedRowsChange={setSelectedRows}
-            enableSorting={true}
-            enableRowSelection={true}
-            enableMultipleRowSelection={true}
-          >
-            <Space direction="vertical" size="small">
-              <OperationalGrid.Grid />
-              
-              <OperationalGrid.Operations>
-                {(operations) => {
-                  const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
-                  const hasSelection = selectedCount > 0
-                  
-                  return (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
-                      <Space>
-                        <IconButton 
-                          icon={{ value: 'new-something' }}
-                          onClick={() => operations.addRow({ name: 'New Item', value: '', type: 'text' })}
-                        >
-                          Add Row
-                        </IconButton>
-                        <IconButton 
-                          icon={{ value: 'trash' }}
-                          onClick={() => operations.deleteSelectedRows()}
-                          disabled={!hasSelection}
-                        >
-                          Delete Selected ({selectedCount})
-                        </IconButton>
-                      </Space>
-                      
-                      <div style={{ width: 1, height: 24, backgroundColor: '#d9d9d9', margin: '0 8px' }} />
-                      
-                      <Space>
-                        <IconButton 
-                          icon={{ value: 'new-column' }}
-                          onClick={() => operations.addColumn(
-                            columnHelper.accessor('type', {
-                              header: 'Type',
-                              cell: info => <DefaultCell {...info} />,
-                              meta: { editable: true }
-                            })
-                          )}
-                        >
-                          Add Type Column
-                        </IconButton>
-                        <IconButton 
-                          icon={{ value: 'new-column' }}
-                          onClick={() => operations.addColumn(
-                            columnHelper.accessor('category' as any, {
-                              header: 'Category (Missing)',
-                              cell: info => <DefaultCell {...info} />,
-                              meta: { editable: true }
-                            }),
-                            null // Default value for existing rows
-                          )}
-                        >
-                          Add Column (null)
-                        </IconButton>
-                        <IconButton 
-                          icon={{ value: 'new-column' }}
-                          onClick={() => operations.addColumn(
-                            columnHelper.accessor('status' as any, {
-                              header: 'Status',
-                              cell: info => <DefaultCell {...info} />,
-                              meta: { editable: true }
-                            }),
-                            'pending' // Default value for existing rows
-                          )}
-                        >
-                          Add Column (default)
-                        </IconButton>
-                        <IconButton 
-                          icon={{ value: 'delete-column' }}
-                          onClick={() => operations.removeColumn('type')}
-                        >
-                          Remove Type
-                        </IconButton>
-                        <IconButton 
-                          icon={{ value: 'delete-column' }}
-                          onClick={() => operations.removeColumn('category')}
-                        >
-                          Remove Category
-                        </IconButton>
-                        <IconButton 
-                          icon={{ value: 'delete-column' }}
-                          onClick={() => operations.removeColumn('status')}
-                        >
-                          Remove Status
-                        </IconButton>
-                        <IconButton 
-                          icon={{ value: 'edit' }}
-                          onClick={() => operations.updateColumn('name', 
-                            columnHelper.accessor('name', {
-                              header: 'Item Name (Updated)',
-                              meta: { editable: true }
-                            })
-                          )}
-                        >
-                          Update Name Header
-                        </IconButton>
-                      </Space>
-                    </div>
-                  )
-                }}
-              </OperationalGrid.Operations>
-            </Space>
-          </OperationalGrid>
-        </div>            <div>
+        <div style={ { maxWidth: '1200px', padding: '20px' } }>
+          <div style={ { display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' } }>
+            <div>
+              <OperationalGrid
+                columns={ columns }
+                enableMultipleRowSelection
+                enableRowSelection
+                enableSorting
+                onChange={ setData }
+                onColumnsChange={ handleColumnsChange }
+                onSelectedRowsChange={ setSelectedRows }
+                selectedRows={ selectedRows }
+                value={ data }
+              >
+                <Space
+                  direction="vertical"
+                  size="small"
+                >
+                  <OperationalGrid.Grid />
+
+                  <OperationalGrid.Operations>
+                    {(operations) => {
+                      const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
+                      const hasSelection = selectedCount > 0
+
+                      return (
+                        <div style={ { display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' } }>
+                          <Space>
+                            <IconButton
+                              icon={ { value: 'new-something' } }
+                              onClick={ () => { operations.addRow({ name: 'New Item', value: '', type: 'text' }) } }
+                            >
+                              Add Row
+                            </IconButton>
+                            <IconButton
+                              disabled={ !hasSelection }
+                              icon={ { value: 'trash' } }
+                              onClick={ () => { operations.deleteSelectedRows() } }
+                            >
+                              Delete Selected ({selectedCount})
+                            </IconButton>
+                          </Space>
+
+                          <div style={ { width: 1, height: 24, backgroundColor: '#d9d9d9', margin: '0 8px' } } />
+
+                          <Space>
+                            <IconButton
+                              icon={ { value: 'new-column' } }
+                              onClick={ () => {
+                                operations.addColumn(
+                                  columnHelper.accessor('type', {
+                                    header: 'Type',
+                                    cell: info => <DefaultCell { ...info } />,
+                                    meta: { editable: true }
+                                  })
+                                )
+                              } }
+                            >
+                              Add Type Column
+                            </IconButton>
+                            <IconButton
+                              icon={ { value: 'new-column' } }
+                              onClick={ () => {
+                                operations.addColumn(
+                                  columnHelper.accessor('category' as any, {
+                                    header: 'Category (Missing)',
+                                    cell: info => <DefaultCell { ...info } />,
+                                    meta: { editable: true }
+                                  }),
+                                  null // Default value for existing rows
+                                )
+                              } }
+                            >
+                              Add Column (null)
+                            </IconButton>
+                            <IconButton
+                              icon={ { value: 'new-column' } }
+                              onClick={ () => {
+                                operations.addColumn(
+                                  columnHelper.accessor('status' as any, {
+                                    header: 'Status',
+                                    cell: info => <DefaultCell { ...info } />,
+                                    meta: { editable: true }
+                                  }),
+                                  'pending' // Default value for existing rows
+                                )
+                              } }
+                            >
+                              Add Column (default)
+                            </IconButton>
+                            <IconButton
+                              icon={ { value: 'delete-column' } }
+                              onClick={ () => { operations.removeColumn('type') } }
+                            >
+                              Remove Type
+                            </IconButton>
+                            <IconButton
+                              icon={ { value: 'delete-column' } }
+                              onClick={ () => { operations.removeColumn('category') } }
+                            >
+                              Remove Category
+                            </IconButton>
+                            <IconButton
+                              icon={ { value: 'delete-column' } }
+                              onClick={ () => { operations.removeColumn('status') } }
+                            >
+                              Remove Status
+                            </IconButton>
+                            <IconButton
+                              icon={ { value: 'edit' } }
+                              onClick={ () => {
+                                operations.updateColumn('name',
+                                  columnHelper.accessor('name', {
+                                    header: 'Item Name (Updated)',
+                                    meta: { editable: true }
+                                  })
+                                )
+                              } }
+                            >
+                              Update Name Header
+                            </IconButton>
+                          </Space>
+                        </div>
+                      )
+                    }}
+                  </OperationalGrid.Operations>
+                </Space>
+              </OperationalGrid>
+            </div>            <div>
               <h4>Current Form Values:</h4>
-              <div style={{
+              <div style={ {
                 background: '#f5f5f5',
                 padding: '16px',
                 borderRadius: '6px',
@@ -615,7 +643,8 @@ export const WithColumnOperations: StoryObj = {
                 whiteSpace: 'pre-wrap',
                 maxHeight: '400px',
                 overflowY: 'auto'
-              }}>
+              } }
+              >
                 {JSON.stringify(data, null, 2)}
               </div>
             </div>
@@ -650,17 +679,18 @@ const AssetPermissionGrid = ({ value = [], onChange }: AssetPermissionGridProps)
     columnHelper.accessor('asset', {
       header: 'Asset',
       size: 200,
-      cell: info => <DefaultCell {...info} />,
-      meta: { 
+      cell: info => <DefaultCell { ...info } />,
+      meta: {
         editable: true,
         type: 'element',
         config: {
           allowedTypes: ['asset'],
           expectsStringValue: false,
           allowTextInput: false,
-          getElementInfo: (props: any) => {
+          /* eslint-disable react/prop-types */
+          getElementInfo: (props: { getValue: () => any }) => {
             const value = props.getValue()
-            if (!value || typeof value !== 'object') {
+            if ((value === null || value === undefined) || typeof value !== 'object') {
               return {
                 elementType: undefined,
                 id: undefined,
@@ -672,11 +702,12 @@ const AssetPermissionGrid = ({ value = [], onChange }: AssetPermissionGridProps)
             return {
               elementType: 'asset',
               id: value.id,
-              fullPath: value.fullPath || value.path || '',
+              fullPath: (value.fullPath !== null && value.fullPath !== undefined && value.fullPath !== '') ? value.fullPath : ((value.path !== null && value.path !== undefined && value.path !== '') ? value.path : ''),
               published: value.published,
               disabled: false
             }
           }
+          /* eslint-enable react/prop-types */
         }
       }
     }),
@@ -684,8 +715,8 @@ const AssetPermissionGrid = ({ value = [], onChange }: AssetPermissionGridProps)
     columnHelper.accessor('read', {
       header: 'Read',
       size: 80,
-      cell: info => <DefaultCell {...info} />,
-      meta: { 
+      cell: info => <DefaultCell { ...info } />,
+      meta: {
         editable: true,
         type: 'checkbox',
         config: {
@@ -694,10 +725,10 @@ const AssetPermissionGrid = ({ value = [], onChange }: AssetPermissionGridProps)
       }
     }),
     columnHelper.accessor('write', {
-      header: 'Write', 
+      header: 'Write',
       size: 80,
-      cell: info => <DefaultCell {...info} />,
-      meta: { 
+      cell: info => <DefaultCell { ...info } />,
+      meta: {
         editable: true,
         type: 'checkbox',
         config: {
@@ -708,8 +739,8 @@ const AssetPermissionGrid = ({ value = [], onChange }: AssetPermissionGridProps)
     columnHelper.accessor('delete', {
       header: 'Delete',
       size: 80,
-      cell: info => <DefaultCell {...info} />,
-      meta: { 
+      cell: info => <DefaultCell { ...info } />,
+      meta: {
         editable: true,
         type: 'checkbox',
         config: {
@@ -720,8 +751,8 @@ const AssetPermissionGrid = ({ value = [], onChange }: AssetPermissionGridProps)
     columnHelper.accessor('publish', {
       header: 'Publish',
       size: 80,
-      cell: info => <DefaultCell {...info} />,
-      meta: { 
+      cell: info => <DefaultCell { ...info } />,
+      meta: {
         editable: true,
         type: 'checkbox',
         config: {
@@ -740,14 +771,14 @@ const AssetPermissionGrid = ({ value = [], onChange }: AssetPermissionGridProps)
           justify="center"
         >
           <IconButton
-            icon={{ value: 'trash' }}
-            onClick={() => {
-              const newValue = [...(value || [])]
-              newValue.splice(info.row.index, 1)
+            icon={ { value: 'trash' } }
+            onClick={ () => {
+              const newValue = [...(value ?? [])]
+              newValue.splice(info.row.index as number, 1)
               onChange?.(newValue)
-            }}
-            type="link"
+            } }
             title="Delete row"
+            type="link"
           />
         </Flex>
       ),
@@ -758,48 +789,53 @@ const AssetPermissionGrid = ({ value = [], onChange }: AssetPermissionGridProps)
 
   return (
     <OperationalGrid
-      value={value}
-      onChange={onChange}
-      columns={columns}
-      enableSorting={true}
-      enableRowSelection={true}
-      enableMultipleRowSelection={true}
-      selectedRows={selectedRows}
-      onSelectedRowsChange={setSelectedRows}
+      columns={ columns }
+      enableMultipleRowSelection
+      enableRowSelection
+      enableSorting
+      onChange={ onChange }
+      onSelectedRowsChange={ setSelectedRows }
+      selectedRows={ selectedRows }
+      value={ value }
     >
-      <Space direction="vertical" size="small">
+      <Space
+        direction="vertical"
+        size="small"
+      >
         <OperationalGrid.Grid />
-        
+
         <OperationalGrid.Operations>
           {(operations) => {
             const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
             const hasSelection = selectedCount > 0
-            
+
             return (
               <Space>
-                <IconButton 
-                  icon={{ value: 'new-something' }}
-                  onClick={() => operations.addRow({ 
-                    asset: null, 
-                    read: false, 
-                    write: false, 
-                    delete: false, 
-                    publish: false 
-                  })}
+                <IconButton
+                  icon={ { value: 'new-something' } }
+                  onClick={ () => {
+                    operations.addRow({
+                      asset: null,
+                      read: false,
+                      write: false,
+                      delete: false,
+                      publish: false
+                    })
+                  } }
                 >
                   Add Asset Permission
                 </IconButton>
-                <IconButton 
-                  icon={{ value: 'trash' }}
-                  onClick={() => operations.deleteSelectedRows()}
-                  disabled={!hasSelection}
+                <IconButton
+                  disabled={ !hasSelection }
+                  icon={ { value: 'trash' } }
+                  onClick={ () => { operations.deleteSelectedRows() } }
                 >
                   Delete Selected ({selectedCount})
                 </IconButton>
-                <IconButton 
-                  icon={{ value: 'close' }}
-                  onClick={() => operations.clearSelectedRows()}
-                  disabled={!hasSelection}
+                <IconButton
+                  disabled={ !hasSelection }
+                  icon={ { value: 'close' } }
+                  onClick={ () => { operations.clearSelectedRows() } }
                 >
                   Clear Selection
                 </IconButton>
@@ -816,47 +852,47 @@ export const AssetPermissionExample: StoryObj = {
   render: () => {
     const AssetPermissionExampleComponent = (): React.JSX.Element => {
       const [value, setValue] = useState<AssetPermissionItem[]>([
-        { 
-          asset: { 
-            id: 1, 
-            fullPath: '/demo/sample-image.jpg', 
+        {
+          asset: {
+            id: 1,
+            fullPath: '/demo/sample-image.jpg',
             type: 'image',
             elementType: 'asset',
             published: true
-          }, 
-          read: true, 
-          write: true, 
-          delete: false, 
-          publish: true 
+          },
+          read: true,
+          write: true,
+          delete: false,
+          publish: true
         },
-        { 
-          asset: { 
-            id: 2, 
-            fullPath: '/demo/document.pdf', 
+        {
+          asset: {
+            id: 2,
+            fullPath: '/demo/document.pdf',
             type: 'document',
             elementType: 'asset',
             published: true
-          }, 
-          read: true, 
-          write: false, 
-          delete: false, 
-          publish: false 
+          },
+          read: true,
+          write: false,
+          delete: false,
+          publish: false
         }
       ])
 
       return (
-        <div style={{ maxWidth: '1200px', padding: '20px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
+        <div style={ { maxWidth: '1200px', padding: '20px' } }>
+          <div style={ { display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' } }>
             <div>
-              <AssetPermissionGrid 
-                value={value}
-                onChange={setValue}
+              <AssetPermissionGrid
+                onChange={ setValue }
+                value={ value }
               />
             </div>
-            
+
             <div>
               <h4>Current Form Values:</h4>
-              <div style={{
+              <div style={ {
                 background: '#f5f5f5',
                 padding: '16px',
                 borderRadius: '6px',
@@ -865,7 +901,8 @@ export const AssetPermissionExample: StoryObj = {
                 whiteSpace: 'pre-wrap',
                 maxHeight: '400px',
                 overflowY: 'auto'
-              }}>
+              } }
+              >
                 {JSON.stringify(value, null, 2)}
               </div>
             </div>
@@ -898,8 +935,8 @@ export const WithPanelLayout: StoryObj = {
         }),
         columnHelper.accessor('value', {
           header: 'Value',
-          cell: info => <DefaultCell {...info} />,
-          meta: { 
+          cell: info => <DefaultCell { ...info } />,
+          meta: {
             editable: true,
             autoWidth: true
           }
@@ -908,7 +945,7 @@ export const WithPanelLayout: StoryObj = {
         columnHelper.accessor('type', {
           header: 'Data Type',
           size: 120,
-          cell: info => <DefaultCell {...info} />,
+          cell: info => <DefaultCell { ...info } />,
           meta: { editable: true }
         }),
         // Delete action column
@@ -922,14 +959,14 @@ export const WithPanelLayout: StoryObj = {
               justify="center"
             >
               <IconButton
-                icon={{ value: 'trash' }}
-                onClick={() => {
+                icon={ { value: 'trash' } }
+                onClick={ () => {
                   const newValue = [...value]
-                  newValue.splice(info.row.index, 1)
+                  newValue.splice(info.row.index as number, 1)
                   setValue(newValue)
-                }}
-                type="link"
+                } }
                 title="Delete row"
+                type="link"
               />
             </Flex>
           ),
@@ -939,58 +976,58 @@ export const WithPanelLayout: StoryObj = {
       ]
 
       return (
-        <div style={{ maxWidth: '1200px', padding: '20px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
+        <div style={ { maxWidth: '1200px', padding: '20px' } }>
+          <div style={ { display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' } }>
             <div>
               <OperationalGrid
-                value={value}
-                docked
-                onChange={setValue}
-                columns={columns}
-                enableSorting={true}
-                enableRowSelection={true}
-                enableMultipleRowSelection={true}
-                selectedRows={selectedRows}
-                onSelectedRowsChange={setSelectedRows}
                 autoWidth
+                columns={ columns }
+                docked
+                enableMultipleRowSelection
+                enableRowSelection
+                enableSorting
+                onChange={ setValue }
+                onSelectedRowsChange={ setSelectedRows }
+                selectedRows={ selectedRows }
+                value={ value }
               >
                 <OperationalGrid.Operations>
                   {(operations) => {
                     const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
                     const hasSelection = selectedCount > 0
-                    
+
                     const extraContent = (
                       <Space>
-                        <IconTextButton 
-                          icon={{ value: 'new-something' }}
-                          onClick={(e) => {
+                        <IconTextButton
+                          icon={ { value: 'new-something' } }
+                          onClick={ (e) => {
                             e.stopPropagation()
-                            operations.addRow({ 
-                              name: 'New Config', 
-                              value: '', 
-                              type: 'text' 
+                            operations.addRow({
+                              name: 'New Config',
+                              value: '',
+                              type: 'text'
                             })
-                          }}
+                          } }
                         >
                           Add Configuration
                         </IconTextButton>
-                        <IconTextButton 
-                          icon={{ value: 'trash' }}
-                          onClick={(e) => {
+                        <IconTextButton
+                          disabled={ !hasSelection }
+                          icon={ { value: 'trash' } }
+                          onClick={ (e) => {
                             e.stopPropagation()
                             operations.deleteSelectedRows()
-                          }}
-                          disabled={!hasSelection}
+                          } }
                         >
                           Delete Selected ({selectedCount})
                         </IconTextButton>
-                        <IconTextButton 
-                          icon={{ value: 'close' }}
-                          onClick={(e) => {
+                        <IconTextButton
+                          disabled={ !hasSelection }
+                          icon={ { value: 'close' } }
+                          onClick={ (e) => {
                             e.stopPropagation()
                             operations.clearSelectedRows()
-                          }}
-                          disabled={!hasSelection}
+                          } }
                         >
                           Clear Selection
                         </IconTextButton>
@@ -998,27 +1035,27 @@ export const WithPanelLayout: StoryObj = {
                     )
 
                     return (
-                        <FormKit.Panel
-                          title="Application Configuration"
-                          extra={extraContent}
-                          extraPosition="start"
-                          border
-                          contentPadding="none"
-                          theme='default'
-                          collapsible
-                          collapsed={false}
-                        >
-                          <OperationalGrid.Grid />
-                        </FormKit.Panel>
+                      <FormKit.Panel
+                        border
+                        collapsed={ false }
+                        collapsible
+                        contentPadding="none"
+                        extra={ extraContent }
+                        extraPosition="start"
+                        theme='default'
+                        title="Application Configuration"
+                      >
+                        <OperationalGrid.Grid />
+                      </FormKit.Panel>
                     )
                   }}
                 </OperationalGrid.Operations>
               </OperationalGrid>
             </div>
-            
+
             <div>
               <h4>Current Configuration Values:</h4>
-              <div style={{
+              <div style={ {
                 background: '#f5f5f5',
                 padding: '16px',
                 borderRadius: '6px',
@@ -1027,7 +1064,8 @@ export const WithPanelLayout: StoryObj = {
                 whiteSpace: 'pre-wrap',
                 maxHeight: '400px',
                 overflowY: 'auto'
-              }}>
+              } }
+              >
                 {JSON.stringify(value, null, 2)}
               </div>
             </div>
@@ -1054,12 +1092,12 @@ export const WithDragAndDrop: StoryObj = {
         }),
         columnHelper.accessor('value', {
           header: 'Priority',
-          cell: info => <DefaultCell {...info} />,
+          cell: info => <DefaultCell { ...info } />,
           meta: { editable: true }
         }),
         columnHelper.accessor('type', {
           header: 'Category',
-          cell: info => <DefaultCell {...info} />,
+          cell: info => <DefaultCell { ...info } />,
           meta: { editable: true }
         })
       ]
@@ -1067,7 +1105,7 @@ export const WithDragAndDrop: StoryObj = {
       const handleDragEnd = useCallback((event: DragEndEvent) => {
         const { active, over } = event
 
-        if (active.id !== over?.id && value) {
+        if (active.id !== over?.id && (value !== null && value !== undefined)) {
           const oldIndex = value.findIndex((_: any, index: number) => `task-${value[index].name}-${index}` === active.id)
           const newIndex = value.findIndex((_: any, index: number) => `task-${value[index].name}-${index}` === over?.id)
 
@@ -1080,7 +1118,7 @@ export const WithDragAndDrop: StoryObj = {
         }
       }, [value, onChange])
 
-      const toggleDragMode = () => {
+      const toggleDragMode = (): void => {
         setIsDragEnabled(!isDragEnabled)
         // Clear selections when switching modes
         setSelectedRows({})
@@ -1088,69 +1126,74 @@ export const WithDragAndDrop: StoryObj = {
 
       return (
         <OperationalGrid
-          value={value}
-          onChange={onChange}
-          columns={columns}
-          enableSorting={false} // Disable sorting to avoid conflicts with drag
-          enableRowSelection={!isDragEnabled} // Disable row selection when drag is enabled
-          enableMultipleRowSelection={!isDragEnabled}
-          enableRowDrag={isDragEnabled}
-          handleDragEnd={handleDragEnd}
-          selectedRows={selectedRows}
-          onSelectedRowsChange={setSelectedRows}
-          setRowId={(row, index) => `task-${row.name}-${index}`} // Provide stable IDs for drag animation
+          columns={ columns }
+          enableMultipleRowSelection={ !isDragEnabled }
+          enableRowDrag={ isDragEnabled }
+          enableRowSelection={ !isDragEnabled } // Disable row selection when drag is enabled
+          enableSorting={ false } // Disable sorting to avoid conflicts with drag
+          handleDragEnd={ handleDragEnd }
+          onChange={ onChange }
+          onSelectedRowsChange={ setSelectedRows }
+          selectedRows={ selectedRows }
+          setRowId={ (row, index) => `task-${row.name}-${index}` } // Provide stable IDs for drag animation
+          value={ value }
         >
-          <Space direction="vertical" size="small">
+          <Space
+            direction="vertical"
+            size="small"
+          >
             <OperationalGrid.Grid />
-            
+
             <OperationalGrid.Operations>
               {(operations) => {
                 const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
                 const hasSelection = selectedCount > 0
-                
+
                 return (
                   <Space wrap>
-                    <IconButton 
-                      icon={{ value: 'new-something' }}
-                      onClick={() => operations.addRow({ 
-                        name: `Task ${value.length + 1}`, 
-                        value: 'New Priority', 
-                        type: 'new' 
-                      })}
+                    <IconButton
+                      icon={ { value: 'new-something' } }
+                      onClick={ () => {
+                        operations.addRow({
+                          name: `Task ${value.length + 1}`,
+                          value: 'New Priority',
+                          type: 'new'
+                        })
+                      } }
                     >
                       Add Task
                     </IconButton>
-                    
-                    <IconButton 
-                      icon={{ value: isDragEnabled ? 'drag-option' : 'transfer' }}
-                      onClick={toggleDragMode}
-                      title={isDragEnabled ? 'Switch to selection mode' : 'Switch to drag mode'}
+
+                    <IconButton
+                      icon={ { value: isDragEnabled ? 'drag-option' : 'transfer' } }
+                      onClick={ toggleDragMode }
+                      title={ isDragEnabled ? 'Switch to selection mode' : 'Switch to drag mode' }
                     />
-                    
+
                     {!isDragEnabled && (
                       <>
-                        <IconButton 
-                          icon={{ value: 'trash' }}
-                          onClick={() => operations.deleteSelectedRows()}
-                          disabled={!hasSelection}
+                        <IconButton
                           danger
+                          disabled={ !hasSelection }
+                          icon={ { value: 'trash' } }
+                          onClick={ () => { operations.deleteSelectedRows() } }
                         >
                           Delete Selected ({selectedCount})
                         </IconButton>
-                        <IconButton 
-                          icon={{ value: 'close' }}
-                          onClick={() => operations.clearSelectedRows()}
-                          disabled={!hasSelection}
+                        <IconButton
+                          disabled={ !hasSelection }
+                          icon={ { value: 'close' } }
+                          onClick={ () => { operations.clearSelectedRows() } }
                         >
                           Clear Selection
                         </IconButton>
                       </>
                     )}
-                    
-                    <div style={{ borderLeft: '1px solid #d9d9d9', paddingLeft: 8, marginLeft: 8 }}>
-                      <IconButton 
-                        icon={{ value: 'refresh' }}
-                        onClick={() => {
+
+                    <div style={ { borderLeft: '1px solid #d9d9d9', paddingLeft: 8, marginLeft: 8 } }>
+                      <IconButton
+                        icon={ { value: 'refresh' } }
+                        onClick={ () => {
                           const resetTasks = [
                             { name: 'User Research', value: 'High Priority', type: 'development' },
                             { name: 'UI Design', value: 'Medium Priority', type: 'design' },
@@ -1160,7 +1203,7 @@ export const WithDragAndDrop: StoryObj = {
                           ]
                           onChange?.(resetTasks)
                           setSelectedRows({}) // Clear selections on reset
-                        }}
+                        } }
                       >
                         Reset Order
                       </IconButton>
@@ -1186,32 +1229,32 @@ export const WithDragAndDrop: StoryObj = {
         ]
       })
 
-      const onValuesChange = (changedValues: any, allValues: any) => {
-        setFormValues(allValues)
+      const onValuesChange = (changedValues: any, allValues: any): void => {
+        setFormValues(allValues as { tasks: Array<{ name: string, value: string, type: string }> })
       }
 
-      const onFinish = (values: any) => {
+      const onFinish = (values: any): void => {
         console.log('Form submitted with reordered tasks:', values)
       }
 
       return (
-        <div style={{ maxWidth: '1200px', padding: '20px' }}>
-          <div style={{ marginBottom: 16, padding: 16, backgroundColor: '#f0f0f0', borderRadius: 4 }}>
-            <h4 style={{ margin: 0, marginBottom: 8 }}>Drag & Drop Form Control</h4>
-            <p style={{ margin: 0, fontSize: '14px', color: '#666' }}>
-              Use the "Drag Mode" / "Select Mode" button to switch between drag & drop reordering and row selection for batch operations. 
+        <div style={ { maxWidth: '1200px', padding: '20px' } }>
+          <div style={ { marginBottom: 16, padding: 16, backgroundColor: '#f0f0f0', borderRadius: 4 } }>
+            <h4 style={ { margin: 0, marginBottom: 8 } }>Drag & Drop Form Control</h4>
+            <p style={ { margin: 0, fontSize: '14px', color: '#666' } }>
+              Use the &quot;Drag Mode&quot; / &quot;Select Mode&quot; button to switch between drag &amp; drop reordering and row selection for batch operations.
               The two modes are mutually exclusive to avoid interaction conflicts.
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
+          <div style={ { display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' } }>
             <div>
               <Form
-                form={form}
-                initialValues={formValues}
+                form={ form }
+                initialValues={ formValues }
                 layout="vertical"
-                onFinish={onFinish}
-                onValuesChange={onValuesChange}
+                onFinish={ onFinish }
+                onValuesChange={ onValuesChange }
               >
                 <Form.Item
                   label="Project Tasks (Drag to Reorder by Priority)"
@@ -1221,16 +1264,19 @@ export const WithDragAndDrop: StoryObj = {
                 </Form.Item>
 
                 <Form.Item>
-                  <Button htmlType="submit" type="primary">
+                  <Button
+                    htmlType="submit"
+                    type="primary"
+                  >
                     Save Project Tasks
                   </Button>
                 </Form.Item>
               </Form>
             </div>
-            
+
             <div>
               <h4>Current Form Values:</h4>
-              <div style={{
+              <div style={ {
                 background: '#f5f5f5',
                 padding: '16px',
                 borderRadius: '6px',
@@ -1239,7 +1285,8 @@ export const WithDragAndDrop: StoryObj = {
                 whiteSpace: 'pre-wrap',
                 maxHeight: '400px',
                 overflowY: 'auto'
-              }}>
+              } }
+              >
                 {JSON.stringify(formValues, null, 2)}
               </div>
             </div>

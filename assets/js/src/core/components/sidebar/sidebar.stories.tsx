@@ -105,12 +105,12 @@ const FocalPointDemoButton = ({ initialActive = false }: { initialActive?: boole
 }
 
 const SidebarControlsDemo = (): React.JSX.Element => {
-  const { 
-    addEntry, 
-    removeEntry, 
-    toggleHighlight, 
-    openTab, 
-    closeTab, 
+  const {
+    addEntry,
+    removeEntry,
+    toggleHighlight,
+    openTab,
+    closeTab,
     setSizing,
     entries,
     activeTab,
@@ -121,8 +121,11 @@ const SidebarControlsDemo = (): React.JSX.Element => {
   const handleAddEntry = (): void => {
     const newEntry = {
       key: `entry-${entries.length + 1}`,
-      icon: <Icon value="pimcore" options={{ width: '16px', height: '16px' }} />,
-      component: <div style={{ padding: '16px' }}>New Entry {entries.length + 1}</div>,
+      icon: <Icon
+        options={ { width: '16px', height: '16px' } }
+        value="pimcore"
+            />,
+      component: <div style={ { padding: '16px' } }>New Entry {entries.length + 1}</div>,
       tooltip: `Entry ${entries.length + 1}`
     }
     addEntry(newEntry)
@@ -147,60 +150,60 @@ const SidebarControlsDemo = (): React.JSX.Element => {
   }
 
   return (
-    <div style={{ padding: '16px', borderRight: '1px solid #d9d9d9', width: '220px' }}>
-      <h4 style={{ margin: '0 0 16px 0' }}>Sidebar Controls</h4>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <div style={ { padding: '16px', borderRight: '1px solid #d9d9d9', width: '220px' } }>
+      <h4 style={ { margin: '0 0 16px 0' } }>Sidebar Controls</h4>
+      <div style={ { display: 'flex', flexDirection: 'column', gap: '8px' } }>
         <Button
-          onClick={handleAddEntry}
+          onClick={ handleAddEntry }
           size="small"
           type="primary"
         >
           Add Entry
         </Button>
-        
+
         <Button
-          onClick={handleRemoveLastEntry}
-          size="small"
-          disabled={entries.length === 0}
           danger
+          disabled={ entries.length === 0 }
+          onClick={ handleRemoveLastEntry }
+          size="small"
         >
           Remove Last Entry
         </Button>
-        
+
         <Button
-          onClick={handleToggleHighlight}
+          disabled={ entries.length === 0 }
+          onClick={ handleToggleHighlight }
           size="small"
-          disabled={entries.length === 0}
         >
           Toggle Highlight
         </Button>
-        
+
         <Button
-          onClick={handleOpenFirstTab}
+          disabled={ entries.length === 0 }
+          onClick={ handleOpenFirstTab }
           size="small"
-          disabled={entries.length === 0}
         >
           Open First Tab
         </Button>
-        
+
         <Button
-          onClick={closeTab}
+          disabled={ activeTab === null || activeTab === undefined || activeTab === '' }
+          onClick={ closeTab }
           size="small"
-          disabled={!activeTab}
         >
           Close Tab
         </Button>
-        
+
         <Button
-          onClick={() => setSizing(sizing === 'default' ? 'large' : 'default')}
+          onClick={ () => { setSizing(sizing === 'default' ? 'large' : 'default') } }
           size="small"
         >
           Toggle Size ({sizing})
         </Button>
       </div>
-      
-      <div style={{ marginTop: '16px', fontSize: '11px', color: '#666' }}>
-        <div>Active Tab: {activeTab || 'None'}</div>
+
+      <div style={ { marginTop: '16px', fontSize: '11px', color: '#666' } }>
+        <div>Active Tab: {(activeTab !== null && activeTab !== undefined && activeTab !== '') ? activeTab : 'None'}</div>
         <div>Highlights: {highlights.length > 0 ? highlights.join(', ') : 'None'}</div>
         <div>Entries: {entries.length}</div>
       </div>
@@ -210,21 +213,21 @@ const SidebarControlsDemo = (): React.JSX.Element => {
 
 // Simple content components
 const DetailsContent = (): React.JSX.Element => (
-  <div style={{ padding: '16px' }}>
+  <div style={ { padding: '16px' } }>
     <h4>Details</h4>
     <p>Asset information and metadata</p>
   </div>
 )
 
 const PropertiesContent = (): React.JSX.Element => (
-  <div style={{ padding: '16px' }}>
+  <div style={ { padding: '16px' } }>
     <h4>Properties</h4>
     <p>Configure asset properties</p>
   </div>
 )
 
 const VersionsContent = (): React.JSX.Element => (
-  <div style={{ padding: '16px' }}>
+  <div style={ { padding: '16px' } }>
     <h4>Versions</h4>
     <p>View version history</p>
   </div>
@@ -234,7 +237,10 @@ const demoData = {
   entries: [
     {
       key: 'details',
-      icon: <Icon options={{ width: '16px', height: '16px' }} value="details" />,
+      icon: <Icon
+        options={ { width: '16px', height: '16px' } }
+        value="details"
+            />,
       component: <DetailsContent />,
       tooltip: 'Details'
     }
@@ -242,7 +248,10 @@ const demoData = {
   buttons: [
     {
       key: 'focal-point',
-      icon: <Icon options={{ width: '16px', height: '16px' }} value="focal-point" />,
+      icon: <Icon
+        options={ { width: '16px', height: '16px' } }
+        value="focal-point"
+            />,
       component: <FocalPointDemoButton />
     }
   ]
@@ -295,13 +304,19 @@ export const MultipleEntries = {
       ...demoData.entries,
       {
         key: 'properties',
-        icon: <Icon value="properties" options={{ width: '16px', height: '16px' }} />,
+        icon: <Icon
+          options={ { width: '16px', height: '16px' } }
+          value="properties"
+              />,
         component: <PropertiesContent />,
         tooltip: 'Properties'
       },
       {
         key: 'versions',
-        icon: <Icon value="versions" options={{ width: '16px', height: '16px' }} />,
+        icon: <Icon
+          options={ { width: '16px', height: '16px' } }
+          value="versions"
+              />,
         component: <VersionsContent />,
         tooltip: 'Versions'
       }
@@ -320,17 +335,20 @@ export const MultipleEntries = {
 export const ProviderPattern = {
   render: () => (
     <SidebarProvider
-      initialEntries={[
+      initialButtons={ demoData.buttons }
+      initialEntries={ [
         {
           key: 'details',
-          icon: <Icon value="details" options={{ width: '16px', height: '16px' }} />,
+          icon: <Icon
+            options={ { width: '16px', height: '16px' } }
+            value="details"
+                />,
           component: <DetailsContent />,
           tooltip: 'Details'
         }
-      ]}
-      initialButtons={demoData.buttons}
+      ] }
     >
-      <div style={{ display: 'flex', height: '400px' }}>
+      <div style={ { display: 'flex', height: '400px' } }>
         <SidebarControlsDemo />
         <ProvidedSidebar />
       </div>
@@ -360,7 +378,6 @@ const InlineHelpDemoContent = (): React.JSX.Element => {
 
   const helpContent = (
     <InlineHelpContent
-      title={<span>Asset Details Help</span>}
       description={
         <div>
           <p>This panel shows detailed information about your asset including:</p>
@@ -375,12 +392,12 @@ const InlineHelpDemoContent = (): React.JSX.Element => {
           <p>You can edit some of these properties directly in the form fields.</p>
         </div>
       }
+      title={ <span>Asset Details Help</span> }
     />
   )
 
   const customHelpContent = (
     <InlineHelpContent
-      title={<span>Custom Help Content</span>}
       description={
         <div>
           <p>This is an example of custom help content that can be triggered programmatically.</p>
@@ -393,38 +410,44 @@ const InlineHelpDemoContent = (): React.JSX.Element => {
           </ul>
         </div>
       }
+      title={ <span>Custom Help Content</span> }
     />
   )
 
   return (
-    <div style={{ padding: '16px' }}>
-      <h4 style={{ marginBottom: '16px' }}>Asset Details with Help</h4>
-      
-      <div style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <label>Asset Name:</label>
-        <input type="text" defaultValue="sample-image.jpg" style={{ padding: '4px 8px' }} />
-        <InlineHelpTrigger component={helpContent} />
+    <div style={ { padding: '16px' } }>
+      <h4 style={ { marginBottom: '16px' } }>Asset Details with Help</h4>
+
+      <div style={ { marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' } }>
+        <label htmlFor="asset-name">Asset Name:</label>
+        <input
+          defaultValue="sample-image.jpg"
+          id="asset-name"
+          style={ { padding: '4px 8px' } }
+          type="text"
+        />
+        <InlineHelpTrigger component={ helpContent } />
       </div>
 
-      <div style={{ marginBottom: '16px' }}>
-        <label>File Size: 1.2 MB</label>
+      <div style={ { marginBottom: '16px' } }>
+        <span>File Size: 1.2 MB</span>
       </div>
 
-      <div style={{ marginBottom: '16px' }}>
-        <label>Dimensions: 1920 × 1080</label>
+      <div style={ { marginBottom: '16px' } }>
+        <span>Dimensions: 1920 × 1080</span>
       </div>
 
-      <div style={{ display: 'flex', gap: '8px', marginTop: '20px' }}>
-        <Button 
-          size="small" 
-          onClick={() => inlineHelpHelper.open(customHelpContent)}
+      <div style={ { display: 'flex', gap: '8px', marginTop: '20px' } }>
+        <Button
+          onClick={ () => { inlineHelpHelper.open(customHelpContent) } }
+          size="small"
         >
           Show Custom Help
         </Button>
-        
-        <Button 
+
+        <Button
+          onClick={ () => { inlineHelpHelper.open(helpContent) } }
           size="small"
-          onClick={() => inlineHelpHelper.open(helpContent)}
         >
           Show Asset Help
         </Button>
@@ -434,16 +457,20 @@ const InlineHelpDemoContent = (): React.JSX.Element => {
 }
 
 const PropertiesHelpContent = (): React.JSX.Element => (
-  <div style={{ padding: '16px' }}>
+  <div style={ { padding: '16px' } }>
     <h4>Properties with Inline Help</h4>
-    
-    <div style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-      <label>Alt Text:</label>
-      <input type="text" placeholder="Describe the image..." style={{ padding: '4px 8px', width: '200px' }} />
-      <InlineHelpTrigger 
+
+    <div style={ { marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' } }>
+      <label htmlFor="alt-text">Alt Text:</label>
+      <input
+        id="alt-text"
+        placeholder="Describe the image..."
+        style={ { padding: '4px 8px', width: '200px' } }
+        type="text"
+      />
+      <InlineHelpTrigger
         component={
           <InlineHelpContent
-            title={<span>Alt Text Help</span>}
             description={
               <div>
                 <p>Alt text (alternative text) provides a text description of images for:</p>
@@ -456,23 +483,28 @@ const PropertiesHelpContent = (): React.JSX.Element => (
                 <ul>
                   <li>Be descriptive but concise (under 125 characters)</li>
                   <li>Focus on the purpose of the image in context</li>
-                  <li>Don't start with "Image of..." or "Picture of..."</li>
+                  <li>Don&apos;t start with &quot;Image of...&quot; or &quot;Picture of...&quot;</li>
                   <li>Leave empty for decorative images</li>
                 </ul>
               </div>
             }
+            title={ <span>Alt Text Help</span> }
           />
         }
       />
     </div>
 
-    <div style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-      <label>Copyright:</label>
-      <input type="text" placeholder="© 2024 Company Name" style={{ padding: '4px 8px', width: '200px' }} />
-      <InlineHelpTrigger 
+    <div style={ { marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' } }>
+      <label htmlFor="copyright">Copyright:</label>
+      <input
+        id="copyright"
+        placeholder="© 2024 Company Name"
+        style={ { padding: '4px 8px', width: '200px' } }
+        type="text"
+      />
+      <InlineHelpTrigger
         component={
           <InlineHelpContent
-            title={<span>Copyright Information</span>}
             description={
               <div>
                 <p>Enter copyright information to:</p>
@@ -484,6 +516,7 @@ const PropertiesHelpContent = (): React.JSX.Element => (
                 <p>Format: © [Year] [Copyright Holder Name]</p>
               </div>
             }
+            title={ <span>Copyright Information</span> }
           />
         }
       />
@@ -497,23 +530,29 @@ export const WithInlineHelpExample = {
   render: () => {
     return (
       <SidebarProviderWithHelp
-        initialEntries={[
+        initialButtons={ demoData.buttons }
+        initialEntries={ [
           {
             key: 'details',
-            icon: <Icon value="details" options={{ width: '16px', height: '16px' }} />,
+            icon: <Icon
+              options={ { width: '16px', height: '16px' } }
+              value="details"
+                  />,
             component: <InlineHelpDemoContent />,
             tooltip: 'Details'
           },
           {
-            key: 'properties', 
-            icon: <Icon value="properties" options={{ width: '16px', height: '16px' }} />,
+            key: 'properties',
+            icon: <Icon
+              options={ { width: '16px', height: '16px' } }
+              value="properties"
+                  />,
             component: <PropertiesHelpContent />,
             tooltip: 'Properties'
           }
-        ]}
-        initialButtons={demoData.buttons}
+        ] }
       >
-        <div style={{ display: 'flex', height: '500px' }}>
+        <div style={ { display: 'flex', height: '500px' } }>
           <ProvidedSidebar />
         </div>
       </SidebarProviderWithHelp>

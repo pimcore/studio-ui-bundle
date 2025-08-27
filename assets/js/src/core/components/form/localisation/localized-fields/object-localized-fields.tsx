@@ -20,7 +20,7 @@ import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/t
 
 // Props for the legacy object definitions version
 export interface ObjectLocalizedFieldsProps extends AbstractObjectDataDefinition {
-  children?: (AbstractObjectDataDefinition | AbstractObjectLayoutDefinition)[]
+  children?: Array<AbstractObjectDataDefinition | AbstractObjectLayoutDefinition>
 }
 
 // Legacy ObjectLocalizedFields component - supports object definition arrays

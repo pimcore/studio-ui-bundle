@@ -84,17 +84,17 @@ const BasicUsageComponent = (): React.JSX.Element => {
   return (
     <div style={ { maxWidth: '600px' } }>
       <FormKit
-        formProps={{
+        formProps={ {
           form,
           onFinish
-        }}
+        } }
       >
         <FormKit.Panel
           extra={
             <LanguageSelection
-              languages={availableLanguages}
-              selectedLanguage={currentLanguage.toUpperCase()} // Convert back to uppercase for display
-              onSelectLanguage={handleLanguageChange}
+              languages={ availableLanguages }
+              onSelectLanguage={ handleLanguageChange }
+              selectedLanguage={ currentLanguage.toUpperCase() } // Convert back to uppercase for display
             />
           }
           theme="card-with-highlight"
@@ -114,7 +114,7 @@ const BasicUsageComponent = (): React.JSX.Element => {
             >
               <TextArea
                 placeholder="Enter content..."
-                rows={4}
+                rows={ 4 }
               />
             </Form.Item>
 
@@ -123,11 +123,11 @@ const BasicUsageComponent = (): React.JSX.Element => {
               name="category"
             >
               <Select
-                options={[
+                options={ [
                   { value: 'news', label: 'News' },
                   { value: 'blog', label: 'Blog' },
                   { value: 'page', label: 'Page' }
-                ]}
+                ] }
                 placeholder="Select category..."
               />
             </Form.Item>

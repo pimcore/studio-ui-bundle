@@ -1,4 +1,14 @@
-import React, { createContext, useContext, useMemo } from "react"
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React, { createContext, useContext, useMemo } from 'react'
 
 export interface IInlineHelpContext {
   component: React.JSX.Element | null
@@ -15,18 +25,18 @@ export const InlineHelpProvider = ({ children }: InlineHelpProviderProps): React
   const [component, setComponent] = React.useState<IInlineHelpContext['component']>(null)
 
   return useMemo(() => (
-    <InlineHelpContext.Provider value={{ component, setComponent }}>
+    <InlineHelpContext.Provider value={ { component, setComponent } }>
       {children}
     </InlineHelpContext.Provider>
-  ), [children, component]);
+  ), [children, component])
 }
 
 export interface UseInlineHelpReturn extends IInlineHelpContext {}
 
 export const useInlineHelp = (): UseInlineHelpReturn => {
   const context = useContext(InlineHelpContext)
-  if (!context) {
-    throw new Error("useInlineHelp must be used within an InlineHelpProvider")
+  if (context === null || context === undefined) {
+    throw new Error('useInlineHelp must be used within an InlineHelpProvider')
   }
   return context
 }

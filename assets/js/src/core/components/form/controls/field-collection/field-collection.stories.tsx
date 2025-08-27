@@ -54,7 +54,7 @@ const TextFieldComponent = (): React.JSX.Element => (
   <Form.Item
     label="Text Value"
     name="text"
-    rules={[{ required: true, message: 'Please enter text' }]}
+    rules={ [{ required: true, message: 'Please enter text' }] }
   >
     <Input placeholder="Enter text..." />
   </Form.Item>
@@ -64,11 +64,11 @@ const NumberFieldComponent = (): React.JSX.Element => (
   <Form.Item
     label="Number Value"
     name="number"
-    rules={[{ required: true, message: 'Please enter a number' }]}
+    rules={ [{ required: true, message: 'Please enter a number' }] }
   >
     <InputNumber
       placeholder="Enter number..."
-      style={{ width: '100%' }}
+      style={ { width: '100%' } }
     />
   </Form.Item>
 )
@@ -80,7 +80,7 @@ const TextAreaFieldComponent = (): React.JSX.Element => (
   >
     <TextArea
       placeholder="Enter description..."
-      rows={3}
+      rows={ 3 }
     />
   </Form.Item>
 )
@@ -89,15 +89,15 @@ const SelectFieldComponent = (): React.JSX.Element => (
   <Form.Item
     label="Category"
     name="category"
-    rules={[{ required: true, message: 'Please select a category' }]}
+    rules={ [{ required: true, message: 'Please select a category' }] }
   >
     <Select
-      options={[
+      options={ [
         { value: 'news', label: 'News' },
         { value: 'blog', label: 'Blog' },
         { value: 'event', label: 'Event' },
         { value: 'announcement', label: 'Announcement' }
-      ]}
+      ] }
       placeholder="Select category..."
     />
   </Form.Item>
@@ -120,7 +120,7 @@ const DateFieldComponent = (): React.JSX.Element => (
   >
     <DatePicker
       placeholder="Select date..."
-      style={{ width: '100%' }}
+      style={ { width: '100%' } }
     />
   </Form.Item>
 )
@@ -140,14 +140,14 @@ const PersonFieldComponent = (): React.JSX.Element => (
     <Form.Item
       label="First Name"
       name="firstName"
-      rules={[{ required: true, message: 'Please enter first name' }]}
+      rules={ [{ required: true, message: 'Please enter first name' }] }
     >
       <Input placeholder="Enter first name..." />
     </Form.Item>
     <Form.Item
       label="Last Name"
       name="lastName"
-      rules={[{ required: true, message: 'Please enter last name' }]}
+      rules={ [{ required: true, message: 'Please enter last name' }] }
     >
       <Input placeholder="Enter last name..." />
     </Form.Item>
@@ -156,18 +156,18 @@ const PersonFieldComponent = (): React.JSX.Element => (
       name="age"
     >
       <InputNumber
-        min={0}
-        max={150}
+        max={ 150 }
+        min={ 0 }
         placeholder="Enter age..."
-        style={{ width: '100%' }}
+        style={ { width: '100%' } }
       />
     </Form.Item>
     <Form.Item
       label="Email"
       name="email"
-      rules={[
+      rules={ [
         { type: 'email', message: 'Please enter a valid email' }
-      ]}
+      ] }
     >
       <Input placeholder="Enter email..." />
     </Form.Item>
@@ -180,7 +180,7 @@ const ProductFieldComponent = (): React.JSX.Element => (
     <Form.Item
       label="Product Name"
       name="name"
-      rules={[{ required: true, message: 'Please enter product name' }]}
+      rules={ [{ required: true, message: 'Please enter product name' }] }
     >
       <Input placeholder="Enter product name..." />
     </Form.Item>
@@ -190,37 +190,37 @@ const ProductFieldComponent = (): React.JSX.Element => (
     >
       <TextArea
         placeholder="Enter product description..."
-        rows={2}
+        rows={ 2 }
       />
     </Form.Item>
     <Form.Item
       label="Price"
       name="price"
-      rules={[{ required: true, message: 'Please enter price' }]}
+      rules={ [{ required: true, message: 'Please enter price' }] }
     >
       <InputNumber
-        min={0}
-        step={0.01}
-        precision={2}
+        formatter={ (value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }
+        min={ 0 }
+        parser={ (value) => value?.replace(/\$\s?|(,*)/g, '') as any }
         placeholder="Enter price..."
-        style={{ width: '100%' }}
-        formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-        parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as any}
+        precision={ 2 }
+        step={ 0.01 }
+        style={ { width: '100%' } }
       />
     </Form.Item>
     <Form.Item
       label="Category"
       name="category"
-      rules={[{ required: true, message: 'Please select category' }]}
+      rules={ [{ required: true, message: 'Please select category' }] }
     >
       <Select
-        options={[
+        options={ [
           { value: 'electronics', label: 'Electronics' },
           { value: 'clothing', label: 'Clothing' },
           { value: 'books', label: 'Books' },
           { value: 'home', label: 'Home & Garden' },
           { value: 'sports', label: 'Sports & Outdoors' }
-        ]}
+        ] }
         placeholder="Select category..."
       />
     </Form.Item>
@@ -237,7 +237,7 @@ const ProductFieldComponent = (): React.JSX.Element => (
     >
       <DatePicker
         placeholder="Select launch date..."
-        style={{ width: '100%' }}
+        style={ { width: '100%' } }
       />
     </Form.Item>
   </Panel>
@@ -336,39 +336,40 @@ const FieldCollectionExample = ({
 
   const handleValuesChange = (changedValues: any, allValues: any): void => {
     console.log('Field collection changed:', allValues.fieldCollection)
-    setFormValues(allValues)
+    setFormValues(allValues as { fieldCollection: any[] })
   }
 
   return (
     <Content padded>
       <Form
-        form={form}
+        form={ form }
+        initialValues={ formValues }
         layout="vertical"
-        onFinish={handleFormSubmit}
-        onValuesChange={handleValuesChange}
-        initialValues={formValues}
+        onFinish={ handleFormSubmit }
+        onValuesChange={ handleValuesChange }
       >
         <Form.Item
           name="fieldCollection"
         >
           <FieldCollection
+            disallowAddRemove={ disallowAddRemove }
+            disallowReorder={ disallowReorder }
+            maxItems={ maxItems }
+            registry={ registry }
             title='Dynamic Field Collection'
-            registry={registry}
-            disallowReorder={disallowReorder}
-            disallowAddRemove={disallowAddRemove}
-            maxItems={maxItems}
           />
         </Form.Item>
 
-        <div style={{ marginTop: '24px' }}>
+        <div style={ { marginTop: '24px' } }>
           <h4>Current Collection Value:</h4>
-          <pre style={{
+          <pre style={ {
             backgroundColor: '#f5f5f5',
             padding: '12px',
             borderRadius: '4px',
             fontSize: '12px',
             overflow: 'auto'
-          }}>
+          } }
+          >
             {JSON.stringify(formValues.fieldCollection ?? [], null, 2)}
           </pre>
         </div>
@@ -391,7 +392,7 @@ export const Default: Story = {
 export const WithInitialData: Story = {
   render: () => (
     <FieldCollectionExample
-      initialValue={[
+      initialValue={ [
         {
           type: 'text',
           data: {
@@ -410,7 +411,7 @@ export const WithInitialData: Story = {
             category: 'news'
           }
         }
-      ]}
+      ] }
     />
   ),
   parameters: {
@@ -425,8 +426,8 @@ export const WithInitialData: Story = {
 export const DisallowReorder: Story = {
   render: () => (
     <FieldCollectionExample
-      disallowReorder={true}
-      initialValue={[
+      disallowReorder
+      initialValue={ [
         {
           type: 'text',
           data: { text: 'First item (cannot be reordered)' }
@@ -435,7 +436,7 @@ export const DisallowReorder: Story = {
           type: 'number',
           data: { number: 123 }
         }
-      ]}
+      ] }
     />
   ),
   parameters: {
@@ -450,8 +451,8 @@ export const DisallowReorder: Story = {
 export const DisallowAddRemove: Story = {
   render: () => (
     <FieldCollectionExample
-      disallowAddRemove={true}
-      initialValue={[
+      disallowAddRemove
+      initialValue={ [
         {
           type: 'text',
           data: { text: 'Fixed item 1' }
@@ -464,7 +465,7 @@ export const DisallowAddRemove: Story = {
           type: 'boolean',
           data: { active: true }
         }
-      ]}
+      ] }
     />
   ),
   parameters: {
@@ -479,8 +480,7 @@ export const DisallowAddRemove: Story = {
 export const WithMaxItems: Story = {
   render: () => (
     <FieldCollectionExample
-      maxItems={3}
-      initialValue={[
+      initialValue={ [
         {
           type: 'text',
           data: { text: 'Item 1 of max 3' }
@@ -489,7 +489,8 @@ export const WithMaxItems: Story = {
           type: 'number',
           data: { number: 100 }
         }
-      ]}
+      ] }
+      maxItems={ 3 }
     />
   ),
   parameters: {
@@ -504,9 +505,9 @@ export const WithMaxItems: Story = {
 export const FullyRestricted: Story = {
   render: () => (
     <FieldCollectionExample
-      disallowReorder={true}
-      disallowAddRemove={true}
-      initialValue={[
+      disallowAddRemove
+      disallowReorder
+      initialValue={ [
         {
           type: 'text',
           data: { text: 'Read-only collection item 1' }
@@ -519,7 +520,7 @@ export const FullyRestricted: Story = {
           type: 'color',
           data: { color: '#ff6b6b' }
         }
-      ]}
+      ] }
     />
   ),
   parameters: {
@@ -535,7 +536,7 @@ export const FullyRestricted: Story = {
 export const AllFieldTypes: Story = {
   render: () => (
     <FieldCollectionExample
-      initialValue={[
+      initialValue={ [
         {
           type: 'text',
           data: { text: 'Sample text input' }
@@ -564,7 +565,7 @@ export const AllFieldTypes: Story = {
           type: 'color',
           data: { color: '#1677ff' }
         }
-      ]}
+      ] }
     />
   ),
   parameters: {
@@ -580,7 +581,7 @@ export const AllFieldTypes: Story = {
 export const ComplexFieldTypes: Story = {
   render: () => (
     <FieldCollectionExample
-      initialValue={[
+      initialValue={ [
         {
           type: 'person',
           data: {
@@ -610,7 +611,7 @@ export const ComplexFieldTypes: Story = {
             email: 'jane.smith@example.com'
           }
         }
-      ]}
+      ] }
     />
   ),
   parameters: {
@@ -626,7 +627,7 @@ export const ComplexFieldTypes: Story = {
 export const MixedComplexity: Story = {
   render: () => (
     <FieldCollectionExample
-      initialValue={[
+      initialValue={ [
         {
           type: 'text',
           data: { text: 'Simple text field' }
@@ -659,7 +660,7 @@ export const MixedComplexity: Story = {
           type: 'boolean',
           data: { active: true }
         }
-      ]}
+      ] }
     />
   ),
   parameters: {

@@ -28,55 +28,55 @@ const config: Meta = {
       const [data, setData] = useState(args.value)
       const [selectedRows, setSelectedRows] = useState(args.selectedRows ?? {})
 
-      const handleChange = (newValue: any[]) => {
+      const handleChange = (newValue: any[]): void => {
         setData(newValue)
         args.onChange?.(newValue)
       }
 
-      const handleSelectedRowsChange = (newSelectedRows: any) => {
-        setSelectedRows(newSelectedRows)
-        args.onSelectedRowsChange?.(newSelectedRows)
+      const handleSelectedRowsChange = (newSelectedRows: any): void => {
+        setSelectedRows(newSelectedRows as RowSelectionState)
+        args.onSelectedRowsChange?.(newSelectedRows as RowSelectionState)
       }
 
       return (
         <OperationalGrid
-          {...args}
-          value={data}
-          onChange={handleChange}
-          selectedRows={selectedRows}
-          onSelectedRowsChange={handleSelectedRowsChange}
+          { ...args }
+          onChange={ handleChange }
+          onSelectedRowsChange={ handleSelectedRowsChange }
+          selectedRows={ selectedRows }
+          value={ data }
         >
           <OperationalGrid.Grid />
-          
-          <div style={{ marginTop: 16 }}>
+
+          <div style={ { marginTop: 16 } }>
             <OperationalGrid.Operations>
               {(operations) => {
                 const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
                 const hasSelection = selectedCount > 0
                 const isMultipleSelection = args.enableMultipleRowSelection === true
-                
+
                 return (
                   <Space>
-                    <IconButton 
-                      icon={{ value: 'new-something' }}
-                      onClick={() => operations.addRow({ name: 'New Item', value: '', category: 'New' })}
+                    <IconButton
+                      icon={ { value: 'new-something' } }
+                      onClick={ () => { operations.addRow({ name: 'New Item', value: '', category: 'New' }) } }
                     >
                       Add Row
                     </IconButton>
-                    {args.enableRowSelection && (
+                    {args.enableRowSelection === true && (
                       <>
-                        <IconButton 
-                          icon={{ value: 'trash' }}
-                          onClick={() => operations.deleteSelectedRows()}
-                          disabled={!hasSelection}
+                        <IconButton
                           danger
+                          disabled={ !hasSelection }
+                          icon={ { value: 'trash' } }
+                          onClick={ () => { operations.deleteSelectedRows() } }
                         >
                           Delete Selected {isMultipleSelection ? `(${selectedCount})` : ''}
                         </IconButton>
-                        <IconButton 
-                          icon={{ value: 'close' }}
-                          onClick={() => operations.clearSelectedRows()}
-                          disabled={!hasSelection}
+                        <IconButton
+                          disabled={ !hasSelection }
+                          icon={ { value: 'close' } }
+                          onClick={ () => { operations.clearSelectedRows() } }
                         >
                           Clear Selection
                         </IconButton>
@@ -120,14 +120,14 @@ const columns = [
   }),
   columnHelper.accessor('value', {
     header: 'Value',
-    cell: info => <DefaultCell {...info} />,
+    cell: info => <DefaultCell { ...info } />,
     meta: {
       editable: true
     }
   }),
   columnHelper.accessor('category', {
     header: 'Category',
-    cell: info => <DefaultCell {...info} />,
+    cell: info => <DefaultCell { ...info } />,
     meta: {
       editable: true
     }
@@ -230,89 +230,93 @@ export const WithColumnOperations = {
           meta: { editable: true }
         }),
         columnHelper.accessor('value', {
-          header: 'Value', 
-          cell: info => <DefaultCell {...info} />,
+          header: 'Value',
+          cell: info => <DefaultCell { ...info } />,
           meta: { editable: true }
         })
       ])
       const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
 
-      const handleColumnsChange = (newColumns: Array<ColumnDef<any>>) => {
+      const handleColumnsChange = (newColumns: Array<ColumnDef<any>>): void => {
         setColumns(newColumns as Array<ColumnDef<Item>>)
       }
 
       return (
         <OperationalGrid
-          value={data}
-          columns={columns}
-          onChange={setData}
-          onColumnsChange={handleColumnsChange}
-          selectedRows={selectedRows}
-          onSelectedRowsChange={setSelectedRows}
-          enableSorting={true}
-          enableRowSelection={true}
-          enableMultipleRowSelection={true}
+          columns={ columns }
+          enableMultipleRowSelection
+          enableRowSelection
+          enableSorting
+          onChange={ setData }
+          onColumnsChange={ handleColumnsChange }
+          onSelectedRowsChange={ setSelectedRows }
+          selectedRows={ selectedRows }
+          value={ data }
         >
           <OperationalGrid.Grid />
-          
-          <div style={{ marginTop: 16 }}>
+
+          <div style={ { marginTop: 16 } }>
             <OperationalGrid.Operations>
               {(operations) => {
                 const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
                 const hasSelection = selectedCount > 0
-                
+
                 return (
                   <Space wrap>
-                    <IconButton 
-                      icon={{ value: 'new-something' }}
-                      onClick={() => operations.addRow({ name: 'New Item', value: '', category: 'New' })}
+                    <IconButton
+                      icon={ { value: 'new-something' } }
+                      onClick={ () => { operations.addRow({ name: 'New Item', value: '', category: 'New' }) } }
                     >
                       Add Row
                     </IconButton>
-                    <IconButton 
-                      icon={{ value: 'trash' }}
-                      onClick={() => operations.deleteSelectedRows()}
-                      disabled={!hasSelection}
+                    <IconButton
                       danger
+                      disabled={ !hasSelection }
+                      icon={ { value: 'trash' } }
+                      onClick={ () => { operations.deleteSelectedRows() } }
                     >
                       Delete Selected ({selectedCount})
                     </IconButton>
-                    <IconButton 
-                      icon={{ value: 'close' }}
-                      onClick={() => operations.clearSelectedRows()}
-                      disabled={!hasSelection}
+                    <IconButton
+                      disabled={ !hasSelection }
+                      icon={ { value: 'close' } }
+                      onClick={ () => { operations.clearSelectedRows() } }
                     >
                       Clear Selection
                     </IconButton>
-                    <div style={{ borderLeft: '1px solid #d9d9d9', paddingLeft: 8, marginLeft: 8 }}>
+                    <div style={ { borderLeft: '1px solid #d9d9d9', paddingLeft: 8, marginLeft: 8 } }>
                       <Space>
-                        <IconButton 
-                          icon={{ value: 'new-column' }}
-                          onClick={() => operations.addColumn(
-                            columnHelper.accessor('category', {
-                              header: 'Category',
-                              cell: info => <DefaultCell {...info} />,
-                              meta: { editable: true }
-                            })
-                          )}
+                        <IconButton
+                          icon={ { value: 'new-column' } }
+                          onClick={ () => {
+                            operations.addColumn(
+                              columnHelper.accessor('category', {
+                                header: 'Category',
+                                cell: info => <DefaultCell { ...info } />,
+                                meta: { editable: true }
+                              })
+                            )
+                          } }
                         >
                           Add Category Column
                         </IconButton>
-                        <IconButton 
-                          icon={{ value: 'delete-column' }}
-                          onClick={() => operations.removeColumn('category')}
+                        <IconButton
                           danger
+                          icon={ { value: 'delete-column' } }
+                          onClick={ () => { operations.removeColumn('category') } }
                         >
                           Remove Category Column
                         </IconButton>
-                        <IconButton 
-                          icon={{ value: 'edit' }}
-                          onClick={() => operations.updateColumn('name', 
-                            columnHelper.accessor('name', {
-                              header: 'Item Name (Updated)',
-                              meta: { editable: true }
-                            })
-                          )}
+                        <IconButton
+                          icon={ { value: 'edit' } }
+                          onClick={ () => {
+                            operations.updateColumn('name',
+                              columnHelper.accessor('name', {
+                                header: 'Item Name (Updated)',
+                                meta: { editable: true }
+                              })
+                            )
+                          } }
                         >
                           Update Name Column Header
                         </IconButton>
@@ -343,7 +347,7 @@ export const WithDragAndDrop = {
       ])
       const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
 
-      const handleDragEnd = (event: DragEndEvent) => {
+      const handleDragEnd = (event: DragEndEvent): void => {
         const { active, over } = event
 
         if (active.id !== over?.id) {
@@ -361,70 +365,74 @@ export const WithDragAndDrop = {
 
       return (
         <div>
-          <div style={{ marginBottom: 16, padding: 16, backgroundColor: '#f0f0f0', borderRadius: 4 }}>
-            <h4 style={{ margin: 0, marginBottom: 8 }}>Drag & Drop Grid</h4>
-            <p style={{ margin: 0, fontSize: '14px', color: '#666' }}>
+          <div style={ { marginBottom: 16, padding: 16, backgroundColor: '#f0f0f0', borderRadius: 4 } }>
+            <h4 style={ { margin: 0, marginBottom: 8 } }>Drag & Drop Grid</h4>
+            <p style={ { margin: 0, fontSize: '14px', color: '#666' } }>
               Use the drag handle (⋮⋮) on the left to reorder rows by dragging them up or down.
             </p>
           </div>
-          
+
           <OperationalGrid
-            value={data}
-            columns={columns}
-            onChange={setData}
-            selectedRows={selectedRows}
-            onSelectedRowsChange={setSelectedRows}
-            enableSorting={false}
-            enableRowSelection={true}
-            enableMultipleRowSelection={true}
-            enableRowDrag={true}
-            handleDragEnd={handleDragEnd}
+            columns={ columns }
+            enableMultipleRowSelection
+            enableRowDrag
+            enableRowSelection
+            enableSorting={ false }
+            handleDragEnd={ handleDragEnd }
+            onChange={ setData }
+            onSelectedRowsChange={ setSelectedRows }
+            selectedRows={ selectedRows }
+            value={ data }
           >
             <OperationalGrid.Grid />
-            
-            <div style={{ marginTop: 16 }}>
+
+            <div style={ { marginTop: 16 } }>
               <OperationalGrid.Operations>
                 {(operations) => {
                   const selectedCount = Object.keys(selectedRows).filter(key => selectedRows[key]).length
                   const hasSelection = selectedCount > 0
-                  
+
                   return (
                     <Space>
-                      <IconButton 
-                        icon={{ value: 'new-something' }}
-                        onClick={() => operations.addRow({ 
-                          name: `Task ${data.length + 1}`, 
-                          value: 'New Priority', 
-                          category: 'New Category' 
-                        })}
+                      <IconButton
+                        icon={ { value: 'new-something' } }
+                        onClick={ () => {
+                          operations.addRow({
+                            name: `Task ${data.length + 1}`,
+                            value: 'New Priority',
+                            category: 'New Category'
+                          })
+                        } }
                       >
                         Add Task
                       </IconButton>
-                      <IconButton 
-                        icon={{ value: 'trash' }}
-                        onClick={() => operations.deleteSelectedRows()}
-                        disabled={!hasSelection}
+                      <IconButton
                         danger
+                        disabled={ !hasSelection }
+                        icon={ { value: 'trash' } }
+                        onClick={ () => { operations.deleteSelectedRows() } }
                       >
                         Delete Selected ({selectedCount})
                       </IconButton>
-                      <IconButton 
-                        icon={{ value: 'close' }}
-                        onClick={() => operations.clearSelectedRows()}
-                        disabled={!hasSelection}
+                      <IconButton
+                        disabled={ !hasSelection }
+                        icon={ { value: 'close' } }
+                        onClick={ () => { operations.clearSelectedRows() } }
                       >
                         Clear Selection
                       </IconButton>
-                      <div style={{ borderLeft: '1px solid #d9d9d9', paddingLeft: 8, marginLeft: 8 }}>
-                        <IconButton 
-                          icon={{ value: 'refresh' }}
-                          onClick={() => setData([
-                            { name: 'Task 1', value: 'High Priority', category: 'Development' },
-                            { name: 'Task 2', value: 'Medium Priority', category: 'Testing' },
-                            { name: 'Task 3', value: 'Low Priority', category: 'Documentation' },
-                            { name: 'Task 4', value: 'High Priority', category: 'Design' },
-                            { name: 'Task 5', value: 'Medium Priority', category: 'Development' }
-                          ])}
+                      <div style={ { borderLeft: '1px solid #d9d9d9', paddingLeft: 8, marginLeft: 8 } }>
+                        <IconButton
+                          icon={ { value: 'refresh' } }
+                          onClick={ () => {
+                            setData([
+                              { name: 'Task 1', value: 'High Priority', category: 'Development' },
+                              { name: 'Task 2', value: 'Medium Priority', category: 'Testing' },
+                              { name: 'Task 3', value: 'Low Priority', category: 'Documentation' },
+                              { name: 'Task 4', value: 'High Priority', category: 'Design' },
+                              { name: 'Task 5', value: 'Medium Priority', category: 'Development' }
+                            ])
+                          } }
                         >
                           Reset Order
                         </IconButton>

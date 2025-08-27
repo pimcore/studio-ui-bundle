@@ -10,7 +10,6 @@
 
 import type { Meta, StoryObj } from '@storybook/react'
 import { ManyToManyRelation } from './many-to-many-relation'
-import type { ManyToManyRelationProps } from './many-to-many-relation'
 
 const meta: Meta<typeof ManyToManyRelation> = {
   title: 'Components/Data Entry/ManyToManyRelation',

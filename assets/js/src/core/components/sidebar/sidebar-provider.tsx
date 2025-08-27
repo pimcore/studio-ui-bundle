@@ -10,7 +10,6 @@
 
 import React, { createContext, useState, useMemo } from 'react'
 import { type ISidebarButton, type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
-import { type SidebarProps } from './sidebar'
 
 export interface SidebarContextValue {
   entries: ISidebarEntry[]
@@ -44,8 +43,8 @@ export interface SidebarProviderProps {
   initialActiveTab?: string
 }
 
-export const SidebarProvider = ({ 
-  children, 
+export const SidebarProvider = ({
+  children,
   initialEntries = [],
   initialButtons = [],
   initialSizing = 'default',
@@ -94,8 +93,8 @@ export const SidebarProvider = ({
   }
 
   const toggleHighlight = (key: string): void => {
-    setHighlights(prev => 
-      prev.includes(key) 
+    setHighlights(prev =>
+      prev.includes(key)
         ? prev.filter(h => h !== key)
         : [...prev, key]
     )
@@ -141,7 +140,7 @@ export const SidebarProvider = ({
   }), [entries, buttons, sizing, highlights, activeTab])
 
   return (
-    <SidebarContext.Provider value={contextValue}>
+    <SidebarContext.Provider value={ contextValue }>
       {children}
     </SidebarContext.Provider>
   )
