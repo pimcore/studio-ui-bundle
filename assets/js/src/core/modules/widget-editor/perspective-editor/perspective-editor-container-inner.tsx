@@ -29,15 +29,15 @@ export const PerspectiveEditorContainerInner = (): React.JSX.Element => {
     id: 'widget-editor.perspective-editor.main',
     minSize: 600,
     children: [
-      <WidgetDetailContainer key={ 'widget-editor.perspective-editor.main.detailTab' } />
+      <WidgetDetailContainer key={'widget-editor.perspective-editor.main.detailTab'} />
     ]
   }
 
   return (
     <ContentLayout>
       <ConfigLayout
-        leftItem={ sidebar }
-        rightItem={ main }
+        leftItem={sidebar}
+        rightItem={main}
       />
     </ContentLayout>
   )
