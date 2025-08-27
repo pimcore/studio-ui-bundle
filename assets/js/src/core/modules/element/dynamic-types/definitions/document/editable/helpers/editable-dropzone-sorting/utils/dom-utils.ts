@@ -151,8 +151,6 @@ export const updateDropzoneContainers = (
       itemEntry.appendChild(dropzoneContainer)
     }
   })
-
-  showElementsWithDropzones(elements)
 }
 
 /**

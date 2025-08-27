@@ -28,7 +28,6 @@ export interface UseBlockEditableParams {
   onChange?: (value: BlockValue) => void
   config?: BlockEditableConfig
   disabled?: boolean
-  addDropzonePortalRef?: React.MutableRefObject<((containerElement: HTMLElement) => void) | null>
 }
 
 export interface UseBlockEditableReturn {
@@ -45,8 +44,7 @@ export const useBlockEditable = ({
   value = [],
   onChange,
   config,
-  disabled = false,
-  addDropzonePortalRef
+  disabled = false
 }: UseBlockEditableParams): UseBlockEditableReturn => {
   const { initializeData, getValues, removeValues } = useDocumentEditor()
   const [dynamicEditables, setDynamicEditables] = useState<AbstractDocumentEditableDefinition[]>([])
@@ -126,21 +124,17 @@ export const useBlockEditable = ({
       if (!isNil(newElement)) {
         const newBlockEntry = newElement as HTMLElement
         
-        // For the first block in an empty container, add a dropzone at the beginning
+        placeholderElement.parentNode.replaceChild(newElement, placeholderElement)
+        
+        // For the first block in an empty container, add a dropzone before the block entry
         if (existingElements.length === 0) {
-          const initialDropzoneContainer = createDropzoneContainer(blockManager.getEditableName())
-          newBlockEntry.insertBefore(initialDropzoneContainer, newBlockEntry.firstChild)
-          // Create portal immediately for the initial dropzone
-          addDropzonePortalRef?.current?.(initialDropzoneContainer)
+          const initialDropzoneContainer = createDropzoneContainer(blockManager.getEditableName(), true)
+          newBlockEntry.parentNode?.insertBefore(initialDropzoneContainer, newBlockEntry)
         }
         
         // Create and add dropzone container with 16px height after the block element
         const dropzoneContainer = createDropzoneContainer(blockManager.getEditableName())
         newBlockEntry.appendChild(dropzoneContainer)
-        // Create portal immediately for the dropzone
-        addDropzonePortalRef?.current?.(dropzoneContainer)
-        
-        placeholderElement.parentNode.replaceChild(newElement, placeholderElement)
         
         blockManager.setElementKey(newBlockEntry, nextKey.toString())
         ensurePortalTargets(newBlockEntry, editableDefinitions)
