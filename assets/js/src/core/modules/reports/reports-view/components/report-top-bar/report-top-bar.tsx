@@ -16,6 +16,8 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Select } from '@Pimcore/components/select/select'
 import { Content } from '@Pimcore/components/content/content'
+import { useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
+import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 
 interface IReportTopBarProps {
@@ -27,6 +29,16 @@ interface IReportTopBarProps {
 export const ReportTopBar = ({ currentReport, setCurrentReport, reportsTreeOptions }: IReportTopBarProps): React.JSX.Element | null => {
   const { t } = useTranslation()
   const { styles } = useStyles()
+
+  const { resetFilters } = useGridFilterContext()
+  const { resetData } = useReportDataContext()
+
+  const handleReportChange = (value: string): void => {
+    resetData()
+    resetFilters()
+
+    setCurrentReport(value)
+  }
 
   return (
     <Content
@@ -46,7 +58,7 @@ export const ReportTopBar = ({ currentReport, setCurrentReport, reportsTreeOptio
           <Text className={ styles.selectReportLabel }>{t('reports.reports-title')}</Text>
           <Select
             className='min-w-200'
-            onChange={ (value: string) => { setCurrentReport(value) } }
+            onChange={ handleReportChange }
             options={ reportsTreeOptions }
             placeholder={ t('reports.select-report') }
             showSearch

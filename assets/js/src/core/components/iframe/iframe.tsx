@@ -14,6 +14,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyle } from './iframe.styles'
 import { useTranslation } from 'react-i18next'
 import { isNull, isNil } from 'lodash'
+import { addCacheBusterToUrl } from '@Pimcore/utils/url-cache-buster'
 
 export interface IframeRef {
   reload: () => void
@@ -105,7 +106,9 @@ export const Iframe = forwardRef<IframeRef, IframeProps>(
           // Set actually loading state when we change the src
           setIsActuallyLoading(true)
           const currentSrc = iframeElement.src
-          iframeElement.src = currentSrc
+          // Add cache buster to force reload and bypass cache
+          const urlWithCacheBuster = addCacheBusterToUrl(currentSrc)
+          iframeElement.src = urlWithCacheBuster
         }
       },
       setReloading: (loading: boolean) => {

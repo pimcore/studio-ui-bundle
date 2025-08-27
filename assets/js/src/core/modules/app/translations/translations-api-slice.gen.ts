@@ -6,6 +6,16 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            translationCleanupByDomain: build.mutation<
+                TranslationCleanupByDomainApiResponse,
+                TranslationCleanupByDomainApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/translations/cleanup/${queryArg.domain}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Translation"],
+            }),
             translationCreate: build.mutation<TranslationCreateApiResponse, TranslationCreateApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/translations/create`,
@@ -62,6 +72,11 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type TranslationCleanupByDomainApiResponse = unknown;
+export type TranslationCleanupByDomainApiArg = {
+    /** Domain of the translation, to be cleaned up */
+    domain: string;
+};
 export type TranslationCreateApiResponse = unknown;
 export type TranslationCreateApiArg = {
     createTranslation: TranslationCreate;
@@ -163,6 +178,7 @@ export type Translation = {
     useFallback?: boolean;
 };
 export const {
+    useTranslationCleanupByDomainMutation,
     useTranslationCreateMutation,
     useTranslationDeleteByKeyMutation,
     useTranslationGetDomainsQuery,

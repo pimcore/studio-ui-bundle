@@ -9,4 +9,3 @@
  */
 
 export * from './snippet-editable'
-export * from './snippet-editable.styles'

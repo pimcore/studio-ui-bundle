@@ -13,6 +13,7 @@ import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import { type DragAndDropInfo } from '@sdk/components'
 import { SnippetContent } from './snippet-content'
 import { isNil } from 'lodash'
+import { allElementTypes } from '@Pimcore/modules/element/utils/element-type'
 
 export interface SnippetValue {
   id?: number
@@ -25,7 +26,6 @@ export interface SnippetEditableConfig {
   height?: number
   defaultHeight?: number
   class?: string
-  documentTypes?: string[]
 }
 
 export interface SnippetEditableProps {
@@ -41,27 +41,25 @@ export const SnippetEditable = ({
   onChange,
   className
 }: SnippetEditableProps): React.JSX.Element => {
+  const isValidSnippetDocument = (info: DragAndDropInfo): boolean => {
+    return info.type === 'document' && !isNil(info.data?.type) && String(info.data.type) === 'snippet'
+  }
+
   const handleDrop = (info: DragAndDropInfo): void => {
-    if (info.type === 'document' && !isNil(info.data?.type)) {
-      const allowedTypes = config?.documentTypes ?? ['snippet']
-      if (allowedTypes.includes(String(info.data.type))) {
-        const newValue: SnippetValue = {
-          id: info.data.id,
-          path: !isNil(info.data.fullPath) ? info.data.fullPath : info.data.path
-        }
-        onChange(newValue)
+    if (isValidSnippetDocument(info)) {
+      const newValue: SnippetValue = {
+        id: info.data.id,
+        path: !isNil(info.data.fullPath) ? info.data.fullPath : info.data.path
       }
+      onChange(newValue)
     }
   }
 
   return (
     <Droppable
       disableDndActiveIndicator
-      isValidContext={ (info: DragAndDropInfo) => info.type === 'document' }
-      isValidData={ (info: DragAndDropInfo) => {
-        const allowedTypes = config?.documentTypes ?? ['snippet']
-        return !isNil(info.data?.type) && allowedTypes.includes(String(info.data.type))
-      } }
+      isValidContext={ (info: DragAndDropInfo) => allElementTypes.includes(info.type) }
+      isValidData={ isValidSnippetDocument }
       onDrop={ handleDrop }
     >
       <SnippetContent

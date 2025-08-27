@@ -14,17 +14,21 @@ import { type ISidebarButton, type ISidebarEntry } from '@Pimcore/modules/elemen
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { SidebarContext } from './sidebar-provider'
+import { useTranslation } from 'react-i18next'
+import { isNil } from 'lodash'
 
 export interface SidebarProps {
   entries: ISidebarEntry[]
   buttons?: ISidebarButton[]
   sizing?: 'large' | 'default'
   highlights?: Array<ISidebarEntry['key']>
+  translateTooltips?: boolean
 }
 
-export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights = [] }: SidebarProps): React.JSX.Element => {
+export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights = [], translateTooltips = false }: SidebarProps): React.JSX.Element => {
   const { styles } = useStyle()
   const sidebarContext = useContext(SidebarContext)
+  const { t } = useTranslation()
 
   const preparedEntries = entries.map((entry) => {
     // TODO: do we need any type of translated label here?
@@ -74,7 +78,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
                 <Tooltip
                   key={ entry.key }
                   placement="left"
-                  title={ entry?.tooltip }
+                  title={ translateTooltips && !isNil(entry?.tooltip) ? t(entry.tooltip) : entry?.tooltip }
                 >
                   <div
                     aria-controls={ entry.key }

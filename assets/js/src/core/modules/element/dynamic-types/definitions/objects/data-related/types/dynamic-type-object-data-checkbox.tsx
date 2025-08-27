@@ -18,6 +18,9 @@ import type { FormInstance } from 'antd'
 import type { NamePath } from 'rc-field-form/es/interface'
 import React from 'react'
 import { DEFAULT_CHECKBOX_COLUMN_WIDTH } from '../../../grid-cell/types/checkbox/dynamic-type-grid-cell-checkbox'
+import { type DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 export type CheckboxObjectDataDefinition = AbstractObjectDataDefinition & {
   defaultValue: boolean | number | null
@@ -25,6 +28,9 @@ export type CheckboxObjectDataDefinition = AbstractObjectDataDefinition & {
 
 export class DynamicTypeObjectDataCheckbox extends DynamicTypeObjectDataAbstract {
   id: string = 'checkbox'
+
+  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Boolean'])
+
   getObjectDataComponent (props: CheckboxObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <Checkbox

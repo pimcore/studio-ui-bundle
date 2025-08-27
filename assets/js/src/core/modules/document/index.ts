@@ -10,6 +10,7 @@
 
 import '@Pimcore/modules/document/editor'
 import '@Pimcore/modules/document/tree'
+import '@Pimcore/modules/document/document-editor-slice'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'

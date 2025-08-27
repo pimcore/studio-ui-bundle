@@ -24,6 +24,7 @@ import { useAddObject } from '../../actions/add-object/use-add-object'
 import { usePaste } from '@Pimcore/modules/data-object/actions/paste/use-paste'
 import { usePublish } from '@Pimcore/modules/element/actions/publish/use-publish'
 import { type IMenuProps, Menu } from '@Pimcore/components/menu/menu'
+import { createContextMenuContainerTestId } from '@Pimcore/utils/test-id-generator'
 
 export interface DataObjectTreeContextMenuProps {
   node: TreeNodeProps
@@ -96,6 +97,7 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
 
   return (
     <Menu
+      dataTestId={ createContextMenuContainerTestId('data-object', node.id) }
       items={ items }
     />
   )
