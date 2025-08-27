@@ -45,10 +45,6 @@ export const useAreablockControls = ({
   onMoveArea,
   onOpenDialog
 }: UseAreablockControlsParams): UseAreablockControlsReturn => {
-  const handleAddArea = useCallback(async (element: HTMLElement | null, areaType?: string) => {
-    await onAddArea(element, areaType)
-  }, [onAddArea])
-
   const {
     activeId,
     handleDragStart,
@@ -74,15 +70,13 @@ export const useAreablockControls = ({
         const targetElement = elements[index - 1]
         await handleAddArea(targetElement, areaType)
       }
-
-      refreshDropzones()
     }
   })
 
-  const handleAddAreaWithRefresh = useCallback(async (element: HTMLElement | null, areaType?: string) => {
-    await handleAddArea(element, areaType)
+  const handleAddArea = useCallback(async (element: HTMLElement | null, areaType?: string) => {
+    await onAddArea(element, areaType)
     refreshDropzones()
-  }, [handleAddArea, refreshDropzones])
+  }, [onAddArea, refreshDropzones])
 
   const handleRemoveArea = useCallback((element: HTMLElement) => {
     const currentAreaEntries = areablockManager.queryElements()
@@ -93,18 +87,9 @@ export const useAreablockControls = ({
     if (isLastItem) {
       removeFirstDropzone() // Remove the first dropzone when removing the last item
     }
-    // refreshDropzones()
   }, [onRemoveArea, areablockManager, removeFirstDropzone])
 
-  const handleMoveAreaUp = useCallback((element: HTMLElement) => {
-    onMoveAreaUp(element)
-    // refreshDropzones()
-  }, [onMoveAreaUp, refreshDropzones])
 
-  const handleMoveAreaDown = useCallback((element: HTMLElement) => {
-    onMoveAreaDown(element)
-    // refreshDropzones()
-  }, [onMoveAreaDown, refreshDropzones])
 
   const createEmptyStatePortal = useCallback((container: HTMLElement): React.ReactPortal => {
     const emptyStateToolbar = (
@@ -112,12 +97,12 @@ export const useAreablockControls = ({
         areaTypes={ areaTypes }
         config={ config }
         onClick={ async (areaType) => {
-          await handleAddAreaWithRefresh(null, areaType)
+          await handleAddArea(null, areaType)
         } }
       />
     )
     return ReactDOM.createPortal(emptyStateToolbar, container)
-  }, [areaTypes, config, handleAddAreaWithRefresh])
+  }, [areaTypes, config, handleAddArea])
 
   const renderAreablockToolbar = useCallback((): React.JSX.Element => {
     const portals: React.ReactPortal[] = []
@@ -154,9 +139,9 @@ export const useAreablockControls = ({
               element={ areaEntry }
               id={ areaKey }
               limitReached={ limitReached }
-              onAddArea={ handleAddAreaWithRefresh }
-              onMoveAreaDown={ handleMoveAreaDown }
-              onMoveAreaUp={ handleMoveAreaUp }
+              onAddArea={ handleAddArea }
+              onMoveAreaDown={ onMoveAreaDown }
+              onMoveAreaUp={ onMoveAreaUp }
               onOpenDialog={ onOpenDialog }
               onRemoveArea={ handleRemoveArea }
             />
@@ -179,7 +164,7 @@ export const useAreablockControls = ({
         <>{portals}</>
       </EditableSortContext>
     )
-  }, [areablockManager, areaTypes, config, handleDragStart, handleDragOver, handleDragEnd, handleAddAreaWithRefresh, handleRemoveArea, handleMoveAreaUp, handleMoveAreaDown, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal])
+  }, [areablockManager, areaTypes, config, handleDragStart, handleDragOver, handleDragEnd, handleAddArea, handleRemoveArea, onMoveAreaUp, onMoveAreaDown, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal])
 
   return {
     renderAreablockToolbar
