@@ -85,7 +85,7 @@ export const useAreablockControls = ({
     onRemoveArea(element)
 
     if (isLastItem) {
-      removeFirstDropzone() // Remove the first dropzone when removing the last item
+      removeFirstDropzone()
     }
   }, [onRemoveArea, areablockManager, removeFirstDropzone])
 

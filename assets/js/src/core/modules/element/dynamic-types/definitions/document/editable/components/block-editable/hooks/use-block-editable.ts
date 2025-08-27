@@ -114,15 +114,12 @@ export const useBlockEditable = ({
     if (!isNil(newElement)) {
       const newBlockEntry = newElement as HTMLElement
 
-      // Hide the new element until editables are rendered
       hideElementUntilRendered(newBlockEntry)
 
       const existingElements = blockManager.queryElements()
 
-      // Insert the new element at the correct position
       if (existingElements.length === 0) {
         container.appendChild(newBlockEntry)
-        // For the first block in an empty container, add a dropzone before the block entry
         const initialDropzoneContainer = createDropzoneContainer(blockManager.getEditableName(), true)
         newBlockEntry.parentNode?.insertBefore(initialDropzoneContainer, newBlockEntry)
       } else if (!isNil(existingElements[index - 1])) {
@@ -131,7 +128,6 @@ export const useBlockEditable = ({
         existingElements[index].insertAdjacentElement('beforebegin', newBlockEntry)
       }
 
-      // Create and add dropzone container with 16px height after the block element
       const dropzoneContainer = createDropzoneContainer(blockManager.getEditableName())
       newBlockEntry.appendChild(dropzoneContainer)
 

@@ -148,15 +148,12 @@ export const useAreablockEditable = ({
         if (!isNil(newElement)) {
           const newAreaElement = newElement as HTMLElement
 
-          // Hide the new element until editables are rendered
           hideElementUntilRendered(newAreaElement)
 
           const existingElements = areablockManager.queryElements()
 
-          // Insert the new element at the correct position
           if (existingElements.length === 0) {
             container.appendChild(newAreaElement)
-            // For the first area in an empty container, add a dropzone before the area element
             const initialDropzoneContainer = createDropzoneContainer(areablockManager.getEditableName(), true)
             newAreaElement.parentNode?.insertBefore(initialDropzoneContainer, newAreaElement)
           } else if (!isNil(existingElements[index - 1])) {
@@ -165,7 +162,6 @@ export const useAreablockEditable = ({
             existingElements[index].insertAdjacentElement('beforebegin', newAreaElement)
           }
 
-          // Create and add dropzone container with 16px height after the area element
           const dropzoneContainer = createDropzoneContainer(areablockManager.getEditableName())
           newAreaElement.appendChild(dropzoneContainer)
         }
