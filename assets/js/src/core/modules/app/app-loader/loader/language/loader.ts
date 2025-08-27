@@ -20,10 +20,14 @@ export const useLanguageLoader = (): ILanguageLoader => {
   const loadAvailableLocales = async (): Promise<void> => {
     try {
       await store.dispatch(
-        baseApi.endpoints.translationGetAvailableLocales.initiate()
+        baseApi.endpoints.translationGetAvailableLocales.initiate(undefined, {
+          forceRefetch: false,
+          subscribe: true
+        })
       ).unwrap()
-    } catch {
-      trackError(new GeneralError("Could not load available locales"))
+    } catch (error) {
+      trackError(new GeneralError("Error loading available locales"))
+      throw error 
     }
   }
 
