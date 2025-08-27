@@ -12,11 +12,15 @@ import { providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './translations-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.DOMAIN_TRANSLATIONS],
+  addTagTypes: [tagNames.DOMAIN_TRANSLATIONS, tagNames.LOCALES],
   endpoints: {
 
     translationGetList: {
       providesTags: (result, error, args) => providingTags.DOMAIN_TRANSLATIONS()
+    },
+
+    translationGetAvailableLocales: {
+      providesTags: (result, error, args) => providingTags.LOCALES()
     },
 
     translationGetDomains: {

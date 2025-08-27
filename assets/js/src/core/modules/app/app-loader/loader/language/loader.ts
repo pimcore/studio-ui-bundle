@@ -9,7 +9,7 @@
  */
 
 import { store } from '@Pimcore/app/store'
-import { api as baseApi } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
+import { api as baseApi } from '@Pimcore/modules/app/translations/translations-api-slice-enhanced'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface ILanguageLoader {
