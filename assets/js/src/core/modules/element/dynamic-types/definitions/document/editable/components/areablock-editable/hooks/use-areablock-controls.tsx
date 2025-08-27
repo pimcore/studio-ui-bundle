@@ -89,8 +89,6 @@ export const useAreablockControls = ({
     }
   }, [onRemoveArea, areablockManager, removeFirstDropzone])
 
-
-
   const createEmptyStatePortal = useCallback((container: HTMLElement): React.ReactPortal => {
     const emptyStateToolbar = (
       <EmptyStateAreablockToolbar
