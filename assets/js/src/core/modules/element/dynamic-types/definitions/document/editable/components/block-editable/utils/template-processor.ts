@@ -61,7 +61,7 @@ export const processBlockTemplate = (
   const fullName = editableName
   const escapedName = fullName.replace(/[:.]/g, '_')
 
-  let processedHtml = processHtmlTemplate(templateHtml, blockManager, nextKey)
+  const processedHtml = processHtmlTemplate(templateHtml, blockManager, nextKey)
 
   const editableDefinitions: AbstractDocumentEditableDefinition[] = []
 
