@@ -9,7 +9,6 @@
  */
 
 import { ConfigLayout } from '@Pimcore/components/predefined-layouts/config/config-layout'
-import { ContentLayout } from '@sdk/components'
 import React from 'react'
 import { WidgetDetailContainer } from './components/perspective-detail/perspective-detail-container'
 import { TreeContainer } from './components/tree/tree-container'
@@ -34,11 +33,9 @@ export const PerspectiveEditorContainerInner = (): React.JSX.Element => {
   }
 
   return (
-    <ContentLayout>
-      <ConfigLayout
-        leftItem={sidebar}
-        rightItem={main}
-      />
-    </ContentLayout>
+    <ConfigLayout
+      leftItem={sidebar}
+      rightItem={main}
+    />
   )
 }

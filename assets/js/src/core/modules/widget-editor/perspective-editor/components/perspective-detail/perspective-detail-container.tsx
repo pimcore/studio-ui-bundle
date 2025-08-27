@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { ContentLayout, Tabs } from '@sdk/components'
+import { ContentLayout, Flex, Tabs } from '@sdk/components'
 import React from 'react'
 import { usePerspectiveEditorContext } from '../../context/hooks/use-perspective-editor-context'
 import { PerspectiveDetailTab } from './tabs/perspective-detail-tab/perspective-detail-tab'
@@ -17,21 +17,20 @@ export const WidgetDetailContainer = (): React.JSX.Element => {
   const { perspectives, activeTabId, setActiveTabId, closePerspective } = usePerspectiveEditorContext()
 
   return (
-    <ContentLayout>
-      <Tabs
-        activeKey={activeTabId}
-        items={perspectives.map((perspective) => ({
-          key: perspective.id,
-          label: perspective.name,
-          children: <PerspectiveDetailTab id={perspective.id} />
-        }))}
-        onChange={(key) => {
-          setActiveTabId(key)
-        }}
-        onClose={(key) => {
-          closePerspective(key as string)
-        }}
-      />
-    </ContentLayout>
+    <Tabs
+      className='h-full'
+      activeKey={activeTabId}
+      items={perspectives.map((perspective) => ({
+        key: perspective.id,
+        label: perspective.name,
+        children: <PerspectiveDetailTab id={perspective.id} />
+      }))}
+      onChange={(key) => {
+        setActiveTabId(key)
+      }}
+      onClose={(key) => {
+        closePerspective(key as string)
+      }}
+    />
   )
 }
