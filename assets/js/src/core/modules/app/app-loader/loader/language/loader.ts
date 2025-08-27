@@ -27,7 +27,7 @@ export const useLanguageLoader = (): ILanguageLoader => {
       ).unwrap()
     } catch (error) {
       trackError(new GeneralError('Error loading available locales'))
-      throw error 
+      throw error
     }
   }
 
