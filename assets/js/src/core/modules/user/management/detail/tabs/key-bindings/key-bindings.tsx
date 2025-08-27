@@ -34,30 +34,35 @@ const KeyBindings = ({ values, modified, onChange, onResetKeyBindings, ...props 
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const { getDefaultKeyBindings } = useUserManagementHelper()
-  const getKeyName = (key: string): string => {
-    if (key === 'CONTROL' || key === 'SHIFT' || key === 'ALT' || key === 'META') {
-      return ''
-    }
 
-    return key
+  const getKeyName = (key: number): string => {
+    let name = ''
+    if (key >= 112 && key <= 123) {
+      name = 'F' + (key - 111)
+    } else if (key === 32) {
+      name = 'Space'
+    } else {
+      name = String.fromCharCode(key)
+    }
+    return name
   }
 
   const renderKeyCombination = (keyBinding: any): string => {
-    return `${keyBinding.ctrl !== false ? 'Ctrl + ' : ''}${keyBinding.alt !== false ? 'Alt + ' : ''}${keyBinding.shift !== false ? 'Shift + ' : ''}${getKeyName(keyBinding.key as string)}`
+    return `${keyBinding.ctrl !== false ? 'Ctrl + ' : ''}${keyBinding.alt !== false ? 'Alt + ' : ''}${keyBinding.shift !== false ? 'Shift + ' : ''}${getKeyName(keyBinding.key)}`
   }
 
   const handleInputChange = (evt: any, name: string): object | boolean => {
-    evt.preventDefault()
+    evt.preventDefault();
 
     const code = {
       action: name,
       ctrl: false,
       alt: false,
       shift: false,
-      key: evt.key.toUpperCase()
+      key: evt.keyCode
     }
 
-    if (evt.key === 'Tab' || evt.key === 'Backspace' || evt.key === 'Escape' || evt.key === 'Delete') {
+    if (evt.keyCode === 9 || evt.keyCode === 8 || evt.keyCode === 27 || evt.keyCode === 46) {
       return false
     }
 
