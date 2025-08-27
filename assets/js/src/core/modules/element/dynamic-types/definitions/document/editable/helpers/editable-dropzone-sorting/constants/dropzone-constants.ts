@@ -34,6 +34,5 @@ export const DROPZONE_STATES = {
 
 export const DROPZONE_CONFIG = {
   ID_PREFIX: 'pimcore-dropzone-',
-  DEBOUNCE_DELAY: 16, // ~60fps
   HEIGHT: '16px'
 } as const
