@@ -37,6 +37,34 @@ export const useStyles = createStyles(({ token, css }) => {
         height: 0;
       }
 
+      &.grid--docked {
+        &.ant-table-wrapper .ant-table-container,
+        &.ant-table-wrapper .ant-table,
+        &.ant-table-wrapper table {
+          border-radius: 0;
+          border: 0;
+        }
+
+        &.ant-table-wrapper .ant-table-container table>thead>tr:first-child >*:first-child,
+        &.ant-table-wrapper .ant-table-container table>thead>tr:first-child >*:last-child {
+          border-radius: 0;
+        }
+
+        .ant-table-cell:first-of-type {
+          border-left: 0;
+        }
+
+        .ant-table-cell:last-of-type {
+          border-right: 0;
+        }
+
+        tr:last-of-type {
+          .ant-table-cell {
+            border-bottom: 0;
+          }
+        }
+      }
+
       table.withoutHeader {
         .ant-table-tbody {
           .ant-table-row:first-child {
