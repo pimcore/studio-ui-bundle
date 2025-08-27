@@ -13,7 +13,8 @@ import {
   DROPZONE_CLASSES,
   DROPZONE_SELECTORS,
   DROPZONE_ATTRIBUTES,
-  DROPZONE_STATES
+  DROPZONE_STATES,
+  DROPZONE_CONFIG
 } from '../constants/dropzone-constants'
 
 /**
@@ -26,7 +27,7 @@ export const createDropzoneContainer = (editableName: string | null, isFirst?: b
   if (isFirst === true) {
     dropzoneContainer.setAttribute(DROPZONE_ATTRIBUTES.DATA_FIRST_DROPZONE, 'true')
   }
-  dropzoneContainer.style.height = '16px'
+  dropzoneContainer.style.height = DROPZONE_CONFIG.HEIGHT
   return dropzoneContainer
 }
 
