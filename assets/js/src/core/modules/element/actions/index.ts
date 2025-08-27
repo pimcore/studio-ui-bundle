@@ -32,6 +32,8 @@ export enum ContextMenuActionName {
   pasteAsChild = 'pasteAsChild',
   pasteOnlyContents = 'pasteOnlyContents',
 
+  openInNewWindow = 'openInNewWindow',
+
   downloadAsZip = 'downloadAsZip',
   uploadNewVersion = 'uploadNewVersion',
   upload = 'upload',

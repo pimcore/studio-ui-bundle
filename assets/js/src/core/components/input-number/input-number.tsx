@@ -12,17 +12,26 @@ import React from 'react'
 import { InputNumber as AntInputNumber, type InputNumberProps } from 'antd'
 import cn from 'classnames'
 import { useStyles } from './input-number.styles'
+import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export interface IInputNumberProps extends InputNumberProps {
   inherited?: boolean
 }
 
-export const InputNumber = ({ inherited, className, ...restProps }: IInputNumberProps): JSX.Element => {
+export const InputNumber = ({ inherited, className, style, ...restProps }: IInputNumberProps): JSX.Element => {
   const { styles } = useStyles()
+  const fieldWidths = useFieldWidthOptional()
+
+  // Apply small width as default for number inputs
+  const computedStyle = {
+    maxWidth: fieldWidths?.small,
+    ...style
+  }
 
   return (
     <AntInputNumber
       className={ cn(styles.inputNumber, className, { [styles.inherited]: inherited }) }
+      style={ computedStyle }
       { ...restProps }
     />
   )

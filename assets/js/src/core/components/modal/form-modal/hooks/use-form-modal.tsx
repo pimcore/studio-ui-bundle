@@ -18,7 +18,7 @@ import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal
 
 let form: FormInstance<any> | null = null
 
-type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)
+export type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)
 
 export type InputFormModalProps = Omit<ModalFuncProps, 'content'> & {
   label?: string

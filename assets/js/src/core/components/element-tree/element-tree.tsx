@@ -24,6 +24,8 @@ import { Box } from '../box/box'
 import { useElementTreeNode } from './hooks/use-element-tree-node'
 import { type TreeNode } from './element-tree-slice'
 import { TreeList } from './list/tree-list'
+import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
+import { createTreeTestId } from '@Pimcore/utils/test-id-generator'
 
 export interface TreeSearchProps {
   node: TreeNodeProps
@@ -90,6 +92,7 @@ const ElementTree = (
 ): React.JSX.Element => {
   const { styles } = useStyles()
   const { nodeId } = props
+  const { treeId } = useTreeId(true)
   const hasRootNode = rootNode !== undefined && parseInt(rootNode.id) === nodeId && props.showRoot
   const preparedRootNode = rootNode
   const { getChildren, isLoading } = useElementTreeNode(String(nodeId))
@@ -122,8 +125,12 @@ const ElementTree = (
   const items: string[] = getChildren()
 
   const TreeNode = renderNode
+  const treeTestId = createTreeTestId(treeId)
   const treeContent = (
-    <div className={ ['tree', styles.tree].join(' ') }>
+    <div
+      className={ ['tree', styles.tree].join(' ') }
+      data-testid={ treeTestId }
+    >
       <TreeContext.Provider value={ treeContextValue }>
 
         {hasRootNode && (

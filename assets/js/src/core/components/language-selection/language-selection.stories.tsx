@@ -12,7 +12,7 @@ import { type Meta } from '@storybook/react'
 import { LanguageSelection } from './language-selection'
 
 const config: Meta = {
-  title: 'Components/Controls/LanguageSelection',
+  title: 'Components/Data Entry/LanguageSelection',
   component: LanguageSelection,
   parameters: {
     layout: 'fullscreen'

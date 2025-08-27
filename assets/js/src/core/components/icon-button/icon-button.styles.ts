@@ -26,6 +26,12 @@ export const useStyles = createStyles(({ token, css }) => {
         box-shadow: none;
       }
 
+      &.icon-button--size-small {
+        padding: 4px;
+        height: 24px;
+        width: 24px;
+      }
+
       &.icon-button--variant-minimal {
         padding: 0;
         width: auto;

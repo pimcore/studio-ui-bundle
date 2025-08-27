@@ -9,7 +9,6 @@
  */
 
 import React from 'react'
-import cn from 'classnames'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -22,6 +21,7 @@ import {
 import { useStyles } from './link.styles'
 import { LinkPreview } from './components/link-preview/link-preview'
 import { useLinkModal } from './hooks/use-link-modal'
+import cn from 'classnames'
 
 export interface LinkValue {
   text: string
@@ -52,12 +52,20 @@ export interface LinkProps {
   className?: string
   textPrefix?: string
   textSuffix?: string
+  PreviewComponent?: React.ComponentType<{
+    className?: string
+    inherited?: boolean
+    textPrefix?: string
+    textSuffix?: string
+    value: LinkValue | null
+  }>
 }
 
 export const Link = (props: LinkProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { openElement } = useElementHelper()
+  const { PreviewComponent = LinkPreview } = props
 
   const value = props.value ?? null
 
@@ -97,11 +105,11 @@ export const Link = (props: LinkProps): React.JSX.Element => {
   return (
     <Flex
       align="center"
-      className={ cn(styles.link, props.className) }
+      className={ styles.link }
       gap="extra-small"
     >
-      <LinkPreview
-        className="studio-inherited-overlay"
+      <PreviewComponent
+        className={ cn('studio-inherited-overlay', props.className) }
         inherited={ props.inherited }
         textPrefix={ props.textPrefix }
         textSuffix={ props.textSuffix }

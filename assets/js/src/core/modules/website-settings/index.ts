@@ -22,8 +22,9 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Settings/Website Settings',
+      path: 'ExperienceEcommerce/Website Settings',
       label: 'navigation.website-settings',
+      order: 100,
       className: 'item-style-modifier',
       permission: UserPermission.WebsiteSettings,
       perspectivePermission: NavPermission.WebsiteSettings,

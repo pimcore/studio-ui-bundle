@@ -173,7 +173,7 @@ export class DocumentSaveTaskManager {
     try {
       const { document: documentApi } = getPimcoreStudioApi()
       const iframeApi = documentApi.getIframeApi(this.documentId)
-      return iframeApi.documentEditable.getValues()
+      return iframeApi.documentEditable.getValues(true)
     } catch (error) {
       console.warn(`Could not get editable data for document ${this.documentId}:`, error)
       return {}

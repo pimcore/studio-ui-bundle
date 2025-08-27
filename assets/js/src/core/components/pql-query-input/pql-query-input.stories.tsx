@@ -12,7 +12,7 @@ import type { Meta } from '@storybook/react'
 import { PQLQueryInput } from './pql-query-input'
 
 const config: Meta = {
-  title: 'Components/Others/PQLQueryInput',
+  title: 'Components/Data Entry/PQLQueryInput',
   component: PQLQueryInput,
   tags: ['autodocs']
 }

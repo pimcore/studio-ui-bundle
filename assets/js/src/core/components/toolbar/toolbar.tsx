@@ -20,7 +20,7 @@ export interface ToolbarProps {
   align?: FlexProps['align']
   theme?: 'primary' | 'secondary'
   borderStyle?: 'default' | 'primary'
-  position?: 'top' | 'bottom'
+  position?: 'top' | 'bottom' | 'content'
   size?: 'small' | 'auto' | 'default'
   padding?: BoxProps['padding']
   margin?: BoxProps['margin']

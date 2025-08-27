@@ -16,10 +16,16 @@ import { serviceIds, useInjection } from '@sdk/app'
 import { isNil, isUndefined } from 'lodash'
 import { defaultFieldWidthValues, FieldWidthProvider } from '@sdk/modules/element'
 import { useDocumentEditor } from '../../hooks/use-document-editor'
+import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 
 interface RenderEditableProps {
   editableDefinition: AbstractDocumentEditableDefinition
   containerRef: React.RefObject<HTMLDivElement>
+}
+
+export const EDITABLE_DEFAULT_FIELD_WIDTHS = {
+  ...defaultFieldWidthValues,
+  large: 9999
 }
 
 export const RenderEditable = ({ editableDefinition, containerRef }: RenderEditableProps): React.JSX.Element => {
@@ -28,10 +34,7 @@ export const RenderEditable = ({ editableDefinition, containerRef }: RenderEdita
   const { updateValue, updateValueWithReload, getValue } = useDocumentEditor()
   const editableProps: AbstractDocumentEditableDefinition = {
     ...editableDefinition,
-    defaultFieldWidth: {
-      ...defaultFieldWidthValues,
-      large: 9999
-    },
+    defaultFieldWidth: EDITABLE_DEFAULT_FIELD_WIDTHS,
     containerRef
   }
 
@@ -42,15 +45,16 @@ export const RenderEditable = ({ editableDefinition, containerRef }: RenderEdita
       return <></>
     }
 
-    const shouldReload = editableType.reloadOnChange(editableProps)
-
     return React.cloneElement(
       editableType.getEditableDataComponent(editableProps),
       {
         key: editableDefinition.name,
         value: localValue,
         onChange: (newValue) => {
+          const oldValue = localValue
           setLocalValue(newValue)
+
+          const shouldReload = editableType.reloadOnChange(editableProps, oldValue, newValue)
 
           if (shouldReload) {
             updateValueWithReload(editableDefinition.name, { type: editableDefinition.type, data: newValue })
@@ -74,8 +78,9 @@ export const RenderEditable = ({ editableDefinition, containerRef }: RenderEdita
   const label = editableType.getLabel(editableProps)
 
   return (
-    <FieldWidthProvider fieldWidthValues={ { large: 9999 } }>
-      {
+    <ErrorBoundary>
+      <FieldWidthProvider fieldWidthValues={ { large: 9999 } }>
+        {
         !isUndefined(label)
           ? (
             <Form.Item
@@ -89,6 +94,7 @@ export const RenderEditable = ({ editableDefinition, containerRef }: RenderEdita
               renderEditableComponent
             )
       }
-    </FieldWidthProvider>
+      </FieldWidthProvider>
+    </ErrorBoundary>
   )
 }

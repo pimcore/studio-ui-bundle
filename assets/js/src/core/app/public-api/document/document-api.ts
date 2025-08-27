@@ -13,6 +13,7 @@ import { markDocumentEditablesAsModified } from '@Pimcore/modules/document/docum
 import { iframeDocumentEditorRegistry } from './iframe-registry'
 import { documentSaveService, SaveTaskType } from '@Pimcore/modules/document/services'
 import { debounce, isNil } from 'lodash'
+import { type AreablockGroupedTypes, setDocumentAreablockTypes } from '@Pimcore/modules/document/document-editor-slice'
 import { type PublicApiDocumentEditorIframe } from '../document-editor-iframe'
 import { type IframeRef } from '@Pimcore/components/iframe/iframe'
 
@@ -24,8 +25,11 @@ export interface DocumentApi {
   unregisterIframe: (documentId: number) => void
   triggerValueChange: (documentId: number, key: string, value: any) => void
   triggerValueChangeWithReload: (documentId: number, key: string, value: any) => void
+  triggerSaveAndReload: (documentId: number) => void
   notifyIframeReady: (documentId: number) => void
+  notifyAreablockTypes: (documentId: number, areablockTypes: AreablockGroupedTypes) => void
   isIframeReady: (documentId: number) => boolean
+  onReady: (documentId: number, callback: () => void) => void
 }
 
 class DocumentApiImpl implements DocumentApi {
@@ -75,12 +79,24 @@ class DocumentApiImpl implements DocumentApi {
     void this.performAutoSaveAndReload(documentId)
   }
 
+  triggerSaveAndReload (documentId: number): void {
+    void this.performAutoSaveAndReload(documentId)
+  }
+
   notifyIframeReady (documentId: number): void {
     iframeDocumentEditorRegistry.markAsReady(documentId)
   }
 
+  notifyAreablockTypes (documentId: number, areablockTypes: AreablockGroupedTypes): void {
+    store.dispatch(setDocumentAreablockTypes({ documentId, areablockTypes }))
+  }
+
   isIframeReady (documentId: number): boolean {
     return iframeDocumentEditorRegistry.isIframeReady(documentId)
+  }
+
+  onReady (documentId: number, callback: () => void): void {
+    iframeDocumentEditorRegistry.onReady(documentId, callback)
   }
 
   private async performAutoSave (documentId: number): Promise<void> {

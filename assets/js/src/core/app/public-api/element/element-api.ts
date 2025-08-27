@@ -19,6 +19,12 @@ import { ApiGatewayEventType, ApiGatewayEvent } from '@Pimcore/app/public-api/ap
 import { type ModalUploadProps } from '@Pimcore/components/modal-upload/modal-upload'
 import { type LinkModalOptions } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/provider/link-modal-provider'
 import { type LinkValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/link'
+import type { CropSettings } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/crop-types'
+import { type CropModalOptions } from '@Pimcore/modules/element/components/crop-modal/provider/crop-modal-provider'
+import type { IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
+import { type HotspotMarkersModalOptions } from '@Pimcore/modules/element/components/hotspot-markers-modal/provider/hotspot-markers-modal-provider'
+import { type VideoValue, type VideoType } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/video/video'
+import { type VideoModalOptions } from '@Pimcore/modules/element/components/video-modal/provider/video-modal-provider'
 
 class ElementOpeningService {
   async openAsset (config: { id: number }): Promise<void> {
@@ -60,6 +66,25 @@ export interface LinkModalProps {
   options?: LinkModalOptions
 }
 
+export interface CropModalProps {
+  imageId: number
+  crop?: CropSettings | null
+  options?: CropModalOptions
+}
+
+export interface HotspotMarkersModalProps {
+  imageId: number
+  hotspots?: IHotspot[] | null
+  crop?: CropSettings | null
+  options?: HotspotMarkersModalOptions
+}
+
+export interface VideoModalProps {
+  value?: VideoValue | null
+  type?: VideoType | null
+  options?: VideoModalOptions
+}
+
 // Public API interface and implementation
 export interface ElementApi {
   openAsset: (id: number) => Promise<void>
@@ -69,6 +94,10 @@ export interface ElementApi {
   openElementSelector: (config: ElementSelectorConfig) => void
   openUploadModal: (props: ModalUploadProps) => void
   openLinkModal: (props: LinkModalProps) => void
+  openCropModal: (props: CropModalProps) => void
+  openHotspotMarkersModal: (props: HotspotMarkersModalProps) => void
+  openVideoModal: (props: VideoModalProps) => void
+  locateInTree: (id: number, elementType: ElementType) => void
 }
 
 class ElementApiImpl implements ElementApi {
@@ -93,10 +122,8 @@ class ElementApiImpl implements ElementApi {
       const { element: elementApi } = getPimcoreStudioApi()
 
       if (isInIframe()) {
-        // We're in an iframe, call the parent's API
         elementApi.openElementSelector(config)
       } else {
-        // We're in the parent window, dispatch the event directly
         this.openElementSelectorDirectly(config)
       }
     } catch (error) {
@@ -112,11 +139,9 @@ class ElementApiImpl implements ElementApi {
   openUploadModal (props: ModalUploadProps): void {
     try {
       if (isInIframe()) {
-        // We're in an iframe, call the parent's API
         const { element: elementApi } = getPimcoreStudioApi()
         elementApi.openUploadModal(props)
       } else {
-        // We're in the parent window, dispatch the event directly
         this.openUploadModalDirectly(props)
       }
     } catch (error) {
@@ -132,11 +157,9 @@ class ElementApiImpl implements ElementApi {
   openLinkModal (props: LinkModalProps): void {
     try {
       if (isInIframe()) {
-        // We're in an iframe, call the parent's API
         const { element: elementApi } = getPimcoreStudioApi()
         elementApi.openLinkModal(props)
       } else {
-        // We're in the parent window, dispatch the event directly
         this.openLinkModalDirectly(props)
       }
     } catch (error) {
@@ -146,6 +169,79 @@ class ElementApiImpl implements ElementApi {
 
   private openLinkModalDirectly (props: LinkModalProps): void {
     const event = new ApiGatewayEvent(ApiGatewayEventType.openLinkModal, props)
+    window.dispatchEvent(event)
+  }
+
+  openCropModal (props: CropModalProps): void {
+    try {
+      if (isInIframe()) {
+        const { element: elementApi } = getPimcoreStudioApi()
+        elementApi.openCropModal(props)
+      } else {
+        this.openCropModalDirectly(props)
+      }
+    } catch (error) {
+      console.error('Failed to open crop modal:', error)
+    }
+  }
+
+  private openCropModalDirectly (props: CropModalProps): void {
+    const event = new ApiGatewayEvent(ApiGatewayEventType.openCropModal, props)
+    window.dispatchEvent(event)
+  }
+
+  openHotspotMarkersModal (props: HotspotMarkersModalProps): void {
+    try {
+      if (isInIframe()) {
+        const { element: elementApi } = getPimcoreStudioApi()
+        elementApi.openHotspotMarkersModal(props)
+      } else {
+        this.openHotspotMarkersModalDirectly(props)
+      }
+    } catch (error) {
+      console.error('Failed to open hotspot markers modal:', error)
+    }
+  }
+
+  private openHotspotMarkersModalDirectly (props: HotspotMarkersModalProps): void {
+    const event = new ApiGatewayEvent(ApiGatewayEventType.openHotspotMarkersModal, props)
+    window.dispatchEvent(event)
+  }
+
+  openVideoModal (props: VideoModalProps): void {
+    try {
+      if (isInIframe()) {
+        const { element: elementApi } = getPimcoreStudioApi()
+        elementApi.openVideoModal(props)
+      } else {
+        this.openVideoModalDirectly(props)
+      }
+    } catch (error) {
+      console.error('Failed to open video modal:', error)
+    }
+  }
+
+  private openVideoModalDirectly (props: VideoModalProps): void {
+    const event = new ApiGatewayEvent(ApiGatewayEventType.openVideoModal, props)
+    window.dispatchEvent(event)
+  }
+
+  locateInTree (id: number, elementType: ElementType): void {
+    try {
+      const { element: elementApi } = getPimcoreStudioApi()
+
+      if (isInIframe()) {
+        elementApi.locateInTree(id, elementType)
+      } else {
+        this.locateInTreeDirectly(id, elementType)
+      }
+    } catch (error) {
+      console.error('Failed to locate in tree:', error)
+    }
+  }
+
+  private locateInTreeDirectly (id: number, elementType: ElementType): void {
+    const event = new ApiGatewayEvent(ApiGatewayEventType.locateInTree, { id, elementType })
     window.dispatchEvent(event)
   }
 }

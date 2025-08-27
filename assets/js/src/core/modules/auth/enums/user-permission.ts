@@ -10,6 +10,7 @@
 
 export enum UserPermission {
   NotesAndEvents = 'notes_events',
+  Translations = 'translations',
   Documents = 'documents',
   DocumentTypes = 'document_types',
   Objects = 'objects',
@@ -20,5 +21,10 @@ export enum UserPermission {
   Users = 'users',
   Notifications = 'notifications',
   SendNotifications = 'notifications_send',
-  Emails = 'emails'
+  Emails = 'emails',
+  Reports = 'reports',
+  ReportsConfig = 'reports_config',
+  RecycleBin = 'recyclebin',
+  Redirects = 'redirects',
+  ApplicationLogger = 'application_logging'
 }

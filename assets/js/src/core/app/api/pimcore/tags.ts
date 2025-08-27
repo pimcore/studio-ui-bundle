@@ -43,14 +43,20 @@ export const tagNames = {
   NOTIFICATION_DETAILS: 'NOTIFICATION_DETAILS',
   AVAILABLE_TAGS: 'AVAILABLE_TAGS',
   WEBSITE_SETTINGS: 'WEBSITE_SETTINGS',
+  REDIRECTS: 'REDIRECTS',
   ELEMENT_TAGS: 'TAGS',
   ROLE: 'ROLE',
+  DOMAIN_TRANSLATIONS: 'DOMAIN_TRANSLATIONS',
   PREDEFINED_ASSET_METADATA: 'PREDEFINED_ASSET_METADATA',
   CURRENT_USER_INFORMATION: 'CURRENT_USER_INFORMATION',
   EMAIL_BLOCKLIST: 'EMAIL_BLOCKLIST',
   EMAIL_BLOCKLIST_DETAIL: 'EMAIL_BLOCKLIST_DETAIL',
+  APPLICATION_LOGGER: 'APPLICATION_LOGGER',
+  APPLICATION_LOGGER_DETAIL: 'APPLICATION_LOGGER_DETAIL',
   EMAIL_LOG: 'EMAIL_LOG',
-  EMAIL_LOG_DETAIL: 'EMAIL_LOG_DETAIL'
+  EMAIL_LOG_DETAIL: 'EMAIL_LOG_DETAIL',
+  RECYCLE_BIN: 'RECYCLE_BIN',
+  RECYCLE_BIN_DETAIL: 'RECYCLE_BIN_DETAIL'
 }
 
 export const providingTags = {
@@ -81,6 +87,7 @@ export const providingTags = {
   DOCUMENT_DETAIL: () => [tagNames.DOCUMENT, tagNames.DOCUMENT_DETAIL],
   DOCUMENT_DETAIL_ID: (id: number) => [tagNames.DOCUMENT, { type: tagNames.DOCUMENT_DETAIL, id }],
   DOCUMENT_TYPES: () => [tagNames.DOCUMENT_TYPES],
+  DOMAIN_TRANSLATIONS: () => [tagNames.DOMAIN_TRANSLATIONS],
   DOCUMENT_TREE: () => [tagNames.DOCUMENT, tagNames.DOCUMENT_TREE],
   DOCUMENT_TREE_ID: (id: number) => [tagNames.DOCUMENT, { type: tagNames.DOCUMENT_TREE, id }],
   ELEMENT_DEPENDENCIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.DEPENDENCIES, elementType, id)],
@@ -88,6 +95,7 @@ export const providingTags = {
   PROPERTY_DETAIL: (id: string) => [{ type: tagNames.PROPERTIES, id }],
   GLOBAL_PROPERTIES: () => [tagNames.PROPERTIES],
   WEBSITE_SETTINGS: () => [tagNames.WEBSITE_SETTINGS],
+  REDIRECTS: () => [tagNames.REDIRECTS],
   ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.PROPERTIES, elementType, id)],
   SCHEDULE_DETAIL: (id: number) => [{ type: tagNames.SCHEDULES, id }, tagNames.SCHEDULES],
   ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.SCHEDULES, elementType, id)],
@@ -105,7 +113,11 @@ export const providingTags = {
   EMAIL_BLOCKLIST: () => [tagNames.EMAIL_BLOCKLIST],
   EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }],
   EMAIL_LOG: () => [tagNames.EMAIL_LOG],
-  EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }]
+  EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }],
+  RECYCLING_BIN: () => [tagNames.RECYCLE_BIN],
+  RECYCLING_BIN_DETAIL: (id: number) => [{ type: tagNames.RECYCLE_BIN_DETAIL, id }],
+  APPLICATION_LOGGER: () => [tagNames.APPLICATION_LOGGER],
+  APPLICATION_LOGGER_DETAIL: (id: number) => [{ type: tagNames.APPLICATION_LOGGER_DETAIL, id }]
 }
 
 export const invalidatingTags = {
@@ -129,6 +141,7 @@ export const invalidatingTags = {
   DOCUMENT_DETAIL: () => [tagNames.DOCUMENT_DETAIL],
   DOCUMENT_DETAIL_ID: (id: number) => [{ type: tagNames.DOCUMENT_DETAIL, id }, elementUnspecificDataTag],
   DOCUMENT_TYPES: () => [tagNames.DOCUMENT_TYPES],
+  DOMAIN_TRANSLATIONS: () => [tagNames.DOMAIN_TRANSLATIONS],
   DOCUMENT_TREE: () => [tagNames.DOCUMENT_TREE],
   DOCUMENT_TREE_ID: (id: number) => [{ type: tagNames.DOCUMENT_TREE, id }],
   ELEMENT_DEPENDENCIES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.DEPENDENCIES, elementType, id)],
@@ -137,6 +150,7 @@ export const invalidatingTags = {
   ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.PROPERTIES, elementType, id)],
   GLOBAL_PROPERTIES: () => [tagNames.PROPERTIES],
   WEBSITE_SETTINGS: () => [tagNames.WEBSITE_SETTINGS],
+  REDIRECTS: () => [tagNames.REDIRECTS],
   SCHEDULE_DETAIL: (id: number) => [{ type: tagNames.SCHEDULES, id }],
   ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.SCHEDULES, elementType, id)],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
@@ -152,8 +166,11 @@ export const invalidatingTags = {
   ELEMENT_DETAIL: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
   EMAIL_BLOCKLIST: () => [tagNames.EMAIL_BLOCKLIST],
   EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }],
+  APPLICATION_LOGGER: () => [tagNames.APPLICATION_LOGGER],
+  APPLICATION_LOGGER_DETAIL: (id: number) => [{ type: tagNames.APPLICATION_LOGGER_DETAIL, id }],
   EMAIL_LOG: () => [tagNames.EMAIL_LOG],
-  EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }]
+  EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }],
+  RECYCLING_BIN: () => [tagNames.RECYCLE_BIN]
 }
 
 const elementUnspecificDataTag = tagNames.AVAILABLE_TAGS

@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { useUserManagementDraft } from '@Pimcore/modules/user/hooks/use-user-management-draft'
 import { Popconfirm } from 'antd'
+import { createTabContentTestId } from '@Pimcore/utils/test-id-generator'
 
 interface IManagementDetailProps {
   onRemoveItem: (id: any, parentId: any) => void
@@ -95,6 +96,8 @@ const ManagementDetail = ({ onCloneUser, onRemoveItem, ...props }: IManagementDe
     return <Content none></Content>
   }
 
+  console.log({ getAllIds })
+
   return (
     <ContentLayout
       renderToolbar={
@@ -123,7 +126,10 @@ const ManagementDetail = ({ onCloneUser, onRemoveItem, ...props }: IManagementDe
           onChange={ (id: string) => { openUser(Number(id)) } }
           onClose={ onHandleClose }
         />
-        <Content className={ 'detail-tabs__content' }>
+        <Content
+          className={ 'detail-tabs__content' }
+          data-testid={ createTabContentTestId(activeId, { prefix: 'user-tab' }) }
+        >
           <UserDetailTab id={ activeId } />
         </Content>
       </div>

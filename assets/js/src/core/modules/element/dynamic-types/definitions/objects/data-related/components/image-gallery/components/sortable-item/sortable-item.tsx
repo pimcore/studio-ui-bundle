@@ -21,9 +21,6 @@ import {
   type ImageGalleryValue,
   type ImageGalleryValueItem
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image-gallery/image-gallery'
-import {
-  type HotspotMarkersModalContainerRef
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/hotspot-markers-modal-container'
 import { useStyles } from '../../image-gallery.styles'
 
 export interface ImageGallerySortableItemProps {
@@ -34,12 +31,11 @@ export interface ImageGallerySortableItemProps {
   setValue: React.Dispatch<React.SetStateAction<ImageGalleryValue>>
   setInternalValue: (value: ImageGalleryValue) => void
   disabled?: boolean
-  hotspotMarkersModalContainer: React.RefObject<HotspotMarkersModalContainerRef>
   width: string
   height: string
 }
 
-export const ImageGallerySortableItem = ({ id, index, item, value, setValue, setInternalValue, disabled, hotspotMarkersModalContainer, width, height }: ImageGallerySortableItemProps): React.JSX.Element => {
+export const ImageGallerySortableItem = ({ id, index, item, value, setValue, setInternalValue, disabled, width, height }: ImageGallerySortableItemProps): React.JSX.Element => {
   const sortable = useSortable({
     id,
     transition: {
@@ -69,7 +65,6 @@ export const ImageGallerySortableItem = ({ id, index, item, value, setValue, set
           <ImageGalleryImagePreview
             disabled={ disabled }
             height={ height }
-            hotspotMarkersModalContainer={ hotspotMarkersModalContainer }
             index={ index }
             item={ item }
             setInternalValue={ setInternalValue }

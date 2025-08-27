@@ -18,9 +18,15 @@ export interface SegmentedProps extends Omit<AntdSegmentedProps<string>, 'ref'> 
 
 const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(({
   options,
+  style,
   ...props
 }: SegmentedProps, ref): React.JSX.Element => {
   const { styles } = useStyles()
+
+  // Apply medium width as default for segmented controls
+  const computedStyle = {
+    ...style
+  }
 
   return (
     <div
@@ -29,6 +35,7 @@ const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(({
     >
       <AntdSegmented<string>
         options={ options }
+        style={ computedStyle }
         { ...props }
       />
     </div>

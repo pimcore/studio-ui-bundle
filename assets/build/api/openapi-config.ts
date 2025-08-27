@@ -34,7 +34,15 @@ const config: ConfigFile = {
       type: 'query',
     },
     {
+      pattern: 'dataObjectFormatPath',
+      type: 'query',
+    },
+    {
       pattern: 'noteGetCollection',
+      type: 'query'
+    },
+    {
+      pattern: 'bundleSeoRedirectsGetCollection',
       type: 'query'
     },
     {
@@ -55,6 +63,26 @@ const config: ConfigFile = {
     },
     {
       pattern: 'metadataGetCollection',
+      type: 'query'
+    },
+    {
+      pattern: 'recycleBinGetCollection',
+      type: 'query'
+    },
+    {
+      pattern: 'dataObjectGetGridPreview',
+      type: 'query',
+    },
+    {
+      pattern: 'customReportsChart',
+      type: 'query'
+    },
+    {
+      pattern: 'customReportsListDrillDownOptions',
+      type: 'query'
+    },
+    {
+      pattern: 'translationGetList',
       type: 'query'
     }
   ],
@@ -143,14 +171,18 @@ const config: ConfigFile = {
     '../../js/src/core/modules/reports/custom-reports-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/bundle\/custom-reports\/?/i)
     },
+    '../../js/src/core/modules/redirects/seo-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/api\/bundle\/seo\/?/i)
+    },
     '../../js/src/core/modules/element/export-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/export\/?/i)
     },
     '../../js/src/core/modules/email/emails-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/emails\/?/i)
+    },
+    '../../js/src/core/modules/recycle-bin/recycle-bin-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/recycle-bin\/?/i)
     }
-
-
   },
   exportName: 'api',
   hooks: true,

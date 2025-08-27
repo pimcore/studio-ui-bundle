@@ -12,6 +12,10 @@ import type { DragAndDropInfo } from '@sdk/components'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { useTranslation } from 'react-i18next'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { useEffect } from 'react'
+import { type IFormatPathItem, useFormatPath } from '@Pimcore/modules/data-object/hooks/use-format-path'
+import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-object'
+import { isValidPathFormatterConfig } from '../utils/path-formatter'
 
 export interface ManyToManyRelationValueItem {
   id: number
@@ -31,6 +35,7 @@ interface UseValueReturn {
   addItems: (items: ManyToManyRelationValueItem[]) => void
   addAssets: (assets: Asset[]) => Promise<void>
   maxRemainingItems?: number
+  pathFormatterConfig?: object
 }
 
 export const useValue = (
@@ -39,13 +44,72 @@ export const useValue = (
   displayedValue: ManyToManyRelationValue | null,
   setDisplayedValue: (value: ManyToManyRelationValue | null) => void,
   maxItems: number | null,
-  allowMultipleAssignments?: boolean
+  allowMultipleAssignments?: boolean,
+  pathFormatterConfig?: { name: string | undefined, class: string | undefined }
 ): UseValueReturn => {
+  const { id: dataObjectId } = useDataObject()
+  const { formatPath } = useFormatPath()
   const modal = useAlertModal()
+
   const { t } = useTranslation()
   const itemIsInValue = (id: number, type: string): boolean => {
     return value?.some(item => item.id === id && item.type === type) ?? false
   }
+
+  function mapNewValues (value: ManyToManyRelationValue, data: { items: Array<{ objectReference: string, formatedPath: string }> }): ManyToManyRelationValue {
+    return value.map((item) => ({
+      ...item,
+      fullPath: data.items.find(i => i.objectReference === `${item.type}_${item.id}`)?.formatedPath ?? item.fullPath
+    }))
+  }
+
+  function getUpdatedDisplayedValue (
+    items: ManyToManyRelationValue | null,
+    newValues: ManyToManyRelationValue
+  ): ManyToManyRelationValue {
+    if (items === null) return []
+    return items.map(item => {
+      const updatedItem = newValues.find(newItem => newItem.id === item.id)
+      return {
+        ...item,
+        fullPath: updatedItem?.fullPath ?? item.fullPath,
+        loading: false
+      }
+    })
+  }
+
+  const handleFormatPath = async (items, newItems?): Promise<ManyToManyRelationValue | undefined> => {
+    console.log('handleFormatPath', pathFormatterConfig, isValidPathFormatterConfig(pathFormatterConfig))
+    if (!isValidPathFormatterConfig(pathFormatterConfig) || value === null || dataObjectId === undefined) {
+      return items
+    }
+
+    const formatItems: ManyToManyRelationValue = newItems ?? items
+
+    try {
+      const data = await formatPath(formatItems as IFormatPathItem[], pathFormatterConfig.name, dataObjectId)
+      if (data === undefined) return
+      const newValues = mapNewValues(formatItems, data)
+      return getUpdatedDisplayedValue(items as ManyToManyRelationValue, newValues)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    if (!isValidPathFormatterConfig(pathFormatterConfig) || value === null || dataObjectId === undefined) {
+      return
+    }
+
+    // const newItems = getNewItems()
+    handleFormatPath(value).then((formattedItems) => {
+      if (formattedItems !== undefined) {
+        setDisplayedValue(formattedItems)
+      }
+    }).catch(error => {
+      console.error('Error formatting path:', error)
+    })
+  }, [])
 
   const addItems = (items: ManyToManyRelationValueItem[]): void => {
     const newItems = allowMultipleAssignments !== true
@@ -57,10 +121,15 @@ export const useValue = (
       ...newItems
     ])
 
-    setDisplayedValue([
-      ...displayedValue ?? [],
-      ...newItems
-    ])
+    setDisplayedValue([...displayedValue ?? [], ...newItems])
+
+    handleFormatPath([...displayedValue ?? [], ...newItems], newItems).then((formattedItems) => {
+      if (formattedItems !== undefined) {
+        setDisplayedValue(formattedItems)
+      }
+    }).catch(error => {
+      console.error('Error formatting path:', error)
+    })
   }
 
   const addItem = (item: ManyToManyRelationValueItem): void => {

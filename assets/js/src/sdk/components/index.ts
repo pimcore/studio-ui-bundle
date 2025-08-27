@@ -41,6 +41,7 @@ export * from '@Pimcore/components/drag-and-drop/droppable-context-provider'
 export * from '@Pimcore/components/dropdown/dropdown'
 export * from '@Pimcore/components/dropdown-button/dropdown-button'
 export * from '@Pimcore/components/dynamic-filter/dynamic-filter'
+export * from '@Pimcore/components/editable-empty-placeholder/editable-empty-placeholder'
 export * from '@Pimcore/components/element-tag/element-tag'
 export * from '@Pimcore/components/element-toolbar/element-toolbar'
 export * from '@Pimcore/components/element-toolbar/element-toolbar.skeleton'
@@ -120,6 +121,7 @@ export * from '@Pimcore/components/search-input/search-input'
 export * from '@Pimcore/components/segmented/segmented'
 export * from '@Pimcore/components/select/select'
 export * from '@Pimcore/components/sidebar/sidebar'
+export * from '@Pimcore/components/sidebar/title'
 export * from '@Pimcore/components/skeleton/skeleton'
 export * from '@Pimcore/components/skeleton/components/skeleton-avatar/skeleton-avatar'
 export * from '@Pimcore/components/skeleton/components/skeleton-button/skeleton-button'
@@ -169,9 +171,6 @@ export * from '@Pimcore/components/modal/file-list/file-list'
 
 // @todo check if this should really located under the components folder
 export * from '@Pimcore/components/login-form/login-form'
-
-// @todo Is this still needed since we have a completed adapted form with it's own form.item
-export * from '@Pimcore/components/form-item-wrapper/form-item-wrapper'
 
 // @todo move those to another folder or make it a more generic iframe component
 export * from '@Pimcore/components/data-object-preview/data-object-preview'

@@ -20,6 +20,7 @@ import { Flex } from 'antd'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
+import { createTabContentTestId } from '@Pimcore/utils/test-id-generator'
 
 const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -44,7 +45,8 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
 
   const documentsAccordion = [
     {
-      key: '1',
+      key: 'documents',
+      id: 'documents',
       title: <>{ t('user-management.workspaces.documents') }</>,
       info: <> <IconTextButton
         icon={ { value: 'add-find' } }
@@ -78,7 +80,8 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
 
   const assetsAccordion = [
     {
-      key: '1',
+      key: 'assets',
+      id: 'assets',
       title: <>{ t('user-management.workspaces.assets') }</>,
       info: <> <IconTextButton
         icon={ { value: 'add-find' } }
@@ -112,7 +115,8 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
 
   const objectsAccordion = [
     {
-      key: '1',
+      key: 'objects',
+      id: 'objects',
       title: <>{ t('user-management.workspaces.objects') }</>,
       info: <> <IconTextButton
         icon={ { value: 'add-find' } }
@@ -146,11 +150,12 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
 
   return (
     <Flex
+      data-testid={ createTabContentTestId(id.toString(), { prefix: 'user-detail-tab', tabKey: 'workspaces' }) }
       gap={ 'middle' }
       vertical
     >
       <Accordion
-        activeKey={ '1' }
+        activeKey={ 'documents' }
         bordered
         collapsible="icon"
         items={ documentsAccordion }
@@ -159,7 +164,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       />
 
       <Accordion
-        activeKey={ '1' }
+        activeKey={ 'assets' }
         bordered
         collapsible="icon"
         items={ assetsAccordion }
@@ -168,7 +173,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       />
 
       <Accordion
-        activeKey={ '1' }
+        activeKey={ 'objects' }
         bordered
         collapsible="icon"
         items={ objectsAccordion }

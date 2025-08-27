@@ -8,9 +8,23 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles, type SerializedStyles } from 'antd-style'
+
+const BORDER_WIDTH = 1
 
 export const useStyles = createStyles(({ token, css }) => {
+  const hideBorder = (side: 'left' | 'right'): SerializedStyles => css`
+    content: '';
+    display: block;
+    position: absolute;
+    top: -${BORDER_WIDTH}px;
+    ${side}: -${BORDER_WIDTH}px;
+    width: 100%;
+    height: 100%;
+    background: ${token.colorBgContainer};
+    z-index: -1;
+  `
+
   return {
     grid: css`
       display: flex; 
@@ -27,7 +41,7 @@ export const useStyles = createStyles(({ token, css }) => {
         .ant-table-tbody {
           .ant-table-row:first-child {
             .ant-table-cell {
-              border-top: 1px solid ${token.Table.colorBorderSecondary} !important;
+              border-top: ${BORDER_WIDTH}px solid ${token.Table.colorBorderSecondary} !important;
             }
 
             .ant-table-cell:first-of-type {
@@ -82,7 +96,7 @@ export const useStyles = createStyles(({ token, css }) => {
 
       .ant-table-cell {
         position: relative;
-        border-left: 1px solid ${token.Table.colorBorderSecondary};
+        border-left: ${BORDER_WIDTH}px solid ${token.Table.colorBorderSecondary};
         white-space: nowrap;
         text-overflow: ellipsis;
 
@@ -91,7 +105,7 @@ export const useStyles = createStyles(({ token, css }) => {
         }
 
         &:last-of-type {
-          border-right: 1px solid #F0F0F0;
+          border-right: ${BORDER_WIDTH}px solid #F0F0F0;
         }
       }
       
@@ -105,11 +119,21 @@ export const useStyles = createStyles(({ token, css }) => {
         z-index: 1;
 
         .ant-table-cell {
-          border-top: 1px solid ${token.Table.colorBorderSecondary} !important;
+          border-top: ${BORDER_WIDTH}px solid ${token.Table.colorBorderSecondary} !important;
+        }
+
+        .ant-table-cell:first-child {
+          &::after {
+            ${hideBorder('left')}
+          }
         }
 
         .ant-table-cell:last-of-type {
           border-color: ${token.Table.colorBorderSecondary} !important;
+          
+          &::before {
+            ${hideBorder('right')}
+          }
         }
 
         .grid__cell-content {
@@ -133,7 +157,7 @@ export const useStyles = createStyles(({ token, css }) => {
 
       .ant-table-content {
         table {
-          border: 1px solid transparent;
+          border: ${BORDER_WIDTH}px solid transparent;
           border-radius: 8px;
         }
           

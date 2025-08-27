@@ -23,9 +23,10 @@ interface TabTitleViewProps {
   title: string
   onClose?: () => void
   onConfirm?: () => void
+  dataTestId?: string
 }
 
-export const TabTitleView = ({ icon, title, onClose, onConfirm }: TabTitleViewProps): React.JSX.Element => {
+export const TabTitleView = ({ icon, title, onClose, onConfirm, dataTestId }: TabTitleViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
 
@@ -40,6 +41,7 @@ export const TabTitleView = ({ icon, title, onClose, onConfirm }: TabTitleViewPr
   return (
     <Space
       className={ ['widget-manager-tab-title', styles.title].join(' ') }
+      data-testid={ dataTestId }
       onMouseDown={ (evt: MouseEvent) => {
         if (evt.button === 1) {
           triggerClose()

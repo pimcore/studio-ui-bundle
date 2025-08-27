@@ -16,6 +16,7 @@ import { type TreeAction } from '@Pimcore/modules/tags/tag-configuration-contain
 import {
   type TagGetCollectionApiResponse
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import { createTreeNodeTestId } from '@Pimcore/utils/test-id-generator'
 
 export interface CreateTreeStructureProps {
   tags: NonNullable<TagGetCollectionApiResponse['items']>
@@ -26,6 +27,7 @@ export interface CreateTreeStructureProps {
 
 export interface CustomTreeDataNode extends TreeDataNode {
   actions?: TreeAction[]
+  'data-testid'?: string
 }
 export const createTreeStructure = ({ tags, loadingNodes, actions, rootActions }: CreateTreeStructureProps): CustomTreeDataNode[] => {
   const getTitle = (tagText: string | undefined, isLoading: boolean): React.ReactNode => {
@@ -57,6 +59,7 @@ export const createTreeStructure = ({ tags, loadingNodes, actions, rootActions }
         key: tag.id.toString(),
         title: getTitle(tag.text, isLoading(tag.id.toString())),
         icon: <Icon value='tag' />,
+        'data-testid': createTreeNodeTestId(tag.id, 'tag'),
         disableCheckbox: isLoading(tag.id.toString()),
         children: tag.hasChildren ? treeWalker(tag.children!) : [],
         actions
@@ -68,6 +71,7 @@ export const createTreeStructure = ({ tags, loadingNodes, actions, rootActions }
     key: 0,
     title: getTitle('All Tags', false),
     icon: <Icon value='folder' />,
+    'data-testid': createTreeNodeTestId(0, 'folder'),
     children: tags.length > 0 ? treeWalker(tags) : [],
     actions: rootActions
   }]

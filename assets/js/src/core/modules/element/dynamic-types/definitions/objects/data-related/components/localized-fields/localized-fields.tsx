@@ -16,6 +16,7 @@ import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/objec
 import { Space } from '@Pimcore/components/space/space'
 import { useLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/use-language-selection'
 import { Form } from '@Pimcore/components/form/form'
+import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/combined-field-name-provider/combined-field-name-provider'
 
 export interface LocalizedFieldsProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectDataDefinition | AbstractObjectLayoutDefinition
@@ -30,22 +31,24 @@ export const LocalizedFields = ({ children, noteditable, className }: LocalizedF
 
   return (
     <LocalizedFieldsProvider locales={ [currentLanguage] }>
-      <Form.Group name={ 'localizedfields' } >
-        <Space
-          className="w-full"
-          direction='vertical'
-          size='small'
-        >
-          {children?.map((child, index) => (
-            <ObjectComponent
-              key={ index }
-              { ...child }
-              className={ className }
-              noteditable={ noteditable }
-            />
-          ))}
-        </Space>
-      </Form.Group>
+      <CombinedFieldNameProvider combinedFieldNameParent={ ['localizedfields'] }>
+        <Form.Group name={ 'localizedfields' } >
+          <Space
+            className="w-full"
+            direction='vertical'
+            size='small'
+          >
+            {children?.map((child, index) => (
+              <ObjectComponent
+                key={ index }
+                { ...child }
+                className={ className }
+                noteditable={ noteditable }
+              />
+            ))}
+          </Space>
+        </Form.Group>
+      </CombinedFieldNameProvider>
     </LocalizedFieldsProvider>
   )
 }
