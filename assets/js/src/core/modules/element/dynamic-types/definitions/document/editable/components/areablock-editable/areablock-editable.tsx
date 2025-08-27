@@ -71,6 +71,8 @@ export const AreablockEditable = ({
 
   const areablockManager = useMemo(() => new AreablockManager(editableName, containerRef), [editableName, containerRef])
 
+  const areaTypes = useMemo(() => configUtils.getAvailableTypes(config), [config])
+
   const [openDialogs, setOpenDialogs] = useState<Set<string>>(new Set())
 
   const handleOpenDialog = useCallback((areaKey: string) => {
@@ -102,7 +104,7 @@ export const AreablockEditable = ({
 
   const { renderAreablockToolbar } = useAreablockControls({
     areablockManager,
-    areaTypes: configUtils.getAvailableTypes(config),
+    areaTypes,
     config,
     onAddArea: addArea,
     onRemoveArea: removeArea,

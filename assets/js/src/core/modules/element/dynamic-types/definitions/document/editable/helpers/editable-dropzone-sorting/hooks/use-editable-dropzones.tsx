@@ -147,7 +147,7 @@ export const useEditableDropzones = <T extends EditableManager>({
     })
 
     setDropzonePortals(newPortals)
-  }, [container, editableName, currentElements.length, dropzoneRefreshKey, isValidDrop, onDropItem])
+  }, [container, editableName, currentElements.length])
 
   useEffect(() => {
     updateStyles()
