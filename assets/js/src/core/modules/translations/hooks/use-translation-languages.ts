@@ -26,41 +26,50 @@ interface UseTranslationLanguagesReturn {
   isLoading: boolean
 }
 
-export const useTranslationLanguages = (isFrontendDomain: boolean): UseTranslationLanguagesReturn => {
+export const useWebsiteTranslationLanguages = (): UseTranslationLanguagesReturn => {
   const user = useUser()
+  const { getDisplayName, isLoading: lookupLoading } = useLanguageLookup()
+
+  const languages = useMemo(() => {
+    const editableLocales = user.allowedLanguagesForEditingWebsiteTranslations ?? []
+    const viewableLocales = user.allowedLanguagesForViewingWebsiteTranslations ?? []
+
+    const allLocales = new Set(viewableLocales)
+
+    return Array.from(allLocales)
+      .filter(locale => !isNil(locale) && isString(locale))
+      .map(locale => ({
+        locale,
+        displayName: getDisplayName(locale),
+        canEdit: editableLocales.includes(locale),
+        canView: true
+      }))
+      .sort((a, b) => (a.displayName ?? 'UNKNOWN').localeCompare(b.displayName ?? 'UNKNOWN'))
+  }, [user, getDisplayName])
+
+  return {
+    languages,
+    isLoading: lookupLoading
+  }
+}
+
+export const useAdminTranslationLanguages = (): UseTranslationLanguagesReturn => {
   const settings = useSettings()
   const { getDisplayName, isLoading: lookupLoading } = useLanguageLookup()
 
   const languages = useMemo(() => {
-    if (!isFrontendDomain) {
-      const editableLocales = user.allowedLanguagesForEditingWebsiteTranslations ?? []
-      const viewableLocales = user.allowedLanguagesForViewingWebsiteTranslations ?? []
+    const adminLanguages = settings?.availableAdminLanguages ?? []
 
-      const allLocales = new Set(viewableLocales)
-
-      return Array.from(allLocales)
-        .filter(locale => !isNil(locale) && isString(locale))
-        .map(locale => ({
-          locale,
-          displayName: getDisplayName(locale),
-          canEdit: editableLocales.includes(locale),
-          canView: true
-        }))
-        .sort((a, b) => (a.displayName ?? 'UNKNOWN').localeCompare(b.displayName ?? 'UNKNOWN'))
-    } else {
-      const adminLanguages = settings?.availableAdminLanguages ?? []
-
-      return adminLanguages
-        .filter(lang => !isNil(lang) && isString(lang))
-        .map((langCode: string) => ({
-          locale: langCode,
-          displayName: getDisplayName(langCode),
-          canEdit: true,
-          canView: true
-        }))
-        .sort((a, b) => (a.displayName ?? 'UNKNOWN').localeCompare(b.displayName ?? 'UNKNOWN'))
-    }
-  }, [isFrontendDomain, user, settings, getDisplayName])
+    return adminLanguages
+      .filter(lang => !isNil(lang) && isString(lang))
+      .map((langCode: string) => ({
+        locale: langCode,
+        displayName: getDisplayName(langCode),
+        canEdit: true,
+        canView: true
+      }))
+      .sort((a, b) => (a.displayName ?? 'UNKNOWN').localeCompare(b.displayName ?? 'UNKNOWN'))
+  }, [settings, getDisplayName])
 
   return {
     languages,

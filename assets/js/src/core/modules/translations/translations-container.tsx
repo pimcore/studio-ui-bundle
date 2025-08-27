@@ -21,7 +21,7 @@ import trackError, { ApiError } from '../app/error-handler'
 import { useTranslationGetListQuery, useTranslationGetDomainsQuery, api } from '../app/translations/translations-api-slice-enhanced'
 import { useTranslation } from './hooks/use-translation'
 import { Table } from './table/table'
-import { useTranslationLanguages } from './hooks/use-translation-languages'
+import { useWebsiteTranslationLanguages, useAdminTranslationLanguages } from './hooks/use-translation-languages'
 import {
   translationsToRows,
   translationDataToRow,
@@ -58,7 +58,9 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const currentDomainInfo = availableDomains.find(d => d.domain === domain)
   const isFrontendDomain = currentDomainInfo?.isFrontendDomain ?? false
 
-  const { languages: domainLanguages, isLoading: languagesLoading } = useTranslationLanguages(isFrontendDomain)
+  const websiteLanguages = useWebsiteTranslationLanguages()
+  const adminLanguages = useAdminTranslationLanguages()
+  const { languages: domainLanguages, isLoading: languagesLoading } = isFrontendDomain ? adminLanguages : websiteLanguages
 
   const queryArgs = useMemo(() => ({
     domain,
