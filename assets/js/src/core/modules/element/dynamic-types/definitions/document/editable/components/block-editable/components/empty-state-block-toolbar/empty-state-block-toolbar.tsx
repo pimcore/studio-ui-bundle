@@ -12,6 +12,7 @@ import React from 'react'
 import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useBlockEditableStyles } from '../../block-editable.styles'
+import { EditableDropzoneContent } from '../../../../helpers/editable-dropzone-sorting/components/editable-dropzone/dropzone-content'
 
 export interface EmptyStateBlockToolbarProps {
   onClick: () => void
@@ -23,15 +24,18 @@ export const EmptyStateBlockToolbar = ({
   const { styles } = useBlockEditableStyles()
 
   return (
-    <ToolStrip
-      className={ styles.blockToolstrip }
-      theme="inverse"
-    >
-      <IconButton
-        icon={ { value: 'new' } }
-        onClick={ onClick }
-        size="small"
-      />
-    </ToolStrip>
+    <>
+      <EditableDropzoneContent />
+      <ToolStrip
+        className={ styles.blockToolstrip }
+        theme="inverse"
+      >
+        <IconButton
+          icon={ { value: 'new' } }
+          onClick={ onClick }
+          size="small"
+        />
+      </ToolStrip>
+    </>
   )
 }

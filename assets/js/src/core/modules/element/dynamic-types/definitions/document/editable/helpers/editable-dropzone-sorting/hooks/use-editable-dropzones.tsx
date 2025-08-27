@@ -8,10 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react'
 import ReactDOM from 'react-dom'
 import { type DragStartEvent, type DragOverEvent, type DragEndEvent } from '@dnd-kit/core'
-import { isNull, isUndefined, debounce } from 'lodash'
+import { isNull, isUndefined } from 'lodash'
 import { useEditableDropzoneStyles } from '../components/editable-dropzone/editable-dropzone.styles'
 import { EditableDropzone } from '../components/editable-dropzone/editable-dropzone'
 import {
@@ -21,8 +21,9 @@ import {
 import {
   updateDropzoneVisibility,
   updateDropzoneDragStates,
-  removeExistingDropzones,
-  injectDropzoneContainers
+  updateDropzoneContainers,
+  removeDropzoneContainers,
+  removeFirstDropzoneContainer
 } from '../utils/dom-utils'
 
 // Generic manager interface that both BlockManager and AreablockManager can implement
@@ -47,6 +48,8 @@ export interface UseEditableDropzonesReturn {
   handleDragEnd: (event: DragEndEvent) => void
   dropzonePortals: React.ReactPortal[]
   refreshDropzones: () => void
+  addDropzonePortal: (containerElement: HTMLElement) => void
+  removeFirstDropzone: () => void
 }
 
 export const useEditableDropzones = <T extends EditableManager>({
@@ -59,6 +62,7 @@ export const useEditableDropzones = <T extends EditableManager>({
   const [activeId, setActiveId] = useState<string | null>(null)
   const [dropzonePortals, setDropzonePortals] = useState<React.ReactPortal[]>([])
   const [dropzoneRefreshKey, setDropzoneRefreshKey] = useState<number>(0)
+  const [, startTransition] = useTransition()
   const isDraggingRef = useRef<boolean>(false)
   const activeDropzoneRef = useRef<string | null>(null)
 
@@ -70,38 +74,52 @@ export const useEditableDropzones = <T extends EditableManager>({
   }, [editableManager, dropzoneRefreshKey])
 
   const refreshDropzones = useCallback((): void => {
-    setDropzoneRefreshKey(prev => prev + 1)
-  }, [])
-
-  const debouncedRefreshDropzones = useMemo(() => {
-    return debounce(refreshDropzones, DROPZONE_CONFIG.DEBOUNCE_DELAY)
-  }, [refreshDropzones])
-
-  useEffect(() => {
-    return () => {
-      debouncedRefreshDropzones.cancel()
-    }
-  }, [debouncedRefreshDropzones])
+    startTransition(() => {
+      setDropzoneRefreshKey(prev => prev + 1)
+    })
+  }, [startTransition])
 
   const updateStyles = useCallback(() => {
     updateDropzoneVisibility(editableName, isDraggingRef.current)
     updateDropzoneDragStates(container, activeDropzoneRef.current, isDraggingRef.current)
   }, [container, editableName])
 
-  const injectDropzones = useCallback(() => {
-    if (isNull(container)) return
+  const addDropzonePortal = useCallback((containerElement: HTMLElement) => {
+    // Find all existing dropzone containers to determine the index
+    const dropzoneContainers = container?.querySelectorAll(`[${DROPZONE_ATTRIBUTES.DATA_EDITABLE_DROPZONE}="${editableName}"]`)
+    const index = Array.from(dropzoneContainers ?? []).indexOf(containerElement)
 
-    removeExistingDropzones(container, editableName)
-    injectDropzoneContainers(currentElements, editableName)
-  }, [container, editableName, currentElements])
+    if (index !== -1) {
+      const dropzoneId = `${DROPZONE_CONFIG.ID_PREFIX}${index}`
+      const dropzone = (
+        <EditableDropzone
+          id={ dropzoneId }
+          index={ index }
+          isValidDrop={ isValidDrop }
+          key={ dropzoneId }
+          onDropItem={ onDropItem }
+        />
+      )
+      const portal = ReactDOM.createPortal(dropzone, containerElement)
+
+      setDropzonePortals(prev => [...prev, portal])
+    }
+  }, [container, editableName, isValidDrop, onDropItem])
+
+  const removeFirstDropzone = useCallback((): void => {
+    removeFirstDropzoneContainer(container, editableName)
+  }, [container, editableName])
 
   useEffect(() => {
     if (currentElements.length === 0) {
       setDropzonePortals([])
+      removeDropzoneContainers(container, editableName)
       return
     }
 
-    injectDropzones()
+    if (!isNull(container) && dropzoneRefreshKey === 0) {
+      updateDropzoneContainers(currentElements, editableName)
+    }
 
     const dropzoneContainers = container?.querySelectorAll(`[${DROPZONE_ATTRIBUTES.DATA_EDITABLE_DROPZONE}="${editableName}"]`)
     const newPortals: React.ReactPortal[] = []
@@ -122,7 +140,7 @@ export const useEditableDropzones = <T extends EditableManager>({
     })
 
     setDropzonePortals(newPortals)
-  }, [injectDropzones, container, editableName, currentElements.length])
+  }, [container, editableName, currentElements.length])
 
   useEffect(() => {
     updateStyles()
@@ -188,13 +206,13 @@ export const useEditableDropzones = <T extends EditableManager>({
 
             if (originalActiveIndex !== targetIndex) {
               onMoveItem(originalActiveIndex, targetIndex)
-              debouncedRefreshDropzones()
+              refreshDropzones()
             }
           }
         }
       }
     }
-  }, [currentElements, editableManager, onMoveItem, debouncedRefreshDropzones, styles.dragActive])
+  }, [currentElements, editableManager, onMoveItem, refreshDropzones, styles.dragActive])
 
   return {
     activeId,
@@ -202,6 +220,8 @@ export const useEditableDropzones = <T extends EditableManager>({
     handleDragOver,
     handleDragEnd,
     dropzonePortals,
-    refreshDropzones: debouncedRefreshDropzones
+    refreshDropzones,
+    addDropzonePortal,
+    removeFirstDropzone
   }
 }

@@ -17,10 +17,12 @@ import { type AbstractDocumentEditableDefinition } from '../../../dynamic-type-d
 import { type AreablockEditableConfig, type AreablockValue } from '../areablock-editable'
 import { type AreablockManager } from '../utils/areablock-manager'
 import { createEditableDataFromDefinitions } from '../../../utils/editable-utils'
+import { createDropzoneContainer } from '../../../helpers/editable-dropzone-sorting/utils/dom-utils'
 import {
   areablockValueUtils,
   configUtils
 } from '../utils/areablock-utils'
+import { usePendingElementsReveal } from '../../../hooks/use-pending-elements-reveal'
 
 export interface UseAreablockEditableParams {
   areablockManager: AreablockManager
@@ -28,7 +30,6 @@ export interface UseAreablockEditableParams {
   onChange?: (value: AreablockValue) => void
   config?: AreablockEditableConfig
   disabled?: boolean
-  onOperationComplete?: (limitReached: boolean) => void
 }
 
 export interface UseAreablockEditableReturn {
@@ -45,13 +46,17 @@ export const useAreablockEditable = ({
   value = [],
   onChange,
   config,
-  disabled = false,
-  onOperationComplete
+  disabled = false
 }: UseAreablockEditableParams): UseAreablockEditableReturn => {
   const { initializeData, getValues, removeValues } = useDocumentEditor()
   const { id: documentId } = useContext(DocumentContext)
   const [dynamicEditables, setDynamicEditables] = useState<AbstractDocumentEditableDefinition[]>([])
   const reloadModeElementsRef = useRef<HTMLElement[]>(areablockManager.queryElements())
+
+  const { hideElementUntilRendered } = usePendingElementsReveal({
+    dynamicEditables,
+    getContainer: () => areablockManager.getContainer()
+  })
 
   const getAreaEditableNames = (element: HTMLElement): string[] => {
     const elementKey = areablockManager.getElementKey(element)
@@ -70,15 +75,10 @@ export const useAreablockEditable = ({
   }, [onChange])
 
   const handlePostOperation = useCallback(() => {
-    const elements = areablockManager.ensureAllElementKeys()
+    areablockManager.ensureAllElementKeys()
     const newValue = areablockManager.getAreablockValue()
     onChange?.(newValue)
-
-    if (!isNil(onOperationComplete)) {
-      const limitReached = configUtils.isLimitReached(elements.length, config?.limit)
-      onOperationComplete(limitReached)
-    }
-  }, [onChange, onOperationComplete, config?.limit, areablockManager])
+  }, [onChange, areablockManager])
 
   const addArea = useCallback(async (element: HTMLElement | null, areaType?: string) => {
     if (disabled) return
@@ -108,21 +108,8 @@ export const useAreablockEditable = ({
     }
 
     try {
-      const placeholderElement = document.createElement('div')
-      placeholderElement.className = 'pimcore-areablock-placeholder'
-      placeholderElement.setAttribute('data-placeholder-key', nextKey.toString())
-      placeholderElement.style.display = 'none'
-
       const container = areablockManager.getContainer()
-      if (!isNil(container)) {
-        if (isEmpty(currentElements)) {
-          container.appendChild(placeholderElement)
-        } else if (!isNil(currentElements[index - 1])) {
-          currentElements[index - 1].insertAdjacentElement('afterend', placeholderElement)
-        } else if (!isNil(currentElements[index])) {
-          currentElements[index].insertAdjacentElement('beforebegin', placeholderElement)
-        }
-      }
+      if (isNil(container)) return
 
       const saveData = areablockManager.getAreablockValue()
       saveData.splice(index, 0, {
@@ -153,18 +140,30 @@ export const useAreablockEditable = ({
 
       const result = await response.json()
 
-      if (!isNil(result.htmlCode) && !isNil(placeholderElement.parentNode)) {
+      if (!isNil(result.htmlCode)) {
         const tempDiv = document.createElement('div')
         tempDiv.innerHTML = result.htmlCode
         const newElement = tempDiv.firstElementChild
 
         if (!isNil(newElement)) {
-          placeholderElement.parentNode.replaceChild(newElement, placeholderElement)
-
-          // Hide newly added element until dropzones are added
           const newAreaElement = newElement as HTMLElement
-          newAreaElement.style.display = 'none'
-          newAreaElement.setAttribute('data-pending-dropzone', 'true')
+
+          hideElementUntilRendered(newAreaElement)
+
+          const existingElements = areablockManager.queryElements()
+
+          if (existingElements.length === 0) {
+            container.appendChild(newAreaElement)
+            const initialDropzoneContainer = createDropzoneContainer(areablockManager.getEditableName(), true)
+            newAreaElement.parentNode?.insertBefore(initialDropzoneContainer, newAreaElement)
+          } else if (!isNil(existingElements[index - 1])) {
+            existingElements[index - 1].insertAdjacentElement('afterend', newAreaElement)
+          } else if (!isNil(existingElements[index])) {
+            existingElements[index].insertAdjacentElement('beforebegin', newAreaElement)
+          }
+
+          const dropzoneContainer = createDropzoneContainer(areablockManager.getEditableName())
+          newAreaElement.appendChild(dropzoneContainer)
         }
       }
 
@@ -180,8 +179,6 @@ export const useAreablockEditable = ({
     } catch (error) {
       trackError(new GeneralError('Failed to add area'))
       console.error('Failed to add area:', error)
-      const placeholders = areablockManager.getContainer()?.querySelectorAll(`[data-placeholder-key="${nextKey}"]`)
-      placeholders?.forEach(placeholder => { placeholder.remove() })
       handlePostOperation()
     }
   }, [disabled, config, handleReloadMode, handlePostOperation, areablockManager, documentId, initializeData])
