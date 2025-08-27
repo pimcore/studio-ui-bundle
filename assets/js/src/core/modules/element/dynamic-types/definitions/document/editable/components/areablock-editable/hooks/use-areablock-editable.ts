@@ -17,6 +17,7 @@ import { type AbstractDocumentEditableDefinition } from '../../../dynamic-type-d
 import { type AreablockEditableConfig, type AreablockValue } from '../areablock-editable'
 import { type AreablockManager } from '../utils/areablock-manager'
 import { createEditableDataFromDefinitions } from '../../../utils/editable-utils'
+import { createDropzoneContainer } from '../../../helpers/editable-dropzone-sorting/utils/dom-utils'
 import {
   areablockValueUtils,
   configUtils
@@ -154,7 +155,19 @@ export const useAreablockEditable = ({
         if (!isNil(newElement)) {
           const newAreaElement = newElement as HTMLElement
           
+          const existingElements = areablockManager.queryElements()
+          
           placeholderElement.parentNode.replaceChild(newElement, placeholderElement)
+          
+          // For the first area in an empty container, add a dropzone before the area element
+          if (existingElements.length === 0) {
+            const initialDropzoneContainer = createDropzoneContainer(areablockManager.getEditableName(), true)
+            newAreaElement.parentNode?.insertBefore(initialDropzoneContainer, newAreaElement)
+          }
+          
+          // Create and add dropzone container with 16px height after the area element
+          const dropzoneContainer = createDropzoneContainer(areablockManager.getEditableName())
+          newAreaElement.appendChild(dropzoneContainer)
         }
       }
 

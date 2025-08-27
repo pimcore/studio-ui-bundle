@@ -56,7 +56,8 @@ export const useAreablockControls = ({
     handleDragEnd,
     dropzonePortals,
     dragOverlayTitle,
-    refreshDropzones
+    refreshDropzones,
+    removeFirstDropzone
   } = useAreablockDropzones({
     areablockManager,
     areaTypes,
@@ -84,9 +85,16 @@ export const useAreablockControls = ({
   }, [handleAddArea, refreshDropzones])
 
   const handleRemoveArea = useCallback((element: HTMLElement) => {
+    const currentAreaEntries = areablockManager.queryElements()
+    const isLastItem = currentAreaEntries.length === 1
+    
     onRemoveArea(element)
+    
+    if (isLastItem) {
+      removeFirstDropzone() // Remove the first dropzone when removing the last item
+    }
     //refreshDropzones()
-  }, [onRemoveArea, refreshDropzones])
+  }, [onRemoveArea, areablockManager, removeFirstDropzone])
 
   const handleMoveAreaUp = useCallback((element: HTMLElement) => {
     onMoveAreaUp(element)
