@@ -388,7 +388,7 @@ export type BundleCustomReportUpdate = {
     /** Whether the report is shared globally */
     sharedGlobally: boolean;
     /** Configuration for data source. Content of array depends on selected adapter/data source */
-    dataSourceConfig: object[];
+    dataSourceConfig: object;
     /** Data column for pie chart */
     pieColumn: string | null;
     /** Label of data column for pie chart */
