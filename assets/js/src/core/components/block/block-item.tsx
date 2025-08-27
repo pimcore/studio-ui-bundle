@@ -32,16 +32,14 @@ export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
       docked={ false }
       renderToolStripStart={
         !noteditable && (
-          <ToolStrip>
-            <BlockToolStrip
-              disallowAdd={ props.disallowAdd ?? false }
-              disallowDelete={ props.disallowDelete ?? false }
-              disallowReorder={ props.disallowReorder ?? false }
-              field={ field }
-              itemValue={props.itemValue}
-              getItemTitle={props.getItemTitle}
-            />
-          </ToolStrip>
+          <BlockToolStrip
+            disallowAdd={ props.disallowAdd ?? false }
+            disallowDelete={ props.disallowDelete ?? false }
+            disallowReorder={ props.disallowReorder ?? false }
+            field={ field }
+            itemValue={props.itemValue}
+            getItemTitle={props.getItemTitle}
+          />
         )
       }
     >
