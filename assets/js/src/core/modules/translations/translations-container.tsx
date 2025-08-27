@@ -60,7 +60,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
 
   const websiteLanguages = useWebsiteTranslationLanguages()
   const adminLanguages = useAdminTranslationLanguages()
-  const { languages: domainLanguages, isLoading: languagesLoading } = isFrontendDomain ? adminLanguages : websiteLanguages
+  const { languages: domainLanguages, isLoading: languagesLoading } = isFrontendDomain ? websiteLanguages : adminLanguages
 
   const queryArgs = useMemo(() => ({
     domain,
