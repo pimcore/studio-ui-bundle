@@ -30,7 +30,7 @@ export const TreeContainer = (): React.JSX.Element => {
         tmpTreeData.push({
           title: item.name,
           key: item.id,
-          icon: <Icon value={ item.icon.value } />
+          icon: <Icon value={item.icon.value} />
         })
       })
     }
@@ -78,34 +78,35 @@ export const TreeContainer = (): React.JSX.Element => {
 
   return (
     <ContentLayout
-      renderToolbar={ (
+      renderToolbar={(
         <Toolbar justify="space-between">
           <IconButton
-            icon={ { value: 'refresh' } }
-            title={ t('refresh') }
+            icon={{ value: 'refresh' }}
+            title={t('refresh')}
           />
 
           <IconTextButton
-            icon={ { value: 'new' } }
+            icon={{ value: 'new' }}
           >
             {t('toolbar.new')}
           </IconTextButton>
         </Toolbar>
-      ) }
+      )}
     >
       <Content padded>
         <SearchInput
-          onChange={ (e) => { setSearchTerm(e.target.value) } }
-          onClear={ clearSearch }
-          onSearch={ handleSearch }
-          value={ searchTerm }
+          onChange={(e) => { setSearchTerm(e.target.value) }}
+          onClear={clearSearch}
+          onSearch={handleSearch}
+          value={searchTerm}
+          withoutAddon
         />
         <TreeElement
-          hasRoot={ false }
-          onSelected={ (key) => {
+          hasRoot={false}
+          onSelected={(key) => {
             void openPerspective(key as string)
-          } }
-          treeData={ treeDataFiltered }
+          }}
+          treeData={treeDataFiltered}
         />
       </Content>
     </ContentLayout>
