@@ -21,7 +21,7 @@ import {
 import { processBlockTemplate, ensurePortalTargets } from '../utils/template-processor'
 import { createEditableDataFromDefinitions } from '../../../utils/editable-utils'
 import { createDropzoneContainer } from '../../../helpers/editable-dropzone-sorting/utils/dom-utils'
-import { usePendingElementsReveal } from '../../../helpers/use-pending-elements-reveal'
+import { usePendingElementsReveal } from '../../../hooks/use-pending-elements-reveal'
 
 export interface UseBlockEditableParams {
   blockManager: BlockManager

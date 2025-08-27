@@ -22,7 +22,7 @@ import {
   areablockValueUtils,
   configUtils
 } from '../utils/areablock-utils'
-import { usePendingElementsReveal } from '../../../helpers/use-pending-elements-reveal'
+import { usePendingElementsReveal } from '../../../hooks/use-pending-elements-reveal'
 
 export interface UseAreablockEditableParams {
   areablockManager: AreablockManager
