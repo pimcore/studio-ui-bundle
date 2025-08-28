@@ -28,6 +28,10 @@ export class AreablockManager {
     return this.editableName
   }
 
+  getRealEditableName (): string {
+    return this.getContainer()?.getAttribute('data-real-name') ?? this.editableName
+  }
+
   queryElements (): HTMLElement[] {
     const container = this.getContainer()
     if (isNil(container)) return []
