@@ -11,6 +11,7 @@
 import { Content } from '@Pimcore/components/content/content'
 import { IconSelector } from '@Pimcore/components/icon-selector/icon-selector'
 import { usePerspectiveEditorContext } from '@Pimcore/modules/widget-editor/perspective-editor/context/hooks/use-perspective-editor-context'
+import { Button } from '@sdk/components'
 import React, { useState } from 'react'
 
 interface PerspectiveDetailTabProps {
@@ -30,9 +31,9 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
   return (
     <Content padded>
       <p>{`You opened the perspective with id ${perspective.id}`}</p>
-      <button onClick={() => setIconSelectorOpen(true)}>
+      <Button onClick={() => setIconSelectorOpen(true)}>
         Open Icon Selector
-      </button>
+      </Button>
       <IconSelector
         onCancel={() => setIconSelectorOpen(false)}
         onSelect={(iconName) => {

@@ -1136,3 +1136,11 @@ navigation.widget-editor.perspective-editor: Perspectives Editor
 widget.widget-editor.widget-editor: Widget Editor
 navigation.widget-editor.widget-editor: Widget Editor
 refresh: Refresh
+icon-selector.title: Icon Selector
+icon-selector.all-icons: All Icons
+icon-selector.pimcore-library: Pimcore Library
+icon-selector.search-placeholder: Search icons...
+icon-selector.current-selection: Current Selection
+icon-selector.clear-selection: Clear selection
+icon-selector.no-selection: No icon selected
+icon-selector.save: Save
