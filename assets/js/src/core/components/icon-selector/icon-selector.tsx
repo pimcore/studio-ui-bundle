@@ -9,7 +9,7 @@
  */
 
 import React, { useMemo, useState, useCallback } from 'react'
-import { Modal, IconButton, SearchInput, Pagination, Tabs, ModalFooter } from '@sdk/components'
+import { Modal, IconButton, SearchInput, Pagination, Tabs, ModalFooter, Space } from '@sdk/components'
 import { Button } from 'antd'
 import { t } from 'i18next'
 import { useInjection } from '@Pimcore/app/depency-injection'
@@ -165,7 +165,8 @@ export const IconSelector = ({
 
         <div className={styles.iconGrid}>
           {paginatedIcons.map(([iconName]) => (
-            <div
+            <Space
+            size='mini'
               key={iconName}
               className={`${styles.iconCard} ${currentSelectedIcon === iconName ? styles.selectedCard : ''}`}
               onClick={() => handleIconClick(iconName)}
@@ -175,7 +176,7 @@ export const IconSelector = ({
                 value={iconName}
               />
               <span className={styles.iconName}>{iconName}</span>
-            </div>
+            </Space>
           ))}
         </div>
         <Flex
