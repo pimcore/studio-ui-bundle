@@ -188,8 +188,8 @@ const ContentEditable = ({
       className={ cn(styles.contentEditable, className) }
       contentEditable
       data-empty={ isEmpty }
-      data-required={ required }
       data-placeholder={ placeholder }
+      data-required={ required }
       onInput={ handleContentChange }
       onKeyDown={ handleKeyDown }
       onPaste={ handlePaste }
