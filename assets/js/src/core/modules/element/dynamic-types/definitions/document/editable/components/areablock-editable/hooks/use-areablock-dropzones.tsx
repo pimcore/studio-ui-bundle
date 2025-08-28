@@ -76,7 +76,7 @@ export const useAreablockDropzones = ({
     }
 
     return undefined
-  }, [sortingResult.activeId, areablockManager, areaTypes, t])
+  }, [sortingResult.activeId, areablockManager, areaTypes])
 
   return {
     ...sortingResult,

@@ -8,10 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useCallback, useState } from 'react'
+import React, { useMemo, useCallback, useState } from 'react'
 import { isArray, isNil } from 'lodash'
 import { DynamicEditablesRenderer } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-renderer/dynamic-editables-renderer'
-import { useAreablockEditableStyles } from './areablock-editable.styles'
 import { useAreablockEditable } from './hooks/use-areablock-editable'
 import { useAreablockControls } from './hooks/use-areablock-controls'
 import { AreablockManager } from './utils/areablock-manager'
@@ -67,10 +66,11 @@ export const AreablockEditable = ({
   containerRef,
   disabled = false
 }: AreablockEditableProps): React.JSX.Element => {
-  const { styles } = useAreablockEditableStyles()
   const currentValue = isArray(value) ? value : []
 
   const areablockManager = useMemo(() => new AreablockManager(editableName, containerRef), [editableName, containerRef])
+
+  const areaTypes = useMemo(() => configUtils.getAvailableTypes(config), [config])
 
   const [openDialogs, setOpenDialogs] = useState<Set<string>>(new Set())
 
@@ -98,16 +98,12 @@ export const AreablockEditable = ({
     value: currentValue,
     onChange,
     config,
-    disabled,
-    onOperationComplete: (limitReached) => {
-      const elements = areablockManager.queryElements()
-      elements.forEach(element => { updateControls(element, limitReached) })
-    }
+    disabled
   })
 
-  const { initializeControls, updateControls, clearEmptyState, renderAreablockToolbar } = useAreablockControls({
+  const { renderAreablockToolbar } = useAreablockControls({
     areablockManager,
-    areaTypes: configUtils.getAvailableTypes(config),
+    areaTypes,
     config,
     onAddArea: addArea,
     onRemoveArea: removeArea,
@@ -117,30 +113,8 @@ export const AreablockEditable = ({
     onOpenDialog: handleOpenDialog
   })
 
-  const refreshControls = useCallback(() => {
-    const elements = areablockManager.ensureAllElementKeys()
-    const container = areablockManager.getContainer()
-    if (isNil(container)) return
-
-    const limitReached = configUtils.isLimitReached(elements.length, config?.limit)
-
-    if (elements.length < 1) {
-      initializeControls()
-    } else {
-      clearEmptyState()
-      container.classList.remove('pimcore_area_buttons')
-      elements.forEach(element => {
-        updateControls(element, limitReached)
-      })
-    }
-  }, [areablockManager, config?.limit, initializeControls, updateControls, clearEmptyState])
-
-  useEffect(() => {
-    refreshControls()
-  }, [currentValue, refreshControls])
-
   return (
-    <div className={ `${styles.areablockContainer} ${className ?? ''}` }>
+    <div className={ className }>
       <DynamicEditablesRenderer editableDefinitions={ dynamicEditables } />
       {renderAreablockToolbar()}
 

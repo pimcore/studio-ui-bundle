@@ -23,7 +23,8 @@ export const DROPZONE_ATTRIBUTES = {
   DATA_EDITABLE_DROPZONE: 'data-pimcore-editable-dropzone',
   DATA_DROPZONE_ID: 'data-pimcore-dropzone-id',
   DATA_DROPZONE_INDEX: 'data-pimcore-dropzone-index',
-  DATA_DRAG_STATE: 'data-pimcore-drag-state'
+  DATA_DRAG_STATE: 'data-pimcore-drag-state',
+  DATA_FIRST_DROPZONE: 'data-pimcore-first-dropzone'
 } as const
 
 export const DROPZONE_STATES = {
@@ -33,5 +34,5 @@ export const DROPZONE_STATES = {
 
 export const DROPZONE_CONFIG = {
   ID_PREFIX: 'pimcore-dropzone-',
-  DEBOUNCE_DELAY: 16 // ~60fps
+  HEIGHT: '16px'
 } as const

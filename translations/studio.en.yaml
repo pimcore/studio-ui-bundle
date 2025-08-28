@@ -1025,6 +1025,8 @@ user-profile.password-repeat-error: Passwords do not match
 creatable-select.add-custom-option: Add custom option
 creatable-select.add: Add
 creatable-select.option-already-exists: Option already exists
+creatable-select.invalid-option: Invalid option
+drag-snippet-here: Drag a snippet here
 drop-snippet-here: Drop a snippet here
 drop-document-here: Drop a document here
 drop-document-asset-here: Drop a document asset here
@@ -1054,6 +1056,9 @@ application-logger.filter.component: Component
 application-logger.filter.related-object-id: Related Object ID
 application-logger.filter.message: Message
 application-logger.filter.pid: Pid
+application-logger.refresh-interval: Refresh interval
+application-logger.refresh-interval.select: Select the refresh frequency
+application-logger.refresh-interval.seconds: "{{seconds}} seconds"
 application-logger.filter.priority-level.1: Emergency
 application-logger.filter.priority-level.2: Alert
 application-logger.filter.priority-level.3: Critical
