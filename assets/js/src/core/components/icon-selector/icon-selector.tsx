@@ -36,7 +36,7 @@ export const IconSelector = ({
   const { styles } = useStyles()
   const iconLibrary = useInjection<IconLibrary>(serviceIds.iconLibrary)
   const allIcons = iconLibrary.getIcons()
-  
+
   const [searchValue, setSearchValue] = useState<string>('')
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(40)
@@ -45,26 +45,24 @@ export const IconSelector = ({
 
   const filteredIcons = useMemo(() => {
     const iconsArray = Array.from(allIcons)
-    
-    // Filter by search
-    let filtered = iconsArray.filter(([name]) => 
+
+    let filtered = iconsArray.filter(([name]) =>
       name.toLowerCase().includes(searchValue.toLowerCase())
     )
-    
-    // Filter by tab
+
     if (activeTab === 'pimcore') {
-      // For demo purposes, consider icons with certain prefixes as "Pimcore Library"
-      filtered = filtered.filter(([name]) => 
-        name.startsWith('pimcore') || 
-        name.includes('data-object') || 
-        name.includes('document') || 
+      // FOR DEMO - delete when implementing tab
+      filtered = filtered.filter(([name]) =>
+        name.startsWith('pimcore') ||
+        name.includes('data-object') ||
+        name.includes('document') ||
         name.includes('asset') ||
         name.includes('folder') ||
         name.includes('user') ||
         name.includes('workflow')
       )
     }
-    
+
     return filtered
   }, [allIcons, searchValue, activeTab])
 
@@ -98,7 +96,7 @@ export const IconSelector = ({
 
   const handleSearch = useCallback((value: string) => {
     setSearchValue(value)
-    setCurrentPage(1) // Reset to first page when searching
+    setCurrentPage(1)
   }, [])
 
   const handleRefresh = useCallback(() => {
@@ -129,53 +127,52 @@ export const IconSelector = ({
 
   return (
     <Modal
-      footer={<ModalFooter divider>
+      footer={ <ModalFooter divider>
         <Button
-          disabled={isUndefined(currentSelectedIcon)}
-          onClick={handleSave}
+          disabled={ isUndefined(currentSelectedIcon) }
+          onClick={ handleSave }
           type="primary"
         >
           {t('icon-selector.save')}
         </Button>
-        </ModalFooter>
+      </ModalFooter>
       }
-      onCancel={handleCancel}
-      open={open}
+      onCancel={ handleCancel }
+      open={ open }
       size="ML"
-      title={t('icon-selector.title')}
+      title={ t('icon-selector.title') }
     >
       <Flex
         gap="small"
         vertical
       >
-        {/* Tabs */}
         <Tabs
-          activeKey={activeTab}
-          items={tabItems}
-          onChange={setActiveTab}
+          activeKey={ activeTab }
+          items={ tabItems }
+          onChange={ setActiveTab }
         />
 
         <SearchInput
-         onSearch={handleSearch}
-          placeholder={t('icon-selector.search-placeholder')}
-          withPrefix={false}
-          withoutAddon={false}
-          maxWidth={'1000px'}
+          maxWidth={ '1000px' }
+          onSearch={ handleSearch }
+          placeholder={ t('icon-selector.search-placeholder') }
+          withPrefix={ false }
+          withoutAddon={ false }
         />
 
-        <div className={styles.iconGrid}>
+        <div className={ styles.iconGrid }>
           {paginatedIcons.map(([iconName]) => (
             <Space
-            size='mini'
-              key={iconName}
-              className={`${styles.iconCard} ${currentSelectedIcon === iconName ? styles.selectedCard : ''}`}
-              onClick={() => handleIconClick(iconName)}
+              className={ `${styles.iconCard} ${currentSelectedIcon === iconName ? styles.selectedCard : ''}` }
+              key={ iconName }
+              onClick={ () => { handleIconClick(iconName) } }
+              size='mini'
             >
               <Icon
-                options={{ height: 24, width: 24 }}
-                value={iconName}
+                options={ { height: 24, width: 24 } }
+                value={ iconName }
               />
-              <span className={styles.iconName}>{iconName}</span>
+              <span className={ styles.iconName }>{iconName}</span>
             </Space>
           ))}
         </div>
@@ -187,25 +184,30 @@ export const IconSelector = ({
             gap="small"
           >
             <span>{t('icon-selector.current-selection')}</span>
-            <Flex 
-            justify='center'
-            align='center'
-            className={styles.selectionPreview}>
-              {!isUndefined(currentSelectedIcon) ? (
+            <Flex
+              align='center'
+              className={ styles.selectionPreview }
+              justify='center'
+            >
+              {!isUndefined(currentSelectedIcon)
+                ? (
                   <Icon
-                    options={{ height: 16, width: 16 }}
-                    value={currentSelectedIcon}
+                    options={ { height: 16, width: 16 } }
+                    value={ currentSelectedIcon }
                   />
-              ) : (
-                <span className={styles.noSelection}>{t('icon-selector.no-selection')}</span>
-              )}
+                  )
+                : (
+                  <span className={ styles.noSelection }>{t('icon-selector.no-selection')}</span>
+                  )}
             </Flex>
-                              {!isUndefined(currentSelectedIcon) && ( <IconButton
-                    icon={{ value: 'trash' }}
-                    onClick={handleClearSelection}
-                    title={t('icon-selector.clear-selection')}
-                    type='default'
-                  />)}
+            {!isUndefined(currentSelectedIcon) && (
+            <IconButton
+              icon={ { value: 'trash' } }
+              onClick={ handleClearSelection }
+              title={ t('icon-selector.clear-selection') }
+              type='default'
+            />
+            )}
           </Flex>
 
           <Flex
@@ -213,18 +215,18 @@ export const IconSelector = ({
             gap="small"
           >
             <IconButton
-              icon={{ value: 'refresh' }}
-              onClick={handleRefresh}
-              title={t('refresh')}
+              icon={ { value: 'refresh' } }
+              onClick={ handleRefresh }
+              title={ t('refresh') }
             />
             <Pagination
-              current={currentPage}
-              defaultPageSize={pageSize}
-              onChange={handlePageChange}
-              pageSizeOptions={[20, 40, 80, 120]}
+              current={ currentPage }
+              defaultPageSize={ pageSize }
+              onChange={ handlePageChange }
+              pageSizeOptions={ [20, 40, 80, 120] }
               showSizeChanger
-              showTotal={(total) => t('pagination.show-total', { total })}
-              total={filteredIcons.length}
+              showTotal={ (total) => t('pagination.show-total', { total }) }
+              total={ filteredIcons.length }
             />
           </Flex>
         </Flex>

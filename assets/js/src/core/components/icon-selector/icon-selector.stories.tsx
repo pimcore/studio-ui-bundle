@@ -19,43 +19,45 @@ const config: Meta = {
   parameters: {
     layout: 'fullscreen'
   },
-  tags: ['autodocs'],
-  argTypes: {
-    open: {
-      control: 'boolean'
-    },
-    selectedIcon: {
-      control: 'text'
-    }
-  }
+  tags: ['autodocs']
 }
 
 export default config
 
 type Story = StoryObj<typeof config>
 
-const IconSelectorWithTrigger = (): React.JSX.Element => {
+const IconSelectorDemo = (): React.JSX.Element => {
   const [open, setOpen] = useState(false)
   const [selectedIcon, setSelectedIcon] = useState<string>('folder')
+
+  const handleOpen = (): void => {
+    setOpen(true)
+  }
+
+  const handleClose = (): void => {
+    setOpen(false)
+  }
+
+  const handleSelect = (iconName: string): void => {
+    setSelectedIcon(iconName)
+    setOpen(false)
+  }
 
   return (
     <div style={{ padding: '20px' }}>
       <div style={{ marginBottom: '20px' }}>
-        <p>Current selected icon: <strong>{selectedIcon ?? 'None'}</strong></p>
+        <p>Current selected icon: <strong>{selectedIcon}</strong></p>
         <IconButton
-          icon={{ value: selectedIcon ?? 'questionmark' }}
-          onClick={() => setOpen(true)}
+          icon={{ value: selectedIcon }}
+          onClick={handleOpen}
         >
           Select Icon
         </IconButton>
       </div>
-      
+
       <IconSelector
-        onCancel={() => setOpen(false)}
-        onSelect={(iconName) => {
-          setSelectedIcon(iconName)
-          setOpen(false)
-        }}
+        onCancel={handleClose}
+        onSelect={handleSelect}
         open={open}
         selectedIcon={selectedIcon}
       />
@@ -64,45 +66,5 @@ const IconSelectorWithTrigger = (): React.JSX.Element => {
 }
 
 export const Default: Story = {
-  render: () => <IconSelectorWithTrigger />
-}
-
-export const WithNoSelection: Story = {
-  render: () => {
-    const [open, setOpen] = useState(false)
-    const [selectedIcon, setSelectedIcon] = useState<string | undefined>(undefined)
-
-    return (
-      <div style={{ padding: '20px' }}>
-        <div style={{ marginBottom: '20px' }}>
-          <p>Current selected icon: <strong>{selectedIcon ?? 'None'}</strong></p>
-          <IconButton
-            icon={{ value: selectedIcon ?? 'questionmark' }}
-            onClick={() => setOpen(true)}
-          >
-            Select Icon
-          </IconButton>
-        </div>
-        
-        <IconSelector
-          onCancel={() => setOpen(false)}
-          onSelect={(iconName) => {
-            setSelectedIcon(iconName)
-            setOpen(false)
-          }}
-          open={open}
-          selectedIcon={selectedIcon}
-        />
-      </div>
-    )
-  }
-}
-
-export const OpenModal: Story = {
-  args: {
-    open: true,
-    selectedIcon: 'pimcore',
-    onCancel: () => {},
-    onSelect: () => {}
-  }
+  render: () => <IconSelectorDemo />
 }

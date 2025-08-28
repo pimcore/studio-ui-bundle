@@ -36,6 +36,7 @@ export const useStyles = createStyles(({ token, css }) => {
       border: 1px solid ${token.colorBorder};
       border-radius: ${token.borderRadius}px;
       background-color: ${token.colorBgContainer};
+      color: ${token.colorTextDescription};
       cursor: pointer;
       transition: all 0.2s ease-in-out;
       

@@ -31,17 +31,17 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
   return (
     <Content padded>
       <p>{`You opened the perspective with id ${perspective.id}`}</p>
-      <Button onClick={() => setIconSelectorOpen(true)}>
+      <Button onClick={ () => { setIconSelectorOpen(true) } }>
         Open Icon Selector
       </Button>
       <IconSelector
-        onCancel={() => setIconSelectorOpen(false)}
-        onSelect={(iconName) => {
+        onCancel={ () => { setIconSelectorOpen(false) } }
+        onSelect={ (iconName) => {
           setSelectedIcon(iconName)
           setIconSelectorOpen(false)
-        }}
-        open={iconSelectorOpen}
-        selectedIcon={selectedIcon}
+        } }
+        open={ iconSelectorOpen }
+        selectedIcon={ selectedIcon }
       />
     </Content>
   )
