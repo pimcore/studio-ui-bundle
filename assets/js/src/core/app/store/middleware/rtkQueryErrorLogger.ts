@@ -40,8 +40,8 @@ const initialState: UserInformation = {
   hasImage: false,
   contentLanguages: [],
   keyBindings: [],
-  allowedLanguagesForEditingWebsiteTranslations: {},
-  allowedLanguagesForViewingWebsiteTranslations: {}
+  allowedLanguagesForEditingWebsiteTranslations: [],
+  allowedLanguagesForViewingWebsiteTranslations: []
 }
 
 export const rtkQueryErrorLogger: Middleware =
