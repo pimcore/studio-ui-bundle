@@ -114,6 +114,17 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Documents"],
             }),
+            documentPageSnippetAreaBlockRender: build.query<
+                DocumentPageSnippetAreaBlockRenderApiResponse,
+                DocumentPageSnippetAreaBlockRenderApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/page-snippet/${queryArg.id}/area-block/render`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Documents"],
+            }),
             documentReplaceContent: build.mutation<DocumentReplaceContentApiResponse, DocumentReplaceContentApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/documents/${queryArg.sourceId}/replace/${queryArg.targetId}`,
@@ -302,6 +313,20 @@ export type DocumentRenderletRenderApiArg = {
     parentDocumentId?: number;
     /** Renderlet template */
     template?: string;
+};
+export type DocumentPageSnippetAreaBlockRenderApiResponse =
+    /** status 200 Rendered HTML and editable definitions */ AreaBlockRenderDataForEditmode;
+export type DocumentPageSnippetAreaBlockRenderApiArg = {
+    /** Id of the document */
+    id: number;
+    body: {
+        areaBlockConfig?: object | null;
+        areaBlockData?: object | null;
+        blockStateStack: object | null;
+        index: number | null;
+        name: string | null;
+        realName: string | null;
+    };
 };
 export type DocumentReplaceContentApiResponse = unknown;
 export type DocumentReplaceContentApiArg = {
@@ -629,6 +654,16 @@ export type DocumentTemplate = {
     /** Path */
     path: string;
 };
+export type AreaBlockRenderDataForEditmode = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Dynamic array of editable definitions */
+    editableDefinitions: object[];
+    /** HTML code of the snippet */
+    htmlCode: string;
+};
 export type Site = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -698,6 +733,7 @@ export const {
     useDocumentAvailableControllersListQuery,
     useDocumentAvailableTemplatesListQuery,
     useDocumentRenderletRenderQuery,
+    useDocumentPageSnippetAreaBlockRenderQuery,
     useDocumentReplaceContentMutation,
     useDocumentsListAvailableSitesQuery,
     useDocumentUpdateSiteMutation,

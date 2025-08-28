@@ -9,10 +9,10 @@
  */
 
 import { useCallback, useState, useRef, useContext } from 'react'
-import { isNil, isArray, isEmpty } from 'lodash'
+import { isNil, isArray, isEmpty, isUndefined, isString } from 'lodash'
 import { useDocumentEditor } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/hooks/use-document-editor'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import trackError, { GeneralError, ApiError } from '@Pimcore/modules/app/error-handler'
 import { type AbstractDocumentEditableDefinition } from '../../../dynamic-type-document-editable-abstract'
 import { type AreablockEditableConfig, type AreablockValue } from '../areablock-editable'
 import { type AreablockManager } from '../utils/areablock-manager'
@@ -23,6 +23,7 @@ import {
   configUtils
 } from '../utils/areablock-utils'
 import { usePendingElementsReveal } from '../../../hooks/use-pending-elements-reveal'
+import { useLazyDocumentPageSnippetAreaBlockRenderQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 
 export interface UseAreablockEditableParams {
   areablockManager: AreablockManager
@@ -52,11 +53,16 @@ export const useAreablockEditable = ({
   const { id: documentId } = useContext(DocumentContext)
   const [dynamicEditables, setDynamicEditables] = useState<AbstractDocumentEditableDefinition[]>([])
   const reloadModeElementsRef = useRef<HTMLElement[]>(areablockManager.queryElements())
+  const [triggerAreaBlockRender] = useLazyDocumentPageSnippetAreaBlockRenderQuery()
 
   const { hideElementUntilRendered } = usePendingElementsReveal({
     dynamicEditables,
     getContainer: () => areablockManager.getContainer()
   })
+
+  const parseBlockStateStack = (blockStateStack?: any): object | null => {
+    return isString(blockStateStack) ? JSON.parse(blockStateStack) : null
+  }
 
   const getAreaEditableNames = (element: HTMLElement): string[] => {
     const elementKey = areablockManager.getElementKey(element)
@@ -118,31 +124,26 @@ export const useAreablockEditable = ({
         hidden: false
       })
 
-      const response = await fetch('/admin/page/areabrick-render-index-editmode', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({
-          documentId: documentId.toString(),
+      const { error, data } = await triggerAreaBlockRender({
+        id: documentId,
+        body: {
           name: areablockManager.getEditableName(),
-          realName: areablockManager.getEditableName(),
-          index: index.toString(),
-          blockStateStack: config?.blockStateStack ?? JSON.stringify([{ blocks: [], indexes: [] }]),
-          areablockConfig: JSON.stringify(config ?? {}),
-          areablockData: JSON.stringify(saveData)
-        })
+          realName: areablockManager.getRealEditableName(),
+          index,
+          blockStateStack: parseBlockStateStack(config?.blockStateStack),
+          areaBlockConfig: config ?? {},
+          areaBlockData: saveData
+        }
       })
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+      if (!isUndefined(error)) {
+        trackError(new ApiError(error))
+        return
       }
 
-      const result = await response.json()
-
-      if (!isNil(result.htmlCode)) {
+      if (!isNil(data?.htmlCode)) {
         const tempDiv = document.createElement('div')
-        tempDiv.innerHTML = result.htmlCode
+        tempDiv.innerHTML = data.htmlCode
         const newElement = tempDiv.firstElementChild
 
         if (!isNil(newElement)) {
@@ -167,21 +168,19 @@ export const useAreablockEditable = ({
         }
       }
 
-      if (!isNil(result.editableDefinitions) && isArray(result.editableDefinitions)) {
-        const editableDefinitions: AbstractDocumentEditableDefinition[] = result.editableDefinitions
+      if (!isNil(data?.editableDefinitions) && isArray(data?.editableDefinitions)) {
+        const editableDefinitions = data.editableDefinitions as AbstractDocumentEditableDefinition[]
         const editablesData = createEditableDataFromDefinitions(editableDefinitions)
-
         initializeData(editablesData)
-        setDynamicEditables(prev => [...prev, ...result.editableDefinitions])
+        setDynamicEditables(prev => [...prev, ...editableDefinitions])
       }
 
       handlePostOperation()
     } catch (error) {
       trackError(new GeneralError('Failed to add area'))
-      console.error('Failed to add area:', error)
       handlePostOperation()
     }
-  }, [disabled, config, handleReloadMode, handlePostOperation, areablockManager, documentId, initializeData])
+  }, [disabled, config, handleReloadMode, handlePostOperation, areablockManager, documentId])
   const removeArea = useCallback((element: HTMLElement) => {
     if (disabled) return
 

@@ -67,7 +67,9 @@ export const {
   useDocumentAvailableControllersListQuery,
   useDocumentDocTypeAddMutation,
   useDocumentDocTypeUpdateByIdMutation,
-  useDocumentDocTypeDeleteMutation
+  useDocumentDocTypeDeleteMutation,
+  useDocumentPageSnippetAreaBlockRenderQuery,
+  useLazyDocumentPageSnippetAreaBlockRenderQuery
 } = api
 
 export { api }
