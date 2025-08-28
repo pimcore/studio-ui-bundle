@@ -12,7 +12,7 @@ import { injectable } from 'inversify'
 import React, { type ReactElement } from 'react'
 import { DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
 import { FieldFilterFrontendType } from '../../frontendTypes'
-import { DynamicTypeFieldFilterSelectComponent } from '@sdk/modules/element'
+import { DynamicTypeFieldFilterBooleanSelectComponent } from '../../components/dynamic-type-field-filter-boolean-select-component'
 
 @injectable()
 export class DynamicTypeFieldFilterBooleanSelect extends DynamicTypeFieldFilterAbstract {
@@ -24,7 +24,7 @@ export class DynamicTypeFieldFilterBooleanSelect extends DynamicTypeFieldFilterA
 
   getFieldFilterComponent (): ReactElement<DynamicTypeFieldFilterAbstract> {
     return (
-      <DynamicTypeFieldFilterSelectComponent />
+      <DynamicTypeFieldFilterBooleanSelectComponent />
     )
   }
 }
