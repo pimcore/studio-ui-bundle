@@ -14,14 +14,15 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     iconGrid: css`
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: ${token.marginXS}px;
-      max-height: 400px;
+      grid-template-columns: repeat(10, 71px);
+      grid-template-rows: repeat(4, 76px);
+      gap: 8px;
+      justify-content: center;
+      max-height: 320px; /* 4 rows * 76px + 3 gaps * 8px */
       overflow-y: auto;
       padding: ${token.paddingXS}px;
       border: 1px solid ${token.colorBorder};
       border-radius: ${token.borderRadius}px;
-      background-color: ${token.colorFillAlter};
     `,
 
     iconCard: css`
@@ -29,18 +30,19 @@ export const useStyles = createStyles(({ token, css }) => {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: ${token.paddingXS}px;
+      width: 71px;
+      height: 76px;
+      padding: ${token.paddingXXS}px;
       border: 1px solid ${token.colorBorder};
       border-radius: ${token.borderRadius}px;
       background-color: ${token.colorBgContainer};
       cursor: pointer;
       transition: all 0.2s ease-in-out;
-      min-height: 80px;
       
       &:hover {
-        border-color: ${token.colorPrimary};
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         transform: translateY(-1px);
+        background-color: ${token.colorPrimaryBg};
       }
     `,
 
@@ -51,12 +53,17 @@ export const useStyles = createStyles(({ token, css }) => {
     `,
 
     iconName: css`
-      font-size: ${token.fontSizeSM}px;
+      font-size: 10px;
       color: ${token.colorTextSecondary};
       text-align: center;
-      margin-top: ${token.marginXXS}px;
+      margin-top: 2px;
       word-break: break-word;
-      line-height: 1.2;
+      line-height: 1.1;
+      max-height: 22px;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
     `,
 
     selectionPreview: css`

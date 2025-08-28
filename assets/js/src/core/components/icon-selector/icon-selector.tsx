@@ -17,7 +17,6 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { useStyles } from './icon-selector.styles'
 import { isUndefined } from 'lodash'
 
@@ -40,7 +39,7 @@ export const IconSelector = ({
   
   const [searchValue, setSearchValue] = useState<string>('')
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(20)
+  const [pageSize, setPageSize] = useState<number>(40)
   const [activeTab, setActiveTab] = useState<string>('all')
   const [currentSelectedIcon, setCurrentSelectedIcon] = useState<string | undefined>(selectedIcon)
 
@@ -69,7 +68,6 @@ export const IconSelector = ({
     return filtered
   }, [allIcons, searchValue, activeTab])
 
-  // Paginate icons
   const paginatedIcons = useMemo(() => {
     const startIndex = (currentPage - 1) * pageSize
     const endIndex = startIndex + pageSize
@@ -142,7 +140,7 @@ export const IconSelector = ({
       }
       onCancel={handleCancel}
       open={open}
-      size="XL"
+      size="ML"
       title={t('icon-selector.title')}
     >
       <Flex
@@ -157,10 +155,11 @@ export const IconSelector = ({
         />
 
         <SearchInput
-          onSearch={handleSearch}
+         onSearch={handleSearch}
           placeholder={t('icon-selector.search-placeholder')}
           withPrefix={false}
           withoutAddon={false}
+          maxWidth={'1000px'}
         />
 
         <div className={styles.iconGrid}>
@@ -220,7 +219,7 @@ export const IconSelector = ({
               current={currentPage}
               defaultPageSize={pageSize}
               onChange={handlePageChange}
-              pageSizeOptions={[10, 20, 50, 100]}
+              pageSizeOptions={[20, 40, 80, 120]}
               showSizeChanger
               showTotal={(total) => t('pagination.show-total', { total })}
               total={filteredIcons.length}
