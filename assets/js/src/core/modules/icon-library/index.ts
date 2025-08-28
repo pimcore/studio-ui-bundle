@@ -24,6 +24,7 @@ import addSomething from '@Pimcore/assets/icons/add-something.inline.svg?react'
 import addUser from '@Pimcore/assets/icons/add-user.inline.svg?react'
 import alert from '@Pimcore/assets/icons/alert.inline.svg?react'
 import applicationLogger from '@Pimcore/assets/icons/application-logger.inline.svg?react'
+import areaBrick from '@Pimcore/assets/icons/area-brick.inline.svg?react'
 import arrowNarrowRight from '@Pimcore/assets/icons/arrow-narrow-right.inline.svg?react'
 import asset from '@Pimcore/assets/icons/asset.inline.svg?react'
 import attachment from '@Pimcore/assets/icons/attachment.inline.svg?react'
@@ -281,6 +282,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'application-logger',
       component: applicationLogger
+    })
+    iconLibrary.register({
+      name: 'area-brick',
+      component: areaBrick
     })
     iconLibrary.register({
       name: 'arrow-narrow-right',

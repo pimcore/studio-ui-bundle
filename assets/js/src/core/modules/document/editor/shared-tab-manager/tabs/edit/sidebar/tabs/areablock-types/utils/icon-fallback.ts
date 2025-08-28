@@ -12,17 +12,7 @@ import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 
 /**
- * Fallback icons for areablock types
- * Selected neutral icons that work well as generic content element representations
- */
-const FALLBACK_ICON_STORE = [
-  'accessory', 'bookmark', 'catalog', 'cms', 'content', 'custom-metadata', 'document-types',
-  'embedded-metadata', 'favorites', 'focal-point', 'list', 'market', 'package', 'webhook',
-  'widget'
-]
-
-/**
- * Gets the icon for an areablock type, applying fallback logic if no icon is provided
+ * Gets the icon for an areablock type, applying fallback icon if no icon is provided
  */
 export const getAreablockTypeIcon = (icon: string | undefined, index: number): ElementIcon => {
   if (isNonEmptyString(icon)) {
@@ -40,10 +30,9 @@ export const getAreablockTypeIcon = (icon: string | undefined, index: number): E
     }
   }
 
-  // Apply fallback logic using the predefined icon store
-  const fallbackIcon = FALLBACK_ICON_STORE[index % FALLBACK_ICON_STORE.length] ?? 'content'
+
   return {
     type: 'name',
-    value: fallbackIcon
+    value: 'area-brick'
   }
 }
