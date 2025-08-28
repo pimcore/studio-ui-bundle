@@ -29,7 +29,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 export class DynamicTypeObjectDataBooleanSelect extends DynamicTypeObjectDataAbstractSelect {
   id: string = 'booleanSelect'
 
-  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Select'])
+  protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/BooleanSelect'])
 
   getObjectDataComponent (props: SelectProps): React.ReactElement<AbstractObjectDataDefinition> {
     const options = props.options === null ? undefined : props.options.map(option => ({ label: t(option.key), value: option.value }))
