@@ -9,7 +9,7 @@
  */
 
 import React, { useMemo, useState, useCallback } from 'react'
-import { Modal, IconButton, SearchInput, Pagination, Tabs } from '@sdk/components'
+import { Modal, IconButton, SearchInput, Pagination, Tabs, ModalFooter } from '@sdk/components'
 import { Button } from 'antd'
 import { t } from 'i18next'
 import { useInjection } from '@Pimcore/app/depency-injection'
@@ -129,7 +129,7 @@ export const IconSelector = ({
 
   return (
     <Modal
-      footer={
+      footer={<ModalFooter divider>
         <Button
           disabled={isUndefined(currentSelectedIcon)}
           onClick={handleSave}
@@ -137,6 +137,7 @@ export const IconSelector = ({
         >
           {t('icon-selector.save')}
         </Button>
+        </ModalFooter>
       }
       onCancel={handleCancel}
       open={open}

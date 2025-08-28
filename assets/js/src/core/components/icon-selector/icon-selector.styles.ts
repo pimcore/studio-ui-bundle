@@ -18,7 +18,7 @@ export const useStyles = createStyles(({ token, css }) => {
       grid-template-rows: repeat(4, 76px);
       gap: 8px;
       justify-content: center;
-      max-height: 320px; /* 4 rows * 76px + 3 gaps * 8px */
+      max-height: 345px;
       overflow-y: auto;
       padding: ${token.paddingXS}px;
       border: 1px solid ${token.colorBorder};
