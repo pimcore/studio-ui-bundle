@@ -186,28 +186,25 @@ export const IconSelector = ({
             gap="small"
           >
             <span>{t('icon-selector.current-selection')}</span>
-            <div className={styles.selectionPreview}>
+            <Flex 
+            justify='center'
+            align='center'
+            className={styles.selectionPreview}>
               {!isUndefined(currentSelectedIcon) ? (
-                <Flex
-                  align="center"
-                  gap="mini"
-                >
                   <Icon
                     options={{ height: 16, width: 16 }}
                     value={currentSelectedIcon}
                   />
-                  <span>{currentSelectedIcon}</span>
-                  <IconButton
-                    icon={{ value: 'trash' }}
-                    onClick={handleClearSelection}
-                    title={t('icon-selector.clear-selection')}
-                    variant="minimal"
-                  />
-                </Flex>
               ) : (
                 <span className={styles.noSelection}>{t('icon-selector.no-selection')}</span>
               )}
-            </div>
+            </Flex>
+                              {!isUndefined(currentSelectedIcon) && ( <IconButton
+                    icon={{ value: 'trash' }}
+                    onClick={handleClearSelection}
+                    title={t('icon-selector.clear-selection')}
+                    type='default'
+                  />)}
           </Flex>
 
           <Flex

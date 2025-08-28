@@ -60,12 +60,12 @@ export const useStyles = createStyles(({ token, css }) => {
     `,
 
     selectionPreview: css`
-      min-height: 24px;
+      min-height: 32px;
       padding: ${token.paddingXXS}px ${token.paddingXS}px;
       border: 1px solid ${token.colorBorder};
       border-radius: ${token.borderRadius}px;
       background-color: ${token.colorBgContainer};
-      min-width: 200px;
+      width: 54px;
     `,
 
     noSelection: css`
