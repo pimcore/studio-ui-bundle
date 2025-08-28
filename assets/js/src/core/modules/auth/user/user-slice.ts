@@ -34,8 +34,8 @@ const initialState: UserInformation = {
   hasImage: false,
   contentLanguages: [],
   keyBindings: [],
-  allowedLanguagesForEditingWebsiteTranslations: {},
-  allowedLanguagesForViewingWebsiteTranslations: {}
+  allowedLanguagesForEditingWebsiteTranslations: [],
+  allowedLanguagesForViewingWebsiteTranslations: []
 }
 
 const slice = createSlice({
