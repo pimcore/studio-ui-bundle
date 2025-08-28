@@ -44,7 +44,6 @@ export const IconSelector = ({
   const [activeTab, setActiveTab] = useState<string>('all')
   const [currentSelectedIcon, setCurrentSelectedIcon] = useState<string | undefined>(selectedIcon)
 
-  // Filter icons based on search and tab
   const filteredIcons = useMemo(() => {
     const iconsArray = Array.from(allIcons)
     
@@ -152,8 +151,8 @@ export const IconSelector = ({
           onChange={setActiveTab}
         />
 
-        {/* Search */}
         <SearchInput
+          onChange={(e) => setSearchValue(e.target.value)}
           onSearch={setSearchValue}
           placeholder={t('icon-selector.search-placeholder')}
           value={searchValue}
@@ -161,7 +160,6 @@ export const IconSelector = ({
           withoutAddon={false}
         />
 
-        {/* Icon Grid */}
         <div className={styles.iconGrid}>
           {paginatedIcons.map(([iconName]) => (
             <div
@@ -177,8 +175,6 @@ export const IconSelector = ({
             </div>
           ))}
         </div>
-
-        {/* Bottom Toolbar */}
         <Toolbar
           justify="space-between"
           theme="secondary"
