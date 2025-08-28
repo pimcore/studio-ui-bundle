@@ -30,7 +30,6 @@ export const getAreablockTypeIcon = (icon: string | undefined, index: number): E
     }
   }
 
-
   return {
     type: 'name',
     value: 'area-brick'
