@@ -178,6 +178,7 @@ export const useAreablockEditable = ({
       handlePostOperation()
     } catch (error) {
       trackError(new GeneralError('Failed to add area'))
+      console.error('Failed to add area:', error)
       handlePostOperation()
     }
   }, [disabled, config, handleReloadMode, handlePostOperation, areablockManager, documentId])
