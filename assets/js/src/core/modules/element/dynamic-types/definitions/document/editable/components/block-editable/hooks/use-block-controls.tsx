@@ -43,9 +43,6 @@ export const useBlockControls = ({
 }: UseBlockControlsParams): UseBlockControlsReturn => {
   const {
     activeId,
-    handleDragStart,
-    handleDragOver,
-    handleDragEnd,
     dropzonePortals,
     dragOverlayTitle,
     refreshDropzones,
@@ -134,14 +131,11 @@ export const useBlockControls = ({
         activeId={ activeId }
         dragOverlayTitle={ dragOverlayTitle }
         items={ blockKeys }
-        onDragEnd={ handleDragEnd }
-        onDragOver={ handleDragOver }
-        onDragStart={ handleDragStart }
       >
         <>{portals}</>
       </EditableSortContext>
     )
-  }, [blockManager, config, handleDragStart, handleDragOver, handleDragEnd, handleAddBlock, handleRemoveBlock, onMoveBlockUp, onMoveBlockDown, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal])
+  }, [blockManager, config, handleAddBlock, handleRemoveBlock, onMoveBlockUp, onMoveBlockDown, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal])
 
   return {
     renderBlockToolbar

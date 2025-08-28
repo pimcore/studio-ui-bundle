@@ -8,8 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
-import { useSortable } from '@dnd-kit/sortable'
+import React, { useCallback, useMemo } from 'react'
+import { Draggable } from '@Pimcore/components/drag-and-drop/draggable'
+import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/droppable'
 
 export interface UseSortableElementProps {
   id: string
@@ -17,36 +18,49 @@ export interface UseSortableElementProps {
 }
 
 export interface UseSortableElementReturn {
-  listeners: ReturnType<typeof useSortable>['listeners']
+  listeners: {
+    onMouseDown?: React.MouseEventHandler
+    onTouchStart?: React.TouchEventHandler
+  }
+  DraggableWrapper: React.ComponentType<{ children: React.ReactNode }>
 }
 
 /**
  * Custom hook to handle sortable element setup for both block and areablock toolbars.
- * Manages the connection between dnd-kit's useSortable and DOM elements.
+ * Uses native browser drag/drop with Draggable component instead of @dnd-kit.
  */
 export const useSortableElement = ({
   id,
   element
 }: UseSortableElementProps): UseSortableElementReturn => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef
-  } = useSortable({ id })
 
-  React.useEffect(() => {
-    if (setNodeRef !== null) {
-      setNodeRef(element)
-
-      Object.keys(attributes).forEach(key => {
-        if (attributes[key] !== undefined && key.startsWith('data-')) {
-          element.setAttribute(key, String(attributes[key]))
-        }
-      })
+  // Create drag info for internal sorting
+  const dragInfo: DragAndDropInfo = useMemo(() => ({
+    type: 'areablock-element', // or 'block-element' depending on context
+    title: element.getAttribute('data-type') ?? 'Element',
+    icon: { value: 'move' },
+    data: {},
+    sortable: {
+      elementKey: id,
+      originalElement: element
     }
-  }, [setNodeRef, element, attributes])
+  }), [id, element])
+
+  // Create a wrapper component that handles dragging
+  const DraggableWrapper = useCallback(({ children }: { children: React.ReactNode }) => (
+    <Draggable info={dragInfo}>
+      {children}
+    </Draggable>
+  ), [dragInfo])
+
+  // Simple listeners for compatibility (not really needed with native implementation)
+  const listeners = useMemo(() => ({
+    onMouseDown: undefined,
+    onTouchStart: undefined
+  }), [])
 
   return {
-    listeners
+    listeners,
+    DraggableWrapper
   }
 }

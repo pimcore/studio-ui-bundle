@@ -14,12 +14,13 @@ import { useEditableDropzoneStyles } from './editable-dropzone.styles'
 import cn from 'classnames'
 
 export interface EditableDropzoneContentProps {
-  id?: string
-  index?: number
-  setNodeRef?: (element: HTMLElement | null) => void
+  id: string
+  elementKey: string
+  position: 'before' | 'after'
+  setNodeRef: (node: HTMLElement | null) => void
 }
 
-export const EditableDropzoneContent = ({ id, index, setNodeRef }: EditableDropzoneContentProps): React.JSX.Element => {
+export const EditableDropzoneContent = ({ id, elementKey, position, setNodeRef }: EditableDropzoneContentProps): React.JSX.Element => {
   const { styles } = useEditableDropzoneStyles()
   const { isDragActive, isOver, isValid } = useDroppable()
 
@@ -34,8 +35,9 @@ export const EditableDropzoneContent = ({ id, index, setNodeRef }: EditableDropz
           [styles.dropzoneRejected]: isOver && !isValid
         }
       ) }
-      data-pimcore-dropzone-id={ id ?? 'default-dropzone' }
-      data-pimcore-dropzone-index={ index ?? 0 }
+      data-pimcore-dropzone-id={id}
+        data-pimcore-element-key={elementKey}
+        data-pimcore-position={position}
       ref={ setNodeRef }
     />
   )

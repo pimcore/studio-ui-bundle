@@ -47,9 +47,6 @@ export const useAreablockControls = ({
 }: UseAreablockControlsParams): UseAreablockControlsReturn => {
   const {
     activeId,
-    handleDragStart,
-    handleDragOver,
-    handleDragEnd,
     dropzonePortals,
     dragOverlayTitle,
     refreshDropzones,
@@ -155,14 +152,11 @@ export const useAreablockControls = ({
         activeId={ activeId }
         dragOverlayTitle={ dragOverlayTitle }
         items={ areaKeys }
-        onDragEnd={ handleDragEnd }
-        onDragOver={ handleDragOver }
-        onDragStart={ handleDragStart }
       >
         <>{portals}</>
       </EditableSortContext>
     )
-  }, [areablockManager, areaTypes, config, handleDragStart, handleDragOver, handleDragEnd, handleAddArea, handleRemoveArea, onMoveAreaUp, onMoveAreaDown, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal])
+  }, [areablockManager, areaTypes, config, activeId, dropzonePortals, dragOverlayTitle])
 
   return {
     renderAreablockToolbar

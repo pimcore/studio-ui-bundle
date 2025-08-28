@@ -20,10 +20,26 @@ import {
 /**
  * Creates a dropzone container element with proper attributes
  */
-export const createDropzoneContainer = (editableName: string | null, isFirst?: boolean): HTMLDivElement => {
+export const createDropzoneContainer = (
+  editableName: string | null, 
+  isFirst?: boolean,
+  elementKey?: string | null,
+  position?: 'before' | 'after'
+): HTMLDivElement => {
   const dropzoneContainer = document.createElement('div')
   dropzoneContainer.className = DROPZONE_CLASSES.DROPZONE_CONTAINER
   dropzoneContainer.setAttribute(DROPZONE_ATTRIBUTES.DATA_EDITABLE_DROPZONE, editableName ?? '')
+  
+  // Add element key if provided
+  if (elementKey != null) {
+    dropzoneContainer.setAttribute(DROPZONE_ATTRIBUTES.DATA_ELEMENT_KEY, elementKey)
+  }
+  
+  // Add position if provided
+  if (position != null) {
+    dropzoneContainer.setAttribute(DROPZONE_ATTRIBUTES.DATA_DROPZONE_POSITION, position)
+  }
+  
   if (isFirst === true) {
     dropzoneContainer.setAttribute(DROPZONE_ATTRIBUTES.DATA_FIRST_DROPZONE, 'true')
   }
@@ -108,31 +124,36 @@ const hasDropzoneAfter = (element: HTMLElement, editableName: string | null): bo
 
 /**
  * Updates dropzone containers before and after elements, skipping if they already exist
+ * Now uses element keys for unique identification
  */
 export const updateDropzoneContainers = (
   elements: HTMLElement[],
-  editableName: string | null
+  editableName: string | null,
+  getElementKey?: (element: HTMLElement) => string | null
 ): void => {
   if (elements.length === 0) {
     // For empty containers, still inject a dropzone at the container level
     const container = document.querySelector(`[data-name="${editableName}"]`)
     if (!isNil(container) && isNil(container.querySelector(`[${DROPZONE_ATTRIBUTES.DATA_EDITABLE_DROPZONE}="${editableName}"]`))) {
-      const dropzone = createDropzoneContainer(editableName)
+      const dropzone = createDropzoneContainer(editableName, true)
       container.appendChild(dropzone)
     }
     return
   }
 
   const firstItem = elements[0]
+  const firstItemKey = getElementKey?.(firstItem)
 
   if (!hasDropzoneBefore(firstItem, editableName)) {
-    const firstDropzone = createDropzoneContainer(editableName, true) // Mark as first dropzone
+    const firstDropzone = createDropzoneContainer(editableName, true, firstItemKey, 'before')
     firstItem.parentNode?.insertBefore(firstDropzone, firstItem)
   }
 
   elements.forEach((itemEntry) => {
+    const elementKey = getElementKey?.(itemEntry)
+    
     if (!hasDropzoneAfter(itemEntry, editableName)) {
-      const dropzoneContainer = createDropzoneContainer(editableName)
+      const dropzoneContainer = createDropzoneContainer(editableName, false, elementKey, 'after')
       itemEntry.appendChild(dropzoneContainer)
     }
   })

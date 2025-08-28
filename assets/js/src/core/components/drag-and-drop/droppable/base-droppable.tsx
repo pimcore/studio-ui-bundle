@@ -74,9 +74,15 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
     if (isVisible) {
       const targetWindow = window.parent
       targetWindow.addEventListener('studioui:draggable:change-drag-info', handleChangeDragInfo)
+      if (isInIframe) {
+        window.addEventListener('studioui:draggable:change-drag-info', handleChangeDragInfo)
+      }
 
       return () => {
         targetWindow.removeEventListener('studioui:draggable:change-drag-info', handleChangeDragInfo)
+        if (isInIframe) {
+          window.removeEventListener('studioui:draggable:change-drag-info', handleChangeDragInfo)
+        }
       }
     }
   }, [isVisible, isInIframe])

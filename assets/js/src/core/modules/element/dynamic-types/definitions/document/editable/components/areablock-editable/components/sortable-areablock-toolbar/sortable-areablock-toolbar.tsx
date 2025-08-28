@@ -51,7 +51,7 @@ export const SortableAreablockToolbar = ({
 }: SortableAreablockToolbarProps): React.JSX.Element => {
   const { styles } = useAreablockEditableStyles()
   const { t } = useTranslation()
-  const { listeners } = useSortableElement({ id, element })
+  const { DraggableWrapper } = useSortableElement({ id, element })
 
   const { menuItems } = useAreablockMenu({
     config,
@@ -141,24 +141,26 @@ export const SortableAreablockToolbar = ({
   )
 
   return (
-    <ToolStrip
-      activateOnHover
-      className={ styles.areablockToolstrip }
-      dragger={ { listeners } }
-      key={ `toolbar-${element.getAttribute('key')}` }
-      theme="inverse"
-      title={ toolbarTitle }
-    >
-      <Split
-        dividerSize="small"
-        size="mini"
-        theme="secondary"
+    <DraggableWrapper>
+      <ToolStrip
+      dragger
+        activateOnHover
+        className={ styles.areablockToolstrip }
+        key={ `toolbar-${element.getAttribute('key')}` }
+        theme="inverse"
+        title={ toolbarTitle }
       >
-        <Space size="small">
-          {buttons}
-        </Space>
-        {deleteButton}
-      </Split>
-    </ToolStrip>
+        <Split
+          dividerSize="small"
+          size="mini"
+          theme="secondary"
+        >
+          <Space size="small">
+            {buttons}
+          </Space>
+          {deleteButton}
+        </Split>
+      </ToolStrip>
+    </DraggableWrapper>
   )
 }

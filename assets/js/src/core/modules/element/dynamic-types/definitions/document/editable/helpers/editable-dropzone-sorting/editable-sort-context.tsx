@@ -9,21 +9,6 @@
  */
 
 import React from 'react'
-import {
-  DndContext,
-  type DragEndEvent,
-  type DragOverEvent,
-  type DragStartEvent,
-  pointerWithin,
-  useSensor,
-  useSensors,
-  PointerSensor,
-  KeyboardSensor
-} from '@dnd-kit/core'
-import {
-  SortableContext,
-  verticalListSortingStrategy
-} from '@dnd-kit/sortable'
 import { ToolstripDragOverlay } from './components/toolstrip-drag-overlay/toolstrip-drag-overlay'
 
 export interface EditableSortContextProps {
@@ -31,47 +16,23 @@ export interface EditableSortContextProps {
   items: string[]
   activeId: string | null
   dragOverlayTitle?: string
-  onDragEnd: (event: DragEndEvent) => void
-  onDragOver: (event: DragOverEvent) => void
-  onDragStart: (event: DragStartEvent) => void
+  // Native events - no need for handlers since we handle everything natively
 }
 
 export const EditableSortContext = ({
   children,
   items,
   activeId,
-  dragOverlayTitle,
-  onDragEnd,
-  onDragOver,
-  onDragStart
+  dragOverlayTitle
 }: EditableSortContextProps): React.JSX.Element => {
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8
-      }
-    }),
-    useSensor(KeyboardSensor)
-  )
-
+  // Simple wrapper - all drag/drop logic is handled by native components
   return (
-    <DndContext
-      collisionDetection={ pointerWithin }
-      onDragEnd={ onDragEnd }
-      onDragOver={ onDragOver }
-      onDragStart={ onDragStart }
-      sensors={ sensors }
-    >
-      <SortableContext
-        items={ items }
-        strategy={ verticalListSortingStrategy }
-      >
-        {children}
-      </SortableContext>
+    <>
+      {children}
       <ToolstripDragOverlay
         activeId={ activeId }
         title={ dragOverlayTitle }
       />
-    </DndContext>
+    </>
   )
 }

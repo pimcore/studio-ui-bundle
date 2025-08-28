@@ -24,7 +24,9 @@ export const DROPZONE_ATTRIBUTES = {
   DATA_DROPZONE_ID: 'data-pimcore-dropzone-id',
   DATA_DROPZONE_INDEX: 'data-pimcore-dropzone-index',
   DATA_DRAG_STATE: 'data-pimcore-drag-state',
-  DATA_FIRST_DROPZONE: 'data-pimcore-first-dropzone'
+  DATA_FIRST_DROPZONE: 'data-pimcore-first-dropzone',
+  DATA_ELEMENT_KEY: 'data-pimcore-element-key',
+  DATA_DROPZONE_POSITION: 'data-pimcore-dropzone-position'
 } as const
 
 export const DROPZONE_STATES = {

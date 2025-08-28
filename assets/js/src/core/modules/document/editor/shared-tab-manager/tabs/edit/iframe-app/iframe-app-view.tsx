@@ -64,6 +64,7 @@ export const DocumentEditorIframeAppView = (): React.JSX.Element => {
               <DateTimeConfig>
                 <DocumentProvider id={ documentId }>
                   <EditablesRenderer editableDefinitions={ editableDefinitions } />
+                  <div id="global-overlay-container" />
                 </DocumentProvider>
               </DateTimeConfig>
             </ModalsProvider>

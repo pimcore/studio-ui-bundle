@@ -44,7 +44,7 @@ export const SortableBlockToolbar = ({
 }: SortableBlockToolbarProps): React.JSX.Element => {
   const { styles } = useBlockEditableStyles()
   const { t } = useTranslation()
-  const { listeners } = useSortableElement({ id, element })
+  const { DraggableWrapper } = useSortableElement({ id, element })
 
   const elements = blockManager.queryElements()
   const elementIndex = blockManager.findElementIndex(element)
@@ -106,24 +106,25 @@ export const SortableBlockToolbar = ({
   }
 
   return (
-    <ToolStrip
-      activateOnHover
-      className={ styles.blockToolstrip }
-      dragger={ { listeners } }
-      key={ `toolbar-${element.getAttribute('key')}` }
-      theme="inverse"
-      title={ t('block') }
-    >
-      <Split
-        dividerSize="small"
-        size="mini"
-        theme="secondary"
+    <DraggableWrapper>
+      <ToolStrip
+        activateOnHover
+        className={ styles.blockToolstrip }
+        key={ `toolbar-${element.getAttribute('key')}` }
+        theme="inverse"
+        title={ t('block') }
       >
-        <Space size="small">
-          {buttons}
-        </Space>
-        {deleteButton}
-      </Split>
-    </ToolStrip>
+        <Split
+          dividerSize="small"
+          size="mini"
+          theme="secondary"
+        >
+          <Space size="small">
+            {buttons}
+          </Space>
+          {deleteButton}
+        </Split>
+      </ToolStrip>
+    </DraggableWrapper>
   )
 }
