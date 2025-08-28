@@ -13,26 +13,26 @@ import { Select } from '@Pimcore/components/select/select'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 
 export const DynamicTypeFieldFilterBooleanSelectComponent = (): React.JSX.Element => {
-  const { setData, data, config: rawConfig } = useDynamicFilter()  
+  const { setData, data } = useDynamicFilter()
   const [_value, setValue] = useState(data)
-  
+
   const options = [
     { label: 'True', value: true },
     { label: 'False', value: false },
     { label: 'Empty', value: null }
   ]
-    
+
   return (
     <Select
       onBlur={ onBlur }
       onChange={ (value: boolean | null) => { setValue(value) } }
-      options={ options as any } 
+      options={ options as any }
       style={ { width: '100%' } }
       value={ _value }
     />
   )
 
   function onBlur (): void {
-       setData(_value)
+    setData(_value)
   }
 }
