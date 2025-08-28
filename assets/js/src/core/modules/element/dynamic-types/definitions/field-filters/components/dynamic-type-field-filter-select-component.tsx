@@ -8,14 +8,15 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Select } from '@Pimcore/components/select/select'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { type DefaultOptionType } from 'antd/es/select'
 
 interface IObjectSelectConfig {
   fieldDefinition: {
-    options: Array<{ key: string, value: string }>
+    options: Array<{ key: string, value: string | number }>
+    fieldtype?: string
   }
 }
 
@@ -23,40 +24,64 @@ interface IAssetSelectConfig {
   options: string[]
 }
 
+const transformBooleanSelectValueToBooleanNull = (value: string | number): boolean | null => {
+  switch (value) {
+    case -1:
+      return false
+    case 0:
+      return null
+    case 1:
+      return true
+  }
+  return null
+}
+
+
 export const DynamicTypeFieldFilterSelectComponent = (): React.JSX.Element => {
   const { setData, data, config: rawConfig } = useDynamicFilter()
-  const [_value, setValue] = useState(data)
-
   const config: IAssetSelectConfig | IObjectSelectConfig = rawConfig
-  let formattedOptions: DefaultOptionType[] = []
+  
+  const getInitialValue = () => {
+    if ('fieldDefinition' in config && config.fieldDefinition.fieldtype === 'booleanSelect') {
+      return transformBooleanSelectValueToBooleanNull(data)
+    }
+    return data
+  }
+  
+  const [_value, setValue] = useState(getInitialValue())
 
+  let formattedOptions: DefaultOptionType[] = []
+  
   if ('fieldDefinition' in config && Array.isArray(config?.fieldDefinition?.options)) {
-    formattedOptions = config?.fieldDefinition?.options.map((opt) => ({
-      label: opt?.key,
-      value: opt?.value
-    }))
+    if (config.fieldDefinition.fieldtype === 'booleanSelect') {
+      formattedOptions = config.fieldDefinition.options.map((opt) => ({
+        label: opt.key,
+        value: transformBooleanSelectValueToBooleanNull(opt.value) as any
+      }))
+    } else {
+      formattedOptions = config?.fieldDefinition?.options.map((opt) => ({
+        label: opt?.key,
+        value: opt?.value
+      }))
+    }
   } else if ('options' in config && Array.isArray(config.options)) {
     formattedOptions = config.options.map((opt) => ({
       label: opt,
       value: opt
     }))
   }
-
-  useEffect(() => {
-    setValue(data)
-  }, [data])
-
+  
   return (
     <Select
       onBlur={ onBlur }
       onChange={ (value: string) => { setValue(value) } }
-      options={ formattedOptions }
+      options={ formattedOptions as any } 
       style={ { width: '100%' } }
       value={ _value }
     />
   )
 
   function onBlur (): void {
-    setData(_value)
+       setData(_value)
   }
 }
