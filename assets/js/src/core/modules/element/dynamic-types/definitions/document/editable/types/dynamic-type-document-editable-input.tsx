@@ -12,12 +12,28 @@ import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import ContentEditable from '../components/content-editable/content-editable'
 
+export type InputEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
+  config?: {
+    placeholder?: string
+    width?: number
+    nowrap?: boolean
+    class?: string
+    required?: boolean
+  }
+}
+
 export class DynamicTypeDocumentEditableInput extends DynamicTypeDocumentEditableAbstract {
   id: string = 'input'
 
-  getEditableDataComponent (props: AbstractDocumentEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
+  getEditableDataComponent (props: InputEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
     return (
-      <ContentEditable />
+      <ContentEditable
+        className={ props.config?.class }
+        nowrap={ props.config?.nowrap }
+        placeholder={ props.config?.placeholder }
+        required={ props.config?.required }
+        width={ props.config?.width }
+      />
     )
   }
 }
