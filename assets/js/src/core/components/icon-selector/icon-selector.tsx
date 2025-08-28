@@ -98,6 +98,11 @@ export const IconSelector = ({
     setCurrentSelectedIcon(undefined)
   }, [])
 
+  const handleSearch = useCallback((value: string) => {
+    setSearchValue(value)
+    setCurrentPage(1) // Reset to first page when searching
+  }, [])
+
   const handleRefresh = useCallback(() => {
     setSearchValue('')
     setCurrentPage(1)
@@ -137,7 +142,7 @@ export const IconSelector = ({
       }
       onCancel={handleCancel}
       open={open}
-      size="L"
+      size="XL"
       title={t('icon-selector.title')}
     >
       <Flex
@@ -152,10 +157,8 @@ export const IconSelector = ({
         />
 
         <SearchInput
-          onChange={(e) => setSearchValue(e.target.value)}
-          onSearch={setSearchValue}
+          onSearch={handleSearch}
           placeholder={t('icon-selector.search-placeholder')}
-          value={searchValue}
           withPrefix={false}
           withoutAddon={false}
         />
@@ -175,9 +178,8 @@ export const IconSelector = ({
             </div>
           ))}
         </div>
-        <Toolbar
+        <Flex
           justify="space-between"
-          theme="secondary"
         >
           <Flex
             align="center"
@@ -227,7 +229,7 @@ export const IconSelector = ({
               total={filteredIcons.length}
             />
           </Flex>
-        </Toolbar>
+        </Flex>
       </Flex>
     </Modal>
   )
