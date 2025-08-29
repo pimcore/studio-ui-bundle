@@ -37,7 +37,7 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
   return useMemo(() => {
     if (!isPaddedLayout) {
       return (
-        <Box padding={finalProps.contentPadding}>
+        <Box padding={ finalProps.contentPadding }>
           {finalProps.children}
         </Box>
       )
