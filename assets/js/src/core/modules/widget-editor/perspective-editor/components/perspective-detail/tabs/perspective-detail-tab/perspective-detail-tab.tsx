@@ -68,8 +68,18 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
           }
         }}
       >
-        <Flex justify='space-between' vertical>
-          <Content style={{ height: '100%' }}>
+        <Flex
+          justify='space-between'
+          vertical
+          className='makeTabsGreatAgain'
+        >
+          <Content
+            padded
+            padding={{
+              x: 'small',
+              y: 'none'
+            }}
+          >
             <FormKit.Panel>
               <Form.Item
                 label="Name"

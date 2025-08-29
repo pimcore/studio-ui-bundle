@@ -18,7 +18,7 @@ export const WidgetDetailContainer = (): React.JSX.Element => {
 
   return (
     <Tabs
-      className='h-full'
+      fullHeight
       activeKey={activeTabId}
       items={perspectives.map((perspective) => ({
         key: perspective.id,

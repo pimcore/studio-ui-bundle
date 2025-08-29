@@ -18,23 +18,23 @@ export interface ITabsProps extends TabsProps {
   hasStickyHeader?: boolean
   noPadding?: boolean
   noTabBarMargin?: boolean
+  fullHeight?: boolean
 }
 
-const Component = ({ items, className, activeKey, onClose, onChange, hasStickyHeader = false, ...props }: ITabsProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
+const Component = ({ items, className, activeKey, onClose, onChange, hasStickyHeader = false, fullHeight = false, ...props }: ITabsProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
   const { styles } = useStyles()
 
   const classNames = cn(
     'ant-tabs-line',
     styles.tabs,
     {
-      'tabs--has-sticky-header': hasStickyHeader
+      'tabs--has-sticky-header': hasStickyHeader,
     },
     className,
     {
-      'tabs--no-padding': props.noPadding
-    },
-    {
-      'tabs--no-tab-bar-margin': props.noTabBarMargin
+      'tabs--no-padding': props.noPadding,
+      'tabs--no-tab-bar-margin': props.noTabBarMargin,
+      'tabs--full-height': fullHeight,
     }
   )
 
@@ -66,8 +66,8 @@ const Component = ({ items, className, activeKey, onClose, onChange, hasStickyHe
     ...item,
     label: (
       <button
-        onMouseDown={ handleMiddleClick(item.key) }
-        style={ { border: 'none', background: 'none', padding: 0, font: 'inherit', cursor: 'inherit' } }
+        onMouseDown={handleMiddleClick(item.key)}
+        style={{ border: 'none', background: 'none', padding: 0, font: 'inherit', cursor: 'inherit' }}
         type="button"
       >
         {item.label}
@@ -77,14 +77,14 @@ const Component = ({ items, className, activeKey, onClose, onChange, hasStickyHe
 
   return (
     <AntdTabs
-      activeKey={ activeKey }
-      className={ classNames }
+      activeKey={activeKey}
+      className={classNames}
       hideAdd
-      items={ enhancedItems }
-      onChange={ onChange }
-      onEdit={ onEdit }
-      type={ tabType }
-      { ...props }
+      items={enhancedItems}
+      onChange={onChange}
+      onEdit={onEdit}
+      type={tabType}
+      {...props}
     />
   )
 }
