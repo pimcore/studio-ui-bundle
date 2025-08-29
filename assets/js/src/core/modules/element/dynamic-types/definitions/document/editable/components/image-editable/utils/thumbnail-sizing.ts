@@ -52,6 +52,7 @@ export const generateThumbnailUrl = ({
   const defaultThumbnailSettings: ImageThumbnailSettings = {
     frame: false,
     resizeMode,
+    mimeType: 'PNG',
     ...thumbnailSettings
   }
 
