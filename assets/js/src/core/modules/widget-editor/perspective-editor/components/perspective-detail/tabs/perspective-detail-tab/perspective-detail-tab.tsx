@@ -49,81 +49,79 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
   }
 
   return (
-    <div className='h-full'>
-      <FormKit
-        formProps={{
-          form: form,
-          initialValues,
-          onFinish: async (values) => {
-            console.table(values)
+    <FormKit
+      formProps={{
+        form: form,
+        initialValues,
+        onFinish: async (values) => {
+          console.table(values)
 
-            await updatePerspective(perspective.id, {
-              ...values
-            }, () => {
-              setPerspectives((prev) => {
-                const updated = prev.map((p) => (p.id === id ? { ...p, ...values } : p))
-                return updated as PerspectiveConfigDetail[]
-              })
+          await updatePerspective(perspective.id, {
+            ...values
+          }, () => {
+            setPerspectives((prev) => {
+              const updated = prev.map((p) => (p.id === id ? { ...p, ...values } : p))
+              return updated as PerspectiveConfigDetail[]
             })
-          }
-        }}
+          })
+        }
+      }}
+    >
+      <Flex
+        justify='space-between'
+        vertical
+        className='makeTabsGreatAgain'
       >
-        <Flex
-          justify='space-between'
-          vertical
-          className='makeTabsGreatAgain'
+        <Content
+          padded
+          padding={{
+            x: 'small',
+            y: 'none'
+          }}
         >
-          <Content
-            padded
-            padding={{
-              x: 'small',
-              y: 'none'
-            }}
-          >
-            <FormKit.Panel>
-              <Form.Item
-                label="Name"
-                name="name"
-                required
-              >
-                <Input
-                  onChange={(e) => { setFormData({ ...formData, name: e.target.value }) }}
-                  placeholder={t('perspective-editor.form.name.placeholder')}
-                />
-              </Form.Item>
-            </FormKit.Panel>
-          </Content>
-
-          <Toolbar justify="space-between">
-            <div>
-              <IconButton
-                icon={{ value: 'refresh' }}
-                title={t('refresh')}
-                onClick={() => {
-                  form.resetFields()
-                }}
-              />
-
-              <IconButton
-                icon={{ value: 'trash' }}
-                title={t('delete')}
-                onClick={() => {
-                  removeWithConfirmation(perspective.id, () => {
-                    setPerspectives((prev) => prev.filter((p) => p.id !== perspective.id))
-                  })
-                }}
-              />
-            </div>
-
-            <Button
-              type='primary'
-              htmlType='submit'
+          <FormKit.Panel>
+            <Form.Item
+              label="Name"
+              name="name"
+              required
             >
-              {t('save')}
-            </Button>
-          </Toolbar>
-        </Flex>
-      </FormKit>
-    </div>
+              <Input
+                onChange={(e) => { setFormData({ ...formData, name: e.target.value }) }}
+                placeholder={t('perspective-editor.form.name.placeholder')}
+              />
+            </Form.Item>
+          </FormKit.Panel>
+        </Content>
+
+        <Toolbar justify="space-between">
+          <div>
+            <IconButton
+              icon={{ value: 'refresh' }}
+              title={t('refresh')}
+              onClick={() => {
+                form.resetFields()
+              }}
+            />
+
+            <IconButton
+              icon={{ value: 'trash' }}
+              title={t('delete')}
+              onClick={() => {
+                removeWithConfirmation(perspective.id, () => {
+                  setPerspectives((prev) => prev.filter((p) => p.id !== perspective.id))
+                })
+              }}
+            />
+          </div>
+
+          <Button
+            type='primary'
+            htmlType='submit'
+          >
+            {t('save')}
+          </Button>
+        </Toolbar>
+      </Flex>
+    </FormKit>
   )
 }
