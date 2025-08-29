@@ -72,7 +72,13 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
     setIsLoading(false)
   }
 
-  const isContextMenuEntryHidden = (node: Element | TreeNodeProps): boolean => {
+  const isContextMenuEntryHidden = (node: Element | TreeNodeProps, options?: { preview?: boolean }): boolean => {
+    return !checkElementPermission(node.permissions, 'view') ||
+           ((isNil(options?.preview) || !options?.preview) && ['snippet', 'newsletter', 'folder', 'link', 'hardlink', 'email'].includes(node.type!)) ||
+           (!isNil(options?.preview) && options.preview && ['folder', 'link', 'hardlink'].includes(node.type!))
+  }
+
+  const isTreeContextMenuEntryHidden = (node: Element | TreeNodeProps): boolean => {
     return node.type !== 'page' ||
         !checkElementPermission(node.permissions, 'view')
   }
@@ -98,7 +104,7 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
       label: t('document.open-in-new-window'),
       key: ContextMenuActionName.openInNewWindow,
       icon: <Icon value={ 'share' } />,
-      hidden: isContextMenuEntryHidden(node) || !isTreeActionAllowed(TreePermission.Open),
+      hidden: isTreeContextMenuEntryHidden(node) || !isTreeActionAllowed(TreePermission.Open),
       onClick: async () => {
         await openInNewWindow(parseInt(node.id))
       }
@@ -114,7 +120,7 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
       key: ContextMenuActionName.openPreviewInNewWindow,
       isLoading,
       icon: <Icon value={ 'eye' } />,
-      hidden: isContextMenuEntryHidden(document),
+      hidden: isContextMenuEntryHidden(document, { preview: true }),
       onClick: async () => {
         await openInNewWindow(document.id, onFinish, { preview: true })
       }
