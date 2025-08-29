@@ -12,7 +12,7 @@ import React, { useMemo } from 'react'
 import { isEmpty } from 'lodash'
 import { Card } from '@Pimcore/components/card/card'
 import { CollapseItem } from '@Pimcore/components/collapse/item/collapse-item'
-import { type BoxProps } from '@Pimcore/components/box/box'
+import { Box, type BoxProps } from '@Pimcore/components/box/box'
 
 export interface BaseViewProps {
   title?: React.ReactNode
@@ -37,9 +37,9 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
   return useMemo(() => {
     if (!isPaddedLayout) {
       return (
-        <>
+        <Box padding={ finalProps.contentPadding }>
           {finalProps.children}
-        </>
+        </Box>
       )
     }
 
