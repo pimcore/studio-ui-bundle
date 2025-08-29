@@ -25,23 +25,16 @@ import {
   removeDropzoneContainers,
   removeFirstDropzoneContainer
 } from '../utils/dom-utils'
+import { type BlockManagerInterface } from '../../../managers/abstract-block-manager'
 
-// Generic manager interface that both BlockManager and AreablockManager can implement
-export interface EditableManager {
-  getContainer: () => HTMLElement | null
-  queryElements: () => HTMLElement[]
-  getElementKey: (element: HTMLElement) => string | null
-  getElementType?: (element: HTMLElement) => string | null
-}
-
-export interface UseEditableDropzonesProps<T extends EditableManager> {
-  editableManager: T
+export interface UseBlockManagerDropzonesProps<T extends BlockManagerInterface> {
+  blockManager: T
   onMoveItem: (fromIndex: number, toIndex: number) => void
   onDropItem?: (info: any, index: number) => Promise<void>
   isValidDrop?: (info: any) => boolean
 }
 
-export interface UseEditableDropzonesReturn {
+export interface UseBlockManagerDropzonesReturn {
   activeId: string | null
   handleDragStart: (event: DragStartEvent) => void
   handleDragOver: (event: DragOverEvent) => void
@@ -52,12 +45,12 @@ export interface UseEditableDropzonesReturn {
   removeFirstDropzone: () => void
 }
 
-export const useEditableDropzones = <T extends EditableManager>({
-  editableManager,
+export const useBlockManagerDropzones = <T extends BlockManagerInterface>({
+  blockManager,
   onMoveItem,
   onDropItem,
   isValidDrop
-}: UseEditableDropzonesProps<T>): UseEditableDropzonesReturn => {
+}: UseBlockManagerDropzonesProps<T>): UseBlockManagerDropzonesReturn => {
   const { styles } = useEditableDropzoneStyles()
   const [activeId, setActiveId] = useState<string | null>(null)
   const [dropzonePortals, setDropzonePortals] = useState<React.ReactPortal[]>([])
@@ -66,12 +59,12 @@ export const useEditableDropzones = <T extends EditableManager>({
   const isDraggingRef = useRef<boolean>(false)
   const activeDropzoneRef = useRef<string | null>(null)
 
-  const container = useMemo(() => editableManager.getContainer(), [editableManager])
+  const container = useMemo(() => blockManager.getContainer(), [blockManager])
   const editableName = useMemo(() => container?.getAttribute(DROPZONE_ATTRIBUTES.DATA_NAME) ?? null, [container])
 
   const currentElements = useMemo(() => {
-    return editableManager.queryElements()
-  }, [editableManager, dropzoneRefreshKey])
+    return blockManager.queryElements()
+  }, [blockManager, dropzoneRefreshKey])
 
   const refreshDropzones = useCallback((): void => {
     startTransition(() => {
@@ -152,11 +145,11 @@ export const useEditableDropzones = <T extends EditableManager>({
     isDraggingRef.current = true
     activeDropzoneRef.current = null
 
-    const activeElement = currentElements.find(el => editableManager.getElementKey(el) === activeElementId)
+    const activeElement = currentElements.find(el => blockManager.getElementKey(el) === activeElementId)
     if (!isUndefined(activeElement)) {
       activeElement.classList.add(styles.dragActive)
     }
-  }, [styles.dragActive, currentElements, editableManager])
+  }, [styles.dragActive, currentElements, blockManager])
 
   const handleDragOver = useCallback((event: DragOverEvent) => {
     const { over } = event
@@ -196,7 +189,7 @@ export const useEditableDropzones = <T extends EditableManager>({
         const dropzoneIndex = !isNull(dropzoneIndexStr) && !isUndefined(dropzoneIndexStr) && dropzoneIndexStr !== '' ? parseInt(dropzoneIndexStr, 10) : NaN
 
         if (!isNaN(dropzoneIndex)) {
-          const originalActiveIndex = currentElements.findIndex(el => editableManager.getElementKey(el) === active.id)
+          const originalActiveIndex = currentElements.findIndex(el => blockManager.getElementKey(el) === active.id)
 
           if (originalActiveIndex !== -1) {
             let targetIndex = dropzoneIndex
@@ -212,7 +205,7 @@ export const useEditableDropzones = <T extends EditableManager>({
         }
       }
     }
-  }, [currentElements, editableManager, onMoveItem, refreshDropzones, styles.dragActive])
+  }, [currentElements, blockManager, onMoveItem, refreshDropzones, styles.dragActive])
 
   return {
     activeId,
