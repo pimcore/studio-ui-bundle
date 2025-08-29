@@ -25,7 +25,7 @@ export const TreeContainer = (): React.JSX.Element => {
   const [treeDataFiltered, setTreeDataFiltered] = useState<TreeDataItem[]>([])
   const { openPerspective, isLoading, setIsLoading } = usePerspectiveEditorContext()
   const { createPerspective } = usePerspectiveEditor()
-  const { data: perspectives } = usePerspectiveGetConfigCollectionQuery()
+  const { data: perspectives, isFetching } = usePerspectiveGetConfigCollectionQuery()
   const dispatch = useAppDispatch()
 
   const generateTreeStructure = (perspectives: PerspectiveConfig[]): TreeDataItem[] => {
@@ -89,7 +89,7 @@ export const TreeContainer = (): React.JSX.Element => {
           <IconButton
             icon={{ value: 'refresh' }}
             title={t('refresh')}
-            loading={isLoading}
+            loading={isLoading || isFetching}
             onClick={async () => {
               setIsLoading(true)
 
@@ -106,14 +106,18 @@ export const TreeContainer = (): React.JSX.Element => {
           <IconTextButton
             icon={{ value: 'new' }}
             onClick={async () => createPerspective()}
-            loading={isLoading}
+            loading={isLoading || isFetching}
+            disabled={isLoading || isFetching}
           >
             {t('toolbar.new')}
           </IconTextButton>
         </Toolbar>
       )}
     >
-      <Content padded>
+      <Content
+        padded
+        loading={isLoading || isFetching}
+      >
         <SearchInput
           onChange={(e) => { setSearchTerm(e.target.value) }}
           onClear={clearSearch}

@@ -16,7 +16,6 @@ import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-h
 import { api, CreatePerspectiveConfig, usePerspectiveCreateMutation, usePerspectiveDeleteMutation, usePerspectiveUpdateConfigByIdMutation, type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 import { isUndefined } from 'lodash'
 import React from 'react'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface UsePerspectiveEditorReturn {
@@ -24,7 +23,6 @@ interface UsePerspectiveEditorReturn {
   getPerspectiveById: (id: string) => Promise<PerspectiveConfigDetail | undefined>
   updatePerspective: (id: string, config: CreatePerspectiveConfig, onFinish?: (updated: PerspectiveConfigDetail) => void) => Promise<void>
   removeWithConfirmation: (id: string, onFinish?: () => void) => void
-  isLoading: boolean
 }
 
 export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
@@ -32,7 +30,6 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
   const modal = useFormModal()
   const { t } = useTranslation()
   const { success } = useMessage()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [perspectiveCreateMutation] = usePerspectiveCreateMutation();
   const [perspectiveUpdateMutation] = usePerspectiveUpdateConfigByIdMutation();
   const [perspectiveDeleteMutation] = usePerspectiveDeleteMutation();
@@ -48,10 +45,8 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
         message: t('perspective-editor.add-modal.name.validation')
       },
       onOk: async (value: string) => {
-        setIsLoading(true)
         await createMutation(value, () => {
           onFinish?.(value)
-          setIsLoading(false)
         })
       }
     })
@@ -157,7 +152,6 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
     createPerspective,
     getPerspectiveById,
     updatePerspective,
-    removeWithConfirmation,
-    isLoading
+    removeWithConfirmation
   }
 }

@@ -35,7 +35,7 @@ interface PerspectiveDetailTabProps {
 
 export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { perspectives, setPerspectives } = usePerspectiveEditorContext()
+  const { perspectives, setPerspectives, setIsLoading, isLoading } = usePerspectiveEditorContext()
   const { updatePerspective, removeWithConfirmation } = usePerspectiveEditor()
   const perspective = perspectives.find(p => p.id === id)
   const [form] = Form.useForm<FormInstance<PerspectiveForm>>()
@@ -55,6 +55,7 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
         initialValues,
         onFinish: async (values) => {
           console.table(values)
+          setIsLoading(true)
 
           await updatePerspective(perspective.id, {
             ...values
@@ -64,6 +65,9 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
               return updated as PerspectiveConfigDetail[]
             })
           })
+            .finally(() => {
+              setIsLoading(false)
+            })
         }
       }}
     >
@@ -98,6 +102,7 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
             <IconButton
               icon={{ value: 'refresh' }}
               title={t('refresh')}
+              disabled={isLoading}
               onClick={() => {
                 form.resetFields()
               }}
@@ -106,6 +111,7 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
             <IconButton
               icon={{ value: 'trash' }}
               title={t('delete')}
+              disabled={isLoading}
               onClick={() => {
                 removeWithConfirmation(perspective.id, () => {
                   setPerspectives((prev) => prev.filter((p) => p.id !== perspective.id))
@@ -117,6 +123,7 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
           <Button
             type='primary'
             htmlType='submit'
+            loading={isLoading}
           >
             {t('save')}
           </Button>
