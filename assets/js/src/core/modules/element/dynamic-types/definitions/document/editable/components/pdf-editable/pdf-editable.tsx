@@ -51,8 +51,10 @@ export const DocumentPdfEditable = (props: DocumentPdfEditableProps): React.JSX.
   const pdfValue = props.value
   const width = props.config?.width
   const height = props.config?.height
+  const hasPdf = !isNil(pdfValue?.id)
 
-  const { lastDimensions, handleResize: handlePdfResize } = useAssetDimensions()
+  const { getSmartDimensions, handlePreviewResize: handlePdfResize, handleAssetTargetResize } = useAssetDimensions()
+  const smartDimensions = getSmartDimensions(pdfValue?.id)
 
   const needsContainerWidth = isNil(width) && isNil(height)
   const { width: containerWidth } = useElementResize(needsContainerWidth ? props.containerRef ?? { current: null } : { current: null })
@@ -175,7 +177,7 @@ export const DocumentPdfEditable = (props: DocumentPdfEditableProps): React.JSX.
       <InlineUpload
         assetType="document"
         disabled={ props.disabled }
-        fullWidth={ isNil(lastDimensions?.width ?? width) }
+        fullWidth={ isNil(smartDimensions?.width ?? width) }
         onSuccess={ handleFileSystemUpload }
         targetFolderPath={ props.config?.uploadPath }
       >
@@ -195,28 +197,28 @@ export const DocumentPdfEditable = (props: DocumentPdfEditableProps): React.JSX.
   }, [props.config?.uploadPath, props.disabled, handleFileSystemUpload, handleReplacePdf, pdfValue?.id])
 
   return renderDroppableContent(
-    !isNil(pdfValue?.id)
+    hasPdf
       ? (
         <PdfEditablePreview
-          assetId={ pdfValue.id }
+          assetId={ pdfValue.id! }
           containerWidth={ Math.max(containerWidth, MIN_WIDTH) }
           dropdownItems={ dropdownItems }
-          height={ height }
+          height={ smartDimensions?.height ?? height }
           key={ pdfValue.id }
-          lastImageDimensions={ lastDimensions }
+          lastImageDimensions={ smartDimensions }
           onResize={ handlePdfResize }
-          width={ width }
+          width={ smartDimensions?.width ?? width }
         />
         )
       : (
         <AssetTarget
           dndIcon
-          height={ lastDimensions?.height ?? height ?? DEFAULT_HEIGHT }
-          onResize={ handlePdfResize }
+          height={ smartDimensions?.height ?? height ?? DEFAULT_HEIGHT }
+          onResize={ handleAssetTargetResize }
           onSearch={ openElementSelector }
           onUpload={ handleUpload }
           title={ t('pdf-editable.dnd-target') }
-          width={ lastDimensions?.width ?? width ?? '100%' }
+          width={ smartDimensions?.width ?? width ?? '100%' }
         />
         )
   )

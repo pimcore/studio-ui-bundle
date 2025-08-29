@@ -36,7 +36,7 @@ export const generateThumbnailUrl = ({
   containerWidth,
   thumbnailSettings,
   fallbackSrc
-}: ThumbnailUrlConfig): string | undefined => {
+}: ThumbnailUrlConfig): string | null | undefined => {
   const { thumbnailWidth, thumbnailHeight, resizeMode } = calculateThumbnailDimensions({
     width,
     height,
@@ -44,7 +44,9 @@ export const generateThumbnailUrl = ({
   })
 
   if (thumbnailWidth === undefined && thumbnailHeight === undefined) {
-    return fallbackSrc
+    // Return null when no dimensions are available to prevent loading images with wrong dimensions
+    // This allows the component to wait for proper container measurements
+    return null
   }
 
   const defaultThumbnailSettings: ImageThumbnailSettings = {

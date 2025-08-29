@@ -8,8 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useRef } from 'react'
-import { MIN_WIDTH, MIN_HEIGHT } from '../image-dimensions'
+import { useRef, useCallback } from 'react'
+import { MIN_WIDTH, MIN_HEIGHT, DEFAULT_HEIGHT } from '../image-dimensions'
 
 interface AssetDimensions {
   width: number
@@ -17,25 +17,101 @@ interface AssetDimensions {
 }
 
 interface UseAssetDimensionsReturn {
-  lastDimensions: AssetDimensions | null
-  handleResize: (dimensions: AssetDimensions) => void
+  getSmartDimensions: (currentAssetId?: number) => AssetDimensions | null
+  handlePreviewResize: (dimensions: AssetDimensions) => void
+  handleAssetTargetResize: (dimensions: AssetDimensions) => void
 }
 
 /**
  * Hook to manage asset dimensions with minimum constraints and reference tracking
- * Used by both image and PDF editables to track resized dimensions
+ * Provides smart dimension selection based on asset ID transitions:
+ * - When changing from image to image: use lastPreviewDimensions (keep image size)
+ * - When changing from empty to image: use lastAssetTargetDimensions (use target size)
  */
 export const useAssetDimensions = (): UseAssetDimensionsReturn => {
-  const lastDimensionsRef = useRef<AssetDimensions | null>(null)
+  const lastPreviewDimensionsRef = useRef<AssetDimensions | null>(null)
+  const assetTargetDimensionsRef = useRef<AssetDimensions | null>(null)
+  const cachedDimensionsRef = useRef<AssetDimensions | null>(null)
 
-  const handleResize = (dimensions: AssetDimensions): void => {
-    const minWidth = Math.max(dimensions.width, MIN_WIDTH)
-    const minHeight = Math.max(dimensions.height, MIN_HEIGHT)
-    lastDimensionsRef.current = { width: minWidth, height: minHeight }
+  const lastAssetIdRef = useRef<number | undefined>(undefined)
+  const hasEverHadImageRef = useRef(false)
+  const isCurrentlyEmptyRef = useRef(true)
+
+  const normalize = (d: AssetDimensions): AssetDimensions => ({
+    width: Math.max(d.width, MIN_WIDTH),
+    height: Math.max(d.height, MIN_HEIGHT)
+  })
+
+  const detectAssetChange = (currentAssetId?: number): boolean => {
+    if (lastAssetIdRef.current !== currentAssetId) {
+      lastAssetIdRef.current = currentAssetId
+      cachedDimensionsRef.current = null
+      return true
+    }
+    return false
   }
 
+  const updateEmptyState = (isEmpty: boolean): void => {
+    if (isEmpty && !isCurrentlyEmptyRef.current) {
+      isCurrentlyEmptyRef.current = true
+    }
+  }
+
+  const selectDimensionSource = (): AssetDimensions | null => {
+    if (!hasEverHadImageRef.current && !isCurrentlyEmptyRef.current) {
+      // First image ever, not from empty state - natural size
+      return null
+    } else if (isCurrentlyEmptyRef.current) {
+      // Coming from empty state - use AssetTarget dimensions
+      return assetTargetDimensionsRef.current
+    } else {
+      // Coming from another image - use previous image dimensions
+      return lastPreviewDimensionsRef.current
+    }
+  }
+
+  const finalizeImageTransition = (dimensions: AssetDimensions | null): void => {
+    hasEverHadImageRef.current = true
+    isCurrentlyEmptyRef.current = false
+    cachedDimensionsRef.current = dimensions
+  }
+
+  const handlePreviewResize = (dimensions: AssetDimensions): void => {
+    const norm = normalize(dimensions)
+    lastPreviewDimensionsRef.current = norm
+    assetTargetDimensionsRef.current = norm
+  }
+
+  const handleAssetTargetResize = (dimensions: AssetDimensions): void => {
+    const norm = normalize(dimensions)
+    if (isCurrentlyEmptyRef.current) {
+      assetTargetDimensionsRef.current = norm
+    }
+  }
+
+  const getSmartDimensions = useCallback((currentAssetId?: number): AssetDimensions | null => {
+    const isEmpty = currentAssetId === undefined
+
+    detectAssetChange(currentAssetId)
+
+    if (isEmpty) {
+      updateEmptyState(true)
+      return assetTargetDimensionsRef.current
+    }
+
+    if (cachedDimensionsRef.current !== null) {
+      return cachedDimensionsRef.current
+    }
+
+    const selectedDimensions = selectDimensionSource()
+    finalizeImageTransition(selectedDimensions)
+    
+    return selectedDimensions
+  }, [])
+
   return {
-    lastDimensions: lastDimensionsRef.current,
-    handleResize
+    getSmartDimensions,
+    handlePreviewResize,
+    handleAssetTargetResize
   }
 }

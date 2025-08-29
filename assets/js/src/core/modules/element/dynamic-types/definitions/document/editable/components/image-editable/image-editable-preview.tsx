@@ -28,6 +28,7 @@ interface ImageEditablePreviewProps {
   onImageLoad?: (event: React.SyntheticEvent<HTMLImageElement>) => void
   onResize?: (dimensions: { width: number, height: number }) => void
   lastImageDimensions?: { width: number, height: number } | null
+  onImageLoadedChange?: (isLoaded: boolean) => void
 }
 
 export const ImageEditablePreview = ({
@@ -38,6 +39,7 @@ export const ImageEditablePreview = ({
   height,
   containerWidth,
   thumbnailSettings,
+  onImageLoadedChange,
   ...props
 }: ImageEditablePreviewProps): React.JSX.Element => {
   const thumbnailUrl = useMemo(() => {
