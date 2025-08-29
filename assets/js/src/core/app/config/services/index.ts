@@ -211,6 +211,14 @@ import { DynamicTypeEditableDialogLayoutPanel } from '@Pimcore/modules/element/d
 import { DynamicTypeGridCellString } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/string/dynamic-type-grid-cell-string'
 import { DynamicTypeFieldFilterNone } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/none/dynamic-type-field-filter-none'
 import { DynamicTypeFieldFilterFulltext } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/fullText/dynamic-type-field-filter-fulltext'
+import { DynamicTypeDocumentPage } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-page'
+import { DynamicTypeDocumentRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/dynamic-type-document-registry'
+import { DynamicTypeDocumentEmail } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-email'
+import { DynamicTypeDocumentFolder } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-folder'
+import { DynamicTypeDocumentHardlink } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-hardlink'
+import { DynamicTypeDocumentLink } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-link'
+import { DynamicTypeDocumentNewsletter } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-newsletter'
+import { DynamicTypeDocumentSnippet } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-snippet'
 
 // Component registry
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
@@ -425,6 +433,16 @@ container.bind(serviceIds['DynamicTypes/DocumentEditable/Areablock']).to(Dynamic
 container.bind(serviceIds['DynamicTypes/EditableDialogLayoutRegistry']).to(DynamicTypeEditableDialogLayoutRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/EditableDialogLayout/Tabpanel']).to(DynamicTypeEditableDialogLayoutTabpanel).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/EditableDialogLayout/Panel']).to(DynamicTypeEditableDialogLayoutPanel).inSingletonScope()
+
+// Document Types
+container.bind(serviceIds['DynamicTypes/DocumentRegistry']).to(DynamicTypeDocumentRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Document/Page']).to(DynamicTypeDocumentPage).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Document/Email']).to(DynamicTypeDocumentEmail).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Document/Folder']).to(DynamicTypeDocumentFolder).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Document/Hardlink']).to(DynamicTypeDocumentHardlink).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Document/Link']).to(DynamicTypeDocumentLink).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Document/Newsletter']).to(DynamicTypeDocumentNewsletter).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Document/Snippet']).to(DynamicTypeDocumentSnippet).inSingletonScope()
 
 // Asset Types
 container.bind(serviceIds['DynamicTypes/AssetRegistry']).to(DynamicTypeAssetRegistry).inSingletonScope()

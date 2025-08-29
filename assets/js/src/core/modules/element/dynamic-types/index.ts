@@ -188,6 +188,14 @@ import { type DynamicTypeEditableDialogLayoutRegistry } from './definitions/edit
 import { type DynamicTypeEditableDialogLayoutTabpanel } from './definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-tabpanel'
 import { type DynamicTypeEditableDialogLayoutPanel } from './definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-panel'
 import { type DynamicTypeGridCellString } from './definitions/grid-cell/types/string/dynamic-type-grid-cell-string'
+import { DynamicTypeDocumentRegistry } from './definitions/document/dynamic-type-document-registry'
+import { DynamicTypeDocumentEmail } from './definitions/document/types/dynamic-type-document-email'
+import { DynamicTypeDocumentFolder } from './definitions/document/types/dynamic-type-document-folder'
+import { DynamicTypeDocumentHardlink } from './definitions/document/types/dynamic-type-document-hardlink'
+import { DynamicTypeDocumentLink } from './definitions/document/types/dynamic-type-document-link'
+import { DynamicTypeDocumentNewsletter } from './definitions/document/types/dynamic-type-document-newsletter'
+import { DynamicTypeDocumentSnippet } from './definitions/document/types/dynamic-type-document-snippet'
+import { DynamicTypeDocumentPage } from './definitions/document/types/dynamic-type-document-page'
 
 moduleSystem.registerModule({
   onInit () {
@@ -379,6 +387,16 @@ moduleSystem.registerModule({
     assetRegistry.registerDynamicType(container.get<DynamicTypeAssetText>(serviceIds['DynamicTypes/Asset/Text']))
     assetRegistry.registerDynamicType(container.get<DynamicTypeAssetUnknown>(serviceIds['DynamicTypes/Asset/Unknown']))
     assetRegistry.registerDynamicType(container.get<DynamicTypeAssetVideo>(serviceIds['DynamicTypes/Asset/Video']))
+
+    const documentRegistry = container.get<DynamicTypeDocumentRegistry>(serviceIds['DynamicTypes/DocumentRegistry'])
+
+    documentRegistry.registerDynamicType(container.get<DynamicTypeDocumentEmail>(serviceIds['DynamicTypes/Document/Email']))
+    documentRegistry.registerDynamicType(container.get<DynamicTypeDocumentFolder>(serviceIds['DynamicTypes/Document/Folder']))
+    documentRegistry.registerDynamicType(container.get<DynamicTypeDocumentHardlink>(serviceIds['DynamicTypes/Document/Hardlink']))
+    documentRegistry.registerDynamicType(container.get<DynamicTypeDocumentLink>(serviceIds['DynamicTypes/Document/Link']))
+    documentRegistry.registerDynamicType(container.get<DynamicTypeDocumentNewsletter>(serviceIds['DynamicTypes/Document/Newsletter']))
+    documentRegistry.registerDynamicType(container.get<DynamicTypeDocumentSnippet>(serviceIds['DynamicTypes/Document/Snippet']))
+    documentRegistry.registerDynamicType(container.get<DynamicTypeDocumentPage>(serviceIds['DynamicTypes/Document/Page']))
 
     const objectRegistry = container.get<DynamicTypeObjectRegistry>(serviceIds['DynamicTypes/ObjectRegistry'])
 
