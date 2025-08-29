@@ -14,13 +14,19 @@ import { isNil, isUndefined } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePerspectiveEditorContext } from '../../context/hooks/use-perspective-editor-context'
+import { usePerspectiveEditor } from '../../hooks/use-perspective-editor'
+import { useAppDispatch } from '@sdk/app'
+import { api } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 
 export const TreeContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [treeDataFiltered, setTreeDataFiltered] = useState<TreeDataItem[]>([])
-  const { openPerspective } = usePerspectiveEditorContext()
+  const { openPerspective, isLoading, setIsLoading } = usePerspectiveEditorContext()
+  const { createPerspective } = usePerspectiveEditor()
   const { data: perspectives } = usePerspectiveGetConfigCollectionQuery()
+  const dispatch = useAppDispatch()
 
   const generateTreeStructure = (perspectives: PerspectiveConfig[]): TreeDataItem[] => {
     const tmpTreeData: TreeDataItem[] = []
@@ -30,7 +36,7 @@ export const TreeContainer = (): React.JSX.Element => {
         tmpTreeData.push({
           title: item.name,
           key: item.id,
-          icon: <Icon value={ item.icon.value } />
+          icon: <Icon value={item.icon.value} />
         })
       })
     }
@@ -78,35 +84,49 @@ export const TreeContainer = (): React.JSX.Element => {
 
   return (
     <ContentLayout
-      renderToolbar={ (
+      renderToolbar={(
         <Toolbar justify="space-between">
           <IconButton
-            icon={ { value: 'refresh' } }
-            title={ t('refresh') }
+            icon={{ value: 'refresh' }}
+            title={t('refresh')}
+            loading={isLoading}
+            onClick={async () => {
+              setIsLoading(true)
+
+              dispatch(
+                api.util.invalidateTags(
+                  invalidatingTags.PERSPECTIVES()
+                )
+              )
+
+              setIsLoading(false)
+            }}
           />
 
           <IconTextButton
-            icon={ { value: 'new' } }
+            icon={{ value: 'new' }}
+            onClick={async () => createPerspective()}
+            loading={isLoading}
           >
             {t('toolbar.new')}
           </IconTextButton>
         </Toolbar>
-      ) }
+      )}
     >
       <Content padded>
         <SearchInput
-          onChange={ (e) => { setSearchTerm(e.target.value) } }
-          onClear={ clearSearch }
-          onSearch={ handleSearch }
-          value={ searchTerm }
+          onChange={(e) => { setSearchTerm(e.target.value) }}
+          onClear={clearSearch}
+          onSearch={handleSearch}
+          value={searchTerm}
           withoutAddon
         />
         <TreeElement
-          hasRoot={ false }
-          onSelected={ (key) => {
+          hasRoot={false}
+          onSelected={(key) => {
             void openPerspective(key as string)
-          } }
-          treeData={ treeDataFiltered }
+          }}
+          treeData={treeDataFiltered}
         />
       </Content>
     </ContentLayout>

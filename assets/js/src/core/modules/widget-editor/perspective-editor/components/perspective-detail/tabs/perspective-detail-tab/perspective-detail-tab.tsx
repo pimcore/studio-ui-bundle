@@ -17,7 +17,9 @@ import { FormKit } from '@Pimcore/components/form/form-kit'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Input } from '@Pimcore/components/input/input'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { CreatePerspectiveConfig, PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
 import { usePerspectiveEditorContext } from '@Pimcore/modules/widget-editor/perspective-editor/context/hooks/use-perspective-editor-context'
+import { usePerspectiveEditor } from '@Pimcore/modules/widget-editor/perspective-editor/hooks/use-perspective-editor'
 import { FormInstance } from 'antd'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -32,7 +34,8 @@ interface PerspectiveDetailTabProps {
 
 export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { perspectives } = usePerspectiveEditorContext()
+  const { perspectives, setPerspectives } = usePerspectiveEditorContext()
+  const { updatePerspective } = usePerspectiveEditor()
   const perspective = perspectives.find(p => p.id === id)
   const [form] = Form.useForm<FormInstance<PerspectiveForm>>()
   const initialValues: PerspectiveForm = {
@@ -50,8 +53,17 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
         formProps={{
           form: form,
           initialValues,
-          onFinish: (values) => {
+          onFinish: async (values) => {
             console.table(values)
+
+            await updatePerspective(perspective.id, {
+              ...values
+            }, () => {
+              setPerspectives((prev) => {
+                const updated = prev.map((p) => (p.id === id ? { ...p, ...values } : p))
+                return updated as PerspectiveConfigDetail[]
+              })
+            })
           }
         }}
       >

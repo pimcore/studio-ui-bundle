@@ -56,7 +56,8 @@ export const tagNames = {
   EMAIL_LOG: 'EMAIL_LOG',
   EMAIL_LOG_DETAIL: 'EMAIL_LOG_DETAIL',
   RECYCLE_BIN: 'RECYCLE_BIN',
-  RECYCLE_BIN_DETAIL: 'RECYCLE_BIN_DETAIL'
+  RECYCLE_BIN_DETAIL: 'RECYCLE_BIN_DETAIL',
+  PERSPECTIVES: 'PERSPECTIVES'
 }
 
 export const providingTags = {
@@ -117,7 +118,8 @@ export const providingTags = {
   RECYCLING_BIN: () => [tagNames.RECYCLE_BIN],
   RECYCLING_BIN_DETAIL: (id: number) => [{ type: tagNames.RECYCLE_BIN_DETAIL, id }],
   APPLICATION_LOGGER: () => [tagNames.APPLICATION_LOGGER],
-  APPLICATION_LOGGER_DETAIL: (id: number) => [{ type: tagNames.APPLICATION_LOGGER_DETAIL, id }]
+  APPLICATION_LOGGER_DETAIL: (id: number) => [{ type: tagNames.APPLICATION_LOGGER_DETAIL, id }],
+  PERSPECTIVES: () => [tagNames.PERSPECTIVES],
 }
 
 export const invalidatingTags = {
@@ -170,7 +172,8 @@ export const invalidatingTags = {
   APPLICATION_LOGGER_DETAIL: (id: number) => [{ type: tagNames.APPLICATION_LOGGER_DETAIL, id }],
   EMAIL_LOG: () => [tagNames.EMAIL_LOG],
   EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }],
-  RECYCLING_BIN: () => [tagNames.RECYCLE_BIN]
+  RECYCLING_BIN: () => [tagNames.RECYCLE_BIN],
+  PERSPECTIVES: () => [tagNames.PERSPECTIVES]
 }
 
 const elementUnspecificDataTag = tagNames.AVAILABLE_TAGS
