@@ -21,6 +21,7 @@ import { CreatePerspectiveConfig, PerspectiveConfigDetail } from '@Pimcore/modul
 import { usePerspectiveEditorContext } from '@Pimcore/modules/widget-editor/perspective-editor/context/hooks/use-perspective-editor-context'
 import { usePerspectiveEditor } from '@Pimcore/modules/widget-editor/perspective-editor/hooks/use-perspective-editor'
 import { FormInstance } from 'antd'
+import { remove } from 'lodash'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -35,7 +36,7 @@ interface PerspectiveDetailTabProps {
 export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { perspectives, setPerspectives } = usePerspectiveEditorContext()
-  const { updatePerspective } = usePerspectiveEditor()
+  const { updatePerspective, removeWithConfirmation } = usePerspectiveEditor()
   const perspective = perspectives.find(p => p.id === id)
   const [form] = Form.useForm<FormInstance<PerspectiveForm>>()
   const initialValues: PerspectiveForm = {
@@ -84,13 +85,25 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
           </Content>
 
           <Toolbar justify="space-between">
-            <IconButton
-              icon={{ value: 'refresh' }}
-              title={t('refresh')}
-              onClick={() => {
-                form.resetFields()
-              }}
-            />
+            <div>
+              <IconButton
+                icon={{ value: 'refresh' }}
+                title={t('refresh')}
+                onClick={() => {
+                  form.resetFields()
+                }}
+              />
+
+              <IconButton
+                icon={{ value: 'trash' }}
+                title={t('delete')}
+                onClick={() => {
+                  removeWithConfirmation(perspective.id, () => {
+                    setPerspectives((prev) => prev.filter((p) => p.id !== perspective.id))
+                  })
+                }}
+              />
+            </div>
 
             <Button
               type='primary'

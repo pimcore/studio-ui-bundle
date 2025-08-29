@@ -8,11 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
-import { api, CreatePerspectiveConfig, usePerspectiveCreateMutation, usePerspectiveUpdateConfigByIdMutation, type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+import { api, CreatePerspectiveConfig, usePerspectiveCreateMutation, usePerspectiveDeleteMutation, usePerspectiveUpdateConfigByIdMutation, type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 import { isUndefined } from 'lodash'
+import React from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -20,6 +23,7 @@ interface UsePerspectiveEditorReturn {
   createPerspective: (onFinish?: (newName: string) => void) => void
   getPerspectiveById: (id: string) => Promise<PerspectiveConfigDetail | undefined>
   updatePerspective: (id: string, config: CreatePerspectiveConfig, onFinish?: (updated: PerspectiveConfigDetail) => void) => Promise<void>
+  removeWithConfirmation: (id: string, onFinish?: () => void) => void
   isLoading: boolean
 }
 
@@ -27,9 +31,11 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
   const dispatch = useAppDispatch()
   const modal = useFormModal()
   const { t } = useTranslation()
+  const { success } = useMessage()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [perspectiveCreateMutation] = usePerspectiveCreateMutation();
   const [perspectiveUpdateMutation] = usePerspectiveUpdateConfigByIdMutation();
+  const [perspectiveDeleteMutation] = usePerspectiveDeleteMutation();
 
   const createPerspective = (
     onFinish?: (newName: string) => void
@@ -109,10 +115,49 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
     }
   }
 
+  const removeWithConfirmation = (id: string, onFinish?: () => void): void => {
+    modal.confirm({
+      title: t('element.delete.confirmation.title'),
+      content: <span>{t('element.delete.confirmation.text')}</span>,
+      okText: t('element.delete.confirmation.ok'),
+      onOk: async () => {
+        await remove(id, () => {
+          onFinish?.()
+        })
+      }
+    })
+  }
+
+  const remove = async (id: string, onFinish?: () => void): Promise<void> => {
+    const deletePerspectiveTask = perspectiveDeleteMutation({
+      perspectiveId: id
+    })
+
+    try {
+      const response = await deletePerspectiveTask
+
+      if (!isUndefined(response.error)) {
+        trackError(new ApiError(response.error))
+      }
+
+      dispatch(
+        api.util.invalidateTags(
+          invalidatingTags.PERSPECTIVES()
+        )
+      )
+
+      onFinish?.()
+      void success(t('perspective-editor.delete.success'))
+    } catch (error) {
+      trackError(new GeneralError('Failed to delete perspective'))
+    }
+  }
+
   return {
     createPerspective,
     getPerspectiveById,
     updatePerspective,
+    removeWithConfirmation,
     isLoading
   }
 }
