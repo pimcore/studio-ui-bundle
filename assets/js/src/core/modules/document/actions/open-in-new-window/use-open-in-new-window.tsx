@@ -49,18 +49,24 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
       setIsLoading(false)
     }
 
-    if (!isNil(data?.settingsData) && has(data?.settingsData, 'url') && isString(data?.settingsData.url)) {
-      let url: string = data.settingsData.url
-      if (!isNil(options?.preview) && options.preview) {
-        const urlObj = new URL(url, window.location.origin)
+    // Use settingsData.url if available and not in preview mode
+    if ((isNil(options?.preview) || (options?.preview)) && !isNil(data?.settingsData) && has(data?.settingsData, 'url') && isString(data?.settingsData.url)) {
+      const url: string = data.settingsData.url
+      window.open(url)
+      onFinish?.()
+    } else if (!isNil(data?.fullPath)) {
+      // Use fullPath (for preview or if settingsData.url is not available)
+      let url: string = data.fullPath
+      const urlObj = new URL(url, window.location.origin)
+      if (!isNil(options?.preview) && options?.preview) {
         urlObj.searchParams.set('pimcore_preview', 'true')
         urlObj.searchParams.set('_dc', Date.now().toString())
-        url = urlObj.toString()
       }
+      url = urlObj.toString()
       window.open(url)
       onFinish?.()
     } else {
-      console.error('Failed to fetch document data')
+      console.error('Failed to fetch document data', data)
     }
 
     setIsLoading(false)
