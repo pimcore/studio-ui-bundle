@@ -32,11 +32,13 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
     const currentColumn = availableColumns.find((column) => column.key === filter.key)
 
     return {
-      id: filter.key,
+      id: `${filter.key}`,
       data: filter.filterValue,
       type: filter.type,
       filterType: filter?.filterType,
       frontendType: currentColumn?.frontendType,
+      localizable: currentColumn?.localizable,
+      locale: filter?.locale,
       config: currentColumn?.config
     }
   }), [fieldFilters, availableColumns])
@@ -49,7 +51,8 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
       key: filter.id,
       filterType: filter?.filterType,
       filterValue: filter.data,
-      type: filter.type
+      type: filter.type,
+      locale: filter.locale
     })))
   }
 
@@ -73,6 +76,8 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
         id: column.key,
         type: column.type,
         frontendType: column.frontendType,
+        localizable: column.localizable,
+        locale: column.locale,
         config: column.config,
         ...(inferedFilterType !== null && { filterType: inferedFilterType.getFieldFilterType() })
       }
@@ -125,6 +130,8 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
       children: groupedItems[group]
     }))
   }, [availableFilterColumns])
+
+  console.log({filters});
 
   return (
     <Space

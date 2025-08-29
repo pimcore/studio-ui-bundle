@@ -15,6 +15,9 @@ import { DynamicFilter } from '../dynamic-filter/dynamic-filter'
 import { ButtonGroup } from '../button-group/button-group'
 import { IconButton } from '../icon-button/icon-button'
 import { Tag } from '../tag/tag'
+import { LanguageSelection } from '../language-selection'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { Flex } from '../flex/flex'
 
 export interface FieldFiltersProps {
   data: IDynamicFilter[]
@@ -23,6 +26,7 @@ export interface FieldFiltersProps {
 
 export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.Element => {
   const [_data, _setData] = useState(data)
+  const { requiredLanguages } = useSettings();
 
   const setData = (data: IDynamicFilter[]): void => {
     _setData(data)
@@ -40,6 +44,13 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
     const index = _data.findIndex((f) => f.id === filter.id)
     const updatedData = [..._data]
     updatedData[index] = { ...updatedData[index], data }
+    setData(updatedData)
+  }
+
+  const onLanguageSelectionChanged = (filter: IDynamicFilter, locale: string | null): void => {
+    const index = _data.findIndex((f) => f.id === filter.id)
+    const updatedData = [..._data]
+    updatedData[index] = { ...updatedData[index], locale }
     setData(updatedData)
   }
 
@@ -61,15 +72,21 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
         />
       ),
       renderRightToolbar: (
-        <ButtonGroup items={
-          [
-            <IconButton
+        <Flex gap="mini">
+          {filter.localizable && (
+            <LanguageSelection
+              key={ 'language' }
+              languages={requiredLanguages}
+              selectedLanguage={ filter.locale ? filter.locale : '' }
+              onSelectLanguage={ (locale) => { onLanguageSelectionChanged(filter, locale) } }
+            />
+          )}
+          <IconButton
               icon={ { value: 'close' } }
               key={ 'remove' }
               onClick={ () => { onRemoveClick(filter) } }
             />
-          ] }
-        />
+        </Flex>
       )
     }
   })

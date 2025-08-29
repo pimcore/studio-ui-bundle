@@ -14,6 +14,7 @@ export interface FieldFilter {
   key: string
   type: string
   filterValue: any
+  locale: string | null | undefined
   filterType?: string
 }
 
