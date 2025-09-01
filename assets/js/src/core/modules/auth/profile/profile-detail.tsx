@@ -196,16 +196,16 @@ const ProfileDetail = ({ id }: IProfileDetail): React.JSX.Element => {
                     rules={ [{ min: 10 }] }
                   >
                     <Input
-                        suffix={ <IconButton
-                      icon={ { value: 'locked' } }
-                      onClick={ () => {
-                        const newPassword = generatePassword()
-                        form.setFieldValue('password', newPassword)
-                        setModifiedCells({ password: newPassword })
-                      } }
-                      title={ t('user-management.generate-password') }
-                      variant={ 'minimal' }
-                                    /> }
+                      suffix={ <IconButton
+                        icon={ { value: 'locked' } }
+                        onClick={ () => {
+                          const newPassword = generatePassword()
+                          form.setFieldValue('password', newPassword)
+                          setModifiedCells({ password: newPassword })
+                        } }
+                        title={ t('user-management.generate-password') }
+                        variant={ 'minimal' }
+                               /> }
                     />
                   </Form.Item>
                   <Form.Item

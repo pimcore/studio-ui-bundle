@@ -77,7 +77,7 @@ export const useUserHelper = (): UseUserReturn => {
     }))
 
     if (user?.modifiedCells?.password !== undefined || user?.modifiedCells?.passwordConfirmation !== undefined || user?.modifiedCells?.oldPassword !== undefined) {
-      const { data:_, error:passwordError }: any = await dispatch(api.endpoints.userUpdatePasswordById.initiate({
+      const { error: passwordError }: any = await dispatch(api.endpoints.userUpdatePasswordById.initiate({
         id: user.id,
         body: {
           password: user.modifiedCells?.password,
