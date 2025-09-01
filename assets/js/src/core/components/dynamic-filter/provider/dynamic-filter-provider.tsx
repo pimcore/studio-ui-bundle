@@ -17,6 +17,8 @@ export interface IDynamicFilter {
   frontendType?: string
   filterType?: string
   config?: any
+  localizable?: boolean
+  locale?: string | null
   name?: string
 }
 
