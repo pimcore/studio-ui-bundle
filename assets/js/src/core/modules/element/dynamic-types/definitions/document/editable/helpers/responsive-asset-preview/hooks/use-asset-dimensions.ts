@@ -105,7 +105,7 @@ export const useAssetDimensions = (): UseAssetDimensionsReturn => {
 
     const selectedDimensions = selectDimensionSource()
     finalizeImageTransition(selectedDimensions)
-    
+
     return selectedDimensions
   }, [])
 

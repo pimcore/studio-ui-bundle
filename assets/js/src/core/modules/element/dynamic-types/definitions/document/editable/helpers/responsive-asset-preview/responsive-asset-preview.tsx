@@ -99,11 +99,13 @@ export const ResponsiveAssetPreview = ({
     onImageLoad?.(event)
   }, [onImageLoad, onImageLoadedChange])
 
-  const loadingSpinner = lastImageDimensions ? (
-    <div className={ styles.loadingSpinner }>
-      <Spin size="small" />
-    </div>
-  ) : undefined
+  const loadingSpinner = !isNil(lastImageDimensions)
+    ? (
+      <div className={ styles.loadingSpinner }>
+        <Spin size="small" />
+      </div>
+      )
+    : undefined
 
   return (
     <Dropdown
@@ -113,8 +115,8 @@ export const ResponsiveAssetPreview = ({
     >
       <div
         className={ cn(
-          className, 
-          styles.imageEditablePreviewContainer, 
+          className,
+          styles.imageEditablePreviewContainer,
           {
             [styles.imageEditablePreviewContainerMinSize]: !isNil(lastImageDimensions) || isImageLoaded
           },
@@ -131,7 +133,7 @@ export const ResponsiveAssetPreview = ({
             placeholder={ loadingSpinner }
             preview={ false }
             src={ finalImageSrc }
-            style={ lastImageDimensions ? getImageDimensions(isImageLoaded, lastImageDimensions) : undefined }
+            style={ !isNil(lastImageDimensions) ? getImageDimensions(isImageLoaded, lastImageDimensions) : undefined }
             { ...imgAttributes }
           />
         )}

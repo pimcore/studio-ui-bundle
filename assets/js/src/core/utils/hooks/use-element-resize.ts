@@ -28,7 +28,7 @@ const useElementResize = (element: Element, disable: boolean = false): { width: 
     if (disable) {
       return
     }
-    
+
     const targetElement = getElement(element)
 
     if (!isNull(targetElement)) {
@@ -42,7 +42,7 @@ const useElementResize = (element: Element, disable: boolean = false): { width: 
     if (disable) {
       return
     }
-    
+
     const targetElement = getElement(element)
 
     if (isNull(targetElement)) return
@@ -52,7 +52,7 @@ const useElementResize = (element: Element, disable: boolean = false): { width: 
       let height: number
 
       // Prefer modern spec-compliant API
-      if (entry.borderBoxSize && entry.borderBoxSize.length > 0) {
+      if (!isNull(entry.borderBoxSize) && entry.borderBoxSize.length > 0) {
         width = entry.borderBoxSize[0].inlineSize
         height = entry.borderBoxSize[0].blockSize
       } else {

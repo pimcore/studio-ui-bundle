@@ -200,7 +200,7 @@ export const DocumentPdfEditable = (props: DocumentPdfEditableProps): React.JSX.
     hasPdf
       ? (
         <PdfEditablePreview
-          assetId={ pdfValue.id! }
+          assetId={ pdfValue.id }
           containerWidth={ Math.max(containerWidth, MIN_WIDTH) }
           dropdownItems={ dropdownItems }
           height={ smartDimensions?.height ?? height }
