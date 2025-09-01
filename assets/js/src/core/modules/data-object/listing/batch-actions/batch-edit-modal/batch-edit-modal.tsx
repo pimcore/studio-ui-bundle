@@ -90,9 +90,6 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
   const handleApplyChanges = (): void => {
     form.submit()
-
-    resetModal()
-    setBatchEditModalOpen(false)
   }
 
   const onFormFinish = async (values: any): Promise<void> => {
@@ -161,6 +158,9 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         assetContextId: id
       }))
     }
+
+    resetModal()
+    setBatchEditModalOpen(false)
   }
 
   const availableDropdownList = getAvailableColumnsDropdown(onColumnClick).menu.items
