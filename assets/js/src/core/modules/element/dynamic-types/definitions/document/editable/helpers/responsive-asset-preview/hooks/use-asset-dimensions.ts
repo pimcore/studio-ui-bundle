@@ -9,7 +9,7 @@
  */
 
 import { useRef, useCallback } from 'react'
-import { MIN_WIDTH, MIN_HEIGHT, DEFAULT_HEIGHT } from '../image-dimensions'
+import { MIN_WIDTH, MIN_HEIGHT } from '../image-dimensions'
 
 interface AssetDimensions {
   width: number

@@ -116,7 +116,7 @@ export const ResponsiveAssetPreview = ({
           className, 
           styles.imageEditablePreviewContainer, 
           {
-            [styles.imageEditablePreviewContainerMinSize]: lastImageDimensions
+            [styles.imageEditablePreviewContainerMinSize]: !isNil(lastImageDimensions) || isImageLoaded
           },
           ...getStateClasses()
         ) }
