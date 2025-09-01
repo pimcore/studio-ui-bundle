@@ -10,12 +10,19 @@
 
 import { createStyles } from 'antd-style'
 
-export const useAreablockEditableStyles = createStyles(({ token }) => ({
+export const useStyles = createStyles(({ token }) => ({
 
   areablockToolstrip: {
     display: 'inline-block',
     width: 'fit-content',
     marginTop: token.marginXS,
     marginBottom: token.marginXS
+  },
+
+  areaEntry: {
+    '&[data-hidden="true"] .pimcore_area_content': {
+      filter: 'blur(1px)',
+      opacity: 0.5
+    }
   }
 }))

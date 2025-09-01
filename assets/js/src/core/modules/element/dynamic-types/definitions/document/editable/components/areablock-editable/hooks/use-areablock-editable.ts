@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useCallback, useState, useRef, useContext } from 'react'
+import { useCallback, useState, useRef, useContext, useEffect } from 'react'
 import { isNil, isArray, isEmpty, isUndefined, isString } from 'lodash'
 import { useDocumentEditor } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/hooks/use-document-editor'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
@@ -18,12 +18,10 @@ import { type AreablockEditableConfig, type AreablockValue } from '../areablock-
 import { type AreablockManager } from '../utils/areablock-manager'
 import { createEditableDataFromDefinitions } from '../../../utils/editable-utils'
 import { createDropzoneContainer } from '../../../helpers/editable-dropzone-sorting/utils/dom-utils'
-import {
-  areablockValueUtils,
-  configUtils
-} from '../utils/areablock-utils'
+import { areablockValueUtils, configUtils } from '../utils/areablock-utils'
 import { usePendingElementsReveal } from '../../../hooks/use-pending-elements-reveal'
 import { useLazyDocumentPageSnippetAreaBlockRenderQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { useStyles } from '../areablock-editable.styles'
 
 export interface UseAreablockEditableParams {
   areablockManager: AreablockManager
@@ -44,7 +42,6 @@ export interface UseAreablockEditableReturn {
 
 export const useAreablockEditable = ({
   areablockManager,
-  value = [],
   onChange,
   config,
   disabled = false
@@ -54,6 +51,15 @@ export const useAreablockEditable = ({
   const [dynamicEditables, setDynamicEditables] = useState<AbstractDocumentEditableDefinition[]>([])
   const reloadModeElementsRef = useRef<HTMLElement[]>(areablockManager.queryElements())
   const [triggerAreaBlockRender] = useLazyDocumentPageSnippetAreaBlockRenderQuery()
+  const { styles } = useStyles()
+
+  const applyStylesToAreaEntries = useCallback(() => {
+    areablockManager.applyStylestoAreaEntries(styles.areaEntry)
+  }, [areablockManager])
+
+  useEffect(() => {
+    applyStylesToAreaEntries()
+  }, [applyStylesToAreaEntries])
 
   const { hideElementUntilRendered } = usePendingElementsReveal({
     dynamicEditables,
@@ -165,6 +171,7 @@ export const useAreablockEditable = ({
 
           const dropzoneContainer = createDropzoneContainer(areablockManager.getEditableName())
           newAreaElement.appendChild(dropzoneContainer)
+          applyStylesToAreaEntries()
         }
       }
 
@@ -237,13 +244,8 @@ export const useAreablockEditable = ({
     }
   }
 
-  const moveAreaUp = (element: HTMLElement): void => {
-    moveAreaByDirection(element, 'up')
-  }
-
-  const moveAreaDown = (element: HTMLElement): void => {
-    moveAreaByDirection(element, 'down')
-  }
+  const moveAreaUp = (element: HTMLElement): void => { moveAreaByDirection(element, 'up') }
+  const moveAreaDown = (element: HTMLElement): void => { moveAreaByDirection(element, 'down') }
 
   const moveArea = useCallback((fromIndex: number, toIndex: number): void => {
     if (disabled) return
