@@ -11,28 +11,58 @@
 import React, { useState } from 'react'
 import { Select } from '@Pimcore/components/select/select'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
+import { type DefaultOptionType } from 'antd/es/select'
+
+interface IObjectSelectConfig {
+  fieldDefinition: {
+    options: Array<{ key: string, value: string | number }>
+    fieldtype?: string
+  }
+}
+
+interface IAssetSelectConfig {
+  options: string[]
+}
+
+const transformBooleanSelectValueToBooleanNull = (value: string | number): boolean | null => {  
+  switch (value) {
+    case -1:
+      return false
+    case 0:
+      return null
+    case 1:
+      return true
+  }
+  return null
+}
+
 
 export const DynamicTypeFieldFilterBooleanSelectComponent = (): React.JSX.Element => {
-  const { setData, data } = useDynamicFilter()
-  const [_value, setValue] = useState(data)
+  const { setData, data, config: rawConfig } = useDynamicFilter()
+  const config: IAssetSelectConfig | IObjectSelectConfig = rawConfig
 
-  const options = [
-    { label: 'True', value: true },
-    { label: 'False', value: false },
-    { label: 'Empty', value: null }
-  ]
+
+  const [_value, setValue] = useState(transformBooleanSelectValueToBooleanNull(data))
+
+  let formattedOptions: DefaultOptionType[] = []
+  if ('fieldDefinition' in config && Array.isArray(config?.fieldDefinition?.options)) {
+      formattedOptions = config.fieldDefinition.options.map((opt) => ({
+        label: opt.key,
+        value: transformBooleanSelectValueToBooleanNull(opt.value) as any
+      }))
+    }
 
   return (
     <Select
       onBlur={ onBlur }
       onChange={ (value: boolean | null) => { setValue(value) } }
-      options={ options as any }
+      options={ formattedOptions as any } 
       style={ { width: '100%' } }
       value={ _value }
     />
   )
 
   function onBlur (): void {
-    setData(_value)
+       setData(_value)
   }
 }
