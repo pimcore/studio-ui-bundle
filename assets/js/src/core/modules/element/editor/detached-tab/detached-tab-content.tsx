@@ -22,6 +22,7 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
 import DraftIndicator from '@Pimcore/modules/data-object/editor/detached-tab/draft-indicator'
+import { useTranslation } from 'react-i18next'
 
 export interface DetachedTabContentProps {
   context: GlobalElementContext
@@ -31,13 +32,14 @@ export interface DetachedTabContentProps {
 export default function DetachedTabContent ({ context, tabKey }: DetachedTabContentProps): React.JSX.Element {
   const { getOpenedMainWidget } = useWidgetManager()
   const { editorType, isLoading } = useElementDraft(context.config.id, context.type)
+  const { t } = useTranslation()
 
   if (isLoading) {
     return <Content loading />
   }
 
   if (editorType === undefined) {
-    return <MissingContext />
+    return <MissingContext description={t('widget.missing-tab-context.description')} />
   }
 
   const openedMainWidget = getOpenedMainWidget()
@@ -46,17 +48,17 @@ export default function DetachedTabContent ({ context, tabKey }: DetachedTabCont
   const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
   if (tab === undefined || openedMainWidget === undefined) {
-    return <MissingContext />
+    return <MissingContext description={t('widget.missing-tab-context.description')} />
   }
 
   const openedMainWidgetComponent = widgetRegistryService.getWidget(openedMainWidget?.getComponent() ?? '')
   if (openedMainWidgetComponent?.getContextProvider === undefined) {
-    return <MissingContext />
+    return <MissingContext description={t('widget.missing-tab-context.description')} />
   }
 
   const contextProvider = openedMainWidgetComponent.getContextProvider(context, tab.children)
   if (contextProvider === undefined) {
-    return <MissingContext />
+    return <MissingContext description={t('widget.missing-tab-context.description')} />
   }
 
   return (

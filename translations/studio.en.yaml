@@ -2,6 +2,9 @@ common.owner: Owner
 common.modification-date: Modification date
 common.globally: Globally
 common.apply-selection: Apply selection
+widget.missing-context.title: "Missing Context"
+widget.missing-context.description: "No related element found"
+widget.missing-tab-context.description: "This feature is not supported for the related element"
 block: Block
 error.error_something_generic_went_wrong: Element not found
 error.error_element_exists: Element already exists
