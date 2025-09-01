@@ -12,4 +12,4 @@ if (module.hot !== undefined) {
   module.hot.accept()
 }
 
-export * from '@Pimcore/modules/class-definition/class-definition-slice-enhanced';
+export * from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
