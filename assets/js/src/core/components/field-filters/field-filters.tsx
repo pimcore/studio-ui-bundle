@@ -12,12 +12,12 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { type IDynamicFilter } from '../dynamic-filter/provider/dynamic-filter-provider'
 import { StackList, type StackListProps } from '../stack-list/stack-list'
 import { DynamicFilter } from '../dynamic-filter/dynamic-filter'
-import { ButtonGroup } from '../button-group/button-group'
 import { IconButton } from '../icon-button/icon-button'
 import { Tag } from '../tag/tag'
 import { LanguageSelection } from '../language-selection'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { Flex } from '../flex/flex'
+import { isNil } from 'lodash'
 
 export interface FieldFiltersProps {
   data: IDynamicFilter[]
@@ -73,11 +73,11 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
       ),
       renderRightToolbar: (
         <Flex gap="mini">
-          {filter.localizable && (
+          {filter.localizable === true && (
             <LanguageSelection
               key={ 'language' }
               languages={requiredLanguages}
-              selectedLanguage={ filter.locale ? filter.locale : '' }
+              selectedLanguage={ !isNil(filter.locale) ? filter.locale : '' }
               onSelectLanguage={ (locale) => { onLanguageSelectionChanged(filter, locale) } }
             />
           )}
