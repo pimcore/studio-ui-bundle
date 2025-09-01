@@ -20,7 +20,7 @@ import { ImagePreviewDropdown } from '../image-preview/components/dropdown/dropd
 import { type DropdownProps } from '../dropdown/dropdown'
 import { Text } from '@sdk/components'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
-import { isNil } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 
 interface AssetTargetProps {
@@ -52,11 +52,11 @@ export const AssetTarget = ({
   const { styles } = useStyle()
   const { t } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
-  const currentDimensions = useElementResize(containerRef)
+  const currentDimensions = useElementResize(containerRef, isUndefined(onResize))
 
   useEffect(() => {
-    if (currentDimensions.width > 0 && currentDimensions.height > 0 && onResize !== undefined) {
-      onResize(currentDimensions)
+    if (currentDimensions.width > 0 && currentDimensions.height > 0) {
+      onResize?.(currentDimensions)
     }
   }, [currentDimensions, onResize])
 
