@@ -68,7 +68,10 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
       }
 
       // TODO: clear perspective list cache tag
-    } catch (error) {
+
+      void success(t('perspective-editor.create.success'))
+      onFinish?.(value)
+    } catch {
       trackError(new GeneralError('Failed to create new perspective.'))
     }
   }
@@ -104,7 +107,7 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
 
       // TODO: clear perspective list cache tag
       onFinish?.(config as PerspectiveConfigDetail)
-    } catch (error) {
+    } catch {
       trackError(new GeneralError('Failed to create new perspective.'))
     }
   }
@@ -131,7 +134,8 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
       const response = await deletePerspectiveTask
 
       if (!isUndefined(response.error)) {
-        trackError(new ApiError(response.error as ApiErrorData))
+        trackError(new ApiError(response.error))
+        return
       }
 
       dispatch(
@@ -142,7 +146,7 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
 
       onFinish?.()
       void success(t('perspective-editor.delete.success'))
-    } catch (error) {
+    } catch {
       trackError(new GeneralError('Failed to delete perspective'))
     }
   }
