@@ -26,7 +26,7 @@ export interface FieldFiltersProps {
 
 export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.Element => {
   const [_data, _setData] = useState(data)
-  const { requiredLanguages } = useSettings();
+  const { requiredLanguages } = useSettings()
 
   const setData = (data: IDynamicFilter[]): void => {
     _setData(data)
@@ -76,16 +76,16 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
           {filter.localizable === true && (
             <LanguageSelection
               key={ 'language' }
-              languages={requiredLanguages}
-              selectedLanguage={ !isNil(filter.locale) ? filter.locale : '' }
+              languages={ requiredLanguages }
               onSelectLanguage={ (locale) => { onLanguageSelectionChanged(filter, locale) } }
+              selectedLanguage={ !isNil(filter.locale) ? filter.locale : '' }
             />
           )}
           <IconButton
-              icon={ { value: 'close' } }
-              key={ 'remove' }
-              onClick={ () => { onRemoveClick(filter) } }
-            />
+            icon={ { value: 'close' } }
+            key={ 'remove' }
+            onClick={ () => { onRemoveClick(filter) } }
+          />
         </Flex>
       )
     }

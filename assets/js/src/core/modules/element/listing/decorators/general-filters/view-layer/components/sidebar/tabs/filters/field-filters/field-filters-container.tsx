@@ -131,7 +131,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
     }))
   }, [availableFilterColumns])
 
-  console.log({filters});
+  console.log({ filters })
 
   return (
     <Space
