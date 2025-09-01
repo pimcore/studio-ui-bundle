@@ -245,6 +245,8 @@ export type GridColumnData = {
     locale?: string | null;
     /** Value */
     value?: any | null;
+    /** Field Type of the column */
+    fieldType?: string | null;
     /** inheritance */
     inheritance?: object | null;
 };

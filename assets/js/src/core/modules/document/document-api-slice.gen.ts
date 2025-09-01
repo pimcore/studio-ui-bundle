@@ -101,6 +101,17 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/documents/get-available-templates` }),
                 providesTags: ["Documents"],
             }),
+            documentPageSnippetAreaBlockRender: build.query<
+                DocumentPageSnippetAreaBlockRenderApiResponse,
+                DocumentPageSnippetAreaBlockRenderApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/page-snippet/${queryArg.id}/area-block/render`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Documents"],
+            }),
             documentRenderletRender: build.query<DocumentRenderletRenderApiResponse, DocumentRenderletRenderApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/documents/renderlet/render`,
@@ -111,17 +122,6 @@ const injectedRtkApi = api
                         parentDocumentId: queryArg.parentDocumentId,
                         template: queryArg.template,
                     },
-                }),
-                providesTags: ["Documents"],
-            }),
-            documentPageSnippetAreaBlockRender: build.query<
-                DocumentPageSnippetAreaBlockRenderApiResponse,
-                DocumentPageSnippetAreaBlockRenderApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/documents/page-snippet/${queryArg.id}/area-block/render`,
-                    method: "POST",
-                    body: queryArg.body,
                 }),
                 providesTags: ["Documents"],
             }),
@@ -301,6 +301,20 @@ export type DocumentAvailableTemplatesListApiResponse =
         items: DocumentTemplate[];
     };
 export type DocumentAvailableTemplatesListApiArg = void;
+export type DocumentPageSnippetAreaBlockRenderApiResponse =
+    /** status 200 Rendered HTML and editable definitions */ AreaBlockRenderDataForEditmode;
+export type DocumentPageSnippetAreaBlockRenderApiArg = {
+    /** Id of the document */
+    id: number;
+    body: {
+        name: string | null;
+        realName: string | null;
+        index: number | null;
+        blockStateStack: object | null;
+        areaBlockConfig?: object | null;
+        areaBlockData?: object | null;
+    };
+};
 export type DocumentRenderletRenderApiResponse = /** status 200 Rendered renderlet */ Blob;
 export type DocumentRenderletRenderApiArg = {
     /** ElementId of the renderlet element */
@@ -313,20 +327,6 @@ export type DocumentRenderletRenderApiArg = {
     parentDocumentId?: number;
     /** Renderlet template */
     template?: string;
-};
-export type DocumentPageSnippetAreaBlockRenderApiResponse =
-    /** status 200 Rendered HTML and editable definitions */ AreaBlockRenderDataForEditmode;
-export type DocumentPageSnippetAreaBlockRenderApiArg = {
-    /** Id of the document */
-    id: number;
-    body: {
-        areaBlockConfig?: object | null;
-        areaBlockData?: object | null;
-        blockStateStack: object | null;
-        index: number | null;
-        name: string | null;
-        realName: string | null;
-    };
 };
 export type DocumentReplaceContentApiResponse = unknown;
 export type DocumentReplaceContentApiArg = {
@@ -732,8 +732,8 @@ export const {
     useDocumentPageStreamPreviewQuery,
     useDocumentAvailableControllersListQuery,
     useDocumentAvailableTemplatesListQuery,
-    useDocumentRenderletRenderQuery,
     useDocumentPageSnippetAreaBlockRenderQuery,
+    useDocumentRenderletRenderQuery,
     useDocumentReplaceContentMutation,
     useDocumentsListAvailableSitesQuery,
     useDocumentUpdateSiteMutation,
