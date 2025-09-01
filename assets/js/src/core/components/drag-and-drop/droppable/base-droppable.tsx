@@ -67,7 +67,7 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
       : isValidContext
 
     isDataValid.current = isContextValid.current && (isValidData?.(info) ?? true)
-    
+
     if (isContextValid.current) {
       updateDragState('active')
     } else {
@@ -101,7 +101,7 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
 
   const handleDragLeave = useCallback((e: React.DragEvent) => {
     e.preventDefault()
-    
+
     if (isContextValid.current) {
       updateDragState(!isNull(dragInfoRef.current) ? 'active' : 'inactive')
     }
