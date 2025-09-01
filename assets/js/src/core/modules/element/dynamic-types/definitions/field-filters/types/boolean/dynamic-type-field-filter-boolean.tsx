@@ -27,4 +27,8 @@ export class DynamicTypeFieldFilterBoolean extends DynamicTypeFieldFilterAbstrac
       <DynamicTypeFieldFilterCheckboxComponent { ...props } />
     )
   }
+
+  shouldApply (value: any): boolean {
+    return value !== undefined
+  }
 }

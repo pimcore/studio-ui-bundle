@@ -16,6 +16,9 @@ import { pqlFilterType } from '../context-layer/provider/pql-filter/pql-filter-p
 import { usePqlFilter } from '../context-layer/provider/pql-filter/use-pql-filter'
 import { useFieldFilters } from '../context-layer/provider/field-filters/use-field-filters'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type DynamicTypeFieldFilterRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-registry'
 
 export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['useDataQueryHelper']): AbstractDecoratorProps['useDataQueryHelper'] => {
   const useDataQueryHelperGeneralFiltersExtension: AbstractDecoratorProps['useDataQueryHelper'] = () => {
@@ -32,6 +35,16 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
         ...rest,
         ...(filterType !== undefined && { type: filterType })
       }))
+    }
+
+    const getApplicableFieldFilters = (filters: any[]): any[] => {
+      return filters.filter((filter) => {
+        const column = availableColumns.find(col => col.key === filter.key)
+        const frontendType = column?.frontendType ?? filter.type ?? 'string'
+        
+        const filterType = container.get<DynamicTypeFieldFilterRegistry>(serviceIds['DynamicTypes/FieldFilterRegistry']).getDynamicType(frontendType)
+        return filterType.shouldApply(filter.filterValue)
+      })
     }
 
     const getArgs: typeof baseGetArgs = () => {
@@ -56,7 +69,8 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
       }
 
       if (fieldFilters.length > 0) {
-        newColumnFilters.push(...fieldFilters)
+        const applicableFieldFilters = getApplicableFieldFilters(fieldFilters)
+        newColumnFilters.push(...applicableFieldFilters)
       }
 
       return {
