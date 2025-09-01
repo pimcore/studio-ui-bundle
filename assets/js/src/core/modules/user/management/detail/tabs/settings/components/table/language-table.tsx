@@ -34,7 +34,7 @@ export const LanguageTable = ({
 
   const getDisplyNameByAbbreviation = (abbreviation: string): string => {
     const language = availableAdminLanguages.find((lang) => lang.language === abbreviation)
-    return language.display
+    return language?.display
   }
 
   const columnsData = data.map((name: string) => (

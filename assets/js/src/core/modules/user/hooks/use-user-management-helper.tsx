@@ -198,11 +198,25 @@ export const useUserManagementHelper = (): UseUserReturn => {
         assetWorkspaces: user.assetWorkspaces,
         dataObjectWorkspaces: user.dataObjectWorkspaces,
         documentWorkspaces: user.documentWorkspaces,
-        perspectives: user.perspectives,
-        ...user.password !== undefined ? { password: user.password } : {}
+        perspectives: user.perspectives
       }
     }))
+
+    if (user.password !== undefined) {
+      const { data:_, error:passwordError }: any = await dispatch(api.endpoints.userUpdatePasswordById.initiate({
+        id: id,
+        body: {
+          password: user.password,
+          passwordConfirmation: user.password,
+          oldPassword: '',
+        }
+      }))
+
+      handleNotification(t('user-management.save-user.password.success'), passwordError)
+    }
+
     handleNotification(t('user-management.save-user.success'), error)
+
     const userDraft: UserDraft = {
       ...data,
       modified: false,
