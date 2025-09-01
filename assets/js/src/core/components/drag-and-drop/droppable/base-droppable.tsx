@@ -67,7 +67,12 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
       : isValidContext
 
     isDataValid.current = isContextValid.current && (isValidData?.(info) ?? true)
-    updateDragState('active')
+    
+    if (isContextValid.current) {
+      updateDragState('active')
+    } else {
+      updateDragState('inactive')
+    }
   }
 
   useEffect(() => {
@@ -84,7 +89,7 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault()
 
-    if (isNull(dragInfoRef.current)) {
+    if (isNull(dragInfoRef.current) || !isContextValid.current) {
       updateDragState('inactive')
       return
     }
@@ -96,7 +101,10 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
 
   const handleDragLeave = useCallback((e: React.DragEvent) => {
     e.preventDefault()
-    updateDragState(!isNull(dragInfoRef.current) ? 'active' : 'inactive')
+    
+    if (isContextValid.current) {
+      updateDragState(!isNull(dragInfoRef.current) ? 'active' : 'inactive')
+    }
   }, [])
 
   const handleDrop = (e: React.DragEvent): void => {
