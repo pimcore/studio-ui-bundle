@@ -39,7 +39,7 @@ export default function DetachedTabContent ({ context, tabKey }: DetachedTabCont
   }
 
   if (editorType === undefined) {
-    return <MissingContext description={t('widget.missing-tab-context.description')} />
+    return <MissingContext description={ t('widget.missing-tab-context.description') } />
   }
 
   const openedMainWidget = getOpenedMainWidget()
@@ -48,17 +48,17 @@ export default function DetachedTabContent ({ context, tabKey }: DetachedTabCont
   const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
   if (tab === undefined || openedMainWidget === undefined) {
-    return <MissingContext description={t('widget.missing-tab-context.description')} />
+    return <MissingContext description={ t('widget.missing-tab-context.description') } />
   }
 
   const openedMainWidgetComponent = widgetRegistryService.getWidget(openedMainWidget?.getComponent() ?? '')
   if (openedMainWidgetComponent?.getContextProvider === undefined) {
-    return <MissingContext description={t('widget.missing-tab-context.description')} />
+    return <MissingContext description={ t('widget.missing-tab-context.description') } />
   }
 
   const contextProvider = openedMainWidgetComponent.getContextProvider(context, tab.children)
   if (contextProvider === undefined) {
-    return <MissingContext description={t('widget.missing-tab-context.description')} />
+    return <MissingContext description={ t('widget.missing-tab-context.description') } />
   }
 
   return (

@@ -20,10 +20,10 @@ interface IDetachedTabProps {
 
 export const DetachedTab = ({ tabKey }: IDetachedTabProps): React.JSX.Element => {
   const { context } = useGlobalElementContext()
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   if (context === undefined) {
-    return <MissingContext description={t('widget.missing-context.description')} />
+    return <MissingContext description={ t('widget.missing-context.description') } />
   }
 
   return (
