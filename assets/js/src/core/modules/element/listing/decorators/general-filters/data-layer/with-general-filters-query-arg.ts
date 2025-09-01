@@ -18,6 +18,7 @@ import { useFieldFilters } from '../context-layer/provider/field-filters/use-fie
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 import { type DynamicTypeFieldFilterRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-registry'
 
 export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['useDataQueryHelper']): AbstractDecoratorProps['useDataQueryHelper'] => {
@@ -28,6 +29,8 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
     const { onlyDirectChildren } = useDirectChildrenFilter()
     const { fieldFilters } = useFieldFilters()
     const { availableColumns } = useAvailableColumns()
+    const objectDataRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+    const fieldFilterRegistry = container.get<DynamicTypeFieldFilterRegistry>(serviceIds['DynamicTypes/FieldFilterRegistry'])
 
     const getUpdatedColumnFilters = (columnFilters: any[]): any[] => {
       // Override 'type' with 'filterType' for specific cases (e.g., 'dataobject.adapter')
@@ -42,8 +45,85 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
         const column = availableColumns.find(col => col.key === filter.key)
         const frontendType = column?.frontendType ?? filter.type ?? 'string'
         
-        const filterType = container.get<DynamicTypeFieldFilterRegistry>(serviceIds['DynamicTypes/FieldFilterRegistry']).getDynamicType(frontendType)
-        return filterType.shouldApply(filter.filterValue)
+        // Create a mapping from frontend types to their corresponding field filter types
+        // This mapping is based on how each object data type declares its dynamicTypeFieldFilterType
+        const typeToFilterMapping: Record<string, string> = {
+          // String-based types
+          'input': 'string',
+          'textarea': 'string', 
+          'wysiwyg': 'string',
+          'password': 'string',
+          'email': 'string',
+          'firstname': 'string',
+          'lastname': 'string',
+          'encryptedField': 'string',
+          'calculatedValue': 'string',
+          'link': 'string',
+          'urlSlug': 'string',
+          'externalImage': 'string',
+          'image': 'string',
+          'video': 'string',
+          'hotspotImage': 'string',
+          'imageGallery': 'string',
+          'geoPoint': 'string',
+          'geoBounds': 'string',
+          'geoPolygon': 'string',
+          'geoPolyLine': 'string',
+          'manyToOneRelation': 'string',
+          'manyToManyRelation': 'string',
+          'manyToManyObjectRelation': 'string',
+          'advancedManyToManyRelation': 'string',
+          'advancedManyToManyObjectRelation': 'string',
+          'reverseObjectRelation': 'string',
+          'table': 'string',
+          'structuredTable': 'string',
+          'block': 'string',
+          'localizedFields': 'string',
+          'fieldCollection': 'string',
+          'objectBrick': 'string',
+          'classificationStore': 'string',
+          
+          // Select-based types
+          'select': 'select',
+          'multiSelect': 'select',
+          'language': 'select',
+          'languageMultiSelect': 'select',
+          'country': 'select',
+          'countryMultiSelect': 'select',
+          'user': 'select',
+          'booleanSelect': 'select',
+          'consent': 'select',
+          'gender': 'select',
+          'rgbaColor': 'select',
+          
+          // Number-based types
+          'numeric': 'number',
+          'numericRange': 'number',
+          'slider': 'number',
+          'quantityValue': 'number',
+          'quantityValueRange': 'number',
+          'inputQuantityValue': 'number',
+          'time': 'number',
+          
+          // Date-based types
+          'date': 'date',
+          'datetime': 'date',
+          'dateRange': 'date',
+          
+          // Boolean-based types
+          'checkbox': 'boolean'
+        }
+        
+        const filterType = typeToFilterMapping[frontendType] ?? 'string'
+        
+        // Get the actual field filter instance and use its shouldApply method
+        if (fieldFilterRegistry.hasDynamicType(filterType)) {
+          const fieldFilter = fieldFilterRegistry.getDynamicType(filterType)
+          return fieldFilter.shouldApply(filter.filterValue)
+        }
+        
+        // Fallback to basic empty check for unknown types
+        return filter.filterValue != null && filter.filterValue !== ''
       })
     }
 
