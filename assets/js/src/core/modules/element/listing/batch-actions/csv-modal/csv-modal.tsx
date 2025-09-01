@@ -136,6 +136,13 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
     })
 
     if (numberedSelectedRows.length === 0) {
+      const filters = getArgs()?.body?.filters ?? {}
+
+      if (filters !== undefined) {
+        delete filters.page
+        delete filters.pageSize
+      }
+
       const promise = fetchCreateFolderCsv({
         body: {
           folders: [id],
@@ -146,9 +153,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
             header
           },
           filters: {
-            ...getArgs().body.filters ?? {},
-            page: 1,
-            pageSize: appConfig.maxPageSize,
+            ...filters,
             includeDescendants: true
           }
         }

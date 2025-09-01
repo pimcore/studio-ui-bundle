@@ -135,6 +135,13 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
     })
 
     if (numberedSelectedRows.length === 0) {
+      const filters = getArgs()?.body?.filters ?? {}
+
+      if (filters !== undefined) {
+        delete filters.page
+        delete filters.pageSize
+      }
+
       const promise = fetchCreateFolderXlsx({
         body: {
           folders: [id],
@@ -144,9 +151,7 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
             header
           },
           filters: {
-            ...getArgs().body.filters ?? {},
-            page: 1,
-            pageSize: appConfig.maxPageSize,
+            ...filters,
             includeDescendants: true
           }
         }
