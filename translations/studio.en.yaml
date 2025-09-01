@@ -1141,3 +1141,4 @@ perspective-editor.add-modal.name.label: Enter the name of the new perspective
 perspective-editor.add-modal.name.validation: Please enter a valid perspective name
 perspective-editor.form.name.placeholder: Enter perspective name
 perspective-editor.delete.success: Perspective deleted successfully
+edit.label: Edit
