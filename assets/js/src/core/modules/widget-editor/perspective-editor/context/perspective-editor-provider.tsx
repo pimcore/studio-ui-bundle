@@ -84,7 +84,7 @@ export const PerspectiveEditorProvider = ({ children }: PerspectiveEditorProvide
   }), [activeTabId, perspectives, isLoading])
 
   return (
-    <PerspectiveEditorContext.Provider value={contextValue}>
+    <PerspectiveEditorContext.Provider value={ contextValue }>
       {children}
     </PerspectiveEditorContext.Provider>
   )

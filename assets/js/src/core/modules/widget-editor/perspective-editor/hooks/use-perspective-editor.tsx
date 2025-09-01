@@ -13,7 +13,8 @@ import { useAppDispatch } from '@Pimcore/app/store'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
-import { api, CreatePerspectiveConfig, usePerspectiveCreateMutation, usePerspectiveDeleteMutation, usePerspectiveUpdateConfigByIdMutation, type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
+import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/classes/api-error'
+import { api, type CreatePerspectiveConfig, usePerspectiveCreateMutation, usePerspectiveDeleteMutation, usePerspectiveUpdateConfigByIdMutation, type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 import { isUndefined } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -30,9 +31,9 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
   const modal = useFormModal()
   const { t } = useTranslation()
   const { success } = useMessage()
-  const [perspectiveCreateMutation] = usePerspectiveCreateMutation();
-  const [perspectiveUpdateMutation] = usePerspectiveUpdateConfigByIdMutation();
-  const [perspectiveDeleteMutation] = usePerspectiveDeleteMutation();
+  const [perspectiveCreateMutation] = usePerspectiveCreateMutation()
+  const [perspectiveUpdateMutation] = usePerspectiveUpdateConfigByIdMutation()
+  const [perspectiveDeleteMutation] = usePerspectiveDeleteMutation()
 
   const createPerspective = (
     onFinish?: (newName: string) => void
@@ -63,12 +64,10 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
       const response = (await perspectiveCreateTask) as any
 
       if (response.error !== undefined) {
-        trackError(new ApiError(response.error))
-        return
+        trackError(new ApiError(response.error as ApiErrorData))
       }
 
-      //TODO: clear perspective list cache tag
-
+      // TODO: clear perspective list cache tag
     } catch (error) {
       trackError(new GeneralError('Failed to create new perspective.'))
     }
@@ -99,11 +98,11 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
       const response = (await perspectiveUpdateTask) as any
 
       if (response.error !== undefined) {
-        trackError(new ApiError(response.error))
+        trackError(new ApiError(response.error as ApiErrorData))
         return
       }
 
-      //TODO: clear perspective list cache tag
+      // TODO: clear perspective list cache tag
       onFinish?.(config as PerspectiveConfigDetail)
     } catch (error) {
       trackError(new GeneralError('Failed to create new perspective.'))
@@ -132,7 +131,7 @@ export const usePerspectiveEditor = (): UsePerspectiveEditorReturn => {
       const response = await deletePerspectiveTask
 
       if (!isUndefined(response.error)) {
-        trackError(new ApiError(response.error))
+        trackError(new ApiError(response.error as ApiErrorData))
       }
 
       dispatch(

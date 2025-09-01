@@ -9,7 +9,6 @@
  */
 
 import { Button } from '@Pimcore/components/button/button'
-import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
@@ -17,11 +16,10 @@ import { FormKit } from '@Pimcore/components/form/form-kit'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Input } from '@Pimcore/components/input/input'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { CreatePerspectiveConfig, PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+import { type CreatePerspectiveConfig } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
 import { usePerspectiveEditorContext } from '@Pimcore/modules/widget-editor/perspective-editor/context/hooks/use-perspective-editor-context'
 import { usePerspectiveEditor } from '@Pimcore/modules/widget-editor/perspective-editor/hooks/use-perspective-editor'
-import { FormInstance } from 'antd'
-import { remove } from 'lodash'
+import { type FormInstance } from 'antd'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -40,7 +38,7 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
   const perspective = perspectives.find(p => p.id === id)
   const [form] = Form.useForm<FormInstance<PerspectiveForm>>()
   const initialValues: PerspectiveForm = {
-    name: perspective?.name || ''
+    name: perspective?.name ?? ''
   }
   const [formData, setFormData] = useState<PerspectiveForm>(initialValues)
 
@@ -51,18 +49,18 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
   return (
     <FormKit
       formProps={{
-        form: form,
+        form,
         initialValues,
-        onFinish: async (values) => {
+        onFinish: async (values: PerspectiveForm) => {
           console.table(values)
           setIsLoading(true)
 
           await updatePerspective(perspective.id, {
-            ...values
+            ...values as CreatePerspectiveConfig
           }, () => {
             setPerspectives((prev) => {
               const updated = prev.map((p) => (p.id === id ? { ...p, ...values } : p))
-              return updated as PerspectiveConfigDetail[]
+              return updated
             })
           })
             .finally(() => {
@@ -72,9 +70,9 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
       }}
     >
       <Flex
+        className='makeTabsGreatAgain'
         justify='space-between'
         vertical
-        className='makeTabsGreatAgain'
       >
         <Content
           padded
@@ -100,30 +98,30 @@ export const PerspectiveDetailTab = ({ id }: PerspectiveDetailTabProps): React.J
         <Toolbar justify="space-between">
           <div>
             <IconButton
-              icon={{ value: 'refresh' }}
-              title={t('refresh')}
               disabled={isLoading}
+              icon={{ value: 'refresh' }}
               onClick={() => {
                 form.resetFields()
               }}
+              title={t('refresh')}
             />
 
             <IconButton
-              icon={{ value: 'trash' }}
-              title={t('delete')}
               disabled={isLoading}
+              icon={{ value: 'trash' }}
               onClick={() => {
                 removeWithConfirmation(perspective.id, () => {
                   setPerspectives((prev) => prev.filter((p) => p.id !== perspective.id))
                 })
               }}
+              title={t('delete')}
             />
           </div>
 
           <Button
-            type='primary'
             htmlType='submit'
             loading={isLoading}
+            type='primary'
           >
             {t('save')}
           </Button>
