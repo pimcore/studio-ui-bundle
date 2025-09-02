@@ -232,9 +232,10 @@ final class EditmodeSubscriber implements EventSubscriberInterface
     private function addCacheBuster(string $filePath): string
     {
         $publicPath = PIMCORE_WEB_ROOT . $filePath;
-        
+
         if (file_exists($publicPath)) {
             $mtime = filemtime($publicPath);
+
             return $filePath . '?v=' . $mtime;
         }
 
