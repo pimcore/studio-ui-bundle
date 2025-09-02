@@ -101,26 +101,28 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
   }), [availableColumns, filters])
 
   const getFilteredDropDownMenuItems = useMemo(() => (): DropdownProps['menu']['items'] => {
-    const groupedItems: DropdownProps['menu']['items'] = []
+    const groupedItems: Record<string, DropdownProps['menu']['items']> = {}
 
     availableFilterColumns.forEach((column) => {
-      const group = column.group
+      const groups = Array.isArray(column.group) ? column.group : [column.group]
 
-      if (groupedItems[group] === undefined) {
-        groupedItems[group] = []
-      }
+      groups.forEach((group) => {
+        if (groupedItems[group] === undefined) {
+          groupedItems[group] = []
+        }
 
-      let translationKey = `${column.key}`
+        let translationKey = `${column.key}`
 
-      if ('fieldDefinition' in column.config) {
-        const fieldDefinition = column.config.fieldDefinition as Record<string, any>
-        translationKey = fieldDefinition?.title ?? column.key
-      }
+        if ('fieldDefinition' in column.config) {
+          const fieldDefinition = column.config.fieldDefinition as Record<string, any>
+          translationKey = fieldDefinition?.title ?? column.key
+        }
 
-      groupedItems[group].push({
-        key: column.key,
-        label: t(translationKey),
-        onClick: () => { handleColumnClick(column) }
+        groupedItems[group].push({
+          key: column.key,
+          label: t(translationKey),
+          onClick: () => { handleColumnClick(column) }
+        })
       })
     })
 

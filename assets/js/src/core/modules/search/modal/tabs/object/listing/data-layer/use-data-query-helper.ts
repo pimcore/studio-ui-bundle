@@ -42,7 +42,7 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
     config: column.config
   }))
 
-  const systemColumns = availableColumns.filter(column => column.group === 'system')
+  const systemColumns = availableColumns.filter(column => Array.isArray(column.group) && column.group.includes('system'))
 
   systemColumns.forEach(column => {
     const hasColumn = columnsArg.some(selectedColumn => selectedColumn.key === column.key)

@@ -37,12 +37,12 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
       key: column.key,
       type: column.type,
       locale: column.locale,
-      group: column.group,
+      // group: column.group,
       config: advancedColumnConfig ?? column.config
     })
   })
 
-  const systemColumns = availableColumns.filter(column => column.group === 'system')
+  const systemColumns = availableColumns.filter(column => Array.isArray(column.group) && column.group.includes('system'))
 
   systemColumns.forEach(column => {
     const hasColumn = columnsArg.some(selectedColumn => selectedColumn.key === column.key)
