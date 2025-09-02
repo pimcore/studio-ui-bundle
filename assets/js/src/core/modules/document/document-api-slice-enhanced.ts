@@ -57,7 +57,6 @@ const api = baseApi.enhanceEndpoints({
   endpoints: (build) => ({
     documentRenderletRender: build.query<DocumentRenderletRenderApiResponse, DocumentRenderletRenderApiArg>({
       queryFn: async (arg, api, extraOptions, baseQuery) => {
-        console.log('Custom documentRenderletRender queryFn called with arg:', arg)
         
         const result = await baseQuery({
           url: `${getPrefix()}/documents/renderlet/render`,
