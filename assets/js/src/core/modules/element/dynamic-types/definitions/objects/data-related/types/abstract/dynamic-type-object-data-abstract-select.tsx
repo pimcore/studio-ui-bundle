@@ -61,7 +61,7 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
     }
   }
 
-  convertOptions (options: Array<{ key: string, value: string | number }> | null): Array<{ label: string, value: string | number }> | undefined {
+  convertOptions (options: Array<{ key: string, value: string | number }> | null): Array<{ label: string, value: string | number | null }> | undefined {
     if (options === null) {
       return
     }

@@ -14,7 +14,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './table.styles'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
 
 interface ITableProps {
   data: any[]
@@ -28,18 +28,13 @@ export const LanguageTable = ({
   data, viewData, editData,
   onChangeOrder, onChange
 }: ITableProps): React.JSX.Element => {
-  const { availableAdminLanguages } = useSettings()
   const { t } = useTranslation()
   const { styles } = useStyles()
-
-  const getDisplyNameByAbbreviation = (abbreviation: string): string => {
-    const language = availableAdminLanguages.find((lang) => lang.language === abbreviation)
-    return language.display
-  }
+  const { getDisplayName } = useLanguageLookup()
 
   const columnsData = data.map((name: string) => (
     {
-      name: getDisplyNameByAbbreviation(name),
+      name: getDisplayName(name),
       abbreviation: name,
       ...(viewData != null ? { view: viewData.includes(name) || false } : {}),
       ...(editData != null ? { edit: editData.includes(name) || false } : {})

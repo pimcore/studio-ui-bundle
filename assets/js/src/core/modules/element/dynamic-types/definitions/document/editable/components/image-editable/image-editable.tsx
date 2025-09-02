@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import { DocumentHotspotImagePreview } from './hotspot-image-preview'
@@ -73,11 +73,12 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
   const imageValue = props.value
   const width = props.config?.width
   const height = props.config?.height
+  const hasImage = !isNil(imageValue?.id)
 
-  const { lastDimensions, handleResize: handleImageResize } = useAssetDimensions()
-
-  const needsContainerWidth = isNil(width) && isNil(height)
-  const { width: containerWidth } = useElementResize(needsContainerWidth ? props.containerRef ?? { current: null } : { current: null })
+  const { getSmartDimensions, handlePreviewResize: handleImageResize, handleAssetTargetResize } = useAssetDimensions()
+  const [isImageLoaded, setIsImageLoaded] = useState(false)
+  const smartDimensions = getSmartDimensions(imageValue?.id)
+  const { width: containerWidth } = useElementResize(props.containerRef ?? { current: null })
 
   const { triggerUpload } = useUploadModal({})
   const {
@@ -208,7 +209,7 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
         accept="image/*"
         assetType="image"
         disabled={ props.disabled }
-        fullWidth={ isNil(lastDimensions?.width ?? width) }
+        fullWidth={ isNil(smartDimensions?.width ?? width) }
         onSuccess={ handleFileSystemUpload }
         targetFolderPath={ props.config?.uploadPath }
       >
@@ -233,11 +234,11 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
   }
 
   return renderDroppableContent(
-    !isNil(imageValue?.id)
+    hasImage
       ? (
         <DocumentHotspotImagePreview
           altText={ imageValue.alt }
-          assetId={ imageValue.id }
+          assetId={ imageValue.id! }
           containerWidth={ containerWidth }
           disableInlineUpload={ props.config?.disableInlineUpload }
           disabled={ props.disabled }
@@ -246,29 +247,31 @@ export const DocumentImageEditable = (props: DocumentImageEditableProps): React.
           handleLocateInTree={ handleLocateInTree }
           handleSearch={ openElementSelector }
           handleUpload={ handleUpload }
-          height={ height }
+          height={ smartDimensions?.height ?? height }
           hideAltTextInput={ props.config?.hidetext }
           imgAttributes={ props.config?.imgAttributes }
+          isImageLoaded={ isImageLoaded }
           key={ imageValue.id }
-          lastImageDimensions={ lastDimensions }
+          lastImageDimensions={ smartDimensions }
           onAltTextChange={ handleAltTextChange }
           onChange={ handleHotspotImageChange }
+          onImageLoadedChange={ setIsImageLoaded }
           onResize={ handleImageResize }
           setCropModalOpen={ handleOpenCropModal }
           setMarkerModalOpen={ handleOpenHotspotMarkersModal }
           value={ convertToHotspotImageValue() }
-          width={ width }
+          width={ smartDimensions?.width ?? width }
         />
         )
       : (
         <AssetTarget
           dndIcon
-          height={ lastDimensions?.height ?? height ?? DEFAULT_HEIGHT }
-          onResize={ handleImageResize }
+          height={ smartDimensions?.height ?? height ?? DEFAULT_HEIGHT }
+          onResize={ handleAssetTargetResize }
           onSearch={ openElementSelector }
           onUpload={ props.config?.disableInlineUpload === true ? undefined : handleUpload }
           title={ props.config?.title ?? t('image.dnd-target') }
-          width={ lastDimensions?.width ?? width ?? '100%' }
+          width={ smartDimensions?.width ?? width ?? '100%' }
         />
         )
   )

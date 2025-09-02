@@ -21,8 +21,12 @@ import { ReportDataProvider } from '@Pimcore/modules/reports/reports-view/contex
 import { ReportViewContent } from '@Pimcore/modules/reports/reports-view/components/report-view-content/report-view-content'
 import { useStyles } from './reports-view.styles'
 
-export const ReportsView = (): React.JSX.Element => {
-  const [currentReport, setCurrentReport] = useState<string | null>(null)
+interface IReportsViewProps {
+  reportId?: string
+}
+
+export const ReportsView = ({ reportId }: IReportsViewProps): React.JSX.Element => {
+  const [currentReport, setCurrentReport] = useState<string | null>(reportId ?? null)
 
   const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery({ page: 1, pageSize: 9999 })
 
@@ -44,9 +48,11 @@ export const ReportsView = (): React.JSX.Element => {
       const ungroupedOptions: DefaultOptionType[] = []
 
       reportsTreeData.items?.forEach(item => {
+        const reportLabel = !isEmptyValue(item.niceName) ? item.niceName : item.name
+
         if (isEmptyValue(item.group)) {
           ungroupedOptions.push({
-            label: renderOptionLabel(item.iconClass, item.niceName),
+            label: renderOptionLabel(item.iconClass, reportLabel),
             value: item.name
           })
 
@@ -62,7 +68,7 @@ export const ReportsView = (): React.JSX.Element => {
         }
 
         groupedOptions[item.group].options.push({
-          label: renderOptionLabel(item.iconClass, item.niceName),
+          label: renderOptionLabel(item.iconClass, reportLabel),
           value: item.name
         })
       })

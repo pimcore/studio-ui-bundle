@@ -21,11 +21,14 @@ const getElement = (element: Element): HTMLElement | null => {
   return element.current
 }
 
-const useElementResize = (element: Element): { width: number, height: number } => {
+const useElementResize = (element: Element, disable: boolean = false): { width: number, height: number } => {
   const [size, setSize] = useState({ width: 0, height: 0 })
-
   // Get initial width before the render phase
   useLayoutEffect(() => {
+    if (disable) {
+      return
+    }
+
     const targetElement = getElement(element)
 
     if (!isNull(targetElement)) {
@@ -33,15 +36,31 @@ const useElementResize = (element: Element): { width: number, height: number } =
 
       setSize({ width, height })
     }
-  }, [])
+  }, [disable])
 
   useEffect(() => {
+    if (disable) {
+      return
+    }
+
     const targetElement = getElement(element)
 
     if (isNull(targetElement)) return
 
     const resizeObserver = new ResizeObserver(([entry]) => {
-      const { width, height } = entry.contentRect
+      let width: number
+      let height: number
+
+      // Prefer modern spec-compliant API
+      if (!isNull(entry.borderBoxSize) && entry.borderBoxSize.length > 0) {
+        width = entry.borderBoxSize[0].inlineSize
+        height = entry.borderBoxSize[0].blockSize
+      } else {
+        // Fallback for older browsers (contentRect is always defined)
+        const rect = entry.contentRect
+        width = rect.width
+        height = rect.height
+      }
 
       setSize((prevSize) => {
         if (
@@ -61,8 +80,7 @@ const useElementResize = (element: Element): { width: number, height: number } =
     return () => {
       resizeObserver.disconnect()
     }
-  }, [element])
-
+  }, [element, disable])
   return size
 }
 

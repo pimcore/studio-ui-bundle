@@ -116,6 +116,14 @@ export const useStyles = createStyles(({ token, css }) => {
       &.ant-tabs-line > .ant-tabs-nav .ant-tabs-ink-bar {
         visibility: visible;
       }
+
+      &.tabs--full-height {
+        height: 100%;
+          
+        .ant-tabs-content {
+          height: 100%;
+        }
+      }
     `
   }
 }, { hashPriority: 'high' })

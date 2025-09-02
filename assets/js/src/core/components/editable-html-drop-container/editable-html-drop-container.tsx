@@ -63,9 +63,9 @@ export const EditableHtmlDropContainer = ({
 
   const defaultContainerStyle: React.CSSProperties = {
     width: toCssDimension(width),
-    height: hasContent ? (toCssDimension(height) ?? 'auto') : toCssDimension(height ?? defaultHeight),
-    minHeight: hasContent ? (toCssDimension(height) ?? 'auto') : toCssDimension(defaultHeight),
-    overflow: hasContent ? 'auto' : undefined,
+    height: hasContent && isNil(error) ? (toCssDimension(height) ?? 'auto') : toCssDimension(height ?? defaultHeight),
+    minHeight: hasContent && isNil(error) ? (toCssDimension(height) ?? 'auto') : toCssDimension(defaultHeight),
+    overflow: hasContent && isNil(error) ? 'auto' : undefined,
     ...containerStyle
   }
 
@@ -77,7 +77,7 @@ export const EditableHtmlDropContainer = ({
   const contentClass = cn(
     {
       [styles.editableHtmlDropContent]: !isHasContent,
-      [styles.editableHtmlDropContentFlex]: !isHasContent && !isNil(error),
+      [styles.editableHtmlDropContentFlex]: !isHasContent || !isNil(error),
       [styles.hasContent]: isHasContent,
       [styles.dndValidOutline]: isDndValid && isHasContent,
       [styles.dndValidBorder]: isDndValid && !isHasContent,

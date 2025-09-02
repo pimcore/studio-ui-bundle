@@ -65,10 +65,8 @@ export const useTranslation = (): UseTranslationReturn => {
   const toApiTranslation = (row: TranslationRow, locale: string, domain: string): TranslationData => {
     const localeKey = `_${locale}`
     return {
-      key: row.key,
       translation: (row[localeKey] ?? '') as string,
-      type: row.type,
-      domain
+      locale
     }
   }
 
@@ -84,9 +82,15 @@ export const useTranslation = (): UseTranslationReturn => {
           const translationData = [toApiTranslation(row, firstLocale, domainParam)]
 
           const result = await updateTranslation({
-            updateTranslation: {
-              locale: firstLocale,
-              translationData
+            domain: domainParam,
+            body: {
+              data: [
+                {
+                  key: row.key,
+                  type: row.type,
+                  translationData
+                }
+              ]
             }
           })
 
@@ -101,9 +105,15 @@ export const useTranslation = (): UseTranslationReturn => {
       const translationData = [toApiTranslation(row, locale, domainParam)]
 
       const result = await updateTranslation({
-        updateTranslation: {
-          locale,
-          translationData
+        domain: domainParam,
+        body: {
+          data: [
+            {
+              key: row.key,
+              type: row.type,
+              translationData
+            }
+          ]
         }
       })
 
