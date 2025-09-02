@@ -135,11 +135,12 @@ export const GridConfigInner = (): React.JSX.Element => {
     })
   }
 
-  function prepareColumns (columns: AvailableColumn[]): Array<{ key: string, locale: string | null, group: string, type: string }> {
+  function prepareColumns (columns: AvailableColumn[]): Array<{ key: string, locale: string | null, type: string }> {
     return columns.map((column) => ({
       key: column.key,
       locale: column.locale ?? null,
-      group: column.group,
+      // @todo Currently the type in backend is not matching anymore
+      // group: column.group,
       type: column.type,
       config: column.__meta?.advancedColumnConfig ?? column.config
     }))

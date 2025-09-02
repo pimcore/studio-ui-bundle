@@ -14,13 +14,19 @@ import { isNil, isUndefined } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePerspectiveEditorContext } from '../../context/hooks/use-perspective-editor-context'
+import { usePerspectiveEditor } from '../../hooks/use-perspective-editor'
+import { useAppDispatch } from '@sdk/app'
+import { api } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 
 export const TreeContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [treeDataFiltered, setTreeDataFiltered] = useState<TreeDataItem[]>([])
-  const { openPerspective } = usePerspectiveEditorContext()
-  const { data: perspectives } = usePerspectiveGetConfigCollectionQuery()
+  const { openPerspective, isLoading, setIsLoading } = usePerspectiveEditorContext()
+  const { createPerspective } = usePerspectiveEditor()
+  const { data: perspectives, isFetching } = usePerspectiveGetConfigCollectionQuery()
+  const dispatch = useAppDispatch()
 
   const generateTreeStructure = (perspectives: PerspectiveConfig[]): TreeDataItem[] => {
     const tmpTreeData: TreeDataItem[] = []
@@ -82,18 +88,36 @@ export const TreeContainer = (): React.JSX.Element => {
         <Toolbar justify="space-between">
           <IconButton
             icon={ { value: 'refresh' } }
+            loading={ isLoading || isFetching }
+            onClick={ async () => {
+              setIsLoading(true)
+
+              dispatch(
+                api.util.invalidateTags(
+                  invalidatingTags.PERSPECTIVES()
+                )
+              )
+
+              setIsLoading(false)
+            } }
             title={ t('refresh') }
           />
 
           <IconTextButton
+            disabled={ isLoading || isFetching }
             icon={ { value: 'new' } }
+            loading={ isLoading || isFetching }
+            onClick={ async () => { createPerspective() } }
           >
             {t('toolbar.new')}
           </IconTextButton>
         </Toolbar>
       ) }
     >
-      <Content padded>
+      <Content
+        loading={ isLoading || isFetching }
+        padded
+      >
         <SearchInput
           onChange={ (e) => { setSearchTerm(e.target.value) } }
           onClear={ clearSearch }

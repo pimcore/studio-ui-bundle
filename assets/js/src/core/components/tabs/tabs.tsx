@@ -18,9 +18,10 @@ export interface ITabsProps extends TabsProps {
   hasStickyHeader?: boolean
   noPadding?: boolean
   noTabBarMargin?: boolean
+  fullHeight?: boolean
 }
 
-const Component = ({ items, className, activeKey, onClose, onChange, hasStickyHeader = false, ...props }: ITabsProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
+const Component = ({ items, className, activeKey, onClose, onChange, hasStickyHeader = false, fullHeight = false, ...props }: ITabsProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
   const { styles } = useStyles()
 
   const classNames = cn(
@@ -31,10 +32,9 @@ const Component = ({ items, className, activeKey, onClose, onChange, hasStickyHe
     },
     className,
     {
-      'tabs--no-padding': props.noPadding
-    },
-    {
-      'tabs--no-tab-bar-margin': props.noTabBarMargin
+      'tabs--no-padding': props.noPadding,
+      'tabs--no-tab-bar-margin': props.noTabBarMargin,
+      'tabs--full-height': fullHeight
     }
   )
 

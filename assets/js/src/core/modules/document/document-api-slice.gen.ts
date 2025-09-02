@@ -101,6 +101,17 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/documents/get-available-templates` }),
                 providesTags: ["Documents"],
             }),
+            documentPageSnippetAreaBlockRender: build.query<
+                DocumentPageSnippetAreaBlockRenderApiResponse,
+                DocumentPageSnippetAreaBlockRenderApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/documents/page-snippet/${queryArg.id}/area-block/render`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Documents"],
+            }),
             documentRenderletRender: build.query<DocumentRenderletRenderApiResponse, DocumentRenderletRenderApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/documents/renderlet/render`,
@@ -290,6 +301,20 @@ export type DocumentAvailableTemplatesListApiResponse =
         items: DocumentTemplate[];
     };
 export type DocumentAvailableTemplatesListApiArg = void;
+export type DocumentPageSnippetAreaBlockRenderApiResponse =
+    /** status 200 Rendered HTML and editable definitions */ AreaBlockRenderDataForEditmode;
+export type DocumentPageSnippetAreaBlockRenderApiArg = {
+    /** Id of the document */
+    id: number;
+    body: {
+        name: string | null;
+        realName: string | null;
+        index: number | null;
+        blockStateStack: object | null;
+        areaBlockConfig?: object | null;
+        areaBlockData?: object | null;
+    };
+};
 export type DocumentRenderletRenderApiResponse = /** status 200 Rendered renderlet */ Blob;
 export type DocumentRenderletRenderApiArg = {
     /** ElementId of the renderlet element */
@@ -629,6 +654,16 @@ export type DocumentTemplate = {
     /** Path */
     path: string;
 };
+export type AreaBlockRenderDataForEditmode = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Dynamic array of editable definitions */
+    editableDefinitions: object[];
+    /** HTML code of the snippet */
+    htmlCode: string;
+};
 export type Site = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -697,6 +732,7 @@ export const {
     useDocumentPageStreamPreviewQuery,
     useDocumentAvailableControllersListQuery,
     useDocumentAvailableTemplatesListQuery,
+    useDocumentPageSnippetAreaBlockRenderQuery,
     useDocumentRenderletRenderQuery,
     useDocumentReplaceContentMutation,
     useDocumentsListAvailableSitesQuery,

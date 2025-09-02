@@ -11,17 +11,16 @@
 import { useTranslation } from 'react-i18next'
 import { type BlockManager } from '../utils/block-manager'
 import {
-  useEditableDropzones,
-  type UseEditableDropzonesReturn,
-  type EditableManager
-} from '../../../helpers/editable-dropzone-sorting/hooks/use-editable-dropzones'
+  useBlockManagerDropzones,
+  type UseBlockManagerDropzonesReturn
+} from '../../../helpers/editable-dropzone-sorting/hooks/use-block-manager-dropzones'
 
 export interface UseBlockDropzonesProps {
   blockManager: BlockManager
   onMoveBlock: (fromIndex: number, toIndex: number) => void
 }
 
-export interface UseBlockDropzonesReturn extends UseEditableDropzonesReturn {
+export interface UseBlockDropzonesReturn extends UseBlockManagerDropzonesReturn {
   dragOverlayTitle: string | undefined
 }
 
@@ -31,15 +30,15 @@ export const useBlockDropzones = ({
 }: UseBlockDropzonesProps): UseBlockDropzonesReturn => {
   const { t } = useTranslation()
 
-  const sortingResult = useEditableDropzones({
-    editableManager: blockManager as EditableManager,
+  const dropzoneActions = useBlockManagerDropzones({
+    blockManager,
     onMoveItem: onMoveBlock
   })
 
   const dragOverlayTitle = t('block')
 
   return {
-    ...sortingResult,
+    ...dropzoneActions,
     dragOverlayTitle
   }
 }

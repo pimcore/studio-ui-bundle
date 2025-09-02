@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState, useRef, useMemo } from 'react'
+import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react'
 import cn from 'classnames'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
@@ -30,7 +30,8 @@ interface ResponsiveAssetPreviewProps {
   onImageLoad?: (event: React.SyntheticEvent<HTMLImageElement>) => void
   onResize?: (dimensions: { width: number, height: number }) => void
   lastImageDimensions?: { width: number, height: number } | null
-  thumbnailUrl?: string
+  thumbnailUrl?: string | null
+  onImageLoadedChange?: (isLoaded: boolean) => void
 }
 
 export const ResponsiveAssetPreview = ({
@@ -42,45 +43,69 @@ export const ResponsiveAssetPreview = ({
   onImageLoad,
   onResize,
   lastImageDimensions,
-  thumbnailUrl
+  thumbnailUrl,
+  onImageLoadedChange
 }: ResponsiveAssetPreviewProps): React.JSX.Element => {
   const { getStateClasses } = useDroppable()
   const { styles } = useStyle()
-  const [key, setKey] = useState(0)
+  const keyRef = useRef(0)
   const [isImageLoaded, setIsImageLoaded] = useState(false)
+  const lastAssetIdRef = useRef<number | undefined>(assetId)
 
   const imageContainerRef = useRef<HTMLDivElement>(null)
   const currentImageDimensions = useElementResize(imageContainerRef)
 
+  const stableThumbnailUrlRef = useRef<string | null | undefined>(undefined)
+  const lastThumbnailAssetIdRef = useRef<number | undefined>(undefined)
+
+  if (lastThumbnailAssetIdRef.current !== assetId) {
+    lastThumbnailAssetIdRef.current = assetId
+    stableThumbnailUrlRef.current = undefined
+  }
+
+  if (thumbnailUrl !== undefined && thumbnailUrl !== null && stableThumbnailUrlRef.current === undefined) {
+    stableThumbnailUrlRef.current = thumbnailUrl
+  }
+
   useEffect(() => {
-    if (currentImageDimensions.width > 0 && currentImageDimensions.height > 0 && onResize !== undefined) {
-      onResize(currentImageDimensions)
+    if (currentImageDimensions.width > 0 && currentImageDimensions.height > 0) {
+      onResize?.(currentImageDimensions)
     }
   }, [currentImageDimensions, onResize])
 
-  const imageSrc = useMemo(() => {
+  useEffect(() => {
+    if (lastAssetIdRef.current !== assetId) {
+      lastAssetIdRef.current = assetId
+      keyRef.current = keyRef.current + 1
+      setIsImageLoaded(false)
+      onImageLoadedChange?.(false)
+    }
+  }, [assetId, onImageLoadedChange])
+
+  const finalImageSrc = useMemo(() => {
+    const stableThumbnailUrl = stableThumbnailUrlRef.current
     if (assetId === undefined) {
       return src
     }
-
-    return thumbnailUrl ?? src
+    if (stableThumbnailUrl === undefined) {
+      return thumbnailUrl === null ? undefined : (thumbnailUrl ?? src)
+    }
+    return stableThumbnailUrl ?? src
   }, [assetId, src, thumbnailUrl])
 
-  useEffect(() => {
-    setKey(key + 1)
-    setIsImageLoaded(false)
-  }, [imageSrc])
-
-  const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>): void => {
+  const handleImageLoad = useCallback((event: React.SyntheticEvent<HTMLImageElement>): void => {
     setIsImageLoaded(true)
+    onImageLoadedChange?.(true)
     onImageLoad?.(event)
-  }
+  }, [onImageLoad, onImageLoadedChange])
 
-  const loadingSpinner = (
-    <div className={ styles.loadingSpinner }>
-      <Spin size="small" />
-    </div>
-  )
+  const loadingSpinner = !isNil(lastImageDimensions)
+    ? (
+      <div className={ styles.loadingSpinner }>
+        <Spin size="small" />
+      </div>
+      )
+    : undefined
 
   return (
     <Dropdown
@@ -89,19 +114,26 @@ export const ResponsiveAssetPreview = ({
       trigger={ ['contextMenu'] }
     >
       <div
-        className={ cn(className, styles.imageEditablePreviewContainer, styles.imageEditablePreviewContainerMinSize, ...getStateClasses()) }
+        className={ cn(
+          className,
+          styles.imageEditablePreviewContainer,
+          {
+            [styles.imageEditablePreviewContainerMinSize]: !isNil(lastImageDimensions) || isImageLoaded
+          },
+          ...getStateClasses()
+        ) }
         ref={ imageContainerRef }
       >
-        {imageSrc !== undefined && (
+        {finalImageSrc !== undefined && (
           <Image
             className={ styles.imageComponent }
             fallback="/bundles/pimcorestudioui/img/fallback-image.svg"
-            key={ key }
+            key={ keyRef.current }
             onLoad={ handleImageLoad }
             placeholder={ loadingSpinner }
             preview={ false }
-            src={ imageSrc }
-            style={ getImageDimensions(isImageLoaded, lastImageDimensions) }
+            src={ finalImageSrc }
+            style={ !isNil(lastImageDimensions) ? getImageDimensions(isImageLoaded, lastImageDimensions) : undefined }
             { ...imgAttributes }
           />
         )}

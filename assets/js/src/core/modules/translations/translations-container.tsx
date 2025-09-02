@@ -21,9 +21,8 @@ import trackError, { ApiError } from '../app/error-handler'
 import { useTranslationGetListQuery, useTranslationGetDomainsQuery, api } from '../app/translations/translations-api-slice-enhanced'
 import { useTranslation } from './hooks/use-translation'
 import { Table } from './table/table'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { useWebsiteTranslationLanguages, useAdminTranslationLanguages } from './hooks/use-translation-languages'
 import {
-  getAvailableLocales,
   translationsToRows,
   translationDataToRow,
   type TranslationRow
@@ -47,7 +46,6 @@ export const TranslationsContainer = (): React.JSX.Element => {
   })
   const { createNewTranslation, createLoading } = useTranslation()
   const { domain, setDomain } = useTranslationDomain()
-  const settings = useSettings()
   const [visibleLocales, setVisibleLocales] = useState<string[] | null>(null)
   const [translationRows, setTranslationRows] = useState<TranslationRow[]>([])
   const [searchTerm, setSearchTerm] = useState<string>('')
@@ -55,7 +53,14 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const [pageSize, setPageSize] = useState<number>(20)
   const [sorting, setSorting] = useState<SortingState>([{ id: 'key', desc: false }])
   const { data: domainsData, isLoading: domainsLoading, error: domainError } = useTranslationGetDomainsQuery()
-  const availableDomains = domainsData?.domains ?? []
+  const availableDomains = domainsData ?? []
+
+  const currentDomainInfo = availableDomains.find(d => d.domain === domain)
+  const isFrontendDomain = currentDomainInfo?.isFrontendDomain ?? false
+
+  const websiteLanguages = useWebsiteTranslationLanguages()
+  const adminLanguages = useAdminTranslationLanguages()
+  const { languages: domainLanguages, isLoading: languagesLoading } = isFrontendDomain ? websiteLanguages : adminLanguages
 
   const queryArgs = useMemo(() => ({
     domain,
@@ -90,8 +95,8 @@ export const TranslationsContainer = (): React.JSX.Element => {
   })
 
   useEffect(() => {
-    if (availableDomains.length > 0 && !availableDomains.includes(domain)) {
-      setDomain(availableDomains[0])
+    if (availableDomains.length > 0 && !availableDomains.some(d => d.domain === domain)) {
+      setDomain(availableDomains[0].domain)
     }
   }, [availableDomains, domain])
 
@@ -118,7 +123,8 @@ export const TranslationsContainer = (): React.JSX.Element => {
     dispatch(api.util.invalidateTags(invalidatingTags.DOMAIN_TRANSLATIONS()))
   }
 
-  const availableLocales = getAvailableLocales(data?.items ?? [])
+  const viewableLanguages = domainLanguages.filter(lang => lang.canView)
+  const editableLanguages = domainLanguages.filter(lang => lang.canEdit)
 
   const onCreateTranslation = async (translationKey: string): Promise<void> => {
     const isValidKeyInput = translationKey !== '' && translationKey !== undefined
@@ -210,9 +216,9 @@ export const TranslationsContainer = (): React.JSX.Element => {
                 setDomain(value)
                 setCurrentPage(1)
               } }
-              options={ availableDomains.map(domain => ({
-                value: domain,
-                label: domain
+              options={ availableDomains.map(domainInfo => ({
+                value: domainInfo.domain,
+                label: domainInfo.domain
               })) }
               placeholder={ t('translations.select-domain') }
               style={ { minWidth: 120 } }
@@ -222,26 +228,22 @@ export const TranslationsContainer = (): React.JSX.Element => {
           <Flex gap="small">
             <Select
               allowClear
-              disabled={ availableLocales.length === 0 }
+              disabled={ viewableLanguages.length === 0 || languagesLoading }
               dropdownStyle={ { minWidth: 250 } }
               filterOption={ (input, option) => {
                 const label = option?.label?.toString() ?? ''
                 return label.toLowerCase().includes(input.toLowerCase())
               } }
+              loading={ languagesLoading }
               maxTagCount="responsive"
               mode="multiple"
               onChange={ (selectedLocales: string[]) => {
                 setVisibleLocales(selectedLocales.length > 0 ? selectedLocales : null)
               } }
-              options={ availableLocales.map(locale => {
-                const languageInfo = settings?.availableAdminLanguages?.find(lang => lang.language === locale)
-                const display = (languageInfo as { display?: string } | undefined)?.display
-
-                return {
-                  value: locale,
-                  label: display !== undefined ? `${display} (${locale})` : locale.toUpperCase()
-                }
-              }) }
+              options={ viewableLanguages.map(lang => ({
+                value: lang.locale,
+                label: lang.displayName
+              })) }
               placeholder={ t('translations.show-hide-locale') }
               showSearch
               style={ { minWidth: 220 } }
@@ -262,12 +264,12 @@ export const TranslationsContainer = (): React.JSX.Element => {
         }
     >
       <Content
-        loading={ translationsLoading || translationsFetching }
+        loading={ translationsLoading || translationsFetching || languagesLoading }
         margin={ {
           x: 'extra-small',
           y: 'none'
         } }
-        none={ !translationsLoading && translationRows.length === 0 }
+        none={ !translationsLoading && !languagesLoading && translationRows.length === 0 }
       >
         <Box
           margin={ {
@@ -276,11 +278,13 @@ export const TranslationsContainer = (): React.JSX.Element => {
           } }
         >
           <Table
+            domainLanguages={ domainLanguages }
+            editableLocales={ editableLanguages.map(lang => lang.locale) }
             onSortingChange={ handleSortingChange }
             setTranslationRows={ setTranslationRows }
             sorting={ sorting }
             translationRows={ translationRows }
-            visibleLocales={ visibleLocales ?? availableLocales }
+            visibleLocales={ visibleLocales ?? viewableLanguages.map(lang => lang.locale) }
           />
           <TranslationErrorModals
             MandatoryModal={ MandatoryModal }

@@ -133,8 +133,8 @@ export type Column = {
     key: string;
     /** Locale of the Column */
     locale: string | null;
-    /** Group of the Column */
-    group: string;
+    /** Define the group structure */
+    group: object;
 };
 export type RelationFieldConfig = {
     /** Relation Getter */
@@ -245,6 +245,8 @@ export type GridColumnData = {
     locale?: string | null;
     /** Value */
     value?: any | null;
+    /** Field Type of the column */
+    fieldType?: string | null;
     /** inheritance */
     inheritance?: object | null;
 };
