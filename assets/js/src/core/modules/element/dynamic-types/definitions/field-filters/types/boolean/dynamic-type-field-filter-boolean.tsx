@@ -28,7 +28,4 @@ export class DynamicTypeFieldFilterBoolean extends DynamicTypeFieldFilterAbstrac
     )
   }
 
-  shouldApply (value: any): boolean {
-    return value !== undefined
-  }
 }
