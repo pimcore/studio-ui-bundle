@@ -10,9 +10,9 @@
 
 import React from 'react'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
-import { Link, type LinkValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/link'
+import { type LinkValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/link'
 import { isNil, isArray } from 'lodash'
-import { DocumentLinkPreview } from '../components/link-preview/document-link-preview'
+import { DocumentLink } from '../components/document-link/document-link'
 
 export type LinkEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
   config?: {
@@ -54,11 +54,11 @@ export class DynamicTypeDocumentEditableLink extends DynamicTypeDocumentEditable
     const disabledFields = isArray(props.config?.disabledFields) ? props.config.disabledFields : []
 
     return (
-      <Link
-        PreviewComponent={ DocumentLinkPreview }
+      <DocumentLink
         allowedTargets={ allowedTargets }
         allowedTypes={ allowedTypes }
         className={ props.config?.class }
+        containerRef={ props.containerRef }
         disabledFields={ disabledFields }
         inherited={ props.inherited }
         onChange={ props.onChange }
@@ -106,5 +106,9 @@ export class DynamicTypeDocumentEditableLink extends DynamicTypeDocumentEditable
       internal: false,
       internalType: value.internalType ?? undefined
     }
+  }
+
+  reloadOnChange (props: LinkEditableDefinition, oldValue: any, newValue: any): boolean {
+    return Boolean(props.config?.reload)
   }
 }
