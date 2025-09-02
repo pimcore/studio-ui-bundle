@@ -14,12 +14,16 @@ import { ColumnsProvider } from '@Pimcore/components/grid/contexts/columns-conte
 import { ReportsView } from '@Pimcore/modules/reports/reports-view/reports-view'
 import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 
-export const ReportsViewWrapper = (): React.JSX.Element => {
+interface IReportsViewWrapperProps {
+  reportId: string
+}
+
+export const ReportsViewWrapper = ({ reportId }: IReportsViewWrapperProps): React.JSX.Element => {
   return (
     <GridFilterProvider initialValue={ { columnFilters: [], drillDownFilters: {} } }>
       <ColumnsProvider>
         <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/FieldFilterRegistry'] }>
-          <ReportsView />
+          <ReportsView reportId={ reportId } />
         </DynamicTypeRegistryProvider>
       </ColumnsProvider>
     </GridFilterProvider>

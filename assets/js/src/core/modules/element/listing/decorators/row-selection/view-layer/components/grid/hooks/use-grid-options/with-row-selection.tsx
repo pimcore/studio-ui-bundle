@@ -25,7 +25,7 @@ export const WithRowSelection = (useBaseHook: IRowSelectionDecoratorProps['useGr
 
     useEffect(() => {
       const newSelectedRowsData: RowSelectionData['selectedRowsData'] = {}
-      const systemColumns = availableColumns.filter(column => column.group === 'system')
+      const systemColumns = availableColumns.filter(column => Array.isArray(column.group) && column.group.includes('system'))
       const systemColumnKeys = systemColumns.map(column => column.key)
 
       for (const key in selectedRows) {
