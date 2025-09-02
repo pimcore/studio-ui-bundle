@@ -13,6 +13,7 @@ import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/r
 import { Space } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { isEmpty, isNil } from 'lodash'
 import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
@@ -100,19 +101,19 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
     return hasDynamicType && !isIgnoredField && !isNoneType && !filters.some((filter) => filter.id === column.key)
   }), [availableColumns, filters])
 
-  const getFilteredDropDownMenuItems = useMemo(() => (): DropdownProps['menu']['items'] => {
+  const getFilteredDropDownMenuItems = useMemo((): DropdownProps['menu']['items'] => {
     // Helper function to create nested menu structure from group paths
-    const createNestedStructure = (columns: typeof availableFilterColumns) => {
+    const createNestedStructure = (columns: typeof availableFilterColumns): any[] => {
       const groupTree: Record<string, any> = {}
       let menuIndex = 0
 
       // Build the tree structure by processing each column's group(s)
       columns.forEach((column) => {
         const groups = Array.isArray(column.group) ? column.group : [column.group]
-        
+
         groups.forEach((groupPath) => {
           let groupParts: string[] = []
-          
+
           // Handle different group path formats:
           // 1. String: "assets.metadata" -> ["assets", "metadata"]
           // 2. Array of strings: ["Attributes", "attributes", "Bodywork"] -> ["Attributes", "attributes", "Bodywork"]
@@ -131,7 +132,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
 
           // Navigate/create the nested tree structure
           groupParts.forEach((part, index) => {
-            if (!currentLevel[part]) {
+            if (isNil(currentLevel[part])) {
               currentLevel[part] = {
                 items: [], // Columns that belong directly to this group level
                 subGroups: {} // Nested sub-groups
@@ -152,22 +153,22 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
       // Convert the tree structure into Ant Design menu format
       const convertTreeToMenuItems = (tree: Record<string, any>, parentPath = ''): any[] => {
         return Object.entries(tree).map(([groupName, groupData]) => {
-          const currentPath = parentPath ? `${parentPath}.${groupName}` : groupName
+          const currentPath = parentPath !== '' ? `${parentPath}.${groupName}` : groupName
           const menuItem: any = {
             key: `group-${menuIndex++}`,
             label: t(groupName)
           }
 
           // Process sub-groups recursively
-          const subGroupItems = Object.keys(groupData.subGroups).length > 0 
-            ? convertTreeToMenuItems(groupData.subGroups, currentPath)
+          const subGroupItems = !isEmpty(Object.keys(groupData.subGroups as Record<string, any>))
+            ? convertTreeToMenuItems(groupData.subGroups as Record<string, any>, currentPath)
             : []
 
           // Create menu items for columns at this level
           const columnItems = groupData.items.map((column: AvailableColumn) => {
             let translationKey = `${column.key}`
 
-            if ('fieldDefinition' in column.config) {
+            if ('fieldDefinition' in column.config && !isNil(column.config)) {
               const fieldDefinition = column.config.fieldDefinition as Record<string, any>
               translationKey = fieldDefinition?.title ?? column.key
             }
@@ -207,7 +208,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
         onChange={ onFilterChange }
       />
 
-      <Dropdown menu={ { items: getFilteredDropDownMenuItems() } }>
+      <Dropdown menu={ { items: getFilteredDropDownMenuItems } }>
         <IconTextButton
           icon={ { value: 'new' } }
           type='link'
