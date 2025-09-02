@@ -28,7 +28,7 @@ export interface UseLinkDataTypeReturn {
   value: LinkValue | null
 }
 
-export const useLinkDataType = (props: Omit<LinkProps, 'useAbsoluteLayout'>): UseLinkDataTypeReturn => {
+export const useLinkDataType = (props: LinkProps): UseLinkDataTypeReturn => {
   const { t } = useTranslation()
   const { openElement } = useElementHelper()
   const { PreviewComponent } = props
