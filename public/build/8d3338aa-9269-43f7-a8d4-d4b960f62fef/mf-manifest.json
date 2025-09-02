@@ -22,29 +22,25 @@
     "globalName": "pimcore_studio_ui_bundle_core",
     "pluginVersion": "0.13.1",
     "prefetchInterface": false,
+<<<<<<<< HEAD:public/build/04451906-e9cb-4d67-b634-e5323c3e4b9c/mf-manifest.json
     "publicPath": "/bundles/pimcorestudioui/build/04451906-e9cb-4d67-b634-e5323c3e4b9c/"
+========
+    "publicPath": "/bundles/pimcorestudioui/build/8d3338aa-9269-43f7-a8d4-d4b960f62fef/"
+>>>>>>>> 6e1a97aab4dd6df25f90ce192c773df0fe344e04:public/build/8d3338aa-9269-43f7-a8d4-d4b960f62fef/mf-manifest.json
   },
   "shared": [],
   "remotes": [
     {
-      "alias": "@sdk",
-      "consumingFederationContainerName": "pimcore_studio_ui_bundle_core",
       "federationContainerName": "promise new Promise(resolve => {\n          const studioUIBundleRemoteUrl = window.StudioUIBundleRemoteUrl\n          const script = document.createElement('script')\n          script.src = studioUIBundleRemoteUrl\n          script.onload = () => {\n            const proxy = {\n              get: (request) => window['pimcore_studio_ui_bundle'].get(request),\n              init: (...arg) => {\n                try {\n                  return window['pimcore_studio_ui_bundle'].init(...arg)\n                } catch(e) {\n                  console.log('remote container already initialized')\n                }\n              }\n            }\n            resolve(proxy)\n          }\n          document.head.appendChild(script);\n        })\n        ",
       "moduleName": "_internal_/mf-bootstrap",
-      "usedIn": [
-        "js/src/core/main.ts"
-      ],
-      "version": "*"
+      "alias": "@sdk",
+      "entry": "*"
     },
     {
-      "alias": "@sdk",
-      "consumingFederationContainerName": "pimcore_studio_ui_bundle_core",
       "federationContainerName": "promise new Promise(resolve => {\n          const studioUIBundleRemoteUrl = window.StudioUIBundleRemoteUrl\n          const script = document.createElement('script')\n          script.src = studioUIBundleRemoteUrl\n          script.onload = () => {\n            const proxy = {\n              get: (request) => window['pimcore_studio_ui_bundle'].get(request),\n              init: (...arg) => {\n                try {\n                  return window['pimcore_studio_ui_bundle'].init(...arg)\n                } catch(e) {\n                  console.log('remote container already initialized')\n                }\n              }\n            }\n            resolve(proxy)\n          }\n          document.head.appendChild(script);\n        })\n        ",
       "moduleName": "_internal_/mf-bootstrap-document-editor-iframe",
-      "usedIn": [
-        "js/src/core/modules/document/editor/shared-tab-manager/tabs/edit/iframe-app/main.ts"
-      ],
-      "version": "*"
+      "alias": "@sdk",
+      "entry": "*"
     }
   ],
   "exposes": []
