@@ -61,17 +61,19 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
       filters: {
         page,
         pageSize,
-        columnFilters: [
-          {
+        columnFilters: nameFilter.length > 0 ? [
+         {
             key: 'name',
             type: 'like',
             filterValue: nameFilter
           }
-        ]
+        ] : []
       }
     }
   }), [nameFilter, page, pageSize])
 
+  console.log("queryArgs", queryArgs);
+  
   const { data, isLoading: websiteSettingsLoading, isFetching: websiteSettingsFetching, error } = useWebsiteSettingsGetCollectionQuery(queryArgs, {
     refetchOnMountOrArgChange: true
   })
